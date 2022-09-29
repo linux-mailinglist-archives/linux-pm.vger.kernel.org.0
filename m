@@ -2,61 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 298DB5EF560
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 14:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E99F25EF69D
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 15:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235128AbiI2M0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 08:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
+        id S235224AbiI2Nbw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 09:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234852AbiI2M0A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 08:26:00 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2428F121108
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 05:25:57 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id o5so851330wms.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 05:25:57 -0700 (PDT)
+        with ESMTP id S235242AbiI2Nbn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 09:31:43 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4071013747F
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 06:31:40 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id a14so1545766ljj.8
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 06:31:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date;
-        bh=NbDaoX4gV0r+47K4xMd3g5Ou3lbNgQYB+MGdJOvpQD8=;
-        b=aVqdXxGe3hjPidzSFD5huhDDctOrTqR6bMOBGpa0DcKqyp6EVNg6KQo3O51gbLwz4p
-         5bLgLrLGBysw+PdI3AzZe48rUTGN3vNq5k68cDeix4wXlZcIPxJ3KLUT1tDckB9WmhZr
-         4J4EZPQoFNf55CQrO6buwhDr5g0xcxUXUYv9aULhDC7Nc5pgacjYhFRNWM8O4+UQz98D
-         tv9L8aO3PJdd4giWHw18CYMDDICUQEyeOw+OLjLwGknIPNu5ye5yY2RgckxCiBFdsFqE
-         Y1gC2zSawRebw3Y8PSFlrmwDuA/Lcytnh1WR2YItMeW3Kp1zA3VZ66AvsJilMqgARAi6
-         jRWw==
+        bh=X48j3G+qVEopzjYTA1H5u2rml5Mx/9RCCV/6TZYhcIQ=;
+        b=hrmIdsn5g/FpEqFeKHHnTpfCSNW5C5r4gCEHVeHwVR80GVFbZg97nDgi41R/Xf3Ymu
+         seJNwwjKnFyrmAgj3MKNLgRmGhEByKoLErdEa5A+ZqKkC9tAUD1c3Php845WLUOWrAjq
+         5ZlItbbiBVyAvLexJw8/YeEBPs4UYnQxHvSSzeGt5jWbcLDFTtLYDxbNNHFoiFOFzm9y
+         fp90/6MsNSvPK1y4kRGgbD0CjwGmTg2k+wqdhLQ/Uzby8fhWkNdV/rsq4WzbE1W2z4lu
+         8CC0AQf8cN0S6yZfRX9sm4vpUZbxuBgOKFxY+20QItfwWPCSJrb/2AhcvtR8BBiHcv1M
+         gavQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date;
-        bh=NbDaoX4gV0r+47K4xMd3g5Ou3lbNgQYB+MGdJOvpQD8=;
-        b=exVoq+rfZ4+lizmcFpW1GwM9Uox4unHFAWWrPNb+OeQqAoEYxrwIYVqj8uG81l3/pA
-         EvWxznX/dwzGM6+tY6ucGn7MYs750nOWAlZXh1JpB1Vdvtrgf0MDnnlBL1e7MVow8vcC
-         OrtJMWDWP9XMWzxea+AKdA1A/nr6tXfuBFEmK6iNox5O2OxpTKfSajE9dcuKILrkdT4h
-         kLd+ZWq0F7aAlVOQAcMD73OA81E3yuR1RyrwWn50O1gEen1PrYXtjujj8BBf9VoZryKu
-         XqZFmfNU4EBucNqEGSP+LQhjyiGY0ngCdcU7aJFFAoKSjqUczLhShftP4ioHoRHDx+Hd
-         a3Pw==
-X-Gm-Message-State: ACrzQf1CZDMZga+hXP8RRKfR4myv2dNDeJYDjDkmajBoAytWTrH1xSVH
-        7+DGOkSLhdpMCI90A8OkHw3qNA==
-X-Google-Smtp-Source: AMsMyM5D/Mwl8jCDLB1JztAjhICzFFtZl7IFXEk6s7QLb+LbOBiYX3iKh8BMXSwkEf0gDFvfcEubXg==
-X-Received: by 2002:a05:600c:3ba0:b0:3b4:8ad0:6c with SMTP id n32-20020a05600c3ba000b003b48ad0006cmr10372001wms.186.1664454355463;
-        Thu, 29 Sep 2022 05:25:55 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d? ([2a05:6e02:1041:c10:48a2:39eb:9d1b:8b8d])
-        by smtp.googlemail.com with ESMTPSA id q17-20020adff511000000b002253fd19a6asm8358816wro.18.2022.09.29.05.25.52
+        bh=X48j3G+qVEopzjYTA1H5u2rml5Mx/9RCCV/6TZYhcIQ=;
+        b=BnAhWKu+LOVwQJjEsB19GupgybsIEmH1jgYZyDsUaYsF7CVIpSGGWK5iThCXOKShZL
+         En2QhlvbiLDN6ZwrBweEpTbv/NDyrDMDgS4+bb3tjz5c910KHtJhQmTwB5vOH8i31kNM
+         u7Pma0pAWs3MGCYvyK3Hp6cnHcfVi2kJEfvup8d40pT0A8MXKbenGxF7U4A/T4JnZvbC
+         59cYCEwSF7PTABu8uRFnmcIFC1Mlj0Rmq8EZ9P8bN938xKGocoPrDCwV9VLWMJCOj4iq
+         vkZVGKuRy0gP38Rma4ZVeDuobwubMDziIGs1PSMWXzJ2r304gg5udjHlwzk/+IRFunYo
+         40/A==
+X-Gm-Message-State: ACrzQf0/HOaWlOAcFvlqYDovX2gHoS1V0n+IeET5XmiHRI5D/HY2tX2c
+        PpZre+9aYC5Xnkp3brTKD1iNOw==
+X-Google-Smtp-Source: AMsMyM7JjhES7J8Rt6+czIznrc9iO1brCXpNmHy+QfoVtGLJY9kCDF+GU2VyflNmIbaVrNY4L7jUPw==
+X-Received: by 2002:a2e:84ca:0:b0:25d:77e0:2566 with SMTP id q10-20020a2e84ca000000b0025d77e02566mr1274760ljh.78.1664458298639;
+        Thu, 29 Sep 2022 06:31:38 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id u5-20020ac258c5000000b004a0232613desm784574lfo.205.2022.09.29.06.31.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 05:25:54 -0700 (PDT)
-Message-ID: <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
-Date:   Thu, 29 Sep 2022 14:25:51 +0200
+        Thu, 29 Sep 2022 06:31:38 -0700 (PDT)
+Message-ID: <803d6c60-2e10-d831-bbdf-e1aaf9f8800f@linaro.org>
+Date:   Thu, 29 Sep 2022 16:31:37 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v7 00/29] Rework the trip points creation
-Content-Language: en-US
-To:     rafael@kernel.org
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v7 13/29] thermal/drivers/qcom: Use generic
+ thermal_zone_get_trip() function
+Content-Language: en-GB
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rui.zhang@intel.com, Raju Rangoju <rajur@chelsio.com>,
         "David S. Miller" <davem@davemloft.net>,
@@ -101,12 +102,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
+        linux-omap@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
 References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220928210059.891387-1-daniel.lezcano@linaro.org>
+ <20220928210059.891387-14-daniel.lezcano@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20220928210059.891387-14-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -117,205 +121,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 29/09/2022 00:00, Daniel Lezcano wrote:
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops are
+> needed and they can be removed.
+> 
+> Convert ops content logic into generic trip points and register them with the
+> thermal zone.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Acked-by: Amit Kucheria <amitk@kernel.org>
 
-Hi Rafael,
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-are you happy with the changes? I would like to integrate those changes 
-with the thermal pull request
-
-
-On 28/09/2022 23:00, Daniel Lezcano wrote:
-> This work is the pre-requisite of handling correctly when the trip
-> point are crossed. For that we need to rework how the trip points are
-> declared and assigned to a thermal zone.
+> ---
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 39 +++++++++------------
+>   1 file changed, 17 insertions(+), 22 deletions(-)
 > 
-> Even if it appears to be a common sense to have the trip points being
-> ordered, this no guarantee neither documentation telling that is the
-> case.
-> 
-> One solution could have been to create an ordered array of trips built
-> when registering the thermal zone by calling the different get_trip*
-> ops. However those ops receive a thermal zone pointer which is not
-> known as it is in the process of creating it.
-> 
-> This cyclic dependency shows we have to rework how we manage the trip
-> points.
-> 
-> Actually, all the trip points definition can be common to the backend
-> sensor drivers and we can factor out the thermal trip structure in all
-> of them.
-> 
-> Then, as we register the thermal trips array, they will be available
-> in the thermal zone structure and a core function can return the trip
-> given its id.
-> 
-> The get_trip_* ops won't be needed anymore and could be removed. The
-> resulting code will be another step forward to a self encapsulated
-> generic thermal framework.
-> 
-> Most of the drivers can be converted more or less easily. This series
-> does a first round with most of the drivers. Some remain and will be
-> converted but with a smaller set of changes as the conversion is a bit
-> more complex.
-> 
-> Changelog:
->   v7:
->      - Added missing return 0 in the x86_pkg_temp driver
->   v6:
->      - Improved the code for the get_crit_temp() function as suggested by Rafael
->      - Removed inner parenthesis in the set_trip_temp() function and invert the
->        conditions. Check the type of the trip point is unchanged
->      - Folded patch 4 with 1
->      - Add per thermal zone info message in the bang-bang governor
->      - Folded the fix for an uninitialized variable in int340x_thermal_zone_add()
->   v5:
->      - Fixed a deadlock when calling thermal_zone_get_trip() while
->        handling the thermal zone lock
->      - Remove an extra line in the sysfs change
->      - Collected tags
-> v4:
->     - Remove extra lines on exynos changes as reported by Krzysztof Kozlowski
->     - Collected tags
->   v3:
->     - Reorg the series to be git-bisect safe
->     - Added the set_trip generic function
->     - Added the get_crit_temp generic function
->     - Removed more dead code in the thermal-of
->     - Fixed the exynos changelog
->     - Fixed the error check for the exynos drivers
->     - Collected tags
->   v2:
->     - Added missing EXPORT_SYMBOL_GPL() for thermal_zone_get_trip()
->     - Removed tab whitespace in the acerhdf driver
->     - Collected tags
-> 
-> Cc: Raju Rangoju <rajur@chelsio.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Peter Kaestle <peter@piie.net>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Mark Gross <markgross@kernel.org>
-> Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> Cc: Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Ray Jui <rjui@broadcom.com>
-> Cc: Scott Branden <sbranden@broadcom.com>
-> Cc: Support Opensource <support.opensource@diasemi.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Shawn Guo <shawnguo@kernel.org>
-> Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> Cc: Fabio Estevam <festevam@gmail.com>
-> Cc: NXP Linux Team <linux-imx@nxp.com>
-> Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> Cc: Andy Gross <agross@kernel.org>
-> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> Cc: Thierry Reding <thierry.reding@gmail.com>
-> Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> Cc: Eduardo Valentin <edubezval@gmail.com>
-> Cc: Keerthy <j-keerthy@ti.com>
-> Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Antoine Tenart <atenart@kernel.org>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Dmitry Osipenko <digetx@gmail.com>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: platform-driver-x86@vger.kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-rpi-kernel@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-arm-msm@vger.kernel.org
-> Cc: linux-renesas-soc@vger.kernel.org
-> Cc: linux-samsung-soc@vger.kernel.org
-> Cc: linux-tegra@vger.kernel.org
-> Cc: linux-omap@vger.kernel.org
-> 
-> Daniel Lezcano (29):
->    thermal/core: Add a generic thermal_zone_get_trip() function
->    thermal/sysfs: Always expose hysteresis attributes
->    thermal/core: Add a generic thermal_zone_set_trip() function
->    thermal/core/governors: Use thermal_zone_get_trip() instead of ops
->      functions
->    thermal/of: Use generic thermal_zone_get_trip() function
->    thermal/of: Remove unused functions
->    thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
->    thermal/drivers/exynos: of_thermal_get_ntrips()
->    thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
->      thermal_zone_get_trip()
->    thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
->    thermal/drivers/uniphier: Use generic thermal_zone_get_trip() function
->    thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
->    thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
->    thermal/drivers/armada: Use generic thermal_zone_get_trip() function
->    thermal/drivers/rcar_gen3: Use the generic function to get the number
->      of trips
->    thermal/of: Remove of_thermal_get_ntrips()
->    thermal/of: Remove of_thermal_is_trip_valid()
->    thermal/of: Remove of_thermal_set_trip_hyst()
->    thermal/of: Remove of_thermal_get_crit_temp()
->    thermal/drivers/st: Use generic trip points
->    thermal/drivers/imx: Use generic thermal_zone_get_trip() function
->    thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
->    thermal/drivers/broadcom: Use generic thermal_zone_get_trip() function
->    thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
->    thermal/drivers/ti: Remove unused macros ti_thermal_get_trip_value() /
->      ti_thermal_trip_is_valid()
->    thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
->    thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
->    thermal/intel/int340x: Replace parameter to simplify
->    thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-> 
->   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 -
->   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  41 +----
->   drivers/platform/x86/acerhdf.c                |  73 +++-----
->   drivers/thermal/armada_thermal.c              |  39 ++---
->   drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
->   drivers/thermal/da9062-thermal.c              |  52 +-----
->   drivers/thermal/gov_bang_bang.c               |  39 +++--
->   drivers/thermal/gov_fair_share.c              |  18 +-
->   drivers/thermal/gov_power_allocator.c         |  51 +++---
->   drivers/thermal/gov_step_wise.c               |  22 ++-
->   drivers/thermal/hisi_thermal.c                |  11 +-
->   drivers/thermal/imx_thermal.c                 |  72 +++-----
->   .../int340x_thermal/int340x_thermal_zone.c    |  33 ++--
->   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
->   .../processor_thermal_device.c                |  10 +-
->   drivers/thermal/intel/x86_pkg_temp_thermal.c  | 120 +++++++------
->   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  39 ++---
->   drivers/thermal/rcar_gen3_thermal.c           |   2 +-
->   drivers/thermal/rcar_thermal.c                |  53 +-----
->   drivers/thermal/samsung/exynos_tmu.c          |  57 +++----
->   drivers/thermal/st/st_thermal.c               |  47 +----
->   drivers/thermal/tegra/soctherm.c              |  33 ++--
->   drivers/thermal/tegra/tegra30-tsensor.c       |  17 +-
->   drivers/thermal/thermal_core.c                | 161 +++++++++++++++---
->   drivers/thermal/thermal_core.h                |  24 +--
->   drivers/thermal/thermal_helpers.c             |  28 +--
->   drivers/thermal/thermal_netlink.c             |  21 +--
->   drivers/thermal/thermal_of.c                  | 116 -------------
->   drivers/thermal/thermal_sysfs.c               | 133 +++++----------
->   drivers/thermal/ti-soc-thermal/ti-thermal.h   |  15 --
->   drivers/thermal/uniphier_thermal.c            |  27 ++-
->   include/linux/thermal.h                       |  10 ++
->   32 files changed, 560 insertions(+), 818 deletions(-)
-> 
-
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+With best wishes
+Dmitry
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
