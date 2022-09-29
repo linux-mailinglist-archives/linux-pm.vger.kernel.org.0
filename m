@@ -2,47 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22645EFDE5
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 21:25:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BA85EFE06
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 21:36:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229708AbiI2TZU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 15:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S230004AbiI2TgC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 15:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiI2TZR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 15:25:17 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0A13520B6
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 12:25:16 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id 3so1505974qka.5
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 12:25:16 -0700 (PDT)
+        with ESMTP id S229805AbiI2TgB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 15:36:01 -0400
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD2D75F9A6;
+        Thu, 29 Sep 2022 12:35:59 -0700 (PDT)
+Received: by mail-qk1-f177.google.com with SMTP id k12so1517246qkj.8;
+        Thu, 29 Sep 2022 12:35:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=N4NVBv3/A4SsPXdzJa+oEXCquAmnLx2QR4QbpRjugXc=;
-        b=BhMBaxvJrUtGtQ8Hos21KGtyUHzqCEWhhjUjM97hmjI/QI1r5GIOYepA0jyMR1z3jQ
-         ABEi03ti5pKZHV8D138fLbA9sY5hw/1SU9SmGU4ktULqjhnZVO1kJwC6eVG0BMf3ska5
-         P2BJANTPiQ+FDcnfYsE7gMN2G+J2bJUYnN0NkuvGeHKiub100jTXL6ZUwfBn+ENaiHKB
-         gHYoalP9/TqsL9g5xAm9Q9dvy2JYhyiiupyxFUqa73svAnWAYk6OJ3cEQ3PLUQ3cX9U6
-         aa+0gnGjQDGY9QNDMF/gqevC/Vz8xWSHEM780jkKa6HoeQDYrxtbVTNCsjCdmgkETc7k
-         ZYag==
-X-Gm-Message-State: ACrzQf1IcFbVY6HjwdPMMO8G9X+MtictwqLRxzniGu9nfzE/144pPFP7
-        4oQqu/QCbr9oCno6Vy1g6KIwLwpP209SX937FX0=
-X-Google-Smtp-Source: AMsMyM4yZxBASYpRV1MbwZhpEbOG2FrNEqyeiY4nyD26MaoQZH/++tLQZpTwpd86mNqdzB/r4gxv/DEm7qMhMcFZ89A=
-X-Received: by 2002:a05:620a:46ac:b0:6ce:3e55:fc21 with SMTP id
- bq44-20020a05620a46ac00b006ce3e55fc21mr3442039qkb.285.1664479516050; Thu, 29
- Sep 2022 12:25:16 -0700 (PDT)
+        bh=mTAlcKpePLUmoa2PPlLgnnpbbR37vsLCkLJsK3FMOMM=;
+        b=zonwpLQcKQG+p2EU8QstcgW8hyoj+hCye+Gp+61vVgzBiB56Aubi5H1NSfomPzhVsA
+         Zxro0mDXhF9BDRkdtR1Pjgrbo4vANCoeGbndss/IRw3qq7TuNlMTkIFbLBpswp13mvtt
+         kK0gYEwokxJPlqpr8FAG+t1LaEBKxdxmrIyVkxLdwrUP37mG2ZwwFbmHMKt+pBFXdOst
+         8MzsJniTYqeFtIxm7e3sVgZANp37M5v4hSQ53mh56YUzN+IIh/nWd4TVba9h0mi2KyoV
+         Dz77r5JHBkMVnjEMWaVVfOGIzHc+UKx8evxnRkHK6tmgi9gMZiA/TWPpPMQhq4MrvDdV
+         BGHQ==
+X-Gm-Message-State: ACrzQf11s1ZFzyh6D7Auax7/3wMtv0laiaSaLNiEljkKcUcGwuUC/8YT
+        jThOBetiYo28V+NwTDT0xA0kKbSCujtI9zLOQkA=
+X-Google-Smtp-Source: AMsMyM6nwPbbMnzN+TFVkeFoMqPTRrzMun/9SaGI62vQ28n3j95zFU2xk6dTQ3pv+9rh/XRcMovC6IXcuteR1RYwINI=
+X-Received: by 2002:a05:620a:290d:b0:6b6:1a92:d88a with SMTP id
+ m13-20020a05620a290d00b006b61a92d88amr3634308qkp.58.1664480158981; Thu, 29
+ Sep 2022 12:35:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220926103520.jzqzjijbnfrr24yt@vireshk-i7>
-In-Reply-To: <20220926103520.jzqzjijbnfrr24yt@vireshk-i7>
+References: <20220928210059.891387-1-daniel.lezcano@linaro.org>
+ <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org> <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
+ <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
+In-Reply-To: <ae86fc5a-0521-3dde-c2ea-8679c0ec4831@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Sep 2022 21:25:05 +0200
-Message-ID: <CAJZ5v0i+7aqm0Yx56Xa66Kt84REnhiYViLzSGaUg0F1stLpnnw@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm updates for 6.1
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
+Date:   Thu, 29 Sep 2022 21:35:48 +0200
+Message-ID: <CAJZ5v0jrWamTTXcHabSk=6cmm4pEx0_ebiECKZRfrX_vS85YYg@mail.gmail.com>
+Subject: Re: [PATCH v7 00/29] Rework the trip points creation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        Raju Rangoju <rajur@chelsio.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Peter Kaestle <peter@piie.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Eduardo Valentin <edubezval@gmail.com>,
+        Keerthy <j-keerthy@ti.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Antoine Tenart <atenart@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        netdev <netdev@vger.kernel.org>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Samsung SoC <linux-samsung-soc@vger.kernel.org>,
+        linux-tegra <linux-tegra@vger.kernel.org>,
+        Linux OMAP Mailing List <linux-omap@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -54,67 +103,54 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Sep 26, 2022 at 12:35 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Thu, Sep 29, 2022 at 4:57 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> Hi Rafael,
+> On 29/09/2022 15:58, Rafael J. Wysocki wrote:
+> > On Thu, Sep 29, 2022 at 2:26 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >>
+> >> Hi Rafael,
+> >>
+> >> are you happy with the changes?
+> >
+> > I'll have a look and let you know.
 >
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
->
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.1
->
-> for you to fetch changes up to c4c0efb06f17fa4a37ad99e7752b18a5405c76dc:
->
->   cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh (2022-09-26 14:05:45 +0530)
->
-> ----------------------------------------------------------------
-> cpufreq/arm updates for 6.1-rc1
->
-> - Add SM6115 to cpufreq-dt blocklist (Adam Skladowski).
-> - Add support for Tegra239 and minor cleanups (Sumit Gupta, ye xingchen,
->   and Yang Yingliang).
-> - Add freq qos for qcom cpufreq driver and minor cleanups (Xuewen Yan,
->   and Viresh Kumar).
-> - Minor cleanups around functions called at module_init() (Xiu Jianfeng).
-> - Use module_init and add module_exit for bmips driver (Zhang Jianhua).
->
-> ----------------------------------------------------------------
-> Adam Skladowski (1):
->       cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
->
-> Sumit Gupta (1):
->       cpufreq: tegra194: Add support for Tegra239
->
-> Viresh Kumar (1):
->       cpufreq: qcom-cpufreq-hw: Fix uninitialized throttled_freq warning
->
-> Xiu Jianfeng (1):
->       cpufreq: Add __init annotation to module init funcs
->
-> Xuewen Yan (1):
->       cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
->
-> Yang Yingliang (1):
->       cpufreq: tegra194: change tegra239_cpufreq_soc to static
->
-> Zhang Jianhua (1):
->       cpufreq: bmips-cpufreq: Use module_init and add module_exit
->
-> ye xingchen (1):
->       cpufreq: tegra194: Remove the unneeded result variable
->
->  drivers/cpufreq/bmips-cpufreq.c      | 10 ++++++++--
->  drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
->  drivers/cpufreq/highbank-cpufreq.c   |  2 +-
->  drivers/cpufreq/qcom-cpufreq-hw.c    | 24 +++++++++++++++++++-----
->  drivers/cpufreq/sti-cpufreq.c        |  2 +-
->  drivers/cpufreq/tegra194-cpufreq.c   | 35 ++++++++++++++++-------------------
->  drivers/cpufreq/ti-cpufreq.c         |  2 +-
->  7 files changed, 47 insertions(+), 29 deletions(-)
->
-> --
+> Great, thanks
 
-Pulled, thanks!
+Well, because you have not added the history of changes to the
+patches, that will take more time than it would otherwise.
+
+Generally, please always add information on what has changed in the
+patch between different versions of it.
+
+> >> I would like to integrate those changes with the thermal pull request
+> >
+> > Sure, but it looks like you've got only a few ACKs for these patches
+> > from the driver people.
+> >
+> > Wouldn't it be prudent to give them some more time to review the changes?
+>
+> Well I would say I received the ACKs from the drivers which are actively
+> maintained. Others are either not with a dedicated maintainer or not a
+> reactive one. The first iteration of the series is from August 5th. So
+> it has been 2 months.
+>
+> I pinged for imx, armada and tegra two weeks ago.
+
+OK
+
+> The st, hisilicon drivers fall under the thermal maintainers umbrella
+>
+> There are three series coming after this series to be posted. I would
+> like to go forward in the process of cleaning up the framework. IMO two
+> months is enough to let the maintainers pay attention to the changes,
+> especially if we do a gentle ping and there are seven versions.
+>
+> And after that comes the thermal_zone_device_register() parameters
+> simplification :)
+
+Well, that's all fine, but I don't want people to get surprised by
+significant changes they haven't expected and I want to avoid missing
+anything subtle.
