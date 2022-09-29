@@ -2,74 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386BF5EEDE4
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 08:29:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94BEB5EEE32
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 09:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232519AbiI2G3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 02:29:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
+        id S235001AbiI2HAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 03:00:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234737AbiI2G3t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 02:29:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21AA023BC7;
-        Wed, 28 Sep 2022 23:29:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=QlBqQ64wnLSOtZ6WaJVazq9vcYmGSriwpedjzHHAGU0=; b=UMIzTycAQc+4Cl3qGTM7QcB/V4
-        lhW8GfjhHz50dZhgK2JpdkoAqNkFVy7xd7hATnJzt1ZlfocBpfYBTxxWndo4W0Wl1WEc38M0cU2qU
-        HVe2UxTNVaKHXkkO81dSkp+LsS3eEc73b/Bm+ikqvQr6VKktyi7WmQOAH/PpBXD0e44DuDCCFqOMr
-        0tALHCRYTu5i5ImCEX4nbGA+PdlQ1M3XmhE2q+RV+saXN680Dkv4+rCmqiJ2DF7hWlpISGjXdbM77
-        B6PoPFAOQxmfyjxAoWEIHJ5P4jHdn56petQ1nqSvEKLwoMQ0jYbdGUQHlfczC6cFdQQ4cQ+Okm9gK
-        ZjDtsd2Q==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1odn3L-00D2jY-5r; Thu, 29 Sep 2022 06:29:47 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        ChiaEn Wu <chiaen_wu@richtek.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH] power: supply: mt6370: uses IIO interfaces, depends on IIO
-Date:   Wed, 28 Sep 2022 23:29:40 -0700
-Message-Id: <20220929062940.27538-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.37.3
+        with ESMTP id S234990AbiI2HAZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 03:00:25 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDDC9A9D1
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 00:00:18 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id q17so504799lji.11
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 00:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=386vlBKDQjGeVA3UyXvp0S8C8SjZLA4HBFBpObVt3X0=;
+        b=iDQWWtFc4TYoufGNtl5idwxvcScK9gXnShtoEafVc8eis/UFl7Zv1g3g1J5B6CtmGq
+         OBEA6X0b0XY6A+8KBVkZsR/a9s6j8PG6FhJ7uutPLQYb6DqVIqiLO7DVYicJz8Z1g7iJ
+         tlZ66Nv2Nqj0/I/XDzKelS36hUFzT/EaKzTvytSoM0hSHxlg1vYYxYbF1vKp8Bw5v1Im
+         RJpM5kS9+UBX635n5/d0/MN9ZkXypQlWcAZNqqjekcavhZT1WP3h8BQYTV4kusZKoKyg
+         pDVoexaf/MO6eCDox7Bi4eQvNmTy5UCkvWpRnKmsveVWRXbDtfzh3mQHtPv2TMUTngwQ
+         Lwfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=386vlBKDQjGeVA3UyXvp0S8C8SjZLA4HBFBpObVt3X0=;
+        b=4pX9+Y+8DIbsn75ArTKNJF3OciV5ZUxtL/cvFVMw5PKQ45oj5TpfZjOifsQ8A+qX2O
+         nuwrDOtWBQAJHZ+zGQEtbnad8KvRQ+ghn0ZDHI+NDShz+NJFkKYGAw/QvFPsrrNa24mn
+         9KKWKtHqBJXUBjkCfgFovXYHPy5oVo9eFgQ9Q7AjivP+DvNlLjaHgmq6mjSnTiyxsnkQ
+         XXq34m9nvdBlho9ZYOO3c/2GubzwqBogo3QcPa5fKjT9YLC5NAxODoVIR7bFbjFH6ZQv
+         e0OV1tcWs7Xn1yD3WMTMIVFc4eLKvfxWWrzdhcwCz9walPEMtKqbRrO919tW2kEwN9ZG
+         zqXg==
+X-Gm-Message-State: ACrzQf14scnxExjm/jx8aKNsrfyasCj7fgvV4OY1TrAn6dmGC1OidHcj
+        OL1LVhxJHEOJvhCOpEkNi7LMZw==
+X-Google-Smtp-Source: AMsMyM6QKX06KtmExcskEX2wYdgSCaBqkRuJ/kZNSLsxyQRCtbIu7RpvR0GEETSMzkuXfxZSMZZtyQ==
+X-Received: by 2002:a2e:b8d6:0:b0:26c:4776:ba2e with SMTP id s22-20020a2eb8d6000000b0026c4776ba2emr557550ljp.143.1664434816949;
+        Thu, 29 Sep 2022 00:00:16 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id g1-20020a0565123b8100b00497b198987bsm694899lfv.26.2022.09.29.00.00.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Sep 2022 00:00:16 -0700 (PDT)
+Message-ID: <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
+Date:   Thu, 29 Sep 2022 09:00:15 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
+ binding
+Content-Language: en-US
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
+ <20220928083702.17309-2-zhuyinbo@loongson.cn>
+ <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
+ <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+ <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
+ <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The mt6370-charger driver uses IIO interfaces and produces build
-errors when CONFIG_IIO is not set, so it should depend on IIO.
+On 29/09/2022 05:57, Yinbo Zhu wrote:
+> 
+> 
+> 在 2022/9/29 上午11:42, Yinbo Zhu 写道:
+>>
+>>
+>> 在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
+>>> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
+>>>> On 28/09/2022 10:37, Yinbo Zhu wrote:
+>>>>> Add the loongson2k thermal binding with DT schema format using
+>>>>> json-schema.
+>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>
+>>>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>>>> there's no need to repost patches *only* to add the tags. The upstream
+>>>> maintainer will do that for acks received on the version they apply.
+>>>>
+>>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540 
+>>>>
+>>>>
+>>>> If a tag was not added on purpose, please state why and what changed.
+>>>>
+>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> ... and please test your patches before sending :(
+> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
+> Need fix that warning, right?
 
-ERROR: modpost: "iio_read_channel_processed" [drivers/power/supply/mt6370-charger.ko] undefined!
-ERROR: modpost: "devm_iio_channel_get_all" [drivers/power/supply/mt6370-charger.ko] undefined!
+Yes. You said you tested it but then sent with an error... so it's not
+really a testing.
 
-Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger driver")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: ChiaEn Wu <chiaen_wu@richtek.com>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: linux-pm@vger.kernel.org
----
- drivers/power/supply/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
+Best regards,
+Krzysztof
 
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -623,6 +623,7 @@ config CHARGER_MT6370
- 	tristate "MediaTek MT6370 Charger Driver"
- 	depends on MFD_MT6370
- 	depends on REGULATOR
-+	depends on IIO
- 	select LINEAR_RANGES
- 	help
- 	  Say Y here to enable MT6370 Charger Part.
