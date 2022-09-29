@@ -2,313 +2,234 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ABDC5EF6FD
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 15:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829B35EF733
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 16:08:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235382AbiI2N60 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 29 Sep 2022 09:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47750 "EHLO
+        id S234255AbiI2OIT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 10:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbiI2N6Z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 09:58:25 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E619814DAEF;
-        Thu, 29 Sep 2022 06:58:23 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id s13so929209qvq.10;
-        Thu, 29 Sep 2022 06:58:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=j2eS2oYTh9Esr2YqEh75jDi4MmL4n4Pma3h/bszXlXg=;
-        b=JHkw2ED6N+6vDgkpaluIQ0M/eGBd/6C37lL4moRwFXrE3rc5vPbt+742/0s6RAv32Y
-         Fx1WfiUyOc0eSYX/3Ka9uox+NwORxiOopuwjG3g4nR/5a5+x6n7ziHHS37hLA5nPNMgC
-         oqnxY7ORu0gfAF00PvYEoFE2SS2j2t+/IZ7U47QL7PhXLs0bk/jcvPMjE45XawrisUKw
-         MsU8NA2FRWsa9M5ybn51Hy4ecFcnyCpaVUMKdOl14gK0nMmvgGwYwUBuikJTkwDX149g
-         tqjJf/WIvloHnc4dH7neDOgeilCDIGztEAAMxhcxR8jb3SJhrMPFgT4KiCe8VeB7hTc6
-         nR2Q==
-X-Gm-Message-State: ACrzQf05KldJqOtWvx6IGV6kgcAPNqaoeH4VkzRWL1S7LVtHIzfV4fNw
-        IdnljfWKkZvEcHXDyfBxVYNiKvPVcLI8LFlYInY=
-X-Google-Smtp-Source: AMsMyM4AySKi6X3qswEVoCCAsrAbASFeJ+Cin4SOyYreY9KboClevIW+n0aulgtbybFccZ7D03ytU7kp5buKL8yuZEs=
-X-Received: by 2002:ad4:4ea3:0:b0:4af:646a:9787 with SMTP id
- ed3-20020ad44ea3000000b004af646a9787mr2549068qvb.15.1664459902561; Thu, 29
- Sep 2022 06:58:22 -0700 (PDT)
+        with ESMTP id S231199AbiI2OIS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 10:08:18 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2072.outbound.protection.outlook.com [40.107.92.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B311B3493;
+        Thu, 29 Sep 2022 07:08:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=L18ovSRHitiS5TJ2Ygx9epEzT1NlZ04y4rNZ3ngHdx/DVNMF+iPl6xmWQx8V+JqRQohZgN5WEyfZUNP1DQDhzAgeh+Y0Ny7TWJqq9wBJG/LPzobFvO4uxjkDA0p4zXK3/WwUwEyUgR52j7W5RsLdmJjo86J4BQviln/sKVX+U4YkVOiI4s08li7kY/SnbbwJtWNrXmZFCp1b/e/yBUppOyGswR4IqHmdcVYxr/lVoBEeOmpT9BAlr3bAeLH4ZirP8s/7VmBx/N+DUaGQgW4lvjh9OlnpMeI9iJ5m50enXhy+3Vqzn8dAaH/ka4cisFAzxwpx0sKS77w2sdfN9NgL1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3Pf1tF14KTjvpLsXVBJyaImhKRfYnAGROV4RGZMZQFg=;
+ b=ffU3lWFL8UItWS6Y6kkyGKLjA+hOUbLyZ1FTag9S+SE6FNjk1LX9BDYxQC0MAjvTcotJSLHUme+zHuOTODWny/UWIhrBbKB3AaWA8sTqp6FBX/CisqQlX30WUZ+0FmkP3+TaWy/fh2ZXKPn8vCMA9L8nAVlvCKrdeaq8tY3B1J7m1GGQpGuikov7PnLDCk5DSbLKU1Vq1k2o3JVkVj+KD9sxvJRQgm+htysz5rqhwYCkbE4v4P2D9Ob1/BUSRUoiSJMWHGDhgBPrIMcqKi/8wAfX2jZrrxMTTCDfnRiTReVmUNvJd5L0d3izzPna8ZBgmj2BPF2hvz1kp1RYUpkolQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3Pf1tF14KTjvpLsXVBJyaImhKRfYnAGROV4RGZMZQFg=;
+ b=U9aiC9AsvrIiNDBU6tlODRjCWBtvZ4f+iSPaOiEzEvde4q/hXiHhjCG1/uuNsPUkeocBT1gQDQHRc3cAUdf4k+LYEYcGSdPMIDtui7T9oY+GbIGLh9I980yQM+D/gmGd1HqghzKdjVdORId5nZreYgb6Mtj+FzWHXojqkB3p92U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com (2603:10b6:208:3c2::19)
+ by CY5PR12MB6478.namprd12.prod.outlook.com (2603:10b6:930:35::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5654.25; Thu, 29 Sep
+ 2022 14:08:13 +0000
+Received: from MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::a02:442a:25ab:c5ea]) by MN0PR12MB6222.namprd12.prod.outlook.com
+ ([fe80::a02:442a:25ab:c5ea%8]) with mapi id 15.20.5654.025; Thu, 29 Sep 2022
+ 14:08:12 +0000
+Message-ID: <a2ac526b-477d-277c-07ce-2b05c35b643d@amd.com>
+Date:   Thu, 29 Sep 2022 09:08:10 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 4/7] cpufreq: amd_pstate: add AMD pstate EPP support for
+ shared memory type processor
+Content-Language: en-US
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>
+Cc:     "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220909164534.71864-1-Perry.Yuan@amd.com>
+ <20220909164534.71864-5-Perry.Yuan@amd.com>
+ <a21bdd7d-3ade-4a54-1a7f-42831ce8e83a@amd.com>
+ <DM4PR12MB5278639EB4E0FD416653743A9C539@DM4PR12MB5278.namprd12.prod.outlook.com>
+From:   Nathan Fontenot <nathan.fontenot@amd.com>
+In-Reply-To: <DM4PR12MB5278639EB4E0FD416653743A9C539@DM4PR12MB5278.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BLAPR03CA0015.namprd03.prod.outlook.com
+ (2603:10b6:208:32b::20) To MN0PR12MB6222.namprd12.prod.outlook.com
+ (2603:10b6:208:3c2::19)
 MIME-Version: 1.0
-References: <20220928210059.891387-1-daniel.lezcano@linaro.org> <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
-In-Reply-To: <d0be3159-8094-aed1-d9b1-c4b16d88d67c@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 29 Sep 2022 15:58:11 +0200
-Message-ID: <CAJZ5v0hOFoe0KqEimFv9pgmiAOzuRoLjdqoScr53ErNFU4AAPA@mail.gmail.com>
-Subject: Re: [PATCH v7 00/29] Rework the trip points creation
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6222:EE_|CY5PR12MB6478:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4fca4ccc-feb1-4a01-0c02-08daa2240bb6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HvYGvgok+bZBoUVlWxYXVWyqttc/AJA14NDqUZ/gP/QB3BZ4zj19++WmZyoHD++WLZwq2vmCkYmgl9QwdAhX7DfD+vI5JYBBy65uhMYSrXCifRqDpq2K0eE+18jkqxdU1/aDtkD7ZUm6uxj23APLY84pQmciEdKnIAaXa55iu435sEAEjuSX96JNsiuUQLbscXexfa2n2TMf5MGhd+aHt10mQLtXzkoXpnNNcs+bhtksjpFUz/kK1/QMZT0GUX1Dfx03HvwmMzVCXmaV+sVsi4/58ZkaI0cU6fSLwznbI/Iw/OE1puK1dYP5nAZM2G9FqWu5hK6UcIfnH+jaVts80HdRoDRWfER87143MjUCVDXiGTcyOAGLIh9hrhAKAWKO7B5J0IH/Wb+y4Ofbp8dzbivZCoqkOEQ+asLXlEOTtIza5sRpr1hML9H+loLTyBnKH3f5YcHtYn7MADqL575Ap+tluzjVFR5NkNtpf+5y9Q/bqZQ9/I8N+EjE12Ak91LDGv1BCKp+IxZH88/TTrfIqQidi6UzLlOxdmERtIpyq4mUj8h4ibUuptGheh/MNF7vwh3y+Xl5klKqr7KqIKnwPYsY9xXl2+7xlDEK+i3n5502Osmi3TmpFGoF8OuITFQzfMNmCqiJf2LX84p62W3lLKvKNcziqbiDmRxAPaUT0qmy+/JXLfoDISbMbnkonh/t6LXjVMd8ieDNeAH5yg/Kj67oeE3BmfsEH911rKQd0hNgj6rugWjUOQPo/9/mzfPlpMMEZwXtAgNgUY3ZXswMgtPY7e8V6NyZKjVLeBcK1ns=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6222.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(346002)(136003)(396003)(376002)(451199015)(31686004)(110136005)(36756003)(54906003)(41300700001)(86362001)(5660300002)(8936002)(26005)(6512007)(2616005)(31696002)(4326008)(66476007)(6486002)(316002)(53546011)(478600001)(38100700002)(66946007)(8676002)(2906002)(186003)(44832011)(66556008)(6506007)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?STNxRnZjR2RBMnZmdTh1dnY3Ui9iVU1CUURPZERkWEhKM21UZXhkT0dlUzJ3?=
+ =?utf-8?B?cHY2MDhmbU91Lyt4NWMzUDV6MjUxeFZvb0g5QlZRWWt6OE9FZ1A4NUNxRzFN?=
+ =?utf-8?B?MnArVjVXUzAyVFdRZEwvN3gvSEY1clR0RG52MVUvYmVZK01ybEVRTWRDL3FW?=
+ =?utf-8?B?eG83S0R5d0R2aTJ0ZXpDaXg3VE85bnkrb21ESDlDUEJkeWdQcWk4R1pWSTZa?=
+ =?utf-8?B?SUdVcnNBak1sSmxUVFpPYmdFcTFhVXJUWlROU3FiK096dlV6MFNycy9qTmlm?=
+ =?utf-8?B?U0sxUWZvR3ZEOXYyVm9PNDN5ZjBpc0lwUENBc1Zxc05hSmgrOXBSdmNPYmhs?=
+ =?utf-8?B?YzRSYnBqR0h1T1VHZG5XYVhXd2dzVHFyRkxKcDhQak5wUnZtdXdKVmlRTHBY?=
+ =?utf-8?B?bXNmWU1qMXpqS1N6NXZVWTlGUUNHdUFWV0VOb05xd1BwYVJ4OXVQR1VGY1dx?=
+ =?utf-8?B?Y3dxbktHRlhxMEpoR1IvR01VclFTS3RmU0JwNHVJUmNwV2ZiZE0yemRraFdw?=
+ =?utf-8?B?SGNIM2V3QkFiT3A5WjZHZHpQWHBuN09tWUxHaHpwN1NFalJuRXJMYlRRVkFR?=
+ =?utf-8?B?V2YwbVFjakZxVVovY3hTcGsxUmloZi9YUmZ0emVSREVuMkpQRE84Y0EvaWs1?=
+ =?utf-8?B?TXphcVk0Ync2YnBqQmMzclBmcEhwVjJyUlZoemgwb2p1MXlmcGI5RE95V2lH?=
+ =?utf-8?B?N2hsVndhZkVORkRKbFdMZy8xVHhpNEVERUdmSTdLSDA2OVJZMXBJdkxQYWls?=
+ =?utf-8?B?Ry9KZWJCNGNhcEpNVEh4aHdoZW1pbjZoSHhZL1kxNnpZaXJpTEJFMVEyVW00?=
+ =?utf-8?B?RFN4TmhCS2xlQVJ1Z2J3WFNuQzFyRDg2ckxCYitHQzF1dWJMekFaTTBpNCtL?=
+ =?utf-8?B?Tk9tUG5kaFR1UGF6ZXc1L2tRajB2U1pVemZYZ1BEQVhMTXdQT2FGb2ptbkly?=
+ =?utf-8?B?UGM2WXpCbFE4aDZyZk02aE9UY3JPczM1ejhsd3BkSHZDMVB3R1dsTVpiVTBJ?=
+ =?utf-8?B?eDhFNVNGaVVGazJsMnNDbjJobGFmTFBnbnNwNlNDcm41RCt1eUl3dVREVnZJ?=
+ =?utf-8?B?dmhIenQ2a2pTNENDMjdKeCthdXBtWG16ZlM2RFE4NGRBb1gwdE9WTXFYUXox?=
+ =?utf-8?B?TXVURWNxWThGK3pBcVh2UG1Fd2dJaVczZEZwR1RaK0tTTUJsUS96eFBjV25s?=
+ =?utf-8?B?KzQra2xSdkFvVGtsMWMwOCt3RW5qVDd0Y1VsREJYWU5tRjZKWVdhRDh1Q2hO?=
+ =?utf-8?B?Tjh1RVR5ak9IQWZieGIrQnRHemQzNmZ1anJRTisxdCtxR3pBTW12L0M0WFJj?=
+ =?utf-8?B?dzZjVDFydmJYdnErZFA3OGxwVGt1UGx0NDQrWjRsT1pPNEJsc1pvc2VqY0FX?=
+ =?utf-8?B?UEh0U2xSQTkramI1SWQwUXgyWFdqaEI1RnF6b2RKTktBUmxsMThuMC9uVWNL?=
+ =?utf-8?B?ditUSGZ1T250Vmw2ZUVBSTBrcG5xbEFHb0NPWVlzREdldU5nUU1zRkxPWWk3?=
+ =?utf-8?B?T09PbzlxSjE2eSthdEZrb2l3TEJLMW4ralRMSmhLdlgwajVuY29JR2d0M25q?=
+ =?utf-8?B?WU43WUY1WUpsajg2czVQRWVueEFtNVZSaHZoS3JvTnF0Z3hiUFZUUEE3T0Fl?=
+ =?utf-8?B?dFlwMjNkVnNFbzFsaHhjRms2NEhab296cnRldy9mMkt5aUVUTXBPOUxOM0Y4?=
+ =?utf-8?B?all2Tlk1Znh4VU51UjdrUG1Gb2RaR0hqN2E2ZE4zOHI1MThGdGJ1eStWRFlD?=
+ =?utf-8?B?TzZ6ZjdBSElYVitDZmdDRzlTdjBhVUpHUjdVNjBZR2hzQlE5ZGhabzFlOVZI?=
+ =?utf-8?B?a2FOQWk5SllpOUhSQmF3RytDMHFWUE1DMnNKQy9UL1pZanordS9CWC9uRVpo?=
+ =?utf-8?B?bkVDTUpSM0QybnAwc2YxdWVoWlRHeW4zSmRlTzFQM2dFVEVuM1BOR2QyN0Q3?=
+ =?utf-8?B?b3NLUmI0b1dtbmtYUFJXRDd5MWQxUVRmT2h2N0Z5TSttdGE3ZE92R1dIbWJl?=
+ =?utf-8?B?VEVKOVltTmt0ejFzcGdFRGJ5TzNPS1h4UXJlTjYyNzRwNVl0M1pZODNNQjBI?=
+ =?utf-8?B?WUhldXl5UDhXRERwL25OZlJTYzd5UWUvZThLTmozSHdjTFBQOUpuZmh5ZUFG?=
+ =?utf-8?Q?jjHwAnxNLBl8NkkPrSTIkQO4H?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4fca4ccc-feb1-4a01-0c02-08daa2240bb6
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6222.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2022 14:08:12.7067
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Bt27C6rkXQfkn04ydNMc9cYVIYJkSSOn7m2/iYVEFvlkS0lTiMPf6ilbSM3r5sYUohVi1zKi69F3a/spxjQepQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR12MB6478
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 2:26 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> are you happy with the changes?
+On 9/25/22 07:23, Yuan, Perry wrote:
+> [AMD Official Use Only - General]
+> 
+> Hi Nathan.
+> 
+> 
+>> -----Original Message-----
+>> From: Fontenot, Nathan <Nathan.Fontenot@amd.com>
+>> Sent: Friday, September 16, 2022 12:24 AM
+>> To: Yuan, Perry <Perry.Yuan@amd.com>; rafael.j.wysocki@intel.com; Huang,
+>> Ray <Ray.Huang@amd.com>; viresh.kumar@linaro.org
+>> Cc: Sharma, Deepak <Deepak.Sharma@amd.com>; Limonciello, Mario
+>> <Mario.Limonciello@amd.com>; Deucher, Alexander
+>> <Alexander.Deucher@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>;
+>> Huang, Shimmer <Shimmer.Huang@amd.com>; Du, Xiaojian
+>> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
+>> pm@vger.kernel.org; linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH 4/7] cpufreq: amd_pstate: add AMD pstate EPP support
+>> for shared memory type processor
+>>
+>> On 9/9/22 11:45, Perry Yuan wrote:
+>>> Add Energy Performance Preference support for AMD SOCs which only
+>>> support the shared memory interface that implemented on Zen2 and Zen3
+>>> processors, because this type CPU has no MSR supported, it will use
+>>> ACPI PCC channel to enable EPP and reset desired perf to be zero.
+>>>
+>>> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+>>> ---
+>>>  drivers/cpufreq/amd-pstate.c | 12 ++++++++++++
+>>>  1 file changed, 12 insertions(+)
+>>>
+>>> diff --git a/drivers/cpufreq/amd-pstate.c
+>>> b/drivers/cpufreq/amd-pstate.c index 451295284a26..fff298744a8e 100644
+>>> --- a/drivers/cpufreq/amd-pstate.c
+>>> +++ b/drivers/cpufreq/amd-pstate.c
+>>> @@ -133,12 +133,24 @@ static inline int pstate_enable(bool enable)
+>>>
+>>>  static int cppc_enable(bool enable)
+>>>  {
+>>> +	struct cppc_perf_ctrls perf_ctrls;
+>>>  	int cpu, ret = 0;
+>>>
+>>>  	for_each_present_cpu(cpu) {
+>>>  		ret = cppc_set_enable(cpu, enable);
+>>>  		if (ret)
+>>>  			return ret;
+>>> +
+>>> +	/* Enable active mode for EPP */
+>>> +	ret = cppc_set_auto_epp(cpu, enable);
+>>> +	if (ret)
+>>> +		return ret;
+>>> +
+>>> +	/* Set zero to desired perf to enable EPP control*/
+>>> +	perf_ctrls.desired_perf = 0;
+>>> +	ret = cppc_set_perf(cpu, &perf_ctrls);
+>>> +	if (ret)
+>>> +		return ret;
+>>
+>> Shouldn't this entire block be indented one additional tab over since its part
+>> of the for_each_present_cpu() loop?
+>>
+>> -Nathan
+> 
+> Yes, I can see the indent in my local vscode editor, I do not know why the patch didn`t show that.
+> Is it correct as below ?
+> 
+> 	for_each_present_cpu(cpu) {
+> 		ret = cppc_set_enable(cpu, enable);
+> 		if (ret)
+> 			return ret;
+> 
+> 		if (epp_enabled) {
+> 			/* Enable autonomous mode for EPP */
+> 			ret = cppc_set_auto_epp(cpu, enable);
+> 			if (ret)
+> 				return ret;
+> 
+> 			/* Set zero to desired perf to allow EPP firmware control*/
+> 			perf_ctrls.desired_perf = 0;
+> 			ret = cppc_set_perf(cpu, &perf_ctrls);
+> 			if (ret)
+> 				return ret;
+> 		}
+> 	}
+> 
+> Perry. 
 
-I'll have a look and let you know.
+That looks much better.
 
-> I would like to integrate those changes with the thermal pull request
+-Nathan
 
-Sure, but it looks like you've got only a few ACKs for these patches
-from the driver people.
-
-Wouldn't it be prudent to give them some more time to review the changes?
-
-> On 28/09/2022 23:00, Daniel Lezcano wrote:
-> > This work is the pre-requisite of handling correctly when the trip
-> > point are crossed. For that we need to rework how the trip points are
-> > declared and assigned to a thermal zone.
-> >
-> > Even if it appears to be a common sense to have the trip points being
-> > ordered, this no guarantee neither documentation telling that is the
-> > case.
-> >
-> > One solution could have been to create an ordered array of trips built
-> > when registering the thermal zone by calling the different get_trip*
-> > ops. However those ops receive a thermal zone pointer which is not
-> > known as it is in the process of creating it.
-> >
-> > This cyclic dependency shows we have to rework how we manage the trip
-> > points.
-> >
-> > Actually, all the trip points definition can be common to the backend
-> > sensor drivers and we can factor out the thermal trip structure in all
-> > of them.
-> >
-> > Then, as we register the thermal trips array, they will be available
-> > in the thermal zone structure and a core function can return the trip
-> > given its id.
-> >
-> > The get_trip_* ops won't be needed anymore and could be removed. The
-> > resulting code will be another step forward to a self encapsulated
-> > generic thermal framework.
-> >
-> > Most of the drivers can be converted more or less easily. This series
-> > does a first round with most of the drivers. Some remain and will be
-> > converted but with a smaller set of changes as the conversion is a bit
-> > more complex.
-> >
-> > Changelog:
-> >   v7:
-> >      - Added missing return 0 in the x86_pkg_temp driver
-> >   v6:
-> >      - Improved the code for the get_crit_temp() function as suggested by Rafael
-> >      - Removed inner parenthesis in the set_trip_temp() function and invert the
-> >        conditions. Check the type of the trip point is unchanged
-> >      - Folded patch 4 with 1
-> >      - Add per thermal zone info message in the bang-bang governor
-> >      - Folded the fix for an uninitialized variable in int340x_thermal_zone_add()
-> >   v5:
-> >      - Fixed a deadlock when calling thermal_zone_get_trip() while
-> >        handling the thermal zone lock
-> >      - Remove an extra line in the sysfs change
-> >      - Collected tags
-> > v4:
-> >     - Remove extra lines on exynos changes as reported by Krzysztof Kozlowski
-> >     - Collected tags
-> >   v3:
-> >     - Reorg the series to be git-bisect safe
-> >     - Added the set_trip generic function
-> >     - Added the get_crit_temp generic function
-> >     - Removed more dead code in the thermal-of
-> >     - Fixed the exynos changelog
-> >     - Fixed the error check for the exynos drivers
-> >     - Collected tags
-> >   v2:
-> >     - Added missing EXPORT_SYMBOL_GPL() for thermal_zone_get_trip()
-> >     - Removed tab whitespace in the acerhdf driver
-> >     - Collected tags
-> >
-> > Cc: Raju Rangoju <rajur@chelsio.com>
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: Peter Kaestle <peter@piie.net>
-> > Cc: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Mark Gross <markgross@kernel.org>
-> > Cc: Miquel Raynal <miquel.raynal@bootlin.com>
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Amit Kucheria <amitk@kernel.org>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Nicolas Saenz Julienne <nsaenz@kernel.org>
-> > Cc: Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>
-> > Cc: Florian Fainelli <f.fainelli@gmail.com>
-> > Cc: Ray Jui <rjui@broadcom.com>
-> > Cc: Scott Branden <sbranden@broadcom.com>
-> > Cc: Support Opensource <support.opensource@diasemi.com>
-> > Cc: Lukasz Luba <lukasz.luba@arm.com>
-> > Cc: Shawn Guo <shawnguo@kernel.org>
-> > Cc: Sascha Hauer <s.hauer@pengutronix.de>
-> > Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-> > Cc: Fabio Estevam <festevam@gmail.com>
-> > Cc: NXP Linux Team <linux-imx@nxp.com>
-> > Cc: Thara Gopinath <thara.gopinath@linaro.org>
-> > Cc: Andy Gross <agross@kernel.org>
-> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > Cc: "Niklas Söderlund" <niklas.soderlund@ragnatech.se>
-> > Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>
-> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Cc: Alim Akhtar <alim.akhtar@samsung.com>
-> > Cc: Thierry Reding <thierry.reding@gmail.com>
-> > Cc: Jonathan Hunter <jonathanh@nvidia.com>
-> > Cc: Eduardo Valentin <edubezval@gmail.com>
-> > Cc: Keerthy <j-keerthy@ti.com>
-> > Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> > Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> > Cc: Antoine Tenart <atenart@kernel.org>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Dmitry Osipenko <digetx@gmail.com>
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: platform-driver-x86@vger.kernel.org
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-rpi-kernel@lists.infradead.org
-> > Cc: linux-arm-kernel@lists.infradead.org
-> > Cc: linux-arm-msm@vger.kernel.org
-> > Cc: linux-renesas-soc@vger.kernel.org
-> > Cc: linux-samsung-soc@vger.kernel.org
-> > Cc: linux-tegra@vger.kernel.org
-> > Cc: linux-omap@vger.kernel.org
-> >
-> > Daniel Lezcano (29):
-> >    thermal/core: Add a generic thermal_zone_get_trip() function
-> >    thermal/sysfs: Always expose hysteresis attributes
-> >    thermal/core: Add a generic thermal_zone_set_trip() function
-> >    thermal/core/governors: Use thermal_zone_get_trip() instead of ops
-> >      functions
-> >    thermal/of: Use generic thermal_zone_get_trip() function
-> >    thermal/of: Remove unused functions
-> >    thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/exynos: of_thermal_get_ntrips()
-> >    thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
-> >      thermal_zone_get_trip()
-> >    thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/uniphier: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/rcar_gen3: Use the generic function to get the number
-> >      of trips
-> >    thermal/of: Remove of_thermal_get_ntrips()
-> >    thermal/of: Remove of_thermal_is_trip_valid()
-> >    thermal/of: Remove of_thermal_set_trip_hyst()
-> >    thermal/of: Remove of_thermal_get_crit_temp()
-> >    thermal/drivers/st: Use generic trip points
-> >    thermal/drivers/imx: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/broadcom: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/ti: Remove unused macros ti_thermal_get_trip_value() /
-> >      ti_thermal_trip_is_valid()
-> >    thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-> >    thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
-> >    thermal/intel/int340x: Replace parameter to simplify
-> >    thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-> >
-> >   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h    |   2 -
-> >   .../ethernet/chelsio/cxgb4/cxgb4_thermal.c    |  41 +----
-> >   drivers/platform/x86/acerhdf.c                |  73 +++-----
-> >   drivers/thermal/armada_thermal.c              |  39 ++---
-> >   drivers/thermal/broadcom/bcm2835_thermal.c    |   8 +-
-> >   drivers/thermal/da9062-thermal.c              |  52 +-----
-> >   drivers/thermal/gov_bang_bang.c               |  39 +++--
-> >   drivers/thermal/gov_fair_share.c              |  18 +-
-> >   drivers/thermal/gov_power_allocator.c         |  51 +++---
-> >   drivers/thermal/gov_step_wise.c               |  22 ++-
-> >   drivers/thermal/hisi_thermal.c                |  11 +-
-> >   drivers/thermal/imx_thermal.c                 |  72 +++-----
-> >   .../int340x_thermal/int340x_thermal_zone.c    |  33 ++--
-> >   .../int340x_thermal/int340x_thermal_zone.h    |   4 +-
-> >   .../processor_thermal_device.c                |  10 +-
-> >   drivers/thermal/intel/x86_pkg_temp_thermal.c  | 120 +++++++------
-> >   drivers/thermal/qcom/qcom-spmi-temp-alarm.c   |  39 ++---
-> >   drivers/thermal/rcar_gen3_thermal.c           |   2 +-
-> >   drivers/thermal/rcar_thermal.c                |  53 +-----
-> >   drivers/thermal/samsung/exynos_tmu.c          |  57 +++----
-> >   drivers/thermal/st/st_thermal.c               |  47 +----
-> >   drivers/thermal/tegra/soctherm.c              |  33 ++--
-> >   drivers/thermal/tegra/tegra30-tsensor.c       |  17 +-
-> >   drivers/thermal/thermal_core.c                | 161 +++++++++++++++---
-> >   drivers/thermal/thermal_core.h                |  24 +--
-> >   drivers/thermal/thermal_helpers.c             |  28 +--
-> >   drivers/thermal/thermal_netlink.c             |  21 +--
-> >   drivers/thermal/thermal_of.c                  | 116 -------------
-> >   drivers/thermal/thermal_sysfs.c               | 133 +++++----------
-> >   drivers/thermal/ti-soc-thermal/ti-thermal.h   |  15 --
-> >   drivers/thermal/uniphier_thermal.c            |  27 ++-
-> >   include/linux/thermal.h                       |  10 ++
-> >   32 files changed, 560 insertions(+), 818 deletions(-)
-> >
->
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+> 
+>>
+>>>  	}
+>>>
+>>>  	return ret;
