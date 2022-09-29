@@ -2,62 +2,24 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BEB5EEE32
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 09:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A94655EEE71
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 09:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235001AbiI2HAc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 03:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S235026AbiI2HHi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 03:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234990AbiI2HAZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 03:00:25 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCDDC9A9D1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 00:00:18 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id q17so504799lji.11
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 00:00:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=386vlBKDQjGeVA3UyXvp0S8C8SjZLA4HBFBpObVt3X0=;
-        b=iDQWWtFc4TYoufGNtl5idwxvcScK9gXnShtoEafVc8eis/UFl7Zv1g3g1J5B6CtmGq
-         OBEA6X0b0XY6A+8KBVkZsR/a9s6j8PG6FhJ7uutPLQYb6DqVIqiLO7DVYicJz8Z1g7iJ
-         tlZ66Nv2Nqj0/I/XDzKelS36hUFzT/EaKzTvytSoM0hSHxlg1vYYxYbF1vKp8Bw5v1Im
-         RJpM5kS9+UBX635n5/d0/MN9ZkXypQlWcAZNqqjekcavhZT1WP3h8BQYTV4kusZKoKyg
-         pDVoexaf/MO6eCDox7Bi4eQvNmTy5UCkvWpRnKmsveVWRXbDtfzh3mQHtPv2TMUTngwQ
-         Lwfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=386vlBKDQjGeVA3UyXvp0S8C8SjZLA4HBFBpObVt3X0=;
-        b=4pX9+Y+8DIbsn75ArTKNJF3OciV5ZUxtL/cvFVMw5PKQ45oj5TpfZjOifsQ8A+qX2O
-         nuwrDOtWBQAJHZ+zGQEtbnad8KvRQ+ghn0ZDHI+NDShz+NJFkKYGAw/QvFPsrrNa24mn
-         9KKWKtHqBJXUBjkCfgFovXYHPy5oVo9eFgQ9Q7AjivP+DvNlLjaHgmq6mjSnTiyxsnkQ
-         XXq34m9nvdBlho9ZYOO3c/2GubzwqBogo3QcPa5fKjT9YLC5NAxODoVIR7bFbjFH6ZQv
-         e0OV1tcWs7Xn1yD3WMTMIVFc4eLKvfxWWrzdhcwCz9walPEMtKqbRrO919tW2kEwN9ZG
-         zqXg==
-X-Gm-Message-State: ACrzQf14scnxExjm/jx8aKNsrfyasCj7fgvV4OY1TrAn6dmGC1OidHcj
-        OL1LVhxJHEOJvhCOpEkNi7LMZw==
-X-Google-Smtp-Source: AMsMyM6QKX06KtmExcskEX2wYdgSCaBqkRuJ/kZNSLsxyQRCtbIu7RpvR0GEETSMzkuXfxZSMZZtyQ==
-X-Received: by 2002:a2e:b8d6:0:b0:26c:4776:ba2e with SMTP id s22-20020a2eb8d6000000b0026c4776ba2emr557550ljp.143.1664434816949;
-        Thu, 29 Sep 2022 00:00:16 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id g1-20020a0565123b8100b00497b198987bsm694899lfv.26.2022.09.29.00.00.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Sep 2022 00:00:16 -0700 (PDT)
-Message-ID: <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
-Date:   Thu, 29 Sep 2022 09:00:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
+        with ESMTP id S235050AbiI2HHZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 03:07:25 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CB993846C;
+        Thu, 29 Sep 2022 00:07:21 -0700 (PDT)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOIaRDVjm6kjAA--.2760S2;
+        Thu, 29 Sep 2022 15:07:06 +0800 (CST)
 Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
  binding
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
@@ -67,59 +29,89 @@ To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>
+        Liu Peibao <liupeibao@loongson.cn>, zhuyinbo@loongson.cn
 References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
  <20220928083702.17309-2-zhuyinbo@loongson.cn>
  <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
  <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
  <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
  <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
+ <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <abaf9b69-487c-0f1e-7a94-201155f5e3d2@loongson.cn>
+Date:   Thu, 29 Sep 2022 15:07:06 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
+MIME-Version: 1.0
+In-Reply-To: <9b62594f-7473-9974-8ab3-4c93aae5fa64@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8CxYOIaRDVjm6kjAA--.2760S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr1kGry5XrWDtFWDXF43ZFb_yoW8Xry7pF
+        y8Ja1qkFWDJrW3Kw48Kw1xtF1Yvws7tr45Xr1rGr4UArWqqw15tF1DZr1jkryDWrWfXFW7
+        trW5K3srJr4UZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9l14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCY02Avz4vE-syl42xK82IYc2Ij64vIr41l4I
+        8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AK
+        xVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcV
+        AFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8I
+        cIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r
+        4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/09/2022 05:57, Yinbo Zhu wrote:
-> 
-> 
-> 在 2022/9/29 上午11:42, Yinbo Zhu 写道:
+
+
+在 2022/9/29 下午3:00, Krzysztof Kozlowski 写道:
+> On 29/09/2022 05:57, Yinbo Zhu wrote:
 >>
 >>
->> 在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
->>> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
->>>> On 28/09/2022 10:37, Yinbo Zhu wrote:
->>>>> Add the loongson2k thermal binding with DT schema format using
->>>>> json-schema.
->>>>>
->>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>
->>>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
->>>> there's no need to repost patches *only* to add the tags. The upstream
->>>> maintainer will do that for acks received on the version they apply.
->>>>
->>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540 
->>>>
->>>>
->>>> If a tag was not added on purpose, please state why and what changed.
->>>>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> 在 2022/9/29 上午11:42, Yinbo Zhu 写道:
 >>>
->>> ... and please test your patches before sending :(
-> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
-> Need fix that warning, right?
-
-Yes. You said you tested it but then sent with an error... so it's not
-really a testing.
-
-Best regards,
-Krzysztof
+>>>
+>>> 在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
+>>>> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
+>>>>> On 28/09/2022 10:37, Yinbo Zhu wrote:
+>>>>>> Add the loongson2k thermal binding with DT schema format using
+>>>>>> json-schema.
+>>>>>>
+>>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>
+>>>>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>>>>> there's no need to repost patches *only* to add the tags. The upstream
+>>>>> maintainer will do that for acks received on the version they apply.
+>>>>>
+>>>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>>>>
+>>>>>
+>>>>> If a tag was not added on purpose, please state why and what changed.
+>>>>>
+>>>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>>
+>>>> ... and please test your patches before sending :(
+>> You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
+>> Need fix that warning, right?
+> 
+> Yes. You said you tested it but then sent with an error... so it's not
+> really a testing.
+sorry, I did do some testing. but I think It is okay that can generate a 
+dtb  without reporting an error when compile yaml file, in fact, I 
+ignore the warning,  I will fix it in v6.
+> 
+> Best regards,
+> Krzysztof
+> 
 
