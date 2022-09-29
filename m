@@ -2,21 +2,21 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804565EEC82
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 05:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600AF5EEC9B
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Sep 2022 05:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232494AbiI2Dmb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Sep 2022 23:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
+        id S234533AbiI2D51 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 28 Sep 2022 23:57:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiI2Dm3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 23:42:29 -0400
+        with ESMTP id S234523AbiI2D50 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Sep 2022 23:57:26 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A720124775;
-        Wed, 28 Sep 2022 20:42:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06735F161D;
+        Wed, 28 Sep 2022 20:57:23 -0700 (PDT)
 Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxnmsMFDVj754jAA--.52949S2;
-        Thu, 29 Sep 2022 11:42:19 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx72ueFzVjZ6AjAA--.64342S2;
+        Thu, 29 Sep 2022 11:57:18 +0800 (CST)
 Subject: Re: [PATCH v5 2/3] dt-bindings: thermal: add loongson2k thermal
  binding
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -34,20 +34,21 @@ References: <20220928083702.17309-1-zhuyinbo@loongson.cn>
  <20220928083702.17309-2-zhuyinbo@loongson.cn>
  <066b55cf-4a28-89a2-56ab-572590c97c30@linaro.org>
  <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+ <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
 From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
-Date:   Thu, 29 Sep 2022 11:42:03 +0800
+Message-ID: <ed762d71-7104-b1ad-009d-51c1a4407472@loongson.cn>
+Date:   Thu, 29 Sep 2022 11:57:18 +0800
 User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
  Thunderbird/68.7.0
 MIME-Version: 1.0
-In-Reply-To: <9b2f2d43-981d-3ffb-7526-dc3e58a9f367@linaro.org>
+In-Reply-To: <f0946817-cc2c-449b-d93b-0dd94a0f51f1@loongson.cn>
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxnmsMFDVj754jAA--.52949S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrZw18CrW8CFy7Aw48JF48Crg_yoW8Jr4xpa
-        4xA3Z8KayDArya9w4xKa4xAF1F9wsIyFZrJr18KF48AFWDZwnxtF9Yyr1j9r1kurWFqFWx
-        Zay5urZxJw4DZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID: AQAAf8Cx72ueFzVjZ6AjAA--.64342S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar45Xr17ZF13XF1UJw17Awb_yoW8GFWrpF
+        yxA3ZrKFWDArya93yxK3WxAFnY9rsxtrWUXr15Kr4UAFWqqwnxtFnY9ryq9rykW3yrWFWI
+        qFW5W39rJrWDZ3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
         9KBjDU0xBIdaVrnRJUUU9C14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
         rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
         1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
@@ -72,37 +73,43 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
-> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
->> On 28/09/2022 10:37, Yinbo Zhu wrote:
->>> Add the loongson2k thermal binding with DT schema format using
->>> json-schema.
+在 2022/9/29 上午11:42, Yinbo Zhu 写道:
+> 
+> 
+> 在 2022/9/28 下午10:18, Krzysztof Kozlowski 写道:
+>> On 28/09/2022 10:37, Krzysztof Kozlowski wrote:
+>>> On 28/09/2022 10:37, Yinbo Zhu wrote:
+>>>> Add the loongson2k thermal binding with DT schema format using
+>>>> json-schema.
+>>>>
+>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 >>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>> Please add Acked-by/Reviewed-by tags when posting new versions. However,
+>>> there's no need to repost patches *only* to add the tags. The upstream
+>>> maintainer will do that for acks received on the version they apply.
+>>>
+>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540 
+>>>
+>>>
+>>> If a tag was not added on purpose, please state why and what changed.
+>>>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >>
->> Please add Acked-by/Reviewed-by tags when posting new versions. However,
->> there's no need to repost patches *only* to add the tags. The upstream
->> maintainer will do that for acks received on the version they apply.
+>> ... and please test your patches before sending :(
+You said is refer that "reg: [[0, 534779136], [0, 48]] is too long" ?
+Need fix that warning, right?
 >>
->> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
->>
->> If a tag was not added on purpose, please state why and what changed.
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Best regards,
+>> Krzysztof
+> Hi Krzysztof,
 > 
-> ... and please test your patches before sending :(
+> I have a function test for these three patch, that it's okay.
+> for binding patch I have a compile test, as follow, it is okay.
+> root@m-pc:/home/m/workspace/test/code/upstream# make DT_CHECKER_FLAGS=-m 
+> dt_binding_check 
+> DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
 > 
-> Best regards,
-> Krzysztof
-Hi Krzysztof,
-
-I have a function test for these three patch, that it's okay.
-for binding patch I have a compile test, as follow, it is okay.
-root@m-pc:/home/m/workspace/test/code/upstream# make DT_CHECKER_FLAGS=-m 
-dt_binding_check 
-DT_SCHEMA_FILES=Documentation/devicetree/bindings/thermal/ls2k-thermal.yaml
-
-BRs,
-Yinbo Zhu.
-> 
+> BRs,
+> Yinbo Zhu.
+>>
 
