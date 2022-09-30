@@ -2,58 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A94055F0193
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Sep 2022 01:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04C95F021B
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Sep 2022 03:09:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiI2X5J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Sep 2022 19:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S229734AbiI3BJO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Sep 2022 21:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiI2X5I (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 19:57:08 -0400
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D4CDD340
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 16:57:07 -0700 (PDT)
-Received: by mail-pj1-f43.google.com with SMTP id gf8so208539pjb.5
-        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 16:57:07 -0700 (PDT)
+        with ESMTP id S229919AbiI3BJN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Sep 2022 21:09:13 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86971F9CA2
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 18:09:11 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id e129so2871344pgc.9
+        for <linux-pm@vger.kernel.org>; Thu, 29 Sep 2022 18:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=6zu5cVI+Iv4TX95Z1+VgZcFJI+6VGuo5ryEev6S/5uI=;
+        b=SnJ/Jtg3RazQ9gNhdKrL3gyO519IiQc6cLPl5gGLJz7PRYIPKfUMH2JgklRvwY+Arg
+         0uGyw7ei+yvJLj6oUEXDyNKodcAw589RRZ+ujujCDyWUQ04IWOJod+A7wmANXJo7KzdK
+         LT1nwBix2KUU6O5kuD5qiogwdt3Wg0q9h+SNmDB1MBA9+wZR7P/OD71SWoIXb9gcwf9p
+         1tk1UeTdpAUeOP3dPMohW9QM+BFIufjp9My+jrGLFE+JT5XvhFb+MswsPzodcheofoDs
+         U2QUKMl7DJXD249XLBTF/4BR0c0DIHPvp6bD68rcVp/MhGQQXSLZRr0k+F4Jsrq7CDhs
+         o5Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=0hiOmFNw3vUr1qIQOZ1iJJ1qBvLhM6j/K3PWxBaYczc=;
-        b=hZSM/Ea86hl75XXwme4ov/G6eMWKNygw1M86YA/i5tNnUbj4EZtxwGid5tN/3eECDT
-         BhQDE+P7GEF+Qcz9h6AqZvxl2HZVX5yTkW3xVBy12j/8DiYtm6BtPad7U5q4WyGmm5Kg
-         153yKPpw0eavAhe6QvU2GEXW6syhkPgCezNrNw+z6jBUc1idoE728w9vLHwy5hJivwqL
-         vPaC/5nddHMjxvqYTYeu3bCOmn2PPFYjTpsGNfu3RyTxtVbuqaStci/eLUIBnedGEKUN
-         s3kA4ITmsBab1LG7PjeB+jKAJ9Z7w8b4DdUtgSLcsBk3GuCZBuH2sgBPq6wEbT+iCkCh
-         SV9A==
-X-Gm-Message-State: ACrzQf2ptPKfik5Zxg93UE4+WT3c1u8/x6rRLf0Axxt6ubx39Gl8INDy
-        Bj7q7ztZxMjcZA0mSmVXQV7lrg==
-X-Google-Smtp-Source: AMsMyM7RickZmWvA5nYIbma/BzAEICuH8mn9KHWobs8Qk2wZLETHH9DVEjzYRV8475r2zCKl7GjRzg==
-X-Received: by 2002:a17:90a:fd8c:b0:200:8cf9:63f4 with SMTP id cx12-20020a17090afd8c00b002008cf963f4mr6362140pjb.201.1664495827086;
-        Thu, 29 Sep 2022 16:57:07 -0700 (PDT)
-Received: from localhost ([75.172.140.17])
-        by smtp.gmail.com with ESMTPSA id v6-20020a17090a0c8600b001fd9c63e56bsm4035477pja.32.2022.09.29.16.57.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=6zu5cVI+Iv4TX95Z1+VgZcFJI+6VGuo5ryEev6S/5uI=;
+        b=SMqss44c+EbHfnxhmiWjjVIjx3YNonnqQ+bp7SZjsyiJDZ3EYJy/BSMaymOP73Rus1
+         RL2UAV9lQorpBVs2Yt5IeoEpZvlrBSV0RpRcOAXp6L3N1nME3hCfz/UkOS3Uwy3rciNK
+         MvD1uQgk16cZwNG2D9z7zB8u6rPk1V727Jgnv06wFyaloVA5jzkDaLJ2YTWvM932Q/Hy
+         UVCd+zlrIXNA4gDRn1RXQE9duM1429XciI6xLD8slLKiweQ7n4nhiqZreS0e/RvhDEPC
+         pnqZsGCuR7hdhmNKrW+aQr2iiAPoMs7JAUWTqUsdCmd0PzOM5iDgAZ0dNTlwdonqURSd
+         p6pA==
+X-Gm-Message-State: ACrzQf1qHjqv3ICujP0SeQGzvIPl1VaKAImbChAuC5lWSyjKF+4wSS66
+        UyVrthjqdHSrmc6ATxa6aqL4ojOFYvGxbw==
+X-Google-Smtp-Source: AMsMyM4UtUlLgi+3fqld4Zj7FhgnpcOhnEqfAN82PoLjF02QBbUkSUfcMcmBXsie22Mun/uEtk5aDQ==
+X-Received: by 2002:a05:6a00:1d26:b0:54e:8c81:9f64 with SMTP id a38-20020a056a001d2600b0054e8c819f64mr6214406pfx.58.1664500151431;
+        Thu, 29 Sep 2022 18:09:11 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id l188-20020a6225c5000000b005411a68fe74sm315179pfl.183.2022.09.29.18.09.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Sep 2022 16:57:06 -0700 (PDT)
-From:   Kevin Hilman <khilman@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>
-Subject: Re: [PATCH] PM: domains: log failures to register always-on domains
-In-Reply-To: <20220929154214.7305-1-johan+linaro@kernel.org>
-References: <20220929154214.7305-1-johan+linaro@kernel.org>
-Date:   Thu, 29 Sep 2022 16:57:05 -0700
-Message-ID: <7h7d1lwx7y.fsf@baylibre.com>
+        Thu, 29 Sep 2022 18:09:11 -0700 (PDT)
+From:   Xueqin Luo <luoxueqin66@gmail.com>
+X-Google-Original-From: Xueqin Luo <luoxueqin@kylinos.cn>
+To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
+Cc:     linux-pm@vger.kernel.org, Xueqin Luo <luoxueqin@kylinos.cn>
+Subject: [PATCH -next] kernel/power : add pr_err() for debugging "Error -14 resuming" error
+Date:   Fri, 30 Sep 2022 09:08:21 +0800
+Message-Id: <20220930010821.221381-1-luoxueqin@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +67,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Johan Hovold <johan+linaro@kernel.org> writes:
+As the machine boots normally, bios initializes the memblock and sets the
+flags of some memblocks to 0x1. During the S4, the bios once again
+initializes the memblock.This initialization may change the flags value
+of some blocks, for example, changing the flags value from 0x1 to 0x4.
+0x4 means do not add to kernel direct mapping. These changed addresses do
+not pass the validity check of the pfn_valid() function, resulting in the
+following "Error -14 resuming" error.
 
-> Always-on PM domains must be on during initialisation or the domain is
-> currently silently rejected.
->
-> Print an error message in case an always-on domain is not on to make it
-> easier to debug drivers getting this wrong (e.g. by setting an always-on
-> genpd flag without making sure that the state matches).
->
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+[  T357] PM: Image loading progress:   0%
+[  T357] PM: Read 2681596 kbytes in 0.03 seconds (89386.53 MB/s)
+[  T357] PM: Error -14 resuming
+[  T357] PM: Failed to load hibernation image, recovering.
+[  T357] PM: Basic memory bitmaps freed
+[  T357] OOM killer enabled.
+[  T357] Restarting tasks ... done.
+[  T357] PM: resume from hibernation failed (-14)
+[  T357] PM: Hibernation image not present or could not be loaded.
 
-Reviewed-by: Kevin Hilman <khilman@baylibre.com>
+Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+---
+ kernel/power/snapshot.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-> ---
->  drivers/base/power/domain.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
->
-> Both myself and Matthias have hit this with the Qualcomm GCC drivers
-> when updating static genpd flags directly instead of using/adding driver
-> specific flags to propagate the setting.
->
-> Johan
->
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index bbfbf05b3446..7200e307effb 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -2087,8 +2087,10 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
->  
->  	/* Always-on domains must be powered on at initialization. */
->  	if ((genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd)) &&
-> -			!genpd_status_on(genpd))
-> +			!genpd_status_on(genpd)) {
-> +		pr_err("always-on PM domain %s is not on\n", genpd->name);
->  		return -EINVAL;
-> +	}
->  
->  	/* Multiple states but no governor doesn't make sense. */
->  	if (!gov && genpd->state_count > 1)
-> -- 
-> 2.35.1
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2a406753af90..2be2e9f5a060 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -2259,10 +2259,13 @@ static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
+ 		if (unlikely(buf[j] == BM_END_OF_MAP))
+ 			break;
+ 
+-		if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j]))
++		if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
+ 			memory_bm_set_bit(bm, buf[j]);
+-		else
++		} else {
++			if (!pfn_valid(buf[j]))
++				pr_err("Address %lx is not valid.\n", buf[j]);
+ 			return -EFAULT;
++		}
+ 	}
+ 
+ 	return 0;
+-- 
+2.25.1
+
