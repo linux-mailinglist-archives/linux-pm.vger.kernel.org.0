@@ -2,66 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460A15F1A83
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 09:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6227C5F1B54
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 11:31:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiJAHNi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Oct 2022 03:13:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40128 "EHLO
+        id S229639AbiJAJbR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Oct 2022 05:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiJAHNg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 03:13:36 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46C1AC746D
-        for <linux-pm@vger.kernel.org>; Sat,  1 Oct 2022 00:13:35 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-35711e5a5ceso23990247b3.13
-        for <linux-pm@vger.kernel.org>; Sat, 01 Oct 2022 00:13:35 -0700 (PDT)
+        with ESMTP id S229632AbiJAJbQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 05:31:16 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6623939B8A
+        for <linux-pm@vger.kernel.org>; Sat,  1 Oct 2022 02:31:14 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id q14so3484557lfo.11
+        for <linux-pm@vger.kernel.org>; Sat, 01 Oct 2022 02:31:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=kHHAs8z9o03GW97wZcdGSq147rwO8mX8P39g1geDY7Y=;
-        b=HmNj8+Qu+jozDXBHZ3WMI7lUi35CuBJ+wsS7hlPf4hcsx8ch6gKLu3B0soytiyI8hR
-         FoBpedxs4nZZrsnIw8fyTeQJ17y36rINCMmqNqVYWu0v7qXY5QoQFm77KKrOItlDy01z
-         vWLKRue2pFi2VvDhnVvlNYym3fJrEwliWyJ8cidhaguHONl24D+cY1riqeTSs7sTn2uB
-         nPEYCFosEDYsnB/IShHF7/LmaNZ6DtZvbm0OJ+knk46cv6o49224hCRbVyx/oNiN9gSz
-         JakMwswkh9p0HtRuWkR64y9rN5VuVsK9kLQPLHlbHn9KL5mAggIOeXkE6bARNYx6c8r6
-         itXQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=2IDkwXcKVh1RrSCp/Ae9caZ7+6zsWJNEEGC+RC5gb5M=;
+        b=JU+TUNXYJ2ItDysz7GCmVbLuOsXh2F/Q30cyV4SmMP8RhmBtaSo6XQNJLwrs9SYnN7
+         fGyKTUIQifno9sZsrP4SWRNG68rJpQno0whhXiKJ7wZRAaQxAc4LivbWv1+tU+iGs4VT
+         fKqTuUFvv39wog7ft8bwFXGHGVkeYarPp2tFyH+ShUW4CrFwd+OIWxAlCQ1ngrBmH2X+
+         +5FHOZUTrBZnQk3vj3t2w6/ZhkPexUNx0Xw428zg1bn1AT/u86GMjDEnSxHFs2gXOvH+
+         4yDw8+BnVWmm6NOe9mpln5/4+gNpf6sjgEYOEUVi5ymjp+LMlQoBNNZruCt01pykCYFA
+         T87g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=kHHAs8z9o03GW97wZcdGSq147rwO8mX8P39g1geDY7Y=;
-        b=ZwBbJ8G6Lk+xuloHRxYCzDAQw13iS6iBJVaUHb4VOHXRCZUrA2kpMopnfXMuzgsWsM
-         eBUNZeAooxaW7QLC+ISeA3FhFnaRM7AZPDH6wBcJ4j59Z4NOgZan1TFtMSdvfA7tmI+B
-         ttgb2+jQf0LVeuYJwC6K5LW7K/Dp0SxZaulTNxoan4kb9P1SyNFPm5mgqcI93PvE2BEW
-         +mh2BetplFA5JJ/wThgVjQnOYV1vA7cRgdmN3gFz33UMIB6+u5PDvcyAi95bYcljcIlE
-         CiakkTesaqfTRCbFjMmkEJCqNP/G+tJRwr+rSHC7J5T0da0n7dCuNqyA3GMX9svZSOPw
-         rH2g==
-X-Gm-Message-State: ACrzQf1QCdGb9Y8QE6gH/1ie4jGM+ND5kVxJAolyu9AXWCicLcIjeNvi
-        u/N6KgU9aexfJdhX3NQdpO2EBzfd7t5pjWYPg+UVjw==
-X-Google-Smtp-Source: AMsMyM5YuSPt8VxqmgnoLZzJmw0xHS9SQrJHd4MrI2PzZBCWU1QUan+joBtvnZfU84wUHG+k+5488i3G0pI9PdE0AGc=
-X-Received: by 2002:a0d:f685:0:b0:343:bd3d:80b2 with SMTP id
- g127-20020a0df685000000b00343bd3d80b2mr11152029ywf.485.1664608414462; Sat, 01
- Oct 2022 00:13:34 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=2IDkwXcKVh1RrSCp/Ae9caZ7+6zsWJNEEGC+RC5gb5M=;
+        b=IlfyyGE07uvZ2WI+bz5cEMZkEA+vP7slDLnV49mq8UPCAYiPMBZQx9I18HR94eBJOq
+         SLuZ4RXM3wmhKOmMjMKv+XlBAxzmVVVw21x67VjJ1TLsK55Q6B2z2N8RPNuuNmFwbkdb
+         Ie1mhwl8Iba6UnDVvUObZyeCj7mXtP+KMeML3TuehgO8VbkTJxN+7Y3ZtMMGji2FXNGJ
+         R68OaUfdgvYQQFY6Bmh7Uu/EFey107Or4oo2JFOPucBXTPFPClHfDNdVExFkscLsPR52
+         BkSthL5YFfVD/U2sbLbGEgtE8So+/oAOBCy38MfUFSiTFFa9yUfcRYQ7YU8R66RGdpTB
+         YnOg==
+X-Gm-Message-State: ACrzQf0Z5Rj7b4FiFiT8ia2dUBDrcsPqTyasisbAzvc5l5aN5hD7pGh/
+        P2YMUJ0xWI2NNdv6QdQ6NOmOaw==
+X-Google-Smtp-Source: AMsMyM709JG3UouwX46iimgSSMVGuqysebClncGvfximstTKAUMWk+ekO+AA6gKx6rK543SofdtA6g==
+X-Received: by 2002:a05:6512:139c:b0:48f:da64:d050 with SMTP id p28-20020a056512139c00b0048fda64d050mr4178806lfa.268.1664616672722;
+        Sat, 01 Oct 2022 02:31:12 -0700 (PDT)
+Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
+        by smtp.gmail.com with ESMTPSA id k21-20020a05651210d500b00492f1b2ac0bsm708242lfg.101.2022.10.01.02.31.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 01 Oct 2022 02:31:12 -0700 (PDT)
+Message-ID: <0bf97760-09e0-e64f-3ef6-2b861131f83e@linaro.org>
+Date:   Sat, 1 Oct 2022 11:31:11 +0200
 MIME-Version: 1.0
-References: <20221001030602.28232-1-quic_molvera@quicinc.com> <20221001030602.28232-3-quic_molvera@quicinc.com>
-In-Reply-To: <20221001030602.28232-3-quic_molvera@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 1 Oct 2022 10:13:23 +0300
-Message-ID: <CAA8EJpopGgmThv1BUHAP-bYsgm-ojF0FJ_KVNgycwOAOj=_D4g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add QDU1000/QRU1000 interconnect driver
-To:     Melody Olvera <quic_molvera@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add QDU1000/QRU1000 dt
+ bindings
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
         Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20221001030602.28232-1-quic_molvera@quicinc.com>
+ <20221001030602.28232-2-quic_molvera@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221001030602.28232-2-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,64 +81,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 1 Oct 2022 at 06:08, Melody Olvera <quic_molvera@quicinc.com> wrote:
->
-> Add interconnect provider driver for Qualcomm QDU1000 and QRU1000
-> platforms.
->
+On 01/10/2022 05:06, Melody Olvera wrote:
+> Add interconnect IDs for Qualcomm QDU1000 and QRU1000 platforms.
+> 
 > Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 > ---
->  drivers/interconnect/qcom/Kconfig    |    9 +
->  drivers/interconnect/qcom/Makefile   |    2 +
->  drivers/interconnect/qcom/qdru1000.c | 1091 ++++++++++++++++++++++++++
->  drivers/interconnect/qcom/qdru1000.h |   95 +++
->  4 files changed, 1197 insertions(+)
->  create mode 100644 drivers/interconnect/qcom/qdru1000.c
->  create mode 100644 drivers/interconnect/qcom/qdru1000.h
->
-> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
-> index 25d5b4baf6f6..760f855d7618 100644
-> --- a/drivers/interconnect/qcom/Kconfig
-> +++ b/drivers/interconnect/qcom/Kconfig
-> @@ -200,5 +200,14 @@ config INTERCONNECT_QCOM_SM8450
->           This is a driver for the Qualcomm Network-on-Chip on SM8450-based
->           platforms.
->
-> +config INTERCONNECT_QCOM_QDRU1000
-> +       tristate "Qualcomm QDU1000/QRU1000 interconnect driver"
-> +       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
-> +       select INTERCONNECT_QCOM_RPMH
-> +       select INTERCONNECT_QCOM_BCM_VOTER
-> +       help
-> +         This is a driver for the Qualcomm Network-on-Chip on QDU1000-based
-> +         and QRU1000-based platforms.
-> +
->  config INTERCONNECT_QCOM_SMD_RPM
->         tristate
-> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
-> index 8e357528185d..85b7f0de473d 100644
-> --- a/drivers/interconnect/qcom/Makefile
-> +++ b/drivers/interconnect/qcom/Makefile
-> @@ -25,6 +25,7 @@ qnoc-sm8150-objs                      := sm8150.o
->  qnoc-sm8250-objs                       := sm8250.o
->  qnoc-sm8350-objs                       := sm8350.o
->  qnoc-sm8450-objs                       := sm8450.o
-> +qnoc-qdru1000-objs                     := qdru1000.o
+>  .../bindings/interconnect/qcom,rpmh.yaml      |  8 ++
+>  .../dt-bindings/interconnect/qcom,qdru1000.h  | 98 +++++++++++++++++++
+>  2 files changed, 106 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,qdru1000.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index a429a1ed1006..c524d92ee203 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -132,6 +132,14 @@ properties:
+>        - qcom,sm8450-nsp-noc
+>        - qcom,sm8450-pcie-anoc
+>        - qcom,sm8450-system-noc
+> +      - qcom,qdu1000-clk-virt
+> +      - qcom,qdu1000-gem-noc
+> +      - qcom,qdu1000-mc-virt
+> +      - qcom,qdu1000-system-noc
+> +      - qcom,qru1000-clk-virt
+> +      - qcom,qru1000-gem-noc
+> +      - qcom,qru1000-mc-virt
+> +      - qcom,qru1000-system-noc
 
-Alphabetic sorting
+Not a correct order.
 
->  icc-smd-rpm-objs                       := smd-rpm.o icc-rpm.o
->
->  obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) += icc-bcm-voter.o
-> @@ -49,4 +50,5 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) += qnoc-sm8150.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) += qnoc-sm8250.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
->  obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
-> +obj-$(CONFIG_INTERCONNECT_QCOM_QDRU1000) += qnoc-qdru1000.o
+>  
+>    '#interconnect-cells': true
+>  
+> diff --git a/include/dt-bindings/interconnect/qcom,qdru1000.h b/include/dt-bindings/interconnect/qcom,qdru1000.h
+> new file mode 100644
+> index 000000000000..2bdfa0c15d2c
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,qdru1000.h
+> @@ -0,0 +1,98 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
 
-Alphabetic sorting.
+Dual license.
 
 
--- 
-With best wishes
-Dmitry
+Best regards,
+Krzysztof
+
