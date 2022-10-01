@@ -2,146 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A7295F1BDA
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 12:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A6C5F1E01
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 19:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229509AbiJAKpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Oct 2022 06:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
+        id S229700AbiJARCV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Oct 2022 13:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJAKp3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 06:45:29 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA863C8F4;
-        Sat,  1 Oct 2022 03:45:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1664621128; x=1696157128;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=xiVJXuR8P1pRABToUvIhXZW5iUyJHHHG80SpQQPDLxI=;
-  b=bE/wrLbhcKP3DR1+1lxIyqOHynT8jZ0WpAAN8oIdPb2B7l1N8lzb2HxI
-   JebV/UO3lJ9BxXWnuZcvwFJZuYdlSU1ZgP0tjLHRO4FxYhlW8Xf6Jxjmi
-   4CGc6S4bHl/v5drLxG9wDJ3QSBGyCXMksDXlKMLjAsY6X63Bznv6NZSDy
-   mBfMiUQXxxfo2Lfz9Qo1Z/n9Zbr83tWwygAqjNXXabSdTWaW6nDjmFzEe
-   ayqhT8gF3fJVLgeQHcRjitlakSGgmW4pt3M9exmSPYpo3clwf2XjJgCZw
-   YlR3DgjVQUFHHT3LLEP6OSjiQtFct4HivXwH6e+PEhQOvVztlWoIMWIOs
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="289527861"
-X-IronPort-AV: E=Sophos;i="5.93,360,1654585200"; 
-   d="scan'208";a="289527861"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2022 03:45:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10486"; a="653835538"
-X-IronPort-AV: E=Sophos;i="5.93,360,1654585200"; 
-   d="scan'208";a="653835538"
-Received: from lkp-server01.sh.intel.com (HELO 14cc182da2d0) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 01 Oct 2022 03:45:26 -0700
-Received: from kbuild by 14cc182da2d0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oeZzq-00029L-0o;
-        Sat, 01 Oct 2022 10:45:26 +0000
-Date:   Sat, 01 Oct 2022 18:44:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 816cee8cb69ed35afedc0a1011493e5f8c6aeead
-Message-ID: <63381a1d.1RMK5Xirt7dxFPZ9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229709AbiJARCE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 13:02:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957AF278;
+        Sat,  1 Oct 2022 10:01:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31A2D60C4A;
+        Sat,  1 Oct 2022 17:01:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A737C433D6;
+        Sat,  1 Oct 2022 17:01:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664643674;
+        bh=Lqpg3UgpPBXoX36zdDlIkFsUKkVufb4LAga1gaHXJrA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BhBTr3eJC4IO7g5XhVa6Ama3J8nckkmNE1P7n1NTmwuQ5CHcJen5lAHtqusr5Vm7v
+         faWtgifpODzzX4Q3BSwp4LQWb3SRcRQLtiHwf41XNmfk5E4dyfF75Zg8kxj1Sne+Ze
+         knbXkk+UCzXMgoL8x7mz6aFbl/NDpd50nSNIFVdTEQVtq9RiBO2HbvQHDtackq+gyc
+         CmzTOulmMiPZR9WmteXRlNyJCSije0s9D/BHYMPzklVRIwEDN0g37JQuzxaXYqFpZO
+         fGEPphIi9s6IjO60+FJ91nORe6zDhb7tCqFpRXXinqLg3LV8No+4Lf9wwoGQXT2iLk
+         IynDdUNakVZCA==
+Date:   Sat, 1 Oct 2022 18:01:30 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Lee Jones <lee.jones@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-pm <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
+Message-ID: <20221001180130.73a26c68@jic23-huawei>
+In-Reply-To: <CAJZ5v0hW049fh=NebWqCMUzZAU=pfHWEFd-dkegRb4qwuHxSXA@mail.gmail.com>
+References: <20220808174107.38676-1-paul@crapouillou.net>
+        <20220808174107.38676-2-paul@crapouillou.net>
+        <CAJZ5v0h3hf06xQsJGOfOyGbD470jyxkPNuaHP+E-pvXbS6Egxg@mail.gmail.com>
+        <HF07HR.3A0DTIDT17IF1@crapouillou.net>
+        <20220925155239.7a37c19a@jic23-huawei>
+        <CAJZ5v0igQL_766obp2csNCg7b0g3g2+gkuqZXjUNL7Jj9Da7zQ@mail.gmail.com>
+        <E1KTIR.IK6LI11BUNDM3@crapouillou.net>
+        <CAJZ5v0hW049fh=NebWqCMUzZAU=pfHWEFd-dkegRb4qwuHxSXA@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 816cee8cb69ed35afedc0a1011493e5f8c6aeead  Merge branch 'thermal-core' into bleeding-edge
+On Mon, 26 Sep 2022 15:35:35 +0200
+"Rafael J. Wysocki" <rafael@kernel.org> wrote:
 
-elapsed time: 979m
+> On Mon, Sep 26, 2022 at 3:27 PM Paul Cercueil <paul@crapouillou.net> wrot=
+e:
+> >
+> > Hi,
+> >
+> > Le lun., sept. 26 2022 at 14:00:52 +0200, Rafael J. Wysocki
+> > <rafael@kernel.org> a =C3=A9crit : =20
+> > > On Sun, Sep 25, 2022 at 4:52 PM Jonathan Cameron <jic23@kernel.org>
+> > > wrote: =20
+> > >>
+> > >>  On Thu, 25 Aug 2022 23:42:53 +0100
+> > >>  Paul Cercueil <paul@crapouillou.net> wrote:
+> > >> =20
+> > >>  > Hi Rafael,
+> > >>  >
+> > >>  > Le mar., ao=C3=BBt 23 2022 at 19:47:57 +0200, Rafael J. Wysocki
+> > >>  > <rafael@kernel.org> a =C3=A9crit : =20
+> > >>  > > On Mon, Aug 8, 2022 at 7:41 PM Paul Cercueil =20
+> > >> <paul@crapouillou.net> =20
+> > >>  > > wrote: =20
+> > >>  > >>
+> > >>  > >>  Update the _EXPORT_DEV_PM_OPS() internal macro. It was not =20
+> > >> used =20
+> > >>  > >> anywhere
+> > >>  > >>  outside pm.h and pm_runtime.h, so it is safe to update it.
+> > >>  > >>
+> > >>  > >>  Before, this macro would take a few parameters to be used as =
+=20
+> > >> sleep =20
+> > >>  > >> and
+> > >>  > >>  runtime callbacks. This made it unsuitable to use with =20
+> > >> different =20
+> > >>  > >>  callbacks, for instance the "noirq" ones.
+> > >>  > >>
+> > >>  > >>  It is now semantically different: instead of creating a
+> > >>  > >> conditionally
+> > >>  > >>  exported dev_pm_ops structure, it only contains part of the
+> > >>  > >> definition.
+> > >>  > >>
+> > >>  > >>  This macro should however never be used directly (hence the =
+=20
+> > >> trailing =20
+> > >>  > >>  underscore). Instead, the following four macros are provided:
+> > >>  > >>  - EXPORT_DEV_PM_OPS(name)
+> > >>  > >>  - EXPORT_GPL_DEV_PM_OPS(name)
+> > >>  > >>  - EXPORT_NS_DEV_PM_OPS(name, ns)
+> > >>  > >>  - EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
+> > >>  > >>
+> > >>  > >>  For instance, it is now possible to conditionally export noirq
+> > >>  > >>  suspend/resume PM functions like this:
+> > >>  > >>
+> > >>  > >>  EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) =3D {
+> > >>  > >>      NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
+> > >>  > >>  };
+> > >>  > >>
+> > >>  > >>  The existing helper macros EXPORT_*_SIMPLE_DEV_PM_OPS() and
+> > >>  > >>  EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to use these =
+=20
+> > >> new =20
+> > >>  > >> macros.
+> > >>  > >>
+> > >>  > >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net> =20
+> > >>  > >
+> > >>  > > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >>  > >
+> > >>  > > or please let me know if you need me to pick up this one. =20
+> > >>  >
+> > >>  > Could you pick this one up then, and make a branch for Jonathan? =
+=20
+> > >>
+> > >>  Hi Paul, Rafael,
+> > >>
+> > >>  What happened to this in the end?  I can't immediately find it on
+> > >>  any of the pm git tree branches.
+> > >>
+> > >>  At this stage in the cycle it would be great if this patch at least
+> > >>  makes the merge window, so we can make use of it next cycle. =20
+> > >
+> > > I thought that this would go in along with the other patches in the
+> > > series.
+> > >
+> > > I can apply it directly, though, if needed.
+> > >
+> > > Thanks! =20
+> >
+> > I think at this point Jonathan can just take it in his tree with his
+> > own patchset. Then I'll rebase this patchset on v6.1-rc1. =20
+>=20
+> Sure.
+>=20
+> Jonathan, please go ahead and take the patch directly.
 
-configs tested: 63
-configs skipped: 2
+Too late for me to take this for this cycle (I route via Greg KH so need to=
+ have things
+in place a little bit before the merge window).  If Lee doesn't pick it up,=
+ I'll do an
+immutable branch after rc1 is out with just this patch on it, then anyone w=
+ho wants
+it can pick it up.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Thanks,
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                           rhel-8.3-kvm
-powerpc                           allnoconfig
-x86_64                           rhel-8.3-syz
-powerpc                          allmodconfig
-x86_64                         rhel-8.3-kunit
-arc                                 defconfig
-mips                             allyesconfig
-x86_64                          rhel-8.3-func
-i386                                defconfig
-x86_64                    rhel-8.3-kselftests
-alpha                               defconfig
-s390                             allmodconfig
-arm                                 defconfig
-m68k                             allmodconfig
-s390                                defconfig
-sh                               allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-s390                             allyesconfig
-m68k                             allyesconfig
-x86_64                              defconfig
-arc                  randconfig-r043-20220925
-arm64                            allyesconfig
-riscv                randconfig-r042-20220925
-arm                              allyesconfig
-i386                 randconfig-a001-20220926
-arc                  randconfig-r043-20220926
-x86_64               randconfig-a002-20220926
-s390                 randconfig-r044-20220925
-i386                 randconfig-a002-20220926
-x86_64               randconfig-a005-20220926
-x86_64                               rhel-8.3
-i386                 randconfig-a003-20220926
-x86_64               randconfig-a004-20220926
-x86_64                        randconfig-a013
-x86_64               randconfig-a006-20220926
-x86_64                        randconfig-a011
-i386                 randconfig-a004-20220926
-i386                             allyesconfig
-x86_64               randconfig-a001-20220926
-i386                 randconfig-a005-20220926
-i386                 randconfig-a006-20220926
-x86_64               randconfig-a003-20220926
-x86_64                        randconfig-a015
-x86_64                           allyesconfig
-ia64                             allmodconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20220925
-hexagon              randconfig-r041-20220926
-hexagon              randconfig-r045-20220926
-hexagon              randconfig-r041-20220925
-riscv                randconfig-r042-20220926
-s390                 randconfig-r044-20220926
-i386                 randconfig-a011-20220926
-i386                 randconfig-a015-20220926
-x86_64                        randconfig-a012
-i386                 randconfig-a014-20220926
-i386                 randconfig-a013-20220926
-i386                 randconfig-a016-20220926
-x86_64                        randconfig-a014
-i386                 randconfig-a012-20220926
-x86_64                        randconfig-a016
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Jonathan
