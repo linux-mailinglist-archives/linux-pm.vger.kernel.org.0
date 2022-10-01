@@ -2,129 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 285FE5F1E3C
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 19:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E060C5F1F35
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 22:15:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiJARLJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Oct 2022 13:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41280 "EHLO
+        id S229545AbiJAUPz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Oct 2022 16:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJARLI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 13:11:08 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 884255A3EF
-        for <linux-pm@vger.kernel.org>; Sat,  1 Oct 2022 10:11:06 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id v128-20020a1cac86000000b003b7a6ad5ccdso527514wme.3
-        for <linux-pm@vger.kernel.org>; Sat, 01 Oct 2022 10:11:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=KyEHZH41+VDH9bxxt3p+dgtz1T9wbtc1HGrXs5RGSsY=;
-        b=DoDARNqoL7+Q63BrbqhTfjnWZYx3qIWl8quEhAIddkb33lWwgDOGMHzs83j78geKio
-         hEJahX3TB2WJwUxSD5zjFc3JmSRKhKb3v0j29HDahGu6HEreLmWvg53+X4uElH0AvU3f
-         Q8wIOMB9XTGyeB8kZ6zfvpgNsXZnfl8yFfglHExHttiduFxgf68vZAJzhbgrjG6r/+D8
-         PNsTUc09JCPJTMahqYyzShcWYOpyo+2QLDGg2TMuIzcMuIXHcB0x05h/4X/7IfjE7dTn
-         MsbgDe1TR79H+/MZ21Qs1SJqomC5RfwaiS3j+wjinPqUYOCiUZ6UThWIRMol2bAZROcn
-         dMZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=KyEHZH41+VDH9bxxt3p+dgtz1T9wbtc1HGrXs5RGSsY=;
-        b=cbBIaj5uvMFAGgv6JOrIXK4zTnuQiMsLYE9+BtKyuHGPjpGQof3HPAHfsbmpU4edJ6
-         CV9dJNcswtN9NgIZVXaUrWiNUsShV4aH3LKKBz2liUAapiKjQMT9p6o8RBYXORTdJU9J
-         w9rqDSb0KII4G1d42NiAoC6+4UKV7Mcac3oDmcmMoue2hNzYHmtcDaTtVprfuBwdpW6a
-         iEz5vv9sWujau351PBOU8w+8ehs9xS9hJtiYrNlvx6vDhGcR4KTELWTteDkHjvjd2U1J
-         iAT1KMm1FuoiHA6oA32RXTSFFBuKDVhhBhMewpYbDfp8l9F8+dyT6uIcT49GnBvx0N/b
-         IzPg==
-X-Gm-Message-State: ACrzQf1MeWaX7xmDEowNmmrnYZ0GF247/DeF23p9inTwZic2zcdKYVnV
-        5nY3BcYPUUaMj2ufwC4swuU5ag==
-X-Google-Smtp-Source: AMsMyM5tt70mEqXeE2WtfEki09ee7rn3yDJD/EYzSGYsbMj0yZQymyg/P+IRhjzNe57uaeBW7ovJ5g==
-X-Received: by 2002:a05:600c:3511:b0:3b4:bb85:f1e3 with SMTP id h17-20020a05600c351100b003b4bb85f1e3mr2254005wmq.0.1664644264502;
-        Sat, 01 Oct 2022 10:11:04 -0700 (PDT)
-Received: from radium.lan ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id h40-20020a05600c49a800b003b49ab8ff53sm5817641wmp.8.2022.10.01.10.11.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Oct 2022 10:11:04 -0700 (PDT)
-From:   Fabien Parent <fabien.parent@linaro.org>
-To:     ilia.lin@kernel.org, agross@kernel.org, bjorn.andersson@linaro.org,
-        rafael@kernel.org, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Fabien Parent <fabien.parent@linaro.org>
-Subject: [PATCH 3/3] cpufreq: qcom: fix writes in read-only memory region
-Date:   Sat,  1 Oct 2022 19:10:27 +0200
-Message-Id: <20221001171027.2101923-3-fabien.parent@linaro.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221001171027.2101923-1-fabien.parent@linaro.org>
-References: <20221001171027.2101923-1-fabien.parent@linaro.org>
+        with ESMTP id S229441AbiJAUPy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 16:15:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31C68349AA;
+        Sat,  1 Oct 2022 13:15:53 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 57E3C6601F54;
+        Sat,  1 Oct 2022 21:15:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1664655351;
+        bh=4VYYmA7fzG9OwRycPX/DaxU4t0NjzNha7dATmLtyZd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HW+8Ymemi2irys0+qXIFZmFLvLoD88W7eVL4SXoBNHjUQ29Qc6ouvdHtXxLOQp+nc
+         mJgIJ6t4JmPu/vN1zNcnhN0/dNPnXTYs+ss6P18oGYFGnhXo06MUDl+BI1eBpKIMjO
+         HWGe8FIRljbXUXXKMZNnEIrVpdFL2y7h6747EN13oHHpv+njg9Xu8loNq7rzIZR07T
+         FXeVXm37odSXEieZkXTWdprIdF+VrxX95RlkFIqM8eNDt7N2C81mx/aXl5fN1vyoxU
+         eew4jxC7Oeh1m0uvG3X1pHFftN0qHmGbbTdrC/NeqOJk1ZDqgF6Ptm3Hm/tZ2rK8jZ
+         kO2AiSv7UsL9w==
+Received: by mercury (Postfix, from userid 1000)
+        id D8041106090C; Sat,  1 Oct 2022 22:15:48 +0200 (CEST)
+Date:   Sat, 1 Oct 2022 22:15:48 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: max1721x: Fix spelling mistake "Gauage"
+ -> "Gauge"
+Message-ID: <20221001201548.xxezxgtsdtwpbe5i@mercury.elektranox.org>
+References: <20220928211926.62818-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3rklnxsuc5paghr6"
+Content-Disposition: inline
+In-Reply-To: <20220928211926.62818-1-colin.i.king@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This commit fixes a kernel oops because of a write in some read-only memory:
 
-	[    9.068287] Unable to handle kernel write to read-only memory at virtual address ffff800009240ad8
-	..snip..
-	[    9.138790] Internal error: Oops: 9600004f [#1] PREEMPT SMP
-	..snip..
-	[    9.269161] Call trace:
-	[    9.276271]  __memcpy+0x5c/0x230
-	[    9.278531]  snprintf+0x58/0x80
-	[    9.282002]  qcom_cpufreq_msm8939_name_version+0xb4/0x190
-	[    9.284869]  qcom_cpufreq_probe+0xc8/0x39c
-	..snip..
+--3rklnxsuc5paghr6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The following line defines a pointer that point to a char buffer stored
-in read-only memory:
+Hi,
 
-	char *pvs_name = PVS_NAME;
+On Wed, Sep 28, 2022 at 10:19:26PM +0100, Colin Ian King wrote:
+> There is a spelling mistake in the module description. Fix it.
+>=20
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/power/supply/max1721x_battery.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/max1721x_battery.c b/drivers/power/supp=
+ly/max1721x_battery.c
+> index 473e53cd2801..d8d52e09da7b 100644
+> --- a/drivers/power/supply/max1721x_battery.c
+> +++ b/drivers/power/supply/max1721x_battery.c
+> @@ -444,5 +444,5 @@ module_w1_family(w1_max1721x_family);
+> =20
+>  MODULE_LICENSE("GPL");
+>  MODULE_AUTHOR("Alex A. Mihaylov <minimumlaw@rambler.ru>");
+> -MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauage IC driver");
+> +MODULE_DESCRIPTION("Maxim MAX17211/MAX17215 Fuel Gauge IC driver");
+>  MODULE_ALIAS("w1-family-" __stringify(W1_MAX1721X_FAMILY_ID));
 
-This pointer is meant to hold a template "speedXX-pvsXX-vXX" where the
-XX values get overridden by the qcom_cpufreq_krait_name_version function. Since
-the template is actually stored in read-only memory, when the function
-executes the following call we get an oops:
+Thanks, queued.
 
-	snprintf(*pvs_name, sizeof(PVS_NAME), "speed%d-pvs%d-v%d",
-		 speed, pvs, pvs_ver);
+-- Sebastian
 
-To fix this issue, we instead store the template name onto the stack by
-using the following syntax:
+--3rklnxsuc5paghr6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	char pvs_name_buffer[] = PVS_NAME;
+-----BEGIN PGP SIGNATURE-----
 
-Because the `pvs_name` needs to be able to be assigned to NULL, the
-template buffer is stored in the pvs_name_template and not under the
-pvs_name variable.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4n+4ACgkQ2O7X88g7
++ppEZg/8DviDAuBQ0jzaES+WYps3+xftStP5fhPDBit6KxSWKewybdbhHr0PtQoX
+HR8JqEe79WgWDplR2lf3rJ1XMOueu3hJU2aH0xtQqLTFCaJvlatZbH+UeGgrWGss
+FNeMpnhhxleOwUdh2m5XusCPwVY5RKEgmecPifHEj1D81uEPLZ0K/5jjsbtEyOe8
+TWpetTLarQ8GzwFK+CbFC2qB8lezNSUQMsJbXv+rc7ZIyLzjTSW69gGF9BAjFOLC
+1yGohFuRZhGe5YGk+cjnwlaSjop33bbQZAy9iq3az+4i4SWRTxkCty1ftcyUzvPC
+Q7HE4u4ouanLp/gF1bD9nMl9s3LK97u7ICQF828GJhW57D5rtQx3bvGbiNveD1og
+B2fNgb+CzaS6egx9mx1yY2dYXbloi452UajVOAC160c4elPJUsr1VSLIw3klv2nZ
+L7jSsgppbJcKJzEKLsnECurjs9LxIELjGf5KrI2ZC5X3g9sGEoO47XGTubOT80lH
+e/fO1aTtvGusUx1D8LhX78GtUF+hqE8cSTQxjrkpodi7C6oTMcGE9+pfdiAoTXIA
+Tw1Y+fpg06q+Hq/cRuRnroRqRnJEE0JGhhDhPkXQFhlTr/NlvQh/QwOcu/qax21r
+P2Nbo3hdbyj1sn7sMvazR9BxFxgJZgmTo03A8kXX6FJ0Kf7Tob8=
+=pxoI
+-----END PGP SIGNATURE-----
 
-Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-nvmem.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-index 64ce077a4848..3e097262f612 100644
---- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-+++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-@@ -269,7 +269,8 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
- 	struct nvmem_cell *speedbin_nvmem;
- 	struct device_node *np;
- 	struct device *cpu_dev;
--	char *pvs_name = PVS_NAME_TEMPLATE;
-+	char pvs_name_buffer[] = PVS_NAME_TEMPLATE;
-+	char *pvs_name = pvs_name_buffer;
- 	unsigned cpu;
- 	const struct of_device_id *match;
- 	int ret;
--- 
-2.37.2
-
+--3rklnxsuc5paghr6--
