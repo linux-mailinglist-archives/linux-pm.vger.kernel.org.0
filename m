@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5D25F1F8C
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 22:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF195F1F9D
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 23:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229477AbiJAU6H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Oct 2022 16:58:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
+        id S229664AbiJAVFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Oct 2022 17:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiJAU6F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 16:58:05 -0400
+        with ESMTP id S229571AbiJAVFw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 17:05:52 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41DF5C379;
-        Sat,  1 Oct 2022 13:58:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B429940BE5;
+        Sat,  1 Oct 2022 14:05:51 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1010B660205E;
-        Sat,  1 Oct 2022 21:58:02 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6E9876601E6A;
+        Sat,  1 Oct 2022 22:05:50 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664657882;
-        bh=C+MnW4H7R+Fuy1N+P3DLx4h/ETVoGGzeo6k5om+x/CA=;
+        s=mail; t=1664658350;
+        bh=Arj8XY3vybvBQ3J7ITnL7U5IbeHE9NPvxP3IGJNaYWI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HDKNM+p3XWPeEaGrs8is+6gaR6cCq4aUR9McR/wDU+G3/uc2eC9JGIRBOkO/GCWX4
-         hbwThNbuPPcQvjPm1Cogm00TgTuthe4aySxUtDJAXhNcImUNAv2sgUNgEfn5YXoBko
-         w79aPswaSOpk08VJL57z+Fmao82bz432zJC8Hns2yuYKIu8JTFwfR74GJpzqMzpexK
-         lNQNbnoSIgxqdxjjj8QVppVTxQ3WBcmHVK1Fz4xw/qtylUzkGk5lviqGRJfbXUgnF8
-         CgkxRfPpx1PXNCo9c02fQ7WnQ8PFriz0Dp7DqFI8EKWOYJbriHQ81AENzU+llVGMVe
-         3VrPLQpuzETeA==
+        b=MT/PzlDp2/y2Z9+SW4qnJ0hQ9ndoIEmMk1AESOv6RJteGdNiG9ocUzIjbAy/NmFSv
+         A/4A6E0zWgfSk/NSoVTu8MlaXPfTlLYE0uBcux5IONjjgfgTOJxeR/vx6zR/X+1xct
+         PRZ2TlVDYHOHAAhjdJh0cwJz33JC34fXn5sEotq+bZBH9MBc6x/xN6C7TzKPk7X7BC
+         u3WnDVoIw+8v5C1scDPuIDuVVh6Hh0RcCA4URJCS2UvvPerLIm/Nvk+ABP1GYXLk7v
+         La1zQ6ffAvugabvo4LajYku0Yx3dCSqF41Chj+JYTXOR4J3h8UBiY/m7qhKRBA0ssC
+         wzd3PcpNu46hQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 7B323106090C; Sat,  1 Oct 2022 22:58:00 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 22:58:00 +0200
+        id F2B601061C22; Sat,  1 Oct 2022 23:05:47 +0200 (CEST)
+Date:   Sat, 1 Oct 2022 23:05:47 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     ChiYuan Huang <u0084500@gmail.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mazziesaccount@gmail.com, alina_yu@richtek.com,
-        cy_huang@richtek.com, alinayu829@gmail.com,
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, andy.shevchenko@gmail.com,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] Documentation: power: rt9471: Document exported
- sysfs entries
-Message-ID: <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
-References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
- <1663173015-7934-4-git-send-email-u0084500@gmail.com>
- <20220916180823.p672rojsrjbpy4ft@mercury.elektranox.org>
- <CADiBU39FMkDOrMHXTQF+0JGX2tDn_iVXCb19jM6MopnKmaXOpQ@mail.gmail.com>
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 5/6] power: supply: Add support for mp2733 battery
+ charger
+Message-ID: <20221001210547.ngtkjm3ue6joxqdg@mercury.elektranox.org>
+References: <20220615145357.2370044-1-sravanhome@gmail.com>
+ <20220615145357.2370044-6-sravanhome@gmail.com>
+ <20220911133101.7g6hnwp3dnnqrmgb@mercury.elektranox.org>
+ <77f13cfe-58dc-d150-18a9-cb14c82f222a@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bkvol2kvrsmj5v4m"
+        protocol="application/pgp-signature"; boundary="fp56e5gruha3a2n2"
 Content-Disposition: inline
-In-Reply-To: <CADiBU39FMkDOrMHXTQF+0JGX2tDn_iVXCb19jM6MopnKmaXOpQ@mail.gmail.com>
+In-Reply-To: <77f13cfe-58dc-d150-18a9-cb14c82f222a@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,157 +63,76 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---bkvol2kvrsmj5v4m
-Content-Type: text/plain; charset=utf-8
+--fp56e5gruha3a2n2
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Sep 19, 2022 at 09:11:09AM +0800, ChiYuan Huang wrote:
-> Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=B9=
-=B49=E6=9C=8817=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=889:19=E5=AF=AB=
-=E9=81=93=EF=BC=9A
-> > On Thu, Sep 15, 2022 at 12:30:15AM +0800, cy_huang wrote:
-> > > From: ChiYuan Huang <cy_huang@richtek.com>
-> > >
-> > > Document the settings exported by rt9471 charger driver through sysfs=
- entries:
-> > > - sysoff_enable
-> > > - port_detect_enable
-> > >
-> > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+On Sun, Sep 25, 2022 at 11:26:24AM +0200, saravanan sekar wrote:
+> On 11/09/22 15:31, Sebastian Reichel wrote:
+> > On Wed, Jun 15, 2022 at 04:53:56PM +0200, Saravanan Sekar wrote:
+> > > mp2733 is updated version of mp2629 battery charge management
+> > > which supports USB fast-charge and higher range of input voltage.
+> > >=20
+> > > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> > > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 > > > ---
-> > > Since v5:
-> > > - Recover all the change in sysfs-class-power.
-> > > - New a sysfs-class-power-rt9471 file.
-> > > - Remove 'charge_term_enable' sysfs entry, directly integrate it in
-> > >   'charge_term_current' power supply property control.
-> > >
-> > > ---
-> > >  Documentation/ABI/testing/sysfs-class-power-rt9471 | 29 ++++++++++++=
-++++++++++
-> > >  1 file changed, 29 insertions(+)
-> > >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9471
-> > >
-> > > diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/Doc=
-umentation/ABI/testing/sysfs-class-power-rt9471
-> > > new file mode 100644
-> > > index 00000000..ad5b049
-> > > --- /dev/null
-> > > +++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
-> > > @@ -0,0 +1,29 @@
-> > > +What:                /sys/class/power_supply/rt9471-*/sysoff_enable
-> > > +Date:                Oct 2022
-> > > +KernelVersion:       6.1
-> > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
-> > > +Description:
-> > > +             This entry allows enabling the sysoff mode of rt9471 ch=
-arger devices.
-> > > +             If enabled and the input is removed, the internal batte=
-ry FET is turned
-> > > +             off to reduce the leakage from the BAT pin. See device =
-datasheet for details.
-> > > +             It's commonly used when the product enter shipping stag=
-e.
+> > > [...]
+> > >   	psy_cfg.drv_data =3D charger;
+> > > -	psy_cfg.attr_grp =3D mp2629_charger_sysfs_groups;
+> > > +	if (charger->chip_info->has_impedance)
+> > > +		psy_cfg.attr_grp =3D mp2629_charger_sysfs_groups;
 > > > +
-> > > +             Access: Read, Write
-> > > +             Valid values:
-> > > +             - 1: enabled
-> > > +             - 0: disabled
-> >
-> > I still fail to see why this needs to be controllable at runtime.
-> > This looks like a hardware property. Are there any known products,
-> > which need this disabled?
-> It's just a switch, actually 'disabled' is not needed.
-> For the enabled case, mostly used in below scenarios
-> 1. Online testing, USB IN -> Factory testing -> write 1 to enable ->
-> USB out -> immediately VSYS off -> pack
-> 2. Offline testing no vbus -> Factory testing -> write 1 to enable ->
-> immediately VSYS off -> pack
->=20
-> The 'disable" can use to cancel the shipping mode in case 1 before USB ou=
-t.
-> It's more like the testing.
->=20
-> Like as you said, shipping BATFET_OFF is all the hardware behavior.
-> To leave this mode after VSYS off, there're three ways
-> 1. power key pressed
-> 2. VBUS IN
-> 3. control BATFET_OFF to 0 (But it need SOC to be alive, at the time,
-> VSYS off, no one can execute this I2C command)
-
-If factory testing and preperation is the only use case, I don't
-think exposing this in sysfs and creating userspace ABI is worth
-it. Just tell factory to use i2c-dev and poke the correct registers.
-
-> If what you care is no need to mention 'disable', then just remove it.
-> It's fine.
-> >
-> > > +What:                /sys/class/power_supply/rt9471-*/port_detect_en=
-able
-> > > +Date:                Oct 2022
-> > > +KernelVersion:       6.1
-> > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
-> > > +Description:
-> > > +             This entry allows enabling the USB BC12 port detect fun=
-ction of rt9471 charger
-> > > +             devices. If enabled and VBUS is inserted, device will s=
-tart to do the BC12
-> > > +             port detect and report the usb port type when port dete=
-ct is done. See
-> > > +             datasheet for details. Normally controlled when TypeC/U=
-SBPD port integrated.
+> > > +	if (charger->chip_info->has_fast_charge)
+> > > +		psy_cfg.attr_grp =3D mp2733_charger_sysfs_groups;
 > > > +
-> > > +             Access: Read, Write
-> > > +             Valid values:
-> > > +             - 1: enabled
-> > > +             - 0: disabled
-> >
-> > So basically this depends on the hardware integration (e.g. it
-> > should be disabled when power source is a DC barrel jack instead
-> > of USB) and is not supposed to change at all during runtime? Then
-> > the information wether it needs to be enabled should be derived
-> > from the device tree.
->
-> It's a switching charger integrates OTG boost.
-> For the case 'DC Jack', there's no need to use this kind of product.
+> > >   	charger->battery =3D devm_power_supply_register(dev,
+> > >   					 &mp2629_battery_desc, &psy_cfg);
+> > >   	if (IS_ERR(charger->battery)) {
+> >=20
+> > Instead of having has_impedance and has_fast_charge feature
+> > flag that are mutual exclusive, store the device type and
+> > use if/else or switch statement to chose the correct attr_grp.
 >=20
-> With typec integration, at most time, it still need bc12 to be enabled
-> by default. Just in some case, like as power role swap (SNK -> SRC -> SNK=
-),
-> to automatically identify the USB port, this may interrupt USB communicat=
-ion.
+> these flags are not really mutual exclusive, limitation only for
+> application between mp2629 and mp2629. In future another chipset on
+> same series shall have both or none, so I would consider to control
+> flags with functionality rather than chipset!
 >=20
-> So as my understanding, keep it enabled by default, just in some case,
-> it my need to control at runtime.
+> Please feedback if still I have to consider your proposal.
 
-This should be part of the description. You can drop the sentence
-"Normally controlled when TypeC/USBPD port integrated.", since
-that's hard to comprehend. Instead add the information that this
-is supposed to be always enabled, but can be disabled to avoid
-USB link loss (?) when doing a USB PD role swap.
+I'm fine with this being flag based, but your code assumes that the
+flags are mutual exclusive, since psy_cfg.attr_grp is overwritten.
+This is bad style and needs to be fixed:
+
++       if (charger->chip_info->has_impedance)
++               psy_cfg.attr_grp =3D mp2629_charger_sysfs_groups;
++
++       if (charger->chip_info->has_fast_charge)
++               psy_cfg.attr_grp =3D mp2733_charger_sysfs_groups;
 
 -- Sebastian
 
---bkvol2kvrsmj5v4m
+--fp56e5gruha3a2n2
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4qdQACgkQ2O7X88g7
-+ppxIw/8DkLHJMoXwLJ8PAlPJGmYJK9NsgOqwqEh51BxbW66BYqGdcEgcUWsxhc9
-iOC/o/Tj6uEbPuJVBSIPdQevlwqlfWmlla/FnUeu3KqYpJYFikLibb9ILOB0IwkQ
-b4HEpsI05VGy05ybpOcfZA/dePqaenyXQjMUTZiU4zYnnuze2wjf4M98xJVMPyiY
-mcmanJTIrEVo959TuXap63YPQV5ZAoyjpmKm6+HviY1iHih/XTDwV5/nsr+8PLbo
-esoeXRWxiaRDSE0Y14SlR2ViIc4I1ehb23NWN7emKMTxJIvue1XQbZlBtoqXgzN4
-Lftkktovz+H5XE50doVGju8+/lK8Mtqol3hsYDy8P4SvgkFV1TK90k6U+uMnZobD
-lyM1ua0HyaeDwKfJhHdMH3aLYdhcgiBC4FxRw945HMiawujgYWnn6mX7A1otlHuf
-WP+z/xY4t76M1XfQGWjXmZPetXH4Kmj8fHJuvD04hXxyu2/cZujx9YHBmZGI9TSx
-Ps+KZEma02ZHqaNxmO1gDe0TEwLB1J0+CHShHHexZPSncyWwNqyJRXfUOlWxYUXm
-wE+k4+1nQWfPte1wHsTe7DXQnzM5eUS9f+4X9UmHWQAvqkuoVoQgxWTZFgTJazcf
-KslR4jNeNl6mufySsNvJHCEiiXu2NnNTTlhmA4zOAdpyS+Ls+N0=
-=lOwa
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4q6sACgkQ2O7X88g7
++pqDzw/8DYNihI/5niBVAy8sxQtMYp1fODvWdL9PyBNxYrYJgicUuiYjMKw7nKuW
+c3JGR1D4bkDtBghktWBfs+BvpexpVt1YrK5dTqHnnnBNEHBv+r/f/+6Zh5y3CJKp
+0ffksLxM2mDaElxchdRXB+ObL2Kb+9HKvTQnuXVldX7LvbgHWhwnbYIDsDdin5mO
+awWkoEEdf/wr31F6seFIHkig+mBd/cuo9opbKCOp/YHDzNrHr79C5LCLmd6CeGKh
+TW78eqWlSM8ArBBpA6MXckTo9x7lW1+tsf67NDA1XPUSlwyuIsAAe2deb87gy3qZ
+O/NtL9ABfHjgQgNWeDeXoM//i/et7IJoncxqokxZOVHMapt3QTFAMbbDI7fBOH1E
+Eu7Paps0/OFp88k0aQCTYAa6mPUPKN15/s9WDHW6W074JgcN4m0wPFlzZAsa6oiM
+kXIMvZWUMOEga4UW5GS29okYuIXQQyC656B/+kVTjfhtNDaarblm5KNVMGbRxdcm
+4AwKX0GJSK1Vf0bPfSD1UtpE3R81Z0nL20QZbQm5fVWZppq3kXUZaXx8W6hVk6/P
+UwLXVClFeax1X0e/UODeNvkwA6xR92QPxDqZ8lsdFA3lJtz0K9avQMLuhpvqoZ94
+NnsOX7zTFVXBmJz6gNp2Q6f7BHSzNTVnNDkGpWyhFA1ZB2lDBhU=
+=I5wa
 -----END PGP SIGNATURE-----
 
---bkvol2kvrsmj5v4m--
+--fp56e5gruha3a2n2--
