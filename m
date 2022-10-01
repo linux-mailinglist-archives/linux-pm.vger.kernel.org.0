@@ -2,51 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AF8D5F1F38
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 22:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1035A5F1F4B
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Oct 2022 22:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiJAUQS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 1 Oct 2022 16:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43056 "EHLO
+        id S229636AbiJAUVg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 1 Oct 2022 16:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiJAUQQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 16:16:16 -0400
+        with ESMTP id S229621AbiJAUVf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 1 Oct 2022 16:21:35 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB6436879;
-        Sat,  1 Oct 2022 13:16:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D67ED240A9
+        for <linux-pm@vger.kernel.org>; Sat,  1 Oct 2022 13:21:33 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 678D96601F54;
-        Sat,  1 Oct 2022 21:16:06 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9E4BF6601FAF;
+        Sat,  1 Oct 2022 21:21:32 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664655366;
-        bh=TrZHAsF5Dyd5x510BkR/KuhalBTsHT0tTgBVGqk/XVc=;
+        s=mail; t=1664655692;
+        bh=dVQ6xV8G7OVjjwCVr6BNKcRSXHmzHENFNR7l4d1BLlg=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Iugp6NIoOkFPhWcQA4Zm6UjTXz87E9RFB/QLRuB8Z/D4OBuGzctk4Z2xg4vuMmrMA
-         nYsI6YOskCKMoHbGzBB0znzNQKgFY3KEsmASFWMmup4uAr6w0lfQFx7CWQ51MeEpBl
-         KlSw8F0k/ZWa8ndw8B0qGKvMci/fUyKZB5YJU5DAvy7kyQA6j8hUGpNOUBr2d3B6qp
-         C9itmWdDLwH80EaSr7RfqrCF0cuwlq7g40YmNxZCgex9DdnrLrOXMCmvq95NjWBhEp
-         LKd8LP+MGHL2z5heN5GeHvYs/CZiZsoKGoLZyKdNnjQDdZShCnqWShFv50ljFt+z7j
-         1LVA2gQ5wOw4w==
+        b=RZ07OgL0KZaiSAFF/LP+KA5EE6iC+FG1zx+/IyUOwCZFPbZjVpaERtyqs5pUBMvJs
+         E2OfEQOGqjbafCkEf7ZPpocyICm8upqS5buwcT4UEaRL+fawQcfoM8hSFzStnquxeW
+         MBXYENc6amDv5RlUQ2ung1ZNBFt830nrMR3VNbqeycB0qN1Y6K+xDCPXB+5/evTngu
+         mJqzXT6xebtBoshHXGyrtPUT5B8OnJACTXf+5EM0IX4C8U2EDkT5xZgYxm3wq68+2V
+         ixS+xzyW9jF6QT+h1LrMenNCpo351LGpYCQ4+9/rOFZA6FXc3H8pGmGbvrlCxojCPo
+         7xypmkA5WtaWA==
 Received: by mercury (Postfix, from userid 1000)
-        id 074B9106090C; Sat,  1 Oct 2022 22:16:04 +0200 (CEST)
-Date:   Sat, 1 Oct 2022 22:16:04 +0200
+        id B4067106090C; Sat,  1 Oct 2022 22:21:29 +0200 (CEST)
+Date:   Sat, 1 Oct 2022 22:21:29 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, ChiaEn Wu <chiaen_wu@richtek.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] power: supply: mt6370: uses IIO interfaces, depends on
- IIO
-Message-ID: <20221001201604.b7cp2a74qr3yjn6b@mercury.elektranox.org>
-References: <20220929062940.27538-1-rdunlap@infradead.org>
+To:     Yuan Can <yuancan@huawei.com>
+Cc:     linus.walleij@linaro.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: ab8500: Remove unused struct
+ ab8500_chargalg_sysfs_entry
+Message-ID: <20221001202129.ckgaksrjaomjajdn@mercury.elektranox.org>
+References: <20220927133758.98745-1-yuancan@huawei.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v7u5xn5m7c6v5fun"
+        protocol="application/pgp-signature"; boundary="gy3oyayto5hnbg5b"
 Content-Disposition: inline
-In-Reply-To: <20220929062940.27538-1-rdunlap@infradead.org>
+In-Reply-To: <20220927133758.98745-1-yuancan@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -57,65 +56,67 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---v7u5xn5m7c6v5fun
+--gy3oyayto5hnbg5b
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Sep 28, 2022 at 11:29:40PM -0700, Randy Dunlap wrote:
-> The mt6370-charger driver uses IIO interfaces and produces build
-> errors when CONFIG_IIO is not set, so it should depend on IIO.
+On Tue, Sep 27, 2022 at 01:37:58PM +0000, Yuan Can wrote:
+> After commit 75ee3f6f0c1a("power: supply: ab8500_chargalg: Drop enable/di=
+sable
+> sysfs"), no one use struct ab8500_chargalg_sysfs_entry, so remove it.
 >=20
-> ERROR: modpost: "iio_read_channel_processed" [drivers/power/supply/mt6370=
--charger.ko] undefined!
-> ERROR: modpost: "devm_iio_channel_get_all" [drivers/power/supply/mt6370-c=
-harger.ko] undefined!
->=20
-> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 charger =
-driver")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: ChiaEn Wu <chiaen_wu@richtek.com>
-> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> Cc: linux-pm@vger.kernel.org
+> Signed-off-by: Yuan Can <yuancan@huawei.com>
 > ---
->  drivers/power/supply/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
+>  drivers/power/supply/ab8500_chargalg.c | 6 ------
+>  1 file changed, 6 deletions(-)
 >=20
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -623,6 +623,7 @@ config CHARGER_MT6370
->  	tristate "MediaTek MT6370 Charger Driver"
->  	depends on MFD_MT6370
->  	depends on REGULATOR
-> +	depends on IIO
->  	select LINEAR_RANGES
->  	help
->  	  Say Y here to enable MT6370 Charger Part.
+> diff --git a/drivers/power/supply/ab8500_chargalg.c b/drivers/power/suppl=
+y/ab8500_chargalg.c
+> index 05146d436a6a..ea4ad61d4c7e 100644
+> --- a/drivers/power/supply/ab8500_chargalg.c
+> +++ b/drivers/power/supply/ab8500_chargalg.c
+> @@ -252,12 +252,6 @@ static enum power_supply_property ab8500_chargalg_pr=
+ops[] =3D {
+>  	POWER_SUPPLY_PROP_HEALTH,
+>  };
+> =20
+> -struct ab8500_chargalg_sysfs_entry {
+> -	struct attribute attr;
+> -	ssize_t (*show)(struct ab8500_chargalg *di, char *buf);
+> -	ssize_t (*store)(struct ab8500_chargalg *di, const char *buf, size_t le=
+ngth);
+> -};
+> -
+>  /**
+>   * ab8500_chargalg_safety_timer_expired() - Expiration of the safety tim=
+er
+>   * @timer:     pointer to the hrtimer structure
 
 Thanks, queued.
 
 -- Sebastian
 
---v7u5xn5m7c6v5fun
+--gy3oyayto5hnbg5b
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4oAMACgkQ2O7X88g7
-+ppichAAlMOQ326ISIwCBCD+jVz/vqsKXBuxRENl+wPBWaynBg2pp3Z52vnaL+Ug
-mBC6S77StiysK3jo8l+axuNLdmR7xhO24PoeJS05eDh/RDNi4KHWXhLN9gBHDWwG
-MyZVqcikdXOkWZqnFzaLBuyxWBjwSIQ3nVECGc287VyCz4HEsN2MdECCOSZ33b82
-vh5jdu7fzFZXI6jiazzfBoY/pOKbkmZyEQKivkxuqI18C6JJb1gLNok/4l8cgCMB
-nrvtoBKykJxVBl4DSprN0QELnrjLXAUzigezYdKfZIobxYob2qDgiiTjHc9DTp8T
-UJgKEvAYPLR5e2VwOhWI1z36dFuEEwQG51TCI1pEBQs8gUi1JMuTzhXC7MUumqNt
-4299CUjLPtX3urPw/RjKQG/rMbrqj2a03Zkt5cP9cF79aLoGBIbenAjtc4X0k0xn
-vYwCg7Hv6Ze7Yn42VeoHjFaJl9BxY6LnVfFhRw0kaj8YgKt9n90mxTui0uHhkrHH
-WEsIXG3KCnbrLg3l0OEv9D/pzDkqHt0YkfWVFIvuXZvv7St0c8aPCshbm9tVULq+
-xNYwTLovBm+uAVrdsxVv97NDKjj7+r4gEON7yycuaoGLNqrlHeOLWF+7bVjvYTUo
-OSoPgx3qqjDaMS/u8u5ovaXBwdYZZUqekVmKyeqoEJXnu+Zhs3Q=
-=7DTF
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmM4oUkACgkQ2O7X88g7
++pp+1Q//XCMjz0WDz9z4whfjhanGf4H7XdhPFGuvgNQ/DwwTxiNdd4t6voEgdKTH
+amQstLUaBftUA0zdPBq7OsxQqkqWGcaC7+xs3HJxrq+UCh9isg8mHWd6pJSYhbdA
+0neFxGJXsGz0iD634cPqnksy9wySb97865RIiBvmO7p0Q03iiYDFvei3XSy32QAL
+FR7jJL0RNIZPJ6Y8cQ4GRyoVD7l/RhLooi4QPEIm0z25kOZ3ePQ9PsR4sA1CL2pN
+G/uCJMt+D3QCNaCF4OFqkkdUysFr4K45rPaM5z9HLIfhcfnTQ5ibwOcV+jX3I6Hy
+vLD+iC/g+2LHZa1JOLlnupEXeADyRVLmIL8A544J7K63UANsfUaIJnSADR3mV2jo
+HFVdfgnLtpuFrNFMX2ovB97JEBGDMqx2K55ovxIuHebGHNESBp6+ODSf9dr/jh0Z
+UDmAGYx5MDoAWu3RaQVVlsmjH8KRTl7PVyIqJJaqYzaQRAyCjARFKP6Xonry/0Nj
+2uYlObOgLpahK7I8K0kzZ1vxPNjWlidjuNzy66NFfk9TvEqTKY6QjfkVezNB54Fs
+Vdo8Cu5ZYcrLoQKGPR1y5ihIgAPZU/p5Y2bl6C85W37Raw0+L3OTv1MduNEwXenD
+UhssC4u0dfk/46rOe17L6u5m4MpkLYvccxEbnS6wQCjGACXtlEE=
+=rTjt
 -----END PGP SIGNATURE-----
 
---v7u5xn5m7c6v5fun--
+--gy3oyayto5hnbg5b--
