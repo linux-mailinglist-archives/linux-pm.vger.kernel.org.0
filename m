@@ -2,102 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BC95F3963
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 00:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E768F5F393E
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 00:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiJCWyr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Oct 2022 18:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S229755AbiJCWoV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Oct 2022 18:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbiJCWyo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Oct 2022 18:54:44 -0400
-X-Greylist: delayed 1801 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 03 Oct 2022 15:54:42 PDT
-Received: from mail-filter.k24.co.id (mail-filter.k24.co.id [117.20.63.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 171FFCFB;
-        Mon,  3 Oct 2022 15:54:37 -0700 (PDT)
-Received: from mail-filter.k24.co.id (localhost.localdomain [127.0.0.1])
-        by mail-filter.k24.co.id (Proxmox) with ESMTP id 3B55750344F;
-        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
-Received: from mta-02.k24.co.id (mta-02.k24.co.id [192.168.2.11])
-        by mail-filter.k24.co.id (Proxmox) with ESMTPS id 29A595039F8;
-        Tue,  4 Oct 2022 04:58:16 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mta-02.k24.co.id (Postfix) with ESMTP id BD790A0FBF;
-        Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
-Received: from mta-02.k24.co.id ([127.0.0.1])
-        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id CtNj6BeHeIYk; Tue,  4 Oct 2022 04:58:15 +0700 (WIB)
-Received: from localhost (localhost [127.0.0.1])
-        by mta-02.k24.co.id (Postfix) with ESMTP id 3DBC9A0FF9;
-        Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mta-02.k24.co.id 3DBC9A0FF9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=k24.co.id;
-        s=201D0EFA-BD0A-11EB-90FB-4354FB48657B; t=1664834294;
-        bh=Yw62bKNhDK09NF2C5/gJe1ePr0AC5lJ8dr3g9D9gnpA=;
-        h=Date:From:Message-ID:MIME-Version;
-        b=eUel0ZyS4voooRXyAazrKUe9sSWvTOizWK/QjeafO1HHQov97lTtJ8zE/VKDW9kG/
-         4TXcKgbBadRJ3BgoKn/B2z5zwkAWMFvJ8SBdYfBK77Dlh7Fy5aGVrj3aoPsxUUd/xE
-         y65Dc84ASVq0gmCJBMtp+PFH0Qv5ZebfB3e/gzePfkauLe10Q2Ivk36A3qBe+YE3a5
-         vbkuLoN26XE7eZ7z1URW2wLY6gX9A5PKdjMKAq/8Y0Vy8UH/hGuYh/9hyfQb1cDpcy
-         Pk2k2jPTRZLjGbjjRAtbCtcr+Zr9O65rO7nxLtsU/OCybAlxauXdi0MbpIzGBrP+Cw
-         HdCgRe7dK//DQ==
-X-Virus-Scanned: amavisd-new at k24.co.id
-Received: from mta-02.k24.co.id ([127.0.0.1])
-        by localhost (mta-02.k24.co.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id J1sKnII_1ODb; Tue,  4 Oct 2022 04:58:14 +0700 (WIB)
-Received: from mailbox1.k24.co.id (mailbox1.k24.co.id [192.168.2.15])
-        by mta-02.k24.co.id (Postfix) with ESMTP id 198B0A0FAE;
-        Tue,  4 Oct 2022 04:57:51 +0700 (WIB)
-Date:   Tue, 4 Oct 2022 04:57:50 +0700 (WIB)
-From:   DIVERSITY CASH LOAN <fredy.daniswara@k24.co.id>
-Reply-To: BELINDA <belindasteenkamp14@gmail.com>
-Message-ID: <2129288997.3602620.1664834270921.JavaMail.zimbra@k24.co.id>
-Subject: New month promo
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Originating-IP: [192.168.2.10]
-X-Mailer: Zimbra 8.8.15_GA_4372 (zclient/8.8.15_GA_4372)
-Thread-Index: FEQ3IfcU2FvE+SDQCgXbHke9nAOpgg==
-Thread-Topic: New month promo
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5013]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  1.0 MISSING_HEADERS Missing To: header
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [belindasteenkamp14[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+        with ESMTP id S230257AbiJCWoI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Oct 2022 18:44:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E0258DFC;
+        Mon,  3 Oct 2022 15:44:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 204C8B81168;
+        Mon,  3 Oct 2022 22:44:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E01A3C43141;
+        Mon,  3 Oct 2022 22:44:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1664837045;
+        bh=Fb/GKQhGHXzGPg6zfEEDq3122h1fYGa/WfLD17sq02A=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=CmrKOJC57tSDrchvIQqs1l4puHUBbSxzzTKb+VWH5hfUH8iAqnPHrOFSboXfaj67I
+         MqD4w3IB4aetInpOtEGD37feWtrlm6dZYmyTrKkok/dnDm4fX1HP4TD05Mi616l+io
+         NTEPTRfWoBmvoMO2fNHn0cNZMllZF2vCOTecAkdtYxruwMY+gxo4ghJoejAlcvKRsZ
+         aBkAmBQWqp+boAbfuaz6UzUpvrhe/cbaCocylQh6JvBWc9U7Kecfx3wVzeyU/n4E+D
+         pnrY2qJQkwWLaI2ppRVbsUN7V1uzksfOf8pVO6P6bJ0teUpDMROjZ4SgntCBDBv9SG
+         vsMfG0mnTHJDg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC0A1E4D03B;
+        Mon,  3 Oct 2022 22:44:05 +0000 (UTC)
+Subject: Re: [GIT PULL] Thermal control updates for v6.1-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0iD8M=qYc32EY96vYSmjTaEz=M357PVvATSQvryrzh0Gw@mail.gmail.com>
+References: <CAJZ5v0iD8M=qYc32EY96vYSmjTaEz=M357PVvATSQvryrzh0Gw@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0iD8M=qYc32EY96vYSmjTaEz=M357PVvATSQvryrzh0Gw@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.1-rc1
+X-PR-Tracked-Commit-Id: 2e70ea7fb9873e642982f166bf9aaa4a6206fbec
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a5088ee7251e5106a4efa9588a73866eb4b4154e
+Message-Id: <166483704583.27150.13930332052495405734.pr-tracker-bot@kernel.org>
+Date:   Mon, 03 Oct 2022 22:44:05 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Whatever your goals are we will customize a loan just right for you from up=
- to TEN MILLION RANDS
+The pull request you sent on Mon, 3 Oct 2022 21:57:54 +0200:
 
-What can an unsecured loan do for you and your family and also your busines=
-s.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.1-rc1
 
-??Pensioners, blacklisted, debt review clients and self-employed, no paysli=
-p are highly welcome ??
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a5088ee7251e5106a4efa9588a73866eb4b4154e
 
-Call ??or what=E2=80=99s-app???? on...+27677352072
-Email??: belindasteenkamp14@gmail.com
+Thank you!
 
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
