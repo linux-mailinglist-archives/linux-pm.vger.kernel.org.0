@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE385F36C7
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Oct 2022 21:56:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BFD25F36CB
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Oct 2022 21:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbiJCT4S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Oct 2022 15:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
+        id S229924AbiJCT6L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Oct 2022 15:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiJCT4R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Oct 2022 15:56:17 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB2349B4F;
-        Mon,  3 Oct 2022 12:56:16 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id f26so6992698qto.11;
-        Mon, 03 Oct 2022 12:56:16 -0700 (PDT)
+        with ESMTP id S229876AbiJCT6H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Oct 2022 15:58:07 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0748E8A;
+        Mon,  3 Oct 2022 12:58:06 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id i3so7228869qkl.3;
+        Mon, 03 Oct 2022 12:58:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bC0sul2UGgyQdiwsa57rpyF6YKEsyQTncLxjmLU3TUU=;
-        b=sXuI9LRajLew2PFBbs3p5oWmFb7zUePNccmeD6Bb9FJcsPmA0syYw3ge33ipAQpvmy
-         bG7VNUsT5sVVOmKrHEJPPrUJhHaUEfDjyFcWsJtbKS5Ue7p82MBS+zSHREjQ7V+QP7io
-         vPHlR5OKNUdJ7ljw9/PxIc6uyGSMmSF+CwzZluHmqESz+5diirfarNtNAqGRAzJEv3Wx
-         37dqRhcBxVmiQp1yxfTS8lY6FYRU9KX3d1zE8OrHlmNXaGSWQkz4m0cKnNL8UFjkBqOG
-         FsQ0DYFuVz++zxxhBL+g+u/sbzmN/dCQp8Oiuixbf/QiQFHdnuOKppi4XtA8vkXnJiSS
-         mVAQ==
-X-Gm-Message-State: ACrzQf1NfZzXMh9ayvnPF/xaO7RBxvUtYAulUGQ6ciapL6EZEKYAhz/d
-        iQEfXClYMg09GZXyoHr2dU2wOUi2LFEwfyulHexbelna75M=
-X-Google-Smtp-Source: AMsMyM66rCZx4CeA/G2ZAExrlZIzA1vdVT1w+bxbTDaKdHOm5a9nVOpVe1luXEP2FcnJ1scSdk2AWOdBxgyj20SFPUU=
-X-Received: by 2002:a05:622a:620a:b0:35c:bf9e:8748 with SMTP id
- hj10-20020a05622a620a00b0035cbf9e8748mr17230683qtb.494.1664826975306; Mon, 03
- Oct 2022 12:56:15 -0700 (PDT)
+        bh=5B/fRi/LbkV2jKxu+Wxg6RFA2fxjkVBUkcu/nIAHTPU=;
+        b=Q4fDn4ZilPaAZUVmNepdROZClK80aJa3YiR0nRG4/t4x3/gQ6IM7O7VfoSlav8HyMo
+         +3RkWnpwbc6vVQbg/8D299egt0H4YHQQW4nv8JubTbmTaQLOVQ/OOGrDSbb2sh/Qbx3U
+         OgyeZ5UVg1UIqckc+2zkmKFeQrus4iRWg9D8owZ8qOC66j31Lx3mexgWtPlkOqaqU9Jb
+         eGSSxQ6zHUhmVp3nGn3VZnffL1ldBRpYn9Muuy7Jj5rsDkK7rQWRA1uyP8yvoUL2Humu
+         Wbcqkn5Zf004o+pPVvFo2U8jtWv3WUJ7eorHpSCso/QeCoBuUToU4enkoyNz4Yj4lBpu
+         DYrg==
+X-Gm-Message-State: ACrzQf0bTdrAFFOh613FYVm1nirAzfO3ItIG6dMKjpewWTdPiwwo1HCj
+        AMIs067ACrCIovbKEWXpGRH9hxvmDswlXR0qitYctD4Sl1c=
+X-Google-Smtp-Source: AMsMyM5iugCOsCgPpwP1+a3fnYEYNiD84qrkbT10Ti6sG/cgaf0fsNVdoOdRZ9a71xzJFWs17GY3/3bh4iTgBC7pp9Q=
+X-Received: by 2002:a05:620a:2988:b0:6ce:cc3f:73b9 with SMTP id
+ r8-20020a05620a298800b006cecc3f73b9mr14802010qkp.9.1664827085488; Mon, 03 Oct
+ 2022 12:58:05 -0700 (PDT)
 MIME-Version: 1.0
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 3 Oct 2022 21:56:04 +0200
-Message-ID: <CAJZ5v0ip_C6y1KopyN2pEs7dyqPw6NzKG1WtJSeqyKJeMOYwfA@mail.gmail.com>
-Subject: [GIT PULL] Power management updates for v6.1-rc1
+Date:   Mon, 3 Oct 2022 21:57:54 +0200
+Message-ID: <CAJZ5v0iD8M=qYc32EY96vYSmjTaEz=M357PVvATSQvryrzh0Gw@mail.gmail.com>
+Subject: [GIT PULL] Thermal control updates for v6.1-rc1
 To:     Linus Torvalds <torvalds@linux-foundation.org>
 Cc:     Linux PM <linux-pm@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,176 +57,227 @@ Hi Linus,
 Please pull from the tag
 
  git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- pm-6.1-rc1
+ thermal-6.1-rc1
 
-with top-most commit ac73ce394a129a88cb01ce190844bcd172ce14fb
+with top-most commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec
 
- Merge branches 'pm-cpuidle', 'pm-core', 'pm-sleep' and 'powercap'
+ Merge branches 'thermal-intel' and 'thermal-drivers'
 
-on top of commit f76349cf41451c5c42a99f18a9163377e4b364ff
+on top of commit b90cb1053190353cc30f0fef0ef1f378ccc063c5
 
- Linux 6.0-rc7
+ Linux 6.0-rc3
 
-to receive power management updates for 6.1-rc1.
+to receive thermal control updates for 6.1-rc1.
 
-These add support for some new hardware, extend the existing hardware
-support, fix some issues and clean up code.
+The most significant part of this update is the thermal control DT
+initialization rework from Daniel Lezcano and the following conversion
+of drivers to use the new API introduced by it.
+
+Apart from that, the maximum number of trip points in a thermal zone
+is increased and there are some fixes and code cleanups.
 
 Specifics:
 
- - Add support for Tiger Lake in no-HWP mode to intel_pstate (Doug
-   Smythies).
+ - Rework the device tree initialization, convert the drivers to the
+   new API and remove the old OF code (Daniel Lezcano).
 
- - Update the AMD P-state driver (Perry Yuan):
-   * Fix wrong lowest perf fetch.
-   * Map desired perf into pstate scope for powersave governor.
-   * Update pstate frequency transition delay time.
-   * Fix initial highest_perf value.
-   * Clean up.
+ - Fix return value to -ENODEV when searching for a specific thermal
+   zone which does not exist (Daniel Lezcano).
 
- - Move max CPU capacity to sugov_policy in the schedutil cpufreq
-   governor (Lukasz Luba).
+ - Fix the return value inspection in of_thermal_zone_find() (Dan
+   Carpenter).
 
- - Add SM6115 to cpufreq-dt blocklist (Adam Skladowski).
+ - Fix kernel panic when KASAN is enabled as it detects use after
+   free when unregistering a thermal zone (Daniel Lezcano).
 
- - Add support for Tegra239 and minor cleanups (Sumit Gupta, ye xingchen,
-   and Yang Yingliang).
+ - Move the set_trip ops inside the therma sysfs code (Daniel Lezcano).
 
- - Add freq qos for qcom cpufreq driver and minor cleanups (Xuewen Yan,
-   and Viresh Kumar).
+ - Remove unnecessary error message as it is already shown in the
+   underlying function (Jiapeng Chong).
 
- - Minor cleanups around functions called at module_init() (Xiu Jianfeng).
+ - Rework the monitoring path and move the locks upper in the call
+   stack to fix some potentials race windows (Daniel Lezcano).
 
- - Use module_init and add module_exit for bmips driver (Zhang Jianhua).
+ - Fix lockdep_assert() warning introduced by the lock rework (Daniel
+   Lezcano).
 
- - Add AlderLake-N support to intel_idle (Zhang Rui).
+ - Do not lock thermal zone mutex in the user space governor (Rafael
+   Wysocki).
 
- - Replace strlcpy() with unused retval with strscpy() in intel_idle
-   (Wolfram Sang).
+ - Revert the Mellanox 'hotter thermal zone' feature because it is
+   already handled in the thermal framework core code (Daniel Lezcano).
 
- - Remove redundant check from cpuidle_switch_governor() (Yu Liao).
-
- - Replace strlcpy() with unused retval with strscpy() in the powernv
-   cpuidle driver (Wolfram Sang).
-
- - Drop duplicate word from a comment in the coupled cpuidle driver
-   (Jason Wang).
-
- - Make rpm_resume() return -EINPROGRESS if RPM_NOWAIT is passed to it
-   in the flags and the device is about to resume (Rafael Wysocki).
-
- - Add extra debugging statement for multiple active IRQs to system
-   wakeup handling code (Mario Limonciello).
+ - Increase maximum number of trip points in the thermal core (Sumeet
+   Pawnikar).
 
  - Replace strlcpy() with unused retval with strscpy() in the core
-   system suspend support code (Wolfram Sang).
+   thermal control code (Wolfram Sang).
 
- - Update the intel_rapl power capping driver:
-   * Use standard Energy Unit for SPR Dram RAPL domain (Zhang Rui).
-   * Add support for RAPTORLAKE_S (Zhang Rui).
-   * Fix UBSAN shift-out-of-bounds issue (Chao Qin).
+ - Use module_pci_driver() macro in the int340x processor_thermal
+   driver (Shang XiaoJing).
 
- - Handle -EPROBE_DEFER when regulator is not probed on
-   mtk-ci-devfreq.c (AngeloGioacchino Del Regno).
+ - Use get_cpu() instead of smp_processor_id() in the intel_powerclamp
+   thermal driver to prevent it from crashing and remove unused
+   accounting for IRQ wakes from it (Srinivas Pandruvada).
 
- - Fix message typo and use dev_err_probe() in rockchip-dfi.c
-   (Christophe JAILLET).
+ - Consolidate priv->data_vault checks in int340x_thermal (Rafael
+   Wysocki).
+
+ - Check the policy first in cpufreq_cooling_register() (Xuewen Yan).
+
+ - Drop redundant error message from da9062-thermal (zhaoxiao).
+
+ - Drop of_match_ptr() from thermal_mmio (Jean Delvare).
 
 Thanks!
 
 
 ---------------
 
-Adam Skladowski (1):
-      cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
+Dan Carpenter (1):
+      thermal/of: Fix error code in of_thermal_zone_find()
 
-AngeloGioacchino Del Regno (1):
-      PM / devfreq: mtk-cci: Handle sram regulator probe deferral
+Daniel Lezcano (42):
+      thermal/of: Rework the thermal device tree initialization
+      thermal/of: Return -ENODEV instead of -EINVAL if registration fails
+      thermal/of: Fix free after use in thermal_of_unregister()
+      thermal/of: Make new code and old code co-exist
+      thermal/drivers/rockchip: Switch to new of API
+      thermal/drivers/uniphier: Switch to new of API
+      thermal/drivers/generic-adc: Switch to new of API
+      thermal/drivers/mmio: Switch to new of API
+      thermal/drivers/tegra: Switch to new of API
+      thermal/drivers/sun8i: Switch to new of API
+      thermal/drivers/sprd: Switch to new of API
+      thermal/drivers/broadcom: Switch to new of API
+      thermal/drivers/qcom: Switch to new of API
+      thermal/drivers/st: Switch to new of API
+      thermal/drivers/amlogic: Switch to new of API
+      thermal/drivers/armada: Switch to new of API
+      thermal/drivers/db8500: Switch to new of API
+      thermal/drivers/imx: Switch to new of API
+      thermal/drivers/rcar: Switch to new of API
+      thermal/drivers/rzg2l: Switch to new of API
+      thermal/drivers/qoriq: Switch to new of API
+      thermal/drivers/mtk: Switch to new of API
+      thermal/drivers/banggap: Switch to new of API
+      thermal/drivers/maxim: Switch to new of API
+      thermal/drivers/hisilicon: Switch to new of API
+      thermal/drivers/ti-soc: Switch to new of API
+      ata/drivers/ahci_imx: Switch to new of thermal API
+      hwmon: pm_bus: core: Switch to new of thermal API
+      hwmon/drivers/core: Switch to new of thermal API
+      iio/drivers/sun4i_gpadc: Switch to new of thermal API
+      Input: sun4i-ts - switch to new of thermal API
+      regulator/drivers/max8976: Switch to new of thermal API
+      thermal/drivers/samsung: Switch to new of thermal API
+      thermal/core: Move set_trip_temp ops to the sysfs code
+      thermal/of: Remove old OF code
+      thermal/core: Rearm the monitoring only one time
+      thermal/core: Rework the monitoring a bit
+      thermal/governors: Group the thermal zone lock inside the
+throttle function
+      thermal/core: Move the thermal zone lock out of the governors
+      thermal/core: Move the mutex inside the
+thermal_zone_device_update() function
+      thermal/core: Fix lockdep_assert() warning
+      Revert "mlxsw: core: Add the hottest thermal zone detection"
 
-Chao Qin (1):
-      powercap: intel_rapl: fix UBSAN shift-out-of-bounds issue
+Jean Delvare (1):
+      thermal/drivers/thermal_mmio: Drop of_match_ptr()
 
-Christophe JAILLET (1):
-      PM / devfreq: rockchip-dfi: Fix an error message
+Jiapeng Chong (1):
+      thermal/drivers/qcom/spmi-adc-tm5: Remove unnecessary print
+function dev_err()
 
-Doug Smythies (1):
-      cpufreq: intel_pstate: Add Tigerlake support in no-HWP mode
+Jilin Yuan (1):
+      thermal: Drop duplicate words from comments
 
-Jason Wang (1):
-      cpuidle: coupled: Drop duplicate word from a comment
+Rafael J. Wysocki (2):
+      thermal: gov_user_space: Do not lock thermal zone mutex
+      thermal: int340x_thermal: Consolidate priv->data_vault checks
 
-Lukasz Luba (1):
-      cpufreq: schedutil: Move max CPU capacity to sugov_policy
+Shang XiaoJing (1):
+      thermal: int340x: processor_thermal: Use module_pci_driver() macro
 
-Mario Limonciello (1):
-      PM: wakeup: Add extra debugging statement for multiple active IRQs
+Srinivas Pandruvada (2):
+      thermal: intel_powerclamp: Use get_cpu() instead of
+smp_processor_id() to avoid crash
+      thermal: intel_powerclamp: Remove accounting for IRQ wakes
 
-Perry Yuan (6):
-      cpufreq: amd-pstate: simplify cpudata pointer assignment
-      cpufreq: amd-pstate: fix white-space
-      cpufreq: amd_pstate: fix wrong lowest perf fetch
-      cpufreq: amd_pstate: map desired perf into pstate scope for
-powersave governor
-      cpufreq: amd-pstate: update pstate frequency transition delay time
-      cpufreq: amd-pstate: Fix initial highest_perf value
+Sumeet Pawnikar (1):
+      thermal: core: Increase maximum number of trip points
 
-Rafael J. Wysocki (1):
-      PM: runtime: Return -EINPROGRESS from rpm_resume() in the RPM_NOWAIT case
-
-Sumit Gupta (1):
-      cpufreq: tegra194: Add support for Tegra239
-
-Viresh Kumar (1):
-      cpufreq: qcom-cpufreq-hw: Fix uninitialized throttled_freq warning
-
-Wolfram Sang (3):
-      cpuidle: powernv: move from strlcpy() with unused retval to strscpy()
-      intel_idle: move from strlcpy() with unused retval to strscpy()
-      PM: suspend: move from strlcpy() with unused retval to strscpy()
-
-Xiu Jianfeng (1):
-      cpufreq: Add __init annotation to module init funcs
+Wolfram Sang (1):
+      thermal: move from strlcpy() with unused retval to strscpy()
 
 Xuewen Yan (1):
-      cpufreq: qcom-cpufreq-hw: Add cpufreq qos for LMh
+      thermal: cpufreq_cooling: Check the policy first in
+cpufreq_cooling_register()
 
-Yang Yingliang (1):
-      cpufreq: tegra194: change tegra239_cpufreq_soc to static
-
-Yu Liao (1):
-      cpuidle: Remove redundant check in cpuidle_switch_governor()
-
-Zhang Jianhua (1):
-      cpufreq: bmips-cpufreq: Use module_init and add module_exit
-
-Zhang Rui (3):
-      powercap: intel_rapl: Add support for RAPTORLAKE_S
-      intel_idle: Add AlderLake-N support
-      powercap: intel_rapl: Use standard Energy Unit for SPR Dram RAPL domain
-
-ye xingchen (1):
-      cpufreq: tegra194: Remove the unneeded result variable
+zhaoxiao (1):
+      thermal: da9062-thermal: Drop redundant error message
 
 ---------------
 
- drivers/base/power/runtime.c         |  7 +++--
- drivers/base/power/wakeup.c          |  2 ++
- drivers/cpufreq/amd-pstate.c         | 39 ++++++++++++++------------
- drivers/cpufreq/bmips-cpufreq.c      | 10 +++++--
- drivers/cpufreq/cpufreq-dt-platdev.c |  1 +
- drivers/cpufreq/highbank-cpufreq.c   |  2 +-
- drivers/cpufreq/intel_pstate.c       |  1 +
- drivers/cpufreq/qcom-cpufreq-hw.c    | 24 ++++++++++++----
- drivers/cpufreq/sti-cpufreq.c        |  2 +-
- drivers/cpufreq/tegra194-cpufreq.c   | 35 +++++++++++-------------
- drivers/cpufreq/ti-cpufreq.c         |  2 +-
- drivers/cpuidle/coupled.c            |  2 +-
- drivers/cpuidle/cpuidle-powernv.c    |  4 +--
- drivers/cpuidle/governor.c           | 11 ++++----
- drivers/devfreq/event/rockchip-dfi.c |  7 ++---
- drivers/devfreq/mtk-cci-devfreq.c    |  8 ++++--
- drivers/idle/intel_idle.c            | 53 +++++++++++++++++++++++++++++++++++-
- drivers/powercap/intel_rapl_common.c |  5 +++-
- include/linux/suspend.h              |  2 +-
- kernel/sched/cpufreq_schedutil.c     | 30 ++++++++++----------
- 20 files changed, 165 insertions(+), 82 deletions(-)
+ drivers/ata/ahci_imx.c                             |   15 +-
+ drivers/hwmon/hwmon.c                              |   14 +-
+ drivers/hwmon/pmbus/pmbus_core.c                   |   10 +-
+ drivers/hwmon/scpi-hwmon.c                         |   14 +-
+ drivers/iio/adc/sun4i-gpadc-iio.c                  |   14 +-
+ drivers/input/touchscreen/sun4i-ts.c               |   10 +-
+ drivers/net/ethernet/mellanox/mlxsw/core_thermal.c |   77 +-
+ drivers/regulator/max8973-regulator.c              |   10 +-
+ drivers/thermal/amlogic_thermal.c                  |   16 +-
+ drivers/thermal/armada_thermal.c                   |   12 +-
+ drivers/thermal/broadcom/bcm2711_thermal.c         |   14 +-
+ drivers/thermal/broadcom/bcm2835_thermal.c         |   14 +-
+ drivers/thermal/broadcom/brcmstb_thermal.c         |   20 +-
+ drivers/thermal/broadcom/ns-thermal.c              |   50 +-
+ drivers/thermal/broadcom/sr-thermal.c              |   16 +-
+ drivers/thermal/cpufreq_cooling.c                  |   12 +-
+ drivers/thermal/da9062-thermal.c                   |    5 +-
+ drivers/thermal/db8500_thermal.c                   |    8 +-
+ drivers/thermal/gov_bang_bang.c                    |   10 +-
+ drivers/thermal/gov_fair_share.c                   |    3 +-
+ drivers/thermal/gov_power_allocator.c              |   20 +-
+ drivers/thermal/gov_step_wise.c                    |   10 +-
+ drivers/thermal/gov_user_space.c                   |    5 +-
+ drivers/thermal/hisi_thermal.c                     |   14 +-
+ drivers/thermal/imx8mm_thermal.c                   |   14 +-
+ drivers/thermal/imx_sc_thermal.c                   |   14 +-
+ .../intel/int340x_thermal/int3400_thermal.c        |    5 +-
+ .../int340x_thermal/processor_thermal_device_pci.c |   13 +-
+ .../processor_thermal_device_pci_legacy.c          |   13 +-
+ drivers/thermal/intel/intel_powerclamp.c           |   27 +-
+ drivers/thermal/k3_bandgap.c                       |   12 +-
+ drivers/thermal/k3_j72xx_bandgap.c                 |   12 +-
+ drivers/thermal/max77620_thermal.c                 |    8 +-
+ drivers/thermal/mtk_thermal.c                      |   10 +-
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   23 +-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   12 +-
+ drivers/thermal/qcom/tsens.c                       |   16 +-
+ drivers/thermal/qoriq_thermal.c                    |   12 +-
+ drivers/thermal/rcar_gen3_thermal.c                |   16 +-
+ drivers/thermal/rcar_thermal.c                     |   13 +-
+ drivers/thermal/rockchip_thermal.c                 |   14 +-
+ drivers/thermal/rzg2l_thermal.c                    |   10 +-
+ drivers/thermal/samsung/exynos_tmu.c               |   24 +-
+ drivers/thermal/sprd_thermal.c                     |   18 +-
+ drivers/thermal/st/stm_thermal.c                   |   18 +-
+ drivers/thermal/sun8i_thermal.c                    |   14 +-
+ drivers/thermal/tegra/soctherm.c                   |   21 +-
+ drivers/thermal/tegra/tegra-bpmp-thermal.c         |   19 +-
+ drivers/thermal/tegra/tegra30-tsensor.c            |   12 +-
+ drivers/thermal/thermal-generic-adc.c              |   10 +-
+ drivers/thermal/thermal_core.c                     |   80 +-
+ drivers/thermal/thermal_core.h                     |    4 +-
+ drivers/thermal/thermal_helpers.c                  |   73 +-
+ drivers/thermal/thermal_hwmon.c                    |    2 +-
+ drivers/thermal/thermal_mmio.c                     |   19 +-
+ drivers/thermal/thermal_of.c                       | 1148 +++++++-------------
+ drivers/thermal/thermal_sysfs.c                    |   11 +-
+ drivers/thermal/ti-soc-thermal/ti-thermal-common.c |   16 +-
+ drivers/thermal/uniphier_thermal.c                 |   10 +-
+ include/linux/thermal.h                            |   87 +-
+ 60 files changed, 835 insertions(+), 1388 deletions(-)
