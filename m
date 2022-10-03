@@ -2,175 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D505F2768
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Oct 2022 02:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9ABF5F2793
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Oct 2022 04:00:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiJCApQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 2 Oct 2022 20:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S229507AbiJCCAf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 2 Oct 2022 22:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiJCApP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Oct 2022 20:45:15 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2055.outbound.protection.outlook.com [40.107.96.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27C4D2AC66;
-        Sun,  2 Oct 2022 17:45:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FuXVwVs4sm7nUXwebXJ9atTqKFU0w6ImvKGWCJzUjcnW82smgx3lzm13dKQw/YsGui1ynECuIvqdImHb1xE1x2OBygGt9KUC9SGuXpAXUmZkjQwfBIxmReLS2kVNHXyn/qi5I0x3UyytDhrrT74xb+vaVt9aJDyyM7Etgc+6We1oW8i9IVyXsarOXtyYBhqmF11/O+gj2aHVZXWVG251leDpfqcA5liFb2gYXyU7ek5Oku7hfau0g8bA2HQ6sk2yvkTflUX6Cu2Rg2XIhQJ6t9VDjf+aPXeoawAV2eAxucw54a1Ea+f0judb5BWl2mzDyxkhzpd/4NPPKM78hKBi2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EJZ+avtP29sOH9sxuKDVmg9vq4zpHZAEqHhlawS3fs0=;
- b=oRY77iVVb2BDQyQiB6/soLdtTvrze7aHTtL+MoP7Ws1mbc4ugN1+xKRxTmyrUK5Ptc9wB5HMzPkbSDWT5Y+V9/MBL+r626xcB//L+EnM4iJlDAapACIcnAb4M2/Q3Uy8l0wX6lM2/0tyRl61LMh21XKYq7i7Vv4r5v75QzZns6aQPG+tXGeizwCRKtIb+/NwNOoS4hzj3hYNmQivD7s+0LSyanhoM4sweD7m0hJ4wCuM4j7yW7DCH4tXRTbKr6dzE4AUqpGIPmJ27xYjrgx4EkR2lpPqrB/idXQGAIVqi6mH3IIh7CoBcDOOgcyzdZ+xGZejeB7VPRofhurws6njTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=samsung.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EJZ+avtP29sOH9sxuKDVmg9vq4zpHZAEqHhlawS3fs0=;
- b=k/ZoG6SGjiwgGZkM8VvEYXCMeN1+Zdt8svi6SRoRAjddG2sE7OlgxGMNPeLMiBu0COGZ0foodWGRT4GE+wvCRv5du7MFowIBGyyB+3I7r10Qa+F6m2R0B3BwAqMvu+ZN+kFm0GJzKxaazjSmkV24sBVZS3SrmGMU7RfhPlPfLnUZYrTvha+uGW+OrtYObJWX5bV0dFWZT6KPG5GuRThafMqyjmzRv7SY+G/w4S+ff8V5TuQ2IPbdCzuGphnnJ5d8gjBSDa1cwxllLuHgAEr7pj8ADto9xSYvNiBwu19jVCQtqnTVG4C21ima1EEDEDszYNjS3hcovE/v1mIJRfXuOQ==
-Received: from BN9PR03CA0392.namprd03.prod.outlook.com (2603:10b6:408:111::7)
- by MW4PR12MB7286.namprd12.prod.outlook.com (2603:10b6:303:22f::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24; Mon, 3 Oct
- 2022 00:45:10 +0000
-Received: from BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:111:cafe::80) by BN9PR03CA0392.outlook.office365.com
- (2603:10b6:408:111::7) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5676.24 via Frontend
- Transport; Mon, 3 Oct 2022 00:45:10 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BN8NAM11FT045.mail.protection.outlook.com (10.13.177.47) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5676.17 via Frontend Transport; Mon, 3 Oct 2022 00:45:09 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Sun, 2 Oct 2022
- 17:45:01 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sun, 2 Oct 2022
- 17:45:01 -0700
-Received: from pc.nvidia.com (10.127.8.11) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.986.29 via Frontend Transport; Sun, 2 Oct
- 2022 17:44:59 -0700
-From:   Johnny Liu <johnliu@nvidia.com>
-To:     <myungjoo.ham@samsung.com>, <kyungmin.park@samsung.com>,
-        <cw00.choi@samsung.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Johnny Liu <johnliu@nvidia.com>
-Subject: [PATCH] devfreq: Support device update function
-Date:   Mon, 3 Oct 2022 08:44:01 +0800
-Message-ID: <20221003004401.21165-1-johnliu@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-X-NVConfidentiality: public
+        with ESMTP id S229476AbiJCCAe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 2 Oct 2022 22:00:34 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1610917E38;
+        Sun,  2 Oct 2022 19:00:31 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id d12-20020a05600c3acc00b003b4c12e47f3so5059677wms.4;
+        Sun, 02 Oct 2022 19:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date;
+        bh=bDOn5KEWOol/POx3OY5sp8JnMcKuLfHDpdab/ZUK6II=;
+        b=AuhdV2KW79os6xuEBd5wkBE8HMNlktciIW3l3q+OiLxR3SPp5lXEWCRy9H+rHLQa3z
+         VkGVMGq9ZL6szE4KL0lBLjOyEz6aEJ4VWP8ZO/9zA4qhZ+z+oSnWU981u5uV4o5ZjJqY
+         LiqePrIzfNJSx6lmN3JcyKGLWbdqBpQyXg+rF2v3E8EP3V+MxiVrtKabdBhBmcbqkips
+         FI8kLl8p2rJjKULXwl1VO0ASndw9l7fc5LDZ9/If6BMnr7eX+xqk9usbbVSAo39t/Tk1
+         vPpx+LLXfwsazQDGzqmpre0akxExez19WXZCnUDJD5q3+46F8ip5ClDcuPoGPODCsOti
+         8pIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=bDOn5KEWOol/POx3OY5sp8JnMcKuLfHDpdab/ZUK6II=;
+        b=Nx5kuV+NqkRGhuPHQG3dT4bHAKvg0vSZ4u9OB+HrrzUsa7H2PmAsFt70qru9OP2g7i
+         tfNKDRMOh4cH8bWR4gPV5kco8/gX9wUpGZ0qsqoQf2/LfMbNlu1IgORXwf8AFAERzjwE
+         eHEY2JgBKq705LyRMwBB1VKxC7Pw3oiTZXOC9SPwXhDz6bI5CKF2NB204t4SfBZ/Gn5e
+         vVNZ0OYaz8MI0zilD/ILXaPzIjw+DdDPOFsStvJ8yQUA/pkcXvs/Q8qwCnJaC01ugLik
+         RB7gIeXtD+3UF05Z1I2BMfEohLXC8t5uMW/ADl/kkFU5rWUdiEt8bGlWarTXA1YW7qkn
+         ATkA==
+X-Gm-Message-State: ACrzQf0AWI+VWmhVvWGslTirTKKkCAfZxgBKq41Yxh7waI5MEJDM+7yq
+        wTnT7rEIvIyv20ZEyEkTw6q1GNKeO8RX1KO+bPPm6Z3QMYY=
+X-Google-Smtp-Source: AMsMyM766IiHMlhusWvnotc4ifTdnEUF7hotYZRv2hlUsagIAN3xgMTuAlIYQHfrkGd3NmC/+a8ckfYBxdjzsvmDZNk=
+X-Received: by 2002:a05:600c:1549:b0:3b4:8fd7:af4 with SMTP id
+ f9-20020a05600c154900b003b48fd70af4mr5222907wmg.100.1664762430059; Sun, 02
+ Oct 2022 19:00:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT045:EE_|MW4PR12MB7286:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8588fa58-4a8a-44ac-481f-08daa4d885e5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wffirprby069XfprGjoTrWRgdv0Rvx1Veu8aD8XQU2H+LOLtWr1F15BDpor7jpXuTsMz/j7oYLZ/Cp840LBdyLdx5HjMfx4cWNCJiIBlJyTfKWSzAiB0RiuMUKXvItAKXqRlv9aHnjxbqK8wOX77Mbp78psbs0Xt8UGfeUgVeK5prI9Ct6J+jHXONMisKp4+jT4psv9HinSq7/FSfrMD7+cxmxLWW8x9IyctPAeHSVOhj7KSwkS5MXgVV4s4VTo6ibVqVU1Ur8WxAQ5k1VkdIj6/9ESamXCJS4vc6MwN2/1VfX4T8q7ErK53XeVLC9W8nvDNKOtL5Qb7A8Sui1b2Bv+KBfmpVs+sSPuwM3ssC5oHf61uOuBfzKU2e6HB+ECcpICvHXEA3++BNu2olOlUOpnyyS6sRQOYIlsrM+DbeQKJtfqgAsnylrKOPJ2VCXsF5lKzArm+NBCLq64AFk+TlJTZXbH4poSECQ5Sca2SxxOn1/JoKN4n+eEv/Ryssw19e7uqeuXZXZBlHD426umtAso0cn2FsbwJTZ6aeaKP37dflGlJSmIOUYPgFaB5OBVGpIRULIxC7fwVsxCESCGz9CpWJ9c23SqevWWQgWFdfttd+HHamjO5VQSJPoAVRZUIpR8+y6g8WQFQA+GUNyUWrIhUvbFXcA630VkrqNEy588dMg5n54SsiF9K13ga+V7D5oc1y2hdXZUAOgJmvIRZfOiNoNlm5TFjm95kw0uT6mFTYUIah/Ola0wQr7/pyB6nlOMxGujGumxPW61EClS5Xg==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199015)(40470700004)(46966006)(36840700001)(2906002)(15650500001)(5660300002)(8936002)(41300700001)(70586007)(70206006)(36756003)(478600001)(40480700001)(86362001)(82740400003)(26005)(8676002)(4326008)(316002)(7696005)(107886003)(6666004)(54906003)(82310400005)(110136005)(2616005)(7636003)(36860700001)(40460700003)(356005)(186003)(1076003)(336012)(47076005)(426003)(83380400001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Oct 2022 00:45:09.0602
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8588fa58-4a8a-44ac-481f-08daa4d885e5
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7286
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <1663173015-7934-1-git-send-email-u0084500@gmail.com>
+ <1663173015-7934-4-git-send-email-u0084500@gmail.com> <20220916180823.p672rojsrjbpy4ft@mercury.elektranox.org>
+ <CADiBU39FMkDOrMHXTQF+0JGX2tDn_iVXCb19jM6MopnKmaXOpQ@mail.gmail.com> <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
+In-Reply-To: <20221001205800.msywk4yvqgegjqpe@mercury.elektranox.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Mon, 3 Oct 2022 10:00:18 +0800
+Message-ID: <CADiBU38vLBfvpFuOOikdZ5XsMGqCaq7hh+ZcjBx85ksw6dbShQ@mail.gmail.com>
+Subject: Re: [PATCH v5 3/3] Documentation: power: rt9471: Document exported
+ sysfs entries
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mazziesaccount@gmail.com, alina_yu@richtek.com,
+        cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-To realize interrupt-driven closed-loop governors, governors need to be
-able to send data to the underlying devfreq driver to ask for updating
-the device settings, such as hardware registers for frequency limits.
+Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=B9=B4=
+10=E6=9C=882=E6=97=A5 =E9=80=B1=E6=97=A5 =E5=87=8C=E6=99=A84:58=E5=AF=AB=E9=
+=81=93=EF=BC=9A
+>
+> Hi,
+>
+> On Mon, Sep 19, 2022 at 09:11:09AM +0800, ChiYuan Huang wrote:
+> > Sebastian Reichel <sebastian.reichel@collabora.com> =E6=96=BC 2022=E5=
+=B9=B49=E6=9C=8817=E6=97=A5 =E9=80=B1=E5=85=AD =E4=B8=8A=E5=8D=889:19=E5=AF=
+=AB=E9=81=93=EF=BC=9A
+> > > On Thu, Sep 15, 2022 at 12:30:15AM +0800, cy_huang wrote:
+> > > > From: ChiYuan Huang <cy_huang@richtek.com>
+> > > >
+> > > > Document the settings exported by rt9471 charger driver through sys=
+fs entries:
+> > > > - sysoff_enable
+> > > > - port_detect_enable
+> > > >
+> > > > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > > > ---
+> > > > Since v5:
+> > > > - Recover all the change in sysfs-class-power.
+> > > > - New a sysfs-class-power-rt9471 file.
+> > > > - Remove 'charge_term_enable' sysfs entry, directly integrate it in
+> > > >   'charge_term_current' power supply property control.
+> > > >
+> > > > ---
+> > > >  Documentation/ABI/testing/sysfs-class-power-rt9471 | 29 ++++++++++=
+++++++++++++
+> > > >  1 file changed, 29 insertions(+)
+> > > >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9=
+471
+> > > >
+> > > > diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9471 b/D=
+ocumentation/ABI/testing/sysfs-class-power-rt9471
+> > > > new file mode 100644
+> > > > index 00000000..ad5b049
+> > > > --- /dev/null
+> > > > +++ b/Documentation/ABI/testing/sysfs-class-power-rt9471
+> > > > @@ -0,0 +1,29 @@
+> > > > +What:                /sys/class/power_supply/rt9471-*/sysoff_enabl=
+e
+> > > > +Date:                Oct 2022
+> > > > +KernelVersion:       6.1
+> > > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
+> > > > +Description:
+> > > > +             This entry allows enabling the sysoff mode of rt9471 =
+charger devices.
+> > > > +             If enabled and the input is removed, the internal bat=
+tery FET is turned
+> > > > +             off to reduce the leakage from the BAT pin. See devic=
+e datasheet for details.
+> > > > +             It's commonly used when the product enter shipping st=
+age.
+> > > > +
+> > > > +             Access: Read, Write
+> > > > +             Valid values:
+> > > > +             - 1: enabled
+> > > > +             - 0: disabled
+> > >
+> > > I still fail to see why this needs to be controllable at runtime.
+> > > This looks like a hardware property. Are there any known products,
+> > > which need this disabled?
+> > It's just a switch, actually 'disabled' is not needed.
+> > For the enabled case, mostly used in below scenarios
+> > 1. Online testing, USB IN -> Factory testing -> write 1 to enable ->
+> > USB out -> immediately VSYS off -> pack
+> > 2. Offline testing no vbus -> Factory testing -> write 1 to enable ->
+> > immediately VSYS off -> pack
+> >
+> > The 'disable" can use to cancel the shipping mode in case 1 before USB =
+out.
+> > It's more like the testing.
+> >
+> > Like as you said, shipping BATFET_OFF is all the hardware behavior.
+> > To leave this mode after VSYS off, there're three ways
+> > 1. power key pressed
+> > 2. VBUS IN
+> > 3. control BATFET_OFF to 0 (But it need SOC to be alive, at the time,
+> > VSYS off, no one can execute this I2C command)
+>
+> If factory testing and preperation is the only use case, I don't
+> think exposing this in sysfs and creating userspace ABI is worth
+> it. Just tell factory to use i2c-dev and poke the correct registers.
+>
+I agree your comment if there's only this case will use it.
 
-Since governors might export several tunable parameters, users can
-enforce different policies for the control logics. Under different
-policies, governors need to send different information to inform the
-devfreq driver to configure the device accordingly.
+So I ask our HW members about this.
+They said there's still one case I didn't consider about.
+It's the dual charger scenario.
+If the charging process is entering CV mode, the slave charger is no
+need to join the charging.
+Then in common case, slave charger need to minimize the battery leakage.
+And the BATFET_OFF is needed to lower the battery leakage.
 
-The introduced update function improves the flexibility of governors
-and acts as a communication interface between governors and devfreq
-drivers.
+They think this sysfs entry is needed. Can this persuade you?
 
-Signed-off-by: Johnny Liu <johnliu@nvidia.com>
----
- drivers/devfreq/governor.h | 8 ++++++++
- include/linux/devfreq.h    | 8 ++++++++
- 2 files changed, 16 insertions(+)
+> > If what you care is no need to mention 'disable', then just remove it.
+> > It's fine.
+> > >
+> > > > +What:                /sys/class/power_supply/rt9471-*/port_detect_=
+enable
+> > > > +Date:                Oct 2022
+> > > > +KernelVersion:       6.1
+> > > > +Contact:     ChiYuan Huang <cy_huang@richtek.com>
+> > > > +Description:
+> > > > +             This entry allows enabling the USB BC12 port detect f=
+unction of rt9471 charger
+> > > > +             devices. If enabled and VBUS is inserted, device will=
+ start to do the BC12
+> > > > +             port detect and report the usb port type when port de=
+tect is done. See
+> > > > +             datasheet for details. Normally controlled when TypeC=
+/USBPD port integrated.
+> > > > +
+> > > > +             Access: Read, Write
+> > > > +             Valid values:
+> > > > +             - 1: enabled
+> > > > +             - 0: disabled
+> > >
+> > > So basically this depends on the hardware integration (e.g. it
+> > > should be disabled when power source is a DC barrel jack instead
+> > > of USB) and is not supposed to change at all during runtime? Then
+> > > the information wether it needs to be enabled should be derived
+> > > from the device tree.
+> >
+> > It's a switching charger integrates OTG boost.
+> > For the case 'DC Jack', there's no need to use this kind of product.
+> >
+> > With typec integration, at most time, it still need bc12 to be enabled
+> > by default. Just in some case, like as power role swap (SNK -> SRC -> S=
+NK),
+> > to automatically identify the USB port, this may interrupt USB communic=
+ation.
+> >
+> > So as my understanding, keep it enabled by default, just in some case,
+> > it my need to control at runtime.
+>
+> This should be part of the description. You can drop the sentence
+> "Normally controlled when TypeC/USBPD port integrated.", since
+> that's hard to comprehend. Instead add the information that this
+> is supposed to be always enabled, but can be disabled to avoid
+> USB link loss (?) when doing a USB PD role swap.
+>
+Thanks for the comment.
 
-diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-index 0adfebc0467a..b5781fa549c7 100644
---- a/drivers/devfreq/governor.h
-+++ b/drivers/devfreq/governor.h
-@@ -124,4 +124,12 @@ static inline int devfreq_update_stats(struct devfreq *df)
+I'll rewrite it as below
+'It's supposed to be always enabled, but can be disabled to avoid usb
+link interruption especially when doing a USBPD 'power' role swap.'
 
- 	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
- }
-+
-+static inline int devfreq_update_dev(struct devfreq *df, void *data)
-+{
-+	if (!df->profile->update)
-+		return -EINVAL;
-+
-+	return df->profile->update(df->dev.parent, data);
-+}
- #endif /* _GOVERNOR_H */
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 34aab4dd336c..82d0f9596935 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -92,6 +92,8 @@ struct devfreq_dev_status {
-  *			devfreq.last_status.
-  * @get_cur_freq:	The device should provide the current frequency
-  *			at which it is operating.
-+ * @update:		An optional function to allow governors send data back
-+ *			to the devfreq driver to update the device settings.
-  * @exit:		An optional callback that is called when devfreq
-  *			is removing the devfreq object due to error or
-  *			from devfreq_remove_device() call. If the user
-@@ -114,6 +116,7 @@ struct devfreq_dev_profile {
- 	int (*get_dev_status)(struct device *dev,
- 			      struct devfreq_dev_status *stat);
- 	int (*get_cur_freq)(struct device *dev, unsigned long *freq);
-+	int (*update)(struct device *dev, void *data);
- 	void (*exit)(struct device *dev);
+Sorry, due to the long reply period, I already sent v6/v7/v8 to fix
+some coding like as missing header and irq wakeup check.
+Actually only missing header change is needed.
+Please ignore these noise.
 
- 	unsigned long *freq_table;
-@@ -451,6 +454,11 @@ static inline int devfreq_update_stats(struct devfreq *df)
- {
- 	return -EINVAL;
- }
-+
-+static inline int devfreq_update_dev(struct devfreq *df)
-+{
-+	return -EINVAL;
-+}
- #endif /* CONFIG_PM_DEVFREQ */
-
- #endif /* __LINUX_DEVFREQ_H__ */
---
-2.17.1
-
+And after the sysfs reviewing is finished, you can just review the revision=
+ v9.
+Thanks.
+> -- Sebastian
