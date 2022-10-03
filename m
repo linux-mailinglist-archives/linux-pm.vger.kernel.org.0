@@ -2,52 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657EC5F2DDC
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Oct 2022 11:31:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA4DE5F2DE5
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Oct 2022 11:31:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbiJCJaq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 3 Oct 2022 05:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S230242AbiJCJba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 3 Oct 2022 05:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231596AbiJCJ30 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Oct 2022 05:29:26 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58774C60D
-        for <linux-pm@vger.kernel.org>; Mon,  3 Oct 2022 02:27:34 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 130-20020a1c0288000000b003b494ffc00bso8138807wmc.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Oct 2022 02:27:34 -0700 (PDT)
+        with ESMTP id S231315AbiJCJ33 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 3 Oct 2022 05:29:29 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92580349B3
+        for <linux-pm@vger.kernel.org>; Mon,  3 Oct 2022 02:27:39 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id a10so3439169wrm.12
+        for <linux-pm@vger.kernel.org>; Mon, 03 Oct 2022 02:27:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=KY22MjtoUlIwWIKxWwfuHh0wn9QBG3Vjtz/Dduvf6bU=;
-        b=MBR6ICFKe+bl+7FRTDTi1pMSJNfC6nvWkInuXTT4JyAomFJPJVBJJkxfVAfrsHbwRl
-         1T2koRRcYrNPgbQUvuFGZUYbc4Cg+AlmEGzCAzNcorg37i4/MEbSQKGLEwkKZ6jTVc4V
-         8JqeBEwvkIPuEMpQu2JNM0wcpI2M6kB8Gu0trgvgXGXJmMqLupuvws3YqCur0UeofD0S
-         rksWdtR5952Vw4eQmAaD3TIJn4LftUwyQZFm86MpmG7VsSMbBG0KJlK8bqfCF9PlQP3Z
-         XNE9lMPFyt1l/70K3zswWSEtMamUhu9BhFM37qs6Wps0jnlNsuVpX9CD1wf53hssHTbJ
-         60rQ==
+        bh=OHXbaNWdyZ0Wkkc1xL/nI14ReQ0AVnlGlwSXS+lV7dA=;
+        b=Af5x9hzSha3my/m/Nte8ywVZs/vFrd/lI7Okv8AZDMu1iLJVal/5muYWUawbsxK0ZT
+         ikS5NRQ0HAcFr8zs22mlw9Ikb7rv3uaqdR7cjPoCU1zjPvnWC63PSKP10AbMrKC5TfuH
+         wbMPuCWE666CZ/zKRxmxZlT2hCHGJ8UGd3YjyNqEMSnAry7LBj3V5MG5kBC1ou2ohRX7
+         +7q6/MhqcliB1JJA5nBAMUy5dqXTqWf2loLs0v4GRC4j3xUm0hEPzG2frvhJvaSZHg6i
+         CMKFMOSM7FdYSQC/kfZ2nCFgMSATWXwKWLeIRE3EJS/9eX9ChxqUAB1Adlku4O7DQo7W
+         2aZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=KY22MjtoUlIwWIKxWwfuHh0wn9QBG3Vjtz/Dduvf6bU=;
-        b=cin0kOOidy0gStVyEzIkBM44wrJTkDzTvkQ5UhHgd6LjKL5hO8qK1We+VQ+IexMxMR
-         zoeT/2qZ6TU0I5ODK0xqta+DxjwAKOiYIgNuN0H5vHTS19kkIt1q7gVT7SzxpmoWqKJ8
-         ppvzMMHN6fcflixFlJT5Ske/DrzZbVZQ7HkAIgQg/M4y/CXaZ/MFDrjiz2GRfzxQz+06
-         NSdPF+o6fwlMmikoKBfP6cArvJ+3Ye03SMaoFesvRMuAAIqtE7z7iOVvPsseOzmxIvS8
-         x5nvXcLXHULMwuugxeoHaEfmkvZinuSTGlO4CncD9FfCOBLHFMgtLh58FKwn4oDrEA4z
-         TJQg==
-X-Gm-Message-State: ACrzQf3Td2PoPH/mxJnUl3d3YtTmEn6V0tMlnrBRhTl3n7/FXe37xU0r
-        ZXKwbwdFN7wNymxu54cvFuS8DA==
-X-Google-Smtp-Source: AMsMyM4WzX42SGBH96J5yFVO8dsU/Bxg/s/4fszh5Y0eQeyIxXHKeLghmfuTfrPEEYYfIUOUze1ajw==
-X-Received: by 2002:a05:600c:3ac9:b0:3b4:bed4:d69 with SMTP id d9-20020a05600c3ac900b003b4bed40d69mr6421993wms.131.1664789234207;
-        Mon, 03 Oct 2022 02:27:14 -0700 (PDT)
+        bh=OHXbaNWdyZ0Wkkc1xL/nI14ReQ0AVnlGlwSXS+lV7dA=;
+        b=l5i1h+dfCkIBnv9z54HNyb25Gxc3WTDT1SsW7L7gW7fYG06OXTReQQthg5fZJxizNW
+         NHfLFlfeuTXsjFHydRM9C1ppw+E4wRYiT6o2TlWNVV1LHqnFO9/yo2KY8/rj3P6Icbfp
+         DXhLmEvwmAeD03eL//4YJ6lAGkwfmdkU9iKPrTNjxaI9KXFhsr26W+h02UEkb3pXl2XB
+         6ICs5Ybmsiz8xeSt+SKoQ2m86G8vHbdfBoaQCUo6qN1hrtylb6gJKtpu8Q29YdeDwPdV
+         fkIAYvC50I15lJIzztZVYVbnuSojM/gVkLJuF4iGgUVis3RHiUf6Sh/HIW5CWYWpWRqj
+         nZ0A==
+X-Gm-Message-State: ACrzQf1igRnY/FNVL/xd/XmNH/j6xdTJQFUobYAkLuVuZ1xQUYToZln3
+        rM2LmAYN7vT29QlGCOSgmk2QtA==
+X-Google-Smtp-Source: AMsMyM7iwzJkV59BXYWsY2xwQbRByh+xbCoNwtMexB5vFgap1/VyXmgzFlIuEUTQeF93pXmOyL3quw==
+X-Received: by 2002:a05:6000:2a7:b0:22a:f98f:b75f with SMTP id l7-20020a05600002a700b0022af98fb75fmr13158012wry.373.1664789237495;
+        Mon, 03 Oct 2022 02:27:17 -0700 (PDT)
 Received: from mai.. ([2a05:6e02:1041:c10:f3a:9f5e:1605:a75a])
-        by smtp.gmail.com with ESMTPSA id ay3-20020a5d6f03000000b0022cc157bf26sm9707520wrb.85.2022.10.03.02.27.11
+        by smtp.gmail.com with ESMTPSA id ay3-20020a5d6f03000000b0022cc157bf26sm9707520wrb.85.2022.10.03.02.27.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Oct 2022 02:27:13 -0700 (PDT)
+        Mon, 03 Oct 2022 02:27:17 -0700 (PDT)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
 To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
@@ -95,9 +95,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-omap@vger.kernel.org
-Subject: [PATCH v8 18/29] thermal/of: Remove of_thermal_set_trip_hyst()
-Date:   Mon,  3 Oct 2022 11:25:51 +0200
-Message-Id: <20221003092602.1323944-19-daniel.lezcano@linaro.org>
+Subject: [PATCH v8 19/29] thermal/of: Remove of_thermal_get_crit_temp()
+Date:   Mon,  3 Oct 2022 11:25:52 +0200
+Message-Id: <20221003092602.1323944-20-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221003092602.1323944-1-daniel.lezcano@linaro.org>
 References: <20221003092602.1323944-1-daniel.lezcano@linaro.org>
@@ -113,48 +113,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal core is providing the generic thermal_zone_set_trip()
-function which does exactly what the OF ops function is doing.
-
-It is pointless to define our own version, just remove the ops and the
-thermal_zone_set_trip() will take care of it.
+The generic version of of_thermal_get_crit_temp() can be used. Let's
+remove this ops which is pointless.
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/thermal_of.c | 13 -------------
- 1 file changed, 13 deletions(-)
+ drivers/thermal/thermal_of.c | 15 ---------------
+ 1 file changed, 15 deletions(-)
 
 diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index 4e54d62720dc..494e9c319541 100644
+index 494e9c319541..bd872183e521 100644
 --- a/drivers/thermal/thermal_of.c
 +++ b/drivers/thermal/thermal_of.c
-@@ -19,18 +19,6 @@
+@@ -19,20 +19,6 @@
  
  #include "thermal_core.h"
  
--static int of_thermal_set_trip_hyst(struct thermal_zone_device *tz, int trip,
--				    int hyst)
+-static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
+-				    int *temp)
 -{
--	if (trip >= tz->num_trips || trip < 0)
--		return -EDOM;
+-	int i;
 -
--	/* thermal framework should take care of data->mask & (1 << trip) */
--	tz->trips[trip].hysteresis = hyst;
+-	for (i = 0; i < tz->num_trips; i++)
+-		if (tz->trips[i].type == THERMAL_TRIP_CRITICAL) {
+-			*temp = tz->trips[i].temperature;
+-			return 0;
+-		}
 -
--	return 0;
+-	return -EINVAL;
 -}
 -
- static int of_thermal_get_crit_temp(struct thermal_zone_device *tz,
- 				    int *temp)
- {
-@@ -541,7 +529,6 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+ /***   functions parsing device tree nodes   ***/
+ 
+ static int of_find_trip_id(struct device_node *np, struct device_node *trip)
+@@ -529,7 +515,6 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
  		goto out_kfree_trips;
  	}
  
--	of_ops->set_trip_hyst = of_ops->set_trip_hyst ? : of_thermal_set_trip_hyst;
- 	of_ops->get_crit_temp = of_ops->get_crit_temp ? : of_thermal_get_crit_temp;
+-	of_ops->get_crit_temp = of_ops->get_crit_temp ? : of_thermal_get_crit_temp;
  	of_ops->bind = thermal_of_bind;
  	of_ops->unbind = thermal_of_unbind;
+ 
 -- 
 2.34.1
 
