@@ -2,108 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37AD05F4570
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 16:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968ED5F4595
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 16:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbiJDO2G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 10:28:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
+        id S229658AbiJDOg5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 10:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJDO2F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 10:28:05 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D295D0F4;
-        Tue,  4 Oct 2022 07:28:04 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id mg6so3504836qvb.10;
-        Tue, 04 Oct 2022 07:28:04 -0700 (PDT)
+        with ESMTP id S229482AbiJDOgz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 10:36:55 -0400
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4CE61707;
+        Tue,  4 Oct 2022 07:36:54 -0700 (PDT)
+Received: by mail-qt1-f170.google.com with SMTP id w2so8217998qtv.9;
+        Tue, 04 Oct 2022 07:36:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5tmKm3hNoJxc0O1Q5BBVSWd2FFBMoTD9nMoF5l3BzG4=;
-        b=OaIPreBcJ8Kt3qjd7UPbp1s4UCc5V3gxv8kGXus274/qH07zh7CvuOTVJeLkccgndV
-         aAoKp4uF+lkcWahvgid2/xc3dFIGccFuyjtAzbn03UstT4xLq4RCe+hSi/5G9b55E6MZ
-         bq5ndGyCqX9KTiEwgWWe8y2gKd9krGus1hgRiRajnZoPhIlFv2ictpMCGgNxKylfBhd7
-         nAG5uwRwzvVMaOXE10/4cOUtnNi77tMxA67NSNlGFLa8DgQ1zaTxxicTsb84uMxhg//O
-         yvNqxItjuVlugIQH0yjb/oGXA378foXdZGg+Ccm3HQmmiZZJvuQ04DtHgO34GIgDiVRx
-         Soww==
-X-Gm-Message-State: ACrzQf05qxpngZAuml+5tgMZlRyrKWd+BZeuMDkWt6MtfQYYbwcknGYy
-        FO4BBL1r6A76r6HrQcB81wSOiC1e++dbYV/Yc/xD7x4T
-X-Google-Smtp-Source: AMsMyM5aLO+96lpnyBwinDVMZD6T/3HZtM5VR4yfs+0tL4RBgHeK61dkjdKeI7gmeR46Bh/Kj2E28P8Zg6vitdNVZvY=
-X-Received: by 2002:a0c:9d91:0:b0:4b1:7809:4825 with SMTP id
- s17-20020a0c9d91000000b004b178094825mr13627846qvd.130.1664893683824; Tue, 04
- Oct 2022 07:28:03 -0700 (PDT)
+        bh=NHbMfE9BgNbZNsvIfzcNE3Q5C2YPynXJeRtIYoOmwAo=;
+        b=yD4CM3QvEumYJOE1HfXnYDxlifIEgsC+0fvFCS+rK9PlCI/JFLAWy6LG45WjsuC4ho
+         ufDerDt4JGNebKS2O2HiHiazxkIepuDewBKGkxP2lvMrImz1RmjLZ9dwAZGK2iNKUimH
+         d2spgaBjh7JELa+IYyvUNRfvhoVbr8YNO+N3VC+LNncAiVdBJY/nuRNWi2lJnY83TA5N
+         bcW00eYBF0iA7YXrOE2gv8qphuCTzVvIkmIQjUbuOTVLMq16q3ozhZ0/iSZB8sc+UtVg
+         rTQ2hpD9fNlH+Y/jP488v6QFsVMNgy4rLUUIz15h5HNPERNxWDTlJpZ9ahqy7Bz3sEt/
+         Tm0w==
+X-Gm-Message-State: ACrzQf2VjZVEXr/Ii4EuOy4sDLeN2Z+mM3BLgWdb/bFYdLr8PYuF2j9q
+        1golSqKFfK0SJC1Iqv+9P2iDz4wDCizjJFJu+LQ=
+X-Google-Smtp-Source: AMsMyM4HaUwcVsxXqeRYWNkyYbxpAEkGy5W6oAN4pHsHhR3OpfffEE/OxIFgzO4vEX8VIo4or6/XCpQ4IwgwW4LUWQ0=
+X-Received: by 2002:a05:622a:1a08:b0:35c:d9b5:144b with SMTP id
+ f8-20020a05622a1a0800b0035cd9b5144bmr19704861qtb.27.1664894214091; Tue, 04
+ Oct 2022 07:36:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929154214.7305-1-johan+linaro@kernel.org> <CAPDyKFoW5HLykzRdtF4a_7=RNXu6LTfABxDX2P3hotsXQwCUMg@mail.gmail.com>
-In-Reply-To: <CAPDyKFoW5HLykzRdtF4a_7=RNXu6LTfABxDX2P3hotsXQwCUMg@mail.gmail.com>
+References: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org>
+In-Reply-To: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 4 Oct 2022 16:27:53 +0200
-Message-ID: <CAJZ5v0jqOatDb=gE_BvZrzVAn4pf51zjUGnSK8G8oAJmYrZX3Q@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: log failures to register always-on domains
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
+Date:   Tue, 4 Oct 2022 16:36:43 +0200
+Message-ID: <CAJZ5v0iMkQNwWPBegwpsr+CTtaUr_Eq=_CsQG3QSwdWEmOmPCA@mail.gmail.com>
+Subject: Re: [GIT PULL] thermal drivers for v6.1-rc1
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Kaehlcke <mka@chromium.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Sep 30, 2022 at 12:39 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Tue, Oct 4, 2022 at 11:41 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> On Thu, 29 Sept 2022 at 17:42, Johan Hovold <johan+linaro@kernel.org> wrote:
-> >
-> > Always-on PM domains must be on during initialisation or the domain is
-> > currently silently rejected.
-> >
-> > Print an error message in case an always-on domain is not on to make it
-> > easier to debug drivers getting this wrong (e.g. by setting an always-on
-> > genpd flag without making sure that the state matches).
-> >
-> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 >
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Hi Rafael,
+>
+> this is a pull request for more thermal material for v6.1. I've dropped
+> the trip point rework as a lock issue has been spotted on exynos.
+>
+> Most of the changes are fixes. There are more pending changes for the
+> thermal drivers on the mailing list but they require some more review,
+> so they will have to wait for v6.2
+>
+> Thanks
+>    -- Daniel
+>
+> The following changes since commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec:
+>
+>    Merge branches 'thermal-intel' and 'thermal-drivers' (2022-10-03
+> 20:43:32 +0200)
+>
+> are available in the Git repository at:
+>
+>    ssh://git@git.linaro.org/people/daniel.lezcano/linux.git
+> tags/thermal-v6.1-rc1-2
 
-Applied as 6.1-rc material, thanks!
+I don't think I can pull over SSH from a host where I don't have an account.
 
-> > ---
-> >  drivers/base/power/domain.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> >
-> > Both myself and Matthias have hit this with the Qualcomm GCC drivers
-> > when updating static genpd flags directly instead of using/adding driver
-> > specific flags to propagate the setting.
-> >
-> > Johan
-> >
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index bbfbf05b3446..7200e307effb 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -2087,8 +2087,10 @@ int pm_genpd_init(struct generic_pm_domain *genpd,
-> >
-> >         /* Always-on domains must be powered on at initialization. */
-> >         if ((genpd_is_always_on(genpd) || genpd_is_rpm_always_on(genpd)) &&
-> > -                       !genpd_status_on(genpd))
-> > +                       !genpd_status_on(genpd)) {
-> > +               pr_err("always-on PM domain %s is not on\n", genpd->name);
-> >                 return -EINVAL;
-> > +       }
-> >
-> >         /* Multiple states but no governor doesn't make sense. */
-> >         if (!gov && genpd->state_count > 1)
-> > --
-> > 2.35.1
-> >
+Did you mean git.kernel.org?
