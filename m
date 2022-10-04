@@ -2,148 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2717E5F4A0C
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 22:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F3A5F4AAF
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 23:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbiJDUDE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 16:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35848 "EHLO
+        id S229620AbiJDVH5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 17:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJDUDB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 16:03:01 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78A16B660;
-        Tue,  4 Oct 2022 13:02:57 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294JtZ8j005960;
-        Tue, 4 Oct 2022 20:02:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=yzZr1rqcaYcmEG9p1d/xn0IstIbc44yEsBfPBU/W980=;
- b=VYhp7f8PV83zpxytd8hPllZpQoIiLKMVDDBqm1QxpAiX9nLRj+1JdJcZZvrmqjcDlkvm
- N50PI6iiteILhPERypBFIemtVZ/zKXkhM7oVrAAPvwGdIHbHeYluChp+o/XjZc6fnygA
- ECrQ+QSFVtvy0KhaTGM4YSg6UbWBpzAzGXTdWpuXCWX/iQi2Ek4H9LSjg7Y9NUj1dGrD
- LgD7KIon0JdBt6Rn05DCQpWb+xRBEP2aE5dIFS71BNasXeWsqGDSMXmPmdxUTgmW8jD/
- uImWuWyC2Yx4MG+QkbLNRsqrKuaBLS1na2leR3qLfKJdGzdEmUTnuixSHgaOYnxA8Aow YQ== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0sq5r6aj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 04 Oct 2022 20:02:54 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 294K2r87024495
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 4 Oct 2022 20:02:53 GMT
-Received: from [10.110.73.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
- 13:02:51 -0700
-Message-ID: <d6212df1-b012-6186-e56d-b552a215418e@quicinc.com>
-Date:   Tue, 4 Oct 2022 15:02:50 -0500
+        with ESMTP id S229630AbiJDVHz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 17:07:55 -0400
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB16A6C13B;
+        Tue,  4 Oct 2022 14:07:52 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id g27so3636115edf.11;
+        Tue, 04 Oct 2022 14:07:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BmoWpeCspOs29Dr+M1Uih3ddTOSH8k/BLFoAKpIsoM8=;
+        b=uAHukF1M4FbY8Jxjihu9nFsS3sTAhSJk74pnPvff4NB7IZe3P0CWliepHVMv2mutOK
+         Yb4e2LxsuCx9QzZ/9jEp4ii95fSbh6FLXG5sRzd/VIi2t/RjIwkvp+Pbw6qKig0chxWI
+         79mng1G/xqdarbMy0C4NWGi+4xjVubk7jq8yI8nUMEQ6/9AA2r86AT1cCIRy5Gwjt5nk
+         znxHTwIGoeQkNw+t1TJmbik1747EQqPXykfkb2FlPC7v5y2XCHpJ5I8R1viLET4jlDs7
+         fqQr6ID9PcI2JPq/CwdXipmwqKCHqsXWOTHySXhfW1wuS+2qzYumNbGpaPBQ59dL9ZRo
+         zQ1g==
+X-Gm-Message-State: ACrzQf2ufDEfpxI3yMkoM4dSlGm1raABADqYJUL87XYuoK5mnFIo3nLG
+        qCotGuztbk6DhpZcfJScPEVvgzaduIJvNIUXpzuVa2sh6I0=
+X-Google-Smtp-Source: AMsMyM45neTD1S6fG+Zyehv+gRPWlymFP2txgUakzpzTDYyKKZw+I3DRNRG4FVmDT1Fu9cFKE9yFShvVkJbNit6ZRUU=
+X-Received: by 2002:a05:6402:2b8f:b0:453:2e59:364d with SMTP id
+ fj15-20020a0564022b8f00b004532e59364dmr25455248edb.254.1664917670880; Tue, 04
+ Oct 2022 14:07:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 2/2] interconnect: qcom: Add QDU1000/QRU1000 interconnect
- driver
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221001030602.28232-1-quic_molvera@quicinc.com>
- <20221001030602.28232-3-quic_molvera@quicinc.com>
- <CAA8EJpopGgmThv1BUHAP-bYsgm-ojF0FJ_KVNgycwOAOj=_D4g@mail.gmail.com>
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <CAA8EJpopGgmThv1BUHAP-bYsgm-ojF0FJ_KVNgycwOAOj=_D4g@mail.gmail.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Tue, 4 Oct 2022 23:07:39 +0200
+Message-ID: <CAJvTdKn8jCWF3f3_EnBCaOAgQf9UgPCCG4oAysva5U2JF=C_4Q@mail.gmail.com>
+Subject: [GIT PULL] turbostat 2022.10.04
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: p7T3foRQeN-h7_y5vWJdtZx4peCoPI2v
-X-Proofpoint-GUID: p7T3foRQeN-h7_y5vWJdtZx4peCoPI2v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
- definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
- mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0 impostorscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 adultscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
- definitions=main-2210040130
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Rafael,
 
+Please pull these turbostat patches to update Linux to turbostat 2022.10.04.
 
-On 10/1/2022 2:13 AM, Dmitry Baryshkov wrote:
-> On Sat, 1 Oct 2022 at 06:08, Melody Olvera <quic_molvera@quicinc.com> wrote:
->> Add interconnect provider driver for Qualcomm QDU1000 and QRU1000
->> platforms.
->>
->> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->> ---
->>  drivers/interconnect/qcom/Kconfig    |    9 +
->>  drivers/interconnect/qcom/Makefile   |    2 +
->>  drivers/interconnect/qcom/qdru1000.c | 1091 ++++++++++++++++++++++++++
->>  drivers/interconnect/qcom/qdru1000.h |   95 +++
->>  4 files changed, 1197 insertions(+)
->>  create mode 100644 drivers/interconnect/qcom/qdru1000.c
->>  create mode 100644 drivers/interconnect/qcom/qdru1000.h
->>
->> diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
->> index 25d5b4baf6f6..760f855d7618 100644
->> --- a/drivers/interconnect/qcom/Kconfig
->> +++ b/drivers/interconnect/qcom/Kconfig
->> @@ -200,5 +200,14 @@ config INTERCONNECT_QCOM_SM8450
->>           This is a driver for the Qualcomm Network-on-Chip on SM8450-based
->>           platforms.
->>
->> +config INTERCONNECT_QCOM_QDRU1000
->> +       tristate "Qualcomm QDU1000/QRU1000 interconnect driver"
->> +       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
->> +       select INTERCONNECT_QCOM_RPMH
->> +       select INTERCONNECT_QCOM_BCM_VOTER
->> +       help
->> +         This is a driver for the Qualcomm Network-on-Chip on QDU1000-based
->> +         and QRU1000-based platforms.
->> +
->>  config INTERCONNECT_QCOM_SMD_RPM
->>         tristate
->> diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
->> index 8e357528185d..85b7f0de473d 100644
->> --- a/drivers/interconnect/qcom/Makefile
->> +++ b/drivers/interconnect/qcom/Makefile
->> @@ -25,6 +25,7 @@ qnoc-sm8150-objs                      := sm8150.o
->>  qnoc-sm8250-objs                       := sm8250.o
->>  qnoc-sm8350-objs                       := sm8350.o
->>  qnoc-sm8450-objs                       := sm8450.o
->> +qnoc-qdru1000-objs                     := qdru1000.o
-> Alphabetic sorting
-Will fix.
->
->>  icc-smd-rpm-objs                       := smd-rpm.o icc-rpm.o
->>
->>  obj-$(CONFIG_INTERCONNECT_QCOM_BCM_VOTER) += icc-bcm-voter.o
->> @@ -49,4 +50,5 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SM8150) += qnoc-sm8150.o
->>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8250) += qnoc-sm8250.o
->>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8350) += qnoc-sm8350.o
->>  obj-$(CONFIG_INTERCONNECT_QCOM_SM8450) += qnoc-sm8450.o
->> +obj-$(CONFIG_INTERCONNECT_QCOM_QDRU1000) += qnoc-qdru1000.o
-> Alphabetic sorting.
-Will fix.
->
->
-Thanks,
-Melody
+Add support for two new platforms, and two bug fixes on existing platforms.
+
+thanks!
+Len Brown, Intel Open Source Technology Center
+
+The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
+
+  Linux 6.0 (2022-10-02 14:09:07 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+
+for you to fetch changes up to 9992dd777123b052e106eb5633de47148fef502e:
+
+  tools/power turbostat: version 2022.10.04 (2022-10-04 23:02:03 +0200)
+
+----------------------------------------------------------------
+Artem Bityutskiy (1):
+      tools/power turbostat: Do not dump TRL if turbo is not supported
+
+Len Brown (1):
+      tools/power turbostat: version 2022.10.04
+
+Zhang Rui (3):
+      tools/power turbostat: Add support for RPL-S
+      tools/power turbostat: Add support for MeteorLake platforms
+      tools/power turbostat: Use standard Energy Unit for SPR Dram RAPL domain
+
+ tools/power/x86/turbostat/turbostat.c | 22 +++++++++++++++-------
+ 1 file changed, 15 insertions(+), 7 deletions(-)
