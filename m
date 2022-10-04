@@ -2,138 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79C95F424B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 13:49:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63C15F453C
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 16:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229608AbiJDLtt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 07:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
+        id S229515AbiJDOPE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 10:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiJDLtp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 07:49:45 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EB962BCD
-        for <linux-pm@vger.kernel.org>; Tue,  4 Oct 2022 04:49:40 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id w18so12191151wro.7
-        for <linux-pm@vger.kernel.org>; Tue, 04 Oct 2022 04:49:40 -0700 (PDT)
+        with ESMTP id S229668AbiJDOPB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 10:15:01 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F98BCA3;
+        Tue,  4 Oct 2022 07:14:58 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id v10-20020a17090a634a00b00205e48cf845so18726644pjs.4;
+        Tue, 04 Oct 2022 07:14:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=qFB9sDD05avVlpNPZ5ecrbhywdXZAZIDy0PBMHVfs4I=;
-        b=xQ09P01WTqO1XKPpjfomMIKugoQszaJVgbdv/oMHNSywyPLkUe2ZVe3k33Yx+gYA/D
-         f8aXDfhI0dpGix3mE4UKIyjWu56OcjcAzM/QICzGuNp6VdGY4xKg7BIZgfKt/iletYiF
-         xpyjLWFczsbyYC75xi3g0gRf7WINXodwV8MsbVXJW1fYenWdGqawqZ5kfH9FmFLiIjNJ
-         027Hrpl/q8qqk/GpBYUk6NYKmIKBf6sX1Ko4kunHQeGvQgOURSr+wajndVnyGLmKbtue
-         YO3r1MAdcGRyVeVRH0yVY40VXSuARy7utffXLP+/G9xpfJtgoF7Ib8Bdq4053DA1Fd0M
-         m+3Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
+        bh=Q0eGf4H3HQEZvc34OQHmLUIB2H2lco3lblwGNYzvq6E=;
+        b=cpe93c77jhYjWIY1o4kQCmI0FJgY+d1vHh75r7bHQymNYwNInghBgNB5Lb5FCqU9K3
+         s6DyPxAi5MOo6rp3ZPSlBAbzkaKec92iN0lFBzA7rGoPApTh1rp53fYnOe0N29Kowkl6
+         Mdy+yUpIoXhrS/kzWSVALKhEn2lMhoRV0eJ0IfXO9fkHog1iY+LADlRhQ0R/gMYpHEy3
+         rxh5hquYWxwV51Ci7wPeTZ+JhSmsVJS2bhHKqOO0QwOTxDg8umY7iv+ngAK3kgSYrluj
+         vxARpCi83zVasFgu+EcJxY+EQUT+5gw3eWn8fWNE+xEuRYdwq/5xZXeWkWrR/wh7jkik
+         hvaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=qFB9sDD05avVlpNPZ5ecrbhywdXZAZIDy0PBMHVfs4I=;
-        b=fEPHQq6ByzQQrnoY7PlYw9G8v4h+p4EGqlYJX3VzVa+ysmA/G8S6DCjEOX39QuS6Fz
-         ejLSRczRXCO5YzhirI1CELoaP7cXj74DK9wKEotnLOLwlwtSQBldxzRj7TpgDDXLL1kp
-         v6Owlnfx6pP61uD7qwSU8agBM6br6CB94ummDHEFI6QTvRP9M0vWAOokoG/YxGPRrVNc
-         p782GS+1ktTkqAtGtMTUv4XD8qmM38Rf06OoLu8MCOTr/pH/ThiNg+ElMJDdeTFZbX6Q
-         /zMosH3OwVwLLnR6xtJc94W4OfogV/IIB2Ocf8vt0lM1eiFEIS2qam+oBmb40BV1taiy
-         IQUg==
-X-Gm-Message-State: ACrzQf2+uf8iZjjgPcyO5ywvd+xwbTLkVcYhY09u0/wECZltP22ujLMt
-        bn0jqn3LYXycTehfjZuC/5ua7g==
-X-Google-Smtp-Source: AMsMyM6gUbXQw0vLgvUXF7Gu1Las9a/mmXt+0iRTWJvfbyVyrbvVriY5uhq8gNWl3WMAaSJlN7KieA==
-X-Received: by 2002:a05:6000:184e:b0:22e:4612:496d with SMTP id c14-20020a056000184e00b0022e4612496dmr4357252wri.91.1664884178590;
-        Tue, 04 Oct 2022 04:49:38 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
-        by smtp.googlemail.com with ESMTPSA id d16-20020adfe890000000b0022e035a4e93sm11624681wrm.87.2022.10.04.04.49.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 04:49:38 -0700 (PDT)
-Message-ID: <fe6c90ea-7b19-36d9-2568-f484c54eafff@linaro.org>
-Date:   Tue, 4 Oct 2022 13:49:36 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=Q0eGf4H3HQEZvc34OQHmLUIB2H2lco3lblwGNYzvq6E=;
+        b=el2cMCiwI2bTVAeWrfYUbg7J2xCzbYZUXGmC0zuZmjng0A4SgDnrg2Z1zx3Zdz8Sm6
+         +vbxu7VtkbyuXE1H+PIPtIx93102dEZa6qWbFRD8Srmr30jXI2TknF0MpC3PJJK4hp08
+         7F9Vr8fERYEpCs2Q/hm0+M5FXwyyHh9HHA/fD/3zJ7QHQ8n4NVBE7zO3Pqo4ApkVWDKE
+         f/HOwu+j4+aEMNiRyWk5xJfoXMQVLekVjEyTL0ZHP0nf7CIuHb34fVP2olvB5ROPf2ur
+         x1gX4Lw1hqhFBOsFQFnN6COaLJdZq8xuAHB/O5V6NPKUhKIL77CTM8FfNaFawtj0yUx4
+         KtCg==
+X-Gm-Message-State: ACrzQf0CKSaHFDsUo3PnGTmWDy6ap9ZceuKIkxWfff9G1iy5NIS4/L+f
+        93SH8tOtzMs0E1fQqFJnhQs=
+X-Google-Smtp-Source: AMsMyM4TGsq6C14TubP0NXUQesEI+mBAPXYiXNIg88omuMKjBDyFpdTZuK2fcfL+rWXpa20azPCiiQ==
+X-Received: by 2002:a17:902:aa89:b0:178:a537:f386 with SMTP id d9-20020a170902aa8900b00178a537f386mr27371481plr.124.1664892897898;
+        Tue, 04 Oct 2022 07:14:57 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d190-20020a6236c7000000b0053ae018a91esm9576747pfa.173.2022.10.04.07.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 07:14:56 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 4 Oct 2022 07:14:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Subject: Re: [PATCH 4/5] thermal/core: Move the thermal zone lock out of the
+ governors
+Message-ID: <20221004141454.GA1746997@roeck-us.net>
+References: <20220805153834.2510142-1-daniel.lezcano@linaro.org>
+ <20220805153834.2510142-4-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC/RFT PATCH resend] thermal: Protect thermal device operations
- against thermal device removal
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org
-References: <20221004033936.1047691-1-linux@roeck-us.net>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221004033936.1047691-1-linux@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805153834.2510142-4-daniel.lezcano@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/10/2022 05:39, Guenter Roeck wrote:
-> A call to thermal_zone_device_unregister() results in thermal device
-> removal. While the thermal device itself is reference counted and
-> protected against removal of its associated data structures, the
-> thermal device operations are owned by the calling code and unprotected.
-> This may result in crashes such as
+On Fri, Aug 05, 2022 at 05:38:33PM +0200, Daniel Lezcano wrote:
+> All the governors throttling ops are taking/releasing the lock at the
+> beginning and the end of the function.
 > 
-> BUG: unable to handle page fault for address: ffffffffc04ef420
->   #PF: supervisor read access in kernel mode
->   #PF: error_code(0x0000) - not-present page
-> PGD 5d60e067 P4D 5d60e067 PUD 5d610067 PMD 110197067 PTE 0
-> Oops: 0000 [#1] PREEMPT SMP NOPTI
-> CPU: 1 PID: 3209 Comm: cat Tainted: G        W         5.10.136-19389-g615abc6eb807 #1 02df41ac0b12f3a64f4b34245188d8875bb3bce1
-> Hardware name: Google Coral/Coral, BIOS Google_Coral.10068.92.0 11/27/2018
-> RIP: 0010:thermal_zone_get_temp+0x26/0x73
-> Code: 89 c3 eb d3 0f 1f 44 00 00 55 48 89 e5 41 57 41 56 53 48 85 ff 74 50 48 89 fb 48 81 ff 00 f0 ff ff 77 44 48 8b 83 98 03 00 00 <48> 83 78 10 00 74 36 49 89 f6 4c 8d bb d8 03 00 00 4c 89 ff e8 9f
-> RSP: 0018:ffffb3758138fd38 EFLAGS: 00010287
-> RAX: ffffffffc04ef410 RBX: ffff98f14d7fb000 RCX: 0000000000000000
-> RDX: ffff98f17cf90000 RSI: ffffb3758138fd64 RDI: ffff98f14d7fb000
-> RBP: ffffb3758138fd50 R08: 0000000000001000 R09: ffff98f17cf90000
-> R10: 0000000000000000 R11: ffffffff8dacad28 R12: 0000000000001000
-> R13: ffff98f1793a7d80 R14: ffff98f143231708 R15: ffff98f14d7fb018
-> FS:  00007ec166097800(0000) GS:ffff98f1bbd00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: ffffffffc04ef420 CR3: 000000010ee9a000 CR4: 00000000003506e0
-> Call Trace:
->   temp_show+0x31/0x68
->   dev_attr_show+0x1d/0x4f
->   sysfs_kf_seq_show+0x92/0x107
->   seq_read_iter+0xf5/0x3f2
->   vfs_read+0x205/0x379
->   __x64_sys_read+0x7c/0xe2
->   do_syscall_64+0x43/0x55
->   entry_SYSCALL_64_after_hwframe+0x61/0xc6
+> We can move the mutex to the throttling call site instead.
 > 
-> if a thermal device is removed while accesses to its device attributes
-> are ongoing.
-> 
-> Use the thermal device mutex to protect device operations. Clear the
-> device operations pointer in thermal_zone_device_unregister() under
-> protection of this mutex, and only access it while the mutex is held.
-> Flatten and simplify device mutex operations to only acquire the mutex
-> once and hold it instead of acquiring and releasing it several times
-> during thermal operations. Only validate parameters once at module entry
-> points after acquiring the mutex. Execute governor operations under mutex
-> instead of expecting governors to acquire and release it.
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/gov_bang_bang.c       |  4 +---
+>  drivers/thermal/gov_fair_share.c      |  4 +---
+>  drivers/thermal/gov_power_allocator.c | 16 ++++++----------
+>  drivers/thermal/gov_step_wise.c       |  4 +---
+>  drivers/thermal/thermal_core.c        |  2 ++
 
-Does the following series:
+This doesn't drop the lock from drivers/thermal/gov_user_space.c.
+Is that on purpose ?
 
-https://lore.kernel.org/lkml/20220805153834.2510142-1-daniel.lezcano@linaro.org/
-
-goes to the same direction than your proposal?
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Thanks,
+Guenter
