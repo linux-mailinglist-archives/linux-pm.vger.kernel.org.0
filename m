@@ -2,55 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC355F499C
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 21:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 049665F4A08
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 22:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbiJDTN3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 15:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57706 "EHLO
+        id S229846AbiJDUCe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 16:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJDTNS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 15:13:18 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C66A6AA3F;
-        Tue,  4 Oct 2022 12:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1664910786; h=from:from:sender:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y2/54OphzrUzrBX6aeIwjTWX6IIaINAv6yVDxv2padQ=;
-        b=EPTvUEtRBxslETxeZSdXYAZxFyVAHOyiHovTxC4oUbKwQee8L1bv8QPoL4VFSlNmenY4zu
-        rMlSB1LADkYC+MXGPeluMEZUhj6NKz571aI/OEyiLlHnXBzQHOp0Jce/ZrRXqxoaejoTCY
-        +gy+aUfIhGM6cR4DP7cEL+w2qjG8lsI=
-Date:   Tue, 04 Oct 2022 20:12:56 +0100
-From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v2 01/30] pm: Improve EXPORT_*_DEV_PM_OPS macros
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>
-Message-Id: <KDT8JR.QPETUDEUEUK4@crapouillou.net>
-In-Reply-To: <CAJZ5v0i06Nj1+kWDPtok-3vB1UPKfdieux8VrLm21NT0XFCftA@mail.gmail.com>
-References: <20220808174107.38676-1-paul@crapouillou.net>
-        <20220808174107.38676-2-paul@crapouillou.net>
-        <CAJZ5v0h3hf06xQsJGOfOyGbD470jyxkPNuaHP+E-pvXbS6Egxg@mail.gmail.com>
-        <HF07HR.3A0DTIDT17IF1@crapouillou.net>
-        <20220925155239.7a37c19a@jic23-huawei>
-        <CAJZ5v0igQL_766obp2csNCg7b0g3g2+gkuqZXjUNL7Jj9Da7zQ@mail.gmail.com>
-        <E1KTIR.IK6LI11BUNDM3@crapouillou.net>
-        <CAJZ5v0hW049fh=NebWqCMUzZAU=pfHWEFd-dkegRb4qwuHxSXA@mail.gmail.com>
-        <20221001180130.73a26c68@jic23-huawei>
-        <02I4JR.BHDWVSR51INT1@crapouillou.net>
-        <CAJZ5v0i06Nj1+kWDPtok-3vB1UPKfdieux8VrLm21NT0XFCftA@mail.gmail.com>
+        with ESMTP id S229835AbiJDUCa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 16:02:30 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601C66B66C;
+        Tue,  4 Oct 2022 13:02:29 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 294JLowA021316;
+        Tue, 4 Oct 2022 20:02:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=uCPs6MKJNbFkSyHzS329eynET+W0UsAO0JmTE+BsIK8=;
+ b=NfOikr0rqcGp+7wR0gTQHnURMljeuTEquWtCH47ROW32UB+/RNMR3EPks57YapLrGYUt
+ h2UfkYBqZTsE88WWLTTHIcMlJwTkSnXENEKHaVbMeTJDAXdO0Hjzl2147PcH7TUFfhEr
+ yzr8PRTiK87J+iuNiRQGR5OLe/WHQSPCAY7MkxuGNeIRoTnXzz+Dlv3V/ISE+cAEyP/7
+ n3UD8nZXAmHeWGHGMX8eL3fP+HAiEw2tAJojFY4OGal2bNGfqMhlducN58+Fa9ynYJez
+ lPFCpE9PFE0WE4CSYbc1sR6S4mX8wtBp48psIEOaxNG6eD3KESHS305siII0CORszv8P Xw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k0rhdgb7q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 04 Oct 2022 20:02:25 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 294K2ODw027188
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 4 Oct 2022 20:02:24 GMT
+Received: from [10.110.73.50] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 4 Oct 2022
+ 13:02:23 -0700
+Message-ID: <91791c6a-345a-e9d7-cc72-3bd27df5bbf7@quicinc.com>
+Date:   Tue, 4 Oct 2022 15:02:21 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add QDU1000/QRU1000 dt
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221001030602.28232-1-quic_molvera@quicinc.com>
+ <20221001030602.28232-2-quic_molvera@quicinc.com>
+ <0bf97760-09e0-e64f-3ef6-2b861131f83e@linaro.org>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <0bf97760-09e0-e64f-3ef6-2b861131f83e@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xyKKdhLC3VYgjFUYRGP9u-hALjmfaKsf
+X-Proofpoint-GUID: xyKKdhLC3VYgjFUYRGP9u-hALjmfaKsf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.528,FMLib:17.11.122.1
+ definitions=2022-10-04_09,2022-09-29_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ lowpriorityscore=0 malwarescore=0 spamscore=0 phishscore=0 impostorscore=0
+ bulkscore=0 clxscore=1015 mlxscore=0 priorityscore=1501 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2209130000
+ definitions=main-2210040130
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,155 +87,52 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-Le mar., oct. 4 2022 at 20:54:28 +0200, Rafael J. Wysocki=20
-<rafael@kernel.org> a =E9crit :
-> On Sun, Oct 2, 2022 at 1:18 PM Paul Cercueil <paul@crapouillou.net>=20
-> wrote:
->>=20
->>=20
->>=20
->>  Le sam., oct. 1 2022 at 18:01:30 +0100, Jonathan Cameron
->>  <jic23@kernel.org> a =E9crit :
->>  > On Mon, 26 Sep 2022 15:35:35 +0200
->>  > "Rafael J. Wysocki" <rafael@kernel.org> wrote:
->>  >
->>  >>  On Mon, Sep 26, 2022 at 3:27 PM Paul Cercueil
->>  >> <paul@crapouillou.net> wrote:
->>  >>  >
->>  >>  > Hi,
->>  >>  >
->>  >>  > Le lun., sept. 26 2022 at 14:00:52 +0200, Rafael J. Wysocki
->>  >>  > <rafael@kernel.org> a =E9crit :
->>  >>  > > On Sun, Sep 25, 2022 at 4:52 PM Jonathan Cameron
->>  >> <jic23@kernel.org>
->>  >>  > > wrote:
->>  >>  > >>
->>  >>  > >>  On Thu, 25 Aug 2022 23:42:53 +0100
->>  >>  > >>  Paul Cercueil <paul@crapouillou.net> wrote:
->>  >>  > >>
->>  >>  > >>  > Hi Rafael,
->>  >>  > >>  >
->>  >>  > >>  > Le mar., ao=FBt 23 2022 at 19:47:57 +0200, Rafael J.=20
->> Wysocki
->>  >>  > >>  > <rafael@kernel.org> a =E9crit :
->>  >>  > >>  > > On Mon, Aug 8, 2022 at 7:41 PM Paul Cercueil
->>  >>  > >> <paul@crapouillou.net>
->>  >>  > >>  > > wrote:
->>  >>  > >>  > >>
->>  >>  > >>  > >>  Update the _EXPORT_DEV_PM_OPS() internal macro. It=20
->> was
->>  >> not
->>  >>  > >> used
->>  >>  > >>  > >> anywhere
->>  >>  > >>  > >>  outside pm.h and pm_runtime.h, so it is safe to=20
->> update
->>  >> it.
->>  >>  > >>  > >>
->>  >>  > >>  > >>  Before, this macro would take a few parameters to be
->>  >> used as
->>  >>  > >> sleep
->>  >>  > >>  > >> and
->>  >>  > >>  > >>  runtime callbacks. This made it unsuitable to use=20
->> with
->>  >>  > >> different
->>  >>  > >>  > >>  callbacks, for instance the "noirq" ones.
->>  >>  > >>  > >>
->>  >>  > >>  > >>  It is now semantically different: instead of=20
->> creating a
->>  >>  > >>  > >> conditionally
->>  >>  > >>  > >>  exported dev_pm_ops structure, it only contains=20
->> part of
->>  >> the
->>  >>  > >>  > >> definition.
->>  >>  > >>  > >>
->>  >>  > >>  > >>  This macro should however never be used directly=20
->> (hence
->>  >> the
->>  >>  > >> trailing
->>  >>  > >>  > >>  underscore). Instead, the following four macros are
->>  >> provided:
->>  >>  > >>  > >>  - EXPORT_DEV_PM_OPS(name)
->>  >>  > >>  > >>  - EXPORT_GPL_DEV_PM_OPS(name)
->>  >>  > >>  > >>  - EXPORT_NS_DEV_PM_OPS(name, ns)
->>  >>  > >>  > >>  - EXPORT_NS_GPL_DEV_PM_OPS(name, ns)
->>  >>  > >>  > >>
->>  >>  > >>  > >>  For instance, it is now possible to conditionally
->>  >> export noirq
->>  >>  > >>  > >>  suspend/resume PM functions like this:
->>  >>  > >>  > >>
->>  >>  > >>  > >>  EXPORT_GPL_DEV_PM_OPS(foo_pm_ops) =3D {
->>  >>  > >>  > >>      NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn)
->>  >>  > >>  > >>  };
->>  >>  > >>  > >>
->>  >>  > >>  > >>  The existing helper macros=20
->> EXPORT_*_SIMPLE_DEV_PM_OPS()
->>  >> and
->>  >>  > >>  > >>  EXPORT_*_RUNTIME_DEV_PM_OPS() have been updated to=20
->> use
->>  >> these
->>  >>  > >> new
->>  >>  > >>  > >> macros.
->>  >>  > >>  > >>
->>  >>  > >>  > >>  Signed-off-by: Paul Cercueil <paul@crapouillou.net>
->>  >>  > >>  > >
->>  >>  > >>  > > Acked-by: Rafael J. Wysocki=20
->> <rafael.j.wysocki@intel.com>
->>  >>  > >>  > >
->>  >>  > >>  > > or please let me know if you need me to pick up this=20
->> one.
->>  >>  > >>  >
->>  >>  > >>  > Could you pick this one up then, and make a branch for
->>  >> Jonathan?
->>  >>  > >>
->>  >>  > >>  Hi Paul, Rafael,
->>  >>  > >>
->>  >>  > >>  What happened to this in the end?  I can't immediately=20
->> find
->>  >> it on
->>  >>  > >>  any of the pm git tree branches.
->>  >>  > >>
->>  >>  > >>  At this stage in the cycle it would be great if this=20
->> patch at
->>  >> least
->>  >>  > >>  makes the merge window, so we can make use of it next=20
->> cycle.
->>  >>  > >
->>  >>  > > I thought that this would go in along with the other=20
->> patches in
->>  >> the
->>  >>  > > series.
->>  >>  > >
->>  >>  > > I can apply it directly, though, if needed.
->>  >>  > >
->>  >>  > > Thanks!
->>  >>  >
->>  >>  > I think at this point Jonathan can just take it in his tree=20
->> with
->>  >> his
->>  >>  > own patchset. Then I'll rebase this patchset on v6.1-rc1.
->>  >>
->>  >>  Sure.
->>  >>
->>  >>  Jonathan, please go ahead and take the patch directly.
->>  >
->>  > Too late for me to take this for this cycle (I route via Greg KH=20
->> so
->>  > need to have things
->>  > in place a little bit before the merge window).  If Lee doesn't=20
->> pick
->>  > it up, I'll do an
->>  > immutable branch after rc1 is out with just this patch on it, then
->>  > anyone who wants
->>  > it can pick it up.
->>=20
->>  Rafael or Lee, can you take it now?
->>=20
->>  Or is it already too late? :(
->=20
-> I've applied this patch as 6.1-rc material, thanks!
-
-Awesome, thanks!
-
--Paul
-
+On 10/1/2022 4:31 AM, Krzysztof Kozlowski wrote:
+> On 01/10/2022 05:06, Melody Olvera wrote:
+>> Add interconnect IDs for Qualcomm QDU1000 and QRU1000 platforms.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>  .../bindings/interconnect/qcom,rpmh.yaml      |  8 ++
+>>  .../dt-bindings/interconnect/qcom,qdru1000.h  | 98 +++++++++++++++++++
+>>  2 files changed, 106 insertions(+)
+>>  create mode 100644 include/dt-bindings/interconnect/qcom,qdru1000.h
+>>
+>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+>> index a429a1ed1006..c524d92ee203 100644
+>> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+>> @@ -132,6 +132,14 @@ properties:
+>>        - qcom,sm8450-nsp-noc
+>>        - qcom,sm8450-pcie-anoc
+>>        - qcom,sm8450-system-noc
+>> +      - qcom,qdu1000-clk-virt
+>> +      - qcom,qdu1000-gem-noc
+>> +      - qcom,qdu1000-mc-virt
+>> +      - qcom,qdu1000-system-noc
+>> +      - qcom,qru1000-clk-virt
+>> +      - qcom,qru1000-gem-noc
+>> +      - qcom,qru1000-mc-virt
+>> +      - qcom,qru1000-system-noc
+> Not a correct order.
+Will fix to alphabetical.
+>
+>>  
+>>    '#interconnect-cells': true
+>>  
+>> diff --git a/include/dt-bindings/interconnect/qcom,qdru1000.h b/include/dt-bindings/interconnect/qcom,qdru1000.h
+>> new file mode 100644
+>> index 000000000000..2bdfa0c15d2c
+>> --- /dev/null
+>> +++ b/include/dt-bindings/interconnect/qcom,qdru1000.h
+>> @@ -0,0 +1,98 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only */
+> Dual license.
+Will add second license.
+>
+>
+> Best regards,
+> Krzysztof
+Thanks,
+Melody
 
