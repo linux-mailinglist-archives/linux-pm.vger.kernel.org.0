@@ -2,155 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 822085F4020
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 11:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52DD15F40DA
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 12:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231157AbiJDJoa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 05:44:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S229755AbiJDKb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 06:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231434AbiJDJnd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 05:43:33 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0767A101D1
-        for <linux-pm@vger.kernel.org>; Tue,  4 Oct 2022 02:41:18 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b4so13480566wrs.1
-        for <linux-pm@vger.kernel.org>; Tue, 04 Oct 2022 02:41:17 -0700 (PDT)
+        with ESMTP id S229621AbiJDKb1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 06:31:27 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB07724951
+        for <linux-pm@vger.kernel.org>; Tue,  4 Oct 2022 03:31:26 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 129so12363276pgc.5
+        for <linux-pm@vger.kernel.org>; Tue, 04 Oct 2022 03:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:subject:cc:to:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date;
-        bh=lTRrmobpQmhWQxPmOHsAlI+7MzWc30kqTg7yDRM8zig=;
-        b=dj6uLicMJVfUKq61X1r7P3A3fpmzoC2tvvAKYI2o+M1kEZG/hKTeG/NpUW5JpO9etj
-         qqBX3+5WoRybTpGWtfHpFLyl9BSAcdaZRVeATPwUuJKsSMf+vyzwwJrHoL+ZbBoxwwQx
-         /HWCEjOZPqkOfsAxz+ZvPRgBi6eFTlbIiXXHE7tOc2vL2PHTIDIOVTCSPFjz8Sh+hKoh
-         lZFingxYx2leYsY1N7NzzeZ0tCFXuvwxo7T5sbfBDO1aQ/NtHv2cydwGKIGl4/JtsbwO
-         i8LFecjTX9ZIeI9ckO+AZcFiwzjgZTzUEYaqYfiQUaSp027sTa0xKzzTEsvBJOQvD/FR
-         KdXw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date;
+        bh=utvgK1UY0RK2HHZyKhoNnFeR107WRrt8jpicmnYxvgU=;
+        b=XqdfsMe2SYxuXvG3vWpK19uF4GCU4DVg5ZpkIZOxOYaKnuO+gpTX2eUKBotTAzAROl
+         XZNkvn/DfHlyn27LOGvt1Whg9evUM0+eFdZeK2ya0lSq7Y9SIFGF3cZzrEbJy37HYm+E
+         rtzefMuyV8+Sm2bbxdh2BjnGeABqLisFOZbKDHnQe8j06p+y+qPfytxH8B1+8xd6SAc3
+         53JOeMAeuLmz9NEDdAL8tEnlAM/JoAD8+tXfQb9cYkuBzJnagklha4pvPeOvpip8DJS0
+         HL4yHC0A41FjGbbMhUAtazdhJoSsnvfa48QuWaEsWY7Y14fTHlYUT1OnmmY2bShcClL8
+         GEOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:cc:to:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=lTRrmobpQmhWQxPmOHsAlI+7MzWc30kqTg7yDRM8zig=;
-        b=PR+D+jJArM1RmB3ULsQuIHaDop4zd3hJWDo0XSnhF+a8eFE12ThvlrXoGHmDF1pg/v
-         O9lBROBUnTxwH/mhSaBiD/K4lUg8ziRWI5bUeEAZngy2IQMTIitAhyhG9ZIsDqr9uHO8
-         5kiEa2wE8ZfhGOYS4AXbmLxuJ073yX+Mk66yNRQI3fHotG2f1+FrOidNlQKuXNG3RGnw
-         8E+kmrSwJctIwZIv1b6sqKLlpGGk8tsEO+ijik8VkmIrs/LvbS3F8zQ2e0lN1CFXEMlW
-         6RecNjtbt3+K80yCOMNfMfqEC9PwJIF2TP/4eBnjqkdwlEKxgfLgTcJyrXoN7QwjJ0Dv
-         m6QQ==
-X-Gm-Message-State: ACrzQf3hCd003mhBtKO9XGA0V6RBotGoVsUuxiKhI/x+pdJxQ6Btz/dX
-        sVr1gHnQwfuR/J6LZQOtnkrD8Q==
-X-Google-Smtp-Source: AMsMyM55wyzrUt4P+WFYEP/1zqiNhtYdg3/kIjds4GHcsfaZyGOfOJwpmaMrwFK68B0d9C8XcMAl1g==
-X-Received: by 2002:a05:6000:2c1:b0:226:e7d0:f098 with SMTP id o1-20020a05600002c100b00226e7d0f098mr15999036wry.578.1664876476464;
-        Tue, 04 Oct 2022 02:41:16 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:c456:8337:99aa:2667? ([2a05:6e02:1041:c10:c456:8337:99aa:2667])
-        by smtp.googlemail.com with ESMTPSA id l13-20020a5d4bcd000000b00226dba960b4sm11998980wrt.3.2022.10.04.02.41.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Oct 2022 02:41:15 -0700 (PDT)
-Message-ID: <58a7d685-e9e9-e47a-1e20-41b18302e6a7@linaro.org>
-Date:   Tue, 4 Oct 2022 11:41:14 +0200
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=utvgK1UY0RK2HHZyKhoNnFeR107WRrt8jpicmnYxvgU=;
+        b=sPczPeGhoQs5fWwDxVYLr7ktALuWUSa2I0eiiQ0tojDF7gtbdUj9EpownM1BlYJa4+
+         RlznAgbsjjmu3DSvr7dIGIkELSqRBuTlCHzJKomqVMbSdf439oqXOg1Gtf2tyeoZtVht
+         mcUwTRpMA/Lohn4MXT+o+QztVxHAsqYeU6xXd+Fb4af8QIHL2tVwJAkbIWnoP/mpdSgP
+         HNiyhwaRFiOW2POqS6UDSnJON6+DPU03ntIh0AOC4ZcIvjmH+Phcwc/nJ+6J5UE2Ow6G
+         FNwFy/dCAYPWkkjddkCbegIUVvS3nR32/udyqfbX14PSsTEd/MmUSzZrwGIbPElmFT9O
+         wZQg==
+X-Gm-Message-State: ACrzQf3VW+KJ1bckjii5i3v55c4EKCX7LQHWFG0r05v2et0hwSqLfa2I
+        tKu1IK4A2IIKPUFB2k9Svs2M/g==
+X-Google-Smtp-Source: AMsMyM6IPjqrwcL1ZH9XVLUsFVfWKL6DxduEFko8rOHncSZWSikbj2VLzsQpMrusO4drR9azu6AcEA==
+X-Received: by 2002:a63:da4f:0:b0:43f:6af:74ed with SMTP id l15-20020a63da4f000000b0043f06af74edmr23076341pgj.290.1664879486244;
+        Tue, 04 Oct 2022 03:31:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x188-20020a6263c5000000b005366696b735sm2775043pfb.77.2022.10.04.03.31.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Oct 2022 03:31:25 -0700 (PDT)
+Message-ID: <633c0b7d.620a0220.e562.4d73@mx.google.com>
+Date:   Tue, 04 Oct 2022 03:31:25 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-Subject: [GIT PULL] thermal drivers for v6.1-rc1
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+X-Kernelci-Kernel: v6.0-rc7-188-g34ec1a3f2119
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 4 warnings (v6.0-rc7-188-g34ec1a3f2119)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 8 builds: 0 failed, 8 passed, 4 warnings (v6.0-rc7-188-g3=
+4ec1a3f2119)
 
-Hi Rafael,
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+0-rc7-188-g34ec1a3f2119/
 
-this is a pull request for more thermal material for v6.1. I've dropped 
-the trip point rework as a lock issue has been spotted on exynos.
+Tree: pm
+Branch: testing
+Git Describe: v6.0-rc7-188-g34ec1a3f2119
+Git Commit: 34ec1a3f211900baecef2b655ab1017719b7b411
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Most of the changes are fixes. There are more pending changes for the 
-thermal drivers on the mailing list but they require some more review, 
-so they will have to wait for v6.2
+Warnings Detected:
 
-Thanks
-   -- Daniel
+arc:
 
-The following changes since commit 2e70ea7fb9873e642982f166bf9aaa4a6206fbec:
+arm64:
 
-   Merge branches 'thermal-intel' and 'thermal-drivers' (2022-10-03 
-20:43:32 +0200)
+arm:
 
-are available in the Git repository at:
+i386:
 
-   ssh://git@git.linaro.org/people/daniel.lezcano/linux.git 
-tags/thermal-v6.1-rc1-2
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
 
-for you to fetch changes up to b0c883e900702f408d62cf92b0ef01303ed69be9:
+riscv:
 
-   thermal/drivers/qcom/tsens-v0_1: Fix MSM8939 fourth sensor hw_id 
-(2022-10-04 11:21:43 +0200)
+sparc:
+    sparc64_defconfig (gcc-10): 3 warnings
 
-----------------------------------------------------------------
-- Used the platform data to get the sensor id instead of parsing the
-   device in the driver and remove the dedicated OF function (Daniel
-   Lezcano)
+x86_64:
 
-- Fixed Kconfig dependency for the QCom tsens driver (Jonathan
-   Cameron)
 
-- Fixed missing const annotation for the RCar ops driver and removed a
-   duplicate parameter check (Lad Prabhakar)
+Warnings summary:
 
-- Fixed a NULL pointer dereference when calling set_trip_temp() (Lad
-   Prabhakar)
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+    1    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
 
-- Fixed the fourth hardware id in the QCom tsens driver (Vincent
-   Knecht)
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
-----------------------------------------------------------------
-Daniel Lezcano (2):
-       thermal/drivers/imx_sc: Rely on the platform data to get the 
-resource id
-       thermal/of: Remove the thermal_zone_of_get_sensor_id() function
+Detailed per-defconfig build reports:
 
-Jonathan Cameron (1):
-       thermal/drivers/qcom: Drop false build dependency of all QCOM 
-drivers on QCOM_TSENS
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
 
-Lad Prabhakar (3):
-       thermal/drivers/rcar_thermal: Constify static thermal_zone_device_ops
-       thermal/core: Drop valid pointer check for type
-       thermal/core: Add a check before calling set_trip_temp()
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
 
-Vincent Knecht (1):
-       thermal/drivers/qcom/tsens-v0_1: Fix MSM8939 fourth sensor hw_id
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
-  drivers/thermal/Makefile          |  2 +-
-  drivers/thermal/imx_sc_thermal.c  | 68 
-+++++++++++++++++++++++++++++++++-----------------------------------
-  drivers/thermal/qcom/tsens-v0_1.c |  2 +-
-  drivers/thermal/rcar_thermal.c    |  2 +-
-  drivers/thermal/thermal_core.c    |  2 +-
-  drivers/thermal/thermal_of.c      | 44 
---------------------------------------------
-  drivers/thermal/thermal_sysfs.c   |  8 +++++---
-  include/linux/thermal.h           | 10 ----------
-  8 files changed, 42 insertions(+), 96 deletions(-)
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 3 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
