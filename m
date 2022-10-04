@@ -2,85 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08CFD5F3D5A
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 09:37:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C425F3DE6
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 10:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbiJDHhJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 03:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S230024AbiJDIMC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 04:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiJDHhH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 03:37:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAB2726122;
-        Tue,  4 Oct 2022 00:37:05 -0700 (PDT)
-Received: from lenovo.Home (unknown [39.45.148.204])
+        with ESMTP id S229531AbiJDILi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 04:11:38 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017D14F1A9;
+        Tue,  4 Oct 2022 01:10:28 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 35BD86602294;
-        Tue,  4 Oct 2022 08:37:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1664869024;
-        bh=Ow0BfW79bfpNtlYiCN2hlVpzCFIfLUidy8OnfpB1IZs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hGB5On3HW21LEikg0ZG0iqbpKg+UAdl0V3K6IeTSbBKEnj1PZG/02yhPjaClt3BOW
-         evZoILYqvR1zDPdRaLuv86Gbww1bwj7Bll3E1V4p8wD/mFb7Iy4DmtUCfw5YGHl4+u
-         m+cLArG9GRftOiAxXpf1PEenMT2pC/f+nwCu+VPbsuo98ispMGNBnwNLAukido+U+5
-         Tcf68kSjaq7xFMDifj9S+xNxXKkv4Evc6H0ZmlR8shQtvQgfJLL3YlbYYrKzyHTjkA
-         W8YZFo+xo5SuzyN4JQnJaFrJSwwmHRrJ9AgClX7c2LzX4B8ycT6XFPjwFgrIxRVvez
-         ocA6tIhzDp7Jg==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: remove dead code
-Date:   Tue,  4 Oct 2022 12:36:51 +0500
-Message-Id: <20221004073652.568681-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.30.2
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1B8D4219BF;
+        Tue,  4 Oct 2022 08:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1664871027; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=8+qYaAMEoPETRr5UAyzz/JjfFWwyODNuWxyPFnBC0Ug=;
+        b=CJt7el3Zwv+Y0dhdPJuvZguCa1aPwOlAyfaNkxTbCYua5wduQLcN9twvuiQAQUbMLgmit5
+        lYPYZm75lqHBC3sPUf6/DRyg+YZpduohgmSLm1zwLS4Fj/UnM6Rdi3kZ7vAk0JYe4befIe
+        tcTdogEDt36xCj6f5IX8Vu2jy/48Np8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6CC313AB3;
+        Tue,  4 Oct 2022 08:10:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id oWzzKnLqO2MYSAAAMHmgww
+        (envelope-from <jgross@suse.com>); Tue, 04 Oct 2022 08:10:26 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v4 00/16] x86: make pat and mtrr independent from each other
+Date:   Tue,  4 Oct 2022 10:10:07 +0200
+Message-Id: <20221004081023.32402-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tmp is an unsigned variable. It can never be less than zero. Remove the
-dead code.
+Today PAT can't be used without MTRR being available, unless MTRR is at
+least configured via CONFIG_MTRR and the system is running as Xen PV
+guest. In this case PAT is automatically available via the hypervisor,
+but the PAT MSR can't be modified by the kernel and MTRR is disabled.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- drivers/power/supply/rk817_charger.c | 4 ----
- 1 file changed, 4 deletions(-)
+The same applies to a kernel built with no MTRR support: it won't
+allow to use the PAT MSR, even if there is no technical reason for
+that, other than setting up PAT on all cpus the same way (which is a
+requirement of the processor's cache management) is relying on some
+MTRR specific code.
 
-diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
-index aa4b33f1bb83..ba3f5ccaeacd 100644
---- a/drivers/power/supply/rk817_charger.c
-+++ b/drivers/power/supply/rk817_charger.c
-@@ -785,8 +785,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
- 		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
- 				 bulk_reg, 4);
- 		tmp = get_unaligned_be32(bulk_reg);
--		if (tmp < 0)
--			tmp = 0;
- 		boot_charge_mah = ADC_TO_CHARGE_UAH(tmp,
- 						    charger->res_div) / 1000;
- 		/*
-@@ -825,8 +823,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
- 	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
- 			 bulk_reg, 4);
- 	tmp = get_unaligned_be32(bulk_reg);
--	if (tmp < 0)
--		tmp = 0;
- 	boot_charge_mah = ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
- 	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
- 			 bulk_reg, 2);
+Fix all of that by:
+
+- moving the function needed by PAT from MTRR specific code one level
+  up
+- reworking the init sequences of MTRR and PAT to be more similar to
+  each other without calling PAT from MTRR code
+- removing the dependency of PAT on MTRR
+
+While working on that I discovered two minor bugs in MTRR code, which
+are fixed, too.
+
+There is some more cleanup done reducing code size.
+
+Changes in V4:
+- new patches 10, 14, 15, 16
+- split up old patch 4 into 3 patches
+- addressed comments
+
+Changes in V3:
+- replace patch 1 by just adding a comment
+
+Changes in V2:
+- complete rework of the patches based on comments by Boris Petkov
+- added several patches to the series
+
+Juergen Gross (16):
+  x86/mtrr: add comment for set_mtrr_state() serialization
+  x86/mtrr: remove unused cyrix_set_all() function
+  x86/mtrr: replace use_intel() with a local flag
+  x86/mtrr: rename prepare_set() and post_set()
+  x86/mtrr: split MTRR specific handling from cache dis/enabling
+  x86: move some code out of arch/x86/kernel/cpu/mtrr
+  x86/mtrr: split generic_set_all()
+  x86/mtrr: remove set_all callback from struct mtrr_ops
+  x86/mtrr: simplify mtrr_bp_init()
+  x86/mtrr: get rid of mtrr_enabled bool
+  x86/mtrr: let cache_aps_delayed_init replace mtrr_aps_delayed_init
+  x86/mtrr: add a stop_machine() handler calling only cache_cpu_init()
+  x86: decouple pat and mtrr handling
+  x86: switch cache_ap_init() to hotplug callback
+  x86: do MTRR/PAT setup on all secondary CPUs in parallel
+  x86/mtrr: simplify mtrr_ops initialization
+
+ arch/x86/include/asm/cacheinfo.h   |  18 +++
+ arch/x86/include/asm/memtype.h     |   5 +-
+ arch/x86/include/asm/mtrr.h        |  13 +-
+ arch/x86/kernel/cpu/cacheinfo.c    | 168 ++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/common.c       |   2 +-
+ arch/x86/kernel/cpu/mtrr/amd.c     |   8 +-
+ arch/x86/kernel/cpu/mtrr/centaur.c |   8 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c   |  42 +------
+ arch/x86/kernel/cpu/mtrr/generic.c | 127 +++-----------------
+ arch/x86/kernel/cpu/mtrr/mtrr.c    | 185 ++++-------------------------
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |  20 ++--
+ arch/x86/kernel/setup.c            |  14 +--
+ arch/x86/kernel/smpboot.c          |   9 +-
+ arch/x86/mm/pat/memtype.c          | 127 ++++++--------------
+ arch/x86/power/cpu.c               |   3 +-
+ include/linux/cpuhotplug.h         |   1 +
+ 16 files changed, 298 insertions(+), 452 deletions(-)
+
 -- 
-2.30.2
+2.35.3
 
