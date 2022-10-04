@@ -2,116 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D8225F4826
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 19:18:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DFCC5F4841
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 19:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJDRSu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 13:18:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56142 "EHLO
+        id S230024AbiJDRUW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 13:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiJDRSt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 13:18:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E0E83DF3C;
-        Tue,  4 Oct 2022 10:18:48 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso9105637pjk.1;
-        Tue, 04 Oct 2022 10:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date;
-        bh=HFaRNpa9mLJ2TOOR7zZ2VVb33Q/fohWmntwZFXz/4Es=;
-        b=mDNEHi4Rr6c4btJInZ4XwVYxo1fQdVCWjzBgULu1Ts0ZfRMiYO5s+F3+Cb8CQXooNm
-         1BveFCRiZf2KTqcQV7DoTcALPmb1pWSDEEn223O7gMVMC6SVG1V8jRgvOCJGWHZuxH8I
-         Vl+SvfcvT5BRn8Lrh4wotIHIBbABlbNJdlblzpgbOscM0jxPUnKRqO7KRTgrXaFc9P0n
-         cbiwLDKMZpOB7jrFHy7peUaj+mCourjLZLrpQquxGVp+DgXPNaq1nrsrkjFzd1gXa/jd
-         PbJjRs3DW9LJ1apBXZK7nGEyc0zM269QawF4eHlyzn5mCttFMHJV2wcWQ40PlDiIZajN
-         WM7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=HFaRNpa9mLJ2TOOR7zZ2VVb33Q/fohWmntwZFXz/4Es=;
-        b=2R1dnfAr6BILfYj//pIkxTcJHhLZHpamqXC5V0BwmFZql3wK09DIsICiaEe5nypw1R
-         vdookq4RZmJg19GP1KxJfqK5kaQ4ZusADYEwU6jYFADPM2E/tOmi5BJ9Ata4Ps/+wcow
-         NnWKmKQj/MxwBrEldrJFxTdqLewRvFfeoc3L9nnW+lIORdGVAugmQ6ai2eumTPWdpDHY
-         qXTtqrrtzmMnsWHa7cgGL858OMO9olJtjlyCiEeixrmmYCuXgfns5hVYJqTJIQFUOyhL
-         5pOg5mowB3SIZWe2r3cv2gdHTXOpwdk15nzbjr4Kgrk1Zm+v9UT/5tyCMVDfqXa/1L/Y
-         SR1w==
-X-Gm-Message-State: ACrzQf0x0v5NzScMzMEr5b2aFkVWxnjTB0PfCCcPNyWQlQmg41LyL4TD
-        D9gScP9m3DShq09dYDHe366stiaxp/U2EA==
-X-Google-Smtp-Source: AMsMyM5/9K/9ohfATX2qANNK1fyZfXxZduQliyakxT8GlQFIXpcKB5RTrXiXHzVCyiR0Z2QjaDycAw==
-X-Received: by 2002:a17:903:18b:b0:176:afb8:b4ab with SMTP id z11-20020a170903018b00b00176afb8b4abmr28490642plg.80.1664903927580;
-        Tue, 04 Oct 2022 10:18:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d18-20020a170903231200b001728ac8af94sm9164260plh.248.2022.10.04.10.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Oct 2022 10:18:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-pm@vger.kernel.org
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-kernel@vger.kernel.org,
-        Guenter Roeck <linux@roeck-us.net>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH] thermal/core: Fix parameter check when setting trip point temperatures
-Date:   Tue,  4 Oct 2022 10:18:43 -0700
-Message-Id: <20221004171843.2737200-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.36.2
+        with ESMTP id S229921AbiJDRUD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 13:20:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B16010C4;
+        Tue,  4 Oct 2022 10:19:54 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A163E1A32;
+        Tue,  4 Oct 2022 10:20:00 -0700 (PDT)
+Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.38.139])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2E7683F792;
+        Tue,  4 Oct 2022 10:19:38 -0700 (PDT)
+Date:   Tue, 4 Oct 2022 18:19:33 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        ulli.kroll@googlemail.com, linus.walleij@linaro.org,
+        shawnguo@kernel.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        tony@atomide.com, khilman@kernel.org, catalin.marinas@arm.com,
+        will@kernel.org, guoren@kernel.org, bcain@quicinc.com,
+        chenhuacai@kernel.org, kernel@xen0n.name, geert@linux-m68k.org,
+        sammy@sammy.net, monstr@monstr.eu, tsbogend@alpha.franken.de,
+        dinguyen@kernel.org, jonas@southpole.se,
+        stefan.kristiansson@saunalahti.fi, shorne@gmail.com,
+        James.Bottomley@HansenPartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, ysato@users.sourceforge.jp, dalias@libc.org,
+        davem@davemloft.net, richard@nod.at,
+        anton.ivanov@cambridgegreys.com, johannes@sipsolutions.net,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fweisbec@gmail.com,
+        ryabinin.a.a@gmail.com, glider@google.com, andreyknvl@gmail.com,
+        dvyukov@google.com, vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v2 33/44] ftrace: WARN on rcuidle
+Message-ID: <YzxrJYjKxy/vUc5n@FVFF77S0Q05N.cambridge.arm.com>
+References: <20220919095939.761690562@infradead.org>
+ <20220919101522.573936213@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220919101522.573936213@infradead.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs
-code") changed the parameter check in trip_point_temp_store() from
+On Mon, Sep 19, 2022 at 12:00:12PM +0200, Peter Zijlstra wrote:
+> CONFIG_GENERIC_ENTRY disallows any and all tracing when RCU isn't
+> enabled.
+> 
+> XXX if s390 (the only other GENERIC_ENTRY user as of this writing)
+> isn't comfortable with this, we could switch to
+> HAVE_NOINSTR_VALIDATION which is x86_64 only atm.
+> 
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  include/linux/tracepoint.h |   13 ++++++++++++-
+>  kernel/trace/trace.c       |    3 +++
+>  2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -178,6 +178,16 @@ static inline struct tracepoint *tracepo
+>  #endif /* CONFIG_HAVE_STATIC_CALL */
+>  
+>  /*
+> + * CONFIG_GENERIC_ENTRY archs are expected to have sanitized entry and idle
+> + * code that disallow any/all tracing/instrumentation when RCU isn't watching.
+> + */
+> +#ifdef CONFIG_GENERIC_ENTRY
+> +#define RCUIDLE_COND(rcuidle)	(rcuidle)
+> +#else
+> +#define RCUIDLE_COND(rcuidle)	(rcuidle && in_nmi())
+> +#endif
 
-	if (!tz->ops->set_trip_temp)
+Could we make this depend on ARCH_WANTS_NO_INSTR instead?
 
-to
-	if (!tz->ops->set_trip_temp && !tz->trips)
+That'll allow arm64 to check this even though we're not using the generic entry
+code (and there's lots of work necessary to make that possible...).
 
-That means the condition will pass if either tz->ops->set_trip_temp
-or tz->trips is not NULL. Subsequently, access to tz->trips is
-checked again, but tz->ops->set_trip_temp is called unconditionally.
-This will result in a crash if the set_trip_temp callback is not set.
-Add check if tz->ops->set_trip_temp is NULL before trying to call it.
+Thanks,
+Mark.
 
-Fixes: 9326167058e8a ("thermal/core: Move set_trip_temp ops to the sysfs code")
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/thermal/thermal_sysfs.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 78c5841bdfae..ec495c7dff03 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -128,9 +128,11 @@ trip_point_temp_store(struct device *dev, struct device_attribute *attr,
- 	if (kstrtoint(buf, 10, &temperature))
- 		return -EINVAL;
- 
--	ret = tz->ops->set_trip_temp(tz, trip, temperature);
--	if (ret)
--		return ret;
-+	if (tz->ops->set_trip_temp) {
-+		ret = tz->ops->set_trip_temp(tz, trip, temperature);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	if (tz->trips)
- 		tz->trips[trip].temperature = temperature;
--- 
-2.36.2
-
+> +
+> +/*
+>   * it_func[0] is never NULL because there is at least one element in the array
+>   * when the array itself is non NULL.
+>   */
+> @@ -189,7 +199,8 @@ static inline struct tracepoint *tracepo
+>  			return;						\
+>  									\
+>  		/* srcu can't be used from NMI */			\
+> -		WARN_ON_ONCE(rcuidle && in_nmi());			\
+> +		if (WARN_ON_ONCE(RCUIDLE_COND(rcuidle)))		\
+> +			return;						\
+>  									\
+>  		/* keep srcu and sched-rcu usage consistent */		\
+>  		preempt_disable_notrace();				\
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -3104,6 +3104,9 @@ void __trace_stack(struct trace_array *t
+>  		return;
+>  	}
+>  
+> +	if (WARN_ON_ONCE(IS_ENABLED(CONFIG_GENERIC_ENTRY)))
+> +		return;
+> +
+>  	/*
+>  	 * When an NMI triggers, RCU is enabled via ct_nmi_enter(),
+>  	 * but if the above rcu_is_watching() failed, then the NMI
+> 
+> 
