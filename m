@@ -2,62 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FA95F549F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 14:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8C95F54FC
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 15:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbiJEMhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Oct 2022 08:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S229791AbiJENFx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Oct 2022 09:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiJEMhV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 08:37:21 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B8757899
-        for <linux-pm@vger.kernel.org>; Wed,  5 Oct 2022 05:37:18 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id b7so18145657wrq.9
-        for <linux-pm@vger.kernel.org>; Wed, 05 Oct 2022 05:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KTX8CzjgT3X/t2r5vWkkyRPC+B6Zpur5yx6z33EALmI=;
-        b=dzsfAxgdAGlUvKVUY6p3V8qGo313WeGugAOXWZSt+1fBP2srisSYreLvsC4Jt8R7vI
-         6CCNZ2KSUzFipf2TUazEUfYo06vjjv91Xy+qnqqccv6JnCX5hNP31NA70WmGp0Yy32QP
-         mExqi6cWI3IjFT/cgE6UfcZSCVhbtLcSJWWwIhNYbOhV6a1O9pc8mtgsF6so8OABSDbC
-         Zz/V8dDJJNEFO8LSd3y5bD7HlZgjLbp0vYE7xf1uhZtqnOrcZuofQtpcfMuSMNNg7ivk
-         kfkIb4D7afc9KH4Wn9yfjJvGbhkNxbmLo2OKigcWEZvHo4LzCO3D1KBst2Iy2FRzztXS
-         ++rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KTX8CzjgT3X/t2r5vWkkyRPC+B6Zpur5yx6z33EALmI=;
-        b=XP9/dwx17SeEbqxslKIe8NOQivYx8ve62CbuYmfVx8A8rqtREfGS6WU6sHJh2rsiOe
-         Dg7HmbBWEEryKd1eFuqD7mFc64D5ia2xBnrDrP+b+CU7WpeYNwlUrzrQkBMryHGv8DPd
-         9WgmR7rF8K2DOwGE4x6L1fk55OPskyNguKzgmeKFzh1rkl0uUjfHXaH5t/E3S5SmY0F6
-         Ycmusl/u5WDyHNUgGK0YEuTJ9pc+bhCCbqEw+Ij4JCZtythLs0IG4L5nnB7gtkfxuYpY
-         rYrR5HDivMeM+Nc3J4UEOwdsZ6e6ORSiQSzyxSxuEMEYCh1A/CZyTpN6lA+Nj0RctYD8
-         Q0pA==
-X-Gm-Message-State: ACrzQf2yfcUs/wmfZUW5ueUE4mphz8l9wmphzPcKmhQS0ZhCEiBF+a7A
-        d1Q4sTKugjkO3Skp3atd614AMA==
-X-Google-Smtp-Source: AMsMyM6Jlg5EJX8UPumAZ9rKA8q/8S24FJ3Uw0SxmI6WuaZGcUfDRQsK4mhRcGoSkeMPVSiGBC98sw==
-X-Received: by 2002:a5d:5983:0:b0:22c:b9a0:e874 with SMTP id n3-20020a5d5983000000b0022cb9a0e874mr19860166wri.306.1664973437294;
-        Wed, 05 Oct 2022 05:37:17 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:ffcf:b5a4:bbee:42a5? ([2a05:6e02:1041:c10:ffcf:b5a4:bbee:42a5])
-        by smtp.googlemail.com with ESMTPSA id f18-20020a05600c4e9200b003b492b30822sm2031325wmq.2.2022.10.05.05.37.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 05:37:16 -0700 (PDT)
-Message-ID: <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
-Date:   Wed, 5 Oct 2022 14:37:14 +0200
+        with ESMTP id S229795AbiJENFv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 09:05:51 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E876F220EE
+        for <linux-pm@vger.kernel.org>; Wed,  5 Oct 2022 06:05:47 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20221005130543euoutp016171e96dbbfe88e6f8d9637703963d6f~bLhJalaPP1552415524euoutp01M
+        for <linux-pm@vger.kernel.org>; Wed,  5 Oct 2022 13:05:43 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20221005130543euoutp016171e96dbbfe88e6f8d9637703963d6f~bLhJalaPP1552415524euoutp01M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1664975143;
+        bh=cShw/3LGlylN+4jJotpQbuNoLk30Zznf4m8prglpDWE=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=S/UHF0e2phRkGiCF0XGwtynhMSI6OuPOWGnyUO31/4azPx9Fd/P482Gl+oVJELhmQ
+         4jSqwCm04jceqZqXx7ZIDlc124H3kU9UGzGKbKQ0r9kZHRmSgCpFwDeWXGZJSZtX8T
+         i62BfLpu0Uya4Uk6HTG2BvfShkSGvcgkGRaYS9oA=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20221005130543eucas1p1aed6763fdecb50ca11125c7eec2cbbf0~bLhI6xuMy3238032380eucas1p14;
+        Wed,  5 Oct 2022 13:05:43 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 1B.A2.29727.6218D336; Wed,  5
+        Oct 2022 14:05:42 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221005130542eucas1p1a50cb2c3ee56c7c6b3b78f9d4b191abf~bLhIInLdI3061230612eucas1p19;
+        Wed,  5 Oct 2022 13:05:42 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221005130542eusmtrp2fa51b0c29199130127621c85d53fce3c~bLhIHmN630188401884eusmtrp2Y;
+        Wed,  5 Oct 2022 13:05:42 +0000 (GMT)
+X-AuditID: cbfec7f2-205ff7000001741f-4f-633d81261c13
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id BA.2D.10862.6218D336; Wed,  5
+        Oct 2022 14:05:42 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221005130541eusmtip25243c5df6e3b8a7331bd5ea6df42850f~bLhHDpACD0498804988eusmtip2d;
+        Wed,  5 Oct 2022 13:05:41 +0000 (GMT)
+Message-ID: <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
+Date:   Wed, 5 Oct 2022 15:05:41 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.1
 Subject: Re: [PATCH v8 00/29] Rework the trip points creation
 Content-Language: en-US
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rui.zhang@intel.com,
         Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
@@ -74,17 +72,60 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
         linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-omap@vger.kernel.org, rafael@kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkk+LIzCtJLcpLzFFi42LZduznOV21Rttkg9/XrS3OPf7NYvFg3jY2
+        i7W9R1ksvm+5zmQx77OsxaqpO1ks9r7eym6x6fE1VouJ+8+yW3T9WslscXnXHDaL2Uv6WSw+
+        9x5htNj68h2TxcTbG9gtZpzfx2TR+WUWm8WxBWIWq/e8YLaY+2Uqs8WTh31sFntbLzI7iHnM
+        un+WzWPFJ32PnbPusnss3vOSyWPTqk42jzvX9rB5bF5S77Hx3Q4mj/6/Bh59W1YxenzeJBfA
+        HcVlk5Kak1mWWqRvl8CVsXLTSraCv/wVFze/YmpgbOPtYuTgkBAwkXg+T7SLkYtDSGAFo8Tz
+        f59ZIZwvjBK7H75lh3A+M0rM2PSBsYuRE6zj4qNHLBCJ5YwSP859Z4ZwPjJKXF6yiR2kilfA
+        TuLn2sdgNouAisSi582MEHFBiZMzn7CA2KICyRI/uw6wgdjCArYS7390gtUzC4hL3HoynwnE
+        FhHQk2h838YEsoBZYAqbxOEVe1lBEmwChhJdb7vAmjmBlh3ZsAiqWV5i+9s5zBCnvuKUODHR
+        FsJ2kZg/6S4ThC0s8er4FnYIW0bi/875YAskBNoZJRb8vg/lTGCUaHh+C+ppa4k7536xgYKM
+        WUBTYv0ufUjoOUrc/+cPYfJJ3HgrCHECn8SkbdOZIcK8Eh1tQhAz1CRmHV8Ht/XghUvMExiV
+        ZiGFyiwk389C8swshLULGFlWMYqnlhbnpqcWG+allusVJ+YWl+al6yXn525iBKbS0/+Of9rB
+        OPfVR71DjEwcjIcYJTiYlUR4eU/aJAvxpiRWVqUW5ccXleakFh9ilOZgURLnZZuhlSwkkJ5Y
+        kpqdmlqQWgSTZeLglGpgas1MywlXW6yRvWzhuUS/oxOTTppaP9/kmKzPFxEUopizT8O0wNm2
+        aX9r6JKILwqnVqyUKhD7WbFlS/i74w+ubdT7fr/52CfZJ5mnd2wwYNVk7GH0/ZY3a8KfW3OU
+        M9uvrT0nzXXI2Mjk7fxDiqLy5TGuC2JO9Zlf/nNecva3A2v9OZPmvLK5cHTdRvF93tXS4uEp
+        fTmngzQ+p/AE6UysU/FdZVpdmm8xOyd1X36Pi8vDSUWR/gblZufs2EVN9Y93hU80fXYyKv+I
+        YVPJ7v7+rcuTiqR2Lj+7Osbr7r6vaa0LS382yZ6Jeu6z5orKgje9XK95hftf1J0oVr5/5kWY
+        NeuH+Km5FlqZKpWvjqxQYinOSDTUYi4qTgQA70iftBQEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprMKsWRmVeSWpSXmKPExsVy+t/xe7pqjbbJBttb2SzOPf7NYvFg3jY2
+        i7W9R1ksvm+5zmQx77OsxaqpO1ks9r7eym6x6fE1VouJ+8+yW3T9WslscXnXHDaL2Uv6WSw+
+        9x5htNj68h2TxcTbG9gtZpzfx2TR+WUWm8WxBWIWq/e8YLaY+2Uqs8WTh31sFntbLzI7iHnM
+        un+WzWPFJ32PnbPusnss3vOSyWPTqk42jzvX9rB5bF5S77Hx3Q4mj/6/Bh59W1YxenzeJBfA
+        HaVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9nk5Kak1mWWqRvl6CXsXLT
+        SraCv/wVFze/YmpgbOPtYuTkkBAwkbj46BFLFyMXh5DAUkaJlytb2CESMhInpzWwQtjCEn+u
+        dbGB2EIC7xklZu8OA7F5Bewkfq59DFbPIqAiseh5MyNEXFDi5MwnLCC2qECyxMs/E8FqhAVs
+        Jd7/6ASzmQXEJW49mc8EYosI6Ek0vm9jgohPY5P4/DkeYtdGJon3W+pBbDYBQ4mutxA3cALt
+        PbJhEdQcM4murV2MELa8xPa3c5gnMArNQnLGLCTrZiFpmYWkZQEjyypGkdTS4tz03GIjveLE
+        3OLSvHS95PzcTYzA1LHt2M8tOxhXvvqod4iRiYPxEKMEB7OSCC/vSZtkId6UxMqq1KL8+KLS
+        nNTiQ4ymwLCYyCwlmpwPTF55JfGGZgamhiZmlgamlmbGSuK8ngUdiUIC6YklqdmpqQWpRTB9
+        TBycUg1M1fHK5u17e/xmPNAx/RH0+cWjBb8WrNXuNq34YHCgtn/5TlP7D3sKTu25XGdRv+Bo
+        oMPkE2zaJ5cdPzpr9inpX/6XOaK26YtPvS8ygaf5seqXe+0nVrnrNpe0+Z9e/SOpau82KdeZ
+        J2Vkru5/EVpp7Cj1wkzmg0iIo6HeXPkwqU0PC9Iap8yJesKwfzqXW6GYzvcLrEL2N40WJrjP
+        3szWtf2Uada+eyXyJi2z9Phn7N6RvLljdZqM9uFwg+K7eW41zayWv3UMdkV+n7np305rbdGb
+        t7tCMuctC7JT2X7EV3mP2PRd+xP61F8/NJB9vf1I0+KwwILXh3j22pbOLnhya8YOsRa7yJzF
+        cj45z6adV2Ipzkg01GIuKk4EAIdUMlKmAwAA
+X-CMS-MailID: 20221005130542eucas1p1a50cb2c3ee56c7c6b3b78f9d4b191abf
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb
 References: <CGME20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb@eucas1p2.samsung.com>
- <20221003092602.1323944-1-daniel.lezcano@linaro.org>
- <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
- <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
-In-Reply-To: <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        <20221003092602.1323944-1-daniel.lezcano@linaro.org>
+        <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
+        <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
+        <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -92,53 +133,62 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Marek,
-
-On 03/10/2022 23:18, Daniel Lezcano wrote:
-
-[ ... ]
-
->> I've tested this v8 patchset after fixing the issue with Exynos TMU with
->> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/ 
+On 05.10.2022 14:37, Daniel Lezcano wrote:
+>
+> Hi Marek,
+>
+> On 03/10/2022 23:18, Daniel Lezcano wrote:
+>
+> [ ... ]
+>
+>>> I've tested this v8 patchset after fixing the issue with Exynos TMU 
+>>> with
+>>> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/ 
+>>>
+>>> patch and I got the following lockdep warning on all Exynos-based 
+>>> boards:
+>>>
+>>>
+>>> ======================================================
+>>> WARNING: possible circular locking dependency detected
+>>> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
+>>> ------------------------------------------------------
+>>> swapper/0/1 is trying to acquire lock:
+>>> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
+>>>
+>>> but task is already holding lock:
+>>> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
+>>> thermal_zone_device_update.part.0+0x3c/0x528
+>>>
+>>> which lock already depends on the new lock.
 >>
->> patch and I got the following lockdep warning on all Exynos-based boards:
+>> I'm wondering if the problem is not already there and related to 
+>> data->lock ...
 >>
+>> Doesn't the thermal zone lock already prevent racy access to the data 
+>> structure?
 >>
->> ======================================================
->> WARNING: possible circular locking dependency detected
->> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
->> ------------------------------------------------------
->> swapper/0/1 is trying to acquire lock:
->> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
->>
->> but task is already holding lock:
->> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
->> thermal_zone_device_update.part.0+0x3c/0x528
->>
->> which lock already depends on the new lock.
-> 
-> I'm wondering if the problem is not already there and related to 
-> data->lock ...
-> 
-> Doesn't the thermal zone lock already prevent racy access to the data 
-> structure?
-> 
-> Another question: if the sensor clock is disabled after reading it, how 
-> does the hardware update the temperature and detect the programed 
-> threshold is crossed?
+>> Another question: if the sensor clock is disabled after reading it, 
+>> how does the hardware update the temperature and detect the programed 
+>> threshold is crossed?
+>
+> just a gentle ping, as the fix will depend on your answer ;)
+>
+Sorry, I've been busy with other stuff. I thought I will fix this once I 
+find a bit of spare time.
 
-just a gentle ping, as the fix will depend on your answer ;)
+IMHO the clock management is a bit over-engineered, as there is little 
+(if any) benefit from such fine grade clock management. That clock is 
+needed only for the AHB related part of the TMU (reading/writing the 
+registers). The IRQ generation and temperature measurement is clocked 
+from so called 'sclk' (special clock).
 
-Thanks
+I also briefly looked at the code and the internal lock doesn't look to 
+be really necessary assuming that the thermal core already serializes 
+all the calls.
 
-   -- D.
-
-[ ... ]
-
-
+Best regards
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
