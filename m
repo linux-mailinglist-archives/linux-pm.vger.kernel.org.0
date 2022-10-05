@@ -2,331 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CB8B5F5B48
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 22:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899865F5B7F
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 23:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiJEU6k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Oct 2022 16:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S231190AbiJEVNd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Oct 2022 17:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiJEU6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 16:58:39 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D4E7D7A3;
-        Wed,  5 Oct 2022 13:58:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665003517; x=1696539517;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5wlRgmXMX0YGl2ggsHILuTzXon7D/FQk/Yadywfyb3M=;
-  b=PW+ikKgdsSw8fAXHFCpIFW+3CG4L9wmBRTvXyVdX5hQzUzwnA/ZjnZ6w
-   HiDd1OA0JmSRf36qcBHxL/K3YRT/dpWVNFonym1LR2TahQ4ghJlpYguol
-   nXbtQQmoAJnrkbtiy6VtMLrZ+PhL4HdzkfCQo13vFJYNwP3/1qmNpGYDn
-   FqGTGwbsqa4MKpx4oLI71W/mZLjDW/bT3bj5tuSGjK9uaS2SEf7Wpus+Q
-   ICIbX7dennFN0cptgn7uA71VR50Mzob/X3Xxu3kxBcnqXTPUeO0fouBCL
-   oQd+MB0PfshX3Exz5ipW4JD5zS7L6BwllnH1QqhK9pJRCByJLtmpN1LX6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="389558801"
-X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
-   d="scan'208";a="389558801"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2022 13:58:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10491"; a="953343839"
-X-IronPort-AV: E=Sophos;i="5.95,161,1661842800"; 
-   d="scan'208";a="953343839"
-Received: from lkp-server01.sh.intel.com (HELO d4f44333118a) ([10.239.97.150])
-  by fmsmga005.fm.intel.com with ESMTP; 05 Oct 2022 13:58:32 -0700
-Received: from kbuild by d4f44333118a with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ogBTM-0001d5-07;
-        Wed, 05 Oct 2022 20:58:32 +0000
-Date:   Thu, 06 Oct 2022 04:58:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     loongarch@lists.linux.dev, linux-wireless@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-ext4@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, iommu@lists.linux.dev,
-        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 67ae4f7434cee86ee318d46fb10b8a9840ad2e81
-Message-ID: <633deff4.q8bW3fyM79Uz0A/F%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S230257AbiJEVNb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 17:13:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE06224BD9;
+        Wed,  5 Oct 2022 14:13:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6C6BCB81F50;
+        Wed,  5 Oct 2022 21:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD564C433C1;
+        Wed,  5 Oct 2022 21:13:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665004405;
+        bh=OYbdBaX1BcxB2O2zUsHIfxOhRluCA5uxN6Qber1Zx6E=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=JXu5JYjHdsNUl1UmbwqZ6LvAvNT7z58Y6cDuydCMl9Bh/hUEJGMoAq87alB1iLftP
+         EhYh465q8wRGyxhuzKjmR1OPgSr7pFegPbjhFiPLP+1LJQYYQ/adCfAP99aglyA7+p
+         H7HpXZcPs5ja0w1Y+p4CKdOeiJQV6FXMQYxMMmTpVV7xTXP46u6yo7WrNiuB+OEacJ
+         Zwr3vUqE4XDxMHHRb8N/noqVDd6p80/eSiNDtCEaDW2GeIIDWe+TWEnXQ86rCkKcTy
+         kaZrHe8FUDzoLpNVUOg1i6kOVJpO+lrOevJQyzm6stgqLJ6Mg1cGoY/o8Bjn5sOPFM
+         0lh66u68bh33A==
+Date:   Wed, 5 Oct 2022 16:13:23 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
+        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
+        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
+        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
+        mturquette@baylibre.com, linux-clk@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
+Message-ID: <20221005211323.GA2390992@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <f1b079c9-d0b8-6d4d-bf3d-dee45731ee88@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 67ae4f7434cee86ee318d46fb10b8a9840ad2e81  Add linux-next specific files for 20221005
+On Mon, Oct 03, 2022 at 05:40:21PM +0530, Krishna Chaitanya Chundru wrote:
+> On 9/30/2022 12:23 AM, Bjorn Helgaas wrote:
+> > On Mon, Sep 26, 2022 at 09:00:11PM +0530, Krishna Chaitanya Chundru wrote:
+> > > On 9/23/2022 7:56 PM, Bjorn Helgaas wrote:
+> > > > On Fri, Sep 23, 2022 at 07:29:31AM +0530, Krishna Chaitanya Chundru wrote:
+> > > > > On 9/23/2022 12:12 AM, Bjorn Helgaas wrote:
+> > > > > > On Thu, Sep 22, 2022 at 09:09:28PM +0530, Krishna Chaitanya Chundru wrote:
+> > > > > > > On 9/21/2022 10:26 PM, Bjorn Helgaas wrote:
+> > > > > > > > On Wed, Sep 21, 2022 at 03:23:35PM +0530, Krishna Chaitanya Chundru wrote:
+> > > > > > > > > On 9/20/2022 11:46 PM, Bjorn Helgaas wrote:
+> > > > > > > > > > On Tue, Sep 20, 2022 at 03:52:23PM +0530, Krishna chaitanya chundru wrote:
+> > > > > > > > > > > In qcom platform PCIe resources( clocks, phy
+> > > > > > > > > > > etc..) can released when the link is in L1ss to
+> > > > > > > > > > > reduce the power consumption. So if the link is
+> > > > > > > > > > > in L1ss, release the PCIe resources. And when
+> > > > > > > > > > > the system resumes, enable the PCIe resources if
+> > > > > > > > > > > they released in the suspend path.
 
-Error/Warning reports:
+> > > > > > > > > > What's the connection with L1.x?  Links enter L1.x
+> > > > > > > > > > based on activity and timing.  That doesn't seem
+> > > > > > > > > > like a reliable indicator to turn PHYs off and
+> > > > > > > > > > disable clocks.
 
-https://lore.kernel.org/linux-mm/202209060229.dVuyxjBv-lkp@intel.com
-https://lore.kernel.org/llvm/202209220019.Yr2VuXhg-lkp@intel.com
-https://lore.kernel.org/llvm/202210041553.k9dc1Joc-lkp@intel.com
-https://lore.kernel.org/llvm/202210060148.UXBijOcS-lkp@intel.com
+> > > > > > > > > This is a Qcom PHY-specific feature (retaining the
+> > > > > > > > > link state in L1.x with clocks turned off).  It is
+> > > > > > > > > possible only with the link being in l1.x. PHY can't
+> > > > > > > > > retain the link state in L0 with the clocks turned
+> > > > > > > > > off and we need to re-train the link if it's in L2
+> > > > > > > > > or L3. So we can support this feature only with
+> > > > > > > > > L1.x.  That is the reason we are taking l1.x as the
+> > > > > > > > > trigger to turn off clocks (in only suspend path).
 
-Error/Warning: (recently discovered and may have been fixed)
+> > > > > > > > This doesn't address my question.  L1.x is an ASPM
+> > > > > > > > feature, which means hardware may enter or leave L1.x
+> > > > > > > > autonomously at any time without software
+> > > > > > > > intervention.  Therefore, I don't think reading the
+> > > > > > > > current state is a reliable way to decide anything.
 
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-arch/arm64/kernel/alternative.c:199:6: warning: no previous prototype for 'apply_alternatives_vdso' [-Wmissing-prototypes]
-arch/arm64/kernel/alternative.c:295:14: warning: no previous prototype for 'alt_cb_patch_nops' [-Wmissing-prototypes]
-arch/loongarch/kernel/traps.c:250 die() warn: variable dereferenced before check 'regs' (see line 244)
-arch/loongarch/mm/init.c:166:24: warning: variable 'new' set but not used [-Wunused-but-set-variable]
-drivers/gpu/drm/amd/amdgpu/../display/dc/virtual/virtual_link_hwss.c:40:6: warning: no previous prototype for 'virtual_disable_link_output' [-Wmissing-prototypes]
-drivers/gpu/drm/bridge/ite-it6505.c:2712 it6505_extcon_work() warn: pm_runtime_get_sync() also returns 1 on success
-drivers/platform/loongarch/loongson-laptop.c:377 loongson_laptop_get_brightness() warn: impossible condition '(level < 0) => (0-255 < 0)'
-drivers/vfio/pci/vfio_pci_core.c:775 vfio_pci_ioctl_get_region_info() warn: potential spectre issue 'pdev->resource' [w]
-drivers/vfio/pci/vfio_pci_core.c:855 vfio_pci_ioctl_get_region_info() warn: potential spectre issue 'vdev->region' [r]
-fs/ext4/super.c:1744:19: warning: 'deprecated_msg' defined but not used [-Wunused-const-variable=]
-include/linux/compiler_types.h:357:45: error: call to '__compiletime_assert_417' declared with attribute error: FIELD_GET: mask is not constant
-kernel/bpf/memalloc.c:500 bpf_mem_alloc_destroy() error: potentially dereferencing uninitialized 'c'.
-net/mac80211/iface.c:251 ieee80211_can_powered_addr_change() warn: inconsistent returns '&local->mtx'.
+> > > > > > > After the link enters the L1.x it will come out only if
+> > > > > > > there is some activity on the link.  As system is
+> > > > > > > suspended and NVMe driver is also suspended (queues
+> > > > > > > will freeze in suspend) who else can initiate any data.
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+> > > > > > I don't think we can assume that nothing will happen to
+> > > > > > cause exit from L1.x.  For instance, PCIe Messages for
+> > > > > > INTx signaling, LTR, OBFF, PTM, etc., may be sent even
+> > > > > > though we think the device is idle and there should be no
+> > > > > > link activity.
 
-ERROR: modpost: "__tsan_memcpy" [arch/s390/crypto/ghash_s390.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [arch/s390/crypto/sha512_s390.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [fs/binfmt_misc.ko] undefined!
-ERROR: modpost: "__tsan_memcpy" [fs/pstore/ramoops.ko] undefined!
-ERROR: modpost: "__tsan_memset" [arch/s390/crypto/ghash_s390.ko] undefined!
-ERROR: modpost: "__tsan_memset" [arch/s390/crypto/sha512_s390.ko] undefined!
-ERROR: modpost: "__tsan_memset" [fs/autofs/autofs4.ko] undefined!
-ERROR: modpost: "__tsan_memset" [fs/binfmt_misc.ko] undefined!
-ERROR: modpost: "__tsan_memset" [fs/cramfs/cramfs.ko] undefined!
-ERROR: modpost: "__tsan_memset" [fs/pstore/ramoops.ko] undefined!
-s390x-linux-ld: self.c:(.text+0xf6): undefined reference to `__tsan_memcpy'
-thread_self.c:(.text+0xe4): undefined reference to `__tsan_memcpy'
+> > > > > I don't think after the link enters into L1.x there will
+> > > > > some activity on the link as you mentioned, except for PCIe
+> > > > > messages like INTx/MSI/MSIX. These messages also will not
+> > > > > come because the client drivers like NVMe will keep their
+> > > > > device in the lowest power mode.
+> > > > > 
+> > > > > The link will come out of L1.x only when there is config or
+> > > > > memory access or some messages to trigger the interrupts
+> > > > > from the devices.  We are already making sure this access
+> > > > > will not be there in S3.  If the link is in L0 or L0s what
+> > > > > you said is expected but not in L1.x
 
-Error/Warning ids grouped by kconfigs:
+> > > > Forgive me for being skeptical, but we just spent a few months
+> > > > untangling the fact that some switches send PTM request
+> > > > messages even when they're in a non-D0 state.  We expected
+> > > > that devices in D3hot would not send such messages because
+> > > > "why would they?"  But it turns out the spec allows that, and
+> > > > they actually *do*.
+> > > > 
+> > > > I don't think it's robust interoperable design for a PCI
+> > > > controller driver like qcom to assume anything about PCI
+> > > > devices unless it's required by the spec.
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-virtual-virtual_link_hwss.c:warning:no-previous-prototype-for-virtual_disable_link_output
-|-- alpha-randconfig-s042-20221002
-|   |-- drivers-thermal-broadcom-ns-thermal.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-data-got-void-noderef-__iomem-assigned-pvtmon
-|   |-- drivers-thermal-broadcom-ns-thermal.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-noderef-__iomem-pvtmon-got-void
-|   |-- drivers-thermal-broadcom-ns-thermal.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-noderef-__iomem-pvtmon-got-void-devdata
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-|   `-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|-- arc-randconfig-s051-20221002
-|   |-- drivers-gpu-drm-tiny-simpledrm.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-vaddr-got-void-noderef-__iomem-screen_base
-|   |-- drivers-gpu-drm-vkms-vkms_formats.c:sparse:sparse:cast-to-restricted-__le16
-|   |-- drivers-gpu-drm-vkms-vkms_formats.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-usertype-got-restricted-__le16-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- kernel-bpf-hashtab.c:sparse:sparse:cast-removes-address-space-__percpu-of-expression
-|   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-__percpu-assigned-pptr-got-void
-|   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-ptr_to_pptr-got-void-noderef-__percpu-assigned-pptr
-|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void
-|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void-pptr
-|   `-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-pptr-got-void-noderef-__percpu
-|-- arc-randconfig-s053-20221002
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-|   |-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-|   |-- kernel-bpf-hashtab.c:sparse:sparse:cast-removes-address-space-__percpu-of-expression
-|   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-__percpu-assigned-pptr-got-void
-|   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-ptr_to_pptr-got-void-noderef-__percpu-assigned-pptr
-|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void
-|   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void-pptr
-|   `-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-pptr-got-void-noderef-__percpu
-|-- arm64-allyesconfig
-|   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-alt_cb_patch_nops
-|   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-apply_alternatives_vdso
-|-- arm64-randconfig-c023-20221005
-|   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-alt_cb_patch_nops
-|   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-apply_alternatives_vdso
-clang_recent_errors
-|-- arm-randconfig-r016-20221003
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-virtual-virtual_link_hwss.c:warning:no-previous-prototype-for-function-virtual_disable_link_output
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   `-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|-- arm-randconfig-r033-20221002
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- arm64-buildonly-randconfig-r002-20221003
-|   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-function-apply_alternatives_vdso
-|   `-- ld.lld:error:assignment-to-symbol-__efistub_kernel_size-does-not-converge
-|-- hexagon-randconfig-r013-20221002
-|   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmnewmap
-|   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmsetvec
-|   `-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-memset
-|-- hexagon-randconfig-r025-20221003
-|   |-- drivers-phy-mediatek-phy-mtk-tphy.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(unsigned-c
-|   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmnewmap
-|   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmsetvec
-|   `-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-memset
-|-- hexagon-randconfig-r031-20221002
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   `-- drivers-phy-mediatek-phy-mtk-tphy.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(unsigned-c
-|-- hexagon-randconfig-r041-20221003
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- hexagon-randconfig-r045-20221002
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- i386-randconfig-a002-20221003
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- i386-randconfig-a005-20221003
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- i386-randconfig-a006-20221003
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- i386-randconfig-r001-20221003
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- mips-loongson1c_defconfig
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- mips-randconfig-r006-20221002
-|   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt2701.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-|   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-|-- powerpc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-virtual-virtual_link_hwss.c:warning:no-previous-prototype-for-function-virtual_disable_link_output
-|   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt2701.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-|   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-|   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
+> > >  From pci spec 4, in sec 5.5 "Ports that support L1 PM Substates
+> > >  must not require a reference clock while in L1 PM Substates
+> > >  other than L1.0".  If there is no reference clk we can say
+> > >  there is no activity on the link.  If anything needs to be sent
+> > >  (such as LTR, or some messages ), the link needs to be back in
+> > >  L0 before it sends the packet to the link partner.
+> > > 
+> > > To exit from L1.x clkreq pin should be asserted.
+> > > 
+> > > In suspend after turning off clocks and phy we can enable to
+> > > trigger an interrupt whenever the clk req pin asserts.  In that
+> > > interrupt handler, we can enable the pcie resources back.
 
-elapsed time: 729m
+> > From the point of view of the endpoint driver, ASPM should be
+> > invisible -- no software intervention required.  I think you're
+> > suggesting that the PCIe controller driver could help exit L1.x by
+> > handling a clk req interrupt and enabling clock and PHY then.
+> > 
+> > But doesn't L1.x exit also have to happen within the time the
+> > endpoint can tolerate?  E.g., I think L1.2 exit has to happen
+> > within the LTR time advertised by the endpoint (PCIe r6.0, sec
+> > 5.5.5).  How can we guarantee that if software is involved?
 
-configs tested: 94
-configs skipped: 3
+> It is true that it is difficult to guarantee those delays. On our
+> internal boards, we are able to achieve this but that is not with
+> linux kernel.
+> 
+> With NVMe attach we have connected the protocol analyzer and tried
+> to see if there are any transactions over the link. We found there
+> are no transactions on the link once the link enters L1.x till we
+> resume the system. As the NVMe is a passive system it is not
+> initiating any transactions.
+> 
+> This whole requirement came from the NVMe driver, it requires
+> keeping the link active state when the system is suspended.
+> 
+> There are only two things we can in do in PCIe suspend as we have to
+> turn off PCIe clocks to allow the system to the lowest possible
+> power state.
+>
+> 1) Keep the device in D3 cold and turn off all the clocks and phy
+> etc. (It is not an ideal one as this decreases the NVMe lifetime
+> because link-down and link-up is treated as a power cycle by a few
+> NVMe devices).
+>
+> 2) This is the one we are proposing where we turn off the clocks,
+> phy once the link enters L1ss.
 
-gcc tested configs:
-i386                                defconfig
-arc                                 defconfig
-x86_64                          rhel-8.3-func
-s390                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-alpha                               defconfig
-s390                                defconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-syz
-mips                             allyesconfig
-s390                             allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                           rhel-8.3-kvm
-arm                            pleb_defconfig
-alpha                             allnoconfig
-powerpc                      chrp32_defconfig
-i386                             allyesconfig
-arc                          axs101_defconfig
-x86_64                               rhel-8.3
-riscv                             allnoconfig
-arc                    vdk_hs38_smp_defconfig
-arm                                 defconfig
-powerpc                 linkstation_defconfig
-i386                 randconfig-a014-20221003
-sh                             espt_defconfig
-sh                               allmodconfig
-csky                              allnoconfig
-x86_64                           allyesconfig
-i386                 randconfig-a011-20221003
-arc                               allnoconfig
-arm                           h3600_defconfig
-x86_64               randconfig-a011-20221003
-i386                 randconfig-a012-20221003
-arm64                            allyesconfig
-s390                       zfcpdump_defconfig
-sparc64                             defconfig
-x86_64               randconfig-a015-20221003
-i386                 randconfig-a013-20221003
-sh                   sh7770_generic_defconfig
-m68k                             allmodconfig
-x86_64               randconfig-a014-20221003
-arm                              allyesconfig
-powerpc                       maple_defconfig
-arc                              allyesconfig
-sh                             shx3_defconfig
-ia64                             allmodconfig
-m68k                            q40_defconfig
-i386                 randconfig-a015-20221003
-x86_64               randconfig-a012-20221003
-arm                       imx_v6_v7_defconfig
-i386                 randconfig-a016-20221003
-mips                            ar7_defconfig
-alpha                            allyesconfig
-x86_64               randconfig-a013-20221003
-arm                          gemini_defconfig
-m68k                                defconfig
-x86_64               randconfig-a016-20221003
-m68k                             allyesconfig
-i386                          randconfig-c001
-mips                          rb532_defconfig
-riscv                randconfig-r042-20221003
-arc                  randconfig-r043-20221003
-arc                  randconfig-r043-20221002
-s390                 randconfig-r044-20221003
-riscv                            allyesconfig
+It sounds like both options turn off the clocks and PHY.  But
+apparently they do not look the same to the NVMe endpoint?  I guess
+NVMe is in D3cold for 1), but it's in D0 for 2), right?
 
-clang tested configs:
-x86_64               randconfig-a003-20221003
-x86_64               randconfig-a002-20221003
-x86_64               randconfig-a001-20221003
-x86_64               randconfig-a004-20221003
-x86_64               randconfig-a006-20221003
-arm                        neponset_defconfig
-x86_64               randconfig-a005-20221003
-i386                 randconfig-a003-20221003
-i386                 randconfig-a002-20221003
-i386                 randconfig-a001-20221003
-i386                 randconfig-a004-20221003
-riscv                          rv32_defconfig
-i386                 randconfig-a005-20221003
-hexagon              randconfig-r041-20221003
-x86_64                        randconfig-k001
-riscv                randconfig-r042-20221002
-i386                 randconfig-a006-20221003
-hexagon              randconfig-r041-20221002
-s390                 randconfig-r044-20221002
-mips                     loongson1c_defconfig
-hexagon              randconfig-r045-20221002
-powerpc                 mpc8272_ads_defconfig
-hexagon              randconfig-r045-20221003
-powerpc                          allyesconfig
-x86_64                          rhel-8.3-rust
+> Can you please suggest us any other possible solutions to meet NVMe
+> requirement (That is to keep the link active during suspend) and the
+> Qcom platform requirement (that is to turn off all the clocks to
+> allow a lower possible power state)? Qcom PCIe controller is
+> compatible with v3.1 specification only.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+The PCIe spec clearly envisions Refclk being turned off
+(sec 5.5.3.3.1) and PHYs being powered off (sec 5.5.3.2) while in
+L1.2.
+
+I've been assuming L1.2 exit (which includes Refclk being turned on
+and PHYs being powered up) is completely handled by hardware, but it
+sounds like the Qcom controller needs software assistance which fields
+an interrupt when CLKREQ# is asserted and turns on Refclk and the
+PHYs?
+
+5.5.3 does say "All Link and PHY state must be maintained during L1.2,
+or must be restored upon exit using implementation specific means",
+and maybe Qcom counts as using implementation specific means.
+
+I *am* concerned about whether software can do the L1.2 exit fast
+enough, but the biggest reason I'm struggling with this is because
+using the syscore framework to work around IRQ affinity changes that
+happen late in suspend just seems kind of kludgy and it doesn't seem
+like it fits cleanly in the power management model.
+
+Bjorn
