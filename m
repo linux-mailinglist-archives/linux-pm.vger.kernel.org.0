@@ -2,88 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F3A5F4AAF
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Oct 2022 23:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DED55F4DB1
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 04:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbiJDVH5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 4 Oct 2022 17:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33710 "EHLO
+        id S229578AbiJEC2s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 4 Oct 2022 22:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiJDVHz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 17:07:55 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB16A6C13B;
-        Tue,  4 Oct 2022 14:07:52 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id g27so3636115edf.11;
-        Tue, 04 Oct 2022 14:07:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BmoWpeCspOs29Dr+M1Uih3ddTOSH8k/BLFoAKpIsoM8=;
-        b=uAHukF1M4FbY8Jxjihu9nFsS3sTAhSJk74pnPvff4NB7IZe3P0CWliepHVMv2mutOK
-         Yb4e2LxsuCx9QzZ/9jEp4ii95fSbh6FLXG5sRzd/VIi2t/RjIwkvp+Pbw6qKig0chxWI
-         79mng1G/xqdarbMy0C4NWGi+4xjVubk7jq8yI8nUMEQ6/9AA2r86AT1cCIRy5Gwjt5nk
-         znxHTwIGoeQkNw+t1TJmbik1747EQqPXykfkb2FlPC7v5y2XCHpJ5I8R1viLET4jlDs7
-         fqQr6ID9PcI2JPq/CwdXipmwqKCHqsXWOTHySXhfW1wuS+2qzYumNbGpaPBQ59dL9ZRo
-         zQ1g==
-X-Gm-Message-State: ACrzQf2ufDEfpxI3yMkoM4dSlGm1raABADqYJUL87XYuoK5mnFIo3nLG
-        qCotGuztbk6DhpZcfJScPEVvgzaduIJvNIUXpzuVa2sh6I0=
-X-Google-Smtp-Source: AMsMyM45neTD1S6fG+Zyehv+gRPWlymFP2txgUakzpzTDYyKKZw+I3DRNRG4FVmDT1Fu9cFKE9yFShvVkJbNit6ZRUU=
-X-Received: by 2002:a05:6402:2b8f:b0:453:2e59:364d with SMTP id
- fj15-20020a0564022b8f00b004532e59364dmr25455248edb.254.1664917670880; Tue, 04
- Oct 2022 14:07:50 -0700 (PDT)
+        with ESMTP id S229453AbiJEC2r (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 4 Oct 2022 22:28:47 -0400
+X-Greylist: delayed 520 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 04 Oct 2022 19:28:45 PDT
+Received: from correo.menpet.gob.ve (correo.menpet.gob.ve [190.202.80.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DB70770E66;
+        Tue,  4 Oct 2022 19:28:45 -0700 (PDT)
+Received: from zsrvhyper01.menpet.gob.ve (zsrvmenpet005.menpet.gob.ve [172.20.10.90])
+        by correo.menpet.gob.ve (Postfix) with ESMTP id A0BF71BEFF;
+        Tue,  4 Oct 2022 22:19:17 -0400 (VET)
+Received: from correo.menpet.gob.ve (localhost [127.0.0.1])
+        by zsrvhyper01.menpet.gob.ve (Postfix) with ESMTP id 5A54D1C259D;
+        Tue,  4 Oct 2022 22:25:43 -0400 (-04)
+Received: from 149.28.63.90
+        (SquirrelMail authenticated user lureyes)
+        by correo.menpet.gob.ve with HTTP;
+        Tue, 4 Oct 2022 22:25:43 -0400
+Message-ID: <34421bb3bc83716caec8c228ee3bc386.squirrel@correo.menpet.gob.ve>
+Date:   Tue, 4 Oct 2022 22:25:43 -0400
+Subject: Dr.John Spells Home.
+From:   "Dr John" <Spells@menpet.gob.ve>
+Reply-To: greathomeofsuccess01@gmail.com
+User-Agent: SquirrelMail/1.4.22-5.el6
 MIME-Version: 1.0
-From:   Len Brown <lenb@kernel.org>
-Date:   Tue, 4 Oct 2022 23:07:39 +0200
-Message-ID: <CAJvTdKn8jCWF3f3_EnBCaOAgQf9UgPCCG4oAysva5U2JF=C_4Q@mail.gmail.com>
-Subject: [GIT PULL] turbostat 2022.10.04
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM list <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+Content-Type:   text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7BIT
+X-Priority: 3 (Normal)
+Importance: Normal
+To:     undisclosed-recipients:;
+X-MPPPM-MailScanner-ID: A0BF71BEFF.A6693
+X-MPPPM-MailScanner: Found to be clean
+X-MPPPM-MailScanner-From: spells@menpet.gob.ve
+X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_SBL,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
 
-Please pull these turbostat patches to update Linux to turbostat 2022.10.04.
 
-Add support for two new platforms, and two bug fixes on existing platforms.
 
-thanks!
-Len Brown, Intel Open Source Technology Center
+I really appreciate Dr. John the great spell caster for returning my lover
+after 2 years of loneliness, i taught all hope was lost. But Thanks to Dr.
+John the great spell caster for making me happy again. You can contact him
+and he will be of great help because he is a wonderful man He is also
+specialize in the following:
+Get your ex lover back
+Money spell
+Pregnancy spell
+Love spell
+Cult case spell
+Fruit of the Womb
+Fibroid
+Business Boom
+Financial Breakthrough
+Get Rich without Rituals
+Lotto winning spell
+Bad Dreams
+Promise and Fail
+Epilepsy
+Spiritual Attack
+Land Case/Court Case
+Mental Disorder
+Political Appointment
+Visa Approval
+Cancer
+Examination Success
+Good Luck
+Natural Health
+Hypertension
+Diabetes+Obesity
+Stroke
+Sickle Cell
+Impotency
+Promotion at Work
+Add him on
+Whatsapp +2347056827869
+Email: greathomeofsuccess01@gmail.com
 
-The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
 
-  Linux 6.0 (2022-10-02 14:09:07 -0700)
 
-are available in the Git repository at:
+--
+"Independencia y Patria Socialista, Viviremos y Venceremos"
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
 
-for you to fetch changes up to 9992dd777123b052e106eb5633de47148fef502e:
-
-  tools/power turbostat: version 2022.10.04 (2022-10-04 23:02:03 +0200)
-
-----------------------------------------------------------------
-Artem Bityutskiy (1):
-      tools/power turbostat: Do not dump TRL if turbo is not supported
-
-Len Brown (1):
-      tools/power turbostat: version 2022.10.04
-
-Zhang Rui (3):
-      tools/power turbostat: Add support for RPL-S
-      tools/power turbostat: Add support for MeteorLake platforms
-      tools/power turbostat: Use standard Energy Unit for SPR Dram RAPL domain
-
- tools/power/x86/turbostat/turbostat.c | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
