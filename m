@@ -2,95 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 636D85F56B9
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 16:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F435F575F
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 17:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiJEOvQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Oct 2022 10:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39932 "EHLO
+        id S230042AbiJEPWT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Oct 2022 11:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiJEOvP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 10:51:15 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 205F77B7BC
-        for <linux-pm@vger.kernel.org>; Wed,  5 Oct 2022 07:51:14 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id j4so945092lfk.0
-        for <linux-pm@vger.kernel.org>; Wed, 05 Oct 2022 07:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=h5EgGPVm4WtQrmT0wcNwLb1/9YJNLS2w6d18NQrshN4=;
-        b=PBjFqLnLVrlg4HIHAA83ypl9+efBowPxAevsjQQnG8DzWFZCPvTdE9KEXhj7MiXeFP
-         wHxlFtS3UzG9vHhjupbOGhmQi4nNfet9ei7LmbHNoGd8PkRYHzw+t1AuGPOZZ5gTTtuY
-         OE9TzUurr+eHetiKN6rCNp/q3mcWvqmId4oLTtf27OSWbqisnpEO7aWk8b6FpWq51Rxo
-         c0qdJUJhHuyxP48BtdTAQyCjK9T5YyYob25eoO/mKLuDzce53Lp8G60sXa5Dq8vAoGZL
-         ENnW4xs9IpJF1JePwQDndy4482Jv1c61NM2Pg0KEUKhvJQjt4AL0Pwj8SXdAbeKHiL9q
-         BQQw==
+        with ESMTP id S229980AbiJEPWR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 11:22:17 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556623FD51;
+        Wed,  5 Oct 2022 08:22:16 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id a22so126828qkk.7;
+        Wed, 05 Oct 2022 08:22:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=h5EgGPVm4WtQrmT0wcNwLb1/9YJNLS2w6d18NQrshN4=;
-        b=Glisjpnpe3dPY7MHp5FCXql8LccUDHj3Veh+DW9sUePpFLbu137mPJOWeRxIX2QJxo
-         mj8iTwR3Ik6xBAPS+OH99ZAMTm22lUCORAYpgG4TzznRiU1VDXonJr2kvx3e+kgLJ6Wy
-         /lM+Q2J/yz3EuJmag46RhptN6PM4UnRZNfLTJt+IVhsKGIweHAStBeIKBSFKJ1t2ZV9/
-         JSoaJUT5/h4FMBMd33CA8uE6ax5GyJgIEKR492ngLsNxBztFCaEaIN256aalIkAHqyrK
-         nvdfbGL7fN2ZmJQuwzMlVk1qARQyNzMR5PhQXRPa9XIxr2nOiCFZYFTuzu2P0K/g/mpQ
-         49UA==
-X-Gm-Message-State: ACrzQf27vDRLbUYdGR6cn4IxKMQsyHE+Uvk5zPnSOy63HmLihCdPKefl
-        3Q3B9zMvsYRSfygfqWJY66MJmQ==
-X-Google-Smtp-Source: AMsMyM7WWzwvjZBfktTFkPyEkixiLQOffQtJBWZkxHjBUglRPsXdwgi1Zyj5wpjvUJwTQ98hIP06Gw==
-X-Received: by 2002:a05:6512:487:b0:4a2:2977:3a83 with SMTP id v7-20020a056512048700b004a229773a83mr88827lfq.88.1664981472385;
-        Wed, 05 Oct 2022 07:51:12 -0700 (PDT)
-Received: from [192.168.0.21] (78-11-189-27.static.ip.netia.com.pl. [78.11.189.27])
-        by smtp.gmail.com with ESMTPSA id q3-20020a0565123a8300b00499fe9ce5f2sm2369292lfu.175.2022.10.05.07.51.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 07:51:11 -0700 (PDT)
-Message-ID: <c04cc64a-9fea-db34-b9ee-486b54fbc223@linaro.org>
-Date:   Wed, 5 Oct 2022 16:51:11 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4o7jKpdTpHVRL3i/qWOAEJ2ycxxPaVJnIcSfhAtoNts=;
+        b=Jvym8lPCEFXoSUX5jhnBC9WJ6nnFlC9FAi8Kj1OirgekLzE4UDm5mWe2s9gCDEx7UQ
+         eFx5qsfcZQMzLuNpim9XBVpL+n+hkkeap9tfy6bzxMrqQ1gLHtUVxqSOsBagXwS8wkba
+         Nlj6Q8Rq3VzDEk6TDyGkGDqqF8QB6MB1PLtzBTJY0sG/L86z5LZlV4VVq47oWTOLcpQF
+         aVW5Ws2m0jcwJ6Uvxtr9nSzkYtojbPPCcxsNExVQzZL54x2MlPXq1YEI6YXeHWQiFC24
+         z1RrE42jpLi/ebN1/9JiPnhYvAxDjvA/f2hV8b4BXiZ0EnPy1uxQq5C/wWg3MIxUkeWX
+         xkfg==
+X-Gm-Message-State: ACrzQf3FI4oLK8IQ7VAvtkJbGw7hNxNjxG22QXqcJb0tTB63Vgw3VJ3V
+        xfwODYbIBFr18OzPZENwl5N/H4ODjGmLFj6KN8HTz8Pm
+X-Google-Smtp-Source: AMsMyM4lVrmmPHUgbTcRn5yNIAERw0LA41Ey/SY40hUUWlNdEIE1rqefEUi8a+/9PHFAiaiXmVm8qyHaAZcPXyg/u7U=
+X-Received: by 2002:a05:620a:290d:b0:6b6:1a92:d88a with SMTP id
+ m13-20020a05620a290d00b006b61a92d88amr110277qkp.58.1664983335468; Wed, 05 Oct
+ 2022 08:22:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: Add Richtek RT9467
- battery charger
-Content-Language: en-US
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, sre@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <cover.1664997251.git.chiaen_wu@richtek.com>
- <0a4a6dfcec35160bb89a932ff73bc2cc0bbd6555.1664997251.git.chiaen_wu@richtek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0a4a6dfcec35160bb89a932ff73bc2cc0bbd6555.1664997251.git.chiaen_wu@richtek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CAJvTdKn8jCWF3f3_EnBCaOAgQf9UgPCCG4oAysva5U2JF=C_4Q@mail.gmail.com>
+In-Reply-To: <CAJvTdKn8jCWF3f3_EnBCaOAgQf9UgPCCG4oAysva5U2JF=C_4Q@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 5 Oct 2022 17:22:04 +0200
+Message-ID: <CAJZ5v0hKL+qEL=tFAbLatVf0tASaVjkw7NyNL=b-hEC0JyPYjQ@mail.gmail.com>
+Subject: Re: [GIT PULL] turbostat 2022.10.04
+To:     Len Brown <lenb@kernel.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05/10/2022 13:37, ChiaEn Wu wrote:
-> From: ChiaEn Wu <chiaen_wu@richtek.com>
-> 
-> Add bindings for the Richtek RT9467 battery charger.
-> 
-> Co-developed-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
+On Tue, Oct 4, 2022 at 11:08 PM Len Brown <lenb@kernel.org> wrote:
+>
+> Hi Rafael,
+>
+> Please pull these turbostat patches to update Linux to turbostat 2022.10.04.
+>
+> Add support for two new platforms, and two bug fixes on existing platforms.
+>
+> thanks!
+> Len Brown, Intel Open Source Technology Center
+>
+> The following changes since commit 4fe89d07dcc2804c8b562f6c7896a45643d34b2f:
+>
+>   Linux 6.0 (2022-10-02 14:09:07 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git turbostat
+>
+> for you to fetch changes up to 9992dd777123b052e106eb5633de47148fef502e:
+>
+>   tools/power turbostat: version 2022.10.04 (2022-10-04 23:02:03 +0200)
+>
+> ----------------------------------------------------------------
+> Artem Bityutskiy (1):
+>       tools/power turbostat: Do not dump TRL if turbo is not supported
+>
+> Len Brown (1):
+>       tools/power turbostat: version 2022.10.04
+>
+> Zhang Rui (3):
+>       tools/power turbostat: Add support for RPL-S
+>       tools/power turbostat: Add support for MeteorLake platforms
+>       tools/power turbostat: Use standard Energy Unit for SPR Dram RAPL domain
+>
+>  tools/power/x86/turbostat/turbostat.c | 22 +++++++++++++++-------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+Pulled and added to my linux-next branch, thanks!
