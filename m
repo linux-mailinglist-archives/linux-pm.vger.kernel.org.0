@@ -2,113 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021EB5F53DC
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 13:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FA95F549F
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Oct 2022 14:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiJELoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 5 Oct 2022 07:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
+        id S229727AbiJEMhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 5 Oct 2022 08:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230456AbiJELnl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 07:43:41 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C497A515;
-        Wed,  5 Oct 2022 04:41:49 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id z20so8634033plb.10;
-        Wed, 05 Oct 2022 04:41:49 -0700 (PDT)
+        with ESMTP id S229567AbiJEMhV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 5 Oct 2022 08:37:21 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5B8757899
+        for <linux-pm@vger.kernel.org>; Wed,  5 Oct 2022 05:37:18 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id b7so18145657wrq.9
+        for <linux-pm@vger.kernel.org>; Wed, 05 Oct 2022 05:37:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=JailJRGGT+MU7QQfQRg334ru/W+CJ+3fnThCLH1Q1Is=;
-        b=etWf/YwTE/onzXAMW9jr0SPmueHelVb0TIiTxVJ0R9sEHP89vUF+Pan12qnO/2Cr0e
-         v3rdYxnXftQzx1D5AcwV22Tf7RuaydIANjTgg/x5sdyn2dsTaR3ZbhRFWwZDtt1TnKK5
-         p3+T7sh3YMzaTZPS8yMpYOOr0DxXi9/fsidxBsTT/yPS69hC5ilUDKR9DiH6oFVmdLen
-         6U7n07Td3xFHctcK1ZZC9V6VYz1lAyMkUskKh8swlLeEOrQfayQNY+cPUSuZUNJKs/E5
-         5jlNKSuKARSqF5hSM6mDgZX2vtuKj34rQ8uqz7WdmbDjGy7wcXmk3V/0PXBSPSh/DnEI
-         UGhw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KTX8CzjgT3X/t2r5vWkkyRPC+B6Zpur5yx6z33EALmI=;
+        b=dzsfAxgdAGlUvKVUY6p3V8qGo313WeGugAOXWZSt+1fBP2srisSYreLvsC4Jt8R7vI
+         6CCNZ2KSUzFipf2TUazEUfYo06vjjv91Xy+qnqqccv6JnCX5hNP31NA70WmGp0Yy32QP
+         mExqi6cWI3IjFT/cgE6UfcZSCVhbtLcSJWWwIhNYbOhV6a1O9pc8mtgsF6so8OABSDbC
+         Zz/V8dDJJNEFO8LSd3y5bD7HlZgjLbp0vYE7xf1uhZtqnOrcZuofQtpcfMuSMNNg7ivk
+         kfkIb4D7afc9KH4Wn9yfjJvGbhkNxbmLo2OKigcWEZvHo4LzCO3D1KBst2Iy2FRzztXS
+         ++rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=JailJRGGT+MU7QQfQRg334ru/W+CJ+3fnThCLH1Q1Is=;
-        b=N9tGy66wrxB5o3DlwtaRYsn7a2/yyeWJlEy2W1gqGvFmtlWFTttb7t6vQXeHGwzjCq
-         oQUfqnLzyeqY7bZ8SDmJkFZyBRiihKh7zr9iOGKdhVYLsQFU4WHqJOrWp93C0mXTnoLN
-         KhxK9+WZqaqlIgiWdCo3RRuDaH3i82dIrXE+HizASzCeUIFOEP9iOaPuD+wFIvb59ldP
-         FNY6nfy5miBcSMaVKFaiX3spP/ZtftpB2A4wJU0/ZnMYxtZ5b/A11x85Eo18AHlGHKnM
-         cNiz2t0r7cvEjUZw3zxvs/01TQReTm0p2sL0wOnNTie2FZNRiktbZ79uFq6/D5K47D7D
-         laFQ==
-X-Gm-Message-State: ACrzQf1hya9FoFztNiHVA2glftJZaL5O4pcvgx2En1hjruuZ7Tp+TguR
-        /kmhVEKTbdZPI+DxeRRzS9k=
-X-Google-Smtp-Source: AMsMyM69iX/pF2NILOzu2RVcP30i/TQD09jn6dRPAWqxLyf3trFbs0Pj4MNRLj1t4iwMfQxnO4zIWA==
-X-Received: by 2002:a17:902:b18e:b0:178:3484:f45e with SMTP id s14-20020a170902b18e00b001783484f45emr31504910plr.166.1664970017218;
-        Wed, 05 Oct 2022 04:40:17 -0700 (PDT)
-Received: from RD-3580-24288.rt.l (42-73-126-108.emome-ip.hinet.net. [42.73.126.108])
-        by smtp.gmail.com with ESMTPSA id v9-20020a17090a4ec900b00200b2894648sm979202pjl.52.2022.10.05.04.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Oct 2022 04:40:16 -0700 (PDT)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v2 3/3] Documentation: power: rt9467: Document exported sysfs entries
-Date:   Wed,  5 Oct 2022 19:37:24 +0800
-Message-Id: <40676e2af49dc8d9bdd9c5f80aef3ad0f5b731db.1664997251.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1664997251.git.chiaen_wu@richtek.com>
-References: <cover.1664997251.git.chiaen_wu@richtek.com>
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KTX8CzjgT3X/t2r5vWkkyRPC+B6Zpur5yx6z33EALmI=;
+        b=XP9/dwx17SeEbqxslKIe8NOQivYx8ve62CbuYmfVx8A8rqtREfGS6WU6sHJh2rsiOe
+         Dg7HmbBWEEryKd1eFuqD7mFc64D5ia2xBnrDrP+b+CU7WpeYNwlUrzrQkBMryHGv8DPd
+         9WgmR7rF8K2DOwGE4x6L1fk55OPskyNguKzgmeKFzh1rkl0uUjfHXaH5t/E3S5SmY0F6
+         Ycmusl/u5WDyHNUgGK0YEuTJ9pc+bhCCbqEw+Ij4JCZtythLs0IG4L5nnB7gtkfxuYpY
+         rYrR5HDivMeM+Nc3J4UEOwdsZ6e6ORSiQSzyxSxuEMEYCh1A/CZyTpN6lA+Nj0RctYD8
+         Q0pA==
+X-Gm-Message-State: ACrzQf2yfcUs/wmfZUW5ueUE4mphz8l9wmphzPcKmhQS0ZhCEiBF+a7A
+        d1Q4sTKugjkO3Skp3atd614AMA==
+X-Google-Smtp-Source: AMsMyM6Jlg5EJX8UPumAZ9rKA8q/8S24FJ3Uw0SxmI6WuaZGcUfDRQsK4mhRcGoSkeMPVSiGBC98sw==
+X-Received: by 2002:a5d:5983:0:b0:22c:b9a0:e874 with SMTP id n3-20020a5d5983000000b0022cb9a0e874mr19860166wri.306.1664973437294;
+        Wed, 05 Oct 2022 05:37:17 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:ffcf:b5a4:bbee:42a5? ([2a05:6e02:1041:c10:ffcf:b5a4:bbee:42a5])
+        by smtp.googlemail.com with ESMTPSA id f18-20020a05600c4e9200b003b492b30822sm2031325wmq.2.2022.10.05.05.37.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Oct 2022 05:37:16 -0700 (PDT)
+Message-ID: <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
+Date:   Wed, 5 Oct 2022 14:37:14 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v8 00/29] Rework the trip points creation
+Content-Language: en-US
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, rafael@kernel.org
+References: <CGME20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb@eucas1p2.samsung.com>
+ <20221003092602.1323944-1-daniel.lezcano@linaro.org>
+ <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
+ <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
+In-Reply-To: <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ChiaEn Wu <chiaen_wu@richtek.com>
 
-Document the settings exported by rt9467 charger driver through sysfs
-entries:
-- sysoff_enable
+Hi Marek,
 
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- Documentation/ABI/testing/sysfs-class-power-rt9467 | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9467
+On 03/10/2022 23:18, Daniel Lezcano wrote:
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9467 b/Documentation/ABI/testing/sysfs-class-power-rt9467
-new file mode 100644
-index 0000000..dd0b962
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9467
-@@ -0,0 +1,19 @@
-+What:		/sys/class/power_supply/rt9467-*/sysoff_enable
-+Date:		Oct 2022
-+KernelVersion:	6.0
-+Contact:	ChiaEn Wu <chiaen_wu@richtek.com>
-+Description:
-+		This entry allows enabling the sysoff mode of rt9467 charger
-+		devices.
-+		If enabled and the input is removed, the internal battery FET
-+		is turned off to reduce the leakage from the BAT pin. See
-+		device datasheet for details. It's commonly used when the
-+		product enter shipping stage. After entering shipping mode,
-+		only 'VBUS' or 'Power key" pressed can make it leave this mode.
-+		'Disable' also can help to leave it, but it's more like to
-+		abort the action before the device really enter shipping mode.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
+[ ... ]
+
+>> I've tested this v8 patchset after fixing the issue with Exynos TMU with
+>> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/ 
+>>
+>> patch and I got the following lockdep warning on all Exynos-based boards:
+>>
+>>
+>> ======================================================
+>> WARNING: possible circular locking dependency detected
+>> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
+>> ------------------------------------------------------
+>> swapper/0/1 is trying to acquire lock:
+>> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
+>>
+>> but task is already holding lock:
+>> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
+>> thermal_zone_device_update.part.0+0x3c/0x528
+>>
+>> which lock already depends on the new lock.
+> 
+> I'm wondering if the problem is not already there and related to 
+> data->lock ...
+> 
+> Doesn't the thermal zone lock already prevent racy access to the data 
+> structure?
+> 
+> Another question: if the sensor clock is disabled after reading it, how 
+> does the hardware update the temperature and detect the programed 
+> threshold is crossed?
+
+just a gentle ping, as the fix will depend on your answer ;)
+
+Thanks
+
+   -- D.
+
+[ ... ]
+
+
 -- 
-2.7.4
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
