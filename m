@@ -2,348 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B18645F6222
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Oct 2022 09:55:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5165F6BA5
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Oct 2022 18:26:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJFHzV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Oct 2022 03:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38380 "EHLO
+        id S231733AbiJFQ0C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Oct 2022 12:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJFHzU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Oct 2022 03:55:20 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7746927154;
-        Thu,  6 Oct 2022 00:55:18 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso2301465wma.1;
-        Thu, 06 Oct 2022 00:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=t0gHcHj95iQot3u9dJoUqW0N9thU/AXtlSvNItR2GnU=;
-        b=Xg5EbkkoECjKyMhve2o8QWXRInBF/7eHGahoOil5v2VGd+U3ER/Fg1rafVO4QYY6Ok
-         0/FmT8reVmLkwrs8oNBUfJ8ZP96i5FcqfuJxeTmOvTAquWVKG8iwScJ4V8aEmbz/rOJG
-         i/dPpYO40FEmNV16LT4AzPN4EJlpB02k5it1WWTLGxE4kVllqXu2x6BfSPBiQ5qwjUkc
-         /GPmGeBIxHeMzNx/A8aEtFjQmTw+blvwly5o+9+tN0KTg6fwMgfhF7Y2GjEgcD03hn28
-         MBMupp6wO+TbmhcOriP2kMpH0XfTtrPA5SfkUYE19cSVgVIgAAOEheYdIMx0teDxc3q1
-         9ggA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t0gHcHj95iQot3u9dJoUqW0N9thU/AXtlSvNItR2GnU=;
-        b=uBZ1NnCFdWNezo6RMMeXAJj+OvPujWeHYFWrnVRTuGI+FK1176m6ncHM5lZLqGc1j4
-         pdmb15uoh9Zn6rx5ATmynxnhv0QoynwuDQDoALtz1UhAXFJ75OOEcejL6KoX1g+z7JS9
-         dSFmz12YAicC1yDXup6Ta0BlrgWRl0voR7m72HW12UJ3rAOR8NyoeTf4hmUIHuH6gdHF
-         TNgM2pCw5wqpInHPZcyxvMXzpyoNiCAGPJ8Om0K5NeWFJ+DXR0mInK6xpckCEF+8zyip
-         zLy+8S66X0Zp6ys/hV81T4d6+z3hhLZnCSIrxiPMNUQDJl1nWhMevBneEl3feivRaeIB
-         XKjQ==
-X-Gm-Message-State: ACrzQf2otsMByGvI/Wi3+aCiqx96mVvFm60dVIAyuHfriKSGxKXpRNgy
-        LIeew8oPFYHD7ylN6drnIy4=
-X-Google-Smtp-Source: AMsMyM4yZuATsxI76joOkdOGKIW2YefUnFNV6FRsb/lH7FBatZ7Cl0qGBSX/NLEem/el3jbtQ2ZSUQ==
-X-Received: by 2002:a05:600c:4f55:b0:3b4:b687:a7b7 with SMTP id m21-20020a05600c4f5500b003b4b687a7b7mr5783994wmq.185.1665042916799;
-        Thu, 06 Oct 2022 00:55:16 -0700 (PDT)
-Received: from krava ([193.85.244.190])
-        by smtp.gmail.com with ESMTPSA id x16-20020adfec10000000b0022a2dbc80fdsm17139125wrn.10.2022.10.06.00.55.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Oct 2022 00:55:16 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 6 Oct 2022 09:55:13 +0200
-To:     kernel test robot <lkp@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        loongarch@lists.linux.dev, linux-wireless@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-ext4@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, iommu@lists.linux.dev,
-        dri-devel@lists.freedesktop.org, bpf@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [linux-next:master] BUILD REGRESSION
- 67ae4f7434cee86ee318d46fb10b8a9840ad2e81
-Message-ID: <Yz6J4eMvHOnK+CXb@krava>
-References: <633deff4.q8bW3fyM79Uz0A/F%lkp@intel.com>
+        with ESMTP id S231629AbiJFQZp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Oct 2022 12:25:45 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FEBCE9B8
+        for <linux-pm@vger.kernel.org>; Thu,  6 Oct 2022 09:25:40 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20221006162537euoutp01f5c5d3a7379f9e7015d47a4efd418386~bh49-jKh32639626396euoutp01z
+        for <linux-pm@vger.kernel.org>; Thu,  6 Oct 2022 16:25:37 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20221006162537euoutp01f5c5d3a7379f9e7015d47a4efd418386~bh49-jKh32639626396euoutp01z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1665073537;
+        bh=ImkWCxrft+8A0CCbLgq7IX5h2Sh9xPmozUhnHMtY+jk=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=FJsUUFJT964geyLNAQ2P0Px4X557LDNHc8WhBU1/+CLRMIKX/Zt5DzAEq804L/xdO
+         ehDtoI2obNoZY2zBrU3tjgGQej1nyKA44zv/rxflcecWv6qBxDvcpslWo365SKC0KU
+         b0U9NvmIdQ764FGqwPWYGjaNbR4Sps3tRmqRocds=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20221006162537eucas1p2234855e46d24d17733a2167b8fe40ed3~bh49oF1Rw3151231512eucas1p2w;
+        Thu,  6 Oct 2022 16:25:37 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id D2.29.07817.1810F336; Thu,  6
+        Oct 2022 17:25:37 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221006162536eucas1p24cebd1ee749c5d96d5d48ab9ede40380~bh49QG9pB1597115971eucas1p2q;
+        Thu,  6 Oct 2022 16:25:36 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221006162536eusmtrp1c203c28b20c277cc7ea5ea0a685cbe03~bh49PEL3b0054400544eusmtrp1j;
+        Thu,  6 Oct 2022 16:25:36 +0000 (GMT)
+X-AuditID: cbfec7f4-893ff70000011e89-48-633f01811286
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id DD.C5.07473.0810F336; Thu,  6
+        Oct 2022 17:25:36 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221006162535eusmtip2e34d1a19e873ba728dcbb60ee3e998b8~bh48QHMJs0707807078eusmtip2i;
+        Thu,  6 Oct 2022 16:25:35 +0000 (GMT)
+Message-ID: <c7772dd5-f081-426a-5443-5ebf32b7c7c0@samsung.com>
+Date:   Thu, 6 Oct 2022 18:25:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <633deff4.q8bW3fyM79Uz0A/F%lkp@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.3.1
+Subject: Re: [PATCH v8 00/29] Rework the trip points creation
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        rui.zhang@intel.com,
+        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>, netdev@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-omap@vger.kernel.org, rafael@kernel.org
+Content-Language: en-US
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <97201878-3bb8-eac5-7fac-a690322ac43a@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf1CTdRi/7/u+fPduNXyZCN9D7Mf0yrD4ddl9LxXxynov86jgouu6co0X
+        9BqgG4TVXYALguEUEYQmwg6ljS0F1iA2mdhSCIw1tCMEPOikFBIWbJcEiLm9/eC/z+d5Ps/z
+        eZ7nHpqUHIIR9L6sHE6ZJVNIoYhq7/7L9Uwh2C6P1bmF2HVzkcLjde0Qn9VepvBd688ErvOu
+        w6YqG4Udv7cJsOXmYBA+1tUvwJqFJhJfs9dCfPLMUQp7tZcAbpucIfCxkRYBrvnxAoFLfTqI
+        u/Vh2Nx5m8SnfFUknvjlCMSOogEyMYzVjfVD1jgXw9p0NwTs6c5JgrWYSiE7OtgJ2a/P5LOt
+        Mx0Ee/ReLHvEagKs1/LIaw+9Ldqaxin2fcgpYxL2iPbeP68m989EHhwvOwwLgCNcA2gaMc+i
+        6dZNGiCiJYwRoBumOsATH0BDLccpnngBGnDZBRogDFScvugO4hMGgLxz5wmezAJkHW+g/Cox
+        k4A+05oJP6aYDaivdUTAx0NQ7xcTAc0aJg31ehYDeDWzDXnmSwOaUCYaFXqKA01JphKi74yO
+        IH+CZMLR8ER9oClk4pBmWgP9WPjArPn6AMVrHkXqtpOkvxgxU0JUfnuO4ud+ERXpByCPV6Op
+        Hus/+0SiK8cPU3zB5wDpF8cInpQDVHBrGPCqLWjUtQD9NyOZp1CzPYY/3w40tpzEw2A0NB3C
+        zxCMKtqrST4sRiXFEr7HE0jXc+4/12/dV8lyINWtOItuxZa6Fdvo/rfVA8oEwrlcVWYGp4rP
+        4vKiVbJMVW5WRrQ8O9MCHrzpleUeXwcwTM1GOwFBAydANCkNFdtsCXKJOE320cecMvs9Za6C
+        UznBWpqShothTZRcwmTIcrgPOG4/p/w3S9DCiAJi7bC8ceQn90v2N6qTrSfEqelrfisqK3Gu
+        esua7v5q6f20ZkVx2LZ4l6u2OiTfLB5UGw7VXo0xpypOLGyuMXhi6N1Nqet3dPcx2vFsUYqk
+        Cti3JNbl/mDcWFHWC2/5ltR5Q1ZjnzyuvrL2XUh9medoSG8ZaegQf39d8efTm7oqypPhRmqp
+        8Vf4apDi3LX8gy+f3dm1cyG22NU/z6x6/Y8Dl3Ief/OVie2z+hlt2eI3ScbH5h3a59kXdjcG
+        e96xRM6uT3TdiYrfrNmV9KmzUG+LSLnYX+k23FmXvlX/8GBvxbJ6qn2PY/JuU+gnIl9KzYUn
+        6+3PjSanyEwl95rMB+5fbjDsklKqvbK4KFKpkv0Njl+bNRUEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprKKsWRmVeSWpSXmKPExsVy+t/xe7oNjPbJBrdv6lqce/ybxeLBvG1s
+        Fmt7j7JYfN9yncli3mdZi1VTd7JY7H29ld1i0+NrrBYT959lt+j6tZLZ4vKuOWwWs5f0s1h8
+        7j3CaLH15Tsmi4m3N7BbzDi/j8mi88ssNotjC8QsVu95wWwx98tUZosnD/vYLPa2XmR2EPOY
+        df8sm8eKT/oeO2fdZfdYvOclk8emVZ1sHneu7WHz2Lyk3mPjux1MHv1/DTz6tqxi9Pi8SS6A
+        O0rPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/OJiU1J7MstUjfLkEv4//u
+        ZuaCdzIVD7p72BoY94p3MXJySAiYSCw+cIG1i5GLQ0hgKaPEmv6DTBAJGYmT0xpYIWxhiT/X
+        utggit4zStw5Mw+siFfATqKldzWYzSKgInFq4212iLigxMmZT1hAbFGBFIl3E++ygdjCArYS
+        7390gtWICOhJNL5vA+tlFpjGJvH5czzEglnMEg2td1kgEuISt57MBytiEzCU6HrbBTaIE2jx
+        +psXoWrMJLq2djFC2PISzVtnM09gFJqF5I5ZSEbNQtIyC0nLAkaWVYwiqaXFuem5xYZ6xYm5
+        xaV56XrJ+bmbGIHpY9uxn5t3MM579VHvECMTB+MhRgkOZiUR3p077ZKFeFMSK6tSi/Lji0pz
+        UosPMZoCA2Mis5Rocj4wgeWVxBuaGZgamphZGphamhkrifN6FnQkCgmkJ5akZqemFqQWwfQx
+        cXBKNTDNl9No7PN+ePPoZh7r+2q9b3WUzFn/BWvr5tnqv+5g+GR6pYstLqvz9d7sEve3Ahvn
+        PFpsJ/gkTObzwzWJutcvJacIld1jDyxieM148+lhuXU+EzdeyFh+7PTF2zamComfVQp7Tqf2
+        LtgscuP1nkkPeaXFGpx7jrR4rfW+Krncdk5jkvP2U5fOrgtK/j/zYdWyGt+Axvn6b/pEjrHG
+        vLFk7LPUKTVZ45naXK/btmGHxfRNolVNEoHzHpuIdXy4bs3PaTZxW7A006b7H6S+nnlx5/9Z
+        kQclkW6zri6OvaFmF3TmpvLnxrQ7h99O/ThzapbzSsN7nPWue2fcLvc49/38yV0JLcJ/F1tZ
+        fv4vNOGfEktxRqKhFnNRcSIAo1FZ2agDAAA=
+X-CMS-MailID: 20221006162536eucas1p24cebd1ee749c5d96d5d48ab9ede40380
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb
+References: <CGME20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb@eucas1p2.samsung.com>
+        <20221003092602.1323944-1-daniel.lezcano@linaro.org>
+        <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
+        <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
+        <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
+        <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
+        <97201878-3bb8-eac5-7fac-a690322ac43a@linaro.org>
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 06, 2022 at 04:58:28AM +0800, kernel test robot wrote:
-> tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> branch HEAD: 67ae4f7434cee86ee318d46fb10b8a9840ad2e81  Add linux-next specific files for 20221005
-> 
-> Error/Warning reports:
-> 
-> https://lore.kernel.org/linux-mm/202209060229.dVuyxjBv-lkp@intel.com
-> https://lore.kernel.org/llvm/202209220019.Yr2VuXhg-lkp@intel.com
-> https://lore.kernel.org/llvm/202210041553.k9dc1Joc-lkp@intel.com
-> https://lore.kernel.org/llvm/202210060148.UXBijOcS-lkp@intel.com
-> 
-> Error/Warning: (recently discovered and may have been fixed)
-> 
-> ERROR: modpost: "devm_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-> ERROR: modpost: "devm_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-> ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-> ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-> ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-> ERROR: modpost: "ioremap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-> ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-> ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-> ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-> arch/arm64/kernel/alternative.c:199:6: warning: no previous prototype for 'apply_alternatives_vdso' [-Wmissing-prototypes]
-> arch/arm64/kernel/alternative.c:295:14: warning: no previous prototype for 'alt_cb_patch_nops' [-Wmissing-prototypes]
-> arch/loongarch/kernel/traps.c:250 die() warn: variable dereferenced before check 'regs' (see line 244)
-> arch/loongarch/mm/init.c:166:24: warning: variable 'new' set but not used [-Wunused-but-set-variable]
-> drivers/gpu/drm/amd/amdgpu/../display/dc/virtual/virtual_link_hwss.c:40:6: warning: no previous prototype for 'virtual_disable_link_output' [-Wmissing-prototypes]
-> drivers/gpu/drm/bridge/ite-it6505.c:2712 it6505_extcon_work() warn: pm_runtime_get_sync() also returns 1 on success
-> drivers/platform/loongarch/loongson-laptop.c:377 loongson_laptop_get_brightness() warn: impossible condition '(level < 0) => (0-255 < 0)'
-> drivers/vfio/pci/vfio_pci_core.c:775 vfio_pci_ioctl_get_region_info() warn: potential spectre issue 'pdev->resource' [w]
-> drivers/vfio/pci/vfio_pci_core.c:855 vfio_pci_ioctl_get_region_info() warn: potential spectre issue 'vdev->region' [r]
-> fs/ext4/super.c:1744:19: warning: 'deprecated_msg' defined but not used [-Wunused-const-variable=]
-> include/linux/compiler_types.h:357:45: error: call to '__compiletime_assert_417' declared with attribute error: FIELD_GET: mask is not constant
-> kernel/bpf/memalloc.c:500 bpf_mem_alloc_destroy() error: potentially dereferencing uninitialized 'c'.
+Hi Daniel,
 
-looks like false warning in here, c should always have value,
-not sure how to disable it in here
+On 06.10.2022 08:55, Daniel Lezcano wrote:
+>
+> On 05/10/2022 15:05, Marek Szyprowski wrote:
+>>
+>> On 05.10.2022 14:37, Daniel Lezcano wrote:
+>>>
+>>> On 03/10/2022 23:18, Daniel Lezcano wrote:
+>>>
+>>> [ ... ]
+>>>
+>>>>> I've tested this v8 patchset after fixing the issue with Exynos TMU
+>>>>> with
+>>>>> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/ 
+>>>>>
+>>>>>
+>>>>> patch and I got the following lockdep warning on all Exynos-based
+>>>>> boards:
+>>>>>
+>>>>>
+>>>>> ======================================================
+>>>>> WARNING: possible circular locking dependency detected
+>>>>> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
+>>>>> ------------------------------------------------------
+>>>>> swapper/0/1 is trying to acquire lock:
+>>>>> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
+>>>>>
+>>>>> but task is already holding lock:
+>>>>> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
+>>>>> thermal_zone_device_update.part.0+0x3c/0x528
+>>>>>
+>>>>> which lock already depends on the new lock.
+>>>>
+>>>> I'm wondering if the problem is not already there and related to
+>>>> data->lock ...
+>>>>
+>>>> Doesn't the thermal zone lock already prevent racy access to the data
+>>>> structure?
+>>>>
+>>>> Another question: if the sensor clock is disabled after reading it,
+>>>> how does the hardware update the temperature and detect the programed
+>>>> threshold is crossed?
+>>>
+>>> just a gentle ping, as the fix will depend on your answer ;)
+>>>
+>> Sorry, I've been busy with other stuff. I thought I will fix this once I
+>> find a bit of spare time.
+>
+> Ok, that is great if you can find time to fix it up because I've other 
+> drivers to convert to the generic thermal trips.
+>
+>
+>> IMHO the clock management is a bit over-engineered, as there is little
+>> (if any) benefit from such fine grade clock management. That clock is
+>> needed only for the AHB related part of the TMU (reading/writing the
+>> registers). The IRQ generation and temperature measurement is clocked
+>> from so called 'sclk' (special clock).
+>>
+>> I also briefly looked at the code and the internal lock doesn't look to
+>> be really necessary assuming that the thermal core already serializes
+>> all the calls.
+>
+> I looked at the code and I think the driver can be simplified (fixed?) 
+> even more.
+>
+> IIUC, the sensor has multiple trip point interrupts, so if the device 
+> tree is describing more trip points than the sensor supports, there is 
+> a warning and the number of trip point is capped.
+>
+> IMO that can be simplified by using two trip point interrupt because 
+> the thermal_zone_device_update() will call the set_trips callback with 
+> the new boundaries. IOW, the thermal framework sets a new trip point 
+> interrupt when one is crossed.
+>
+> That should result in the simplification of the tmu_control as well as 
+> the tmu_probe function. As well as removing the limitation of the 
+> number of trip points.
+>
+> In order to have that correctly working, the 'set_trips' ops must be 
+> used to call the tmu_control callback instead of calling it in tmu_probe.
+>
+> The intialization workflow should be:
+>
+> probe->...
+>  ->thermal_zone_device_register()
+>   ->thermal_zone_device_update()
+>    ->update_trip_points()
+>     ->ops->set_trips()
+>       ->tmu_control()
+>
+> Also, replace the workqueue by a threaded interrupt.
+>
+> Does it make sense?
 
-jirka
+Yes, definitely. Frankly speaking I've never looked into that code, so I 
+was not aware that it needs some cleanup.
 
-> net/mac80211/iface.c:251 ieee80211_can_powered_addr_change() warn: inconsistent returns '&local->mtx'.
-> 
-> Unverified Error/Warning (likely false positive, please contact us if interested):
-> 
-> ERROR: modpost: "__tsan_memcpy" [arch/s390/crypto/ghash_s390.ko] undefined!
-> ERROR: modpost: "__tsan_memcpy" [arch/s390/crypto/sha512_s390.ko] undefined!
-> ERROR: modpost: "__tsan_memcpy" [fs/binfmt_misc.ko] undefined!
-> ERROR: modpost: "__tsan_memcpy" [fs/pstore/ramoops.ko] undefined!
-> ERROR: modpost: "__tsan_memset" [arch/s390/crypto/ghash_s390.ko] undefined!
-> ERROR: modpost: "__tsan_memset" [arch/s390/crypto/sha512_s390.ko] undefined!
-> ERROR: modpost: "__tsan_memset" [fs/autofs/autofs4.ko] undefined!
-> ERROR: modpost: "__tsan_memset" [fs/binfmt_misc.ko] undefined!
-> ERROR: modpost: "__tsan_memset" [fs/cramfs/cramfs.ko] undefined!
-> ERROR: modpost: "__tsan_memset" [fs/pstore/ramoops.ko] undefined!
-> s390x-linux-ld: self.c:(.text+0xf6): undefined reference to `__tsan_memcpy'
-> thread_self.c:(.text+0xe4): undefined reference to `__tsan_memcpy'
-> 
-> Error/Warning ids grouped by kconfigs:
-> 
-> gcc_recent_errors
-> |-- alpha-allyesconfig
-> |   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-virtual-virtual_link_hwss.c:warning:no-previous-prototype-for-virtual_disable_link_output
-> |-- alpha-randconfig-s042-20221002
-> |   |-- drivers-thermal-broadcom-ns-thermal.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-data-got-void-noderef-__iomem-assigned-pvtmon
-> |   |-- drivers-thermal-broadcom-ns-thermal.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-noderef-__iomem-pvtmon-got-void
-> |   |-- drivers-thermal-broadcom-ns-thermal.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-noderef-__iomem-pvtmon-got-void-devdata
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-> |   `-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-> |-- arc-randconfig-s051-20221002
-> |   |-- drivers-gpu-drm-tiny-simpledrm.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-vaddr-got-void-noderef-__iomem-screen_base
-> |   |-- drivers-gpu-drm-vkms-vkms_formats.c:sparse:sparse:cast-to-restricted-__le16
-> |   |-- drivers-gpu-drm-vkms-vkms_formats.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-unsigned-short-usertype-got-restricted-__le16-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-> |   |-- kernel-bpf-hashtab.c:sparse:sparse:cast-removes-address-space-__percpu-of-expression
-> |   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-__percpu-assigned-pptr-got-void
-> |   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-ptr_to_pptr-got-void-noderef-__percpu-assigned-pptr
-> |   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void
-> |   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void-pptr
-> |   `-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-pptr-got-void-noderef-__percpu
-> |-- arc-randconfig-s053-20221002
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-priv1-got-restricted-__le16-addressable-usertype-fc_len
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-int-tag-got-restricted-__le16-addressable-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-argument-(different-base-types)-expected-unsigned-short-usertype-tag-got-restricted-__le16-addressable-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_len-got-unsigned-short-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-assignment-(different-base-types)-expected-restricted-__le16-usertype-fc_tag-got-unsigned-short-usertype
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:incorrect-type-in-initializer-(different-base-types)-expected-int-tag-got-restricted-__le16-usertype-fc_tag
-> |   |-- fs-ext4-fast_commit.c:sparse:sparse:restricted-__le16-degrades-to-integer
-> |   |-- kernel-bpf-hashtab.c:sparse:sparse:cast-removes-address-space-__percpu-of-expression
-> |   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-noderef-__percpu-assigned-pptr-got-void
-> |   |-- kernel-bpf-hashtab.c:sparse:sparse:incorrect-type-in-assignment-(different-address-spaces)-expected-void-ptr_to_pptr-got-void-noderef-__percpu-assigned-pptr
-> |   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void
-> |   |-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-argument-(different-address-spaces)-expected-void-noderef-__percpu-__pdata-got-void-pptr
-> |   `-- kernel-bpf-memalloc.c:sparse:sparse:incorrect-type-in-initializer-(different-address-spaces)-expected-void-pptr-got-void-noderef-__percpu
-> |-- arm64-allyesconfig
-> |   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-alt_cb_patch_nops
-> |   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-apply_alternatives_vdso
-> |-- arm64-randconfig-c023-20221005
-> |   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-alt_cb_patch_nops
-> |   `-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-apply_alternatives_vdso
-> clang_recent_errors
-> |-- arm-randconfig-r016-20221003
-> |   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-virtual-virtual_link_hwss.c:warning:no-previous-prototype-for-function-virtual_disable_link_output
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   `-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |-- arm-randconfig-r033-20221002
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- arm64-buildonly-randconfig-r002-20221003
-> |   |-- arch-arm64-kernel-alternative.c:warning:no-previous-prototype-for-function-apply_alternatives_vdso
-> |   `-- ld.lld:error:assignment-to-symbol-__efistub_kernel_size-does-not-converge
-> |-- hexagon-randconfig-r013-20221002
-> |   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmnewmap
-> |   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmsetvec
-> |   `-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-memset
-> |-- hexagon-randconfig-r025-20221003
-> |   |-- drivers-phy-mediatek-phy-mtk-tphy.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(unsigned-c
-> |   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmnewmap
-> |   |-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-__vmsetvec
-> |   `-- ld.lld:error:vmlinux.a(arch-hexagon-kernel-head.o):(.init.text):relocation-R_HEX_B22_PCREL-out-of-range:is-not-in-references-memset
-> |-- hexagon-randconfig-r031-20221002
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   `-- drivers-phy-mediatek-phy-mtk-tphy.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(unsigned-c
-> |-- hexagon-randconfig-r041-20221003
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- hexagon-randconfig-r045-20221002
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- i386-randconfig-a002-20221003
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- i386-randconfig-a005-20221003
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- i386-randconfig-a006-20221003
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- i386-randconfig-r001-20221003
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- mips-loongson1c_defconfig
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- mips-randconfig-r006-20221002
-> |   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt2701.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-> |   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   `-- fs-ext4-super.c:warning:unused-variable-deprecated_msg
-> |-- powerpc-allyesconfig
-> |   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-virtual-virtual_link_hwss.c:warning:no-previous-prototype-for-function-virtual_disable_link_output
-> |   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt2701.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-> |   |-- drivers-phy-mediatek-phy-mtk-hdmi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:(uns
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8173.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> |   |-- drivers-phy-mediatek-phy-mtk-mipi-dsi-mt8183.c:warning:result-of-comparison-of-constant-with-expression-of-type-typeof-(_Generic((mask_)-char:(unsigned-char)-unsigned-char:(unsigned-char)-signed-char:
-> 
-> elapsed time: 729m
-> 
-> configs tested: 94
-> configs skipped: 3
-> 
-> gcc tested configs:
-> i386                                defconfig
-> arc                                 defconfig
-> x86_64                          rhel-8.3-func
-> s390                             allmodconfig
-> x86_64                    rhel-8.3-kselftests
-> um                             i386_defconfig
-> um                           x86_64_defconfig
-> alpha                               defconfig
-> s390                                defconfig
-> powerpc                           allnoconfig
-> powerpc                          allmodconfig
-> x86_64                           rhel-8.3-syz
-> mips                             allyesconfig
-> s390                             allyesconfig
-> x86_64                         rhel-8.3-kunit
-> x86_64                              defconfig
-> x86_64                           rhel-8.3-kvm
-> arm                            pleb_defconfig
-> alpha                             allnoconfig
-> powerpc                      chrp32_defconfig
-> i386                             allyesconfig
-> arc                          axs101_defconfig
-> x86_64                               rhel-8.3
-> riscv                             allnoconfig
-> arc                    vdk_hs38_smp_defconfig
-> arm                                 defconfig
-> powerpc                 linkstation_defconfig
-> i386                 randconfig-a014-20221003
-> sh                             espt_defconfig
-> sh                               allmodconfig
-> csky                              allnoconfig
-> x86_64                           allyesconfig
-> i386                 randconfig-a011-20221003
-> arc                               allnoconfig
-> arm                           h3600_defconfig
-> x86_64               randconfig-a011-20221003
-> i386                 randconfig-a012-20221003
-> arm64                            allyesconfig
-> s390                       zfcpdump_defconfig
-> sparc64                             defconfig
-> x86_64               randconfig-a015-20221003
-> i386                 randconfig-a013-20221003
-> sh                   sh7770_generic_defconfig
-> m68k                             allmodconfig
-> x86_64               randconfig-a014-20221003
-> arm                              allyesconfig
-> powerpc                       maple_defconfig
-> arc                              allyesconfig
-> sh                             shx3_defconfig
-> ia64                             allmodconfig
-> m68k                            q40_defconfig
-> i386                 randconfig-a015-20221003
-> x86_64               randconfig-a012-20221003
-> arm                       imx_v6_v7_defconfig
-> i386                 randconfig-a016-20221003
-> mips                            ar7_defconfig
-> alpha                            allyesconfig
-> x86_64               randconfig-a013-20221003
-> arm                          gemini_defconfig
-> m68k                                defconfig
-> x86_64               randconfig-a016-20221003
-> m68k                             allyesconfig
-> i386                          randconfig-c001
-> mips                          rb532_defconfig
-> riscv                randconfig-r042-20221003
-> arc                  randconfig-r043-20221003
-> arc                  randconfig-r043-20221002
-> s390                 randconfig-r044-20221003
-> riscv                            allyesconfig
-> 
-> clang tested configs:
-> x86_64               randconfig-a003-20221003
-> x86_64               randconfig-a002-20221003
-> x86_64               randconfig-a001-20221003
-> x86_64               randconfig-a004-20221003
-> x86_64               randconfig-a006-20221003
-> arm                        neponset_defconfig
-> x86_64               randconfig-a005-20221003
-> i386                 randconfig-a003-20221003
-> i386                 randconfig-a002-20221003
-> i386                 randconfig-a001-20221003
-> i386                 randconfig-a004-20221003
-> riscv                          rv32_defconfig
-> i386                 randconfig-a005-20221003
-> hexagon              randconfig-r041-20221003
-> x86_64                        randconfig-k001
-> riscv                randconfig-r042-20221002
-> i386                 randconfig-a006-20221003
-> hexagon              randconfig-r041-20221002
-> s390                 randconfig-r044-20221002
-> mips                     loongson1c_defconfig
-> hexagon              randconfig-r045-20221002
-> powerpc                 mpc8272_ads_defconfig
-> hexagon              randconfig-r045-20221003
-> powerpc                          allyesconfig
-> x86_64                          rhel-8.3-rust
-> 
-> -- 
-> 0-DAY CI Kernel Test Service
-> https://01.org/lkp
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
+
