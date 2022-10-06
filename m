@@ -2,195 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE8DE5F613E
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Oct 2022 08:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2B85F621F
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Oct 2022 09:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJFGzS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 6 Oct 2022 02:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S230346AbiJFHyj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 6 Oct 2022 03:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiJFGzR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Oct 2022 02:55:17 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4D42F3A0
-        for <linux-pm@vger.kernel.org>; Wed,  5 Oct 2022 23:55:14 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id a10so1126283wrm.12
-        for <linux-pm@vger.kernel.org>; Wed, 05 Oct 2022 23:55:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mpnbl0sOHmjZXpRaPHZuxhEh+P6N/msQTLYNVhfBBe8=;
-        b=MiPZCFMrd8ZJnITo2QNV97U1PS/R+5ZaOpCPg1dg0ozuIl6v8QxOhznFxmMRbJFt61
-         +KQ26aFgOClHddDkzpBN5Ti5bjTzZazFn9IOccCqYNGZm83luL0MAi2ZIMoiLBhbdpI9
-         ErI4nhBYVAiDsh8U0oXUCxVcV8bop7IuJT7Ik70JSybZ18r2+2UEeGXI8zLnhalxuyPK
-         D72/xbL0hdoGvzz5uUDTnekoAkjXs/FrL4Ugud+EDDTaZGiQrY2Xuz1ety4QCzOavUyl
-         +n3MfQtsIn5LI92EpTTgt2DO7DNNtKRNghaJz8p+7n59IVXb/QZmDJ0puWLNYB+9gbop
-         agyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpnbl0sOHmjZXpRaPHZuxhEh+P6N/msQTLYNVhfBBe8=;
-        b=JlgX5JrGgMggq08yXmVz2w/81twDFePeyd6Qh6CH/oxJscRQYpa1oo2QdzXg3CHrsp
-         PBTVQVgFwQu4D2i1vNvVdM1oIWhV3qoj0qYkJAGYDh7S5Gf0mVlu4CyLSy+vtpMDO8fI
-         2gk7eeenfb/U5Mxa1/PcVWcgBSiONDcrZnK9ys+ImGoWZi3pG75A+3FghaiWpXUJrFZa
-         gwisziZcVxlceVTJ1usFBYJp2WcVGcwhajDZJnMpv8QtI32GzM/EXe35CZYvOxIcfEp0
-         xv5Ec9EVfWsh5297VKOCzn125GRh9ttfLgpM9n4e4fogR/Z8YrmnDY0VPUPYyOXjmzNH
-         EmqA==
-X-Gm-Message-State: ACrzQf3rTbDYmzWiepi87XDE0HsNR7BlGEBwU25Y1zpYPYM1PIPuxjnT
-        YrO/bTq5sRk9O7Yfn7Q1xu2iaw==
-X-Google-Smtp-Source: AMsMyM4tUv+yoGLPcmLIx0TCLkILd2ZuyZqPgL+k6wTXzf/o8aVrTs7qe5sYTzmE/qACZEBJdXpwZw==
-X-Received: by 2002:a05:6000:806:b0:22a:36df:2663 with SMTP id bt6-20020a056000080600b0022a36df2663mr1873670wrb.423.1665039312765;
-        Wed, 05 Oct 2022 23:55:12 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:86cc:fff3:d44b:9793? ([2a05:6e02:1041:c10:86cc:fff3:d44b:9793])
-        by smtp.googlemail.com with ESMTPSA id a5-20020adfeec5000000b0022e2c38f8basm14459474wrp.14.2022.10.05.23.55.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Oct 2022 23:55:12 -0700 (PDT)
-Message-ID: <97201878-3bb8-eac5-7fac-a690322ac43a@linaro.org>
-Date:   Thu, 6 Oct 2022 08:55:10 +0200
+        with ESMTP id S230263AbiJFHyh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 6 Oct 2022 03:54:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 021B0915D3;
+        Thu,  6 Oct 2022 00:54:23 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 86C271BB2;
+        Thu,  6 Oct 2022 00:54:29 -0700 (PDT)
+Received: from [10.57.35.228] (unknown [10.57.35.228])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A1E4E3F792;
+        Thu,  6 Oct 2022 00:54:21 -0700 (PDT)
+Message-ID: <1094d467-797b-f795-a486-6d2bae1edcd6@arm.com>
+Date:   Thu, 6 Oct 2022 09:54:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v8 00/29] Rework the trip points creation
+Subject: Re: [PATCH 0/2] Save cpuhp dynamic state
 Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rui.zhang@intel.com,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Andy Gross <agross@kernel.org>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org, rafael@kernel.org
-References: <CGME20221003092704eucas1p2875c1f996dfd60a58f06cf986e02e8eb@eucas1p2.samsung.com>
- <20221003092602.1323944-1-daniel.lezcano@linaro.org>
- <8cdd1927-da38-c23e-fa75-384694724b1c@samsung.com>
- <c3258cb2-9a56-d048-5738-1132331a157d@linaro.org>
- <851008bf-145d-224c-87a8-cb6ec1e9addb@linaro.org>
- <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <207c1979-0da2-b05d-fead-6880ad956b90@samsung.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Abhyuday Godhasara <abhyuday.godhasara@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220914162815.1954866-1-pierre.gondois@arm.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <20220914162815.1954866-1-pierre.gondois@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
+Just a ping in case this was forgotten,
 
-Hi Marek,
+Regards,
+Pierre
 
-On 05/10/2022 15:05, Marek Szyprowski wrote:
+On 9/14/22 18:28, Pierre Gondois wrote:
+> Requesting a CPUHP_AP_ONLINE_DYN cpuhp state reserves a state
+> among the range [CPUHP_AP_ONLINE_DYN:CPUHP_AP_ONLINE_DYN_END].
+> The reserved state must be saved in order to remove it later.
 > 
-> On 05.10.2022 14:37, Daniel Lezcano wrote:
->>
->> Hi Marek,
->>
->> On 03/10/2022 23:18, Daniel Lezcano wrote:
->>
->> [ ... ]
->>
->>>> I've tested this v8 patchset after fixing the issue with Exynos TMU
->>>> with
->>>> https://lore.kernel.org/all/20221003132943.1383065-1-daniel.lezcano@linaro.org/
->>>>
->>>> patch and I got the following lockdep warning on all Exynos-based
->>>> boards:
->>>>
->>>>
->>>> ======================================================
->>>> WARNING: possible circular locking dependency detected
->>>> 6.0.0-rc1-00083-ge5c9d117223e #12945 Not tainted
->>>> ------------------------------------------------------
->>>> swapper/0/1 is trying to acquire lock:
->>>> c1ce66b0 (&data->lock#2){+.+.}-{3:3}, at: exynos_get_temp+0x3c/0xc8
->>>>
->>>> but task is already holding lock:
->>>> c2979b94 (&tz->lock){+.+.}-{3:3}, at:
->>>> thermal_zone_device_update.part.0+0x3c/0x528
->>>>
->>>> which lock already depends on the new lock.
->>>
->>> I'm wondering if the problem is not already there and related to
->>> data->lock ...
->>>
->>> Doesn't the thermal zone lock already prevent racy access to the data
->>> structure?
->>>
->>> Another question: if the sensor clock is disabled after reading it,
->>> how does the hardware update the temperature and detect the programed
->>> threshold is crossed?
->>
->> just a gentle ping, as the fix will depend on your answer ;)
->>
-> Sorry, I've been busy with other stuff. I thought I will fix this once I
-> find a bit of spare time.
-
-Ok, that is great if you can find time to fix it up because I've other 
-drivers to convert to the generic thermal trips.
-
-
-> IMHO the clock management is a bit over-engineered, as there is little
-> (if any) benefit from such fine grade clock management. That clock is
-> needed only for the AHB related part of the TMU (reading/writing the
-> registers). The IRQ generation and temperature measurement is clocked
-> from so called 'sclk' (special clock).
+> Cf. __cpuhp_setup_state_cpuslocked() documentation:
+> Return:
+>    On success:
+>      Positive state number if @state is CPUHP_AP_ONLINE_DYN;
+>      0 for all other states
 > 
-> I also briefly looked at the code and the internal lock doesn't look to
-> be really necessary assuming that the thermal core already serializes
-> all the calls.
-
-I looked at the code and I think the driver can be simplified (fixed?) 
-even more.
-
-IIUC, the sensor has multiple trip point interrupts, so if the device 
-tree is describing more trip points than the sensor supports, there is a 
-warning and the number of trip point is capped.
-
-IMO that can be simplified by using two trip point interrupt because the 
-thermal_zone_device_update() will call the set_trips callback with the 
-new boundaries. IOW, the thermal framework sets a new trip point 
-interrupt when one is crossed.
-
-That should result in the simplification of the tmu_control as well as 
-the tmu_probe function. As well as removing the limitation of the number 
-of trip points.
-
-In order to have that correctly working, the 'set_trips' ops must be 
-used to call the tmu_control callback instead of calling it in tmu_probe.
-
-The intialization workflow should be:
-
-probe->...
-  ->thermal_zone_device_register()
-   ->thermal_zone_device_update()
-    ->update_trip_points()
-     ->ops->set_trips()
-       ->tmu_control()
-
-Also, replace the workqueue by a threaded interrupt.
-
-Does it make sense?
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> Indeed, the following:
+>    cpuhp_remove_state(CPUHP_AP_ONLINE_DYN);
+> removes the first dynamic states added to the cpuhp state machine.
+> 
+> Patches were tested as:
+> - powercap/drivers/dtpm: on a Juno-r2, using a late_initcall()
+>    to init and exit the dtpm framework.
+> - driver: soc: xilinx: the patch was only compile tested
+>    due to missing hardware.
+> 
+> Pierre Gondois (2):
+>    driver: soc: xilinx: Save cpuhp dynamic state
+>    powercap/drivers/dtpm: Save cpuhp dynamic state
+> 
+>   drivers/powercap/dtpm_cpu.c             |  7 ++++++-
+>   drivers/soc/xilinx/xlnx_event_manager.c | 12 ++++++++++--
+>   2 files changed, 16 insertions(+), 3 deletions(-)
+> 
