@@ -2,120 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118875F74B8
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Oct 2022 09:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61575F7535
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Oct 2022 10:21:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiJGHbL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Oct 2022 03:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S229780AbiJGIVV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Oct 2022 04:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiJGHbK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Oct 2022 03:31:10 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AD4C0696;
-        Fri,  7 Oct 2022 00:31:10 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id s20so6039399lfi.11;
-        Fri, 07 Oct 2022 00:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=EYSGULqa5xfW659MCGZ1cJazL97U/ExMDYm/HUp34jc=;
-        b=aWEK54yQMnoWsg52sifbjsz+ERvWv8idSbv7d/i7YgBWk3Q0eMeZueLfGWlBbGUB51
-         0Bdfj7vIhEFfak3R/EGLhKguWiPd1BcPW3zQfCncEiv3Xnu071lYO8+AgnlHw6H8ST45
-         GEWcmyJxni4RxaOmx6TN3QlCOCuh5N3/L4VS3Q78L3UGqdJPeqHsuNwzQOO21x2LAswi
-         588I9NAaFl85/HWWRGZeRObyEndpifEcNDNN+7plEINLZyU4b1j9mVkDMJa85Znpo0xO
-         Fx6qwV1JTwwH4K9U3Y9J8XDC5GOaxVFhRE1cohOJhP9wzAB+7+fCLysFlbKzErJKBss5
-         SfsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=EYSGULqa5xfW659MCGZ1cJazL97U/ExMDYm/HUp34jc=;
-        b=FBDAuZhvJl10wPlg5Odr1Fi3jqMZf8c0rtuR67+XBm5J5GR7rWV51AMVrGOaBD608w
-         en3a2ITqhcDzvkO/pdaooDGbys2W1pvFC1pLpwPt8jEpUk4ohRiNLyj+Z6tVU52/6kNT
-         pBpaOG05rnc1khLEXme1+RfzlyMvuQ+uoosaB7BCfpUdz8LoJ1fWPj0a8vGdQxHAtbC8
-         ysxKC4bEK+yzZuk03s5LOmX9sHFmBdbY8Fx8IQCddOS0VdlXdiq14fJo9kxL6NBp1M1t
-         SIyh3yZj1PqOz0DXOiOs3Pd0JH/A/nX3OkeUFDIClM1vp+vMFj3yZmF4HJS/sfnnZPUt
-         tw5w==
-X-Gm-Message-State: ACrzQf1Z9Ws+NldIwA+mGgoUjaq0l4pD4O7cIuTA+imwx+RftY5K9K1/
-        J0vt6p6eGmXzhZTEpFddhuM=
-X-Google-Smtp-Source: AMsMyM7VcZMfaeRok8chUjeQBJg6+kCAAGwiL9obfGOWsOtiYCMpNuM5IaftejwLSI0AqVvsCBEcrA==
-X-Received: by 2002:a05:6512:6c2:b0:4a2:e7c:6164 with SMTP id u2-20020a05651206c200b004a20e7c6164mr1415568lff.329.1665127868220;
-        Fri, 07 Oct 2022 00:31:08 -0700 (PDT)
-Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id x18-20020a056512079200b004917a30c82bsm185611lfr.153.2022.10.07.00.31.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Oct 2022 00:31:07 -0700 (PDT)
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Marcus Folkesson <marcus.folkesson@gmail.com>
-Subject: [PATCH v2] thermal: imx8mm_thermal: wait for a valid measurement
-Date:   Fri,  7 Oct 2022 09:30:57 +0200
-Message-Id: <20221007073057.41803-1-marcus.folkesson@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        with ESMTP id S229459AbiJGIVU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Oct 2022 04:21:20 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9D1ACA32;
+        Fri,  7 Oct 2022 01:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665130879; x=1696666879;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nIFSOQ0AeD8J+eyw5v6soPd9iUsTxrc8o6p2KfkLkDI=;
+  b=SFzG4oYx+n5mggLP7fzD7lStd9HbNB+ARtzRqHiaOd3BnjMs3a0JMdX7
+   RUcCGjp50c6kEiTlSBJvQpNtIhMV65tSEaVDOSgdbE85QN/2QC21lmz9k
+   o8Dm7QRVirLpOpoCUelF8VfdxdFCjRekx+HAPVIlFKn+ZZoPqFCaymNF7
+   Kv55O9o6DYP3Ilxrtz7lAuI3PINQdBTKHUwnVwz8igdsQ2LDPOMIksX51
+   xqKBrTn9AfOnRGAzxzp4gQuIk2FopV8PqCV3YliyKpkmlz50BtWg+Fkql
+   TTDuK3j3pBIA8X7mUGU0pMTLAuhRBVLOt8XNaOtc1wg4/dzA1bLtSOIUk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="305263814"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="305263814"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2022 01:21:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10492"; a="800226070"
+X-IronPort-AV: E=Sophos;i="5.95,166,1661842800"; 
+   d="scan'208";a="800226070"
+Received: from lkp-server01.sh.intel.com (HELO 3c15167049b7) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 07 Oct 2022 01:21:16 -0700
+Received: from kbuild by 3c15167049b7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ogibb-0000vn-2V;
+        Fri, 07 Oct 2022 08:21:15 +0000
+Date:   Fri, 07 Oct 2022 16:20:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ fa158c045ecf464a6b553980e461db469dc0392f
+Message-ID: <633fe141.cfECPPSqPYg7Z/F8%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Check if first measurement is still pending or if temperature is out of
-range.
-Return and try again later if that is the case.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: fa158c045ecf464a6b553980e461db469dc0392f  Merge branch 'acpi-thermal' into linux-next
 
-Fixes: 5eed800a6811 ("thermal: imx8mm: Add support for i.MX8MM thermal monitoring unit")
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
----
+elapsed time: 725m
 
-Notes:
-    v2: Also invalidate if temperature > max (125 degrees C)
+configs tested: 123
+configs skipped: 3
 
- drivers/thermal/imx8mm_thermal.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index af666bd9e8d4..e42bf373cebc 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -62,11 +62,17 @@ static int imx8mm_tmu_get_temp(void *data, int *temp)
- {
- 	struct tmu_sensor *sensor = data;
- 	struct imx8mm_tmu *tmu = sensor->priv;
--	u32 val;
-+	bool ready;
-+	unsigned long val;
-+
-+	val = readl_relaxed(tmu->base + TRITSR);
-+	ready = test_bit(probe_status_offset(1), &val);
-+	if (!ready)
-+		return -EAGAIN;
- 
--	val = readl_relaxed(tmu->base + TRITSR) & TRITSR_TEMP0_VAL_MASK;
-+	val = val & TRITSR_TEMP0_VAL_MASK;
- 	*temp = val * 1000;
--	if (*temp < VER1_TEMP_LOW_LIMIT)
-+	if (*temp < VER1_TEMP_LOW_LIMIT || *temp > VER2_TEMP_HIGH_LIMIT)
- 		return -EAGAIN;
- 
- 	return 0;
+gcc tested configs:
+powerpc                           allnoconfig
+arc                                 defconfig
+um                             i386_defconfig
+s390                             allmodconfig
+um                           x86_64_defconfig
+alpha                               defconfig
+s390                                defconfig
+x86_64                              defconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+x86_64               randconfig-a011-20221003
+s390                             allyesconfig
+mips                             allyesconfig
+x86_64               randconfig-a012-20221003
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+powerpc                          allmodconfig
+x86_64               randconfig-a013-20221003
+x86_64                         rhel-8.3-kunit
+x86_64                           allyesconfig
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a011-20221003
+x86_64               randconfig-a015-20221003
+i386                 randconfig-a012-20221003
+arc                  randconfig-r043-20221006
+x86_64                          rhel-8.3-func
+x86_64               randconfig-a014-20221003
+i386                 randconfig-a013-20221003
+x86_64               randconfig-a016-20221003
+arm                                 defconfig
+i386                 randconfig-a015-20221003
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a016-20221003
+i386                 randconfig-a014-20221003
+i386                             allyesconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+m68k                             allmodconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+ia64                             allmodconfig
+m68k                             allyesconfig
+powerpc                  iss476-smp_defconfig
+sparc                            alldefconfig
+m68k                        stmark2_defconfig
+mips                        bcm47xx_defconfig
+sparc64                             defconfig
+mips                      loongson3_defconfig
+microblaze                          defconfig
+arm64                            alldefconfig
+openrisc                    or1ksim_defconfig
+powerpc                        warp_defconfig
+powerpc                      makalu_defconfig
+csky                             alldefconfig
+arc                      axs103_smp_defconfig
+mips                            gpr_defconfig
+i386                          randconfig-c001
+powerpc                 mpc85xx_cds_defconfig
+powerpc                      tqm8xx_defconfig
+nios2                            alldefconfig
+sh                            migor_defconfig
+powerpc                     tqm8555_defconfig
+powerpc                       eiger_defconfig
+sh                           se7619_defconfig
+m68k                          hp300_defconfig
+arm                        keystone_defconfig
+sh                           se7751_defconfig
+sh                         ap325rxa_defconfig
+mips                          rb532_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+nios2                         3c120_defconfig
+powerpc                  storcenter_defconfig
+powerpc                     mpc83xx_defconfig
+mips                  maltasmvp_eva_defconfig
+mips                         rt305x_defconfig
+xtensa                         virt_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+powerpc                    adder875_defconfig
+powerpc                      pcm030_defconfig
+riscv                            allmodconfig
+mips                       bmips_be_defconfig
+sh                              ul2_defconfig
+arc                          axs101_defconfig
+xtensa                              defconfig
+openrisc                 simple_smp_defconfig
+parisc                           allyesconfig
+arm                      integrator_defconfig
+parisc64                            defconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20221006
+hexagon              randconfig-r041-20221006
+riscv                randconfig-r042-20221006
+s390                 randconfig-r044-20221006
+i386                 randconfig-a003-20221003
+i386                 randconfig-a002-20221003
+i386                 randconfig-a001-20221003
+i386                 randconfig-a004-20221003
+i386                 randconfig-a005-20221003
+i386                 randconfig-a006-20221003
+hexagon              randconfig-r041-20221003
+hexagon              randconfig-r045-20221003
+x86_64               randconfig-a003-20221003
+x86_64               randconfig-a005-20221003
+x86_64               randconfig-a001-20221003
+x86_64               randconfig-a004-20221003
+x86_64               randconfig-a002-20221003
+x86_64               randconfig-a006-20221003
+x86_64                        randconfig-k001
+arm                       cns3420vb_defconfig
+powerpc                   microwatt_defconfig
+mips                malta_qemu_32r6_defconfig
+powerpc                      obs600_defconfig
+arm                          collie_defconfig
+powerpc                 xes_mpc85xx_defconfig
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
