@@ -2,56 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8DD35F7DE5
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Oct 2022 21:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55E795F80BA
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Oct 2022 00:23:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiJGTVQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 7 Oct 2022 15:21:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S229700AbiJGWXR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 7 Oct 2022 18:23:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiJGTUq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Oct 2022 15:20:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E74FBC612;
-        Fri,  7 Oct 2022 12:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C404C61DD4;
-        Fri,  7 Oct 2022 19:20:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 93608C43140;
-        Fri,  7 Oct 2022 19:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665170420;
-        bh=vsNMb9cBpVhrMj7KodWqtRcc1KWG2pf9AhUA+Kdbab4=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=g33S9HO/v4a3rwOakIjg57v8K1dVFzBj08PS1bHEf03RuQOFUZFgWGpn21X/Le0tp
-         s7vSEPnfC5Mz8kQa91uZk+MsGZzBWVFkiqS6iDdet16Cj8sCRxLHnexMbqhA9D4H6a
-         q5j4MFHJSdtxaO44ju7RtE4hpj0G1SqXalc++e4tYx2I2u2oEYPnUmH+yYPEcZIbHU
-         7UCk+RehS8h+ZkPztvIRTXBW5kkaPdlML5WFhJJl1ihOMOzFgOLrWDuBHPpgjV14uf
-         ODb8lxJQvQq+WRzu7n28cQTxwGe9E1rF0OP8vzwd0raN7+/4lvxpGc33qOtwAEdreb
-         YwJNgEKZZITyg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8255CE2A05C;
-        Fri,  7 Oct 2022 19:20:20 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply changes for v6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221006194159.4m7ybf2lduxncc56@mercury.elektranox.org>
-References: <20221006194159.4m7ybf2lduxncc56@mercury.elektranox.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221006194159.4m7ybf2lduxncc56@mercury.elektranox.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.1
-X-PR-Tracked-Commit-Id: 189a2aaef9cbee4cd7c3d1bd142f790cc14c598e
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 11c747e5a1f908e9e3a868461ba9992e5396402a
-Message-Id: <166517042052.8063.9927245137161832978.pr-tracker-bot@kernel.org>
-Date:   Fri, 07 Oct 2022 19:20:20 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        with ESMTP id S229646AbiJGWXQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 7 Oct 2022 18:23:16 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB8CCD18C1
+        for <linux-pm@vger.kernel.org>; Fri,  7 Oct 2022 15:23:14 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id n40-20020a05600c3ba800b003b49aefc35fso3300170wms.5
+        for <linux-pm@vger.kernel.org>; Fri, 07 Oct 2022 15:23:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MImtf0Wf4m+QCdLQViE/JC/7ATAAtbSE1jIuWWLnJvA=;
+        b=EkmsnPinOHoAe1msnfPZIqppKVi9NZfAp14tWuESUEWdySA7FzW5P/Lx7qmFQc5xoT
+         tIKmNTq6cmITRsdnhWIdolKS/+mmCrIMH1Aisj0SVlIvqptcAnQ+WsiTrKqWlI6LGhIV
+         Tc46U5KQE4FgKgp9V94Y4A9sSU9QoVvPDUqbkZnrS98Qvz6+LJIkucRiHUX+ojVUTUB+
+         1i9RXsjYBZc+1bSKss029x+0cBASDUBc09UNd0Sasm4ix6ScqlDlk98SOUHk/OT6VRmz
+         r4tEwMbLwO/NjKoOWpsj+p4kAeDQIXdnOhao/zrS3U8OoV9fqbVLz7eyb2zBy1cHie5y
+         joYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MImtf0Wf4m+QCdLQViE/JC/7ATAAtbSE1jIuWWLnJvA=;
+        b=zjSBeo1KHCP5dLgwSjP1m2k7PMhKD+Ln09w9FPRSmGBtVzUbYRSGdUh5u1BIgO8O86
+         9ws4sG2k+1gMhxuy6VXHAPch5F76l1PdnXL76i1YhIM+MfNrDgxPgoOCJB1pg72rv6Yn
+         jRbYylS1lm55pjh8iJDvpfBMOQYTD72bQuGtZFPNhXSCfd08+nEWlSFRjZpXDZMzFgMb
+         0Fz0n9iQgmS/3Vcd0oO26Bu1t08bgBCimGqxP8JgHpNXL1kuNXn16jNSLI77nMNlCAHB
+         pbNcGbngWQClPDjmON1vztAoaFoOWPNHtxv5fg/LCA/IQoSzsxxeWKEgh/g1FrYl45HF
+         QN8g==
+X-Gm-Message-State: ACrzQf184qZ8xxCuNJGHCibhyzlLpcMBTDbJT+2rGlLNdZJLCkNBlWJy
+        vgDxR+yWiX2LX73DqQUBUf5A1g==
+X-Google-Smtp-Source: AMsMyM5biB58MjjwoI54Sm9NJ1aowLkAk7UBf2LQFmWAjoz9bJsxy3V8abHtA4Ks8YUspX2Axq9hPg==
+X-Received: by 2002:a05:600c:1d23:b0:3c0:7701:8a54 with SMTP id l35-20020a05600c1d2300b003c077018a54mr9273178wms.84.1665181393349;
+        Fri, 07 Oct 2022 15:23:13 -0700 (PDT)
+Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
+        by smtp.gmail.com with ESMTPSA id d5-20020a05600c34c500b003c409244bb0sm1115777wmq.6.2022.10.07.15.23.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Oct 2022 15:23:12 -0700 (PDT)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        phone-devel@vger.kernel.org,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        devicetree@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH v5 0/2] power: supply: introduce support for the Qualcomm smb2 charger
+Date:   Fri,  7 Oct 2022 23:22:01 +0100
+Message-Id: <20221007222205.126190-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.38.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,15 +73,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Thu, 6 Oct 2022 21:41:59 +0200:
+Add a driver for the Qualcomm PMI8998/PM660 Switch-Mode Battery Charger.
+This is the second generation SMB charger, and replaces the previous
+SMBB hardware found in older PMICs.
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.1
+This driver provides basic support for initialising the hardware,
+configuring the USB input current limit and reporting information about
+the state of the charger. Features like type-c dual role support and OTG
+switching will be added in future patches.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/11c747e5a1f908e9e3a868461ba9992e5396402a
+This patch series depends on my previous series adding support for
+the Round Robin ADC which is used for reading the USB voltage and
+current, it is currently queued in linux-next, and can be found here:
+https://lore.kernel.org/linux-arm-msm/20220429220904.137297-1-caleb.connolly@linaro.org/
+This has now been merged
 
-Thank you!
+Changes since v4:
+ * Fix typo when setting FAST_CHARGE_CURRENT_CFG - the OnePlus 6 now charges
+   properly!
+ * Limited charge current to 1A until we better understand the thermal
+   protection features and how to use them.
+ * Address Sebastian's comments (thanks for your patience with this)
+ * re-run clang-format
+
+Changes since v3:
+ * Drop DTS patches, to be sent in a future series
+ * Add POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT so that the charger will
+   be exposed as a cooling device,
+   see https://lore.kernel.org/linux-pm/164f2458-fb66-f238-7143-bdbe1e200870@linaro.org
+ * Run clang-format and prevent it from breaking the formatting of the
+   defines
+ * Apply Sebastian's suggested fixes
+
+Changes since v2:
+ * Use devm_delayed_work_autocancel
+ * Minor driver fixes
+ * Pick up Krzysztof's R-b on the DT patch
+
+Changes since v1:
+ * Rename the driver to pmi8998_charger
+ * Drop unnecessary (and very broken) mutex
+ * Rework the driver based on feedback to v1
+ * Fix some minor bugs and improve Automatic Input Current Limit support
+
+Caleb Connolly (2):
+  power: supply: add Qualcomm PMI8998 SMB2 Charger driver
+  dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for
+    smb2 driver
+
+ .../power/supply/qcom,pmi8998-charger.yaml    |   82 ++
+ drivers/power/supply/Kconfig                  |   16 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_pmi8998_charger.c   | 1040 +++++++++++++++++
+ 4 files changed, 1139 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+ create mode 100644 drivers/power/supply/qcom_pmi8998_charger.c
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.38.0
+
