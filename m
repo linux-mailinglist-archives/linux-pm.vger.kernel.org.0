@@ -2,180 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9795F5F86B0
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Oct 2022 20:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56D735F873E
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Oct 2022 21:52:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiJHSkK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 8 Oct 2022 14:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
+        id S229634AbiJHTwa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 8 Oct 2022 15:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbiJHSkI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Oct 2022 14:40:08 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9CB22B00
-        for <linux-pm@vger.kernel.org>; Sat,  8 Oct 2022 11:40:04 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id bu30so11543187wrb.8
-        for <linux-pm@vger.kernel.org>; Sat, 08 Oct 2022 11:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EgD3kP0sSWca4YlP6hR+kz5HlaxlTP+KMXKfvr3kHec=;
-        b=b6GVfGW5JnhTrvqehLVkLkkzJWiN982+Yjnjisk8UQVjWn1Yff400hD6AH1yMsy78x
-         Aid2a8rStuTW4NK3w5iiOkdJoFTmmU66egoGFJYVv34Nn2heRyyUUVeCT43Yt7c7Rm1O
-         CTV4Sv0LtVKPse42CNQ0BsmK+ESeJXLbQ/ggAR4A9HR4gDZK1mYnshBY71MEeDqppskh
-         5mXlEMcjL9d4iH2ltfh/Bvd5Ah7RQfpMtY2tBcxW9tScVhBAFtnioeUYmJgbGE6TRg9Q
-         WGfKJlD+6GoqTyqHEcAs1BgR7eGW7f6D97/YbGcBOJHSJrsmaeExkoW9C/SDL+27i1vX
-         UGTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EgD3kP0sSWca4YlP6hR+kz5HlaxlTP+KMXKfvr3kHec=;
-        b=VqXSGCJqo90fJHkyV9vMUP82ezg5ueIKlCv/qA3kCPzq0z7X9veO1n9J3aK3tlyZry
-         RtFnMDJpZHx5Vd4Z0Z7RumIeASTHyYFZ34f2Yznf8bQvGn/y5iJyfPtxCZiw+WVrUqxW
-         b8NfACXHLnzduQQD3Tcv8J1VxNTkM9C7ICNL9IfyGIu1cQjmMsTVRnNeZdf2+7X6ml0R
-         pFvMBfGE7Rkc+Ur6xV/z2TdJaTzlQaUSSgLuH6Y9iUc84cUg8TpbTjCzWi8eyIqBy0b2
-         tqA2wFNlZTbGsypeDvfvPLvdNIJr9i4HD5vn8FDVkS5M71j+xHYNrHp9lN/ORYyUWPUi
-         nj5w==
-X-Gm-Message-State: ACrzQf12n0+cgkMNS6Rm+ze+RIWNVNguxMNQelEEvFywnXS6EGD7+bt9
-        wcaQZzTtgxs7c7sHDprHoDWeCw==
-X-Google-Smtp-Source: AMsMyM6JzbCD/vOcJXmuExnmgBlsqiJfszhrDlcEyT5u9xQNubX6MXHbri4HR+9+gp6gxO6Rxr3Peg==
-X-Received: by 2002:a5d:6484:0:b0:22e:3456:37fa with SMTP id o4-20020a5d6484000000b0022e345637famr6403075wri.203.1665254402785;
-        Sat, 08 Oct 2022 11:40:02 -0700 (PDT)
-Received: from localhost.localdomain (cpc76482-cwma10-2-0-cust629.7-3.cable.virginm.net. [86.14.22.118])
-        by smtp.gmail.com with ESMTPSA id m38-20020a05600c3b2600b003b4ff30e566sm28325194wms.3.2022.10.08.11.40.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Oct 2022 11:40:02 -0700 (PDT)
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        phone-devel@vger.kernel.org,
-        Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 2/2] dt-bindings: power: supply: qcom,pmi8998-charger: add bindings for smb2 driver
-Date:   Sat,  8 Oct 2022 19:37:52 +0100
-Message-Id: <20221008183753.249514-3-caleb.connolly@linaro.org>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221008183753.249514-1-caleb.connolly@linaro.org>
-References: <20221008183753.249514-1-caleb.connolly@linaro.org>
+        with ESMTP id S229531AbiJHTw3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 8 Oct 2022 15:52:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0302362E0;
+        Sat,  8 Oct 2022 12:52:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665258748; x=1696794748;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x0t3mgqFmD0TBYTipEEEJTaiO743Vf6OovrpWoPE5XA=;
+  b=PcGycwpMSsQNFHUceMYjuDD4xo9yrCklNdO8waYCCQh9j53jmgiULIM8
+   Z9oUIwb2UZzqOwX4s/cdFWoKY5RuXeKDmPuX9bKcSj0hJFPrLBju4qqUr
+   B/pQVhvgUowXj1O5Evn6UXjBl/mlRaVhsFZTNNeDiTZFxbX/IMmHg5kRN
+   BEbenUvt+1XJZgq6oZyp3Zv+a90y3Vdx5+2zuDhDB56Be0wcYZiVKSdIJ
+   83mCmRW1Cr/pv4hrL9ipSm6nsaKjZNzisaNOsVM0830qTRUTI0rmGtY6h
+   FHDeFl33a0eqCUnVEo/GZndl8xM2gb6b/zd80d7TMVlz0ohYNxrobvCCT
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="302703669"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="302703669"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2022 12:52:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10494"; a="658721264"
+X-IronPort-AV: E=Sophos;i="5.95,170,1661842800"; 
+   d="scan'208";a="658721264"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 08 Oct 2022 12:52:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id CF2E5D0; Sat,  8 Oct 2022 22:52:45 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Subject: [PATCH v1 1/1] cpufreq: ACPI: Use str_enabled_disabled() helper
+Date:   Sat,  8 Oct 2022 22:52:44 +0300
+Message-Id: <20221008195244.53813-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add devicetree bindings for the Qualcomm PMI8998/PM660 SMB2 charger
-driver.
+Use str_enabled_disabled() helper instead of open coding the same.
 
-Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- .../power/supply/qcom,pmi8998-charger.yaml    | 82 +++++++++++++++++++
- 1 file changed, 82 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
+ drivers/cpufreq/acpi-cpufreq.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-new file mode 100644
-index 000000000000..277c47e048b6
---- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/qcom,pmi8998-charger.yaml
-@@ -0,0 +1,82 @@
-+# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/qcom,pmi8998-charger.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Qualcomm PMI8998/PM660 Switch-Mode Battery Charger "2"
-+
-+maintainers:
-+  - Caleb Connolly <caleb.connolly@linaro.org>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,pmi8998-charger
-+      - qcom,pm660-charger
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 4
-+
-+  interrupt-names:
-+    items:
-+      - const: usb-plugin
-+      - const: bat-ov
-+      - const: wdog-bark
-+      - const: usbin-icl-change
-+
-+  io-channels:
-+    items:
-+      - description: USB in current in uA
-+      - description: USB in voltage in uV
-+
-+  io-channel-names:
-+    items:
-+      - const: usbin_i
-+      - const: usbin_v
-+
-+  monitored-battery:
-+    description: phandle to the simple-battery node
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-names
-+  - io-channels
-+  - io-channel-names
-+  - monitored-battery
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    pmic {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+      #interrupt-cells = <4>;
-+
-+      charger@1000 {
-+        compatible = "qcom,pmi8998-charger";
-+        reg = <0x1000>;
-+
-+        interrupts = <0x2 0x12 0x2 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x4 IRQ_TYPE_EDGE_BOTH>,
-+                     <0x2 0x13 0x6 IRQ_TYPE_EDGE_RISING>,
-+                     <0x2 0x16 0x1 IRQ_TYPE_EDGE_RISING>;
-+        interrupt-names = "usb-plugin", "bat-ov", "wdog-bark", "usbin-icl-change";
-+
-+        io-channels = <&pmi8998_rradc 3>,
-+                      <&pmi8998_rradc 4>;
-+        io-channel-names = "usbin_i",
-+                           "usbin_v";
-+
-+        monitored-battery = <&battery>;
-+      };
-+    };
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index 1bb2b90ebb21..8597ab0a84b5 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -19,6 +19,7 @@
+ #include <linux/compiler.h>
+ #include <linux/dmi.h>
+ #include <linux/slab.h>
++#include <linux/string_helpers.h>
+ 
+ #include <linux/acpi.h>
+ #include <linux/io.h>
+@@ -135,8 +136,8 @@ static int set_boost(struct cpufreq_policy *policy, int val)
+ {
+ 	on_each_cpu_mask(policy->cpus, boost_set_msr_each,
+ 			 (void *)(long)val, 1);
+-	pr_debug("CPU %*pbl: Core Boosting %sabled.\n",
+-		 cpumask_pr_args(policy->cpus), val ? "en" : "dis");
++	pr_debug("CPU %*pbl: Core Boosting %s.\n",
++		 cpumask_pr_args(policy->cpus), str_enabled_disabled(val));
+ 
+ 	return 0;
+ }
 -- 
-2.38.0
+2.35.1
 
