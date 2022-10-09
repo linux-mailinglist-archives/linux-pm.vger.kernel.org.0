@@ -2,86 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 778A55F95EC
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 02:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E77C5F96D3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 04:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232587AbiJJAZ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Oct 2022 20:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S230127AbiJJCcv convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Sun, 9 Oct 2022 22:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233487AbiJJAZU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 20:25:20 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD6F4B9B1
-        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 17:00:57 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 0514984B62;
-        Mon, 10 Oct 2022 02:00:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665360053;
-        bh=p3a6hXZtK+ulMupILln8nimv1U1d9s29Ctyy7p3f/d8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mIYk3Xws+y7en0JrBDyK2AxLV2ntPJUgPYJAyHUUgJkpsHhIvC+HxDse8KwpWISMa
-         wLIvs1fCkzvS8xEFGyLWxwqv1YE1Eu6qCktdU8Xu3DH06DuSYwOJx4D01K5vDf4eTC
-         +/dsSai3BSM6u7ULr/kuXOYZ8QavIrdtWvBIxsYA1KkzHmzAuzuFcVJ8puOpeE4WfV
-         sOEcoKG7RWiGz8mP6V0RH98CWI9848bD35yXZuiP/qMbWna9knEy1e4ZcaVkqvuBCn
-         w5MFluFQLlnb87N+1KFQEbF1ZNYljGKN9tKAixilgmA0nKhTQTQK6ZuATYmtkQcc3J
-         cCBuVb5S153dg==
-Message-ID: <1da48c09-fe83-c4d7-8d6f-c5e5a7189bc0@denx.de>
-Date:   Mon, 10 Oct 2022 02:00:52 +0200
+        with ESMTP id S230040AbiJJCcu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 22:32:50 -0400
+X-Greylist: delayed 11119 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 19:32:44 PDT
+Received: from symantec6.comsats.net.pk (symantec6.comsats.net.pk [203.124.39.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6EA332AA8
+        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 19:32:44 -0700 (PDT)
+X-AuditID: cb7c27aa-21bff70000006b5f-aa-63433ba4047a
+Received: from host201505.comsatshosting.com (host201505.comsatshosting.com [210.56.11.66])
+        (using TLS with cipher ECDHE-RSA-AES256-SHA (256/256 bits))
+        (Client did not present a certificate)
+        by symantec6.comsats.net.pk (Symantec Messaging Gateway) with SMTP id C5.48.27487.5AB33436; Mon, 10 Oct 2022 02:22:45 +0500 (PKT)
+Received: from [103.145.253.52] (UnknownHost [103.145.253.52]) by host201505.comsatshosting.com with SMTP;
+   Mon, 10 Oct 2022 00:29:29 +0500
+Message-ID: <C5.48.27487.5AB33436@symantec6.comsats.net.pk>
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 2/2] power: supply: bq25890: Rename
- POWER_SUPPLY_PROP_CURRENT_NOW to CC current
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20221009191839.102686-1-marex@denx.de>
- <20221009191839.102686-2-marex@denx.de> <Y0NSBvkcOOx/3XcR@qmqm.qmqm.pl>
-Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <Y0NSBvkcOOx/3XcR@qmqm.qmqm.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: Re; Interest,riazeda.com.pk aft
+To:     linux-pm@vger.kernel.org
+From:   "Chen Yun" <imrank@riazeda.com.pk>
+Date:   Sun, 09 Oct 2022 12:24:32 -0700
+Reply-To: chyyncn@gmail.com
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sa0gUURTHuzuzOq577TquelstYkrLLHugJmRWSrQ9QAl7CVLj7tUV1911
+        Z7QMCaEysFIhRTKy7CFhTwwjM7WWHqwSmChJKEbah14QSB96aXd0150vw7m/c8/5n/mfyzH8
+        6UAjV2iXicsu2oQAHTuYEpy+5uamDPO6J7UoZer8C7AVmKbal2SBHF2qhdgKy4hrbdoRnfXG
+        vQHW2cUcq6q9xlaCCU01COIwSsTvRs9qq4GO49ErDW6cfBgwd6gBeGRwmB44DqJNuH4mSylg
+        UAIeaagPUGKIQrHn4iQ7x+Nxa8tXRrnOoFj8s1pWcBhaiUe+vwZKbEDRuGGoV6vEAZTfrnw+
+        e51FMXh0Cikhj6Jwd7+1DsAmlVaTSqtJpdXk17oK2DaApfJikTpjTk4wO4olUZYS7EROcBa1
+        A+pTf8WKtsfgw2XRDRAHBD20dqSbea1YRqvcYDenEcLh79gMMx+S57CUW0XJethVaiOSYICp
+        OyiG8ziv1FYkGOG/XZSGzVM7OSrZiEwX4waYY2gZuEIFoEUsP05cjrlmbhDFsUIktJSszeFR
+        gSiTIkKcxOXLZnOcgGGxiXYOdZECciy/0Cb70rQuLpVmkDozO8xiuPw11YpQJ9TzaLggNzBx
+        ejrUq2jlXySnWCwVFnj7hsFOTKneR2d7LoIX0ijkfdDfrw84uOaa3m6GGx8aoN+fj6qfMTxr
+        d9iJMRImKVVIqbKW2udnN0bAxk90xIWqhCJjjIY/xikPV3G/ku99fwHb6crCoEFZhJ6+fv/s
+        PKwQKAz2wtnRMTyUoTjoZf5+X6gJGmqCZ1jZjCSLstoEbV+6YoKXek3460lXTPBCfytjJeiA
+        J0/3Bh58a4hP+hzVoLuTvyU739ASR3Ke2iP6A5eeqtuvseQT867rI4NxPbHJJx7c79oc3Ptm
+        29149O148oH3E86XPWLcJX1mW+KGG9qx1irTx19/MkN1M3s8Md2rS6Km+4uWNQdv3Hsm5NZA
+        bu6YMyJpwbnk1tTOrH1/dgZ6yqcFVrKK61cxLkn8DzOXHT0YBAAA
+X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_SOFTFAIL
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/10/22 00:58, Michał Mirosław wrote:
-> On Sun, Oct 09, 2022 at 09:18:39PM +0200, Marek Vasut wrote:
->> The POWER_SUPPLY_PROP_CURRENT_NOW property represents, as far as I can tell,
->> the immediate power supply input current, however, this driver reports the
->> immediate battery charge current using that property, i.e. content of REG12
->> ICHGR -- ADC conversion of Charge Current (IBAT). Replace the property with
->> POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT, which as far as I can tell should
->> be used to report immediate battery charge voltage.
->>
->> This also aligns the behavior of POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT
->> with POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE, as the former reports IBAT
->> and the later reports VBAT.
-> 
-> I believe this is wrong: CC_CURRENT would be the constant-current charge phase
-> current limit (ICHG in REG04).
-> 
-> Documentation/power/power_supply_class.rst mentions that:
-> 
-> CONSTANT_CHARGE_CURRENT
->    constant charge current programmed by charger.
+Re; Interest,
 
-I think I will wait for the subsystem maintainer to clarify these 
-properties, because right now, this driver seems to be a complete mess 
-in terms of what it reports and through which property. And I'm afraid 
-that is because neither of those properties are clearly documented.
+I am interested in discussing the Investment proposal as I explained
+in my previous mail. May you let me know your interest and the
+possibility of a cooperation aimed for mutual interest.
+
+Looking forward to your mail for further discussion.
+
+Regards
+
+------
+Chen Yun - Chairman of CREC
+China Railway Engineering Corporation - CRECG
+China Railway Plaza, No.69 Fuxing Road, Haidian District, Beijing, P.R.
+China
+
