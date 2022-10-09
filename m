@@ -2,113 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B726C5F8EB8
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Oct 2022 23:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14865F94B6
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 02:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbiJIVDa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Oct 2022 17:03:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47992 "EHLO
+        id S231214AbiJJACK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 9 Oct 2022 20:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiJIVDG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 17:03:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A03EF37FA4;
-        Sun,  9 Oct 2022 13:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E514860C79;
-        Sun,  9 Oct 2022 20:55:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 609D4C4347C;
-        Sun,  9 Oct 2022 20:55:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665348916;
-        bh=9S9Jzqh/QQ0jJHUzmYwU6n8cgbVBAGr8mD+X8spS9Kk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kSPVGbG34ojK0Bk01dkkvpFHZ8W2VVI0mQXaroNi4OHp5El+9ZIeqZqQgphzSbV0P
-         FgWoYN6+jfZ9Dl/htEJz0b+jdhHAGQ5FNna3Eo+GBh2FSFHrPXSUiqbOTgYHjpO+jD
-         K79g0UtHpiN+m6RLgm7H1MbJBFTL/wnjXPZrZlUTmFzchT/Ls5ah9e2o4Ax5Cjt46G
-         CwaNGM06773xTQc853kxFE7I13mQL2q1ZKNYPvP/4jUeE5OiQlZvJC8lrnOvMI42cV
-         cqRBjWWm2L5ccmyhN0PJwOs8CGtjrenuk+BYMEsjBBplOyBwv5bUeblw3hQ3xOYwht
-         t66bhmTtOxwQw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Chen Yu <yu.c.chen@intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.9 4/4] thermal: intel_powerclamp: Use get_cpu() instead of smp_processor_id() to avoid crash
-Date:   Sun,  9 Oct 2022 16:55:08 -0400
-Message-Id: <20221009205508.1204042-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221009205508.1204042-1-sashal@kernel.org>
-References: <20221009205508.1204042-1-sashal@kernel.org>
+        with ESMTP id S231343AbiJJABn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 20:01:43 -0400
+X-Greylist: delayed 549 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 09 Oct 2022 16:34:11 PDT
+Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68AE76447
+        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 16:34:11 -0700 (PDT)
+Received: from remote.user (localhost [127.0.0.1])
+        by rere.qmqm.pl (Postfix) with ESMTPSA id 4MlyQQ3NfqzF0;
+        Mon, 10 Oct 2022 01:08:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
+        t=1665356910; bh=1tjCaCOga1RdUh1bzpKBR1njpbuOFx6+MHcyJ0A1WeA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Y3rOWAEE/z4Kqjp2gnYRaHD5tVgxqUrHTphdoZkJFNc+R07Bi2oKB+ipNZ1KAjQMu
+         gsU7PFbIF76J0Z/6+JsUOHNKNN0biZEcGc8WZcqoXTqumdGN+O0MS2qOLvb3QaNaqH
+         u2Rm8Dhnk+ALBWXyZ6cQOhIE4LvgGL/p1n9yKUkIEFEf++UTR7nq1Sf5tUwdXv9hIf
+         dKA6jqvpe6YK+eJyKiAbHRB/65xAwj50AzWIfiK1lsIEP1lan/6S3nYbv6Ny54PnK3
+         R1310YFMxKEvjLzdQbHI0cf6nqDIYRL61nLhE5cFrTIsmjJAR4AF44SbxFLz7tc3PY
+         mRRUikcomKqLQ==
+X-Virus-Status: Clean
+X-Virus-Scanned: clamav-milter 0.103.7 at mail
+Date:   Mon, 10 Oct 2022 01:08:29 +0200
+From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-pm@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: Re: [PATCH 1/2] power: supply: bq25890: Add CC voltage to ADC
+ properties
+Message-ID: <Y0NUbeUae01t+UGa@qmqm.qmqm.pl>
+References: <20221009191839.102686-1-marex@denx.de>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
+Content-Type: text/plain; charset=iso-8859-2
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221009191839.102686-1-marex@denx.de>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Sun, Oct 09, 2022 at 09:18:38PM +0200, Marek Vasut wrote:
+> The POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE , representing register
+> REG0E field BATV is an ADC conversion of Battery Voltage (VBAT). Mark
+> the property as ADC one.
 
-[ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
+In this case I believe the property is representing wrong value: it
+should be REG06 - the programmed voltage limit, and _MAX should reflect
+maximum setting possible. Though I think there is no proper property
+for the VSYS value that is currently occupying VOLTAGE_NOW - this
+might be better modelled as a separate regulator maybe?
 
-When CPU 0 is offline and intel_powerclamp is used to inject
-idle, it generates kernel BUG:
+But, for the time being this look ok.
 
-BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
-caller is debug_smp_processor_id+0x17/0x20
-CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
-Call Trace:
-<TASK>
-dump_stack_lvl+0x49/0x63
-dump_stack+0x10/0x16
-check_preemption_disabled+0xdd/0xe0
-debug_smp_processor_id+0x17/0x20
-powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
-...
-...
+> Fixes: 21d90eda433f ("power: bq25890: fix ADC mode configuration")
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Micha³ Miros³aw <mirq-linux@rere.qmqm.pl>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> To: linux-pm@vger.kernel.org
+> ---
+>  drivers/power/supply/bq25890_charger.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+> index 6020b58c641d2..34dbd498f0f51 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -432,6 +432,7 @@ static bool bq25890_is_adc_property(enum power_supply_property psp)
+>  {
+>  	switch (psp) {
+>  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:
+>  	case POWER_SUPPLY_PROP_TEMP:
+>  		return true;
+> -- 
+> 2.35.1
+> 
 
-Here CPU 0 is the control CPU by default and changed to the current CPU,
-if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
-hence the above warning.
-
-Use get_cpu() instead of smp_processor_id() to avoid this BUG.
-
-Suggested-by: Chen Yu <yu.c.chen@intel.com>
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-[ rjw: Subject edits ]
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/thermal/intel_powerclamp.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/thermal/intel_powerclamp.c b/drivers/thermal/intel_powerclamp.c
-index afada655f861..492bb3ec6546 100644
---- a/drivers/thermal/intel_powerclamp.c
-+++ b/drivers/thermal/intel_powerclamp.c
-@@ -519,8 +519,10 @@ static int start_power_clamp(void)
- 
- 	/* prefer BSP */
- 	control_cpu = 0;
--	if (!cpu_online(control_cpu))
--		control_cpu = smp_processor_id();
-+	if (!cpu_online(control_cpu)) {
-+		control_cpu = get_cpu();
-+		put_cpu();
-+	}
- 
- 	clamping = true;
- 	schedule_delayed_work(&poll_pkg_cstate_work, 0);
 -- 
-2.35.1
-
+Micha³ Miros³aw
