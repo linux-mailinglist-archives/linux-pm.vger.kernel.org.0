@@ -2,100 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D09E5F8B91
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Oct 2022 15:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72D95F8DB0
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Oct 2022 21:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiJINek (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Oct 2022 09:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45880 "EHLO
+        id S229979AbiJITSz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 9 Oct 2022 15:18:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJINej (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 09:34:39 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C39CF9;
-        Sun,  9 Oct 2022 06:34:36 -0700 (PDT)
-Received: from kwepemi500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Mljb75P7VzVhqF;
-        Sun,  9 Oct 2022 21:30:11 +0800 (CST)
-Received: from [10.67.111.83] (10.67.111.83) by kwepemi500022.china.huawei.com
- (7.221.188.64) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Sun, 9 Oct
- 2022 21:34:33 +0800
-Message-ID: <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
-Date:   Sun, 9 Oct 2022 21:34:33 +0800
+        with ESMTP id S230012AbiJITSw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 15:18:52 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B9D23388
+        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 12:18:50 -0700 (PDT)
+Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id D953384D7A;
+        Sun,  9 Oct 2022 21:18:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1665343127;
+        bh=18wNtkoEPHEZXSeMPxyUmW8gYwdNnViL95mGEje+OQo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gtMFw5R5KL7EB47kFCyTfRIH0mq6c3I8C/H7nAJwfdMcwA7OHjN/dV1oLNNuVkbDc
+         ixiL0TBC4uV6nbWrImV3Ru/3+l6+I6A/PPTzeeRgP6vR9DyBu/hD3bEd4csaXWiAo6
+         D+QKDbdP8l68rWPiQ1wbWB1475THeEyDB1Xm/5LPMiX3oBWcGiOTRUIDdw7K8ZW4mk
+         6JE6kFyR9w6n+QxHghabiBbb+iv7IdzZ3f5fm8UgAPklEgx+AD2o5fY102AVdcFuq3
+         dMgZqNEhDlIihjnAQo83YLaULI5HlD0Oh7jbVc/poBhGlrLOIp82EgiaQZYgZw/DDS
+         2BfhEaeageP1Q==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-pm@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+Subject: [PATCH 1/2] power: supply: bq25890: Add CC voltage to ADC properties
+Date:   Sun,  9 Oct 2022 21:18:38 +0200
+Message-Id: <20221009191839.102686-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
-To:     ChiaEn Wu <peterwu.pub@gmail.com>, <sre@kernel.org>,
-        <andy.shevchenko@gmail.com>, <chiaen_wu@richtek.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220922023337.15609-1-renzhijie2@huawei.com>
- <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
-From:   Ren Zhijie <renzhijie2@huawei.com>
-In-Reply-To: <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.83]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500022.china.huawei.com (7.221.188.64)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+The POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE , representing register
+REG0E field BATV is an ADC conversion of Battery Voltage (VBAT). Mark
+the property as ADC one.
 
-just a friendly ping...
+Fixes: 21d90eda433f ("power: bq25890: fix ADC mode configuration")
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: linux-pm@vger.kernel.org
+---
+ drivers/power/supply/bq25890_charger.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Ren
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index 6020b58c641d2..34dbd498f0f51 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -432,6 +432,7 @@ static bool bq25890_is_adc_property(enum power_supply_property psp)
+ {
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+ 	case POWER_SUPPLY_PROP_CURRENT_NOW:
+ 	case POWER_SUPPLY_PROP_TEMP:
+ 		return true;
+-- 
+2.35.1
 
-在 2022/9/22 17:58, ChiaEn Wu 写道:
-> On 9/22/2022 10:33 AM, Ren Zhijie wrote:
->> If CONFIG_IIO is not set,
->> make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu-,
->> will be failed, like this:
->>
->> drivers/power/supply/mt6370-charger.o: In function 
->> `mt6370_chg_mivr_dwork_func':
->> mt6370-charger.c:(.text+0x670): undefined reference to 
->> `iio_read_channel_processed'
->> drivers/power/supply/mt6370-charger.o: In function `mt6370_chg_probe':
->> mt6370-charger.c:(.text+0xb43): undefined reference to 
->> `devm_iio_channel_get_all'
->> make: *** [vmlinux] Error 1
->>
->> To fix this build error, add depends on IIO to config CHARGER_MT6370 
->> dependency.
->>
->> Fixes: 233cb8a47d65 ("power: supply: mt6370: Add MediaTek MT6370 
->> charger driver")
->> Signed-off-by: Ren Zhijie <renzhijie2@huawei.com>
->> ---
->>   drivers/power/supply/Kconfig | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
->> index 591deb82e2c6..62111f4bb093 100644
->> --- a/drivers/power/supply/Kconfig
->> +++ b/drivers/power/supply/Kconfig
->> @@ -623,6 +623,7 @@ config CHARGER_MT6370
->>       tristate "MediaTek MT6370 Charger Driver"
->>       depends on MFD_MT6370
->>       depends on REGULATOR
->> +    depends on IIO
->>       select LINEAR_RANGES
->>       help
->>         Say Y here to enable MT6370 Charger Part.
->
-> Hi Ren,
->
-> Thanks for catching this!
->
-> Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
->
