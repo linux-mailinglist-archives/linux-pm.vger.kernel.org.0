@@ -2,88 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 735135F980E
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 08:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 622075F9862
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 08:32:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiJJGFA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 02:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53182 "EHLO
+        id S231327AbiJJGck (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 02:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbiJJGE7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 02:04:59 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D50F22BDF
-        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 23:04:58 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id l1-20020a17090a72c100b0020a6949a66aso9526537pjk.1
-        for <linux-pm@vger.kernel.org>; Sun, 09 Oct 2022 23:04:58 -0700 (PDT)
+        with ESMTP id S230500AbiJJGcj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 02:32:39 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D85956034
+        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 23:32:38 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id i3so9951290pfk.9
+        for <linux-pm@vger.kernel.org>; Sun, 09 Oct 2022 23:32:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ze6sWpLp4OvIIrfkLpb2+ilcLI2WvN54fOLaHJtyJQ0=;
-        b=brojRUA4twJZbhunUPYWOqEG3kEV1+Dt5K34DHoxqPqdRk7/m1oig7e/E3ZrIjKEm5
-         WwwJX5MD/Tt2CNOhQx1slrOGSRpTWRQ0f5og5wJMxA9qRP8OatdepajU6lGlQvTerV5t
-         +tGum6VU5yOzWqdv6V7W4E55U6C3LWAassuBs+1VQ4B7Dr46mCY0LmkLZY6QWglhSo1h
-         mPq+5W/QRslkKQ8rJajiRu3rIVgS9hAzw5Wvbcs4BQApO4SkRr58PBNmDxLvHT9/zbIX
-         zEPNQ3juQycV/tbNxi/ike8VJIfzIxKRdykkRfET/wR/yBJahqydktty3iFLaOmKp4Up
-         cdlw==
+        bh=NgaF+gMva8dckm9CLf90aqiI0duPSDPY/OWDay53LhA=;
+        b=h/ozjNeq00sDI5b17bBXSXNxfX5R410nyrQDJEDyTd+STmDSkJ7zWtqBrIzfyq5eYA
+         WrsyDylLFbELG0PecO+UZOkJhTFF5qDv/AXs4Cgkz9jfHIQZCm/8B+RLVM3w7wffHsEh
+         gptVbcCRalaYxof0u5ln9E3Qh8ssaZjGpOd9ADyxJPa08Q2jHIA4N1UKswI1NlVP12+5
+         iaL9sD4cEeitHFXquQ3fdsLTM93J8G6rteEv8nef7AXdX8aqk0ct5WcqXeef5MjsmF6N
+         zyPZFtVqbAVFG+Nl6sw09i7G8tautiVvJ3s9aYgJSegorGlRKrpdaNG2TM+2pBCHTy/v
+         cyiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ze6sWpLp4OvIIrfkLpb2+ilcLI2WvN54fOLaHJtyJQ0=;
-        b=h8YcPnDjF+9XbVOMkhF0eUX+YHuXaAnI9Og2hRcZ9LkrtupOBA2JwS9IhD+/lSyIrG
-         apYj735RRHb9zczHLbOUlN7xwPg3tK1f3AIJPFRm++VZZV8k/UngEaU+u1Le6As2T9iR
-         VkZKW9FYM8cpqVAVehFFO7+8BONLWiffRYuPhdYrNlncUx2BZ9XtD7tNJYaOk3GoO3K3
-         ViEi7tGZe8+O4XsUT8R/JYf9K93VxxbZX5lf+4IUw+S6wF9sFbNDauuT02gi615j2/lJ
-         zY+xBf2a2+L98n8FyTky1CN607fIGDEr3Jxb8Pnm7bBF3NQm9CM15mp6OqRYT19mp880
-         hYMA==
-X-Gm-Message-State: ACrzQf1AwM3h8waaIAvNet9+W5qcNVi4KBYH8jrZn1OZSPNLJMf+aT2s
-        /A4VPIWh9Zyb+pTZbcVviLX/HDsHGdsXKg==
-X-Google-Smtp-Source: AMsMyM4Dw8vuxf5zlXz41FyIpJmGE5/yHcnIZmYyUCdgOIk9PW8Q4pogshvbi2TUcY/YN/hvkrBz0A==
-X-Received: by 2002:a17:902:ea0c:b0:181:61d1:ac1c with SMTP id s12-20020a170902ea0c00b0018161d1ac1cmr9048198plg.120.1665381897930;
-        Sun, 09 Oct 2022 23:04:57 -0700 (PDT)
+        bh=NgaF+gMva8dckm9CLf90aqiI0duPSDPY/OWDay53LhA=;
+        b=4WnXAmSYM/QrQQjJuEyMRyZj5lkMIkrbHq+sRociCIpOUpCiTqEHm6ciUp0+G9wJUe
+         4lnNxLfD3tZq1J4aNIVApgknspyUIx9nm+qFSUBqZVs5aU0tpI0liKdT59TOx/1Hcdvd
+         u2+xD6iMxjpg+bsPdbLWbzXfENFaQmq6rfdChyXwU4j8PZmhDXBqQpE5qOkcD2Ouc6MR
+         mcSpIixZinqPlVMb7vm5H4qQLLTk1oNGNZfqVtoN1OR/3qnLZoG28tQ0haFbFvIp+sCy
+         JbuoNzdUPQkCMIyPD1mQr/E/8U8ctnHn3EtXY2uHT/N+e2IIk4uehzoHuJiBADcSxSz6
+         6bqQ==
+X-Gm-Message-State: ACrzQf01woVSC8/RTt7GIvLkvQHUREfbRpk0oVwsaDERXoi+j3cyeM70
+        h8QNOnTPB9NcQyqAPEGlF+pxXQ==
+X-Google-Smtp-Source: AMsMyM7J/bEwOj7yGx70aukfr/e/FzNuGCgyz+iPALe/bAxPUxcbk1gnFh0dngeWQ47/5vEiL4VedA==
+X-Received: by 2002:aa7:9218:0:b0:560:f3f1:d2d4 with SMTP id 24-20020aa79218000000b00560f3f1d2d4mr18225900pfo.14.1665383557970;
+        Sun, 09 Oct 2022 23:32:37 -0700 (PDT)
 Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id e10-20020a170902784a00b0017dd839f2a5sm5691051pln.38.2022.10.09.23.04.56
+        by smtp.gmail.com with ESMTPSA id j6-20020a170903024600b00178a9b193cfsm5774220plh.140.2022.10.09.23.32.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Oct 2022 23:04:57 -0700 (PDT)
-Date:   Mon, 10 Oct 2022 11:34:55 +0530
+        Sun, 09 Oct 2022 23:32:37 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 12:02:35 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Sumit Gupta <sumitg@nvidia.com>, Rob Herring <robh@kernel.org>
-Cc:     rafael@kernel.org, treding@nvidia.com, jonathanh@nvidia.com,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bbasu@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com
-Subject: Re: [Patch v2] cpufreq: tegra194: Add support for Tegra239
-Message-ID: <20221010060455.o3mnc5fx2xm34wpb@vireshk-i7>
-References: <20220920110646.27837-1-sumitg@nvidia.com>
- <20221004152714.GA1524940-robh@kernel.org>
+To:     hongchengwen <hongchengwen@oppo.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhengding chen <chenzhengding@oppo.com>
+Subject: Re: [PATCH] ANDROID: cpufreq: times: record fast switch frequency
+ transitions
+Message-ID: <20221010063235.3zb6bgtxwpmltlrk@vireshk-i7>
+References: <1665231397-115755-1-git-send-email-hongchengwen@oppo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221004152714.GA1524940-robh@kernel.org>
+In-Reply-To: <1665231397-115755-1-git-send-email-hongchengwen@oppo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04-10-22, 10:27, Rob Herring wrote:
-> On Tue, Sep 20, 2022 at 04:36:46PM +0530, Sumit Gupta wrote:
-> > @@ -586,6 +586,7 @@ static int tegra194_cpufreq_remove(struct platform_device *pdev)
-> >  static const struct of_device_id tegra194_cpufreq_of_match[] = {
-> >  	{ .compatible = "nvidia,tegra194-ccplex", .data = &tegra194_cpufreq_soc },
-> >  	{ .compatible = "nvidia,tegra234-ccplex-cluster", .data = &tegra234_cpufreq_soc },
-> > +	{ .compatible = "nvidia,tegra239-ccplex-cluster", .data = &tegra239_cpufreq_soc },
+On 08-10-22, 20:16, hongchengwen wrote:
+> From: zhengding chen <chenzhengding@oppo.com>
 > 
-> Not documented.
+> cpufreq_times_record_transition() is not called when fast switch is
+> enabled, leading /proc/[pid]/time_in_state to attribute all time on a
+> cluster to a single frequency. To fix this, add a call to
+> cpufreq_times_record_transition() in the fast switch path.
+> 
+> Test: /proc/[pid]/time_in_state shows times for more than one freq per
+> cluster
+> 
+> Bug: 204726690
+> Signed-off-by: zhengding chen <chenzhengding@oppo.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 69b3d61..1caaf63 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -2128,6 +2128,7 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+>         arch_set_freq_scale(policy->related_cpus, freq,
+>                             policy->cpuinfo.max_freq);
+>         cpufreq_stats_record_transition(policy, freq);
+> +       cpufreq_times_record_transition(policy, freq);
+> 
+>         if (trace_cpu_frequency_enabled()) {
+>                 for_each_cpu(cpu, policy->cpus)
 
-Sumit, can you please send a patch to document this in bindings ?
+zhengding chen,
+
+You have sent your email to linux kernel lists, which don't have the
+same code base as Android. Please send your patch to the relevant
+lists/gerrit for Android.
+
+Thanks.
 
 -- 
 viresh
