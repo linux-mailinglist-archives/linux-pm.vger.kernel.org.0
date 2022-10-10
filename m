@@ -2,57 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25475F9734
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 05:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F335F97B3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 07:17:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbiJJDl4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 9 Oct 2022 23:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54660 "EHLO
+        id S230253AbiJJFRI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 01:17:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbiJJDlx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 9 Oct 2022 23:41:53 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5487827CD4;
-        Sun,  9 Oct 2022 20:41:51 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29A3fbBQ017544;
-        Sun, 9 Oct 2022 22:41:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1665373297;
-        bh=cs0TPifxs4xJXLOJNSL1O0T4pkZwMuaDp3ydO8jVaDI=;
-        h=From:To:CC:Subject:Date;
-        b=uNCOHG5qh5X6M+VQckOgihuARHdzhiUQ4wwlJhpqRIy1m7yV/uQJkYd49H5mzM/Qo
-         YzfH70y5cf0/+pvmC/d7Kk4F3UEKoAsRrV7sPz67+ACKpgMmzci5oWCxm6XWdDcI6n
-         v74h3LQrRm9qIMlNCxb5vqDfm3KMt7RMP/KfIYTU=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29A3fbMm094178
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sun, 9 Oct 2022 22:41:37 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Sun, 9 Oct
- 2022 22:41:37 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Sun, 9 Oct 2022 22:41:37 -0500
-Received: from keerthy.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29A3fYfc009427;
-        Sun, 9 Oct 2022 22:41:35 -0500
-From:   Keerthy <j-keerthy@ti.com>
-To:     <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <amitk@kernel.org>
-CC:     <j-keerthy@ti.com>, <bb@ti.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] thermal: k3_j72xx_bandgap: Fix the debug print message
-Date:   Mon, 10 Oct 2022 09:11:26 +0530
-Message-ID: <20221010034126.3550-1-j-keerthy@ti.com>
-X-Mailer: git-send-email 2.17.1
+        with ESMTP id S229546AbiJJFRF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 01:17:05 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC954D4D0
+        for <linux-pm@vger.kernel.org>; Sun,  9 Oct 2022 22:17:04 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id c24so9403034pls.9
+        for <linux-pm@vger.kernel.org>; Sun, 09 Oct 2022 22:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TUWTlqEj5JWA3cymAkX5jVFzyKQy4OyRhFvxdWRqESY=;
+        b=rxy6vI5LG209fPsCdbieUHJTe4XVZPFimIwV7gmIese3WGElaaE/Vf0a757rKhwOns
+         dwoR/Nzih6W+CNTrJ13eL29H3jd99rEbH59DeDE5VoRULdEe51gH/Ssv5siSXr7Uyf8l
+         iy6umHCMFXymiv8zDIF17ha7cbPlwhvjUglwSPss7X/X29EvEp0NI+3TEx6+rTdL5BWA
+         IIlbD3TFjYLHyEcY3WAImdU11xmJN7gyCme9E007m8RL2k8tr04jKCMe+8XCvUTYiSQ6
+         PMH8VCcYE9K7ZX7ktSN31jrCDsJ59Hb5oV5jt3lmrC1aKgI3N2MuSBR7/6ydJlKTnE6s
+         Ujsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TUWTlqEj5JWA3cymAkX5jVFzyKQy4OyRhFvxdWRqESY=;
+        b=EOzvd4pNZvBQJ6p4sQqzpGQsbQcFYFh9QgEkIOkRq7ZfUNbVzCux2vRONW7KVd2Dwk
+         WM0k6oSwqQeGb/NPq3ofcg88F8qezhe8epzNCTqwF2uUmAOlm8QJ/fDQdsI2euO4aXJQ
+         TxsCBkiIEotSlfzYRQIFDFYWZvYlbMHgX1T1HLdlTYLMp9Z2M69nc5sQx0w+ojix/mpB
+         zmu1XgEM+g9ACTzxBPObgAIv5ZljeH5x4HpXikUlqx5XnHZGeVkJqIlcZo2AcxXeiK6j
+         ilnm9PTStFToo5nMN97IsGzQbLarDZorn6uiRzlMaBIaa+KbjC9MbsfUom36RmJX2u75
+         FRiA==
+X-Gm-Message-State: ACrzQf2SOjtPIOe4hJIrQZjRG0c8nUHaU+E+7qsOSVAoC3KyuSqUL2wD
+        /eei7gUwYd5qVk1C2Tx02Xzokg==
+X-Google-Smtp-Source: AMsMyM5EFzT12uCpl+TN78sYq6riM8l0k5H56tLUqytKgP5oj1J7Z3sXfa/UFr94AwIsJBCEXzC8xg==
+X-Received: by 2002:a17:902:bb86:b0:17c:4cac:eea4 with SMTP id m6-20020a170902bb8600b0017c4caceea4mr16662325pls.141.1665379024236;
+        Sun, 09 Oct 2022 22:17:04 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b0017f6c9622b9sm5593969plr.183.2022.10.09.22.17.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Oct 2022 22:17:03 -0700 (PDT)
+Date:   Mon, 10 Oct 2022 10:47:01 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-pm@vger.kernel.org, rafael@kernel.org
+Subject: Re: [PATCH -next 0/4] cpufreq: Switch to use dev_err_probe() helper
+Message-ID: <20221010051701.a2s4u5g76466bqbv@vireshk-i7>
+References: <20220927154021.816570-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220927154021.816570-1-yangyingliang@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +68,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The debug print message to check the workaround applicability is inverted.
-Fix the same.
+On 27-09-22, 23:40, Yang Yingliang wrote:
+> This patchset is trying to replace dev_err() with dev_err_probe() in
+> the probe path. With this helper, it prints the error name instead of
+> printing error code which is more readable and sets the defer probe
+> reason which can be checked later through debugfs, and it makes error
+> path more clean.
+> 
+> Yang Yingliang (4):
+>   cpufreq: dt: Switch to use dev_err_probe() helper
+>   cpufreq: imx6q: Switch to use dev_err_probe() helper
+>   cpufreq: qcom-nvmem: Switch to use dev_err_probe() helper
+>   cpufreq: sun50i: Switch to use dev_err_probe() helper
+> 
+>  drivers/cpufreq/cpufreq-dt.c           | 6 ++----
+>  drivers/cpufreq/imx6q-cpufreq.c        | 4 +---
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c   | 7 ++-----
+>  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 9 +++------
+>  4 files changed, 8 insertions(+), 18 deletions(-)
 
-Fixes: ffcb2fc86eb7 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
-Reported-by: Bryan Brattlof <bb@ti.com>
-Signed-off-by: Keerthy <j-keerthy@ti.com>
----
- drivers/thermal/k3_j72xx_bandgap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied. Thanks.
 
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index 16b6bcf1bf4f..c073b1023bbe 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -439,7 +439,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
- 		workaround_needed = false;
- 
- 	dev_dbg(bgp->dev, "Work around %sneeded\n",
--		workaround_needed ? "not " : "");
-+		workaround_needed ? "" : "not ");
- 
- 	if (!workaround_needed)
- 		init_table(5, ref_table, golden_factors);
 -- 
-2.17.1
-
+viresh
