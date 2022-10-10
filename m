@@ -2,78 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2547A5F9FAE
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 15:55:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A984E5F9FFA
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 16:13:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbiJJNzi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 09:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
+        id S230004AbiJJONp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 10:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbiJJNzg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 09:55:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D3766A60
-        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 06:55:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665410133;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Tc5aQic8H6+eU3IGncrpCO0n3+KOJF+zPCxhE4rJPAU=;
-        b=Dq9TBlN+CJE9ALYAY6bM84ajE+bBvMEIGTYkMEfQ2QAgH4sdXiXncMIn3NF28yg+OssZtn
-        969KV84CELepHWtTr7/XUx9UUsgQdP/uOsK2SvBUns3cMrEZGQvrIpZtenu3qwX8rIlC0o
-        qOEjjAEAKtWSEpmf2YT87B3xCB9BwWk=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-292-ePAanpiNPfiIk8SrYGoGIg-1; Mon, 10 Oct 2022 09:55:32 -0400
-X-MC-Unique: ePAanpiNPfiIk8SrYGoGIg-1
-Received: by mail-ej1-f70.google.com with SMTP id du10-20020a17090772ca00b00782e5bc9641so4555382ejc.23
-        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 06:55:32 -0700 (PDT)
+        with ESMTP id S229920AbiJJONe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 10:13:34 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523189FF5
+        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 07:13:32 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id u15so6901782oie.2
+        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 07:13:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2LInEgpoLjaWQQiOfUSh68UQ+OYo/vhsuxJne2mnOIo=;
+        b=msetRcFxjPB0OS9RwnY2i/qO8zzupocb1p1EQPWXuroErHxXofsdO9OmyGF2hkf4zM
+         I8M5tc6oEn2gWPz613PG3fznesWHeoqquQQGgHsMaDMycYbIvhK0XKzNvbmk3OI4Pzgi
+         Z86ShypFdi8hui3eeH37nJQefiXgNfInDyfUDAAwS7CFIDCFXMkeMe43v6hc3Gi6cHVq
+         sCd0c0tfIJmBYDSPZbtOsSRPm/CBoK1wJpi2efOcTksCX6D2X3zXo9vgBx9qTUIjLBBA
+         KV8fyVBtN5Z5VbPNu7Lo5FsatbQP7AEy5iIJl+g0YiQyGc06JWDB/aKsqS6Fjq5X3uuX
+         ng/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tc5aQic8H6+eU3IGncrpCO0n3+KOJF+zPCxhE4rJPAU=;
-        b=wkdVuevhA1+GCSIMR+zoMCt7EURiebn4E58oWBjtulMdlZYGdbcOeIeYFhDspNe0DI
-         1ScWB/TaCvfJ+wlYhqsQ+38qraXsX4Ja5FL99BLjCcIHrhnsXkwIIrlz43qFfCRIRyHG
-         TIQcXsCM9ca5I7TkxWMs0GTNoGLDlCExkPmjU+hQ8xarAmfSjvvCax0rGhDaN0zF5Zdt
-         jKiHLPmY87BqxDjnDyRm/acqQtEiASBydH7mq9+Sal2u8hT4CaNHNrmmERc1W4DPJs0T
-         3frY2t7/GLPqfMhr3uBs2ndcbmjaq/Q5XUW8p/x2JNMAuTHfm80FIr7eGTM3hVFOtpKJ
-         BVGw==
-X-Gm-Message-State: ACrzQf08Y0FjcD7kI7NFRkS6f/CdspZsspqssFT0J4fxUhQA1BqbjX5a
-        b3vAG+SHfLL3xaUwxhRwGHVXNzdtOcbIkZqiu5i5XAzGA25l8riHrGYu/fXlegDi5kzowp86U2F
-        d/rsBwYXerV7ENLEbJeI=
-X-Received: by 2002:a17:907:271a:b0:78d:cdd7:5a23 with SMTP id w26-20020a170907271a00b0078dcdd75a23mr937045ejk.556.1665410131272;
-        Mon, 10 Oct 2022 06:55:31 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5UNlHzjCh7mj/OOM5sVysjJdXCBdhCc/MFVlcRXgMgHwcGQ2qh2AFO9tgv4IQO6OoAHayZ0g==
-X-Received: by 2002:a17:907:271a:b0:78d:cdd7:5a23 with SMTP id w26-20020a170907271a00b0078dcdd75a23mr937038ejk.556.1665410131072;
-        Mon, 10 Oct 2022 06:55:31 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id o8-20020a50c908000000b004533fc582cbsm7122013edh.21.2022.10.10.06.55.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Oct 2022 06:55:30 -0700 (PDT)
-Message-ID: <ac433eb7-2fcd-78ae-8379-4567528ad837@redhat.com>
-Date:   Mon, 10 Oct 2022 15:55:29 +0200
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2LInEgpoLjaWQQiOfUSh68UQ+OYo/vhsuxJne2mnOIo=;
+        b=dq41o7oFvuTyRHLcFEGuZSskpGTDT3UQwvrAlf1DxgVrJyElnsR4N+Ju5lj5OkOoE1
+         6sGDEnKZNlLQm7OXxUEQ5zIJncmSyeosF/oqsj4Cjk1+hdJ0wii/5FTfmuHDHRaFGcG0
+         TLPP6ZFTC72/6bNS1yj/Qgt+hqGY+W7crgvmo4UKTFIkvKjXd7VTzF8oInwXUHuMIoxn
+         H+2zf0w2qqrYc6KWFZq2v/l5pUWKdOM8ioCYzi9DXT5cfYNlUmsAYUnMZ9jnfmh7X+Xs
+         XfGG94t0R1ph9Jgc8rhRKMOmBchY0is6Nyy1uFKlFZzm6/ZdkFDzU/TeQX074a5P8qMz
+         sjMg==
+X-Gm-Message-State: ACrzQf1EGhwPtOdgqFiG1+vTMU0UXx2AT0WUY/kQGw8mxcTR9j/zYU+X
+        J5QB4IA8AmoXrxZO22EUtnUCvZt7cjM=
+X-Google-Smtp-Source: AMsMyM4tTbLvRZVT6or3frYc8rgERrfRQomPpvU5Vq8WJrGUBiBXArzD7vyaoSpBLhfzufhH3XaIvw==
+X-Received: by 2002:a05:6808:1717:b0:334:9342:63f1 with SMTP id bc23-20020a056808171700b00334934263f1mr15323815oib.77.1665411211351;
+        Mon, 10 Oct 2022 07:13:31 -0700 (PDT)
+Received: from wintermute.localdomain (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
+        by smtp.gmail.com with ESMTPSA id q66-20020a4a4b45000000b00475f26931c8sm2901694ooa.13.2022.10.10.07.13.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 07:13:30 -0700 (PDT)
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     maccraft123mc@gmail.com, lee@kernel.org, sre@kernel.org,
+        dan.carpenter@oracle.com, Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH] power: supply: Change rk817_chg_cur_to_reg to int
+Date:   Mon, 10 Oct 2022 09:13:29 -0500
+Message-Id: <20221010141329.10006-1-macroalpha82@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] power: supply: bq25890: Add support for setting max CC
- current and voltage
-Content-Language: en-US
-To:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20221009192136.106859-1-marex@denx.de>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221009192136.106859-1-marex@denx.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,107 +68,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+From: Chris Morgan <macromorgan@hotmail.com>
 
-On 10/9/22 21:21, Marek Vasut wrote:
-> Let user set battery charge current and voltage limit via sysfs. This is
-> useful in case the user space needs to reduce charge current to keep the
-> system within thermal limits. The maximum charge current and voltage are
-> still limited to "ti,charge-current" and "ti,battery-regulation-voltage"
-> values to avoid damaging the hardware in case too high values are set by
-> user space.
+Change return value of rk817_chg_cur_to_reg from u8 to int. If the
+function fails to find a suitable value it returns a -EINVAL, but
+defined as a u8 it would not return correctly. Additionally, change
+defined variable that stores return value from u8 to int.
 
-As I have tried to explain in my replies to your other patch-series,
-the currently used battery charge current and voltage limits belong in
-the POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT resp.
-POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE properties (which may also
-be written to set these).
+Fixes: 11cb8da0189b (power: supply: Add charger driver for Rockchip
+RK817)
 
-Where as the _MAX variants of these properties should give the maximum
-allowed values as read from devicetree in the "ti,charge-current" and
-"ti,battery-regulation-voltage" properties.
+Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+---
+ drivers/power/supply/rk817_charger.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Making this work as it should will require first fixing the abuse
-of at least POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE which
-I mentioned in the other thread.
-
-In case it is not clear, this is a nack for this patch. Sorry that you
-have to cleanup this mess, but IMHO it is better to fix the mess now
-then to try and hack around it making an even bigger mess.
-
-Regards,
-
-Hans
-
-
-
-> 
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> To: linux-pm@vger.kernel.org
-> ---
->  drivers/power/supply/bq25890_charger.c | 23 +++++++++++++++++++++--
->  1 file changed, 21 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-> index c4c830247e0e0..d48c147c8be81 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -531,7 +531,11 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
->  		break;
->  
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> -		val->intval = bq25890_find_val(bq->init_data.ichg, TBL_ICHG);
-> +		ret = bq25890_field_read(bq, F_ICHG);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		val->intval = bq25890_find_val(ret, TBL_ICHG);
->  
->  		/* When temperature is too low, charge current is decreased */
->  		if (bq->state.ntc_fault == NTC_FAULT_COOL) {
-> @@ -561,7 +565,11 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
->  		break;
->  
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> -		val->intval = bq25890_find_val(bq->init_data.vreg, TBL_VREG);
-> +		ret = bq25890_field_read(bq, F_VREG);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		val->intval = bq25890_find_val(ret, TBL_VREG);
->  		break;
->  
->  	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> @@ -619,9 +627,18 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
->  					     const union power_supply_propval *val)
->  {
->  	struct bq25890_device *bq = power_supply_get_drvdata(psy);
-> +	int maxval;
->  	u8 lval;
->  
->  	switch (psp) {
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +		maxval = bq25890_find_val(bq->init_data.ichg, TBL_ICHG);
-> +		lval = bq25890_find_idx(min(val->intval, maxval), TBL_ICHG);
-> +		return bq25890_field_write(bq, F_ICHG, lval);
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> +		maxval = bq25890_find_val(bq->init_data.vreg, TBL_VREG);
-> +		lval = bq25890_find_idx(min(val->intval, maxval), TBL_VREG);
-> +		return bq25890_field_write(bq, F_VREG, lval);
->  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
->  		lval = bq25890_find_idx(val->intval, TBL_IINLIM);
->  		return bq25890_field_write(bq, F_IINLIM, lval);
-> @@ -634,6 +651,8 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
->  						      enum power_supply_property psp)
->  {
->  	switch (psp) {
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
->  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
->  		return true;
->  	default:
+diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
+index 635f051b0821..305354d99177 100644
+--- a/drivers/power/supply/rk817_charger.c
++++ b/drivers/power/supply/rk817_charger.c
+@@ -121,7 +121,7 @@ struct rk817_charger {
+ #define ADC_TO_CHARGE_UAH(adc_value, res_div)	\
+ 	(adc_value / 3600 * 172 / res_div)
+ 
+-static u8 rk817_chg_cur_to_reg(u32 chg_cur_ma)
++static int rk817_chg_cur_to_reg(u32 chg_cur_ma)
+ {
+ 	if (chg_cur_ma >= 3500)
+ 		return CHG_3_5A;
+@@ -864,8 +864,8 @@ static int rk817_battery_init(struct rk817_charger *charger,
+ {
+ 	struct rk808 *rk808 = charger->rk808;
+ 	u32 tmp, max_chg_vol_mv, max_chg_cur_ma;
+-	u8 max_chg_vol_reg, chg_term_i_reg, max_chg_cur_reg;
+-	int ret, chg_term_ma;
++	u8 max_chg_vol_reg, chg_term_i_reg;
++	int ret, chg_term_ma, max_chg_cur_reg;
+ 	u8 bulk_reg[2];
+ 
+ 	/* Get initial plug state */
+-- 
+2.25.1
 
