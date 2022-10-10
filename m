@@ -2,49 +2,38 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 010325F9CB9
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 12:25:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08AB5F9D07
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 12:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiJJKZI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 06:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
+        id S231811AbiJJKqk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 06:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231886AbiJJKZH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 06:25:07 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D761E3C0;
-        Mon, 10 Oct 2022 03:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=pdhnKAPF52sYqK980IWtdt34OQpnL0NrY0o26kTdZ0U=; b=JMskWiApk8yj22fRCu/QbJfUmG
-        0IAUl7h2FxkcJ40L8Fu8Rf+ip/39Y+0cXpSNyuVUCkoEfABM7V+R7xEgY5Dwbo6SoGcgb5Vnd+tsJ
-        0Z/1hbEuBl/1Z2OacuZSlWprdHrh/j68RQT4t3kSs/iY7wSBGq/s5o58sEZ9lbzUkxPyXKoSCqZc+
-        5DfYQBKcLQ2zPfstUu2BdoHtawgJxRn21l5681YGLNB+ZjacdcFJj00j0BsKLfAN5Glcuw95rhqHw
-        dPjirp6erAKf6SuDEPd8kACLf7T/kJDB+CdpDap8s1/bmj6qVmsGo6PJWaI7QifwXzdHAAQ7JbWZL
-        ENojMVvw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ohpy1-002GDL-3V; Mon, 10 Oct 2022 10:25:01 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B44DE300422;
-        Mon, 10 Oct 2022 12:25:00 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9C4922024D73A; Mon, 10 Oct 2022 12:25:00 +0200 (CEST)
-Date:   Mon, 10 Oct 2022 12:25:00 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
+        with ESMTP id S231218AbiJJKqe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 06:46:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F1C1D67C95;
+        Mon, 10 Oct 2022 03:46:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E548E1480;
+        Mon, 10 Oct 2022 03:46:38 -0700 (PDT)
+Received: from [10.57.5.39] (unknown [10.57.5.39])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50A333F792;
+        Mon, 10 Oct 2022 03:46:31 -0700 (PDT)
+Message-ID: <7ded9241-6c21-6631-8910-9f1150db6724@arm.com>
+Date:   Mon, 10 Oct 2022 11:46:29 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
+ store_scaling_max_freq()
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com
-Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
- store_scaling_max_freq()
-Message-ID: <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
+        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
 References: <20220930094821.31665-1-lukasz.luba@arm.com>
  <20220930094821.31665-2-lukasz.luba@arm.com>
  <20221010053902.5rofnpzvyynumw3e@vireshk-i7>
@@ -53,22 +42,47 @@ References: <20220930094821.31665-1-lukasz.luba@arm.com>
  <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
  <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
  <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+ <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 10, 2022 at 11:12:06AM +0100, Lukasz Luba wrote:
-> BTW, those Android user space max freq requests are not that long,
-> mostly due to camera capturing (you can see a few in this file,
-> e.g. [1]).
 
-It does what now ?!? Why is Android using this *at*all* ?
++CC Daniel, since I have mentioned a few times DTPM
+
+On 10/10/22 11:25, Peter Zijlstra wrote:
+> On Mon, Oct 10, 2022 at 11:12:06AM +0100, Lukasz Luba wrote:
+>> BTW, those Android user space max freq requests are not that long,
+>> mostly due to camera capturing (you can see a few in this file,
+>> e.g. [1]).
+> 
+> It does what now ?!? Why is Android using this *at*all* ?
+
+It tries to balance the power budget, before bad things happen
+randomly (throttling different devices w/o a good context what's
+going on). Please keep in mind that we have ~3 Watts total power
+budget in a phone, while several devices might be suddenly used:
+1. big CPU with max power ~3-3.5 Watts (and we have 2 cores on pixel6)
+2. GPU with max power ~6Watts (normally ~1-2Watts when lightly used)
+3. ISP (Image Signal Processor) up to ~2Watts
+4. DSP also up to 1-2Watts
+
+We don't have currently a good mechanism which could be aware
+of the total power/thermal budget and relations between those
+devices. Vendors and OEMs run experiments on devices and profile
+them to work more predictable in those 'important to users' scenarios.
+
+AFAIK Daniel Lescano is trying to help with this new interface
+for PowerCap: DTMP. It might be use as a new interface for those known
+scenarios like the camera snapshot. But that interface is on the list
+that I have also mentioned - it's missing the notification mechanism
+for the scheduler reduced capacity due to user-space new scenario.
