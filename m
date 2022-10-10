@@ -2,127 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50575FA2E3
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 19:47:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364165FA414
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 21:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbiJJRrp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 13:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S229755AbiJJTW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 15:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJJRro (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 13:47:44 -0400
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5343E69184;
-        Mon, 10 Oct 2022 10:47:43 -0700 (PDT)
-Received: by mail-qv1-f53.google.com with SMTP id i9so7576526qvo.0;
-        Mon, 10 Oct 2022 10:47:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jv86Vf+p1vocEHP4ncmuBlZBjtxstd5HAmslvFY0pLg=;
-        b=yixWe+3cCe8KmtUEFfL/J7lJAfbYmd4xSGWfgV//8i/JiqMjilUOlkk+AZczIF1mal
-         RtBfmFNVCiQoHmEdlopyQPky9WqPk5lsDp3dVpphjWVd/KZ/Rx/fZDQSuJAsGqRWPX/o
-         hTcFj2P5CCxaThGs47d3LwLdqCumPNl0eav+dmd/HE4ckJ9p1ILMCgTQmZajuxx3zhgK
-         hlON1zM1WGFYMsj931Ssh8zsVmyw9MOAz0g9LfCpHbWf0UM4kAJrJIb8EuHtuilLhhm8
-         dNRVtqTbY0/AKDJ695dHA3lfXdZu1RXL7cLh+y7udZ5AzfLHeA/a43FWzYhOgQPbKKCF
-         hKbg==
-X-Gm-Message-State: ACrzQf2eIEcnhZGdV8vPvpGX5QPT+unJ1OhQAVYVB3Q2O6syTgZ+T+oA
-        1tXdkZKJPQnm6YyNucVGaCrYyKQ4FxtpUBujf1L9Ze41MLQ=
-X-Google-Smtp-Source: AMsMyM4ts/yrVkZ/rwo1rX5dF+U9YbdwmlS+g6Emy1R6Ka4W26Z9PtrVHLaHRvmePk+CdJhX0Jhu5QXzR4yU/x9b6dQ=
-X-Received: by 2002:ad4:5d48:0:b0:4b4:12a4:8a2f with SMTP id
- jk8-20020ad45d48000000b004b412a48a2fmr3179433qvb.85.1665424062417; Mon, 10
- Oct 2022 10:47:42 -0700 (PDT)
+        with ESMTP id S229637AbiJJTW1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 15:22:27 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B739C60693
+        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 12:22:25 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 92C9684A73;
+        Mon, 10 Oct 2022 21:22:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1665429743;
+        bh=rdYj6KJaNQ4lbn118QI9y7+KQmUmUhqvxHofQq9TNWg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NfNQojHjBboyIMQCzpgDaOWZpm+3hZg3Rp7nkaO98RJA9gI611iaQ5o40IoL9TzFZ
+         7/LPVC55/O4rakhJK42QNOKO5vjnqzeoPnnIBp+3O8HpnKy/NekPhbQA+EK771GQUi
+         EgDaioEfFzQbWR9rYrBJf16/Vnb1Q5Q1i5+EqsGnyQFcOrYZNqhBXfVwPEMAYklwbG
+         hLi/BYysaPVcAntWPy2n9JbjYgEP/SqQq+/fX8e0bamRYx+xVn5FGLrj+PvkVHF1Mu
+         mKVZ0S3L9uUXfuh85woCpt5G1R7f7D2c5dLQ/VAPZbzAi2lCdrUvh91hgRemv+bzju
+         vDSSy5A2ySHYg==
+Message-ID: <c528ae92-26bd-e6a9-a406-93a077d2fab7@denx.de>
+Date:   Mon, 10 Oct 2022 21:22:22 +0200
 MIME-Version: 1.0
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 10 Oct 2022 19:47:31 +0200
-Message-ID: <CAJZ5v0i_sK86N5i3sVRE1cdb7TgHOCGnMV5+5JuQewwwLBEp0Q@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.1-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/2] power: supply: bq25890: Add CC voltage to ADC
+ properties
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-pm@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20221009191839.102686-1-marex@denx.de>
+ <Y0NUbeUae01t+UGa@qmqm.qmqm.pl>
+ <dde63fea-04eb-c438-27d3-fe6ff5c174bc@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <dde63fea-04eb-c438-27d3-fe6ff5c174bc@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Linus,
+On 10/10/22 15:50, Hans de Goede wrote:
+> Hi,
 
-Please pull from the tag
+Hi,
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.1-rc1-2
+[...]
 
-with top-most commit e021563fd09e1fd4041a6a573ec10fb5b5d275b0
+>> Though I think there is no proper property
+>> for the VSYS value that is currently occupying VOLTAGE_NOW - this
+>> might be better modelled as a separate regulator maybe?
+> 
+> Ack, see above.
 
- Merge tag 'thermal-v6.1-rc1-2' of
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux
+We already do have a regulator in the bq25890 driver. The regulator is 
+used as a switch to toggle OTG boost mode (supply from battery to VBUS), 
+but I don't see any users of this functionality, and I cannot imagine 
+how this would be modeled in DT. (Hans, can you clarify?)
 
-on top of commit a5088ee7251e5106a4efa9588a73866eb4b4154e
+There is the usb_work (usb_register_notifier()) which triggers workqueue 
+which does the same, toggles OTG boost mode, but this is only used in 
+case a valid USB PHY is found. I didn't find any users of this either.
 
- Merge tag 'thermal-6.1-rc1' of
-git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+Anyway, maybe we can extend the regulator to report VBus and register 
+another one to report VSys, where the VSys one can be plugged e.g. as 
+supply for PMIC in DT ?
 
-to receive thermal control fixes for 6.1-rc1.
-
-These fix assorted issues in the thermal core and ARM thermal drivers.
-
-Specifics:
-
- - Use platform data to get the sensor ID instead of parsing the device
-   in imx_sc thermal driver and remove the dedicated OF function from
-   the core code (Daniel Lezcano).
-
- - Fix Kconfig dependency for the QCom tsens thermal driver (Jonathan
-   Cameron).
-
- - Add missing const annotation to the RCar ops thermal driver (Lad
-   Prabhakar).
-
- - Drop duplicate parameter check from
-   thermal_zone_device_register_with_trips() (Lad Prabhakar).
-
- - Fix NULL pointer dereference in trip_point_temp_store() by making it
-   check if the ->set_trip_temp() operation is present (Lad Prabhakar).
-
- - Fix the MSM8939 fourth sensor hardware ID in the QCom tsens thermal
-   driver (Vincent Knecht).
-
-Thanks!
-
-
----------------
-
-Daniel Lezcano (2):
-      thermal/drivers/imx_sc: Rely on the platform data to get the resource id
-      thermal/of: Remove the thermal_zone_of_get_sensor_id() function
-
-Jonathan Cameron (1):
-      thermal/drivers/qcom: Drop false build dependency of all QCOM
-drivers on QCOM_TSENS
-
-Lad Prabhakar (3):
-      thermal/drivers/rcar_thermal: Constify static thermal_zone_device_ops
-      thermal/core: Drop valid pointer check for type
-      thermal/core: Add a check before calling set_trip_temp()
-
-Vincent Knecht (1):
-      thermal/drivers/qcom/tsens-v0_1: Fix MSM8939 fourth sensor hw_id
-
----------------
-
- drivers/thermal/Makefile          |  2 +-
- drivers/thermal/imx_sc_thermal.c  | 68 +++++++++++++++++++--------------------
- drivers/thermal/qcom/tsens-v0_1.c |  2 +-
- drivers/thermal/rcar_thermal.c    |  2 +-
- drivers/thermal/thermal_core.c    |  2 +-
- drivers/thermal/thermal_of.c      | 44 -------------------------
- drivers/thermal/thermal_sysfs.c   |  8 +++--
- include/linux/thermal.h           | 10 ------
- 8 files changed, 42 insertions(+), 96 deletions(-)
+[...]
