@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364165FA414
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 21:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FCB45FA6A3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 22:57:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJJTW2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 15:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S230295AbiJJU5I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 16:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJJTW1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 15:22:27 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B739C60693
-        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 12:22:25 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        with ESMTP id S230355AbiJJU4o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 16:56:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062C65727E;
+        Mon, 10 Oct 2022 13:56:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 92C9684A73;
-        Mon, 10 Oct 2022 21:22:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665429743;
-        bh=rdYj6KJaNQ4lbn118QI9y7+KQmUmUhqvxHofQq9TNWg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NfNQojHjBboyIMQCzpgDaOWZpm+3hZg3Rp7nkaO98RJA9gI611iaQ5o40IoL9TzFZ
-         7/LPVC55/O4rakhJK42QNOKO5vjnqzeoPnnIBp+3O8HpnKy/NekPhbQA+EK771GQUi
-         EgDaioEfFzQbWR9rYrBJf16/Vnb1Q5Q1i5+EqsGnyQFcOrYZNqhBXfVwPEMAYklwbG
-         hLi/BYysaPVcAntWPy2n9JbjYgEP/SqQq+/fX8e0bamRYx+xVn5FGLrj+PvkVHF1Mu
-         mKVZ0S3L9uUXfuh85woCpt5G1R7f7D2c5dLQ/VAPZbzAi2lCdrUvh91hgRemv+bzju
-         vDSSy5A2ySHYg==
-Message-ID: <c528ae92-26bd-e6a9-a406-93a077d2fab7@denx.de>
-Date:   Mon, 10 Oct 2022 21:22:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 1/2] power: supply: bq25890: Add CC voltage to ADC
- properties
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20221009191839.102686-1-marex@denx.de>
- <Y0NUbeUae01t+UGa@qmqm.qmqm.pl>
- <dde63fea-04eb-c438-27d3-fe6ff5c174bc@redhat.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <dde63fea-04eb-c438-27d3-fe6ff5c174bc@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 976EB61032;
+        Mon, 10 Oct 2022 20:56:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 056F0C433C1;
+        Mon, 10 Oct 2022 20:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665435398;
+        bh=s2Ej6XrZFJWQNYQBhzbEoFqG9B/P5d4rZiiqHjCXV7I=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=j/NvsrFHmSZJOTXpXNygoFttOoc1xbntKTOTNTuT91F4baLDgvIS9KDco4ruclNZ/
+         668j4b07RGehm6Muwys7THEl2ba7de/Or//0lk2la6Ld9/X2oLgtSclxz5TpQt2eoZ
+         s8WawM5TPOUYTtrLIWpiMxpLk+cbtorXhNatyfmAuVfD93YOoT6xpsZo4AHhfk6Ii1
+         cWcrbw8lyWfXvPy+VwxpyuS4RyOFlo1ztWb79Igr12rVdw9aUFgLcRxIGPCikBHmZ+
+         75UVpayLSLY6+avvn+ZmNGlhwSq21oSVwYQkVj/JH4WOcS+9xvVdtsu3X1jBocVSc4
+         9V4PtEYaCwrzg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8F61E43EFE;
+        Mon, 10 Oct 2022 20:56:37 +0000 (UTC)
+Subject: Re: [GIT PULL] More ACPI updates for v6.1-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0jxEKB0521TSXqrJj4D0=2Dm+tXe-RxMff-2exxGLcA6A@mail.gmail.com>
+References: <CAJZ5v0jxEKB0521TSXqrJj4D0=2Dm+tXe-RxMff-2exxGLcA6A@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0jxEKB0521TSXqrJj4D0=2Dm+tXe-RxMff-2exxGLcA6A@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.1-rc1-2
+X-PR-Tracked-Commit-Id: 056a81549c2722f0e7a9cceb7a98728eb1d67434
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3a1e24fa70a06ab6b087361ffe90d4cb5e1d059d
+Message-Id: <166543539795.11766.9462886223358557510.pr-tracker-bot@kernel.org>
+Date:   Mon, 10 Oct 2022 20:56:37 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +61,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/10/22 15:50, Hans de Goede wrote:
-> Hi,
+The pull request you sent on Mon, 10 Oct 2022 19:44:48 +0200:
 
-Hi,
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.1-rc1-2
 
-[...]
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3a1e24fa70a06ab6b087361ffe90d4cb5e1d059d
 
->> Though I think there is no proper property
->> for the VSYS value that is currently occupying VOLTAGE_NOW - this
->> might be better modelled as a separate regulator maybe?
-> 
-> Ack, see above.
+Thank you!
 
-We already do have a regulator in the bq25890 driver. The regulator is 
-used as a switch to toggle OTG boost mode (supply from battery to VBUS), 
-but I don't see any users of this functionality, and I cannot imagine 
-how this would be modeled in DT. (Hans, can you clarify?)
-
-There is the usb_work (usb_register_notifier()) which triggers workqueue 
-which does the same, toggles OTG boost mode, but this is only used in 
-case a valid USB PHY is found. I didn't find any users of this either.
-
-Anyway, maybe we can extend the regulator to report VBus and register 
-another one to report VSys, where the VSys one can be plugged e.g. as 
-supply for PMIC in DT ?
-
-[...]
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
