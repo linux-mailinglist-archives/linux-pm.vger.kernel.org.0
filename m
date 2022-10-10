@@ -2,65 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A984E5F9FFA
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 16:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 781D25FA05A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 16:43:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbiJJONp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 10:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44806 "EHLO
+        id S229871AbiJJOn4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 10:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiJJONe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 10:13:34 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523189FF5
-        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 07:13:32 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id u15so6901782oie.2
-        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 07:13:32 -0700 (PDT)
+        with ESMTP id S229853AbiJJOnx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 10:43:53 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB676C137;
+        Mon, 10 Oct 2022 07:43:51 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id c24so10586538plo.3;
+        Mon, 10 Oct 2022 07:43:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2LInEgpoLjaWQQiOfUSh68UQ+OYo/vhsuxJne2mnOIo=;
-        b=msetRcFxjPB0OS9RwnY2i/qO8zzupocb1p1EQPWXuroErHxXofsdO9OmyGF2hkf4zM
-         I8M5tc6oEn2gWPz613PG3fznesWHeoqquQQGgHsMaDMycYbIvhK0XKzNvbmk3OI4Pzgi
-         Z86ShypFdi8hui3eeH37nJQefiXgNfInDyfUDAAwS7CFIDCFXMkeMe43v6hc3Gi6cHVq
-         sCd0c0tfIJmBYDSPZbtOsSRPm/CBoK1wJpi2efOcTksCX6D2X3zXo9vgBx9qTUIjLBBA
-         KV8fyVBtN5Z5VbPNu7Lo5FsatbQP7AEy5iIJl+g0YiQyGc06JWDB/aKsqS6Fjq5X3uuX
-         ng/Q==
+        bh=Nrd95k6GPbOHhAfvdiaYVtqkHMeXbzfYwCg/In6/c7g=;
+        b=QlbmWFjn8z5Cs1v7eYZPoWGJxvACjjfV/96oGtazZXVGRdUk9fsHKigxuNPLwomO55
+         J+NXvzmrxOYzkRPbBh5vrn3kwcmxCFyNdvXk8mGOLe3oYbqyCkkuZsProB0gsN+vHyGT
+         N8A0OOg2i5cfqc8i9aFeEMr6qxdV/Aee3OSadXupwO0Yjj+GBd2X97Q5MXmwae+mTO7/
+         f4XQlNw+Uc/FJ3b9jTAu/+A5u5gJbVqxbqbmpcD4qhNIV5WJNVup7mYkCcAawsym2mew
+         OUGG4BuKfTLFZGd8lsI16ky+JAY6ipl8MMZ9nQDLO6OVzQQGRUYiS2NNFlb3uyGRVY1V
+         K1Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2LInEgpoLjaWQQiOfUSh68UQ+OYo/vhsuxJne2mnOIo=;
-        b=dq41o7oFvuTyRHLcFEGuZSskpGTDT3UQwvrAlf1DxgVrJyElnsR4N+Ju5lj5OkOoE1
-         6sGDEnKZNlLQm7OXxUEQ5zIJncmSyeosF/oqsj4Cjk1+hdJ0wii/5FTfmuHDHRaFGcG0
-         TLPP6ZFTC72/6bNS1yj/Qgt+hqGY+W7crgvmo4UKTFIkvKjXd7VTzF8oInwXUHuMIoxn
-         H+2zf0w2qqrYc6KWFZq2v/l5pUWKdOM8ioCYzi9DXT5cfYNlUmsAYUnMZ9jnfmh7X+Xs
-         XfGG94t0R1ph9Jgc8rhRKMOmBchY0is6Nyy1uFKlFZzm6/ZdkFDzU/TeQX074a5P8qMz
-         sjMg==
-X-Gm-Message-State: ACrzQf1EGhwPtOdgqFiG1+vTMU0UXx2AT0WUY/kQGw8mxcTR9j/zYU+X
-        J5QB4IA8AmoXrxZO22EUtnUCvZt7cjM=
-X-Google-Smtp-Source: AMsMyM4tTbLvRZVT6or3frYc8rgERrfRQomPpvU5Vq8WJrGUBiBXArzD7vyaoSpBLhfzufhH3XaIvw==
-X-Received: by 2002:a05:6808:1717:b0:334:9342:63f1 with SMTP id bc23-20020a056808171700b00334934263f1mr15323815oib.77.1665411211351;
-        Mon, 10 Oct 2022 07:13:31 -0700 (PDT)
-Received: from wintermute.localdomain (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
-        by smtp.gmail.com with ESMTPSA id q66-20020a4a4b45000000b00475f26931c8sm2901694ooa.13.2022.10.10.07.13.30
+        bh=Nrd95k6GPbOHhAfvdiaYVtqkHMeXbzfYwCg/In6/c7g=;
+        b=badv7wEebnSTjiIzRe7tDnxvW2dOXeaz/yfZ16K+aASEaSA31y+koCzJzCp5ZUlpDn
+         alq0cFwOX806cVOewB7BwQDr8YSyWLJZLRbPruopmWEHV6SvIvMsJKr9rnVtKwehihGr
+         fKg+e39dftqrD1yXNQbAIZx6Md8uIxjQqfqcWYEG0NNhXptHAWbYLU7POTov7AHF14dY
+         SjB+VTEF4+yptMFM42cd3xRrT4q+4gmC8htrA0RsDoyUBcn889yOZWPQpM5ZeE8KZ6t7
+         SCUHvG3+U/jeURbKQsAFnoE2lIDy6lY3i+lJj6DDRZk0eL4iakw4NfstbWGDzJWVA8ym
+         MYFQ==
+X-Gm-Message-State: ACrzQf10OkqbI0GlSw7AuoZH6BgQZfmdOVqNQnu/gh42alfQ7QKB11oI
+        LrGzPw9ZavRNimjVy4F3sic=
+X-Google-Smtp-Source: AMsMyM7c9/OUUEj2Qpcm3zY0WKWkTDc2G4V1VIUrfZnTmr1afP2recxfW4QgvrcmxI6bdUASl8P13A==
+X-Received: by 2002:a17:90a:a512:b0:209:9b31:5f2f with SMTP id a18-20020a17090aa51200b002099b315f2fmr21920791pjq.146.1665413030479;
+        Mon, 10 Oct 2022 07:43:50 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.236])
+        by smtp.gmail.com with ESMTPSA id pg12-20020a17090b1e0c00b0020087d7e778sm9198078pjb.37.2022.10.10.07.43.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Oct 2022 07:13:30 -0700 (PDT)
-From:   Chris Morgan <macroalpha82@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     maccraft123mc@gmail.com, lee@kernel.org, sre@kernel.org,
-        dan.carpenter@oracle.com, Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH] power: supply: Change rk817_chg_cur_to_reg to int
-Date:   Mon, 10 Oct 2022 09:13:29 -0500
-Message-Id: <20221010141329.10006-1-macroalpha82@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 10 Oct 2022 07:43:50 -0700 (PDT)
+From:   Qibo Huang <huangqibo.tech@gmail.com>
+To:     rafael@kernel.org
+Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Qibo Huang <huangqibo.tech@gmail.com>
+Subject: [PATCH] thermal/governors: Fix cooling device setting cooling state failure
+Date:   Mon, 10 Oct 2022 22:43:41 +0800
+Message-Id: <20221010144341.16738-1-huangqibo.tech@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,46 +69,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Chris Morgan <macromorgan@hotmail.com>
+Because the __thermal_cdev_update function traverses the
+cooling_device->thermal_instances list to obtain the maximum
+target state, and then the cooling device sets the maximum
+cooling state. However, the power_actor_set_power function
+only updates the target value of thermal_zone->thermal_instances
+to the target state, and does not update the target value of
+cooling_device->thermal_instances, resulting in the target
+being 0 all the time.
 
-Change return value of rk817_chg_cur_to_reg from u8 to int. If the
-function fails to find a suitable value it returns a -EINVAL, but
-defined as a u8 it would not return correctly. Additionally, change
-defined variable that stores return value from u8 to int.
-
-Fixes: 11cb8da0189b (power: supply: Add charger driver for Rockchip
-RK817)
-
-Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
 ---
- drivers/power/supply/rk817_charger.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/thermal/gov_power_allocator.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
-index 635f051b0821..305354d99177 100644
---- a/drivers/power/supply/rk817_charger.c
-+++ b/drivers/power/supply/rk817_charger.c
-@@ -121,7 +121,7 @@ struct rk817_charger {
- #define ADC_TO_CHARGE_UAH(adc_value, res_div)	\
- 	(adc_value / 3600 * 172 / res_div)
- 
--static u8 rk817_chg_cur_to_reg(u32 chg_cur_ma)
-+static int rk817_chg_cur_to_reg(u32 chg_cur_ma)
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 2d1aeaba38a8..8a6a08906dd4 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -293,6 +293,7 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
+ 		      struct thermal_instance *instance, u32 power)
  {
- 	if (chg_cur_ma >= 3500)
- 		return CHG_3_5A;
-@@ -864,8 +864,8 @@ static int rk817_battery_init(struct rk817_charger *charger,
- {
- 	struct rk808 *rk808 = charger->rk808;
- 	u32 tmp, max_chg_vol_mv, max_chg_cur_ma;
--	u8 max_chg_vol_reg, chg_term_i_reg, max_chg_cur_reg;
--	int ret, chg_term_ma;
-+	u8 max_chg_vol_reg, chg_term_i_reg;
-+	int ret, chg_term_ma, max_chg_cur_reg;
- 	u8 bulk_reg[2];
+ 	unsigned long state;
++	struct thermal_instance *cdev_instance;
+ 	int ret;
  
- 	/* Get initial plug state */
+ 	ret = cdev->ops->power2state(cdev, power, &state);
+@@ -300,6 +301,10 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
+ 		return ret;
+ 
+ 	instance->target = clamp_val(state, instance->lower, instance->upper);
++	list_for_each_entry(cdev_instance, &cdev->thermal_instances, cdev_node) {
++		if (cdev_instance->tz->id == instance->tz->id)
++			cdev_instance->target = state;
++	}
+ 	mutex_lock(&cdev->lock);
+ 	__thermal_cdev_update(cdev);
+ 	mutex_unlock(&cdev->lock);
 -- 
-2.25.1
+2.37.1
 
