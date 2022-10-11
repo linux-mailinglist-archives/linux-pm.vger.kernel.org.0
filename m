@@ -2,98 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E665FBABA
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 20:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62A705FBBE0
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 22:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiJKSs4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 14:48:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
+        id S229620AbiJKUKz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 16:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJKSsz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 14:48:55 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA8584E43
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 11:48:52 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id o2so1896487qkk.10
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 11:48:52 -0700 (PDT)
+        with ESMTP id S229754AbiJKUKw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 16:10:52 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4018B7C772
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 13:10:51 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d7-20020a17090a2a4700b0020d268b1f02so4193pjg.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 13:10:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mG2zwWYNxIWtSztSKOnvPD7xgArPRkO20SvzB1RsUNA=;
-        b=tn3AqHoMOmYRGqInNP1wFi2+uneFjRWwKgRnzxxWnAoLwMoGE+Qc2A4wcVzs5FIAgd
-         2BgGs4gWUlQGa+PN8IWz4PKv1vpNSaU5tQIQEA+F/h02K52N3BtaJlZGdCVI0T6816YU
-         NYWuXrQmgRAvTnGpbEYJxAJO6/s/4nRIZwDnTNaEoquHHsIfcI/2oqxLMvBQPLSboQKN
-         yeCjs+gd6TvLMeQ+kQbNA1v47CCIPXHqKMn8HHzg5aFJ2fEwRxom5C4lgTaJ3KHNGko9
-         A723vHMxJAvZk0snb3tsTDKO9a2Y0ncIqgcyZUFdD4txzQEOsh77MAj0gQWN89jm3dU7
-         BToQ==
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gdwf1KGq05Jj2wBDUsBe9H2+KCNJMFX0ODf5icvl56Y=;
+        b=YkR7uAg5WXHLuK+YB1M8Ivl3ryL5ttl3PLx8SDWmIk5lSJKuGIzsAHyc3wXjJjswhf
+         5RwXRItZh+nBi2hMD8JvcXfubJi94JUg997gSQ7Ue9VHPQx7I9BkqoNrO0iB1W5UemoE
+         4125IB2XHOy9l409FliXKklm7etV1o3mddhmDMEQvgK0+fMSYy0/U8uGjvERAUF/EBbQ
+         NFBBpaJuDANPwNJ8EZN9wF4CoilYffJ4cFSlzGHod/K+kybE7FUGu0RfGq+d93mrHTiY
+         eE09Aj/iUHQWFOQJwLa+pzIGD9zH/QRnO+OsGGx/No6c3Wa/GocDvlE/0DbFXJnkt6a2
+         WEnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mG2zwWYNxIWtSztSKOnvPD7xgArPRkO20SvzB1RsUNA=;
-        b=iOnJNKEVlj+pD0jx72j+6bhlGXJGiEL9YZXxvV5VMwUqykYDJleNoyJA9eVv/34hwj
-         RC7U4qPz8cycU9UQArdfF+iKkL39v0dFY1teHIcjVEsGovvVNOGoV0uVMRYFCdXJp8Lh
-         otBdFYYxX9PFu9Vzk+wmIaFkHDewjDTRD1zpjIT0kSlwrBWGfY4z4fAF3pcEV6qbIhbm
-         WxnDoPjKhc9zrBlYq253HnSK/nrwgLWvrqQh83KXPFCsXEvaiC/6/FYeXvUBGxCy7l5k
-         aVhx5S5ZulfWyS61ObUpLTPmaiMed16dAS4asrvhX5LWnfXZ3ZQU4OeFvfQ8QFydQ506
-         ELDg==
-X-Gm-Message-State: ACrzQf2otznHi/pbJypIkWQKTD5gzfN71SxPZ4KkMgjv9VXTKYMmCQtL
-        vvcMkJEUbgiL2NQ/+91tJt7inQ==
-X-Google-Smtp-Source: AMsMyM4CGlYrpnjNHBvMf8M1YQruOkuVcEl81tyRMWUVOnRYQmss7kRrR3+p43tvKMpt7CWIviYv2w==
-X-Received: by 2002:a05:620a:4008:b0:6ce:8725:cb7 with SMTP id h8-20020a05620a400800b006ce87250cb7mr18157000qko.480.1665514131819;
-        Tue, 11 Oct 2022 11:48:51 -0700 (PDT)
-Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
-        by smtp.gmail.com with ESMTPSA id bw5-20020a05622a098500b0039cba52974fsm566090qtb.94.2022.10.11.11.48.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Oct 2022 11:48:51 -0700 (PDT)
-Message-ID: <d94d99e0-195c-4b27-a928-debe3f20e7d4@linaro.org>
-Date:   Tue, 11 Oct 2022 14:46:38 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gdwf1KGq05Jj2wBDUsBe9H2+KCNJMFX0ODf5icvl56Y=;
+        b=S1qz4emBTD+BghzzfIUheOZzwBsf4qMcqziKWswc6JVCxFvSRmHixi6Z5kHD7cFjzg
+         fM1K7b4rbEU6mgvuVu4my/ydTDjsoLCYeYRrOjUGI3+RA5bAEzMeaSEIs8Z/kWRU6UyG
+         irZADosTgvuXXCvXUlfzU67YAQxmSX4zisbd3Z7k45bU2N8UfbmkB9XNVnw6uEbJcliG
+         ceyW7nNWbZdFjX0v5bUHaJRD/icjqjcs8KOKCyQSa77Vr3g6JPpR68gHpwCX1Iqrdl1q
+         o/U+QJdNlAaF69kkuN0UsbxwYQlanNoAhHLpjF7XEnySTKIpAild5t1D1CemNobL+5II
+         Pjjw==
+X-Gm-Message-State: ACrzQf2HvVoYhKYqtU//UuY1zGb2huJtnZhKeQ173qyaPNxGcSSnfMdR
+        YYQkve3txxmbv6rLNYD2XCvFbImw8ODsrefwN4VDqw==
+X-Google-Smtp-Source: AMsMyM508ceCmi/EResRMaolUhhT5785fFLEEM2lQzYkZA2L+M/ZK2bABzAGyKsCygnQdtEGlLmtXhO5OWYAmKavRQA=
+X-Received: by 2002:a17:902:eb8e:b0:17f:637b:9548 with SMTP id
+ q14-20020a170902eb8e00b0017f637b9548mr25784213plg.158.1665519050412; Tue, 11
+ Oct 2022 13:10:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH] dt-bindings: thermal: Convert generic-adc-thermal to DT
- schema
-To:     Rob Herring <robh@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laxman Dewangan <ldewangan@nvidia.com>
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221011175235.3191509-1-robh@kernel.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221011175235.3191509-1-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Tue, 11 Oct 2022 13:10:39 -0700
+Message-ID: <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
+Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     djakov@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        festevam@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, abelvesa@kernel.org,
+        abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, marex@denx.de,
+        paul.elder@ideasonboard.com, Markus.Niebel@ew.tq-group.com,
+        aford173@gmail.com, kernel@pengutronix.de,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-imx@nxp.com, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/10/2022 13:52, Rob Herring wrote:
-> Convert the 'generic-adc-thermal' binding to DT schema format.
-> 
-> The binding said '#thermal-sensor-cells' should be 1, but all in tree
-> users are 0 and 1 doesn't make sense for a single channel.
-> 
-> Drop the example's related providers and consumers of the
-> 'generic-adc-thermal' node as the convention is to not have those in
-> the examples.
+On Fri, Jul 8, 2022 at 1:57 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> V4:
+>  Because the header is not included when adding NoC node, the fsl,imx8mp.h
+>  needs be included in this patchset. So include it in patch 6
+>
+> V3:
+>  Move adding NoC node patch to i.MX8MP ICC driver patchset
+>  Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
+>
+> V2:
+>  Use a low bandwidth value instead INT_MAX
+>  Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
+>  Add A-b tag from DT maintainer
+>
+> i.MX8MP NoC settings is invalid after related power domain up. So
+> need to set valid values after power domain up.
+>
+> This patchset is to bind interconnect for each entry in blk ctrl.
+>
+> This patchset is not include DVFS DDRC feature.
+>
+> Peng Fan (7):
+>   dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
+>     ctrl
+>   dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
+>     ctrl
+>   dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
+>     ctrl
+>   soc: imx: add icc paths for i.MX8MP media blk ctrl
+>   soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
+>   arm64: dts: imx8mp: add interconnects for media blk ctrl
+>   arm64: dts: imx8mp: add interconnect for hsio blk ctrl
+>
+>  .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
+>  .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
+>  .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
+>  arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
+>  drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
+>  drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
+>  6 files changed, 125 insertions(+)
+>
+> --
+> 2.25.1
+>
 
+Hi Peng,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I built origin/master from commit 041bc24d867a today for an imx8mp
+board and am running into errors that appear to be introduced by this
+series:
+[   15.177372] platform 381f0040.usb-phy: deferred probe pending
+[   15.183155] platform 382f0040.usb-phy: deferred probe pending
+[   15.188928] platform 33800000.pcie: deferred probe pending
+[   15.194439] platform 32ec0000.blk-ctrl: deferred probe pending
+[   15.200287] platform 38330000.blk-ctrl: deferred probe pending
+[   15.206129] platform 32f10000.blk-ctrl: deferred probe pending
+[   15.211974] platform 32f10100.usb: deferred probe pending
+[   15.217382] platform 32f10108.usb: deferred probe pending
+[   15.222791] platform cpufreq-dt: deferred probe pending
+# cat /sys/kernel/debug/devices_deferred
+381f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
+382f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
+33800000.pcie   platform: supplier 32f10000.blk-ctrl not ready
+32ec0000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
+38330000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
+32f10000.blk-ctrl       imx8mp-blk-ctrl: failed to get noc entries
+32f10100.usb    platform: supplier 32f10000.blk-ctrl not ready
+32f10108.usb    platform: supplier 32f10000.blk-ctrl not ready
+cpufreq-dt
 
-Best regards,
-Krzysztof
+Is there a driver I'm perhaps missing that is needed now or are there
+some patches that come from a different unmerged tree needed?
 
+Best Regards,
+
+Tim
