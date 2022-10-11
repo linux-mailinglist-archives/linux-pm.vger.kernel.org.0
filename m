@@ -2,109 +2,277 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173E15FB85B
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 18:39:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77CF5FB9F1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 19:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiJKQjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 12:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
+        id S229825AbiJKRwu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 13:52:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiJKQjL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 12:39:11 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8115912D33
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 09:39:10 -0700 (PDT)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id C5D0884D9F;
-        Tue, 11 Oct 2022 18:39:07 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665506348;
-        bh=m6nJ4RG374+JjZVOp0n0p+XqKIV+Lam9mzeitkJ7XDY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=B8oDhX+txa4pthj7GF9XdEs/NcY6/cQn306JzS3WLOjK4jSmEgP5MlAKqDJ0UECMi
-         o6oxuoIvNXEkPTRMEEl2k3WkyPOizI3z9/cjyOTm+G9YhVixHFnp19ii9fb8V9Qt34
-         J6ALx+X6ZbiTGRsaPbK5N28Fck5n/bJRjjT0c2o5cM5vxpTxLyw9Y9eUrFBcfYBrEP
-         4Ci1D0U/pS4QHzrIjMOzxiF2HxK+AvSwTz159G81w0iI9IqtSDxOpE84EycbDfvq5H
-         Pr2vNtQmXWMAOt8DkG8dzRjVt6xQEbtxd+A+cBDQj0M9yZsO+XLYYE/I1FZX6nDf36
-         ONCsWiYpKlplQ==
-Message-ID: <00e6b9b0-ddef-6e2f-0603-9a25fd3b9e0d@denx.de>
-Date:   Tue, 11 Oct 2022 18:39:07 +0200
+        with ESMTP id S230015AbiJKRwp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 13:52:45 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C194F18E;
+        Tue, 11 Oct 2022 10:52:44 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id h1-20020a4aa741000000b004756c611188so10587040oom.4;
+        Tue, 11 Oct 2022 10:52:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=06y4LPa2ARF61oYkkmp5uqG5RC795RcUrnsHXwHkyVI=;
+        b=17On4Z1I0IRgh+mwDuwyeiFzz0SiT5lLktUiMvWv377IZ7ORDJ11JxRWxko/Zkdr31
+         CEk2A0i19wVuAOZ/3dGZSbfpINWfPOZ0vLEMjM70y7ukUDqceDSgRwyOzMutueBCXqJE
+         rjnxldz3XLmr7VKuAKPD78021ADDUSOFC8h4pX7Z2Sf22cypmmTZ/Aua4Mes3yxbVuKn
+         QxheXejVE8vbYI2OHAGrS71LBV350Db+rbBKWVCwCTGS+897sE87rgOAe9aMwQbhyTQ1
+         51DAxHRo40uJ9y33Ev1Vjl7raDRP/hD0cRA5+uqRreuqmK50TVoBBmpe5ePHqJKqQUDc
+         FlHg==
+X-Gm-Message-State: ACrzQf1KcHZUv+SSi1sduKwMhkPhXjCEydwmIhE1Gw9UfRoHqv1cfM2+
+        3KaGd4IxteOsZ+c4oJW/QQ==
+X-Google-Smtp-Source: AMsMyM6qzjWoKY66x3ERX/h+VaCthT/iVnP1s+NJpheeyaoElqOI8gxqgwb90rNfuE84zsFOyBMrHw==
+X-Received: by 2002:a05:6820:408:b0:476:229c:141d with SMTP id o8-20020a056820040800b00476229c141dmr9570931oou.64.1665510763475;
+        Tue, 11 Oct 2022 10:52:43 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p186-20020acabfc3000000b00354b0850fb6sm1638072oif.33.2022.10.11.10.52.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 10:52:42 -0700 (PDT)
+Received: (nullmailer pid 3191691 invoked by uid 1000);
+        Tue, 11 Oct 2022 17:52:44 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laxman Dewangan <ldewangan@nvidia.com>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: thermal: Convert generic-adc-thermal to DT schema
+Date:   Tue, 11 Oct 2022 12:52:35 -0500
+Message-Id: <20221011175235.3191509-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 5/7] power: supply: bq25890: Factor out regulator
- registration code
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20221010210310.165461-1-marex@denx.de>
- <20221010210310.165461-5-marex@denx.de>
- <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/11/22 10:20, Hans de Goede wrote:
-> Hi,
+Convert the 'generic-adc-thermal' binding to DT schema format.
 
-Hi,
+The binding said '#thermal-sensor-cells' should be 1, but all in tree
+users are 0 and 1 doesn't make sense for a single channel.
 
-> On 10/10/22 23:03, Marek Vasut wrote:
->> Pull the regulator registration code into separate function, so it can
->> be extended to register more regulators later. Currently this is only
->> moving ifdeffery into one place and other preparatory changes. The
->> dev_err_probe() output string is changed to explicitly list vbus
->> regulator failure, so that once more regulators are registered, it
->> would be clear which one failed.
->>
->> Signed-off-by: Marek Vasut <marex@denx.de>
-> 
-> First of all thank you for your work on this series. Based purely
-> on reading the commit messages patches 1-4 sound good to me. I will
-> do a more detailed review tomorrow.
-> 
-> As for patch 5-7 thinking some more about adding a Vsys regulator
-> just to report the Vsys reading feels wrong to me.
-> 
-> A regulator device's voltage in sysfs is about the value the regulator
-> is supposed to try and regulate its outputted voltage to, while here
-> we are talking about an ADC reading of the actual outputted voltage.
-> 
-> This really should *not* be modeled as a regulator if anything the
-> hwmon interface would be applicable for this ADC reading and
-> the power_supply core has support for exporting some of
-> the psy info through hwmon now.
-> 
-> So what should happen for Vsys IMHO is make it a new
-> POWER_SUPPLY_PROP_SYSTEM_VOLTAGE property and while adding support
-> for this new property to the power-supply core, also make the core's
-> hwmon glue code export this in the registered hwmon device so that
-> e.g. a sensors applet on the desktop can easily show it (*).
-> 
-> Sorry for the confusion with my ack in the other thread which
-> only meant to agree with a part of the alinea/sentence I put
-> the ack under.
+Drop the example's related providers and consumers of the
+'generic-adc-thermal' node as the convention is to not have those in
+the examples.
 
-I'm not sure that's all there is to the Vsys regulator, it would let us 
-model the connection between the charger chip and PMIC, where the 
-charger would be the supply and the PMIC the regulator consumer. If the 
-PMIC can determine its input voltage, it might be able to configure 
-itself to some more optimal mode of operation. With the Vsys regulator, 
-the PMIC can determine its voltage. So I think the Vsys regulator would 
-be useful in that scenario (that's how it is wired on my board btw.).
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ .../bindings/thermal/generic-adc-thermal.yaml | 84 ++++++++++++++++
+ .../bindings/thermal/thermal-generic-adc.txt  | 95 -------------------
+ 2 files changed, 84 insertions(+), 95 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+ delete mode 100644 Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
+
+diff --git a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+new file mode 100644
+index 000000000000..f1fc3b0d8608
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+@@ -0,0 +1,84 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/generic-adc-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: General Purpose Analog To Digital Converter (ADC) based thermal sensor
++
++maintainers:
++  - Laxman Dewangan <ldewangan@nvidia.com>
++
++description:
++  On some of platforms, thermal sensor like thermistors are connected to
++  one of ADC channel and sensor resistance is read via voltage across the
++  sensor resistor. The voltage read across the sensor is mapped to
++  temperature using voltage-temperature lookup table.
++
++properties:
++  compatible:
++    const: generic-adc-thermal
++
++  '#thermal-sensor-cells':
++    const: 0
++
++  io-channels:
++    maxItems: 1
++
++  io-channel-names:
++    const: sensor-channel
++
++  temperature-lookup-table:
++    description: |
++      Lookup table to map the relation between ADC value and temperature.
++      When ADC is read, the value is looked up on the table to get the
++      equivalent temperature.
++
++      If not specified, driver assumes the ADC channel gives milliCelsius
++      directly.
++    $ref: /schemas/types.yaml#/definitions/int32-matrix
++    items:
++      items:
++        - description: Temperature in milliCelsius
++        - description: ADC read value
++
++required:
++  - compatible
++  - '#thermal-sensor-cells'
++  - io-channels
++  - io-channel-names
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/thermal/thermal.h>
++
++    thermal-sensor {
++        compatible = "generic-adc-thermal";
++        #thermal-sensor-cells = <0>;
++        io-channels = <&ads1015 1>;
++        io-channel-names = "sensor-channel";
++        temperature-lookup-table = <
++              (-40000) 2578
++              (-39000) 2577
++              (-38000) 2576
++              (-37000) 2575
++              (-36000) 2574
++              (-35000) 2573
++              (-34000) 2572
++              (-33000) 2571
++              (-32000) 2569
++              (-31000) 2568
++              (-30000) 2567
++              /* skip */
++              118000 254
++              119000 247
++              120000 240
++              121000 233
++              122000 226
++              123000 220
++              124000 214
++              125000 208>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt b/Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
+deleted file mode 100644
+index e136946a2f4f..000000000000
+--- a/Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
++++ /dev/null
+@@ -1,95 +0,0 @@
+-General Purpose Analog To Digital Converter (ADC) based thermal sensor.
+-
+-On some of platforms, thermal sensor like thermistors are connected to
+-one of ADC channel and sensor resistance is read via voltage across the
+-sensor resistor. The voltage read across the sensor is mapped to
+-temperature using voltage-temperature lookup table.
+-
+-Required properties:
+-===================
+-- compatible:		     Must be "generic-adc-thermal".
+-- #thermal-sensor-cells:     Should be 1. See Documentation/devicetree/bindings/thermal/thermal-sensor.yaml for a description
+-		             of this property.
+-Optional properties:
+-===================
+-- temperature-lookup-table:  Two dimensional array of Integer; lookup table
+-			     to map the relation between ADC value and
+-			     temperature. When ADC is read, the value is
+-			     looked up on the table to get the equivalent
+-			     temperature.
+-
+-			     The first value of the each row of array is the
+-			     temperature in milliCelsius and second value of
+-			     the each row of array is the ADC read value.
+-
+-			     If not specified, driver assumes the ADC channel
+-			     gives milliCelsius directly.
+-
+-Example :
+-#include <dt-bindings/thermal/thermal.h>
+-
+-i2c@7000c400 {
+-	ads1015: ads1015@4a {
+-		reg = <0x4a>;
+-		compatible = "ads1015";
+-		sampling-frequency = <3300>;
+-		#io-channel-cells = <1>;
+-	};
+-};
+-
+-tboard_thermistor: thermal-sensor {
+-	compatible = "generic-adc-thermal";
+-	#thermal-sensor-cells = <0>;
+-	io-channels = <&ads1015 1>;
+-	io-channel-names = "sensor-channel";
+-	temperature-lookup-table = <    (-40000) 2578
+-					(-39000) 2577
+-					(-38000) 2576
+-					(-37000) 2575
+-					(-36000) 2574
+-					(-35000) 2573
+-					(-34000) 2572
+-					(-33000) 2571
+-					(-32000) 2569
+-					(-31000) 2568
+-					(-30000) 2567
+-					::::::::::
+-					118000 254
+-					119000 247
+-					120000 240
+-					121000 233
+-					122000 226
+-					123000 220
+-					124000 214
+-					125000 208>;
+-};
+-
+-dummy_cool_dev: dummy-cool-dev {
+-	compatible = "dummy-cooling-dev";
+-	#cooling-cells = <2>; /* min followed by max */
+-};
+-
+-thermal-zones {
+-	Tboard {
+-		polling-delay = <15000>; /* milliseconds */
+-		polling-delay-passive = <0>; /* milliseconds */
+-		thermal-sensors = <&tboard_thermistor>;
+-
+-		trips {
+-			therm_est_trip: therm_est_trip {
+-				temperature = <40000>;
+-				type = "active";
+-				hysteresis = <1000>;
+-			};
+-		};
+-
+-		cooling-maps {
+-			map0 {
+-				trip = <&therm_est_trip>;
+-				cooling-device = <&dummy_cool_dev THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+-				contribution = <100>;
+-			};
+-
+-		};
+-	};
+-};
+-- 
+2.35.1
+
