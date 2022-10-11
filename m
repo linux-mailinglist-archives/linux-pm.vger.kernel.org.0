@@ -2,110 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5499C5FB3EF
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 15:54:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA3B45FB447
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 16:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiJKNyw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 09:54:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36246 "EHLO
+        id S229590AbiJKOJx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 10:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbiJKNyv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 09:54:51 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949CC15FC6;
-        Tue, 11 Oct 2022 06:54:50 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id g8-20020a17090a128800b0020c79f987ceso8310882pja.5;
-        Tue, 11 Oct 2022 06:54:50 -0700 (PDT)
+        with ESMTP id S229459AbiJKOJw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 10:09:52 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67984FAF3
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 07:09:49 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id 8so1055104qka.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 07:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=++qS99RmO93zbKMD8xBZUiM3/4ESYDMfDLqXJ/bo6gA=;
-        b=cgs4pIdy/DRkLmn5aVKtA8ZDVxt2PWskVhJn+tHzYd3ShxyglR+mzRl/7f+qEdoK1G
-         eyOAJjYDP2aPMh4r9aLyfVtrsH1rinWlbBkhTbYWP8bOnd4hBCuCko+utATMq6UqFgYm
-         iJYkI7Uc/qbW6ni0uha4RCRJ8aVOc+2tRiPs6Vj6d03TxzzzEu5ZNfCkEeYUoC8xXuBt
-         WQvOt6+6GJ0P4ABgtE2aDahhN5kkqtKNuIU++E4PF8j6b3AFKJQrYakh+0+dgpSQ+CZv
-         bFg2DXWTEGHzkY98OaV5aDcWrKDTZsturnHKe6n1GD3jwFKtd+w8bIl5prGMalFmMviF
-         urAw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qgU+j7ZCV4AebDJiRH1Omm0iISpODuroU2FgUcdEDTg=;
+        b=seXhbOEhZADT/FVNxI4w1XWvaYjMs/WuJw173RmYw9Lz9ak9rrFtWsfI36w/x3cWv6
+         lANw7RoHfKUGEKy8zo10jZ26LuwpR5BT9iiuqHZecFX9RJfz3zBYRbu+gxiDnPoDj04h
+         AwWh1OizT/eE5i3CgZaJMGzn22bsnSC+eUpyiMWGNzmygg/Z3qNJcC2BiI84o5CHm+Hy
+         /76+e3UGICFddX0KwkHCk+z+HGVww804HwyhCowTtFFbfoW2+NEiw+bQVUjvbjiASSkf
+         LYLwOrLf0YVcTKHzzEFxxrMxcyrxa88JtRMvmhkoA9zzKfKPl4BVToK7M9QWCUkrKNBx
+         4CCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=++qS99RmO93zbKMD8xBZUiM3/4ESYDMfDLqXJ/bo6gA=;
-        b=pFiXbEf3GKQ+7pfA5wAvBrpWMcNjm84PQV/ky4LF8VJEklEuHdWCjRRsYmpbWk/uUP
-         WqJPnrekZW0yQ2MFIku3efRQQXoXwQkDltjljNCPHhAmz/pDssf08DU8NZpZ2cZRSKWt
-         QI6f0tovnRs2xXxuGKaWyFaxMt1ND3Qz4ljWlnCKWxNClWsIojOSJbQTITnm12whozLe
-         lsN2G7xCodlrvSL8yxdyTRQw8Vto/xwdnjrP/dbeQYJCoZ3LKHhXy2jbll0AUGEdN6pn
-         Y8tMSFr52mowj4estT84AAYOUGybC8AWPMXy2p4RJwxM0G/lLgQMb6AWTV2AazimEslG
-         BOkA==
-X-Gm-Message-State: ACrzQf2Vu9hw42e62sW+SydEXmBMaY2HDZQKiHQ57dlZvaR+fy1ns+c1
-        00peWCCveWM456OwkbZS5aA=
-X-Google-Smtp-Source: AMsMyM5lo/jNIkI/quSoU4v4DX9j89fDJOAWhjaXs3sThlQUdVl97SLoVQYRsiAOe9l+baw7yo+Rgg==
-X-Received: by 2002:a17:90b:2741:b0:20a:ebc3:6513 with SMTP id qi1-20020a17090b274100b0020aebc36513mr27919382pjb.29.1665496490132;
-        Tue, 11 Oct 2022 06:54:50 -0700 (PDT)
-Received: from localhost.localdomain ([43.224.245.236])
-        by smtp.gmail.com with ESMTPSA id x20-20020a63cc14000000b0041c35462316sm8007259pgf.26.2022.10.11.06.54.47
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qgU+j7ZCV4AebDJiRH1Omm0iISpODuroU2FgUcdEDTg=;
+        b=URdVOXI8FuPk189l9D6dcz9jHSkk7RPUYX+N1S4qAYHbVdy4aVmzv3ebg93EI3RcSW
+         bv8/VX6BdyPYU4uPk4NUIRCAmWIy+RaMCUnyIWy625Hp8QfSpGIacu1GNgCxPKWGDgEL
+         uzv8832qg8lOXLLRAqsMDyhdtF0HKFDFrNUGJ5gKr3fYmHHkVpLSdyGQ0yus0R+okKzS
+         GbMChc5+sZFsC7MhWgG/NayvOLuRYIUUDykgb8HasYgAfAQcnP00nCJfEVGdg2ABX1i0
+         wvScMLA7DeOVqto8lxvzk4yLMhMrGDmXQFr4kVOV4OJfTGV6UFghrUnIAv+/g6oNnfd1
+         yHNw==
+X-Gm-Message-State: ACrzQf0n5pK6fdJF7ZYPzhZ4EWqk7XHpU+9HTqh1OjO8QzE/wkQhmfP5
+        l0LeXBF/Yoq+oPrdH1/sU+TNZQ==
+X-Google-Smtp-Source: AMsMyM63pcT5iolfTdSHTX2Z5yyeLUsOx4E2TKrAbo2GoYbKsBLReUG06WldGlINrnSQbw17CFpp4w==
+X-Received: by 2002:a05:620a:791:b0:6ec:b7ad:e936 with SMTP id 17-20020a05620a079100b006ecb7ade936mr7442568qka.637.1665497388081;
+        Tue, 11 Oct 2022 07:09:48 -0700 (PDT)
+Received: from krzk-bin.home (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id h3-20020a05620a244300b006d94c499d8fsm13265726qkn.50.2022.10.11.07.09.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 06:54:49 -0700 (PDT)
-From:   Qibo Huang <huangqibo.tech@gmail.com>
-To:     lukasz.luba@arm.com, rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, amitk@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Qibo Huang <huangqibo.tech@gmail.com>
-Subject: [PATCH] thermal/governors: Fix cooling device setting cooling state failure
-Date:   Tue, 11 Oct 2022 21:54:41 +0800
-Message-Id: <20221011135441.21166-1-huangqibo.tech@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 11 Oct 2022 07:09:47 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct SC7280 CPU compatible
+Date:   Tue, 11 Oct 2022 10:07:44 -0400
+Message-Id: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Because the __thermal_cdev_update function traverses the
-cooling_device->thermal_instances list to obtain the maximum
-target state, and then the cooling device sets the maximum
-cooling state. However, the power_actor_set_power function
-only updates the target value of thermal_zone->thermal_instances
-to the target state, and does not update the target value of
-cooling_device->thermal_instances, resulting in the target
-being 0 all the time.
+Two different compatibles for SC7280 CPU BWMON instance were used
+in DTS and bindings.  Correct the bindings to use the same one as in
+DTS, because it is more specific.
 
-Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
+Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/thermal/gov_power_allocator.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 2d1aeaba38a8..2bdf8d797e3c 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -293,6 +293,7 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
- 		      struct thermal_instance *instance, u32 power)
- {
- 	unsigned long state;
-+	struct thermal_instance *cdev_instance;
- 	int ret;
- 
- 	ret = cdev->ops->power2state(cdev, power, &state);
-@@ -300,6 +301,10 @@ power_actor_set_power(struct thermal_cooling_device *cdev,
- 		return ret;
- 
- 	instance->target = clamp_val(state, instance->lower, instance->upper);
-+	list_for_each_entry(cdev_instance, &cdev->thermal_instances, cdev_node) {
-+		if (cdev_instance->tz->id == instance->tz->id)
-+			cdev_instance->target = instance->target;
-+	}
- 	mutex_lock(&cdev->lock);
- 	__thermal_cdev_update(cdev);
- 	mutex_unlock(&cdev->lock);
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+index 2684562df4d9..be29e0b80995 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+@@ -24,7 +24,7 @@ properties:
+     oneOf:
+       - items:
+           - enum:
+-              - qcom,sc7280-bwmon
++              - qcom,sc7280-cpu-bwmon
+               - qcom,sdm845-bwmon
+           - const: qcom,msm8998-bwmon
+       - const: qcom,msm8998-bwmon       # BWMON v4
 -- 
-2.37.1
+2.34.1
 
