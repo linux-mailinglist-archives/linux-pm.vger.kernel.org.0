@@ -2,102 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800F55FAA72
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 04:03:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6DC05FAAC2
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 04:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229651AbiJKCDY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 22:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
+        id S229599AbiJKCye (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 22:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbiJKCDU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 22:03:20 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B1A7F0AD;
-        Mon, 10 Oct 2022 19:03:19 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id l19so8156756qvu.4;
-        Mon, 10 Oct 2022 19:03:19 -0700 (PDT)
+        with ESMTP id S229741AbiJKCyd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 22:54:33 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285768681B
+        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 19:54:33 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id 10so12050357pli.0
+        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 19:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VGL9iA1eU5cRSfFnKKNpXrK9dyHSOHJ0yZSzYyhp9uU=;
-        b=cmhVkoms9HBWoRT2ra/pvHPATa5XnR3v1/v64xNqA9d96OlkusGwkkppuvTf5T1mPp
-         GjKZfBXg/ni1RRrcHcqI3pPNBycOvYNmOyDAuJowU2/MuIBN5nRRzwBWhTWvaFVD9ETz
-         Ycss9xJLT5sjwu8OCU9rPVitHo9HJ/NPGn8c2ZsZR+VyQ3BbgFfjgr59tVhLgdTvrPjR
-         OQVfJuxJr0NoF7k3dYAziW4JisAmnApQxe7fIcI3/pSq+TKSRTSZ0Tt1FgQMtZRgOxJZ
-         e6ClnI+vpOVFtTduucUheXF/s6A7L1hINOV9Z2Ig4yJwhcqK4FqZXBAOmoxZAmyTgIBX
-         n7aQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c9h01mOlxpzNszygrbY3PSLVmKbNIHt3PdjiV1vSnx0=;
+        b=ZjdW8+T+Y4e71mZf1sibeBNLw/z7mE7w4NcdaTKDB1CKtnqPQShw9RAW1fDmFFtN1W
+         Ho5cbX8s1Uv6nKmfwUz3zeFuHr30aFJARnS/9GAqL0cSuwqXh8RC5IVM9MxT+Pc2pzko
+         hw9XaY02k60i32ujEOOiUIvYuZAWvReQcHSupledK7sO/UcS8Zs3oqu/Put4yvDbYuEr
+         mLcCNyhWIAZ8CLE7/binJqdcsv7qe8L2YAVl0u2mW0uRZ6Hk37JklnJjK0b9+BuLKJmY
+         VJmQUTvMZ4O7l9ha4D6cbYSyIVtjlZJ3NCYabAINv31yO62jhz2upSSparefphVaxdoV
+         vT6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VGL9iA1eU5cRSfFnKKNpXrK9dyHSOHJ0yZSzYyhp9uU=;
-        b=DsDk/YYhRyNjyIFb3NoCWsbJy02EMNPvfFD6uWsC5upLnjyWcj2VLnG7xCfK4M9pAA
-         1kh4gQOq4LbvZDiiJ/ipDW0CqJq3DkTVUMHwYZ0rNzR2Ad0HkBG1X2P2m0rsy1l/DQgp
-         cH8WfBxgXaSJ66fBvr8gq2KLfSINT+fK3qA9GufCkh667npch+a38klZs6TQCdbQvxTa
-         QWSQ6KI9MtJrgV/OIXC0qnxFkayiRI3M4gN3SgmqMgvYxRrpOe04ETp9Obv7RkObiRxR
-         aVCp7mudpNLIISHKMaQT0Sdxg8smm1bWzHL4qr0cqbGf9vCoSE2J+uQxlG1eEMQC5TC2
-         Kt8A==
-X-Gm-Message-State: ACrzQf3+dwDqtL0OL9Lf/3P8mS2PkKjQRfrlvTgcJ6TYhLl7+79ONaBk
-        xIf6sMtvwSrBjuwIpxLS9r8MlO22+KrhgmN3pnU=
-X-Google-Smtp-Source: AMsMyM4sskn1qHLEbgtpuqCpTKAmMOFsZykhgopt0w63D6jlQ93xWB+eubSYkKb0Blge9yTSd9Zbu2pKaItAcNTwlBI=
-X-Received: by 2002:a05:6214:2a83:b0:4b1:cdc6:821d with SMTP id
- jr3-20020a0562142a8300b004b1cdc6821dmr17207341qvb.36.1665453798548; Mon, 10
- Oct 2022 19:03:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220922023337.15609-1-renzhijie2@huawei.com> <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
- <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
-In-Reply-To: <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-Date:   Tue, 11 Oct 2022 10:02:42 +0800
-Message-ID: <CABtFH5JH3wKXq_ek+gv8ZK2+yuTL5WnniUoxL96qLNbhMQbZTw@mail.gmail.com>
-Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
-To:     Ren Zhijie <renzhijie2@huawei.com>
-Cc:     sre@kernel.org, andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c9h01mOlxpzNszygrbY3PSLVmKbNIHt3PdjiV1vSnx0=;
+        b=oX+PjivYCJvyhSxUJKWYQnOkkfQSdLXjpX2lNW5/BfWJi8YJxGdCBaHOI3/8S85TfL
+         l1Wd+foJahbVFJTDA0/pokp1xPGCKwSqxgW0JkDZdrWAFDALjoXOpcbBu6jSCCD9gyow
+         HjR7DlzLfiSUmJzEVBZ8Cw6aIVT8+MWcUDG0HZOgNMzN28C/YElA6dHqZ/QzaW9f6aPn
+         gxm8OXffdcz+hCKRjh5EpPIp4DXSSW/FqsRWjB+1FA2OL4ItWxK187w/ajCvYn9BO5oR
+         o69IrWXK3QoS9Si8Uxop7T4mISNwSnXqJ2FumWCV4Tu9VarsI8Xp6X6rI8J/AZJ8ydZI
+         MBAw==
+X-Gm-Message-State: ACrzQf1iI4X209b3BSmhbxzeJeUDAT5yNY58y+lIXa2sGW9j6CpvHxdN
+        NHgOwCn8CvpTVN/cwtgqVP520g==
+X-Google-Smtp-Source: AMsMyM7YnZwwrBObgtHtb6a+5AOTs5/9arUWCvNE0jilaJdTKTjFFKZiDKU28V/+o97ZDdHSvbvEfg==
+X-Received: by 2002:a17:902:8347:b0:178:6e81:35ce with SMTP id z7-20020a170902834700b001786e8135cemr21272589pln.23.1665456872597;
+        Mon, 10 Oct 2022 19:54:32 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id o39-20020a17090a0a2a00b001f262f6f717sm9935137pjo.3.2022.10.10.19.54.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Oct 2022 19:54:31 -0700 (PDT)
+Date:   Tue, 11 Oct 2022 08:24:26 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, ray.huang@amd.com,
+        Deepak.Sharma@amd.com, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [RESEND PATCH V2 7/9] cpufreq: amd_pstate: add AMD Pstate EPP
+ support for the MSR based processors
+Message-ID: <20221011025426.xocfhvvkakdc4jzo@vireshk-i7>
+References: <20221010162248.348141-1-Perry.Yuan@amd.com>
+ <20221010162248.348141-8-Perry.Yuan@amd.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221010162248.348141-8-Perry.Yuan@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Oct 9, 2022 at 9:34 PM Ren Zhijie <renzhijie2@huawei.com> wrote:
+On 11-10-22, 00:22, Perry Yuan wrote:
+> +static void amd_pstate_update_max_freq(unsigned int cpu)
+> +{
+> +	struct cpufreq_policy *policy = cpufreq_cpu_acquire(cpu);
 
-...
+Why isn't cpufreq_cpu_get() enough here ? cpufreq_cpu_acquire() is
+special as it takes policy->rwsem as well and you shouldn't need it.
 
-> >> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> >> index 591deb82e2c6..62111f4bb093 100644
-> >> --- a/drivers/power/supply/Kconfig
-> >> +++ b/drivers/power/supply/Kconfig
-> >> @@ -623,6 +623,7 @@ config CHARGER_MT6370
-> >>       tristate "MediaTek MT6370 Charger Driver"
-> >>       depends on MFD_MT6370
-> >>       depends on REGULATOR
-> >> +    depends on IIO
-> >>       select LINEAR_RANGES
-> >>       help
-> >>         Say Y here to enable MT6370 Charger Part.
-> >
-> > Hi Ren,
-> >
-> > Thanks for catching this!
-> >
-> > Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> >
-
-Hi Ren,
-
-There is the same patch that Sebastian already applies.
-(https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=for-next&id=d8be4fe92433ad905eedc7d877099685eb2eaaa1)
-
-Thanks.
+> +
+> +	if (!policy)
+> +		return;
+> +
+> +	refresh_frequency_limits(policy);
+> +	cpufreq_cpu_release(policy);
+> +}
 
 -- 
-Best Regards,
-ChiaEn Wu
+viresh
