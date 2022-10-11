@@ -2,138 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE2D5FABF7
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 07:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1B25FAD9A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 09:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbiJKFp0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 01:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46404 "EHLO
+        id S229489AbiJKHi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 03:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiJKFpZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 01:45:25 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2050.outbound.protection.outlook.com [40.107.212.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD204C60E;
-        Mon, 10 Oct 2022 22:45:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PyVjHrvCjFO0EKQoZRDExHQu/BeS3bKXY2UspbzRJ/fOzReAHfqtvKDhomi1kOq/mpk86c3B5jUUfJayCAamrNVT11PcFg2b+P522g5cdMjEXFhyfgRMxQd+obqdD3Qpd6YGAuWOq3RsmEvUfjdERENobmvxvzZ4blRpAzwHUPE8JYmBHkoINsh+wv40oPHWiWT8ATpPAYBcjJLox/GLfPGT6W9Yn5q+/17BZXKAPGsyxVjeVD6nSjXvSPC1yNzauiTwhMByq7paQ6pSIECXPTRrS5Nvmopk+/0C5YtZAaVcfMele/xsKflhcPeoBw3FWF10WzGoEqxLLsbPetz0PA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=upX4EhmpV+dF+0gv6BWMZC1Vesyg2FO/+wptxPBhrwk=;
- b=ggRrKSQ5pE/pQqfLarJ56+wilbFsOmVS/EyCHCpWB8hO2DoPc5+tyaFXUmuAHCUnmUTyaqewKlQ547Wv8Y+KRSURrCIVxjpQ8M9ElofZR8d9ICW3ia8eJcsWArAk05TIbgjqTeJAJrDpyNwJ53zg8VZGY+DxcoSxtt8Phc1QukGMypvR2KJe5FAEy5g//LEldDktkivanicPk+6XLBiDSL4WI4ZdxfmtUqvqaFnR0npSxtu6UTyMs9m9SfDMM/94bg6ZyGPaomlxyzD01frKFgf0KmUga4FDPEXZdRt6dXq4aZ3C7VmZ1p/hi5yM4MAKTHebRzFPDkO1wMmr9sOipA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=upX4EhmpV+dF+0gv6BWMZC1Vesyg2FO/+wptxPBhrwk=;
- b=cN9QfGR+97DcJbLk7wqXXm4wW37Dgtiwaw8inu+7XPksa+NcqEKDwQZxEJOxFvVEZRUKQdzdMKR8oVYJT1ZKXw5dTp9d/vkCNo1F12pUKImY4jEQHyTgSdAiqrAD/FFysb2i3wbnrT1juvUVfFfK3mNaX4VUlUC8Qs175K35Ht4=
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
- by BY5PR12MB4164.namprd12.prod.outlook.com (2603:10b6:a03:207::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5709.15; Tue, 11 Oct
- 2022 05:45:21 +0000
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::d862:67a:d93b:8128]) by DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::d862:67a:d93b:8128%5]) with mapi id 15.20.5676.036; Tue, 11 Oct 2022
- 05:45:21 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [RESEND PATCH V2 7/9] cpufreq: amd_pstate: add AMD Pstate EPP
- support for the MSR based processors
-Thread-Topic: [RESEND PATCH V2 7/9] cpufreq: amd_pstate: add AMD Pstate EPP
- support for the MSR based processors
-Thread-Index: AQHY3MSzQ3Vflgb9QE2Zw3YiNLM+S64IgAIAgAAvS6A=
-Date:   Tue, 11 Oct 2022 05:45:21 +0000
-Message-ID: <DM4PR12MB52782A5F40C7F18CCC199A009C239@DM4PR12MB5278.namprd12.prod.outlook.com>
-References: <20221010162248.348141-1-Perry.Yuan@amd.com>
- <20221010162248.348141-8-Perry.Yuan@amd.com>
- <20221011025426.xocfhvvkakdc4jzo@vireshk-i7>
-In-Reply-To: <20221011025426.xocfhvvkakdc4jzo@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-10-11T05:43:42Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=4c774621-81fb-458c-83a8-8a1a68c38bcb;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-10-11T05:45:17Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 9ab0b0fc-89b1-4465-971a-b3c3c35a423a
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|BY5PR12MB4164:EE_
-x-ms-office365-filtering-correlation-id: 95effcbb-d85a-41a0-ab9b-08daab4bc92f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: gQzEseMyWk8Ubg50JgjMmbJlfcYA9bxqSE//d4dLCFewJZv0fPHP+Ce1EWfK9i71igISM2mDMyeQJAMKkH+eUjOifchweMJ1u0teg/eSh5M1w+k3cvQiv7Z25XGYnnqIM+J0TB+1UerZj0AQyv4k0opbS4eeWJTBFtMjecxAd2dWGn9hPoRI04wmHcFpAxQmQXCn3ltfOIMaT5Pgx5DAZOF651Wlgz5QtsZnP6vTWykfuVLndkNxYRHIREVsSbUPI8nsXLH6G+R4hGIpnrnktNoPrnNTZZx6aGnZFbUHeEAEjZQn2OFj9AiOcdwAzhIzi375omvjGwG/PzAfjYdbeJN0J4uk3HavdpJ+NgqLxfpafCYuBq9zcEjAKZgM1uSoscvzzpKRfVafx8psFc75rfa9wCE88dPG/yBxz/idq9RbyiM1QE+AeH2tOtCKEERmfqsrpAgjZ4A4H5jZ5hZN+0WKBQX0HJwUbDbOFC1fd4smJv0OOBaETh7o5Bg1iTyquxhuGp1ETX51rx5RhnMnAcZtLCzFs/gSRqKNrYLIv3keoP/eAmD1es5MWv0rTJsWrrNOm5cHKyruErH4K+nfDkcCTT/EFcoXsQeCYmLFPmcXh2/M5jvJAv3Mpd7CeFJFAQs85lCpW23WAvWgM4btn3OqNZ/97UQkTOVmQr5cZEU/6V+IP3gmfWhZeDAe6QVn2ypNnbtmaZOKdHzqe0AG3C+qEG1w1+9F4xRJBsmxTYYyJSAKJh7No+pj7eEJB82UvBaQk4g1slZybd9qJvB5NA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(39860400002)(396003)(376002)(451199015)(38100700002)(2906002)(7696005)(33656002)(6916009)(316002)(186003)(38070700005)(122000001)(5660300002)(55016003)(6506007)(26005)(9686003)(53546011)(8936002)(52536014)(66476007)(66946007)(76116006)(66556008)(4326008)(8676002)(64756008)(66446008)(86362001)(83380400001)(71200400001)(54906003)(41300700001)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?zDa4Z8mjeLJ+hfO9G/XrC3NiuKGCXb4Jej84UiN5d3X92jrL965u0pKjKQpr?=
- =?us-ascii?Q?zfQ7TYC77PFh6ovVZ47lnUVEMLc0XIIsH8ZnxnmG07xa23Y3lVcvzEwclK6K?=
- =?us-ascii?Q?mHSAatOwvx5Gs95BRCcgWn6k/1Jo75Mi2oV3UuUtN6aIoBK/rXpaPFFyaMV9?=
- =?us-ascii?Q?koAt5r65vpss9wP3nPbEVuNFwLr+YRvlQ+wEerIl4alD0KuqWGi2JfjhaQaP?=
- =?us-ascii?Q?PE1xwGgOgGQMBegCHYhBFDiTZ9kuvxma96pMFsBTgLkEUbhwzemXoPwYf6Pi?=
- =?us-ascii?Q?PvwZqQ2fx7o3IgCyNnGVlj1DsLTiAlaLTtPdfQGXmHvTAulFYP0MgS45ZofS?=
- =?us-ascii?Q?L6bK2ifF0Tew0Y07cjWxqgcSuvf8bW5yTH20saQj/Yk6dj4okOtDP9ywhDf8?=
- =?us-ascii?Q?wjXoxwWYygIc3cNOYE12LAftYpT7RmR8fZT7fzGmFVPIzUSOJSve8SNRHx3p?=
- =?us-ascii?Q?aI5/+lLIXs4kab4kZWS62aUZP2V81ogR4nL1P2PD5pDjPPQz8J54z9lDJx7k?=
- =?us-ascii?Q?cUdJdCKa8O4IEYkeQwzvsF6J+hzNmX1HW9gDdWlL7JymuT3uv4r3+AE3nS3B?=
- =?us-ascii?Q?A+uuVDcHAc3lTcdS+SGlIdO+zXUrqjlUY3FWZopCtLlJeAj4eezITQmrFHC4?=
- =?us-ascii?Q?9BH+tRsNylgpAmuYLZzwfnjZhtAavkgHFJPYK/AbExFz1xMBPRijEuzhagzz?=
- =?us-ascii?Q?eto993+F4MDsbr1XAMzi4wC7jgk8iSKY3MQRadpOH80Kx0odjr6hxXV5cHHy?=
- =?us-ascii?Q?1b9SQBDpKH6TnzfQAjaDXpOBupyqh/BO57Y56zKmGxGNr4oHyGRsfYHnSNPw?=
- =?us-ascii?Q?UL5aZQvGxlDqA6ZCH2CUydKD1kBK59gtKDp0oPePw2Qz8Oa4nFyB341mYBfx?=
- =?us-ascii?Q?LBil5BrSyxC7jQJi8wCXBdDtt8nc+oCx3Docf7rhOVpb82SYoU2EeMPBri2o?=
- =?us-ascii?Q?Jz3jmT2m+Qm2DmYaLVWqF8XHCsv66YHTioKERqOD96EgiIQOT7CGnDog7JWg?=
- =?us-ascii?Q?RwYGvGntGMFSlNYl53QXtSOj8jzDmUeJdOw37ATNND5n0GfYNV80rE/V6vXj?=
- =?us-ascii?Q?2MLTp+dFgzUJLa5M4bUr5sWQMHXVRiM97OcVdngWz5dcVwBJaBawj7fhQrng?=
- =?us-ascii?Q?Iayo+L9H5HbCB2TLsH1sLUra4FtwRbQemWMS1oP5MQ9tf+nEVIiK3RUi1xx+?=
- =?us-ascii?Q?DS7T2Hi7dlqOzFp2K2XRJUaupdK/IG7+OPBy8xUtVDN6ivtkIfKlqHQ7s+P4?=
- =?us-ascii?Q?F6gTJkC1MzQiQfJdYim19mX9GC586KHEgvuF2vVrYzpRvbmi8bNkN72wL7My?=
- =?us-ascii?Q?NWe85EzIcMxmIsw3zLUtXX35Q2XFlYHZneJ8S+sWC7Y+4mX7THrR7fXauLzT?=
- =?us-ascii?Q?b4ZFMNk4KS6idlcHkwwSUjFDXszqtQdUiRBRmMaq/mMGJ9pHlXQVUzszU6iJ?=
- =?us-ascii?Q?FdXFeq8SxeFXz6GJkXfHLxVmpa1waZA/t9TZhW1IJfxAzfqoJ15pM6A1sW87?=
- =?us-ascii?Q?liIKcbymaVrtSClUegFDmzIWus2dYBfvyWAedUKSu2LmiFtmMlrah/INsLYj?=
- =?us-ascii?Q?Phh4Z+CBxs8wQD8b0F0cVGdQ7HUfNWv97XgZBmeg?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229480AbiJKHi5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 03:38:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCE37D1F8
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 00:38:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665473935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=x+omRR0NMF7scNdbRm9dq1ut5HJA5A7ZYYiKI02v194=;
+        b=Av260s8gaRyLgq9hX9HNYhJym7acf851RRkF14SHqtaJAplW8p7RHxK9GvNkd5rAdcxdhx
+        k0joUDhVZxIo5EGyWa6VwfGvvzTKIki8rMPs4Q3xP5CI3X9qB0N0/8epxhP/Gr00IVnlS4
+        A4XQ7GCSOJe6pWoTX6az/xbjX2ESnaE=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-263-raZVJyv9Obydk1Zs7yWQUw-1; Tue, 11 Oct 2022 03:38:54 -0400
+X-MC-Unique: raZVJyv9Obydk1Zs7yWQUw-1
+Received: by mail-ej1-f69.google.com with SMTP id gn33-20020a1709070d2100b00787e6fbcb72so5447891ejc.3
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 00:38:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x+omRR0NMF7scNdbRm9dq1ut5HJA5A7ZYYiKI02v194=;
+        b=nN6+aH91EBEzOcK1wWXV9TsSSIHsZZNXDpJUIlOdJAB/MczBNITuOCJ7iQ3Y21Ki8p
+         i2cOYiTQRWopO6LM7hsHhLNIdj9Lf35oif0HX7J1Sff1vOrOppA07GxqZ3sduwAXOKFM
+         cm1BSMlt6BLek2ngE0w69HIyB7Pgx+uQ7F+1qz2P9/HVgqX7S0frXkdMPeS5iT3ZL+v+
+         i3/1t/+MyoEa4foHb1EtYKNZV+1h/+pS2mRJlt1VWhIe8fTbukofqpzgf4yMb2wBMHyd
+         u86TadCLBaU9W8YV6+CBE90hVtxTsPqwSL+lrH4sDJ8jXSvk9OZVRInlXa4rS5H0OcoJ
+         Rutg==
+X-Gm-Message-State: ACrzQf3vhrgrn3Qtrc7OWpIX5QQdywZzVyn0RozwkE5sptO4oA2mfTq+
+        18OTLQtL8uwjpEbN3w7cv7yHnc+uuIVS3Ds1oELlou8hNbWXe2IcJ1w8d73/8r6Z6gAWFrRUdFi
+        ITmQsxSeSOMBRYVn8dsg=
+X-Received: by 2002:a17:907:a0c6:b0:787:8250:f90e with SMTP id hw6-20020a170907a0c600b007878250f90emr18315463ejc.8.1665473932962;
+        Tue, 11 Oct 2022 00:38:52 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4ckMK39+of2f9ITqihz+kTlT9fCbYZI0dJaoK2ga1C4haAYRZuXum0oV7uFLPdqSfeESE7BA==
+X-Received: by 2002:a17:907:a0c6:b0:787:8250:f90e with SMTP id hw6-20020a170907a0c600b007878250f90emr18315453ejc.8.1665473932751;
+        Tue, 11 Oct 2022 00:38:52 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id nb36-20020a1709071ca400b0073d7b876621sm6462986ejc.205.2022.10.11.00.38.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Oct 2022 00:38:52 -0700 (PDT)
+Message-ID: <e26abfe6-850a-32e5-fa2e-5dd633c72a62@redhat.com>
+Date:   Tue, 11 Oct 2022 09:38:50 +0200
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95effcbb-d85a-41a0-ab9b-08daab4bc92f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Oct 2022 05:45:21.1963
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: wOrsyYENJZSs/1+I+q+ibe8e8eS/VmVrNYaKW2pqyPOXZMPgFkluwm/FqnvBi6YBDdrVPCoQSvYxHI93fAXPNA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4164
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 1/2] power: supply: bq25890: Add CC voltage to ADC
+ properties
+To:     Marek Vasut <marex@denx.de>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Cc:     linux-pm@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20221009191839.102686-1-marex@denx.de>
+ <Y0NUbeUae01t+UGa@qmqm.qmqm.pl>
+ <dde63fea-04eb-c438-27d3-fe6ff5c174bc@redhat.com>
+ <c528ae92-26bd-e6a9-a406-93a077d2fab7@denx.de>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <c528ae92-26bd-e6a9-a406-93a077d2fab7@denx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -141,51 +86,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hi,
 
-Hi Viresh.=20
+On 10/10/22 21:22, Marek Vasut wrote:
+> On 10/10/22 15:50, Hans de Goede wrote:
+>> Hi,
+> 
+> Hi,
+> 
+> [...]
+> 
+>>> Though I think there is no proper property
+>>> for the VSYS value that is currently occupying VOLTAGE_NOW - this
+>>> might be better modelled as a separate regulator maybe?
+>>
+>> Ack, see above.
+> 
+> We already do have a regulator in the bq25890 driver. The regulator is used as a switch to toggle OTG boost mode (supply from battery to VBUS), but I don't see any users of this functionality, and I cannot imagine how this would be modeled in DT. (Hans, can you clarify?)
 
-> -----Original Message-----
-> From: Viresh Kumar <viresh.kumar@linaro.org>
-> Sent: Tuesday, October 11, 2022 10:54 AM
-> To: Yuan, Perry <Perry.Yuan@amd.com>
-> Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>; Sharma,
-> Deepak <Deepak.Sharma@amd.com>; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Huang, Shimmer
-> <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng, Li
-> (Jassmine) <Li.Meng@amd.com>; linux-pm@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Subject: Re: [RESEND PATCH V2 7/9] cpufreq: amd_pstate: add AMD Pstate EP=
-P
-> support for the MSR based processors
->=20
-> Caution: This message originated from an External Source. Use proper caut=
-ion
-> when opening attachments, clicking links, or responding.
->=20
->=20
-> On 11-10-22, 00:22, Perry Yuan wrote:
-> > +static void amd_pstate_update_max_freq(unsigned int cpu) {
-> > +     struct cpufreq_policy *policy =3D cpufreq_cpu_acquire(cpu);
->=20
-> Why isn't cpufreq_cpu_get() enough here ? cpufreq_cpu_acquire() is specia=
-l as it
-> takes policy->rwsem as well and you shouldn't need it.
->=20
-> > +
-> > +     if (!policy)
-> > +             return;
-> > +
-> > +     refresh_frequency_limits(policy);
-> > +     cpufreq_cpu_release(policy);
-> > +}
->=20
-> --
-> Viresh
+Ah, with the Ack I meant ack for the "I think there is no proper property for the VSYS value" I did not meant to ack the regulator bit, I don't directly see how having registering a regulator device for Vsys would be useful, sorry. As mentioned in my original email I believe that just adding a new property for Vsys makes the most sense.
 
-Thanks for your suggestion. I will try the cpufreq_cpu_get() and get this f=
-ixed in v3.
+Note the OTG regulator is useful to enable/disable 5V boost output when used with e.g. a micro-usb connector and that micro-usb connector is used with an micro-USB OTG host-mode cable / dongle.
 
-Perry .
+> There is the usb_work (usb_register_notifier()) which triggers workqueue which does the same, toggles OTG boost mode, but this is only used in case a valid USB PHY is found. I didn't find any users of this either.
+
+This is used, but the use is hidden away pretty well I admit. Some X86 tablets from the Cherry Trail era have ACPI tables where the charging / fuel-gauge ICs are not handled in ACPI (as they typically are on x86) so we need to do it ourselves.
+
+Specifically the charger IC is connected to a special I2c bus of the PMIC (which itself is an i2c-device so we have an i2c-attached i2c-controller, crazy ...) the driver for this special PMIC embedded i2c-controller is also responsible for instantiating the charger chip i2c-client and this setup uses the OTG regulator device, see: drivers/i2c/busses/i2c-cht-wc.c specifically these bits:
+
+/********** Xiaomi Mi Pad 2 charger IC settings  **********/
+static struct regulator_consumer_supply bq2589x_vbus_consumer = {
+        .supply = "vbus",
+        .dev_name = "cht_wcove_pwrsrc",
+};
+
+static const struct regulator_init_data bq2589x_vbus_init_data = {
+        .constraints = {
+                .valid_ops_mask = REGULATOR_CHANGE_STATUS,
+        },
+        .consumer_supplies = &bq2589x_vbus_consumer,
+        .num_consumer_supplies = 1,
+};
+
+static struct bq25890_platform_data bq2589x_pdata = {
+        .regulator_init_data = &bq2589x_vbus_init_data,
+};
+
+static const struct property_entry xiaomi_mipad2_props[] = {
+        PROPERTY_ENTRY_BOOL("linux,skip-reset"),
+        PROPERTY_ENTRY_BOOL("linux,read-back-settings"),
+        { }
+};
+
+static const struct software_node xiaomi_mipad2_node = {
+        .properties = xiaomi_mipad2_props,
+};
+
+static struct i2c_board_info xiaomi_mipad2_board_info = {
+        .type = "bq25890",
+        .addr = 0x6a,
+        .dev_name = "bq25890",
+        .swnode = &xiaomi_mipad2_node,
+        .platform_data = &bq2589x_pdata,
+};
+
+And then the drivers/extcon/extcon-intel-cht-wc.c uses
+the vbus regulator to control the 5V out on the micro-USB.
+
+(also note these devices do not instantiate a usb_phy device anywhere, which is why the V5 boost is handled through the regulator framework)
+
+TL;DR: the regulator device for the V5 boost output is used, please don't remove it :)
+
+> Anyway, maybe we can extend the regulator to report VBus and register another one to report VSys, where the VSys one can be plugged e.g. as supply for PMIC in DT ?
+
+I'm not sure if a regulator device for Vsys is really useful, AFAIK Vsys can not be turned off, nor can the voltage level be controlled... 
+
+Regards,
+
+Hans
+
+
+
