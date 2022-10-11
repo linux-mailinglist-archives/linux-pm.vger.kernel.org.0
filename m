@@ -2,54 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 080695FB852
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 18:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 173E15FB85B
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 18:39:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229604AbiJKQf4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 12:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S229800AbiJKQjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 12:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJKQfu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 12:35:50 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA64A02DD
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 09:35:43 -0700 (PDT)
+        with ESMTP id S229598AbiJKQjL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 12:39:11 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8115912D33
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 09:39:10 -0700 (PDT)
 Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 6357284D8C;
-        Tue, 11 Oct 2022 18:35:41 +0200 (CEST)
+        by phobos.denx.de (Postfix) with ESMTPSA id C5D0884D9F;
+        Tue, 11 Oct 2022 18:39:07 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665506141;
-        bh=5e86cqFQtLamT+0YjJnWVc3JlOpU1ixZgJCuhC+5wp4=;
+        s=phobos-20191101; t=1665506348;
+        bh=m6nJ4RG374+JjZVOp0n0p+XqKIV+Lam9mzeitkJ7XDY=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ybF+pLILf97sldSd+9YA7/uWgSkhjOkRzMgwACbFS6TuAr9kE8Sz9h2vK4HLpFakL
-         cslxAxtC+/ttfP6zZ1vjVV0TuCq1AGKwSB7XMvfkKlsRoHPiahHKSCs3i0j16SDFDa
-         RazaiqGrWowgJ9gS/TZyx4r7VL8ZiQ6LtRe2BANUCEtTIHGqN33EkxFcv9CHUDrmHh
-         bzxw4lEaauQjUeRGsxarjtWZ21jWmp1Grh0LzZC6V+8dQMWWaMGUonotunZvJZJr7u
-         RHA1heaVrDTB0HeFcVRcDawAFb0DJzncmSTkN0DcktZTHeRLhwYTjE/tnI3+/5bMLx
-         pFb0s5n5UdVHA==
-Message-ID: <0519057c-82f7-d7b7-af11-5137bfce3eca@denx.de>
-Date:   Tue, 11 Oct 2022 18:35:40 +0200
+        b=B8oDhX+txa4pthj7GF9XdEs/NcY6/cQn306JzS3WLOjK4jSmEgP5MlAKqDJ0UECMi
+         o6oxuoIvNXEkPTRMEEl2k3WkyPOizI3z9/cjyOTm+G9YhVixHFnp19ii9fb8V9Qt34
+         J6ALx+X6ZbiTGRsaPbK5N28Fck5n/bJRjjT0c2o5cM5vxpTxLyw9Y9eUrFBcfYBrEP
+         4Ci1D0U/pS4QHzrIjMOzxiF2HxK+AvSwTz159G81w0iI9IqtSDxOpE84EycbDfvq5H
+         Pr2vNtQmXWMAOt8DkG8dzRjVt6xQEbtxd+A+cBDQj0M9yZsO+XLYYE/I1FZX6nDf36
+         ONCsWiYpKlplQ==
+Message-ID: <00e6b9b0-ddef-6e2f-0603-9a25fd3b9e0d@denx.de>
+Date:   Tue, 11 Oct 2022 18:39:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
-Subject: Re: [PATCH 1/2] power: supply: bq25890: Add CC voltage to ADC
- properties
-To:     Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Cc:     linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-References: <20221009191839.102686-1-marex@denx.de>
- <Y0NUbeUae01t+UGa@qmqm.qmqm.pl>
- <dde63fea-04eb-c438-27d3-fe6ff5c174bc@redhat.com>
- <c528ae92-26bd-e6a9-a406-93a077d2fab7@denx.de>
- <e26abfe6-850a-32e5-fa2e-5dd633c72a62@redhat.com>
+Subject: Re: [PATCH 5/7] power: supply: bq25890: Factor out regulator
+ registration code
 Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20221010210310.165461-1-marex@denx.de>
+ <20221010210310.165461-5-marex@denx.de>
+ <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
 From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <e26abfe6-850a-32e5-fa2e-5dd633c72a62@redhat.com>
+In-Reply-To: <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
@@ -63,54 +60,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/11/22 09:38, Hans de Goede wrote:
+On 10/11/22 10:20, Hans de Goede wrote:
 > Hi,
 
 Hi,
 
->>>> Though I think there is no proper property
->>>> for the VSYS value that is currently occupying VOLTAGE_NOW - this
->>>> might be better modelled as a separate regulator maybe?
->>>
->>> Ack, see above.
+> On 10/10/22 23:03, Marek Vasut wrote:
+>> Pull the regulator registration code into separate function, so it can
+>> be extended to register more regulators later. Currently this is only
+>> moving ifdeffery into one place and other preparatory changes. The
+>> dev_err_probe() output string is changed to explicitly list vbus
+>> regulator failure, so that once more regulators are registered, it
+>> would be clear which one failed.
 >>
->> We already do have a regulator in the bq25890 driver. The regulator is used as a switch to toggle OTG boost mode (supply from battery to VBUS), but I don't see any users of this functionality, and I cannot imagine how this would be modeled in DT. (Hans, can you clarify?)
+>> Signed-off-by: Marek Vasut <marex@denx.de>
 > 
-> Ah, with the Ack I meant ack for the "I think there is no proper property for the VSYS value" I did not meant to ack the regulator bit, I don't directly see how having registering a regulator device for Vsys would be useful, sorry. As mentioned in my original email I believe that just adding a new property for Vsys makes the most sense.
-
-I disagree here, have a look at the new series I posted that adds the 
-Vsys regulator, esp. patch 7/7 . I think the Vsys regulator does make 
-sense, since it can be the supply for PMIC, which would let us model 
-that hardware connection between the charger and PMIC properly, and even 
-in DT.
-
-> Note the OTG regulator is useful to enable/disable 5V boost output when used with e.g. a micro-usb connector and that micro-usb connector is used with an micro-USB OTG host-mode cable / dongle.
+> First of all thank you for your work on this series. Based purely
+> on reading the commit messages patches 1-4 sound good to me. I will
+> do a more detailed review tomorrow.
 > 
->> There is the usb_work (usb_register_notifier()) which triggers workqueue which does the same, toggles OTG boost mode, but this is only used in case a valid USB PHY is found. I didn't find any users of this either.
+> As for patch 5-7 thinking some more about adding a Vsys regulator
+> just to report the Vsys reading feels wrong to me.
 > 
-> This is used, but the use is hidden away pretty well I admit. Some X86 tablets from the Cherry Trail era have ACPI tables where the charging / fuel-gauge ICs are not handled in ACPI (as they typically are on x86) so we need to do it ourselves.
+> A regulator device's voltage in sysfs is about the value the regulator
+> is supposed to try and regulate its outputted voltage to, while here
+> we are talking about an ADC reading of the actual outputted voltage.
 > 
-> Specifically the charger IC is connected to a special I2c bus of the PMIC (which itself is an i2c-device so we have an i2c-attached i2c-controller, crazy ...) the driver for this special PMIC embedded i2c-controller is also responsible for instantiating the charger chip i2c-client and this setup uses the OTG regulator device, see: drivers/i2c/busses/i2c-cht-wc.c specifically these bits:
-
-[...]
-
-> And then the drivers/extcon/extcon-intel-cht-wc.c uses
-> the vbus regulator to control the 5V out on the micro-USB.
-
-Uh, now I understand, thanks for clarification.
-
-> (also note these devices do not instantiate a usb_phy device anywhere, which is why the V5 boost is handled through the regulator framework)
+> This really should *not* be modeled as a regulator if anything the
+> hwmon interface would be applicable for this ADC reading and
+> the power_supply core has support for exporting some of
+> the psy info through hwmon now.
 > 
-> TL;DR: the regulator device for the V5 boost output is used, please don't remove it :)
-
-I won't, I only extended the current regulator registration in the end.
-
->> Anyway, maybe we can extend the regulator to report VBus and register another one to report VSys, where the VSys one can be plugged e.g. as supply for PMIC in DT ?
+> So what should happen for Vsys IMHO is make it a new
+> POWER_SUPPLY_PROP_SYSTEM_VOLTAGE property and while adding support
+> for this new property to the power-supply core, also make the core's
+> hwmon glue code export this in the registered hwmon device so that
+> e.g. a sensors applet on the desktop can easily show it (*).
 > 
-> I'm not sure if a regulator device for Vsys is really useful, AFAIK Vsys can not be turned off, nor can the voltage level be controlled...
+> Sorry for the confusion with my ack in the other thread which
+> only meant to agree with a part of the alinea/sentence I put
+> the ack under.
 
-It can be used as a supply for system PMIC, so I think it is actually 
-useful. Sure, you cannot turn the Vsys on/off, but that's not the sole 
-purpose of the regulator. The PMIC can get its input voltage and 
-configure itself accordingly, which without the Vsys regulator providing 
-its current voltage is not possible.
+I'm not sure that's all there is to the Vsys regulator, it would let us 
+model the connection between the charger chip and PMIC, where the 
+charger would be the supply and the PMIC the regulator consumer. If the 
+PMIC can determine its input voltage, it might be able to configure 
+itself to some more optimal mode of operation. With the Vsys regulator, 
+the PMIC can determine its voltage. So I think the Vsys regulator would 
+be useful in that scenario (that's how it is wired on my board btw.).
