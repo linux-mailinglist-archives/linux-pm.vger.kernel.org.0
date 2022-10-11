@@ -2,102 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E90C45FAE4E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 10:21:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEF35FAE8C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 10:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiJKIV6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 04:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S229560AbiJKIiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 04:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiJKIV5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 04:21:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 320C02126F;
-        Tue, 11 Oct 2022 01:21:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2DD01ED1;
-        Tue, 11 Oct 2022 01:22:02 -0700 (PDT)
-Received: from [10.57.1.254] (unknown [10.57.1.254])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 762813F766;
-        Tue, 11 Oct 2022 01:21:54 -0700 (PDT)
-Message-ID: <d3ebd0c8-bea6-1c30-6c9e-52c459766b40@arm.com>
-Date:   Tue, 11 Oct 2022 09:21:53 +0100
+        with ESMTP id S229607AbiJKIiV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 04:38:21 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C448D7F0B1;
+        Tue, 11 Oct 2022 01:38:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=KO7gU+LefA6D5wKQ9wSoqhxq2c2iQC8o1fyv5h63CAw=; b=YUUfb42mPZ2+kOu6aaItA3oZJo
+        sFLP+fyN2y9tRMkBLL5GkSc+CEK5Remo0jI0MfjC9DG3x58PbX/1o0klgRCZk9lEsBnZnt5wDWEmI
+        b7Si56ravAbG+8rDvk2fhtlBvm63FA0eSG8jfRYv6QIwViZF0GLzeAx0MLXAenWVVzDjzPQJpeRm0
+        /XUJiFIOqwthieUeq1TNrUW9eRkp+aDVtNH95DUt56boLklPoTQcEfuVfE5a7/uzD8V0bLqJ2gCj/
+        4yPlXIA3DO1fX3LuyByQX/UmJzHlCyb7wv+TjnwC/Z2wbw8ichLlEqGiDzX623Tk6nfh70YdKfTJ9
+        UeMnMMuQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oiAm4-002X70-Om; Tue, 11 Oct 2022 08:38:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4D3A730004F;
+        Tue, 11 Oct 2022 10:38:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0C98320E1D7DB; Tue, 11 Oct 2022 10:38:04 +0200 (CEST)
+Date:   Tue, 11 Oct 2022 10:38:04 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, Dietmar.Eggemann@arm.com,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
+Subject: Re: [PATCH 2/2] cpufreq: Update CPU capacity reduction in
+ store_scaling_max_freq()
+Message-ID: <Y0UrbBioezoyeez/@hirez.programming.kicks-ass.net>
+References: <20220930094821.31665-1-lukasz.luba@arm.com>
+ <20220930094821.31665-2-lukasz.luba@arm.com>
+ <20221010053902.5rofnpzvyynumw3e@vireshk-i7>
+ <3f9a4123-171b-5fa7-f506-341355f71483@arm.com>
+ <CAKfTPtBPqcTm5_-M_Ka3y46yQ2322TmH8KS-QyDbAiKk5B6hEQ@mail.gmail.com>
+ <8a7968c2-dbf7-5316-ef36-6d45143e0605@arm.com>
+ <CAKfTPtB3Lk5bc9k634O+Yi8wwP=MVeKS5NPbpaqwhX1F4t5EbA@mail.gmail.com>
+ <9611971c-d8dd-7877-6f50-c5afbf38b171@arm.com>
+ <Y0Py/Ol9t+LMM1pI@hirez.programming.kicks-ass.net>
+ <7ded9241-6c21-6631-8910-9f1150db6724@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
- util-awareness
-Content-Language: en-US
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Doug Smythies <dsmythies@telus.net>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAAYoRsXgmwQXNzDPgVe=_cW=C8_7__GYHCyRKkfX=6dFY9dybw@mail.gmail.com>
- <Y0PvRz83+lklWeyb@e126311.manchester.arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <Y0PvRz83+lklWeyb@e126311.manchester.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ded9241-6c21-6631-8910-9f1150db6724@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Doug, Kajetan,
-
-On 10/10/22 11:09, Kajetan Puchalski wrote:
-> On Thu, Oct 06, 2022 at 05:06:58PM -0700, Doug Smythies wrote:
->>
->> I would suggest a completely new governor for your
->> only 2 idle states, and of similar power use, scenario.
->> Incredibly simple:
->>
->> If CPU utilization >= threshold
->>    select idle state 0
->> Else
->>    Select idle state 1
->> Endif
+On Mon, Oct 10, 2022 at 11:46:29AM +0100, Lukasz Luba wrote:
 > 
-> That would be easy to implement at least but sadly just doesn't really
-> work at all. It would just result in huge amounts of too deep C1 sleeps
-> which are the main problem for us at the moment. For all intents and
-> purposes, only ever selecting C0 gives better results than this approach
-> on our hardware.
+> +CC Daniel, since I have mentioned a few times DTPM
 > 
->> As previously mentioned, you are overriding
->> everything that teo does anyhow.
+> On 10/10/22 11:25, Peter Zijlstra wrote:
+> > On Mon, Oct 10, 2022 at 11:12:06AM +0100, Lukasz Luba wrote:
+> > > BTW, those Android user space max freq requests are not that long,
+> > > mostly due to camera capturing (you can see a few in this file,
+> > > e.g. [1]).
+> > 
+> > It does what now ?!? Why is Android using this *at*all* ?
 > 
-> To an extent yes, this just came from observations of how cpuidle
-> behaves on arm. We tried an approach with only ever using C0 and it was
-> all right on power usage, the device would just heat up too much and
-> lose performance. That's why this approach of using TEO when the core is
-> completely idle and moving to the lower state when it's not achieves the
-> best of both worlds.
+> It tries to balance the power budget, before bad things happen
+> randomly (throttling different devices w/o a good context what's
+> going on). Please keep in mind that we have ~3 Watts total power
+> budget in a phone, while several devices might be suddenly used:
+> 1. big CPU with max power ~3-3.5 Watts (and we have 2 cores on pixel6)
+> 2. GPU with max power ~6Watts (normally ~1-2Watts when lightly used)
+> 3. ISP (Image Signal Processor) up to ~2Watts
+> 4. DSP also up to 1-2Watts
 > 
->> Note to other readers: I also sent Kajetan an off-list email with more
->> tests descriptions and web links to results graphs and such.
-
-Thanks Doug for testing this work, we really appreciate that.
-Doug maybe you could post these into some public space, so wider
-community would also see them. Kajetan has used github to put
-a report with testing results containing some graphs/plots.
-
+> We don't have currently a good mechanism which could be aware
+> of the total power/thermal budget and relations between those
+> devices. Vendors and OEMs run experiments on devices and profile
+> them to work more predictable in those 'important to users' scenarios.
 > 
-> Looks like the email got lost in my inbox, could be some email filtering
-> or something like that.. Could you possibly resend and cc my private
-> email (kajetan.puchalski@tuta.io)?
-> So far I've not directly received any of your emails, they show up on
-> the mailing list archive but not in my inbox. Could be an IT issue on my
-> end but might be worth checking your email setup regardless.
+> AFAIK Daniel Lescano is trying to help with this new interface
+> for PowerCap: DTMP. It might be use as a new interface for those known
+> scenarios like the camera snapshot. But that interface is on the list
+> that I have also mentioned - it's missing the notification mechanism
+> for the scheduler reduced capacity due to user-space new scenario.
 
-I also have some issues with the email inbox. Me apologies Doug, we will
-sort it.
-
-Regards,
-Lukasz
+DTMP is like IPA but including random devices? Because I thought IPA
+already did lots of this.
