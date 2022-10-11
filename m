@@ -2,133 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EDA95FA6CF
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Oct 2022 23:03:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 800F55FAA72
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Oct 2022 04:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJJVDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 10 Oct 2022 17:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S229651AbiJKCDY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 10 Oct 2022 22:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229546AbiJJVDh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 17:03:37 -0400
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8D1D74
-        for <linux-pm@vger.kernel.org>; Mon, 10 Oct 2022 14:03:34 -0700 (PDT)
-Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 18AD084EF5;
-        Mon, 10 Oct 2022 23:03:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665435810;
-        bh=hQ6dxFTvjUuGsBkXzbyUMAxYR2mdPX3HxHMDMIq1Jus=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QpvIslr70G7ZdYSziDVWWGY1cWOIFRJzlFkFIhbzRTF51sDQx4jEJ7aYnFynmXXY1
-         ebTT3QOdiLejX3OKJ/VlmwRq2jOVLjhwjys/B3aBCAEvJBqdXg2IkR//QojLY4lEpY
-         8ZgcYixzclTZ8R9ZwYGGjW4AHjMaO69TFejSg9iXUqUw8jY6/2qhtC6tyYXuhiUwiN
-         v+WEG3F0YuB62Nmadtv/l6+yOdR6U1KF1oh5iK+1Ro9uQ1J5LT5Ojjjs0L7HEg5hcW
-         dz3UdvLnv5yLyni5I1tw8XanRkbojTHKu5+MvKm9P8E/BEwz3YHxqwEfa1ki/5NviY
-         tYLhWoC2LNh/Q==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH 7/7] power: supply: bq25890: Add Vsys regulator
-Date:   Mon, 10 Oct 2022 23:03:10 +0200
-Message-Id: <20221010210310.165461-7-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221010210310.165461-1-marex@denx.de>
-References: <20221010210310.165461-1-marex@denx.de>
+        with ESMTP id S229701AbiJKCDU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 10 Oct 2022 22:03:20 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B1A7F0AD;
+        Mon, 10 Oct 2022 19:03:19 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id l19so8156756qvu.4;
+        Mon, 10 Oct 2022 19:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGL9iA1eU5cRSfFnKKNpXrK9dyHSOHJ0yZSzYyhp9uU=;
+        b=cmhVkoms9HBWoRT2ra/pvHPATa5XnR3v1/v64xNqA9d96OlkusGwkkppuvTf5T1mPp
+         GjKZfBXg/ni1RRrcHcqI3pPNBycOvYNmOyDAuJowU2/MuIBN5nRRzwBWhTWvaFVD9ETz
+         Ycss9xJLT5sjwu8OCU9rPVitHo9HJ/NPGn8c2ZsZR+VyQ3BbgFfjgr59tVhLgdTvrPjR
+         OQVfJuxJr0NoF7k3dYAziW4JisAmnApQxe7fIcI3/pSq+TKSRTSZ0Tt1FgQMtZRgOxJZ
+         e6ClnI+vpOVFtTduucUheXF/s6A7L1hINOV9Z2Ig4yJwhcqK4FqZXBAOmoxZAmyTgIBX
+         n7aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VGL9iA1eU5cRSfFnKKNpXrK9dyHSOHJ0yZSzYyhp9uU=;
+        b=DsDk/YYhRyNjyIFb3NoCWsbJy02EMNPvfFD6uWsC5upLnjyWcj2VLnG7xCfK4M9pAA
+         1kh4gQOq4LbvZDiiJ/ipDW0CqJq3DkTVUMHwYZ0rNzR2Ad0HkBG1X2P2m0rsy1l/DQgp
+         cH8WfBxgXaSJ66fBvr8gq2KLfSINT+fK3qA9GufCkh667npch+a38klZs6TQCdbQvxTa
+         QWSQ6KI9MtJrgV/OIXC0qnxFkayiRI3M4gN3SgmqMgvYxRrpOe04ETp9Obv7RkObiRxR
+         aVCp7mudpNLIISHKMaQT0Sdxg8smm1bWzHL4qr0cqbGf9vCoSE2J+uQxlG1eEMQC5TC2
+         Kt8A==
+X-Gm-Message-State: ACrzQf3+dwDqtL0OL9Lf/3P8mS2PkKjQRfrlvTgcJ6TYhLl7+79ONaBk
+        xIf6sMtvwSrBjuwIpxLS9r8MlO22+KrhgmN3pnU=
+X-Google-Smtp-Source: AMsMyM4sskn1qHLEbgtpuqCpTKAmMOFsZykhgopt0w63D6jlQ93xWB+eubSYkKb0Blge9yTSd9Zbu2pKaItAcNTwlBI=
+X-Received: by 2002:a05:6214:2a83:b0:4b1:cdc6:821d with SMTP id
+ jr3-20020a0562142a8300b004b1cdc6821dmr17207341qvb.36.1665453798548; Mon, 10
+ Oct 2022 19:03:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20220922023337.15609-1-renzhijie2@huawei.com> <904af4cb-147f-a7ba-63e3-c27cad0350f2@gmail.com>
+ <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
+In-Reply-To: <b725c6eb-1026-a010-1e93-50af9a96a0a4@huawei.com>
+From:   ChiaEn Wu <peterwu.pub@gmail.com>
+Date:   Tue, 11 Oct 2022 10:02:42 +0800
+Message-ID: <CABtFH5JH3wKXq_ek+gv8ZK2+yuTL5WnniUoxL96qLNbhMQbZTw@mail.gmail.com>
+Subject: Re: [PATCH -next] power: supply: mt6370: Fix Kconfig dependency
+To:     Ren Zhijie <renzhijie2@huawei.com>
+Cc:     sre@kernel.org, andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The chip is capable of reporting Vsys voltage supplied to the system.
-Add regulator which represents the Vsys supply. This can be used e.g.
-as a supply for system PMIC input.
+On Sun, Oct 9, 2022 at 9:34 PM Ren Zhijie <renzhijie2@huawei.com> wrote:
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: linux-pm@vger.kernel.org
----
- drivers/power/supply/bq25890_charger.c | 32 ++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+...
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index 2be5861cfcb66..d8c39a0d6c965 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -1106,6 +1106,20 @@ static int bq25890_vbus_get_voltage(struct regulator_dev *rdev)
- 	return bq25890_get_vbus_voltage(bq);
- }
- 
-+static int bq25890_vsys_get_voltage(struct regulator_dev *rdev)
-+{
-+	struct bq25890_device *bq = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	/* Should be some output voltage ? */
-+	ret = bq25890_field_read(bq, F_SYSV); /* read measured value */
-+	if (ret < 0)
-+		return ret;
-+
-+	/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
-+	return 2304000 + ret * 20000;
-+}
-+
- static const struct regulator_ops bq25890_vbus_ops = {
- 	.get_voltage = bq25890_vbus_get_voltage,
- };
-@@ -1133,6 +1147,18 @@ static const struct regulator_desc bq25890_vbus_boost_desc = {
- 	.ops = &bq25890_vbus_boost_ops,
- };
- 
-+static const struct regulator_ops bq25890_vsys_ops = {
-+	.get_voltage = bq25890_vsys_get_voltage,
-+};
-+
-+static const struct regulator_desc bq25890_vsys_desc = {
-+	.name = "vsys",
-+	.of_match = "vsys",
-+	.type = REGULATOR_VOLTAGE,
-+	.owner = THIS_MODULE,
-+	.ops = &bq25890_vsys_ops,
-+};
-+
- static int bq25890_register_regulator(struct bq25890_device *bq)
- {
- 	struct bq25890_platform_data *pdata = dev_get_platdata(bq->dev);
-@@ -1155,6 +1181,12 @@ static int bq25890_register_regulator(struct bq25890_device *bq)
- 				     "registering vbus regulator");
- 	}
- 
-+	reg = devm_regulator_register(bq->dev, &bq25890_vsys_desc, &cfg);
-+	if (IS_ERR(reg)) {
-+		return dev_err_probe(bq->dev, PTR_ERR(reg),
-+				     "registering vsys regulator");
-+	}
-+
- 	return 0;
- }
- #else
+> >> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> >> index 591deb82e2c6..62111f4bb093 100644
+> >> --- a/drivers/power/supply/Kconfig
+> >> +++ b/drivers/power/supply/Kconfig
+> >> @@ -623,6 +623,7 @@ config CHARGER_MT6370
+> >>       tristate "MediaTek MT6370 Charger Driver"
+> >>       depends on MFD_MT6370
+> >>       depends on REGULATOR
+> >> +    depends on IIO
+> >>       select LINEAR_RANGES
+> >>       help
+> >>         Say Y here to enable MT6370 Charger Part.
+> >
+> > Hi Ren,
+> >
+> > Thanks for catching this!
+> >
+> > Reviewed-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> >
+
+Hi Ren,
+
+There is the same patch that Sebastian already applies.
+(https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=for-next&id=d8be4fe92433ad905eedc7d877099685eb2eaaa1)
+
+Thanks.
+
 -- 
-2.35.1
-
+Best Regards,
+ChiaEn Wu
