@@ -2,186 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9435FCCB5
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 23:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 461235FCD59
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 23:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230015AbiJLVAj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 17:00:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41408 "EHLO
+        id S229492AbiJLVgt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 17:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbiJLVAO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 17:00:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D88310B768;
-        Wed, 12 Oct 2022 13:59:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229496AbiJLVgs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 17:36:48 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D16AD73C0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 14:36:45 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CB0EEB81ACE;
-        Wed, 12 Oct 2022 20:58:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4D5C433C1;
-        Wed, 12 Oct 2022 20:57:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665608279;
-        bh=lyVPbSJRlzXY7G1YRYBP8MezTu+FDMQL/a72HoumYFc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=dsEC2vGHBQI4rcokVUBWlyk0YGKcimJHjr/0V3RQUyMRLBbwgPnEI+J1eECECsVsn
-         h8IAxAiC0eCbkAtLFqdUuXL3/Np/3oV+S2O+VDRXFipcg12sgBtswkgMYkv3EqKhna
-         s5911iXxAp6uuJ6xSl+/G/85dReMRwDFF9YXGRqXJHs2yHQ9+HVdIl6bB76SOYj7Uy
-         5F17/V9ysSRS7cknHDFa/kZLgrl1pczYz1T+/jGfOYdUMrjAkAFRG5rjLPYUJGRdBr
-         5cxWEIEPGxjDCvQaADEgCxlU0EYve5Vx00sr42fZBwbxAKYsMiTJJj5exrMDuzdHiv
-         wKNDpVc37mYDg==
-Date:   Wed, 12 Oct 2022 15:57:57 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix event handler registration ordering
- issue
-Message-ID: <20221012205757.GA3118709@bhelgaas>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 47ABF8455E;
+        Wed, 12 Oct 2022 23:36:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1665610603;
+        bh=OuCXA5U1FEsa03Dc4BPzHBdkg5KhlTmEnIRT0n5gcJA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CZY+zBu6ufbUB+1F9edEHmabsseahgv8muQF71dYfULimx1H7UBHtdbzGbaf085yY
+         MIVg5c/JoJtv4/sFzRMYAgLd6LlXzP9+zOPo5+ZEIa3t5sb5y9GmJzJAe9B3viXbN6
+         6ZgKNa+p9xwbwHTbYkOv5FAkpXDpPmFMV6w2cSjSBu2hplvGuRHozPzxi6onRbvYB6
+         CI74X2JWsy1KOlreKYwTOkPT/RhRiLX+0vkqNVfwu92lIpJ95IC+WncC+Zf9bWokvs
+         JztoC1fPUEh1shlooI2CwDAGl3fCWY4boDztUnUUdL5mVuS4NsiPRnqoGWgbAyOnZ7
+         glul7UQt6gtvA==
+Message-ID: <7e9aa397-eb39-64ae-5e34-69c9b0749b46@denx.de>
+Date:   Wed, 12 Oct 2022 23:36:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5629262.DvuYhMxLoT@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 3/7] power: supply: bq25890: Clean up
+ POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20221010210310.165461-1-marex@denx.de>
+ <20221010210310.165461-3-marex@denx.de>
+ <1bbd11c1-20df-d9d2-568c-2c616b6dbd80@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <1bbd11c1-20df-d9d2-568c-2c616b6dbd80@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 12, 2022 at 08:07:01PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Because acpi_install_fixed_event_handler() enables the event
-> automatically on success, it is incorrect to call it before the
-> handler routine passed to it is ready to handle events.
-> 
-> Unfortunately, the rtc-cmos driver does exactly the incorrect thing
-> by calling cmos_wake_setup(), which passes rtc_handler() to
-> acpi_install_fixed_event_handler(), before cmos_do_probe(), because
-> rtc_handler() uses dev_get_drvdata() to get to the cmos object
-> pointer and the driver data pointer is only populated in
-> cmos_do_probe().
-> 
-> This leads to a NULL pointer dereference in rtc_handler() on boot
-> if the RTC fixed event happens to be active at the init time.
-> 
-> To address this issue, change the initialization ordering of the
-> driver so that cmos_wake_setup() is always called after a successful
-> cmos_do_probe() call.
-> 
-> While at it, change cmos_pnp_probe() to call cmos_do_probe() after
-> the initial if () statement used for computing the IRQ argument to
-> be passed to cmos_do_probe() which is cleaner than calling it in
-> each branch of that if () (local variable "irq" can be of type int,
-> because it is passed to that function as an argument of type int).
-> 
-> Note that commit 6492fed7d8c9 ("rtc: rtc-cmos: Do not check
-> ACPI_FADT_LOW_POWER_S0") caused this issue to affect a larger number
-> of systems, because previously it only affected systems with
-> ACPI_FADT_LOW_POWER_S0 set, but it is present regardless of that
-> commit.
-> 
-> Fixes: 6492fed7d8c9 ("rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0")
-> Fixes: a474aaedac99 ("rtc-cmos: move wake setup from ACPI glue into RTC driver")
-> Link: https://lore.kernel.org/linux-acpi/20221010141630.zfzi7mk7zvnmclzy@techsingularity.net/
-> Reported-by: Mel Gorman <mgorman@techsingularity.net>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 10/12/22 21:56, Hans de Goede wrote:
+> Hi,
 
-Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
+Hi,
 
-Yep, I blew it with a474aaedac99, sorry about that.
-
-Possibly could call cmos_wake_setup() from cmos_do_probe() instead of
-from cmos_pnp_probe() and cmos_platform_probe()?  Then there would be
-a single call site and it would be closer to the actual dependency on
-dev_set_drvdata().  Either way is fine with me.
-
-Unrelated, but I happened to notice that pnp_irq() returns -1 for
-failure, and this note suggests that possibly returning 0 would be
-better:
-
-  https://lore.kernel.org/r/CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com
-
-> ---
->  drivers/rtc/rtc-cmos.c |   29 +++++++++++++++++++----------
->  1 file changed, 19 insertions(+), 10 deletions(-)
+> On 10/10/22 23:03, Marek Vasut wrote:
+>> Clean up misuse of POWER_SUPPLY_PROP_VOLTAGE,
+>> POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX
+>> and POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE
+>> and document what exactly each value means.
+>>
+>> The POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE content is newly read
+>> back from hardware, while POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX
+>> is reported as the maximum value set in DT.
+>>
+>> The POWER_SUPPLY_PROP_VOLTAGE is newly used to report immediate value
+>> of battery voltage V_BAT, which is what this property was intended to
+>> report and which has been thus far misused to report the charger chip
+>> output voltage V_SYS.
+>>
+>> The V_SYS is no longer reported as there is currently no suitable
+>> property to report V_SYS. V_SYS reporting will be reinstated in
+>> subsequent patch.
+>>
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+>> ---
+>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+>> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+>> To: linux-pm@vger.kernel.org
+>> ---
+>>   drivers/power/supply/bq25890_charger.c | 76 +++++++++++++++++---------
+>>   1 file changed, 49 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+>> index 5924b036b1588..7632aad8bf0a1 100644
+>> --- a/drivers/power/supply/bq25890_charger.c
+>> +++ b/drivers/power/supply/bq25890_charger.c
+>> @@ -529,24 +529,6 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+>>   			val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+>>   		break;
+>>   
+>> -	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>> -		if (!state.online) {
+>> -			val->intval = 0;
+>> -			break;
+>> -		}
+>> -
+>> -		ret = bq25890_field_read(bq, F_BATV); /* read measured value */
+>> -		if (ret < 0)
+>> -			return ret;
+>> -
+>> -		/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
+>> -		val->intval = 2304000 + ret * 20000;
+>> -		break;
+>> -
+>> -	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+>> -		val->intval = bq25890_find_val(bq->init_data.vreg, TBL_VREG);
+>> -		break;
+>> -
+>>   	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+>>   		val->intval = bq25890_find_val(bq->init_data.iprechg, TBL_ITERM);
+>>   		break;
+>> @@ -563,15 +545,6 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+>>   		val->intval = bq25890_find_val(ret, TBL_IINLIM);
+>>   		break;
+>>   
+>> -	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+>> -		ret = bq25890_field_read(bq, F_SYSV); /* read measured value */
+>> -		if (ret < 0)
+>> -			return ret;
+>> -
+>> -		/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
+>> -		val->intval = 2304000 + ret * 20000;
+>> -		break;
+>> -
+>>   	case POWER_SUPPLY_PROP_CURRENT_NOW:	/* I_BAT now */
+>>   		/*
+>>   		 * This is ADC-sampled immediate charge current supplied
+>> @@ -628,6 +601,55 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+>>   		val->intval = bq25890_find_val(bq->init_data.ichg, TBL_ICHG);
+>>   		break;
+>>   
+>> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:	/* V_BAT now */
+>> +		/*
+>> +		 * This is ADC-sampled immediate charge voltage supplied
+>> +		 * from charger to battery. The property name is confusing,
+>> +		 * for clarification refer to:
+>> +		 * Documentation/ABI/testing/sysfs-class-power
+>> +		 * /sys/class/power_supply/<supply_name>/voltage_now
+>> +		 */
+>> +		if (!state.online) {
+>> +			val->intval = 0;
+>> +			break;
+>> +		}
 > 
-> Index: linux-pm/drivers/rtc/rtc-cmos.c
-> ===================================================================
-> --- linux-pm.orig/drivers/rtc/rtc-cmos.c
-> +++ linux-pm/drivers/rtc/rtc-cmos.c
-> @@ -1352,10 +1352,10 @@ static void cmos_check_acpi_rtc_status(s
->  
->  static int cmos_pnp_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
->  {
-> -	cmos_wake_setup(&pnp->dev);
-> +	int irq, ret;
->  
->  	if (pnp_port_start(pnp, 0) == 0x70 && !pnp_irq_valid(pnp, 0)) {
-> -		unsigned int irq = 0;
-> +		irq = 0;
->  #ifdef CONFIG_X86
->  		/* Some machines contain a PNP entry for the RTC, but
->  		 * don't define the IRQ. It should always be safe to
-> @@ -1364,13 +1364,17 @@ static int cmos_pnp_probe(struct pnp_dev
->  		if (nr_legacy_irqs())
->  			irq = RTC_IRQ;
->  #endif
-> -		return cmos_do_probe(&pnp->dev,
-> -				pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
->  	} else {
-> -		return cmos_do_probe(&pnp->dev,
-> -				pnp_get_resource(pnp, IORESOURCE_IO, 0),
-> -				pnp_irq(pnp, 0));
-> +		irq = pnp_irq(pnp, 0);
->  	}
-> +
-> +	ret = cmos_do_probe(&pnp->dev, pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
-> +	if (ret)
-> +		return ret;
-> +
-> +	cmos_wake_setup(&pnp->dev);
-> +
-> +	return 0;
->  }
->  
->  static void cmos_pnp_remove(struct pnp_dev *pnp)
-> @@ -1454,10 +1458,9 @@ static inline void cmos_of_init(struct p
->  static int __init cmos_platform_probe(struct platform_device *pdev)
->  {
->  	struct resource *resource;
-> -	int irq;
-> +	int irq, ret;
->  
->  	cmos_of_init(pdev);
-> -	cmos_wake_setup(&pdev->dev);
->  
->  	if (RTC_IOMAPPED)
->  		resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
-> @@ -1467,7 +1470,13 @@ static int __init cmos_platform_probe(st
->  	if (irq < 0)
->  		irq = -1;
->  
-> -	return cmos_do_probe(&pdev->dev, resource, irq);
-> +	ret = cmos_do_probe(&pdev->dev, resource, irq);
-> +	if (ret)
-> +		return ret;
-> +
-> +	cmos_wake_setup(&pdev->dev);
-> +
-> +	return 0;
->  }
->  
->  static int cmos_platform_remove(struct platform_device *pdev)
+> I see that this 'if (!state.online) { }' block was also there in the original
+> POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE code, but I wonder why this is here?
 > 
+> Does the bq25890 not support sampling the battery voltage when discharging/
+> when running from the battery as power-source ?
 > 
-> 
+> I would expect the battery voltage sampling to work fine when discharging
+> too, and this is useful into to have during discharge too. Especially when
+> there is no fuel-gauge ...
+
+This does work fine while discharging too, so I'll drop the 
+!state.online check .
