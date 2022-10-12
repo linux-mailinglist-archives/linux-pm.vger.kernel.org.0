@@ -2,109 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E98F5FC998
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 18:58:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F38895FCA3D
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 20:07:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiJLQ64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 12:58:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
+        id S229484AbiJLSHI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 14:07:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiJLQ6z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 12:58:55 -0400
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55115DED17;
-        Wed, 12 Oct 2022 09:58:54 -0700 (PDT)
-Received: by mail-qt1-f172.google.com with SMTP id a24so3006865qto.10;
-        Wed, 12 Oct 2022 09:58:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5vBHj8epZRV6r337mAeq8QE108Ef9pXuaSsp4XqN2Uk=;
-        b=Gb/EH5aKWlECGmXyOVAcbJxze8i6OWvlcr7CGGEvnu51SGCfqRfotUjPLeiulhWCSU
-         5tSNwRnKp2tY1cZax0EOUxpF+QV0mm1sCvFlGl0c73lTKCmyxmpZi1ZEqK/S0KNyllrU
-         9WVFxddOZMnpigpNAkwpECsxuC+fD3+pGWKgT1fC9hMEXYqmnGgo2ZgQVFk16Tcx2zr4
-         bYbyYHnGu1vI6I6LmF2u2WlHU+PIzDbK2pZM1foSstgTOauftzDddgkF7RRBMG64PYeg
-         3JUOzZIITFd2EE24svJNgNUKa+pgxxdnMmo3mv991uSh9v8dwmOpm1OH88Y0SYiJplxt
-         MtMA==
-X-Gm-Message-State: ACrzQf1fwcB9xhW2X1L0FgHebONhOtrbZKJiZtXlU8vbOmgDGpolM/pF
-        Z6TBEO7FTAaZZwP6rC6hhujrAEFb9Lka9ix4d0E=
-X-Google-Smtp-Source: AMsMyM5Lvg1ooUuM9Fb/ql4O0ZXlsMI64qCW+6Yz0+tjKs/OW14aLENf5EDw+Gl+F34qXcmdrDEPYN45B/hK0VB4LGY=
-X-Received: by 2002:a05:622a:11c7:b0:39c:b4bc:7030 with SMTP id
- n7-20020a05622a11c700b0039cb4bc7030mr6813339qtk.17.1665593933419; Wed, 12 Oct
- 2022 09:58:53 -0700 (PDT)
+        with ESMTP id S229471AbiJLSHH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 14:07:07 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7622861B06;
+        Wed, 12 Oct 2022 11:07:05 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 9949fdea2438a364; Wed, 12 Oct 2022 20:07:03 +0200
+Received: from kreacher.localnet (unknown [213.134.169.115])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 63C5666677E;
+        Wed, 12 Oct 2022 20:07:02 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Mel Gorman <mgorman@techsingularity.net>
+Subject: [PATCH] rtc: rtc-cmos: Fix event handler registration ordering issue
+Date:   Wed, 12 Oct 2022 20:07:01 +0200
+Message-ID: <5629262.DvuYhMxLoT@kreacher>
 MIME-Version: 1.0
-References: <20221009205508.1204042-1-sashal@kernel.org> <20221009205508.1204042-4-sashal@kernel.org>
- <20221011113646.GA12080@duo.ucw.cz> <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
-In-Reply-To: <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 12 Oct 2022 18:58:42 +0200
-Message-ID: <CAJZ5v0iHu3ZZuHeC7q6x4ZERaAu0pP2ubqzUv3v2upxLwOFXsg@mail.gmail.com>
-Subject: Re: [PATCH AUTOSEL 4.9 4/4] thermal: intel_powerclamp: Use get_cpu()
- instead of smp_processor_id() to avoid crash
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-CLIENT-IP: 213.134.169.115
+X-CLIENT-HOSTNAME: 213.134.169.115
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeejkedguddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrdduieelrdduudehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeiledrudduhedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepledprhgtphhtthhopegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheprgdriihumhhmohesthhofigvrhhtvggthhdrihhtpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopehlihhnuhigqdhrthgtsehv
+ ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhhgohhrmhgrnhesthgvtghhshhinhhguhhlrghrihhthidrnhgvth
+X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 3:23 PM Chen Yu <yu.c.chen@intel.com> wrote:
->
-> Hi Pavel,
-> On 2022-10-11 at 13:36:46 +0200, Pavel Machek wrote:
-> > Hi!
-> >
-> > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > >
-> > > [ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
-> > >
-> > > When CPU 0 is offline and intel_powerclamp is used to inject
-> > > idle, it generates kernel BUG:
-> > >
-> > > BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
-> > > caller is debug_smp_processor_id+0x17/0x20
-> > > CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
-> > > Call Trace:
-> > > <TASK>
-> > > dump_stack_lvl+0x49/0x63
-> > > dump_stack+0x10/0x16
-> > > check_preemption_disabled+0xdd/0xe0
-> > > debug_smp_processor_id+0x17/0x20
-> > > powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
-> > > ...
-> > > ...
-> > >
-> > > Here CPU 0 is the control CPU by default and changed to the current CPU,
-> > > if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
-> > > hence the above warning.
-> > >
-> > > Use get_cpu() instead of smp_processor_id() to avoid this BUG.
-> >
-> > This has exactly the same problem as smp_processor_id(), you just
-> > worked around the warning. If it is okay that control_cpu contains
-> > stale value, could we have a comment explaining why?
-> >
-> May I know why does control_cpu have stale value? The control_cpu
-> is a random picked online CPU which will be used later to collect statistics.
-> As long as the control_cpu is online, it is valid IMO.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-So this is confusing, because the code makes the impression that
-getting the number of the CPU running the code matters in some way,
-which isn't the case.
+Because acpi_install_fixed_event_handler() enables the event
+automatically on success, it is incorrect to call it before the
+handler routine passed to it is ready to handle events.
 
-Something like cpumask_first(cpu_online_mask) should work as well if
-I'm not mistaken and it would be less confusing to use this instead
-IMO.
+Unfortunately, the rtc-cmos driver does exactly the incorrect thing
+by calling cmos_wake_setup(), which passes rtc_handler() to
+acpi_install_fixed_event_handler(), before cmos_do_probe(), because
+rtc_handler() uses dev_get_drvdata() to get to the cmos object
+pointer and the driver data pointer is only populated in
+cmos_do_probe().
+
+This leads to a NULL pointer dereference in rtc_handler() on boot
+if the RTC fixed event happens to be active at the init time.
+
+To address this issue, change the initialization ordering of the
+driver so that cmos_wake_setup() is always called after a successful
+cmos_do_probe() call.
+
+While at it, change cmos_pnp_probe() to call cmos_do_probe() after
+the initial if () statement used for computing the IRQ argument to
+be passed to cmos_do_probe() which is cleaner than calling it in
+each branch of that if () (local variable "irq" can be of type int,
+because it is passed to that function as an argument of type int).
+
+Note that commit 6492fed7d8c9 ("rtc: rtc-cmos: Do not check
+ACPI_FADT_LOW_POWER_S0") caused this issue to affect a larger number
+of systems, because previously it only affected systems with
+ACPI_FADT_LOW_POWER_S0 set, but it is present regardless of that
+commit.
+
+Fixes: 6492fed7d8c9 ("rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0")
+Fixes: a474aaedac99 ("rtc-cmos: move wake setup from ACPI glue into RTC driver")
+Link: https://lore.kernel.org/linux-acpi/20221010141630.zfzi7mk7zvnmclzy@techsingularity.net/
+Reported-by: Mel Gorman <mgorman@techsingularity.net>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/rtc/rtc-cmos.c |   29 +++++++++++++++++++----------
+ 1 file changed, 19 insertions(+), 10 deletions(-)
+
+Index: linux-pm/drivers/rtc/rtc-cmos.c
+===================================================================
+--- linux-pm.orig/drivers/rtc/rtc-cmos.c
++++ linux-pm/drivers/rtc/rtc-cmos.c
+@@ -1352,10 +1352,10 @@ static void cmos_check_acpi_rtc_status(s
+ 
+ static int cmos_pnp_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
+ {
+-	cmos_wake_setup(&pnp->dev);
++	int irq, ret;
+ 
+ 	if (pnp_port_start(pnp, 0) == 0x70 && !pnp_irq_valid(pnp, 0)) {
+-		unsigned int irq = 0;
++		irq = 0;
+ #ifdef CONFIG_X86
+ 		/* Some machines contain a PNP entry for the RTC, but
+ 		 * don't define the IRQ. It should always be safe to
+@@ -1364,13 +1364,17 @@ static int cmos_pnp_probe(struct pnp_dev
+ 		if (nr_legacy_irqs())
+ 			irq = RTC_IRQ;
+ #endif
+-		return cmos_do_probe(&pnp->dev,
+-				pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
+ 	} else {
+-		return cmos_do_probe(&pnp->dev,
+-				pnp_get_resource(pnp, IORESOURCE_IO, 0),
+-				pnp_irq(pnp, 0));
++		irq = pnp_irq(pnp, 0);
+ 	}
++
++	ret = cmos_do_probe(&pnp->dev, pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
++	if (ret)
++		return ret;
++
++	cmos_wake_setup(&pnp->dev);
++
++	return 0;
+ }
+ 
+ static void cmos_pnp_remove(struct pnp_dev *pnp)
+@@ -1454,10 +1458,9 @@ static inline void cmos_of_init(struct p
+ static int __init cmos_platform_probe(struct platform_device *pdev)
+ {
+ 	struct resource *resource;
+-	int irq;
++	int irq, ret;
+ 
+ 	cmos_of_init(pdev);
+-	cmos_wake_setup(&pdev->dev);
+ 
+ 	if (RTC_IOMAPPED)
+ 		resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
+@@ -1467,7 +1470,13 @@ static int __init cmos_platform_probe(st
+ 	if (irq < 0)
+ 		irq = -1;
+ 
+-	return cmos_do_probe(&pdev->dev, resource, irq);
++	ret = cmos_do_probe(&pdev->dev, resource, irq);
++	if (ret)
++		return ret;
++
++	cmos_wake_setup(&pdev->dev);
++
++	return 0;
+ }
+ 
+ static int cmos_platform_remove(struct platform_device *pdev)
+
+
+
