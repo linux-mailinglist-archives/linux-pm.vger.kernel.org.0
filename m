@@ -2,72 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3405FCBA9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 21:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD7055FCBB8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 21:56:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbiJLToJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 15:44:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37646 "EHLO
+        id S229468AbiJLT4I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 15:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJLToH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 15:44:07 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79357D7A4;
-        Wed, 12 Oct 2022 12:44:06 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q1so8056100pgl.11;
-        Wed, 12 Oct 2022 12:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GP8R9b8X0vVdCTIRB5D133eRHeLBtAx7ECCX776impk=;
-        b=THejl0pIlG7JbmbIlMS3DXlksVsBPH10tiaaH48toQVAtTivJTGHJdtM5cQ4Yx5Mqd
-         TOwrIW36ClMw157BXSH/uR6rlGrsarasUWCs1zcuA9/yQm/QwrEoW+inyQwwWVeuApKV
-         1FbjY9DB4OyM5CrKzNnTOpEAxiN4YEeRajwje0I6Pa+So4/aNDZCU+FhH7VfXrAujlo+
-         4jZzm0o2dqzk68ELG0mK6pImkZaYz7BncPTJQU8Q9psKeHiDSZIspYlQ0+ctT9QRiO9X
-         MY+oYcFdXznWbMuQpSligxtZ0p4kLrzl9i1ACmWwZjVvdb5wFps2kgWkiEIshZ7XA82U
-         nHsw==
+        with ESMTP id S229487AbiJLT4H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 15:56:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714E0BCB8C
+        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 12:56:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1665604564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=G+NscCR9NiSc2rsoD0GoyJp8oMpkakkJjksjzEC1GE0=;
+        b=QJK5j1lZh+lgv21ngE7W0dqyZoFz3DQ+9U1TqS44zeQiIoXozsO6AKgukdOwHBupW7++xi
+        NCawgVuQRZInRzqRUGdu3PZKriEO8tBO1wiOnwH3hrnkmhN1hs++s2GCcckYmDTzBx7nKT
+        L/uOWcBkaVbXsitm7+3f/latp0vNRdE=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-451-4LTqC6m_Omq5KXlvXHl4jg-1; Wed, 12 Oct 2022 15:56:03 -0400
+X-MC-Unique: 4LTqC6m_Omq5KXlvXHl4jg-1
+Received: by mail-ed1-f71.google.com with SMTP id t11-20020a056402524b00b0045cdc3a403dso257869edd.16
+        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 12:56:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GP8R9b8X0vVdCTIRB5D133eRHeLBtAx7ECCX776impk=;
-        b=5m9X5VmEDD3KVb6Vgv7F7qaUoluOmb9x7j6QReb7B/G8RMrHiTu1BHIm+42yQqvm7K
-         nnDeRyHEn+uATrslEP6VcswQzH70sioEki/K0U0s3sqLZxTfKbUA0DYlvanjSZz0+x2N
-         rKo18OUL1TWyM1IWNyr3HU1fZ8LbMotst9nBk6EJmO7U2Nfe7fCDow1EIIqoEj17Ln2A
-         S3C4vHBvaR+j4ALN5pTInBsq+/ETFJvH7ycQ6h6Z49PNngngOHArQZWPN9EcDRQKs7wp
-         5kk3YCB7+91Brugt80IrdOfWN2rLCgICP5GueHBBOqJu7caVhQOnonU//ds3VB2vRvN+
-         X5Kg==
-X-Gm-Message-State: ACrzQf3xesSsXE2I7oDR7FUOjgq2Y9GFREaB2z+qmy2EUiTJh3i6ubBB
-        38+MU64pGw7HD8ZWAExa4r8=
-X-Google-Smtp-Source: AMsMyM6UhxAwUXUfvZ4N+q0zgWdTigKYWORFNiiIy1Og6PEll1vKZCm8iLWHQixh3a+2k+DAth3rgg==
-X-Received: by 2002:a05:6a00:1343:b0:562:ea5e:57e5 with SMTP id k3-20020a056a00134300b00562ea5e57e5mr25818183pfu.45.1665603846152;
-        Wed, 12 Oct 2022 12:44:06 -0700 (PDT)
-Received: from [172.30.1.63] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id i186-20020a626dc3000000b005627ddbc7a4sm222303pfc.191.2022.10.12.12.44.03
+        bh=G+NscCR9NiSc2rsoD0GoyJp8oMpkakkJjksjzEC1GE0=;
+        b=DdyF+m29AN0TLzspDipxNJd9roOgql0x7w4A0Zxk2r+lLNPkNhCW9gNsHfR5VrJ5GU
+         J9PFP5KRBdwwT1d2LixiDdFz84DnQYjyoabe883WTwT7I61/BOEtiOv7GZ1hGNhF/gTa
+         owI+ZK7ILXzrORprJLSTUj2XPK+AwdDBqd81/1/zoD2gsy0ZAH/R8MqSAGgCmC7rcyew
+         yo6ssgRMzuSSpeUg7MDNuuQvOISZLQxmPnrwaPqDFxeCmct7tf6TxfrPJicM7KyHkJj1
+         dLq0l8twfsp4AnZKdt1PMO+c+MoWn43NHXUGyTxlf7A9O+KpViYxH0WFVOxIsmxFwfSX
+         oejA==
+X-Gm-Message-State: ACrzQf0nMcqQBCX4tCvJd5X5RktvV0sZMoNoqIB+ipKfSC1uTrELBxA6
+        BlgAY9eYfP/rvjOa6BJHw5kU0WD1e0oVBRP8kA8ORWmRQvCXWXTlXXbzlkNQGme1MTtsqVDnTla
+        6T5AcRZpfcNZ6zMYYcXA=
+X-Received: by 2002:a05:6402:34d6:b0:45c:ccee:ca94 with SMTP id w22-20020a05640234d600b0045ccceeca94mr2035193edc.342.1665604562075;
+        Wed, 12 Oct 2022 12:56:02 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7zu38/dg/ohWd/JPdA4d7Eh1doM/2I3cy1Pu4PwQRNs1WP0zSTMRYF+/SdFFgnYJpXUqRf+A==
+X-Received: by 2002:a05:6402:34d6:b0:45c:ccee:ca94 with SMTP id w22-20020a05640234d600b0045ccceeca94mr2035174edc.342.1665604561826;
+        Wed, 12 Oct 2022 12:56:01 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id b17-20020a1709063cb100b0078d9c2c8250sm1794713ejh.84.2022.10.12.12.56.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 12:44:05 -0700 (PDT)
-Message-ID: <24e701e9-b560-5350-a2f7-89e2a4a1c97a@gmail.com>
-Date:   Thu, 13 Oct 2022 04:44:01 +0900
+        Wed, 12 Oct 2022 12:56:01 -0700 (PDT)
+Message-ID: <1bbd11c1-20df-d9d2-568c-2c616b6dbd80@redhat.com>
+Date:   Wed, 12 Oct 2022 21:56:00 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] devfreq: Support device update function
-Content-Language: en-US
-To:     Johnny Liu <johnliu@nvidia.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221003060201.14833-1-johnliu@nvidia.com>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <20221003060201.14833-1-johnliu@nvidia.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 3/7] power: supply: bq25890: Clean up
+ POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE
+Content-Language: en-US, nl
+To:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20221010210310.165461-1-marex@denx.de>
+ <20221010210310.165461-3-marex@denx.de>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221010210310.165461-3-marex@denx.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,101 +85,153 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-Basically, struct devfreq_dev_profile is used to pass the devfreq device data
-from devfreq driver to governor. But, This means that it passes
-the data from governor to devfreq driver reversely?
-
-On 22. 10. 3. 15:02, Johnny Liu wrote:
-> To realize interrupt-driven closed-loop governors, governors need to be
-
-Could you explain the detailed means of 'interrupt-driven closed-loop governors'?
-
-> able to send data to the underlying devfreq driver to ask for updating
-> the device settings, such as hardware registers for frequency limits,
-
-I think that governor is not able to get the hardware information direclty
-instead of devfreq driver. Usually, the devfreq driver should get the
-h/w info and then passed to governor if required.
-
-Lastly, this patch doesn't contain the any use-case of devfreq_update_dev().
-I prefer to post the real use-case of this patch. 
-
-> which are compared against the device frequency to generate interrupts
+On 10/10/22 23:03, Marek Vasut wrote:
+> Clean up misuse of POWER_SUPPLY_PROP_VOLTAGE,
+> POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX
+> and POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE
+> and document what exactly each value means.
 > 
-> Since governors might export several tunable parameters, users can
-> enforce different policies for the control logics. Under different
-> policies, governors need to send different information to inform the
-> devfreq driver to configure the device accordingly.
+> The POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE content is newly read
+> back from hardware, while POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX
+> is reported as the maximum value set in DT.
 > 
-> The introduced update function improves the flexibility of governors
-> and acts as a communication interface between governors and devfreq
-> drivers.
+> The POWER_SUPPLY_PROP_VOLTAGE is newly used to report immediate value
+> of battery voltage V_BAT, which is what this property was intended to
+> report and which has been thus far misused to report the charger chip
+> output voltage V_SYS.
 > 
-> Signed-off-by: Johnny Liu <johnliu@nvidia.com>
+> The V_SYS is no longer reported as there is currently no suitable
+> property to report V_SYS. V_SYS reporting will be reinstated in
+> subsequent patch.
+> 
+> Signed-off-by: Marek Vasut <marex@denx.de>
 > ---
-> v2: Correct the function signature of devfreq_update_dev
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> To: linux-pm@vger.kernel.org
+> ---
+>  drivers/power/supply/bq25890_charger.c | 76 +++++++++++++++++---------
+>  1 file changed, 49 insertions(+), 27 deletions(-)
 > 
->  drivers/devfreq/governor.h | 8 ++++++++
->  include/linux/devfreq.h    | 8 ++++++++
->  2 files changed, 16 insertions(+)
-> 
-> diff --git a/drivers/devfreq/governor.h b/drivers/devfreq/governor.h
-> index 0adfebc0467a..b5781fa549c7 100644
-> --- a/drivers/devfreq/governor.h
-> +++ b/drivers/devfreq/governor.h
-> @@ -124,4 +124,12 @@ static inline int devfreq_update_stats(struct devfreq *df)
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+> index 5924b036b1588..7632aad8bf0a1 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -529,24 +529,6 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+>  			val->intval = POWER_SUPPLY_HEALTH_UNSPEC_FAILURE;
+>  		break;
 >  
->  	return df->profile->get_dev_status(df->dev.parent, &df->last_status);
->  }
-> +
-> +static inline int devfreq_update_dev(struct devfreq *df, void *data)
-> +{
-> +	if (!df->profile->update)
-> +		return -EINVAL;
-> +
-> +	return df->profile->update(df->dev.parent, data);
-> +}
->  #endif /* _GOVERNOR_H */
-> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-> index 34aab4dd336c..91648e8f8d76 100644
-> --- a/include/linux/devfreq.h
-> +++ b/include/linux/devfreq.h
-> @@ -92,6 +92,8 @@ struct devfreq_dev_status {
->   *			devfreq.last_status.
->   * @get_cur_freq:	The device should provide the current frequency
->   *			at which it is operating.
-> + * @update:		An optional function to allow governors send data back
-> + *			to the devfreq driver to update the device settings.
-
-IMO, 'update' word is too generic. I think that 'update_device_data' is better
-to improve the readability.
-
->   * @exit:		An optional callback that is called when devfreq
->   *			is removing the devfreq object due to error or
->   *			from devfreq_remove_device() call. If the user
-> @@ -114,6 +116,7 @@ struct devfreq_dev_profile {
->  	int (*get_dev_status)(struct device *dev,
->  			      struct devfreq_dev_status *stat);
->  	int (*get_cur_freq)(struct device *dev, unsigned long *freq);
-> +	int (*update)(struct device *dev, void *data);
->  	void (*exit)(struct device *dev);
+> -	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+> -		if (!state.online) {
+> -			val->intval = 0;
+> -			break;
+> -		}
+> -
+> -		ret = bq25890_field_read(bq, F_BATV); /* read measured value */
+> -		if (ret < 0)
+> -			return ret;
+> -
+> -		/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
+> -		val->intval = 2304000 + ret * 20000;
+> -		break;
+> -
+> -	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
+> -		val->intval = bq25890_find_val(bq->init_data.vreg, TBL_VREG);
+> -		break;
+> -
+>  	case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
+>  		val->intval = bq25890_find_val(bq->init_data.iprechg, TBL_ITERM);
+>  		break;
+> @@ -563,15 +545,6 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+>  		val->intval = bq25890_find_val(ret, TBL_IINLIM);
+>  		break;
 >  
->  	unsigned long *freq_table> @@ -451,6 +454,11 @@ static inline int devfreq_update_stats(struct devfreq *df)
->  {
->  	return -EINVAL;
->  }
-> +
-> +static inline int devfreq_update_dev(struct devfreq *df, void *data)
-> +{
-> +	return -EINVAL;
-> +}
->  #endif /* CONFIG_PM_DEVFREQ */
+> -	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+> -		ret = bq25890_field_read(bq, F_SYSV); /* read measured value */
+> -		if (ret < 0)
+> -			return ret;
+> -
+> -		/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
+> -		val->intval = 2304000 + ret * 20000;
+> -		break;
+> -
+>  	case POWER_SUPPLY_PROP_CURRENT_NOW:	/* I_BAT now */
+>  		/*
+>  		 * This is ADC-sampled immediate charge current supplied
+> @@ -628,6 +601,55 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+>  		val->intval = bq25890_find_val(bq->init_data.ichg, TBL_ICHG);
+>  		break;
 >  
->  #endif /* __LINUX_DEVFREQ_H__ */
+> +	case POWER_SUPPLY_PROP_VOLTAGE_NOW:	/* V_BAT now */
+> +		/*
+> +		 * This is ADC-sampled immediate charge voltage supplied
+> +		 * from charger to battery. The property name is confusing,
+> +		 * for clarification refer to:
+> +		 * Documentation/ABI/testing/sysfs-class-power
+> +		 * /sys/class/power_supply/<supply_name>/voltage_now
+> +		 */
+> +		if (!state.online) {
+> +			val->intval = 0;
+> +			break;
+> +		}
+
+I see that this 'if (!state.online) { }' block was also there in the original
+POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE code, but I wonder why this is here?
+
+Does the bq25890 not support sampling the battery voltage when discharging/
+when running from the battery as power-source ?
+
+I would expect the battery voltage sampling to work fine when discharging
+too, and this is useful into to have during discharge too. Especially when
+there is no fuel-gauge ...
+
+> +
+> +		ret = bq25890_field_read(bq, F_BATV); /* read measured value */
+> +		if (ret < 0)
+> +			return ret;
+> +
+> +		/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
+> +		val->intval = 2304000 + ret * 20000;
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:	/* V_BAT user limit */
+> +		/*
+> +		 * This is user-configured constant charge voltage supplied
+> +		 * from charger to battery in second phase of charging, when
+> +		 * battery voltage reached constant charge voltage.
+> +		 *
+> +		 * This value reflects the current hardware setting.
+> +		 *
+> +		 * The POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX is the
+> +		 * maximum value of this property.
+> +		 */
+> +		ret = bq25890_field_read(bq, F_VREG);
+> +		if (ret < 0)
+> +			return ret;
+> +		val->intval = bq25890_find_val(ret, TBL_VREG);
+> +		break;
+> +
+> +	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:	/* V_BAT max */
+> +		/*
+> +		 * This is maximum allowed constant charge voltage supplied
+> +		 * from charger to battery in second phase of charging, when
+> +		 * battery voltage reached constant charge voltage.
+> +		 *
+> +		 * This value is constant for each battery and set from DT.
+> +		 */
+> +		val->intval = bq25890_find_val(bq->init_data.vreg, TBL_VREG);
+> +		break;
+> +
+>  	case POWER_SUPPLY_PROP_TEMP:
+>  		ret = bq25890_field_read(bq, F_TSPCT);
+>  		if (ret < 0)
 
 
+Otherwise this looks good to me.
 
--- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+Regards,
+
+Hans
+
