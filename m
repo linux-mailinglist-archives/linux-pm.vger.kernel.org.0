@@ -2,70 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176CC5FC88B
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 17:40:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A00FF5FC8F2
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 18:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiJLPkE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 11:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
+        id S229971AbiJLQLf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 12:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbiJLPkC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 11:40:02 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC2D45990
-        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 08:39:59 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id n73so8879298iod.13
-        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 08:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DmZMR3m2P4foh3/AnslPZcLh3BzKs5VTYcawpGmrgBQ=;
-        b=W+BRf1i+101nPJSuleHKgC4CHXztnHYDxfdNnAyn8JowdXbRdwVFIhQVN2UGQ4oGXn
-         5X/ZlQ41XNlTLur+74o4rlpD3Pb+ki4L3vMG1NzaBBTdd2nuxmkbWmfXRKit73RHL5Zj
-         hoSxz0q6oIs9ZRT7HObmSGlK34ePhXhq4Rmag=
+        with ESMTP id S229950AbiJLQLa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 12:11:30 -0400
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D67A033F;
+        Wed, 12 Oct 2022 09:11:30 -0700 (PDT)
+Received: by mail-oo1-f42.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so12454995ooi.5;
+        Wed, 12 Oct 2022 09:11:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DmZMR3m2P4foh3/AnslPZcLh3BzKs5VTYcawpGmrgBQ=;
-        b=Hv6fLaVworKcSQOZGDjf6nvCJj2uigOWm+WwqTMa3V8DXxo6pDHaCA5xJnvT/IRJEr
-         8p9CXtVaQtGZIVVt1YZ1xSdDXPKhfHVbJGm98e0ej7N6E6vJHBG53qjUBGmcmqh1t6Hu
-         hkcRmUGqVhcNeFfQHLcNi8AXG3LV/8J3vGye0YCmerNRT7SSTSUKRsnpGt5TMRXjhvV3
-         zII6lbLJ/2Bv4JzsZJUQ4u2GSdh3vzRCTZV++4RuqGdGFU9MJQHefymLvcLz54VBW+rv
-         sZviF/idYhSRE4X4PnM3tEcNjI/geMjNAk++/FHZMqnVXN748izO3IRcPGtJKtQwMZ5S
-         LqnA==
-X-Gm-Message-State: ACrzQf1K91suAh8YVr/FB4LPTilRw+Vr0mDxibZjTpNhE/jVNRgxkkum
-        S5VERi13X3eM3ejcIftAH5YGiQ==
-X-Google-Smtp-Source: AMsMyM6sQDFuW6B3FMNI5Tintw2F7xS9dbILnspf17C7yyJEJ54/S6qE91KJks7jM4ovi5G8RMLwWw==
-X-Received: by 2002:a5d:9403:0:b0:6bb:dd42:ad53 with SMTP id v3-20020a5d9403000000b006bbdd42ad53mr10712635ion.106.1665589198606;
-        Wed, 12 Oct 2022 08:39:58 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y1-20020a929501000000b002e988fe84d1sm5805274ilh.58.2022.10.12.08.39.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Oct 2022 08:39:58 -0700 (PDT)
-Message-ID: <14d690a4-d2d5-01db-b2a2-e3c87b4a6394@linuxfoundation.org>
-Date:   Wed, 12 Oct 2022 09:39:56 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9J7x9zN0OClxgUpHT1aRD0SP13D4n7eAdvmXv478zN0=;
+        b=x2ex/H+BoZBnL6sZWtvuIVNhwJn9oVhnz6GzhThc9SSQJCiIBDB/CcgEqrBZwZazrX
+         WlBWg5SIe6jaTz+yDvXSeDUvsk3a7nRDzm1qY/nGmWQgq1AqVmwAAkGQ8l2l4SpmEU6G
+         LfrepGAAhX8WUc/SZWphYRsskIOtL+F0BfAp8tKC0Bw983bfqIyJR0pqv3FHDiehvG8H
+         cVDiNd9Uglceliw+x6InhRItJ3/mHwyinHnfsPruEfhVwLhYIEdyi/KbVuiTCWxOZQea
+         VYd3bzwWdygqfDB3MSPXlfUJWOvBivAyLN8oYWQQ9BQTzlJT7wHyzt/y1tYnrAz342De
+         6buA==
+X-Gm-Message-State: ACrzQf0yEM/he/sPNRkkkyLKGdBMxTuy8q20BIrihEVu5/g+Epm3gCxn
+        qwwpbKB4qFr+vGXK5SDCBhNYb2gSjw==
+X-Google-Smtp-Source: AMsMyM7wW7pmkLQ/s8EMhQ0+P97Btqh8AR7UaS1Tkj2OpwWjhdoIQDU1UlMTqzbG25b7Byn/JCsZLg==
+X-Received: by 2002:a9d:68d9:0:b0:661:9e75:af9b with SMTP id i25-20020a9d68d9000000b006619e75af9bmr6591581oto.293.1665591089162;
+        Wed, 12 Oct 2022 09:11:29 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h13-20020a9d554d000000b006619f38a686sm3491517oti.56.2022.10.12.09.11.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Oct 2022 09:11:28 -0700 (PDT)
+Received: (nullmailer pid 2270880 invoked by uid 1000);
+        Wed, 12 Oct 2022 16:11:30 -0000
+Date:   Wed, 12 Oct 2022 11:11:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
+        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
+ SC7280 CPU compatible
+Message-ID: <166559108971.2270830.13074268044998349307.robh@kernel.org>
+References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] power: cpupower: utils: Optimize print_online_cpus and
- print_offline_cpus function
-To:     Li kunyu <kunyu@nfschina.com>, trenn@suse.com, shuah@kernel.org,
-        ray.huang@amd.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221012101039.3142-1-kunyu@nfschina.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221012101039.3142-1-kunyu@nfschina.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,16 +68,16 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/12/22 04:10, Li kunyu wrote:
-> 1. Remove the initialization assignment of variables, and they will be
-> assigned first.
-> 2. Remove the mandatory conversion of returned value of malloc function,
-> which returns void* type.
+On Tue, 11 Oct 2022 10:07:44 -0400, Krzysztof Kozlowski wrote:
+> Two different compatibles for SC7280 CPU BWMON instance were used
+> in DTS and bindings.  Correct the bindings to use the same one as in
+> DTS, because it is more specific.
 > 
-> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-Can you tell me more about why this change is needed and how you determined
-the need for this change?
-
-thanks,
--- Shuah
+Acked-by: Rob Herring <robh@kernel.org>
