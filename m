@@ -2,67 +2,67 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746685FBF34
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 04:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 267005FBF66
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 05:07:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229451AbiJLChD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 22:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S229454AbiJLDHj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 11 Oct 2022 23:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLChC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 22:37:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D017A503
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 19:37:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6425B818D3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 02:37:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 85A3AC43470
-        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 02:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665542219;
-        bh=Zvy0wv6ue/b3LVZOgdF8y9Q1sSV2hVc4+QPGEnPpWDQ=;
-        h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=O6c6FHPjzba3MSrcWNfbSAxVM7Adg/snz40a2wRTgeemhu5F88eLiCap4KD5ZzBWd
-         0kSqKsoz/Q0s74ik98m/Fr1esHrtiXat0RRf8yoIhXTRfsbxYM4jdlQa711zwrLVqO
-         NTZtQ08w4dVDzBHtJ8s1rydTy4R8JidIsQFRAo+K4N1AtKAkR9RfAavu98lwi3ikB0
-         ulhV2Oy8AK/GR1kJd4RugCop+FyRWm5sWhuZjAl4SkL2zgzavufmQeleF9MHEVTOz5
-         ovq4LMP4bSCXc0p5tU8h4VtGd410sOlaFNOuClQdLsxrtOXCjxu5c9/wNfDqhWHqVt
-         0ci275M5quZmA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-        id 6A54CC05F8A; Wed, 12 Oct 2022 02:36:59 +0000 (UTC)
-From:   bugzilla-daemon@kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [Bug 215800] amd-pstate does not allow to set arbitrary maximum CPU
- frequency above 2200MHz for a desktop Zen 3 CPU
-Date:   Wed, 12 Oct 2022 02:36:59 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P1
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc rep_platform
-Message-ID: <bug-215800-137361-BdiZY2gQxE@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-215800-137361@https.bugzilla.kernel.org/>
-References: <bug-215800-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+        with ESMTP id S229484AbiJLDHh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 23:07:37 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1EF4E42F
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 20:07:34 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id c24so15016438pls.9
+        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 20:07:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNJfRDpcAKr8ACE2m9HF/GFLqzPGRxixlVowBczXTN8=;
+        b=LJGbU33DU05/QCkrNRdRZMPdtH86dbxeLyFu56M3N6Dy7DlkQKw6F3+VvZKMrtjWkp
+         XFlr1rznO7kd0CNzyXGywLJdYpa/I4gxBkep+Gozw9w+Jw/UEMBSgvqvXl+4JkPo84Bt
+         OEp15uaNtDBL4WRg/7nl/WLZ4sPwy3365ZLUhAYOU1E7ygM6rwkhvKriM1KDV0ZEjVsI
+         65TPwGnC3orOVCp/TIhDs+hQ65kXGuZpwYmOh0KZXVIWOVvslYWwZANEze3+1EQx7qDj
+         egtTLWTS1sxL+ZRhf6VUjJ/zj9rygzOwIATQOTa6NzXIahGpY7n5PzNy4aXT2xNfRTaz
+         Fq4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNJfRDpcAKr8ACE2m9HF/GFLqzPGRxixlVowBczXTN8=;
+        b=n/MVuzUhMWWS33Z+JN1gq3kT99c+zzZkEMLbldN1K41rVtsP+dJrBjbnzCQA0VLhnx
+         waVDibKuUECfMRkPw9yWpqxx9CR9TpfXGePY7U/XcK23QyWCD2Q4NLxY+Tl64tVU5NMJ
+         MXjZbOQhMnpmg4gPGNy0GrPi+rPgelhxpOiAIBFPK16Dcu7J/n65/dwSBL6623VHW3MB
+         Rbs0xAq9s9PV4hNKHuT2AZxvi//KliKpsf/b3X3LkEpx3s80u7bIStJG9qcBEgPvSMLQ
+         +lA29Pa32NQlreA/RX8NfIQrsXhiVzvQmizMpC8DYzUw8U66J+xq7J7iYKe1pd7ne0Lx
+         T5Mg==
+X-Gm-Message-State: ACrzQf1XjFM4ryL2LGqwdkAPW1FrDtebGkBwVV4fyyO5BtznG1i/NTh8
+        tPRq8DbyKDIZn84O0c5hMHTlbQ==
+X-Google-Smtp-Source: AMsMyM4SI9rtKMOewPCH+amLCTl8+42jCoz9oy7gWSooXLChf8G5zzs73Jwjwref8q3ms7C9ce4NiA==
+X-Received: by 2002:a17:90b:17cf:b0:20d:72eb:fd0c with SMTP id me15-20020a17090b17cf00b0020d72ebfd0cmr2550871pjb.217.1665544053822;
+        Tue, 11 Oct 2022 20:07:33 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id l7-20020a17090a660700b002037a4e913bsm283774pjj.44.2022.10.11.20.07.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Oct 2022 20:07:32 -0700 (PDT)
+Date:   Wed, 12 Oct 2022 08:37:29 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Jon Hunter <jonathanh@nvidia.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: tegra194: Fix module loading
+Message-ID: <20221012030729.avte3mhtzat36nme@vireshk-i7>
+References: <20221011153243.133712-1-jonathanh@nvidia.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221011153243.133712-1-jonathanh@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,17 +70,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D215800
+On 11-10-22, 16:32, Jon Hunter wrote:
+> When the Tegra194 CPUFREQ driver is built as a module it is not
+> automatically loaded as expected on Tegra194 devices. Populate the
+> MODULE_DEVICE_TABLE to fix this.
+> 
+> Fixes: df320f89359c ("cpufreq: Add Tegra194 cpufreq driver")
 
-Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
+Added:
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |mario.limonciello@amd.com
-           Hardware|x86-64                      |AMD
+    Cc: v5.9+ <stable@vger.kernel.org> # v5.9+
 
---=20
-You may reply to this email to add a comment.
+> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
+> ---
+>  drivers/cpufreq/tegra194-cpufreq.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
+> index c2004cae3f02..4596c3e323aa 100644
+> --- a/drivers/cpufreq/tegra194-cpufreq.c
+> +++ b/drivers/cpufreq/tegra194-cpufreq.c
+> @@ -589,6 +589,7 @@ static const struct of_device_id tegra194_cpufreq_of_match[] = {
+>  	{ .compatible = "nvidia,tegra239-ccplex-cluster", .data = &tegra239_cpufreq_soc },
+>  	{ /* sentinel */ }
+>  };
+> +MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
+>  
+>  static struct platform_driver tegra194_ccplex_driver = {
+>  	.driver = {
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+Applied. Thanks.
+
+-- 
+viresh
