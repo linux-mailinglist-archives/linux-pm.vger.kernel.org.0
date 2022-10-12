@@ -2,157 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B235FC025
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 07:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4567B5FC06E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 08:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229489AbiJLFdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 01:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S229513AbiJLGJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 02:09:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiJLFdO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 01:33:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D41866A6B;
-        Tue, 11 Oct 2022 22:33:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1665552793; x=1697088793;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wn1xstVhxQVmqi5Leuw/Fl+1hzRsJc8yGRMjVACxU48=;
-  b=fzBJFS26KNCvG0jHyZdTS0ic1l9ZM6miCTydO8vOv9FFWFCA3W3vZkP/
-   510fbwATdSpwOxBN8+0M+cPbC8Oiaz4jsOnUulkEMDUaXoc2B4HuKKhTA
-   ujUYIVCM6kifAcaPOKrhPRQrxRoHMbambl/a/au8W+ZwP/gbhHRXpmHx9
-   pn9dLjVEOjw62kRvVwcppXLgqhwixuXhjSLXSpR62eb4B+jiHA73EAVIx
-   Oe5yQ6MsNhSsQxzsX4vESrkKx3q5khUBBbl1z8PKa22sKJsDXt5ZZdOtT
-   Mdni6TB14+869uQ39KI0TtODh2YLDvnhzDBIwz7VhDy6pu6dWG6+SUWEA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="303442671"
-X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
-   d="scan'208";a="303442671"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 22:33:12 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="695339603"
-X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
-   d="scan'208";a="695339603"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 22:33:12 -0700
-Message-ID: <cca662f039d4b152fd3471561180dca4b140b217.camel@linux.intel.com>
-Subject: Re: [PATCH AUTOSEL 4.9 4/4] thermal: intel_powerclamp: Use
- get_cpu() instead of smp_processor_id() to avoid crash
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Chen Yu <yu.c.chen@intel.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Date:   Tue, 11 Oct 2022 22:33:11 -0700
-In-Reply-To: <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
-References: <20221009205508.1204042-1-sashal@kernel.org>
-         <20221009205508.1204042-4-sashal@kernel.org>
-         <20221011113646.GA12080@duo.ucw.cz> <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S229469AbiJLGJK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 02:09:10 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9BD77EB0;
+        Tue, 11 Oct 2022 23:09:09 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29C5t8d8011501;
+        Wed, 12 Oct 2022 06:09:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jQYrO476z41NopM/bcra25kVZpYW49EA2sUprgcs8ic=;
+ b=o+yvO1xx/RixIYUGAHU4qkfR+n/AQS5AI3T/JwQkUH637BLfSkOYVr3K61YJ5+E8bN4L
+ Pw9Az601SbMqwIDeulzV+ddGDnSLOo5K5AqBCRifAlw8Ef1LMVm8zAGphbTjtlUlBULD
+ 7v5XyG9j5rPn+sd4w4KGJq5LP75mhmmLL8d954/DkXnyZqc/cD0oFpFEfa9VOQ2rE546
+ LnbA1m10/G37RDfxG9pcZ3Nd7lIPFejhG2vtnUq0nwb3Ys/aZuUYZa09VelN+3XsxuSv
+ hXzNXoglRsLd/ATRzTxewEdH9UxOv6Y1uF233EpVcun+oXdd3PUaz0YC34dFJskjhOIM UQ== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k5kar0m56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 06:09:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29C6911J009180
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 12 Oct 2022 06:09:01 GMT
+Received: from [10.131.117.203] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 11 Oct
+ 2022 23:08:58 -0700
+Message-ID: <ea0d7156-972b-8ce7-6169-c49dd7cd03d1@quicinc.com>
+Date:   Wed, 12 Oct 2022 11:38:49 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
+ SC7280 CPU compatible
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+From:   Rajendra Nayak <quic_rjendra@quicinc.com>
+In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: u15rEIGE9huMAx7oLW2Sr8x_AlRq-uk3
+X-Proofpoint-GUID: u15rEIGE9huMAx7oLW2Sr8x_AlRq-uk3
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-12_03,2022-10-11_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1011
+ phishscore=0 suspectscore=0 adultscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210120040
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2022-10-11 at 21:22 +0800, Chen Yu wrote:
-> Hi Pavel,
-> On 2022-10-11 at 13:36:46 +0200, Pavel Machek wrote:
-> > Hi!
-> > 
-> > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > > 
-> > > [ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
-> > > 
-> > > When CPU 0 is offline and intel_powerclamp is used to inject
-> > > idle, it generates kernel BUG:
-> > > 
-> > > BUG: using smp_processor_id() in preemptible [00000000] code:
-> > > bash/15687
-> > > caller is debug_smp_processor_id+0x17/0x20
-> > > CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
-> > > Call Trace:
-> > > <TASK>
-> > > dump_stack_lvl+0x49/0x63
-> > > dump_stack+0x10/0x16
-> > > check_preemption_disabled+0xdd/0xe0
-> > > debug_smp_processor_id+0x17/0x20
-> > > powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
-> > > ...
-> > > ...
-> > > 
-> > > Here CPU 0 is the control CPU by default and changed to the current
-> > > CPU,
-> > > if CPU 0 offlined. This check has to be performed under
-> > > cpus_read_lock(),
-> > > hence the above warning.
-> > > 
-> > > Use get_cpu() instead of smp_processor_id() to avoid this BUG.
-> > 
-> > This has exactly the same problem as smp_processor_id(), you just
-> > worked around the warning. If it is okay that control_cpu contains
-> > stale value, could we have a comment explaining why?
-> > 
-> May I know why does control_cpu have stale value? The control_cpu
-> is a random picked online CPU which will be used later to collect
-> statistics.
-> As long as the control_cpu is online, it is valid IMO.
+
+
+On 10/11/2022 7:37 PM, Krzysztof Kozlowski wrote:
+> Two different compatibles for SC7280 CPU BWMON instance were used
+> in DTS and bindings.  Correct the bindings to use the same one as in
+> DTS, because it is more specific.
 > 
+> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I am also interested to know why this can be stale. The get_cpu() call
-disables preemption. 
+ah, thanks for the fixing this,
+Reviewed-by: Rajendra Nayak <quic_rjendra@quicinc.com>
 
-#define get_cpu()		({ preempt_disable();
-__smp_processor_id(); })
-
-
-Even if you change it to call debug_smp_processor_id() instead of
-__smp_processor_id(), it will still not print warning as
-preempt_count() will return 1.
-
-If after the preemption is enabled if the CPU is offlined, there are
-hotplug callbacks to handle.
-
-
-Thanks,
-Srinivas
- 
-
-> thanks,
-> Chenyu
-> > Thanks,
-> >                                                                 Pavel
-> >                                                                 
-> > > +++ b/drivers/thermal/intel_powerclamp.c
-> > > @@ -519,8 +519,10 @@ static int start_power_clamp(void)
-> > >  
-> > >         /* prefer BSP */
-> > >         control_cpu = 0;
-> > > -       if (!cpu_online(control_cpu))
-> > > -               control_cpu = smp_processor_id();
-> > > +       if (!cpu_online(control_cpu)) {
-> > > +               control_cpu = get_cpu();
-> > > +               put_cpu();
-> > > +       }
-> > >  
-> > >         clamping = true;
-> > >         schedule_delayed_work(&poll_pkg_cstate_work, 0);
-> > > -- 
-> > > 2.35.1
-> > 
-> > -- 
-> > People of Russia, stop Putin before his war on Ukraine escalates.
+> ---
+>   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
-
-
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> index 2684562df4d9..be29e0b80995 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> @@ -24,7 +24,7 @@ properties:
+>       oneOf:
+>         - items:
+>             - enum:
+> -              - qcom,sc7280-bwmon
+> +              - qcom,sc7280-cpu-bwmon
+>                 - qcom,sdm845-bwmon
+>             - const: qcom,msm8998-bwmon
+>         - const: qcom,msm8998-bwmon       # BWMON v4
