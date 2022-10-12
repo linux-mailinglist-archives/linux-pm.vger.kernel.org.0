@@ -2,104 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 267005FBF66
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 05:07:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54B235FC025
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 07:33:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229454AbiJLDHj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 11 Oct 2022 23:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S229489AbiJLFdP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 01:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiJLDHh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 11 Oct 2022 23:07:37 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E1EF4E42F
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 20:07:34 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id c24so15016438pls.9
-        for <linux-pm@vger.kernel.org>; Tue, 11 Oct 2022 20:07:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZNJfRDpcAKr8ACE2m9HF/GFLqzPGRxixlVowBczXTN8=;
-        b=LJGbU33DU05/QCkrNRdRZMPdtH86dbxeLyFu56M3N6Dy7DlkQKw6F3+VvZKMrtjWkp
-         XFlr1rznO7kd0CNzyXGywLJdYpa/I4gxBkep+Gozw9w+Jw/UEMBSgvqvXl+4JkPo84Bt
-         OEp15uaNtDBL4WRg/7nl/WLZ4sPwy3365ZLUhAYOU1E7ygM6rwkhvKriM1KDV0ZEjVsI
-         65TPwGnC3orOVCp/TIhDs+hQ65kXGuZpwYmOh0KZXVIWOVvslYWwZANEze3+1EQx7qDj
-         egtTLWTS1sxL+ZRhf6VUjJ/zj9rygzOwIATQOTa6NzXIahGpY7n5PzNy4aXT2xNfRTaz
-         Fq4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZNJfRDpcAKr8ACE2m9HF/GFLqzPGRxixlVowBczXTN8=;
-        b=n/MVuzUhMWWS33Z+JN1gq3kT99c+zzZkEMLbldN1K41rVtsP+dJrBjbnzCQA0VLhnx
-         waVDibKuUECfMRkPw9yWpqxx9CR9TpfXGePY7U/XcK23QyWCD2Q4NLxY+Tl64tVU5NMJ
-         MXjZbOQhMnpmg4gPGNy0GrPi+rPgelhxpOiAIBFPK16Dcu7J/n65/dwSBL6623VHW3MB
-         Rbs0xAq9s9PV4hNKHuT2AZxvi//KliKpsf/b3X3LkEpx3s80u7bIStJG9qcBEgPvSMLQ
-         +lA29Pa32NQlreA/RX8NfIQrsXhiVzvQmizMpC8DYzUw8U66J+xq7J7iYKe1pd7ne0Lx
-         T5Mg==
-X-Gm-Message-State: ACrzQf1XjFM4ryL2LGqwdkAPW1FrDtebGkBwVV4fyyO5BtznG1i/NTh8
-        tPRq8DbyKDIZn84O0c5hMHTlbQ==
-X-Google-Smtp-Source: AMsMyM4SI9rtKMOewPCH+amLCTl8+42jCoz9oy7gWSooXLChf8G5zzs73Jwjwref8q3ms7C9ce4NiA==
-X-Received: by 2002:a17:90b:17cf:b0:20d:72eb:fd0c with SMTP id me15-20020a17090b17cf00b0020d72ebfd0cmr2550871pjb.217.1665544053822;
-        Tue, 11 Oct 2022 20:07:33 -0700 (PDT)
-Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id l7-20020a17090a660700b002037a4e913bsm283774pjj.44.2022.10.11.20.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Oct 2022 20:07:32 -0700 (PDT)
-Date:   Wed, 12 Oct 2022 08:37:29 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Jon Hunter <jonathanh@nvidia.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: tegra194: Fix module loading
-Message-ID: <20221012030729.avte3mhtzat36nme@vireshk-i7>
-References: <20221011153243.133712-1-jonathanh@nvidia.com>
+        with ESMTP id S229436AbiJLFdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 01:33:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D41866A6B;
+        Tue, 11 Oct 2022 22:33:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665552793; x=1697088793;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=wn1xstVhxQVmqi5Leuw/Fl+1hzRsJc8yGRMjVACxU48=;
+  b=fzBJFS26KNCvG0jHyZdTS0ic1l9ZM6miCTydO8vOv9FFWFCA3W3vZkP/
+   510fbwATdSpwOxBN8+0M+cPbC8Oiaz4jsOnUulkEMDUaXoc2B4HuKKhTA
+   ujUYIVCM6kifAcaPOKrhPRQrxRoHMbambl/a/au8W+ZwP/gbhHRXpmHx9
+   pn9dLjVEOjw62kRvVwcppXLgqhwixuXhjSLXSpR62eb4B+jiHA73EAVIx
+   Oe5yQ6MsNhSsQxzsX4vESrkKx3q5khUBBbl1z8PKa22sKJsDXt5ZZdOtT
+   Mdni6TB14+869uQ39KI0TtODh2YLDvnhzDBIwz7VhDy6pu6dWG6+SUWEA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="303442671"
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="303442671"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 22:33:12 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10497"; a="695339603"
+X-IronPort-AV: E=Sophos;i="5.95,178,1661842800"; 
+   d="scan'208";a="695339603"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2022 22:33:12 -0700
+Message-ID: <cca662f039d4b152fd3471561180dca4b140b217.camel@linux.intel.com>
+Subject: Re: [PATCH AUTOSEL 4.9 4/4] thermal: intel_powerclamp: Use
+ get_cpu() instead of smp_processor_id() to avoid crash
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Chen Yu <yu.c.chen@intel.com>, Pavel Machek <pavel@ucw.cz>
+Cc:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org
+Date:   Tue, 11 Oct 2022 22:33:11 -0700
+In-Reply-To: <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
+References: <20221009205508.1204042-1-sashal@kernel.org>
+         <20221009205508.1204042-4-sashal@kernel.org>
+         <20221011113646.GA12080@duo.ucw.cz> <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011153243.133712-1-jonathanh@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11-10-22, 16:32, Jon Hunter wrote:
-> When the Tegra194 CPUFREQ driver is built as a module it is not
-> automatically loaded as expected on Tegra194 devices. Populate the
-> MODULE_DEVICE_TABLE to fix this.
+On Tue, 2022-10-11 at 21:22 +0800, Chen Yu wrote:
+> Hi Pavel,
+> On 2022-10-11 at 13:36:46 +0200, Pavel Machek wrote:
+> > Hi!
+> > 
+> > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > > 
+> > > [ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
+> > > 
+> > > When CPU 0 is offline and intel_powerclamp is used to inject
+> > > idle, it generates kernel BUG:
+> > > 
+> > > BUG: using smp_processor_id() in preemptible [00000000] code:
+> > > bash/15687
+> > > caller is debug_smp_processor_id+0x17/0x20
+> > > CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
+> > > Call Trace:
+> > > <TASK>
+> > > dump_stack_lvl+0x49/0x63
+> > > dump_stack+0x10/0x16
+> > > check_preemption_disabled+0xdd/0xe0
+> > > debug_smp_processor_id+0x17/0x20
+> > > powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
+> > > ...
+> > > ...
+> > > 
+> > > Here CPU 0 is the control CPU by default and changed to the current
+> > > CPU,
+> > > if CPU 0 offlined. This check has to be performed under
+> > > cpus_read_lock(),
+> > > hence the above warning.
+> > > 
+> > > Use get_cpu() instead of smp_processor_id() to avoid this BUG.
+> > 
+> > This has exactly the same problem as smp_processor_id(), you just
+> > worked around the warning. If it is okay that control_cpu contains
+> > stale value, could we have a comment explaining why?
+> > 
+> May I know why does control_cpu have stale value? The control_cpu
+> is a random picked online CPU which will be used later to collect
+> statistics.
+> As long as the control_cpu is online, it is valid IMO.
 > 
-> Fixes: df320f89359c ("cpufreq: Add Tegra194 cpufreq driver")
 
-Added:
+I am also interested to know why this can be stale. The get_cpu() call
+disables preemption. 
 
-    Cc: v5.9+ <stable@vger.kernel.org> # v5.9+
+#define get_cpu()		({ preempt_disable();
+__smp_processor_id(); })
 
-> Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
-> ---
->  drivers/cpufreq/tegra194-cpufreq.c | 1 +
->  1 file changed, 1 insertion(+)
+
+Even if you change it to call debug_smp_processor_id() instead of
+__smp_processor_id(), it will still not print warning as
+preempt_count() will return 1.
+
+If after the preemption is enabled if the CPU is offlined, there are
+hotplug callbacks to handle.
+
+
+Thanks,
+Srinivas
+ 
+
+> thanks,
+> Chenyu
+> > Thanks,
+> >                                                                 Pavel
+> >                                                                 
+> > > +++ b/drivers/thermal/intel_powerclamp.c
+> > > @@ -519,8 +519,10 @@ static int start_power_clamp(void)
+> > >  
+> > >         /* prefer BSP */
+> > >         control_cpu = 0;
+> > > -       if (!cpu_online(control_cpu))
+> > > -               control_cpu = smp_processor_id();
+> > > +       if (!cpu_online(control_cpu)) {
+> > > +               control_cpu = get_cpu();
+> > > +               put_cpu();
+> > > +       }
+> > >  
+> > >         clamping = true;
+> > >         schedule_delayed_work(&poll_pkg_cstate_work, 0);
+> > > -- 
+> > > 2.35.1
+> > 
+> > -- 
+> > People of Russia, stop Putin before his war on Ukraine escalates.
 > 
-> diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-> index c2004cae3f02..4596c3e323aa 100644
-> --- a/drivers/cpufreq/tegra194-cpufreq.c
-> +++ b/drivers/cpufreq/tegra194-cpufreq.c
-> @@ -589,6 +589,7 @@ static const struct of_device_id tegra194_cpufreq_of_match[] = {
->  	{ .compatible = "nvidia,tegra239-ccplex-cluster", .data = &tegra239_cpufreq_soc },
->  	{ /* sentinel */ }
->  };
-> +MODULE_DEVICE_TABLE(of, tegra194_cpufreq_of_match);
->  
->  static struct platform_driver tegra194_ccplex_driver = {
->  	.driver = {
+> 
 
-Applied. Thanks.
 
--- 
-viresh
