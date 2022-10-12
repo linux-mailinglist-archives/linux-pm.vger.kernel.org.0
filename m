@@ -2,109 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3275FC63D
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 15:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB0D05FC69C
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 15:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiJLNTt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 09:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38300 "EHLO
+        id S229477AbiJLNi0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 09:38:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiJLNTm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 09:19:42 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495AF07;
-        Wed, 12 Oct 2022 06:19:39 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-1326637be6eso19386601fac.13;
-        Wed, 12 Oct 2022 06:19:38 -0700 (PDT)
+        with ESMTP id S229775AbiJLNiZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 09:38:25 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34580CF871
+        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 06:38:22 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id z8so5624579qtv.5
+        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 06:38:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SidGkWFa9nPlFG+3QhCQlPl1KwD5+nWLJM4PPfubZi8=;
+        b=yduzRp+hEe3uLj/tYh2WUUp5LNVSRTO5Ou6Hf2Aws8/SZ6563pC1LqWisK5xF7j+vW
+         V6C7qRDWiVJo9+A8n2Zm3ki5hdDmFcHQfkcI7Ie3aJ6Y0fJcrtViu5tW0dmRG7bhB+lt
+         9frA7NqruVeUgoTaGK+LZb0rrr3YLfPMyYUSM7NUCXh0NygZhFHvoDMrUDFl9kVx62Y4
+         SfMezfHWTDv6B4IERJR7U+cr9ZaMAXuYzQSbOaiuRmLOvDGeuaT6suxMahHOSgbRIjjp
+         ydArzJELLkjM/NxwQVgQx5+BaPzxWdtBWCMJOnzYjeO+bEWC+TZGxKnSi12gOX9gczKn
+         Yrtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EAJFO7neLdf3WjMmm37zm/4YHZwmJFmdFV44FOsiFk=;
-        b=7CJx76oCPoGg+j8jq0Qnlc6kw5MZZKrHdBIAO+BMzX0wE4NpJLgPrRXo7boI20CbKR
-         7RJr+TjG+k+a8Uv11UFOT5QjIQ/Vc5FTRExSssSXC2l/Iw00wYxfSGT06bSvYWv18CqZ
-         wd/TBATDjj9aMb3OZtrAffZ+7zARUF5a7eCVTSoUYdaI5hMU65ZFWAfwhQaDva8lLIPV
-         b/fKEGFV/VnbguC25sYqIS6V7mqaLejUZXNxYdUZyfrgcIE7ldV0FOhd1CsqjwKIcimd
-         gnqAa/yvuojmw1SDVgVQegjISqsj670fVLrxywXb9DRYx2/HxJHB2ZSdpgg9x5YqN+Ws
-         0fHA==
-X-Gm-Message-State: ACrzQf09ovdWav289/j1zT8soouKb14mLEoFBwIQ9AWzgtYCu2vk0BOF
-        syMMI8eT9cDptPYByOcltg==
-X-Google-Smtp-Source: AMsMyM7K5jb6v64ktWm+n2zTk2z7te9iFpUFOXpPsi2Kx8O72MAANdsaWdTy1AA7cGj9J993ook2Lg==
-X-Received: by 2002:a05:6870:15d3:b0:122:5c72:f21f with SMTP id k19-20020a05687015d300b001225c72f21fmr2417883oad.178.1665580778204;
-        Wed, 12 Oct 2022 06:19:38 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id cg12-20020a056830630c00b006618b23df05sm6026187otb.21.2022.10.12.06.19.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 06:19:37 -0700 (PDT)
-Received: (nullmailer pid 1941571 invoked by uid 1000);
-        Wed, 12 Oct 2022 13:19:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Bryan Brattlof <bb@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>,
+        bh=SidGkWFa9nPlFG+3QhCQlPl1KwD5+nWLJM4PPfubZi8=;
+        b=MUZ1rLyDg9AZI1N51ny+7g2EwpZbtpYvNM9qtVI1ZrvgJwvpN/NKILozjFww5y44Sh
+         TnLxUCMvD16o5OqHSh7lvB8tthithTs4MeKXWVG9Y+povkU5HcWN7iza/g+4ExY86VXh
+         Ct7rtq/x8yDikHlqi3KeV/l3+gKRI1usz0Yrx9y9v6qk7V5VI7PkDjZXIo1IYaqU4yWk
+         EtRVaD3QbMHgfjBYDUbVGmzdxqIOUogym+4CmBUdI9qlQhlC1ukry/MbKRNobHiATYNr
+         kr2nTTuRhnkOXeyb0Q8T1z1ViA6GL6f85uQ7FMmNWh/7zH+o1/58l6cXZKzfGWgO6pzU
+         fq9A==
+X-Gm-Message-State: ACrzQf29NmqpD4tGUvhlT93UT3r0/xKApN8G9sOQQpjqT0w490zbJU78
+        uRRLUaczb/uNMikNy/eXYpqdnw==
+X-Google-Smtp-Source: AMsMyM4Rsj5oR1ATGM7658GzD3Q3lBbF+8Os3pqf/BLWi2fFG+xAXEPFzjZU6ldVhh3TOTZ5dZec8Q==
+X-Received: by 2002:ac8:5e08:0:b0:399:e50e:f821 with SMTP id h8-20020ac85e08000000b00399e50ef821mr13129591qtx.5.1665581900935;
+        Wed, 12 Oct 2022 06:38:20 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05620a430a00b006ce7cd81359sm15535290qko.110.2022.10.12.06.38.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Oct 2022 06:38:20 -0700 (PDT)
+Message-ID: <06249fe9-97eb-1ab8-5e35-00b3c613d3a7@linaro.org>
+Date:   Wed, 12 Oct 2022 09:36:04 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 05/11] dt-bindings: thermal: k3-j72xx: elaborate on
+ binding descriptions
+Content-Language: en-US
+To:     Bryan Brattlof <bb@ti.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
         Amit Kucheria <amitk@kernel.org>,
-        Linux Device Tree <devicetree@vger.kernel.org>,
-        Tero Kristo <kristo@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Keerthy <j-keerthy@ti.com>,
-        Linux Thermal <linux-pm@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Nishanth Menon <nm@ti.com>,
         Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Keerthy <j-keerthy@ti.com>,
+        Linux Thermal <linux-pm@vger.kernel.org>,
+        Linux Device Tree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Linux ARM <linux-arm-kernel@lists.infradead.org>
-In-Reply-To: <20221011231727.8090-7-bb@ti.com>
-References: <20221011231727.8090-1-bb@ti.com> <20221011231727.8090-7-bb@ti.com>
-Message-Id: <166558062789.1936784.4988511846855638539.robh@kernel.org>
-Subject: Re: [PATCH 06/11] dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
-Date:   Wed, 12 Oct 2022 08:19:39 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221011231727.8090-1-bb@ti.com>
+ <20221011231727.8090-6-bb@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221011231727.8090-6-bb@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 11 Oct 2022 18:17:22 -0500, Bryan Brattlof wrote:
-> Only some of TI's J721E SoCs will need a eFuse register range mapped to
-> determine if they're affected by TI's i2128 erratum. All other SoC will
-> not need this eFuse range to be mapped to function properly
-> 
-> Update the bindings for the k3_j72xx_bandgap thermal driver so other
-> devices will only need to define two register ranges
+On 11/10/2022 19:17, Bryan Brattlof wrote:
+> Elaborate on the function of this device node as well as some of the
+> properties that this node uses.
 > 
 > Signed-off-by: Bryan Brattlof <bb@ti.com>
 > ---
->  .../bindings/thermal/ti,j72xx-thermal.yaml    | 34 +++++++++++++------
->  1 file changed, 24 insertions(+), 10 deletions(-)
+>  .../bindings/thermal/ti,j72xx-thermal.yaml    | 27 ++++++++++++++++++-
+>  1 file changed, 26 insertions(+), 1 deletion(-)
 > 
+> diff --git a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> index c74f124ebfc00..0b6a6fa07a532 100644
+> --- a/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+> @@ -9,6 +9,24 @@ title: Texas Instruments J72XX VTM (DTS) binding
+>  maintainers:
+>    - Keerthy <j-keerthy@ti.com>
+>  
+> +description: |
+> +  The TI K3 family of SoCs typically have a Voltage & Thermal
+> +  Management (VTM) device to control up to 8 temperature diode
+> +  sensors to measure silicon junction temperatures from different
+> +  hotspots of the chip as well as provide temperature, interrupt
+> +  and alerting information.
+> +
+> +  The VTM device will periodically enable these temperature sensors
+> +  to make a temperature measurement and store the reported data
+> +  allowing the sensors to stay in a reset state when not in use
+> +  to maximize the sensor's life.
+> +
+> +  This VTM driver will then use the following polynomial equation to
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+"VTM driver" is some physical/electronic element called driver? Or Linux
+driver? If the latter, drop it and just describe the equation.
 
-yamllint warnings/errors:
+> +  calculate the temperature from the value stored in the VTM device.
+> +
+> +  Temp = (-9.2627e-12) * x^4 + (6.0373e-08) * x^3 + \
+> +         (-1.7058e-04) * x^2 + (3.2512e-01) * x   + (-4.9003e+01)
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -19,9 +37,16 @@ properties:
+>      items:
+>        - description: VTM cfg1 register space
+>        - description: VTM cfg2 register space
+> -      - description: VTM efuse register space
+> +      - description: |
+> +          A software trimming method must be applied to some Jacinto
+> +          devices to function properly. This eFuse region provides
+> +          the information needed for these SoCs to report
+> +          temperatures accurately.
+>  
+>    power-domains:
+> +    description: |
+> +      Should contain the phandle to a power management (PM) domain
+> +      node and the device-id of this device.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.example.dtb: thermal-sensor@42040000: 'reg' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/thermal/ti,j72xx-thermal.yaml
+This is quite generic - why adding it?
 
-doc reference errors (make refcheckdocs):
+>      maxItems: 1
+>  
+>    "#thermal-sensor-cells":
 
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
+Best regards,
+Krzysztof
 
