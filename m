@@ -2,82 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A00FF5FC8F2
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 18:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E98F5FC998
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Oct 2022 18:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJLQLf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 12:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33066 "EHLO
+        id S229567AbiJLQ64 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 12:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiJLQLa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 12:11:30 -0400
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D67A033F;
-        Wed, 12 Oct 2022 09:11:30 -0700 (PDT)
-Received: by mail-oo1-f42.google.com with SMTP id g15-20020a4a894f000000b0047f8e899623so12454995ooi.5;
-        Wed, 12 Oct 2022 09:11:30 -0700 (PDT)
+        with ESMTP id S229526AbiJLQ6z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 12:58:55 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55115DED17;
+        Wed, 12 Oct 2022 09:58:54 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id a24so3006865qto.10;
+        Wed, 12 Oct 2022 09:58:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9J7x9zN0OClxgUpHT1aRD0SP13D4n7eAdvmXv478zN0=;
-        b=x2ex/H+BoZBnL6sZWtvuIVNhwJn9oVhnz6GzhThc9SSQJCiIBDB/CcgEqrBZwZazrX
-         WlBWg5SIe6jaTz+yDvXSeDUvsk3a7nRDzm1qY/nGmWQgq1AqVmwAAkGQ8l2l4SpmEU6G
-         LfrepGAAhX8WUc/SZWphYRsskIOtL+F0BfAp8tKC0Bw983bfqIyJR0pqv3FHDiehvG8H
-         cVDiNd9Uglceliw+x6InhRItJ3/mHwyinHnfsPruEfhVwLhYIEdyi/KbVuiTCWxOZQea
-         VYd3bzwWdygqfDB3MSPXlfUJWOvBivAyLN8oYWQQ9BQTzlJT7wHyzt/y1tYnrAz342De
-         6buA==
-X-Gm-Message-State: ACrzQf0yEM/he/sPNRkkkyLKGdBMxTuy8q20BIrihEVu5/g+Epm3gCxn
-        qwwpbKB4qFr+vGXK5SDCBhNYb2gSjw==
-X-Google-Smtp-Source: AMsMyM7wW7pmkLQ/s8EMhQ0+P97Btqh8AR7UaS1Tkj2OpwWjhdoIQDU1UlMTqzbG25b7Byn/JCsZLg==
-X-Received: by 2002:a9d:68d9:0:b0:661:9e75:af9b with SMTP id i25-20020a9d68d9000000b006619e75af9bmr6591581oto.293.1665591089162;
-        Wed, 12 Oct 2022 09:11:29 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id h13-20020a9d554d000000b006619f38a686sm3491517oti.56.2022.10.12.09.11.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Oct 2022 09:11:28 -0700 (PDT)
-Received: (nullmailer pid 2270880 invoked by uid 1000);
-        Wed, 12 Oct 2022 16:11:30 -0000
-Date:   Wed, 12 Oct 2022 11:11:30 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
- SC7280 CPU compatible
-Message-ID: <166559108971.2270830.13074268044998349307.robh@kernel.org>
-References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5vBHj8epZRV6r337mAeq8QE108Ef9pXuaSsp4XqN2Uk=;
+        b=Gb/EH5aKWlECGmXyOVAcbJxze8i6OWvlcr7CGGEvnu51SGCfqRfotUjPLeiulhWCSU
+         5tSNwRnKp2tY1cZax0EOUxpF+QV0mm1sCvFlGl0c73lTKCmyxmpZi1ZEqK/S0KNyllrU
+         9WVFxddOZMnpigpNAkwpECsxuC+fD3+pGWKgT1fC9hMEXYqmnGgo2ZgQVFk16Tcx2zr4
+         bYbyYHnGu1vI6I6LmF2u2WlHU+PIzDbK2pZM1foSstgTOauftzDddgkF7RRBMG64PYeg
+         3JUOzZIITFd2EE24svJNgNUKa+pgxxdnMmo3mv991uSh9v8dwmOpm1OH88Y0SYiJplxt
+         MtMA==
+X-Gm-Message-State: ACrzQf1fwcB9xhW2X1L0FgHebONhOtrbZKJiZtXlU8vbOmgDGpolM/pF
+        Z6TBEO7FTAaZZwP6rC6hhujrAEFb9Lka9ix4d0E=
+X-Google-Smtp-Source: AMsMyM5Lvg1ooUuM9Fb/ql4O0ZXlsMI64qCW+6Yz0+tjKs/OW14aLENf5EDw+Gl+F34qXcmdrDEPYN45B/hK0VB4LGY=
+X-Received: by 2002:a05:622a:11c7:b0:39c:b4bc:7030 with SMTP id
+ n7-20020a05622a11c700b0039cb4bc7030mr6813339qtk.17.1665593933419; Wed, 12 Oct
+ 2022 09:58:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221009205508.1204042-1-sashal@kernel.org> <20221009205508.1204042-4-sashal@kernel.org>
+ <20221011113646.GA12080@duo.ucw.cz> <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
+In-Reply-To: <Y0VuKmt5BGfB6nAE@chenyu5-mobl1>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 12 Oct 2022 18:58:42 +0200
+Message-ID: <CAJZ5v0iHu3ZZuHeC7q6x4ZERaAu0pP2ubqzUv3v2upxLwOFXsg@mail.gmail.com>
+Subject: Re: [PATCH AUTOSEL 4.9 4/4] thermal: intel_powerclamp: Use get_cpu()
+ instead of smp_processor_id() to avoid crash
+To:     Chen Yu <yu.c.chen@intel.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Sasha Levin <sashal@kernel.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        rafael@kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 11 Oct 2022 10:07:44 -0400, Krzysztof Kozlowski wrote:
-> Two different compatibles for SC7280 CPU BWMON instance were used
-> in DTS and bindings.  Correct the bindings to use the same one as in
-> DTS, because it is more specific.
-> 
-> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+On Tue, Oct 11, 2022 at 3:23 PM Chen Yu <yu.c.chen@intel.com> wrote:
+>
+> Hi Pavel,
+> On 2022-10-11 at 13:36:46 +0200, Pavel Machek wrote:
+> > Hi!
+> >
+> > > From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > >
+> > > [ Upstream commit 68b99e94a4a2db6ba9b31fe0485e057b9354a640 ]
+> > >
+> > > When CPU 0 is offline and intel_powerclamp is used to inject
+> > > idle, it generates kernel BUG:
+> > >
+> > > BUG: using smp_processor_id() in preemptible [00000000] code: bash/15687
+> > > caller is debug_smp_processor_id+0x17/0x20
+> > > CPU: 4 PID: 15687 Comm: bash Not tainted 5.19.0-rc7+ #57
+> > > Call Trace:
+> > > <TASK>
+> > > dump_stack_lvl+0x49/0x63
+> > > dump_stack+0x10/0x16
+> > > check_preemption_disabled+0xdd/0xe0
+> > > debug_smp_processor_id+0x17/0x20
+> > > powerclamp_set_cur_state+0x7f/0xf9 [intel_powerclamp]
+> > > ...
+> > > ...
+> > >
+> > > Here CPU 0 is the control CPU by default and changed to the current CPU,
+> > > if CPU 0 offlined. This check has to be performed under cpus_read_lock(),
+> > > hence the above warning.
+> > >
+> > > Use get_cpu() instead of smp_processor_id() to avoid this BUG.
+> >
+> > This has exactly the same problem as smp_processor_id(), you just
+> > worked around the warning. If it is okay that control_cpu contains
+> > stale value, could we have a comment explaining why?
+> >
+> May I know why does control_cpu have stale value? The control_cpu
+> is a random picked online CPU which will be used later to collect statistics.
+> As long as the control_cpu is online, it is valid IMO.
 
-Acked-by: Rob Herring <robh@kernel.org>
+So this is confusing, because the code makes the impression that
+getting the number of the CPU running the code matters in some way,
+which isn't the case.
+
+Something like cpumask_first(cpu_online_mask) should work as well if
+I'm not mistaken and it would be less confusing to use this instead
+IMO.
