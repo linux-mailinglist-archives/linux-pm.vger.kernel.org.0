@@ -2,88 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4382E5FCE54
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 00:22:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C42B65FCF60
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 02:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiJLWW3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 18:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37244 "EHLO
+        id S229955AbiJMARk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 20:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiJLWW2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 18:22:28 -0400
-Received: from rere.qmqm.pl (rere.qmqm.pl [91.227.64.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B952CAE60
-        for <linux-pm@vger.kernel.org>; Wed, 12 Oct 2022 15:22:27 -0700 (PDT)
-Received: from remote.user (localhost [127.0.0.1])
-        by rere.qmqm.pl (Postfix) with ESMTPSA id 4MnnFq4F5jzBb;
-        Thu, 13 Oct 2022 00:22:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rere.qmqm.pl; s=1;
-        t=1665613344; bh=cQK+1uYjAn1Lrexz8rIq8dhLUrGJHKziIFswEjdQR+k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=N20Ys88ezUtMyB9eHewqQaJ2w06v+akF8ys7RDMEZsxMIGoGzG5+4F+Zn3mSgYOdK
-         2gopKyPpffu6ipCMzeDsqwE2IXQ9xu8WWtk9pR+FYkQ3dGFz8vxQILYpRYNCe/E5uD
-         +1RNObeeZ8EMMSJM6hahlJirrsywRduOi5CtTo1PXHkUZi2PjLAUzzt5xx5ROP4U6m
-         jvRXSah7qJOy0JH6gx6xhntMhkScV41SazV8jpITqF7e3kcg2A8da+WrvaGbiIEz/G
-         eu5XaET0eXGx7BXxegQHlQ4xRx9Kf3nhM2wgC0gsXnBNlivIn5pG1N1l9+4JU3qipL
-         IQ6J7X9luHKiw==
-X-Virus-Status: Clean
-X-Virus-Scanned: clamav-milter 0.103.7 at mail
-Date:   Thu, 13 Oct 2022 00:22:21 +0200
-From:   =?iso-8859-2?Q?Micha=B3_Miros=B3aw?= <mirq-linux@rere.qmqm.pl>
-To:     Marek Vasut <marex@denx.de>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH 5/7] power: supply: bq25890: Factor out regulator
- registration code
-Message-ID: <Y0c+Had3TTCwl+R1@qmqm.qmqm.pl>
-References: <20221010210310.165461-1-marex@denx.de>
- <20221010210310.165461-5-marex@denx.de>
- <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
- <00e6b9b0-ddef-6e2f-0603-9a25fd3b9e0d@denx.de>
- <848ada38-00a1-0631-871f-926bb33a166f@redhat.com>
- <021a1dfc-eb05-77ad-644c-f967a5bf7799@denx.de>
+        with ESMTP id S229957AbiJMARW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 20:17:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393D0FE91A;
+        Wed, 12 Oct 2022 17:16:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 373D06166E;
+        Thu, 13 Oct 2022 00:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FB65C433B5;
+        Thu, 13 Oct 2022 00:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1665620200;
+        bh=PyVuP224LTfOgKeY7PGhWDcswJIc+RIZ/ujbhn1tRm4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Y8/7IYOgf4oJo+BMNcaaV7aT1YoBnrX/zBqNu1zF8maNdCATEgYawfQHXdKMm6SKT
+         HxxMPP9wfIyW8p/6+3r1cx5XpIOrluNOd8lew2KErwBUTetDI02+i05YFMEPK9OZM7
+         BsPe2BCC89m9Gqt2GmaxS1OmDPAJzB6xtFgGyZRuyJzqfSg8qu6hAcq/ZZoqEL7sJk
+         zl8Oglp3YkjHrqlvBGISt/ip3Oe0EyBvKpr93fQd9Iso2vUuogLJtDCFPIdF2Wiv4A
+         2DMWi1bU6D1gKsNMobgNYiExqtczdQa1sfRpzlDvqCcbPndYOMBey+QEK15aTbPYL6
+         ZIhtok+b2BfPg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Wei Yongjun <weiyongjun1@huawei.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sasha Levin <sashal@kernel.org>, Michael.Hennerich@analog.com,
+        sre@kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 17/67] power: supply: adp5061: fix out-of-bounds read in adp5061_get_chg_type()
+Date:   Wed, 12 Oct 2022 20:14:58 -0400
+Message-Id: <20221013001554.1892206-17-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20221013001554.1892206-1-sashal@kernel.org>
+References: <20221013001554.1892206-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-2
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <021a1dfc-eb05-77ad-644c-f967a5bf7799@denx.de>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 12:02:52AM +0200, Marek Vasut wrote:
-> On 10/12/22 12:10, Hans de Goede wrote:
-[...]
-> > Looking at standard Linux userspace (Debian/Fedora/etc.)
-> > all the userspace tools capable of reporting voltages
-> > of various voltage rails inside the system to the user
-> > use the hwmon interface for this. This is also why
-> > the power-supply class core recently got support for
-> > proxying some psy properties to a hwmon class device.
-> > 
-> > So the way I see it is that if we want to report Vsys to
-> > userspace, that we then clearly need to report it through
-> > the hwmon interface.
-> 
-> For regulators, you can read their values via /sys/class/regulators/* , if
-> the user is interesting in Vsys .
-> 
-> Maybe that is where we disagree -- I'm not particularly interested in
-> exposing Vsys to user space, but since it was exposed before, I tried to
-> retain that exposure, although via different channel. And the regulator also
-> makes the Vsys useful, since it can be used as a supply on the kernel level.
+From: Wei Yongjun <weiyongjun1@huawei.com>
 
-I find knowing Vsys useful at least to have a way to quickly check if
-the voltage requirements of other parts of the system are met. I don't
-mind regulator vs pure hwmon interface for reading it. Though, a regulator
-for Vsys could also include controlling VSYSMIN and BATFET_DIS if anyone
-cared to change those at runtime.
+[ Upstream commit 9d47e01b9d807808224347935562f7043a358054 ]
 
-Best Regards
-Micha³ Miros³aw
+ADP5061_CHG_STATUS_1_CHG_STATUS is masked with 0x07, which means a length
+of 8, but adp5061_chg_type array size is 4, may end up reading 4 elements
+beyond the end of the adp5061_chg_type[] array.
+
+Signed-off-by: Wei Yongjun <weiyongjun1@huawei.com>
+Acked-by: Michael Hennerich <michael.hennerich@analog.com>
+Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/power/supply/adp5061.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/power/supply/adp5061.c b/drivers/power/supply/adp5061.c
+index 003557043ab3..daee1161c305 100644
+--- a/drivers/power/supply/adp5061.c
++++ b/drivers/power/supply/adp5061.c
+@@ -427,11 +427,11 @@ static int adp5061_get_chg_type(struct adp5061_state *st,
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	chg_type = adp5061_chg_type[ADP5061_CHG_STATUS_1_CHG_STATUS(status1)];
+-	if (chg_type > ADP5061_CHG_FAST_CV)
++	chg_type = ADP5061_CHG_STATUS_1_CHG_STATUS(status1);
++	if (chg_type >= ARRAY_SIZE(adp5061_chg_type))
+ 		val->intval = POWER_SUPPLY_STATUS_UNKNOWN;
+ 	else
+-		val->intval = chg_type;
++		val->intval = adp5061_chg_type[chg_type];
+ 
+ 	return ret;
+ }
+-- 
+2.35.1
+
