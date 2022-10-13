@@ -2,53 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6133F5FE482
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 23:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34E545FE50D
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 00:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiJMVvS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Oct 2022 17:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40824 "EHLO
+        id S229755AbiJMWNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Oct 2022 18:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiJMVu1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 17:50:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3279E1900E
-        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 14:49:46 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oj651-0003l1-Su; Thu, 13 Oct 2022 23:49:27 +0200
-Message-ID: <849213369ce9ed3364ba0beb2744bfbcb3740b0c.camel@pengutronix.de>
-Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Tim Harvey <tharvey@gateworks.com>, Marek Vasut <marex@denx.de>
-Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        abelvesa@kernel.org, abailon@baylibre.com,
-        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
-        Markus.Niebel@ew.tq-group.com, aford173@gmail.com,
-        kernel@pengutronix.de, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Date:   Thu, 13 Oct 2022 23:49:25 +0200
-In-Reply-To: <CAJ+vNU0mPt27PgheodNLcOk97OdD6TK+1us58jc=4DMHndQpvQ@mail.gmail.com>
-References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
-         <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
-         <ec599991-44da-7b83-9374-d0043b32f053@denx.de>
-         <CAJ+vNU2g+e8_PBq0SJYOXsB6PKpMb3dmzDRA5Gyj=NJS3Ckc1g@mail.gmail.com>
-         <CAJ+vNU0mPt27PgheodNLcOk97OdD6TK+1us58jc=4DMHndQpvQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        with ESMTP id S229727AbiJMWNB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 18:13:01 -0400
+Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0343818BE29
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 15:13:00 -0700 (PDT)
+Received: by mail-vk1-xa34.google.com with SMTP id w185so1473354vkb.7
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 15:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=telus.net; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xLlp+L6UoYHOMNwsqCOlw+S3zS7vqmcy26ijo646RY8=;
+        b=O8AEMcxiWJI/qRNaoqxoTmxniQ9mIt/D1O8aw6Xrsja8xvG3vcNZxYIRhpQbVri1F8
+         ZqvYt/RpHfeFWiK+32uburTgHLokD29VaTTMabo52h7yqi5/0HoMV3eSvhdA8Q17ndwD
+         rA1hRVvKw6wdjCKa5eMKFnfvv8ssXfsRhQvI/t/aHeU71MDMuGcSQQJZCzHv1LQxncDw
+         6qZUQUc8unyuy1LuDR8aVyztxamFjvjkT7Jg1MECrfLYRPGO9Gwib6XeOe3AYJjzqrHN
+         2ZhhLISav5qVUvTLWp+c0uPxHcsWW2H1fC5dQtGLpN7YAD+6ZThAmPStIjQ6DaUndtHg
+         ZQww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xLlp+L6UoYHOMNwsqCOlw+S3zS7vqmcy26ijo646RY8=;
+        b=iSBcKfrr6HpzUWNu3gQKXvlR7VQ12hXdECt7gkXyCq2I5BhM8eJJGJpSWcUePe7vH6
+         HsGK16uyol5lmt4n10mVlRKRkLc5PKK0dENt3NKYDikRIRS/ID+St9w5ZEtiQ4rxlI7c
+         P2aDVkG4pHtJiKv4cdNcCtBmIluIV3BgyY5ztMwVsaM/D2XD+VEnpylebwbvl4k0N8TB
+         L/ITr9LE89P8sNtp1jxArtuQ8mwgR5xlTlTuOBgZNFM+2R5VoX9vlRB9+Sz8d+D5Yxbl
+         yDjHAxIog7/q+dHfEEtMy+JE6aFeOFSO6g7qYPFUMgQC2Lw7BdAwxxsRpTZ81NVpLgGS
+         /SgA==
+X-Gm-Message-State: ACrzQf0L5hIX2sIPJfAoGg5yxe4pwn4b/xgkEKNqzOzQ1Tl6k31yIGX9
+        lth5YQmGiges/wIx9vOrDGn0iAwQoCiRyC1v6F0q5A==
+X-Google-Smtp-Source: AMsMyM7V2B+2B0PzcJiVhCmvnZwWQdza7W21iJqVsoyjKadFoMTFXHj2u9GdL4XzCSwWzqoI3oLfk8kXvmdBrzobwOU=
+X-Received: by 2002:a1f:5981:0:b0:3a6:6655:831f with SMTP id
+ n123-20020a1f5981000000b003a66655831fmr1350689vkb.12.1665699179056; Thu, 13
+ Oct 2022 15:12:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+ <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com> <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
+In-Reply-To: <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
+From:   Doug Smythies <dsmythies@telus.net>
+Date:   Thu, 13 Oct 2022 15:12:53 -0700
+Message-ID: <CAAYoRsW+5xbW_Zd7Mtbo4VMi4RZFXRr7mf4NAU=Le7GhQzNJvg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
+        lukasz.luba@arm.com, Dietmar.Eggemann@arm.com,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Doug Smythies <dsmythies@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,139 +68,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Tim,
+Hi All,
 
-Am Donnerstag, dem 13.10.2022 um 11:23 -0700 schrieb Tim Harvey:
-> On Wed, Oct 12, 2022 at 11:46 AM Tim Harvey <tharvey@gateworks.com> wrote:
-> > 
-> > On Tue, Oct 11, 2022 at 4:13 PM Marek Vasut <marex@denx.de> wrote:
-> > > 
-> > > On 10/11/22 22:10, Tim Harvey wrote:
-> > > > On Fri, Jul 8, 2022 at 1:57 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
-> > > > > 
-> > > > > From: Peng Fan <peng.fan@nxp.com>
-> > > > > 
-> > > > > V4:
-> > > > >   Because the header is not included when adding NoC node, the fsl,imx8mp.h
-> > > > >   needs be included in this patchset. So include it in patch 6
-> > > > > 
-> > > > > V3:
-> > > > >   Move adding NoC node patch to i.MX8MP ICC driver patchset
-> > > > >   Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
-> > > > > 
-> > > > > V2:
-> > > > >   Use a low bandwidth value instead INT_MAX
-> > > > >   Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
-> > > > >   Add A-b tag from DT maintainer
-> > > > > 
-> > > > > i.MX8MP NoC settings is invalid after related power domain up. So
-> > > > > need to set valid values after power domain up.
-> > > > > 
-> > > > > This patchset is to bind interconnect for each entry in blk ctrl.
-> > > > > 
-> > > > > This patchset is not include DVFS DDRC feature.
-> > > > > 
-> > > > > Peng Fan (7):
-> > > > >    dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
-> > > > >      ctrl
-> > > > >    dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
-> > > > >      ctrl
-> > > > >    dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
-> > > > >      ctrl
-> > > > >    soc: imx: add icc paths for i.MX8MP media blk ctrl
-> > > > >    soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
-> > > > >    arm64: dts: imx8mp: add interconnects for media blk ctrl
-> > > > >    arm64: dts: imx8mp: add interconnect for hsio blk ctrl
-> > > > > 
-> > > > >   .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
-> > > > >   .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
-> > > > >   .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
-> > > > >   arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
-> > > > >   drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
-> > > > >   drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
-> > > > >   6 files changed, 125 insertions(+)
-> > > > > 
-> > > > > --
-> > > > > 2.25.1
-> > > > > 
-> > > > 
-> > > > Hi Peng,
-> > > > 
-> > > > I built origin/master from commit 041bc24d867a today for an imx8mp
-> > > > board and am running into errors that appear to be introduced by this
-> > > > series:
-> > > > [   15.177372] platform 381f0040.usb-phy: deferred probe pending
-> > > > [   15.183155] platform 382f0040.usb-phy: deferred probe pending
-> > > > [   15.188928] platform 33800000.pcie: deferred probe pending
-> > > > [   15.194439] platform 32ec0000.blk-ctrl: deferred probe pending
-> > > > [   15.200287] platform 38330000.blk-ctrl: deferred probe pending
-> > > > [   15.206129] platform 32f10000.blk-ctrl: deferred probe pending
-> > > > [   15.211974] platform 32f10100.usb: deferred probe pending
-> > > > [   15.217382] platform 32f10108.usb: deferred probe pending
-> > > > [   15.222791] platform cpufreq-dt: deferred probe pending
-> > > > # cat /sys/kernel/debug/devices_deferred
-> > > > 381f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
-> > > > 382f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
-> > > > 33800000.pcie   platform: supplier 32f10000.blk-ctrl not ready
-> > > > 32ec0000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
-> > > > 38330000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
-> > > > 32f10000.blk-ctrl       imx8mp-blk-ctrl: failed to get noc entries
-> > > > 32f10100.usb    platform: supplier 32f10000.blk-ctrl not ready
-> > > > 32f10108.usb    platform: supplier 32f10000.blk-ctrl not ready
-> > > > cpufreq-dt
-> > > > 
-> > > > Is there a driver I'm perhaps missing that is needed now or are there
-> > > > some patches that come from a different unmerged tree needed?
-> > > 
-> > > Do you have these enabled ?
-> > > 
-> > > CONFIG_INTERCONNECT_IMX8MM=y
-> > > CONFIG_INTERCONNECT_IMX8MN=y
-> > > CONFIG_INTERCONNECT_IMX8MQ=y
-> > > CONFIG_INTERCONNECT_IMX8MP=y
-> > 
-> > Marek,
-> > 
-> > Yes, I have those as well as CONFIG_ARCH_NXP which appears new for 6.1 enabled.
-> > 
-> > Best Regards,
-> > 
-> > Tim
-> 
-> I see this issue on origin/master 1440f5760228 using
-> arch/arm64/configs/defconfig.
-> 
-> It seems to me that the imx8m*_blk_ctrl_probe will all defer now until
-> perhaps all the drivers using interconnects can probe, such as
-> g1/lcdif etc?
-> 
-> Some added debugging shows me:
-> [   14.951371] of_icc_bulk_get path lcdif-rd err=-517
-> [   14.956205] devm_of_icc_bulk_get ret=-517
-> [   14.960562] imx8m_blk_ctrl_probe failed -517
-> [   14.967191] of_icc_bulk_get path g1 err=-517
-> [   14.971487] devm_of_icc_bulk_get ret=-517
-> [   14.975614] imx8m_blk_ctrl_probe failed -517
-> [   14.982200] of_icc_bulk_get path usb1 err=-517
-> [   14.986680] devm_of_icc_bulk_get ret=-517
-> [   14.990709] imx8mp_blk_ctrl_probe 0:usb1
-> [   14.994641] imx8mp_blk_ctrl_probe 1:usb2
-> [   15.002086] platform 381f0040.usb-phy: deferred probe pending
-> [   15.007875] platform 382f0040.usb-phy: deferred probe pending
-> [   15.013636] platform 32f00000.pcie-phy: deferred probe pending
-> [   15.019480] platform 33800000.pcie: deferred probe pending
-> [   15.024975] platform 32ec0000.blk-ctrl: deferred probe pending
-> [   15.030819] platform 38330000.blk-ctrl: deferred probe pending
-> [   15.036662] platform 32f10000.blk-ctrl: deferred probe pending
-> [   15.042503] platform 32f10100.usb: deferred probe pending
-> [   15.047912] platform 32f10108.usb: deferred probe pending
-> 
-Do you have CONFIG_ARM_IMX_BUS_DEVFREQ enabled? This one will actually
-instantiate the interconnect devices for the interconnect drivers to
-hang onto. Once the interconnect is probed the blk-ctrl drivers should
-probe. There is no dependency into leaf peripheral devices.
+On Thu, Oct 13, 2022 at 4:12 AM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
+> > On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
+> > <kajetan.puchalski@arm.com> wrote:
+...
 
-Regards,
-Lucas
+> On the Intel & power usage angle you might have seen in the discussion,
+> Doug sent me some interesting data privately. As far as I can tell the
+> main issue there is that C0 on Intel doesn't actually do power saving so
+> moving the state selection down to it is a pretty bad idea because C1
+> could be very close in terms of latency and save much more power.
+>
+> A potential solution could be altering the v2 to only decrease the state
+> selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
+> because arm systems with 2 states use the early exit path anyway. It'd
+> just amount to changing this hunk:
+>
+> +       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
+> +               idx--;
+>
+> to:
+>
+> +       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
+> +               idx--;
+>
+> What would you think about that? Should make it much less intense for
+> Intel systems.
 
+I tested the above, which you sent me as patch version v2-2.
 
+By default, my Intel i5-10600K has 4 idle states:
+
+$ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/name
+/sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
+/sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
+/sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
+/sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
+
+Idle driver governor legend:
+teo: the normal teo idle governor
+menu: the normal menu idle governor
+util or v1: the original patch
+util-v2 or v2: V2 of the patch
+util-v2-2 or v2-2: the suggestion further up in this thread.
+
+Test 1: Timer based periodic:
+
+A load sweep from 0 to 100%, then 100% to 0, first 73 hertz, then 113,
+211,347 and finally 401 hertz work/sleep frequency. Single thread.
+
+http://smythies.com/~doug/linux/idle/teo-util/consume/idle-1/
+
+Summary, average processor package powers (watts):
+
+teo              menu          v1               v2             v2-2
+10.19399    10.74804    22.12791    21.0431    11.27865
+                     5.44%      117.07%     106.43%     10.64%
+
+There is no performance measurement for this test, it just has to
+finish the work packet before the next period starts. Note that
+overruns do occur as the workload approaches 100%, but I do not record
+that data, as typically the lower workload percentages are the area of
+interest.
+
+Test 2: Ping-pong test rotating through 6 different cores, with a
+variable packet of work to do at each stop. This test goes gradually
+through different idle states and is not timer based. A different 2
+core test (which I have not done) is used to better explore the idle
+state 0 to idle state 1 transition. This test has a performance
+measurement. The CPU scaling governor was set to performance. HWP was
+disabled.
+
+http://smythies.com/~doug/linux/idle/teo-util/ping-sweep/6-1/loop-times.png
+http://smythies.com/~doug/linux/idle/teo-util/ping-sweep/6-1/loop-times-detail-a.png
+http://smythies.com/~doug/linux/idle/teo-util/ping-sweep/6-1/
+
+Summary:
+
+Average processor package power (watts):
+teo            v2-2            menu
+27.3881    29.98293    28.04096
+                 9.47%        2.38%
+
+Execution time for the entire test (minutes):
+teo   v2-2        menu
+56    54.667    55.333
+        -2.38%    -1.19%
+
+However, notice that in the idle-state 0 and 1 region, V2-2 uses more
+power and its loop time is longer (less is better), but also in the
+deeper idle states regions V2-2 uses more power and also runs faster.
+
+teo: 36.4 watts and 10.3533 usecs/loop.
+menu: 36.8 watts and 10.1604 usecs/loop.
+util-v2-2: 38.8 watts and 11.2358 usecs/loop.
+
+and
+
+teo: 15.2 watts and 1,777.6 usecs/loop.
+menu: 15.6 watts and 1767.4 usecs/loop.
+util-v2-2: 17.4 watts and 1618.7 usecs/loop.
+
+... Doug
