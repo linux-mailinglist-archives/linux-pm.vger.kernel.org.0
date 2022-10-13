@@ -2,81 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DE645FD6AE
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA805FD6F4
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 11:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiJMJMg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Oct 2022 05:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
+        id S229583AbiJMJYt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Oct 2022 05:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiJMJMf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 05:12:35 -0400
+        with ESMTP id S229507AbiJMJYs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 05:24:48 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EE3713D62D
-        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 02:12:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB28913E29
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 02:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1665652353;
+        s=mimecast20190719; t=1665653083;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=eJPTf+J0rkxkKJ6ep7rmBEFxSznnVS2v0m6jwh2RDu0=;
-        b=SchzoOzFbEkR+RuB7TGwoWrVZX0GkOpBu5JleOAuPKgQKCIMPtND0dJMRyRY2UF1miVZEK
-        euZbPB0952vfhBVSDLptOM1Fo9jGkC91e4PsDmY2K7Cw9g9vgwBHJg0vY3ERTef+MFG3AA
-        2Db4To6THNr811U6OYoe4+XNo5crFwo=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=ZGCT7DAvN9LCwxdxhJw9119Fs6WG0wEr19eeqRjFzmc=;
+        b=Mg0JUedEslLlwaEoB/xMvabXBFhsDSQi3YHGlYWHILNo66Q4Jn94lvJMDVbkwiz0QjUy4d
+        jnEtsGnzjbU9nr7IBm7eplLyeAWFgz4b+i1cwzeZf98J4Sp4WvJCJrgLsuINNBF4pS31Bs
+        dSflKtHUPxd8AO74pW7OUWvLqEXrG+M=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-32xRMy5WMAi-EVUUVnOyrw-1; Thu, 13 Oct 2022 05:12:32 -0400
-X-MC-Unique: 32xRMy5WMAi-EVUUVnOyrw-1
-Received: by mail-ed1-f70.google.com with SMTP id f18-20020a056402355200b0045c13ee57d9so1060960edd.20
-        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 02:12:32 -0700 (PDT)
+ us-mta-582-wVIIlKjQPaONSfEc_lU-JQ-1; Thu, 13 Oct 2022 05:24:42 -0400
+X-MC-Unique: wVIIlKjQPaONSfEc_lU-JQ-1
+Received: by mail-ed1-f71.google.com with SMTP id z16-20020a05640235d000b0045c0360bfcfso1071259edc.14
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 02:24:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eJPTf+J0rkxkKJ6ep7rmBEFxSznnVS2v0m6jwh2RDu0=;
-        b=nMfL/fOFSWr93feYYRm0T/BmGkd6Jwfc1MREd7bZUTzt502iVMEQ2GAL26ruuNf6n9
-         0YnIZdGBjWdFpm6jB05vhVMlTY+p1nd55hOgEqEHLKGEcXE8WCCAz8pjPOXpDeubMQq7
-         yyx3EhgizZHg2ppWvVMcetjb21lAUQeVC2dJ1c5gTWPGhvhG36yfhi2Ob8Kl9hT39tRZ
-         M/tdw3nPTexsn1KTafpeYWVcaRE3DhsDlqrVqwTkW/nOmxuv8QaQJW2C3DC4AWBNWE7Y
-         AKGGR85gzoppd3gu2oLU1EWaxTJdZsi/x8dcMcdSawBXn2mt47sfhn39hby+Sj+EW8Jz
-         BXNg==
-X-Gm-Message-State: ACrzQf33DZBEDEBxmQ08niWjmrtIM7B4aBZgWKiW+j4u3He3+SQPgvR1
-        BUFS2f+ByzXU/UcJzyE8ZvZAJb45wNr7GalMeJNq7C3MVeBOpaeJsyF524laA+9Fd6rzjsH3l0f
-        5pHL3WGBG+LJLqfYbI2g=
-X-Received: by 2002:a17:906:2a93:b0:78d:b87e:6aab with SMTP id l19-20020a1709062a9300b0078db87e6aabmr14531624eje.157.1665652350737;
-        Thu, 13 Oct 2022 02:12:30 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM486OQG8dRXTsVAeiklXmE0BR4db2hABa99S1xKJQy+TWMm5tI0qhBDDV1g+/7apMJsPiqjCA==
-X-Received: by 2002:a17:906:2a93:b0:78d:b87e:6aab with SMTP id l19-20020a1709062a9300b0078db87e6aabmr14531615eje.157.1665652350431;
-        Thu, 13 Oct 2022 02:12:30 -0700 (PDT)
+        bh=ZGCT7DAvN9LCwxdxhJw9119Fs6WG0wEr19eeqRjFzmc=;
+        b=DBTTI9gNi9XKLknoGndIGVxcB8UOh7LESeAuxko7kELPz2qh3eO/YFqNo51Or6MdZd
+         LsnpbfjrzxugxioaqZ0yPLTmK2lN2/VpPvfTCN2ryikbLSuHoC991k7SQkxeTT2+slvl
+         N8afy1kjwyJJeA7pfAg1lBQnf3EqXWDOPQhM8lTPMgFxHH/t+t4Q0lOivs/b6p0wHvum
+         9qA6oUObt8h4l+WvuFvRbGT3sub/4BcDKNfHpLEhYYmNwG7Op89STgyswrR6shgbgDAW
+         iNU8jApoGaNWYt7W2ucs1yfHBJkpbioBiF00NO6dSC4e8vw67qBpl6bhDRKFzTF0Ttud
+         2N5g==
+X-Gm-Message-State: ACrzQf2XzWLzHKuJPuKUbI46dsXygoYEfbC4TnMU+rNRLH1OB4cPRaIo
+        J3i1prmMbsuI260zS2EpYHNadhYKu1uC54x/dSjilmm7ibxfOwGTAV9sBD9hPKxqTBct6CWwlx1
+        AnoseSO1aAFfldLUE0yM=
+X-Received: by 2002:a05:6402:3552:b0:45c:1e45:6f92 with SMTP id f18-20020a056402355200b0045c1e456f92mr17502531edd.4.1665653081285;
+        Thu, 13 Oct 2022 02:24:41 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6532lcVJYRKMM9t0qiOvLpBDOVg0ZMCUMViNKh4CGp8zhZiJCJwLaZjQVRk5Z8MtvHHCMzpg==
+X-Received: by 2002:a05:6402:3552:b0:45c:1e45:6f92 with SMTP id f18-20020a056402355200b0045c1e456f92mr17502517edd.4.1665653081112;
+        Thu, 13 Oct 2022 02:24:41 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id e14-20020a170906080e00b0078d25e0f74bsm2634812ejd.46.2022.10.13.02.12.29
+        by smtp.gmail.com with ESMTPSA id q26-20020aa7d45a000000b0045b4b67156fsm10906699edr.45.2022.10.13.02.24.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Oct 2022 02:12:29 -0700 (PDT)
-Message-ID: <27d4c17a-1894-e055-9311-9fb6d69d3665@redhat.com>
-Date:   Thu, 13 Oct 2022 11:12:28 +0200
+        Thu, 13 Oct 2022 02:24:40 -0700 (PDT)
+Message-ID: <2e46a972-f1fb-aad4-7b6c-accbec4bff42@redhat.com>
+Date:   Thu, 13 Oct 2022 11:24:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.3.1
 Subject: Re: [PATCH 5/7] power: supply: bq25890: Factor out regulator
  registration code
+Content-Language: en-US, nl
 To:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
 Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
         Sebastian Reichel <sebastian.reichel@collabora.com>
 References: <20221010210310.165461-1-marex@denx.de>
  <20221010210310.165461-5-marex@denx.de>
- <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
- <00e6b9b0-ddef-6e2f-0603-9a25fd3b9e0d@denx.de>
- <848ada38-00a1-0631-871f-926bb33a166f@redhat.com>
- <021a1dfc-eb05-77ad-644c-f967a5bf7799@denx.de>
-Content-Language: en-US, nl
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <021a1dfc-eb05-77ad-644c-f967a5bf7799@denx.de>
+In-Reply-To: <20221010210310.165461-5-marex@denx.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
@@ -89,106 +85,108 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi,
 
-On 10/13/22 00:02, Marek Vasut wrote:
-> On 10/12/22 12:10, Hans de Goede wrote:
->> Hi Marek,
+On 10/10/22 23:03, Marek Vasut wrote:
+> Pull the regulator registration code into separate function, so it can
+> be extended to register more regulators later. Currently this is only
+> moving ifdeffery into one place and other preparatory changes. The
+> dev_err_probe() output string is changed to explicitly list vbus
+> regulator failure, so that once more regulators are registered, it
+> would be clear which one failed.
 > 
-> Hello Hans,
-> 
->>>> On 10/10/22 23:03, Marek Vasut wrote:
->>>>> Pull the regulator registration code into separate function, so it can
->>>>> be extended to register more regulators later. Currently this is only
->>>>> moving ifdeffery into one place and other preparatory changes. The
->>>>> dev_err_probe() output string is changed to explicitly list vbus
->>>>> regulator failure, so that once more regulators are registered, it
->>>>> would be clear which one failed.
->>>>>
->>>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>>
->>>> First of all thank you for your work on this series. Based purely
->>>> on reading the commit messages patches 1-4 sound good to me. I will
->>>> do a more detailed review tomorrow.
->>>>
->>>> As for patch 5-7 thinking some more about adding a Vsys regulator
->>>> just to report the Vsys reading feels wrong to me.
->>>>
->>>> A regulator device's voltage in sysfs is about the value the regulator
->>>> is supposed to try and regulate its outputted voltage to, while here
->>>> we are talking about an ADC reading of the actual outputted voltage.
->>>>
->>>> This really should *not* be modeled as a regulator if anything the
->>>> hwmon interface would be applicable for this ADC reading and
->>>> the power_supply core has support for exporting some of
->>>> the psy info through hwmon now.
->>>>
->>>> So what should happen for Vsys IMHO is make it a new
->>>> POWER_SUPPLY_PROP_SYSTEM_VOLTAGE property and while adding support
->>>> for this new property to the power-supply core, also make the core's
->>>> hwmon glue code export this in the registered hwmon device so that
->>>> e.g. a sensors applet on the desktop can easily show it (*).
->>>>
->>>> Sorry for the confusion with my ack in the other thread which
->>>> only meant to agree with a part of the alinea/sentence I put
->>>> the ack under.
->>>
->>> I'm not sure that's all there is to the Vsys regulator, it would let us model the connection between the charger chip and PMIC, where the charger would be the supply and the PMIC the regulator consumer. If the PMIC can determine its input voltage, it might be able to configure itself to some more optimal mode of operation. With the Vsys regulator, the PMIC can determine its voltage. So I think the Vsys regulator would be useful in that scenario (that's how it is wired on my board btw.).
->>
->> You are right that theoretically there is nothing wrong with
->> the model of having the charger-IC's Vsys output being
->> a perent regulator for the PMIC.
->>
->> As for this being useful to actually have I have my doubts
->> though. All the PMICs I know automatically select the
->> optimal mode/parameters for their buck convertors based
->> on the detected input voltage. So they basically always
->> work optimally as long as the input voltage is within
->> their supported range. So having Vsys moduled as
->> a regulator is only theoretically useful which is not
->> a good argument for adding this to the kernel in this
->> way IMHO.
-> 
-> I would be careful with "All the PMICs" , not all of them are fully automatic, some are just broken or partly automatic. i.MX28 POWER unit and one of the Dialog 9062 I think come to mind.
-> 
-> I also think if we have a supplier (bq25890) -> consumer (pmic input) relationship in hardware between two chips, we should model it using regulators. This is the common approach on embedded systems, so I don't see why we shouldn't do it here the same way?
-> 
->> I believe it is important to go back to the original
->> problem / question which we are trying to solve / answer
->> here, which is:
->>
->> "what is the best way to make the readings from
->> the Vsys ADC available to userspace?"
-> 
-> Actually, I don't particularly care about exposing Vsys to user space. We are already changing the ABI with these first four patches, and the Vsys is no longer reported with 1..4 applied, so shall we change the question to:
-> "
-> Do we care about making Vsys reading available to userspace at all ?
-> "
-> 
->> Looking at standard Linux userspace (Debian/Fedora/etc.)
->> all the userspace tools capable of reporting voltages
->> of various voltage rails inside the system to the user
->> use the hwmon interface for this. This is also why
->> the power-supply class core recently got support for
->> proxying some psy properties to a hwmon class device.
->>
->> So the way I see it is that if we want to report Vsys to
->> userspace, that we then clearly need to report it through
->> the hwmon interface.
-> 
-> For regulators, you can read their values via /sys/class/regulators/* , if the user is interesting in Vsys .
-> 
-> Maybe that is where we disagree -- I'm not particularly interested in exposing Vsys to user space, but since it was exposed before, I tried to retain that exposure, although via different channel. And the regulator also makes the Vsys useful, since it can be used as a supply on the kernel level.
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> To: linux-pm@vger.kernel.org
 
-I don't particularly care a lot about exposing Vsys to user space either,
-but like you I do believe that we should at least keep the functionality
-around while fixing the wrong property use.
+Thanks, patch looks good to me:
 
-I'm still not 100% convinced a regular for Vsys is not a bit
-overkill but I don't want to block going this route either.
-
-So I'll go and review the last 3 patches and then lets wait
-and see what Sebastian (SRE) has to say.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
 Regards,
 
 Hans
+
+
+
+> ---
+>  drivers/power/supply/bq25890_charger.c | 51 ++++++++++++++++++--------
+>  1 file changed, 35 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+> index 6cc3c23cd8853..7ab27a9dce14a 100644
+> --- a/drivers/power/supply/bq25890_charger.c
+> +++ b/drivers/power/supply/bq25890_charger.c
+> @@ -1114,6 +1114,36 @@ static const struct regulator_desc bq25890_vbus_desc = {
+>  	.fixed_uV = 5000000,
+>  	.n_voltages = 1,
+>  };
+> +
+> +static int bq25890_register_regulator(struct bq25890_device *bq)
+> +{
+> +	struct bq25890_platform_data *pdata = dev_get_platdata(bq->dev);
+> +	struct regulator_config cfg = {
+> +		.dev = bq->dev,
+> +		.driver_data = bq,
+> +	};
+> +	struct regulator_dev *reg;
+> +
+> +	if (!IS_ERR_OR_NULL(bq->usb_phy))
+> +		return 0;
+> +
+> +	if (pdata)
+> +		cfg.init_data = pdata->regulator_init_data;
+> +
+> +	reg = devm_regulator_register(bq->dev, &bq25890_vbus_desc, &cfg);
+> +	if (IS_ERR(reg)) {
+> +		return dev_err_probe(bq->dev, PTR_ERR(reg),
+> +				     "registering vbus regulator");
+> +	}
+> +
+> +	return 0;
+> +}
+> +#else
+> +static inline int
+> +bq25890_register_regulator(struct bq25890_device *bq)
+> +{
+> +	return 0
+> +}
+>  #endif
+>  
+>  static int bq25890_get_chip_version(struct bq25890_device *bq)
+> @@ -1309,27 +1339,16 @@ static int bq25890_probe(struct i2c_client *client,
+>  
+>  	/* OTG reporting */
+>  	bq->usb_phy = devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+> +
+> +	ret = bq25890_register_regulator(bq);
+> +	if (ret)
+> +		return ret;
+> +
+>  	if (!IS_ERR_OR_NULL(bq->usb_phy)) {
+>  		INIT_WORK(&bq->usb_work, bq25890_usb_work);
+>  		bq->usb_nb.notifier_call = bq25890_usb_notifier;
+>  		usb_register_notifier(bq->usb_phy, &bq->usb_nb);
+>  	}
+> -#ifdef CONFIG_REGULATOR
+> -	else {
+> -		struct bq25890_platform_data *pdata = dev_get_platdata(dev);
+> -		struct regulator_config cfg = { };
+> -		struct regulator_dev *reg;
+> -
+> -		cfg.dev = dev;
+> -		cfg.driver_data = bq;
+> -		if (pdata)
+> -			cfg.init_data = pdata->regulator_init_data;
+> -
+> -		reg = devm_regulator_register(dev, &bq25890_vbus_desc, &cfg);
+> -		if (IS_ERR(reg))
+> -			return dev_err_probe(dev, PTR_ERR(reg), "registering regulator");
+> -	}
+> -#endif
+>  
+>  	ret = bq25890_power_supply_init(bq);
+>  	if (ret < 0) {
 
