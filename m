@@ -2,121 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18BF5FD268
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 03:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C31A65FD2F5
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 03:49:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiJMBOg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 12 Oct 2022 21:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S229815AbiJMBtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 12 Oct 2022 21:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbiJMBNz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 21:13:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E415DFA2;
-        Wed, 12 Oct 2022 18:12:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA498616D1;
-        Thu, 13 Oct 2022 00:44:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03566C43470;
-        Thu, 13 Oct 2022 00:44:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1665621886;
-        bh=DKXGPgqaiPkIBCBB26ELdj+CVTTMyMJ9i/fnIjLcUSQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=Dd8sa6U0NOxibXKaQPEphZ/krmhRr7n/v6yTSTggiHzhkANlzBGhvELS7Lc0sh0xC
-         QVq0tY3jJIkGA72yx9C//YeMqqngoNAyhC/IBtyDk9akrtRxupxyB6/3thQHA/ICRn
-         mvll3qWTTRY9TXaUhroH0/6ctovHTbOsRPHqNdVTZhGHJygefMwtlstZQEp5XaqebW
-         w9i5JInzE1jJx7D3ZXzvda+TPBDV85RLS3EJGfhe/K23HkKbQukeC0sQ30+segWurZ
-         P1jXEFp17hWIh3cW2D8XmvBlSvrfAmpBeteq9pN1Ul4mFn4P2U3YkCsuAmmpOq0D8X
-         D6CeUf8YcsmdA==
-Date:   Wed, 12 Oct 2022 19:44:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mka@chromium.org,
-        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
-        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
-        quic_ramkri@quicinc.com, manivannan.sadhasivam@linaro.org,
-        swboyd@chromium.org, dmitry.baryshkov@linaro.org,
-        svarbanov@mm-sol.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@somainline.org, lpieralisi@kernel.org,
-        robh@kernel.org, kw@linux.com, bhelgaas@google.com,
-        linux-phy@lists.infradead.org, vkoul@kernel.org, kishon@ti.com,
-        mturquette@baylibre.com, linux-clk@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Kevin Rowland <kevin.p.rowland@gmail.com>
-Subject: Re: [PATCH v7 1/5] PCI: qcom: Add system suspend and resume support
-Message-ID: <20221013004444.GA3135316@bhelgaas>
+        with ESMTP id S229680AbiJMBtU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 12 Oct 2022 21:49:20 -0400
+Received: from mail.nfschina.com (unknown [124.16.136.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 98AF9112ABF;
+        Wed, 12 Oct 2022 18:49:19 -0700 (PDT)
+Received: from localhost (unknown [127.0.0.1])
+        by mail.nfschina.com (Postfix) with ESMTP id BBDEF1E80D9B;
+        Thu, 13 Oct 2022 09:49:23 +0800 (CST)
+X-Virus-Scanned: amavisd-new at test.com
+Received: from mail.nfschina.com ([127.0.0.1])
+        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id G6W7QMe6cfWn; Thu, 13 Oct 2022 09:49:21 +0800 (CST)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        (Authenticated sender: kunyu@nfschina.com)
+        by mail.nfschina.com (Postfix) with ESMTPA id A267F1E80D99;
+        Thu, 13 Oct 2022 09:49:20 +0800 (CST)
+From:   Li kunyu <kunyu@nfschina.com>
+To:     skhan@linuxfoundation.org
+Cc:     kunyu@nfschina.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, ray.huang@amd.com, shuah@kernel.org,
+        trenn@suse.com
+Subject: 
+Date:   Thu, 13 Oct 2022 09:49:10 +0800
+Message-Id: <20221013014911.2682-1-kunyu@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+In-Reply-To: <14d690a4-d2d5-01db-b2a2-e3c87b4a6394@linuxfoundation.org>
+References: <14d690a4-d2d5-01db-b2a2-e3c87b4a6394@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04ace1ae-26d0-4157-b7eb-8dff29895180@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Marc, Kevin]
 
-On Wed, Oct 12, 2022 at 07:36:52PM +0530, Krishna Chaitanya Chundru wrote:
-> On 10/6/2022 2:43 AM, Bjorn Helgaas wrote:
+I'm glad to get your reply. In previous tests, it was found that variable initialization and assignment use mov related instructions. Therefore, when I analyze the code and find that removing some variable initialization and assignment does not affect the function and security, I will try to remove variable initialization.
 
-[I'm declaring quote text bankruptcy and dropping the huge wall of
-text.  The IRQ affinity change you mention seems to be the critical
-issue :)]
+Find the malloc function and find that its return value is void * type, so it does not need to cast.
 
-> > The PCIe spec clearly envisions Refclk being turned off
-> > (sec 5.5.3.3.1) and PHYs being powered off (sec 5.5.3.2) while in
-> > L1.2.
-> > 
-> > I've been assuming L1.2 exit (which includes Refclk being turned on
-> > and PHYs being powered up) is completely handled by hardware, but it
-> > sounds like the Qcom controller needs software assistance which fields
-> > an interrupt when CLKREQ# is asserted and turns on Refclk and the
-> > PHYs?
-> > 
-> > 5.5.3 does say "All Link and PHY state must be maintained during L1.2,
-> > or must be restored upon exit using implementation specific means",
-> > and maybe Qcom counts as using implementation specific means.
-> > 
-> > I *am* concerned about whether software can do the L1.2 exit fast
-> > enough, but the biggest reason I'm struggling with this is because
-> > using the syscore framework to work around IRQ affinity changes that
-> > happen late in suspend just seems kind of kludgy and it doesn't seem
-> > like it fits cleanly in the power management model.
-> 
-> Can you please suggest any another way to work around IRQ affinity
-> changes.
+thanks,
+kunyu
 
-One of your earlier patches [1] made dw_msi_mask_irq() look like this:
-
-  static void dw_msi_mask_irq(struct irq_data *d)
-  {
-    struct pcie_port *pp = irq_data_get_irq_chip_data(d->parent_data);
-    struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-
-    if (dw_pcie_link_up(pci))
-	    pci_msi_mask_irq(d);
-
-    irq_chip_mask_parent(d);
-  }
-
-That was an awful lot like Marc's suggestion [2] that the
-pci_msi_mask_irq() should be redundant.
-
-If it's truly redundant, maybe pci_msi_mask_irq() can be removed
-from dw_msi_mask_irq() (and other similar *_mask_irq()
-implementations) completely?
-
-Bjorn
-
-[1] https://lore.kernel.org/r/1659526134-22978-3-git-send-email-quic_krichai@quicinc.com
-[2] https://lore.kernel.org/linux-pci/86k05m7dkr.wl-maz@kernel.org/
