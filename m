@@ -2,649 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559565FDF3E
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 19:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B14135FE13A
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 20:29:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiJMRqk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Oct 2022 13:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S231635AbiJMS36 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Oct 2022 14:29:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJMRqg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 13:46:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA9CC13ECC4;
-        Thu, 13 Oct 2022 10:46:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D3AF7176B;
-        Thu, 13 Oct 2022 10:46:39 -0700 (PDT)
-Received: from e120937-lin.home (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01E993F766;
-        Thu, 13 Oct 2022 10:46:30 -0700 (PDT)
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org
-Cc:     sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@Huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com, wzmuda@marvell.com,
-        dan.carpenter@oracle.com,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Subject: [PATCH v3 1/1] powercap: arm_scmi: Add SCMI Powercap based driver
-Date:   Thu, 13 Oct 2022 18:46:12 +0100
-Message-Id: <20221013174612.393830-2-cristian.marussi@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221013174612.393830-1-cristian.marussi@arm.com>
-References: <20221013174612.393830-1-cristian.marussi@arm.com>
+        with ESMTP id S231929AbiJMS3l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 14:29:41 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FB125C9DA
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 11:25:03 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id r18so2234750pgr.12
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 11:25:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+BTHaUgYO9jMl/xNji3tXYK1xSdk1QlEpno0FrqGDuU=;
+        b=wDSSH+4FY0VpIbgiubC+64Ugh9mhNbjE9Cg9Bp/N8tGJTTJ6V8mvcqXc3CyPlmRCCj
+         LFDFS2a9w47KoDRWWSQYU6FJIRAy/Z9S6lVfTOhDQ9eEb8olV/1vYHXR5s01g6+eCLgW
+         HISdz4uUlbGkaZgYJqVyFzxGkgM/P9WtBoAbdlkUApj6MkvXK6Wb3UTytIReooPKnCr+
+         DLI5raWn+zRH49nxXIvUIm944qaMgAnJUr5mmylp+KraSaKHHL2EZGzZvN4Pdtuvj4wz
+         fNXv0wL0IkjcsVdal513BLNcaDO5fKovL3lp3PKaNUAV9fAgC/Wl2+sDjAdVAGQi/hHC
+         v/bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+BTHaUgYO9jMl/xNji3tXYK1xSdk1QlEpno0FrqGDuU=;
+        b=I22odadrIgvOTD3fm4iih25A6nxZ0FqCgo9CaG4h0NeBCdTDN+QpYPZwG7Z3SK6XpP
+         b8GmjiPnMgGPdaAm2fa/17PNcUmJk5S0Z78ods03Ib/T2VgCH8UXzRojzQlViKZkPtEh
+         /HkN9dn8PM/VXVziYL0kHJ1kV7+yUtOWVDjrxTZ2FSL/2h8MKf5Whu4W45+sBcbAYnwx
+         wCI0BFIXnEMWR3OlkGKdUe/PJThlZIbzcHinUu3mIbnQUNsN4TdLNYVKv90Rv7bNnPpv
+         ACvcn2ioWk5TINR0H9E4SwMrV9MFxZ07kCf5N1NmSWkoW/7VQ3EAnn8XXwjM4+G+DHK0
+         dV/A==
+X-Gm-Message-State: ACrzQf2g/KZpsvtNg2xrGenh2NLELEdWuQ1xTu3bfomYW0cP2hNXptRS
+        Vb3AShXZ8ob3wa2f1qiVuyXGSdGXixQXs70dywBQLg==
+X-Google-Smtp-Source: AMsMyM6vwqMcF79SgQmU96lUIhoknsg5lP1hG79RoUNhba0APdmzSzyBg6VnUlzHAK1CSgzO0HTJ4WoKCZ/dw6IcAmw=
+X-Received: by 2002:a63:f512:0:b0:460:35b5:14ed with SMTP id
+ w18-20020a63f512000000b0046035b514edmr952445pgh.389.1665685415620; Thu, 13
+ Oct 2022 11:23:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
+ <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
+ <ec599991-44da-7b83-9374-d0043b32f053@denx.de> <CAJ+vNU2g+e8_PBq0SJYOXsB6PKpMb3dmzDRA5Gyj=NJS3Ckc1g@mail.gmail.com>
+In-Reply-To: <CAJ+vNU2g+e8_PBq0SJYOXsB6PKpMb3dmzDRA5Gyj=NJS3Ckc1g@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Thu, 13 Oct 2022 11:23:22 -0700
+Message-ID: <CAJ+vNU0mPt27PgheodNLcOk97OdD6TK+1us58jc=4DMHndQpvQ@mail.gmail.com>
+Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
+To:     Marek Vasut <marex@denx.de>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abelvesa@kernel.org, abailon@baylibre.com, l.stach@pengutronix.de,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        Markus.Niebel@ew.tq-group.com, aford173@gmail.com,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-platform firmware for the list of existing Powercap domains, registers all
-of such discovered domains under the new 'arm-scmi' powercap control type.
+On Wed, Oct 12, 2022 at 11:46 AM Tim Harvey <tharvey@gateworks.com> wrote:
+>
+> On Tue, Oct 11, 2022 at 4:13 PM Marek Vasut <marex@denx.de> wrote:
+> >
+> > On 10/11/22 22:10, Tim Harvey wrote:
+> > > On Fri, Jul 8, 2022 at 1:57 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+> > >>
+> > >> From: Peng Fan <peng.fan@nxp.com>
+> > >>
+> > >> V4:
+> > >>   Because the header is not included when adding NoC node, the fsl,imx8mp.h
+> > >>   needs be included in this patchset. So include it in patch 6
+> > >>
+> > >> V3:
+> > >>   Move adding NoC node patch to i.MX8MP ICC driver patchset
+> > >>   Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
+> > >>
+> > >> V2:
+> > >>   Use a low bandwidth value instead INT_MAX
+> > >>   Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
+> > >>   Add A-b tag from DT maintainer
+> > >>
+> > >> i.MX8MP NoC settings is invalid after related power domain up. So
+> > >> need to set valid values after power domain up.
+> > >>
+> > >> This patchset is to bind interconnect for each entry in blk ctrl.
+> > >>
+> > >> This patchset is not include DVFS DDRC feature.
+> > >>
+> > >> Peng Fan (7):
+> > >>    dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
+> > >>      ctrl
+> > >>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
+> > >>      ctrl
+> > >>    dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
+> > >>      ctrl
+> > >>    soc: imx: add icc paths for i.MX8MP media blk ctrl
+> > >>    soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
+> > >>    arm64: dts: imx8mp: add interconnects for media blk ctrl
+> > >>    arm64: dts: imx8mp: add interconnect for hsio blk ctrl
+> > >>
+> > >>   .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
+> > >>   .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
+> > >>   .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
+> > >>   arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
+> > >>   drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
+> > >>   drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
+> > >>   6 files changed, 125 insertions(+)
+> > >>
+> > >> --
+> > >> 2.25.1
+> > >>
+> > >
+> > > Hi Peng,
+> > >
+> > > I built origin/master from commit 041bc24d867a today for an imx8mp
+> > > board and am running into errors that appear to be introduced by this
+> > > series:
+> > > [   15.177372] platform 381f0040.usb-phy: deferred probe pending
+> > > [   15.183155] platform 382f0040.usb-phy: deferred probe pending
+> > > [   15.188928] platform 33800000.pcie: deferred probe pending
+> > > [   15.194439] platform 32ec0000.blk-ctrl: deferred probe pending
+> > > [   15.200287] platform 38330000.blk-ctrl: deferred probe pending
+> > > [   15.206129] platform 32f10000.blk-ctrl: deferred probe pending
+> > > [   15.211974] platform 32f10100.usb: deferred probe pending
+> > > [   15.217382] platform 32f10108.usb: deferred probe pending
+> > > [   15.222791] platform cpufreq-dt: deferred probe pending
+> > > # cat /sys/kernel/debug/devices_deferred
+> > > 381f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
+> > > 382f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
+> > > 33800000.pcie   platform: supplier 32f10000.blk-ctrl not ready
+> > > 32ec0000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
+> > > 38330000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
+> > > 32f10000.blk-ctrl       imx8mp-blk-ctrl: failed to get noc entries
+> > > 32f10100.usb    platform: supplier 32f10000.blk-ctrl not ready
+> > > 32f10108.usb    platform: supplier 32f10000.blk-ctrl not ready
+> > > cpufreq-dt
+> > >
+> > > Is there a driver I'm perhaps missing that is needed now or are there
+> > > some patches that come from a different unmerged tree needed?
+> >
+> > Do you have these enabled ?
+> >
+> > CONFIG_INTERCONNECT_IMX8MM=y
+> > CONFIG_INTERCONNECT_IMX8MN=y
+> > CONFIG_INTERCONNECT_IMX8MQ=y
+> > CONFIG_INTERCONNECT_IMX8MP=y
+>
+> Marek,
+>
+> Yes, I have those as well as CONFIG_ARCH_NXP which appears new for 6.1 enabled.
+>
+> Best Regards,
+>
+> Tim
 
-A new simple powercap zone and constraint is registered for all the SCMI
-powercap zones that are found.
+I see this issue on origin/master 1440f5760228 using
+arch/arm64/configs/defconfig.
 
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
----
-v2 --> v3
-- rebased on v6.0
-- added review tag
-- squashed Dan Carpenter fixes into this powercap patch:
-  https://lore.kernel.org/linux-arm-kernel/20220906142337.1697569-3-cristian.marussi@arm.com/
-  https://lore.kernel.org/linux-arm-kernel/20220906142337.1697569-4-cristian.marussi@arm.com/
-v1 --> v2
-- using clamp_t() to simplify normalizations
-- cleanup style in block of var declarations
-- refactor scale conversions code
-- add MAINTAINER entry
-- refactored normalizations and added dev_dbg
-vOLD --> v1
-- fix _init cleaning up powerctrl zone on failure
-- removed uneeded casting
-- simplified normalization helpers
----
- MAINTAINERS                          |   1 +
- drivers/powercap/Kconfig             |  13 +
- drivers/powercap/Makefile            |   1 +
- drivers/powercap/arm_scmi_powercap.c | 509 +++++++++++++++++++++++++++
- 4 files changed, 524 insertions(+)
- create mode 100644 drivers/powercap/arm_scmi_powercap.c
+It seems to me that the imx8m*_blk_ctrl_probe will all defer now until
+perhaps all the drivers using interconnects can probe, such as
+g1/lcdif etc?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 72b9654f764c..a3ef06f49cab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19763,6 +19763,7 @@ F:	drivers/clk/clk-sc[mp]i.c
- F:	drivers/cpufreq/sc[mp]i-cpufreq.c
- F:	drivers/firmware/arm_scmi/
- F:	drivers/firmware/arm_scpi.c
-+F:	drivers/powercap/arm_scmi_powercap.c
- F:	drivers/regulator/scmi-regulator.c
- F:	drivers/reset/reset-scmi.c
- F:	include/linux/sc[mp]i_protocol.h
-diff --git a/drivers/powercap/Kconfig b/drivers/powercap/Kconfig
-index 515e3ceb3393..90d33cd1b670 100644
---- a/drivers/powercap/Kconfig
-+++ b/drivers/powercap/Kconfig
-@@ -44,6 +44,19 @@ config IDLE_INJECT
- 	  synchronously on a set of specified CPUs or alternatively
- 	  on a per CPU basis.
- 
-+config ARM_SCMI_POWERCAP
-+	tristate "ARM SCMI Powercap driver"
-+	depends on ARM_SCMI_PROTOCOL
-+	help
-+	  This enables support for the ARM Powercap based on ARM SCMI
-+	  Powercap protocol.
-+
-+	  ARM SCMI Powercap protocol allows power limits to be enforced
-+	  and monitored against the SCMI Powercap domains advertised as
-+	  available by the SCMI platform firmware.
-+
-+	  When compiled as module it will be called arm_scmi_powercap.ko.
-+
- config DTPM
- 	bool "Power capping for Dynamic Thermal Power Management (EXPERIMENTAL)"
- 	depends on OF
-diff --git a/drivers/powercap/Makefile b/drivers/powercap/Makefile
-index 494617cdad88..4474201b4aa7 100644
---- a/drivers/powercap/Makefile
-+++ b/drivers/powercap/Makefile
-@@ -6,3 +6,4 @@ obj-$(CONFIG_POWERCAP)	+= powercap_sys.o
- obj-$(CONFIG_INTEL_RAPL_CORE) += intel_rapl_common.o
- obj-$(CONFIG_INTEL_RAPL) += intel_rapl_msr.o
- obj-$(CONFIG_IDLE_INJECT) += idle_inject.o
-+obj-$(CONFIG_ARM_SCMI_POWERCAP) += arm_scmi_powercap.o
-diff --git a/drivers/powercap/arm_scmi_powercap.c b/drivers/powercap/arm_scmi_powercap.c
-new file mode 100644
-index 000000000000..05d0e516176a
---- /dev/null
-+++ b/drivers/powercap/arm_scmi_powercap.c
-@@ -0,0 +1,509 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * SCMI Powercap support.
-+ *
-+ * Copyright (C) 2022 ARM Ltd.
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/math.h>
-+#include <linux/limits.h>
-+#include <linux/list.h>
-+#include <linux/module.h>
-+#include <linux/powercap.h>
-+#include <linux/scmi_protocol.h>
-+
-+#define to_scmi_powercap_zone(z)		\
-+	container_of(z, struct scmi_powercap_zone, zone)
-+
-+static const struct scmi_powercap_proto_ops *powercap_ops;
-+
-+struct scmi_powercap_zone {
-+	unsigned int height;
-+	struct device *dev;
-+	struct scmi_protocol_handle *ph;
-+	const struct scmi_powercap_info *info;
-+	struct scmi_powercap_zone *spzones;
-+	struct powercap_zone zone;
-+	struct list_head node;
-+};
-+
-+struct scmi_powercap_root {
-+	unsigned int num_zones;
-+	struct scmi_powercap_zone *spzones;
-+	struct list_head *registered_zones;
-+};
-+
-+static struct powercap_control_type *scmi_top_pcntrl;
-+
-+static int scmi_powercap_zone_release(struct powercap_zone *pz)
-+{
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_range_uw(struct powercap_zone *pz,
-+						u64 *max_power_range_uw)
-+{
-+	*max_power_range_uw = U32_MAX;
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_power_uw(struct powercap_zone *pz,
-+				      u64 *power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+	u32 avg_power, pai;
-+	int ret;
-+
-+	if (!spz->info->powercap_monitoring)
-+		return -EINVAL;
-+
-+	ret = powercap_ops->measurements_get(spz->ph, spz->info->id, &avg_power,
-+					     &pai);
-+	if (ret)
-+		return ret;
-+
-+	*power_uw = avg_power;
-+	if (spz->info->powercap_scale_mw)
-+		*power_uw *= 1000;
-+
-+	return 0;
-+}
-+
-+static const struct powercap_zone_ops zone_ops = {
-+	.get_max_power_range_uw = scmi_powercap_get_max_power_range_uw,
-+	.get_power_uw = scmi_powercap_get_power_uw,
-+	.release = scmi_powercap_zone_release,
-+};
-+
-+static void scmi_powercap_normalize_cap(const struct scmi_powercap_zone *spz,
-+					u64 power_limit_uw, u32 *norm)
-+{
-+	bool scale_mw = spz->info->powercap_scale_mw;
-+	u64 val;
-+
-+	val = scale_mw ? DIV_ROUND_UP_ULL(power_limit_uw, 1000) : power_limit_uw;
-+	/*
-+	 * This cast is lossless since here @req_power is certain to be within
-+	 * the range [min_power_cap, max_power_cap] whose bounds are assured to
-+	 * be two unsigned 32bits quantities.
-+	 */
-+	*norm = clamp_t(u32, val, spz->info->min_power_cap,
-+			spz->info->max_power_cap);
-+	*norm = rounddown(*norm, spz->info->power_cap_step);
-+
-+	val = (scale_mw) ? *norm * 1000 : *norm;
-+	if (power_limit_uw != val)
-+		dev_dbg(spz->dev,
-+			"Normalized %s:CAP - requested:%llu - normalized:%llu\n",
-+			spz->info->name, power_limit_uw, val);
-+}
-+
-+static int scmi_powercap_set_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+	u32 norm_power;
-+
-+	if (!spz->info->powercap_cap_config)
-+		return -EINVAL;
-+
-+	scmi_powercap_normalize_cap(spz, power_uw, &norm_power);
-+
-+	return powercap_ops->cap_set(spz->ph, spz->info->id, norm_power, false);
-+}
-+
-+static int scmi_powercap_get_power_limit_uw(struct powercap_zone *pz, int cid,
-+					    u64 *power_limit_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+	u32 power;
-+	int ret;
-+
-+	ret = powercap_ops->cap_get(spz->ph, spz->info->id, &power);
-+	if (ret)
-+		return ret;
-+
-+	*power_limit_uw = power;
-+	if (spz->info->powercap_scale_mw)
-+		*power_limit_uw *= 1000;
-+
-+	return 0;
-+}
-+
-+static void scmi_powercap_normalize_time(const struct scmi_powercap_zone *spz,
-+					 u64 time_us, u32 *norm)
-+{
-+	/*
-+	 * This cast is lossless since here @time_us is certain to be within the
-+	 * range [min_pai, max_pai] whose bounds are assured to be two unsigned
-+	 * 32bits quantities.
-+	 */
-+	*norm = clamp_t(u32, time_us, spz->info->min_pai, spz->info->max_pai);
-+	*norm = rounddown(*norm, spz->info->pai_step);
-+
-+	if (time_us != *norm)
-+		dev_dbg(spz->dev,
-+			"Normalized %s:PAI - requested:%llu - normalized:%u\n",
-+			spz->info->name, time_us, *norm);
-+}
-+
-+static int scmi_powercap_set_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+	u32 norm_pai;
-+
-+	if (!spz->info->powercap_pai_config)
-+		return -EINVAL;
-+
-+	scmi_powercap_normalize_time(spz, time_window_us, &norm_pai);
-+
-+	return powercap_ops->pai_set(spz->ph, spz->info->id, norm_pai);
-+}
-+
-+static int scmi_powercap_get_time_window_us(struct powercap_zone *pz, int cid,
-+					    u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+	int ret;
-+	u32 pai;
-+
-+	ret = powercap_ops->pai_get(spz->ph, spz->info->id, &pai);
-+	if (ret)
-+		return ret;
-+
-+	*time_window_us = pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *max_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	*max_power_uw = spz->info->max_power_cap;
-+	if (spz->info->powercap_scale_mw)
-+		*max_power_uw *= 1000;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_power_uw(struct powercap_zone *pz, int cid,
-+					  u64 *min_power_uw)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	*min_power_uw = spz->info->min_power_cap;
-+	if (spz->info->powercap_scale_mw)
-+		*min_power_uw *= 1000;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_max_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	*time_window_us = spz->info->max_pai;
-+
-+	return 0;
-+}
-+
-+static int scmi_powercap_get_min_time_window_us(struct powercap_zone *pz,
-+						int cid, u64 *time_window_us)
-+{
-+	struct scmi_powercap_zone *spz = to_scmi_powercap_zone(pz);
-+
-+	*time_window_us = (u64)spz->info->min_pai;
-+
-+	return 0;
-+}
-+
-+static const char *scmi_powercap_get_name(struct powercap_zone *pz, int cid)
-+{
-+	return "SCMI power-cap";
-+}
-+
-+static const struct powercap_zone_constraint_ops constraint_ops  = {
-+	.set_power_limit_uw = scmi_powercap_set_power_limit_uw,
-+	.get_power_limit_uw = scmi_powercap_get_power_limit_uw,
-+	.set_time_window_us = scmi_powercap_set_time_window_us,
-+	.get_time_window_us = scmi_powercap_get_time_window_us,
-+	.get_max_power_uw = scmi_powercap_get_max_power_uw,
-+	.get_min_power_uw = scmi_powercap_get_min_power_uw,
-+	.get_max_time_window_us = scmi_powercap_get_max_time_window_us,
-+	.get_min_time_window_us = scmi_powercap_get_min_time_window_us,
-+	.get_name = scmi_powercap_get_name,
-+};
-+
-+static void scmi_powercap_unregister_all_zones(struct scmi_powercap_root *pr)
-+{
-+	int i;
-+
-+	/* Un-register children zones first starting from the leaves */
-+	for (i = pr->num_zones - 1; i >= 0; i--) {
-+		if (!list_empty(&pr->registered_zones[i])) {
-+			struct scmi_powercap_zone *spz;
-+
-+			list_for_each_entry(spz, &pr->registered_zones[i], node)
-+				powercap_unregister_zone(scmi_top_pcntrl,
-+							 &spz->zone);
-+		}
-+	}
-+}
-+
-+static inline bool
-+scmi_powercap_is_zone_registered(struct scmi_powercap_zone *spz)
-+{
-+	return !list_empty(&spz->node);
-+}
-+
-+static inline unsigned int
-+scmi_powercap_get_zone_height(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return 0;
-+
-+	return spz->spzones[spz->info->parent_id].height + 1;
-+}
-+
-+static inline struct scmi_powercap_zone *
-+scmi_powercap_get_parent_zone(struct scmi_powercap_zone *spz)
-+{
-+	if (spz->info->parent_id == SCMI_POWERCAP_ROOT_ZONE_ID)
-+		return NULL;
-+
-+	return &spz->spzones[spz->info->parent_id];
-+}
-+
-+/**
-+ * scmi_powercap_register_zone  - Register an SCMI powercap zone recursively
-+ *
-+ * @pr: A reference to the root powercap zones descriptors
-+ * @spz: A reference to the SCMI powercap zone to register
-+ *
-+ * When registering SCMI powercap zones with the powercap framework we should
-+ * take care to always register zones starting from the root ones and to
-+ * deregister starting from the leaves.
-+ *
-+ * Unfortunately we cannot assume that the array of available SCMI powercap
-+ * zones provided by the SCMI platform firmware is built to comply with such
-+ * requirement.
-+ *
-+ * This function, given an SCMI powercap zone to register, takes care to walk
-+ * the SCMI powercap zones tree up to the root looking recursively for
-+ * unregistered parent zones before registering the provided zone; at the same
-+ * time each registered zone height in such a tree is accounted for and each
-+ * zone, once registered, is stored in the @registered_zones array that is
-+ * indexed by zone height: this way will be trivial, at unregister time, to walk
-+ * the @registered_zones array backward and unregister all the zones starting
-+ * from the leaves, removing children zones before parents.
-+ *
-+ * While doing this, we prune away any zone marked as invalid (like the ones
-+ * sporting an SCMI abstract power scale) as long as they are positioned as
-+ * leaves in the SCMI powercap zones hierarchy: any non-leaf invalid zone causes
-+ * the entire process to fail since we cannot assume the correctness of an SCMI
-+ * powercap zones hierarchy if some of the internal nodes are missing.
-+ *
-+ * Note that the array of SCMI powercap zones as returned by the SCMI platform
-+ * is known to be sane, i.e. zones relationships have been validated at the
-+ * protocol layer.
-+ *
-+ * Return: 0 on Success
-+ */
-+static int scmi_powercap_register_zone(struct scmi_powercap_root *pr,
-+				       struct scmi_powercap_zone *spz)
-+{
-+	int ret = 0;
-+	struct scmi_powercap_zone *parent;
-+
-+	if (!spz->info)
-+		return ret;
-+
-+	parent = scmi_powercap_get_parent_zone(spz);
-+	if (parent && !scmi_powercap_is_zone_registered(parent)) {
-+		/*
-+		 * Bail out if a parent domain was marked as unsupported:
-+		 * only domains participating as leaves can be skipped.
-+		 */
-+		if (!parent->info)
-+			return -ENODEV;
-+
-+		ret = scmi_powercap_register_zone(pr, parent);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (!scmi_powercap_is_zone_registered(spz)) {
-+		struct powercap_zone *z;
-+
-+		z = powercap_register_zone(&spz->zone,
-+					   scmi_top_pcntrl,
-+					   spz->info->name,
-+					   parent ? &parent->zone : NULL,
-+					   &zone_ops, 1, &constraint_ops);
-+		if (!IS_ERR(z)) {
-+			spz->height = scmi_powercap_get_zone_height(spz);
-+			list_add(&spz->node,
-+				 &pr->registered_zones[spz->height]);
-+			dev_dbg(spz->dev,
-+				"Registered node %s - parent %s - height:%d\n",
-+				spz->info->name,
-+				parent ? parent->info->name : "ROOT",
-+				spz->height);
-+			ret = 0;
-+		} else {
-+			ret = PTR_ERR(z);
-+			dev_err(spz->dev,
-+				"Error registering node:%s - parent:%s - h:%d - ret:%d\n",
-+				 spz->info->name,
-+				 parent ? parent->info->name : "ROOT",
-+				 spz->height, ret);
-+		}
-+	}
-+
-+	return ret;
-+}
-+
-+static int scmi_powercap_probe(struct scmi_device *sdev)
-+{
-+	int ret, i;
-+	struct scmi_powercap_root *pr;
-+	struct scmi_powercap_zone *spz;
-+	struct scmi_protocol_handle *ph;
-+	struct device *dev = &sdev->dev;
-+
-+	if (!sdev->handle)
-+		return -ENODEV;
-+
-+	powercap_ops = sdev->handle->devm_protocol_get(sdev,
-+						       SCMI_PROTOCOL_POWERCAP,
-+						       &ph);
-+	if (IS_ERR(powercap_ops))
-+		return PTR_ERR(powercap_ops);
-+
-+	pr = devm_kzalloc(dev, sizeof(*pr), GFP_KERNEL);
-+	if (!pr)
-+		return -ENOMEM;
-+
-+	ret = powercap_ops->num_domains_get(ph);
-+	if (ret < 0) {
-+		dev_err(dev, "number of powercap domains not found\n");
-+		return ret;
-+	}
-+	pr->num_zones = ret;
-+
-+	pr->spzones = devm_kcalloc(dev, pr->num_zones,
-+				   sizeof(*pr->spzones), GFP_KERNEL);
-+	if (!pr->spzones)
-+		return -ENOMEM;
-+
-+	/* Allocate for worst possible scenario of maximum tree height. */
-+	pr->registered_zones = devm_kcalloc(dev, pr->num_zones,
-+					    sizeof(*pr->registered_zones),
-+					    GFP_KERNEL);
-+	if (!pr->registered_zones)
-+		return -ENOMEM;
-+
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		/*
-+		 * Powercap domains are validate by the protocol layer, i.e.
-+		 * when only non-NULL domains are returned here, whose
-+		 * parent_id is assured to point to another valid domain.
-+		 */
-+		spz->info = powercap_ops->info_get(ph, i);
-+
-+		spz->dev = dev;
-+		spz->ph = ph;
-+		spz->spzones = pr->spzones;
-+		INIT_LIST_HEAD(&spz->node);
-+		INIT_LIST_HEAD(&pr->registered_zones[i]);
-+
-+		/*
-+		 * Forcibly skip powercap domains using an abstract scale.
-+		 * Note that only leaves domains can be skipped, so this could
-+		 * lead later to a global failure.
-+		 */
-+		if (!spz->info->powercap_scale_uw &&
-+		    !spz->info->powercap_scale_mw) {
-+			dev_warn(dev,
-+				 "Abstract power scale not supported. Skip %s.\n",
-+				 spz->info->name);
-+			spz->info = NULL;
-+			continue;
-+		}
-+	}
-+
-+	/*
-+	 * Scan array of retrieved SCMI powercap domains and register them
-+	 * recursively starting from the root domains.
-+	 */
-+	for (i = 0, spz = pr->spzones; i < pr->num_zones; i++, spz++) {
-+		ret = scmi_powercap_register_zone(pr, spz);
-+		if (ret) {
-+			dev_err(dev,
-+				"Failed to register powercap zone %s - ret:%d\n",
-+				spz->info->name, ret);
-+			scmi_powercap_unregister_all_zones(pr);
-+			return ret;
-+		}
-+	}
-+
-+	dev_set_drvdata(dev, pr);
-+
-+	dev_info(dev, "Registered %d SCMI Powercap domains !\n", pr->num_zones);
-+
-+	return ret;
-+}
-+
-+static void scmi_powercap_remove(struct scmi_device *sdev)
-+{
-+	struct device *dev = &sdev->dev;
-+	struct scmi_powercap_root *pr = dev_get_drvdata(dev);
-+
-+	scmi_powercap_unregister_all_zones(pr);
-+}
-+
-+static const struct scmi_device_id scmi_id_table[] = {
-+	{ SCMI_PROTOCOL_POWERCAP, "powercap" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(scmi, scmi_id_table);
-+
-+static struct scmi_driver scmi_powercap_driver = {
-+	.name = "scmi-powercap",
-+	.probe = scmi_powercap_probe,
-+	.remove = scmi_powercap_remove,
-+	.id_table = scmi_id_table,
-+};
-+
-+static int __init scmi_powercap_init(void)
-+{
-+	int ret;
-+
-+	scmi_top_pcntrl = powercap_register_control_type(NULL, "arm-scmi", NULL);
-+	if (IS_ERR(scmi_top_pcntrl))
-+		return PTR_ERR(scmi_top_pcntrl);
-+
-+	ret = scmi_register(&scmi_powercap_driver);
-+	if (ret)
-+		powercap_unregister_control_type(scmi_top_pcntrl);
-+
-+	return ret;
-+}
-+module_init(scmi_powercap_init);
-+
-+static void __exit scmi_powercap_exit(void)
-+{
-+	scmi_unregister(&scmi_powercap_driver);
-+
-+	powercap_unregister_control_type(scmi_top_pcntrl);
-+}
-+module_exit(scmi_powercap_exit);
-+
-+MODULE_AUTHOR("Cristian Marussi <cristian.marussi@arm.com>");
-+MODULE_DESCRIPTION("ARM SCMI Powercap driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+Some added debugging shows me:
+[   14.951371] of_icc_bulk_get path lcdif-rd err=-517
+[   14.956205] devm_of_icc_bulk_get ret=-517
+[   14.960562] imx8m_blk_ctrl_probe failed -517
+[   14.967191] of_icc_bulk_get path g1 err=-517
+[   14.971487] devm_of_icc_bulk_get ret=-517
+[   14.975614] imx8m_blk_ctrl_probe failed -517
+[   14.982200] of_icc_bulk_get path usb1 err=-517
+[   14.986680] devm_of_icc_bulk_get ret=-517
+[   14.990709] imx8mp_blk_ctrl_probe 0:usb1
+[   14.994641] imx8mp_blk_ctrl_probe 1:usb2
+[   15.002086] platform 381f0040.usb-phy: deferred probe pending
+[   15.007875] platform 382f0040.usb-phy: deferred probe pending
+[   15.013636] platform 32f00000.pcie-phy: deferred probe pending
+[   15.019480] platform 33800000.pcie: deferred probe pending
+[   15.024975] platform 32ec0000.blk-ctrl: deferred probe pending
+[   15.030819] platform 38330000.blk-ctrl: deferred probe pending
+[   15.036662] platform 32f10000.blk-ctrl: deferred probe pending
+[   15.042503] platform 32f10100.usb: deferred probe pending
+[   15.047912] platform 32f10108.usb: deferred probe pending
 
+Best Regards,
+
+Tim
