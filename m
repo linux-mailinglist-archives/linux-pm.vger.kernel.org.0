@@ -2,65 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E545FE50D
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 00:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2724F5FE5E2
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 01:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229755AbiJMWNC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Oct 2022 18:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36564 "EHLO
+        id S229673AbiJMXcx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Oct 2022 19:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiJMWNB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 18:13:01 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0343818BE29
-        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 15:13:00 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id w185so1473354vkb.7
-        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 15:12:59 -0700 (PDT)
+        with ESMTP id S229572AbiJMXcw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 19:32:52 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC88E189C16
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 16:32:50 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id r19so2749392qtx.6
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 16:32:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xLlp+L6UoYHOMNwsqCOlw+S3zS7vqmcy26ijo646RY8=;
-        b=O8AEMcxiWJI/qRNaoqxoTmxniQ9mIt/D1O8aw6Xrsja8xvG3vcNZxYIRhpQbVri1F8
-         ZqvYt/RpHfeFWiK+32uburTgHLokD29VaTTMabo52h7yqi5/0HoMV3eSvhdA8Q17ndwD
-         rA1hRVvKw6wdjCKa5eMKFnfvv8ssXfsRhQvI/t/aHeU71MDMuGcSQQJZCzHv1LQxncDw
-         6qZUQUc8unyuy1LuDR8aVyztxamFjvjkT7Jg1MECrfLYRPGO9Gwib6XeOe3AYJjzqrHN
-         2ZhhLISav5qVUvTLWp+c0uPxHcsWW2H1fC5dQtGLpN7YAD+6ZThAmPStIjQ6DaUndtHg
-         ZQww==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0+QfEwy7B/NrkymaL7q2hDY+q10f+0eJfcatFNx6Eqs=;
+        b=g/Vu/8osdQ1PPPGH7vBzzXaURD1oaMlsGgq3jdnsKjd5krGykX/Cle2SBf169AE5ys
+         hdM4wPEzDLwwMKvQH3DPzWGk1iRcWbR+snhitd0/pRftFXoi2wVL2nMGctYk38p33na1
+         n0c10dea0uI6lAQj4EDXgjTP5etp24/JKkyGVjqo9CZXtIZKcMlsiWx071FNqELvDsdE
+         uYsaK6blFQNGCXMnSVgUY08ZM8xJVeAc5QtVuqW7wOTq9U+VLtqh+N/1PNiw6ZYlwIpA
+         T9ERcCWX1wv8jru0xXngfVU/bYH51AerLE3rdIQTum7Z5z7qSaWqzVBYI89PBnU9NhsY
+         tH7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xLlp+L6UoYHOMNwsqCOlw+S3zS7vqmcy26ijo646RY8=;
-        b=iSBcKfrr6HpzUWNu3gQKXvlR7VQ12hXdECt7gkXyCq2I5BhM8eJJGJpSWcUePe7vH6
-         HsGK16uyol5lmt4n10mVlRKRkLc5PKK0dENt3NKYDikRIRS/ID+St9w5ZEtiQ4rxlI7c
-         P2aDVkG4pHtJiKv4cdNcCtBmIluIV3BgyY5ztMwVsaM/D2XD+VEnpylebwbvl4k0N8TB
-         L/ITr9LE89P8sNtp1jxArtuQ8mwgR5xlTlTuOBgZNFM+2R5VoX9vlRB9+Sz8d+D5Yxbl
-         yDjHAxIog7/q+dHfEEtMy+JE6aFeOFSO6g7qYPFUMgQC2Lw7BdAwxxsRpTZ81NVpLgGS
-         /SgA==
-X-Gm-Message-State: ACrzQf0L5hIX2sIPJfAoGg5yxe4pwn4b/xgkEKNqzOzQ1Tl6k31yIGX9
-        lth5YQmGiges/wIx9vOrDGn0iAwQoCiRyC1v6F0q5A==
-X-Google-Smtp-Source: AMsMyM7V2B+2B0PzcJiVhCmvnZwWQdza7W21iJqVsoyjKadFoMTFXHj2u9GdL4XzCSwWzqoI3oLfk8kXvmdBrzobwOU=
-X-Received: by 2002:a1f:5981:0:b0:3a6:6655:831f with SMTP id
- n123-20020a1f5981000000b003a66655831fmr1350689vkb.12.1665699179056; Thu, 13
- Oct 2022 15:12:59 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0+QfEwy7B/NrkymaL7q2hDY+q10f+0eJfcatFNx6Eqs=;
+        b=dMmzYdNh5a3f17EDZ4D9Ljfm/RxdkQDvoeEPvsuvP8mB8mGwSogDePSuMZQWLbYn3C
+         mIo7SdZhpJzhv8WAvzpzTbj0oRfoE3rCDeu/Neojv+qk3htMxbprfs4hWWno+ues1MsX
+         qN7j6Tl59tBcAeBbMy3DI26tnOE3iVGJgiIhtmhxDWCPDyIxM2KAZGZl6FWh86s106y5
+         ZSS6d6z/cLyp1HEotG45YChx5+hNLikGJP7sHQZjcd6EAkrlugfVWugXtJZ5NFn4x3ww
+         zuCYVuXy0RY2q9I2TgMFO39O1CiSaME0atmmhY7POYZQNd6iNfkcudrk1veEY0guGwJU
+         hvAQ==
+X-Gm-Message-State: ACrzQf0MWJMhER+Z6jvPzHIWTRteiVVh6p1jwEoXJlGPJ7R9WjCukvrO
+        YzK2dBajhs/gHGksmGAPoodZYA==
+X-Google-Smtp-Source: AMsMyM4IKZBPcrAkKgLQFL2CqgM5z3RNWKbjf6LsalpKHQodpII16MZttEiPtH4fRBxp/igpWcV2Vg==
+X-Received: by 2002:a05:622a:178b:b0:39c:c9db:2c5e with SMTP id s11-20020a05622a178b00b0039cc9db2c5emr2056358qtk.111.1665703969887;
+        Thu, 13 Oct 2022 16:32:49 -0700 (PDT)
+Received: from [192.168.1.57] (cpe-72-225-192-120.nyc.res.rr.com. [72.225.192.120])
+        by smtp.gmail.com with ESMTPSA id n1-20020a05620a294100b006e8f8ca8287sm903306qkp.120.2022.10.13.16.32.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Oct 2022 16:32:48 -0700 (PDT)
+Message-ID: <1e02c8ae-d3b1-e226-f14b-c7f7d0292237@linaro.org>
+Date:   Thu, 13 Oct 2022 19:30:36 -0400
 MIME-Version: 1.0
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com> <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
-In-Reply-To: <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Thu, 13 Oct 2022 15:12:53 -0700
-Message-ID: <CAAYoRsW+5xbW_Zd7Mtbo4VMi4RZFXRr7mf4NAU=Le7GhQzNJvg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
-        lukasz.luba@arm.com, Dietmar.Eggemann@arm.com,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 05/11] dt-bindings: thermal: k3-j72xx: elaborate on
+ binding descriptions
+Content-Language: en-US
+To:     Bryan Brattlof <bb@ti.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>, Keerthy <j-keerthy@ti.com>,
+        Linux Thermal <linux-pm@vger.kernel.org>,
+        Linux Device Tree <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
+References: <20221011231727.8090-1-bb@ti.com>
+ <20221011231727.8090-6-bb@ti.com>
+ <06249fe9-97eb-1ab8-5e35-00b3c613d3a7@linaro.org>
+ <20221012181911.qk7v3yabo726lmtl@bryanbrattlof.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221012181911.qk7v3yabo726lmtl@bryanbrattlof.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,109 +87,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi All,
+On 12/10/2022 14:19, Bryan Brattlof wrote:
+>>> +          temperatures accurately.
+>>>  
+>>>    power-domains:
+>>> +    description: |
+>>> +      Should contain the phandle to a power management (PM) domain
+>>> +      node and the device-id of this device.
+>>
+>> This is quite generic - why adding it?
+> 
+> This was really a "while I'm here" addition. But there is no need, I can 
+> drop this
 
-On Thu, Oct 13, 2022 at 4:12 AM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
-> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
-> > On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
-> > <kajetan.puchalski@arm.com> wrote:
-...
+Drop it, we do not describe generic properties (already described in
+core schema).
 
-> On the Intel & power usage angle you might have seen in the discussion,
-> Doug sent me some interesting data privately. As far as I can tell the
-> main issue there is that C0 on Intel doesn't actually do power saving so
-> moving the state selection down to it is a pretty bad idea because C1
-> could be very close in terms of latency and save much more power.
->
-> A potential solution could be altering the v2 to only decrease the state
-> selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
-> because arm systems with 2 states use the early exit path anyway. It'd
-> just amount to changing this hunk:
->
-> +       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
-> +               idx--;
->
-> to:
->
-> +       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
-> +               idx--;
->
-> What would you think about that? Should make it much less intense for
-> Intel systems.
+Best regards,
+Krzysztof
 
-I tested the above, which you sent me as patch version v2-2.
-
-By default, my Intel i5-10600K has 4 idle states:
-
-$ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/name
-/sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
-/sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
-/sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
-/sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
-
-Idle driver governor legend:
-teo: the normal teo idle governor
-menu: the normal menu idle governor
-util or v1: the original patch
-util-v2 or v2: V2 of the patch
-util-v2-2 or v2-2: the suggestion further up in this thread.
-
-Test 1: Timer based periodic:
-
-A load sweep from 0 to 100%, then 100% to 0, first 73 hertz, then 113,
-211,347 and finally 401 hertz work/sleep frequency. Single thread.
-
-http://smythies.com/~doug/linux/idle/teo-util/consume/idle-1/
-
-Summary, average processor package powers (watts):
-
-teo              menu          v1               v2             v2-2
-10.19399    10.74804    22.12791    21.0431    11.27865
-                     5.44%      117.07%     106.43%     10.64%
-
-There is no performance measurement for this test, it just has to
-finish the work packet before the next period starts. Note that
-overruns do occur as the workload approaches 100%, but I do not record
-that data, as typically the lower workload percentages are the area of
-interest.
-
-Test 2: Ping-pong test rotating through 6 different cores, with a
-variable packet of work to do at each stop. This test goes gradually
-through different idle states and is not timer based. A different 2
-core test (which I have not done) is used to better explore the idle
-state 0 to idle state 1 transition. This test has a performance
-measurement. The CPU scaling governor was set to performance. HWP was
-disabled.
-
-http://smythies.com/~doug/linux/idle/teo-util/ping-sweep/6-1/loop-times.png
-http://smythies.com/~doug/linux/idle/teo-util/ping-sweep/6-1/loop-times-detail-a.png
-http://smythies.com/~doug/linux/idle/teo-util/ping-sweep/6-1/
-
-Summary:
-
-Average processor package power (watts):
-teo            v2-2            menu
-27.3881    29.98293    28.04096
-                 9.47%        2.38%
-
-Execution time for the entire test (minutes):
-teo   v2-2        menu
-56    54.667    55.333
-        -2.38%    -1.19%
-
-However, notice that in the idle-state 0 and 1 region, V2-2 uses more
-power and its loop time is longer (less is better), but also in the
-deeper idle states regions V2-2 uses more power and also runs faster.
-
-teo: 36.4 watts and 10.3533 usecs/loop.
-menu: 36.8 watts and 10.1604 usecs/loop.
-util-v2-2: 38.8 watts and 11.2358 usecs/loop.
-
-and
-
-teo: 15.2 watts and 1,777.6 usecs/loop.
-menu: 15.6 watts and 1767.4 usecs/loop.
-util-v2-2: 17.4 watts and 1618.7 usecs/loop.
-
-... Doug
