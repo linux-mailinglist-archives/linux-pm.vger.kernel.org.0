@@ -2,216 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7D15FE44A
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 23:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842295FE467
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Oct 2022 23:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229507AbiJMVeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 13 Oct 2022 17:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
+        id S229967AbiJMVtd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 13 Oct 2022 17:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbiJMVeo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 17:34:44 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F137F31;
-        Thu, 13 Oct 2022 14:34:38 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4B0D740003;
-        Thu, 13 Oct 2022 21:34:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1665696877;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=S/j4VwaT4LG3Yaw516KnXpuXfG1/DCE/NaX0TVRcb+0=;
-        b=MyTRzYh8SaclkkMeCwVfm//yVoYxD6Nv2RNcJl3SDMzwWeu2D7dRus81kMKwU36AxnC3F7
-        A+WquWGTJw76AwW8kQAZevFMBz1v9xmlzDkqtBKVvXrcrH8yS9MmsPixCy2djZ/17v7kTZ
-        xNDvfTOvWXoNgOUQGOnJWyLZCof7eNAov8e7MjClBnNCXnEjiimVx/c/+jzsNBBRqz5lXj
-        PET7fEtZoPfmPKIknd0gki1lcOT/cd265emz8CpYUN5S+EQhfoAizgI3V6cAlbT2dnddAS
-        ZdqtgOujsskfhrMyJRkL1xW7mbSPeHBzVfAV7zEnaURqdVFoRa3f+RlTqS/6VQ==
-Date:   Thu, 13 Oct 2022 23:34:35 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        linux-rtc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix event handler registration ordering
- issue
-Message-ID: <Y0iEaxyO8Jj6tKSC@mail.local>
-References: <5629262.DvuYhMxLoT@kreacher>
- <20221012205757.GA3118709@bhelgaas>
- <CAJZ5v0gWG1qVzwSy19SSqFmxL7NZRf1pkLR_buPoyCcj4f0FLw@mail.gmail.com>
+        with ESMTP id S229845AbiJMVtN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 13 Oct 2022 17:49:13 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CE336BC5
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 14:49:05 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id t12-20020a17090a3b4c00b0020b04251529so3043071pjf.5
+        for <linux-pm@vger.kernel.org>; Thu, 13 Oct 2022 14:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=i3K43ojbMq8isMbqFxDt+PzOi1qTNmeGQ4/NX2/+N0s=;
+        b=m4GpdrZWyUxvcdlQIiSLdarZ/8f06jvKA5NbPKwsGtQy8/PzXJLAdpV0Iqq8ic3i/+
+         ALBxWhsGIv7/agd3mSgUwanDeWl+OwHsWOOmyV6ujoSPkONdtO9HicQ9mAiH0Bsjspow
+         s90v2642xpaknJej8cUEg8abEalRdK4fRxcA0fyeiqu/7Tp7Uk+C7uAtbm47WyTkGr87
+         YaBZAY0uBXSUTLc1BcQoW/RxlmQ48lOEkHlculPPDMH8mbstu/Z5q6gO1LQ5mioaKxOJ
+         51ehanKyth51rAduNNDu6GYTh1hIpyWJaFt/XCybvEnWgLgEQRiNqJ0G+YCA8CsmCeb3
+         uf0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i3K43ojbMq8isMbqFxDt+PzOi1qTNmeGQ4/NX2/+N0s=;
+        b=vQ7IL4X/ZzbJ88Voj6C2dbTvK4rloHURHZO+/T7CHgFEIP9g7SNzw0AvJ0J2yaBxHn
+         DQ6hK2QMnpGutIIepdRN+Ai7QQcnY+Dgsrxfr1KyOGoymMVj7ZwdwZYiD+bLH/aIJTtH
+         e0U63j8fovRNnWNo/Lg8TfO6hV7CbZDFaINspXXgZ/XZiXzrAZiBwP9uxIs33eDg936Z
+         VfyiPZcHS63Rywez+DCJ3QQL1bIveuxCjj6VCa0OXHU14DbjmtjALoHdbI9J1Nfqp7Yv
+         mOs+pCgzF/5VWxWeacAf1sbexNXtI5BXzD/nQ09wXANgoyTkjnNeKoW1kGwD/1gMOj8X
+         Xt3g==
+X-Gm-Message-State: ACrzQf1qKy/hB9HGHY1vRWhOvqCdp/FNIoHsXroajfM/DzhuTVLHS4e4
+        qW1KgdCzVaj+aMiYmR+SNhseuA==
+X-Google-Smtp-Source: AMsMyM733KNeybflC+If1obbzWxANjLNj7Zgxv/5gM6kA2Oko04lczn0Q0lcUQrsWOwUH9yVmaymeQ==
+X-Received: by 2002:a17:903:240d:b0:183:9bab:9c3 with SMTP id e13-20020a170903240d00b001839bab09c3mr1849051plo.48.1665697745345;
+        Thu, 13 Oct 2022 14:49:05 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id m9-20020a170902db0900b00182d25a1e4bsm285318plx.259.2022.10.13.14.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Oct 2022 14:49:04 -0700 (PDT)
+Subject: [PATCH] MAINTAINERS: git://github -> https://github.com for intel
+Date:   Thu, 13 Oct 2022 14:46:37 -0700
+Message-Id: <20221013214637.30873-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gWG1qVzwSy19SSqFmxL7NZRf1pkLR_buPoyCcj4f0FLw@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Cc:        linux-kernel@vger.kernel.org,
+           Palmer Dabbelt <palmer@rivosinc.com>,
+           Conor Dooley <conor.dooley@microchip.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     todd.e.brandt@linux.intel.com, linux-pm@vger.kernel.org
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/10/2022 13:38:31+0200, Rafael J. Wysocki wrote:
-> On Wed, Oct 12, 2022 at 11:00 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > On Wed, Oct 12, 2022 at 08:07:01PM +0200, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > Because acpi_install_fixed_event_handler() enables the event
-> > > automatically on success, it is incorrect to call it before the
-> > > handler routine passed to it is ready to handle events.
-> > >
-> > > Unfortunately, the rtc-cmos driver does exactly the incorrect thing
-> > > by calling cmos_wake_setup(), which passes rtc_handler() to
-> > > acpi_install_fixed_event_handler(), before cmos_do_probe(), because
-> > > rtc_handler() uses dev_get_drvdata() to get to the cmos object
-> > > pointer and the driver data pointer is only populated in
-> > > cmos_do_probe().
-> > >
-> > > This leads to a NULL pointer dereference in rtc_handler() on boot
-> > > if the RTC fixed event happens to be active at the init time.
-> > >
-> > > To address this issue, change the initialization ordering of the
-> > > driver so that cmos_wake_setup() is always called after a successful
-> > > cmos_do_probe() call.
-> > >
-> > > While at it, change cmos_pnp_probe() to call cmos_do_probe() after
-> > > the initial if () statement used for computing the IRQ argument to
-> > > be passed to cmos_do_probe() which is cleaner than calling it in
-> > > each branch of that if () (local variable "irq" can be of type int,
-> > > because it is passed to that function as an argument of type int).
-> > >
-> > > Note that commit 6492fed7d8c9 ("rtc: rtc-cmos: Do not check
-> > > ACPI_FADT_LOW_POWER_S0") caused this issue to affect a larger number
-> > > of systems, because previously it only affected systems with
-> > > ACPI_FADT_LOW_POWER_S0 set, but it is present regardless of that
-> > > commit.
-> > >
-> > > Fixes: 6492fed7d8c9 ("rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0")
-> > > Fixes: a474aaedac99 ("rtc-cmos: move wake setup from ACPI glue into RTC driver")
-> > > Link: https://lore.kernel.org/linux-acpi/20221010141630.zfzi7mk7zvnmclzy@techsingularity.net/
-> > > Reported-by: Mel Gorman <mgorman@techsingularity.net>
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Reviewed-by: Bjorn Helgaas <bhelgaas@google.com>
-> >
-> > Yep, I blew it with a474aaedac99, sorry about that.
-> >
-> > Possibly could call cmos_wake_setup() from cmos_do_probe() instead of
-> > from cmos_pnp_probe() and cmos_platform_probe()?
-> 
-> Sounds good.
-> 
-> I would prefer to send a separate patch for this on top of the
-> $subject one, unless Alexandre wants me to do it all in one go.
-> 
-> Alexandre, what's your preference here?  Or would you prefer if I
-> pushed this forward?
-> 
+Github deprecated the git:// links about a year ago, so let's move to
+the https:// URLs instead.
 
-I applied your patch, feel free to improve on top of that ;)
+Reported-by: Conor Dooley <conor.dooley@microchip.com>
+Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+I've split these up by github username so folks can take them
+independently, as some of these repos have been renamed at github and
+thus need more than just a sed to fix them.
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> > Then there would be a single call site and it would be closer to the actual dependency on
-> > dev_set_drvdata().  Either way is fine with me.
-> 
-> OK
-> 
-> > Unrelated, but I happened to notice that pnp_irq() returns -1 for
-> > failure, and this note suggests that possibly returning 0 would be
-> > better:
-> >
-> >   https://lore.kernel.org/r/CAHk-=wg2Pkb9kbfbstbB91AJA2SF6cySbsgHG-iQMq56j3VTcA@mail.gmail.com
-> 
-> Probably.
-> 
-> In that case, though, it would be prudent to also explicitly discard
-> IRQ resources where start is equal to 0.
-> 
-> >
-> > > ---
-> > >  drivers/rtc/rtc-cmos.c |   29 +++++++++++++++++++----------
-> > >  1 file changed, 19 insertions(+), 10 deletions(-)
-> > >
-> > > Index: linux-pm/drivers/rtc/rtc-cmos.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/rtc/rtc-cmos.c
-> > > +++ linux-pm/drivers/rtc/rtc-cmos.c
-> > > @@ -1352,10 +1352,10 @@ static void cmos_check_acpi_rtc_status(s
-> > >
-> > >  static int cmos_pnp_probe(struct pnp_dev *pnp, const struct pnp_device_id *id)
-> > >  {
-> > > -     cmos_wake_setup(&pnp->dev);
-> > > +     int irq, ret;
-> > >
-> > >       if (pnp_port_start(pnp, 0) == 0x70 && !pnp_irq_valid(pnp, 0)) {
-> > > -             unsigned int irq = 0;
-> > > +             irq = 0;
-> > >  #ifdef CONFIG_X86
-> > >               /* Some machines contain a PNP entry for the RTC, but
-> > >                * don't define the IRQ. It should always be safe to
-> > > @@ -1364,13 +1364,17 @@ static int cmos_pnp_probe(struct pnp_dev
-> > >               if (nr_legacy_irqs())
-> > >                       irq = RTC_IRQ;
-> > >  #endif
-> > > -             return cmos_do_probe(&pnp->dev,
-> > > -                             pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
-> > >       } else {
-> > > -             return cmos_do_probe(&pnp->dev,
-> > > -                             pnp_get_resource(pnp, IORESOURCE_IO, 0),
-> > > -                             pnp_irq(pnp, 0));
-> > > +             irq = pnp_irq(pnp, 0);
-> > >       }
-> > > +
-> > > +     ret = cmos_do_probe(&pnp->dev, pnp_get_resource(pnp, IORESOURCE_IO, 0), irq);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     cmos_wake_setup(&pnp->dev);
-> > > +
-> > > +     return 0;
-> > >  }
-> > >
-> > >  static void cmos_pnp_remove(struct pnp_dev *pnp)
-> > > @@ -1454,10 +1458,9 @@ static inline void cmos_of_init(struct p
-> > >  static int __init cmos_platform_probe(struct platform_device *pdev)
-> > >  {
-> > >       struct resource *resource;
-> > > -     int irq;
-> > > +     int irq, ret;
-> > >
-> > >       cmos_of_init(pdev);
-> > > -     cmos_wake_setup(&pdev->dev);
-> > >
-> > >       if (RTC_IOMAPPED)
-> > >               resource = platform_get_resource(pdev, IORESOURCE_IO, 0);
-> > > @@ -1467,7 +1470,13 @@ static int __init cmos_platform_probe(st
-> > >       if (irq < 0)
-> > >               irq = -1;
-> > >
-> > > -     return cmos_do_probe(&pdev->dev, resource, irq);
-> > > +     ret = cmos_do_probe(&pdev->dev, resource, irq);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     cmos_wake_setup(&pdev->dev);
-> > > +
-> > > +     return 0;
-> > >  }
-> > >
-> > >  static int cmos_platform_remove(struct platform_device *pdev)
-> > >
-> > >
-> > >
-
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 9a9ca93b63fd..7b5e1953b718 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16211,7 +16211,7 @@ L:	linux-pm@vger.kernel.org
+ S:	Supported
+ W:	https://01.org/pm-graph
+ B:	https://bugzilla.kernel.org/buglist.cgi?component=pm-graph&product=Tools
+-T:	git git://github.com/intel/pm-graph
++T:	git https://github.com/intel/pm-graph
+ F:	tools/power/pm-graph
+ 
+ PMBUS HARDWARE MONITORING DRIVERS
 -- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.38.0
+
