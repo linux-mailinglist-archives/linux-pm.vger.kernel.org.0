@@ -2,85 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CC15FF140
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 17:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250A15FF2D4
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 19:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230361AbiJNPZN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Oct 2022 11:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S231230AbiJNROo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Oct 2022 13:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiJNPZJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Oct 2022 11:25:09 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E9011831
-        for <linux-pm@vger.kernel.org>; Fri, 14 Oct 2022 08:24:47 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id h10so3426207qvq.7
-        for <linux-pm@vger.kernel.org>; Fri, 14 Oct 2022 08:24:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8srtPqHGa40CVslrURYXsHSOfQqBi5LmheASbuMqgVc=;
-        b=qcTAeaAa3q5DBM3sbVJ4oUjdktutaxqU3rr8IdCFsW9wPJnSYgImx0dNu0FMyYrH8R
-         hanQkYVd75F7yv0HvNgIhf3sn13iW1eFf3BE1sZbpLFGbJPZe705DoVavp0Yzx6ebT41
-         V9firAUWgdxk7Rp2TKdRaQCuBt6G1OnYIF0PETfq9iz6ObS49/cJgfM/fDxWaXqEX3+k
-         s0WQ64erNi2xkeDuzFyGuQx2WxBCkYiU7zs7e0Pjmp4EgQkX7xBi3fMQccYoSVXVpM1R
-         OR0WyGrdd5GHLRW49xt6Dh/5uJ8n4Lulkq6mavRC02+qXeTeOoD4xeaZUvWgnYI2cNgb
-         DL3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8srtPqHGa40CVslrURYXsHSOfQqBi5LmheASbuMqgVc=;
-        b=WFlBMUD6siU1GozucRbsOWgCLyhGErVECxCImmL5xy9ZNel7OmmIc78LQRFT3+yrUP
-         6wmqzJW8cA/1Nv/cGFxtqT0soHjOYpoj0Err1M1Ta8eRJYUqdXe6Seg0fXq+xzh2z2Tc
-         4l69e8IS/tkr7DmFa+ph8Z0noIbHrW+3CZw0wYRb4qfeSv570Kpru3pZVV5l9gjLeaIN
-         gJ531FJLeRxGqS/iP7IK9fl7tNxeGWw5O8IE9joNPa9khISCB1U/yvkVI+euc/Y6NIDt
-         SyM19A+QVYXHKQ9zy3Mr6MAJ0vwUccMtWLnoop4G/ySjeoAoLxoQT8MccsdKdnemP5yr
-         TRMg==
-X-Gm-Message-State: ACrzQf3jKcIqsEK+F9aVK78iRz35t4rlyjMmq9jPsa0DpCarPRqOXkO8
-        zrJsSdFJ7uDpS3zOvKs8pE91vXkJ2J/WwQnvfP8=
-X-Google-Smtp-Source: AMsMyM66/9V0hiYngFsfBDM8+JbqFskih95boZ0yPyGhxH85Jld/00GaBcjBeXgiwRDdJ+dbMPPV4JUgm6UTKG3IuhI=
-X-Received: by 2002:ad4:5aee:0:b0:4b4:595:fb54 with SMTP id
- c14-20020ad45aee000000b004b40595fb54mr4642461qvh.5.1665761072129; Fri, 14 Oct
- 2022 08:24:32 -0700 (PDT)
+        with ESMTP id S231278AbiJNROn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Oct 2022 13:14:43 -0400
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B21A444
+        for <linux-pm@vger.kernel.org>; Fri, 14 Oct 2022 10:14:40 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5EDE1803D2;
+        Fri, 14 Oct 2022 19:14:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1665767678;
+        bh=wjTa/LR19TM3f2nCl1k+QMz8PZWBG9LvIm6SAyCnMVQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=anAmvjmlDi4pgm3s5d6jJtX+kCQKJbZYF7LFqYjLbHtKTXV2pXJrvkB6olPI8Far2
+         HF5T279fYUfmUG5luASaokOjRujjDHsqxGn+RmrkOMnyxsK9YuqC+pDjKxgC0+aUpZ
+         ub9FhPjJoeWw4tCfRjfSrApOOK3sRPVVmHMwV0FHeo3XGVeskNrRxuFrMyR0fNL/jh
+         GxFTQ2P6iUQVY/+rVEMizBoDBgq53uOt64cq+lCOadDaGS0o4nRHVNQQ9B0fjDLTEs
+         RzS5Ksz6DFBd5BZyJsfuua2zLEghZbaFNaR/PYZQAWM0ebvBpvW6sBZ+IV/OqUb5cN
+         IcDAIDTEREQvw==
+Message-ID: <08bbfa77-8001-9a69-94ea-936afe8195a8@denx.de>
+Date:   Fri, 14 Oct 2022 18:46:03 +0200
 MIME-Version: 1.0
-Sender: klin.mlin122@gmail.com
-Received: by 2002:ac8:7f4b:0:0:0:0:0 with HTTP; Fri, 14 Oct 2022 08:24:31
- -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Fri, 14 Oct 2022 17:24:31 +0200
-X-Google-Sender-Auth: vowOCk0XPpe9aq9iPLIEEkxsyhE
-Message-ID: <CAMwUt-qfPG+8B3m6anbG1YTKtmr0-Hanc+Z91Q6vbJk5mFth3g@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH 5/7] power: supply: bq25890: Factor out regulator
+ registration code
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>
+References: <20221010210310.165461-1-marex@denx.de>
+ <20221010210310.165461-5-marex@denx.de>
+ <e0659fb1-7e1e-de5c-de6a-99a8f180bd3f@redhat.com>
+ <00e6b9b0-ddef-6e2f-0603-9a25fd3b9e0d@denx.de>
+ <848ada38-00a1-0631-871f-926bb33a166f@redhat.com>
+ <021a1dfc-eb05-77ad-644c-f967a5bf7799@denx.de>
+ <27d4c17a-1894-e055-9311-9fb6d69d3665@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <27d4c17a-1894-e055-9311-9fb6d69d3665@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-7.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dearly Beloved In Christ,
+On 10/13/22 11:12, Hans de Goede wrote:
+> Hi,
 
-Please forgive me for stressing you with my predicaments as I directly
-believe that you will be honest to fulfill my final wish before i die.
+Hi,
 
-I am Mrs.Sophia Erick, and i was Diagnosed with Cancer about 2 years
-ago, before i go for a surgery i have to do this by helping the
-Orphanages home, Motherless babies home, less privileged and disable
-citizens and widows around the world,
+[...]
 
-So If you are interested to fulfill my final wish by using the sum of
-$ 11,000,000.00, Eleven Million Dollars, to help them as I mentioned,
-kindly get back to me for more information on how the fund will be
-transferred to your account.
+>>> Looking at standard Linux userspace (Debian/Fedora/etc.)
+>>> all the userspace tools capable of reporting voltages
+>>> of various voltage rails inside the system to the user
+>>> use the hwmon interface for this. This is also why
+>>> the power-supply class core recently got support for
+>>> proxying some psy properties to a hwmon class device.
+>>>
+>>> So the way I see it is that if we want to report Vsys to
+>>> userspace, that we then clearly need to report it through
+>>> the hwmon interface.
+>>
+>> For regulators, you can read their values via /sys/class/regulators/* , if the user is interesting in Vsys .
+>>
+>> Maybe that is where we disagree -- I'm not particularly interested in exposing Vsys to user space, but since it was exposed before, I tried to retain that exposure, although via different channel. And the regulator also makes the Vsys useful, since it can be used as a supply on the kernel level.
+> 
+> I don't particularly care a lot about exposing Vsys to user space either,
+> but like you I do believe that we should at least keep the functionality
+> around while fixing the wrong property use.
 
-Warm Regards,
-Sincerely Mrs. Sophia Erick.
+I agree.
+
+> I'm still not 100% convinced a regular for Vsys is not a bit
+> overkill but I don't want to block going this route either.
+
+Why would a regulator be an overkill compared to hwmon ?
+What am I missing here ?
+
+> So I'll go and review the last 3 patches and then lets wait
+> and see what Sebastian (SRE) has to say.
+
+Thank you
+
+[...]
