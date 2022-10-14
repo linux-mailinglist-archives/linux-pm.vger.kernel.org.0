@@ -2,53 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5C45FF2EE
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 19:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAF95FF611
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Oct 2022 00:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiJNRYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Oct 2022 13:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52326 "EHLO
+        id S229868AbiJNWLt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Oct 2022 18:11:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbiJNRYr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Oct 2022 13:24:47 -0400
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8AF20356
-        for <linux-pm@vger.kernel.org>; Fri, 14 Oct 2022 10:24:45 -0700 (PDT)
-Received: from tr.lan (ip-86-49-12-201.bb.vodafone.cz [86.49.12.201])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id B407384EA8;
-        Fri, 14 Oct 2022 19:24:42 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1665768282;
-        bh=MwkRKajwC9OjsHcqszKSG7RdYaNHhDBu9jjx3tOZ8vk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cnZfB++qNyCKJ5Lb/SR8NLUHe43pnnfFiAPODTtlcXNpbxpG3U9K58de89EM/HFj9
-         oqSUOxAGpPbckgemiB4yB6uw0CDcwL1aCNjwv9cXcom5Hi5uTwhAGn5zYbrC/O4LiR
-         fhijz0sDybi+8YCSuGrz4HHOiW+7p8Q/H1ldiaGYGQxhrXADZp2vCPbZrbGwelhgRY
-         84RksGIZHxsnI6WOgUVF1J6gZGJY31O9QweyhwCKxXoTTMk3HnhYygbCYEjbSjD+BW
-         eErR1auysQvQqKjOfWKeiH1e0y4gks17jTja2prvZ+LgwhkhRHtu2XjbR9zPjSyvhu
-         5wcqB91+nVwBw==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?UTF-8?q?Micha=C5=82=20Miros=C5=82aw?= <mirq-linux@rere.qmqm.pl>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH v2 7/7] power: supply: bq25890: Add Vsys regulator
-Date:   Fri, 14 Oct 2022 19:24:27 +0200
-Message-Id: <20221014172427.128512-7-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221014172427.128512-1-marex@denx.de>
-References: <20221014172427.128512-1-marex@denx.de>
+        with ESMTP id S229873AbiJNWLc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Oct 2022 18:11:32 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217211CF57D;
+        Fri, 14 Oct 2022 15:11:17 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29EIE2I5023968;
+        Fri, 14 Oct 2022 22:11:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=N+AwruBS3Pj7Tmz2cNbYqF/weqCkOsjHYpUki9uEcYE=;
+ b=Qz9kg2jm/rczB7KBE2qc0GyayQMhXkA+gnVavKNoAYQXMH3uuQVFD7sFipkdVW1YEW40
+ drXURDOsKWxvc+cRYLEJb60KDqzvlGvlSb0Q9B6Yt71MD7dXFhLHhMZJb9SR0H1pv0YQ
+ mEOHlvFRZFoVhzf3ttwht/MC5D/xVwfXZFShG1Oz5AUZ8myFEMfNyZTy/N/JI6Ltze6z
+ yBkQPikhUtnuLGceJPnCHv0rPhX2wcQmMbJJ30raNIeU6iy/4teJfSOBY7P2ZtymMxiL
+ AmJlm4E4qMHCNGBmNDlCpoUY9PVCikm7fVWjSI4TlsVHe8RvyIMsFNr5asFnLpjJrfXO Bg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3k6smp4rn4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Oct 2022 22:11:13 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29EMBCiB005979
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 14 Oct 2022 22:11:12 GMT
+Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Fri, 14 Oct 2022 15:10:50 -0700
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Subject: [PATCH v2 0/2] Add interconnect support for QDU1000/QRU1000 SoCs
+Date:   Fri, 14 Oct 2022 15:10:36 -0700
+Message-ID: <20221014221038.7423-1-quic_molvera@quicinc.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: g_hHwTSQzqcjZeepChSxQXo3gya-Knef
+X-Proofpoint-GUID: g_hHwTSQzqcjZeepChSxQXo3gya-Knef
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-14_11,2022-10-14_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=961
+ malwarescore=0 phishscore=0 adultscore=0 clxscore=1011 impostorscore=0
+ mlxscore=0 lowpriorityscore=0 priorityscore=1501 spamscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2209130000 definitions=main-2210140122
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,81 +78,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The chip is capable of reporting Vsys voltage supplied to the system.
-Add regulator which represents the Vsys supply. This can be used e.g.
-as a supply for system PMIC input.
+Add dt bindings and driver support for the Qualcomm QDU1000 and QRU1000
+SoCs.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Hans de Goede <hdegoede@redhat.com>
-Cc: Michał Mirosław <mirq-linux@rere.qmqm.pl>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: linux-pm@vger.kernel.org
----
-V2: Add RB from Hans
----
- drivers/power/supply/bq25890_charger.c | 32 ++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+The Qualcomm Technologies, Inc. Distributed Unit 1000 and Radio Unit
+1000 are new SoCs meant for enabling Open RAN solutions. See more at
+https://www.qualcomm.com/content/dam/qcomm-martech/dm-assets/documents/qualcomm_5g_ran_platforms_product_brief.pdf
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index ad5811304f88a..f0362dcb935e9 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -1102,6 +1102,20 @@ static int bq25890_vbus_get_voltage(struct regulator_dev *rdev)
- 	return bq25890_get_vbus_voltage(bq);
- }
- 
-+static int bq25890_vsys_get_voltage(struct regulator_dev *rdev)
-+{
-+	struct bq25890_device *bq = rdev_get_drvdata(rdev);
-+	int ret;
-+
-+	/* Should be some output voltage ? */
-+	ret = bq25890_field_read(bq, F_SYSV); /* read measured value */
-+	if (ret < 0)
-+		return ret;
-+
-+	/* converted_val = 2.304V + ADC_val * 20mV (table 10.3.15) */
-+	return 2304000 + ret * 20000;
-+}
-+
- static const struct regulator_ops bq25890_vbus_ops = {
- 	.enable = bq25890_vbus_enable,
- 	.disable = bq25890_vbus_disable,
-@@ -1117,6 +1131,18 @@ static const struct regulator_desc bq25890_vbus_desc = {
- 	.ops = &bq25890_vbus_ops,
- };
- 
-+static const struct regulator_ops bq25890_vsys_ops = {
-+	.get_voltage = bq25890_vsys_get_voltage,
-+};
-+
-+static const struct regulator_desc bq25890_vsys_desc = {
-+	.name = "vsys",
-+	.of_match = "vsys",
-+	.type = REGULATOR_VOLTAGE,
-+	.owner = THIS_MODULE,
-+	.ops = &bq25890_vsys_ops,
-+};
-+
- static int bq25890_register_regulator(struct bq25890_device *bq)
- {
- 	struct bq25890_platform_data *pdata = dev_get_platdata(bq->dev);
-@@ -1135,6 +1161,12 @@ static int bq25890_register_regulator(struct bq25890_device *bq)
- 				     "registering vbus regulator");
- 	}
- 
-+	reg = devm_regulator_register(bq->dev, &bq25890_vsys_desc, &cfg);
-+	if (IS_ERR(reg)) {
-+		return dev_err_probe(bq->dev, PTR_ERR(reg),
-+				     "registering vsys regulator");
-+	}
-+
- 	return 0;
- }
- #else
+Melody Olvera (2):
+  dt-bindings: interconnect: Add QDU1000/QRU1000 dt bindings
+  interconnect: qcom: Add QDU1000/QRU1000 interconnect driver
+
+ .../bindings/interconnect/qcom,rpmh.yaml      |    8 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/qdu1000.c           | 1091 +++++++++++++++++
+ drivers/interconnect/qcom/qdu1000.h           |   95 ++
+ .../dt-bindings/interconnect/qcom,qdu1000.h   |   98 ++
+ 6 files changed, 1303 insertions(+)
+ create mode 100644 drivers/interconnect/qcom/qdu1000.c
+ create mode 100644 drivers/interconnect/qcom/qdu1000.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,qdu1000.h
+
+
+base-commit: dca0a0385a4963145593ba417e1417af88a7c18d
 -- 
-2.35.1
+2.38.0
 
