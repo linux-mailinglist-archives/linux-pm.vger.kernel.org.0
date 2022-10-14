@@ -2,139 +2,258 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C69BE5FE98F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 09:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64F425FE99A
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Oct 2022 09:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiJNH2k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 14 Oct 2022 03:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59670 "EHLO
+        id S229926AbiJNHdQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 14 Oct 2022 03:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiJNH2k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Oct 2022 03:28:40 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649CA17FD6A;
-        Fri, 14 Oct 2022 00:28:39 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id b2so5921871lfp.6;
-        Fri, 14 Oct 2022 00:28:39 -0700 (PDT)
+        with ESMTP id S229845AbiJNHdO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 14 Oct 2022 03:33:14 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451591B8642
+        for <linux-pm@vger.kernel.org>; Fri, 14 Oct 2022 00:33:12 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id n12so6224989wrp.10
+        for <linux-pm@vger.kernel.org>; Fri, 14 Oct 2022 00:33:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SyMPuARgI/cMW3vAnqIKcmeUrRRRLXL+kTVTiHp6F18=;
-        b=Uhk7l/TUMcB3aXP5JC4d928KA5zigdEwO6kuyDxzN04onE2qENHX2fYQ3X0VR50OWu
-         yWIiBiogxa3oj5M29c8lukh9WfSS6r3itRbzKdsnRcGz2QVOmWCImh8Blw1GsXb4HeNT
-         BJi/8D/+tVN/YunWReEzfo9PTRzkH0mMpjDjfE5GdeN9M2Fs7zR9xbHEo43YUZuD1NFE
-         ynL0IzO9U/1brhRFHJL6RjTLLyRE8NWeJjPtq4hDdPj+aVs/YRgLqS6CMdlqknh9KOs2
-         YCYkYA4N0bJMpMQqHY//x6RX3RFc/Vcc/7sTxU6cjofIfxu6o1SmyuqMExco5Sm4B3Ze
-         U+XQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SKEmi6vccBwd4SuCcKc/2Tnsrh3azVvNbQckYv+e6ak=;
+        b=gNx2C+pR029dJrAMYsM/ISYcaMzSXUq1lw4AX6GAvR0rl8PXVM3vUZ283CFCrrzcpo
+         ncW5tMv7rYUFtP525ZQYUFEh/mtcdqZ/T0guZr8y2hnTgHfaJvuIi9G3kbdiBmtDeX2q
+         Eb3snzOIVOuFoiLa0GB0N6eJj0hYjh/VnSQtp3nuH4xuHXfduU7mknGehTL9WNI2Wbrt
+         c3gQyocfEbOVsgseyD1o1uXHN/HAWozN1uYfgau0sQLhvwpdJO+wdrnTIbYh7leWx8P3
+         iG6IQRSx4queQONUNMipBhA7LjaKBTCe7wuJfosMY/+Yhkkq+xKmI7hMNG5hFmcvRUbP
+         5d3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SyMPuARgI/cMW3vAnqIKcmeUrRRRLXL+kTVTiHp6F18=;
-        b=ELJaf09nIQnAsAEEK0PAVkiHdrp4q2oCHrcOM5noRhv29J3sVpmjnmR3J1RsqiXJSN
-         9m4J0H2hQLjTYPcf+fAnn4MZ/1FOYRZ2IdILw28NKyoaewIMu4XkJ1E1HAFHomaGS+0c
-         QWXaswJ+ya7Xx6QgZ3M4Fbq+7vDAy4WgwqyQT9oRHZu00+MT7f4UnfAMIUCBOsKimri6
-         lmgPBj69840nLcAONfth3tHTdQQ/u7635V/BOFiwcsxJ0ddB8aVDx0StFjVGLsyqhK9L
-         l39aHWEtQB03IxPKP2VD8hf4RNaj5zQWx9O3kwDjwsiO/lYMmmXOx6+zSgaEoy+kWKQ9
-         Ja2w==
-X-Gm-Message-State: ACrzQf3qe0+Kduza90sJHVgb8baJCWpXZoiXbRC5QP7ZFFRv3FrBqNYb
-        AtNr6D0F665lBpdaX3X1P8s=
-X-Google-Smtp-Source: AMsMyM7egWkgr8i9TnfRJ4inSksIa8+UNFlB0IyGYii7eeDMWqnAmy4nspLLyCI7QLACC4NVuAahAA==
-X-Received: by 2002:a05:6512:458:b0:4a2:c67c:afbd with SMTP id y24-20020a056512045800b004a2c67cafbdmr1281812lfk.76.1665732517599;
-        Fri, 14 Oct 2022 00:28:37 -0700 (PDT)
-Received: from gmail.com (82-209-154-112.cust.bredband2.com. [82.209.154.112])
-        by smtp.gmail.com with ESMTPSA id i14-20020a056512340e00b00497a879e552sm224136lfr.291.2022.10.14.00.28.36
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SKEmi6vccBwd4SuCcKc/2Tnsrh3azVvNbQckYv+e6ak=;
+        b=7HFrGqmAyQUPaIst4FmKXKSthqBoekQsUT6tNHxlNRSZ80gSKNH/kgXIZtBgALwkDT
+         0C1tylRfzbXvf+/Ba32ldSdAzHdW5dtoGHucacOO/PdtOhMGAJjJORwpaFpI4orlwrdm
+         1xUdcv7Ey6vFTMZitEFv0E71LvzRj6GirfRhNC9YB/1qqHltXb6Cp/oQx1gLYQJjauOi
+         LTnCf8qBY8dk9TO2qbQ/UCoB5FzoKM4qqBLcQwbwiWUixifxhrhTuiJJ716PcESB01Ib
+         AOyaDsgmnIaE+RLkWYEkTJ8ozVRV2qLE+vsXlD72mHm/PYElqSGvHPLmDIah3ewUVHh3
+         poFw==
+X-Gm-Message-State: ACrzQf24tL1lsRw00u7T0VLVxiFacQtsK+Q2lVH3FRDzsg6QYwbpyl6e
+        b1TVzJa9jnn6yfsw/o9bGxFwhA==
+X-Google-Smtp-Source: AMsMyM7U73AFlAev/JPrLh9ASLCfIzg6SpI5mfM2QVAT97wVOID0wpuDdrcu0/aorO8JS6jw8R/vkg==
+X-Received: by 2002:a5d:4887:0:b0:226:ed34:7bbd with SMTP id g7-20020a5d4887000000b00226ed347bbdmr2218132wrq.561.1665732790764;
+        Fri, 14 Oct 2022 00:33:10 -0700 (PDT)
+Received: from mai.. ([2a05:6e02:1041:c10:b460:17f0:186d:9d2e])
+        by smtp.gmail.com with ESMTPSA id w12-20020a05600c474c00b003a682354f63sm898148wmo.11.2022.10.14.00.33.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Oct 2022 00:28:36 -0700 (PDT)
-Date:   Fri, 14 Oct 2022 09:28:36 +0200
-From:   Marcus Folkesson <marcus.folkesson@gmail.com>
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Anson Huang <Anson.Huang@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] thermal: imx8mm_thermal: wait for a valid measurement
-Message-ID: <Y0kPpAYYnSvV/HWR@gmail.com>
-References: <20221007073057.41803-1-marcus.folkesson@gmail.com>
- <1b247906-665f-8d14-82b3-c55467659644@oss.nxp.com>
+        Fri, 14 Oct 2022 00:33:10 -0700 (PDT)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Nathan Errera <nathan.errera@intel.com>,
+        linux-wireless@vger.kernel.org (open list:INTEL WIRELESS WIFI LINK
+        (iwlwifi)), netdev@vger.kernel.org (open list:NETWORKING DRIVERS)
+Subject: [PATCH 1/2] thermal/drivers/iwlwifi: Use generic thermal_zone_get_trip() function
+Date:   Fri, 14 Oct 2022 09:32:50 +0200
+Message-Id: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zogtDrRbthaXzIxw"
-Content-Disposition: inline
-In-Reply-To: <1b247906-665f-8d14-82b3-c55467659644@oss.nxp.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
 
---zogtDrRbthaXzIxw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The get_trip_temp, get_trip_hyst and get_trip_type are handled by the
+get_trip_point().
 
-Hi Peng,
+The set_trip_temp() generic function does some checks which are no
+longer needed in the set_trip_point() ops.
 
-On Fri, Oct 14, 2022 at 09:20:21AM +0800, Peng Fan wrote:
->=20
->=20
-> On 10/7/2022 3:30 PM, Marcus Folkesson wrote:
-> > Check if first measurement is still pending or if temperature is out of
-> > range.
-> > Return and try again later if that is the case.
-> >=20
-> > Fixes: 5eed800a6811 ("thermal: imx8mm: Add support for i.MX8MM thermal =
-monitoring unit")
-> > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
->=20
-> NAK:
-> Please refer: https://www.nxp.com/docs/en/errata/IMX8MM_0N87W.pdf
-> ERR051272: TMU: Bit 31 of registers TMU_TSCR/TMU_TRITSR/TMU_TRATSR invalid
+Convert ops content logic into generic trip points and register them
+with the thermal zone.
 
-I see, thank you.
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/mvm.h |  2 +-
+ drivers/net/wireless/intel/iwlwifi/mvm/tt.c  | 71 ++++----------------
+ 2 files changed, 13 insertions(+), 60 deletions(-)
 
-I think it is still worth to check the upper limit though, so I will
-send a patch for that.
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+index bf35e130c876..38e7426f98c0 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/mvm.h
+@@ -501,7 +501,7 @@ struct iwl_mvm_tt_mgmt {
+  * @tzone: thermal zone device data
+ */
+ struct iwl_mvm_thermal_device {
+-	s16 temp_trips[IWL_MAX_DTS_TRIPS];
++	struct thermal_trip trips[IWL_MAX_DTS_TRIPS];
+ 	u8 fw_trips_index[IWL_MAX_DTS_TRIPS];
+ 	struct thermal_zone_device *tzone;
+ };
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+index 69cf3a372759..3da4af7bc1ca 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/tt.c
+@@ -573,11 +573,11 @@ int iwl_mvm_send_temp_report_ths_cmd(struct iwl_mvm *mvm)
+ 	 * and uncompressed, the FW should get it compressed and sorted
+ 	 */
+ 
+-	/* compress temp_trips to cmd array, remove uninitialized values*/
++	/* compress trips to cmd array, remove uninitialized values*/
+ 	for (i = 0; i < IWL_MAX_DTS_TRIPS; i++) {
+-		if (mvm->tz_device.temp_trips[i] != S16_MIN) {
++		if (mvm->tz_device.trips[i].temperature != INT_MIN) {
+ 			cmd.thresholds[idx++] =
+-				cpu_to_le16(mvm->tz_device.temp_trips[i]);
++				cpu_to_le16((s16)(mvm->tz_device.trips[i].temperature / 1000));
+ 		}
+ 	}
+ 	cmd.num_temps = cpu_to_le32(idx);
+@@ -593,8 +593,8 @@ int iwl_mvm_send_temp_report_ths_cmd(struct iwl_mvm *mvm)
+ 	 */
+ 	for (i = 0; i < idx; i++) {
+ 		for (j = 0; j < IWL_MAX_DTS_TRIPS; j++) {
+-			if (le16_to_cpu(cmd.thresholds[i]) ==
+-				mvm->tz_device.temp_trips[j])
++			if ((int)(le16_to_cpu(cmd.thresholds[i]) * 1000) ==
++			    mvm->tz_device.trips[j].temperature)
+ 				mvm->tz_device.fw_trips_index[i] = j;
+ 		}
+ 	}
+@@ -638,37 +638,12 @@ static int iwl_mvm_tzone_get_temp(struct thermal_zone_device *device,
+ 	return ret;
+ }
+ 
+-static int iwl_mvm_tzone_get_trip_temp(struct thermal_zone_device *device,
+-				       int trip, int *temp)
+-{
+-	struct iwl_mvm *mvm = (struct iwl_mvm *)device->devdata;
+-
+-	if (trip < 0 || trip >= IWL_MAX_DTS_TRIPS)
+-		return -EINVAL;
+-
+-	*temp = mvm->tz_device.temp_trips[trip] * 1000;
+-
+-	return 0;
+-}
+-
+-static int iwl_mvm_tzone_get_trip_type(struct thermal_zone_device *device,
+-				       int trip, enum thermal_trip_type *type)
+-{
+-	if (trip < 0 || trip >= IWL_MAX_DTS_TRIPS)
+-		return -EINVAL;
+-
+-	*type = THERMAL_TRIP_PASSIVE;
+-
+-	return 0;
+-}
+-
+ static int iwl_mvm_tzone_set_trip_temp(struct thermal_zone_device *device,
+ 				       int trip, int temp)
+ {
+ 	struct iwl_mvm *mvm = (struct iwl_mvm *)device->devdata;
+ 	struct iwl_mvm_thermal_device *tzone;
+-	int i, ret;
+-	s16 temperature;
++	int ret;
+ 
+ 	mutex_lock(&mvm->mutex);
+ 
+@@ -678,40 +653,17 @@ static int iwl_mvm_tzone_set_trip_temp(struct thermal_zone_device *device,
+ 		goto out;
+ 	}
+ 
+-	if (trip < 0 || trip >= IWL_MAX_DTS_TRIPS) {
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+ 	if ((temp / 1000) > S16_MAX) {
+ 		ret = -EINVAL;
+ 		goto out;
+ 	}
+ 
+-	temperature = (s16)(temp / 1000);
+ 	tzone = &mvm->tz_device;
+-
+ 	if (!tzone) {
+ 		ret = -EIO;
+ 		goto out;
+ 	}
+ 
+-	/* no updates*/
+-	if (tzone->temp_trips[trip] == temperature) {
+-		ret = 0;
+-		goto out;
+-	}
+-
+-	/* already existing temperature */
+-	for (i = 0; i < IWL_MAX_DTS_TRIPS; i++) {
+-		if (tzone->temp_trips[i] == temperature) {
+-			ret = -EINVAL;
+-			goto out;
+-		}
+-	}
+-
+-	tzone->temp_trips[trip] = temperature;
+-
+ 	ret = iwl_mvm_send_temp_report_ths_cmd(mvm);
+ out:
+ 	mutex_unlock(&mvm->mutex);
+@@ -720,8 +672,6 @@ static int iwl_mvm_tzone_set_trip_temp(struct thermal_zone_device *device,
+ 
+ static  struct thermal_zone_device_ops tzone_ops = {
+ 	.get_temp = iwl_mvm_tzone_get_temp,
+-	.get_trip_temp = iwl_mvm_tzone_get_trip_temp,
+-	.get_trip_type = iwl_mvm_tzone_get_trip_type,
+ 	.set_trip_temp = iwl_mvm_tzone_set_trip_temp,
+ };
+ 
+@@ -743,7 +693,8 @@ static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
+ 	BUILD_BUG_ON(ARRAY_SIZE(name) >= THERMAL_NAME_LENGTH);
+ 
+ 	sprintf(name, "iwlwifi_%u", atomic_inc_return(&counter) & 0xFF);
+-	mvm->tz_device.tzone = thermal_zone_device_register(name,
++	mvm->tz_device.tzone = thermal_zone_device_register_with_trips(name,
++							mvm->tz_device.trips,    
+ 							IWL_MAX_DTS_TRIPS,
+ 							IWL_WRITABLE_TRIPS_MSK,
+ 							mvm, &tzone_ops,
+@@ -766,8 +717,10 @@ static void iwl_mvm_thermal_zone_register(struct iwl_mvm *mvm)
+ 	/* 0 is a valid temperature,
+ 	 * so initialize the array with S16_MIN which invalid temperature
+ 	 */
+-	for (i = 0 ; i < IWL_MAX_DTS_TRIPS; i++)
+-		mvm->tz_device.temp_trips[i] = S16_MIN;
++	for (i = 0 ; i < IWL_MAX_DTS_TRIPS; i++) {
++		mvm->tz_device.trips[i].temperature = INT_MIN;
++		mvm->tz_device.trips[i].type = THERMAL_TRIP_PASSIVE;
++	}
+ }
+ 
+ static int iwl_mvm_tcool_get_max_state(struct thermal_cooling_device *cdev,
+-- 
+2.34.1
 
->=20
-> Thanks,
-> Peng.
-
-Best regards,
-Marcus Folkesson
-
---zogtDrRbthaXzIxw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAEBCAAdFiEEBVGi6LZstU1kwSxliIBOb1ldUjIFAmNJD58ACgkQiIBOb1ld
-UjIi9w/+OPV3O8sggMQbdOEJXZNCBSIxdf5ni+OQ2LXoP8vQ9kLmnpc3PCSGJ+Mn
-erLM6iQriIGkONfbRrsXvX3nfejt1md3ouu9q0BMRt8XtOs3rVTcGa9H3WlhzgO5
-SOg+Cc0MMcDeOqjlQVs6uc5H8PyWEAEnC88WospNVMB1NQqFrt9hf8aJ+otoZwoK
-DKqgL0EiBCc8WXlDV6ab4wABglaLESH1SMr6n7+RQieHW9faNgg35OOUEwk0KV1t
-F25x9iOEUnvQzMSV9NXbtAQYgpwW75o0gUWuu+JYU3kNkXe4jXvuYGfy0VIz/Qhs
-VJ8r20U3FHOBinkODdU8UE9u6SV2dlq4LbYOmGGg2/v3kpqzeLU/pcIypx/3uUs6
-ivQbo/O1Y10ZFLGSgwiqrcKLlvTaNS6FWnNgYFmQZxi3RgBsemsJ62zW0JfZwlwt
-KQOhIl+wKjrKn2BHvBCj/k+9TQ0WMeKjx3Y5kEhamFUNDv+qr1rK9+9gDhPc/AiY
-Qs5YPgccFtqnDhlUkApierjryEjb0QNTEBDJpog5LWRiph7k3Z+RGE5XokuV4c6L
-1eNjNltDnJqOdkNc6HbUn67qmnFzYKEknCu/Hun5cpq7ma1NGBpSkmyoyYMFE/MC
-9OBiu3Ecp99NkR4xDk1ldFZzhpHuxkx0KLElKP32Lx+EyP1d0TU=
-=htvi
------END PGP SIGNATURE-----
-
---zogtDrRbthaXzIxw--
