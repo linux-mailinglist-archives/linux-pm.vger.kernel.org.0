@@ -2,257 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE8236007DF
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 09:41:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFDAA60084C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 10:05:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiJQHlX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Oct 2022 03:41:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S230091AbiJQIFQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Oct 2022 04:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbiJQHlV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 03:41:21 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2056.outbound.protection.outlook.com [40.107.93.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E670620F75;
-        Mon, 17 Oct 2022 00:41:17 -0700 (PDT)
+        with ESMTP id S229911AbiJQIFO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 04:05:14 -0400
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2052.outbound.protection.outlook.com [40.107.103.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC42E57893;
+        Mon, 17 Oct 2022 01:05:12 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V1Dze4QjSIlBCcJOyedFMAX3vCpdn6IIWeGw8k5eJGx+zAGgtHPMef2qlQihEafGVUpJEKMrwRx3QSiv0LqkuTBqm7fKePweRD1OMFU493tQL2qlPv7y78Ii+M8iPonSlaT8bxQ6VNJrtW0mmjrxrXzwZec7hb8oQmMw2xqGU9uusfAxVnVf4Y48iLntVSOS9PQuCnmDQWXSR+UdP6rFWZrpVJ7PvQ84lB7mbPoXzXPouj9umBIrEFvzXWx/4R2343YI0/3Zs8HKbw5bji4temQ05oEgchkDKJMOICiAs4viCfRDs0d/AdXIP5Cv7w8HbYFj7E0LIaOWb74hnzmIwQ==
+ b=mAXEGzrfqnx8xZdUDHdya0xN+gomtpGL4epkWU7LBOTw7tf6yCMmMoXxc6di5XDqbbasIQyjqJadyF9gKBtnmH50DnOYBch4RjbqkD6F7v/EicJua+gxzuzEka90klST85dR4lklf3TPruJnBn48mx1NNmYF+QAIJ0UMXafQMng6uBWZIKpAy9N1s5lorxPsOGnvr2ur7yUseyz/p+h6kRCPj0p6E/CKQCA/793djCcOJzPyCzFuBCWomptYSiW5jEKcS5t1hPGTUmEXR6O2C8j44eOgEHEz8Nfbfy+RGfQG6XNWA+KaRhK0AX2IaFdgmydjnaDs9BqL1tShQ1wfsg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F4aXs2Ra5Y3uL00uY9hC2NOIX/fRW9XU99LSwgh1CrA=;
- b=Cm6bSiaMfc5iuNQcVX3r6iGg3MuWDXg9t+3pG+Cg3AsE/c9+IrVa9qE4ETROwJAdrW4TK1Rlvc1iX5+FDIqsn+jxTicW9hl3dNkjYMcD2ALnP9yZMfH+Rt9XlvU2A5eQwibj3hLEmg4PBLjb1aLBzwJ4uIGJYhopqKN3WKOXucyIjbMIdcmYROGW5wWSVJd1M+Q4nfW4zIwTx1LPIP92nDqbAd0y6ws8QB84JRDt3qjN3PqCWVAmHnSA9pedCyRjNcG57n4u6u8ofzabKZaz70VfJzQO+KiQQr5+O+W8j33FmN6D4Xin/qmCkfZtmcoNXIlKJoaP6Q+aQ5DPOxPMNg==
+ bh=8/dCa0DHIAQf7wBm1UB7OXdXIEpylM+0wSydOkX647Y=;
+ b=Puf0MesF5ygXeDPcx5+q2uMI90g2mi4R/Fg3kyKZ//hhbxXqLQcdE8luC9dhdLTLoYqeB8sBzEQfNALylEU4kPwbiNnz2vrP3VN5FVan+mqU/BF7eD4BHnHkIHuo1oWhYf0ZqvMA4OnJhkWAoxcZBsI+CfdrvnMVVij+sdfvXOwxycX71GvqO0sARbCK6RMBBX7+G1H3WTlNlsyPlRNr9ZTupYMXRpY1EHto+vrKC9Fx/w5SJupxW8sd4SZMLeF3k2nByq3lUu8qiUllt+Q6m+EnHaMNocEdV3y39ldN8IpkUfn3gYkSm2VQsZI7RB1kEL1pNnWZmw+e/s7b3Se8OA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F4aXs2Ra5Y3uL00uY9hC2NOIX/fRW9XU99LSwgh1CrA=;
- b=UZejZay3xpuvthEtL2KBkFf5CjO1Taa2T7aukOM9aOsFUYA5srITWGSjObU/VrtJH0ifoxo+Ut6VP61pi81SAzulz8iK6068DjcDIP7ofz5vf23qDlU1IWyj6uD06cy2zEwAC3AJO2J5TvezK/9zwPnItQqSvoXqVuwO2yisRcw=
+ bh=8/dCa0DHIAQf7wBm1UB7OXdXIEpylM+0wSydOkX647Y=;
+ b=L14SvQ63H5zvf6sTxE16Ciimrtkd/R58EqnbJODS3jEazcdRYO2Mb7dEDE/2aKLMvw3qVHVToyTJ8R7bY0dqGPeVAWK+1qtqBolIn4qEGq2El2kyh1pmMpt666h3zHMoqs8462OygIGPyLCO9sPlL0S2kdg/jhvsBE0Ecyugsu4=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- SN7PR12MB7324.namprd12.prod.outlook.com (2603:10b6:806:29b::12) with
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM9PR04MB8826.eurprd04.prod.outlook.com (2603:10a6:20b:409::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.29; Mon, 17 Oct
- 2022 07:41:14 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::739e:43cb:7ff0:9b08]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::739e:43cb:7ff0:9b08%7]) with mapi id 15.20.5723.033; Mon, 17 Oct 2022
- 07:41:14 +0000
-Date:   Mon, 17 Oct 2022 15:40:49 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RESEND PATCH V2 0/9] Implement AMD Pstate EPP Driver
-Message-ID: <Y00HAWmU7nOoKXBI@amd.com>
-References: <20221010162248.348141-1-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=gb2312
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221010162248.348141-1-Perry.Yuan@amd.com>
-X-ClientProxiedBy: SI1PR02CA0049.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::18) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.26; Mon, 17 Oct
+ 2022 08:05:09 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a5ff:3d28:4bbc:e1ed]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::a5ff:3d28:4bbc:e1ed%6]) with mapi id 15.20.5723.032; Mon, 17 Oct 2022
+ 08:05:09 +0000
+Message-ID: <f9f56c91-83b0-116d-5e5f-7a2df1e939c7@oss.nxp.com>
+Date:   Mon, 17 Oct 2022 16:04:56 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] thermal: imx8mm_thermal: use GENMASK() when appropriate
+Content-Language: en-US
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Anson Huang <Anson.Huang@nxp.com>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20221014081620.1599511-1-marcus.folkesson@gmail.com>
+From:   Peng Fan <peng.fan@oss.nxp.com>
+In-Reply-To: <20221014081620.1599511-1-marcus.folkesson@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SI1PR02CA0012.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::8) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|SN7PR12MB7324:EE_
-X-MS-Office365-Filtering-Correlation-Id: 51d7acb3-f24c-445e-ecaa-08dab012f82b
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9417:EE_|AM9PR04MB8826:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5727dcf6-61cc-4f98-2aca-08dab0164f04
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: K9KhaW1xgDz4tXH7vPbnbtnCdF1BCdO9y8gCaukRXrdn8eK6nh/5scEDjx9oZbeg2wF30I1LDV3WO/xxb6XoD4Rjn5midFG64MvhkHrYd3p9teXrIdS1TGUxOxfj8mnQlyzn5vYDNpypvwZvuZJA1aXAZlp+HbNqZQ0exYK6gpP+gNjeQocsCfwpwh0nmwm3kBQ6olzWo6X3HFL1Ty5aiUuVk/XXNb7T/GZELHZ7v2144kFzJcyK7Or8qZJKLFthtTCiVC+o5mWt/NpARsUFpM49A17xoKD2lZveRQUnwDn460nf240BEfnjXpwaxjBZZrMGxg//eP249HfZGQBfW62sX2T9NBlYY6pKz4BeFtKN5MkjcFUm8rmPeAvEIoeMjmf5ZVfGbVX8kYkNPv/faAWI3UGH7jnLxk2OTG2a0Szq5RjJTjft5pvr90MZbMIi99S64+1hxdK1ZEmTFINZ8cOjQV2im7y0fXpMlr1c7vFp8+But/NbSdmVdXnHVbvMBZZdfaQ9D7BawOqQf2MVnMRG7LddNEeFBo7zETc+iuSNjik4rOSwXvKRNsh0X77SL5Wlr5xI7+dhh41eA0Qxa2yC/VzsC2CRARVY/onesy863Y3VKwXYIvqALl0OeY6xyK6UtY5qxi1UKnctb7UUzOabZX12MSiwfHNTPx2/Opu6P/mUnabAF+fSoP/OOCrwPCJ/H4Zyjpi7Yea+5VC/H6jNsy97kITu+3p4I/dof/em9goWqUE+MuzpifKOXARX
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(346002)(376002)(136003)(366004)(451199015)(36756003)(38100700002)(8936002)(6862004)(5660300002)(83380400001)(86362001)(26005)(6512007)(54906003)(37006003)(6636002)(6666004)(186003)(2616005)(478600001)(966005)(45080400002)(6486002)(316002)(4326008)(66946007)(66556008)(66476007)(41300700001)(8676002)(6506007)(2906002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: gRQaHO8CQUOdGdTOmwEDw5oqSl+kuOXy/2ST2YtiVQ+IL2vnZLc56C5ra0e480Mbayi9b2yzYPSkjH/dVNEoWQf7pWIhUVB6yy3Ais1bKazM84yU15tU+iHVuaB7Yt9/YLi7d6iaQJsGo+QEKPlNCuY5J9i3ivkCeLPzlO7Za16WwPuTJTWuv3kJcv60ADUxTkCG5+lDoN/1I2vJtMG4CWPuZmhLt+jCBu8TTc9wEIvLc3BRw1zPs4zYbe+KbSxxFJRx9a3HNYblvpn7If+ioIqXiXFk/pmV1i56sGFRdstsQRuNOLZTei4qix5snCIFQyuwFhL++hndvPm5EWkVrdKDGbL0HD4GRKtnxrUb9DA0iqL67AkreHQc19tR5Wk9zVdiZmiIWhwkygCYf99y0fEo3VxnRTXsP9/uYoKXUoJ9D8OpEuo2741qzt2YQT3pFXxOTHuCk/1EjtgCVaUAKY30Snj6BJptw5nADh8pO3Rnfa+UW1aIddssyyUMEmWvmh8Lrw4m5Zs7SXjE+A0l9oCnXtNZosttATrMlbGmUMMDBsnYoTYFd5QxAVU5T+KHmAEIEup5arRC5w0zsP7aMFJl6lrVsTFf/sxqIA4Y+0tLgX6rgTwRbVxt7uY8XYorNIp6cFGjZT5cGDDlj1MxRh3v9bLpq++vHb+dZtjHyhpbRJtV7QS3jDWRw8mY4XE48THGcIvb9Vj2J0ABzcUZD48cfsV3BhhnmoonA/N8jimighz27P3OQ0OWcJzBqOrU07BoVziippQVNCyeSPPoF8WIZo8P+0YyZzklHRtRH+Jvt1XIyNPd+Lg3rHbbUEq/FQdKe94XMMf0QZrAFbTcj4+9Ph4DmuE+PtglpIVuzSI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(39860400002)(346002)(136003)(396003)(451199015)(921005)(86362001)(31696002)(38350700002)(38100700002)(83380400001)(6666004)(66556008)(66476007)(8676002)(316002)(31686004)(110136005)(66946007)(7416002)(4744005)(44832011)(5660300002)(4326008)(186003)(6486002)(2906002)(8936002)(2616005)(6506007)(478600001)(6512007)(26005)(41300700001)(52116002)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?gb2312?B?QmdGLzRGNjFEMjJwSmt5UmJ5SzNaY2JMN2l2bVpOUDIyYU1pU2JWUFliOGpP?=
- =?gb2312?B?cVRrMGpidmhIRjN5R0VaV21XQzVib0pnVHF6QXFEcXJsOXZlNkIrSUIrK1Bt?=
- =?gb2312?B?ZXJvdEl3TmREUjhHRWhaU1lic0h2WkFIM2xpODJEcFQ2aCtndTNWbkM0K3ZH?=
- =?gb2312?B?Vm1kVDdORHNHVDRhdllicWhlV0lqVmtOQXV4OWtFeldqZktucTMyNDNKek1C?=
- =?gb2312?B?RXovWHEyRE5JZ0dkQTM4RUhWOWZKWmtlREFjTzR3dzlzdDBxc3ZwTU12UDF1?=
- =?gb2312?B?ay90dXZBVkUwK2NFZ3NBUldpTVpxWnZLcVI3VG1FRGNzMFM3eGVCZDYxY2ZT?=
- =?gb2312?B?YU0xRmFXU2NwQUw2YThPbW90ZGo3RHFBUU9Id2dtRUY4UHh3Zk40MnRqQkZl?=
- =?gb2312?B?bnB2RTZkRFdBWUhJZlBFYm1WMjRYSWlJQVpSYm5jKzlURldWeEJRNE1URVBx?=
- =?gb2312?B?TE02eHcxR1M2NnVWL1lXa2IvR1grcmxxV2ZzY2dPNTZIMjdtNFQzcS9lNm50?=
- =?gb2312?B?bjBLQmxJemdkV3pKVDVDS0pPUDRmU1JiQjB3WHJKR3gzdXNFQnNkMGNyM3RO?=
- =?gb2312?B?eUhiUGlYQTF4Lzl6bVhsaklSd3kvYU5wRkJZVTMxbnZOSzRIcm5pN093TGpT?=
- =?gb2312?B?V3kxZjRKYVJHak9vejAveEhWNGhKU05WdllIMGduV1AzTmxjTGdtbkpNQUhB?=
- =?gb2312?B?U29oaTVRMHFCaS9lL3JJdmdlNkU4dDNDZXM2S25uQ2VQWWI4MHcyM2trUCtI?=
- =?gb2312?B?WW9tQlVsM1I4RTYrajdERHhLZzU1ME9Ca2l6YkdFM3ROckEyd3h5MWppZDVl?=
- =?gb2312?B?blF0K2RIQVRQakJobndKanhvdDlJV0VJUlBBUTh3Q1c5MVlQODc3QUF5UURq?=
- =?gb2312?B?YzU2M0R4T1Z5MXl1VlhwSTdWYlAxNUJIWjNnenRhamxlNmNwdmVWVEJaVE1J?=
- =?gb2312?B?SlZTVE9zY3Y3dTY0OWFvd0cwM09aMkNJVCtkZWFCeVg3RjFyclUvWXllWEVH?=
- =?gb2312?B?TGNqZENKWDdMUmpmbWFvaGNOaXlZWnNrTks2L1FvM1JEbXcrMU1GYkRzTGlM?=
- =?gb2312?B?a2NSWS9sZmlURFQ1ZHZLUGxTUnEvK1hBMjJKMDBPcGcyYkk4ZVdEY3A0MVJP?=
- =?gb2312?B?SkloWHE3ZnpKdzJydzdzOWtlK0l1bDMzWHBDQUg2c256eU0vWmJQMTVXSkU1?=
- =?gb2312?B?S3lOaTY4eENvdzRJTmRHTWR2T256NWxmdlUvK0plUnVKQmgxSnE2c2t5NUha?=
- =?gb2312?B?WE5TMEZiM21EdVNXNnladHovdlhNa2JweWJQWlh1Z0lRS1RLN29Ya25xSThi?=
- =?gb2312?B?VHdrMjM5KzZweFppcXRvaEo1NVdxc21IbXpLdnNFRHJmT2xDNTZpNyt2NEFx?=
- =?gb2312?B?UC9oaytmVit6Sm5KejZqWEFtVExsYlFseThQWHJhQytmanl0amFHaXZDdGVp?=
- =?gb2312?B?Q244MkRHWkxEaGUvZkpUSS8rdlZVdG5TNUFrZW5aRnkxR1UxeGgzbTk1Y29G?=
- =?gb2312?B?RWJuMW9aUWxqZHdFV3R3TkFacTBlNE9CRFpJaUtiRUQzS3AxR3FyZVVNbnpp?=
- =?gb2312?B?MUdTZmpUaHlPKzhhRXJnSUc2K3Q0MFkwei9xYnZhR295N3Q0eWF4S1BLNDMw?=
- =?gb2312?B?aE15WHJ4SHJUNEtoZ05WS0kvL2xiY21lc05McmIwZGxhMHlkSnNhQTJoblMy?=
- =?gb2312?B?SzVxZ0JzcFNmU2o2SFNPU0N0S1M3M2MxcUVVem1pdEF1M1F6TlQ3Q0pNQmc4?=
- =?gb2312?B?UG5iR1RjY2lTOVJuWDJEeFdGbk4yRXVDcldjZStnS3ZwbUxmN1RJMmNlVkxF?=
- =?gb2312?B?NVp3KzR3VE5nUVVUM2RTamFpVzI0YkdwUkExempJZlg4TkpXL3p6aHR3Mzgv?=
- =?gb2312?B?M0E4LzhTdW1CZ241SGpWdlY0ZzFYMUdBWkFYVmI5NGlBR2Fxa2xaMVdCUWVO?=
- =?gb2312?B?Znhrcm1XTTl4NVVnM1VCNVVkQUVTZzlGM0VRMmUvV2g5WHhnYU1sUlNqSm8x?=
- =?gb2312?B?SDM2V2swZ3JwdUpTS3F3VDVHTmhnYVlQWU1NenZDRWEyNzhlRmFZaHJ0QXpK?=
- =?gb2312?B?ZndxekxCeERnL1VMVmJvNU1iN2VEUnNZRWVWWWFjYTFpU0JxbStCeEJBNGFv?=
- =?gb2312?Q?OjB3sSX7M09l18bLbeGOoK63A?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51d7acb3-f24c-445e-ecaa-08dab012f82b
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlhqL2s2R2dxV2F3dFQ1aVRNTjhoalhNSGZNRG9jd3ZqanRVa1lnZDJEdkhD?=
+ =?utf-8?B?aWIyUzhEK0orbDlzWXgzMzU5VFlIU2w5SmQzUVc4Q2wvTzdaa0lPR2VGV1pI?=
+ =?utf-8?B?OWhTUTZreEhKdDZrbi9vVUU0QjBzYjNLNzJEOU0yOEdldk5JdjhwU05DT0Z4?=
+ =?utf-8?B?NFdWaGRFZXM1RkUwb3g2UmxhaS9Sd01qQUtjcGMvZ2dMNW1UUXRuTXg4Z1Y1?=
+ =?utf-8?B?b1BSS0h6dWJsWnpaeTE2bEU2UlJFQjhIS0Y1WE0yU0QzbFk1Vjl0bWFzS3JM?=
+ =?utf-8?B?SUtaNkJOQWpXTWxNdmR5V1ZuMUoxcURLbml1WVp4Q0hRdXljbW16aGdaY1hl?=
+ =?utf-8?B?QTlLVW51VlpSaTJUc2FZcGZPREZFN0ZVOGF6NnRmWnZPSGVhM1M3dk90eEhG?=
+ =?utf-8?B?Y2UvWExvRWc0ckVNRUg3TzA1bXBTcHFMclJsMHNFTGdyUUwyVUFXdkxzYnFN?=
+ =?utf-8?B?TEEzN0svcnlybU1hM1hXSE1uY0lyditlelNOZEw3dUtTNzlpR0lDZ1ZFNGxw?=
+ =?utf-8?B?d3hIeWZPZWNlWldOQm5MRGFMZkNSa0w4eG9uUGtXMEg5REF3cFFaZG9IcjUz?=
+ =?utf-8?B?ckVWak5GK0xpUnRFWnc4a1NQZG11eEU1dmlvbGZhdTUyOWRYTi9VS3JlV2ht?=
+ =?utf-8?B?QklKbDZFMkRVOXRZV1Q3MUtjMmxWanZyU0xrRm5GaXZvaVFMTGZpbDdRSnRR?=
+ =?utf-8?B?QTdwRUxjY2R0a1VHY0dLVm9iN01MVUlvT1E3LzhJMThhTkZPeWN5azVwK1VX?=
+ =?utf-8?B?VFlaNXlmZ092bWVsdGJWR2t1UnFVdURZM1Z5QWZJWmJxNWQ1NStpN0R3alVs?=
+ =?utf-8?B?TjgxTjVFYmlnUXF5QmZKZkF6ZzNQYWFtN0NLYnhKdll1Ukw0RUJHWTBoTU5r?=
+ =?utf-8?B?VGdUNmFGUFZuSW9MR1lvbUJMRjFzR2VOTHVBNzVEcjV1K0FyekN1UXVFdVJ0?=
+ =?utf-8?B?blFybkdRME9ObGpyTmh3N0p2NWFzZ3grYk9SQ3N6Z2RhT01vSzVITnlJcmNX?=
+ =?utf-8?B?VUpMNVNVcWxxZlpnR2tCR091UEpVc1REMWpjNlVPWHVSK1FBUTVoQU1ua1la?=
+ =?utf-8?B?c25wVWdVWTM1eW50bzcrWUVKVmtHRHFIZDJ2VkduTnduMlZBVk5CQnFrWHFI?=
+ =?utf-8?B?bEYvZXcyZjllMGVxNFZOeXRkSUdENXRKUmRpVTIrR1NwbVVONjlwMnpJRlBW?=
+ =?utf-8?B?U1pkWlg0UnJMN2hUQWhPaDdOTW44ZDErWVN6SlFZdGF3NFZBVUg3OHVtQUZQ?=
+ =?utf-8?B?MW8yc0pDVTBjLy9EeGNXSmJYSXZTMTQzTFUyTGg0dXdwc0JHMUhZQmpqamkw?=
+ =?utf-8?B?V2hUTUdabzVWaEVxMnp2Y0tvaVc0SUlvK1QvQThxNkZSVFJ6bkNXNENoTmsv?=
+ =?utf-8?B?Mm1ZbFE0QjRQMjFnK25seDZsbHR5dFJGb3NMVnJ3VVRLNTNsOHhNc2RKQUNK?=
+ =?utf-8?B?dFNEa0hHSzVUNm8xSXltYjdyTWRaYUxtakQrYy9obU0wWEtSWmtBeUFzVG5j?=
+ =?utf-8?B?KzVaa0JRM1UyVXAyckFJWXVFSDdPZm00d09ZaGh6MGFRb2dvOFhSaytZRUFh?=
+ =?utf-8?B?NmFxVDNiak1mcko0bTBHVzQ1QThyQlEzNHVDSGRHYTJMenZZQ2tndTRScHBR?=
+ =?utf-8?B?OG5kRXlWVndtdnFDUzF6Qmk1djBiMU92eUF6ZHRPUXByOVRkVjVWOVFSSFhG?=
+ =?utf-8?B?YkNsWUpXb0hwMHpVNWlIV2c1QjNiSGZ1OEJqZ3R2RUJneDVBdktNeWRjZVI2?=
+ =?utf-8?B?Y3d3QnVlU2xyZTBacFhDaVVTQ0tDWjd2cko3VVp3Q2JFYTF3c0JURno4b2ZD?=
+ =?utf-8?B?T0F4OTJUUVozdmZBYXB3Q05EbFVBbGErdTJPaHJVSTVWREd5QVdDSXljb00r?=
+ =?utf-8?B?bVEvM0dLaW1zOXZSeTNOL2VOeE9yZmFNYmk5L3pXSUV4b3BqNlZZYURNdkta?=
+ =?utf-8?B?UGd0SDRyT1JYeTMzZlhmc25RZlBwVFEwTkhLVE1NMjZ3Q1dZNzFybGgrRno4?=
+ =?utf-8?B?MEtXa1RGQnBQQS9leG1WK0pCclJKOWl1dkc2TDVUdWoyU2taaUVlTUVCc0Nx?=
+ =?utf-8?B?U3Vic2NlMFhvOVA3ZnVHYk1JYWlDTWZNektHajVuZHNOZVhEcDJuNE9xVHRn?=
+ =?utf-8?Q?V9beALBmQf8me+RTr5406urFr?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5727dcf6-61cc-4f98-2aca-08dab0164f04
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 07:41:14.7280
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2022 08:05:09.2631
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /wpYxu0kzEti5dJF/oD4ZkrwiwjKlVkBnJ5NM2x5PEhhnl4oSMDvGFWQnZ/SiT0aSTcJLcBOFgqzxellq0ZjaQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7324
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: x2IcUuXrhnTrytSKK60LUg0j69Esq27iro5MvPuZRr10TSSR24cEScTEx+r94WLdjtKhg4t8hq3kM1/1JZ2sdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB8826
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 11, 2022 at 12:22:39AM +0800, Yuan, Perry wrote:
-> Hi all,
-> 
-> This patchset implements one new AMD CPU frequency driver
-> "amd-pstate-epp¡± instance for better performance and power control.
-> CPPC has a parameter called energy preference performance (EPP).
-> The EPP is used in the CCLK DPM controller to drive the frequency that a core
-> is going to operate during short periods of activity.
-> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
-> 
-> AMD Energy Performance Preference (EPP) provides a hint to the hardware
-> if software wants to bias toward performance (0x0) or energy efficiency (0xff)
-> The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
-> value. So the EPP hint will impact the CPU cores frequency responsiveness.
-> 
-> We use the RAPL interface with "perf" tool to get the energy data of the package power.
-> Performance Per Watt (PPW) Calculation:
-> 
-> The PPW calculation is referred by below paper:
-> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
-> 
-> Below formula is referred from below spec to measure the PPW:
-> 
-> (F / t) / P = F * t / (t * E) = F / E,
-> 
-> "F" is the number of frames per second.
-> "P" is power measured in watts.
-> "E" is energy measured in joules.
-> 
-> Gitsouce Benchmark Data on ROME Server CPU
-> +------------------------------+------------------------------+------------+------------------+
-> | Kernel Module                | PPW (1 / s * J)              |Energy(J) | PPW Improvement (%)|
-> +==============================+==============================+============+==================+
-> | acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
-> +------------------------------+------------------------------+------------+------------------+
-> | acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
-> +------------------------------+------------------------------+------------+------------------+
-> | acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
-> +------------------------------+------------------------------+------------+------------------+
-> | amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
-> +------------------------------+------------------------------+------------+------------------+
-> | amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
-> +------------------------------+------------------------------+------------+------------------+
-> | amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
-> +------------------------------+------------------------------+------------+------------------+
-> | EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
-> +------------------------------+------------------------------+------------+------------------+
-> | EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
-> +------------------------------+------------------------------+------------+------------------+
-> | EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
-> +------------------------------+------------------------------+------------+------------------+
-> 
-> Tbench Benchmark Data on ROME Server CPU
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)|PPW Improvement(%)|
-> +=============================================+===================+==============+=============+==================+
-> | acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> | amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
-> +---------------------------------------------+-------------------+--------------+-------------+------------------+
-> 
 
-Please add the test cycle number in the average test result.
 
-Since Jasmine has submitted the TBench and Gitsource benchmark test suite
-into amd-pstate-ut test module, I suggest to align the test script and make
-sure everybody can use that script to get the similar accurate performance
-per watt data even on the EPP mode.
-
-https://lore.kernel.org/lkml/20220914061105.1982477-1-li.meng@amd.com/
-
-Thanks,
-Ray
-
-> changes from v1:
->  * rebased to v6.0
->  * drive feedbacks from Mario for the suspend/resume patch
->  * drive feedbacks from Nathan for the EPP support on msr type
->  * fix some typos and code style indent problems
->  * update commit comments for patch 4/7
->  * change the `epp_enabled` module param name to `epp`
->  * set the default epp mode to be false
->  * add testing for the x86_energy_perf_policy utility patchset(will
->    send that utility patchset with another thread)
+On 10/14/2022 4:16 PM, Marcus Folkesson wrote:
+> GENMASK() is preferred to use for bitmasks.
 > 
-> Perry Yuan (9):
->   ACPI: CPPC: Add AMD pstate energy performance preference cppc control
->   cpufreq: amd_pstate: add module parameter to load amd pstate EPP
->     driver
->   cpufreq: cpufreq: export cpufreq cpu release and acquire
->   x86/msr: Add the MSR definition for AMD CPPC boost state
->   Documentation: amd-pstate: add EPP profiles introduction
->   cpufreq: amd_pstate: add AMD pstate EPP support for shared memory type
->     processor
->   cpufreq: amd_pstate: add AMD Pstate EPP support for the MSR based
->     processors
->   cpufreq: amd_pstate: implement amd pstate cpu online and offline
->     callback
->   cpufreq: amd-pstate: implement suspend and resume callbacks
+> Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> ---
+>   drivers/thermal/imx8mm_thermal.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->  Documentation/admin-guide/pm/amd-pstate.rst |  19 +
->  arch/x86/include/asm/msr-index.h            |   7 +
->  drivers/acpi/cppc_acpi.c                    | 128 ++-
->  drivers/cpufreq/amd-pstate.c                | 949 +++++++++++++++++++-
->  drivers/cpufreq/cpufreq.c                   |   2 +
->  include/acpi/cppc_acpi.h                    |  17 +
->  6 files changed, 1115 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+> diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+> index c5cd873c6e01..74fc34b88bb0 100644
+> --- a/drivers/thermal/imx8mm_thermal.c
+> +++ b/drivers/thermal/imx8mm_thermal.c
+> @@ -23,8 +23,8 @@
+>   
+>   #define TER_ADC_PD		BIT(30)
+>   #define TER_EN			BIT(31)
+> -#define TRITSR_TEMP0_VAL_MASK	0xff
+> -#define TRITSR_TEMP1_VAL_MASK	0xff0000
+> +#define TRITSR_TEMP0_VAL_MASK	GENMASK(7, 0)
+> +#define TRITSR_TEMP1_VAL_MASK	GENMASK(23, 16)
+>   
+>   #define PROBE_SEL_ALL		GENMASK(31, 30)
+>   
+Reviewed-by: Peng Fan <peng.fan@nxp.com>
