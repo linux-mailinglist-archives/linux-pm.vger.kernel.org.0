@@ -2,98 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7AA5601585
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 19:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C5C60159C
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 19:44:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiJQRij (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Oct 2022 13:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
+        id S230423AbiJQRoK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Oct 2022 13:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiJQRih (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 13:38:37 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC40072854;
-        Mon, 17 Oct 2022 10:38:35 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id m6so7098660qkm.4;
-        Mon, 17 Oct 2022 10:38:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+EuDinjXnRNJMh10ykEex11JG7grFmZlx9zMYOtc2Uk=;
-        b=BuIuxBXrcg3PqxdCZ23OrmKAXTeEDOFbetfZUNHY8dUFxTOIaFjCZn9o6ARWXBL+O1
-         6Z1uoBjbMX9dL6+CS6u8WPIQgrEd4fKVtxCt1u2qP5PkRmaQAdWPNhR3oJ2Bg9+8DMTS
-         htcz2wM3iQJTKKvAEzYUo3N+vRRjg6SlbLZdzlYSUVEtAbA58wjg13+605sOV+L0A9Yv
-         HDB/jEHK3I4RAlYKsI2efd3ge/AOAdpm4t4zWT5xw5skn8uuvBAKBVhQz2nHm45lQUFx
-         N2qqN5udrs4ADbk2Bm1mH7qD2536qjCsq65BNEENbQ7WROAoTaU/AruQbnr8Pushkvj9
-         oS5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+EuDinjXnRNJMh10ykEex11JG7grFmZlx9zMYOtc2Uk=;
-        b=pspK8FGz+HKGVvecVapxlz6Jeo8I64iKQnu0elocGV0ZDBeUjl7JRKMVlffLT3/t/F
-         uFarjfezi+BL1S9SGuaZMIqheq7kBJY3TDFUc2Ayo9bTrjzDNnrY7lbDWGli3UbDmKQ4
-         me0hsWGkvC10CAopTbqoRZ1kRfXWlX745pTt1px7/7NikF/carQdWNDvNxvKs4yve3bh
-         1TV89s7fC2+RyvHqxFGcL6ndPBbfwPJr8MOADx5B8hiz0BcXBtLw8FQ6fvcAmVJpQ/T+
-         PMEWzBklhB5MGgTFrUBlbpVXK/QowsNxLmgxKbt9jkyaggNxAWuwrBSyV+adXCY3UVVZ
-         qbNQ==
-X-Gm-Message-State: ACrzQf2w8U3PI6VVvUXv2LrLvb4lcG8VRV75y31WmmepARFtj7Lc8bBS
-        i2MwUCOTKUz5xh04CxmJftZZtbrgX4Q=
-X-Google-Smtp-Source: AMsMyM6cfZij01FZn4saN9n2ujPUnz2PuwHcNg3pvT0WmCiQ22sL8HuxzDE6UJPByBnLqathBsp+rA==
-X-Received: by 2002:a05:620a:4546:b0:6ee:bf43:a8f4 with SMTP id u6-20020a05620a454600b006eebf43a8f4mr8727794qkp.673.1666028314663;
-        Mon, 17 Oct 2022 10:38:34 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bk18-20020a05620a1a1200b006ec771d8f89sm248271qkb.112.2022.10.17.10.38.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 10:38:33 -0700 (PDT)
-Message-ID: <807d12c6-c467-d183-6ee6-675465033e86@gmail.com>
-Date:   Mon, 17 Oct 2022 10:38:25 -0700
+        with ESMTP id S229762AbiJQRoI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 13:44:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B7BC73913;
+        Mon, 17 Oct 2022 10:43:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DCD42611EC;
+        Mon, 17 Oct 2022 17:43:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E83FC433D7;
+        Mon, 17 Oct 2022 17:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666028634;
+        bh=mlm9IawCUv6HCW+CtDSEE4DUxF4ycNCkp5t/60ov5ks=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=rH6gqJ7gGnfHcA9f4RJyFi6GUm6w35nBRIbgq6Z59k3kPJWB/wacn25YApmKmSAtM
+         8i1NMsjU2TifnnkwPZ00/lt4UVfn4mDfFt+mlSKZN5iiXKlIx5OhkCuXBP0H/uB75s
+         W/q83Cet8180jYfhiH1dDdmNfwE/LIKOb+du7H/Eq/4iXl3STcK75Xk2b0H1qVGGqv
+         fW6tgFvKZeegeEbQcHwGxIyTFVKn2B3pQt7eVAT4Mh0qgdLtJErV5+d9CKvqU3oBLc
+         oxxfS2VreNkzuzAH9/78EuYXOO040WwQ+YkHULYILrt3mDbCF8d5y6e9hDCCAFMDtk
+         aYOfiOnxnCwoQ==
+Date:   Mon, 17 Oct 2022 18:44:19 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, lee.jones@linaro.org, sre@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org, lars@metafoo.de,
+        andy.shevchenko@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+        michael@walle.cc, samuel@sholland.org, linux-iio@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/13] Add support for AXP192 PMIC
+Message-ID: <20221017184419.62d365c1@jic23-huawei>
+In-Reply-To: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for
- broadcom
-Content-Language: en-US
-To:     Palmer Dabbelt <palmer@rivosinc.com>, william.zhang@broadcom.com,
-        anand.gore@broadcom.com, kursad.oney@broadcom.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        rjui@broadcom.com, sbranden@broadcom.com, rafal@milecki.pl,
-        linux-pm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>
-References: <20221013214639.31074-1-palmer@rivosinc.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221013214639.31074-1-palmer@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/13/22 14:46, Palmer Dabbelt wrote:
-> Github deprecated the git:// links about a year ago, so let's move to
-> the https:// URLs instead.
-> 
-> Reported-by: Conor Dooley <conor.dooley@microchip.com>
-> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
-> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> ---
-> I've split these up by github username so folks can take them
-> independently, as some of these repos have been renamed at github and
-> thus need more than just a sed to fix them.
+On Mon, 17 Oct 2022 00:43:22 +0100
+Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-Applied thanks, next time  please copy bcm-kernel-feedback-list such 
-that patches land in our internal patchwork instance and they are easier 
-to pick up.
--- 
-Florian
+> This series adds support for the AXP192 PMIC to the AXP20x MFD driver
+> framework, including support for regulators, ADCs, and AC/USB/battery
+> power supplies.
+> 
+> v6 is a resend of v5 from July -- the patches haven't changed at all
+> but I've rebased them on the latest git master branch.
+
+Hi Aidan,
+
+Lee has recently expressed that he keen to take as much of these sorts
+of series as possible via the various subsystem trees.
+
+As such, it is useful to call out in the cover letter of such a series
+if this can be done.  For example, patch 9 (last IIO one) can't be
+applied without defines in patch 6 (I think).  Thus I'm assuming Lee
+will do an immutable branch with at least those patches on it.
+
+Perhaps worth expressing if that is also the case for the power
+and regulator subsystem patches?
+
+Thanks,
+
+Jonathan
+
+
+> 
+> Aidan MacDonald (13):
+>   dt-bindings: mfd: add bindings for AXP192 MFD device
+>   dt-bindings: iio: adc: axp209: Add AXP192 compatible
+>   dt-bindings: power: supply: axp20x: Add AXP192 compatible
+>   dt-bindings: power: axp20x-battery: Add AXP192 compatible
+>   mfd: axp20x: Add support for AXP192
+>   regulator: axp20x: Add support for AXP192
+>   iio: adc: axp20x_adc: Minor code cleanups
+>   iio: adc: axp20x_adc: Replace adc_en2 flag with adc_en2_mask field
+>   iio: adc: axp20x_adc: Add support for AXP192
+>   power: supply: axp20x_usb_power: Add support for AXP192
+>   power: axp20x_battery: Add constant charge current table
+>   power: axp20x_battery: Support battery status without fuel gauge
+>   power: axp20x_battery: Add support for AXP192
+> 
+>  .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
+>  .../bindings/mfd/x-powers,axp152.yaml         |   1 +
+>  .../x-powers,axp20x-battery-power-supply.yaml |   1 +
+>  .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
+>  drivers/iio/adc/axp20x_adc.c                  | 356 ++++++++++++++++--
+>  drivers/mfd/axp20x-i2c.c                      |   2 +
+>  drivers/mfd/axp20x.c                          | 141 +++++++
+>  drivers/power/supply/axp20x_battery.c         | 142 ++++++-
+>  drivers/power/supply/axp20x_usb_power.c       |  84 ++++-
+>  drivers/regulator/axp20x-regulator.c          | 100 ++++-
+>  include/linux/mfd/axp20x.h                    |  84 +++++
+>  11 files changed, 856 insertions(+), 74 deletions(-)
+> 
+
