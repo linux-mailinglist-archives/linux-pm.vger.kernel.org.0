@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35436600BDF
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 12:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6E88600BE2
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 12:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiJQKDP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Oct 2022 06:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S231556AbiJQKDY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Oct 2022 06:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiJQKDO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 06:03:14 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF8885E64F
-        for <linux-pm@vger.kernel.org>; Mon, 17 Oct 2022 03:03:12 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id f23so10311231plr.6
-        for <linux-pm@vger.kernel.org>; Mon, 17 Oct 2022 03:03:12 -0700 (PDT)
+        with ESMTP id S231465AbiJQKDR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 06:03:17 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68D95E66A
+        for <linux-pm@vger.kernel.org>; Mon, 17 Oct 2022 03:03:15 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d10so10623435pfh.6
+        for <linux-pm@vger.kernel.org>; Mon, 17 Oct 2022 03:03:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=X4ECXKPxuSi9FlL0YX5UZrOOqChEolMljlUJMvD0OCY=;
-        b=gZ22LJbRBZC4XEHPVSBT0gTQZjF75VJEv8GWn/tPZ9gJLtkTAS93CnERDsy63KhCpO
-         fqBlcTAGClPK4PI38DBjKM2ZdTRD6g/ara7Joxr8IHwX2ayDURN0t8ozoiZLWgrDWYVu
-         Cd+gjDR+XnxcqFrLfLYaIcwNvPhOlixq0wtBd2N+3HZVg8P5jVz3h3jnw8gHkJMhSp0h
-         5ZwiR6H1tgEULsQKRFkvvQhcaJNaPI01LsAfrfNn/eIZooJauY3MDG4e9nJON5Yu8TpU
-         ztE6G/mggqW0FOOLMwCD2pHmaXEwmzk+ZNdxXryzeQYzWVWAmWmFsNQOhvPfJm7sD637
-         xTOA==
+        bh=8UaAzKyNq9nnRse/+cCAjXKMYZQLGLVwCydbfKuvY54=;
+        b=VrvnK+3ZAIN1ufgfpHItfJNANC6LgdnWBLQHxtEuLb3d/QY/jQsOlmkAnaHrqZQFdp
+         T01CIpbq34QT1DYa9+H26ykD1hvXuToNZiWwhoPn2R6uffGCuCmxeNNQ2NieeJeTgFnG
+         W9J6HeuQjI8eLQFBZ5S+JewdaeEBnrIi4Fh7B4G3eOgSVp1bnWq5656oMR6gfXKTJ7+U
+         eaBGZMoQbTPvfFTvLQWaP0RxBrfZ5W0Gjv0kdgGa7iC+3Lav++wgaHN0qYbzvrpLz1Os
+         3vfvzVbfLwsg5qiZh50Mo3cG9qL6MtaFFTctAoq16PlUNgVnDw2e/QvnTSMnvefhwYsn
+         R7xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=X4ECXKPxuSi9FlL0YX5UZrOOqChEolMljlUJMvD0OCY=;
-        b=FeCLw0+SGX0nvxP39ealrR1V1XWBYwTKIVMOadh9m39Mdm2d/IgZ6SSFGSW09p6t1z
-         yyD4uRjJDwNcfogpL9kz3MH71P2VCtOg9TdAgaI+WN/nxkEfbDjT3eUnDO2WSK67j0x5
-         OD4eSo3vThyQBL3m2/NCIuqtKk1hhYMr45ADNRBKGV/ETMY1rlTY+g7GeCLCfa/saM1i
-         KIqNU2uT+FnytPsj/zHn7DCEDMPgZ5HLZICYj0eHa0m4gcD/HxDn5f8KzHSl2Sk/s8u7
-         v3eVb69gBTta/XLW4GWHR3M0utmbdRzO86hUMzMumgGhjJEaYQPsWMSJuqqzP3HC8FbH
-         SPDA==
-X-Gm-Message-State: ACrzQf1cKl7ie9hMXVVecV6yLp5+QH7dVX35Pys8U7d+FhCaY8jmVff+
-        sliWH1NuQQo74/4WVgytVWaHBg==
-X-Google-Smtp-Source: AMsMyM4NhfHDJD2hLKC5bLKj3iKelofKvfP4UvUFgTg/zAYNeFiXVx3/ooXoYnq1Agb9vtYfh1gJuw==
-X-Received: by 2002:a17:90b:4c0b:b0:20d:8572:ab27 with SMTP id na11-20020a17090b4c0b00b0020d8572ab27mr12633543pjb.193.1666000992367;
-        Mon, 17 Oct 2022 03:03:12 -0700 (PDT)
+        bh=8UaAzKyNq9nnRse/+cCAjXKMYZQLGLVwCydbfKuvY54=;
+        b=NvAbMmRBK7hHXgBtuD15JRvuUJwchxipIXhlUE6xtHsxeSpykn1FYUh/K7D2VHAV++
+         YV1x9PVe4LuxrcDX4MTLmDXrCO7Glk4TvLrxJA1V3XnNmporeiNjTLeOQgzMu8YyzAle
+         Xc/QWyoDBNQJmitBU4rc+HT7PRFpUzY/OKj+wezCtkxUVaWZpCM6zw5t3A3mC2lVz66n
+         70K1ypWtZUgVaGEnUs//4KM+/RG0sATYrQiA5KE72BOYtEDQvWuEVoWiMAUA3NvFqZif
+         3WEIqRGHQ8j7jEJm0Ys2/sA9INls/Jnv5r1rZY4Cywe5wvjEWHdUtSS+71EZt6yCzwOH
+         r4/g==
+X-Gm-Message-State: ACrzQf2FD/7EvkInJxe26Lx/d9IkqC2v3wYbeMT+aqMzIwBwx4Mq3Cf5
+        27oa1qE8/JL/oWpNFa9iK/F5Cg==
+X-Google-Smtp-Source: AMsMyM6qZa2HnPhyKKOx8pZXzS74QOIoLa7aYXY+beudzq7U2papGMTBBB3rJGRMsd+XaW/aDQBZ/Q==
+X-Received: by 2002:a05:6a00:15c2:b0:565:bc96:1c75 with SMTP id o2-20020a056a0015c200b00565bc961c75mr11715950pfu.23.1666000995277;
+        Mon, 17 Oct 2022 03:03:15 -0700 (PDT)
 Received: from localhost ([122.172.86.128])
-        by smtp.gmail.com with ESMTPSA id g8-20020a631108000000b00462612c2699sm5864667pgl.86.2022.10.17.03.03.11
+        by smtp.gmail.com with ESMTPSA id i18-20020a056a00005200b00561b02e3118sm6662744pfk.106.2022.10.17.03.03.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Oct 2022 03:03:11 -0700 (PDT)
+        Mon, 17 Oct 2022 03:03:14 -0700 (PDT)
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -58,9 +58,9 @@ Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
         Vincent Guittot <vincent.guittot@linaro.org>,
         Dan Carpenter <dan.carpenter@oracle.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] thermal: Validate new state in cur_state_store()
-Date:   Mon, 17 Oct 2022 15:33:01 +0530
-Message-Id: <100e1f814d0d3e20a291e4bfdddabc2c0a4a12f0.1666000867.git.viresh.kumar@linaro.org>
+Subject: [PATCH 2/2] thermal: sysfs: Reuse cdev->max_state
+Date:   Mon, 17 Oct 2022 15:33:02 +0530
+Message-Id: <56d3dcfd92206eea6164ed26e40ae307c5c5219d.1666000867.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1666000867.git.viresh.kumar@linaro.org>
 References: <cover.1666000867.git.viresh.kumar@linaro.org>
@@ -68,134 +68,125 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In cur_state_store(), the new state of the cooling device is received
-from user-space and is not validated by the thermal core but the same is
-left for the individual drivers to take care of. Apart from duplicating
-the code it leaves possibility for introducing bugs where a driver may
-not do it right.
+Now that the cooling device structure stores the max_state value, reuse
+it and drop max_states from struct cooling_dev_stats.
 
-Lets make the thermal core check the new state itself and store the max
-value in the cooling device structure.
-
-Link: https://lore.kernel.org/all/Y0ltRJRjO7AkawvE@kili/
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/thermal/gov_fair_share.c |  6 +-----
- drivers/thermal/thermal_core.c   | 15 +++++++--------
- drivers/thermal/thermal_sysfs.c  | 11 +++++------
- include/linux/thermal.h          |  1 +
- 4 files changed, 14 insertions(+), 19 deletions(-)
+ drivers/thermal/thermal_sysfs.c | 26 ++++++++++----------------
+ 1 file changed, 10 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
-index a4ee4661e9cc..1cfeac16e7ac 100644
---- a/drivers/thermal/gov_fair_share.c
-+++ b/drivers/thermal/gov_fair_share.c
-@@ -49,11 +49,7 @@ static int get_trip_level(struct thermal_zone_device *tz)
- static long get_target_state(struct thermal_zone_device *tz,
- 		struct thermal_cooling_device *cdev, int percentage, int level)
- {
--	unsigned long max_state;
--
--	cdev->ops->get_max_state(cdev, &max_state);
--
--	return (long)(percentage * level * max_state) / (100 * tz->num_trips);
-+	return (long)(percentage * level * cdev->max_state) / (100 * tz->num_trips);
- }
- 
- /**
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 117eeaf7dd24..08de59369e94 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -603,8 +603,7 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
- 	struct thermal_instance *pos;
- 	struct thermal_zone_device *pos1;
- 	struct thermal_cooling_device *pos2;
--	unsigned long max_state;
--	int result, ret;
-+	int result;
- 
- 	if (trip >= tz->num_trips || trip < 0)
- 		return -EINVAL;
-@@ -621,15 +620,11 @@ int thermal_zone_bind_cooling_device(struct thermal_zone_device *tz,
- 	if (tz != pos1 || cdev != pos2)
- 		return -EINVAL;
- 
--	ret = cdev->ops->get_max_state(cdev, &max_state);
--	if (ret)
--		return ret;
--
- 	/* lower default 0, upper default max_state */
- 	lower = lower == THERMAL_NO_LIMIT ? 0 : lower;
--	upper = upper == THERMAL_NO_LIMIT ? max_state : upper;
-+	upper = upper == THERMAL_NO_LIMIT ? cdev->max_state : upper;
- 
--	if (lower > upper || upper > max_state)
-+	if (lower > upper || upper > cdev->max_state)
- 		return -EINVAL;
- 
- 	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-@@ -900,6 +895,10 @@ __thermal_cooling_device_register(struct device_node *np,
- 	cdev->updated = false;
- 	cdev->device.class = &thermal_class;
- 	cdev->devdata = devdata;
-+
-+	if (cdev->ops->get_max_state(cdev, &cdev->max_state))
-+		goto out_kfree_type;
-+
- 	thermal_cooling_device_setup_sysfs(cdev);
- 	ret = device_register(&cdev->device);
- 	if (ret)
 diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index ec495c7dff03..bd7596125461 100644
+index bd7596125461..febf9e76c440 100644
 --- a/drivers/thermal/thermal_sysfs.c
 +++ b/drivers/thermal/thermal_sysfs.c
-@@ -589,13 +589,8 @@ static ssize_t max_state_show(struct device *dev, struct device_attribute *attr,
- 			      char *buf)
+@@ -661,7 +661,6 @@ struct cooling_dev_stats {
+ 	spinlock_t lock;
+ 	unsigned int total_trans;
+ 	unsigned long state;
+-	unsigned long max_states;
+ 	ktime_t last_time;
+ 	ktime_t *time_in_state;
+ 	unsigned int *trans_table;
+@@ -691,7 +690,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+ 		goto unlock;
+ 
+ 	update_time_in_state(stats);
+-	stats->trans_table[stats->state * stats->max_states + new_state]++;
++	stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
+ 	stats->state = new_state;
+ 	stats->total_trans++;
+ 
+@@ -725,7 +724,7 @@ time_in_state_ms_show(struct device *dev, struct device_attribute *attr,
+ 	spin_lock(&stats->lock);
+ 	update_time_in_state(stats);
+ 
+-	for (i = 0; i < stats->max_states; i++) {
++	for (i = 0; i <= cdev->max_state; i++) {
+ 		len += sprintf(buf + len, "state%u\t%llu\n", i,
+ 			       ktime_to_ms(stats->time_in_state[i]));
+ 	}
+@@ -740,7 +739,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
  {
  	struct thermal_cooling_device *cdev = to_cooling_device(dev);
--	unsigned long state;
--	int ret;
+ 	struct cooling_dev_stats *stats = cdev->stats;
+-	int i, states = stats->max_states;
++	int i, states = cdev->max_state + 1;
  
--	ret = cdev->ops->get_max_state(cdev, &state);
--	if (ret)
--		return ret;
--	return sprintf(buf, "%ld\n", state);
-+	return sprintf(buf, "%ld\n", cdev->max_state);
- }
+ 	spin_lock(&stats->lock);
  
- static ssize_t cur_state_show(struct device *dev, struct device_attribute *attr,
-@@ -625,6 +620,10 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
- 	if ((long)state < 0)
- 		return -EINVAL;
+@@ -749,7 +748,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
+ 	memset(stats->trans_table, 0,
+ 	       states * states * sizeof(*stats->trans_table));
  
-+	/* Requested state should be less than max_state + 1 */
-+	if (state > cdev->max_state)
-+		return -EINVAL;
-+
- 	mutex_lock(&cdev->lock);
+-	for (i = 0; i < stats->max_states; i++)
++	for (i = 0; i < states; i++)
+ 		stats->time_in_state[i] = ktime_set(0, 0);
  
- 	result = cdev->ops->set_cur_state(cdev, state);
-diff --git a/include/linux/thermal.h b/include/linux/thermal.h
-index 9ecc128944a1..5e093602e8fc 100644
---- a/include/linux/thermal.h
-+++ b/include/linux/thermal.h
-@@ -100,6 +100,7 @@ struct thermal_cooling_device_ops {
- struct thermal_cooling_device {
- 	int id;
- 	char *type;
-+	unsigned long max_state;
- 	struct device device;
- 	struct device_node *np;
- 	void *devdata;
+ 	spin_unlock(&stats->lock);
+@@ -767,7 +766,7 @@ static ssize_t trans_table_show(struct device *dev,
+ 
+ 	len += snprintf(buf + len, PAGE_SIZE - len, " From  :    To\n");
+ 	len += snprintf(buf + len, PAGE_SIZE - len, "       : ");
+-	for (i = 0; i < stats->max_states; i++) {
++	for (i = 0; i <= cdev->max_state; i++) {
+ 		if (len >= PAGE_SIZE)
+ 			break;
+ 		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u  ", i);
+@@ -777,17 +776,17 @@ static ssize_t trans_table_show(struct device *dev,
+ 
+ 	len += snprintf(buf + len, PAGE_SIZE - len, "\n");
+ 
+-	for (i = 0; i < stats->max_states; i++) {
++	for (i = 0; i <= cdev->max_state; i++) {
+ 		if (len >= PAGE_SIZE)
+ 			break;
+ 
+ 		len += snprintf(buf + len, PAGE_SIZE - len, "state%2u:", i);
+ 
+-		for (j = 0; j < stats->max_states; j++) {
++		for (j = 0; j <= cdev->max_state; j++) {
+ 			if (len >= PAGE_SIZE)
+ 				break;
+ 			len += snprintf(buf + len, PAGE_SIZE - len, "%8u ",
+-				stats->trans_table[i * stats->max_states + j]);
++				stats->trans_table[i * (cdev->max_state + 1) + j]);
+ 		}
+ 		if (len >= PAGE_SIZE)
+ 			break;
+@@ -823,14 +822,10 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+ {
+ 	const struct attribute_group *stats_attr_group = NULL;
+ 	struct cooling_dev_stats *stats;
+-	unsigned long states;
++	/* Total number of states is highest state + 1 */
++	unsigned long states = cdev->max_state + 1;
+ 	int var;
+ 
+-	if (cdev->ops->get_max_state(cdev, &states))
+-		goto out;
+-
+-	states++; /* Total number of states is highest state + 1 */
+-
+ 	var = sizeof(*stats);
+ 	var += sizeof(*stats->time_in_state) * states;
+ 	var += sizeof(*stats->trans_table) * states * states;
+@@ -843,7 +838,6 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+ 	stats->trans_table = (unsigned int *)(stats->time_in_state + states);
+ 	cdev->stats = stats;
+ 	stats->last_time = ktime_get();
+-	stats->max_states = states;
+ 
+ 	spin_lock_init(&stats->lock);
+ 
 -- 
 2.31.1.272.g89b43f80a514
 
