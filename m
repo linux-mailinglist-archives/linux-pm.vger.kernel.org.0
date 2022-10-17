@@ -2,126 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAC06016CD
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 21:00:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8C06016D6
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 21:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiJQTAk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Oct 2022 15:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S230154AbiJQTBv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Oct 2022 15:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiJQTAj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 15:00:39 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7018774375;
-        Mon, 17 Oct 2022 12:00:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666033237; x=1697569237;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=UYwqn8lfrfS9iaOUz7zhvOyKhScwE6zhaTGCrMNhQhE=;
-  b=dRAcy++e/e9kAQUmz+nJNsYWOgWffjzwEI3eG92ttXiHGC5giSamTder
-   QRNLT8HMEvaoZy690ul7v82MbDCNRwWMd+26tcPY89hagMxm0Q8ft2Rze
-   s15o1jaQfzr9xmrDkiNM88qd5J0Z7O45Hr/MoODujjxF3Ep0lKNYOU36H
-   PKjmnY1BoxxAwU4i8+QwGD/JUNJDd/BFC3VVB/uoCGGa08u2hbG0Wh9Zp
-   tJulN+f8vZ9hD/Qg3KMV3g8Eql6nzH2M+hV5z61qUU56QsrQ1JCTKtWve
-   gRQxyXq7qK5sN52RjEv32c2M4uKTMnGa+tRd9c452k3/ly5GwP2iTGHQS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="332432244"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="332432244"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2022 12:00:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="579483303"
-X-IronPort-AV: E=Sophos;i="5.95,192,1661842800"; 
-   d="scan'208";a="579483303"
-Received: from lkp-server01.sh.intel.com (HELO 8381f64adc98) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 17 Oct 2022 12:00:34 -0700
-Received: from kbuild by 8381f64adc98 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1okVLl-0000oO-3C;
-        Mon, 17 Oct 2022 19:00:33 +0000
-Date:   Tue, 18 Oct 2022 02:59:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- da137aba6fe2ba43809c68e882d41e0a2bb3a774
-Message-ID: <634da62f.Xx2C68NeB/s3GHYl%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229942AbiJQTBu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 15:01:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2712733CA;
+        Mon, 17 Oct 2022 12:01:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9684FB8129F;
+        Mon, 17 Oct 2022 19:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24629C433C1;
+        Mon, 17 Oct 2022 19:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666033306;
+        bh=PSZUuFivGvt+IE+bPLkNcfzVVIH07xVNyt++2+Gn45E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BZ9D79IlAMH8eZQvHL0dHGSO+qH7npF2+PzfA1+QJ6AA7nHidCy0aBhfcG1BQ1rBx
+         GVPRbUm5WVij6f4d/iWyXblU7EERT55L9gqIMgI2Nztb6wil65xLh8CBgvsYgemIui
+         KiLHfof3dJ4qu3RbYWdFcrudTRoOq+wTdTvqZcd/1RU22OJ0txqF733xUXZ4M3q/rE
+         nHoQCT6+8VaMV9ePd8HILd8tQ8cNjsrZgynOWtkclYkGHIOpftso5tsJU9MiW7ebia
+         cEGA0XoAUjyYbSre4ySDWGK8x+KX0wt6Kgc2kzNVv9D+ultLrBvK/rh5obPuXkizNP
+         8R77x6LHOZDOQ==
+Date:   Mon, 17 Oct 2022 14:01:43 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Robert Marko <robimarko@gmail.com>
+Cc:     amitk@kernel.org, thara.gopinath@gmail.com, agross@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 2/5] drivers: thermal: tsens: Add support for combined
+ interrupt
+Message-ID: <20221017190143.7fjwrlud6hamu3yr@builder.lan>
+References: <20220818220245.338396-1-robimarko@gmail.com>
+ <20220818220245.338396-2-robimarko@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20220818220245.338396-2-robimarko@gmail.com>
 X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: da137aba6fe2ba43809c68e882d41e0a2bb3a774  Merge branch 'thermal-intel' into bleeding-edge
+On Fri, Aug 19, 2022 at 12:02:42AM +0200, Robert Marko wrote:
+> Despite using tsens v2.3 IP, IPQ8074 and IPQ6018 only have one IRQ for
+> signaling both up/low and critical trips.
+> 
+> Signed-off-by: Robert Marko <robimarko@gmail.com>
+> ---
+> Changes in v7:
+> * Rebase to apply on next-20220818
+> 
+> Changes in v6:
+> * Check critical IRQ handler return, simplify up/low return
+> ---
+>  drivers/thermal/qcom/tsens-8960.c |  1 +
+>  drivers/thermal/qcom/tsens-v0_1.c |  1 +
+>  drivers/thermal/qcom/tsens-v1.c   |  1 +
+>  drivers/thermal/qcom/tsens-v2.c   |  1 +
+>  drivers/thermal/qcom/tsens.c      | 38 ++++++++++++++++++++++++++-----
+>  drivers/thermal/qcom/tsens.h      |  2 ++
+>  6 files changed, 38 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-8960.c b/drivers/thermal/qcom/tsens-8960.c
+> index 67c1748cdf73..ee584e5b07e5 100644
+> --- a/drivers/thermal/qcom/tsens-8960.c
+> +++ b/drivers/thermal/qcom/tsens-8960.c
+> @@ -269,6 +269,7 @@ static const struct tsens_ops ops_8960 = {
+>  static struct tsens_features tsens_8960_feat = {
+>  	.ver_major	= VER_0,
+>  	.crit_int	= 0,
+> +	.combo_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 0,
+>  	.max_sensors	= 11,
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index f136cb350238..6effb822bf3c 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -539,6 +539,7 @@ static int calibrate_9607(struct tsens_priv *priv)
+>  static struct tsens_features tsens_v0_1_feat = {
+>  	.ver_major	= VER_0_1,
+>  	.crit_int	= 0,
+> +	.combo_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 1,
+>  	.max_sensors	= 11,
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 573e261ccca7..a4f561a6e582 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -302,6 +302,7 @@ static int calibrate_8976(struct tsens_priv *priv)
+>  static struct tsens_features tsens_v1_feat = {
+>  	.ver_major	= VER_1_X,
+>  	.crit_int	= 0,
+> +	.combo_int	= 0,
+>  	.adc		= 1,
+>  	.srot_split	= 1,
+>  	.max_sensors	= 11,
+> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
+> index b293ed32174b..129cdb247381 100644
+> --- a/drivers/thermal/qcom/tsens-v2.c
+> +++ b/drivers/thermal/qcom/tsens-v2.c
+> @@ -31,6 +31,7 @@
+>  static struct tsens_features tsens_v2_feat = {
+>  	.ver_major	= VER_2_X,
+>  	.crit_int	= 1,
+> +	.combo_int	= 0,
+>  	.adc		= 0,
+>  	.srot_split	= 1,
+>  	.max_sensors	= 16,
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index b1b10005fb28..816769af8813 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -532,6 +532,27 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +/**
+> + * tsens_combined_irq_thread - Threaded interrupt handler for combined interrupts
 
-elapsed time: 957m
+This should have () after the function name. Perhaps Daniel could add
+that as he picks the patch?
 
-configs tested: 43
-configs skipped: 2
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Regards,
+Bjorn
 
-gcc tested configs:
-arc                               allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-x86_64                              defconfig
-s390                             allyesconfig
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-m68k                             allyesconfig
-arc                  randconfig-r043-20221017
-i386                                defconfig
-i386                             allyesconfig
-powerpc                           allnoconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-i386                 randconfig-a001-20221017
-i386                 randconfig-a002-20221017
-i386                 randconfig-a003-20221017
-i386                 randconfig-a005-20221017
-i386                 randconfig-a004-20221017
-
-clang tested configs:
-hexagon              randconfig-r045-20221017
-hexagon              randconfig-r041-20221017
-riscv                randconfig-r042-20221017
-s390                 randconfig-r044-20221017
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> + * @irq: irq number
+> + * @data: tsens controller private data
+> + *
+> + * Handle the combined interrupt as if it were 2 separate interrupts, so call the
+> + * critical handler first and then the up/low one.
+> + *
+> + * Return: IRQ_HANDLED
+> + */
+> +static irqreturn_t tsens_combined_irq_thread(int irq, void *data)
+> +{
+> +	irqreturn_t ret;
+> +
+> +	ret = tsens_critical_irq_thread(irq, data);
+> +	if (ret != IRQ_HANDLED)
+> +		return ret;
+> +
+> +	return tsens_irq_thread(irq, data);
+> +}
+> +
+>  static int tsens_set_trips(struct thermal_zone_device *tz, int low, int high)
+>  {
+>  	struct tsens_sensor *s = tz->devdata;
+> @@ -1071,13 +1092,18 @@ static int tsens_register(struct tsens_priv *priv)
+>  				   tsens_mC_to_hw(priv->sensor, 0));
+>  	}
+>  
+> -	ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
+> -	if (ret < 0)
+> -		return ret;
+> +	if (priv->feat->combo_int) {
+> +		ret = tsens_register_irq(priv, "combined",
+> +					 tsens_combined_irq_thread);
+> +	} else {
+> +		ret = tsens_register_irq(priv, "uplow", tsens_irq_thread);
+> +		if (ret < 0)
+> +			return ret;
+>  
+> -	if (priv->feat->crit_int)
+> -		ret = tsens_register_irq(priv, "critical",
+> -					 tsens_critical_irq_thread);
+> +		if (priv->feat->crit_int)
+> +			ret = tsens_register_irq(priv, "critical",
+> +						 tsens_critical_irq_thread);
+> +	}
+>  
+>  	return ret;
+>  }
+> diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
+> index ba05c8233356..1678c5e9e60b 100644
+> --- a/drivers/thermal/qcom/tsens.h
+> +++ b/drivers/thermal/qcom/tsens.h
+> @@ -493,6 +493,7 @@ enum regfield_ids {
+>   * struct tsens_features - Features supported by the IP
+>   * @ver_major: Major number of IP version
+>   * @crit_int: does the IP support critical interrupts?
+> + * @combo_int: does the IP use one IRQ for up, low and critical thresholds?
+>   * @adc:      do the sensors only output adc code (instead of temperature)?
+>   * @srot_split: does the IP neatly splits the register space into SROT and TM,
+>   *              with SROT only being available to secure boot firmware?
+> @@ -502,6 +503,7 @@ enum regfield_ids {
+>  struct tsens_features {
+>  	unsigned int ver_major;
+>  	unsigned int crit_int:1;
+> +	unsigned int combo_int:1;
+>  	unsigned int adc:1;
+>  	unsigned int srot_split:1;
+>  	unsigned int has_watchdog:1;
+> -- 
+> 2.37.2
+> 
