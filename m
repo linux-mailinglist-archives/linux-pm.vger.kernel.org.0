@@ -2,89 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6896860046D
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 01:50:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 243D2600533
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 04:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiJPXuD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 16 Oct 2022 19:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45848 "EHLO
+        id S229897AbiJQCWY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 16 Oct 2022 22:22:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiJPXuC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 Oct 2022 19:50:02 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E341CB06;
-        Sun, 16 Oct 2022 16:50:00 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id r13so15999782wrj.11;
-        Sun, 16 Oct 2022 16:50:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=hqOSIJYANytRgjreYBbHhrU6O3a0X+o3akj1sgVCeIg=;
-        b=PglFXOXth5k4R5xVSOxmYKOF0Hlkc1mvgZPlm3QC3dFnfHxmCijpO8b++RsH/WeUj4
-         mgQN+eP1uTn1wR7Kd+1WyoUBuTHXEZoVDZhs8hgfkQiWQY2QSxCp/qDI019pTcJs9Ghw
-         CPwC6TxgMLJ3tjdzSg0Gogg6LwTALMgbSSAVEDjGhWPnB6Fxs2HjJE9Xsp3slsCVqiJ0
-         sZYb2NxewbMIFEtTtD/WEOCbxWXQiZnln/iDSoXtSzMhSC+L8kNNBhlRrwMONFv7ARv3
-         A+ZdtU++tITX4YOr0WIyMlmH3ReuUsg0Pb7THD6f0H3VUeDmdrN4vYicYZ3jEH7BIzv5
-         WSzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hqOSIJYANytRgjreYBbHhrU6O3a0X+o3akj1sgVCeIg=;
-        b=Vrii43qzTgXXGDeIKda9see8VcHMWruDHRMzKClloaFrAcqTjB/9i2jSRQN7v0j/Z/
-         C7T1xorjSCEu8+OAVuFKS4WwhD6m4mqbQtIe8XhkMbicNjr6zvrwz0kCnGujrsLBh6y9
-         HF9u4xWnhNFc7qUoLe9P/QcMa8P/yNPngeS78gEjo2Cjplq1C0k+H8Ft/ZLvENygX48m
-         uu2Rb4fth601sY9WzBGsxK2jh4iuFjKZXT2j9rG5+XtiEVuVBYg2dg9lpae1wZAP2lsS
-         oUpK5AdmqoJ854XmU55Rb+plWgiJTa4+CO5g0TvtYjvAsW19iRwMYioUvJohgRFXLKzt
-         /GrA==
-X-Gm-Message-State: ACrzQf3q/DdFO12BbUQpOF4kFZJU8hQxCDs6uLuoXteNEJOyZslPz8Zb
-        kOitEBKhbA7f+t7DCIEyiOs=
-X-Google-Smtp-Source: AMsMyM7gwYq0L/dGmCChh7k/MqaoK5BVP38VC5+6H41ZEoCwrtqJoRpUc95LAC/AbeRuPp3LfRADSw==
-X-Received: by 2002:a5d:5149:0:b0:22e:8b85:3d7d with SMTP id u9-20020a5d5149000000b0022e8b853d7dmr4664169wrt.55.1665964199395;
-        Sun, 16 Oct 2022 16:49:59 -0700 (PDT)
-Received: from localhost (188.31.4.189.threembb.co.uk. [188.31.4.189])
-        by smtp.gmail.com with ESMTPSA id e14-20020a5d65ce000000b0022abcc1e3cesm7099822wrw.116.2022.10.16.16.49.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Oct 2022 16:49:58 -0700 (PDT)
-References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     jic23@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
-        lee.jones@linaro.org, sre@kernel.org, lgirdwood@gmail.com,
-        broonie@kernel.org
-Cc:     lars@metafoo.de, andy.shevchenko@gmail.com,
-        linus.walleij@linaro.org, brgl@bgdev.pl, michael@walle.cc,
-        samuel@sholland.org, linux-iio@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 00/13] Add support for AXP192 PMIC
-Date:   Mon, 17 Oct 2022 00:48:17 +0100
-In-reply-to: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
-Message-ID: <K1COyeb13LQEOP5ZE6KtxH963IahQXav@localhost>
+        with ESMTP id S230154AbiJQCWY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 16 Oct 2022 22:22:24 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C976744497;
+        Sun, 16 Oct 2022 19:22:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1665973341; x=1697509341;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cWkYhAdLuaSiTRewBbelfEEc6QGMlFnrQcbUtDRBuGc=;
+  b=AJazEuYa79PRnuCFkSZCdpSvJGfGYlKryBQFl4kF9Ohb0nbMQnMNYMrx
+   bRAVk6F6ecMot1MHr1li4WLmbhxuf0C8CmKC3esuWprOfq3YqBdhIF4g1
+   mCK3PzU+Pkp40kGEOd9Y1woId9qSa1UxGR8+DHS+rhn4ZeRKIPU4OHp+G
+   drODCRAoEV6WiPV1puyPM4oE8D3sVk2iiTEd47wSyWhhls/XMzXUsFjn0
+   WbsqKjfSijY3J5c/rNfqB2PMBEBvo4dlhvk6fDZVhBhSppxxXhmyErncg
+   Vk4ygwY0AlfaDDh7BtFBW0/mETb5F6aPehEKR+Fg4lZ530uKi5Z/uN1rB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="285413155"
+X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
+   d="scan'208";a="285413155"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2022 19:22:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10502"; a="753479061"
+X-IronPort-AV: E=Sophos;i="5.95,190,1661842800"; 
+   d="scan'208";a="753479061"
+Received: from lkp-server02.sh.intel.com (HELO 8556ec0e0fdc) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 16 Oct 2022 19:22:19 -0700
+Received: from kbuild by 8556ec0e0fdc with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1okFli-000049-35;
+        Mon, 17 Oct 2022 02:22:18 +0000
+Date:   Mon, 17 Oct 2022 10:21:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 134eb444363b548c34b7bf79d231a1ab7690cfb6
+Message-ID: <634cbc1f.dw1aXk2jHDx35OSX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 134eb444363b548c34b7bf79d231a1ab7690cfb6  Merge branch 'acpi-resource' into bleeding-edge
 
-Aidan MacDonald <aidanmacdonald.0x0@gmail.com> writes:
+elapsed time: 4611m
 
-> This series adds support for the AXP192 PMIC to the AXP20x MFD driver
-> framework, including support for regulators, ADCs, and AC/USB/battery
-> power supplies.
->
-> v6 is a resend of v5 from July -- the patches haven't changed at all
-> but I've rebased them on the latest git master branch.
+configs tested: 62
+configs skipped: 2
 
-Whoops, forgot the link to v5. Here it is:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-https://lore.kernel.org/linux-iio/20220706101902.4984-1-aidanmacdonald.0x0@gmail.com/
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                  randconfig-r043-20221012
+riscv                randconfig-r042-20221012
+s390                 randconfig-r044-20221012
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+m68k                             allmodconfig
+x86_64                          rhel-8.3-func
+arc                              allyesconfig
+powerpc                           allnoconfig
+alpha                            allyesconfig
+s390                                defconfig
+x86_64                    rhel-8.3-kselftests
+m68k                             allyesconfig
+s390                             allyesconfig
+i386                                defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a004
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a002
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a006
+x86_64                           allyesconfig
+arm                                 defconfig
+sh                               allmodconfig
+x86_64                        randconfig-a015
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a013
+i386                          randconfig-a014
+x86_64                        randconfig-a011
+i386                          randconfig-a005
+i386                          randconfig-a012
+i386                             allyesconfig
+i386                          randconfig-a016
+arm64                            allyesconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+
+clang tested configs:
+hexagon              randconfig-r041-20221012
+hexagon              randconfig-r045-20221012
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a014
+i386                          randconfig-a013
+i386                          randconfig-a002
+i386                          randconfig-a011
+x86_64                        randconfig-a012
+i386                          randconfig-a006
+x86_64                        randconfig-a016
+i386                          randconfig-a004
+i386                          randconfig-a015
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
