@@ -2,115 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954776010E2
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 16:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7AA5601585
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Oct 2022 19:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230287AbiJQOOo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 17 Oct 2022 10:14:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
+        id S230180AbiJQRij (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 17 Oct 2022 13:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiJQOOl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 10:14:41 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA6011A3F
-        for <linux-pm@vger.kernel.org>; Mon, 17 Oct 2022 07:14:35 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id n12so18639998wrp.10
-        for <linux-pm@vger.kernel.org>; Mon, 17 Oct 2022 07:14:35 -0700 (PDT)
+        with ESMTP id S230264AbiJQRih (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 17 Oct 2022 13:38:37 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC40072854;
+        Mon, 17 Oct 2022 10:38:35 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id m6so7098660qkm.4;
+        Mon, 17 Oct 2022 10:38:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Vq5kCnUtoL+6Ezgs4d51zvzN1gUGsMC/kvnhiOvxhZA=;
-        b=tz3RbYuUFruNlDazal9vUSlnltiLDHvOxIl0LPUBuv6NxoHo4Vq9jqpO+al2nQKQI5
-         jgcl8xIehpkHmpp4r4Q+IWD+dhvC9i80tQ5Wzp5nQou+s9jLpG8rhqY+Uh7I5z9wMxlt
-         QF2zH65EKK1nXRdZNuvu7k7GEGtmX3+rZ5JWHfOoipbWSqjwn6KyzKKMzAZ85ZEuOHMV
-         bpTAOFrf+BiU+6sZmU/F2OjMtWb1YvTZFJTAJeSXADdnC0J3jbbszwQAP0UX8EnC6t2Q
-         DvyGE8C+YTFM/9xHctANb6CMFAo6zi46s9s+OfhIkFxaQNacgLnWj/3UByTYBYsKua1p
-         9K6A==
+        bh=+EuDinjXnRNJMh10ykEex11JG7grFmZlx9zMYOtc2Uk=;
+        b=BuIuxBXrcg3PqxdCZ23OrmKAXTeEDOFbetfZUNHY8dUFxTOIaFjCZn9o6ARWXBL+O1
+         6Z1uoBjbMX9dL6+CS6u8WPIQgrEd4fKVtxCt1u2qP5PkRmaQAdWPNhR3oJ2Bg9+8DMTS
+         htcz2wM3iQJTKKvAEzYUo3N+vRRjg6SlbLZdzlYSUVEtAbA58wjg13+605sOV+L0A9Yv
+         HDB/jEHK3I4RAlYKsI2efd3ge/AOAdpm4t4zWT5xw5skn8uuvBAKBVhQz2nHm45lQUFx
+         N2qqN5udrs4ADbk2Bm1mH7qD2536qjCsq65BNEENbQ7WROAoTaU/AruQbnr8Pushkvj9
+         oS5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vq5kCnUtoL+6Ezgs4d51zvzN1gUGsMC/kvnhiOvxhZA=;
-        b=whYtwPqTTxLOr46782dHAtC3EKfVjehg76WwjidM/e0smp2EZFSqGYbUqlDgYOE0pm
-         Kax4h3h49/2DOPj/+lNkh6Q8jerUG/aYuwcGp5TjO2ukcLSAh0jUrALBJWCnYF+S938k
-         DlvPeWLQrjS64+1/655M0wIZH37jjKPHXVmNXFevuPIJVq2ueaEqXynJ+fvLdg+S+p9f
-         9RP5CYrKx3i7r/a2YDbHH6Exv3iaoG4MOk4Rs7Umdlz2XFim/ohER2zFkmOEiOlhD4Te
-         +WIHzRhR4Ix9k5M4iM76y3YfRukQmLItg5WMi21+bAOfUqb4nVgW2KkJIL5nsC8vY2a8
-         6m4Q==
-X-Gm-Message-State: ACrzQf206fWPnVjXQpyMu4k7g+s1nyEDmU9LRvAezZrrPqIJIyVKmm1j
-        4z9Hs7sKxq/TxjOapiReFV+Ljw==
-X-Google-Smtp-Source: AMsMyM7CM0UpKnoMrB0XCN0oLx3Pp5aNEqNuOcOBP8m2CUuk58Y8mdiVuC8BXiFJDuJcLQxlD0XrEg==
-X-Received: by 2002:adf:fd4a:0:b0:22d:d3aa:e004 with SMTP id h10-20020adffd4a000000b0022dd3aae004mr6402643wrs.173.1666016073416;
-        Mon, 17 Oct 2022 07:14:33 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9? ([2a05:6e02:1041:c10:ea6:24ea:3fe7:64b9])
-        by smtp.googlemail.com with ESMTPSA id x17-20020adff0d1000000b00231ed902a4esm8608659wro.5.2022.10.17.07.14.32
+        bh=+EuDinjXnRNJMh10ykEex11JG7grFmZlx9zMYOtc2Uk=;
+        b=pspK8FGz+HKGVvecVapxlz6Jeo8I64iKQnu0elocGV0ZDBeUjl7JRKMVlffLT3/t/F
+         uFarjfezi+BL1S9SGuaZMIqheq7kBJY3TDFUc2Ayo9bTrjzDNnrY7lbDWGli3UbDmKQ4
+         me0hsWGkvC10CAopTbqoRZ1kRfXWlX745pTt1px7/7NikF/carQdWNDvNxvKs4yve3bh
+         1TV89s7fC2+RyvHqxFGcL6ndPBbfwPJr8MOADx5B8hiz0BcXBtLw8FQ6fvcAmVJpQ/T+
+         PMEWzBklhB5MGgTFrUBlbpVXK/QowsNxLmgxKbt9jkyaggNxAWuwrBSyV+adXCY3UVVZ
+         qbNQ==
+X-Gm-Message-State: ACrzQf2w8U3PI6VVvUXv2LrLvb4lcG8VRV75y31WmmepARFtj7Lc8bBS
+        i2MwUCOTKUz5xh04CxmJftZZtbrgX4Q=
+X-Google-Smtp-Source: AMsMyM6cfZij01FZn4saN9n2ujPUnz2PuwHcNg3pvT0WmCiQ22sL8HuxzDE6UJPByBnLqathBsp+rA==
+X-Received: by 2002:a05:620a:4546:b0:6ee:bf43:a8f4 with SMTP id u6-20020a05620a454600b006eebf43a8f4mr8727794qkp.673.1666028314663;
+        Mon, 17 Oct 2022 10:38:34 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bk18-20020a05620a1a1200b006ec771d8f89sm248271qkb.112.2022.10.17.10.38.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Oct 2022 07:14:33 -0700 (PDT)
-Message-ID: <e7229067-71e5-0b1c-fd46-acd5a64ecc2b@linaro.org>
-Date:   Mon, 17 Oct 2022 16:14:31 +0200
+        Mon, 17 Oct 2022 10:38:33 -0700 (PDT)
+Message-ID: <807d12c6-c467-d183-6ee6-675465033e86@gmail.com>
+Date:   Mon, 17 Oct 2022 10:38:25 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/drivers/exynos: Fix NULL pointer dereference when
- getting the critical temp
+Subject: Re: [PATCH] MAINTAINERS: git://github -> https://github.com for
+ broadcom
 Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>, rafael@kernel.org
-Cc:     Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-        "open list:SAMSUNG THERMAL DRIVER" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <4e4d873b-4a40-334a-34e7-defb0fcc4e6b@samsung.com>
- <CGME20221003133014eucas1p1fe47bf216e05f96e946c7dcc5fc7eea9@eucas1p1.samsung.com>
- <20221003132943.1383065-1-daniel.lezcano@linaro.org>
- <1155a694-b821-d41a-da54-8a9656d90e50@samsung.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <1155a694-b821-d41a-da54-8a9656d90e50@samsung.com>
+To:     Palmer Dabbelt <palmer@rivosinc.com>, william.zhang@broadcom.com,
+        anand.gore@broadcom.com, kursad.oney@broadcom.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        rjui@broadcom.com, sbranden@broadcom.com, rafal@milecki.pl,
+        linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+References: <20221013214639.31074-1-palmer@rivosinc.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221013214639.31074-1-palmer@rivosinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/10/2022 15:48, Marek Szyprowski wrote:
-> Hi Daniel,
+On 10/13/22 14:46, Palmer Dabbelt wrote:
+> Github deprecated the git:// links about a year ago, so let's move to
+> the https:// URLs instead.
 > 
-> On 03.10.2022 15:29, Daniel Lezcano wrote:
->> The driver is assuming the get_critical temperature exists as it is
->> inherited by the thermal of ops. But this one has been removed in
->> favor of the generic one.
->>
->> Use the generic thermal_zone_get_crit_temp() function instead
->>
->> Fixes: 13bea86623b ("thermal/of: Remove of_thermal_get_crit_temp(")
->> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-> This patch has been dropped from -next, is there are reason for that?
+> Reported-by: Conor Dooley <conor.dooley@microchip.com>
+> Link: https://github.blog/2021-09-01-improving-git-protocol-security-github/
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+> I've split these up by github username so folks can take them
+> independently, as some of these repos have been renamed at github and
+> thus need more than just a sed to fix them.
 
-No, my mistake. I dropped it accidentally when I rebased the branch.
-
-Thanks for pointing it out.
-
-
+Applied thanks, next time  please copy bcm-kernel-feedback-list such 
+that patches land in our internal patchwork instance and they are easier 
+to pick up.
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Florian
