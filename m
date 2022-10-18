@@ -2,53 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996EB603352
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 21:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC9C6033FE
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 22:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiJRTXq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Oct 2022 15:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36704 "EHLO
+        id S229506AbiJRUdF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Oct 2022 16:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiJRTXo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 15:23:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5289D6CD13
-        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 12:23:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666121022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=s0ybmAdKdKZNlXCdss0Mmrg5Wa8iFFzfcU0KpodNEzg=;
-        b=BIHsKMMB0yTRkJwTQJLOBp8NlzsNHeaO+h10iI2JVQz8CFKCA7Y06+nwt9uWbNvw77P0O6
-        C+dthQKNPKMVIADECN8kFeXtwiKXzMtQV2vPcgRDJPDKgJSfT080r5nZWHKgFf35HozYDO
-        4KGJJtgJX7BcOVIKiys/6Ev1WzBzF/s=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-352-Uz4c2vNWMPO4z0ErsDJvJg-1; Tue, 18 Oct 2022 15:23:41 -0400
-X-MC-Unique: Uz4c2vNWMPO4z0ErsDJvJg-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D1121101E985;
-        Tue, 18 Oct 2022 19:23:40 +0000 (UTC)
-Received: from prarit.7a2m.lab.eng.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B0A4E2166B41;
-        Tue, 18 Oct 2022 19:23:40 +0000 (UTC)
-From:   Prarit Bhargava <prarit@redhat.com>
-To:     linux-pm@vger.kernel.org
-Cc:     Prarit Bhargava <prarit@redhat.com>, Len Brown <lenb@kernel.org>,
-        David Arcari <darcari@redhat.com>
-Subject: [PATCH] turbostat: Provide better debug messages for failed capabilities accesses
-Date:   Tue, 18 Oct 2022 15:23:37 -0400
-Message-Id: <20221018192337.3725439-1-prarit@redhat.com>
+        with ESMTP id S229606AbiJRUdE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 16:33:04 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21DAE62910
+        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 13:33:04 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id o65so12803415iof.4
+        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 13:33:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oq6wgYQj/TBbdBfnpCFWn07F6umZaHlghKYwRrWRmt4=;
+        b=EqTJRnGsNkvg2dFS+sNFuOhgwUsmc8Kc+ySOF5vKmzb++cK9xu0SI/WSoOnxWj9DDY
+         AQCTsg7/WWB2fdAAcsRKk9E7/e9r430SWEmVheBWVMVzCUXGV0SjwpcLzCLJaVuwnUQG
+         T+W5kul3qLFWUeKaxZdWxDXp4G6CgS7P9EHOc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oq6wgYQj/TBbdBfnpCFWn07F6umZaHlghKYwRrWRmt4=;
+        b=pjSqc9SGqvvwpmYpc6e0wzmI9f3CkG17eZoevc1inJy9TBLylVqb2NtR+PRNscmUbn
+         fYAOKo9zv0D+f/nmiVyIYEkP40jb4XKjSDrpyLlrJ4/Obj8csbbq8liyRFxOhe3lZdOu
+         vnuApelLb/vYTXaBeHIOz1ym4tPNKB3JXPaKC64ZwM138l6JNoxXmqULHiT9KaYXJ3M1
+         kHKqUGYXWM/N2ncGSsvXHntZVZYz4YbHqb/r9ES/XybvYwrW240bIJqd3ahKcJZHW2py
+         kJ+S7o80PffGxuEmF8nopc7N+RjQDOhwtgv/eKZwiDqt9Z7qMIs4ST4tPJaselj/OaT+
+         yUcw==
+X-Gm-Message-State: ACrzQf3DyFbzPFoH088eub9GiDCKJFFQWZ8sskGRKy+ERTIdsJcKW8sR
+        FrTn1h+0ODIqz94b2TAsGUaVk0NRum36RA==
+X-Google-Smtp-Source: AMsMyM6MWpgp6ZZSFCT/GDO+SiE1F11vXddR4Xv13Ha20gd1+QWO1R9E3YsfgUBa0m0odJngLxr8Cg==
+X-Received: by 2002:a05:6638:2508:b0:363:c76e:babf with SMTP id v8-20020a056638250800b00363c76ebabfmr3226399jat.54.1666125183479;
+        Tue, 18 Oct 2022 13:33:03 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id g26-20020a02271a000000b003640f27d82esm1409640jaa.21.2022.10.18.13.33.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Oct 2022 13:33:03 -0700 (PDT)
+Message-ID: <e07df85d-9b98-75b8-d773-1124278aeb2e@linuxfoundation.org>
+Date:   Tue, 18 Oct 2022 14:33:02 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] power: cpupower: utils: Add malloc return value check
+Content-Language: en-US
+To:     Li kunyu <kunyu@nfschina.com>, shuah@kernel.org
+Cc:     trenn@suse.com, ray.huang@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221014042911.298308-1-kunyu@nfschina.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221014042911.298308-1-kunyu@nfschina.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,74 +72,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-turbostat reports some capabilities access errors and not others.  Provide
-the same debug message for all errors.
+On 10/13/22 22:29, Li kunyu wrote:
+> Add the check and judgment statement of malloc return value.
+> 
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
+> ---
+>   tools/power/cpupower/utils/helpers/misc.c | 4 ++++
+>   1 file changed, 4 insertions(+)
+> 
+> diff --git a/tools/power/cpupower/utils/helpers/misc.c b/tools/power/cpupower/utils/helpers/misc.c
+> index 9547b29254a7..eafdbd6d760c 100644
+> --- a/tools/power/cpupower/utils/helpers/misc.c
+> +++ b/tools/power/cpupower/utils/helpers/misc.c
+> @@ -139,6 +139,8 @@ void print_online_cpus(void)
+>   
+>   	str_len = online_cpus->size * 5;
+>   	online_cpus_str = (void *)malloc(sizeof(char) * str_len);
+> +	if (unlikely(!online_cpus_str))
+> +		return;
 
-Cc: Len Brown <lenb@kernel.org>
-Cc: David Arcari <darcari@redhat.com>
-Signed-off-by: Prarit Bhargava <prarit@redhat.com>
----
- tools/power/x86/turbostat/turbostat.8 |  2 +-
- tools/power/x86/turbostat/turbostat.c | 12 ++++++------
- 2 files changed, 7 insertions(+), 7 deletions(-)
+You don't need unlikely here.
 
-diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
-index c7b26a3603af..7dcb4f4f3d55 100644
---- a/tools/power/x86/turbostat/turbostat.8
-+++ b/tools/power/x86/turbostat/turbostat.8
-@@ -340,7 +340,7 @@ starts a new interval.
- must be run as root.
- Alternatively, non-root users can be enabled to run turbostat this way:
- 
--# setcap cap_sys_admin,cap_sys_rawio,cap_sys_nice=+ep ./turbostat
-+# setcap cap_sys_admin,cap_sys_rawio,cap_sys_nice=+ep path/to/turbostat
- 
- # chmod +r /dev/cpu/*/msr
- 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index aba460410dbd..7484754fc403 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -670,7 +670,8 @@ static int perf_instr_count_open(int cpu_num)
- 	/* counter for cpu_num, including user + kernel and all processes */
- 	fd = perf_event_open(&pea, -1, cpu_num, -1, 0);
- 	if (fd == -1) {
--		warn("cpu%d: perf instruction counter", cpu_num);
-+		warnx("capget(CAP_PERFMON) failed," " try \"# setcap cap_sys_admin=ep %s\"",
-+		      progname);
- 		BIC_NOT_PRESENT(BIC_IPC);
- 	}
- 
-@@ -3502,9 +3503,6 @@ void msr_sum_record(void)
- /*
-  * set_my_sched_priority(pri)
-  * return previous
-- *
-- * if non-root, do this:
-- * # /sbin/setcap cap_sys_rawio,cap_sys_nice=+ep /usr/bin/turbostat
-  */
- int set_my_sched_priority(int priority)
- {
-@@ -3518,7 +3516,8 @@ int set_my_sched_priority(int priority)
- 
- 	retval = setpriority(PRIO_PROCESS, 0, priority);
- 	if (retval)
--		err(retval, "setpriority(%d)", priority);
-+		errx(retval, "capget(CAP_SYS_NICE) failed," "try \"# setcap cap_sys_nice=ep %s\"",
-+		     progname);
- 
- 	errno = 0;
- 	retval = getpriority(PRIO_PROCESS, 0);
-@@ -5476,7 +5475,8 @@ void print_dev_latency(void)
- 
- 	fd = open(path, O_RDONLY);
- 	if (fd < 0) {
--		warn("fopen %s\n", path);
-+		warnx("capget(CAP_SYS_ADMIN) failed," " try \"# setcap cap_sys_admin=ep %s\"",
-+		      progname);
- 		return;
- 	}
- 
--- 
-2.37.3
+>   
+>   	if (!bitmask_isallclear(online_cpus)) {
+>   		bitmask_displaylist(online_cpus_str, str_len, online_cpus);
+> @@ -157,6 +159,8 @@ void print_offline_cpus(void)
+>   
+>   	str_len = offline_cpus->size * 5;
+>   	offline_cpus_str = (void *)malloc(sizeof(char) * str_len);
+> +	if (unlikely(!offline_cpus_str))
+> +		return;
 
+You don't need unlikely here.
+
+>   
+>   	if (!bitmask_isallclear(offline_cpus)) {
+>   		bitmask_displaylist(offline_cpus_str, str_len, offline_cpus);
+
+thanks,
+-- Shuah
