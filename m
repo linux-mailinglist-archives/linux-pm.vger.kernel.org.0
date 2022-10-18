@@ -2,123 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E24160295F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 12:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD25602970
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 12:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229775AbiJRKeQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Oct 2022 06:34:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57942 "EHLO
+        id S229509AbiJRKhX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Oct 2022 06:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiJRKdw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 06:33:52 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5412EB4483;
-        Tue, 18 Oct 2022 03:33:51 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id A4F285C00CD;
-        Tue, 18 Oct 2022 06:33:50 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 18 Oct 2022 06:33:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666089230; x=1666175630; bh=urMCChgCu1u+56jJGaeezcXuErkz
-        0/nAyptCtTcKAcc=; b=EW+G5ucp3HiQ0siiSTUhTA4p8V2d8zcFZpKXOP3CzkRr
-        A04oWt1tAIiyOkHSazLT/ot/liLe4rhjuQUsnjQduyUwOhyHq6wSDRPJDg7F6f2D
-        AQIPeqRQQFKydjwF6qfPe5Hcd6TdGfuwXL4rOcxdYckg8S0eShQgg3UhT1IFuamZ
-        UieemhI47uDsk5pAGY7gB0s7ffrDin53lWz6/1WOXXFckL7SmJpQ166PALbIVjE/
-        TqwQ21BEPZ/SGTfJWIdBR35ugKolRvGm7XtPwh5+34JLZQafEeUMIWnOF0YyAnlS
-        88khAbGuyjmbdF1yCadsxvEYJCgN8bmnkKG4gLbRLQ==
-X-ME-Sender: <xms:DoFOY9NG_H_uSEcMfkaE43bD6AGuDA7hZnQzpElG_maclGjFGKCa6Q>
-    <xme:DoFOY__VhbILrmFQuP2XUj9VNOa5S3dnOECHjogetN1gwkn1t7YdJYIxX1K4WlBxv
-    MBg0gT7ZAN6iOw>
-X-ME-Received: <xmr:DoFOY8SPs6H39l3Jhoi5yrwAxlBe4Kaj8VvkB1NOKQReTKim9AQDporhxDrUPSuYc1pTcziwl8t6aJUdkMuJhtomCS6aug>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelvdcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghh
-    ihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrh
-    hnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeghfen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughosh
-    gthhesihguohhstghhrdhorhhg
-X-ME-Proxy: <xmx:DoFOY5u6MfKuGtDUc-v7zORUgfBNwfPbsW4GtXYnSBJJwYCuUyqSfA>
-    <xmx:DoFOY1d6-3mXqAAhsytAIw2n1_fRiGYcvBU_Y1v68UXJ3x7rBAca5w>
-    <xmx:DoFOY13dF5tQfP2qVddc5U-7PKGAaRUQmjcihXv0oR2ERkHfGyS4UA>
-    <xmx:DoFOY8pE1725d-CmP5gN2yfkMaePDCefVP9oR8DSmV2G9uSn_17Obw>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 18 Oct 2022 06:33:49 -0400 (EDT)
-Date:   Tue, 18 Oct 2022 13:33:45 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Daniel Lezcano <daniel.lezcano@linexp.org>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, abailon@baylibre.com, lukasz.luba@arm.com,
-        broonie@kernel.org, damien.lemoal@opensource.wdc.com,
-        heiko@sntech.de, hayashi.kunihiko@socionext.com,
-        mhiramat@kernel.org, talel@amazon.com, thierry.reding@gmail.com,
-        digetx@gmail.com, jonathanh@nvidia.com, anarsoul@gmail.com,
-        tiny.windzz@gmail.com, baolin.wang7@gmail.com,
-        f.fainelli@gmail.com, bjorn.andersson@linaro.org,
-        mcoquelin.stm32@gmail.com, glaroque@baylibre.com,
-        miquel.raynal@bootlin.com, shawnguo@kernel.org,
-        niklas.soderlund@ragnatech.se, matthias.bgg@gmail.com,
-        j-keerthy@ti.com, Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v5 01/33] thermal/of: Rework the thermal device tree
- initialization
-Message-ID: <Y06BCSh+jq5Ztf+3@shredder>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220804224349.1926752-2-daniel.lezcano@linexp.org>
- <Y05/8JUU+3kLCZvb@shredder>
+        with ESMTP id S229707AbiJRKhW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 06:37:22 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A648E9B8
+        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 03:37:20 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d24so13419110pls.4
+        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 03:37:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RWwcbHxc4gNZkpX9lULBb97jbG0T6/PKCXFFwxy3BRo=;
+        b=Q/VWQoheR0jWqMa+lig4NkopBmoRotDVaP9cGfl7W4DQXcbenSZTvnHlU8ec5aY5Cd
+         jBcPRpEQBqqGzCmNQmhr1llswDmnoxy4Vj1PMy0QYDpv6AVlZC7OQXu0eAY4SQmNIhBh
+         v8Ej7R1pjU4YXoKJWzA3RMe3ynKxYOBjVlE56Ebbg795HXfU1w9F137tWGRC+aqPzyV7
+         iEehitdslfnyYbRf7oFhgqGOjtU2fml9JibMeOeuXxwWUeWifXf9VW8qJLdY9e5tN/5K
+         P2Bs5z9LTvlwQw4z0p5reRgY8WmxLyLYIXQH45UFupvLtkdIxLDtAjzquUMDFa9ElfU9
+         P30Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RWwcbHxc4gNZkpX9lULBb97jbG0T6/PKCXFFwxy3BRo=;
+        b=vXNeMWWPFMSMWd0SAYTrJ3ygLlyw0Ioxh6vehGC976NjDMfD0udnP6okOKq+wwRJoR
+         xbtGGJogPfa1N092QpnKTFfEKIAI7iSJjHZOKRh9ENq2K39+WNwzDlnrlY3W0Mac/zMY
+         IW9OOYUU1BHoQ/ULigpsudbHw0q/qvjq+K1Q7yVnzfd0kXrMwFxMLaKzYab0HexA7mTk
+         8i8tYWTF0HzQB6cqJ0XRJHZmDsHuVhmZJYRulvWkmbOYRVPEwLKdHGY3xyEMpVjOUSIj
+         3dOEO+fdUSeiUMHgk+ob2Rm4ohF9A5DzZTfq334j5/cl8t2lgi1o586ejZDi+L1zXQG4
+         VrEQ==
+X-Gm-Message-State: ACrzQf1Qn4rjicl6tP692GUgkMNMEacfm7Ni5E1lARXAlkHXKufn8R/Z
+        6l8J2/XfrHOw7KnDEY5NaAQH/C3B9PghDg==
+X-Google-Smtp-Source: AMsMyM4Fyb5TgyL3VpXLmiFDY5cvDh03vJUy5fgOn3WKBILuMSVwtJ1mW+U1Wh6C6g7EfbpKaVxMzg==
+X-Received: by 2002:a17:902:e750:b0:17f:71fa:d695 with SMTP id p16-20020a170902e75000b0017f71fad695mr2519699plf.105.1666089439919;
+        Tue, 18 Oct 2022 03:37:19 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170902ea1100b0017ec1b1bf9fsm8523191plg.217.2022.10.18.03.37.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 03:37:19 -0700 (PDT)
+Date:   Tue, 18 Oct 2022 16:07:17 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Fabien Parent <fabien.parent@linaro.org>
+Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        rafael@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] cpufreq: qcom: fix memory leak in error path
+Message-ID: <20221018103717.kjwmecadk6dknwxm@vireshk-i7>
+References: <20221015130424.1923706-1-fabien.parent@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y05/8JUU+3kLCZvb@shredder>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221015130424.1923706-1-fabien.parent@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:29:04PM +0300, Ido Schimmel wrote:
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index d4b6335ace15..43d55c29a29a 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -604,13 +604,15 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
->         if (IS_ERR(np)) {
->                 if (PTR_ERR(np) != -ENODEV)
->                         pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
-> -               return ERR_CAST(np);
-> +               ret = PTR_ERR(np);
-> +               goto out_kfree_of_ops;
->         }
->  
->         trips = thermal_of_trips_init(np, &ntrips);
->         if (IS_ERR(trips)) {
->                 pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
-> -               return ERR_CAST(trips);
-> +               ret = PTR_ERR(np);
+On 15-10-22, 15:04, Fabien Parent wrote:
+> If for some reason the speedbin length is incorrect, then there is a
+> memory leak in the error path because we never free the speedbin buffer.
+> This commit fixes the error path to always free the speedbin buffer.
+> 
+> Fixes: a8811ec764f9 ("cpufreq: qcom: Add support for krait based socs")
+> Signed-off-by: Fabien Parent <fabien.parent@linaro.org>
+> ---
+> 
+> v2: Added missing "Fixes" tag
+> 
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 
-Sorry, should be:
+Applied all three. Thanks.
 
-ret = PTR_ERR(trips);
-
-> +               goto out_kfree_of_ops;
->         }
->  
->         ret = thermal_of_monitor_init(np, &delay, &pdelay);
-> @@ -659,6 +661,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
->         kfree(tzp);
->  out_kfree_trips:
->         kfree(trips);
-> +out_kfree_of_ops:
-> +       kfree(of_ops);
->  
->         return ERR_PTR(ret);
->  }
+-- 
+viresh
