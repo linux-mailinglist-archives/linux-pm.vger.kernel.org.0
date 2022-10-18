@@ -2,101 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF834602C60
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 15:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D679602F8F
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 17:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiJRNGB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Oct 2022 09:06:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
+        id S230083AbiJRPXK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Oct 2022 11:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiJRNF5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 09:05:57 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018A3C5129
-        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 06:05:52 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so17284789pjq.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Oct 2022 06:05:52 -0700 (PDT)
+        with ESMTP id S230127AbiJRPXJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 11:23:09 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11FC3D0CD9;
+        Tue, 18 Oct 2022 08:23:05 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id bh7-20020a05600c3d0700b003c6fb3b2052so3305500wmb.2;
+        Tue, 18 Oct 2022 08:23:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cIcJSjmyj8wnG5VFs+JiL9G2kqKZBCT633VYrUKLe84=;
-        b=VkvQM5gxx4ABLOU9ihZoRTxZlQl2Z51gFfv9JDfTBGRKmqeqOKx2bFPYG84gnYMkYj
-         r8rieo3qkPjJ+tb/MudakkOK+636EoLvWCg3p/Zy8oX4nNo8fAGEi7A4CReMW7hjNmF8
-         Zziq3bR85k4ILLAQGjxMJ0oQDUhQs+pihpFoJSuHG8s4irtZOs2vOFwA7AvLxySX9p6P
-         gP2a9PswWgb+9ckSMDQVgQxOGZIk4HWXe4Iv7qyHOfip49XOkhpJGOawr//i2ueIc0rE
-         adIBd7SMQf1//dyRVDoWjiE3myXDnthxUUtC8uTSdbyTyqRYk/tPrP+NohxjATNcQu1W
-         LNCA==
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=bEddq63SNEjeM/xMvu/ByxpDSe5rVs/O0NJXLl0d3Xg=;
+        b=gE7AGVea8ljT1IZHd4CmvcafBr/enqORfbdBqrgjJSrVGOOKPY4ywo7IeiIrQ4fywQ
+         gGszJUNF2NeKfFoHUPRtFvPEspit2YSpFRUvPiEzhL7vwfDme0ymoDPUyXkErRgHREor
+         CVHrUmmhl4EnlfNPBACKMfwWD7Cfq1rRqjVLE4X7/UoyEzHRNSE2G4+fZ5kz4vyQq3RV
+         Gq6NjMEKfrzAqX7plM5nLqGKAaeAo1PUfqwaZMh7cMslP4rh6iK04VkQSKzeia1omlP2
+         UWG39AfB76XqX9a9VyIPZkeki2r2wX1ytOjcOtnYcvwQbb+SgU9QBsDFGpreb+T1klDt
+         okRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cIcJSjmyj8wnG5VFs+JiL9G2kqKZBCT633VYrUKLe84=;
-        b=xjajwMQyhxGoh/KP8SeGZaCN612XHP2LedevLIK+iCHFNfpxVVGCEFkidr+fvywnoU
-         a9ETv1DB7hfHUk3lX4C64VkZB/ld74D7wXBOB9grSgvTTYKVuRwEztpioJzVSe2ZDXWU
-         IaSh1qL9MlvevnSsac3v4ZTrFlEvzAgK0VWLT+ha20P4zyTmZbJdksaeJbDLYY+DeyEY
-         6L3Vy5kFfMcgVpAFaVXG0D9BDjLo/4dcYHWfWYeYdYmNNlFNzXBO9rMhNbr354giHpkw
-         fUxQ3uVSpRZd+tAfL3bt3aZA3pFfkDF62BmPNgM6kCnPPaZ6fprsj4bmJolrvDVQHRPT
-         Jalw==
-X-Gm-Message-State: ACrzQf2Bi/Go3Qbgwb9nXSFW3Hp77P95jvRKH9nT0XUx6ngxOWEruIx/
-        nZhIGBIFWTY/0518G67IiptdKqMTL5Ei08RXZFY=
-X-Google-Smtp-Source: AMsMyM6BQ8AjmSi979SJM4C6MR/TasdJr5FRETUrOUUyDFYl/bmySg13MiWqCUMiCDdBS5OXQj7EJq3INK6cZcAl8wc=
-X-Received: by 2002:a17:90b:314c:b0:20d:83c1:5297 with SMTP id
- ip12-20020a17090b314c00b0020d83c15297mr3510508pjb.18.1666098352018; Tue, 18
- Oct 2022 06:05:52 -0700 (PDT)
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bEddq63SNEjeM/xMvu/ByxpDSe5rVs/O0NJXLl0d3Xg=;
+        b=0UfGsMGXQ5zaYOgqOa1rtlRueBRlApBqSBvYhKbfHluxO1Oi6X5bcoZs+0hxhbXxg6
+         0MV1dD9ga/sulmLJvbtOn3mMTYfU1KxD7u+/l9vbIXtAWsVAWLToBsuucYdqSHfi/NSo
+         nzmKA2BcwpjXfH5e0h+mb4dNGUTJqgbkJ2+ZlOA1hajImhnwS6a35RCpnLP5jqP0lzSY
+         kcCdqwreUJMUkVdixc7OR5/LYEjPfjbaSvDBHfMhG5uX8zlXm4phHVlgK7kuNkv96Q/A
+         tqFMKlaNzS8DkPb9u4bUltZR+IRZb7g8kxYLdjAn8eS9njQNhj3l7lEXihtIOtcD8bln
+         Qjjw==
+X-Gm-Message-State: ACrzQf12VwKfPToUNxPuRFRITTte2XD6NnKoO1bdMLOSG5JcCivcPGb2
+        rz3Gbe2eYgaki7TuOtcH11A=
+X-Google-Smtp-Source: AMsMyM4daIGfqDv/NZF1S01gyC5tFEmQdv3UTJqAdeeUQvv25Fu5Hg5RKSgZXfi/kzn0A0QnspLPOg==
+X-Received: by 2002:a05:600c:1509:b0:3c6:809a:b5a1 with SMTP id b9-20020a05600c150900b003c6809ab5a1mr23993837wmg.71.1666106584459;
+        Tue, 18 Oct 2022 08:23:04 -0700 (PDT)
+Received: from localhost (94.197.29.248.threembb.co.uk. [94.197.29.248])
+        by smtp.gmail.com with ESMTPSA id l6-20020a05600c1d0600b003a5f3f5883dsm20187232wms.17.2022.10.18.08.23.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Oct 2022 08:23:03 -0700 (PDT)
+References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+ <20221017184419.62d365c1@jic23-huawei>
+ <LYfRwE3pxZfgZBDC6gwvsSrHWqcSQXHK@localhost>
+ <CAHp75VfL5TXvoVY8Zq946eUJYetLt2Od2m26mUSPGxsdF=TC-Q@mail.gmail.com>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lee.jones@linaro.org, sre@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, lars@metafoo.de, linus.walleij@linaro.org,
+        brgl@bgdev.pl, michael@walle.cc, samuel@sholland.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 00/13] Add support for AXP192 PMIC
+Date:   Tue, 18 Oct 2022 16:15:37 +0100
+In-reply-to: <CAHp75VfL5TXvoVY8Zq946eUJYetLt2Od2m26mUSPGxsdF=TC-Q@mail.gmail.com>
+Message-ID: <HMq7csUe6Gk3DrWRzgEmM5kpQ9DomiFs@localhost>
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:d10f:b0:2fc:7351:8c22 with HTTP; Tue, 18 Oct 2022
- 06:05:51 -0700 (PDT)
-Reply-To: thomasjoycetho12@gmail.com
-From:   Joyce Thomas <joycethomasj5@gmail.com>
-Date:   Tue, 18 Oct 2022 06:05:51 -0700
-Message-ID: <CAG1cWb76dbbjLm6vyDzRjKjPsEFDs099D9kW35f-MvTf=ev97A@mail.gmail.com>
-Subject: Greetings
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:102e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5010]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [thomasjoycetho12[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [joycethomasj5[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [joycethomasj5[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Dearest one,
-Good day to you today and how are you doing I hope all is well with
-you; please did you receive the mail I sent to you since three days
-ago?  Please can you be kindly get back to me  so that I will  know if
-you received the mail I sent to you or not.
-Best Regards,
-Ms Joyce
+
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+
+> On Tue, Oct 18, 2022 at 2:06 AM Aidan MacDonald
+> <aidanmacdonald.0x0@gmail.com> wrote:
+>> Jonathan Cameron <jic23@kernel.org> writes:
+>> > On Mon, 17 Oct 2022 00:43:22 +0100
+>> > Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
+>
+> ...
+>
+>> > Lee has recently expressed that he keen to take as much of these sorts
+>> > of series as possible via the various subsystem trees.
+>> >
+>> > As such, it is useful to call out in the cover letter of such a series
+>> > if this can be done.  For example, patch 9 (last IIO one) can't be
+>> > applied without defines in patch 6 (I think).  Thus I'm assuming Lee
+>> > will do an immutable branch with at least those patches on it.
+>> >
+>> > Perhaps worth expressing if that is also the case for the power
+>> > and regulator subsystem patches?
+>
+>> Yep, the IIO, regulator, and power subsystem patches all depend on
+>> the MFD patch.
+>
+> There are two types of dependencies: compile and functional.
+>
+>> Specifically, patches 6, 9, and 10 depend on patch 5.
+>> I can't get rid of this dependency because the variant ID (AXP192_ID)
+>> has to be defined centrally in the MFD patch.
+>
+> It's not clear which one you are talking about. If it's functional,
+> then each driver can be taken separately via each concerned subsystem.
+
+Johnathan was talking about compile dependencies -- the defines he's
+mentioning -- so what I mean is compile dependencies. Patches 6/9/10
+do not compile unless they are applied after patch 5, because of a new
+enumerator AXP192_ID defined in patch 5.
+
+Regards,
+Aidan
