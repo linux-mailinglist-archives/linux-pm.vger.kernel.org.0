@@ -2,103 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65DC6029FE
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 13:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF55602B87
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Oct 2022 14:19:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiJRLQc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Oct 2022 07:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46528 "EHLO
+        id S229710AbiJRMTS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 18 Oct 2022 08:19:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiJRLQc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 07:16:32 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5551EA;
-        Tue, 18 Oct 2022 04:16:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666091791; x=1697627791;
-  h=from:to:cc:subject:date:message-id;
-  bh=pA0PdqTHxsHL7/a/8drLbW+gda7QFfqXPuVNuMwE6kQ=;
-  b=kcniZT7jON9eWYaJZRDgzpYJEkLYg9lreVYaLLbIYHQjlTNuCZEDjfKL
-   kh++RGhtTi4u0PmpD4IbW+urR512ftexygXRKAYh2RFkCOS9naqzR+cbz
-   HVGDgnS9piaX6bei0cJBfcDdW9k3S868WycGnfi/gm3JKLhCgMIAE2ijo
-   RKzT5SPLG9b89AktI4uwpQ/kmVCuU9eOhzgAC0Q7T75CGASGBNBDS67f7
-   LIKkI5y7EHY4TcdIkwFj7kMIlt5qGdTssbFagWQKTy5Svl6vIjEBq91Jb
-   3pLMIuVE2sibLK+BmrmU1pvopQR1gREo9PKUPsRXpMGF3kcH8gKj9+uWe
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="370272282"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="370272282"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 04:16:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10503"; a="957724705"
-X-IronPort-AV: E=Sophos;i="5.95,193,1661842800"; 
-   d="scan'208";a="957724705"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga005.fm.intel.com with ESMTP; 18 Oct 2022 04:16:30 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: intel: hfi: Improve the type of hfi_features::nr_table_pages
-Date:   Tue, 18 Oct 2022 04:22:40 -0700
-Message-Id: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229823AbiJRMTR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 08:19:17 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F188AAD9BB;
+        Tue, 18 Oct 2022 05:19:15 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id w3so9457951qtv.9;
+        Tue, 18 Oct 2022 05:19:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LiNDBNVyZfRCvjPG4NAD0FPyNgn27eYCFKSVJt21O1A=;
+        b=CdtklZI4CVjxSMQNIZZn21ikyKOwFwTSAmkb1Q2iioTBafnzbO2blM03OYarRgWcQ6
+         jO01FgQr4dB+gyKfPjQ+2geWll7bKxTxxQ8/wXus+f7c8ApINwU/Spi9tVFYzX8Q11Bx
+         YJqlBYPr+2JqdRHDrJ4qY0Zj1CFrkSioxE9Q10GYQHgnJHBre8Hg4oG6iZz9r7Zzvi9S
+         ih/WLMhQ3rdC4gTja7VAHXDUgD0XxwOVQCifuH6HTovM1CidvW9XwYkck3c49x4tJGMS
+         Yv4RtvmIp0TLZHmOdYMxfgzg3qOLBUfWOGyCAb1WhCuVF7woAZek8yya6U4vvjpv6r4p
+         fGXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LiNDBNVyZfRCvjPG4NAD0FPyNgn27eYCFKSVJt21O1A=;
+        b=rJ9tGTpL7vkVAeMdgL8cxmA5r8rSykj12qxwwtgDN+raT6sXlyRTT9+QmPg2DmvkLi
+         ktMVoWJdU6enrOA9bhLJz8t096bcvUbpKDyO20Z/eQaeWB9bLEXLl9BxE4/jV8h8EVuZ
+         fXbkJCVaCxxaocizL0spGVLn2mRXSKev46ts4aalN6UomXxcnesHPslI25U64DM52WP0
+         tJO8/bbmmtU5OAuaDxwj6BUgN3WyYV+c2OZAYtkxzsDUEtyq1jtmVJX1vMd1KTVfGxiV
+         nUsHP6as6J4vTJ5+Qka7hOPF5tNEw9gaptPN60I5dl8dQt8pKBsRx2jg9bHfe5O4Bub6
+         Vwmg==
+X-Gm-Message-State: ACrzQf1ZzIDpk4GNr/llAwvZLFYLDXdmNMAn+gQ48S3Qz5qsEbxToId9
+        1pd0EJZiGPvHfoOHjCwljLrcNh2qfHFZlobLVrE=
+X-Google-Smtp-Source: AMsMyM42wYUHzaf6FdDo7ooxTQC/Q7AwwYYKqUW+nOUiZm+XijDhUYwDXtRDPnOV2rYbFAxZpbitt+QCIXfZL2hNI8w=
+X-Received: by 2002:a05:622a:1045:b0:39c:e2e1:dc59 with SMTP id
+ f5-20020a05622a104500b0039ce2e1dc59mr1718640qte.195.1666095554850; Tue, 18
+ Oct 2022 05:19:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
+ <20221017184419.62d365c1@jic23-huawei> <LYfRwE3pxZfgZBDC6gwvsSrHWqcSQXHK@localhost>
+In-Reply-To: <LYfRwE3pxZfgZBDC6gwvsSrHWqcSQXHK@localhost>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 18 Oct 2022 15:18:38 +0300
+Message-ID: <CAHp75VfL5TXvoVY8Zq946eUJYetLt2Od2m26mUSPGxsdF=TC-Q@mail.gmail.com>
+Subject: Re: [PATCH v6 00/13] Add support for AXP192 PMIC
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lee.jones@linaro.org, sre@kernel.org, lgirdwood@gmail.com,
+        broonie@kernel.org, lars@metafoo.de, linus.walleij@linaro.org,
+        brgl@bgdev.pl, michael@walle.cc, samuel@sholland.org,
+        linux-iio@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A Coverity static code scan raised a potential overflow_before_widen
-warning when hfi_features::nr_table_pages is used as an argument to
-memcpy in intel_hfi_process_event().
+On Tue, Oct 18, 2022 at 2:06 AM Aidan MacDonald
+<aidanmacdonald.0x0@gmail.com> wrote:
+> Jonathan Cameron <jic23@kernel.org> writes:
+> > On Mon, 17 Oct 2022 00:43:22 +0100
+> > Aidan MacDonald <aidanmacdonald.0x0@gmail.com> wrote:
 
-Even though the overflow can never happen (the maximum number of pages of
-the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
-the data type of hfi_features::nr_table_pages makes Coverity happy and
-matches the data type of the argument 'size' of memcpy().
+...
 
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Aubrey Li <aubrey.li@linux.intel.com>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
- drivers/thermal/intel/intel_hfi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > Lee has recently expressed that he keen to take as much of these sorts
+> > of series as possible via the various subsystem trees.
+> >
+> > As such, it is useful to call out in the cover letter of such a series
+> > if this can be done.  For example, patch 9 (last IIO one) can't be
+> > applied without defines in patch 6 (I think).  Thus I'm assuming Lee
+> > will do an immutable branch with at least those patches on it.
+> >
+> > Perhaps worth expressing if that is also the case for the power
+> > and regulator subsystem patches?
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index a0640f762dc5..239afe02e518 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -137,7 +137,7 @@ struct hfi_instance {
-  * Parameters and supported features that are common to all HFI instances
-  */
- struct hfi_features {
--	unsigned int	nr_table_pages;
-+	size_t		nr_table_pages;
- 	unsigned int	cpu_stride;
- 	unsigned int	hdr_size;
- };
+> Yep, the IIO, regulator, and power subsystem patches all depend on
+> the MFD patch.
+
+There are two types of dependencies: compile and functional.
+
+> Specifically, patches 6, 9, and 10 depend on patch 5.
+> I can't get rid of this dependency because the variant ID (AXP192_ID)
+> has to be defined centrally in the MFD patch.
+
+It's not clear which one you are talking about. If it's functional,
+then each driver can be taken separately via each concerned subsystem.
+
+> The axp20x_battery patches (last three of the whole series) don't
+> depend on the variant ID or other defines, so they could be taken
+> independently through the power subsystem.
+>
+> Even though the IIO cleanups (7 and 8) don't depend on anything else
+> I imagine it'd cause problems to take those via IIO because patch 9
+> depends on them.
+>
+> IOW: Lee probably needs to take patches 5-10.
+
+
+
 -- 
-2.25.1
-
+With Best Regards,
+Andy Shevchenko
