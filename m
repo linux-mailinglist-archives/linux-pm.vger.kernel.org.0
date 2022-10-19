@@ -2,85 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0623D604CB7
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 18:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A43604CDE
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 18:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiJSQGE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Oct 2022 12:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
+        id S230010AbiJSQOC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Oct 2022 12:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJSQFb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 12:05:31 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2854826D7;
-        Wed, 19 Oct 2022 09:04:24 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 72dc682b41a07469; Wed, 19 Oct 2022 18:03:35 +0200
-Received: from kreacher.localnet (unknown [213.134.188.148])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 902B06669D5;
-        Wed, 19 Oct 2022 18:03:34 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+        with ESMTP id S230513AbiJSQN7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 12:13:59 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A614F1AA;
+        Wed, 19 Oct 2022 09:13:56 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id d13so11014828qko.5;
+        Wed, 19 Oct 2022 09:13:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IHhKcEgiGkudQevH1H7LbkAoh0BJo+NcpXaDwQTf7b4=;
+        b=yGjh5/P68z78GF5TttAb5JsYPXZMjjXAwOjGLMjaWQpEYl2M29OzG3/q8sC0b450WN
+         Fiy7dMFMq6U8UDeXM4HmnqqrMC338xUUunZ6LX9hvtcgJJgyWEQgTeowY07BmGO0GZsQ
+         5Ae2NWBKPKW74Ps7A5miXJ4Ml+Hzpey6q2H1VmBOALicr0j1Y+0ej/e8r6P8PV5AH/vt
+         ECg9efBEbJJ4wKzZtHhRiwZDTCGm2yw6SxBYI/r3qNXVGhtpRVdjUJOGcUTOaVq8yAz6
+         BC72nWONecuAA9ESqvU7YAAsaZibhUo+125/DRr8DIH67lg5VN2wE1h1TUGVnkwYor/T
+         F/Kg==
+X-Gm-Message-State: ACrzQf0H/vCuntJ6AYzYQ23aAW4mh3dgwuwxykgQjbe90EJ2zEw6I7ka
+        U1J82QSLU0pRxJGahXCtyaAqKr5LY0+PTH2aZgs=
+X-Google-Smtp-Source: AMsMyM5D7RZZU29da+wHtoXkLPoB/1LG3eWvwWGaAT8534K9+vHtCvMrVqTJPGn7HXBxL+tK2bPdVDCUl7T1YtTvjSY=
+X-Received: by 2002:a05:620a:450c:b0:6ee:af91:60b2 with SMTP id
+ t12-20020a05620a450c00b006eeaf9160b2mr6345268qkp.480.1666196035196; Wed, 19
+ Oct 2022 09:13:55 -0700 (PDT)
+MIME-Version: 1.0
+References: <5887691.lOV4Wx5bFT@kreacher> <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
+In-Reply-To: <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 19 Oct 2022 18:13:43 +0200
+Message-ID: <CAJZ5v0jh9g8fKAoymwv1UeUqtX7EcU3JkgMHsQWZSHngyQUFQg@mail.gmail.com>
+Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
 To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
         Mario Limonciello <mario.limonciello@amd.com>,
-        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
         Mel Gorman <mgorman@techsingularity.net>,
         Zhang Rui <rui.zhang@intel.com>,
-        Todd Brandt <todd.e.brandt@linux.intel.com>
-Subject: [PATCH] rtc: rtc-cmos: Fix compilation with CONFIG_ACPI unset
-Date:   Wed, 19 Oct 2022 18:03:33 +0200
-Message-ID: <2677035.mvXUDI8C0e@kreacher>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+        LKML <linux-kernel@vger.kernel.org>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rtc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.148
-X-CLIENT-HOSTNAME: 213.134.188.148
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrfeelgedgleehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrddukeekrddugeeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudegkedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepuddupdhrtghpthhtoheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegrrdiiuhhmmhhosehtohifvghrthgvtghhrdhithdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheplhhinhhugidqrhhttgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphht
- thhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmghhorhhmrghnsehtvggthhhsihhnghhulhgrrhhithihrdhnvghtpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehtohguugdrvgdrsghrrghnughtsehlihhnuhigrdhinhhtvghlrdgtohhm
-X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Oct 18, 2022 at 6:39 PM Alexandre Belloni
+<alexandre.belloni@bootlin.com> wrote:
+>
+> On Tue, 18 Oct 2022 18:09:31 +0200, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
+> > ordering issue") overlooked the fact that cmos_do_probe() depended
+> > on the preparations carried out by cmos_wake_setup() and the wake
+> > alarm stopped working after the ordering of them had been changed.
+> >
+> > [...]
+>
+> Applied, thanks!
+>
+> [1/1] rtc: rtc-cmos: Fix wake alarm breakage
+>       commit: 0782b66ed2fbb035dda76111df0954515e417b24
 
-After commit 0782b66ed2fb ("rtc: rtc-cmos: Fix wake alarm breakage")
-the driver won't build with CONFIG_ACPI unset due to a missing stub
-definition of rtc_wake_setup(), so fix that.
+Thank you!
 
-Fixes: 0782b66ed2fb ("rtc: rtc-cmos: Fix wake alarm breakage")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/rtc/rtc-cmos.c |    4 ++++
- 1 file changed, 4 insertions(+)
+However, there is a build fix on top of this which has just been posted:
 
-Index: linux-pm/drivers/rtc/rtc-cmos.c
-===================================================================
---- linux-pm.orig/drivers/rtc/rtc-cmos.c
-+++ linux-pm/drivers/rtc/rtc-cmos.c
-@@ -1337,6 +1337,10 @@ static void cmos_check_acpi_rtc_status(s
- 
- #else
- 
-+static inline void rtc_wake_setup(struct device *dev)
-+{
-+}
-+
- static void cmos_wake_setup(struct device *dev)
- {
- }
+https://lore.kernel.org/linux-acpi/2677035.mvXUDI8C0e@kreacher/
 
-
-
+Sorry about breaking it again.
