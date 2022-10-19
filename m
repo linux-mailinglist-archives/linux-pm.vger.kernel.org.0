@@ -2,128 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A116044C2
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 14:14:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 685006045F8
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 14:52:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232383AbiJSMOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Oct 2022 08:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
+        id S230357AbiJSMwn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Oct 2022 08:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232935AbiJSMOF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 08:14:05 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD5E1C2090;
-        Wed, 19 Oct 2022 04:50:24 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id s3so11429336qtn.12;
-        Wed, 19 Oct 2022 04:50:24 -0700 (PDT)
+        with ESMTP id S233507AbiJSMwH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 08:52:07 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0893D10564
+        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 05:34:18 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id c23so11512389qtw.8
+        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 05:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rqgGJo+VkrEIB31JMhwIvUVH55mGBmWPF4DgCtb++g0=;
+        b=DVREBeEKvhlzvvX56d43ecksMYNM3qThPtqGMqwrV8spZOnkS0bJU0XPOG1/bf9Ujt
+         SqI/cCXib3NmgVpQ3cph3UAtMGpWtydgg8MbzOH4Ra8dhrhdVbPlsuglqE2ztpXErRSz
+         Wf/UmkfEEvZj1UYguJ3ym2ZuzqslRfsY8Aq128ELaqDGyP+TOjHte/pcc0IrymT+HdSb
+         aOACZUsWPidqEVa9WtBawByhkGH5fr3dyIkiaykInrPVsS9buXDiQh4l002UIqm+1jwB
+         EE/4LmfDi74Fc7c+q/MeXMhnaaoEBVuL7zfodm0gAvXJLB6BrQScULP2Ds0YeynTzCg7
+         EqSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f6pXDQz9XHum5BRL37fQvqtMyYdJ8Q0/PFYhMyqRhmg=;
-        b=Q1QuGQu9kcBXR6IM1gHTbp2qGt+ijXs/BRI4ySCmmmS8zrVPbwSC2++VY8QhfAd0aG
-         hg17zr5jogxSVY9Sn3m5m51bHU2tMq2DEZj7B7tqdPT74c4vtBKOJTHO2fTDUjNhvlDf
-         wAtc6bvnJeGsgOwIxSyIr394HdHxadKCEbSW5H2u39abMNjySVk+6H8/yQbTWEBCPmK0
-         ro1Ivw3UoxdoJ6YL8A4yyy1+jLZQ//eOz0mm86jVfnQC/hptu54qgUwNZZPJjeMQQJZu
-         APk75mfMdxaoLEeHAmYIChAtBFLBtdZoXJsTEY/nOo4+DtQgkSc1ngT2sCMWkswO/Gpi
-         kv6w==
-X-Gm-Message-State: ACrzQf36XK1c8nXfmEofA+i/gaUgPAYc9qoGHjV8sdCSAxoxMB4avZcZ
-        0w1Dzb4/Zca1tzqBMj9hXRaYzpmOJu9zag5fFNE=
-X-Google-Smtp-Source: AMsMyM6k1Gf6jEZxabu8Q7RNxuT/7g8aD8D9CuVKV2ZJDfYMmiMOhx5t42A+tgNfaXQiHJS8T70Ak8YxTx89UfUoYT8=
-X-Received: by 2002:a05:622a:11c7:b0:39c:b4bc:7030 with SMTP id
- n7-20020a05622a11c700b0039cb4bc7030mr5936809qtk.17.1666180070299; Wed, 19 Oct
- 2022 04:47:50 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rqgGJo+VkrEIB31JMhwIvUVH55mGBmWPF4DgCtb++g0=;
+        b=6WFvFdjO1Kv6ZF1IU+lawmSTG/pJt3F6hoDx3kdMq9bbMKmsXDtaAooGyJkA/kDycq
+         CM1ARajGnPEYgrjKpWiei0NoWWWhdYeGpFnkkvfP+clin5JpxUOhkhFNUpDbzwm8kszK
+         ZSz2PLgbSjBa5yRAcJiArgoEngwULnFtVIHdUPVPOOvwn/8L3Z3HU9bj9P7XdWJIZrJ0
+         dnsSa5zBrCUbqD5DftzUoer8fl+gltSLmjwlZA2JUF26QVPx5NOoEzkL0OxUzha+yTXe
+         vPvi//+4oWDV3tem8BsgtF8qNS98CdbpPJ76JflkdLVFrg/spG4wde0dJg/wuxcgcjrk
+         hzqg==
+X-Gm-Message-State: ACrzQf20jt90lQ6eEX/gid3E0FkOOZwwcIih7vTHNwR6IyKoJ7G7p3de
+        yu92VqsOYtzyHKU3Hhj6OfE1VGqO3eBdSw==
+X-Google-Smtp-Source: AMsMyM4jnGJcsPoJ/eCogq9FIATpFpf3xU7k5A3woo4fSySkfin24aNZ+hLF2WZaPTvYMQFqnYlBMA==
+X-Received: by 2002:a05:620a:4015:b0:6ed:a8db:32c0 with SMTP id h21-20020a05620a401500b006eda8db32c0mr5321214qko.656.1666180766976;
+        Wed, 19 Oct 2022 04:59:26 -0700 (PDT)
+Received: from [192.168.10.124] (pool-72-83-177-149.washdc.east.verizon.net. [72.83.177.149])
+        by smtp.gmail.com with ESMTPSA id bz12-20020a05622a1e8c00b0039a1146e0e1sm3951343qtb.33.2022.10.19.04.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Oct 2022 04:59:26 -0700 (PDT)
+Message-ID: <e52eeddc-1562-05ff-de3b-c28655c7b550@linaro.org>
+Date:   Wed, 19 Oct 2022 07:59:25 -0400
 MIME-Version: 1.0
-References: <1666168845-67690-1-git-send-email-guanjun@linux.alibaba.com> <1666168845-67690-2-git-send-email-guanjun@linux.alibaba.com>
-In-Reply-To: <1666168845-67690-2-git-send-email-guanjun@linux.alibaba.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 19 Oct 2022 13:47:39 +0200
-Message-ID: <CAJZ5v0h=tPw8K30_yTh6rq3Pbnvx2MzQH5+kiMq3UAeUFXGWRA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] cpufreq: Fix show()/store() issue for hotplugging
- offline CPU
-To:     Guanjun <guanjun@linux.alibaba.com>
-Cc:     schspa@gmail.com, rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        zelin.deng@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v7 2/2] dt-bindings: thermal: add loongson2k thermal
+ binding
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20220930021054.22387-1-zhuyinbo@loongson.cn>
+ <20220930021054.22387-2-zhuyinbo@loongson.cn>
+ <21717466-63f9-09b0-e666-61b98ab808f4@loongson.cn>
+ <48b246c7-2af0-9d0d-3252-274b369af703@loongson.cn>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <48b246c7-2af0-9d0d-3252-274b369af703@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 10:40 AM Guanjun <guanjun@linux.alibaba.com> wrote:
->
-> From: Zelin Deng <zelin.deng@linux.alibaba.com>
->
-> After brought one CPU offline, lscpu returned failure:
->
-> lscpu: cannot read /sys/devices/system/cpu/cpu64/cpufreq/cpuinfo_max_freq: Device or resource busy
->
-> which had blocked all outputs of lscpu.
+On 19/10/2022 04:53, Yinbo Zhu wrote:
+> 
+> 
+> 在 2022/10/14 上午11:47, Yinbo Zhu 写道:
+>> Hi thermal maintainer
+>>
+>> Are there any other suggestions about this patch? If not, please help
+>> merge this patch to upstream.
+>>
+>> RRs
+>> Yinbo
+> 
+> Any updates?
 
-OK, so the policy->cpus mask is empty and -EBUSY is returned.
+You sent the patches just before merge window and since then you keep
+pinging. No, it does not work like that. It was a merge window.
 
-What's wrong?
+Best regards,
+Krzysztof
 
-> This is not the case mentioned in commit d4627a287e251, as the policy
-> had been created successfully but is inactive due to CPU gets offline.
-
-Yes, that's when policy_is_inactive(policy) returns "true" IIUC.
-
-> To fix this issue, just add an addtional check whether CPU is online or
-> not.
-
-Which is racy.
-
-Please explain the problem in the first place.
-
-> Fixes: d4627a287e251 ("cpufreq: Abort show()/store() for half-initialized policies")
-> Signed-off-by: Zelin Deng <zelin.deng@linux.alibaba.com>
-> Signed-off-by: Guanjun <guanjun@linux.alibaba.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 69b3d61852ac..aa238ba7d2fe 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -956,8 +956,12 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
->                 return -EIO;
->
->         down_read(&policy->rwsem);
-> -       if (likely(!policy_is_inactive(policy)))
-> -               ret = fattr->show(policy, buf);
-> +       if (unlikely(policy_is_inactive(policy) && cpu_online(policy->cpu)))
-> +               goto err;
-> +
-> +       ret = fattr->show(policy, buf);
-> +
-> +err:
->         up_read(&policy->rwsem);
->
->         return ret;
-> @@ -974,8 +978,12 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
->                 return -EIO;
->
->         down_write(&policy->rwsem);
-> -       if (likely(!policy_is_inactive(policy)))
-> -               ret = fattr->store(policy, buf, count);
-> +       if (unlikely(policy_is_inactive(policy) && cpu_online(policy->cpu)))
-> +               goto err;
-> +
-> +       ret = fattr->store(policy, buf, count);
-> +
-> +err:
->         up_write(&policy->rwsem);
->
->         return ret;
-> --
-> 2.32.0.GIT
->
