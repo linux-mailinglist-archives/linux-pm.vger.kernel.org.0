@@ -2,231 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0DCC6037AB
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 03:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D518603983
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 08:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiJSBvQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 18 Oct 2022 21:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S229958AbiJSGEb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Oct 2022 02:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiJSBvP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 18 Oct 2022 21:51:15 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D75448F970;
-        Tue, 18 Oct 2022 18:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666144274; x=1697680274;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=G4GLDL4SXF8Q7uQ4nuIndTPWq5ouLmk2XRjxP+wb2dk=;
-  b=efYKxwv6KbtIR/yydIBIlht5nsPfM9rL5/RoOM+6ywTJkDQCw4rSaEA4
-   LnJerT+AJWSSsD1kH0+ahh71zRvB2tw2lHwQPk15IG8Zn+1FZdCTOXexs
-   LrgaWUbNWNnghKqcVqvC05J31kkoispV233D8ptjnttKAAzJjKx2cbs2C
-   6qsRfBxDPwl9FYoZ5WBVqz+P2yEubX32HyZpgenT/Gk+fKGAzfDru+2NK
-   bzkJawC7JpfwwzXEzfhMIaKoPgu2rQAFxT8cP/K0nCi9+xPnSMN9z32p+
-   /RjpXfHCaDVvTyIk6IBgfGca5cavQ86VDovVGuMUwsXJJBa3u8R+Y7Mk6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="305017714"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="305017714"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2022 18:51:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10504"; a="629009901"
-X-IronPort-AV: E=Sophos;i="5.95,194,1661842800"; 
-   d="scan'208";a="629009901"
-Received: from lkp-server01.sh.intel.com (HELO 8381f64adc98) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 18 Oct 2022 18:51:12 -0700
-Received: from kbuild by 8381f64adc98 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1okyEi-0002Fd-0W;
-        Wed, 19 Oct 2022 01:51:12 +0000
-Date:   Wed, 19 Oct 2022 09:51:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- ba1b46e36fd7cae85e58325de9814fd9a594b4fe
-Message-ID: <634f5808.tjazel2jfYuEqNTa%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229933AbiJSGE3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 02:04:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3456CAE5C;
+        Tue, 18 Oct 2022 23:04:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C50416177E;
+        Wed, 19 Oct 2022 06:04:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA9ABC433D6;
+        Wed, 19 Oct 2022 06:04:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666159466;
+        bh=GoNOcTQRihsxSULDlcIct8Lz22S4CPpgq7KawTBDN6A=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ZBt8FacKXn5rb4huB9HM70ploZTOfCUG5Qa1Vc5E3rJ8uTrM/i3faUw2emwM4cUfg
+         EFhJ5N/uXl3iHgsKyEiCkBw+BJv0W2gef00+fLJFOXvzHdlZWRLmM7s0Kq3ezbqEJe
+         76pURUV9D7j2F6HvL2ek3vtifUU97O0+XTX3yA2f1YDqhI3/gbXyOHB9TlYJQWhMcx
+         Kkbu1eZ7hkhnH9nMnsCTd48dPc1035XA9ihE+A1FUguawgCnjfr/cQvV9Uq9/ehG9U
+         RWXLfZbvkO2NQ6YZtUvjU8Tv9YL3vIwD2j6EaBYKzgwp5U2cO+zAaa58cz2GNOTQYD
+         vcXvbnQL/fTVw==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Luca Coelho <luciano.coelho@intel.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+        Nathan Errera <nathan.errera@intel.com>,
+        "open list\:INTEL WIRELESS WIFI LINK \(iwlwifi\)" 
+        <linux-wireless@vger.kernel.org>,
+        "open list\:NETWORKING DRIVERS" <netdev@vger.kernel.org>
+Subject: Re: [PATCH 1/2] thermal/drivers/iwlwifi: Use generic thermal_zone_get_trip() function
+References: <20221014073253.3719911-1-daniel.lezcano@linaro.org>
+        <87mt9yn22w.fsf@kernel.org>
+        <f327dfc4-cd67-930c-a011-8cc2c58d7668@linaro.org>
+Date:   Wed, 19 Oct 2022 09:04:19 +0300
+In-Reply-To: <f327dfc4-cd67-930c-a011-8cc2c58d7668@linaro.org> (Daniel
+        Lezcano's message of "Fri, 14 Oct 2022 12:21:09 +0200")
+Message-ID: <87y1tcl57g.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ba1b46e36fd7cae85e58325de9814fd9a594b4fe  Merge branch 'pm-cpufreq' into linux-next
+Daniel Lezcano <daniel.lezcano@linaro.org> writes:
 
-elapsed time: 722m
+> On 14/10/2022 12:15, Kalle Valo wrote:
+>
+>> Daniel Lezcano <daniel.lezcano@linaro.org> writes:
+>>
+>>> The thermal framework gives the possibility to register the trip
+>>> points with the thermal zone. When that is done, no get_trip_* ops are
+>>> needed and they can be removed.
+>>>
+>>> The get_trip_temp, get_trip_hyst and get_trip_type are handled by the
+>>> get_trip_point().
+>>>
+>>> The set_trip_temp() generic function does some checks which are no
+>>> longer needed in the set_trip_point() ops.
+>>>
+>>> Convert ops content logic into generic trip points and register them
+>>> with the thermal zone.
+>>>
+>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>> ---
+>>>   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h |  2 +-
+>>>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c  | 71 ++++----------------
+>>>   2 files changed, 13 insertions(+), 60 deletions(-)
+>>
+>> The subject should begin with "wifi: iwlwifi: ".
+>>
+>> I don't see patch 2. Via which tree is the plan for this patch?
+>
+> patch 2 are similar changes but related to the mellanox driver.
+>
+> This is the continuation of the trip point rework:
+>
+> https://lore.kernel.org/netdev/20221003092602.1323944-22-daniel.lezcano@linaro.org/t/
+>
+> This patch is planned to go through the thermal tree
 
-configs tested: 145
-configs skipped: 4
+Ok, feel free to take this via the thermal tree:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                               allnoconfig
-arc                                 defconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-alpha                               defconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                             allyesconfig
-i386                                defconfig
-s390                                defconfig
-s390                             allmodconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-s390                             allyesconfig
-powerpc                         wii_defconfig
-arm                            lart_defconfig
-sh                   sh7770_generic_defconfig
-arc                    vdk_hs38_smp_defconfig
-arc                     nsimosci_hs_defconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-alpha                            allyesconfig
-m68k                             allyesconfig
-i386                          randconfig-a001
-arc                  randconfig-r043-20221018
-i386                          randconfig-a003
-riscv                randconfig-r042-20221018
-s390                 randconfig-r044-20221018
-powerpc                           allnoconfig
-mips                             allyesconfig
-i386                          randconfig-a005
-powerpc                          allmodconfig
-sh                               allmodconfig
-sh                           se7751_defconfig
-m68k                       m5275evb_defconfig
-powerpc                     pq2fads_defconfig
-sh                   sh7724_generic_defconfig
-ia64                          tiger_defconfig
-microblaze                      mmu_defconfig
-powerpc                      ppc6xx_defconfig
-xtensa                  audio_kc705_defconfig
-arc                           tb10x_defconfig
-openrisc                 simple_smp_defconfig
-i386                          randconfig-c001
-sparc                             allnoconfig
-powerpc                     tqm8541_defconfig
-mips                  maltasmvp_eva_defconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc                     stx_gp3_defconfig
-powerpc                   currituck_defconfig
-powerpc                 mpc834x_mds_defconfig
-arm                        trizeps4_defconfig
-powerpc                 linkstation_defconfig
-m68k                        mvme16x_defconfig
-ia64                                defconfig
-arm                        mvebu_v7_defconfig
-nios2                               defconfig
-m68k                          amiga_defconfig
-openrisc                         alldefconfig
-arm                      jornada720_defconfig
-ia64                             allmodconfig
-arm                        cerfcube_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arc                  randconfig-r043-20221017
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-arm                        spear6xx_defconfig
-arm                         assabet_defconfig
-mips                 decstation_r4k_defconfig
-powerpc                      ep88xc_defconfig
-arm                         lpc18xx_defconfig
-arm                            mps2_defconfig
-sh                          r7780mp_defconfig
-arm                         axm55xx_defconfig
-ia64                        generic_defconfig
-arm                           tegra_defconfig
-powerpc                      chrp32_defconfig
-mips                         db1xxx_defconfig
-powerpc                  storcenter_defconfig
-powerpc                 canyonlands_defconfig
-sh                          urquell_defconfig
-m68k                                defconfig
-sh                 kfr2r09-romimage_defconfig
-s390                       zfcpdump_defconfig
-openrisc                            defconfig
-powerpc                     tqm8548_defconfig
-openrisc                  or1klitex_defconfig
-loongarch                           defconfig
-loongarch                         allnoconfig
-loongarch                        allmodconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20221018
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-c007
-mips                 randconfig-c004-20221018
-i386                          randconfig-c001
-s390                 randconfig-c005-20221018
-arm                  randconfig-c002-20221018
-riscv                randconfig-c006-20221018
-powerpc              randconfig-c003-20221018
-x86_64                        randconfig-a014
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20221018
-hexagon              randconfig-r045-20221018
-i386                 randconfig-a013-20221017
-i386                 randconfig-a015-20221017
-i386                 randconfig-a016-20221017
-i386                 randconfig-a011-20221017
-i386                 randconfig-a014-20221017
-i386                 randconfig-a012-20221017
-x86_64                        randconfig-k001
-arm                      tct_hammer_defconfig
-riscv                             allnoconfig
-arm                      pxa255-idp_defconfig
-powerpc                 mpc832x_mds_defconfig
-powerpc                      ppc44x_defconfig
-mips                        maltaup_defconfig
-arm                                 defconfig
-mips                           rs90_defconfig
+Acked-by: Kalle Valo <kvalo@kernel.org>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
