@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CC9A604900
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 16:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF8460498A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Oct 2022 16:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233462AbiJSOSs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Oct 2022 10:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S230498AbiJSOmu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 19 Oct 2022 10:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiJSOS1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 10:18:27 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A40D81974E6
-        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 07:01:31 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id z20so17316414plb.10
-        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 07:01:31 -0700 (PDT)
+        with ESMTP id S230009AbiJSOm2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 10:42:28 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2908A17A036
+        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 07:28:08 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id df9so11451426qvb.9
+        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 07:28:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sOX/hC2X41UFwbpGdGHI430ElqEtPDdbL5GfxahROlI=;
-        b=dVd2escWA07wQyW29+yHtf1Aabg3rIpLGn64iqrAMkpAVqzr3PKpKo/woq+fpTux+P
-         OV67s5a2ZUJCkU53QILMfg3ASfe6ticcgpoQ/U4Ya1KJv4LQfq/hn7SkBgDWzyfGAyG7
-         Z2sTsQ0afOXdPkM1cDbQVYIHt1pWH0qp+k7Lv8VQfsB5tj66huJLPa8kMWzeBN8aKHIv
-         G5TtWxDNa8HL5kvhyQiEr5qLzZ3jxsOTIZNmd6VciiQbbg0tX7kSlhZdssOO/8zcTMm1
-         UiOqYIq1amvuIMkbhcK3FXbyPq478KivxxiUekU7kInHLyB/fV8dkcm5Tzbucaq/pBYr
-         Z+bw==
+        bh=5vgVZXeinbhpnwzOcj3FGms9cM/M5Xj4R/cDa4Tk1cA=;
+        b=rk5peA0BMWFeyDVMmseRsE34nvZ6ETndaDo8/pPXbdaMYNHXtIqBDx9Voigy0BlSKB
+         w4Ch9hzSDZ6TEnBjZPBnKyTIPHIy4UaziH9o03NjzzrQ8HJ4nrvBXc35I8Bjo02kHFhH
+         HTRueBS7B0zoCmi47wCK+/JrVRDlzKZICYaueC0HQ4YE5gmQ4CVRwJMmTS1EOvVl5kLy
+         safAUk6uLnfvYRatROHZzB5PFDfETN+QPQAOLHEEvH5zyHPZs6SvPRJVGQCTUnmznXPP
+         FanCKOiU1cWgR7wzMsBBed7tYw5v0bwiRzvdg0pD74ea8tYwgMTvlQ3jQeb9y23XbeaJ
+         khrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sOX/hC2X41UFwbpGdGHI430ElqEtPDdbL5GfxahROlI=;
-        b=Dk850GWtzkOPWWo/eff/FXmVrDU1XeEl1MT3kU0gXoxRpBLKMeO5mgrQPr6Cv881W+
-         JIH61EE0BTa6lYK3hYLF9czw5S+SHOfEg6ZzruuuggfGpQsEszKoxdL45C1gh/eTJz6m
-         j30vVDiley8vbn4xQahiY7KRLJ++sycuAI3tYK9M6co1sOP3MFgnGk6C6E5zhyJwCWMI
-         MaqfcBWAVYX90+Yomwp/S0UFqdwPTKOtGDkwg2hMpcFDFBau1hNu7vaSaTpot2eiI2NL
-         IPNLwVzkTCQSNGUUKHnub/C0pgO6mpDN6O3MOK5/+qN4MKU9puVHJeR3qdycj75HdEw/
-         E4Wg==
-X-Gm-Message-State: ACrzQf118V98wK1t48LEm09r2vUHKqFRjuM8XZ0lmysS/g43adR5CzLx
-        tE7M0DjMMaVY90Pj6wBtpQeb
-X-Google-Smtp-Source: AMsMyM4Rf1cbF2sWXTg1dfLCfhcWy6pUBvlDplgDIArkHHmRI+jsUANiVp81hJPfsEUHqgPOVBNUDg==
-X-Received: by 2002:a17:902:d588:b0:180:cf18:e76c with SMTP id k8-20020a170902d58800b00180cf18e76cmr8498867plh.138.1666187994228;
-        Wed, 19 Oct 2022 06:59:54 -0700 (PDT)
+        bh=5vgVZXeinbhpnwzOcj3FGms9cM/M5Xj4R/cDa4Tk1cA=;
+        b=QSwzRPVYuJPgYssiN5NKXemZfxdg4OMvkh18dBChHA0SuhVUHKpBv8mrEOkE8m7q0q
+         To5B2ziiXSwrATC5BaqzYoOYpfHtZk3EThMPAlKDLx/RxiiFY6BreZ+0mNbVb/BlR81R
+         jMuQZWQ/N+rQ5ZCClzXMvhIxsZvL3pawc56q+bpjuHLWV8NJARxH1W9+2N8a2xHhF3P4
+         c8h5J8Rj2mIFUeiEasCf4CdRzz4/q2LYHtB7AulqKdp70VeYm1lJqj6R1I3a1vhUoAGQ
+         DyLv+jCRW7/iPk7HLO+b3zAYijsJ+fGrxGiVOQvrH0D3pAhDn5Is5BzDhXmw4MURLMO6
+         oimQ==
+X-Gm-Message-State: ACrzQf0DE/OX7YNpGiICUawp2BJBdQ9ABPv3GUBzmwSJ9SrYFY50ttlK
+        7XexYtpcsHN3l5Im9Q/eZ87gZO9WNXdiiUd/dg==
+X-Google-Smtp-Source: AMsMyM4mOJ/ZRGynrSUABhwfAdolVCW+k/oCuD8MciOZ3QxKdz/q9Sa33mzbHg22ndZhxIQLzGpdgQ==
+X-Received: by 2002:a17:903:48e:b0:17e:ea4a:394e with SMTP id jj14-20020a170903048e00b0017eea4a394emr8350170plb.48.1666187999426;
+        Wed, 19 Oct 2022 06:59:59 -0700 (PDT)
 Received: from localhost.localdomain ([117.193.210.93])
-        by smtp.gmail.com with ESMTPSA id 194-20020a6216cb000000b0053e199aa99bsm11240322pfw.220.2022.10.19.06.59.48
+        by smtp.gmail.com with ESMTPSA id 194-20020a6216cb000000b0053e199aa99bsm11240322pfw.220.2022.10.19.06.59.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Oct 2022 06:59:52 -0700 (PDT)
+        Wed, 19 Oct 2022 06:59:58 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, viresh.kumar@linaro.org,
         krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
@@ -57,9 +57,9 @@ Cc:     johan@kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 3/4] cpufreq: qcom-hw: Add CPU clock provider support
-Date:   Wed, 19 Oct 2022 19:29:24 +0530
-Message-Id: <20221019135925.366162-4-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 4/4] arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+Date:   Wed, 19 Oct 2022 19:29:25 +0530
+Message-Id: <20221019135925.366162-5-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
 References: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
@@ -67,161 +67,102 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-cores. But this relationship is not represented with the clk framework
-so far.
+Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply clocks
+to the CPU cores. But this relationship is not represented in DTS so far.
 
-So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-clock producer/consumer relationship cleaner and is also useful for CPU
-related frameworks like OPP to know the frequency at which the CPUs are
-running.
-
-The clock frequency provided by the driver is for each CPU policy. We
-cannot get the frequency of each CPU core because, not all platforms
-support per-core DCVS feature.
-
-Also the frequency supplied by the driver is the actual frequency that
-comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-not same as what the CPUFreq framework has set but it is the one that gets
-supplied to the CPUs after throttling by LMh.
+So let's make cpufreq node as the clock provider and CPU nodes as the
+consumers. The clock index for each CPU node is based on the frequency
+domain index.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 67 +++++++++++++++++++++++++++++--
- 1 file changed, 63 insertions(+), 4 deletions(-)
+ arch/arm64/boot/dts/qcom/sm8450.dtsi | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index a5b3b8d0e164..4dd710f9fb69 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -4,6 +4,7 @@
-  */
+diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+index 6c18cfca9a34..8f26cf9aad01 100644
+--- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
+@@ -52,6 +52,7 @@ CPU0: cpu@0 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 0>;
+ 			L2_0: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -71,6 +72,7 @@ CPU1: cpu@100 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 0>;
+ 			L2_100: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -87,6 +89,7 @@ CPU2: cpu@200 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 0>;
+ 			L2_200: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -103,6 +106,7 @@ CPU3: cpu@300 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 0>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 0>;
+ 			L2_300: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -119,6 +123,7 @@ CPU4: cpu@400 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 1>;
+ 			L2_400: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -135,6 +140,7 @@ CPU5: cpu@500 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 1>;
+ 			L2_500: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -152,6 +158,7 @@ CPU6: cpu@600 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 1>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 1>;
+ 			L2_600: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -168,6 +175,7 @@ CPU7: cpu@700 {
+ 			power-domain-names = "psci";
+ 			qcom,freq-domain = <&cpufreq_hw 2>;
+ 			#cooling-cells = <2>;
++			clocks = <&cpufreq_hw 2>;
+ 			L2_700: l2-cache {
+ 			      compatible = "cache";
+ 			      next-level-cache = <&L3_0>;
+@@ -3804,6 +3812,7 @@ cpufreq_hw: cpufreq@17d91000 {
+ 				     <GIC_SPI 19 IRQ_TYPE_LEVEL_HIGH>;
+ 			interrupt-names = "dcvsh-irq-0", "dcvsh-irq-1", "dcvsh-irq-2";
+ 			#freq-domain-cells = <1>;
++			#clock-cells = <1>;
+ 		};
  
- #include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
- #include <linux/cpufreq.h>
- #include <linux/init.h>
- #include <linux/interconnect.h>
-@@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
- 	bool cancel_throttle;
- 	struct delayed_work throttle_work;
- 	struct cpufreq_policy *policy;
-+	struct clk_hw cpu_clk;
- 
- 	bool per_core_dcvs;
- };
-@@ -482,6 +484,54 @@ static void qcom_cpufreq_hw_lmh_exit(struct qcom_cpufreq_data *data)
- 	free_irq(data->throttle_irq, data);
- }
- 
-+static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-+
-+	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
-+}
-+
-+static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-+	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-+};
-+
-+static int qcom_cpufreq_hw_clk_add(struct qcom_cpufreq_data *data, u32 index)
-+{
-+	struct platform_device *pdev = cpufreq_get_driver_data();
-+	struct device *dev = &pdev->dev;
-+	char *clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", index);
-+	static struct clk_init_data init = {};
-+	int ret;
-+
-+	init.name = clk_name;
-+	init.flags = CLK_GET_RATE_NOCACHE;
-+	init.ops = &qcom_cpufreq_hw_clk_ops;
-+	data->cpu_clk.init = &init;
-+
-+	ret = clk_hw_register(dev, &data->cpu_clk);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-+		return ret;
-+	}
-+
-+	ret = of_clk_add_hw_provider(dev->of_node, of_clk_hw_simple_get, &data->cpu_clk);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-+		clk_hw_unregister(&data->cpu_clk);
-+	}
-+
-+	return ret;
-+}
-+
-+static void qcom_cpufreq_hw_clk_remove(struct qcom_cpufreq_data *data)
-+{
-+	struct platform_device *pdev = cpufreq_get_driver_data();
-+	struct device *dev = &pdev->dev;
-+
-+	of_clk_del_provider(dev->of_node);
-+	clk_hw_unregister(&data->cpu_clk);
-+}
-+
- static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- {
- 	struct platform_device *pdev = cpufreq_get_driver_data();
-@@ -556,19 +606,24 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	policy->driver_data = data;
- 	policy->dvfs_possible_from_any_cpu = true;
- 
-+	ret = qcom_cpufreq_hw_clk_add(data, index);
-+	if (ret) {
-+		dev_err(dev, "Domain-%d failed to add CPU clock\n", index);
-+		goto error;
-+	}
-+
- 	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy);
- 	if (ret) {
- 		dev_err(dev, "Domain-%d failed to read LUT\n", index);
--		goto error;
-+		goto clk_remove;
- 	}
- 
- 	ret = dev_pm_opp_get_opp_count(cpu_dev);
- 	if (ret <= 0) {
- 		dev_err(cpu_dev, "Failed to add OPPs\n");
- 		ret = -ENODEV;
--		goto error;
-+		goto clk_remove;
- 	}
--
- 	if (policy_has_boost_freq(policy)) {
- 		ret = cpufreq_enable_boost_support();
- 		if (ret)
-@@ -577,9 +632,12 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 
- 	ret = qcom_cpufreq_hw_lmh_init(policy, index);
- 	if (ret)
--		goto error;
-+		goto clk_remove;
- 
- 	return 0;
-+
-+clk_remove:
-+	qcom_cpufreq_hw_clk_remove(data);
- error:
- 	kfree(data);
- unmap_base:
-@@ -599,6 +657,7 @@ static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
- 	dev_pm_opp_remove_all_dynamic(cpu_dev);
- 	dev_pm_opp_of_cpumask_remove_table(policy->related_cpus);
- 	qcom_cpufreq_hw_lmh_exit(data);
-+	qcom_cpufreq_hw_clk_remove(data);
- 	kfree(policy->freq_table);
- 	kfree(data);
- 	iounmap(base);
+ 		gem_noc: interconnect@19100000 {
 -- 
 2.25.1
 
