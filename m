@@ -2,140 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E11360542E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 01:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C98C6056B7
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 07:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiJSXpN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 19 Oct 2022 19:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52268 "EHLO
+        id S229576AbiJTFWg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Oct 2022 01:22:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiJSXpM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 19 Oct 2022 19:45:12 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9440BF01A6
-        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 16:45:08 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5D3996602373;
-        Thu, 20 Oct 2022 00:45:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666223107;
-        bh=32/nM8tOizuEVobUKFcvhd6TOzppgakon2L/Dy3MsY0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Uzf0p9Uf14IOdv5/SjOF8ORUv8Cn/KcD353vNEtWtVVhecbDlKJ79V+tRTp3r+B8z
-         21pB8QCqXQPYITJmCP5r8RjyXLZ0X8Ybq20aYlXYvBtqLsKILDr1ntFN359xtdJ51K
-         SmHG/lCWwOFrTcLtZQFsF//JpMsxibHQ4cuEwrtUty9rMnFS/apyKD5VulVNPEc6l8
-         v1c0zFpqmGhzhDMEhQBfb6rVLqwK7WMTfYIJRd1zSOOrkWe9NpM54hUNwpc7bN8xV8
-         P7VcS7k9GAE5LOp12oVq1ScynDAFe29v2AR+eHiUc7Wd9msxcp82ISEkZiEYgVdz5A
-         IfJOu72EeMfwg==
-Received: by mercury (Postfix, from userid 1000)
-        id 1AC7810607E3; Thu, 20 Oct 2022 01:45:05 +0200 (CEST)
-Date:   Thu, 20 Oct 2022 01:45:05 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Chris Morgan <macroalpha82@gmail.com>
-Cc:     linux-pm@vger.kernel.org, maccraft123mc@gmail.com, lee@kernel.org,
-        dan.carpenter@oracle.com, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH] power: supply: Change rk817_chg_cur_to_reg to int
-Message-ID: <20221019234505.5viojwmk6ksqr4gb@mercury.elektranox.org>
-References: <20221010141329.10006-1-macroalpha82@gmail.com>
+        with ESMTP id S229786AbiJTFWg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 01:22:36 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE15716021B
+        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 22:22:33 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id bh13so18240738pgb.4
+        for <linux-pm@vger.kernel.org>; Wed, 19 Oct 2022 22:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w2MLVCopfBzHJZ9plEFQGqy/JaQDNWctRItbuh9GNoU=;
+        b=y/TjnX9N1gqV2hmOmgTeuvIQNtIvpJoZX5XhRtVjeijtHHtkEY3WXtsqCt4riHHSZ4
+         JzPNBaMiOtxKOKIrAI2VGXFsEcH+2yRVjL8I6ywbXROWrgy4x0RwXUwiwAF0zZ5+gBP/
+         DQWU0MLoByLOUUrResGrdOAypvO0T9VuT+QiP0QBgRr6s2RKrdWXmm7M60gKiTbsD5eI
+         tlCCglGf5nHLa1E3oLlBGEhETIxmOkqwMrZDLVvbA5EOQlkQCiIyWboeJbqlU/KoSHh9
+         f1yMXVf3rSbhHBOP7dLGJZ9hAFd0u6m/qUBAG7EIOSRjVFGDnnbkSarK/x6Z99fmkMHq
+         oTpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w2MLVCopfBzHJZ9plEFQGqy/JaQDNWctRItbuh9GNoU=;
+        b=hVqbiVr3WlRRVfo0g6jx/36FuW3p2vKaMYsN9KwN6X/75wxeEz0tm9G96e9ianoUFE
+         J0G4lPkjyG4PnI7p+T7Lygat2oz7nQdvhQBuxUGJGr3o3LIXuE+UuXGIp0XF3YkDBaYN
+         uEiNinNoZZJMLOsz6WwO8KSRm9cOcqJlb9QmZm6NLTk+RgkHjWW4Ye8E1h3e4mxiD5IJ
+         EWdsj19ST5GZ16aSrrf6IVD63N0iRNd89hTsauYDROX1QmGRBu45+spcHWf5Au7WG0J7
+         gINmPv9KSZmRlohZK3BZpOKOt3Z+o4AVEKjMCMZnBgbQWsRpjYOs6wDExMU9sAOE5BRS
+         CVjA==
+X-Gm-Message-State: ACrzQf0UNm73Pk3E0eK1LtNywh0OC0GuySdCAIBzDZuZEsGjBkfrg+d6
+        OUvd83f5Jc9EunwAGqFde2uMrg==
+X-Google-Smtp-Source: AMsMyM6K+ZR1YbcbhMCxCncgDbNrN7YxB7cXwahSOQPAPTnBb3HsKJGl/Ok+xA4Sa336CYanHjc0Tw==
+X-Received: by 2002:a05:6a00:705:b0:562:b9e1:d0e8 with SMTP id 5-20020a056a00070500b00562b9e1d0e8mr12432418pfl.0.1666243353385;
+        Wed, 19 Oct 2022 22:22:33 -0700 (PDT)
+Received: from localhost ([122.172.86.128])
+        by smtp.gmail.com with ESMTPSA id p9-20020a17090a0e4900b00203917403ccsm881093pja.1.2022.10.19.22.22.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Oct 2022 22:22:32 -0700 (PDT)
+Date:   Thu, 20 Oct 2022 10:52:30 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/4] qcom-cpufreq-hw: Add CPU clock provider support
+Message-ID: <20221020052230.m2ndqmjxlojdm4ie@vireshk-i7>
+References: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ojhjhth2aqihinrd"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221010141329.10006-1-macroalpha82@gmail.com>
+In-Reply-To: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
++ Johan,
 
---ojhjhth2aqihinrd
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 19-10-22, 19:29, Manivannan Sadhasivam wrote:
+> Hello,
+> 
+> This series adds clock provider support to the Qcom CPUFreq driver for
+> supplying the clocks to the CPU cores in Qcom SoCs.
+> 
+> The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+> clocks to the CPU cores. But this is not represented clearly in devicetree.
+> There is no clock coming out of the CPUFreq HW node to the CPU. This created
+> an issue [1] with the OPP core when a recent enhancement series was submitted.
+> Eventhough the issue got fixed in the OPP framework in the meantime, that's
+> not a proper solution and this series aims to fix it properly.
+> 
+> There was also an attempt made by Viresh [2] to fix the issue by moving the
+> clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+> since those clocks belong to the CPUFreq HW node only.
+> 
+> The proposal here is to add clock provider support to the Qcom CPUFreq HW
+> driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+> This correctly reflects the hardware implementation.
+> 
+> The clock provider is a simple one that just provides the frequency of the
+> clocks supplied to each frequency domain in the SoC using .recalc_rate()
+> callback. The frequency supplied by the driver will be the actual frequency
+> that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+> is not same as what the CPUFreq framework has set but it is the one that gets
+> supplied to the CPUs after throttling by LMh.
+> 
+> This series has been tested on SM8450 based dev board and hence there is a DTS
+> change only for that platform. Once this series gets accepted, rest of the
+> platform DTS can also be modified and finally the hack on the OPP core can be
+> dropped.
 
-Hi,
+Thanks for working on this Mani.
 
-On Mon, Oct 10, 2022 at 09:13:29AM -0500, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
->=20
-> Change return value of rk817_chg_cur_to_reg from u8 to int. If the
-> function fails to find a suitable value it returns a -EINVAL, but
-> defined as a u8 it would not return correctly. Additionally, change
-> defined variable that stores return value from u8 to int.
->=20
-> Fixes: 11cb8da0189b (power: supply: Add charger driver for Rockchip
-> RK817)
+Can you also test the below code over your series ? This shouldn't
+result in issues that Johan reported earlier [1][2]. Below is the hack I
+am carrying in the OPP core for Qcom SoCs at the moment.
 
-Wrong format, must be one line and title should be in quotes in
-addition to the brackets. (I fixed this while applying)
+diff --git a/drivers/opp/core.c b/drivers/opp/core.c
+index e87567dbe99f..b7158d33c13d 100644
+--- a/drivers/opp/core.c
++++ b/drivers/opp/core.c
+@@ -1384,20 +1384,6 @@ static struct opp_table *_update_opp_table_clk(struct device *dev,
+        }
 
-> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> ---
+        if (ret == -ENOENT) {
+-               /*
+-                * There are few platforms which don't want the OPP core to
+-                * manage device's clock settings. In such cases neither the
+-                * platform provides the clks explicitly to us, nor the DT
+-                * contains a valid clk entry. The OPP nodes in DT may still
+-                * contain "opp-hz" property though, which we need to parse and
+-                * allow the platform to find an OPP based on freq later on.
+-                *
+-                * This is a simple solution to take care of such corner cases,
+-                * i.e. make the clk_count 1, which lets us allocate space for
+-                * frequency in opp->rates and also parse the entries in DT.
+-                */
+-               opp_table->clk_count = 1;
+-
+                dev_dbg(dev, "%s: Couldn't find clock: %d\n", __func__, ret);
+                return opp_table;
+        }
+diff --git a/drivers/opp/debugfs.c b/drivers/opp/debugfs.c
+index 96a30a032c5f..402c507edac7 100644
+--- a/drivers/opp/debugfs.c
++++ b/drivers/opp/debugfs.c
+@@ -138,7 +138,7 @@ void opp_debug_create_one(struct dev_pm_opp *opp, struct opp_table *opp_table)
+         * - For some devices rate isn't available or there are multiple, use
+         *   index instead for them.
+         */
+-       if (likely(opp_table->clk_count == 1 && opp->rates[0]))
++       if (likely(opp_table->clk_count == 1))
+                id = opp->rates[0];
+        else
+                id = _get_opp_count(opp_table);
 
-Thanks, queued to fixes branch.
+-- 
+viresh
 
--- Sebastian
-
->  drivers/power/supply/rk817_charger.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
-rk817_charger.c
-> index 635f051b0821..305354d99177 100644
-> --- a/drivers/power/supply/rk817_charger.c
-> +++ b/drivers/power/supply/rk817_charger.c
-> @@ -121,7 +121,7 @@ struct rk817_charger {
->  #define ADC_TO_CHARGE_UAH(adc_value, res_div)	\
->  	(adc_value / 3600 * 172 / res_div)
-> =20
-> -static u8 rk817_chg_cur_to_reg(u32 chg_cur_ma)
-> +static int rk817_chg_cur_to_reg(u32 chg_cur_ma)
->  {
->  	if (chg_cur_ma >=3D 3500)
->  		return CHG_3_5A;
-> @@ -864,8 +864,8 @@ static int rk817_battery_init(struct rk817_charger *c=
-harger,
->  {
->  	struct rk808 *rk808 =3D charger->rk808;
->  	u32 tmp, max_chg_vol_mv, max_chg_cur_ma;
-> -	u8 max_chg_vol_reg, chg_term_i_reg, max_chg_cur_reg;
-> -	int ret, chg_term_ma;
-> +	u8 max_chg_vol_reg, chg_term_i_reg;
-> +	int ret, chg_term_ma, max_chg_cur_reg;
->  	u8 bulk_reg[2];
-> =20
->  	/* Get initial plug state */
-> --=20
-> 2.25.1
->=20
-
---ojhjhth2aqihinrd
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNQjAAACgkQ2O7X88g7
-+pqBfA//f+km5kVUQeP9SwC0jnkEhNZh6/EKepvExUu7IYkbUx40uPrcAPG5K6gJ
-C8XNvEY5mHlZJYH+BfR/MWgZ9tVBMx+bYNMN9zVSACFhP9cY3LT8ku+Yg7QmpcXR
-YZoidOxlkafnUGzrSj6h1g4EbgjgxLswLCZAz8IKyNfjNWg8D5U59aBwdcLKeZeC
-mVfaDMYBL5xsEWrNSJNzO8CkqKv/TWvOVxuKZ119Moaj6Mn83zn8Uxxfq0YE2Oy+
-GFIn0kV+iqOseDxR1Zk2Pt7lUurbTP6vKPoNjdfB0qApiL8FY62/M67/p6cPQWyL
-KnayNj406rPoATZTCv9Aj9IeiyFnjQh9QKXrbJrW0ZPiOzZBvKteqU80btIjJ+wn
-yiwkbUUk7S/h+a9uW5zK7KryKPK/gYcTUUS8Ny+kiNEpdLV+oMSV/hXshKrHGdbc
-gK2mHn1J6POH+7HCn9z6gEOA7SNPE0QvC0Clhe4QHN3QzhZZ2cycKQ809U06BfBJ
-geVbA/ZcOesUMRLKqZ3fKvt4GzI/YsAvbQ6Uh2qspSZNw5XlL2BeDzNZ6uPFHWs3
-sgiO9fbRDsjY0Wbs6Zofj2RXH9Q9JYYNYGJvmk1LxGEYobiQkLUjxt4aFUSlJU7p
-a9l85aCnlgpZl18hswwSuJ9cSPETQ2T8AF5aXSpRqs2M6wlOMIs=
-=5sQl
------END PGP SIGNATURE-----
-
---ojhjhth2aqihinrd--
+[1] https://lore.kernel.org/all/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/all/Ys2FZa6YDwt7d%2FZc@hovoldconsulting.com/
