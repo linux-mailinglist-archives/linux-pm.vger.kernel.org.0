@@ -2,99 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D117C605920
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 09:56:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102A8605986
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 10:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiJTH4R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Oct 2022 03:56:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46864 "EHLO
+        id S229683AbiJTIUJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Oct 2022 04:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbiJTH4Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 03:56:16 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D58172B5F
-        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 00:56:07 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MtKY31QYVzmVC3;
-        Thu, 20 Oct 2022 15:51:19 +0800 (CST)
-Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 20 Oct 2022 15:55:42 +0800
-Received: from huawei.com (10.90.53.225) by kwepemm600014.china.huawei.com
- (7.193.23.54) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 20 Oct
- 2022 15:55:42 +0800
-From:   Zhang Qilong <zhangqilong3@huawei.com>
-To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <amitk@kernel.org>, <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>
-Subject: [PATCH] thermal/of: Fix possible memleak in thermal_of_zone_register()
-Date:   Thu, 20 Oct 2022 16:00:48 +0800
-Message-ID: <20221020080048.56377-1-zhangqilong3@huawei.com>
-X-Mailer: git-send-email 2.26.0.106.g9fadedd
+        with ESMTP id S229610AbiJTIUI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 04:20:08 -0400
+X-Greylist: delayed 565 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 20 Oct 2022 01:20:07 PDT
+Received: from outbound-smtp42.blacknight.com (outbound-smtp42.blacknight.com [46.22.139.226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308AE2EF48
+        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 01:20:05 -0700 (PDT)
+Received: from mail.blacknight.com (pemlinmail05.blacknight.ie [81.17.254.26])
+        by outbound-smtp42.blacknight.com (Postfix) with ESMTPS id 1F41529C5
+        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 09:10:37 +0100 (IST)
+Received: (qmail 8911 invoked from network); 20 Oct 2022 08:10:36 -0000
+Received: from unknown (HELO techsingularity.net) (mgorman@techsingularity.net@[84.203.198.246])
+  by 81.17.254.9 with ESMTPSA (AES256-SHA encrypted, authenticated); 20 Oct 2022 08:10:36 -0000
+Date:   Thu, 20 Oct 2022 09:10:35 +0100
+From:   Mel Gorman <mgorman@techsingularity.net>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        linux-rtc@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
+Message-ID: <20221020081035.4lafnpunbacrhdqs@techsingularity.net>
+References: <5887691.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.225]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600014.china.huawei.com (7.193.23.54)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <5887691.lOV4Wx5bFT@kreacher>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the error path, we forget to free the memory that allocated
-to of_ops in thermal_of_zone_register(), it can cause memleak
-when error returns. We fix it by moving kmemdup to the front of
-using it and freeing it in the later error path.
+On Tue, Oct 18, 2022 at 06:09:31PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
+> ordering issue") overlooked the fact that cmos_do_probe() depended
+> on the preparations carried out by cmos_wake_setup() and the wake
+> alarm stopped working after the ordering of them had been changed.
+> 
+> Address this by partially reverting commit 4919d3eb2ec0 so that
+> cmos_wake_setup() is called before cmos_do_probe() again and moving
+> the rtc_wake_setup() invocation from cmos_wake_setup() directly to the
+> callers of cmos_do_probe() where it will happen after a successful
+> completion of the latter.
+> 
+> Fixes: 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration ordering issue")
+> Reported-by: Zhang Rui <rui.zhang@intel.com>
+> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
-Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
----
- drivers/thermal/thermal_of.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+Boot test that previously hit NULL pointer exceptions also completed successfully.
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index d4b6335ace15..fc8fa27480a1 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -596,10 +596,6 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 	int ntrips, mask;
- 	int ret;
- 
--	of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
--	if (!of_ops)
--		return ERR_PTR(-ENOMEM);
--
- 	np = of_thermal_zone_find(sensor, id);
- 	if (IS_ERR(np)) {
- 		if (PTR_ERR(np) != -ENODEV)
-@@ -626,6 +622,12 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 		goto out_kfree_trips;
- 	}
- 
-+	of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
-+	if (!of_ops) {
-+		ret = -ENOMEM;
-+		goto out_kfree_tzp;
-+	}
-+
- 	of_ops->get_trip_type = of_ops->get_trip_type ? : of_thermal_get_trip_type;
- 	of_ops->get_trip_temp = of_ops->get_trip_temp ? : of_thermal_get_trip_temp;
- 	of_ops->get_trip_hyst = of_ops->get_trip_hyst ? : of_thermal_get_trip_hyst;
-@@ -656,6 +658,7 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 	return tz;
- 
- out_kfree_tzp:
-+	kfree(of_ops);
- 	kfree(tzp);
- out_kfree_trips:
- 	kfree(trips);
 -- 
-2.25.1
-
+Mel Gorman
+SUSE Labs
