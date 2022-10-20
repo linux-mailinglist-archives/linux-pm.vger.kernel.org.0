@@ -2,166 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9D2605C65
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 12:34:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 159F8605C87
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 12:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiJTKeE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Oct 2022 06:34:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
+        id S230283AbiJTKhW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Oct 2022 06:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiJTKeD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 06:34:03 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0482C157F55
-        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 03:34:02 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id r22so25718230ljn.10
-        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 03:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yWjPN4KXHxPWN4WI4l5tKmALmiP8Slvad4TlEfvcieE=;
-        b=l6AhLaMP0llYNqZfo5qGuwvluxb7uJZ8dQVp+TEWGoMkOr0PVxTgLEYCaa+Z0GzRwz
-         idiIGKwMVtNKgc/BUlJ7qbIBqGqeEOOpVc4yu92ZsBeXmHJRzqpSFrhJF9s8bCRXA1Rp
-         FDmJCR9VF3nyuUlDmFrzBDaxozSnSl16S6ge2yck0ed4HG7t0DG44xTmLyT6nD0SqDcs
-         /RNVJ0XhucCCy/3t/y2wOCbJcHf9V0DmzPs+xJNk9IWYw9wHpJPqIpA+WS8D//iKX55B
-         Xuthe3TkwTjJknmbgy62/yFLQnPAcYY9avkXYee/MxQB2oFCu5FRj+NLdPjxbRuztkmk
-         MCdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yWjPN4KXHxPWN4WI4l5tKmALmiP8Slvad4TlEfvcieE=;
-        b=Yw3F8eZ1d+a1H8j10rP4THtb803124KqIfOtIJurRQcvZESCQQOOebmOBlP0KdTJhQ
-         QOPDVGKtmNrTKtMC7Vt4W01RavP8wnYFJoRCqbQVhEua7Ah6XirSWHMfIX2TIMWfg1kV
-         qf0QUBaEdcfHlGf+y+kyZOgUdAaEq9FGqUH0GJlX5XVKPmvzwtVqOyOb92kYqcctdLPU
-         nrlRm2qneyVaayoDJYZYqelVt4QhHGAoDmSxmAXq2AwRi0nvNFpTywJE3X1vDEUAjXn7
-         /zvjOS3PoRJq9OdVzOAawAv7ZTDfH52ElOQtdhep7Mt89Z958pl5il4ycNZKsUoa7RqN
-         v6mg==
-X-Gm-Message-State: ACrzQf0vw/CAFW2CnzmfJuM2ZVmA8XX/kTXcFFqF7l7mBbzRjDfyzoWj
-        AKwKvQxlE/cBzR+jcMGfVoY9JQ==
-X-Google-Smtp-Source: AMsMyM4hm2kOhU2E0xX6eMOwIhvjHKKOb4ioplBvbXHocJEUxxCR5hxB4bbpeeMW+Jneh7LGk+UTkQ==
-X-Received: by 2002:a2e:8541:0:b0:261:b44b:1a8b with SMTP id u1-20020a2e8541000000b00261b44b1a8bmr4802602ljj.46.1666262040316;
-        Thu, 20 Oct 2022 03:34:00 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id f20-20020a056512229400b0049f53b65790sm2658525lfu.228.2022.10.20.03.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Oct 2022 03:33:59 -0700 (PDT)
-Message-ID: <ec30d40c-d1d8-84d2-961e-c0a2fde5e341@linaro.org>
-Date:   Thu, 20 Oct 2022 13:33:59 +0300
+        with ESMTP id S230190AbiJTKhV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 06:37:21 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2074.outbound.protection.outlook.com [40.107.244.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1BAA1BE1D8
+        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 03:37:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kZ06bXuUiL7JBL/Cro2958VFlI6+ebqi3JKSwaS5dMGPPjU9Wfxq0nciwOCcTnf3473qmtUQSowdppY9OyM8Fx7fM8wU3CuxleCj3Kkpxoj8Z1v/raquGNkb2VH7alYmCTKzQBKrQKNhyZSC335yOJsWkXAjxZaRYYbBk71SY0K4OdJbVvf4UvkQ7Es7UeBthypPQ1uXRSeSxGcIN2n087+RHni3B226udSXF4qI7OSxDE9Z3dZu+AEUPs9TEgYR5pfmp9O6176df0PFmTrYclL1fwaXS6qPbpbyDUpAb/KSlJ+Dx4NfwX+hVYe21JkLZsV5R4MH1yVqnuMV0vpH+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WLxoNMS3/xQkt6nnBBsICqPGHj+mkPa+vNy+D50yZoQ=;
+ b=Ks3FTgbqI+XCfN1g/SOUn6akUWjxbulROX8RMOQm8pvTrepltdZIpW1HhBL5gVigNCAxi8P2xDp4UWAcWIM10UlZMaruSa56BXAd/Cjw3JmtGvgwNCsMwrX/rKinpoe8XlYVBUdTmwCZBhSsgwbnTKao2FERKT1wqFkQujyGw5Kd+CE9NjW3oWqH4zeTeRigZaMQUvKJdBjupShJbvYOuoM1SYcmG3Z3RB3VyuWsZiIV0sXy/T4RPpM14JmLk9qP7Xzpuyhp9Kzj+i2Lz/RsxME0oON0TEnHnFlztOsj/fi4dF1WTAG7p/BggCfNb7DAlsVeNY0EbE1fikCQmPdeHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WLxoNMS3/xQkt6nnBBsICqPGHj+mkPa+vNy+D50yZoQ=;
+ b=R+8QUAy2kFe9AKf/k1GgeJiGttdeH57Th6LSr7PcWMhbOFnGOYUwvohLcmheNQmcdVQBztqj2btF3oVE58H+oS7y1KDJs/VJQ+Z4fNOteOgq6nNNPgbCAeVSsIFM1BXRf+b0NyfykUFFj/kfUpKWoynGdGLo51XhEG+CjLL6QCaP6PVA+Hlm82/EGfQnId9A1BvmKc3Nu2iLcsIk0gouLpqlrUhS7zi1+kIhS4+Tug2b98BT7wUgTkd2dk7CjTyVeUIS8flx35TfENnlJ9qyqZgrvK5WB9TlrmtzUn0TsZXj2/7vhbt3G7Qf3RJ9ikuwP/pfv6Sakpylhvyx51WiSg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by BN9PR12MB5132.namprd12.prod.outlook.com (2603:10b6:408:119::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Thu, 20 Oct
+ 2022 10:37:17 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::4ff2:d93e:d200:227e]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::4ff2:d93e:d200:227e%7]) with mapi id 15.20.5723.033; Thu, 20 Oct 2022
+ 10:37:17 +0000
+From:   Ido Schimmel <idosch@nvidia.com>
+To:     linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, vadimp@nvidia.com, mlxsw@nvidia.com,
+        Ido Schimmel <idosch@nvidia.com>
+Subject: [PATCH] thermal/of: Fix memory leak on thermal_of_zone_register() failure
+Date:   Thu, 20 Oct 2022 13:36:58 +0300
+Message-Id: <20221020103658.802457-1-idosch@nvidia.com>
+X-Mailer: git-send-email 2.37.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1PR0601CA0003.eurprd06.prod.outlook.com
+ (2603:10a6:800:1e::13) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RESEND PATCH v2] firmware/psci: Print a warning if PSCI doesn't
- accept PC mode
-Content-Language: en-GB
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, soc@kernel.org,
-        linux-pm@vger.kernel.org
-References: <20220926110249.666813-1-dmitry.baryshkov@linaro.org>
- <Y1AGLPXWFOmjfdd0@hovoldconsulting.com>
- <CAPDyKFr9MraGWz7hbHyGtFsk7V2_GBUqvWBG5yM40zV6utwXOQ@mail.gmail.com>
- <CAA8EJpoHSHqsqok1hhVhF-24O5dwjA46fmdjsUg1aHjuiy266w@mail.gmail.com>
- <Y1DxfjExuzfKLWDs@hovoldconsulting.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <Y1DxfjExuzfKLWDs@hovoldconsulting.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|BN9PR12MB5132:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0fe3550e-21b2-40d6-a905-08dab2870f22
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hQDWEpJm361aH7N62lJwxniIvkEqe35tu45NK7DKcFTcUFU9KSolNltemqlBwlqyLxROqC0RAJsgMAQm0R3WqGhdXl3tfWnLSvjFkdUUGMt0ilxy/9u+oarAMPHSZsFTb9Vn/xxZr/FBprm8c3YzAr5j3oW6m/r1D3DlXAeUP/TOumnncPrJe8b17md3p53YL0nI7chN+lPBciUAM6StVyBgf1uboo3ViCzPf/UvrifHzSQK8eWm3pn+5Ij1VRUDTpYo63aIM51U9CR4C6Ek1vCl0AJahRAX78RUIFR310z23PzGON/zTglzsCYHQEYCdQoEdu9d/2Qyr5z+Vwjhcymw51oIauQjLeXcs9aNdLbjPRHs4rgtAwL4uoN/9PrNuXYcHkI0wF/bge7Xdf7+MSxcji1pknzt95+XPCUygA9cbFxGdI3NdPiVmuHYl7/YagTDZcm50ryEL+6f6mg/vs4LUaD6dr/Xw2T6Aen2eDkha/DDa2H1TVDJuF62Of/MeIG5waFtZqRgNzz0Q7f2i+HAZEznc1NLGXOXFPuViIKQr6po7XX8jJcQeZsmIe1lghb8w48rnly4rlruavzFICOrSjVMBlBvpQE7r0u54wYofOV7h2ao7h/Zp5G7LkdqT2wZCFk4FyPBdSHeNB0WYMkfUqPJD4v34gS3n/j3fTnyUUwUzhlFVevhyJVkNGXyOA8FaPmW9YYw0GmfNFoQIggCsGGFUS4KrYpex5HKHppdVtPLadQ5hJU9vQOoyjXmxtsgNHWU+s4mDp0dxxYaSA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(39860400002)(376002)(396003)(346002)(451199015)(186003)(1076003)(41300700001)(38100700002)(8936002)(316002)(6916009)(5660300002)(2616005)(83380400001)(36756003)(6666004)(107886003)(26005)(86362001)(6512007)(2906002)(478600001)(6506007)(6486002)(66556008)(66476007)(66946007)(8676002)(4326008)(505234007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2iN4cNwkWHGNTPKWGklvw4CR4sAgXQ68HEVtU5ACruto4DnUe+WHnvA17dAk?=
+ =?us-ascii?Q?hdpaKCCIiJncXpFlcGyXrMxCmr2XIKgXzOAXE/+w+VfQVjLodAo7jYkBZXz/?=
+ =?us-ascii?Q?uQlyEM/jhgqkiFODAyr9VIhEuq6DoC8tjdeAm7ni1nODNEk9JC8FGzdviFaB?=
+ =?us-ascii?Q?77iSLSkZlpOKTIA/KpU4vkg8jZASN0tryNCMK+P4lqpjSTHkhVpPePngbdVf?=
+ =?us-ascii?Q?yy7N7vCghGgn402pFouvCG5qp95EXE1O5Xzxe8r8zGjvUKbqFYb/b9nW2S0t?=
+ =?us-ascii?Q?KH5VY9RZ8mKcSPCojdjp67E2Uxwiwaid1FqH1S29h69ZyZKII/VWTDZNWUCJ?=
+ =?us-ascii?Q?wTJ6zW3o3IPh83lqa2zW6mUb+idPQ56vyjFSwCV5Uz4Etw6EexEYpZABYPKc?=
+ =?us-ascii?Q?y55q8dubQaxQWqh6hHj+lDR7UpIrpUeSRQbMkHZq223oZMavjsaK2SV8agF6?=
+ =?us-ascii?Q?tytYXeclXxcTTefPp0RcRnrCB6nipTU6+NdLLxAQ3Ch8juP04H/sY9ZbaSc3?=
+ =?us-ascii?Q?1qJeATDaK6ACwz/g69TDnMdr+CI0jcfdyY/1IJ96RZzmmDzqtqb8n+XkXV2Y?=
+ =?us-ascii?Q?pT+aHm4uAHmw8KA7O6flMyHRRQCFc3J/bnnl3asZPBnazMMF1h2vceHkSBND?=
+ =?us-ascii?Q?kbZvexTZoc+4rdtjzHk7y+XHzuHCfn8P0EbjH46djKbVWjkAQcthu1XFqHmB?=
+ =?us-ascii?Q?X3FcSBnHmPWSyUaIde5rWMOXKakci9cbFwGyE354CANwtsLG2pOWYk4RrDnG?=
+ =?us-ascii?Q?ZLrIuaiMeQiSk3mMmlG6vuTrPd3H8CoZVYKNaUxrdfB+WTOHXfkCde+cE/an?=
+ =?us-ascii?Q?KjV+nD9dtK/Fs9Gr4+1Vejs2LjziCgCijGYeTXlfnhCjg83AdHwNFtl55X0G?=
+ =?us-ascii?Q?Rx6tRABeAobRUmGRDUgNnPX3CZHZ4kWazgfBCEWKN/flsXZi2sLUXYoB1Xxp?=
+ =?us-ascii?Q?hGO/2n+nXf7qEvzwdyGKit2iLQV9BGl5nn2YUnWm+8HG+imDxZf5Z05mgFdM?=
+ =?us-ascii?Q?OIXGI76scDQaA1HFVhnHP0uNFm6bVRXoax/6M7oG0m7LZ8Y1NOanQbpkHoU7?=
+ =?us-ascii?Q?iNUcpQEAr9ApzKTpGQli+BbejmHnIO3yj1NurvaHwtmqn3UDOs8FKu8Lu2M4?=
+ =?us-ascii?Q?suENHX2DUVQskvIO3hpNfm/l92sRVBHCAX5hRSerexfrZptFLMWm3kfUqodY?=
+ =?us-ascii?Q?WdraBCQ8lJLmCnHXBHO+Zdn10VOMFT2UOP6nXGe92NfRujWpEcEWrM32ESb9?=
+ =?us-ascii?Q?w+gSJ6X8IY/d4FZd6RVeon3ZXrbOklEt8MjEss+BHNFmyvLK/pFRllrKhJuc?=
+ =?us-ascii?Q?cp/bU+AuVG/DY2v5tOWKxeFWi93VKErOewJ0TnpTpDXZktlKIkHHMsNeTWsQ?=
+ =?us-ascii?Q?kBLes8tJi/qMpWMsnV7L0lvYtTn+Cz25/1edwOmbKg6UjJEQize3Rx93u/tO?=
+ =?us-ascii?Q?Rhftbl/WIzZ/tbfYO+ofesjnnLM70ruRWvj7Zb/cfcASXPxwa5qSTwaKsGpb?=
+ =?us-ascii?Q?+xi3PeabiZnEtMMgaBsqd6AIvDUaQycd3kvzpn9u3BtAjbBf9QBdQcLHxc0b?=
+ =?us-ascii?Q?7IgxP6+f6KSckp8+OUoAi0lKD+I3LAOBHPLFWHNl?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe3550e-21b2-40d6-a905-08dab2870f22
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2022 10:37:17.2496
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0ecdhRUbI8ouOGI5mFzul6SjOni2/34BnFCOZvCmd2ICdA5oSlDJ0E72ukoiZRA2gkdKT6YMXcCPbRTtCdMTSQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5132
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/10/2022 09:58, Johan Hovold wrote:
-> On Wed, Oct 19, 2022 at 06:02:37PM +0300, Dmitry Baryshkov wrote:
->> On Wed, 19 Oct 2022 at 17:37, Ulf Hansson <ulf.hansson@linaro.org> wrote:
->>> On Wed, 19 Oct 2022 at 16:14, Johan Hovold <johan@kernel.org> wrote:
->>>> On Mon, Sep 26, 2022 at 02:02:49PM +0300, Dmitry Baryshkov wrote:
->>>>> The function psci_pd_try_set_osi_mode() will print an error if enabling
->>>>> OSI mode fails. To ease debugging PSCI issues print corresponding
->>>>> message if switching to PC mode fails too.
->>>>>
->>>>> Acked-by: Mark Rutland <mark.rutland@arm.com>
->>>>> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
->>>>> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->>>>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
->>>>> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
->>>>> index 9fdcb6bff403..42cae0ba10e2 100644
->>>>> --- a/drivers/firmware/psci/psci.c
->>>>> +++ b/drivers/firmware/psci/psci.c
->>>>> @@ -164,6 +164,8 @@ int psci_set_osi_mode(bool enable)
->>>>>                        PSCI_1_0_SUSPEND_MODE_PC;
->>>>>
->>>>>        err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
->>>>> +     if (err < 0)
->>>>> +             pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
->>>>>        return psci_to_linux_errno(err);
->>>>>   }
->>>>
->>>> When booting 6.1-rc1 I now see:
->>>>
->>>>          [    0.000000] psci: OSI mode supported.
->>>>          [    0.000000] psci: failed to set PC mode: -3
->>>>
->>>> on every boot with sc8280xp, while later enabling OSI mode still works:
->>>>
->>>>          [    0.227358] CPUidle PSCI: psci_pd_try_set_osi_mode - success
->>>>          [    0.227599] CPUidle PSCI: Initialized CPU PM domain topology
->>>>
->>>> Judging from Sudeep's comment on v1:
->>>>
->>>>          The platform must boot in PC mode, so even if it fails we ignore
->>>>          so not sure if the logging is of much help here IMO.
->>>>
->>>> perhaps logging this as an error is not a good idea?
->>
->> As far as I understand, some of the Qualcomm platforms booted in the
->> OSI mode, no matter what the spec says. I'm not sure about the
->> sc8280xp, but it definitely was the case previously. This was the
->> primary reason for adding a log here.
->>
->>> I think it's useful to get information that the FW doesn't fully
->>> conform to the spec (it should support PC mode), but that doesn't
->>> really mean that it can't work.
->>>
->>> To me, it sounds like we should move the logging to the debug level!?
->>
->> I'd say, either ignore the error, or move the warning to the info or
->> debug level.
-> 
-> "Ignore the error" as in removing the warning or as in telling every
-> owner of an X13s Thinkpad to ignore it?
-> 
-> If there's nothing that can be done about it and this is nothing to
-> worry about, then moving to debug level would seem like the right thing
-> to do here. At least for the PC case.
+The function does not free 'of_ops' upon failure, leading to a memory
+leak [1].
 
-Feel free to send the patch. I'd maybe use dev_info rather than dev_dbg, 
-to let the user have a chance of seeing the warning.
+Fix by freeing 'of_ops' in the error path.
 
-Regarding telling every user to ignore the warning. This is not 
-something new. E.g. each time I boot my ThinkPad, I see two or three 
-warning messages related to TPM, despite having 'quiet' in kernel boot args.
+[1]
+unreferenced object 0xffff8ee846198c80 (size 128):
+  comm "swapper/0", pid 1, jiffies 4294699704 (age 70.076s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    d0 3f 6e 8c ff ff ff ff 00 00 00 00 00 00 00 00  .?n.............
+  backtrace:
+    [<00000000d136f562>] __kmalloc_node_track_caller+0x42/0x120
+    [<0000000063f31678>] kmemdup+0x1d/0x40
+    [<00000000e6d24096>] thermal_of_zone_register+0x49/0x520
+    [<000000005e78c755>] devm_thermal_of_zone_register+0x54/0x90
+    [<00000000ee6b209e>] pmbus_add_sensor+0x1b4/0x1d0
+    [<00000000896105e3>] pmbus_add_sensor_attrs_one+0x123/0x440
+    [<0000000049e990a6>] pmbus_add_sensor_attrs+0xfe/0x1d0
+    [<00000000466b5440>] pmbus_do_probe+0x66b/0x14e0
+    [<0000000084d42285>] i2c_device_probe+0x13b/0x2f0
+    [<0000000029e2ae74>] really_probe+0xce/0x2c0
+    [<00000000692df15c>] driver_probe_device+0x19/0xd0
+    [<00000000547d9cce>] __device_attach_driver+0x6f/0x100
+    [<0000000020abd24b>] bus_for_each_drv+0x76/0xc0
+    [<00000000665d9563>] __device_attach+0xfc/0x180
+    [<000000008ddd4d6a>] bus_probe_device+0x82/0xa0
+    [<000000009e61132b>] device_add+0x3fe/0x920
 
-> 
-> Johan
+Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+---
+ drivers/thermal/thermal_of.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index d4b6335ace15..aacba30bc10c 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -604,13 +604,15 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+ 	if (IS_ERR(np)) {
+ 		if (PTR_ERR(np) != -ENODEV)
+ 			pr_err("Failed to find thermal zone for %pOFn id=%d\n", sensor, id);
+-		return ERR_CAST(np);
++		ret = PTR_ERR(np);
++		goto out_kfree_of_ops;
+ 	}
+ 
+ 	trips = thermal_of_trips_init(np, &ntrips);
+ 	if (IS_ERR(trips)) {
+ 		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+-		return ERR_CAST(trips);
++		ret = PTR_ERR(trips);
++		goto out_kfree_of_ops;
+ 	}
+ 
+ 	ret = thermal_of_monitor_init(np, &delay, &pdelay);
+@@ -659,6 +661,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+ 	kfree(tzp);
+ out_kfree_trips:
+ 	kfree(trips);
++out_kfree_of_ops:
++	kfree(of_ops);
+ 
+ 	return ERR_PTR(ret);
+ }
 -- 
-With best wishes
-Dmitry
+2.37.3
 
