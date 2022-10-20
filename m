@@ -2,65 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F07CC605F75
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 13:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EE93606395
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Oct 2022 16:53:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiJTLzb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Oct 2022 07:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40566 "EHLO
+        id S229691AbiJTOxK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Oct 2022 10:53:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbiJTLza (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 07:55:30 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A62F13332C
-        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 04:55:29 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id a29so33181436lfo.1
-        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 04:55:29 -0700 (PDT)
+        with ESMTP id S229756AbiJTOxJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 10:53:09 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D5E153824
+        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 07:53:07 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id b2so86035eja.6
+        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 07:53:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=fairphone.com; s=fair;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LsYCCTAqbxl1nYegcA6XVTC9x8A8DOyUVzkeALJAq+8=;
-        b=NBtRzRBtf3CHp+ZqCc1ugzJAxtf+FQVKg2znqKAHKcyqQD28FLc1pZigowJDa5b4cx
-         T14yJBOg6h/DCw82V1QIGM5NujztBo7z5POKBdEh5+GvZIpQO2i62wrTbaUya4zjj0Jw
-         nGJDa6LGC2eIuoWcU+F57K/9Qxd4SMDa/bgId48bb9tHTIDzwE95NvzZQyMscY4iPcD6
-         UZwmxGMzeB2fHWb5jDfOtSSwUjZ3KGnLsHuHwaicwmoEa7hdVRhuEFI3rTONtWv3Ijlv
-         OvKXGcaJibok55AsceVFipb8FoGx2bs8Kyk/0c5y0e2+o4xRRqSkc+sJnYg66ADBpmj8
-         VOpw==
+        bh=iDGNVxNBG5DnP2O72JRwhZ79bFRdgRafb7U2+dHA6NI=;
+        b=HQx6beIGe/7vsiKgB9fdxAVCuvcdbkQg+VQX6cKRsc+Gu2PI/mHpj5LeOPIAJXmziM
+         +gSPF02UrS5CAMYnQTdZCGvU9PP6fjDkOTBfUlQ5yIN0VeNH2RbKyXy0un3FvjX+lHA1
+         o6gpyV/iQBb3aFE3FpY9lGrCvezZA0rEW+Gk+OP9jc2i7nzek1ENKKOTWwYXa0FBeaS2
+         DbyxcM7AIaKGFf0haYiX/biPZcdBTp+ORTfmCYyQeu6tZ/ZRziQBgp+tW1leWRQwo4DQ
+         jhZ5azqVFMc2dtaPNro2vcAwaYNuSRvBE5cHnN/PL+CGBDY3eQHvu2UDa7KqwFLAvk0A
+         IsXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LsYCCTAqbxl1nYegcA6XVTC9x8A8DOyUVzkeALJAq+8=;
-        b=muHdaTooqrnxfHhG3sWUTk61iLksb4c+FVetTfLm0fGtQVYDvSlxDlxrrXp1NNbAeV
-         vxYf2FkB0Z7eV64Kw6HWASvg5S1tbn5bpd8uU685JKIlSiV0la1GPvffV1dNTbINnDJH
-         i/J8Cl6IDsQ5P6iZ3xMlDG1bxP6Rgnvku56KT1c8V+0oKprMf6gCHnQIzezGsGTkhxUt
-         q+2mfsyh51BO/k6jRxGcI3R0Q1hACxxRdTs4UAH9/k7miiWlwZfnRl3NmIjNEP3BqUzD
-         zIOF07DmPTXVXDyQEptp4Oa8lAh7XKbpnVEXnIu/PalR0bL61lgdVvVy8A0a7aT/M7Ig
-         R0Gw==
-X-Gm-Message-State: ACrzQf3qoZj4+0pqeC3TfVQV+B4f3YPK9+85siVZX9F57uKe7Ws0Na/n
-        RP0Rwk3MZmgZ6UZCT+nWb293rg==
-X-Google-Smtp-Source: AMsMyM5ipN3ArP3zHYOiQQl4eLE64TxXPn3wOxrn/2+hiWFMuiv5mEYk8Kq5Z/mO5CmICg29fehyZw==
-X-Received: by 2002:a05:6512:40d:b0:4a2:d61d:6c82 with SMTP id u13-20020a056512040d00b004a2d61d6c82mr4378263lfk.381.1666266927538;
-        Thu, 20 Oct 2022 04:55:27 -0700 (PDT)
-Received: from uffe-XPS13.. (h-94-254-63-18.NA.cust.bahnhof.se. [94.254.63.18])
-        by smtp.gmail.com with ESMTPSA id s16-20020a056512215000b0049adf925d00sm2701626lfr.1.2022.10.20.04.55.26
+        bh=iDGNVxNBG5DnP2O72JRwhZ79bFRdgRafb7U2+dHA6NI=;
+        b=gPo2lDdOwzy4NseMyRrYh6vHYncl3jEw2MIRB2Yr4StrtccJdki0qqIt/0Ksdtr7An
+         9Q3Q8z/4ubZmh9CVNoW4AWatlyjiMBT3SWhYsFFmrhIAXVUyE9YdZGPiOE+Zzrea20bk
+         0gkMKsACgkVDgKOSsyxbZhNn516LEuZXGR4jZ/RHKegosOm7KE4o+zY5aXuFTBLlBdnA
+         6JUMdMuAngsrx0IiucdcBfHDYteD/6kawDAFbxbS6VXPfQUD0EruZ1EQ8Q+hnL6D5Ylz
+         Z/glOx7qpbAuGht1kGLPC33HibeXQXxEXFB6sPaN+hjqCJnWIpA3tkkainDiqvh7WrWg
+         7UNg==
+X-Gm-Message-State: ACrzQf3nFF9BXeDhhBVh8DZDZnSy+1ZkQcAUcck5l/zwLd5wl8qhdS4z
+        2fXP8RV+ahhRenHWs/NPVfxLXA==
+X-Google-Smtp-Source: AMsMyM6SH+STgAR7RMIyUn6RoKLYTwg+3oKL+R4KBRsq3rVx6bqFAsr50CDvjDox3CEvXE5KgDFlmA==
+X-Received: by 2002:a17:907:c78e:b0:78d:138a:ec4b with SMTP id tz14-20020a170907c78e00b0078d138aec4bmr11231917ejc.381.1666277586545;
+        Thu, 20 Oct 2022 07:53:06 -0700 (PDT)
+Received: from otso.. (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id fk26-20020a056402399a00b0044dbecdcd29sm12088479edb.12.2022.10.20.07.53.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 04:55:26 -0700 (PDT)
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-To:     "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     Johan Hovold <johan@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thu, 20 Oct 2022 07:53:06 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpuidle: psci: Extend information in log about OSI/PC mode
-Date:   Thu, 20 Oct 2022 13:55:13 +0200
-Message-Id: <20221020115513.93809-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Zhang Rui <rui.zhang@intel.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        David Collins <collinsd@codeaurora.org>,
+        Guru Das Srinagesh <gurus@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] thermal/drivers/qcom/temp-alarm: fix inaccurate warning for gen2
+Date:   Thu, 20 Oct 2022 16:52:37 +0200
+Message-Id: <20221020145237.942146-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,30 +80,31 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It's useful to understand whether we are using OS-initiated (OSI) mode or
-Platform Coordinated (PC) mode, when initializing the CPU PM domains.
-Therefore, let's extend the print in the log after a successful probe with
-this information.
+On gen2 chips the stage2 threshold is not 140 degC but 125 degC.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+Make the warning message clearer by using this variable and also by
+including the temperature that was checked for.
+
+Fixes: aa92b3310c55 ("thermal/drivers/qcom-spmi-temp-alarm: Add support for GEN2 rev 1 PMIC peripherals")
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
- drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index 821984947ed9..c80cf9ddabd8 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -181,7 +181,8 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto remove_pd;
+diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+index be785ab37e53..ad84978109e6 100644
+--- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
++++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+@@ -252,7 +252,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+ 			disable_s2_shutdown = true;
+ 		else
+ 			dev_warn(chip->dev,
+-				 "No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.\n");
++				 "No ADC is configured and critical temperature %d mC is above the maximum stage 2 threshold of %ld mC! Configuring stage 2 shutdown at %ld mC.\n",
++				 temp, stage2_threshold_max, stage2_threshold_max);
+ 	}
  
--	pr_info("Initialized CPU PM domain topology\n");
-+	pr_info("Initialized CPU PM domain topology using %s mode\n",
-+		use_osi ? "OSI" : "PC");
- 	return 0;
- 
- put_node:
+ skip:
 -- 
-2.34.1
+2.38.1
 
