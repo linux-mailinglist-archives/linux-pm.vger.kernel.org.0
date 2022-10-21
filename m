@@ -2,146 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 845C4607E52
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 20:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D59607E67
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 20:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiJUSds (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Oct 2022 14:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S229610AbiJUSui (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Oct 2022 14:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJUSdq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 14:33:46 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DB0286CBA
-        for <linux-pm@vger.kernel.org>; Fri, 21 Oct 2022 11:33:45 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z97so9068834ede.8
-        for <linux-pm@vger.kernel.org>; Fri, 21 Oct 2022 11:33:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MNS/Xzv51DcFaEv1wkxo1BDU5sd5eff+DnDRv83bAU0=;
-        b=CjYUP4coYcJAzuKjAxRNbwUiy0V10PtLSTDPWERzTCg4RLHC7C2t0GzfY01PHrhR0f
-         KaHA8YyzXdWb88g6sdklQBcLbYerh1CZ/3LGjPHxrTjKBMPFwLcc9aibqdH+UWqesAzf
-         JwDJz7K1Tx8TlGmrCvOnQ4QlFho7Is/NN2Y51jnCXf0TH3DXXeAXa9VQ8Nk5Jw3m3xle
-         tk7/bguOt+6oTsNWWsunLJnuQn5iml9zwJ40fMiYp4wLAYHBeg08V2SQo5T4zV1ibhaW
-         IOftKei6a2JnCsjweCJL4vThiLn3TNS1vL3ezwDCcyQ0cEz6Fo2O1HND+z6C3/IkccAw
-         Zz5w==
+        with ESMTP id S229596AbiJUSui (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 14:50:38 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E574815ECD8;
+        Fri, 21 Oct 2022 11:50:36 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id c23so2225501qtw.8;
+        Fri, 21 Oct 2022 11:50:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MNS/Xzv51DcFaEv1wkxo1BDU5sd5eff+DnDRv83bAU0=;
-        b=S0xB+pM9h+tGl2Zz5q5v6WlIPqU6UTaKVEgCya03+sH+UxRipjGptPEp7Eh6VSCiTK
-         9Ckam3YWgZ8y4z7ZX0AC9JWNB1VCITdg+K95nYt7mQuHbBZVhSSsFh4TmJSBeso9ttCB
-         umZkqSxOT1U5QcsaxzFOA08WTkd8pRzngPqCRDqwHDXrSOFeg0O7cpFwK7Q+sm/+TdYb
-         pGvvsW0ucFpTEaXPLSAnKW37JuYWBiWws4Hh2eiw+vsUv8O+q4pTiY9X8u4PPQQRlKkb
-         qfcFuUveyBvy8PgXap30hlsJKzNgLs+vlKR38NF3oYhzhBPIN18p+eSaVYikMc1UEPIf
-         NdZw==
-X-Gm-Message-State: ACrzQf3MFm5+3Cvz6yVwDfzeNQIewxQkuCptDIVyhZqbvObdoxbq2fex
-        HF2DI+BvwluTSFviSqgW11iiRQ==
-X-Google-Smtp-Source: AMsMyM7lsIaiLnPNZ8zDmOJFv/eV1ZwypvFv0lN3TApj6rpYOoUmigqvWZaVyzAvkUhD5ZQ+xFqpkA==
-X-Received: by 2002:a05:6402:220b:b0:460:f0a1:c4ed with SMTP id cq11-20020a056402220b00b00460f0a1c4edmr8140121edb.318.1666377223707;
-        Fri, 21 Oct 2022 11:33:43 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:25b:e73e:85eb:ae6e? ([2a05:6e02:1041:c10:25b:e73e:85eb:ae6e])
-        by smtp.googlemail.com with ESMTPSA id n9-20020a05640206c900b0045bd257b307sm13978605edy.22.2022.10.21.11.33.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Oct 2022 11:33:43 -0700 (PDT)
-Message-ID: <f1e9b309-ba98-bba2-8d12-9f13ac34587d@linaro.org>
-Date:   Fri, 21 Oct 2022 20:33:41 +0200
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7Eysv7zcSaSmjCvoZiMko9/clmFPR09HgvorThEzAV0=;
+        b=S4m9G1sdLkl++/6A1p3gOqjIBLu33U00XFFTtKvG0OXF3dCt0WLSnEW6lvauAZ70Yk
+         9bbzIIn6mZER1HP+RQyiyrgtFSKAddIHRXQhBkCtoNlbV1PNN+4Px46NERwqSZ7h2Q7R
+         LHhl0Cf1gNn1vxfw4pm7uS8736fl8CKuLQaPO/1XROuXdyeXkznQbCrKtZwGPpgqLoKd
+         Rku50zpwxMTgcMsXpsDCFJbnQ9nmQPJuku6caW09H4zeJlPitTRSXE67Zn8UPiF84+/a
+         IbphoZRTpiErTB3+bpoqXSNXXGcyBJ/mxvt7L+Y/tRDgsSYWixAxGL+YyntW6vhyi8KS
+         9Pcw==
+X-Gm-Message-State: ACrzQf1II+KnGc42jH/YYkhv5U7BuqxzEnkyDyOjR+X4NXVdrHw24hlK
+        SeFEv0P7Uex5mkhvoLbjrbo6jIOV9IgHizRwMDk=
+X-Google-Smtp-Source: AMsMyM5e+TniKndwbNXCbDzhIwBmyhaEQoSjPqDh5pNbiCMZ6yY6II5GFaDaxfQpgF3yKgw6iTR1JgSS1EG7EoEKF8Q=
+X-Received: by 2002:a05:622a:11c7:b0:39c:b4bc:7030 with SMTP id
+ n7-20020a05622a11c700b0039cb4bc7030mr17834072qtk.17.1666378236106; Fri, 21
+ Oct 2022 11:50:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RESEND PATCH 2/2] thermal: qcom: tsens: simplify debugfs init
- function
-Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thara Gopinath <thara.gopinath@linaro.org>
-References: <20221021181906.16647-1-ansuelsmth@gmail.com>
- <20221021181906.16647-2-ansuelsmth@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221021181906.16647-2-ansuelsmth@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 21 Oct 2022 20:50:25 +0200
+Message-ID: <CAJZ5v0hE31BLmRR9w6u5+vrEEc3QjkaOpUPaCo6QcdJCFez0Rg@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.1-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/10/2022 20:19, Christian Marangi wrote:
-> Simplify debugfs init function.
-> - Add check for existing dev directory.
-> - Fix wrong version in dbg_version_show (with version 0.0.0, 0.1.0 was
->    incorrectly reported)
-> 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> ---
->   drivers/thermal/qcom/tsens.c | 14 +++++---------
->   1 file changed, 5 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index cc2965b8d409..ff82626cecef 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -692,7 +692,7 @@ static int dbg_version_show(struct seq_file *s, void *data)
->   			return ret;
->   		seq_printf(s, "%d.%d.%d\n", maj_ver, min_ver, step_ver);
->   	} else {
-> -		seq_puts(s, "0.1.0\n");
-> +		seq_printf(s, "0.%d.0\n", priv->feat->ver_major);
->   	}
->   
->   	return 0;
-> @@ -704,21 +704,17 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
->   static void tsens_debug_init(struct platform_device *pdev)
->   {
->   	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> -	struct dentry *root, *file;
->   
-> -	root = debugfs_lookup("tsens", NULL);
-> -	if (!root)
-> +	priv->debug_root = debugfs_lookup("tsens", NULL);
-> +	if (!priv->debug_root)
->   		priv->debug_root = debugfs_create_dir("tsens", NULL);
-> -	else
-> -		priv->debug_root = root;
->   
-> -	file = debugfs_lookup("version", priv->debug_root);
-> -	if (!file)
-> +	if (!debugfs_lookup("version", priv->debug_root))
->   		debugfs_create_file("version", 0444, priv->debug_root,
->   				    pdev, &dbg_version_fops);
->   
->   	/* A directory for each instance of the TSENS IP */
-> -	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-> +	priv->debug = debugfs_lookup(dev_name(&pdev->dev), priv->debug_root);
+Hi Linus,
 
-Why the directory creation is replaced by the lookup ?
+Please pull from the tag
 
->   	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
->   }
->   #else
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.1-rc2
+
+with top-most commit a6991d623de02c42c44ddfffde66ec18608069d3
+
+ Merge tag 'cpufreq-arm-fixes-6.1-rc' of
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm
+
+on top of commit 9abf2313adc1ca1b6180c508c25f22f9395cc780
+
+ Linux 6.1-rc1
+
+to receive power management fixes for 6.1-rc2.
+
+These fix some issues and clean up code in ARM cpufreq drivers.
+
+Specifics:
+
+ - Fix module loading in the Tegra124 cpufreq driver (Jon Hunter).
+
+ - Fix memory leak and update to read-only region in the qcom
+   cpufreq driver (Fabien Parent).
+
+ - Miscellaneous minor cleanups to cpufreq drivers (Fabien Parent,
+   Yang Yingliang).
+
+Thanks!
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+---------------
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Fabien Parent (3):
+      cpufreq: qcom: fix memory leak in error path
+      cpufreq: qcom: fix writes in read-only memory region
+      cpufreq: qcom: remove unused parameter in function definition
+
+Jon Hunter (1):
+      cpufreq: tegra194: Fix module loading
+
+Yang Yingliang (4):
+      cpufreq: dt: Switch to use dev_err_probe() helper
+      cpufreq: imx6q: Switch to use dev_err_probe() helper
+      cpufreq: qcom-nvmem: Switch to use dev_err_probe() helper
+      cpufreq: sun50i: Switch to use dev_err_probe() helper
+
+---------------
+
+ drivers/cpufreq/cpufreq-dt.c           |  6 ++----
+ drivers/cpufreq/imx6q-cpufreq.c        |  4 +---
+ drivers/cpufreq/qcom-cpufreq-nvmem.c   | 25 +++++++++++++------------
+ drivers/cpufreq/sun50i-cpufreq-nvmem.c |  9 +++------
+ drivers/cpufreq/tegra194-cpufreq.c     |  1 +
+ 5 files changed, 20 insertions(+), 25 deletions(-)
