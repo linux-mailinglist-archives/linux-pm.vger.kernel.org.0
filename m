@@ -2,53 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF3D6608007
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 22:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B19A608039
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 22:50:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiJUUnR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Oct 2022 16:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S229776AbiJUUuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Oct 2022 16:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiJUUm4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 16:42:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53E22A17D1;
-        Fri, 21 Oct 2022 13:42:38 -0700 (PDT)
+        with ESMTP id S229785AbiJUUuW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 16:50:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEE3DFC1E0;
+        Fri, 21 Oct 2022 13:50:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 744E761F1A;
-        Fri, 21 Oct 2022 20:42:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68425C433D7;
-        Fri, 21 Oct 2022 20:42:23 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CED34B80C82;
+        Fri, 21 Oct 2022 20:50:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F655C433D6;
+        Fri, 21 Oct 2022 20:49:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666384946;
-        bh=OzXG9cO8TgE4LXZUmE+an4SXeiNKfPtvb8eemwziMgg=;
+        s=k20201202; t=1666385400;
+        bh=kYmXdlJCPhtt4uIiTfM2YwsKyRkHie/QI7iUSviGI7I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SlEHXZ9W2VW1K52a5l4DiStfpB9gQRQ6g2Tk+CoAgvtDQeGYfFsYhfq7Frqyctheq
-         luxePxPLnWV3P9teeQoo9DosYZ2TiinjkErIM/X1hVivH6/ahkulu7cB4NQ5cComLR
-         QL4mayyptJxKtQIxIi/ZbJ7OOysW4KQ0pbF49GQa4rNxhX29ZW8xkoO8ly8VoYQdnu
-         BQsgZHlftzNJ7NY8Y7TpmoTHNWuq6hiJqHelMhzMC5DlO0pyviGOb1vLpjJ+c9jzbd
-         rrA0XiCMxMTFOB+vD9WwMgs9CB9/O16x30FOsGCjSOyYsb4oWgx4Ml+iuFA7MLjMRW
-         t+dlMmUNYQh8g==
+        b=HOY8GsWX/MBlmsU4NQ/Kcf6mjvd95DH3jHkfK3d7HxPS2m0Uu2779N0+EFYiHV7Mp
+         ARhZZuD2f0LqZsKfkYOHAHpiA0xfSuTI+cwW+Ga5+a3kXZIyZKbUkGPlZy7yVP29r7
+         uLOU8PJYQWHFQp+vw287RbAa8tnS7Ey7ro05EfmsXMU2QZH/05IapM/0gqehybpA1H
+         CfTyg90T7/PABTi44q83w5NxI7CZhxGAtW5BM/rBVEC/OEbtY0/7vJH5lwBs+QxR6C
+         kRile9AbSnwhfw5Dfsc951wp3EvsWtqsaC9hXUNbB3cAzAZtTgQQVV5w3CmSH75plv
+         +oeG0Tlw7m6jw==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     linux-arm-kernel@lists.infradead.org,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
 Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
         Simtec Linux Team <linux@simtec.co.uk>,
-        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        Lee Jones <lee@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 07/21] power: remove s3c adc battery driver
-Date:   Fri, 21 Oct 2022 22:27:40 +0200
-Message-Id: <20221021203329.4143397-7-arnd@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Subject: [PATCH 15/21] cpufreq: remove s3c24xx drivers
+Date:   Fri, 21 Oct 2022 22:27:48 +0200
+Message-Id: <20221021203329.4143397-15-arnd@kernel.org>
 X-Mailer: git-send-email 2.29.2
 In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
 References: <20221021202254.4142411-1-arnd@kernel.org>
@@ -65,73 +60,157 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The s3c-adc driver is removed along with the s3c24xx platform,
-so the battery driver is no longer needed either.
+All s3c24xx platforms were removed, so these five drivers are all
+obsolete now.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- MAINTAINERS                            |   7 -
- drivers/power/supply/Kconfig           |   6 -
- drivers/power/supply/Makefile          |   1 -
- drivers/power/supply/s3c_adc_battery.c | 453 -------------------------
- include/linux/s3c_adc_battery.h        |  39 ---
- 5 files changed, 506 deletions(-)
- delete mode 100644 drivers/power/supply/s3c_adc_battery.c
- delete mode 100644 include/linux/s3c_adc_battery.h
+ drivers/cpufreq/Kconfig.arm                  |  78 ---
+ drivers/cpufreq/Makefile                     |   6 -
+ drivers/cpufreq/s3c2410-cpufreq.c            | 155 -----
+ drivers/cpufreq/s3c2412-cpufreq.c            | 240 -------
+ drivers/cpufreq/s3c2416-cpufreq.c            | 492 --------------
+ drivers/cpufreq/s3c2440-cpufreq.c            | 321 ---------
+ drivers/cpufreq/s3c24xx-cpufreq-debugfs.c    | 163 -----
+ drivers/cpufreq/s3c24xx-cpufreq.c            | 648 -------------------
+ include/linux/soc/samsung/s3c-cpufreq-core.h | 299 ---------
+ 9 files changed, 2402 deletions(-)
+ delete mode 100644 drivers/cpufreq/s3c2410-cpufreq.c
+ delete mode 100644 drivers/cpufreq/s3c2412-cpufreq.c
+ delete mode 100644 drivers/cpufreq/s3c2416-cpufreq.c
+ delete mode 100644 drivers/cpufreq/s3c2440-cpufreq.c
+ delete mode 100644 drivers/cpufreq/s3c24xx-cpufreq-debugfs.c
+ delete mode 100644 drivers/cpufreq/s3c24xx-cpufreq.c
+ delete mode 100644 include/linux/soc/samsung/s3c-cpufreq-core.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 071d64e2a7ca..2caf42b0328a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17920,13 +17920,6 @@ S:	Supported
- W:	http://www.ibm.com/developerworks/linux/linux390/
- F:	drivers/s390/scsi/zfcp_*
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 8f7a1065f344..e3e0367305ec 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -180,84 +180,6 @@ config ARM_RASPBERRYPI_CPUFREQ
  
--S3C ADC BATTERY DRIVER
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
--L:	linux-samsung-soc@vger.kernel.org
--S:	Odd Fixes
--F:	drivers/power/supply/s3c_adc_battery.c
--F:	include/linux/s3c_adc_battery.h
--
- S3C24XX SD/MMC Driver
- M:	Ben Dooks <ben-linux@fluff.org>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 568b3ede993a..e2f8dfcdd2a9 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -406,12 +406,6 @@ config BATTERY_MAX1721X
- 	  Say Y here to enable support for the MAX17211/MAX17215 standalone
- 	  battery gas-gauge.
+ 	  If in doubt, say N.
  
--config BATTERY_S3C_ADC
--	tristate "Battery driver for Samsung ADC based monitoring"
--	depends on S3C_ADC
+-config ARM_S3C_CPUFREQ
+-	bool
 -	help
--	  Say Y here to enable support for iPAQ h1930/h1940/rx1950 battery
+-	  Internal configuration node for common cpufreq on Samsung SoC
 -
- config BATTERY_TWL4030_MADC
- 	tristate "TWL4030 MADC battery driver"
- 	depends on TWL4030_MADC
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index af43866b3980..8cb3c7f5c111 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_MAX17042)	+= max17042_battery.o
- obj-$(CONFIG_BATTERY_MAX1721X)	+= max1721x_battery.o
- obj-$(CONFIG_BATTERY_RT5033)	+= rt5033_battery.o
- obj-$(CONFIG_CHARGER_RT9455)	+= rt9455_charger.o
--obj-$(CONFIG_BATTERY_S3C_ADC)	+= s3c_adc_battery.o
- obj-$(CONFIG_BATTERY_TWL4030_MADC)	+= twl4030_madc_battery.o
- obj-$(CONFIG_CHARGER_88PM860X)	+= 88pm860x_charger.o
- obj-$(CONFIG_CHARGER_PCF50633)	+= pcf50633-charger.o
-diff --git a/drivers/power/supply/s3c_adc_battery.c b/drivers/power/supply/s3c_adc_battery.c
+-config ARM_S3C24XX_CPUFREQ
+-	bool "CPUfreq driver for Samsung S3C24XX series CPUs (EXPERIMENTAL)"
+-	depends on ARCH_S3C24XX
+-	select ARM_S3C_CPUFREQ
+-	help
+-	  This enables the CPUfreq driver for the Samsung S3C24XX family
+-	  of CPUs.
+-
+-	  For details, take a look at <file:Documentation/cpu-freq>.
+-
+-	  If in doubt, say N.
+-
+-config ARM_S3C24XX_CPUFREQ_DEBUG
+-	bool "Debug CPUfreq Samsung driver core"
+-	depends on ARM_S3C24XX_CPUFREQ
+-	help
+-	  Enable s3c_freq_dbg for the Samsung S3C CPUfreq core
+-
+-config ARM_S3C24XX_CPUFREQ_IODEBUG
+-	bool "Debug CPUfreq Samsung driver IO timing"
+-	depends on ARM_S3C24XX_CPUFREQ
+-	help
+-	  Enable s3c_freq_iodbg for the Samsung S3C CPUfreq core
+-
+-config ARM_S3C24XX_CPUFREQ_DEBUGFS
+-	bool "Export debugfs for CPUFreq"
+-	depends on ARM_S3C24XX_CPUFREQ && DEBUG_FS
+-	help
+-	  Export status information via debugfs.
+-
+-config ARM_S3C2410_CPUFREQ
+-	bool
+-	depends on ARM_S3C24XX_CPUFREQ && CPU_S3C2410
+-	help
+-	  CPU Frequency scaling support for S3C2410
+-
+-config ARM_S3C2412_CPUFREQ
+-	bool
+-	depends on ARM_S3C24XX_CPUFREQ && CPU_S3C2412
+-	default y
+-	select S3C2412_IOTIMING
+-	help
+-	  CPU Frequency scaling support for S3C2412 and S3C2413 SoC CPUs.
+-
+-config ARM_S3C2416_CPUFREQ
+-	bool "S3C2416 CPU Frequency scaling support"
+-	depends on CPU_S3C2416
+-	help
+-	  This adds the CPUFreq driver for the Samsung S3C2416 and
+-	  S3C2450 SoC. The S3C2416 supports changing the rate of the
+-	  armdiv clock source and also entering a so called dynamic
+-	  voltage scaling mode in which it is possible to reduce the
+-	  core voltage of the CPU.
+-
+-	  If in doubt, say N.
+-
+-config ARM_S3C2416_CPUFREQ_VCORESCALE
+-	bool "Allow voltage scaling for S3C2416 arm core"
+-	depends on ARM_S3C2416_CPUFREQ && REGULATOR
+-	help
+-	  Enable CPU voltage scaling when entering the dvs mode.
+-	  It uses information gathered through existing hardware and
+-	  tests but not documented in any datasheet.
+-
+-	  If in doubt, say N.
+-
+-config ARM_S3C2440_CPUFREQ
+-	bool "S3C2440/S3C2442 CPU Frequency scaling support"
+-	depends on ARM_S3C24XX_CPUFREQ && (CPU_S3C2440 || CPU_S3C2442)
+-	default y
+-	help
+-	  CPU Frequency scaling support for S3C2440 and S3C2442 SoC CPUs.
+-
+ config ARM_S3C64XX_CPUFREQ
+ 	bool "Samsung S3C64XX"
+ 	depends on CPU_S3C6410
+diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+index 8de99b213146..692c16e4ee55 100644
+--- a/drivers/cpufreq/Makefile
++++ b/drivers/cpufreq/Makefile
+@@ -70,13 +70,7 @@ obj-$(CONFIG_PXA3xx)			+= pxa3xx-cpufreq.o
+ obj-$(CONFIG_ARM_QCOM_CPUFREQ_HW)	+= qcom-cpufreq-hw.o
+ obj-$(CONFIG_ARM_QCOM_CPUFREQ_NVMEM)	+= qcom-cpufreq-nvmem.o
+ obj-$(CONFIG_ARM_RASPBERRYPI_CPUFREQ) 	+= raspberrypi-cpufreq.o
+-obj-$(CONFIG_ARM_S3C2410_CPUFREQ)	+= s3c2410-cpufreq.o
+-obj-$(CONFIG_ARM_S3C2412_CPUFREQ)	+= s3c2412-cpufreq.o
+-obj-$(CONFIG_ARM_S3C2416_CPUFREQ)	+= s3c2416-cpufreq.o
+-obj-$(CONFIG_ARM_S3C2440_CPUFREQ)	+= s3c2440-cpufreq.o
+ obj-$(CONFIG_ARM_S3C64XX_CPUFREQ)	+= s3c64xx-cpufreq.o
+-obj-$(CONFIG_ARM_S3C24XX_CPUFREQ)	+= s3c24xx-cpufreq.o
+-obj-$(CONFIG_ARM_S3C24XX_CPUFREQ_DEBUGFS) += s3c24xx-cpufreq-debugfs.o
+ obj-$(CONFIG_ARM_S5PV210_CPUFREQ)	+= s5pv210-cpufreq.o
+ obj-$(CONFIG_ARM_SA1110_CPUFREQ)	+= sa1110-cpufreq.o
+ obj-$(CONFIG_ARM_SCMI_CPUFREQ)		+= scmi-cpufreq.o
+diff --git a/drivers/cpufreq/s3c2410-cpufreq.c b/drivers/cpufreq/s3c2410-cpufreq.c
 deleted file mode 100644
-index 68d31a3bee48..000000000000
-diff --git a/include/linux/s3c_adc_battery.h b/include/linux/s3c_adc_battery.h
+index 5dcfbf0bfb74..000000000000
+diff --git a/drivers/cpufreq/s3c2412-cpufreq.c b/drivers/cpufreq/s3c2412-cpufreq.c
 deleted file mode 100644
-index 57f982c375f8..000000000000
+index 5945945ead7c..000000000000
+diff --git a/drivers/cpufreq/s3c2416-cpufreq.c b/drivers/cpufreq/s3c2416-cpufreq.c
+deleted file mode 100644
+index 5c221bc90210..000000000000
+diff --git a/drivers/cpufreq/s3c2440-cpufreq.c b/drivers/cpufreq/s3c2440-cpufreq.c
+deleted file mode 100644
+index 2011fb9c03a4..000000000000
+diff --git a/drivers/cpufreq/s3c24xx-cpufreq-debugfs.c b/drivers/cpufreq/s3c24xx-cpufreq-debugfs.c
+deleted file mode 100644
+index 93971dfe7c75..000000000000
+diff --git a/drivers/cpufreq/s3c24xx-cpufreq.c b/drivers/cpufreq/s3c24xx-cpufreq.c
+deleted file mode 100644
+index 7380c32b238e..000000000000
+diff --git a/include/linux/soc/samsung/s3c-cpufreq-core.h b/include/linux/soc/samsung/s3c-cpufreq-core.h
+deleted file mode 100644
+index 3b278afb769b..000000000000
 -- 
 2.29.2
 
