@@ -2,76 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C165607E36
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 20:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A96E607E42
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 20:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbiJUSTY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Oct 2022 14:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48350 "EHLO
+        id S229918AbiJUS2r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Oct 2022 14:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiJUSTW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 14:19:22 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C3F297;
-        Fri, 21 Oct 2022 11:19:19 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id bk15so6194242wrb.13;
-        Fri, 21 Oct 2022 11:19:19 -0700 (PDT)
+        with ESMTP id S229913AbiJUS2p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 14:28:45 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90EF285B5C
+        for <linux-pm@vger.kernel.org>; Fri, 21 Oct 2022 11:28:39 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id t16so9069612edd.2
+        for <linux-pm@vger.kernel.org>; Fri, 21 Oct 2022 11:28:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Te2D+O/dmhyY7I6GW0ko5spH0/ons5hMu2IA6w5aW0Y=;
-        b=lEDT/zllJSBCa52U0EqXXG+BfRl7bIUFw43JqFvqrmx5IxDDM19hy3BOuuW2pc4P6W
-         kQ6OnZV3kmY1ggTCIn0jIgtk6jZ2flR1Afug+i5A3Hqyw9nE6omwimaP3mJybAAwIWfF
-         SbELbG8bz8QypD+nnKXhVb11cm/ivslvjlB3eNtyhu6rCYvs7wFx/NMoErt+b/ah4rfz
-         Tfiw4E+UIWFTaSd0AIZzqiGCy7bO+HrdMIYq+rqVhaoF6f+arYbmVetVxvEE8wrIEQYV
-         WYMA43sGyr+sdrKuI9jvMzu2HILFNYwTMiOiKMukwzvhCNvpFq6ik9Ii0CdgZMkRzJHp
-         NgAw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PMTJgtnYeK5/Y6Namaf3IIdsfnio66yHLVROtRxsJ8E=;
+        b=Dk1E3ocdbXqDwZRpA+L8NihMfxZNkhVOuZEN2gRi5+fvZDLCvoGsVgac6dRVJVrWBx
+         mLsJ+ZhnTHH/ekJsrsFuN3mkQSu5QjSlywIRgDNJBnkBVRGwbt0xz/wwm8yjxHav+Hjv
+         MOlrNh4Vgb93vRP/Bg+yLJWPeG4xXSwiUEphNFU0lpvaRuPsXVib0crtdmGnKkukTWey
+         01Dnb8ns/9V6O6kkXfOh/Nv8ei3oU++vAOb55TBCkhjLWq7+AYO6SzuBL6bdTioOSUVJ
+         mHA5cpkMO9vHf4K7OoJiEqLQAcLRAw+4IwcrO6/umFObPbxLw/aVy4C3OCrMIrp//7I1
+         Bw4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Te2D+O/dmhyY7I6GW0ko5spH0/ons5hMu2IA6w5aW0Y=;
-        b=d3coe1MZqfRDgaPzga5qh7mtqi8R8gST3vUUaOs//0L6qNXFFsTuT1Jn2fs7LZoruy
-         0T2iIFYxaOlfGDY75wOpcDWTukgI08R4X4PCCEA3TMuQ0rUOIBE0bJuOc1Mz5IHeKTcw
-         cv/IEBA+7Z8BUrpstFrXf9ATbFlYdamnnw3jjAyR1dAoIPfduOQDFlMynzJbmKSAS38h
-         VeXGDbQ+CGANUj+CZYtWC/CgOdJtqszrCJ7CTQU6OjVQppgVJAJdKItorlIVW5KMqryY
-         Bw7IvwJw8ruVkzq6JJGauibdfnAt6vv4RBcf1/q3MAcF9AfNA++xckpKOpVh7pFGs6u0
-         m9mA==
-X-Gm-Message-State: ACrzQf3/BDhw8k8KcOENzA46kLQFoV0J12O2qNOtXuvn6OlkoP/yvOSv
-        WWgGRFL5YXoV4QrVgcn2GXI=
-X-Google-Smtp-Source: AMsMyM5tCVvm7H98qVCWlorWfA70mZvkDIx69S+m9jgI37Ler28IZemd0y1ydu3QmpT42dgn5NPS4g==
-X-Received: by 2002:a5d:4ac1:0:b0:235:ef61:68ba with SMTP id y1-20020a5d4ac1000000b00235ef6168bamr6620408wrs.316.1666376357805;
-        Fri, 21 Oct 2022 11:19:17 -0700 (PDT)
-Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.googlemail.com with ESMTPSA id j8-20020a05600c1c0800b003c6b7f5567csm11157313wms.0.2022.10.21.11.19.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:19:17 -0700 (PDT)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PMTJgtnYeK5/Y6Namaf3IIdsfnio66yHLVROtRxsJ8E=;
+        b=dID4kUKPj8ynU2c5DHf7zP8C4vxoK24FQ8OCSw0NzeRTE6hA17N14r0BRMcmf1p8B4
+         UGZTtaiolk9PhcJeofUnRzqH51xPx/wtoY6g9n6RyDDUYOMsHNwBd//NPvy4oU7d8k4J
+         lfmu5hCUg1xyie4T19na7Rs5uHCN6NXNi0nOO0jiQjyAs0dEIVH/TeV4Cvm1q9v7B/0w
+         hF/MgRoXqElJQSQcuzhMnQT9KFlxBKBpuk+9xC6HMYmCR63axPrHGdKSKczsbezwhvjn
+         DiytFYaxfLoEWnf7EInB+SEFn9mlpgYOtbliQ6Ikd61fOkZgA7oWh/6nPRgBgMvDiY8S
+         QJEA==
+X-Gm-Message-State: ACrzQf0F3iOoNxt2giIUsdMC4+ZjaWa+rSMiXnjjUESwvCjg11BxKy6f
+        9pvc/9XEqLZ6b+exzJtHAIxfwg==
+X-Google-Smtp-Source: AMsMyM7/9n1jVn2Dq1Tehgwu6CuK76iZQUV1L5MQwXAkI3GqLxbvuy1I6Aj4V4XmIRLcizSgBKqXug==
+X-Received: by 2002:a17:907:7250:b0:791:9093:47f7 with SMTP id ds16-20020a170907725000b00791909347f7mr16698780ejc.278.1666376918211;
+        Fri, 21 Oct 2022 11:28:38 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:25b:e73e:85eb:ae6e? ([2a05:6e02:1041:c10:25b:e73e:85eb:ae6e])
+        by smtp.googlemail.com with ESMTPSA id n26-20020a056402061a00b0045c010d0584sm13886137edv.47.2022.10.21.11.28.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 11:28:37 -0700 (PDT)
+Message-ID: <53c5bd41-ccd0-c964-ef23-cb86f8f32de4@linaro.org>
+Date:   Fri, 21 Oct 2022 20:28:36 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH 1/2] thermal: qcom: tsens: init debugfs only with
+ successful probe
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Subject: [RESEND PATCH 2/2] thermal: qcom: tsens: simplify debugfs init function
-Date:   Fri, 21 Oct 2022 20:19:06 +0200
-Message-Id: <20221021181906.16647-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221021181906.16647-1-ansuelsmth@gmail.com>
+Cc:     Thara Gopinath <thara.gopinath@linaro.org>
 References: <20221021181906.16647-1-ansuelsmth@gmail.com>
-MIME-Version: 1.0
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20221021181906.16647-1-ansuelsmth@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,56 +82,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Simplify debugfs init function.
-- Add check for existing dev directory.
-- Fix wrong version in dbg_version_show (with version 0.0.0, 0.1.0 was
-  incorrectly reported)
+On 21/10/2022 20:19, Christian Marangi wrote:
+> calibrate and tsens_register can fail or PROBE_DEFER. This will cause a
+> double or a wrong init of the debugfs information. Init debugfs only
+> with successful probe fixing warning about directory already present.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> Acked-by: Thara Gopinath <thara.gopinath@linaro.org>
+> ---
+>   drivers/thermal/qcom/tsens.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+> index b1b10005fb28..cc2965b8d409 100644
+> --- a/drivers/thermal/qcom/tsens.c
+> +++ b/drivers/thermal/qcom/tsens.c
+> @@ -918,8 +918,6 @@ int __init init_common(struct tsens_priv *priv)
+>   	if (tsens_version(priv) >= VER_0_1)
+>   		tsens_enable_irq(priv);
+>   
+> -	tsens_debug_init(op);
+> -
+>   err_put_device:
+>   	put_device(&op->dev);
+>   	return ret;
+> @@ -1153,7 +1151,12 @@ static int tsens_probe(struct platform_device *pdev)
+>   		}
+>   	}
+>   
+> -	return tsens_register(priv);
+> +	ret = tsens_register(priv);
+> +
 
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
----
- drivers/thermal/qcom/tsens.c | 14 +++++---------
- 1 file changed, 5 insertions(+), 9 deletions(-)
+extra line
 
-diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index cc2965b8d409..ff82626cecef 100644
---- a/drivers/thermal/qcom/tsens.c
-+++ b/drivers/thermal/qcom/tsens.c
-@@ -692,7 +692,7 @@ static int dbg_version_show(struct seq_file *s, void *data)
- 			return ret;
- 		seq_printf(s, "%d.%d.%d\n", maj_ver, min_ver, step_ver);
- 	} else {
--		seq_puts(s, "0.1.0\n");
-+		seq_printf(s, "0.%d.0\n", priv->feat->ver_major);
- 	}
- 
- 	return 0;
-@@ -704,21 +704,17 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
- static void tsens_debug_init(struct platform_device *pdev)
- {
- 	struct tsens_priv *priv = platform_get_drvdata(pdev);
--	struct dentry *root, *file;
- 
--	root = debugfs_lookup("tsens", NULL);
--	if (!root)
-+	priv->debug_root = debugfs_lookup("tsens", NULL);
-+	if (!priv->debug_root)
- 		priv->debug_root = debugfs_create_dir("tsens", NULL);
--	else
--		priv->debug_root = root;
- 
--	file = debugfs_lookup("version", priv->debug_root);
--	if (!file)
-+	if (!debugfs_lookup("version", priv->debug_root))
- 		debugfs_create_file("version", 0444, priv->debug_root,
- 				    pdev, &dbg_version_fops);
- 
- 	/* A directory for each instance of the TSENS IP */
--	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-+	priv->debug = debugfs_lookup(dev_name(&pdev->dev), priv->debug_root);
- 	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
- }
- #else
+> +	if (!ret)
+> +		tsens_debug_init(pdev);
+> +
+> +	return ret;
+>   }
+>   
+>   static int tsens_remove(struct platform_device *pdev)
+
+
 -- 
-2.37.2
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
