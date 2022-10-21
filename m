@@ -2,84 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46967606D40
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 03:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58749606D66
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 04:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiJUByM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 20 Oct 2022 21:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
+        id S229498AbiJUCGa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 20 Oct 2022 22:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiJUByL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 21:54:11 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D339158181;
-        Thu, 20 Oct 2022 18:54:10 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id x188so1694092oig.5;
-        Thu, 20 Oct 2022 18:54:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=50G7i/VlfV6g3TEgkiDJrPM7pGNq9cJ5IVshh1NyIl8=;
-        b=WlHlbCI3lcnp3an7Ql4RwOkReic9LzDlZksDmuf2qE4yHc3o3boOjht4Ztbq7PqNYv
-         rR6+IMg/p6XsomI2ELajlhA4B4kOoh4jM1/F9GSjW2IeJmyrxyerMYTWVnr51a1cQAEv
-         tTr5kIqtXYaKjtppN9tdRjn+I71CBo0LrbCLWfygUxKVSFEwqAz6F5lwQGF3zzsT6G6g
-         EXs0gbPy3kSh9lJoVSKj/TvVmfY+6Ws8ZT9C2BHO6YSwxOlrhxg1kUDa25V1cc2R0fDE
-         rkJ1q9kzJlIO0YarCNc9S0O23lV155Z1BSH+Vn3JnYM9YfNBvCz+RgCepzmM9BPR1BZi
-         EWvg==
-X-Gm-Message-State: ACrzQf1T0CMr0gnBeNvXmdl21bb+kTwSfxfQH0FD0YuDva1lkv74O3q0
-        5gCcX4mZQnHqkICr8V5sIvQs9af2TQ==
-X-Google-Smtp-Source: AMsMyM6FYQPGkJtjJ4yIdF1gZq3keLCLJfvptvRw+9kSDjrA4k6PhW7tEtGJYtouyGkJqxwUpbXDdQ==
-X-Received: by 2002:a05:6808:ecd:b0:34d:8ab0:912 with SMTP id q13-20020a0568080ecd00b0034d8ab00912mr22293238oiv.89.1666317239605;
-        Thu, 20 Oct 2022 18:53:59 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 33-20020a9d0c24000000b00660d73c8bdesm565568otr.50.2022.10.20.18.53.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Oct 2022 18:53:59 -0700 (PDT)
-Received: (nullmailer pid 2154135 invoked by uid 1000);
-        Fri, 21 Oct 2022 01:54:00 -0000
-Date:   Thu, 20 Oct 2022 20:54:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        johan@kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, viresh.kumar@linaro.org,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq
- clock provider
-Message-ID: <166631723974.2154081.10911150649507151378.robh@kernel.org>
-References: <20221019135925.366162-1-manivannan.sadhasivam@linaro.org>
- <20221019135925.366162-3-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S229526AbiJUCG2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 20 Oct 2022 22:06:28 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47BBB1AE2A4
+        for <linux-pm@vger.kernel.org>; Thu, 20 Oct 2022 19:06:27 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Mtnl70CJFzmVHX;
+        Fri, 21 Oct 2022 10:01:39 +0800 (CST)
+Received: from kwepemm000014.china.huawei.com (7.193.23.6) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 10:06:25 +0800
+Received: from kwepemm600014.china.huawei.com (7.193.23.54) by
+ kwepemm000014.china.huawei.com (7.193.23.6) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Fri, 21 Oct 2022 10:06:24 +0800
+Received: from kwepemm600014.china.huawei.com ([7.193.23.54]) by
+ kwepemm600014.china.huawei.com ([7.193.23.54]) with mapi id 15.01.2375.031;
+ Fri, 21 Oct 2022 10:06:24 +0800
+From:   zhangqilong <zhangqilong3@huawei.com>
+To:     Ido Schimmel <idosch@idosch.org>
+CC:     "rafael@kernel.org" <rafael@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "rui.zhang@intel.com" <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogW1BBVENIXSB0aGVybWFsL29mOiBGaXggcG9zc2libGUgbWVtbGVh?=
+ =?gb2312?B?ayBpbiB0aGVybWFsX29mX3pvbmVfcmVnaXN0ZXIoKQ==?=
+Thread-Topic: [PATCH] thermal/of: Fix possible memleak in
+ thermal_of_zone_register()
+Thread-Index: AQHY5HEaK1iX/X6ZikmA1e0xjM/5264YGepA
+Date:   Fri, 21 Oct 2022 02:06:24 +0000
+Message-ID: <9ecb5384d05a43918c0b4c7890340f89@huawei.com>
+References: <20221020080048.56377-1-zhangqilong3@huawei.com>
+ <Y1Em16K5jxk3BQ0h@shredder>
+In-Reply-To: <Y1Em16K5jxk3BQ0h@shredder>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.174.177.246]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221019135925.366162-3-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 19 Oct 2022 19:29:23 +0530, Manivannan Sadhasivam wrote:
-> Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply clocks
-> to the CPU cores. Document the same in the binding to reflect the actual
-> implementation.
-> 
-> CPUFreq HW will become the clock provider and CPU cores will become the
-> clock consumers.
-> 
-> The clock index for each CPU core is based on the frequency domain index.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  .../devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-
-Reviewed-by: Rob Herring <robh@kernel.org>
+PiBPbiBUaHUsIE9jdCAyMCwgMjAyMiBhdCAwNDowMDo0OFBNICswODAwLCBaaGFuZyBRaWxvbmcg
+d3JvdGU6DQo+ID4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX29mLmMNCj4g
+PiBiL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX29mLmMgaW5kZXggZDRiNjMzNWFjZTE1Li5mYzhm
+YTI3NDgwYTEgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy90aGVybWFsL3RoZXJtYWxfb2YuYw0K
+PiA+ICsrKyBiL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX29mLmMNCj4gPiBAQCAtNTk2LDEwICs1
+OTYsNiBAQCBzdHJ1Y3QgdGhlcm1hbF96b25lX2RldmljZQ0KPiAqdGhlcm1hbF9vZl96b25lX3Jl
+Z2lzdGVyKHN0cnVjdCBkZXZpY2Vfbm9kZSAqc2Vuc29yLA0KPiA+ICAJaW50IG50cmlwcywgbWFz
+azsNCj4gPiAgCWludCByZXQ7DQo+ID4NCj4gPiAtCW9mX29wcyA9IGttZW1kdXAob3BzLCBzaXpl
+b2YoKm9wcyksIEdGUF9LRVJORUwpOw0KPiA+IC0JaWYgKCFvZl9vcHMpDQo+ID4gLQkJcmV0dXJu
+IEVSUl9QVFIoLUVOT01FTSk7DQo+ID4gLQ0KPiA+ICAJbnAgPSBvZl90aGVybWFsX3pvbmVfZmlu
+ZChzZW5zb3IsIGlkKTsNCj4gPiAgCWlmIChJU19FUlIobnApKSB7DQo+ID4gIAkJaWYgKFBUUl9F
+UlIobnApICE9IC1FTk9ERVYpDQo+ID4gQEAgLTYyNiw2ICs2MjIsMTIgQEAgc3RydWN0IHRoZXJt
+YWxfem9uZV9kZXZpY2UNCj4gKnRoZXJtYWxfb2Zfem9uZV9yZWdpc3RlcihzdHJ1Y3QgZGV2aWNl
+X25vZGUgKnNlbnNvciwNCj4gPiAgCQlnb3RvIG91dF9rZnJlZV90cmlwczsNCj4gPiAgCX0NCj4g
+Pg0KPiA+ICsJb2Zfb3BzID0ga21lbWR1cChvcHMsIHNpemVvZigqb3BzKSwgR0ZQX0tFUk5FTCk7
+DQo+ID4gKwlpZiAoIW9mX29wcykgew0KPiA+ICsJCXJldCA9IC1FTk9NRU07DQo+ID4gKwkJZ290
+byBvdXRfa2ZyZWVfdHpwOw0KPiA+ICsJfQ0KPiA+ICsNCj4gPiAgCW9mX29wcy0+Z2V0X3RyaXBf
+dHlwZSA9IG9mX29wcy0+Z2V0X3RyaXBfdHlwZSA/IDoNCj4gb2ZfdGhlcm1hbF9nZXRfdHJpcF90
+eXBlOw0KPiA+ICAJb2Zfb3BzLT5nZXRfdHJpcF90ZW1wID0gb2Zfb3BzLT5nZXRfdHJpcF90ZW1w
+ID8gOg0KPiBvZl90aGVybWFsX2dldF90cmlwX3RlbXA7DQo+ID4gIAlvZl9vcHMtPmdldF90cmlw
+X2h5c3QgPSBvZl9vcHMtPmdldF90cmlwX2h5c3QgPyA6DQo+ID4gb2ZfdGhlcm1hbF9nZXRfdHJp
+cF9oeXN0OyBAQCAtNjU2LDYgKzY1OCw3IEBAIHN0cnVjdA0KPiB0aGVybWFsX3pvbmVfZGV2aWNl
+ICp0aGVybWFsX29mX3pvbmVfcmVnaXN0ZXIoc3RydWN0IGRldmljZV9ub2RlDQo+ICpzZW5zb3Is
+DQo+ID4gIAlyZXR1cm4gdHo7DQo+ID4NCj4gPiAgb3V0X2tmcmVlX3R6cDoNCj4gPiArCWtmcmVl
+KG9mX29wcyk7DQo+ID4gIAlrZnJlZSh0enApOw0KPiA+ICBvdXRfa2ZyZWVfdHJpcHM6DQo+ID4g
+IAlrZnJlZSh0cmlwcyk7DQo+IA0KPiBUaGUgcGF0Y2ggbG9va3MgY29ycmVjdCwgYnV0IGl0IGNh
+biBiZSBjbGVhbmVyLiBJZGVhbGx5LCB5b3Ugd291bGQgaGF2ZSBhDQo+IHNlcGFyYXRlIGxhYmVs
+IHRvIGZyZWUgJ29mX29wcycgbGlrZSB3ZSBoYXZlIGZvciBvdGhlciB2YXJpYWJsZXMuDQo+IEFs
+c28sIHRoZSBlcnJvciBwYXRoIGlzIG5vdCBzeW1tZXRyaWMgd2l0aCB0aGVybWFsX29mX3pvbmVf
+dW5yZWdpc3RlcigpDQo+IHdoZXJlIHRoaXMgdmFyaWFibGUgaXMgdGhlIGxhc3QgdG8gYmUgZnJl
+ZWQsIG5vdCB0aGUgZmlyc3QuDQo+IA0KPiBJIGFsc28gZW5jb3VudGVyZWQgdGhpcyBpc3N1ZSBh
+bmQgcG9zdGVkIGEgcGF0Y2g6DQo+IGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LXBtLzIw
+MjIxMDIwMTAzNjU4LjgwMjQ1Ny0xLQ0KPiBpZG9zY2hAbnZpZGlhLmNvbS8NCj4gDQo+IFVubGVz
+cyB5b3Ugc2VlIHNvbWV0aGluZyB3cm9uZyB3aXRoIGl0LCBjYW4geW91IHBsZWFzZSB0ZXN0IGFu
+ZCBzZWUgaWYgaXQNCj4gZml4ZXMgeW91ciBpc3N1ZT8NCj4gDQoNCkhpLA0KDQpJdCBsb29rcyBn
+b29kIHRvIG1lIQ0KDQpUaGFua3MsDQpaaGFuZw0KDQo+IFRoYW5rcw0KDQo=
