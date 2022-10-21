@@ -2,58 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D918607E73
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 20:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626AA607EC0
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Oct 2022 21:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiJUS4o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 21 Oct 2022 14:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
+        id S230315AbiJUTLK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 21 Oct 2022 15:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229886AbiJUS4m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 14:56:42 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEDB28DC3B;
-        Fri, 21 Oct 2022 11:56:39 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id az22-20020a05600c601600b003c6b72797fdso2661150wmb.5;
-        Fri, 21 Oct 2022 11:56:39 -0700 (PDT)
+        with ESMTP id S229574AbiJUTLJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 21 Oct 2022 15:11:09 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986BD30558
+        for <linux-pm@vger.kernel.org>; Fri, 21 Oct 2022 12:11:05 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id j14so4937797ljh.12
+        for <linux-pm@vger.kernel.org>; Fri, 21 Oct 2022 12:11:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ST5S4NRKJlo7+7q0tIycVPYZ9ok2v0CvCXW/kXSFp4Q=;
-        b=PcmlCLBWVyv3tkJJnYNquYLNyrZZQQnFfAOd90MJAW1EZAnwtpGSzgKX3tREjWvYsZ
-         RjDfpZghE2jLaWsY/mqXMvUBr+AA75mEDQj69X/W+I6vc+TFM4PIMXNg7EjHiMKCMucV
-         z+zYSevSt4edpnGLspXXYhxO1zYqgYcv510CqLDgu+HlU7gyFXxahd5b7t4qAqC/cK3T
-         S+VM1ebZJbXrZD5PAKWHbNGW0xTxLfGqWf8Ej/963/KlhaWS8ok4SDRtbCPWFD/USwOu
-         Y43qqtPyGsycPpVOuRjVxFxuVPDb648fjGFRL/zgyicp2QKsze6ALGnoqVNNP/DzIdBd
-         XvEA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q9N0quDGynabuTnZpTH6+L+PseJlLMHF0ftpq0x+i50=;
+        b=ivJnr3EVAaMbX/61XT9Fla7Vz4RzD/bdgG0NFNWNPvmqymlecs7UvVuOneEF3LGdH5
+         yMmishz/tlU6bbaO4oztwg4OJ7zO3pOb0/BYueOK+lc57zJoNu99JkYAfICUqGXDSBIN
+         GWJG/Vid6uT5K0KDGrwuxX0HxceB/4U2mHwx7SjxY5ucX4aqOAi6DDN3B8M7zMR95Djd
+         8xr6CBymWaOTplhYIa1fgjAEPZwLqGXpP+fuvnfna2WOms7MkOjR1Wc2XkQE+7w+mFKZ
+         jSQJqaPdouyIJoVGdcNanb1ZG/5oTv1DeinUCUPq3uNIvKWDF60NOkRnznkhd1i9o/fp
+         DTwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ST5S4NRKJlo7+7q0tIycVPYZ9ok2v0CvCXW/kXSFp4Q=;
-        b=zC00OkHD9V8EJPJ/r4zAQWsF5P9X1kAPzmjnXJgQz3LdmeBlzp5s1NVMHQ2MepAZEb
-         lcjt+Lhnfcu/WrEk2Hc9AWu0LKMTOxdK8ISxQetJ2I9OEP3wFBHcZ6zGtwj5Ye2uNk0/
-         6173Wwf1I+UnoZ8w5cxcJaP1bDs7D/uTEieLmsZeNk5jH1CW56/Bb8jWsIV+PG+ggoDF
-         ogVLRRsG3GiwA41DQORxb8nzovR1nTB1NGSODEzxU7zOg2LjGCdMMdh/ydabsWjmupvc
-         uZgWDoOVdekJRkO68xVHqMHNkTHlC++fkqhXqgkv8CO/nh1Fc1nkRBh5HvAM87G1hMfl
-         dg/w==
-X-Gm-Message-State: ACrzQf3wpnqLxX69aNeHdvF4tmPQ09Eq4KqnZNXjCGtizlc8R2130Y09
-        o4qDYnWs/La1slNpf+K3fCY=
-X-Google-Smtp-Source: AMsMyM6Y0qgqO6iPAiSYcOZ8b1Bi++pFHwANQHdvYihea8Oing69m7e/mnTTAS8SfgEtVNz5LWNpFQ==
-X-Received: by 2002:a05:600c:654f:b0:3c4:271b:6b35 with SMTP id dn15-20020a05600c654f00b003c4271b6b35mr13711847wmb.182.1666378597481;
-        Fri, 21 Oct 2022 11:56:37 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id g16-20020a05600c4ed000b003c6b9749505sm419399wmq.30.2022.10.21.11.56.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Oct 2022 11:56:37 -0700 (PDT)
-Message-ID: <6352eb65.050a0220.3eb5e.14c7@mx.google.com>
-X-Google-Original-Message-ID: <Y1LrXlNw71KGPfUB@Ansuel-xps.>
-Date:   Fri, 21 Oct 2022 20:56:30 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+        bh=Q9N0quDGynabuTnZpTH6+L+PseJlLMHF0ftpq0x+i50=;
+        b=xK7Zzk3L45vyTTomE3IauaiRhoHwKG6/YOQui2ZnXk0eoz55Mkh3n1vES2jT4VONhI
+         6FNZ51ID5PNJARGB2P49Yxx85A42+XSk1CX/VxPgreoSE3UjYuIds+qFFiPjNpY5smVc
+         64a5fe8/a0Le1ww/3kB72olYBqOMoOuNU0yPqDhH/tZP/brUEIBqUmR1d46y9hzzlomF
+         OEoONWdA7wO0FbYV6GreebcxmhEBYmXCvzIwUBxRhFNIF1wbKrKvZq6VAD6YYJQeYzSM
+         NbBRnpzexQaegJTcgnpqSMszN08BNj10m/zAJavF4l/BwIJwnZCpkoOJMVlzmEC1vlWN
+         8l+w==
+X-Gm-Message-State: ACrzQf0HT8gbS9BLNqtPxcoa6pQ3E64iQb9k5AMAt7docr64dA5bJFme
+        bhH1nSTTv3XACNWPSDdTQVHO33+3HflfhA==
+X-Google-Smtp-Source: AMsMyM7Om9Qo99zfePmjfmWjdKbj+bCXywZjrwsrk5ZvhWF4xm1XxXNXvV8YGUWm8+TmpewkgEdfzA==
+X-Received: by 2002:a17:907:7f1c:b0:78d:ddc7:dfb1 with SMTP id qf28-20020a1709077f1c00b0078dddc7dfb1mr17382708ejc.189.1666379453437;
+        Fri, 21 Oct 2022 12:10:53 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:25b:e73e:85eb:ae6e? ([2a05:6e02:1041:c10:25b:e73e:85eb:ae6e])
+        by smtp.googlemail.com with ESMTPSA id fe7-20020a056402390700b004587c2b5048sm14014709edb.52.2022.10.21.12.10.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Oct 2022 12:10:52 -0700 (PDT)
+Message-ID: <c9fcb7f4-5bb3-a5d4-ee2a-0e65282d9d73@linaro.org>
+Date:   Fri, 21 Oct 2022 21:10:51 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RESEND PATCH 2/2] thermal: qcom: tsens: simplify debugfs init
+ function
+Content-Language: en-US
+To:     Christian Marangi <ansuelsmth@gmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
@@ -62,108 +66,75 @@ Cc:     Andy Gross <agross@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thara Gopinath <thara.gopinath@linaro.org>
-Subject: Re: [RESEND PATCH 2/2] thermal: qcom: tsens: simplify debugfs init
- function
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 References: <20221021181906.16647-1-ansuelsmth@gmail.com>
  <20221021181906.16647-2-ansuelsmth@gmail.com>
  <f1e9b309-ba98-bba2-8d12-9f13ac34587d@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+ <6352eb65.050a0220.3eb5e.14c7@mx.google.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <6352eb65.050a0220.3eb5e.14c7@mx.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f1e9b309-ba98-bba2-8d12-9f13ac34587d@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 08:33:41PM +0200, Daniel Lezcano wrote:
-> On 21/10/2022 20:19, Christian Marangi wrote:
-> > Simplify debugfs init function.
-> > - Add check for existing dev directory.
-> > - Fix wrong version in dbg_version_show (with version 0.0.0, 0.1.0 was
-> >    incorrectly reported)
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > Reviewed-by: Thara Gopinath <thara.gopinath@linaro.org>
-> > ---
-> >   drivers/thermal/qcom/tsens.c | 14 +++++---------
-> >   1 file changed, 5 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> > index cc2965b8d409..ff82626cecef 100644
-> > --- a/drivers/thermal/qcom/tsens.c
-> > +++ b/drivers/thermal/qcom/tsens.c
-> > @@ -692,7 +692,7 @@ static int dbg_version_show(struct seq_file *s, void *data)
-> >   			return ret;
-> >   		seq_printf(s, "%d.%d.%d\n", maj_ver, min_ver, step_ver);
-> >   	} else {
-> > -		seq_puts(s, "0.1.0\n");
-> > +		seq_printf(s, "0.%d.0\n", priv->feat->ver_major);
-> >   	}
-> >   	return 0;
-> > @@ -704,21 +704,17 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
-> >   static void tsens_debug_init(struct platform_device *pdev)
-> >   {
-> >   	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> > -	struct dentry *root, *file;
-> > -	root = debugfs_lookup("tsens", NULL);
-> > -	if (!root)
-> > +	priv->debug_root = debugfs_lookup("tsens", NULL);
-> > +	if (!priv->debug_root)
-> >   		priv->debug_root = debugfs_create_dir("tsens", NULL);
-> > -	else
-> > -		priv->debug_root = root;
-> > -	file = debugfs_lookup("version", priv->debug_root);
-> > -	if (!file)
-> > +	if (!debugfs_lookup("version", priv->debug_root))
-> >   		debugfs_create_file("version", 0444, priv->debug_root,
-> >   				    pdev, &dbg_version_fops);
-> >   	/* A directory for each instance of the TSENS IP */
-> > -	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-> > +	priv->debug = debugfs_lookup(dev_name(&pdev->dev), priv->debug_root);
+On 21/10/2022 20:56, Christian Marangi wrote:
+
+[ ... ]
+
+> Hi,
+> thanks for the review! I have to be honest and do not create some fake
+> excuse for this. This patch is a bit old and was pending from a long
+> time so out of despair i just tried to RESEND this hoping someone would
+> pick it up. And it seems it have worked... Sooo sorry for making you
+> asking this.
 > 
-> Why the directory creation is replaced by the lookup ?
->
+> On rechecking the change here, the entire debug_init logic seems
+> wrong... I don't know if it's possible but what if in the system there
+> are multiple version of tsens istance? Looks wrong to overwrite the
+> version with the last one...
 
-Hi,
-thanks for the review! I have to be honest and do not create some fake
-excuse for this. This patch is a bit old and was pending from a long
-time so out of despair i just tried to RESEND this hoping someone would
-pick it up. And it seems it have worked... Sooo sorry for making you
-asking this.
+It sounds not logical to have different versions, a quick look at the DT 
+seems to confirm this. However, it is an assumption and it may be safer 
+to assume the opposite can happen
 
-On rechecking the change here, the entire debug_init logic seems
-wrong... I don't know if it's possible but what if in the system there
-are multiple version of tsens istance? Looks wrong to overwrite the
-version with the last one...
-
-I think the original idea of this was to create a directory for each
-istance and put in there version and sensors debugfs.
-
-I will propose this in the next version if it's ok for you and you agree
-with this logic. Also I think I will split this in 2 different patch one
-for the version fixup and one for this new logic.
-
-Waiting for your feedback and again sorry for the noise.
-
-> >   	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
-> >   }
-> >   #else
+> I think the original idea of this was to create a directory for each
+> istance and put in there version and sensors debugfs.
 > 
+> I will propose this in the next version if it's ok for you and you agree
+> with this logic. Also I think I will split this in 2 different patch one
+> for the version fixup and one for this new logic.
+
+I don't have a strong opinion on that but it seems reasonable
+
+> Waiting for your feedback and again sorry for the noise.
+
+No worries ;)
+
+>>>    	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
+>>>    }
+>>>    #else
+>>
+>>
+>> -- 
+>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>>
+>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+>> <http://twitter.com/#!/linaroorg> Twitter |
+>> <http://www.linaro.org/linaro-blog/> Blog
 > 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+
 
 -- 
-	Ansuel
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
