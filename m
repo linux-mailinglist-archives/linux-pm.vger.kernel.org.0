@@ -2,72 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6F2608E7A
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 18:26:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC8A608E90
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 18:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiJVQ0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Oct 2022 12:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53496 "EHLO
+        id S229838AbiJVQfr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Oct 2022 12:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJVQ0l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 12:26:41 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363161057E0
-        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 09:26:39 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id e18so16574023edj.3
-        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 09:26:39 -0700 (PDT)
+        with ESMTP id S229846AbiJVQfo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 12:35:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A929158D40
+        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 09:35:41 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id a5so3549802edb.11
+        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 09:35:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CQq1ftIfCawIcZ71Z4vpkzLEmtpaBABYme45VEwy43c=;
-        b=l6VzlaOfRk+1vaUxRuG4Y3nWEtyo1rhBSa+uU9NJZP6+BYMRNndbHe4M3uIOYBg4Ql
-         NFQSzX+EYfvdnizWUS/j0OXDQQ0Oo+Eoemz/uYypR1gIz7uJ6m39/RGqeWmFQF95q6HT
-         SxOUPWD3tHIIWRJhOdI0PhuNHVHRpIJUUOo2k5y/9czjVGBhanlPSmVoiMwwJh/EJxTM
-         2iWt91QG9olNOWFMtIaWT2jdrflob8g5f5fivtaOVlsiSoEhBobzor9VzKdEq7GaN/mm
-         eLHq0HU2yfCf3vLDTazgktvD1HindtVNZe+ok8b9BuuLtatyHSTFqLk2xjnUOMP7Et2d
-         6XGg==
+        bh=5Hdv1mbqowF6vh5DNfkIUiQ0n9553kuzhvWlhKpDxJY=;
+        b=VGWwodF9ZFY1oMM0Pfgp/Er92v3OynuJgIUMeiAiyJB9bviBTVwD/1vCOpu/Ki+2K+
+         3f3S87RfL69pdGNm8gVWNMXEX4EEZ7LVgzw0N0Tqfd4DiVr2eXYgEsJVWy9UfxvfaGpL
+         1hhtKxW6FTiu/yxkTKYFGOVzYSwL5072Nlcks+cYyTrVJDJIXac3qnkr8Tv/UHf95xUy
+         AZYLklyFTDg9v5mfujOSUSCVqyjisPz/613exmZk+rJISsPy8282utFFZfoluY7vWW2o
+         VSAFuRk6tDaVUbp4J68GIcEINulIgIkTyVvuFM3JyiW9nXx9llyssfJ7J5lfCn8J6S9h
+         uTSw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CQq1ftIfCawIcZ71Z4vpkzLEmtpaBABYme45VEwy43c=;
-        b=rzPcft6HJjwv5SkC6T1NES4nJU0fNdkI+DIzPXWxgGelY1n0EpDQKD2npCdsMaDx/I
-         Apt2hadKIT8ejBX3KmzC2ANiJsRb7AxKYhK+G+ASe+LRZZ1R5qUHgGHZN+pCPVl0IPHH
-         +tO5S8bH4siQ5I4dZ4NF+sJyRw5D07byzVB8meLDexCQbRNn41u6/vAa/+05tUP4KHXJ
-         mR6VWS14EavNXo/9ZVMWGAA4J1VaMNdDc4gcvN7oxPggjbg5K2F8Aa1G5ZHS2tENQDfL
-         x9k0A9VwCVMUVQTwU0R97LZDSzKSur4huRyi7Fmd+uJS2wFEUr895xu0jq+tT0jQcrxd
-         rPpQ==
-X-Gm-Message-State: ACrzQf2CEpuYh4kv44ftJXDY/1OjeEkEoNdIWuNUPRvkdkO5R1o2Y2wX
-        X004xXK2Ma1vfowqjZK5K4dsAw==
-X-Google-Smtp-Source: AMsMyM7a8uKW10yr4l06GQ3zKCGujmDoYBAOWchkmdpiQajQGty+HAC/UK/YbNYGmz+DCscgm/oDhw==
-X-Received: by 2002:a05:6402:2813:b0:461:970e:2ad9 with SMTP id h19-20020a056402281300b00461970e2ad9mr880468ede.405.1666455997697;
-        Sat, 22 Oct 2022 09:26:37 -0700 (PDT)
+        bh=5Hdv1mbqowF6vh5DNfkIUiQ0n9553kuzhvWlhKpDxJY=;
+        b=pL4YlE5ADPNsKEozXdBAfJHKKZ2T4gvAOYjpcl2HX/mYTh9cvGYMUoSQATRQ5r7qrE
+         +EUDP0Wn3jCXERBFhU0LeQWwM+RACr77s0UyVMuC3UTyks5ZmDgm/ZZH0O2PSmmuKZYj
+         c0UMkdQcxMHkr0IOA+2JHPLInpmc81luTw6Fd2zNz7f3E/AWqBIHxCkLCt3IAXluPncg
+         raAKqOGnfaMT/oGHeek6M8oZ8buHAgu7iD/+mf8JKLjuIA3+QpFMEhkhyQukljSJ8itc
+         Tz+OWBSW6MhRQzqf1ljs5YBYcvIYtcuSgPKKDfh+CXVE6xJcz0/FNcnI6siWBW1Bmrzg
+         +opg==
+X-Gm-Message-State: ACrzQf0PZR34lR1W6X0CpXwKlZIN4t4hG+lUyrhGvlUL3DqARFel8sNI
+        PKMDDYih3l3gnbyBd9hrNQfy2A==
+X-Google-Smtp-Source: AMsMyM6a5QLh2viiSelQ6l4YiBUdev8Gs5f5CFAE5EQY1dkRpELZdjzz3gkewypVCIBffYz7C+R1Lw==
+X-Received: by 2002:a05:6402:2489:b0:454:11de:7698 with SMTP id q9-20020a056402248900b0045411de7698mr23343739eda.214.1666456539409;
+        Sat, 22 Oct 2022 09:35:39 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:7b1d:c5f2:c85:8976? ([2a05:6e02:1041:c10:7b1d:c5f2:c85:8976])
-        by smtp.googlemail.com with ESMTPSA id 16-20020a170906309000b0078d22b0bcf2sm13156619ejv.168.2022.10.22.09.26.36
+        by smtp.googlemail.com with ESMTPSA id da3-20020a056402176300b004615bea1d5bsm2014878edb.35.2022.10.22.09.35.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 09:26:37 -0700 (PDT)
-Message-ID: <373309fd-4931-5850-775a-4e4f04b86cff@linaro.org>
-Date:   Sat, 22 Oct 2022 18:26:35 +0200
+        Sat, 22 Oct 2022 09:35:38 -0700 (PDT)
+Message-ID: <d5cda762-63d0-ac89-e826-52b3bc6fad84@linaro.org>
+Date:   Sat, 22 Oct 2022 18:35:37 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v3 0/3] thermal: qcom: tsens: small fixup for debugfs
+Subject: Re: [PATCH v11 1/2] thermal: Add thermal driver for Sunplus
 Content-Language: en-US
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221022125657.22530-1-ansuelsmth@gmail.com>
+To:     Li-hao Kuo <lhjeff911@gmail.com>, krzk@kernel.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lh.kuo@sunplus.com
+References: <cover.1665990345.git.lhjeff911@gmail.com>
+ <076585e120b64832dcb81e39f3e59d719148816b.1665990345.git.lhjeff911@gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221022125657.22530-1-ansuelsmth@gmail.com>
+In-Reply-To: <076585e120b64832dcb81e39f3e59d719148816b.1665990345.git.lhjeff911@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -80,41 +77,156 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/10/2022 14:56, Christian Marangi wrote:
-> This is a small series to fixup some bug in how tsens init debufs.
+On 18/10/2022 09:32, Li-hao Kuo wrote:
+> Add thermal driver for Sunplus.
 > 
-> The first patch just handle situation where tsens fails to register and
-> debugfs are getting registred anyway. When tsens is tried to reprobe
-> debugs will print a warning as the directory are already there.
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> ---
+> Changes in v11:
+>   - Remove the remove function of the platform_driver
+>   - Fix error reported-by: kernel test robot.
 > 
-> The second patch is a fixup for wrong version when the ancient VER_0 is
-> used.
+>   MAINTAINERS                       |   6 ++
+>   drivers/thermal/Kconfig           |  10 +++
+>   drivers/thermal/Makefile          |   1 +
+>   drivers/thermal/sunplus_thermal.c | 130 ++++++++++++++++++++++++++++++++++++++
+>   4 files changed, 147 insertions(+)
+>   create mode 100644 drivers/thermal/sunplus_thermal.c
 > 
-> The third patch is a rework of debugfs structure moving version in the
-> tsens istance instead of ignoring any other tsens istance if it will
-> ever be the case in the future of having multiple tsens instance with
-> different version. It's just futureproof on it's own and also removed
-> one additional check.
-> 
-> changes v3:
-> - remove extra space from patch 1
-> - split patch 2 to 2 different patch
-> - patch 3 rework wrong debugfs structure
-> changes v2:
-> - Changed sob name to new one.
-> 
-> (the resend was actually v2 but i totally forgot that I sent it as v2 with
-> the sob name fixed... but everything should be good now...)
-> 
-> Christian Marangi (3):
->    thermal: qcom: tsens: init debugfs only with successful probe
->    thermal: qcom: tsens: fix wrong version id dbg_version_show
->    thermal: qcom: tsens: rework debugfs file structure
-> 
->   drivers/thermal/qcom/tsens.c | 23 +++++++++--------------
->   1 file changed, 9 insertions(+), 14 deletions(-)
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cf0f185..bf22c53 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -19753,6 +19753,12 @@ S:	Maintained
+>   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
+>   F:	drivers/spi/spi-sunplus-sp7021.c
+>   
+> +SUNPLUS THERMAL DRIVER
+> +M:	Li-hao Kuo <lhjeff911@gmail.com>
+> +L:	linux-pm@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/thermal/sunplus_thermal.c
+> +
+>   SUNPLUS UART DRIVER
+>   M:	Hammer Hsieh <hammerh0314@gmail.com>
+>   S:	Maintained
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae..405b788 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+>   	  If you say yes here you get support for the FAN controlled
+>   	  by the Microcontroller found on the Khadas VIM boards.
+>   
+> +config SUNPLUS_THERMAL
+> +	tristate "Sunplus thermal drivers"
+> +	depends on SOC_SP7021 || COMPILE_TEST
+> +	help
+> +	  This enable the Sunplus SP7021 thermal driver, which supports the primitive
+> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +
+> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
+> +	  to have support for thermal management.
+> +
+>   endif
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 2506c6c..4512193 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+>   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+>   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+>   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
+> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
+> \ No newline at end of file
+> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
+> new file mode 100644
+> index 0000000..20ea7d9
+> --- /dev/null
+> +++ b/drivers/thermal/sunplus_thermal.c
+> @@ -0,0 +1,130 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) Sunplus Inc.
+> + * Author: Li-hao Kuo <lhjeff911@gmail.com>
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reset.h>
+> +#include <linux/thermal.h>
+> +
+> +#define ENABLE_THERMAL		BIT(31)
+> +#define SP_THERMAL_MASK		GENMASK(10, 0)
+> +
+> +#define TEMP_RATE		608
+> +#define TEMP_BASE		3500
+> +#define TEMP_OTP_BASE		1518
+> +
+> +#define SP_THERMAL_CTL0_REG	0x0000
+> +#define SP_THERMAL_STS0_REG	0x0030
+> +
+> +/* common data structures */
+> +struct sp_thermal_data {
+> +	struct thermal_zone_device *pcb_tz;
+> +	void __iomem *regs;
+> +	int *otp_temp0;
+> +};
+> +
+> +static int sunplus_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
+> +{
+> +	struct nvmem_cell *cell;
+> +	ssize_t otp_l;
+> +
+> +	cell = nvmem_cell_get(dev, "calib");
+> +	if (IS_ERR(cell))
+> +		return PTR_ERR(cell);
+> +
+> +	sp_data->otp_temp0 = nvmem_cell_read(cell, &otp_l);
+> +	nvmem_cell_put(cell);
+> +
+> +	if (*sp_data->otp_temp0 == 0)
+> +		*sp_data->otp_temp0 = TEMP_OTP_BASE;
+> +
+> +	return 0;
+> +}
+> +
+> +/*
+> + * There is a thermal sensor instance for Sunplus Soc
+> + * T_CODE is the ADC of the thermal sensor
+> + * T_CODE : 11 digits in total
+> + * When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
+> + * otp_temp0 is the 35 degree T_CODE obtained from nvcell
+> + * The function will get 35 degree T_CODE for thermal calibration.
+> + * TEMP_RATE is the Sunplus thermal temperature slope.
+> + */
+> +
+> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
+> +{
+> +	struct sp_thermal_data *sp_data = data;
+> +	int t_code;
+> +
+> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
+> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
+> +	*temp = ((*sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
+> +	*temp *= 10;
+> +	return 0;
+> +}
+> +
+> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
 
-Applied thanks
+struct thermal_zone_device_ops ...
+
+ 
+https://lore.kernel.org/r/20220804224349.1926752-1-daniel.lezcano@linexp.org
+
+
+
 
 
 -- 
