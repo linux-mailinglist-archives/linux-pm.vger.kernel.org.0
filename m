@@ -2,231 +2,313 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BC8A608E90
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 18:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE81608EBE
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 19:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiJVQfr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Oct 2022 12:35:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49160 "EHLO
+        id S229799AbiJVRDZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Oct 2022 13:03:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiJVQfo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 12:35:44 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A929158D40
-        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 09:35:41 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id a5so3549802edb.11
-        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 09:35:41 -0700 (PDT)
+        with ESMTP id S229661AbiJVRDY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 13:03:24 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040C91C6BC7
+        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 10:03:22 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r14so16778705edc.7
+        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 10:03:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5Hdv1mbqowF6vh5DNfkIUiQ0n9553kuzhvWlhKpDxJY=;
-        b=VGWwodF9ZFY1oMM0Pfgp/Er92v3OynuJgIUMeiAiyJB9bviBTVwD/1vCOpu/Ki+2K+
-         3f3S87RfL69pdGNm8gVWNMXEX4EEZ7LVgzw0N0Tqfd4DiVr2eXYgEsJVWy9UfxvfaGpL
-         1hhtKxW6FTiu/yxkTKYFGOVzYSwL5072Nlcks+cYyTrVJDJIXac3qnkr8Tv/UHf95xUy
-         AZYLklyFTDg9v5mfujOSUSCVqyjisPz/613exmZk+rJISsPy8282utFFZfoluY7vWW2o
-         VSAFuRk6tDaVUbp4J68GIcEINulIgIkTyVvuFM3JyiW9nXx9llyssfJ7J5lfCn8J6S9h
-         uTSw==
+        bh=iMEJOs8rsFhAhsZPWWaHcq3vp7VFtPBUd+l2pbsoxiA=;
+        b=dvYlFOdRg/4NTlEfV63r1JuX+xJP6eNfzEbgTQK9tLjyXuJAf/t8SDzr3z5jP96MJq
+         qOrHGM4J4kUHeYA4PRuEyT1+IC09dKcItl7r36iivs1bz0vlpxc6H+z9gCwQjS7Yz9Dg
+         rjRutVP4IqRzxp8ZTWK7BbnOAXm02oMvUoJrP5mjBmrpd8CpLJpdTSHik059DVqCLuyf
+         iCPzUlb5QRGUGWl8Lp4LKe1VvASDnm7OMiD2zze15ryHt96x4fG+3WKUARPC+NQ/ma2W
+         iYLszJ4XBgPefFhNQEB1HxxADZGYrJM6nL+zlzOnex6RDZZ0ZJ/Gjm0IPj4Nwm0XkxBQ
+         CoFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5Hdv1mbqowF6vh5DNfkIUiQ0n9553kuzhvWlhKpDxJY=;
-        b=pL4YlE5ADPNsKEozXdBAfJHKKZ2T4gvAOYjpcl2HX/mYTh9cvGYMUoSQATRQ5r7qrE
-         +EUDP0Wn3jCXERBFhU0LeQWwM+RACr77s0UyVMuC3UTyks5ZmDgm/ZZH0O2PSmmuKZYj
-         c0UMkdQcxMHkr0IOA+2JHPLInpmc81luTw6Fd2zNz7f3E/AWqBIHxCkLCt3IAXluPncg
-         raAKqOGnfaMT/oGHeek6M8oZ8buHAgu7iD/+mf8JKLjuIA3+QpFMEhkhyQukljSJ8itc
-         Tz+OWBSW6MhRQzqf1ljs5YBYcvIYtcuSgPKKDfh+CXVE6xJcz0/FNcnI6siWBW1Bmrzg
-         +opg==
-X-Gm-Message-State: ACrzQf0PZR34lR1W6X0CpXwKlZIN4t4hG+lUyrhGvlUL3DqARFel8sNI
-        PKMDDYih3l3gnbyBd9hrNQfy2A==
-X-Google-Smtp-Source: AMsMyM6a5QLh2viiSelQ6l4YiBUdev8Gs5f5CFAE5EQY1dkRpELZdjzz3gkewypVCIBffYz7C+R1Lw==
-X-Received: by 2002:a05:6402:2489:b0:454:11de:7698 with SMTP id q9-20020a056402248900b0045411de7698mr23343739eda.214.1666456539409;
-        Sat, 22 Oct 2022 09:35:39 -0700 (PDT)
+        bh=iMEJOs8rsFhAhsZPWWaHcq3vp7VFtPBUd+l2pbsoxiA=;
+        b=AtrCoA2zhuhdmSTiCgUN/6s/w8oFiwaQmE+n5wzdMgokT1bCkfIC6+KfSxX/mPk9Nc
+         O3Xbxm6YJpLt1LOk4aGxmSTt5IcpTiluwhXgwgsuODsBKxfFVv9BeY/7YgWuOWWym7bZ
+         K/RmJRQ7yHnuB9sPCzaxWOHbeuXwd6DGL3y8PGBpHqyPOnLtmH+Laz41qOwmp6s19fg1
+         eJz/LcjZj4FqYKJPJ5sCrGozD61Ko9hwKwrnY5tFK2aBYULimHT8lQDYrLFZh0nxU5mK
+         haqp6YHakzQalkHwr7YQz26IvnByYYaXRIJa/KifXp0pS31psk6N/MUEHxMLptlwpl+T
+         yfUg==
+X-Gm-Message-State: ACrzQf3yI7EuDq+2dRy4MrpZtKjFjgSoB7hLQwDkBaOxQUuBjYZOzYgG
+        T9TEdgkUohZTRDx/pKvv4ymiFw==
+X-Google-Smtp-Source: AMsMyM4DmmgF16YuIV2sQhfY7/ByyCdcFHvL3XCoNKIWCxdQZ5rojnPTvFMcvIzvbB2CSVdBIBdvYA==
+X-Received: by 2002:a05:6402:3215:b0:45c:97de:b438 with SMTP id g21-20020a056402321500b0045c97deb438mr22748644eda.7.1666458200377;
+        Sat, 22 Oct 2022 10:03:20 -0700 (PDT)
 Received: from ?IPV6:2a05:6e02:1041:c10:7b1d:c5f2:c85:8976? ([2a05:6e02:1041:c10:7b1d:c5f2:c85:8976])
-        by smtp.googlemail.com with ESMTPSA id da3-20020a056402176300b004615bea1d5bsm2014878edb.35.2022.10.22.09.35.38
+        by smtp.googlemail.com with ESMTPSA id i18-20020a170906699200b007812ba2a360sm13306136ejr.149.2022.10.22.10.03.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 09:35:38 -0700 (PDT)
-Message-ID: <d5cda762-63d0-ac89-e826-52b3bc6fad84@linaro.org>
-Date:   Sat, 22 Oct 2022 18:35:37 +0200
+        Sat, 22 Oct 2022 10:03:19 -0700 (PDT)
+Message-ID: <904faa39-9435-b8a8-fa6f-1ade8d5b61f4@linaro.org>
+Date:   Sat, 22 Oct 2022 19:03:16 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v11 1/2] thermal: Add thermal driver for Sunplus
+Subject: Re: [PATCH v6 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
 Content-Language: en-US
-To:     Li-hao Kuo <lhjeff911@gmail.com>, krzk@kernel.org,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     lh.kuo@sunplus.com
-References: <cover.1665990345.git.lhjeff911@gmail.com>
- <076585e120b64832dcb81e39f3e59d719148816b.1665990345.git.lhjeff911@gmail.com>
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        linux-mediatek@lists.infradead.org, Rob Herring <robh@kernel.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+References: <20221018-up-i350-thermal-bringup-v6-0-c87b9f75550b@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <076585e120b64832dcb81e39f3e59d719148816b.1665990345.git.lhjeff911@gmail.com>
+In-Reply-To: <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/10/2022 09:32, Li-hao Kuo wrote:
-> Add thermal driver for Sunplus.
+On 19/10/2022 16:17, Amjad Ouled-Ameur wrote:
+> Provide thermal zone to read thermal sensor in the SoC. We can read all the
+> thermal sensors value in the SoC by the node /sys/class/thermal/
 > 
-> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
+> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> on the first read of sensor that often are bogus values.
+> This can avoid following warning on boot:
+> 
+>    thermal thermal_zone6: failed to read out thermal zone (-13)
+> 
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Overall the series looks good to me, however there is a couple of things 
+to fix. See below
+
 > ---
-> Changes in v11:
->   - Remove the remove function of the platform_driver
->   - Fix error reported-by: kernel test robot.
+>   drivers/thermal/mtk_thermal.c | 104 ++++++++++++++++++++++++++++++++----------
+>   1 file changed, 79 insertions(+), 25 deletions(-)
 > 
->   MAINTAINERS                       |   6 ++
->   drivers/thermal/Kconfig           |  10 +++
->   drivers/thermal/Makefile          |   1 +
->   drivers/thermal/sunplus_thermal.c | 130 ++++++++++++++++++++++++++++++++++++++
->   4 files changed, 147 insertions(+)
->   create mode 100644 drivers/thermal/sunplus_thermal.c
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf0f185..bf22c53 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -19753,6 +19753,12 @@ S:	Maintained
->   F:	Documentation/devicetree/bindings/spi/spi-sunplus-sp7021.yaml
->   F:	drivers/spi/spi-sunplus-sp7021.c
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 3a5df1440822..311ad611fdab 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
 >   
-> +SUNPLUS THERMAL DRIVER
-> +M:	Li-hao Kuo <lhjeff911@gmail.com>
-> +L:	linux-pm@vger.kernel.org
-> +S:	Maintained
-> +F:	drivers/thermal/sunplus_thermal.c
-> +
->   SUNPLUS UART DRIVER
->   M:	Hammer Hsieh <hammerh0314@gmail.com>
->   S:	Maintained
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index e052dae..405b788 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
->   	  If you say yes here you get support for the FAN controlled
->   	  by the Microcontroller found on the Khadas VIM boards.
+>   struct mtk_thermal;
 >   
-> +config SUNPLUS_THERMAL
-> +	tristate "Sunplus thermal drivers"
-> +	depends on SOC_SP7021 || COMPILE_TEST
-> +	help
-> +	  This enable the Sunplus SP7021 thermal driver, which supports the primitive
-> +	  temperature sensor embedded in Sunplus SP7021 SoC.
+> +struct mtk_thermal_zone {
+> +	struct mtk_thermal *mt;
+> +	int id;
+> +};
+
+Do you really need to create a new structure for that ?
+
+>   struct thermal_bank_cfg {
+>   	unsigned int num_sensors;
+>   	const int *sensors;
+> @@ -307,6 +312,8 @@ struct mtk_thermal {
+>   
+>   	const struct mtk_thermal_data *conf;
+>   	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
 > +
-> +	  If you have a Sunplus SP7021 platform say Y here and enable this option
-> +	  to have support for thermal management.
+> +	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
+>   };
+>   
+>   /* MT8183 thermal sensor data */
+> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+>   		mutex_unlock(&mt->lock);
+>   }
+>   
+> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
+> +{
+> +	u32 raw;
+> +	int temp;
 > +
->   endif
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 2506c6c..4512193 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
->   obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
->   obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
->   obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
-> +obj-$(CONFIG_SUNPLUS_THERMAL)	+= sunplus_thermal.o
-> \ No newline at end of file
-> diff --git a/drivers/thermal/sunplus_thermal.c b/drivers/thermal/sunplus_thermal.c
-> new file mode 100644
-> index 0000000..20ea7d9
-> --- /dev/null
-> +++ b/drivers/thermal/sunplus_thermal.c
-> @@ -0,0 +1,130 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) Sunplus Inc.
-> + * Author: Li-hao Kuo <lhjeff911@gmail.com>
-> + */
+> +	const struct mtk_thermal_data *conf = mt->conf;
 > +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset.h>
-> +#include <linux/thermal.h>
+> +	raw = readl(mt->thermal_base + conf->msr[id]);
 > +
-> +#define ENABLE_THERMAL		BIT(31)
-> +#define SP_THERMAL_MASK		GENMASK(10, 0)
+> +	temp = mt->raw_to_mcelsius(mt, id, raw);
 > +
-> +#define TEMP_RATE		608
-> +#define TEMP_BASE		3500
-> +#define TEMP_OTP_BASE		1518
+> +	/*
+> +	 * The first read of a sensor often contains very high bogus
+> +	 * temperature value. Filter these out so that the system does
+> +	 * not immediately shut down.
+> +	 */
 > +
-> +#define SP_THERMAL_CTL0_REG	0x0000
-> +#define SP_THERMAL_STS0_REG	0x0030
+> +	if (temp > 200000)
+> +		return -EAGAIN;
+> +	else
+> +		return temp;
+> +}
 > +
-> +/* common data structures */
-> +struct sp_thermal_data {
-> +	struct thermal_zone_device *pcb_tz;
-> +	void __iomem *regs;
-> +	int *otp_temp0;
+>   /**
+>    * mtk_thermal_bank_temperature - get the temperature of a bank
+>    * @bank:	The bank
+> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	struct mtk_thermal *mt = bank->mt;
+>   	const struct mtk_thermal_data *conf = mt->conf;
+>   	int i, temp = INT_MIN, max = INT_MIN;
+> -	u32 raw;
+>   
+>   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+> -		raw = readl(mt->thermal_base + conf->msr[i]);
+> -
+> -		if (mt->conf->version == MTK_THERMAL_V1) {
+> -			temp = raw_to_mcelsius_v1(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		} else {
+> -			temp = raw_to_mcelsius_v2(
+> -				mt, conf->bank_data[bank->id].sensors[i], raw);
+> -		}
+> -
+> -		/*
+> -		 * The first read of a sensor often contains very high bogus
+> -		 * temperature value. Filter these out so that the system does
+> -		 * not immediately shut down.
+> -		 */
+> -		if (temp > 200000)
+> -			temp = 0;
+> +		temp = _get_sensor_temp(mt, i);
+>   
+>   		if (temp > max)
+>   			max = temp;
+> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>   	return max;
+>   }
+>   
+> -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
+>   {
+> -	struct mtk_thermal *mt = tz->devdata;
+> +	struct mtk_thermal_zone *tz = tzdev->devdata;
+> +	struct mtk_thermal *mt = tz->mt;
+>   	int i;
+>   	int tempmax = INT_MIN;
+>   
+> @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+>   	return 0;
+>   }
+>   
+> +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
+> +{
+> +	struct mtk_thermal_zone *tz = tzdev->devdata;
+> +	struct mtk_thermal *mt = tz->mt;
+> +	int id = tz->id - 1;
+> +
+> +	if (id < 0)
+> +		return -EACCES;
+> +
+> +	*temperature = _get_sensor_temp(mt, id);
+> +
+> +	return 0;
+> +}
+> +
+>   static const struct thermal_zone_device_ops mtk_thermal_ops = {
+>   	.get_temp = mtk_read_temp,
+>   };
+>   
+> +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
+> +	.get_temp = mtk_read_sensor_temp,
 > +};
 > +
-> +static int sunplus_get_otp_temp_coef(struct sp_thermal_data *sp_data, struct device *dev)
-> +{
-> +	struct nvmem_cell *cell;
-> +	ssize_t otp_l;
+>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
+>   				  int ctrl_id)
+> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   	u64 auxadc_phys_base, apmixed_phys_base;
+>   	struct thermal_zone_device *tzdev;
+>   	void __iomem *apmixed_base, *auxadc_base;
+> +	struct mtk_thermal_zone *tz;
+>   
+>   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>   	if (!mt)
+> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	mtk_thermal_turn_on_buffer(mt, apmixed_base);
+>   
+> +	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
+> +				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
 > +
-> +	cell = nvmem_cell_get(dev, "calib");
-> +	if (IS_ERR(cell))
-> +		return PTR_ERR(cell);
+>   	if (mt->conf->version == MTK_THERMAL_V2) {
+>   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>   	}
+> @@ -1161,11 +1197,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>   
+>   	platform_set_drvdata(pdev, mt);
+>   
+> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+> -					      &mtk_thermal_ops);
+> -	if (IS_ERR(tzdev)) {
+> -		ret = PTR_ERR(tzdev);
+> -		goto err_disable_clk_peri_therm;
+> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+> +		if (!tz)
+> +			return -ENOMEM;
 > +
-> +	sp_data->otp_temp0 = nvmem_cell_read(cell, &otp_l);
-> +	nvmem_cell_put(cell);
+> +		tz->mt = mt;
+> +		tz->id = i;
 > +
-> +	if (*sp_data->otp_temp0 == 0)
-> +		*sp_data->otp_temp0 = TEMP_OTP_BASE;
-> +
-> +	return 0;
-> +}
-> +
-> +/*
-> + * There is a thermal sensor instance for Sunplus Soc
-> + * T_CODE is the ADC of the thermal sensor
-> + * T_CODE : 11 digits in total
-> + * When remanufacturing, the 35 degree T_CODE will be read and stored in nvcell.
-> + * otp_temp0 is the 35 degree T_CODE obtained from nvcell
-> + * The function will get 35 degree T_CODE for thermal calibration.
-> + * TEMP_RATE is the Sunplus thermal temperature slope.
-> + */
-> +
-> +static int sp_thermal_get_sensor_temp(void *data, int *temp)
-> +{
-> +	struct sp_thermal_data *sp_data = data;
-> +	int t_code;
-> +
-> +	t_code = readl(sp_data->regs + SP_THERMAL_STS0_REG);
-> +	t_code = FIELD_GET(SP_THERMAL_MASK, t_code);
-> +	*temp = ((*sp_data->otp_temp0 - t_code) * 10000 / TEMP_RATE) + TEMP_BASE;
-> +	*temp *= 10;
-> +	return 0;
-> +}
-> +
-> +static const struct thermal_zone_of_device_ops sp_of_thermal_ops = {
+> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
+> +							     &mtk_thermal_ops :
+> +							     &mtk_thermal_sensor_ops);
 
-struct thermal_zone_device_ops ...
+We want to prevent the aggregation from the different sensors within a 
+driver. I know there is already a function doing that for the previous 
+sensor version but that is something we don't want to continue.
 
- 
-https://lore.kernel.org/r/20220804224349.1926752-1-daniel.lezcano@linexp.org
+Using mtk_thermal_ops tries to overcome this.
+
+Also, the userspace needs to know to which device a thermal zone is 
+related to. Here all the thermal zones have the same name so the 
+userspace does not know if it is the GPU, the CPU, the chassis, the NPU, ...
 
 
+> +
+> +		if (IS_ERR(tzdev)) {
+> +			if (PTR_ERR(tzdev) == -ENODEV) {
+> +				dev_warn(&pdev->dev,
+> +					 "sensor %d not registered in thermal zone in dt\n", i);
 
+ENODEV is not considered an error, so the warning can be removed
+
+> +				continue;
+> +			}
+> +			if (PTR_ERR(tzdev) == -EACCES) {
+
+When devm_thermal_of_zone_register() returns -EACCES ?
+
+> +				ret = PTR_ERR(tzdev);
+> +				goto err_disable_clk_peri_therm;
+> +			}
+> +		}
+>   	}
+>   
+>   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
+> 
 
 
 -- 
