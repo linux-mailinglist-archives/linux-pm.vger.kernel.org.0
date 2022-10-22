@@ -2,140 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20D3C608CB1
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 13:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBD0608D43
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 14:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230285AbiJVLdD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Oct 2022 07:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
+        id S229773AbiJVM5L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Oct 2022 08:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiJVLco (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 07:32:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7525127FF6
-        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 04:12:26 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id a13so14855771edj.0
-        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 04:12:26 -0700 (PDT)
+        with ESMTP id S229767AbiJVM5K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 08:57:10 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F01AC22B38C;
+        Sat, 22 Oct 2022 05:57:09 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z97so15312982ede.8;
+        Sat, 22 Oct 2022 05:57:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XkHBPe8kKp/EBO1kgCVV44yINTVx9+9WMF/ZWQU88KM=;
-        b=hrLNxiuD7rGcoYoDFEG4FYJ/zZHCXK1tR2mH+JEjkDCh6yA6QjUPp6hoaTbZGI5xwI
-         S0wosoyTQLKJZteniGi1EOiIC27IGNkYXTMMocUfW5VMrtxE6dN2ItO5DXXhvN+8j9gS
-         H5urh1Mh8cAZU6X0H7Qk0CFxWioOf6qULmay65o9qqInJjxwFtI0329CssSoNf7bvXdv
-         DGSy76oaDRXXtkJwyDKOdxWyVIXAOFDJVOdPJ22X1EPpoTGyOKXh1e3dV1UNWIv8Av3y
-         9bfLKPDbpgWhV2bwmi+1h8ozn/pGs6jcFMH+3dRFmi3u3yI4CgmQ3FpOjrQCXg9ARbEA
-         1ilA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=527bxp9h/jqaP6bCJj6qmuI38uc+kV9+b2ns/HCfZM8=;
+        b=G6ngoJy0awMrBKvuw1h47s/rl8H0wPcmh4spCh/kMBZ2e+bHcBagxeNSzrhqVQ/Pjs
+         rnuLGgZngqVL3/yMAcsXbNVLv/jbPRxXIbVjhHa7NZvZrjQig3Z+3n8QDqM90QSmxhu9
+         4V8PtdORXhxasdAEVTH34Us65ggHldjnH2dntHIJw+22G3urNR6pe9GOz7LlfzTwLTSp
+         g7G4jO/w1EtMPExUDLI7RBWZqUW76/FSJTF7KTPll83EqU/oVBhInJb3eULY7340wwpy
+         2EWrIJYxfXtivs2mCCCjwtBVbYeSXcO34yw8gPsQc+k9MA2lSjpL19jo54OIUVl1xjPs
+         jEmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XkHBPe8kKp/EBO1kgCVV44yINTVx9+9WMF/ZWQU88KM=;
-        b=il2eJuYZHIKjW2d1bXa5DEevIKRrv5yXtPiQr54dv44U6tfRhrCJrp4YDRp82yZdXc
-         y+q+4UkkByMU/scHUv0nr/TqTx4BUSKLzsoyGuToDaMG2HAz00PfxsEC7nUtNnqcSHpa
-         rEdXIPl2QayUYc4i8LR3EpT71uz7HL8rG8wGaCxrt4Jv59AFBqI++3jSn4MkvbwsmCDR
-         kA/r94NjLOs48M59gL9hA8fMsR5luCBElnzgfMpNge0xH/4cY2UQmhtaDDZvHqAFFcUQ
-         0A3uZzSJSTsj5Paz1h0VNF+rCGp28dvTUjdsMfMv6nki/wzs6ZeL150FxFD51W9YC2Ul
-         Ap+A==
-X-Gm-Message-State: ACrzQf1QhVzsSIydUPL8g5TaAjfh67EHSiXz2uuvwpwgbsRRN6IoFNl9
-        NsxVlNUh4Un2XLqV/GN1KL0uYA==
-X-Google-Smtp-Source: AMsMyM5sbHVdjq9chPJBv2v73OaTQ6ZtNtFRPn38AtlSsWcq8cx5eu0OlB4Dk1p4BQXHMJFueZyYOg==
-X-Received: by 2002:a05:6402:1911:b0:45c:be41:a879 with SMTP id e17-20020a056402191100b0045cbe41a879mr21645066edz.322.1666437144931;
-        Sat, 22 Oct 2022 04:12:24 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:25b:e73e:85eb:ae6e? ([2a05:6e02:1041:c10:25b:e73e:85eb:ae6e])
-        by smtp.googlemail.com with ESMTPSA id hp21-20020a1709073e1500b0079800b8173asm3338667ejc.158.2022.10.22.04.12.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 22 Oct 2022 04:12:24 -0700 (PDT)
-Message-ID: <2b0fe8c2-674a-3b44-16aa-d3008b1271c3@linaro.org>
-Date:   Sat, 22 Oct 2022 13:12:22 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] thermal: rockchip: Support RK3588 SoC in the thermal
- driver
-Content-Language: en-US
-To:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Heiko Stuebner <heiko@sntech.de>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=527bxp9h/jqaP6bCJj6qmuI38uc+kV9+b2ns/HCfZM8=;
+        b=kIAg3B50B9+sVFUSMSZXdZClRaOBeB4RCKi9/Z9YOBaJVQUzRlEtmgYc1dCu5YMW2V
+         G/90IKu3HvIO+Mf05nMOrx1BEoi4OUpBTbD/mpXb55zQHd9JtiySrCtvyuES3zYP+79W
+         e1OsHD+myoMpRjZPM7qJ2U4r2clgrcSF1YcYz6N678KX4o7n0z33BRGrBkavZqpVt4lv
+         nmh0ciYkn0n/s78tCeQHMJDIa+rgOiqLpQXae7STvG6+YWhon35axpZl5qtN8W68pxT1
+         cpgAXcDgQoQbqrsQKtDi366ZiFxvdgP+ZdDOIzvnYgGEWiM6XvfnWZqLCFlEWEFmHS0Y
+         ZH0A==
+X-Gm-Message-State: ACrzQf0h7EdfiKovQ742Nlzkh67CuPImuZkecHOY9DUONJGkTAAmGKrx
+        aMZvRd6UQspNeyLvruMmGos=
+X-Google-Smtp-Source: AMsMyM5+JIbx7OR2f6XLQo3O89li6hBkahzs9EsxHlhWypPUsw87KEtQT2iWwX5CDe1b9La5Fy0otw==
+X-Received: by 2002:a05:6402:3223:b0:461:8635:e5c with SMTP id g35-20020a056402322300b0046186350e5cmr1580007eda.303.1666443428117;
+        Sat, 22 Oct 2022 05:57:08 -0700 (PDT)
+Received: from localhost.localdomain (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
+        by smtp.googlemail.com with ESMTPSA id t29-20020a056402241d00b0045ce419ecffsm15173970eda.58.2022.10.22.05.57.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Oct 2022 05:57:07 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-rockchip@lists.infradead.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
-References: <20221021174721.92468-1-sebastian.reichel@collabora.com>
- <20221021174721.92468-2-sebastian.reichel@collabora.com>
- <2aafa6cc-a7de-0b7a-571f-04593ad53787@linaro.org>
- <7276280.TLKafQO6qx@archbook>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <7276280.TLKafQO6qx@archbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v3 0/3] thermal: qcom: tsens: small fixup for debugfs
+Date:   Sat, 22 Oct 2022 14:56:54 +0200
+Message-Id: <20221022125657.22530-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/10/2022 10:43, Nicolas Frattaroli wrote:
+This is a small series to fixup some bug in how tsens init debufs.
 
-[ ... ]
+The first patch just handle situation where tsens fails to register and
+debugfs are getting registred anyway. When tsens is tried to reprobe
+debugs will print a warning as the directory are already there.
 
->> What is TOP and CENTER ?
->>
->> There are 4 Bigs on this platform but two sensors ?
-> 
-> As far as I know, the four big cores in the SoC are arranged in two
-> clusters of two cores each, so one temperature sensor for each
-> cluster. As far as I can tell each CPU in a cluster shares its voltage
-> with its partner CPU core in its cluster.
+The second patch is a fixup for wrong version when the ancient VER_0 is
+used.
 
-Ok, I found some more details on the datasheet, page 7-8.
+The third patch is a rework of debugfs structure moving version in the
+tsens istance instead of ignoring any other tsens istance if it will
+ever be the case in the future of having multiple tsens instance with
+different version. It's just futureproof on it's own and also removed
+one additional check.
 
-So it is a big "Cluster" with the 4 Big cores. They share the same cache.
+changes v3:
+- remove extra space from patch 1
+- split patch 2 to 2 different patch
+- patch 3 rework wrong debugfs structure
+changes v2:
+- Changed sob name to new one.
 
-There is one power domain per core (cpuidle)
+(the resend was actually v2 but i totally forgot that I sent it as v2 with
+the sob name fixed... but everything should be good now...)
 
-There are two performance domains (cpufreq x 2)
+Christian Marangi (3):
+  thermal: qcom: tsens: init debugfs only with successful probe
+  thermal: qcom: tsens: fix wrong version id dbg_version_show
+  thermal: qcom: tsens: rework debugfs file structure
 
-So it makes sense to have one sensor per performance domain to mitigate 
-the temperature.
-
-> If you have access to the TRM, it contains the following line in
-> part 1 on page 1372:
-
-Unfortunately no, I don't have access to the TRM. But I'll be happy if I 
-can ;)
-
-> 	Support to 7 channel TS-ADC (near chip center, A76_0/1, A76_2/3,
-> 	DSU and A55_0/1/2/3, PD_CENTER, NPU, GPU)
-> 
-> I assume one of "TOP" and "CENTER" is "near chip center", the other is
-> PD_CENTER, whatever that means (PD = power domain maybe?)
-
-Yes certainly.
-
-I take the opportunity to let you know there is a new tool in the linux 
-tools directory called 'thermometer'. You can capture the temperature 
-and use the data to create graphics.
-
-> I agree these could be named more descriptively.
-> 
-
-
+ drivers/thermal/qcom/tsens.c | 23 +++++++++--------------
+ 1 file changed, 9 insertions(+), 14 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.37.2
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
