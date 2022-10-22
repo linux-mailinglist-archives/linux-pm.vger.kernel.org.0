@@ -2,150 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EE0608D59
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 15:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DB9B608DF9
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 17:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbiJVNKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Oct 2022 09:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
+        id S229742AbiJVPTA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Oct 2022 11:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiJVNKs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 09:10:48 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A4253ED4;
-        Sat, 22 Oct 2022 06:10:43 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id e18so15430062edj.3;
-        Sat, 22 Oct 2022 06:10:43 -0700 (PDT)
+        with ESMTP id S229588AbiJVPS7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 11:18:59 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A147867443
+        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 08:18:55 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1364357a691so7080007fac.7
+        for <linux-pm@vger.kernel.org>; Sat, 22 Oct 2022 08:18:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DWxqQb3pJCcHfHLbrY0SnKRqWah2jt07DVxlX1RC15Q=;
-        b=LU544rhD/8aW9X28J01TZtgJMQFfls6teFuuyKVhO7/g/eg8rKuG0gdUuqAO0N3LG6
-         K3HG/iAegJG13Y8EvqI5K5UNlwFFGBToRsJaqq+65UYxeLXMrFMWCg5VYyyrNIFFtMtV
-         e/M0ZBfUR5YO+tITz4qpnTzk2HJorrqSi0Q35gao59J5kPpej9AZHkTULjiWqoWp7LY0
-         AOQfcBA+DG18x/st63v8rhwsOE1e1sAZXe43qbV1QCB+jUqLIBj3nToyRYniQjrEOdNZ
-         9NhxEoPbXhfKgy/b7wlp8T2gFDDtHy0jNrJcUNmdNU8wHTPtKhnMdExGUynTNfid13LS
-         a71A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gz0LxUsOUlJDcIAW5bPu+WDjpQGro2FyWxGKpu7r8bo=;
+        b=gWrs34NeTJPV2fQ1MVoQY+zpFojHR3D/A6fVxaEOoPyaG1lz86TK/RINtSik3ihs6m
+         epr6PhFlnoD33CCeTfWoNQCRee99kzlwRupaR937A3VU5HU4OTIvs/zluF82SMnywl6D
+         HdEJ7m7PbwxapFaNOFa9ppWW4y91iGtKkwoLpnocgDPBTYKE8ItremNKc8YrHhceRIZp
+         h3VMtehI1AqTwZwEWQcTgFOjDVRQQngjmAnbv2gz4Ef/Bbck+zcB6GCOTs8PKUKrqPeL
+         49sPdfcCEYUyqTEphtRdJczJc984b2NmTshEFvs/XiFALWDOPilFuaMHYm7NR6Fhz+qX
+         X9nQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:subject:cc:to:from:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DWxqQb3pJCcHfHLbrY0SnKRqWah2jt07DVxlX1RC15Q=;
-        b=rEGv8GLhZrSkuCVEnCpayQlXpg0fkB2I1phzAi14VFU7fFkTpLvHjLe8aSA5let6hC
-         zZHJZske7V/eRfPo3aO77hPhvzsObOKM538HNFkLIXJ3gb6tYFG5oTi5dPTWSDL6X3J9
-         9HiIhPqp3vJtmbr89q5WjIDlphHNBTE/S1vWzy9iyJdm/6yn6rMvoKAJRJQlrMOkareF
-         XvP4cfReovldpQn+YQBQCwXbtx8OFaXnHNto6Ic5aGBNQSRJnLdvsetnval5qUzSUOSW
-         N15N1BbSIjixr/tue4xFXdVFNbG5JglTEVF5fHqrICHsRTfIHLlg77vAs50QfeC+ToJD
-         aBDQ==
-X-Gm-Message-State: ACrzQf2jiHZxfNuZqKKbJyPkImZWzKRYhJB/JM0zbMVurIu/qpNPFNko
-        b9S3br+DKATzAxU0vwX3Bug=
-X-Google-Smtp-Source: AMsMyM6dCpj3wjpMtwzjGOP46+DRGb2A5PRc4PNj927PdfRV6G+pDmrePX26iL7ahW5qL58/pJkgXw==
-X-Received: by 2002:a17:907:80b:b0:77a:86a1:db52 with SMTP id wv11-20020a170907080b00b0077a86a1db52mr20599778ejb.294.1666444242121;
-        Sat, 22 Oct 2022 06:10:42 -0700 (PDT)
-Received: from Ansuel-xps. (93-42-70-134.ip85.fastwebnet.it. [93.42.70.134])
-        by smtp.gmail.com with ESMTPSA id r9-20020a170906280900b0077b523d309asm12840797ejc.185.2022.10.22.06.10.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Oct 2022 06:10:41 -0700 (PDT)
-Message-ID: <6353ebd1.170a0220.e607e.711a@mx.google.com>
-X-Google-Original-Message-ID: <Y1Pryo4btyRLfKGP@Ansuel-xps.>
-Date:   Sat, 22 Oct 2022 15:10:34 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] thermal: qcom: tsens: rework debugfs file
- structure
-References: <20221022125657.22530-1-ansuelsmth@gmail.com>
- <20221022125657.22530-4-ansuelsmth@gmail.com>
- <591f7038-81ed-1850-b525-d02a4e082903@linaro.org>
+        bh=gz0LxUsOUlJDcIAW5bPu+WDjpQGro2FyWxGKpu7r8bo=;
+        b=f1ZffK7Lx76b98GudPzyORieHgW1o+lJVBxvBfBIn8QmpACR6q2nNSfNni1qavF7Jl
+         Y7FS9vh4cOfR2N0mhOR/GokudDYCo4QEYYkDpic6VcRc6JJlaqu/dW9drNqUL38eJXJR
+         LNNNoV1b4LgY1AA6GQPYAfMUDBRGmPJRAhTRpb6LSst0X8D++aaWUkizFgQYcHNqT5/+
+         XX0PYtxBYaTz71OWRWZReWAxbVYebgkJyYJbdd8HikZaT4aYmz1yy5HE0Mw7Rqg+lV0O
+         N+kDS89eQF83/Hc0n6SXePUBG+Vu0bESv0D3R1vYbvxQdGvrV7BwEBo7Jbuwcr7GYWWt
+         BkHg==
+X-Gm-Message-State: ACrzQf1cx66f8rfoeKm2T6cRQGH1m0CyJMIvSVdi1M5ZUACNcD996sL5
+        gyFWNYXFwH16vAP8c46D9hGCwQ==
+X-Google-Smtp-Source: AMsMyM4Ums0et6AQMZox+xdB7Wz2plUu78klbaMd0EOzV1OnnwGbhhl8/BymyNDqbBFL+Y+cBT/t0g==
+X-Received: by 2002:a05:6870:f288:b0:131:de71:3eb6 with SMTP id u8-20020a056870f28800b00131de713eb6mr31239483oap.63.1666451935002;
+        Sat, 22 Oct 2022 08:18:55 -0700 (PDT)
+Received: from [10.203.8.70] ([205.153.95.177])
+        by smtp.gmail.com with ESMTPSA id v5-20020a056870310500b00136c20b1c59sm11538284oaa.43.2022.10.22.08.18.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 22 Oct 2022 08:18:54 -0700 (PDT)
+Message-ID: <e7ace68a-98e5-63c8-7dd7-a35d0eba1c6e@linaro.org>
+Date:   Sat, 22 Oct 2022 11:18:49 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <591f7038-81ed-1850-b525-d02a4e082903@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
+To:     Arnd Bergmann <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>, linux-doc@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-serial@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-watchdog@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-pwm@vger.kernel.org
+References: <20221021202254.4142411-1-arnd@kernel.org>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221021202254.4142411-1-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 22, 2022 at 03:08:46PM +0200, Daniel Lezcano wrote:
-> On 22/10/2022 14:56, Christian Marangi wrote:
-> > The current tsens debugfs structure is composed by:
-> > - a tsens dir in debugfs with a version file
-> > - a directory for each tsens istance with sensors file to dump all the
-> >    sensors value.
+On 21/10/2022 16:22, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
-> s/istance/instance/
+> The s3c24xx platform was marked as deprecated a while ago,
+> and for the s3c64xx platform, we marked all except one legacy
+> board file as unused.
 > 
-> The patch looks good to me, no need to resend, I'll fix the typos
->
+> This series removes all of those, leaving only s3c64xx support
+> for DT based boots as well as the cragg6410 board file.
+> 
+> About half of the s3c specific drivers were only used on
+> the now removed machines, so these drivers can be retired
+> as well. I can either merge the driver removal patches through
+> the soc tree along with the board file patches, or subsystem
+> maintainers can pick them up into their own trees, whichever
+> they prefer.
 
-Thanks for picking this, np for fixing typos.
+Just to be sure - do you expect me to ack the series, or rather as usual
+pick them up?
 
-> > This works on the assumption that we have the same version for each
-> > istance but this assumption seems fragile and with more than one tsens
-> > istance results in the version file not tracking each of them.
-> > 
-> > A better approach is to just create a subdirectory for each tsens
-> > istance and put there version and sensors debugfs file.
-> > 
-> > Using this new implementation results in less code since debugfs entry
-> > are created only on successful tsens probe.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >   drivers/thermal/qcom/tsens.c | 13 +++----------
-> >   1 file changed, 3 insertions(+), 10 deletions(-)
-> > 
-> > diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> > index 467585c45d34..fc12d7c07de4 100644
-> > --- a/drivers/thermal/qcom/tsens.c
-> > +++ b/drivers/thermal/qcom/tsens.c
-> > @@ -704,21 +704,14 @@ DEFINE_SHOW_ATTRIBUTE(dbg_sensors);
-> >   static void tsens_debug_init(struct platform_device *pdev)
-> >   {
-> >   	struct tsens_priv *priv = platform_get_drvdata(pdev);
-> > -	struct dentry *root, *file;
-> > -	root = debugfs_lookup("tsens", NULL);
-> > -	if (!root)
-> > +	priv->debug_root = debugfs_lookup("tsens", NULL);
-> > +	if (!priv->debug_root)
-> >   		priv->debug_root = debugfs_create_dir("tsens", NULL);
-> > -	else
-> > -		priv->debug_root = root;
-> > -
-> > -	file = debugfs_lookup("version", priv->debug_root);
-> > -	if (!file)
-> > -		debugfs_create_file("version", 0444, priv->debug_root,
-> > -				    pdev, &dbg_version_fops);
-> >   	/* A directory for each instance of the TSENS IP */
-> >   	priv->debug = debugfs_create_dir(dev_name(&pdev->dev), priv->debug_root);
-> > +	debugfs_create_file("version", 0444, priv->debug, pdev, &dbg_version_fops);
-> >   	debugfs_create_file("sensors", 0444, priv->debug, pdev, &dbg_sensors_fops);
-> >   }
-> >   #else
-> 
-> 
-> -- 
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-> 
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
 
--- 
-	Ansuel
+Best regards,
+Krzysztof
+
