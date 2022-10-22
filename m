@@ -2,66 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93350608EF7
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 20:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75EE608F6C
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 21:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiJVSTB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Oct 2022 14:19:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
+        id S229965AbiJVTsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 22 Oct 2022 15:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiJVSTA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 14:19:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C95F5ED980;
-        Sat, 22 Oct 2022 11:18:59 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 828AD660237E;
-        Sat, 22 Oct 2022 19:18:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666462737;
-        bh=aVRfa05Pe4xu8Oy3Hd7CQnA76p8LS2W9iGhPGMnw+qg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MK/yeP8c8W918ZegSCk1eMlJ+VPS+K8YHfpnvuq768Vo87AGYTqpFPvlaG/EFFDLS
-         dPUKr7VN+Ybw342XFy2hBe4RnwxWXA5cHsyL1/1qVxnNj5W+7jusYh3RF/fpQrm8Hk
-         SQ0dzvr9yStrJfsR5W1o7RzRpPi9mdj+LK06OfAJLzOxxqJ0W0FPRlUuKtp29+ael/
-         BmIEp/r+bHo/J3W7hNRw4kO5VXQMjvS+IPzWcj6E8WS1S6vacIJE/g1SDoXeMRVLAQ
-         Ur419A1T2KfXpJlhhXar9CFC0kXibYQgz3rGcx/1vx8RVeA+Q53TqPOxIqJs1hOPdl
-         VDxh07PGeyGBQ==
-Received: by mercury (Postfix, from userid 1000)
-        id C0F3210607E8; Sat, 22 Oct 2022 20:18:54 +0200 (CEST)
-Date:   Sat, 22 Oct 2022 20:18:54 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-rockchip@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Finley Xiao <finley.xiao@rock-chips.com>, kernel@collabora.com
-Subject: Re: [PATCH 1/2] thermal: rockchip: Support RK3588 SoC in the thermal
- driver
-Message-ID: <20221022181854.znel4pizx3gemz7q@mercury.elektranox.org>
-References: <20221021174721.92468-1-sebastian.reichel@collabora.com>
- <20221021174721.92468-2-sebastian.reichel@collabora.com>
- <2aafa6cc-a7de-0b7a-571f-04593ad53787@linaro.org>
- <7276280.TLKafQO6qx@archbook>
- <2b0fe8c2-674a-3b44-16aa-d3008b1271c3@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="r3ipl5tfxboahj42"
-Content-Disposition: inline
-In-Reply-To: <2b0fe8c2-674a-3b44-16aa-d3008b1271c3@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        with ESMTP id S229847AbiJVTsq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 15:48:46 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F5412D80A;
+        Sat, 22 Oct 2022 12:48:44 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 6AD1458012A;
+        Sat, 22 Oct 2022 15:48:41 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Sat, 22 Oct 2022 15:48:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666468121; x=1666475321; bh=UGS1Mg1RbR
+        rjg7l/C4uODk6tRvKSFxQmBze4CDiRUok=; b=R769R20cvAUvCJzdLxBnDkwPBp
+        EbTpyCnh90ePwkW/W271GgnujcaxKPNlKUZTD1QiMzbOX6UUmX5GBGQy5YnoG3Hz
+        7bIbm4GGSebbV6RK2kBgjxCEhVjRMxNaLgKsw+7i5e4f4W2C2HsQFTmKv8S+gZdE
+        jcEJHfdX99rjFuuQuzOPTEkJYLvC3gJ1f7jx+9U6cwktdP6NSfqNvxTgarEWxD1c
+        GFRrikCndHmtZnFVFspin0GH0nBuno9DFl/vX1YEuWJJ1DmabcJBI+QgW+pFl13L
+        PUlTUh21czWS+IFSiTNJyGJ4p7ipLzCb7UJepNPQ1EVgfsLevgq5To41FFEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666468121; x=1666475321; bh=UGS1Mg1RbRrjg7l/C4uODk6tRvKS
+        FxQmBze4CDiRUok=; b=DZdlxJQ1/OPf/Y6KDYWPfdC+mu56NzIOlbXghWxjCj9D
+        9CPMuzFO6wSIpYXaVVKO5ogBmtK5zrRUpai6gPg5qF7aq51p1Tf8zgVV+aEGQIpg
+        Le7lvLJR+05feR3Q+7owk4RsmE3rzpsqGg/UOGa7xGgp5BzvreC3G8OxhZ0WzoTZ
+        kHVkLu1P+KTSJm4dYCrODRLVTVeSHwuFqAuyI9eyO0UD5B3tL3/NipBn2AFumQvr
+        +xjvFjLrJEOmbNOFedB+o0knlGPPR7li0EwNxPvDXhDL0DJhj4plmQqEZJg8uEWZ
+        ljUtVQj8llXCVqwnpTmY8Mpk0y+FjFMyLlNEuZEfiA==
+X-ME-Sender: <xms:GElUY9vt3ItviEp5AJXQjYcX0YyV47YTITTgtkGjjNw0aSie0vzYkg>
+    <xme:GElUY2cknoJTeDpYvjbC4RFS-FtPGbyfFDbbyjNFIChdDqrc0xYFVavFYI99vu8kl
+    0KtHqNspAg1e6vBhwY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedttddgudegtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:GElUYwxiXoqPMILm1SZ_32__qu1Q5l_zrlV4KYN9jBrAlex9SwSKIg>
+    <xmx:GElUY0PzOcbbrTlSQkCZ5j1lrS1Cnv1p6FZXhLQlA1lHQyiDXRQGng>
+    <xmx:GElUY9-JQg9pRkXJG00aarf_3pC2T4jG_plPdMl-YxzKsRcEtsxZ9g>
+    <xmx:GUlUYyKFp-5FR5wwM3xl6nutJeKlKU0pfMGHX_pxDvaIG8i-amMB_w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 90C24B60086; Sat, 22 Oct 2022 15:48:40 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <7c4531b8-a296-4ea3-9564-b094704d10b2@app.fastmail.com>
+In-Reply-To: <e7ace68a-98e5-63c8-7dd7-a35d0eba1c6e@linaro.org>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <e7ace68a-98e5-63c8-7dd7-a35d0eba1c6e@linaro.org>
+Date:   Sat, 22 Oct 2022 21:48:19 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
+        "Simtec Linux Team" <linux@simtec.co.uk>,
+        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
+        linux-mtd@lists.infradead.org,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-pwm@vger.kernel.org
+Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,60 +101,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Sat, Oct 22, 2022, at 17:18, Krzysztof Kozlowski wrote:
+> On 21/10/2022 16:22, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> The s3c24xx platform was marked as deprecated a while ago,
+>> and for the s3c64xx platform, we marked all except one legacy
+>> board file as unused.
+>> 
+>> This series removes all of those, leaving only s3c64xx support
+>> for DT based boots as well as the cragg6410 board file.
+>> 
+>> About half of the s3c specific drivers were only used on
+>> the now removed machines, so these drivers can be retired
+>> as well. I can either merge the driver removal patches through
+>> the soc tree along with the board file patches, or subsystem
+>> maintainers can pick them up into their own trees, whichever
+>> they prefer.
+>
+> Just to be sure - do you expect me to ack the series, or rather as usual
+> pick them up?
 
---r3ipl5tfxboahj42
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I think in this case it is easier if I pick them up with your
+Ack along with the other platforms I posted, as there are
+some minor conflicts between Makefile/Kconfig changes where
+I remove adjacent lines.
 
-Hi,
-
-On Sat, Oct 22, 2022 at 01:12:22PM +0200, Daniel Lezcano wrote:
-> > If you have access to the TRM, it contains the following line in
-> > part 1 on page 1372:
->=20
-> Unfortunately no, I don't have access to the TRM. But I'll be happy if I =
-can
-> ;)
-
-The RK3588 TRM is available under datasheets on this page:
-
-https://wiki.radxa.com/Rock5/hardware
-
-> > 	Support to 7 channel TS-ADC (near chip center, A76_0/1, A76_2/3,
-> > 	DSU and A55_0/1/2/3, PD_CENTER, NPU, GPU)
-> >=20
-> > I assume one of "TOP" and "CENTER" is "near chip center", the other is
-> > PD_CENTER, whatever that means (PD =3D power domain maybe?)
->=20
-> Yes certainly.
->=20
-> I take the opportunity to let you know there is a new tool in the linux
-> tools directory called 'thermometer'. You can capture the temperature and
-> use the data to create graphics.
-
-nice :)
-
--- Sebastian
-
---r3ipl5tfxboahj42
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNUNAsACgkQ2O7X88g7
-+pqiABAAoegMIjcvD0MMzIGy5tJXZrbTiRiXnecAxm52JAWAFUOguaq/9eHHfUTA
-txSchjmuzrZf41rhF1nM+6gbb3EEgZyNlkVfcmY+I++jWpA4labqb/fj+j7Ct2aF
-TCixCcJT7RgPyF/MvrQ5zAlPPk0loikk3OBZwLIs5zDULIurjwu9hHLNYHi0S5nT
-taiaHtfvdzlOidmbb7yc0TdvC5bYKnIjeMCQ49Vs7OsltnzUJvztSCEtRHj2flvq
-GvFZavp3VB3ZZl3FaRO4AzmHGM9zxTMsbLXMBqMO6pplUKCHEliOKh6svRwbrEza
-MqNHl4cNl9KWI7hqdB1kXPtRF3s6kcTZsH8+LK0wkh2po1oV9jkVloFxApy0kjo3
-EDpuRmUKOeWdX0iO+88ehK6k31heZInEjTYJivgCII52OrwN7ryDkYj5s/WoZE+i
-KqkozthBLI9dM7yojZ97fYO2MqxO4IF+63j9kmgcjhDEF3PQjs/5gMlpMyEY+Ab0
-rR6zN1X8t12EDUfm1tmPtFSJ9YfbWoi18CkBid8BB0YFYl9rCfl7BNlCp35B2uBo
-fwgHnDefq3llRKK+5NX+Imk+z3DiMisEeLjEicORXERweAzkuG6CaMQwK2GboMK9
-e32ANTH6AUcf9knUFSKqFGckFVkdpne5N+pDgIrrL4NHaSOCVoQ=
-=oMve
------END PGP SIGNATURE-----
-
---r3ipl5tfxboahj42--
+       Arnd
