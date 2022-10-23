@@ -2,129 +2,379 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75EE608F6C
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Oct 2022 21:49:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B468B6096A0
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Oct 2022 23:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiJVTsy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 22 Oct 2022 15:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S229652AbiJWVzX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 23 Oct 2022 17:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiJVTsq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 22 Oct 2022 15:48:46 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F5412D80A;
-        Sat, 22 Oct 2022 12:48:44 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 6AD1458012A;
-        Sat, 22 Oct 2022 15:48:41 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Sat, 22 Oct 2022 15:48:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1666468121; x=1666475321; bh=UGS1Mg1RbR
-        rjg7l/C4uODk6tRvKSFxQmBze4CDiRUok=; b=R769R20cvAUvCJzdLxBnDkwPBp
-        EbTpyCnh90ePwkW/W271GgnujcaxKPNlKUZTD1QiMzbOX6UUmX5GBGQy5YnoG3Hz
-        7bIbm4GGSebbV6RK2kBgjxCEhVjRMxNaLgKsw+7i5e4f4W2C2HsQFTmKv8S+gZdE
-        jcEJHfdX99rjFuuQuzOPTEkJYLvC3gJ1f7jx+9U6cwktdP6NSfqNvxTgarEWxD1c
-        GFRrikCndHmtZnFVFspin0GH0nBuno9DFl/vX1YEuWJJ1DmabcJBI+QgW+pFl13L
-        PUlTUh21czWS+IFSiTNJyGJ4p7ipLzCb7UJepNPQ1EVgfsLevgq5To41FFEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1666468121; x=1666475321; bh=UGS1Mg1RbRrjg7l/C4uODk6tRvKS
-        FxQmBze4CDiRUok=; b=DZdlxJQ1/OPf/Y6KDYWPfdC+mu56NzIOlbXghWxjCj9D
-        9CPMuzFO6wSIpYXaVVKO5ogBmtK5zrRUpai6gPg5qF7aq51p1Tf8zgVV+aEGQIpg
-        Le7lvLJR+05feR3Q+7owk4RsmE3rzpsqGg/UOGa7xGgp5BzvreC3G8OxhZ0WzoTZ
-        kHVkLu1P+KTSJm4dYCrODRLVTVeSHwuFqAuyI9eyO0UD5B3tL3/NipBn2AFumQvr
-        +xjvFjLrJEOmbNOFedB+o0knlGPPR7li0EwNxPvDXhDL0DJhj4plmQqEZJg8uEWZ
-        ljUtVQj8llXCVqwnpTmY8Mpk0y+FjFMyLlNEuZEfiA==
-X-ME-Sender: <xms:GElUY9vt3ItviEp5AJXQjYcX0YyV47YTITTgtkGjjNw0aSie0vzYkg>
-    <xme:GElUY2cknoJTeDpYvjbC4RFS-FtPGbyfFDbbyjNFIChdDqrc0xYFVavFYI99vu8kl
-    0KtHqNspAg1e6vBhwY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedttddgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:GElUYwxiXoqPMILm1SZ_32__qu1Q5l_zrlV4KYN9jBrAlex9SwSKIg>
-    <xmx:GElUY0PzOcbbrTlSQkCZ5j1lrS1Cnv1p6FZXhLQlA1lHQyiDXRQGng>
-    <xmx:GElUY9-JQg9pRkXJG00aarf_3pC2T4jG_plPdMl-YxzKsRcEtsxZ9g>
-    <xmx:GUlUYyKFp-5FR5wwM3xl6nutJeKlKU0pfMGHX_pxDvaIG8i-amMB_w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 90C24B60086; Sat, 22 Oct 2022 15:48:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
-Mime-Version: 1.0
-Message-Id: <7c4531b8-a296-4ea3-9564-b094704d10b2@app.fastmail.com>
-In-Reply-To: <e7ace68a-98e5-63c8-7dd7-a35d0eba1c6e@linaro.org>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <e7ace68a-98e5-63c8-7dd7-a35d0eba1c6e@linaro.org>
-Date:   Sat, 22 Oct 2022 21:48:19 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Arnd Bergmann" <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, "Ben Dooks" <ben-linux@fluff.org>,
-        "Simtec Linux Team" <linux@simtec.co.uk>,
-        linux-doc@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        devicetree@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-input@vger.kernel.org,
-        linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>,
-        linux-mtd@lists.infradead.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-rtc@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-watchdog@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-pwm@vger.kernel.org
-Subject: Re: [PATCH 00/21] ARM: s3c: clean out obsolete platforms
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229608AbiJWVzW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 23 Oct 2022 17:55:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367B33A48F;
+        Sun, 23 Oct 2022 14:55:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7F4B6B80E05;
+        Sun, 23 Oct 2022 21:55:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B7FC433C1;
+        Sun, 23 Oct 2022 21:55:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666562114;
+        bh=ZKN6qPUKnFeC0DSv6i0+oQTXmyk9XpOHU4Olt7pVdNI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IH0ShmKqQEEua6/hAHrf3oos/OMg5YKFpZXkQyNLslUEb/zCIZcFh45qIiw/8y7RH
+         3Y0MaOChdIYnj3gjpFLSS6d3APddLnK/szUfbfJ8y3mvrH/88zUmS5yA5EEuixMSW6
+         j2lL49FfVB5FMpohhtjIq8GuiBv6NPW11pGa18gAbLY8qxh1EDTqjdIeRXEkDyIZMl
+         LbupoDd5v/uyNjTv8W7NRTge1y205eox8gKL9zV7ymeL6/pdQFM3ETgqpFXnG+WttB
+         oiWyPyCT2qz2rW787kGHzbQ6ArS93LTmGkZzlMNVsdtV3xySIbzi7K3+RscUn2HjRd
+         vjIWovspyLERg==
+Date:   Mon, 24 Oct 2022 00:55:07 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        apronin@chromium.org, dlunev@google.com,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, corbet@lwn.net, linux-pm@vger.kernel.org,
+        zohar@linux.ibm.com, Kees Cook <keescook@chromium.org>,
+        Eric Biggers <ebiggers@kernel.org>, jejb@linux.ibm.com,
+        gwendal@chromium.org, Matthew Garrett <mgarrett@aurora.tech>,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v3 08/11] PM: hibernate: Use TPM-backed keys to encrypt
+ image
+Message-ID: <Y1W4O2bQIQMyuT2+@kernel.org>
+References: <20220927164922.3383711-1-evgreen@chromium.org>
+ <20220927094559.v3.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
+ <YzdhMW6VqoT0EkGI@kernel.org>
+ <CAE=gft45p4QFqe0E0X_1XGeRB2kLgH3p9ZfNNTvMk2H9GwbhMw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE=gft45p4QFqe0E0X_1XGeRB2kLgH3p9ZfNNTvMk2H9GwbhMw@mail.gmail.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 22, 2022, at 17:18, Krzysztof Kozlowski wrote:
-> On 21/10/2022 16:22, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->> 
->> The s3c24xx platform was marked as deprecated a while ago,
->> and for the s3c64xx platform, we marked all except one legacy
->> board file as unused.
->> 
->> This series removes all of those, leaving only s3c64xx support
->> for DT based boots as well as the cragg6410 board file.
->> 
->> About half of the s3c specific drivers were only used on
->> the now removed machines, so these drivers can be retired
->> as well. I can either merge the driver removal patches through
->> the soc tree along with the board file patches, or subsystem
->> maintainers can pick them up into their own trees, whichever
->> they prefer.
->
-> Just to be sure - do you expect me to ack the series, or rather as usual
-> pick them up?
+On Fri, Oct 21, 2022 at 12:56:50PM -0700, Evan Green wrote:
+> On Fri, Sep 30, 2022 at 2:35 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Tue, Sep 27, 2022 at 09:49:19AM -0700, Evan Green wrote:
+> > > When using encrypted hibernate images, have the TPM create a key for us
+> > > and seal it. By handing back a sealed blob instead of the raw key, we
+> > > prevent usermode from being able to decrypt and tamper with the
+> > > hibernate image on a different machine.
+> > >
+> > > We'll also go through the motions of having PCR23 set to a known value at
+> > > the time of key creation and unsealing. Currently there's nothing that
+> > > enforces the contents of PCR23 as a condition to unseal the key blob,
+> > > that will come in a later change.
+> > >
+> > > Sourced-from: Matthew Garrett <mjg59@google.com>
+> > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > >
+> > > ---
+> > > Matthew's incarnation of this patch is at:
+> > > https://patchwork.kernel.org/project/linux-pm/patch/20210220013255.1083202-9-matthewgarrett@google.com/
+> > >
+> > > Changes in v3:
+> > >  - ENCRYPTED_HIBERNATION needs TRUSTED_KEYS builtin for
+> > >    key_type_trusted.
+> > >  - Remove KEYS dependency since it's covered by TRUSTED_KEYS (Kees)
+> > >
+> > > Changes in v2:
+> > >  - Rework load/create_kernel_key() to eliminate a label (Andrey)
+> > >  - Call put_device() needed from calling tpm_default_chip().
+> > >
+> > >  kernel/power/Kconfig   |   1 +
+> > >  kernel/power/snapenc.c | 207 +++++++++++++++++++++++++++++++++++++++--
+> > >  kernel/power/user.h    |   1 +
+> > >  3 files changed, 200 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > > index cd574af0b43379..2f8acbd87b34dc 100644
+> > > --- a/kernel/power/Kconfig
+> > > +++ b/kernel/power/Kconfig
+> > > @@ -96,6 +96,7 @@ config ENCRYPTED_HIBERNATION
+> > >       bool "Encryption support for userspace snapshots"
+> > >       depends on HIBERNATION_SNAPSHOT_DEV
+> > >       depends on CRYPTO_AEAD2=y
+> > > +     depends on TRUSTED_KEYS=y
+> > >       default n
+> > >       help
+> > >         Enable support for kernel-based encryption of hibernation snapshots
+> > > diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
+> > > index cb90692d6ab83a..90079f6d4f184b 100644
+> > > --- a/kernel/power/snapenc.c
+> > > +++ b/kernel/power/snapenc.c
+> > > @@ -4,13 +4,23 @@
+> > >  #include <linux/crypto.h>
+> > >  #include <crypto/aead.h>
+> > >  #include <crypto/gcm.h>
+> > > +#include <keys/trusted-type.h>
+> > > +#include <linux/key-type.h>
+> > >  #include <linux/random.h>
+> > >  #include <linux/mm.h>
+> > > +#include <linux/tpm.h>
+> > >  #include <linux/uaccess.h>
+> > >
+> > >  #include "power.h"
+> > >  #include "user.h"
+> > >
+> > > +/* sha256("To sleep, perchance to dream") */
+> > > +static struct tpm_digest known_digest = { .alg_id = TPM_ALG_SHA256,
+> > > +     .digest = {0x92, 0x78, 0x3d, 0x79, 0x2d, 0x00, 0x31, 0xb0, 0x55, 0xf9,
+> > > +                0x1e, 0x0d, 0xce, 0x83, 0xde, 0x1d, 0xc4, 0xc5, 0x8e, 0x8c,
+> > > +                0xf1, 0x22, 0x38, 0x6c, 0x33, 0xb1, 0x14, 0xb7, 0xec, 0x05,
+> > > +                0x5f, 0x49}};
+> > > +
+> > >  /* Encrypt more data from the snapshot into the staging area. */
+> > >  static int snapshot_encrypt_refill(struct snapshot_data *data)
+> > >  {
+> > > @@ -313,6 +323,12 @@ void snapshot_teardown_encryption(struct snapshot_data *data)
+> > >  {
+> > >       int i;
+> > >
+> > > +     if (data->key) {
+> >
+> > Would be a helpful to have perhaps inline comment before the check.
+> >
+> > Just stating this because I did not exactly follow why the null
+> > check was needed (but do believe that there are good reasons to
+> > do it).
+> >
+> > > +             key_revoke(data->key);
+> > > +             key_put(data->key);
+> > > +             data->key = NULL;
+> > > +     }
+> > > +
+> > >       if (data->aead_req) {
+> > >               aead_request_free(data->aead_req);
+> > >               data->aead_req = NULL;
+> > > @@ -381,11 +397,83 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
+> > >       return rc;
+> > >  }
+> > >
+> > > +static int snapshot_create_kernel_key(struct snapshot_data *data)
+> > > +{
+> > > +     const struct cred *cred = current_cred();
+> > > +     struct tpm_digest *digests = NULL;
+> > > +     struct tpm_chip *chip;
+> > > +     struct key *key = NULL;
+> > > +     int ret, i;
+> > > +     /* Create a key sealed by the SRK. */
+> > > +     char *keyinfo = "new\t32\tkeyhandle=0x81000000";
+> >
+> > Again, I'd consider put this declaration as first.
+> >
+> > > +
+> > > +     chip = tpm_default_chip();
+> > > +     if (!chip)
+> > > +             return -ENODEV;
+> > > +
+> > > +     if (!(tpm_is_tpm2(chip))) {
+> > > +             ret = -ENODEV;
+> > > +             goto out_dev;
+> > > +     }
+> > > +
+> > > +     ret = tpm_pcr_reset(chip, 23);
+> > > +     if (ret)
+> > > +             goto out;
+> > > +
+> > > +     digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
+> > > +                       GFP_KERNEL);
+> > > +     if (!digests) {
+> > > +             ret = -ENOMEM;
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     for (i = 0; i <= chip->nr_allocated_banks; i++) {
+> > > +             digests[i].alg_id = chip->allocated_banks[i].alg_id;
+> > > +             if (digests[i].alg_id == known_digest.alg_id)
+> > > +                     memcpy(&digests[i], &known_digest, sizeof(known_digest));
+> > > +     }
+> > > +
+> > > +     ret = tpm_pcr_extend(chip, 23, digests);
+> > > +     if (ret != 0)
+> > > +             goto out;
+> > > +
+> > > +     key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
+> > > +                     GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
+> > > +                     NULL);
+> > > +
+> > > +     if (IS_ERR(key)) {
+> > > +             ret = PTR_ERR(key);
+> > > +             key = NULL;
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
+> > > +                                    NULL);
+> >
+> > Generally speaking, even if it somehow would be "safe", not strlen()
+> > thank you.
+> >
+> > AFAIK, keyinfo is a constant so you could just as well use sizeof().
+> > And then you would not need "+ 1".
+> 
+> Ack, I'm changing this one to sizeof(keyinfo), but...
+> 
+> >
+> > > +     if (ret != 0)
+> > > +             goto out;
+> > > +
+> > > +     data->key = key;
+> > > +     key = NULL;
+> > > +
+> > > +out:
+> > > +     if (key) {
+> > > +             key_revoke(key);
+> > > +             key_put(key);
+> > > +     }
+> > > +
+> > > +     kfree(digests);
+> > > +     tpm_pcr_reset(chip, 23);
+> > > +
+> > > +out_dev:
+> > > +     put_device(&chip->dev);
+> > > +     return ret;
+> > > +}
+> > > +
+> > >  int snapshot_get_encryption_key(struct snapshot_data *data,
+> > >       struct uswsusp_key_blob __user *key)
+> > >  {
+> > > -     u8 aead_key[SNAPSHOT_ENCRYPTION_KEY_SIZE];
+> > >       u8 nonce[USWSUSP_KEY_NONCE_SIZE];
+> > > +     struct trusted_key_payload *payload;
+> > >       int rc;
+> > >       /* Don't pull a random key from a world that can be reset. */
+> > >       if (data->ready)
+> > > @@ -399,21 +487,28 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
+> > >       get_random_bytes(nonce, sizeof(nonce));
+> > >       memcpy(&data->nonce_low, &nonce[0], sizeof(data->nonce_low));
+> > >       memcpy(&data->nonce_high, &nonce[8], sizeof(data->nonce_high));
+> > > -     /* Build a random key */
+> > > -     get_random_bytes(aead_key, sizeof(aead_key));
+> > > -     rc = crypto_aead_setkey(data->aead_tfm, aead_key, sizeof(aead_key));
+> > > +
+> > > +     /* Create a kernel key, and set it. */
+> > > +     rc = snapshot_create_kernel_key(data);
+> > > +     if (rc)
+> > > +             goto fail;
+> > > +
+> > > +     payload = data->key->payload.data[0];
+> > > +     /* Install the key */
+> > > +     rc = crypto_aead_setkey(data->aead_tfm, payload->key, SNAPSHOT_ENCRYPTION_KEY_SIZE);
+> > >       if (rc)
+> > >               goto fail;
+> > >
+> > > -     /* Hand the key back to user mode (to be changed!) */
+> > > -     rc = put_user(sizeof(struct uswsusp_key_blob), &key->blob_len);
+> > > +     /* Hand the key back to user mode in sealed form. */
+> > > +     rc = put_user(payload->blob_len, &key->blob_len);
+> > >       if (rc)
+> > >               goto fail;
+> > >
+> > > -     rc = copy_to_user(&key->blob, &aead_key, sizeof(aead_key));
+> > > +     rc = copy_to_user(&key->blob, &payload->blob, payload->blob_len);
+> > >       if (rc)
+> > >               goto fail;
+> > >
+> > > +     /* The nonce just gets handed back in the clear. */
+> > >       rc = copy_to_user(&key->nonce, &nonce, sizeof(nonce));
+> > >       if (rc)
+> > >               goto fail;
+> > > @@ -425,10 +520,99 @@ int snapshot_get_encryption_key(struct snapshot_data *data,
+> > >       return rc;
+> > >  }
+> > >
+> > > +static int snapshot_load_kernel_key(struct snapshot_data *data,
+> > > +     struct uswsusp_key_blob *blob)
+> >
+> > Bad alignment.
+> >
+> > > +{
+> > > +
+> > > +     const struct cred *cred = current_cred();
+> > > +     char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
+> >
+> > Ditto.
+> >
+> > > +     struct tpm_digest *digests = NULL;
+> > > +     char *blobstring = NULL;
+> > > +     char *keyinfo = NULL;
+> > > +     struct tpm_chip *chip;
+> > > +     struct key *key = NULL;
+> > > +     int i, ret;
+> > > +
+> > > +     chip = tpm_default_chip();
+> > > +     if (!chip)
+> > > +             return -ENODEV;
+> > > +
+> > > +     if (!(tpm_is_tpm2(chip))) {
+> > > +             ret = -ENODEV;
+> > > +             goto out_dev;
+> > > +     }
+> > > +
+> > > +     ret = tpm_pcr_reset(chip, 23);
+> > > +     if (ret)
+> > > +             goto out;
+> > > +
+> > > +     digests = kcalloc(chip->nr_allocated_banks, sizeof(struct tpm_digest),
+> > > +                       GFP_KERNEL);
+> > > +     if (!digests)
+> > > +             goto out;
+> > > +
+> > > +     for (i = 0; i <= chip->nr_allocated_banks; i++) {
+> > > +             digests[i].alg_id = chip->allocated_banks[i].alg_id;
+> > > +             if (digests[i].alg_id == known_digest.alg_id)
+> > > +                     memcpy(&digests[i], &known_digest, sizeof(known_digest));
+> > > +     }
+> > > +
+> > > +     ret = tpm_pcr_extend(chip, 23, digests);
+> > > +     if (ret != 0)
+> > > +             goto out;
+> > > +
+> > > +     blobstring = kmalloc(blob->blob_len * 2, GFP_KERNEL);
+> > > +     if (!blobstring) {
+> > > +             ret = -ENOMEM;
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     bin2hex(blobstring, blob->blob, blob->blob_len);
+> > > +     keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
+> > > +     if (!keyinfo) {
+> > > +             ret = -ENOMEM;
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
+> > > +                     GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
+> > > +                     NULL);
+> > > +
+> > > +     if (IS_ERR(key)) {
+> > > +             ret = PTR_ERR(key);
+> > > +             key = NULL;
+> > > +             goto out;
+> > > +     }
+> > > +
+> > > +     ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
+> > > +                                    NULL);
+> >
+> > Ditto.
+> 
+> ... I can't change this one to sizeof. Since this came out of
+> kasprintf() and we already checked against null, strlen() seemed safe
+> here. Is there a different pattern I should be following?
 
-I think in this case it is easier if I pick them up with your
-Ack along with the other platforms I posted, as there are
-some minor conflicts between Makefile/Kconfig changes where
-I remove adjacent lines.
+You're right. Let's strlen() here givent that as long as kasprintf() 
+is working correctly there's no risks involved.
 
-       Arnd
+BR, Jarkko
