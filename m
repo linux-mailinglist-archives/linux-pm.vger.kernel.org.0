@@ -2,110 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A777F60BF1E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 01:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6209360BF35
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 02:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiJXX6V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Oct 2022 19:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S230255AbiJYAGs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Oct 2022 20:06:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiJXX6C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 19:58:02 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DF6D347B57;
-        Mon, 24 Oct 2022 15:14:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666649690; x=1698185690;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IpovU0pr5GqNyG1RQY1BOg6p1QwyjDdZAzVeYeoqpcQ=;
-  b=SdBlbZeQKdECKVnMMqoOrJdEMoKXO0cf3IXrb6FZgu/ztduI2hD8kiXD
-   p3MCr9gJTe2FsaiKoE+NYpc7b+VK+OdnUVyoHnmEYuJ9yw6h2/U897t1n
-   IpnhClCcrf/SHY6/jlnH5MoWJXLdupuZuVKm+ZWz+JX6AUgkMX1ziz8Dr
-   8c0l98S0X5jFr8wlFh86v5yVjaiMeG/7t1/dRMGXRVWTrwJMU/q1xe9ag
-   deDA6JEA9RFv4gXC70RNwzvob9IUgjQaenB9nJ0oilQqD9KsrwdHsHNQO
-   BU/98oveVyMRxpeohG+Miet2hBrGtjC6AOaL1sO18du+JWfAOJiKQFLSj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="308627361"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="308627361"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 15:14:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694715326"
-X-IronPort-AV: E=Sophos;i="5.95,210,1661842800"; 
-   d="scan'208";a="694715326"
-Received: from hossain3-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.39.87])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2022 15:14:37 -0700
-Message-ID: <8bbd9bc65622aafd36433dbf0cf81338fde3007a.camel@linux.intel.com>
-Subject: Re: [PATCH 0/2] cpufreq: intel_pstate: Make HWP calibration work on
- all hybrid platforms
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>
-Date:   Mon, 24 Oct 2022 15:14:36 -0700
-In-Reply-To: <2258064.ElGaqSPkdT@kreacher>
-References: <2258064.ElGaqSPkdT@kreacher>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S230209AbiJYAGd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 20:06:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1ABFBCD3
+        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 15:23:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1666650190;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=yAu84s8rk3cqzQWkUOACGj/hySV4th5LzQjIQBUH6pI=;
+        b=PU4hPKkO6didveTqF8QKq7NWhqvVmQQ/CYiqbyK4aYkxEotQAIs2vRL4NqlbgQTwO/6Z4a
+        DE45nfL+E2YAd9jV0AiUmIhRYiC96gceNxq1Aip8dqTAvu50OVgHTnKacCjD9ODlPo2FnX
+        2WKprVj/OIY2rJIKbC5qPQd6Kw0hQjA=
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
+ [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-160-Tbop4919OkO3DgURSGSccg-1; Mon, 24 Oct 2022 16:02:27 -0400
+X-MC-Unique: Tbop4919OkO3DgURSGSccg-1
+Received: by mail-oo1-f70.google.com with SMTP id a29-20020a4a9b1d000000b00480db71d44bso4931236ook.7
+        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 13:02:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yAu84s8rk3cqzQWkUOACGj/hySV4th5LzQjIQBUH6pI=;
+        b=kNFKR02RcXYZCEXYfVIoIwTIG09GOfjqhuPAnxRCNZA+x/YDZ5hzgAE+PbvgyJ+37b
+         5e113sfEonaLwh9H3IXeapvwyroZrXrOArotn0IJb6FRDqCZ3t+U4HHbNyb4S5dVm3Pu
+         wF2Uc0NJUlypt6igLdPv5LaGqoeuxhC3a0jjMlCbgLpDRZorR/0Uhtud7NTAD4+yn8Nx
+         TZnQeFgqT+gTdp4FyTcBD8CuC24RBjS8m0QkgKBMBGrqJhHKwaUP/wtimfXquGtSYfEZ
+         c9+Amvwncmcc5+KOJQngcFKUxnru/mIiQegn3chDSK7B3GuXwdgD+erLT5OiSLHWWkm0
+         Srzw==
+X-Gm-Message-State: ACrzQf3+KGJk2jN5HJoWY135cCt5rBs4y2F2MFqcr9rFlcM9qmiqTg3s
+        8YwIyFv8c9CDocZvaFyADGu1C3rt+IWAWt3wvdjbKSY/YOqnuVE+kgY/a+UWWkxn5Q55+Gj6YAo
+        zaDoQfxjLh+I4xf5CK1c=
+X-Received: by 2002:a05:6870:f202:b0:13b:c2c5:ed3d with SMTP id t2-20020a056870f20200b0013bc2c5ed3dmr3016217oao.252.1666641746026;
+        Mon, 24 Oct 2022 13:02:26 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM54g8rhYLOuCJEYPTIti3cvvmXOtuSfRfS5sohQPzeU0IGnm6DuA2ng30T7rsaeW4R33wdz9Q==
+X-Received: by 2002:a05:6870:f202:b0:13b:c2c5:ed3d with SMTP id t2-20020a056870f20200b0013bc2c5ed3dmr3016197oao.252.1666641745716;
+        Mon, 24 Oct 2022 13:02:25 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id w16-20020a056830061000b006619f38a686sm154449oti.56.2022.10.24.13.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Oct 2022 13:02:25 -0700 (PDT)
+Date:   Mon, 24 Oct 2022 15:02:22 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        echanude@redhat.com
+Subject: Re: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK
+ driver
+Message-ID: <20221024200222.vg7vhu7dfd3wlnkc@halaney-x13s>
+References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+ <20220818031512.319310-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818031512.319310-3-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2022-10-24 at 21:18 +0200, Rafael J. Wysocki wrote:
-> Hi All,
+On Wed, Aug 17, 2022 at 08:15:10PM -0700, Bjorn Andersson wrote:
+> The PMIC GLINK service runs on one of the co-processors of some modern
+> Qualcomm platforms and implements USB-C and battery managements. It uses
+> a message based protocol over GLINK for communication with the OS, hence
+> the name.
 > 
-> The HWP calibration in intel_pstate is needed to map HWP performance
-> levels to
-> frequencies, which are used in the cpufreq sysfs interface, in a
-> reliable way.
-> On all non-hybrid "core" platforms it is sufficient to multiply the
-> HWP
-> performance levels by 100000 to obtain the corresponding frequencies,
-> but on
-> hybrid ones there is a difference between P-cores and E-cores.
+> The driver implemented provides the rpmsg device for communication and
+> uses auxilirary bus to spawn off individual devices in respsective
+> subsystem. The auxilirary devices are spawned off from a
+> platform_device, so that the drm_bridge is available early, to allow the
+> DisplayPort driver to probe even before the remoteproc has spun up.
 > 
-> Previous attempts to make this work were based on using CPPC (and in
-> particular
-> the nominal performance values provided by _CPC), but it turns out
-> that the
-> CPPC information is not sufficiently reliable for this purpose and
-> the only
-> way to do it is to use a hard-coded scaling factors for P-cores and
-> for E-cores
-> (which fortunately is the same as in the non-hybrid case). 
-> Fortunately, the
-> same scaling factor for P-cores works on all of the hybrid platforms
-> to date.
-> 
-> The first patch in the series ensures that all of the CPUs will use
-> correct
-> information from MSRs by avoiding the situations in which an MSR
-> values read
-> on one CPU will be used for performance scaling of another CPU.
-> 
-> The second one implements the approach outlined above.
-> 
-> Please see the changelogs for details.
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+<snip>
+> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
+> new file mode 100644
+> index 000000000000..d42127521eca
+> --- /dev/null
+> +++ b/drivers/soc/qcom/pmic_glink.c
+> @@ -0,0 +1,336 @@
+<snip>
+> +
+> +static void _devm_pmic_glink_release_client(struct device *dev, void *res)
+> +{
+> +	struct pmic_glink_client *client = *(struct pmic_glink_client **)res;
 
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Tested-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+As Eric Chanudet pointed out to me, this should be:
 
+	struct pmic_glink_client *client = (struct pmic_glink_client *)res;
 
-> 
-> Thanks!
-> 
-> 
-> 
+Otherwise you get a splat like below (which somehow resulted in my
+panel output not to work on my x13s... not sure of the connection
+there, and is easily reproducible with a probe deferal or qcom_battmgr
+unload):
+
+        Unable to handle kernel NULL pointer dereference at virtual address 0000000000000958
+        Mem abort info:
+          ESR = 0x0000000096000004
+          EC = 0x25: DABT (current EL), IL = 32 bits
+          ESR = 0x0000000096000004
+          EC = 0x25: DABT (current EL), IL = 32 bits
+          SET = 0, FnV = 0
+          EA = 0, S1PTW = 0
+          FSC = 0x04: level 0 translation fault
+        Data abort info:
+          ISV = 0, ISS = 0x00000004
+          CM = 0, WnR = 0
+        user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b92000
+        [0000000000000958] pgd=0000000000000000, p4d=0000000000000000
+        Internal error: Oops: 96000004 [#1] PREEMPT SMP
+        Modules linked in: llcc_qcom qcom_battmgr aes_ce_blk pmic_glink_altmode aes_ce_cipher ghash_ce gf128mul sha2_ce sha256_arm64 sha1_ce gpio_sbu_mux pmic_glink gpio_keys autofs4
+        CPU: 2 PID: 182 Comm: kworker/u16:5 Not tainted 6.0.0-rc6 #29
+        Hardware name: LENOVO 21BX0016US/21BX0016US, BIOS N3HET47W (1.19 ) 07/04/2022
+        Workqueue: events_unbound deferred_probe_work_func
+        pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+        pc : mutex_lock+0x1c/0x60
+        lr : _devm_pmic_glink_release_client+0x2c/0x74 [pmic_glink]
+        sp : ffff80000c553970
+        x29: ffff80000c553970 x28: 0000000000000000 x27: 0000000000000000
+        x26: ffffc297e181e0e8 x25: ffffc297e181d000 x24: ffffc2984efd9a80
+        x23: ffffc2984ea7a008 x22: ffff1738863cc3a0 x21: ffff80000c553a28
+        x20: 0000000000000958 x19: ffff1738863cc9f8 x18: ffffffffffffffff
+        x17: 0000000000000000 x16: ffffc2984e1bb110 x15: 61622d6d6f63713d
+        x14: ffffc2984f3b23e0 x13: 554e514553007972 x12: 0000000000000000
+        x11: 00313731333d4d55 x10: 0000000000000000 x9 : ffffc297e181d1cc
+        x8 : ffff80000c553910 x7 : 0000000000000000 x6 : 0000000080200016
+        x5 : 0000000000000038 x4 : 0000000000000000 x3 : 0000000000000958
+        x2 : ffff17388522c100 x1 : 0000000000000000 x0 : 0000000000000958
+        Call trace:
+         mutex_lock+0x1c/0x60
+         release_nodes+0x68/0x100
+         devres_release_all+0x94/0xf0
+         device_unbind_cleanup+0x20/0x70
+         device_release_driver_internal+0x214/0x260
+         device_release_driver+0x20/0x30
+         bus_remove_device+0xdc/0x170
+         device_del+0x178/0x3ac
+         pmic_glink_probe+0x1e8/0x240 [pmic_glink]
+         platform_probe+0x70/0xcc
+         really_probe+0xc8/0x3e0
+         __driver_probe_device+0x84/0x190
+         driver_probe_device+0x44/0x100
+         __device_attach_driver+0xc4/0x160
+         bus_for_each_drv+0x84/0xe0
+         __device_attach+0xa4/0x1c4
+         device_initial_probe+0x1c/0x30
+         bus_probe_device+0xa4/0xb0
+         deferred_probe_work_func+0xc0/0x114
+         process_one_work+0x1ec/0x470
+         worker_thread+0x74/0x410
+         kthread+0xfc/0x110
+         ret_from_fork+0x10/0x20
+        Code: d5384102 d503201f d2800001 aa0103e4 (c8e47c02)
+        ---[ end trace 0000000000000000 ]---
+
+All credit to Eric[0] on that, I'm just tying up loose ends.
+
+[0] https://gitlab.com/ahalaney/linux/-/commit/1819fbccd03de430d9fd4c58ded35f5be83e9aa8
+
+Thanks,
+Andrew
 
