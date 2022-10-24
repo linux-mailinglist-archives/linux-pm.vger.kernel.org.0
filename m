@@ -2,67 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53477609A15
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 07:54:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50FD1609B4D
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 09:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbiJXFyK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Oct 2022 01:54:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S229562AbiJXH2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Oct 2022 03:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiJXFyJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 01:54:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BE58E8E
-        for <linux-pm@vger.kernel.org>; Sun, 23 Oct 2022 22:54:08 -0700 (PDT)
+        with ESMTP id S229574AbiJXH2u (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 03:28:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5284260698;
+        Mon, 24 Oct 2022 00:28:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 347C861018
-        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 05:54:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8B1C43141
-        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 05:54:05 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A146B80E23;
+        Mon, 24 Oct 2022 07:28:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F55C433D6;
+        Mon, 24 Oct 2022 07:28:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666590845;
-        bh=IdeoKRp7CnTeQycf+9JLsdNh6b3jxG4J8xktr1nYokc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cLsmSRL7yxCsgsZYI4pkwM4eu2stTLbzCozg1hw8x6YBv7W3s0z2Kbaw5KCs7xjrt
-         new2b7/zUlv/NgqN0ac3LfNw87n4B/V8TuhDvpJdNZZ8RnHM/BbxG4zVW0LQ7m1WA3
-         0QFUi+gjlBZ2v2A9jnK6l3SU/81kJudtgAUdLkcHbiNvT1u0a9z7tMEJv+z5Y8Ewtn
-         LvYTIWCAbi70BdVdzrLGYGct48kT8tg85q0YZ9yfmyTZQH9ODF2aZqK+xl894gBVBv
-         CrNcmum/oCkE27rwik+Quqh3DT/PdHxZrVIxYzAI3yfTOt6HfwM1MfbiKArdjBnfgJ
-         Oy6nZRHh1inQw==
-Received: by mail-vs1-f53.google.com with SMTP id a2so6900109vsc.13
-        for <linux-pm@vger.kernel.org>; Sun, 23 Oct 2022 22:54:05 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3c0LYA8oKQy1Jj0XocwimxfN8GVeiBVmqd1BEGKBVo9S3V7Q+X
-        e4gA81IPYpZ4DSP3AlIPQ2QSnHptvxglqbFd+rMYlQ==
-X-Google-Smtp-Source: AMsMyM6r3lhmzECYp5LCoWCOCyKSCy4MMw6xBEcHox8V0neSeitmujt/1h4kOBN101XI1Nv3slbvsWLOegmr2kJxRTI=
-X-Received: by 2002:a67:d296:0:b0:3a6:ef66:b4cb with SMTP id
- z22-20020a67d296000000b003a6ef66b4cbmr16546365vsi.30.1666590844366; Sun, 23
- Oct 2022 22:54:04 -0700 (PDT)
+        s=k20201202; t=1666596523;
+        bh=MffOR/T1WlwBDzbjXkfystAwGNvGe8P+IC3A3If7o5k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q5i1WtCjy5doyPithNm34nm+si6W2TtLLdf2O/tOxLIuj6LoTbKiN/C/BHKJM85iB
+         tGtrSZwyVFp/i/AcmlvTWBaJCtq1YnJdqszyOvuQe7L2c7wA+Pdigi8Ku4iPqHR51J
+         YIYu5pJqDgySkPctizIjq+Zff846aFixg145uzYs5Gc/f87BDt1ZJydVf7TPhx9YKt
+         j0JriiRDIjhsq7q4jqKkloVHe7hojophBApSpwj91NM1YN663kA5/f1UPVZaH27e9s
+         W2OJjVh2mSeODdKT+wKmuIC75dkeEt6OleqB67ScgGo7VgdpTL9i07rPY2f+HFWwc4
+         CIG5BRFZkTogA==
+Date:   Mon, 24 Oct 2022 08:28:35 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
+        Simtec Linux Team <linux@simtec.co.uk>,
+        Arnd Bergmann <arnd@arndb.de>, Rob Herring <robh@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 07/21] power: remove s3c adc battery driver
+Message-ID: <Y1Y+o2aDz2Cd+ZG8@google.com>
+References: <20221021202254.4142411-1-arnd@kernel.org>
+ <20221021203329.4143397-7-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20221020145237.942146-1-luca.weiss@fairphone.com>
-In-Reply-To: <20221020145237.942146-1-luca.weiss@fairphone.com>
-From:   Amit Kucheria <amitk@kernel.org>
-Date:   Mon, 24 Oct 2022 11:23:53 +0530
-X-Gmail-Original-Message-ID: <CAHLCerN+-5qKsRmpuF55RdeUMZJZuiZJ-7O4LnM8+QuHJfs0mQ@mail.gmail.com>
-Message-ID: <CAHLCerN+-5qKsRmpuF55RdeUMZJZuiZJ-7O4LnM8+QuHJfs0mQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/qcom/temp-alarm: fix inaccurate warning
- for gen2
-To:     Luca Weiss <luca.weiss@fairphone.com>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        David Collins <collinsd@codeaurora.org>,
-        Guru Das Srinagesh <gurus@codeaurora.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221021203329.4143397-7-arnd@kernel.org>
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,36 +66,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 8:23 PM Luca Weiss <luca.weiss@fairphone.com> wrote:
->
-> On gen2 chips the stage2 threshold is not 140 degC but 125 degC.
->
-> Make the warning message clearer by using this variable and also by
-> including the temperature that was checked for.
->
-> Fixes: aa92b3310c55 ("thermal/drivers/qcom-spmi-temp-alarm: Add support for GEN2 rev 1 PMIC peripherals")
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+On Fri, 21 Oct 2022, Arnd Bergmann wrote:
 
-Reviewed-by: Amit Kucheria <amitk@kernel.org>
-
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The s3c-adc driver is removed along with the s3c24xx platform,
+> so the battery driver is no longer needed either.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> index be785ab37e53..ad84978109e6 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> @@ -252,7 +252,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
->                         disable_s2_shutdown = true;
->                 else
->                         dev_warn(chip->dev,
-> -                                "No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.\n");
-> +                                "No ADC is configured and critical temperature %d mC is above the maximum stage 2 threshold of %ld mC! Configuring stage 2 shutdown at %ld mC.\n",
-> +                                temp, stage2_threshold_max, stage2_threshold_max);
->         }
->
->  skip:
-> --
-> 2.38.1
->
+>  MAINTAINERS                            |   7 -
+>  drivers/power/supply/Kconfig           |   6 -
+>  drivers/power/supply/Makefile          |   1 -
+>  drivers/power/supply/s3c_adc_battery.c | 453 -------------------------
+>  include/linux/s3c_adc_battery.h        |  39 ---
+>  5 files changed, 506 deletions(-)
+>  delete mode 100644 drivers/power/supply/s3c_adc_battery.c
+>  delete mode 100644 include/linux/s3c_adc_battery.h
+
+Any idea why I was Cc'ed on this (and only this) patch?
+
+-- 
+Lee Jones [李琼斯]
