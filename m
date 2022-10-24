@@ -2,372 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F9E6609947
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 06:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53477609A15
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 07:54:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiJXEks (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Oct 2022 00:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S230108AbiJXFyK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Oct 2022 01:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiJXEk1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 00:40:27 -0400
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6713AB20;
-        Sun, 23 Oct 2022 21:40:06 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229576AbiJXFyJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 01:54:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716BE58E8E
+        for <linux-pm@vger.kernel.org>; Sun, 23 Oct 2022 22:54:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: hector@marcansoft.com)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id B2621424B9;
-        Mon, 24 Oct 2022 04:40:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1666586405; bh=E4VzSpZFeNA5d/uDXozYlW93u8ZNKpH+5o1ytjh8lo0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=k4/9da3phZ0pUF289YlBI/t1+9dfx4Po4asOkUORSBhIji4r1DW587XmBYCBe72VE
-         fHrBAkPKMeOON8WjZd/mAT3ZpRMRiOhOraEapjOE/pBex9yjaRLHvAV9oWYQ8o2JB0
-         T3G0eQXekJ15UfpFyQ+Z+E0USw7lfbpujhvzHDW59/WpX3oFI+qYI4lsMlkWz16/tE
-         rAF7njHB2iMe2wWpvq8W7P72fodL79NmUNZQ/SLGJGgMGea8h14hd4LvcLxcA8JRtQ
-         Ds1N9kVVtJ56AyaCaDP75s8LKxFbWHzix1wOmyuWMX6eWMIolfP1sO46ZPNHQmAM4A
-         ev3s1cjPfNv6w==
-From:   Hector Martin <marcan@marcan.st>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
-Date:   Mon, 24 Oct 2022 13:39:25 +0900
-Message-Id: <20221024043925.25379-6-marcan@marcan.st>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221024043925.25379-1-marcan@marcan.st>
-References: <20221024043925.25379-1-marcan@marcan.st>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 347C861018
+        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 05:54:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C8B1C43141
+        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 05:54:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666590845;
+        bh=IdeoKRp7CnTeQycf+9JLsdNh6b3jxG4J8xktr1nYokc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=cLsmSRL7yxCsgsZYI4pkwM4eu2stTLbzCozg1hw8x6YBv7W3s0z2Kbaw5KCs7xjrt
+         new2b7/zUlv/NgqN0ac3LfNw87n4B/V8TuhDvpJdNZZ8RnHM/BbxG4zVW0LQ7m1WA3
+         0QFUi+gjlBZ2v2A9jnK6l3SU/81kJudtgAUdLkcHbiNvT1u0a9z7tMEJv+z5Y8Ewtn
+         LvYTIWCAbi70BdVdzrLGYGct48kT8tg85q0YZ9yfmyTZQH9ODF2aZqK+xl894gBVBv
+         CrNcmum/oCkE27rwik+Quqh3DT/PdHxZrVIxYzAI3yfTOt6HfwM1MfbiKArdjBnfgJ
+         Oy6nZRHh1inQw==
+Received: by mail-vs1-f53.google.com with SMTP id a2so6900109vsc.13
+        for <linux-pm@vger.kernel.org>; Sun, 23 Oct 2022 22:54:05 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3c0LYA8oKQy1Jj0XocwimxfN8GVeiBVmqd1BEGKBVo9S3V7Q+X
+        e4gA81IPYpZ4DSP3AlIPQ2QSnHptvxglqbFd+rMYlQ==
+X-Google-Smtp-Source: AMsMyM6r3lhmzECYp5LCoWCOCyKSCy4MMw6xBEcHox8V0neSeitmujt/1h4kOBN101XI1Nv3slbvsWLOegmr2kJxRTI=
+X-Received: by 2002:a67:d296:0:b0:3a6:ef66:b4cb with SMTP id
+ z22-20020a67d296000000b003a6ef66b4cbmr16546365vsi.30.1666590844366; Sun, 23
+ Oct 2022 22:54:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221020145237.942146-1-luca.weiss@fairphone.com>
+In-Reply-To: <20221020145237.942146-1-luca.weiss@fairphone.com>
+From:   Amit Kucheria <amitk@kernel.org>
+Date:   Mon, 24 Oct 2022 11:23:53 +0530
+X-Gmail-Original-Message-ID: <CAHLCerN+-5qKsRmpuF55RdeUMZJZuiZJ-7O4LnM8+QuHJfs0mQ@mail.gmail.com>
+Message-ID: <CAHLCerN+-5qKsRmpuF55RdeUMZJZuiZJ-7O4LnM8+QuHJfs0mQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal/drivers/qcom/temp-alarm: fix inaccurate warning
+ for gen2
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        David Collins <collinsd@codeaurora.org>,
+        Guru Das Srinagesh <gurus@codeaurora.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the missing CPU topology/capacity information and the cpufreq nodes,
-so we can have CPU frequency scaling and the scheduler has the
-information it needs to make the correct decisions.
+On Thu, Oct 20, 2022 at 8:23 PM Luca Weiss <luca.weiss@fairphone.com> wrote:
+>
+> On gen2 chips the stage2 threshold is not 140 degC but 125 degC.
+>
+> Make the warning message clearer by using this variable and also by
+> including the temperature that was checked for.
+>
+> Fixes: aa92b3310c55 ("thermal/drivers/qcom-spmi-temp-alarm: Add support for GEN2 rev 1 PMIC peripherals")
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 
-Boost states are commented out, as they are not yet available (that
-requires CPU deep sleep support, to be eventually done via PSCI).
-The driver supports them fine; the hardware will just refuse to ever
-go into them at this time, so don't expose them to users until that's
-done.
+Reviewed-by: Amit Kucheria <amitk@kernel.org>
 
-Signed-off-by: Hector Martin <marcan@marcan.st>
----
- arch/arm64/boot/dts/apple/t8103.dtsi | 206 +++++++++++++++++++++++++--
- 1 file changed, 196 insertions(+), 10 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 51a63b29d404..055e395ee88d 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -22,71 +22,245 @@ cpus {
- 		#address-cells = <2>;
- 		#size-cells = <0>;
- 
--		cpu0: cpu@0 {
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu_e0>;
-+				};
-+				core1 {
-+					cpu = <&cpu_e1>;
-+				};
-+				core2 {
-+					cpu = <&cpu_e2>;
-+				};
-+				core3 {
-+					cpu = <&cpu_e3>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu_p0>;
-+				};
-+				core1 {
-+					cpu = <&cpu_p1>;
-+				};
-+				core2 {
-+					cpu = <&cpu_p2>;
-+				};
-+				core3 {
-+					cpu = <&cpu_p3>;
-+				};
-+			};
-+		};
-+
-+		cpu_e0: cpu@0 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x0>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu1: cpu@1 {
-+		cpu_e1: cpu@1 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x1>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu2: cpu@2 {
-+		cpu_e2: cpu@2 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x2>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu3: cpu@3 {
-+		cpu_e3: cpu@3 {
- 			compatible = "apple,icestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x3>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&ecluster_opp>;
-+			capacity-dmips-mhz = <714>;
-+			performance-domains = <&cpufreq_e>;
- 		};
- 
--		cpu4: cpu@10100 {
-+		cpu_p0: cpu@10100 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10100>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu5: cpu@10101 {
-+		cpu_p1: cpu@10101 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10101>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu6: cpu@10102 {
-+		cpu_p2: cpu@10102 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10102>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 
--		cpu7: cpu@10103 {
-+		cpu_p3: cpu@10103 {
- 			compatible = "apple,firestorm";
- 			device_type = "cpu";
- 			reg = <0x0 0x10103>;
- 			enable-method = "spin-table";
- 			cpu-release-addr = <0 0>; /* To be filled by loader */
-+			operating-points-v2 = <&pcluster_opp>;
-+			capacity-dmips-mhz = <1024>;
-+			performance-domains = <&cpufreq_p>;
- 		};
- 	};
- 
-+	ecluster_opp: opp-table-0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <7500>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <972000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <22000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1332000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <27000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1704000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <33000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <2064000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <50000>;
-+		};
-+	};
-+
-+	pcluster_opp: opp-table-1 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		opp01 {
-+			opp-hz = /bits/ 64 <600000000>;
-+			opp-level = <1>;
-+			clock-latency-ns = <8000>;
-+		};
-+		opp02 {
-+			opp-hz = /bits/ 64 <828000000>;
-+			opp-level = <2>;
-+			clock-latency-ns = <19000>;
-+		};
-+		opp03 {
-+			opp-hz = /bits/ 64 <1056000000>;
-+			opp-level = <3>;
-+			clock-latency-ns = <21000>;
-+		};
-+		opp04 {
-+			opp-hz = /bits/ 64 <1284000000>;
-+			opp-level = <4>;
-+			clock-latency-ns = <23000>;
-+		};
-+		opp05 {
-+			opp-hz = /bits/ 64 <1500000000>;
-+			opp-level = <5>;
-+			clock-latency-ns = <24000>;
-+		};
-+		opp06 {
-+			opp-hz = /bits/ 64 <1728000000>;
-+			opp-level = <6>;
-+			clock-latency-ns = <29000>;
-+		};
-+		opp07 {
-+			opp-hz = /bits/ 64 <1956000000>;
-+			opp-level = <7>;
-+			clock-latency-ns = <31000>;
-+		};
-+		opp08 {
-+			opp-hz = /bits/ 64 <2184000000>;
-+			opp-level = <8>;
-+			clock-latency-ns = <34000>;
-+		};
-+		opp09 {
-+			opp-hz = /bits/ 64 <2388000000>;
-+			opp-level = <9>;
-+			clock-latency-ns = <36000>;
-+		};
-+		opp10 {
-+			opp-hz = /bits/ 64 <2592000000>;
-+			opp-level = <10>;
-+			clock-latency-ns = <51000>;
-+		};
-+		opp11 {
-+			opp-hz = /bits/ 64 <2772000000>;
-+			opp-level = <11>;
-+			clock-latency-ns = <54000>;
-+		};
-+		opp12 {
-+			opp-hz = /bits/ 64 <2988000000>;
-+			opp-level = <12>;
-+			clock-latency-ns = <55000>;
-+		};
-+#if 0
-+		/* Not available until CPU deep sleep is implemented */
-+		opp13 {
-+			opp-hz = /bits/ 64 <3096000000>;
-+			opp-level = <13>;
-+			clock-latency-ns = <55000>;
-+			turbo-mode;
-+		};
-+		opp14 {
-+			opp-hz = /bits/ 64 <3144000000>;
-+			opp-level = <14>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+		opp15 {
-+			opp-hz = /bits/ 64 <3204000000>;
-+			opp-level = <15>;
-+			clock-latency-ns = <56000>;
-+			turbo-mode;
-+		};
-+#endif
-+	};
-+
- 	timer {
- 		compatible = "arm,armv8-timer";
- 		interrupt-parent = <&aic>;
-@@ -124,6 +298,18 @@ soc {
- 		ranges;
- 		nonposted-mmio;
- 
-+		cpufreq_e: cpufreq@210e20000 {
-+			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+			reg = <0x2 0x10e20000 0 0x1000>;
-+			#performance-domain-cells = <0>;
-+		};
-+
-+		cpufreq_p: cpufreq@211e20000 {
-+			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-+			reg = <0x2 0x11e20000 0 0x1000>;
-+			#performance-domain-cells = <0>;
-+		};
-+
- 		i2c0: i2c@235010000 {
- 			compatible = "apple,t8103-i2c", "apple,i2c";
- 			reg = <0x2 0x35010000 0x0 0x4000>;
-@@ -229,12 +415,12 @@ aic: interrupt-controller@23b100000 {
- 			affinities {
- 				e-core-pmu-affinity {
- 					apple,fiq-index = <AIC_CPU_PMU_E>;
--					cpus = <&cpu0 &cpu1 &cpu2 &cpu3>;
-+					cpus = <&cpu_e0 &cpu_e1 &cpu_e2 &cpu_e3>;
- 				};
- 
- 				p-core-pmu-affinity {
- 					apple,fiq-index = <AIC_CPU_PMU_P>;
--					cpus = <&cpu4 &cpu5 &cpu6 &cpu7>;
-+					cpus = <&cpu_p0 &cpu_p1 &cpu_p2 &cpu_p3>;
- 				};
- 			};
- 		};
--- 
-2.35.1
-
+> ---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index be785ab37e53..ad84978109e6 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -252,7 +252,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>                         disable_s2_shutdown = true;
+>                 else
+>                         dev_warn(chip->dev,
+> -                                "No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.\n");
+> +                                "No ADC is configured and critical temperature %d mC is above the maximum stage 2 threshold of %ld mC! Configuring stage 2 shutdown at %ld mC.\n",
+> +                                temp, stage2_threshold_max, stage2_threshold_max);
+>         }
+>
+>  skip:
+> --
+> 2.38.1
+>
