@@ -2,64 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AE5B609BED
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 09:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013D2609C9E
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 10:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229635AbiJXH54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Oct 2022 03:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
+        id S230521AbiJXI2m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Oct 2022 04:28:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiJXH5w (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 03:57:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE8BE5D0F9;
-        Mon, 24 Oct 2022 00:57:51 -0700 (PDT)
+        with ESMTP id S230336AbiJXI2U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 04:28:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 207AF645F9;
+        Mon, 24 Oct 2022 01:28:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8CAF0B80EDF;
-        Mon, 24 Oct 2022 07:57:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADEA7C433C1;
-        Mon, 24 Oct 2022 07:57:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 48CCE60B47;
+        Mon, 24 Oct 2022 08:27:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96F31C433D6;
+        Mon, 24 Oct 2022 08:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666598269;
-        bh=hDxpDhMk666IjZLpS8egPr1W30wkhtST4o6l5/G/OKg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rx0otZNOy7IbrQKLnW3PM2+b2cB1XZSZbp/HFiyMB/j7FLQFO88HxGa5vh8BaUwsH
-         REbjpSe38TAZrunQZHNSbkSt/pHkSwPlnCM7lf+h6g4UDOB/0+IOUlalbRe3wRvPE8
-         ZrFkpp3sKW+D3SxoAGUkhnwzjjNVbDsCDb6UmplYvNRXyqKegtfYeXPUbGEOepWRXm
-         xkID7NQoeN/3l0rodyClEFMrIsNRF8L+NuNu8VDxpTHEQyqoupSbSwazU/Lt9o29w9
-         v0TS1d2Inxp6ljbE/FoWWzrm6uFcsqReNW1dyLhRI5MyCwrhU33E7f3iZxWxA1h/Wd
-         eFD2Ckzei22MQ==
-Date:   Mon, 24 Oct 2022 08:57:41 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, Ben Dooks <ben-linux@fluff.org>,
-        Simtec Linux Team <linux@simtec.co.uk>,
-        Rob Herring <robh@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Joe Perches <joe@perches.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 07/21] power: remove s3c adc battery driver
-Message-ID: <Y1ZFdblT4MaZ9ZS1@google.com>
-References: <20221021202254.4142411-1-arnd@kernel.org>
- <20221021203329.4143397-7-arnd@kernel.org>
- <Y1Y+o2aDz2Cd+ZG8@google.com>
- <697f1503-1289-45bf-acb0-57429c903665@app.fastmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <697f1503-1289-45bf-acb0-57429c903665@app.fastmail.com>
+        s=k20201202; t=1666600057;
+        bh=ysnt+Y6t1FMRzHAEEL6QxFMl6KRfQ8Smz2P0BWUTlFs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=pmbef9SJDQK3+et4z6SVFeBoNmRtPQm5LBLxdzkgLUEDz6z+wVGn2cUUK5TCA9K2i
+         k7KoAS6Rn4ie14xWdPBhUguCdlT4ZZ0wvcCB9Z3ATiGLhHl+04pO5ELZbgPMuLpTZ/
+         8YSg3v1wRDGMjHJ+77Y/KFtNul2W1qNO2oBPMHHPEWlE8pMpdOhDAO+0CH2cuhlVif
+         bCA9QyKF4l2SYGe3WZU0+5iksVrZRroVmmFLyBBXeZ62RPGzQAOYuaWjeHofcYwFcq
+         FWhAPlcbFl29DPw6NOVyMawkj8JRf9lcQOuXkcyGvxQoRcfZy2fhj1CnW/Q05PN86L
+         +OBW3rh88n+mQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1omso3-001630-E9;
+        Mon, 24 Oct 2022 09:27:35 +0100
+Date:   Mon, 24 Oct 2022 09:27:35 +0100
+Message-ID: <8635bdocco.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+In-Reply-To: <20221024043925.25379-5-marcan@marcan.st>
+References: <20221024043925.25379-1-marcan@marcan.st>
+        <20221024043925.25379-5-marcan@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, rafael@kernel.org, viresh.kumar@linaro.org, matthias.bgg@gmail.com, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org, ulf.hansson@linaro.org, mark.kettenis@xs4all.nl, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -69,37 +75,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 24 Oct 2022, Arnd Bergmann wrote:
-
-> On Mon, Oct 24, 2022, at 09:28, Lee Jones wrote:
-> > On Fri, 21 Oct 2022, Arnd Bergmann wrote:
-> >
-> >> From: Arnd Bergmann <arnd@arndb.de>
-> >> 
-> >> The s3c-adc driver is removed along with the s3c24xx platform,
-> >> so the battery driver is no longer needed either.
-> >> 
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >> ---
-> >>  MAINTAINERS                            |   7 -
-> >>  drivers/power/supply/Kconfig           |   6 -
-> >>  drivers/power/supply/Makefile          |   1 -
-> >>  drivers/power/supply/s3c_adc_battery.c | 453 -------------------------
-> >>  include/linux/s3c_adc_battery.h        |  39 ---
-> >>  5 files changed, 506 deletions(-)
-> >>  delete mode 100644 drivers/power/supply/s3c_adc_battery.c
-> >>  delete mode 100644 include/linux/s3c_adc_battery.h
-> >
-> > Any idea why I was Cc'ed on this (and only this) patch?
+On Mon, 24 Oct 2022 05:39:24 +0100,
+Hector Martin <marcan@marcan.st> wrote:
 > 
-> Not sure. I use "get_maintainer.pl -i" to generate the list
-> and try to prune it manually to avoid adding too many
-> people to Cc. It appears that for this patch I accidentally
-> included everyone who showed up in the git history for the
-> maintainers file, rather than the people who touched the
-> actual driver.
+> This driver implements CPU frequency scaling for Apple Silicon SoCs,
+> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
+> 
+> Each CPU cluster has its own register set, and frequency management is
+> fully automated by the hardware; the driver only has to write one
+> register. There is boost frequency support, but the hardware will only
+> allow their use if only a subset of cores in a cluster are in
+> non-deep-idle. Since we don't support deep idle yet, these frequencies
+> are not achievable, but the driver supports them. They will remain
+> disabled in the device tree until deep idle is implemented, to avoid
+> confusing users.
+> 
+> This driver does not yet implement the memory controller performance
+> state tuning that usually accompanies higher CPU p-states. This will be
+> done in a future patch.
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
+> ---
+>  drivers/cpufreq/Kconfig.arm          |   9 +
+>  drivers/cpufreq/Makefile             |   1 +
+>  drivers/cpufreq/apple-soc-cpufreq.c  | 352 +++++++++++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+>  4 files changed, 364 insertions(+)
+>  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
+>
 
-Understood.  Thanks for the explanation.
+[...]
+
+> +static struct freq_attr *apple_soc_cpufreq_hw_attr[] = {
+> +	&cpufreq_freq_attr_scaling_available_freqs,
+> +	NULL,
+> +	NULL,
+
+nit: extra NULL?
+
+	M.
 
 -- 
-Lee Jones [李琼斯]
+Without deviation from the norm, progress is not possible.
