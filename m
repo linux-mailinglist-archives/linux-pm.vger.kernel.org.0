@@ -2,70 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9C8609F7D
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 12:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50DD0609F99
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Oct 2022 13:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiJXK6F (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Oct 2022 06:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
+        id S229966AbiJXLAw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Oct 2022 07:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbiJXK5b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 06:57:31 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E0D53A4D;
-        Mon, 24 Oct 2022 03:57:22 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id 4so2229110pli.0;
-        Mon, 24 Oct 2022 03:57:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JailJRGGT+MU7QQfQRg334ru/W+CJ+3fnThCLH1Q1Is=;
-        b=PgpRBRAV0VQnb3CsMbkFilLmdJ93zWOEdIjNmUQ+izERRYl7Fm/SF5f61YzXPDYZzP
-         u8GGg0HxNzrwDdLYslNmy3wjqXnEt7aAxcuJ1ekzpBIR96KyqwzY6A2KoqgkqnBETRwV
-         W1ilOny8va381kPdMXBrs05mZaHvufZnK4NLnzn+l0tnM2tUsfBuTFCBo+r8U0fuhsVZ
-         ASZS3dNvaYLwGtMQzB/uQ/f8wZT+RKZBxhMakHC7cbE0l2gNjJl7RY+33rEzxT42r5Fy
-         6zjKY9NKgQ5R04H5KE1kZLYNEh8GZEphgPxgiXkTN/BRYHvJoCLwddokfUbxNHa0hhZk
-         Dkkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JailJRGGT+MU7QQfQRg334ru/W+CJ+3fnThCLH1Q1Is=;
-        b=xhLP8FVQNyNh5qtXD93sM5icnYEic3ZRmN6STtouZzXnBszDjDFvaLqD7Tua8XeeOA
-         WIpzV2H0b8XmLWJ5yFF3z/F7pSVxLp66EleLnKRmTLQzgHW+RQaJ/yHQSU614f5TQOo9
-         wYhi61DaLZd+VWX5ZVAquAbWIl5NON/b049JvS4kXZm0gJEfhW2aN6HxX157i/xXsS9k
-         vkUHpBF/DhKN1WUglEIQ567t0DnCV8y51VO1Pgv4oPtNPZ8bvGBiG4iwtvkHQbosiBXH
-         pwa+zTUlitPGz+qGExNVy3wlP1y6ol+6HHT/HaKETLZm/xnbSUeZYpdskXECLFP1FX7T
-         WEjw==
-X-Gm-Message-State: ACrzQf0VGAoWh52ZezD9mSEqcWm+slULS/Gv4XKd5KcKBS1Pb/ghCQI4
-        XniU5dYU8gKyQVUSskKOeBc=
-X-Google-Smtp-Source: AMsMyM4S5aKg7WdqBIpzwjMK+mTJG8gHvmevQPZDmwNiiIDVqTw4Tvgp3CBuGXvWtpe7G/MAIcwVug==
-X-Received: by 2002:a17:903:2286:b0:185:3948:be93 with SMTP id b6-20020a170903228600b001853948be93mr33287486plh.121.1666609032732;
-        Mon, 24 Oct 2022 03:57:12 -0700 (PDT)
-Received: from RD-3580-24288.rt.l (111-82-141-7.emome-ip.hinet.net. [111.82.141.7])
-        by smtp.gmail.com with ESMTPSA id a15-20020a631a4f000000b0045751ef6423sm1366696pgm.87.2022.10.24.03.57.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 03:57:12 -0700 (PDT)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3 3/3] Documentation: power: rt9467: Document exported sysfs entries
-Date:   Mon, 24 Oct 2022 18:55:48 +0800
-Message-Id: <77bc3eb3e8ecc6035bd492b801c0bff8fe4212a7.1666633143.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1666633143.git.chiaen_wu@richtek.com>
-References: <cover.1666633143.git.chiaen_wu@richtek.com>
+        with ESMTP id S230153AbiJXLAe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 07:00:34 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC1D5B12E;
+        Mon, 24 Oct 2022 03:59:17 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 110083200931;
+        Mon, 24 Oct 2022 06:59:12 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 24 Oct 2022 06:59:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1666609152; x=1666695552; bh=kr
+        VYjkfLDQwBr9ZbrRSYb5IXhlOH+en9JkOrrwDgplM=; b=Seq+o1mxj8SBX5gryq
+        usY2g9H3HKdswRTaOM0c128UWYVRii8xeCwKm357kmJF+dq9pgVVrNT6gQex/IU0
+        zAlgxisOxqtlj7VsmtD2KLVt0LFc2HMGir0d6+tS+MRiSvagKmP01uk1+RHA/+6q
+        ++ULuPxGsILyxIM0oYsqx/MuyceNdEOi569Qpo9vOecE0gcdnNMNasggZBAumtDs
+        1ejBTs7A0yhvOej3fL5h1wLOT2nECK3ueELAfCp6yLeN18bqKH2xfMnIRzSzxSVP
+        Kz/ZctzdzGGfrFB8LOr5Vxoa2lEXLwjCUg6ED2e1Np2zjlYgCzIvw2cWBh4ewyG0
+        e+wA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1666609152; x=1666695552; bh=krVYjkfLDQwBr
+        9ZbrRSYb5IXhlOH+en9JkOrrwDgplM=; b=h06dFB9Nko3rb4oLphVZi4tqQoB8S
+        nVWCBGFXUXZ4myPx9Gj7qSF7QRAeG9JE28MyeBVJsriRzdYS6Wogfcupx1thWkad
+        sMln8bSlBUiJDK4LKy5H4/aGiiVNxNidltyxrIo0DeliASHQDu4VBaW3yHelni6D
+        3sdgBCZE2q3o/jPdq/dT3RWgsgVz1CH9PEfRZQnASaTfBvwRaiUc7k8bttJouTKa
+        lBQEFXzalPr6FogZgbYkz2VRKvs1V96CRLvxFtBDKF1byUfxIfe7kmSPtDxWnkkw
+        i3CYTEqIsYrOAmF5uCO4VWq/Atp9jk37jbg5+xHWaKKvt8sJo3LNcj9QQ==
+X-ME-Sender: <xms:_29WY_-DpLdwUHFJSbwTMCqgQKcqZ1rybVW3KqlyfCh-gkSelJISwA>
+    <xme:_29WY7tprRiPFJ8B82Xp0D6Qz1GQwStngLsZbT4iAwcqp75gzUv4P3qT8i01sRQbc
+    uYgS6nBmPO1zmdDIRI>
+X-ME-Received: <xmr:_29WY9BemOgU3K9F3r0e7BTiY1rOgXL53Bu6LSYn9ai0H9pnETu46hArrujr6HNXOJf6ppAnWnNz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtgedgfeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffotggggfesthekre
+    dtredtjeenucfhrhhomheptehlihhsthgrihhrucfhrhgrnhgtihhsuceorghlihhsthgr
+    ihhrsegrlhhishhtrghirhdvfedrmhgvqeenucggtffrrghtthgvrhhnpeffkefhleetge
+    fgteeikeetkeehtdffkedvtdevteegfffglefffedtheeugfehfeenucevlhhushhtvghr
+    ufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrlhhishhtrghirhesrghlih
+    hsthgrihhrvdefrdhmvg
+X-ME-Proxy: <xmx:_29WY7eqsvrO0l8rXM1f3Nx9lKR1LchNAsKKrkSMemSflLYUSsPmYw>
+    <xmx:_29WY0PeapLQ0UH73EciW-HIlbN2P12aKpCoPELSOYEHBricKObViQ>
+    <xmx:_29WY9lw29slNeBFWcwEjb-gDq64TQv2vSWCBg8gCURQ8a-7Imdonw>
+    <xmx:AHBWY_GxVy-ksoztcf47ATui4DQv0hyRXJ8b3RCzg4zZj-leY20gsw>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Oct 2022 06:58:58 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     kernel@pengutronix.de, robh+dt@kernel.org, lgirdwood@gmail.com,
+        lee.jones@linaro.org, broonie@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, rui.zhang@intel.com,
+        s.hauer@pengutronix.de, linux-kernel@vger.kernel.org,
+        alistair@alistair23.me, geert@linux-m68k.org,
+        linux-pm@vger.kernel.org, andreas@kemnade.info, amitk@kernel.org,
+        linux-hwmon@vger.kernel.org, shawnguo@kernel.org,
+        alistair23@gmail.com, devicetree@vger.kernel.org,
+        linux@roeck-us.net, linux-imx@nxp.com
+Subject: [PATCH v22 0/2] Add support for the silergy,sy7636a
+Date:   Mon, 24 Oct 2022 20:58:51 +1000
+Message-Id: <20221024105853.42029-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.37.3
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,43 +88,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ChiaEn Wu <chiaen_wu@richtek.com>
+v22:
+ - Rebase on master
+ - Drop `ARM: dts: imx7d-remarkable2: Enable lcdif`
+v21:
+ - Rebase on master
+v20:
+ - Remove merged patches
+ - Fixup Kconfig selection based on previous discussions
+v19:
+ - Rebase on linux-next
+v18:
+ - Rebase
+v17:
+ - Rebase and fix build issues
+v16:
+ - Improve vdd regulator comments
+v15:
+ - Address comments on the patches
+v14:
+ - Merge the thermal driver and hwmon
+v13:
+ - Address comments on thermal driver
+ - Rebase on master (without other patches)
+v12:
+ - Rebase
+v11:
+ - Address comments on hwmon
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+v10:
+ - Use dev_get_regmap() instead of dev_get_drvdata()
+v9:
+ - Convert to use the simple-mfd-i2c instead
 
-Document the settings exported by rt9467 charger driver through sysfs
-entries:
-- sysoff_enable
+Alistair Francis (2):
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
 
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- Documentation/ABI/testing/sysfs-class-power-rt9467 | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9467
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 62 +++++++++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig    |  3 ++
+ 2 files changed, 65 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9467 b/Documentation/ABI/testing/sysfs-class-power-rt9467
-new file mode 100644
-index 0000000..dd0b962
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9467
-@@ -0,0 +1,19 @@
-+What:		/sys/class/power_supply/rt9467-*/sysoff_enable
-+Date:		Oct 2022
-+KernelVersion:	6.0
-+Contact:	ChiaEn Wu <chiaen_wu@richtek.com>
-+Description:
-+		This entry allows enabling the sysoff mode of rt9467 charger
-+		devices.
-+		If enabled and the input is removed, the internal battery FET
-+		is turned off to reduce the leakage from the BAT pin. See
-+		device datasheet for details. It's commonly used when the
-+		product enter shipping stage. After entering shipping mode,
-+		only 'VBUS' or 'Power key" pressed can make it leave this mode.
-+		'Disable' also can help to leave it, but it's more like to
-+		abort the action before the device really enter shipping mode.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
 -- 
-2.7.4
+2.37.3
 
