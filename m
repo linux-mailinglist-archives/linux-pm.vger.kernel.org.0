@@ -2,81 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6209360BF35
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 02:06:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8959160C06D
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 03:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiJYAGs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 24 Oct 2022 20:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S229882AbiJYBGc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 24 Oct 2022 21:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiJYAGd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 20:06:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1ABFBCD3
-        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 15:23:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1666650190;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yAu84s8rk3cqzQWkUOACGj/hySV4th5LzQjIQBUH6pI=;
-        b=PU4hPKkO6didveTqF8QKq7NWhqvVmQQ/CYiqbyK4aYkxEotQAIs2vRL4NqlbgQTwO/6Z4a
-        DE45nfL+E2YAd9jV0AiUmIhRYiC96gceNxq1Aip8dqTAvu50OVgHTnKacCjD9ODlPo2FnX
-        2WKprVj/OIY2rJIKbC5qPQd6Kw0hQjA=
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com
- [209.85.161.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-160-Tbop4919OkO3DgURSGSccg-1; Mon, 24 Oct 2022 16:02:27 -0400
-X-MC-Unique: Tbop4919OkO3DgURSGSccg-1
-Received: by mail-oo1-f70.google.com with SMTP id a29-20020a4a9b1d000000b00480db71d44bso4931236ook.7
-        for <linux-pm@vger.kernel.org>; Mon, 24 Oct 2022 13:02:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yAu84s8rk3cqzQWkUOACGj/hySV4th5LzQjIQBUH6pI=;
-        b=kNFKR02RcXYZCEXYfVIoIwTIG09GOfjqhuPAnxRCNZA+x/YDZ5hzgAE+PbvgyJ+37b
-         5e113sfEonaLwh9H3IXeapvwyroZrXrOArotn0IJb6FRDqCZ3t+U4HHbNyb4S5dVm3Pu
-         wF2Uc0NJUlypt6igLdPv5LaGqoeuxhC3a0jjMlCbgLpDRZorR/0Uhtud7NTAD4+yn8Nx
-         TZnQeFgqT+gTdp4FyTcBD8CuC24RBjS8m0QkgKBMBGrqJhHKwaUP/wtimfXquGtSYfEZ
-         c9+Amvwncmcc5+KOJQngcFKUxnru/mIiQegn3chDSK7B3GuXwdgD+erLT5OiSLHWWkm0
-         Srzw==
-X-Gm-Message-State: ACrzQf3+KGJk2jN5HJoWY135cCt5rBs4y2F2MFqcr9rFlcM9qmiqTg3s
-        8YwIyFv8c9CDocZvaFyADGu1C3rt+IWAWt3wvdjbKSY/YOqnuVE+kgY/a+UWWkxn5Q55+Gj6YAo
-        zaDoQfxjLh+I4xf5CK1c=
-X-Received: by 2002:a05:6870:f202:b0:13b:c2c5:ed3d with SMTP id t2-20020a056870f20200b0013bc2c5ed3dmr3016217oao.252.1666641746026;
-        Mon, 24 Oct 2022 13:02:26 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM54g8rhYLOuCJEYPTIti3cvvmXOtuSfRfS5sohQPzeU0IGnm6DuA2ng30T7rsaeW4R33wdz9Q==
-X-Received: by 2002:a05:6870:f202:b0:13b:c2c5:ed3d with SMTP id t2-20020a056870f20200b0013bc2c5ed3dmr3016197oao.252.1666641745716;
-        Mon, 24 Oct 2022 13:02:25 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id w16-20020a056830061000b006619f38a686sm154449oti.56.2022.10.24.13.02.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Oct 2022 13:02:25 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 15:02:22 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        echanude@redhat.com
-Subject: Re: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK
- driver
-Message-ID: <20221024200222.vg7vhu7dfd3wlnkc@halaney-x13s>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-3-bjorn.andersson@linaro.org>
+        with ESMTP id S230134AbiJYBGE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 24 Oct 2022 21:06:04 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2084.outbound.protection.outlook.com [40.107.243.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E46D716E2B9;
+        Mon, 24 Oct 2022 17:12:39 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z68+qA0Ner6dlH4kSJaJ2fwAuIv/yxlkcH189L4OiSrEBzxlp5EQJmhy68hwEkfCljLDH/BOIE2cc+QY989Ux0XacHPngEJboOfm3ORFZd7Y0XvX2soUxohOlMP7sKbUu5MlhaD7SXZFUXWZuGQy9bHP2wuamlfehWeRwc+fF1EiRei6GhOTnHLJIy4nKHLVVIYusWhLHCvsV+YrJjEqrTR8Mx3/j7OAfqcHuEM4ZLN55Rml0fREM8kDVFduoPvj6sPWxASnWa7eNd6Ts/l12/OmySs1mpJ/bwZIe2DJ4fyLKSgxUYoFN5Y/sZ6xPpU9TIfUPiwjpR/MUcJGsBPtSA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JsAEuR9yXWi8V/95WaDIbvTtrgW6/6ONPNtNJ9oWf8E=;
+ b=HkPnvBvjsZXt78dATfXvICuq4FWmPGSuT76Cv0mmAuovfESIXL/bC6jUWfYSZkCGHmUXjr05CtrUdv4uaN3A7xIdbH1zKNrRFlEhcMcTgcn3p684w/dKUKHz/UNvxHRFt9fw/H/VyOnjDTspQWT5R4AbuGaN37gHVEy+RH8Gm5YI2ORSxwHiwXIKszQqVXYTQ1AGyqLga3aUK0Auy7/vzW9py1DEdC7DlDOWbSEY0KADvSuT/5cZS26ZqZZBG/qMJK3KLPlCPwS4iL3mSztNLsqaT+DoItUu33Exgb1C4qTsfP/SMg9nHsKwDeSqajXwKlKnvd3Wl+fCG+MeC/DtDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JsAEuR9yXWi8V/95WaDIbvTtrgW6/6ONPNtNJ9oWf8E=;
+ b=V3CSo7ZVjrZXRNRsW9ldmBT30dTgKH4X2UkEG7Z1dtE3fh7PNnTVszsgss9hh6vWf4izwHiunNjETcjxNjHVNU7dX3Qr+Z8dMoFh0rIrTQ5FBcBtjcanQ1jOc+9KhrlPy6B57Q44Q4CHscFq8zP5qfIVcFTVtyebjgfRttsRKhs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CY8PR12MB7244.namprd12.prod.outlook.com (2603:10b6:930:57::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.35; Tue, 25 Oct
+ 2022 00:12:37 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f8c0:db03:2d30:792c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f8c0:db03:2d30:792c%3]) with mapi id 15.20.5746.026; Tue, 25 Oct 2022
+ 00:12:37 +0000
+Message-ID: <63718e7b-bc37-af47-011d-9fd0207a6d2c@amd.com>
+Date:   Mon, 24 Oct 2022 19:12:36 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH] PM: hibernate: Allow hybrid sleep to work with s2idle
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     kolAflash <kolAflash@kolahilft.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>
+References: <20221013035017.5098-1-mario.limonciello@amd.com>
+Content-Language: en-US
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20221013035017.5098-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MN2PR19CA0046.namprd19.prod.outlook.com
+ (2603:10b6:208:19b::23) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818031512.319310-3-bjorn.andersson@linaro.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CY8PR12MB7244:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8421b2dd-4737-4f65-71e3-08dab61d9fb8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IgC/+ilb2XokcYZGsV/ZRYlrcGMoo2siuTVUyfdvL5PIQEgUGL3xhNpbYGR8suHSbYNuwCUNid1g4TaUQK53afwCF4PJdLafRiLHpr3oo2A8j5U0mAOh+jIdnnAd5l5/i+lvaNbjkMhNOY9kN/Cd8Au51QwO7nhMEpSecXuS4QCXtjfk4JOVUnbn0ojThDxaBBbqTzTsPqKJ/40owjfOcR+Qr8yMpz15qIU2M4apu7Reod/KE7kATdPn3E4wYiCztSNfA5KOZZxOsbwt8wIOnPje8vue38ORPIzDWqRr/2sU2QjRUOJ2azFFfnTYicm2JpPxl0yoyG/EfFMSviwNKnr3j07GMtsxj5UTLJ3UYppxQ5x/QqF+r3Bw3tVxSFfObGje1Cqt54tvAkFQr68JpBMD97xcTrvSIU10E2cIIa56iMGh8wVT2sq4ZuIJ8xBTa174mJmYnX9iMkY3Sk3nh1c/wSFsAIWEFTmEWOvTO3ha+DIfvmAT4rmqV1zmH2u9Q0yOaywMeHG+A+j2VgArpp1dj/ua9CJCrUp6QRCxfMtvBMd80Q9cqVOnhY3/dBCSOWqP7cOCw1ylIbXeen0zfyMrXIVb6lnApoaEIYIN3eeFdJ42klRhzk1W1WwLzW/hkBkOA307hvlGsNmGLW/S6tLKVBX6Wd8qi7PaebyqCbFY0iU01VKe1bhwDUyZaOBquQENbTsnygimbbGOOffIItavRdyw38II3+d1vF66rOK03OUZZbN193bKD++gLMTGMgtcJ1Q0R2mBDEP6dKO3htHi7L+RQ7Z9K4m2+AiWO1qIT8Kp9t+zDlH83DfrszoApstuZ8ORFCnnhLS7z7cibw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(366004)(346002)(39860400002)(376002)(451199015)(86362001)(53546011)(41300700001)(5660300002)(36756003)(6486002)(8936002)(66556008)(6506007)(6916009)(66946007)(54906003)(966005)(66476007)(4326008)(8676002)(316002)(2906002)(38100700002)(478600001)(31696002)(31686004)(83380400001)(6512007)(26005)(186003)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dXp5S2FYM1JtdXhrRDJvWGFScFVhTnB5NEhVSmJUWU1IdkFFak5vSjNTUDRP?=
+ =?utf-8?B?dW9vem1YTEFKMWZoUEx6dzI1UmRBeXRrMjVJUnY4MWFHNkFQZHdsbFJJOXBK?=
+ =?utf-8?B?eVg5WnJ5K012QU03bEJOWjBTWDZObDk2UzZzMjcrUWZqam53NWZHVlBxNmR6?=
+ =?utf-8?B?dHVpdXhZY1BtbWR1NkRkc0V2MGt0L3E3dGlPbFFNcXJxYiszbnBXblc0U2hC?=
+ =?utf-8?B?bTdyVlJGeUkyUlE0WVNPYjNCbGZOOWM1SkhRdkt2MmJENGs0by9OWDhkdFVh?=
+ =?utf-8?B?ajVKUE9jWkt4bkVtczhFVmNhc2pZUk9VcGVjM1N1TE1sSDFsZU9XUXJvdGJ1?=
+ =?utf-8?B?UnpHemlVSUptNmNGV01YSkJ1MkwvT2JOWG1Fd0NCUDNOaE5CVHN0SVFYd2Vk?=
+ =?utf-8?B?K0VjT0YyNUNLUEpwdTVLRmNUWFBoWU9MQVVtZjhBMDRtZkRSSCtyZW1CZ1px?=
+ =?utf-8?B?aDkzeUFWTVVSWU9jYWVwVHYwdTF3eThCWEo1T1NseHhoSFhkZVMwNERyWGlE?=
+ =?utf-8?B?S3pLOUpIV2djK3VleE9CemNwS1BUbEhXYkd5MzVDRUEraG1lZ3NON3RuWVE1?=
+ =?utf-8?B?NkZqcCtuV1JSMzZMSU1RRnhrdktsUVp3RXNtOXpFTkw5cmZHMTBmT24wU2FH?=
+ =?utf-8?B?MVZPKzdlY1FyZEpkSnJERldRdlpFaVNETEZFWXJUaUJ4L1Jzb2VtU3NWNWk1?=
+ =?utf-8?B?U0RGR29tME9qelBVc2d0VHRNRU80azZHRzFzTUk5ZjBRc2Y0dkdaOVZLeTFp?=
+ =?utf-8?B?WjViTTJzMTloSDdId1BCSFpvYjFKRm5iYkhQa1ZjVkVWbytSdkZSNXZSdmx0?=
+ =?utf-8?B?K3prS3BrMXNFYVMzWjI4empGQnh2SUtsL3Mxd2JPUitSN21OM2FGOTYxNTF1?=
+ =?utf-8?B?Vjh2ZlRvVmdaVG1tUVk5Y0g2UGhPMll1T25RcUw3UDhOcVBuTnlvUmNLcUFo?=
+ =?utf-8?B?UW5kby95c05PMkhSYW9LQlVhZytJV3N6bC9BV0VhSU10dm9IL21SN1QzamVl?=
+ =?utf-8?B?RVIzV210NHdiMkJmY2dPcm9LSmFlTC9aRkp0YXAyeXRYeCtHcTZHSDZ4Uk9t?=
+ =?utf-8?B?MC9NVERWc1pIbm5ldFFTYkNsNm83MGFkSjA1ZmRRWjRKTldNcGxNSWFIMVdr?=
+ =?utf-8?B?SVpBeTdzOEhxYlNkSDk1cWtYMHZIL0ZOTDl2MjZMdit6S0RSK2NCcUNjS3pP?=
+ =?utf-8?B?YXhKdFhIczVOUE5IYlBzQjlBVVE3cUMva0xHcVhERUxqdDY0S2tkRDZWc2lU?=
+ =?utf-8?B?eHV4dXRWRFg1TlRMSEsyUHl3eU15aVJVdkZ2c2hDMGtJaExKbFdhQ09zbHlW?=
+ =?utf-8?B?bk1mb1BFQW0xNUh2Qzg4VE9ka1lSQitJM2xKcVovNXlkR01zaTRzTzBMakIy?=
+ =?utf-8?B?QVdURVhjanRKTUxlTlV0d28vbWNWWFhYQWlPT1pjVDd5STU3eGtncFdCZm5H?=
+ =?utf-8?B?T21mSUtaT1c2cUh0aTJGRWIrSHlCMU1vZUQrRVhuM0hjcEVxSTFrM2JSZSts?=
+ =?utf-8?B?VmpMRUlqakdGRjNzRjJ2Z05vaHl2cUNUdkNORk41c1NlbkMrbkpQa3JCbU1w?=
+ =?utf-8?B?a3FURTRxUk8wSExIem9QdUZ6ekRPZnltM3JpUkpmbFIweGRzZkt6NW02SDZZ?=
+ =?utf-8?B?bGNobmxnTUhjcFdaQkUwV2t5Q1U3akVmYzhMdlJFejNOeTR4RzBocWNHRjhP?=
+ =?utf-8?B?UFowbXo1YmpZbEdyN2ZuOGd5WUI5SDRIR1lqMWdsWVRhdExheS91Tk9zS09D?=
+ =?utf-8?B?TGlWZW5mSDJrbys4UHVqWXFyUDV4bERjRHErRFRPaUhDU002NWtReVJEVFdW?=
+ =?utf-8?B?eEZienh2aisxVWg1bjdKOVZqU05zT1BhN1Mzdk14L0hRRU55L3lVekh1akt1?=
+ =?utf-8?B?WHdpVWRTeGRnNE51d0FVZGdlM0VQc0xJWGtQVXN2SCs2NGFVSVRqMHllbkVM?=
+ =?utf-8?B?aWtIU2RQTE54K29kdWdpUU5aUmZRVGpSSW0rTThkUGdPczhlYnhBbHBKSUxV?=
+ =?utf-8?B?M05NWXYzQ3BRSUJRSUlmSWlTOHltS2l1T3JPYU9jcDFBNllWTnlFekZYSUlt?=
+ =?utf-8?B?TjJJQ0ZGbW5zS0lWRXY5Z3hTMEM0elFnZ0w1NUYybE1xMHdEanIxUzRnVEoy?=
+ =?utf-8?Q?Fpk/E0PFXIZHswHItl+b7hr+W?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8421b2dd-4737-4f65-71e3-08dab61d9fb8
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 00:12:37.7724
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nyzghxGah9Ju2T87jyS+9PgK+CxPSV2BwmV9lT8DgIF1Be80j91jq2HM/1epLEgrneKo9FwX8fnd/yJ9HgXmGg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7244
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,106 +124,41 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Aug 17, 2022 at 08:15:10PM -0700, Bjorn Andersson wrote:
-> The PMIC GLINK service runs on one of the co-processors of some modern
-> Qualcomm platforms and implements USB-C and battery managements. It uses
-> a message based protocol over GLINK for communication with the OS, hence
-> the name.
+On 10/12/2022 22:50, Mario Limonciello wrote:
+> Hybrid sleep is currently hardcoded to only operate with S3 even
+> on systems that might not support it.
 > 
-> The driver implemented provides the rpmsg device for communication and
-> uses auxilirary bus to spawn off individual devices in respsective
-> subsystem. The auxilirary devices are spawned off from a
-> platform_device, so that the drm_bridge is available early, to allow the
-> DisplayPort driver to probe even before the remoteproc has spun up.
+> Instead of assuming this mode is what the user wants to use, for
+> hybrid sleep follow the setting of `mem_sleep_current` which
+> will respect mem_sleep_default kernel command line and policy
+> decisions made by the presence of the FADT low power idle bit.
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Reported-and-tested-by: kolAflash <kolAflash@kolahilft.de>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216574
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
-<snip>
-> diff --git a/drivers/soc/qcom/pmic_glink.c b/drivers/soc/qcom/pmic_glink.c
-> new file mode 100644
-> index 000000000000..d42127521eca
-> --- /dev/null
-> +++ b/drivers/soc/qcom/pmic_glink.c
-> @@ -0,0 +1,336 @@
-<snip>
-> +
-> +static void _devm_pmic_glink_release_client(struct device *dev, void *res)
-> +{
-> +	struct pmic_glink_client *client = *(struct pmic_glink_client **)res;
+>   kernel/power/hibernate.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 
-As Eric Chanudet pointed out to me, this should be:
+Hi Rafael,
 
-	struct pmic_glink_client *client = (struct pmic_glink_client *)res;
+This got sent near the merge window a few weeks ago.  It's a trivial fix 
+so I just want to make sure it didn't get misplaced.
 
-Otherwise you get a splat like below (which somehow resulted in my
-panel output not to work on my x13s... not sure of the connection
-there, and is easily reproducible with a probe deferal or qcom_battmgr
-unload):
+Thanks!
 
-        Unable to handle kernel NULL pointer dereference at virtual address 0000000000000958
-        Mem abort info:
-          ESR = 0x0000000096000004
-          EC = 0x25: DABT (current EL), IL = 32 bits
-          ESR = 0x0000000096000004
-          EC = 0x25: DABT (current EL), IL = 32 bits
-          SET = 0, FnV = 0
-          EA = 0, S1PTW = 0
-          FSC = 0x04: level 0 translation fault
-        Data abort info:
-          ISV = 0, ISS = 0x00000004
-          CM = 0, WnR = 0
-        user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b92000
-        [0000000000000958] pgd=0000000000000000, p4d=0000000000000000
-        Internal error: Oops: 96000004 [#1] PREEMPT SMP
-        Modules linked in: llcc_qcom qcom_battmgr aes_ce_blk pmic_glink_altmode aes_ce_cipher ghash_ce gf128mul sha2_ce sha256_arm64 sha1_ce gpio_sbu_mux pmic_glink gpio_keys autofs4
-        CPU: 2 PID: 182 Comm: kworker/u16:5 Not tainted 6.0.0-rc6 #29
-        Hardware name: LENOVO 21BX0016US/21BX0016US, BIOS N3HET47W (1.19 ) 07/04/2022
-        Workqueue: events_unbound deferred_probe_work_func
-        pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-        pc : mutex_lock+0x1c/0x60
-        lr : _devm_pmic_glink_release_client+0x2c/0x74 [pmic_glink]
-        sp : ffff80000c553970
-        x29: ffff80000c553970 x28: 0000000000000000 x27: 0000000000000000
-        x26: ffffc297e181e0e8 x25: ffffc297e181d000 x24: ffffc2984efd9a80
-        x23: ffffc2984ea7a008 x22: ffff1738863cc3a0 x21: ffff80000c553a28
-        x20: 0000000000000958 x19: ffff1738863cc9f8 x18: ffffffffffffffff
-        x17: 0000000000000000 x16: ffffc2984e1bb110 x15: 61622d6d6f63713d
-        x14: ffffc2984f3b23e0 x13: 554e514553007972 x12: 0000000000000000
-        x11: 00313731333d4d55 x10: 0000000000000000 x9 : ffffc297e181d1cc
-        x8 : ffff80000c553910 x7 : 0000000000000000 x6 : 0000000080200016
-        x5 : 0000000000000038 x4 : 0000000000000000 x3 : 0000000000000958
-        x2 : ffff17388522c100 x1 : 0000000000000000 x0 : 0000000000000958
-        Call trace:
-         mutex_lock+0x1c/0x60
-         release_nodes+0x68/0x100
-         devres_release_all+0x94/0xf0
-         device_unbind_cleanup+0x20/0x70
-         device_release_driver_internal+0x214/0x260
-         device_release_driver+0x20/0x30
-         bus_remove_device+0xdc/0x170
-         device_del+0x178/0x3ac
-         pmic_glink_probe+0x1e8/0x240 [pmic_glink]
-         platform_probe+0x70/0xcc
-         really_probe+0xc8/0x3e0
-         __driver_probe_device+0x84/0x190
-         driver_probe_device+0x44/0x100
-         __device_attach_driver+0xc4/0x160
-         bus_for_each_drv+0x84/0xe0
-         __device_attach+0xa4/0x1c4
-         device_initial_probe+0x1c/0x30
-         bus_probe_device+0xa4/0xb0
-         deferred_probe_work_func+0xc0/0x114
-         process_one_work+0x1ec/0x470
-         worker_thread+0x74/0x410
-         kthread+0xfc/0x110
-         ret_from_fork+0x10/0x20
-        Code: d5384102 d503201f d2800001 aa0103e4 (c8e47c02)
-        ---[ end trace 0000000000000000 ]---
-
-All credit to Eric[0] on that, I'm just tying up loose ends.
-
-[0] https://gitlab.com/ahalaney/linux/-/commit/1819fbccd03de430d9fd4c58ded35f5be83e9aa8
-
-Thanks,
-Andrew
+> 
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 89c71fce225dd..537dd3beafc16 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -641,7 +641,7 @@ static void power_down(void)
+>   	int error;
+>   
+>   	if (hibernation_mode == HIBERNATION_SUSPEND) {
+> -		error = suspend_devices_and_enter(PM_SUSPEND_MEM);
+> +		error = suspend_devices_and_enter(mem_sleep_current);
+>   		if (error) {
+>   			hibernation_mode = hibernation_ops ?
+>   						HIBERNATION_PLATFORM :
 
