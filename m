@@ -2,60 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD4060D136
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 18:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E26F60D13A
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 18:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbiJYQBr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 12:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
+        id S232580AbiJYQCk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 12:02:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230345AbiJYQBq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 12:01:46 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F026118F929
-        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:01:45 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id w10so2663767qvr.3
-        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:01:45 -0700 (PDT)
+        with ESMTP id S231526AbiJYQCj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 12:02:39 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B6D190444
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:02:37 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id a18so8414681qko.0
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:02:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5k4oXNi7wIr/yTUcNWF+k2ZgcBaXW2+/B9fhcI3NaxY=;
-        b=fZoLICmcpxc7ya8YhyB8zyJ0hhZBpusQO1Te7bNyn7VgyIrTHa/zgg93BVM9FX79Qx
-         yuiAJMyDN/1iRmtJ4dk3XD9iPp+OwWxHJYE8nJAe7t18FT6V8H/uifX0CqyDBrEy9Ird
-         YHrUM04nT93ARAzXeNQYU+P6Iq87XYJiqVRKHkyk1edg0+gRCkQgSR5DgWKgjTG1fkpr
-         Lmy6eqied/95AT5xejacqjO2ZIbFkJqgnrOArj5LCAPnHXezoXRkwDDo9UGqPsJradYI
-         siHQfJ14o7g/0y2GnEk+1zSEC0pKPBZgxy7AB/Kagq0DGLpL24OaS3ehvdQnFtVw6tJj
-         zKxQ==
+        bh=7pGkJc93t4XHow6PfRqMAHBDJ4RPCkSR1Pf3xadIrCU=;
+        b=SIe8n72+y1kEIAoch9h1uTh83dmjyrtwUDXwR49pPtgKaa8fiocc+xDxIeuNNF1xGy
+         J4cAQ/I4jr8DUXLZyJ92bDYWfayqzdRNuJrZK6lJSpxDKrFfbXdz4FjPuW1RG9smqVG4
+         9q218uQkBOAvI/wYNnJcmTRdlTO0dLDTevZSACp7aznSNuiZRKIvveeYCIfzIQ7SZmXV
+         PwpOVXPzSnI7GCjVcg/IJ83YD/K7rrwvfPmqRK/qXDdE5/kpnTNbdzJTT5TcmqUckKam
+         BdEMfSsDFNH9Xhmyv6s5OCiaUoFDYSmBXF28UU5UMLadV5osVNB4nB/JsubNeBLbXSPh
+         L2Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5k4oXNi7wIr/yTUcNWF+k2ZgcBaXW2+/B9fhcI3NaxY=;
-        b=sg78jJVyQv6qv1t3hkV3tiqcbe1KZkQ857Q3t6LVkFD+rpMpwaEW1y8jQo19LQdR/C
-         LYCL7P4VXh+SvZbaBPJ6C1a7Iv2ztWRH+Hbh0XA8biOLR3I6RI/mo3qakoawtAEBszW5
-         hXVAS660NsWHG0RN5BuOWGj+qK34WMJV6aiVUO4vnF3HqlrddT0t5l4OUhzNSiJXwlIC
-         2qE3yEL0I+SYDKbXL9M2mtukUoP4psNRhW1hdywelmxct99uRA6aA704DhmVPB8XIA16
-         dpbMVQfqRZV1Hm2rA2nJ4KAHg6jH9I4xPU0ZO6RxVU8vjrf8E+3rCSnP+IPzmtivr8kX
-         9iQg==
-X-Gm-Message-State: ACrzQf0FH4iPnQTUsivxU6SyqwoFJpCGxla800UuriVhVQLCvtLMNyq3
-        b6IYCbuqKpykqt/Dqb7YsC+Qog==
-X-Google-Smtp-Source: AMsMyM6o6xBD+WYR2CO0j6dAkweiKItDjdgpLFpHCMkk6IrNKCkm8KiYfd7Yt33MY63MGZbyfL20aA==
-X-Received: by 2002:ad4:594b:0:b0:4bb:6e7d:6c63 with SMTP id eo11-20020ad4594b000000b004bb6e7d6c63mr9749603qvb.86.1666713704935;
-        Tue, 25 Oct 2022 09:01:44 -0700 (PDT)
+        bh=7pGkJc93t4XHow6PfRqMAHBDJ4RPCkSR1Pf3xadIrCU=;
+        b=rlMch52kPF1mjmYVZyC3ojAILuZAJBATnEDm9c+ASuo3qjhmF3EsPedvoEUaOPBThY
+         BE6eLOqz93mi2syko6/KCpfH6N4kchvISVXO8nKJXbJRD+LQ3JZyp2tPNTud8szLjtSE
+         KWWLV2BkxQ4ccHAdZ4MwOT/IWohOPIAMrlaaOsZjSxXhhECysztWTL30AF4no7eW8qxp
+         oVQnkYz/iBUH1eLeoo+P5zH9uH+02Knqn4hrQXOYcAI2TDVESskJScPhKxIiEolUuaHL
+         XwyDgUJo574nxTdw+onJ9HyKWN4COgbRPB2PWmNoh86VqfO/J0Ig0BsxZYeo3Mw4CWlW
+         aMrQ==
+X-Gm-Message-State: ACrzQf2fEE2OLl9kI87X27melI4cXQVPfMbvbgBMbHTY2qkcffYFmfUA
+        l+CJGGNKIVokJxDS1aMP1hJC2w==
+X-Google-Smtp-Source: AMsMyM6pX7Eil0FyKEI9e8Ft2/z18UKFTF36FYyYjt8eQKd6AWyFYhXNIbzd6/rZfO6ndBKWu9Wzjg==
+X-Received: by 2002:a05:620a:1212:b0:6ee:a8ec:c07f with SMTP id u18-20020a05620a121200b006eea8ecc07fmr28121292qkj.334.1666713756708;
+        Tue, 25 Oct 2022 09:02:36 -0700 (PDT)
 Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac85fcb000000b0039953dcc480sm1794373qta.88.2022.10.25.09.01.42
+        by smtp.gmail.com with ESMTPSA id h2-20020ac81382000000b0038b684a1642sm1809136qtj.32.2022.10.25.09.02.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 09:01:44 -0700 (PDT)
-Message-ID: <5c3126fb-8fdb-5163-95a8-136a4a7ee2ce@linaro.org>
-Date:   Tue, 25 Oct 2022 12:01:42 -0400
+        Tue, 25 Oct 2022 09:02:35 -0700 (PDT)
+Message-ID: <9b21fb34-4035-c43e-0e4e-896c2d7ba218@linaro.org>
+Date:   Tue, 25 Oct 2022 12:02:33 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
+Subject: Re: [PATCH v3 5/5] arm64: dts: apple: Add CPU topology & cpufreq
+ nodes for t8103
 Content-Language: en-US
 To:     Hector Martin <marcan@marcan.st>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -72,9 +72,9 @@ Cc:     Sven Peter <sven@svenpeter.dev>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20221024043925.25379-1-marcan@marcan.st>
- <20221024043925.25379-3-marcan@marcan.st>
+ <20221024043925.25379-6-marcan@marcan.st>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221024043925.25379-3-marcan@marcan.st>
+In-Reply-To: <20221024043925.25379-6-marcan@marcan.st>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,161 +88,38 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 24/10/2022 00:39, Hector Martin wrote:
-> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
-> The hardware has an independent controller per CPU cluster, and we
-> represent them as unique nodes in order to accurately describe the
-> hardware. The driver is responsible for binding them as a single cpufreq
-> device (in the Linux cpufreq model).
+> Add the missing CPU topology/capacity information and the cpufreq nodes,
+> so we can have CPU frequency scaling and the scheduler has the
+> information it needs to make the correct decisions.
 > 
-> Signed-off-by: Hector Martin <marcan@marcan.st>
-> ---
->  .../cpufreq/apple,cluster-cpufreq.yaml        | 119 ++++++++++++++++++
->  1 file changed, 119 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> new file mode 100644
-> index 000000000000..b11452f91468
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-> @@ -0,0 +1,119 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/cpufreq/apple,cluster-cpufreq.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Apple SoC cluster cpufreq device
 
-Few nits, in general looks fine to me.
+Thank you for your patch. There is something to discuss/improve.
 
 > +
-> +maintainers:
-> +  - Hector Martin <marcan@marcan.st>
-> +
-> +description: |
-> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
-> +  the cluster management register block. This binding uses the standard
-> +  operating-points-v2 table to define the CPU performance states, with the
-> +  opp-level property specifying the hardware p-state index for that level.
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - const: apple,t8103-cluster-cpufreq
-> +          - const: apple,cluster-cpufreq
-> +      - items:
-> +          - const: apple,t6000-cluster-cpufreq
-> +          - const: apple,t8103-cluster-cpufreq
-> +          - const: apple,cluster-cpufreq
-> +      - items:
-> +          - const: apple,t8112-cluster-cpufreq
-
-With the first one (t8103) - it's an enum.
-
-> +          - const: apple,cluster-cpufreq
-> +
-> +  reg:
-> +    maxItems: 1
-> +    description: The register region for this CPU cluster DVFS controller
-
-Drop description, quite obvious.
-
-> +
-> +  '#performance-domain-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#performance-domain-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    // This example shows a single CPU per domain and 2 domains,
-> +    // with two p-states per domain.
-> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
-> +    cpus {
-> +      #address-cells = <2>;
-> +      #size-cells = <0>;
-> +
-> +      cpu@0 {
-> +        compatible = "apple,icestorm";
-> +        device_type = "cpu";
-> +        reg = <0x0 0x0>;
-> +        operating-points-v2 = <&ecluster_opp>;
-> +        performance-domains = <&cpufreq_e>;
-> +      };
-> +
-> +      cpu@10100 {
-> +        compatible = "apple,firestorm";
-> +        device_type = "cpu";
-> +        reg = <0x0 0x10100>;
-> +        operating-points-v2 = <&pcluster_opp>;
-> +        performance-domains = <&cpufreq_p>;
-> +      };
-> +    };
-> +
-> +    ecluster_opp: opp-table-0 {
-> +      compatible = "operating-points-v2";
-> +      opp-shared;
-> +
-> +      opp01 {
-> +        opp-hz = /bits/ 64 <600000000>;
-> +        opp-level = <1>;
-> +        clock-latency-ns = <7500>;
-> +      };
-> +      opp02 {
-> +        opp-hz = /bits/ 64 <972000000>;
-> +        opp-level = <2>;
-> +        clock-latency-ns = <22000>;
-> +      };
-> +    };
-> +
-> +    pcluster_opp: opp-table-1 {
-> +      compatible = "operating-points-v2";
-> +      opp-shared;
-> +
-> +      opp01 {
-> +        opp-hz = /bits/ 64 <600000000>;
-> +        opp-level = <1>;
-> +        clock-latency-ns = <8000>;
-> +      };
-> +      opp02 {
-> +        opp-hz = /bits/ 64 <828000000>;
-> +        opp-level = <2>;
-> +        clock-latency-ns = <19000>;
-> +      };
-> +    };
-> +
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      cpufreq_e: cpufreq@210e20000 {
+>  	timer {
+>  		compatible = "arm,armv8-timer";
+>  		interrupt-parent = <&aic>;
+> @@ -124,6 +298,18 @@ soc {
+>  		ranges;
+>  		nonposted-mmio;
+>  
+> +		cpufreq_e: cpufreq@210e20000 {
 
 Node name: performance-controller
 
-(cpufreq is rather Linux naming)
-
-> +        compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-> +        reg = <0x2 0x10e20000 0 0x1000>;
-> +        #performance-domain-cells = <0>;
-> +      };
+> +			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
+> +			reg = <0x2 0x10e20000 0 0x1000>;
+> +			#performance-domain-cells = <0>;
+> +		};
 > +
-> +      cpufreq_p: cpufreq@211e20000 {
+> +		cpufreq_p: cpufreq@211e20000 {
 
-The same.
+Ditto
 
-> +        compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
-> +        reg = <0x2 0x11e20000 0 0x1000>;
-> +        #performance-domain-cells = <0>;
-> +      };
-> +    };
-
-Best regards,
+> +			compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
+> +			reg = <0x2 0x11e20000 0 0x1000>;
+> +			#performance-domain-cells = <0>;
+> +		};
+> +
 Krzysztof
 
