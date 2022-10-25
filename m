@@ -2,120 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6562C60D4E1
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 21:44:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0355060D5A2
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 22:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231374AbiJYToX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 15:44:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
+        id S232442AbiJYUjG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 16:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiJYToW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 15:44:22 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3270EB3B0F;
-        Tue, 25 Oct 2022 12:44:22 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id z6so464742qtv.5;
-        Tue, 25 Oct 2022 12:44:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YGKKI9J0n8rIfX9oZQEzGX9YCINu+GWwt1TnCnAQ1BI=;
-        b=RGO9b1RyvlxzdykVmp+1WwQtBh4Jp+Y7clVN7yDetbyd+VWu/eE6F/wxSIwM6neeDg
-         GCLrouykg1qrekal3Iy2RHE1DelVO2iiKlCAQqeP4+nL99Fw78UCcq1zn8kNNTTxM8+n
-         RYTAQvfDybDM8fLKEGn6doTDizQhz+nvncc1Wd83oYGWkGd7yONj8yKhO0oaxvBCOLKh
-         M8MM5yfyr6OlfLzrqjVQsdEDYceMLjquh8GMmxHZm5S8yK6YSduyfl0gpIUuSsc6evRL
-         S5KJVgzM7tWO7fxc4a33PGxsDKGeoVj8ImJcOT6d0xcYYlrBrrFicYXiy+p2C9ZIDPwX
-         L2IQ==
-X-Gm-Message-State: ACrzQf0Tu/ZAthnj8L5lHvlH55di+4+xVUuP+8umEsopIqUNqnvPGxEU
-        PxoAqYunhCtRRGut9/wztXGd2r5pNjy32q3HM1U=
-X-Google-Smtp-Source: AMsMyM5ytdS2lcDQqzDLgwIWQq2p+uoveyPZE8UkKxS+0igoe4Zqlk/GW6VpUD0GhIlenQaqje0ZaT1HLvLRYgfLmQo=
-X-Received: by 2002:ac8:7d02:0:b0:39c:bbef:178a with SMTP id
- g2-20020ac87d02000000b0039cbbef178amr33243867qtb.357.1666727061344; Tue, 25
- Oct 2022 12:44:21 -0700 (PDT)
+        with ESMTP id S231482AbiJYUjD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 16:39:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8412AC4B9;
+        Tue, 25 Oct 2022 13:39:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 532D6CE1C10;
+        Tue, 25 Oct 2022 20:39:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1190BC433C1;
+        Tue, 25 Oct 2022 20:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666730339;
+        bh=pNxIekC28wfpOc5Ypgdt8TBFN8v88QrFVDS9wqoB4fk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RqSfv94sp39rY9R6dfnKNtA2yzyyL+taF+AKAbt1StMoVeHrtOmoZ8ZmMBXJ3krGy
+         M280K4bsUBIoOIHOGnsOcYDpHG4zzHCwDB2UlH1lj9XqKQQ/c59IeIWCxRi/So+So1
+         9YdUIZBVduYEZ2X9LjSbAmi+lV5q17+kcrwyC8SYNJdPS5iw4NwroUyds1T3C6z0Cj
+         8dGKvrKF3RoP70esMxj9xNR3mEfVfRJFsKoSZ2eei4mESQfW7/WTW8UllreUfuXm2l
+         n3F06FCCOIHuqCd4/nW8IrlGIyY/pdfabLlj4WNAyoXrpyK0r8S/p+trjChtqiu1fm
+         Dar8mob5nL9SA==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     David Airlie <airlied@redhat.com>
+Cc:     =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v2 0/8] agp: Convert to generic power management
+Date:   Tue, 25 Oct 2022 15:38:44 -0500
+Message-Id: <20221025203852.681822-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221025193502.669091-1-helgaas@kernel.org>
-In-Reply-To: <20221025193502.669091-1-helgaas@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Oct 2022 21:44:10 +0200
-Message-ID: <CAJZ5v0g-EoVgpC3qot4iBqXp98-Ejt7ib28qxtDJfCjr13EVBg@mail.gmail.com>
-Subject: Re: [PATCH] PCI/PM: Remove unused 'state' parameter to pci_legacy_suspend_late()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     linux-pci@vger.kernel.org,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 9:35 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> 1a1daf097e21 ("PCI/PM: Remove unused pci_driver.suspend_late() hook")
-> removed the legacy .suspend_late() hook, which was the only user of the
-> "state" parameter to pci_legacy_suspend_late(), but it neglected to remove
-> the parameter.
->
-> Remove the unused "state" parameter to pci_legacy_suspend_late().
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+From: Bjorn Helgaas <bhelgaas@google.com>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Vaibhav converted several AGP drivers from legacy PCI power management to
+generic power management [1].  This series converts the rest of them.
 
-> ---
->  drivers/pci/pci-driver.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
-> index 107d77f3c846..a2ceeacc33eb 100644
-> --- a/drivers/pci/pci-driver.c
-> +++ b/drivers/pci/pci-driver.c
-> @@ -646,7 +646,7 @@ static int pci_legacy_suspend(struct device *dev, pm_message_t state)
->         return 0;
->  }
->
-> -static int pci_legacy_suspend_late(struct device *dev, pm_message_t state)
-> +static int pci_legacy_suspend_late(struct device *dev)
->  {
->         struct pci_dev *pci_dev = to_pci_dev(dev);
->
-> @@ -848,7 +848,7 @@ static int pci_pm_suspend_noirq(struct device *dev)
->                 return 0;
->
->         if (pci_has_legacy_pm_support(pci_dev))
-> -               return pci_legacy_suspend_late(dev, PMSG_SUSPEND);
-> +               return pci_legacy_suspend_late(dev);
->
->         if (!pm) {
->                 pci_save_state(pci_dev);
-> @@ -1060,7 +1060,7 @@ static int pci_pm_freeze_noirq(struct device *dev)
->         const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
->
->         if (pci_has_legacy_pm_support(pci_dev))
-> -               return pci_legacy_suspend_late(dev, PMSG_FREEZE);
-> +               return pci_legacy_suspend_late(dev);
->
->         if (pm && pm->freeze_noirq) {
->                 int error;
-> @@ -1179,7 +1179,7 @@ static int pci_pm_poweroff_noirq(struct device *dev)
->                 return 0;
->
->         if (pci_has_legacy_pm_support(pci_dev))
-> -               return pci_legacy_suspend_late(dev, PMSG_HIBERNATE);
-> +               return pci_legacy_suspend_late(dev);
->
->         if (!pm) {
->                 pci_fixup_device(pci_fixup_suspend_late, pci_dev);
-> --
-> 2.25.1
->
+v1 posted at [2].
+
+Changes from v1 to v2:
+  - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
+    DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
+
+[1] https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/#t
+[2] https://lore.kernel.org/all/20220607034340.307318-1-helgaas@kernel.org/
+
+Bjorn Helgaas (8):
+  agp/efficeon: Convert to generic power management
+  agp/intel: Convert to generic power management
+  agp/amd-k7: Convert to generic power management
+  agp/ati: Convert to generic power management
+  agp/nvidia: Convert to generic power management
+  agp/amd64: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+  agp/sis: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+  agp/via: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+
+ drivers/char/agp/amd-k7-agp.c   | 24 ++++--------------------
+ drivers/char/agp/amd64-agp.c    |  6 ++----
+ drivers/char/agp/ati-agp.c      | 22 ++++------------------
+ drivers/char/agp/efficeon-agp.c | 16 ++++------------
+ drivers/char/agp/intel-agp.c    | 11 +++++------
+ drivers/char/agp/nvidia-agp.c   | 24 ++++--------------------
+ drivers/char/agp/sis-agp.c      |  7 ++-----
+ drivers/char/agp/via-agp.c      |  6 ++----
+ 8 files changed, 27 insertions(+), 89 deletions(-)
+
+-- 
+2.25.1
+
