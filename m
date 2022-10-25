@@ -2,227 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC2D660C9BE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 12:17:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A6360C9D0
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 12:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbiJYKRH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 06:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S232422AbiJYKTe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 06:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232372AbiJYKQg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 06:16:36 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608E3F53D0;
-        Tue, 25 Oct 2022 03:10:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Yw5E+XBluBDQSa1n2V8cOHjjvk52MdEVVtSc+YrEkFOBXnTF9rT6vlIQC5yeJJcTupz5sWLS9GI89KA2+YIoSKnr98l+5fJlA8XDJf4YG6UN9iP4ZmGR8JZbYwdklCaCswNn/4J9458q/AMz2JNphOxhylM7J7N5MOZQdlEIPdE4BWJTkW7+15wUzZm15l1PC1RQCotIBQyrGD6cet1AcTX6BUZSXeHCIDJ/x4s++YJQqgmHdTMM+M6axQOaaa++B0MadJ588ISl6vrsBm4eu/uk6Zb9hbnk9VW0mE1OQnKTRF7l1nAVd/Qa90nLJAZRSbiFVSYed0X6FSNr9/S+Jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NB7qMc1OXxTQzcguIRDh30RFkjcS4JMSvK1b7CtYARU=;
- b=d4KVu2SFlcCHucDqrawtGOcJKuFj5oRczWJ6pXcHMhQrHerP5JXug2dsfgUEv4ZoUTY3FENCeU9nq5ODmzzj7b6EoE3ZnXW0QpDRDZbiK6TYQjjWy2upghnYoQGAWUybxZz3v/MNiWDAFjwbm2+prYmLBoeFDnusVQEtG8OqaUCnWwjO1xDHRoaaoV59Ya92QB0JJ4jkaGF6HKdKp2QoGcd7ZDIu0pY7cVOCKq+CNz750SEhDiAZoOYhbNvxw2TdOUb4G1GDw4aYs1e4SWa5IN/WV76WUJFBE8uyY2JLZLoywPfJDZp1u4vvv+RcLI6cMXlM8qJyG8018gOsu4TGIQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NB7qMc1OXxTQzcguIRDh30RFkjcS4JMSvK1b7CtYARU=;
- b=C5NyI2tQdsqj/YeItS8sDflUeSjaHDCPo1ci7oOylnbbrz9r+Iono3vsEP3T9cabdr1g/slFgD7gJHWvuwaqdGYWrNGDwee5yH246KOvM9g3rA22vOCT0idwRlIuO+vsy70GSPp84c5Cmy0vW+da7of8VVS1/NwbsxmpUD4NxgE=
-Received: from BN0PR04CA0165.namprd04.prod.outlook.com (2603:10b6:408:eb::20)
- by BL1PR12MB5729.namprd12.prod.outlook.com (2603:10b6:208:384::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5723.33; Tue, 25 Oct
- 2022 10:10:29 +0000
-Received: from BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:eb:cafe::3b) by BN0PR04CA0165.outlook.office365.com
- (2603:10b6:408:eb::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.27 via Frontend
- Transport; Tue, 25 Oct 2022 10:10:29 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT075.mail.protection.outlook.com (10.13.176.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5746.16 via Frontend Transport; Tue, 25 Oct 2022 10:10:29 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 25 Oct
- 2022 05:09:58 -0500
-From:   Meng Li <li.meng@amd.com>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>
-CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        "Alex Deucher" <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        "Perry Yuan" <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
-        Meng Li <li.meng@amd.com>
-Subject: [PATCH V1 2/2] Documentation: amd-pstate: Add speedometer test introduction
-Date:   Tue, 25 Oct 2022 18:09:10 +0800
-Message-ID: <20221025100910.1682567-3-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221025100910.1682567-1-li.meng@amd.com>
-References: <20221025100910.1682567-1-li.meng@amd.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        with ESMTP id S232616AbiJYKTQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 06:19:16 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347C0144099;
+        Tue, 25 Oct 2022 03:14:44 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id DD3355C0219;
+        Tue, 25 Oct 2022 06:14:41 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 25 Oct 2022 06:14:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1666692881; x=1666779281; bh=mbtl4BXNRq
+        9JJk803nUONhImAHZ6xfcC6jtFjkVSL7M=; b=TGfzSgdccEs/oOLx2bESIEPDG0
+        ptZDZynyxZm4KeHaXMmr3Mg413MHvhlg4BMhad3jleNuWm5QJ5+YUWIhNm9yrYfN
+        9tiytTDOOtRaO/7Uj/qLJo/bzvY5kQo66DZ5xOm6VhV2KZTRExlFX9OvwzJts3Rn
+        Khd33FOrNyzfnCI/VumruxwH1e+yyrgZ4+0hU1HX8shzpWla3wyogVtMs/o77ngk
+        S6eoj1N7d0rrWL1sh8ZbSHoRS5zfdViJByOEKZIPWBirb2y32ExlDJ13B5RnNa1j
+        0u1tGmVstfpFERrznLuxbHfFT0LUy5OcMbpy5ZtlUAmzZiM0m17K4apeS15g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1666692881; x=1666779281; bh=mbtl4BXNRq9JJk803nUONhImAHZ6
+        xfcC6jtFjkVSL7M=; b=AQF1oGrCmtkaZ1hRNlsKmaUvDA0DdicPWLqVKT6EqLmW
+        sSVJa+/B5Sz5XRxCCz95mg6ZEmlrmxqVpeGodcDXkMrG2VYqo9BBMuigSajdkC7m
+        FTaHWu+ev55OKL+8PstOUneCLItsPBDOnhIZBrUxiGaR5025PB1UKIRQ+KaLahNI
+        EtJdAMX13h86bmNTAKys28gsJojCGrrJ7O3aPPYbRKaB3K3olFjy/V8PEWJDvUCs
+        I9rS37KOFdOH/9tj3kcKnUh86J7rI+4w6jkD6jkjQWAu5zSN3S1uU3pgc+08V0LW
+        w3zCV8+0zRVOoXVPDjV1fp1dinvtIePxf6rK8qc96A==
+X-ME-Sender: <xms:EbdXY734aMHygivFFYRD9b4w55uMZ0Jzhnse3kT0_rsXzuwqaf-gIw>
+    <xme:EbdXY6HSXSU_s5f6rRregsUVbWsVx7IM-Y6SKn14_60UzKi8oy3SEFjqnLY6D5IPc
+    zPAB4gAcGWwnHbLBhI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrgedtiedgvdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:EbdXY76s-_VrbBSoHpLWdlwHgBMsQavAQpnlSBFze4s4VTvR-XH7tA>
+    <xmx:EbdXYw2tZiGmet-9VD-QmrQmDJvJ0hs_vy4YjwgUw6rWrjJ6deaPaw>
+    <xmx:EbdXY-EgcYJlrHPsvoNNUfGJY11X9SVjPHOg9V0PMhy5ogS4i8Uodg>
+    <xmx:EbdXYz4Hqi6tL-p_NZqEoqUF3nEXsxVs_y-BVNUc3HNnXqSnL4pg4A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 27918B60086; Tue, 25 Oct 2022 06:14:41 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1047-g9e4af4ada4-fm-20221005.001-g9e4af4ad
+Mime-Version: 1.0
+Message-Id: <e21edff1-1f01-40d1-96a4-5b77a16dccb4@app.fastmail.com>
+In-Reply-To: <Y1eeEQr/E59uIE3j@shell.armlinux.org.uk>
+References: <20221021155000.4108406-1-arnd@kernel.org>
+ <20221021155000.4108406-5-arnd@kernel.org>
+ <Y1eeEQr/E59uIE3j@shell.armlinux.org.uk>
+Date:   Tue, 25 Oct 2022 12:14:19 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Russell King" <linux@armlinux.org.uk>,
+        "Arnd Bergmann" <arnd@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Lubomir Rintel" <lkundrak@v3.sk>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 04/11] ARM: sa1100: make cpufreq driver build standalone
 Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT075:EE_|BL1PR12MB5729:EE_
-X-MS-Office365-Filtering-Correlation-Id: 66ad10b3-62bb-4ced-5cac-08dab6712500
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xtDlXMNNCAhBOs/2hQ3IPw9TvnoBdYHHbtQRpamz/zvcJsnhbQlnFrHyFmcjZtYS+exSy3n9quoB+DdMHHWmsMH/Egeta/nD6HZfuKV1QziGQehPmr8mW12nOHhPbNICyuZR/Ldchvme2V29bGTkGgiS9lgc4fGQwyqYKUdmRPaeOPhaIbl6pAiM4l7RshmHx6oGaUfCrNkfpmhUDcEBdBL4MXLEDfOQasEhm6DFO1urf9hXy/2hPKohyTEw83yq/3VTmMdJSfs5l5aXofo5m1bO6K6dyz88LASsNRBokw4wYMnFMQrtAbHhVPrGKp/Vp+LtivMpAWSGMpez78yntC14D3p9FNvk8miTjYVngi6SI1IY0P28MbKrAj331m+161H1eT4pBnvMIm/fWd5Z6k6UJne+5cw0viDv/inTtj2L1w6x5kXR8dOY/NQIDhhgMz0ACiVGUDFJFB0uXWggAoIuobtWAvRmZJlq0wIBkcsKMnPqjrJpUQxaDWSRus4QcmmHbtkhFjvQedjYF8FDIiSl20dvF+eHcEn7NhU+//p3Nzs9qVGjUxxLyxyvN2HRj7MIlWJxXq6GVnX3CQLQLIbEU0FsySWDttpruqN3Wsb+jWAUOhh1Qjk94qZvhvKszHtf/n5PiGwfPzXW/HTxrREO3RWjEg1whltuCxdzUGgfkl11mcSyIAJdeLsgBMqfeLwQ0cORilXzIp8WPrY6+nlfkgVQbp+k5HIURtUwvIs70MPb27g1Axj0TZbubsx8O5yEqqFE1/rkG7zhiGbv6aJGolJpzCg+tXSTM4SXUSs=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199015)(46966006)(40470700004)(36840700001)(2616005)(81166007)(54906003)(110136005)(356005)(82310400005)(478600001)(40460700003)(36756003)(16526019)(186003)(316002)(36860700001)(6666004)(1076003)(82740400003)(86362001)(41300700001)(26005)(2906002)(426003)(336012)(47076005)(8936002)(83380400001)(7696005)(66574015)(70586007)(5660300002)(4326008)(40480700001)(8676002)(70206006)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Oct 2022 10:10:29.4218
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 66ad10b3-62bb-4ced-5cac-08dab6712500
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5729
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce speedometer test cases design and implementation.
-Monitor cpus changes about performance and power consumption etc.
+On Tue, Oct 25, 2022, at 10:28, Russell King (Oracle) wrote:
+> On Fri, Oct 21, 2022 at 05:49:34PM +0200, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> Commit 59a2e613d07f ("cpufreq: sa11x0: move cpufreq driver
+>> to drivers/cpufreq") added an unnecessary reference to
+>> mach/generic.h. Just remove it again after moving the code
+>> into the corresponding driver.
+>
+> So how does arch/arm/mach-sa1100/clock.c get the MPLL rate with this
+> change?
 
-Signed-off-by: Meng Li <li.meng@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 75 ++++++++++++++++++++-
- 1 file changed, 74 insertions(+), 1 deletion(-)
+You are right, that's broken. It works for the defconfigs that
+enable the cpufreq driver, but it seems I need to improve my
+randconfig build testing to make sure I find problems like this
+sooner.
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 4f0d5169ff86..769982f66eca 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -451,6 +451,23 @@ Unit Tests for amd-pstate
-         The specified governor is ondemand or schedutil.
-         Gitsource can also be tested on the ``acpi-cpufreq`` kernel driver for comparison.
- 
-+    4). Speedometer test
-+
-+        Test and monitor the cpu changes when running speedometer benchmark under the specified governor.
-+        These changes include desire performance, frequency, load, time, energy etc.
-+        The specified governor is ondemand or schedutil.
-+        Speedometer can also be tested on the ``acpi-cpufreq`` kernel driver for comparison.
-+
-+#. Preparations before tests
-+
-+    1). Speedometer
-+
-+     + Python version 3.0.x or higher
-+     + Install chromium-browser
-+     + Install chromium-chromedriver
-+     + Install selenium on the client
-+     + Install selenium-server on the server
-+
- #. How to execute the tests
- 
-    We use test module in the kselftest frameworks to implement it.
-@@ -487,6 +504,8 @@ Unit Tests for amd-pstate
-         $ sudo ./run.sh -t tbench -m acpi-cpufreq
-         $ sudo ./run.sh -t gitsource
-         $ sudo ./run.sh -t gitsource -m acpi-cpufreq
-+        $ sudo ./run.sh -t speedometer
-+        $ sudo ./run.sh -t speedometer -m acpi-cpufreq
-         $ ./run.sh --help
-         ./run.sh: illegal option -- -
-         Usage: ./run.sh [OPTION...]
-@@ -495,7 +514,8 @@ Unit Tests for amd-pstate
-                 [-c <all: All testing,
-                      basic: Basic testing,
-                      tbench: Tbench testing,
--                     gitsource: Gitsource testing.>]
-+                     gitsource: Gitsource testing,
-+                     speedometer: Speedometer testing.>]
-                 [-t <tbench time limit>]
-                 [-p <tbench process number>]
-                 [-l <loop times for tbench>]
-@@ -621,6 +641,59 @@ Unit Tests for amd-pstate
-          + acpi-cpufreq-schedutil VS amd-pstate-schedutil  | Comprison(%) |          |          |          | 2.1115      | 4.2873  | -4.1110              |
-          +-------------------------------------------------+--------------+----------+----------+----------+-------------+---------+----------------------+
- 
-+        + speedometer
-+
-+         When you finish test, you will get selftest.speedometer.csv and png images.
-+         The selftest.speedometer.csv file contains the raw data and the drop of the comparative test.
-+         The png images shows the goal, time, energy and performan per watt of each test.
-+         Open selftest.speedometer.csv :
-+
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + Governor                                        | Round        | Des-perf | Freq     | Load     | Goal        | Time        | Energy  | Performance Per Watt |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + Unit                                            |              |          | GHz      |          | Runs/Minute | s           | J       | Runs/w               |
-+         +=================================================+==============+==========+==========+==========+=============+=============+=========+======================+
-+         + acpi-cpufreq-ondemand                           | 1            |          |          |          | 209         | 51          | 731.84  | 0.2427               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand                           | 2            |          |          |          | 205         | 51          | 759.03  | 0.2295               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand                           | 3            |          |          |          | 206         | 51          | 755.15  | 0.2318               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand                           | Average      |          |          |          | 206.667     | 51          | 748.673 | 0.2346               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | 1            |          |          |          | 206         | 56          | 775.08  | 0.248                |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | 2            |          |          |          | 204         | 51          | 762.06  | 0.2275               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | 3            |          |          |          | 207         | 56          | 776.35  | 0.2488               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil                          | Average      |          |          |          | 205.667     | 54.3333     | 771.163 | 0.2415               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | 1            | 24.7974  | 1.73142  | 7.71728  | 195         | 64          | 756.6   | 0.2749               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | 2            | 26.1653  | 1.91492  | 8.5525   | 195         | 51          | 705.67  | 0.2348               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | 3            | 24.1789  | 1.69516  | 7.41152  | 196         | 65          | 758.98  | 0.2797               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand                             | Average      | 25.0472  | 1.7805   | 7.89377  | 195.333     | 60          | 740.417 | 0.2638               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | 1            | 67.0214  | 2.76691  | 17.1314  | 197         | 51          | 737.52  | 0.227                |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | 2            | 64.3032  | 2.75981  | 16.1196  | 198         | 55          | 763.57  | 0.2376               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | 3            | 65.5175  | 2.59423  | 17.0067  | 201         | 51          | 735.96  | 0.2321               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-schedutil                            | Average      | 65.614   | 2.70698  | 16.7526  | 198.667     | 52.3333     | 745.683 | 0.2323               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand VS acpi-cpufreq-schedutil | Comprison(%) |          |          |          | -0.4838     | 6.5358      | 3.0039  | 2.9411               |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + amd-pstate-ondemand VS amd-pstate-schedutil     | Comprison(%) | 161.9614 | 52.0348  | 112.2255 | 1.7068      | -12.7778    | 0.7112  | -11.9408             |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-ondemand VS amd-pstate-ondemand    | Comprison(%) |          |          |          | -5.4841     | 17.647      | -1.1027 | 12.4467              |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+         + acpi-cpufreq-schedutil VS amd-pstate-schedutil  | Comprison(%) |          |          |          | -3.4035     | -3.6809     | -3.3041 | -3.8095              |
-+         +-------------------------------------------------+--------------+----------+----------+----------+-------------+-------------+---------+----------------------+
-+
- Reference
- ===========
- 
--- 
-2.34.1
+I don't think anything depends on this patch, so I've dropped
+it from my series now.
 
+Thanks,
+
+    Arnd
