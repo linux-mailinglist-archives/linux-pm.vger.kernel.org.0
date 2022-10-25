@@ -2,89 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64D4E60CBE9
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 14:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C61C960CCC8
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 14:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbiJYMel (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 08:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52174 "EHLO
+        id S231696AbiJYM7z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 08:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiJYMek (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 08:34:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4F99923D4;
-        Tue, 25 Oct 2022 05:34:37 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F15A0D6E;
-        Tue, 25 Oct 2022 05:34:43 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7F8683F7B4;
-        Tue, 25 Oct 2022 05:34:36 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH] PM: domains: Fix handling of unavailable/disabled idle states
-Date:   Tue, 25 Oct 2022 13:34:32 +0100
-Message-Id: <20221025123432.1227269-1-sudeep.holla@arm.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S232869AbiJYM7b (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 08:59:31 -0400
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94AE3ECE9;
+        Tue, 25 Oct 2022 05:55:23 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id z17so5272328qkj.8;
+        Tue, 25 Oct 2022 05:55:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yIHQeRu6+k+uEjVxAuibPyEPD1wGoj/FafhrdNtjTmA=;
+        b=g2UYhyizFNx4N+YG77NmhcBgXiYCAeOucEMc9cO98d6xMuVvoRxJtDOMjMOSaaAWK+
+         AN/7QRSGMWv+Y8dqswlOfa9mhOM8qCFXJyw6GtGl7A9ZfdYxsl6uCp2rRtJbLgcl42mo
+         UyAp2N1tOH6qNXpycgfpE4bMvxPASpIrW8eXSHTPvJCj3O/HIaYqk9BnCYut5aSWoxL7
+         9jos/pAhgdRHhZwxbkh8Luku7SI6REgAiGPDZKiPsHzRutRki1AQE+kfGwH/PY9Qr4Hc
+         Uf7/1cmxll1juncLEz1UqHu6N6+RShveNmb6X2V824KTR1szHmNT+/pYVzUVNHreLILO
+         dbTA==
+X-Gm-Message-State: ACrzQf3vIS9kPmVtZiRIuQRg+x4wpujW7csZaZG61RwMeF3OAETpE0NT
+        YnmhhURi7RbZYHHFNrHb67vVhKdHfmUm+MVNsPWbvdyt
+X-Google-Smtp-Source: AMsMyM4iYSyBRCGcK7eDHaL2ViaugaEPr0CLBkHXpCP+PPhafrPxnLbbBXqcFORjaIneVsGhlXBdbx8tkBjuEIy+Heg=
+X-Received: by 2002:a05:620a:4626:b0:6ee:b43:d2bc with SMTP id
+ br38-20020a05620a462600b006ee0b43d2bcmr25553040qkb.764.1666702522945; Tue, 25
+ Oct 2022 05:55:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221013035017.5098-1-mario.limonciello@amd.com> <63718e7b-bc37-af47-011d-9fd0207a6d2c@amd.com>
+In-Reply-To: <63718e7b-bc37-af47-011d-9fd0207a6d2c@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Oct 2022 14:55:11 +0200
+Message-ID: <CAJZ5v0i-vQSAMrKCbh+e0OGW8-ctzaxSzhx9uWAO5vtrYg6L1w@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Allow hybrid sleep to work with s2idle
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        kolAflash <kolAflash@kolahilft.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Platforms can provide the information about the availability of each
-idle states via status flag. Platforms may have to disable one or more
-idle states for various reasons like broken firmware or other unmet
-dependencies.
+On Tue, Oct 25, 2022 at 2:12 AM Limonciello, Mario
+<mario.limonciello@amd.com> wrote:
+>
+> On 10/12/2022 22:50, Mario Limonciello wrote:
+> > Hybrid sleep is currently hardcoded to only operate with S3 even
+> > on systems that might not support it.
+> >
+> > Instead of assuming this mode is what the user wants to use, for
+> > hybrid sleep follow the setting of `mem_sleep_current` which
+> > will respect mem_sleep_default kernel command line and policy
+> > decisions made by the presence of the FADT low power idle bit.
+> >
+> > Reported-and-tested-by: kolAflash <kolAflash@kolahilft.de>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=216574
+> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> > ---
+> >   kernel/power/hibernate.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> Hi Rafael,
+>
+> This got sent near the merge window a few weeks ago.  It's a trivial fix
+> so I just want to make sure it didn't get misplaced.
 
-Fix handling of such unavailable/disabled idle states by ignoring them
-while parsing the states.
+It wasn't lost.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Fixes: a3381e3a65cb ("PM / domains: Fix up domain-idle-states OF parsing")
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
----
- drivers/base/power/domain.c | 4 ++++
- 1 file changed, 4 insertions(+)
+I've just applied it for -rc3 (and added a Fixes: tag that was missing to it).
 
-Hi Ulf,
+Thanks!
 
-As you already know, this change alone doesn't fix the issue reported here[1].
-It also needs the fixes you have posted [2].
-
-Regards,
-Sudeep
-
-[1] https://lore.kernel.org/all/20221018145348.4051809-1-amit.pundir@linaro.org
-[2] https://lore.kernel.org/all/20221021151013.148457-1-ulf.hansson@linaro.org
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index ead135c7044c..6471b559230e 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -2952,6 +2952,10 @@ static int genpd_iterate_idle_states(struct device_node *dn,
- 		np = it.node;
- 		if (!of_match_node(idle_state_match, np))
- 			continue;
-+
-+		if (!of_device_is_available(np))
-+			continue;
-+
- 		if (states) {
- 			ret = genpd_parse_state(&states[i], np);
- 			if (ret) {
---
-2.38.1
-
+> >
+> > diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> > index 89c71fce225dd..537dd3beafc16 100644
+> > --- a/kernel/power/hibernate.c
+> > +++ b/kernel/power/hibernate.c
+> > @@ -641,7 +641,7 @@ static void power_down(void)
+> >       int error;
+> >
+> >       if (hibernation_mode == HIBERNATION_SUSPEND) {
+> > -             error = suspend_devices_and_enter(PM_SUSPEND_MEM);
+> > +             error = suspend_devices_and_enter(mem_sleep_current);
+> >               if (error) {
+> >                       hibernation_mode = hibernation_ops ?
+> >                                               HIBERNATION_PLATFORM :
+>
