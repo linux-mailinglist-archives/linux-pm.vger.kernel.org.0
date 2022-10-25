@@ -2,112 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03D8160CA4C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 12:49:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2AD360CB12
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 13:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbiJYKtn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 06:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43380 "EHLO
+        id S230008AbiJYLls (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 07:41:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229800AbiJYKtm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 06:49:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCDBB6A;
-        Tue, 25 Oct 2022 03:49:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=mzKf4zO+aOND3THi9Mu4VLFu+cDOF5LRRU7uDWVved8=; b=drAwqS4LP96zpDpHwpq6MvvMJS
-        oOTRW1UAGrBCGBEMp6DVBnhjWagPeCZZheSoI2DkIlACY/RTvB5Zir3QnK0z1kY90/WamBX8qPZY9
-        YG/GkldNcOnAZwsGfT7LLcA0dJ8TTauzyiYGFiZuAgfysMVz1BaBVhX4n6mK3xQ9T5XyzSkRi33Wf
-        BpEvK/RbO6MVc993r74jWuRyXSzg7FNx85l+uO3M7J6yvC/+ionBv/MtYZmY0nDfiXy+tX7sIALe9
-        3eRtjO4N//w2SWmnv2imoBiJzCsJflmaA3DTd6iVXu4UO+yR9BE1nS489Kb9lva2nxJ63cpjphGfF
-        FBnihckg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1onHUl-00GC5g-Nh; Tue, 25 Oct 2022 10:49:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3E39A30008D;
-        Tue, 25 Oct 2022 12:49:13 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1EB092C431FB4; Tue, 25 Oct 2022 12:49:13 +0200 (CEST)
-Date:   Tue, 25 Oct 2022 12:49:13 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
-References: <20220822111816.760285417@infradead.org>
- <20220822114649.055452969@infradead.org>
- <Y1LVYaPCCP3BBS4g@intel.com>
- <Y1drd2gzxUJWdz5F@intel.com>
+        with ESMTP id S229730AbiJYLlr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 07:41:47 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4F37B16E2AB
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 04:41:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E606ED6E;
+        Tue, 25 Oct 2022 04:41:51 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F57B3F7B4;
+        Tue, 25 Oct 2022 04:41:44 -0700 (PDT)
+Date:   Tue, 25 Oct 2022 12:41:41 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, soc@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [RESEND PATCH v2] firmware/psci: Print a warning if PSCI doesn't
+ accept PC mode
+Message-ID: <20221025114141.2my5drpjhincjons@bogus>
+References: <20220926110249.666813-1-dmitry.baryshkov@linaro.org>
+ <Y1AGLPXWFOmjfdd0@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y1drd2gzxUJWdz5F@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1AGLPXWFOmjfdd0@hovoldconsulting.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 07:52:07AM +0300, Ville Syrjälä wrote:
-> On Fri, Oct 21, 2022 at 08:22:41PM +0300, Ville Syrjälä wrote:
-> > On Mon, Aug 22, 2022 at 01:18:22PM +0200, Peter Zijlstra wrote:
-> > > +#ifdef CONFIG_LOCKDEP
-> > > +	/*
-> > > +	 * It's dangerous to freeze with locks held; there be dragons there.
-> > > +	 */
-> > > +	if (!(state & __TASK_FREEZABLE_UNSAFE))
-> > > +		WARN_ON_ONCE(debug_locks && p->lockdep_depth);
-> > > +#endif
-> > 
-> > We now seem to be hitting this sporadically in the intel gfx CI.
-> > 
-> > I've spotted it on two machines so far:
-> > https://intel-gfx-ci.01.org/tree/drm-tip/CI_DRM_12270/shard-tglb7/igt@gem_ctx_isolation@preservation-s3@vcs0.html
-> > https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_109950v1/shard-snb5/igt@kms_flip@flip-vs-suspend-interruptible@a-vga1.html
-> 
-> Sadly no luck in reproducing this locally so far. In the meantime
-> I added the following patch into our topic/core-for-CI branch in
-> the hopes of CI stumbling on it again and dumping a bit more data:
-> 
-> --- a/kernel/freezer.c
-> +++ b/kernel/freezer.c
-> @@ -125,8 +125,16 @@ static int __set_task_frozen(struct task_struct *p, void *arg)
->  	/*
->  	 * It's dangerous to freeze with locks held; there be dragons there.
->  	 */
-> -	if (!(state & __TASK_FREEZABLE_UNSAFE))
-> -		WARN_ON_ONCE(debug_locks && p->lockdep_depth);
-> +	if (!(state & __TASK_FREEZABLE_UNSAFE)) {
-> +		static bool warned = false;
-> +
-> +		if (!warned && debug_locks && p->lockdep_depth) {
-> +			debug_show_held_locks(p);
-> +			WARN(1, "%s/%d holding locks while freezing\n",
-> +			     p->comm, task_pid_nr(p));
-> +			warned = true;
-> +		}
-> +	}
->  #endif
->  
->  	WRITE_ONCE(p->__state, TASK_FROZEN);
+On Wed, Oct 19, 2022 at 04:14:04PM +0200, Johan Hovold wrote:
+> On Mon, Sep 26, 2022 at 02:02:49PM +0300, Dmitry Baryshkov wrote:
+> > The function psci_pd_try_set_osi_mode() will print an error if enabling
+> > OSI mode fails. To ease debugging PSCI issues print corresponding
+> > message if switching to PC mode fails too.
+> >
+> > Acked-by: Mark Rutland <mark.rutland@arm.com>
+> > Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> > Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> > This is a replacement for [1], now moving the warning from
+> > psci_set_osi_mode() callers to the function iself.
+> >
+> > The patch is resent to include soc@kernel.org
+> >
+> > [1] https://lore.kernel.org/all/20220727182034.983727-1-dmitry.baryshkov@linaro.org/
+> >
+> > ---
+> >  drivers/cpuidle/cpuidle-psci-domain.c | 4 +---
+> >  drivers/firmware/psci/psci.c          | 2 ++
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> > index 3db4fca1172b..821984947ed9 100644
+> > --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> > @@ -124,10 +124,8 @@ static bool psci_pd_try_set_osi_mode(void)
+> >  		return false;
+> >
+> >  	ret = psci_set_osi_mode(true);
+> > -	if (ret) {
+> > -		pr_warn("failed to enable OSI mode: %d\n", ret);
+> > +	if (ret)
+> >  		return false;
+> > -	}
+> >
+> >  	return true;
+> >  }
+> > diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> > index 9fdcb6bff403..42cae0ba10e2 100644
+> > --- a/drivers/firmware/psci/psci.c
+> > +++ b/drivers/firmware/psci/psci.c
+> > @@ -164,6 +164,8 @@ int psci_set_osi_mode(bool enable)
+> >  			PSCI_1_0_SUSPEND_MODE_PC;
+> >
+> >  	err = invoke_psci_fn(PSCI_1_0_FN_SET_SUSPEND_MODE, suspend_mode, 0, 0);
+> > +	if (err < 0)
+> > +		pr_warn("failed to set %s mode: %d\n", enable ? "OSI" : "PC", err);
+> >  	return psci_to_linux_errno(err);
+> >  }
+>
+> When booting 6.1-rc1 I now see:
+>
+> 	[    0.000000] psci: OSI mode supported.
+> 	[    0.000000] psci: failed to set PC mode: -3
+>
+> on every boot with sc8280xp, while later enabling OSI mode still works:
+>
+> 	[    0.227358] CPUidle PSCI: psci_pd_try_set_osi_mode - success
+> 	[    0.227599] CPUidle PSCI: Initialized CPU PM domain topology
+>
+> Judging from Sudeep's comment on v1:
+>
+> 	The platform must boot in PC mode, so even if it fails we ignore
+> 	so not sure if the logging is of much help here IMO.
+>
+> perhaps logging this as an error is not a good idea?
+>
 
-That seems reasonable. But note that this constraint isn't new; the
-previous freezer had much the same constraint but perhaps it wasn't
-triggered for mysterious raisins. see the previous
-try_to_freeze_unsafe() function.
+Sorry I have forgotten about the discussion on this already. I may contradict
+myself, but it the platform is misbehaving, why is it not a good idea to
+log it as error. It can be ignored right if it is not an issue on the
+platform ? My main worry is no one will turn on debug unless they are
+debugging and new platforms with same issues may go unnoticed while we
+want them to be fixed, right ?
+
+--
+Regards,
+Sudeep
