@@ -2,101 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1582460D125
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 17:58:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD4060D136
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 18:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232296AbiJYP5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 11:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
+        id S231836AbiJYQBr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 12:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232893AbiJYP5c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 11:57:32 -0400
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1461C15B31A;
-        Tue, 25 Oct 2022 08:57:32 -0700 (PDT)
-Received: by mail-qt1-f177.google.com with SMTP id h24so7801609qta.7;
-        Tue, 25 Oct 2022 08:57:32 -0700 (PDT)
+        with ESMTP id S230345AbiJYQBq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 12:01:46 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F026118F929
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:01:45 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id w10so2663767qvr.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5k4oXNi7wIr/yTUcNWF+k2ZgcBaXW2+/B9fhcI3NaxY=;
+        b=fZoLICmcpxc7ya8YhyB8zyJ0hhZBpusQO1Te7bNyn7VgyIrTHa/zgg93BVM9FX79Qx
+         yuiAJMyDN/1iRmtJ4dk3XD9iPp+OwWxHJYE8nJAe7t18FT6V8H/uifX0CqyDBrEy9Ird
+         YHrUM04nT93ARAzXeNQYU+P6Iq87XYJiqVRKHkyk1edg0+gRCkQgSR5DgWKgjTG1fkpr
+         Lmy6eqied/95AT5xejacqjO2ZIbFkJqgnrOArj5LCAPnHXezoXRkwDDo9UGqPsJradYI
+         siHQfJ14o7g/0y2GnEk+1zSEC0pKPBZgxy7AB/Kagq0DGLpL24OaS3ehvdQnFtVw6tJj
+         zKxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=k29w+kL7IGJnJULcDKFHRJDTCVQ+jNFBrIj3XeJ0s6Q=;
-        b=jFYZXjx7/c8Ryly00vP13e8QPYn1XdF+6DHdgMls4uSTiUJ4GGMFSQgkK6YZ9NeW1j
-         ACowD82ggr21KFwl/aloovd3wwAtImDknQCRcKkEVqGYIwB3otzdJ8e+nzByoybE2Xft
-         F2OkBIJI0rXP+WQ30728GgyX5oUK3nn5zjwfq7YfgBKNAbVu4Uk6Nhk7C2tZvAVz3Tn9
-         w69oIO091Nqn6yc+HE1F/K9Odrpean3qxRJCw6vLp+eEtue9fLq/YoMLK2BhIvfpDng1
-         X1nbI8T6hp0PcC+3az6U6DPzjUmuUvfOL4RPeVWDzhjw08cROg8NBiBzEi532UCcfaGa
-         2hYA==
-X-Gm-Message-State: ACrzQf0zHGOtgXJv7t3mBtruApY/0XQnn4saizwTjm8Scg2moehzYVxZ
-        IHwu7hI2Ii2c56pe2LLeY538dnv77uffBZ4hdtFRQGu1
-X-Google-Smtp-Source: AMsMyM5pE6mS7PBO9yo7jvy6BF5n8mn+iOb3wxFuX1D5CYeBrjYGLcaY5jbQjnb9YM7hY0NYuptQEtg2Rc/ppoICL0w=
-X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
- p6-20020a05622a13c600b0039cc34f29ecmr32619602qtk.153.1666713451143; Tue, 25
- Oct 2022 08:57:31 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5k4oXNi7wIr/yTUcNWF+k2ZgcBaXW2+/B9fhcI3NaxY=;
+        b=sg78jJVyQv6qv1t3hkV3tiqcbe1KZkQ857Q3t6LVkFD+rpMpwaEW1y8jQo19LQdR/C
+         LYCL7P4VXh+SvZbaBPJ6C1a7Iv2ztWRH+Hbh0XA8biOLR3I6RI/mo3qakoawtAEBszW5
+         hXVAS660NsWHG0RN5BuOWGj+qK34WMJV6aiVUO4vnF3HqlrddT0t5l4OUhzNSiJXwlIC
+         2qE3yEL0I+SYDKbXL9M2mtukUoP4psNRhW1hdywelmxct99uRA6aA704DhmVPB8XIA16
+         dpbMVQfqRZV1Hm2rA2nJ4KAHg6jH9I4xPU0ZO6RxVU8vjrf8E+3rCSnP+IPzmtivr8kX
+         9iQg==
+X-Gm-Message-State: ACrzQf0FH4iPnQTUsivxU6SyqwoFJpCGxla800UuriVhVQLCvtLMNyq3
+        b6IYCbuqKpykqt/Dqb7YsC+Qog==
+X-Google-Smtp-Source: AMsMyM6o6xBD+WYR2CO0j6dAkweiKItDjdgpLFpHCMkk6IrNKCkm8KiYfd7Yt33MY63MGZbyfL20aA==
+X-Received: by 2002:ad4:594b:0:b0:4bb:6e7d:6c63 with SMTP id eo11-20020ad4594b000000b004bb6e7d6c63mr9749603qvb.86.1666713704935;
+        Tue, 25 Oct 2022 09:01:44 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id k11-20020ac85fcb000000b0039953dcc480sm1794373qta.88.2022.10.25.09.01.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Oct 2022 09:01:44 -0700 (PDT)
+Message-ID: <5c3126fb-8fdb-5163-95a8-136a4a7ee2ce@linaro.org>
+Date:   Tue, 25 Oct 2022 12:01:42 -0400
 MIME-Version: 1.0
-References: <20220907064311.54475-1-niejianglei2021@163.com>
-In-Reply-To: <20220907064311.54475-1-niejianglei2021@163.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Oct 2022 17:57:20 +0200
-Message-ID: <CAJZ5v0j_7y7craYxv0PiFTKOUgu+sS0mwuSnQi6-qAhRSSkGwg@mail.gmail.com>
-Subject: Re: [PATCH] PM: hibernate: Fix potential memory leak in
- hibernate_preallocate_memory() and prepare_highmem_image()
-To:     Jianglei Nie <niejianglei2021@163.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221024043925.25379-1-marcan@marcan.st>
+ <20221024043925.25379-3-marcan@marcan.st>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221024043925.25379-3-marcan@marcan.st>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Sep 7, 2022 at 8:43 AM Jianglei Nie <niejianglei2021@163.com> wrote:
->
-> hibernate_preallocate_memory() and prepare_highmem_image() allocates
-> memory chunk with memory_bm_create(). When the function gets some error
-> after memory_bm_create(), relavent memory should be released with
-> memory_bm_free().
-
-swsusp_free() called at the end is expected to free all of these
-pages.  Doesn't it do that?
-
-> Fix it by calling memory_bm_free() at the right time.
->
-> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+On 24/10/2022 00:39, Hector Martin wrote:
+> This binding represents the cpufreq/DVFS hardware present in Apple SoCs.
+> The hardware has an independent controller per CPU cluster, and we
+> represent them as unique nodes in order to accurately describe the
+> hardware. The driver is responsible for binding them as a single cpufreq
+> device (in the Linux cpufreq model).
+> 
+> Signed-off-by: Hector Martin <marcan@marcan.st>
 > ---
->  kernel/power/snapshot.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 2a406753af90..e5ec204ebe22 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1752,6 +1752,7 @@ int hibernate_preallocate_memory(void)
->
->         error = memory_bm_create(&copy_bm, GFP_IMAGE, PG_ANY);
->         if (error) {
-> +               memory_bm_free(&orig_bm, PG_UNSAFE_CLEAR);
->                 pr_err("Cannot allocate copy bitmap\n");
->                 goto err_out;
->         }
-> @@ -2335,8 +2336,10 @@ static int prepare_highmem_image(struct memory_bitmap *bm,
->         if (memory_bm_create(bm, GFP_ATOMIC, PG_SAFE))
->                 return -ENOMEM;
->
-> -       if (get_highmem_buffer(PG_SAFE))
-> +       if (get_highmem_buffer(PG_SAFE)) {
-> +               memory_bm_free(bm, PG_UNSAFE_CLEAR);
->                 return -ENOMEM;
-> +       }
->
->         to_alloc = count_free_highmem_pages();
->         if (to_alloc > *nr_highmem_p)
-> --
-> 2.25.1
->
+>  .../cpufreq/apple,cluster-cpufreq.yaml        | 119 ++++++++++++++++++
+>  1 file changed, 119 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> new file mode 100644
+> index 000000000000..b11452f91468
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+> @@ -0,0 +1,119 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/cpufreq/apple,cluster-cpufreq.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Apple SoC cluster cpufreq device
+
+Few nits, in general looks fine to me.
+
+> +
+> +maintainers:
+> +  - Hector Martin <marcan@marcan.st>
+> +
+> +description: |
+> +  Apple SoCs (e.g. M1) have a per-cpu-cluster DVFS controller that is part of
+> +  the cluster management register block. This binding uses the standard
+> +  operating-points-v2 table to define the CPU performance states, with the
+> +  opp-level property specifying the hardware p-state index for that level.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: apple,t8103-cluster-cpufreq
+> +          - const: apple,cluster-cpufreq
+> +      - items:
+> +          - const: apple,t6000-cluster-cpufreq
+> +          - const: apple,t8103-cluster-cpufreq
+> +          - const: apple,cluster-cpufreq
+> +      - items:
+> +          - const: apple,t8112-cluster-cpufreq
+
+With the first one (t8103) - it's an enum.
+
+> +          - const: apple,cluster-cpufreq
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: The register region for this CPU cluster DVFS controller
+
+Drop description, quite obvious.
+
+> +
+> +  '#performance-domain-cells':
+> +    const: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#performance-domain-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    // This example shows a single CPU per domain and 2 domains,
+> +    // with two p-states per domain.
+> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
+> +    cpus {
+> +      #address-cells = <2>;
+> +      #size-cells = <0>;
+> +
+> +      cpu@0 {
+> +        compatible = "apple,icestorm";
+> +        device_type = "cpu";
+> +        reg = <0x0 0x0>;
+> +        operating-points-v2 = <&ecluster_opp>;
+> +        performance-domains = <&cpufreq_e>;
+> +      };
+> +
+> +      cpu@10100 {
+> +        compatible = "apple,firestorm";
+> +        device_type = "cpu";
+> +        reg = <0x0 0x10100>;
+> +        operating-points-v2 = <&pcluster_opp>;
+> +        performance-domains = <&cpufreq_p>;
+> +      };
+> +    };
+> +
+> +    ecluster_opp: opp-table-0 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp01 {
+> +        opp-hz = /bits/ 64 <600000000>;
+> +        opp-level = <1>;
+> +        clock-latency-ns = <7500>;
+> +      };
+> +      opp02 {
+> +        opp-hz = /bits/ 64 <972000000>;
+> +        opp-level = <2>;
+> +        clock-latency-ns = <22000>;
+> +      };
+> +    };
+> +
+> +    pcluster_opp: opp-table-1 {
+> +      compatible = "operating-points-v2";
+> +      opp-shared;
+> +
+> +      opp01 {
+> +        opp-hz = /bits/ 64 <600000000>;
+> +        opp-level = <1>;
+> +        clock-latency-ns = <8000>;
+> +      };
+> +      opp02 {
+> +        opp-hz = /bits/ 64 <828000000>;
+> +        opp-level = <2>;
+> +        clock-latency-ns = <19000>;
+> +      };
+> +    };
+> +
+> +    soc {
+> +      #address-cells = <2>;
+> +      #size-cells = <2>;
+> +
+> +      cpufreq_e: cpufreq@210e20000 {
+
+Node name: performance-controller
+
+(cpufreq is rather Linux naming)
+
+> +        compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
+> +        reg = <0x2 0x10e20000 0 0x1000>;
+> +        #performance-domain-cells = <0>;
+> +      };
+> +
+> +      cpufreq_p: cpufreq@211e20000 {
+
+The same.
+
+> +        compatible = "apple,t8103-cluster-cpufreq", "apple,cluster-cpufreq";
+> +        reg = <0x2 0x11e20000 0 0x1000>;
+> +        #performance-domain-cells = <0>;
+> +      };
+> +    };
+
+Best regards,
+Krzysztof
+
