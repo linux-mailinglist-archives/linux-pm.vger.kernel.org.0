@@ -2,55 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63FD560D184
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 18:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 244CE60D1BA
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 18:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbiJYQUl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 25 Oct 2022 12:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
+        id S229714AbiJYQle (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 12:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232740AbiJYQUh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 12:20:37 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07D03A3F78;
-        Tue, 25 Oct 2022 09:20:22 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id b25so8408597qkk.7;
-        Tue, 25 Oct 2022 09:20:22 -0700 (PDT)
+        with ESMTP id S232024AbiJYQld (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 12:41:33 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6731474DE2
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:41:30 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id b25so8460996qkk.7
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 09:41:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gv2B/ttXmvVZtAJ+uQ/eIe+Op/L8T4+42ZzG50QIqi4=;
-        b=WVmwoWTY+ivE1ZzYzbIEN3sRdqabdgDL6BdsBhR7EE+6Olk9sikSLBqx6V4+wBgk6g
-         Vu2Kg1Bq0+HKwlPRqa9oyNnjKd/H07UEN8O9Zy0LgnHxTfmlDoUy2x0X6+0nVLk8d6g0
-         PhMFQRQqlY+XndfCJjomoS9EyLNrTH49/Er8LQfaDBXRqXxttAl6EucZUzZruO+1JgXv
-         h0JBxMiYqdDEEO6TqSMM6peUQRB3r7uj+PxDPFx0nh+ygarjTYYQqhU8f+XxCmE7VojR
-         ruSsLw5CKfZGEGvHjvioaeOIgEij2sULWN5TQx+j1I3oryOkr9brti7mgPRD2mevfZXq
-         1KTQ==
-X-Gm-Message-State: ACrzQf2917nJj0VqpA9cGOhuF5705CQg8UNrLNxV3zIsj+nOPptZnZxv
-        PcChNV919pRKqAEZADIVLkQLdFU3jTfeyVlxrNQ=
-X-Google-Smtp-Source: AMsMyM59RyVZyO6Oh5nFrD0xUOSdbiPfcyvyhfzmHcH5V5n4+F2i4ECQj9IzdLY/DafNLK1kvxk6hrh6IesU6NF02hw=
-X-Received: by 2002:a05:620a:4547:b0:6ee:dc16:d67a with SMTP id
- u7-20020a05620a454700b006eedc16d67amr27799057qkp.23.1666714822034; Tue, 25
- Oct 2022 09:20:22 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S2SaQpI/48+OBtsHYK1p3r6bOQYqwf5uL5Qs2+5lRvE=;
+        b=rhIWMnu3kQUQqO1oD/hZQ/qv752v2Dg+92tprutl37W+twam0/YNNGyMc/imcTj3vQ
+         DINo0NMo3npErswYs594iFcz0j0Z2e+nM5hZHXb/beGRX6rqNqY/OxRI2Q0LqyHv6yFf
+         fuIPagh+neV9mpSIW7YuIfj0kAs0ZMSwg++Wq5YefO8dKfrp5FnDswY+o7/IMUIb+dlH
+         tR2bc1js3wuQqak/cycRt9dEO+RMsR3/jbZbX0CFCxd0tpQagfCvFM8VsWDnhFr2GtFh
+         l2iby5arWiRY7ARSQTAktpNvKYgd9zO/tOz7lmpuKXBkuXYl9LUDK91z9y2STT3cY05v
+         /G8Q==
+X-Gm-Message-State: ACrzQf1IwzpAtO8L5gewlI0PN8vxRp1zjSttS9upZpAB4QnH1H4Ba2x/
+        nSbug4OT7OXJ1nYRuusiIcsszRRn/xgwL/SPWDxvneAz
+X-Google-Smtp-Source: AMsMyM4k30qj2Kh2eAWk3ighvwuhUqH2PQakIim2XHdbfr8uDjVq4JALlIsNUPptSTRMnCI3115FdlXYzHM9YQ5VoXE=
+X-Received: by 2002:a05:620a:348:b0:6ec:a429:cc88 with SMTP id
+ t8-20020a05620a034800b006eca429cc88mr27366840qkm.648.1666716089532; Tue, 25
+ Oct 2022 09:41:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220929144618.1086985-1-marten.lindahl@axis.com> <20220929144618.1086985-2-marten.lindahl@axis.com>
-In-Reply-To: <20220929144618.1086985-2-marten.lindahl@axis.com>
+References: <20220930010821.221381-1-luoxueqin@kylinos.cn>
+In-Reply-To: <20220930010821.221381-1-luoxueqin@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Oct 2022 18:20:10 +0200
-Message-ID: <CAJZ5v0jhk8tGw9iak+BKr=3AUG5iPdn+0_KnmToDLji1ttV7hA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] PM: runtime: Synchronize PM runtime enable state with parent
-To:     =?UTF-8?Q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
-        kernel@axis.com
+Date:   Tue, 25 Oct 2022 18:41:18 +0200
+Message-ID: <CAJZ5v0jrtPFpHmiRjt+dqQb0iG7q2birWzUezgQQ43v1OZatzw@mail.gmail.com>
+Subject: Re: [PATCH -next] kernel/power : add pr_err() for debugging "Error
+ -14 resuming" error
+To:     Xueqin Luo <luoxueqin66@gmail.com>
+Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        linux-pm@vger.kernel.org, Xueqin Luo <luoxueqin@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
@@ -61,105 +56,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Sep 29, 2022 at 4:46 PM Mårten Lindahl <marten.lindahl@axis.com> wrote:
+On Fri, Sep 30, 2022 at 3:09 AM Xueqin Luo <luoxueqin66@gmail.com> wrote:
 >
-> A device that creates a child character device with cdev_device_add by
-> default create a PM sysfs group with power attributes for userspace
-> control. This means that the power attributes monitors the child device
-> only and thus does not reflect the parent device PM runtime behavior.
+> As the machine boots normally, bios initializes the memblock and sets the
+> flags of some memblocks to 0x1. During the S4, the bios once again
+> initializes the memblock.This initialization may change the flags value
+> of some blocks, for example, changing the flags value from 0x1 to 0x4.
+> 0x4 means do not add to kernel direct mapping. These changed addresses do
+> not pass the validity check of the pfn_valid() function, resulting in the
+> following "Error -14 resuming" error.
 
-It looks like device_set_pm_not_required() should be used on the child then.
+I suppose that you wanted to say that the system memory map can change
+over a hibernation-restore cycle and some of the page frames used by
+the kernel before hibernation may not be available any more during the
+subsequent restore which leads to the error below.
 
-> But as the PM runtime framework (rpm_suspend/rpm_resume) operates not
-> only on a single device that has been enabled for runtime PM, but also
-> on its parent, it should be possible to synchronize the child and the
-> parent so that the power attribute monitoring reflects the child and the
-> parent as one.
+It would be good to also note that this can be regarded as a platform
+firmware defect.
+
+> [  T357] PM: Image loading progress:   0%
+> [  T357] PM: Read 2681596 kbytes in 0.03 seconds (89386.53 MB/s)
+> [  T357] PM: Error -14 resuming
+> [  T357] PM: Failed to load hibernation image, recovering.
+> [  T357] PM: Basic memory bitmaps freed
+> [  T357] OOM killer enabled.
+> [  T357] Restarting tasks ... done.
+> [  T357] PM: resume from hibernation failed (-14)
+> [  T357] PM: Hibernation image not present or could not be loaded.
 >
-> As an example, if an i2c_client device registers an iio_device, the
-> iio_device will create sysfs power/attribute nodes for userspace
-> control. But if the dev_pm_ops with resume/suspend callbacks is attached
-> to the struct i2c_driver.driver.pm, the PM runtime needs to be enabled
-> for the i2c_client device and not for the child iio_device.
->
-> In this case PM runtime can be enabled for the i2c_client device and
-> suspend/resume callbacks will be triggered, but the child sysfs power
-> attributes will be visible but marked as 'unsupported' and can not be
-> used for control or monitoring. This can be confusing as the sysfs
-> device node presents the i2c_client and the iio_device as one device.
-
-I don't quite understand the last sentence.
-
-They are separate struct device objects and so they each have a
-directory in sysfs, right?
-
-> Add a function to synchronize the runtime PM enable state of a device
-> with its parent. As there already exists a link from the child to its
-> parent and both are enabled, all sysfs control/monitoring can reflect
-> both devices, which from a userspace perspective makes more sense.
-
-Except that user space will be able to change "control" to "on" for
-the parent alone AFAICS which still will be confusing.
-
-For devices that are pure software constructs it only makes sense to
-expose the PM-runtime interface for them if the plan is to indirectly
-control the parent's runtime PM through them.
-
-> Signed-off-by: Mårten Lindahl <marten.lindahl@axis.com>
+> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
 > ---
->  drivers/base/power/runtime.c | 18 ++++++++++++++++++
->  include/linux/pm_runtime.h   |  2 ++
->  2 files changed, 20 insertions(+)
+>  kernel/power/snapshot.c | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 997be3ac20a7..b202d513684a 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1499,6 +1499,24 @@ void pm_runtime_enable(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_enable);
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 2a406753af90..2be2e9f5a060 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -2259,10 +2259,13 @@ static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
+>                 if (unlikely(buf[j] == BM_END_OF_MAP))
+>                         break;
 >
-> +/**
-> + * pm_runtime_sync_parent_enable - Synchronize enable state.
-> + * @dev: Device to handle.
-> + *
-> + * Synchronize the device enable state with its parent.
-> + * NOTE: This function should only be used if the parent will never disable
-> + * PM runtime (i.e. calling __pm_runtime_disable()) without telling its child.
-> + */
-> +void pm_runtime_sync_parent_enable(struct device *dev)
-> +{
-> +       struct device *parent = dev->parent;
-> +
-> +       if (parent && !parent->power.ignore_children
-> +           && pm_runtime_enabled(parent))
-> +               pm_runtime_enable(dev);
-> +}
-> +EXPORT_SYMBOL_GPL(pm_runtime_sync_parent_enable);
-> +
->  static void pm_runtime_disable_action(void *data)
->  {
->         pm_runtime_dont_use_autosuspend(data);
-> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-> index 0a41b2dcccad..5054427adbd1 100644
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -89,6 +89,7 @@ extern void pm_runtime_put_suppliers(struct device *dev);
->  extern void pm_runtime_new_link(struct device *dev);
->  extern void pm_runtime_drop_link(struct device_link *link);
->  extern void pm_runtime_release_supplier(struct device_link *link);
-> +extern void pm_runtime_sync_parent_enable(struct device *dev);
+> -               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j]))
+> +               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
+>                         memory_bm_set_bit(bm, buf[j]);
+> -               else
+> +               } else {
+> +                       if (!pfn_valid(buf[j]))
+> +                               pr_err("Address %lx is not valid.\n", buf[j]);
+
+buf[j] is not an address here.  It is a page frame number.
+
+The message is still a bit cryptic IMV, it doesn't explain what's the
+problem and cannot be understood without reading the code.
+
+>                         return -EFAULT;
+> +               }
+>         }
 >
->  extern int devm_pm_runtime_enable(struct device *dev);
->
-> @@ -315,6 +316,7 @@ static inline void pm_runtime_put_suppliers(struct device *dev) {}
->  static inline void pm_runtime_new_link(struct device *dev) {}
->  static inline void pm_runtime_drop_link(struct device_link *link) {}
->  static inline void pm_runtime_release_supplier(struct device_link *link) {}
-> +static inline void pm_runtime_sync_parent_enable(struct device *dev) {}
->
->  #endif /* !CONFIG_PM */
->
+>         return 0;
 > --
-> 2.30.2
->
