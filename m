@@ -2,209 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2940360C5EA
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 09:57:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FCA60C65D
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 10:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiJYH5b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 03:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
+        id S232114AbiJYIZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 04:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232083AbiJYH5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 03:57:30 -0400
-Received: from out28-125.mail.aliyun.com (out28-125.mail.aliyun.com [115.124.28.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD21160ED6;
-        Tue, 25 Oct 2022 00:57:28 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436725|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00450854-0.00182145-0.99367;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.PpUsFGp_1666684642;
-Received: from 192.168.220.136(mailfrom:kant@allwinnertech.com fp:SMTPD_---.PpUsFGp_1666684642)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 15:57:25 +0800
-Message-ID: <f0d68beb-f115-88f8-9901-5e7dfac5da77@allwinnertech.com>
-Date:   Tue, 25 Oct 2022 15:57:22 +0800
+        with ESMTP id S230214AbiJYIZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 04:25:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D1660FF;
+        Tue, 25 Oct 2022 01:25:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 49825CE1C03;
+        Tue, 25 Oct 2022 08:25:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7934DC433C1;
+        Tue, 25 Oct 2022 08:25:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666686302;
+        bh=95Bw03v1d7DpNovUuUhhDHWGN1eDfLvag7c8d/BfT3c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BpgBnumk2WY6jmeSGjyimBupg2i/Gz6Fj2jYBdav4GuS3vZI/mAXM1HF8jxL7DUXp
+         vktLYfItFNox/TbNJ489U1YqgjlZEOVxIRB5bS5ImslUiWGhPR9HuUcR27uK2zb94n
+         oQlfJCv7PnTb43Ue5MKcOUWFWcvK8OI1OgChi5EmM1XsYrPqOH9BundJPug0e0u1Ni
+         KCgwlpmLY4g8wOF/AJeQyb25VuU9ckJzdWMQ5OX/9FAVVu3atq1GxrDHge0QNTZNYe
+         yAlAy8azCC5yH3WxWFduwVngJI9TYFKe19LHy0WEfr4XSlkv/3kKzfw1FmKc+QQzcR
+         KGSLN0I3aEnow==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1onFEq-0000ud-7S; Tue, 25 Oct 2022 10:24:44 +0200
+Date:   Tue, 25 Oct 2022 10:24:44 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/4] soc: qcom: pmic_glink: Introduce altmode support
+Message-ID: <Y1edTHlbaPlhxIuB@hovoldconsulting.com>
+References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+ <20220818031512.319310-4-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH v3] PM/devfreq: governor: Add a private governor_data for
- governor
-Content-Language: en-US
-To:     Chanwoo Choi <cwchoi00@gmail.com>, myungjoo.ham@samsung.com,
-        kyungmin.park@samsung.com, cw00.choi@samsung.com, khilman@ti.com,
-        rjw@rjwysocki.net, mturquette@ti.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221014094359.100995-1-kant@allwinnertech.com>
- <bdbed01c-0e86-14fc-4efa-32a010431d67@gmail.com>
-From:   Kant Fan <kant@allwinnertech.com>
-In-Reply-To: <bdbed01c-0e86-14fc-4efa-32a010431d67@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818031512.319310-4-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/22/2022 7:41 AM, Chanwoo Choi wrote:
-> Hi,
+On Wed, Aug 17, 2022 at 08:15:11PM -0700, Bjorn Andersson wrote:
+> With the PMIC GLINK service, the host OS subscribes to USB-C altmode
+> messages, which are sent by the firmware to notify the host OS about
+> state updates and HPD interrupts.
 > 
-> Looks good to me. But, you need to send it to the stable mailing list
-> too as I commented on previous mail.
+> The pmic_glink_altmode driver registers for these notifications and
+> propagates the notifications as typec_mux, typec_switch and DRM OOB
+> notifications as necessary to implement DisplayPort altmode support.
 > 
-> Please add stable@vger.kernel.org to Cc.
-> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/soc/qcom/Makefile             |   1 +
+>  drivers/soc/qcom/pmic_glink_altmode.c | 477 ++++++++++++++++++++++++++
+>  2 files changed, 478 insertions(+)
+>  create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
 
-Hi Chanwoo,
-Thanks for the notice. Please review this patch-v4 [1].
+> diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
+> new file mode 100644
+> index 000000000000..8d2d563cb756
+> --- /dev/null
+> +++ b/drivers/soc/qcom/pmic_glink_altmode.c
 
-[1]
-https://lore.kernel.org/all/20221025072109.64025-1-kant@allwinnertech.com/
+> +static void pmic_glink_altmode_worker(struct work_struct *work)
+> +{
+> +	struct pmic_glink_altmode_port *alt_port = work_to_altmode_port(work);
+> +	struct pmic_glink_altmode *altmode = alt_port->altmode;
+> +
+> +	typec_switch_set(alt_port->typec_switch, alt_port->orientation);
+> +
+> +	if (alt_port->svid == USB_TYPEC_DP_SID)
+> +		pmic_glink_altmode_enable_dp(altmode, alt_port, alt_port->mode,
+> +					     alt_port->hpd_state, alt_port->hpd_irq);
+> +	else
+> +		pmic_glink_altmode_enable_usb(altmode, alt_port);
+> +
+> +	if (alt_port->hpd_state)
+> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_connected);
+> +	else
+> +		drm_bridge_hpd_notify(&alt_port->bridge, connector_status_disconnected);
+> +
+> +	pmic_glink_altmode_request(altmode, ALTMODE_PAN_ACK, alt_port->index);
+> +};
 
--- 
-Best Regards,
-Kant Fan
+I'm seeing fairly frequent crashes during boot of the X13s due to these
+notifications being propagated before things have been fully set up:
 
-> On 22. 10. 14. 18:43, Kant Fan wrote:
->> The member void *data in the structure devfreq can be overwrite
->> by governor_userspace. For example:
->> 1. The device driver assigned the devfreq governor to simple_ondemand
->> by the function devfreq_add_device() and init the devfreq member
->> void *data to a pointer of a static structure devfreq_simple_ondemand_data
->> by the function devfreq_add_device().
->> 2. The user changed the devfreq governor to userspace by the command
->> "echo userspace > /sys/class/devfreq/.../governor".
->> 3. The governor userspace alloced a dynamic memory for the struct
->> userspace_data and assigend the member void *data of devfreq to
->> this memory by the function userspace_init().
->> 4. The user changed the devfreq governor back to simple_ondemand
->> by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
->> 5. The governor userspace exited and assigned the member void *data
->> in the structure devfreq to NULL by the function userspace_exit().
->> 6. The governor simple_ondemand fetched the static information of
->> devfreq_simple_ondemand_data in the function
->> devfreq_simple_ondemand_func() but the member void *data of devfreq was
->> assigned to NULL by the function userspace_exit().
->> 7. The information of upthreshold and downdifferential is lost
->> and the governor simple_ondemand can't work correctly.
->>
->> The member void *data in the structure devfreq is designed for
->> a static pointer used in a governor and inited by the function
->> devfreq_add_device(). This patch add an element named governor_data
->> in the devfreq structure which can be used by a governor(E.g userspace)
->> who want to assign a private data to do some private things.
->>
->> Fixes: ce26c5bb9569 ("PM / devfreq: Add basic governors")
->>
->> Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
->>
->> Signed-off-by: Kant Fan <kant@allwinnertech.com>
->> ---
->>   drivers/devfreq/devfreq.c            |  6 ++----
->>   drivers/devfreq/governor_userspace.c | 12 ++++++------
->>   include/linux/devfreq.h              |  7 ++++---
->>   3 files changed, 12 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
->> index 63347a5ae599..8c5f6f7fca11 100644
->> --- a/drivers/devfreq/devfreq.c
->> +++ b/drivers/devfreq/devfreq.c
->> @@ -776,8 +776,7 @@ static void remove_sysfs_files(struct devfreq *devfreq,
->>    * @dev:	the device to add devfreq feature.
->>    * @profile:	device-specific profile to run devfreq.
->>    * @governor_name:	name of the policy to choose frequency.
->> - * @data:	private data for the governor. The devfreq framework does not
->> - *		touch this value.
->> + * @data:	devfreq driver pass to governors, governor should not change it.
->>    */
->>   struct devfreq *devfreq_add_device(struct device *dev,
->>   				   struct devfreq_dev_profile *profile,
->> @@ -1011,8 +1010,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
->>    * @dev:	the device to add devfreq feature.
->>    * @profile:	device-specific profile to run devfreq.
->>    * @governor_name:	name of the policy to choose frequency.
->> - * @data:	private data for the governor. The devfreq framework does not
->> - *		touch this value.
->> + * @data:	 devfreq driver pass to governors, governor should not change it.
->>    *
->>    * This function manages automatically the memory of devfreq device using device
->>    * resource management and simplify the free operation for memory of devfreq
->> diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
->> index ab9db7adb3ad..d69672ccacc4 100644
->> --- a/drivers/devfreq/governor_userspace.c
->> +++ b/drivers/devfreq/governor_userspace.c
->> @@ -21,7 +21,7 @@ struct userspace_data {
->>   
->>   static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
->>   {
->> -	struct userspace_data *data = df->data;
->> +	struct userspace_data *data = df->governor_data;
->>   
->>   	if (data->valid)
->>   		*freq = data->user_frequency;
->> @@ -40,7 +40,7 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
->>   	int err = 0;
->>   
->>   	mutex_lock(&devfreq->lock);
->> -	data = devfreq->data;
->> +	data = devfreq->governor_data;
->>   
->>   	sscanf(buf, "%lu", &wanted);
->>   	data->user_frequency = wanted;
->> @@ -60,7 +60,7 @@ static ssize_t set_freq_show(struct device *dev,
->>   	int err = 0;
->>   
->>   	mutex_lock(&devfreq->lock);
->> -	data = devfreq->data;
->> +	data = devfreq->governor_data;
->>   
->>   	if (data->valid)
->>   		err = sprintf(buf, "%lu\n", data->user_frequency);
->> @@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
->>   		goto out;
->>   	}
->>   	data->valid = false;
->> -	devfreq->data = data;
->> +	devfreq->governor_data = data;
->>   
->>   	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
->>   out:
->> @@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
->>   	if (devfreq->dev.kobj.sd)
->>   		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
->>   
->> -	kfree(devfreq->data);
->> -	devfreq->data = NULL;
->> +	kfree(devfreq->governor_data);
->> +	devfreq->governor_data = NULL;
->>   }
->>   
->>   static int devfreq_userspace_handler(struct devfreq *devfreq,
->> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
->> index 34aab4dd336c..4dc7cda4fd46 100644
->> --- a/include/linux/devfreq.h
->> +++ b/include/linux/devfreq.h
->> @@ -152,8 +152,8 @@ struct devfreq_stats {
->>    * @max_state:		count of entry present in the frequency table.
->>    * @previous_freq:	previously configured frequency value.
->>    * @last_status:	devfreq user device info, performance statistics
->> - * @data:	Private data of the governor. The devfreq framework does not
->> - *		touch this.
->> + * @data:	devfreq driver pass to governors, governor should not change it.
->> + * @governor_data:	private data for governors, devfreq core doesn't touch it.
->>    * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
->>    * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
->>    * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
->> @@ -193,7 +193,8 @@ struct devfreq {
->>   	unsigned long previous_freq;
->>   	struct devfreq_dev_status last_status;
->>   
->> -	void *data; /* private data for governors */
->> +	void *data;
->> +	void *governor_data;
->>   
->>   	struct dev_pm_qos_request user_min_freq_req;
->>   	struct dev_pm_qos_request user_max_freq_req;
-> 
+[   16.591910] panel-simple-dp-aux aux-aea0000.displayport-controller: Detected SHP LQ140M1JW48 (0x1511)
+[   16.592142] qcom,fastrpc-cb 1b300000.remoteproc:glink-edge:fastrpc:compute-cb@12: Adding to iommu group 17
+[   16.597644] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+[   16.597653] Mem abort info:
+[   16.597657]   ESR = 0x0000000096000004
+[   16.597663]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   16.597670]   SET = 0, FnV = 0
+[   16.597675]   EA = 0, S1PTW = 0
+[   16.597680]   FSC = 0x04: level 0 translation fault
+[   16.597686] Data abort info:
+[   16.597689]   ISV = 0, ISS = 0x00000004
+[   16.597694]   CM = 0, WnR = 0
+[   16.597698] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000106b93000
+[   16.597706] [0000000000000010] pgd=0000000000000000, p4d=0000000000000000
+[   16.597722] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[   16.597731] Dumping ftrace buffer:
+[   16.597742]    (ftrace buffer empty)
+[   16.597744] Modules linked in: fastrpc(+) rpmsg_ctrl qrtr_smd rpmsg_char qcom_battmgr pmic_glink_altmode rtc_pm8xxxr
+[   16.597831] CPU: 0 PID: 389 Comm: kworker/0:3 Not tainted 6.1.0-rc2 #195
+[   16.597838] Hardware name: Qualcomm QRD, BIOS 6.0.220110.BOOT.MXF.1.1-00470-MAKENA-1 01/10/2022
+[   16.597842] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
+[   16.597864] pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   16.597870] pc : drm_kms_helper_hotplug_event+0x1c/0x50
+[   16.597882] lr : drm_kms_helper_hotplug_event+0x18/0x50
+[   16.597887] sp : ffff80000c20bca0
+[   16.597889] x29: ffff80000c20bca0 x28: ffffdba5eadbb000 x27: ffff22a9f6f2dc05
+[   16.597898] x26: ffffdba5eadc0b20 x25: ffffdba5eadd8ca0 x24: 0000000000000000
+[   16.597906] x23: 0000000000000003 x22: ffff22a888526000 x21: 0000000000000002
+[   16.597914] x20: ffff22a88ceed000 x19: ffff22a888526000 x18: 0000000000000020
+[   16.597921] x17: 4d003632323d524f x16: 4a414d00313d4755 x15: 4c50544f48006d72
+[   16.597929] x14: 0000000000000001 x13: 0000000000000040 x12: 0000000000000000
+[   16.597936] x11: 0000000000000000 x10: 0000000000000228 x9 : 0000000000000000
+[   16.597944] x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000062e00
+[   16.597951] x5 : 0000000000000000 x4 : ffff22a9f6f2d290 x3 : 0000000000062f00
+[   16.597959] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000000
+[   16.597965] Call trace:
+[   16.597968]  drm_kms_helper_hotplug_event+0x1c/0x50
+[   16.597973]  drm_bridge_connector_hpd_cb+0xa0/0xc0
+[   16.597983]  drm_bridge_hpd_notify+0x40/0x60
+[   16.597990]  pmic_glink_altmode_worker+0xc0/0x150 [pmic_glink_altmode]
+[   16.598006]  process_one_work+0x288/0x6c0
+[   16.598014]  worker_thread+0x74/0x450
+[   16.598019]  kthread+0x118/0x120
+[   16.598028]  ret_from_fork+0x10/0x20
+[   16.598039] Code: f9000bf3 aa0003f3 97ff22af f9445e60 (f9400801) 
+[   16.598043] ---[ end trace 0000000000000000 ]---
+[   16.603424] [drm] Initialized msm 1.9.0 20130625 for ae01000.mdp on minor 0
 
+I've verified that it is the funcs pointer in
+drm_kms_helper_hotplug_event() which is NULL and a hack like the below
+prevents the crash:
 
+diff --git a/drivers/gpu/drm/drm_probe_helper.c b/drivers/gpu/drm/drm_probe_helper.c
+index 69b0b2b9cc1c..d515f5b6f3d5 100644
+--- a/drivers/gpu/drm/drm_probe_helper.c
++++ b/drivers/gpu/drm/drm_probe_helper.c
+@@ -661,7 +661,9 @@ void drm_kms_helper_hotplug_event(struct drm_device *dev)
+ {
+        /* send a uevent + call fbdev */
+        drm_sysfs_hotplug_event(dev);
+-       if (dev->mode_config.funcs->output_poll_changed)
++
++       WARN_ON(!dev->mode_config.funcs);
++       if (dev->mode_config.funcs && dev->mode_config.funcs->output_poll_changed)
+                dev->mode_config.funcs->output_poll_changed(dev);
+ 
+        drm_client_dev_hotplug(dev);
 
+It appears that pointer is set in msm_drm_init(), which suggests events
+are being forwarded before the driver is ready.
+
+Johan
