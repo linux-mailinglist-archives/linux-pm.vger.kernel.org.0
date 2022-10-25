@@ -2,84 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126D660D20B
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 18:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8311860D22A
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 19:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232274AbiJYQ4H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 12:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
+        id S231918AbiJYRAM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 13:00:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232351AbiJYQzn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 12:55:43 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DA361109;
-        Tue, 25 Oct 2022 09:55:31 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id bb5so7922503qtb.11;
-        Tue, 25 Oct 2022 09:55:31 -0700 (PDT)
+        with ESMTP id S231476AbiJYRAL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 13:00:11 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08AC146D97;
+        Tue, 25 Oct 2022 10:00:10 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id 8so8530579qka.1;
+        Tue, 25 Oct 2022 10:00:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TZqUr/OzcoHnOZKPLsDNCtHXwikXL6EbBtCzKiFk/Cc=;
-        b=cUJ4OIRi8qRMjq8EKpdADJXwff7OeNUG33dkV98yubIeJL8cOI0ITRx5gfa4n6dEj2
-         1Ep+f+soKlrTD1vy6a7rDWnXv4/Di2MLayZLv9L6p1x5Q7wAgJpay+WIQa5xZPv8c0bL
-         8giVGK/RI8oLgGqTo3GAgmb8L3SkSyUrHQqRTN9SfCHaHZzKP4m0D6/XrfxLNir5qOjQ
-         DgXLL302Q/0cegNG3OUc7M7LnUJ0bfaHslDZUgBnivB/jXIo9jqF02Ln+eRqMv25zdR1
-         rgv8detdt2X+nT+alAcf7dVZB3/iocWRiIVa9knoc7fnoDyfA7govZlARlSQcATa1+CQ
-         e7lA==
-X-Gm-Message-State: ACrzQf040j1ZaCc32utXESofO38JwvwevAB3s0uRGgmS4N7WkML/5Ljo
-        I4iqKveZu6rW87IOIPTOS9/+khIFae+wbiy1rh0=
-X-Google-Smtp-Source: AMsMyM4kGQLDWyB8QPdQB0gSaZY0jopUbg0ROIJcNDy1dd1EtYpGLn6tVdf/4JP3TlQ1to3Fyjmj5FD4yThSZM6WIUU=
-X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
- p6-20020a05622a13c600b0039cc34f29ecmr32890078qtk.153.1666716930758; Tue, 25
- Oct 2022 09:55:30 -0700 (PDT)
+        bh=LTZQtE2w2U1K5L9bDC3388PiqB5iO4ZihXZEoNcy5mw=;
+        b=PrOEAI8moSlUimbJ5mw0gxXPu1ABE0bw5C5mcA/a1HKk7vmTe/4Kv2zs1Te3p+jbXq
+         BQFXNaxUUNQ3QGDNKDGTVxX3fq5tfp2bG+DDdLtTQZn+aQsZq/Htfk8EBPqHMn0ifPoJ
+         dniMgi6jNRkH/nTB3towdtNdZVbeE9sKMsuSbrQVeDsNAgQTAUN5PRkrSpOyrCtw7vjz
+         fcTLqBixMB6w6xYca/G8Lq19CtiyttTNPa6PZSOWM813SIFp8/QTu7hpNJPbenI3XGjn
+         FlEs+YKC7mrhl9z3sTKO40bCsnruUs9tMdlpvCA3RcNaORnyNl/E39L/IyMZDNWCKQ6w
+         B30g==
+X-Gm-Message-State: ACrzQf1CaBmoSHT6VCPrycq3Ryjh4TERCNNgIZetUgoXi4tXvze0Ru3d
+        iSB147T1V7vM0abjdPhQDfY5sZXGOdRYVPkM/OM=
+X-Google-Smtp-Source: AMsMyM6NBZmStH15Smsny67sCBEAgrek7DrE2XPASyaiZdjzk7F3C8+Y4aId+7RT+W8+xX/aPCIZnpYfoXtN+lWPgV8=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr27251959qkl.443.1666717208955; Tue, 25
+ Oct 2022 10:00:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221013174612.393830-1-cristian.marussi@arm.com>
- <20221013174612.393830-2-cristian.marussi@arm.com> <20221014105143.4yxldx2idqgvmzgu@bogus>
-In-Reply-To: <20221014105143.4yxldx2idqgvmzgu@bogus>
+References: <cover.1666000867.git.viresh.kumar@linaro.org>
+In-Reply-To: <cover.1666000867.git.viresh.kumar@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 25 Oct 2022 18:55:19 +0200
-Message-ID: <CAJZ5v0gNzZmwf1sXB4SkjmpLOKgv==uWDw7HYJjSzBHinuiEBQ@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] powercap: arm_scmi: Add SCMI Powercap based driver
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        daniel.lezcano@linaro.org, tarek.el-sherbiny@arm.com,
-        adrian.slatineanu@arm.com, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, wbartczak@marvell.com, wzmuda@marvell.com,
-        dan.carpenter@oracle.com, "Rafael J . Wysocki" <rafael@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>
+Date:   Tue, 25 Oct 2022 18:59:58 +0200
+Message-ID: <CAJZ5v0g9v6nsw1UftD7zGVYXKKTUN1y_sLgFG7Z+h9hVXoxU8w@mail.gmail.com>
+Subject: Re: [PATCH 0/2] thermal: Validate new state in cur_state_store()
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 12:51 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Mon, Oct 17, 2022 at 12:03 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> On Thu, Oct 13, 2022 at 06:46:12PM +0100, Cristian Marussi wrote:
-> > Add a powercap driver that, using the ARM SCMI Protocol to query the SCMI
-> > platform firmware for the list of existing Powercap domains, registers all
-> > of such discovered domains under the new 'arm-scmi' powercap control type.
-> >
-> > A new simple powercap zone and constraint is registered for all the SCMI
-> > powercap zones that are found.
-> >
-> > Cc: Rafael J. Wysocki <rafael@kernel.org>
-> > Cc: linux-pm@vger.kernel.org
+> In cur_state_store(), the new state of the cooling device is received
+> from user-space and is not validated by the thermal core but the same is
+> left for the individual drivers to take care of. Apart from duplicating
+> the code it leaves possibility for introducing bugs where a driver may
+> not do it right.
 >
-> From the core SCMI perspctive, this looks good. I don't have much in-depth
-> knowledge of powercap framework itself.
+> Lets make the thermal core check the new state itself and store the max
+> value in the cooling device structure.
 >
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> Once this is merged, I will update the thermal drivers to stop checking
+> for the same.
+>
+> Based of v6.1-rc1.
+>
+> Viresh Kumar (2):
+>   thermal: Validate new state in cur_state_store()
+>   thermal: sysfs: Reuse cdev->max_state
+>
+>  drivers/thermal/gov_fair_share.c |  6 +-----
+>  drivers/thermal/thermal_core.c   | 15 ++++++-------
+>  drivers/thermal/thermal_sysfs.c  | 37 +++++++++++++-------------------
+>  include/linux/thermal.h          |  1 +
+>  4 files changed, 24 insertions(+), 35 deletions(-)
+>
+> --
 
-Applied as 6.2 material, thanks!
+Both patches in the series applied as 6.2 material, thanks!
