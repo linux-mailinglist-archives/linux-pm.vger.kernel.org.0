@@ -2,182 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E65E60C4EA
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 09:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A985760C53C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 09:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiJYHV2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 03:21:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40822 "EHLO
+        id S231786AbiJYHdW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 03:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiJYHV1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 03:21:27 -0400
-Received: from out28-52.mail.aliyun.com (out28-52.mail.aliyun.com [115.124.28.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CA875481;
-        Tue, 25 Oct 2022 00:21:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07441602|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00302366-0.00215713-0.994819;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.PpTooo6_1666682480;
-Received: from SunxiBot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.PpTooo6_1666682480)
-          by smtp.aliyun-inc.com;
-          Tue, 25 Oct 2022 15:21:21 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        cw00.choi@samsung.com, mturquette@ti.com, rjw@rjwysocki.net,
-        khilman@ti.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: [PATCH v4] PM/devfreq: governor: Add a private governor_data for governor
-Date:   Tue, 25 Oct 2022 15:21:09 +0800
-Message-Id: <20221025072109.64025-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        with ESMTP id S231799AbiJYHdM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 03:33:12 -0400
+Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5275F150F82
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 00:33:09 -0700 (PDT)
+Received: by mail-pf1-x443.google.com with SMTP id w189so9619466pfw.4
+        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 00:33:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bQgCaWbgbYow1rgq+ZxN/4mds+e7cc6gBHNrup7NClQ=;
+        b=Rma508W6fqDHDy8X+To2mg/1uAtZ5IaQzmUr+YHjGOFAm4K11fJ25xDB9x97fQxp/3
+         pAKuwa1y4LTFa8ZDVIeGc19yNb7KXcCb+0AOl/V3heAVwMucficS7vVofz3MjMfyBIrg
+         q2snNTbRNOGZZHmSCdmCsxRXmoPl2il6PecioXpJjR3hpNMVYC5QsBqovcnNEEaaISjg
+         3xze1FffCERBHcsduLW2v6CbzBJhCgU6sBtADSoqt+uSNbsh2lekpDISmVou0xgQDKyU
+         uNBfwCinnyjyrretyJKoOpQt+rtCZr4OvQ/S3WnEjDRoWOx2HKV7moWlSfKVAaOcALwZ
+         NuUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bQgCaWbgbYow1rgq+ZxN/4mds+e7cc6gBHNrup7NClQ=;
+        b=tBeKMLNdPBqx0cYK2Nd7ECVmtfjCzGPygtw8LxsHnAd6MwTkeOgMhQBcSQm8SD6viW
+         wPLFQ93ZcQGDnTIK86N4RVW/VPamn/LXyiotHUpR/hQ8cFLhUdmQyFJtgMOFq0BUBYsJ
+         NPjGJ6wy4r/XOpjDm0JYApCfYKzZFfL5AVi0HslbeaN+tzYE923/yTLKcxrXROXr6E2E
+         RHGGwjuVaE5+8KOr9oBTicRQOlueMW+m5xmR4DUuwEx09HUu5ZtF3Nudw1BO2bfyIOAY
+         09sC0SmvLds566OuzcFXPH6jU5clQ2aqILWxKE4+tiaPa6YXAMHUAfzIvUYs4CRzdpzL
+         iQIA==
+X-Gm-Message-State: ACrzQf1HDp08cOxE0hVCnyzqeYLXhXiylcOE1JIWkaHlKu//4D46UiZr
+        JMy5Uxjzd+2u+lEfeU/+Ts7J
+X-Google-Smtp-Source: AMsMyM4DsarYjZkBTgiETVgHPPe5/NCMxK4F2rPLgYezcHMrAG64Jaa7kPSXcD3GLtirzsSbLhqGzg==
+X-Received: by 2002:a05:6a00:1a47:b0:52e:6a8c:5430 with SMTP id h7-20020a056a001a4700b0052e6a8c5430mr36915826pfv.48.1666683189162;
+        Tue, 25 Oct 2022 00:33:09 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.211.146])
+        by smtp.gmail.com with ESMTPSA id c1-20020a17090a4d0100b0020dda7efe61sm5048369pjg.5.2022.10.25.00.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Oct 2022 00:33:06 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org
+Cc:     johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/7] qcom-cpufreq-hw: Add CPU clock provider support
+Date:   Tue, 25 Oct 2022 13:02:47 +0530
+Message-Id: <20221025073254.1564622-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The member void *data in the structure devfreq can be overwrite
-by governor_userspace. For example:
-1. The device driver assigned the devfreq governor to simple_ondemand
-by the function devfreq_add_device() and init the devfreq member
-void *data to a pointer of a static structure devfreq_simple_ondemand_data
-by the function devfreq_add_device().
-2. The user changed the devfreq governor to userspace by the command
-"echo userspace > /sys/class/devfreq/.../governor".
-3. The governor userspace alloced a dynamic memory for the struct
-userspace_data and assigend the member void *data of devfreq to
-this memory by the function userspace_init().
-4. The user changed the devfreq governor back to simple_ondemand
-by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-5. The governor userspace exited and assigned the member void *data
-in the structure devfreq to NULL by the function userspace_exit().
-6. The governor simple_ondemand fetched the static information of
-devfreq_simple_ondemand_data in the function
-devfreq_simple_ondemand_func() but the member void *data of devfreq was
-assigned to NULL by the function userspace_exit().
-7. The information of upthreshold and downdifferential is lost
-and the governor simple_ondemand can't work correctly.
+Hello,
 
-The member void *data in the structure devfreq is designed for
-a static pointer used in a governor and inited by the function
-devfreq_add_device(). This patch add an element named governor_data
-in the devfreq structure which can be used by a governor(E.g userspace)
-who want to assign a private data to do some private things.
+This series adds clock provider support to the Qcom CPUFreq driver for
+supplying the clocks to the CPU cores in Qcom SoCs.
 
-Fixes: ce26c5bb9569 ("PM / devfreq: Add basic governors")
-Cc: stable@vger.kernel.org # 5.10+
-Reviewed-by: Chanwoo Choi <cwchoi00@gmail.com>
-Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
----
- drivers/devfreq/devfreq.c            |  6 ++----
- drivers/devfreq/governor_userspace.c | 12 ++++++------
- include/linux/devfreq.h              |  7 ++++---
- 3 files changed, 12 insertions(+), 13 deletions(-)
+The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+clocks to the CPU cores. But this is not represented clearly in devicetree.
+There is no clock coming out of the CPUFreq HW node to the CPU. This created
+an issue [1] with the OPP core when a recent enhancement series was submitted.
+Eventhough the issue got fixed in the OPP framework in the meantime, that's
+not a proper solution and this series aims to fix it properly.
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 63347a5ae599..8c5f6f7fca11 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -776,8 +776,7 @@ static void remove_sysfs_files(struct devfreq *devfreq,
-  * @dev:	the device to add devfreq feature.
-  * @profile:	device-specific profile to run devfreq.
-  * @governor_name:	name of the policy to choose frequency.
-- * @data:	private data for the governor. The devfreq framework does not
-- *		touch this value.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-  */
- struct devfreq *devfreq_add_device(struct device *dev,
- 				   struct devfreq_dev_profile *profile,
-@@ -1011,8 +1010,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
-  * @dev:	the device to add devfreq feature.
-  * @profile:	device-specific profile to run devfreq.
-  * @governor_name:	name of the policy to choose frequency.
-- * @data:	private data for the governor. The devfreq framework does not
-- *		touch this value.
-+ * @data:	 devfreq driver pass to governors, governor should not change it.
-  *
-  * This function manages automatically the memory of devfreq device using device
-  * resource management and simplify the free operation for memory of devfreq
-diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-index ab9db7adb3ad..d69672ccacc4 100644
---- a/drivers/devfreq/governor_userspace.c
-+++ b/drivers/devfreq/governor_userspace.c
-@@ -21,7 +21,7 @@ struct userspace_data {
- 
- static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
- {
--	struct userspace_data *data = df->data;
-+	struct userspace_data *data = df->governor_data;
- 
- 	if (data->valid)
- 		*freq = data->user_frequency;
-@@ -40,7 +40,7 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
- 	int err = 0;
- 
- 	mutex_lock(&devfreq->lock);
--	data = devfreq->data;
-+	data = devfreq->governor_data;
- 
- 	sscanf(buf, "%lu", &wanted);
- 	data->user_frequency = wanted;
-@@ -60,7 +60,7 @@ static ssize_t set_freq_show(struct device *dev,
- 	int err = 0;
- 
- 	mutex_lock(&devfreq->lock);
--	data = devfreq->data;
-+	data = devfreq->governor_data;
- 
- 	if (data->valid)
- 		err = sprintf(buf, "%lu\n", data->user_frequency);
-@@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
- 		goto out;
- 	}
- 	data->valid = false;
--	devfreq->data = data;
-+	devfreq->governor_data = data;
- 
- 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
- out:
-@@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
- 	if (devfreq->dev.kobj.sd)
- 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
- 
--	kfree(devfreq->data);
--	devfreq->data = NULL;
-+	kfree(devfreq->governor_data);
-+	devfreq->governor_data = NULL;
- }
- 
- static int devfreq_userspace_handler(struct devfreq *devfreq,
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 34aab4dd336c..4dc7cda4fd46 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -152,8 +152,8 @@ struct devfreq_stats {
-  * @max_state:		count of entry present in the frequency table.
-  * @previous_freq:	previously configured frequency value.
-  * @last_status:	devfreq user device info, performance statistics
-- * @data:	Private data of the governor. The devfreq framework does not
-- *		touch this.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-+ * @governor_data:	private data for governors, devfreq core doesn't touch it.
-  * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
-  * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
-  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-@@ -193,7 +193,8 @@ struct devfreq {
- 	unsigned long previous_freq;
- 	struct devfreq_dev_status last_status;
- 
--	void *data; /* private data for governors */
-+	void *data;
-+	void *governor_data;
- 
- 	struct dev_pm_qos_request user_min_freq_req;
- 	struct dev_pm_qos_request user_max_freq_req;
+There was also an attempt made by Viresh [2] to fix the issue by moving the
+clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+since those clocks belong to the CPUFreq HW node only.
+
+The proposal here is to add clock provider support to the Qcom CPUFreq HW
+driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+This correctly reflects the hardware implementation.
+
+The clock provider is a simple one that just provides the frequency of the
+clocks supplied to each frequency domain in the SoC using .recalc_rate()
+callback. The frequency supplied by the driver will be the actual frequency
+that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+is not same as what the CPUFreq framework has set but it is the one that gets
+supplied to the CPUs after throttling by LMh.
+
+This series has been tested on SM8450 based dev board with the OPP hack removed
+and hence there is a DTS change only for that platform. Once this series gets
+accepted, rest of the platform DTS can also be modified and finally the hack on
+the OPP core can be dropped.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
+
+Changes in v2:
+
+* Moved the qcom_cpufreq_data allocation to probe
+* Added single clock provider with multiple clks for each freq domain
+* Moved soc_data to qcom_cpufreq struct
+* Added Rob's review for binding
+
+Manivannan Sadhasivam (7):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+  cpufreq: qcom-hw: Remove un-necessary cpumask_empty() check
+  cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe
+  cpufreq: qcom-hw: Use cached dev pointer in probe()
+  cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq
+  cpufreq: qcom-hw: Add CPU clock provider support
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     |  12 ++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |   9 +
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 166 ++++++++++--------
+ 3 files changed, 118 insertions(+), 69 deletions(-)
+
 -- 
-2.29.0
+2.25.1
 
