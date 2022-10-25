@@ -2,113 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482E660D632
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 23:34:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4C1960D643
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 23:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbiJYVd5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 17:33:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S230453AbiJYVlh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 17:41:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbiJYVd4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 17:33:56 -0400
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DC4106A46
-        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 14:33:55 -0700 (PDT)
-Received: by mail-io1-xd30.google.com with SMTP id r142so11653753iod.11
-        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 14:33:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=aqCyDzBlgI0lxrRS0dVDOBPWnZoyypnDJaDYBUnhBSA=;
-        b=ZbCWAHeaKy2n264Ub+ghiRtRmway0DRQ071l6WoJpSS1lHbUdOyzGEWfAkv7NZ3/Bp
-         lfMxjFqVrLNEI+69N5m/udrQUiRi6+nWfEelZXmTmYKjEXJDakIn6pCkOxktYlUE0UHW
-         NGy62ZV/grMkxizRvH/hcWpI+4d2bBPCfKpSs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aqCyDzBlgI0lxrRS0dVDOBPWnZoyypnDJaDYBUnhBSA=;
-        b=R3C4EE6astPpV4ceqaqO7CGl3AVuqqch1cskKw5C9YOnqcvQMHjrgu/ski++AtIMSU
-         ohZhsQbJTzeE0aA+WMDIYpcFG0p9iYlLHSp8+76bQzFU7MST68imCe3AZaJkRCxc+x/m
-         XmvMf3wPsPVofBgZliR13S7+ydgSoIQmWDpUOSKOlhzyTzHsIpTDY3QeJrRGvvzh7Sn/
-         kKU0+SJshlD15MDSclTFfdyNyZ+4MdFMgeKdCwJCfI9g3ZSUdeGdX1cK1lfzXvuHDhxV
-         wwqLoEPR8V8BDdTIXkY+TTf+BMO+skU3sUqXIU94JpsA+1BP5dVzJNfejrylIH/ljIn6
-         F/rw==
-X-Gm-Message-State: ACrzQf0AuQqojYv7WfdI3/1psqSmeaMdrzAFLaU54LZM7g7GczgfTtjC
-        uID6rKN8nNMwdWP8aKbI1NExcg==
-X-Google-Smtp-Source: AMsMyM697VIOL/dbE1vPoZgpCLB2Ws+ra6abn/XsvHDNZhHcaNpAUdaRm0Fv/A2x82DlF7T0Pz/cAw==
-X-Received: by 2002:a05:6602:2ac9:b0:6bc:17dd:3800 with SMTP id m9-20020a0566022ac900b006bc17dd3800mr22880722iov.72.1666733634729;
-        Tue, 25 Oct 2022 14:33:54 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id h12-20020a92c08c000000b003001f822301sm1356232ile.81.2022.10.25.14.33.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Oct 2022 14:33:54 -0700 (PDT)
-Date:   Tue, 25 Oct 2022 21:33:53 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        with ESMTP id S229875AbiJYVlf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 17:41:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF7E7B5BD;
+        Tue, 25 Oct 2022 14:41:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 389B261B44;
+        Tue, 25 Oct 2022 21:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61FCCC433C1;
+        Tue, 25 Oct 2022 21:41:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666734091;
+        bh=g0MQtgRYZfDOv+tEhLc+C4W38o44WvYauhAjZ+Pk7Fo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=eRHSsYYNd2WHenoJlMdU7oedcYXyv4fgNtea/qfBXDf04xxtRxqePF08Kc3T/Vx/F
+         mylfxCeDlCh5158Ob2ZHqnnYXHLDS3f1LvRL7va8B8+FLTfnIo4FXBcO4R39MfeLWn
+         Y8KKUT4fc0/TDNAv8jt7Q24dY0ZCm9e8N1gpRQyqRWuAPzu8E7YiJGz7v9pyw5xHyB
+         //19100QJbm8QVP9PULkOb3GXGu0Dqtee6uAsWNy1KQn4BWhjt9fj4ofOvYmwC+bgs
+         hPsK5AszLMIfzlLxEdBfcbX9UOBuPux4RGueWK6Yhz67SP1p/Sxi7IOyt0Y4IesILv
+         yVz6eGduq1cIw==
+Date:   Tue, 25 Oct 2022 16:41:29 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Stefan Richter <stefanr@s5r6.in-berlin.de>
+Cc:     Vaibhav Gupta <vaibhavgupta40@gmail.com>,
         "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>
-Subject: Re: [PATCH] thermal: qcom-spmi-temp-alarm: Log the actual max stage
- 2 threshold
-Message-ID: <Y1hWQXnl7ko0EJDw@google.com>
-References: <20221025171453.1.I13c2a23f276fb63bfc225aeab0bf0db9560a90e0@changeid>
+        linux1394-devel@lists.sourceforge.net, linux-pci@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2] firewire: ohci: convert to generic power management
+Message-ID: <20221025214129.GA688126@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221025171453.1.I13c2a23f276fb63bfc225aeab0bf0db9560a90e0@changeid>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221025212521.686779-1-helgaas@kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I just saw that Luca already posted a similar patch:
-
-https://lore.kernel.org/lkml/CAHLCerN+-5qKsRmpuF55RdeUMZJZuiZJ-7O4LnM8+QuHJfs0mQ@mail.gmail.com/T/
-
-Please disregard this one.
-
-On Tue, Oct 25, 2022 at 05:15:08PM +0000, Matthias Kaehlcke wrote:
-> If the critical trip point of the thermal zone is higher than
-> the max threshold of the PMIC log the actual max threshold of the
-> chip, not the gen1 max threshold of 140°C.
+On Tue, Oct 25, 2022 at 04:25:21PM -0500, Bjorn Helgaas wrote:
+> From: Vaibhav Gupta <vaibhavgupta40@gmail.com>
 > 
-> Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
+> Convert ohci from legacy PCI power management to the generic power
+> management framework.
+
+> v1 was posted at https://lore.kernel.org/r/20200720150715.624520-1-vaibhavgupta40@gmail.com
 > 
->  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+> Changes from v1 to v2:
+>   - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
+>     DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
+>   - Expand commit log.
+
+My mistake: This should have been marked *v3*.  v1 was posted as
+listed above.
+
+I posted a v2 in June at https://lore.kernel.org/all/20220607212157.343033-1-helgaas@kernel.org/,
+which had an expanded commit log and trivial parameter renames.
+
+So this should have been marked v3 and added the
+DEFINE_SIMPLE_DEV_PM_OPS() conversion.
+
+Bjorn
+
+>  drivers/firewire/ohci.c | 41 +++++++++++------------------------------
+>  1 file changed, 11 insertions(+), 30 deletions(-)
 > 
-> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> index be785ab37e53..bdfe2129c357 100644
-> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-> @@ -252,7 +252,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
->  			disable_s2_shutdown = true;
->  		else
->  			dev_warn(chip->dev,
-> -				 "No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.\n");
-> +				 "No ADC is configured and critical temperature is above the maximum stage 2 threshold of %d C! Configuring stage 2 shutdown at %d C.\n",
-> +				 stage2_threshold_max / 1000, stage2_threshold_max / 1000);
->  	}
+> diff --git a/drivers/firewire/ohci.c b/drivers/firewire/ohci.c
+> index 17c9d825188b..f3cceca51e59 100644
+> --- a/drivers/firewire/ohci.c
+> +++ b/drivers/firewire/ohci.c
+> @@ -3165,7 +3165,6 @@ static int ohci_set_iso_channels(struct fw_iso_context *base, u64 *channels)
+>  	return ret;
+>  }
 >  
->  skip:
+> -#ifdef CONFIG_PM
+>  static void ohci_resume_iso_dma(struct fw_ohci *ohci)
+>  {
+>  	int i;
+> @@ -3183,7 +3182,6 @@ static void ohci_resume_iso_dma(struct fw_ohci *ohci)
+>  			ohci_start_iso(&ctx->base, 0, ctx->sync, ctx->tags);
+>  	}
+>  }
+> -#endif
+>  
+>  static int queue_iso_transmit(struct iso_context *ctx,
+>  			      struct fw_iso_packet *packet,
+> @@ -3789,39 +3787,24 @@ static void pci_remove(struct pci_dev *dev)
+>  	dev_notice(&dev->dev, "removed fw-ohci device\n");
+>  }
+>  
+> -#ifdef CONFIG_PM
+> -static int pci_suspend(struct pci_dev *dev, pm_message_t state)
+> +static int pci_suspend(struct device *dev)
+>  {
+> -	struct fw_ohci *ohci = pci_get_drvdata(dev);
+> -	int err;
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	struct fw_ohci *ohci = pci_get_drvdata(pdev);
+>  
+>  	software_reset(ohci);
+> -	err = pci_save_state(dev);
+> -	if (err) {
+> -		ohci_err(ohci, "pci_save_state failed\n");
+> -		return err;
+> -	}
+> -	err = pci_set_power_state(dev, pci_choose_state(dev, state));
+> -	if (err)
+> -		ohci_err(ohci, "pci_set_power_state failed with %d\n", err);
+> -	pmac_ohci_off(dev);
+> +	pmac_ohci_off(pdev);
+>  
+>  	return 0;
+>  }
+>  
+> -static int pci_resume(struct pci_dev *dev)
+> +static int pci_resume(struct device *dev)
+>  {
+> -	struct fw_ohci *ohci = pci_get_drvdata(dev);
+> +	struct pci_dev *pdev = to_pci_dev(dev);
+> +	struct fw_ohci *ohci = pci_get_drvdata(pdev);
+>  	int err;
+>  
+> -	pmac_ohci_on(dev);
+> -	pci_set_power_state(dev, PCI_D0);
+> -	pci_restore_state(dev);
+> -	err = pci_enable_device(dev);
+> -	if (err) {
+> -		ohci_err(ohci, "pci_enable_device failed\n");
+> -		return err;
+> -	}
+> +	pmac_ohci_on(pdev);
+>  
+>  	/* Some systems don't setup GUID register on resume from ram  */
+>  	if (!reg_read(ohci, OHCI1394_GUIDLo) &&
+> @@ -3838,7 +3821,6 @@ static int pci_resume(struct pci_dev *dev)
+>  
+>  	return 0;
+>  }
+> -#endif
+>  
+>  static const struct pci_device_id pci_table[] = {
+>  	{ PCI_DEVICE_CLASS(PCI_CLASS_SERIAL_FIREWIRE_OHCI, ~0) },
+> @@ -3847,15 +3829,14 @@ static const struct pci_device_id pci_table[] = {
+>  
+>  MODULE_DEVICE_TABLE(pci, pci_table);
+>  
+> +static DEFINE_SIMPLE_DEV_PM_OPS(pci_pm_ops, pci_suspend, pci_resume);
+> +
+>  static struct pci_driver fw_ohci_pci_driver = {
+>  	.name		= ohci_driver_name,
+>  	.id_table	= pci_table,
+>  	.probe		= pci_probe,
+>  	.remove		= pci_remove,
+> -#ifdef CONFIG_PM
+> -	.resume		= pci_resume,
+> -	.suspend	= pci_suspend,
+> -#endif
+> +	.driver.pm	= &pci_pm_ops,
+>  };
+>  
+>  static int __init fw_ohci_init(void)
 > -- 
-> 2.38.0.135.g90850a2211-goog
+> 2.25.1
 > 
