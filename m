@@ -2,105 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A214760D4D9
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 21:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6562C60D4E1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 21:44:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiJYTmT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 15:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55450 "EHLO
+        id S231374AbiJYToX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 15:44:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232208AbiJYTmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 15:42:18 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 586748C448;
-        Tue, 25 Oct 2022 12:42:17 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29PJg2MZ119572;
-        Tue, 25 Oct 2022 14:42:02 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1666726922;
-        bh=H/as/1Tn9o1i2U2DwmPl0CGI3P3tgiJdJ3deInJ3bw0=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=Er6+biu5OoiqIuFs74X+1JBEm08eYptQuWK8UBFebRFe6bIZ1L4SDUNL13nlRFtGa
-         vBIsiDuCbkfVT3dhdCSLmg6TjWgJE2KAaJJvfRbI7t2uVOSnC/tm7H5jgux8+TuYc0
-         auGAs2disOnVah1ZKlLcyrqSJ1bF1hg4OxpHgAo8=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29PJg2PJ079385
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 25 Oct 2022 14:42:02 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 25
- Oct 2022 14:42:01 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 25 Oct 2022 14:42:02 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29PJg1kL027737;
-        Tue, 25 Oct 2022 14:42:01 -0500
-Date:   Tue, 25 Oct 2022 14:42:01 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
-        Device Trees <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LKML ARM <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 04/11] thermal: k3_j72xx_bandgap: map fuse_base only
- for erratum workaround
-Message-ID: <20221025194201.3iup4ionv3zhnfd5@bryanbrattlof.com>
-References: <20221025191515.9151-1-bb@ti.com>
- <20221025191515.9151-5-bb@ti.com>
+        with ESMTP id S230460AbiJYToW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 15:44:22 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3270EB3B0F;
+        Tue, 25 Oct 2022 12:44:22 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id z6so464742qtv.5;
+        Tue, 25 Oct 2022 12:44:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YGKKI9J0n8rIfX9oZQEzGX9YCINu+GWwt1TnCnAQ1BI=;
+        b=RGO9b1RyvlxzdykVmp+1WwQtBh4Jp+Y7clVN7yDetbyd+VWu/eE6F/wxSIwM6neeDg
+         GCLrouykg1qrekal3Iy2RHE1DelVO2iiKlCAQqeP4+nL99Fw78UCcq1zn8kNNTTxM8+n
+         RYTAQvfDybDM8fLKEGn6doTDizQhz+nvncc1Wd83oYGWkGd7yONj8yKhO0oaxvBCOLKh
+         M8MM5yfyr6OlfLzrqjVQsdEDYceMLjquh8GMmxHZm5S8yK6YSduyfl0gpIUuSsc6evRL
+         S5KJVgzM7tWO7fxc4a33PGxsDKGeoVj8ImJcOT6d0xcYYlrBrrFicYXiy+p2C9ZIDPwX
+         L2IQ==
+X-Gm-Message-State: ACrzQf0Tu/ZAthnj8L5lHvlH55di+4+xVUuP+8umEsopIqUNqnvPGxEU
+        PxoAqYunhCtRRGut9/wztXGd2r5pNjy32q3HM1U=
+X-Google-Smtp-Source: AMsMyM5ytdS2lcDQqzDLgwIWQq2p+uoveyPZE8UkKxS+0igoe4Zqlk/GW6VpUD0GhIlenQaqje0ZaT1HLvLRYgfLmQo=
+X-Received: by 2002:ac8:7d02:0:b0:39c:bbef:178a with SMTP id
+ g2-20020ac87d02000000b0039cbbef178amr33243867qtb.357.1666727061344; Tue, 25
+ Oct 2022 12:44:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221025191515.9151-5-bb@ti.com>
-X-PGP-Fingerprint: D3D1 77E4 0A38 DF4D 1853 FEEF 41B9 0D5D 71D5 6CE0
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20221025193502.669091-1-helgaas@kernel.org>
+In-Reply-To: <20221025193502.669091-1-helgaas@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Oct 2022 21:44:10 +0200
+Message-ID: <CAJZ5v0g-EoVgpC3qot4iBqXp98-Ejt7ib28qxtDJfCjr13EVBg@mail.gmail.com>
+Subject: Re: [PATCH] PCI/PM: Remove unused 'state' parameter to pci_legacy_suspend_late()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     linux-pci@vger.kernel.org,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On October 25, 2022 thus sayeth Bryan Brattlof:
-> Some of TI's J721E SoCs require a software trimming procedure for the
-> temperature monitors to function properly. To determine if a particular
-> J721E is not affected by this erratum, both bits in the WKUP_SPARE_FUSE0
-> region must be set. Other SoCs, not affected by this erratum, will not
-> need this region.
-> 
-> Map the 'fuse_base' region only when the erratum fix is needed.
-> 
-> Signed-off-by: Bryan Brattlof <bb@ti.com>
+On Tue, Oct 25, 2022 at 9:35 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> 1a1daf097e21 ("PCI/PM: Remove unused pci_driver.suspend_late() hook")
+> removed the legacy .suspend_late() hook, which was the only user of the
+> "state" parameter to pci_legacy_suspend_late(), but it neglected to remove
+> the parameter.
+>
+> Remove the unused "state" parameter to pci_legacy_suspend_late().
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
 > ---
->  drivers/thermal/k3_j72xx_bandgap.c | 37 ++++++++++++++++++------------
->  1 file changed, 22 insertions(+), 15 deletions(-)
-> 
-
-...
-
->  
-> -	if (workaround_needed)
-> -		devm_iounmap(dev, fuse_base);
-> -
-
-Ugh... This is wrong. 
-
-Of course I will catch it right after I send this out
-
-Sorry for the noise everyone
-~Bryan
+>  drivers/pci/pci-driver.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/pci/pci-driver.c b/drivers/pci/pci-driver.c
+> index 107d77f3c846..a2ceeacc33eb 100644
+> --- a/drivers/pci/pci-driver.c
+> +++ b/drivers/pci/pci-driver.c
+> @@ -646,7 +646,7 @@ static int pci_legacy_suspend(struct device *dev, pm_message_t state)
+>         return 0;
+>  }
+>
+> -static int pci_legacy_suspend_late(struct device *dev, pm_message_t state)
+> +static int pci_legacy_suspend_late(struct device *dev)
+>  {
+>         struct pci_dev *pci_dev = to_pci_dev(dev);
+>
+> @@ -848,7 +848,7 @@ static int pci_pm_suspend_noirq(struct device *dev)
+>                 return 0;
+>
+>         if (pci_has_legacy_pm_support(pci_dev))
+> -               return pci_legacy_suspend_late(dev, PMSG_SUSPEND);
+> +               return pci_legacy_suspend_late(dev);
+>
+>         if (!pm) {
+>                 pci_save_state(pci_dev);
+> @@ -1060,7 +1060,7 @@ static int pci_pm_freeze_noirq(struct device *dev)
+>         const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+>
+>         if (pci_has_legacy_pm_support(pci_dev))
+> -               return pci_legacy_suspend_late(dev, PMSG_FREEZE);
+> +               return pci_legacy_suspend_late(dev);
+>
+>         if (pm && pm->freeze_noirq) {
+>                 int error;
+> @@ -1179,7 +1179,7 @@ static int pci_pm_poweroff_noirq(struct device *dev)
+>                 return 0;
+>
+>         if (pci_has_legacy_pm_support(pci_dev))
+> -               return pci_legacy_suspend_late(dev, PMSG_HIBERNATE);
+> +               return pci_legacy_suspend_late(dev);
+>
+>         if (!pm) {
+>                 pci_fixup_device(pci_fixup_suspend_late, pci_dev);
+> --
+> 2.25.1
+>
