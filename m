@@ -2,97 +2,101 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8542D60D096
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 17:30:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1582460D125
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 17:58:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiJYPaH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 11:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S232296AbiJYP5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 11:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbiJYPaG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 11:30:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDD92AC78;
-        Tue, 25 Oct 2022 08:30:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666711805; x=1698247805;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=xn5JOS/FH+ZZXqzrPkPODHcTMuCEZjsZ59+va4WxJ7A=;
-  b=CvPslIeOsFexfPByRaSzOuU8ter0iUdOGyGigzfK/IAq3bXKJNNfwUf0
-   hcVkRfi64TzU4gjecrijIu/b2NfpGxfN9BqnaOf7pgFlgwgT9Zgkh6XdK
-   8fHfU8aMXVH6tGucy8D7uTfz2z7P6n+rT2AG1jCaOj8bYXDG68cQ/Dxkf
-   UdE23kwtTIQKkDEFB2PDqGEmBb0RobqYR4APHA9zXwcK7BKBLYcbMsHcq
-   49VqNwxGQ8C3CDfavm/tysVnSK4C7xMQXiYy9MVYT1a5eUivbcA4e56yD
-   uEHty3t+S1/JeHe4E8pPozr9Urbxv/p2YLKnwsjaz35nVv/qdA0g2l+Rx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="371921673"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="371921673"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:28:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10510"; a="694995410"
-X-IronPort-AV: E=Sophos;i="5.95,212,1661842800"; 
-   d="scan'208";a="694995410"
-Received: from wdunn-mobl1.amr.corp.intel.com ([10.212.194.192])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 08:28:39 -0700
-Message-ID: <836b1787426d5b1569f6d77007a4765ee17d5ea6.camel@linux.intel.com>
-Subject: Re: [PATCH] rtc: rtc-cmos: Fix wake alarm breakage
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Zhang Rui <rui.zhang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rtc@vger.kernel.org
-Date:   Tue, 25 Oct 2022 08:28:39 -0700
-In-Reply-To: <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-References: <5887691.lOV4Wx5bFT@kreacher>
-         <166611112152.2353171.9661532286339710942.b4-ty@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.1-0ubuntu1 
+        with ESMTP id S232893AbiJYP5c (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 11:57:32 -0400
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1461C15B31A;
+        Tue, 25 Oct 2022 08:57:32 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id h24so7801609qta.7;
+        Tue, 25 Oct 2022 08:57:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=k29w+kL7IGJnJULcDKFHRJDTCVQ+jNFBrIj3XeJ0s6Q=;
+        b=jFYZXjx7/c8Ryly00vP13e8QPYn1XdF+6DHdgMls4uSTiUJ4GGMFSQgkK6YZ9NeW1j
+         ACowD82ggr21KFwl/aloovd3wwAtImDknQCRcKkEVqGYIwB3otzdJ8e+nzByoybE2Xft
+         F2OkBIJI0rXP+WQ30728GgyX5oUK3nn5zjwfq7YfgBKNAbVu4Uk6Nhk7C2tZvAVz3Tn9
+         w69oIO091Nqn6yc+HE1F/K9Odrpean3qxRJCw6vLp+eEtue9fLq/YoMLK2BhIvfpDng1
+         X1nbI8T6hp0PcC+3az6U6DPzjUmuUvfOL4RPeVWDzhjw08cROg8NBiBzEi532UCcfaGa
+         2hYA==
+X-Gm-Message-State: ACrzQf0zHGOtgXJv7t3mBtruApY/0XQnn4saizwTjm8Scg2moehzYVxZ
+        IHwu7hI2Ii2c56pe2LLeY538dnv77uffBZ4hdtFRQGu1
+X-Google-Smtp-Source: AMsMyM5pE6mS7PBO9yo7jvy6BF5n8mn+iOb3wxFuX1D5CYeBrjYGLcaY5jbQjnb9YM7hY0NYuptQEtg2Rc/ppoICL0w=
+X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
+ p6-20020a05622a13c600b0039cc34f29ecmr32619602qtk.153.1666713451143; Tue, 25
+ Oct 2022 08:57:31 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20220907064311.54475-1-niejianglei2021@163.com>
+In-Reply-To: <20220907064311.54475-1-niejianglei2021@163.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 25 Oct 2022 17:57:20 +0200
+Message-ID: <CAJZ5v0j_7y7craYxv0PiFTKOUgu+sS0mwuSnQi6-qAhRSSkGwg@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Fix potential memory leak in
+ hibernate_preallocate_memory() and prepare_highmem_image()
+To:     Jianglei Nie <niejianglei2021@163.com>
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2022-10-18 at 18:38 +0200, Alexandre Belloni wrote:
-> On Tue, 18 Oct 2022 18:09:31 +0200, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >=20
-> > Commit 4919d3eb2ec0 ("rtc: cmos: Fix event handler registration
-> > ordering issue") overlooked the fact that cmos_do_probe() depended
-> > on the preparations carried out by cmos_wake_setup() and the wake
-> > alarm stopped working after the ordering of them had been changed.
-> >=20
-> > [...]
->=20
-> Applied, thanks!
+On Wed, Sep 7, 2022 at 8:43 AM Jianglei Nie <niejianglei2021@163.com> wrote:
+>
+> hibernate_preallocate_memory() and prepare_highmem_image() allocates
+> memory chunk with memory_bm_create(). When the function gets some error
+> after memory_bm_create(), relavent memory should be released with
+> memory_bm_free().
 
-I did testing yesterday on the 6.1.0-rc2 build and this patch hasn't
-made it into rc2. This is an extreme inconvenience to anyone testing
-low power modes as the rtc wakealarm doesn't function. I'm a little
-surprised more people haven't complained.
+swsusp_free() called at the end is expected to free all of these
+pages.  Doesn't it do that?
 
-Please get this in 6.1.0-rc3.
-
-> [1/1] rtc: rtc-cmos: Fix wake alarm breakage
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 commit: 0782b66ed2fbb035dda76111df0954515e=
-417b24
->=20
-> Best regards,
->=20
-
+> Fix it by calling memory_bm_free() at the right time.
+>
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+> ---
+>  kernel/power/snapshot.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 2a406753af90..e5ec204ebe22 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1752,6 +1752,7 @@ int hibernate_preallocate_memory(void)
+>
+>         error = memory_bm_create(&copy_bm, GFP_IMAGE, PG_ANY);
+>         if (error) {
+> +               memory_bm_free(&orig_bm, PG_UNSAFE_CLEAR);
+>                 pr_err("Cannot allocate copy bitmap\n");
+>                 goto err_out;
+>         }
+> @@ -2335,8 +2336,10 @@ static int prepare_highmem_image(struct memory_bitmap *bm,
+>         if (memory_bm_create(bm, GFP_ATOMIC, PG_SAFE))
+>                 return -ENOMEM;
+>
+> -       if (get_highmem_buffer(PG_SAFE))
+> +       if (get_highmem_buffer(PG_SAFE)) {
+> +               memory_bm_free(bm, PG_UNSAFE_CLEAR);
+>                 return -ENOMEM;
+> +       }
+>
+>         to_alloc = count_free_highmem_pages();
+>         if (to_alloc > *nr_highmem_p)
+> --
+> 2.25.1
+>
