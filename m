@@ -2,97 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F70E60D6DB
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 00:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2881460D6E7
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 00:18:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230090AbiJYWMJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 18:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49084 "EHLO
+        id S232204AbiJYWSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 18:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232576AbiJYWL6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 18:11:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D4CF5CF5;
-        Tue, 25 Oct 2022 15:11:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4015FB81CF3;
-        Tue, 25 Oct 2022 22:11:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89166C433C1;
-        Tue, 25 Oct 2022 22:11:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666735914;
-        bh=ZrST8jxYvpsWDgOSq/Y8N6I166vrmd60HQPbLRrsCvU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IsgCBuowMlZ2lEaAYIB1fOxnsatrv2L9OehwPziwHhUeCqqyHi0hqdTxqtn8uNKZ6
-         0wMosU4WypK/P7ypnmtFyVnGmMp3pb/a6/PcA4DGxTdEApPAXrXIf1TUEn/+7O3IWz
-         MVa+gLPKcWBv0LxmN8V622hSlQVQKr8mBvs4pEqJ2NjAf2RbnguGMQtZeZg45LU1/I
-         +9vb3kQcbrsUUmtmXjQRGsctJh+AZpyTNquhGeaEfxbMfDaTdffqMKnJVsG39gDPWI
-         IMHQ3jmcBXIN5qVfd8epJq0AA3l18FlNTt36a+l8CV+VzVkAzWextmJgaXPAxEYG4d
-         2+2dCLhvD8pnQ==
-Date:   Wed, 26 Oct 2022 00:11:51 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@redhat.com>
-Subject: Re: [PATCH v3 02/17] tick-sched: Warn when next tick seems to be in
- the past
-Message-ID: <20221025221151.GA1313991@lothringen>
-References: <20221025135850.51044-1-anna-maria@linutronix.de>
- <20221025135850.51044-3-anna-maria@linutronix.de>
+        with ESMTP id S232094AbiJYWSB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 18:18:01 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F21FC58;
+        Tue, 25 Oct 2022 15:18:00 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id o8so9907523qvw.5;
+        Tue, 25 Oct 2022 15:18:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sBctOic5Jlqwv7dQ/OcbsCcYwMhW7gNKqj7DG4uh3kk=;
+        b=a+L0eQQmLecyw0nknTLcGw/I7RrVyowZfcF3d2y+BIMofaBOYJ4McrsCEwcTEFSYZn
+         NfY/oYnV48cHs+3vHUz4V4HRO6IkWdET4AqUgU5X5zETq4MsZGMdWmxaf5kaAWAIebgA
+         bG1eqDVPEq34MjLvdkr/Z/33gCuG+t+yd/lGVsNphjS8Muzez6O+5RG4geeg8GXQ91Wv
+         981Ug1LrzbF+aPqzZAHo4+z+csuOF90G6c9/HcojFmO/XCq1MkC8MziiJgdWIWsM3Bc+
+         iMJkp+HJgDHG2WbkPg5NMRv2Fy3+HrfMJJNx2T9GuczkWqDRCHtnbHZyY9wdw8K++6by
+         664g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sBctOic5Jlqwv7dQ/OcbsCcYwMhW7gNKqj7DG4uh3kk=;
+        b=nBe1graJ7PBVTmTb/tunKZsz+OiKlQehhGFuIvbGzY3tf3tbj8c+yLSKgI7pn/VaBC
+         6gqn7BBNb38yE+SrpwFS7Pr/gz4WPvnYMaYZr50CFeE37WDyWeE8pLv7GryXHA9n1M2J
+         5OEEEVX03/eIcHFmgMygFhwhKE8bp6eeavd9BrUyUgo7CkHGQmpja0RINwbvqxcStGZA
+         5K8B8+ZM1dAUZ/IDEFp9KMM8pf0RXIqnx8bMvfIg43dFdoqbbUOwATnph/jh7gAr0ktl
+         GmotcNHvpS9pB0M+mJNjEZpPPpp81smPdqW9jxcn5W4p4PxrzH5dwYMlmwZiESCbJdP8
+         QyQA==
+X-Gm-Message-State: ACrzQf1ShPVrfx7LhLsiYL4n1pzlL5FeXi06S/uVlQfisz9xyM5h0HEu
+        NthJowMFiVtDZ6/nbF8HeWZchHgLsFUPuKrI6bE=
+X-Google-Smtp-Source: AMsMyM7bwRfU/9iNaQbyljheW233pohShNkzDsvX5eCeD0iJDN+6nYrObBDYS85GAmjuVNxoNOwdcyLqfGLtXD+JT/0=
+X-Received: by 2002:a05:6214:e86:b0:4bb:7e1a:9dee with SMTP id
+ hf6-20020a0562140e8600b004bb7e1a9deemr8414735qvb.96.1666736279438; Tue, 25
+ Oct 2022 15:17:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025135850.51044-3-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221025203852.681822-1-helgaas@kernel.org>
+In-Reply-To: <20221025203852.681822-1-helgaas@kernel.org>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Wed, 26 Oct 2022 08:17:47 +1000
+Message-ID: <CAPM=9twkfjHh4SR2aQdB9WTRYEhTdWZG4A-f0n8oB8yw=dZgyw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/8] agp: Convert to generic power management
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     David Airlie <airlied@redhat.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pm@vger.kernel.org, linux-pci@vger.kernel.org,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 03:58:35PM +0200, Anna-Maria Behnsen wrote:
-> When the next tick is in the past, the delta between basemono and the next
-> tick gets negativ. But the next tick should never be in the past. The
-> negative effect of a wrong next tick might be a stop of the tick and timers
-> might expire late.
-> 
-> To prevent expensive debugging when changing underlying code, add a
-> WARN_ON_ONCE into this code path.
-> 
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+On Wed, 26 Oct 2022 at 06:39, Bjorn Helgaas <helgaas@kernel.org> wrote:
+>
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Vaibhav converted several AGP drivers from legacy PCI power management to
+> generic power management [1].  This series converts the rest of them.
 
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Do you want to merge through the PCI tree?
 
-> ---
->  kernel/time/tick-sched.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> index b0e3c9205946..7ffdc7ba19b4 100644
-> --- a/kernel/time/tick-sched.c
-> +++ b/kernel/time/tick-sched.c
-> @@ -826,6 +826,8 @@ static ktime_t tick_nohz_next_event(struct tick_sched *ts, int cpu)
->  	 * If the tick is due in the next period, keep it ticking or
->  	 * force prod the timer.
->  	 */
-> +	WARN_ON_ONCE(basemono > next_tick);
-> +
->  	delta = next_tick - basemono;
->  	if (delta <= (u64)TICK_NSEC) {
->  		/*
-> -- 
-> 2.30.2
-> 
+Acked-by: Dave Airlie <airlied@redhat.com>
+
+Dave.
+>
+> v1 posted at [2].
+>
+> Changes from v1 to v2:
+>   - Convert from SIMPLE_DEV_PM_OPS() (which is deprecated) to
+>     DEFINE_SIMPLE_DEV_PM_OPS() and remove __maybe_unused annotations.
+>
+> [1] https://lore.kernel.org/all/20210112080924.1038907-1-vaibhavgupta40@gmail.com/#t
+> [2] https://lore.kernel.org/all/20220607034340.307318-1-helgaas@kernel.org/
+>
+> Bjorn Helgaas (8):
+>   agp/efficeon: Convert to generic power management
+>   agp/intel: Convert to generic power management
+>   agp/amd-k7: Convert to generic power management
+>   agp/ati: Convert to generic power management
+>   agp/nvidia: Convert to generic power management
+>   agp/amd64: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+>   agp/sis: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+>   agp/via: Update to DEFINE_SIMPLE_DEV_PM_OPS()
+>
+>  drivers/char/agp/amd-k7-agp.c   | 24 ++++--------------------
+>  drivers/char/agp/amd64-agp.c    |  6 ++----
+>  drivers/char/agp/ati-agp.c      | 22 ++++------------------
+>  drivers/char/agp/efficeon-agp.c | 16 ++++------------
+>  drivers/char/agp/intel-agp.c    | 11 +++++------
+>  drivers/char/agp/nvidia-agp.c   | 24 ++++--------------------
+>  drivers/char/agp/sis-agp.c      |  7 ++-----
+>  drivers/char/agp/via-agp.c      |  6 ++----
+>  8 files changed, 27 insertions(+), 89 deletions(-)
+>
+> --
+> 2.25.1
+>
