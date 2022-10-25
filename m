@@ -2,188 +2,209 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31DF60C54E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 09:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2940360C5EA
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Oct 2022 09:57:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiJYHeX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 25 Oct 2022 03:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S232102AbiJYH5b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 25 Oct 2022 03:57:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231911AbiJYHeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 03:34:05 -0400
-Received: from mail-pj1-x1041.google.com (mail-pj1-x1041.google.com [IPv6:2607:f8b0:4864:20::1041])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C763A153806
-        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 00:33:44 -0700 (PDT)
-Received: by mail-pj1-x1041.google.com with SMTP id v13-20020a17090a6b0d00b0021332e5388fso2308983pjj.1
-        for <linux-pm@vger.kernel.org>; Tue, 25 Oct 2022 00:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XNFZLWBDpEQVVP8PITjRVb+C8Kzi0WYhsCO8eonBgh0=;
-        b=QsWpwnJULajs9HDqiZmXgkvTZGZkYUVcrZ3B7G7duiqEitktj9vkDQ/g75wHP7rLUf
-         Y3LQKXcUxrmrcTzZApvHSGRd8WDKxJl9BFS9YeQiQcopN147yzmCmsbwfVwQ74Cuf4L2
-         t6CsM7bnebtyY0C+qYldRH6J+y7Ie3OM/phjKEuQ8PpE2kMUEcwqpwEvi8QWsVca1d9F
-         qeqMrcfJHFDjWyDBS6zLxeUfs4BG+K7Jx85MsYbjBWRCwUhEvznPHZtGZrkNkeITMnsP
-         MZAph4ZsdQmxqbeYbzw4waTcN8bE5p+L9Bexg9B2yhAH0liE2Mh33RrsCYUIVpwE8XQM
-         N0AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XNFZLWBDpEQVVP8PITjRVb+C8Kzi0WYhsCO8eonBgh0=;
-        b=FSh8EArw8tfnhdVFaF28SDAneHz5loSsR1SX02v0eOce6LDVpPUMSP6aYWlYQPjCEs
-         BY1bxZVclrJ+I6f8Gqij2l+GLnB5i5qvtuH8B1/zV5bkP0+Vcz8jCA083sooIi2GjgIT
-         wV6aOGTObVn97p4gXKS1lCzkwXfnb4r7d30hiak5OSawaGzQi7UGTymMOEWtbptAVOE/
-         sjzzErqxgxUf85FzHr5aiyaWPihM6P4N4Ka/JvEWhBmHjEkGfltCOewxZ/Egb27IqnKF
-         6Bgign2hg3gniE5L21akG+zZohPiN0qabfwGotjKJAlFMqQHYybEV0zUuriervlZ/HRa
-         mZmA==
-X-Gm-Message-State: ACrzQf0k7PY46Wsa5me+MD4MkZIOeNgwarOOvc7mqZpPU/+BKlJ7NkLe
-        nYcgODOmvkMsNfTJPiX3vuCc
-X-Google-Smtp-Source: AMsMyM6+ep5OX6LFLnBIpKwOJqjTdnabuv3UlmkbhDRgTYaCRuGzjWjDmrmMeJFhb7UIoHNASgukig==
-X-Received: by 2002:a17:902:ce09:b0:178:bb78:49a5 with SMTP id k9-20020a170902ce0900b00178bb7849a5mr37984224plg.100.1666683223934;
-        Tue, 25 Oct 2022 00:33:43 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.211.146])
-        by smtp.gmail.com with ESMTPSA id c1-20020a17090a4d0100b0020dda7efe61sm5048369pjg.5.2022.10.25.00.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Oct 2022 00:33:42 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org
-Cc:     johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 7/7] cpufreq: qcom-hw: Add CPU clock provider support
-Date:   Tue, 25 Oct 2022 13:02:54 +0530
-Message-Id: <20221025073254.1564622-8-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221025073254.1564622-1-manivannan.sadhasivam@linaro.org>
-References: <20221025073254.1564622-1-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S232083AbiJYH5a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 25 Oct 2022 03:57:30 -0400
+Received: from out28-125.mail.aliyun.com (out28-125.mail.aliyun.com [115.124.28.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD21160ED6;
+        Tue, 25 Oct 2022 00:57:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07436725|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.00450854-0.00182145-0.99367;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.PpUsFGp_1666684642;
+Received: from 192.168.220.136(mailfrom:kant@allwinnertech.com fp:SMTPD_---.PpUsFGp_1666684642)
+          by smtp.aliyun-inc.com;
+          Tue, 25 Oct 2022 15:57:25 +0800
+Message-ID: <f0d68beb-f115-88f8-9901-5e7dfac5da77@allwinnertech.com>
+Date:   Tue, 25 Oct 2022 15:57:22 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v3] PM/devfreq: governor: Add a private governor_data for
+ governor
+Content-Language: en-US
+To:     Chanwoo Choi <cwchoi00@gmail.com>, myungjoo.ham@samsung.com,
+        kyungmin.park@samsung.com, cw00.choi@samsung.com, khilman@ti.com,
+        rjw@rjwysocki.net, mturquette@ti.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221014094359.100995-1-kant@allwinnertech.com>
+ <bdbed01c-0e86-14fc-4efa-32a010431d67@gmail.com>
+From:   Kant Fan <kant@allwinnertech.com>
+In-Reply-To: <bdbed01c-0e86-14fc-4efa-32a010431d67@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-cores. But this relationship is not represented with the clk framework
-so far.
+On 10/22/2022 7:41 AM, Chanwoo Choi wrote:
+> Hi,
+> 
+> Looks good to me. But, you need to send it to the stable mailing list
+> too as I commented on previous mail.
+> 
+> Please add stable@vger.kernel.org to Cc.
+> 
 
-So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-clock producer/consumer relationship cleaner and is also useful for CPU
-related frameworks like OPP to know the frequency at which the CPUs are
-running.
+Hi Chanwoo,
+Thanks for the notice. Please review this patch-v4 [1].
 
-The clock frequency provided by the driver is for each frequency domain.
-We cannot get the frequency of each CPU core because, not all platforms
-support per-core DCVS feature.
+[1]
+https://lore.kernel.org/all/20221025072109.64025-1-kant@allwinnertech.com/
 
-Also the frequency supplied by the driver is the actual frequency that
-comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-not same as what the CPUFreq framework has set but it is the one that gets
-supplied to the CPUs after throttling by LMh.
-
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 76f840636828..66677db3e267 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
- #include <linux/cpufreq.h>
- #include <linux/init.h>
- #include <linux/interconnect.h>
-@@ -53,6 +54,7 @@ struct qcom_cpufreq_data {
- 	bool cancel_throttle;
- 	struct delayed_work throttle_work;
- 	struct cpufreq_policy *policy;
-+	struct clk_hw cpu_clk;
- 
- 	bool per_core_dcvs;
- };
-@@ -601,8 +603,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 	.ready		= qcom_cpufreq_ready,
- };
- 
-+static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-+
-+	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
-+}
-+
-+static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-+	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-+};
-+
- static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
-+	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
- 	struct device *cpu_dev;
- 	struct clk *clk;
-@@ -645,8 +659,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
- 
-+	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	clk_data->num = num_domains;
-+
- 	for (i = 0; i < num_domains; i++) {
- 		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-+		static struct clk_init_data init = {};
-+		const char *clk_name;
- 		struct resource *res;
- 		void __iomem *base;
- 
-@@ -658,6 +680,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 		data->base = base;
- 		data->res = res;
-+
-+		/* Register CPU clock for each frequency domain */
-+		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
-+		init.name = clk_name;
-+		init.flags = CLK_GET_RATE_NOCACHE;
-+		init.ops = &qcom_cpufreq_hw_clk_ops;
-+		data->cpu_clk.init = &init;
-+
-+		ret = devm_clk_hw_register(dev, &data->cpu_clk);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-+			return ret;
-+		}
-+
-+		clk_data->hws[i] = &data->cpu_clk;
-+	}
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-+		return ret;
- 	}
- 
- 	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
 -- 
-2.25.1
+Best Regards,
+Kant Fan
+
+> On 22. 10. 14. 18:43, Kant Fan wrote:
+>> The member void *data in the structure devfreq can be overwrite
+>> by governor_userspace. For example:
+>> 1. The device driver assigned the devfreq governor to simple_ondemand
+>> by the function devfreq_add_device() and init the devfreq member
+>> void *data to a pointer of a static structure devfreq_simple_ondemand_data
+>> by the function devfreq_add_device().
+>> 2. The user changed the devfreq governor to userspace by the command
+>> "echo userspace > /sys/class/devfreq/.../governor".
+>> 3. The governor userspace alloced a dynamic memory for the struct
+>> userspace_data and assigend the member void *data of devfreq to
+>> this memory by the function userspace_init().
+>> 4. The user changed the devfreq governor back to simple_ondemand
+>> by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
+>> 5. The governor userspace exited and assigned the member void *data
+>> in the structure devfreq to NULL by the function userspace_exit().
+>> 6. The governor simple_ondemand fetched the static information of
+>> devfreq_simple_ondemand_data in the function
+>> devfreq_simple_ondemand_func() but the member void *data of devfreq was
+>> assigned to NULL by the function userspace_exit().
+>> 7. The information of upthreshold and downdifferential is lost
+>> and the governor simple_ondemand can't work correctly.
+>>
+>> The member void *data in the structure devfreq is designed for
+>> a static pointer used in a governor and inited by the function
+>> devfreq_add_device(). This patch add an element named governor_data
+>> in the devfreq structure which can be used by a governor(E.g userspace)
+>> who want to assign a private data to do some private things.
+>>
+>> Fixes: ce26c5bb9569 ("PM / devfreq: Add basic governors")
+>>
+>> Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
+>>
+>> Signed-off-by: Kant Fan <kant@allwinnertech.com>
+>> ---
+>>   drivers/devfreq/devfreq.c            |  6 ++----
+>>   drivers/devfreq/governor_userspace.c | 12 ++++++------
+>>   include/linux/devfreq.h              |  7 ++++---
+>>   3 files changed, 12 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+>> index 63347a5ae599..8c5f6f7fca11 100644
+>> --- a/drivers/devfreq/devfreq.c
+>> +++ b/drivers/devfreq/devfreq.c
+>> @@ -776,8 +776,7 @@ static void remove_sysfs_files(struct devfreq *devfreq,
+>>    * @dev:	the device to add devfreq feature.
+>>    * @profile:	device-specific profile to run devfreq.
+>>    * @governor_name:	name of the policy to choose frequency.
+>> - * @data:	private data for the governor. The devfreq framework does not
+>> - *		touch this value.
+>> + * @data:	devfreq driver pass to governors, governor should not change it.
+>>    */
+>>   struct devfreq *devfreq_add_device(struct device *dev,
+>>   				   struct devfreq_dev_profile *profile,
+>> @@ -1011,8 +1010,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
+>>    * @dev:	the device to add devfreq feature.
+>>    * @profile:	device-specific profile to run devfreq.
+>>    * @governor_name:	name of the policy to choose frequency.
+>> - * @data:	private data for the governor. The devfreq framework does not
+>> - *		touch this value.
+>> + * @data:	 devfreq driver pass to governors, governor should not change it.
+>>    *
+>>    * This function manages automatically the memory of devfreq device using device
+>>    * resource management and simplify the free operation for memory of devfreq
+>> diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+>> index ab9db7adb3ad..d69672ccacc4 100644
+>> --- a/drivers/devfreq/governor_userspace.c
+>> +++ b/drivers/devfreq/governor_userspace.c
+>> @@ -21,7 +21,7 @@ struct userspace_data {
+>>   
+>>   static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+>>   {
+>> -	struct userspace_data *data = df->data;
+>> +	struct userspace_data *data = df->governor_data;
+>>   
+>>   	if (data->valid)
+>>   		*freq = data->user_frequency;
+>> @@ -40,7 +40,7 @@ static ssize_t set_freq_store(struct device *dev, struct device_attribute *attr,
+>>   	int err = 0;
+>>   
+>>   	mutex_lock(&devfreq->lock);
+>> -	data = devfreq->data;
+>> +	data = devfreq->governor_data;
+>>   
+>>   	sscanf(buf, "%lu", &wanted);
+>>   	data->user_frequency = wanted;
+>> @@ -60,7 +60,7 @@ static ssize_t set_freq_show(struct device *dev,
+>>   	int err = 0;
+>>   
+>>   	mutex_lock(&devfreq->lock);
+>> -	data = devfreq->data;
+>> +	data = devfreq->governor_data;
+>>   
+>>   	if (data->valid)
+>>   		err = sprintf(buf, "%lu\n", data->user_frequency);
+>> @@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
+>>   		goto out;
+>>   	}
+>>   	data->valid = false;
+>> -	devfreq->data = data;
+>> +	devfreq->governor_data = data;
+>>   
+>>   	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
+>>   out:
+>> @@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
+>>   	if (devfreq->dev.kobj.sd)
+>>   		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+>>   
+>> -	kfree(devfreq->data);
+>> -	devfreq->data = NULL;
+>> +	kfree(devfreq->governor_data);
+>> +	devfreq->governor_data = NULL;
+>>   }
+>>   
+>>   static int devfreq_userspace_handler(struct devfreq *devfreq,
+>> diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+>> index 34aab4dd336c..4dc7cda4fd46 100644
+>> --- a/include/linux/devfreq.h
+>> +++ b/include/linux/devfreq.h
+>> @@ -152,8 +152,8 @@ struct devfreq_stats {
+>>    * @max_state:		count of entry present in the frequency table.
+>>    * @previous_freq:	previously configured frequency value.
+>>    * @last_status:	devfreq user device info, performance statistics
+>> - * @data:	Private data of the governor. The devfreq framework does not
+>> - *		touch this.
+>> + * @data:	devfreq driver pass to governors, governor should not change it.
+>> + * @governor_data:	private data for governors, devfreq core doesn't touch it.
+>>    * @user_min_freq_req:	PM QoS minimum frequency request from user (via sysfs)
+>>    * @user_max_freq_req:	PM QoS maximum frequency request from user (via sysfs)
+>>    * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
+>> @@ -193,7 +193,8 @@ struct devfreq {
+>>   	unsigned long previous_freq;
+>>   	struct devfreq_dev_status last_status;
+>>   
+>> -	void *data; /* private data for governors */
+>> +	void *data;
+>> +	void *governor_data;
+>>   
+>>   	struct dev_pm_qos_request user_min_freq_req;
+>>   	struct dev_pm_qos_request user_max_freq_req;
+> 
+
+
 
