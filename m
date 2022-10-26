@@ -2,103 +2,169 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5971C60E3D7
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 16:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 393C360E46B
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 17:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234023AbiJZOzw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 10:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49494 "EHLO
+        id S234478AbiJZP01 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 11:26:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234366AbiJZOzm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 10:55:42 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5FB4DF23
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:55:40 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id f22so10047458qto.3
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:55:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e3lqNi3RbqgpuL1HhrQjDmFY0qPGdGmAhxHwivSb/T8=;
-        b=Gcb8FjMs4ySz6J+pR+J1Mo/EPLeUu24ZaxXMLXfj+jAWgYMTPDfUxiUow8fZpQ+i8I
-         9h34U92YQK5UR2zLTk97+OU7cXC0yJaTq8Y6OTGdTaSLKD2KKVd26WHoL5IVUPH3J+QO
-         7XrFg5T6yXwvOrbfOi4B8fZL1i1mh9My6ry+pAxcIgfz4Kmc49O8OFQiBPCPtRT5FdYV
-         Ju34rxsPx5/4VRT7Mqt81L7wwaB03Y2rpFkyX0cLpzgH3QQVx6TatZYdm+J0ipP0BD8h
-         pif4Orsgp4D/e3eyQypKmhjvH+Ss1Gu/8G2QEVmIZx0R3CvTT/JHI/95xR9DQe1nFnsO
-         vlhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3lqNi3RbqgpuL1HhrQjDmFY0qPGdGmAhxHwivSb/T8=;
-        b=fPdxtGbdeJMX9VkBLNM1UgIFbyZKGSNuNqmVPoLmCxgWWse3tgFYwLjG4Hr8CEo6q5
-         TkJTZ7bgtG7HptDDSNvpSkDNNShXY6JbtymDG+D4FFAn8os9MwTVXeiqgB97yFY7m04i
-         8MutuvY4jf/UgUMgFTyYtKIAGHk1SiLUjF5Vnpaj5ZsIwiWBqUjcRIauGS/FCPt49XAw
-         Gm9l6BOPBEKnuRKy83BdlJMc5eN2o62Vyu+NOguDy16a9EgRVHnyNx2TgUckh9OjzO5o
-         83bjK4CpHg8o/qNNyQQVxJsCI6Jw2pFyZvxyZ1l6pX3HzaWLLgE7aip1v4xz6k/TntJi
-         leCw==
-X-Gm-Message-State: ACrzQf2iTMGj/xPn0cMhXButbfJzYHQMgEm/uqXSMxvTN2fgQizIi7wn
-        qXzDpu4FDWsMF3aKMECuzADOjw==
-X-Google-Smtp-Source: AMsMyM7j/ZVDc5l9UFuHrdwBCBzkxBteTzFIJOBIUZKFvQpGoW8iRFKuzC3SUR7OGcb+XCilbIai4A==
-X-Received: by 2002:ac8:7f41:0:b0:39c:f34f:feca with SMTP id g1-20020ac87f41000000b0039cf34ffecamr36575709qtk.644.1666796139618;
-        Wed, 26 Oct 2022 07:55:39 -0700 (PDT)
-Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id w27-20020a05620a0e9b00b006f16148fa96sm4007204qkm.91.2022.10.26.07.55.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:55:38 -0700 (PDT)
-Message-ID: <853acb94-ee52-e776-2e0e-08ef837bf02d@linaro.org>
-Date:   Wed, 26 Oct 2022 10:55:36 -0400
+        with ESMTP id S234392AbiJZP00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 11:26:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47571EE8AD;
+        Wed, 26 Oct 2022 08:26:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D612861F86;
+        Wed, 26 Oct 2022 15:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD787C433C1;
+        Wed, 26 Oct 2022 15:26:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666797984;
+        bh=Pzek3yhRyqg9onveV/DhbH5znQ1mcRmwDYSkzMK+98w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ifwIVNut1KU3sPF6rN9bNiDsLLnDSmcNPtKJLrLZvWrRpGjxiadRNZBdyFHaTBSRl
+         noZbPvz1hdQitmFg3eFsp9o6AuOuAIqr1VRwVs75iowjYn3Jj0R6ANIiqKI/0iBci+
+         Mf0mhiT54j9Ixm+7wSA5efQaz2caWpGM6dx2OsPJS8sI+nF11h6JJKhOrM+GEG1haH
+         EBVqD5yjop3RFtrpNL60f5ooEMkFTNpjCeIzlH4CBWVn2vDX7SGek0ycWEfKUldNtL
+         sIVv6LdPzHKsGQwnv8u+X2uomMRVyiPsn6+3N8B/a0rKMTi6TuPFSjSc1uewjFAVCW
+         dwVft+cnQxMxA==
+Date:   Wed, 26 Oct 2022 17:26:21 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Subject: Re: [PATCH v3 06/17] timer: Keep the pinned timers separate from the
+ others
+Message-ID: <20221026152621.GA1330257@lothringen>
+References: <20221025135850.51044-1-anna-maria@linutronix.de>
+ <20221025135850.51044-7-anna-maria@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 06/11] dt-bindings: thermal: k3-j72xx: conditionally
- require efuse reg range
-Content-Language: en-US
-To:     Bryan Brattlof <bb@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-Cc:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
-        Device Trees <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LKML ARM <linux-arm-kernel@lists.infradead.org>
-References: <20221025191515.9151-1-bb@ti.com>
- <20221025191515.9151-7-bb@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221025191515.9151-7-bb@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025135850.51044-7-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 25/10/2022 15:15, Bryan Brattlof wrote:
-> Only some of TI's J721E SoCs will need a eFuse register range mapped to
-> determine if they're affected by TI's i2128 erratum. All other SoC will
-> not need this eFuse range to function properly
+On Tue, Oct 25, 2022 at 03:58:39PM +0200, Anna-Maria Behnsen wrote:
+> @@ -1711,38 +1724,69 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+>  	if (cpu_is_offline(smp_processor_id()))
+>  		return expires;
+>  
+> -	raw_spin_lock(&base->lock);
+> +	base_local = this_cpu_ptr(&timer_bases[BASE_LOCAL]);
+> +	base_global = this_cpu_ptr(&timer_bases[BASE_GLOBAL]);
+>  
+> -	nextevt = next_timer_interrupt(base);
+> +	raw_spin_lock(&base_local->lock);
+> +	raw_spin_lock_nested(&base_global->lock, SINGLE_DEPTH_NESTING);
+> +
+> +	nextevt_local = next_timer_interrupt(base_local);
+> +	nextevt_global = next_timer_interrupt(base_global);
+>  
+>  	/*
+>  	 * We have a fresh next event. Check whether we can forward the
+>  	 * base. We can only do that when @basej is past base->clk
+>  	 * otherwise we might rewind base->clk.
+>  	 */
+> -	if (time_after(basej, base->clk)) {
+> -		if (time_after(nextevt, basej))
+> -			base->clk = basej;
+> -		else if (time_after(nextevt, base->clk))
+> -			base->clk = nextevt;
+> +	if (time_after(basej, base_local->clk)) {
+> +		if (time_after(nextevt_local, basej))
+> +			base_local->clk = basej;
+> +		else if (time_after(nextevt_local, base_local->clk))
+> +			base_local->clk = nextevt_local;
+> +	}
+> +
+> +	if (time_after(basej, base_global->clk)) {
+> +		if (time_after(nextevt_global, basej))
+> +			base_global->clk = basej;
+> +		else if (time_after(nextevt_global, base_global->clk))
+> +			base_global->clk = nextevt_global;
+
+Perhaps make a helper for the two above?
+
+>  	}
+>  
+> @@ -1763,6 +1807,9 @@ void timer_clear_idle(void)
+>  	 * the lock in the exit from idle path.
+>  	 */
+>  	base->is_idle = false;
+> +
+> +	base = this_cpu_ptr(&timer_bases[BASE_GLOBAL]);
+> +	base->is_idle = false;
+
+May be just:
+
+    __this_cpu_write(timer_bases[BASE_LOCAL].is_idle, false)
+    __this_cpu_write(timer_bases[BASE_GLOBAL].is_idle, false)
+
+>  }
+>  #endif
+>  
+> @@ -1820,17 +1869,21 @@ static __latent_entropy void run_timer_softirq(struct softirq_action *h)
+>   */
+>  static void run_local_timers(void)
+>  {
+> -	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_STD]);
+> +	struct timer_base *base = this_cpu_ptr(&timer_bases[BASE_LOCAL]);
+>  
+>  	hrtimer_run_queues();
+>  	/* Raise the softirq only if required. */
+>  	if (time_before(jiffies, base->next_expiry)) {
+>  		if (!IS_ENABLED(CONFIG_NO_HZ_COMMON))
+>  			return;
+> -		/* CPU is awake, so check the deferrable base. */
+> +		/* CPU is awake, so check for the global base. */
+>  		base++;
+> -		if (time_before(jiffies, base->next_expiry))
+> -			return;
+> +		if (time_before(jiffies, base->next_expiry)) {
+> +			/* CPU is awake, so check the deferrable base. */
+> +			base++;
+> +			if (time_before(jiffies, base->next_expiry))
+> +				return;
+> +		}
+
+Could be:
+
+for (i = 0; i < NR_BASES; i++) {
+    struct timer_base *base = this_cpu_ptr(&timer_bases[i]);
+    if (time_after_eq(jiffies, base->next_expiry)) {
+       raise_softirq(TIMER_SOFTIRQ);
+       return;
+    }
+}
+       
+
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+
+Thanks!
+
+
+>  	}
+>  	raise_softirq(TIMER_SOFTIRQ);
+>  }
+> -- 
+> 2.30.2
 > 
-> Update the bindings for the k3_j72xx_bandgap thermal driver so other
-> devices will only need two register ranges
-> 
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
