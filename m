@@ -2,115 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DF360DE11
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 11:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFFF160DE1D
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 11:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiJZJ34 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 05:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
+        id S232530AbiJZJdL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 05:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232844AbiJZJ3z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 05:29:55 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D25A3868D
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 02:29:53 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oncjM-0003K0-Ax; Wed, 26 Oct 2022 11:29:48 +0200
-Message-ID: <9e747f87-1854-dbd7-ef3a-1effc2b90e3b@leemhuis.info>
-Date:   Wed, 26 Oct 2022 11:29:46 +0200
+        with ESMTP id S231164AbiJZJdK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 05:33:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B0BB2773;
+        Wed, 26 Oct 2022 02:33:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3DD2B8212F;
+        Wed, 26 Oct 2022 09:33:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DC0C433C1;
+        Wed, 26 Oct 2022 09:33:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666776787;
+        bh=BofbRtfIxoJoenlFoJc1d0N551Sv7Cz7H1y1Amq+Qo0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OCCBUq/Df0dDEVCTbMgVIdLVL865mdtl9QRgpR4rlTZFRIaHQOucswtXZaGFckhTZ
+         Qu0SI6rb2kmQcRhOlDmCyoFSgPvdgxVdThEBpvBe412LTeVjEtPJJvuEv+qDyrRGfZ
+         jdroKRhc9D8yHZCm1fx/T2wy2jX182MdYWx5k5TKl5wYDbFugnWiEZfQKptprlA5Ok
+         mzPg9Frd2Eh+IxXGwkVJzbP35M1HM4IL9C9qHCHXJYUfHuhJyd6KDHS+ySzhrsGNIR
+         e4XJUExG0QSoS0gaYOOQBL9q+S2ZhCdqjGZOf4B21cH2eOTg2XdP+85ihdpHl5uwis
+         JtOWS76re+WsQ==
+Date:   Wed, 26 Oct 2022 11:33:04 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <john.stultz@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@redhat.com>
+Subject: Re: [PATCH v3 03/17] timer: Move store of next event into
+ __next_timer_interrupt()
+Message-ID: <20221026093304.GA1327339@lothringen>
+References: <20221025135850.51044-1-anna-maria@linutronix.de>
+ <20221025135850.51044-4-anna-maria@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: Regression after recent changes to drivers/thermal/thermal_of.c
- #forregzbot
-Content-Language: en-US, de-DE
-Cc:     Linux PM list <linux-pm@vger.kernel.org>
-References: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
-To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-In-Reply-To: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666776593;f23cd270;
-X-HE-SMSGID: 1oncjM-0003K0-Ax
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221025135850.51044-4-anna-maria@linutronix.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Note: this mail is primarily send for documentation purposes and/or for
-regzbot, my Linux kernel regression tracking bot. That's why I removed
-most or all folks from the list of recipients, but left any that looked
-like a mailing lists. These mails usually contain '#forregzbot' in the
-subject, to make them easy to spot and filter out.]
-
-[TLDR: I'm adding this regression report to the list of tracked
-regressions; all text from me you find below is based on a few templates
-paragraphs you might have encountered already already in similar form.]
-
-Hi, this is your Linux kernel regression tracker.
-
-On 25.10.22 23:13, Linus Walleij wrote:
-> Hi Folks,
+On Tue, Oct 25, 2022 at 03:58:36PM +0200, Anna-Maria Behnsen wrote:
+> Both call sides of __next_timer_interrupt() store the return value directly
+> in base->next_expiry. Move the store into __next_timer_interrupt().
 > 
-> I have this in my dmesg in v6.1-rc1:
+> No functional change.
 > 
-> [    3.879229] ab8500-fg ab8500-fg.0: line impedance: 36000 uOhm
-> [    3.892793] power_supply ab8500_usb: Samsung SDI EB-L1M7FLU battery 1500 mAh
-> [    3.901663] thermal_sys: Failed to find 'trips' node
-> [    3.906635] thermal_sys: Failed to find trip points for thermistor id=0
-> [    3.913427] ntc-thermistor thermistor: unable to register as hwmon device.
-> [    3.920350] ntc-thermistor: probe of thermistor failed with error -22
+> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  kernel/time/timer.c | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
 > 
-> The device tree looks like this
-> (arch/arm/boot/dts/ste-ux500-samsung-golden.dts):
+> diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+> index 717fcb9fb14a..7695c733dfa5 100644
+> --- a/kernel/time/timer.c
+> +++ b/kernel/time/timer.c
+> @@ -1571,8 +1571,10 @@ static int next_pending_bucket(struct timer_base *base, unsigned offset,
+>  /*
+>   * Search the first expiring timer in the various clock levels. Caller must
+>   * hold base->lock.
+> + *
+> + * Store next expiry time in base->next_expiry.
+>   */
+> -static unsigned long __next_timer_interrupt(struct timer_base *base)
+> +static void __next_timer_interrupt(struct timer_base *base)
+>  {
+>  	unsigned long clk, next, adj;
+>  	unsigned lvl, offset = 0;
+> @@ -1638,10 +1640,11 @@ static unsigned long __next_timer_interrupt(struct timer_base *base)
+>  		clk += adj;
+>  	}
+>  
+> +	base->next_expiry = next;
+>  	base->next_expiry_recalc = false;
+
+In that case, maybe rename that function as next_expiry_recalc() to make its
+purpose clearer?
+
+Thanks!
+
+>  	base->timers_pending = !(next == base->clk + NEXT_TIMER_MAX_DELTA);
+>  
+> -	return next;
+> +	return;
+>  }
+>  
+>  #ifdef CONFIG_NO_HZ_COMMON
+> @@ -1701,7 +1704,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+>  
+>  	raw_spin_lock(&base->lock);
+>  	if (base->next_expiry_recalc)
+> -		base->next_expiry = __next_timer_interrupt(base);
+> +		__next_timer_interrupt(base);
+>  	nextevt = base->next_expiry;
+>  
+>  	/*
+> @@ -1784,7 +1787,7 @@ static inline void __run_timers(struct timer_base *base)
+>  		WARN_ON_ONCE(!levels && !base->next_expiry_recalc
+>  			     && base->timers_pending);
+>  		base->clk++;
+> -		base->next_expiry = __next_timer_interrupt(base);
+> +		__next_timer_interrupt(base);
+>  
+>  		while (levels--)
+>  			expire_timers(base, heads + levels);
+> -- 
+> 2.30.2
 > 
->         thermal-zones {
->                 battery-thermal {
->                         /* This zone will be polled by the battery
-> temperature code */
->                         polling-delay = <0>;
->                         polling-delay-passive = <0>;
->                         thermal-sensors = <&bat_therm>;
->                 };
->         };
-> 
-> This is a thermal zone without trip points, which it seems like the new
-> code does not allow, also the bindings were patched to not allow this,
-> in commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7
-> "dt-bindings: thermal: Fix missing required property"
-> but this broke my systems. The requirement to have trip points also
-> broke my device trees.
-> [...]
-
-Thanks for the report. To be sure below issue doesn't fall through the
-cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
-tracking bot:
-
-#regzbot ^introduced 8c596324232d22e19f
-#regzbot title dt-bindings: thermal: thermal zone without trip points broke
-#regzbot ignore-activity
-
-This isn't a regression? This issue or a fix for it are already
-discussed somewhere else? It was fixed already? You want to clarify when
-the regression started to happen? Or point out I got the title or
-something else totally wrong? Then just reply -- ideally with also
-telling regzbot about it, as explained here:
-https://linux-regtracking.leemhuis.info/tracked-regression/
-
-Reminder for developers: When fixing the issue, add 'Link:' tags
-pointing to the report (the mail this one replies to), as explained for
-in the Linux kernel's documentation; above webpage explains why this is
-important for tracked regressions.
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
-
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
