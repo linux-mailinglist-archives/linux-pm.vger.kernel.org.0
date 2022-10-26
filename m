@@ -2,61 +2,40 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DF160DB9E
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 08:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4DF360DE11
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 11:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbiJZGwK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 02:52:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49588 "EHLO
+        id S229904AbiJZJ34 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 05:29:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiJZGwJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 02:52:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 963019C2CA;
-        Tue, 25 Oct 2022 23:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666767128; x=1698303128;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=48A3whc/JIcid0pEpadUw/To0jFtvo9Q0V16FOxTKTI=;
-  b=BL5LpzgxRTz9LSyoZs1CJ7o0bvYwpEaDgGOcX89G8i4Xi9wwgtKWvYah
-   uAeSMm3ZZGpNkb6AiI+9ilca8aKg8KWLr61In83dRqEYRPFN3I7pNqJbF
-   +JkHEYvyeZePkXKE8hEaixpV+QEV/l2htq5t7Q5OMNKw3evmnSLMBYEdv
-   h8N2g8EAzyW2aiCvvyetzlcsq3zsFU8AYIhfZ+WcexFeGYd6Jwi+ek9n1
-   /oeSo2HI/8tMsCm1DS2GmfWTi5UaH0PT7YG4+iXzfN+15pvl+pqlRHBNC
-   ly0nejHPbmYV+xIB0bmphPz3gQlOWprQ8l0LcNRkxh6s/6fDsn49ClfWd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="372084820"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="372084820"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2022 23:51:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10511"; a="583052818"
-X-IronPort-AV: E=Sophos;i="5.95,213,1661842800"; 
-   d="scan'208";a="583052818"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 25 Oct 2022 23:51:42 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1onaGL-000779-2r;
-        Wed, 26 Oct 2022 06:51:41 +0000
-Date:   Wed, 26 Oct 2022 14:51:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 4731015a0f0468e1ab6c2c0b417eac166f1a6d24
-Message-ID: <6358d8f0.B/F75SsPK28VY6gy%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232844AbiJZJ3z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 05:29:55 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D25A3868D
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 02:29:53 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oncjM-0003K0-Ax; Wed, 26 Oct 2022 11:29:48 +0200
+Message-ID: <9e747f87-1854-dbd7-ef3a-1effc2b90e3b@leemhuis.info>
+Date:   Wed, 26 Oct 2022 11:29:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: Regression after recent changes to drivers/thermal/thermal_of.c
+ #forregzbot
+Content-Language: en-US, de-DE
+Cc:     Linux PM list <linux-pm@vger.kernel.org>
+References: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1666776593;f23cd270;
+X-HE-SMSGID: 1oncjM-0003K0-Ax
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,89 +43,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 4731015a0f0468e1ab6c2c0b417eac166f1a6d24  Merge branch 'devprop' into bleeding-edge
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
 
-elapsed time: 723m
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-configs tested: 68
-configs skipped: 2
+Hi, this is your Linux kernel regression tracker.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+On 25.10.22 23:13, Linus Walleij wrote:
+> Hi Folks,
+> 
+> I have this in my dmesg in v6.1-rc1:
+> 
+> [    3.879229] ab8500-fg ab8500-fg.0: line impedance: 36000 uOhm
+> [    3.892793] power_supply ab8500_usb: Samsung SDI EB-L1M7FLU battery 1500 mAh
+> [    3.901663] thermal_sys: Failed to find 'trips' node
+> [    3.906635] thermal_sys: Failed to find trip points for thermistor id=0
+> [    3.913427] ntc-thermistor thermistor: unable to register as hwmon device.
+> [    3.920350] ntc-thermistor: probe of thermistor failed with error -22
+> 
+> The device tree looks like this
+> (arch/arm/boot/dts/ste-ux500-samsung-golden.dts):
+> 
+>         thermal-zones {
+>                 battery-thermal {
+>                         /* This zone will be polled by the battery
+> temperature code */
+>                         polling-delay = <0>;
+>                         polling-delay-passive = <0>;
+>                         thermal-sensors = <&bat_therm>;
+>                 };
+>         };
+> 
+> This is a thermal zone without trip points, which it seems like the new
+> code does not allow, also the bindings were patched to not allow this,
+> in commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7
+> "dt-bindings: thermal: Fix missing required property"
+> but this broke my systems. The requirement to have trip points also
+> broke my device trees.
+> [...]
 
-gcc tested configs:
-um                             i386_defconfig
-arc                              allyesconfig
-um                           x86_64_defconfig
-arc                               allnoconfig
-alpha                            allyesconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-m68k                             allyesconfig
-arc                                 defconfig
-m68k                             allmodconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-powerpc                           allnoconfig
-mips                             allyesconfig
-x86_64                              defconfig
-powerpc                          allmodconfig
-x86_64                               rhel-8.3
-sh                               allmodconfig
-x86_64                           allyesconfig
-ia64                             allmodconfig
-i386                                defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-arc                  randconfig-r043-20221025
-x86_64                        randconfig-a013
-i386                 randconfig-a011-20221024
-x86_64                        randconfig-a011
-i386                 randconfig-a015-20221024
-i386                 randconfig-a014-20221024
-i386                 randconfig-a013-20221024
-i386                 randconfig-a012-20221024
-i386                 randconfig-a016-20221024
-i386                             allyesconfig
-x86_64                        randconfig-a015
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-sh                          kfr2r09_defconfig
-arc                              alldefconfig
-sh                           sh2007_defconfig
-sh                        edosk7760_defconfig
-sh                          r7780mp_defconfig
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-x86_64               randconfig-a001-20221024
-x86_64               randconfig-a005-20221024
-x86_64               randconfig-a003-20221024
-i386                          randconfig-a006
-x86_64               randconfig-a004-20221024
-x86_64               randconfig-a002-20221024
-hexagon              randconfig-r041-20221025
-riscv                randconfig-r042-20221025
-hexagon              randconfig-r045-20221025
-x86_64               randconfig-a006-20221024
-s390                 randconfig-r044-20221025
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-mips                        maltaup_defconfig
+#regzbot ^introduced 8c596324232d22e19f
+#regzbot title dt-bindings: thermal: thermal zone without trip points broke
+#regzbot ignore-activity
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
