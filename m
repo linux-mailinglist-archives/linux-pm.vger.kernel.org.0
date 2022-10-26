@@ -2,145 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2261A60E2B6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 15:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7D7860E2F5
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 16:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234056AbiJZN4A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 09:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S234197AbiJZONL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 10:13:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234091AbiJZNzK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 09:55:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEC221BA;
-        Wed, 26 Oct 2022 06:54:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C09E7B82256;
-        Wed, 26 Oct 2022 13:54:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF802C433C1;
-        Wed, 26 Oct 2022 13:54:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666792466;
-        bh=LKZk9dBZGIq7KqFoibWcuqHEwOK9OLBpzjrlxQ1KBlM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fKikGAmSLTBEDZcy4Ji5S4E690ealCJfSRBv9dXVt94phADLKB5WObZ+//7lt9E4e
-         JsA+/VaZOCeJmTM1QTSFmKvpP6TvQh/xfpYyS44d3aypIebEYZ8BSbPFjTJDMraLdx
-         xGcX+2U+g+sQEPhhcH/3lUnbIIx6BosZx67YY/LLdaOO5vF2EVuYoFUDmhquFVHpWS
-         IdeCVOtIabZjvD43K7P8xYekLqKFQMMu5re3buLjeTDqlutyl98+qK9AAuBzW25RO8
-         D45F5rDYtybZJGS2qzAQRxUNwdmGkVnzVcL9tW2jVkkJ6O9kyqM/rBB8GL2QPk4cz8
-         XQReRe+ltefuQ==
-Date:   Wed, 26 Oct 2022 15:54:23 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <john.stultz@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@redhat.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: Re: [PATCH v3 01/17] cpufreq: Prepare timer flags for hierarchical
- timer pull model
-Message-ID: <20221026135423.GA1329996@lothringen>
-References: <20221025135850.51044-1-anna-maria@linutronix.de>
- <20221025135850.51044-2-anna-maria@linutronix.de>
+        with ESMTP id S233730AbiJZONK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 10:13:10 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9576B10DE4E
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:13:09 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id z17so7922621qkj.8
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:13:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3BJkQ2Lvx038FbiNzpk9wcXe4nIQwkZdE8UfXIihqNk=;
+        b=QhFXvTvNJUlIUlpQDnzeAFmF6+ln6IFY1BFH21RP3EDt2LD6+1BYjRCN8caiSBm9uE
+         CPrOIRLVIOU+Xb1tuA5uzcHXRF7ZgVxAc3k82P8Mz5y9pR/HX2TepOaNrgwIXyEfqtfl
+         QsEycG67flPJyLlIIpQxjnPapaGi5xAXZNMh5iU8UZ+zTDI3D5A9QIQQMOFjr9FUJEx5
+         ep/+BMxyL5A6mYuUnVqMPJX0r7bnvvrSfWFLqz1HyLxOhEAIlz6nj4ZNidzji5N/SsPi
+         fc+x4k16tPOTNEtcw7GO9Dlfd2ijEz1Dxx7dGrYQsJjNfiEKfoRKjwN5btuyQQQnNAfu
+         mjfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3BJkQ2Lvx038FbiNzpk9wcXe4nIQwkZdE8UfXIihqNk=;
+        b=Orj0ORWs6MsZ37ejNg9mcKwec363GZC4xSpT5O2dkRLmus0XzE3Qdx6S6oOdcu6EVT
+         9lN5djKEOm0pxOxmkn1PPKM5ICny1Eu1KT65f1g/T43zIkGziH6V4IryIa4KXKoJ0arc
+         /NuzGbPFncC7DR5KRAl0lDqzUV1Z4ufjs3F4IkWH/EUGxP9tAFRUFLN2R7C42E7UcLrl
+         P3WuFkLZ3uy3w41YtNaq0tDG5fH+EuCUg/9imvq1mpohtTnx4O2QJp5pxy+7NKQLgD4v
+         rW09WQ8f0ND3bujkYBzeI92HD+Axgpr4fK6DobTSgV/Ir2kIJDTg264LSOaJU2k97qCx
+         nT6g==
+X-Gm-Message-State: ACrzQf244e9ixs3orTOPfpdP6rh0+JV0CiRbVFbraN/OzfJs+wMgdnTn
+        5/VeAUWJoB6MjlAdaQqhzt9LRw==
+X-Google-Smtp-Source: AMsMyM5HJOoGv/K2f7op+AS1jKZWgMgm9sMjTfvjwWkv3/yGR1lYtHuWo60wwCaoDlDuxiFnqa7Rig==
+X-Received: by 2002:a05:620a:28d3:b0:6ee:cffb:21ef with SMTP id l19-20020a05620a28d300b006eecffb21efmr30529027qkp.123.1666793588691;
+        Wed, 26 Oct 2022 07:13:08 -0700 (PDT)
+Received: from [192.168.1.11] ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05620a2a0e00b006cbc00db595sm4164494qkp.23.2022.10.26.07.13.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 07:13:07 -0700 (PDT)
+Message-ID: <bcf5ef3c-a17d-e174-2b97-cef4d728cb35@linaro.org>
+Date:   Wed, 26 Oct 2022 10:13:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025135850.51044-2-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221024043925.25379-1-marcan@marcan.st>
+ <20221024043925.25379-3-marcan@marcan.st>
+ <5c3126fb-8fdb-5163-95a8-136a4a7ee2ce@linaro.org>
+ <97d3d6d4-b19c-a194-de41-f17e65bf3eb6@marcan.st>
+ <21602556-8312-fb7a-1981-cd03a314d904@linaro.org>
+ <0f76c1b5-8fe5-e3dc-dc9a-7b0ad9660275@marcan.st>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <0f76c1b5-8fe5-e3dc-dc9a-7b0ad9660275@marcan.st>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 03:58:34PM +0200, Anna-Maria Behnsen wrote:
-> Note: This is a proposal only. I was waiting on input how to change this
-> driver properly to use the already existing infrastructure. See therfore
-> the thread on linux-pm mailinglist:
-> https://lore.kernel.org/linux-pm/4c99f34b-40f1-e6cc-2669-7854b615b5fd@linutronix.de/
+On 26/10/2022 00:18, Hector Martin wrote:
+>>>> With the first one (t8103) - it's an enum.
+>>>
+>>> This is deliberate. t6000 is compatible with t8103, but t8112 is not
+>>> (though all are compatible with what the generic apple,cluster-cpufreq
+>>> compatible implies).
+>>
+>> I was not talking about t6000. I was talking about two entries - first
+>> and last - which should be just an enum. There is no compatibility, so
+>> what is here deliberate? To not make enum things which are an enum?
 > 
-> gpstates timer is the only timer using TIMER_PINNED and TIMER_DEFERRABLE
-> flag. When moving to hierarchical timer pull model, pinned and deferrable
-> timers are stored in separate bases.
-> 
-> To ensure gpstates timer always expires on the CPU where it is pinned to,
-> keep only TIMER_PINNED flag and drop TIMER_DEFERRABLE flag.
+> Sorry, I didn't understand what you meant. You mean that the two entries
+> should be merged, with an enum for the first item listing both SoCs, right?
 
-OTOH there are deferrable timers out there that expect to run on a
-specific CPU, because there are always queued with add_timer_on().
+Yes
 
-For example workqueues using DECLARE_DEFERRABLE_WORK() that are queued
-with queue_delayed_work_on(). Like vmstat().
+Best regards,
+Krzysztof
 
-Those are not explicitely pinned because they don't rely on __mod_timer()
-but they expect CPU affinity.
-
-Thanks.
-
-> 
-> While at it, rewrite comment explaining the rule for timer expiry for the
-> next interval and fix whitespace damages.
-> 
-> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> Cc: linux-pm@vger.kernel.org
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: Viresh Kumar <viresh.kumar@linaro.org>
-> Cc: Michael Ellerman <mpe@ellerman.id.au>
-> ---
->  drivers/cpufreq/powernv-cpufreq.c | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-> index fddbd1ea1635..08d6bd54539d 100644
-> --- a/drivers/cpufreq/powernv-cpufreq.c
-> +++ b/drivers/cpufreq/powernv-cpufreq.c
-> @@ -640,18 +640,18 @@ static inline int calc_global_pstate(unsigned int elapsed_time,
->  		return highest_lpstate_idx + index_diff;
->  }
->  
-> -static inline void  queue_gpstate_timer(struct global_pstate_info *gpstates)
-> +static inline void queue_gpstate_timer(struct global_pstate_info *gpstates)
->  {
->  	unsigned int timer_interval;
->  
->  	/*
-> -	 * Setting up timer to fire after GPSTATE_TIMER_INTERVAL ms, But
-> -	 * if it exceeds MAX_RAMP_DOWN_TIME ms for ramp down time.
-> -	 * Set timer such that it fires exactly at MAX_RAMP_DOWN_TIME
-> -	 * seconds of ramp down time.
-> +	 * Timer should expire next time after GPSTATE_TIMER_INTERVAL. If
-> +	 * the resulting interval (elapsed time + interval) between last
-> +	 * and next timer expiry is greater than MAX_RAMP_DOWN_TIME, ensure
-> +	 * it is maximum MAX_RAMP_DOWN_TIME when queueing the next timer.
->  	 */
->  	if ((gpstates->elapsed_time + GPSTATE_TIMER_INTERVAL)
-> -	     > MAX_RAMP_DOWN_TIME)
-> +	    > MAX_RAMP_DOWN_TIME)
->  		timer_interval = MAX_RAMP_DOWN_TIME - gpstates->elapsed_time;
->  	else
->  		timer_interval = GPSTATE_TIMER_INTERVAL;
-> @@ -865,8 +865,7 @@ static int powernv_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  
->  	/* initialize timer */
->  	gpstates->policy = policy;
-> -	timer_setup(&gpstates->timer, gpstate_timer_handler,
-> -		    TIMER_PINNED | TIMER_DEFERRABLE);
-> +	timer_setup(&gpstates->timer, gpstate_timer_handler, TIMER_PINNED);
->  	gpstates->timer.expires = jiffies +
->  				msecs_to_jiffies(GPSTATE_TIMER_INTERVAL);
->  	spin_lock_init(&gpstates->gpstate_lock);
-> -- 
-> 2.30.2
-> 
