@@ -2,68 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75B5E60EA46
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 22:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF7660EAE8
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 23:40:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234154AbiJZUb6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 16:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S229670AbiJZVkb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 17:40:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234111AbiJZUb5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 16:31:57 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E71F83D5BF
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 13:31:55 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so4188579pjh.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 13:31:55 -0700 (PDT)
+        with ESMTP id S229602AbiJZVk3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 17:40:29 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5933402FA
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 14:40:27 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id h9so17599502wrt.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 14:40:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Vo0sS6aua0AA2hmKOLbbD8XcrG6QhZurL2yFWtK6O3w=;
-        b=HuouoGzh5N4BpZZ9fd/DQk+KEeZQOIc6aYmCcHszFgz37l9157W6ZuOVHaRuhxjr2i
-         UsxeIFTP7hJa3uQKqxN6SkH553fKe4KHwOnRJvi3cw/6Zla+y48lTeVq09WRSq5aMIGv
-         uMnUxrj0yQbEHmgSMwGk8NclpZLeXabu4SsXTbSvB+Ips88uqQX1XDgbZLAcmRHArehH
-         i9rAVWEI5iChItq9nCPjDcQoyuBWPrYbtrGPSlRhBnBNZ9fOIPLcAh/L2CP43kl+HsS7
-         krZZTBXPZKw1fhUA5emJFcX2GjHo4gg/rFpsp6vRKkteS0iFZm6kUFuFj3WhulPP7jKB
-         32xQ==
+        d=linexp-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZwNsTTHURgLKh1yzrfJmsvrLjDlMLsHVhYFq55x7IQw=;
+        b=kBXKvkT9uhSkFnS920jsjAGIEyNb8LsD4LCnYYkb9ko5md1J4ZNLClGIA/JlFdEYmD
+         5vJtCwxLw7yjiXPxXlJkLd9kDAI+B8cM4QOC/2XF3MMUY9+1TlaHIxgvIX7atn3471x7
+         bjpoiR3B8WlldTNhtauz6hoR+7nziwPN9ged4M+hOF6L3luIcq7VmNjcTUZStFvOItg5
+         oa5krI7qB0EqKR1k14xsLYDM5Pdo/cG6v0rbX0nXXwWJyuZuFcfJ6Fv9F5mbK94YJrXq
+         8GPKmPQR3fgtP4xuiLzINHNWlwRjXhzu9NcTpA8MnE+ItywNzLok1UrcC5JU3nFI+S1Y
+         GJ5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vo0sS6aua0AA2hmKOLbbD8XcrG6QhZurL2yFWtK6O3w=;
-        b=WWePulZds41j82YmnlCiEXW1UIzGNr+seRU4jNICI3swZkVR/Azxh8i1NtHMDBD7L2
-         jQIYIW4P7JTLz8DIB+45xM0HL3VYLlD45KfMn3H7aB9GHA9uHmK2/2UIJqTwep/1GcGm
-         x+CG5r8xZ4hETm2Bhaz/jRCiY+FeBcMkjGtEtW3TJ7cefT+eyRSmVJXrqjgK0nePTzq/
-         /DPlBRC4BT9OZTIZYn+/yanPwxIbYLR9Wzg3ofRPHZ2GQ3IlBHemD8+jWEIAXiANINst
-         cnsZhyEYKjHvAWtaY8Ew0NklZz5yc0+qvFgiOH7Ihg6l5J2TKU22woDs4lTN3Kh4GfMq
-         K6fA==
-X-Gm-Message-State: ACrzQf0SWCI0zowsKUc1RQB2bDqr29Ij+5GSZPsR63BZ3oUOpDLu7sN7
-        +rsa1n0RPa/Jj6ZS8K9/lBFacAjy4NRbWIkg
-X-Google-Smtp-Source: AMsMyM6e26leKti9Lnen5dO8zHAGb+l1OaUcKgRm811Nl+DiP9gBp9Vb9PKNF5ygetgXWMYnelgfQg==
-X-Received: by 2002:a17:902:e74a:b0:186:a094:1d3 with SMTP id p10-20020a170902e74a00b00186a09401d3mr18826510plf.153.1666816315353;
-        Wed, 26 Oct 2022 13:31:55 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id i1-20020a1709026ac100b00185402cfedesm3279939plt.246.2022.10.26.13.31.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 13:31:55 -0700 (PDT)
-Message-ID: <6359993b.170a0220.f30bc.73a3@mx.google.com>
-Date:   Wed, 26 Oct 2022 13:31:55 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZwNsTTHURgLKh1yzrfJmsvrLjDlMLsHVhYFq55x7IQw=;
+        b=4Gl1OqkeHHyU1uIZsSZnPifjC8AjMzgPGqoF2Wm9McSmnl9QqTT2k3nPPgJRfY0z51
+         uU1m6ZIIuBkiDYL35bJneoCe83hTTIVHIUTaV+suU94ms3L2sqFTefUyLjteecnfzbhF
+         HIn2ISa+EV6KbuNkdSvoM03w0YOdwcuw3JbTOPTwaUXWbzDGh+INi3MBqFDH/HSOcRLE
+         DaHx+xTfQ7ocJXZAp37JBU96DuvOrroO3b2SO0xqPgAX3UOVdS4wpnY+YAuV4kN/n8yh
+         rKDV2nMyEnE+U2cw3Vd7exfSCuQfvCM75SYsVAgwPAEdn1GwS+XO46iSKBSecEndvis2
+         x9kg==
+X-Gm-Message-State: ACrzQf0vpD+v16IhmKsYMYl+ctLHEVqHbWwdreXoyzeias368wFMuQJz
+        dDwu93Okrp2xx6FysiBzsTBcEw==
+X-Google-Smtp-Source: AMsMyM5eltNal8ZWcghIGGfcdTmo5/xb13hUZbFhwKbSacJ5LZ+4HZLEOzOfJR2PEnnOuvix+qqRZQ==
+X-Received: by 2002:a5d:59a4:0:b0:230:eaa4:88d7 with SMTP id p4-20020a5d59a4000000b00230eaa488d7mr30926262wrr.35.1666820426034;
+        Wed, 26 Oct 2022 14:40:26 -0700 (PDT)
+Received: from ?IPV6:2a05:6e02:1041:c10:3f3f:ad57:c99f:65a2? ([2a05:6e02:1041:c10:3f3f:ad57:c99f:65a2])
+        by smtp.gmail.com with ESMTPSA id h17-20020a05600c351100b003c7087f6c9asm3045152wmq.32.2022.10.26.14.40.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 26 Oct 2022 14:40:25 -0700 (PDT)
+Message-ID: <4817aeca-4fb1-cb99-8df5-7df22a77ea3f@linexp.org>
+Date:   Wed, 26 Oct 2022 23:40:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.1-rc2-12-g77db830e1d3a3
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 40 runs,
- 1 regressions (v6.1-rc2-12-g77db830e1d3a3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+References: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
+ <CAL_JsqKQM4oSxrbhA4_ST8O0ieek9sGQQ9p55AXjhqmVx=rUrw@mail.gmail.com>
+ <CAJZ5v0i76X0TiaOhPa3a5440fRb7vA1z1mFKJibso8G6wYz7HQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linexp.org>
+Subject: Re: Regression after recent changes to drivers/thermal/thermal_of.c
+In-Reply-To: <CAJZ5v0i76X0TiaOhPa3a5440fRb7vA1z1mFKJibso8G6wYz7HQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,76 +76,155 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 40 runs, 1 regressions (v6.1-rc2-12-g77db830e1d3a3)
+On 26/10/2022 19:06, Rafael J. Wysocki wrote:
+> On Wed, Oct 26, 2022 at 5:47 PM Rob Herring <robh+dt@kernel.org> wrote:
+>>
+>> On Tue, Oct 25, 2022 at 4:13 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+>>>
+>>> Hi Folks,
+>>>
+>>> I have this in my dmesg in v6.1-rc1:
+>>>
+>>> [    3.879229] ab8500-fg ab8500-fg.0: line impedance: 36000 uOhm
+>>> [    3.892793] power_supply ab8500_usb: Samsung SDI EB-L1M7FLU battery 1500 mAh
+>>> [    3.901663] thermal_sys: Failed to find 'trips' node
+>>> [    3.906635] thermal_sys: Failed to find trip points for thermistor id=0
+>>> [    3.913427] ntc-thermistor thermistor: unable to register as hwmon device.
+>>> [    3.920350] ntc-thermistor: probe of thermistor failed with error -22
+>>>
+>>> The device tree looks like this
+>>> (arch/arm/boot/dts/ste-ux500-samsung-golden.dts):
+>>>
+>>>          thermal-zones {
+>>>                  battery-thermal {
+>>>                          /* This zone will be polled by the battery
+>>> temperature code */
+>>>                          polling-delay = <0>;
+>>>                          polling-delay-passive = <0>;
+>>>                          thermal-sensors = <&bat_therm>;
+>>>                  };
+>>>          };
+>>>
+>>> This is a thermal zone without trip points, which it seems like the new
+>>> code does not allow, also the bindings were patched to not allow this,
+>>> in commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7
+>>> "dt-bindings: thermal: Fix missing required property"
+>>> but this broke my systems. The requirement to have trip points also
+>>> broke my device trees.
+>>>
+>>> The reason why I have this is that the thermal zone is not managed
+>>> by the OF thermal core, but by the battery charging algorithm which
+>>> just retrieves the thermal zone and use it to read the temperature, see
+>>> commit 2b0e7ac0841b3906aeecf432567b02af683a596c
+>>> "power: supply: ab8500: Integrate thermal zone".
+>>>
+>>> The code is using
+>>> thermal_zone_get_zone_by_name()
+>>> thermal_zone_get_temp()
+>>> and applying its own policy on the thermal zone in order to not
+>>> dulicate code.
+>>>
+>>> I understand from the code and changes to the bindings that the
+>>> authors assume that no zones without trips exist but... well they
+>>> exist.
+>>>
+>>> I understand that the bindings always said that trips are required
+>>> but ... thermal zones without trip points make a bit of sense.
+>>> It's just a zone without a policy. It can be observed even if it can't
+>>> be acted on.
+>>>
+>>> How do you want to solve this? Can we make trips non-compulsory
+>>> again or shall I add dummy trip points to the device trees?
+>>>
+>>> This:
+>>>
+>>> diff --git a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
+>>> b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
+>>> index b0dce91aff4b..d00e9e6ebbf7 100644
+>>> --- a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
+>>> +++ b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
+>>> @@ -35,6 +35,15 @@ battery-thermal {
+>>>                          polling-delay = <0>;
+>>>                          polling-delay-passive = <0>;
+>>>                          thermal-sensors = <&bat_therm>;
+>>> +
+>>> +                       trips {
+>>> +                               /* Unused trip point to please the framework */
+>>> +                               dummy {
+>>> +                                       temperature = <700000>;
+>>> +                                       hysteresis = <2000>;
+>>> +                                       type = "passive";
+>>> +                               };
+>>> +                       };
+>>
+>> That's ugly and requiring a DT update breaks the ABI. So the
+>> requirement for 'trips' should be reverted. (Well the schema should, I
+>> imagine the code change is not just a revert.)
+> 
+> I agree and the code change is not just a revert AFAICS.
+> 
+> This is Daniel's work, so I'm still hoping that he'll chime in
+> shortly,
 
-Regressions Summary
--------------------
+Yep, I'm in sick leave ATM, I broke my arm (without wordplay).
 
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 1     =
-     =
+I took sometime to read the code, so from my POV we should keep the 
+required property patch because the DT was defined that as required 
+property. The conversion to yaml obviously spotted the DT not conforming 
+with the bindings.
+
+ From an implementation POV, that was not spotted initially because of 
+the old OF code design IMO (but I'm not sure).
+
+We can continue registering the thermal with no trip points but then 
+still raise a message.
+
+However, a thermal zone without trip point does not really make sense 
+IMO. If I'm correct, the ACPI at least defines the critical temperature 
+as a non optional object.
+
+Did you consider using hwmon instead of a thermal zone ?
+
+Below a patch (not tested): one hand writing is painful
+
+diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+index ff4d12ef51bc..51f7dc5b8d18 100644
+--- a/drivers/thermal/thermal_of.c
++++ b/drivers/thermal/thermal_of.c
+@@ -481,8 +481,8 @@ struct thermal_zone_device 
+*thermal_of_zone_register(struct device_node *sensor,
+  	struct thermal_zone_params *tzp;
+  	struct thermal_zone_device_ops *of_ops;
+  	struct device_node *np;
+-	int delay, pdelay;
+-	int ntrips, mask;
++	int delay = 0, pdelay = 0;
++	int ntrips = 0, mask = 0;
+  	int ret;
+
+  	of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
+@@ -500,8 +500,8 @@ struct thermal_zone_device 
+*thermal_of_zone_register(struct device_node *sensor,
+  	trips = thermal_of_trips_init(np, &ntrips);
+  	if (IS_ERR(trips)) {
+  		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+-		ret = PTR_ERR(trips);
+-		goto out_kfree_of_ops;
++		trips = NULL;
++		goto out_register;
+  	}
+
+  	ret = thermal_of_monitor_init(np, &delay, &pdelay);
+@@ -522,6 +522,7 @@ struct thermal_zone_device 
+*thermal_of_zone_register(struct device_node *sensor,
+
+  	mask = GENMASK_ULL((ntrips) - 1, 0);
+
++out_register:
+  	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+  						     mask, data, of_ops, tzp,
+  						     pdelay, delay);
 
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.1-rc2=
--12-g77db830e1d3a3/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.1-rc2-12-g77db830e1d3a3
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      77db830e1d3a3b7ae46801b25de69104aff9ed7a =
 
 
-
-Test Regressions
----------------- =
-
-
-
-platform              | arch  | lab         | compiler | defconfig | regres=
-sions
-----------------------+-------+-------------+----------+-----------+-------=
------
-kontron-kbox-a-230-ls | arm64 | lab-kontron | gcc-10   | defconfig | 1     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/63598f4aca3d9849d3e7db98
-
-  Results:     94 PASS, 1 FAIL, 1 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.1-rc2-12-g77db83=
-0e1d3a3/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.t=
-xt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.1-rc2-12-g77db83=
-0e1d3a3/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-kbox-a-230-ls.h=
-tml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221024.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.mscc_felix-probed: https://kernelci.org/test/case/id/63=
-598f4aca3d9849d3e7dba1
-        failing since 141 days (last pass: v5.18-rc7-183-g45785e0ed597, fir=
-st fail: v5.19-rc1-2-g6a8964e282382)
-
-    2022-10-26T19:49:11.265334  /lava-191754/1/../bin/lava-test-case
-    2022-10-26T19:49:11.265637  <8>[   13.822545] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dmscc_felix-probed RESULT=3Dfail>
-    2022-10-26T19:49:11.265786  /lava-191754/1/../bin/lava-test-case
-    2022-10-26T19:49:11.265924  <8>[   13.839135] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-driver-present RESULT=3Dpass>
-    2022-10-26T19:49:11.266062  /lava-191754/1/../bin/lava-test-case
-    2022-10-26T19:49:11.266194  <8>[   13.855278] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Dleds-gpio-probed RESULT=3Dpass>
-    2022-10-26T19:49:11.266325  /lava-191754/1/../bin/lava-test-case   =
-
- =20
