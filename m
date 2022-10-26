@@ -2,178 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC6460E98A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 21:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E130960E9A1
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 21:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbiJZTsb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 15:48:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54500 "EHLO
+        id S233721AbiJZTwl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 15:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234000AbiJZTsT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 15:48:19 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CC1431EFB
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 12:48:18 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id r18so15930741pgr.12
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 12:48:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bLSjQWHZV5CyzoDOQTCtkvP2MJieuvohXadOFgKWMzk=;
-        b=6G3fHyZbOebI8LcBnYrKnwYOH2F1DhbHWNG5xBc7K9/lmQv491C4J0ojKKMRmBv9Ln
-         ZVpUTrl56SYhNw/Bu4DYl7ltS6W6nGOzwMJRmyun1er0s9QhTf+wfsMl/dQ7Vql6GZR4
-         U+ZRr6g0/tqu3UHwqVeYXLOv+kJSuIzNGeObw1gX7LbjLvAftVW9n7sd8+PIuPynIiha
-         4EsPYkrEB6fE3HykjTi21lahujz/Lvjz6sSm6fl298UfbHpFESFRja53tdrpuVKU2VN9
-         Amu0P2nZMXZttwdPJ2MpK++ggSoClEYSQdH1aIagQ7jrYT+trHeN4wMM68ZWXP/C2Bkk
-         HFvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bLSjQWHZV5CyzoDOQTCtkvP2MJieuvohXadOFgKWMzk=;
-        b=ErZp6SnBGLdb2TuKJImF5zHV4B/A31D9TaqdL9e2hHxquPEaVogWqDA5tzF5JpuAdP
-         VKeogkvLSyenZvf+PG5rO676HZTupRF/Nrj9y+AqL9DTkZ1XHHfaJ0qdBtNSr6iGVYYQ
-         bD4eTwVEahRasUyyTgt5cLGdL6Iio1ncGBGnQE7mhIPpOtFJvUWYj8DXzyXiqCd7+a7/
-         TdyXhMgFoCvmp6FdgamIP6RXT9m18zeXf1wmaQYtzN4f8Y+5BhPovFgDXT2D7YmfpaY0
-         NuIo3UcPc1BTSTzuIV2R6Lv9Uqdl8I6zY6qNoGE9hLaZA9nQJw7PySsj6MKAF2yLlEWY
-         3Icw==
-X-Gm-Message-State: ACrzQf3CboeGkh0oc6Yx8qN7Oo1Ucuh2NHYiKsSZcQ5H8ISTk9tgCkF/
-        MWcCYgp7tyxYbHBjj6Eg5TdBPyUdLHmo0OH6
-X-Google-Smtp-Source: AMsMyM4vbcD+3xsAOTzt9ogSAFXvivV83pbjNXIXP450AdBYzdIx//27HByJKefvpujpiLZpVkoXXg==
-X-Received: by 2002:a05:6a00:88f:b0:558:8186:3ec3 with SMTP id q15-20020a056a00088f00b0055881863ec3mr44194048pfj.83.1666813687041;
-        Wed, 26 Oct 2022 12:48:07 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b001869f2120a4sm3292748plg.94.2022.10.26.12.48.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Oct 2022 12:48:06 -0700 (PDT)
-Message-ID: <63598ef6.170a0220.997df.7246@mx.google.com>
-Date:   Wed, 26 Oct 2022 12:48:06 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S234516AbiJZTwk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 15:52:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F91F63D6;
+        Wed, 26 Oct 2022 12:52:40 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29QJm37f027235;
+        Wed, 26 Oct 2022 19:52:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type; s=qcppdkim1;
+ bh=OmBwWhQGh7YtiLbeVb/rH4Mt1uj9aXGUgjRU9w21yZw=;
+ b=OEg9Y0UCfsYB8WpjchI/kBXFpOjxx+nkoo8YXUxa2feFkI2zYsiAeYbMqwX3EzEBh6pW
+ pdAbj4o664iE2paGB/D3epkZM0DCRWBeadao3xLj/NWdJnttKJ2k7aEhcO2D42n2FuPR
+ IVoX5vf/84BKRNOEitRnSxBlaNGFtSvf3EYQnRK7GZ/iMcedqHFRHrXSkXYcrkSdheXo
+ vSttQbkyA7xWKywCJMQWHIjBz0RszOX1FGp8VSeIUKzn31TDAM1UaiV2MYWo8tNo+Ut+
+ Iu26BmAGN8+yuyH6il8313t5F3TrNKj0lXG39j8XQ10CJ8tIi/s0An65kKrCxl9RJOgs 4Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahvr3tg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 19:52:33 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29QJqWNB026962
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 26 Oct 2022 19:52:32 GMT
+Received: from hu-subbaram-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 26 Oct 2022 12:52:31 -0700
+From:   Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>
+To:     <bjorn.andersson@linaro.org>
+CC:     <agross@kernel.org>, <devicetree@vger.kernel.org>,
+        <konrad.dybcio@somainline.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <robh+dt@kernel.org>, <sre@kernel.org>
+Subject: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+Date:   Wed, 26 Oct 2022 12:52:26 -0700
+Message-ID: <1666813946-21569-1-git-send-email-quic_subbaram@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <20220818031512.319310-3-bjorn.andersson@linaro.org>
+References: <20220818031512.319310-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.1-rc2-12-g77db830e1d3a3
-X-Kernelci-Branch: testing
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.1-rc2-12-g77db830e1d3a3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: j6kq3teLL9aL6JIybqHYPH5sYIeWecHw
+X-Proofpoint-GUID: j6kq3teLL9aL6JIybqHYPH5sYIeWecHw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-26_08,2022-10-26_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=661
+ spamscore=0 phishscore=0 bulkscore=0 malwarescore=0 clxscore=1011
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210260110
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc2-12-g77=
-db830e1d3a3)
+> +static struct pmic_glink *__pmic_glink;
+> +static DEFINE_MUTEX(__pmic_glink_lock);
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-1-rc2-12-g77db830e1d3a3/
+Having this global device and lock to update pmic_glink struct pointer
+might not work well if there are multiple pmic_glink devices that
+corresponds to multiple pmic_glink channels (or rpmsg devices). This
+is fine for the primary pmic_glink channel that supports mission mode
+clients. However, to support debugging, there could be a secondary
+pmic_glink channel and some clients under it.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.1-rc2-12-g77db830e1d3a3
-Git Commit: 77db830e1d3a3b7ae46801b25de69104aff9ed7a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+> +struct pmic_glink_client {
+> +	struct list_head node;
+> +
+> +	struct pmic_glink *pmic;
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+It would be good to name this pointer as "pg" or something.
