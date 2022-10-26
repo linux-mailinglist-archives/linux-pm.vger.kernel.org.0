@@ -2,83 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7D7860E2F5
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 16:13:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF58860E3D1
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 16:54:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234197AbiJZONL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 10:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
+        id S234199AbiJZOyv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 10:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbiJZONK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 10:13:10 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9576B10DE4E
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:13:09 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id z17so7922621qkj.8
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:13:09 -0700 (PDT)
+        with ESMTP id S234196AbiJZOys (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 10:54:48 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21D7DF75
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:54:46 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id cr19so10086377qtb.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 07:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=3BJkQ2Lvx038FbiNzpk9wcXe4nIQwkZdE8UfXIihqNk=;
-        b=QhFXvTvNJUlIUlpQDnzeAFmF6+ln6IFY1BFH21RP3EDt2LD6+1BYjRCN8caiSBm9uE
-         CPrOIRLVIOU+Xb1tuA5uzcHXRF7ZgVxAc3k82P8Mz5y9pR/HX2TepOaNrgwIXyEfqtfl
-         QsEycG67flPJyLlIIpQxjnPapaGi5xAXZNMh5iU8UZ+zTDI3D5A9QIQQMOFjr9FUJEx5
-         ep/+BMxyL5A6mYuUnVqMPJX0r7bnvvrSfWFLqz1HyLxOhEAIlz6nj4ZNidzji5N/SsPi
-         fc+x4k16tPOTNEtcw7GO9Dlfd2ijEz1Dxx7dGrYQsJjNfiEKfoRKjwN5btuyQQQnNAfu
-         mjfA==
+        bh=maWypIlUNRQImlFt8IOBRCfQffbBnX1XZA77vfFeGis=;
+        b=x0boBOpFEuAAbdJJdBwPBV2y6SFbtFG9IIaMdbFhxC2An9hMa+mfJO/wnc4rJPYge2
+         5SyC4VtTZNN9Z8IdkLfFb0bup9LZ+XgfE6XjXPUaAPXgBsxmROJn+N/tG/lsfOq6NKLI
+         mF5lEa43cBOw3xXyb8vBALIE+KmPj+Jk7r5qzZ9JpEayYHrck5J3jUTuB+vSPvYyCGUi
+         ZbqEddMoi37IfN90kdLeVvBdU+C6j7cAm7OIh9wqW9K8wzRhQi/qxrfhLamRomVnfi5S
+         0Z3agm5/qvLHrlDD3ViI9oqu20yBKB3yWCwA+BFLwb4CYChLTiVEAPtM4rXi3SkXJWRd
+         TlMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BJkQ2Lvx038FbiNzpk9wcXe4nIQwkZdE8UfXIihqNk=;
-        b=Orj0ORWs6MsZ37ejNg9mcKwec363GZC4xSpT5O2dkRLmus0XzE3Qdx6S6oOdcu6EVT
-         9lN5djKEOm0pxOxmkn1PPKM5ICny1Eu1KT65f1g/T43zIkGziH6V4IryIa4KXKoJ0arc
-         /NuzGbPFncC7DR5KRAl0lDqzUV1Z4ufjs3F4IkWH/EUGxP9tAFRUFLN2R7C42E7UcLrl
-         P3WuFkLZ3uy3w41YtNaq0tDG5fH+EuCUg/9imvq1mpohtTnx4O2QJp5pxy+7NKQLgD4v
-         rW09WQ8f0ND3bujkYBzeI92HD+Axgpr4fK6DobTSgV/Ir2kIJDTg264LSOaJU2k97qCx
-         nT6g==
-X-Gm-Message-State: ACrzQf244e9ixs3orTOPfpdP6rh0+JV0CiRbVFbraN/OzfJs+wMgdnTn
-        5/VeAUWJoB6MjlAdaQqhzt9LRw==
-X-Google-Smtp-Source: AMsMyM5HJOoGv/K2f7op+AS1jKZWgMgm9sMjTfvjwWkv3/yGR1lYtHuWo60wwCaoDlDuxiFnqa7Rig==
-X-Received: by 2002:a05:620a:28d3:b0:6ee:cffb:21ef with SMTP id l19-20020a05620a28d300b006eecffb21efmr30529027qkp.123.1666793588691;
-        Wed, 26 Oct 2022 07:13:08 -0700 (PDT)
+        bh=maWypIlUNRQImlFt8IOBRCfQffbBnX1XZA77vfFeGis=;
+        b=No+qlfNKmqMLG5KXkWcBHOVbpL050QeV8pOp+A0ceIrSoxCaye7sHyZf/2rj24PlLJ
+         FCFrsvNIB7GQExiELRil+iL540qPqdogPI2ZGBVlTUxHOCVY+NpxoxRc7iCkM6bvAzEa
+         iCxAyqCnhKvX+2VwnIwULbccpinNeRwBak9qAfpK1l+/IKhwupZWuyIHmO8NbmUu3vMv
+         DxFnZ6pPIPuGH1QtOVgKPfAPcfMOlJbY6oaQ4iYTSIZmUHDjyCju6c3oy7r134clGOsj
+         bacIoQczuRmouhuBP/i4xwT1fp/h+N8w3D4xgRbasdDgoTlsjc1wh+ydM9lhnpLM+gPm
+         OBtA==
+X-Gm-Message-State: ACrzQf1Ig38hO0aZeMdxYc79874mU3a8aKEgTu6FOvfKMZypnNDNv7VA
+        NrNWD5G3SuSo/37Y/X6YdpnCRg==
+X-Google-Smtp-Source: AMsMyM5V/3LE82C/jHm/q6UNMC47f/vDs71jqDRMUHg476+Ylo4FUg/rGSzbf0vqzwmGIfpbKKes4w==
+X-Received: by 2002:a05:622a:10b:b0:39c:e3ae:b790 with SMTP id u11-20020a05622a010b00b0039ce3aeb790mr37715488qtw.306.1666796085685;
+        Wed, 26 Oct 2022 07:54:45 -0700 (PDT)
 Received: from [192.168.1.11] ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id o14-20020a05620a2a0e00b006cbc00db595sm4164494qkp.23.2022.10.26.07.13.06
+        by smtp.gmail.com with ESMTPSA id bj7-20020a05620a190700b006bb87c4833asm3903320qkb.109.2022.10.26.07.54.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Oct 2022 07:13:07 -0700 (PDT)
-Message-ID: <bcf5ef3c-a17d-e174-2b97-cef4d728cb35@linaro.org>
-Date:   Wed, 26 Oct 2022 10:13:05 -0400
+        Wed, 26 Oct 2022 07:54:44 -0700 (PDT)
+Message-ID: <8ff8ca86-3e6a-c690-c2ac-49d978ff6669@linaro.org>
+Date:   Wed, 26 Oct 2022 10:54:43 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
+Subject: Re: [PATCH v2 05/11] dt-bindings: thermal: k3-j72xx: elaborate on
+ binding description
 Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
+To:     Bryan Brattlof <bb@ti.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221024043925.25379-1-marcan@marcan.st>
- <20221024043925.25379-3-marcan@marcan.st>
- <5c3126fb-8fdb-5163-95a8-136a4a7ee2ce@linaro.org>
- <97d3d6d4-b19c-a194-de41-f17e65bf3eb6@marcan.st>
- <21602556-8312-fb7a-1981-cd03a314d904@linaro.org>
- <0f76c1b5-8fe5-e3dc-dc9a-7b0ad9660275@marcan.st>
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+Cc:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
+        Device Trees <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LKML ARM <linux-arm-kernel@lists.infradead.org>
+References: <20221025191515.9151-1-bb@ti.com>
+ <20221025191515.9151-6-bb@ti.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <0f76c1b5-8fe5-e3dc-dc9a-7b0ad9660275@marcan.st>
+In-Reply-To: <20221025191515.9151-6-bb@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -91,21 +87,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/10/2022 00:18, Hector Martin wrote:
->>>> With the first one (t8103) - it's an enum.
->>>
->>> This is deliberate. t6000 is compatible with t8103, but t8112 is not
->>> (though all are compatible with what the generic apple,cluster-cpufreq
->>> compatible implies).
->>
->> I was not talking about t6000. I was talking about two entries - first
->> and last - which should be just an enum. There is no compatibility, so
->> what is here deliberate? To not make enum things which are an enum?
+On 25/10/2022 15:15, Bryan Brattlof wrote:
+> Elaborate on the function of this device node as well as some of the
+> properties this node uses.
 > 
-> Sorry, I didn't understand what you meant. You mean that the two entries
-> should be merged, with an enum for the first item listing both SoCs, right?
+> Signed-off-by: Bryan Brattlof <bb@ti.com>
+> ---
 
-Yes
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
