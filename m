@@ -2,148 +2,259 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B483860E625
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 19:07:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732C460E661
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Oct 2022 19:22:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbiJZRHC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 13:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S234149AbiJZRWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 13:22:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234005AbiJZRHB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 13:07:01 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C4D080E8E
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 10:07:00 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id mi9so2839157qvb.8
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 10:07:00 -0700 (PDT)
+        with ESMTP id S234137AbiJZRWj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 13:22:39 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA309B846
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 10:22:37 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id v13-20020a17090a6b0d00b0021332e5388fso2756143pjj.1
+        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 10:22:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gateworks-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=quHF11bisNBche9+VnC8BLjKYyYleEVda0+BIKXMuLE=;
+        b=cc+zseFHMVC95ncVRpvbvWJ0frPHxIprtbNYVnAfezAsSiHiBRVT+ILOylUO758TxU
+         k95bfYWuNLTkg0Cj4IQWeFSFPpk0L8P/yU+X1jOce8vxNp6WHkOeBfBFogw7DZEMcqBp
+         tm8erm1rx2lhNL9Wg96QX4J9JRsbFxTsYIK5xZM70K9YoCF7kaKOlkH0JKOT6/Q0llkc
+         SgBuwIBg6yTDvHnmThG3O2rhaO1DPVfN2ruK3bkfzrSZtFekj5R6rfpg7zs5HAbFX/Ln
+         DF+yTDzp8Lzmn+3e6VzpgFQtd5Q4fNfHJDZIjFPnJVKZyk8QeCjNSKq/Hv+/1cvwyQ6i
+         XI3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=30vWFKXCeh6oN2n0TSnNP+V63AhRkkK+O+ua5NS86k8=;
-        b=vNwW3bMTFbYv0Ca0dKJC6X9kzxevTmN10vNITd2at5/OkuBixDl4mwn78kHjzKF8+t
-         ka4LAuCyUcLBUaCZEf1xVpm63fk/QM2NT8prVGjpUyTm3rnN+VtJ5TZ2w5OCM8FaNMaX
-         rVkeRQULDjmFcWMOb6EKaI0+gAxewafs/QKycVTHdxZEcKEz5v9Z9FEZSltqKMTtzmP7
-         wkFvpqixIS7vUFbxMBFJkZ9cxh71fFObm4CaR072X4A5FY73wx4mWik++iQq3LDpNl9N
-         kwBqpUenb706JP2jNAqWZ+mx7HR4kFL/RnxIVHfO+68doqTAjG38FLLHDLgw3/5MrFwS
-         sgxg==
-X-Gm-Message-State: ACrzQf0GTKG3MExL8Vq5MCbgGVj+HHKKqZLTn8QVBbbOFA0DQj/dlbot
-        isVTuG+JKnP5o+DEaY4EYCp7rf1bVgGgPS1Lvoahnx0o
-X-Google-Smtp-Source: AMsMyM6DchZkDV6vxt4NxDBP5bXr1EOB5OuzpLbJNj7P5+TtvWk5RLzT4A/0IZUPcD9E851ouTt8JQdAbpYMXko0zz0=
-X-Received: by 2002:a05:6214:238f:b0:4bb:7bf:770b with SMTP id
- fw15-20020a056214238f00b004bb07bf770bmr24051896qvb.52.1666804019269; Wed, 26
- Oct 2022 10:06:59 -0700 (PDT)
+        bh=quHF11bisNBche9+VnC8BLjKYyYleEVda0+BIKXMuLE=;
+        b=VqGEmA8IQjHVttC2w6uZtCSfZ0nseSiMW6Z0kjaCor4PStp+TpEGMH0il0IlrqQQ/F
+         BBXW0EyOGelK/krdt+h1fN7/imUkxBjZmeyQAHt9UyjCM2fw770muP5MMFJZeyKcj0QC
+         TP6qQ4qGWAmDreziYr+bPQ98cGmSWrWFjLEGw+5AI3mHXD2ycUKpWeD//UfUbRAhw+6g
+         YBsy2xuwkJrZl1sz3WgeZgo5g3N4jdly6F82qE6yO1M+hEMLVCMczim2lDxfuNxOczZq
+         KsCCcnQ7/UFUsiINplz66ucKqDx2VXmtbvAEZlwTd2gNcW4C33K1a+oSQYKXLW9elsf2
+         5Log==
+X-Gm-Message-State: ACrzQf2Jg7WGM2pCJc2LaqOk1F5SHIDVbyLXOg2oB5w/L0HPQ5bh7vRp
+        FU76VJSmTvJkxOfQvkUpP+Y5QhPbcMosbV7KAMoIOw==
+X-Google-Smtp-Source: AMsMyM558UTbwtNu3DoELIB0y+tfRhgP734rMthquZje+JjLbW7CN3/n9bYbdNCN6wABvYemtjxp3gREVqE1VHyxSYY=
+X-Received: by 2002:a17:902:768c:b0:186:b136:187a with SMTP id
+ m12-20020a170902768c00b00186b136187amr14281399pll.94.1666804957189; Wed, 26
+ Oct 2022 10:22:37 -0700 (PDT)
 MIME-Version: 1.0
-References: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
- <CAL_JsqKQM4oSxrbhA4_ST8O0ieek9sGQQ9p55AXjhqmVx=rUrw@mail.gmail.com>
-In-Reply-To: <CAL_JsqKQM4oSxrbhA4_ST8O0ieek9sGQQ9p55AXjhqmVx=rUrw@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 26 Oct 2022 19:06:47 +0200
-Message-ID: <CAJZ5v0i76X0TiaOhPa3a5440fRb7vA1z1mFKJibso8G6wYz7HQ@mail.gmail.com>
-Subject: Re: Regression after recent changes to drivers/thermal/thermal_of.c
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
+References: <20220708085632.1918323-1-peng.fan@oss.nxp.com>
+ <CAJ+vNU3uYtDGMd6fPi7skWKL8UNXntfAEODARF0NVz9k7DCT7w@mail.gmail.com>
+ <ec599991-44da-7b83-9374-d0043b32f053@denx.de> <CAJ+vNU2g+e8_PBq0SJYOXsB6PKpMb3dmzDRA5Gyj=NJS3Ckc1g@mail.gmail.com>
+ <CAJ+vNU0mPt27PgheodNLcOk97OdD6TK+1us58jc=4DMHndQpvQ@mail.gmail.com>
+ <849213369ce9ed3364ba0beb2744bfbcb3740b0c.camel@pengutronix.de> <CAJ+vNU0r_4mEJk0aNHE0c-81KDvdhV6aTBa6R-BgHa+zeB_u=g@mail.gmail.com>
+In-Reply-To: <CAJ+vNU0r_4mEJk0aNHE0c-81KDvdhV6aTBa6R-BgHa+zeB_u=g@mail.gmail.com>
+From:   Tim Harvey <tharvey@gateworks.com>
+Date:   Wed, 26 Oct 2022 10:22:23 -0700
+Message-ID: <CAJ+vNU23qCrXqULTMMHVSxiRSg2F2GE2v=mTn7stV7nEp6DMmQ@mail.gmail.com>
+Subject: Re: [PATCH V4 0/7] imx: blk-ctrl: Add interconnect for i.MX8MP
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     Marek Vasut <marex@denx.de>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, djakov@kernel.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, festevam@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        abelvesa@kernel.org, abailon@baylibre.com,
+        laurent.pinchart@ideasonboard.com, paul.elder@ideasonboard.com,
+        Markus.Niebel@ew.tq-group.com, aford173@gmail.com,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-imx@nxp.com,
+        Peng Fan <peng.fan@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Oct 26, 2022 at 5:47 PM Rob Herring <robh+dt@kernel.org> wrote:
+On Mon, Oct 17, 2022 at 11:53 AM Tim Harvey <tharvey@gateworks.com> wrote:
 >
-> On Tue, Oct 25, 2022 at 4:13 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Thu, Oct 13, 2022 at 2:49 PM Lucas Stach <l.stach@pengutronix.de> wrote:
 > >
-> > Hi Folks,
+> > Hi Tim,
 > >
-> > I have this in my dmesg in v6.1-rc1:
+> > Am Donnerstag, dem 13.10.2022 um 11:23 -0700 schrieb Tim Harvey:
+> > > On Wed, Oct 12, 2022 at 11:46 AM Tim Harvey <tharvey@gateworks.com> wrote:
+> > > >
+> > > > On Tue, Oct 11, 2022 at 4:13 PM Marek Vasut <marex@denx.de> wrote:
+> > > > >
+> > > > > On 10/11/22 22:10, Tim Harvey wrote:
+> > > > > > On Fri, Jul 8, 2022 at 1:57 AM Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+> > > > > > >
+> > > > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > > > >
+> > > > > > > V4:
+> > > > > > >   Because the header is not included when adding NoC node, the fsl,imx8mp.h
+> > > > > > >   needs be included in this patchset. So include it in patch 6
+> > > > > > >
+> > > > > > > V3:
+> > > > > > >   Move adding NoC node patch to i.MX8MP ICC driver patchset
+> > > > > > >   Per Lucas's comments, warn once when icc bulk get not return probe defer and continue.
+> > > > > > >
+> > > > > > > V2:
+> > > > > > >   Use a low bandwidth value instead INT_MAX
+> > > > > > >   Minor fix to move fsl,imx8mp.h out to dts patch, not driver patch
+> > > > > > >   Add A-b tag from DT maintainer
+> > > > > > >
+> > > > > > > i.MX8MP NoC settings is invalid after related power domain up. So
+> > > > > > > need to set valid values after power domain up.
+> > > > > > >
+> > > > > > > This patchset is to bind interconnect for each entry in blk ctrl.
+> > > > > > >
+> > > > > > > This patchset is not include DVFS DDRC feature.
+> > > > > > >
+> > > > > > > Peng Fan (7):
+> > > > > > >    dt-bindings: soc: imx: add interconnect property for i.MX8MP media blk
+> > > > > > >      ctrl
+> > > > > > >    dt-bindings: soc: imx: add interconnect property for i.MX8MP hdmi blk
+> > > > > > >      ctrl
+> > > > > > >    dt-bindings: soc: imx: add interconnect property for i.MX8MP hsio blk
+> > > > > > >      ctrl
+> > > > > > >    soc: imx: add icc paths for i.MX8MP media blk ctrl
+> > > > > > >    soc: imx: add icc paths for i.MX8MP hsio/hdmi blk ctrl
+> > > > > > >    arm64: dts: imx8mp: add interconnects for media blk ctrl
+> > > > > > >    arm64: dts: imx8mp: add interconnect for hsio blk ctrl
+> > > > > > >
+> > > > > > >   .../soc/imx/fsl,imx8mp-hdmi-blk-ctrl.yaml     |  9 +++++
+> > > > > > >   .../soc/imx/fsl,imx8mp-hsio-blk-ctrl.yaml     | 10 +++++
+> > > > > > >   .../soc/imx/fsl,imx8mp-media-blk-ctrl.yaml    | 14 +++++++
+> > > > > > >   arch/arm64/boot/dts/freescale/imx8mp.dtsi     | 18 +++++++++
+> > > > > > >   drivers/soc/imx/imx8m-blk-ctrl.c              | 39 +++++++++++++++++++
+> > > > > > >   drivers/soc/imx/imx8mp-blk-ctrl.c             | 35 +++++++++++++++++
+> > > > > > >   6 files changed, 125 insertions(+)
+> > > > > > >
+> > > > > > > --
+> > > > > > > 2.25.1
+> > > > > > >
+> > > > > >
+> > > > > > Hi Peng,
+> > > > > >
+> > > > > > I built origin/master from commit 041bc24d867a today for an imx8mp
+> > > > > > board and am running into errors that appear to be introduced by this
+> > > > > > series:
+> > > > > > [   15.177372] platform 381f0040.usb-phy: deferred probe pending
+> > > > > > [   15.183155] platform 382f0040.usb-phy: deferred probe pending
+> > > > > > [   15.188928] platform 33800000.pcie: deferred probe pending
+> > > > > > [   15.194439] platform 32ec0000.blk-ctrl: deferred probe pending
+> > > > > > [   15.200287] platform 38330000.blk-ctrl: deferred probe pending
+> > > > > > [   15.206129] platform 32f10000.blk-ctrl: deferred probe pending
+> > > > > > [   15.211974] platform 32f10100.usb: deferred probe pending
+> > > > > > [   15.217382] platform 32f10108.usb: deferred probe pending
+> > > > > > [   15.222791] platform cpufreq-dt: deferred probe pending
+> > > > > > # cat /sys/kernel/debug/devices_deferred
+> > > > > > 381f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
+> > > > > > 382f0040.usb-phy        platform: supplier 32f10000.blk-ctrl not ready
+> > > > > > 33800000.pcie   platform: supplier 32f10000.blk-ctrl not ready
+> > > > > > 32ec0000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
+> > > > > > 38330000.blk-ctrl       imx8m-blk-ctrl: failed to get noc entries
+> > > > > > 32f10000.blk-ctrl       imx8mp-blk-ctrl: failed to get noc entries
+> > > > > > 32f10100.usb    platform: supplier 32f10000.blk-ctrl not ready
+> > > > > > 32f10108.usb    platform: supplier 32f10000.blk-ctrl not ready
+> > > > > > cpufreq-dt
+> > > > > >
+> > > > > > Is there a driver I'm perhaps missing that is needed now or are there
+> > > > > > some patches that come from a different unmerged tree needed?
+> > > > >
+> > > > > Do you have these enabled ?
+> > > > >
+> > > > > CONFIG_INTERCONNECT_IMX8MM=y
+> > > > > CONFIG_INTERCONNECT_IMX8MN=y
+> > > > > CONFIG_INTERCONNECT_IMX8MQ=y
+> > > > > CONFIG_INTERCONNECT_IMX8MP=y
+> > > >
+> > > > Marek,
+> > > >
+> > > > Yes, I have those as well as CONFIG_ARCH_NXP which appears new for 6.1 enabled.
+> > > >
+> > > > Best Regards,
+> > > >
+> > > > Tim
+> > >
+> > > I see this issue on origin/master 1440f5760228 using
+> > > arch/arm64/configs/defconfig.
+> > >
+> > > It seems to me that the imx8m*_blk_ctrl_probe will all defer now until
+> > > perhaps all the drivers using interconnects can probe, such as
+> > > g1/lcdif etc?
+> > >
+> > > Some added debugging shows me:
+> > > [   14.951371] of_icc_bulk_get path lcdif-rd err=-517
+> > > [   14.956205] devm_of_icc_bulk_get ret=-517
+> > > [   14.960562] imx8m_blk_ctrl_probe failed -517
+> > > [   14.967191] of_icc_bulk_get path g1 err=-517
+> > > [   14.971487] devm_of_icc_bulk_get ret=-517
+> > > [   14.975614] imx8m_blk_ctrl_probe failed -517
+> > > [   14.982200] of_icc_bulk_get path usb1 err=-517
+> > > [   14.986680] devm_of_icc_bulk_get ret=-517
+> > > [   14.990709] imx8mp_blk_ctrl_probe 0:usb1
+> > > [   14.994641] imx8mp_blk_ctrl_probe 1:usb2
+> > > [   15.002086] platform 381f0040.usb-phy: deferred probe pending
+> > > [   15.007875] platform 382f0040.usb-phy: deferred probe pending
+> > > [   15.013636] platform 32f00000.pcie-phy: deferred probe pending
+> > > [   15.019480] platform 33800000.pcie: deferred probe pending
+> > > [   15.024975] platform 32ec0000.blk-ctrl: deferred probe pending
+> > > [   15.030819] platform 38330000.blk-ctrl: deferred probe pending
+> > > [   15.036662] platform 32f10000.blk-ctrl: deferred probe pending
+> > > [   15.042503] platform 32f10100.usb: deferred probe pending
+> > > [   15.047912] platform 32f10108.usb: deferred probe pending
+> > >
+> > Do you have CONFIG_ARM_IMX_BUS_DEVFREQ enabled? This one will actually
+> > instantiate the interconnect devices for the interconnect drivers to
+> > hang onto. Once the interconnect is probed the blk-ctrl drivers should
+> > probe. There is no dependency into leaf peripheral devices.
 > >
-> > [    3.879229] ab8500-fg ab8500-fg.0: line impedance: 36000 uOhm
-> > [    3.892793] power_supply ab8500_usb: Samsung SDI EB-L1M7FLU battery 1500 mAh
-> > [    3.901663] thermal_sys: Failed to find 'trips' node
-> > [    3.906635] thermal_sys: Failed to find trip points for thermistor id=0
-> > [    3.913427] ntc-thermistor thermistor: unable to register as hwmon device.
-> > [    3.920350] ntc-thermistor: probe of thermistor failed with error -22
+> > Regards,
+> > Lucas
 > >
-> > The device tree looks like this
-> > (arch/arm/boot/dts/ste-ux500-samsung-golden.dts):
-> >
-> >         thermal-zones {
-> >                 battery-thermal {
-> >                         /* This zone will be polled by the battery
-> > temperature code */
-> >                         polling-delay = <0>;
-> >                         polling-delay-passive = <0>;
-> >                         thermal-sensors = <&bat_therm>;
-> >                 };
-> >         };
-> >
-> > This is a thermal zone without trip points, which it seems like the new
-> > code does not allow, also the bindings were patched to not allow this,
-> > in commit 8c596324232d22e19f8df59ba03410b9b5b0f3d7
-> > "dt-bindings: thermal: Fix missing required property"
-> > but this broke my systems. The requirement to have trip points also
-> > broke my device trees.
-> >
-> > The reason why I have this is that the thermal zone is not managed
-> > by the OF thermal core, but by the battery charging algorithm which
-> > just retrieves the thermal zone and use it to read the temperature, see
-> > commit 2b0e7ac0841b3906aeecf432567b02af683a596c
-> > "power: supply: ab8500: Integrate thermal zone".
-> >
-> > The code is using
-> > thermal_zone_get_zone_by_name()
-> > thermal_zone_get_temp()
-> > and applying its own policy on the thermal zone in order to not
-> > dulicate code.
-> >
-> > I understand from the code and changes to the bindings that the
-> > authors assume that no zones without trips exist but... well they
-> > exist.
-> >
-> > I understand that the bindings always said that trips are required
-> > but ... thermal zones without trip points make a bit of sense.
-> > It's just a zone without a policy. It can be observed even if it can't
-> > be acted on.
-> >
-> > How do you want to solve this? Can we make trips non-compulsory
-> > again or shall I add dummy trip points to the device trees?
-> >
-> > This:
-> >
-> > diff --git a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-> > b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-> > index b0dce91aff4b..d00e9e6ebbf7 100644
-> > --- a/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-> > +++ b/arch/arm/boot/dts/ste-ux500-samsung-golden.dts
-> > @@ -35,6 +35,15 @@ battery-thermal {
-> >                         polling-delay = <0>;
-> >                         polling-delay-passive = <0>;
-> >                         thermal-sensors = <&bat_therm>;
-> > +
-> > +                       trips {
-> > +                               /* Unused trip point to please the framework */
-> > +                               dummy {
-> > +                                       temperature = <700000>;
-> > +                                       hysteresis = <2000>;
-> > +                                       type = "passive";
-> > +                               };
-> > +                       };
 >
-> That's ugly and requiring a DT update breaks the ABI. So the
-> requirement for 'trips' should be reverted. (Well the schema should, I
-> imagine the code change is not just a revert.)
+> Lucas,
+>
+> That's configured as a module in arch/arm64/configs/defconfig - making
+> it static still does not help. I am booting a static kernel with no
+> modules here so there must be something else required that is
+> configured as a module that wasn't needed before this series?
+>
+> I haven't had much time to look into this. I'm simply using
+> arch/arm64/configs/defconfig and CONFIG_INITRAMFS_SOURCE set to a
+> rootfs I use for quick testing. If there is indeed now one or more
+> modules required before USB and PCIe are available I wonder if they
+> should be made static in arch/arm64/configs/defconfig? If not then I
+> don't know what the point in having the PCI and USB drivers static is.
+>
 
-I agree and the code change is not just a revert AFAICS.
+Lucas,
 
-This is Daniel's work, so I'm still hoping that he'll chime in
-shortly, but in any case the code has to work with the existing
-setups, no question about that.
+Sorry, I misspoke - I did not have CONFIG_ARM_IMX_BUS_DEVFREQ and that
+was indeed my issue.
+
+Question: Should the intention of arch/arm64/configs/defconfig be to
+provide static bus support for PCIe/USB which can be boot devices?
+
+Prior to the interconnect drivers (and even following those drivers
+for imx8mm/imx8mn) PCIe/USB are available without module support with
+arch/arm64/configs/defconfig but now the following would need to be
+changed to make PCIe/USB available with defconfig and no modules:
+CONFIG_INTERCONNECT_IMX8MM=y
+CONFIG_INTERCONNECT_IMX8MN=y
+CONFIG_INTERCONNECT_IMX8MQ=y
+CONFIG_INTERCONNECT_IMX8MP=y
+CONFIG_ARM_IMX_BUS_DEVFREQ=y
+
+Without this change one would need an initrd to boot off PCIe/NVMe or
+USB boot devices. I'm simply not clear what the intended use case is
+for the defconfig with regards to modules vs static drivers.
+
+Best Regards,
+
+Tim
