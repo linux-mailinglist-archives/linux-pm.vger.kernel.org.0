@@ -2,143 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A135960EB71
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 00:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67BDE60ECEB
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 02:18:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229456AbiJZWSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 18:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39568 "EHLO
+        id S233245AbiJ0ASZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 20:18:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiJZWSK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 18:18:10 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4995F63F7
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 15:18:07 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id f37so31711338lfv.8
-        for <linux-pm@vger.kernel.org>; Wed, 26 Oct 2022 15:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9jqI46+e/77kTgH7h4PL7uKuCpH6Cjz4yNeCC9Ks3dc=;
-        b=MAx9GoqJUSQhB9bUYYAAInmItHedCwfDzU+a4AbWRsIeK/Yc90GUigg1RMlpIdTisx
-         mC4FlztFxd+wbVprYc/rwG8i1qM8Y+NnBwRdOv4HkLoF5IBFaptL9QGCipm79reH71Aj
-         Y9bT4Uf/if6xXcCHZImJQqf7A78epbLOgSNMc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9jqI46+e/77kTgH7h4PL7uKuCpH6Cjz4yNeCC9Ks3dc=;
-        b=kfx23Skw0M3VRoxwE/u6GPn3ycGg8DdRNcHLuBvB09TFBt1F8H1oFmA7a9vSfD4Ckc
-         93LYX23O2VjZQSqp1NEiycDOL8Fc9xfkp5mnR7K/QrH3twvMiodbtWjY7q28Nd2uVNtN
-         FDZ0xFX5dLH16Eoa8o8Mhst+Or8E1srApxIzHjXdVMNQZAtBaxpZZobgOWz70cWP+VV+
-         hIpoeUdlvbfDqL1BGTF6Y54sKGWiaybHD5xK4aNSHBTwE1qxmz4SP9lPNSHvEjmhXH4I
-         HALtT97aEUqeHHlASMw4OvEChOEQjri0HjPNqBg1acnPir72sxEBX1Y1pZG5YamY+X+j
-         YTGQ==
-X-Gm-Message-State: ACrzQf1QsSDySVJSqYWuYS32qnVJW2N+/+xqZg6NHghgcqXhnUlJTrog
-        qpaMiIaM/0DgCrBSU9s1AqsXla5GL1AmNPUPpowGng==
-X-Google-Smtp-Source: AMsMyM4NW2ATDJXFwKq7wuAg3X3McqDZmNzLYBOFH6QkeLPvXebMrquLMvO2T31xyTlgJ0snNV/KF5PqAsctW7ikaq4=
-X-Received: by 2002:a05:6512:3dac:b0:4a4:8044:9c3 with SMTP id
- k44-20020a0565123dac00b004a4804409c3mr16238548lfv.145.1666822686108; Wed, 26
- Oct 2022 15:18:06 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 26 Oct 2022 18:18:05 -0400
+        with ESMTP id S233790AbiJ0ASY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 20:18:24 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3022AC96CF;
+        Wed, 26 Oct 2022 17:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666829904; x=1698365904;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=oB6nTDCMqGB4bl603Y+aNjuJYpKdztso9dayg7OlEFk=;
+  b=DFmReBYMh5B2EubJ+g1paD0HAlOFgidR6FCsRnIAL/UrW/FgbEwDznoh
+   H59J1Ri2SJrI+orHOcu077Mi2Z666JN7ZEMnYrrVeHSNdZburcAUmHRFj
+   LJsF55+9cfHJNZen+rBZrCEnQsr+FVnDWDH2sl1g7kVZxUi0GjxeukalR
+   MunoqcmlFHdliGQS0fZMhtEN4Xb86CICd2ATkvZnugF5TZj5I49zR2Rkd
+   9WARYPkl0wbGcQ4KHRnmh9K4vHDuGjpJUuZtqfMFqnQB1dcB0Be13Lsg6
+   0o1e9x+GzXZXyD0sVYo3bfNJsIhbSsZiF9FB6G2SxMcXU+zojsA8T5f09
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="288490084"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="288490084"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 17:18:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="663414342"
+X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
+   d="scan'208";a="663414342"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 26 Oct 2022 17:18:22 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1onqbF-00081D-1M;
+        Thu, 27 Oct 2022 00:18:21 +0000
+Date:   Thu, 27 Oct 2022 08:18:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 1de66fcb380ec2ea6ad56911061c65ba1928a94c
+Message-ID: <6359ce46.UUtBc51qx8f6Watx%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-In-Reply-To: <CAPDyKFpay0w6n6rtv+bsdcTvL4ijtEPBODo1=XJpUFNdaooTcg@mail.gmail.com>
-References: <CAE-0n52xbZeJ66RaKwggeRB57fUAwjvxGxfFMKOKJMKVyFTe+w@mail.gmail.com>
- <CAPDyKFpay0w6n6rtv+bsdcTvL4ijtEPBODo1=XJpUFNdaooTcg@mail.gmail.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 26 Oct 2022 18:18:05 -0400
-Message-ID: <CAE-0n52Bfe-7Fpawct=_3=miLBygR_-YXm1YPnhCWOwxFnjv7g@mail.gmail.com>
-Subject: Re: clk: qcom: genpd lockdep warning in gdsc
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Yu Zhao <yuzhao@google.com>, linux-arm-msm@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Reviving this old thread because this commit has lead to a couple bugs
-now.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 1de66fcb380ec2ea6ad56911061c65ba1928a94c  Merge branch 'acpi-scan' into bleeding-edge
 
-Quoting Ulf Hansson (2022-06-22 03:26:52)
-> On Fri, 17 Jun 2022 at 21:58, Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > Hi Bjorn and Dmitry,
-> >
-> > Yu reported a lockdep warning coming from the gdsc driver. It looks like
-> > the runtime PM usage in gdsc.c is causing lockdep to see an AA deadlock
-> > possibility with 'genpd->mlock'. I suspect this is because we have
-> > commit 1b771839de05 ("clk: qcom: gdsc: enable optional power domain
-> > support"), and that is now calling runtime PM code from within the genpd
-> > code.
+elapsed time: 721m
 
-This commit has caused a deadlock at boot for Doug[1] and I see that the
-camera driver on Google CoachZ and Wormdingler devices doesn't work
-after resuming from suspend once this commit is applied. I'm leaning
-towards sending a revert, because it seems to cause 3 issues while
-removing the regulator hack that was in place to enable MMCX. This patch
-is cleaning up the hack, but trading the hack for three more problems.
+configs tested: 62
+configs skipped: 2
 
-> I think genpd already has nested lock support, so the only
-> > solution is to not use runtime PM from within genpd code and start
-> > expressing genpd parent relationships in genpd itself?
->
-> Not sure exactly what you mean here, but yes, expressing the
-> parent/child domain relationship is always needed.
->
-> Having gdsc_disable() to do runtime PM calls (gdsc_pm_runtime_put())
-> seems awkward to me. Why is that needed, more exactly?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-It seems like this is needed so that the gdsc_enable() and
-gdsc_disable() calls can read/write the registers for the genpd, while
-those registers live in some clk controller that needs either a
-different clk (probably some AHB clk) or another genpd to be enabled. It
-looks like for qcom,sm8250-dispcc it relies on MMCX gdsc (which is a
-genpd). From a hardware view, the MDSS_GDSC provided by the display clk
-controller is probably not a sub-domain of MMCX. Instead, we need to
-have MMCX enabled so that we can access the registers for the MDSS GDSC.
+gcc tested configs:
+arc                                 defconfig
+arc                               allnoconfig
+alpha                               defconfig
+powerpc                           allnoconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
+csky                              allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+s390                                defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+s390                             allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+sh                               allmodconfig
+s390                             allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+i386                                defconfig
+riscv                randconfig-r042-20221026
+x86_64                          rhel-8.3-func
+arc                  randconfig-r043-20221026
+ia64                             allmodconfig
+s390                 randconfig-r044-20221026
+x86_64                    rhel-8.3-kselftests
+arm                                 defconfig
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a013
+arm64                            allyesconfig
+x86_64                        randconfig-a011
+arm                              allyesconfig
+i386                          randconfig-a014
+m68k                             allmodconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a015
+arc                              allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+alpha                            allyesconfig
+x86_64                        randconfig-a006
+m68k                             allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
 
-My question is if it makes sense to simply describe that the GDSCs
-provided by a device are sub-domains of whatever power domains are
-listed in DT for that device? I think if we did that here for sm8250
-dispcc, we wouldn't need to use runtime PM within the genpd code
-assuming that the MMCX parent genpd is enabled before we attempt to
-read/write the dispcc gdsc registers. Hopefully that is also done, i.e.
-enabling parent domains before enabling child domains if the parent is
-disabled.
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20221026
+hexagon              randconfig-r045-20221026
+i386                          randconfig-a013
+x86_64                        randconfig-a012
+i386                          randconfig-a011
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+x86_64                        randconfig-a003
 
-Is this already being done with pm_genpd_add_subdomain() in
-gdsc_register()? I see that we're attaching that to dispcc's struct
-device::pm_domain, but I assume that is different from the MMCX genpd.
-Maybe that is the problem here. Dmitry can you further describe the
-problem being solved?
-
->
-> > Or maybe genpd
-> > needs to drop locks while calling down into gdsc_disable() and reacquire
-> > them after that?
->
-> Nope, that doesn't work. This internals of genpd relies on this
-> behaviour, as it allows it to properly deal with power-on|off for
-> parent/child domains, for example.
-
-Ok.
-
-[1] https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
