@@ -2,144 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67BDE60ECEB
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 02:18:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CA6E60EE6F
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 05:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233245AbiJ0ASZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 26 Oct 2022 20:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S233682AbiJ0DRD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 26 Oct 2022 23:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233790AbiJ0ASY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 20:18:24 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3022AC96CF;
-        Wed, 26 Oct 2022 17:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1666829904; x=1698365904;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oB6nTDCMqGB4bl603Y+aNjuJYpKdztso9dayg7OlEFk=;
-  b=DFmReBYMh5B2EubJ+g1paD0HAlOFgidR6FCsRnIAL/UrW/FgbEwDznoh
-   H59J1Ri2SJrI+orHOcu077Mi2Z666JN7ZEMnYrrVeHSNdZburcAUmHRFj
-   LJsF55+9cfHJNZen+rBZrCEnQsr+FVnDWDH2sl1g7kVZxUi0GjxeukalR
-   MunoqcmlFHdliGQS0fZMhtEN4Xb86CICd2ATkvZnugF5TZj5I49zR2Rkd
-   9WARYPkl0wbGcQ4KHRnmh9K4vHDuGjpJUuZtqfMFqnQB1dcB0Be13Lsg6
-   0o1e9x+GzXZXyD0sVYo3bfNJsIhbSsZiF9FB6G2SxMcXU+zojsA8T5f09
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="288490084"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="288490084"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Oct 2022 17:18:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10512"; a="663414342"
-X-IronPort-AV: E=Sophos;i="5.95,215,1661842800"; 
-   d="scan'208";a="663414342"
-Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 26 Oct 2022 17:18:22 -0700
-Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1onqbF-00081D-1M;
-        Thu, 27 Oct 2022 00:18:21 +0000
-Date:   Thu, 27 Oct 2022 08:18:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 1de66fcb380ec2ea6ad56911061c65ba1928a94c
-Message-ID: <6359ce46.UUtBc51qx8f6Watx%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229616AbiJ0DQ7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 26 Oct 2022 23:16:59 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B89DD896;
+        Wed, 26 Oct 2022 20:16:58 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id q1so17045600pgl.11;
+        Wed, 26 Oct 2022 20:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UdfYL7Y9VZRkcaGm5JO6kmXdUQOSNAtEcm9KHbShwM0=;
+        b=XIR6I96JOE4YdJFAGI9vkaV9ftdFHLXvgaTfH/BrmdWg9E2lioAP3gwj4j1QwOd2kg
+         X+kE3+dK4thHPm6gdtYky6VrtInB+1Q1jGzVBZwg+eGWIVy8edwa/o3jOjFBZZGh3+Jn
+         avgFZEtcdOQWzfLftnRYYAcVp/s5Bxbq3Yt5xcRHl7a6pW2hZ54N3drqU/cnp3KUd2s9
+         waFl/lFpGUTa42N5g7fZz0MaF7hrepY/48d78ngJk4gNlWYNWURl2QoudknCUVCzYOen
+         48S/4/HXTh9ZzjtopQlg7loHvqdxIZxAN2OmYYfCwiucNx58+w6gXGKor9H8EGjaTk0O
+         wQNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UdfYL7Y9VZRkcaGm5JO6kmXdUQOSNAtEcm9KHbShwM0=;
+        b=1P2R7Zn5QVL+zeH63gLYPgcSDLL1UBQAo3Nnv02pQzk3Dr4aJk6UiF01BfEhKvHonA
+         c4QvsLscOlbDDEYgXu3lIOHQScISbAe2u5G9XuizpG2waqUw80AcrWjjlmI6MpEymrw0
+         Cd3kg5egWYUj/YT/7dvikP9RB++OyEgdjT1K+yfPKaG12ucbQRc5AFmn5AZgN4BJ+2zq
+         HcxI8yevoUPEE1K5/coM6a0w9hZL6ed06WXNzHWtu22SG7QV/pttOoQbgEe41BjULlEU
+         PB5+aLXb/wuWuuJLF++y/7a/lZwGr1SGS/17RStUGvJYnAGsOrLKWzFZox31yauNPd4J
+         llCw==
+X-Gm-Message-State: ACrzQf2qQImFKOE4tVDyHwjAKEIKmHYbx2Zm6BKsv+74EpVQZTypAkGY
+        WY8irqnl4qyigdnCbizVjGA=
+X-Google-Smtp-Source: AMsMyM5+xOtqqxmysxAnn8Duv7uM/CHacx922DUA+NrlUAuR8I9zgfdwOzN/MkestWZMoGjCzSI39g==
+X-Received: by 2002:a63:1b16:0:b0:46b:8e7:3e0a with SMTP id b22-20020a631b16000000b0046b08e73e0amr39509387pgb.86.1666840618217;
+        Wed, 26 Oct 2022 20:16:58 -0700 (PDT)
+Received: from localhost.localdomain ([43.224.245.180])
+        by smtp.gmail.com with ESMTPSA id d17-20020aa797b1000000b0056bb99db338sm112636pfq.175.2022.10.26.20.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Oct 2022 20:16:57 -0700 (PDT)
+From:   Qibo Huang <huangqibo.tech@gmail.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Qibo Huang <huangqibo.tech@gmail.com>
+Subject: [PATCH] thermal/core: cooling device duplicate creation check
+Date:   Thu, 27 Oct 2022 11:16:48 +0800
+Message-Id: <20221027031648.2452-1-huangqibo.tech@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 1de66fcb380ec2ea6ad56911061c65ba1928a94c  Merge branch 'acpi-scan' into bleeding-edge
+Because creating a cooling device may have duplicate names.
+When creating, first check thermal_cdev_list whether
+there is a device with the same name. If it has the same name,
+it returns a reference to the cooling device.
 
-elapsed time: 721m
+Signed-off-by: Qibo Huang <huangqibo.tech@gmail.com>
+---
+ drivers/thermal/thermal_core.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-configs tested: 62
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arc                                 defconfig
-arc                               allnoconfig
-alpha                               defconfig
-powerpc                           allnoconfig
-alpha                             allnoconfig
-riscv                             allnoconfig
-csky                              allnoconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-s390                                defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-s390                             allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-sh                               allmodconfig
-s390                             allyesconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-i386                                defconfig
-riscv                randconfig-r042-20221026
-x86_64                          rhel-8.3-func
-arc                  randconfig-r043-20221026
-ia64                             allmodconfig
-s390                 randconfig-r044-20221026
-x86_64                    rhel-8.3-kselftests
-arm                                 defconfig
-i386                             allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a013
-arm64                            allyesconfig
-x86_64                        randconfig-a011
-arm                              allyesconfig
-i386                          randconfig-a014
-m68k                             allmodconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a015
-arc                              allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-alpha                            allyesconfig
-x86_64                        randconfig-a006
-m68k                             allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r041-20221026
-hexagon              randconfig-r045-20221026
-i386                          randconfig-a013
-x86_64                        randconfig-a012
-i386                          randconfig-a011
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a014
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a003
-
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 7e669b60a065..f38f9464e9f4 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -844,6 +844,34 @@ static void bind_cdev(struct thermal_cooling_device *cdev)
+ 	mutex_unlock(&thermal_list_lock);
+ }
+ 
++struct thermal_cooling_device *thermal_cdev_get_zone_by_name(const char *name)
++{
++	struct thermal_cooling_device *pos = NULL, *ref = ERR_PTR(-EINVAL);
++	unsigned int found = 0;
++
++	if (!name)
++		goto exit;
++
++	mutex_lock(&thermal_list_lock);
++	list_for_each_entry(pos, &thermal_cdev_list, node)
++		if (!strncasecmp(name, pos->type, THERMAL_NAME_LENGTH)) {
++			found++;
++			ref = pos;
++		}
++	mutex_unlock(&thermal_list_lock);
++
++	/* nothing has been found, thus an error code for it */
++	if (found == 0)
++		ref = ERR_PTR(-ENODEV);
++	else if (found > 1)
++	/* Success only when an unique zone is found */
++		ref = ERR_PTR(-EEXIST);
++
++exit:
++	return ref;
++}
++EXPORT_SYMBOL_GPL(thermal_cdev_get_zone_by_name);
++
+ /**
+  * __thermal_cooling_device_register() - register a new thermal cooling device
+  * @np:		a pointer to a device tree node.
+@@ -873,6 +901,12 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	    !ops->set_cur_state)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (type) {
++		cdev = thermal_cdev_get_zone_by_name(type);
++		if (!IS_ERR(cdev))
++			return cdev;
++	}
++
+ 	cdev = kzalloc(sizeof(*cdev), GFP_KERNEL);
+ 	if (!cdev)
+ 		return ERR_PTR(-ENOMEM);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+
