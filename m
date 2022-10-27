@@ -2,65 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D7E60FD8F
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 18:53:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA09660FF38
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 19:20:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235321AbiJ0Qxt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Oct 2022 12:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33850 "EHLO
+        id S233548AbiJ0RUC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Oct 2022 13:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235273AbiJ0Qxr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 12:53:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3906B64D;
-        Thu, 27 Oct 2022 09:53:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=/U8S3Hm7GM0N6bSRIg6fGWmqOXH9FpB3PcS4vcOVE4s=; b=LssFHjU3t3g7NhCPsPAUbQXcNS
-        /acApWjgm1hBREBZAMSdkS+j4BidQLmuo0qgb16z1ZemttbxkkAiAhb3KNonWYweDrx9fmJwx2+eJ
-        HscLMxV5H4nw3V1np3WxeeY8HKUIaYtDjvFGi21dnd2vxyXIsGjyYtbBe/Zxlmj9thgIWDc8eAc0b
-        adhHkvlG35IqPDYoV+kT6hiHUBye/VPnBk6WB8AVsenW87uV37WQn7PBbkBKquyoWW0c8wCVgTKLv
-        5AqWnbk0e0eIqrWQOIeZv6MFdezzYUn3IZxlaH4wQLgYDzAdkUGRE8u/LKOjNz+7UsRWKPmowhbPF
-        aIDUDNzQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oo68C-006uwr-8y; Thu, 27 Oct 2022 16:53:24 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3746230020C;
-        Thu, 27 Oct 2022 18:53:23 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1BEDC2C646598; Thu, 27 Oct 2022 18:53:23 +0200 (CEST)
-Date:   Thu, 27 Oct 2022 18:53:23 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <Y1q3gzbPUCvEMHGD@hirez.programming.kicks-ass.net>
-References: <20220822111816.760285417@infradead.org>
- <20220822114649.055452969@infradead.org>
- <Y1LVYaPCCP3BBS4g@intel.com>
- <Y1drd2gzxUJWdz5F@intel.com>
- <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
- <Y1kMv1GpKwOSIt8f@intel.com>
- <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
- <Y1qC7d7QVJB8NCHt@intel.com>
+        with ESMTP id S233619AbiJ0RUB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 13:20:01 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23EEC303D0;
+        Thu, 27 Oct 2022 10:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1666891197; x=1698427197;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uLUbt4+uG5KMwbCnM+TCrogE8RgHzw0WgZnOBwJ7M2U=;
+  b=h//Q2r+EbsDa/1M0DJeKCIebSBUG13lleQocZE4TFly41rFeRNfuv2h7
+   C9dR6AqDnKievhQhONXUst+bvoTAIMQ0J3bGm1zeCsxaM1CM68T0lBu2H
+   9Cx4o8b/MSvQZ8oFlPU9T9jYcCMC6Fwc9cyFX4IVMPrT3hlgjybzMUNwI
+   reQ9ZmUY1GzdyENHOaH0oTYt4ofh6cR3jQGxe164wi0OxAJHF7+poqwan
+   j9zc50X9todebTbGnin4S5VpbYT4WjaOZ0IJ8/FHKzl5+s1CVmFUgNIfL
+   Q4PwiQxlnp+g6S6DaFge/WfPRFHKXah2liorXJEh+pG05xqrpoZBzgVzN
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="309984236"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="309984236"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2022 10:19:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10513"; a="634988307"
+X-IronPort-AV: E=Sophos;i="5.95,218,1661842800"; 
+   d="scan'208";a="634988307"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga007.fm.intel.com with ESMTP; 27 Oct 2022 10:19:54 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] cpufreq: intel_pstate: Allow EPP 0x80 setting by the firmware
+Date:   Thu, 27 Oct 2022 10:19:47 -0700
+Message-Id: <20221027171947.1465343-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y1qC7d7QVJB8NCHt@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,14 +57,74 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 04:09:01PM +0300, Ville Syrjälä wrote:
-> On Wed, Oct 26, 2022 at 01:43:00PM +0200, Peter Zijlstra wrote:
+With the
+"commit 3d13058ed2a6 ("cpufreq: intel_pstate: Use firmware default EPP")"
+the firmware can set an EPP, which driver will not overwrite. But the
+driver has a valid range check for:
+0x40 > firmware epp < 0x80.
+Hence firmware can't specify EPP of 0x80.
 
-> > Could you please give the below a spin?
-> 
-> Thanks. I've added this to our CI branch. I'll try to keep and eye
-> on it in the coming days and let you know if anything still trips.
-> And I'll report back maybe ~middle of next week if we haven't caught
-> anything by then.
+If the firmware didn't specify in the valid range, the driver has a
+hard coded EPP of 102. But some Chrome hardware vendors don't want
+this overwrite and wants to boot with chipset default EPP of 0x80 as
+this improves battery life.
 
-Thanks!
+In this case they want to have capability to specify EPP of 0x80 via
+the firmware. This require the valid range to include 0x80 also.
+But here the valid range can't be simply extended to include 0x80 as
+this is the chipset default EPP. Even without any firmware specifying
+EPP, the chipset will always boot with EPP of 0x80.
+
+To make sure that firmware specified EPP of 0x80 and not by the
+chipset default, it will require additional check to make sure HWP
+was enabled by the firmware before boot. Only way the firmware can
+update EPP, is to enable HWP and update EPP via MSR_HWP_REQUEST.
+
+This driver already checks, if the HWP is enabled by the firmware.
+Use the same flag and extend valid range to include 0x80.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/cpufreq/intel_pstate.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+index fc3ebeb0bbe5..c41875abd8be 100644
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -297,6 +297,7 @@ static int hwp_active __read_mostly;
+ static int hwp_mode_bdw __read_mostly;
+ static bool per_cpu_limits __read_mostly;
+ static bool hwp_boost __read_mostly;
++static bool hwp_forced __read_mostly;
+ 
+ static struct cpufreq_driver *intel_pstate_driver __read_mostly;
+ 
+@@ -1705,12 +1706,12 @@ static void intel_pstate_update_epp_defaults(struct cpudata *cpudata)
+ 		return;
+ 
+ 	/*
+-	 * If powerup EPP is something other than chipset default 0x80 and
+-	 * - is more performance oriented than 0x80 (default balance_perf EPP)
++	 * If the EPP is set by firmware, which means that firmware enabled HWP
++	 * - Is equal or less than 0x80 (default balance_perf EPP)
+ 	 * - But less performance oriented than performance EPP
+ 	 *   then use this as new balance_perf EPP.
+ 	 */
+-	if (cpudata->epp_default < HWP_EPP_BALANCE_PERFORMANCE &&
++	if (hwp_forced && cpudata->epp_default <= HWP_EPP_BALANCE_PERFORMANCE &&
+ 	    cpudata->epp_default > HWP_EPP_PERFORMANCE) {
+ 		epp_values[EPP_INDEX_BALANCE_PERFORMANCE] = cpudata->epp_default;
+ 		return;
+@@ -3423,7 +3424,7 @@ static int __init intel_pstate_init(void)
+ 
+ 	id = x86_match_cpu(hwp_support_ids);
+ 	if (id) {
+-		bool hwp_forced = intel_pstate_hwp_is_enabled();
++		hwp_forced = intel_pstate_hwp_is_enabled();
+ 
+ 		if (hwp_forced)
+ 			pr_info("HWP enabled by BIOS\n");
+-- 
+2.31.1
+
