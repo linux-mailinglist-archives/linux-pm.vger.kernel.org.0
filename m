@@ -2,169 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D9760FFE5
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 20:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3458610217
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 21:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235980AbiJ0SNu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Oct 2022 14:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46866 "EHLO
+        id S236674AbiJ0T4V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Oct 2022 15:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJ0SNu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 14:13:50 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5279EE28
-        for <linux-pm@vger.kernel.org>; Thu, 27 Oct 2022 11:13:47 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id o4so4687376ljp.8
-        for <linux-pm@vger.kernel.org>; Thu, 27 Oct 2022 11:13:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AH3B2XVD+782BtcBMlI9PyqTgXUoHuH6MusMjljvSDs=;
-        b=fvmm7xeIfG0714j5BtaMWH51TgwVKTWCp5poHufD++4vRk5I/kK4JVj6iBiajavhzn
-         JG5CWOk5tthB4dpzPbD6E0Vb+VqyNfZ1FckinVysRSEgV7b8gZKUfg3xOcJMjeC6pGvu
-         J7ted5WOBqnHjKuMvW61Lnbeq6Yj/I6vCZOr9ugDUaB3ZdfrDlVxpKH24DLrF03+9oF1
-         9nE/s+m5WysRxUIB+c8H7On2lsJsHXzqFXrIvRPUOM36m0sNGujPZ5hWOB1ggX3QbtL9
-         Yz42a5Phh1WiemRjpp2gOBPo6DCz1falIoDgMLny37IHwUXY3Z4MeQX193115vjLGpFk
-         lRrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AH3B2XVD+782BtcBMlI9PyqTgXUoHuH6MusMjljvSDs=;
-        b=x9RzWH2mORWpRce1RdQRuCHo/kDjMHwqrVfPJyKzI1qHI+hS3lM2E5JfZfbOqcfJOQ
-         kFcPFABq/i0KZvR0DByT6ysolTZIzt5BNIP1U5njz/PVNc0wJxdXi17tudCH+QrbBoeG
-         6uw655RzhOa0JMznlSbYgjlGiTwrLqZfG1QNzIK9GiRsIcss4TvcLIcth+n//Tg3eaCA
-         vVOAiXC8Gj60Zt6DPQ8GyWJy+1CkrUcCA6nanDy4J28MPLbmZ10y0yV5vf0MY1RZIU9o
-         WU7IWfCWrTW7VPrbII21i2wabj9DzSF6PbNUbD/vOl2i1Iy7BA7DQmpfTW+zxxOQt8WY
-         9czA==
-X-Gm-Message-State: ACrzQf2/syI+pGHbTCSnLkbZx3g2wzA2xOu9XxOWviB/MILsyCfuQXFm
-        cfJh8c7JhuWJZltNABegUMZNrw==
-X-Google-Smtp-Source: AMsMyM5xYI5/5dwMTnYXc+gGf4S8cfEbL29ctsWNazAgG3BAm21oY79OdUt2kvL6tP9WJNbNyHQQ1A==
-X-Received: by 2002:a05:6512:3684:b0:4b0:4ef:dc39 with SMTP id d4-20020a056512368400b004b004efdc39mr770237lfs.91.1666894426146;
-        Thu, 27 Oct 2022 11:13:46 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id bk9-20020a05651c238900b0026befa96249sm322815ljb.8.2022.10.27.11.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Oct 2022 11:13:45 -0700 (PDT)
-Message-ID: <9a696c92-eac2-e8fc-5081-8feb9c6150c1@linaro.org>
-Date:   Thu, 27 Oct 2022 21:13:44 +0300
+        with ESMTP id S236752AbiJ0T4T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 15:56:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 755B987084;
+        Thu, 27 Oct 2022 12:56:17 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E278023A;
+        Thu, 27 Oct 2022 12:56:22 -0700 (PDT)
+Received: from [10.57.7.15] (unknown [10.57.7.15])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1FF053F445;
+        Thu, 27 Oct 2022 12:56:14 -0700 (PDT)
+Message-ID: <c6e6d338-60e5-4401-1cf4-faaee3cc447f@arm.com>
+Date:   Thu, 27 Oct 2022 20:56:13 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: clk: qcom: genpd lockdep warning in gdsc
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Yu Zhao <yuzhao@google.com>, linux-arm-msm@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-References: <CAE-0n52xbZeJ66RaKwggeRB57fUAwjvxGxfFMKOKJMKVyFTe+w@mail.gmail.com>
- <CAPDyKFpay0w6n6rtv+bsdcTvL4ijtEPBODo1=XJpUFNdaooTcg@mail.gmail.com>
- <CAE-0n52Bfe-7Fpawct=_3=miLBygR_-YXm1YPnhCWOwxFnjv7g@mail.gmail.com>
-Content-Language: en-GB
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAE-0n52Bfe-7Fpawct=_3=miLBygR_-YXm1YPnhCWOwxFnjv7g@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
+ util-awareness
+Content-Language: en-US
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
+        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
+References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
+ <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
+ <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
+ <CAAYoRsW+5xbW_Zd7Mtbo4VMi4RZFXRr7mf4NAU=Le7GhQzNJvg@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAAYoRsW+5xbW_Zd7Mtbo4VMi4RZFXRr7mf4NAU=Le7GhQzNJvg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 27/10/2022 01:18, Stephen Boyd wrote:
-> Reviving this old thread because this commit has lead to a couple bugs
-> now.
+Hi Doug,
+
+Thank you for your effort in testing these patches and different
+governors. We really appreciate that, since this helped us to
+better understand the platform that you are using. It is different
+to what we have and our workloads. That's why I have some comments.
+
+It would be hard to combine these two worlds and requirements.
+I have some concerns to the tests, the setup and the platform.
+I can see a reason why this patch has to prove the
+strengths on this platform and environment.
+Please see my comments below.
+
+On 10/13/22 23:12, Doug Smythies wrote:
+> Hi All,
 > 
-> Quoting Ulf Hansson (2022-06-22 03:26:52)
->> On Fri, 17 Jun 2022 at 21:58, Stephen Boyd <swboyd@chromium.org> wrote:
->>>
->>> Hi Bjorn and Dmitry,
->>>
->>> Yu reported a lockdep warning coming from the gdsc driver. It looks like
->>> the runtime PM usage in gdsc.c is causing lockdep to see an AA deadlock
->>> possibility with 'genpd->mlock'. I suspect this is because we have
->>> commit 1b771839de05 ("clk: qcom: gdsc: enable optional power domain
->>> support"), and that is now calling runtime PM code from within the genpd
->>> code.
+> On Thu, Oct 13, 2022 at 4:12 AM Kajetan Puchalski
+> <kajetan.puchalski@arm.com> wrote:
+>> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
+>>> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
+>>> <kajetan.puchalski@arm.com> wrote:
+> ...
 > 
-> This commit has caused a deadlock at boot for Doug[1] and I see that the
-> camera driver on Google CoachZ and Wormdingler devices doesn't work
-> after resuming from suspend once this commit is applied. I'm leaning
-> towards sending a revert, because it seems to cause 3 issues while
-> removing the regulator hack that was in place to enable MMCX. This patch
-> is cleaning up the hack, but trading the hack for three more problems.
-> 
->> I think genpd already has nested lock support, so the only
->>> solution is to not use runtime PM from within genpd code and start
->>> expressing genpd parent relationships in genpd itself?
+>> On the Intel & power usage angle you might have seen in the discussion,
+>> Doug sent me some interesting data privately. As far as I can tell the
+>> main issue there is that C0 on Intel doesn't actually do power saving so
+>> moving the state selection down to it is a pretty bad idea because C1
+>> could be very close in terms of latency and save much more power.
 >>
->> Not sure exactly what you mean here, but yes, expressing the
->> parent/child domain relationship is always needed.
+>> A potential solution could be altering the v2 to only decrease the state
+>> selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
+>> because arm systems with 2 states use the early exit path anyway. It'd
+>> just amount to changing this hunk:
 >>
->> Having gdsc_disable() to do runtime PM calls (gdsc_pm_runtime_put())
->> seems awkward to me. Why is that needed, more exactly?
-> 
-> It seems like this is needed so that the gdsc_enable() and
-> gdsc_disable() calls can read/write the registers for the genpd, while
-> those registers live in some clk controller that needs either a
-> different clk (probably some AHB clk) or another genpd to be enabled. It
-> looks like for qcom,sm8250-dispcc it relies on MMCX gdsc (which is a
-> genpd). From a hardware view, the MDSS_GDSC provided by the display clk
-> controller is probably not a sub-domain of MMCX. Instead, we need to
-> have MMCX enabled so that we can access the registers for the MDSS GDSC.
-
-Yes, exactly.
-
-> 
-> My question is if it makes sense to simply describe that the GDSCs
-> provided by a device are sub-domains of whatever power domains are
-> listed in DT for that device? I think if we did that here for sm8250
-> dispcc, we wouldn't need to use runtime PM within the genpd code
-> assuming that the MMCX parent genpd is enabled before we attempt to
-> read/write the dispcc gdsc registers. Hopefully that is also done, i.e.
-> enabling parent domains before enabling child domains if the parent is
-> disabled.
-
-I will check this tomorrow. It should be possible to handle the 
-MMCX/MDSS_GDSC relationship in this way.
-
-> Is this already being done with pm_genpd_add_subdomain() in
-> gdsc_register()? I see that we're attaching that to dispcc's struct
-> device::pm_domain, but I assume that is different from the MMCX genpd.
-
-No, I think the only domain there is the MMCX domain, so this call s
-
-> Maybe that is the problem here. Dmitry can you further describe the
-> problem being solved?
-
-I must admit, I don't remember what caused me to add this call. May be 
-it was added before me getting the pm_genpd_add_subdomain() call in place.
-
-> 
+>> +       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
+>> +               idx--;
 >>
->>> Or maybe genpd
->>> needs to drop locks while calling down into gdsc_disable() and reacquire
->>> them after that?
+>> to:
 >>
->> Nope, that doesn't work. This internals of genpd relies on this
->> behaviour, as it allows it to properly deal with power-on|off for
->> parent/child domains, for example.
+>> +       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
+>> +               idx--;
+>>
+>> What would you think about that? Should make it much less intense for
+>> Intel systems.
 > 
-> Ok.
+> I tested the above, which you sent me as patch version v2-2.
 > 
-> [1] https://lore.kernel.org/r/20220922154354.2486595-1-dianders@chromium.org
+> By default, my Intel i5-10600K has 4 idle states:
+> 
+> $ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/name
+> /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
 
--- 
-With best wishes
-Dmitry
+This active polling state type worries me a bit. We don't have
+such on our platforms. Our shallowest idle state is really different.
+We don't have active polling and there is no need for such.
 
+> /sys/devices/system/cpu/cpu7/cpuidle/state1/name:C1_ACPI
+> /sys/devices/system/cpu/cpu7/cpuidle/state2/name:C2_ACPI
+> /sys/devices/system/cpu/cpu7/cpuidle/state3/name:C3_ACPI
+> 
+> Idle driver governor legend:
+> teo: the normal teo idle governor
+> menu: the normal menu idle governor
+> util or v1: the original patch
+> util-v2 or v2: V2 of the patch
+> util-v2-2 or v2-2: the suggestion further up in this thread.
+> 
+> Test 1: Timer based periodic:
+> 
+> A load sweep from 0 to 100%, then 100% to 0, first 73 hertz, then 113,
+> 211,347 and finally 401 hertz work/sleep frequency. Single thread.
+
+This 'Single thread' worries me a bit as well. Probably the
+task don't migrate at all over CPUs, or very unlikely.
+
+> 
+> http://smythies.com/~doug/linux/idle/teo-util/consume/idle-1/
+> 
+> Summary, average processor package powers (watts):
+> 
+> teo              menu          v1               v2             v2-2
+> 10.19399    10.74804    22.12791    21.0431    11.27865
+>                       5.44%      117.07%     106.43%     10.64%
+> 
+> There is no performance measurement for this test, it just has to
+> finish the work packet before the next period starts. Note that
+> overruns do occur as the workload approaches 100%, but I do not record
+> that data, as typically the lower workload percentages are the area of
+> interest.
+> 
+> Test 2: Ping-pong test rotating through 6 different cores, with a
+> variable packet of work to do at each stop. This test goes gradually
+> through different idle states and is not timer based. A different 2
+> core test (which I have not done) is used to better explore the idle
+> state 0 to idle state 1 transition. This test has a performance
+> measurement. The CPU scaling governor was set to performance. HWP was
+
+The 'performance' governor also worries me here. When we fix the
+frequency of the CPU then some basic statistics mechanisms would be good
+enough for reasoning.
+
+In our world, a few conditions are different:
+1. The CPU frequency changes. We work with SchedUtil and adjust the
+frequency quite often. Therefore, simple statistics which are not
+aware of the frequency change and the impact to the CPU computation
+capacity might be misleading. The utilization signal of the CPU runqueue
+brings that information to our idle decisions.
+2. Single threaded workloads aren't typical apps. When we deal
+with many tasks and the task scheduler migrates them across many
+CPUs we would like to 'see' this. The 'old-school' statistics
+observing only the local CPU usage are not able to figure out
+fast enough that some bigger task just migrated to that CPU.
+With utilization of the runqueue, we know that upfront, because the task
+utilization was subtracted from the old CPU's runqueue and
+added to the new CPU's runqueue. Our approach with this util
+signal would allow us to make a better decision in these two use cases:
+a) task is leaving the CPU and rq util drops dramatically - so we can
+go into deeper sleep immediately
+b) task just arrived on this CPU and rq util got higher value - so we
+shouldn't go into deep idle state, since there is 'not small' task.
+3. Power saving on our platform in shallowest idle state was improved
+recently and creates a scope for saving power and increase performance.
+
+It would be fair to let TEO continue it's evolution (on the platforms
+that it was designed for) and create a new governor which would address
+better other platforms and workloads needs.
+
+I will ask Rafael if that can happen. Kajetan has a tiny patch with
+basic mechanisms, which performs really good. I will ask him to send it
+so Rafael could have a look and decide. We could then develop/improve
+that new governor with ideas from other experienced engineers in
+mobile platforms.
+
+Regards,
+Lukasz
