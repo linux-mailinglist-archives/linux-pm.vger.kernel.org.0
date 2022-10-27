@@ -2,86 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D630610257
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 22:05:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3E0610485
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Oct 2022 23:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbiJ0UFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Oct 2022 16:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47034 "EHLO
+        id S235623AbiJ0VgZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Oct 2022 17:36:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236674AbiJ0UE5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 16:04:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 76C7122BCA;
-        Thu, 27 Oct 2022 13:04:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3D6E423A;
-        Thu, 27 Oct 2022 13:05:00 -0700 (PDT)
-Received: from [10.57.7.15] (unknown [10.57.7.15])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6766E3F445;
-        Thu, 27 Oct 2022 13:04:52 -0700 (PDT)
-Message-ID: <f799f67c-c9e9-c702-8457-db8da78500c9@arm.com>
-Date:   Thu, 27 Oct 2022 21:04:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional
- util-awareness
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     daniel.lezcano@linaro.org, Dietmar.Eggemann@arm.com,
-        dsmythies@telus.net, yu.chen.surf@gmail.com,
+        with ESMTP id S236191AbiJ0VgZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 17:36:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB1F5F113;
+        Thu, 27 Oct 2022 14:36:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC086624EC;
+        Thu, 27 Oct 2022 21:36:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00638C433D6;
+        Thu, 27 Oct 2022 21:36:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666906583;
+        bh=d+99Qklp1XvLTs5hzjLB/CTz9UM6Vp6GAr9OOIx8fNY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KC66wXZdXYcDgawaSO+aUS27v4e+yS1UvhLRjbeCDLDfEMLfg+pdBqzvstCPxGY4J
+         yWHwLfUgNMj1ommkw2Sxymy1hLEvLDgIHEcjKB6FQJUVFeKLqLdtddCxVcplG7wXwA
+         aH8+5VsPOfiqPHOfpVEB13uqNDXnuCv7pGAhYZR1CR5o3LjsYZfRL+dt4a1FqevkOY
+         v5vpsfW5kKSMZFSGC7MCQTDSiAbGUncz5dnFwrHcWwGp0sv0EGs1I1YXoVGGo7U/fP
+         NzmunzziJR1YI6b+7ldr25Gs5o95nHmV02oXhUZ1JhPZRX7zeNsFosbzh5CLldySCP
+         ghkFW/BXcKO3g==
+Date:   Thu, 27 Oct 2022 16:36:20 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     Stefan Richter <stefanr@s5r6.in-berlin.de>,
+        Vaibhav Gupta <vaibhavgupta40@gmail.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux1394-devel@lists.sourceforge.net, linux-pci@vger.kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
- <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <Y0fymW5LOoIHstE2@e126311.manchester.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v2] firewire: ohci: convert to generic power management
+Message-ID: <20221027213620.GA842366@bhelgaas>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027060342.GA444@wunner.de>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
-
-On 10/13/22 12:12, Kajetan Puchalski wrote:
-> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
->> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
->> <kajetan.puchalski@arm.com> wrote:
->>>
->>> Hi,
->>>
->>> At the moment, all the available idle governors operate mainly based on their own past performance
->>
->> Not true, at least for the menu and teo governors that use the
->> information on the distribution of CPU wakeups that is available to
->> them and try to predict the next idle duration with the help of it.
->> This has a little to do with their performance.
+On Thu, Oct 27, 2022 at 08:03:42AM +0200, Lukas Wunner wrote:
+> On Tue, Oct 25, 2022 at 04:25:21PM -0500, Bjorn Helgaas wrote:
+> > N.B. This changes the order of pmac_ohci_off() and pmac_ohci_on().
+> > Previously, pmac_ohci_off() was called *after* pci_save_state() and
+> > pci_set_power_state(), and this change calls it *before*.
+> > 
+> > Similarly, pmac_ohci_on() was previously called *before*
+> > pci_set_power_state() and pci_restore_state() and this change calls it
+> > *after*.
 > 
-> You're right of course, I should have written "their own past
-> correctness" as that's what I was referring to. I just meant that for
-> instance with TEO the initial timer-based choice is only adjusted using
-> the governor's own metrics and not any information from anywhere else in
-> the system.
+> Seems likely the ordering change may break things.
 > 
+> pmac_ohci_on/off() toggles PMAC_FTR_1394_ENABLE, which is defined as:
+> 
+>  * enable/disable the firewire cell of an uninorth ASIC.
+> 
+> It sounds like it will cut power to the firewire controller and I'd
+> expect that pci_save_state() will then not be able to access config
+> space.
 
-[snip]
+Yeah, definitely a risk, so I won't merge this myself since I have no
+insight or way to test it.
 
-Would it be possible to consider a new small and simple idle governor
-which is better suited for those other workloads and platforms?
-Kajetan has such one and can send to the LKML, so you could have a look.
+> The only way to make this work is to define a struct dev_pm_domain
+> whose ->suspend_noirq callback first invokes the pci_bus_type
+> ->suspend_noirq callback and then cuts power to the firewire cell
+> by calling pmac_ohci_off().
+> 
+> I've done something like this for Thunderbolt power management on
+> x86 Macs a few years back but didn't get around to upstream it so far:
+> 
+> https://github.com/l1k/linux/commit/4db7f0b1f5c9
 
-I have sent some detailed explanation about this to Doug in this
-thread (don't want to duplicate it).
+Wow, that's some impressive reverse engineering and work!
 
-It looks like it would be hard to meet both worlds' requirements.
+We're not quite there yet, but if we ever get to the point where this
+driver is the only thing preventing us from removing the PCI legacy PM
+hooks, I think I'd be inclined to just sacrifice PM completely for
+this driver.  I can't really see putting in the kind of work you did
+for Thunderbolt.
 
-Regards,
-Lukasz
+Bjorn
