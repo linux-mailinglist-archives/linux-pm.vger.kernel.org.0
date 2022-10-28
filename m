@@ -2,286 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F1161084E
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 04:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A56F6108D8
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 05:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235771AbiJ1ClU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Oct 2022 22:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S236083AbiJ1DmR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 27 Oct 2022 23:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236094AbiJ1ClS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 22:41:18 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6246F97D4F
-        for <linux-pm@vger.kernel.org>; Thu, 27 Oct 2022 19:41:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3957B82743
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 02:41:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D703C433D7;
-        Fri, 28 Oct 2022 02:41:12 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH 2/2] LoongArch: Add hibernation (ACPI S4) support
-Date:   Fri, 28 Oct 2022 10:38:29 +0800
-Message-Id: <20221028023829.4030984-2-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221028023829.4030984-1-chenhuacai@loongson.cn>
-References: <20221028023829.4030984-1-chenhuacai@loongson.cn>
+        with ESMTP id S235712AbiJ1DmP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 23:42:15 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A722D0CEB;
+        Thu, 27 Oct 2022 20:42:14 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S1fSb6024445;
+        Fri, 28 Oct 2022 03:42:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=g5+N1PHowRMUT5TXOjJDnHoPkr/6MxFxj3HIebfEAeg=;
+ b=ogCuhoC8ME8upWhGZIOsaDF0KQ5OiAIj79gJxCFST5/ZTm0khr4u7j3buwzHit5WWoDA
+ FbZOEVcBeJ0B/G0Uqv7H78wTHqLIQlWC6TNFVrq2/FZIKS/2CUlbA3Xqelabqnruapj7
+ uSH2Wk8/Fr7LjJ4jA4+mCKZxQpyaOqDGvBR8k6y4RGU2fSjaOSRA5xQLfHJXOqg3o3EP
+ 5cM5vSzfPtjHrvA7gD7nQ3cy5B+QZfsX9Hrjmu3Cv3yCoCLStY3NRmsOUYuPRX9qgBzk
+ IRoQ2HMOHbx8WPVdojHKyE7gXSU9qLQcUiDKjKDlcqCgNmRb34onIR5YqDiPFkx82sYM Wg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfyf7h3fe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 03:42:02 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29S3g1rA003679
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 28 Oct 2022 03:42:01 GMT
+Received: from th-lint-050.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 27 Oct 2022 20:42:00 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Georgi Djakov" <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>
+CC:     Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/10] interconnect: osm-l3: SC8280XP L3 and DDR scaling
+Date:   Thu, 27 Oct 2022 20:41:45 -0700
+Message-ID: <20221028034155.5580-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3MdJ1CNUHZnUqBOvIqTODDRU_rZLAtIK
+X-Proofpoint-GUID: 3MdJ1CNUHZnUqBOvIqTODDRU_rZLAtIK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ spamscore=0 malwarescore=0 clxscore=1011 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 bulkscore=0 adultscore=0 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2210280022
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add hibernation (Suspend to Disk, aka ACPI S4) support for LoongArch.
+The SC8280XP currently shows depressing results in memory benchmarks.
+Fix this by introducing support for the platform in the OSM (and EPSS)
+L3 driver and support for the platform in the bwmon binding.
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
- arch/loongarch/Kconfig               |  3 ++
- arch/loongarch/kernel/asm-offsets.c  | 12 +++++
- arch/loongarch/kernel/reset.c        |  2 +
- arch/loongarch/kernel/setup.c        |  5 ++
- arch/loongarch/power/Makefile        |  1 +
- arch/loongarch/power/hibernate.c     | 58 ++++++++++++++++++++++++
- arch/loongarch/power/hibernate_asm.S | 68 ++++++++++++++++++++++++++++
- 7 files changed, 149 insertions(+)
- create mode 100644 arch/loongarch/power/hibernate.c
- create mode 100644 arch/loongarch/power/hibernate_asm.S
+Then add the necessary nodes and values throughout the sc8280xp and
+sa8540p dtsi files to make the various devices on these platforms scale
+both L3, memory bus and DDR.
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 0df102401d1d..1943f840e494 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -521,6 +521,9 @@ menu "Power management options"
- config ARCH_SUSPEND_POSSIBLE
- 	def_bool y
- 
-+config ARCH_HIBERNATION_POSSIBLE
-+	def_bool y
-+
- source "kernel/power/Kconfig"
- source "drivers/acpi/Kconfig"
- 
-diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-index bdd88eda9513..4ef494577813 100644
---- a/arch/loongarch/kernel/asm-offsets.c
-+++ b/arch/loongarch/kernel/asm-offsets.c
-@@ -257,3 +257,15 @@ void output_smpboot_defines(void)
- 	BLANK();
- }
- #endif
-+
-+#ifdef CONFIG_HIBERNATION
-+void output_pbe_defines(void)
-+{
-+	COMMENT(" Linux struct pbe offsets. ");
-+	OFFSET(PBE_ADDRESS, pbe, address);
-+	OFFSET(PBE_ORIG_ADDRESS, pbe, orig_address);
-+	OFFSET(PBE_NEXT, pbe, next);
-+	DEFINE(PBE_SIZE, sizeof(struct pbe));
-+	BLANK();
-+}
-+#endif
-diff --git a/arch/loongarch/kernel/reset.c b/arch/loongarch/kernel/reset.c
-index 8c82021eb2f4..cdf021ff6214 100644
---- a/arch/loongarch/kernel/reset.c
-+++ b/arch/loongarch/kernel/reset.c
-@@ -15,6 +15,7 @@
- #include <acpi/reboot.h>
- #include <asm/idle.h>
- #include <asm/loongarch.h>
-+#include <asm/loongson.h>
- 
- void (*pm_power_off)(void);
- EXPORT_SYMBOL(pm_power_off);
-@@ -42,6 +43,7 @@ void machine_power_off(void)
- 	preempt_disable();
- 	smp_send_stop();
- #endif
-+	enable_pci_wakeup();
- 	do_kernel_power_off();
- #ifdef CONFIG_EFI
- 	efi.reset_system(EFI_RESET_SHUTDOWN, EFI_SUCCESS, 0, NULL);
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 96b6cb5db004..3c8bc250f4e2 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -28,6 +28,7 @@
- #include <linux/sizes.h>
- #include <linux/device.h>
- #include <linux/dma-map-ops.h>
-+#include <linux/suspend.h>
- #include <linux/swiotlb.h>
- 
- #include <asm/addrspace.h>
-@@ -312,6 +313,10 @@ static void __init arch_mem_init(char **cmdline_p)
- 
- 	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
- 
-+	/* Reserve for hibernation. */
-+	register_nosave_region(PFN_DOWN(__pa_symbol(&__nosave_begin)),
-+				   PFN_UP(__pa_symbol(&__nosave_end)));
-+
- 	memblock_dump_all();
- 
- 	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
-diff --git a/arch/loongarch/power/Makefile b/arch/loongarch/power/Makefile
-index 6740117decaa..58151d003e40 100644
---- a/arch/loongarch/power/Makefile
-+++ b/arch/loongarch/power/Makefile
-@@ -1,3 +1,4 @@
- obj-y	+= platform.o
- 
- obj-$(CONFIG_SUSPEND)		+= suspend.o suspend_asm.o
-+obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate_asm.o
-diff --git a/arch/loongarch/power/hibernate.c b/arch/loongarch/power/hibernate.c
-new file mode 100644
-index 000000000000..32dae9ef311a
---- /dev/null
-+++ b/arch/loongarch/power/hibernate.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <asm/fpu.h>
-+#include <asm/loongson.h>
-+#include <asm/sections.h>
-+#include <asm/tlbflush.h>
-+
-+static u64 saved_crmd;
-+static u64 saved_prmd;
-+static u64 saved_euen;
-+static u64 saved_ecfg;
-+struct pt_regs saved_regs;
-+
-+void save_processor_state(void)
-+{
-+	saved_crmd = csr_read32(LOONGARCH_CSR_CRMD);
-+	saved_prmd = csr_read32(LOONGARCH_CSR_PRMD);
-+	saved_euen = csr_read32(LOONGARCH_CSR_EUEN);
-+	saved_ecfg = csr_read32(LOONGARCH_CSR_ECFG);
-+
-+	if (is_fpu_owner())
-+		save_fp(current);
-+}
-+
-+void restore_processor_state(void)
-+{
-+	csr_write32(saved_crmd, LOONGARCH_CSR_CRMD);
-+	csr_write32(saved_prmd, LOONGARCH_CSR_PRMD);
-+	csr_write32(saved_euen, LOONGARCH_CSR_EUEN);
-+	csr_write32(saved_ecfg, LOONGARCH_CSR_ECFG);
-+
-+	if (is_fpu_owner())
-+		restore_fp(current);
-+}
-+
-+int pfn_is_nosave(unsigned long pfn)
-+{
-+	unsigned long nosave_begin_pfn = PFN_DOWN(__pa(&__nosave_begin));
-+	unsigned long nosave_end_pfn = PFN_UP(__pa(&__nosave_end));
-+
-+	return	(pfn >= nosave_begin_pfn) && (pfn < nosave_end_pfn);
-+}
-+
-+extern int swsusp_asm_suspend(void);
-+
-+int swsusp_arch_suspend(void)
-+{
-+	enable_pci_wakeup();
-+	return swsusp_asm_suspend();
-+}
-+
-+extern int swsusp_asm_resume(void);
-+
-+int swsusp_arch_resume(void)
-+{
-+	/* Avoid TLB mismatch during and after kernel resume */
-+	local_flush_tlb_all();
-+	return swsusp_asm_resume();
-+}
-diff --git a/arch/loongarch/power/hibernate_asm.S b/arch/loongarch/power/hibernate_asm.S
-new file mode 100644
-index 000000000000..7894fbd56c85
---- /dev/null
-+++ b/arch/loongarch/power/hibernate_asm.S
-@@ -0,0 +1,64 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Hibernation support specific for LoongArch
-+ *
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/linkage.h>
-+#include <asm/asm.h>
-+#include <asm/asm-offsets.h>
-+#include <asm/regdef.h>
-+
-+.text
-+SYM_FUNC_START(swsusp_asm_suspend)
-+	la.pcrel	t0, saved_regs
-+	PTR_S		ra, t0, PT_R1
-+	PTR_S		sp, t0, PT_R3
-+	PTR_S		fp, t0, PT_R22
-+	PTR_S		tp, t0, PT_R2
-+	PTR_S		s0, t0, PT_R23
-+	PTR_S		s1, t0, PT_R24
-+	PTR_S		s2, t0, PT_R25
-+	PTR_S		s3, t0, PT_R26
-+	PTR_S		s4, t0, PT_R27
-+	PTR_S		s5, t0, PT_R28
-+	PTR_S		s6, t0, PT_R29
-+	PTR_S		s7, t0, PT_R30
-+	PTR_S		s8, t0, PT_R31
-+	b		swsusp_save
-+SYM_FUNC_END(swsusp_asm_suspend)
-+
-+SYM_FUNC_START(swsusp_asm_resume)
-+	la.pcrel	t0, restore_pblist
-+	PTR_L		t0, t0, 0
-+0:
-+	PTR_L		t1, t0, PBE_ADDRESS  /* source */
-+	PTR_L		t2, t0, PBE_ORIG_ADDRESS /* destination */
-+	PTR_LI		t3, _PAGE_SIZE
-+	PTR_ADD		t3, t3, t1
-+1:
-+	REG_L		t8, t1, 0
-+	REG_S		t8, t2, 0
-+	PTR_ADDI	t1, t1, SZREG
-+	PTR_ADDI	t2, t2, SZREG
-+	bne		t1, t3, 1b
-+	PTR_L		t0, t0, PBE_NEXT
-+	bnez		t0, 0b
-+	la.pcrel	t0, saved_regs
-+	PTR_L		ra, t0, PT_R1
-+	PTR_L		sp, t0, PT_R3
-+	PTR_L		fp, t0, PT_R22
-+	PTR_L		tp, t0, PT_R2
-+	PTR_L		s0, t0, PT_R23
-+	PTR_L		s1, t0, PT_R24
-+	PTR_L		s2, t0, PT_R25
-+	PTR_L		s3, t0, PT_R26
-+	PTR_L		s4, t0, PT_R27
-+	PTR_L		s5, t0, PT_R28
-+	PTR_L		s6, t0, PT_R29
-+	PTR_L		s7, t0, PT_R30
-+	PTR_L		s8, t0, PT_R31
-+	PTR_LI		a0, 0x0
-+	jirl		zero, ra, 0
-+SYM_FUNC_END(swsusp_asm_resume)
+Bjorn Andersson (10):
+  interconnect: qcom: osm-l3: Use platform-independent node ids
+  interconnect: qcom: osm-l3: Squash common descriptors
+  interconnect: qcom: osm-l3: Add per-core EPSS L3 support
+  interconnect: qcom: osm-l3: Simplify osm_l3_set()
+  dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3
+    compatibles
+  arm64: dts: qcom: Align with generic osm-l3/epss-l3
+  arm64: dts: qcom: sc8280xp: Add epss_l3 node
+  arm64: dts: qcom: sc8280xp: Set up L3 scaling
+  dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon
+    instances
+  arm64: dts: qcom: sc8280xp: Add bwmon instances
+
+ .../interconnect/qcom,msm8998-bwmon.yaml      |   5 +
+ .../bindings/interconnect/qcom,osm-l3.yaml    |  22 ++-
+ arch/arm64/boot/dts/qcom/sa8540p.dtsi         |  39 +++++
+ arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 152 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +-
+ drivers/interconnect/qcom/osm-l3.c            | 126 ++++-----------
+ 10 files changed, 251 insertions(+), 103 deletions(-)
+
 -- 
-2.31.1
+2.37.3
 
