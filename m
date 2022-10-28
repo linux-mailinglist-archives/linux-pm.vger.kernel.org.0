@@ -2,170 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87603611DFC
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83455611E39
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:43:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229542AbiJ1XND (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 19:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
+        id S229691AbiJ1XnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 19:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiJ1XNB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:13:01 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD834CA29
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 16:13:00 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id bb5so4418939qtb.11
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 16:13:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1TTqFXJnufak57lBJdLAiI5r22saT5S8wMPVdyLYJWQ=;
-        b=ogypng3huLd9C6k8ChgEqfkCle5/rUaHBHBD/ptyC6xEUFau8FCB8ZK1goK4KakUUL
-         I0RXL9cORu3+wNcIouY5hYG7WS6Oerh3Pl/cgBXXZlD5r9SiCxmAfCcw08qqjzRZAZkO
-         utjAxP0dbDfy5xxkAP/r8ei0283DOAy9l2Dg8p0FMvveI809EwkmZAqZHmHh4hBaWiZ8
-         P8SdGIYY18Da39kcFSVfeQ1MEiFbT46EaD0urz3QxhEZ/6EHNs/Amilz4Sx1mYvyY5Sc
-         H0LeLuQKiI81AVYcLuahymCG3/7o1IQzj9b0bNLxHlucpaGZnm0n4hPUeqc7/R2dyLi3
-         LWGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1TTqFXJnufak57lBJdLAiI5r22saT5S8wMPVdyLYJWQ=;
-        b=LciN7NWTcDSywQ89rw9EKkzisw7yra8yS7w885WW44sGI/m2E8xRypPv+xst9kjSqg
-         be2OXOIscE6St4cTkR390ZjPjb0uuHSNypUebLkQDU8kqDNaSlydokvTrmH6X1k4Epim
-         pfutHB6+4q77Uxwa+XQZEoylIpEhcUCrM8yT6+UnBllCH2Prfiqz0Do6ZufmuBnB01pE
-         ssBqu0aoZNgxovfuEQ8oGP0RM4MjExkqaMvplbUbgIrbPUgPxqf/l9aPyD0G3r+2gy18
-         nG5eZdNSfZrybGv77nwprgqw8G2zikQDsW0yhPJvG0yy7BHaupKTXJCdTHrgcf98uFKd
-         ucTw==
-X-Gm-Message-State: ACrzQf3Dc1Cxsp4tuiXYAbPrcbkHSATtcmvyl+b0RPVyUgRsqO2BoQfm
-        oEqpTc+AsUYhnWHJlcZizjqhhQ==
-X-Google-Smtp-Source: AMsMyM4deQ6TLfI9iTlLyVmUPekBdwUM2eeZJhBtMskzloonFWP5VJbYDXDokrrsCMQjRIM5Q04YpA==
-X-Received: by 2002:a05:622a:188a:b0:3a4:eb2c:f221 with SMTP id v10-20020a05622a188a00b003a4eb2cf221mr1641126qtc.613.1666998779575;
-        Fri, 28 Oct 2022 16:12:59 -0700 (PDT)
-Received: from krzk-bin.. ([64.57.193.93])
-        by smtp.gmail.com with ESMTPSA id fx12-20020a05622a4acc00b0039ccd7a0e10sm3016026qtb.62.2022.10.28.16.12.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 16:12:58 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        "Andrew F. Davis" <afd@ti.com>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: power: supply: expect specific type for monitored-battery
-Date:   Fri, 28 Oct 2022 19:12:55 -0400
-Message-Id: <20221028231255.565363-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229670AbiJ1XnB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:43:01 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC6F114DC6
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 16:43:00 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 574396602942;
+        Sat, 29 Oct 2022 00:42:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667000579;
+        bh=JYCd0OZ4huxkD0mKEGZ6en4V++w8Mw/2eSqNicOtyvw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ez0jf3lYWD0CWa4bFrx0Yy/RWDrgDb6lbK+tzOPnt6LRIbD4KzRkawkWYhw7+sVfU
+         j749Jrn5BCCxzZW6sCd43GctgKwMKKkSL+FoEFFVPVHClg1TuxZaJtDfW/wQq6d7UW
+         XqWd+kRtRUYkznPuRtdIwURuaQZ54myAZoXe9brsE/gSO9QmdZefn9Eyx/0BlJnDj+
+         24L8/8B09f2Ih4QWuhvgBINyKqk3EKiS/PqUOu42LXwW9pu5WlbixjmBXIwMtJ/46T
+         Br1S/b16gSJaOnGHYh/TqmrzC0Ml5MPB6nsTEB+C14HY5pUqXT2JHjJSw2nOARvojG
+         frWi1R3AA9zsg==
+Received: by mercury (Postfix, from userid 1000)
+        id 672861060757; Sat, 29 Oct 2022 01:42:56 +0200 (CEST)
+Date:   Sat, 29 Oct 2022 01:42:56 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Marek Vasut <marex@denx.de>
+Cc:     linux-pm@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
+Subject: Re: [PATCH v2 1/7] power: supply: bq25890: Document
+ POWER_SUPPLY_PROP_CURRENT_NOW
+Message-ID: <20221028234256.7f73i2w4yawfnk7i@mercury.elektranox.org>
+References: <20221014172427.128512-1-marex@denx.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2ktrciwj66xurkz6"
+Content-Disposition: inline
+In-Reply-To: <20221014172427.128512-1-marex@denx.de>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Core schema does not define type of monitored-battery, so the schemas
-are expected to reference proper type.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/power/supply/bq27xxx.yaml    | 2 +-
- .../devicetree/bindings/power/supply/ingenic,battery.yaml      | 1 +
- .../devicetree/bindings/power/supply/rohm,bd99954.yaml         | 1 +
- .../devicetree/bindings/power/supply/sc2731-charger.yaml       | 2 +-
- Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml  | 3 ++-
- 5 files changed, 6 insertions(+), 3 deletions(-)
+--2ktrciwj66xurkz6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-index 65fc6049efc1..b04c86ed0f58 100644
---- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
-@@ -59,6 +59,7 @@ properties:
-     description: integer, I2C address of the fuel gauge.
- 
-   monitored-battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-        phandle of battery characteristics node.
-        The fuel gauge uses the following battery properties:
-@@ -66,7 +67,6 @@ properties:
-        - charge-full-design-microamp-hours
-        - voltage-min-design-microvolt
-        Both or neither of the *-full-design-*-hours properties must be set.
--       See Documentation/devicetree/bindings/power/supply/battery.yaml
- 
-   power-supplies: true
- 
-diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-index 46527038bf22..8bdacc30e9d8 100644
---- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
-@@ -27,6 +27,7 @@ properties:
-     const: battery
- 
-   monitored-battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: >
-       phandle to a "simple-battery" compatible node.
- 
-diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-index 24b06957b4ca..ad97d0ac9438 100644
---- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
-@@ -121,6 +121,7 @@ properties:
-   monitored-battery:
-     description:
-       phandle of battery characteristics devicetree node
-+    $ref: /schemas/types.yaml#/definitions/phandle
- 
-   rohm,vsys-regulation-microvolt:
-     description: system specific lower limit for system voltage.
-diff --git a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
-index eeb043f9bb4f..4a1ca7288a3b 100644
---- a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
-@@ -24,11 +24,11 @@ properties:
-     description: phandle to the USB phy
- 
-   monitored-battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-     description: |
-       The charger uses the following battery properties
-       - charge-term-current-microamp: current for charge termination phase.
-       - constant-charge-voltage-max-microvolt: maximum constant input voltage.
--      See Documentation/devicetree/bindings/power/supply/battery.yaml
- 
- additionalProperties: false
- 
-diff --git a/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml b/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
-index d90a838a1744..8af5957800c0 100644
---- a/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
-@@ -47,7 +47,8 @@ properties:
-   sprd,calib-resistance-micro-ohms:
-     description: real resistance of coulomb counter chip in micro Ohms
- 
--  monitored-battery: true
-+  monitored-battery:
-+    $ref: /schemas/types.yaml#/definitions/phandle
- 
- required:
-   - compatible
--- 
-2.34.1
+Hi,
 
+On Fri, Oct 14, 2022 at 07:24:21PM +0200, Marek Vasut wrote:
+> Document that POWER_SUPPLY_PROP_CURRENT_NOW really does refer to ADC-samp=
+led
+> immediate battery charge current I_BAT , since the meaning is not clear w=
+ith
+> all the currents which might be measured by charger chips.
+>=20
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Marek Vasut <marex@denx.de>
+> ---
+> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+> To: linux-pm@vger.kernel.org
+> ---
+> V2: Add RB from Hans
+> ---
+
+Thanks, I queued the whole series.
+
+-- Sebastian
+
+--2ktrciwj66xurkz6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNcaPkACgkQ2O7X88g7
++po7iA//Xxij/ZLgfygRG+BZSPGDyy1uWEo0I/FratuPuahGnRmspMuxFbwg9XAd
+DzdL4nykmgxXhVxgQUs5StcJsn8hFMLdO8RUERzMQ/m/WelX9SEnp6DyrAsgLI53
+anb7vN+VO9NmG07Kv/toGE5vYxDG4d21hJhNP7jHKtlslojw+OXvND6xwzHK+r/s
+J/LC2Cg1FGDBxd0QR0RLERsgh/84DH2uk8RHHtNBE5+9ubx/JW3EiOpvCBFW/24Y
+Cp9Mp3OLKQg8LgXFu+yVOKz2OR9TQfMmMfcMheNbKIlBFMeSuUSKtrVWIPTTgadl
+CB0ixOmNhfgW0S9S2ACHnermztShXGchQYcy2gkugS3A+o5/iMJSZ5iY3HOCSoUX
+nfcXPAKRnZ/90LeO8I74F4jmZNmUV4jW0b/2O7RxljkRPeeQ6/AZ+u1cF7hs5l2k
+fxnMNFge8gceLQcVZ0ZgZdN14gl1F2cOPybKNuyz0pbFbPxyBfgnjVBapVmoNwxP
+d0VR0x6M2xBvB8Q7WMgDsqqJPucneVJBl3L6yoPEwo2v9RIjwqfY8oCe92RJT/tF
+UfiOp02S+1JCSGNf4fcapQQd5uwxiHXGhVEIbt4qWNNwIyhIO6ifL3/4ZWKGW1O8
+BOIH62bx5WziK8G4BMOvHnrrf8IKS1IWPEX6M0IOjOtpsBxf4dM=
+=bW7s
+-----END PGP SIGNATURE-----
+
+--2ktrciwj66xurkz6--
