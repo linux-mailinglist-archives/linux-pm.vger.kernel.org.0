@@ -2,108 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CBEF61131F
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 15:38:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672656113FD
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 16:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiJ1Niy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 09:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43886 "EHLO
+        id S230433AbiJ1OGE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 10:06:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiJ1NiS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 09:38:18 -0400
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2073F1DB88B;
-        Fri, 28 Oct 2022 06:38:00 -0700 (PDT)
-Received: by mail-qt1-f178.google.com with SMTP id l28so3446988qtv.4;
-        Fri, 28 Oct 2022 06:38:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eWh8pd3OdimW0V1XMFr3AP+GAzmhu3IzOkunAen1PLE=;
-        b=QMiXTsHYm15EkI6DwAJt5deevKG8ZuoS8PSMuPWIl4Zar+bSLdUAt6xdQv31y8YVau
-         DpqToJy6+MyFwWJQdBvlh05dWpoPk32IxZwGGpnB7PD/HMDCt3clj+LjfMpul88KFUgE
-         M6TldUsq5c87UxI0wCWMPKMtymixMgBsw6u4s/njiu0e1GgqfBCmzHVSgtuiUuzxXSMG
-         ZAH6DRh1tC3BRtRLkcCR5z5jZeT1kDXmTF2+Ewk01U3x8mmKMXZPXo3q/KwSfSqGXbW3
-         hqMwW2hes4bLxMLmRJ4aWBfsXSexplLloXJEaQOj/Lhuv/0KB4vr8WZY+ndoHCqiCssn
-         H0ZQ==
-X-Gm-Message-State: ACrzQf1bAcj6vM4JLd809LoUTqV0aKINp+sKyptppCiIvqxetEAQagLS
-        63V/8ERf8cqJgLKqdst4oYI8G4stI0fM8GfRWkQ=
-X-Google-Smtp-Source: AMsMyM7NPhUyQmUgvWcje65omOtwg4jxAApag4GzvyM3n67acb1tlKtlyROefyouc3bKBoe0EXuvRZ+6hdc/y5zK67Q=
-X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
- f37-20020a05622a1a2500b0039cb8627318mr45882092qtb.147.1666964279219; Fri, 28
- Oct 2022 06:37:59 -0700 (PDT)
+        with ESMTP id S231299AbiJ1OF4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 10:05:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445251D5869;
+        Fri, 28 Oct 2022 07:05:55 -0700 (PDT)
+Received: from mercury (unknown [37.84.150.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 85B346602925;
+        Fri, 28 Oct 2022 15:05:53 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1666965953;
+        bh=ZKWOJrdPclNKs3XXHSb+DRfOCLdcNJAvkWIYYQjz6uk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AhWvOXJogvEpW0qPuuxRy1WbfW4T5zOb4qok+o8llbMOxu0lnt5T+nf/1uHNs1iJD
+         ZzelAFRwj55TSj8tgnnCw8elDiaKlVlLT2WeYjNLViOZWv92by44/k4RKAZbYGpNDm
+         zDn4KyNon3T2gwvmYduow7wlrcn75oU5iYUt3OVqQH9DfkDJtPoGTjMgokjzXIDasW
+         t+G3CZ0YnDbatO9J4BQfF+37fGJojZ2X/rueFmDe8kw7nh2K2fJyajTS82M3dSccLE
+         TQrKnBo0+CdR5Fg6GLR+YmO4rqZ/Nm7C8PCiAW2OTVJ5EohCaFRcZyMkVfKBc6K88v
+         UQPi0h9WNygjQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 2D0D810607E8; Fri, 28 Oct 2022 16:05:51 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 16:05:51 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jic23@kernel.org, lars@metafoo.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v4 6/8] power: supply: fix failed to get iio channel by
+ device name
+Message-ID: <20221028140551.cerlozkr4ixj772z@mercury.elektranox.org>
+References: <20221024132757.3345400-1-sravanhome@gmail.com>
+ <20221024132757.3345400-7-sravanhome@gmail.com>
+ <CAHp75VcvZ9drkFfbpVJFz0UWQvOMgAu3+JmV4HvOG3dPKDoN5w@mail.gmail.com>
+ <049e0cf3-49b9-ed25-c595-06de22117f1a@gmail.com>
 MIME-Version: 1.0
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
- <Y0fymW5LOoIHstE2@e126311.manchester.arm.com> <f799f67c-c9e9-c702-8457-db8da78500c9@arm.com>
-In-Reply-To: <f799f67c-c9e9-c702-8457-db8da78500c9@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 15:37:48 +0200
-Message-ID: <CAJZ5v0iBqnD3bCVxk0xcO1gtgrzoZX3YPjvo9Cckaz6D1MbJCQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="oae75tq66mg3uoqn"
+Content-Disposition: inline
+In-Reply-To: <049e0cf3-49b9-ed25-c595-06de22117f1a@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+
+--oae75tq66mg3uoqn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
 Hi,
 
-On Thu, Oct 27, 2022 at 10:04 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi Rafael,
->
-> On 10/13/22 12:12, Kajetan Puchalski wrote:
-> > On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
-> >> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
-> >> <kajetan.puchalski@arm.com> wrote:
-> >>>
-> >>> Hi,
-> >>>
-> >>> At the moment, all the available idle governors operate mainly based on their own past performance
-> >>
-> >> Not true, at least for the menu and teo governors that use the
-> >> information on the distribution of CPU wakeups that is available to
-> >> them and try to predict the next idle duration with the help of it.
-> >> This has a little to do with their performance.
-> >
-> > You're right of course, I should have written "their own past
-> > correctness" as that's what I was referring to. I just meant that for
-> > instance with TEO the initial timer-based choice is only adjusted using
-> > the governor's own metrics and not any information from anywhere else in
-> > the system.
-> >
->
-> [snip]
->
-> Would it be possible to consider a new small and simple idle governor
-> which is better suited for those other workloads and platforms?
-> Kajetan has such one and can send to the LKML, so you could have a look.
->
-> I have sent some detailed explanation about this to Doug in this
-> thread (don't want to duplicate it).
->
-> It looks like it would be hard to meet both worlds' requirements.
+On Mon, Oct 24, 2022 at 04:02:21PM +0200, saravanan sekar wrote:
+> On 24/10/22 15:49, Andy Shevchenko wrote:
+> > On Mon, Oct 24, 2022 at 4:28 PM Saravanan Sekar <sravanhome@gmail.com> =
+wrote:
+> > >=20
+> > > The mfd cell devices name populated on sysfs entry is dynamically der=
+ived
+> > > from an auto instance which introduced a regression. As a result
+> > > mpc2629_charger driver failed to get adc channel because of iio consu=
+mer
+> > > name mismatch with the sysfs.
+> > >=20
+> > > /sys/class/i2c-adapter/i2c-1/mp2629_adc.0.auto/
+> > > /sys/class/i2c-adapter/i2c-1/mp2629_charger.1.auto/
+> > >=20
+> > > Fixes: 466a62d7642f(mfd: core: Make a best effort attempt to match de=
+vices)
+> >=20
+> > Wrong Fixes tag format, moreover the fixes should be grouped at the
+> > beginning of the series, so it will be visible and splittable based on
+> > this property.
+>=20
+> Thanks for quick review Andy, I will correct fixes tag format and group a=
+ll
+> the fixes beginning of series in v5.
+>=20
+> Thanks,
+> Saravanan
 
-It may or may not be the case.  Let's first explore the original idea
-of improving "teo" a bit more.
+Also the patch subject has incorrect prefix. It should be "mfd:"
+instead of "power: supply:".
 
-As I said in another message in this thread, there are clear cases in
-which the new governor is likely to underperform, because it only
-takes 2 sources of information into account (the next timer event and
-CPU utilization).  If some more information is to be taken into
-account without adding too much overhead, "teo" is the simplest thing
-that I could imagine (but perhaps my imagination is limited).
+-- Sebastian
+
+--oae75tq66mg3uoqn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNb4bsACgkQ2O7X88g7
++pq2EQ//XBXjtJ09TZDmfNp+pWsRRw9og5GmYViAnjmcMbpqHBtlJbQa3AnSsvF+
+fRxJDnJCRXgw9uja/oS3aIBak9h0ugT9d/9URUWlErsETlqfMlYxABGg8SCkoeZq
+ThHprYkjoiApva3fOrhCciua7nmjZ2urWKjVMQgGghtcgjSzk6FojrocS+GElsQu
+882iUjtFrxX2lQit3+1dROiQxF9VBbt+19P9aeBbw83sHhirvW23XxgwsQxTkqNb
+o7sys5nBzudRC0hwgvhvyg4pkB7NkTkIQKDgXpXhEmrt7DsKwhyixJg6+1eOEmlr
+mg47yxQJbAqosvuLqv0hCR0H5reQ09nJf4vqCn/FJUqlXigiJwOJRspYeH66L77R
+zfGNeihOn8LWMWNLeuelym1T2j+XBPjYjiDhQor11+z/KXJrgwjBanPhr7zsQfTJ
+mPThE1vnchfD92MEW/L3IC28W8wsgZ4IzZNZsGc3c0kAXxY2okXy1vS2QdZx6zvG
+rUbbhhQcEJn5mjuqaPwuNQ3jHf5HlLVyLoEGY9Dj1yd52lEfiCg5ZtsoPJ57U/kl
+doLnF1jeWK93HzsyrA65CD/QY9mO5OOpZRIdKenb3szIDeSRtf8SSx3eHsaOLf6A
+lm8jlSYyrDE25CDeMSW/UboEXxTY4iIFmu6VsNebCp1fKnlPfro=
+=rGEa
+-----END PGP SIGNATURE-----
+
+--oae75tq66mg3uoqn--
