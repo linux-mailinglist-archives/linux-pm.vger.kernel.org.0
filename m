@@ -2,107 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7316C6119F3
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 20:13:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A436119F8
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 20:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbiJ1SN2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 14:13:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
+        id S230132AbiJ1SOu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 14:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229926AbiJ1SN1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 14:13:27 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E56F22EE05;
-        Fri, 28 Oct 2022 11:13:27 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id ay12so3321473qtb.12;
-        Fri, 28 Oct 2022 11:13:27 -0700 (PDT)
+        with ESMTP id S229779AbiJ1SOs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 14:14:48 -0400
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C931D399D9;
+        Fri, 28 Oct 2022 11:14:45 -0700 (PDT)
+Received: by mail-qt1-f175.google.com with SMTP id l28so3985556qtv.4;
+        Fri, 28 Oct 2022 11:14:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uWNya/+hVsv+hcMdBZq4/CVUI24kPOML1PJ3BWEQBhk=;
-        b=olmwRiIA1GclNr6Q3ofnM3rn2Lk3d69gcmwvVQ5dD1qNfEVQ4dGpaGMsAnKaaudMQ9
-         2SxZG9mxtsVAT9dSHLqk1DXBL1qU6PaDjj+6Fx4+KH97A6t2i4evmiu1QAmCDNZF9NwD
-         GmC+SUffTUQisCePA94sxhYlK9hFYm6TQK3B0Zun8wn1CXgOPHevZP9o5Rhd2brV4O+s
-         2rzvqoQ+YesCaiBxE7Vsi42O3pkmVAMnBpNSW1x0TLzyYPfM5JUZb8cP7bszboloGIGi
-         njKmBvofETgCmTlGt8RqgH2GZhmwgrH24dKvPJE9pTpDbRy2mYvK8ZAzFSRuoStNGYuQ
-         656g==
-X-Gm-Message-State: ACrzQf2Uee6kpxIYwXz67vxD0twY4Yy8xiLGuizR5WJ1C7PhWWmlivFu
-        +Q1oLWYX70FJRVmbO4zR1s/Pj8BPwwDjIjm/HfTNsxBF
-X-Google-Smtp-Source: AMsMyM70hVQRXusxL/PQW7PcpGjxtNoTI2TrSJEbPliAaAMzcth8GPBNdiF+P8bG30NgjTIgq63vE9L47vs//YZX83M=
-X-Received: by 2002:a05:622a:44d:b0:39c:f7a4:5ee0 with SMTP id
- o13-20020a05622a044d00b0039cf7a45ee0mr721807qtx.48.1666980806041; Fri, 28 Oct
- 2022 11:13:26 -0700 (PDT)
+        bh=97AQWmEatqBegigv9Bw4x+oKbVYTdEMST5QdXz0824I=;
+        b=vUc2GBF562O4HY/dA/pAVRplF1OS5AGQmcNLUZLYaUTWJW0GSwrGDYHpRWuL54OTUi
+         FsO0jiSfcK1LjZnKDsmzi6tED+m5d7WWxA1tYvdeKjlb/pu07y5fljNYu4bmGtg61Pyk
+         PgwyxV+h4I90unAVSv3RW5OcbYrugFF4WIN+WXgKGb55PC5DVqoca5Qe9v/8ikkzHkEt
+         iRUh/ue4tDppCpUqWlu0tL5qACu4udeuK0Q96OgBtv5fxwB9VC8hoKfl08XudfOtO51t
+         N0A+RAzs5S+Ub9THdA2AVc/SDC4bzNNaXTbijTazmQQ1CslHZy1sOz8dCbMvUqm99ITX
+         O5rA==
+X-Gm-Message-State: ACrzQf2JfytnzNQ+ZgE8HPujYwnb1c69JCtqNLRDvaqFwYJHzmf+lWzS
+        3fHDkCF3li4ZgsFa5Gl3eSspBM9CZldM1aZMSVk=
+X-Google-Smtp-Source: AMsMyM4+IKWlCKddvGVb3fzRqd7M3BIPJLLB7Hxcrz30rb9HC1gnM7eG/qEU68m7Kz1QWCPg2C6CuATH5PO170aRIwg=
+X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
+ f37-20020a05622a1a2500b0039cb8627318mr670755qtb.147.1666980884970; Fri, 28
+ Oct 2022 11:14:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
-In-Reply-To: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
+References: <20221024144304.198689-1-abel.vesa@linaro.org>
+In-Reply-To: <20221024144304.198689-1-abel.vesa@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 20:13:15 +0200
-Message-ID: <CAJZ5v0hsWw2juPzLooVfDgykTwdepjgGSQGezhYeFBQN8yza_Q@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: hfi: Improve the type of hfi_features::nr_table_pages
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Fri, 28 Oct 2022 20:14:34 +0200
+Message-ID: <CAJZ5v0hKhXfQhDdh-GSFSuW7NWCWLO1up+p7WrLe5Vz+bd2igw@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: Reverse the order of performance and
+ enabling ops
+To:     Abel Vesa <abel.vesa@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 1:16 PM Ricardo Neri
-<ricardo.neri-calderon@linux.intel.com> wrote:
+On Mon, Oct 24, 2022 at 5:52 PM Abel Vesa <abel.vesa@linaro.org> wrote:
 >
-> A Coverity static code scan raised a potential overflow_before_widen
-> warning when hfi_features::nr_table_pages is used as an argument to
-> memcpy in intel_hfi_process_event().
+> The ->set_performance_state() needs to be called before ->power_on()
+> when a genpd is powered on, and after ->power_off() when a genpd is
+> powered off. Do this in order to let the provider know to which
+> performance state to power on the genpd, on the power on sequence, and
+> also to maintain the performance for that genpd until after powering off,
+> on power off sequence.
 >
-> Even though the overflow can never happen (the maximum number of pages of
-> the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
-> the data type of hfi_features::nr_table_pages makes Coverity happy and
-> matches the data type of the argument 'size' of memcpy().
+> There is no scenario where a consumer would need its genpd enabled and
+> then its performance state increased. Instead, in every scenario, the
+> consumer needs the genpd to be enabled from the start at a specific
+> performance state.
 >
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Cc: Amit Kucheria <amitk@kernel.org>
-> Cc: Zhang Rui <rui.zhang@intel.com>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> Cc: Haowen Bai <baihaowen@meizu.com>
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
->  drivers/thermal/intel/intel_hfi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> And same logic applies to the powering down. No consumer would need its
+> genpd performance state dropped right before powering down.
 >
-> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> index a0640f762dc5..239afe02e518 100644
-> --- a/drivers/thermal/intel/intel_hfi.c
-> +++ b/drivers/thermal/intel/intel_hfi.c
-> @@ -137,7 +137,7 @@ struct hfi_instance {
->   * Parameters and supported features that are common to all HFI instances
->   */
->  struct hfi_features {
-> -       unsigned int    nr_table_pages;
-> +       size_t          nr_table_pages;
->         unsigned int    cpu_stride;
->         unsigned int    hdr_size;
->  };
-> --
+> Now, there are currently two vendors which use ->set_performance_state()
+> in their genpd providers. One of them is Tegra, but the only genpd provider
+> (PMC) that makes use of ->set_performance_state() doesn't implement the
+> ->power_on() or ->power_off(), and so it will not be affected by the ops
+> reversal.
+>
+> The other vendor that uses it is Qualcomm, in multiple genpd providers
+> actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
+> use of ->set_performance_state() need the order between enabling ops and
+> the performance setting op to be reversed. And the reason for that is that
+> it currently translates into two different voltages in order to power on
+> a genpd to a specific performance state. Basically, ->power_on() switches
+> to the minimum (enabling) voltage for that genpd, and then
+> ->set_performance_state() sets it to the voltage level required by the
+> consumer.
+>
+> By reversing the call order, we rely on the provider to know what to do
+> on each call, but most popular usecase is to cache the performance state
+> and postpone the voltage setting until the ->power_on() gets called.
+>
+> As for the reason of still needing the ->power_on() and ->power_off() for a
+> provider which could get away with just having ->set_performance_state()
+> implemented, there are consumers that do not (nor should) provide an
+> opp-table. For those consumers, ->set_performance_state() will not be
+> called, and so they will enable the genpd to its minimum performance state
+> by a ->power_on() call. Same logic goes for the disabling.
 
-Applied as 6.2 material, thanks!
+Ulf, any comments?
+
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index ead135c7044c..e66a711fec88 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
+>                 return 0;
+>
+>         genpd_lock(genpd);
+> -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>         genpd_power_off(genpd, true, 0);
+> +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>         genpd_unlock(genpd);
+>
+>         return 0;
+> @@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
+>                 goto out;
+>
+>         genpd_lock(genpd);
+> +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+>         ret = genpd_power_on(genpd, 0);
+> -       if (!ret)
+> -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+>         genpd_unlock(genpd);
+>
+>         if (ret)
+> @@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
+>  err_poweroff:
+>         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+>                 genpd_lock(genpd);
+> -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>                 genpd_power_off(genpd, true, 0);
+> +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+>                 genpd_unlock(genpd);
+>         }
+>
+> @@ -2749,17 +2748,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>         dev->pm_domain->detach = genpd_dev_pm_detach;
+>         dev->pm_domain->sync = genpd_dev_pm_sync;
+>
+> -       if (power_on) {
+> -               genpd_lock(pd);
+> -               ret = genpd_power_on(pd, 0);
+> -               genpd_unlock(pd);
+> -       }
+> -
+> -       if (ret) {
+> -               genpd_remove_device(pd, dev);
+> -               return -EPROBE_DEFER;
+> -       }
+> -
+>         /* Set the default performance state */
+>         pstate = of_get_required_opp_performance_state(dev->of_node, index);
+>         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
+> @@ -2771,6 +2759,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+>                         goto err;
+>                 dev_gpd_data(dev)->default_pstate = pstate;
+>         }
+> +
+> +       if (power_on) {
+> +               genpd_lock(pd);
+> +               ret = genpd_power_on(pd, 0);
+> +               genpd_unlock(pd);
+> +       }
+> +
+> +       if (ret) {
+> +               genpd_remove_device(pd, dev);
+> +               return -EPROBE_DEFER;
+> +       }
+> +
+>         return 1;
+>
+>  err:
+> --
+> 2.34.1
+>
