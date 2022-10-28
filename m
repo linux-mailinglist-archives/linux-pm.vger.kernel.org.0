@@ -2,53 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A01AA61129E
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 15:25:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FBC6112BC
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 15:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiJ1NZh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 09:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
+        id S230431AbiJ1N3V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 09:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiJ1NZg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 09:25:36 -0400
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 389FC6DAC1;
-        Fri, 28 Oct 2022 06:25:34 -0700 (PDT)
-Received: by mail-qk1-f175.google.com with SMTP id b25so3372495qkk.7;
-        Fri, 28 Oct 2022 06:25:34 -0700 (PDT)
+        with ESMTP id S230291AbiJ1N3U (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 09:29:20 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC422792E6;
+        Fri, 28 Oct 2022 06:29:19 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id c8so4026874qvn.10;
+        Fri, 28 Oct 2022 06:29:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jh+fSXeT51XdQX9MiufjVJfYk9I5Ct95Pw/9sQRm2oE=;
-        b=cMuwerX1kjXapGEJoQMcGHcFclUAPma98YP2v+4LjUyfhAGnmnNupS/Mg8QmSbCWwv
-         GBBMa+ZieutFVQKqBxEUtaJxZyhcniEmTX5L6+ypFtLAOi83LR1lNj7k2VF478yi8dT3
-         KaV23d5ndKUFSOrCLvci3WjJQemzTSq3XAdKPQt5uYyViT/R2RkWHNaJW1mY/OeFNrFH
-         DLm4P0wYnbNf08NyiLSVQJoL1pOgUYkZ1LvCsge9bVWSya4K9G812d9BfJ3RZ87F5Eem
-         W8Msy5GKDT40NGegrUblEuG7jAs5B+eoS728AdXA/Bdc/wbMl5L9BVFaX+nIroJOu6mH
-         v9jQ==
-X-Gm-Message-State: ACrzQf06AJ4TI8gpzoPAmoZCKXVWKL7Sds2itnjPaO79Nnpf5yQCaB7E
-        R3Ljxzlx4fJ/tN4b491Afewb557ieuqLFA4Zyos=
-X-Google-Smtp-Source: AMsMyM7lb5Svw83lnyO2ElFQjxXGM0zLWEuY4WkUFrjUYKAsLybfAftRCi2zKUgzDUn7gQ3I1unthf53yn2yRfotjsk=
-X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr37892604qkl.443.1666963533416; Fri, 28
- Oct 2022 06:25:33 -0700 (PDT)
+        bh=Ewf1/0yS/MPVhCM+bumhxUWSJIhluAl1yOgoepsPDa4=;
+        b=vq51oE0CjsKMLZlgeai7ShOdfS53y13/NgTUZZMTPJ7+bp86Om0jTXHgq5YC5qFAb/
+         KaQTQ5tIPcEQtnbAgAGSVJs/CRfg1vikWn+psTDZenzPymU/X3R+0f4DLvfKpUnSoOYX
+         PxPZSBKv+YzvUxiQ2ukVGvWRfsj+EpWkdM6HewN9Dl5a06coshTviaFgqi7q1G/8aVDX
+         vi3OnEZrMaxWvDtzqXiTsenIUII3G2aWsW3sSYIpE7uAb/gTnt8UWjIotT8N0qZ2PGVK
+         0HrGg/OgNS0i+EMQOQ3f9VhWx/+iiPiB62SOyFf6aEcjqgrhJLbSkUarq5sgJA5pD1GG
+         6RgQ==
+X-Gm-Message-State: ACrzQf0nO9uTmoFXd1+poUpxHNYksuW/5onZ2fEQxRyjsvSfiiwJe5eQ
+        eBPV4ai2TRUCUSO/qi9jCS+YiZJT52alluvNAlY=
+X-Google-Smtp-Source: AMsMyM69tjCqCgwdNnpekRVLWiO5RijjEAo0SO6mteLZEeWi6P7gklOz9rvsahUQ70s1DEaFcXaJMxjlrR1TlHlbLww=
+X-Received: by 2002:ad4:596b:0:b0:4b1:ee66:1cb8 with SMTP id
+ eq11-20020ad4596b000000b004b1ee661cb8mr45829729qvb.3.1666963758929; Fri, 28
+ Oct 2022 06:29:18 -0700 (PDT)
 MIME-Version: 1.0
 References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
  <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
- <Y1F0GYlJJOnFQeYe@e126311.manchester.arm.com> <71438330-dbfe-a10c-f289-24ba25c0d55f@linaro.org>
-In-Reply-To: <71438330-dbfe-a10c-f289-24ba25c0d55f@linaro.org>
+ <Y0fymW5LOoIHstE2@e126311.manchester.arm.com> <CAAYoRsW+5xbW_Zd7Mtbo4VMi4RZFXRr7mf4NAU=Le7GhQzNJvg@mail.gmail.com>
+ <c6e6d338-60e5-4401-1cf4-faaee3cc447f@arm.com>
+In-Reply-To: <c6e6d338-60e5-4401-1cf4-faaee3cc447f@arm.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 15:25:22 +0200
-Message-ID: <CAJZ5v0iese2fs30vrz2_NiR5rMgct21L3ddy5MDapqcSPY2DKg@mail.gmail.com>
+Date:   Fri, 28 Oct 2022 15:29:07 +0200
+Message-ID: <CAJZ5v0iwr1rAFuxn3H0XEyr1wEjRtTXKXPo5ZzhBp8Fg2fonnw@mail.gmail.com>
 Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Doug Smythies <dsmythies@telus.net>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
+        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,38 +61,69 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 20, 2022 at 9:52 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Thu, Oct 27, 2022 at 9:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
 >
+> Hi Doug,
 >
-> Hi Kajetan,
+> Thank you for your effort in testing these patches and different
+> governors. We really appreciate that, since this helped us to
+> better understand the platform that you are using. It is different
+> to what we have and our workloads. That's why I have some comments.
 >
-> On 20/10/2022 18:20, Kajetan Puchalski wrote:
-> > Hi Rafael,
+> It would be hard to combine these two worlds and requirements.
+> I have some concerns to the tests, the setup and the platform.
+> I can see a reason why this patch has to prove the
+> strengths on this platform and environment.
+> Please see my comments below.
+>
+> On 10/13/22 23:12, Doug Smythies wrote:
+> > Hi All,
 > >
-> >> The avg_util value tells us nothing about how much the CPU is going to
-> >> be idle this time and it also tells us nothing about the
-> >> latency-sensitivity of the workload.
-> >>
-> >> Yes, it tells us how much idle time there was on the given CPU in the
-> >> past, on the average, but there is zero information about the
-> >> distribution of that idle time in it.
-> >>
-> >> So in the first place please tell me why it fundamentally makes sense
-> >> to use avg_util in CPU idle time management at all.
+> > On Thu, Oct 13, 2022 at 4:12 AM Kajetan Puchalski
+> > <kajetan.puchalski@arm.com> wrote:
+> >> On Wed, Oct 12, 2022 at 08:50:39PM +0200, Rafael J. Wysocki wrote:
+> >>> On Mon, Oct 3, 2022 at 4:50 PM Kajetan Puchalski
+> >>> <kajetan.puchalski@arm.com> wrote:
+> > ...
 > >
-> > I have an alternative suggestion that could be a reasonable way forward
-> > here. Instead of applying util-awareness on top of TEO where it would
-> > have to be reconciled with how TEO is currently expected to work, I just
-> > wrote a simple completely new governor which operates only on timer
-> > events alongside util values.
+> >> On the Intel & power usage angle you might have seen in the discussion,
+> >> Doug sent me some interesting data privately. As far as I can tell the
+> >> main issue there is that C0 on Intel doesn't actually do power saving so
+> >> moving the state selection down to it is a pretty bad idea because C1
+> >> could be very close in terms of latency and save much more power.
+> >>
+> >> A potential solution could be altering the v2 to only decrease the state
+> >> selection by 1 if it's above 1, ie 2->1 but not 1->0. It's fine for us
+> >> because arm systems with 2 states use the early exit path anyway. It'd
+> >> just amount to changing this hunk:
+> >>
+> >> +       if (cpu_data->utilized && idx > 0 && !dev->states_usage[idx-1].disable)
+> >> +               idx--;
+> >>
+> >> to:
+> >>
+> >> +       if (cpu_data->utilized && idx > 1 && !dev->states_usage[idx-1].disable)
+> >> +               idx--;
+> >>
+> >> What would you think about that? Should make it much less intense for
+> >> Intel systems.
+> >
+> > I tested the above, which you sent me as patch version v2-2.
+> >
+> > By default, my Intel i5-10600K has 4 idle states:
+> >
+> > $ grep . /sys/devices/system/cpu/cpu7/cpuidle/state*/name
+> > /sys/devices/system/cpu/cpu7/cpuidle/state0/name:POLL
 >
-> I second the idea. I took a long time to investigate how to improve the
-> governor and reached the conclusion having a dedicated governor for
-> mobile platform makes sense.
+> This active polling state type worries me a bit. We don't have
+> such on our platforms. Our shallowest idle state is really different.
+> We don't have active polling and there is no need for such.
 
-Please define "mobile".
+So as I said in a reply to Kajetan, the way to go is to avoid them
+when you do this utilization-based optimization.
 
-> Also the behavior is very platform dependent.
+CPUIDLE_FLAG_POLLING is for that and it is used already in the code.
 
-I'm not sure what you mean.
+Moreover, as I said in the other message, IMO the utilization-based
+optimization makes the most sense when the current candidate state is
+state 1, so it may not make sense to do it on Intel systems at all.
