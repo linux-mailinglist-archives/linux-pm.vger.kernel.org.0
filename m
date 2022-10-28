@@ -2,81 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4716119EA
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 20:10:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7316C6119F3
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 20:13:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiJ1SKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 14:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
+        id S230084AbiJ1SN2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 14:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiJ1SKi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 14:10:38 -0400
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4748D22D;
-        Fri, 28 Oct 2022 11:10:35 -0700 (PDT)
-Received: by mail-qk1-f174.google.com with SMTP id k4so1064259qkj.8;
-        Fri, 28 Oct 2022 11:10:35 -0700 (PDT)
+        with ESMTP id S229926AbiJ1SN1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 14:13:27 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E56F22EE05;
+        Fri, 28 Oct 2022 11:13:27 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id ay12so3321473qtb.12;
+        Fri, 28 Oct 2022 11:13:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=CcLuxRQs5tABHxAs+Y7/Lan+bBcM/F9sLFO2LCCg8pI=;
-        b=fFRnJD+ZWuW4TVrnQD3vavTqjwCWgCugY3lLjK6PBU5t72rZM4bv9yno4wSkk/aTej
-         GLTlxeI6F3NONCV/e9xsiSwvJsHgHi06X8F0iyO9RXwMbC56wcm/rEOc6W68q0/wOTrE
-         cyS+JMDZ5p661J/LVsdprqs2SM7eY0hDQBjx49GNZKQVN3yRDtzCGz8BxplBVjm0YVeC
-         rkcwNZLLtUcOvc1ZsL8amoGbY0LkfzIgqert4p15Q80yQlVtiuKf6JOIZUZMroo9r5t9
-         rNEH1K9zMkQtqWSSxJIdMD55fEytZXaKiPHIfXUYG5xUfb4DhpjTToC6HK20DnFdYRK4
-         nGtw==
-X-Gm-Message-State: ACrzQf37rJm6sPrw9Qf9mAgxeZyUN6S/KPB9RYHbqF/cJdF7SlhvaCTC
-        g3XiALyFQJL9/6LkMxCJATBm74NswaUnvjWzNqg=
-X-Google-Smtp-Source: AMsMyM54EVSBeljNE55w6SiZvJVeDXIdVmQr3Abl3AV8IYuAQ+bIargizIY/e8fCVgrBAre4T1vZ4n1HAXQwNX4+KBg=
-X-Received: by 2002:a37:b1c2:0:b0:6fa:1185:4dbf with SMTP id
- a185-20020a37b1c2000000b006fa11854dbfmr389886qkf.764.1666980634716; Fri, 28
- Oct 2022 11:10:34 -0700 (PDT)
+        bh=uWNya/+hVsv+hcMdBZq4/CVUI24kPOML1PJ3BWEQBhk=;
+        b=olmwRiIA1GclNr6Q3ofnM3rn2Lk3d69gcmwvVQ5dD1qNfEVQ4dGpaGMsAnKaaudMQ9
+         2SxZG9mxtsVAT9dSHLqk1DXBL1qU6PaDjj+6Fx4+KH97A6t2i4evmiu1QAmCDNZF9NwD
+         GmC+SUffTUQisCePA94sxhYlK9hFYm6TQK3B0Zun8wn1CXgOPHevZP9o5Rhd2brV4O+s
+         2rzvqoQ+YesCaiBxE7Vsi42O3pkmVAMnBpNSW1x0TLzyYPfM5JUZb8cP7bszboloGIGi
+         njKmBvofETgCmTlGt8RqgH2GZhmwgrH24dKvPJE9pTpDbRy2mYvK8ZAzFSRuoStNGYuQ
+         656g==
+X-Gm-Message-State: ACrzQf2Uee6kpxIYwXz67vxD0twY4Yy8xiLGuizR5WJ1C7PhWWmlivFu
+        +Q1oLWYX70FJRVmbO4zR1s/Pj8BPwwDjIjm/HfTNsxBF
+X-Google-Smtp-Source: AMsMyM70hVQRXusxL/PQW7PcpGjxtNoTI2TrSJEbPliAaAMzcth8GPBNdiF+P8bG30NgjTIgq63vE9L47vs//YZX83M=
+X-Received: by 2002:a05:622a:44d:b0:39c:f7a4:5ee0 with SMTP id
+ o13-20020a05622a044d00b0039cf7a45ee0mr721807qtx.48.1666980806041; Fri, 28 Oct
+ 2022 11:13:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221021151013.148457-1-ulf.hansson@linaro.org> <20221025114308.4kevtiz5heoekgz3@bogus>
-In-Reply-To: <20221025114308.4kevtiz5heoekgz3@bogus>
+References: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
+In-Reply-To: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 20:10:23 +0200
-Message-ID: <CAJZ5v0hQj2OgpCj-6REuCYwMn+qoHc1TXQ+HjtqL8JcL8XPQRg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpuidle: dt: Return the correct numbers of parsed
- idle states
-To:     Sudeep Holla <sudeep.holla@arm.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Fri, 28 Oct 2022 20:13:15 +0200
+Message-ID: <CAJZ5v0hsWw2juPzLooVfDgykTwdepjgGSQGezhYeFBQN8yza_Q@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: hfi: Improve the type of hfi_features::nr_table_pages
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Len Brown <len.brown@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Aubrey Li <aubrey.li@linux.intel.com>,
+        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 1:43 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Tue, Oct 18, 2022 at 1:16 PM Ricardo Neri
+<ricardo.neri-calderon@linux.intel.com> wrote:
 >
-> On Fri, Oct 21, 2022 at 05:10:12PM +0200, Ulf Hansson wrote:
-> > While we correctly skips to initialize an idle state from a disabled idle
-> > state node in DT, the returned value from dt_init_idle_driver() don't get
-> > adjusted accordingly. Instead the number of found idle state nodes are
-> > returned, while the callers are expecting the number of successfully
-> > initialized idle states from DT.
-> >
-> > This leads to cpuidle drivers unnecessarily continues to initialize their
-> > idle state specific data. Moreover, in the case when all idle states have
-> > been disabled in DT, we would end up registering a cpuidle driver, rather
-> > than relying on the default arch specific idle call.
-> >
+> A Coverity static code scan raised a potential overflow_before_widen
+> warning when hfi_features::nr_table_pages is used as an argument to
+> memcpy in intel_hfi_process_event().
 >
-> Makes sense.
+> Even though the overflow can never happen (the maximum number of pages of
+> the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
+> the data type of hfi_features::nr_table_pages makes Coverity happy and
+> matches the data type of the argument 'size' of memcpy().
 >
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: Amit Kucheria <amitk@kernel.org>
+> Cc: Zhang Rui <rui.zhang@intel.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Aubrey Li <aubrey.li@linux.intel.com>
+> Cc: Haowen Bai <baihaowen@meizu.com>
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+>  drivers/thermal/intel/intel_hfi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+> index a0640f762dc5..239afe02e518 100644
+> --- a/drivers/thermal/intel/intel_hfi.c
+> +++ b/drivers/thermal/intel/intel_hfi.c
+> @@ -137,7 +137,7 @@ struct hfi_instance {
+>   * Parameters and supported features that are common to all HFI instances
+>   */
+>  struct hfi_features {
+> -       unsigned int    nr_table_pages;
+> +       size_t          nr_table_pages;
+>         unsigned int    cpu_stride;
+>         unsigned int    hdr_size;
+>  };
+> --
 
-Applied along with the [2/2] as 6.2 material, thanks!
+Applied as 6.2 material, thanks!
