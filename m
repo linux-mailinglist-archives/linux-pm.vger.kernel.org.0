@@ -2,160 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E08F6115C5
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 17:24:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9E616116FC
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 18:07:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbiJ1PYu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 11:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S230490AbiJ1QHO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 12:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiJ1PYi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 11:24:38 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38FF5FDA;
-        Fri, 28 Oct 2022 08:24:31 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id g16so3653541qtu.2;
-        Fri, 28 Oct 2022 08:24:31 -0700 (PDT)
+        with ESMTP id S230343AbiJ1QGt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 12:06:49 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34DD01DE3D5
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 09:06:00 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c24so5213944pls.9
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 09:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=fcQaevsjRfO+W5RAjncKOm4xdkPjE8glulZFKh4Ab2w=;
+        b=afkEYK+KWOFm18xOQ2COYDOrKb98ORr97ImSJ/2gNdu5LTGMoDgh+GlcFOUDHu2UbJ
+         UI8Oy6bnL+KkQ9ZGelUEMz1mYHaVRCtS2J7KVAOrs31vu6q25NXnCusN0tE/muBdjTyj
+         e2e4vaWc5q0JHJ02HB0BvoU3/uUmUMNRI6pqAjAZiOwBf1pqZv5fjcpm9RSh0h8OZG8O
+         TGmVzSTALUkjRg0zZHa7UBTaNQsuzsWi/ULTWuomxw2jlzmqB5k+cz9XRD2G7fOsFJP0
+         NSGSKgQnkjwhF1wn3YEa51x7VKCoUGPMTuSzDi3rOn9XHcXcK5IE7D1ePFTzi+45t02/
+         mNhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qpmGBg3X0GaqgkHSwAA94pKJ0y8cJkgKJLejT4W7PEQ=;
-        b=dGvcV8OSg7+vG6gQuYRA3u0nDtscyxM44msjq2TfGfJUay8QRB1MZEiimilAjNhhUP
-         R4DTfh9RSqW0pMEe/8oAxjjUFP3n/U0IbNePuEvBev3PuY7CqckDOFBBFM6fxX6M5Kij
-         bgzpXsIwLk5TaHlBuLK2ijWPeIDTbGCyGcQdvMnGOTcKQZbbhKYXNGGhWWCDQ7Vk2LP0
-         l3pYmHlkPb08EAz11+CSckRFcXuM15Yo+xgUbCGBEsgf35wCVxTXiaVh0dIu/pMT6lW9
-         JGL1p/62+ZsBAVi1M74tvWgDPI/ncVbsRt96Pz+KnkFqkLdSpmJ72DwPEobKlnYcbr1X
-         YkDA==
-X-Gm-Message-State: ACrzQf0JpFEeyslP/ukupLRUhLmlRzHjT0EqSkEsNSYX5o13lrUhMlBY
-        gyXHksEbgsdz4x1royfGXr5FG49C4DYP8JA9Zm70kvJ5
-X-Google-Smtp-Source: AMsMyM7wn7LlwlxJepvgSXqnWyGFHz/fQZ9n6rDHJTC5HtEZfy2K2sPEfQEiBRPzQx+Tf6lY1SIU+aVQNF7eLvxmIZg=
-X-Received: by 2002:a05:622a:13c6:b0:39c:c34f:29ec with SMTP id
- p6-20020a05622a13c600b0039cc34f29ecmr46533066qtk.153.1666970670464; Fri, 28
- Oct 2022 08:24:30 -0700 (PDT)
+        bh=fcQaevsjRfO+W5RAjncKOm4xdkPjE8glulZFKh4Ab2w=;
+        b=Lb75uIcgx2yJELO7iXpC7RJZj3/pM/an/UqDzeE+OTnS+cloyElrVQULSkbH/N8Rbf
+         /EiT166fjN/rKEBKOeibv4gwvx4d3gcuTZ9pj9ZlZKjd9txjN6uWPWooUE+ntH3gyPML
+         eDb2jykpIN+TbNlxd5IcIBR832KnjAD80y32gvgiJxxmog+sB2zc/Yd2tt6dDa6BwDpX
+         /47Zvp4X4BF7mUraw3cEYe6xLWYpcsv2DuvkgF1PLOK5fOxbaVDK1KlRVBcADKwUcnGF
+         NAoCNYqlNguRFxRyiLSVQ+6j+4c6k72GoMXKiEHLXhrRHiPVhX36W+oAmbSYPw5r/7rg
+         XPhw==
+X-Gm-Message-State: ACrzQf25nh5TBzvyEHlKUPBnn03+jCWTK+N8MZX9XlefNPuhy4mbhJnX
+        yus5GM1y4QIGSJFWYgMdOujT+Q==
+X-Google-Smtp-Source: AMsMyM6UBdUKVERXADxfKkaSI5b9wrKz7T3JioXTveJUmMZfTpkTJxx8weSZsfwQ1mHBp2kuVlBZgQ==
+X-Received: by 2002:a17:90a:4d04:b0:212:ee1c:b0ec with SMTP id c4-20020a17090a4d0400b00212ee1cb0ecmr17212950pjg.66.1666973159730;
+        Fri, 28 Oct 2022 09:05:59 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id e15-20020aa7980f000000b0056bcf0dd175sm3017896pfl.215.2022.10.28.09.05.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 09:05:59 -0700 (PDT)
+Message-ID: <635bfde7.a70a0220.f562.6062@mx.google.com>
+Date:   Fri, 28 Oct 2022 09:05:59 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 17:24:19 +0200
-Message-ID: <CAJZ5v0hVaO-j6PEZ0u+uz==0it3qvZ8XdkrXk4F2x692OfgBcQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, rafael@kernel.org,
-        len.brown@intel.com, peterz@infradead.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.1-rc2-18-g111ae903a8e62
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.1-rc2-18-g111ae903a8e62)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 12:01 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Intel processors support additional software hint called EPB ("Energy
-> Performance Bias") to guide the hardware heuristic of power management
-> features to favor increasing dynamic performance or conserve energy
-> consumption.
->
-> Since this EPB hint is processor specific, the same value of hint can
-> result in different behavior across generations of processors.
->
-> commit 4ecc933b7d1f ("x86: intel_epb: Allow model specific normal EPB
-> value")' introduced capability to update the default power up EPB
-> based on the CPU model and updated the default EPB to 7 for Alder Lake
-> mobile CPUs.
->
-> The same change is required for other Alder Lake-N and Raptor Lake-P
-> mobile CPUs as the current default of 6 results in higher uncore power
-> consumption. This increase in power is related to memory clock
-> frequency setting based on the EPB value.
->
-> Depending on the EPB the minimum memory frequency is set by the
-> firmware. At EPB = 7, the minimum memory frequency is 1/4th compared to
-> EPB = 6. This results in significant power saving for idle and
-> semi-idle workload on a Chrome platform.
->
-> For example Change in power and performance from EPB change from 6 to 7
-> on Alder Lake-N:
->
-> Workload    Performance diff (%)    power diff
-> ----------------------------------------------------
-> VP9 FHD30       0 (FPS)         -218 mw
-> Google meet     0 (FPS)         -385 mw
->
-> This 200+ mw power saving is very significant for mobile platform for
-> battery life and thermal reasons.
->
-> But as the workload demands more memory bandwidth, the memory frequency
-> will be increased very fast. There is no power savings for such busy
-> workloads.
->
-> For example:
->
-> Workload                Performance diff (%) from EPB 6 to 7
-> -------------------------------------------------------
-> Speedometer 2.0         -0.8
-> WebGL Aquarium 10K
-> Fish                    -0.5
-> Unity 3D 2018           0.2
-> WebXPRT3                -0.5
->
-> There are run to run variations for performance scores for
-> such busy workloads. So the difference is not significant.
->
-> Add a new define ENERGY_PERF_BIAS_NORMAL_POWERSAVE for EPB 7
-> and use it for Alder Lake-N and Raptor Lake-P mobile CPUs.
->
-> This modification is done originally by
-> Jeremy Compostella <jeremy.compostella@intel.com>.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc2-18-g11=
+1ae903a8e62)
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+1-rc2-18-g111ae903a8e62/
 
-> ---
->  arch/x86/include/asm/msr-index.h | 1 +
->  arch/x86/kernel/cpu/intel_epb.c  | 7 ++++++-
->  2 files changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> index 10ac52705892..a3eb4d3e70b8 100644
-> --- a/arch/x86/include/asm/msr-index.h
-> +++ b/arch/x86/include/asm/msr-index.h
-> @@ -796,6 +796,7 @@
->  #define ENERGY_PERF_BIAS_PERFORMANCE           0
->  #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE   4
->  #define ENERGY_PERF_BIAS_NORMAL                        6
-> +#define ENERGY_PERF_BIAS_NORMAL_POWERSAVE      7
->  #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE     8
->  #define ENERGY_PERF_BIAS_POWERSAVE             15
->
-> diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-> index fbaf12e43f41..3b8476158236 100644
-> --- a/arch/x86/kernel/cpu/intel_epb.c
-> +++ b/arch/x86/kernel/cpu/intel_epb.c
-> @@ -204,7 +204,12 @@ static int intel_epb_offline(unsigned int cpu)
->  }
->
->  static const struct x86_cpu_id intel_epb_normal[] = {
-> -       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,
-> +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,
-> +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,
-> +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
->         {}
->  };
->
-> --
-> 2.31.1
->
+Tree: pm
+Branch: testing
+Git Describe: v6.1-rc2-18-g111ae903a8e62
+Git Commit: 111ae903a8e6222057b042648ac9b64ffd4adb63
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
