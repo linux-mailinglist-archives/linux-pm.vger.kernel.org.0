@@ -2,53 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DAE9611582
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 17:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19ADE6115B5
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 17:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbiJ1PIo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 11:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55104 "EHLO
+        id S229910AbiJ1PSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 11:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiJ1PIm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 11:08:42 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84528208832;
-        Fri, 28 Oct 2022 08:08:38 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id r19so3609449qtx.6;
-        Fri, 28 Oct 2022 08:08:38 -0700 (PDT)
+        with ESMTP id S230410AbiJ1PRq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 11:17:46 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6134420C9B3;
+        Fri, 28 Oct 2022 08:17:45 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id a27so327972qtw.10;
+        Fri, 28 Oct 2022 08:17:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NYii+0fW0gEKCWGN+D7BxbLvb2ZrmudcEIDGIcfsEBs=;
-        b=lxdkkRzhhdN5w6Q12sb9uZzvWAZxG3MxGZo9iXqP6QUTA7/7E/xckczlwQSMlRmZ2n
-         2QJM+9i8uD5E2rfA/J7rJPA8YzD+PGZD4w5laHWbP5S8+bcyFD/iLzNUxHqEyQa8Tk8W
-         Cmv/9kvlEbxW1mSC7BssqkOMdsdej+VXUXi7PGRgO7+fnjCgGrjvtxdttJknzK+7weN8
-         FdlqI3KwXlMZOu/kOI0/a+jjN57eSDOiazFCA01L4aHsqM6mXYeK3Ys8DciFA3MRjNm0
-         USuyJudj/qmBVucuFIEhmM+HfeTVgjqR1lVeX6z9CIj7bsAqwlAHmhcPPTi6Bmv7PnYi
-         8tdw==
-X-Gm-Message-State: ACrzQf1NjBJi41eNwpRBtkljnzsekZBy3ywsT+EN84RXJqxAeW4tigRU
-        irE/tG5vx4EnPH5ILx3VqA2GrULDYffvmUdYy3p0r4yE
-X-Google-Smtp-Source: AMsMyM7oYD83QNmGbnNTLaNVUXqpU/34cwf3LMweStOy4pBRdXXttiV/RN14ltJFbmmMQ5L05ce61fr71s7gmW2vCbA=
-X-Received: by 2002:a05:622a:44d:b0:39c:f7a4:5ee0 with SMTP id
- o13-20020a05622a044d00b0039cf7a45ee0mr45218839qtx.48.1666969717630; Fri, 28
- Oct 2022 08:08:37 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3yHtPsMV0ZtZibYDErsuqkp3aAUiU24r8aPqIVoD3v4=;
+        b=G0PReAJxRHHhECs1xMrpz5JVRr0BPiY1fuvuAVG8/73NvKBO/56fFLrWtwJDVXK1em
+         HSprFf8E3dw96NGJB/ZFUvr/1Yd15ugT9VOmzSyx6bfy7GD7HMRWPUUF9nUX+KBZpKLE
+         HPt7ccgfQJwx8Dn76UX4FB6xOn5UOYdJHozwg7BhkBi7NdkhyFlK+WiR4VjxUXPrR9sS
+         urfu6JcBK6cHz4sl3yCWxmg/eUoDUz6vMAgCOZpKqiEi7eAmXKq5XW5mG9XVgOhRf8zV
+         B4wGaFOIM07lwpuGdSyxDj6xXF4T1EYP6iLuMPsqhWmBXXdJB/HvnmgIa2BESFJQcjcF
+         xD7Q==
+X-Gm-Message-State: ACrzQf0Mb3ahE9iDWgvKHTf6Jw1h2mT9OVHhl9MdkTEyT5af0ePcpr6I
+        2skqCA6IQRioePQElyJYX5HF+cN5f9An9JNcX49yr0xpXIo=
+X-Google-Smtp-Source: AMsMyM56+qk07VCJaQuHTA7kiZu2yoXyzvWZRejmZVKLQ2Gw033Kj2tA8Gfpghm1mG5cgYgDhng5931CHHO42Nc2k38=
+X-Received: by 2002:a05:622a:1750:b0:39a:82aa:f4ab with SMTP id
+ l16-20020a05622a175000b0039a82aaf4abmr46105697qtk.411.1666970264407; Fri, 28
+ Oct 2022 08:17:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221003144914.160547-1-kajetan.puchalski@arm.com>
- <CAJZ5v0hoe=8nY9vR=+Bjvexrg+E6fcO-S=W+PDkfD=Li6Uy__g@mail.gmail.com>
- <Y0fymW5LOoIHstE2@e126311.manchester.arm.com> <CAJZ5v0gvAtpzdQo0Tj13ZGFcop8fdNht7e_Nc_UNYCgbU1zZLA@mail.gmail.com>
- <Y1vum4BECMf2BXQW@e126311.manchester.arm.com> <CAJZ5v0hZbw18BuG64046DiG2_dWOFk9gcg0bD+X3rQknwp0xsA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hZbw18BuG64046DiG2_dWOFk9gcg0bD+X3rQknwp0xsA@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 17:08:26 +0200
-Message-ID: <CAJZ5v0iGM84i72m2eJkF6k8PkFqHw4gTDQhYV-K9D_VPWNKW7A@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/1] cpuidle: teo: Introduce optional util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Fri, 28 Oct 2022 17:17:33 +0200
+Message-ID: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.1-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,63 +53,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 5:04 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Oct 28, 2022 at 5:01 PM Kajetan Puchalski
-> <kajetan.puchalski@arm.com> wrote:
-> >
-> > On Fri, Oct 28, 2022 at 03:12:43PM +0200, Rafael J. Wysocki wrote:
-> >
-> > > > The result being that this util-aware TEO variant while using much less
-> > > > C1 and decreasing the percentage of too deep sleeps from ~24% to ~3% in
-> > > > PCMark Web Browsing also uses almost 2% less power. Clearly the power is
-> > > > being wasted on not hitting C1 residency over and over.
-> > >
-> > > Hmm.  The PCMark Web Browsing table in your cover letter doesn't indicate that.
-> > >
-> > > The "gmean power usage" there for "teo + util-aware" is 205, whereas
-> > > for "teo" alone it is 187.8.  This is still arguably balanced by the
-> > > latency difference (~100 us vs ~185 us, respectively), but this looks
-> > > like trading energy for performance.
-> >
-> > In this case yes, I meant 2% less compared to menu but you're right of
-> > course.
-> >
-> > [...]
-> >
-> > > Definitely it should not be changed if the previous state is a polling
-> > > one which can be checked right away.  That would take care of the
-> > > "Intel case" automatically.
-> >
-> > Makes sense, I already used the polling flag to implement this in this other
-> > governor I mentioned.
-> >
-> > >
-> > > > Should make it much less intense for Intel systems.
-> > >
-> > > So I think that this adjustment only makes sense if the current
-> > > candidate state is state 1 and state 0 is not polling.  In the other
-> > > cases the cost of missing an opportunity to save energy would be too
-> > > high for the observed performance gain.
-> >
-> > Interesting, but only applying it to C1 and only when C0 isn't polling would
-> > make it effectively not do anything on Intel systems, right?
->
-> Indeed.
->
-> > From what I've seen on Doug's plots even C1 is hardly ever used on his platform, most
-> > sleeps end up in the deepest possible state.
->
-> That depends a lot on the workload.  There are workloads in which C1
-> is mostly used and the deeper idle states aren't.
->
-> > Checking for the polling flag is a good idea regardless so I can send a
-> > v3 with that. If you'd like me to also restrict the entire mechanism to
-> > only working on C1 as you suggested then I'm okay with including that in
-> > the v3 as well. What do you think?
->
-> It would be good to do that and see if there are any significant
-> differences in the results.
+Hi Linus,
 
-BTW, you may as well drop the extra #ifdeffery from the v3, I don't
-think that it is particularly useful.
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.1-rc3
+
+with top-most commit 6f257934ed6170ed0094149e0e1bac09f7997103
+
+ Merge branches 'pm-sleep', 'pm-domains' and 'pm-tools'
+
+on top of commit 247f34f7b80357943234f93f247a1ae6b6c3a740
+
+ Linux 6.1-rc2
+
+to receive power management fixes for 6.1-rc3.
+
+These make the intel_pstate driver work as expected on all hybrid
+platforms to date (regardless of possible platform firmware issues),
+fix hybrid sleep on systems using suspend-to-idle by default, make
+the generic power domains code handle disabled idle states properly
+and update pm-graph.
+
+Specifics:
+
+ - Make intel_pstate use what is known about the hardware instead of
+   relying on information from the platform firmware (ACPI CPPC in
+   particular) to establish the relationship between the HWP CPU
+   performance levels and frequencies on all hybrid platforms
+   available to date (Rafael Wysocki).
+
+ - Allow hybrid sleep to use suspend-to-idle as a system suspend method
+   if it is the current suspend method of choice (Mario Limonciello).
+
+ - Fix handling of unavailable/disabled idle states in the generic
+   power domains code (Sudeep Holla).
+
+ - Update the pm-graph suite of utilities to version 5.10 which is
+   fixes-mostly and does not add any new features (Todd Brandt).
+
+Thanks!
+
+
+---------------
+
+Mario Limonciello (1):
+      PM: hibernate: Allow hybrid sleep to work with s2idle
+
+Rafael J. Wysocki (2):
+      cpufreq: intel_pstate: Read all MSRs on the target CPU
+      cpufreq: intel_pstate: hybrid: Use known scaling factor for P-cores
+
+Sudeep Holla (1):
+      PM: domains: Fix handling of unavailable/disabled idle states
+
+Todd Brandt (1):
+      pm-graph v5.10
+
+---------------
+
+ drivers/base/power/domain.c        |   4 +
+ drivers/cpufreq/intel_pstate.c     | 133 ++++++++--------------
+ kernel/power/hibernate.c           |   2 +-
+ tools/power/pm-graph/README        |  12 +-
+ tools/power/pm-graph/sleepgraph.8  |   3 +
+ tools/power/pm-graph/sleepgraph.py | 225 ++++++++++++++++++-------------------
+ 6 files changed, 170 insertions(+), 209 deletions(-)
