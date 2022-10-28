@@ -2,124 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1696611DE6
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87603611DFC
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiJ1XGN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 19:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S229542AbiJ1XND (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 19:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiJ1XGM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:06:12 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367A31DA350;
-        Fri, 28 Oct 2022 16:06:11 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id A998C5C017D;
-        Fri, 28 Oct 2022 19:06:08 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 28 Oct 2022 19:06:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1666998368; x=
-        1667084768; bh=6ErzU4gGH8yU302IzT7x6da7AL+aZ5llrq9RKS5ab+o=; b=m
-        4KE7OmqbQjEH6Dw7ERDVmB6GefrXwfUe7oysqCxp3133igpTqTk1ZoW9smT1XyVM
-        Hs0AUPK3HuPLBjX+oN8UfFPD4oP6wwUUitFUXyXVM9keADNGtoM/NLJU+AjTPxcL
-        lyuBYKhtXcfPqK3wFLwH/CtKQ8hjI1xcBdYWMgTzyxbJbmfOsdl/tWQZgDkfB7/4
-        OSwTsBPpe/8O4588iyhaXtUgjNrzzavsI4hzVaHMY7IpzgnF6JnGSqhS8k1O3qO8
-        DI+0NqIq50m4O/pNFFkwoGTnEpCWRgnSnR2rYWNqmFOba5xRWs/3Y9FkFeES/LCT
-        F7W8T6VQklOZgLaD1qH1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1666998368; x=
-        1667084768; bh=6ErzU4gGH8yU302IzT7x6da7AL+aZ5llrq9RKS5ab+o=; b=r
-        3oYnFdEmdZp5pkHqVuUmxM4VBDFEnBscB3R/qKU3Oy5uJD8GJs6XM1SucbhJuVqM
-        MUrnPHMByyJzoX9ZxNfuqXYwJ8Txz2DL0jAL5baPKqT2TwfJvf/FC6iizK/dmtc7
-        XOFeTkw90EStN6MZJb79+6J7Er/3MT97cAnE8tO32mwWoeZay5yZ1al5qre2M3NC
-        jU7SQzzlvn5CuG9JQc/e/WTsslUWu9hu+xmrbUhBZgXImGn5SyBhckPUnd2AKnI0
-        KK6ckukK4ADwX8G5DhhN1H/gD/vDHh79OxbseuVhqiyv2zIw0SnCU6ucQjKYtJKD
-        M2z/PLxlMpv6x9Diwd6Gw==
-X-ME-Sender: <xms:YGBcY7xe3yfeZjsCWtvfyiCCoEKEqJcxfMYf6D1zv6jNhh2KwqBjRg>
-    <xme:YGBcYzRafk6PU8IVgJpQ6u9ewraMSHpDCQc26uWcxQhFAeIhfl85AX0vZRXxtxr4q
-    87xiZ65XfnEnI5Y0A>
-X-ME-Received: <xmr:YGBcY1V4JyheSNZtpaHGF4OIv-lvOHQqAyxq5QPz2c1tayTybzyYYTPlgjcLxy0MDW_IIY3P0rp6tuZnqGDnyJtVGbsVbZJysvZCa9rcqOcwEpWWpqT-3kgMbQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdejgddukecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepkeejleelfeeitdfhtdfgkeeghedufeduueegffdvhfdukeelleef
-    tdetjeehuddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:YGBcY1gGKngsAa3EiqfAC_uuZakxRfHY9sRzsBhK1eDP98Ap56Fy3Q>
-    <xmx:YGBcY9CH-1C7N_yfuTW3btaZe09km3mwHSU7v39NvYlOcA5QfjopYA>
-    <xmx:YGBcY-JPxItgIvBNRhraPcJRjvPEAoTWlA5ZECp5D2765St7tECQ0w>
-    <xmx:YGBcY8MPPsGMVtp6xZUgeJ2t18IQjl1XOJ7UFSKbrlJtoYqgEV_Z8w>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 28 Oct 2022 19:06:08 -0400 (EDT)
-Message-ID: <6b23af14-340d-b7b5-7d20-14fae03f724c@sholland.org>
-Date:   Fri, 28 Oct 2022 18:06:07 -0500
+        with ESMTP id S229379AbiJ1XNB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:13:01 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AD834CA29
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 16:13:00 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id bb5so4418939qtb.11
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 16:13:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1TTqFXJnufak57lBJdLAiI5r22saT5S8wMPVdyLYJWQ=;
+        b=ogypng3huLd9C6k8ChgEqfkCle5/rUaHBHBD/ptyC6xEUFau8FCB8ZK1goK4KakUUL
+         I0RXL9cORu3+wNcIouY5hYG7WS6Oerh3Pl/cgBXXZlD5r9SiCxmAfCcw08qqjzRZAZkO
+         utjAxP0dbDfy5xxkAP/r8ei0283DOAy9l2Dg8p0FMvveI809EwkmZAqZHmHh4hBaWiZ8
+         P8SdGIYY18Da39kcFSVfeQ1MEiFbT46EaD0urz3QxhEZ/6EHNs/Amilz4Sx1mYvyY5Sc
+         H0LeLuQKiI81AVYcLuahymCG3/7o1IQzj9b0bNLxHlucpaGZnm0n4hPUeqc7/R2dyLi3
+         LWGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1TTqFXJnufak57lBJdLAiI5r22saT5S8wMPVdyLYJWQ=;
+        b=LciN7NWTcDSywQ89rw9EKkzisw7yra8yS7w885WW44sGI/m2E8xRypPv+xst9kjSqg
+         be2OXOIscE6St4cTkR390ZjPjb0uuHSNypUebLkQDU8kqDNaSlydokvTrmH6X1k4Epim
+         pfutHB6+4q77Uxwa+XQZEoylIpEhcUCrM8yT6+UnBllCH2Prfiqz0Do6ZufmuBnB01pE
+         ssBqu0aoZNgxovfuEQ8oGP0RM4MjExkqaMvplbUbgIrbPUgPxqf/l9aPyD0G3r+2gy18
+         nG5eZdNSfZrybGv77nwprgqw8G2zikQDsW0yhPJvG0yy7BHaupKTXJCdTHrgcf98uFKd
+         ucTw==
+X-Gm-Message-State: ACrzQf3Dc1Cxsp4tuiXYAbPrcbkHSATtcmvyl+b0RPVyUgRsqO2BoQfm
+        oEqpTc+AsUYhnWHJlcZizjqhhQ==
+X-Google-Smtp-Source: AMsMyM4deQ6TLfI9iTlLyVmUPekBdwUM2eeZJhBtMskzloonFWP5VJbYDXDokrrsCMQjRIM5Q04YpA==
+X-Received: by 2002:a05:622a:188a:b0:3a4:eb2c:f221 with SMTP id v10-20020a05622a188a00b003a4eb2cf221mr1641126qtc.613.1666998779575;
+        Fri, 28 Oct 2022 16:12:59 -0700 (PDT)
+Received: from krzk-bin.. ([64.57.193.93])
+        by smtp.gmail.com with ESMTPSA id fx12-20020a05622a4acc00b0039ccd7a0e10sm3016026qtb.62.2022.10.28.16.12.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Oct 2022 16:12:58 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: power: supply: expect specific type for monitored-battery
+Date:   Fri, 28 Oct 2022 19:12:55 -0400
+Message-Id: <20221028231255.565363-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] power: supply: ip5xxx: Fix integer overflow in
- current_now calculation
-Content-Language: en-US
-To:     Ondrej Jirman <megi@xff.cz>, Sebastian Reichel <sre@kernel.org>
-Cc:     "open list:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rockchip@lists.infradead.org
-References: <20221028224052.293693-1-megi@xff.cz>
-From:   Samuel Holland <samuel@sholland.org>
-In-Reply-To: <20221028224052.293693-1-megi@xff.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10/28/22 17:40, Ondrej Jirman wrote:
-> When current is larger than ~2A, the multiplication in current_now
-> property overflows and the kernel reports invalid negative current
-> value. Change the numerator and denominator while preserving their
-> ratio to allow up to +-6A before the overflow.
-> 
-> Fixes: 75853406fa27 ("power: supply: Add a driver for Injoinic power bank ICs")
-> Signed-off-by: Ondrej Jirman <megi@xff.cz>
+Core schema does not define type of monitored-battery, so the schemas
+are expected to reference proper type.
 
-Reviewed-by: Samuel Holland <samuel@sholland.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ Documentation/devicetree/bindings/power/supply/bq27xxx.yaml    | 2 +-
+ .../devicetree/bindings/power/supply/ingenic,battery.yaml      | 1 +
+ .../devicetree/bindings/power/supply/rohm,bd99954.yaml         | 1 +
+ .../devicetree/bindings/power/supply/sc2731-charger.yaml       | 2 +-
+ Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml  | 3 ++-
+ 5 files changed, 6 insertions(+), 3 deletions(-)
 
-> ---
->  drivers/power/supply/ip5xxx_power.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply/ip5xxx_power.c
-> index 02ee4d252a3e..f39cb2f7aa11 100644
-> --- a/drivers/power/supply/ip5xxx_power.c
-> +++ b/drivers/power/supply/ip5xxx_power.c
-> @@ -398,7 +398,7 @@ static int ip5xxx_battery_get_property(struct power_supply *psy,
->  		ret = ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATIADC_DAT0,
->  					      IP5XXX_BATIADC_DAT1, &raw);
->  
-> -		val->intval = DIV_ROUND_CLOSEST(raw * 745985, 1000);
-> +		val->intval = DIV_ROUND_CLOSEST(raw * 261095, 350);
-
-DIV_ROUND_CLOSEST(raw * 149197, 200) would be marginally more accurate,
-but it doesn't matter in practice.
-
->  		return 0;
->  
->  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+index 65fc6049efc1..b04c86ed0f58 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+@@ -59,6 +59,7 @@ properties:
+     description: integer, I2C address of the fuel gauge.
+ 
+   monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description: |
+        phandle of battery characteristics node.
+        The fuel gauge uses the following battery properties:
+@@ -66,7 +67,6 @@ properties:
+        - charge-full-design-microamp-hours
+        - voltage-min-design-microvolt
+        Both or neither of the *-full-design-*-hours properties must be set.
+-       See Documentation/devicetree/bindings/power/supply/battery.yaml
+ 
+   power-supplies: true
+ 
+diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+index 46527038bf22..8bdacc30e9d8 100644
+--- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
++++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+@@ -27,6 +27,7 @@ properties:
+     const: battery
+ 
+   monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description: >
+       phandle to a "simple-battery" compatible node.
+ 
+diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+index 24b06957b4ca..ad97d0ac9438 100644
+--- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
++++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+@@ -121,6 +121,7 @@ properties:
+   monitored-battery:
+     description:
+       phandle of battery characteristics devicetree node
++    $ref: /schemas/types.yaml#/definitions/phandle
+ 
+   rohm,vsys-regulation-microvolt:
+     description: system specific lower limit for system voltage.
+diff --git a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
+index eeb043f9bb4f..4a1ca7288a3b 100644
+--- a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
++++ b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
+@@ -24,11 +24,11 @@ properties:
+     description: phandle to the USB phy
+ 
+   monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
+     description: |
+       The charger uses the following battery properties
+       - charge-term-current-microamp: current for charge termination phase.
+       - constant-charge-voltage-max-microvolt: maximum constant input voltage.
+-      See Documentation/devicetree/bindings/power/supply/battery.yaml
+ 
+ additionalProperties: false
+ 
+diff --git a/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml b/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
+index d90a838a1744..8af5957800c0 100644
+--- a/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
++++ b/Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml
+@@ -47,7 +47,8 @@ properties:
+   sprd,calib-resistance-micro-ohms:
+     description: real resistance of coulomb counter chip in micro Ohms
+ 
+-  monitored-battery: true
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
+ 
+ required:
+   - compatible
+-- 
+2.34.1
 
