@@ -2,217 +2,595 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E915B610D50
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 11:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A66F610D71
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 11:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbiJ1Jb7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 05:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S229909AbiJ1Jii (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 05:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiJ1Jbp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 05:31:45 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5E21C6BFD
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 02:31:43 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id c3-20020a1c3503000000b003bd21e3dd7aso6122201wma.1
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 02:31:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linexp-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WaKNgqEgoF6Zx2JfcPmTHiX+wsh3k8+Xy+QiK1kLIG0=;
-        b=CAcoDivo3WyhJ0Jjxv3r+aLVyYnLbkY3IfmhpKwoDxGd1lWxYCq3m7P3ACmf/9Ov5d
-         veOfzx7QFbLHU4V+55xY0OUdu6Ym5WrSS5PzPmIR7tZ/MbWSGYE8s/F1+B/iL6xqW05p
-         +L+UW0AAIJ03ExtJiTcitNCjlBZCrPsYPZy4Gidz3YJEaPjLPsB/DlFL3cLcd+BHqat+
-         P44S7DjYFQa2L+9eyaQOxF8VmWbSY9F17LPIsJYyjp/q9ZOp0HDIqen4aJ7OMtOlqZ6L
-         pQB3utkt8P4rD3DipmA3wUrPEohgxI6N/ecroBXiK7QJ3XgTR0kdv2nId/1jYYIyt0Xo
-         u59g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WaKNgqEgoF6Zx2JfcPmTHiX+wsh3k8+Xy+QiK1kLIG0=;
-        b=fvxsYin0dWt5/SNRJtiHHRoigj3op7RvnqCDRDGiRPQIICr3EkIQ1jrGavef0gsfVZ
-         YwOb72W/fqXzeWWBehb5ZWoVVlMC6UwM4k093iRlEZKXWINSEmiKtmEoyiYb0XCYlsAg
-         5G5xJ/ECkhlJakVmPa3sEvH4wCokhahItDWEcB6m/Hpw1sLw/MJYPLxLXRrYzh9gUzlM
-         DA+/S34xkanG/sWy/n7K6Dq2s1WmkdLnpU7GhEMBLRiOwNg5PfamPWkslNfdqrfHUzz7
-         Zbtd8KpOPC5hmO64+QwmFCJ+YSjUcPSC9mQvoh3G3PKj7Gk9LFBbX+WMPNRv+W1xBorE
-         5UeQ==
-X-Gm-Message-State: ACrzQf18DLuzwtnqt+3HTaSdevJSp9kWcCo32BHpgZo0K85vACE+cui9
-        kAyfW3I+GZqwEQY5hcl6MlgBHrHolNUR+g==
-X-Google-Smtp-Source: AMsMyM7ucYn+qC1RoU1d90Qtg8VE+vUiGHrCKAhLjrYNfbGkmKQxa8joA1i4c7BrB592Lb7oQkvXaw==
-X-Received: by 2002:a05:600c:3d92:b0:3cf:3921:d8ad with SMTP id bi18-20020a05600c3d9200b003cf3921d8admr8716490wmb.15.1666949502244;
-        Fri, 28 Oct 2022 02:31:42 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:973f:a8b:7c4d:b6c4? ([2a05:6e02:1041:c10:973f:a8b:7c4d:b6c4])
-        by smtp.gmail.com with ESMTPSA id u11-20020adfdd4b000000b00236883f2f5csm3260322wrm.94.2022.10.28.02.31.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 28 Oct 2022 02:31:41 -0700 (PDT)
-Message-ID: <c98486ac-0a32-f650-0084-96cc5c255df9@linexp.org>
-Date:   Fri, 28 Oct 2022 11:31:40 +0200
+        with ESMTP id S229965AbiJ1JiP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 05:38:15 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B28F51C883C
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 02:37:18 -0700 (PDT)
+Received: from loongson.cn (unknown [111.9.175.10])
+        by gateway (Coremail) with SMTP id _____8Cxq9jMoltjgBEDAA--.11643S3;
+        Fri, 28 Oct 2022 17:37:16 +0800 (CST)
+Received: from [10.136.12.12] (unknown [111.9.175.10])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxFlfJoltjH0wGAA--.3902S3;
+        Fri, 28 Oct 2022 17:37:15 +0800 (CST)
+Subject: Re: [PATCH 1/2] LoongArch: Add suspend (ACPI S3) support
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+References: <20221028023829.4030984-1-chenhuacai@loongson.cn>
+ <9a866ff3-63a9-09fc-00cc-1a156d258202@loongson.cn>
+ <CAAhV-H7J_2_jDbqor6dRLnV65mNYSrzSrkOA-D_1pUhQSdTaXg@mail.gmail.com>
+From:   Jinyang He <hejinyang@loongson.cn>
+Message-ID: <90b19909-8261-7783-bb43-fff00f8a0bb1@loongson.cn>
+Date:   Fri, 28 Oct 2022 17:37:12 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Linux PM list <linux-pm@vger.kernel.org>
-References: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
- <CAL_JsqKQM4oSxrbhA4_ST8O0ieek9sGQQ9p55AXjhqmVx=rUrw@mail.gmail.com>
- <CAJZ5v0i76X0TiaOhPa3a5440fRb7vA1z1mFKJibso8G6wYz7HQ@mail.gmail.com>
- <4817aeca-4fb1-cb99-8df5-7df22a77ea3f@linexp.org>
- <CACRpkdb=WX5XO1YDB04uLzv=tNfpmr+ORN+LkAiZTE6gSris_g@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linexp.org>
-Subject: Re: Regression after recent changes to drivers/thermal/thermal_of.c
-In-Reply-To: <CACRpkdb=WX5XO1YDB04uLzv=tNfpmr+ORN+LkAiZTE6gSris_g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <CAAhV-H7J_2_jDbqor6dRLnV65mNYSrzSrkOA-D_1pUhQSdTaXg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8BxFlfJoltjH0wGAA--.3902S3
+X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3Zw13tw48AF4DZr4xXr1rtFb_yoW8Aw1kKo
+        WYk3Wxtr4rGrWjkF15K3sIqFy3tw10gw4DAay7Aw13GF4qy34UAayUGrW5tay3G3WkGr1f
+        Ga4UWFs7ZayxXrs8n29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s
+        0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
+        Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84
+        ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
+        w2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
+        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2
+        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
+        AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j
+        6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8X_-PUUUUU==
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi, Huacai,
 
-Hi Linus,
 
-On 28/10/2022 10:04, Linus Walleij wrote:
-> On Wed, Oct 26, 2022 at 11:40 PM Daniel Lezcano
-> <daniel.lezcano@linexp.org> wrote:
->> On 26/10/2022 19:06, Rafael J. Wysocki wrote:
-> 
->>> This is Daniel's work, so I'm still hoping that he'll chime in
->>> shortly,
+On 2022/10/28 下午5:00, Huacai Chen wrote:
+
+>   Hi, Jinyang,
+>
+> On Fri, Oct 28, 2022 at 3:23 PM Jinyang He <hejinyang@loongson.cn> wrote:
+>> On 2022/10/28 上午10:38, Huacai Chen wrote:
 >>
->> Yep, I'm in sick leave ATM, I broke my arm (without wordplay).
-> 
-> Yeah I heard, get well soon!
-
-Thanks
-
->> I took sometime to read the code, so from my POV we should keep the
->> required property patch because the DT was defined that as required
->> property. The conversion to yaml obviously spotted the DT not conforming
->> with the bindings.
-> 
-> So I guess you mean I should add some trip points to my device
-> trees then so they pass validation?
-
-May be a critical trip point? (but a monitoring delay will be needed 
-implying additional wake ups if the interrupt mode is not supported)
-
-> It's fine with me, I can just put some absolute maximum temperatures
-> around the batteries, I am more worrying if there are other users
-> out there that might get upset.
-
-If you put an active or passive trip point without a cooling device, 
-that trip point won't do anything except sending a notification to the 
-userspace when it is crossed (if monitored).
-
-It is always useful to have a passive trip, so when the writable trip 
-option is enabled, the userspace can set the temperature and get notified.
-
-> I have a problem to add a trip point like this:
-> 
->                  battery-crit-lo {
->                      temperature = <-50000>;
->                      hysteresis = <2000>;
->                      type = "critical";
->                  };
-> 
-> Despite it is legal to the schema:
-> 
->              properties:
->                temperature:
->                  $ref: /schemas/types.yaml#/definitions/int32
->                  minimum: -273000
->                  maximum: 200000
->                  description:
->                    An integer expressing the trip temperature in millicelsius.
-> 
-> I get this error:
-> 
->    DTC     arch/arm/boot/dts/ste-ux500-samsung-golden.dtb
-> Error: ../arch/arm/boot/dts/ste-ux500-samsung-golden.dts:50.21-22 syntax error
-> 
-> Does anyone know how to put a negative number in a
-> property?
-
-I don't know but the thermal framework does not support the cold trip 
-points (yet). That means here, the battery will be in temperature 
-violation if the temperature is above -50°C
-
-
->>   From an implementation POV, that was not spotted initially because of
->> the old OF code design IMO (but I'm not sure).
+>>> Add suspend (Suspend To RAM, aka ACPI S3) support for LoongArch.
+>>>
+>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>>> ---
+>>>    arch/loongarch/Kconfig                |   5 ++
+>>>    arch/loongarch/Makefile               |   3 +
+>>>    arch/loongarch/include/asm/acpi.h     |  10 +++
+>>>    arch/loongarch/include/asm/bootinfo.h |   1 +
+>>>    arch/loongarch/include/asm/loongson.h |   3 +
+>>>    arch/loongarch/include/asm/time.h     |   1 +
+>>>    arch/loongarch/kernel/acpi.c          |   6 ++
+>>>    arch/loongarch/kernel/smp.c           |   1 +
+>>>    arch/loongarch/kernel/time.c          |  11 ++-
+>>>    arch/loongarch/power/Makefile         |   3 +
+>>>    arch/loongarch/power/platform.c       |  45 +++++++++++
+>>>    arch/loongarch/power/suspend.c        |  73 +++++++++++++++++
+>>>    arch/loongarch/power/suspend_asm.S    | 112 ++++++++++++++++++++++++++
+>>>    13 files changed, 271 insertions(+), 3 deletions(-)
+>>>    create mode 100644 arch/loongarch/power/Makefile
+>>>    create mode 100644 arch/loongarch/power/platform.c
+>>>    create mode 100644 arch/loongarch/power/suspend.c
+>>>    create mode 100644 arch/loongarch/power/suspend_asm.S
+>>>
+>>> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+>>> index a8dc58e8162a..0df102401d1d 100644
+>>> --- a/arch/loongarch/Kconfig
+>>> +++ b/arch/loongarch/Kconfig
+>>> @@ -57,6 +57,7 @@ config LOONGARCH
+>>>        select ARCH_WANTS_NO_INSTR
+>>>        select BUILDTIME_TABLE_SORT
+>>>        select COMMON_CLK
+>>> +     select CPU_PM
+>>>        select EFI
+>>>        select GENERIC_CLOCKEVENTS
+>>>        select GENERIC_CMOS_UPDATE
+>>> @@ -517,6 +518,10 @@ config ARCH_MMAP_RND_BITS_MAX
+>>>
+>>>    menu "Power management options"
+>>>
+>>> +config ARCH_SUSPEND_POSSIBLE
+>>> +     def_bool y
+>>> +
+>>> +source "kernel/power/Kconfig"
+>>>    source "drivers/acpi/Kconfig"
+>>>
+>>>    endmenu
+>>> diff --git a/arch/loongarch/Makefile b/arch/loongarch/Makefile
+>>> index f4cb54d5afd6..a0fc1f9980e3 100644
+>>> --- a/arch/loongarch/Makefile
+>>> +++ b/arch/loongarch/Makefile
+>>> @@ -104,6 +104,9 @@ endif
+>>>    libs-y += arch/loongarch/lib/
+>>>    libs-$(CONFIG_EFI_STUB) += $(objtree)/drivers/firmware/efi/libstub/lib.a
+>>>
+>>> +# suspend and hibernation support
+>>> +drivers-$(CONFIG_PM) += arch/loongarch/power/
+>>> +
+>>>    ifeq ($(KBUILD_EXTMOD),)
+>>>    prepare: vdso_prepare
+>>>    vdso_prepare: prepare0
+>>> diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
+>>> index 825c2519b9d1..9664868b1260 100644
+>>> --- a/arch/loongarch/include/asm/acpi.h
+>>> +++ b/arch/loongarch/include/asm/acpi.h
+>>> @@ -35,4 +35,14 @@ extern struct list_head acpi_wakeup_device_list;
+>>>
+>>>    #define ACPI_TABLE_UPGRADE_MAX_PHYS ARCH_LOW_ADDRESS_LIMIT
+>>>
+>>> +extern int loongarch_acpi_suspend(void);
+>>> +extern int (*acpi_suspend_lowlevel)(void);
+>>> +extern void loongarch_suspend_enter(void);
+>>> +extern void loongarch_wakeup_start(void);
+>>> +
+>>> +static inline unsigned long acpi_get_wakeup_address(void)
+>>> +{
+>>> +     return (unsigned long)loongarch_wakeup_start;
+>>> +}
+>>> +
+>>>    #endif /* _ASM_LOONGARCH_ACPI_H */
+>>> diff --git a/arch/loongarch/include/asm/bootinfo.h b/arch/loongarch/include/asm/bootinfo.h
+>>> index ed0910e8b856..0051b526ac6d 100644
+>>> --- a/arch/loongarch/include/asm/bootinfo.h
+>>> +++ b/arch/loongarch/include/asm/bootinfo.h
+>>> @@ -32,6 +32,7 @@ struct loongson_system_configuration {
+>>>        int cores_per_node;
+>>>        int cores_per_package;
+>>>        unsigned long cores_io_master;
+>>> +     unsigned long suspend_addr;
+>>>        const char *cpuname;
+>>>    };
+>>>
+>>> diff --git a/arch/loongarch/include/asm/loongson.h b/arch/loongarch/include/asm/loongson.h
+>>> index 00db93edae1b..12494cffffd1 100644
+>>> --- a/arch/loongarch/include/asm/loongson.h
+>>> +++ b/arch/loongarch/include/asm/loongson.h
+>>> @@ -136,4 +136,7 @@ typedef enum {
+>>>    #define ls7a_writel(val, addr)      *(volatile unsigned int   *)TO_UNCACHE(addr) = (val)
+>>>    #define ls7a_writeq(val, addr)      *(volatile unsigned long  *)TO_UNCACHE(addr) = (val)
+>>>
+>>> +void enable_gpe_wakeup(void);
+>>> +void enable_pci_wakeup(void);
+>>> +
+>>>    #endif /* __ASM_LOONGSON_H */
+>>> diff --git a/arch/loongarch/include/asm/time.h b/arch/loongarch/include/asm/time.h
+>>> index 2eae219301d0..037a2d1b8ff4 100644
+>>> --- a/arch/loongarch/include/asm/time.h
+>>> +++ b/arch/loongarch/include/asm/time.h
+>>> @@ -12,6 +12,7 @@
+>>>    extern u64 cpu_clock_freq;
+>>>    extern u64 const_clock_freq;
+>>>
+>>> +extern void save_counter(void);
+>>>    extern void sync_counter(void);
+>>>
+>>>    static inline unsigned int calc_const_freq(void)
+>>> diff --git a/arch/loongarch/kernel/acpi.c b/arch/loongarch/kernel/acpi.c
+>>> index 335398482038..982672caf753 100644
+>>> --- a/arch/loongarch/kernel/acpi.c
+>>> +++ b/arch/loongarch/kernel/acpi.c
+>>> @@ -156,6 +156,12 @@ static void __init acpi_process_madt(void)
+>>>        loongson_sysconf.nr_cpus = num_processors;
+>>>    }
+>>>
+>>> +#ifdef CONFIG_ACPI_SLEEP
+>>> +int (*acpi_suspend_lowlevel)(void) = loongarch_acpi_suspend;
+>>> +#else
+>>> +int (*acpi_suspend_lowlevel)(void);
+>>> +#endif
+>>> +
+>>>    int __init acpi_boot_init(void)
+>>>    {
+>>>        /*
+>>> diff --git a/arch/loongarch/kernel/smp.c b/arch/loongarch/kernel/smp.c
+>>> index 781a4d4bdddc..6e192a25e134 100644
+>>> --- a/arch/loongarch/kernel/smp.c
+>>> +++ b/arch/loongarch/kernel/smp.c
+>>> @@ -16,6 +16,7 @@
+>>>    #include <linux/smp.h>
+>>>    #include <linux/threads.h>
+>>>    #include <linux/export.h>
+>>> +#include <linux/syscore_ops.h>
+>>>    #include <linux/time.h>
+>>>    #include <linux/tracepoint.h>
+>>>    #include <linux/sched/hotplug.h>
+>>> diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+>>> index 786735dcc8d6..a6576dea590c 100644
+>>> --- a/arch/loongarch/kernel/time.c
+>>> +++ b/arch/loongarch/kernel/time.c
+>>> @@ -115,12 +115,17 @@ static unsigned long __init get_loops_per_jiffy(void)
+>>>        return lpj;
+>>>    }
+>>>
+>>> -static long init_timeval;
+>>> +static long init_offset __nosavedata;
+>>> +
+>>> +void save_counter(void)
+>>> +{
+>>> +     init_offset = drdtime();
+>>> +}
+>>>
+>>>    void sync_counter(void)
+>>>    {
+>>>        /* Ensure counter begin at 0 */
+>>> -     csr_write64(-init_timeval, LOONGARCH_CSR_CNTC);
+>>> +     csr_write64(init_offset, LOONGARCH_CSR_CNTC);
+>>>    }
+>>>
+>>>    static int get_timer_irq(void)
+>>> @@ -219,7 +224,7 @@ void __init time_init(void)
+>>>        else
+>>>                const_clock_freq = calc_const_freq();
+>>>
+>>> -     init_timeval = drdtime() - csr_read64(LOONGARCH_CSR_CNTC);
+>>> +     init_offset = -(drdtime() - csr_read64(LOONGARCH_CSR_CNTC));
+>>>
+>>>        constant_clockevent_init();
+>>>        constant_clocksource_init();
+>>> diff --git a/arch/loongarch/power/Makefile b/arch/loongarch/power/Makefile
+>>> new file mode 100644
+>>> index 000000000000..6740117decaa
+>>> --- /dev/null
+>>> +++ b/arch/loongarch/power/Makefile
+>>> @@ -0,0 +1,3 @@
+>>> +obj-y        += platform.o
+>>> +
+>>> +obj-$(CONFIG_SUSPEND)                += suspend.o suspend_asm.o
+>>> diff --git a/arch/loongarch/power/platform.c b/arch/loongarch/power/platform.c
+>>> new file mode 100644
+>>> index 000000000000..675e8792afaf
+>>> --- /dev/null
+>>> +++ b/arch/loongarch/power/platform.c
+>>> @@ -0,0 +1,45 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Author: Huacai Chen <chenhuacai@loongson.cn>
+>>> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+>>> + */
+>>> +#include <linux/acpi.h>
+>>> +#include <linux/platform_device.h>
+>>> +
+>>> +#include <asm/bootinfo.h>
+>>> +#include <asm/setup.h>
+>>> +
+>>> +void enable_gpe_wakeup(void)
+>>> +{
+>>> +     acpi_enable_all_wakeup_gpes();
+>>> +}
+>>> +
+>>> +void enable_pci_wakeup(void)
+>>> +{
+>>> +     acpi_write_bit_register(ACPI_BITREG_PCIEXP_WAKE_STATUS, 1);
+>>> +
+>>> +     if (acpi_gbl_FADT.flags & ACPI_FADT_PCI_EXPRESS_WAKE)
+>>> +             acpi_write_bit_register(ACPI_BITREG_PCIEXP_WAKE_DISABLE, 0);
+>>> +}
+>>> +
+>>> +static int __init loongson3_acpi_suspend_init(void)
+>>> +{
+>>> +#ifdef CONFIG_ACPI
+>>> +     acpi_status status;
+>>> +     uint64_t suspend_addr = 0;
+>>> +
+>>> +     if (acpi_disabled || acpi_gbl_reduced_hardware)
+>>> +             return 0;
+>>> +
+>>> +     acpi_write_bit_register(ACPI_BITREG_SCI_ENABLE, 1);
+>>> +     status = acpi_evaluate_integer(NULL, "\\SADR", NULL, &suspend_addr);
+>>> +     if (ACPI_FAILURE(status) || !suspend_addr) {
+>>> +             pr_err("ACPI S3 is not support!\n");
+>>> +             return -1;
+>>> +     }
+>>> +     loongson_sysconf.suspend_addr = (u64)phys_to_virt(PHYSADDR(suspend_addr));
+>>> +#endif
+>>> +     return 0;
+>>> +}
+>>> +
+>>> +device_initcall(loongson3_acpi_suspend_init);
+>>> diff --git a/arch/loongarch/power/suspend.c b/arch/loongarch/power/suspend.c
+>>> new file mode 100644
+>>> index 000000000000..b9fa0f9a9277
+>>> --- /dev/null
+>>> +++ b/arch/loongarch/power/suspend.c
+>>> @@ -0,0 +1,73 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * loongson-specific suspend support
+>>> + *
+>>> + * Author: Huacai Chen <chenhuacai@loongson.cn>
+>>> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+>>> + */
+>>> +#include <linux/acpi.h>
+>>> +#include <linux/pm.h>
+>>> +#include <linux/suspend.h>
+>>> +
+>>> +#include <asm/loongarch.h>
+>>> +#include <asm/loongson.h>
+>>> +#include <asm/setup.h>
+>>> +#include <asm/time.h>
+>>> +#include <asm/tlbflush.h>
+>>> +
+>>> +u64 loongarch_suspend_addr;
+>>> +
+>>> +struct saved_registers {
+>>> +     u32 ecfg;
+>>> +     u32 euen;
+>>> +     u64 pgd;
+>>> +     u64 kpgd;
+>>> +     u32 pwctl0;
+>>> +     u32 pwctl1;
+>>> +};
+>>> +static struct saved_registers saved_regs;
+>>> +
+>>> +static void arch_common_suspend(void)
+>>> +{
+>>> +     save_counter();
+>>> +     saved_regs.pgd = csr_read64(LOONGARCH_CSR_PGDL);
+>>> +     saved_regs.kpgd = csr_read64(LOONGARCH_CSR_PGDH);
+>>> +     saved_regs.pwctl0 = csr_read32(LOONGARCH_CSR_PWCTL0);
+>>> +     saved_regs.pwctl1 = csr_read32(LOONGARCH_CSR_PWCTL1);
+>>> +     saved_regs.ecfg = csr_read32(LOONGARCH_CSR_ECFG);
+>>> +     saved_regs.euen = csr_read32(LOONGARCH_CSR_EUEN);
+>>> +
+>>> +     loongarch_suspend_addr = loongson_sysconf.suspend_addr;
+>>> +}
+>>> +
+>>> +static void arch_common_resume(void)
+>>> +{
+>>> +     sync_counter();
+>>> +     local_flush_tlb_all();
+>>> +     csr_write64(per_cpu_offset(0), PERCPU_BASE_KS);
+>>> +     csr_write64(eentry, LOONGARCH_CSR_EENTRY);
+>>> +     csr_write64(eentry, LOONGARCH_CSR_MERRENTRY);
+>>> +     csr_write64(tlbrentry, LOONGARCH_CSR_TLBRENTRY);
+>>> +
+>>> +     csr_write64(saved_regs.pgd, LOONGARCH_CSR_PGDL);
+>>> +     csr_write64(saved_regs.kpgd, LOONGARCH_CSR_PGDH);
+>>> +     csr_write32(saved_regs.pwctl0, LOONGARCH_CSR_PWCTL0);
+>>> +     csr_write32(saved_regs.pwctl1, LOONGARCH_CSR_PWCTL1);
+>>> +     csr_write32(saved_regs.ecfg, LOONGARCH_CSR_ECFG);
+>>> +     csr_write32(saved_regs.euen, LOONGARCH_CSR_EUEN);
+>>> +}
+>>> +
+>>> +int loongarch_acpi_suspend(void)
+>>> +{
+>>> +     enable_gpe_wakeup();
+>>> +     enable_pci_wakeup();
+>>> +
+>>> +     arch_common_suspend();
+>>> +
+>>> +     /* processor specific suspend */
+>>> +     loongarch_suspend_enter();
+>>> +
+>>> +     arch_common_resume();
+>>> +
+>>> +     return 0;
+>>> +}
+>>> diff --git a/arch/loongarch/power/suspend_asm.S b/arch/loongarch/power/suspend_asm.S
+>>> new file mode 100644
+>>> index 000000000000..ff52c3aa09d9
+>>> --- /dev/null
+>>> +++ b/arch/loongarch/power/suspend_asm.S
+>>> @@ -0,0 +1,108 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +/*
+>>> + * Sleep helper for Loongson-3 sleep mode.
+>>> + *
+>>> + * Author: Huacai Chen <chenhuacai@loongson.cn>
+>>> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
+>>> + */
+>>> +
+>>> +#include <asm/asm.h>
+>>> +#include <asm/asmmacro.h>
+>>> +#include <asm/addrspace.h>
+>>> +#include <asm/loongarch.h>
+>>> +#include <asm/stackframe.h>
+>>> +
+>>> +     .text
+>>> +     .align  5
+>>> +
+>>> +/* preparatory stuff */
+>>> +.macro       SETUP_SLEEP
+>>> +     addi.d          sp, sp, -PT_SIZE
+>>> +     st.d            $r1, sp, PT_R1
+>>> +     st.d            $r2, sp, PT_R2
+>>> +     st.d            $r3, sp, PT_R3
+>>> +     st.d            $r4, sp, PT_R4
+>>> +     st.d            $r5, sp, PT_R5
+>>> +     st.d            $r6, sp, PT_R6
+>>> +     st.d            $r7, sp, PT_R7
+>>> +     st.d            $r8, sp, PT_R8
+>>> +     st.d            $r9, sp, PT_R9
+>>> +     st.d            $r10, sp, PT_R10
+>>> +     st.d            $r11, sp, PT_R11
+>>> +     st.d            $r20, sp, PT_R20
+>>> +     st.d            $r21, sp, PT_R21
+>>> +     st.d            $r22, sp, PT_R22
+>>> +     st.d            $r23, sp, PT_R23
+>>> +     st.d            $r24, sp, PT_R24
+>>> +     st.d            $r25, sp, PT_R25
+>>> +     st.d            $r26, sp, PT_R26
+>>> +     st.d            $r27, sp, PT_R27
+>>> +     st.d            $r28, sp, PT_R28
+>>> +     st.d            $r29, sp, PT_R29
+>>> +     st.d            $r30, sp, PT_R30
+>>> +     st.d            $r31, sp, PT_R31
+>>> +
+>>> +     la.pcrel        t0, acpi_saved_sp
+>>> +     st.d            sp, t0, 0
+>>> +.endm
+>>> +
+>>> +/* Sleep code for Loongson-3 */
+>>> +SYM_CODE_START(loongarch_suspend_enter)
+>>> +     SETUP_SLEEP
+>>> +     bl              __flush_cache_all
+>>> +
+>>> +     /* Pass RA and SP to BIOS */
+>>> +     addi.d          a1, sp, 0
+>>> +     la.pcrel        a0, loongarch_wakeup_start
+>>> +     la.pcrel        t0, loongarch_suspend_addr
+>>> +     ld.d            t0, t0, 0 /* Call BIOS's STR sleep routine */
+>>> +     jr              t0
+>>> +     nop
+>> Hi, Huacai,
 >>
->> We can continue registering the thermal with no trip points but then
->> still raise a message.
+>> For loongarch_suspend_enter() and loongarch_wakeup_start(), it is better to
+>> make them be more like C-style, that means it could obey LoongArch-psABI.
+>> Just alloc limited stack and store the ra, s* and fp registers.
+>> Additionally,
+>> the tp and the u0 should be saved, too. Combine
+>> loongarch_suspend_enter() and
+>> loongarch_suspend_enter() to one function and using 'jirl a0, t0, 0' to link
+>> them which indicate the control flow will return. These works make the
+>> control
+>> flow clarity. Finally use SYM_FUNC_START/END declare the new function.
+> Thank you for your comments, but you may misunderstand something about S3.
+> 1,  S3 sleep means come from kernel to BIOS, and S3 wakeup means come
+> from BIOS to kernel (it has a POST progress, all register context
+> lost). This is very different from a function call. When exception
+> handling we need to save all and restore all, S3 wakeup should do even
+> more.
+
+It's true I'm not familiar with S3 (almost the hardware working). It is
+special code control that S3 sleep from kernel to BIOS and wakeup
+from BIOS to kernel. But loongarch_acpi_suspend() calls 
+loongarch_suspend_enter()
+and the latter returns by loongarch_wakeup_start().
+(If there is other way to restore it, I'm seriously wrong.) The key
+point is the position after calling loongarch_suspend_enter() and
+before calling arch_common_resume(). We just keep this control flow
+is normally at this point. So, due to LoongArch-psABI, after calling
+loongarch_suspend_enter(), t* and a* can be changed. Actually, we
+just should take care of tp and u0.
+
+
+> 2, a0 (wakeup pc) and a1 (wakeup sp) are information passed to BIOS,
+> BIOS may store it in some place similar to NVRAM, it does not
+> naturally exist in the register after power up.
+> 3, What means combine  loongarch_suspend_enter() and loongarch_suspend_enter()?
+
+Just mistake, combine loongarch_suspend_enter and loongarch_wakeup_start,
+
+like follows,
+
++     /* Pass RA and SP to BIOS */
++     addi.d          a1, sp, 0
++     la.pcrel        a0, loongarch_wakeup_start
++     la.pcrel        t0, loongarch_suspend_addr
++     ld.d            t0, t0, 0 /* Call BIOS's STR sleep routine */
++     jr              t0
++     nop
++SYM_CODE_END(loongarch_suspend_enter)
++
++     .align 12
++
++SYM_CODE_START(loongarch_wakeup_start)
++     li.d            t0, CSR_DMW0_INIT       # UC, PLV0
++     csrwr           t0, LOONGARCH_CSR_DMWIN0
++     li.d            t0, CSR_DMW1_INIT       # CA, PLV0
++     csrwr           t0, LOONGARCH_CSR_DMWIN1
+
+--------change it to-------------->
+
+.align 12
+SYM_FUNC_START(loongarch_suspend_enter)
+...
++     /* Pass RA and SP to BIOS */
++     addi.d          a1, sp, 0
++     la.pcrel        t0, loongarch_suspend_addr
++     ld.d            t0, t0, 0 /* Call BIOS's STR sleep routine */
+*jirl a0, t0, 0*
++     li.d            t0, CSR_DMW0_INIT       # UC, PLV0
++     csrwr           t0, LOONGARCH_CSR_DMWIN0
++     li.d            t0, CSR_DMW1_INIT       # CA, PLV0
++     csrwr           t0, LOONGARCH_CSR_DMWIN1
+...
+
+> Huacai
+>
+>> Thanks,
 >>
->> However, a thermal zone without trip point does not really make sense
->> IMO. If I'm correct, the ACPI at least defines the critical temperature
->> as a non optional object.
-> 
-> I don't know about that, this is from one of my laptops, output
-> from "sensors" command:
-> 
-> acpitz-acpi-0
-> Adapter: ACPI interface
-> temp1:        +46.0°C  (crit = +99.0°C)
-> temp2:        +46.0°C
-> 
-> This temp2 looks like a temperature zone without trip point...
-
-Yeah, ACPI ...
-
-Mine is:
-
-acpi -tci
-Thermal 0: ok, 16.8 degrees C
-Thermal 0: trip point 0 switches to mode critical at temperature 20.8 
-degrees C
-Thermal 0: trip point 1 switches to mode hot at temperature 19.8 degrees C
-Thermal 1: ok, 16.8 degrees C
-Thermal 1: trip point 0 switches to mode critical at temperature 20.8 
-degrees C
-Thermal 1: trip point 1 switches to mode hot at temperature 19.8 degrees C
-
-:)
-
-> I guess Rafael might know for sure what is out there?
-> 
-> But if the idea is that DT want to mimic what ACPI is doing
-> then it seems to me that ACPI has thermal zones without
-> trip points.
-> 
->> Did you consider using hwmon instead of a thermal zone ?
-> 
-> The concept of "thermal zone" actually makes much more
-> sense for a battery since the thermistor is often not mounted
-> in the battery (at least not in this case) and is measuring
-> the proximity of the battery, not the battery per se.
-
-IMO, you are reinventing the wheel in the battery code.
-
-Why not use the cooling device psy_register_cooler()? And let the 
-thermal framework deal with the monitoring and the mitigation ?
-
-(cold trip point handling will have to stay in the current code)
-
->> Below a patch (not tested): one hand writing is painful
-> 
-> This works!
-> I can sign off the patch and send it if you like.
-
-Sure, no problem. May be see if that could be done more elegantly?
-
-> I would probably alter the warning text "please add trip
-> points to your DTS..."
-
-Ok
+>> Jinyang
+>>
+>>
+>>> +SYM_CODE_END(loongarch_suspend_enter)
+>>> +
+>>> +.macro SETUP_WAKEUP
+>>> +     ld.d            $r1, sp, PT_R1
+>>> +     ld.d            $r2, sp, PT_R2
+>>> +     ld.d            $r3, sp, PT_R3
+>>> +     ld.d            $r4, sp, PT_R4
+>>> +     ld.d            $r5, sp, PT_R5
+>>> +     ld.d            $r6, sp, PT_R6
+>>> +     ld.d            $r7, sp, PT_R7
+>>> +     ld.d            $r8, sp, PT_R8
+>>> +     ld.d            $r9, sp, PT_R9
+>>> +     ld.d            $r10, sp, PT_R10
+>>> +     ld.d            $r11, sp, PT_R11
+>>> +     ld.d            $r20, sp, PT_R20
+>>> +     ld.d            $r21, sp, PT_R21
+>>> +     ld.d            $r22, sp, PT_R22
+>>> +     ld.d            $r23, sp, PT_R23
+>>> +     ld.d            $r24, sp, PT_R24
+>>> +     ld.d            $r25, sp, PT_R25
+>>> +     ld.d            $r26, sp, PT_R26
+>>> +     ld.d            $r27, sp, PT_R27
+>>> +     ld.d            $r28, sp, PT_R28
+>>> +     ld.d            $r29, sp, PT_R29
+>>> +     ld.d            $r30, sp, PT_R30
+>>> +     ld.d            $r31, sp, PT_R31
+>>> +.endm
+>>> +
+>>> +     /* This is where we return upon wakeup.
+>>> +      * Reload all of the registers and return.
+>>> +      */
+>>> +     .align 12
+>>> +
+>>> +SYM_CODE_START(loongarch_wakeup_start)
+>>> +     li.d            t0, CSR_DMW0_INIT       # UC, PLV0
+>>> +     csrwr           t0, LOONGARCH_CSR_DMWIN0
+>>> +     li.d            t0, CSR_DMW1_INIT       # CA, PLV0
+>>> +     csrwr           t0, LOONGARCH_CSR_DMWIN1
+>>> +
+>>> +     la.abs          t0, 0f
+>>> +     jr              t0
+>>> +0:
+>>> +     la.pcrel        t0, acpi_saved_sp
+>>> +     ld.d            sp, t0, 0
+>>> +     SETUP_WAKEUP
+>>> +     addi.d          sp, sp, PT_SIZE
+>>> +     jr              ra
+>>> +SYM_CODE_END(loongarch_wakeup_start)
+>>
 
