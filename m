@@ -2,110 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83455611E39
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A161611E65
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJ1XnC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 19:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41570 "EHLO
+        id S229974AbiJ1X50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 19:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbiJ1XnB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:43:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEC6F114DC6
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 16:43:00 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S229944AbiJ1X5Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:57:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003471C77DA;
+        Fri, 28 Oct 2022 16:57:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 574396602942;
-        Sat, 29 Oct 2022 00:42:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667000579;
-        bh=JYCd0OZ4huxkD0mKEGZ6en4V++w8Mw/2eSqNicOtyvw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ez0jf3lYWD0CWa4bFrx0Yy/RWDrgDb6lbK+tzOPnt6LRIbD4KzRkawkWYhw7+sVfU
-         j749Jrn5BCCxzZW6sCd43GctgKwMKKkSL+FoEFFVPVHClg1TuxZaJtDfW/wQq6d7UW
-         XqWd+kRtRUYkznPuRtdIwURuaQZ54myAZoXe9brsE/gSO9QmdZefn9Eyx/0BlJnDj+
-         24L8/8B09f2Ih4QWuhvgBINyKqk3EKiS/PqUOu42LXwW9pu5WlbixjmBXIwMtJ/46T
-         Br1S/b16gSJaOnGHYh/TqmrzC0Ml5MPB6nsTEB+C14HY5pUqXT2JHjJSw2nOARvojG
-         frWi1R3AA9zsg==
-Received: by mercury (Postfix, from userid 1000)
-        id 672861060757; Sat, 29 Oct 2022 01:42:56 +0200 (CEST)
-Date:   Sat, 29 Oct 2022 01:42:56 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Marek Vasut <marex@denx.de>
-Cc:     linux-pm@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>
-Subject: Re: [PATCH v2 1/7] power: supply: bq25890: Document
- POWER_SUPPLY_PROP_CURRENT_NOW
-Message-ID: <20221028234256.7f73i2w4yawfnk7i@mercury.elektranox.org>
-References: <20221014172427.128512-1-marex@denx.de>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2ktrciwj66xurkz6"
-Content-Disposition: inline
-In-Reply-To: <20221014172427.128512-1-marex@denx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F0262AF7;
+        Fri, 28 Oct 2022 23:57:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 43050C433D6;
+        Fri, 28 Oct 2022 23:57:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667001443;
+        bh=KsYuk4vSab1tim0O0Xj55qxhUwIRMGlontNk9l00ZV8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=jD15AB7zFKzHGXVJORQc1zfReeJrs3hViDu/DgtIpXBumkS2znHLviC48uIVeMtLy
+         E7PePFSXtlU87aZRHt49q4TkrW4M99qcJBOqJW4735csucmfgpRJGIPBTHAuaZ6ZfX
+         q6XFxjY4R1nhP2flEoP81m5TS+TxtGil19WFfeClMpS3BB1bdszxKRdKeOTgIGbS/g
+         PqDq+x+JpapyCHf8YOFDjYQMBzcnq9R5WUzeHbnXvO2arz791Rqm8/RbsQ2yK2UklJ
+         VJysXI8aidLjuAqd5zKBJaJe4gGpenRjYlqkuW+qeAs1B91z/2UocvGwEzLrr98FC9
+         Wh1Lcb/K4gx9g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26D9AC4314C;
+        Fri, 28 Oct 2022 23:57:23 +0000 (UTC)
+Subject: Re: [GIT PULL] Power management fixes for v6.1-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
+References: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.1-rc3
+X-PR-Tracked-Commit-Id: 6f257934ed6170ed0094149e0e1bac09f7997103
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 6b872a5ecece462ba02c8cad1c0203583631db2b
+Message-Id: <166700144315.1674.3221315977917085505.pr-tracker-bot@kernel.org>
+Date:   Fri, 28 Oct 2022 23:57:23 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The pull request you sent on Fri, 28 Oct 2022 17:17:33 +0200:
 
---2ktrciwj66xurkz6
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.1-rc3
 
-Hi,
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/6b872a5ecece462ba02c8cad1c0203583631db2b
 
-On Fri, Oct 14, 2022 at 07:24:21PM +0200, Marek Vasut wrote:
-> Document that POWER_SUPPLY_PROP_CURRENT_NOW really does refer to ADC-samp=
-led
-> immediate battery charge current I_BAT , since the meaning is not clear w=
-ith
-> all the currents which might be measured by charger chips.
->=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Marek Vasut <marex@denx.de>
-> ---
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: Hans de Goede <hdegoede@redhat.com>
-> Cc: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
-> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
-> To: linux-pm@vger.kernel.org
-> ---
-> V2: Add RB from Hans
-> ---
+Thank you!
 
-Thanks, I queued the whole series.
-
--- Sebastian
-
---2ktrciwj66xurkz6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNcaPkACgkQ2O7X88g7
-+po7iA//Xxij/ZLgfygRG+BZSPGDyy1uWEo0I/FratuPuahGnRmspMuxFbwg9XAd
-DzdL4nykmgxXhVxgQUs5StcJsn8hFMLdO8RUERzMQ/m/WelX9SEnp6DyrAsgLI53
-anb7vN+VO9NmG07Kv/toGE5vYxDG4d21hJhNP7jHKtlslojw+OXvND6xwzHK+r/s
-J/LC2Cg1FGDBxd0QR0RLERsgh/84DH2uk8RHHtNBE5+9ubx/JW3EiOpvCBFW/24Y
-Cp9Mp3OLKQg8LgXFu+yVOKz2OR9TQfMmMfcMheNbKIlBFMeSuUSKtrVWIPTTgadl
-CB0ixOmNhfgW0S9S2ACHnermztShXGchQYcy2gkugS3A+o5/iMJSZ5iY3HOCSoUX
-nfcXPAKRnZ/90LeO8I74F4jmZNmUV4jW0b/2O7RxljkRPeeQ6/AZ+u1cF7hs5l2k
-fxnMNFge8gceLQcVZ0ZgZdN14gl1F2cOPybKNuyz0pbFbPxyBfgnjVBapVmoNwxP
-d0VR0x6M2xBvB8Q7WMgDsqqJPucneVJBl3L6yoPEwo2v9RIjwqfY8oCe92RJT/tF
-UfiOp02S+1JCSGNf4fcapQQd5uwxiHXGhVEIbt4qWNNwIyhIO6ifL3/4ZWKGW1O8
-BOIH62bx5WziK8G4BMOvHnrrf8IKS1IWPEX6M0IOjOtpsBxf4dM=
-=bW7s
------END PGP SIGNATURE-----
-
---2ktrciwj66xurkz6--
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
