@@ -2,54 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA777611990
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 19:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F6606119A0
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 19:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiJ1Rp0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 13:45:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54736 "EHLO
+        id S229689AbiJ1RvN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 13:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230218AbiJ1RpU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 13:45:20 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F07150FAC;
-        Fri, 28 Oct 2022 10:45:19 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id o8so4536445qvw.5;
-        Fri, 28 Oct 2022 10:45:19 -0700 (PDT)
+        with ESMTP id S229515AbiJ1RvM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 13:51:12 -0400
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3646772EF3
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 10:51:11 -0700 (PDT)
+Received: by mail-qk1-f176.google.com with SMTP id j21so3909473qkk.9
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 10:51:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RZQHAqFn7xHc+L6KaGyhnBY2IDdvQwbbysAINIV2Tus=;
-        b=B/LBiLbbUJqVRBoeAS0dCssIbAb1vT7sgkabMaWw7Mjab0GDI9toP4AlmkvvP7eQ44
-         Ex0Y72VNBcvvWKWP1sLICcMGHVfPXssjWr228NuipEPa9STALc6PbhVAxm0QnBYei/vP
-         9GkrHJRBbbi5JGg4sSA0YAvnHn1DgruwvOZepHFYngcq8UD6E9pQZ9hEz2ZIkHSiw364
-         aFhQsDFIQudeUrgg8J+Joo0zLqjuabYxIdrwK2rabwuG4aCwkgPwPxYoR/9a6lECA8Yb
-         Lx9VKiarnIYNINnBeQp+5AXJOhS3WlhqVc6GISEu2010bvdWRjszdgnQCIWas0gv6MBy
-         T83A==
-X-Gm-Message-State: ACrzQf0zePYJSQ/hzGmnboO35mJ35bhu0h7ycVdOB49LLMjCCa04J0tp
-        2dWIK3CECpjNz0jqMcsx9d2pnD+3+0d3WoqTLUc=
-X-Google-Smtp-Source: AMsMyM5kQXQVWqsSU6Ox3yyFrYUf5omerGPpDbFWWyIuatB8czIAQj/JR/xRrizGLcjX4nFjOGe5rFrWtyomOZrWpOk=
-X-Received: by 2002:ad4:596b:0:b0:4b1:ee66:1cb8 with SMTP id
- eq11-20020ad4596b000000b004b1ee661cb8mr554004qvb.3.1666979118329; Fri, 28 Oct
- 2022 10:45:18 -0700 (PDT)
+        bh=kwLbVyCHpeoUl2n6bydmVhbfkQylsgv+UGSFppXPI/w=;
+        b=gS5e9MQSmbyCVVwU+D5C2AQqrCc/IBJUYp51RZwTTr3YZiz1x4+VXQ5ISpvkNlx8X/
+         7CoexBsm2HRCW47K5Y1JMuVQ+ZoPoAyZ4EB7NkCsr8n3r/wZfUDNbmqjHU2551k8zZdj
+         58I99VELS0vQ2jd+c+LhuUBIe8vk+2XIVPrw5NAqnVLw5McEOAu1wX9HwihmuY1J44ny
+         IPZauMvBetBG5bDOvjfwDGxC6mqgST8aVmXB3Ody/AJIoL44U0TUjoWAcucHBPbnyr8u
+         SKgwv2fXNZPCy0/EWador38HArELmwekb3j9PjiB1hvvQs3xHF1WK5Qf1eyhC1GemwA6
+         ACEg==
+X-Gm-Message-State: ACrzQf0ftM0mqwvSaPhAdhjlwLe9Ra+5ZuQHkKhLwvC8riquURfQoECc
+        iRFE8ouvnFNMVd7ohDasshI1tE91QN20oiI7C98=
+X-Google-Smtp-Source: AMsMyM69bgB87sQ1K2vOjb+uP3T0M9lR/icJhNhqelUd77f7jafTC69brMZxajPsLDldpIKFt0R/I0ybAAJsWq/zm9k=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr303639qkl.443.1666979470373; Fri, 28 Oct
+ 2022 10:51:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221027150525.753064657@goodmis.org> <20221027150926.394670044@goodmis.org>
-In-Reply-To: <20221027150926.394670044@goodmis.org>
+References: <20221028114433.51839-1-linus.walleij@linaro.org>
+In-Reply-To: <20221028114433.51839-1-linus.walleij@linaro.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 19:45:07 +0200
-Message-ID: <CAJZ5v0j_4xMY1fGY7ocbOzbJKdHDRUoY0OgyvQ=JCeNy_FOWDA@mail.gmail.com>
-Subject: Re: [RFC][PATCH v2 07/31] timers: PM: Use del_timer_shutdown()
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Date:   Fri, 28 Oct 2022 19:50:59 +0200
+Message-ID: <CAJZ5v0gVSZo2J2TO_0cL01P4EGLDOQ8ZkzZi=zLjPrO03WMP7g@mail.gmail.com>
+Subject: Re: [PATCH] thermal/of: Accept but warn about TZ without trip
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amit.kucheria@verdurent.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
@@ -62,50 +58,61 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 5:09 PM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Fri, Oct 28, 2022 at 1:46 PM Linus Walleij <linus.walleij@linaro.org> wrote:
 >
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> From: Daniel Lezcano <daniel.lezcano@linaro.org>
 >
-> Instead of open coding making the timer look like it was not registered by
-> setting the function pointer to NULL, call del_timer_shutdown() that does
-> the same thing.
+> The thermal OF core used to accept the creation of thermal zones
+> without trip points, but recent changes made it error out as
+> thermal zones should according to specification have trip
+> points.
 >
-> Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+> Relax the requirements so we still create those thermal zones
+> but make a request to update the DTS in the kernel log.
 >
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-Please add "wakeup:" to the subject after "PM:".
-
-Apart from this
-
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-
+> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 > ---
->  drivers/base/power/wakeup.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+>  drivers/thermal/thermal_of.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-> index 7cc0c0cf8eaa..c690f6c0d670 100644
-> --- a/drivers/base/power/wakeup.c
-> +++ b/drivers/base/power/wakeup.c
-> @@ -202,12 +202,7 @@ void wakeup_source_remove(struct wakeup_source *ws)
->         raw_spin_unlock_irqrestore(&events_lock, flags);
->         synchronize_srcu(&wakeup_srcu);
+> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+> index d4b6335ace15..f683cbb4a72a 100644
+> --- a/drivers/thermal/thermal_of.c
+> +++ b/drivers/thermal/thermal_of.c
+> @@ -592,8 +592,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+>         struct thermal_zone_params *tzp;
+>         struct thermal_zone_device_ops *of_ops;
+>         struct device_node *np;
+> -       int delay, pdelay;
+> -       int ntrips, mask;
+> +       int delay = 0, pdelay = 0;
+> +       int ntrips = 0, mask = 0;
+>         int ret;
 >
-> -       del_timer_sync(&ws->timer);
-> -       /*
-> -        * Clear timer.function to make wakeup_source_not_registered() treat
-> -        * this wakeup source as not registered.
-> -        */
-> -       ws->timer.function = NULL;
-> +       del_timer_shutdown(&ws->timer);
->  }
->  EXPORT_SYMBOL_GPL(wakeup_source_remove);
+>         of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
+> @@ -610,7 +610,9 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+>         trips = thermal_of_trips_init(np, &ntrips);
+>         if (IS_ERR(trips)) {
+>                 pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
+> -               return ERR_CAST(trips);
+> +               pr_err("Trip points are compulsory for thermal zones, please add them to the DTS\n");
+> +               trips = NULL;
+> +               goto out_register;
+>         }
 >
+>         ret = thermal_of_monitor_init(np, &delay, &pdelay);
+> @@ -636,6 +638,7 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
+>
+>         mask = GENMASK_ULL((ntrips) - 1, 0);
+>
+> +out_register:
+>         tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
+>                                                      mask, data, of_ops, tzp,
+>                                                      pdelay, delay);
 > --
-> 2.35.1
+
+Applied, but I'll push it for -rc4.
+
+Thanks!
