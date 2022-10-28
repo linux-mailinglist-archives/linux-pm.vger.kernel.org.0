@@ -2,54 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 994676119E2
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 20:09:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E4716119EA
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 20:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJ1SJb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 14:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51452 "EHLO
+        id S229927AbiJ1SKo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 14:10:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiJ1SJ2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 14:09:28 -0400
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 415BB2679;
-        Fri, 28 Oct 2022 11:09:27 -0700 (PDT)
-Received: by mail-qv1-f46.google.com with SMTP id n18so4567619qvt.11;
-        Fri, 28 Oct 2022 11:09:27 -0700 (PDT)
+        with ESMTP id S230088AbiJ1SKi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 14:10:38 -0400
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4748D22D;
+        Fri, 28 Oct 2022 11:10:35 -0700 (PDT)
+Received: by mail-qk1-f174.google.com with SMTP id k4so1064259qkj.8;
+        Fri, 28 Oct 2022 11:10:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jg4lijVp4M44rm7xpeYVgDNZw9lPyznKpJvDGVTFJGA=;
-        b=VrHb1hV/N4h95/kp/Us7QTFZdhM/RkiM21x7Vomr5bnAuk0qRhVVli+X0Bm6EAH/X0
-         ig7RZ7+m+7VKAfi8ZSjS+BJGeu7Om5Maf0CJTb7yHisosffTGkwRXwLf9Loo2OYqjZcn
-         c9dbdLbZ5AVFsaHu35R8xlUPflmGqCa2QXtaiXU9i/Wa8JLxZc2jDt24sqGTaL0Zvcrm
-         fSSj3Ap02b4B1kHBv6VCOox49eaE4a+HRm9vMksYTuD0bSj/saFnTVrLPQJBsh82kd1Y
-         uNRMkjkzGfCQtcrx0LNv8TRD8e6ztfO7aiWW1lXPmnlldOHErX+awUG6D8K/JizQI6xL
-         b7rg==
-X-Gm-Message-State: ACrzQf1djRtPoG4McQ+WBhcvAuu8aj55nVaWmrwZg3IcSkWX4QBR6rBy
-        S8EiDNM0I8AxMwDaSTntTZHpuTrv3llSJKkyCIOdbEdK
-X-Google-Smtp-Source: AMsMyM4Hxqm3WhctEhuDjsH3P7E7+gQLMNNDrYTdWP0j8coHS75zlgsS8GSIn8bkkj9G1/8vQ+/w5iVIO+56X1S5vpo=
-X-Received: by 2002:a0c:e44d:0:b0:4bb:6814:cacc with SMTP id
- d13-20020a0ce44d000000b004bb6814caccmr753711qvm.73.1666980566349; Fri, 28 Oct
- 2022 11:09:26 -0700 (PDT)
+        bh=CcLuxRQs5tABHxAs+Y7/Lan+bBcM/F9sLFO2LCCg8pI=;
+        b=fFRnJD+ZWuW4TVrnQD3vavTqjwCWgCugY3lLjK6PBU5t72rZM4bv9yno4wSkk/aTej
+         GLTlxeI6F3NONCV/e9xsiSwvJsHgHi06X8F0iyO9RXwMbC56wcm/rEOc6W68q0/wOTrE
+         cyS+JMDZ5p661J/LVsdprqs2SM7eY0hDQBjx49GNZKQVN3yRDtzCGz8BxplBVjm0YVeC
+         rkcwNZLLtUcOvc1ZsL8amoGbY0LkfzIgqert4p15Q80yQlVtiuKf6JOIZUZMroo9r5t9
+         rNEH1K9zMkQtqWSSxJIdMD55fEytZXaKiPHIfXUYG5xUfb4DhpjTToC6HK20DnFdYRK4
+         nGtw==
+X-Gm-Message-State: ACrzQf37rJm6sPrw9Qf9mAgxeZyUN6S/KPB9RYHbqF/cJdF7SlhvaCTC
+        g3XiALyFQJL9/6LkMxCJATBm74NswaUnvjWzNqg=
+X-Google-Smtp-Source: AMsMyM54EVSBeljNE55w6SiZvJVeDXIdVmQr3Abl3AV8IYuAQ+bIargizIY/e8fCVgrBAre4T1vZ4n1HAXQwNX4+KBg=
+X-Received: by 2002:a37:b1c2:0:b0:6fa:1185:4dbf with SMTP id
+ a185-20020a37b1c2000000b006fa11854dbfmr389886qkf.764.1666980634716; Fri, 28
+ Oct 2022 11:10:34 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221020115513.93809-1-ulf.hansson@linaro.org>
- <CAJZ5v0iPaP60OxzS4RQv8-JO1-cuv=JAW8zHwjCbyVXgLDa-RA@mail.gmail.com> <CAPDyKFpo_JhpGRZwJExMxPoit7yzp_LByfUEbkkLZxgUdNGRFw@mail.gmail.com>
-In-Reply-To: <CAPDyKFpo_JhpGRZwJExMxPoit7yzp_LByfUEbkkLZxgUdNGRFw@mail.gmail.com>
+References: <20221021151013.148457-1-ulf.hansson@linaro.org> <20221025114308.4kevtiz5heoekgz3@bogus>
+In-Reply-To: <20221025114308.4kevtiz5heoekgz3@bogus>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 28 Oct 2022 20:09:15 +0200
-Message-ID: <CAJZ5v0iQmOZAV_zXq=GkDsf3yc=LMhnfdTc3sozfC4w+APeEPw@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: psci: Extend information in log about OSI/PC mode
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org,
-        Johan Hovold <johan@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
+Date:   Fri, 28 Oct 2022 20:10:23 +0200
+Message-ID: <CAJZ5v0hQj2OgpCj-6REuCYwMn+qoHc1TXQ+HjtqL8JcL8XPQRg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpuidle: dt: Return the correct numbers of parsed
+ idle states
+To:     Sudeep Holla <sudeep.holla@arm.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
@@ -62,40 +60,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 3:18 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Tue, Oct 25, 2022 at 1:43 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
 >
-> On Tue, 25 Oct 2022 at 15:16, Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Fri, Oct 21, 2022 at 05:10:12PM +0200, Ulf Hansson wrote:
+> > While we correctly skips to initialize an idle state from a disabled idle
+> > state node in DT, the returned value from dt_init_idle_driver() don't get
+> > adjusted accordingly. Instead the number of found idle state nodes are
+> > returned, while the callers are expecting the number of successfully
+> > initialized idle states from DT.
 > >
-> > On Thu, Oct 20, 2022 at 1:55 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > It's useful to understand whether we are using OS-initiated (OSI) mode or
-> > > Platform Coordinated (PC) mode, when initializing the CPU PM domains.
-> > > Therefore, let's extend the print in the log after a successful probe with
-> > > this information.
-> > >
-> > > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > > ---
-> > >  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
-> > >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > index 821984947ed9..c80cf9ddabd8 100644
-> > > --- a/drivers/cpuidle/cpuidle-psci-domain.c
-> > > +++ b/drivers/cpuidle/cpuidle-psci-domain.c
-> > > @@ -181,7 +181,8 @@ static int psci_cpuidle_domain_probe(struct platform_device *pdev)
-> > >         if (ret)
-> > >                 goto remove_pd;
-> > >
-> > > -       pr_info("Initialized CPU PM domain topology\n");
-> > > +       pr_info("Initialized CPU PM domain topology using %s mode\n",
-> > > +               use_osi ? "OSI" : "PC");
-> > >         return 0;
-> > >
-> > >  put_node:
-> > > --
+> > This leads to cpuidle drivers unnecessarily continues to initialize their
+> > idle state specific data. Moreover, in the case when all idle states have
+> > been disabled in DT, we would end up registering a cpuidle driver, rather
+> > than relying on the default arch specific idle call.
 > >
-> > Am I expected to pick up this one?
 >
-> Yes, please!
+> Makes sense.
+>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
 
-Done, thanks!
+Applied along with the [2/2] as 6.2 material, thanks!
