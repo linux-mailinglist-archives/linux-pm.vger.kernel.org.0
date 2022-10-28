@@ -2,323 +2,383 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3DBB610B40
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 09:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA338610B45
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 09:27:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiJ1H0D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 03:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51396 "EHLO
+        id S229602AbiJ1H1p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 03:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiJ1H0C (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 03:26:02 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0ECBCABF3
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 00:26:00 -0700 (PDT)
-Received: from loongson.cn (unknown [111.9.175.10])
-        by gateway (Coremail) with SMTP id _____8DxfbcHhFtjJAsDAA--.6603S3;
-        Fri, 28 Oct 2022 15:25:59 +0800 (CST)
-Received: from [10.136.12.12] (unknown [111.9.175.10])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dxr+AFhFtjJD0GAA--.22104S3;
-        Fri, 28 Oct 2022 15:25:58 +0800 (CST)
-Subject: Re: [PATCH 2/2] LoongArch: Add hibernation (ACPI S4) support
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-References: <20221028023829.4030984-1-chenhuacai@loongson.cn>
- <20221028023829.4030984-2-chenhuacai@loongson.cn>
-From:   Jinyang He <hejinyang@loongson.cn>
-Message-ID: <61fdb0b1-d413-1fa4-5dde-748db84c5994@loongson.cn>
-Date:   Fri, 28 Oct 2022 15:25:57 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S230081AbiJ1H1m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 03:27:42 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0FC1B6CB5
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 00:27:41 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q1so4111699pgl.11
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 00:27:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WGyW0Bb4dZNWJ26cqlQ7MbFHewGbpJT4dP9GrPwuNv8=;
+        b=Yr65ahPFnZ+lGCbNaPS6S6o7jrsxgiXwrttIuIy9obdu4rfxRLRwqC3FKNaVjajmsS
+         vi63Cy8g5nKDbPo0pZIBIwPfUKkIYzxw21XZbLbMTALLF2VFZPaF0TiAF1qpPyBPbVbQ
+         wTORT4PeXUJBFSX6gDYIsIu4KSqLp4s6ACgIc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WGyW0Bb4dZNWJ26cqlQ7MbFHewGbpJT4dP9GrPwuNv8=;
+        b=qKcwT/P92j4mmmRScNQpkqGyCnkclPsHZfwjUl0D8far7aU1gunt8dX3U+rX4w05Dr
+         X56P3EMY7yF6MTg51gsq8l3nNqGCgqhU+nnRvS7jAHasXP+0JhL1q83lYGPda+PvfOQd
+         vU/vT+fHeskFyDJydW5fIRdXKqmwHYxWoDD/G5SQrHW3b1NybwUbnHm61slPhUpruSCO
+         K/s2s5Ow02bmbldETb3UuH+oLfYoA/vBcPBcXSXTyuZHxsHdzibwqrV/4bbss//VvU4m
+         fAb3rPOiXSOC1+HFe8EnhsKBamJr5NgvJdI+UjjG/GpJ9v66unPqRDBBxQlQ420xI318
+         r42g==
+X-Gm-Message-State: ACrzQf23yoNEYDnXhLMw6uQxRx/KmAG/t9TYH1f135mLkN/TqXoYHiob
+        Ktb7FU7N2kgS1DZTFr06H1doNQ==
+X-Google-Smtp-Source: AMsMyM6zZiD+wD0VrwaTi3fOONqQpKG3KDpL/ag/KEKX4kR3I5dg56OreW5LagTpDi7mdmGRPW1z8A==
+X-Received: by 2002:a63:950d:0:b0:46e:d655:b377 with SMTP id p13-20020a63950d000000b0046ed655b377mr29241343pgd.191.1666942060865;
+        Fri, 28 Oct 2022 00:27:40 -0700 (PDT)
+Received: from [192.168.0.168] ([103.99.10.63])
+        by smtp.gmail.com with ESMTPSA id d9-20020a170902654900b001753654d9c5sm2357406pln.95.2022.10.28.00.27.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 28 Oct 2022 00:27:39 -0700 (PDT)
+Message-ID: <d58aeb94-f6d8-5b15-b400-0798e40d51b1@linuxfoundation.org>
+Date:   Fri, 28 Oct 2022 01:27:33 -0600
 MIME-Version: 1.0
-In-Reply-To: <20221028023829.4030984-2-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH V4 1/4] selftests: amd-pstate: Modify amd-pstate-ut.sh to
+ basic.sh.
+To:     Meng Li <li.meng@amd.com>, Huang Rui <ray.huang@amd.com>,
+        linux-pm@vger.kernel.org
+Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221024013356.1639489-1-li.meng@amd.com>
+ <20221024013356.1639489-2-li.meng@amd.com>
 Content-Language: en-US
-X-CM-TRANSID: AQAAf8Dxr+AFhFtjJD0GAA--.22104S3
-X-CM-SenderInfo: pkhmx0p1dqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW3GFy3CrW8Wr47Kw18Gw48Zwb_yoW3Xr17pr
-        yDAF4kJ3yv9Fn7Jr93t34UZrn8Jw4kKw43Wa43CryxJF17Xrn8Aw18Kr98XF1rtw48Cr10
-        vr1fK3ya9F47KaDanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAa
-        w2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62
-        AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCa
-        FVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2
-        IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI
-        42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42
-        IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280
-        aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221024013356.1639489-2-li.meng@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Huacai,
-
-
-On 2022/10/28 上午10:38, Huacai Chen wrote:
-> Add hibernation (Suspend to Disk, aka ACPI S4) support for LoongArch.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+On 10/23/22 19:33, Meng Li wrote:
+> Modify amd-pstate-ut.sh to basic.sh.
+> The purpose of this modification is to facilitate the subsequent
+> addition of gitsource, tbench and other tests.
+> Then you can specify test case in kselftest/amd-pstate, for example:
+> sudo ./run.sh -c basic, this command only test basic kernel funcitions.
+> The detail please run the below script.
+> ./run.sh --help
+> 
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
 > ---
->   arch/loongarch/Kconfig               |  3 ++
->   arch/loongarch/kernel/asm-offsets.c  | 12 +++++
->   arch/loongarch/kernel/reset.c        |  2 +
->   arch/loongarch/kernel/setup.c        |  5 ++
->   arch/loongarch/power/Makefile        |  1 +
->   arch/loongarch/power/hibernate.c     | 58 ++++++++++++++++++++++++
->   arch/loongarch/power/hibernate_asm.S | 68 ++++++++++++++++++++++++++++
->   7 files changed, 149 insertions(+)
->   create mode 100644 arch/loongarch/power/hibernate.c
->   create mode 100644 arch/loongarch/power/hibernate_asm.S
->
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 0df102401d1d..1943f840e494 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -521,6 +521,9 @@ menu "Power management options"
->   config ARCH_SUSPEND_POSSIBLE
->   	def_bool y
+>   tools/testing/selftests/amd-pstate/Makefile   |   3 +-
+>   .../selftests/amd-pstate/amd-pstate-ut.sh     |  56 -------
+>   tools/testing/selftests/amd-pstate/basic.sh   |  38 +++++
+>   tools/testing/selftests/amd-pstate/run.sh     | 142 ++++++++++++++++++
+>   4 files changed, 182 insertions(+), 57 deletions(-)
+>   delete mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+>   create mode 100755 tools/testing/selftests/amd-pstate/basic.sh
+
+Is there a reason to delete followed by a create?  It is cleaner to rename amd-pstate-ut.sh
+it to basic.sh first and then make changes.
+
+>   create mode 100755 tools/testing/selftests/amd-pstate/run.sh
+> 
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 199867f44b32..6f4c7b01e3bb 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -4,6 +4,7 @@
+>   # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+>   all:
 >   
-> +config ARCH_HIBERNATION_POSSIBLE
-> +	def_bool y
-> +
->   source "kernel/power/Kconfig"
->   source "drivers/acpi/Kconfig"
+> -TEST_PROGS := amd-pstate-ut.sh
+> +TEST_PROGS := run.sh
+> +TEST_FILES := basic.sh
 >   
-> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-> index bdd88eda9513..4ef494577813 100644
-> --- a/arch/loongarch/kernel/asm-offsets.c
-> +++ b/arch/loongarch/kernel/asm-offsets.c
-> @@ -257,3 +257,15 @@ void output_smpboot_defines(void)
->   	BLANK();
->   }
->   #endif
-> +
-> +#ifdef CONFIG_HIBERNATION
-> +void output_pbe_defines(void)
-> +{
-> +	COMMENT(" Linux struct pbe offsets. ");
-> +	OFFSET(PBE_ADDRESS, pbe, address);
-> +	OFFSET(PBE_ORIG_ADDRESS, pbe, orig_address);
-> +	OFFSET(PBE_NEXT, pbe, next);
-> +	DEFINE(PBE_SIZE, sizeof(struct pbe));
-> +	BLANK();
-> +}
-> +#endif
-> diff --git a/arch/loongarch/kernel/reset.c b/arch/loongarch/kernel/reset.c
-> index 8c82021eb2f4..cdf021ff6214 100644
-> --- a/arch/loongarch/kernel/reset.c
-> +++ b/arch/loongarch/kernel/reset.c
-> @@ -15,6 +15,7 @@
->   #include <acpi/reboot.h>
->   #include <asm/idle.h>
->   #include <asm/loongarch.h>
-> +#include <asm/loongson.h>
->   
->   void (*pm_power_off)(void);
->   EXPORT_SYMBOL(pm_power_off);
-> @@ -42,6 +43,7 @@ void machine_power_off(void)
->   	preempt_disable();
->   	smp_send_stop();
->   #endif
-> +	enable_pci_wakeup();
->   	do_kernel_power_off();
->   #ifdef CONFIG_EFI
->   	efi.reset_system(EFI_RESET_SHUTDOWN, EFI_SUCCESS, 0, NULL);
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-> index 96b6cb5db004..3c8bc250f4e2 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -28,6 +28,7 @@
->   #include <linux/sizes.h>
->   #include <linux/device.h>
->   #include <linux/dma-map-ops.h>
-> +#include <linux/suspend.h>
->   #include <linux/swiotlb.h>
->   
->   #include <asm/addrspace.h>
-> @@ -312,6 +313,10 @@ static void __init arch_mem_init(char **cmdline_p)
->   
->   	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
->   
-> +	/* Reserve for hibernation. */
-> +	register_nosave_region(PFN_DOWN(__pa_symbol(&__nosave_begin)),
-> +				   PFN_UP(__pa_symbol(&__nosave_end)));
-> +
->   	memblock_dump_all();
->   
->   	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
-> diff --git a/arch/loongarch/power/Makefile b/arch/loongarch/power/Makefile
-> index 6740117decaa..58151d003e40 100644
-> --- a/arch/loongarch/power/Makefile
-> +++ b/arch/loongarch/power/Makefile
-> @@ -1,3 +1,4 @@
->   obj-y	+= platform.o
->   
->   obj-$(CONFIG_SUSPEND)		+= suspend.o suspend_asm.o
-> +obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate_asm.o
-> diff --git a/arch/loongarch/power/hibernate.c b/arch/loongarch/power/hibernate.c
-> new file mode 100644
-> index 000000000000..32dae9ef311a
+>   include ../lib.mk
+> diff --git a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh b/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+> deleted file mode 100755
+> index f8e82d91ffcf..000000000000
+> --- a/tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+> +++ /dev/null
+> @@ -1,56 +0,0 @@
+> -#!/bin/sh
+> -# SPDX-License-Identifier: GPL-2.0
+> -
+> -# amd-pstate-ut is a test module for testing the amd-pstate driver.
+> -# It can only run on x86 architectures and current cpufreq driver
+> -# must be amd-pstate.
+> -# (1) It can help all users to verify their processor support
+> -# (SBIOS/Firmware or Hardware).
+> -# (2) Kernel can have a basic function test to avoid the kernel
+> -# regression during the update.
+> -# (3) We can introduce more functional or performance tests to align
+> -# the result together, it will benefit power and performance scale optimization.
+> -
+> -# Kselftest framework requirement - SKIP code is 4.
+> -ksft_skip=4
+> -
+> -# amd-pstate-ut only run on x86/x86_64 AMD systems.
+> -ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
+> -VENDOR=$(cat /proc/cpuinfo | grep -m 1 'vendor_id' | awk '{print $NF}')
+> -
+> -if ! echo "$ARCH" | grep -q x86; then
+> -	echo "$0 # Skipped: Test can only run on x86 architectures."
+> -	exit $ksft_skip
+> -fi
+> -
+> -if ! echo "$VENDOR" | grep -iq amd; then
+> -	echo "$0 # Skipped: Test can only run on AMD CPU."
+> -	echo "$0 # Current cpu vendor is $VENDOR."
+> -	exit $ksft_skip
+> -fi
+> -
+> -scaling_driver=$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver)
+> -if [ "$scaling_driver" != "amd-pstate" ]; then
+> -	echo "$0 # Skipped: Test can only run on amd-pstate driver."
+> -	echo "$0 # Please set X86_AMD_PSTATE enabled."
+> -	echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
+> -	exit $ksft_skip
+> -fi
+> -
+> -msg="Skip all tests:"
+> -if [ ! -w /dev ]; then
+> -    echo $msg please run this as root >&2
+> -    exit $ksft_skip
+> -fi
+> -
+> -if ! /sbin/modprobe -q -n amd-pstate-ut; then
+> -	echo "amd-pstate-ut: module amd-pstate-ut is not found [SKIP]"
+> -	exit $ksft_skip
+> -fi
+> -if /sbin/modprobe -q amd-pstate-ut; then
+> -	/sbin/modprobe -q -r amd-pstate-ut
+> -	echo "amd-pstate-ut: ok"
+> -else
+> -	echo "amd-pstate-ut: [FAIL]"
+> -	exit 1
+> -fi
+> diff --git a/tools/testing/selftests/amd-pstate/basic.sh b/tools/testing/selftests/amd-pstate/basic.sh
+> new file mode 100755
+> index 000000000000..e4c43193e4a3
 > --- /dev/null
-> +++ b/arch/loongarch/power/hibernate.c
-> @@ -0,0 +1,58 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <asm/fpu.h>
-> +#include <asm/loongson.h>
-> +#include <asm/sections.h>
-> +#include <asm/tlbflush.h>
+> +++ b/tools/testing/selftests/amd-pstate/basic.sh
+> @@ -0,0 +1,38 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +static u64 saved_crmd;
-> +static u64 saved_prmd;
-> +static u64 saved_euen;
-> +static u64 saved_ecfg;
-> +struct pt_regs saved_regs;
+> +# amd-pstate-ut is a test module for testing the amd-pstate driver.
+> +# It can only run on x86 architectures and current cpufreq driver
+> +# must be amd-pstate.
+> +# (1) It can help all users to verify their processor support
+> +# (SBIOS/Firmware or Hardware).
+> +# (2) Kernel can have a basic function test to avoid the kernel
+> +# regression during the update.
+> +# (3) We can introduce more functional or performance tests to align
+> +# the result together, it will benefit power and performance scale optimization.
 > +
-> +void save_processor_state(void)
+> +# protect against multiple inclusion
+> +if [ $FILE_BASIC ]; then
+> +	return 0
+> +else
+> +	FILE_BASIC=DONE
+> +fi
+> +
+> +amd_pstate_basic()
 > +{
-> +	saved_crmd = csr_read32(LOONGARCH_CSR_CRMD);
-> +	saved_prmd = csr_read32(LOONGARCH_CSR_PRMD);
-> +	saved_euen = csr_read32(LOONGARCH_CSR_EUEN);
-> +	saved_ecfg = csr_read32(LOONGARCH_CSR_ECFG);
+> +	printf "\n---------------------------------------------\n"
+> +	printf "*** Running AMD P-state ut                ***"
+> +	printf "\n---------------------------------------------\n"
 > +
-> +	if (is_fpu_owner())
-> +		save_fp(current);
+> +	if ! /sbin/modprobe -q -n amd-pstate-ut; then
+> +		echo "amd-pstate-ut: module amd-pstate-ut is not found [SKIP]"
+> +		exit $ksft_skip
+> +	fi
+> +	if /sbin/modprobe -q amd-pstate-ut; then
+> +		/sbin/modprobe -q -r amd-pstate-ut
+> +		echo "amd-pstate-basic: ok"
+> +	else
+> +		echo "amd-pstate-basic: [FAIL]"
+> +		exit 1
+> +	fi
 > +}
-> +
-> +void restore_processor_state(void)
-> +{
-> +	csr_write32(saved_crmd, LOONGARCH_CSR_CRMD);
-> +	csr_write32(saved_prmd, LOONGARCH_CSR_PRMD);
-> +	csr_write32(saved_euen, LOONGARCH_CSR_EUEN);
-> +	csr_write32(saved_ecfg, LOONGARCH_CSR_ECFG);
-> +
-> +	if (is_fpu_owner())
-> +		restore_fp(current);
-> +}
-> +
-> +int pfn_is_nosave(unsigned long pfn)
-> +{
-I'm surprised that every arch has its own version of pfn_is_nosave().
-
-We can improve it. But it's beyond these patches, just ignore here.
-
-
-> +	unsigned long nosave_begin_pfn = PFN_DOWN(__pa(&__nosave_begin));
-> +	unsigned long nosave_end_pfn = PFN_UP(__pa(&__nosave_end));
-> +
-> +	return	(pfn >= nosave_begin_pfn) && (pfn < nosave_end_pfn);
-> +}
-> +
-> +extern int swsusp_asm_suspend(void);
-> +
-> +int swsusp_arch_suspend(void)
-> +{
-> +	enable_pci_wakeup();
-> +	return swsusp_asm_suspend();
-> +}
-> +
-> +extern int swsusp_asm_resume(void);
-> +
-> +int swsusp_arch_resume(void)
-> +{
-> +	/* Avoid TLB mismatch during and after kernel resume */
-> +	local_flush_tlb_all();
-> +	return swsusp_asm_resume();
-> +}
-> diff --git a/arch/loongarch/power/hibernate_asm.S b/arch/loongarch/power/hibernate_asm.S
-> new file mode 100644
-> index 000000000000..7894fbd56c85
+> diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
+> new file mode 100755
+> index 000000000000..715e9d01484f
 > --- /dev/null
-> +++ b/arch/loongarch/power/hibernate_asm.S
-> @@ -0,0 +1,64 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Hibernation support specific for LoongArch
-> + *
-> + * Author: Huacai Chen <chenhuacai@loongson.cn>
-> + * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-> + */
-> +#include <linux/linkage.h>
-> +#include <asm/asm.h>
-> +#include <asm/asm-offsets.h>
-> +#include <asm/regdef.h>
+> +++ b/tools/testing/selftests/amd-pstate/run.sh
+> @@ -0,0 +1,142 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +.text
-> +SYM_FUNC_START(swsusp_asm_suspend)
-> +	la.pcrel	t0, saved_regs
-> +	PTR_S		ra, t0, PT_R1
-> +	PTR_S		sp, t0, PT_R3
-> +	PTR_S		fp, t0, PT_R22
-> +	PTR_S		tp, t0, PT_R2
-> +	PTR_S		s0, t0, PT_R23
-> +	PTR_S		s1, t0, PT_R24
-> +	PTR_S		s2, t0, PT_R25
-> +	PTR_S		s3, t0, PT_R26
-> +	PTR_S		s4, t0, PT_R27
-> +	PTR_S		s5, t0, PT_R28
-> +	PTR_S		s6, t0, PT_R29
-> +	PTR_S		s7, t0, PT_R30
-> +	PTR_S		s8, t0, PT_R31
-> +	b		swsusp_save
-
-Is needed save and restore PERCPU_BASE_KS, u0 or other KSave registers?
-
-
-Thanks,
-
-Jinyang
-
-
-> +SYM_FUNC_END(swsusp_asm_suspend)
+> +# protect against multiple inclusion
+> +if [ $FILE_MAIN ]; then
+> +	return 0
+> +else
+> +	FILE_MAIN=DONE
+> +fi
 > +
-> +SYM_FUNC_START(swsusp_asm_resume)
-> +	la.pcrel	t0, restore_pblist
-> +	PTR_L		t0, t0, 0
-> +0:
-> +	PTR_L		t1, t0, PBE_ADDRESS  /* source */
-> +	PTR_L		t2, t0, PBE_ORIG_ADDRESS /* destination */
-> +	PTR_LI		t3, _PAGE_SIZE
-> +	PTR_ADD		t3, t3, t1
-> +1:
-> +	REG_L		t8, t1, 0
-> +	REG_S		t8, t2, 0
-> +	PTR_ADDI	t1, t1, SZREG
-> +	PTR_ADDI	t2, t2, SZREG
-> +	bne		t1, t3, 1b
-> +	PTR_L		t0, t0, PBE_NEXT
-> +	bnez		t0, 0b
-> +	la.pcrel	t0, saved_regs
-> +	PTR_L		ra, t0, PT_R1
-> +	PTR_L		sp, t0, PT_R3
-> +	PTR_L		fp, t0, PT_R22
-> +	PTR_L		tp, t0, PT_R2
-> +	PTR_L		s0, t0, PT_R23
-> +	PTR_L		s1, t0, PT_R24
-> +	PTR_L		s2, t0, PT_R25
-> +	PTR_L		s3, t0, PT_R26
-> +	PTR_L		s4, t0, PT_R27
-> +	PTR_L		s5, t0, PT_R28
-> +	PTR_L		s6, t0, PT_R29
-> +	PTR_L		s7, t0, PT_R30
-> +	PTR_L		s8, t0, PT_R31
-> +	PTR_LI		a0, 0x0
-> +	jirl		zero, ra, 0
-> +SYM_FUNC_END(swsusp_asm_resume)
+> +source basic.sh
+> +
+> +# amd-pstate-ut only run on x86/x86_64 AMD systems.
+> +ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
+> +VENDOR=$(cat /proc/cpuinfo | grep -m 1 'vendor_id' | awk '{print $NF}')
+> +
+> +FUNC=all
+> +OUTFILE=selftest
+> +
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=4
+> +
+> +# All amd-pstate tests
+> +amd_pstate_all()
+> +{
+> +	printf "\n=============================================\n"
+> +	printf "***** Running AMD P-state Sanity Tests  *****\n"
+> +	printf "=============================================\n\n"
+> +
+> +	# unit test for amd-pstate kernel driver
+> +	amd_pstate_basic
+> +}
+> +
+> +helpme()
+
+Make this just help()
+
+> +{
+> +	printf "Usage: $0 [OPTION...]
+> +	[-h <help>]
+> +	[-o <output-file-for-dump>]
+> +	[-c <all: All testing,
+> +	     basic: Basic testing.>]
+> +	\n"
+> +	exit 2
+> +}
+> +
+> +parse_arguments()
+> +{
+> +	while getopts ho:c: arg
+> +	do
+> +		case $arg in
+> +			h) # --help
+> +				helpme
+> +				;;
+> +
+> +			c) # --func_type (Function to perform: basic (default: all))
+> +				FUNC=$OPTARG
+> +				;;
+> +
+> +			o) # --output-file (Output file to store dumps)
+> +				OUTFILE=$OPTARG
+> +				;;
+> +
+> +			*)
+> +				helpme
+
+Same here
+
+> +				;;
+> +		esac
+> +	done
+> +}
+> +
+> +prerequisite()
+> +{
+> +	if ! echo "$ARCH" | grep -q x86; then
+> +		echo "$0 # Skipped: Test can only run on x86 architectures."
+> +		exit $ksft_skip
+> +	fi
+> +
+> +	if ! echo "$VENDOR" | grep -iq amd; then
+> +		echo "$0 # Skipped: Test can only run on AMD CPU."
+> +		echo "$0 # Current cpu vendor is $VENDOR."
+> +		exit $ksft_skip
+> +	fi
+> +
+> +	scaling_driver=$(cat /sys/devices/system/cpu/cpufreq/policy0/scaling_driver)
+> +	if [ "$scaling_driver" != "amd-pstate" ]; then
+> +		echo "$0 # Skipped: Test can only run on amd-pstate driver."
+> +		echo "$0 # Please set X86_AMD_PSTATE enabled."
+> +		echo "$0 # Current cpufreq scaling drvier is $scaling_driver."
+> +		exit $ksft_skip
+> +	fi
+> +
+> +	msg="Skip all tests:"
+> +	if [ ! -w /dev ]; then
+> +		echo $msg please run this as root >&2
+> +		exit $ksft_skip
+> +	fi
+> +}
+> +
+> +do_test()
+> +{
+> +	case "$FUNC" in
+> +		"all")
+> +			amd_pstate_all
+> +			;;
+> +
+> +		"basic")
+> +			amd_pstate_basic
+> +			;;
+> +
+> +		*)
+> +			echo "Invalid [-f] function type"
+> +			helpme
+> +			;;
+> +	esac
+> +}
+> +
+> +# clear dumps
+> +pre_clear_dumps()
+> +{
+> +	case "$FUNC" in
+> +		"all")
+> +			rm -rf $OUTFILE*
+> +			;;
+> +
+> +		*)
+> +			;;
+> +	esac
+> +}
+> +
+> +post_clear_dumps()
+> +{
+> +	rm -rf $OUTFILE.log
+> +}
+> +
+> +# Parse arguments
+> +parse_arguments $@
+> +
+> +# Make sure all requirements are met
+> +prerequisite
+> +
+> +# Run requested functions
+> +pre_clear_dumps
+> +do_test | tee -a $OUTFILE.log
+> +post_clear_dumps
 
