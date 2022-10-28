@@ -2,52 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AB24610B17
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 09:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB4A6610B31
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 09:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiJ1HPA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 03:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56476 "EHLO
+        id S229610AbiJ1HVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 03:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiJ1HPA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 03:15:00 -0400
+        with ESMTP id S229473AbiJ1HVh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 03:21:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392054C2D4;
-        Fri, 28 Oct 2022 00:14:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBC9392CC3;
+        Fri, 28 Oct 2022 00:21:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4A020B8289B;
-        Fri, 28 Oct 2022 07:14:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B6AC4347C;
-        Fri, 28 Oct 2022 07:14:52 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82630B81FC3;
+        Fri, 28 Oct 2022 07:21:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E13DC433B5;
+        Fri, 28 Oct 2022 07:21:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1666941295;
-        bh=MxQF7C6N2bgDc8qWPr3XWxr/QVgxtca4lSdN14fri4c=;
+        s=k20201202; t=1666941694;
+        bh=ldtxaAYay6wYygiBjwGGXItQZodlkvcE8cVHtMo9FS8=;
         h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=UxrMkmPhaRU39RMJpE85mPZncHpJoe0JLWh5T88Gz9ipg+/ZOVlWfpeSqMYc+CJf9
-         Z4mTeQHN3VeoDZmyjLBEfz8O7t/cV6bWD/QQ724BpHQG7JLS1YgC3QMNMAR5VCGr90
-         INfnmuJ/aWio5nFvsC5JKvbRcglnbVRvb2teMxMujAevv4haIppdWxY2XRtWdeyrPU
-         W4bR6WtJD2YNc5DRVrwhnUQgAn0CL87cQnBUPjOaq83dEMaKXWZ8eLBrU9ZhLVTtL0
-         G710llfcL/dHSQwbHP0I8jxdXBDUvgjNZ/vl6bvblF3aXvMU0OxhO/EjxseYhBrNlJ
-         KWBxMTMRoPauA==
-Message-ID: <d2600fef-0313-551e-b175-40edfbf1acd4@kernel.org>
-Date:   Fri, 28 Oct 2022 10:14:49 +0300
+        b=JFMMmB+l7nc9LCK5MzHep3/DeBTWgUirBgn5kitkgrP6nc/tXBTcJNysSkF0fh+ko
+         xI73+Z/PtIUb1BSPZ8W27IQtW0aiaLkcfP6BKsuzd9IXvEN+3g+WMgZV6dP30ceibK
+         ReJ++1gySB6OOz8mzMV4H7GvsSF7PNsFY7cn8BIG6ubNP6XyPqKmeZaKeD9Q+ovFfa
+         nocyZY/dapsuw5zHHVYbudYsyes723I2dLqZ6zKBYLoXIlejthXjFcFsBsEeW668GP
+         MYGmLVnUu28QC1Y3UbOETpoRTn+7Ax6qSC21WNPNObQ0nD93zmrRvCQx5D0tX47yCA
+         ynYLIzDvMwAoQ==
+Message-ID: <ba254421-c721-87a8-11f8-e27b04782189@kernel.org>
+Date:   Fri, 28 Oct 2022 10:21:30 +0300
 MIME-Version: 1.0
-Subject: Re: [PATCH] dt-bindings: interconnect: qcom,msm8998-bwmon: Correct
- SC7280 CPU compatible
+Subject: Re: [PATCH 1/3] interconnect: qcom: sc7180: fix dropped const of
+ qcom_icc_bcm
 Content-Language: en-US
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+        linux-kernel@vger.kernel.org
+References: <20221027154848.293523-1-krzysztof.kozlowski@linaro.org>
 From:   Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20221011140744.29829-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221027154848.293523-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,33 +57,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11.10.22 17:07, Krzysztof Kozlowski wrote:
-> Two different compatibles for SC7280 CPU BWMON instance were used
-> in DTS and bindings.  Correct the bindings to use the same one as in
-> DTS, because it is more specific.
-> 
-> Fixes: b7c84ae757c2 ("dt-bindings: interconnect: qcom,msm8998-bwmon: Add support for sc7280 BWMONs")
+On 27.10.22 18:48, Krzysztof Kozlowski wrote:
+> Pointers to struct qcom_icc_bcm are const, but the change was dropped
+> during merge.
+
+Oops, thanks for the fix!
+
+BR,
+Georgi
+
+> Fixes: 016fca59f95f ("Merge branch 'icc-const' into icc-next")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-I assume that this will be picked by Bjorn. Please let me know otherwise.
-
-Acked-by: Georgi Djakov <djakov@kernel.org>
-
 > ---
->   .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    | 2 +-
+>   drivers/interconnect/qcom/sc7180.c | 2 +-
 >   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> index 2684562df4d9..be29e0b80995 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-> @@ -24,7 +24,7 @@ properties:
->       oneOf:
->         - items:
->             - enum:
-> -              - qcom,sc7280-bwmon
-> +              - qcom,sc7280-cpu-bwmon
->                 - qcom,sdm845-bwmon
->             - const: qcom,msm8998-bwmon
->         - const: qcom,msm8998-bwmon       # BWMON v4
+> diff --git a/drivers/interconnect/qcom/sc7180.c b/drivers/interconnect/qcom/sc7180.c
+> index 35cd448efdfb..82d5e8a8c19e 100644
+> --- a/drivers/interconnect/qcom/sc7180.c
+> +++ b/drivers/interconnect/qcom/sc7180.c
+> @@ -369,7 +369,7 @@ static const struct qcom_icc_desc sc7180_gem_noc = {
+>   	.num_bcms = ARRAY_SIZE(gem_noc_bcms),
+>   };
+>   
+> -static struct qcom_icc_bcm *mc_virt_bcms[] = {
+> +static struct qcom_icc_bcm * const mc_virt_bcms[] = {
+>   	&bcm_acv,
+>   	&bcm_mc0,
+>   };
 
