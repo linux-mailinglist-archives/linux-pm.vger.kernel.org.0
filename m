@@ -2,107 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25973611118
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 14:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78C561114C
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 14:26:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiJ1MU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 08:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
+        id S229631AbiJ1M0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 08:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiJ1MUS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 08:20:18 -0400
-Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9814231EE0;
-        Fri, 28 Oct 2022 05:20:10 -0700 (PDT)
-Received: by mail-ot1-f41.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso2884112otb.2;
-        Fri, 28 Oct 2022 05:20:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NwwUKBJK2ts9JQbEn+aT2R7CdnRNl0fVI6fqIamBwNM=;
-        b=4cqLckJXKqYBpKCyYNC6z5COApqWnQXn0mMNAziNtUChVIamMmyDjW0R/5giF8ivm8
-         bqj/KB0w54vNSoernqJ6VSxYKKddKZcRQmV/COmjGqBVOtGZBKaRz0LGEuMivxdglFgu
-         xzdPNUHvtoZFsIvkKO/PFfDwUrBlj9YP9RIpgWkvWv8sooZhLL8uxIoDW2o6cfiMEWg7
-         AeoyczUU7erPhFElDIeF1cnn7kDBHeeSjNkyUa9cMg5mWRji1Uz+nQAN7vWzd0sviBFe
-         1pQy/Fq38/lyP5Mcn/xML8aTz1SH1uah7BYPI4IQPjLEDjCfqEeDW5AHB+cBBkwn55rB
-         fEtg==
-X-Gm-Message-State: ACrzQf25fjaTc5RMhn4i12ELLvN0P4u6erSvf5zxygWXE0ULo8S0y1kT
-        pHnU7D9KXe/gG85tTy+ctQYcQPj9dg==
-X-Google-Smtp-Source: AMsMyM61gDqPCsm78gUOyWJAjboELdy4Wi9sePZ0bD4E8MIGa1EEc2Wy1l9L2JynMsaYNH1jsAljrQ==
-X-Received: by 2002:a05:6830:368c:b0:660:ece0:ce33 with SMTP id bk12-20020a056830368c00b00660ece0ce33mr26535851otb.146.1666959609714;
-        Fri, 28 Oct 2022 05:20:09 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w30-20020a056870b39e00b0012b298699dbsm2039684oap.1.2022.10.28.05.20.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 05:20:09 -0700 (PDT)
-Received: (nullmailer pid 1079531 invoked by uid 1000);
-        Fri, 28 Oct 2022 12:20:05 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        devicetree@vger.kernel.org, Georgi Djakov <djakov@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>
-In-Reply-To: <20221028034155.5580-6-quic_bjorande@quicinc.com>
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com> <20221028034155.5580-6-quic_bjorande@quicinc.com>
-Message-Id: <166695949085.1076887.9913893260550976176.robh@kernel.org>
-Subject: Re: [PATCH 05/10] dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3 compatibles
-Date:   Fri, 28 Oct 2022 07:20:05 -0500
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229789AbiJ1M0q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 08:26:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 369DA1D3E81
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 05:26:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C246D62819
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 12:26:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 324BEC43470
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 12:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1666960004;
+        bh=bnIMZ1ebFhqgwDOrCr6K3O7h5lcExzUd1tuyjsPdREY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=vMu5sDf7/xKAS1Kt11U86vFooUyqTBRD5KsJ2Ury4OKPhiRw2L8TBzD5wpQQCfcy8
+         c9hE1Yv4RSNjofSh/N+Pa1U9RpIEZW7Kee6yNuKVtUN7IYS8aaW+aU4VseU5rstAPI
+         Po69mnYEsMzfn1YxC1uRtGfEhP24L4s2amQ/cOyn+Re6uDabsHYEjjGf5TNPlx5ctD
+         X6inqHBYbby20h5BR9Ov9zUTYlIk/MnI8dRmEjI2y5xjE028Atns/5gOQuyh+rXtKG
+         TN6YOeGEH8OY+hNjCsN3nlUOW/0IsoQUtl7eAvxRRjvVQd9BVJZeHCiqQjogesXN+I
+         o7l50AW6M72KQ==
+Received: by mail-lf1-f43.google.com with SMTP id j16so7985590lfe.12
+        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 05:26:44 -0700 (PDT)
+X-Gm-Message-State: ACrzQf1coP1Xeu5YcHSRo002T1xVtLoNtzCPxueeG8VQtQcc8z/HJucJ
+        gNBGxyTipUmGgfTINmLgfOrUa536sFOh+96eag==
+X-Google-Smtp-Source: AMsMyM6ZmBsUBGEkTWwP/mJBILhgYFkIGDngz9imZli0WHFutFamJadjfODVM7TMictvul5Ro1Vs/hJYLqA4B2C5IJc=
+X-Received: by 2002:a05:6512:3e10:b0:4a2:48c1:8794 with SMTP id
+ i16-20020a0565123e1000b004a248c18794mr19382327lfv.17.1666960002138; Fri, 28
+ Oct 2022 05:26:42 -0700 (PDT)
+MIME-Version: 1.0
+References: <CACRpkdbB5hgkrPZVb-+9tuKErvwjTKNaBQ1LvH1==fR7bndjSQ@mail.gmail.com>
+ <CAL_JsqKQM4oSxrbhA4_ST8O0ieek9sGQQ9p55AXjhqmVx=rUrw@mail.gmail.com>
+ <CAJZ5v0i76X0TiaOhPa3a5440fRb7vA1z1mFKJibso8G6wYz7HQ@mail.gmail.com>
+ <4817aeca-4fb1-cb99-8df5-7df22a77ea3f@linexp.org> <CACRpkdb=WX5XO1YDB04uLzv=tNfpmr+ORN+LkAiZTE6gSris_g@mail.gmail.com>
+In-Reply-To: <CACRpkdb=WX5XO1YDB04uLzv=tNfpmr+ORN+LkAiZTE6gSris_g@mail.gmail.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 28 Oct 2022 07:26:32 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKECuRr5080roHXJKEP1QRN+ruG8KwYuLDtt__hA0p-6g@mail.gmail.com>
+Message-ID: <CAL_JsqKECuRr5080roHXJKEP1QRN+ruG8KwYuLDtt__hA0p-6g@mail.gmail.com>
+Subject: Re: Regression after recent changes to drivers/thermal/thermal_of.c
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     daniel.lezcano@linexp.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 27 Oct 2022 20:41:50 -0700, Bjorn Andersson wrote:
-> Add EPSS L3 compatibles for sm8350 and sc8280xp, but while at it also
-> introduce generic compatible for both qcom,osm-l3 and qcom,epss-l3.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
->  .../bindings/interconnect/qcom,osm-l3.yaml    | 22 +++++++++++++------
->  1 file changed, 15 insertions(+), 7 deletions(-)
-> 
+On Fri, Oct 28, 2022 at 3:04 AM Linus Walleij <linus.walleij@linaro.org> wrote:
+>
+> On Wed, Oct 26, 2022 at 11:40 PM Daniel Lezcano
+> <daniel.lezcano@linexp.org> wrote:
+> > On 26/10/2022 19:06, Rafael J. Wysocki wrote:
+>
+> > > This is Daniel's work, so I'm still hoping that he'll chime in
+> > > shortly,
+> >
+> > Yep, I'm in sick leave ATM, I broke my arm (without wordplay).
+>
+> Yeah I heard, get well soon!
+>
+> > I took sometime to read the code, so from my POV we should keep the
+> > required property patch because the DT was defined that as required
+> > property. The conversion to yaml obviously spotted the DT not conforming
+> > with the bindings.
+>
+> So I guess you mean I should add some trip points to my device
+> trees then so they pass validation?
+>
+> It's fine with me, I can just put some absolute maximum temperatures
+> around the batteries, I am more worrying if there are other users
+> out there that might get upset.
+>
+> I have a problem to add a trip point like this:
+>
+>                 battery-crit-lo {
+>                     temperature = <-50000>;
+>                     hysteresis = <2000>;
+>                     type = "critical";
+>                 };
+>
+> Despite it is legal to the schema:
+>
+>             properties:
+>               temperature:
+>                 $ref: /schemas/types.yaml#/definitions/int32
+>                 minimum: -273000
+>                 maximum: 200000
+>                 description:
+>                   An integer expressing the trip temperature in millicelsius.
+>
+> I get this error:
+>
+>   DTC     arch/arm/boot/dts/ste-ux500-samsung-golden.dtb
+> Error: ../arch/arm/boot/dts/ste-ux500-samsung-golden.dts:50.21-22 syntax error
+>
+> Does anyone know how to put a negative number in a
+> property?
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Expressions have to be enclosed in parenthesis.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml:27:7: [error] duplication of key "items" in mapping (key-duplicates)
-
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/interconnect/qcom,osm-l3.example.dts'
-Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml:27:7: found duplicate key "items" with value "[]" (original value: "[]")
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/interconnect/qcom,osm-l3.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml:27:7: found duplicate key "items" with value "[]" (original value: "[]")
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml: ignoring, error parsing file
-make: *** [Makefile:1492: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Rob
