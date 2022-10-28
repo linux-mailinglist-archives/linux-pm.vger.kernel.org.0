@@ -2,124 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E244610FFC
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 13:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25973611118
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 14:20:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229528AbiJ1Lqz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 07:46:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39656 "EHLO
+        id S230336AbiJ1MU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 08:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiJ1Lqi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 07:46:38 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D041C8123
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 04:46:37 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id j4so7929705lfk.0
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 04:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JzfotkAl9WA/C5Amwds50josaEmg6lDNRxVHKP+Q30o=;
-        b=Q2XvxgJcvC//vsl4QjrthkErdyrf27NxB7J9weI6WHIAplvJIvImJU68R3U0pP7xYd
-         JCunjkkZqjPlCuiAzyP5yRneDqv0RrqtxTeRMArDKqFd8AI5WNxz4UJdYiIoliQE55ZP
-         U7Nv1UUnE52jVNDsyJW18yEsgD9azx+vbKp0QilZi1LCVOZD/Szbl6H08tY6VcTuMPJO
-         dCw/kH+PNqW7EYO5P3EHTh9RlXnB+ovdsXczafqQyr10pX/gZ1HHnJTAtuHN4l0S32ER
-         F0BIN4eT2LXxlaOGtocFef9q3fIBiw0PpWtiWCj1qwOOo2/LCZp9bF52gShvFo4E3sAg
-         gdGA==
+        with ESMTP id S230224AbiJ1MUS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 08:20:18 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9814231EE0;
+        Fri, 28 Oct 2022 05:20:10 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso2884112otb.2;
+        Fri, 28 Oct 2022 05:20:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JzfotkAl9WA/C5Amwds50josaEmg6lDNRxVHKP+Q30o=;
-        b=oyofMQEUyaagCJKQe1UhwOTqwfBmx3pkH19XUifNdYMTwqQWzeC4mMX/Fqge/yzVei
-         nIHbeBbT4Ut0qtPjJYrVUEGZAkFCxukOEQT2N2S2pH8P3HN9Tt8voIib//4lm6QfkKh0
-         saO3f+rWOMT8hWLB4sj2FTMUe5qhdUio/e0gI9YdFlZ1Q6wxMzocdZb78qxNOYxDHd35
-         ggbjoOJWcS3ew/Fv9vRanpwoMHwVUOm+M89JGhDS/G9efRsI4Cv90SGO0O4M7D6Jb6yQ
-         on8PMAntMOpYMNEIiH0r2iZ379AQEGwEpzsgPerhINia/ibd6/sNo+TWvs2uGZ5JN4CB
-         a1Gg==
-X-Gm-Message-State: ACrzQf3nkudqb11Q+Ddhuubd/HnOHTdAOS4SgPQYk6e82mtPXjPnu/86
-        a2IZtEQU1W7G/4C05SgIvnjA4g==
-X-Google-Smtp-Source: AMsMyM4/+pt/G/eVYArAjcUaKhqexcZbhqibXnp85yAAATJuonbwY10m2DcNi1x72CDtVNMKSZo/3Q==
-X-Received: by 2002:a05:6512:3f14:b0:47d:e011:f19b with SMTP id y20-20020a0565123f1400b0047de011f19bmr19015737lfa.427.1666957596141;
-        Fri, 28 Oct 2022 04:46:36 -0700 (PDT)
-Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
-        by smtp.gmail.com with ESMTPSA id d26-20020a2eb05a000000b0027709706194sm608182ljl.49.2022.10.28.04.46.35
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NwwUKBJK2ts9JQbEn+aT2R7CdnRNl0fVI6fqIamBwNM=;
+        b=4cqLckJXKqYBpKCyYNC6z5COApqWnQXn0mMNAziNtUChVIamMmyDjW0R/5giF8ivm8
+         bqj/KB0w54vNSoernqJ6VSxYKKddKZcRQmV/COmjGqBVOtGZBKaRz0LGEuMivxdglFgu
+         xzdPNUHvtoZFsIvkKO/PFfDwUrBlj9YP9RIpgWkvWv8sooZhLL8uxIoDW2o6cfiMEWg7
+         AeoyczUU7erPhFElDIeF1cnn7kDBHeeSjNkyUa9cMg5mWRji1Uz+nQAN7vWzd0sviBFe
+         1pQy/Fq38/lyP5Mcn/xML8aTz1SH1uah7BYPI4IQPjLEDjCfqEeDW5AHB+cBBkwn55rB
+         fEtg==
+X-Gm-Message-State: ACrzQf25fjaTc5RMhn4i12ELLvN0P4u6erSvf5zxygWXE0ULo8S0y1kT
+        pHnU7D9KXe/gG85tTy+ctQYcQPj9dg==
+X-Google-Smtp-Source: AMsMyM61gDqPCsm78gUOyWJAjboELdy4Wi9sePZ0bD4E8MIGa1EEc2Wy1l9L2JynMsaYNH1jsAljrQ==
+X-Received: by 2002:a05:6830:368c:b0:660:ece0:ce33 with SMTP id bk12-20020a056830368c00b00660ece0ce33mr26535851otb.146.1666959609714;
+        Fri, 28 Oct 2022 05:20:09 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w30-20020a056870b39e00b0012b298699dbsm2039684oap.1.2022.10.28.05.20.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Oct 2022 04:46:35 -0700 (PDT)
-From:   Linus Walleij <linus.walleij@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amit.kucheria@verdurent.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH] thermal/of: Accept but warn about TZ without trip
-Date:   Fri, 28 Oct 2022 13:44:33 +0200
-Message-Id: <20221028114433.51839-1-linus.walleij@linaro.org>
-X-Mailer: git-send-email 2.37.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 28 Oct 2022 05:20:09 -0700 (PDT)
+Received: (nullmailer pid 1079531 invoked by uid 1000);
+        Fri, 28 Oct 2022 12:20:05 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        devicetree@vger.kernel.org, Georgi Djakov <djakov@kernel.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+In-Reply-To: <20221028034155.5580-6-quic_bjorande@quicinc.com>
+References: <20221028034155.5580-1-quic_bjorande@quicinc.com> <20221028034155.5580-6-quic_bjorande@quicinc.com>
+Message-Id: <166695949085.1076887.9913893260550976176.robh@kernel.org>
+Subject: Re: [PATCH 05/10] dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3 compatibles
+Date:   Fri, 28 Oct 2022 07:20:05 -0500
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
+On Thu, 27 Oct 2022 20:41:50 -0700, Bjorn Andersson wrote:
+> Add EPSS L3 compatibles for sm8350 and sc8280xp, but while at it also
+> introduce generic compatible for both qcom,osm-l3 and qcom,epss-l3.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>  .../bindings/interconnect/qcom,osm-l3.yaml    | 22 +++++++++++++------
+>  1 file changed, 15 insertions(+), 7 deletions(-)
+> 
 
-The thermal OF core used to accept the creation of thermal zones
-without trip points, but recent changes made it error out as
-thermal zones should according to specification have trip
-points.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-Relax the requirements so we still create those thermal zones
-but make a request to update the DTS in the kernel log.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml:27:7: [error] duplication of key "items" in mapping (key-duplicates)
 
-Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initialization")
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
----
- drivers/thermal/thermal_of.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+dtschema/dtc warnings/errors:
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/interconnect/qcom,osm-l3.example.dts'
+Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml:27:7: found duplicate key "items" with value "[]" (original value: "[]")
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/interconnect/qcom,osm-l3.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml:27:7: found duplicate key "items" with value "[]" (original value: "[]")
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml: ignoring, error parsing file
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index d4b6335ace15..f683cbb4a72a 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -592,8 +592,8 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 	struct thermal_zone_params *tzp;
- 	struct thermal_zone_device_ops *of_ops;
- 	struct device_node *np;
--	int delay, pdelay;
--	int ntrips, mask;
-+	int delay = 0, pdelay = 0;
-+	int ntrips = 0, mask = 0;
- 	int ret;
- 
- 	of_ops = kmemdup(ops, sizeof(*ops), GFP_KERNEL);
-@@ -610,7 +610,9 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 	trips = thermal_of_trips_init(np, &ntrips);
- 	if (IS_ERR(trips)) {
- 		pr_err("Failed to find trip points for %pOFn id=%d\n", sensor, id);
--		return ERR_CAST(trips);
-+		pr_err("Trip points are compulsory for thermal zones, please add them to the DTS\n");
-+		trips = NULL;
-+		goto out_register;
- 	}
- 
- 	ret = thermal_of_monitor_init(np, &delay, &pdelay);
-@@ -636,6 +638,7 @@ struct thermal_zone_device *thermal_of_zone_register(struct device_node *sensor,
- 
- 	mask = GENMASK_ULL((ntrips) - 1, 0);
- 
-+out_register:
- 	tz = thermal_zone_device_register_with_trips(np->name, trips, ntrips,
- 						     mask, data, of_ops, tzp,
- 						     pdelay, delay);
--- 
-2.37.3
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
