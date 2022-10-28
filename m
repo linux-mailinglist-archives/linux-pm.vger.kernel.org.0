@@ -2,195 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9714A6108F0
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 05:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254FE610AD4
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 08:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236265AbiJ1Dm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 27 Oct 2022 23:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
+        id S229880AbiJ1G53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 02:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235121AbiJ1DmT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 27 Oct 2022 23:42:19 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B903D18C3;
-        Thu, 27 Oct 2022 20:42:18 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29S2qNEb012858;
-        Fri, 28 Oct 2022 03:42:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=dcvGEyCk5HBE8N9yo00NnbAt3RtvsmvtwzwfhcFvfm8=;
- b=DpIXBgOcL9pgTaQS4FCbPoz2E2rX7k4gCI3gDuhrSFhodqb2ldOvdr9nQxxaaPiJfdjD
- zRovlxidGNjw5sd20ey/kKk0nd/BUfp1QP3q0hMNYoCIXEWlh3KKYeBa5inXxwHYbAy/
- M3BhU5pO9XNqb0u3UhlbObP59O8YzdSwFrhtKz3GdctmTkk9Yqa06YftaaW3JLUP5UNd
- jwEuheJbPQdi7m2GHRKXCvd5wLAc6ivoiHTwl2iwjoGpN6IQA9HcwTogtTFbTfkyvJnd
- Pl57LVTvGazYiYk+hztOLegWELCmJneoveMTkTee9Ga+PL7n/TMa4YyKN3y6hXUX55DM jg== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kfahvuxux-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 03:42:07 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29S3g6Qq003756
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 28 Oct 2022 03:42:06 GMT
-Received: from th-lint-050.qualcomm.com (10.80.80.8) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 27 Oct 2022 20:42:06 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        with ESMTP id S229441AbiJ1G51 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 02:57:27 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8024E16D89A;
+        Thu, 27 Oct 2022 23:57:25 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8DxvrdTfVtj3wkDAA--.6717S3;
+        Fri, 28 Oct 2022 14:57:23 +0800 (CST)
+Received: from [10.180.13.64] (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxiFdOfVtjsjkGAA--.3812S2;
+        Fri, 28 Oct 2022 14:57:19 +0800 (CST)
+Subject: Re: [PATCH v8 1/2] thermal: loongson-2: add thermal management
+ support
+To:     kernel test robot <lkp@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        zhuyinbo@loongson.cn, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 10/10] arm64: dts: qcom: sc8280xp: Add bwmon instances
-Date:   Thu, 27 Oct 2022 20:41:55 -0700
-Message-ID: <20221028034155.5580-11-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221028034155.5580-1-quic_bjorande@quicinc.com>
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>
+References: <20221028013532.10361-1-zhuyinbo@loongson.cn>
+ <202210281326.Wv56U0Zw-lkp@intel.com>
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+Message-ID: <53b1516b-ec53-dc03-fc23-f3d8014e7d55@loongson.cn>
+Date:   Fri, 28 Oct 2022 14:57:17 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _p6_VENDhfT4NPW1-D_l3Amkgv6at4O_
-X-Proofpoint-ORIG-GUID: _p6_VENDhfT4NPW1-D_l3Amkgv6at4O_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-27_07,2022-10-27_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0 clxscore=1015
- suspectscore=0 spamscore=0 priorityscore=1501 adultscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2210280022
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202210281326.Wv56U0Zw-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxiFdOfVtjsjkGAA--.3812S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3Jr18ZF17trykKr47uw45KFg_yoWxCw4rpa
+        y5Jas8GrZ7Xr1DZ3WUA3y8Ar4Dtr13tasrZr4xGw15ArWrX34agFy8JF15urWIkF98KFyj
+        vr90gFWY93Z8XrJanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4UJwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8jXdUUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add the two bwmon instances and define votes for CPU -> LLCC and LLCC ->
-DDR, with bandwidth values based on the downstream DeviceTree.
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 91 ++++++++++++++++++++++++++
- 1 file changed, 91 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index e62245e37a61..86c5bfb33357 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -1296,6 +1296,97 @@ usb_1_ssphy: usb3-phy@8903400 {
- 			};
- 		};
- 
-+		pmu@9091000 {
-+			compatible = "qcom,sc8280xp-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-+			reg = <0 0x9091000 0 0x1000>;
-+
-+			interrupts = <GIC_SPI 81 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&mc_virt MASTER_LLCC 3 &mc_virt SLAVE_EBI1 3>;
-+
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <762000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <1720000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <2086000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <2597000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <2929000>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <3879000>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <5161000>;
-+				};
-+				opp-7 {
-+					opp-peak-kBps = <5931000>;
-+				};
-+				opp-8 {
-+					opp-peak-kBps = <6515000>;
-+				};
-+				opp-9 {
-+					opp-peak-kBps = <7980000>;
-+				};
-+				opp-10 {
-+					opp-peak-kBps = <8136000>;
-+				};
-+				opp-11 {
-+					opp-peak-kBps = <10437000>;
-+				};
-+				opp-12 {
-+					opp-peak-kBps = <12191000>;
-+				};
-+			};
-+		};
-+
-+		pmu@90b6400 {
-+			compatible = "qcom,sc8280xp-bwmon", "qcom,msm8998-bwmon";
-+			reg = <0 0x090b6400 0 0x600>;
-+
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+
-+			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <2288000>;
-+				};
-+				opp-1 {
-+					opp-peak-kBps = <4577000>;
-+				};
-+				opp-2 {
-+					opp-peak-kBps = <7110000>;
-+				};
-+				opp-3 {
-+					opp-peak-kBps = <9155000>;
-+				};
-+				opp-4 {
-+					opp-peak-kBps = <12298000>;
-+				};
-+				opp-5 {
-+					opp-peak-kBps = <14236000>;
-+				};
-+				opp-6 {
-+					opp-peak-kBps = <15258001>;
-+				};
-+			};
-+		};
-+
- 		system-cache-controller@9200000 {
- 			compatible = "qcom,sc8280xp-llcc";
- 			reg = <0 0x09200000 0 0x58000>, <0 0x09600000 0 0x58000>;
--- 
-2.37.3
+在 2022/10/28 下午1:55, kernel test robot 写道:
+> Hi Yinbo,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on rafael-pm/thermal]
+> [also build test WARNING on linus/master v6.1-rc2 next-20221027]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/thermal-loongson-2-add-thermal-management-support/20221028-093603
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+> patch link:    https://lore.kernel.org/r/20221028013532.10361-1-zhuyinbo%40loongson.cn
+> patch subject: [PATCH v8 1/2] thermal: loongson-2: add thermal management support
+> config: sparc-allyesconfig
+> compiler: sparc64-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/d94e01f4aefe4c0ab05babe101f0a0ce53165456
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Yinbo-Zhu/thermal-loongson-2-add-thermal-management-support/20221028-093603
+>          git checkout d94e01f4aefe4c0ab05babe101f0a0ce53165456
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/thermal/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>     drivers/thermal/loongson2_thermal.c:136:21: error: variable 'loongson2_of_thermal_ops' has initializer but incomplete type
+>       136 | static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+>           |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:137:10: error: 'const struct thermal_zone_of_device_ops' has no member named 'get_temp'
+>       137 |         .get_temp = loongson2_thermal_get_temp,
+>           |          ^~~~~~~~
+>>> drivers/thermal/loongson2_thermal.c:137:21: warning: excess elements in struct initializer
+>       137 |         .get_temp = loongson2_thermal_get_temp,
+>           |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:137:21: note: (near initialization for 'loongson2_of_thermal_ops')
+>     drivers/thermal/loongson2_thermal.c:138:10: error: 'const struct thermal_zone_of_device_ops' has no member named 'set_trips'
+>       138 |         .set_trips = loongson2_thermal_set_trips,
+>           |          ^~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:138:22: warning: excess elements in struct initializer
+>       138 |         .set_trips = loongson2_thermal_set_trips,
+>           |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>     drivers/thermal/loongson2_thermal.c:138:22: note: (near initialization for 'loongson2_of_thermal_ops')
+>     drivers/thermal/loongson2_thermal.c: In function 'loongson2_thermal_probe':
+>     drivers/thermal/loongson2_thermal.c:177:21: error: implicit declaration of function 'devm_thermal_zone_of_sensor_register'; did you mean 'devm_thermal_of_zone_register'? [-Werror=implicit-function-declaration]
+>       177 |         data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+>           |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>           |                     devm_thermal_of_zone_register
+>>> drivers/thermal/loongson2_thermal.c:177:19: warning: assignment to 'struct thermal_zone_device *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>       177 |         data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+>           |                   ^
+>     drivers/thermal/loongson2_thermal.c: At top level:
+>     drivers/thermal/loongson2_thermal.c:136:48: error: storage size of 'loongson2_of_thermal_ops' isn't known
+>       136 | static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+>           |                                                ^~~~~~~~~~~~~~~~~~~~~~~~
+>     cc1: some warnings being treated as errors
+> 
+> 
+> vim +137 drivers/thermal/loongson2_thermal.c
+> 
+>     135	
+>     136	static const struct thermal_zone_of_device_ops loongson2_of_thermal_ops = {
+>   > 137		.get_temp = loongson2_thermal_get_temp,
+>     138		.set_trips = loongson2_thermal_set_trips,
+>     139	};
+>     140	
+>     141	static int loongson2_thermal_probe(struct platform_device *pdev)
+>     142	{
+>     143		struct device *dev = &pdev->dev;
+>     144		struct resource *res;
+>     145		struct loongson2_thermal_data *data;
+>     146		int ret;
+>     147	
+>     148		data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>     149		if (!data)
+>     150			return -ENOMEM;
+>     151	
+>     152		data->pdev = pdev;
+>     153		platform_set_drvdata(pdev, data);
+>     154	
+>     155		res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>     156		data->regs = devm_ioremap(dev, res->start, resource_size(res));
+>     157		if (IS_ERR(data->regs))
+>     158			return PTR_ERR(data->regs);
+>     159	
+>     160		/* get irq */
+>     161		data->irq = platform_get_irq(pdev, 0);
+>     162		if (data->irq < 0)
+>     163			return data->irq;
+>     164	
+>     165		/* get id */
+>     166		data->id = loongson2_thermal_get_sensor_id();
+>     167		if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
+>     168			dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
+>     169					LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
+>     170			return -EINVAL;
+>     171		}
+>     172	
+>     173		writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
+>     174	
+>     175		loongson2_thermal_set(data, 0, 0, false);
+>     176	
+>   > 177		data->tzd = devm_thermal_zone_of_sensor_register(&pdev->dev,
+>     178								   data->id, data,
+>     179								   &loongson2_of_thermal_ops);
+>     180		if (IS_ERR(data->tzd)) {
+>     181			ret = PTR_ERR(data->tzd);
+>     182			data->tzd = NULL;
+>     183			dev_err(&pdev->dev, "failed to register %d\n", ret);
+>     184			return ret;
+>     185		}
+>     186	
+>     187		ret = devm_request_threaded_irq(dev, data->irq,
+>     188				loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
+>     189				IRQF_ONESHOT, "loongson2_thermal", data);
+>     190		if (ret < 0) {
+>     191			dev_err(dev, "failed to request alarm irq: %d\n", ret);
+>     192			return ret;
+>     193		}
+>     194	
+>     195		/*
+>     196		 * Thermal_zone doesn't enable hwmon as default,
+>     197		 * enable it here
+>     198		 */
+>     199		data->tzd->tzp->no_hwmon = false;
+>     200		ret = thermal_add_hwmon_sysfs(data->tzd);
+>     201		if (ret) {
+>     202			dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
+>     203			return ret;
+>     204		}
+>     205	
+>     206		return 0;
+>     207	}Hi
+
+I use W=1 to compile it and doesn't reproduce that warning, and I added
+the change that don't touch .c code. I think it shoud be error report.
+
+Tks
+Yinbo
+>     208	
+> 
 
