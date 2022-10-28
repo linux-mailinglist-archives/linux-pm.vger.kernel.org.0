@@ -2,55 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0610611407
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 16:07:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 043B5611430
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Oct 2022 16:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231359AbiJ1OHG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 10:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51590 "EHLO
+        id S230231AbiJ1OND (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 10:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbiJ1OHG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 10:07:06 -0400
+        with ESMTP id S230113AbiJ1OM7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 10:12:59 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2016B1DC802;
-        Fri, 28 Oct 2022 07:07:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48891D5E34;
+        Fri, 28 Oct 2022 07:12:57 -0700 (PDT)
 Received: from mercury (unknown [37.84.150.129])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DE32C6602925;
-        Fri, 28 Oct 2022 15:07:03 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 891096602925;
+        Fri, 28 Oct 2022 15:12:56 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1666966024;
-        bh=b+dmykbhnZBjZG+45a2JI9gul2w3DjWzcEXQfAgTb8w=;
+        s=mail; t=1666966376;
+        bh=Q8Sm90eLz9bcTykS5udA2a2769DuI7dhaihk1DL2/OI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KTluhKw7CYgsqEF4S+rKQSVu+COc3HzX0027zWUxenCHiRYYNXEfrHr1krL6es6qH
-         CvIK5Zs8zVS5LDViAgzsCGB+zzoiTExt+d2vtpgfV1UQ6vCBhPqFePyfYJ8UUl9v/Z
-         4QFOpUlXR2wvpiT3uB7oQ/u67sfxJgqqiyeJfvcrmeccSSz5KhqCUlODOFZBXGcPHm
-         fcMa3LH4UvrOP8TPF1/3mbuEwuiitZYHohY4df7w20ZI5M77thaYSh9IPOMdeUEbwQ
-         U8CcXHnEMFhszpEBYlY85zGqGong3XHJevOyZSdnz7+kAo72y3BuC9PxpNRGTT7v4O
-         8NFe1MXfA+baw==
+        b=EK1YwROS5o/I/+6D0cAcus4o9M3IpJ+GyQOSkamLQsZ0xM8FLzoIyB2i4UFBS2Epf
+         65VT71GdpZGOzMfrmeA0V+IKZlMAyF4lBc2qv5iGzhsAKgSPIWiLCa2tPokyBZi8eG
+         x3HCxC1A/TtVUW8Ckm3mlo72jy4wTY6QOqOnaDKVtWziI1pSyhHXekamSnc8/YuRl8
+         h1MQizX/9VZj3pP9gHOtmcrDAnlPF5OKYjs/o1AuGW2ZwHL2eIJX9dZhhMBFXnJUsW
+         cm81EzdMXWC2Pb/2CiNO5D36bqQbHoppkNwyDGkKsjjJDw4cFh9cidvT3PIxvDCnYU
+         83VnMTxo80AQQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 88D1510607E8; Fri, 28 Oct 2022 16:07:01 +0200 (CEST)
-Date:   Fri, 28 Oct 2022 16:07:01 +0200
+        id AEB8B10607E8; Fri, 28 Oct 2022 16:12:53 +0200 (CEST)
+Date:   Fri, 28 Oct 2022 16:12:53 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
-        lars@metafoo.de, andy.shevchenko@gmail.com,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v4 5/8] power: supply: mp2629: Add USB fast charge
- settings
-Message-ID: <20221028140701.e2q2ukiquzzjmhjg@mercury.elektranox.org>
-References: <20221024132757.3345400-1-sravanhome@gmail.com>
- <20221024132757.3345400-6-sravanhome@gmail.com>
+To:     wangjianli <wangjianli@cdjrlc.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power/supply: fix repeated words in comments
+Message-ID: <20221028141253.scedsv7neimehpec@mercury.elektranox.org>
+References: <20221022054544.35121-1-wangjianli@cdjrlc.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ohozfzobh33tgn2f"
+        protocol="application/pgp-signature"; boundary="toctd2ayv5efoqap"
 Content-Disposition: inline
-In-Reply-To: <20221024132757.3345400-6-sravanhome@gmail.com>
+In-Reply-To: <20221022054544.35121-1-wangjianli@cdjrlc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -61,76 +55,65 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ohozfzobh33tgn2f
+--toctd2ayv5efoqap
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Oct 24, 2022 at 03:27:54PM +0200, Saravanan Sekar wrote:
-> Allows the user to change the USB device fast charge setting to advertise
-> host on enumeration helps to accelerate the charging cycle. Altering this
-> value resets USB existing connection.
+On Sat, Oct 22, 2022 at 01:45:44PM +0800, wangjianli wrote:
+> Delete the redundant word 'the'.
 >=20
-> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: wangjianli <wangjianli@cdjrlc.com>
 > ---
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Thanks, queued.
 
 -- Sebastian
 
->  .../ABI/testing/sysfs-class-power-mp2629         | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>  drivers/power/supply/ab8500_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/Documentation/ABI/testing/sysfs-class-power-mp2629 b/Documen=
-tation/ABI/testing/sysfs-class-power-mp2629
-> index 914d67caac0d..b386d02cb010 100644
-> --- a/Documentation/ABI/testing/sysfs-class-power-mp2629
-> +++ b/Documentation/ABI/testing/sysfs-class-power-mp2629
-> @@ -1,3 +1,19 @@
-> +What:		/sys/class/power_supply/mp2629_battery/usb_fast_charge
-> +Date:		June 2022
-> +KernelVersion:	5.20
-> +Description:
-> +		Represents a USB device fast charge settings.Altering this
-> +		value resets USB existing connection
-> +		USB DP:DM[0:0] 0.6V : Hi-Z
-> +		USB DP:DM[0:1] 3.3V : 0.6V
-> +		USB DP:DM[1:0] 0.6V : 0.6V
-> +		USB DP:DM[1:1] 0.6V : 3.3V
-> +
-> +                Access: Read, Write
-> +
-> +                Valid values: Represented in bit DP & DM setting. Valid
-> +			      range is [0, 3].
-> +
->  What:		/sys/class/power_supply/mp2629_battery/batt_impedance_compen
->  Date:		April 2020
->  KernelVersion:	5.7
+> diff --git a/drivers/power/supply/ab8500_charger.c b/drivers/power/supply=
+/ab8500_charger.c
+> index d04d087caa50..2af83643508c 100644
+> --- a/drivers/power/supply/ab8500_charger.c
+> +++ b/drivers/power/supply/ab8500_charger.c
+> @@ -1963,7 +1963,7 @@ static int ab8500_charger_get_ext_psy_data(struct d=
+evice *dev, void *data)
+>   *
+>   * Due to a asic bug it is necessary to lower the input current to the v=
+bus
+>   * charger when charging with at some specific levels. This issue is onl=
+y valid
+> - * for below a certain battery voltage. This function makes sure that the
+> + * for below a certain battery voltage. This function makes sure that
+>   * the allowed current limit isn't exceeded.
+>   */
+>  static void ab8500_charger_check_vbat_work(struct work_struct *work)
 > --=20
-> 2.32.0
+> 2.36.1
 >=20
 
---ohozfzobh33tgn2f
+--toctd2ayv5efoqap
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNb4gUACgkQ2O7X88g7
-+ppA9A//Xsz2LxawwvIgJTT4R0ELr5vOGp1GnOoXxK23EFyzkiWcIEVRm0vy9x7t
-6Z1Lxbm411qUqgtY367e6Czmv1xEt+UqakkovDD6yG6Sqp3u9hRumfczoVTRc3CY
-pQNhS2PmtIm64OXbVwyc+rEQzeqNylEC6OgSp9ZIZawYz8750ailLNBznwZezcNt
-NRFja2/a2gH06g2X3M06jnDb+8lcQzn86IyoFnug0XdzLxRh0tEmslE8T5UlyE+y
-lwveyYkGrGviNI3VN1N2CIhCQdR9jMWilGfPmUsQAmxw3zZ+vpWKeGNh38jDNix9
-picZ7WWmcbNU9b+rMOwOR0MjcUgkFMuFC41aNtw0FyPeXLC11RX5Tu8eyKlk5944
-42/IUCLFiSFQj3twYqUT5vY2fD/p+Zkft5a63qAWkm1ZV9xjZ/RNSPEk+h+k1FUG
-idY/g5WJtCvkTev43VrtvIjbDEv4CMCfXMGzQi1hqXsuQZ+1/TiWEha8G7daFuN9
-1O/zIApo161BoobcSK4DrP31W3Mrh1kN7cnGuwzFUR1cK298akg8+8TfCsgG+rk0
-8qchxKXuZxY0pMh9PgEfrA0aH8E0GZpOD04wY4yQN7Hto7LIUKl9HSvIw12lTfyk
-Pu31LioqGsPdPqE5i8iuWtX7gpWhZ5txPQd7GbW24ewZ6l3ZT/I=
-=mwkP
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNb42UACgkQ2O7X88g7
++pq1NQ/7BWd4wz61to42/m++n27nu3LTmeg0j8zeocQh683rSyx/93o8Dz4/H6qm
+gHklvpELCKGpz0Q+mDMrhpMdFE0mz2CxiQTZOCFziXgMFHfbHKQaIWasYQadSdH1
+78rJkEGVbyU0XkV29vG29cMVbjZ+7QT/AemgMmLpGe1BtHfQRKOFphXRAsxfQAq1
+0J6FS+2xspt5Am+bjMOvgsIaAN7w72vCNjptwyex6p1qAPlY1FFixweCxp7EOXMD
++5LcCqAASMnUFJTl1qNiacr0F7Rfa3xB6gzaeeIsrt/vBz1VcKpBQxi4a1mAT4tl
+cyvkdRuT1q79M7kJIKA0rPzUFBy96goO1IaFa+oN1CZrhBMQOOraLmc2cfZ1buKQ
+q6lQMlDRZqOKp9osaHbWRP4H5jcxYxKCuSOI8ZTiLOaPhIpwB/aRr4f5m7TtF7iB
+Gk54nZen9iFrlzFl+gN19xXrmw6NsHtHJdsA3AmVSgb5fxn1rlG1mNTXuIq35a2d
+EEcQpVAyHJTTQs7zyjhh+nXmzMYUcU9MsuslKtvsl0hPQJF1YZNct+UBQTmLYhgH
+KOMf9uB03F5UFvFKi2CKK+QGcFEGs9hSMGRee4dZQTpcdI+sBD+1/VoSLBBOPOrq
+vPHokTxOs8WqpWbwV2o4pzdL8jcxmBAxSlZGMF8eNX65mwKHwpQ=
+=hw1n
 -----END PGP SIGNATURE-----
 
---ohozfzobh33tgn2f--
+--toctd2ayv5efoqap--
