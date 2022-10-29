@@ -2,113 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 598BC6121DD
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 11:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C11261221F
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 12:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJ2JaR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Oct 2022 05:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S229781AbiJ2KHJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Oct 2022 06:07:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbiJ2JaO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 05:30:14 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5F75C961;
-        Sat, 29 Oct 2022 02:30:12 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id h9so9475681wrt.0;
-        Sat, 29 Oct 2022 02:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bkJrpxcP48TMk8lHsqey+h3jqmE5YwXV+ijLJdBnXvo=;
-        b=HmwqAQG8Tk2v71b7VEjnQad2cz+Fk8YUMWxxRgn+QXvgJo1COCuAaQ62WwbZIAfVUE
-         5wrax/x9Rp8ADIzqWJOfiKob74lIeLPIg5OqRohmQBhyFVq5LDEM78nPZSO13e1AQtHo
-         lhY8mStRWxuunE/f5kFZZ2tg8yq17oP+8Iql0HZPpSztVLv6VsnLLNqjKBQ7ii51ecva
-         skLeXirsN6TUMQi+hv4xx/v4vHVSK3Kpw8K1Ic8+rkasZMQjbLzYXPycwWo7otctY9+Y
-         /T8MiLiMgopDjP29VHzWvS6/k9lVw9i/BKI5ccGRNyi5t6onpmPHeKP71xTMtFzmzyPP
-         rJCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bkJrpxcP48TMk8lHsqey+h3jqmE5YwXV+ijLJdBnXvo=;
-        b=FHvqAMyUdXDHzSP1JnEMNNerA+kEG5VwwwDfDBmmyAWk3WYx3PeagnxOlYyQEJyIZb
-         xGKrrnJqG5NBzPFATgx6E3nNm88OQklFjZ5MREV/V46xEY6uX9/9k1nqMVWhhQ8CP41X
-         wk9WR+w3ZtS/Wrz51LI0xgXcFlNNV/DxQZe8iZrZhKT1NqqGAANu2zfO8quWfOFXpjEG
-         gWWUNwhJH1H5U6vQsw3ygEiUWrrGOkl1ST4GZHfPurxl8G9kEpBonss0qVZMszhkMJsY
-         KUeHzDfD5bpjVuDRcTb8qaXFwTNdMikZKkCyx9LXAfY29EesBe1rEtL2Pb1LU/C8/z2L
-         03xw==
-X-Gm-Message-State: ACrzQf2ieCLUOHrbvcYDCuujf+Jlqd5YhhFYdcNyo+ZnL+9URaINP14z
-        rzeVNW6XLI9eopLHwQD3uPc=
-X-Google-Smtp-Source: AMsMyM4m0SgvZTbNuPJIGzE2zVDyx5FULFr7VqyeQN/rq6FUbBUwhynXpCEow9/e/64lsyj2yanGoA==
-X-Received: by 2002:a05:6000:887:b0:21e:24a0:f302 with SMTP id ca7-20020a056000088700b0021e24a0f302mr1844035wrb.466.1667035811519;
-        Sat, 29 Oct 2022 02:30:11 -0700 (PDT)
-Received: from discovery.. (p5b3f76b5.dip0.t-ipconnect.de. [91.63.118.181])
-        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0022e6178bd84sm1068187wrr.8.2022.10.29.02.30.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 29 Oct 2022 02:30:11 -0700 (PDT)
-From:   Saravanan Sekar <sravanhome@gmail.com>
-To:     sre@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
-        lars@metafoo.de, andy.shevchenko@gmail.com
-Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-iio@vger.kernel.org, Saravanan Sekar <sravanhome@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: [PATCH v5 8/8] power: supply: mp2629: Add USB fast charge settings
-Date:   Sat, 29 Oct 2022 11:30:00 +0200
-Message-Id: <20221029093000.45451-9-sravanhome@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20221029093000.45451-1-sravanhome@gmail.com>
-References: <20221029093000.45451-1-sravanhome@gmail.com>
+        with ESMTP id S229761AbiJ2KHI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 06:07:08 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1764F7B7AA;
+        Sat, 29 Oct 2022 03:07:07 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id DECFE5C015A;
+        Sat, 29 Oct 2022 06:07:03 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sat, 29 Oct 2022 06:07:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alistair23.me;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1667038023; x=1667124423; bh=X1
+        FoTzqNKN1Kmjdz4a3YhRLFY9KNaucDFaWdfFf2th0=; b=VIsSSJmS3SJ1oleOa5
+        ykSLvEHrT/7b2P4YKN9oDFAxX81qyEzZDbzZWicVm9rhMzSBH44lgEkwivgpcd50
+        Ap6qDtLvw2jhoSgsvz+fonG8mXnc/RvThtXBuqAb+6a44jL+ck6zPdcy4siN0z1L
+        NTmNHk9tH87kRIh//ksytGP0HiBpmcx0xEqPwhLImB8mO7lWpznpbKH77hti9eGW
+        9UJZQ2JA1rv2fVw+4mheQYy3tpOG47/WYWB8WVWuVjUuZyj4t/XQdcnt1npg+3S4
+        g71Un2Gl42KYwuDW45VBURKhsFFQnTIqbhtpZAkOkPp6bBzSA7nEh7gIxqz2zZbs
+        etBg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1667038023; x=1667124423; bh=X1FoTzqNKN1Km
+        jdz4a3YhRLFY9KNaucDFaWdfFf2th0=; b=SyU/3aqKGtEVofaulqnCHmPyGqHlF
+        co4j771E6n4PSuVUh0kz1cgJJMMfiWOpwc9rBdDf9yudb9MC4hbE7b8VBu3Vq72N
+        abGOEqaZKlV8QMYcfO/b1t2uKgJXIyMtmbMGC+hE+ydinWfF+070GIXBtpxdSRjm
+        GWdVF20gVBqgM8E1CyZv6DqNQiWHGNPrAM6uWGzQFsYE+QYUOs6msO2k7ZsKY1S2
+        nSbz8gRFGd7F0JTxONBFuF3fBVuGUDFChIO6+PxoRHz7lcCiLQE+g6IUYumZNHyz
+        la7NQXTy4HxfksJTIQtWkPjRWXcZU8cW/RG0+opadpGZY6J+UAFsxQOXw==
+X-ME-Sender: <xms:R_tcY5QoSxnvDf4bA9ZWDC5r1i-ghIeL_0KblDCxeB1KYcBs1Y5asw>
+    <xme:R_tcYyxb21PBAlIx8Ib71PXqyOJyrejegTrp2gqzEmJI0q3GLVDuATcuKYkRK1k_E
+    SoBtpiNazO5r5sU17I>
+X-ME-Received: <xmr:R_tcY-2xP_RYAVY4Z1i0Zi5h29KAwMjM3doEKrTwoc2P7PjbexfMVzzUC5C7rDU7cHBDK3ADLXjI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrtdekgddvgecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgtggfgsehtkeertd
+    ertdejnecuhfhrohhmpeetlhhishhtrghirhcuhfhrrghntghishcuoegrlhhishhtrghi
+    rhesrghlihhsthgrihhrvdefrdhmvgeqnecuggftrfgrthhtvghrnhepffekhfelteeggf
+    etieekteekhedtffekvddtveetgeffgfelffeftdehuefgheefnecuvehluhhsthgvrhfu
+    ihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghlihhsthgrihhrsegrlhhish
+    htrghirhdvfedrmhgv
+X-ME-Proxy: <xmx:R_tcYxAcWQp_LlrVmo3eTZruES8G7rC-0zA-hy_1IiyvjRUAJr9u1w>
+    <xmx:R_tcYygXK3J6K0hEoUqxKGRZn1avSbkaN5i9b4LSlBYghKQ7Yd3C1w>
+    <xmx:R_tcY1po7dxk7m22OY7v4XlCEaaUoAFa8n-6nsH8_7yqrWpUn0ELlw>
+    <xmx:R_tcY7Ztl3VmoNENOasV4Ur-xttiF9G8pNCqdLREqeTMWDThesRSVQ>
+Feedback-ID: ifd214418:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 29 Oct 2022 06:06:52 -0400 (EDT)
+From:   Alistair Francis <alistair@alistair23.me>
+To:     lgirdwood@gmail.com, robh+dt@kernel.org, broonie@kernel.org,
+        kernel@pengutronix.de, lee.jones@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
+        linux-imx@nxp.com, alistair@alistair23.me, amitk@kernel.org,
+        s.hauer@pengutronix.de, linux@roeck-us.net, rui.zhang@intel.com,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, shawnguo@kernel.org,
+        andreas@kemnade.info, linux-kernel@vger.kernel.org,
+        geert@linux-m68k.org
+Subject: [PATCH v23 0/2] Add support for the silergy,sy7636a
+Date:   Sat, 29 Oct 2022 20:06:44 +1000
+Message-Id: <20221029100646.294583-1-alistair@alistair23.me>
+X-Mailer: git-send-email 2.38.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Allows the user to change the USB device fast charge setting to advertise
-host on enumeration helps to accelerate the charging cycle. Altering this
-value resets USB existing connection.
+v23:
+ - Cleanup device tree changes
+v22:
+ - Rebase on master
+ - Drop `ARM: dts: imx7d-remarkable2: Enable lcdif`
+v21:
+ - Rebase on master
+v20:
+ - Remove merged patches
+ - Fixup Kconfig selection based on previous discussions
+v19:
+ - Rebase on linux-next
+v18:
+ - Rebase
+v17:
+ - Rebase and fix build issues
+v16:
+ - Improve vdd regulator comments
+v15:
+ - Address comments on the patches
+v14:
+ - Merge the thermal driver and hwmon
+v13:
+ - Address comments on thermal driver
+ - Rebase on master (without other patches)
+v12:
+ - Rebase
+v11:
+ - Address comments on hwmon
+ - Improve "mfd: simple-mfd-i2c: Add a Kconfig name" commit message
+v10:
+ - Use dev_get_regmap() instead of dev_get_drvdata()
+v9:
+ - Convert to use the simple-mfd-i2c instead
 
-Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- .../ABI/testing/sysfs-class-power-mp2629         | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+Alistair Francis (2):
+  ARM: imx_v6_v7_defconfig: Enable silergy,sy7636a
+  ARM: dts: imx7d-remarkable2: Enable silergy,sy7636a
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-mp2629 b/Documentation/ABI/testing/sysfs-class-power-mp2629
-index 914d67caac0d..b386d02cb010 100644
---- a/Documentation/ABI/testing/sysfs-class-power-mp2629
-+++ b/Documentation/ABI/testing/sysfs-class-power-mp2629
-@@ -1,3 +1,19 @@
-+What:		/sys/class/power_supply/mp2629_battery/usb_fast_charge
-+Date:		June 2022
-+KernelVersion:	5.20
-+Description:
-+		Represents a USB device fast charge settings.Altering this
-+		value resets USB existing connection
-+		USB DP:DM[0:0] 0.6V : Hi-Z
-+		USB DP:DM[0:1] 3.3V : 0.6V
-+		USB DP:DM[1:0] 0.6V : 0.6V
-+		USB DP:DM[1:1] 0.6V : 3.3V
-+
-+                Access: Read, Write
-+
-+                Valid values: Represented in bit DP & DM setting. Valid
-+			      range is [0, 3].
-+
- What:		/sys/class/power_supply/mp2629_battery/batt_impedance_compen
- Date:		April 2020
- KernelVersion:	5.7
+ arch/arm/boot/dts/imx7d-remarkable2.dts | 63 +++++++++++++++++++++++++
+ arch/arm/configs/imx_v6_v7_defconfig    |  3 ++
+ 2 files changed, 66 insertions(+)
+
 -- 
-2.32.0
+2.38.1
 
