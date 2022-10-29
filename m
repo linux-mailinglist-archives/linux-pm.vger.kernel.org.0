@@ -2,173 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6856611F0F
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 03:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AAD611F4A
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 04:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbiJ2B1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 21:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
+        id S229648AbiJ2CZS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 22:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiJ2B1n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 21:27:43 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9585D1CC749
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 18:27:41 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id sc25so16787972ejc.12
-        for <linux-pm@vger.kernel.org>; Fri, 28 Oct 2022 18:27:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SB8cXsJ6cSiGdyMloRjmKV5mlYek2j619QkGusLH93k=;
-        b=OIignES46Kbt8O1G/D8CE5LCzf4liD+TVCHTDYlD1UbO7ZV00At2PgUGiLzRcjcRoP
-         KDz7BunLbRO8b7QvzRLiyOYUoHvTfU9FCx65vWf3xgqvOJfA9iwsnxzTSjLjFF9sYFPW
-         oYjD0DXfz6gTvYLzJGRJbZK+G+AXCUGpHlhghba5fZUJvAy/kS6ffd4YC9jxzDunFcSf
-         vFV9nR1IVVFNTZQXpa+glCngHUChxUtAowEyJGhQRCTxA5BuzVj4ZMRpqk49kbNedsjN
-         j+nCAT3fysljbaAoQW9f4RydBrH+FUr24DZEeAVV9w+0jE2sDNkP80yZyp1RAxuojKBH
-         q1xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SB8cXsJ6cSiGdyMloRjmKV5mlYek2j619QkGusLH93k=;
-        b=Ca1Jg90invA9Q/0lMXMpk4fFnxwU64BeT9D0DVeEnPKA4JnIpsq6HxLcI00dh6rFOC
-         jSbRm+jBtM2MBquELlrWrNKGvDTfjPhUMe1iTUweHGFlewtp1D4ICjCXohZFYS7AILJd
-         1yykHT+Agy/9turISTNbojMo8xRBbPaGAoBwyArP7rkLe5TFeFfYiG3iebRDTK5YcFnv
-         fUUP8UpkRHFw0t9gxwXmgMYDo0bHhA3oYUGqRiaTS9Z8xmcjpz8ocW35zkz3jC/8Cw7C
-         3v3iXa6wWE2fUGXuaDIWwD2ixX4vwNLWL8eg408Qm1DpHWNkf6Yq20jigaxUm/SAAIxr
-         I9IQ==
-X-Gm-Message-State: ACrzQf0GpDF2NB2aC4Rrn3ZQz3qxQ23NwhR2OS9fyFXlVDxWJusXJVhG
-        tu0LF8INU5mjHUyRAINbx4gLkbDrsF1IXyLr4oOhDQ==
-X-Google-Smtp-Source: AMsMyM6MGnF2TSbEaIjrBzL/n0tAG+PSMkH6yiE/pY/08UqBhcIIpMPKhMmviToeyNxz+zsaPbVSgur3Lfy83BExNZM=
-X-Received: by 2002:a17:907:75c1:b0:79b:f804:c081 with SMTP id
- jl1-20020a17090775c100b0079bf804c081mr1857415ejc.381.1667006860118; Fri, 28
- Oct 2022 18:27:40 -0700 (PDT)
+        with ESMTP id S229379AbiJ2CZR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 22:25:17 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2040.outbound.protection.outlook.com [40.92.18.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF2259E9D;
+        Fri, 28 Oct 2022 19:25:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F9LmTL1iVR28dDVu76tzFCgpia75arNccfY7xKJCS5tBeHTkVN5jkrx103iNwaTbD+G1Abi2hU3ABGK5MTXU67GDHHSMtotAVdR3suKg8Y3F5z0y+C4xCUXCboqXP98ccMJc6OId0UXE5+6riH9Vqytl1Zkkun5JFERDZHrmVwTaUU0XRFXREU195F7xkgLTPEy312Fxoub9sYrTDkmfbwHc6LBQyagQ7GDkRFdTMVToEn5aeEIveogVvtwxY8VolE4GkNfPCsB6b9c3qEwVgbQcqgiwzFdvLvMffbracC/i+itpnXRvT1Xb4U9r3oPwtJPPLjx86D7QiLbHXggdrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2wm4Kxc9XJTWMnGsOHr1386ThOyCKT2OHdDT2Vzx3MM=;
+ b=BIB0CCjURngDIu9pAFQe2uY9X0mwiLUftJQm5EpRFYcqkVtor3NCIQPkZIm4zixGrvqLzXYm/s7eRsddOtNaik3uqTlE5mtnRJFoqc6nS1M0GMmLlik1TkgpEfTGKTW+rmGKhv+2XxmonslL3jy6bo5nMufuWVrA0FxpLNPjnn+v9iBEYuheeyQ0TgC4PRLURlnQgSZA655t4px4pF31HMWYmGjMn7FLkBXMqvH3J59QvBgyTCDKfeJmRqaaGuQQd4VVKFwdsvhMaUg3S7HZz4GD6mZhGs0wQBMBAPU7CRxR40t9FLPcQ7ZiVGTNJzBeqLlZGVZvADCbuNMnVgPRmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2wm4Kxc9XJTWMnGsOHr1386ThOyCKT2OHdDT2Vzx3MM=;
+ b=NMGuio5OzaM+iLMasb8ptVxK3MT3MpOzLLdqavZd0N2DjG5dwEeyPWxXOmIe3bhxAIaq8qPCIYGNdOhcfWHfsuJ7rtNvTjIX6Dc0m2QwGuT1yiH9adVGYW/GC/DJiCd34zYVRMmvgOoPXJE+J0YTlPrEfJoLUxPNV6w80HRQicPyNsGhA53WBZ1u8boPHTimX0sRb+RX1DyOgCAvcoX/VVcMM6H4P/C18a4HYsWolVk95peuL12flx90XhYh33hvfH6lKjwPyfJk0X0x5ZdHspnO6rk1Jw5iRwX15NT7PyK0IcnrJVpIhCvdJuQiI/+5vO+njU/NqBmrluYIrCZBeQ==
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com (2603:10b6:805:f9::31)
+ by MW4PR06MB8332.namprd06.prod.outlook.com (2603:10b6:303:12b::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.14; Sat, 29 Oct
+ 2022 02:25:14 +0000
+Received: from SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::b849:682e:6222:2b2d]) by SN6PR06MB5342.namprd06.prod.outlook.com
+ ([fe80::b849:682e:6222:2b2d%5]) with mapi id 15.20.5746.021; Sat, 29 Oct 2022
+ 02:25:14 +0000
+Date:   Fri, 28 Oct 2022 21:25:09 -0500
+From:   Chris Morgan <macromorgan@hotmail.com>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: Re: [PATCH] power: supply: remove less-than-zero comparison of
+ unsigned variables
+Message-ID: <SN6PR06MB534244907609468217F4AAFBA5359@SN6PR06MB5342.namprd06.prod.outlook.com>
+References: <20221004064521.498510-1-usama.anjum@collabora.com>
+ <20221029001708.fxu6he7pbv7voiy2@mercury.elektranox.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029001708.fxu6he7pbv7voiy2@mercury.elektranox.org>
+X-TMN:  [f5cgaOjPN0Oyq5uZNUbqiS9tslfHjEjP]
+X-ClientProxiedBy: SA9PR13CA0170.namprd13.prod.outlook.com
+ (2603:10b6:806:28::25) To SN6PR06MB5342.namprd06.prod.outlook.com
+ (2603:10b6:805:f9::31)
+X-Microsoft-Original-Message-ID: <20221029022509.GA25353@wintermute.localdomain>
 MIME-Version: 1.0
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
-In-Reply-To: <20221028034155.5580-1-quic_bjorande@quicinc.com>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Fri, 28 Oct 2022 20:27:27 -0500
-Message-ID: <CAKXuJqhOH1Ts0Nde5WB0-bVHUv=_As23eJRsH=VnCxxjtkNB_A@mail.gmail.com>
-Subject: Re: [PATCH 00/10] interconnect: osm-l3: SC8280XP L3 and DDR scaling
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR06MB5342:EE_|MW4PR06MB8332:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7bc37ff7-ee2d-4045-8da3-08dab954cf90
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Q+gDfMMA3I3ehqJhfeM8i/YlGFa8Jv92565Y51IcI6lY+WlXZ0Jv5Fnk2+iLTZrktwcJ5znZgfR5xk3GlkkoXzXGb1LWxZzeys8kEUq2po22HvhPTGlasI+xni2lepIdtn1GhmULVqdMhrJLbCQLiVQO0HSCbu+CjVfzdL/Jp9sobzxoRxUpOqX4YUD9whUnYT+QpOLshxrmkskcqab0yIc9rSMvL8fIHR/bl/b5ygqxZ6aFW3s9MuJMbn/zuTorh5N0+d48dy7L4BXUQeOFYhKnjofrnfpG/4HYcV38HIWq3vwbadcOPGdIQ+A7OZxGq0MBaOXIDqqKj9UTCVN4ci8+eAX/8ouq6lv8Y7GRWjfHb4zEWgEtRE6Sb7eB81Je5QjhaHiiCWWUaVtHy/7YarSIx3DRiRxXfRmCEvPvdQzuD6mzQSsLOq4JQF2LCwkhzkG1yKmm22ycPn3kw2iWcb0kigjH6O4QJ6X/Q+cWwpc34bykZ9itHDRw5JyrKjH8Pee39308cABqTOxYWX2TDPV4+hwF+t79fTazUsh5YN07DtsBjGLJvQS4ln3y7K4eQbRnPNoEV/3D2vqcQy07UljPnMyKl40QGy6u+Swl9BT6r/U0q1+S3x5xZBP90D7O+A4+GSF2yj/UvNOqytFdErQ/ouv6xE4w8Q5ME4ODfZvMiRtUDbnn1+JX8JmoqR6L
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Ik/Q+3Np2+pqoSi3RCJIl+xPp17W++widsf2WwNkG+w3dBGnfkxc+NRdedfy?=
+ =?us-ascii?Q?V+xjJEU/bTIlE1S6gNVHoSRzqwHHhpzK3395KsvlI9llUSC+ChhyU5BQ02GC?=
+ =?us-ascii?Q?+kae+2jS/mIO12Ptc8dEmnZOpMU52Jr8gLq1XpOQYjvMjhlKZJ+yvAgj0pkP?=
+ =?us-ascii?Q?X6hun2QMOFvxskA3GzyBWQPYbvJ1lIGDxfJzB7QJ+4Nga/kFbE8BinlhYVlS?=
+ =?us-ascii?Q?asqoiPP5d+ebUa0q6zIm2grJ5L025C2lB/G4bKuGgL9hUrLEIFb9rn3ka+PS?=
+ =?us-ascii?Q?sQteQ46ptDkeDLhQytoqEn+NIU3rVbVjJlVFendPwWslxkENdIASzR2Mjtvf?=
+ =?us-ascii?Q?Au6TQxDXTCU31FsUO/krz3sYEurXfhnp/75iZYL9eIT0J1jjQE3sURo0HIOV?=
+ =?us-ascii?Q?/8xX5obam8G4DFcU31q4wU+NJvdOq/uPTGUO2dCf5CSPTLYhBX6gHAzoe2fL?=
+ =?us-ascii?Q?UexX6xRgEqWzJKJCQIIWlMewyMKmD0Y+Sy584oMUI0/4Q1uL8mzWlSwlak9V?=
+ =?us-ascii?Q?gNidSgPKqKweHvfwyNlR51iVEA9adqHusH3ASd+w+bgSPLclIV1vbZdcvVeE?=
+ =?us-ascii?Q?gukvkZmT2o/SP2Z7WHThWLk2MrEI4BB0u4ItBN7nuyErqC/ZypPovEQk8VzO?=
+ =?us-ascii?Q?h5mLc45yqgQBwyWZpf4J4yhMwpLoDtJTv4wb3pwPrhV2brY7FzK9ku69FqMX?=
+ =?us-ascii?Q?R9rdJOmHvPIT7pmoJxzx8Z3MMwJG4Up5wjH23YNjRDjqGsX+NamI+egx/fvb?=
+ =?us-ascii?Q?CXSScIjdT3wnyFzOPcBYe/WAGZ/V4aCHK2r/5AZMbZOKnqRqiocSX7FTeGSC?=
+ =?us-ascii?Q?qKOkAJVluvBn1BEG9+hx6HLcQhR9OMk0wOEqHZc3B13km2XowXMwSXXjh0aT?=
+ =?us-ascii?Q?bfoaC8bHqNS0VDK/1qaOFWvoHg2xjEO924fqt6TUOI0otC+gbMmZYfejRH+v?=
+ =?us-ascii?Q?z0cPALxvHNE8a9gEgPU7sjeWGQRz7erir8LkJJ4fgZbQgDgI8mggmsNX2fga?=
+ =?us-ascii?Q?7J4UBMoFmv+sJSdwz9XReC4w38MCtW/0RIUKSa6lWYOrcLjHuC9nXsiaSveA?=
+ =?us-ascii?Q?He/JAHHP9k+hg9dlS3JnaNe1jQYi8sM7JwrtM+AXXHEK2n41bzdVW9+t/lz9?=
+ =?us-ascii?Q?gtZAqVlI7s3jQNE7iMZLEs1/B4cieuJPRrYDtTrJIeibSfCXjBkoXtl1/8Z5?=
+ =?us-ascii?Q?jOGHuETLH9zDw+xUm9YO0Ctd4quZ85OsDSo8ykdra10lzYWyCKd1cJmFtgoI?=
+ =?us-ascii?Q?iFRdOKE4v89WEt8Cop4nTjrCa2W07WsRGd5l4rR6Sg=3D=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-89723.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7bc37ff7-ee2d-4045-8da3-08dab954cf90
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR06MB5342.namprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2022 02:25:14.1782
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR06MB8332
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 10:42 PM Bjorn Andersson
-<quic_bjorande@quicinc.com> wrote:
->
-> The SC8280XP currently shows depressing results in memory benchmarks.
-> Fix this by introducing support for the platform in the OSM (and EPSS)
-> L3 driver and support for the platform in the bwmon binding.
->
-> Then add the necessary nodes and values throughout the sc8280xp and
-> sa8540p dtsi files to make the various devices on these platforms scale
-> both L3, memory bus and DDR.
->
-> Bjorn Andersson (10):
->   interconnect: qcom: osm-l3: Use platform-independent node ids
->   interconnect: qcom: osm-l3: Squash common descriptors
->   interconnect: qcom: osm-l3: Add per-core EPSS L3 support
->   interconnect: qcom: osm-l3: Simplify osm_l3_set()
->   dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3
->     compatibles
->   arm64: dts: qcom: Align with generic osm-l3/epss-l3
->   arm64: dts: qcom: sc8280xp: Add epss_l3 node
->   arm64: dts: qcom: sc8280xp: Set up L3 scaling
->   dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon
->     instances
->   arm64: dts: qcom: sc8280xp: Add bwmon instances
->
->  .../interconnect/qcom,msm8998-bwmon.yaml      |   5 +
->  .../bindings/interconnect/qcom,osm-l3.yaml    |  22 ++-
->  arch/arm64/boot/dts/qcom/sa8540p.dtsi         |  39 +++++
->  arch/arm64/boot/dts/qcom/sc7180.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sc7280.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        | 152 ++++++++++++++++++
->  arch/arm64/boot/dts/qcom/sdm845.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sm8150.dtsi          |   2 +-
->  arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +-
->  drivers/interconnect/qcom/osm-l3.c            | 126 ++++-----------
->  10 files changed, 251 insertions(+), 103 deletions(-)
->
-> --
-> 2.37.3
->
-Prior to this series being applied:
+On Sat, Oct 29, 2022 at 02:17:08AM +0200, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Tue, Oct 04, 2022 at 11:45:21AM +0500, Muhammad Usama Anjum wrote:
+> > max_chg_vol_reg and max_chg_cur_reg are unsigned variables. The
+> > less-than-zero comparison of an unsigned value is never true. Remove
+> > these checks.
+> > 
+> > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > ---
+> 
+> I'm a bit hesitant to apply this. While the analysis is correct
+> max_chg_cur_reg is sourced from rk817_chg_cur_to_reg(). That has
+> has a 'u8' return value as function signature, but tries to return
+> -EINVAL. I think it makes sense to either fix this at the same
+> time or change the variable type to signed. Also please Cc the
+> driver author (done now).
 
-steev@cho:~/temp/mybw$ ./mybw
-    64: 21043.42MB/s
-   128: 22511.90MB/s
-   256: 23190.96MB/s
-   512: 23532.00MB/s
-  1024: 23537.36MB/s
-    2K: 23730.19MB/s
-    4K: 23307.45MB/s
-    8K: 23603.36MB/s
-   16K: 23752.39MB/s
-   32K: 23819.91MB/s
-   64K: 23871.28MB/s
-  128K: 23890.10MB/s
-  256K: 23851.90MB/s
-  512K: 23759.65MB/s
- 1024K: 15956.73MB/s
-    2M: 8418.88MB/s
-    4M: 6385.06MB/s
-    8M: 5959.11MB/s
-   16M: 5892.18MB/s
-   32M: 6109.78MB/s
+I think this fixes it, can you confirm?
+
+https://lore.kernel.org/linux-pm/20221019234505.5viojwmk6ksqr4gb@mercury.elektranox.org/
+
+Thank you.
+
+> 
+> -- Sebastian
+> 
+> >  drivers/power/supply/rk817_charger.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
+> > index 635f051b0821..aa4b33f1bb83 100644
+> > --- a/drivers/power/supply/rk817_charger.c
+> > +++ b/drivers/power/supply/rk817_charger.c
+> > @@ -951,12 +951,12 @@ static int rk817_battery_init(struct rk817_charger *charger,
+> >  
+> >  	max_chg_cur_reg = rk817_chg_cur_to_reg(max_chg_cur_ma);
+> >  
+> > -	if (max_chg_vol_reg < 0 || max_chg_vol_reg > 7) {
+> > +	if (max_chg_vol_reg > 7) {
+> >  		return dev_err_probe(charger->dev, -EINVAL,
+> >  		       "invalid max charger voltage, value %u unsupported\n",
+> >  		       max_chg_vol_mv * 1000);
+> >  	}
+> > -	if (max_chg_cur_reg < 0 || max_chg_cur_reg > 7) {
+> > +	if (max_chg_cur_reg > 7) {
+> >  		return dev_err_probe(charger->dev, -EINVAL,
+> >  		       "invalid max charger current, value %u unsupported\n",
+> >  		       max_chg_cur_ma * 1000);
+> > -- 
+> > 2.30.2
+> > 
 
 
-With this series applied:
-steev@cho:~/temp/mybw$ ./mybw
-    64: 21193.63MB/s
-   128: 22513.64MB/s
-   256: 23196.15MB/s
-   512: 23554.33MB/s
-  1024: 23555.31MB/s
-    2K: 23738.53MB/s
-    4K: 23310.13MB/s
-    8K: 23616.14MB/s
-   16K: 23768.47MB/s
-   32K: 23847.16MB/s
-   64K: 23881.61MB/s
-  128K: 23901.33MB/s
-  256K: 23910.21MB/s
-  512K: 23839.70MB/s
- 1024K: 23577.47MB/s
-    2M: 23836.08MB/s
-    4M: 23798.35MB/s
-    8M: 23759.23MB/s
-   16M: 22887.62MB/s
-   32M: 22491.87MB/s
-
-Additionally, if anyone is curious, geekbench 5.4 comparison, with
-this patchset applied on 6.0.5:
-
-https://browser.geekbench.com/v5/cpu/compare/18284519?baseline=18076980
-
-This change is very welcomed :)
-
-Tested on the Lenovo Thinkpad X13s
-
-Tested-by: Steev Klimaszewski <steev@kali.org>
