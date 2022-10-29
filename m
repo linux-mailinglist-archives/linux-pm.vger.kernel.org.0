@@ -2,50 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0FFC611E94
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 02:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4095C611EA8
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 02:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbiJ2AEz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 20:04:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S229494AbiJ2ARO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 20:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiJ2AEy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 20:04:54 -0400
+        with ESMTP id S229457AbiJ2ARN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 20:17:13 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448F3740D;
-        Fri, 28 Oct 2022 17:04:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 105D05AA33;
+        Fri, 28 Oct 2022 17:17:13 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B1E06602942;
-        Sat, 29 Oct 2022 01:04:51 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A56AD6602942;
+        Sat, 29 Oct 2022 01:17:11 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667001891;
-        bh=N/y7U/Okdvo3CXVLovtSFdb9ULZV0KM7M5mV6wzzd+A=;
+        s=mail; t=1667002631;
+        bh=w7ba4X8MPyTvkQ4A4Oz6t+sl29x7NcjWiX53veUPMxU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=od03TChcm26PnFRBuIxGENz/XdB14TrhfNjelcIfoS0F1hwZBW0yz5f8L1VES0KJE
-         bvSxMV8oyglk8hCfqaBXuxttQQJtCNhOF2uuDNdrVtYYWXxA/cEYs+hsrC0NKAR/XA
-         UBTDQlgppmxudInnokcyDHj2FJoGDlIeM1lLatBaFtYWdX3RlVFTdTSY9un5Tbj/3m
-         8LlH5qPocYrsrecWhQ57MQADlE2S88nBW5gZSo7uLY9m52ONfH6RJkkNg/DK4p7sjm
-         jG3BDZPaWxrGVTdfptBZcJtA7eGHDZ3Psi6fFJvLXooKXQmqu7bduep65EG3TkrUf3
-         4lrcS4EkOLbYA==
+        b=DnEAYVtQRYd1ASJ7VI/RTnHddguySG369ooOablWWfMhrVPSZa5q3h/TBeV8sV7p6
+         pXVZgMD/7UGSmIZjS9nJkU6jcVmwN4QdxjkhexamCqE7ShQ2dOCf6xkn6Vsx97xR8C
+         ypK/o/jbi8UEMA2cYi0mD+vrWENICBo3OdmpD0A2bNIdWY81v7QR9JkZbIBhxzItrC
+         WQr64LGaIQk6TH0F6KKHCcS3VYKCP9A05SphZSnmF8kSS0zkHfjnUvaIn2rsHpWSOM
+         W2Bfa1bifqnk5MfXTRJE7/EEx+LU0OkBU9TMFBjEaAnAKRdWT9V4USM/6ZtzgbpXnk
+         qQBwXAzktzR7w==
 Received: by mercury (Postfix, from userid 1000)
-        id 94E241060757; Sat, 29 Oct 2022 02:04:48 +0200 (CEST)
-Date:   Sat, 29 Oct 2022 02:04:48 +0200
+        id DD9451060757; Sat, 29 Oct 2022 02:17:08 +0200 (CEST)
+Date:   Sat, 29 Oct 2022 02:17:08 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
 Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: remove dead code
-Message-ID: <20221029000448.zanbx2cdb6woxw36@mercury.elektranox.org>
-References: <20221004073652.568681-1-usama.anjum@collabora.com>
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+Subject: Re: [PATCH] power: supply: remove less-than-zero comparison of
+ unsigned variables
+Message-ID: <20221029001708.fxu6he7pbv7voiy2@mercury.elektranox.org>
+References: <20221004064521.498510-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="zpqim7ikonix4hlu"
+        protocol="application/pgp-signature"; boundary="kpqij2bctgflog2o"
 Content-Disposition: inline
-In-Reply-To: <20221004073652.568681-1-usama.anjum@collabora.com>
+In-Reply-To: <20221004064521.498510-1-usama.anjum@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,75 +59,76 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---zpqim7ikonix4hlu
+--kpqij2bctgflog2o
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Oct 04, 2022 at 12:36:51PM +0500, Muhammad Usama Anjum wrote:
-> tmp is an unsigned variable. It can never be less than zero. Remove the
-> dead code.
+On Tue, Oct 04, 2022 at 11:45:21AM +0500, Muhammad Usama Anjum wrote:
+> max_chg_vol_reg and max_chg_cur_reg are unsigned variables. The
+> less-than-zero comparison of an unsigned value is never true. Remove
+> these checks.
 >=20
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
 
-Right, but the return value of regmap_bulk_read() should be checked
-instead.
+I'm a bit hesitant to apply this. While the analysis is correct
+max_chg_cur_reg is sourced from rk817_chg_cur_to_reg(). That has
+has a 'u8' return value as function signature, but tries to return
+-EINVAL. I think it makes sense to either fix this at the same
+time or change the variable type to signed. Also please Cc the
+driver author (done now).
 
 -- Sebastian
 
->  drivers/power/supply/rk817_charger.c | 4 ----
->  1 file changed, 4 deletions(-)
+>  drivers/power/supply/rk817_charger.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
 rk817_charger.c
-> index aa4b33f1bb83..ba3f5ccaeacd 100644
+> index 635f051b0821..aa4b33f1bb83 100644
 > --- a/drivers/power/supply/rk817_charger.c
 > +++ b/drivers/power/supply/rk817_charger.c
-> @@ -785,8 +785,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_ch=
-arger *charger,
->  		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
->  				 bulk_reg, 4);
->  		tmp =3D get_unaligned_be32(bulk_reg);
-> -		if (tmp < 0)
-> -			tmp =3D 0;
->  		boot_charge_mah =3D ADC_TO_CHARGE_UAH(tmp,
->  						    charger->res_div) / 1000;
->  		/*
-> @@ -825,8 +823,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_ch=
-arger *charger,
->  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
->  			 bulk_reg, 4);
->  	tmp =3D get_unaligned_be32(bulk_reg);
-> -	if (tmp < 0)
-> -		tmp =3D 0;
->  	boot_charge_mah =3D ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
->  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
->  			 bulk_reg, 2);
+> @@ -951,12 +951,12 @@ static int rk817_battery_init(struct rk817_charger =
+*charger,
+> =20
+>  	max_chg_cur_reg =3D rk817_chg_cur_to_reg(max_chg_cur_ma);
+> =20
+> -	if (max_chg_vol_reg < 0 || max_chg_vol_reg > 7) {
+> +	if (max_chg_vol_reg > 7) {
+>  		return dev_err_probe(charger->dev, -EINVAL,
+>  		       "invalid max charger voltage, value %u unsupported\n",
+>  		       max_chg_vol_mv * 1000);
+>  	}
+> -	if (max_chg_cur_reg < 0 || max_chg_cur_reg > 7) {
+> +	if (max_chg_cur_reg > 7) {
+>  		return dev_err_probe(charger->dev, -EINVAL,
+>  		       "invalid max charger current, value %u unsupported\n",
+>  		       max_chg_cur_ma * 1000);
 > --=20
 > 2.30.2
 >=20
 
---zpqim7ikonix4hlu
+--kpqij2bctgflog2o
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNcbh0ACgkQ2O7X88g7
-+prK4xAAp6R66xdKiJ+FGOpxmJeMQwpCWEbEbP6OQms2yhUH7sC8gAf4hJVIt+Ee
-68BsaBG+FElQP1Ocj7aWn+6Up2ZXpX9oEpJ3DFr9zzD6Pw+zQqXl2Wc4TEldQVjq
-u3/vc0vcSpxVrCbGcaedKjXt2yvTWN0Wrr7S2SljalxV8XhgeypeTW0ZvxGDB6pR
-RXyf1qSwvOrNuv5sf816DbS27TaN/ALr8fjjVRTH3frn7K778a3tWVf7TdBXeq70
-y87rwQaPAa1TY4bgk5Cai5a80h7VlVmzznCl4HDqwMoe0DlFZnX2Zq6YzfxmPDer
-x1+PDqarZTxDO/EmA6fyWAXi/UD1zBsEYAaMOb0P/HBplagio6FoUw4/LIz/P3+y
-iPFV7GxIPjLwzyz7gRE517dKI4WVnkiyV8cAgfbR7cLpqgFq4G9vIbMHE8tNNvPp
-XcIwwEjPxSSic0G8aWQHW537BceBBX/INZxgnOFKO9lVKJUf3qzc/m20ylL4N918
-2uG/LHffzoXVOFQv2XuOr6ECwW+SppZ/uauv+7HA7UVxWc5zyswDhUThx47PpW8f
-x+cShq3izB13CMKEvndmXMxccjhd39MTZEw2V9vZMNbMzT7oFWJWtUh9C0bjDRWx
-MPTBUfZGN2jMI9NM6YWUrIV5D62LXW7VXCC4O2+DKPV/MWzM8y4=
-=UJ8c
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNccQAACgkQ2O7X88g7
++pqYLA//VBqbwe7TYlleJXz7Cmqb0nUb+ZG9Pc6wmlWSTpitKPkc1+eAEqJ0azCY
+DDZB35scSvAZAyhu/RA1W4+P/v3CW6K172UYSd3xi6IHtwLA9yBNN+k5c/bdpiBH
+9nAB/FB2qVN22AHsOeYYRlQ1mTVtvqvvy4DicrM4+AH6WjakJ17QpR/g0xBfjXi/
+ZYvYwpzGSGgyBL30IZqFT90dbKlUOTBU6vxsd8bDp448tPhehzfdh0oM0r8lxI34
+0d8LDecZlWWY1lbFE7ChDYQ84O5AxEnPABqC3bBVAFUz0pklmAjh0c8rZU8IZcKp
+Z6lkETVqwCMLb6auyZfpsbG69JmwnNa53I3qDBB7ub1BauGptcvG0vByqLS6Q7Uc
+8kazcsNqiQ+Xmq9ca1rV/p/vSRfraaJJNxGb5zYID0chrsjr7QsirY2AezwgrDi9
+x6XzJ1XngE7oTAzdWCfNln0TZ3vUSYOeq+oRduFj4hEEnAuIK1iLTqCUBDS9+Py6
+pSho+U2PigHwnh+XTrCHJDIcU1R0By+KLOLUeXvC1k3bvw2uiUsvo2kfDXyecu+v
+gsGDTwGwkf4AnMaVKUCPDFPEKhsrIGimP8Pf7I4bR+8zLRxbETznqsBIL0NX2aXa
+WRviqu7C1jt3+qYX5Hd3uZgibIyE5Ovtfifa6yiJwG0VTc/ViFA=
+=Ig94
 -----END PGP SIGNATURE-----
 
---zpqim7ikonix4hlu--
+--kpqij2bctgflog2o--
