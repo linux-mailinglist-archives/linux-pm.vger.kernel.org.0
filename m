@@ -2,118 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527FA612634
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Oct 2022 00:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590DE61264B
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Oct 2022 00:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229616AbiJ2WWn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Oct 2022 18:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43586 "EHLO
+        id S229552AbiJ2Wwn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Oct 2022 18:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiJ2WWn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 18:22:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E622133850;
-        Sat, 29 Oct 2022 15:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667082162; x=1698618162;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zArReFz0K4WZAU7MHhzMeJpctz+eoMR8V6T85As7MO8=;
-  b=eY8yrce/snCPALglB7j634xvg7ux8g4LBxwVRKEXxf4ltOsKFNjP0/NN
-   eLCcquL5Ib0k1LIfYxs5cbM3cwMvvrO0FPcbHufRKd9Upe7my0CTUg3sr
-   s9VlXoHAoT59JLLkuu/h+RffiFGLoNrYY5THcJy8b2qRgtp3WWIPHoU+U
-   Kt+famGlZrClthSq9dQfpEtbH+zQxids7hI4swDYGL9o9rU0N2BzwhqCH
-   3loHzo18v54u41bQMu0uEGMCMFE+zSsdozrHiv4b/R0kJnPAmAHQFXVFA
-   Nal1c7jdH172pDNCTJAG9ylIY6MqWUCOcEAfdjH2WBEzCZCOnhH2etd+W
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="296105542"
-X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
-   d="scan'208";a="296105542"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 15:22:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="808169545"
-X-IronPort-AV: E=Sophos;i="5.95,224,1661842800"; 
-   d="scan'208";a="808169545"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga005.jf.intel.com with ESMTP; 29 Oct 2022 15:22:33 -0700
-Date:   Sat, 29 Oct 2022 15:29:36 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Len Brown <len.brown@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Aubrey Li <aubrey.li@linux.intel.com>,
-        Haowen Bai <baihaowen@meizu.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal: intel: hfi: Improve the type of
- hfi_features::nr_table_pages
-Message-ID: <20221029222936.GD24473@ranerica-svr.sc.intel.com>
-References: <20221018112240.25647-1-ricardo.neri-calderon@linux.intel.com>
- <CAJZ5v0hsWw2juPzLooVfDgykTwdepjgGSQGezhYeFBQN8yza_Q@mail.gmail.com>
+        with ESMTP id S229441AbiJ2Wwm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 18:52:42 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96385186DF;
+        Sat, 29 Oct 2022 15:52:41 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id i10so5501583qkl.12;
+        Sat, 29 Oct 2022 15:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FlfzuOHM1YFrNvQdKzw6XTpnPpUSBLciH+9rkU1qqZ0=;
+        b=JWtcNlw9n1MHCubXk8qkLBh410FkH7pnB9AXpKIuh66LELEIGAUJKC3qATxOBev82K
+         iWZj2OyZQZKQ1ODJpHq6AmsrK/gENL5ViOAs2G5YZjIp8MRxVqm82zYdYIrTIAp2tMgA
+         KTIOaeJf6idfkIDLZ0m9T95RvREW4h7zxiXh3bn8d4W4WXt6wZj7fIFOLzn947DxRg0J
+         a1XZiP1aIY0ycPSEc7dwlJ+rfW8X2mTYWFpXVG8uRfVkvfv5KRsSN0LwEpajpZ7hEGRl
+         5CLoCR9V1/L+MQ/WiPOoPX5ho3OlfYOCfvaErNcKHZ2Jck8K4vU4vHanTzhvYjF1+/9D
+         TDrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FlfzuOHM1YFrNvQdKzw6XTpnPpUSBLciH+9rkU1qqZ0=;
+        b=UjiaIr7J0mwVrWpK6ezSETGwb/LbaZoPbN1sAHV1VLO7gaHXwwdLjnctw74uQMd2o9
+         RqwgZ2hz30EXd9ejXcstRf5MuGIyMZZ62Zh3ArxBQYP2ry9s81Iaw72mUXnO2ayGzYDy
+         dvTxmObcGSn2o7Gpv11TMezsMNzd4ZMXjvgkKBKvoZdmfbPV5zkQctf4TzHhHft0N15t
+         hQnM7z+SnmQ9440BDnzB0l1s5jTBj9JUnjBfXOV/qoNtRvMhu463x8RAHJNlBc4EJOMo
+         6Q+aLo1KrO5ceVebEkfPUz3e160O+TMYHvHxh+Bp4OSHQDuJqoPwv6/u6iZ9r+0lCNVJ
+         Q4Hg==
+X-Gm-Message-State: ACrzQf38P0FrjcFQgy/x6g0E+XmSp+40GK7s+rSoIXBa/5K2Vy6jjMfT
+        X1dPVXqUTdVP+5+wxtAKBe3HrkkZiBp7SOmNnsY=
+X-Google-Smtp-Source: AMsMyM4dQ3TeoEE+jqU/nddI292tqpWhXocEXIvqnCT94aO+/0h9o5OBH8kne71u+ImDm0OzdBqkip99BIi6o6LDBjU=
+X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
+ j10-20020a05620a288a00b006b8fcfedb02mr4523899qkp.504.1667083960733; Sat, 29
+ Oct 2022 15:52:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hsWw2juPzLooVfDgykTwdepjgGSQGezhYeFBQN8yza_Q@mail.gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221029093000.45451-1-sravanhome@gmail.com> <20221029093000.45451-5-sravanhome@gmail.com>
+In-Reply-To: <20221029093000.45451-5-sravanhome@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 30 Oct 2022 00:52:03 +0200
+Message-ID: <CAHp75Vcej8uhmdZmMQAH0-0To0oaFsYsvtorZiwuSTKUFKj3hA@mail.gmail.com>
+Subject: Re: [PATCH v5 4/8] power: supply: fix wrong interpretation of
+ register value
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     sre@kernel.org, lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 08:13:15PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Oct 18, 2022 at 1:16 PM Ricardo Neri
-> <ricardo.neri-calderon@linux.intel.com> wrote:
-> >
-> > A Coverity static code scan raised a potential overflow_before_widen
-> > warning when hfi_features::nr_table_pages is used as an argument to
-> > memcpy in intel_hfi_process_event().
-> >
-> > Even though the overflow can never happen (the maximum number of pages of
-> > the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
-> > the data type of hfi_features::nr_table_pages makes Coverity happy and
-> > matches the data type of the argument 'size' of memcpy().
-> >
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > Cc: Amit Kucheria <amitk@kernel.org>
-> > Cc: Zhang Rui <rui.zhang@intel.com>
-> > Cc: Len Brown <len.brown@intel.com>
-> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > Cc: Aubrey Li <aubrey.li@linux.intel.com>
-> > Cc: Haowen Bai <baihaowen@meizu.com>
-> > Cc: linux-pm@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> > ---
-> >  drivers/thermal/intel/intel_hfi.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-> > index a0640f762dc5..239afe02e518 100644
-> > --- a/drivers/thermal/intel/intel_hfi.c
-> > +++ b/drivers/thermal/intel/intel_hfi.c
-> > @@ -137,7 +137,7 @@ struct hfi_instance {
-> >   * Parameters and supported features that are common to all HFI instances
-> >   */
-> >  struct hfi_features {
-> > -       unsigned int    nr_table_pages;
-> > +       size_t          nr_table_pages;
-> >         unsigned int    cpu_stride;
-> >         unsigned int    hdr_size;
-> >  };
-> > --
-> 
-> Applied as 6.2 material, thanks!
+On Sat, Oct 29, 2022 at 11:30 AM Saravanan Sekar <sravanhome@gmail.com> wrote:
+>
+> fix the switch cases to match the register value.
 
-Thank you Rafael!
+Something is still wrong with the English grammar (i.e. capitalization
+at the beginning of the sentence).
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
