@@ -2,74 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A161611E65
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 01:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FFC611E94
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 02:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiJ1X50 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 28 Oct 2022 19:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S229450AbiJ2AEz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 28 Oct 2022 20:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229944AbiJ1X5Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 19:57:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003471C77DA;
-        Fri, 28 Oct 2022 16:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229536AbiJ2AEy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 28 Oct 2022 20:04:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8448F3740D;
+        Fri, 28 Oct 2022 17:04:52 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5F0262AF7;
-        Fri, 28 Oct 2022 23:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 43050C433D6;
-        Fri, 28 Oct 2022 23:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667001443;
-        bh=KsYuk4vSab1tim0O0Xj55qxhUwIRMGlontNk9l00ZV8=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=jD15AB7zFKzHGXVJORQc1zfReeJrs3hViDu/DgtIpXBumkS2znHLviC48uIVeMtLy
-         E7PePFSXtlU87aZRHt49q4TkrW4M99qcJBOqJW4735csucmfgpRJGIPBTHAuaZ6ZfX
-         q6XFxjY4R1nhP2flEoP81m5TS+TxtGil19WFfeClMpS3BB1bdszxKRdKeOTgIGbS/g
-         PqDq+x+JpapyCHf8YOFDjYQMBzcnq9R5WUzeHbnXvO2arz791Rqm8/RbsQ2yK2UklJ
-         VJysXI8aidLjuAqd5zKBJaJe4gGpenRjYlqkuW+qeAs1B91z/2UocvGwEzLrr98FC9
-         Wh1Lcb/K4gx9g==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26D9AC4314C;
-        Fri, 28 Oct 2022 23:57:23 +0000 (UTC)
-Subject: Re: [GIT PULL] Power management fixes for v6.1-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
-References: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-acpi.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0hT3gebDJdqjoODa_z+WgJqJBgusCg1j2P8Os4=mJ0G4g@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.1-rc3
-X-PR-Tracked-Commit-Id: 6f257934ed6170ed0094149e0e1bac09f7997103
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6b872a5ecece462ba02c8cad1c0203583631db2b
-Message-Id: <166700144315.1674.3221315977917085505.pr-tracker-bot@kernel.org>
-Date:   Fri, 28 Oct 2022 23:57:23 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B1E06602942;
+        Sat, 29 Oct 2022 01:04:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667001891;
+        bh=N/y7U/Okdvo3CXVLovtSFdb9ULZV0KM7M5mV6wzzd+A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=od03TChcm26PnFRBuIxGENz/XdB14TrhfNjelcIfoS0F1hwZBW0yz5f8L1VES0KJE
+         bvSxMV8oyglk8hCfqaBXuxttQQJtCNhOF2uuDNdrVtYYWXxA/cEYs+hsrC0NKAR/XA
+         UBTDQlgppmxudInnokcyDHj2FJoGDlIeM1lLatBaFtYWdX3RlVFTdTSY9un5Tbj/3m
+         8LlH5qPocYrsrecWhQ57MQADlE2S88nBW5gZSo7uLY9m52ONfH6RJkkNg/DK4p7sjm
+         jG3BDZPaWxrGVTdfptBZcJtA7eGHDZ3Psi6fFJvLXooKXQmqu7bduep65EG3TkrUf3
+         4lrcS4EkOLbYA==
+Received: by mercury (Postfix, from userid 1000)
+        id 94E241060757; Sat, 29 Oct 2022 02:04:48 +0200 (CEST)
+Date:   Sat, 29 Oct 2022 02:04:48 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: remove dead code
+Message-ID: <20221029000448.zanbx2cdb6woxw36@mercury.elektranox.org>
+References: <20221004073652.568681-1-usama.anjum@collabora.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zpqim7ikonix4hlu"
+Content-Disposition: inline
+In-Reply-To: <20221004073652.568681-1-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 28 Oct 2022 17:17:33 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.1-rc3
+--zpqim7ikonix4hlu
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6b872a5ecece462ba02c8cad1c0203583631db2b
+Hi,
 
-Thank you!
+On Tue, Oct 04, 2022 at 12:36:51PM +0500, Muhammad Usama Anjum wrote:
+> tmp is an unsigned variable. It can never be less than zero. Remove the
+> dead code.
+>=20
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Right, but the return value of regmap_bulk_read() should be checked
+instead.
+
+-- Sebastian
+
+>  drivers/power/supply/rk817_charger.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/=
+rk817_charger.c
+> index aa4b33f1bb83..ba3f5ccaeacd 100644
+> --- a/drivers/power/supply/rk817_charger.c
+> +++ b/drivers/power/supply/rk817_charger.c
+> @@ -785,8 +785,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_ch=
+arger *charger,
+>  		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
+>  				 bulk_reg, 4);
+>  		tmp =3D get_unaligned_be32(bulk_reg);
+> -		if (tmp < 0)
+> -			tmp =3D 0;
+>  		boot_charge_mah =3D ADC_TO_CHARGE_UAH(tmp,
+>  						    charger->res_div) / 1000;
+>  		/*
+> @@ -825,8 +823,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_ch=
+arger *charger,
+>  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
+>  			 bulk_reg, 4);
+>  	tmp =3D get_unaligned_be32(bulk_reg);
+> -	if (tmp < 0)
+> -		tmp =3D 0;
+>  	boot_charge_mah =3D ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
+>  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
+>  			 bulk_reg, 2);
+> --=20
+> 2.30.2
+>=20
+
+--zpqim7ikonix4hlu
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNcbh0ACgkQ2O7X88g7
++prK4xAAp6R66xdKiJ+FGOpxmJeMQwpCWEbEbP6OQms2yhUH7sC8gAf4hJVIt+Ee
+68BsaBG+FElQP1Ocj7aWn+6Up2ZXpX9oEpJ3DFr9zzD6Pw+zQqXl2Wc4TEldQVjq
+u3/vc0vcSpxVrCbGcaedKjXt2yvTWN0Wrr7S2SljalxV8XhgeypeTW0ZvxGDB6pR
+RXyf1qSwvOrNuv5sf816DbS27TaN/ALr8fjjVRTH3frn7K778a3tWVf7TdBXeq70
+y87rwQaPAa1TY4bgk5Cai5a80h7VlVmzznCl4HDqwMoe0DlFZnX2Zq6YzfxmPDer
+x1+PDqarZTxDO/EmA6fyWAXi/UD1zBsEYAaMOb0P/HBplagio6FoUw4/LIz/P3+y
+iPFV7GxIPjLwzyz7gRE517dKI4WVnkiyV8cAgfbR7cLpqgFq4G9vIbMHE8tNNvPp
+XcIwwEjPxSSic0G8aWQHW537BceBBX/INZxgnOFKO9lVKJUf3qzc/m20ylL4N918
+2uG/LHffzoXVOFQv2XuOr6ECwW+SppZ/uauv+7HA7UVxWc5zyswDhUThx47PpW8f
+x+cShq3izB13CMKEvndmXMxccjhd39MTZEw2V9vZMNbMzT7oFWJWtUh9C0bjDRWx
+MPTBUfZGN2jMI9NM6YWUrIV5D62LXW7VXCC4O2+DKPV/MWzM8y4=
+=UJ8c
+-----END PGP SIGNATURE-----
+
+--zpqim7ikonix4hlu--
