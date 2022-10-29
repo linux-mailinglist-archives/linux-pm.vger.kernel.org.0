@@ -2,176 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04562612323
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 15:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9802612619
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Oct 2022 00:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbiJ2NIO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Oct 2022 09:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34130 "EHLO
+        id S229574AbiJ2WC4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Oct 2022 18:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiJ2NIN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 09:08:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81ADE27CCD;
-        Sat, 29 Oct 2022 06:08:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S229489AbiJ2WCz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 18:02:55 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB072C656;
+        Sat, 29 Oct 2022 15:02:54 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0D8A0B80C63;
-        Sat, 29 Oct 2022 13:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE16FC433C1;
-        Sat, 29 Oct 2022 13:08:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667048889;
-        bh=quMDOfP1QXfzQ6F0KCVWRa5HH46e9O2tMvwS/Aw9lB4=;
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CFC21660231A;
+        Sat, 29 Oct 2022 23:02:52 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667080972;
+        bh=34xyCO5Alo2glnzXKm3onPMsgcEoOJdeiM8/2fgcEbQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eBFymFPKFa3NrMnJKmOaI2ORyY7Ha9urPdBGJDtPtGuPBSln8Wj/vU6DW6R3LoheL
-         cFBo4FGtgubxaMd72SlDKlpAN65MXF08HZgxYOb+5dTF0ZVggep9DzW2F0+BNnIo59
-         RzjlnRs8WHo099wgBCHJnMOC6K7uwHObkkPwTI4rDWi4X83NNNHmp95H4qe8Y4Fr93
-         ZQzKl4OqwviodcDjyauB9pLUDfQpXyDnJxrEU184aI9bhaD0Rt7Drb5Lx3AdYN+FW/
-         BG8dw497iFpOi4e/HMt9pl5DI97ntLekHKxi/ArTUWtfenWnffjA/21a7zCmnEkAtM
-         DsWR63Q38vaCg==
-Date:   Sat, 29 Oct 2022 21:08:00 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Alistair Francis <alistair@alistair23.me>
-Cc:     lgirdwood@gmail.com, robh+dt@kernel.org, broonie@kernel.org,
-        kernel@pengutronix.de, lee.jones@linaro.org,
-        linux-arm-kernel@lists.infradead.org, alistair23@gmail.com,
-        linux-imx@nxp.com, amitk@kernel.org, s.hauer@pengutronix.de,
-        linux@roeck-us.net, rui.zhang@intel.com,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, andreas@kemnade.info,
-        linux-kernel@vger.kernel.org, geert@linux-m68k.org
-Subject: Re: [PATCH v23 2/2] ARM: dts: imx7d-remarkable2: Enable
- silergy,sy7636a
-Message-ID: <20221029130800.GZ125525@dragon>
-References: <20221029100646.294583-1-alistair@alistair23.me>
- <20221029100646.294583-3-alistair@alistair23.me>
+        b=Uk+C9Wq4RQZR9ak3Evg9c2Fv7UHDHSK9JFFdLIgwcUblgosBx2Pz3A1RBJTuF0jC1
+         fbYHcCiJ4pQfWRKp0scaAVNG06w3Np5QvsY4MIMBnGh+F5CLc3cLjexa84NQAzD/Zm
+         mB7Htet0hr95fwHWlV8qnHZGuVjqt1DPoA+mtoWoqomm9Cp6nDH5y89IVcviFk6U+G
+         +q5aYcRDnq4NdAeZNo6a3+RqDi9lskkf5YvhqCrO3EW896Iv44u4zsROiRC+Gs249b
+         p3MsPpvOn66e5qbF8aStXFwKRnCUkm9NoD0Pd19jLlHs/udrrVJ/F9aklZ3rQa+Zy6
+         pG8rzQzWHcdIw==
+Received: by mercury (Postfix, from userid 1000)
+        id 373041066A63; Sun, 30 Oct 2022 00:02:50 +0200 (CEST)
+Date:   Sun, 30 Oct 2022 00:02:50 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, andy.shevchenko@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v5 0/8] Add support for mp2733 battery charger
+Message-ID: <20221029220250.pybesx2w4hslkrcp@mercury.elektranox.org>
+References: <20221029093000.45451-1-sravanhome@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tnqkut6gjfzafbxh"
 Content-Disposition: inline
-In-Reply-To: <20221029100646.294583-3-alistair@alistair23.me>
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221029093000.45451-1-sravanhome@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 08:06:46PM +1000, Alistair Francis wrote:
-> Enable the silergy,sy7636a and silergy,sy7636a-regulator on the
-> reMarkable2.
-> 
-> Signed-off-by: Alistair Francis <alistair@alistair23.me>
-> ---
->  arch/arm/boot/dts/imx7d-remarkable2.dts | 63 +++++++++++++++++++++++++
->  1 file changed, 63 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/imx7d-remarkable2.dts b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> index a2a91bfdd98e..58581295b9a0 100644
-> --- a/arch/arm/boot/dts/imx7d-remarkable2.dts
-> +++ b/arch/arm/boot/dts/imx7d-remarkable2.dts
-> @@ -22,6 +22,28 @@ memory@80000000 {
->  		reg = <0x80000000 0x40000000>;
->  	};
->  
-> +	thermal-zones {
-> +		epd-thermal {
-> +			thermal-sensors = <&epd_pmic>;
-> +			polling-delay-passive = <30000>;
-> +			polling-delay = <30000>;
-> +
-> +			trips {
-> +				trip0 {
-> +					temperature = <49000>;
-> +					hysteresis = <2000>;
-> +					type = "passive";
-> +				};
-> +
-> +				trip1 {
-> +					temperature = <50000>;
-> +					hysteresis = <2000>;
-> +					type = "critical";
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  	reg_brcm: regulator-brcm {
->  		compatible = "regulator-fixed";
->  		regulator-name = "brcm_reg";
-> @@ -84,6 +106,33 @@ wacom_digitizer: digitizer@9 {
->  	};
->  };
->  
-> +&i2c4 {
-> +	clock-frequency = <100000>;
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&pinctrl_i2c4>;
-> +	pinctrl-1 = <&pinctrl_i2c4>;
-> +	status = "okay";
-> +
-> +	sy7636a: pmic@62 {
-> +		compatible = "silergy,sy7636a";
-> +		reg = <0x62>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_epdpmic>;
-> +		#address-cells = <1>;
-> +		#size-cells = <0>;
-> +		#thermal-sensor-cells = <0>;
-> +		epd-pwr-good-gpios = <&gpio6 21 GPIO_ACTIVE_HIGH>;
-> +		status = "okay";
 
-The "okay" status is only needed to flip disabled devices.  It can be
-dropped here.
+--tnqkut6gjfzafbxh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I fixed it up and applied both patches.
+Hi,
 
-Shawn
+On Sat, Oct 29, 2022 at 11:29:52AM +0200, Saravanan Sekar wrote:
+> add support for mp2733 Battery charger control driver for
+> Monolithic Power System's MP2733 chipset.
 
-> +
-> +		regulators {
-> +			reg_epdpmic: vcom {
-> +				regulator-name = "vcom";
-> +				regulator-boot-on;
-> +			};
-> +		};
-> +	};
-> +};
-> +
->  &snvs_pwrkey {
->  	status = "okay";
->  };
-> @@ -177,6 +226,13 @@ MX7D_PAD_SAI1_TX_BCLK__GPIO6_IO13	0x14
->  		>;
->  	};
->  
-> +	pinctrl_epdpmic: epdpmicgrp {
-> +		fsl,pins = <
-> +			MX7D_PAD_SAI2_RX_DATA__GPIO6_IO21	0x00000074
-> +			MX7D_PAD_ENET1_RGMII_TXC__GPIO7_IO11	0x00000014
-> +		>;
-> +	};
-> +
->  	pinctrl_i2c1: i2c1grp {
->  		fsl,pins = <
->  			MX7D_PAD_I2C1_SDA__I2C1_SDA		0x4000007f
-> @@ -184,6 +240,13 @@ MX7D_PAD_I2C1_SCL__I2C1_SCL		0x4000007f
->  		>;
->  	};
->  
-> +	pinctrl_i2c4: i2c4grp {
-> +		fsl,pins = <
-> +			MX7D_PAD_I2C4_SDA__I2C4_SDA		0x4000007f
-> +			MX7D_PAD_I2C4_SCL__I2C4_SCL		0x4000007f
-> +		>;
-> +	};
-> +
->  	pinctrl_uart1: uart1grp {
->  		fsl,pins = <
->  			MX7D_PAD_UART1_TX_DATA__UART1_DCE_TX	0x79
-> -- 
-> 2.38.1
-> 
+I suppose you do not actually want to get this merged concidering
+you did not carry over the Acked-by you got in v4? :)
+
+-- Sebastian
+
+--tnqkut6gjfzafbxh
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNdowYACgkQ2O7X88g7
++ppCuA/9EaUr3RIT3rZlRyeSq64bqT5OX6cD2aCfAz0t6X4UnShTGVeXTHY2ROxX
+ChF3GmKE6V7VDbNUyWisgVAXVk0Sxv/qIDHJKLy9H07BGRw61jfYU/LTNrup/1rU
+8e6HbmKBbr6s+Bp4G2uTTCS2YmcFtd13CoKu+jr+of67o74eI16iuHpb1+LS7nIC
+Qo6nRUf/BbrG6NDRNFLKkrFRSXJ0OupS9ScjB2M0uwSL7ShHHXz98BNt54EsVsvF
+LVdAB/jNdpHGpoE3sGeLWACHBbudNRrbFo1FGf/lCC5ck0lHeaF+sz6oe1AkU2So
+QWsWnvsngqcZi2I3DqnAjIvrVMQFxUr74/nGylcyqb+5B3J7ugqeO8RmXbKXtD/N
+L7EexVF4ijjJ+pA+XEIFfrOzBAveOrqj5FCb0zOcFtKO4NRl9w6mzZi8dTByZ4nm
+g8shb2qH/B+uLEEdoyIhAcpO7q2pK4rWG+mdnJZmMz8qwr3W/n/N1mO3I9AOr8q8
+p5EYXi1nxFrNU88HSxbP/IwCRaVsrI0+vdzqvZ+KisI2jNDkZN9zhNyz9m9e/+5f
+Xdq97NX0qQtyMLK5uTD2cVR3ULhWf0AxyI5p4p4sjx1uyFMADoJ0LGP4tRUwUl2m
+7Y2g3HIFCHjrPqnVxvNs52TfHILISS/Ogug/8x6/yoC7KfK+RI4=
+=FNRE
+-----END PGP SIGNATURE-----
+
+--tnqkut6gjfzafbxh--
