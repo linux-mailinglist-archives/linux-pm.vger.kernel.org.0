@@ -2,295 +2,246 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A3A612107
-	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 09:26:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5219161218C
+	for <lists+linux-pm@lfdr.de>; Sat, 29 Oct 2022 10:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbiJ2H0s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 29 Oct 2022 03:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48134 "EHLO
+        id S229552AbiJ2IpY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 29 Oct 2022 04:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiJ2H0r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 03:26:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAE21A4019
-        for <linux-pm@vger.kernel.org>; Sat, 29 Oct 2022 00:26:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DC848B82E8A
-        for <linux-pm@vger.kernel.org>; Sat, 29 Oct 2022 07:26:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243A7C433B5;
-        Sat, 29 Oct 2022 07:26:40 +0000 (UTC)
-From:   Huacai Chen <chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>
-Cc:     loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>
-Subject: [PATCH V2 2/2] LoongArch: Add hibernation (ACPI S4) support
-Date:   Sat, 29 Oct 2022 15:21:49 +0800
-Message-Id: <20221029072149.1129926-2-chenhuacai@loongson.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221029072149.1129926-1-chenhuacai@loongson.cn>
-References: <20221029072149.1129926-1-chenhuacai@loongson.cn>
+        with ESMTP id S229494AbiJ2IpX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 29 Oct 2022 04:45:23 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1BA196EDA;
+        Sat, 29 Oct 2022 01:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667033122; x=1698569122;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eW0l4vh1EvfKw92JbwHaOUTwKitW3szL0V4i8boU3XA=;
+  b=Ac2xxlAJfe+Vqd682Zv8vlGKm5/cR4sWd6lE+RE4kfgMYMA6mvEwed+L
+   69RnPhC7j8KLbqhg2Gdd2XeHbGONoqPaAWybx1PNcDEqTmEQ66qtByycP
+   eEK9gguDefnc+meCpzdqc+ph4LItDpUlrmUNp/YN1UnOoCBbOB8ayVtfA
+   Ux/tyBMsO/2Wa1YbbpHEcjGW4/KkXMP3XBPh2AKu1Yn3O3i3dZq0ASM02
+   Fh5du9Fh3S2/hw3mdDHzRQg8MHZPQoARgfHNBoMKgmuaorOdiqpv/1BXw
+   oCvDWo5zPGvM/A6FDJ9PPgUh+ECyDqp6IYptIlvdQUj3oag9GiF9tLWG+
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="307377191"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="307377191"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2022 01:45:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10514"; a="610998755"
+X-IronPort-AV: E=Sophos;i="5.95,223,1661842800"; 
+   d="scan'208";a="610998755"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 29 Oct 2022 01:45:19 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oohSx-000Apg-0i;
+        Sat, 29 Oct 2022 08:45:19 +0000
+Date:   Sat, 29 Oct 2022 16:44:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
+ 8e9079a14a87adc267d8fef9bf420af3a8d84d60
+Message-ID: <635ce7ff.ONljMpQ4l0Y8sJBX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add hibernation (Suspend to Disk, aka ACPI S4) support for LoongArch.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 8e9079a14a87adc267d8fef9bf420af3a8d84d60  Merge branch 'thermal-intel' into bleeding-edge
 
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
----
-V2: Save/restore r21 and KS0.
+Error/Warning reports:
 
- arch/loongarch/Kconfig               |  3 ++
- arch/loongarch/kernel/asm-offsets.c  | 12 +++++
- arch/loongarch/kernel/reset.c        |  4 ++
- arch/loongarch/kernel/setup.c        |  5 +++
- arch/loongarch/power/Makefile        |  1 +
- arch/loongarch/power/hibernate.c     | 61 +++++++++++++++++++++++++
- arch/loongarch/power/hibernate_asm.S | 66 ++++++++++++++++++++++++++++
- 7 files changed, 152 insertions(+)
- create mode 100644 arch/loongarch/power/hibernate.c
- create mode 100644 arch/loongarch/power/hibernate_asm.S
+https://lore.kernel.org/oe-kbuild-all/202210291101.UBt5Vjis-lkp@intel.com
 
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 0df102401d1d..1943f840e494 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -521,6 +521,9 @@ menu "Power management options"
- config ARCH_SUSPEND_POSSIBLE
- 	def_bool y
- 
-+config ARCH_HIBERNATION_POSSIBLE
-+	def_bool y
-+
- source "kernel/power/Kconfig"
- source "drivers/acpi/Kconfig"
- 
-diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
-index bdd88eda9513..4ef494577813 100644
---- a/arch/loongarch/kernel/asm-offsets.c
-+++ b/arch/loongarch/kernel/asm-offsets.c
-@@ -257,3 +257,15 @@ void output_smpboot_defines(void)
- 	BLANK();
- }
- #endif
-+
-+#ifdef CONFIG_HIBERNATION
-+void output_pbe_defines(void)
-+{
-+	COMMENT(" Linux struct pbe offsets. ");
-+	OFFSET(PBE_ADDRESS, pbe, address);
-+	OFFSET(PBE_ORIG_ADDRESS, pbe, orig_address);
-+	OFFSET(PBE_NEXT, pbe, next);
-+	DEFINE(PBE_SIZE, sizeof(struct pbe));
-+	BLANK();
-+}
-+#endif
-diff --git a/arch/loongarch/kernel/reset.c b/arch/loongarch/kernel/reset.c
-index 8c82021eb2f4..9fad889a3c1b 100644
---- a/arch/loongarch/kernel/reset.c
-+++ b/arch/loongarch/kernel/reset.c
-@@ -15,6 +15,7 @@
- #include <acpi/reboot.h>
- #include <asm/idle.h>
- #include <asm/loongarch.h>
-+#include <asm/loongson.h>
- 
- void (*pm_power_off)(void);
- EXPORT_SYMBOL(pm_power_off);
-@@ -41,6 +42,9 @@ void machine_power_off(void)
- #ifdef CONFIG_SMP
- 	preempt_disable();
- 	smp_send_stop();
-+#endif
-+#ifdef CONFIG_PM
-+	enable_pci_wakeup();
- #endif
- 	do_kernel_power_off();
- #ifdef CONFIG_EFI
-diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.c
-index 96b6cb5db004..3c8bc250f4e2 100644
---- a/arch/loongarch/kernel/setup.c
-+++ b/arch/loongarch/kernel/setup.c
-@@ -28,6 +28,7 @@
- #include <linux/sizes.h>
- #include <linux/device.h>
- #include <linux/dma-map-ops.h>
-+#include <linux/suspend.h>
- #include <linux/swiotlb.h>
- 
- #include <asm/addrspace.h>
-@@ -312,6 +313,10 @@ static void __init arch_mem_init(char **cmdline_p)
- 
- 	dma_contiguous_reserve(PFN_PHYS(max_low_pfn));
- 
-+	/* Reserve for hibernation. */
-+	register_nosave_region(PFN_DOWN(__pa_symbol(&__nosave_begin)),
-+				   PFN_UP(__pa_symbol(&__nosave_end)));
-+
- 	memblock_dump_all();
- 
- 	early_memtest(PFN_PHYS(ARCH_PFN_OFFSET), PFN_PHYS(max_low_pfn));
-diff --git a/arch/loongarch/power/Makefile b/arch/loongarch/power/Makefile
-index 6740117decaa..58151d003e40 100644
---- a/arch/loongarch/power/Makefile
-+++ b/arch/loongarch/power/Makefile
-@@ -1,3 +1,4 @@
- obj-y	+= platform.o
- 
- obj-$(CONFIG_SUSPEND)		+= suspend.o suspend_asm.o
-+obj-$(CONFIG_HIBERNATION)	+= hibernate.o hibernate_asm.o
-diff --git a/arch/loongarch/power/hibernate.c b/arch/loongarch/power/hibernate.c
-new file mode 100644
-index 000000000000..efc4a54c8631
---- /dev/null
-+++ b/arch/loongarch/power/hibernate.c
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <asm/fpu.h>
-+#include <asm/loongson.h>
-+#include <asm/sections.h>
-+#include <asm/tlbflush.h>
-+
-+static u32 saved_crmd;
-+static u32 saved_prmd;
-+static u32 saved_euen;
-+static u32 saved_ecfg;
-+static u64 saved_pcpu_base;
-+struct pt_regs saved_regs;
-+
-+void save_processor_state(void)
-+{
-+	saved_crmd = csr_read32(LOONGARCH_CSR_CRMD);
-+	saved_prmd = csr_read32(LOONGARCH_CSR_PRMD);
-+	saved_euen = csr_read32(LOONGARCH_CSR_EUEN);
-+	saved_ecfg = csr_read32(LOONGARCH_CSR_ECFG);
-+	saved_pcpu_base = csr_read64(PERCPU_BASE_KS);
-+
-+	if (is_fpu_owner())
-+		save_fp(current);
-+}
-+
-+void restore_processor_state(void)
-+{
-+	csr_write32(saved_crmd, LOONGARCH_CSR_CRMD);
-+	csr_write32(saved_prmd, LOONGARCH_CSR_PRMD);
-+	csr_write32(saved_euen, LOONGARCH_CSR_EUEN);
-+	csr_write32(saved_ecfg, LOONGARCH_CSR_ECFG);
-+	csr_write64(saved_pcpu_base, PERCPU_BASE_KS);
-+
-+	if (is_fpu_owner())
-+		restore_fp(current);
-+}
-+
-+int pfn_is_nosave(unsigned long pfn)
-+{
-+	unsigned long nosave_begin_pfn = PFN_DOWN(__pa(&__nosave_begin));
-+	unsigned long nosave_end_pfn = PFN_UP(__pa(&__nosave_end));
-+
-+	return	(pfn >= nosave_begin_pfn) && (pfn < nosave_end_pfn);
-+}
-+
-+extern int swsusp_asm_suspend(void);
-+
-+int swsusp_arch_suspend(void)
-+{
-+	enable_pci_wakeup();
-+	return swsusp_asm_suspend();
-+}
-+
-+extern int swsusp_asm_resume(void);
-+
-+int swsusp_arch_resume(void)
-+{
-+	/* Avoid TLB mismatch during and after kernel resume */
-+	local_flush_tlb_all();
-+	return swsusp_asm_resume();
-+}
-diff --git a/arch/loongarch/power/hibernate_asm.S b/arch/loongarch/power/hibernate_asm.S
-new file mode 100644
-index 000000000000..60beff533175
---- /dev/null
-+++ b/arch/loongarch/power/hibernate_asm.S
-@@ -0,0 +1,66 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Hibernation support specific for LoongArch
-+ *
-+ * Author: Huacai Chen <chenhuacai@loongson.cn>
-+ * Copyright (C) 2020-2022 Loongson Technology Corporation Limited
-+ */
-+#include <linux/linkage.h>
-+#include <asm/asm.h>
-+#include <asm/asm-offsets.h>
-+#include <asm/regdef.h>
-+
-+.text
-+SYM_FUNC_START(swsusp_asm_suspend)
-+	la.pcrel	t0, saved_regs
-+	PTR_S		ra, t0, PT_R1
-+	PTR_S		sp, t0, PT_R3
-+	PTR_S		u0, t0, PT_R21
-+	PTR_S		fp, t0, PT_R22
-+	PTR_S		tp, t0, PT_R2
-+	PTR_S		s0, t0, PT_R23
-+	PTR_S		s1, t0, PT_R24
-+	PTR_S		s2, t0, PT_R25
-+	PTR_S		s3, t0, PT_R26
-+	PTR_S		s4, t0, PT_R27
-+	PTR_S		s5, t0, PT_R28
-+	PTR_S		s6, t0, PT_R29
-+	PTR_S		s7, t0, PT_R30
-+	PTR_S		s8, t0, PT_R31
-+	b		swsusp_save
-+SYM_FUNC_END(swsusp_asm_suspend)
-+
-+SYM_FUNC_START(swsusp_asm_resume)
-+	la.pcrel	t0, restore_pblist
-+	PTR_L		t0, t0, 0
-+0:
-+	PTR_L		t1, t0, PBE_ADDRESS  /* source */
-+	PTR_L		t2, t0, PBE_ORIG_ADDRESS /* destination */
-+	PTR_LI		t3, _PAGE_SIZE
-+	PTR_ADD		t3, t3, t1
-+1:
-+	REG_L		t8, t1, 0
-+	REG_S		t8, t2, 0
-+	PTR_ADDI	t1, t1, SZREG
-+	PTR_ADDI	t2, t2, SZREG
-+	bne		t1, t3, 1b
-+	PTR_L		t0, t0, PBE_NEXT
-+	bnez		t0, 0b
-+	la.pcrel	t0, saved_regs
-+	PTR_L		ra, t0, PT_R1
-+	PTR_L		sp, t0, PT_R3
-+	PTR_L		u0, t0, PT_R21
-+	PTR_L		fp, t0, PT_R22
-+	PTR_L		tp, t0, PT_R2
-+	PTR_L		s0, t0, PT_R23
-+	PTR_L		s1, t0, PT_R24
-+	PTR_L		s2, t0, PT_R25
-+	PTR_L		s3, t0, PT_R26
-+	PTR_L		s4, t0, PT_R27
-+	PTR_L		s5, t0, PT_R28
-+	PTR_L		s6, t0, PT_R29
-+	PTR_L		s7, t0, PT_R30
-+	PTR_L		s8, t0, PT_R31
-+	PTR_LI		a0, 0x0
-+	jirl		zero, ra, 0
-+SYM_FUNC_END(swsusp_asm_resume)
+Error/Warning: (recently discovered and may have been fixed)
+
+arch/loongarch/include/asm/acpi.h:102:8: error: redefinition of 'struct acpi_madt_core_pic'
+arch/loongarch/include/asm/acpi.h:112:8: error: redefinition of 'struct acpi_madt_lio_pic'
+arch/loongarch/include/asm/acpi.h:123:8: error: redefinition of 'struct acpi_madt_eio_pic'
+arch/loongarch/include/asm/acpi.h:133:8: error: redefinition of 'struct acpi_madt_ht_pic'
+arch/loongarch/include/asm/acpi.h:143:8: error: redefinition of 'struct acpi_madt_bio_pic'
+arch/loongarch/include/asm/acpi.h:154:8: error: redefinition of 'struct acpi_madt_msi_pic'
+arch/loongarch/include/asm/acpi.h:164:8: error: redefinition of 'struct acpi_madt_lpc_pic'
+arch/loongarch/include/asm/acpi.h:56:6: error: redeclaration of 'enum acpi_madt_core_pic_version'
+arch/loongarch/include/asm/acpi.h:57:9: error: redeclaration of enumerator 'ACPI_MADT_CORE_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:58:9: error: redeclaration of enumerator 'ACPI_MADT_CORE_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:59:9: error: redeclaration of enumerator 'ACPI_MADT_CORE_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:62:6: error: redeclaration of 'enum acpi_madt_lio_pic_version'
+arch/loongarch/include/asm/acpi.h:63:9: error: redeclaration of enumerator 'ACPI_MADT_LIO_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:64:9: error: redeclaration of enumerator 'ACPI_MADT_LIO_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:65:9: error: redeclaration of enumerator 'ACPI_MADT_LIO_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:68:6: error: redeclaration of 'enum acpi_madt_eio_pic_version'
+arch/loongarch/include/asm/acpi.h:69:9: error: redeclaration of enumerator 'ACPI_MADT_EIO_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:70:9: error: redeclaration of enumerator 'ACPI_MADT_EIO_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:71:9: error: redeclaration of enumerator 'ACPI_MADT_EIO_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:74:6: error: redeclaration of 'enum acpi_madt_ht_pic_version'
+arch/loongarch/include/asm/acpi.h:75:9: error: redeclaration of enumerator 'ACPI_MADT_HT_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:76:9: error: redeclaration of enumerator 'ACPI_MADT_HT_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:77:9: error: redeclaration of enumerator 'ACPI_MADT_HT_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:80:6: error: redeclaration of 'enum acpi_madt_bio_pic_version'
+arch/loongarch/include/asm/acpi.h:81:9: error: redeclaration of enumerator 'ACPI_MADT_BIO_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:82:9: error: redeclaration of enumerator 'ACPI_MADT_BIO_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:83:9: error: redeclaration of enumerator 'ACPI_MADT_BIO_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:86:6: error: redeclaration of 'enum acpi_madt_msi_pic_version'
+arch/loongarch/include/asm/acpi.h:87:9: error: redeclaration of enumerator 'ACPI_MADT_MSI_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:88:9: error: redeclaration of enumerator 'ACPI_MADT_MSI_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:89:9: error: redeclaration of enumerator 'ACPI_MADT_MSI_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:92:6: error: redeclaration of 'enum acpi_madt_lpc_pic_version'
+arch/loongarch/include/asm/acpi.h:93:9: error: redeclaration of enumerator 'ACPI_MADT_LPC_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:94:9: error: redeclaration of enumerator 'ACPI_MADT_LPC_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:95:9: error: redeclaration of enumerator 'ACPI_MADT_LPC_PIC_VERSION_RESERVED'
+drivers/irqchip/irq-loongarch-cpu.c:101:46: error: passing argument 2 of 'liointc_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongarch-cpu.c:110:46: error: passing argument 2 of 'eiointc_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-eiointc.c:313:50: error: passing argument 2 of 'pch_pic_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-eiointc.c:326:50: error: passing argument 2 of 'pch_msi_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-eiointc.c:340:12: error: conflicting types for 'eiointc_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_eio_pic *)'
+drivers/irqchip/irq-loongson-liointc.c:352:12: error: conflicting types for 'liointc_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_lio_pic *)'
+drivers/irqchip/irq-loongson-pch-lpc.c:150:12: error: conflicting types for 'pch_lpc_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_lpc_pic *)'
+drivers/irqchip/irq-loongson-pch-pic.c:334:63: error: passing argument 2 of 'pch_lpc_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-pch-pic.c:344:12: error: conflicting types for 'pch_pic_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_bio_pic *)'
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- loongarch-allyesconfig
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_bio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_core_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_eio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_ht_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_lio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_lpc_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_msi_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_EIO_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_EIO_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_EIO_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_HT_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_HT_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_HT_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LIO_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LIO_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LIO_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LPC_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LPC_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LPC_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_MSI_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_MSI_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_MSI_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_bio_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_core_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_eio_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_ht_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_lio_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_lpc_pic
+|   `-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_msi_pic
+|-- loongarch-buildonly-randconfig-r002-20221029
+|   |-- drivers-irqchip-irq-loongarch-cpu.c:error:passing-argument-of-eiointc_acpi_init-from-incompatible-pointer-type
+|   |-- drivers-irqchip-irq-loongarch-cpu.c:error:passing-argument-of-liointc_acpi_init-from-incompatible-pointer-type
+|   |-- drivers-irqchip-irq-loongson-eiointc.c:error:conflicting-types-for-eiointc_acpi_init-have-int(struct-irq_domain-struct-acpi_madt_eio_pic-)
+|   |-- drivers-irqchip-irq-loongson-eiointc.c:error:passing-argument-of-pch_msi_acpi_init-from-incompatible-pointer-type
+|   |-- drivers-irqchip-irq-loongson-eiointc.c:error:passing-argument-of-pch_pic_acpi_init-from-incompatible-pointer-type
+|   |-- drivers-irqchip-irq-loongson-liointc.c:error:conflicting-types-for-liointc_acpi_init-have-int(struct-irq_domain-struct-acpi_madt_lio_pic-)
+|   |-- drivers-irqchip-irq-loongson-pch-lpc.c:error:conflicting-types-for-pch_lpc_acpi_init-have-int(struct-irq_domain-struct-acpi_madt_lpc_pic-)
+|   |-- drivers-irqchip-irq-loongson-pch-pic.c:error:conflicting-types-for-pch_pic_acpi_init-have-int(struct-irq_domain-struct-acpi_madt_bio_pic-)
+|   `-- drivers-irqchip-irq-loongson-pch-pic.c:error:passing-argument-of-pch_lpc_acpi_init-from-incompatible-pointer-type
+|-- loongarch-buildonly-randconfig-r003-20221029
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_bio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_core_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_eio_pic_version
+
+elapsed time: 832m
+
+configs tested: 62
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                          randconfig-a001
+powerpc                           allnoconfig
+i386                          randconfig-a003
+arc                                 defconfig
+i386                          randconfig-a005
+csky                              allnoconfig
+arc                               allnoconfig
+alpha                               defconfig
+alpha                             allnoconfig
+riscv                             allnoconfig
+s390                                defconfig
+s390                             allmodconfig
+x86_64                              defconfig
+i386                                defconfig
+s390                             allyesconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a013
+arc                  randconfig-r043-20221028
+x86_64                           allyesconfig
+x86_64                        randconfig-a002
+sh                               allmodconfig
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+ia64                             allmodconfig
+arm                                 defconfig
+i386                          randconfig-a014
+mips                             allyesconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+riscv                randconfig-r042-20221028
+x86_64                        randconfig-a015
+x86_64                           rhel-8.3-kvm
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+s390                 randconfig-r044-20221028
+arc                              allyesconfig
+i386                          randconfig-a012
+x86_64                        randconfig-a004
+alpha                            allyesconfig
+i386                             allyesconfig
+i386                          randconfig-a016
+arm64                            allyesconfig
+arm                              allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20221028
+i386                          randconfig-a013
+hexagon              randconfig-r045-20221028
+i386                          randconfig-a015
+x86_64                        randconfig-a012
+x86_64                        randconfig-a001
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a011
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+
 -- 
-2.31.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp
