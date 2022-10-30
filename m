@@ -2,109 +2,378 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7618361291E
-	for <lists+linux-pm@lfdr.de>; Sun, 30 Oct 2022 09:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1CF6129FA
+	for <lists+linux-pm@lfdr.de>; Sun, 30 Oct 2022 11:16:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiJ3Ibm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 30 Oct 2022 04:31:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S229574AbiJ3KQs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 30 Oct 2022 06:16:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiJ3Ibk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Oct 2022 04:31:40 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CD9120;
-        Sun, 30 Oct 2022 01:31:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667118696; x=1698654696;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8vFhLuD0S36ME3HvT/tSVLmP1r1ZUW0wiXJ1NfH1yT0=;
-  b=R/YHafDbL4rdypqq7VB+z7X+tN8v6UuVaRFAtuyt5JAZQfEEvDdyPZF5
-   nfd0+yLXMoCInrpfbLxHGtNzRP6EA4J9xJ8WKoKcqM4maMKhv7bZOdFFa
-   QG62kxt/x4D5n0OuAKcMwQLdrJcZLiWqV3moPuXx4CNTwjj4q5ZRMmA9Z
-   pGxyBqNoLPMwCP3uyucQbQRoIjUGtfzmyt75U4zrpk/d+Jm11+h/rSZQu
-   BLslPZV/Kz9+hwYxpg8iuNb5mctM1bqIPL2/8kbvUv2z8zCgqdKHXqp05
-   XnnEcNJdXUSGTWntrz0bhwG0DAmXrvX/rXs1jlrPt2JL3uvgq5PWYm0Fm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="395044758"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="395044758"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 01:31:36 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10515"; a="722495889"
-X-IronPort-AV: E=Sophos;i="5.95,225,1661842800"; 
-   d="scan'208";a="722495889"
-Received: from heyingjx-mobl.ccr.corp.intel.com ([10.254.215.115])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 01:31:33 -0700
-Message-ID: <433dcc871ecbee4a2ddd21b3ae23be7100002149.camel@intel.com>
-Subject: Re: [PATCH 2/3] perf/x86/rapl: Use standard Energy Unit for SPR
- Dram RAPL domain
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     peterz@infradead.org, rjw@rjwysocki.net, len.brown@intel.com
-Cc:     mingo@redhat.com, linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ak@linux.intel.com, kan.liang@linux.intel.com,
-        artem.bityutskiy@linux.intel.com
-Date:   Sun, 30 Oct 2022 16:31:30 +0800
-In-Reply-To: <20220924054738.12076-3-rui.zhang@intel.com>
-References: <20220924054738.12076-1-rui.zhang@intel.com>
-         <20220924054738.12076-3-rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S229691AbiJ3KQr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 30 Oct 2022 06:16:47 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C69EC77F;
+        Sun, 30 Oct 2022 03:16:46 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so3664579pjk.1;
+        Sun, 30 Oct 2022 03:16:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6BjV3jMnHxiyk9vjlUByFMrcW+i/sskvIB9yrt40dHk=;
+        b=b82FV0uPTxO7N0jeVWLEvG6lSGRZag8ko426telOn8QPkZ86ufw0kWLu4O9jNEyvlV
+         jzivTXCBC2jKEIFjFHdJgAp470v0jybJSZDBxFCJUORfmpFhKpteWwf29mmwaLJYQP1f
+         Wb9Jm8ejN/AZTKNWWkanA+VryNobvnSp+rxrZpkTYQ8FZE/ardFWxtyj72GWnmG237th
+         7EjDeL+7Ae9/AWcR8leHhRBgc/039bQ6d5oZgZBtXcb4IYk+6fpKRvjD8dLLcS92ucLD
+         Fpq1K+c+EVTsMqotGUVhTc/za5SRhn5iwHS6OCOWp8apDVPHTJE23T09wDpfXIdQD6RQ
+         hGqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6BjV3jMnHxiyk9vjlUByFMrcW+i/sskvIB9yrt40dHk=;
+        b=d8aQHoQ4NHwS59D5eeGnNYfKYnxRwwyn+oekFnsEtUMmzwCz9oFYMPGCCSukDv2ji6
+         z3VmZD8nq8NU8CtjLOpkz8HnRnxULYzrnRAl6zlbLtmP9KDH/csWb6UYTSxsPOBxLkAI
+         xfHPDhoni87sp3weot+gBvWBkBAxqNPnMSWOnx3a4r1+gWg1S0Gol3o17vrGRqIgySga
+         YrEDP3yX8+YngiqQOtC9KrRbdASoOFZtTy9g4NzLpjAzd103pswtvWDBk/7uhtwt1JdS
+         UY+q9PSkCzLWl7ePWCIEHvzK7U+/dcyv8jK328YQWdMI9UImdyfzlIdLtMYN9XBH6k9i
+         41Yw==
+X-Gm-Message-State: ACrzQf3fhrzoYIbyEXiA0GCz2kq0c8m6G9v5mBDvo8qzMBA8N6y0wGv+
+        qd8hm2OXeYme04vwD6tvq4I=
+X-Google-Smtp-Source: AMsMyM6nOEePFc08O6PWhbcUUQFHk+7LRmtGo/1IfWmZgN5+Nh/Ok34dxugyF9j5yBIZnaeP4Xz4bw==
+X-Received: by 2002:a17:903:292:b0:186:f931:ec29 with SMTP id j18-20020a170903029200b00186f931ec29mr8555054plr.144.1667125005526;
+        Sun, 30 Oct 2022 03:16:45 -0700 (PDT)
+Received: from localhost.localdomain (2403-580a-80ed--90b3-8553.ip6.aussiebb.net. [2403:580a:80ed::90b3:8553])
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902ce8600b0017ec1b1bf9fsm2461137plg.217.2022.10.30.03.16.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 03:16:45 -0700 (PDT)
+From:   James Calligeros <jcalligeros99@gmail.com>
+To:     vireshk@kernel.org, sboyd@kernel.org, nm@ti.com,
+        linux-pm@vger.kernel.org
+Cc:     asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        James Calligeros <jcalligeros99@gmail.com>
+Subject: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
+Date:   Sun, 30 Oct 2022 20:15:46 +1000
+Message-Id: <20221030101546.29306-1-jcalligeros99@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Peter,
+The opp-microwatt property was added with the intention of providing
+platforms a way to specify a precise value for the power consumption
+of a device at a given OPP to enable better energy-aware scheduling
+decisions by informing the kernel of the total static and dynamic
+power of a device at a given OPP, removing the reliance on the EM
+subsystem's often flawed estimations. This property is parsed by
+opp_parse_supplies(), which creates a hard dependency on the
+opp-microvolt property.
 
-Can you please consider this as tip material?
-This patch series does not get merged altogether. The intel-rapl and
-turbostat fixes have been merged by Rafael and Len respectively.
+Some platforms, such as Apple Silicon, do not describe their devices'
+voltage regulators in the DT as they cannot be controlled by the kernel
+and/or rely on opaque firmware algorithms to control their voltage and
+current characteristics at runtime. We can, however, experimentally
+determine the power consumption of a given device at a given OPP, taking
+advantage of opp-microwatt to provide EAS on such devices as was initially
+intended.
 
-thanks,
-rui
+Allow platforms to specify and consume any subset of opp-microvolt,
+opp-microamp, or opp-microwatt without a hard dependency on opp-microvolt
+to enable this functionality on such platforms.
 
-On Sat, 2022-09-24 at 13:47 +0800, Zhang Rui wrote:
-> Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
-> Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
-> energy resolution as described in MSR_RAPL_POWER_UNIT.
-> 
-> Remove the SPR Dram energy unit quirk.
-> 
-> Fixes: bcfd218b6679 ("perf/x86/rapl: Add support for Intel SPR
-> platform")
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> Tested-by: Wang Wendy <wendy.wang@intel.com>
-> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-> ---
->  arch/x86/events/rapl.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
-> 
-> diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
-> index 77e3a47af5ad..7d8db681880d 100644
-> --- a/arch/x86/events/rapl.c
-> +++ b/arch/x86/events/rapl.c
-> @@ -619,12 +619,8 @@ static int rapl_check_hw_unit(struct rapl_model
-> *rm)
->  	case RAPL_UNIT_QUIRK_INTEL_HSW:
->  		rapl_hw_unit[PERF_RAPL_RAM] = 16;
->  		break;
-> -	/*
-> -	 * SPR shares the same DRAM domain energy unit as HSW, plus it
-> -	 * also has a fixed energy unit for Psys domain.
-> -	 */
-> +	/* SPR uses a fixed energy unit for Psys domain. */
->  	case RAPL_UNIT_QUIRK_INTEL_SPR:
-> -		rapl_hw_unit[PERF_RAPL_RAM] = 16;
->  		rapl_hw_unit[PERF_RAPL_PSYS] = 0;
->  		break;
->  	default:
+Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
+Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+---
+Changes since v1:
+Fixed bad reference (opp to opp_table)
+
+ drivers/opp/of.c | 198 +++++++++++++++++++++++++----------------------
+ 1 file changed, 104 insertions(+), 94 deletions(-)
+
+diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+index 605d68673f92..0fa25c3a959e 100644
+--- a/drivers/opp/of.c
++++ b/drivers/opp/of.c
+@@ -581,166 +581,176 @@ static bool _opp_is_supported(struct device *dev, struct opp_table *opp_table,
+ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+ 			      struct opp_table *opp_table)
+ {
+-	u32 *microvolt, *microamp = NULL, *microwatt = NULL;
++	u32 *microvolt = NULL, *microamp = NULL, *microwatt = NULL;
+ 	int supplies = opp_table->regulator_count;
+ 	int vcount, icount, pcount, ret, i, j;
+-	struct property *prop = NULL;
++	struct property *prop_mv = NULL, *prop_ma = NULL, *prop_mw = NULL;
+ 	char name[NAME_MAX];
+ 
+ 	/* Search for "opp-microvolt-<name>" */
+ 	if (opp_table->prop_name) {
+ 		snprintf(name, sizeof(name), "opp-microvolt-%s",
+ 			 opp_table->prop_name);
+-		prop = of_find_property(opp->np, name, NULL);
++		prop_mv = of_find_property(opp->np, name, NULL);
+ 	}
+ 
+-	if (!prop) {
++	if (!prop_mv) {
+ 		/* Search for "opp-microvolt" */
+ 		sprintf(name, "opp-microvolt");
+-		prop = of_find_property(opp->np, name, NULL);
+-
+-		/* Missing property isn't a problem, but an invalid entry is */
+-		if (!prop) {
+-			if (unlikely(supplies == -1)) {
+-				/* Initialize regulator_count */
+-				opp_table->regulator_count = 0;
+-				return 0;
+-			}
++		prop_mv = of_find_property(opp->np, name, NULL);
+ 
+-			if (!supplies)
+-				return 0;
+-
+-			dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
+-				__func__);
+-			return -EINVAL;
+-		}
+ 	}
+ 
+-	if (unlikely(supplies == -1)) {
+-		/* Initialize regulator_count */
+-		supplies = opp_table->regulator_count = 1;
+-	} else if (unlikely(!supplies)) {
+-		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
+-		return -EINVAL;
++	if (prop_mv) {
++		vcount = of_property_count_u32_elems(opp->np, name);
++		if (unlikely(supplies == -1))
++			supplies = opp_table->regulator_count = vcount;
++	} else {
++		prop_mv = NULL;
++		vcount = 0;
+ 	}
+ 
+-	vcount = of_property_count_u32_elems(opp->np, name);
+ 	if (vcount < 0) {
+ 		dev_err(dev, "%s: Invalid %s property (%d)\n",
+ 			__func__, name, vcount);
+ 		return vcount;
+ 	}
+ 
+-	/* There can be one or three elements per supply */
+-	if (vcount != supplies && vcount != supplies * 3) {
+-		dev_err(dev, "%s: Invalid number of elements in %s property (%d) with supplies (%d)\n",
+-			__func__, name, vcount, supplies);
+-		return -EINVAL;
+-	}
++	if (vcount) {
++		/* There can be one or three elements per supply */
++		if (vcount != supplies && vcount != supplies * 3) {
++			dev_err(dev, "%s: Invalid number of elements in %s property (%d) with supplies (%d)\n",
++				__func__, name, vcount, supplies);
++			return -EINVAL;
++		}
+ 
+-	microvolt = kmalloc_array(vcount, sizeof(*microvolt), GFP_KERNEL);
+-	if (!microvolt)
+-		return -ENOMEM;
++		microvolt = kmalloc_array(vcount, sizeof(*microvolt), GFP_KERNEL);
++		if (!microvolt)
++			return -ENOMEM;
+ 
+-	ret = of_property_read_u32_array(opp->np, name, microvolt, vcount);
+-	if (ret) {
+-		dev_err(dev, "%s: error parsing %s: %d\n", __func__, name, ret);
+-		ret = -EINVAL;
+-		goto free_microvolt;
++		ret = of_property_read_u32_array(opp->np, name, microvolt, vcount);
++		if (ret) {
++			dev_err(dev, "%s: error parsing %s: %d\n", __func__, name, ret);
++			ret = -EINVAL;
++			goto free_microvolt;
++		}
+ 	}
+ 
+ 	/* Search for "opp-microamp-<name>" */
+-	prop = NULL;
+ 	if (opp_table->prop_name) {
+ 		snprintf(name, sizeof(name), "opp-microamp-%s",
+ 			 opp_table->prop_name);
+-		prop = of_find_property(opp->np, name, NULL);
++		prop_ma = of_find_property(opp->np, name, NULL);
+ 	}
+ 
+-	if (!prop) {
++	if (!prop_ma) {
+ 		/* Search for "opp-microamp" */
+ 		sprintf(name, "opp-microamp");
+-		prop = of_find_property(opp->np, name, NULL);
++		prop_ma = of_find_property(opp->np, name, NULL);
++
+ 	}
+ 
+-	if (prop) {
++	if (prop_ma) {
+ 		icount = of_property_count_u32_elems(opp->np, name);
+-		if (icount < 0) {
+-			dev_err(dev, "%s: Invalid %s property (%d)\n", __func__,
+-				name, icount);
+-			ret = icount;
+-			goto free_microvolt;
+-		}
++		if (unlikely(supplies == -1))
++			supplies = opp_table->regulator_count = icount;
++	} else {
++		prop_ma = NULL;
++		icount = 0;
++	}
+ 
+-		if (icount != supplies) {
++	if (icount < 0) {
++		dev_err(dev, "%s: Invalid %s property (%d)\n",
++			__func__, name, icount);
++		return icount;
++	}
++
++	if (icount) {
++		/* There can be one or three elements per supply */
++		if (icount != supplies && icount != supplies * 3) {
+ 			dev_err(dev, "%s: Invalid number of elements in %s property (%d) with supplies (%d)\n",
+ 				__func__, name, icount, supplies);
+-			ret = -EINVAL;
+-			goto free_microvolt;
++			return -EINVAL;
+ 		}
+ 
+ 		microamp = kmalloc_array(icount, sizeof(*microamp), GFP_KERNEL);
+-		if (!microamp) {
+-			ret = -EINVAL;
+-			goto free_microvolt;
+-		}
++		if (!microamp)
++			return -ENOMEM;
+ 
+-		ret = of_property_read_u32_array(opp->np, name, microamp,
+-						 icount);
++		ret = of_property_read_u32_array(opp->np, name, microamp, icount);
+ 		if (ret) {
+-			dev_err(dev, "%s: error parsing %s: %d\n", __func__,
+-				name, ret);
++			dev_err(dev, "%s: error parsing %s: %d\n", __func__, name, ret);
+ 			ret = -EINVAL;
+ 			goto free_microamp;
+ 		}
+ 	}
+ 
+-	/* Search for "opp-microwatt" */
+-	sprintf(name, "opp-microwatt");
+-	prop = of_find_property(opp->np, name, NULL);
++	/* Search for "opp-microwatt-<name>" */
++	if (opp_table->prop_name) {
++		snprintf(name, sizeof(name), "opp-microwatt-%s",
++			 opp_table->prop_name);
++		prop_mw = of_find_property(opp->np, name, NULL);
++	}
++
++	if (!prop_mw) {
++		/* Search for "opp-microwatt" */
++		sprintf(name, "opp-microwatt");
++		prop_mw = of_find_property(opp->np, name, NULL);
+ 
+-	if (prop) {
++	}
++
++	if (prop_mw) {
+ 		pcount = of_property_count_u32_elems(opp->np, name);
+-		if (pcount < 0) {
+-			dev_err(dev, "%s: Invalid %s property (%d)\n", __func__,
+-				name, pcount);
+-			ret = pcount;
+-			goto free_microamp;
+-		}
++		if (unlikely(supplies == -1))
++			supplies = opp_table->regulator_count = pcount;
++	} else {
++		prop_mw = NULL;
++		pcount = 0;
++	}
++
++	if (pcount < 0) {
++		dev_err(dev, "%s: Invalid %s property (%d)\n",
++			__func__, name, pcount);
++		return pcount;
++	}
+ 
+-		if (pcount != supplies) {
++	if (pcount) {
++		/* There can be one or three elements per supply */
++		if (pcount != supplies && pcount != supplies * 3) {
+ 			dev_err(dev, "%s: Invalid number of elements in %s property (%d) with supplies (%d)\n",
+ 				__func__, name, pcount, supplies);
+-			ret = -EINVAL;
+-			goto free_microamp;
++			return -EINVAL;
+ 		}
+ 
+-		microwatt = kmalloc_array(pcount, sizeof(*microwatt),
+-					  GFP_KERNEL);
+-		if (!microwatt) {
+-			ret = -EINVAL;
+-			goto free_microamp;
+-		}
++		microwatt = kmalloc_array(pcount, sizeof(*microwatt), GFP_KERNEL);
++		if (!microwatt)
++			return -ENOMEM;
+ 
+-		ret = of_property_read_u32_array(opp->np, name, microwatt,
+-						 pcount);
++		ret = of_property_read_u32_array(opp->np, name, microwatt, pcount);
+ 		if (ret) {
+-			dev_err(dev, "%s: error parsing %s: %d\n", __func__,
+-				name, ret);
++			dev_err(dev, "%s: error parsing %s: %d\n", __func__, name, ret);
+ 			ret = -EINVAL;
+ 			goto free_microwatt;
+ 		}
+ 	}
+ 
+-	for (i = 0, j = 0; i < supplies; i++) {
+-		opp->supplies[i].u_volt = microvolt[j++];
++	/* No supplies associated with the OPP */
++	if (unlikely(supplies == -1)) {
++		supplies = opp_table->regulator_count = 0;
++		return 0;
++	}
+ 
+-		if (vcount == supplies) {
+-			opp->supplies[i].u_volt_min = opp->supplies[i].u_volt;
+-			opp->supplies[i].u_volt_max = opp->supplies[i].u_volt;
+-		} else {
+-			opp->supplies[i].u_volt_min = microvolt[j++];
+-			opp->supplies[i].u_volt_max = microvolt[j++];
++	for (i = 0, j = 0; i < supplies; i++) {
++		if (microvolt) {
++			opp->supplies[i].u_volt = microvolt[j++];
++
++			if (vcount == supplies) {
++				opp->supplies[i].u_volt_min = opp->supplies[i].u_volt;
++				opp->supplies[i].u_volt_max = opp->supplies[i].u_volt;
++			} else {
++				opp->supplies[i].u_volt_min = microvolt[j++];
++				opp->supplies[i].u_volt_max = microvolt[j++];
++			}
+ 		}
+ 
+ 		if (microamp)
+-- 
+2.38.0
 
