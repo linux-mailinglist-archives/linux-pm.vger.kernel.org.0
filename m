@@ -2,95 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C1FC6139E0
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 16:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6276139ED
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 16:22:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiJaPSa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Oct 2022 11:18:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S230512AbiJaPWk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Oct 2022 11:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231397AbiJaPS3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 11:18:29 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F88DE80;
-        Mon, 31 Oct 2022 08:18:28 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id q9so30338245ejd.0;
-        Mon, 31 Oct 2022 08:18:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gTV1RDq/tqDmxPZjQ5buJyVBHl/4xI27X2Mwsnm3/U8=;
-        b=R6xRqcKQmu00dy1Cfnxt+XFMnppMpjDHkI+/jH9MTTupl6brGVib0eZesPU9DhNRI9
-         mY6+FqzbE30I3It9nOMuqluV6gYcP0xygz4ZK95tbAmjAvFeQDTs6ZDGqepvyjxekf1z
-         Xash2POIGK6RMge1cJA9jultjlSzgCXAuj4L2KZ0moaChoR4Ngz8tmI2aeTMi9bIsDsp
-         +jsL1e6OAGxVVbz39FLrFqu0cYlESAlDLU7wUJGoIzwd7QP0FbCfMukbBrsk4LZ8IsR1
-         w9k7DayNzBb+0lpk5bD4NL+Qv7Sl2IRsumn+HLtvb5aORkiyeQuTYDTijJNcdO7if+dj
-         vPKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gTV1RDq/tqDmxPZjQ5buJyVBHl/4xI27X2Mwsnm3/U8=;
-        b=CxYdWhjiGCYwKcCO/JPtGur53451QDarWXjTpZSJf3SOCM9rMqJqzox+jSWSC7fyxF
-         sjJE1aacLrZ3qZ5fnph6dfQGi+DHOwRU9KXaZowrDSbzA5kSs8Gb7lzUM4MfeZKWG9vD
-         rdK2KAd2VCWf/fg75u2bKLsh5dPuu+LuiIRbAnUw4IZuygzbba5HD9IbxFzLQWykgBS5
-         3hvYhSqqGd7uMeuBbmYCYFhDuY0yv7eRFD3pS/MvpAnEsKwLxUggrbxvdOgqlUXv0ihA
-         KNR1eVMsNT+/wMfcbeLOtflhd28p7BGGD7lF2WZ3SG5YTmOZATJL+l+C36aCKOgrB5Fs
-         0WfA==
-X-Gm-Message-State: ACrzQf29hSnxwzSQARor539D2B/O/uNYeAAH9JmENGecxsaDEkPRIVuI
-        UTPhHdlPAgRgWi+ZxXmFLXw=
-X-Google-Smtp-Source: AMsMyM5oEFz72DTLsasj9GphB8VANdv7H6HI866he5Oo33ldWNk8V7nCVUxTrI/S+TbdbZxkphCHWg==
-X-Received: by 2002:a17:907:845:b0:731:2f6c:6dbd with SMTP id ww5-20020a170907084500b007312f6c6dbdmr13364159ejb.551.1667229506461;
-        Mon, 31 Oct 2022 08:18:26 -0700 (PDT)
-Received: from felia.fritz.box (200116b826e26a00101a4a419a6960a9.dip.versatel-1u1.de. [2001:16b8:26e2:6a00:101a:4a41:9a69:60a9])
-        by smtp.gmail.com with ESMTPSA id u25-20020a056402065900b00461cdda400esm3386142edx.4.2022.10.31.08.18.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 08:18:26 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] power: supply: core: repair kernel-doc for power_supply_vbat2ri()
-Date:   Mon, 31 Oct 2022 16:18:08 +0100
-Message-Id: <20221031151808.826-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231365AbiJaPWj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 11:22:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FADC11803;
+        Mon, 31 Oct 2022 08:22:37 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 16:22:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667229755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfgV6mGS26skLphn6hioeVNQQARpNHg2LEwEcY6JCWk=;
+        b=ttPlZw30ReFKM4Fq/UqmtOecjidGo55rrXy1DTsPutOc94LHYAZkwz6OdwAY+BL5Sx3X6e
+        N+SlsYp7c6hoJw5cIqsgvrJu0bOOdYXxjhH0rLQ9dIU3D1oDuXTRjp7sqyGpl1dV079I08
+        wjdpIotyTtnpDTmXz6pRYwkYnPhZdoJMsn+lG7zP8Z4jCnFfp7lSD3IpJVzVS37A5Jlnou
+        Rr1z9PaTmx2UnqMno00obhr3a1Uf10hagCktj2W4N8L56VtAwySkLmU5V/r2qrn56FiOkT
+        SShpnHSpxzPnDY2vbtlpmjMNF3/mjM0l941KVKCkH62Bemiud2PSXkYEr+x+4w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667229755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gfgV6mGS26skLphn6hioeVNQQARpNHg2LEwEcY6JCWk=;
+        b=INLp3IinyZOrHN20dbK5JioVNwe8LkOV4Lq4rHokGCqbFFXkP6tJgz1hGlE2oEiTuZ5Ly6
+        1tDaX5Xsy5Yfu7CA==
+From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
+To:     Frederic Weisbecker <frederic@kernel.org>
+cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, Arjan van de Ven <arjan@infradead.org>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH v3 01/17] cpufreq: Prepare timer flags for hierarchical
+ timer pull model
+In-Reply-To: <20221026135423.GA1329996@lothringen>
+Message-ID: <cb54d934-bef7-cc21-308b-e25aaeb63d94@linutronix.de>
+References: <20221025135850.51044-1-anna-maria@linutronix.de> <20221025135850.51044-2-anna-maria@linutronix.de> <20221026135423.GA1329996@lothringen>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The function power_supply_vbat2ri() does not have a parameter called table,
-despite it being mentioned in the kernel-doc comment. The table is actually
-obtained from the info parameter, the battery information container. Hence,
-./scripts/kernel-doc -none drivers/power/supply/power_supply_core.c warns
-about this excess function parameter.
+On Wed, 26 Oct 2022, Frederic Weisbecker wrote:
 
-Adjust the kernel-doc comment for power_supply_vbat2ri() for make W=1
-happiness.
+> On Tue, Oct 25, 2022 at 03:58:34PM +0200, Anna-Maria Behnsen wrote:
+> > Note: This is a proposal only. I was waiting on input how to change this
+> > driver properly to use the already existing infrastructure. See therfore
+> > the thread on linux-pm mailinglist:
+> > https://lore.kernel.org/linux-pm/4c99f34b-40f1-e6cc-2669-7854b615b5fd@linutronix.de/
+> > 
+> > gpstates timer is the only timer using TIMER_PINNED and TIMER_DEFERRABLE
+> > flag. When moving to hierarchical timer pull model, pinned and deferrable
+> > timers are stored in separate bases.
+> > 
+> > To ensure gpstates timer always expires on the CPU where it is pinned to,
+> > keep only TIMER_PINNED flag and drop TIMER_DEFERRABLE flag.
+> 
+> OTOH there are deferrable timers out there that expect to run on a
+> specific CPU, because there are always queued with add_timer_on().
+> 
+> For example workqueues using DECLARE_DEFERRABLE_WORK() that are queued
+> with queue_delayed_work_on(). Like vmstat().
+> 
+> Those are not explicitely pinned because they don't rely on __mod_timer()
+> but they expect CPU affinity.
+> 
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- drivers/power/supply/power_supply_core.c | 1 -
- 1 file changed, 1 deletion(-)
+You are right. In contrast to the original plan, I'm not able (yet) to
+remove the deferrable timers completely. But all timers using the
+add_timer_on() path need the TIMER_PINNED flag. Then three timer bases per
+CPU will be available:
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 4b5fb172fa99..9035e349bf53 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -870,7 +870,6 @@ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
-  * power_supply_vbat2ri() - find the battery internal resistance
-  * from the battery voltage
-  * @info: The battery information container
-- * @table: Pointer to battery resistance temperature table
-  * @vbat_uv: The battery voltage in microvolt
-  * @charging: If we are charging (true) or not (false)
-  *
--- 
-2.17.1
+- global base (TIMER_PINNED is not set)
+- local base (TIMER_PINNED is set but not TIMER_DEFERRABLE)
+- deferrable pinned base (TIMER_PINNED and TIMER_DEFERRABLE is set)
+
+The logic stays the same as already implemented in patch queue: Timers in
+global base will not prevent CPU from going idle. When the CPU has the
+migrator duty, timers in hierarchy are taken into account. Timers in local
+base force the CPU to wake up. Timers in the deferrable pinned base are not
+taken into account when going idle.
+
+With this, the rework of cpufreq driver is no longer required - the timer
+will end up in deferrable pinned base the same with vmstat.
+
+Thanks,
+
+	Anna-Maria
+
+
+
 
