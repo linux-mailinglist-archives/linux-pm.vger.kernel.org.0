@@ -2,56 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 583BA613FC0
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 22:16:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD480613FD3
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 22:19:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiJaVQ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Oct 2022 17:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54734 "EHLO
+        id S230111AbiJaVTO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Oct 2022 17:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbiJaVQ5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 17:16:57 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21F5F12;
-        Mon, 31 Oct 2022 14:16:55 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id kt23so32558463ejc.7;
-        Mon, 31 Oct 2022 14:16:55 -0700 (PDT)
+        with ESMTP id S230190AbiJaVTL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 17:19:11 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B461161;
+        Mon, 31 Oct 2022 14:19:10 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id k2so32664956ejr.2;
+        Mon, 31 Oct 2022 14:19:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=googlemail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lDfCd2FuDOvtKfrsSPo+hRMdeUAtRjfZl9QXKPEK178=;
-        b=gDGxs1fY5KUO+uyr19HQao3BICcCY4is90BRyK3f+Qh9VuFmnzfq5aLy3Q3fvGZTJO
-         C61v10U4g/1PZ8bt+tS0bq7A4KwqdVn3UeFFHwFjpWdh0VGd29Am/Yk0ACZW56v9CXRD
-         IXPPtGC08Z5zDluhG1AjoBQyz0RCQv+CxJoWwPCvyQFn6D9xNGUmFkl5xPkG62SWKw2C
-         RkwEcJLgcc/bOlETdlZ7insycx1toun3GuwVlwXTJEewPIXL6CHT5alBNo3jCAgdJ1+M
-         YEA/jeimfRkqup57/mhP6rbhkUXv4ZXeEiWZ5ER6V8UcaeUy9z90nOOr1YTdmwb+C48a
-         QRTA==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/qWsb0SGi8QeQtOKhb0/4kvJ5Eb+D2s5VKybi0N7j1Y=;
+        b=AzZULfLPBMcm+DUmjgEYV107VADO9otzoaT9RLKeDX8V2ypcVjCMMxR1ZfS339jhbz
+         xnA3jaA3aIv/uzdt0kbteLtMmNzUos7Z9ZY4vmerRpOKEPe+u7e33u1bN3MRQT5LLI4p
+         dtq1ToR3KPduVwJjwTukPWqEywH7+NA6wJN1a22IdXuJOKi6clXO8Zy1dMzy7mGZd1b9
+         koT+JXMa9w13JgOsvT0XSCo+m9lJ6oCh9S7cqKa1D45GcLy4jqPykMqyzyRHqThojUdE
+         yZyzJkFRjr4FnWPe6x6oIRtNChO8SK5z74xhMZ+dMWIhL8OnY/hKdq6lBJimYNiFRO/g
+         0KHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lDfCd2FuDOvtKfrsSPo+hRMdeUAtRjfZl9QXKPEK178=;
-        b=nu/w2lnURiUddvDHcu4E/vMIbVbvTqkeNpIl36iODmq78zsAqQPamewKM1wARW8/YE
-         OoIuAuuYByESc3L8NvCGASElwQ7Tv1U5Ka6OVeupDDC1ztdoIHz8kalnSFwk3gXU+kJ4
-         YRjdOlTqTdy7/w5zH+7o48rfknrLOFW6Wdtetao7kANd4HNMjXelEPK4Uom82rVs1U0A
-         UgfVlr7M4fbL4tk2c+k51pojWncCaQZaxhH+CQ7KcSSiCdqrTHOnOyegOGNNk/DyXm/d
-         Dqw8B5nu7Y5GmLHMcocNvK91jJL0C0UZI7K5yun3hKl0zI/DoAOXF3IGh5xTuJPboFZG
-         CSlA==
-X-Gm-Message-State: ACrzQf1NolZ1oZBLOXaCPgyga62zhETCeyN4a5cphalivjjMAGejqY5Q
-        O0A7uKAxtihw8K5JskrHgKhao1QFW3Fdlnjlf8HG9u0DjkI=
-X-Google-Smtp-Source: AMsMyM56K441yZsKmM7JuCfanM6BjR8HaEBggpUvIKn0DtcCrLMNid1v1ldjaleJWeq81Dq/vY9m8bv6b80jQVsyIc4=
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/qWsb0SGi8QeQtOKhb0/4kvJ5Eb+D2s5VKybi0N7j1Y=;
+        b=bX47nELsX7P7ZiW/1UUI8ssXKBLJ5mVGYTRBqMWN7HSQ5LQwmsNEUlXEW/CO5V5NbT
+         9BDPZHOs+z/W/xFYcnAhxtcd6LRjyCPOiLeTTAgGFqnq9PMdhIrQh5p76q2G47bZLq+f
+         gjw1zANblqph+dmWgbaiMBJ/OGbQUBL9+bk9fhY3g5IbY/5qMippQeNqGBM7e5kq3KC6
+         zGfKOfY3TC8r85Fvoy04n3gFJLoFMc58CUNru/QbfrbTMOKkM0nGOV8cG+DhO4vW/3fT
+         cdOHGd/44GHOFC9zKXCktbn9sW1zIrbGSXYbi2B5zwnnjyH2/uAIS4ONwfAGeQNiO+rk
+         8vrQ==
+X-Gm-Message-State: ACrzQf0uuydBFVOomifL/vxM9PHLFH6mh8NuvSUTu64hAqst8RF0STLS
+        X2oZgMCaSQQtb4BCrII2AKG8CM47oaH7syiDrZg=
+X-Google-Smtp-Source: AMsMyM793wQb5dTAUE/EmKc++FETmfnoTczV6euc1hrr77pY+81h0cawpbby2zZhteI7qZWz0A+LqmZypQ+fPno4seo=
 X-Received: by 2002:a17:906:7314:b0:791:a45a:bc84 with SMTP id
- di20-20020a170906731400b00791a45abc84mr14851850ejc.394.1667251014365; Mon, 31
- Oct 2022 14:16:54 -0700 (PDT)
+ di20-20020a170906731400b00791a45abc84mr14859875ejc.394.1667251149204; Mon, 31
+ Oct 2022 14:19:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org> <20221031-b4-odroid-go-ultra-initial-v1-1-42e3dbea86d5@linaro.org>
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-1-42e3dbea86d5@linaro.org>
+References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org> <20221031-b4-odroid-go-ultra-initial-v1-3-42e3dbea86d5@linaro.org>
+In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-3-42e3dbea86d5@linaro.org>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 31 Oct 2022 22:16:43 +0100
-Message-ID: <CAFBinCAQKf9RvRWQTCSg7g+7NP_vbEFBUeCoFbYnyfmqeegy5g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] dt-bindings: reset: document Odroid Go Ultra power-off
+Date:   Mon, 31 Oct 2022 22:18:58 +0100
+Message-ID: <CAFBinCAuiGtigKwzJ1WUgs5bbwf-y1fvVFq79wZA-E1e6tMXtw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] dt-bindings: amlogic: document Odroid Go Ultra compatible
 To:     Neil Armstrong <neil.armstrong@linaro.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,6 +63,7 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
         devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -72,20 +74,23 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Neil,
-
 On Mon, Oct 31, 2022 at 5:47 PM Neil Armstrong
 <neil.armstrong@linaro.org> wrote:
 >
-> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
-> to its two PMICs in order, this represents the poweroff scheme needed to complet
-s/complet/complete/
-> a clean poeroff of the system.
-s/poeroff/poweroff/
-
-Please wait with re-sending this patch in case the dt-bindings and
-reset experts have more to say than finding typos.
-
-
-Best regards,
-Martin
+> This documents the Odroid Go Ultra, a portable gaming device,
+> with the following characteristics:
+> - Amlogic S922X SoC
+> - RK817 & RK818 PMICs
+> - 2GiB LPDDR4
+> - On board 16GiB eMMC
+> - Micro SD Card slot
+> - 5inch 854=C3=97480 MIPI-DSI TFT LCD
+> - Earphone stereo jack, 0.5Watt 8=CE=A9 Mono speaker
+> - Li-Polymer 3.7V/4000mAh Battery
+> - USB-A 2.0 Host Connector
+> - x16 GPIO Input Buttons
+> - 2x ADC Analog Joysticks
+> - USB-C Port for USB2 Device and Charging
+>
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
