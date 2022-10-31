@@ -2,95 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD480613FD3
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 22:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB3E6140AF
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 23:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiJaVTO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Oct 2022 17:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59180 "EHLO
+        id S229719AbiJaW37 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Oct 2022 18:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbiJaVTL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 17:19:11 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B461161;
-        Mon, 31 Oct 2022 14:19:10 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k2so32664956ejr.2;
-        Mon, 31 Oct 2022 14:19:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/qWsb0SGi8QeQtOKhb0/4kvJ5Eb+D2s5VKybi0N7j1Y=;
-        b=AzZULfLPBMcm+DUmjgEYV107VADO9otzoaT9RLKeDX8V2ypcVjCMMxR1ZfS339jhbz
-         xnA3jaA3aIv/uzdt0kbteLtMmNzUos7Z9ZY4vmerRpOKEPe+u7e33u1bN3MRQT5LLI4p
-         dtq1ToR3KPduVwJjwTukPWqEywH7+NA6wJN1a22IdXuJOKi6clXO8Zy1dMzy7mGZd1b9
-         koT+JXMa9w13JgOsvT0XSCo+m9lJ6oCh9S7cqKa1D45GcLy4jqPykMqyzyRHqThojUdE
-         yZyzJkFRjr4FnWPe6x6oIRtNChO8SK5z74xhMZ+dMWIhL8OnY/hKdq6lBJimYNiFRO/g
-         0KHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/qWsb0SGi8QeQtOKhb0/4kvJ5Eb+D2s5VKybi0N7j1Y=;
-        b=bX47nELsX7P7ZiW/1UUI8ssXKBLJ5mVGYTRBqMWN7HSQ5LQwmsNEUlXEW/CO5V5NbT
-         9BDPZHOs+z/W/xFYcnAhxtcd6LRjyCPOiLeTTAgGFqnq9PMdhIrQh5p76q2G47bZLq+f
-         gjw1zANblqph+dmWgbaiMBJ/OGbQUBL9+bk9fhY3g5IbY/5qMippQeNqGBM7e5kq3KC6
-         zGfKOfY3TC8r85Fvoy04n3gFJLoFMc58CUNru/QbfrbTMOKkM0nGOV8cG+DhO4vW/3fT
-         cdOHGd/44GHOFC9zKXCktbn9sW1zIrbGSXYbi2B5zwnnjyH2/uAIS4ONwfAGeQNiO+rk
-         8vrQ==
-X-Gm-Message-State: ACrzQf0uuydBFVOomifL/vxM9PHLFH6mh8NuvSUTu64hAqst8RF0STLS
-        X2oZgMCaSQQtb4BCrII2AKG8CM47oaH7syiDrZg=
-X-Google-Smtp-Source: AMsMyM793wQb5dTAUE/EmKc++FETmfnoTczV6euc1hrr77pY+81h0cawpbby2zZhteI7qZWz0A+LqmZypQ+fPno4seo=
-X-Received: by 2002:a17:906:7314:b0:791:a45a:bc84 with SMTP id
- di20-20020a170906731400b00791a45abc84mr14859875ejc.394.1667251149204; Mon, 31
- Oct 2022 14:19:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org> <20221031-b4-odroid-go-ultra-initial-v1-3-42e3dbea86d5@linaro.org>
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-3-42e3dbea86d5@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Mon, 31 Oct 2022 22:18:58 +0100
-Message-ID: <CAFBinCAuiGtigKwzJ1WUgs5bbwf-y1fvVFq79wZA-E1e6tMXtw@mail.gmail.com>
-Subject: Re: [PATCH 3/4] dt-bindings: amlogic: document Odroid Go Ultra compatible
+        with ESMTP id S230036AbiJaW3Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 18:29:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC7F26E5;
+        Mon, 31 Oct 2022 15:29:23 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA6996601E58;
+        Mon, 31 Oct 2022 22:29:21 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667255361;
+        bh=y7NHk+x/vkwV4B6bPqXt9h+kTokITc8sWrGBHP8NPNg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JYpPB0aO/MMbrQkYic+RHqVrLuAwKNI0ud8uCXdiAarhfFi43aQfo1mwfZPFQUVf1
+         ny0VvEs0HTxMMLY6jC+h8BTa+tIf+zvtpag4Qahv2T58+rlZe6DavftrokXx1dQ45a
+         ggpyHAZU2BxGnB7SFMT36OeKjqMdvppN807wIfHh8zelXnWvZsFxZIDAKg2pqgFaNc
+         OGrFWyudfLmF7+U4U8nZWOcyT1qY9VD8RGV8iJ0jVtx3sOjNFKn5s+NpK0SIqYD4PH
+         uU/OKM69U2ewrpSdH5z/VioJ06tLmh5sYzLGfgiv9m4+Z4/xHvepfPU/Vo9pdbOwZF
+         pWFhl9HsdzoYg==
+Received: by mercury (Postfix, from userid 1000)
+        id D6D1E1061C6E; Mon, 31 Oct 2022 23:29:18 +0100 (CET)
+Date:   Mon, 31 Oct 2022 23:29:18 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Kevin Hilman <khilman@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
         devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 2/4] power: reset: add Odroid Go Ultra poweroff driver
+Message-ID: <20221031222918.knzv3lotfn3sp7bl@mercury.elektranox.org>
+References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
+ <20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="eujrc3kuhfvtgn3s"
+Content-Disposition: inline
+In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 5:47 PM Neil Armstrong
-<neil.armstrong@linaro.org> wrote:
->
-> This documents the Odroid Go Ultra, a portable gaming device,
-> with the following characteristics:
-> - Amlogic S922X SoC
-> - RK817 & RK818 PMICs
-> - 2GiB LPDDR4
-> - On board 16GiB eMMC
-> - Micro SD Card slot
-> - 5inch 854=C3=97480 MIPI-DSI TFT LCD
-> - Earphone stereo jack, 0.5Watt 8=CE=A9 Mono speaker
-> - Li-Polymer 3.7V/4000mAh Battery
-> - USB-A 2.0 Host Connector
-> - x16 GPIO Input Buttons
-> - 2x ADC Analog Joysticks
-> - USB-C Port for USB2 Device and Charging
->
+
+--eujrc3kuhfvtgn3s
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Mon, Oct 31, 2022 at 05:47:26PM +0100, Neil Armstrong wrote:
+> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a powe=
+roff
+> to its two PMICs in order, this represents the poweroff scheme needed to =
+complete
+> a clean poweroff of the system.
+>=20
+> This implement this scheme, and overrides the PSCI pm_power_off.
+
+Please use devm_register_power_off_handler() or
+devm_register_sys_off_handler() for new drivers.
+
+Thanks,
+
+-- Sebastian
+
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> [...]
+
+--eujrc3kuhfvtgn3s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNgTDsACgkQ2O7X88g7
++pq7uA/9H2d0rwb0Y8DB6tj/S2dpXLu4UNe10uTTfw48HwbZ/u9iAZA10IpCLUsN
+v1nLjSNKO0KZAV4V8oQaic8k3g3ZW50mt26gDPSCo19q/D3VcIwzFjUV93XDP/ue
+z3M1ftw6SWWIByaL7PoB9JSh5NCQsLAofDCCwVrJP8xC6Po59AXNUfYl1oLakV+x
++3+HPE5KnQBH+c2kQwD6RteiSRc9oBj5TzUJGPQJVj3sAns//vRnSAkPnUKj6cSc
+1YIxtfuZM+f0lHZ4q0QPP9CZnoZrOZGKBfuk51GzkBCqRqHNlXQyo3IALzARWkzC
+ybj5PYeiAtt/9065o4qW8l/5ZkRnBgKtXLo6yEeZ4QWi4v8k+peULZUhj15hYIu1
+PFNMbCPYgrdw0zAhYF+ZGalmj7V0Bc2dt/Vdmy8P67G+Z/yFrHPkOPd+8annG1P9
+f32huAi+Moe5KUGplibWRdWHivxosVV48HH1Mcl7FD223VSt2HIzIHDEshufM0Wq
+BghGc+J2KEs9+dKwxnaZzKco59tjCmw+78inlEeyJreEEGh9vqfWFOJN0At47VPa
+cQcqGGXPMOOJHDlTFZVTLmxlZA9tl9FT+7X78IrqFZFSKEJ15VnY3Bfl2BZwwYSs
+vdojcitlJoJUU3vfa11ut36Rd2hSFSoaWdmS+mzXnuFcDD7hIqI=
+=j9s8
+-----END PGP SIGNATURE-----
+
+--eujrc3kuhfvtgn3s--
