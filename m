@@ -2,80 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9929613ACA
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 16:56:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDBC613BA6
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 17:47:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbiJaP4H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Oct 2022 11:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59012 "EHLO
+        id S231810AbiJaQrc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Oct 2022 12:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231670AbiJaP4E (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 11:56:04 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423BC120A6
-        for <linux-pm@vger.kernel.org>; Mon, 31 Oct 2022 08:56:01 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z18so13073201edb.9
-        for <linux-pm@vger.kernel.org>; Mon, 31 Oct 2022 08:56:01 -0700 (PDT)
+        with ESMTP id S231753AbiJaQrb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 12:47:31 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3886B12A8C
+        for <linux-pm@vger.kernel.org>; Mon, 31 Oct 2022 09:47:29 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id bk15so16770636wrb.13
+        for <linux-pm@vger.kernel.org>; Mon, 31 Oct 2022 09:47:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=54IXG2FPqhGXRhjbMJeBZJCoE2PKYVWz3wVMDeZTLCU=;
-        b=Zskj8hY47y9/vRBVhsXI/zOvfwa2iyJBv9QUq1+i13j5qsNOJnVU3wL/JUdlYLqz4v
-         Mk75ESkgustxHq75/QaQ5OEO1eZt7heVL+VSe9tWHj5UP5z0WxpoZwggf/S4CeijV4z5
-         HpPLq4by6bha61t+359KMwWeXzdOid4NQVZsaks1CdeCumgLsRV5VNAtoBtOUtua3AOs
-         B5a4nrT+akXiUSdAx3LfyeaIm/nUCwSaWn4ght0Rx/QkIRjjlRNszAEfCaGP1d1g0WE4
-         nBI6wREzdJQ6Rx+IOYKCW7XmWBLDVtspMgcS3+GdeG5+YYpDHOEQlReggADgkn+UXgD5
-         SxHw==
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=jxq7Kit5ewu9alvw6v26dSql8rnzDq0nCvqHaHXZbsc=;
+        b=BLgwe1DfbNcToNja0I5ablkTHUZTolxvc/J+2guV1ofgW2O0ZkmzsTV+rbohlGCiMO
+         6alYezYMn3i1bUec2jl8HIBLbZsSTOPEIuUmgumFBOxKb8joazGFaf81bqFWbGKu8lcQ
+         kq9WQo4RnI8nX8ANFFXx6p+bIzoN/j9Bg/n63dyNS2TiCEOrnZVHX3gswMnmkBqy3CLB
+         Tv24Fklhb/f56VQKGKx/vvhTMV98yd0SSWhu/LHi5kZRarR6Ncw1i5XgrznM0opIg1qd
+         d7nBoVcBy6l81sY1EEvv4CNgFx67bYZq6l6ZOD1kWHVi4JvCOFAAAoFn91k04Z/mr5Nb
+         +zng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=54IXG2FPqhGXRhjbMJeBZJCoE2PKYVWz3wVMDeZTLCU=;
-        b=tCppw6BYb1jce7X+gIW/8zCZo9T6ruIo7dWqCwJuk9ZqS0VZmc/7G8RpPGGD4YwLvv
-         tGvUS1IZNSkHDEHBp589h84e+e5oXydtN5xPON5CFzbnaTgl7sYqJQbCupV5Rk0l0Eai
-         GvEZI6eNmP59Ax1nSI6FKt2SmEzEgvNYi7crHhh+ErMzPvxTEZAs9Dm1cqN311iOusW4
-         vxq4i0B9GcyJi1Uf95/7geSeXt7t+pfECoJ1sdhgZHfT/BsaooAg/d+gLTcy8XKyfIZC
-         SuObw2p5gk2ih05q1KszWa6Db6KDzvlf1OD8p3dTIxW6WJr6G4sWSSeYXatDmLpJ2FvK
-         z5Rw==
-X-Gm-Message-State: ACrzQf2Plo91NoerTqvJ6d0IlKf2JBtSqcsAn6QSgQGj86+X4NHd+ZZ6
-        f516g3TYptGPcGihwjC56Xcg9rgxvTGuuEuwawA=
-X-Google-Smtp-Source: AMsMyM4G/j8m1/zSeccQf2AkVugX8309cUfDI+UYDvZQuRuoGB23q/LHl7RH2mbAs7rIvYUS8mc5Ee0Zt9e7fN034Ws=
-X-Received: by 2002:a05:6402:f0e:b0:461:aaa3:a11c with SMTP id
- i14-20020a0564020f0e00b00461aaa3a11cmr14510961eda.53.1667231759743; Mon, 31
- Oct 2022 08:55:59 -0700 (PDT)
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jxq7Kit5ewu9alvw6v26dSql8rnzDq0nCvqHaHXZbsc=;
+        b=u7YlGPSkEK3cw1bfuBD9m1q3mafgrECQG632r2BIgULwymNgGxFKpACpBsZJgEkwWr
+         G3t87f6uW0bHdvy2YXNdsgO3ZEb+o+OSfXSXXRgP0j+rbiXjjlPSkQYhEdQNypB3gxsV
+         ztGC1eVAUxd2BQciVGXuxMxeUD5bzNWzLhzPfRMw96e3Ut93+jwZzMCCtzem3kZhKHS5
+         XU89PLBqVqR0z4B5z+ejcD6X/PdyY0E6TUV8PaaVq0eAYjJBnDYgXHTld/6bThCG4V5o
+         SJUU9zBK4q5u9ree/NsCRmAcQGrbWfYAxps8/0ib3Lgd7Jt1byJDqAIHzacoBFL9tNO7
+         qgLw==
+X-Gm-Message-State: ACrzQf0bmm718I8Qn+By8V3mC9wk8Z8VRm1rnt9kAI/JYFm+a942vp09
+        f0SwfZzBpsETJZFxKVRfOfRw5A==
+X-Google-Smtp-Source: AMsMyM4uCIJl5FzuUBvAx55rrePRHBWvJHlDInwsB5i3biXxKtWVuCdFt25ddWPZhDdx0h3GVqlyzg==
+X-Received: by 2002:a5d:6d42:0:b0:236:c9a6:5523 with SMTP id k2-20020a5d6d42000000b00236c9a65523mr4378601wri.222.1667234847726;
+        Mon, 31 Oct 2022 09:47:27 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id q8-20020a05600c46c800b003b4868eb71bsm7488871wmo.25.2022.10.31.09.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 09:47:27 -0700 (PDT)
+Subject: [PATCH 0/4] arm64: amlogic: add initial Odroid Go Ultra DTS
 MIME-Version: 1.0
-Received: by 2002:a05:7208:608b:b0:5d:5fd:eaac with HTTP; Mon, 31 Oct 2022
- 08:55:59 -0700 (PDT)
-Reply-To: victorinaquezon01@yahoo.com
-From:   Victorina <victorinaquezon@gmail.com>
-Date:   Mon, 31 Oct 2022 15:55:59 +0000
-Message-ID: <CAAOoKdtKiOsY9NHKOKnMFde+5RJ9erb66BYraxj99G3YEi+ybg@mail.gmail.com>
-Subject: Bonjour
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIABz8X2MC/w3MMQ6AIAwAwK+YzjYREAd/U6DRJqQkRV2Mf5fxlnuhswl32KcXjB/p0nTAzRPkk/
+ RglDIMfvHeLcFhWrEVa1LwaHjXywhF5RKqGHmLuXBkHwhGkKgzJiPN5yj0rvX7fvF2aJ9xAAAA
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Mon, 31 Oct 2022 17:47:24 +0100
+Message-Id: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This adds initial support for the Hardkernel Odroid Go Ultra.
+
+The Odroid Go Ultra is a portable gaming device with the following
+characteristics:
+- Amlogic S922X SoC
+- RK817 & RK818 PMICs
+- 2GiB LPDDR4
+- On board 16GiB eMMC
+- Micro SD Card slot
+- 5inch 854×480 MIPI-DSI TFT LCD
+- Earphone stereo jack, 0.5Watt 8Ω Mono speaker
+- Li-Polymer 3.7V/4000mAh Battery
+- USB-A 2.0 Host Connector
+- x16 GPIO Input Buttons
+- 2x ADC Analog Joysticks
+- USB-C Port for USB2 Device and Charging
+
+The following are not yet handled:
+- Battery RK818 Gauge and Charging
+- Earphone stereo jack detect
+- 5inch 854×480 MIPI-DSI TFT LCD
+
+This adds:
+- Poweroff bindings
+- Poweroff driver
+- Device bindings
+- Initial device DT
+
+This serie depends on:
+- https://lore.kernel.org/all/20221025-rk808-multi-v2-0-d292d51ada81@linaro.org/
+
+To: Sebastian Reichel <sre@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Kevin Hilman <khilman@baylibre.com>
+To: Jerome Brunet <jbrunet@baylibre.com>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-amlogic@lists.infradead.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+---
+Neil Armstrong (4):
+      dt-bindings: reset: document Odroid Go Ultra power-off
+      power: reset: add Odroid Go Ultra poweroff driver
+      dt-bindings: amlogic: document Odroid Go Ultra compatible
+      arm64: dts: amlogic: add initial Odroid Go Ultra DTS
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ .../reset/hardkernel,odroid-go-ultra-poweroff.yaml |  42 ++
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     | 730 +++++++++++++++++++++
+ drivers/power/reset/Kconfig                        |   7 +
+ drivers/power/reset/Makefile                       |   1 +
+ drivers/power/reset/odroid-go-ultra-poweroff.c     | 122 ++++
+ 7 files changed, 904 insertions(+)
+---
+base-commit: 247f34f7b80357943234f93f247a1ae6b6c3a740
+change-id: 20221031-b4-odroid-go-ultra-initial-5e65cde5e23a
+
+Best regards,
 -- 
-I am Madam Victorina Quezon a citizen of philippine,A widow
-I am  woman going through so much pain and suffer and might not walk
-again if nothing is been done fast
-Please  I want you to help me retrieve the only Thing I have now in a
-box  which contains my jewelries and 585,000 thounsand dollars   which
- my late husband left for me which is currently in a Security company,
-I have no strength to do this due to my health condition and safety
-Please Keep this Confidential
-I await your response
-Please reply me at     victorinaquezon01@yahoo.com
-So i can explain more
-With love
-Victorina Quezon
+Neil Armstrong <neil.armstrong@linaro.org>
