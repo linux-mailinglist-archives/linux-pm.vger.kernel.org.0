@@ -2,57 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EB3E6140AF
-	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 23:30:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1BB6140DF
+	for <lists+linux-pm@lfdr.de>; Mon, 31 Oct 2022 23:50:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiJaW37 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Oct 2022 18:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S229739AbiJaWuT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Oct 2022 18:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230036AbiJaW3Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 18:29:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CC7F26E5;
-        Mon, 31 Oct 2022 15:29:23 -0700 (PDT)
+        with ESMTP id S229452AbiJaWuR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 18:50:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBEF2DC2;
+        Mon, 31 Oct 2022 15:50:17 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BA6996601E58;
-        Mon, 31 Oct 2022 22:29:21 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8C1516602392;
+        Mon, 31 Oct 2022 22:50:15 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667255361;
-        bh=y7NHk+x/vkwV4B6bPqXt9h+kTokITc8sWrGBHP8NPNg=;
+        s=mail; t=1667256615;
+        bh=kVDDQeMOdM+UVteLf3u36rrJFa9xVLBf4adP3dt8wlU=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JYpPB0aO/MMbrQkYic+RHqVrLuAwKNI0ud8uCXdiAarhfFi43aQfo1mwfZPFQUVf1
-         ny0VvEs0HTxMMLY6jC+h8BTa+tIf+zvtpag4Qahv2T58+rlZe6DavftrokXx1dQ45a
-         ggpyHAZU2BxGnB7SFMT36OeKjqMdvppN807wIfHh8zelXnWvZsFxZIDAKg2pqgFaNc
-         OGrFWyudfLmF7+U4U8nZWOcyT1qY9VD8RGV8iJ0jVtx3sOjNFKn5s+NpK0SIqYD4PH
-         uU/OKM69U2ewrpSdH5z/VioJ06tLmh5sYzLGfgiv9m4+Z4/xHvepfPU/Vo9pdbOwZF
-         pWFhl9HsdzoYg==
+        b=feFsJnBaq5RKiulZzAexRlfaGop5Sb05DyqHBVwWh6HcV/ctJHn/5NNwyDSuvzGMi
+         Ymj0qcAYRAEZJ41a9SidzaB2fpaOSdkBzZa33Is2naG9n0ByfFmubrIGjCB15WUuqr
+         niyy3OGiRwt6XREovnwWwQ0zfMGj3hSg34k784D8sXkQrr1iqt0BRvd8LZNJn1dQUP
+         5ERLSLmQOtjAuFNLsyCon8TsMjpV0sRUXIOi1W31RyLN/EnpM9WVhqdvqc31eKVKTA
+         blXcNjSmKtP5GE5KV5mH+lYAhJ+8XIa4idq4ZuYjeXiqFRTVsokd3fo6p+bx+5LR/u
+         ihzYy3iFxzRXA==
 Received: by mercury (Postfix, from userid 1000)
-        id D6D1E1061C6E; Mon, 31 Oct 2022 23:29:18 +0100 (CET)
-Date:   Mon, 31 Oct 2022 23:29:18 +0100
+        id 34CAC1061C6E; Mon, 31 Oct 2022 23:50:13 +0100 (CET)
+Date:   Mon, 31 Oct 2022 23:50:13 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 2/4] power: reset: add Odroid Go Ultra poweroff driver
-Message-ID: <20221031222918.knzv3lotfn3sp7bl@mercury.elektranox.org>
-References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
- <20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: core: repair kernel-doc for
+ power_supply_vbat2ri()
+Message-ID: <20221031225013.aax5tsvenbykzp7e@mercury.elektranox.org>
+References: <20221031151808.826-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="eujrc3kuhfvtgn3s"
+        protocol="application/pgp-signature"; boundary="umduf3gx7xxv6ica"
 Content-Disposition: inline
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org>
+In-Reply-To: <20221031151808.826-1-lukas.bulwahn@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -63,50 +57,71 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---eujrc3kuhfvtgn3s
+--umduf3gx7xxv6ica
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Mon, Oct 31, 2022 at 05:47:26PM +0100, Neil Armstrong wrote:
-> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a powe=
-roff
-> to its two PMICs in order, this represents the poweroff scheme needed to =
-complete
-> a clean poweroff of the system.
+On Mon, Oct 31, 2022 at 04:18:08PM +0100, Lukas Bulwahn wrote:
+> The function power_supply_vbat2ri() does not have a parameter called tabl=
+e,
+> despite it being mentioned in the kernel-doc comment. The table is actual=
+ly
+> obtained from the info parameter, the battery information container. Henc=
+e,
+> ./scripts/kernel-doc -none drivers/power/supply/power_supply_core.c warns
+> about this excess function parameter.
 >=20
-> This implement this scheme, and overrides the PSCI pm_power_off.
+> Adjust the kernel-doc comment for power_supply_vbat2ri() for make W=3D1
+> happiness.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
 
-Please use devm_register_power_off_handler() or
-devm_register_sys_off_handler() for new drivers.
-
-Thanks,
+Thanks, queued.
 
 -- Sebastian
 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> [...]
+>  drivers/power/supply/power_supply_core.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/sup=
+ply/power_supply_core.c
+> index 4b5fb172fa99..9035e349bf53 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -870,7 +870,6 @@ EXPORT_SYMBOL_GPL(power_supply_temp2resist_simple);
+>   * power_supply_vbat2ri() - find the battery internal resistance
+>   * from the battery voltage
+>   * @info: The battery information container
+> - * @table: Pointer to battery resistance temperature table
+>   * @vbat_uv: The battery voltage in microvolt
+>   * @charging: If we are charging (true) or not (false)
+>   *
+> --=20
+> 2.17.1
+>=20
 
---eujrc3kuhfvtgn3s
+--umduf3gx7xxv6ica
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNgTDsACgkQ2O7X88g7
-+pq7uA/9H2d0rwb0Y8DB6tj/S2dpXLu4UNe10uTTfw48HwbZ/u9iAZA10IpCLUsN
-v1nLjSNKO0KZAV4V8oQaic8k3g3ZW50mt26gDPSCo19q/D3VcIwzFjUV93XDP/ue
-z3M1ftw6SWWIByaL7PoB9JSh5NCQsLAofDCCwVrJP8xC6Po59AXNUfYl1oLakV+x
-+3+HPE5KnQBH+c2kQwD6RteiSRc9oBj5TzUJGPQJVj3sAns//vRnSAkPnUKj6cSc
-1YIxtfuZM+f0lHZ4q0QPP9CZnoZrOZGKBfuk51GzkBCqRqHNlXQyo3IALzARWkzC
-ybj5PYeiAtt/9065o4qW8l/5ZkRnBgKtXLo6yEeZ4QWi4v8k+peULZUhj15hYIu1
-PFNMbCPYgrdw0zAhYF+ZGalmj7V0Bc2dt/Vdmy8P67G+Z/yFrHPkOPd+8annG1P9
-f32huAi+Moe5KUGplibWRdWHivxosVV48HH1Mcl7FD223VSt2HIzIHDEshufM0Wq
-BghGc+J2KEs9+dKwxnaZzKco59tjCmw+78inlEeyJreEEGh9vqfWFOJN0At47VPa
-cQcqGGXPMOOJHDlTFZVTLmxlZA9tl9FT+7X78IrqFZFSKEJ15VnY3Bfl2BZwwYSs
-vdojcitlJoJUU3vfa11ut36Rd2hSFSoaWdmS+mzXnuFcDD7hIqI=
-=j9s8
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNgUSEACgkQ2O7X88g7
++poksA//SZmYISwCudqSe/7w94/UPtbVBb9eqqoGwhGaIb99BlieQWRQcGKmgQ1J
+sjS1zna2/j5AzhkLhD3R7EqyfAb29BIOML0AtjRHH6niAdluXRakPf/ldZ7QddB0
+OvJ7RQGRio+2GXrflB9Hi6F3rbZAMN5ND2XLMdA4xcfJCncRZi1TgrsNhd67WIq5
+lShHmeuQodySfX2uIwe9dGoNpTBni8Afe0UaR7GxPIyshxDQnOwjEQbHq9BTtog2
+TKe1LWx3AEek1S5tsNPQIGvbJBK0Vjwfvi3ilTN3WHnfLK8ZwHimvUWfaksf0vmS
+eVowYLli2Zk9VmHbx9svoKkIFjmFRQ18wmucK4KBjSq/cSBnsn0xqMLcsbGqXSUV
+b0BI0HjZmIQMIufzO6Cj3J9cg/LTypzELAMYEu9m9UT0SQ+qY6cqe6+z/I9d97B3
+RdR9rFE4XpTjxSLcw/8x/btfUu2vLaFoNrj8IjZe7tH8hqs/+tJCzdA0mgYR2GEb
+MJaLXga1V7sQsGXeLnZbm4+mF+XNyLgEwole372onymfaf0bk/Yt8VK2z7bqa6m8
+s8KvFVjmUzWSQeEBb3QS/i7MiutijSz2UJyQzNGt6yGGDGULHxTRrvpPqhuWbLts
+fBZkbHhr3JnBA9Lp4k4dvrF2qT+vD467qjhPQFAWYE/Hp1G/C7c=
+=K8mD
 -----END PGP SIGNATURE-----
 
---eujrc3kuhfvtgn3s--
+--umduf3gx7xxv6ica--
