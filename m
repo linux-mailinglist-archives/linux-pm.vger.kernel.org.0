@@ -2,184 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F6686147AA
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 11:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB8F0614B0B
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 13:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229462AbiKAKZT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Nov 2022 06:25:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S229981AbiKAMp7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Nov 2022 08:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiKAKZS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 06:25:18 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09939186DB
-        for <linux-pm@vger.kernel.org>; Tue,  1 Nov 2022 03:25:17 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id h193so4341505pgc.10
-        for <linux-pm@vger.kernel.org>; Tue, 01 Nov 2022 03:25:17 -0700 (PDT)
+        with ESMTP id S229471AbiKAMp6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 08:45:58 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E2A192BC;
+        Tue,  1 Nov 2022 05:45:58 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 78so13292365pgb.13;
+        Tue, 01 Nov 2022 05:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UzaP6H2n+Ux6mF9ntbtY3HjcdPLfyeY4b4+5jsw9NFc=;
-        b=K67YoO89ft4OBL/cSXdU99CvmQEG1lOVf9vlR+HxtxzxPYUQsnSF2vaI3zExgs0hYD
-         Koq54uyKFu1cRMvkxZ2/onlABECMos8mSgc01OdYuyjX3WG+Ji+ii93IoVkgFQBQD8qT
-         Q1jxR0Kk7Ks3Y/RJT+XPM64hEfRRHOjE5fetDH7VqGUXSI+CS4bjfQEw07FZfpYy1BDE
-         jQOsqABfyekEkiZ0Y5c9A6/Yxg+REJDvPb0xLm/AIQJ0jMX5nNBHdyJbZhBY5j4nwQGA
-         ALCrM5L9oA33IKub6rhhUB2WoAXCpDYrJFDmFMNbR3Odtp05ehCj5foR8KrRmOR8yfVp
-         SCmw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lrG+YXaUGAscfFFfn+JVBJvhu3xyIhC/RE4Ontt4Bn8=;
+        b=X5FvDNq+UEDBiGr4dMhgnutQKwbuvBz1+LajQr9xTClsadOf/VNuAKXKgZ504MocjN
+         f0O1aY683/QyRDtBAyCxBgVI8SpDKwcta9V3TMnls6+vgoiBBTyL/WpXWiHAKRF5q09C
+         WgAB7WqUyen7eW0Ynq1ko+qJfBciJ0dOfG1HMw6+JZ3EZn2uRnM3YHBOAc8deYvnvPRN
+         lJMtT4RjbV98ULwIbQPeWdP1Rbh212vmbKdlM5BTufiKBiIS33DP+g3vw65zp0f+xLDA
+         P8UfZr3y7KiPPxZ8RYqz12A4mxz0/7OGoW/G6OJPcWBmIwgexnDEtDziSZNtBxJiew6R
+         0JDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UzaP6H2n+Ux6mF9ntbtY3HjcdPLfyeY4b4+5jsw9NFc=;
-        b=a+i53oUt2ZdIX2gOiH94EFZSPSU8Abx6lPjBJR5zL8YMpGM9Zuz4o9wpRYBhA+VpOy
-         lXyS6cXXeoJIoS8/9TtMEomNzvPA7qbup5/fJ6BQGzM9czOA8cgR3LCUiCfTSNUOSiAq
-         Ftxsn6Rxxjk4KS3CIkgoLoiNhJFWpP0GZwq+nYTd2cgxWhr2NG2pJYnLlZ90EgXXAn/L
-         X74n0ZTP1w8sesrBGTOuDiDJo3sRHW4+o5RiQiDKM0q183PkXGN30oLempUs803hLcq+
-         OQBGeHrTzOycPC+bBDce3op/xCTxY/n1x+iMnAnmQXmCzXW+1K5T1gC54apP43jl78YN
-         8N7Q==
-X-Gm-Message-State: ACrzQf1vJJbLc3sYA/oeilOcuwoATl8h+ZMo87Dg2TiSOsIpEp2dA3tK
-        lmS6DdX5wHhzEzQRBHYpfz9Cwa/U6wi+8ErUmqPMBA==
-X-Google-Smtp-Source: AMsMyM5YqrlZpuviaO+utF1dLtIVzEV1mde0FZoUPJC4rIXXDmiDVGuVbe04MtPn8QqNGjBJCo9eCCSGeD4BZilYZLk=
-X-Received: by 2002:a63:464d:0:b0:441:5968:cd0e with SMTP id
- v13-20020a63464d000000b004415968cd0emr17219844pgk.595.1667298316520; Tue, 01
- Nov 2022 03:25:16 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lrG+YXaUGAscfFFfn+JVBJvhu3xyIhC/RE4Ontt4Bn8=;
+        b=0UuWLUqwYGQQpivvdKopvKizI/VJ3LEXUxzO6T2G4IqIEtI4Aho8rhVluwnj7GPRER
+         tS2HvVgO/OY5LrJL75AI1/ki2bybnC5dGG8z5ZFBR3tWzPfG8WdvClJkbBFUlfYx05re
+         lRbsxOpRMnogdFEeYwr+NNzbPPZ1hkZ0fURpiyI0puCRFH8G1QbZkR4LPtgEpfNo/hqk
+         5KhSKj6ne8z9NPWeRSRoYPPv00NDWo6WKeyjIP0DvIXro4O0E6JVeMEokSW8vvqL0Gnz
+         0pzewvioVxAGeW4DX3k55yR8f39NR3XYVVmM2t1C1d4v+n42zJceoWdF6vFk26RRuJM7
+         05dA==
+X-Gm-Message-State: ACrzQf3gVBrDjQc3pjaofjIQO2faeroViJUJdNHezyv1bUgvhiPjaSu5
+        Co/maJzD/hNm8ZozgzqKWPc=
+X-Google-Smtp-Source: AMsMyM4HzgkWxuPH9DkJZ5EmFj0kWanp79esgEtSFYJJkil56qYRzaD6XGNaQ2HBrhCykiTV3g0fAw==
+X-Received: by 2002:aa7:818f:0:b0:562:dc99:8a84 with SMTP id g15-20020aa7818f000000b00562dc998a84mr19555257pfi.30.1667306757992;
+        Tue, 01 Nov 2022 05:45:57 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-74.three.co.id. [180.214.232.74])
+        by smtp.gmail.com with ESMTPSA id 77-20020a621750000000b0056c2e497ad6sm6606351pfx.93.2022.11.01.05.45.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 05:45:57 -0700 (PDT)
+Message-ID: <55d9baa0-6ab2-63ff-51c1-57f379efff29@gmail.com>
+Date:   Tue, 1 Nov 2022 19:45:54 +0700
 MIME-Version: 1.0
-References: <20221101024736.1509207-1-shawn.guo@linaro.org> <20221101024736.1509207-4-shawn.guo@linaro.org>
-In-Reply-To: <20221101024736.1509207-4-shawn.guo@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Nov 2022 11:24:39 +0100
-Message-ID: <CAPDyKFo-S7s4dSf33TOv2SBFEKW6oUKoMjg5vDPxf1OpY5=kAw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] PM: domains: Power off[on] domain in hibernate
- .freeze[thaw]_noirq hook
-To:     Shawn Guo <shawn.guo@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for
+ annotation
+Content-Language: en-US
+To:     TGSP <tgsp002@gmail.com>, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, huanglei@kylinos.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
+References: <20221101022840.1351163-1-tgsp002@gmail.com>
+ <20221101022840.1351163-2-tgsp002@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221101022840.1351163-2-tgsp002@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 1 Nov 2022 at 03:47, Shawn Guo <shawn.guo@linaro.org> wrote:
->
-> On platforms which use SHUTDOWN as hibernation mode, the genpd noirq
-> hooks will be called like below.
->
->     genpd_freeze_noirq()         genpd_restore_noirq()
->           =E2=86=93                            =E2=86=91
->     Create snapshot image        Restore system
->           =E2=86=93                            =E2=86=91
->     genpd_thaw_noirq()           Read snapshot image
->           =E2=86=93                            =E2=86=91
->     Write snapshot image         Kernel boot
->           =E2=86=93                            =E2=86=91
->     power_down()                 Power on device
->
-> As of today suspend hooks genpd_suspend[resume]_noirq() manages domain
-> on/off state, but hibernate hooks genpd_freeze[thaw]_noirq() doesn't.
-> This results in a different behavior of domain power state between suspen=
-d
-> and hibernate freeze, i.e. domain is powered off for the former while on
-> for the later.  It causes a problem on platforms like i.MX where the
-> domain needs to be powered on/off by calling clock and regulator interfac=
-e.
-> When the platform restores from hibernation, the domain is off in hardwar=
-e
-> and genpd_restore_noirq() tries to power it on, but will never succeed
-> because software state of domain (clock and regulator) is left on from th=
-e
-> last hibernate freeze, so kernel thinks that clock and regulator are
-> enabled while they are actually not turned on in hardware.  The
-> consequence would be that devices in the power domain will access
-> registers without clock or power, and cause hardware lockup.
->
-> Power off[on] domain in hibernate .freeze[thaw]_noirq hook for reasons:
->
-> - Align the behavior between suspend and hibernate freeze.
-> - Have power state of domains stay in sync between hardware and software
->   for hibernate freeze, and thus fix the lockup issue seen on i.MX
->   platform.
->
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+On 11/1/22 09:28, TGSP wrote:
+> From: xiongxin <xiongxin@kylinos.cn>
+> 
+> The actual calculation formula in the code below is:
+> 
+> max_size = (count - (size + PAGES_FOR_IO)) / 2
+> 	    - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+> 
+> But function comments are written differently, the comment is wrong?
+> 
+> By the way, what exactly do the "/ 2" and "2 *" mean?
+> 
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Shouldn't the description above better below triple-dash (just
+before diffstat)?
 
-Kind regards
-Uffe
+-- 
+An old man doll... just what I always wanted! - Clara
 
-> ---
->  drivers/base/power/domain.c | 35 ++++-------------------------------
->  1 file changed, 4 insertions(+), 31 deletions(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index b81baeb38d81..28c9e04e3488 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -1323,24 +1323,11 @@ static int genpd_resume_noirq(struct device *dev)
->   */
->  static int genpd_freeze_noirq(struct device *dev)
->  {
-> -       const struct generic_pm_domain *genpd;
-> -       int ret =3D 0;
-> -
->         dev_dbg(dev, "%s()\n", __func__);
->
-> -       genpd =3D dev_to_genpd(dev);
-> -       if (IS_ERR(genpd))
-> -               return -EINVAL;
-> -
-> -       ret =3D pm_generic_freeze_noirq(dev);
-> -       if (ret)
-> -               return ret;
-> -
-> -       if (genpd->dev_ops.stop && genpd->dev_ops.start &&
-> -           !pm_runtime_status_suspended(dev))
-> -               ret =3D genpd_stop_dev(genpd, dev);
-> -
-> -       return ret;
-> +       return genpd_finish_suspend(dev,
-> +                                   pm_generic_freeze_noirq,
-> +                                   pm_generic_thaw_noirq);
->  }
->
->  /**
-> @@ -1352,23 +1339,9 @@ static int genpd_freeze_noirq(struct device *dev)
->   */
->  static int genpd_thaw_noirq(struct device *dev)
->  {
-> -       const struct generic_pm_domain *genpd;
-> -       int ret =3D 0;
-> -
->         dev_dbg(dev, "%s()\n", __func__);
->
-> -       genpd =3D dev_to_genpd(dev);
-> -       if (IS_ERR(genpd))
-> -               return -EINVAL;
-> -
-> -       if (genpd->dev_ops.stop && genpd->dev_ops.start &&
-> -           !pm_runtime_status_suspended(dev)) {
-> -               ret =3D genpd_start_dev(genpd, dev);
-> -               if (ret)
-> -                       return ret;
-> -       }
-> -
-> -       return pm_generic_thaw_noirq(dev);
-> +       return genpd_finish_resume(dev, pm_generic_thaw_noirq);
->  }
->
->  /**
-> --
-> 2.25.1
->
