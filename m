@@ -2,239 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E785F6142A9
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 02:09:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2EE96142D3
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 02:42:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbiKABJD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 31 Oct 2022 21:09:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51868 "EHLO
+        id S229910AbiKABm1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 31 Oct 2022 21:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiKABJC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 21:09:02 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CDC2264D
-        for <linux-pm@vger.kernel.org>; Mon, 31 Oct 2022 18:09:01 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id f205so15725020yba.2
-        for <linux-pm@vger.kernel.org>; Mon, 31 Oct 2022 18:09:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4jYhgCXnVodbNWDB2rRTz9iSRZip5q9Zs/8Yq6qfrHM=;
-        b=x6PkcIYxeIZhkNJNh5PTLKkgMpXohVquQ49iwWeF2wxBSryknEyu5TWkM//H1HiUgQ
-         ieY1wVwZYrmOMOsomSu0Fu75n5ys7qGEtABaz3/LKgQVCJf9SWcyi8GVM1HwbKfWuQAv
-         QdnJ2viFa4VL1DuWUbHwkUZHv54rFGY+6eMrS1u9eM3WjsniErAPXueZB6jdStD2XWL5
-         aWHcoKQeXoY4ovvyLveMemrPn6mLRS5HIMeugtaDX43XpgjBs0Mq/reY8mSBePuIueiz
-         F0yCA2DyGTz53cBXLpbr/FxDKIgkSv698eJf5+S5KvEtjJc8Msh6YofWMEdsEm11+DFT
-         P2RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4jYhgCXnVodbNWDB2rRTz9iSRZip5q9Zs/8Yq6qfrHM=;
-        b=InAUIG6J0kOboXunNUh1+x4F/gYDcHx/bfKOgoXyGBD6U69rVjssen5D5WwuwJ6Y11
-         y9ID00fmFtSSbvbwM747e5q087bF6wv6VFtjF8oTmXprPy+x+W7nIJ19lQuNz6G9Dg+A
-         VhxDjIgqnsso3gEqkObEFxwh50dNO0i9FiTFZR4kvDZtdvWofFUCqGRyf+SQYbbjvxhx
-         amxPsdoLRK/lAtAVWWwVXDjl7Ej1L8BrR3mk0r9KQ7xiEVj4iqJtmziIhT9LSSdyws1O
-         oJBc2uTjEJFU/MRyyXVygiliku/x1uf8Cg3brpKtrJXUEKOnikFGUyXS7mnQ/hwgaLKG
-         meIQ==
-X-Gm-Message-State: ACrzQf2oT/HlLF/Iq/x6meiKIiw9dQKszHdfFHFC0+kP5MmW4eT9XCvd
-        BUI+39MQJrR/iHVUZLHrV2o581D6QzVmZYOLZENEYw==
-X-Google-Smtp-Source: AMsMyM6WVPAsBcmF9m+QrqRbQ3a5gBKgI80Q1OWpN7PGMglpP4zNDlPpv8DvBx8a5TAQc25GaT97kwMaOmuXaDeLmvE=
-X-Received: by 2002:a25:ba45:0:b0:67a:6298:7bac with SMTP id
- z5-20020a25ba45000000b0067a62987bacmr16839119ybj.194.1667264940414; Mon, 31
- Oct 2022 18:09:00 -0700 (PDT)
+        with ESMTP id S229881AbiKABmZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 31 Oct 2022 21:42:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44B017402;
+        Mon, 31 Oct 2022 18:42:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667266943; x=1698802943;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=4OYGu0RKdW2L34vFwgyzV4Q3BN/6r7P6a5YCMK9FnSI=;
+  b=TbxqET0+S+Pp+DCxMfnzCGfvxfAfXbCViGhpQ394H98lyXUcrXi6Fy+f
+   o9XZVMdG5uHveEIz9F+Jp03aDl/IP0fsE6l/41lavlP3uAdixxXKjPPwk
+   FNeDAOEHSi1W/zyuhs4bMAd/LdOrX9T1HpnAwHlOkUn28XWWjpMtPU/oc
+   ePavYyz/1qIGXPyWQotnVHBpbm8pB6/jIjWjdUiJKLyaEn01rsp5ibIYO
+   TlHZujfsmF3oe//GHHJrrX89ocyWrGXxbXWDnAuhlFHmuQz7paIkGV1ju
+   gTGQsCa18o+DyO0zc03vfOaVz4qA6cmmoGn3Q58zTDNwxH+pL8eBw7YbH
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310136106"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="310136106"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 18:42:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="628433612"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="628433612"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 31 Oct 2022 18:42:19 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1opgIF-000DBA-00;
+        Tue, 01 Nov 2022 01:42:19 +0000
+Date:   Tue, 01 Nov 2022 09:42:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     sound-open-firmware@alsa-project.org, ntfs3@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-ext4@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-arch@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c
+Message-ID: <6360796a.Im9eP1m6DSU/3Bdw%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <CAE-0n52xbZeJ66RaKwggeRB57fUAwjvxGxfFMKOKJMKVyFTe+w@mail.gmail.com>
- <CAPDyKFpay0w6n6rtv+bsdcTvL4ijtEPBODo1=XJpUFNdaooTcg@mail.gmail.com>
- <CAE-0n52Bfe-7Fpawct=_3=miLBygR_-YXm1YPnhCWOwxFnjv7g@mail.gmail.com>
- <9a696c92-eac2-e8fc-5081-8feb9c6150c1@linaro.org> <CAE-0n50b+h_1tojmw-u0uMkmAHP_=-Kxx=oUURfn52gTv99KaA@mail.gmail.com>
-In-Reply-To: <CAE-0n50b+h_1tojmw-u0uMkmAHP_=-Kxx=oUURfn52gTv99KaA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 1 Nov 2022 04:08:49 +0300
-Message-ID: <CAA8EJprYe+wFC6b0ryKRzUF4WE9pz28gT_+60SZ=S-NmRfsbsQ@mail.gmail.com>
-Subject: Re: clk: qcom: genpd lockdep warning in gdsc
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Yu Zhao <yuzhao@google.com>, linux-arm-msm@vger.kernel.org,
-        dianders@chromium.org, mka@chromium.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 1 Nov 2022 at 03:43, Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Dmitry Baryshkov (2022-10-27 11:13:44)
-> > On 27/10/2022 01:18, Stephen Boyd wrote:
-> > > Reviving this old thread because this commit has lead to a couple bugs
-> > > now.
-> > >
-> > > Quoting Ulf Hansson (2022-06-22 03:26:52)
-> > >> On Fri, 17 Jun 2022 at 21:58, Stephen Boyd <swboyd@chromium.org> wrote:
-> > >>>
-> > >>> Hi Bjorn and Dmitry,
-> > >>>
-> > >>> Yu reported a lockdep warning coming from the gdsc driver. It looks like
-> > >>> the runtime PM usage in gdsc.c is causing lockdep to see an AA deadlock
-> > >>> possibility with 'genpd->mlock'. I suspect this is because we have
-> > >>> commit 1b771839de05 ("clk: qcom: gdsc: enable optional power domain
-> > >>> support"), and that is now calling runtime PM code from within the genpd
-> > >>> code.
-> > >
-> > > This commit has caused a deadlock at boot for Doug[1] and I see that the
-> > > camera driver on Google CoachZ and Wormdingler devices doesn't work
-> > > after resuming from suspend once this commit is applied. I'm leaning
-> > > towards sending a revert, because it seems to cause 3 issues while
-> > > removing the regulator hack that was in place to enable MMCX. This patch
-> > > is cleaning up the hack, but trading the hack for three more problems.
-> > >
-> > >> I think genpd already has nested lock support, so the only
-> > >>> solution is to not use runtime PM from within genpd code and start
-> > >>> expressing genpd parent relationships in genpd itself?
-> > >>
-> > >> Not sure exactly what you mean here, but yes, expressing the
-> > >> parent/child domain relationship is always needed.
-> > >>
-> > >> Having gdsc_disable() to do runtime PM calls (gdsc_pm_runtime_put())
-> > >> seems awkward to me. Why is that needed, more exactly?
-> > >
-> > > It seems like this is needed so that the gdsc_enable() and
-> > > gdsc_disable() calls can read/write the registers for the genpd, while
-> > > those registers live in some clk controller that needs either a
-> > > different clk (probably some AHB clk) or another genpd to be enabled. It
-> > > looks like for qcom,sm8250-dispcc it relies on MMCX gdsc (which is a
-> > > genpd). From a hardware view, the MDSS_GDSC provided by the display clk
-> > > controller is probably not a sub-domain of MMCX. Instead, we need to
-> > > have MMCX enabled so that we can access the registers for the MDSS GDSC.
-> >
-> > Yes, exactly.
->
-> Thanks for confirming. I've debugged further and found that we can't use
-> runtime PM calls here in the gdsc enable/disable functions at all. What
-> happens is runtime PM is disabled during device late suspend (see
-> __device_suspend_late() and how it calls __pm_runtime_disable() early
-> on). All genpds are assigned noirq phase suspend/resume operations that
-> will power on and off the genpd during system wide suspend/resume (see
-> the genpd->domain.ops assignments in pm_genpd_init() and how noirq PM
-> ops are used).
->
-> When it comes time to resume the system, we'll try to enable the gdsc,
-> and call into gdsc_enable() which will try to call pm_runtime APIs on
-> the parent clk controller during the noirq phase of resume and that is
-> doomed to fail.
->
-> >
-> > >
-> > > My question is if it makes sense to simply describe that the GDSCs
-> > > provided by a device are sub-domains of whatever power domains are
-> > > listed in DT for that device? I think if we did that here for sm8250
-> > > dispcc, we wouldn't need to use runtime PM within the genpd code
-> > > assuming that the MMCX parent genpd is enabled before we attempt to
-> > > read/write the dispcc gdsc registers. Hopefully that is also done, i.e.
-> > > enabling parent domains before enabling child domains if the parent is
-> > > disabled.
-> >
-> > I will check this tomorrow. It should be possible to handle the
-> > MMCX/MDSS_GDSC relationship in this way.
-> >
-> > > Is this already being done with pm_genpd_add_subdomain() in
-> > > gdsc_register()? I see that we're attaching that to dispcc's struct
-> > > device::pm_domain, but I assume that is different from the MMCX genpd.
-> >
-> > No, I think the only domain there is the MMCX domain, so this call s
-> >
->
-> Did this get deleted?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 6fbda10ec6f8d70d0f4446f861f7db726c2f2e7c  Add linux-next specific files for 20221031
 
-No, the regulator was deleted. But for some time we had the following
-in display and video clock controller nodes:
+Error/Warning reports:
 
-power-domains = <&rpmhpd SM8250_MMCX>;
-required-opps = <&rpmhpd_opp_low_svs>;
+https://lore.kernel.org/linux-mm/202210090954.pTR6m6rj-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210111318.mbUfyhps-lkp@intel.com
+https://lore.kernel.org/linux-mm/202210261404.b6UlzG7H-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210270637.Q5Y7FiKJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210271517.snUEnhD0-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210290926.rwDI063c-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202210300751.rG3UDsuc-lkp@intel.com
 
->
-> > > Maybe that is the problem here. Dmitry can you further describe the
-> > > problem being solved?
-> >
-> > I must admit, I don't remember what caused me to add this call. May be
-> > it was added before me getting the pm_genpd_add_subdomain() call in place.
-> >
->
-> I see that the 'dev->pm_domain' pointer isn't assigned unless I have a
-> 'power-domains = <&some_pd>' property in DT for the clock controller
-> registering GDSCs. This means that a driver using the pm clock APIs
-> isn't populating 'dev->pm_domain' and thus the clks for the device
-> aren't enabled when this gdsc is enabled.
+Error/Warning: (recently discovered and may have been fixed)
 
-We were looking for the opposite way: to enable the power domain, when
-the GDSC (and clocks) are accessed.
-The bus clocks (DISP_CC_XO_CLK, GCC_DISP_AHB_CLK, etc.) are hardwired
-into the on state forever.
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4878: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5044:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:102:9: error: implicit declaration of function 'u32p_replace_bits' [-Werror=implicit-function-declaration]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:127:16: error: implicit declaration of function 'FIELD_GET' [-Werror=implicit-function-declaration]
+drivers/pinctrl/qcom/pinctrl-lpass-lpi.c:233:23: error: implicit declaration of function 'u32_encode_bits' [-Werror=implicit-function-declaration]
+include/asm-generic/div64.h:222:35: warning: comparison of distinct pointer types lacks a cast
+include/asm-generic/div64.h:234:32: warning: right shift count >= width of type [-Wshift-count-overflow]
+lib/test_maple_tree.c:453:12: warning: result of comparison of constant 4398046511104 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+mm/hugetlb_vmemmap.c:419:11: error: a function declaration without a prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+mm/hugetlb_vmemmap.c:419:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+mm/hugetlb_vmemmap.c:419:59: error: expected ')' before 'bool'
+mm/hugetlb_vmemmap.c:419:60: error: unexpected type name 'bool': expected identifier
+mm/hugetlb_vmemmap.c:419:66: error: expected identifier
+sound/soc/sof/amd/../ops.h:309:56: error: too many arguments provided to function-like macro invocation
+sound/soc/sof/amd/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/amd/../ops.h:336:10: error: incompatible pointer to integer conversion returning 'u8 (*)(struct snd_sof_dev *, void *)' (aka 'unsigned char (*)(struct snd_sof_dev *, void *)') from a function with result type 'u8' (aka 'unsigned char') [-Wint-conversion]
+sound/soc/sof/amd/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/imx/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/imx/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/intel/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/intel/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/mt8186/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/mt8186/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/mediatek/mt8195/../../ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/mediatek/mt8195/../../ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
+sound/soc/sof/ops.h:309:75: error: macro "writeb" passed 3 arguments, but takes just 2
+sound/soc/sof/ops.h:336:74: error: macro "readb" passed 2 arguments, but takes just 1
 
-> There is a GENPD_FLAG_PM_CLK flag that we could try, but
-> genpd_resume_noirq() calls genpd_sync_power_on() before calling
-> genpd_start_dev(), and the device it is trying to start there is the
-> wrong device, it is the consumer of the gdsc. That looks like a
-> dead-end.
+Unverified Error/Warning (likely false positive, please contact us if interested):
 
-I see.
+drivers/thermal/thermal_core.c:929 __thermal_cooling_device_register() warn: passing zero to 'ERR_PTR'
+lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
+lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
 
-[skipped the pm_clk part. I might be wrong, but I don't think it's
-relevant. We have to enable the GDSC, but not the clocks to enable the
-access.]
+Error/Warning ids grouped by kconfigs:
 
-> This problem exposes that the power-domains that we implement for GDSCs
-> are not "complete". If we listed the clocks required for the domain to
-> operate properly, then we would be able to attach those to the gdsc's
-> genpd and have one power domain that represents everything for the
-> device in DT. Of course, if the device itself had some sort of "freeze"
-> or "lock" register that caused the device to not work unless you
-> unlocked it by writing a special value then we would need to also start
-> the device in the PM domain. I don't see any sort of call to start
-> parent devices in genpd_resume_noirq(), so I don't know how this would
-> work. Luckily I don't have this problem today, but I'm just thinking of
-> how we slice up the genpd code and the device specific code and hook
-> that all into genpd.
->
-> In a sense, we want to resume the device that is providing the genpd,
-> but that isn't happening here. Instead, we're noirq resuming a genpd
-> while the provider of that genpd is still suspended. I think typically
-> genpds are registered by a bus entity that is "always on" and doesn't
-> need to power manage itself. That disconnect is where we're getting into
-> trouble.
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   `-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|-- alpha-randconfig-m041-20221030
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-thermal-thermal_core.c-__thermal_cooling_device_register()-warn:passing-zero-to-ERR_PTR
+|   `-- lib-zstd-decompress-zstd_decompress_block.c-ZSTD_execSequenceEndSplitLitBuffer()-warn:inconsistent-indenting
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   `-- sound-soc-sof-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|-- arc-randconfig-r043-20221030
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   `-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|-- arm-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-FIELD_GET
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32_encode_bits
+|   |-- drivers-pinctrl-qcom-pinctrl-lpass-lpi.c:error:implicit-declaration-of-function-u32p_replace_bits
+|   |-- include-asm-generic-div64.h:warning:comparison-of-distinct-pointer-types-lacks-a-cast
+|   |-- include-asm-generic-div64.h:warning:right-shift-count-width-of-type
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-amd-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-imx-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-intel-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8186-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-readb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-mediatek-mt8195-..-..-ops.h:error:macro-writeb-passed-arguments-but-takes-just
+|   |-- sound-soc-sof-ops.h:error:macro-readb-passed-arguments-but-takes-just
+clang_recent_errors
+|-- hexagon-allmodconfig
+|   `-- lib-test_maple_tree.c:warning:result-of-comparison-of-constant-with-expression-of-type-unsigned-long-is-always-false
+|-- riscv-randconfig-r024-20221030
+|   |-- sound-soc-sof-amd-..-ops.h:error:incompatible-pointer-to-integer-conversion-returning-u8-(-)(struct-snd_sof_dev-void-)-(aka-unsigned-char-(-)(struct-snd_sof_dev-void-)-)-from-a-function-with-result-ty
+|   `-- sound-soc-sof-amd-..-ops.h:error:too-many-arguments-provided-to-function-like-macro-invocation
+`-- s390-randconfig-r044-20221030
+    |-- mm-hugetlb_vmemmap.c:error:a-function-declaration-without-a-prototype-is-deprecated-in-all-versions-of-C-Werror-Wstrict-prototypes
+    |-- mm-hugetlb_vmemmap.c:error:expected-identifier
+    |-- mm-hugetlb_vmemmap.c:error:type-specifier-missing-defaults-to-int-ISO-C99-and-later-do-not-support-implicit-int
+    `-- mm-hugetlb_vmemmap.c:error:unexpected-type-name-bool:expected-identifier
 
-I think that genpd's are registered in the logical order. So the
-parents are resumed before the child because they come earlier in the
-device list. Is my assumption correct?
+elapsed time: 1039m
 
-> TL;DR: This patch seems fairly broken. It works only for boot time probe
-> and then breaks suspend/resume. I think we should revert it and work on
-> a proper solution. Can we do that? Or are there DT dependencies stacked
-> on top to move away from the regulator design?
+configs tested: 85
+configs skipped: 3
 
-No, the regulators are completely removed. I think I still need to
-send the revert for the fixed-regulator driver, but the code is not
-used anyway.
+gcc tested configs:
+arm                                 defconfig
+um                           x86_64_defconfig
+arm                              allyesconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+arm64                            allyesconfig
+i386                                defconfig
+x86_64                              defconfig
+x86_64               randconfig-a014-20221031
+x86_64               randconfig-a012-20221031
+x86_64               randconfig-a011-20221031
+x86_64               randconfig-a013-20221031
+i386                 randconfig-a011-20221031
+x86_64               randconfig-a016-20221031
+i386                 randconfig-a012-20221031
+x86_64               randconfig-a015-20221031
+x86_64                               rhel-8.3
+m68k                             allmodconfig
+powerpc                           allnoconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+i386                 randconfig-a013-20221031
+arm                     eseries_pxa_defconfig
+powerpc                          allmodconfig
+ia64                             allmodconfig
+i386                 randconfig-a015-20221031
+alpha                            allyesconfig
+m68k                             allyesconfig
+arc                      axs103_smp_defconfig
+sh                               allmodconfig
+i386                 randconfig-a014-20221031
+x86_64                           rhel-8.3-syz
+i386                             allyesconfig
+i386                 randconfig-a016-20221031
+arm                           stm32_defconfig
+mips                             allyesconfig
+powerpc                     ep8248e_defconfig
+m68k                       bvme6000_defconfig
+arc                  randconfig-r043-20221031
+riscv                randconfig-r042-20221031
+arc                  randconfig-r043-20221030
+arm                         cm_x300_defconfig
+s390                 randconfig-r044-20221031
+arm                        mvebu_v7_defconfig
+x86_64                           rhel-8.3-kvm
+m68k                            q40_defconfig
+powerpc                      chrp32_defconfig
+xtensa                           alldefconfig
+x86_64                         rhel-8.3-kunit
+loongarch                 loongson3_defconfig
+openrisc                 simple_smp_defconfig
+powerpc                    adder875_defconfig
+sh                                  defconfig
+sh                            hp6xx_defconfig
+i386                          randconfig-c001
+sh                           se7705_defconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
 
-Just reverting the commit would kill the display & video on all recent
-platforms. We can mark MMCX as ALWAYS_ON for some time.
-However I'd like to try if anything is necessary at all to fix this
-issue. I suppose that setting up the subdomain should be enough, but
-I'd like to run some thorough tests before declaring the result.
+clang tested configs:
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+i386                 randconfig-a005-20221031
+i386                 randconfig-a001-20221031
+hexagon              randconfig-r045-20221031
+hexagon              randconfig-r041-20221030
+arm                        mvebu_v5_defconfig
+riscv                randconfig-r042-20221030
+x86_64               randconfig-a004-20221031
+s390                 randconfig-r044-20221030
+x86_64               randconfig-a003-20221031
+hexagon              randconfig-r041-20221031
+x86_64               randconfig-a002-20221031
+hexagon              randconfig-r045-20221030
+x86_64               randconfig-a001-20221031
+x86_64               randconfig-a006-20221031
+x86_64               randconfig-a005-20221031
+arm                         lpc32xx_defconfig
+powerpc                       ebony_defconfig
+arm                        vexpress_defconfig
+x86_64                          rhel-8.3-rust
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp
