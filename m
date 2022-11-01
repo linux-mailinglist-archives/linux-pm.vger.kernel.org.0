@@ -2,101 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AEF61514B
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 19:09:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148F9615160
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 19:17:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiKASJs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Nov 2022 14:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55488 "EHLO
+        id S229933AbiKASRb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Nov 2022 14:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiKASJp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 14:09:45 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF14B1D0E8;
-        Tue,  1 Nov 2022 11:09:44 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A1I9aTH083738;
-        Tue, 1 Nov 2022 13:09:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667326176;
-        bh=aHfPf+ay0vTuzra6DofDgrduM8g8o28Yub+/Uu/B19Q=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=JEcSkaHC0ykuoH7zYS+XXHizmjO16pr52Iia2v2KstNUeKlbq4Dlaoa2t0/rUEdDE
-         LaQ0QaThHIzm5m7CkqX0Bjeoruuh3m9+oayawUri/itWVr7KVegvHOTn52BsSVfl3Q
-         2JljI14U7FQI6qUSiYEiocfHYiH5eGQLXLtmN+ls=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A1I9alH017625
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 1 Nov 2022 13:09:36 -0500
-Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 1 Nov
- 2022 13:09:35 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 1 Nov 2022 13:09:35 -0500
-Received: from maitri.dhcp.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A1I9ZVq008602;
-        Tue, 1 Nov 2022 13:09:35 -0500
-From:   Vibhore Vardhan <vibhore@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: [PATCH RESEND 5/5] arm64: dts: ti: k3-am625-sk: Add 1.4GHz OPP
-Date:   Tue, 1 Nov 2022 13:09:35 -0500
-Message-ID: <20221101180935.139268-6-vibhore@ti.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221101180935.139268-1-vibhore@ti.com>
-References: <20221101180935.139268-1-vibhore@ti.com>
+        with ESMTP id S229926AbiKASR3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 14:17:29 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064A810548;
+        Tue,  1 Nov 2022 11:17:26 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 90F894267F;
+        Tue,  1 Nov 2022 18:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1667326644; bh=GJ6UagwrNwG/uy6EayoDIRM68iGK+xdSGDUz3nYaQYk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=zL6q+tNEyi5i/2DUXyv6d24t0f5qiyTKF5Oyf7Zy6rigRBpX7SEPw6hEZwy7xg7Zl
+         1IM4ww4DszMY8f0McbZqzDAnwG6/J8eMNfLfWGZW702nTigM6q5w2cR8YN/xVp0x/l
+         Ybi6RNCHP3YadSkYjDe5nvu8Gt5fkaS40rPfkU8wZMjBcUVZZzobfnSsIAGm+jFcvE
+         +M6ZptTWWuJtYaSGMtURzQPCZ4WPNEikroi1LWyJ1HE1QnMtD19PcNViH5naCsCMgn
+         jeSzUbZ8gEF8b7gcurOGoyVhxcsTUqcBKMMo3BjpO5n3AaKEMj1ffglaHIFIqzgiij
+         yHxuxbK5p17Dw==
+Message-ID: <c791b776-c90f-4ee5-b025-79352937bf62@marcan.st>
+Date:   Wed, 2 Nov 2022 03:17:17 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control
+ Apple SoC CPU P-states
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221024043925.25379-1-marcan@marcan.st>
+ <20221024043925.25379-5-marcan@marcan.st>
+ <CAPDyKFqYr5NDhZNT=EHWzWq=eCZKbF8Z3Y0eRHY8-nY7Ej0PBw@mail.gmail.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <CAPDyKFqYr5NDhZNT=EHWzWq=eCZKbF8Z3Y0eRHY8-nY7Ej0PBw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The 1.4 GHz OPP requires supported silicon variant (T speed grade) and
-also VDD_CORE to be at 0.85V.  All production revisions of the AM625-SK
-have both so we can enable the 1.4 GHz OPP for it.  Any other boards
-based on this design should verify that they have the right silicon
-variant and the right power tree before adding 1.4 GHz support in their
-board dts file.
+On 02/11/2022 00.16, Ulf Hansson wrote:
+> On Mon, 24 Oct 2022 at 06:40, Hector Martin <marcan@marcan.st> wrote:
+>>
+>> This driver implements CPU frequency scaling for Apple Silicon SoCs,
+>> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
+>>
+>> Each CPU cluster has its own register set, and frequency management is
+>> fully automated by the hardware; the driver only has to write one
+>> register. There is boost frequency support, but the hardware will only
+>> allow their use if only a subset of cores in a cluster are in
+>> non-deep-idle. Since we don't support deep idle yet, these frequencies
+>> are not achievable, but the driver supports them. They will remain
+>> disabled in the device tree until deep idle is implemented, to avoid
+>> confusing users.
+> 
+> Out of curiosity, may I ask if this implies the need of a
+> synchronization mechanism on the Linux side? Or is the boost frequency
+> dynamically managed solely by HW/FW?
 
-Signed-off-by: Vibhore Vardhan <vibhore@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
+It's managed by hardware - Linux gets to request whatever frequency it
+wants, and the hardware will limit it to what is achievable given the
+current idle states within the cluster (and it will change automatically
+with them). So if Linux asks for 3.2 GHz but there are no deep idle
+cores in the cluster, you get 3.0. If there's one deep idle core, you
+get 3.1 (I think). Three, 3.2. So this driver doesn't have to do
+anything (and will report the correct current-frequency as long as the
+per-SoC compatible is matched; without that this feature is disabled and
+it just reports the requested frequency). We could enable the boost
+states today just fine, it's just that they would never actually be
+reached by the hardware.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 93a5f0817efc..4620ef5e19bb 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -31,6 +31,15 @@ chosen {
- 		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
- 	};
- 
-+	opp-table {
-+		/* Add 1.4GHz OPP for am625-sk board. Requires VDD_CORE to be at 0.85V */
-+		opp-1400000000 {
-+			opp-hz = /bits/ 64 <1400000000>;
-+			opp-supported-hw = <0x01 0x0004>;
-+			clock-latency-ns = <6000000>;
-+		};
-+	};
-+
- 	memory@80000000 {
- 		device_type = "memory";
- 		/* 2G RAM */
--- 
-2.34.1
-
+- Hector
