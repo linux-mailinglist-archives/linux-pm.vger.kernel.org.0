@@ -2,65 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B453961475A
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 11:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA46D6147A2
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 11:24:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiKAKBJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Nov 2022 06:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S229533AbiKAKYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Nov 2022 06:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbiKAKBH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 06:01:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13F81902A
-        for <linux-pm@vger.kernel.org>; Tue,  1 Nov 2022 03:01:01 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso1189160pjn.0
-        for <linux-pm@vger.kernel.org>; Tue, 01 Nov 2022 03:01:01 -0700 (PDT)
+        with ESMTP id S229471AbiKAKYX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 06:24:23 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2B2D120
+        for <linux-pm@vger.kernel.org>; Tue,  1 Nov 2022 03:24:22 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so973901pjh.1
+        for <linux-pm@vger.kernel.org>; Tue, 01 Nov 2022 03:24:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5MT9pFJPIFyMQMUqsCPf2dIxLdEeAaS7OZYyjwAin4=;
-        b=vLrovUn7NN6GLFWxM1wONYTxkGW3zbxw/+nu7rVxO7HcBM/vAG2IwkiAHvFnOrItf3
-         APw52AtM3dtCiRg4x64sL9KpCRKzqfdKY9IrNBoO7ycNCzApUmKH/4qDPeUifjFvogh5
-         ntHtGiLd16NHpuIzGrIKPzy8ys9kB/FQdX+50+szel1d5F+QM0fOsCBoCD93+7ZTwqag
-         ktsWM9r2nMNuJ8DcECmRCl5gSgg/V5lyyCb1loueGEuNh0AxDUJzIUnlujA2M56DxD0p
-         ok4U9A3YXV882ayb/Vi0PdowV1SObTNd6DqUgcznflh8q3Vu2E4MTvClKy9jjzk+Vtiv
-         xMwA==
+        bh=KeuyhC/yqWeMZ9A5XwFlrzKZ+ajBX1/kPKg5+DZQVrM=;
+        b=btzAajd+q+JpmIQm13I5HOulVkqsIH1EJRGHuaPfS6MbvPOkEM2c/b6kvooZu+25YQ
+         3qls0kUzH4K1pD6HZ1NuPel5a2CYtsOK5412oU3sdUMPdlMBp9lxrd39EtisslQIU4JR
+         Nuh2W3/i8jOb4TKFQVuCeCGFhmsQbWR5K5MzZA1WxZaQkZSHTtTjCqd1z7R5Jjc9jcZ6
+         bTKORRm9JXCKbq6CKTNMHCYGUgVyvU7JQTbUtqIjLa16n6lnjHTL/zJ8fEX996H/8OYT
+         nTnvluVsYa0T/oe7uKJWGkO3atpwqPL2hpLwkTd1cylvT5p39qAXDD8n4RInw0NR06RM
+         yH/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=C5MT9pFJPIFyMQMUqsCPf2dIxLdEeAaS7OZYyjwAin4=;
-        b=jFvIlDKpMM0ezfU+Qds0YVfWwYoUU1IPDb3uozpz6p+m4N+yYLJ3Qg1NZk+pewAWWh
-         o2kC01hc8mfPlPx+IBGqTS272YbrGBbTWapyc6jYchVJRS2QR/s1PCdhQeslTWc26r3d
-         94uQ42+vwLAlziwCx7tdKSSul0BLB5Haxsc8WAD7Js2mYWLNDbumohrrCUEg5Vn4Y+i6
-         prJqzgFRpM7A/+Wqc51kZcROzxkGcLjgKM/V2YKyEmCSOACML1VxqzrVkKXXi/YvJ8qg
-         ZaIKYIOLUDHTkd/Tv9aE1IEbLtyh7/aXIX0tttcfLApRPUYVj2m8YJINTlYw35W2qGjX
-         027Q==
-X-Gm-Message-State: ACrzQf0zw23AQ3690ib3t3n2GpA43jxC1OneEDAVZQDraFujTrn9n/6E
-        to+Pl7VsvsjfIr27U/XgrLFFYaN71S7DM7Eyfs055dlu6M+jzg==
-X-Google-Smtp-Source: AMsMyM4bHEnfRhWl+iQhLC/OofGxaCzQnfDqCYyhMSIu6O+SCD51XE5TGkp7lLwyJtkmRS3ZUhUKFRlCYfkx1guE0Cw=
-X-Received: by 2002:a17:903:100c:b0:186:63a1:3b5d with SMTP id
- a12-20020a170903100c00b0018663a13b5dmr19241016plb.148.1667296860898; Tue, 01
- Nov 2022 03:01:00 -0700 (PDT)
+        bh=KeuyhC/yqWeMZ9A5XwFlrzKZ+ajBX1/kPKg5+DZQVrM=;
+        b=GRg6Zk7wax1TgyFKS++VM1PhcYRLbJIfcPxator7RfHYGCBdIQLgDs5W7PHa1tYG2F
+         hr7nKtkKwLdODF0nVyTzrzlxrjsr5nymWYDbAOWgKkGdQT8y0V/AaM5pdPparzVRuvVB
+         mm7DQqQXUcHkM8+nT5CG2MgAywvJuhvEICqxMEURh2pP8ePktAxEo1tkpNvfUBT3xRY5
+         uqYVbgHRaj11MdkdOSE9rA+NvRHFl8YhWM++4N37GrSpRg0nOLV1QgqkpwDWdhGZot1E
+         3a/BK9wg9wpKCplwB5ZtCg88s6njIMue7rFLzPA6R0rJ/wKCx3VZgkredfbPKDBQlxqk
+         2iHw==
+X-Gm-Message-State: ACrzQf29LLmPeRhbnA2sQzEuMqMxVRFLHZrvkGhczReA6V2JrHNODII7
+        XGWgx3GrwqX8nNRiUAfkGgs+7j6nPzMO9f7S8m2VoA==
+X-Google-Smtp-Source: AMsMyM4pKvV+Qk2wQ7bCR6XhdiDx26u61Hppa6SqeDDgb8CInrWbtfF06Y9S7fpIlVG3UeuCB/ehTxZsxBr/L45xrDw=
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
+ mw7-20020a17090b4d0700b001ef521cf051mr37407934pjb.164.1667298262178; Tue, 01
+ Nov 2022 03:24:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024144304.198689-1-abel.vesa@linaro.org>
-In-Reply-To: <20221024144304.198689-1-abel.vesa@linaro.org>
+References: <20221101024736.1509207-1-shawn.guo@linaro.org> <20221101024736.1509207-3-shawn.guo@linaro.org>
+In-Reply-To: <20221101024736.1509207-3-shawn.guo@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Nov 2022 11:00:23 +0100
-Message-ID: <CAPDyKFq1fvKBtPhmd3YbYcg-hWPRkqGoB=-f8SwTG2OSiKjzdw@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Reverse the order of performance and
- enabling ops
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+Date:   Tue, 1 Nov 2022 11:23:45 +0100
+Message-ID: <CAPDyKFqjf3P8GDfNinEeO57peM=7qVVP_M4yu1vsQY6N2wNcqA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] PM: domains: Consolidate genpd_restore_noirq() and genpd_resume_noirq()
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -71,136 +68,152 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 24 Oct 2022 at 16:44, Abel Vesa <abel.vesa@linaro.org> wrote:
+On Tue, 1 Nov 2022 at 03:47, Shawn Guo <shawn.guo@linaro.org> wrote:
 >
-> The ->set_performance_state() needs to be called before ->power_on()
-> when a genpd is powered on, and after ->power_off() when a genpd is
-> powered off. Do this in order to let the provider know to which
-> performance state to power on the genpd, on the power on sequence, and
-> also to maintain the performance for that genpd until after powering off,
-> on power off sequence.
+> Most of the logic between genpd_restore_noirq() and genpd_resume_noirq()
+> are same except GENPD_STATE_OFF status reset for hibernation restore.
+> The suspended_count decrement for restore should be the right thing to do
+> anyway, considering there is an increment in genpd_finish_suspend() for
+> hibernation.
 >
-> There is no scenario where a consumer would need its genpd enabled and
-> then its performance state increased. Instead, in every scenario, the
-> consumer needs the genpd to be enabled from the start at a specific
-> performance state.
+> Consolidate genpd_restore_noirq() and genpd_resume_noirq() into
+> genpd_finish_resume() and handle GENPD_STATE_OFF status reset for
+> restore case specially.
 >
-> And same logic applies to the powering down. No consumer would need its
-> genpd performance state dropped right before powering down.
->
-> Now, there are currently two vendors which use ->set_performance_state()
-> in their genpd providers. One of them is Tegra, but the only genpd provider
-> (PMC) that makes use of ->set_performance_state() doesn't implement the
-> ->power_on() or ->power_off(), and so it will not be affected by the ops
-> reversal.
->
-> The other vendor that uses it is Qualcomm, in multiple genpd providers
-> actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
-> use of ->set_performance_state() need the order between enabling ops and
-> the performance setting op to be reversed. And the reason for that is that
-> it currently translates into two different voltages in order to power on
-> a genpd to a specific performance state. Basically, ->power_on() switches
-> to the minimum (enabling) voltage for that genpd, and then
-> ->set_performance_state() sets it to the voltage level required by the
-> consumer.
->
-> By reversing the call order, we rely on the provider to know what to do
-> on each call, but most popular usecase is to cache the performance state
-> and postpone the voltage setting until the ->power_on() gets called.
->
-> As for the reason of still needing the ->power_on() and ->power_off() for a
-> provider which could get away with just having ->set_performance_state()
-> implemented, there are consumers that do not (nor should) provide an
-> opp-table. For those consumers, ->set_performance_state() will not be
-> called, and so they will enable the genpd to its minimum performance state
-> by a ->power_on() call. Same logic goes for the disabling.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+
+I have a comment, see more below.
+
+Nevertheless, please add:
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
 > ---
->  drivers/base/power/domain.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
+>  drivers/base/power/domain.c | 70 ++++++++++++++++++-------------------
+>  1 file changed, 35 insertions(+), 35 deletions(-)
 >
 > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index ead135c7044c..e66a711fec88 100644
+> index 54f6b0dd35fb..b81baeb38d81 100644
 > --- a/drivers/base/power/domain.c
 > +++ b/drivers/base/power/domain.c
-> @@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
->                 return 0;
+> @@ -1247,12 +1247,14 @@ static int genpd_suspend_noirq(struct device *dev)
+>  }
+>
+>  /**
+> - * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
+> + * genpd_finish_resume - Completion of resume of device in an I/O PM domain.
+>   * @dev: Device to resume.
+> + * @resume_noirq: Generic resume_noirq callback.
+>   *
+>   * Restore power to the device's PM domain, if necessary, and start the device.
+>   */
+> -static int genpd_resume_noirq(struct device *dev)
+> +static int genpd_finish_resume(struct device *dev,
+> +                              int (*resume_noirq)(struct device *dev))
+>  {
+>         struct generic_pm_domain *genpd;
+>         int ret;
+> @@ -1264,9 +1266,25 @@ static int genpd_resume_noirq(struct device *dev)
+>                 return -EINVAL;
+>
+>         if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
+> -               return pm_generic_resume_noirq(dev);
+> +               return resume_noirq(dev);
 >
 >         genpd_lock(genpd);
-> -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->         genpd_power_off(genpd, true, 0);
-> +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->         genpd_unlock(genpd);
->
->         return 0;
-> @@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
->                 goto out;
->
->         genpd_lock(genpd);
-> +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
->         ret = genpd_power_on(genpd, 0);
-> -       if (!ret)
-> -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
->         genpd_unlock(genpd);
->
->         if (ret)
-> @@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
->  err_poweroff:
->         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
->                 genpd_lock(genpd);
-> -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->                 genpd_power_off(genpd, true, 0);
-> +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->                 genpd_unlock(genpd);
->         }
->
-> @@ -2749,17 +2748,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->         dev->pm_domain->detach = genpd_dev_pm_detach;
->         dev->pm_domain->sync = genpd_dev_pm_sync;
->
-> -       if (power_on) {
-> -               genpd_lock(pd);
-> -               ret = genpd_power_on(pd, 0);
-> -               genpd_unlock(pd);
-> -       }
-> -
-> -       if (ret) {
-> -               genpd_remove_device(pd, dev);
-> -               return -EPROBE_DEFER;
-> -       }
-> -
->         /* Set the default performance state */
->         pstate = of_get_required_opp_performance_state(dev->of_node, index);
->         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> @@ -2771,6 +2759,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                         goto err;
->                 dev_gpd_data(dev)->default_pstate = pstate;
->         }
 > +
-> +       if (power_on) {
-> +               genpd_lock(pd);
-> +               ret = genpd_power_on(pd, 0);
-> +               genpd_unlock(pd);
-> +       }
-> +
-> +       if (ret) {
-> +               genpd_remove_device(pd, dev);
-> +               return -EPROBE_DEFER;
+> +       /*
+> +        * Special handling for hibernation restore:
+> +        * At this point suspended_count == 0 means we are being run for the
+> +        * first time for the given domain in the present cycle.
+> +        */
+> +       if (resume_noirq == pm_generic_restore_noirq &&
+> +           genpd->suspended_count++ == 0) {
+> +               /*
+> +                * The boot kernel might put the domain into arbitrary state,
+> +                * so make it appear as powered off to genpd_sync_power_on(),
+> +                * so that it tries to power it on in case it was really off.
+> +                */
+> +               genpd->status = GENPD_STATE_OFF;
 
-If we manage to request a default performance state
-(dev_gpd_data(dev)->default_pstate != 0) a few lines above, we should
-probably drop that request before returning here.
+This has really never worked as intended. Resetting the status like
+this, needs more careful actions.
 
-Similar to what we do in genpd_dev_pm_detach().
+For example, if the genpd->status was GENPD_STATE_ON, the parent
+domain's ->sd_count have been increased - so that needs to be adjusted
+too.
+
+By looking at patch3/3, I wonder if we shouldn't try to align the
+hibernation behaviors so the above hack can be dropped. Do you think
+that could work?
 
 > +       }
 > +
->         return 1;
+>         genpd_sync_power_on(genpd, true, 0);
+>         genpd->suspended_count--;
+>         genpd_unlock(genpd);
+> @@ -1281,6 +1299,19 @@ static int genpd_resume_noirq(struct device *dev)
+>         return pm_generic_resume_noirq(dev);
+>  }
 >
->  err:
-
-Other than the rather small thing above, this looks good to me!
+> +/**
+> + * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
+> + * @dev: Device to resume.
+> + *
+> + * Restore power to the device's PM domain, if necessary, and start the device.
+> + */
+> +static int genpd_resume_noirq(struct device *dev)
+> +{
+> +       dev_dbg(dev, "%s()\n", __func__);
+> +
+> +       return genpd_finish_resume(dev, pm_generic_resume_noirq);
+> +}
+> +
+>  /**
+>   * genpd_freeze_noirq - Completion of freezing a device in an I/O PM domain.
+>   * @dev: Device to freeze.
+> @@ -1366,40 +1397,9 @@ static int genpd_poweroff_noirq(struct device *dev)
+>   */
+>  static int genpd_restore_noirq(struct device *dev)
+>  {
+> -       struct generic_pm_domain *genpd;
+> -       int ret = 0;
+> -
+>         dev_dbg(dev, "%s()\n", __func__);
+>
+> -       genpd = dev_to_genpd(dev);
+> -       if (IS_ERR(genpd))
+> -               return -EINVAL;
+> -
+> -       /*
+> -        * At this point suspended_count == 0 means we are being run for the
+> -        * first time for the given domain in the present cycle.
+> -        */
+> -       genpd_lock(genpd);
+> -       if (genpd->suspended_count++ == 0) {
+> -               /*
+> -                * The boot kernel might put the domain into arbitrary state,
+> -                * so make it appear as powered off to genpd_sync_power_on(),
+> -                * so that it tries to power it on in case it was really off.
+> -                */
+> -               genpd->status = GENPD_STATE_OFF;
+> -       }
+> -
+> -       genpd_sync_power_on(genpd, true, 0);
+> -       genpd_unlock(genpd);
+> -
+> -       if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+> -           !pm_runtime_status_suspended(dev)) {
+> -               ret = genpd_start_dev(genpd, dev);
+> -               if (ret)
+> -                       return ret;
+> -       }
+> -
+> -       return pm_generic_restore_noirq(dev);
+> +       return genpd_finish_resume(dev, pm_generic_restore_noirq);
+>  }
+>
+>  /**
 
 Kind regards
 Uffe
