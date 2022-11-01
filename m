@@ -2,65 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7656F615296
-	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 20:54:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8FD6152A1
+	for <lists+linux-pm@lfdr.de>; Tue,  1 Nov 2022 20:58:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiKATyM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Nov 2022 15:54:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S229475AbiKAT6s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Nov 2022 15:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiKATyL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 15:54:11 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F32918E27;
-        Tue,  1 Nov 2022 12:54:09 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so4342512wmg.2;
-        Tue, 01 Nov 2022 12:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DqgDcLSZNA5Saaon/Fmk29zadvFURd3kHj533JQMAZI=;
-        b=L3wtkvYXHlDG15kqSgQX9OEeEdTYNSkh7poQs18k8dBe/Uz6uEfZIzt16BhbzPKd2p
-         RTz32NgKZY16G9g2S8SMpAqi8L/9Lp+yyq1nNeIKhwP1seuGjpowo1Tz7RDQnZY2ssA6
-         haFJkb603fzoXpaGGzFWPtaTvQ0rP8lG2xyFUZHYjSgIGg9LRom+F51XEcU1cq4/Nbhu
-         ATrgsKgpyZp2vhT/MARL3WVLhEsrHbWfUoIPb3cjfHwCrOyU+080G75vMs2UCmyV6tpM
-         5o6TwpDMjQK8zWChJxJaWF1lf3GPBdtQPcPUeht+lmwvI2DJd6hOuLhbpNhnpwdnCMw9
-         2Fcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqgDcLSZNA5Saaon/Fmk29zadvFURd3kHj533JQMAZI=;
-        b=acStzKqrC6EQnA0j6Kvhg6NJQNAWQ4WdIFMVrxsN+H1fRemJRr2j16qqSOGLlxE22o
-         DEbU4X+TI19tGDbVDYRIHdZBn4KI9ZI3L328n/eeExQZ4lPL5iUnxDC2dZ8DkjyR9bK0
-         5PxgZil9gFB3S/aUHkNEl3g08yUuffyBn6R5t4Y94HFCcAASd4Wlq0sghxYgpd6Fq5BQ
-         ExgvhxhSx1U75m4n1aEV80nThQnZNCbHNV2xyBV7tRWSU0hDrOpaTI5TJsj0Rct1NOXL
-         ssvcF77jeBAkonElSkMkBn9KI5ymHXK8feCbSSOpQ7dqlPY76lnFwJen1bOlkb6E7UDM
-         9KoA==
-X-Gm-Message-State: ACrzQf1r5qOgmkC0ULZalFXwMUh/cKhtQNR/Uv05BohfdSG9JURSnsiI
-        tB49viW9AByOstsWDT+Wkiw=
-X-Google-Smtp-Source: AMsMyM4scvnGtmJEI6L/0Q7Wcs3P0BW9nd6Ahkk/Xzw4ydDyis0Wsxx+GDBffAi2z+KCbeDkRKseLQ==
-X-Received: by 2002:a05:600c:3147:b0:3c6:f860:9610 with SMTP id h7-20020a05600c314700b003c6f8609610mr23655070wmo.170.1667332448210;
-        Tue, 01 Nov 2022 12:54:08 -0700 (PDT)
-Received: from localhost.localdomain ([46.249.74.23])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003cf75213bb9sm6092617wmo.8.2022.11.01.12.54.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Nov 2022 12:54:07 -0700 (PDT)
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony@atomide.com, philipp@uvos.xyz,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: [PATCH 3/3] power: supply: cpcap_battery: Read battery parameters from nvram
-Date:   Tue,  1 Nov 2022 21:53:45 +0200
-Message-Id: <1667332425-12536-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1667332425-12536-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-References: <1667332425-12536-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        with ESMTP id S229457AbiKAT6q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 15:58:46 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A017A1BEA0;
+        Tue,  1 Nov 2022 12:58:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OBAuH/mOUMCSsTmJIYu9Dct3keP2DzPI3rHQAFKceuXHf+JLwogx3mdQzNE5N+Zl8ps0nDLMV1pAECaF1a+BLhCYNfwJX/D4+V0Pkr0sngJV26t41nOpA8iNN8MHaRHRhgJSWTMev9NhE40ynUme1nXa4TZ8FJ1sGgWbEkFIFqsVy5ASW3gU8gkGYNYnPbhrpgmFzW9IKw1D7/ZKS52mcb/mv/M/K3hDkRRWtmhrirurLRRmYTcTB9nBKMdwPN+Zk1PjTw0VU/9zXt+oaU31fhPtsIh1Ny1tFA3Ra2s5Pto2ZbMkxtjI7r90nl+LX02UgXdi+NS48ttLnIe3ZDWwQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DdmuB/CkmpbbaoUlOmQqUsc0Nyfs2Y2QnhEqVEAVP+4=;
+ b=aXwReL8kvZVKQXaDzv7OLlADPwEAkZQZfVg+MUlhILXL9Sbl9kPWTty/UZLQO35XgwmfXweDiFROEAc5sD3UpYqN7JLq5kNvXpNrOJFUTfsK5CnUVj+p+6psJVkoj1nuwJAMkCBP+9eXF4wvEcDjeVhTK5KKKeX7No1B/VaR3uRofuSLcsGS11rwrasyolMp1GGwtEDfiLJBT64GwVq+j3nZW91bt6v83JZAltSBAA30INLx31UDqqeaqKTCaaObQlR2yZjPEoyHD+5VbhXvafMphZ55VMYEWUDkbJd8kM6n6TnBbVW9lCcMyLMresBpKQzw9fWzc3eGnmdowdbQ1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DdmuB/CkmpbbaoUlOmQqUsc0Nyfs2Y2QnhEqVEAVP+4=;
+ b=vrro04S1fAbe01Q0DlaMQbKVU4/dLMR4CQmQJX8Sic0wbj/3Airwzl7Laynorg6hwb8fnl3zbci/fwiVzndOui5yFbBKLiBGkVUN2MBFoPKpXfFDkssW0rddzQM5b98CbPbzrORBJNcrS2hwtFf7148OHDA2PJvbPxvPnLZ89o8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS7PR12MB5911.namprd12.prod.outlook.com (2603:10b6:8:7c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
+ 2022 19:58:43 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f8c0:db03:2d30:792c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f8c0:db03:2d30:792c%3]) with mapi id 15.20.5769.016; Tue, 1 Nov 2022
+ 19:58:43 +0000
+Message-ID: <23c353e0-078f-91e4-26fe-bf552319eaad@amd.com>
+Date:   Tue, 1 Nov 2022 14:58:41 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [RFC 1/3] PM: Add a sysfs file to represent whether hardware
+ reached the deepest state
+Content-Language: en-US
+To:     Sven van Ashbrook <svenva@chromium.org>
+Cc:     Rafael J Wysocki <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        rrangel@chromium.org, platform-driver-x86@vger.kernel.org,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221031204320.22464-1-mario.limonciello@amd.com>
+ <20221031204320.22464-2-mario.limonciello@amd.com>
+ <CAM7w-FXAGki+k9aP0wV1Qs8dKqpPXgY9ZJR_a83ETrUF6ZRZOw@mail.gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <CAM7w-FXAGki+k9aP0wV1Qs8dKqpPXgY9ZJR_a83ETrUF6ZRZOw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DM6PR13CA0025.namprd13.prod.outlook.com
+ (2603:10b6:5:bc::38) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB5911:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecd0377b-83f7-4047-4ed8-08dabc437aa9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jra/+7tezDP12KzMb3RmrXGbNf+Adeku1nwYI3MHH+4cNKJCDal5RWm9gJtwFEfU7neDZ67vQWnauDW9d+xKyyxFFEuoqID1xyvZA9tSQ6JybjiWWtq8mCHcz8EaUwRsKPCn1kmURyPCyunI1RrCJG/rlU7luLHfry6MH4SHmJkoMM1AOh811ebyYOqcKO+/ns12rus39/xbb4oi9NKfr5ImmrpVp7sZYcbM5JyCPEJwnEpZFXKtrXOIjOdIbHO5H+Ubm4bFPsHg5Dnr51DSYgpIs/4329eJEhR7m4VMPOXqHBVaRmvx8sKS44XDGtvJ72zw/te15g/jY5BUpUgtVKwne67KycFnp8QGliy5QzImsgBs+upqmENjGZhuAvpxDTpTg5GjkOCFjXym3mIxaQY/lqEs7RKu13sE9+7nHDwJ20lq3MmF7ccPnWXHO0TluMGt2K+apdkyGgwp2pZOxg4O9C441Rb4mrV+mbl7wNhqeO8UslWX9OB551C6wtjcyv2iS61M78iHwdSM5K80j1KXcMfVwaWEr8bsy2IrC1OVvY/oZfNPSbAHBcdQCgpMKwKqcS0jINgG7pusgb4G7KMSJ5KQwLzx9K0RwLrTzk5VR2rAftlGhpTg7Zb2sgfWxNfR3npFrf6BLaoxdPjISP+UdfHut8PuOQMIbdALAL9WMTB95zY2onu8PHXqaO3Gben1GqPyKTm/PPRUVYOIpx1nBOxEOpJV9XAr48raT203Rz2IzRC8oP2LqXCJSAQwl9xW5RLHNMWWZ4JFbOdPR03pjWoySHfpvmAijIZUQwE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(366004)(136003)(376002)(451199015)(6486002)(54906003)(478600001)(31686004)(38100700002)(6916009)(86362001)(5660300002)(36756003)(316002)(53546011)(31696002)(8936002)(2616005)(26005)(41300700001)(66556008)(6512007)(83380400001)(2906002)(186003)(66946007)(8676002)(6506007)(4326008)(66476007)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QTdGVDhzUXpVUlI1aldDOWtsYTJCVSt5bGtheDE0Y0pZWlh1S3pVNE4rQ3Jy?=
+ =?utf-8?B?bmNRanhUVFVCeE9URFNlVjFsa0dLMXZkcklqbitNbDR1WFlvZUFHYTJsNDJ0?=
+ =?utf-8?B?NVEycGdpM0E2a1lNclMwV2gvaDZwY3hyWEhxUnZBS2YvdlZLS3hIK3VJMFQ5?=
+ =?utf-8?B?bTUzZytNSmMzTytSaEFyNTBjUXdGZUlubjRxSFdmL3NaRm9BcDBVNHN5c2RG?=
+ =?utf-8?B?SkhYWFV0ckhiT0cyeTc4b2cyV0dJNlpmVTdaYk5IMXRVRnBDbFBTS3lpMFRi?=
+ =?utf-8?B?dDBySHJ1c1FmYzIvUmVlbHlvdjZkeDdUbUtBeUIzTnhXR1Q0bzNBWE5jN2FN?=
+ =?utf-8?B?Y2p5Mzg1RmxVcFc3d3ZhZ2NlWEkydDBPZmdKM1B3UWx5R3VKbVVZU2xleFFX?=
+ =?utf-8?B?Z2lybmVZSC9JbVROeTNSbmZGclFCcVZQaWpsS1BwZ3pLQWFvdHhuVnFDSTZJ?=
+ =?utf-8?B?a2lNaUJ0UFJiTGI0aUVvZ0lBWEtsSSsrajNMNWt5ankvLzZlZTNlcEcya3hu?=
+ =?utf-8?B?K045dFpadFVnU2VqQTdXak5CbUVLSEUwcllhYnVyWThjcEROcFYrZGpNQjE2?=
+ =?utf-8?B?N0dONHg4K2Zaa3FqdnBhUzlvOU1RckVtaGkzOVpxdkNJUWtlOEdwR1Q5c0tN?=
+ =?utf-8?B?N2dQNTN2STc0Skd5VFM5N2o2bUtQN3NlM3NKajJJSUR0VVhJdUVzU3NzSjdV?=
+ =?utf-8?B?MVFMVHk4TVNBVXV1VGZ3aEdvck5SUzg2aEFkclYzZk9ERWM4MW9sNVZJYjZo?=
+ =?utf-8?B?U3F1MkdPVzQ3ay9Mbkh1dCtuZUFoK09tckMyK1RmQXJnNVRlTGFmWE1JVGxz?=
+ =?utf-8?B?SVJha2JqUG92VkRjeWJKcTE0OGlMVzZIN0tOMEpGdmtIZ1RsNUpvTUV1TWVp?=
+ =?utf-8?B?enhaWVIyOHlMV0xxNlg3RUtnRElXbHZVb1kybTBqRlNRRVZNN1J1OCtab0VD?=
+ =?utf-8?B?L1phRTgrS0l4dUhXcU5SSzNGYU1rS1Y1NFRKRHpDNDU0bUJNSTd4ZkpwMVBj?=
+ =?utf-8?B?U3NjdnVWaWJvZElwdHQrNG1uRzJ0cnRqRTRyOUhNU0JGZmFIZW9vcmJ5em1l?=
+ =?utf-8?B?QXg5MWtQZFNPWGJaQXBKaFF6MSs3UUQ1QXkxdmJUUG01WlFGenI2T2RkTXJK?=
+ =?utf-8?B?a2RtMDBnT0h3SGRaemJQL2FXQWk4b3FNNU9PMlNyeEU1emhqYjVxbkFxcEJT?=
+ =?utf-8?B?cjJhYWt5WlVHY1Fvck9LaTIzR1dxRi94b1JRZzhZQVk5QzNibGZWeU9WSHBw?=
+ =?utf-8?B?YlowSzZ3L0pqNk9JSnExM2JTaWpMUWFMSjJTTlA4S2psSmIvUC93Q3VpWVpV?=
+ =?utf-8?B?OGZqcllaa3BwMC91eEo1cDRGSER1ZDFzRFZxMW5HRFdmQWZoTGxzcmFPVUhP?=
+ =?utf-8?B?amNuTnJpbHhJcVl6V3dja3ZjQmtERzhIcnNKaXNNWkVvVUhMYkl5T2x1REg2?=
+ =?utf-8?B?N0ViZ1BBVUxkVFpuQmVpUXVKTXJpZ0N4VVBxZXJHc0FZTVZJeENLRUdrNTNB?=
+ =?utf-8?B?TDdzNVdPeWZpV2dYaXhVMkNMblhUc1pBMkV2RDN0M2pmRUdEK1FNK3A5SHlJ?=
+ =?utf-8?B?T0xYNUhqSjJDbURZT3VFRTh1VTFTZlI1azloWlh2c3NNUXkwenA2b010UkRy?=
+ =?utf-8?B?MzhJNDdGMFZ0MlhFb1BCNjZrVnlDWExNYkJkRnZGNXBHUFFrOHZkcDBWTWtK?=
+ =?utf-8?B?N2l6dWFaKzFiRzIxZmFEZDJNVWxwSXFXNGZEMkQ2TTIwNlZMSTdqdDIxaG5L?=
+ =?utf-8?B?MG1DZHkxbmtZMUVTb3RkZzlwampBcDBPelZ3amRYUkQ4N2dEMzJVWDR3TG5K?=
+ =?utf-8?B?MSsvUjdWRjFheEJqOFdHejJqbVJPa1lGckdXT2NoeU40b3d6T3BVbjhrUDdp?=
+ =?utf-8?B?K0RpSzJ2NG1WMmZNN3IxN0hmTy9qbkdTeGlSNDdhRUhWc3F2MWhrSWdQaTRZ?=
+ =?utf-8?B?dFlLdlNvVy9PY3hCdXBTKzFaVTR2SVBvM3Q5SnRmT2dpNEp6SzdBd0NzTGpz?=
+ =?utf-8?B?cXhaU3dONGY0LzZ2SGg1QVp5SFN3YytMeWlLMWgwK0Ruc0FBK0FjUWZnTWxY?=
+ =?utf-8?B?akdIWFFQSFU4aEY1TU0ranFHdUp4MkZJQ0I4RkczclNPYzFUNnk0aW12Qm4r?=
+ =?utf-8?Q?tUix9FgQ2tZAPc+/NWxoKvrM6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecd0377b-83f7-4047-4ed8-08dabc437aa9
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 19:58:43.4967
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qcBHKL9Km6zG6OwCRZkhYqAC7j6H8yd7IeML3ciaHXLxcmXjhb+d9yFIviTuCKHfkUDXNzkpiI3ah8hX4tpD1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5911
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,138 +133,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Formulas were taken from android blob
+On 11/1/2022 12:37, Sven van Ashbrook wrote:
+> On Mon, Oct 31, 2022 at 4:43 PM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+>>
+>> +void pm_set_hw_deepest_state(u64 duration)
+>> +{
+>> +       suspend_stats.last_hw_deepest_state = duration;
+> 
+> I'm wondering if we could add a userspace notification here. Then
+> userspace wouldn't have to synchronize with the suspend/resume state
+> of the system when reading this entry.
+> 
+> What about sysfs_notify() ? Or via udev?
 
-Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
----
- drivers/power/supply/cpcap-battery.c | 88 ++++++++++++++++++++----------------
- 1 file changed, 48 insertions(+), 40 deletions(-)
+The question I would have is what kobj would you notify?  power_kobj? 
+Lots of other things write to suspend stats, but nothing else sends 
+notifications.  So why is this one going to be special?
 
-diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-index 4cfc325..5c51685 100644
---- a/drivers/power/supply/cpcap-battery.c
-+++ b/drivers/power/supply/cpcap-battery.c
-@@ -74,9 +74,6 @@
- 
- #define CPCAP_BATTERY_CC_SAMPLE_PERIOD_MS	250
- 
--#define CPCAP_BATTERY_EB41_HW4X_ID 0x9E
--#define CPCAP_BATTERY_BW8X_ID 0x98
--
- enum {
- 	CPCAP_BATTERY_IIO_BATTDET,
- 	CPCAP_BATTERY_IIO_VOLTAGE,
-@@ -388,22 +385,9 @@ static int cpcap_battery_cc_to_ua(struct cpcap_battery_ddata *ddata,
-  * kernel on droid 4, full is 4351000 and software initiates shutdown
-  * at 3078000. The device will die around 2743000.
-  */
--static const struct cpcap_battery_config cpcap_battery_eb41_data = {
--	.cd_factor = 0x3cc,
--	.info.technology = POWER_SUPPLY_TECHNOLOGY_LION,
--	.info.voltage_max_design = 4351000,
--	.info.voltage_min_design = 3100000,
--	.info.charge_full_design = 1740000,
--	.bat.constant_charge_voltage_max_uv = 4200000,
--};
--
--/* Values for the extended Droid Bionic battery bw8x. */
--static const struct cpcap_battery_config cpcap_battery_bw8x_data = {
-+static struct cpcap_battery_config cpcap_battery_mot_data = {
- 	.cd_factor = 0x3cc,
- 	.info.technology = POWER_SUPPLY_TECHNOLOGY_LION,
--	.info.voltage_max_design = 4200000,
--	.info.voltage_min_design = 3200000,
--	.info.charge_full_design = 2760000,
- 	.bat.constant_charge_voltage_max_uv = 4200000,
- };
- 
-@@ -431,39 +415,63 @@ static int cpcap_battery_match_nvmem(struct device *dev, const void *data)
- static void cpcap_battery_detect_battery_type(struct cpcap_battery_ddata *ddata)
- {
- 	struct nvmem_device *nvmem;
--	u8 battery_id = 0;
-+	char buf[24];
-+	u8 capacity;
-+	u8 mul_idx;
-+	u8 charge_voltage;
-+	u32 v;
-+	static const u32 multipliers[] = {20, 10, 10, 10, 10, 40, 10, 20, 40};
- 
- 	ddata->check_nvmem = false;
- 
- 	nvmem = nvmem_device_find(NULL, &cpcap_battery_match_nvmem);
- 	if (IS_ERR_OR_NULL(nvmem)) {
--		ddata->check_nvmem = true;
- 		dev_info_once(ddata->dev, "Can not find battery nvmem device. Assuming generic lipo battery\n");
--	} else {
--		char buf[24];
--
--		if (nvmem_device_read(nvmem, 96, 4, buf) < 0 ||
--		    strncmp(buf, "COPR", 4) != 0 ||
--		    nvmem_device_read(nvmem, 104, 24, buf) < 0 ||
--		    strncmp(buf, "MOTOROLA E.P CHARGE ONLY", 24) != 0 ||
--		    nvmem_device_read(nvmem, 2, 1, &battery_id) < 0) {
--			battery_id = 0;
--			ddata->check_nvmem = true;
--			dev_warn(ddata->dev, "Can not read battery nvmem device. Assuming generic lipo battery\n");
--		}
-+		goto unknown;
-+	}
- 
-+	if (nvmem_device_read(nvmem, 96, 4, buf) < 0 ||
-+	    strncmp(buf, "COPR", 4) != 0 ||
-+	    nvmem_device_read(nvmem, 104, 24, buf) < 0 ||
-+	    strncmp(buf, "MOTOROLA E.P CHARGE ONLY", 24) != 0) {
-+		dev_warn(ddata->dev, "Unknown battery nvmem device. Assuming generic lipo battery\n");
-+		goto unknown;
- 	}
- 
--	switch (battery_id) {
--	case CPCAP_BATTERY_EB41_HW4X_ID:
--		ddata->config = cpcap_battery_eb41_data;
--		break;
--	case CPCAP_BATTERY_BW8X_ID:
--		ddata->config = cpcap_battery_bw8x_data;
--		break;
--	default:
--		ddata->config = cpcap_battery_unkown_data;
-+	if (nvmem_device_read(nvmem, 49, 1, &mul_idx) < 0 ||
-+	    nvmem_device_read(nvmem, 34, 1, &capacity) < 0 ||
-+	    nvmem_device_read(nvmem, 65, 1, &charge_voltage) < 0) {
-+		dev_warn(ddata->dev, "Can not read battery nvmem device. Assuming generic lipo battery\n");
-+		goto unknown;
- 	}
-+
-+	/* design capacity */
-+	mul_idx -= 2;
-+
-+	if (mul_idx < ARRAY_SIZE(multipliers))
-+		v = multipliers[mul_idx];
-+	else
-+		v = 10;
-+
-+	cpcap_battery_mot_data.info.charge_full_design = 1000 * v * capacity;
-+
-+	/* design max voltage */
-+	v = 1000 * ((16702 * charge_voltage) / 1000 + 1260);
-+	cpcap_battery_mot_data.info.voltage_max_design = v;
-+
-+	/* design min voltage */
-+	if (v > 4200000)
-+		cpcap_battery_mot_data.info.voltage_min_design = 3100000;
-+	else
-+		cpcap_battery_mot_data.info.voltage_min_design = 3200000;
-+
-+	ddata->config = cpcap_battery_mot_data;
-+
-+	return;
-+
-+unknown:
-+	ddata->check_nvmem = true;
-+	ddata->config = cpcap_battery_unkown_data;
- }
- 
- /**
--- 
-1.9.1
+To me I don't think it's much different for userspace to "always" read 
+the file after resume vs wait for the notification and then read it.
+
+To make userspace flexible to multiple kernel versions it seems to me 
+that userspace could check if that file exists before suspend and if it 
+does then check the value after suspend.
+
+> 
+>> +}
+>> +EXPORT_SYMBOL_GPL(pm_set_hw_deepest_state);
 
