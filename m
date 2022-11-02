@@ -2,195 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC98615E9A
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695AD615EC4
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiKBJBX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 05:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
+        id S231300AbiKBJDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 05:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiKBJBI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:01:08 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B839286C9
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:01:05 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id l2so15934021pld.13
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:01:05 -0700 (PDT)
+        with ESMTP id S231287AbiKBJCd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:02:33 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52828701
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:02:31 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so1339345pjl.3
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:02:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TCbesr7t22BH12koAKaq07PLsfL/CZLX5cbu8l4PC8k=;
-        b=MDGtYph3exFjeCg9VqNZzVzu3Vumc0ZwkNtXfKqvGqA0BSAzU1mop8s97+EujGQVla
-         BNZJxwW1pPWMa4xpHTzHj0o3RJDIcYEOoM4r/XpG2AY2z1Af5t+GA3ASTdPsSvdAmhLF
-         KH2v8yLW13suU86jRHH5EmYzpVX0TArdHKs70YhEYsoVB66y1XZKpNpf7JfujxTehMdz
-         lDT+2gmlRAjjycDhG46ZhhwShvUlYruDZbimedwd5yDh0/Ao4xoamKioRjItIVlhv2WB
-         kNP7nGE2cVidcRSGdr/lCmIcmbL3m+qvr8sNBxeXRSSVRsCVS6UxPCCPVT8qmLDnzldr
-         Re4Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3lW+SEAwaQj22Ep5QkmznnP/cF5sNnG1Gxo6Sa2AZ74=;
+        b=zMACeZbTZl8Q3wbIi8TRiige4VbN1aGqtrYun5aTANcuZZe+p7qmASVXONqOc8BnjO
+         EXUpfbpmLT4aldBZy+mhaQUupoCUeZZt6VqjUbjTA9X4Zx3bRl3erk2FCZAgbGp7SbmI
+         1xnzVLkngnIJP+qZvFQ1rW/oLf4sRdaTM8kS6enQOg0wRQ215McLO0h9oGWZPvVnsl9D
+         FerDzddgYMI4QPktFlJyuv7L6Q54iEHyS7k5k2aX6/fOVvEu2UapwdObqqF0mf9Zw2yc
+         VBsphQ7BS33X/JO7bmpx6UWnuCfJXDYNgtfzX7OKuD7AyX9aWhXpBzu03Pc+GrnrujDL
+         YNTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TCbesr7t22BH12koAKaq07PLsfL/CZLX5cbu8l4PC8k=;
-        b=j5Ll/N+ORJGiqGZOE6IStWBgTaXfTpXEtWFO7KEUSO5IBRgp7uezy3s0p/mPCk98pO
-         36chBeqelopIOcVwZCpiwZp1uMu8xrMymP+BHIJgbx7esjwY3DEO+URyZzZg519smSjh
-         T4CB0qNOBpegKK/TuEfSvXTYbFRsHIS7pPt9FCcM9RhD9T/aYhRFxzeqRacj+EdjH06x
-         lij1a+j0Kc7kNqL3pMIYxA/GLPTMqrYr7Lx3dOPIeYW4GHWpwzGoKwh7wXNFYOh77EHd
-         e3nSm0c2BOAWxmAO4VfWcuT2PA0a2OuPzkjwShyy1V2NFX1hD4dlTJElGtQ9idX6QAA8
-         6R1Q==
-X-Gm-Message-State: ACrzQf1TFf+hvRREXhD2i1nqgDqTeabwB2gwxkvJnkOya4WdWna9t+tK
-        hEZJZcgpJ6VZSx0a648hpVXmk4tUw1vE
-X-Google-Smtp-Source: AMsMyM7kWzjgmWgi2JYTCNHRGMGFCkgT5IlBpTNmkAhrr2N7dB+zScr1peUE1BOXig/x7+qWL8z6+A==
-X-Received: by 2002:a17:903:444:b0:187:428:1317 with SMTP id iw4-20020a170903044400b0018704281317mr23647290plb.151.1667379664568;
-        Wed, 02 Nov 2022 02:01:04 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.209.178])
-        by smtp.gmail.com with ESMTPSA id z10-20020a63d00a000000b0046f7b0f504esm7136389pgf.58.2022.11.02.02.01.00
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3lW+SEAwaQj22Ep5QkmznnP/cF5sNnG1Gxo6Sa2AZ74=;
+        b=aa5U6ep+ASsYAaavO1HpJgTr47OSr9OaHCX9cyrWPs/KZ+EfwbDuQHpRanjYFlf2rp
+         yEWA4H3v3PfhkQG4prEWa4v+S1ercX1XSYgm2yv1zWoVluo4WX200nhou9e1iHqn84SY
+         EmkH9wK+rBvirRmd7T+tpgeMvoLyYxQaLYfVXRO4ignOb77WwnlS7N+PFelGwvOvKPGF
+         c04bjXlnB9H8Xwibgt2kANeuSk7PmRnZ+xQqohCdlmIcETze/YzgMigyRIFVDzvY3NOW
+         EisOWUVxgto/hFjmUnK0mXxXLdiZBJmfaTOi4YMETwUtMyghZd0g997vzkl2uRcOUh4W
+         I4vw==
+X-Gm-Message-State: ACrzQf0O2LzeQbYh7FYEmLjN8ylONrH9rZuA/XCYFPt2jUYc0jVLGZoA
+        ETE0eiMKvAMpFkEXiJqdTKTVJQ==
+X-Google-Smtp-Source: AMsMyM6PALNUlom1rlSsoWaB+9NYnSm8AiAITHIXsiK1BSybVbtqKeCAusR4sDxJ3wdLnUx7GI0NlQ==
+X-Received: by 2002:a17:902:8e88:b0:185:3cea:6335 with SMTP id bg8-20020a1709028e8800b001853cea6335mr23860226plb.96.1667379751258;
+        Wed, 02 Nov 2022 02:02:31 -0700 (PDT)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902ecc300b001868ed86a95sm7830304plh.174.2022.11.02.02.02.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 02:01:03 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, viresh.kumar@linaro.org, rafael@kernel.org
-Cc:     johan@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 3/3] cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq
-Date:   Wed,  2 Nov 2022 14:30:38 +0530
-Message-Id: <20221102090038.64541-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221102090038.64541-1-manivannan.sadhasivam@linaro.org>
-References: <20221102090038.64541-1-manivannan.sadhasivam@linaro.org>
+        Wed, 02 Nov 2022 02:02:30 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 14:32:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     James Calligeros <jcalligeros99@gmail.com>
+Cc:     vireshk@kernel.org, sboyd@kernel.org, nm@ti.com,
+        linux-pm@vger.kernel.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
+Message-ID: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
+References: <20221030101546.29306-1-jcalligeros99@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221030101546.29306-1-jcalligeros99@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-soc_data is a static info of the driver and thus no need to cache it inside
-the qcom_cpufreq_data struct which is allocated per frequency domain. So,
-move it inside qcom_cpufreq struct.
+On 30-10-22, 20:15, James Calligeros wrote:
+> The opp-microwatt property was added with the intention of providing
+> platforms a way to specify a precise value for the power consumption
+> of a device at a given OPP to enable better energy-aware scheduling
+> decisions by informing the kernel of the total static and dynamic
+> power of a device at a given OPP, removing the reliance on the EM
+> subsystem's often flawed estimations. This property is parsed by
+> opp_parse_supplies(), which creates a hard dependency on the
+> opp-microvolt property.
+> 
+> Some platforms, such as Apple Silicon, do not describe their devices'
+> voltage regulators in the DT as they cannot be controlled by the kernel
+> and/or rely on opaque firmware algorithms to control their voltage and
+> current characteristics at runtime. We can, however, experimentally
+> determine the power consumption of a given device at a given OPP, taking
+> advantage of opp-microwatt to provide EAS on such devices as was initially
+> intended.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+Do you supply a regulator to the OPP core for your platform ?
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 6d807956aaf6..5e0598730a04 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -43,7 +43,6 @@ struct qcom_cpufreq_soc_data {
- struct qcom_cpufreq_data {
- 	void __iomem *base;
- 	struct resource *res;
--	const struct qcom_cpufreq_soc_data *soc_data;
- 
- 	/*
- 	 * Mutex to synchronize between de-init sequence and re-starting LMh
-@@ -63,6 +62,7 @@ struct qcom_cpufreq_data {
- 
- static struct {
- 	struct qcom_cpufreq_data *data;
-+	const struct qcom_cpufreq_soc_data *soc_data;
- } qcom_cpufreq;
- 
- static unsigned long cpu_hw_rate, xo_rate;
-@@ -113,7 +113,7 @@ static int qcom_cpufreq_hw_target_index(struct cpufreq_policy *policy,
- 					unsigned int index)
- {
- 	struct qcom_cpufreq_data *data = policy->driver_data;
--	const struct qcom_cpufreq_soc_data *soc_data = data->soc_data;
-+	const struct qcom_cpufreq_soc_data *soc_data = qcom_cpufreq.soc_data;
- 	unsigned long freq = policy->freq_table[index].frequency;
- 	unsigned int i;
- 
-@@ -141,7 +141,7 @@ static unsigned int qcom_cpufreq_hw_get(unsigned int cpu)
- 		return 0;
- 
- 	data = policy->driver_data;
--	soc_data = data->soc_data;
-+	soc_data = qcom_cpufreq.soc_data;
- 
- 	index = readl_relaxed(data->base + soc_data->reg_perf_state);
- 	index = min(index, LUT_MAX_ENTRIES - 1);
-@@ -153,7 +153,7 @@ static unsigned int qcom_cpufreq_hw_fast_switch(struct cpufreq_policy *policy,
- 						unsigned int target_freq)
- {
- 	struct qcom_cpufreq_data *data = policy->driver_data;
--	const struct qcom_cpufreq_soc_data *soc_data = data->soc_data;
-+	const struct qcom_cpufreq_soc_data *soc_data = qcom_cpufreq.soc_data;
- 	unsigned int index;
- 	unsigned int i;
- 
-@@ -177,7 +177,7 @@ static int qcom_cpufreq_hw_read_lut(struct device *cpu_dev,
- 	unsigned long rate;
- 	int ret;
- 	struct qcom_cpufreq_data *drv_data = policy->driver_data;
--	const struct qcom_cpufreq_soc_data *soc_data = drv_data->soc_data;
-+	const struct qcom_cpufreq_soc_data *soc_data = qcom_cpufreq.soc_data;
- 
- 	table = kcalloc(LUT_MAX_ENTRIES + 1, sizeof(*table), GFP_KERNEL);
- 	if (!table)
-@@ -294,10 +294,10 @@ static unsigned long qcom_lmh_get_throttle_freq(struct qcom_cpufreq_data *data)
- {
- 	unsigned int lval;
- 
--	if (data->soc_data->reg_current_vote)
--		lval = readl_relaxed(data->base + data->soc_data->reg_current_vote) & 0x3ff;
-+	if (qcom_cpufreq.soc_data->reg_current_vote)
-+		lval = readl_relaxed(data->base + qcom_cpufreq.soc_data->reg_current_vote) & 0x3ff;
- 	else
--		lval = readl_relaxed(data->base + data->soc_data->reg_domain_state) & 0xff;
-+		lval = readl_relaxed(data->base + qcom_cpufreq.soc_data->reg_domain_state) & 0xff;
- 
- 	return lval * xo_rate;
- }
-@@ -371,9 +371,9 @@ static irqreturn_t qcom_lmh_dcvs_handle_irq(int irq, void *data)
- 	disable_irq_nosync(c_data->throttle_irq);
- 	schedule_delayed_work(&c_data->throttle_work, 0);
- 
--	if (c_data->soc_data->reg_intr_clr)
-+	if (qcom_cpufreq.soc_data->reg_intr_clr)
- 		writel_relaxed(GT_IRQ_STATUS,
--			       c_data->base + c_data->soc_data->reg_intr_clr);
-+			       c_data->base + qcom_cpufreq.soc_data->reg_intr_clr);
- 
- 	return IRQ_HANDLED;
- }
-@@ -528,16 +528,15 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 		return ret;
- 
- 	index = args.args[0];
--	data->soc_data = of_device_get_match_data(&pdev->dev);
- 	data = &qcom_cpufreq.data[index];
- 
- 	/* HW should be in enabled state to proceed */
--	if (!(readl_relaxed(data->base + data->soc_data->reg_enable) & 0x1)) {
-+	if (!(readl_relaxed(data->base + qcom_cpufreq.soc_data->reg_enable) & 0x1)) {
- 		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
- 		return -ENODEV;
- 	}
- 
--	if (readl_relaxed(data->base + data->soc_data->reg_dcvs_ctrl) & 0x1)
-+	if (readl_relaxed(data->base + qcom_cpufreq.soc_data->reg_dcvs_ctrl) & 0x1)
- 		data->per_core_dcvs = true;
- 
- 	qcom_get_related_cpus(index, policy->cpus);
-@@ -658,6 +657,8 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	if (!qcom_cpufreq.data)
- 		return -ENOMEM;
- 
-+	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
-+
- 	for (i = 0; i < num_domains; i++) {
- 		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
- 		struct resource *res;
+> Allow platforms to specify and consume any subset of opp-microvolt,
+> opp-microamp, or opp-microwatt without a hard dependency on opp-microvolt
+> to enable this functionality on such platforms.
+> 
+> Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
+
+I won't call it a fix, we are trying to use this information in a
+different way here, that's all.
+
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
+> ---
+> Changes since v1:
+> Fixed bad reference (opp to opp_table)
+> 
+>  drivers/opp/of.c | 198 +++++++++++++++++++++++++----------------------
+>  1 file changed, 104 insertions(+), 94 deletions(-)
+> 
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 605d68673f92..0fa25c3a959e 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -581,166 +581,176 @@ static bool _opp_is_supported(struct device *dev, struct opp_table *opp_table,
+>  static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+>  			      struct opp_table *opp_table)
+>  {
+> -	u32 *microvolt, *microamp = NULL, *microwatt = NULL;
+> +	u32 *microvolt = NULL, *microamp = NULL, *microwatt = NULL;
+>  	int supplies = opp_table->regulator_count;
+>  	int vcount, icount, pcount, ret, i, j;
+> -	struct property *prop = NULL;
+> +	struct property *prop_mv = NULL, *prop_ma = NULL, *prop_mw = NULL;
+>  	char name[NAME_MAX];
+>  
+>  	/* Search for "opp-microvolt-<name>" */
+>  	if (opp_table->prop_name) {
+>  		snprintf(name, sizeof(name), "opp-microvolt-%s",
+>  			 opp_table->prop_name);
+> -		prop = of_find_property(opp->np, name, NULL);
+> +		prop_mv = of_find_property(opp->np, name, NULL);
+>  	}
+>  
+> -	if (!prop) {
+> +	if (!prop_mv) {
+>  		/* Search for "opp-microvolt" */
+>  		sprintf(name, "opp-microvolt");
+> -		prop = of_find_property(opp->np, name, NULL);
+> -
+> -		/* Missing property isn't a problem, but an invalid entry is */
+> -		if (!prop) {
+> -			if (unlikely(supplies == -1)) {
+> -				/* Initialize regulator_count */
+> -				opp_table->regulator_count = 0;
+> -				return 0;
+> -			}
+> +		prop_mv = of_find_property(opp->np, name, NULL);
+>  
+> -			if (!supplies)
+> -				return 0;
+> -
+> -			dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
+> -				__func__);
+
+Catching such errors are important and so the opp-microvolt property
+was made compulsory earlier.
+
+If there is a regulator, then we must have microvolt property.
+amps/watts are optional.
+
+> -			return -EINVAL;
+> -		}
+>  	}
+>  
+> -	if (unlikely(supplies == -1)) {
+> -		/* Initialize regulator_count */
+> -		supplies = opp_table->regulator_count = 1;
+> -	} else if (unlikely(!supplies)) {
+> -		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
+> -		return -EINVAL;
+> +	if (prop_mv) {
+> +		vcount = of_property_count_u32_elems(opp->np, name);
+> +		if (unlikely(supplies == -1))
+> +			supplies = opp_table->regulator_count = vcount;
+
+This is wrong. There can be one or three entries per regulator here.
+Target or min/max/target. If the supplies value is -1, we can only
+support one regulator, i.e. one or three entries total.
+
+I didn't look at rest of the patch yet. Lets discuss this a bit first.
+
 -- 
-2.25.1
-
+viresh
