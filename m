@@ -2,227 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F37616623
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 16:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07908616634
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 16:32:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiKBP3I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 11:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S230493AbiKBPb7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 11:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiKBP3F (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 11:29:05 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D7C21C40B;
-        Wed,  2 Nov 2022 08:28:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 416CB11FB;
-        Wed,  2 Nov 2022 08:28:58 -0700 (PDT)
-Received: from e126311.arm.com (unknown [10.57.67.104])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 03B4D3F534;
-        Wed,  2 Nov 2022 08:28:49 -0700 (PDT)
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, kajetan.puchalski@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v4 2/2] cpuidle: teo: Introduce util-awareness
-Date:   Wed,  2 Nov 2022 15:28:08 +0000
-Message-Id: <20221102152808.2978590-3-kajetan.puchalski@arm.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20221102152808.2978590-1-kajetan.puchalski@arm.com>
-References: <20221102152808.2978590-1-kajetan.puchalski@arm.com>
+        with ESMTP id S231173AbiKBPbp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 11:31:45 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52E52CC87
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 08:30:52 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id w4so932244qts.0
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 08:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fAaNeYtIE9F0QZElZY6MMMzf/k79uGm8TBc9K2sR8Wk=;
+        b=vuosTVMmmwcG1J2BRW4nrC+4OXNBIDiN9/tRTAC7tQPjiHq6uWPTuUlzmNfZet6yV3
+         TcjNW37nn45+prgcA0Mc4KKbb7/ZRK9qKq3KPzmQGDVCtSIHZvAjwmtKol/BpW9O3x0U
+         a4Ic456oeZNXO5Ua2OI7lwIBeG+dqRIu9N/COesN1aRfL0jXZWvsgOIjhtRQQDFLhAIh
+         r/q5XtdT8ohSY0nOMRaNsdSKAbOx2xu4FYNoC9hrrkUdg/a7MBzcXt7QNrfomsLxG3fW
+         fI+NcKjcztFJ8ui2rVw3gDUUR8hXmHHAu8s082e/3XqPPott3Vtr8HSM8XEH5Xwollv0
+         KnTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fAaNeYtIE9F0QZElZY6MMMzf/k79uGm8TBc9K2sR8Wk=;
+        b=JHsBxdGfEcajIBjQhXLMhRCoz70Bw569lRSUoihaBzSST4MdjmOQlpjoCPSVUBaNV8
+         A2+4Q79KmqwLV9yqMj8THd9bq1E0jRix9lUNZ7dN98R+IzXquKHlOSGky4cMljwe+SCh
+         BitYngz9wYqq6anH43QC5elGrwjR5yCYn6G0SWxCkZVIQ8cSvWgSRYqIhyJnKTt89r50
+         g1XfQq4oy4GlHEYuRMk9auNBYSpUuwA572Ame4KZ5O8YiWDFqfZwM3Mx+HLOjHYW2x1A
+         +2IBkdvcrErw3wewvQuOW36sIDDiNXuf6f8bOWq6BSY92rJdsPZKyAobuRrTvWuEHguz
+         WZnQ==
+X-Gm-Message-State: ACrzQf1dsQ8vhmjML17Toirq8lrz2lpUm/rvMkvuOjVsWl+OXJBxwm2C
+        B5DjENUJEHOGxEXSHtNtVoVwZg==
+X-Google-Smtp-Source: AMsMyM69BMjOyTlyjAH1Asg2OhIG7ZGYclnIc7HwK2Wz2y3w9kvGB7H1VQqv5CxwWV2fQhrr1v2ppg==
+X-Received: by 2002:ac8:7d8c:0:b0:39c:f4b6:f02f with SMTP id c12-20020ac87d8c000000b0039cf4b6f02fmr19764674qtd.252.1667403052090;
+        Wed, 02 Nov 2022 08:30:52 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id t1-20020a05620a450100b006cbcdc6efedsm8794176qkp.41.2022.11.02.08.30.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 08:30:51 -0700 (PDT)
+Message-ID: <d7f245d9-2b4c-089e-44cf-a97f8b2d5769@linaro.org>
+Date:   Wed, 2 Nov 2022 11:30:50 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: cpufreq: ti-cpufreq: Enable AM625 CPUFreq
+Content-Language: en-US
+To:     Vibhore Vardhan <vibhore@ti.com>, nm@ti.com, vigneshr@ti.com,
+        kristo@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221101171022.133322-1-vibhore@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221101171022.133322-1-vibhore@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Modern interactive systems, such as recent Android phones, tend to have
-power efficient shallow idle states. Selecting deeper idle states on a
-device while a latency-sensitive workload is running can adversely impact
-performance due to increased latency. Additionally, if the CPU wakes up
-from a deeper sleep before its target residency as is often the case, it
-results in a waste of energy on top of that.
+On 01/11/2022 13:10, Vibhore Vardhan wrote:
+> Hi,
+> This series enables CPUFreq for AM625. This version is a fixup and 
+> rebase of the patch series by Dave Gerlach on v6.1-rc3 [1].
+> 
 
-This patch extends the TEO governor with a mechanism adding util-awareness,
-effectively providing a way for the governor to reduce the selected idle
-state by 1 when the CPU is being utilized over a certain threshold while
-still trying to select the deepest possible state using TEO's metrics when
-the CPU is not being utilized. This is now possible since the CPU
-utilization is exported from the scheduler with the sched_cpu_util function
-and already used e.g. in the thermal governor IPA.
+Use subject prefixes matching the subsystem - missing PATCH. Tools are
+doing it automatically. You kind of break people's filters...
 
-Under this implementation, when the CPU is being utilised and the
-selected candidate state is C1, it will be reduced to C0 as long as C0
-is not a polling state. This effectively should make the patch have no
-effect on most Intel systems.
-
-This can provide drastically decreased latency and performance benefits in
-certain types of mobile workloads that are sensitive to latency,
-such as Geekbench 5.
-
-Signed-off-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
----
- drivers/cpuidle/governors/teo.c | 80 ++++++++++++++++++++++++++++++++-
- 1 file changed, 79 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-index e2864474a98d..2f37aeba8cb8 100644
---- a/drivers/cpuidle/governors/teo.c
-+++ b/drivers/cpuidle/governors/teo.c
-@@ -2,8 +2,13 @@
- /*
-  * Timer events oriented CPU idle governor
-  *
-+ * TEO governor:
-  * Copyright (C) 2018 - 2021 Intel Corporation
-  * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-+ *
-+ * Util-awareness mechanism:
-+ * Copyright (C) 2022 Arm Ltd.
-+ * Author: Kajetan Puchalski <kajetan.puchalski@arm.com>
-  */
- 
- /**
-@@ -99,14 +104,49 @@
-  *      select the given idle state instead of the candidate one.
-  *
-  * 3. By default, select the candidate state.
-+ *
-+ * Util-awareness mechanism:
-+ *
-+ * The idea behind the util-awareness extension is that there are two distinct
-+ * scenarios for the CPU which should result in two different approaches to idle
-+ * state selection - utilized and not utilized.
-+ *
-+ * In this case, 'utilized' means that the average runqueue util of the CPU is
-+ * above a certain threshold.
-+ *
-+ * When the CPU is utilized while going into idle, more likely than not it will
-+ * be woken up to do more work soon and so a shallower idle state should be
-+ * selected to minimise latency and maximise performance. When the CPU is not
-+ * being utilized, the usual metrics-based approach to selecting the deepest
-+ * available idle state should be preferred to take advantage of the power
-+ * saving.
-+ *
-+ * In order to achieve this, the governor uses a utilization threshold.
-+ * The threshold is computed per-cpu as a percentage of the CPU's capacity
-+ * by bit shifting the capacity value. Based on testing, the shift of 6 (~1.56%)
-+ * seems to be getting the best results.
-+ *
-+ * Before selecting the next idle state, the governor compares the current CPU
-+ * util to the precomputed util threshold. If it's below, it defaults to the
-+ * TEO metrics mechanism. If it's above and the currently selected candidate is
-+ * C1, the idle state will be reduced to C0 as long as C0 is not a polling state.
-  */
- 
- #include <linux/cpuidle.h>
- #include <linux/jiffies.h>
- #include <linux/kernel.h>
-+#include <linux/sched.h>
- #include <linux/sched/clock.h>
-+#include <linux/sched/topology.h>
- #include <linux/tick.h>
- 
-+/*
-+ * The number of bits to shift the cpu's capacity by in order to determine
-+ * the utilized threshold
-+ */
-+#define UTIL_THRESHOLD_SHIFT 6
-+
-+
- /*
-  * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
-  * is used for decreasing metrics on a regular basis.
-@@ -137,9 +177,11 @@ struct teo_bin {
-  * @time_span_ns: Time between idle state selection and post-wakeup update.
-  * @sleep_length_ns: Time till the closest timer event (at the selection time).
-  * @state_bins: Idle state data bins for this CPU.
-- * @total: Grand total of the "intercepts" and "hits" mertics for all bins.
-+ * @total: Grand total of the "intercepts" and "hits" metrics for all bins.
-  * @next_recent_idx: Index of the next @recent_idx entry to update.
-  * @recent_idx: Indices of bins corresponding to recent "intercepts".
-+ * @util_threshold: Threshold above which the CPU is considered utilized
-+ * @utilized: Whether the last sleep on the CPU happened while utilized
-  */
- struct teo_cpu {
- 	s64 time_span_ns;
-@@ -148,10 +190,24 @@ struct teo_cpu {
- 	unsigned int total;
- 	int next_recent_idx;
- 	int recent_idx[NR_RECENT];
-+	unsigned long util_threshold;
-+	bool utilized;
- };
- 
- static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
- 
-+/**
-+ * teo_get_util - Update the CPU utilized status
-+ * @dev: Target CPU
-+ * @cpu_data: Governor CPU data for the target CPU
-+ */
-+static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-+{
-+	unsigned long util = sched_cpu_util(dev->cpu);
-+
-+	cpu_data->utilized = util > cpu_data->util_threshold;
-+}
-+
- /**
-  * teo_update - Update CPU metrics after wakeup.
-  * @drv: cpuidle driver containing state data.
-@@ -323,6 +379,21 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 			goto end;
- 	}
- 
-+	teo_get_util(dev, cpu_data);
-+	/* the cpu is being utilized and there's only 2 states to choose from */
-+	/* no need to consider metrics, choose the shallowest non-polling state and exit */
-+	if (drv->state_count < 3 && cpu_data->utilized) {
-+		for (i = 0; i < drv->state_count; ++i) {
-+			if (dev->states_usage[i].disable ||
-+					drv->states[i].flags & CPUIDLE_FLAG_POLLING)
-+				continue;
-+			break;
-+		}
-+
-+		idx = i;
-+		goto end;
-+	}
-+
- 	/*
- 	 * Find the deepest idle state whose target residency does not exceed
- 	 * the current sleep length and the deepest idle state not deeper than
-@@ -454,6 +525,11 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
- 	if (idx > constraint_idx)
- 		idx = constraint_idx;
- 
-+	/* if the CPU is being utilized and C1 is the selected candidate */
-+	/* choose a shallower non-polling state to improve latency */
-+	if (cpu_data->utilized && idx == 1)
-+		idx = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-+
- end:
- 	/*
- 	 * Don't stop the tick if the selected state is a polling one or if the
-@@ -510,9 +586,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
- 			     struct cpuidle_device *dev)
- {
- 	struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-+	unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
- 	int i;
- 
- 	memset(cpu_data, 0, sizeof(*cpu_data));
-+	cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
- 
- 	for (i = 0; i < NR_RECENT; i++)
- 		cpu_data->recent_idx[i] = -1;
--- 
-2.37.1
+Best regards,
+Krzysztof
 
