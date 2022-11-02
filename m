@@ -2,175 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A279616E27
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 21:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8194F616F6C
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 22:11:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiKBUBO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 16:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S231168AbiKBVLk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 17:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiKBUBL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 16:01:11 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB296E53;
-        Wed,  2 Nov 2022 13:01:08 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id n83so20312191oif.11;
-        Wed, 02 Nov 2022 13:01:08 -0700 (PDT)
+        with ESMTP id S230495AbiKBVLk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 17:11:40 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E22FDF24
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 14:11:38 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id l9so12634242qkk.11
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 14:11:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdYxLy6u/2PaTIupg+k2bBdapnT54tEDA9Zj5rVwx9I=;
-        b=bAVCp0ivJaQO14A0QNklaSQIqSD0fnB3qCvfGZk24diiJXROl20vlLybQHTqWsCAmd
-         G/OXrtfBqqVagHhnVljb3P4K1POpC+oMSjohUKIAU26KLaKRJc4r1uPq6NiktKorDDIa
-         czZhkVpV7cjbJw10jQ6cLNEiH4zM80BpD4X2GUYYKDEKQZlQfVZlX8/S2HUzIS5GT1Mx
-         UYarHeMq11u0lkibbOD8CWVpdyogUHObFPoBf83nIh6+PJWshohpERwc34q55ZiK2mYu
-         lL2/t29Z1BzWqlfoblPJuC6Gua9PE/lVxDcwcijz3jyG78oDxRo+KiwAPxxl0R9Id/M3
-         E2jA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SMdd6W9zqTykplxA9atF92tm5CBcUP1U7yvf5vUxJ94=;
+        b=qB3heRMEENXq8LFOVv7rITGt3zC5JeYlR5KthvYqttf4k6cy+wq7eT+G5PU0Y1gk+T
+         hIDyJ8EDJGC4oefNczl6sxRZJYwkHx7zYy0szk3EL69mVeSGtEEgYnxqWp1eJAqGUtDD
+         FzvCzCNYtJKaplARHRsXpCDCC/UuQgXbAqcA45tzUMB+KOnfLMBtdvJCUfKBMUfT+F1r
+         C6yUhosIbNAemIdWXHBCwCI1WMUJo/j4cJyUvfJvPQZrBI1zf/cBQehcdITcpYrDiyeD
+         L6tOkEedAVUpFSq63IEZskKrZ/HwskotE8pb/OT0LprAO9P7dw5nUXd7C51ynN90uOQQ
+         cqMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NdYxLy6u/2PaTIupg+k2bBdapnT54tEDA9Zj5rVwx9I=;
-        b=RLU6ucL1+CyQqg6Q/Nh3kB/YugtA0rmHQ8/syAyzteqOs6gmY4BidQMETJcdlRL0YD
-         SrCPi0L2HbLb+1SgS1rsBEq6Uu7cqq2YkwsWvY0wNiQZwpB98SPrjkl/XvHOAIDmgGmX
-         OZFfP0nCvIIYIf2/CMqRQ35k8OxoCl2qv1tbTV3IJAMuEeYOyTZVgdaAoTZlrNv22tAZ
-         xAsqEtU+hGQJdVfzuzBogxl7+vNnyHJgJ662L88F167DyBOkVQbZpES5oB5Lo7La8aMw
-         ma+qRHcetydQrjcXEfDHgHCdRzlAH2WtKnrBBZCVxVJWC0u3VcEE1iTg+NvdhsoVO9LL
-         N66Q==
-X-Gm-Message-State: ACrzQf09e9aS/wASMcF2S/2r3rsKSVdAl9dnUfzI1Nn/JFBSe0swD0ot
-        hnVCmnHSMqxmWDyJvrGioIs=
-X-Google-Smtp-Source: AMsMyM7NdmpoQP25PH2Uc/dA20RwnF8f9qcE3BAQDocFFzqpofVxY8PDrwxFWjupI0R/+C+yTZmhlg==
-X-Received: by 2002:a05:6808:1442:b0:35a:1542:a1a6 with SMTP id x2-20020a056808144200b0035a1542a1a6mr8584650oiv.243.1667419267979;
-        Wed, 02 Nov 2022 13:01:07 -0700 (PDT)
-Received: from auvcetillem1m1.corp.emc.net ([143.166.81.254])
-        by smtp.gmail.com with ESMTPSA id n29-20020a0568080a1d00b003549397fde4sm4873182oij.54.2022.11.02.13.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:01:07 -0700 (PDT)
-From:   Stuart Hayes <stuart.w.hayes@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Kyle Meyer <kyle.meyer@hpe.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: acpi: Defer setting boost MSRs
-Date:   Wed,  2 Nov 2022 14:59:57 -0500
-Message-Id: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SMdd6W9zqTykplxA9atF92tm5CBcUP1U7yvf5vUxJ94=;
+        b=TV8V9EffuYVLeHywUwBALS39U4vATh303ghYtivgkZm03DxwVeLOYdDfNpRef+rsRN
+         Xv6A1pYLtg+d3Z83qdhMTxm4m02NfwA7DLqp26Q9zYYRXdPba+xQSSsoPjb9buAqijam
+         JWmCFkqCCOuq04mFj1h1fOjkpLrYZm6k0Mot62YtQ2Gq6IVgBgxDIpsykEDuDduP16CE
+         5vIXTIJJ2RpCgOBK3rhDnWTGO57rAjf+c91Vxiv2ayIVnLS4C/VMm99YQe+duU5Dop4b
+         cwC/xFBNMM6ozgZoLy8Nc+FEpyLUtfYy/7rHJODwXGSkajVAe8xy2AsmInBTVS+ml5xb
+         TKHA==
+X-Gm-Message-State: ACrzQf0AXV1A9f903eLdRov2N0VFn3L2vU3GmJ6NBr1/ybSFD7fI7qjp
+        q5uC+49rPzUWy8DFmHSh8+abrw==
+X-Google-Smtp-Source: AMsMyM6Wkzj6KTSaNv+AilpDqn1fSqGn/N2Li1l/svMXz1ljJSNXtiq4HeywPXe80VDgV4C1XUmDFQ==
+X-Received: by 2002:a37:ef05:0:b0:6fa:630:2b4f with SMTP id j5-20020a37ef05000000b006fa06302b4fmr19416018qkk.41.1667423497764;
+        Wed, 02 Nov 2022 14:11:37 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id h10-20020ac846ca000000b0039853b7b771sm7139821qto.80.2022.11.02.14.11.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 14:11:37 -0700 (PDT)
+Message-ID: <1a7fd1fd-4f0d-bec3-ddd5-7c6a99a2ab01@linaro.org>
+Date:   Wed, 2 Nov 2022 17:11:35 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 1/3] dt-bindings: interconnect: Remove required reg
+ field
+Content-Language: en-US
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221026190520.4004264-1-quic_molvera@quicinc.com>
+ <20221026190520.4004264-2-quic_molvera@quicinc.com>
+ <a214f513-fe28-2096-c2b0-2107e97f3ce2@linaro.org>
+ <64d0e5ef-fd36-6f25-2c39-00e8e1346af7@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <64d0e5ef-fd36-6f25-2c39-00e8e1346af7@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
-MSR) before the driver is registered with cpufreq.  This can be very time
-consuming, because it is done with a CPU hotplug startup callback, and
-cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
-on each CPU one at a time, waiting for each to run before calling the next.
+On 31/10/2022 19:29, Melody Olvera wrote:
+> 
+> 
+> On 10/27/2022 8:29 AM, Krzysztof Kozlowski wrote:
+>> On 26/10/2022 15:05, Melody Olvera wrote:
+>>> Many of the *-virt compatible devices do not have a reg field
+>>> so remove it as required from the bindings.
+>> and some virt have it... This should be probably separate binding or if
+>> the list is small - allOf:if:then.
+> I attempted this; however I'm still seeing failures in dtb_check. I've added this
+> to the binding; does this look correct?
+>  allOf:
+>    - $ref: qcom,rpmh-common.yaml#
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,qdu1000-clk-virt
+> +              - qcom,qdu1000-mc-virt
+> +
+> +    then:
+> +      required:
+> +        - compatible
 
-If cpufreq_register_driver() fails--if, for example, there are no ACPI
-P-states present--this is wasted time.
+No, because we talk about reg, not compatible. You should not require
+reg instead for some compatibles... but then the schema is getting
+complicated.
 
-Since cpufreq already sets up a CPU hotplug startup callback if and when
-acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
-which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
-exit quickly if it is loaded but not needed.
+It's difficult to give you recommendation because I do not know what are
+all these "virt" interconnects. Why some have unit address, why some do not?
 
-On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
-
-Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
----
- drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
- 1 file changed, 3 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 1bb2b90ebb21..cb167263de72 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -535,15 +535,6 @@ static void free_acpi_perf_data(void)
- 	free_percpu(acpi_perf_data);
- }
- 
--static int cpufreq_boost_online(unsigned int cpu)
--{
--	/*
--	 * On the CPU_UP path we simply keep the boost-disable flag
--	 * in sync with the current global state.
--	 */
--	return boost_set_msr(acpi_cpufreq_driver.boost_enabled);
--}
--
- static int cpufreq_boost_down_prep(unsigned int cpu)
- {
- 	/*
-@@ -897,6 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
- 		pr_warn(FW_WARN "P-state 0 is not max freq\n");
- 
-+	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
-+
- 	return result;
- 
- err_unreg:
-@@ -916,6 +909,7 @@ static int acpi_cpufreq_cpu_exit(struct cpufreq_policy *policy)
- 
- 	pr_debug("%s\n", __func__);
- 
-+	cpufreq_boost_down_prep(policy->cpu);
- 	policy->fast_switch_possible = false;
- 	policy->driver_data = NULL;
- 	acpi_processor_unregister_performance(data->acpi_perf_cpu);
-@@ -972,25 +966,9 @@ static void __init acpi_cpufreq_boost_init(void)
- 	acpi_cpufreq_driver.set_boost = set_boost;
- 	acpi_cpufreq_driver.boost_enabled = boost_state(0);
- 
--	/*
--	 * This calls the online callback on all online cpu and forces all
--	 * MSRs to the same value.
--	 */
--	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "cpufreq/acpi:online",
--				cpufreq_boost_online, cpufreq_boost_down_prep);
--	if (ret < 0) {
--		pr_err("acpi_cpufreq: failed to register hotplug callbacks\n");
--		return;
--	}
- 	acpi_cpufreq_online = ret;
- }
- 
--static void acpi_cpufreq_boost_exit(void)
--{
--	if (acpi_cpufreq_online > 0)
--		cpuhp_remove_state_nocalls(acpi_cpufreq_online);
--}
--
- static int __init acpi_cpufreq_init(void)
- {
- 	int ret;
-@@ -1032,7 +1010,6 @@ static int __init acpi_cpufreq_init(void)
- 	ret = cpufreq_register_driver(&acpi_cpufreq_driver);
- 	if (ret) {
- 		free_acpi_perf_data();
--		acpi_cpufreq_boost_exit();
- 	}
- 	return ret;
- }
-@@ -1041,8 +1018,6 @@ static void __exit acpi_cpufreq_exit(void)
- {
- 	pr_debug("%s\n", __func__);
- 
--	acpi_cpufreq_boost_exit();
--
- 	cpufreq_unregister_driver(&acpi_cpufreq_driver);
- 
- 	free_acpi_perf_data();
--- 
-2.31.1
+Best regards,
+Krzysztof
 
