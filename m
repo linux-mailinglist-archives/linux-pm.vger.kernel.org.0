@@ -2,158 +2,247 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD516155AC
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 00:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF756615764
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 03:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229919AbiKAXC4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 1 Nov 2022 19:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S229772AbiKBCMo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 1 Nov 2022 22:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiKAXCz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 19:02:55 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E6D5260F
-        for <linux-pm@vger.kernel.org>; Tue,  1 Nov 2022 16:02:54 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id kt23so40853075ejc.7
-        for <linux-pm@vger.kernel.org>; Tue, 01 Nov 2022 16:02:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=F1GdaZsbTBZ1IzvfiXwZ441nhI4PYcYDBPSYLuFmf1M=;
-        b=hP5w4fPR/AIxrYr95PtHsP/y05FHCT08b+LGW99CRwW/9K16UMWMHOUauArDwljvm6
-         pxx61Lc79LAv3++pWDLO2KWNApV8fkFgRfvI7syV9AA3zhKHUyQvsVOFzD07omjcfrPt
-         GhNV71QZ9vTlw6Nd0jt1Hv8MmPnwli7J+Zq0LwD3ID9FEhRNcAd898+9s250zhbMWceO
-         12Plq6iYEaRsPTZPCBpBqWxcpLpY2efHUSvTA35K5zvw3+yh4NWXpuoDSBXoqVoFoEu9
-         5KzUS0jBNCwQpToXE7nAFtDYH8bvogF2Utr2JNFDwPu6M4Dm7yzHQfCTOEEyWayoIDN2
-         TQvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F1GdaZsbTBZ1IzvfiXwZ441nhI4PYcYDBPSYLuFmf1M=;
-        b=PNOfwSWTjPfi9TlLdYbQbBLD0OP1hcPd5JQsNHLHVNy27FLk89ma55c9cQhgwdW/Lt
-         z/DpaEEYBhTNFquX+13uuYN8zAXzAz4nTxu1NfspKfRXcQA1z+WHm6ovLsB/C7Qvd1TE
-         xz4UG8m5OBXXwU2gh+7w4Ie63ZlgXmy2AvOJ5ggS86b+ab4W0BMwwDDjVVua1jBTrNKr
-         TKUacmHR5Ucp1YabbBrk9sisC1kMovakvs79gXcJpqD8Qf7hW0ekV7M2NDcNwT5IaUug
-         E3nPX66z+RXOw58mHi+zeXhytgE6y48VjZJUDK6BBR243NsPdhDWs1FQEQNm0rom6WUr
-         qisw==
-X-Gm-Message-State: ACrzQf1m/maZ89+iv0hgGlSO1M+UgLIuSH/09uIcyl+cTETaWVKKH+vH
-        G5V756xVLB83SHjI68msNz3LErNplzY04AYrH9p+Sg==
-X-Google-Smtp-Source: AMsMyM5f0kQ1Gv1cj0tuNeepRB2Dai1Ejxn1AJ72L8VOI0YzfIy1vhFqT/JU0CHXx2cWPjut934y0Bgxu9efYWzb8uk=
-X-Received: by 2002:a17:906:99c1:b0:6fe:b01d:134 with SMTP id
- s1-20020a17090699c100b006feb01d0134mr20262535ejn.598.1667343772538; Tue, 01
- Nov 2022 16:02:52 -0700 (PDT)
+        with ESMTP id S229637AbiKBCMn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 1 Nov 2022 22:12:43 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42AED64F8;
+        Tue,  1 Nov 2022 19:12:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667355161; x=1698891161;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FaTjZIMPUaV+44T2HRH3XxAC84DB7PBPx2yckCzy/5s=;
+  b=Kb1thNIIhftcmycJpwS/OydvPaNT48XvdfhjQrGvKH3loISBNy1mQHjJ
+   p10i1lpuU7YAPqrBk9HFHk+wfdVfUWRfkSDjrRrA/mVySiRMvNz/afkjy
+   GVgD6IAeQx7B7qIbViDy7HCuX4nwHESWOyC7HskhjBKTMOiYysC1K2Hj3
+   lEb6zdZi7SegT3t44tX5Bh7t2AhUZ7yilssGYkD7+Vwr13SasnKdlXXZt
+   aAlSMY9Ch+jYDh/cVR45RBTY2uGAOdHtILE0SdGA6sIEQRgaxwV7uRfmh
+   6OQoCpeiawpL3FL/UtRfDlgGBt4NrGnxLZpxm75/gHJHt2cTlMf5T/itV
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="296730589"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="296730589"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 19:12:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="963346719"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="963346719"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Nov 2022 19:12:36 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oq3F5-000EK9-3C;
+        Wed, 02 Nov 2022 02:12:35 +0000
+Date:   Wed, 02 Nov 2022 10:12:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
+ e0ac4f6ff9ff842b7c287cfa2deb27aadaa76bfb
+Message-ID: <6361d1fa.2HklfKes1DjBoezb%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20221031121314.1381472-1-kajetan.puchalski@arm.com>
- <20221031121314.1381472-3-kajetan.puchalski@arm.com> <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
-In-Reply-To: <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Tue, 1 Nov 2022 16:02:42 -0700
-Message-ID: <CAAYoRsUgm6KyJCDowGKFVuMwJepnVN8NFEenjd3O-FN7+BETSw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:24 PM Doug Smythies <dsmythies@telus.net> wrote:
->
-> Hi Kajetan,
->
-> On Mon, Oct 31, 2022 at 5:14 AM Kajetan Puchalski
-> <kajetan.puchalski@arm.com> wrote:
->
-> ... [delete some]...
->
-> >  /**
-> >   * teo_update - Update CPU metrics after wakeup.
-> >   * @drv: cpuidle driver containing state data.
-> > @@ -303,7 +359,9 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
-> >         int i;
-> >
-> >         if (dev->last_state_idx >= 0) {
-> > -               teo_update(drv, dev);
-> > +               /* don't update metrics if the cpu was utilized during the last sleep */
-> > +               if (!cpu_data->utilized)
-> > +                       teo_update(drv, dev);
-> >                 dev->last_state_idx = -1;
-> >         }
->
-> Ignoring the metrics is not the correct thing to do.
-> Depending on the workflow, it can severely bias the idle states deeper
-> than they should be because most of the needed information to select
-> the appropriate shallow state is tossed out.
->
-> Example 1:
-> 2 pairs of ping pongs = 4 threads
-> Parameters chosen such that idle state 2 would be a most used state.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: e0ac4f6ff9ff842b7c287cfa2deb27aadaa76bfb  Merge branch 'acpica' into bleeding-edge
 
-Sorry, typo, I meant idle state 1 would be most used.
+Error/Warning reports:
 
-> CPU frequency governor: Schedutil.
-> CPU frequency scaling driver: intel_cpufreq.
-> HWP: Disabled
-> Processor: i5-10600K (6 cores 12 cpus).
-> Kernel: 6.1-rc3
-> Run length: 1e8 cycles
-> Idle governor:
-> teo: 11.73 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
-> menu: 12.1 uSecs/loop ; idle state 1 ~3.3e6 exits/sec
-> util-v3: 15.2 uSecs/loop ; idle state 1 ~200 exits/sec
-> util-v4: 11.63 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
->
-> Where util-v4 is the same as this patch (util-v3) with the above code reverted.
->
-> Note: less time per loop is better.
->
-> Example 2: Same but parameters selected such that idle state 0 would
-> be a most used idle state.
-> Run Length: 4e8 cycles
-> Idle governor:
-> teo: 3.1 uSecs/loop ; idle state 0 ~1.2e6 exits/sec
-> menu:  3.1 uSecs/loop ; idle state 0 ~1.3e6 exits/sec
-> util-v3: 5.1 uSecs/loop ; idle state 0 ~4 exits/sec
-> util-v4: ? uSecs/loop ; idle state 0 ~1.2e6 exits/sec (partial result)
+https://lore.kernel.org/oe-kbuild-all/202210291101.UBt5Vjis-lkp@intel.com
 
-util-v4: 3.15 uSecs/loop ; idle state 0 ~1.2e6 exits/sec
+Error/Warning: (recently discovered and may have been fixed)
 
-For the above tests we do not expect teo-util to have much impact.
+arch/loongarch/include/asm/acpi.h:102:8: error: redefinition of 'struct acpi_madt_core_pic'
+arch/loongarch/include/asm/acpi.h:112:8: error: redefinition of 'struct acpi_madt_lio_pic'
+arch/loongarch/include/asm/acpi.h:123:8: error: redefinition of 'struct acpi_madt_eio_pic'
+arch/loongarch/include/asm/acpi.h:133:8: error: redefinition of 'struct acpi_madt_ht_pic'
+arch/loongarch/include/asm/acpi.h:143:8: error: redefinition of 'struct acpi_madt_bio_pic'
+arch/loongarch/include/asm/acpi.h:154:8: error: redefinition of 'struct acpi_madt_msi_pic'
+arch/loongarch/include/asm/acpi.h:164:8: error: redefinition of 'struct acpi_madt_lpc_pic'
+arch/loongarch/include/asm/acpi.h:56:6: error: redeclaration of 'enum acpi_madt_core_pic_version'
+arch/loongarch/include/asm/acpi.h:57:9: error: redeclaration of enumerator 'ACPI_MADT_CORE_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:58:9: error: redeclaration of enumerator 'ACPI_MADT_CORE_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:59:9: error: redeclaration of enumerator 'ACPI_MADT_CORE_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:62:6: error: redeclaration of 'enum acpi_madt_lio_pic_version'
+arch/loongarch/include/asm/acpi.h:63:9: error: redeclaration of enumerator 'ACPI_MADT_LIO_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:64:9: error: redeclaration of enumerator 'ACPI_MADT_LIO_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:65:9: error: redeclaration of enumerator 'ACPI_MADT_LIO_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:68:6: error: redeclaration of 'enum acpi_madt_eio_pic_version'
+arch/loongarch/include/asm/acpi.h:69:9: error: redeclaration of enumerator 'ACPI_MADT_EIO_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:70:9: error: redeclaration of enumerator 'ACPI_MADT_EIO_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:71:9: error: redeclaration of enumerator 'ACPI_MADT_EIO_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:74:6: error: redeclaration of 'enum acpi_madt_ht_pic_version'
+arch/loongarch/include/asm/acpi.h:75:9: error: redeclaration of enumerator 'ACPI_MADT_HT_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:76:9: error: redeclaration of enumerator 'ACPI_MADT_HT_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:77:9: error: redeclaration of enumerator 'ACPI_MADT_HT_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:80:6: error: redeclaration of 'enum acpi_madt_bio_pic_version'
+arch/loongarch/include/asm/acpi.h:81:9: error: redeclaration of enumerator 'ACPI_MADT_BIO_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:82:9: error: redeclaration of enumerator 'ACPI_MADT_BIO_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:83:9: error: redeclaration of enumerator 'ACPI_MADT_BIO_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:86:6: error: redeclaration of 'enum acpi_madt_msi_pic_version'
+arch/loongarch/include/asm/acpi.h:87:9: error: redeclaration of enumerator 'ACPI_MADT_MSI_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:88:9: error: redeclaration of enumerator 'ACPI_MADT_MSI_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:89:9: error: redeclaration of enumerator 'ACPI_MADT_MSI_PIC_VERSION_RESERVED'
+arch/loongarch/include/asm/acpi.h:92:6: error: redeclaration of 'enum acpi_madt_lpc_pic_version'
+arch/loongarch/include/asm/acpi.h:93:9: error: redeclaration of enumerator 'ACPI_MADT_LPC_PIC_VERSION_NONE'
+arch/loongarch/include/asm/acpi.h:94:9: error: redeclaration of enumerator 'ACPI_MADT_LPC_PIC_VERSION_V1'
+arch/loongarch/include/asm/acpi.h:95:9: error: redeclaration of enumerator 'ACPI_MADT_LPC_PIC_VERSION_RESERVED'
+drivers/irqchip/irq-loongarch-cpu.c:101:46: error: passing argument 2 of 'liointc_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongarch-cpu.c:110:46: error: passing argument 2 of 'eiointc_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-eiointc.c:313:50: error: passing argument 2 of 'pch_pic_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-eiointc.c:326:50: error: passing argument 2 of 'pch_msi_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-eiointc.c:340:12: error: conflicting types for 'eiointc_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_eio_pic *)'
+drivers/irqchip/irq-loongson-liointc.c:352:12: error: conflicting types for 'liointc_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_lio_pic *)'
+drivers/irqchip/irq-loongson-pch-lpc.c:150:12: error: conflicting types for 'pch_lpc_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_lpc_pic *)'
+drivers/irqchip/irq-loongson-pch-pic.c:334:63: error: passing argument 2 of 'pch_lpc_acpi_init' from incompatible pointer type [-Werror=incompatible-pointer-types]
+drivers/irqchip/irq-loongson-pch-pic.c:344:12: error: conflicting types for 'pch_pic_acpi_init'; have 'int(struct irq_domain *, struct acpi_madt_bio_pic *)'
 
-For completeness:
+Error/Warning ids grouped by kconfigs:
 
-Test 3: Same but parameters selected such that idle states 2 and 3
-would be used the most.
-Run Length: 3.42e5 cycles
-CPU frequency scaling governor: schedutil.
-CPU frequency scaling driver: intel_cpufreq.
-Idle governor:
-teo: 4005 uSecs/loop ; IS 2: 1917 IS 3: 107.4 exits/sec
-menu: 3113 uSecs/loop ;  IS 2: 1020 IS 3: 1576 exits/sec
-util-v3: 3457 uSecs/loop ;  IS 2: 1139 IS 3: 1000 exits/sec
-util-v4: 3526 uSecs/loop ;  IS 2: 2029 IS 3: 109 exits/sec
+gcc_recent_errors
+|-- loongarch-allyesconfig
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_bio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_core_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_eio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_ht_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_lio_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_lpc_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_msi_pic_version
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_EIO_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_EIO_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_EIO_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_HT_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_HT_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_HT_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LIO_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LIO_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LIO_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LPC_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LPC_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_LPC_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_MSI_PIC_VERSION_NONE
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_MSI_PIC_VERSION_RESERVED
+|   |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_MSI_PIC_VERSION_V1
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_bio_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_core_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_eio_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_ht_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_lio_pic
+|   |-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_lpc_pic
+|   `-- arch-loongarch-include-asm-acpi.h:error:redefinition-of-struct-acpi_madt_msi_pic
+`-- loongarch-randconfig-r012-20221101
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_bio_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_core_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_eio_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_ht_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_lio_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_lpc_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enum-acpi_madt_msi_pic_version
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_NONE
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_RESERVED
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_BIO_PIC_VERSION_V1
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_NONE
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_RESERVED
+    |-- arch-loongarch-include-asm-acpi.h:error:redeclaration-of-enumerator-ACPI_MADT_CORE_PIC_VERSION_V1
 
-Now, things are very noisy with the schedutil governor, so...
+elapsed time: 727m
 
-Test 4: Same as test 3 except for frequency scaling governor.
-Run Length: 3.42e5 cycles
-CPU frequency scaling governor: performance.
-CPU frequency scaling driver: intel_pstate.
-Idle governor:
-teo: 2688 uSecs/loop ; IS 2: 2489 IS 3: 16 exits/sec
-menu: 2596 uSecs/loop ;  IS 2: 865 IS 3: 2005 exits/sec
-util-v3: 2766 uSecs/loop ;  IS 2: 1049 IS 3: 1394 exits/sec
-util-v4: 2756 uSecs/loop ;  IS 2: 2440 IS 3: 24 exits/sec
+configs tested: 62
+configs skipped: 2
 
-... Doug
+gcc tested configs:
+arc                                 defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                    rhel-8.3-kselftests
+alpha                               defconfig
+x86_64                           rhel-8.3-kvm
+powerpc                           allnoconfig
+x86_64                              defconfig
+um                             i386_defconfig
+arm                                 defconfig
+x86_64                          rhel-8.3-func
+um                           x86_64_defconfig
+x86_64                        randconfig-a015
+s390                                defconfig
+arm64                            allyesconfig
+i386                                defconfig
+arm                              allyesconfig
+i386                          randconfig-a012
+arc                               allnoconfig
+x86_64                               rhel-8.3
+arc                              allyesconfig
+ia64                             allmodconfig
+i386                          randconfig-a016
+alpha                             allnoconfig
+s390                             allmodconfig
+alpha                            allyesconfig
+x86_64                           allyesconfig
+riscv                             allnoconfig
+sh                               allmodconfig
+arc                  randconfig-r043-20221101
+csky                              allnoconfig
+mips                             allyesconfig
+i386                          randconfig-a014
+m68k                             allmodconfig
+powerpc                          allmodconfig
+s390                             allyesconfig
+m68k                             allyesconfig
+i386                             allyesconfig
+
+clang tested configs:
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64               randconfig-a003-20221031
+x86_64                        randconfig-a012
+x86_64               randconfig-a002-20221031
+i386                 randconfig-a001-20221031
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+x86_64               randconfig-a001-20221031
+i386                          randconfig-a013
+x86_64               randconfig-a006-20221031
+i386                          randconfig-a011
+hexagon              randconfig-r041-20221101
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+x86_64               randconfig-a004-20221031
+x86_64               randconfig-a005-20221031
+i386                 randconfig-a005-20221031
+i386                          randconfig-a015
+hexagon              randconfig-r045-20221101
+riscv                randconfig-r042-20221101
+s390                 randconfig-r044-20221101
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
