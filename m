@@ -2,95 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B5C616B7D
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 19:05:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F270A616BEA
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 19:20:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiKBSFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 14:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231537AbiKBSUa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 14:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbiKBSFE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 14:05:04 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80152F003;
-        Wed,  2 Nov 2022 11:05:02 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DC3C1EC0430;
-        Wed,  2 Nov 2022 19:05:01 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667412301;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Ep4poWzvh4BEAYAVPV+8HNyluMMUvJCMlgTBWwttbq0=;
-        b=E7zQs/NLK4edogyboQinsYMbiq0yAOWPRwhBwjaS6EBtShq9AEdpxQAXzpjC7wAPDRri/v
-        os5dLBrfulfFNGLIEBtiV380bLKXXMyMBMcaiAQIeV/cMy8kacpfhCExGiQL83e584TlbM
-        PnOtnsh2KH1ZCKTOplCG+qmgfO5IvJQ=
-Date:   Wed, 2 Nov 2022 19:04:56 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v5 00/16] x86: make PAT and MTRR independent from each
- other
-Message-ID: <Y2KxSGWllUPTikJv@zn.tnic>
-References: <20221102074713.21493-1-jgross@suse.com>
+        with ESMTP id S231406AbiKBSUS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 14:20:18 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49AC2F386
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 11:20:17 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id 8so12321151qka.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 11:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PgH8+iPkG2HkoR14yXypmLmMN1g+buscpWKRVlqLP/4=;
+        b=g5qhWsDeWUZf+m5OUQo8qmB9Ed32os7oG2djVX3jvfoPzImGy93QlZFzE0xA6JaAP1
+         i3nBl8QrDECNpiCLKSXqjf3AWRSkqVyrIqs/b70/uXT68xqI3AHpNevHd+oVLt67wHS+
+         moepsm+88S8MFFd04DVnhHYtvHAPXWHkbiNS9ULg9447FU5uC2UtvPRcg2ls1wAEPQkW
+         4952B9OeWlb0zlICo8DNbqbjQvZxbaDG1f5fn4LMfeRa/ZLfi5M/AcN/d7JndSxHH7jc
+         y/+1kWOVqGNwO5BZ7J16JdRX7c/2kc+wbCjvDyfiLFprwFxCNHZy+JajwlVUn/SSVPwP
+         hjtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PgH8+iPkG2HkoR14yXypmLmMN1g+buscpWKRVlqLP/4=;
+        b=KuO2ikFhRw4Z4XaWnwQsiW7uVrssruggWPCfafmgqH3DennVlMMMxie1GrgG70IS4r
+         NcmpdN1CmoJjfpcKqAtkRBJeUdjnysEPhXI2SiQBSrYG5ZKEjrpswNhXIDkY7fqFnhid
+         MNCM/bD0OpY+ZeygpiBq2jIXFMGm48xlYxVmhvN6+U7fQFLXNf+9aa2WSXXMdkrFgCc9
+         hoew73GIwUGhnUVlB41Qf7m/ATvsm3v6cCu1VVe3DsAx2LLQMQLVdEic6qVsZovFf6AJ
+         3w57mT8zJLwRRFv+v9TAfIAGPfxSabA5nIC2eIrrPuBXCEaD49/2df+Cqi4AB5Wj1DrT
+         DfJA==
+X-Gm-Message-State: ACrzQf2XBCJFor4rQEEsVLY9Qx5NhOaDkrQdyF/+c7WPHP7sU95ve+hn
+        JIc1HjcdfPf9Y8ZM4l3SSM+VZxU06BYv6w==
+X-Google-Smtp-Source: AMsMyM5GtSz9/EmO99tqJRfQlpAcEwjit/B/NA1gRPPe8Y5GADPc9XgrOLxcMC64wuxEdHAyb+b5vA==
+X-Received: by 2002:a37:96c4:0:b0:6f9:f3f1:8e4e with SMTP id y187-20020a3796c4000000b006f9f3f18e4emr18631503qkd.534.1667413216822;
+        Wed, 02 Nov 2022 11:20:16 -0700 (PDT)
+Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id t1-20020a05620a450100b006cbcdc6efedsm9081995qkp.41.2022.11.02.11.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:20:16 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: power: supply: bq25890: use one fallback compatible
+Date:   Wed,  2 Nov 2022 14:20:11 -0400
+Message-Id: <20221102182011.106040-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221102074713.21493-1-jgross@suse.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 08:46:57AM +0100, Juergen Gross wrote:
-> Today PAT can't be used without MTRR being available, unless MTRR is at
-> least configured via CONFIG_MTRR and the system is running as Xen PV
-> guest. In this case PAT is automatically available via the hypervisor,
-> but the PAT MSR can't be modified by the kernel and MTRR is disabled.
-> 
-> The same applies to a kernel built with no MTRR support: it won't
-> allow to use the PAT MSR, even if there is no technical reason for
-> that, other than setting up PAT on all CPUs the same way (which is a
-> requirement of the processor's cache management) is relying on some
-> MTRR specific code.
-> 
-> Fix all of that by:
+BQ2589[0256] seem compatible between each other in major aspects and
+remaining features are auto-detectable (by reading device revision ID
+register).  Existing DTS already uses the compatibles with a fallback,
+so adjust the bindings to reflect this and fix dtbs_check warning:
 
-One of the AMD test boxes here says with this:
+  arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb: charger@6a: compatible: ['ti,bq25895', 'ti,bq25890'] is too long
 
-...
-[    0.863466] PCI: not using MMCONFIG
-[    0.863475] PCI: Using configuration type 1 for base access
-[    0.863478] PCI: Using configuration type 1 for extended access
-[    0.866733] mtrr: your CPUs had inconsistent MTRRdefType settings
-[    0.866737] mtrr: probably your BIOS does not setup all CPUs.
-[    0.866740] mtrr: corrected configuration.
-[    0.869350] kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
-...
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../devicetree/bindings/power/supply/bq25890.yaml  | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-Previous logs don't have it:
-
-PCI: not using MMCONFIG
-PCI: Using configuration type 1 for base access
-PCI: Using configuration type 1 for extended access
-kprobes: kprobe jump-optimization is enabled. All kprobes are optimized if possible.
-
+diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.yaml b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+index fd01ff10b4e0..ee51b6335e72 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq25890.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
+@@ -15,11 +15,15 @@ allOf:
+ 
+ properties:
+   compatible:
+-    enum:
+-      - ti,bq25890
+-      - ti,bq25892
+-      - ti,bq25895
+-      - ti,bq25896
++    oneOf:
++      - enum:
++          - ti,bq25890
++      - items:
++          - enum:
++              - ti,bq25892
++              - ti,bq25895
++              - ti,bq25896
++          - const: ti,bq25890
+ 
+   reg:
+     maxItems: 1
 -- 
-Regards/Gruss,
-    Boris.
+2.34.1
 
-https://people.kernel.org/tglx/notes-about-netiquette
