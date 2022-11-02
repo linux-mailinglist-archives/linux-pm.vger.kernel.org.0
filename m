@@ -2,164 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341CB615FBD
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F7E86160BA
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 11:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiKBJbJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 05:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
+        id S230132AbiKBKVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 06:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKBJbJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:31:09 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E6C7671
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:31:03 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id l6so15719049pjj.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:31:03 -0700 (PDT)
+        with ESMTP id S229996AbiKBKVH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 06:21:07 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADEE24BCA;
+        Wed,  2 Nov 2022 03:21:06 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f9so15852372pgj.2;
+        Wed, 02 Nov 2022 03:21:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5vJjpZUP6Df3WgXvyEwzQX7839DymC1MDleHo3NzumQ=;
-        b=lK8mezEHoK+bQ3SBLa6p5aZS+Hm2wxr02GbjTbG8znDKJPeYLrg0fXTjRkykogcxI+
-         CXgZcHZ0+sUtbj7odHT5HJIAFukBEVnqZ1Ue9mqtM7l6aY/5DeUHaF3wPDwXpm1hjcTG
-         e4yMVW2u+Ru1+vFZvKxGrlAYPj2xrZxdpmS602PiDs/A5QPaGKlob4nG08paTMyJ7ACE
-         9lNw/gi93k5sbtiNWDp7CYcUblSTK6gvjpwzZKxRmOQcXAKRR6SKVdSvP7nT+W4Hg9VA
-         5WBLn4/Wx1PhCIv7upXJ+bGIv7cdnT/72Blxt+xWFz13zbuylo71BJUhVu+Hr2IJjxwD
-         QZeQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w+v+Uk4ph8G3ivevMkDD1+/l5JO6IeLjWfLLSRXlGKg=;
+        b=GVZOwlOBgXY+2rToRwZ6Q4ktnqTnUjC1UK4TrgdxvWLKFpuYvjriu5/Q49S7RJgJBz
+         G0dYOCm1P4oLO42bh/MEIxiQH2wF3DNQGVYsaa20gnhNCmKYRxKe/fhSKVD87ve7g10g
+         iDawmziHNrZ5+07pjlmw84SjAkFXaGj0dQFvZincZNE7IPbzkem201AUYnmNQyRAC6yI
+         9FMDDgE0vlOKefKr+WYYwWYTLgdDWEh8reaaq2Gj6znuZU8YzBg+NwpcWHH3P3LlT/3d
+         YxbzTJ5+EnLzF32Le8sc67JbK+ckjX4C1oDBWzCY0miH0uphW+8pQB6cGmYGWXcTb6lG
+         7pHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5vJjpZUP6Df3WgXvyEwzQX7839DymC1MDleHo3NzumQ=;
-        b=tvm16OtxOSF1u8lUPvKOtSfCsO38Tryviz6lZray7h49bxfkLH5dpKcHv0c1wrufKw
-         XgiZbVx8lewOomzgK2gnQFORdg6Dngi8wdx9FNsEcLUfgKnEQeDwhBzetJ689PHer54R
-         aRGEY4C7HeKuCkZSKLsos6bxwuG6QM6q1V7tdOfYsjDLvxV6vq6CWWbQsjTH/QhVzmlS
-         Up8k+DpZRRDPeW59dOPI+vOM1s2/1iUUUrEIRHIUI14SIfeXnGzglPDj0beNIP07YtUF
-         MGhEiw1bQMIRlbUf5A1jrrAGmiNl9hJS9ncyS9h1bC7YCR4rt5mdKsr/MrXqrii4zmJU
-         uhwg==
-X-Gm-Message-State: ACrzQf2PKreaL/8JDJp0L3aXImW4Qe1CsS1K8oK6gcD/k+jToLLV1COq
-        gQqulEFru1gb9zJO42tLZGaAng==
-X-Google-Smtp-Source: AMsMyM5dgqK5P+IkbrfpOI1FVmChGL1WlIa/+jC1kvFZPmi9nkAZUpv8t8m1tIex8SnuSCBhyMzScg==
-X-Received: by 2002:a17:90a:1690:b0:20a:8f70:14bb with SMTP id o16-20020a17090a169000b0020a8f7014bbmr24534952pja.115.1667381462622;
-        Wed, 02 Nov 2022 02:31:02 -0700 (PDT)
-Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id d17-20020a17090ac25100b0020ad26fa65dsm998737pjx.56.2022.11.02.02.30.59
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w+v+Uk4ph8G3ivevMkDD1+/l5JO6IeLjWfLLSRXlGKg=;
+        b=yZzAPVTEnGBn6KFXL4fKgCd6EZXqD+0Qt4OQQE7eWNEFg8/yt1xxnx+Kn0XLT6Ikg2
+         08nKMAaOcNuQwEA7Nu4VbireStmTDejQeETtgqr6Amv1yyUwgt1z6PWRCpgyLReITQ8X
+         MGgqM1L0X+2IRhsoRYyxxA0j5ljIZIPsjeywDmd3vzed6nT58AbQ/8RzCt2JatWz5gQZ
+         pQ5HZLUw8alYPorMJY3fwVS6p153B3hs7NzNtUQRCmVf1bOoxi8Hs9Q02BbQo63WDWQO
+         sc7vqTRfvHiPFCHkzZZ5/uUyPcnrfrNH3vUpQHrblpI59G8AydSeITAV8OJj9/NgklUY
+         1r+Q==
+X-Gm-Message-State: ACrzQf35j8gqBB1yfWJI5Ozs+0K5xMFjj26Kr0uwvfW8WuOFaqZe1IYa
+        TJhkUr8oVbb99AShGt0Uuns=
+X-Google-Smtp-Source: AMsMyM4LOhJz5rxgtFjV6yVXQUawGjAc8IinLj4FnHJo3GNB+7LqwgTK52RVRShmpwXtpX0XTr2vdw==
+X-Received: by 2002:a63:ce54:0:b0:46a:e2a9:c7f6 with SMTP id r20-20020a63ce54000000b0046ae2a9c7f6mr20856483pgi.264.1667384466034;
+        Wed, 02 Nov 2022 03:21:06 -0700 (PDT)
+Received: from localhost.localdomain (2403-580a-80ed--90b3-8553.ip6.aussiebb.net. [2403:580a:80ed::90b3:8553])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176acd80f69sm7919680pln.102.2022.11.02.03.21.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 02:31:02 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 17:30:55 +0800
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] PM: domains: Consolidate genpd_restore_noirq()
- and genpd_resume_noirq()
-Message-ID: <20221102093055.GA1963677@dragon>
-References: <20221101024736.1509207-1-shawn.guo@linaro.org>
- <20221101024736.1509207-3-shawn.guo@linaro.org>
- <CAPDyKFqjf3P8GDfNinEeO57peM=7qVVP_M4yu1vsQY6N2wNcqA@mail.gmail.com>
+        Wed, 02 Nov 2022 03:21:05 -0700 (PDT)
+From:   James Calligeros <jcalligeros99@gmail.com>
+To:     viresh.kumar@linaro.org
+Cc:     asahi@lists.linux.dev, jcalligeros99@gmail.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
+        sboyd@kernel.org, vireshk@kernel.org
+Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
+Date:   Wed,  2 Nov 2022 20:20:13 +1000
+Message-Id: <20221102102011.11623-1-jcalligeros99@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
+References: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFqjf3P8GDfNinEeO57peM=7qVVP_M4yu1vsQY6N2wNcqA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 11:23:45AM +0100, Ulf Hansson wrote:
-> On Tue, 1 Nov 2022 at 03:47, Shawn Guo <shawn.guo@linaro.org> wrote:
-> >
-> > Most of the logic between genpd_restore_noirq() and genpd_resume_noirq()
-> > are same except GENPD_STATE_OFF status reset for hibernation restore.
-> > The suspended_count decrement for restore should be the right thing to do
-> > anyway, considering there is an increment in genpd_finish_suspend() for
-> > hibernation.
-> >
-> > Consolidate genpd_restore_noirq() and genpd_resume_noirq() into
-> > genpd_finish_resume() and handle GENPD_STATE_OFF status reset for
-> > restore case specially.
-> >
-> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> 
-> I have a comment, see more below.
-> 
-> Nevertheless, please add:
-> 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> 
-> > ---
-> >  drivers/base/power/domain.c | 70 ++++++++++++++++++-------------------
-> >  1 file changed, 35 insertions(+), 35 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index 54f6b0dd35fb..b81baeb38d81 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -1247,12 +1247,14 @@ static int genpd_suspend_noirq(struct device *dev)
-> >  }
-> >
-> >  /**
-> > - * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
-> > + * genpd_finish_resume - Completion of resume of device in an I/O PM domain.
-> >   * @dev: Device to resume.
-> > + * @resume_noirq: Generic resume_noirq callback.
-> >   *
-> >   * Restore power to the device's PM domain, if necessary, and start the device.
-> >   */
-> > -static int genpd_resume_noirq(struct device *dev)
-> > +static int genpd_finish_resume(struct device *dev,
-> > +                              int (*resume_noirq)(struct device *dev))
-> >  {
-> >         struct generic_pm_domain *genpd;
-> >         int ret;
-> > @@ -1264,9 +1266,25 @@ static int genpd_resume_noirq(struct device *dev)
-> >                 return -EINVAL;
-> >
-> >         if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
-> > -               return pm_generic_resume_noirq(dev);
-> > +               return resume_noirq(dev);
-> >
-> >         genpd_lock(genpd);
-> > +
-> > +       /*
-> > +        * Special handling for hibernation restore:
-> > +        * At this point suspended_count == 0 means we are being run for the
-> > +        * first time for the given domain in the present cycle.
-> > +        */
-> > +       if (resume_noirq == pm_generic_restore_noirq &&
-> > +           genpd->suspended_count++ == 0) {
-> > +               /*
-> > +                * The boot kernel might put the domain into arbitrary state,
-> > +                * so make it appear as powered off to genpd_sync_power_on(),
-> > +                * so that it tries to power it on in case it was really off.
-> > +                */
-> > +               genpd->status = GENPD_STATE_OFF;
-> 
-> This has really never worked as intended. Resetting the status like
-> this, needs more careful actions.
-> 
-> For example, if the genpd->status was GENPD_STATE_ON, the parent
-> domain's ->sd_count have been increased - so that needs to be adjusted
-> too.
-> 
-> By looking at patch3/3, I wonder if we shouldn't try to align the
-> hibernation behaviors so the above hack can be dropped. Do you think
-> that could work?
+>> The opp-microwatt property was added with the intention of providing
+>> platforms a way to specify a precise value for the power consumption
+>> of a device at a given OPP to enable better energy-aware scheduling
+>> decisions by informing the kernel of the total static and dynamic
+>> power of a device at a given OPP, removing the reliance on the EM
+>> subsystem's often flawed estimations. This property is parsed by
+>> opp_parse_supplies(), which creates a hard dependency on the
+>> opp-microvolt property.
+>> 
+>> Some platforms, such as Apple Silicon, do not describe their devices'
+>> voltage regulators in the DT as they cannot be controlled by the kernel
+>> and/or rely on opaque firmware algorithms to control their voltage and
+>> current characteristics at runtime. We can, however, experimentally
+>> determine the power consumption of a given device at a given OPP, taking
+>> advantage of opp-microwatt to provide EAS on such devices as was initially
+>> intended.
 
-To be honest, I found this piece of code suspicious when I was fixing my
-problem.  To be on the safe side, I chose to leave it there because I'm
-not sure if it's handling any special cases or platform quirks.
+>Do you supply a regulator to the OPP core for your platform ?
 
-I tested on my platform with dropping the code.  Worked perfectly fine.
-So I will repost the series by starting with this cleanup.
+On Apple SoCs, all the regulators are controlled transparently
+by the hardware/firmware. The CPUfreq driver requests a pstate as
+described in the OPP table by setting some bits in some registers, and
+the platform handles everything else.
 
-Shawn
+Not only is there no use for the voltage and current information from
+the kernel's perspective since there's nothing to control, we don't
+even really have a way to reliably model their behaviour.
+
+What we can do, however, is use energy counter registers in the core
+clusters to determine energy consumption at a given pstate and register
+that with the OPP core using the opp-microwatt property. Given that its
+stated purpose is to enable such behaviour, requiring it to be coupled
+to opp-microvolt is a major design deficiency.
+
+>> Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
+
+>I won't call it a fix, we are trying to use this information in a
+>different way here, that's all.
+
+My interpretation of the commit message for 32bf8bc9a077 is that this
+is the way in which the property was intended to be used, and that it not
+working like this is a bug. Quoting the commit message, "Some of the platforms
+don't expose voltage information, thus it's not possible to use EM
+registration using DT. This patch aims to fix it." 
+
+There is probably a bigger discussion to be had on whether or not parsing
+opp-microwatt for the purpose of EM registration should be entangled in
+opp_parse_supplies() at all, but that's by the by.
+
+>If there is a regulator, then we must have microvolt property.
+>amps/watts are optional.
+
+I noticed no adverse effects from not having opp-microvolt in my testing of
+this patch, possibly because the data is not used to actually puppeteer any
+supplies. This goes back to the greater discussion, though. If we're going
+to use opp_parse_supplies() to do EM registration stuff then having the
+check for a valid representation of an actual VRM should probably happen
+elsewhere, where a valid VRM is actually a hard requirement of the code being
+run.
+
+>> -			return -EINVAL;
+>> -		}
+>>  	}
+>>  
+>> -	if (unlikely(supplies == -1)) {
+>> -		/* Initialize regulator_count */
+>> -		supplies = opp_table->regulator_count = 1;
+>> -	} else if (unlikely(!supplies)) {
+>> -		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
+>> -		return -EINVAL;
+>> +	if (prop_mv) {
+>> +		vcount = of_property_count_u32_elems(opp->np, name);
+>> +		if (unlikely(supplies == -1))
+>> +			supplies = opp_table->regulator_count = vcount;
+
+>This is wrong. There can be one or three entries per regulator here.
+>Target or min/max/target. If the supplies value is -1, we can only
+>support one regulator, i.e. one or three entries total.
+
+Ack.
+
+- James
+
