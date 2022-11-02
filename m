@@ -2,88 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6B86615E23
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:45:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1ED1615E39
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:47:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiKBIpt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 04:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
+        id S230333AbiKBIr3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 04:47:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBIpq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:45:46 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E26AA25EA8
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:45:45 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so1330398pji.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:45:45 -0700 (PDT)
+        with ESMTP id S231160AbiKBIr2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:47:28 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 831A327CDC
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:47:27 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id h9so23493140wrt.0
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:47:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TOClqmxlvPnNU/Xt17KTim859Uzye5tKFUlkimgaw9k=;
-        b=J6StuQV7F+5TBvqyuzI6uExx4RNgyQYedibLywGw1li8yywvZP1A4V5QGspEfUArqN
-         f3YQu2LQ67l6kUpnFTVDchgELu/PpziEW7Iyr6d3DPl0ZTZD8pDsJmfVJfQFEFo8nyKZ
-         VJYAeMeVR8JLt5IYAPGvV2Y6LfjkGHaX13FFJT/oAmPY/koXSKpT1YxqOqXVXn63OSz5
-         tw1eNHP94v1XAallkqaa3W/OQZ5SXsxEE6uWmnAXFhgB1LSWNq4TNe3wR6FeZLI70iIN
-         omUgSrH7xROcuMLdm5A5481l9/1SyLsNx7p2rcE9QNDO+1gG01Xc2wmcq5RnIkusLyKb
-         lMSA==
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=LacC/W4nEJTi1K9NvGGjHmz+dnzd8gTcBfyb9WbOq1M=;
+        b=cXkcNEA+d7XPal/bfe1WsUKa0kt+a7cEVY5J1DH2cAjO5ctiRDAXvLJkieIOm/BYsi
+         V3Qcizyu8AjXWzf0DaZi1udr2/bzEBEAFszhuorxVUNx9Puy3d+SBQirSUf00/PaZa15
+         EnUbo0wweZJLFmIyVyXLkVj7+rmM7cjlU3Z3wje96es7TejoUW0aKip2QLWkUOz9eJdr
+         yzZ0FE3o8aChRbHFOtchLMwlRXClbTZ7MllSb9jfK19BC+CvDgVHDfuQNjAd4/pvuBUL
+         00cPXDYBJKSimPvt7e6XTzAYvVnONZvL/c8AXMUvtKEdm7+FhFZaUfMx4pMrV0tWgPPF
+         BYGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TOClqmxlvPnNU/Xt17KTim859Uzye5tKFUlkimgaw9k=;
-        b=FpwxsBApfr61A+nE7CSAmy8a3TQkCc3eWHk2LxqAJ0SI6r2e6Le3expgFqq4sZuxbi
-         WwwmExZsJrABAKyw9I/bmN8MrO+A1QZrvFLyJfBMfTPxae01L4oYpGY4FOREU3oO1vJr
-         r/LW0z02KMnIvgT7BR2HiYmo1cMqyXLXZxeVFam3X60kikfwEY47Ar90v4qCk4PEB1zi
-         2XC/r84YZzEyrN1xqEeyBKtKFtN0aY68CtO8fHSp+x3bBjt1j9cpyQY4U8fAYpuhXn1I
-         mci5yFvUq+lf5BBizTfkHzlClPjYjdErTgMhMACQ9OZM+YIcMax7VqexBY5Xl0b8wGS5
-         I6nw==
-X-Gm-Message-State: ACrzQf3G89qvcF437Rpv3LiqZ1R1pu7DNYAdAF2AR0vj/eYi7owLarNX
-        25ZJlrNrGInMWrAB3nM1ldv4qg==
-X-Google-Smtp-Source: AMsMyM4/WHsXfITyAI0IugOgOx31A5fznQp16dYMdte4llM4Z4CbwJ0/MjjOpbI0HV/ufYx0+kNiAg==
-X-Received: by 2002:a17:902:c1c6:b0:186:994f:6e57 with SMTP id c6-20020a170902c1c600b00186994f6e57mr23483233plc.17.1667378745459;
-        Wed, 02 Nov 2022 01:45:45 -0700 (PDT)
-Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id e10-20020a170902784a00b00172fad607b3sm7662379pln.207.2022.11.02.01.45.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 01:45:45 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 14:15:43 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, rafael@kernel.org, johan@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/3] Qcom CPUFreq HW driver cleanups
-Message-ID: <20221102084543.e65wjxtk5p2fkuwo@vireshk-i7>
-References: <20221102083239.53826-1-manivannan.sadhasivam@linaro.org>
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LacC/W4nEJTi1K9NvGGjHmz+dnzd8gTcBfyb9WbOq1M=;
+        b=IR02qwMIytrTSwtXIf0hpf/sEmLO55+vrHKBGRIMZdm4e5Fm8uh01UFacGL4BUuPIo
+         yEKsE6a2xsiyZX4UrcpzaiSZxYo5spf/Yen2q+nzI5UymlBqv+XQTtMX5jlRkeZva7ct
+         tdsGCysP/3rnbWwAVz5RSrUnGwQzq0rHfqALkNBfYtL3xoPQbgy8NeWXlvZFA8v1pZMM
+         GSECe2FH2oXrcDz/7VibJWF9yW7Lh5JtgbK86BWlAWRk2ChipBSqW5HjTVMj94Q1fQqU
+         u04HmTb6Q8M9tkZgz3mb89A46KkygZVnJeKj+Y7+Wl6JWlzdCPn6gVfd9OSob5hyzBJ0
+         pfRg==
+X-Gm-Message-State: ACrzQf2j84bv/JxGNrbHmtTzuJFymeHhSJbO1hbLzyCoHjWjeHMBzml6
+        W2O8GzqgimEnICPLGgsYVH6ROg==
+X-Google-Smtp-Source: AMsMyM4/UnCKSPJDBb89BPx/nxH21VzXl0PaOgeJTz0qotnPqdKToT8N/zbTLYVlVCWaRARLV4HsJQ==
+X-Received: by 2002:adf:f50b:0:b0:236:7d5d:d785 with SMTP id q11-20020adff50b000000b002367d5dd785mr13787442wro.427.1667378846080;
+        Wed, 02 Nov 2022 01:47:26 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:6bae:ac40:a798:cbb4? ([2a01:e0a:982:cbb0:6bae:ac40:a798:cbb4])
+        by smtp.gmail.com with ESMTPSA id q9-20020adfdfc9000000b002366d1cc198sm12634001wrn.41.2022.11.02.01.47.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 01:47:25 -0700 (PDT)
+Message-ID: <3ee4a424-1a1f-514f-3289-cb813c382327@linaro.org>
+Date:   Wed, 2 Nov 2022 09:47:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102083239.53826-1-manivannan.sadhasivam@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/4] dt-bindings: reset: document Odroid Go Ultra
+ power-off
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org
+References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
+ <20221031-b4-odroid-go-ultra-initial-v1-1-42e3dbea86d5@linaro.org>
+ <CAFBinCAQKf9RvRWQTCSg7g+7NP_vbEFBUeCoFbYnyfmqeegy5g@mail.gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <CAFBinCAQKf9RvRWQTCSg7g+7NP_vbEFBUeCoFbYnyfmqeegy5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-11-22, 14:02, Manivannan Sadhasivam wrote:
-> Hello,
+On 31/10/2022 22:16, Martin Blumenstingl wrote:
+> Hi Neil,
 > 
-> This series contains cleanup patches targeting the Qcom CPUFreq HW driver.
-> This is a spun off of the clock provier series [1].
+> On Mon, Oct 31, 2022 at 5:47 PM Neil Armstrong
+> <neil.armstrong@linaro.org> wrote:
+>>
+>> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
+>> to its two PMICs in order, this represents the poweroff scheme needed to complet
+> s/complet/complete/
+>> a clean poeroff of the system.
+> s/poeroff/poweroff/
 > 
-> Thanks,
-> Mani
-> 
-> [1] https://lore.kernel.org/lkml/20221025073254.1564622-2-manivannan.sadhasivam@linaro.org/T/
+> Please wait with re-sending this patch in case the dt-bindings and
+> reset experts have more to say than finding typos.
 
-On what have you rebased it ? This should be based of my cpufreq/arm/linux-next
-branch.
+Thx for spotting those typos !
 
--- 
-viresh
+> 
+> 
+> Best regards,
+> Martin
+
+Neil
+
