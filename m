@@ -2,451 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D5A615D27
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 08:48:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DBDE615DB6
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:32:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbiKBHsr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 03:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59294 "EHLO
+        id S230256AbiKBIcz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 04:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230457AbiKBHs0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 03:48:26 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0727D23151;
-        Wed,  2 Nov 2022 00:48:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B4911338F3;
-        Wed,  2 Nov 2022 07:48:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667375303; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jL+jY4ifaFqfpcISKGZk1rhvt1fSpsik0OwYqcIWnDU=;
-        b=o+9eFEVP6b4Wpu8d2ZEF86V7aJi7ksBB8opTSYJWk92vj2p0mdcQg7ftFxHN+iF084KvFf
-        mktWJ1eohNgQGinzYPOjMJ0sk4WcrmY7d7mq0TFyVu4nERDT6uKaf4renJa0W4gn6rTlEe
-        HALPPd5OWaZyCVJxXr4axfn7iNhzHD4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5ED901376E;
-        Wed,  2 Nov 2022 07:48:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JprbFccgYmMkcwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 02 Nov 2022 07:48:23 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>
-Subject: [PATCH v5 12/16] x86/mtrr: add a stop_machine() handler calling only cache_cpu_init()
-Date:   Wed,  2 Nov 2022 08:47:09 +0100
-Message-Id: <20221102074713.21493-13-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20221102074713.21493-1-jgross@suse.com>
-References: <20221102074713.21493-1-jgross@suse.com>
+        with ESMTP id S230175AbiKBIcy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:32:54 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD2C27B01
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:32:53 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o7so12357890pjj.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GeVB0TEyhDy7j/DKZJYR86bV8vbgA9u9nMdT2SoI+90=;
+        b=W7FfdIEIRREb369VaotcUbQZVR3hH/M1/UOHUuAajfyKGmeTwPiSEM34g0cKYHYegc
+         faJGJfzYVZ3Rx+ufPzzxEfahbyYhrcPuagR/IMVW8nw4RoOn+xcNXbhDMl2fOsx9+Vq9
+         iIa1xL4VNcaKm0XKXFXFet/fxjH1jE8LNsVIR2niAeqyYOR7VfrfTNmv9fUZ973RykYV
+         URvJ/sV4XZqVeHmQOFJKNXCIrQ8zhJHxawpQlC64MDYoF0scoPFXggGfnGzHF2Mpiz/R
+         jfaALliEyWO1H06Q/z0toE8r4+JHQy/hgCuW83g7FYUG0lzFQmMYFwjHDyhJe6hG1WfS
+         cW1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GeVB0TEyhDy7j/DKZJYR86bV8vbgA9u9nMdT2SoI+90=;
+        b=ikDk/ZUFihKqZDrR/T+tGFJ3ZCqRc28QaGeTts5ETdMsgfYCFIjO4TenLu40waMOCz
+         tVH4gXJZA6yNEoS6LnXV8xRPJbg5Hid3zk/GuEpUY1nzcMR5B//5JU4yvV70q6Hxg/pQ
+         RM9n9wM3VUQGp2dMjYhvDRteepRbCRvrE3enWxnLipId43rXSa466NjPJE+iaXf42nP8
+         zwTiS2kYHGFsbQPTph/SK1JmqOzwTiL+XXnqD3qXrj81ttnL2VZZlOhkI3yYtVJ6DKiO
+         qLcnk7kU3DZZ5KpBDJv1UCwhPkXXewAd59HDHWFlOlyo8TDoYNcHwz+jjiR7FFviG7py
+         hI0g==
+X-Gm-Message-State: ACrzQf04AtEpsouNNmFOVHgY6sufXbIcniqbSFQyTdeVzxMBxWCwLZ9d
+        YgHcYMXX9EeLyFIhRdvL/aIL
+X-Google-Smtp-Source: AMsMyM7AX5prodbruzgE6T5okL6IIYEqP0fZVZGFqkN1+w9TSvSfykyQz3H4jX5BZ1y7qN0AvaQglA==
+X-Received: by 2002:a17:902:f551:b0:186:be04:6670 with SMTP id h17-20020a170902f55100b00186be046670mr23323054plf.159.1667377972798;
+        Wed, 02 Nov 2022 01:32:52 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.209.178])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176acd80f69sm7682256pln.102.2022.11.02.01.32.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 01:32:51 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org, rafael@kernel.org
+Cc:     johan@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 0/3] Qcom CPUFreq HW driver cleanups
+Date:   Wed,  2 Nov 2022 14:02:36 +0530
+Message-Id: <20221102083239.53826-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Instead of having a stop_machine() handler for either a specific MTRR
-register or all state at once, add a handler just for calling
-cache_cpu_init() if appropriate.
+Hello,
 
-Add functions for calling stop_machine() with this handler as well.
+This series contains cleanup patches targeting the Qcom CPUFreq HW driver.
+This is a spun off of the clock provier series [1].
 
-Add a generic replacement for mtrr_bp_restore() and a wrapper for
-mtrr_bp_init().
+Thanks,
+Mani
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V2:
-- completely new replacement of former patch 2
-V5:
-- add a missing mtrr_bp_init() stub (Borislav Petkov)
----
- arch/x86/include/asm/cacheinfo.h |  5 +-
- arch/x86/include/asm/mtrr.h      |  8 +--
- arch/x86/kernel/cpu/cacheinfo.c  | 59 ++++++++++++++++++++-
- arch/x86/kernel/cpu/common.c     |  3 +-
- arch/x86/kernel/cpu/mtrr/mtrr.c  | 88 +-------------------------------
- arch/x86/kernel/setup.c          |  3 +-
- arch/x86/kernel/smpboot.c        |  4 +-
- arch/x86/power/cpu.c             |  3 +-
- 8 files changed, 74 insertions(+), 99 deletions(-)
+[1] https://lore.kernel.org/lkml/20221025073254.1564622-2-manivannan.sadhasivam@linaro.org/T/
 
-diff --git a/arch/x86/include/asm/cacheinfo.h b/arch/x86/include/asm/cacheinfo.h
-index e443fcc1f045..a0ef46e9f453 100644
---- a/arch/x86/include/asm/cacheinfo.h
-+++ b/arch/x86/include/asm/cacheinfo.h
-@@ -12,8 +12,11 @@ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu);
- 
- void cache_disable(void);
- void cache_enable(void);
--void cache_cpu_init(void);
- void set_cache_aps_delayed_init(bool val);
- bool get_cache_aps_delayed_init(void);
-+void cache_bp_init(void);
-+void cache_bp_restore(void);
-+void cache_ap_init(void);
-+void cache_aps_init(void);
- 
- #endif /* _ASM_X86_CACHEINFO_H */
-diff --git a/arch/x86/include/asm/mtrr.h b/arch/x86/include/asm/mtrr.h
-index 5d31219c8529..f0eeaf6e5f5f 100644
---- a/arch/x86/include/asm/mtrr.h
-+++ b/arch/x86/include/asm/mtrr.h
-@@ -25,13 +25,12 @@
- 
- #include <uapi/asm/mtrr.h>
- 
--void mtrr_bp_init(void);
--
- /*
-  * The following functions are for use by other drivers that cannot use
-  * arch_phys_wc_add and arch_phys_wc_del.
-  */
- # ifdef CONFIG_MTRR
-+void mtrr_bp_init(void);
- extern u8 mtrr_type_lookup(u64 addr, u64 end, u8 *uniform);
- extern void mtrr_save_fixed_ranges(void *);
- extern void mtrr_save_state(void);
-@@ -42,8 +41,6 @@ extern int mtrr_add_page(unsigned long base, unsigned long size,
- extern int mtrr_del(int reg, unsigned long base, unsigned long size);
- extern int mtrr_del_page(int reg, unsigned long base, unsigned long size);
- extern void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi);
--extern void mtrr_ap_init(void);
--extern void mtrr_aps_init(void);
- extern void mtrr_bp_restore(void);
- extern int mtrr_trim_uncached_memory(unsigned long end_pfn);
- extern int amd_special_default_mtrr(void);
-@@ -85,8 +82,7 @@ static inline int mtrr_trim_uncached_memory(unsigned long end_pfn)
- static inline void mtrr_centaur_report_mcr(int mcr, u32 lo, u32 hi)
- {
- }
--#define mtrr_ap_init() do {} while (0)
--#define mtrr_aps_init() do {} while (0)
-+#define mtrr_bp_init() do {} while (0)
- #define mtrr_bp_restore() do {} while (0)
- #define mtrr_disable() do {} while (0)
- #define mtrr_enable() do {} while (0)
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 931ba3fb1363..a92099569617 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -15,6 +15,7 @@
- #include <linux/capability.h>
- #include <linux/sysfs.h>
- #include <linux/pci.h>
-+#include <linux/stop_machine.h>
- 
- #include <asm/cpufeature.h>
- #include <asm/cacheinfo.h>
-@@ -1121,7 +1122,7 @@ void cache_enable(void) __releases(cache_disable_lock)
- 	raw_spin_unlock(&cache_disable_lock);
- }
- 
--void cache_cpu_init(void)
-+static void cache_cpu_init(void)
- {
- 	unsigned long flags;
- 
-@@ -1149,3 +1150,59 @@ bool get_cache_aps_delayed_init(void)
- {
- 	return cache_aps_delayed_init;
- }
-+
-+static int cache_rendezvous_handler(void *unused)
-+{
-+	if (get_cache_aps_delayed_init() || !cpu_online(smp_processor_id()))
-+		cache_cpu_init();
-+
-+	return 0;
-+}
-+
-+void __init cache_bp_init(void)
-+{
-+	mtrr_bp_init();
-+
-+	if (memory_caching_control)
-+		cache_cpu_init();
-+}
-+
-+void cache_bp_restore(void)
-+{
-+	if (memory_caching_control)
-+		cache_cpu_init();
-+}
-+
-+void cache_ap_init(void)
-+{
-+	if (!memory_caching_control || get_cache_aps_delayed_init())
-+		return;
-+
-+	/*
-+	 * Ideally we should hold mtrr_mutex here to avoid MTRR entries
-+	 * changed, but this routine will be called in CPU boot time,
-+	 * holding the lock breaks it.
-+	 *
-+	 * This routine is called in two cases:
-+	 *
-+	 *   1. very early time of software resume, when there absolutely
-+	 *      isn't MTRR entry changes;
-+	 *
-+	 *   2. CPU hotadd time. We let mtrr_add/del_page hold cpuhotplug
-+	 *      lock to prevent MTRR entry changes
-+	 */
-+	stop_machine_from_inactive_cpu(cache_rendezvous_handler, NULL,
-+				       cpu_callout_mask);
-+}
-+
-+/*
-+ * Delayed cache initialization for all AP's
-+ */
-+void cache_aps_init(void)
-+{
-+	if (!memory_caching_control || !get_cache_aps_delayed_init())
-+		return;
-+
-+	stop_machine(cache_rendezvous_handler, NULL, cpu_online_mask);
-+	set_cache_aps_delayed_init(false);
-+}
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 3e508f239098..fd058b547f8d 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -52,6 +52,7 @@
- #include <asm/cpu.h>
- #include <asm/mce.h>
- #include <asm/msr.h>
-+#include <asm/cacheinfo.h>
- #include <asm/memtype.h>
- #include <asm/microcode.h>
- #include <asm/microcode_intel.h>
-@@ -1948,7 +1949,7 @@ void identify_secondary_cpu(struct cpuinfo_x86 *c)
- #ifdef CONFIG_X86_32
- 	enable_sep_cpu();
- #endif
--	mtrr_ap_init();
-+	cache_ap_init();
- 	validate_apic_and_package_id(c);
- 	x86_spec_ctrl_setup_ap();
- 	update_srbds_msr();
-diff --git a/arch/x86/kernel/cpu/mtrr/mtrr.c b/arch/x86/kernel/cpu/mtrr/mtrr.c
-index 15ee6d72fb1f..99b6973a69b4 100644
---- a/arch/x86/kernel/cpu/mtrr/mtrr.c
-+++ b/arch/x86/kernel/cpu/mtrr/mtrr.c
-@@ -73,9 +73,6 @@ static const struct mtrr_ops *mtrr_ops[X86_VENDOR_NUM] __ro_after_init;
- 
- const struct mtrr_ops *mtrr_if;
- 
--static void set_mtrr(unsigned int reg, unsigned long base,
--		     unsigned long size, mtrr_type type);
--
- void __init set_mtrr_ops(const struct mtrr_ops *ops)
- {
- 	if (ops->vendor && ops->vendor < X86_VENDOR_NUM)
-@@ -158,26 +155,8 @@ static int mtrr_rendezvous_handler(void *info)
- {
- 	struct set_mtrr_data *data = info;
- 
--	/*
--	 * We use this same function to initialize the mtrrs during boot,
--	 * resume, runtime cpu online and on an explicit request to set a
--	 * specific MTRR.
--	 *
--	 * During boot or suspend, the state of the boot cpu's mtrrs has been
--	 * saved, and we want to replicate that across all the cpus that come
--	 * online (either at the end of boot or resume or during a runtime cpu
--	 * online). If we're doing that, @reg is set to something special and on
--	 * all the CPUs we do cache_cpu_init() (On the logical CPU that
--	 * started the boot/resume sequence, this might be a duplicate
--	 * cache_cpu_init()).
--	 */
--	if (data->smp_reg != ~0U) {
--		mtrr_if->set(data->smp_reg, data->smp_base,
--			     data->smp_size, data->smp_type);
--	} else if (get_cache_aps_delayed_init() ||
--		   !cpu_online(smp_processor_id())) {
--		cache_cpu_init();
--	}
-+	mtrr_if->set(data->smp_reg, data->smp_base,
-+		     data->smp_size, data->smp_type);
- 	return 0;
- }
- 
-@@ -247,19 +226,6 @@ static void set_mtrr_cpuslocked(unsigned int reg, unsigned long base,
- 	stop_machine_cpuslocked(mtrr_rendezvous_handler, &data, cpu_online_mask);
- }
- 
--static void set_mtrr_from_inactive_cpu(unsigned int reg, unsigned long base,
--				      unsigned long size, mtrr_type type)
--{
--	struct set_mtrr_data data = { .smp_reg = reg,
--				      .smp_base = base,
--				      .smp_size = size,
--				      .smp_type = type
--				    };
--
--	stop_machine_from_inactive_cpu(mtrr_rendezvous_handler, &data,
--				       cpu_callout_mask);
--}
--
- /**
-  * mtrr_add_page - Add a memory type region
-  * @base: Physical base address of region in pages (in units of 4 kB!)
-@@ -761,7 +727,6 @@ void __init mtrr_bp_init(void)
- 			if (get_mtrr_state()) {
- 				memory_caching_control |= CACHE_MTRR | CACHE_PAT;
- 				changed_by_mtrr_cleanup = mtrr_cleanup(phys_addr);
--				cache_cpu_init();
- 			} else {
- 				mtrr_if = NULL;
- 			}
-@@ -780,27 +745,6 @@ void __init mtrr_bp_init(void)
- 	}
- }
- 
--void mtrr_ap_init(void)
--{
--	if (!memory_caching_control || get_cache_aps_delayed_init())
--		return;
--
--	/*
--	 * Ideally we should hold mtrr_mutex here to avoid mtrr entries
--	 * changed, but this routine will be called in cpu boot time,
--	 * holding the lock breaks it.
--	 *
--	 * This routine is called in two cases:
--	 *
--	 *   1. very early time of software resume, when there absolutely
--	 *      isn't mtrr entry changes;
--	 *
--	 *   2. cpu hotadd time. We let mtrr_add/del_page hold cpuhotplug
--	 *      lock to prevent mtrr entry changes
--	 */
--	set_mtrr_from_inactive_cpu(~0U, 0, 0, 0);
--}
--
- /**
-  * mtrr_save_state - Save current fixed-range MTRR state of the first
-  *	cpu in cpu_online_mask.
-@@ -816,34 +760,6 @@ void mtrr_save_state(void)
- 	smp_call_function_single(first_cpu, mtrr_save_fixed_ranges, NULL, 1);
- }
- 
--/*
-- * Delayed MTRR initialization for all AP's
-- */
--void mtrr_aps_init(void)
--{
--	if (!memory_caching_control)
--		return;
--
--	/*
--	 * Check if someone has requested the delay of AP MTRR initialization,
--	 * by doing set_mtrr_aps_delayed_init(), prior to this point. If not,
--	 * then we are done.
--	 */
--	if (!get_cache_aps_delayed_init())
--		return;
--
--	set_mtrr(~0U, 0, 0, 0);
--	set_cache_aps_delayed_init(false);
--}
--
--void mtrr_bp_restore(void)
--{
--	if (!memory_caching_control)
--		return;
--
--	cache_cpu_init();
--}
--
- static int __init mtrr_init_finialize(void)
- {
- 	if (!mtrr_enabled())
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 216fee7144ee..e0e185ee0229 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -34,6 +34,7 @@
- #include <asm/numa.h>
- #include <asm/bios_ebda.h>
- #include <asm/bugs.h>
-+#include <asm/cacheinfo.h>
- #include <asm/cpu.h>
- #include <asm/efi.h>
- #include <asm/gart.h>
-@@ -1075,7 +1076,7 @@ void __init setup_arch(char **cmdline_p)
- 
- 	/* update e820 for memory not covered by WB MTRRs */
- 	if (IS_ENABLED(CONFIG_MTRR))
--		mtrr_bp_init();
-+		cache_bp_init();
- 	else
- 		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
- 
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 13c71ab29d84..1b61a480c966 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1445,7 +1445,7 @@ void arch_thaw_secondary_cpus_begin(void)
- 
- void arch_thaw_secondary_cpus_end(void)
- {
--	mtrr_aps_init();
-+	cache_aps_init();
- }
- 
- /*
-@@ -1488,7 +1488,7 @@ void __init native_smp_cpus_done(unsigned int max_cpus)
- 
- 	nmi_selftest();
- 	impress_friends();
--	mtrr_aps_init();
-+	cache_aps_init();
- }
- 
- static int __initdata setup_possible_cpus = -1;
-diff --git a/arch/x86/power/cpu.c b/arch/x86/power/cpu.c
-index bb176c72891c..754221c9a1c3 100644
---- a/arch/x86/power/cpu.c
-+++ b/arch/x86/power/cpu.c
-@@ -23,6 +23,7 @@
- #include <asm/fpu/api.h>
- #include <asm/debugreg.h>
- #include <asm/cpu.h>
-+#include <asm/cacheinfo.h>
- #include <asm/mmu_context.h>
- #include <asm/cpu_device_id.h>
- #include <asm/microcode.h>
-@@ -261,7 +262,7 @@ static void notrace __restore_processor_state(struct saved_context *ctxt)
- 	do_fpu_end();
- 	tsc_verify_tsc_adjust(true);
- 	x86_platform.restore_sched_clock_state();
--	mtrr_bp_restore();
-+	cache_bp_restore();
- 	perf_restore_debug_store();
- 
- 	c = &cpu_data(smp_processor_id());
+Manivannan Sadhasivam (3):
+  cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe
+  cpufreq: qcom-hw: Use cached dev pointer in probe()
+  cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 118 ++++++++++++++----------------
+ 1 file changed, 54 insertions(+), 64 deletions(-)
+
 -- 
-2.35.3
+2.25.1
 
