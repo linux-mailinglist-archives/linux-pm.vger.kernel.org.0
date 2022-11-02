@@ -2,65 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695AD615EC4
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64AC0615EE5
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:07:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbiKBJDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 05:03:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34890 "EHLO
+        id S230165AbiKBJHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 05:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231287AbiKBJCd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:02:33 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52828701
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:02:31 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so1339345pjl.3
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:02:31 -0700 (PDT)
+        with ESMTP id S229752AbiKBJGy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:06:54 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF15526CF
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:05:15 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so1522785pji.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3lW+SEAwaQj22Ep5QkmznnP/cF5sNnG1Gxo6Sa2AZ74=;
-        b=zMACeZbTZl8Q3wbIi8TRiige4VbN1aGqtrYun5aTANcuZZe+p7qmASVXONqOc8BnjO
-         EXUpfbpmLT4aldBZy+mhaQUupoCUeZZt6VqjUbjTA9X4Zx3bRl3erk2FCZAgbGp7SbmI
-         1xnzVLkngnIJP+qZvFQ1rW/oLf4sRdaTM8kS6enQOg0wRQ215McLO0h9oGWZPvVnsl9D
-         FerDzddgYMI4QPktFlJyuv7L6Q54iEHyS7k5k2aX6/fOVvEu2UapwdObqqF0mf9Zw2yc
-         VBsphQ7BS33X/JO7bmpx6UWnuCfJXDYNgtfzX7OKuD7AyX9aWhXpBzu03Pc+GrnrujDL
-         YNTw==
+        bh=mOYHShxj2Z09W+c7tLCPouxAq6KkaYZ6y3Ma3yqAsuE=;
+        b=FPfSy8F51NgBPac6q89WdfCkOIziZrv4V1dJdqSeH+hBUnZ/gvmevz01ZujdBT8+mM
+         DxtawPUVvSu3MCAwMH7WuQUqHa2BlJe+uX3yTM1nB0AHi0K5Pds02nuOpi590Hm+Hg2v
+         wBc+IPYUmcbQiZk2LctEm8preTqbK8XzK366cUOc3w7P+Wvou/KbzcM3KinQDpi1mGc/
+         p+HwwUsfPqWeMVNFL/muozyPGsUOFJS8jZQI7a6UChl46Uw3WWyu/5KDY3zmjxW6dsbW
+         oHaZyv9l7xCwbz5FJPmrA5Zzfyu+d6uGFvyv1bTCRJ+HfJgFouUi1hVcm35M6nC/VIG7
+         3ZCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3lW+SEAwaQj22Ep5QkmznnP/cF5sNnG1Gxo6Sa2AZ74=;
-        b=aa5U6ep+ASsYAaavO1HpJgTr47OSr9OaHCX9cyrWPs/KZ+EfwbDuQHpRanjYFlf2rp
-         yEWA4H3v3PfhkQG4prEWa4v+S1ercX1XSYgm2yv1zWoVluo4WX200nhou9e1iHqn84SY
-         EmkH9wK+rBvirRmd7T+tpgeMvoLyYxQaLYfVXRO4ignOb77WwnlS7N+PFelGwvOvKPGF
-         c04bjXlnB9H8Xwibgt2kANeuSk7PmRnZ+xQqohCdlmIcETze/YzgMigyRIFVDzvY3NOW
-         EisOWUVxgto/hFjmUnK0mXxXLdiZBJmfaTOi4YMETwUtMyghZd0g997vzkl2uRcOUh4W
-         I4vw==
-X-Gm-Message-State: ACrzQf0O2LzeQbYh7FYEmLjN8ylONrH9rZuA/XCYFPt2jUYc0jVLGZoA
-        ETE0eiMKvAMpFkEXiJqdTKTVJQ==
-X-Google-Smtp-Source: AMsMyM6PALNUlom1rlSsoWaB+9NYnSm8AiAITHIXsiK1BSybVbtqKeCAusR4sDxJ3wdLnUx7GI0NlQ==
-X-Received: by 2002:a17:902:8e88:b0:185:3cea:6335 with SMTP id bg8-20020a1709028e8800b001853cea6335mr23860226plb.96.1667379751258;
-        Wed, 02 Nov 2022 02:02:31 -0700 (PDT)
+        bh=mOYHShxj2Z09W+c7tLCPouxAq6KkaYZ6y3Ma3yqAsuE=;
+        b=rVegr82D+NQpft72dCzUjNO7TGbe+6CuV1pxrJ8MDs7aJ041aDUDuqi4iY/0sMoBsJ
+         GjTrKzbu3/AecBUYoK6HVBS8LLKud1Qv76GAVeieaIPwitQlzvL1P4sY6tJ5gsGbFFMd
+         +tVvAEwkLum+VOs3o1nymPCWpc8abHMmm5mCBU/c3ait4XNINz/Q4RLp/UbQLlVHriGT
+         Ahr4cVs++lmqukjrXwJiK2lkDz/dYzmv9pFvZ4oHcOAOq6aJYbL1SlsZGDrRIu7lwdZ0
+         KSnBV+IUJriWpMT/28ujHGjjMrwsZW/GEr9yvfi2FtVLNHQ+p+RLJbbEh2LwFEnqcqf1
+         /aUQ==
+X-Gm-Message-State: ACrzQf0nTN4mXbYEgLz58h2bmsRrWw3HRFPMAwOW6A7QlOCHkrZsvvRz
+        eZ7Wflc+wl+pn/K7uRrEiHYSd0IpVER5/w==
+X-Google-Smtp-Source: AMsMyM7v0it+37mFtxOllnwCsi/EUsAK42mTUgpX7+cma6Gfcodtgzdt/i8z0FCpcYG5Mrh/zbrXbw==
+X-Received: by 2002:a17:90a:9404:b0:213:765c:779f with SMTP id r4-20020a17090a940400b00213765c779fmr33905553pjo.127.1667379915248;
+        Wed, 02 Nov 2022 02:05:15 -0700 (PDT)
 Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id a3-20020a170902ecc300b001868ed86a95sm7830304plh.174.2022.11.02.02.02.30
+        by smtp.gmail.com with ESMTPSA id i26-20020a63585a000000b0046ffe3fea77sm1620462pgm.76.2022.11.02.02.05.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 02:02:30 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 14:32:28 +0530
+        Wed, 02 Nov 2022 02:05:14 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 14:35:12 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     James Calligeros <jcalligeros99@gmail.com>
-Cc:     vireshk@kernel.org, sboyd@kernel.org, nm@ti.com,
-        linux-pm@vger.kernel.org, asahi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
-Message-ID: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
-References: <20221030101546.29306-1-jcalligeros99@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, rafael@kernel.org, johan@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 0/3] Qcom CPUFreq HW driver cleanups
+Message-ID: <20221102090512.sfj5fuefzkcl24co@vireshk-i7>
+References: <20221102090038.64541-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221030101546.29306-1-jcalligeros99@gmail.com>
+In-Reply-To: <20221102090038.64541-1-manivannan.sadhasivam@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -71,114 +71,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30-10-22, 20:15, James Calligeros wrote:
-> The opp-microwatt property was added with the intention of providing
-> platforms a way to specify a precise value for the power consumption
-> of a device at a given OPP to enable better energy-aware scheduling
-> decisions by informing the kernel of the total static and dynamic
-> power of a device at a given OPP, removing the reliance on the EM
-> subsystem's often flawed estimations. This property is parsed by
-> opp_parse_supplies(), which creates a hard dependency on the
-> opp-microvolt property.
+On 02-11-22, 14:30, Manivannan Sadhasivam wrote:
+> Hello,
 > 
-> Some platforms, such as Apple Silicon, do not describe their devices'
-> voltage regulators in the DT as they cannot be controlled by the kernel
-> and/or rely on opaque firmware algorithms to control their voltage and
-> current characteristics at runtime. We can, however, experimentally
-> determine the power consumption of a given device at a given OPP, taking
-> advantage of opp-microwatt to provide EAS on such devices as was initially
-> intended.
-
-Do you supply a regulator to the OPP core for your platform ?
-
-> Allow platforms to specify and consume any subset of opp-microvolt,
-> opp-microamp, or opp-microwatt without a hard dependency on opp-microvolt
-> to enable this functionality on such platforms.
+> This series contains cleanup patches targeting the Qcom CPUFreq HW driver.
+> This is a spun off of the clock provier series [1].
 > 
-> Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
-
-I won't call it a fix, we are trying to use this information in a
-different way here, that's all.
-
-> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
-> ---
-> Changes since v1:
-> Fixed bad reference (opp to opp_table)
+> Thanks,
+> Mani
 > 
->  drivers/opp/of.c | 198 +++++++++++++++++++++++++----------------------
->  1 file changed, 104 insertions(+), 94 deletions(-)
+> [1] https://lore.kernel.org/lkml/20221025073254.1564622-2-manivannan.sadhasivam@linaro.org/T/
 > 
-> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-> index 605d68673f92..0fa25c3a959e 100644
-> --- a/drivers/opp/of.c
-> +++ b/drivers/opp/of.c
-> @@ -581,166 +581,176 @@ static bool _opp_is_supported(struct device *dev, struct opp_table *opp_table,
->  static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
->  			      struct opp_table *opp_table)
->  {
-> -	u32 *microvolt, *microamp = NULL, *microwatt = NULL;
-> +	u32 *microvolt = NULL, *microamp = NULL, *microwatt = NULL;
->  	int supplies = opp_table->regulator_count;
->  	int vcount, icount, pcount, ret, i, j;
-> -	struct property *prop = NULL;
-> +	struct property *prop_mv = NULL, *prop_ma = NULL, *prop_mw = NULL;
->  	char name[NAME_MAX];
->  
->  	/* Search for "opp-microvolt-<name>" */
->  	if (opp_table->prop_name) {
->  		snprintf(name, sizeof(name), "opp-microvolt-%s",
->  			 opp_table->prop_name);
-> -		prop = of_find_property(opp->np, name, NULL);
-> +		prop_mv = of_find_property(opp->np, name, NULL);
->  	}
->  
-> -	if (!prop) {
-> +	if (!prop_mv) {
->  		/* Search for "opp-microvolt" */
->  		sprintf(name, "opp-microvolt");
-> -		prop = of_find_property(opp->np, name, NULL);
-> -
-> -		/* Missing property isn't a problem, but an invalid entry is */
-> -		if (!prop) {
-> -			if (unlikely(supplies == -1)) {
-> -				/* Initialize regulator_count */
-> -				opp_table->regulator_count = 0;
-> -				return 0;
-> -			}
-> +		prop_mv = of_find_property(opp->np, name, NULL);
->  
-> -			if (!supplies)
-> -				return 0;
-> -
-> -			dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
-> -				__func__);
+> Changes in v2:
+> 
+> * Rebased on top of cpufreq/arm/linux-next branch
 
-Catching such errors are important and so the opp-microvolt property
-was made compulsory earlier.
-
-If there is a regulator, then we must have microvolt property.
-amps/watts are optional.
-
-> -			return -EINVAL;
-> -		}
->  	}
->  
-> -	if (unlikely(supplies == -1)) {
-> -		/* Initialize regulator_count */
-> -		supplies = opp_table->regulator_count = 1;
-> -	} else if (unlikely(!supplies)) {
-> -		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
-> -		return -EINVAL;
-> +	if (prop_mv) {
-> +		vcount = of_property_count_u32_elems(opp->np, name);
-> +		if (unlikely(supplies == -1))
-> +			supplies = opp_table->regulator_count = vcount;
-
-This is wrong. There can be one or three entries per regulator here.
-Target or min/max/target. If the supplies value is -1, we can only
-support one regulator, i.e. one or three entries total.
-
-I didn't look at rest of the patch yet. Lets discuss this a bit first.
+Applied. Thanks.
 
 -- 
 viresh
