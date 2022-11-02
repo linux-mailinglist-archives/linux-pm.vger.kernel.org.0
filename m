@@ -2,188 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2013615F02
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 341CB615FBD
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 10:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiKBJJb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 05:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39534 "EHLO
+        id S230045AbiKBJbJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 05:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiKBJI4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:08:56 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D4D27DE5
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:08:54 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso1492659pjg.5
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:08:54 -0700 (PDT)
+        with ESMTP id S229523AbiKBJbJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 05:31:09 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E6C7671
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 02:31:03 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id l6so15719049pjj.0
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 02:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rzl32xJg5uURgQ4K0EHlEDDO5IuPKAMEY+OYjIvy/iI=;
-        b=RqvacI6/ZK4cjTKIBRouuQj5tPYgFJ+Kilc5Xf1hm6NNgS4L2SJNIRnDDSjfsYHXxJ
-         ZkHHClK4oVtQx1R0auH3zoRUT0tbrBgL+F1JLUg04FC11oicZWBBmHsUTR9VmReRHvl8
-         XOGR46ezy0EAb91ZCoqCSn/QXGOHFF8+xQ1r5iAmpgXlBKF31aJY63kfWuFHXdLxM4MY
-         tU552gZ1imJV1Ip+O/You1y60ZoN5BckB2m3LniOKouols9t+C8r/Rx6n+0wNGYbYtMF
-         u/n61GigTznijZRC6mSx+f013zfer1t3r2ft06cM45ZMnueyVICOyoaaXjQ8vQIgGg8Y
-         bejQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5vJjpZUP6Df3WgXvyEwzQX7839DymC1MDleHo3NzumQ=;
+        b=lK8mezEHoK+bQ3SBLa6p5aZS+Hm2wxr02GbjTbG8znDKJPeYLrg0fXTjRkykogcxI+
+         CXgZcHZ0+sUtbj7odHT5HJIAFukBEVnqZ1Ue9mqtM7l6aY/5DeUHaF3wPDwXpm1hjcTG
+         e4yMVW2u+Ru1+vFZvKxGrlAYPj2xrZxdpmS602PiDs/A5QPaGKlob4nG08paTMyJ7ACE
+         9lNw/gi93k5sbtiNWDp7CYcUblSTK6gvjpwzZKxRmOQcXAKRR6SKVdSvP7nT+W4Hg9VA
+         5WBLn4/Wx1PhCIv7upXJ+bGIv7cdnT/72Blxt+xWFz13zbuylo71BJUhVu+Hr2IJjxwD
+         QZeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rzl32xJg5uURgQ4K0EHlEDDO5IuPKAMEY+OYjIvy/iI=;
-        b=K7AD102twwP6LaYTRfsseOEbg7fuhtiDhisOviZQOLcQFHwvWtHWyo6LSxFHgwpaRt
-         4qAKqvl5K+pO8IPPs2HSrc6diJ0RHwo7KRkNEVtR6o5j8EeLQfO0rgQjJA07r4IYoZN3
-         MPWVCIffs91PyCpEkQSE7XACjp43l52bBEZBkzmCwpnRIBIvysg71Xpo92PYX4kaqyip
-         uBMtfrY4Zqnx3jge/CPZ1QfiP8ShOfKYitVaoi89PKWYR3lHVpYQQVkJ8fhN6UsxxmpS
-         /t/xqISpfa0XDHmui7xBnOyNOcLy8lGcGjTiDF3yGWQxqNZs7Xu6/cwS3o1y+LP+qjkR
-         1BRg==
-X-Gm-Message-State: ACrzQf3UI5HtDYgXiLkQxeCr6PMnY/PXjSOeKTfahqZ9l2qOr/PNViGs
-        LCHW67EvdyqKBn4AU6IOAAFE
-X-Google-Smtp-Source: AMsMyM5Fqj9xkaH+wdggdto15/vTvmIem8RTze54UgSBohNyKSCxrQRuop1jQyOKlv3bAfVfdj2QHA==
-X-Received: by 2002:a17:90a:e606:b0:212:f100:22e3 with SMTP id j6-20020a17090ae60600b00212f10022e3mr42233439pjy.83.1667380134042;
-        Wed, 02 Nov 2022 02:08:54 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.209.178])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b0017f36638010sm7856126plg.276.2022.11.02.02.08.49
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5vJjpZUP6Df3WgXvyEwzQX7839DymC1MDleHo3NzumQ=;
+        b=tvm16OtxOSF1u8lUPvKOtSfCsO38Tryviz6lZray7h49bxfkLH5dpKcHv0c1wrufKw
+         XgiZbVx8lewOomzgK2gnQFORdg6Dngi8wdx9FNsEcLUfgKnEQeDwhBzetJ689PHer54R
+         aRGEY4C7HeKuCkZSKLsos6bxwuG6QM6q1V7tdOfYsjDLvxV6vq6CWWbQsjTH/QhVzmlS
+         Up8k+DpZRRDPeW59dOPI+vOM1s2/1iUUUrEIRHIUI14SIfeXnGzglPDj0beNIP07YtUF
+         MGhEiw1bQMIRlbUf5A1jrrAGmiNl9hJS9ncyS9h1bC7YCR4rt5mdKsr/MrXqrii4zmJU
+         uhwg==
+X-Gm-Message-State: ACrzQf2PKreaL/8JDJp0L3aXImW4Qe1CsS1K8oK6gcD/k+jToLLV1COq
+        gQqulEFru1gb9zJO42tLZGaAng==
+X-Google-Smtp-Source: AMsMyM5dgqK5P+IkbrfpOI1FVmChGL1WlIa/+jC1kvFZPmi9nkAZUpv8t8m1tIex8SnuSCBhyMzScg==
+X-Received: by 2002:a17:90a:1690:b0:20a:8f70:14bb with SMTP id o16-20020a17090a169000b0020a8f7014bbmr24534952pja.115.1667381462622;
+        Wed, 02 Nov 2022 02:31:02 -0700 (PDT)
+Received: from dragon (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id d17-20020a17090ac25100b0020ad26fa65dsm998737pjx.56.2022.11.02.02.30.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 02:08:53 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org
-Cc:     johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v4 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Date:   Wed,  2 Nov 2022 14:38:18 +0530
-Message-Id: <20221102090818.65321-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
-References: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
+        Wed, 02 Nov 2022 02:31:02 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 17:30:55 +0800
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] PM: domains: Consolidate genpd_restore_noirq()
+ and genpd_resume_noirq()
+Message-ID: <20221102093055.GA1963677@dragon>
+References: <20221101024736.1509207-1-shawn.guo@linaro.org>
+ <20221101024736.1509207-3-shawn.guo@linaro.org>
+ <CAPDyKFqjf3P8GDfNinEeO57peM=7qVVP_M4yu1vsQY6N2wNcqA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFqjf3P8GDfNinEeO57peM=7qVVP_M4yu1vsQY6N2wNcqA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-cores. But this relationship is not represented with the clk framework
-so far.
+On Tue, Nov 01, 2022 at 11:23:45AM +0100, Ulf Hansson wrote:
+> On Tue, 1 Nov 2022 at 03:47, Shawn Guo <shawn.guo@linaro.org> wrote:
+> >
+> > Most of the logic between genpd_restore_noirq() and genpd_resume_noirq()
+> > are same except GENPD_STATE_OFF status reset for hibernation restore.
+> > The suspended_count decrement for restore should be the right thing to do
+> > anyway, considering there is an increment in genpd_finish_suspend() for
+> > hibernation.
+> >
+> > Consolidate genpd_restore_noirq() and genpd_resume_noirq() into
+> > genpd_finish_resume() and handle GENPD_STATE_OFF status reset for
+> > restore case specially.
+> >
+> > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> 
+> I have a comment, see more below.
+> 
+> Nevertheless, please add:
+> 
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+> > ---
+> >  drivers/base/power/domain.c | 70 ++++++++++++++++++-------------------
+> >  1 file changed, 35 insertions(+), 35 deletions(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 54f6b0dd35fb..b81baeb38d81 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -1247,12 +1247,14 @@ static int genpd_suspend_noirq(struct device *dev)
+> >  }
+> >
+> >  /**
+> > - * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
+> > + * genpd_finish_resume - Completion of resume of device in an I/O PM domain.
+> >   * @dev: Device to resume.
+> > + * @resume_noirq: Generic resume_noirq callback.
+> >   *
+> >   * Restore power to the device's PM domain, if necessary, and start the device.
+> >   */
+> > -static int genpd_resume_noirq(struct device *dev)
+> > +static int genpd_finish_resume(struct device *dev,
+> > +                              int (*resume_noirq)(struct device *dev))
+> >  {
+> >         struct generic_pm_domain *genpd;
+> >         int ret;
+> > @@ -1264,9 +1266,25 @@ static int genpd_resume_noirq(struct device *dev)
+> >                 return -EINVAL;
+> >
+> >         if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
+> > -               return pm_generic_resume_noirq(dev);
+> > +               return resume_noirq(dev);
+> >
+> >         genpd_lock(genpd);
+> > +
+> > +       /*
+> > +        * Special handling for hibernation restore:
+> > +        * At this point suspended_count == 0 means we are being run for the
+> > +        * first time for the given domain in the present cycle.
+> > +        */
+> > +       if (resume_noirq == pm_generic_restore_noirq &&
+> > +           genpd->suspended_count++ == 0) {
+> > +               /*
+> > +                * The boot kernel might put the domain into arbitrary state,
+> > +                * so make it appear as powered off to genpd_sync_power_on(),
+> > +                * so that it tries to power it on in case it was really off.
+> > +                */
+> > +               genpd->status = GENPD_STATE_OFF;
+> 
+> This has really never worked as intended. Resetting the status like
+> this, needs more careful actions.
+> 
+> For example, if the genpd->status was GENPD_STATE_ON, the parent
+> domain's ->sd_count have been increased - so that needs to be adjusted
+> too.
+> 
+> By looking at patch3/3, I wonder if we shouldn't try to align the
+> hibernation behaviors so the above hack can be dropped. Do you think
+> that could work?
 
-So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-clock producer/consumer relationship cleaner and is also useful for CPU
-related frameworks like OPP to know the frequency at which the CPUs are
-running.
+To be honest, I found this piece of code suspicious when I was fixing my
+problem.  To be on the safe side, I chose to leave it there because I'm
+not sure if it's handling any special cases or platform quirks.
 
-The clock frequency provided by the driver is for each frequency domain.
-We cannot get the frequency of each CPU core because, not all platforms
-support per-core DCVS feature.
+I tested on my platform with dropping the code.  Worked perfectly fine.
+So I will repost the series by starting with this cleanup.
 
-Also the frequency supplied by the driver is the actual frequency that
-comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-not same as what the CPUFreq framework has set but it is the one that gets
-supplied to the CPUs after throttling by LMh.
-
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 5e0598730a04..5b5f9a4d1466 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -4,6 +4,7 @@
-  */
- 
- #include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
- #include <linux/cpufreq.h>
- #include <linux/init.h>
- #include <linux/interconnect.h>
-@@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
- 	bool cancel_throttle;
- 	struct delayed_work throttle_work;
- 	struct cpufreq_policy *policy;
-+	struct clk_hw cpu_clk;
- 
- 	bool per_core_dcvs;
- 
-@@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 	.ready		= qcom_cpufreq_ready,
- };
- 
-+static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-+{
-+	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-+
-+	return qcom_lmh_get_throttle_freq(data) / HZ_PER_KHZ;
-+}
-+
-+static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-+	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-+};
-+
- static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
-+	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
- 	struct device *cpu_dev;
- 	struct clk *clk;
-@@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
- 
-+	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-+	if (!clk_data)
-+		return -ENOMEM;
-+
-+	clk_data->num = num_domains;
-+
- 	for (i = 0; i < num_domains; i++) {
- 		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-+		struct clk_init_data init = {};
-+		const char *clk_name;
- 		struct resource *res;
- 		void __iomem *base;
- 
-@@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 
- 		data->base = base;
- 		data->res = res;
-+
-+		/* Register CPU clock for each frequency domain */
-+		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
-+		init.name = clk_name;
-+		init.flags = CLK_GET_RATE_NOCACHE;
-+		init.ops = &qcom_cpufreq_hw_clk_ops;
-+		data->cpu_clk.init = &init;
-+
-+		ret = devm_clk_hw_register(dev, &data->cpu_clk);
-+		if (ret < 0) {
-+			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-+			return ret;
-+		}
-+
-+		clk_data->hws[i] = &data->cpu_clk;
-+	}
-+
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-+	if (ret < 0) {
-+		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-+		return ret;
- 	}
- 
- 	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
--- 
-2.25.1
-
+Shawn
