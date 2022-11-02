@@ -2,94 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104F26169D9
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 17:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F2E5616B23
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 18:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiKBQ6D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 12:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S230300AbiKBRp7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 13:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiKBQ56 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 12:57:58 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE47B86A;
-        Wed,  2 Nov 2022 09:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667408278; x=1698944278;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=HeHwbPhOHs42Kq6mnfMZGexb4iqh1X1MYkH7cuf67cI=;
-  b=LY6Llq1U8VPQmxLJFj6VhFAiCqR5+ffqN2YxBorCCsp6NLpp3D4SfLxR
-   YBW+GjMiO71XH8WcMPD9Vo376QsopQ/eQF29xoP/al57Nnk6jVmdG5mar
-   5Os20LXQ/tfIFM9Xf+39iomXzuLexarWnhNBFv5DUOmgL6o/KF5YXZ7Yo
-   e1ArtFnHU9VU3klk9N5kbEU+h3sr1SXCpHZwaiMHePKz2GBiVRhcHxYR8
-   qxOP7pMj2kV20iHhX3rjzgIV9rqBM/Jj1yQN78aeulas5bgCtFS5drvzu
-   jDLoGDqUFwN9+e6gqrhN7vXzQaGNUfo7eS5LbhroxV8aL4jAkKXxs//12
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="371558549"
-X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
-   d="scan'208";a="371558549"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 09:57:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="776967155"
-X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
-   d="scan'208";a="776967155"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by fmsmga001.fm.intel.com with SMTP; 02 Nov 2022 09:57:52 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Wed, 02 Nov 2022 18:57:51 +0200
-Date:   Wed, 2 Nov 2022 18:57:51 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
-        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
-        linux-kernel@vger.kernel.org, tj@kernel.org,
-        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
-Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
-Message-ID: <Y2Khj7n+tRq3r++O@intel.com>
-References: <20220822111816.760285417@infradead.org>
- <20220822114649.055452969@infradead.org>
- <Y1LVYaPCCP3BBS4g@intel.com>
- <Y1drd2gzxUJWdz5F@intel.com>
- <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
- <Y1kMv1GpKwOSIt8f@intel.com>
- <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
- <Y1qC7d7QVJB8NCHt@intel.com>
- <Y1q3gzbPUCvEMHGD@hirez.programming.kicks-ass.net>
+        with ESMTP id S231298AbiKBRp5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 13:45:57 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C602DAA2
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 10:45:53 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id s20so5833545qkg.5
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 10:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FhdA4rQr0h0JHz2jK1i63BpkMkxoHoWynIDjwqEDB+E=;
+        b=Ko/XhEQEVy8vhYi2Chd7g4Pc0uL+vmvOn2/a6NXdhPxD2Y7c8T1GRvqkhcePqP6v/C
+         KLGb7mu3ves6N3Sx1yUfZfbnaF2wU/711K+xEuKHUASt6+29rrP28EY9hHdrKuuOIhy5
+         a9CSzAxaZ7LELJwoIV0rMLCfYh9e/MfHxveo1REl/smgiJtM9XSqtld5USHvUGRTJ4Iv
+         xxkKn3vNy7LVeLayEBbnx8rf4XXvSAgVFTELg+/7hthlCWVxAkmV0MzVEqaycWV7zeW2
+         YRaBdci6hXeARGPC74Jj0C7PRcMAkLxAq4YaZIpP/1kahrnu7N9eyfTlz8ORW7qBvnk1
+         dFwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FhdA4rQr0h0JHz2jK1i63BpkMkxoHoWynIDjwqEDB+E=;
+        b=heDIon0lAVYqnVeenUG3TdMTu4pHPdqdhtjG2WlfwdD1VWJK5vZmbcG7y286JoJB1v
+         FNVeNsBSlNw/CRYYeoj52w0fz98o2tiPFN3b6h1A0dOaT20YLfKrYkdzkq+QjmwGf3B4
+         3/kEB2QaON7Z7MNIvqKNdftFRfzDvfgGe5M+CFJdFIp4aVCGpK7IBMf7yJHUYbeCtPWy
+         z1ePUsG4mNr0SG37sn91m1Pp8FoJvobt0Kp34T+prHiElOB6VaCW6hotk5AJ2480ckeq
+         Z4655ByuHnKp99phtAWa1EhkhzQ4jKmOqcO8HNX0BFW6iwgLmBnpnCL5FVt9VWMQeXuY
+         3LMQ==
+X-Gm-Message-State: ACrzQf0TpL11WmlG6FAbp2zzb+0F81X2lF3DOkNvintMsjHh2uH7MLOS
+        QBjczZvmU5yOmFTNf73P0HeNEw==
+X-Google-Smtp-Source: AMsMyM6laFDeCzjGMT0dXXGw/q7TuqBxY7XkgJLdR16KWV3Gda6y3n78BNcHzkdRgFQNIQWU4LmdSg==
+X-Received: by 2002:a37:de04:0:b0:6f9:386a:f58d with SMTP id h4-20020a37de04000000b006f9386af58dmr18367578qkj.166.1667411152458;
+        Wed, 02 Nov 2022 10:45:52 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id 22-20020ac85916000000b003a4f0bad332sm6947256qty.66.2022.11.02.10.45.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 10:45:51 -0700 (PDT)
+Message-ID: <2a2baeb6-d1ae-b564-d20b-039832156121@linaro.org>
+Date:   Wed, 2 Nov 2022 13:45:50 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y1q3gzbPUCvEMHGD@hirez.programming.kicks-ass.net>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] dt-bindings: power: supply: expect specific type for
+ monitored-battery
+Content-Language: en-US
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221028231255.565363-1-krzysztof.kozlowski@linaro.org>
+ <20221031192617.GA3283833-robh@kernel.org>
+ <20221031225635.ntziphignf7m4h3w@mercury.elektranox.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221031225635.ntziphignf7m4h3w@mercury.elektranox.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 06:53:23PM +0200, Peter Zijlstra wrote:
-> On Thu, Oct 27, 2022 at 04:09:01PM +0300, Ville Syrjälä wrote:
-> > On Wed, Oct 26, 2022 at 01:43:00PM +0200, Peter Zijlstra wrote:
+On 31/10/2022 18:56, Sebastian Reichel wrote:
+> Hi,
 > 
-> > > Could you please give the below a spin?
-> > 
-> > Thanks. I've added this to our CI branch. I'll try to keep and eye
-> > on it in the coming days and let you know if anything still trips.
-> > And I'll report back maybe ~middle of next week if we haven't caught
-> > anything by then.
+> On Mon, Oct 31, 2022 at 02:26:17PM -0500, Rob Herring wrote:
+>> On Fri, Oct 28, 2022 at 07:12:55PM -0400, Krzysztof Kozlowski wrote:
+>>> Core schema does not define type of monitored-battery, so the schemas
+>>> are expected to reference proper type.
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  Documentation/devicetree/bindings/power/supply/bq27xxx.yaml    | 2 +-
+>>>  .../devicetree/bindings/power/supply/ingenic,battery.yaml      | 1 +
+>>>  .../devicetree/bindings/power/supply/rohm,bd99954.yaml         | 1 +
+>>>  .../devicetree/bindings/power/supply/sc2731-charger.yaml       | 2 +-
+>>>  Documentation/devicetree/bindings/power/supply/sc27xx-fg.yaml  | 3 ++-
+>>>  5 files changed, 6 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+>>> index 65fc6049efc1..b04c86ed0f58 100644
+>>> --- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+>>> @@ -59,6 +59,7 @@ properties:
+>>>      description: integer, I2C address of the fuel gauge.
+>>>  
+>>>    monitored-battery:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>>      description: |
+>>>         phandle of battery characteristics node.
+>>>         The fuel gauge uses the following battery properties:
+>>> @@ -66,7 +67,6 @@ properties:
+>>>         - charge-full-design-microamp-hours
+>>>         - voltage-min-design-microvolt
+>>>         Both or neither of the *-full-design-*-hours properties must be set.
+>>> -       See Documentation/devicetree/bindings/power/supply/battery.yaml
+>>>  
+>>>    power-supplies: true
+>>>  
+>>> diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+>>> index 46527038bf22..8bdacc30e9d8 100644
+>>> --- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+>>> +++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+>>> @@ -27,6 +27,7 @@ properties:
+>>>      const: battery
+>>>  
+>>>    monitored-battery:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>
+>> We should not have a type definition multiple times for the same 
+>> property. We need to add a common schema defining the type instead.
 > 
-> Thanks!
+> I suppose monitored-battery should become part of
+> Documentation/devicetree/bindings/power/supply/power-supply.yaml
 
-Looks like we haven't caught anything since I put the patch in.
-So the fix seems good.
+I'll send a v2.
 
--- 
-Ville Syrjälä
-Intel
+Best regards,
+Krzysztof
+
