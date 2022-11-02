@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77B7C615DEA
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:38:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E13DA615DEE
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:38:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiKBIiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 04:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
+        id S230450AbiKBIiR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 04:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKBIiJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:38:09 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0175724F09
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:38:07 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id v17so12885516plo.1
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:38:07 -0700 (PDT)
+        with ESMTP id S230437AbiKBIiO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:38:14 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C19524F29
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:38:13 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so1469251pji.1
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:38:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hJGPayayBC+qiXWCRJ9hCea3jMLnq0xughVCq6oneVg=;
-        b=gN4V9bRPfg+ByaCH9eEFI9fo3j+dMH85dRfTdT6af1MPxrg+tYKB9STPS4aU1807of
-         qBopKXYNWkvAR8hU4d67qrvd1VB2Tn8vTPmusnvsB9cKmUJHlFXwlx9fsQlSZlpOdlDF
-         ueUxbN6NkPAdKzC3uC0fyk8l00j0Qcq9Rex9deakVsgCAunyOEvobYr2oKG0NOmCcZfG
-         lQxbP2MVAxgtKZvDe5XhTMP8IQKsavFu+nX8tEktwoTq29h4WCjy/9GSwXbNDY/Ik7g8
-         /u+hcRLb40tbJ73yU6RCGut6lLAzmgRuGcuWpnsgUljwnctLRaJrldE21VieEdmnx0cR
-         tokw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jQnAjVM8KfWMqcwU3yG9m91ABhfRemXy71C0Mul10HU=;
+        b=BI5z3t5yh+o/6QROXQ6AMqcln1aDKa4g86WvBaWv08SoJh/CN4rpQJxusRiuGqubs3
+         0WKp/NDTUz2/m4GvxtOKJybTLZBtjcCpjj2xkSoaqzwHfLROyh4mIRqDiuEPWkeSsBJz
+         mJ0WEEO7xVScBm9QejSv5iKbaDFRPnEY+LhjOrEGX4V9nOd91nFhC95M0GNBinOthfQA
+         bdH9/BADrpnxUJTwYvjk2RDtf+NFSc3pPYzZs48nYMYxMoj+2vXn6IY4Yb39O1nt+p9A
+         tr6pOV3jUfPvwEL2quP5wv98BXGLmipv9MQoUzIWqMTRMMEMsGTJcY8Ysrf5YeuUYfB+
+         tdCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hJGPayayBC+qiXWCRJ9hCea3jMLnq0xughVCq6oneVg=;
-        b=ThRJvPt5Xy7xjsAbt50SvwMM+wL3oPaWxsvS0GcK3plr8vWzcumhIzHy2681Wqusjo
-         7sLXRBkWJunLSduHdP6u4U3fYAd4Az8+jyuszTEd4E0B38ngENvXctMYdnrTVOR1fbBY
-         UVpzVDQR9Cz8vkJYVAtLQKeVhXFIUURlT3Y3zcoLtNm5Wa7bI3R/LWAmfwXWaGlr5dCZ
-         OX91tleuwbrNmFREuK6E34YIVLO/gdc5N0pU3Ry0RHS/YNiWb7yJ2wib68RXTAHy2iNS
-         wD7VPwmJ9REmbWUl37czfUduELmL6YhsRgNSbtxT8inoBfd08LfJnqCgrhN3hiwAQJvR
-         c39w==
-X-Gm-Message-State: ACrzQf2/vr3csSftskxGIn/pA+ByHNVYXK93O7njDr9TXEzUL4vRJnV2
-        D6FqQ91fRnnBItfd3IBrupQ9
-X-Google-Smtp-Source: AMsMyM4WLiSemzP8HxeHMzFWxYd6s821xdZtEiVTp/bjtw30qjIodM/m3P4WoBtLWihcH023PIE+WA==
-X-Received: by 2002:a17:90a:b792:b0:214:2a4a:4bbc with SMTP id m18-20020a17090ab79200b002142a4a4bbcmr2887944pjr.81.1667378287222;
-        Wed, 02 Nov 2022 01:38:07 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jQnAjVM8KfWMqcwU3yG9m91ABhfRemXy71C0Mul10HU=;
+        b=PsLDFHeFLM21dkPsDzQrAgSXX1tDKCHut8bSd7deVd/Dy9/RX1ezQCxK1iRWo+UNph
+         eQuUrKkgD/ypxDTWjQTKNjiZXUEeFHKwcmohqFscrKwYnq4FqOAiLaxy9RJatB45E6Xk
+         aXGI2L64vIHN0zBhiYqlEpiuLzGFYwn7c9DLfDw7SNPoj3SOGBCC22y6l+QYYzmUN+q2
+         r2ZysdOaHv3uXZQpAwBAme2Wn99odKDz3kf+FlQxhAxgcQn+4fH8n/7XBBvOkL0s2Fng
+         tRYoopl1vHUlTyFm6gPLpU2Y5OYX38n7/m/HBuFZTRcbuqMokQn7pM+1OlzKQ3Yyqhfm
+         myeA==
+X-Gm-Message-State: ACrzQf2o3pl9dosUH5a0zERJGrKqzae7YUQIw1zQo4BdOVNzFtPpa0e7
+        deUSMv7NA3fto9fPj8x5k01ICm9mqO8/
+X-Google-Smtp-Source: AMsMyM77dg5YxTTvjtwAYBd+pJTnRDwtud450+37wTGwfMoZBBFV0IUkYDuLrrWRee0lywU00ZFaSw==
+X-Received: by 2002:a17:90b:1bc1:b0:213:e2af:b1f4 with SMTP id oa1-20020a17090b1bc100b00213e2afb1f4mr15165846pjb.47.1667378292730;
+        Wed, 02 Nov 2022 01:38:12 -0700 (PDT)
 Received: from localhost.localdomain ([117.193.209.178])
-        by smtp.gmail.com with ESMTPSA id x19-20020aa79573000000b0056bcb102e7bsm7887770pfq.68.2022.11.02.01.38.02
+        by smtp.gmail.com with ESMTPSA id x19-20020aa79573000000b0056bcb102e7bsm7887770pfq.68.2022.11.02.01.38.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 01:38:06 -0700 (PDT)
+        Wed, 02 Nov 2022 01:38:11 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, viresh.kumar@linaro.org,
         krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
@@ -55,11 +56,14 @@ To:     andersson@kernel.org, viresh.kumar@linaro.org,
 Cc:     johan@kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v3 0/3] qcom-cpufreq-hw: Add CPU clock provider support
-Date:   Wed,  2 Nov 2022 14:07:48 +0530
-Message-Id: <20221102083751.56330-1-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v3 1/3] dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+Date:   Wed,  2 Nov 2022 14:07:49 +0530
+Message-Id: <20221102083751.56330-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221102083751.56330-1-manivannan.sadhasivam@linaro.org>
+References: <20221102083751.56330-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,67 +76,107 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply clocks
+to the CPU cores. Document the same in the binding to reflect the actual
+implementation.
 
-This series adds clock provider support to the Qcom CPUFreq driver for
-supplying the clocks to the CPU cores in Qcom SoCs.
+CPUFreq HW will become the clock provider and CPU cores will become the
+clock consumers.
 
-The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
-clocks to the CPU cores. But this is not represented clearly in devicetree.
-There is no clock coming out of the CPUFreq HW node to the CPU. This created
-an issue [1] with the OPP core when a recent enhancement series was submitted.
-Eventhough the issue got fixed in the OPP framework in the meantime, that's
-not a proper solution and this series aims to fix it properly.
+The clock index for each CPU core is based on the frequency domain index.
 
-There was also an attempt made by Viresh [2] to fix the issue by moving the
-clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
-since those clocks belong to the CPUFreq HW node only.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-The proposal here is to add clock provider support to the Qcom CPUFreq HW
-driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
-This correctly reflects the hardware implementation.
-
-The clock provider is a simple one that just provides the frequency of the
-clocks supplied to each frequency domain in the SoC using .recalc_rate()
-callback. The frequency supplied by the driver will be the actual frequency
-that comes out of the EPSS/OSM block after the DCVS operation. This frequency
-is not same as what the CPUFreq framework has set but it is the one that gets
-supplied to the CPUs after throttling by LMh.
-
-This series has been tested on SM8450 based dev board with the OPP hack removed
-and hence there is a DTS change only for that platform. Once this series gets
-accepted, rest of the platform DTS can also be modified and finally the hack on
-the OPP core can be dropped.
-
-Thanks,
-Mani
-
-[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
-[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
-
-Changes in v3:
-
-* Submitted the cpufreq driver cleanup patches as a separate series as
-  suggested by Viresh
-* Removed static keyword from clk_init_data declaration
-
-Changes in v2:
-
-* Moved the qcom_cpufreq_data allocation to probe
-* Added single clock provider with multiple clks for each freq domain
-* Moved soc_data to qcom_cpufreq struct
-* Added Rob's review for binding
-
-Manivannan Sadhasivam (3):
-  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
-  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
-  cpufreq: qcom-hw: Add CPU clock provider support
-
- .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 12 ++++++
- arch/arm64/boot/dts/qcom/sm8450.dtsi          |  9 ++++
- drivers/cpufreq/qcom-cpufreq-hw.c             | 43 +++++++++++++++++++
- 3 files changed, 64 insertions(+)
-
+diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+index cbba8979fe0e..2e0336163ffb 100644
+--- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
+@@ -57,6 +57,9 @@ properties:
+   '#freq-domain-cells':
+     const: 1
+ 
++  '#clock-cells':
++    const: 1
++
+ required:
+   - compatible
+   - reg
+@@ -84,6 +87,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_0>;
+         qcom,freq-domain = <&cpufreq_hw 0>;
++        clocks = <&cpufreq_hw 0>;
+         L2_0: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -100,6 +104,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_100>;
+         qcom,freq-domain = <&cpufreq_hw 0>;
++        clocks = <&cpufreq_hw 0>;
+         L2_100: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -113,6 +118,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_200>;
+         qcom,freq-domain = <&cpufreq_hw 0>;
++        clocks = <&cpufreq_hw 0>;
+         L2_200: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -126,6 +132,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_300>;
+         qcom,freq-domain = <&cpufreq_hw 0>;
++        clocks = <&cpufreq_hw 0>;
+         L2_300: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -139,6 +146,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_400>;
+         qcom,freq-domain = <&cpufreq_hw 1>;
++        clocks = <&cpufreq_hw 1>;
+         L2_400: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -152,6 +160,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_500>;
+         qcom,freq-domain = <&cpufreq_hw 1>;
++        clocks = <&cpufreq_hw 1>;
+         L2_500: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -165,6 +174,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_600>;
+         qcom,freq-domain = <&cpufreq_hw 1>;
++        clocks = <&cpufreq_hw 1>;
+         L2_600: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -178,6 +188,7 @@ examples:
+         enable-method = "psci";
+         next-level-cache = <&L2_700>;
+         qcom,freq-domain = <&cpufreq_hw 1>;
++        clocks = <&cpufreq_hw 1>;
+         L2_700: l2-cache {
+           compatible = "cache";
+           next-level-cache = <&L3_0>;
+@@ -198,6 +209,7 @@ examples:
+         clock-names = "xo", "alternate";
+ 
+         #freq-domain-cells = <1>;
++        #clock-cells = <1>;
+       };
+     };
+ ...
 -- 
 2.25.1
 
