@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6A9615DB8
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:33:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF27615DBD
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 09:33:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiKBIdD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 04:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
+        id S230369AbiKBIdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 04:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbiKBIdB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:33:01 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5291B27B01
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:32:58 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso1421988pjg.5
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:32:58 -0700 (PDT)
+        with ESMTP id S230331AbiKBIdE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 04:33:04 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA30827B13
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 01:33:02 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id p3so15889306pld.10
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 01:33:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q2nlS3XahONFZFIAHmPH/AavNAlCb2gKg69yTobdo08=;
-        b=oeMpWeKeP0rveiNwGyuAN4gNDf6JHLEQ6H7aQ7WK5bkqfCdJaus2WQZ0Cae7Uv/Whj
-         hmjZj5wn7hGNTy92X9wOPaRdkvK5gElRihTmougdTTd7kQBjrQ/HWqxFvIm3NXe/53vZ
-         /SQ1IHi4fWZ58LmeMC1USf5Uq+5gMHU1LqUhXWz3TMYL1nHemu91jJfDFV+ajlNoMTzo
-         GfzjJXaoOZki5KVPJqwoTs1/cyFJErlvsvAVrnNxt+YtFn/gvzH+qakawhw4p2zIkdwH
-         /+4D2LsTgiMw+MsE5eC8g+SWurCzNG9cLvqhQaK/J6hujAy5tHtDjb7Fih6Lael72zk9
-         i8uQ==
+        bh=3UeGRLt0I6Ca0YYYt9StoKBqh2LnPMLZ6623L26cNAw=;
+        b=IH0U1tsxJITrnpwgUR/Hzctz5g/bXvQYOc1TdCZde+I0rJQPoXhlaI+SRAOLsOUEZr
+         AOaBS0r+QFPEOqsT+mb35BORHxvc8zXuTai8otYkmJS+JBg/Wkkcrgz9bIj8Q1DsO1iN
+         /4FrWb+0BS3j9gm6nJmkGgowOh8h+Fxrkqdotw9vlY/IfM++mED0fWloaRZyPUvNlTPG
+         vrrQgUkmes2d7/c5RoGR304O0OfECoowUSggvz2LjCPR7KY7LaOglXkb77Kv8x1YIsLI
+         7woxPdKQlviakM3Vil07FTjQjgH3B3GdgPvpwDkEgQ4y9akdsvgsZEI1cas6dDQU3mHz
+         fP+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q2nlS3XahONFZFIAHmPH/AavNAlCb2gKg69yTobdo08=;
-        b=m/fcI7tzWtSvFaDQO9RVAKNw1iKDz/lqdP7XizsjNdho0rIpJDXsNEQHhoPzMUYYyf
-         BOcPUEpPsEbuY9hJ+tJxeb9fPXs9inE1d+P3ReMG1ZoifznpfSMF13jeL/SmaDeNpAxN
-         3PABaTI22IrXcpB2E0WhwywsF/VvDYQGIHcUH7VOJuxLl62rS+tOrujr+hBKTiBhltvi
-         Zl6IG5/OVh1SW/e9bpVv9OT98Gfasyelr49XZngXlvlmV1pvy9E2MOTa0y+BCXwJRT3e
-         iz1OrXxT13QPXr4T0E43CTfQrnIMKMzIcmVgKsVpMc6pvegaHOG7Y2jR52QkEezyCi17
-         1AiQ==
-X-Gm-Message-State: ACrzQf03BTAjGoWcQ39evVbC7jjEBduzSv/zgnsNs6PlsbkWCfsVwcmg
-        XX6YmPdawFoHE1plkkMlqBBi
-X-Google-Smtp-Source: AMsMyM4ElgaogpH3aOKa4/LTBdF1aWHexA+c5wQiud780R9cduZbExY/WAmOT8CGQs/Mp9sUBCfPpQ==
-X-Received: by 2002:a17:90a:6d22:b0:213:7e1e:9be0 with SMTP id z31-20020a17090a6d2200b002137e1e9be0mr24188999pjj.17.1667377977781;
-        Wed, 02 Nov 2022 01:32:57 -0700 (PDT)
+        bh=3UeGRLt0I6Ca0YYYt9StoKBqh2LnPMLZ6623L26cNAw=;
+        b=Xs6FqUyr6pZNetWxXWDtnDYAEMKBql6apeBjLdQptzUGhq4ABkZWV/m4N/CPwHF2LM
+         MUwhSfEdUp04UZHXaqTMKzxs+N5FPDoSPvNRzrgGt79722cuDtal841qGDAg7kU3qMfI
+         jmrSTJI4kOgfXtAW4rZOjFXyD/j47OMC/AjoWC6Uy44aBo8jtoy6k/aJTkQlWWHrZNpc
+         5wneg2ZmzHSW+HGxFqZYugsuprN71Amfy0aQ+sSRTKsFeoQyY7CihQkyKMDVHQpMVxGg
+         SGWp+oZyliOvjdOnivfHO77gYmo5ukJbTKaTArDXQ7M7Cf0cxsH+9LaSYoW5VBFDxF+L
+         bRPw==
+X-Gm-Message-State: ACrzQf2E3nFTgJGIFlKGyRC1RgNFvqup68T+gELZC3WRGI4Y3Q9D6dEF
+        1H6Z0+cx+5+S80Ftjfl4qaV+
+X-Google-Smtp-Source: AMsMyM5t0U7P8BEhY2X9jqqV+oFtJTEnd/5oerb6BW5BVAAOZBz/FMM4/sXo/NGticgGEmBMQqFZBg==
+X-Received: by 2002:a17:90a:1c02:b0:1e0:df7:31f2 with SMTP id s2-20020a17090a1c0200b001e00df731f2mr40598415pjs.222.1667377982313;
+        Wed, 02 Nov 2022 01:33:02 -0700 (PDT)
 Received: from localhost.localdomain ([117.193.209.178])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176acd80f69sm7682256pln.102.2022.11.02.01.32.53
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176acd80f69sm7682256pln.102.2022.11.02.01.32.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 01:32:56 -0700 (PDT)
+        Wed, 02 Nov 2022 01:33:01 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, viresh.kumar@linaro.org, rafael@kernel.org
 Cc:     johan@kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 1/3] cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe
-Date:   Wed,  2 Nov 2022 14:02:37 +0530
-Message-Id: <20221102083239.53826-2-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 2/3] cpufreq: qcom-hw: Use cached dev pointer in probe()
+Date:   Wed,  2 Nov 2022 14:02:38 +0530
+Message-Id: <20221102083239.53826-3-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221102083239.53826-1-manivannan.sadhasivam@linaro.org>
 References: <20221102083239.53826-1-manivannan.sadhasivam@linaro.org>
@@ -72,170 +72,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-qcom_cpufreq_data is allocated based on the number of frequency domains
-defined in DT which is static and won't change during runtime. There is
-no real reason to allocate it during the CPU init() callback and deallocate
-it during exit(). Hence, move the allocation to probe() and use the
-allocated memory during init().
-
-This also allows us to use devm_platform_get_and_ioremap_resource() helper
-for acquiring the freq-domain resources from DT.
+There are multiple instances of dev pointer used in the probe() function.
+Instead of referencing pdev->dev all the time, let's use a cached dev
+pointer to simplify the code.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 86 +++++++++++++------------------
- 1 file changed, 37 insertions(+), 49 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-hw.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index a5b3b8d0e164..1842e9facaa1 100644
+index 1842e9facaa1..bc991ef10c05 100644
 --- a/drivers/cpufreq/qcom-cpufreq-hw.c
 +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -58,6 +58,10 @@ struct qcom_cpufreq_data {
- 	bool per_core_dcvs;
- };
+@@ -604,18 +604,19 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
  
-+static struct {
-+	struct qcom_cpufreq_data *data;
-+} qcom_cpufreq;
-+
- static unsigned long cpu_hw_rate, xo_rate;
- static bool icc_scaling_enabled;
- 
-@@ -489,8 +493,6 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	struct of_phandle_args args;
- 	struct device_node *cpu_np;
- 	struct device *cpu_dev;
--	struct resource *res;
--	void __iomem *base;
- 	struct qcom_cpufreq_data *data;
- 	int ret, index;
- 
-@@ -512,43 +514,16 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 		return ret;
- 
- 	index = args.args[0];
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, index);
--	if (!res) {
--		dev_err(dev, "failed to get mem resource %d\n", index);
--		return -ENODEV;
--	}
--
--	if (!request_mem_region(res->start, resource_size(res), res->name)) {
--		dev_err(dev, "failed to request resource %pR\n", res);
--		return -EBUSY;
--	}
--
--	base = ioremap(res->start, resource_size(res));
--	if (!base) {
--		dev_err(dev, "failed to map resource %pR\n", res);
--		ret = -ENOMEM;
--		goto release_region;
--	}
--
--	data = kzalloc(sizeof(*data), GFP_KERNEL);
--	if (!data) {
--		ret = -ENOMEM;
--		goto unmap_base;
--	}
--
- 	data->soc_data = of_device_get_match_data(&pdev->dev);
--	data->base = base;
--	data->res = res;
-+	data = &qcom_cpufreq.data[index];
- 
- 	/* HW should be in enabled state to proceed */
--	if (!(readl_relaxed(base + data->soc_data->reg_enable) & 0x1)) {
-+	if (!(readl_relaxed(data->base + data->soc_data->reg_enable) & 0x1)) {
- 		dev_err(dev, "Domain-%d cpufreq hardware not enabled\n", index);
--		ret = -ENODEV;
--		goto error;
-+		return -ENODEV;
- 	}
- 
--	if (readl_relaxed(base + data->soc_data->reg_dcvs_ctrl) & 0x1)
-+	if (readl_relaxed(data->base + data->soc_data->reg_dcvs_ctrl) & 0x1)
- 		data->per_core_dcvs = true;
- 
- 	qcom_get_related_cpus(index, policy->cpus);
-@@ -559,14 +534,13 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 	ret = qcom_cpufreq_hw_read_lut(cpu_dev, policy);
- 	if (ret) {
- 		dev_err(dev, "Domain-%d failed to read LUT\n", index);
--		goto error;
-+		return ret;
- 	}
- 
- 	ret = dev_pm_opp_get_opp_count(cpu_dev);
- 	if (ret <= 0) {
- 		dev_err(cpu_dev, "Failed to add OPPs\n");
--		ret = -ENODEV;
--		goto error;
-+		return -ENODEV;
- 	}
- 
- 	if (policy_has_boost_freq(policy)) {
-@@ -575,18 +549,7 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
- 	}
- 
--	ret = qcom_cpufreq_hw_lmh_init(policy, index);
--	if (ret)
--		goto error;
--
--	return 0;
--error:
--	kfree(data);
--unmap_base:
--	iounmap(base);
--release_region:
--	release_mem_region(res->start, resource_size(res));
--	return ret;
-+	return qcom_cpufreq_hw_lmh_init(policy, index);
- }
- 
- static int qcom_cpufreq_hw_cpu_exit(struct cpufreq_policy *policy)
-@@ -643,7 +606,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
  {
++	struct device *dev = &pdev->dev;
  	struct device *cpu_dev;
  	struct clk *clk;
--	int ret;
-+	int ret, i, num_domains;
+ 	int ret, i, num_domains;
  
- 	clk = clk_get(&pdev->dev, "xo");
+-	clk = clk_get(&pdev->dev, "xo");
++	clk = clk_get(dev, "xo");
  	if (IS_ERR(clk))
-@@ -670,6 +633,31 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	if (ret)
+ 		return PTR_ERR(clk);
+ 
+ 	xo_rate = clk_get_rate(clk);
+ 	clk_put(clk);
+ 
+-	clk = clk_get(&pdev->dev, "alternate");
++	clk = clk_get(dev, "alternate");
+ 	if (IS_ERR(clk))
+ 		return PTR_ERR(clk);
+ 
+@@ -634,11 +635,11 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
  		return ret;
  
-+	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
-+	num_domains = of_property_count_elems_of_size(pdev->dev.of_node, "reg", sizeof(u32) * 4);
-+	if (num_domains <= 0)
-+		return num_domains;
-+
-+	qcom_cpufreq.data = devm_kzalloc(&pdev->dev, sizeof(struct qcom_cpufreq_data) * num_domains,
-+					 GFP_KERNEL);
-+	if (!qcom_cpufreq.data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < num_domains; i++) {
-+		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-+		struct resource *res;
-+		void __iomem *base;
-+
-+		base = devm_platform_get_and_ioremap_resource(pdev, i, &res);
-+		if (IS_ERR(base)) {
-+			dev_err(&pdev->dev, "Failed to map resource %pR\n", res);
-+			return PTR_ERR(base);
-+		}
-+
-+		data->base = base;
-+		data->res = res;
-+	}
-+
+ 	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
+-	num_domains = of_property_count_elems_of_size(pdev->dev.of_node, "reg", sizeof(u32) * 4);
++	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * 4);
+ 	if (num_domains <= 0)
+ 		return num_domains;
+ 
+-	qcom_cpufreq.data = devm_kzalloc(&pdev->dev, sizeof(struct qcom_cpufreq_data) * num_domains,
++	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
+ 					 GFP_KERNEL);
+ 	if (!qcom_cpufreq.data)
+ 		return -ENOMEM;
+@@ -650,7 +651,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+ 
+ 		base = devm_platform_get_and_ioremap_resource(pdev, i, &res);
+ 		if (IS_ERR(base)) {
+-			dev_err(&pdev->dev, "Failed to map resource %pR\n", res);
++			dev_err(dev, "Failed to map resource %pR\n", res);
+ 			return PTR_ERR(base);
+ 		}
+ 
+@@ -660,9 +661,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+ 
  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
  	if (ret)
- 		dev_err(&pdev->dev, "CPUFreq HW driver failed to register\n");
+-		dev_err(&pdev->dev, "CPUFreq HW driver failed to register\n");
++		dev_err(dev, "CPUFreq HW driver failed to register\n");
+ 	else
+-		dev_dbg(&pdev->dev, "QCOM CPUFreq HW driver initialized\n");
++		dev_dbg(dev, "QCOM CPUFreq HW driver initialized\n");
+ 
+ 	return ret;
+ }
 -- 
 2.25.1
 
