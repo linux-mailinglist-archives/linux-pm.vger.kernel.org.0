@@ -2,81 +2,235 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74588616C19
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 19:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D860B616CE3
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 19:45:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbiKBS0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 14:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S231589AbiKBSpJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 14:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiKBS0Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 14:26:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623CB2F3B7;
-        Wed,  2 Nov 2022 11:26:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10042B82432;
-        Wed,  2 Nov 2022 18:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A64C433B5;
-        Wed,  2 Nov 2022 18:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667413575;
-        bh=0OnF8htTtPrhW90XoJmnZ9HiTpzXeY8j4Qxh7eEPkcM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J5jL15/ZggiB//3835TMN3jw4jGvTN1hbV83U0GggX7zajZoFFU3MaXHAncNCHZNP
-         uYCl/DjFc3ueFj3RhLeg5yKAiHyZAIXA7kwOf4DeHEeJOoYgI8Pk9hAb9IJEfJq2r7
-         96HucyLcPfdqfGCGYrBjouQ6xrquHVYLpnSPMOBKyhYSVyx9llOSWj/61PZn484DTW
-         VSwYiS+w8J4+5jVBCFdF20YcJwJrEN/WGwnEL0YhdYZ7c/gA0XmMzo5I4y4+ni3Bt6
-         oJCoxJYW3+gTkcq70+PQoTDVQd23r279Ag2a+vHYnlnTTM6j3lkcfbyGBEkpFzNuH2
-         Clg5RWQwjeWfQ==
-Received: by mail-lf1-f46.google.com with SMTP id b2so29600586lfp.6;
-        Wed, 02 Nov 2022 11:26:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2Wm77KXoDxcwtGWj8qAZZtfR0sqB719nVd5c9yoiO6gVCo79JP
-        M1jifYn2UWzQzenPycVUDUYiCR6myG7MfHKpiQ==
-X-Google-Smtp-Source: AMsMyM7kjGNrP3+8CtQwqjr4zosxnOmrv8yYX7CqgC43OsFofOIvtBA61DXFtaoqkMCrosPPhD7KyRmyDY2H7UVJfF0=
-X-Received: by 2002:a19:f24b:0:b0:4ab:cd12:d282 with SMTP id
- d11-20020a19f24b000000b004abcd12d282mr10160512lfk.74.1667413573707; Wed, 02
- Nov 2022 11:26:13 -0700 (PDT)
+        with ESMTP id S231575AbiKBSpI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 14:45:08 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5812FC06
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 11:45:06 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id k2so6804338qkk.7
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 11:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qwMjg0saElDDpZvRFhfvApzBKYcp7fB4XgxFqTJpFWI=;
+        b=iGaADkhPbx01tqF1+AYct8FpWGDExhUT2ThVozEDuaLinordiXkfGKDZpED19wmdIp
+         gXoCt6vU+OA79pnmBQTyTQ4nfrFkGI4DNHP7o9BhEAnjd+u8NRo8BW7r3Q0mdz539oLN
+         tVWVrYO8X1atqcXLlOd1aKpzCxaKFmbFfwObPNU+OSowx4qHLKMXDh746xPhIZ6pX62S
+         A/bUZ4W3kYHaExw5AgcH8cks2eKcfFscaYfeWwvwDC7AeXwdAZtiXw+qpTsY/gE7rgpE
+         /I8/DTlg/hLmd9HOumtV4uncWgUKqgTz2i8gJQnlmEU+2zBkvs+rs3l7gDxl907ltBtC
+         j/uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qwMjg0saElDDpZvRFhfvApzBKYcp7fB4XgxFqTJpFWI=;
+        b=JijCXGRSca11AX8mauMMty72iqkjI26Wkqp4yvDm70SF9e8wwhsQ7RRWeVjFi3pENx
+         42HF6259OxCvYUHBFA/dQbeCHOp2ssPs0h8ar9uWNLf7NGc9yw1xT+0fBw9mtJNUB4F5
+         wbuPL/vwsEnMjltCOL4aVzGMrX4WR4ol5D28nqwVQut/9FjDxBwW+37g8aYj+3qeSQ4h
+         5gfkvd5P+kYKyE0MZRJ7XvR1mm27kIQ0thXmCgSPpd2M7N3nG3unVzO66T28F/DS/O0N
+         N0C055JpqNISXJ3VP23QvFcsqaGXsTmK3ru3x0080iTNFanuPrvcq0kP7BHbkx/uTwVa
+         2Qsg==
+X-Gm-Message-State: ACrzQf3ILHGOfUla1TYS3ym/WIMykdxNWBT5jp7uo6lF7WfPl0TdhYa+
+        LB3WFdsaJ7AzLD7hNVnIvhSTDQ==
+X-Google-Smtp-Source: AMsMyM7qMH4VE42ylFBZd3s7+XZqRDReXC3eIHhr14XAC1ZQJeiWIRtuqGId4UaNsQI7xBD3vRaSbQ==
+X-Received: by 2002:a05:620a:13fa:b0:6fa:15e3:a277 with SMTP id h26-20020a05620a13fa00b006fa15e3a277mr17133309qkl.479.1667414705461;
+        Wed, 02 Nov 2022 11:45:05 -0700 (PDT)
+Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05620a425000b006e54251993esm9090413qko.97.2022.11.02.11.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:45:04 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Zhang Qing <zhangqing@rock-chips.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] dt-bindings: power: supply: define monitored-battery in common place
+Date:   Wed,  2 Nov 2022 14:44:59 -0400
+Message-Id: <20221102184501.109148-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <136157bd1f94c64504f87ee2db6b3ed0a8dcc3de.1667254476.git.daniel@makrotopia.org>
- <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
-In-Reply-To: <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 2 Nov 2022 13:26:04 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
-Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: thermal: mediatek: add compatible string
- for MT7986 SoC
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 6:08 PM Daniel Golle <daniel@makrotopia.org> wrote:
->
-> Add compatible string 'mediatek,mt7986-thermal' for V3 thermal unit
-> found in MT7981 and MT7986 SoCs.
->
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
->  1 file changed, 1 insertion(+)
+Define the type of monitored-battery in power-supply.yaml common schema.
+Reference the schema where applicable to enforce the above in bindings
+which have monitored-battery property.
 
-Resending as the reply headers got lost...
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Acked-by: Rob Herring <robh@kernel.org>
+---
+
+Changes since v1:
+1. Re-work the patch - define the type in power-supply.yaml.
+---
+ Documentation/devicetree/bindings/mfd/ene-kb930.yaml        | 6 +++---
+ Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml   | 2 ++
+ Documentation/devicetree/bindings/power/supply/bq27xxx.yaml | 2 --
+ .../devicetree/bindings/power/supply/ingenic,battery.yaml   | 4 ++--
+ .../devicetree/bindings/power/supply/power-supply.yaml      | 6 ++++++
+ .../devicetree/bindings/power/supply/rohm,bd99954.yaml      | 1 +
+ .../devicetree/bindings/power/supply/sc2731-charger.yaml    | 1 -
+ 7 files changed, 14 insertions(+), 8 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/mfd/ene-kb930.yaml b/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+index 06ed9ec8f4bb..7c0a42390f18 100644
+--- a/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
++++ b/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+@@ -13,6 +13,8 @@ description: |
+ maintainers:
+   - Dmitry Osipenko <digetx@gmail.com>
+ 
++$ref: /schemas/power/supply/power-supply.yaml
++
+ properties:
+   compatible:
+     items:
+@@ -22,15 +24,13 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  monitored-battery: true
+-  power-supplies: true
+   system-power-controller: true
+ 
+ required:
+   - compatible
+   - reg
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+index 935e17099213..269fb85b2027 100644
+--- a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
++++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+@@ -124,6 +124,8 @@ properties:
+       The child node for the charger to hold additional properties. If a
+       battery is not in use, this node can be omitted.
+     type: object
++    $ref: /schemas/power/supply/power-supply.yaml
++
+     properties:
+       monitored-battery:
+         description: |
+diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+index 65fc6049efc1..347d4433adc5 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+@@ -60,13 +60,11 @@ properties:
+ 
+   monitored-battery:
+     description: |
+-       phandle of battery characteristics node.
+        The fuel gauge uses the following battery properties:
+        - energy-full-design-microwatt-hours
+        - charge-full-design-microamp-hours
+        - voltage-min-design-microvolt
+        Both or neither of the *-full-design-*-hours properties must be set.
+-       See Documentation/devicetree/bindings/power/supply/battery.yaml
+ 
+   power-supplies: true
+ 
+diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+index 46527038bf22..42fcfc026972 100644
+--- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
++++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+@@ -10,6 +10,8 @@ title: Ingenic JZ47xx battery bindings
+ maintainers:
+   - Artur Rojek <contact@artur-rojek.eu>
+ 
++$ref: power-supply.yaml#
++
+ properties:
+   compatible:
+     oneOf:
+@@ -28,8 +30,6 @@ properties:
+ 
+   monitored-battery:
+     description: >
+-      phandle to a "simple-battery" compatible node.
+-
+       This property must be a phandle to a node using the format described
+       in battery.yaml, with the following properties being required:
+       - voltage-min-design-microvolt: drained battery voltage,
+diff --git a/Documentation/devicetree/bindings/power/supply/power-supply.yaml b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+index 2f672e6e8d72..4e54c937973e 100644
+--- a/Documentation/devicetree/bindings/power/supply/power-supply.yaml
++++ b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+@@ -18,4 +18,10 @@ properties:
+       This property is added to a supply in order to list the devices which
+       supply it power, referenced by their phandles.
+ 
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      The battery (with "simple-battery" compatible) being monitored by this
++      power supply.
++
+ additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+index 24b06957b4ca..14d9b42eda27 100644
+--- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
++++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+@@ -18,6 +18,7 @@ description: |
+   provides a Dual-source Battery Charger, two port BC1.2 detection and a
+   Battery Monitor.
+ 
++$ref: power-supply.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
+index eeb043f9bb4f..735f7d372ae1 100644
+--- a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
++++ b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
+@@ -28,7 +28,6 @@ properties:
+       The charger uses the following battery properties
+       - charge-term-current-microamp: current for charge termination phase.
+       - constant-charge-voltage-max-microvolt: maximum constant input voltage.
+-      See Documentation/devicetree/bindings/power/supply/battery.yaml
+ 
+ additionalProperties: false
+ 
+-- 
+2.34.1
+
