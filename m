@@ -2,90 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07908616634
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 16:32:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDA06167F1
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 17:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiKBPb7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 11:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S231510AbiKBQNK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 12:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbiKBPbp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 11:31:45 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E52E52CC87
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 08:30:52 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id w4so932244qts.0
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 08:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fAaNeYtIE9F0QZElZY6MMMzf/k79uGm8TBc9K2sR8Wk=;
-        b=vuosTVMmmwcG1J2BRW4nrC+4OXNBIDiN9/tRTAC7tQPjiHq6uWPTuUlzmNfZet6yV3
-         TcjNW37nn45+prgcA0Mc4KKbb7/ZRK9qKq3KPzmQGDVCtSIHZvAjwmtKol/BpW9O3x0U
-         a4Ic456oeZNXO5Ua2OI7lwIBeG+dqRIu9N/COesN1aRfL0jXZWvsgOIjhtRQQDFLhAIh
-         r/q5XtdT8ohSY0nOMRaNsdSKAbOx2xu4FYNoC9hrrkUdg/a7MBzcXt7QNrfomsLxG3fW
-         fI+NcKjcztFJ8ui2rVw3gDUUR8hXmHHAu8s082e/3XqPPott3Vtr8HSM8XEH5Xwollv0
-         KnTg==
+        with ESMTP id S231545AbiKBQL4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 12:11:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70C52C659
+        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 09:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667405459;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=818fkauCT2wdZz4+yrO04ax3xbhchL67Khz2gBKnDvo=;
+        b=Xrzn310YUBWrHMzEDHCVcREpm2qx9/ZaBjMcAZHADIK8bOijfv9MgsJ0Dfnf3rVlHs4iac
+        0q482ShXaGM72jK9k5POGgPJa63HPvmrLTEjJtdrdDGKn/FTfEvSlJ7+YcHBCLHm4X04d3
+        C9rUdWD7oOZ3znYAuwhxOhgSwDZopc4=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-400-eatZlJ_iM4uXyVC5EccmOg-1; Wed, 02 Nov 2022 12:10:57 -0400
+X-MC-Unique: eatZlJ_iM4uXyVC5EccmOg-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-13bb98bb80fso9241964fac.23
+        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 09:10:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fAaNeYtIE9F0QZElZY6MMMzf/k79uGm8TBc9K2sR8Wk=;
-        b=JHsBxdGfEcajIBjQhXLMhRCoz70Bw569lRSUoihaBzSST4MdjmOQlpjoCPSVUBaNV8
-         A2+4Q79KmqwLV9yqMj8THd9bq1E0jRix9lUNZ7dN98R+IzXquKHlOSGky4cMljwe+SCh
-         BitYngz9wYqq6anH43QC5elGrwjR5yCYn6G0SWxCkZVIQ8cSvWgSRYqIhyJnKTt89r50
-         g1XfQq4oy4GlHEYuRMk9auNBYSpUuwA572Ame4KZ5O8YiWDFqfZwM3Mx+HLOjHYW2x1A
-         +2IBkdvcrErw3wewvQuOW36sIDDiNXuf6f8bOWq6BSY92rJdsPZKyAobuRrTvWuEHguz
-         WZnQ==
-X-Gm-Message-State: ACrzQf1dsQ8vhmjML17Toirq8lrz2lpUm/rvMkvuOjVsWl+OXJBxwm2C
-        B5DjENUJEHOGxEXSHtNtVoVwZg==
-X-Google-Smtp-Source: AMsMyM69BMjOyTlyjAH1Asg2OhIG7ZGYclnIc7HwK2Wz2y3w9kvGB7H1VQqv5CxwWV2fQhrr1v2ppg==
-X-Received: by 2002:ac8:7d8c:0:b0:39c:f4b6:f02f with SMTP id c12-20020ac87d8c000000b0039cf4b6f02fmr19764674qtd.252.1667403052090;
-        Wed, 02 Nov 2022 08:30:52 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id t1-20020a05620a450100b006cbcdc6efedsm8794176qkp.41.2022.11.02.08.30.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 08:30:51 -0700 (PDT)
-Message-ID: <d7f245d9-2b4c-089e-44cf-a97f8b2d5769@linaro.org>
-Date:   Wed, 2 Nov 2022 11:30:50 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=818fkauCT2wdZz4+yrO04ax3xbhchL67Khz2gBKnDvo=;
+        b=Ui+86LU3wJebnjQJGimAfUltW0hfQQnKHkW3kVxOsvea4qAeQXHwFa6fdodmQzvWNd
+         Iuqivw8r8EqoMDNHAsFOdSVi03Q5cgLJgjV1n/krsbpv4luP9S4BovVvGTEoAtzLt7DN
+         mSNAEh5lyTq05NAlixoIP1nIUrXlepWuQderh5HWxW1fgkuq+z1vVtA8TRGqOio6OBjy
+         nqMUhdNlsQaQCrj22jO1BL5cRaDuI4OR0vXLYo8dUkvP2CCIMhMMj5uFfIfzLWdSVkD9
+         21qsdostuRjtNkARrkBGGKgifY1Koival5hxIFVQu2d/KFmlhxuo2FK0NbaDC8/anDnC
+         xhLA==
+X-Gm-Message-State: ACrzQf208rZqFU+YUWvdQ3GZUKNUJ/M6w9b1uFr+G5CZTsAPNHkVsrrl
+        +So19bjeQLrwFivJy9rMLNhJCCH08rQjPay/TEYkiIgX8nM4CSJ2ND8DuKalHeqXivfizsbomfa
+        y5tuSiqIx0HTWWCj3a5E=
+X-Received: by 2002:a05:6870:d107:b0:13c:b7de:ed24 with SMTP id e7-20020a056870d10700b0013cb7deed24mr13325200oac.41.1667405455667;
+        Wed, 02 Nov 2022 09:10:55 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4FieKkr532FessZ6Ca/K73+gPVeRaDL1sIRNXwQUYUk+qc5sJ3R2bzyDCiDORWw+yibzS7Nw==
+X-Received: by 2002:a05:6870:d107:b0:13c:b7de:ed24 with SMTP id e7-20020a056870d10700b0013cb7deed24mr13325186oac.41.1667405455472;
+        Wed, 02 Nov 2022 09:10:55 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::41])
+        by smtp.gmail.com with ESMTPSA id bx25-20020a056830601900b0066c312b044dsm5207253otb.27.2022.11.02.09.10.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 09:10:55 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 11:10:52 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal: qcom-spmi-adc-tm5: suppress probe-deferral
+ error message
+Message-ID: <20221102161052.eox4sxhvfzl6dhfn@halaney-x13s>
+References: <20221102152630.696-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: cpufreq: ti-cpufreq: Enable AM625 CPUFreq
-Content-Language: en-US
-To:     Vibhore Vardhan <vibhore@ti.com>, nm@ti.com, vigneshr@ti.com,
-        kristo@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        viresh.kumar@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221101171022.133322-1-vibhore@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221101171022.133322-1-vibhore@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102152630.696-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/11/2022 13:10, Vibhore Vardhan wrote:
-> Hi,
-> This series enables CPUFreq for AM625. This version is a fixup and 
-> rebase of the patch series by Dave Gerlach on v6.1-rc3 [1].
+On Wed, Nov 02, 2022 at 04:26:30PM +0100, Johan Hovold wrote:
+> Drivers should not be logging errors on probe deferral. Switch to using
+> dev_err_probe() to log failures when parsing the devicetree to avoid
+> errors like:
 > 
+> 	qcom-spmi-adc-tm5 c440000.spmi:pmic@0:adc-tm@3400: get dt data failed: -517
+> 
+> when a channel is not yet available.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Use subject prefixes matching the subsystem - missing PATCH. Tools are
-doing it automatically. You kind of break people's filters...
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-Best regards,
-Krzysztof
+> ---
+>  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> index a3310bf061cb..c70615d2d771 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+> @@ -1031,10 +1031,8 @@ static int adc_tm5_probe(struct platform_device *pdev)
+>  		return irq;
+>  
+>  	ret = adc_tm5_get_dt_data(adc_tm, node);
+> -	if (ret) {
+> -		dev_err(dev, "get dt data failed: %d\n", ret);
+> -		return ret;
+> -	}
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "get dt data failed\n");
+>  
+>  	ret = adc_tm->data->init(adc_tm);
+>  	if (ret) {
+> -- 
+> 2.37.3
+> 
 
