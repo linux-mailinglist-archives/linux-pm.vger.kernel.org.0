@@ -2,156 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F7E86160BA
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 11:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1177616453
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 15:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiKBKVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 06:21:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
+        id S230216AbiKBOCu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 10:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKBKVH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 06:21:07 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADEE24BCA;
-        Wed,  2 Nov 2022 03:21:06 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id f9so15852372pgj.2;
-        Wed, 02 Nov 2022 03:21:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w+v+Uk4ph8G3ivevMkDD1+/l5JO6IeLjWfLLSRXlGKg=;
-        b=GVZOwlOBgXY+2rToRwZ6Q4ktnqTnUjC1UK4TrgdxvWLKFpuYvjriu5/Q49S7RJgJBz
-         G0dYOCm1P4oLO42bh/MEIxiQH2wF3DNQGVYsaa20gnhNCmKYRxKe/fhSKVD87ve7g10g
-         iDawmziHNrZ5+07pjlmw84SjAkFXaGj0dQFvZincZNE7IPbzkem201AUYnmNQyRAC6yI
-         9FMDDgE0vlOKefKr+WYYwWYTLgdDWEh8reaaq2Gj6znuZU8YzBg+NwpcWHH3P3LlT/3d
-         YxbzTJ5+EnLzF32Le8sc67JbK+ckjX4C1oDBWzCY0miH0uphW+8pQB6cGmYGWXcTb6lG
-         7pHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w+v+Uk4ph8G3ivevMkDD1+/l5JO6IeLjWfLLSRXlGKg=;
-        b=yZzAPVTEnGBn6KFXL4fKgCd6EZXqD+0Qt4OQQE7eWNEFg8/yt1xxnx+Kn0XLT6Ikg2
-         08nKMAaOcNuQwEA7Nu4VbireStmTDejQeETtgqr6Amv1yyUwgt1z6PWRCpgyLReITQ8X
-         MGgqM1L0X+2IRhsoRYyxxA0j5ljIZIPsjeywDmd3vzed6nT58AbQ/8RzCt2JatWz5gQZ
-         pQ5HZLUw8alYPorMJY3fwVS6p153B3hs7NzNtUQRCmVf1bOoxi8Hs9Q02BbQo63WDWQO
-         sc7vqTRfvHiPFCHkzZZ5/uUyPcnrfrNH3vUpQHrblpI59G8AydSeITAV8OJj9/NgklUY
-         1r+Q==
-X-Gm-Message-State: ACrzQf35j8gqBB1yfWJI5Ozs+0K5xMFjj26Kr0uwvfW8WuOFaqZe1IYa
-        TJhkUr8oVbb99AShGt0Uuns=
-X-Google-Smtp-Source: AMsMyM4LOhJz5rxgtFjV6yVXQUawGjAc8IinLj4FnHJo3GNB+7LqwgTK52RVRShmpwXtpX0XTr2vdw==
-X-Received: by 2002:a63:ce54:0:b0:46a:e2a9:c7f6 with SMTP id r20-20020a63ce54000000b0046ae2a9c7f6mr20856483pgi.264.1667384466034;
-        Wed, 02 Nov 2022 03:21:06 -0700 (PDT)
-Received: from localhost.localdomain (2403-580a-80ed--90b3-8553.ip6.aussiebb.net. [2403:580a:80ed::90b3:8553])
-        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176acd80f69sm7919680pln.102.2022.11.02.03.21.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 03:21:05 -0700 (PDT)
-From:   James Calligeros <jcalligeros99@gmail.com>
-To:     viresh.kumar@linaro.org
-Cc:     asahi@lists.linux.dev, jcalligeros99@gmail.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
-        sboyd@kernel.org, vireshk@kernel.org
-Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
-Date:   Wed,  2 Nov 2022 20:20:13 +1000
-Message-Id: <20221102102011.11623-1-jcalligeros99@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
-References: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
+        with ESMTP id S230341AbiKBOCd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 10:02:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D312DCE21;
+        Wed,  2 Nov 2022 07:02:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBD4D1FB;
+        Wed,  2 Nov 2022 07:02:21 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.67.104])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EB4A3F534;
+        Wed,  2 Nov 2022 07:02:13 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 14:01:40 +0000
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
+Message-ID: <Y2J4RFiOeJ5XymlI@e126311.manchester.arm.com>
+References: <20221031121314.1381472-1-kajetan.puchalski@arm.com>
+ <20221031121314.1381472-3-kajetan.puchalski@arm.com>
+ <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
->> The opp-microwatt property was added with the intention of providing
->> platforms a way to specify a precise value for the power consumption
->> of a device at a given OPP to enable better energy-aware scheduling
->> decisions by informing the kernel of the total static and dynamic
->> power of a device at a given OPP, removing the reliance on the EM
->> subsystem's often flawed estimations. This property is parsed by
->> opp_parse_supplies(), which creates a hard dependency on the
->> opp-microvolt property.
->> 
->> Some platforms, such as Apple Silicon, do not describe their devices'
->> voltage regulators in the DT as they cannot be controlled by the kernel
->> and/or rely on opaque firmware algorithms to control their voltage and
->> current characteristics at runtime. We can, however, experimentally
->> determine the power consumption of a given device at a given OPP, taking
->> advantage of opp-microwatt to provide EAS on such devices as was initially
->> intended.
+On Mon, Oct 31, 2022 at 11:24:06PM -0700, Doug Smythies wrote:
 
->Do you supply a regulator to the OPP core for your platform ?
+> Ignoring the metrics is not the correct thing to do.
+> Depending on the workflow, it can severely bias the idle states deeper
+> than they should be because most of the needed information to select
+> the appropriate shallow state is tossed out.
 
-On Apple SoCs, all the regulators are controlled transparently
-by the hardware/firmware. The CPUfreq driver requests a pstate as
-described in the OPP table by setting some bits in some registers, and
-the platform handles everything else.
+Interesting, thanks for flagging this actually. Arguably it made sense
+originally but with v3 changes it probably causes more harm than good.
 
-Not only is there no use for the voltage and current information from
-the kernel's perspective since there's nothing to control, we don't
-even really have a way to reliably model their behaviour.
+From testing it on my own side it still looks all right without the
+skipping metrics part so I'm fine with just dropping it from the patch.
+V4 it is.
 
-What we can do, however, is use energy counter registers in the core
-clusters to determine energy consumption at a given pstate and register
-that with the OPP core using the opp-microwatt property. Given that its
-stated purpose is to enable such behaviour, requiring it to be coupled
-to opp-microvolt is a major design deficiency.
+I'll include my updated numbers and more tests in the new cover letter.
 
->> Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
+> Example 1:
+> 2 pairs of ping pongs = 4 threads
+> Parameters chosen such that idle state 2 would be a most used state.
+> CPU frequency governor: Schedutil.
+> CPU frequency scaling driver: intel_cpufreq.
+> HWP: Disabled
+> Processor: i5-10600K (6 cores 12 cpus).
+> Kernel: 6.1-rc3
+> Run length: 1e8 cycles
+> Idle governor:
+> teo: 11.73 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
+> menu: 12.1 uSecs/loop ; idle state 1 ~3.3e6 exits/sec
+> util-v3: 15.2 uSecs/loop ; idle state 1 ~200 exits/sec
+> util-v4: 11.63 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
+> 
+> Where util-v4 is the same as this patch (util-v3) with the above code reverted.
+> 
+> Note: less time per loop is better.
+> 
+> Example 2: Same but parameters selected such that idle state 0 would
+> be a most used idle state.
+> Run Length: 4e8 cycles
+> Idle governor:
+> teo: 3.1 uSecs/loop ; idle state 0 ~1.2e6 exits/sec
+> menu:  3.1 uSecs/loop ; idle state 0 ~1.3e6 exits/sec
+> util-v3: 5.1 uSecs/loop ; idle state 0 ~4 exits/sec
+> util-v4: ? uSecs/loop ; idle state 0 ~1.2e6 exits/sec (partial result)
 
->I won't call it a fix, we are trying to use this information in a
->different way here, that's all.
+Thanks a lot for the testing!
 
-My interpretation of the commit message for 32bf8bc9a077 is that this
-is the way in which the property was intended to be used, and that it not
-working like this is a bug. Quoting the commit message, "Some of the platforms
-don't expose voltage information, thus it's not possible to use EM
-registration using DT. This patch aims to fix it." 
-
-There is probably a bigger discussion to be had on whether or not parsing
-opp-microwatt for the purpose of EM registration should be entangled in
-opp_parse_supplies() at all, but that's by the by.
-
->If there is a regulator, then we must have microvolt property.
->amps/watts are optional.
-
-I noticed no adverse effects from not having opp-microvolt in my testing of
-this patch, possibly because the data is not used to actually puppeteer any
-supplies. This goes back to the greater discussion, though. If we're going
-to use opp_parse_supplies() to do EM registration stuff then having the
-check for a valid representation of an actual VRM should probably happen
-elsewhere, where a valid VRM is actually a hard requirement of the code being
-run.
-
->> -			return -EINVAL;
->> -		}
->>  	}
->>  
->> -	if (unlikely(supplies == -1)) {
->> -		/* Initialize regulator_count */
->> -		supplies = opp_table->regulator_count = 1;
->> -	} else if (unlikely(!supplies)) {
->> -		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
->> -		return -EINVAL;
->> +	if (prop_mv) {
->> +		vcount = of_property_count_u32_elems(opp->np, name);
->> +		if (unlikely(supplies == -1))
->> +			supplies = opp_table->regulator_count = vcount;
-
->This is wrong. There can be one or three entries per regulator here.
->Target or min/max/target. If the supplies value is -1, we can only
->support one regulator, i.e. one or three entries total.
-
-Ack.
-
-- James
-
+---
+Kajetan
