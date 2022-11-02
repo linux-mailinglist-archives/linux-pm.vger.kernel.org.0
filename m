@@ -2,60 +2,37 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DDA06167F1
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 17:14:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E626168BE
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 17:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231510AbiKBQNK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 12:13:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50130 "EHLO
+        id S231721AbiKBQ2V (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 12:28:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231545AbiKBQL4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 12:11:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D70C52C659
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 09:10:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667405459;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=818fkauCT2wdZz4+yrO04ax3xbhchL67Khz2gBKnDvo=;
-        b=Xrzn310YUBWrHMzEDHCVcREpm2qx9/ZaBjMcAZHADIK8bOijfv9MgsJ0Dfnf3rVlHs4iac
-        0q482ShXaGM72jK9k5POGgPJa63HPvmrLTEjJtdrdDGKn/FTfEvSlJ7+YcHBCLHm4X04d3
-        C9rUdWD7oOZ3znYAuwhxOhgSwDZopc4=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-400-eatZlJ_iM4uXyVC5EccmOg-1; Wed, 02 Nov 2022 12:10:57 -0400
-X-MC-Unique: eatZlJ_iM4uXyVC5EccmOg-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-13bb98bb80fso9241964fac.23
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 09:10:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=818fkauCT2wdZz4+yrO04ax3xbhchL67Khz2gBKnDvo=;
-        b=Ui+86LU3wJebnjQJGimAfUltW0hfQQnKHkW3kVxOsvea4qAeQXHwFa6fdodmQzvWNd
-         Iuqivw8r8EqoMDNHAsFOdSVi03Q5cgLJgjV1n/krsbpv4luP9S4BovVvGTEoAtzLt7DN
-         mSNAEh5lyTq05NAlixoIP1nIUrXlepWuQderh5HWxW1fgkuq+z1vVtA8TRGqOio6OBjy
-         nqMUhdNlsQaQCrj22jO1BL5cRaDuI4OR0vXLYo8dUkvP2CCIMhMMj5uFfIfzLWdSVkD9
-         21qsdostuRjtNkARrkBGGKgifY1Koival5hxIFVQu2d/KFmlhxuo2FK0NbaDC8/anDnC
-         xhLA==
-X-Gm-Message-State: ACrzQf208rZqFU+YUWvdQ3GZUKNUJ/M6w9b1uFr+G5CZTsAPNHkVsrrl
-        +So19bjeQLrwFivJy9rMLNhJCCH08rQjPay/TEYkiIgX8nM4CSJ2ND8DuKalHeqXivfizsbomfa
-        y5tuSiqIx0HTWWCj3a5E=
-X-Received: by 2002:a05:6870:d107:b0:13c:b7de:ed24 with SMTP id e7-20020a056870d10700b0013cb7deed24mr13325200oac.41.1667405455667;
-        Wed, 02 Nov 2022 09:10:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4FieKkr532FessZ6Ca/K73+gPVeRaDL1sIRNXwQUYUk+qc5sJ3R2bzyDCiDORWw+yibzS7Nw==
-X-Received: by 2002:a05:6870:d107:b0:13c:b7de:ed24 with SMTP id e7-20020a056870d10700b0013cb7deed24mr13325186oac.41.1667405455472;
-        Wed, 02 Nov 2022 09:10:55 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::41])
-        by smtp.gmail.com with ESMTPSA id bx25-20020a056830601900b0066c312b044dsm5207253otb.27.2022.11.02.09.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:10:55 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 11:10:52 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
+        with ESMTP id S231419AbiKBQ2E (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 12:28:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2AA11C11;
+        Wed,  2 Nov 2022 09:23:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 65F08B823C0;
+        Wed,  2 Nov 2022 16:23:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EACC433C1;
+        Wed,  2 Nov 2022 16:23:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667406209;
+        bh=KAUYkNDElfqZbLWslfyhLBCbvIgG2boL2USce5w0SuM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FNU/w5LmJ90ySCfOHvrPDP6sRkqfmFtNG4on+782B7kLkKejL9BAytAXWZrAWAfey
+         cKGVROHBDvbVGrjUqSOVGW/ZGAS5DWu8LxPs9jVKysFgBtECNHmqufUMZyUOYeAR85
+         7CQwrEX5ZMhB74+uvKHCz/NHVsX0+Zoe6tF4LqMvLCek73AA+p+MdB8nvrzvZc7Ed0
+         OTw580ieh9+oJL/kTKZUEQgRA2flPodlhHRtBnAIkgkniIA9BDoXuCaq4G7Ei/+te1
+         sUeDk7Bh6F0cvI1AJJOmP26rU/xDXIl8T1Psbxmagvv3qWTgvZFnrEbKaMy5LCRMYQ
+         Ahx3IphMCRJ2w==
+Date:   Wed, 2 Nov 2022 21:53:16 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
 To:     Johan Hovold <johan+linaro@kernel.org>
 Cc:     Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>,
@@ -68,16 +45,16 @@ Cc:     Amit Kucheria <amitk@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH] thermal: qcom-spmi-adc-tm5: suppress probe-deferral
  error message
-Message-ID: <20221102161052.eox4sxhvfzl6dhfn@halaney-x13s>
+Message-ID: <20221102162316.GB10650@thinkpad>
 References: <20221102152630.696-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 In-Reply-To: <20221102152630.696-1-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,7 +72,13 @@ On Wed, Nov 02, 2022 at 04:26:30PM +0100, Johan Hovold wrote:
 > 
 > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+I did send a patch earlier for fixing this same issue but I did not use
+dev_err_probe(). So yours is better.
+
+Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+
+Thanks,
+Mani
 
 > ---
 >  drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 6 ++----
@@ -122,3 +105,5 @@ Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 > 2.37.3
 > 
 
+-- 
+மணிவண்ணன் சதாசிவம்
