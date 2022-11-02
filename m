@@ -2,112 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F270A616BEA
-	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 19:20:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74588616C19
+	for <lists+linux-pm@lfdr.de>; Wed,  2 Nov 2022 19:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbiKBSUa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 14:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45708 "EHLO
+        id S230303AbiKBS0a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 14:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231406AbiKBSUS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 14:20:18 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49AC2F386
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 11:20:17 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id 8so12321151qka.1
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 11:20:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PgH8+iPkG2HkoR14yXypmLmMN1g+buscpWKRVlqLP/4=;
-        b=g5qhWsDeWUZf+m5OUQo8qmB9Ed32os7oG2djVX3jvfoPzImGy93QlZFzE0xA6JaAP1
-         i3nBl8QrDECNpiCLKSXqjf3AWRSkqVyrIqs/b70/uXT68xqI3AHpNevHd+oVLt67wHS+
-         moepsm+88S8MFFd04DVnhHYtvHAPXWHkbiNS9ULg9447FU5uC2UtvPRcg2ls1wAEPQkW
-         4952B9OeWlb0zlICo8DNbqbjQvZxbaDG1f5fn4LMfeRa/ZLfi5M/AcN/d7JndSxHH7jc
-         y/+1kWOVqGNwO5BZ7J16JdRX7c/2kc+wbCjvDyfiLFprwFxCNHZy+JajwlVUn/SSVPwP
-         hjtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PgH8+iPkG2HkoR14yXypmLmMN1g+buscpWKRVlqLP/4=;
-        b=KuO2ikFhRw4Z4XaWnwQsiW7uVrssruggWPCfafmgqH3DennVlMMMxie1GrgG70IS4r
-         NcmpdN1CmoJjfpcKqAtkRBJeUdjnysEPhXI2SiQBSrYG5ZKEjrpswNhXIDkY7fqFnhid
-         MNCM/bD0OpY+ZeygpiBq2jIXFMGm48xlYxVmhvN6+U7fQFLXNf+9aa2WSXXMdkrFgCc9
-         hoew73GIwUGhnUVlB41Qf7m/ATvsm3v6cCu1VVe3DsAx2LLQMQLVdEic6qVsZovFf6AJ
-         3w57mT8zJLwRRFv+v9TAfIAGPfxSabA5nIC2eIrrPuBXCEaD49/2df+Cqi4AB5Wj1DrT
-         DfJA==
-X-Gm-Message-State: ACrzQf2XBCJFor4rQEEsVLY9Qx5NhOaDkrQdyF/+c7WPHP7sU95ve+hn
-        JIc1HjcdfPf9Y8ZM4l3SSM+VZxU06BYv6w==
-X-Google-Smtp-Source: AMsMyM5GtSz9/EmO99tqJRfQlpAcEwjit/B/NA1gRPPe8Y5GADPc9XgrOLxcMC64wuxEdHAyb+b5vA==
-X-Received: by 2002:a37:96c4:0:b0:6f9:f3f1:8e4e with SMTP id y187-20020a3796c4000000b006f9f3f18e4emr18631503qkd.534.1667413216822;
-        Wed, 02 Nov 2022 11:20:16 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id t1-20020a05620a450100b006cbcdc6efedsm9081995qkp.41.2022.11.02.11.20.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 11:20:16 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: power: supply: bq25890: use one fallback compatible
-Date:   Wed,  2 Nov 2022 14:20:11 -0400
-Message-Id: <20221102182011.106040-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S230370AbiKBS0Y (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 14:26:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623CB2F3B7;
+        Wed,  2 Nov 2022 11:26:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10042B82432;
+        Wed,  2 Nov 2022 18:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A64C433B5;
+        Wed,  2 Nov 2022 18:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667413575;
+        bh=0OnF8htTtPrhW90XoJmnZ9HiTpzXeY8j4Qxh7eEPkcM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J5jL15/ZggiB//3835TMN3jw4jGvTN1hbV83U0GggX7zajZoFFU3MaXHAncNCHZNP
+         uYCl/DjFc3ueFj3RhLeg5yKAiHyZAIXA7kwOf4DeHEeJOoYgI8Pk9hAb9IJEfJq2r7
+         96HucyLcPfdqfGCGYrBjouQ6xrquHVYLpnSPMOBKyhYSVyx9llOSWj/61PZn484DTW
+         VSwYiS+w8J4+5jVBCFdF20YcJwJrEN/WGwnEL0YhdYZ7c/gA0XmMzo5I4y4+ni3Bt6
+         oJCoxJYW3+gTkcq70+PQoTDVQd23r279Ag2a+vHYnlnTTM6j3lkcfbyGBEkpFzNuH2
+         Clg5RWQwjeWfQ==
+Received: by mail-lf1-f46.google.com with SMTP id b2so29600586lfp.6;
+        Wed, 02 Nov 2022 11:26:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2Wm77KXoDxcwtGWj8qAZZtfR0sqB719nVd5c9yoiO6gVCo79JP
+        M1jifYn2UWzQzenPycVUDUYiCR6myG7MfHKpiQ==
+X-Google-Smtp-Source: AMsMyM7kjGNrP3+8CtQwqjr4zosxnOmrv8yYX7CqgC43OsFofOIvtBA61DXFtaoqkMCrosPPhD7KyRmyDY2H7UVJfF0=
+X-Received: by 2002:a19:f24b:0:b0:4ab:cd12:d282 with SMTP id
+ d11-20020a19f24b000000b004abcd12d282mr10160512lfk.74.1667413573707; Wed, 02
+ Nov 2022 11:26:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <136157bd1f94c64504f87ee2db6b3ed0a8dcc3de.1667254476.git.daniel@makrotopia.org>
+ <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
+In-Reply-To: <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 2 Nov 2022 13:26:04 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
+Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: thermal: mediatek: add compatible string
+ for MT7986 SoC
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-BQ2589[0256] seem compatible between each other in major aspects and
-remaining features are auto-detectable (by reading device revision ID
-register).  Existing DTS already uses the compatibles with a fallback,
-so adjust the bindings to reflect this and fix dtbs_check warning:
+On Mon, Oct 31, 2022 at 6:08 PM Daniel Golle <daniel@makrotopia.org> wrote:
+>
+> Add compatible string 'mediatek,mt7986-thermal' for V3 thermal unit
+> found in MT7981 and MT7986 SoCs.
+>
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
+>  1 file changed, 1 insertion(+)
 
-  arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb: charger@6a: compatible: ['ti,bq25895', 'ti,bq25890'] is too long
+Resending as the reply headers got lost...
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/power/supply/bq25890.yaml  | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/power/supply/bq25890.yaml b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-index fd01ff10b4e0..ee51b6335e72 100644
---- a/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/bq25890.yaml
-@@ -15,11 +15,15 @@ allOf:
- 
- properties:
-   compatible:
--    enum:
--      - ti,bq25890
--      - ti,bq25892
--      - ti,bq25895
--      - ti,bq25896
-+    oneOf:
-+      - enum:
-+          - ti,bq25890
-+      - items:
-+          - enum:
-+              - ti,bq25892
-+              - ti,bq25895
-+              - ti,bq25896
-+          - const: ti,bq25890
- 
-   reg:
-     maxItems: 1
--- 
-2.34.1
-
+Acked-by: Rob Herring <robh@kernel.org>
