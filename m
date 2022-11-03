@@ -2,49 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EC94618747
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABEE618753
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbiKCSRM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 14:17:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52766 "EHLO
+        id S231334AbiKCSUB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 14:20:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbiKCSRL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:17:11 -0400
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354057641;
-        Thu,  3 Nov 2022 11:17:11 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id v8so1676779qkg.12;
-        Thu, 03 Nov 2022 11:17:11 -0700 (PDT)
+        with ESMTP id S230423AbiKCSUA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:20:00 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959CF12633;
+        Thu,  3 Nov 2022 11:19:59 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id i9so1683479qki.10;
+        Thu, 03 Nov 2022 11:19:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wwInbiQpYH0R+lv1Uxr2msjru8SH9TRKDoxjbpGyKW4=;
-        b=AKp4aMwwVdDIsIiADTHHRqHWv7tthcid9rYmx9Q8xMXLsqCCYFqAIHsXGq9b8yCsuQ
-         VVTXuDjTcObYeaiGOE9b5iPwOeuxhbfkJIt4jBMXkjwUqOtbDBKElift9uL2g6lrhvt1
-         BfvfV5P0jQudZL7M60Jola64+KzCfY/3N6l2tIB9FlRq9uHIh/HVbfvpeRXym72Hq5aR
-         dS/f5U7AiU824PjPmuEhRozPvmbGonRjCX1B3omN/M8lH5R1s2BQ8kRHVno7Tg5WWytV
-         u0s8E1NNM3VWuP+S0I2jO/Ts0Zn3ijDySe2K3y3KWudLD4g14+1S9syAqdhUCfzy3JZu
-         KIkQ==
-X-Gm-Message-State: ACrzQf2dQNaYBYhTltDWTiz0tJ/oGgmWOuPL9OiY3ZOfwVooCY1JudYU
-        o4Cu3MnBtD5Ff2h5ODt8XiiD4VjK/1X6vZlyRFU=
-X-Google-Smtp-Source: AMsMyM6tkfZXD9POFVGn74lYYhvpO+OzZF6kPvQKHvUQ/mKo3qFjTpRJL+iMMRsH1fnDuURk5k4+bn6aGfB71NXNX7E=
-X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr22592850qkl.443.1667499430353; Thu, 03
- Nov 2022 11:17:10 -0700 (PDT)
+        bh=3TLcpb+iCvLZOd/QMzRc0iBoGSARI75zWWPSuf5F76c=;
+        b=M9KCMo64TwyvQW/znAhmwF83eghX2V7oKeZq9VAU73c4+hBaBGxP+Tf4jJNS6aeTQH
+         9rl/bWi0a1hOUWQ4Hu85LjSYkGKFIJRp+3hsH1FF3Vy/AWxb/0z9Vyi7ynpG33PFyf5c
+         Au6LEMc4qI2GldL6KNjuj03jpFsWYovTNrIeopYs0pt2+aFwQ+uK3805pZFPPkHOT6D1
+         NURaEqG/xMkof33qOP+bjP1t/BWZa4qtaxQPcQz68O/Fp73JLHF+Y5nqHL4KYRNFPaxs
+         d2tCyWWvTlWU/sAjCbFW53qgoJ+FSKfDJJB6RZMSxTnNlWUPAjv3RPEXiZ2z2oZbpLAY
+         yLFg==
+X-Gm-Message-State: ACrzQf095cefVWSBSqp/oCV5z0jZ2jvW1SCTkfLskhpmwUENLCjb+TNJ
+        lZZb/0jakXGw2oWr6aN+UZ5Jgvau+LP+joVus6M=
+X-Google-Smtp-Source: AMsMyM4vqgEAH9OPc7S7MhURJsCmLThGF2sLAxVw6AfK5up6ttfDcphRecizCSKnQYPUVAvQNPAXCjJ3aeogAKA5lOM=
+X-Received: by 2002:a37:c4e:0:b0:6fa:c1c:6fc0 with SMTP id 75-20020a370c4e000000b006fa0c1c6fc0mr23461428qkm.501.1667499598727;
+ Thu, 03 Nov 2022 11:19:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221103143654.85275-1-colin.i.king@gmail.com>
-In-Reply-To: <20221103143654.85275-1-colin.i.king@gmail.com>
+References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+In-Reply-To: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 19:16:59 +0100
-Message-ID: <CAJZ5v0hN691V+n1HbUc5J8jZCwONMFQX4exGj=M6A8eeRgLjdw@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: SPEAr: Make read-only array sys_clk_src static
-To:     Colin Ian King <colin.i.king@gmail.com>
+Date:   Thu, 3 Nov 2022 19:19:47 +0100
+Message-ID: <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+To:     Stuart Hayes <stuart.w.hayes@gmail.com>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
@@ -57,30 +56,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 3:37 PM Colin Ian King <colin.i.king@gmail.com> wrote:
+On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
 >
-> Don't populate the read-only array sys_clk_src on the stack but instead
-> make it static and add in a missing const. Also makes the object code a
-> little smaller.
+> When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+> MSR) before the driver is registered with cpufreq.  This can be very time
+> consuming, because it is done with a CPU hotplug startup callback, and
+> cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+> on each CPU one at a time, waiting for each to run before calling the next.
 >
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> If cpufreq_register_driver() fails--if, for example, there are no ACPI
+> P-states present--this is wasted time.
+>
+> Since cpufreq already sets up a CPU hotplug startup callback if and when
+> acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+> which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+> exit quickly if it is loaded but not needed.
+>
+> On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
+>
+> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
 > ---
->  drivers/cpufreq/spear-cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+>  1 file changed, 3 insertions(+), 28 deletions(-)
 >
-> diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
-> index 7d0d62a06bf3..c6fdf019dbde 100644
-> --- a/drivers/cpufreq/spear-cpufreq.c
-> +++ b/drivers/cpufreq/spear-cpufreq.c
-> @@ -39,7 +39,7 @@ static struct clk *spear1340_cpu_get_possible_parent(unsigned long newfreq)
->          * In SPEAr1340, cpu clk's parent sys clk can take input from
->          * following sources
->          */
-> -       const char *sys_clk_src[] = {
-> +       static const char * const sys_clk_src[] = {
->                 "sys_syn_clk",
->                 "pll1_clk",
->                 "pll2_clk",
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index 1bb2b90ebb21..cb167263de72 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -535,15 +535,6 @@ static void free_acpi_perf_data(void)
+>         free_percpu(acpi_perf_data);
+>  }
+>
+> -static int cpufreq_boost_online(unsigned int cpu)
+> -{
+> -       /*
+> -        * On the CPU_UP path we simply keep the boost-disable flag
+> -        * in sync with the current global state.
+> -        */
+> -       return boost_set_msr(acpi_cpufreq_driver.boost_enabled);
+> -}
+> -
+>  static int cpufreq_boost_down_prep(unsigned int cpu)
+>  {
+>         /*
+> @@ -897,6 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>         if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
+>                 pr_warn(FW_WARN "P-state 0 is not max freq\n");
+>
+> +       set_boost(policy, acpi_cpufreq_driver.boost_enabled);
+> +
+>         return result;
+>
+>  err_unreg:
+> @@ -916,6 +909,7 @@ static int acpi_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+>
+>         pr_debug("%s\n", __func__);
+>
+> +       cpufreq_boost_down_prep(policy->cpu);
+>         policy->fast_switch_possible = false;
+>         policy->driver_data = NULL;
+>         acpi_processor_unregister_performance(data->acpi_perf_cpu);
+> @@ -972,25 +966,9 @@ static void __init acpi_cpufreq_boost_init(void)
+>         acpi_cpufreq_driver.set_boost = set_boost;
+>         acpi_cpufreq_driver.boost_enabled = boost_state(0);
+>
+> -       /*
+> -        * This calls the online callback on all online cpu and forces all
+> -        * MSRs to the same value.
+> -        */
+> -       ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "cpufreq/acpi:online",
+> -                               cpufreq_boost_online, cpufreq_boost_down_prep);
+> -       if (ret < 0) {
+> -               pr_err("acpi_cpufreq: failed to register hotplug callbacks\n");
+> -               return;
+> -       }
+>         acpi_cpufreq_online = ret;
+>  }
+>
+> -static void acpi_cpufreq_boost_exit(void)
+> -{
+> -       if (acpi_cpufreq_online > 0)
+> -               cpuhp_remove_state_nocalls(acpi_cpufreq_online);
+> -}
+> -
+>  static int __init acpi_cpufreq_init(void)
+>  {
+>         int ret;
+> @@ -1032,7 +1010,6 @@ static int __init acpi_cpufreq_init(void)
+>         ret = cpufreq_register_driver(&acpi_cpufreq_driver);
+>         if (ret) {
+>                 free_acpi_perf_data();
+> -               acpi_cpufreq_boost_exit();
+>         }
+>         return ret;
+>  }
+> @@ -1041,8 +1018,6 @@ static void __exit acpi_cpufreq_exit(void)
+>  {
+>         pr_debug("%s\n", __func__);
+>
+> -       acpi_cpufreq_boost_exit();
+> -
+>         cpufreq_unregister_driver(&acpi_cpufreq_driver);
+>
+>         free_acpi_perf_data();
 > --
 
 Applied as 6.2 material, thanks!
