@@ -2,173 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B897617B42
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 12:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22F61617B4E
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 12:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbiKCLCP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 07:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35782 "EHLO
+        id S229551AbiKCLE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 07:04:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiKCLCB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 07:02:01 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3990B11471
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 04:01:55 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id c2so1541768plz.11
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 04:01:55 -0700 (PDT)
+        with ESMTP id S231222AbiKCLEl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 07:04:41 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F47D11464
+        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 04:04:40 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 64so1348710pgc.5
+        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 04:04:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fsmUR9VBjzdfb/PGMg0vmzjLCq4QjfuLi4iPrW87qL0=;
-        b=GHinC0PrjwVZKhYfmM8nt17mNc2XQ9VSl2eWqe4GgpapVAog+Tw41GRAzFQDLdwSfh
-         3U27PBnVZm8Z31LLeWf798nvm6I8hmccO+gZsY8kqIMjeRMuE6yovKGZTftmyFWoNXMx
-         nQX/kahB2mbF7pom1+RpekbBuhWNpUUy/17bBbYAvjDZPAp5bqtFuWwQ7ii4/apHMqQ+
-         v5qdpSlzR0b4MQuhEkxaKojApu8ykXPymUmAb63meFdW3KxBXuYS4SBRtkmJIs4YHBrR
-         jeSy+UfYb4f/uBYwd9A/FslWy97JajxeHtcU1FLdd60oolyMEa/NwIYdHCCx5TozlFZ4
-         C/2Q==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DiXjM4iMvd43WrMIxSpRyTAtrsP97x/VxFMbhkANt6w=;
+        b=qiEjYezP0qOxICceOLv9V1EqtoBAf2owOkVNHlplVSMCgKx8KquyKvc36mvWqMKm3W
+         5I0TSDjWWgnvxNGPrkG8iFkObUQ5rxeAuG+Xe2JXtZ0xQ4cCXyFNp72BDfwOMUtBP2LM
+         bqTdxWuBK9GI4ju9i17L+B3i5RJ45eDAq/KINshzib/YUHQ56UrztrK+oPrhLbAQw1K9
+         e4sAkOcGB7fZ7P/qBzriTz7ttPyuTO0iHx+C9P8o9l4Dk8LbEJRY73TPwzd4IBkrLJbl
+         fN025GYddMZNoW1kb6pW5iGiMfoGhBuVpexU53P+mMJmYh8N9+C4su7qmoMGIKz4M988
+         OTHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fsmUR9VBjzdfb/PGMg0vmzjLCq4QjfuLi4iPrW87qL0=;
-        b=gBbwqoKvcjNOJq09hCSJpna/yCQ4S5aONm0ANpslKDyzNcCKW5fxlaiGcImKCiTb04
-         Mhy8iz574DFRy9DPuELRztr/FyOs0e1pAIXxenFgF+ex4For9UJ+HWzCtk5GzUTqxV5K
-         ABO5atOQj7I1ADk+ZSiZZp3su2D47lMTNvOupr3bXnrhOL8umPs1hmoZmZSD8aApRSpk
-         eencauuaTsVyc4S82ijziq1ObrZjor3fMcrB4CrZMHoWwQZ8+gJ5W64LXT1dxmiiiS4V
-         5OM4YGIBcTxoL3hKbBcn2SEup1SoyzQs7NretHYJNU/BW4sK1QJCmreAk1pZCtp1VZT4
-         pOkA==
-X-Gm-Message-State: ACrzQf2HK2L5Es+BIUNdsM+JBNHWp27ceCzJ6k1zJQ4geghKDMmAZNzL
-        Zxo8IRBj1j8O9sRZCqqdsWKIxA==
-X-Google-Smtp-Source: AMsMyM6XSKlbSK0JuqjYQIz/h/+VQHH4mk0vaC5SsBya5JFSTXHYTK4fF7hmoELCXp9bmqBQJsmNNw==
-X-Received: by 2002:a17:90b:3690:b0:213:c985:b5ee with SMTP id mj16-20020a17090b369000b00213c985b5eemr25247343pjb.192.1667473314641;
-        Thu, 03 Nov 2022 04:01:54 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DiXjM4iMvd43WrMIxSpRyTAtrsP97x/VxFMbhkANt6w=;
+        b=yOVtyVdCozZcqY9xDeXeV6C18ccJsRCzla55GHxgmlTxQ/CXrmavK/hhlKcWQAvCE1
+         0HO0BfcYT/9l7U+ApR2RofpV8NLn5I6BLGx9ZJ01jtqzfZsPStGguAWmwf2ryhBHcsdr
+         CMz7AcBmZTPsduyNuwwNwoAkuyFx4LL7WkK6PtXUt8o46zdicIzVkTsM9EOeMzQiJiWv
+         jL7KHB60vp1t4RD7K4g/POP+sbxJmrsRg91XgyaPL1OIwEKvaes3pqrOAbhsSxuv4CUc
+         5XLYWIWEmHbS0E7i3QrVVYUds/7ZnjLrHEBQbE6SAAIQ01n+KfgZu7kRy0BRQi7q5BHz
+         Tuww==
+X-Gm-Message-State: ACrzQf2ENIa2OQTpfVTxfpFD/Ndmz0BmfDhfivBR353u98Jc1tMkdPWw
+        0w9JL5ereHRk+ujlH5MCroX2DQ==
+X-Google-Smtp-Source: AMsMyM5+1lQ/y2nh9vFIrWD5JV4qg6JGTWNsSck0DDXg/GgvtF3S3J/dJ9NntHd213XBDRjmAnCB9A==
+X-Received: by 2002:a63:5d0b:0:b0:464:bb2b:9b0e with SMTP id r11-20020a635d0b000000b00464bb2b9b0emr25126297pgb.583.1667473479658;
+        Thu, 03 Nov 2022 04:04:39 -0700 (PDT)
 Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id b33-20020a630c21000000b00461b85e5ad6sm560176pgl.19.2022.11.03.04.01.42
+        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b00186ac812ab0sm399146plh.83.2022.11.03.04.04.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 04:01:43 -0700 (PDT)
+        Thu, 03 Nov 2022 04:04:38 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 16:34:35 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     James Calligeros <jcalligeros99@gmail.com>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH V2 5/5] OPP: decouple dt properties in opp_parse_supplies()
-Date:   Thu,  3 Nov 2022 16:31:08 +0530
-Message-Id: <5acd93462bff6c108d65802fd39f6002dfadd1a0.1667473008.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
-In-Reply-To: <cover.1667473008.git.viresh.kumar@linaro.org>
-References: <cover.1667473008.git.viresh.kumar@linaro.org>
+To:     James Calligeros <jcalligeros99@gmail.com>
+Cc:     asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, nm@ti.com, sboyd@kernel.org,
+        vireshk@kernel.org
+Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
+Message-ID: <20221103110435.5egvoqwppczmij3t@vireshk-i7>
+References: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
+ <20221102102011.11623-1-jcalligeros99@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102102011.11623-1-jcalligeros99@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: James Calligeros <jcalligeros99@gmail.com>
+On 02-11-22, 20:20, James Calligeros wrote:
+> On Apple SoCs, all the regulators are controlled transparently
+> by the hardware/firmware. The CPUfreq driver requests a pstate as
+> described in the OPP table by setting some bits in some registers, and
+> the platform handles everything else.
+> 
+> Not only is there no use for the voltage and current information from
+> the kernel's perspective since there's nothing to control, we don't
+> even really have a way to reliably model their behaviour.
+> 
+> What we can do, however, is use energy counter registers in the core
+> clusters to determine energy consumption at a given pstate and register
+> that with the OPP core using the opp-microwatt property. Given that its
+> stated purpose is to enable such behaviour, requiring it to be coupled
+> to opp-microvolt is a major design deficiency.
 
-The opp-microwatt property was added with the intention of providing
-platforms a way to specify a precise value for the power consumption
-of a device at a given OPP to enable better energy-aware scheduling
-decisions by informing the kernel of the total static and dynamic
-power of a device at a given OPP, removing the reliance on the EM
-subsystem's often flawed estimations. This property is parsed by
-opp_parse_supplies(), which creates a hard dependency on the
-opp-microvolt property.
+I wasn't asking this. I was rather asking if some code for your
+platform calls dev_pm_opp_set_regulators(). I assume No based on what
+you provided.
 
-Some platforms, such as Apple Silicon, do not describe their device's
-voltage regulators in the DT as they cannot be controlled by the kernel
-and/or rely on opaque firmware algorithms to control their voltage and
-current characteristics at runtime. We can, however, experimentally
-determine the power consumption of a given device at a given OPP, taking
-advantage of opp-microwatt to provide EAS on such devices as was
-initially intended.
+> >I won't call it a fix, we are trying to use this information in a
+> >different way here, that's all.
+> 
+> My interpretation of the commit message for 32bf8bc9a077 is that this
+> is the way in which the property was intended to be used, and that it not
+> working like this is a bug. Quoting the commit message, "Some of the platforms
+> don't expose voltage information, thus it's not possible to use EM
+> registration using DT. This patch aims to fix it." 
+> 
+> There is probably a bigger discussion to be had on whether or not parsing
+> opp-microwatt for the purpose of EM registration should be entangled in
+> opp_parse_supplies() at all, but that's by the by.
 
-Allow platforms to specify and consume any subset of opp-microvolt,
-opp-microamp, or opp-microwatt without a hard dependency on
-opp-microvolt to enable this functionality on such platforms.
+I get it. I will still skip the Fixes tag for now as that may make
+people backport this to older kernels, which we may not want as there
+are no broken users currently in mainline.
 
-Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
-Co-developed-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-V2: Rewritten by Viresh on top of his changes.
+> I noticed no adverse effects from not having opp-microvolt in my testing of
+> this patch, possibly because the data is not used to actually puppeteer any
+> supplies. This goes back to the greater discussion, though. If we're going
+> to use opp_parse_supplies() to do EM registration stuff then having the
+> check for a valid representation of an actual VRM should probably happen
+> elsewhere, where a valid VRM is actually a hard requirement of the code being
+> run.
 
- drivers/opp/of.c | 36 +++++++++++++++++++++++++-----------
- 1 file changed, 25 insertions(+), 11 deletions(-)
+I figured out that you had to make a lot of unrelated changes for this
+simple change, just because of the layout of the routine.
 
-diff --git a/drivers/opp/of.c b/drivers/opp/of.c
-index e51c43495e21..273fa9c0e1c0 100644
---- a/drivers/opp/of.c
-+++ b/drivers/opp/of.c
-@@ -654,9 +654,12 @@ static u32 *opp_parse_microvolt(struct dev_pm_opp *opp, struct device *dev,
- 		/*
- 		 * Missing property isn't a problem, but an invalid
- 		 * entry is. This property isn't optional if regulator
--		 * information is provided.
-+		 * information is provided. Check only for the first OPP, as
-+		 * regulator_count may get initialized after that to a valid
-+		 * value.
- 		 */
--		if (opp_table->regulator_count > 0) {
-+		if (list_empty(&opp_table->opp_list) &&
-+		    opp_table->regulator_count > 0) {
- 			dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
- 				__func__);
- 			return ERR_PTR(-EINVAL);
-@@ -674,7 +677,7 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
- 	bool triplet;
- 
- 	microvolt = opp_parse_microvolt(opp, dev, opp_table, &triplet);
--	if (IS_ERR_OR_NULL(microvolt))
-+	if (IS_ERR(microvolt))
- 		return PTR_ERR(microvolt);
- 
- 	microamp = _parse_named_prop(opp, dev, opp_table, "microamp", NULL);
-@@ -689,15 +692,26 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
- 		goto free_microamp;
- 	}
- 
--	for (i = 0, j = 0; i < opp_table->regulator_count; i++) {
--		opp->supplies[i].u_volt = microvolt[j++];
-+	/*
-+	 * Initialize regulator_count if it is uninitialized and no properties
-+	 * are found.
-+	 */
-+	if (unlikely(opp_table->regulator_count == -1)) {
-+		opp_table->regulator_count = 0;
-+		return 0;
-+	}
- 
--		if (triplet) {
--			opp->supplies[i].u_volt_min = microvolt[j++];
--			opp->supplies[i].u_volt_max = microvolt[j++];
--		} else {
--			opp->supplies[i].u_volt_min = opp->supplies[i].u_volt;
--			opp->supplies[i].u_volt_max = opp->supplies[i].u_volt;
-+	for (i = 0, j = 0; i < opp_table->regulator_count; i++) {
-+		if (microvolt) {
-+			opp->supplies[i].u_volt = microvolt[j++];
-+
-+			if (triplet) {
-+				opp->supplies[i].u_volt_min = microvolt[j++];
-+				opp->supplies[i].u_volt_max = microvolt[j++];
-+			} else {
-+				opp->supplies[i].u_volt_min = opp->supplies[i].u_volt;
-+				opp->supplies[i].u_volt_max = opp->supplies[i].u_volt;
-+			}
- 		}
- 
- 		if (microamp)
+I have included your patch in my series now, cc'd you. Please give
+that a try and see if it works or not. Thanks.
+
+I have kept your Authorship and Signed-off, hope that is fine.
+
 -- 
-2.31.1.272.g89b43f80a514
-
+viresh
