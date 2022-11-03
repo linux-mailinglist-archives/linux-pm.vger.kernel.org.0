@@ -2,188 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47734618352
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 16:56:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32E086183E8
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 17:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231891AbiKCP4Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 11:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58558 "EHLO
+        id S231473AbiKCQQA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 12:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiKCP4Y (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 11:56:24 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B8213E81
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 08:56:23 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id z1so1398389qkl.9
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 08:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tEdlO2eJHCWVqpq9ZVmfFrHoK+b5oUGHwUErbKgRbJo=;
-        b=ehxT8BnUuWvvgFR/WyjOn0EeBKCALG1yZXrAqTz8QVo/bXbWOKQimZ7PSY02mWw3eR
-         6Gyd99eRGa1Ay7XFHF5zwJ4JKbJtqYcY2es1g8JbRs0H6VceGJqd89HZq8RLTN3a8pRC
-         aZAM2E+sh9MkRwyXCuO1zVngZotQEmRnkr6oZclSbcdxB1lG1+dVicvR0lDkjNrteQ1h
-         ODlv68plAFnp9sDypLOyy3KbFtrCEqIdLS62H2tdQR4rsb4haernYYt11LUnH7vfimht
-         3dGZJUx0NVimXDkQsJWV5xJR0RXfkaQ0QLf1E9ellUyKCsmJRGrKQWstv7TjA8/OuKBy
-         58/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tEdlO2eJHCWVqpq9ZVmfFrHoK+b5oUGHwUErbKgRbJo=;
-        b=gokUw2TL8j5JFjNsn0NTym9dhwbKKLh4sfcFEVjrh/gUzcPxlnyx0wP+4ueKGvHlmQ
-         tj9Vr2RwnNqvlHFSU2TON/h4MxlgiYHYWcffkHyuc7tPnUlNmcqhJaL1L4GRDk0MOyjI
-         SThuB9Db8wAXSx8jpEP0crCcIL8qcruErhAMnHqZOK/TX7RmOcf3y2cpLJQOPNQbKnDQ
-         EGDV0tIzF04b3bKrxRTkpAptGfVadtC5PaWK7CN0Oe2Wh2NdBWw9KWO7kv23Zr39A/Hz
-         bjsoKMa0uqiz76+k2EqnqRaL9GSL39DTVUT8D6SvcW5eDL+giGqMAAWbHgOXC+SPCBPm
-         86Qg==
-X-Gm-Message-State: ACrzQf0mIy7S+HloRnBgjfcVqvZpJIg3J0Q/KK0ekEtnnuOQa41q+zpE
-        /bz3yf6zFaesU0nFydsmRlymfg==
-X-Google-Smtp-Source: AMsMyM49ONOs/YLVOtSG+GQhfYXHOv4K5GNKWD8MYoE8uTvwxAimwbp/ySZ0z8Zm/a1vmY+uuIF0BA==
-X-Received: by 2002:a37:6588:0:b0:6fa:3046:7f8b with SMTP id z130-20020a376588000000b006fa30467f8bmr15690041qkb.752.1667490982649;
-        Thu, 03 Nov 2022 08:56:22 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id ey21-20020a05622a4c1500b003988b3d5280sm725662qtb.70.2022.11.03.08.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:56:22 -0700 (PDT)
-Message-ID: <910c152d-5e1a-4667-2f0a-a1524f51958c@linaro.org>
-Date:   Thu, 3 Nov 2022 11:56:20 -0400
+        with ESMTP id S231873AbiKCQP7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 12:15:59 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E16178B8;
+        Thu,  3 Nov 2022 09:15:58 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7e7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 6C7FA1EC04F0;
+        Thu,  3 Nov 2022 17:15:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667492157;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BDVaUg54wfl/xCMdSJWmb+iMXlpz8E0yvyP08froxkM=;
+        b=oFxSCTS6oNB2G+pumgtyPaKAxY8PVtu0fQqnH2P97qCSp2dhuIbJWlEWbERe2EK51WtmoB
+        lCBDcS/cS86wRdh4MFsWLXOLTvw8dBZ7wRcv/3iI9auoEvys0OG59J263tsfWRrRtcr8Xt
+        IvrTN2ZlslquhYZN1UzaTwgNV2PXk50=
+Date:   Thu, 3 Nov 2022 17:15:52 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v5 00/16] x86: make PAT and MTRR independent from each
+ other
+Message-ID: <Y2PpOGaiapd4twQR@zn.tnic>
+References: <20221102074713.21493-1-jgross@suse.com>
+ <Y2KxSGWllUPTikJv@zn.tnic>
+ <a9c1ba97-340e-ed7b-ccdc-44a1aaff6d6d@suse.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 05/10] dt-bindings: interconnect: Add sm8350, sc8280xp and
- generic OSM L3 compatibles
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
- <20221028034155.5580-6-quic_bjorande@quicinc.com>
- <a364b343-fa19-348c-bc38-e8b44061890b@linaro.org>
- <20221103034410.GB5525@core-thresher1.qualcomm.com>
- <f3882934-9f95-39f1-83e4-6ce9efeb089c@linaro.org>
- <20221103154653.67mgsey57uvdcvx3@builder.lan>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103154653.67mgsey57uvdcvx3@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <a9c1ba97-340e-ed7b-ccdc-44a1aaff6d6d@suse.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/11/2022 11:46, Bjorn Andersson wrote:
-> On Thu, Nov 03, 2022 at 08:25:17AM -0400, Krzysztof Kozlowski wrote:
->> On 02/11/2022 23:44, Bjorn Andersson wrote:
->>> On Fri, Oct 28, 2022 at 06:12:29PM -0400, Krzysztof Kozlowski wrote:
->>>> On 27/10/2022 23:41, Bjorn Andersson wrote:
->>>>> Add EPSS L3 compatibles for sm8350 and sc8280xp, but while at it also
->>>>> introduce generic compatible for both qcom,osm-l3 and qcom,epss-l3.
->>>>>
->>>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->>>>> ---
->>>>>  .../bindings/interconnect/qcom,osm-l3.yaml    | 22 +++++++++++++------
->>>>>  1 file changed, 15 insertions(+), 7 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>> index bf538c0c5a81..ae0995341a78 100644
->>>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>> @@ -16,13 +16,21 @@ description:
->>>>>  
->>>>>  properties:
->>>>>    compatible:
->>>>> -    enum:
->>>>> -      - qcom,sc7180-osm-l3
->>>>> -      - qcom,sc7280-epss-l3
->>>>> -      - qcom,sc8180x-osm-l3
->>>>> -      - qcom,sdm845-osm-l3
->>>>> -      - qcom,sm8150-osm-l3
->>>>> -      - qcom,sm8250-epss-l3
->>>>> +    oneOf:
->>>>> +      items:
->>>>
->>>> oneOf expects a list, so this should be "    - items"
->>>>
->>>
->>> Ahh, thanks. Must have missed running the dt_binding_check on this one.
->>>
->>>>> +        - enum:
->>>>> +            - qcom,sc7180-osm-l3
->>>>> +            - qcom,sc8180x-osm-l3
->>>>> +            - qcom,sdm845-osm-l3
->>>>> +            - qcom,sm8150-osm-l3
->>>>> +        - const: qcom,osm-l3
->>>>
->>>> The concept is good, but are you sure all SoCs will be compatible with
->>>> generic osm-l3?
->>>
->>> Per the current implementation yes, worst case if one or more of them isn't the
->>> more specific compatible can be used to alter the behavior of that platform.
->>>
->>>> Why not using dedicated compatible of one soc, e.g. the
->>>> oldest here? We already did like that for BWMON, DMA and few others.
->>>>
->>>
->>> Because if we say compatible = "qcom,sc8180x-osm-l3", "qcom,sdm845-osm-l3" and
->>> there is a quirk needed for "qcom,sdm845-osm-l3" we're forced to add a "special
->>> case" every other *-osm-l3 in the driver.
->>>
->>> This way we can have a generic implementation for the qcom,osm-l3 and if we
->>> realize that we need to quirk something for the oldest platform, we can do so
->>> without affecting the others.
->>
->> True. This also means we do not really know which one is the generic
->> implementation :)
->>
-> 
-> There currently is an implementation without platform specific quirks, I
-> call that the generic implementation and suggest that we refer to that
-> using "qcom,osm-l3".>
-> If we instead were to use sdm845 as the generic compatible, and there
-> turns out to be a need for a quirk for this platform, you:
-> 
-> 1) no longer have a generic implementation, but 4 platform-specific
->    implementations
+On Thu, Nov 03, 2022 at 09:40:32AM +0100, Juergen Gross wrote:
+> Would it be possible to identify the patch causing that?
 
-It's okay because there is no such thing anymore as "generic
-implementation". If this happened, your generic compatible is not
-specific enough. It does not represent any specific hardware.
+Lemme try to find a smaller box which shows that too - that one is a
+pain to bisect on.
 
-Adding generic compatibles just to make driver binding easier, is a bit
-in contrast with DT which should focus on hardware description.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> 2) have 3 platforms claiming to be compatible with the quirked (now
->    specialized) implementation, which they clearly aren't anymore
-
-Yes, that's the problem and this is why I mentioned that we do not know
-the generic implementation. If we knew that sdm845 is the generic, we
-would not expect specific quirks for it.
-
-If you cannot make sdm845 generic because of unknown quirk, then you
-just do not know which one is generic implementation and that compatible
-is not specific enough... Or it is specific only to current Linux driver.
-
-> Therefor I favor using generic names for generic compatibles.
-
-They make driver development easier but they hide the real match between
-hardware and compatible.
-
-Best regards,
-Krzysztof
-
+https://people.kernel.org/tglx/notes-about-netiquette
