@@ -2,62 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18C6617435
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 03:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9339161751C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 04:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiKCC3x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 2 Nov 2022 22:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60074 "EHLO
+        id S230085AbiKCDhz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 2 Nov 2022 23:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKCC3v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 22:29:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBF5CCA
-        for <linux-pm@vger.kernel.org>; Wed,  2 Nov 2022 19:29:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DAEDA61CE4
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 02:29:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40541C433D6
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 02:29:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667442589;
-        bh=Sq9rrnqD8ccggdb87O4voEYKRkri+79IUG5ZurtLBw0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ELkh/9hOKPVdI921UsL+6dh+rB6zi46HipbiTzYZa33e5j6aBIt4WUOCjnJjObNOw
-         lAstUS/AI1OwVnasQT7vD6OqbpmXmvJYJvFoMjniE9sz23ltqSCzfTxvHwRQVaapSk
-         bnwkDqPXP426ULmGS0ME3nU3PO/c7vW70/dRlhCbmech2wr+rf3e1AUMO1wJ8a+1ie
-         vxkAp/7iU3nFZP4axSVKZymmCJhNAetC0vP3h9rMmrp68ZBiXYYscjNML1uAJ9/xtP
-         PzBWS1nSueijMbtzaZdaK8y9qvglwqX/wSm2caG14A8RRSBZougrE04dh/eYF5S0X7
-         LS+AEP/gNOBUA==
-Received: by mail-ej1-f52.google.com with SMTP id d26so1734379eje.10
-        for <linux-pm@vger.kernel.org>; Wed, 02 Nov 2022 19:29:49 -0700 (PDT)
-X-Gm-Message-State: ACrzQf09Wow9GpOubVBWNjXfE7/pVinsYdXLU7B1qi0HOY0wUiwOUSE6
-        fsMQ/Q4d8Fte9a4CyFS7ScZs9r6wnxpupUYki/g=
-X-Google-Smtp-Source: AMsMyM5Wul4EL1+0HB6fJSvjGNuQ/9zRaABncxYCB3vvel/ATwuEbQtpEjqmyBO25Udj0kDSMsI44W0H6B1d31dHUvI=
-X-Received: by 2002:a17:907:3ea2:b0:7ad:86f9:7b15 with SMTP id
- hs34-20020a1709073ea200b007ad86f97b15mr26399709ejc.272.1667442587444; Wed, 02
- Nov 2022 19:29:47 -0700 (PDT)
+        with ESMTP id S229570AbiKCDhy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 2 Nov 2022 23:37:54 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492401408F;
+        Wed,  2 Nov 2022 20:37:53 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A32Kjra010807;
+        Thu, 3 Nov 2022 03:37:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=7d5DQ2aJU83RE1U2XYB1vydBkrBxFxM1P93WKomtemo=;
+ b=oYQSdiSK6go0bJzBpjfc4XyI9fK1Lnv1/BMjnmALzhOAgy6IEBsTEY3Qr3EYguVAYeXA
+ SVgCw5eii5qYWp6IaxB+7IMsWlJ1/8S1JznBxd9N53+gVa6qCE9NxxYC4QbXn4ogFYLp
+ ZjhTEY2rPrZzk2WEWpRz357w7y4XoVsIe552Jz6dsS5BSG3xKWBlUDMXBvZGhsH6twBH
+ CAHQXvWFDjbn2cwX1dIR1DXN8pj3ffrIUhRuCssX+HFY6C5X8K/izYIhHvp6FUMJcfcQ
+ 1LBEbEQhEa2CjA9NQ6knQAYGWmhX7qoF+i4HdXv3CWVr2qu0Zn0Is83ib2bMLAjHcnTq VA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kktuxa4g9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 03:37:46 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A33bjiZ015922
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 3 Nov 2022 03:37:45 GMT
+Received: from core-thresher1.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Wed, 2 Nov 2022 20:37:44 -0700
+Date:   Wed, 2 Nov 2022 20:37:43 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Sibi Sankar" <quic_sibis@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 09/10] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ sc8280xp bwmon instances
+Message-ID: <20221103033741.GA5525@core-thresher1.qualcomm.com>
+References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
+ <20221028034155.5580-10-quic_bjorande@quicinc.com>
+ <0ada5a42-02f4-50ce-e65c-1a5fa9966900@linaro.org>
 MIME-Version: 1.0
-References: <20221102064750.2609503-1-chenhuacai@loongson.cn> <CAJZ5v0hLDm6Y7QR0azDKNo5eS9U6QkjZ9N-PkjnrSMLZK_07aQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hLDm6Y7QR0azDKNo5eS9U6QkjZ9N-PkjnrSMLZK_07aQ@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 3 Nov 2022 10:29:36 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4tQEz5QQurLzRxCe0Ct8Uu4ZZD6yjaRgh=r+V_2jQMPA@mail.gmail.com>
-Message-ID: <CAAhV-H4tQEz5QQurLzRxCe0Ct8Uu4ZZD6yjaRgh=r+V_2jQMPA@mail.gmail.com>
-Subject: Re: [PATCH] Revert "LoongArch: Provisionally add ACPICA data structures"
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <0ada5a42-02f4-50ce-e65c-1a5fa9966900@linaro.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3c9-EHKsGTHxTc0UNIVkB987Oyo-bTyi
+X-Proofpoint-GUID: 3c9-EHKsGTHxTc0UNIVkB987Oyo-bTyi
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ clxscore=1015 suspectscore=0 spamscore=0 mlxlogscore=999 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211030023
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,185 +84,35 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, Rafael,
-
-On Thu, Nov 3, 2022 at 3:59 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Nov 2, 2022 at 7:50 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > This reverts commit af6a1cfa6859dab4a843 ("LoongArch: Provisionally add
-> > ACPICA data structures") to fix build error for linux-next on LoongArch,
-> > since acpica is merged to linux-pm.git now.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> Would you mind if I added this to my acpica branch?
->
-> There would be no cross-tree dependencies then.
-Emm, I hope this patch be merged via your acpi tree, and so does
-another patch named "ACPI / table: Print CORE_PIC information when
-MADT is parsed".
-
-Huacai
->
+On Fri, Oct 28, 2022 at 06:15:50PM -0400, Krzysztof Kozlowski wrote:
+> On 27/10/2022 23:41, Bjorn Andersson wrote:
+> > The sc8280xp platform has two BWMON instances, one v4 and one v5. Extend
+> > the existing qcom,msm8998-bwmon and qcom,sc7280-llcc-bwmon to describe
+> > these.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 > > ---
-> >  arch/loongarch/include/asm/acpi.h | 142 ------------------------------
-> >  1 file changed, 142 deletions(-)
-> >
-> > diff --git a/arch/loongarch/include/asm/acpi.h b/arch/loongarch/include/asm/acpi.h
-> > index 17162f494b9b..825c2519b9d1 100644
-> > --- a/arch/loongarch/include/asm/acpi.h
-> > +++ b/arch/loongarch/include/asm/acpi.h
-> > @@ -31,148 +31,6 @@ static inline bool acpi_has_cpu_in_madt(void)
-> >
-> >  extern struct list_head acpi_wakeup_device_list;
-> >
-> > -/*
-> > - * Temporary definitions until the core ACPICA code gets updated (see
-> > - * 1656837932-18257-1-git-send-email-lvjianmin@loongson.cn and its
-> > - * follow-ups for the "rationale").
-> > - *
-> > - * Once the "legal reasons" are cleared and that the code is merged,
-> > - * this can be dropped entierely.
-> > - */
-> > -#if (ACPI_CA_VERSION == 0x20220331 && !defined(LOONGARCH_ACPICA_EXT))
-> > -
-> > -#define LOONGARCH_ACPICA_EXT   1
-> > -
-> > -#define        ACPI_MADT_TYPE_CORE_PIC         17
-> > -#define        ACPI_MADT_TYPE_LIO_PIC          18
-> > -#define        ACPI_MADT_TYPE_HT_PIC           19
-> > -#define        ACPI_MADT_TYPE_EIO_PIC          20
-> > -#define        ACPI_MADT_TYPE_MSI_PIC          21
-> > -#define        ACPI_MADT_TYPE_BIO_PIC          22
-> > -#define        ACPI_MADT_TYPE_LPC_PIC          23
-> > -
-> > -/* Values for Version field above */
-> > -
-> > -enum acpi_madt_core_pic_version {
-> > -       ACPI_MADT_CORE_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_CORE_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_CORE_PIC_VERSION_RESERVED = 2 /* 2 and greater are reserved */
-> > -};
-> > -
-> > -enum acpi_madt_lio_pic_version {
-> > -       ACPI_MADT_LIO_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_LIO_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_LIO_PIC_VERSION_RESERVED = 2  /* 2 and greater are reserved */
-> > -};
-> > -
-> > -enum acpi_madt_eio_pic_version {
-> > -       ACPI_MADT_EIO_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_EIO_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_EIO_PIC_VERSION_RESERVED = 2  /* 2 and greater are reserved */
-> > -};
-> > -
-> > -enum acpi_madt_ht_pic_version {
-> > -       ACPI_MADT_HT_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_HT_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_HT_PIC_VERSION_RESERVED = 2   /* 2 and greater are reserved */
-> > -};
-> > -
-> > -enum acpi_madt_bio_pic_version {
-> > -       ACPI_MADT_BIO_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_BIO_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_BIO_PIC_VERSION_RESERVED = 2  /* 2 and greater are reserved */
-> > -};
-> > -
-> > -enum acpi_madt_msi_pic_version {
-> > -       ACPI_MADT_MSI_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_MSI_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_MSI_PIC_VERSION_RESERVED = 2  /* 2 and greater are reserved */
-> > -};
-> > -
-> > -enum acpi_madt_lpc_pic_version {
-> > -       ACPI_MADT_LPC_PIC_VERSION_NONE = 0,
-> > -       ACPI_MADT_LPC_PIC_VERSION_V1 = 1,
-> > -       ACPI_MADT_LPC_PIC_VERSION_RESERVED = 2  /* 2 and greater are reserved */
-> > -};
-> > -
-> > -#pragma pack(1)
-> > -
-> > -/* Core Interrupt Controller */
-> > -
-> > -struct acpi_madt_core_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u32 processor_id;
-> > -       u32 core_id;
-> > -       u32 flags;
-> > -};
-> > -
-> > -/* Legacy I/O Interrupt Controller */
-> > -
-> > -struct acpi_madt_lio_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u64 address;
-> > -       u16 size;
-> > -       u8 cascade[2];
-> > -       u32 cascade_map[2];
-> > -};
-> > -
-> > -/* Extend I/O Interrupt Controller */
-> > -
-> > -struct acpi_madt_eio_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u8 cascade;
-> > -       u8 node;
-> > -       u64 node_map;
-> > -};
-> > -
-> > -/* HT Interrupt Controller */
-> > -
-> > -struct acpi_madt_ht_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u64 address;
-> > -       u16 size;
-> > -       u8 cascade[8];
-> > -};
-> > -
-> > -/* Bridge I/O Interrupt Controller */
-> > -
-> > -struct acpi_madt_bio_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u64 address;
-> > -       u16 size;
-> > -       u16 id;
-> > -       u16 gsi_base;
-> > -};
-> > -
-> > -/* MSI Interrupt Controller */
-> > -
-> > -struct acpi_madt_msi_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u64 msg_address;
-> > -       u32 start;
-> > -       u32 count;
-> > -};
-> > -
-> > -/* LPC Interrupt Controller */
-> > -
-> > -struct acpi_madt_lpc_pic {
-> > -       struct acpi_subtable_header header;
-> > -       u8 version;
-> > -       u64 address;
-> > -       u16 size;
-> > -       u8 cascade;
-> > -};
-> > -
-> > -#pragma pack()
-> > -
-> > -#endif
-> > -
-> >  #endif /* !CONFIG_ACPI */
-> >
-> >  #define ACPI_TABLE_UPGRADE_MAX_PHYS ARCH_LOW_ADDRESS_LIMIT
-> > --
-> > 2.31.1
-> >
->
+> >  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> > index be29e0b80995..223cd6ecf279 100644
+> > --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> > @@ -25,9 +25,14 @@ properties:
+> >        - items:
+> >            - enum:
+> >                - qcom,sc7280-cpu-bwmon
+> > +              - qcom,sc8280xp-bwmon
+> 
+> qcom,sc8280xp-cpu-bwmon
+> To match sc7280. I think it's better than my initial choice for
+> qcom,sdm845-bwmon without the cpu part.
+> 
+
+As discussed back then, we omitted "cpu" because there where multiple instances
+of the bwmon block. Would you prefer we give it the "cpu" compatible and
+potentially us it for non-cpu measurements?
+
+Regards,
+Bjorn
