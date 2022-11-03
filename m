@@ -2,68 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22F61617B4E
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 12:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4D9617C6D
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 13:21:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKCLE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 07:04:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37920 "EHLO
+        id S231221AbiKCMVz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 08:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiKCLEl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 07:04:41 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F47D11464
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 04:04:40 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 64so1348710pgc.5
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 04:04:40 -0700 (PDT)
+        with ESMTP id S229791AbiKCMVt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 08:21:49 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707C3F69
+        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 05:21:48 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id s20so950674qkg.5
+        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 05:21:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DiXjM4iMvd43WrMIxSpRyTAtrsP97x/VxFMbhkANt6w=;
-        b=qiEjYezP0qOxICceOLv9V1EqtoBAf2owOkVNHlplVSMCgKx8KquyKvc36mvWqMKm3W
-         5I0TSDjWWgnvxNGPrkG8iFkObUQ5rxeAuG+Xe2JXtZ0xQ4cCXyFNp72BDfwOMUtBP2LM
-         bqTdxWuBK9GI4ju9i17L+B3i5RJ45eDAq/KINshzib/YUHQ56UrztrK+oPrhLbAQw1K9
-         e4sAkOcGB7fZ7P/qBzriTz7ttPyuTO0iHx+C9P8o9l4Dk8LbEJRY73TPwzd4IBkrLJbl
-         fN025GYddMZNoW1kb6pW5iGiMfoGhBuVpexU53P+mMJmYh8N9+C4su7qmoMGIKz4M988
-         OTHQ==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=P+5YUCvZqbd7CB2bQQ6MOe7ruJKblRITAjPMVct4pI8=;
+        b=CO/f0A0UqCf3wCwPKnaBeTqdgR6dBumZAGDTOy0GPfBAk5+rSxhjYmofU5K1KyJHkp
+         bQyvFZSpUmpU7EU32AtkXmOH+YUqkO0wCQVAXj6hRkJlUlGjZyI1U1Juy+GHmBg5ztKs
+         CpFVbEqN3F0rO6soGDKfnafyjrgbVh7rwGF/DvRWV7EwaS87hgEqkKoZOEHbbntSFtvV
+         wX9fFHnuskwD2YM3PQX53UFKeGDcnv7gCWFo2ApNWPKd/6DHJm7u8Tz2L+ff2M4zdIWQ
+         8myc7gDWb3DMVbw62yk+cAxfoED7cJAZhrpKrLeoNIAoGIH9mQU9e7eoFWrdFGfi0Xb2
+         62GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DiXjM4iMvd43WrMIxSpRyTAtrsP97x/VxFMbhkANt6w=;
-        b=yOVtyVdCozZcqY9xDeXeV6C18ccJsRCzla55GHxgmlTxQ/CXrmavK/hhlKcWQAvCE1
-         0HO0BfcYT/9l7U+ApR2RofpV8NLn5I6BLGx9ZJ01jtqzfZsPStGguAWmwf2ryhBHcsdr
-         CMz7AcBmZTPsduyNuwwNwoAkuyFx4LL7WkK6PtXUt8o46zdicIzVkTsM9EOeMzQiJiWv
-         jL7KHB60vp1t4RD7K4g/POP+sbxJmrsRg91XgyaPL1OIwEKvaes3pqrOAbhsSxuv4CUc
-         5XLYWIWEmHbS0E7i3QrVVYUds/7ZnjLrHEBQbE6SAAIQ01n+KfgZu7kRy0BRQi7q5BHz
-         Tuww==
-X-Gm-Message-State: ACrzQf2ENIa2OQTpfVTxfpFD/Ndmz0BmfDhfivBR353u98Jc1tMkdPWw
-        0w9JL5ereHRk+ujlH5MCroX2DQ==
-X-Google-Smtp-Source: AMsMyM5+1lQ/y2nh9vFIrWD5JV4qg6JGTWNsSck0DDXg/GgvtF3S3J/dJ9NntHd213XBDRjmAnCB9A==
-X-Received: by 2002:a63:5d0b:0:b0:464:bb2b:9b0e with SMTP id r11-20020a635d0b000000b00464bb2b9b0emr25126297pgb.583.1667473479658;
-        Thu, 03 Nov 2022 04:04:39 -0700 (PDT)
-Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b00186ac812ab0sm399146plh.83.2022.11.03.04.04.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 04:04:38 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 16:34:35 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     James Calligeros <jcalligeros99@gmail.com>
-Cc:     asahi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, nm@ti.com, sboyd@kernel.org,
-        vireshk@kernel.org
-Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
-Message-ID: <20221103110435.5egvoqwppczmij3t@vireshk-i7>
-References: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
- <20221102102011.11623-1-jcalligeros99@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P+5YUCvZqbd7CB2bQQ6MOe7ruJKblRITAjPMVct4pI8=;
+        b=G+INxHszBkemIoYwDa8zzoY/ObKjLSIolJgDfTErE/Jyg6IPYZRVM2kMBMiAs01KiC
+         tfr1UV6IlThQ3lBD+hW/sNhi/XbT9AqM3yyXmisp75siotG6WkzTUG7XcuxwWc8B1Hfw
+         T9JgZ2a/3Wti0DRS2x101TtmBGptzgco4YGpH280aRwBUlKKRtzKHyHyKe9ujQdChEDR
+         gd5JMdHhxHquQN/JuFPaHaVBxC9/OUEB6Z4613mB12A7VcSfbBJoOLMUnuHgiTgDlgaN
+         ysCDR8TAouOoUzw+E3XqdYim4zv93AfStkqdhXn8+pKfY9YFfi1lguUryJlDk+6MHhX0
+         IPbA==
+X-Gm-Message-State: ACrzQf0xuvprMX4Zs6OjF2CU4Kfv0tFAx5YboYakDGSIU6vZIJjfaZTA
+        atiC1v7vreCoe80s18TvH0DzQ9OFPLZOng==
+X-Google-Smtp-Source: AMsMyM6SDfF7cMxptMVQxQuncXmO78QNH8O+ogTcFC6KAzOv0cS/F4ORrpJhJoSy97C4UYtYyZxdXQ==
+X-Received: by 2002:a37:5e41:0:b0:6ce:79e2:68af with SMTP id s62-20020a375e41000000b006ce79e268afmr21736389qkb.239.1667478107634;
+        Thu, 03 Nov 2022 05:21:47 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id r23-20020ae9d617000000b006f474e6a715sm606366qkk.131.2022.11.03.05.21.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 05:21:46 -0700 (PDT)
+Message-ID: <10086127-c733-364c-25da-0332c2336925@linaro.org>
+Date:   Thu, 3 Nov 2022 08:21:45 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102102011.11623-1-jcalligeros99@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 09/10] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ sc8280xp bwmon instances
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
+ <20221028034155.5580-10-quic_bjorande@quicinc.com>
+ <0ada5a42-02f4-50ce-e65c-1a5fa9966900@linaro.org>
+ <20221103033741.GA5525@core-thresher1.qualcomm.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103033741.GA5525@core-thresher1.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,58 +85,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-11-22, 20:20, James Calligeros wrote:
-> On Apple SoCs, all the regulators are controlled transparently
-> by the hardware/firmware. The CPUfreq driver requests a pstate as
-> described in the OPP table by setting some bits in some registers, and
-> the platform handles everything else.
+On 02/11/2022 23:37, Bjorn Andersson wrote:
+> On Fri, Oct 28, 2022 at 06:15:50PM -0400, Krzysztof Kozlowski wrote:
+>> On 27/10/2022 23:41, Bjorn Andersson wrote:
+>>> The sc8280xp platform has two BWMON instances, one v4 and one v5. Extend
+>>> the existing qcom,msm8998-bwmon and qcom,sc7280-llcc-bwmon to describe
+>>> these.
+>>>
+>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+>>> ---
+>>>  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 5 +++++
+>>>  1 file changed, 5 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+>>> index be29e0b80995..223cd6ecf279 100644
+>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+>>> @@ -25,9 +25,14 @@ properties:
+>>>        - items:
+>>>            - enum:
+>>>                - qcom,sc7280-cpu-bwmon
+>>> +              - qcom,sc8280xp-bwmon
+>>
+>> qcom,sc8280xp-cpu-bwmon
+>> To match sc7280. I think it's better than my initial choice for
+>> qcom,sdm845-bwmon without the cpu part.
+>>
 > 
-> Not only is there no use for the voltage and current information from
-> the kernel's perspective since there's nothing to control, we don't
-> even really have a way to reliably model their behaviour.
-> 
-> What we can do, however, is use energy counter registers in the core
-> clusters to determine energy consumption at a given pstate and register
-> that with the OPP core using the opp-microwatt property. Given that its
-> stated purpose is to enable such behaviour, requiring it to be coupled
-> to opp-microvolt is a major design deficiency.
+> As discussed back then, we omitted "cpu" because there where multiple instances
+> of the bwmon block. Would you prefer we give it the "cpu" compatible and
+> potentially us it for non-cpu measurements?
 
-I wasn't asking this. I was rather asking if some code for your
-platform calls dev_pm_opp_set_regulators(). I assume No based on what
-you provided.
+I think yes, because we actually do not know whether measuring on
+non-cpu instances would work without some adjustments...
 
-> >I won't call it a fix, we are trying to use this information in a
-> >different way here, that's all.
-> 
-> My interpretation of the commit message for 32bf8bc9a077 is that this
-> is the way in which the property was intended to be used, and that it not
-> working like this is a bug. Quoting the commit message, "Some of the platforms
-> don't expose voltage information, thus it's not possible to use EM
-> registration using DT. This patch aims to fix it." 
-> 
-> There is probably a bigger discussion to be had on whether or not parsing
-> opp-microwatt for the purpose of EM registration should be entangled in
-> opp_parse_supplies() at all, but that's by the by.
+Best regards,
+Krzysztof
 
-I get it. I will still skip the Fixes tag for now as that may make
-people backport this to older kernels, which we may not want as there
-are no broken users currently in mainline.
-
-> I noticed no adverse effects from not having opp-microvolt in my testing of
-> this patch, possibly because the data is not used to actually puppeteer any
-> supplies. This goes back to the greater discussion, though. If we're going
-> to use opp_parse_supplies() to do EM registration stuff then having the
-> check for a valid representation of an actual VRM should probably happen
-> elsewhere, where a valid VRM is actually a hard requirement of the code being
-> run.
-
-I figured out that you had to make a lot of unrelated changes for this
-simple change, just because of the layout of the routine.
-
-I have included your patch in my series now, cc'd you. Please give
-that a try and see if it works or not. Thanks.
-
-I have kept your Authorship and Signed-off, hope that is fine.
-
--- 
-viresh
