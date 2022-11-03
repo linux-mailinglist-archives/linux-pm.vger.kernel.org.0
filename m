@@ -2,381 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66886618708
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:05:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F29A618727
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231672AbiKCSFb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 14:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S230072AbiKCSM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 14:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231355AbiKCSEn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:04:43 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741DC2339D
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 11:01:59 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id k22so2339289pfd.3
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 11:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kfsRuzUO5GLP1zW6AyT7/m3TZFGZZvZuTGTusTKfICE=;
-        b=A1RKpE7yH4+y1aR4/Pz7oxVQPNq2pDcOQXYwYk8Vur37noDZ52R8ef4ZcYJGv7LrTs
-         MgItuNd3tKWBjhvirNsfIiVRIxP+QlTRo+mIfQTYYXhMpjgIB6VE18HnonowDzWGjXLN
-         wm5LyLwopRycLWBnHhuYh8+aco+LfdC4wRfL0=
+        with ESMTP id S230005AbiKCSMZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:12:25 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C26F6B;
+        Thu,  3 Nov 2022 11:12:20 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id k26so1699366qkg.2;
+        Thu, 03 Nov 2022 11:12:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kfsRuzUO5GLP1zW6AyT7/m3TZFGZZvZuTGTusTKfICE=;
-        b=l7BHW0xRRBtH8a2oArwUg9J/PDvP4WXVlSww2eznAqDoqoYHgBGDXBp2flk3SabOAX
-         0dfSvU1Nkfh6znvDiDnjDHRVyDblYzw9fS8Yny1cl4bfR9o8PEGA4LKt+v55zXofneap
-         qpGDBgxiPFClVnbGw9U+Vbs3gIbsUHCBii8aZDaQc/H1NbW9ccSiaY0QawdgtyKFnWkO
-         cFlImHW1mLN/39bHJ6DspPoGuvcuLQ9rmWkbp9pz8Ik9BA0PhEgItbQvjh2dBbtRcovU
-         DBHw25sJs6MIzUEeRMXwvVhrm5gEpHXVIxifSN4xUf7cgAF57MhbxCYwkstkTC3DWMGE
-         0cYQ==
-X-Gm-Message-State: ACrzQf0ILZRTMnBs8wR7ukPL3hgosIwEmpK39Y8L453nIMZDlAjvUrYH
-        /epaN3nK5WuyT6SOo5ke5K04/Q==
-X-Google-Smtp-Source: AMsMyM7TyqDnv1YbntPAADx/j/4AUEuR2qMr1YRP3T2ectcFiSVFXvKyzofQ/SX4dK8CYafJYWcHsA==
-X-Received: by 2002:aa7:809a:0:b0:567:6e2c:2e2a with SMTP id v26-20020aa7809a000000b005676e2c2e2amr31896423pff.56.1667498518982;
-        Thu, 03 Nov 2022 11:01:58 -0700 (PDT)
-Received: from evgreen-glaptop.lan ([98.45.28.95])
-        by smtp.gmail.com with ESMTPSA id t12-20020a1709027fcc00b00177fb862a87sm1000277plb.20.2022.11.03.11.01.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 11:01:58 -0700 (PDT)
-From:   Evan Green <evgreen@chromium.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     corbet@lwn.net, linux-pm@vger.kernel.org, rjw@rjwysocki.net,
-        gwendal@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Kees Cook <keescook@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
-        Evan Green <evgreen@chromium.org>,
-        Matthew Garrett <mjg59@google.com>,
-        Len Brown <len.brown@intel.com>,
-        Matthew Garrett <matthewgarrett@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, axelj <axelj@axis.com>
-Subject: [PATCH v4 11/11] PM: hibernate: seal the encryption key with a PCR policy
-Date:   Thu,  3 Nov 2022 11:01:19 -0700
-Message-Id: <20221103105558.v4.11.Ifce072ae1ef1ce39bd681fff55af13a054045d9f@changeid>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-In-Reply-To: <20221103180120.752659-1-evgreen@chromium.org>
-References: <20221103180120.752659-1-evgreen@chromium.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BcS1TkH8ThTkQl6q5umAgQ39Rvhb04Vxao2fTgYI9x8=;
+        b=uhG385aJIcoVcKRVwMFBlu8f6QJaA6Ex7A14Pga4AI/LPI7awlmuK+lsE3g2yyvQK0
+         2PWchOCoPn2BQtOBreNA4I6z3En62LEQ1OXGzA2MEhGObOtD7+RXvIzzXV+bKyzgQp4K
+         g5EY/5FYAMvXrCyiyKgKmouN/tTTb84iWsR5FIAN0veW288PqDAemyZO8Vyt/fV81GbJ
+         WNOSGBjmSrkJl6C29oWEIcHskt1lSgx6Q3UH5WGUMFn8oMZ4YN5cCzTe2kqbANuF73dp
+         7JZZV71n/MdTowSy2nXbUaefn0DNUwigLYXv3g90ecSRh2MnLQn9Drs4yFjVQj3C8cKD
+         vLTQ==
+X-Gm-Message-State: ACrzQf1t0nEwDi+0Y4ZD/Zc6TW5UPBCRFDOOOmU7UbQrKGudLMHtrbYa
+        rZgotc8XOfIde8j0sdVex0aaVEPrr2+BLxH78Yc=
+X-Google-Smtp-Source: AMsMyM49+sF3PR/wyVNOvkxA3hQJY5xVrPHzYcTnivwkur2R1VxP620dNNbPjs+22VxLqnF9K+lrs5ZsNGUefSNioaQ=
+X-Received: by 2002:a05:620a:1476:b0:6fa:4c67:83ec with SMTP id
+ j22-20020a05620a147600b006fa4c6783ecmr11380447qkl.23.1667499139371; Thu, 03
+ Nov 2022 11:12:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221008195244.53813-1-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <20221008195244.53813-1-andriy.shevchenko@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Nov 2022 19:12:08 +0100
+Message-ID: <CAJZ5v0hzZYdO+U0yrgazZGv243soFv2StB88NZQLr-evs5KreA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] cpufreq: ACPI: Use str_enabled_disabled() helper
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The key blob is not secret, and by default the TPM will happily unseal
-it regardless of system state. We can protect against that by sealing
-the secret with a PCR policy - if the current PCR state doesn't match,
-the TPM will refuse to release the secret. For now let's just seal it to
-PCR 23. In the long term we may want a more flexible policy around this,
-such as including PCR 7 for PCs or 0 for Chrome OS.
+On Sat, Oct 8, 2022 at 9:52 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> Use str_enabled_disabled() helper instead of open coding the same.
+>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index 1bb2b90ebb21..8597ab0a84b5 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/compiler.h>
+>  #include <linux/dmi.h>
+>  #include <linux/slab.h>
+> +#include <linux/string_helpers.h>
+>
+>  #include <linux/acpi.h>
+>  #include <linux/io.h>
+> @@ -135,8 +136,8 @@ static int set_boost(struct cpufreq_policy *policy, int val)
+>  {
+>         on_each_cpu_mask(policy->cpus, boost_set_msr_each,
+>                          (void *)(long)val, 1);
+> -       pr_debug("CPU %*pbl: Core Boosting %sabled.\n",
+> -                cpumask_pr_args(policy->cpus), val ? "en" : "dis");
+> +       pr_debug("CPU %*pbl: Core Boosting %s.\n",
+> +                cpumask_pr_args(policy->cpus), str_enabled_disabled(val));
+>
+>         return 0;
+>  }
+> --
 
-Link: https://lore.kernel.org/all/20210220013255.1083202-10-matthewgarrett@google.com/
-Co-developed-by: Matthew Garrett <mjg59@google.com>
-Signed-off-by: Matthew Garrett <mjg59@google.com>
-Signed-off-by: Evan Green <evgreen@chromium.org>
-
----
-
-Changes in v4:
- - Local variable ordering (Jarkko)
-
-Changes in v3:
- - Changed funky tag to Co-developed-by (Kees)
-
-Changes in v2:
- - Fix sparse warnings
- - Fix session type comment (Andrey)
- - Eliminate extra label in get/create_kernel_key() (Andrey)
- - Call tpm_try_get_ops() before calling tpm2_flush_context().
-
- include/linux/tpm.h    |   4 +
- kernel/power/snapenc.c | 166 +++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 165 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-index 9c2ee3e30ffa5d..252a8a92a7ff5b 100644
---- a/include/linux/tpm.h
-+++ b/include/linux/tpm.h
-@@ -233,18 +233,22 @@ enum tpm2_command_codes {
- 	TPM2_CC_CONTEXT_LOAD	        = 0x0161,
- 	TPM2_CC_CONTEXT_SAVE	        = 0x0162,
- 	TPM2_CC_FLUSH_CONTEXT	        = 0x0165,
-+	TPM2_CC_START_AUTH_SESSION      = 0x0176,
- 	TPM2_CC_VERIFY_SIGNATURE        = 0x0177,
- 	TPM2_CC_GET_CAPABILITY	        = 0x017A,
- 	TPM2_CC_GET_RANDOM	        = 0x017B,
- 	TPM2_CC_PCR_READ	        = 0x017E,
-+	TPM2_CC_POLICY_PCR              = 0x017F,
- 	TPM2_CC_PCR_EXTEND	        = 0x0182,
- 	TPM2_CC_EVENT_SEQUENCE_COMPLETE = 0x0185,
- 	TPM2_CC_HASH_SEQUENCE_START     = 0x0186,
-+	TPM2_CC_POLICY_GET_DIGEST       = 0x0189,
- 	TPM2_CC_CREATE_LOADED           = 0x0191,
- 	TPM2_CC_LAST		        = 0x0193, /* Spec 1.36 */
- };
- 
- enum tpm2_permanent_handles {
-+	TPM2_RH_NULL		= 0x40000007,
- 	TPM2_RS_PW		= 0x40000009,
- };
- 
-diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
-index 2f421061498246..23f4d09ced578b 100644
---- a/kernel/power/snapenc.c
-+++ b/kernel/power/snapenc.c
-@@ -438,6 +438,111 @@ void snapshot_teardown_encryption(struct snapshot_data *data)
- 	memset(data->user_key, 0, sizeof(data->user_key));
- }
- 
-+static int tpm_setup_policy(struct tpm_chip *chip, int *session_handle)
-+{
-+	struct tpm_header *head;
-+	struct tpm_buf buf;
-+	char nonce[32] = {0x00};
-+	int rc;
-+
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS,
-+			  TPM2_CC_START_AUTH_SESSION);
-+	if (rc)
-+		return rc;
-+
-+	/* Decrypt key */
-+	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-+
-+	/* Auth entity */
-+	tpm_buf_append_u32(&buf, TPM2_RH_NULL);
-+
-+	/* Nonce - blank is fine here */
-+	tpm_buf_append_u16(&buf, sizeof(nonce));
-+	tpm_buf_append(&buf, nonce, sizeof(nonce));
-+
-+	/* Encrypted secret - empty */
-+	tpm_buf_append_u16(&buf, 0);
-+
-+	/* Session type - policy */
-+	tpm_buf_append_u8(&buf, 0x01);
-+
-+	/* Encryption type - NULL */
-+	tpm_buf_append_u16(&buf, TPM_ALG_NULL);
-+
-+	/* Hash type - SHA256 */
-+	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
-+
-+	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-+	if (rc)
-+		goto out;
-+
-+	head = (struct tpm_header *)buf.data;
-+	if (be32_to_cpu(head->length) != sizeof(struct tpm_header) +
-+	    sizeof(u32) + sizeof(u16) + sizeof(nonce)) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	*session_handle = be32_to_cpu(*(__be32 *)&buf.data[10]);
-+	memcpy(nonce, &buf.data[16], sizeof(nonce));
-+	tpm_buf_destroy(&buf);
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_POLICY_PCR);
-+	if (rc)
-+		return rc;
-+
-+	tpm_buf_append_u32(&buf, *session_handle);
-+
-+	/* PCR digest - read from the PCR, we'll verify creation data later */
-+	tpm_buf_append_u16(&buf, 0);
-+
-+	/* One PCR */
-+	tpm_buf_append_u32(&buf, 1);
-+
-+	/* SHA256 banks */
-+	tpm_buf_append_u16(&buf, TPM_ALG_SHA256);
-+
-+	/* Select PCR 23 */
-+	tpm_buf_append_u32(&buf, 0x03000080);
-+	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-+	if (rc)
-+		goto out;
-+
-+out:
-+	tpm_buf_destroy(&buf);
-+	return rc;
-+}
-+
-+static int tpm_policy_get_digest(struct tpm_chip *chip, int handle,
-+				 char *digest)
-+{
-+	struct tpm_header *head;
-+	struct tpm_buf buf;
-+	int rc;
-+
-+	rc = tpm_buf_init(&buf, TPM2_ST_NO_SESSIONS, TPM2_CC_POLICY_GET_DIGEST);
-+	if (rc)
-+		return rc;
-+
-+	tpm_buf_append_u32(&buf, handle);
-+	rc = tpm_send(chip, buf.data, tpm_buf_length(&buf));
-+
-+	if (rc)
-+		goto out;
-+
-+	head = (struct tpm_header *)buf.data;
-+	if (be32_to_cpu(head->length) != sizeof(struct tpm_header) +
-+	    sizeof(u16) + SHA256_DIGEST_SIZE) {
-+		rc = -EINVAL;
-+		goto out;
-+	}
-+
-+	memcpy(digest, &buf.data[12], SHA256_DIGEST_SIZE);
-+
-+out:
-+	tpm_buf_destroy(&buf);
-+	return rc;
-+}
-+
- static int snapshot_setup_encryption_common(struct snapshot_data *data)
- {
- 	int i, rc;
-@@ -492,11 +597,16 @@ static int snapshot_setup_encryption_common(struct snapshot_data *data)
- static int snapshot_create_kernel_key(struct snapshot_data *data)
- {
- 	/* Create a key sealed by the SRK. */
--	char *keyinfo = "new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000";
-+	const char *keytemplate =
-+		"new\t32\tkeyhandle=0x81000000\tcreationpcrs=0x00800000\tpolicydigest=%s";
- 	const struct cred *cred = current_cred();
- 	struct tpm_digest *digests = NULL;
-+	char policy[SHA256_DIGEST_SIZE];
-+	char *policydigest = NULL;
-+	int session_handle = -1;
- 	struct key *key = NULL;
- 	struct tpm_chip *chip;
-+	char *keyinfo = NULL;
- 	int ret, i;
- 
- 	chip = tpm_default_chip();
-@@ -529,6 +639,28 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
- 	if (ret != 0)
- 		goto out;
- 
-+	policydigest = kmalloc(SHA256_DIGEST_SIZE * 2 + 1, GFP_KERNEL);
-+	if (!policydigest) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	ret = tpm_setup_policy(chip, &session_handle);
-+	if (ret != 0)
-+		goto out;
-+
-+	ret = tpm_policy_get_digest(chip, session_handle, policy);
-+	if (ret != 0)
-+		goto out;
-+
-+	bin2hex(policydigest, policy, SHA256_DIGEST_SIZE);
-+	policydigest[SHA256_DIGEST_SIZE * 2] = '\0';
-+	keyinfo = kasprintf(GFP_KERNEL, keytemplate, policydigest);
-+	if (!keyinfo) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
- 	key = key_alloc(&key_type_trusted, "swsusp", GLOBAL_ROOT_UID,
- 			GLOBAL_ROOT_GID, cred, 0, KEY_ALLOC_NOT_IN_QUOTA,
- 			NULL);
-@@ -539,7 +671,7 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
- 		goto out;
- 	}
- 
--	ret = key_instantiate_and_link(key, keyinfo, sizeof(keyinfo), NULL,
-+	ret = key_instantiate_and_link(key, keyinfo, strlen(keyinfo) + 1, NULL,
- 				       NULL);
- 	if (ret != 0)
- 		goto out;
-@@ -553,7 +685,16 @@ static int snapshot_create_kernel_key(struct snapshot_data *data)
- 		key_put(key);
- 	}
- 
-+	if (session_handle != -1) {
-+		if (tpm_try_get_ops(chip) == 0) {
-+			tpm2_flush_context(chip, session_handle);
-+			tpm_put_ops(chip);
-+		}
-+	}
-+
- 	kfree(digests);
-+	kfree(keyinfo);
-+	kfree(policydigest);
- 	tpm2_pcr_reset(chip, 23);
- 
- out_dev:
-@@ -617,12 +758,13 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
- 				    struct uswsusp_key_blob *blob)
- {
- 
--	char *keytemplate = "load\t%s\tkeyhandle=0x81000000";
-+	char *keytemplate = "load\t%s\tkeyhandle=0x81000000\tpolicyhandle=0x%x";
- 	const struct cred *cred = current_cred();
- 	struct trusted_key_payload *payload;
- 	char certhash[SHA256_DIGEST_SIZE];
- 	struct tpm_digest *digests = NULL;
- 	char *blobstring = NULL;
-+	int session_handle = -1;
- 	struct key *key = NULL;
- 	struct tpm_chip *chip;
- 	char *keyinfo = NULL;
-@@ -658,14 +800,21 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
- 	if (ret != 0)
- 		goto out;
- 
--	blobstring = kmalloc(blob->blob_len * 2, GFP_KERNEL);
-+	ret = tpm_setup_policy(chip, &session_handle);
-+	if (ret != 0)
-+		goto out;
-+
-+	blobstring = kmalloc(blob->blob_len * 2 + 1, GFP_KERNEL);
- 	if (!blobstring) {
- 		ret = -ENOMEM;
- 		goto out;
- 	}
- 
- 	bin2hex(blobstring, blob->blob, blob->blob_len);
--	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring);
-+	blobstring[blob->blob_len * 2] = '\0';
-+	keyinfo = kasprintf(GFP_KERNEL, keytemplate, blobstring,
-+			    session_handle);
-+
- 	if (!keyinfo) {
- 		ret = -ENOMEM;
- 		goto out;
-@@ -748,6 +897,13 @@ static int snapshot_load_kernel_key(struct snapshot_data *data,
- 		key_put(key);
- 	}
- 
-+	if (session_handle != -1) {
-+		if (tpm_try_get_ops(chip) == 0) {
-+			tpm2_flush_context(chip, session_handle);
-+			tpm_put_ops(chip);
-+		}
-+	}
-+
- 	kfree(keyinfo);
- 	kfree(blobstring);
- 	kfree(digests);
--- 
-2.38.1.431.g37b22c650d-goog
-
+Applied as 6.2 material, thanks!
