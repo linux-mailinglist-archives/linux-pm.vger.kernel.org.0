@@ -2,73 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E939617F8E
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 15:30:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28BB7617FAC
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 15:37:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiKCOaU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 10:30:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S231555AbiKCOhF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 10:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiKCOaQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 10:30:16 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E9E2BCD;
-        Thu,  3 Nov 2022 07:30:13 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id h9so3113875wrt.0;
-        Thu, 03 Nov 2022 07:30:13 -0700 (PDT)
+        with ESMTP id S230410AbiKCOg6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 10:36:58 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290F210CC;
+        Thu,  3 Nov 2022 07:36:57 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id z14so3069813wrn.7;
+        Thu, 03 Nov 2022 07:36:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ay5uVzW4y/GRmRkmcgKyUCqUyAa2Ays6LturwQFJT6g=;
-        b=C2GSX0TXsbkPGe2C+mK3YaMlOHWYffcJ/cKHvUDQB9+mEvgHY72lOXLtntLgQJrt2b
-         MqAECVHC1sBGE+qzq7ykVM39bByTg+rqoYHNpr7qEbReUkOviUx1IZrRuqHQO1Gpq5yf
-         kggFjxRyYWlkTUHwD1xRP9Td4hWq4u8w6ixjkA0g6CYu36U5AyReq5v4I89xgRGWgetR
-         mCddPeEJIvnE7yMXQe0dTnQ48Lxd09PzvEMzY/SHFuZd18J/LlX762OGomH1ZnWJX+C1
-         WHnjFxv5MZ0jJx9APveJXKSsJ8ZcWsMTeH99v9rCK2ejAHBvPK/VI42DycIGXoSJqJhN
-         Hepw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ES1nm1fALBWsnWNeWE6cH/eUHmHK3mjzRJulJRIoib0=;
+        b=BGB0/7WZRrgNq7UIH13nwkr/vZC7rpLEpdwB1j5uv7fiDc2R66SM0IxRpYYngznkZ1
+         2PhfAKwaNYtN8epe2pz7zXl56PWJUlgFjJzuuhAd34cnQXPOJF8mKCq2hFumPn1PD9sR
+         1jUIgGJGqXHpvDn8/64AFxUzZ28y63i8bc7D6Q0mo3xlN1hmFAMBf1Rt0/LnSsQlG/pY
+         wXs4vlZJWv0w7I/9VhHCDirO1Q+MErL2cDuRY/t/61aWBDyAvXO1qmqlzzjQ8siCr7FO
+         hVP6h4oCeismtmPb2e9DpenpMpTmvB7zW0GVjgiSw6U7QJkNEhUwV+aTloHSUgZ3sTy1
+         4Ckg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ay5uVzW4y/GRmRkmcgKyUCqUyAa2Ays6LturwQFJT6g=;
-        b=YuVeERgwxJX+nucWOFEOwrH3nh3rSSTMyQ/0C8O35HyTsFiBDaQjT6VH4iKKKoaJua
-         iclzw/Mc6FSe1CE+56PQLgqUxw5hjizdYo9zW48OxMhjiPs3ZEUnt3fMNUXkmeVlb1qD
-         St/wjstli9Hxsk6pTK2oHoH0KYzkTyuaVZCQiv+rSP3rs9O8Ecx7RPpCrthBvCt/LVtC
-         81MzOwBNMuWDUClxlZmLYz22mEA4JEUM3iNfQnCMvzyGDu9dZwXyS3OKE5w6Aq83DOFL
-         r+CDPPT0xEXOurwr9gUqh3BMIRWyqJpSMNaTSQbgUg2KfNPIhNjXdJGYHNoHBC6E5b0j
-         Ur4Q==
-X-Gm-Message-State: ACrzQf08OY2WMN0MvGkYY7ie2IC7s7TC2OQuomrfGOd+s3+VBbxCE+qO
-        9Dk+aPM84tsHhX576o9cYMk=
-X-Google-Smtp-Source: AMsMyM6lZJ8Y8grZ1TzG2GtLZjnNdSmKVgB5zO7cx9dY1jFWKpE5vEZ1MPTlb0lif3t2BPOFKKCnJw==
-X-Received: by 2002:a05:6000:170d:b0:236:6aa1:8a56 with SMTP id n13-20020a056000170d00b002366aa18a56mr18873255wrc.302.1667485812194;
-        Thu, 03 Nov 2022 07:30:12 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id q12-20020a05600c46cc00b003b4ac05a8a4sm203wmo.27.2022.11.03.07.30.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 07:30:11 -0700 (PDT)
-Message-ID: <c0490cb3-28d2-457c-8ae6-89d07b8b7577@gmail.com>
-Date:   Thu, 3 Nov 2022 14:30:10 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] cpufreq: longhaul: Make array speeds static const
-Content-Language: en-US
-To:     Joe Perches <joe@perches.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ES1nm1fALBWsnWNeWE6cH/eUHmHK3mjzRJulJRIoib0=;
+        b=sOBE6LarX8tEwBxAVf0HdPgDplNHLORv1ubXjhAoahLeB5f9cJEN9ZSjKyx5jkMZNP
+         jBzuSrI1h7X53ARcttBIfr4hYfvLzeACLCmN/eLzJNf34pCa0PYByyaj3ifbRgUoz4vk
+         ZVj3FWwmz7zWpKXcYQpuh824TZ6b+FsUD8//+aS3F3yDwDk4L4Avrtdl7P3zLwHPT8YZ
+         mk4qWHJA1bkMKq52sABs8u1lOxUAbPtYkt4uFlMLelquQjRvkCEnl5iuDN5MC6BcE2Nf
+         xEGGoboAYbP2uIWKv5jeAwPj01Ma5C4O0ctQVMmGDkPgTXtyZtfQcXN0N8muRY/cyUzD
+         JWyg==
+X-Gm-Message-State: ACrzQf3Bu3y16N6WkEQ2oJ3Cxd7L6ceN5apL72B5Hk5xNBF1bnPcL2tD
+        /t89/xbUBJ/Ex1DpgHuNa5U=
+X-Google-Smtp-Source: AMsMyM4Rs1cxPouTtEmcWcmnfuAmM1E7ih1x9jR0C3RQk+T+gxcvtSZpeBWL9tYSm1ugs+0DUotqyg==
+X-Received: by 2002:a5d:6a90:0:b0:236:4835:ca94 with SMTP id s16-20020a5d6a90000000b002364835ca94mr18846026wru.187.1667486215679;
+        Thu, 03 Nov 2022 07:36:55 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id h7-20020a5d4307000000b00236883f2f5csm1005803wrq.94.2022.11.03.07.36.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 07:36:55 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         linux-pm@vger.kernel.org
 Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221103132141.79671-1-colin.i.king@gmail.com>
- <aec9ee4b771b70d0839d51b836e6301f0a2a1276.camel@perches.com>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <aec9ee4b771b70d0839d51b836e6301f0a2a1276.camel@perches.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH] cpufreq: SPEAr: Make read-only array sys_clk_src static
+Date:   Thu,  3 Nov 2022 14:36:54 +0000
+Message-Id: <20221103143654.85275-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,27 +70,28 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/11/2022 14:15, Joe Perches wrote:
-> On Thu, 2022-11-03 at 13:21 +0000, Colin Ian King wrote:
->> Don't populate the read-only array speeds on the stack but instead
->> make it static. Also makes the object code a little smaller.
-> []
->> diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
-> []
->> @@ -407,7 +407,7 @@ static int guess_fsb(int mult)
->>   {
->>   	int speed = cpu_khz / 1000;
->>   	int i;
->> -	int speeds[] = { 666, 1000, 1333, 2000 };
->> +	static const int speeds[] = { 666, 1000, 1333, 2000 };
->>   	int f_max, f_min;
->>   
->>   	for (i = 0; i < 4; i++) {
-> 
-> style trivia:  the loop test is probably better using ARRAY_SIZE
-> 
-> 	for (i = 0; i < ARRAY_SIZE(speeds); i++)
-> 
-I'll send a V2 for that. Good idea.
+Don't populate the read-only array sys_clk_src on the stack but instead
+make it static and add in a missing const. Also makes the object code a
+little smaller.
 
-Colin
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/cpufreq/spear-cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
+index 7d0d62a06bf3..c6fdf019dbde 100644
+--- a/drivers/cpufreq/spear-cpufreq.c
++++ b/drivers/cpufreq/spear-cpufreq.c
+@@ -39,7 +39,7 @@ static struct clk *spear1340_cpu_get_possible_parent(unsigned long newfreq)
+ 	 * In SPEAr1340, cpu clk's parent sys clk can take input from
+ 	 * following sources
+ 	 */
+-	const char *sys_clk_src[] = {
++	static const char * const sys_clk_src[] = {
+ 		"sys_syn_clk",
+ 		"pll1_clk",
+ 		"pll2_clk",
+-- 
+2.38.1
+
