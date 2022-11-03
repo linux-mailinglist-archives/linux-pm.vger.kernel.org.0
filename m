@@ -2,123 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4D9617C6D
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 13:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB405617C7B
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 13:25:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiKCMVz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 08:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46484 "EHLO
+        id S229493AbiKCMZK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 08:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiKCMVt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 08:21:49 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707C3F69
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 05:21:48 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id s20so950674qkg.5
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 05:21:48 -0700 (PDT)
+        with ESMTP id S231374AbiKCMZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 08:25:09 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9A0A455;
+        Thu,  3 Nov 2022 05:25:08 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id p21so1746497plr.7;
+        Thu, 03 Nov 2022 05:25:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P+5YUCvZqbd7CB2bQQ6MOe7ruJKblRITAjPMVct4pI8=;
-        b=CO/f0A0UqCf3wCwPKnaBeTqdgR6dBumZAGDTOy0GPfBAk5+rSxhjYmofU5K1KyJHkp
-         bQyvFZSpUmpU7EU32AtkXmOH+YUqkO0wCQVAXj6hRkJlUlGjZyI1U1Juy+GHmBg5ztKs
-         CpFVbEqN3F0rO6soGDKfnafyjrgbVh7rwGF/DvRWV7EwaS87hgEqkKoZOEHbbntSFtvV
-         wX9fFHnuskwD2YM3PQX53UFKeGDcnv7gCWFo2ApNWPKd/6DHJm7u8Tz2L+ff2M4zdIWQ
-         8myc7gDWb3DMVbw62yk+cAxfoED7cJAZhrpKrLeoNIAoGIH9mQU9e7eoFWrdFGfi0Xb2
-         62GA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SoyesS99Fc4fhJQxB70DEhu+bNqWB5Z2Q4GxLzfZjGs=;
+        b=Q1SxqeOy5yvsxRTe2bAwnCmnDEciefYeJVHpiPnlaE4F6A3oVUOjcxg/UDC5JyAc+x
+         Qx+9hq0WDVmCDCVDrZbt5rc8JhJtp9+3L3hK6trXaDeNtKbE3Kc0iJ4ZXUya1tMfh4at
+         f7fOEeB2j64UCPNfaaYY34uDtLdEnafNu4ptTI4cKTvHwQmzPl7HRaFKfTXvD8rzpBjx
+         QhzgrWeErKhVa2XtzZ6fHrJPI6ylQJ64icdWFQC402PmbiuWk98lft8Vt3oJGW8Io04m
+         P9ZZAb0XHIUbyaynfuYnCDfSEccXCxxSpXc22MgbY+qnQthzKGRt3CzA1Sl5OCo5eTfG
+         CXDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+5YUCvZqbd7CB2bQQ6MOe7ruJKblRITAjPMVct4pI8=;
-        b=G+INxHszBkemIoYwDa8zzoY/ObKjLSIolJgDfTErE/Jyg6IPYZRVM2kMBMiAs01KiC
-         tfr1UV6IlThQ3lBD+hW/sNhi/XbT9AqM3yyXmisp75siotG6WkzTUG7XcuxwWc8B1Hfw
-         T9JgZ2a/3Wti0DRS2x101TtmBGptzgco4YGpH280aRwBUlKKRtzKHyHyKe9ujQdChEDR
-         gd5JMdHhxHquQN/JuFPaHaVBxC9/OUEB6Z4613mB12A7VcSfbBJoOLMUnuHgiTgDlgaN
-         ysCDR8TAouOoUzw+E3XqdYim4zv93AfStkqdhXn8+pKfY9YFfi1lguUryJlDk+6MHhX0
-         IPbA==
-X-Gm-Message-State: ACrzQf0xuvprMX4Zs6OjF2CU4Kfv0tFAx5YboYakDGSIU6vZIJjfaZTA
-        atiC1v7vreCoe80s18TvH0DzQ9OFPLZOng==
-X-Google-Smtp-Source: AMsMyM6SDfF7cMxptMVQxQuncXmO78QNH8O+ogTcFC6KAzOv0cS/F4ORrpJhJoSy97C4UYtYyZxdXQ==
-X-Received: by 2002:a37:5e41:0:b0:6ce:79e2:68af with SMTP id s62-20020a375e41000000b006ce79e268afmr21736389qkb.239.1667478107634;
-        Thu, 03 Nov 2022 05:21:47 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id r23-20020ae9d617000000b006f474e6a715sm606366qkk.131.2022.11.03.05.21.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 05:21:46 -0700 (PDT)
-Message-ID: <10086127-c733-364c-25da-0332c2336925@linaro.org>
-Date:   Thu, 3 Nov 2022 08:21:45 -0400
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SoyesS99Fc4fhJQxB70DEhu+bNqWB5Z2Q4GxLzfZjGs=;
+        b=YIyzYUgOOELJ/WzW940lm8rey/Wame3m1GW/GAI5ZDC/8O2McUTPTmi9IvUBrk7xJ1
+         rmdOWl63ogv5qmSzIO8mtScTimWDpzLb9TKwtYfHepBMPGQV/Kc1IXvxjRexNMbXRAJf
+         Cd4jJFVw9wxxIn0p9z3oqAi1JMsrFk5gSlb5AmEXfpC74NjusK4WeXDGspqulsQ17xJ/
+         iaRifaUV4hWIPnvL4m/6+puV5FTu+rAmL2t6OHJLfEWP4KIoGGa4YfdGmOsMKXh1wlZd
+         ODVG6joWS8mKJrywZQcPoU5uhSHMNesS2M4Atq/JDz+HeQiFtFRlc5fgjivFBAGp8T6n
+         V4wQ==
+X-Gm-Message-State: ACrzQf2UUAy07DY4bHQz1/RlLcoiaWC276xJieRsU6E2Eui45JiWW0jV
+        cFVm6ejuWHxyQEJ5nqg1gpY=
+X-Google-Smtp-Source: AMsMyM5NJhLeXX3IAb1/d7cMSRIAnsxBzWsfPCni3KFWy5jutUunzq3rKvx/d8yjJn8MH/ZkLYFvDQ==
+X-Received: by 2002:a17:90b:4a09:b0:213:9911:5f07 with SMTP id kk9-20020a17090b4a0900b0021399115f07mr31640342pjb.160.1667478308284;
+        Thu, 03 Nov 2022 05:25:08 -0700 (PDT)
+Received: from localhost.localdomain (2403-580a-80ed--90b3-8553.ip6.aussiebb.net. [2403:580a:80ed::90b3:8553])
+        by smtp.gmail.com with ESMTPSA id d190-20020a6236c7000000b0056c3a0dc65fsm633526pfa.71.2022.11.03.05.25.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 05:25:07 -0700 (PDT)
+From:   James Calligeros <jcalligeros99@gmail.com>
+To:     viresh.kumar@linaro.org
+Cc:     jcalligeros99@gmail.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, nm@ti.com, rafael@kernel.org,
+        sboyd@kernel.org, vincent.guittot@linaro.org, vireshk@kernel.org
+Subject: Re: [PATCH V2 5/5] OPP: decouple dt properties in opp_parse_supplies()
+Date:   Thu,  3 Nov 2022 22:24:25 +1000
+Message-Id: <3519763.iIbC2pHGDl@makoto>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <5acd93462bff6c108d65802fd39f6002dfadd1a0.1667473008.git.viresh.kumar@linaro.org>
+References: <cover.1667473008.git.viresh.kumar@linaro.org> <5acd93462bff6c108d65802fd39f6002dfadd1a0.1667473008.git.viresh.kumar@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 09/10] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- sc8280xp bwmon instances
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
- <20221028034155.5580-10-quic_bjorande@quicinc.com>
- <0ada5a42-02f4-50ce-e65c-1a5fa9966900@linaro.org>
- <20221103033741.GA5525@core-thresher1.qualcomm.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103033741.GA5525@core-thresher1.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02/11/2022 23:37, Bjorn Andersson wrote:
-> On Fri, Oct 28, 2022 at 06:15:50PM -0400, Krzysztof Kozlowski wrote:
->> On 27/10/2022 23:41, Bjorn Andersson wrote:
->>> The sc8280xp platform has two BWMON instances, one v4 and one v5. Extend
->>> the existing qcom,msm8998-bwmon and qcom,sc7280-llcc-bwmon to describe
->>> these.
->>>
->>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->>> ---
->>>  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 5 +++++
->>>  1 file changed, 5 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->>> index be29e0b80995..223cd6ecf279 100644
->>> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->>> @@ -25,9 +25,14 @@ properties:
->>>        - items:
->>>            - enum:
->>>                - qcom,sc7280-cpu-bwmon
->>> +              - qcom,sc8280xp-bwmon
->>
->> qcom,sc8280xp-cpu-bwmon
->> To match sc7280. I think it's better than my initial choice for
->> qcom,sdm845-bwmon without the cpu part.
->>
-> 
-> As discussed back then, we omitted "cpu" because there where multiple instances
-> of the bwmon block. Would you prefer we give it the "cpu" compatible and
-> potentially us it for non-cpu measurements?
+On Thursday, 3 November 2022 9:01:08 PM AEST Viresh Kumar wrote:
 
-I think yes, because we actually do not know whether measuring on
-non-cpu instances would work without some adjustments...
+> @@ -674,7 +677,7 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+>  	bool triplet;
+>  
+>  	microvolt = opp_parse_microvolt(opp, dev, opp_table, &triplet);
+> -	if (IS_ERR_OR_NULL(microvolt))
+> +	if (IS_ERR(microvolt))
+>  		return PTR_ERR(microvolt);
+ 
+Erroring out here will still block EM registration on platforms without 
+the opp-microvolt prop so we're back to square one, which means the 
+patch does not do what the description says it does. It behaves
+almost identically to the current code.
 
-Best regards,
-Krzysztof
+I assume this is an intentional choice given the comments in
+opp_parse_microvolt(), so the commit message should drop 
+references to fixing such platforms.
+
+If this is a hard sticking point and opp_parse_supplies() must return
+a regulator with opp-microvolt, then I am of the opinion that the parsing
+of opp-microwatt should be detangled entirely from the regulator
+infrastructure.
+
+Otherwise for the whole series,
+
+Tested-by: James Calligeros <jcalligeros99@gmail.com>
+
+- James
 
