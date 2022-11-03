@@ -2,71 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FAAC617FF5
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 15:49:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F3761808C
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 16:07:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiKCOtf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 10:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S231789AbiKCPHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 11:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbiKCOte (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 10:49:34 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AED17E3A;
-        Thu,  3 Nov 2022 07:49:33 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1355533wmg.2;
-        Thu, 03 Nov 2022 07:49:33 -0700 (PDT)
+        with ESMTP id S231406AbiKCPHF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 11:07:05 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD2EB1CFD6;
+        Thu,  3 Nov 2022 08:04:33 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id r186-20020a1c44c3000000b003cf4d389c41so3557231wma.3;
+        Thu, 03 Nov 2022 08:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6XPo/k7heVDESQZpImoWUJDkxoQwwB8JDz0aFByags=;
-        b=Us9V1/BdKTxxamujzNwkkFGRkUmW6S1w1PpIaEgvlqlZvhm9uvWU3US37rCNWldORI
-         l/BL5me6PT+Zn6EUX4Y6SMU3U6hDoFbY5HdEVhpmZcCpKpk/AjLYvrqatab4OAsgdL6s
-         Kf8m8Sy+DOKs6z+Jq3u6NWEeH2yM9kp1tTH7jYrtMdzn8/AiAgNANShrUJ7dc+oDJG5k
-         sIYOlITsaZ3DBNyrXCXIHx9fw5+ZKoaNMGiC0PcJKNdcUhoiJTZCgr8VGvyRhDqdgsdr
-         sJe4t4BKzXjVlV9iqlUrZDYdP6BxGUrgId6aFrS16HMSYQu4dQ5B7JwJMVFpYc1qxZ3D
-         3DhA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=v209CplkpUexHsLlLnwCwseFS2Qb1ruqSsIW0PYiNeA=;
+        b=FnqJS9esJc1rzfl3RzJiNomY6iTabfrM6+V56r+OFNSM1+adygP9+qnt7w7/isqrkN
+         MIp0hyS/kh4MzF+lmviuby+wvS6gADHcdfu3RROEKIHiUgvKlcwVQQXbrbq6vOh7jvba
+         i61CtfL5GgEnaPW6B58CGwfmkFhyyZ1JTsU6/eP9Ooed7z7kGoK3tEpzxudSxpxLG2CQ
+         BUqeZQvWc8KhdqPTCvE5v4SW58+bvIeBpMDq8P+6zGhuqefVTbXoiW7RqH8y1EOlbGtx
+         IQK21K+GV0OOV2GsNDyITe6GgDaqSbUdpBNCnAmglNDbo+dRJK2F4b//N+z7zyOQBog8
+         LZxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S6XPo/k7heVDESQZpImoWUJDkxoQwwB8JDz0aFByags=;
-        b=KyY/yotgwyYA0xDzmUpNuqTSpdH76W80fnBENiMdeR7Q8J9quhvJsR11uu1ssX1UnS
-         Z4jOMp+YDxTNp8djOtTIO+CrpsDivR5eBrD+1cXIL2jqCl2CkWHr4A2IZkS3tG/Wb7Kr
-         k3tvNpqZSuT9xrdfu38SvgRzHMiN1WnBwz6FeUB3oFJUMNOV0hYnruVVweCE96q25/qV
-         IwdPAxSCEhzAmSn1/YLuD/PJNO8tcz6CiIub5iihYptPOGAJvuSOQ2wTyJ7fLnIJwGnN
-         vELNVNZSReazFyyRvkrOdxTWIAKW6ESWpiVrq9u2Z97H0qcET20j1wBpKaX9ma5w09/j
-         tEgg==
-X-Gm-Message-State: ACrzQf3g/x7/Cy3qhQRtoByKcD/7r0tw3gYANNASCtvZwDuKWKYJehzg
-        pY5Vd0YUbNbP3pwwU+OHOOk=
-X-Google-Smtp-Source: AMsMyM49js37BJfeTe2EkgqiIxd21xul39YrnWt496H015GdItEKOZqrMj4nHElwuJCkReajdwTYVg==
-X-Received: by 2002:a05:600c:4f05:b0:3cf:4818:1704 with SMTP id l5-20020a05600c4f0500b003cf48181704mr19781528wmq.181.1667486972492;
-        Thu, 03 Nov 2022 07:49:32 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id k4-20020a05600c168400b003c6f1732f65sm8044wmn.38.2022.11.03.07.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 07:49:32 -0700 (PDT)
-Message-ID: <ef637642-7d0f-66b8-2225-b6f8609f037e@gmail.com>
-Date:   Thu, 3 Nov 2022 14:49:31 +0000
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=v209CplkpUexHsLlLnwCwseFS2Qb1ruqSsIW0PYiNeA=;
+        b=KugtcHhjco2BsrtfjTaIEqxg5hCUn/QCtqYISfAsFFwHVPfIFr5Cj0tBYG8a7AKNjq
+         9OgIWNBTnnkAe19S+1NDkc3IF7+RyYMV07VCCPHOq0kVVk0I+KQe+vj16toFhPJUJix9
+         fyPkQ6zkxpBzpQKiNwvhXncY2conKh3RDRf+sK/aotH2Ua2Z/NV56m/hEMJvoCruTQYT
+         qCRgpiAO+ngeALPKAUjiAge5f7odCnF9GZWNRyFf1sEx1QZf+hGI9txa928nrgKfk/kI
+         Cqb7bfNGRRk/7D1lnM5/MqGAC/kuP4AD+yByJ2uJylM7ji9JBQP2YrQCZ2QtWqIcg9Ji
+         hjGQ==
+X-Gm-Message-State: ACrzQf1JYlibvop25AqyVbG9av69keZcj5hr84GegSd6wenYjxp5Esq7
+        2HLGO7ZbpTVfYONmBpNXMUA=
+X-Google-Smtp-Source: AMsMyM4GJ7vFlVmtsfEUAkqDrWX9Q9yjRnOWWVaXvdKs22w4PlP49L1cTKGvahuZdbEAtlDTgEVHeA==
+X-Received: by 2002:a1c:acc5:0:b0:3c6:eebf:feee with SMTP id v188-20020a1cacc5000000b003c6eebffeeemr20120360wme.122.1667487872148;
+        Thu, 03 Nov 2022 08:04:32 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id y6-20020a1c4b06000000b003cf6a55d8e8sm209996wma.7.2022.11.03.08.04.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 08:04:31 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][V2] cpufreq: longhaul: Make array speeds static const
+Date:   Thu,  3 Nov 2022 15:04:31 +0000
+Message-Id: <20221103150431.87598-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] cpufreq: SPEAr: Make read-only array sys_clk_src static
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221103143654.85275-1-colin.i.king@gmail.com>
- <20221103143807.tamhepos3cureoga@vireshk-i7>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <20221103143807.tamhepos3cureoga@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,34 +70,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/11/2022 14:38, Viresh Kumar wrote:
-> On 03-11-22, 14:36, Colin Ian King wrote:
->> Don't populate the read-only array sys_clk_src on the stack but instead
->> make it static and add in a missing const. Also makes the object code a
->> little smaller.
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->> ---
->>   drivers/cpufreq/spear-cpufreq.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
->> index 7d0d62a06bf3..c6fdf019dbde 100644
->> --- a/drivers/cpufreq/spear-cpufreq.c
->> +++ b/drivers/cpufreq/spear-cpufreq.c
->> @@ -39,7 +39,7 @@ static struct clk *spear1340_cpu_get_possible_parent(unsigned long newfreq)
->>   	 * In SPEAr1340, cpu clk's parent sys clk can take input from
->>   	 * following sources
->>   	 */
->> -	const char *sys_clk_src[] = {
->> +	static const char * const sys_clk_src[] = {
->>   		"sys_syn_clk",
->>   		"pll1_clk",
->>   		"pll2_clk",
-> 
-> Same questions from longhaul patch apply here too.
-> 
-See answer in that patch :-)
+Don't populate the read-only array speeds on the stack but instead
+make it static. Also makes the object code a little smaller. Replace
+hard-coded loop array bounds with ARRAY_SIZE.
 
-But really, this is kind of basic C level stuff. I suggest reading K&R 
-2nd Edition, Section 4.6, last paragraph before exercise 4-11.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+V2: replace 4 with ARRAY_SIZE in for-loop as suggested by Joe Perches.
+---
+ drivers/cpufreq/longhaul.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
+index 3e000e1a75c6..4c57c6725c13 100644
+--- a/drivers/cpufreq/longhaul.c
++++ b/drivers/cpufreq/longhaul.c
+@@ -407,10 +407,10 @@ static int guess_fsb(int mult)
+ {
+ 	int speed = cpu_khz / 1000;
+ 	int i;
+-	int speeds[] = { 666, 1000, 1333, 2000 };
++	static const int speeds[] = { 666, 1000, 1333, 2000 };
+ 	int f_max, f_min;
+ 
+-	for (i = 0; i < 4; i++) {
++	for (i = 0; i < ARRAY_SIZE(speeds); i++) {
+ 		f_max = ((speeds[i] * mult) + 50) / 100;
+ 		f_max += (ROUNDING / 2);
+ 		f_min = f_max - ROUNDING;
+-- 
+2.38.1
+
