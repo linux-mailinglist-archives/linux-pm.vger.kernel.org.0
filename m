@@ -2,77 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36914618795
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE0A618799
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:35:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbiKCSdO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 14:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59518 "EHLO
+        id S229548AbiKCSfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 14:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232046AbiKCSdA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:33:00 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D8921E3D8;
-        Thu,  3 Nov 2022 11:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667500344; x=1699036344;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=wJHxXMwz4IGhtwnDctSuhSAsogpPRrGlQTB5IUCB9qY=;
-  b=AMNB2kIxDDfjVn6Di7viAutuZ8lmjof7O9lHqQzZlk4FC/W5vZdg1t2D
-   oWNjOescAib+ynRhy5tu3yoRqwnFdbFz2gxuXDxuErOf2+tq4q5Fnahnb
-   lVdQSuGgEvlaqTy3rns2tq/fQtLGtrAXEFaBnzYT2yqO/qlNqV6bnlAnz
-   Qq4x9OQVXjLbdU+i1rVWJk2d3Gh0VFqPVo/x4FTDQn8HKlwXBmeRXmcvr
-   qd0GN3nzd7l1SEcJ4JCMQCIIwNt7H1f9VLju87IIX3uhUCxOR+/97SDmO
-   5SG5cxxT+relbVtLjOv0dP4Qbebqk4xZQ5AcDcqkJJ/pPZRyFanb0A4tB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308485913"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="308485913"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 11:32:24 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="777414886"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="777414886"
-Received: from btoolex-mobl.amr.corp.intel.com (HELO [10.209.95.24]) ([10.209.95.24])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 11:32:23 -0700
-Message-ID: <2bee4f6a-5f25-eee1-471b-f1c4f94c3877@intel.com>
-Date:   Thu, 3 Nov 2022 11:32:22 -0700
+        with ESMTP id S229672AbiKCSe7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:34:59 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4149CD6
+        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 11:34:57 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id k2so1723989qkk.7
+        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 11:34:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Fme8TpX7/aX6I0wUHkOV0EjnvReL60XkORWeEGO34oM=;
+        b=2kibW0+vryXErg+mDHwnqajIZjz0pPoZxsrKzyybbiUpFIo+lg2wP9Ykv6mDhbe6G9
+         vxNRCLfXA9mVhxz0pw7fAZBlSdS0tZ1UpOy8dt5MJDSaoBK6qhh7l7lfeoy+Mi3WUUVJ
+         uLjs5WPurIvVrnKKBGWDD/pUkPvBsvpqMyCL7Ub9Ur1Mr0J1Dg35G6poKcozlQEMO5US
+         qXDkxnpxNAuAqgBs75byeh1+7RDK+FVlLAX9zOOnln7C/q+XtQCdmuy6VyyLZ5yK0iel
+         1wVb9fQ78Zu6bdsgprW/nvDsLxWkJBpsu4DCDu8aIn5k0CV7FoE4l6kq/3jpu9Pw3Ilw
+         0apw==
+X-Gm-Message-State: ACrzQf3N5QbbSEJ228iUxcib3JivHKQYeGtunbzNKHN2xo6Oa0zwucBl
+        eCjz9/3eAuBz+J8kuXnwv0qLk4pybHtBnkA/yac=
+X-Google-Smtp-Source: AMsMyM7VMuMQnOTaWFYlaOGoRYgL/vknb0LyCbtSuxv/81b5hzsSHwf1rDWoR4eB7vHh+BH/EO4b2Rh5EBw4pkTzBdQ=
+X-Received: by 2002:a37:65c9:0:b0:6fa:1ef8:fa10 with SMTP id
+ z192-20020a3765c9000000b006fa1ef8fa10mr20190691qkb.648.1667500496799; Thu, 03
+ Nov 2022 11:34:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal
- EPB
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        dave.hansen@linux.intel.com, bp@alien8.de
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        len.brown@intel.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        x86@kernel.org
-References: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com>
- <CAJZ5v0hVaO-j6PEZ0u+uz==0it3qvZ8XdkrXk4F2x692OfgBcQ@mail.gmail.com>
- <CAJZ5v0gMgq+=WvzL8yiKr6AW9+dGb9w5uVOYjthC6a1HJRXMOQ@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CAJZ5v0gMgq+=WvzL8yiKr6AW9+dGb9w5uVOYjthC6a1HJRXMOQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221102064838.2615669-1-chenhuacai@loongson.cn>
+In-Reply-To: <20221102064838.2615669-1-chenhuacai@loongson.cn>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Nov 2022 19:34:45 +0100
+Message-ID: <CAJZ5v0hi3cqjCH-2hGp9xeC4Ch5mA+V9Zb+D_mCqDViNA6Musg@mail.gmail.com>
+Subject: Re: [PATCH] ACPI / table: Print CORE_PIC information when MADT is parsed
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/3/22 11:25, Rafael J. Wysocki wrote:
-> I'm wondering if there are any plans to pick up this one into the x86
-> tree?  If not, I can take care of it.
+On Wed, Nov 2, 2022 at 7:50 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+>
+> When MADT is parsed, print CORE_PIC information as below:
+>
+> ACPI: CORE PIC (processor_id[0x00] core_id[0x00] enabled)
+> ACPI: CORE PIC (processor_id[0x01] core_id[0x01] enabled)
+> ...
+> ACPI: CORE PIC (processor_id[0xff] core_id[0xff] enabled)
+>
+> This debug information will be very helpful to bring up early systems to
+> see if processor_id and core_id are matched or not as spec defined.
+>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  drivers/acpi/tables.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
+> index 47ec11d4c68e..23bff77b09f4 100644
+> --- a/drivers/acpi/tables.c
+> +++ b/drivers/acpi/tables.c
+> @@ -210,6 +210,16 @@ void acpi_table_print_madt_entry(struct acpi_subtable_header *header)
+>                 }
+>                 break;
+>
+> +       case ACPI_MADT_TYPE_CORE_PIC:
+> +               {
+> +                       struct acpi_madt_core_pic *p =
+> +                           (struct acpi_madt_core_pic *)header;
+> +                       pr_debug("CORE PIC (processor_id[0x%02x] core_id[0x%02x] %s)\n",
+> +                                p->processor_id, p->core_id,
+> +                                (p->flags & ACPI_MADT_ENABLED) ? "enabled" : "disabled");
+> +               }
+> +               break;
+> +
+>         default:
+>                 pr_warn("Found unsupported MADT entry (type = 0x%x)\n",
+>                         header->type);
+> --
 
-I'll bump it up to the front of the queue. :)
+Applied as 6.2 material.
 
-Thanks for the reminder.
+However, next time please CC ACPI-related patches to linux-acpi rather
+than to linux-pm (or you can do both if the patch is PM-related
+anyway).
+
+Thanks!
