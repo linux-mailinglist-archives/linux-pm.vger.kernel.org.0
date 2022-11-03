@@ -2,53 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FE0A618799
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:35:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E6296187C0
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 19:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiKCSfB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 14:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35236 "EHLO
+        id S230011AbiKCSjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 14:39:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229672AbiKCSe7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:34:59 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4149CD6
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 11:34:57 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id k2so1723989qkk.7
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 11:34:57 -0700 (PDT)
+        with ESMTP id S229523AbiKCSjm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 14:39:42 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F408100;
+        Thu,  3 Nov 2022 11:39:41 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id k4so1733834qkj.8;
+        Thu, 03 Nov 2022 11:39:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Fme8TpX7/aX6I0wUHkOV0EjnvReL60XkORWeEGO34oM=;
-        b=2kibW0+vryXErg+mDHwnqajIZjz0pPoZxsrKzyybbiUpFIo+lg2wP9Ykv6mDhbe6G9
-         vxNRCLfXA9mVhxz0pw7fAZBlSdS0tZ1UpOy8dt5MJDSaoBK6qhh7l7lfeoy+Mi3WUUVJ
-         uLjs5WPurIvVrnKKBGWDD/pUkPvBsvpqMyCL7Ub9Ur1Mr0J1Dg35G6poKcozlQEMO5US
-         qXDkxnpxNAuAqgBs75byeh1+7RDK+FVlLAX9zOOnln7C/q+XtQCdmuy6VyyLZ5yK0iel
-         1wVb9fQ78Zu6bdsgprW/nvDsLxWkJBpsu4DCDu8aIn5k0CV7FoE4l6kq/3jpu9Pw3Ilw
-         0apw==
-X-Gm-Message-State: ACrzQf3N5QbbSEJ228iUxcib3JivHKQYeGtunbzNKHN2xo6Oa0zwucBl
-        eCjz9/3eAuBz+J8kuXnwv0qLk4pybHtBnkA/yac=
-X-Google-Smtp-Source: AMsMyM7VMuMQnOTaWFYlaOGoRYgL/vknb0LyCbtSuxv/81b5hzsSHwf1rDWoR4eB7vHh+BH/EO4b2Rh5EBw4pkTzBdQ=
-X-Received: by 2002:a37:65c9:0:b0:6fa:1ef8:fa10 with SMTP id
- z192-20020a3765c9000000b006fa1ef8fa10mr20190691qkb.648.1667500496799; Thu, 03
- Nov 2022 11:34:56 -0700 (PDT)
+        bh=KzoAaszO4H5feq9ifFyoUO4g382Xi213Yx0rSxYlkkk=;
+        b=zo9a38LNwQu+3Og3PUQQGnfg+OUM8ZJOzUvV8adbbZdwM5CFXa1Z9wc+b9FLQq199b
+         3HmuFX0vXmV52jdGBpjaAQoV4EfkioXiEwGGFPtYHFmIslMWvTtWgTxhro+49z1PrI9N
+         WV7N3NaL8q1I5I4+qMIa1Dcue4xQHbTXtjvXbHQBYKPyYj+Xr92NjTL+sP0QQQuzdcua
+         WNeqXQS3dQiY5T249Hkg7+o2XHuJTrx9qd0rx9dMdh8z1hFSh0Jq7OLPeRDWSFs8r1cA
+         M0K+/AVfPyzgO799cwE16dcmOf9L/PKK2O+j1y5SkXCMA9JRcgmccwAhy6v5V2UNVB+b
+         xdtg==
+X-Gm-Message-State: ACrzQf1NeCDzHfcnQCFHTDThd5Qm51J7se3JX3MuyG8lA8Q5aHQL1Fo4
+        qzcv9zI0QqKCOjU/EqQIWLgf8KkRxo8hwpO9ZaE=
+X-Google-Smtp-Source: AMsMyM6h+nd034u171sGJIo0kMJVTuQtZWkzxVeBridmsJRx5IuuFc8gdtf2RwlsqaRBnYO0BBU432GqNNR63++MGA8=
+X-Received: by 2002:a37:b1c2:0:b0:6fa:1185:4dbf with SMTP id
+ a185-20020a37b1c2000000b006fa11854dbfmr22071519qkf.764.1667500780650; Thu, 03
+ Nov 2022 11:39:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221102064838.2615669-1-chenhuacai@loongson.cn>
-In-Reply-To: <20221102064838.2615669-1-chenhuacai@loongson.cn>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr> <652abbd70fca17977135754901135a6dad5d636c.1667336095.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <652abbd70fca17977135754901135a6dad5d636c.1667336095.git.christophe.jaillet@wanadoo.fr>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 19:34:45 +0100
-Message-ID: <CAJZ5v0hi3cqjCH-2hGp9xeC4Ch5mA+V9Zb+D_mCqDViNA6Musg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI / table: Print CORE_PIC information when MADT is parsed
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date:   Thu, 3 Nov 2022 19:39:29 +0100
+Message-ID: <CAJZ5v0iy8UfC_9rsUGObgGQ=6_Ts17E0rTn_LSbYhbGNrvq4FQ@mail.gmail.com>
+Subject: Re: [PATCH 14/30] powercap: Use kstrtobool() instead of strtobool()
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -60,50 +56,53 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 7:50 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+On Tue, Nov 1, 2022 at 10:15 PM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
 >
-> When MADT is parsed, print CORE_PIC information as below:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
 >
-> ACPI: CORE PIC (processor_id[0x00] core_id[0x00] enabled)
-> ACPI: CORE PIC (processor_id[0x01] core_id[0x01] enabled)
-> ...
-> ACPI: CORE PIC (processor_id[0xff] core_id[0xff] enabled)
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
 >
-> This debug information will be very helpful to bring up early systems to
-> see if processor_id and core_id are matched or not as spec defined.
+> While at it, include the corresponding header file (<linux/kstrtox.h>)
 >
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  drivers/acpi/tables.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
+> This patch is part of a serie that axes all usages of strtobool().
+> Each patch can be applied independently from the other ones.
 >
-> diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
-> index 47ec11d4c68e..23bff77b09f4 100644
-> --- a/drivers/acpi/tables.c
-> +++ b/drivers/acpi/tables.c
-> @@ -210,6 +210,16 @@ void acpi_table_print_madt_entry(struct acpi_subtable_header *header)
->                 }
->                 break;
+> The last patch of the serie removes the definition of strtobool().
 >
-> +       case ACPI_MADT_TYPE_CORE_PIC:
-> +               {
-> +                       struct acpi_madt_core_pic *p =
-> +                           (struct acpi_madt_core_pic *)header;
-> +                       pr_debug("CORE PIC (processor_id[0x%02x] core_id[0x%02x] %s)\n",
-> +                                p->processor_id, p->core_id,
-> +                                (p->flags & ACPI_MADT_ENABLED) ? "enabled" : "disabled");
-> +               }
-> +               break;
-> +
->         default:
->                 pr_warn("Found unsupported MADT entry (type = 0x%x)\n",
->                         header->type);
+> You may not be in copy of the cover letter. So, if needed, it is available
+> at [1].
+>
+> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
+> ---
+>  drivers/powercap/powercap_sys.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+> index f0654a932b37..1f968353d479 100644
+> --- a/drivers/powercap/powercap_sys.c
+> +++ b/drivers/powercap/powercap_sys.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/module.h>
+>  #include <linux/device.h>
+>  #include <linux/err.h>
+> +#include <linux/kstrtox.h>
+>  #include <linux/slab.h>
+>  #include <linux/powercap.h>
+>
+> @@ -446,7 +447,7 @@ static ssize_t enabled_store(struct device *dev,
+>  {
+>         bool mode;
+>
+> -       if (strtobool(buf, &mode))
+> +       if (kstrtobool(buf, &mode))
+>                 return -EINVAL;
+>         if (dev->parent) {
+>                 struct powercap_zone *power_zone = to_powercap_zone(dev);
 > --
 
-Applied as 6.2 material.
-
-However, next time please CC ACPI-related patches to linux-acpi rather
-than to linux-pm (or you can do both if the patch is PM-related
-anyway).
-
-Thanks!
+Applied as 6.2 material, thanks!
