@@ -2,96 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28BB7617FAC
-	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 15:37:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC6D617FB0
+	for <lists+linux-pm@lfdr.de>; Thu,  3 Nov 2022 15:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiKCOhF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 10:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S231618AbiKCOhM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 10:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiKCOg6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 10:36:58 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290F210CC;
-        Thu,  3 Nov 2022 07:36:57 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id z14so3069813wrn.7;
-        Thu, 03 Nov 2022 07:36:57 -0700 (PDT)
+        with ESMTP id S231522AbiKCOhJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 10:37:09 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271C214021
+        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 07:37:08 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id q71so1821735pgq.8
+        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 07:37:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ES1nm1fALBWsnWNeWE6cH/eUHmHK3mjzRJulJRIoib0=;
-        b=BGB0/7WZRrgNq7UIH13nwkr/vZC7rpLEpdwB1j5uv7fiDc2R66SM0IxRpYYngznkZ1
-         2PhfAKwaNYtN8epe2pz7zXl56PWJUlgFjJzuuhAd34cnQXPOJF8mKCq2hFumPn1PD9sR
-         1jUIgGJGqXHpvDn8/64AFxUzZ28y63i8bc7D6Q0mo3xlN1hmFAMBf1Rt0/LnSsQlG/pY
-         wXs4vlZJWv0w7I/9VhHCDirO1Q+MErL2cDuRY/t/61aWBDyAvXO1qmqlzzjQ8siCr7FO
-         hVP6h4oCeismtmPb2e9DpenpMpTmvB7zW0GVjgiSw6U7QJkNEhUwV+aTloHSUgZ3sTy1
-         4Ckg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PF4KJhlREAMO13MZb6HASqlqjPtxWxB+/ki0jtcrRVU=;
+        b=YuqXDAGfRgXxsHfPuM9MeVNi/kdbzsvn5G7ZIdhGVTAb+wop8Zh+aIA57zeTQWx6mi
+         N/b/f4ZIJDyi+/mBgHDLFlNuciJ3i/72TvNuAR/gnxgYwTDgZDUWulPtd3K7Mgclnsea
+         hQz8IgVdmPfyi1Vw4w6PfdRt+R8JOd0paiyF3kVM9XA5/FzNAblhMXZcuKVmmMT3uDxm
+         NwQp1KtKLjLWawPqgrAWNY4CFUe79c9y8Zc7On2VktguYebhnYla9SDb1Al5weP8ikbf
+         MbRBaPqpZKYykvZQAz1yMidd5mZ3ZZ9L2GDVusXquGC6k3HPHieNk9AIQtz3xfcmJJwC
+         2F/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ES1nm1fALBWsnWNeWE6cH/eUHmHK3mjzRJulJRIoib0=;
-        b=sOBE6LarX8tEwBxAVf0HdPgDplNHLORv1ubXjhAoahLeB5f9cJEN9ZSjKyx5jkMZNP
-         jBzuSrI1h7X53ARcttBIfr4hYfvLzeACLCmN/eLzJNf34pCa0PYByyaj3ifbRgUoz4vk
-         ZVj3FWwmz7zWpKXcYQpuh824TZ6b+FsUD8//+aS3F3yDwDk4L4Avrtdl7P3zLwHPT8YZ
-         mk4qWHJA1bkMKq52sABs8u1lOxUAbPtYkt4uFlMLelquQjRvkCEnl5iuDN5MC6BcE2Nf
-         xEGGoboAYbP2uIWKv5jeAwPj01Ma5C4O0ctQVMmGDkPgTXtyZtfQcXN0N8muRY/cyUzD
-         JWyg==
-X-Gm-Message-State: ACrzQf3Bu3y16N6WkEQ2oJ3Cxd7L6ceN5apL72B5Hk5xNBF1bnPcL2tD
-        /t89/xbUBJ/Ex1DpgHuNa5U=
-X-Google-Smtp-Source: AMsMyM4Rs1cxPouTtEmcWcmnfuAmM1E7ih1x9jR0C3RQk+T+gxcvtSZpeBWL9tYSm1ugs+0DUotqyg==
-X-Received: by 2002:a5d:6a90:0:b0:236:4835:ca94 with SMTP id s16-20020a5d6a90000000b002364835ca94mr18846026wru.187.1667486215679;
-        Thu, 03 Nov 2022 07:36:55 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id h7-20020a5d4307000000b00236883f2f5csm1005803wrq.94.2022.11.03.07.36.55
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PF4KJhlREAMO13MZb6HASqlqjPtxWxB+/ki0jtcrRVU=;
+        b=6uB3wXXHI6Z/BOUWOmJsUos1hvgKZ8BqCfZXLVqArZix/6rcbpapJIddd5p5/krHPE
+         02X1/8/83zXrOU/JpQHtwPC1825AvLpt/ZPhFfyYQVM7HtYK1Zw6PjFxCWdd2/CWf1BD
+         K7tBZu5I3rc0XH/kUgWm62tyznS1G3VBvbmu7t7H8WuynfJ9YkIgzX86quAALlEyg1U5
+         6c6luNbrxJ7jJ57ZzZaUJKlkSGX98SUtSejG6v1nl9Bpe9fOtwQlhzeodH9wbGB9e8FA
+         cop40EeYRACzo71LagBb4wsaQy5AO43ggEtRz+5wTyp79rjh+ztl68VG0cFg+ool2l/v
+         Z1RQ==
+X-Gm-Message-State: ACrzQf3mgpBG4BckSbXHLvR4pGvmbQPBZLGuYM6tvePD0eMTDs1Yft7J
+        BO9Yue8THjz6lLWhKd+bORcIWw==
+X-Google-Smtp-Source: AMsMyM5LRPw3sJu0S6IYaEzxAplyQPG+AMWGIal4R4heyurPG/hw3ddScxNuvMy9AVHXwotlltfM/A==
+X-Received: by 2002:a63:cc43:0:b0:43a:2f12:d326 with SMTP id q3-20020a63cc43000000b0043a2f12d326mr26197581pgi.320.1667486227674;
+        Thu, 03 Nov 2022 07:37:07 -0700 (PDT)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id s124-20020a625e82000000b0056b9124d441sm779193pfb.218.2022.11.03.07.37.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:36:55 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: SPEAr: Make read-only array sys_clk_src static
-Date:   Thu,  3 Nov 2022 14:36:54 +0000
-Message-Id: <20221103143654.85275-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Thu, 03 Nov 2022 07:37:07 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 20:07:05 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: longhaul: Make array speeds static const
+Message-ID: <20221103143705.6g3geneixpmguaq5@vireshk-i7>
+References: <20221103132141.79671-1-colin.i.king@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103132141.79671-1-colin.i.king@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Don't populate the read-only array sys_clk_src on the stack but instead
-make it static and add in a missing const. Also makes the object code a
-little smaller.
+On 03-11-22, 13:21, Colin Ian King wrote:
+> Don't populate the read-only array speeds on the stack but instead
+> make it static. Also makes the object code a little smaller.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/cpufreq/spear-cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+How will that benefit ? I am just looking for a valid answer in commit log.
 
-diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
-index 7d0d62a06bf3..c6fdf019dbde 100644
---- a/drivers/cpufreq/spear-cpufreq.c
-+++ b/drivers/cpufreq/spear-cpufreq.c
-@@ -39,7 +39,7 @@ static struct clk *spear1340_cpu_get_possible_parent(unsigned long newfreq)
- 	 * In SPEAr1340, cpu clk's parent sys clk can take input from
- 	 * following sources
- 	 */
--	const char *sys_clk_src[] = {
-+	static const char * const sys_clk_src[] = {
- 		"sys_syn_clk",
- 		"pll1_clk",
- 		"pll2_clk",
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> ---
+>  drivers/cpufreq/longhaul.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/longhaul.c b/drivers/cpufreq/longhaul.c
+> index 3e000e1a75c6..25f8ef7bac47 100644
+> --- a/drivers/cpufreq/longhaul.c
+> +++ b/drivers/cpufreq/longhaul.c
+> @@ -407,7 +407,7 @@ static int guess_fsb(int mult)
+>  {
+>  	int speed = cpu_khz / 1000;
+>  	int i;
+> -	int speeds[] = { 666, 1000, 1333, 2000 };
+> +	static const int speeds[] = { 666, 1000, 1333, 2000 };
+
+Why not make it global then ?
+
 -- 
-2.38.1
-
+viresh
