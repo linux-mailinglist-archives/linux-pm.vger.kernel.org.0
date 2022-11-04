@@ -2,159 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 288E96190A9
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 07:09:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7054619108
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 07:25:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKDGJy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 02:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
+        id S231255AbiKDGZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 02:25:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiKDGJx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 02:09:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF3C178B8;
-        Thu,  3 Nov 2022 23:09:53 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id bj12so10645941ejb.13;
-        Thu, 03 Nov 2022 23:09:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+Tr/8hi5G7RL1UIjwqgzK0lAVGdQMoS2Pg25E/W9mMA=;
-        b=j47wp55XIfHt/4ShZQhg6PwD0qLIXnfGr8DblGzC564u4/ZP8LKISgmism26QTukkz
-         MiZcUXoboPKpeMG8nc8RPx/iXHluu08o1fX2xsHOYJbWI1TEjEcLu2BLDqzT+q6MUnvF
-         E6k9Ln/b/nV9qbOPQKSviQgz9Gw4dxZoaOQKryAahiSMwHq2jkyGO0pqdchJVtfgNMLj
-         Bn+JtuhfuQGtDYXguOID8sob9ZKuWaCOHQerkdGQ6x8qC4YAJRNFaX7GiQUZhMZdQgrT
-         7TKbH7AJq4JvHe1FAodjMRIGojve/FDHs7exu/EcmHirWgg25o3Y0yK/XhqFaB4Mkscn
-         CeVw==
+        with ESMTP id S231390AbiKDGZJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 02:25:09 -0400
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112545FE1;
+        Thu,  3 Nov 2022 23:25:05 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id cl5so5669796wrb.9;
+        Thu, 03 Nov 2022 23:25:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+Tr/8hi5G7RL1UIjwqgzK0lAVGdQMoS2Pg25E/W9mMA=;
-        b=QYXmQ2LzlTnmuX4sJLd7iJNbdRuhxeTP0ulxkYDNDGEJ4GM1wb6TtHRe/SnF3ZRp7o
-         jE9sEtJHQ3PylFl3sXN92SfJ0+9bxs54NOfFbm1zsV0DKW2SeUJrtLEraJmpwzoJX/3f
-         vXejnNeoVmQ8v0NIHvszqcGmykyj9FvapQnzTyY8BNEtvhH608om/DacsUh5mK2WW1k+
-         G8yp4k84Ws1OyiUWdZE0irexuyuaWlA4swfArc4awUFg2+cl5Oy78MCxxYmEe+PSDbIK
-         m82ECBQ4iohh4HQSgcI7w+PuGJuSynunLp6+ThdP8DLYZgKw56mJ+yxW0sZhHBn2pnZp
-         3U7Q==
-X-Gm-Message-State: ACrzQf0vf2AkNO0BoTb/yQYuGuMN3LEvL0LRTrnYuOt2Q7RJ9iOlMRcC
-        csLGiFFmzNgmbcEW3ei0x3tCxZeRn+M78w==
-X-Google-Smtp-Source: AMsMyM7hve8hRJtZwRoCWB82qjULQJwqJkd4zxtaiGuBlB8BhuG7A+PxHy1rT30oWU4f04ZlKqQerQ==
-X-Received: by 2002:a17:907:5c2:b0:77e:def7:65d8 with SMTP id wg2-20020a17090705c200b0077edef765d8mr33622937ejb.487.1667542191538;
-        Thu, 03 Nov 2022 23:09:51 -0700 (PDT)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id m11-20020a170906258b00b0078dce9984afsm1331503ejb.220.2022.11.03.23.09.50
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Nov 2022 23:09:51 -0700 (PDT)
-Subject: Re: [PATCH 1/3] power: cpcap-battery: Do not issue low signal too
- frequently
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony@atomide.com, philipp@uvos.xyz
-References: <1667332425-12536-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1667332425-12536-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <ce999c0b-342d-6a29-6a16-b69cf8a1db9d@gmail.com>
-Date:   Fri, 4 Nov 2022 08:09:46 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        bh=LWHoRHPkqrmeG+hiuWGL48/5B+q3CyL5rXd2G/yB4LY=;
+        b=VmlFUlviMj6ZSFTqh7FIgoUeBYpqGRrXz89wX9BtaHGygyz37trWlwsaf/fohR1Wq/
+         0tUoFELkeaN246ZVdxZXMv6LW9LsnqPz2k2y1h+0birXtoT9PM+TKcdZGN6IEantCPTR
+         8d99asytO2gGmYIHd5QtTiOc7euvWvCuE+6urZlkuShTy7TYhntz0AY15/vI76lRyq6l
+         1bD5kGlYmP4IenmVnvkLHnT13z9WR0Cl0kZ+8XKRlgm9hOgxWr36FSArz/BqbfnBnIp3
+         SCukdlZ37v6tYZu+y0U4xvorUpxsjn0rozk816eaSKpn3muucxkoq01tVp69VyUFnnTw
+         Le1Q==
+X-Gm-Message-State: ACrzQf0wX9VM53i05Wg/MNppMkYxkWVKqeYbNlzl76d4l4aGHv5pnkI+
+        4b3vLYrZMLqUsBmhOo11/UA=
+X-Google-Smtp-Source: AMsMyM6ELLkCViZP9S+BjozkioNNxKU3qVKRVolbwfydrl3pvkISKZMDfTo6ZWGhIp/e9Qdqhk2BrA==
+X-Received: by 2002:a5d:5a99:0:b0:236:7751:4e43 with SMTP id bp25-20020a5d5a99000000b0023677514e43mr20846137wrb.241.1667543103424;
+        Thu, 03 Nov 2022 23:25:03 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id n35-20020a05600c502300b003c6b874a0dfsm2411233wmr.14.2022.11.03.23.25.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 23:25:02 -0700 (PDT)
+Message-ID: <90de2e70-1802-b26b-798e-74421389180e@kernel.org>
+Date:   Fri, 4 Nov 2022 07:25:01 +0100
 MIME-Version: 1.0
-In-Reply-To: <1667332425-12536-2-git-send-email-ivo.g.dimitrov.75@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 2/2] PM: hibernate: add check of preallocate mem for
+ image size pages
+Content-Language: en-US
+To:     TGSP <tgsp002@gmail.com>, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, huanglei@kylinos.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
+References: <20221104054119.1946073-1-tgsp002@gmail.com>
+ <20221104054119.1946073-3-tgsp002@gmail.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20221104054119.1946073-3-tgsp002@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch has issues (calling enable_irq() from timer function), will 
-send v2 that uses delayed_work.
-
-On 1.11.22 г. 21:53 ч., Ivaylo Dimitrov wrote:
-> It seems that low battery irq may be generated tens of times per second,
-> leading to userspace being flooded with unnecessary events.
+On 04. 11. 22, 6:41, TGSP wrote:
+> From: xiongxin <xiongxin@kylinos.cn>
 > 
-> Fix that by preventing such events being generated more than once every 30
-> seconds.
+> Added a check on the return value of preallocate_image_highmem(). If
+> memory preallocate is insufficient, S4 cannot be done;
 > 
-> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+> I am playing 4K video on a machine with AMD or other graphics card and
+> only 8GiB memory, and the kernel is not configured with CONFIG_HIGHMEM.
+> When doing the S4 test, the analysis found that when the pages get from
+> minimum_image_size() is large enough, The preallocate_image_memory() and
+> preallocate_image_highmem() calls failed to obtain enough memory. Add
+> the judgment that memory preallocate is insufficient;
+> 
+> The detailed debugging data is as follows:
+> 
+> image_size: 3225923584, totalram_pages: 1968948 in
+> hibernate_reserved_size_init();
+> 
+> in hibernate_preallocate_memory():
+> code pages = minimum_image_size(saveable) = 717992, at this time(line):
+> count: 2030858
+> avail_normal: 2053753
+> highmem: 0
+> totalreserve_pages: 22895
+> max_size: 1013336
+> size: 787579
+> saveable: 1819905
+> 
+> When the code executes to:
+> pages = preallocate_image_memory(alloc, avail_normal), at that
+> time(line):
+> pages_highmem: 0
+> avail_normal: 1335761
+> alloc: 1017522
+> pages: 1017522
+> 
+> So enter the else branch judged by (pages < alloc), When executed to
+> size = preallocate_image_memory(alloc, avail_normal):
+> alloc = max_size - size = 225757;
+> size = preallocate_image_memory(alloc, avail_normal) = 168671, That is,
+> preallocate_image_memory() does not apply for all alloc memory pages,
+> because highmem is not enabled, and size_highmem will return 0 here, so
+> there is a memory page that has not been preallocated, so I think a
+> judgment needs to be added here.
+> 
+> But what I can't understand is that although pages are not preallocated
+> enough, "pages -= free_unnecessary_pages()" in the code below can also
+> discard some pages that have been preallocated, so I am not sure whether
+> it is appropriate to add a judgment here.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> Signed-off-by: huanglei <huanglei@kylinos.cn>
 > ---
->   drivers/power/supply/cpcap-battery.c | 25 ++++++++++++++++++++++++-
->   1 file changed, 24 insertions(+), 1 deletion(-)
+>   kernel/power/snapshot.c | 11 +++++++++--
+>   1 file changed, 9 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-> index 4676560..2659df7 100644
-> --- a/drivers/power/supply/cpcap-battery.c
-> +++ b/drivers/power/supply/cpcap-battery.c
-> @@ -137,6 +137,7 @@ struct cpcap_battery_ddata {
->   	struct power_supply *psy;
->   	struct cpcap_battery_config config;
->   	struct cpcap_battery_state_data state[CPCAP_BATTERY_STATE_NR];
-> +	struct timer_list low_timer;
->   	u32 cc_lsb;		/* μAms per LSB */
->   	atomic_t active;
->   	int charge_full;
-> @@ -914,9 +915,14 @@ static irqreturn_t cpcap_battery_irq_thread(int irq, void *data)
->   		dev_info(ddata->dev, "Coulomb counter calibration done\n");
->   		break;
->   	case CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW:
-> -		if (latest->current_ua >= 0)
-> +		if (latest->current_ua >= 0 &&
-> +		    !timer_pending(&ddata->low_timer)) {
->   			dev_warn(ddata->dev, "Battery low at %imV!\n",
->   				latest->voltage / 1000);
-> +			mod_timer(&ddata->low_timer,
-> +				  jiffies + msecs_to_jiffies(30000));
-> +			disable_irq_nosync(d->irq);
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index c20ca5fb9adc..546d544cf7de 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1854,6 +1854,8 @@ int hibernate_preallocate_memory(void)
+>   		alloc = (count - pages) - size;
+>   		pages += preallocate_image_highmem(alloc);
+>   	} else {
+> +		unsigned long size_highmem = 0;
+
+This needs not be initialized, right?
+
+> @@ -1863,8 +1865,13 @@ int hibernate_preallocate_memory(void)
+>   		pages_highmem += size;
+>   		alloc -= size;
+>   		size = preallocate_image_memory(alloc, avail_normal);
+> -		pages_highmem += preallocate_image_highmem(alloc - size);
+> -		pages += pages_highmem + size;
+> +		size_highmem = preallocate_image_highmem(alloc - size);
+> +		if (size_highmem < (alloc - size)) {
+> +			pr_err("Image allocation is %lu pages short, exit\n",
+> +				alloc - size - pages_highmem);
+> +			goto err_out;
 > +		}
->   		break;
->   	case CPCAP_BATTERY_IRQ_ACTION_POWEROFF:
->   		if (latest->current_ua >= 0 && latest->voltage <= 3200000) {
-> @@ -1087,6 +1093,19 @@ static int cpcap_battery_calibrate(struct cpcap_battery_ddata *ddata)
->   	return error;
->   }
+> +		pages += pages_highmem + size_highmem + size;
+>   	}
 >   
-> +static void cpcap_battery_lowbph_enable(struct timer_list *t)
-> +{
-> +	struct cpcap_battery_ddata *ddata = from_timer(ddata, t, low_timer);
-> +	struct cpcap_interrupt_desc *d;
-> +
-> +	list_for_each_entry(d, &ddata->irq_list, node) {
-> +		if (d->action == CPCAP_BATTERY_IRQ_ACTION_BATTERY_LOW)
-> +			break;
-> +	}
-> +
-> +	enable_irq(d->irq);
-> +}
-> +
->   #ifdef CONFIG_OF
->   static const struct of_device_id cpcap_battery_id_table[] = {
->   	{
-> @@ -1118,6 +1137,8 @@ static int cpcap_battery_probe(struct platform_device *pdev)
->   	if (!ddata)
->   		return -ENOMEM;
->   
-> +	timer_setup(&ddata->low_timer, cpcap_battery_lowbph_enable, 0);
-> +
->   	cpcap_battery_detect_battery_type(ddata);
->   
->   	INIT_LIST_HEAD(&ddata->irq_list);
-> @@ -1185,6 +1206,8 @@ static int cpcap_battery_remove(struct platform_device *pdev)
->   	if (error)
->   		dev_err(&pdev->dev, "could not disable: %i\n", error);
->   
-> +	del_timer_sync(&ddata->low_timer);
-> +
->   	return 0;
->   }
->   
-> 
+>   	/*
+
+-- 
+js
+suse labs
+
