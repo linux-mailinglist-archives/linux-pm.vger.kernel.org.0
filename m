@@ -2,92 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9932A619029
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 06:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D39B8619010
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 06:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbiKDFsv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 01:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55648 "EHLO
+        id S230231AbiKDFl2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 01:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiKDFsu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 01:48:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DE72792C;
-        Thu,  3 Nov 2022 22:48:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 516D1620A7;
-        Fri,  4 Nov 2022 05:48:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4A4DC43149;
-        Fri,  4 Nov 2022 05:48:46 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oqpZp-00711f-16;
-        Fri, 04 Nov 2022 01:49:13 -0400
-Message-ID: <20221104054913.171973223@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Fri, 04 Nov 2022 01:41:00 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org
-Subject: [RFC][PATCH v3 07/33] timers: PM: Use timer_shutdown_sync()
-References: <20221104054053.431922658@goodmis.org>
+        with ESMTP id S229964AbiKDFl1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 01:41:27 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E3DA275CD;
+        Thu,  3 Nov 2022 22:41:26 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso7308118pjc.0;
+        Thu, 03 Nov 2022 22:41:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/BZyFt5dCsT73A04TLBbOghf3YLF5kXYNj3qEppPq5Y=;
+        b=GOyEzehOcyRHUAlammU7EX9xRYhpA+YP4HPYMpKjovpagz8U6b8H/dV/9LC7A3Rv7z
+         AuxQJcKBDJn/mP7obi/aEMAwYNI1Xn5pH1LkBZ6x0hJbVlZvpH1fYaDb1Kh9r9CaT8zu
+         MSY+NsJdDzUYN+6VkC+KXowti8qjlc1G10BwbMY4GzVHlPf5JkPu3YLiYexmfJuf+d5F
+         Sp3JNnhfIKQ1HdhKAT+8ipgGbQf4Of7LlL4lon0tktVxAmYuOOwY8gbnTLjBOmZ5A6zg
+         booqWifuUzuyxxhwia00Sg8H0jof0+9oBzdsx8XaRXT7arCujN+pp9aO3zQjoawt7m6f
+         fT0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/BZyFt5dCsT73A04TLBbOghf3YLF5kXYNj3qEppPq5Y=;
+        b=Cqsfjpb/OXIOC9PWPvSuBs4uHwjLLVtPr8m/KHEpEAUrHGfDgin6l6ZFoRgXOB9Ff4
+         TMHq/uWhrmGNCLpneqzhGJu4YMuXzrcHWuvkam1hkOKs4iekWzEOOb8jKO32Rx1MpzM1
+         V3FQHB0K/K3McZ9NCLTvajtEnWOkJNOKd1et88uZZ62Dm57p+59sdtIhSD9sZDbH175+
+         nDPR1z86lYNgW932CfmD0HerT/UojKpmCgFWp4lwuKTgQ3DdCYvHwNV0B7+Q7k5Yo64c
+         E14EjiBYYgsR4Do+O7HEIfDlKVXs9Myk6SJHO4ehY3/mnurPpU+VgA6zzNQUItNhra1H
+         uoUw==
+X-Gm-Message-State: ACrzQf0A7MpVC9NyEjlc8k8EB1Rba+vx4JXI0TaW3vi7SvVWSOLsagE/
+        64krewzoCDrUU2dYN6FdE3E=
+X-Google-Smtp-Source: AMsMyM5ppXYAEctK4C52i9lpfUEFpfzLG/flwaMFtbqyr03aXVwRpcqL6NjtiSyJGTuT8RqckuL2aQ==
+X-Received: by 2002:a17:902:b94c:b0:178:336f:13d6 with SMTP id h12-20020a170902b94c00b00178336f13d6mr34498524pls.64.1667540485964;
+        Thu, 03 Nov 2022 22:41:25 -0700 (PDT)
+Received: from localhost.localdomain ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id q15-20020aa7960f000000b0056bdc3f5b29sm1684043pfg.186.2022.11.03.22.41.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 22:41:25 -0700 (PDT)
+From:   TGSP <tgsp002@gmail.com>
+To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        huanglei@kylinos.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        TGSP <tgsp002@gmail.com>
+Subject: [PATCH v2 0/2] Fixes to the hibernate_preallocate_memory()
+Date:   Fri,  4 Nov 2022 13:41:17 +0800
+Message-Id: <20221104054119.1946073-1-tgsp002@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Changes in v2:
+- Optimize code to resolve compilation warnings;
+- Add comments, add debug data, easy to view and modify.
 
-Instead of open coding making the timer look like it was not registered by
-setting the function pointer to NULL, call timer_shutdown_sync() that does
-the same thing.
+v1:
+hibernate_preallocate_memory() function is still quite obscure, can
+anyone add a little more description?
 
-Link: https://lore.kernel.org/all/20220407161745.7d6754b3@gandalf.local.home/
+It seems that the max_size calculation formula is wrong in the comment
+part, correct it;
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/base/power/wakeup.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+It is also found that when mem preallocate is not enough, it goes
+directly down without checking.
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 7cc0c0cf8eaa..c6d68bdcac68 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -202,12 +202,7 @@ void wakeup_source_remove(struct wakeup_source *ws)
- 	raw_spin_unlock_irqrestore(&events_lock, flags);
- 	synchronize_srcu(&wakeup_srcu);
- 
--	del_timer_sync(&ws->timer);
--	/*
--	 * Clear timer.function to make wakeup_source_not_registered() treat
--	 * this wakeup source as not registered.
--	 */
--	ws->timer.function = NULL;
-+	timer_shutdown_sync(&ws->timer);
- }
- EXPORT_SYMBOL_GPL(wakeup_source_remove);
- 
+xiongxin (2):
+  PM: hibernate: fix spelling mistake for annotation
+  PM: hibernate: add check of preallocate mem for image size pages
+
+ kernel/power/snapshot.c | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
+
 -- 
-2.35.1
+2.25.1
+
