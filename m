@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93CD61A007
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:34:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7634D61A009
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbiKDSeC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 14:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S232013AbiKDSef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 14:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232145AbiKDSd6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:33:58 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852744092F
-        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:33:56 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id y203so5237954pfb.4
-        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:33:56 -0700 (PDT)
+        with ESMTP id S232047AbiKDSee (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:34:34 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27B640471
+        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:34:32 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id k22so5234572pfd.3
+        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:34:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=cHlujkwLHQA1OWRlitXKA2okTr4nOrBSjZdPzF8hE5c=;
-        b=fYGdM/Tg8Tza7nWYNx1gvE5AjwWtFIuP2aMr7NSPrgUEcKXetw2efj4K9ltVVjew/O
-         hfXJ6HTPJXObLs10g0NdIXaQf1I9XXduYXsuLGv+V9dxSo0TvDryLnn2dlG70bCeTkio
-         Mvw0wCqrgxfpNUxlYb3257rRnrsy7wsaQJrD0=
+        bh=fFlgEoQ+2ARPKvzYCLdvHvwC3pq/RnzvVojet0DXLgg=;
+        b=nJ8Xa/ROHn8AT1PIg/dhjRMINqphLAL/bOrhvxGaJRCtDh1l/knL1nNHyUgybie2+i
+         4/4cKvfd0kb4xC00W02DHqwHRJlnuzWSqU376vzNvl9FZx33yev9vWF/3XjSBccf27dl
+         Emj5vMOkiP2lYyhiVng01hYuCLd3maODPa/LI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cHlujkwLHQA1OWRlitXKA2okTr4nOrBSjZdPzF8hE5c=;
-        b=Q44fKBE1nhZITHzPM1xDqwskjQXBfNj2c2BkAUBr6bor+JItNzhDODO6hRCvSkU7RF
-         eAi3HE5mbgafJ5a6BiSTbpR0XJn+BfX6gzMRO24nmlJ4Zo9QOFTaHjZ9PJT+MOJRA2Hg
-         Fu4ZSTecS+dFRUkdZAWuXryaLt0WZtx9FG6oulGLSv+jZwk9MYQRHM0vZAJpW3aRylwG
-         CmzuuLHhZAWNrZNk9JpQZRGtDIjDKAEwRaAu8TgvNPmqZTXpWXohCzwy5sm5zLVsGF8n
-         HTXy0ZdFuO4zR8p0o9E1aoDFi7FrsN5A8LOAV/5u4/SWXjGtTeLqMh72kCAtUswvSw4V
-         7tEg==
-X-Gm-Message-State: ACrzQf2mZlrwbN6zYfY4mS097/6auoJWnkDL4kxjDGldOjEGzADsPWW7
-        rV0sPCsef6E1mpe5zBW/WtiB8w==
-X-Google-Smtp-Source: AMsMyM6rQqEYsHld7hqlGdxSuOaXH5JXb85iYTOBX6NHfyLfqeh7au3t/GuMFJWcTQ45Yl98zYA5gw==
-X-Received: by 2002:a63:c65:0:b0:470:cb4:aca3 with SMTP id 37-20020a630c65000000b004700cb4aca3mr11424330pgm.389.1667586835979;
-        Fri, 04 Nov 2022 11:33:55 -0700 (PDT)
+        bh=fFlgEoQ+2ARPKvzYCLdvHvwC3pq/RnzvVojet0DXLgg=;
+        b=E0IDNdlhtjFMhv279fgGpYtouHWt+97GbQKlIQFnxykagelTehq5DzFdk+3AhJbRk1
+         SIoR5gcqlpr6FPnW8bye7uzykWuDtJNhYUubn6s9dDfGujJNz83aD3cqFOVgdWm3oMK3
+         otzAMsNHDXbQeWQBDkA+MSo6jN41PJvhMAABzPvwc2g4rqihpSlJ5bYPPkfFw9YbqIm7
+         A647WkO0ci3IXFNZn336GX0noFlpRIZEP/YGhAEmZRDbUnJPWuzuEHlw08gWfldj9rEh
+         8sRzkqzX90m9nTE425uyKeffLOyR8+URBtwIQ/J2P86Xd9L+T8YUebY0po9zD9JivaQL
+         1Y1A==
+X-Gm-Message-State: ACrzQf3Xk4IoK/SysMy9fDf04YCsVc9x5vEvMMbKCbueiAqE4drumqmV
+        6bVoFLEyBRnbhqHuHp5reFijrQ==
+X-Google-Smtp-Source: AMsMyM6S7zxtJ4UwzgqjmSKGYJg8U3NwTZne4WYB2avbtJ8sShe6lVSGKAHshLFa5m0rqJszHDmCRw==
+X-Received: by 2002:a63:1206:0:b0:470:18c:1489 with SMTP id h6-20020a631206000000b00470018c1489mr14766650pgl.357.1667586872547;
+        Fri, 04 Nov 2022 11:34:32 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id g8-20020a17090a640800b00205fafa6768sm1990807pjj.6.2022.11.04.11.33.55
+        by smtp.gmail.com with ESMTPSA id b9-20020aa79509000000b0056bc30e618dsm3071068pfp.38.2022.11.04.11.34.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:33:55 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:33:54 -0700
+        Fri, 04 Nov 2022 11:34:32 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:34:31 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Evan Green <evgreen@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
@@ -56,50 +56,45 @@ Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
         zohar@linux.ibm.com, dlunev@google.com,
         Eric Biggers <ebiggers@kernel.org>,
         Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Ben Boeckel <linux@me.benboeckel.net>,
         David Howells <dhowells@redhat.com>,
         James Morris <jmorris@namei.org>,
         Paul Moore <paul@paul-moore.com>,
         "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v4 04/11] security: keys: trusted: Include TPM2 creation
- data
-Message-ID: <202211041132.E8CB636@keescook>
+        linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 05/11] security: keys: trusted: Allow storage of PCR
+ values in creation data
+Message-ID: <202211041134.927C258@keescook>
 References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+ <20221103105558.v4.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+In-Reply-To: <20221103105558.v4.5.I32591db064b6cdc91850d777f363c9d05c985b39@changeid>
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:12AM -0700, Evan Green wrote:
-> In addition to the private key and public key, the TPM2_Create
-> command may also return creation data, a creation hash, and a creation
-> ticket. These fields allow the TPM to attest to the contents of a
-> specified set of PCRs at the time the trusted key was created. Encrypted
-> hibernation will use this to ensure that PCRs settable only by the
-> kernel were set properly at the time of creation, indicating this is an
-> authentic hibernate key.
+On Thu, Nov 03, 2022 at 11:01:13AM -0700, Evan Green wrote:
+> From: Matthew Garrett <matthewgarrett@google.com>
 > 
-> Encode these additional parameters into the ASN.1 created to represent
-> the key blob. The new fields are made optional so that they don't bloat
-> key blobs which don't need them, and to ensure interoperability with
-> old blobs.
+> When TPMs generate keys, they can also generate some information
+> describing the state of the PCRs at creation time. This data can then
+> later be certified by the TPM, allowing verification of the PCR values.
+> This allows us to determine the state of the system at the time a key
+> was generated. Add an additional argument to the trusted key creation
+> options, allowing the user to provide the set of PCRs that should have
+> their values incorporated into the creation data.
 > 
-> Signed-off-by: Evan Green <evgreen@chromium.org>
-
-There's a lot of open-coded math for the bounds checking. I didn't
-immediately see any problems, but it'd be nice if there was a way to
-hook a fuzzer up to this, or at least write some KUnit tests to check
-boundary conditions explicitly.
+> Link: https://lore.kernel.org/lkml/20210220013255.1083202-6-matthewgarrett@google.com/
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
 
 Reviewed-by: Kees Cook <keescook@chromium.org>
 
