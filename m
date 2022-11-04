@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387F0619FD9
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A93CD61A007
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:34:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232005AbiKDS14 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 14:27:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
+        id S229749AbiKDSeC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 14:34:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiKDS1z (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:27:55 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0471B2CC80
-        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:27:55 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h14so5219701pjv.4
-        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:27:54 -0700 (PDT)
+        with ESMTP id S232145AbiKDSd6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:33:58 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852744092F
+        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:33:56 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y203so5237954pfb.4
+        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:33:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pUqszso6Ws0bgIO+Fn99YX+rUGif2Q1cUmfl0WM0vmw=;
-        b=odecLGRhxOwhsXd0tqsJnLvySgK1wwL5EuKjfVW2c3GzswA2SuTOPOMGHpRE8Oo5jF
-         L45owvgVsVwiX3yrJTEPO3I5oqc25pHMej0OGi+/D3BFS/EyoVBztE7WTQMpAaqf+Rgg
-         AknDcr7HTObIsDEivNuvIS1OvsxZeWIyfLnAc=
+        bh=cHlujkwLHQA1OWRlitXKA2okTr4nOrBSjZdPzF8hE5c=;
+        b=fYGdM/Tg8Tza7nWYNx1gvE5AjwWtFIuP2aMr7NSPrgUEcKXetw2efj4K9ltVVjew/O
+         hfXJ6HTPJXObLs10g0NdIXaQf1I9XXduYXsuLGv+V9dxSo0TvDryLnn2dlG70bCeTkio
+         Mvw0wCqrgxfpNUxlYb3257rRnrsy7wsaQJrD0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pUqszso6Ws0bgIO+Fn99YX+rUGif2Q1cUmfl0WM0vmw=;
-        b=WYDIaV0QV1HQ5Z9ayCUUSgj2x5Zu7C+lCNgPJsqnk0x5qiWbj6qMQn23ztGFWaYq5Q
-         JIt/doW7WD6hP3IKSZNUCtRfMGHmheMgFbsH3QjV4Fvf8du10TnNSp8+yyyrvNaidxyx
-         QZpPUj71FI7YetPZMBdIWVVOaQjU7h4wJosvSW2MEzkU2M34YAI6ojo/raDUW/ZflTF3
-         zJx/XRo3vBIOlHlucQgL9SlnB8Qaw1tQWHGyCOZw/Ppkm989phN3ATf5xZKXxWkb2HVS
-         qgFjCb0Je+0yINGSbA18j8wOlsD6/7TNGwlQEjTuXbW0OlwVVvFIO7MsgRovF+lLOVPK
-         bJSw==
-X-Gm-Message-State: ACrzQf20D6Z9bB+vW/bLfAVd9hevG4MxzYi9MY9KMS4wsVuaj7v6cJtR
-        OUqH1EAOdaVStTSMFHCgoifVnQ==
-X-Google-Smtp-Source: AMsMyM4tInOtgbMjfF6aNdaiuKY8s8KWXpkz40UU3nzPEwdRYEQVO8XJ8Joli67e3QuEsGHMoa0zKA==
-X-Received: by 2002:a17:90b:3a81:b0:213:ff6a:aa0d with SMTP id om1-20020a17090b3a8100b00213ff6aaa0dmr23344938pjb.86.1667586474491;
-        Fri, 04 Nov 2022 11:27:54 -0700 (PDT)
+        bh=cHlujkwLHQA1OWRlitXKA2okTr4nOrBSjZdPzF8hE5c=;
+        b=Q44fKBE1nhZITHzPM1xDqwskjQXBfNj2c2BkAUBr6bor+JItNzhDODO6hRCvSkU7RF
+         eAi3HE5mbgafJ5a6BiSTbpR0XJn+BfX6gzMRO24nmlJ4Zo9QOFTaHjZ9PJT+MOJRA2Hg
+         Fu4ZSTecS+dFRUkdZAWuXryaLt0WZtx9FG6oulGLSv+jZwk9MYQRHM0vZAJpW3aRylwG
+         CmzuuLHhZAWNrZNk9JpQZRGtDIjDKAEwRaAu8TgvNPmqZTXpWXohCzwy5sm5zLVsGF8n
+         HTXy0ZdFuO4zR8p0o9E1aoDFi7FrsN5A8LOAV/5u4/SWXjGtTeLqMh72kCAtUswvSw4V
+         7tEg==
+X-Gm-Message-State: ACrzQf2mZlrwbN6zYfY4mS097/6auoJWnkDL4kxjDGldOjEGzADsPWW7
+        rV0sPCsef6E1mpe5zBW/WtiB8w==
+X-Google-Smtp-Source: AMsMyM6rQqEYsHld7hqlGdxSuOaXH5JXb85iYTOBX6NHfyLfqeh7au3t/GuMFJWcTQ45Yl98zYA5gw==
+X-Received: by 2002:a63:c65:0:b0:470:cb4:aca3 with SMTP id 37-20020a630c65000000b004700cb4aca3mr11424330pgm.389.1667586835979;
+        Fri, 04 Nov 2022 11:33:55 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 101-20020a17090a0fee00b0020669c8bd87sm45503pjz.36.2022.11.04.11.27.54
+        by smtp.gmail.com with ESMTPSA id g8-20020a17090a640800b00205fafa6768sm1990807pjj.6.2022.11.04.11.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:27:54 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:27:53 -0700
+        Fri, 04 Nov 2022 11:33:55 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:33:54 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Evan Green <evgreen@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
@@ -56,72 +56,52 @@ Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
         zohar@linux.ibm.com, dlunev@google.com,
         Eric Biggers <ebiggers@kernel.org>,
         Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
-        Matthew Garrett <matthewgarrett@google.com>,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v4 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-Message-ID: <202211041127.55ED2921E5@keescook>
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v4 04/11] security: keys: trusted: Include TPM2 creation
+ data
+Message-ID: <202211041132.E8CB636@keescook>
 References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <20221103105558.v4.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+In-Reply-To: <20221103105558.v4.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:11AM -0700, Evan Green wrote:
-> From: Matthew Garrett <matthewgarrett@google.com>
+On Thu, Nov 03, 2022 at 11:01:12AM -0700, Evan Green wrote:
+> In addition to the private key and public key, the TPM2_Create
+> command may also return creation data, a creation hash, and a creation
+> ticket. These fields allow the TPM to attest to the contents of a
+> specified set of PCRs at the time the trusted key was created. Encrypted
+> hibernation will use this to ensure that PCRs settable only by the
+> kernel were set properly at the time of creation, indicating this is an
+> authentic hibernate key.
 > 
-> Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
-> restricts usermode's ability to extend or reset PCR 23.
+> Encode these additional parameters into the ASN.1 created to represent
+> the key blob. The new fields are made optional so that they don't bloat
+> key blobs which don't need them, and to ensure interoperability with
+> old blobs.
 > 
-> Under certain circumstances it might be desirable to enable the creation
-> of TPM-backed secrets that are only accessible to the kernel. In an
-> ideal world this could be achieved by using TPM localities, but these
-> don't appear to be available on consumer systems. An alternative is to
-> simply block userland from modifying one of the resettable PCRs, leaving
-> it available to the kernel. If the kernel ensures that no userland can
-> access the TPM while it is carrying out work, it can reset PCR 23,
-> extend it to an arbitrary value, create or load a secret, and then reset
-> the PCR again. Even if userland somehow obtains the sealed material, it
-> will be unable to unseal it since PCR 23 will never be in the
-> appropriate state.
-> 
-> This Kconfig is only properly supported for systems with TPM2 devices.
-> For systems with TPM1 devices, having this Kconfig enabled completely
-> restricts usermode's access to the TPM. TPM1 contains support for
-> tunnelled transports, which usermode could use to smuggle commands
-> through that this Kconfig is attempting to restrict.
-> 
-> Link: https://lore.kernel.org/lkml/20210220013255.1083202-3-matthewgarrett@google.com/
-> Signed-off-by: Matthew Garrett <mjg59@google.com>
 > Signed-off-by: Evan Green <evgreen@chromium.org>
-> ---
-> 
-> Changes in v4:
->  - Augment the commit message (Jarkko)
-> 
-> Changes in v3:
->  - Fix up commit message (Jarkko)
->  - tpm2_find_and_validate_cc() was split (Jarkko)
->  - Simply fully restrict TPM1 since v2 failed to account for tunnelled
->    transport sessions (Stefan and Jarkko).
-> 
-> Changes in v2:
->  - Fixed sparse warnings
 
-Since you've changed this patch from the original, I would follow the
-same advice I gave here:
-https://lore.kernel.org/lkml/202209201620.A886373@keescook/
+There's a lot of open-coded math for the bounds checking. I didn't
+immediately see any problems, but it'd be nice if there was a way to
+hook a fuzzer up to this, or at least write some KUnit tests to check
+boundary conditions explicitly.
 
->
+Reviewed-by: Kees Cook <keescook@chromium.org>
+
 -- 
 Kees Cook
