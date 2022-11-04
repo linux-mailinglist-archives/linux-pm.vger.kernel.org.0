@@ -2,140 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA023619203
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 08:32:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC467619242
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 08:56:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiKDHb7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 03:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S229485AbiKDH4G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 03:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbiKDHb4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 03:31:56 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D785F29CBB;
-        Fri,  4 Nov 2022 00:31:54 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id k15so3809146pfg.2;
-        Fri, 04 Nov 2022 00:31:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z/2ddx3QK9qVmB+YZPn4XwRTbYZOHRH73PR/5mzfEfs=;
-        b=VMp82LIS3vwEtXJO+/+qulhDA06eeVOiufgCORgqh+ukznplIhIOFxydjlGiDfIpqY
-         UXc7qz9WXOAUh0Zkxs49Ghh30Bvcf8K8IHjeVFs94dlpDBS09g4nt9weckjZgunEm2OI
-         n99KXR/LbdhfaiDbWFhmOuw4GyzDc+iw5QiZWsBTmkVMpWE5qkm74GfUv9hEszTSSO/F
-         mQe33R6q5DoI5gWUb435ifIWgEG5j/HfVHuETy6uPq8SYbX7D2FTNqpu3K6nXgJg4/SN
-         vZz9LE3DjAHomW5KRTf9Ng8KTAgn8q00HkDlW2fM9BNBO39I3ZaNp7nri8rfn/KHZ3Ab
-         h+pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:cc:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/2ddx3QK9qVmB+YZPn4XwRTbYZOHRH73PR/5mzfEfs=;
-        b=50If4sZKgIByADnHsZ6x0Vf7naPadevkP59RlmIckbE9LoyXzXuNpKQjwgKvM4Ni1d
-         zZ8GsEabvr/bNexo6kHMU0cto4yT9hRRz12b7wfWnpO/PiM7qUJGEYhO9T3NjrRYw4Pg
-         Mn8QJc6ghjeMpGR5Oo7ZR4QoWgwvJNE7Ncxr70xwvB14JbWSadHQpQONpwXr3nlYg7Ga
-         52fVvbfLsmEK1ivw9OevUsHrvgno+xpki/PVud2b+yqWkfLVeBzQUENJugBM5nYYi8pn
-         dZkRvjEyanhMIWEFEVr+SUrZaiA8kqHDZ4gU2qmo9g97MgI5s679Na3bET47ClkMcR0j
-         mIlA==
-X-Gm-Message-State: ACrzQf3x/10TkSgKYa1AY6UFsPZMCsUa6lxxu0FO+hVIkxV9NNmLO9dO
-        4o1bfCYnle87hy6ymzOWvWjQ3XcyG+6pbQ==
-X-Google-Smtp-Source: AMsMyM4DOu8z9+w2S8sFcStYPjXJIlaR24z6iOen4ZQnFO1xlWcOOFlfIIWQREkSfp6bE+UOMspzpQ==
-X-Received: by 2002:a63:4955:0:b0:44e:d36e:4c2e with SMTP id y21-20020a634955000000b0044ed36e4c2emr29441324pgk.326.1667547114380;
-        Fri, 04 Nov 2022 00:31:54 -0700 (PDT)
-Received: from [172.20.12.203] ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id b3-20020aa79503000000b0056d2797bf05sm1926784pfp.217.2022.11.04.00.31.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 04 Nov 2022 00:31:53 -0700 (PDT)
-Message-ID: <fe95b054-e720-ebbf-ba03-4ea6662974ad@gmail.com>
-Date:   Fri, 4 Nov 2022 15:31:49 +0800
+        with ESMTP id S229553AbiKDH4G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 03:56:06 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A8B0DFAD;
+        Fri,  4 Nov 2022 00:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667548562; x=1699084562;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8YVAUnj+ZQ8o3nJoilJCafFnXKrXY54F6O7QfZw0yDM=;
+  b=Q8DcVTuyD5SbeB2YJlFno+w1A3Fdc5kC0PNkCm3nhoID0oMbYCi/w03v
+   fi/Pz7EeidmjzhZ7tCj7l35KNAjwds5Ss2B7XmcwpaO0h624zTf8KAhKc
+   kbl2rh0W6fuH+URwtFxm38V4os/Er6NlsOmNIt1DwoFKTCy4oC/3bd6I1
+   XTEqR7z5Y2XeYULNdfpIkjyj021GjFTxnrZqroeyKNBelvKOly54OaTuy
+   JaIZDdyYKZTEQAO9DOTqNwF1gKiFRp0kOC7GpAWUJvxeYNLwbmQNvFw7x
+   rAI0EHyFIrg4SutFQ7gUxh1OKlW0mJ8a14dyhLXDugrfdnpMQVeTH1lyy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308620237"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="308620237"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2022 00:56:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="724265184"
+X-IronPort-AV: E=Sophos;i="5.96,136,1665471600"; 
+   d="scan'208";a="724265184"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 04 Nov 2022 00:56:00 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oqrYW-000Gk7-17;
+        Fri, 04 Nov 2022 07:56:00 +0000
+Date:   Fri, 04 Nov 2022 15:55:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 3f69d2d820f43e844f775fa86f7d6e40b8596dd4
+Message-ID: <6364c57c.wraN9ddDLVGxvm+1%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Cc:     xiongxin@kylinos.cn, len.brown@intel.com, pavel@ucw.cz,
-        huanglei@kylinos.cn, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for
- annotation
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20221101022840.1351163-1-tgsp002@gmail.com>
- <20221101022840.1351163-2-tgsp002@gmail.com>
- <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com>
-From:   TGSP <tgsp002@gmail.com>
-In-Reply-To: <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-在 2022/11/4 00:25, Rafael J. Wysocki 写道:
-> On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
->>
->> From: xiongxin <xiongxin@kylinos.cn>
->>
->> The actual calculation formula in the code below is:
->>
->> max_size = (count - (size + PAGES_FOR_IO)) / 2
->>              - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
->>
->> But function comments are written differently, the comment is wrong?
-> 
-> It is, and it is more serious than just a spelling mistake.
-> 
->> By the way, what exactly do the "/ 2" and "2 *" mean?
-> 
-> Every page in the image is a copy of an existing allocated page, so
-> room needs to be made for the two, except for the "IO pages" and
-> metadata pages that are not copied.  Hence, the division by 2.
-> 
-> Now, the "reserved_size" pages will be allocated right before creating
-> the image and there will be a copy of each of them in the image, so
-> there needs to be room for twice as many.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 3f69d2d820f43e844f775fa86f7d6e40b8596dd4  Merge branch 'acpi-scan' into bleeding-edge
 
-According to your interpretation, the formula should be：
-max_size = (count - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
-                - (size + PAGES_FOR_IO)) / 2
+elapsed time: 720m
 
-Am I right?
+configs tested: 60
+configs skipped: 2
 
-> 
-> I'll adjust the changelog and queue up the path for 6.2.
-> 
->> Cc: stable@vger.kernel.org
-> 
-> I'll add a Fixes tag instead.
-> 
->> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
->> ---
->>   kernel/power/snapshot.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
->> index 2a406753af90..c20ca5fb9adc 100644
->> --- a/kernel/power/snapshot.c
->> +++ b/kernel/power/snapshot.c
->> @@ -1723,8 +1723,8 @@ static unsigned long minimum_image_size(unsigned long saveable)
->>    * /sys/power/reserved_size, respectively).  To make this happen, we compute the
->>    * total number of available page frames and allocate at least
->>    *
->> - * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
->> - *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
->> + * ([page frames total] - PAGES_FOR_IO - [metadata pages]) / 2
->> + *  - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
->>    *
->>    * of them, which corresponds to the maximum size of a hibernation image.
->>    *
->> --
->> 2.25.1
->>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
+gcc tested configs:
+um                             i386_defconfig
+arc                                 defconfig
+um                           x86_64_defconfig
+x86_64                    rhel-8.3-kselftests
+x86_64                          rhel-8.3-func
+alpha                               defconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+i386                                defconfig
+ia64                             allmodconfig
+arc                  randconfig-r043-20221102
+riscv                randconfig-r042-20221102
+x86_64                              defconfig
+alpha                             allnoconfig
+s390                                defconfig
+s390                             allmodconfig
+x86_64                           rhel-8.3-syz
+arc                               allnoconfig
+i386                          randconfig-a014
+s390                 randconfig-r044-20221102
+x86_64                               rhel-8.3
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+x86_64                         rhel-8.3-kunit
+m68k                             allmodconfig
+arm                                 defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           allyesconfig
+x86_64                        randconfig-a013
+s390                             allyesconfig
+i386                          randconfig-a016
+x86_64                        randconfig-a011
+arc                              allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a004
+alpha                            allyesconfig
+mips                             allyesconfig
+arm64                            allyesconfig
+m68k                             allyesconfig
+x86_64                        randconfig-a015
+arm                              allyesconfig
+i386                             allyesconfig
+powerpc                           allnoconfig
+x86_64                        randconfig-a006
+sh                               allmodconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+hexagon              randconfig-r041-20221102
+hexagon              randconfig-r045-20221102
+i386                          randconfig-a013
+i386                          randconfig-a011
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a005
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
