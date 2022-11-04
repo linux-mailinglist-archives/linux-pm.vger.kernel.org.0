@@ -2,156 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7054619108
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 07:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE856191A2
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 08:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbiKDGZR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 02:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54806 "EHLO
+        id S230145AbiKDHOC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 03:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231390AbiKDGZJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 02:25:09 -0400
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112545FE1;
-        Thu,  3 Nov 2022 23:25:05 -0700 (PDT)
-Received: by mail-wr1-f43.google.com with SMTP id cl5so5669796wrb.9;
-        Thu, 03 Nov 2022 23:25:04 -0700 (PDT)
+        with ESMTP id S229496AbiKDHOB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 03:14:01 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C039C28E;
+        Fri,  4 Nov 2022 00:14:00 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so4811233wma.4;
+        Fri, 04 Nov 2022 00:14:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=71JDLSPDuOSbvW6+01TP0a2cLDg8k4YK3ZQF2CPNVmw=;
+        b=ECMGKlpSiSmSjUeCpDQL2qatv/Hg3mMkzAERCgFbCAh3HAekaZFIBticVVVsOUv0rR
+         8c/qwD8iir6CSLOSg7m8PF07nWsDEah6bvY36i6YFPKfv+Ji7SEK+wSBBlZALtkVNfsF
+         J5VA4jW+n/LKdMuUlWy3qC/5DWzyHKAMdlChjoNjJD8T8SHiaF/DVEDijz15xUbEHYPW
+         yHXjDC/0fZi1X+aB2bc5j8KJdQ9JTipdhmDVpLM8BhJWY/SU6/B/SmdzPwj+lvD3eGEe
+         TWNxrsY3DPVBiEZg6VwKcfK4Q422ovM+2+dSo7vp9zCBUdL8Pakntxhowo44pcGPXcq2
+         cfVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LWHoRHPkqrmeG+hiuWGL48/5B+q3CyL5rXd2G/yB4LY=;
-        b=VmlFUlviMj6ZSFTqh7FIgoUeBYpqGRrXz89wX9BtaHGygyz37trWlwsaf/fohR1Wq/
-         0tUoFELkeaN246ZVdxZXMv6LW9LsnqPz2k2y1h+0birXtoT9PM+TKcdZGN6IEantCPTR
-         8d99asytO2gGmYIHd5QtTiOc7euvWvCuE+6urZlkuShTy7TYhntz0AY15/vI76lRyq6l
-         1bD5kGlYmP4IenmVnvkLHnT13z9WR0Cl0kZ+8XKRlgm9hOgxWr36FSArz/BqbfnBnIp3
-         SCukdlZ37v6tYZu+y0U4xvorUpxsjn0rozk816eaSKpn3muucxkoq01tVp69VyUFnnTw
-         Le1Q==
-X-Gm-Message-State: ACrzQf0wX9VM53i05Wg/MNppMkYxkWVKqeYbNlzl76d4l4aGHv5pnkI+
-        4b3vLYrZMLqUsBmhOo11/UA=
-X-Google-Smtp-Source: AMsMyM6ELLkCViZP9S+BjozkioNNxKU3qVKRVolbwfydrl3pvkISKZMDfTo6ZWGhIp/e9Qdqhk2BrA==
-X-Received: by 2002:a5d:5a99:0:b0:236:7751:4e43 with SMTP id bp25-20020a5d5a99000000b0023677514e43mr20846137wrb.241.1667543103424;
-        Thu, 03 Nov 2022 23:25:03 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id n35-20020a05600c502300b003c6b874a0dfsm2411233wmr.14.2022.11.03.23.25.02
+        bh=71JDLSPDuOSbvW6+01TP0a2cLDg8k4YK3ZQF2CPNVmw=;
+        b=gyWdi0RJ0eXiHf+WVq/ac4lttZVwb79d1i319SJ7mtZOknpe9Fn9U0q6+NiRRflvJQ
+         9+TlS9qOCRZs16s8EcXoTqJUL1vFRSwG5AOJEuZeQFYawyylUeNxuaEWqPLP7u91kdWs
+         0STJ+ltzawxxflZqw3UlBklRZtnD6tZBO5QwNaxvZa4QZSnvCgoM/wqAUaQAbp/FQ9jh
+         Q+7lT776YDQ/fmjZtAOgzYKPHf4yTEe2coaM3tKlVND9PTckWgV6LePTm9Pom+Hm7FnQ
+         QigW8IqReLbGIUNcZV50nmq2TyPCcsLbOt1/I7I3KN6d5jq137cSuTs0s5XGhiuXN219
+         OOCA==
+X-Gm-Message-State: ACrzQf0yGhsPQt99Y5jPBw5hpin7eTKyqo+WYjH4xINThOFZv3B3UGwf
+        krfMmsyr8u37v1/DQ3K0ffLtvNYexuI=
+X-Google-Smtp-Source: AMsMyM5552JHK7ePe0KMS/Ml1NhsaEsl83t1vO1WMqhdROt7orCJp32OTE5eReE/Dp7REC477+zJiQ==
+X-Received: by 2002:a7b:c30a:0:b0:3c1:bf95:e17b with SMTP id k10-20020a7bc30a000000b003c1bf95e17bmr23281588wmj.31.1667546039161;
+        Fri, 04 Nov 2022 00:13:59 -0700 (PDT)
+Received: from [192.168.0.104] (p5dcfe5c1.dip0.t-ipconnect.de. [93.207.229.193])
+        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003b4fdbb6319sm2122672wmq.21.2022.11.04.00.13.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 23:25:02 -0700 (PDT)
-Message-ID: <90de2e70-1802-b26b-798e-74421389180e@kernel.org>
-Date:   Fri, 4 Nov 2022 07:25:01 +0100
+        Fri, 04 Nov 2022 00:13:58 -0700 (PDT)
+Message-ID: <3e1b8549-0961-697b-63b8-db6b37d53c6b@gmail.com>
+Date:   Fri, 4 Nov 2022 08:13:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 2/2] PM: hibernate: add check of preallocate mem for
- image size pages
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v5 0/8] Add support for mp2733 battery charger
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        lee.jones@linaro.org, linux-iio@vger.kernel.org, jic23@kernel.org,
+        sre@kernel.org, andy.shevchenko@gmail.com, lars@metafoo.de,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org
+References: <20221029093000.45451-1-sravanhome@gmail.com>
+ <8ba915b1-be77-f78e-87b0-9a00c8387084@linaro.org>
 Content-Language: en-US
-To:     TGSP <tgsp002@gmail.com>, rafael@kernel.org, len.brown@intel.com,
-        pavel@ucw.cz, huanglei@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
-References: <20221104054119.1946073-1-tgsp002@gmail.com>
- <20221104054119.1946073-3-tgsp002@gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20221104054119.1946073-3-tgsp002@gmail.com>
+From:   saravanan sekar <sravanhome@gmail.com>
+In-Reply-To: <8ba915b1-be77-f78e-87b0-9a00c8387084@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04. 11. 22, 6:41, TGSP wrote:
-> From: xiongxin <xiongxin@kylinos.cn>
+On 04/11/22 02:54, Krzysztof Kozlowski wrote:
+> On 29/10/2022 05:29, Saravanan Sekar wrote:
+>> changes in v5:
+>>    - fixed commit message on v5-0002 and v5-0004
+>>
+>> changes in v4:
+>>    - fixed attributes groups review comments in v3
+>>    - added new bug fix patches v4-0007 and v4-0008
+>>
+>> changes in v3:
+>>    - fixed dt_binding_check error
+>>    - fixed spelling usb->USB
+>>
+>> changes in v2:
+>>    - fixed spelling
+>>    - revert back probe to probe_new in mfd driver
+>>
+>> I do not see a cover letter, but FWIW,
+>> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 > 
-> Added a check on the return value of preallocate_image_highmem(). If
-> memory preallocate is insufficient, S4 cannot be done;
-> 
-> I am playing 4K video on a machine with AMD or other graphics card and
-> only 8GiB memory, and the kernel is not configured with CONFIG_HIGHMEM.
-> When doing the S4 test, the analysis found that when the pages get from
-> minimum_image_size() is large enough, The preallocate_image_memory() and
-> preallocate_image_highmem() calls failed to obtain enough memory. Add
-> the judgment that memory preallocate is insufficient;
-> 
-> The detailed debugging data is as follows:
-> 
-> image_size: 3225923584, totalram_pages: 1968948 in
-> hibernate_reserved_size_init();
-> 
-> in hibernate_preallocate_memory():
-> code pages = minimum_image_size(saveable) = 717992, at this time(line):
-> count: 2030858
-> avail_normal: 2053753
-> highmem: 0
-> totalreserve_pages: 22895
-> max_size: 1013336
-> size: 787579
-> saveable: 1819905
-> 
-> When the code executes to:
-> pages = preallocate_image_memory(alloc, avail_normal), at that
-> time(line):
-> pages_highmem: 0
-> avail_normal: 1335761
-> alloc: 1017522
-> pages: 1017522
-> 
-> So enter the else branch judged by (pages < alloc), When executed to
-> size = preallocate_image_memory(alloc, avail_normal):
-> alloc = max_size - size = 225757;
-> size = preallocate_image_memory(alloc, avail_normal) = 168671, That is,
-> preallocate_image_memory() does not apply for all alloc memory pages,
-> because highmem is not enabled, and size_highmem will return 0 here, so
-> there is a memory page that has not been preallocated, so I think a
-> judgment needs to be added here.
-> 
-> But what I can't understand is that although pages are not preallocated
-> enough, "pages -= free_unnecessary_pages()" in the code below can also
-> discard some pages that have been preallocated, so I am not sure whether
-> it is appropriate to add a judgment here.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> Signed-off-by: huanglei <huanglei@kylinos.cn>
-> ---
->   kernel/power/snapshot.c | 11 +++++++++--
->   1 file changed, 9 insertions(+), 2 deletions(-)
-> 
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index c20ca5fb9adc..546d544cf7de 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1854,6 +1854,8 @@ int hibernate_preallocate_memory(void)
->   		alloc = (count - pages) - size;
->   		pages += preallocate_image_highmem(alloc);
->   	} else {
-> +		unsigned long size_highmem = 0;
+> This does not belong to the cover letter. Please add respective tags to
+> patches, where applicable. If Andy gave Rb tag for entire patchset, add
+> it to the patches.
+>
 
-This needs not be initialized, right?
+Hello Krzysztof,
 
-> @@ -1863,8 +1865,13 @@ int hibernate_preallocate_memory(void)
->   		pages_highmem += size;
->   		alloc -= size;
->   		size = preallocate_image_memory(alloc, avail_normal);
-> -		pages_highmem += preallocate_image_highmem(alloc - size);
-> -		pages += pages_highmem + size;
-> +		size_highmem = preallocate_image_highmem(alloc - size);
-> +		if (size_highmem < (alloc - size)) {
-> +			pr_err("Image allocation is %lu pages short, exit\n",
-> +				alloc - size - pages_highmem);
-> +			goto err_out;
-> +		}
-> +		pages += pages_highmem + size_highmem + size;
->   	}
->   
->   	/*
+These are v1 comments from Andy to me, all of them are addressed and I 
+kept in cover letter for history
 
--- 
-js
-suse labs
+>> for all patches except DT binding
+>> Note, some of the comments regarding spelling were given, I believe
+>> you are going to address them in v3.
+> 
+> ...and this comment is from who? Andy?
+> 
+>>
+>>
+>> add support for mp2733 Battery charger control driver for Monolithic
+>> Power System's MP2733 chipset
+>>
+>> Saravanan Sekar (8):
+>>    iio: adc: mp2629: fix wrong comparison of channel
+>>    mfd: mp2629: fix failed to get iio channel by device name
+>>    iio: adc: mp2629: fix potential array out of bound access
+>>    power: supply: fix wrong interpretation of register value
+>>    mfd: mp2629: Add support for mps mp2733 battery charger
+>>    iio: adc: mp2629: restrict input voltage mask for mp2629
+>>    power: supply: Add support for mp2733 battery charger
+>>    power: supply: mp2629: Add USB fast charge settings
+>>
+>>   .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
+>>   drivers/iio/adc/mp2629_adc.c                  |   8 +-
+>>   drivers/mfd/mp2629.c                          |   7 +-
+>>   drivers/power/supply/mp2629_charger.c         | 229 +++++++++++++++---
+>>   include/linux/mfd/mp2629.h                    |   6 +
+> 
+> Why do you Cc DT maintainers?
+>
 
+This patch series includes DT bindings documentation which has already 
+merged by 15Jun2022.
+
+https://lore.kernel.org/all/20220615145357.2370044-3-sravanhome@gmail.com/
+
+>>   5 files changed, 228 insertions(+), 38 deletions(-)
+>>
+> 
+> Best regards,
+> Krzysztof
+> 
+
+Thanks,
+Saravanan
