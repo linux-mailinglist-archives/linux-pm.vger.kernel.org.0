@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334D761A022
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 224A761A02D
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231669AbiKDSjA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 14:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56948 "EHLO
+        id S231336AbiKDSmA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 14:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiKDSi7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:38:59 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D55611148
-        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:38:58 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id p12so181959plq.4
-        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:38:58 -0700 (PDT)
+        with ESMTP id S231431AbiKDSlx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:41:53 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA9FD1D673
+        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:41:50 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id l6so5284041pjj.0
+        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:41:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GxUQcGD1ekL/2d9GXVQdlQ0tteAYOQEOTDd6IVlVtPY=;
-        b=GjlhU7IoqaY718RNOR7DqWTG20zF6kOt5wgWynudn0ITp0+zDVD5QosZuVb9DcNI1E
-         uLg7ZOVZiESDg9QBf+b2QS/Pn8Hc0gkXnTqzle1PVe0v7nwVonxi/nK9dqBJhmAlASAJ
-         tuMCJ67J0Eu/2HZM0qT0wURiQPbKt5+sQ88DQ=
+        bh=0/e3XNedcUafbur2krWu5QjN/qTE3byumYrWwxXDmZc=;
+        b=kGSjUhZTyjnX8YG/47uimIoE2UEf9s/oVTICYJrEQO5GSp1K8+xNIGyKeF1KhMmemV
+         k7ZbxfVkOQLiTfy90ca5LLathM338Bh+RvXpY0YYBtJGZNTf5qg8koUOtFY1ugoW6J8h
+         Z89WoUjNYf4aucrM/3Toa4/13NvqSniAzQs7U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GxUQcGD1ekL/2d9GXVQdlQ0tteAYOQEOTDd6IVlVtPY=;
-        b=42B6I4jhtGfpoAkqhmfgCNnQmazz/iF0fY+stDF845DIBv4EC2BJ08MiCCxYwCcDTE
-         YPr+5xhnaoRQkMSGZM+ycNRYekPkJBOBoRA37jwB3febBEvRKqgfdGXygWGv111fTHpe
-         4ZPYy1II8c57r0D3PUlQQDZMu1r1zzqjieqYE4zcmAijwj5QTJfC4zLWr4E8sr8lFsYg
-         pn2ILKaCWxJzdDe1JWCad8si+FEdsjdCNmUNSRRMWlSIvYLPGE+tTmmCat9thWTG4CMT
-         eSiHyPyMqB7pCQdPRqRviqbMN+U5Hh/yF54e0cwzwuYHSFhXCIjI4mFGa9U+6Ei9ZKN/
-         JblA==
-X-Gm-Message-State: ACrzQf2Vo5yuAl5EO74rwG9G0fbfMq+1E3qpVQKYGX++/cQWCIVi57k+
-        xKK5a40JPHc8rH3t6bDBX7DiDE7z0eTphA==
-X-Google-Smtp-Source: AMsMyM4Ns1LVB+0LABBHOJzWrjQNzMAUk0lZthXzQw3TR/Rcm2joh9j3MHvMTSFHaR/HR+59oKPNuw==
-X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id p16-20020a1709028a9000b00186b145f5ecmr37462611plo.103.1667587137752;
-        Fri, 04 Nov 2022 11:38:57 -0700 (PDT)
+        bh=0/e3XNedcUafbur2krWu5QjN/qTE3byumYrWwxXDmZc=;
+        b=jSf9iDN4whwPGE8Gt22Brt6mhtWWh+iTMjTWcFLLGY5HFAXwkZS87CB0ch8/YOXvYP
+         gLbYnE0s6Cwr0bhkiP6UbQWqjBgyEBaKeC/qt8OU2NFqPDsS+hQfEXZwyawFOJJkXbbv
+         ges22WIkwcSbIBT0n23XRrCgBQodj8/5nyy8w0OVNrYFSsv4Flu/qf8SV/S4ewAo7QV7
+         c/6nYPvMZ4ATBbAGbj2wBFsGcJKj6xbXHTEL+Rf28aEXZQXCDic4NqNuv57ut4ZnCYzD
+         Uu0QIEFqhpr34yeKeFqK2JeMEnh0IWX3eXgt3F1V4roF2NZnXPlWZ91pU13qoXVkvRPs
+         uLJQ==
+X-Gm-Message-State: ACrzQf2tuJvZF+2id8CU5gND05UczpzcwR3sdqv92PkTPY6xU/1eQ1tI
+        TpNMz3qwmmIJ4o9IxubByyFpmA==
+X-Google-Smtp-Source: AMsMyM5/IPN5VMplBtILamsruzNtJlYqyGvnWzu4y+2P1igwwYuJl16YKo0t3xoP5o5K5UwU0dTZrA==
+X-Received: by 2002:a17:903:200b:b0:186:892f:9f0b with SMTP id s11-20020a170903200b00b00186892f9f0bmr36374630pla.56.1667587310437;
+        Fri, 04 Nov 2022 11:41:50 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id d17-20020aa797b1000000b0056bcc744bdbsm2957812pfq.203.2022.11.04.11.38.57
+        by smtp.gmail.com with ESMTPSA id p5-20020a170902780500b00186c37270f6sm99028pll.24.2022.11.04.11.41.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:38:57 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:38:56 -0700
+        Fri, 04 Nov 2022 11:41:50 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:41:49 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Evan Green <evgreen@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
@@ -58,35 +58,44 @@ Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
         Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
         Len Brown <len.brown@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 07/11] PM: hibernate: Add kernel-based encryption
-Message-ID: <202211041135.EAC889BA08@keescook>
+Subject: Re: [PATCH v4 08/11] PM: hibernate: Use TPM-backed keys to encrypt
+ image
+Message-ID: <202211041139.15A90C4EED@keescook>
 References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+ <20221103105558.v4.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+In-Reply-To: <20221103105558.v4.8.Ibd067e73916b9fae268a5824c2dd037416426af8@changeid>
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:15AM -0700, Evan Green wrote:
-> [...]
-> +config ENCRYPTED_HIBERNATION
-> +	bool "Encryption support for userspace snapshots"
-> +	depends on HIBERNATION_SNAPSHOT_DEV
-> +	depends on CRYPTO_AEAD2=y
-> +	default n
+On Thu, Nov 03, 2022 at 11:01:16AM -0700, Evan Green wrote:
+> When using encrypted hibernate images, have the TPM create a key for us
+> and seal it. By handing back a sealed blob instead of the raw key, we
+> prevent usermode from being able to decrypt and tamper with the
+> hibernate image on a different machine.
+> 
+> We'll also go through the motions of having PCR23 set to a known value at
+> the time of key creation and unsealing. Currently there's nothing that
+> enforces the contents of PCR23 as a condition to unseal the key blob,
+> that will come in a later change.
+> 
+> Sourced-from: Matthew Garrett <mjg59@google.com>
 
-"default n" is the, err, default, so this line can be left out.
+I'd say Suggested-by. "Source-from:" is not a tag that has ever been
+used before. :)
 
-If someone more familiar with the crypto pieces can review the rest,
-that would be good. :)
+Otherwise, looks good.
+
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
 Kees Cook
