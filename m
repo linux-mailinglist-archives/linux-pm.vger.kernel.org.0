@@ -2,118 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70792618D27
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 01:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6F7618DD2
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 02:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiKDAU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 3 Nov 2022 20:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S229492AbiKDByu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 3 Nov 2022 21:54:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbiKDAUZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 20:20:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EFF205F2
-        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 17:20:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 310BF6206A
-        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 00:20:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9427FC43140
-        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 00:20:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667521223;
-        bh=M9LmYO99kDc6aa+ZxDXmkvHvftfkjPIsAyEzsL0TVxA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UaD62jJFjihqGMb8cV+WX6Pce1hDoG40qxOJMpky6RlpWXXJ068DZx3l1zEBpjR0b
-         ObE1EI4ZnTZjPZ6pGwOvLPbIWZTdsVdK2hsysz/6gCfMJShFfJgKNbJjoRuoBAw2lb
-         7bb7ddeNZbHzqcHTgdJpWDlUW6oPgLO5ehkrht307/P9lq5QMUfdPtzTDGZgTXVBam
-         Ahx/cH0tHYCyv4jPr5C6kkIGVwrcZGeaTWcD3JiT7xmgulVQf5BBmMHDy3Rkyf3Ein
-         oHMAdyQTkqYLxEYLefAzG4Vma3rKyr5wvwKX4TImulnWglR5o/j55ylieaEocZVUAF
-         zE7EcCsIZ1Mqw==
-Received: by mail-ej1-f43.google.com with SMTP id k2so9526294ejr.2
-        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 17:20:23 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2Pi/VtFkknuEQkupOMZpOciJVc7fA8680R2tgLrfMzPZfPn5An
-        iztH+sWAXVbPW1leVerj8la1J+T4S+sTYkO2QMw=
-X-Google-Smtp-Source: AMsMyM5+aYzIYl5HwffMZA6M0uFAPYJJyQv8odvwFx2nC3FthODUsNhj4UNnmJAXUaPqea83JNXdAhLttnijpMh1YKI=
-X-Received: by 2002:a17:906:5a45:b0:7ad:d250:b904 with SMTP id
- my5-20020a1709065a4500b007add250b904mr215917ejc.633.1667521221778; Thu, 03
- Nov 2022 17:20:21 -0700 (PDT)
+        with ESMTP id S229954AbiKDByu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 3 Nov 2022 21:54:50 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D4123BE1
+        for <linux-pm@vger.kernel.org>; Thu,  3 Nov 2022 18:54:48 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id x21so2365344qkj.0
+        for <linux-pm@vger.kernel.org>; Thu, 03 Nov 2022 18:54:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CpQRyt8GRENl7jaeL0O4GGJhTNn+SQKLLiVgAveef7I=;
+        b=Gwqb90AaQPYreptA6yTj60W19Ra5ot0OVoD4ya55AZzhLKcKjA735OsZhNwjUTXkLD
+         fY/07k0mUNv88fCbe3S178vC7UfN72uy82jNxXTJJyds/Q3Iwjqs+I95nXOnFgVm/vOf
+         spQ7DfLWjs9YPJq/wdv5oCquy+1bEk7VQk3+7YYE1hTToeUFo1DVx5ziKszoB8XeZsYR
+         HaxBqgkSszsMM82gXZyBVZtv5lHzZoPP0WR9niQnOyUjMCsJLfTEnUrnLJXyfkWkhJmp
+         mN16eK2I2vdBK297IXM7qfXpG1b7AwvvuZXB3hOsAkmU4/nnRG7O/gSU/9KuK9zmjACx
+         Y6XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CpQRyt8GRENl7jaeL0O4GGJhTNn+SQKLLiVgAveef7I=;
+        b=dKmrEQFQqn4nKRzSFZjrVwWnRMFYRc2CbHgp+4K5/bowp2vgXiEoHFGJlH0dsiK8Zq
+         zPIjYL8/58J6FDQNS5pkLYdH9e3iEtB6iLamKlqOIArIT/49t7HR6vcgaoaSmrWDMPdi
+         xlBW3cZvz5r4fjYKk0ZyTJbi4eGaV37A/YFtkiZZ1Ft5CBpEVFbqYoK47NkPld+K2ZEX
+         Y+Czc8XRsKKT9GJuKoFWK5fUDSANVtNnpWI7NnkPu/AfCF10GWIB7bql2DkK/xsaxuIR
+         wjJ4c4/UkXFx9VwOADILJ2IAm4lwaxK7aF5x2Tm6eqeP+cHJIJW7DdzDuVbqe8fdUVP+
+         bakQ==
+X-Gm-Message-State: ACrzQf0GwtvZ31TBkfMPhgO84AakskCAfQzNNihACLkgB6OL8jiY+jP3
+        iRnfurNpb4FI5t0PAZDD8GPiSA==
+X-Google-Smtp-Source: AMsMyM6V5SIrE7g6V+q7s37+2/77Q9qXgfIom8+gzk14wCaEDiQzqDI2OJ+5xVj34r4QCTPSOXX/wA==
+X-Received: by 2002:ae9:ebce:0:b0:6f9:ff07:7295 with SMTP id b197-20020ae9ebce000000b006f9ff077295mr24885670qkg.655.1667526887546;
+        Thu, 03 Nov 2022 18:54:47 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:da2a:9e7e:ddb5:dfa1? ([2601:586:5000:570:da2a:9e7e:ddb5:dfa1])
+        by smtp.gmail.com with ESMTPSA id s9-20020a05620a29c900b006f1187ca494sm2024602qkp.28.2022.11.03.18.54.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 18:54:47 -0700 (PDT)
+Message-ID: <8ba915b1-be77-f78e-87b0-9a00c8387084@linaro.org>
+Date:   Thu, 3 Nov 2022 21:54:46 -0400
 MIME-Version: 1.0
-References: <20221102064838.2615669-1-chenhuacai@loongson.cn> <CAJZ5v0hi3cqjCH-2hGp9xeC4Ch5mA+V9Zb+D_mCqDViNA6Musg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hi3cqjCH-2hGp9xeC4Ch5mA+V9Zb+D_mCqDViNA6Musg@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 4 Nov 2022 08:20:10 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4Bj+fJWCm8U7sw62X1CgUqn+rCgr32+r814cGN1Po3rg@mail.gmail.com>
-Message-ID: <CAAhV-H4Bj+fJWCm8U7sw62X1CgUqn+rCgr32+r814cGN1Po3rg@mail.gmail.com>
-Subject: Re: [PATCH] ACPI / table: Print CORE_PIC information when MADT is parsed
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        loongarch@lists.linux.dev, linux-pm@vger.kernel.org,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v5 0/8] Add support for mp2733 battery charger
+Content-Language: en-US
+To:     Saravanan Sekar <sravanhome@gmail.com>, sre@kernel.org,
+        lee.jones@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jic23@kernel.org,
+        lars@metafoo.de, andy.shevchenko@gmail.com
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-iio@vger.kernel.org
+References: <20221029093000.45451-1-sravanhome@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221029093000.45451-1-sravanhome@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 4, 2022 at 2:35 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Nov 2, 2022 at 7:50 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> >
-> > When MADT is parsed, print CORE_PIC information as below:
-> >
-> > ACPI: CORE PIC (processor_id[0x00] core_id[0x00] enabled)
-> > ACPI: CORE PIC (processor_id[0x01] core_id[0x01] enabled)
-> > ...
-> > ACPI: CORE PIC (processor_id[0xff] core_id[0xff] enabled)
-> >
-> > This debug information will be very helpful to bring up early systems to
-> > see if processor_id and core_id are matched or not as spec defined.
-> >
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >  drivers/acpi/tables.c | 10 ++++++++++
-> >  1 file changed, 10 insertions(+)
-> >
-> > diff --git a/drivers/acpi/tables.c b/drivers/acpi/tables.c
-> > index 47ec11d4c68e..23bff77b09f4 100644
-> > --- a/drivers/acpi/tables.c
-> > +++ b/drivers/acpi/tables.c
-> > @@ -210,6 +210,16 @@ void acpi_table_print_madt_entry(struct acpi_subtable_header *header)
-> >                 }
-> >                 break;
-> >
-> > +       case ACPI_MADT_TYPE_CORE_PIC:
-> > +               {
-> > +                       struct acpi_madt_core_pic *p =
-> > +                           (struct acpi_madt_core_pic *)header;
-> > +                       pr_debug("CORE PIC (processor_id[0x%02x] core_id[0x%02x] %s)\n",
-> > +                                p->processor_id, p->core_id,
-> > +                                (p->flags & ACPI_MADT_ENABLED) ? "enabled" : "disabled");
-> > +               }
-> > +               break;
-> > +
-> >         default:
-> >                 pr_warn("Found unsupported MADT entry (type = 0x%x)\n",
-> >                         header->type);
-> > --
->
-> Applied as 6.2 material.
->
-> However, next time please CC ACPI-related patches to linux-acpi rather
-> than to linux-pm (or you can do both if the patch is PM-related
-> anyway).
-Sorry, I will do that next time.
+On 29/10/2022 05:29, Saravanan Sekar wrote:
+> changes in v5:
+>   - fixed commit message on v5-0002 and v5-0004
+> 
+> changes in v4:
+>   - fixed attributes groups review comments in v3
+>   - added new bug fix patches v4-0007 and v4-0008 
+> 
+> changes in v3:
+>   - fixed dt_binding_check error
+>   - fixed spelling usb->USB
+> 
+> changes in v2:
+>   - fixed spelling
+>   - revert back probe to probe_new in mfd driver
+> 
+> I do not see a cover letter, but FWIW,
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Huacai
->
-> Thanks!
+This does not belong to the cover letter. Please add respective tags to
+patches, where applicable. If Andy gave Rb tag for entire patchset, add
+it to the patches.
+
+> for all patches except DT binding
+> Note, some of the comments regarding spelling were given, I believe
+> you are going to address them in v3.
+
+...and this comment is from who? Andy?
+
+> 
+> 
+> add support for mp2733 Battery charger control driver for Monolithic
+> Power System's MP2733 chipset 
+> 
+> Saravanan Sekar (8):
+>   iio: adc: mp2629: fix wrong comparison of channel
+>   mfd: mp2629: fix failed to get iio channel by device name
+>   iio: adc: mp2629: fix potential array out of bound access
+>   power: supply: fix wrong interpretation of register value
+>   mfd: mp2629: Add support for mps mp2733 battery charger
+>   iio: adc: mp2629: restrict input voltage mask for mp2629
+>   power: supply: Add support for mp2733 battery charger
+>   power: supply: mp2629: Add USB fast charge settings
+> 
+>  .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
+>  drivers/iio/adc/mp2629_adc.c                  |   8 +-
+>  drivers/mfd/mp2629.c                          |   7 +-
+>  drivers/power/supply/mp2629_charger.c         | 229 +++++++++++++++---
+>  include/linux/mfd/mp2629.h                    |   6 +
+
+Why do you Cc DT maintainers?
+
+>  5 files changed, 228 insertions(+), 38 deletions(-)
+> 
+
+Best regards,
+Krzysztof
+
