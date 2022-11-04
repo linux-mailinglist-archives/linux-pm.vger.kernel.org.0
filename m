@@ -2,50 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 793B0619FCC
-	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:25:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 387F0619FD9
+	for <lists+linux-pm@lfdr.de>; Fri,  4 Nov 2022 19:28:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231848AbiKDSZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 4 Nov 2022 14:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        id S232005AbiKDS14 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 4 Nov 2022 14:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbiKDSZ2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:25:28 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B67F2650
-        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:25:27 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id g62so5197572pfb.10
-        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:25:27 -0700 (PDT)
+        with ESMTP id S231868AbiKDS1z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 4 Nov 2022 14:27:55 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0471B2CC80
+        for <linux-pm@vger.kernel.org>; Fri,  4 Nov 2022 11:27:55 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id h14so5219701pjv.4
+        for <linux-pm@vger.kernel.org>; Fri, 04 Nov 2022 11:27:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N+zCgb1/SzDeDjC+vBm0YAYeuRy8cLDQigNzNk9ARjk=;
-        b=XybAPYJttcijaPr/nAJsmDLP3UTm9pg2RY/hUVR216pKXnvZsPs8UblVlXw6iv++Wt
-         twSGPXjkJAmuQtRG59/Rb3MQdTXwOdvfJFdXWoWSPRUhJ0dUkHTYuSKXHAztXcVNyoPY
-         RLrhYvQGFb6M3h29pihNmOQha+MZz9F7UBL2c=
+        bh=pUqszso6Ws0bgIO+Fn99YX+rUGif2Q1cUmfl0WM0vmw=;
+        b=odecLGRhxOwhsXd0tqsJnLvySgK1wwL5EuKjfVW2c3GzswA2SuTOPOMGHpRE8Oo5jF
+         L45owvgVsVwiX3yrJTEPO3I5oqc25pHMej0OGi+/D3BFS/EyoVBztE7WTQMpAaqf+Rgg
+         AknDcr7HTObIsDEivNuvIS1OvsxZeWIyfLnAc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=N+zCgb1/SzDeDjC+vBm0YAYeuRy8cLDQigNzNk9ARjk=;
-        b=Kq15SLG+q4r+eLT31gIZslUNI+qSOao5nRM0Cx4fWjqVVO13M4JesqL7F66C8zrpMD
-         ysu28eaDduJGJWxheIlsr32iMwWA0z1+8PWc1jL2A0NqqXbYfNAHNddHnWIrLxdyPY77
-         kZxZS2em2kZIMXXWmAsav8KZWnTN1kjKB6e7qiK1mJGZyuYX3Pq6pN/zflyj9bqiWoNB
-         lDYxMiz2ZugvUdhAaG0BXq34NFzGKYom2tTT6CDqQoFjbIpXjeUrq7ixJHLqYzru07yy
-         +nONI9BtnrSmEBnPkXARvoG19RU9/k8VYQxgh6LMvtMiqjbbGoudG0po8rW6XcPzEE76
-         dSlg==
-X-Gm-Message-State: ACrzQf1/+DvCk2eAFNe0uo2RGlCNy5WrhvoUz/2IdqFDxXYxUGsz++PK
-        U/78wi9GDA8W/A1Iz8KjodNVRw==
-X-Google-Smtp-Source: AMsMyM5X/Shx4cgtu5hc6fwml5LMImDqhjEcMMKKGnvGAIdHWWZYV748v+nJVyT5k+iiPjXS5Y64nQ==
-X-Received: by 2002:a63:211d:0:b0:44e:f294:8440 with SMTP id h29-20020a63211d000000b0044ef2948440mr31050826pgh.103.1667586326820;
-        Fri, 04 Nov 2022 11:25:26 -0700 (PDT)
+        bh=pUqszso6Ws0bgIO+Fn99YX+rUGif2Q1cUmfl0WM0vmw=;
+        b=WYDIaV0QV1HQ5Z9ayCUUSgj2x5Zu7C+lCNgPJsqnk0x5qiWbj6qMQn23ztGFWaYq5Q
+         JIt/doW7WD6hP3IKSZNUCtRfMGHmheMgFbsH3QjV4Fvf8du10TnNSp8+yyyrvNaidxyx
+         QZpPUj71FI7YetPZMBdIWVVOaQjU7h4wJosvSW2MEzkU2M34YAI6ojo/raDUW/ZflTF3
+         zJx/XRo3vBIOlHlucQgL9SlnB8Qaw1tQWHGyCOZw/Ppkm989phN3ATf5xZKXxWkb2HVS
+         qgFjCb0Je+0yINGSbA18j8wOlsD6/7TNGwlQEjTuXbW0OlwVVvFIO7MsgRovF+lLOVPK
+         bJSw==
+X-Gm-Message-State: ACrzQf20D6Z9bB+vW/bLfAVd9hevG4MxzYi9MY9KMS4wsVuaj7v6cJtR
+        OUqH1EAOdaVStTSMFHCgoifVnQ==
+X-Google-Smtp-Source: AMsMyM4tInOtgbMjfF6aNdaiuKY8s8KWXpkz40UU3nzPEwdRYEQVO8XJ8Joli67e3QuEsGHMoa0zKA==
+X-Received: by 2002:a17:90b:3a81:b0:213:ff6a:aa0d with SMTP id om1-20020a17090b3a8100b00213ff6aaa0dmr23344938pjb.86.1667586474491;
+        Fri, 04 Nov 2022 11:27:54 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id y11-20020a17090a784b00b00217090ece49sm49088pjl.31.2022.11.04.11.25.26
+        by smtp.gmail.com with ESMTPSA id 101-20020a17090a0fee00b0020669c8bd87sm45503pjz.36.2022.11.04.11.27.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Nov 2022 11:25:26 -0700 (PDT)
-Date:   Fri, 4 Nov 2022 11:25:25 -0700
+        Fri, 04 Nov 2022 11:27:54 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 11:27:53 -0700
 From:   Kees Cook <keescook@chromium.org>
 To:     Evan Green <evgreen@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
@@ -56,16 +56,18 @@ Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
         zohar@linux.ibm.com, dlunev@google.com,
         Eric Biggers <ebiggers@kernel.org>,
         Ben Boeckel <me@benboeckel.net>, jarkko@kernel.org,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
         Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v4 02/11] tpm: Export and rename
- tpm2_find_and_validate_cc()
-Message-ID: <202211041125.6DA20EB25@keescook>
+Subject: Re: [PATCH v4 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+Message-ID: <202211041127.55ED2921E5@keescook>
 References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
+ <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
+In-Reply-To: <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -75,15 +77,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:10AM -0700, Evan Green wrote:
-> Export tpm_find_and_validate_cc() since it will be needed by an upcoming
-> change allowing access to certain PCRs to be restricted to the kernel.
-> In order to export it consistently, and because it's a tpm2-only
-> function, rename it to tpm2_find_and_validate_cc().
+On Thu, Nov 03, 2022 at 11:01:11AM -0700, Evan Green wrote:
+> From: Matthew Garrett <matthewgarrett@google.com>
 > 
+> Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> restricts usermode's ability to extend or reset PCR 23.
+> 
+> Under certain circumstances it might be desirable to enable the creation
+> of TPM-backed secrets that are only accessible to the kernel. In an
+> ideal world this could be achieved by using TPM localities, but these
+> don't appear to be available on consumer systems. An alternative is to
+> simply block userland from modifying one of the resettable PCRs, leaving
+> it available to the kernel. If the kernel ensures that no userland can
+> access the TPM while it is carrying out work, it can reset PCR 23,
+> extend it to an arbitrary value, create or load a secret, and then reset
+> the PCR again. Even if userland somehow obtains the sealed material, it
+> will be unable to unseal it since PCR 23 will never be in the
+> appropriate state.
+> 
+> This Kconfig is only properly supported for systems with TPM2 devices.
+> For systems with TPM1 devices, having this Kconfig enabled completely
+> restricts usermode's access to the TPM. TPM1 contains support for
+> tunnelled transports, which usermode could use to smuggle commands
+> through that this Kconfig is attempting to restrict.
+> 
+> Link: https://lore.kernel.org/lkml/20210220013255.1083202-3-matthewgarrett@google.com/
+> Signed-off-by: Matthew Garrett <mjg59@google.com>
 > Signed-off-by: Evan Green <evgreen@chromium.org>
+> ---
+> 
+> Changes in v4:
+>  - Augment the commit message (Jarkko)
+> 
+> Changes in v3:
+>  - Fix up commit message (Jarkko)
+>  - tpm2_find_and_validate_cc() was split (Jarkko)
+>  - Simply fully restrict TPM1 since v2 failed to account for tunnelled
+>    transport sessions (Stefan and Jarkko).
+> 
+> Changes in v2:
+>  - Fixed sparse warnings
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Since you've changed this patch from the original, I would follow the
+same advice I gave here:
+https://lore.kernel.org/lkml/202209201620.A886373@keescook/
 
+>
 -- 
 Kees Cook
