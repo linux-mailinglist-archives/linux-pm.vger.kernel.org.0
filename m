@@ -2,77 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A0561DDF9
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Nov 2022 21:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A4E61DDFC
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Nov 2022 21:21:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiKEUVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Nov 2022 16:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45010 "EHLO
+        id S229940AbiKEUVb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Nov 2022 16:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiKEUVM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Nov 2022 16:21:12 -0400
+        with ESMTP id S229951AbiKEUVa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Nov 2022 16:21:30 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F187113D7B;
-        Sat,  5 Nov 2022 13:21:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EFC913DFC;
+        Sat,  5 Nov 2022 13:21:30 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B74696602366;
-        Sat,  5 Nov 2022 20:21:09 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E71B66602366;
+        Sat,  5 Nov 2022 20:21:28 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667679669;
-        bh=oFL+eFW9VNZnIxnzxItCZONBvkMIY4e/57puUZz/1/U=;
+        s=mail; t=1667679689;
+        bh=Ju13tIA7HkUYV57aem6z/qdyub2dsPXBhW6VfhnNUh0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PNVy6yZJvOG3XLx5Fjo1uDwg4wiDU9t/6wSOsh7PvTR7WtpCc1yUIGBpSVexsegUB
-         kctUn8L3a5VGtkRR5AhCCjZlE4Tx/R2JvKqM1vUfG/9fYVvYhEN0/x6CYDElJPwH+O
-         AOBFYOEeNX3fBa3UQG88uS7qZL90BoOVmYQtG2o0yp3mpx1xLDUSSvC7t0i1DsZqEc
-         clUYRyRZYnb0QMXO+9c/Ow4VBH/Kbq/xM7QApl+vlCDwwAcdpcR/7yOGQvMIz6X6xY
-         Ysr198HLqi2iJyHQTOqz99zXAFHauW2RoOOmtCmSQcCMEvhvg1Om7P9W5ci7QQOqTj
-         mTYsuJbn3CCUg==
+        b=WPy9overUVqP1vkftFHaZx7J3Ualq7YI7gGwM2G+esDeIh5/OBSw/NWTIN9NmXJs0
+         xZpUpd9QhM7WQ7ofzb6tOZc25iPfawDALkebig9ahy2MNM6ONgXxu3hEdFNdJigeL4
+         vXPYehEGeXMucWLhj7RMhsIdbsNwSoCpDR6995sC8xc+oGNzZ9cD9xEocLY8b0rqY0
+         WyFZD1Lfl88Vx6ws0kqve/CwX0tRFsaBf8w/djr7uobM15LhLyJ1YA191CF2+Fv4UT
+         zlYIH+eUMS0Co3owrKGHY+7tC8c5cC/d5pg7b7ON08TwrJx4DGJQsKF73+08Qfm821
+         y+UARCTocWTsQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 912401062C1F; Sat,  5 Nov 2022 21:21:07 +0100 (CET)
-Date:   Sat, 5 Nov 2022 21:21:07 +0100
+        id 074A21062C1F; Sat,  5 Nov 2022 21:21:27 +0100 (CET)
+Date:   Sat, 5 Nov 2022 21:21:27 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Rob Herring <robh@kernel.org>
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Zhang Qing <zhangqing@rock-chips.com>,
-        linux-rockchip@lists.infradead.org,
-        Chris Zhong <zyw@rock-chips.com>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        devicetree@vger.kernel.org,
-        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
-        Lee Jones <lee@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Markus Laine <markus.laine@fi.rohmeurope.com>,
-        linux-pm@vger.kernel.org,
-        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
         Chunyan Zhang <zhang.lyra@gmail.com>,
-        Purism Kernel Team <kernel@puri.sm>,
-        linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        "Andrew F. Davis" <afd@ti.com>
-Subject: Re: [PATCH v2 2/3] dt-bindings: power: supply: bq25890: allow
- power-supply fields
-Message-ID: <20221105202107.6iuiahftidyvhlkq@mercury.elektranox.org>
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        Chris Zhong <zyw@rock-chips.com>,
+        Zhang Qing <zhangqing@rock-chips.com>,
+        devicetree@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        "Andrew F. Davis" <afd@ti.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Orson Zhai <orsonzhai@gmail.com>, Lee Jones <lee@kernel.org>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Marek Szyprowski <m.szyprowski@samsung.com>
+Subject: Re: [PATCH v2 3/3] dt-bindings: power: supply: maxim,max17042: allow
+ power-supplies
+Message-ID: <20221105202127.yecpvgdqxdarodwb@mercury.elektranox.org>
 References: <20221102184501.109148-1-krzysztof.kozlowski@linaro.org>
- <20221102184501.109148-2-krzysztof.kozlowski@linaro.org>
- <166759888639.2894265.16300000999459794709.robh@kernel.org>
+ <20221102184501.109148-3-krzysztof.kozlowski@linaro.org>
+ <166759890804.2894757.9957388407173837405.robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xrwr6djdhlvsae7h"
+        protocol="application/pgp-signature"; boundary="ecarqkduelppuy7j"
 Content-Disposition: inline
-In-Reply-To: <166759888639.2894265.16300000999459794709.robh@kernel.org>
+In-Reply-To: <166759890804.2894757.9957388407173837405.robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -83,22 +78,20 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---xrwr6djdhlvsae7h
+--ecarqkduelppuy7j
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Fri, Nov 04, 2022 at 04:54:46PM -0500, Rob Herring wrote:
+On Fri, Nov 04, 2022 at 04:55:08PM -0500, Rob Herring wrote:
 >=20
-> On Wed, 02 Nov 2022 14:45:00 -0400, Krzysztof Kozlowski wrote:
-> > The BQ25890 schema references common power-supply.yaml, so allow all its
-> > properties to fix warnings like:
+> On Wed, 02 Nov 2022 14:45:01 -0400, Krzysztof Kozlowski wrote:
+> > MAX17042 Fuel Gauge uses power-supplies supplies:
 > >=20
-> >   arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb: charger@6a: 'mon=
-itored-battery', 'power-supplies', ... do not match any of the regexes: 'pi=
-nctrl-[0-9]+'
+> >   arch/arm64/boot/dts/freescale/imx8mq-librem5-r2.dtb: fuel-gauge@36: '=
+power-supplies' does not match any of the regexes: 'pinctrl-[0-9]+'
 > >=20
 > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > >=20
@@ -107,8 +100,8 @@ nctrl-[0-9]+'
 > > Changes since v1:
 > > 1. New patch
 > > ---
-> >  Documentation/devicetree/bindings/power/supply/bq25890.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >  .../devicetree/bindings/power/supply/maxim,max17042.yaml        | 2 ++
+> >  1 file changed, 2 insertions(+)
 > >=20
 >=20
 > Reviewed-by: Rob Herring <robh@kernel.org>
@@ -117,24 +110,24 @@ Thanks, queued.
 
 -- Sebastian
 
---xrwr6djdhlvsae7h
+--ecarqkduelppuy7j
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNmxbMACgkQ2O7X88g7
-+pqyeg/+J35tV/0bGI5gBzwiaSLrPxYKQZ9I2Rk7/hVFT9rOC9BWJGDvCGR43oOH
-O9CbKjq7Ur5EdKKPArAoyPcuAT8km9MYflV/6SE/YlqnHHFBpjFFYOrD72oI1MKw
-jeIa4XdCzDhh1eA6y9hb77aCA71f3YpgmTWR4JZqSkLJHpKtve08F84DHXmLiCvW
-RYeDQmqRs9MghcBM3s+hahO4euBJucBr9GMyqSVK4oDksYRf+MNYsGFtyd2Zc9f3
-VSvvqjpwzP1xQaydBOEcHNDLWwVC1C2y+dPYsgSc7CF73WKiX5IkspNdYw8xu0mj
-BQzhSgAaNA9FRP0c3jjireMuNsW/1ZGez349zdpwAEYfNZTZnzALbHMcVRta/stT
-XkL60sAYwiYjhVejdJNwHTrIm717d6/k5s0cC0H3h+73RcancB3J1tptB49W2X4k
-IlL2dwRUcVkDayPa69FJAKFIK2SysQu4M7DQIg7etJZCs/ScO0uKVTdeDWJ1ANGF
-i37ld4P8Vksf1W3X5Z2918eDhaOpeTyc2HHs7f9Ua30SmZejuyEO7T0pGLGsuFmO
-qeu1/uCtH8WwBoEP+t+7AGqPUvC4+RydzStNdxRvLsc52SRoeZk58Uz/sVeNIUqe
-1RKhOqevx34NazEfgH4gVsw9hElaWFiKeplAbgDzVgjCwaQ21sk=
-=rEdX
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNmxcYACgkQ2O7X88g7
++prj0A//WtKcjH9Ao7yMy59PQ2I6qxJCNjPM4XNxNVLy0carhItc7vkdDcPj+CZP
+sybnYYKkDMnNGYA3v6AnFHM8nqVe/wrSyAUQNUUmGgujyO8ik+psaAuwIUzLDsh/
+MCDOSn4BVvGwtm9tRU5kz9p0R1f/Wy9a030irkgYf+S/Z6uJX+yjWDI3YML2fP0N
+g5CIkWdI9ILo9JVn0K+0Q6o8Zsq+Y4V1nHiGMb5YM1kmTy+2ptYaLY+NdwK6AX9S
+exNOiZIkiFoNwZLYT7f/wRl5u6ZR7xrt62nOBOztSlcBHOPKU6TADi5qP8MTG/ic
+qUyknEjQRuIce+KpXBQQPDozqkIl+o9ajEisjebD7GM/eXo51NgtWouGMN7X1C1Q
+EThDuv6kqL8vFt6AHzDRZVXYQR7siVWRqSdaqEddmU6uMhQkLHSOdA1WV0NieZjX
+LrV1nwgPyyI4+MPaU/Hqjv/LpS6CXG746VG0ATykR6Zk2cYMm0ZcWjfrqPO+6P96
+woNESaWyLeUA0FZ+d4I7MlZ6RSStRbd97GIfl98Fw2jhLuSARUtlxAQbibH0yr/w
+5cYAPcSLEQhR8yp0QZNk0pYWsqhgJG1NVfhqlfLTTSN54asXAlG8xXPkthv+O1pF
+0d0bV33zKL+z4sVNvoYJX4xBckaE/RO48vB+mRBpSanIGnlxXmw=
+=FbLi
 -----END PGP SIGNATURE-----
 
---xrwr6djdhlvsae7h--
+--ecarqkduelppuy7j--
