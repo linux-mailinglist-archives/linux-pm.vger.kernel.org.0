@@ -2,92 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 565A761D7CB
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Nov 2022 07:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA18061D9AA
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Nov 2022 12:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiKEGCW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Nov 2022 02:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
+        id S229718AbiKEL0R (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Nov 2022 07:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbiKEGBf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Nov 2022 02:01:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7612230560;
-        Fri,  4 Nov 2022 23:01:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 58488609EB;
-        Sat,  5 Nov 2022 06:01:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D5EC433C1;
-        Sat,  5 Nov 2022 06:01:33 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1orCFl-007P0H-3B;
-        Sat, 05 Nov 2022 02:02:01 -0400
-Message-ID: <20221105060201.829050575@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Sat, 05 Nov 2022 02:01:02 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v4a 38/38] timers: PM: Use timer_shutdown_sync()
-References: <20221105060024.598488967@goodmis.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229556AbiKEL0Q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Nov 2022 07:26:16 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91981C93B;
+        Sat,  5 Nov 2022 04:26:15 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id kt23so19234464ejc.7;
+        Sat, 05 Nov 2022 04:26:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lY/KtbX3jbDptuIQjnvBjdpzPDQrxT9VwpfdqZ2aZ5E=;
+        b=ZrBOJSZdWcoOe/+txsHOjwOKetptUDuyt1nUoaadwRBvRuAbtmiWaj6KHx/5ANEjp+
+         t74IW2t/9TOPPwCaldVcnaH8RorDnE2cDOkwQp4RqF8eCGTgAxnvuS7CW7B/liW/en6h
+         cU7wtVs6o6GZORidhqzaQAbh7jTqTMnX+G/wXpEDOplfSROVvqxG1Cq4AORo+fXZFvL6
+         ogmNDq0XR95Aj9fevfiRKdo8s15R+2I+0DInjxK8v1IGAvmrC9qfOIjpB9eVCgv3hGAL
+         AZOT/lqFA3Ne2VJEm3E/evkU8nd5y8RLJOXn9bztnA0DZxbxXNWKgs3TfZvt9FgrT1nE
+         beMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lY/KtbX3jbDptuIQjnvBjdpzPDQrxT9VwpfdqZ2aZ5E=;
+        b=mUawxLBdXrcIulZN3LT4gzeJ1d2nblsqFFVh/6F3+FjiLbcb5DFc1h+13Zmo2WM0L7
+         UqpB+F54CuYfvXK16q8qXLR2uaw0n2xSCzHRpT5ufeXQnC4RxTHTIqIjZerje03WP5TI
+         vsJqR881oG1VvR/0awYZf7InwKD1TgYiTK6myMd85aE7F6MYdFzkZYPoSYFpoUfuMn0N
+         1VsDIfd9XjH+43OGEW3RozPlpAOBzOh8q3cjY2i1JToWV7rMF4BPJujaOP01dxPF6tiu
+         Ru49dQU/S+HJcRDRPZYcxaVjYCAQrliQqdm2r0jW1YG6VkaFh7i/slmsjG2DJImeMNkI
+         IyAw==
+X-Gm-Message-State: ACrzQf09vhvx3Qv/GgTxL/bjr6+G9GnSXJr/HSgAy+juLsGRLs4Jc8TI
+        FIrmBD2Qcn8UBT/m3/lqdajorAOW0nGTfw==
+X-Google-Smtp-Source: AMsMyM6Hi76abSC7XtLo543s3U1W1fxckam5NsSx+Bjtod7RieJ7/tw9LbUPS3KmBYZesLMRAPlN8Q==
+X-Received: by 2002:a17:906:5a63:b0:7ad:ac42:150 with SMTP id my35-20020a1709065a6300b007adac420150mr38787217ejc.583.1667647574314;
+        Sat, 05 Nov 2022 04:26:14 -0700 (PDT)
+Received: from localhost.localdomain ([46.249.74.23])
+        by smtp.gmail.com with ESMTPSA id u18-20020a509512000000b004611c230bd0sm1050069eda.37.2022.11.05.04.26.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sat, 05 Nov 2022 04:26:13 -0700 (PDT)
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony@atomide.com, philipp@uvos.xyz
+Subject: [PATCH v2 0/3] power: supply: cpcap-battery improvements
+Date:   Sat,  5 Nov 2022 13:25:41 +0200
+Message-Id: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+X-Mailer: git-send-email 1.9.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+This patch series implements few improvememts in cpcap-battery driver
 
-Instead of open coding making the timer look like it was not registered by
-setting the function pointer to NULL, call timer_shutdown_sync() that does
-the same thing.
+Changes compared to v1:
+[PATCH 1/3] power: cpcap-battery: Do not issue low signal too
 
-Link: https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
+use delayed_work instead of timer as enable_irq() should not be called in
+atomic context (timer function).
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-pm@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- drivers/base/power/wakeup.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+[PATCH 2/3] power: supply: cpcap-battery: Fix battery identification
 
-diff --git a/drivers/base/power/wakeup.c b/drivers/base/power/wakeup.c
-index 7cc0c0cf8eaa..c6d68bdcac68 100644
---- a/drivers/base/power/wakeup.c
-+++ b/drivers/base/power/wakeup.c
-@@ -202,12 +202,7 @@ void wakeup_source_remove(struct wakeup_source *ws)
- 	raw_spin_unlock_irqrestore(&events_lock, flags);
- 	synchronize_srcu(&wakeup_srcu);
- 
--	del_timer_sync(&ws->timer);
--	/*
--	 * Clear timer.function to make wakeup_source_not_registered() treat
--	 * this wakeup source as not registered.
--	 */
--	ws->timer.function = NULL;
-+	timer_shutdown_sync(&ws->timer);
- }
- EXPORT_SYMBOL_GPL(wakeup_source_remove);
- 
--- 
-2.35.1
+no changes
+
+[PATCH 3/3] power: supply: cpcap_battery: Read battery parameters
+
+no changes
