@@ -2,130 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E6761DDC0
-	for <lists+linux-pm@lfdr.de>; Sat,  5 Nov 2022 20:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F3061DDF6
+	for <lists+linux-pm@lfdr.de>; Sat,  5 Nov 2022 21:20:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiKETbh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 5 Nov 2022 15:31:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
+        id S229865AbiKEUUz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 5 Nov 2022 16:20:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbiKETbe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Nov 2022 15:31:34 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F5A2DEF4;
-        Sat,  5 Nov 2022 12:31:33 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id r76so8402035oie.13;
-        Sat, 05 Nov 2022 12:31:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CTlAHc9k7qwIZyOhFoXagieaQq5pwRyAvyi0mAOE5RE=;
-        b=jURw19XL/xOvCrYwmv2aWUKdeAoWjP9YO+FTg9LO7kNLGP2qrxnNI/DeaM/hhYlqsP
-         YdQYptnzjKsYbbyAKOY5T5QWBhSSLuRj9tx/h3x3Iolz6OENad9xOgpnNTl3bQfF4abr
-         IGnRZ+gwoVhjhy8eDyzb76gdYWeTNG8HbYJzf+upnNf3q7GfCqhXHTbMnctQM+lT4ISN
-         LgN+zILvYp/x3cxyWSBN67VcIOLSthpIiMe3XVQLxJ5DNQbV3DpA0r2y4Xi6Om/6kI/T
-         +bTGJHJtUOpMMkvOkxDlr0Z5JMnZYu43sVpFgzYDCR/HFlqDOFJ8Z5bQFtUlln66Rbqg
-         ggdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CTlAHc9k7qwIZyOhFoXagieaQq5pwRyAvyi0mAOE5RE=;
-        b=3DN3uBBAdumw9VRPsShfHfGp73Pg4PdCRiFdzkXf4cQLPgUI3pIjIYusLO/xd0R2gR
-         QuYZ/Xws0VAO77AMSHRQ5wdaRFUSGKKMMbqEYFZ6TsA2vhLmtunk+nupZkRZXGmhBvrh
-         5p/+4oEbhaD8swG9EG8Z50T4n2zombjsdIabydzMxcs4gcqc6ipVQB3DWfH2zmRRUnew
-         lcHC11W4wjvOZGZ4rUviAzsPfF/yB4hao89JFEMiYiqIcRGxBMKhy/OoLYq9yy3ebsCP
-         7yNTmvKwlXPW/BFzvIAoM20+n+k2E6sFGEK/6qkWNLkIUBHXqqUNluOhiKCYbpG6Eogm
-         7atw==
-X-Gm-Message-State: ACrzQf11t7q3jaYlAkphgg7NJBD5WOyGhSOhya0Qwt9AX+c3YRUaOnBT
-        nU/fFlMyVx+7ndXLi+M6jec=
-X-Google-Smtp-Source: AMsMyM7VRYR4ja1354r4nOb4sGsFC9SF+e+FSsFCXSIKNyBk3irIl03bXoaveyKZeBBPlTvKUXlEMQ==
-X-Received: by 2002:a05:6808:1708:b0:351:728b:3a03 with SMTP id bc8-20020a056808170800b00351728b3a03mr22106906oib.275.1667676692450;
-        Sat, 05 Nov 2022 12:31:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l14-20020a4ac60e000000b00499499a8e18sm834040ooq.5.2022.11.05.12.31.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Nov 2022 12:31:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 5 Nov 2022 12:31:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Anna-Maria Gleixner <anna-maria@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>, rcu@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, linux-edac@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-acpi@vger.kernel.org,
-        linux-atm-general@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, drbd-dev@lists.linbit.com,
-        linux-bluetooth@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org, intel-gfx@lists.freedesktop.org,
-        linux-input@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linux-leds@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-ext4@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        bridge@lists.linux-foundation.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, lvs-devel@vger.kernel.org,
-        linux-afs@lists.infradead.org, linux-nfs@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, alsa-devel@alsa-project.org
-Subject: Re: [PATCH v4a 00/38] timers: Use timer_shutdown*() before freeing
- timers
-Message-ID: <20221105193129.GA1487775@roeck-us.net>
-References: <20221105060024.598488967@goodmis.org>
+        with ESMTP id S229479AbiKEUUy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 5 Nov 2022 16:20:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81CDB12771;
+        Sat,  5 Nov 2022 13:20:53 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3E2FC6602366;
+        Sat,  5 Nov 2022 20:20:51 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667679651;
+        bh=mN8RRJhsexrMmxXRD/OzjLCD+e45Cf3A7xewzxMAk7g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nv146gyy87JZaKTwIPg8oDriZSgQJQenM6vsHMddgUvVjiSGRwV/aKmaGjx2qJcUi
+         C8etKDyd2rnoHpVcQXTVpN/gTJd9+Y4IIn8FAtd8zGj3TAHDHYsJoXk0BKrQqPUHoo
+         0/NSU+poYDHh7iQwskYKWSTf7fxhhaofeDllWnbZUUng+bff3LxWFpgie6jYnUDpTj
+         RlknxyhGBRcHPDWWx7kL7MPh9JSXllx1vAjcqBEFjZT93Z0H+nxAtUQPV0BDyohYdf
+         G1qznt7Vq8zvei0IlHP4qTCX60eTdZC0+lIBR5YqJ5XpMe5mkaoo3QrA1imtd4kjVy
+         FaMAkc5v/WlsA==
+Received: by mercury (Postfix, from userid 1000)
+        id 6AE111062C1F; Sat,  5 Nov 2022 21:20:49 +0100 (CET)
+Date:   Sat, 5 Nov 2022 21:20:49 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Zhang Qing <zhangqing@rock-chips.com>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Chris Zhong <zyw@rock-chips.com>,
+        "Andrew F. Davis" <afd@ti.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        linux-kernel@vger.kernel.org,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        devicetree@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Dmitry Osipenko <digetx@gmail.com>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Orson Zhai <orsonzhai@gmail.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] dt-bindings: power: supply: define
+ monitored-battery in common place
+Message-ID: <20221105202049.2m2mbn3n4mhx7ppt@mercury.elektranox.org>
+References: <20221102184501.109148-1-krzysztof.kozlowski@linaro.org>
+ <166759887101.2893866.8476609318769745646.robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b4bt64bo4i7jwi3n"
 Content-Disposition: inline
-In-Reply-To: <20221105060024.598488967@goodmis.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <166759887101.2893866.8476609318769745646.robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 05, 2022 at 02:00:24AM -0400, Steven Rostedt wrote:
-> 
-> Back in April, I posted an RFC patch set to help mitigate a common issue
-> where a timer gets armed just before it is freed, and when the timer
-> goes off, it crashes in the timer code without any evidence of who the
-> culprit was. I got side tracked and never finished up on that patch set.
-> Since this type of crash is still our #1 crash we are seeing in the field,
-> it has become a priority again to finish it.
-> 
-> The last version of that patch set is here:
-> 
->   https://lore.kernel.org/all/20221104054053.431922658@goodmis.org/
-> 
-> I'm calling this version 4a as it only has obvious changes were the timer that
-> is being shutdown is in the same function where it will be freed or released,
-> as this series should be "safe" for adding. I'll be calling the other patches
-> 4b for the next merge window.
-> 
 
-For the series, as far as my testbed goes:
+--b4bt64bo4i7jwi3n
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Build results:
-	total: 152 pass: 152 fail: 0
-Qemu test results:
-	total: 500 pass: 500 fail: 0
+Hi,
 
-No runtime crashes or warnings observed.
+On Fri, Nov 04, 2022 at 04:54:31PM -0500, Rob Herring wrote:
+> On Wed, 02 Nov 2022 14:44:59 -0400, Krzysztof Kozlowski wrote:
+> > Define the type of monitored-battery in power-supply.yaml common schema.
+> > Reference the schema where applicable to enforce the above in bindings
+> > which have monitored-battery property.
+> >=20
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >=20
+> > ---
+> >=20
+> > Changes since v1:
+> > 1. Re-work the patch - define the type in power-supply.yaml.
+> > ---
+> >  Documentation/devicetree/bindings/mfd/ene-kb930.yaml        | 6 +++---
+> >  Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml   | 2 ++
+> >  Documentation/devicetree/bindings/power/supply/bq27xxx.yaml | 2 --
+> >  .../devicetree/bindings/power/supply/ingenic,battery.yaml   | 4 ++--
+> >  .../devicetree/bindings/power/supply/power-supply.yaml      | 6 ++++++
+> >  .../devicetree/bindings/power/supply/rohm,bd99954.yaml      | 1 +
+> >  .../devicetree/bindings/power/supply/sc2731-charger.yaml    | 1 -
+> >  7 files changed, 14 insertions(+), 8 deletions(-)
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Thanks, queued.
 
-Guenter
+-- Sebastian
 
+--b4bt64bo4i7jwi3n
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNmxZoACgkQ2O7X88g7
++prHnBAAoPZTWzrs6l6hUkEYVyqFlmO+8R2RwkF+0vpSS/vXtrs6KFN0L3im5zh3
+zj7BN0D9SJHSwYtl7bbJCAizZ9dzwLS8EFZq+6gKoh8wRQ+Y4WJCVeUhCwUMFzGI
+7rHzct8qpnjxkjwGCjb9Oip3dP2CE6YAad0QurUb/5xKQMZJhevi8xy19bURb9NS
+fqyuwHP4B41pVl/nosS8ssEyeiF6Wg0ypsXi+0nyiKHVHw/8ZOzSAM60crPVdFpi
+XGxv06qabil3Y9TmwxDHdSwKBzi37PK8QtMK2KvSQRb/lwVDw+ZsVuWQrOCoDYLI
+r/Rwy1YZmrQYYvcAMKaSZyQ0oTz9uv7SgIvfa+Yp/i/dCno9Z4NNgKh/ao84AHSk
+rPEQkaxHc6kNZ94H3dGBVaEW/kW+opU1IRk6ozA879KRPd8d4XWhakpigJ195jgd
+vzvOdmTTaW6sU1wiOeKSzTKUaCUFTTrVjO7F+ahqZtxTWv3rukR0vswbubPV2ors
+TaGUZtPJo1TM4yk12IOtXJcBKp1W/HFEGqOHvSI71fmF3zYguoht067emWduslH/
+1r4CvY2LI+oRMm6FR0yNx6GmPXhXRkmqh5tbV2zDaAlJ4/wYI2YaVumrYkjFEQWu
+zMMcrlBhLsDm/sPnMNirjWaBfUhm6e5i/IWzAsM9+vtBgtYkwQc=
+=d/iP
+-----END PGP SIGNATURE-----
+
+--b4bt64bo4i7jwi3n--
