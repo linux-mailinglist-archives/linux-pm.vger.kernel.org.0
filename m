@@ -2,123 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4591061E9D5
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 04:45:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF0861EAB3
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 06:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbiKGDpz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 6 Nov 2022 22:45:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S230328AbiKGFt2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 00:49:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiKGDpy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 6 Nov 2022 22:45:54 -0500
-X-Greylist: delayed 656 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 06 Nov 2022 19:45:52 PST
-Received: from mx2.zhaoxin.com (mx2.zhaoxin.com [203.110.167.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B42656A
-        for <linux-pm@vger.kernel.org>; Sun,  6 Nov 2022 19:45:51 -0800 (PST)
-X-ASG-Debug-ID: 1667792092-1eb14e7e6270db0001-MQbzy6
-Received: from ZXSHMBX1.zhaoxin.com (ZXSHMBX1.zhaoxin.com [10.28.252.163]) by mx2.zhaoxin.com with ESMTP id 0s7bCf8yw66UkIBv (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO); Mon, 07 Nov 2022 11:34:52 +0800 (CST)
-X-Barracuda-Envelope-From: TonyWWang-oc@zhaoxin.com
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-Received: from zxbjmbx1.zhaoxin.com (10.29.252.163) by ZXSHMBX1.zhaoxin.com
- (10.28.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Mon, 7 Nov
- 2022 11:34:52 +0800
-Received: from tony-HX002EA0.zhaoxin.com (10.32.64.2) by zxbjmbx1.zhaoxin.com
- (10.29.252.163) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12; Mon, 7 Nov
- 2022 11:34:50 +0800
-X-Barracuda-RBL-Trusted-Forwarder: 10.28.252.163
-From:   Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
-X-Barracuda-RBL-Trusted-Forwarder: 10.29.252.163
-To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <linux-acpi@vger.kernel.org>, <CobeChen@zhaoxin.com>,
-        <TimGuo@zhaoxin.com>, <LindaChai@zhaoxin.com>, <LeoLiu@zhaoxin.com>
-Subject: [PATCH v2] x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
-Date:   Mon, 7 Nov 2022 11:34:49 +0800
-X-ASG-Orig-Subj: [PATCH v2] x86/acpi/cstate: Optimize ARB_DISABLE on Centaur CPUs
-Message-ID: <1667792089-4904-1-git-send-email-TonyWWang-oc@zhaoxin.com>
-X-Mailer: git-send-email 2.7.4
+        with ESMTP id S230095AbiKGFt1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 00:49:27 -0500
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6044B4B7
+        for <linux-pm@vger.kernel.org>; Sun,  6 Nov 2022 21:49:26 -0800 (PST)
+Received: by mail-pf1-x42e.google.com with SMTP id v28so9617548pfi.12
+        for <linux-pm@vger.kernel.org>; Sun, 06 Nov 2022 21:49:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BrDTIKjF+Spift0ofw1JIFvDGqNjCzl7ehqas5LGuNc=;
+        b=BVliihZAaYEm142eZJ2QmBuMNxhAryDYrPXvjQ/GzOeYV/y02HOgufuXbGmwygrQEl
+         v28niaX5HzQPxysDDnmlu0tYGd3Q0LMEQddizPYyx1gypwYNYzFAaIQ6YB9P91BYxSA5
+         KtA/+WcODwSBdfsMy5CeJsxxIJ2hKGcotaHQ66hZNi99cORxLUUNo4wlr+h+SCFPYzXj
+         yqgweuaa2+YldsDCpxRTq9d3VDGfI7oNm4doRrlkMNmGxDwDOmiNdBGQhbG6tMwAOSHV
+         4wQNRUOlCH0qwer3cv/xOVRIRNqjLdo7ktFvj4aKzGXia+BPjk4FYpx4kfTIyYN9s+nS
+         BDTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BrDTIKjF+Spift0ofw1JIFvDGqNjCzl7ehqas5LGuNc=;
+        b=Bgr1cEtb8C70NEBO98v4B4ZhS2N4eNPUCA1lPf6Qy5hotTii9+pqkkyuuuCdiqKUAK
+         +9f129YtG8VinBhd7CsrNGkeiIk+n8RA0ljlZCklptvNdSNZcjhkg2FneXCPR+zL/IMm
+         7ZTQEZOCLAOduh43s2cGTuu7hKEeL4gavG9nfxESsmRZv6vwz0DWSQz1SLUcD5JfHEbD
+         R1dH9eHaPRJWxTTu46owMhwgxmDC10rvMjzTwHKVlA/liSL7//e8UZJJC6CnNmDGfZLO
+         CzX+NHJZhh87CtfPJ3Bmnp8wzLsByraDx8F5rqE6FSmhi+ddKUm7G+0OnsnsDdiue80G
+         V8JA==
+X-Gm-Message-State: ANoB5pmaQWaDwPfy0+mx4+PK7EQCS6sXyusSCwExIcWrStbjQlHwf5cC
+        QM1i6oZB67vcuLhaeWLbQ8Rn3SDBznyTcg==
+X-Google-Smtp-Source: AA0mqf41kHCgHoev80MlyuyNdsmuwo08EhQyFJVziS/qaf8ElpUip1/0CcgTSdPzpU2mgoyAuE+4BA==
+X-Received: by 2002:a63:4a4c:0:b0:470:75a0:e8c3 with SMTP id j12-20020a634a4c000000b0047075a0e8c3mr3611888pgl.589.1667800166523;
+        Sun, 06 Nov 2022 21:49:26 -0800 (PST)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id 68-20020a621647000000b0056bd1bf4243sm3493898pfw.53.2022.11.06.21.49.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Nov 2022 21:49:26 -0800 (PST)
+Date:   Mon, 7 Nov 2022 11:19:24 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: cpufreq: qcom: Add missing cache related
+ properties
+Message-ID: <20221107054924.ohm7s2cnyywjxrqw@vireshk-i7>
+References: <20221104162429.1981729-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.32.64.2]
-X-ClientProxiedBy: zxbjmbx1.zhaoxin.com (10.29.252.163) To
- zxbjmbx1.zhaoxin.com (10.29.252.163)
-X-Barracuda-Connect: ZXSHMBX1.zhaoxin.com[10.28.252.163]
-X-Barracuda-Start-Time: 1667792092
-X-Barracuda-Encrypted: ECDHE-RSA-AES128-GCM-SHA256
-X-Barracuda-URL: https://10.28.252.36:4443/cgi-mod/mark.cgi
-X-Virus-Scanned: by bsmtpd at zhaoxin.com
-X-Barracuda-Scan-Msg-Size: 2020
-X-Barracuda-BRTS-Status: 1
-X-Barracuda-Bayes: INNOCENT GLOBAL 0.0000 1.0000 -2.0210
-X-Barracuda-Spam-Score: -2.02
-X-Barracuda-Spam-Status: No, SCORE=-2.02 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=9.0 tests=
-X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.101960
-        Rule breakdown below
-         pts rule name              description
-        ---- ---------------------- --------------------------------------------------
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221104162429.1981729-1-robh@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On all recent Centaur platforms, ARB_DISABLE is handled by PMU
-automatically while entering C3 type state. No need for OS to
-issue the ARB_DISABLE, so set bm_control to zero to indicate that.
+On 04-11-22, 11:24, Rob Herring wrote:
+> The examples' cache nodes are incomplete as 'cache-unified' and
+> 'cache-level' are required cache properties.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../bindings/cpufreq/cpufreq-qcom-hw.yaml      | 18 ++++++++++++++++++
+>  1 file changed, 18 insertions(+)
 
-Signed-off-by: Tony W Wang-oc <TonyWWang-oc@zhaoxin.com>
----
-Changes in V2:
- - fix typo in comments.
----
- arch/x86/kernel/acpi/cstate.c | 26 +++++++++++++++++---------
- 1 file changed, 17 insertions(+), 9 deletions(-)
+Applied. Thanks.
 
-diff --git a/arch/x86/kernel/acpi/cstate.c b/arch/x86/kernel/acpi/cstate.c
-index 7945eae..da71679 100644
---- a/arch/x86/kernel/acpi/cstate.c
-+++ b/arch/x86/kernel/acpi/cstate.c
-@@ -52,17 +52,25 @@ void acpi_processor_power_init_bm_check(struct acpi_processor_flags *flags,
- 	if (c->x86_vendor == X86_VENDOR_INTEL &&
- 	    (c->x86 > 0xf || (c->x86 == 6 && c->x86_model >= 0x0f)))
- 			flags->bm_control = 0;
--	/*
--	 * For all recent Centaur CPUs, the ucode will make sure that each
--	 * core can keep cache coherence with each other while entering C3
--	 * type state. So, set bm_check to 1 to indicate that the kernel
--	 * doesn't need to execute a cache flush operation (WBINVD) when
--	 * entering C3 type state.
--	 */
-+
- 	if (c->x86_vendor == X86_VENDOR_CENTAUR) {
- 		if (c->x86 > 6 || (c->x86 == 6 && c->x86_model == 0x0f &&
--		    c->x86_stepping >= 0x0e))
--			flags->bm_check = 1;
-+		    c->x86_stepping >= 0x0e)) {
-+			/*
-+			 * For all recent Centaur CPUs, the ucode will make sure that each
-+			 * core can keep cache coherence with each other while entering C3
-+			 * type state. So, set bm_check to 1 to indicate that the kernel
-+			 * doesn't need to execute a cache flush operation (WBINVD) when
-+			 * entering C3 type state.
-+			 */
-+			flags->bm_check = 1;
-+			/*
-+			 * For all recent Centaur platforms, ARB_DISABLE is a nop.
-+			 * Set bm_control to zero to indicate that ARB_DISABLE is
-+			 * not required while entering C3 type state.
-+			 */
-+			flags->bm_control = 0;
-+		}
- 	}
- 
- 	if (c->x86_vendor == X86_VENDOR_ZHAOXIN) {
 -- 
-2.7.4
-
+viresh
