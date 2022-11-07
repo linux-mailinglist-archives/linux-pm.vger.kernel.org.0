@@ -2,121 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFBB461FD2C
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 19:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6182761FD3B
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 19:19:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233120AbiKGSRx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 13:17:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
+        id S232733AbiKGSTd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 13:19:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233193AbiKGSRc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 13:17:32 -0500
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DE729838;
-        Mon,  7 Nov 2022 10:16:08 -0800 (PST)
+        with ESMTP id S232741AbiKGSTQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 13:19:16 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2073.outbound.protection.outlook.com [40.107.243.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A278E218F;
+        Mon,  7 Nov 2022 10:18:17 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ls7VJnsEwVDPzMmQz9ZeI0ArX6pWklD5hiSWdIZc3MZRQvPq2bSvSQPYPcc49kn5z8wcVAzGvCU/9zlO+LsCvWbrKL9JQ1V1I0f8emlgpiFZEKHWwj5owrmpfdTZ4QeOaCAQzFG/pmOqX7wQNYf+4soY8knZ3yGh3d5u4ZE0X3e2khGG7P5JxOks/i0atpIW1H90AiMY4DUg2XtHNfFBWigj0ipPlO6PYXe9UQhvGSldbioAt2TNANqQW9nZR/1mywy180TGFncAch5R4wVf+vh8yKebn9eIiUa12lOA7XR1z3qv5KWgomF8OjmL2Oi+sKHjs6p8XtNVQJx70L7dmw==
+ b=HDyrfkhXYWfaF/ZPWqAvN1dY70NV5lwIGwvp9bP4/40esRk1EcxkVD2+760DgvD6RmZ+2iPDK9WJlfnVnrQ2qVkE8qX5ZCPPybZ7a5+SONEuyNWtYcKTz6+bM1oU1DkV+tm+9olmHGD1JteQyJokK0uhKtN4rrkOdkmZ9KH+9jNyJHh6AV5jTWsbZMi068mNx+BWo58359ZgFQXOvBkeCrbMT3DDBjgnvDh1+dP3I9MQrGy9ftBRzNZuBUdh8fs6HQAVn2SAWcACzPoHLgPX9iBizfu8d1aCLpSBDmLsS3zi3NAatDQPTU6x7D5P0mmabkHsr3DYYt1y3jTqSQux9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zx8vWEdogkOq9K85mOgAuTWXrPehFEmKqK24k5EbteU=;
- b=C/KrEsxQd0FAPUQlJ+Zlj41TFuFtjp9td5J+OrIePE/Fm34TrkejiMOoqat4YWz4g2DdS6KCGNbQlS8SRZ17cfsOv6HuP4LRPHLSSnz2MHmzhGddp9rAwmzwuLs5aFWJSDJeJ/oBZtXSxMBduKp8qxP7hvuqUrLxpX2p4J7SsOd4a0U529n0ID/lZRqhCaFpk+8WylZVzALPm5u/WdidybW3lAn50OSxTqjfSBO70u20ubCZ7UA8Wi1PXwQsICaQWqSyQiJHGHBSgeRaGNW5gwqKMBUsa+g1xBBzuTGfIImS8S219itbSLkp+hbqeElJCDYcs68Y21mQSg/oZ3IqQw==
+ bh=qYasbIiL0YgH5mZOOE/OQZlOBJ9vDc+0nFXIHERWJq4=;
+ b=KerET0GiUDCobJ7wMLvmsNpnbeSBQO4cJQosNei21OwbxuZJRyA6+LNZop4xDFFNBg1uUcOBJdpGAD4Z9nvHW6yDHvMQLpubzf50NlLbhX5CDAvBSLatGj2iIsLKRJuVGwWt3TTKOumCtK/o9F//w2so1h2u0tOYet0aKofJUSytWGxXu268iTgJVAUz0j7JkvMB68U66s7As5tq+IGB9gJcPGAITMeqVlHLQLAQj2bpMNqL/855iuiafBLlfBduuTZvEluyeO28pXKfLpqDb/vQkBtSwqwrNj6D8LjOYrKyPE5DKY2LKsiPk0IawPxfWvQoeviGbYxUX7QzwMS3Sg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zx8vWEdogkOq9K85mOgAuTWXrPehFEmKqK24k5EbteU=;
- b=QXOo9eR4WUE7HuKm9db9MtjsXkMO2le6ml2jc17/ZmRngfhoomBNzZ39Wy7no0sOl0fuNkbDvCiwDTs8pXpJGd08ud4V772N1SWaARC9zvmQ+MsCLVS7sR9RLf5v0Fv8bPwoqGUp3cFGQtZyimaeuFD24DF8+NtVAHbzpcYJD20=
+ bh=qYasbIiL0YgH5mZOOE/OQZlOBJ9vDc+0nFXIHERWJq4=;
+ b=x5gr0WnZl5qjd5qSOhaBPpyZyuZfRw7evnY9lbh0shiI93VivaFjCPpkKZOZIqMO9+nc41jYRQq9k5HR8S/1QXCqVVnpLrBJg23TPhdFnm4qlgpIjXTLZmAOLPVQjusmY+oKYA+FUAFgvBa06Tjr0mXpIZzJ+d9UN0npvxaqZzg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
  by BY5PR12MB4146.namprd12.prod.outlook.com (2603:10b6:a03:20d::24) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Mon, 7 Nov
- 2022 18:16:04 +0000
+ 2022 18:18:13 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::f842:a9ba:3f41:3c3c]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::f842:a9ba:3f41:3c3c%5]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 18:16:04 +0000
-Message-ID: <1b7a5cd5-6ecf-8529-f10b-4f7f06fc7462@amd.com>
-Date:   Mon, 7 Nov 2022 12:16:00 -0600
+ 18:18:13 +0000
+Message-ID: <30690bad-e3f4-36ee-c957-a2cf750b7775@amd.com>
+Date:   Mon, 7 Nov 2022 12:18:09 -0600
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v3 7/8] cpufreq: amd-pstate: add frequency dynamic boost
- sysfs control
+Subject: Re: [PATCH v3 6/8] cpufreq: amd-pstate: implement suspend and resume
+ callbacks
 Content-Language: en-US
 To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
         ray.huang@amd.com, viresh.kumar@linaro.org
 Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
         Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
         Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, wyes.karny@amd.com
+        linux-kernel@vger.kernel.org
 References: <20221107175705.2207842-1-Perry.Yuan@amd.com>
- <20221107175705.2207842-8-Perry.Yuan@amd.com>
+ <20221107175705.2207842-7-Perry.Yuan@amd.com>
 From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20221107175705.2207842-8-Perry.Yuan@amd.com>
+In-Reply-To: <20221107175705.2207842-7-Perry.Yuan@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR10CA0009.namprd10.prod.outlook.com
- (2603:10b6:610:4c::19) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: CH0PR07CA0007.namprd07.prod.outlook.com
+ (2603:10b6:610:32::12) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|BY5PR12MB4146:EE_
-X-MS-Office365-Filtering-Correlation-Id: 136b7024-f38d-4193-574b-08dac0ec21e0
+X-MS-Office365-Filtering-Correlation-Id: 520170b1-647c-4862-2abd-08dac0ec6ec4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KKYHK00KhhbXKlq7HUVLLGJBde+op5Xr9t/0KiXKBBDzl8+0JbWqpROi9qMvlj04amVkHji1O04pRsBiFJjP1rpqf2q4Df1C/vX99o8zMv4drvdOmHFgEme7tpR5JaX7N/kAoiDkyXwUG3fUtjPzyPiBPXajSBxD3AEe7yAybfrP6QZRADuLrOesk9zAWFd518JRSirW+IUKTJoS2xki/qG3/7uzoZ41OCUHvVz8xrXWGY4OPRdOWggNloEWggAD+WZ/qTW085SdLoaFjFdbdRPB4H+4C3MUZlWPWy4VkyKWFUcBgf5QPqOIFjAPFE0pyftRHJ/sb39KRvAPUO6HQZQ85JxDTbE3aB2MGyBDe+9dpiFsSmsfkg0xKrP/rtKxIjlGJCP/+uXIy5uGlxUlKz7Z+moCZVTaEN7k6vtnP/0UMMBrzlWkyWV1xanGtgjtOOB5W8DaHFPPibpoXTt9e9F/aGobDEH2xTu/d7UEjOkzP6U0c+28Djf3OOLpB0NJ6i1TIigWS2OvFG4rAZ2XPm+euQqWIslU105Mr+iJ2OJcwtK1sWcdRudG6vWJN8FTKpXfi1LBEWIHajj60AVfGmoAuNkP4FJRWQl5At5qDESgm8zvowyj18VsZ7GYoSZd/jaA6cClXDxSOKLIFqqjOW5/a7zgR/x73BcKarRYCB1NJohkqK6SPXDtoob6aqOVp/8XWXMlJ4ubAV8a6b/oADFRydrZGnLdL35fo5ReFoi680BB4ufr1mkusQ+p5eLVJ3iheSc5oZ/XQ/xHVsILS9Q7doCfn6m+blVCfJaeKBbsD5N7nPp1A3hn7OhbUssBs+jVzWrSuoXfbu6T2+tCBw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(136003)(346002)(366004)(451199015)(26005)(186003)(6512007)(83380400001)(2616005)(38100700002)(2906002)(5660300002)(8936002)(53546011)(6486002)(478600001)(6666004)(6506007)(4326008)(66556008)(8676002)(41300700001)(66946007)(316002)(66476007)(31686004)(31696002)(86362001)(36756003)(43740500002)(45980500001)(309714004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: DNUcTLeFUJXAQHbfvGUymHey4PUl9TOJzKQWIa33Wg0YRZm/utcnHgeyx7/HCu7/VddZbnxS50ilsxUT9hcQh/16RUG//5rs7gJezvjuMtQm166z2VndeXXTFxyd21cNchU8xNxynRCGE1jSJNbLbcst8feaQ/geW3BkwZzo5GcXxoZOBWRxHMivg6ijIXW8nuUr+7g+9OxZ39smAh/QV9jbzA+ID8mwQ1IG7lB6VjEKR7nztedkssaCcmhldvo5njjwhrHcB8f1C1BgDiJp66Cl1y2DShGEBswA3AbG/ERVkN1WOG9zWZTkKDJhfyhDDIH73Cn3XTj33Ro/dh4Odle7WRfFwgtYIQ8sPEpQTc3+o5edyIlQOF8it2Yc/m0kqwmHC8UUWt9kgnfmAmtkSOXgvSl5gXLfGW4PnxpsAjCt6F0WWU+RtQDdUGEoggZVGyh56TQREWXH01IaZ6a85ZabjK6uiLYAxyh8kdzIJT1qp88swL/N/WFjLHD1Lb6HAUv/6aXwaM1gIewHkYJ/5lve+ds2LsWrf89HNM4ly6SJ4rN6O2Y8of0w9b/vMvgYZejO1J5d+/w1M4jdH2kt5Q+Ic7WNXEzGpteC3vVInHAaeci41pyjl7EY+eHd3sYjbJay3Jkw54QkzjvuvHZJHx1DBbIpMI7xGUleE6rGSosqBOILA+p/ZlIfboeiQNRYPXbOt7aiDzXBmBQrxS/ZSX+bOw2TQH4W3Ug3mysoWcOpNSfGOV5PIfYtn8uZOJOcYSNWcqU6gP23mjwRZU6P9BAVEpfPfgGpE7o/BTVTNE0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(39860400002)(396003)(136003)(346002)(366004)(451199015)(26005)(186003)(6512007)(83380400001)(2616005)(38100700002)(2906002)(5660300002)(8936002)(15650500001)(53546011)(6486002)(478600001)(6666004)(6506007)(4326008)(66556008)(8676002)(41300700001)(66946007)(316002)(66476007)(31686004)(31696002)(86362001)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SllDTWE0MG1pYmlEUmd2Vlk0cm80UVBMa3JlQ0FaaWQ1WTlZZ01rYm9PRHBI?=
- =?utf-8?B?S01lMUgvMjdCNHVPUkU2RWhOL0grK1hQQzZsZnppNWc3SFhUVXNmZ1Fja09B?=
- =?utf-8?B?dDNTVm14c2tKRzBGQndubnh6SnNCcjV6eTVnR1k2TFJmV1R6cEs4b3hpQzUr?=
- =?utf-8?B?NjVuYUwrbkxyT01xR3l1enR4Ly9kS0hUdGh4dHNBdUl3NkFSdnVEOW9pOWpr?=
- =?utf-8?B?c2NMcEpDdDRUUlQ4d0hYdjBpd3o2a3ZoQnJHQlh3Z0Q2c3VqM1U2MFlXV0pm?=
- =?utf-8?B?T2Z6NitmekxqZWVIdW9tK0F0VlNRaGNiWjV1K0ZaN0J1QVFicmdzNk9tOXAw?=
- =?utf-8?B?dDlDamNMUlQxUkFBcFF4SktXWEUwRjZIM3BZNWx3U1ZkRG5UdnhqV0ZsT0Jx?=
- =?utf-8?B?QjZxUHFMdkFlTWQxbDJCOGR0OUNiUm9RcXo2TlVORFdtaUZ0TGUzT0NnM0FV?=
- =?utf-8?B?b2p3eVBIek43aGJKMHRoWXB0cmdBL3N4d0xVN3lZV1d4clkzbFozeWNSZ0U3?=
- =?utf-8?B?OGtSelFuRHZqNWdGaUZmbXZJSFdHdjJtRkYvWThYY25nb1UrdmRpeHliVTFH?=
- =?utf-8?B?aEdXTHFSdSt2VHVNb2F1ZWZWUW9hSkZUV1FXVmNjMVpicncwdHBCTitIZFAr?=
- =?utf-8?B?VGVGQ0l0dEVuT1ljZW54NmdRQkVzQUwraGZPY0xGVCsrV05PMTQySEdTQnNR?=
- =?utf-8?B?K1UxUW42N0NWTUdVckJLMitySklRVXpRejR2d1UvekZWaEhpVU85Y0VMbGtD?=
- =?utf-8?B?SnlKb2pvUFAvcEE1ZDNIczkzOHIwN1RJaFR5Z0Rzbk5sTm5GSHFmZktCYmNz?=
- =?utf-8?B?aWRpSHJjV2I4cnhZNE8zc1ZNL1FVNy8vRTdqKzJKWGJ6dDBTRXNIcFN2ellt?=
- =?utf-8?B?RjY0OEdQL1ZFSi9sUnAyZStVVi9PTUk4S3lrYm9SMm82RXMreGtXUjJJdXBx?=
- =?utf-8?B?MDZJRkhKTDhWRGFMT1JFeDBnaDZKcE1xek40ODZXZ2Z4emhpS1pnL0EyTFZQ?=
- =?utf-8?B?M1M1a0dzZ1RDZUpQNkErR3ZPQWtIeFQzbEptbTN6bnJPdG03RWNpOFA5UUJO?=
- =?utf-8?B?bTR6SEY2a1FYQzVpRmxuc2NyeGpnVU9oVCs3MWl3V1hBUllyUjlKOUM5ZWNP?=
- =?utf-8?B?TjJwb2tLUFpNWW1ZM3J6TGtOSDRNZ2xDMG5pdEd5U0phRXhPRjk2L3BobHlW?=
- =?utf-8?B?NFdpZkg5NmFuNUtYcHNWYnNYcEZLSEFRQlVYOEl5czkvUGhlZXVFdXFmdWJn?=
- =?utf-8?B?MzRsYlVpeTZYUjFBRnNqdWwxK20wK2krUkxDYnltOG93NHZCSUVxOTdQOGdR?=
- =?utf-8?B?MCthRkRoc3RmZWtTNTc5M3MxVk42UE1aU1c5ME5CeWZ3UHFzVUdXeFl6eHJZ?=
- =?utf-8?B?SmxaTzJobWdUU3I3Y3NUSnMzRTNqV3ViVlRZWlUwdHJWZW5kS0NKL2xiOW40?=
- =?utf-8?B?OTZva3NSeDhsRnhsNk1IYjFxM0NKT2xqZHR6Mm9VeW8zOXlFOTNoYml2eFBD?=
- =?utf-8?B?SWJsU2RpNXpKejM3ZDgwUFFWN0dqZll3RDJxRkRYemJWZ2dKQUZZZHhhT25K?=
- =?utf-8?B?aHNEZG5GK1NFbVoyTWZseTZXL0xLNkhSVTJ2QXQ3TmNHWko1MVdyVmZWYzNM?=
- =?utf-8?B?MHdTN3ZQSWtKbTFFeEFxaS9JYzBvMzRrNFV3TnpDc3lHQzJPY2o2VzFiMEQ0?=
- =?utf-8?B?TG5nMjE2cFJMWExRL3dtSFFraHdZTkYyeGlvbGpmdFBvNGR2RlcwV3gza2hi?=
- =?utf-8?B?UjN1amZ4QzluNXpuem5SN1VsV1l6MHMrZTdtanFrL0NnZHcvejJrY0IxYmVn?=
- =?utf-8?B?STR5NUdGVC8yUkNkd1Bpc0ZBQ2swY1hqTkJZNXoyU2VZZUdmTFV0VExLTWZx?=
- =?utf-8?B?Z1dLYkZZSGUvcjlIQ3ZjOVljVjFkejlaTmNYUExxYWVlVzd4eTVlZWZhVDhU?=
- =?utf-8?B?bi90ZWc3My9NWFcvbGxxY3ZxRTJvTHZNRDJ4N0UyREtJdWFVNlBsL3hRQVNX?=
- =?utf-8?B?YVEwOXRQRERSTGJXaGxsaWFWV1BtUng2eU8rcytiREdHSFUvM2J3amc3Q3ZL?=
- =?utf-8?B?cjhBZDZRb1pneFB4Mmdkd1NFSTRtKzZuK05OZTZBczltcDNEcEdMdW95d3BK?=
- =?utf-8?Q?BJMxO60HjRHjlc+QpN0Ah3Fm1?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UDNJYUw0NytmREEzeTY1K2xONUJEWlArZGFPNVJvR0ZvNS95dysxd1duOWh1?=
+ =?utf-8?B?ejRpMHNENW1TN2pWd1Y4bGg2MktTT2NVWTFvQXlvdDM3SFE3Qm5VZGhqZEUx?=
+ =?utf-8?B?MXVCbHZQMFI4RDA2NWtxNTN0REZiUHZybTVPKyttTHNwSWxRbFJ3NnpnTk9S?=
+ =?utf-8?B?RU1QWThNR1o5NDdwZGFVaVowdm1pdE1tNUFLeThlWHY5UEdYUU1icHA0ME1M?=
+ =?utf-8?B?bTdVY0owcTdCVlM0T0dRUm5BSmpsSUtFbktIa29HUXg4eHdpaWV2eE5ZU0k1?=
+ =?utf-8?B?MG03MFpkSEp6K3ZQbnZBSEZRTWpZeGxYT3pZOXlrSVlxc2VsTGZjNXUzSWhi?=
+ =?utf-8?B?b213Q0dlakE2OHp4Nk9xTnI2OEd2WHpDSVkvNnd3cGljRW5QS2tULy81aUJI?=
+ =?utf-8?B?aVVIN2w4SUZGNXZVR1pTdXR2LzZvYzNqUWNwUUZ5dWM4ck9BeWRxSWs0K2VZ?=
+ =?utf-8?B?eFhhMWYra0M1SlRJSCt4b1pDUCt3MkdZbFA4b21Fa2hpekZ2RGVyNTdleTJM?=
+ =?utf-8?B?T0U3dkhYaUMvMnRJaFNpN2hNeWI5ckc2VElvb3JPNVpUaUFrMS84WEgvcEQr?=
+ =?utf-8?B?c3lQdDAwNTB3Vk9JblUwZTlPekJRcGpCTDNtWk1LbkxLcXRLNlFFTGJFRHZ5?=
+ =?utf-8?B?cklUZ3gvRDZlSlJ4emtBVjUySncrNFk0UEpJTXRMTi9tSTZPaDJpVFN2cE5w?=
+ =?utf-8?B?cEh2eEZUTXBqQWIzanZhYitueWlnZlVxc2dFV291bmxSSkJyUHk3Nm5GTUla?=
+ =?utf-8?B?WjdidkFYNTg5OFNUL3BCNDU0RFh3QzVVcmFESUNHM1BIVzlUN0ZhRVd4UzV3?=
+ =?utf-8?B?bWVuTGNidHZaZFZreHJ6K0pLZitlK3RMaFFPZkdBY1RvU0xEM2hCZ3N6OHlJ?=
+ =?utf-8?B?UU0rRk43dEZyNk9IQ2xZZDVkZU12ZnJFbkc5bFRYZ3NhdzFKMmZOb1F6M3Vs?=
+ =?utf-8?B?akNaTW9ydWp6UjRRVjFiQlJCRWFCU0g3UWZvUUhRY28rTEtFQXR1Y2wwc0Rz?=
+ =?utf-8?B?N0JUZGtiY1c3OFJpU2w2UC9KZEl3cjErazJrcGJBVG0vSTZRY0t1TmRBdy9Y?=
+ =?utf-8?B?dnF2MGJGNWhjZFVBcUZtcCt4U1YyTUwxTVE2TENoMGFVRkg0c0tvd3A5b1NU?=
+ =?utf-8?B?bkR6NEJWcTVNN3Mrc2xSdUpjNnl2ZEFxcGpPZE9kM09CTU85ZzJjOHlXQXQ2?=
+ =?utf-8?B?ZDNZM0V2UmZ6cDM0ZjlxZkdBaElKTVA3ZFlDUFNUTjA5OEN5OW8vamhtZlRW?=
+ =?utf-8?B?VnlVZERNNS8xYXg5V3VKeFVrdkloVlJ4U1BKNnV1WW5sN0wwbCtvQ0gzcmgr?=
+ =?utf-8?B?YUtTQ3pFNGhjOTQ4Nk84eVRJWVFLU1R4ZXgzcVZHdzh1MnkzdTdoQmlYV3Ju?=
+ =?utf-8?B?QTV5WkZMSnN1MU9Pd2l3bVlCUlM0aHU3WUt3YTRQNTIyQjFTWmQ0c095cC8v?=
+ =?utf-8?B?dStpRm4zVUpTbTd0QmZMT2ExcnpEbHdEbk5hMzh2aFlxRzI1R2h2YUFXSkh3?=
+ =?utf-8?B?eXZsVjVKc3RrT0FHQWV3NTE2VlhaT3kvdW8vTWxMTk9Qdkhqd3E1bXdXSHll?=
+ =?utf-8?B?b2NRMUZEdzBkRGxBYWFOYUxOZW1JU3NvU1lJMXhOZ0FUSEZGdm9FTDJlSkQx?=
+ =?utf-8?B?ZEloU0VlZU8vdXEwT2xJVjlMbkhFQzFnUWJrUkZvZnI5d0x5U1RqaGI3ZTlN?=
+ =?utf-8?B?V29WbHpPUDlGcE9RQW9wVzgwdkVyNVpUL3NSR2xweWhseExTK0ZOdno2VW14?=
+ =?utf-8?B?K1VHeS9nTGFrdlkwSU5oZFBWQXo4RldSTjd3ak9HNERDL1lPdlEza0MvV3BJ?=
+ =?utf-8?B?OGRWRmpwQ0lYWmdvSWNiL2xBVWJzR1g5WmxkRVF0SnpDZGQzU1I3RVhldmQw?=
+ =?utf-8?B?U3BjRHFtbVI3TTh2dG5BVk5sMmE0MTkvamgxejY2OHVUZlhCTmdVREJSVUI2?=
+ =?utf-8?B?Y2RmWGNOOUpGS1d1aUhaamMvWjFKL2xpOXRrUEgveEhtbWg1UGl6Wll5cXNJ?=
+ =?utf-8?B?aHBYZFdGRXU5QS9ER1M5d201M1NJS2JKZWZ0WDJOSVFVRVpwd1FDbjh4c29P?=
+ =?utf-8?B?OVhyQzAwWEZ2VDI4eGg3eS9rWTgreUtXd1Y0ZWFVeDVpRUd4dmE2V1h3T0xk?=
+ =?utf-8?Q?OwrLq3j6ooWe8OIvOvvDdDY7c?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 136b7024-f38d-4193-574b-08dac0ec21e0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 520170b1-647c-4862-2abd-08dac0ec6ec4
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:16:04.1243
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:18:13.0760
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /x6cUlB8qp9j49TZaih7s0ArekLdCC69poXNT1IUHBRks05H8VDYMC+kYie879Irr3ejwX1mv1/vmqOfFEUtWw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: blmvPNbYFObLVrQLLJiglwq1cjT1fu/Y+JZCfT3yYW/uW6lX5vuabOBcKfSyfYaRv1zkfDjZBbawlM549r+zCg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4146
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -128,113 +128,79 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-+wyes.karny@amd.com
-
 On 11/7/2022 11:57, Perry Yuan wrote:
-> Add one sysfs entry to control the CPU cores frequency boost state
-> The attribute file can allow user to set max performance boosted or
-> keeping at normal perf level.
+> add suspend and resume support for the AMD processors by amd_pstate_epp
+> driver instance.
+> 
+> When the CPPC is suspended, EPP driver will set EPP profile to 'power'
+> profile and set max/min perf to lowest perf value.
+> When resume happens, it will restore the MSR registers with
+> previous cached value.
 > 
 > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+
 > ---
->   drivers/cpufreq/amd-pstate.c | 53 ++++++++++++++++++++++++++++++++++++
->   1 file changed, 53 insertions(+)
-
-Make sure that you update the documentation for this new sysfs file as well.
-
+>   drivers/cpufreq/amd-pstate.c | 40 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 40 insertions(+)
 > 
 > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 841b1e2383b8..6958c5fd9e1c 100644
+> index 6ce9fca0a128..841b1e2383b8 100644
 > --- a/drivers/cpufreq/amd-pstate.c
 > +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -786,12 +786,46 @@ static ssize_t show_energy_performance_preference(
->   		return  sprintf(buf, "%s\n", energy_perf_strings[preference]);
+> @@ -1282,6 +1282,44 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+>   	return amd_pstate_cpu_offline(policy);
 >   }
 >   
-> +static void amd_pstate_update_policies(void)
+> +static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
 > +{
-> +	int cpu;
-> +
-> +	for_each_possible_cpu(cpu)
-> +		cpufreq_update_policy(cpu);
-> +}
-> +
-> +static ssize_t show_pstate_dynamic_boost(struct kobject *kobj,
-> +				struct kobj_attribute *attr, char *buf)
-> +{
-> +	return sprintf(buf, "%u\n", cppc_boost);
-> +}
-> +
-> +static ssize_t store_pstate_dynamic_boost(struct kobject *a,
-> +				       struct kobj_attribute *b,
-> +				       const char *buf, size_t count)
-> +{
-> +	unsigned int input;
+> +	struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
 > +	int ret;
 > +
-> +	ret = kstrtouint(buf, 10, &input);
+> +	/* avoid suspending when EPP is not enabled */
+> +	if (!cppc_active)
+> +		return 0;
+> +
+> +	/* set this flag to avoid setting core offline*/
+> +	cpudata->suspended = true;
+> +
+> +	/* disable CPPC in lowlevel firmware */
+> +	ret = amd_pstate_enable(false);
 > +	if (ret)
-> +		return ret;
-
-To be more flexible maybe kstrtobool would be better here instead?
-
+> +		pr_err("failed to suspend, return %d\n", ret);
 > +
-> +	mutex_lock(&amd_pstate_driver_lock);
-> +	cppc_boost = !!input;
-> +	amd_pstate_update_policies();
-> +	mutex_unlock(&amd_pstate_driver_lock);
-> +
-> +	return count;
+> +	return 0;
 > +}
 > +
->   cpufreq_freq_attr_ro(amd_pstate_max_freq);
->   cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
->   
->   cpufreq_freq_attr_ro(amd_pstate_highest_perf);
->   cpufreq_freq_attr_rw(energy_performance_preference);
->   cpufreq_freq_attr_ro(energy_performance_available_preferences);
-> +define_one_global_rw(pstate_dynamic_boost);
->   
->   static struct freq_attr *amd_pstate_attr[] = {
->   	&amd_pstate_max_freq,
-> @@ -809,6 +843,15 @@ static struct freq_attr *amd_pstate_epp_attr[] = {
->   	NULL,
->   };
->   
-> +static struct attribute *pstate_global_attributes[] = {
-> +	&pstate_dynamic_boost.attr,
-> +	NULL
-> +};
+> +static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
+> +{
+> +	struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
 > +
-> +static const struct attribute_group amd_pstate_global_attr_group = {
-> +	.attrs = pstate_global_attributes,
-> +};
+> +	if (cpudata->suspended) {
+> +		mutex_lock(&amd_pstate_limits_lock);
 > +
->   static inline void update_boost_state(void)
->   {
->   	u64 misc_en;
-> @@ -1416,6 +1459,16 @@ static int __init amd_pstate_init(void)
->   		pr_err("failed to register amd pstate driver with return %d\n",
->   		       ret);
->   
-> +	amd_pstate_kobj = kobject_create_and_add("amd-pstate", &cpu_subsys.dev_root->kobj);
-> +	if (!amd_pstate_kobj)
-> +		pr_err("amd-pstate: Global sysfs registration failed.\n");
+> +		/* enable amd pstate from suspend state*/
+> +		amd_pstate_epp_reenable(cpudata);
 > +
-> +	ret = sysfs_create_group(amd_pstate_kobj, &amd_pstate_global_attr_group);
-> +	if (ret) {
-> +		pr_err("amd-pstate: Sysfs attribute export failed with error %d.\n",
-> +		       ret);
-
-amd-pstate can currently be a module too.  So don't you need the 
-matching cleanup path for this code too?
-
-Also, regarding the error messages you don't need to prefix with 
-"amd-pstate: ", amd-pstate.c already sets `pr_fmt`.
-
+> +		mutex_unlock(&amd_pstate_limits_lock);
+> +
+> +		cpudata->suspended = false;
 > +	}
 > +
->   	return ret;
->   }
->   device_initcall(amd_pstate_init);
+> +	return 0;
+> +}
+> +
+>   static void amd_pstate_verify_cpu_policy(struct amd_cpudata *cpudata,
+>   					   struct cpufreq_policy_data *policy)
+>   {
+> @@ -1318,6 +1356,8 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
+>   	.update_limits	= amd_pstate_epp_update_limits,
+>   	.offline	= amd_pstate_epp_cpu_offline,
+>   	.online		= amd_pstate_epp_cpu_online,
+> +	.suspend	= amd_pstate_epp_suspend,
+> +	.resume		= amd_pstate_epp_resume,
+>   	.name		= "amd_pstate_epp",
+>   	.attr		= amd_pstate_epp_attr,
+>   };
 
