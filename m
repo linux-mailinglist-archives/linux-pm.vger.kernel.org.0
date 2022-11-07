@@ -2,116 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF4561F150
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 11:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0DE361F1F5
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 12:38:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbiKGK5f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 05:57:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55740 "EHLO
+        id S231843AbiKGLh7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 06:37:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbiKGK5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 05:57:30 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C751A061;
-        Mon,  7 Nov 2022 02:57:29 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id t25so28965164ejb.8;
-        Mon, 07 Nov 2022 02:57:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9+Z2+ck32GlpQgV/uBGlJrkyX3/Vf2IzJOHORrIT1MY=;
-        b=XFFyTmL7BSv4J4Wq1E+s9vtLhWCkieiq+QZhvKznof880A9tcPYTH7fnAW4IWQDkTe
-         vkPTrSTPhhq+1pOcbw0zlF6zg1prsrr2WYym5Pc58X2PY/4NjVCWx+03Yab1XvCcann+
-         O4gG7kTNce/XcWV3xi+oBITARBXYdNnH7XCqqpt8D1Wt/JT3SMRjrkf0KlcG2kRukrcj
-         WI0BsNOJu6lqQ8Qs17prqMpqyslaH0LHQFTWx6MO1d0tCZQQOGyw6PO3u3gYyVbt1Hhg
-         1BiKkaRdcomr2mNejNy17nOiy8JM0C9GyYIHSqxNAbHYOZXVzJjXG46S5uYITS8HI4UU
-         GKbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9+Z2+ck32GlpQgV/uBGlJrkyX3/Vf2IzJOHORrIT1MY=;
-        b=M9/l7DoxWM2DDPnSp2ts3HNz8mqZnDDqi05QrwnHp9rpI/0O67fI/E6y70joCFHyfN
-         tWg1SzqqRlqY34lG0ren0+sT1drXojwwAFQMQRQlIVSwixaZioiKhmancPcood6Y4vao
-         UQuiRdTuUI/cjfMqQM/UQ5KOkkpnleC2or+zARM6FY27xJmMdFGBg9+Tz3VqHy9nFmPy
-         ZSSN72x9IfFUcPZWf4C/PeDhquGt+3VOHGUqAw1R1Z0TLmLzIN5F84ESHhUtuJHduo1z
-         P0PyOlG16oqGrc5nH0aSSyhvO2189GrbGTvV72YXDvfGtSbZ5G4inw/cjvH7kHJz6Mdv
-         9ONQ==
-X-Gm-Message-State: ACrzQf316eEPkESBgOv0vl9K2sIoNPjAukT4h1Enm4cAEjU+5/hNzSrV
-        IJBagKM36JImGOYU3BtKBiyOEdsXuEQ=
-X-Google-Smtp-Source: AMsMyM4NvgfZgWsr6EjuRh9MkFgv0bBQd9NonzB5fp9eFJcOmOlXfJonMayyfIaL6OdMMGpuR07UDA==
-X-Received: by 2002:a17:906:7948:b0:7ac:d6f9:eb3e with SMTP id l8-20020a170906794800b007acd6f9eb3emr46181609ejo.350.1667818648080;
-        Mon, 07 Nov 2022 02:57:28 -0800 (PST)
-Received: from felia.fritz.box (200116b826b04a00c13f470e37e07cb6.dip.versatel-1u1.de. [2001:16b8:26b0:4a00:c13f:470e:37e0:7cb6])
-        by smtp.gmail.com with ESMTPSA id et10-20020a056402378a00b0045c47b2a800sm3949250edb.67.2022.11.07.02.57.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 02:57:27 -0800 (PST)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] notifier: repair slips in kernel-doc comments
-Date:   Mon,  7 Nov 2022 11:56:57 +0100
-Message-Id: <20221107105657.19002-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231837AbiKGLh6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 06:37:58 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AFB6D40;
+        Mon,  7 Nov 2022 03:37:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3A9DB81047;
+        Mon,  7 Nov 2022 11:37:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F6C3C433C1;
+        Mon,  7 Nov 2022 11:37:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667821075;
+        bh=wmRJ9Bh1sQC5dP/YZFcpYvwOfERvr5wUBEB4e5Epx4E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O+DVhJKV0sdvQ9OEqMeJ39GM3xddAsWmwVCTv+OcVovps629wehNde+cOI0Yw3Ucn
+         d+eEG+YFVPK1eD5C75kDEy9j0asfxBFJH1WIGxRGw4aVSe0fTeqwwDN2bhnEbpfXdL
+         1SwXXP2JA+DGFkUF6iHoswBEKo9mLtEuMPVYn0soK4qAMdYN/tL3mF3FNqGYGRebtO
+         AQ5xh6+QWg7/SBlOEcRa8yQzjHAUmsg+uOjPjl5YtOxkYN/vB77G7CetEAfro4gEfA
+         xDBU7kkHQ6xokjAwDstiCoq1xizZhyceELdGhJ5cNBXO1cJJhmnZ6doQ0acUvaAlsD
+         DwRSHUSdT6W2g==
+Date:   Mon, 7 Nov 2022 13:37:49 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
+        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v4 02/11] tpm: Export and rename
+ tpm2_find_and_validate_cc()
+Message-ID: <Y2juDUwRLnYRYCPs@kernel.org>
+References: <20221103180120.752659-1-evgreen@chromium.org>
+ <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103105558.v4.2.I7bbedcf5efd3f1c72c32d6002faed086c5ed31c7@changeid>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Invoking ./scripts/kernel-doc -none kernel/notifier.c warns:
+On Thu, Nov 03, 2022 at 11:01:10AM -0700, Evan Green wrote:
+> Export tpm_find_and_validate_cc() since it will be needed by an upcoming
+> change allowing access to certain PCRs to be restricted to the kernel.
+> In order to export it consistently, and because it's a tpm2-only
+> function, rename it to tpm2_find_and_validate_cc().
+> 
+> Signed-off-by: Evan Green <evgreen@chromium.org>
+> 
+> ---
+> 
+> (no changes since v3)
+> 
+> Changes in v3:
+>  - Split find_and_validate_cc() export to its own patch (Jarkko)
+>  - Rename tpm_find_and_validate_cc() to tpm2_find_and_validate_cc().
+> 
+>  drivers/char/tpm/tpm.h        | 3 +++
+>  drivers/char/tpm/tpm2-space.c | 8 ++++----
+>  2 files changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> index 24ee4e1cc452a0..f1e0f490176f01 100644
+> --- a/drivers/char/tpm/tpm.h
+> +++ b/drivers/char/tpm/tpm.h
+> @@ -231,6 +231,9 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc);
+>  int tpm2_init_space(struct tpm_space *space, unsigned int buf_size);
+>  void tpm2_del_space(struct tpm_chip *chip, struct tpm_space *space);
+>  void tpm2_flush_space(struct tpm_chip *chip);
+> +int tpm2_find_and_validate_cc(struct tpm_chip *chip,
+> +			      struct tpm_space *space,
+> +			      const void *cmd, size_t len);
+>  int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+>  		       size_t cmdsiz);
+>  int tpm2_commit_space(struct tpm_chip *chip, struct tpm_space *space, void *buf,
+> diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
+> index ffb35f0154c16c..ca34cc006e7f8d 100644
+> --- a/drivers/char/tpm/tpm2-space.c
+> +++ b/drivers/char/tpm/tpm2-space.c
+> @@ -262,9 +262,9 @@ static int tpm2_map_command(struct tpm_chip *chip, u32 cc, u8 *cmd)
+>  	return 0;
+>  }
+>  
+> -static int tpm_find_and_validate_cc(struct tpm_chip *chip,
+> -				    struct tpm_space *space,
+> -				    const void *cmd, size_t len)
+> +int tpm2_find_and_validate_cc(struct tpm_chip *chip,
+> +			      struct tpm_space *space,
+> +			      const void *cmd, size_t len)
+>  {
+>  	const struct tpm_header *header = (const void *)cmd;
+>  	int i;
+> @@ -306,7 +306,7 @@ int tpm2_prepare_space(struct tpm_chip *chip, struct tpm_space *space, u8 *cmd,
+>  	if (!space)
+>  		return 0;
+>  
+> -	cc = tpm_find_and_validate_cc(chip, space, cmd, cmdsiz);
+> +	cc = tpm2_find_and_validate_cc(chip, space, cmd, cmdsiz);
+>  	if (cc < 0)
+>  		return cc;
+>  
+> -- 
+> 2.38.1.431.g37b22c650d-goog
+> 
 
-  kernel/notifier.c:71: warning: Excess function parameter 'returns' description in 'notifier_call_chain'
-  kernel/notifier.c:119: warning: Function parameter or member 'v' not described in 'notifier_call_chain_robust'
+Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-These two warning are easy to fix, as they are just due to some minor slips
-that makes the comment not follow kernel-doc's syntactic expectation.
-
-Fix those minor slips in kernel-doc comments for make W=1 happiness.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
-Rafael, please pick this minor non-urgent patch for your pm tree. Thanks.
-
- kernel/notifier.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/notifier.c b/kernel/notifier.c
-index 0d5bd62c480e..ab75637fd904 100644
---- a/kernel/notifier.c
-+++ b/kernel/notifier.c
-@@ -62,7 +62,7 @@ static int notifier_chain_unregister(struct notifier_block **nl,
-  *			value of this parameter is -1.
-  *	@nr_calls:	Records the number of notifications sent. Don't care
-  *			value of this field is NULL.
-- *	@returns:	notifier_call_chain returns the value returned by the
-+ *	Return:		notifier_call_chain returns the value returned by the
-  *			last notifier function called.
-  */
- static int notifier_call_chain(struct notifier_block **nl,
-@@ -105,13 +105,13 @@ NOKPROBE_SYMBOL(notifier_call_chain);
-  * @val_up:	Value passed unmodified to the notifier function
-  * @val_down:	Value passed unmodified to the notifier function when recovering
-  *              from an error on @val_up
-- * @v		Pointer passed unmodified to the notifier function
-+ * @v:		Pointer passed unmodified to the notifier function
-  *
-  * NOTE:	It is important the @nl chain doesn't change between the two
-  *		invocations of notifier_call_chain() such that we visit the
-  *		exact same notifier callbacks; this rules out any RCU usage.
-  *
-- * Returns:	the return value of the @val_up call.
-+ * Return:	the return value of the @val_up call.
-  */
- static int notifier_call_chain_robust(struct notifier_block **nl,
- 				     unsigned long val_up, unsigned long val_down,
--- 
-2.17.1
-
+BR, Jarkko
