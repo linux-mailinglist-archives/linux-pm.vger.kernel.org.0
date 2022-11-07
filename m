@@ -2,920 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB69C61F218
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 12:43:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9334861F226
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 12:47:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbiKGLnA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 06:43:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53354 "EHLO
+        id S231420AbiKGLrh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 06:47:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbiKGLm4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 06:42:56 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09C818E11;
-        Mon,  7 Nov 2022 03:42:53 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 199A6B8104A;
-        Mon,  7 Nov 2022 11:42:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B7C5C433C1;
-        Mon,  7 Nov 2022 11:42:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667821370;
-        bh=uWDzbT3W19PitZUxWWMUBtaR9EzHi9Ev2sUpvc3qyu4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Pe6Sbb2Jc90I3IHG4HIVm0zF+BsuXHe+bWxVSpodYjiFnP4eNZ8izannnD48v1NMl
-         2Ne/ZZkAyIGvyDEXksa20Iqd21zMsDYAfv8v+XtJVfxmUoAIqgxbckyHqBrVT79vgP
-         ra7T7eBOwWUY4LUz9Pu1QXqkj+DyAo/GxmLyDztb/Nq53bJaTom2yuoBsajYTFEsKy
-         61idxm8ZPuQz/l24iZR9xo+CEKbTSCbx2Sydy/xg3ygv/NlexbUXgnzPgVcA/Q4ZmI
-         IWYsqrbmk13sNvwhX+rwD8euh4qQZL99+4/ZPyeBUvX0qQVOUScB5FgJrMxxERnPoq
-         LtFDsQ6xc1oAg==
-Date:   Mon, 7 Nov 2022 13:42:45 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Evan Green <evgreen@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
-        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
-        Kees Cook <keescook@chromium.org>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
-        zohar@linux.ibm.com, dlunev@google.com,
-        Eric Biggers <ebiggers@kernel.org>,
-        Ben Boeckel <me@benboeckel.net>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v4 07/11] PM: hibernate: Add kernel-based encryption
-Message-ID: <Y2jvNcteDT+AeHOb@kernel.org>
-References: <20221103180120.752659-1-evgreen@chromium.org>
- <20221103105558.v4.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
+        with ESMTP id S231810AbiKGLre (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 06:47:34 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27501AD99;
+        Mon,  7 Nov 2022 03:47:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667821650; x=1699357650;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=DNck0O7tKxZz4E60oTrC+FSvqpcG6re8AP26uzazs0k=;
+  b=DbpziIA/KY/zim6KON8tGj+s86Iydj8uO0uXyhphCfEuauRbenxHYWSU
+   lujHnGCJbbNDHIitDG2TimuvQqUatfPzn/tILJqz0ljijf94sK7CpB33k
+   nUIIU0YHUrIbD3S2IVbN9E48i8wi2tKelc49kdEmQ98DqQFaqCCiAG5+e
+   /sagzp0kWI+rNmBusDgVv7YJ5mlVmC9lM2buNCEpzdS0X3bzDjZ3bk4Ym
+   j62+q/LY7jITsvv2FHNr2DMkyC4aUJGaK0Rjr6i0ZB876IMFEH1JU5hfA
+   ZenaReyxeYSahInFt7MCUojxF0qh34Q+9IJhFlZl5zPhLp9ALIoSwLK0a
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="297882492"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="297882492"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 03:47:30 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10523"; a="778463730"
+X-IronPort-AV: E=Sophos;i="5.96,143,1665471600"; 
+   d="scan'208";a="778463730"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by fmsmga001.fm.intel.com with SMTP; 07 Nov 2022 03:47:24 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 07 Nov 2022 13:47:23 +0200
+Date:   Mon, 7 Nov 2022 13:47:23 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     rjw@rjwysocki.net, oleg@redhat.com, mingo@kernel.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, mgorman@suse.de, ebiederm@xmission.com,
+        bigeasy@linutronix.de, Will Deacon <will@kernel.org>,
+        linux-kernel@vger.kernel.org, tj@kernel.org,
+        linux-pm@vger.kernel.org, intel-gfx@lists.freedesktop.org
+Subject: Re: [PATCH v3 6/6] freezer,sched: Rewrite core freezer logic
+Message-ID: <Y2jwSwfRC3Q5x7Rm@intel.com>
+References: <20220822114649.055452969@infradead.org>
+ <Y1LVYaPCCP3BBS4g@intel.com>
+ <Y1drd2gzxUJWdz5F@intel.com>
+ <Y1e/Kd+1UQqeSwzY@hirez.programming.kicks-ass.net>
+ <Y1kMv1GpKwOSIt8f@intel.com>
+ <Y1kdRNNfUeAU+FNl@hirez.programming.kicks-ass.net>
+ <Y1qC7d7QVJB8NCHt@intel.com>
+ <Y1q3gzbPUCvEMHGD@hirez.programming.kicks-ass.net>
+ <Y2Khj7n+tRq3r++O@intel.com>
+ <Y2LsUIfbUiy2Ar0r@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221103105558.v4.7.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2LsUIfbUiy2Ar0r@hirez.programming.kicks-ass.net>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:01:15AM -0700, Evan Green wrote:
-> Enabling the kernel to be able to do encryption and integrity checks on
-> the hibernate image prevents a malicious userspace from escalating to
-> kernel execution via hibernation resume. As a first step toward this, add
-> the scaffolding needed for the kernel to do AEAD encryption on the
-> hibernate image, giving us both secrecy and integrity.
+On Wed, Nov 02, 2022 at 11:16:48PM +0100, Peter Zijlstra wrote:
+> On Wed, Nov 02, 2022 at 06:57:51PM +0200, Ville Syrjälä wrote:
+> > On Thu, Oct 27, 2022 at 06:53:23PM +0200, Peter Zijlstra wrote:
+> > > On Thu, Oct 27, 2022 at 04:09:01PM +0300, Ville Syrjälä wrote:
+> > > > On Wed, Oct 26, 2022 at 01:43:00PM +0200, Peter Zijlstra wrote:
+> > > 
+> > > > > Could you please give the below a spin?
+> > > > 
+> > > > Thanks. I've added this to our CI branch. I'll try to keep and eye
+> > > > on it in the coming days and let you know if anything still trips.
+> > > > And I'll report back maybe ~middle of next week if we haven't caught
+> > > > anything by then.
+> > > 
+> > > Thanks!
+> > 
+> > Looks like we haven't caught anything since I put the patch in.
+> > So the fix seems good.
 > 
-> We currently hardwire the encryption to be gcm(aes) in 16-page chunks.
-> This strikes a balance between minimizing the authentication tag
-> overhead on storage, and keeping a modest sized staging buffer. With
-> this chunk size, we'd generate 2MB of authentication tag data on an 8GB
-> hiberation image.
-> 
-> The encryption currently sits on top of the core snapshot functionality,
-> wired up only if requested in the uswsusp path. This could potentially
+> While writing up the Changelog, it occured to me it might be possible to
+> fix another way, could I bother you to also run the below patch for a
+> bit?
 
-User Space Software Suspend?
+I swapped in the new patch to the CI branch. I'll check back
+after a few days.
 
-I'd also open up briefly a bit what is uswsup path that gets wired up.
-
-> be lowered into the common snapshot code given a mechanism to stitch the
-> key contents into the image itself.
 > 
-> To avoid forcing usermode to deal with sequencing the auth tags in with
-> the data, we stitch the auth tags in to the snapshot after each chunk of
-> pages. This complicates the read and write functions, as we roll through
-> the flow of (for read) 1) fill the staging buffer with encrypted data,
-> 2) feed the data pages out to user mode, 3) feed the tag out to user
-> mode. To avoid having each syscall return a small and variable amount
-> of data, the encrypted versions of read and write operate in a loop,
-> allowing an arbitrary amount of data through per syscall.
-> 
-> One alternative that would simplify things here would be a streaming
-> interface to AEAD. Then we could just stream the entire hibernate image
-> through directly, and handle a single tag at the end. However there is a
-> school of thought that suggests a streaming interface to AEAD represents
-> a loaded footgun, as it tempts the caller to act on the decrypted but
-> not yet verified data, defeating the purpose of AEAD.
-> 
-> With this change alone, we don't actually protect ourselves from
-> malicious userspace at all, since we kindly hand the key in plaintext
-> to usermode. In later changes, we'll seal the key with the TPM
-> before handing it back to usermode, so they can't decrypt or tamper with
-> the key themselves.
-> 
-> Signed-off-by: Evan Green <evgreen@chromium.org>
 > ---
-> 
-> Changes in v4:
->  - Local ordering and whitespace changes (Jarkko)
-> 
->  Documentation/power/userland-swsusp.rst |   8 +
->  include/uapi/linux/suspend_ioctls.h     |  15 +-
->  kernel/power/Kconfig                    |  13 +
->  kernel/power/Makefile                   |   1 +
->  kernel/power/snapenc.c                  | 493 ++++++++++++++++++++++++
->  kernel/power/user.c                     |  40 +-
->  kernel/power/user.h                     | 103 +++++
->  7 files changed, 661 insertions(+), 12 deletions(-)
->  create mode 100644 kernel/power/snapenc.c
->  create mode 100644 kernel/power/user.h
-> 
-> diff --git a/Documentation/power/userland-swsusp.rst b/Documentation/power/userland-swsusp.rst
-> index 1cf62d80a9ca10..f759915a78ce98 100644
-> --- a/Documentation/power/userland-swsusp.rst
-> +++ b/Documentation/power/userland-swsusp.rst
-> @@ -115,6 +115,14 @@ SNAPSHOT_S2RAM
->  	to resume the system from RAM if there's enough battery power or restore
->  	its state on the basis of the saved suspend image otherwise)
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index cb2aa2b54c7a..daff72f00385 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -4200,6 +4200,40 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+>  	return success;
+>  }
 >  
-> +SNAPSHOT_ENABLE_ENCRYPTION
-> +	Enables encryption of the hibernate image within the kernel. Upon suspend
-> +	(ie when the snapshot device was opened for reading), returns a blob
-> +	representing the random encryption key the kernel created to encrypt the
-> +	hibernate image with. Upon resume (ie when the snapshot device was opened
-> +	for writing), receives a blob from usermode containing the key material
-> +	previously returned during hibernate.
-> +
->  The device's read() operation can be used to transfer the snapshot image from
->  the kernel.  It has the following limitations:
->  
-> diff --git a/include/uapi/linux/suspend_ioctls.h b/include/uapi/linux/suspend_ioctls.h
-> index bcce04e21c0dce..b73026ef824bb9 100644
-> --- a/include/uapi/linux/suspend_ioctls.h
-> +++ b/include/uapi/linux/suspend_ioctls.h
-> @@ -13,6 +13,18 @@ struct resume_swap_area {
->  	__u32 dev;
->  } __attribute__((packed));
->  
-> +#define USWSUSP_KEY_NONCE_SIZE 16
-> +
-> +/*
-> + * This structure is used to pass the kernel's hibernate encryption key in
-> + * either direction.
-> + */
-> +struct uswsusp_key_blob {
-> +	__u32 blob_len;
-> +	__u8 blob[512];
-> +	__u8 nonce[USWSUSP_KEY_NONCE_SIZE];
-> +} __attribute__((packed));
-> +
->  #define SNAPSHOT_IOC_MAGIC	'3'
->  #define SNAPSHOT_FREEZE			_IO(SNAPSHOT_IOC_MAGIC, 1)
->  #define SNAPSHOT_UNFREEZE		_IO(SNAPSHOT_IOC_MAGIC, 2)
-> @@ -29,6 +41,7 @@ struct resume_swap_area {
->  #define SNAPSHOT_PREF_IMAGE_SIZE	_IO(SNAPSHOT_IOC_MAGIC, 18)
->  #define SNAPSHOT_AVAIL_SWAP_SIZE	_IOR(SNAPSHOT_IOC_MAGIC, 19, __kernel_loff_t)
->  #define SNAPSHOT_ALLOC_SWAP_PAGE	_IOR(SNAPSHOT_IOC_MAGIC, 20, __kernel_loff_t)
-> -#define SNAPSHOT_IOC_MAXNR	20
-> +#define SNAPSHOT_ENABLE_ENCRYPTION	_IOWR(SNAPSHOT_IOC_MAGIC, 21, struct uswsusp_key_blob)
-> +#define SNAPSHOT_IOC_MAXNR	21
->  
->  #endif /* _LINUX_SUSPEND_IOCTLS_H */
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index 60a1d3051cc79a..cd574af0b43379 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -92,6 +92,19 @@ config HIBERNATION_SNAPSHOT_DEV
->  
->  	  If in doubt, say Y.
->  
-> +config ENCRYPTED_HIBERNATION
-> +	bool "Encryption support for userspace snapshots"
-> +	depends on HIBERNATION_SNAPSHOT_DEV
-> +	depends on CRYPTO_AEAD2=y
-> +	default n
-> +	help
-> +	  Enable support for kernel-based encryption of hibernation snapshots
-> +	  created by uswsusp tools.
-> +
-> +	  Say N if userspace handles the image encryption.
-> +
-> +	  If in doubt, say N.
-> +
->  config PM_STD_PARTITION
->  	string "Default resume partition"
->  	depends on HIBERNATION
-> diff --git a/kernel/power/Makefile b/kernel/power/Makefile
-> index 874ad834dc8daf..7be08f2e0e3b68 100644
-> --- a/kernel/power/Makefile
-> +++ b/kernel/power/Makefile
-> @@ -16,6 +16,7 @@ obj-$(CONFIG_SUSPEND)		+= suspend.o
->  obj-$(CONFIG_PM_TEST_SUSPEND)	+= suspend_test.o
->  obj-$(CONFIG_HIBERNATION)	+= hibernate.o snapshot.o swap.o
->  obj-$(CONFIG_HIBERNATION_SNAPSHOT_DEV) += user.o
-> +obj-$(CONFIG_ENCRYPTED_HIBERNATION) += snapenc.o
->  obj-$(CONFIG_PM_AUTOSLEEP)	+= autosleep.o
->  obj-$(CONFIG_PM_WAKELOCKS)	+= wakelock.o
->  
-> diff --git a/kernel/power/snapenc.c b/kernel/power/snapenc.c
-> new file mode 100644
-> index 00000000000000..f215df16dad4d3
-> --- /dev/null
-> +++ b/kernel/power/snapenc.c
-> @@ -0,0 +1,493 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* This file provides encryption support for system snapshots. */
-> +
-> +#include <linux/crypto.h>
-> +#include <crypto/aead.h>
-> +#include <crypto/gcm.h>
-> +#include <linux/random.h>
-> +#include <linux/mm.h>
-> +#include <linux/uaccess.h>
-> +
-> +#include "power.h"
-> +#include "user.h"
-> +
-> +/* Encrypt more data from the snapshot into the staging area. */
-> +static int snapshot_encrypt_refill(struct snapshot_data *data)
+> +static bool __task_needs_rq_lock(struct task_struct *p)
 > +{
-> +
-> +	struct aead_request *req = data->aead_req;
-> +	u8 nonce[GCM_AES_IV_SIZE];
-> +	DECLARE_CRYPTO_WAIT(wait);
-> +	size_t total = 0;
-> +	int pg_idx;
-> +	int res;
+> +	unsigned int state = READ_ONCE(p->__state);
 > +
 > +	/*
-> +	 * The first buffer is the associated data, set to the offset to prevent
-> +	 * attacks that rearrange chunks.
+> +	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
+> +	 * the task is blocked. Make sure to check @state since ttwu() can drop
+> +	 * locks at the end, see ttwu_queue_wakelist().
 > +	 */
-> +	sg_set_buf(&data->sg[0], &data->crypt_total, sizeof(data->crypt_total));
-> +
-> +	/* Load the crypt buffer with snapshot pages. */
-> +	for (pg_idx = 0; pg_idx < CHUNK_SIZE; pg_idx++) {
-> +		void *buf = data->crypt_pages[pg_idx];
-> +
-> +		res = snapshot_read_next(&data->handle);
-> +		if (res < 0)
-> +			return res;
-> +		if (res == 0)
-> +			break;
-> +
-> +		WARN_ON(res != PAGE_SIZE);
-> +
-> +		/*
-> +		 * Copy the page into the staging area. A future optimization
-> +		 * could potentially skip this copy for lowmem pages.
-> +		 */
-> +		memcpy(buf, data_of(data->handle), PAGE_SIZE);
-> +		sg_set_buf(&data->sg[1 + pg_idx], buf, PAGE_SIZE);
-> +		total += PAGE_SIZE;
-> +	}
-> +
-> +	sg_set_buf(&data->sg[1 + pg_idx], &data->auth_tag, SNAPSHOT_AUTH_TAG_SIZE);
-> +	aead_request_set_callback(req, 0, crypto_req_done, &wait);
-> +	/*
-> +	 * Use incrementing nonces for each chunk, since a 64 bit value won't
-> +	 * roll into re-use for any given hibernate image.
-> +	 */
-> +	memcpy(&nonce[0], &data->nonce_low, sizeof(data->nonce_low));
-> +	memcpy(&nonce[sizeof(data->nonce_low)],
-> +	       &data->nonce_high,
-> +	       sizeof(nonce) - sizeof(data->nonce_low));
-> +
-> +	data->nonce_low += 1;
-> +	/* Total does not include AAD or the auth tag. */
-> +	aead_request_set_crypt(req, data->sg, data->sg, total, nonce);
-> +	res = crypto_wait_req(crypto_aead_encrypt(req), &wait);
-> +	if (res)
-> +		return res;
-> +
-> +	data->crypt_size = total;
-> +	data->crypt_total += total;
-> +	return 0;
-> +}
-> +
-> +/* Decrypt data from the staging area and push it to the snapshot. */
-> +static int snapshot_decrypt_drain(struct snapshot_data *data)
-> +{
-> +	struct aead_request *req = data->aead_req;
-> +	u8 nonce[GCM_AES_IV_SIZE];
-> +	DECLARE_CRYPTO_WAIT(wait);
-> +	int page_count;
-> +	size_t total;
-> +	int pg_idx;
-> +	int res;
-> +
-> +	/* Set up the associated data. */
-> +	sg_set_buf(&data->sg[0], &data->crypt_total, sizeof(data->crypt_total));
+> +	if (state == TASK_RUNNING || state == TASK_WAKING)
+> +		return true;
 > +
 > +	/*
-> +	 * Get the number of full pages, which could be short at the end. There
-> +	 * should also be a tag at the end, so the offset won't be an even page.
+> +	 * Ensure we load p->on_rq after p->__state, otherwise it would be
+> +	 * possible to, falsely, observe p->on_rq == 0.
+> +	 *
+> +	 * See try_to_wake_up() for a longer comment.
 > +	 */
-> +	page_count = data->crypt_offset >> PAGE_SHIFT;
-> +	total = page_count << PAGE_SHIFT;
-> +	if ((total == 0) || (total == data->crypt_offset))
-> +		return -EINVAL;
+> +	smp_rmb();
+> +	if (p->on_rq)
+> +		return true;
 > +
+> +#ifdef CONFIG_SMP
 > +	/*
-> +	 * Load the sg list with the crypt buffer. Inline decrypt back into the
-> +	 * staging buffer. A future optimization could decrypt directly into
-> +	 * lowmem pages.
+> +	 * Ensure the task has finished __schedule() and will not be referenced
+> +	 * anymore. Again, see try_to_wake_up() for a longer comment.
 > +	 */
-> +	for (pg_idx = 0; pg_idx < page_count; pg_idx++)
-> +		sg_set_buf(&data->sg[1 + pg_idx], data->crypt_pages[pg_idx], PAGE_SIZE);
+> +	smp_rmb();
+> +	smp_cond_load_acquire(&p->on_cpu, !VAL);
+> +#endif
 > +
-> +	/*
-> +	 * It's possible this is the final decrypt, and there are fewer than
-> +	 * CHUNK_SIZE pages. If this is the case we would have just written the
-> +	 * auth tag into the first few bytes of a new page. Copy to the tag if
-> +	 * so.
-> +	 */
-> +	if ((page_count < CHUNK_SIZE) &&
-> +	    (data->crypt_offset - total) == sizeof(data->auth_tag)) {
-> +
-> +		memcpy(data->auth_tag,
-> +			data->crypt_pages[pg_idx],
-> +			sizeof(data->auth_tag));
-> +
-> +	} else if (data->crypt_offset !=
-> +		   ((CHUNK_SIZE << PAGE_SHIFT) + SNAPSHOT_AUTH_TAG_SIZE)) {
-> +
-> +		return -EINVAL;
-> +	}
-> +
-> +	sg_set_buf(&data->sg[1 + pg_idx], &data->auth_tag, SNAPSHOT_AUTH_TAG_SIZE);
-> +	aead_request_set_callback(req, 0, crypto_req_done, &wait);
-> +	memcpy(&nonce[0], &data->nonce_low, sizeof(data->nonce_low));
-> +	memcpy(&nonce[sizeof(data->nonce_low)],
-> +	       &data->nonce_high,
-> +	       sizeof(nonce) - sizeof(data->nonce_low));
-> +
-> +	data->nonce_low += 1;
-> +	aead_request_set_crypt(req, data->sg, data->sg, total + SNAPSHOT_AUTH_TAG_SIZE, nonce);
-> +	res = crypto_wait_req(crypto_aead_decrypt(req), &wait);
-> +	if (res)
-> +		return res;
-> +
-> +	data->crypt_size = 0;
-> +	data->crypt_offset = 0;
-> +
-> +	/* Push the decrypted pages further down the stack. */
-> +	total = 0;
-> +	for (pg_idx = 0; pg_idx < page_count; pg_idx++) {
-> +		void *buf = data->crypt_pages[pg_idx];
-> +
-> +		res = snapshot_write_next(&data->handle);
-> +		if (res < 0)
-> +			return res;
-> +		if (res == 0)
-> +			break;
-> +
-> +		if (!data_of(data->handle))
-> +			return -EINVAL;
-> +
-> +		WARN_ON(res != PAGE_SIZE);
-> +
-> +		/*
-> +		 * Copy the page into the staging area. A future optimization
-> +		 * could potentially skip this copy for lowmem pages.
-> +		 */
-> +		memcpy(data_of(data->handle), buf, PAGE_SIZE);
-> +		total += PAGE_SIZE;
-> +	}
-> +
-> +	data->crypt_total += total;
-> +	return 0;
+> +	return false;
 > +}
 > +
-> +static ssize_t snapshot_read_next_encrypted(struct snapshot_data *data,
-> +					    void **buf)
-> +{
-> +	size_t tag_off;
-> +
-> +	/* Refill the encrypted buffer if it's empty. */
-> +	if ((data->crypt_size == 0) ||
-> +	    (data->crypt_offset >=
-> +	     (data->crypt_size + SNAPSHOT_AUTH_TAG_SIZE))) {
-> +
-> +		int rc;
-> +
-> +		data->crypt_size = 0;
-> +		data->crypt_offset = 0;
-> +		rc = snapshot_encrypt_refill(data);
-> +		if (rc < 0)
-> +			return rc;
-> +	}
-> +
-> +	/* Return data pages if the offset is in that region. */
-> +	if (data->crypt_offset < data->crypt_size) {
-> +		size_t pg_idx = data->crypt_offset >> PAGE_SHIFT;
-> +		size_t pg_off = data->crypt_offset & (PAGE_SIZE - 1);
-> +		*buf = data->crypt_pages[pg_idx] + pg_off;
-> +		return PAGE_SIZE - pg_off;
-> +	}
-> +
-> +	/* Use offsets just beyond the size to return the tag. */
-> +	tag_off = data->crypt_offset - data->crypt_size;
-> +	if (tag_off > SNAPSHOT_AUTH_TAG_SIZE)
-> +		tag_off = SNAPSHOT_AUTH_TAG_SIZE;
-> +
-> +	*buf = data->auth_tag + tag_off;
-> +	return SNAPSHOT_AUTH_TAG_SIZE - tag_off;
-> +}
-> +
-> +static ssize_t snapshot_write_next_encrypted(struct snapshot_data *data,
-> +					     void **buf)
-> +{
-> +	size_t tag_off;
-> +
-> +	/* Return data pages if the offset is in that region. */
-> +	if (data->crypt_offset < (PAGE_SIZE * CHUNK_SIZE)) {
-> +		size_t pg_idx = data->crypt_offset >> PAGE_SHIFT;
-> +		size_t pg_off = data->crypt_offset & (PAGE_SIZE - 1);
-> +		*buf = data->crypt_pages[pg_idx] + pg_off;
-> +		return PAGE_SIZE - pg_off;
-> +	}
-> +
-> +	/* Use offsets just beyond the size to return the tag. */
-> +	tag_off = data->crypt_offset - (PAGE_SIZE * CHUNK_SIZE);
-> +	if (tag_off > SNAPSHOT_AUTH_TAG_SIZE)
-> +		tag_off = SNAPSHOT_AUTH_TAG_SIZE;
-> +
-> +	*buf = data->auth_tag + tag_off;
-> +	return SNAPSHOT_AUTH_TAG_SIZE - tag_off;
-> +}
-> +
-> +ssize_t snapshot_read_encrypted(struct snapshot_data *data,
-> +				char __user *buf, size_t count, loff_t *offp)
-> +{
-> +	ssize_t total = 0;
-> +
-> +	/* Loop getting buffers of varying sizes and copying to userspace. */
-> +	while (count) {
-> +		size_t copy_size;
-> +		size_t not_done;
-> +		void *src;
-> +		ssize_t src_size = snapshot_read_next_encrypted(data, &src);
-> +
-> +		if (src_size <= 0) {
-> +			if (total == 0)
-> +				return src_size;
-> +
-> +			break;
-> +		}
-> +
-> +		copy_size = min(count, (size_t)src_size);
-> +		not_done = copy_to_user(buf + total, src, copy_size);
-> +		copy_size -= not_done;
-> +		total += copy_size;
-> +		count -= copy_size;
-> +		data->crypt_offset += copy_size;
-> +		if (copy_size == 0) {
-> +			if (total == 0)
-> +				return -EFAULT;
-> +
-> +			break;
-> +		}
-> +	}
-> +
-> +	*offp += total;
-> +	return total;
-> +}
-> +
-> +ssize_t snapshot_write_encrypted(struct snapshot_data *data,
-> +				 const char __user *buf, size_t count,
-> +				 loff_t *offp)
-> +{
-> +	ssize_t total = 0;
-> +
-> +	/* Loop getting buffers of varying sizes and copying from. */
-> +	while (count) {
-> +		size_t copy_size;
-> +		size_t not_done;
-> +		void *dst;
-> +		ssize_t dst_size = snapshot_write_next_encrypted(data, &dst);
-> +
-> +		if (dst_size <= 0) {
-> +			if (total == 0)
-> +				return dst_size;
-> +
-> +			break;
-> +		}
-> +
-> +		copy_size = min(count, (size_t)dst_size);
-> +		not_done = copy_from_user(dst, buf + total, copy_size);
-> +		copy_size -= not_done;
-> +		total += copy_size;
-> +		count -= copy_size;
-> +		data->crypt_offset += copy_size;
-> +		if (copy_size == 0) {
-> +			if (total == 0)
-> +				return -EFAULT;
-> +
-> +			break;
-> +		}
-> +
-> +		/* Drain the encrypted buffer if it's full. */
-> +		if ((data->crypt_offset >=
-> +		    ((PAGE_SIZE * CHUNK_SIZE) + SNAPSHOT_AUTH_TAG_SIZE))) {
-> +
-> +			int rc;
-> +
-> +			rc = snapshot_decrypt_drain(data);
-> +			if (rc < 0)
-> +				return rc;
-> +		}
-> +	}
-> +
-> +	*offp += total;
-> +	return total;
-> +}
-> +
-> +void snapshot_teardown_encryption(struct snapshot_data *data)
-> +{
-> +	int i;
-> +
-> +	if (data->aead_req) {
-> +		aead_request_free(data->aead_req);
-> +		data->aead_req = NULL;
-> +	}
-> +
-> +	if (data->aead_tfm) {
-> +		crypto_free_aead(data->aead_tfm);
-> +		data->aead_tfm = NULL;
-> +	}
-> +
-> +	for (i = 0; i < CHUNK_SIZE; i++) {
-> +		if (data->crypt_pages[i]) {
-> +			free_page((unsigned long)data->crypt_pages[i]);
-> +			data->crypt_pages[i] = NULL;
-> +		}
-> +	}
-> +}
-> +
-> +static int snapshot_setup_encryption_common(struct snapshot_data *data)
-> +{
-> +	int i, rc;
-> +
-> +	data->crypt_total = 0;
-> +	data->crypt_offset = 0;
-> +	data->crypt_size = 0;
-> +	memset(data->crypt_pages, 0, sizeof(data->crypt_pages));
-> +	/* This only works once per hibernate. */
-> +	if (data->aead_tfm)
-> +		return -EINVAL;
-> +
-> +	/* Set up the encryption transform */
-> +	data->aead_tfm = crypto_alloc_aead("gcm(aes)", 0, 0);
-> +	if (IS_ERR(data->aead_tfm)) {
-> +		rc = PTR_ERR(data->aead_tfm);
-> +		data->aead_tfm = NULL;
-> +		return rc;
-> +	}
-> +
-> +	rc = -ENOMEM;
-> +	data->aead_req = aead_request_alloc(data->aead_tfm, GFP_KERNEL);
-> +	if (data->aead_req == NULL)
-> +		goto setup_fail;
-> +
-> +	/* Allocate the staging area */
-> +	for (i = 0; i < CHUNK_SIZE; i++) {
-> +		data->crypt_pages[i] = (void *)__get_free_page(GFP_ATOMIC);
-> +		if (data->crypt_pages[i] == NULL)
-> +			goto setup_fail;
-> +	}
-> +
-> +	sg_init_table(data->sg, CHUNK_SIZE + 2);
-> +
-> +	/*
-> +	 * The associated data will be the offset so that blocks can't be
-> +	 * rearranged.
-> +	 */
-> +	aead_request_set_ad(data->aead_req, sizeof(data->crypt_total));
-> +	rc = crypto_aead_setauthsize(data->aead_tfm, SNAPSHOT_AUTH_TAG_SIZE);
-> +	if (rc)
-> +		goto setup_fail;
-> +
-> +	return 0;
-> +
-> +setup_fail:
-> +	snapshot_teardown_encryption(data);
-> +	return rc;
-> +}
-> +
-> +int snapshot_get_encryption_key(struct snapshot_data *data,
-> +				struct uswsusp_key_blob __user *key)
-> +{
-> +	u8 aead_key[SNAPSHOT_ENCRYPTION_KEY_SIZE];
-> +	u8 nonce[USWSUSP_KEY_NONCE_SIZE];
-> +	int rc;
-> +
-> +	/* Don't pull a random key from a world that can be reset. */
-> +	if (data->ready)
-> +		return -EPIPE;
-> +
-> +	rc = snapshot_setup_encryption_common(data);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/* Build a random starting nonce. */
-> +	get_random_bytes(nonce, sizeof(nonce));
-> +	memcpy(&data->nonce_low, &nonce[0], sizeof(data->nonce_low));
-> +	memcpy(&data->nonce_high, &nonce[8], sizeof(data->nonce_high));
-> +	/* Build a random key */
-> +	get_random_bytes(aead_key, sizeof(aead_key));
-> +	rc = crypto_aead_setkey(data->aead_tfm, aead_key, sizeof(aead_key));
-> +	if (rc)
-> +		goto fail;
-> +
-> +	/* Hand the key back to user mode (to be changed!) */
-> +	rc = put_user(sizeof(struct uswsusp_key_blob), &key->blob_len);
-> +	if (rc)
-> +		goto fail;
-> +
-> +	rc = copy_to_user(&key->blob, &aead_key, sizeof(aead_key));
-> +	if (rc)
-> +		goto fail;
-> +
-> +	rc = copy_to_user(&key->nonce, &nonce, sizeof(nonce));
-> +	if (rc)
-> +		goto fail;
-> +
-> +	return 0;
-> +
-> +fail:
-> +	snapshot_teardown_encryption(data);
-> +	return rc;
-> +}
-> +
-> +int snapshot_set_encryption_key(struct snapshot_data *data,
-> +				struct uswsusp_key_blob __user *key)
-> +{
-> +	struct uswsusp_key_blob blob;
-> +	int rc;
-> +
-> +	/* It's too late if data's been pushed in. */
-> +	if (data->handle.cur)
-> +		return -EPIPE;
-> +
-> +	rc = snapshot_setup_encryption_common(data);
-> +	if (rc)
-> +		return rc;
-> +
-> +	/* Load the key from user mode. */
-> +	rc = copy_from_user(&blob, key, sizeof(struct uswsusp_key_blob));
-> +	if (rc)
-> +		goto crypto_setup_fail;
-> +
-> +	if (blob.blob_len != sizeof(struct uswsusp_key_blob)) {
-> +		rc = -EINVAL;
-> +		goto crypto_setup_fail;
-> +	}
-> +
-> +	rc = crypto_aead_setkey(data->aead_tfm,
-> +				blob.blob,
-> +				SNAPSHOT_ENCRYPTION_KEY_SIZE);
-> +
-> +	if (rc)
-> +		goto crypto_setup_fail;
-> +
-> +	/* Load the starting nonce. */
-> +	memcpy(&data->nonce_low, &blob.nonce[0], sizeof(data->nonce_low));
-> +	memcpy(&data->nonce_high, &blob.nonce[8], sizeof(data->nonce_high));
-> +	return 0;
-> +
-> +crypto_setup_fail:
-> +	snapshot_teardown_encryption(data);
-> +	return rc;
-> +}
-> +
-> +loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
-> +{
-> +	loff_t pages = raw_size >> PAGE_SHIFT;
-> +	loff_t chunks = (pages + (CHUNK_SIZE - 1)) / CHUNK_SIZE;
-> +	/*
-> +	 * The encrypted size is the normal size, plus a stitched in
-> +	 * authentication tag for every chunk of pages.
-> +	 */
-> +	return raw_size + (chunks * SNAPSHOT_AUTH_TAG_SIZE);
-> +}
-> +
-> +int snapshot_finalize_decrypted_image(struct snapshot_data *data)
-> +{
-> +	int rc;
-> +
-> +	if (data->crypt_offset != 0) {
-> +		rc = snapshot_decrypt_drain(data);
-> +		if (rc)
-> +			return rc;
-> +	}
-> +
-> +	return 0;
-> +}
-> diff --git a/kernel/power/user.c b/kernel/power/user.c
-> index 3a4e70366f354c..bba5cdbd2c0239 100644
-> --- a/kernel/power/user.c
-> +++ b/kernel/power/user.c
-> @@ -25,19 +25,10 @@
->  #include <linux/uaccess.h>
->  
->  #include "power.h"
-> +#include "user.h"
->  
->  static bool need_wait;
-> -
-> -static struct snapshot_data {
-> -	struct snapshot_handle handle;
-> -	int swap;
-> -	int mode;
-> -	bool frozen;
-> -	bool ready;
-> -	bool platform_support;
-> -	bool free_bitmaps;
-> -	dev_t dev;
-> -} snapshot_state;
-> +struct snapshot_data snapshot_state;
->  
->  int is_hibernate_resume_dev(dev_t dev)
+>  /**
+>   * task_call_func - Invoke a function on task in fixed state
+>   * @p: Process for which the function is to be invoked, can be @current.
+> @@ -4217,28 +4251,12 @@ try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
+>  int task_call_func(struct task_struct *p, task_call_f func, void *arg)
 >  {
-> @@ -122,6 +113,7 @@ static int snapshot_release(struct inode *inode, struct file *filp)
->  	} else if (data->free_bitmaps) {
->  		free_basic_memory_bitmaps();
->  	}
-> +	snapshot_teardown_encryption(data);
->  	pm_notifier_call_chain(data->mode == O_RDONLY ?
->  			PM_POST_HIBERNATION : PM_POST_RESTORE);
->  	hibernate_release();
-> @@ -146,6 +138,12 @@ static ssize_t snapshot_read(struct file *filp, char __user *buf,
->  		res = -ENODATA;
->  		goto Unlock;
->  	}
-> +
-> +	if (snapshot_encryption_enabled(data)) {
-> +		res = snapshot_read_encrypted(data, buf, count, offp);
-> +		goto Unlock;
-> +	}
-> +
->  	if (!pg_offp) { /* on page boundary? */
->  		res = snapshot_read_next(&data->handle);
->  		if (res <= 0)
-> @@ -182,6 +180,11 @@ static ssize_t snapshot_write(struct file *filp, const char __user *buf,
+>  	struct rq *rq = NULL;
+> -	unsigned int state;
+>  	struct rq_flags rf;
+>  	int ret;
 >  
->  	data = filp->private_data;
+>  	raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
 >  
-> +	if (snapshot_encryption_enabled(data)) {
-> +		res = snapshot_write_encrypted(data, buf, count, offp);
-> +		goto unlock;
-> +	}
-> +
->  	if (!pg_offp) {
->  		res = snapshot_write_next(&data->handle);
->  		if (res <= 0)
-> @@ -317,6 +320,12 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
->  		break;
+> -	state = READ_ONCE(p->__state);
+> -
+> -	/*
+> -	 * Ensure we load p->on_rq after p->__state, otherwise it would be
+> -	 * possible to, falsely, observe p->on_rq == 0.
+> -	 *
+> -	 * See try_to_wake_up() for a longer comment.
+> -	 */
+> -	smp_rmb();
+> -
+> -	/*
+> -	 * Since pi->lock blocks try_to_wake_up(), we don't need rq->lock when
+> -	 * the task is blocked. Make sure to check @state since ttwu() can drop
+> -	 * locks at the end, see ttwu_queue_wakelist().
+> -	 */
+> -	if (state == TASK_RUNNING || state == TASK_WAKING || p->on_rq)
+> +	if (__task_needs_rq_lock(p))
+>  		rq = __task_rq_lock(p, &rf);
 >  
->  	case SNAPSHOT_ATOMIC_RESTORE:
-> +		if (snapshot_encryption_enabled(data)) {
-> +			error = snapshot_finalize_decrypted_image(data);
-> +			if (error)
-> +				break;
-> +		}
-> +
->  		snapshot_write_finalize(&data->handle);
->  		if (data->mode != O_WRONLY || !data->frozen ||
->  		    !snapshot_image_loaded(&data->handle)) {
-> @@ -352,6 +361,8 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
->  		}
->  		size = snapshot_get_image_size();
->  		size <<= PAGE_SHIFT;
-> +		if (snapshot_encryption_enabled(data))
-> +			size = snapshot_get_encrypted_image_size(size);
->  		error = put_user(size, (loff_t __user *)arg);
->  		break;
->  
-> @@ -409,6 +420,13 @@ static long snapshot_ioctl(struct file *filp, unsigned int cmd,
->  		error = snapshot_set_swap_area(data, (void __user *)arg);
->  		break;
->  
-> +	case SNAPSHOT_ENABLE_ENCRYPTION:
-> +		if (data->mode == O_RDONLY)
-> +			error = snapshot_get_encryption_key(data, (void __user *)arg);
-> +		else
-> +			error = snapshot_set_encryption_key(data, (void __user *)arg);
-> +		break;
-> +
->  	default:
->  		error = -ENOTTY;
->  
-> diff --git a/kernel/power/user.h b/kernel/power/user.h
-> new file mode 100644
-> index 00000000000000..ac429782abff85
-> --- /dev/null
-> +++ b/kernel/power/user.h
-> @@ -0,0 +1,103 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <linux/crypto.h>
-> +#include <crypto/aead.h>
-> +#include <crypto/aes.h>
-> +
-> +#define SNAPSHOT_ENCRYPTION_KEY_SIZE AES_KEYSIZE_128
-> +#define SNAPSHOT_AUTH_TAG_SIZE 16
-> +
-> +/* Define the number of pages in a single AEAD encryption chunk. */
-> +#define CHUNK_SIZE 16
-> +
-> +struct snapshot_data {
-> +	struct snapshot_handle handle;
-> +	int swap;
-> +	int mode;
-> +	bool frozen;
-> +	bool ready;
-> +	bool platform_support;
-> +	bool free_bitmaps;
-> +	dev_t dev;
-> +
-> +#if defined(CONFIG_ENCRYPTED_HIBERNATION)
-> +	struct crypto_aead *aead_tfm;
-> +	struct aead_request *aead_req;
-> +	void *crypt_pages[CHUNK_SIZE];
-> +	u8 auth_tag[SNAPSHOT_AUTH_TAG_SIZE];
-> +	struct scatterlist sg[CHUNK_SIZE + 2]; /* Add room for AD and auth tag. */
-> +	size_t crypt_offset;
-> +	size_t crypt_size;
-> +	uint64_t crypt_total;
-> +	uint64_t nonce_low;
-> +	uint64_t nonce_high;
-> +#endif
-> +
-> +};
-> +
-> +extern struct snapshot_data snapshot_state;
-> +
-> +/* kernel/power/swapenc.c routines */
-> +#if defined(CONFIG_ENCRYPTED_HIBERNATION)
-> +
-> +ssize_t snapshot_read_encrypted(struct snapshot_data *data,
-> +				char __user *buf, size_t count, loff_t *offp);
-> +
-> +ssize_t snapshot_write_encrypted(struct snapshot_data *data,
-> +				 const char __user *buf, size_t count,
-> +				 loff_t *offp);
-> +
-> +void snapshot_teardown_encryption(struct snapshot_data *data);
-> +int snapshot_get_encryption_key(struct snapshot_data *data,
-> +				struct uswsusp_key_blob __user *key);
-> +
-> +int snapshot_set_encryption_key(struct snapshot_data *data,
-> +				struct uswsusp_key_blob __user *key);
-> +
-> +loff_t snapshot_get_encrypted_image_size(loff_t raw_size);
-> +
-> +int snapshot_finalize_decrypted_image(struct snapshot_data *data);
-> +
-> +#define snapshot_encryption_enabled(data) (!!(data)->aead_tfm)
-> +
-> +#else
-> +
-> +ssize_t snapshot_read_encrypted(struct snapshot_data *data,
-> +				char __user *buf, size_t count, loff_t *offp)
-> +{
-> +	return -ENOTTY;
-> +}
-> +
-> +ssize_t snapshot_write_encrypted(struct snapshot_data *data,
-> +				 const char __user *buf, size_t count,
-> +				 loff_t *offp)
-> +{
-> +	return -ENOTTY;
-> +}
-> +
-> +static void snapshot_teardown_encryption(struct snapshot_data *data) {}
-> +static int snapshot_get_encryption_key(struct snapshot_data *data,
-> +				       struct uswsusp_key_blob __user *key)
-> +{
-> +	return -ENOTTY;
-> +}
-> +
-> +static int snapshot_set_encryption_key(struct snapshot_data *data,
-> +				       struct uswsusp_key_blob __user *key)
-> +{
-> +	return -ENOTTY;
-> +}
-> +
-> +static loff_t snapshot_get_encrypted_image_size(loff_t raw_size)
-> +{
-> +	return raw_size;
-> +}
-> +
-> +static int snapshot_finalize_decrypted_image(struct snapshot_data *data)
-> +{
-> +	return -ENOTTY;
-> +}
-> +
-> +#define snapshot_encryption_enabled(data) (0)
-> +
-> +#endif
-> -- 
-> 2.38.1.431.g37b22c650d-goog
-> 
+>  	/*
 
-BR, Jarkko
+-- 
+Ville Syrjälä
+Intel
