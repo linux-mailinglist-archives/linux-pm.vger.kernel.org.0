@@ -2,110 +2,128 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C026F61EFF9
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 11:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A18A61F072
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 11:24:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbiKGKKs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 05:10:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
+        id S231989AbiKGKY2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 05:24:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbiKGKKp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 05:10:45 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C2118E00
-        for <linux-pm@vger.kernel.org>; Mon,  7 Nov 2022 02:10:40 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso9810772pjc.5
-        for <linux-pm@vger.kernel.org>; Mon, 07 Nov 2022 02:10:40 -0800 (PST)
+        with ESMTP id S231527AbiKGKYS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 05:24:18 -0500
+Received: from mail-qv1-xf41.google.com (mail-qv1-xf41.google.com [IPv6:2607:f8b0:4864:20::f41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610DD18E1E
+        for <linux-pm@vger.kernel.org>; Mon,  7 Nov 2022 02:24:03 -0800 (PST)
+Received: by mail-qv1-xf41.google.com with SMTP id h10so7757799qvq.7
+        for <linux-pm@vger.kernel.org>; Mon, 07 Nov 2022 02:24:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=FfPdfiMeb7d1wqxRJF5SGqNPveJ8RGTJz9eypb5I398=;
-        b=QRAKC0O/czl9M13T+3PhWmbh80wgYcJY4mUdtbe6tgrI21Y/li8UELVy/SXJDsjhuf
-         Aj6rCClLWrMGVjFAloN7f1z0OS0nc/Poi8dcqTzwWzDRHjRU5V+33JvABee6FX7UxUpq
-         Pyxw3E3Hdk5FL4FOURTc69VfN6TuQndh227ApkrYyTFk2QkKdtstkuPZjDpeocJ54DSc
-         9yVDJTHtkKsMs1JYnQUHIIB3GLQf45Uv9pwibcV5XExMQRlsyDS/QcXoUtFNERO0JnTh
-         ddH2qO97LkFfqy8LiLW+fdO57RRar81fBioDAsOFWupLAiyX7Zm1Gn1lazyCy28Rncz4
-         96Lw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=Zv++OJ/ncK2pWuUWAQT+z52+cIoHK/WVJU4bVze52hunD5wDL4D5XJdl5mW2VbRjhi
+         PKA0tQ/z42/ONfUnPJoBfdYRGEG2gwiyoDRW7hecaxcg+/0t0u3g44ISFlpe+B9l1fvu
+         TmkNgtKOyak6WThRMAIvY+g5IgPZxvnz63e21BpajeaX9653GP4qpHUHyfV7BL4cSNb4
+         pCU1fNGxZBn7NlKzWZCMHMxM9LSs8sKofgpQ0FSoeb/qTDQ+CPP+tvlBe/vGQ8T8hOyn
+         vdUZr48/zTuwVxtBDF6IrOR7pT19nf73qD9i1Q8QUWEzM8dVJjwmGS+xVbVCXqFaE09J
+         SKzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FfPdfiMeb7d1wqxRJF5SGqNPveJ8RGTJz9eypb5I398=;
-        b=U4C4De/40c3nTrJLs/p+0lhpO/wOWJjiaukM0TcQOeK4usemFjy49r5QSxp/kEyekV
-         jmN9empixTLaukdx28b8/xXemscWCEIUuCZduwm4GPhcf5ruzN6fRMAw6cak0e3SFPKO
-         1NpAu7q1pnAfDggBEm3YPBMSuiqXsiVlQd8pMmD+fzwq7e+xV2rOJqT4BUl3iEm5t77v
-         KxjJt0g0vHSCKPkhv7SuWsMGFLo2cQ5S+YX4zblGg6tSfDHqqOqMFu3HfCpB87ZdSi1c
-         gaR4xAYMr2QBELX8boqy4Y/pJPOu4iM0MCV3kPvnf/FK/Z95j6T83v9XpCjQj/QyJ6Qx
-         7vsw==
-X-Gm-Message-State: ACrzQf2CWVUlOVfKLqYJgAqOkvhd8ScWy5lmVZUXy7EGFYlIjvmiodhP
-        a7khqUcKdO1jZD4ozyNtTrE8yg==
-X-Google-Smtp-Source: AMsMyM5wdIkrf+yOc4+6Vs63SokbBXQbTLJA1hO5szkzyKlNeT/uk/iXDwA0JgqMhFD2VO/BKkAjIw==
-X-Received: by 2002:a17:90a:17c8:b0:213:f1db:3119 with SMTP id q66-20020a17090a17c800b00213f1db3119mr39204252pja.190.1667815839749;
-        Mon, 07 Nov 2022 02:10:39 -0800 (PST)
-Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id mn22-20020a17090b189600b001faafa42a9esm3918221pjb.26.2022.11.07.02.10.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Nov 2022 02:10:38 -0800 (PST)
-Date:   Mon, 7 Nov 2022 15:40:37 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     andersson@kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 0/3] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221107101037.kcs2d2tvpmwdnzgq@vireshk-i7>
-References: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
+        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AOmtRIzmF5dcnWrT0j3skK83MYTC+QvduwZ6ndeN2Ks=;
+        b=OhkinC0G4iWdYr10OGYQmqsPlprtZpHpkgSCpblzSYVuXoVeQXhuy2gTigFXnKH7E3
+         AM03QPzGr6Ge1gMd3rabS6TiriYqwid8ij2ANepbMOa6cBVZTIANEWSiaQ2k18XRk1Q2
+         t/GorcGQVUbZl+lq9mLeLKl7ubFGVnz9n0CZa+gJscINe+B/nPdRltM/sm6lx1ZxomzB
+         l/tU8I2z4yzoPXcniF9M8Cm/DFOSroTEF9nOEaQO2w+7LfCVVTz3dipQvhVZJ4ei1Moe
+         f4isq3e/LnFk2c7HaZW6jXIVC/hPw0jHu7A+UTnGAYPJsGYP+s06h66qhCbpjW5aJuZJ
+         YgcQ==
+X-Gm-Message-State: ACrzQf37DC01yOJIdheabOog821eWxEIpleOarz0oMylO53BTCRqrD2n
+        fnm1pUcPpMDIaDjYuH8OHTzN1DbcmPTAksUGojNJtGFrxs4=
+X-Google-Smtp-Source: AMsMyM7DPjaK7bSeUBIcMTkNZUaqK+NSwCEUfp88ZZDLY5TXShnQ2+B86xH3ryBKqTyGQWW3ozA/96x60VupsK8qo34=
+X-Received: by 2002:a17:902:8a90:b0:186:b145:f5ec with SMTP id
+ p16-20020a1709028a9000b00186b145f5ecmr50774476plo.103.1667816632274; Mon, 07
+ Nov 2022 02:23:52 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a06:925:b0:587:19e0:c567 with HTTP; Mon, 7 Nov 2022
+ 02:23:51 -0800 (PST)
+Reply-To: contact@ammico.it
+From:   =?UTF-8?Q?Mrs=2E_Monika_Everenov=C3=A1?= <977638ib@gmail.com>
+Date:   Mon, 7 Nov 2022 11:23:51 +0100
+Message-ID: <CAHAXD+bPNCns8Ez=7iXmPLADMtJgZj3-mFTk3NMhWC-Ca1b9rw@mail.gmail.com>
+Subject: Re:
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: Yes, score=5.8 required=5.0 tests=ADVANCE_FEE_2_NEW_MONEY,
+        BAYES_20,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,FROM_STARTS_WITH_NUMS,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:f41 listed in]
+        [list.dnswl.org]
+        * -0.0 BAYES_20 BODY: Bayes spam probability is 5 to 20%
+        *      [score: 0.1494]
+        *  0.7 FROM_STARTS_WITH_NUMS From: starts with several numbers
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [977638ib[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  3.3 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+        *  2.0 ADVANCE_FEE_2_NEW_MONEY Advance Fee fraud and lots of money
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 02-11-22, 14:38, Manivannan Sadhasivam wrote:
-> Hello,
-> 
-> This series adds clock provider support to the Qcom CPUFreq driver for
-> supplying the clocks to the CPU cores in Qcom SoCs.
-> 
-> The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
-> clocks to the CPU cores. But this is not represented clearly in devicetree.
-> There is no clock coming out of the CPUFreq HW node to the CPU. This created
-> an issue [1] with the OPP core when a recent enhancement series was submitted.
-> Eventhough the issue got fixed in the OPP framework in the meantime, that's
-> not a proper solution and this series aims to fix it properly.
-> 
-> There was also an attempt made by Viresh [2] to fix the issue by moving the
-> clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
-> since those clocks belong to the CPUFreq HW node only.
-> 
-> The proposal here is to add clock provider support to the Qcom CPUFreq HW
-> driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
-> This correctly reflects the hardware implementation.
-> 
-> The clock provider is a simple one that just provides the frequency of the
-> clocks supplied to each frequency domain in the SoC using .recalc_rate()
-> callback. The frequency supplied by the driver will be the actual frequency
-> that comes out of the EPSS/OSM block after the DCVS operation. This frequency
-> is not same as what the CPUFreq framework has set but it is the one that gets
-> supplied to the CPUs after throttling by LMh.
-> 
-> This series has been tested on SM8450 based dev board with the OPP hack removed
-> and hence there is a DTS change only for that platform. Once this series gets
-> accepted, rest of the platform DTS can also be modified and finally the hack on
-> the OPP core can be dropped.
-
-Would be better to get an Ack from Bjorn before I apply these.
-
--- 
-viresh
+Hei ja miten voit?
+Nimeni on rouva Evereen, l=C3=A4het=C3=A4n t=C3=A4m=C3=A4n viestin suurella=
+ toivolla
+v=C3=A4lit=C3=B6n vastaus, koska minun on teht=C3=A4v=C3=A4 uusi syd=C3=A4n=
+leikkaus
+t=C3=A4ll=C3=A4 hetkell=C3=A4 huonokuntoinen ja v=C3=A4h=C3=A4iset mahdolli=
+suudet selviyty=C3=A4.
+Mutta ennen kuin min=C3=A4
+Tee toinen vaarallinen operaatio, annan sen sinulle
+Minulla on 6 550 000 dollaria yhdysvaltalaisella pankkitilill=C3=A4
+sijoittamista, hallinnointia ja k=C3=A4ytt=C3=B6=C3=A4 varten
+voittoa hyv=C3=A4ntekev=C3=A4isyysprojektin toteuttamiseen. Tarkoitan saira=
+iden auttamista
+ja k=C3=B6yh=C3=A4t ovat viimeinen haluni maan p=C3=A4=C3=A4ll=C3=A4, sill=
+=C3=A4 minulla ei ole niit=C3=A4
+kenelt=C3=A4 perii rahaa.
+Vastaa minulle nopeasti
+terveisi=C3=A4
+Rouva Monika Evereen
+Florida, Amerikan Yhdysvallat
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+Hi and how are you?
+My name is Mrs. Evereen, I am sending this message with great hope for
+an immediate response, as I have to undergo heart reoperation in my
+current poor health with little chance of survival. But before I
+undertake the second dangerous operation, I will give you the
+$6,550,000 I have in my US bank account to invest well, manage and use
+the profits to run a charity project for me. I count helping the sick
+and the poor as my last wish on earth, because I have no one to
+inherit money from.
+Please give me a quick reply
+regards
+Mrs. Monika Evereen
+Florida, United States of America
