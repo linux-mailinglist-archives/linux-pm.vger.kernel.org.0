@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B519C61FDA1
-	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 19:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E0D61FDCB
+	for <lists+linux-pm@lfdr.de>; Mon,  7 Nov 2022 19:44:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiKGSd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 13:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48692 "EHLO
+        id S231888AbiKGSon (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 13:44:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbiKGSd5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 13:33:57 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED3C209B2;
-        Mon,  7 Nov 2022 10:33:57 -0800 (PST)
+        with ESMTP id S232440AbiKGSol (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 13:44:41 -0500
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2048.outbound.protection.outlook.com [40.107.93.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5047E1D33E;
+        Mon,  7 Nov 2022 10:44:40 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mVpdolVy0RsAfggYX+vqVp9qKhyTFjy1UGhW3DGrM4V2y3fJBQQGXhxumc7RlSx0Z0Oa7Km65eWKcb/xVS6lfdmIhXYRQOI0qRroIv8dvCRzXhV2j5NciVoaGLw1PcmZeysDzmMq8SqKMNRyThI0rUA63EVD5KDmrEA9rtt4oIs5sX3VRHLqugLvicp9onrW6AFKsKaUs3HsRWfEu5+Gpg4uJPT3XdFOw/POYUplkAonQGOMoPn/b6b+Qy24HNG590LojA+eQCnTG1Mwm1uddZItylZvSyk1Y80WXq0jQmSQqlvAnjF8cun6F5Cn5ypO9xbh3bu2B4l76nQMVHtfIQ==
+ b=fTdTotPm175v6SFejzbLXfMoJMKtVgn4MUO/bq01rE98ofLkd7di8IS6ZapkPzuojGEZ8zSO1cvXTu1x8UzfjuLxgCRLe0moyl4n0ZVidiP00ZVWNauxsOPPcqLFwGCpLZtddyg4IeMR46MGSdgzEzKh21U4XCDyIPCmv+MCpposg9agckGa5DQTU4Jsma4qChnRKvTdCezwohgf1CdJfVFAGFccHWJZtQiQhPZHmDeHVR6sSJ7JnUpYJLAfjxRqoSy/SX5GKozp3apmfSWmHjerlkChhyc5J7+klVbmmzFaUTN7IH74RA1G4dCih5vWgpVw2Fl8gkUCbVf++5pCHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BWX8v9oFDrcZCKWdMeQ7BJEhEEhjxFzbLHw6nXpiwsU=;
- b=ICJQKN28QeHpKJaHUTa14k5NQlrNeLnwhoZ/j90JEdnxCEYfVVEvhg8Q89dGLG2y5TV682UI9/yyfQbdd+PYlyGaoVmRJfHrrx925nqa58kkw02UhLVw7ThruszdlWBeo7kPqSzNov2o3E4jATYYZ57CP/yrQLA7w3yt6u2UKJkkK7NQosv+kHbJ8v+B5lE0o7sXwBHKgUwnOEWFqnpayaDUGJ1PFpflVi92sv3A6IsMXTnXP98HCGPL2deGjYLJOKqt9+x7jm8/37xoEWRfV1TRdtMi2fM62sAdarrpHF+/ANmdWp23tpt7umk3iINbBx8rF7eV0yil8ohrcE9jZQ==
+ bh=gUw8KiQ48s1vAnUqa80H8O6rDawGe+pPao9eCruWoNE=;
+ b=aMIfTqUIiCte+gRnlm9wG6hfwGzeuCWN+ejBlYjtYIkP1IP6VNki8eTwKCA3nNvdLTZ0PTrJTrDq+FWkFIweR9CW2CJtfM9S0iMDP7H+OedNOkiD7+vVufAK70vSyGUNSWqICocmT6TkZzfPc2k/B+YYf/r8wMLyJ47kbAx/PERPCjYD5n+ZY4ksZQevWAhcGo1Al/YM51YiadG3Y3usymuwc4pr2t1+BIK+fUydPYWRXgQ4/joIHeujT/nJ3seNE/4RL3pCd+l5Mnjg/C+4PpH4Q+EDseqTci5KrwuJtBnzOxVupDvf0kyn44nyCB0apANh+E116Ow91pApgnPsMQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BWX8v9oFDrcZCKWdMeQ7BJEhEEhjxFzbLHw6nXpiwsU=;
- b=YuRRTTqSJP+I9EegXQqhimS7IsNOznE1HPtpUixn22+ZGWfRorHBkmzhrC1CoPdYeZF1T9nEynZuJJecxyMAqVb915arfxwl02d3kRZPYk8hdG+gT8yz2edr6pnFbgh7AEnzuzBkc8Rs4S8EZuFHhMU0NKB6hvAVbzLkfOkeaFk=
+ bh=gUw8KiQ48s1vAnUqa80H8O6rDawGe+pPao9eCruWoNE=;
+ b=xLrk2zdpkG5r6R9vhxQ2FKlUlBgMXzCgCZNHISnCM7eMpxoO5aXUae6qljnyucbPGdzAfQ0UbQqHl49YNYbduL4zP+py2nEQSUAj9P2bCZ4eKH5YmN+C3BBNC9ZcqZfxvXowUV0szcteTN1lnMEWJ6pZJnsLijObAXLgdTHrETc=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SJ1PR12MB6363.namprd12.prod.outlook.com (2603:10b6:a03:453::9) with
+ by SA0PR12MB4590.namprd12.prod.outlook.com (2603:10b6:806:93::11) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.25; Mon, 7 Nov
- 2022 18:33:54 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.26; Mon, 7 Nov
+ 2022 18:44:38 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::f842:a9ba:3f41:3c3c]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::f842:a9ba:3f41:3c3c%5]) with mapi id 15.20.5791.026; Mon, 7 Nov 2022
- 18:33:54 +0000
-Message-ID: <8ca9feaa-90c9-93fc-38e0-3c41d51dc845@amd.com>
-Date:   Mon, 7 Nov 2022 12:33:50 -0600
+ 18:44:38 +0000
+Message-ID: <64836554-7caa-9a3e-3832-a66e87c83bf9@amd.com>
+Date:   Mon, 7 Nov 2022 12:44:35 -0600
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.1
-Subject: Re: [PATCH v3 2/8] Documentation: amd-pstate: add EPP profiles
- introduction
+Subject: Re: [PATCH v3 1/8] ACPI: CPPC: Add AMD pstate energy performance
+ preference cppc control
 Content-Language: en-US
 To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
         ray.huang@amd.com, viresh.kumar@linaro.org
@@ -53,71 +53,71 @@ Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
         Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 References: <20221107175705.2207842-1-Perry.Yuan@amd.com>
- <20221107175705.2207842-3-Perry.Yuan@amd.com>
+ <20221107175705.2207842-2-Perry.Yuan@amd.com>
 From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <20221107175705.2207842-3-Perry.Yuan@amd.com>
+In-Reply-To: <20221107175705.2207842-2-Perry.Yuan@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0PR03CA0013.namprd03.prod.outlook.com
- (2603:10b6:610:b0::18) To MN0PR12MB6101.namprd12.prod.outlook.com
+X-ClientProxiedBy: CH0PR03CA0397.namprd03.prod.outlook.com
+ (2603:10b6:610:11b::30) To MN0PR12MB6101.namprd12.prod.outlook.com
  (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SJ1PR12MB6363:EE_
-X-MS-Office365-Filtering-Correlation-Id: 070fedeb-7f7f-438c-1edf-08dac0ee9ffb
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SA0PR12MB4590:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4ef840ee-4887-4d1b-d351-08dac0f01f78
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E+tRs2IKM+Wg4NScIJoGnf4TG+bU0vMpBHTzbbeEqR7lXeUkzToxYl8th0WfmJl1luZk7UCP+vORr6a2byowSodPuFzCeWyVuFKHWhB7Sa8gDA4EyaYnLFB7tCzZoRQ6IDBg4pfTNPMHXaKDvrqxE/bsDtBpPbFBPg5uYrpfXKuEc0CbWlnh2fefC0+MiZ4g5K+5tHihJsT06sYwi9NHWvDK4zJCFgBNIe81GE0OAcsG8XDUc73odJn7g2nrjRLjLJG1kZWISx+S++3Qzr+ejgPmZcZ6ylBorez/JmpKT/drZqbroef95QmcF2EeirkFHL7iO47iK+BAVNmlXIKmB+psEUlnJgxgEeI68d+/03u13CRxn4OYu4XCv08LMgrnB0Ygjo/SpC4j1mj2gq1qDiANw+/0kSlvD+I+FZokC468cP44ZH4cIYVExQSr1nGKMEJhOOBO/mDCQqByTBBsmimdwiX8A0oOfxZAFLlZWcef6WTw5MCL3PhrNLgVmyAnPD5STVQwV/sR7iujavG9iCYoiPw2q3gLkZXXPHbph73RcWMmKpcaLBeG2TMaxWQ1nj4agGwxLpH5S8iwCb/m8TInUHIZh2tZzdKazElfk5EzFlraaNMdhIp5rq1OtYPT3+SuiO2sl6COGlfvYCO+GF6Z7FaPZIFlrjEtIkie9PoiYTita8+vJ5nbkFEyqvG9hiyhsjALQlpkjMX+VZ7rOricjTf/z8pG3awsOfy46N20925/BEZnur0XbTMpBSCcP7HCThzRm6NAdlu1zpSnICzmZVbA1jqDlZH223hkTzz9k6GUnj1r8bJzR1y8/7NDEJJVp38zdDcBrf1uOh00kd7i6sLBdfZ0KdLLfZDhvTk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(136003)(396003)(366004)(39860400002)(451199015)(31686004)(83380400001)(186003)(316002)(38100700002)(8936002)(41300700001)(6666004)(2906002)(6486002)(478600001)(36756003)(6506007)(53546011)(6512007)(26005)(86362001)(31696002)(2616005)(5660300002)(8676002)(66556008)(66476007)(66946007)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: WGtBM/IxQjXW9nE86OwJyPv5pC1q4Ki4Nv34XKUejkejFYA7cnfnKEUo1+WKr+uLESe0Pd4oziRhW+DDkEl7FnCLTKefMm1pGQvGs8UoSklzvI2ajbo0RKBfc5sDdmEVamsIHi5XxRMthsY00FttHr3cQPcSSB1i2uYXqsC4kARh1v4RgQ532iOXPdyL2mOk/MqMGuOzajzp7unq1xC91RqJVku0wbo4POqi47LRmvKzmhOBVL+Zh7MiygGua71RYJvtwq9OMHAs6aPdDdGASK4Y8RWwdaMiLZWfM9/65ieErMwLvWCu37G4Q8IQPF0VlOLxJgjy+LK9WZlkVVjuM7jjPrSIfsVTJzFfZIMMq9PXvVTwBao1lLnWSo8sB+htxJE3lXRF1bP/dYwXkQ+ReEkc6o2L6HxoxMcW5/SCarRNriuB4fUAR2aIYVeYJx8Y/dLuZQaQgZwLyzvKoYtGiVJSKB09bQWpDnDiFcFi0N47rLItf0D1cbfneuvn/CKlpII74KxF5bxkBCfELgMWhgP3/xcw3fpfoO2zi91hfE/QMftAr606+d0uOrIgxIZ3Eg+4vRdbDTu1JxpDk0t89efYnO2w7Rqs8oTAQS7mfhcheXrbl8xTtLzC6hSs4bq54a9bW4bdQabZ0J4PxpF9VnXxmkSOn6Yl++ZYy7MbTlgbvWHV0k3rFfGe6zWG+B9c1oQp28D0MYhY6gx/uBY1n30ncPT6rTEbpX2Mdz2J6ou2JzxZpOGlIpzxsd00a71TF89ij4e0HhRLoJFlkDWMrOvufOEa6QoMEFN2B04+SNk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(39860400002)(376002)(396003)(366004)(451199015)(53546011)(6512007)(2616005)(26005)(6666004)(186003)(6506007)(83380400001)(2906002)(478600001)(6486002)(41300700001)(5660300002)(38100700002)(8936002)(4326008)(316002)(66946007)(66556008)(66476007)(8676002)(36756003)(31696002)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K2NDVURMMjNJbXdLaC91SE1BSDh4RzRWS0tFMTZ3bWxoNjU0dVY4NmlLWTJn?=
- =?utf-8?B?eGVDNWQvemc5VmdkUm1JYzRPL1c3eUZoTWF6cG9QTXhnTklRNDkyaWVWYVl0?=
- =?utf-8?B?Q1VHc2RWdE1aOE9pb25xdWhlc3ZZZEwyaDhodGp5eGxiTFh2OEo2TDhycVZa?=
- =?utf-8?B?dTB6c21GQ1dUYmdkNW8ySVRwb01nemx6TTJQbm1xTjFPTXU3N2ZUVWFDdnV5?=
- =?utf-8?B?eHUzWjMvbjJGbzBDaFo0ZEEvQnNhNnRSYzM1dytaWlYzKzQ4R1ZucXFJR1FS?=
- =?utf-8?B?REJYcHhnYkl2QnR2V0c5d05iQXhBQVJRUGpvRjlTWUUxSXJreHg1eU1pVXFJ?=
- =?utf-8?B?WHRGcWg5U2dUS3JNakovMkhidFNEbVBIdzhZMEZ1NFdGZURTTUxnN0llSkpC?=
- =?utf-8?B?OXZaRjQ1Y2NTSno4Z2RWdThzdUpxM0JhcnJRbWdrdlR5VDFnNjJnNjBueGdX?=
- =?utf-8?B?cFlsV3NKZm1pQi83c096bXE3NGZrZDFtZFpjcjVHd0RIczVaN3pBZVdNenBS?=
- =?utf-8?B?UHpIRlpvZ3dhdTEvQk9ZNEFXZ0duQVpIendJRGdlS0RCTWFHN2RscCtMTW03?=
- =?utf-8?B?UkZiRTczSG1YM1lrYmhXZVJIYmF2N1JyVU8yQmRlLytqM2dJMEo2V240ei9B?=
- =?utf-8?B?dVlVWUhFbGRBaENSZHRDcmZkUXBNYU9Qb1B1TXJlbllSb21QTXFaYXdCeW51?=
- =?utf-8?B?N1FDNlZ3a2lIbndpNjAyUFFIR2hycE5HaFB1WDd1LzZDeFg0WUptZ2ZlRldj?=
- =?utf-8?B?eXZ2QXUwVzRNcGI2VVNtTGF5eno2Vm92My9VaStyL1hyNEdtZmY5bXRDSzlq?=
- =?utf-8?B?MjRPcDFrcFZzL3ZsWFpSaHlRaGJGWlFkYkhUTzVnRHBxaXlKcXRFYXJEamw2?=
- =?utf-8?B?bnJ5TXNOYnZHVG9NWTIydnJUbW9OMzFtc0FFVHgzQi9EUDE5b0IyblZjOE55?=
- =?utf-8?B?dTdiWVdPcUIycWYxd0VMYkJhMi9JNWFDUkNZVFloZ3U0T3h0aTAwOW5ZSTQy?=
- =?utf-8?B?c29vUm5LT0RMU3dwQXRMeFJmdTJ4UG9LcERWd2VsMGROUWlqMkpYajgyWDR3?=
- =?utf-8?B?UkN2ZXJqcjZWaSthMkwwbDh4eVIrT2lPaFlqQ01OdHFWWjBybVQ4S2dmbFdG?=
- =?utf-8?B?MEY5Rms5ekpsWXlMekRYK0haUHk3TFlZSE9MMk9jTEY3a1JJd3FXdEdvWUJH?=
- =?utf-8?B?TEF4dmx3Qmk5dXhJdU9DeGkwYW9RcHkvdWROLzFxQ0xxenBDTit0eVRGYVIx?=
- =?utf-8?B?b1ZoSHhKMFNsYjU5M2cvcmVCOTlZVkpjcFMrZ2U0eVBUL1VIZEZQTXJLVEZx?=
- =?utf-8?B?RW02RkdFNk1LcEIrdHpzendZNjB3QkJpN29Hd0QzSVRHdmx1S3JxdWd5bklx?=
- =?utf-8?B?MFU1a1hhOWQxaXJrWW5OenRlcUlUUmNYbDlMZ1FJWFpBdFNiMUNqVktIT3VE?=
- =?utf-8?B?dEpxYnhZWGFhTy9jTzgwME1kQUE3anJxOW1KaGhBbVFBWEZoNUo1Wkw1MFY2?=
- =?utf-8?B?NjdtaEpBY3NNdklOYzlyeTNUWk92eVZoWitsM1krcEVxVC82OGVkeG9nUVN1?=
- =?utf-8?B?ZHluNUk4R3QwTHpIS2tINk1qSllBUmx2ZE1IWDNmc3dNYmxFU3dXRHZPcFUx?=
- =?utf-8?B?aUgrSS9oaEg5YkZVV2s3Q1czTlhWRWJpb2swc1FTdHo5L2dkWWxuK2xXVVln?=
- =?utf-8?B?WlVwcXJIN1R5WDVqS1VVZE00emZCOWg2SU5yaE9XVGFsMjdNMm9wQUN0SWNJ?=
- =?utf-8?B?YTVnWTVZOGh2ZnU3RG1DclhOeG9Qd0xsRHV6OHRwKyt3MkEwRmZhYTVzRldO?=
- =?utf-8?B?TzVNa1Q5YTJJMlR0dnRQaTgybUtYeXQ1b09vNThyYmhrZU1zNjJPekoyZzQ4?=
- =?utf-8?B?S21WbTJ2cyttTUlwOE90ekFhTWNGRmt2dXcwRUZET05qZTBTSHdVZjBiR2dN?=
- =?utf-8?B?dlljZHdYaFdoVzVrUnJiemltUVNhRm50Z2RpK3FiQVJoczZnWGZYSHZmTnR1?=
- =?utf-8?B?ZHgxRElSMEx1VW5iQXdWYy8rcmVNbklCYm5Kc3VjTFVZYWtuL05QRUZMcU5v?=
- =?utf-8?B?VUgrWnc0WmM4RXNhY1pWeHIyR3ZBSjZHMkUrTTdtZllSK3hZTVZmMExieVNp?=
- =?utf-8?Q?3xUx24ODVKvR4HeZgRmchqP5P?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VGlieWpoNlRJMHVMVlhLamd5MFNiVlMrRVdaWGtKa2JXY2ZNZk1LMGdCbTJi?=
+ =?utf-8?B?WmhPcStQSTlxMktZNEpHQ2E4RndsNVdVRmVJd09qbXdZbVF6Y3JLeHJIdmVF?=
+ =?utf-8?B?UDMxMlpjV0Fpd1FNY3pDNG1aUjdFSlRJL3NvYkIwV0Q0MmU5OWtCVHdBbEVQ?=
+ =?utf-8?B?Z0I1YVRPa0FhNGNFdXZqM1k3dGZxcTJvU1ZjUTY4bGNZVnhlR2pLbCtPSy9N?=
+ =?utf-8?B?VWhqeVFQUGF3Y3M3Wk1qYiszOE1zUVFVU0tCdkZiZVZUc1hnOVhXRFdkL0Rp?=
+ =?utf-8?B?UFNsUHluQ1ZYaWRVSjkweFJoR2JVQ2FaRnBpbDJ5dmV3L3VjejFJZzNkTGRv?=
+ =?utf-8?B?czE0ZnRiNmdBSWkyRmJ0dnBHQk43T1F0SHJ0NWJKQ2p4ellPdkE0dkZ6djFk?=
+ =?utf-8?B?R0wwaFBldHNGK281NTZzdGYwTWdZUWN3L0JQM1ZVRzNwVmF1QW1JNXRzYmxa?=
+ =?utf-8?B?WkRPSk9hTTNrM24wQXV5ZXl6NGRyQ3NXMmZad2E1Tk9ZM0VtVU9nTzNsZ2pW?=
+ =?utf-8?B?ejdmWnhWUTVlZEEzS0x6QXlIQml4OEozMjhaTlNFbW1xdlpYaS83M2hkK1Ro?=
+ =?utf-8?B?amtYcjUrS001VDhCYWhtTS84WW0wVEpEZVBiKzlpcFpjWldHd0wxa1dxSzFG?=
+ =?utf-8?B?OUVmaTBIZkZsYng3VUhtWTU3R2gvN01SUlBtak5DOFFsSGlybkYyR0tQOWVY?=
+ =?utf-8?B?TXJOaXdNRHZydW9pZ1pNaHVsdUx6bnZjNTgyR1BnQkpqV3QvOWNjREdsOC8z?=
+ =?utf-8?B?TkltVUVlc2YxTjYvVzZTRVNFSnJkNXp2MkU5bENOSmF5eGhPSTljWHl4aGdC?=
+ =?utf-8?B?T1padnM0YTZGcENJNXFjS2QvZk1LVGplTGhwa3dDQk9HQVlsbi9oS1JsZjZh?=
+ =?utf-8?B?dVlWSTZEWDYrNWlDblZFNmh2Um5rVXJDcXhhOFJZcXRCNzI4N2pHWk5WcjVt?=
+ =?utf-8?B?ZkhZaytXaUhyU1lNcnd2R3JRQjduZ3d3L1BzS00xZ1pYVzV1djJOVmNFaVVk?=
+ =?utf-8?B?eGIyVWxxM2wvUmRCMm1pcGcwRjhMTDl0djl6ZFdYWVhnMDE5VGRRcVNTVmdQ?=
+ =?utf-8?B?bkZ3ejVuKzhlcWxVRVRPNHhFTHFNaDNvSkNQVzR1aUV4ZWw4eEZRN2Vjb3hs?=
+ =?utf-8?B?VzdtZk1UaXN5MGRFTTJHdzlnTUVyS0FUQVQ1eE5zQko5M0lXNk1DbWt4MEFS?=
+ =?utf-8?B?UGxmZm1LaFpOTzFLYlFaa2RCQTAyZHFFSVA2R1drNlNuQzJ4MTRSV29LaEEz?=
+ =?utf-8?B?aTRpZHBMVHlEOGYvdlkzUG5kcndBVjVmWnROMWVNTWFwenZCblkyNFN3UEl1?=
+ =?utf-8?B?d0kybklxMmpQN2ZESE5jMzVQNHdGK1NMcEN1NnBuRUYxQmFmd3RhVUFuSmlK?=
+ =?utf-8?B?bERqcG5qOWwxMGNMb1VCSlBMTEFZSzByRFFFN1kvV0ZxUW1WMDl3c0NYR1Zs?=
+ =?utf-8?B?d3ZrZkZ6aWRiS2JjR3hsVGVIdTQvMnJlVGxZckRHZXdlQkxTbEhvK1lPajh2?=
+ =?utf-8?B?RHRpZkttVWdGK2MxUWROaTBqRUxRZGIxYWZyOStHemUxbXdXcFhCYXVLTmoy?=
+ =?utf-8?B?L3JtQWo2cXhkclZBWkVGYlJWeGRCNzF0V2dIM001cnlOdmhsMGlNVGk4Nmtl?=
+ =?utf-8?B?UXNrWHBiQmhDZDVxTTRFREp4UzJTYWhud2l4V0RUOU5Mb3AwWDAxVFBLbkJ2?=
+ =?utf-8?B?OTNHZEJoZWV6dkE5QlpaQ3NZb3ppMDlIV0N5cDdBalBIVWVQeUVuV0NvWHRH?=
+ =?utf-8?B?aS9zRThqcXp5WHFHbExtOGsrSjNaclZidi95ZlJNdTNlZEZESm5SWVhnNEht?=
+ =?utf-8?B?Y2lMcVgzdUQwQUJIWTlXNHpQNHZtL1I2RVdVZGxWQjdrVUZyT1BKU0JaQVJy?=
+ =?utf-8?B?cFRNekx5cnFNNkxlK0R2OUw0ZTBhYjQ3TnBxN2gvTU9qa0JEdjdIcGJCU1dv?=
+ =?utf-8?B?TEdDVVI5TnlKNGNGaXM1LzB4Y2xIL25PcFhwSE5iTUo0UFB0TmFLUEtUaDFP?=
+ =?utf-8?B?RkZrSEVONkJVeW1BNmg2QUdyOXpjV0ljY3A0M2lTMlZ3NDFOZjRaVXk3WnRw?=
+ =?utf-8?B?QytFa0U5MXV6SlA0VmZlMFZOc3ZpdnpPbHhKbFpqcW0rcVJqUWVsRXhwRXkw?=
+ =?utf-8?Q?sUwifKlvb+1obuDUVavxt79jb?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 070fedeb-7f7f-438c-1edf-08dac0ee9ffb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ef840ee-4887-4d1b-d351-08dac0f01f78
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:33:54.6706
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Nov 2022 18:44:38.0459
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OFqTDUsYy1uVY4luDQAg9wOkNeVTOXcXFkHCeoWrpazff7QQKwDfUYt/LKw+IzLota95oW+tCn0KRk7T9YS7Nw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6363
+X-MS-Exchange-CrossTenant-UserPrincipalName: +VkZZnzONdtRccNrJmf8zfOnUxQx8GiMehCst6GJWbQsqZEn4QUJ0CB3ThpfTYwIEZHWMW7TX56wNGBi8yaKBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4590
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -129,67 +129,236 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 11/7/2022 11:56, Perry Yuan wrote:
-> The patch add AMD pstate EPP feature introduction and what EPP
-> preference supported for AMD processors.
+> Add the EPP(Energy Performance Preference) support for the
+> AMD SoCs without the dedicated CPPC MSR, those SoCs need to add this
+> cppc acpi functions to update EPP values and desired perf value.
+
+As far as I can tell this is generic code.  Although the reason you're 
+submitting it is for enabling AMD SoCs, the commit message should be 
+worded as such.
+
 > 
-> User can get supported list from
-> energy_performance_available_preferences attribute file, or update
-> current profile to energy_performance_preference file
-> 
-> 1) See all EPP profiles
-> $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_available_preferences
-> default performance balance_performance balance_power power
-> 
-> 2) Check current EPP profile
-> $ sudo cat /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference
-> performance
-> 
-> 3) Set new EPP profile
-> $ sudo bash -c "echo power > /sys/devices/system/cpu/cpu0/cpufreq/energy_performance_preference"
+> In order to get EPP worked, cppc_get_epp_caps() will query EPP preference
+> value and cppc_set_epp_perf() will set EPP new value.
+> Before the EPP works, pstate driver will use cppc_set_auto_epp() to
+> enable EPP function from firmware firstly.
+
+This could more succinctly say:
+
+"Add support for setting and querying EPP preferences to the generic 
+CPPC driver.  This enables downstream drivers such as amd-pstate to discover
+and use these values."
+
 > 
 > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
->   Documentation/admin-guide/pm/amd-pstate.rst | 19 +++++++++++++++++++
->   1 file changed, 19 insertions(+)
+>   drivers/acpi/cppc_acpi.c | 126 +++++++++++++++++++++++++++++++++++++++
+>   include/acpi/cppc_acpi.h |  17 ++++++
+>   2 files changed, 143 insertions(+)
 > 
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 8f3d30c5a0d8..78c6525d5a49 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -262,6 +262,25 @@ lowest non-linear performance in `AMD CPPC Performance Capability
->   <perf_cap_>`_.)
->   This attribute is read-only.
->   > +``energy_performance_available_preferences``
-> +
-> +All the supported EPP preference could be selected, List of the strings that
-> +can be set to the ``energy_performance_preference`` attribute
-> +those different profiles represent different energy vs efficiency hints provided
-> +to low-level firmware
-> +however, the ``default`` represents the epp value is set by platform firmware
-> +This attribute is read-only.
-
-My proposal at rewording it.
-
-A list of all the supported EPP preferences that could be used for 
-``energy_performance_preference` on this system.
-These profiles represent different hints that are provided
-to the low-level firmware about the user's desired energy vs efficiency 
-tradeoff.  ``default`` represents the epp value is set by platform 
-firmware. This attribute is read-only.
-
-
-> +
-> +``energy_performance_preference``
-> +
-> +The current energy performance preference can be read from this attribute.
-> +and user can change current preference according to energy or performance needs
-> +Please get all support profiles list from
-> +``energy_performance_available_preferences`` attribute, all the profiles are
-> +integer values defined between 0 to 255 when EPP feature is enabled by platform
-> +firmware, if EPP feature is disabled, driver will ignore the written value
-> +This attribute is read-write.
-> +
->   Other performance and frequency values can be read back from
->   ``/sys/devices/system/cpu/cpuX/acpi_cppc/``, see :ref:`cppc_sysfs`.
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index 093675b1a1ff..d9c38dee1f48 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -1365,6 +1365,132 @@ int cppc_get_perf_ctrs(int cpunum, struct cppc_perf_fb_ctrs *perf_fb_ctrs)
+>   }
+>   EXPORT_SYMBOL_GPL(cppc_get_perf_ctrs);
 >   
+> +/**
+> + * cppc_get_epp_caps - Get the energy preference register value.
+> + * @cpunum: CPU from which to get epp preference level.
+> + * @perf_caps: Return address.
+> + *
+> + * Return: 0 for success, -EIO otherwise.
+> + */
+> +int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+> +{
+> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+> +	struct cpc_register_resource *energy_perf_reg;
+> +	u64 energy_perf;
+> +
+> +	if (!cpc_desc) {
+> +		pr_warn("No CPC descriptor for CPU:%d\n", cpunum);
+> +		return -ENODEV;
+> +	}
+> +
+> +	energy_perf_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+> +
+> +	if (!CPC_SUPPORTED(energy_perf_reg))
+> +		pr_warn("energy perf reg update is unsupported!\n");
+
+No need to add a explanation point at the end.
+
+As this is a per-CPU message I wonder if this would be better as 
+pr_warn_once()?  Othewrise some systems with large numbers of cores 
+might potentially show this message quite a few times.
+
+> +
+> +	if (CPC_IN_PCC(energy_perf_reg)) {
+> +		int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+> +		struct cppc_pcc_data *pcc_ss_data = NULL;
+> +		int ret = 0;
+> +
+> +		if (pcc_ss_id < 0)
+> +			return -ENODEV;
+> +
+> +		pcc_ss_data = pcc_data[pcc_ss_id];
+> +
+> +		down_write(&pcc_ss_data->pcc_lock);
+> +
+> +		if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0) {
+> +			cpc_read(cpunum, energy_perf_reg, &energy_perf);
+> +			perf_caps->energy_perf = energy_perf;
+> +		} else {
+> +			ret = -EIO;
+> +		}
+> +
+> +		up_write(&pcc_ss_data->pcc_lock);
+> +
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_get_epp_caps);
+> +
+> +int cppc_set_auto_epp(int cpu, bool enable)
+> +{
+> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> +	struct cpc_register_resource *auto_sel_reg;
+> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +	struct cppc_pcc_data *pcc_ss_data = NULL;
+> +	int ret = -EINVAL;
+> +
+> +	if (!cpc_desc) {
+> +		pr_warn("No CPC descriptor for CPU:%d\n", cpu);
+
+Is this actually warn worthy?  I would think it's fine a debug like we 
+have for the other _CPC missing messages.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	auto_sel_reg = &cpc_desc->cpc_regs[AUTO_SEL_ENABLE];
+> +
+> +	if (CPC_IN_PCC(auto_sel_reg)) {
+> +		if (pcc_ss_id < 0)
+> +			return -ENODEV;
+> +
+> +		ret = cpc_write(cpu, auto_sel_reg, enable);
+> +		if (ret)
+> +			return ret;
+> +
+> +		pcc_ss_data = pcc_data[pcc_ss_id];
+> +
+> +		down_write(&pcc_ss_data->pcc_lock);
+> +		/* after writing CPC, transfer the ownership of PCC to platform */
+> +		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> +		up_write(&pcc_ss_data->pcc_lock);
+> +		return ret;
+> +	}
+> +
+> +	return cpc_write(cpu, auto_sel_reg, enable);
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_set_auto_epp);
+> +
+> +/*
+> + * Set Energy Performance Preference Register value through
+> + * Performance Controls Interface
+> + */
+> +int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+> +{
+> +	int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+> +	struct cpc_register_resource *epp_set_reg;
+> +	struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+> +	struct cppc_pcc_data *pcc_ss_data = NULL;
+> +	int ret = -EINVAL;
+> +
+> +	if (!cpc_desc) {
+> +		pr_warn("No CPC descriptor for CPU:%d\n", cpu);
+
+Is this actually warn worthy?  I would think it's fine a debug like we 
+have for the other _CPC missing messages.
+
+> +		return -EINVAL;
+> +	}
+> +
+> +	epp_set_reg = &cpc_desc->cpc_regs[ENERGY_PERF];
+> +
+> +	if (CPC_IN_PCC(epp_set_reg)) {
+> +		if (pcc_ss_id < 0)
+> +			return -ENODEV;
+> +
+> +		ret = cpc_write(cpu, epp_set_reg, perf_ctrls->energy_perf);
+> +		if (ret)
+> +			return ret;
+> +
+> +		pcc_ss_data = pcc_data[pcc_ss_id];
+> +
+> +		down_write(&pcc_ss_data->pcc_lock);
+> +		/* after writing CPC, transfer the ownership of PCC to platform */
+> +		ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+> +		up_write(&pcc_ss_data->pcc_lock);
+
+cppc_set_auto_epp and cppc_set_epp_perf have nearly the same code in the 
+if block.  I wonder if it's worth having a static helper function for 
+this purpose that takes "reg" and "value" as arguments?
+
+> +	}
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
+> +
+>   /**
+>    * cppc_set_enable - Set to enable CPPC on the processor by writing the
+>    * Continuous Performance Control package EnableRegister field.
+> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+> index c5614444031f..10d91aeedaca 100644
+> --- a/include/acpi/cppc_acpi.h
+> +++ b/include/acpi/cppc_acpi.h
+> @@ -108,12 +108,14 @@ struct cppc_perf_caps {
+>   	u32 lowest_nonlinear_perf;
+>   	u32 lowest_freq;
+>   	u32 nominal_freq;
+> +	u32 energy_perf;
+>   };
+>   
+>   struct cppc_perf_ctrls {
+>   	u32 max_perf;
+>   	u32 min_perf;
+>   	u32 desired_perf;
+> +	u32 energy_perf;
+>   };
+>   
+>   struct cppc_perf_fb_ctrs {
+> @@ -149,6 +151,9 @@ extern bool cpc_ffh_supported(void);
+>   extern bool cpc_supported_by_cpu(void);
+>   extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+>   extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+> +extern int cppc_set_auto_epp(int cpu, bool enable);
+> +extern int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps);
+> +extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
+>   #else /* !CONFIG_ACPI_CPPC_LIB */
+>   static inline int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
+>   {
+> @@ -202,6 +207,18 @@ static inline int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val)
+>   {
+>   	return -ENOTSUPP;
+>   }
+> +static inline int cppc_set_auto_epp(int cpu, bool enable)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls)
+> +{
+> +	return -ENOTSUPP;
+> +}
+> +static inline int cppc_get_epp_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+> +{
+> +	return -ENOTSUPP;
+> +}
+>   #endif /* !CONFIG_ACPI_CPPC_LIB */
+>   
+>   #endif /* _CPPC_ACPI_H*/
 
