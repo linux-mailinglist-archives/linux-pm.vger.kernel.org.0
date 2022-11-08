@@ -2,220 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2944620631
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 02:36:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 181126206CF
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 03:31:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233430AbiKHBf6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 20:35:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60540 "EHLO
+        id S232693AbiKHCbZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 21:31:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233500AbiKHBfs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 20:35:48 -0500
-Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD94B1B9F0;
-        Mon,  7 Nov 2022 17:35:40 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 9467C84F1C;
-        Tue,  8 Nov 2022 02:35:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1667871339;
-        bh=aD2mQVPfdWqzQxFkatpPuRDlb/RB7uncjpAoGFchjLM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QwN2OMmYAami925k9uoqFsKsHFnqHU6UoR0+3A1Q7jCMHgoVlp3ZKsI9LbdO2y0Fi
-         FLVkyvmRnEq1uS8MCV416wMmX7TNX5equBQytJSb0ePDrxS7d1tmwtaOvtvJ9vk/w5
-         oU2bmkjpSPIjn/TiS67eleNObkAhfOwSpUX27uFlosBXic4fXUMxaWyRn7V4OOBlm1
-         /1m9fhqok31zLjToZjWs5gFtMd9e5kqVpIAjwuAYFpfFrqrmvXtBoHrJ4MMdCfy6Vp
-         y33s0Fy9leUcQBf6BPsgPuqRkTuYKWo+eaSsAqe9WYaaNyyaYNBqeT1HkF5k3sWEK5
-         bw5bRdC15u8og==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-pm@vger.kernel.org
-Cc:     Marek Vasut <marex@denx.de>, Adam Ford <aford173@gmail.com>,
-        Fabio Estevam <festevam@denx.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jacky Bai <ping.bai@nxp.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Len Brown <len.brown@intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Mark Brown <broonie@kernel.org>,
-        Martin Kepplinger <martink@posteo.de>,
-        Pavel Machek <pavel@ucw.cz>, Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        linux-clk@vger.kernel.org, linux-imx@nxp.com
-Subject: [PATCH 3/3] [RFC] soc: imx: imx8m-blk-ctrl: Split clock prepare from clock enable in the domain
-Date:   Tue,  8 Nov 2022 02:35:17 +0100
-Message-Id: <20221108013517.749665-3-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221108013517.749665-1-marex@denx.de>
-References: <20221108013517.749665-1-marex@denx.de>
+        with ESMTP id S233664AbiKHCbE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 21:31:04 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96DF140B6;
+        Mon,  7 Nov 2022 18:30:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667874653; x=1699410653;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v5JfCjrostcFM57ehzBq1YAw5lngVCrvuFrcq8Fs8LI=;
+  b=KPQxqcVwd0zGsSxuMmVIgm9AL5kfdDK+kZ0BCiy1Jpu9e36UHgLb9iyL
+   eXH1PoOD/3ueHn1ayOStEu6vuGO6QpIx0BiyVH54jWT/A623FcWVy8CR/
+   L7ASyg3ykPX/70E4sp/gkIFXs2ENNQNo+M0Rs2TrMUQVl1mHKzYp8x4o1
+   aPek3ES9L9pqoV4fYEuFWGTntF1u6fRs4id0dEbQqfKl3SOvJl9WaiX2j
+   /wx8+fQXRGrYVeCiB5eyrdHov1BTWmSrhvDwRPB3P7rhn799vM6jFMFER
+   SRkI0gT+hPrtEzalSdkUi5J9u7BqSKa/cnYSm/cS1F65YUrYmz8OJ5QYb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="396879231"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="396879231"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 18:30:39 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="669373099"
+X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
+   d="scan'208";a="669373099"
+Received: from hushengh-mobl.ccr.corp.intel.com ([10.254.212.182])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 18:30:36 -0800
+Message-ID: <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
+Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from
+ cmos_do_probe()
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Date:   Tue, 08 Nov 2022 10:30:33 +0800
+In-Reply-To: <1850290.tdWV9SEqCh@kreacher>
+References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-It is possible for clk_disable_unused() to trigger lockdep warning
-regarding lock ordering in this driver. This happens in case of the
-following conditions:
+On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Notice that cmos_wake_setup() is the only user of acpi_rtc_info and
+> it
+> can operate on the cmos_rtc variable directly, so it need not set the
+> platform_data pointer before cmos_do_probe() is called.  Instead, it
+> can be called by cmos_do_probe() in the case when the platform_data
+> pointer is not set to implement the default behavior (which is to use
+> the FADT information as long as ACPI support is enabled).
+> 
 
-A) clock core clk_disable_unused() triggers the following sequence in a
-   driver which also uses blkctrl domain:
-   - clk_prepare_lock() -> obtains clock core prepare_lock
-   - pm_runtime_get*() -> obtains &blk_ctrl_genpd_lock_class
+...
 
-B) driver powers up a power domain and triggers the following sequence
-   in blkctrl:
-   - pm_runtime_get_sync() -> obtains &blk_ctrl_genpd_lock_class
-   - clk_bulk_prepare_enable() -> obtains clock core prepare_lock
+>  
+> @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
+>  		if (info->address_space)
+>  			address_space = info->address_space;
+>  
+> -		if (info->rtc_day_alarm && info->rtc_day_alarm < 128)
+> -			cmos_rtc.day_alrm = info->rtc_day_alarm;
+> -		if (info->rtc_mon_alarm && info->rtc_mon_alarm < 128)
+> -			cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> -		if (info->rtc_century && info->rtc_century < 128)
+> -			cmos_rtc.century = info->rtc_century;
+> +		cmos_rtc.day_alrm = info->rtc_day_alarm;
+> +		cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> +		cmos_rtc.century = info->rtc_century;
+>  
+>  		if (info->wake_on && info->wake_off) {
+>  			cmos_rtc.wake_on = info->wake_on;
+>  			cmos_rtc.wake_off = info->wake_off;
+>  		}
+> +	} else {
+> +		cmos_wake_setup(dev);
+>  	}
+>  
+> 
 
-This can lead to a deadlock in case A and B runs on separate CPUs.
+Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup from
+ACPI glue into RTC driver"), dev->platform_data is set in
+drivers/acpi/glue.c, and the above commit moves it to cmos_wake_setup()
+in this file.
 
-To avoid the deadlock, split clk_*prepare() from clk_*enable() and call
-the former in power_pre_on() callback, before pm_runtime_get_sync(). The
-reverse is implemented in the power_off_post() callback in the same way.
-This way, the blkctrl driver always claims the prepare_lock before
-blk_ctrl_genpd_lock_class and the deadlock is avoided.
+Now, with this patch, my understanding is that dev->platform_data is
+never set, thus we can remove the 'info' variable and the
+	if (info)
+check above.
 
-Signed-off-by: Marek Vasut <marex@denx.de>
----
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Fabio Estevam <festevam@denx.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jacky Bai <ping.bai@nxp.com>
-Cc: Kevin Hilman <khilman@kernel.org>
-Cc: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Marek Vasut <marex@denx.de>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Martin Kepplinger <martink@posteo.de>
-Cc: Pavel Machek <pavel@ucw.cz>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Philipp Zabel <p.zabel@pengutronix.de>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Shengjiu Wang <shengjiu.wang@nxp.com>
-Cc: Stephen Boyd <sboyd@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-imx@nxp.com
-Cc: linux-pm@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
----
- drivers/soc/imx/imx8mp-blk-ctrl.c | 38 +++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
-index ca4366e264783..844039d4e6bd2 100644
---- a/drivers/soc/imx/imx8mp-blk-ctrl.c
-+++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
-@@ -408,6 +408,30 @@ static const struct imx8mp_blk_ctrl_data imx8mp_hdmi_blk_ctl_dev_data = {
- 	.num_domains = ARRAY_SIZE(imx8mp_hdmi_domain_data),
- };
- 
-+static int imx8mp_blk_ctrl_power_pre_on(struct generic_pm_domain *genpd)
-+{
-+	struct imx8mp_blk_ctrl_domain *domain = to_imx8mp_blk_ctrl_domain(genpd);
-+	const struct imx8mp_blk_ctrl_domain_data *data = domain->data;
-+	struct imx8mp_blk_ctrl *bc = domain->bc;
-+	int ret;
-+
-+	ret = clk_bulk_prepare(data->num_clks, domain->clks);
-+	if (ret)
-+		dev_err(bc->dev, "failed to enable clocks\n");
-+
-+	return ret;
-+}
-+
-+static int imx8mp_blk_ctrl_power_off_post(struct generic_pm_domain *genpd)
-+{
-+	struct imx8mp_blk_ctrl_domain *domain = to_imx8mp_blk_ctrl_domain(genpd);
-+	const struct imx8mp_blk_ctrl_domain_data *data = domain->data;
-+
-+	clk_bulk_unprepare(data->num_clks, domain->clks);
-+
-+	return 0;
-+}
-+
- static int imx8mp_blk_ctrl_power_on(struct generic_pm_domain *genpd)
- {
- 	struct imx8mp_blk_ctrl_domain *domain = to_imx8mp_blk_ctrl_domain(genpd);
-@@ -423,7 +447,7 @@ static int imx8mp_blk_ctrl_power_on(struct generic_pm_domain *genpd)
- 	}
- 
- 	/* enable upstream clocks */
--	ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
-+	ret = clk_bulk_enable(data->num_clks, domain->clks);
- 	if (ret) {
- 		dev_err(bc->dev, "failed to enable clocks\n");
- 		goto bus_put;
-@@ -443,12 +467,12 @@ static int imx8mp_blk_ctrl_power_on(struct generic_pm_domain *genpd)
- 	if (ret)
- 		dev_err(bc->dev, "failed to set icc bw\n");
- 
--	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
-+	clk_bulk_disable(data->num_clks, domain->clks);
- 
- 	return 0;
- 
- clk_disable:
--	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
-+	clk_bulk_disable(data->num_clks, domain->clks);
- bus_put:
- 	pm_runtime_put(bc->bus_power_dev);
- 
-@@ -462,7 +486,7 @@ static int imx8mp_blk_ctrl_power_off(struct generic_pm_domain *genpd)
- 	struct imx8mp_blk_ctrl *bc = domain->bc;
- 	int ret;
- 
--	ret = clk_bulk_prepare_enable(data->num_clks, domain->clks);
-+	ret = clk_bulk_enable(data->num_clks, domain->clks);
- 	if (ret) {
- 		dev_err(bc->dev, "failed to enable clocks\n");
- 		return ret;
-@@ -471,7 +495,7 @@ static int imx8mp_blk_ctrl_power_off(struct generic_pm_domain *genpd)
- 	/* domain specific blk-ctrl manipulation */
- 	bc->power_off(bc, domain);
- 
--	clk_bulk_disable_unprepare(data->num_clks, domain->clks);
-+	clk_bulk_disable(data->num_clks, domain->clks);
- 
- 	/* power down upstream GPC domain */
- 	pm_runtime_put(domain->power_dev);
-@@ -585,8 +609,12 @@ static int imx8mp_blk_ctrl_probe(struct platform_device *pdev)
- 		dev_set_name(domain->power_dev, "%s", data->name);
- 
- 		domain->genpd.name = data->name;
-+		domain->genpd.power_pre_on = imx8mp_blk_ctrl_power_pre_on;
- 		domain->genpd.power_on = imx8mp_blk_ctrl_power_on;
-+		domain->genpd.power_post_on = imx8mp_blk_ctrl_power_off_post;
-+		domain->genpd.power_off_pre = imx8mp_blk_ctrl_power_pre_on;
- 		domain->genpd.power_off = imx8mp_blk_ctrl_power_off;
-+		domain->genpd.power_off_post = imx8mp_blk_ctrl_power_off_post;
- 		domain->bc = bc;
- 		domain->id = i;
- 
--- 
-2.35.1
+thanks,
+rui
 
