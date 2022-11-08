@@ -2,132 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C929622528
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 09:16:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4527F6228C1
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 11:42:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbiKIIQn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 03:16:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
+        id S230183AbiKIKmj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 05:42:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKIIQm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 03:16:42 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4799B1BE81;
-        Wed,  9 Nov 2022 00:16:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8C8618EE;
-        Wed,  9 Nov 2022 08:16:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23376C433C1;
-        Wed,  9 Nov 2022 08:16:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667981801;
-        bh=Xu0pJZHgNqiJ14KtQMOxTvZJNLdPl1pLSA3nwf+3Ac4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jYt+QveGoM8LsxlrCCOhmG+yQO3jUvDl5NaKvldIwLP/QVblszdTn7vbzR6ZPDQWV
-         NSpdDiWnpH8dC5asIolfDxi/u3OpjuopVnsTiXDEGTb51YyMyrkq31GhGwO5XhPqCQ
-         9J1pgZZfZo/hONj1QduB7Wz6VSiyL8T8Z28s0wGP4yxI8N6Ii3uCZ9JX959XupE1fb
-         ZjmtbkXca1baWqzaBSa60w4E7aTyxI1+m3n60em4T1yvVYpIFNRqTWEyavf33aTYWk
-         OfdRSMt7xjCBcBERwcn6GNmB3yA6+RVQGiwvspyfuKOn5czYUJIND/8XxeK9KZ7EOP
-         UlxSh2YwyVelg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1osgFr-0006qG-Lf; Wed, 09 Nov 2022 09:16:15 +0100
-Date:   Wed, 9 Nov 2022 09:16:15 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <Y2thz0vk8krV5bBH@hovoldconsulting.com>
-References: <20221109080120.19078-1-manivannan.sadhasivam@linaro.org>
- <20221109080120.19078-4-manivannan.sadhasivam@linaro.org>
+        with ESMTP id S231215AbiKIKm3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 05:42:29 -0500
+X-Greylist: delayed 4198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 02:42:24 PST
+Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83362655E
+        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 02:42:24 -0800 (PST)
+Received: by mail.lokoho.com (Postfix, from userid 1001)
+        id D4CA48267B; Tue,  8 Nov 2022 08:55:45 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
+        t=1667897753; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
+        h=Date:From:To:Subject:From;
+        b=V2LWdmzO+GJaTz66d7CKM9SuMWZKAE/MHWTlueg/Bd6M5yXhTPYMCt51Wz1qEaS7p
+         Fjr7pSqfUdL5jKuekmW/8DOuleHg5DAhd2l94gxL7PlFIEMHHAx3NNAPHWgaljrR01
+         H2lL22X8PG05HNi10SQu3jVUqK8TLLibZFqmqe+u+q+6gx+4Eqqi3igW44lEq0pV4Q
+         1e/vpvA7n4yw25ZMmZ4Sd9QIE3PbnBlep8mQ8esKQNNmkJPi5vEAKlrFQWNKvJa6Az
+         bz5VXtFl5dnFx0dpZPouGQFG0+Xp8ENIThM6EG7TRrB5yquCRGZjsBFL4w3LRsvm/H
+         xc7Ai6EjfaDOw==
+Received: by mail.lokoho.com for <linux-pm@vger.kernel.org>; Tue,  8 Nov 2022 08:55:33 GMT
+Message-ID: <20221108074500-0.1.24.5o0i.0.n851fh91n5@lokoho.com>
+Date:   Tue,  8 Nov 2022 08:55:33 GMT
+From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
+To:     <linux-pm@vger.kernel.org>
+Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
+X-Mailer: mail.lokoho.com
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221109080120.19078-4-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 01:31:20PM +0530, Manivannan Sadhasivam wrote:
-> Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-> cores. But this relationship is not represented with the clk framework
-> so far.
-> 
-> So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-> clock producer/consumer relationship cleaner and is also useful for CPU
-> related frameworks like OPP to know the frequency at which the CPUs are
-> running.
-> 
-> The clock frequency provided by the driver is for each frequency domain.
-> We cannot get the frequency of each CPU core because, not all platforms
-> support per-core DCVS feature.
-> 
-> Also the frequency supplied by the driver is the actual frequency that
-> comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-> not same as what the CPUFreq framework has set but it is the one that gets
-> supplied to the CPUs after throttling by LMh.
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 41 +++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 5e0598730a04..c0e4b223f9c1 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
- 
-> @@ -672,6 +693,26 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  
->  		data->base = base;
->  		data->res = res;
-> +
-> +		/* Register CPU clock for each frequency domain */
-> +		clk_init.name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
+Dzie=C5=84 dobry,
 
-This is still an allocation and can in theory fail.
+zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
+=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
+o dalszych rozm=C3=B3w.=20
 
-But it is also unnecessary to keep these around after registering the
-clocks so it's better to just reuse a single stack allocated buffer for
-this.
+Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
+=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
+=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
+strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
 
-> +		clk_init.flags = CLK_GET_RATE_NOCACHE;
-> +		clk_init.ops = &qcom_cpufreq_hw_clk_ops;
-> +		data->cpu_clk.init = &clk_init;
-> +
-> +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
-> +		if (ret < 0) {
-> +			dev_err(dev, "Failed to register Qcom CPUFreq clock(%d)\n", i);
+Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
 
-nit: This looks unnecessarily verbose. Using
 
-	"failed to register clock %d: %d\n", i, ret
-
-should do just fine as you are using dev_err().
-
-> +			return ret;
-> +		}
-> +
-> +		clk_data->hws[i] = &data->cpu_clk;
-> +	}
-> +
-> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-> +		return ret;
->  	}
->  
->  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
-
-Johan
+Pozdrawiam
+Adam Charachuta
