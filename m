@@ -2,98 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E16D6211E2
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 14:03:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D792D621200
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 14:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234309AbiKHNDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Nov 2022 08:03:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
+        id S234109AbiKHNJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Nov 2022 08:09:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234421AbiKHNDQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 08:03:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA52D554EF;
-        Tue,  8 Nov 2022 05:03:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61251B81A9A;
-        Tue,  8 Nov 2022 13:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99853C433D6;
-        Tue,  8 Nov 2022 13:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667912580;
-        bh=AkKnvGBH75slHzzHE2jOu7sJWLUsxZlpFfrdZcyFTDM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ns+E8Tv7GPN5IgSqRS+SQMVv63+PFMmAcROp3vocZleoS0OhimwEkzyKlTsJPbRpK
-         b89ftBToApCSbcTIw+xwsBD8M5qupBHwoYIZP93SnFoxXBWKZiJ6xPj8KVYrYesB59
-         bDecqOSum9jPc6lPx3kM3CRgMioAOmHiZpUYaw5WI1EooChmwOdvSp3JOjphWcGFEy
-         fl06d96hdvcuJHPuPRqVA6kNDC+nqyninhzcx8O+uqmQfnRChAOpI3hqg4cs6oJwBf
-         WevwRPSQzVHGCrscqW79e2OYEizuf1fq7BS6TzubN6vrhpWiGt4X0wsCHDOyJjWpbN
-         vT0F9X4YnxIjA==
-Message-ID: <af3bc209-5c89-e0c4-1534-7d190d5daae0@kernel.org>
-Date:   Tue, 8 Nov 2022 14:02:54 +0100
+        with ESMTP id S233603AbiKHNJV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 08:09:21 -0500
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B291B9E3;
+        Tue,  8 Nov 2022 05:09:20 -0800 (PST)
+Received: by mail-qk1-f180.google.com with SMTP id p18so4452436qkg.2;
+        Tue, 08 Nov 2022 05:09:20 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tp5OMnbOjRDcClttdvcSBeqhMkw9nAZs4zoixrpu0Ao=;
+        b=5JbFpnFsykVdYy1yIEdjFcPNjjbTPdP4tVr+X3hsZ0t3lEBfh3BDgoRcctT6ygnE3C
+         GIvTKxuYO8ni/5ekA8Y5ytu1A/jZTH37LGDd1LQg3fGlPYwHX0/S2gmE3B8rZXg4KI3G
+         qW4IKFBMkujpRNOyk7XS8PJTKLB9291oy+aFUF1nE9/ZWxyCgnUTGfDPPYY1L00bZ1am
+         PQBTQhxB6lOextBrYP4Pv1gDOtX2GPGuD4557Fwat6SjtHxHXjyx9bZSTyIUXa7nl5cP
+         VHNgcVMOCHf9htBPFpoQIWrF+g5qVLiWTvyezZQ/Q1dMCO7T7Khuw8LwHjN1QPyOyWkq
+         pWFw==
+X-Gm-Message-State: ACrzQf0QiSC0sWKCzracyMFLZSUZDKqwfPQgKnuK7CaxRmCIyGlbe04q
+        VFawEYLEDookkaNkEKinsHnqkmhG9+iYdCeXH+k=
+X-Google-Smtp-Source: AMsMyM7+IhXIk2o4MVZnaGbRer32KZO8HPffRRWa5txMjuW5kyjpco5GjzuVGiYEwwl98+vbuAF9Wuc/hiMSDY8JAAI=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr38198402qkl.443.1667912959715; Tue, 08
+ Nov 2022 05:09:19 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] ina3221: add support for summation channel control
-To:     Ninad Malwade <nmalwade@nvidia.com>, treding@nvidia.com,
-        jonathanh@nvidia.com, linux@roeck-us.net, jdelvare@suse.com,
-        nicolinc@nvidia.com, rkasirajan@nvidia.com
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20221108045243.24143-1-nmalwade@nvidia.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20221108045243.24143-1-nmalwade@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher> <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
+In-Reply-To: <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 8 Nov 2022 14:09:07 +0100
+Message-ID: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from cmos_do_probe()
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 08/11/2022 05:52, Ninad Malwade wrote:
-> Add support to initialize summation channel control via kernel device
-> tree property "summation-bypass". The channel which has this property
-> is excluded from channel summation.
-> 
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Notice that cmos_wake_setup() is the only user of acpi_rtc_info and
+> > it
+> > can operate on the cmos_rtc variable directly, so it need not set the
+> > platform_data pointer before cmos_do_probe() is called.  Instead, it
+> > can be called by cmos_do_probe() in the case when the platform_data
+> > pointer is not set to implement the default behavior (which is to use
+> > the FADT information as long as ACPI support is enabled).
+> >
+>
+> ...
+>
+> >
+> > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
+> >               if (info->address_space)
+> >                       address_space = info->address_space;
+> >
+> > -             if (info->rtc_day_alarm && info->rtc_day_alarm < 128)
+> > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
+> > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm < 128)
+> > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> > -             if (info->rtc_century && info->rtc_century < 128)
+> > -                     cmos_rtc.century = info->rtc_century;
+> > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
+> > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
+> > +             cmos_rtc.century = info->rtc_century;
+> >
+> >               if (info->wake_on && info->wake_off) {
+> >                       cmos_rtc.wake_on = info->wake_on;
+> >                       cmos_rtc.wake_off = info->wake_off;
+> >               }
+> > +     } else {
+> > +             cmos_wake_setup(dev);
+> >       }
+> >
+> >
+>
+> Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup from
+> ACPI glue into RTC driver"), dev->platform_data is set in
+> drivers/acpi/glue.c, and the above commit moves it to cmos_wake_setup()
+> in this file.
+>
+> Now, with this patch, my understanding is that dev->platform_data is
+> never set, thus we can remove the 'info' variable and the
+>         if (info)
+> check above.
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+There are other users of this driver which can be found by grepping
+for cmos_rtc_board_info.
 
-You skipped not only one, but all DT maintainers and mailing lists...
-
-> ---
->  .../devicetree/bindings/hwmon/ina3221.txt          |  2 ++
->  drivers/hwmon/ina3221.c                            | 14 ++++++++++++--
-
-DT bindings and driver changes are separate patches.
-
-
->  2 files changed, 14 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
-> index fa63b6171407..c6e8e6aafcce 100644
-> --- a/Documentation/devicetree/bindings/hwmon/ina3221.txt
-> +++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
-> @@ -29,6 +29,7 @@ Texas Instruments INA3221 Device Tree Bindings
->    Optional properties:
->    - label: Name of the input source
->    - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
-> +  - summation-bypass: exclude from channel summation.
-
-Convert to DT schema first.
-
-
-Best regards,
-Krzysztof
-
+They create platform device objects with platform_data set which are
+then bound to by this driver.
