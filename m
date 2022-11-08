@@ -2,139 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4622762189E
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 16:42:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 412D06218B0
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 16:45:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234256AbiKHPly (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Nov 2022 10:41:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
+        id S234457AbiKHPpi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Nov 2022 10:45:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234424AbiKHPlx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 10:41:53 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32F95C751;
-        Tue,  8 Nov 2022 07:41:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667922112; x=1699458112;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Fj2cRf0yfLP9Hty6jDMoaxrwsB/IsUZhdIEv+NMr+lk=;
-  b=WJCQ17IGIH0C/eLm+QAik0jtkVN2S7YfJVpUalNQfjx2/xNPmMfVCTiZ
-   ppg1EorRy7HsyGn20Ly00AvEnSqD9wyzpYfQZZC2u/DsCAEgFHUMgNyQu
-   1zxtMvshpKBJvE0IqcGbZAGOYaD95kx4ZT6d4F2dM9QKDSzVMdkfA9vBI
-   glur8/yq53SojqKajMS09TV2lY4yCzkCLt8cRPYaS+G6OQYJzDH2JkFZR
-   gY9iKSpnXFCGic50UE6e78vMwqivZa3H+FMudHxAkBfA2OhRE/b3RfhSW
-   IvfYrOQR0z4TfA0UCqu2O/tcWLzyFsmJTkDXC9JaZW0NV7VgN57outFLf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="290445132"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="290445132"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:52 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669591064"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="669591064"
-Received: from liuc3-mobl1.ccr.corp.intel.com ([10.254.214.201])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 07:41:49 -0800
-Message-ID: <0ab36c3ac0841296227b96ec0a5cadca0c4ac2ed.camel@intel.com>
-Subject: Re: [PATCH v1 1/5] rtc: rtc-cmos: Call cmos_wake_setup() from
- cmos_do_probe()
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-rtc@vger.kernel.org, Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Date:   Tue, 08 Nov 2022 23:41:47 +0800
-In-Reply-To: <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-References: <2276401.ElGaqSPkdT@kreacher> <1850290.tdWV9SEqCh@kreacher>
-         <b369e6d44b01e0ccc653e333bc2def556b17bbb3.camel@intel.com>
-         <CAJZ5v0gavPhs5wqhE0VOrhydbqVgC4BSRxN-aGPmAP2a2k_WhA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S233817AbiKHPph (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 10:45:37 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9053B57B72;
+        Tue,  8 Nov 2022 07:45:36 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8009A1FB;
+        Tue,  8 Nov 2022 07:45:42 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C1B083F73D;
+        Tue,  8 Nov 2022 07:45:34 -0800 (PST)
+Date:   Tue, 8 Nov 2022 15:45:32 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] qcom-cpufreq-hw: Add CPU clock provider support
+Message-ID: <20221108154532.dvo3drvvkagkssab@bogus>
+References: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2022-11-08 at 14:09 +0100, Rafael J. Wysocki wrote:
-> On Tue, Nov 8, 2022 at 3:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
-> > On Mon, 2022-11-07 at 20:59 +0100, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > 
-> > > Notice that cmos_wake_setup() is the only user of acpi_rtc_info
-> > > and
-> > > it
-> > > can operate on the cmos_rtc variable directly, so it need not set
-> > > the
-> > > platform_data pointer before cmos_do_probe() is called.  Instead,
-> > > it
-> > > can be called by cmos_do_probe() in the case when the
-> > > platform_data
-> > > pointer is not set to implement the default behavior (which is to
-> > > use
-> > > the FADT information as long as ACPI support is enabled).
-> > > 
-> > 
-> > ...
-> > 
-> > > @@ -827,19 +829,27 @@ cmos_do_probe(struct device *dev, struct
-> > >               if (info->address_space)
-> > >                       address_space = info->address_space;
-> > > 
-> > > -             if (info->rtc_day_alarm && info->rtc_day_alarm <
-> > > 128)
-> > > -                     cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > > -             if (info->rtc_mon_alarm && info->rtc_mon_alarm <
-> > > 128)
-> > > -                     cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > > -             if (info->rtc_century && info->rtc_century < 128)
-> > > -                     cmos_rtc.century = info->rtc_century;
-> > > +             cmos_rtc.day_alrm = info->rtc_day_alarm;
-> > > +             cmos_rtc.mon_alrm = info->rtc_mon_alarm;
-> > > +             cmos_rtc.century = info->rtc_century;
-> > > 
-> > >               if (info->wake_on && info->wake_off) {
-> > >                       cmos_rtc.wake_on = info->wake_on;
-> > >                       cmos_rtc.wake_off = info->wake_off;
-> > >               }
-> > > +     } else {
-> > > +             cmos_wake_setup(dev);
-> > >       }
-> > > 
-> > > 
-> > 
-> > Previously, before commit a474aaedac99 ("rtc-cmos: move wake setup
-> > from
-> > ACPI glue into RTC driver"), dev->platform_data is set in
-> > drivers/acpi/glue.c, and the above commit moves it to
-> > cmos_wake_setup()
-> > in this file.
-> > 
-> > Now, with this patch, my understanding is that dev->platform_data
-> > is
-> > never set, thus we can remove the 'info' variable and the
-> >         if (info)
-> > check above.
+On Wed, Nov 02, 2022 at 02:38:15PM +0530, Manivannan Sadhasivam wrote:
+> Hello,
 > 
-> There are other users of this driver which can be found by grepping
-> for cmos_rtc_board_info.
+> This series adds clock provider support to the Qcom CPUFreq driver for
+> supplying the clocks to the CPU cores in Qcom SoCs.
 > 
-> They create platform device objects with platform_data set which are
-> then bound to by this driver.
+> The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+> clocks to the CPU cores. But this is not represented clearly in devicetree.
+> There is no clock coming out of the CPUFreq HW node to the CPU. This created
+> an issue [1] with the OPP core when a recent enhancement series was submitted.
+> Eventhough the issue got fixed in the OPP framework in the meantime, that's
+> not a proper solution and this series aims to fix it properly.
+> 
+> There was also an attempt made by Viresh [2] to fix the issue by moving the
+> clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+> since those clocks belong to the CPUFreq HW node only.
+> 
+> The proposal here is to add clock provider support to the Qcom CPUFreq HW
+> driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+> This correctly reflects the hardware implementation.
+>
 
-yeah, I overlooked this.
+Just curious as who will be the consumer of this CPU clock information ?
+Traditionally it was cpufreq that needed this information. But now with
+this series, it is bit convoluted IMO as the clocks is depending on the
+CPUFreq information indirectly and not used by cpufreq.
 
-thanks,
-rui
+Whoever is the consumer of this clock, why can't they use cpufreq information ?
 
+I did a quick check and couldn't find the info I am requesting here, sorry if
+it is already answered/discussed. Please just point me the url.
+
+-- 
+Regards,
+Sudeep
