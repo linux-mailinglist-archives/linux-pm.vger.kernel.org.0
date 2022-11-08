@@ -2,148 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECEE62076D
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 04:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6964620834
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 05:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbiKHDbd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 7 Nov 2022 22:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51750 "EHLO
+        id S232307AbiKHEVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 7 Nov 2022 23:21:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbiKHDba (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 22:31:30 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54A7F2F672
-        for <linux-pm@vger.kernel.org>; Mon,  7 Nov 2022 19:31:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667878289; x=1699414289;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=ea1poUBCd4hPy458r9ilS29cRNF0FN/s2Pc7/4v/umw=;
-  b=aYCzQ2jsLlKInTDebNZLwP8q749yDJE/8RKAO5LwWIa+u5mshYiEbcQe
-   Pln+2LqGeMpedjnG2JWWRwywLndFlQ4roxt2LB243jRaygH5mnKGbp6ye
-   xGzMxZZCJlooHK4TGIuKvw21nFQQYhYSvVh0Vakt30u6M7B+6qviMf8hL
-   +1BF0gYSDV5zSqMQNWyWWQTAXGJ7rqM5Y5Pzn+HcDaoO/rJF+sn/II8Ns
-   HtKsGqw9zdAwXffoC/MWd44hH4wqybR77GsbgPGU8XwruXTgaIbBwqh2d
-   x9PceNyGxGS89pCVZd6M+I7xpW0sRDhDK0ycrVMTN8LkwXt0czco2SnFY
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="372732572"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="372732572"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2022 19:31:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10524"; a="614120257"
-X-IronPort-AV: E=Sophos;i="5.96,145,1665471600"; 
-   d="scan'208";a="614120257"
-Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by orsmga006.jf.intel.com with ESMTP; 07 Nov 2022 19:31:27 -0800
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
-Subject: [PATCH 6/6] thermal/x86_pkg_temp_thermal: Add support for handling dynamic tjmax
-Date:   Tue,  8 Nov 2022 11:33:32 +0800
-Message-Id: <20221108033332.27760-7-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221108033332.27760-1-rui.zhang@intel.com>
-References: <20221108033332.27760-1-rui.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232381AbiKHEVM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 7 Nov 2022 23:21:12 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D42A19025
+        for <linux-pm@vger.kernel.org>; Mon,  7 Nov 2022 20:21:03 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id k5so12642088pjo.5
+        for <linux-pm@vger.kernel.org>; Mon, 07 Nov 2022 20:21:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3SfqLAbIddyq76wOhovHVJdZznkWEzSpDefKEM7fw48=;
+        b=JIPRYFMoxy3GfAJ8By4TEu05YaVP1ntog5Y9wfjBHbFI1pS5m1s0/JiB9eBWyuxgRs
+         0d4P4UZ4vPDsNtFUnv4GxztfLBlFtpjOiBeHFieTSpPDV2eF6EeOrHaJX6plPhQ34F3w
+         NDtQwNc7pWMxanGPjLm8ziu+H56nHbzmXNyTJm/MiMdm4aGS/2EnyHjpHA41vfCOcdkk
+         PZYkoCZKIO9P2X7ul2+Brtdrn31FQo4Aagnu5OsEx780t6woauhvhYEAvhfUjk8RRfFn
+         Y1i98rgs9vswK1e9wRByWf0TlSpa1oD0/+RnVPkKSHpOqiPHpkhoezw0CyhuWqJvao1G
+         dkcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3SfqLAbIddyq76wOhovHVJdZznkWEzSpDefKEM7fw48=;
+        b=Fipe/PcOuKk0y1YREiCZFSgEfKso0DLX3eAiF7foVkQiruNXAHtid2oE3c0WSsW70K
+         Js/yblHNYbqyjlT0pL/CJMjOwh5EfqPMU4YduozLS7lELSaUp4DwqDtjsBvO0L+XMOpl
+         dm/HCDJOPqDFIus3gMxEwc8hRaYNHsSpEaBy9g/JA0Ki/UXlEKWSSSdShEPN2F3hl1IG
+         oHZ9gQot3L85s/cHK5IQ5/t5UF4KS9T1DZBuUtSbT2fsoElOlICXJ/QozSsIfdnNFVzf
+         NUjCVx1HU1x8QzjKrBiqrS6eic6jrprt5leFxPcSFBOArTYF2vkOZVohM2k8GFG43y11
+         FaPQ==
+X-Gm-Message-State: ACrzQf1bh/UR88PjAUuoVLOnmmVn5IgDsmW3opPZaQa1iyGbzddUW1S/
+        nUKBfp+l8x3cPlplMiopaJSe6Q==
+X-Google-Smtp-Source: AMsMyM6rouWEqC5wyKoVUJdp0gW7NIB8ViQoUIR9P8lG8d913aUjGMtR7fXDusx8RWaiFC72isNXQA==
+X-Received: by 2002:a17:90b:33d0:b0:213:137b:1343 with SMTP id lk16-20020a17090b33d000b00213137b1343mr55451053pjb.128.1667881263179;
+        Mon, 07 Nov 2022 20:21:03 -0800 (PST)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a39c400b00211d5f93029sm6873798pjf.24.2022.11.07.20.21.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Nov 2022 20:21:02 -0800 (PST)
+Date:   Tue, 8 Nov 2022 09:50:58 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh@kernel.org>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: opp-v2: Fix clock-latency-ns prop in example
+Message-ID: <20221108042058.o7xuzkuokykv5xcs@vireshk-i7>
+References: <20221107204355.31971-1-Sergey.Semin@baikalelectronics.ru>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221107204355.31971-1-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Tjmax value retrieved from MSR_IA32_TEMPERATURE_TARGET can be changed at
-runtime when the Intel SST-PP (Intel Speed Select Technology -
-Performance Profile) level is changed.
+On 07-11-22, 23:43, Serge Semin wrote:
+> Accidentally discovered a hidden typo in the DT-nodes defined in the
+> opp-v2 bindings example. Instead of specifying the "clock-latency-ns"
+> property the DT-node has been created with the "lock-latency-ns" property
+> in it, which doesn't exist neither in opp-v2 nor in the base schemas.
+> Let's fix the name to having the "clock-" prefix as it was originally
+> implied and as the rest of the similar nodes has.
+> 
+> Fixes: 94274f20f6bf ("dt-bindings: opp: Convert to DT schema")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 
-Enhance the code to use updated tjmax when programming the thermal
-interrupt thresholds.
+Applied. Thanks.
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 22 +++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index cfe905735c62..9a9866a602ec 100644
---- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
-+++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -49,7 +49,6 @@ MODULE_PARM_DESC(notify_delay_ms,
- struct zone_device {
- 	int				cpu;
- 	bool				work_scheduled;
--	u32				tj_max;
- 	u32				msr_pkg_therm_low;
- 	u32				msr_pkg_therm_high;
- 	struct delayed_work		work;
-@@ -125,7 +124,7 @@ static int sys_get_trip_temp(struct thermal_zone_device *tzd,
- 	struct zone_device *zonedev = tzd->devdata;
- 	unsigned long thres_reg_value;
- 	u32 mask, shift, eax, edx;
--	int ret;
-+	int tj_max, ret;
- 
- 	if (trip >= MAX_NUMBER_OF_TRIPS)
- 		return -EINVAL;
-@@ -138,6 +137,11 @@ static int sys_get_trip_temp(struct thermal_zone_device *tzd,
- 		shift = THERM_SHIFT_THRESHOLD0;
- 	}
- 
-+	ret = intel_tcc_get_tjmax(zonedev->cpu, &tj_max);
-+	if (ret)
-+		return ret;
-+	tj_max *= 1000;
-+
- 	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
- 			   &eax, &edx);
- 	if (ret < 0)
-@@ -145,7 +149,7 @@ static int sys_get_trip_temp(struct thermal_zone_device *tzd,
- 
- 	thres_reg_value = (eax & mask) >> shift;
- 	if (thres_reg_value)
--		*temp = zonedev->tj_max - thres_reg_value * 1000;
-+		*temp = tj_max - thres_reg_value * 1000;
- 	else
- 		*temp = THERMAL_TEMP_INVALID;
- 	pr_debug("sys_get_trip_temp %d\n", *temp);
-@@ -158,9 +162,14 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- {
- 	struct zone_device *zonedev = tzd->devdata;
- 	u32 l, h, mask, shift, intr;
--	int ret;
-+	int tj_max, ret;
-+
-+	ret = intel_tcc_get_tjmax(zonedev->cpu, &tj_max);
-+	if (ret)
-+		return ret;
-+	tj_max *= 1000;
- 
--	if (trip >= MAX_NUMBER_OF_TRIPS || temp >= zonedev->tj_max)
-+	if (trip >= MAX_NUMBER_OF_TRIPS || temp >= tj_max)
- 		return -EINVAL;
- 
- 	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
-@@ -185,7 +194,7 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
- 	if (!temp) {
- 		l &= ~intr;
- 	} else {
--		l |= (zonedev->tj_max - temp)/1000 << shift;
-+		l |= (tj_max - temp)/1000 << shift;
- 		l |= intr;
- 	}
- 
-@@ -336,7 +345,6 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
- 
- 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
- 	zonedev->cpu = cpu;
--	zonedev->tj_max = tj_max;
- 	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
- 			thres_count,
- 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
 -- 
-2.25.1
-
+viresh
