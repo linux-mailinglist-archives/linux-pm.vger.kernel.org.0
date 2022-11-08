@@ -2,97 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D806210AA
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 13:30:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E16D6211E2
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 14:03:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbiKHMaJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Nov 2022 07:30:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
+        id S234309AbiKHNDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Nov 2022 08:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234049AbiKHMaH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 07:30:07 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D22F28700
-        for <linux-pm@vger.kernel.org>; Tue,  8 Nov 2022 04:30:06 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id z1so8944538qkl.9
-        for <linux-pm@vger.kernel.org>; Tue, 08 Nov 2022 04:30:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=cigNPlEtEE1k5xiZ9PvVBazoo9lUtOBUwB6YZSwBfhiXaLfnGYlViGJ/CkI7QbpyRc
-         DUkc/pXyGXkzwxwNKmQ/AVr17gtcnro/HIxn3z8V8Vc+39bff1bepY3CjxGya/RlhJQD
-         pm03SLH1zh1vk5Et08W05yayJWnxdxRnbNjb7jCohrMzy/0/FJWKkATniYBbpKgsaBKE
-         Z+OGb8Lsc3JgCU/vlNmJzwFukVrY1yODwKOWdcEffdpTGbLPgR5Erg+jlwzjZKljWkGx
-         l6m9q0cv+BGPJ+GX+X1NDb4hrmrYY0d2qQvBndPhFSr7mcH+QfGu5TnM80huZaOEkW4m
-         IdPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SzBlYeGeT15Xra75w9IZDBjQ7Da3XKSmRdlnDJDYrko=;
-        b=eGuynCfvp3NIdIDNFv00TNqETU9bgrakCYlINsuom1Ff5E9nyYCUiZxbdp2Z7esMMV
-         e3XJplPn2egvPwZjNrVhlN4G3+ZHnJxPv5QwCGpfbalcyoAKoW9CGYkdT8u1zGexIfUI
-         AGyz4f7fgXJ6PxMs/9uOHVHSaaP4Cvqv4xb+BYr9R3jGqWaI/35iiVgpoJgeyMLIpmGz
-         dgAzpLZ/k68yqQ2b4pO6OhhG9Db2dT/TBHfXZpvpHoWQQ27jFEgQVcMfP+dHm5Jjd5OY
-         3OG//8xyROCu/5cbL0v7vK0fhWloLLpdqOiBvZYAccRhxvrB3sow1m/iKGT5Nwvs5SaR
-         h4UA==
-X-Gm-Message-State: ACrzQf3CHnK16pODCrRQXolx7TkWfonAj5a2ilrERaIhXWX2Gva2ZCZe
-        aWpu0ijM+9FqPdAsSH+AFVpll9XVQtIokpQHm0Q=
-X-Google-Smtp-Source: AMsMyM58hZ1EPsKu7coHtKEAadQRfLUwq2/6MbLEjdgMZ+NpfmCkJjte0dLlRzUMReSpEc0nbvrKDwByTED+/niEF+4=
-X-Received: by 2002:ae9:eb48:0:b0:6fa:d61:4510 with SMTP id
- b69-20020ae9eb48000000b006fa0d614510mr37684535qkg.768.1667910605712; Tue, 08
- Nov 2022 04:30:05 -0800 (PST)
+        with ESMTP id S234421AbiKHNDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 08:03:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA52D554EF;
+        Tue,  8 Nov 2022 05:03:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61251B81A9A;
+        Tue,  8 Nov 2022 13:03:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99853C433D6;
+        Tue,  8 Nov 2022 13:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667912580;
+        bh=AkKnvGBH75slHzzHE2jOu7sJWLUsxZlpFfrdZcyFTDM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ns+E8Tv7GPN5IgSqRS+SQMVv63+PFMmAcROp3vocZleoS0OhimwEkzyKlTsJPbRpK
+         b89ftBToApCSbcTIw+xwsBD8M5qupBHwoYIZP93SnFoxXBWKZiJ6xPj8KVYrYesB59
+         bDecqOSum9jPc6lPx3kM3CRgMioAOmHiZpUYaw5WI1EooChmwOdvSp3JOjphWcGFEy
+         fl06d96hdvcuJHPuPRqVA6kNDC+nqyninhzcx8O+uqmQfnRChAOpI3hqg4cs6oJwBf
+         WevwRPSQzVHGCrscqW79e2OYEizuf1fq7BS6TzubN6vrhpWiGt4X0wsCHDOyJjWpbN
+         vT0F9X4YnxIjA==
+Message-ID: <af3bc209-5c89-e0c4-1534-7d190d5daae0@kernel.org>
+Date:   Tue, 8 Nov 2022 14:02:54 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6214:2f8a:b0:4bb:6e86:8303 with HTTP; Tue, 8 Nov 2022
- 04:30:05 -0800 (PST)
-Reply-To: mr.abraham022@gmail.com
-From:   Mr Abraham <mr.abraham2021@gmail.com>
-Date:   Tue, 8 Nov 2022 12:30:05 +0000
-Message-ID: <CAJ2UK+YqK-OgWa-GbqjTU89edKqVZ5nqmL-j=gKpwP5uFtkvUA@mail.gmail.com>
-Subject: Greeting
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:730 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4987]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [mr.abraham022[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [mr.abraham2021[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [mr.abraham2021[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] ina3221: add support for summation channel control
+To:     Ninad Malwade <nmalwade@nvidia.com>, treding@nvidia.com,
+        jonathanh@nvidia.com, linux@roeck-us.net, jdelvare@suse.com,
+        nicolinc@nvidia.com, rkasirajan@nvidia.com
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20221108045243.24143-1-nmalwade@nvidia.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221108045243.24143-1-nmalwade@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-My Greeting, Did you receive the letter i sent to you. Please answer me.
-Regard, Mr.Abraham
+On 08/11/2022 05:52, Ninad Malwade wrote:
+> Add support to initialize summation channel control via kernel device
+> tree property "summation-bypass". The channel which has this property
+> is excluded from channel summation.
+> 
+> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
+
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
+
+You skipped not only one, but all DT maintainers and mailing lists...
+
+> ---
+>  .../devicetree/bindings/hwmon/ina3221.txt          |  2 ++
+>  drivers/hwmon/ina3221.c                            | 14 ++++++++++++--
+
+DT bindings and driver changes are separate patches.
+
+
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/hwmon/ina3221.txt b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> index fa63b6171407..c6e8e6aafcce 100644
+> --- a/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> +++ b/Documentation/devicetree/bindings/hwmon/ina3221.txt
+> @@ -29,6 +29,7 @@ Texas Instruments INA3221 Device Tree Bindings
+>    Optional properties:
+>    - label: Name of the input source
+>    - shunt-resistor-micro-ohms: Shunt resistor value in micro-Ohm
+> +  - summation-bypass: exclude from channel summation.
+
+Convert to DT schema first.
+
+
+Best regards,
+Krzysztof
+
