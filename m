@@ -2,47 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1785621BE6
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 19:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DA5621C15
+	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 19:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiKHS3J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Nov 2022 13:29:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
+        id S229556AbiKHSkM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Nov 2022 13:40:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230079AbiKHS3H (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 13:29:07 -0500
+        with ESMTP id S229540AbiKHSkJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 13:40:09 -0500
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C6F2AE2;
-        Tue,  8 Nov 2022 10:29:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAA221822;
+        Tue,  8 Nov 2022 10:40:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667932146; x=1699468146;
+  t=1667932808; x=1699468808;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=pJxT5M9z/7O1GhSHzC1EnjXBsVZgl67H/7V8AvhcL0o=;
-  b=RzSAjGcJF8tit26BUqmTPBu8+S7mNT/Ci3H54HYzaPOXmF7/ZA4NWVI3
-   3kyhDc5Phw9grBeWynrg1w6wtqO4PSEqWbGh0Mm0MakFNNy4Bdj177C4L
-   1jBrh4Z1QX6/JxOV6LV6dY4k3z9Wz6ZHZs//KgE07WPwHCVowSEBpQIYi
-   v4DMGw6zRwwW9KQzUU/SjjjkqtikqtFf8++ZLG8llCcCEWv3F1WH82A2C
-   tieLwCtjJW6Yu/V27eSJGL55T28WGx9rJNLPX8qGwUk2kyh+wvNqZURnb
-   xyrW/FYm31AolGbM8yiSMWltE2ZdESr2sF5qoYMdg1apz6MLl7I29bE6S
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="311928738"
+  bh=6svTSErwgcBWmVVssdjVJhxp54lnK//1QR9DvAte5oM=;
+  b=h6CWbWNG8zXrPWmQ+SZM2ABSbg5ixcjRW3E4j9tOVyGSdUsWCF0C/r+i
+   qlcc4MBTHtY3di3muokFZoJJtPh4+ElSJKFLBfbNM2PFYqkN1o2e5cwcE
+   LXmvx2MPtg0xrDDiW3LqbIoWwiHs1ih5mJ2TyJrl0HpYFmAQSn8YYy3Eu
+   W04UQdA8LL92Mjy4rX6c8lkO2b8j7iKlB2VqptjzaH/pAMQPRS6HhGNHO
+   NRE9QcFX5sZQWy2I+pPcdE9oRTdSYFSMgv4aDs9vkRGU9uDveBHAME6Fq
+   yUwsNIPSwWJekKF1hdgdQJR2vvCsE3ZsqmldUEs1zZGrL6vXZGMAVIM81
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="311931669"
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="311928738"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:27:59 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="638890327"
+   d="scan'208";a="311931669"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:40:07 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="614378400"
 X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="638890327"
+   d="scan'208";a="614378400"
 Received: from vibhusha-mobl1.amr.corp.intel.com (HELO [10.252.133.56]) ([10.252.133.56])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:27:57 -0800
-Message-ID: <9eb8f395-c77f-a0bf-96b7-f1a3bb178c48@intel.com>
-Date:   Tue, 8 Nov 2022 10:27:56 -0800
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 10:40:06 -0800
+Message-ID: <98ec85df-cbf8-83b7-df79-12ff379eae9b@intel.com>
+Date:   Tue, 8 Nov 2022 10:40:06 -0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 1/3] x86/tsx: Add feature bit for TSX control MSR support
+Subject: Re: [PATCH 3/3] x86/pm: Add enumeration check before spec MSRs
+ save/restore setup
 Content-Language: en-US
 To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -56,9 +57,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Daniel Sneddon <daniel.sneddon@linux.intel.com>,
         antonio.gomez.iglesias@linux.intel.com
 References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <8592af5e3b95b197231445beb8c3123948ced15a.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+ <206cec042e17f15432d523d12ce6f5ae9267dc77.1663025154.git.pawan.kumar.gupta@linux.intel.com>
 From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <8592af5e3b95b197231445beb8c3123948ced15a.1663025154.git.pawan.kumar.gupta@linux.intel.com>
+In-Reply-To: <206cec042e17f15432d523d12ce6f5ae9267dc77.1663025154.git.pawan.kumar.gupta@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -71,16 +72,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 9/12/22 16:39, Pawan Gupta wrote:
-> Support for TSX control MSR is enumerated in MSR_IA32_ARCH_CAPABILITIES.
-> This is different from how other CPU features are enumerated i.e. via
-> CPUID. Enumerating support for TSX control currently has an overhead of
-> reading the MSR every time which can be avoided.
+On 9/12/22 16:41, Pawan Gupta wrote:
+> On an Intel Atom N2600 (and presumable other Cedar Trail models)
+> MSR_IA32_TSX_CTRL can be read, causing saved_msr.valid to be set for it
+> by msr_build_context().
 
-I only see tsx_ctrl_is_supported() getting called in three places:
+This changelog needs some help.  Shouldn't it be something like this?
 
-> 1 tsx.c tsx_clear_cpuid       138 } else if (tsx_ctrl_is_supported()) {
-> 2 tsx.c tsx_dev_mode_disable  161 if (!boot_cpu_has_bug(X86_BUG_TAA) || !tsx_ctrl_is_supported() ||
-> 3 tsx.c tsx_init              194 if (!tsx_ctrl_is_supported()) {
+pm_save_spec_msr() keeps a list of all the MSRs which _might_ need to be
+saved and restored at hibernate?? and resume??.  However, it has zero
+awareness of CPU support for these MSRs.  It mostly works by
+unconditionally attempting to manipulate these MSRs and relying on
+rdmsrl_safe() being able to handle a #GP on CPUs where the support is
+unavailable.
 
-Those all look like boot-time things to me.  Why does the overhead matter?
+However, it's possible for reads (RDMSR) to be supported for a given MSR
+while writes (WRMSR) are not.  In this case, msr_build_context() sees a
+successful read (RDMSR) and marks the MSR as 'valid'.  Then, later, a
+write (WRMSR) fails, producing a nasty (but harmless) error message.
+
+To fix this, add the corresponding X86_FEATURE bit for each MSR.  Avoid
+trying to manipulate the MSR when the feature bit is clear.  This
+required adding a X86_FEATURE bit for MSRs that do not have one already,
+but it's a small price to pay.
