@@ -2,44 +2,35 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B246621F8A
-	for <lists+linux-pm@lfdr.de>; Tue,  8 Nov 2022 23:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5E3622024
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 00:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbiKHWvp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 8 Nov 2022 17:51:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S229612AbiKHXK4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 8 Nov 2022 18:10:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbiKHWvo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 17:51:44 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF4860E99;
-        Tue,  8 Nov 2022 14:51:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667947903; x=1699483903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2yhDaRWzu3W49o6ZiqRcLmYsZfta/SXF/5U9XO1w2w4=;
-  b=oDaza5uldgDNgfJRQNHz+UpMJHF+r4AO7u6RTAOdeT0YRGR7Ikf7VJVr
-   IjPpgAg5piEGe+WkOqr3wt0FZUOdGadkaPxMq0EFIpFARPZSqCUgFZOuk
-   hmwkTXs6ip7Ql3y7du/xANm3gtsmmUma/WaggmW1DtoX0+CP7K2+HNYRl
-   9tFJaR2zNuPyzAmMLDHZR/stqm4BpEXVi3/1q61G42DynKmOS8VcljZZO
-   EK8SMDHhsJDaoGzSpBt/yhBfnH2xyVNnmrGBbwWEgZuSuIdZ6pG/b2900
-   4EljwZO1HyV5TxEC6G8wX3p/iDssk4FM/IdO50KO1gY6MtFza0jHYWMzh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="312622420"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="312622420"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 14:51:43 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10525"; a="669721571"
-X-IronPort-AV: E=Sophos;i="5.96,148,1665471600"; 
-   d="scan'208";a="669721571"
-Received: from ehartman-mobl.amr.corp.intel.com (HELO desk) ([10.212.198.244])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2022 14:51:42 -0800
-Date:   Tue, 8 Nov 2022 14:51:41 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
+        with ESMTP id S230048AbiKHXKo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 8 Nov 2022 18:10:44 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 926F422B06;
+        Tue,  8 Nov 2022 15:10:39 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7e8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DBC121EC03B9;
+        Wed,  9 Nov 2022 00:10:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667949037;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=MzGRpumXAyDorB94qJhH4CdO9wTTZaFcqHTtZT9tz4U=;
+        b=nk03BrMjaQjePwEJbGR3s60Yvw80tchgGtAKXD30v9fkOEMLVfrXEQPMVKFETG8YXdeiL2
+        1JlyaIARB2hfe2OYC/WEvJrp4csioagXFh1TnpGu+sptEKVJZjyg9FMZYXlkVJ+A8IsMGD
+        CDtPSn4fnuU9WKia1gD3DlDc9mMYHx0=
+Date:   Wed, 9 Nov 2022 00:10:32 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
@@ -52,52 +43,39 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         antonio.gomez.iglesias@linux.intel.com
 Subject: Re: [PATCH 2/3] x86/cpu/amd: Add feature bit for MSR_AMD64_LS_CFG
  enumeration
-Message-ID: <20221108225141.aikng7veemp25p62@desk>
+Message-ID: <Y2rh6FN+gbD6Vbzj@zn.tnic>
 References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
  <034c7f5ac243ee7b40ba1a8cc3f9b10b1e380674.1663025154.git.pawan.kumar.gupta@linux.intel.com>
  <Y2qlyfRKgIc4KVcx@zn.tnic>
+ <20221108225141.aikng7veemp25p62@desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y2qlyfRKgIc4KVcx@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221108225141.aikng7veemp25p62@desk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 07:54:01PM +0100, Borislav Petkov wrote:
->On Mon, Sep 12, 2022 at 04:40:47PM -0700, Pawan Gupta wrote:
->> Currently there is no easy way to enumerate MSR_AMD64_LS_CFG. As this
->> MSR is supported on AMD CPU families 10h to 18h, set a new feature bit
->> on these CPU families. The new bit can be used to detect the MSR
->> support.
->>
->> Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
->> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
->> ---
->>  arch/x86/include/asm/cpufeatures.h | 1 +
->>  arch/x86/kernel/cpu/amd.c          | 3 +++
->>  2 files changed, 4 insertions(+)
->>
->> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
->> index dd173733e40d..90bdb1d98531 100644
->> --- a/arch/x86/include/asm/cpufeatures.h
->> +++ b/arch/x86/include/asm/cpufeatures.h
->> @@ -305,6 +305,7 @@
->>  #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
->>  #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
->>  #define X86_FEATURE_MSR_TSX_CTRL	(11*32+18) /* "" MSR IA32_TSX_CTRL */
->> +#define X86_FEATURE_MSR_LS_CFG		(11*32+19) /* "" MSR AMD64_LS_CFG */
->
->We already have that one:
->
->#define X86_FEATURE_LS_CFG_SSBD         ( 7*32+24)  /* "" AMD SSBD implementation via LS_CFG MSR */
+On Tue, Nov 08, 2022 at 02:51:41PM -0800, Pawan Gupta wrote:
+> Looking at bsp_init_amd() this feature bit will only be set on AMD
+> families 0x15-0x17. Andrew mentioned that the MSR LS_CFG is present on
+> AMD family >= 0x10 && family <= 0x18.
 
-Looking at bsp_init_amd() this feature bit will only be set on AMD
-families 0x15-0x17. Andrew mentioned that the MSR LS_CFG is present on
-AMD family >= 0x10 && family <= 0x18. That is why I added a new bit for
-the MSR.
+Do you need to save that MSR on those families?
+
+Or do 0x15-0x18 suffice?
+
+Yes, 0x18 because that's Hygon and that does its own detection.
+
+So, do you need to save it on families 0x10-0x14?
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
