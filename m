@@ -2,103 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBE9B6235FD
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 22:41:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7BBF623662
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 23:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbiKIVlf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 16:41:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46296 "EHLO
+        id S229551AbiKIWP2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 17:15:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiKIVle (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 16:41:34 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB4F29C8A;
-        Wed,  9 Nov 2022 13:41:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668030093; x=1699566093;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1U/Ysvzugqok1OiNYXo54FZ7q5XZ9HUDIbpMFGaIxRg=;
-  b=bnV3xqAO+cKRILFyRhMHTvVYbT9ywddCRAAHpkQKmXhvPrEPIOPCNPaz
-   eEC1qm1BEB4tQ3VjcaDSf9YuAVDWqmANclsazZJUUQr8N9cMYDTc5esSh
-   gbYLzjuusK4u802+PWyk1wCxBIFyK79NCSQvHUBhUfDGIzMFBlr6i6OPs
-   ojDvl9kBgg1zDWUv+BzsvUxKueM2J/ClyZXApX0vGvnKE6DcIuGxz2pK6
-   Bby7r+IprEj2d3knF/38/2FPdvDwTiNmz+aT5L36usnCNVYnoiiTCiWFW
-   lWt1TdrDQsMR2Wz3g10BEITYwUdHuLwNYQ1+4a+lPoTIr7ewnRn1kz7OC
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="309835698"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="309835698"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 13:41:32 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="762036677"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="762036677"
-Received: from sibacon-mobl1.amr.corp.intel.com (HELO desk) ([10.212.38.58])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 13:41:29 -0800
-Date:   Wed, 9 Nov 2022 13:41:26 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "hdegoede@redhat.com" <hdegoede@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        "antonio.gomez.iglesias@linux.intel.com" 
-        <antonio.gomez.iglesias@linux.intel.com>
-Subject: Re: [PATCH 2/3] x86/cpu/amd: Add feature bit for MSR_AMD64_LS_CFG
- enumeration
-Message-ID: <20221109214126.ao477sucsks6msyd@desk>
-References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <034c7f5ac243ee7b40ba1a8cc3f9b10b1e380674.1663025154.git.pawan.kumar.gupta@linux.intel.com>
- <Y2qlyfRKgIc4KVcx@zn.tnic>
- <20221108225141.aikng7veemp25p62@desk>
- <Y2rh6FN+gbD6Vbzj@zn.tnic>
- <1ee02d57-21a7-b18e-6cf9-0667445a6fb3@citrix.com>
- <20221109173720.4ovtb2ao3vuuge43@desk>
- <Y2vyz2OAp1xKedYc@zn.tnic>
+        with ESMTP id S229784AbiKIWP0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 17:15:26 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06A62EF3A
+        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 14:15:24 -0800 (PST)
+Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 985EF85010;
+        Wed,  9 Nov 2022 23:15:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1668032122;
+        bh=/9BQkYMXI1gK7muUGPn2LT4qVR56QvjNHZ0qoVar4PA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PV/QiJTFTWIu5iNFRP6PRhR/oaNskQgrmCY6o1lml/qa+yrfMkbP//HGeVOX//5EX
+         9h1yN3IYL/ik2AvhnrFpVmNRe4i4bC0HXR8XSmrApHrXqWNICOJIuUzQcwCBeZmFqT
+         19NxMwevZ3x/kDOepSkh36+FppEs+ibu5rY8N1XyX7iXHcMPKSg5R430Q4s2TsOV+Y
+         qRcYYBTIC1qtm0n9+C2DfrTjWGOEuYNKxaEm61cEK5WVHx+pW1SQ8rmK4g2rA0UhtV
+         RVFu3EIjOKVj2ZUgKO2buKYJoZuwRTliR+u1gCJxDCA5yaBK7yHYWgVYhL+0O6ci1B
+         YyVDb+S4J5cQQ==
+From:   Marek Vasut <marex@denx.de>
+To:     linux-pm@vger.kernel.org
+Cc:     Marek Vasut <marex@denx.de>, Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sre@kernel.org>
+Subject: [PATCH 1/2] power: supply: bq25890: Factor out chip state update
+Date:   Wed,  9 Nov 2022 23:15:03 +0100
+Message-Id: <20221109221504.79562-1-marex@denx.de>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y2vyz2OAp1xKedYc@zn.tnic>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 07:34:55PM +0100, Borislav Petkov wrote:
->On Wed, Nov 09, 2022 at 09:37:20AM -0800, Pawan Gupta wrote:
->> Looks like we need to restore this MSR too,
->
->Why do we? Is that MSR read-only too or what is the reason for that one?
+Pull the chip state and ADC conversion update functionality out into
+separate function, so it can be reused elsewhere in the driver. This
+is a preparatory patch, no functional change.
 
-Please ignore, it doesn't concern this series.
+Signed-off-by: Marek Vasut <marex@denx.de>
+---
+Cc: Hans de Goede <hdegoede@redhat.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Sebastian Reichel <sre@kernel.org>
+---
+ drivers/power/supply/bq25890_charger.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
->Yes, MSR_AMD64_LS_CFG is used in SSBD mitigations. For everything <= 0x12:
->
->        /* AMD Family 0xf - 0x12 */
->        VULNWL_AMD(0x0f,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
->        VULNWL_AMD(0x10,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
->        VULNWL_AMD(0x11,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
->        VULNWL_AMD(0x12,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
->
->On F14h it says here:
->
->[    0.278930] Speculative Store Bypass: Vulnerable
->
->simply because it is not present there.
+diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+index f0362dcb935e9..676eb66374e01 100644
+--- a/drivers/power/supply/bq25890_charger.c
++++ b/drivers/power/supply/bq25890_charger.c
+@@ -454,20 +454,18 @@ static int bq25890_get_vbus_voltage(struct bq25890_device *bq)
+ 	return bq25890_find_val(ret, TBL_VBUSV);
+ }
+ 
+-static int bq25890_power_supply_get_property(struct power_supply *psy,
+-					     enum power_supply_property psp,
+-					     union power_supply_propval *val)
++static void bq25890_update_state(struct bq25890_device *bq,
++				 enum power_supply_property psp,
++				 struct bq25890_state *state)
+ {
+-	struct bq25890_device *bq = power_supply_get_drvdata(psy);
+-	struct bq25890_state state;
+ 	bool do_adc_conv;
+ 	int ret;
+ 
+ 	mutex_lock(&bq->lock);
+ 	/* update state in case we lost an interrupt */
+ 	__bq25890_handle_irq(bq);
+-	state = bq->state;
+-	do_adc_conv = !state.online && bq25890_is_adc_property(psp);
++	*state = bq->state;
++	do_adc_conv = !state->online && bq25890_is_adc_property(psp);
+ 	if (do_adc_conv)
+ 		bq25890_field_write(bq, F_CONV_START, 1);
+ 	mutex_unlock(&bq->lock);
+@@ -475,6 +473,17 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
+ 	if (do_adc_conv)
+ 		regmap_field_read_poll_timeout(bq->rmap_fields[F_CONV_START],
+ 			ret, !ret, 25000, 1000000);
++}
++
++static int bq25890_power_supply_get_property(struct power_supply *psy,
++					     enum power_supply_property psp,
++					     union power_supply_propval *val)
++{
++	struct bq25890_device *bq = power_supply_get_drvdata(psy);
++	struct bq25890_state state;
++	int ret;
++
++	bq25890_update_state(bq, psp, &state);
+ 
+ 	switch (psp) {
+ 	case POWER_SUPPLY_PROP_STATUS:
+-- 
+2.35.1
 
-So looks like MSR_AMD64_LS_CFG should only be restored when
-X86_FEATURE_LS_CFG_SSBD is present. I will make this change in v2.
