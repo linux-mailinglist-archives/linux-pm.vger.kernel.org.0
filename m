@@ -2,46 +2,45 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706C862333E
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 20:12:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C40C62334B
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 20:15:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiKITMj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 14:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53730 "EHLO
+        id S231298AbiKITPb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 14:15:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiKITMi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 14:12:38 -0500
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D191FCE3;
-        Wed,  9 Nov 2022 11:12:37 -0800 (PST)
-Received: by mail-qv1-f49.google.com with SMTP id o8so12955644qvw.5;
-        Wed, 09 Nov 2022 11:12:37 -0800 (PST)
+        with ESMTP id S229915AbiKITP3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 14:15:29 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3328A1581D;
+        Wed,  9 Nov 2022 11:15:29 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id s20so11555209qkg.5;
+        Wed, 09 Nov 2022 11:15:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/ITcRl/8QQz+hLocoq0sl/MFdQo6RjgfiBVxNFpHYuY=;
-        b=llfdEkBiS9VIKhEmVGQXb88IK2HE0G2GPOKuO27sJFWGmFw0kULz7fHRj5UY8jf0LM
-         G0IkCh5Kiu6K/E/uTS7wNYPzN56+6I28fNnJlxisS95U6U+DEye0Fj5mNsHq7/S8RKWm
-         lC3lNjIrUTQkWABaK2VYf8V/SB+q1zdXUMdUIHwXP1VAxivNB28DXpHb4ocGetv/+TzH
-         efW9KWEGnNxu58iVnW59IKX6RcDQ5owtQ+wcIOdnPs5Z+kUVZJBbCw5kdm3/r8uS9fq4
-         7Z9tmOCVw9T49+X5cuhZP2cckc3F+qkoiOUuvh8oCs+/nVw7sDx0bvmck34a/gcUWNEx
-         k0bQ==
-X-Gm-Message-State: ACrzQf0cJPoutgy1x9DNdJ+ec66q0D3rt9MnNnsZ1ftW8zvscb/mvXed
-        3GppSDvX3kNnay+AXs9NbzqUT2aloWaPZCgxeq7EmBSz
-X-Google-Smtp-Source: AMsMyM5cK0BAvTR9+Wm/DShnGZUULzmKjAgDlz8YmeriOq9eOow75PSvhjUZxHyuCPu6Js7uqSPfAvpRvYqS3Zy9Pkw=
-X-Received: by 2002:a05:6214:f63:b0:4b8:c0bc:c43e with SMTP id
- iy3-20020a0562140f6300b004b8c0bcc43emr55978455qvb.119.1668021156462; Wed, 09
- Nov 2022 11:12:36 -0800 (PST)
+        bh=vH5PyIAlNuh7/zzJt8KiSzR2t2C93ID7RXrLpyPstHE=;
+        b=gMqOd/BXNdSPfMnP9Rx5qepP8D5ynYHuaPtVPAfNRZ08ShtWv5/OIs0ddeelSReijP
+         cqe4SvgRy89GugEQwOBXbdMIrqVfxSgJJXkDVesj9Z2A/tSbjvGAS1tcQ1Itx8eN8s1E
+         DXINQeXcrN2NR4+9V5dzMEf8dQ933oAw2F7aOVfjR5JJzp4RDL+D4iwWtpGw5R6MdYbl
+         64ObgR6H/21k8u0s0n0NfoCsengOphoK8kNPt7KC6QJYhnX3ZIA7wIFU3Mv/65wTEPAO
+         RtIL13ur9ugD2E/CcSKSO3NrxTENbVqOcq3hsXYiBEb4j9L/9fFKPM0d4/bPnKUS2vYM
+         U3cw==
+X-Gm-Message-State: ACrzQf2qU+HQ0mg+YkGVM3kYF0P9jAKwWl2nUd0xyl3AnQNzdfsE4jpc
+        5NpwgxXcol4/0k7MBt/fuwkXspB9OxV2xFgw1Nw=
+X-Google-Smtp-Source: AMsMyM68XnbdgLgEo2bamjCU4xI+xxM7VjEXDet7JmI9KpWZ0rzQZPuPggQxZ2uM6NJ8iVJn+k3NLR6PQVIap3P8CjM=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr43209380qkl.443.1668021328293; Wed, 09
+ Nov 2022 11:15:28 -0800 (PST)
 MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-5-linux@roeck-us.net>
-In-Reply-To: <20221017130910.2307118-5-linux@roeck-us.net>
+References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-6-linux@roeck-us.net>
+In-Reply-To: <20221017130910.2307118-6-linux@roeck-us.net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 20:12:25 +0100
-Message-ID: <CAJZ5v0i0gN-PnbAMDVxcGyWbWSTN0LCXvDNj_uhzYbSTxH=GGg@mail.gmail.com>
-Subject: Re: [PATCH 4/9] thermal/core: Move parameter validation from
- __thermal_zone_get_temp to thermal_zone_get_temp
+Date:   Wed, 9 Nov 2022 20:15:17 +0100
+Message-ID: <CAJZ5v0hO9_95uD1qY8aBe094JWsxPrba2wk_PchKHmVqRj0CHw@mail.gmail.com>
+Subject: Re: [PATCH 5/9] thermal/core: Introduce locked version of thermal_zone_device_update
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -61,71 +60,106 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> All callers of __thermal_zone_get_temp() already validated the
-> thermal zone parameters. Move validation to thermal_zone_get_temp()
-> where it is actually needed.
+> In thermal_zone_device_set_mode(), the thermal zone mutex is released only
+> to be reacquired in the subsequent call to thermal_zone_device_update().
+>
+> Introduce __thermal_zone_device_update() as locked version of
+
+Did you mean "unlocked"?
+
+> thermal_zone_device_update() and call it from
+> thermal_zone_device_set_mode() without releasing the lock to avoid
+> the extra release/acuire sequence.
 >
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/thermal/thermal_helpers.c | 26 +++++++++++++++++++++++---
->  1 file changed, 23 insertions(+), 3 deletions(-)
+>  drivers/thermal/thermal_core.c | 57 ++++++++++++++++++----------------
+>  1 file changed, 31 insertions(+), 26 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-> index 3bac0b7a4c62..0161d5fb1cf2 100644
-> --- a/drivers/thermal/thermal_helpers.c
-> +++ b/drivers/thermal/thermal_helpers.c
-> @@ -64,6 +64,20 @@ get_thermal_instance(struct thermal_zone_device *tz,
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 562ece8d16aa..9facd9c5b70f 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -403,6 +403,34 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
+>                 pos->initialized = false;
 >  }
->  EXPORT_SYMBOL(get_thermal_instance);
 >
-> +/**
-> + * __thermal_zone_get_temp() - returns the temperature of a thermal zone
-> + * @tz: a valid pointer to a struct thermal_zone_device
-> + * @temp: a valid pointer to where to store the resulting temperature.
-> + *
-> + * When a valid thermal zone reference is passed, it will fetch its
-> + * temperature and fill @temp.
-> + *
-> + * Both tz and tz->ops must be valid pointers when calling this function,
-> + * and the tz->ops->get_temp callback must be provided.
-> + * The function must be called under tz->lock.
-> + *
-> + * Return: On success returns 0, an error code otherwise
-> + */
-
-I would mention adding the kerneldoc in the patch changelog.
-
->  int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+> +static void __thermal_zone_device_update(struct thermal_zone_device *tz,
+> +                                        enum thermal_notify_event event)
+> +{
+> +       int count;
+> +
+> +       if (atomic_read(&in_suspend))
+> +               return;
+> +
+> +       if (WARN_ONCE(!tz->ops->get_temp,
+> +                     "'%s' must not be called without 'get_temp' ops set\n",
+> +                     __func__))
+> +               return;
+> +
+> +       if (!thermal_zone_device_is_enabled(tz))
+> +               return;
+> +
+> +       update_temperature(tz);
+> +
+> +       __thermal_zone_set_trips(tz);
+> +
+> +       tz->notify_event = event;
+> +
+> +       for (count = 0; count < tz->num_trips; count++)
+> +               handle_thermal_trip(tz, count);
+> +
+> +       monitor_thermal_zone(tz);
+> +}
+> +
+>  static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>                                         enum thermal_device_mode mode)
 >  {
->         int ret = -EINVAL;
-> @@ -73,9 +87,6 @@ int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+> @@ -423,9 +451,9 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
+>         if (!ret)
+>                 tz->mode = mode;
 >
->         lockdep_assert_held(&tz->lock);
+> -       mutex_unlock(&tz->lock);
+> +       __thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
 >
-> -       if (!tz || IS_ERR(tz) || !tz->ops->get_temp)
-> -               return -EINVAL;
+> -       thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+> +       mutex_unlock(&tz->lock);
+>
+>         if (mode == THERMAL_DEVICE_ENABLED)
+>                 thermal_notify_tz_enable(tz->id);
+> @@ -457,31 +485,8 @@ int thermal_zone_device_is_enabled(struct thermal_zone_device *tz)
+>  void thermal_zone_device_update(struct thermal_zone_device *tz,
+>                                 enum thermal_notify_event event)
+>  {
+> -       int count;
 > -
->         ret = tz->ops->get_temp(tz, temp);
->
->         if (IS_ENABLED(CONFIG_THERMAL_EMULATION) && tz->emul_temperature) {
-> @@ -114,7 +125,16 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
->  {
->         int ret;
->
-> +       if (!tz || IS_ERR(tz))
-
-IS_ERR_OR_NULL() ?
-
-> +               return -EINVAL;
-> +
+> -       if (atomic_read(&in_suspend))
+> -               return;
+> -
+> -       if (WARN_ONCE(!tz->ops->get_temp, "'%s' must not be called without "
+> -                     "'get_temp' ops set\n", __func__))
+> -               return;
+> -
 >         mutex_lock(&tz->lock);
-> +
-> +       if (!tz->ops->get_temp) {
-> +               ret = -EINVAL;
-> +               goto unlock;
-> +       }
-> +
->         if (!device_is_registered(&tz->device)) {
->                 ret = -ENODEV;
->                 goto unlock;
+> -
+> -       if (!thermal_zone_device_is_enabled(tz))
+> -               goto out;
+> -
+> -       update_temperature(tz);
+> -
+> -       __thermal_zone_set_trips(tz);
+> -
+> -       tz->notify_event = event;
+> -
+> -       for (count = 0; count < tz->num_trips; count++)
+> -               handle_thermal_trip(tz, count);
+> -
+> -       monitor_thermal_zone(tz);
+> -out:
+> +       __thermal_zone_device_update(tz, event);
+>         mutex_unlock(&tz->lock);
+>  }
+>  EXPORT_SYMBOL_GPL(thermal_zone_device_update);
 > --
+> 2.36.2
+>
