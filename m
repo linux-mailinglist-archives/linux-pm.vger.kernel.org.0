@@ -2,45 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F7862319A
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 18:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CE362328A
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 19:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229624AbiKIRjp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 12:39:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
+        id S229947AbiKISfF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 13:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231479AbiKIRjo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 12:39:44 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3892E13CF5;
-        Wed,  9 Nov 2022 09:39:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668015583; x=1699551583;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=bEOHMNIrA8juYx3VOItS2P7TeSkyDS6Uvv7P/3S0bt8=;
-  b=NGkn8kfyPVcACYEQrWDLLZSFTR3SrQxaHpTzU1DARN4G/o2baZ5UCmyB
-   XfZNQ5F7RUO4Qsqf94tJHCyLB39n6pYl1nQWwUJyFuqyvW5M99hU2BfO9
-   bLGZGcJC1pknbqY9eDZRloqz1UZhei2CO1dTrRcTtDjqAE4KqNQ2UzDe5
-   BgCEn2ME4W8obr0E0+1GOGvP/e3/hKZneI+znlxJHYY6Vyl5kwLipQgwN
-   +THug3kDWlLGo5JTLmKXonctB0FJVgDY/d4Z1NOdvzJn17gPvMZCwR+mw
-   rVgeckkT/sxDzKJ4UE646KZaR7FXuQIEvplfidwYLZW3lO8/sPy38RDPt
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="298572319"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="298572319"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 09:37:27 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10526"; a="779431667"
-X-IronPort-AV: E=Sophos;i="5.96,151,1665471600"; 
-   d="scan'208";a="779431667"
-Received: from fluthi-mobl2.amr.corp.intel.com (HELO desk) ([10.251.18.168])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2022 09:37:24 -0800
-Date:   Wed, 9 Nov 2022 09:37:20 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
+        with ESMTP id S229590AbiKISfE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 13:35:04 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4057625FD;
+        Wed,  9 Nov 2022 10:35:03 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e7e8329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e8:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D73F91EC04A9;
+        Wed,  9 Nov 2022 19:35:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1668018901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=sgCqhlYzNFswrSvP0izYLcyc40NMQDlTd1dkj4E/Xzk=;
+        b=g1jlMZgLawleBiRBTg5BSP9vPzR1jY+aaGM8VT7WTGKWTq7onsiubqyfMowbdvNC3fUYDA
+        JMYvZ/Lbgwus63pqBatvPUMOBTiBO6AECRV7BRxGZFvE6Yw00q2ZB9CPtNmbvN5Q67U1EL
+        V8/dJj2nTz78zsvBP1e9b7vI+teUDuQ=
+Date:   Wed, 9 Nov 2022 19:34:55 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -56,21 +47,20 @@ Cc:     Borislav Petkov <bp@alien8.de>,
         <antonio.gomez.iglesias@linux.intel.com>
 Subject: Re: [PATCH 2/3] x86/cpu/amd: Add feature bit for MSR_AMD64_LS_CFG
  enumeration
-Message-ID: <20221109173720.4ovtb2ao3vuuge43@desk>
+Message-ID: <Y2vyz2OAp1xKedYc@zn.tnic>
 References: <cover.1663025154.git.pawan.kumar.gupta@linux.intel.com>
  <034c7f5ac243ee7b40ba1a8cc3f9b10b1e380674.1663025154.git.pawan.kumar.gupta@linux.intel.com>
  <Y2qlyfRKgIc4KVcx@zn.tnic>
  <20221108225141.aikng7veemp25p62@desk>
  <Y2rh6FN+gbD6Vbzj@zn.tnic>
  <1ee02d57-21a7-b18e-6cf9-0667445a6fb3@citrix.com>
+ <20221109173720.4ovtb2ao3vuuge43@desk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1ee02d57-21a7-b18e-6cf9-0667445a6fb3@citrix.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+In-Reply-To: <20221109173720.4ovtb2ao3vuuge43@desk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +68,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 12:45:58AM +0000, Andrew Cooper wrote:
->On 08/11/2022 23:10, Borislav Petkov wrote:
->> On Tue, Nov 08, 2022 at 02:51:41PM -0800, Pawan Gupta wrote:
->>> Looking at bsp_init_amd() this feature bit will only be set on AMD
->>> families 0x15-0x17. Andrew mentioned that the MSR LS_CFG is present on
->>> AMD family >= 0x10 && family <= 0x18.
->> Do you need to save that MSR on those families?
->>
->> Or do 0x15-0x18 suffice?
->>
->> Yes, 0x18 because that's Hygon and that does its own detection.
->>
->> So, do you need to save it on families 0x10-0x14?
->
->https://www.amd.com/system/files/documents/software-techniques-for-managing-speculation.pdf 
->Mitigation G-2.
->
->The MSR exists on Fam 10/12/14/15/16/17, and in all cases the
->LFENCE_DISPATCH bit wants setting if not already set.
+On Wed, Nov 09, 2022 at 09:37:20AM -0800, Pawan Gupta wrote:
+> Looks like we need to restore this MSR too,
 
-Isn't that a different MSR:
+Why do we? Is that MSR read-only too or what is the reason for that one?
 
-   #define MSR_AMD64_LS_CFG                0xc0011020
+> and we can use existing X86_FEATURE_XMM2 to enumerate it.
 
-   #define MSR_F10H_DECFG                  0xc0011029
-   #define MSR_F10H_DECFG_LFENCE_SERIALIZE_BIT     1
+Or 86_FEATURE_LFENCE_RDTSC.
 
-Looks like we need to restore this MSR too, and we can use existing
-X86_FEATURE_XMM2 to enumerate it.
+> If SSBD is the only reason to restore MSR_AMD64_LS_CFG then we should
+> be able to use X86_FEATURE_LS_CFG_SSBD for enumeration.
 
-If SSBD is the only reason to restore MSR_AMD64_LS_CFG then we should be
-able to use X86_FEATURE_LS_CFG_SSBD for enumeration.
+Yes, MSR_AMD64_LS_CFG is used in SSBD mitigations. For everything <= 0x12:
+
+        /* AMD Family 0xf - 0x12 */
+        VULNWL_AMD(0x0f,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+        VULNWL_AMD(0x10,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+        VULNWL_AMD(0x11,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+        VULNWL_AMD(0x12,        NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
+
+On F14h it says here:
+
+[    0.278930] Speculative Store Bypass: Vulnerable
+
+simply because it is not present there.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
