@@ -2,181 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAC4F62251C
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 09:12:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C929622528
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 09:16:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiKIIM1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 03:12:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S229501AbiKIIQn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 03:16:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKIIM1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 03:12:27 -0500
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B53F61902F;
-        Wed,  9 Nov 2022 00:12:25 -0800 (PST)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8DxPLfoYGtjvIAFAA--.6049S3;
-        Wed, 09 Nov 2022 16:12:24 +0800 (CST)
-Received: from [10.180.13.64] (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxR1fmYGtjdHAPAA--.24419S2;
-        Wed, 09 Nov 2022 16:12:22 +0800 (CST)
-Subject: Re: [PATCH v10 2/2] dt-bindings: thermal: add loongson-2 thermal
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
- <20221103083407.4039-2-zhuyinbo@loongson.cn>
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-Message-ID: <fba09a98-1938-eeae-bf2c-c13200982af7@loongson.cn>
-Date:   Wed, 9 Nov 2022 16:12:17 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        with ESMTP id S229447AbiKIIQm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 03:16:42 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4799B1BE81;
+        Wed,  9 Nov 2022 00:16:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA8C8618EE;
+        Wed,  9 Nov 2022 08:16:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23376C433C1;
+        Wed,  9 Nov 2022 08:16:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667981801;
+        bh=Xu0pJZHgNqiJ14KtQMOxTvZJNLdPl1pLSA3nwf+3Ac4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jYt+QveGoM8LsxlrCCOhmG+yQO3jUvDl5NaKvldIwLP/QVblszdTn7vbzR6ZPDQWV
+         NSpdDiWnpH8dC5asIolfDxi/u3OpjuopVnsTiXDEGTb51YyMyrkq31GhGwO5XhPqCQ
+         9J1pgZZfZo/hONj1QduB7Wz6VSiyL8T8Z28s0wGP4yxI8N6Ii3uCZ9JX959XupE1fb
+         ZjmtbkXca1baWqzaBSa60w4E7aTyxI1+m3n60em4T1yvVYpIFNRqTWEyavf33aTYWk
+         OfdRSMt7xjCBcBERwcn6GNmB3yA6+RVQGiwvspyfuKOn5czYUJIND/8XxeK9KZ7EOP
+         UlxSh2YwyVelg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1osgFr-0006qG-Lf; Wed, 09 Nov 2022 09:16:15 +0100
+Date:   Wed, 9 Nov 2022 09:16:15 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 3/3] cpufreq: qcom-hw: Add CPU clock provider support
+Message-ID: <Y2thz0vk8krV5bBH@hovoldconsulting.com>
+References: <20221109080120.19078-1-manivannan.sadhasivam@linaro.org>
+ <20221109080120.19078-4-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-In-Reply-To: <20221103083407.4039-2-zhuyinbo@loongson.cn>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxR1fmYGtjdHAPAA--.24419S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWryxZw1xXw1DWF13CF17ZFb_yoW5ury3pF
-        4kC3Z8Cr4vvF17uanIkFyxCrs0vrn5tF9rZr4Igwn8Kr98t34ft3y7K3WDZ393ury8WFW7
-        ZFy09r4UCF1DArJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        ba8Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
-        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
-        IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I
-        3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxV
-        WUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8I
-        cVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aV
-        AFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZE
-        Xa7IU8SzuJUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221109080120.19078-4-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi maintainer
-
-please help merge this patch to upstream.
-
-Thanks,
-Yinbo.
-
-ÔÚ 2022/11/3 ÏÂÎç4:34, Yinbo Zhu Ð´µÀ:
-> Add the Loongson-2 thermal binding with DT schema format using
-> json-schema.
+On Wed, Nov 09, 2022 at 01:31:20PM +0530, Manivannan Sadhasivam wrote:
+> Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
+> cores. But this relationship is not represented with the clk framework
+> so far.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
+> clock producer/consumer relationship cleaner and is also useful for CPU
+> related frameworks like OPP to know the frequency at which the CPUs are
+> running.
+> 
+> The clock frequency provided by the driver is for each frequency domain.
+> We cannot get the frequency of each CPU core because, not all platforms
+> support per-core DCVS feature.
+> 
+> Also the frequency supplied by the driver is the actual frequency that
+> comes out of the EPSS/OSM block after the DCVS operation. This frequency is
+> not same as what the CPUFreq framework has set but it is the one that gets
+> supplied to the CPUs after throttling by LMh.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
-> Change in v10:
-> 		1. Add all history change log information.
-> Change in v9:
-> 		1. NO change, but other patch in this series of patches set
-> 		   has changes.
-> Change in v8:
->                  1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-> Change in v7:
-> 		1. Split the modification of patch 3 and merge it into this patch.
-> Change in v6:
-> 		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-> 		   when compile the yaml.
-> Change in v5:
-> 		1. Keep use same quotes "'" in all places.
-> Change in v4:
-> 		1. Fixup the compatible.
-> 		2. Update the binding file name.
-> 		3. Include irq.h to fix compile issue.
-> Change in v3:
-> 		1. Remove the sensor id.
-> 		2. Remove the interrupt-parent in thermal required property.
-> 		3. Update the thermal binding file name.
-> 		4. Fixup the commit log information.
-> Change in v2:
-> 		1. Add description and type about the "id".	
-> 		2. Make the filename was based on compatible.
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 41 +++++++++++++++++++++++++++++++
+>  1 file changed, 41 insertions(+)
 > 
->   .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
->   MAINTAINERS                                   |  1 +
->   2 files changed, 44 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> new file mode 100644
-> index 000000000000..c0637e2d6d57
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 5e0598730a04..c0e4b223f9c1 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+ 
+> @@ -672,6 +693,26 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  
+>  		data->base = base;
+>  		data->res = res;
 > +
-> +title: Thermal sensors on Loongson-2 SoCs
-> +
-> +maintainers:
-> +  - zhanghongchen <zhanghongchen@loongson.cn>
-> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
-> +
-> +properties:
-> +  compatible:
-> +    const: loongson,ls2k-thermal
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#thermal-sensor-cells':
-> +    const: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - '#thermal-sensor-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    thermal: thermal-sensor@1fe01500 {
-> +        compatible = "loongson,ls2k-thermal";
-> +        reg = <0x1fe01500 0x30>;
-> +        interrupt-parent = <&liointc0>;
-> +        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-> +        #thermal-sensor-cells = <1>;
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 37ab451d9258..3aff8b8723b1 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -12015,6 +12015,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
->   M:	Yinbo Zhu <zhuyinbo@loongson.cn>
->   L:	linux-pm@vger.kernel.org
->   S:	Maintained
-> +F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
->   F:	drivers/thermal/loongson2_thermal.c
->   
->   LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
-> 
+> +		/* Register CPU clock for each frequency domain */
+> +		clk_init.name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
 
+This is still an allocation and can in theory fail.
+
+But it is also unnecessary to keep these around after registering the
+clocks so it's better to just reuse a single stack allocated buffer for
+this.
+
+> +		clk_init.flags = CLK_GET_RATE_NOCACHE;
+> +		clk_init.ops = &qcom_cpufreq_hw_clk_ops;
+> +		data->cpu_clk.init = &clk_init;
+> +
+> +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
+> +		if (ret < 0) {
+> +			dev_err(dev, "Failed to register Qcom CPUFreq clock(%d)\n", i);
+
+nit: This looks unnecessarily verbose. Using
+
+	"failed to register clock %d: %d\n", i, ret
+
+should do just fine as you are using dev_err().
+
+> +			return ret;
+> +		}
+> +
+> +		clk_data->hws[i] = &data->cpu_clk;
+> +	}
+> +
+> +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
+> +		return ret;
+>  	}
+>  
+>  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
+
+Johan
