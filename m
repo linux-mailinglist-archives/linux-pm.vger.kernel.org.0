@@ -2,116 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77CA0623377
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 20:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B636233A1
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 20:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229470AbiKITaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 14:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        id S231355AbiKITkx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 14:40:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiKITaN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 14:30:13 -0500
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969EFA474;
-        Wed,  9 Nov 2022 11:30:12 -0800 (PST)
-Received: by mail-qt1-f170.google.com with SMTP id e15so10964122qts.1;
-        Wed, 09 Nov 2022 11:30:12 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Dad91m4JdqavDny1NSm8MrvniHzGm/e+1gZ5ERythI=;
-        b=UZk+pdHTM2cRyt1R5hFJoUrnPsMxn6lGq4XjxUIqDrhxI7xOFsEMbITaa6yJV/CJNQ
-         CPPfpXzioMizpuz4W4zvbyvyfWOagLxF4/5XLPw34JiGf1naE/HZzv6l8n30QawVwehR
-         oTivL8fkU3He4r3Vbk5fuxZJ6BKp0ZhN5VGdBeD/Yimrx6OrLdvpROl0fidn+iuI+/VA
-         A2TmvjpT5k0edYfUdEZuJ1IF09zaWZGbtN0PI1MVMp/JYJSKQld82IoIKSQ+gSsaBS9C
-         BOWy6PbqnzdsUqC83XLzorSyFbt+pNqpmjYo6rLO/0xvi32vO12kliFaGnpO785lyfyh
-         KVbQ==
-X-Gm-Message-State: ACrzQf1bEywJGfHB/OqdB48Ze03tIbItW8UpneU9Dt62LeWeslhgVR87
-        R3MGuD+1xKIW5iVuVlnMBpij0Z6/WKaJMJ7gNys=
-X-Google-Smtp-Source: AMsMyM7NOjN2Zy0q7508HKVoeHqnitZBBNrkXL8QY20vxqMIbnjZV+T+DEUJ2smumypFXTCU6Ugr73SduA5MeoWuqQ4=
-X-Received: by 2002:a05:622a:4c07:b0:3a5:27ec:6dd3 with SMTP id
- ey7-20020a05622a4c0700b003a527ec6dd3mr41130537qtb.411.1668022211771; Wed, 09
- Nov 2022 11:30:11 -0800 (PST)
+        with ESMTP id S229774AbiKITkx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 14:40:53 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D104518B2A
+        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 11:40:51 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1osqwL-0006uB-TC; Wed, 09 Nov 2022 20:40:49 +0100
+Message-ID: <cadbced5-be58-8cca-8659-37da39aecc21@leemhuis.info>
+Date:   Wed, 9 Nov 2022 20:40:49 +0100
 MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221102185030.GA2026081@roeck-us.net>
-In-Reply-To: <20221102185030.GA2026081@roeck-us.net>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 20:30:00 +0100
-Message-ID: <CAJZ5v0h_treX+uL_D8=b0NOyVU56W=wCQyKu3oMz7nGaWT_MUw@mail.gmail.com>
-Subject: Re: [PATCH 0/9] thermal/core: Protect thermal device operations
- against removal
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
+ mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622) #forregzbot
+Content-Language: en-US, de-DE
+Cc:     linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+To:     linux-arm-kernel@lists.infradead.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1668022851;7aea6463;
+X-HE-SMSGID: 1osqwL-0006uB-TC
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Guenter,
+[Note: this mail is primarily send for documentation purposes and/or for
+regzbot, my Linux kernel regression tracking bot. That's why I removed
+most or all folks from the list of recipients, but left any that looked
+like a mailing lists. These mails usually contain '#forregzbot' in the
+subject, to make them easy to spot and filter out.]
 
-Sorry for the delay.
+[TLDR: I'm adding this regression report to the list of tracked
+regressions; all text from me you find below is based on a few templates
+paragraphs you might have encountered already already in similar form.]
 
-On Wed, Nov 2, 2022 at 7:50 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
+Hi, this is your Linux kernel regression tracker.
+
+On 09.11.22 14:35, Nick wrote:
 > Hi,
->
-> On Mon, Oct 17, 2022 at 06:09:01AM -0700, Guenter Roeck wrote:
-> > Accesses to thermal zones, and with it to thermal zone device operations,
-> > are still possible after the thermal zone device has been unregistered.
-> > For example, thermal_zone_get_temp() can be called from temp_show()
-> > in thermal_sysfs.c if the sysfs attribute was opened before the thermal
-> > device was unregistered. This is problematic and may result in crashes
-> > since the operations data structure and the underlying code may be gone
-> > when the calls are made.
-> >
-> > The following series solves the problem by protecting accesses to thermal
-> > device operations with the thermal device mutex, and by verifying that the
-> > thermal device is still registered after the mutex has been acquired.
-> >
-> > This was previously sent as RFC/RFT as single patch [1]. The code was reworked
-> > to match thermal subsystem changes made between v6.0 and v6.1, and it was
-> > split into several patches to simplify review.
-> >
->
-> Any thoughts / comments / feedback on this series ?
+> while trying to bump OpenWrt Kernel to 6.1rc2 I noticed that the kernel
+> is crashing while booting on a Banana Pi R64 (MT7622):
+> 
+>> [    1.055565] ------------[ cut here ]------------
+>> [    1.060204] Kernel BUG at regulator_check_voltage+0xb0/0xf0
+>> [verbose debug info unavailable]
 
-I have reviewed the series now and haven't found any major issues in it.
+[...]
 
-I've posted some minor comments in separate replies to individual
-patches.  If they are addressed, I can queue up the series for 6.2.
+> Reverting commit "cpufreq: mediatek: Refine
+> mtk_cpufreq_voltage_tracking()" fixes the kernel bug:
+> https://github.com/torvalds/linux/commit/6a17b3876bc8303612d7ad59ecf7cbc0db418bcd
 
-Cheers!
+Thanks for the report. To be sure below issue doesn't fall through the
+cracks unnoticed, I'm adding it to regzbot, my Linux kernel regression
+tracking bot:
 
+#regzbot ^introduced 6a17b3876bc
+#regzbot title cpufreq: mediatek: Kernel BUG at regulator_check_voltage
+#regzbot ignore-activity
 
-> > [1] https://lore.kernel.org/linux-pm/20221004033936.1047691-1-linux@roeck-us.net/
-> >
-> > ----------------------------------------------------------------
-> > Guenter Roeck (9):
-> >       thermal/core: Destroy thermal zone device mutex in release function
-> >       thermal/core: Delete device under thermal device zone lock
-> >       thermal/core: Ensure that thermal device is registered in thermal_zone_get_temp
-> >       thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
-> >       thermal/core: Introduce locked version of thermal_zone_device_update
-> >       thermal/core: Protect hwmon accesses to thermal operations with thermal zone mutex
-> >       thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-> >       thermal/core: Remove thermal_zone_set_trips()
-> >       thermal/core: Protect thermal device operations against thermal device removal
-> >
-> >  drivers/thermal/thermal_core.c    | 76 ++++++++++++++++++++++++--------------
-> >  drivers/thermal/thermal_core.h    |  3 +-
-> >  drivers/thermal/thermal_helpers.c | 65 ++++++++++++++++++++++-----------
-> >  drivers/thermal/thermal_hwmon.c   | 14 +++++--
-> >  drivers/thermal/thermal_sysfs.c   | 77 +++++++++++++++++++++++++++++++++------
-> >  5 files changed, 169 insertions(+), 66 deletions(-)
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply -- ideally with also
+telling regzbot about it, as explained here:
+https://linux-regtracking.leemhuis.info/tracked-regression/
+
+Reminder for developers: When fixing the issue, add 'Link:' tags
+pointing to the report (the mail this one replies to), as explained for
+in the Linux kernel's documentation; above webpage explains why this is
+important for tracked regressions.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
