@@ -2,133 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 702A2622C98
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 14:40:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D02622D11
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 15:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiKINkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 08:40:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
+        id S230387AbiKIOAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 09:00:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbiKINkq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 08:40:46 -0500
-X-Greylist: delayed 324 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 09 Nov 2022 05:40:43 PST
-Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587662E6A3
-        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 05:40:43 -0800 (PST)
-Message-ID: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
-        s=default; t=1668000915;
-        bh=+GUaBpSLjcsDpSEk8ATKUTZgKIV8pbmAZ1XnfGnicZ4=;
-        h=Date:To:Cc:From:Subject:From;
-        b=4TD00xCvsDVkVIt7ZSkoCZ4zuIMBujyerc1andI3G16RW7BhIb/4ZpgMnGOQgaHu+
-         lZl4GgxPMkZ1ZB8MUTL3LRRn/Kxyi6aoZkwy/JW8tUK9iyDvbKIStjf1uLNND3b2SP
-         0a8za/heRn4GwkV8+X3C0J7dqJcg9WU0b8hsc5HfmwzTvJ+qKvy+h5Lfpoc9R6kWjf
-         Omhmvb1M6+H16tAK7aHReJ3cxSR4kZzfPKjnlp57ZoL+p4lEghHjZlWWWZM9FIuZmg
-         IEFMjb1AbpZnTRh2BgMJgPXzdZF2eo2Rd1W7qk9exqzRiyn8QxPxbdrXLkzsmURmuW
-         LPtDVZjPCj/BQ==
-Date:   Wed, 9 Nov 2022 14:35:12 +0100
+        with ESMTP id S230164AbiKIOA1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 09:00:27 -0500
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338F4634E
+        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 06:00:26 -0800 (PST)
+Received: by mail-qt1-f175.google.com with SMTP id e15so10371194qts.1
+        for <linux-pm@vger.kernel.org>; Wed, 09 Nov 2022 06:00:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6ug/ZUSfpqeBzCp/+2AJ33WlcK1pNZvoFgV1Z6DdI3U=;
+        b=sxQJeXa9UKtvZxQpSjH6HWA5dVhEz+Nz0ZVosfm8Tg7F2PgxlBxP4cdfPbq07yRXXS
+         Z4ZvlFX+r2G05HQxrqOzmlQO/WUQQLGX8+OY3MyNucrRHhGCsIrlQWa1ZI8ieSfeUfX7
+         rilwgQ/DFCWRAUBz4oam0aN7DSAIy3vAQJmFpt7kOX9oVt7utiWZUMdG1nzw5vdjEGEi
+         PL+AbfXDY8+GoT08c5QJ5xmu+zxpZr4E0DcVQmLm7+MoAifmKxPS+d0V+h7QTbgpI/P6
+         8mLCSvjbMCEpDbGjSgTtQFInFobRv8MtiNDR5LMG12ICkkECmTvZNdA3enZKKZ2u0kTx
+         T1ig==
+X-Gm-Message-State: ACrzQf15jD7fit4GQBX42/5OQNqOXRHN4+JB+gFsIJMc1gC1/A+xi1ms
+        TMu8D7rczBepqguD6TOomy6BQjuG9Z9oPZu2uT0=
+X-Google-Smtp-Source: AMsMyM6tpZAc8azDTTlxXFm+d2l+hgAOGeZNboC5qVpx3kNAZrkb4C2d4hYgvPc6kEBNC5KAwfr8AdW5FDom1P1CfB4=
+X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
+ g21-20020ac87d15000000b003a5044987c3mr47592903qtb.357.1668002423504; Wed, 09
+ Nov 2022 06:00:23 -0800 (PST)
 MIME-Version: 1.0
-Content-Language: en-US
-To:     jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
-        angelogioacchino.delregno@collabora.com, viresh.kumar@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Daniel Golle <daniel@makrotopia.org>,
-        =?UTF-8?Q?H=c3=bchn=2c_Thomas?= <thomas.huehn@hs-nordhausen.de>
-From:   Nick <vincent@systemli.org>
-Subject: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221108081220.7070-1-rui.zhang@intel.com>
+In-Reply-To: <20221108081220.7070-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 9 Nov 2022 15:00:12 +0100
+Message-ID: <CAJZ5v0iyMLX-D5OG7VYTD-PYpLbpA4+x2itPVUvGf+sF1DU-Uw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] thermal/intel/intel_tcc_cooling: Detect TCC lock bit
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-while trying to bump OpenWrt Kernel to 6.1rc2 I noticed that the kernel 
-is crashing while booting on a Banana Pi R64 (MT7622):
+On Tue, Nov 8, 2022 at 9:10 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> When MSR_IA32_TEMPERATURE_TARGET is locked, TCC Offset can not be
+> updated even if the PROGRAMMABE Bit is set.
+>
+> Yield the driver on platforms with MSR_IA32_TEMPERATURE_TARGET locked.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+> Note that this patch is made based on this patch series
+> https://patchwork.kernel.org/project/linux-pm/list/?series=693050
+> ---
+>  drivers/thermal/intel/intel_tcc_cooling.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+>
+> diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+> index ccd62358d4d0..f17fa5c81034 100644
+> --- a/drivers/thermal/intel/intel_tcc_cooling.c
+> +++ b/drivers/thermal/intel/intel_tcc_cooling.c
+> @@ -13,6 +13,7 @@
+>  #include <asm/cpu_device_id.h>
+>
+>  #define TCC_PROGRAMMABLE       BIT(30)
+> +#define TCC_LOCKED             BIT(31)
+>
+>  static struct thermal_cooling_device *tcc_cdev;
+>
+> @@ -80,6 +81,15 @@ static int __init tcc_cooling_init(void)
+>         if (!(val & TCC_PROGRAMMABLE))
+>                 return -ENODEV;
+>
+> +       err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
+> +       if (err)
+> +               return err;
+> +
+> +       if (val & TCC_LOCKED) {
+> +               pr_info("TCC Offset locked\n");
+> +               return -ENODEV;
+> +       }
+> +
+>         pr_info("Programmable TCC Offset detected\n");
+>
+>         tcc_cdev =
+> --
 
-> [    1.055565] ------------[ cut here ]------------
-> [    1.060204] Kernel BUG at regulator_check_voltage+0xb0/0xf0 [verbose debug info unavailable]
-> [    1.062418] mtk-pcie 1a143000.pcie: host bridge /pcie@1a143000 ranges:
-> [    1.068656] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
-> [    1.075248] mtk-pcie 1a143000.pcie: Parsing ranges property...
-> [    1.081257] Modules linked in:
-> [    1.081264] CPU: 1 PID: 328 Comm: kworker/1:7 Tainted: G S                 6.1-rc2 #0
-> [    1.087088] mtk-pcie 1a143000.pcie:      MEM 0x0020000000..0x0027ffffff -> 0x0020000000
-> [    1.090126] Hardware name: Bananapi BPI-R64 (DT)
-> [    1.110541] Workqueue: events dbs_work_handler
-> [    1.114988] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    1.121944] pc : regulator_check_voltage+0xb0/0xf0
-> [    1.126728] lr : regulator_set_voltage_unlocked+0x88/0x110
-> [    1.129638] mmc1: host does not support reading read-only switch, assuming write-enable
-> [    1.132207] sp : ffffffc00956bb30
-> [    1.132209] x29: ffffffc00956bb30 x28: ffffff8000efb400 x27: 0000000000000024
-> [    1.132219] x26: 00000000001312d0 x25: 0000000000118c30 x24: 00000000001312d0
-> [    1.132227] x23: 0000000000149970
-> [    1.146036] mmc1: new high speed SDHC card at address e624
-> [    1.150642]  x22: ffffff800038f800
-> [    1.159192] mmcblk1: mmc1:e624 SL16G 14.8 GiB
-> [    1.161068]  x21: ffffff8000efb100
-> [    1.161072] x20: 00000000001312d0
-> [    1.175424] GPT:partition_entry_array_crc32 values don't match: 0xa0b5ce6d != 0xab54d286
-> [    1.177757]  x19: 0000000000000000 x18: 00000000799b2550
-> [    1.181067] GPT:Primary header thinks Alt. header is not at the end of the disk.
-> [    1.189143] x17: 0000000000000003 x16: 0000000000000001 x15: 0000000000000000
-> [    1.189151] x14: 0000000000000000 x13: 0000000000000146 x12: 00000000fa83b2da
-> [    1.189159] x11: 000000000000013d x10: 0000000000000850
-> [    1.194472] GPT:305184 != 31116287
-> [    1.201842]  x9 : ffffffc00956b910
-> [    1.201846] x8 : ffffff8000b9edf0 x7 : 0000000000000001
-> [    1.208970] GPT:Alternate GPT header not at the end of the disk.
-> [    1.216092]  x6 : 00000000001312d0
-> [    1.216095] x5 : 0000000000118c30 x4 : 0000000000000000 x3 : 0000000000000000
-> [    1.216103] x2 : ffffffc00956bb68 x1 : ffffffc00956bb6c
-> [    1.221321] GPT:305184 != 31116287
-> [    1.224706]  x0 : ffffff800038f800
-> [    1.228095] GPT: Use GNU Parted to correct GPT errors.
-> [    1.233307]
-> [    1.233309] Call trace:
-> [    1.233312]  regulator_check_voltage+0xb0/0xf0
-> [    1.242680] FIT: Selected configuration: "config-mt7622-bananapi-bpi-r64-pcie1" (OpenWrt bananapi_bpi-r64 with mt7622-bananapi-bpi-r64-pcie1)
-> [    1.242694]  regulator_set_voltage+0x3c/0x64
-> [    1.249831] FIT:           kernel sub-image 0x00001000..0x0052fd0a "kernel-1" (ARM64 OpenWrt Linux-6.1-rc2)
-> [    1.255030]  mtk_cpufreq_voltage_tracking+0x11c/0x26c
-> [    1.255039]  mtk_cpufreq_set_target+0x1c4/0x350
-> [    1.258444] FIT:          flat_dt sub-image 0x00530000..0x005380c5 "fdt-1" (ARM64 OpenWrt bananapi_bpi-r64 device tree blob)
-> [    1.261820]  __cpufreq_driver_target+0x2f4/0x674
-> [    1.261826]  od_dbs_update+0xb8/0x19c
-> [    1.266969] FIT:          flat_dt sub-image 0x00539000..0x0053911a "fdt-mt7622-bananapi-bpi-r64-pcie1" (ARM64 OpenWrt bananapi_bpi-r64 device tree overlay mt7622-bananapi-bpi-r64-pcie1)
-> [    1.268431]  dbs_work_handler+0x3c/0x7c
-> [    1.270883] FIT:          flat_dt sub-image 0x0053a000..0x0053a20f "fdt-mt7622-bananapi-bpi-r64-sata" (ARM64 OpenWrt bananapi_bpi-r64 device tree overlay mt7622-bananapi-bpi-r64-sata)
-> [    1.275297]  process_one_work+0x200/0x3a0
-> [    1.287998] FIT:       filesystem sub-image 0x0053b000..0x00859fff "rootfs-1" (ARM64 OpenWrt bananapi_bpi-r64 rootfs)
-> [    1.292237]  worker_thread+0x170/0x4c0
-> [    1.292244]  kthread+0xd4/0xe0
-> [    1.302066] FIT: selecting configured loadable "rootfs-1" to be root filesystem
-> [    1.307092]  ret_from_fork+0x10/0x20
-> [    1.311631]  mmcblk1: p1 p2 p3 p4 p5 p6 p65(rootfs-1) p66(rootfs_data) p128
-> [    1.322903] Code: 6b04001f 54fffe6b 2a0003e4 17fffff3 (d4210000)
-> [    1.413322] ---[ end trace 0000000000000000 ]---
-The complete log can be found here:
-https://gist.githubusercontent.com/PolynomialDivision/395d009c84b426d780549c5fa1f64ff1/raw/886d621d2bf6f03429586adf8a14a6c37c8d8a7d/mt7622-6-1.log
-
-Reverting commit "cpufreq: mediatek: Refine 
-mtk_cpufreq_voltage_tracking()" fixes the kernel bug:
-https://github.com/torvalds/linux/commit/6a17b3876bc8303612d7ad59ecf7cbc0db418bcd
-
-The revert commit can be found here:
-https://github.com/PolynomialDivision/openwrt/commit/1df941d0334000e3aced43b7d50cdac0da8bf427
-
-The branch I use to build the 6.1rc2 on a Banana Pi R64 can be found here:
-https://github.com/PolynomialDivision/openwrt/commits/bump-mt7622-rebase
-
-Bests
-Nick
-
+Applied as 6.2 material along with the [2/2], thanks!
