@@ -2,191 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1091F6224F7
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 08:55:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 606CB6224FC
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 09:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbiKIHzm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 02:55:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S229702AbiKIIBk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 03:01:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229492AbiKIHzk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 02:55:40 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBED1B7B2;
-        Tue,  8 Nov 2022 23:55:39 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EC403B81D12;
-        Wed,  9 Nov 2022 07:55:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57778C433C1;
-        Wed,  9 Nov 2022 07:55:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667980536;
-        bh=t1X8tGhPnTqhrxpV3kqt4S1VIJabTvUnGc+aFkHBdgo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NTX5AVlssCn5Xtu7RtHEcJvX4iGC7mnlFhxqFZkwcuqiQEJf8b4iMNHC4OnobBH6w
-         nC+CCTnP11NXxnD8uCFQyHqBki+Tp43wS9iwTv8Du8EgdKDV78/UvK67cI44aTM53M
-         8fITbQmcmTdK0677AEv4+A3Z2inbRrz9azRD/fhVUDy2Aavsa8Vyb0kbHpH7kiOfVp
-         OF8UUP6gp6Gmm07lbkt7NbwDY9rYgaNVmohNM5TRoDaokOHahxkBaqHoWFWjzYg1fj
-         yi3l1b5O7fiYYrEW9Fy2A6C8VtKwWssbPpsRDqtcZWERHq40qj9mIoU4QlZoDX7iZk
-         Tl+H9u9dIv5Iw==
-Date:   Wed, 9 Nov 2022 13:25:27 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Matthias Kaehlcke <mka@chromium.org>
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        andersson@kernel.org, viresh.kumar@linaro.org,
+        with ESMTP id S229638AbiKIIBi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 03:01:38 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD1717050
+        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 00:01:37 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so687695wmi.3
+        for <linux-pm@vger.kernel.org>; Wed, 09 Nov 2022 00:01:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yhDGMUAJ/8+pgpJNQg1TQbjn1AXs8DB1HpGyR9GVzcs=;
+        b=VxroMqW0lKOYqYNetofEu6ca+iX/+spminKk/i6p/iX8XmzD9TjYhFrInOjtZ65viO
+         iZYVAZW3E4ATiN462+oNO/9P/9lmSaXxHaIlGVzSjEU0LQPV9C/4cqDiUiBQ9t6saq6L
+         kWNVj0FJ0uEpdXtoI5pT0YZB/jyj9OUgFrO6Xa6sKeA1jAWGp3RbS/ENKalT1i1exLrc
+         ldcho/1VU1/DIikxijZ0xbF4covuiiT5fVUP9c5t2olVRcQB+sDXBRnzo8stezzPMdjE
+         P24/2fSXu2MAOV2JAM/IClFJQItws9+33/X+IqjvjpFO6qNfjHegr/yGGmt0J/k/shAn
+         NnsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yhDGMUAJ/8+pgpJNQg1TQbjn1AXs8DB1HpGyR9GVzcs=;
+        b=gMNXNXI6bKOZgep6TAf2Jn4HJhykrgDYiZIY0GxuxUYz3x/0iP32eskSsadWQDGTZw
+         CffCe6qLymVolCcIRzYXmVwWhNXdVH0dWrZgzLHinrPXoPsKGfLCPJ5PTKIqjK5YNu7P
+         Es+fgeND6j1YXxjmRVNQade4nK3m6zhjpAt3dEtBd7f3v+tXDeTRe6nyTRHMPGZMURpy
+         LEWep9wAPbD5WoQMvxeoDouLewcYxXutPDUEVinkdThPqMxDOj23j43m+VV8s8lFxPtc
+         hVrGjEps5LaoM0VJSzcRK/3Er9IHztECQq31X0LRFtiyYBAdE1BhEosKmG/R66qwgE2i
+         Vi9Q==
+X-Gm-Message-State: ACrzQf259mQrBHCymdIUSu1pvyrf4PRuPrm0A38cOujh/RRr3N4FKtEm
+        cNj0vG6ncjLAPS7Dd8K858He
+X-Google-Smtp-Source: AMsMyM4TH5hrY0p/CREqR3/LAKWyI/Ih9vAEa88lR6VMnzKNsSGiSdeV/K/bKfxtY8p/tHgiY29SZg==
+X-Received: by 2002:a7b:cb87:0:b0:3cf:6af4:c509 with SMTP id m7-20020a7bcb87000000b003cf6af4c509mr36538317wmi.140.1667980895367;
+        Wed, 09 Nov 2022 00:01:35 -0800 (PST)
+Received: from localhost.localdomain ([117.202.189.229])
+        by smtp.gmail.com with ESMTPSA id l26-20020a05600c2cda00b003cf774c31a0sm769427wmc.16.2022.11.09.00.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Nov 2022 00:01:33 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org,
         krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
+        robh+dt@kernel.org
+Cc:     johan@kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <20221109075527.GD4651@thinkpad>
-References: <20221108154037.111794-1-manivannan.sadhasivam@linaro.org>
- <20221108154037.111794-4-manivannan.sadhasivam@linaro.org>
- <Y2qfmFVK665b1Nbw@google.com>
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v6 0/3] qcom-cpufreq-hw: Add CPU clock provider support
+Date:   Wed,  9 Nov 2022 13:31:17 +0530
+Message-Id: <20221109080120.19078-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y2qfmFVK665b1Nbw@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 06:27:36PM +0000, Matthias Kaehlcke wrote:
-> Hi,
-> 
-> On Tue, Nov 08, 2022 at 09:10:37PM +0530, Manivannan Sadhasivam wrote:
-> > Qcom CPUFreq hardware (EPSS/OSM) controls clock and voltage to the CPU
-> > cores. But this relationship is not represented with the clk framework
-> > so far.
-> > 
-> > So, let's make the qcom-cpufreq-hw driver a clock provider. This makes the
-> > clock producer/consumer relationship cleaner and is also useful for CPU
-> > related frameworks like OPP to know the frequency at which the CPUs are
-> > running.
-> > 
-> > The clock frequency provided by the driver is for each frequency domain.
-> > We cannot get the frequency of each CPU core because, not all platforms
-> > support per-core DCVS feature.
-> > 
-> > Also the frequency supplied by the driver is the actual frequency that
-> > comes out of the EPSS/OSM block after the DCVS operation. This frequency is
-> > not same as what the CPUFreq framework has set but it is the one that gets
-> > supplied to the CPUs after throttling by LMh.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  drivers/cpufreq/qcom-cpufreq-hw.c | 43 +++++++++++++++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
-> > 
-> > diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > index 5e0598730a04..86bb11de347f 100644
-> > --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> > +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> > @@ -4,6 +4,7 @@
-> >   */
-> >  
-> >  #include <linux/bitfield.h>
-> > +#include <linux/clk-provider.h>
-> >  #include <linux/cpufreq.h>
-> >  #include <linux/init.h>
-> >  #include <linux/interconnect.h>
-> > @@ -54,6 +55,7 @@ struct qcom_cpufreq_data {
-> >  	bool cancel_throttle;
-> >  	struct delayed_work throttle_work;
-> >  	struct cpufreq_policy *policy;
-> > +	struct clk_hw cpu_clk;
-> >  
-> >  	bool per_core_dcvs;
-> >  
-> > @@ -615,8 +617,20 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
-> >  	.ready		= qcom_cpufreq_ready,
-> >  };
-> >  
-> > +static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
-> > +{
-> > +	struct qcom_cpufreq_data *data = container_of(hw, struct qcom_cpufreq_data, cpu_clk);
-> > +
-> > +	return qcom_lmh_get_throttle_freq(data);
-> > +}
-> > +
-> > +static const struct clk_ops qcom_cpufreq_hw_clk_ops = {
-> > +	.recalc_rate = qcom_cpufreq_hw_recalc_rate,
-> > +};
-> > +
-> >  static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
-> >  {
-> > +	struct clk_hw_onecell_data *clk_data;
-> >  	struct device *dev = &pdev->dev;
-> >  	struct device *cpu_dev;
-> >  	struct clk *clk;
-> > @@ -659,8 +673,16 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
-> >  
-> >  	qcom_cpufreq.soc_data = of_device_get_match_data(dev);
-> >  
-> > +	clk_data = devm_kzalloc(dev, struct_size(clk_data, hws, num_domains), GFP_KERNEL);
-> > +	if (!clk_data)
-> > +		return -ENOMEM;
-> > +
-> > +	clk_data->num = num_domains;
-> > +
-> >  	for (i = 0; i < num_domains; i++) {
-> >  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-> > +		struct clk_init_data init = {};
-> > +		const char *clk_name;
-> >  		struct resource *res;
-> >  		void __iomem *base;
-> >  
-> > @@ -672,6 +694,27 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
-> >  
-> >  		data->base = base;
-> >  		data->res = res;
-> > +
-> > +		/* Register CPU clock for each frequency domain */
-> > +		clk_name = devm_kasprintf(dev, GFP_KERNEL, "qcom_cpufreq%d", i);
-> > +		init.name = clk_name;
-> 
-> nit: 'clk_name' isn't really needed, the result of devm_kasprintf() could be
-> assigned directly to 'init.name'. 'init' could be renamed to 'clk_init' if
-> the purpose of using 'clk_name' is to make clear that this is the name of a
-> clock.
-> 
+Hello,
 
-Ack.
+This series adds clock provider support to the Qcom CPUFreq driver for
+supplying the clocks to the CPU cores in Qcom SoCs.
+
+The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+clocks to the CPU cores. But this is not represented clearly in devicetree.
+There is no clock coming out of the CPUFreq HW node to the CPU. This created
+an issue [1] with the OPP core when a recent enhancement series was submitted.
+Eventhough the issue got fixed in the OPP framework in the meantime, that's
+not a proper solution and this series aims to fix it properly.
+
+There was also an attempt made by Viresh [2] to fix the issue by moving the
+clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+since those clocks belong to the CPUFreq HW node only.
+
+The proposal here is to add clock provider support to the Qcom CPUFreq HW
+driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+This correctly reflects the hardware implementation.
+
+The clock provider is a simple one that just provides the frequency of the
+clocks supplied to each frequency domain in the SoC using .recalc_rate()
+callback. The frequency supplied by the driver will be the actual frequency
+that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+is not same as what the CPUFreq framework has set but it is the one that gets
+supplied to the CPUs after throttling by LMh.
+
+This series has been tested on SM8450 based dev board with the OPP hack removed
+and hence there is a DTS change only for that platform. Once this series gets
+accepted, rest of the platform DTS can also be modified and finally the hack on
+the OPP core can be dropped.
 
 Thanks,
 Mani
 
-> > +		init.flags = CLK_GET_RATE_NOCACHE;
-> > +		init.ops = &qcom_cpufreq_hw_clk_ops;
-> > +		data->cpu_clk.init = &init;
-> > +
-> > +		ret = devm_clk_hw_register(dev, &data->cpu_clk);
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "Failed to register Qcom CPUFreq clock\n");
-> > +			return ret;
-> > +		}
-> > +
-> > +		clk_data->hws[i] = &data->cpu_clk;
-> > +	}
-> > +
-> > +	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get, clk_data);
-> > +	if (ret < 0) {
-> > +		dev_err(dev, "Failed to add Qcom CPUFreq clock provider\n");
-> > +		return ret;
-> >  	}
-> >  
-> >  	ret = cpufreq_register_driver(&cpufreq_qcom_hw_driver);
-> > -- 
-> > 2.25.1
-> > 
+[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
+
+Changes in v6:
+
+* Removed the local variable clk_name (Matthias)
+* Added the clock id to the error message of devm_clk_hw_register()
+
+Changes in v5:
+
+* Switched to Hz unit for the CPU clocks
+
+Changes in v4:
+
+* Rebased on top of cpufreq/arm/linux-next branch
+
+Changes in v3:
+
+* Submitted the cpufreq driver cleanup patches as a separate series as
+  suggested by Viresh
+* Removed static keyword from clk_init_data declaration
+
+Changes in v2:
+
+* Moved the qcom_cpufreq_data allocation to probe
+* Added single clock provider with multiple clks for each freq domain
+* Moved soc_data to qcom_cpufreq struct
+* Added Rob's review for binding
+
+Manivannan Sadhasivam (3):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+  cpufreq: qcom-hw: Add CPU clock provider support
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 12 ++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |  9 ++++
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 41 +++++++++++++++++++
+ 3 files changed, 62 insertions(+)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.25.1
+
