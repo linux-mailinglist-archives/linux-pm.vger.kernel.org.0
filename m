@@ -2,102 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D02622D11
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 15:00:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 248B6622DBF
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 15:22:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiKIOAg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 09:00:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
+        id S231565AbiKIOW5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 09:22:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiKIOA1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 09:00:27 -0500
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338F4634E
-        for <linux-pm@vger.kernel.org>; Wed,  9 Nov 2022 06:00:26 -0800 (PST)
-Received: by mail-qt1-f175.google.com with SMTP id e15so10371194qts.1
-        for <linux-pm@vger.kernel.org>; Wed, 09 Nov 2022 06:00:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6ug/ZUSfpqeBzCp/+2AJ33WlcK1pNZvoFgV1Z6DdI3U=;
-        b=sxQJeXa9UKtvZxQpSjH6HWA5dVhEz+Nz0ZVosfm8Tg7F2PgxlBxP4cdfPbq07yRXXS
-         Z4ZvlFX+r2G05HQxrqOzmlQO/WUQQLGX8+OY3MyNucrRHhGCsIrlQWa1ZI8ieSfeUfX7
-         rilwgQ/DFCWRAUBz4oam0aN7DSAIy3vAQJmFpt7kOX9oVt7utiWZUMdG1nzw5vdjEGEi
-         PL+AbfXDY8+GoT08c5QJ5xmu+zxpZr4E0DcVQmLm7+MoAifmKxPS+d0V+h7QTbgpI/P6
-         8mLCSvjbMCEpDbGjSgTtQFInFobRv8MtiNDR5LMG12ICkkECmTvZNdA3enZKKZ2u0kTx
-         T1ig==
-X-Gm-Message-State: ACrzQf15jD7fit4GQBX42/5OQNqOXRHN4+JB+gFsIJMc1gC1/A+xi1ms
-        TMu8D7rczBepqguD6TOomy6BQjuG9Z9oPZu2uT0=
-X-Google-Smtp-Source: AMsMyM6tpZAc8azDTTlxXFm+d2l+hgAOGeZNboC5qVpx3kNAZrkb4C2d4hYgvPc6kEBNC5KAwfr8AdW5FDom1P1CfB4=
-X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
- g21-20020ac87d15000000b003a5044987c3mr47592903qtb.357.1668002423504; Wed, 09
- Nov 2022 06:00:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20221108081220.7070-1-rui.zhang@intel.com>
-In-Reply-To: <20221108081220.7070-1-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 15:00:12 +0100
-Message-ID: <CAJZ5v0iyMLX-D5OG7VYTD-PYpLbpA4+x2itPVUvGf+sF1DU-Uw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] thermal/intel/intel_tcc_cooling: Detect TCC lock bit
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S231305AbiKIOWl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 09:22:41 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B976227FD0;
+        Wed,  9 Nov 2022 06:20:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64E6FB81F0C;
+        Wed,  9 Nov 2022 14:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16AFC433D6;
+        Wed,  9 Nov 2022 14:20:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668003651;
+        bh=R0d+e4AdJ2Po6pEtyX7eL5IfvQAUQy4DjsaeX0GaoDY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=at9a6f9v122U0kVYFxgGtwpdg96Pc2vJZm4v4xb0dEbLL8IiwKzAx26pGIzPVC2UX
+         NDxi56Imv4Hy6IaBRLmzWLrZxOkkjjPZH8LnUwMVdOBox+/FxAoc+Y2/NvLRy7Tc3G
+         EDimLtiyEEomjqy5nBCqvFRa/MmWCTVlumFQeC0/u3aw44SlR9CZmJckulKXYFt6Rs
+         vLF5NOBvDABZT6tRAtjGKear1eURDWKg7mE4goFIfiOQRy7U+cKFEf/GCtC1I3vQjT
+         I/G6WLS3C9J+y5YWKFQxSzbQWZjC6dkuXMjLmK16H2W53IAJghZxknrykpr+Eqh3ag
+         xtovpcX77veVw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oslwe-004vkC-MP;
+        Wed, 09 Nov 2022 14:20:48 +0000
+Date:   Wed, 09 Nov 2022 14:20:47 +0000
+Message-ID: <86v8nop5ts.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+In-Reply-To: <3d4536c9-4b3b-8312-4868-5e5b42a87424@marcan.st>
+References: <20221024043925.25379-1-marcan@marcan.st>
+        <20221024043925.25379-5-marcan@marcan.st>
+        <8635bdocco.wl-maz@kernel.org>
+        <3d4536c9-4b3b-8312-4868-5e5b42a87424@marcan.st>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: marcan@marcan.st, rafael@kernel.org, viresh.kumar@linaro.org, matthias.bgg@gmail.com, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org, ulf.hansson@linaro.org, mark.kettenis@xs4all.nl, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 9:10 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> When MSR_IA32_TEMPERATURE_TARGET is locked, TCC Offset can not be
-> updated even if the PROGRAMMABE Bit is set.
->
-> Yield the driver on platforms with MSR_IA32_TEMPERATURE_TARGET locked.
->
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
-> Note that this patch is made based on this patch series
-> https://patchwork.kernel.org/project/linux-pm/list/?series=693050
-> ---
->  drivers/thermal/intel/intel_tcc_cooling.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
->
-> diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
-> index ccd62358d4d0..f17fa5c81034 100644
-> --- a/drivers/thermal/intel/intel_tcc_cooling.c
-> +++ b/drivers/thermal/intel/intel_tcc_cooling.c
-> @@ -13,6 +13,7 @@
->  #include <asm/cpu_device_id.h>
->
->  #define TCC_PROGRAMMABLE       BIT(30)
-> +#define TCC_LOCKED             BIT(31)
->
->  static struct thermal_cooling_device *tcc_cdev;
->
-> @@ -80,6 +81,15 @@ static int __init tcc_cooling_init(void)
->         if (!(val & TCC_PROGRAMMABLE))
->                 return -ENODEV;
->
-> +       err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
-> +       if (err)
-> +               return err;
-> +
-> +       if (val & TCC_LOCKED) {
-> +               pr_info("TCC Offset locked\n");
-> +               return -ENODEV;
-> +       }
-> +
->         pr_info("Programmable TCC Offset detected\n");
->
->         tcc_cdev =
-> --
+On Wed, 09 Nov 2022 12:13:33 +0000,
+Hector Martin <marcan@marcan.st> wrote:
+> 
+> On 24/10/2022 17.27, Marc Zyngier wrote:
+> > On Mon, 24 Oct 2022 05:39:24 +0100,
+> > Hector Martin <marcan@marcan.st> wrote:
+> >>
+> >> This driver implements CPU frequency scaling for Apple Silicon SoCs,
+> >> including M1 (t8103), M1 Max/Pro/Ultra (t600x), and M2 (t8112).
+> >>
+> >> Each CPU cluster has its own register set, and frequency management is
+> >> fully automated by the hardware; the driver only has to write one
+> >> register. There is boost frequency support, but the hardware will only
+> >> allow their use if only a subset of cores in a cluster are in
+> >> non-deep-idle. Since we don't support deep idle yet, these frequencies
+> >> are not achievable, but the driver supports them. They will remain
+> >> disabled in the device tree until deep idle is implemented, to avoid
+> >> confusing users.
+> >>
+> >> This driver does not yet implement the memory controller performance
+> >> state tuning that usually accompanies higher CPU p-states. This will be
+> >> done in a future patch.
+> >>
+> >> Signed-off-by: Hector Martin <marcan@marcan.st>
+> >> ---
+> >>  drivers/cpufreq/Kconfig.arm          |   9 +
+> >>  drivers/cpufreq/Makefile             |   1 +
+> >>  drivers/cpufreq/apple-soc-cpufreq.c  | 352 +++++++++++++++++++++++++++
+> >>  drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+> >>  4 files changed, 364 insertions(+)
+> >>  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
+> >>
+> > 
+> > [...]
+> > 
+> >> +static struct freq_attr *apple_soc_cpufreq_hw_attr[] = {
+> >> +	&cpufreq_freq_attr_scaling_available_freqs,
+> >> +	NULL,
+> >> +	NULL,
+> > 
+> > nit: extra NULL?
+> 
+> That slot gets filled in later if boost is enabled, hence the need for
+> an extra terminating NULL in that case.
 
-Applied as 6.2 material along with the [2/2], thanks!
+Right. Consider placing a comment next to the first NULL so that
+someone else doesn't consider it useless and accidentally removes
+it...
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
