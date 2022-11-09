@@ -2,45 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C40C62334B
-	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 20:15:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1049F623353
+	for <lists+linux-pm@lfdr.de>; Wed,  9 Nov 2022 20:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiKITPb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 9 Nov 2022 14:15:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56160 "EHLO
+        id S229915AbiKITT0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 9 Nov 2022 14:19:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiKITP3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 14:15:29 -0500
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3328A1581D;
-        Wed,  9 Nov 2022 11:15:29 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id s20so11555209qkg.5;
-        Wed, 09 Nov 2022 11:15:29 -0800 (PST)
+        with ESMTP id S229657AbiKITTZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 9 Nov 2022 14:19:25 -0500
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4433A1B3;
+        Wed,  9 Nov 2022 11:19:24 -0800 (PST)
+Received: by mail-qv1-f44.google.com with SMTP id w10so12973631qvr.3;
+        Wed, 09 Nov 2022 11:19:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vH5PyIAlNuh7/zzJt8KiSzR2t2C93ID7RXrLpyPstHE=;
-        b=gMqOd/BXNdSPfMnP9Rx5qepP8D5ynYHuaPtVPAfNRZ08ShtWv5/OIs0ddeelSReijP
-         cqe4SvgRy89GugEQwOBXbdMIrqVfxSgJJXkDVesj9Z2A/tSbjvGAS1tcQ1Itx8eN8s1E
-         DXINQeXcrN2NR4+9V5dzMEf8dQ933oAw2F7aOVfjR5JJzp4RDL+D4iwWtpGw5R6MdYbl
-         64ObgR6H/21k8u0s0n0NfoCsengOphoK8kNPt7KC6QJYhnX3ZIA7wIFU3Mv/65wTEPAO
-         RtIL13ur9ugD2E/CcSKSO3NrxTENbVqOcq3hsXYiBEb4j9L/9fFKPM0d4/bPnKUS2vYM
-         U3cw==
-X-Gm-Message-State: ACrzQf2qU+HQ0mg+YkGVM3kYF0P9jAKwWl2nUd0xyl3AnQNzdfsE4jpc
-        5NpwgxXcol4/0k7MBt/fuwkXspB9OxV2xFgw1Nw=
-X-Google-Smtp-Source: AMsMyM68XnbdgLgEo2bamjCU4xI+xxM7VjEXDet7JmI9KpWZ0rzQZPuPggQxZ2uM6NJ8iVJn+k3NLR6PQVIap3P8CjM=
-X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
- q9-20020a05620a0d8900b006cfc98b744cmr43209380qkl.443.1668021328293; Wed, 09
- Nov 2022 11:15:28 -0800 (PST)
+        bh=jrQi34q0LM/jTR2NDgEHPDmLWCBKJGinUDccPqdXWHU=;
+        b=Up1sbGyJNBxWO+//y5q8mnIyXHUcud8smVX1Rj1dyIlxZX1D9XKdT0jHyLNNqM/6M5
+         p9Anfg3GYi3s4Q2Qi/u/RWS/tGBnF0VIBIZuojfmTSwY2ZlIeiPSFBAfQJXTIrYJbPrZ
+         Madh00eDH6wvuCX4B4x7OzdJxxbNmiyrLY87k91w04/ixAy0i54PN5P2Hcoi5UK0BJ7H
+         NhB0dywZqSWQt2CI98QFeeWjNcw40RN2oYxD1mbxoqhP1sXpLoWChzy/COSGpTZExGbe
+         Jg1SX0G0irtBJYrAQeNgYafiVFGJHeYlw/gWGIKkwIX2TTR71ztnDCF7Rb2X3yrxhBuY
+         XnIA==
+X-Gm-Message-State: ACrzQf1f++5YRi0CP8aVt6LfyX/qTMgYevH5r/LfGnr8NTVMA3dz4zQt
+        W2+uqbbIMQHjXMlcj0uvBD5vDrYuBDUKQCeZjrs=
+X-Google-Smtp-Source: AMsMyM4HHJ65z2pm+kE7cDgrVxcJl9RsLdlSFyrJPMX1bR9dvZjbdlJdotYGJwL+3bJGt2OLzgIJInNlX/ZI/nS44cw=
+X-Received: by 2002:a0c:c684:0:b0:4bb:fc53:5ad9 with SMTP id
+ d4-20020a0cc684000000b004bbfc535ad9mr47289132qvj.3.1668021563859; Wed, 09 Nov
+ 2022 11:19:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-6-linux@roeck-us.net>
-In-Reply-To: <20221017130910.2307118-6-linux@roeck-us.net>
+References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-7-linux@roeck-us.net>
+In-Reply-To: <20221017130910.2307118-7-linux@roeck-us.net>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 9 Nov 2022 20:15:17 +0100
-Message-ID: <CAJZ5v0hO9_95uD1qY8aBe094JWsxPrba2wk_PchKHmVqRj0CHw@mail.gmail.com>
-Subject: Re: [PATCH 5/9] thermal/core: Introduce locked version of thermal_zone_device_update
+Date:   Wed, 9 Nov 2022 20:19:13 +0100
+Message-ID: <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com>
+Subject: Re: [PATCH 6/9] thermal/core: Protect hwmon accesses to thermal
+ operations with thermal zone mutex
 To:     Guenter Roeck <linux@roeck-us.net>
 Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -60,106 +61,52 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
 >
-> In thermal_zone_device_set_mode(), the thermal zone mutex is released only
-> to be reacquired in the subsequent call to thermal_zone_device_update().
->
-> Introduce __thermal_zone_device_update() as locked version of
-
-Did you mean "unlocked"?
-
-> thermal_zone_device_update() and call it from
-> thermal_zone_device_set_mode() without releasing the lock to avoid
-> the extra release/acuire sequence.
+> In preparation to protecting access to thermal operations against thermal
+> zone device removal, protect hwmon accesses to thermal zone operations
+> with the thermal zone mutex. After acquiring the mutex, ensure that the
+> thermal zone device is registered before proceeding.
 >
 > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
->  drivers/thermal/thermal_core.c | 57 ++++++++++++++++++----------------
->  1 file changed, 31 insertions(+), 26 deletions(-)
+>  drivers/thermal/thermal_hwmon.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 562ece8d16aa..9facd9c5b70f 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -403,6 +403,34 @@ static void thermal_zone_device_init(struct thermal_zone_device *tz)
->                 pos->initialized = false;
->  }
+> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> index f53f4ceb6a5d..33bfbaed4236 100644
+> --- a/drivers/thermal/thermal_hwmon.c
+> +++ b/drivers/thermal/thermal_hwmon.c
+> @@ -77,11 +77,19 @@ temp_crit_show(struct device *dev, struct device_attribute *attr, char *buf)
+>         int temperature;
+>         int ret;
 >
-> +static void __thermal_zone_device_update(struct thermal_zone_device *tz,
-> +                                        enum thermal_notify_event event)
-> +{
-> +       int count;
+> +       mutex_lock(&tz->lock);
 > +
-> +       if (atomic_read(&in_suspend))
-> +               return;
+> +       if (!device_is_registered(&tz->device)) {
+> +               ret = -ENODEV;
+> +               goto unlock;
+> +       }
 > +
-> +       if (WARN_ONCE(!tz->ops->get_temp,
-> +                     "'%s' must not be called without 'get_temp' ops set\n",
-> +                     __func__))
-> +               return;
-> +
-> +       if (!thermal_zone_device_is_enabled(tz))
-> +               return;
-> +
-> +       update_temperature(tz);
-> +
-> +       __thermal_zone_set_trips(tz);
-> +
-> +       tz->notify_event = event;
-> +
-> +       for (count = 0; count < tz->num_trips; count++)
-> +               handle_thermal_trip(tz, count);
-> +
-> +       monitor_thermal_zone(tz);
-> +}
-> +
->  static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->                                         enum thermal_device_mode mode)
->  {
-> @@ -423,9 +451,9 @@ static int thermal_zone_device_set_mode(struct thermal_zone_device *tz,
->         if (!ret)
->                 tz->mode = mode;
+>         ret = tz->ops->get_crit_temp(tz, &temperature);
+
+Again, I would do it this way:
+
+        if (device_is_registered(&tz->device))
+                ret = tz->ops->get_crit_temp(tz, &temperature);
+        else
+                ret = -ENODEV;
+
+And I wouldn't change the code below (the ternary operator is out of
+fashion in particular).
+
+> -       if (ret)
+> -               return ret;
 >
-> -       mutex_unlock(&tz->lock);
-> +       __thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
->
-> -       thermal_zone_device_update(tz, THERMAL_EVENT_UNSPECIFIED);
+> -       return sprintf(buf, "%d\n", temperature);
+> +unlock:
 > +       mutex_unlock(&tz->lock);
->
->         if (mode == THERMAL_DEVICE_ENABLED)
->                 thermal_notify_tz_enable(tz->id);
-> @@ -457,31 +485,8 @@ int thermal_zone_device_is_enabled(struct thermal_zone_device *tz)
->  void thermal_zone_device_update(struct thermal_zone_device *tz,
->                                 enum thermal_notify_event event)
->  {
-> -       int count;
-> -
-> -       if (atomic_read(&in_suspend))
-> -               return;
-> -
-> -       if (WARN_ONCE(!tz->ops->get_temp, "'%s' must not be called without "
-> -                     "'get_temp' ops set\n", __func__))
-> -               return;
-> -
->         mutex_lock(&tz->lock);
-> -
-> -       if (!thermal_zone_device_is_enabled(tz))
-> -               goto out;
-> -
-> -       update_temperature(tz);
-> -
-> -       __thermal_zone_set_trips(tz);
-> -
-> -       tz->notify_event = event;
-> -
-> -       for (count = 0; count < tz->num_trips; count++)
-> -               handle_thermal_trip(tz, count);
-> -
-> -       monitor_thermal_zone(tz);
-> -out:
-> +       __thermal_zone_device_update(tz, event);
->         mutex_unlock(&tz->lock);
+> +
+> +       return ret ? ret : sprintf(buf, "%d\n", temperature);
 >  }
->  EXPORT_SYMBOL_GPL(thermal_zone_device_update);
-> --
-> 2.36.2
 >
+>
+> --
