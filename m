@@ -2,96 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EC2E624426
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 15:21:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DADA6243B7
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 14:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiKJOVz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 09:21:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52388 "EHLO
+        id S230208AbiKJN5i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Nov 2022 08:57:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiKJOVy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 09:21:54 -0500
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB61C19C19;
-        Thu, 10 Nov 2022 06:21:52 -0800 (PST)
-Received: by mail-oi1-x22a.google.com with SMTP id l127so1937163oia.8;
-        Thu, 10 Nov 2022 06:21:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S0l0HkGStvh8ekqBVw6XOHFtjJQ25u2aSlRE478jryI=;
-        b=TQYDbPO/olvXM/iSV5CJ6so73UsFpCcZOAGE8qruh/KqC785Ci1ZGZ/RF8JKHNQdtF
-         lyCHvSUvMThbMRiMKz1jA7wD2q9doBbm3D6qDC64/cCkG6xikNOaGrW4fE7icucOaIN+
-         pT6fEPvBD/6/imVt9ngYFZO30wtmjldaMQlfJVpQAIpP83oxsVuxIKrMDPWe0lRg2zLP
-         uTA+W5p2ltVYHJgQLG2kfscdwW+wkqVBhxu2kjjl+vehFUikJHKAm5OQMuyAYQ1bOdi5
-         2Rp0xsaPhF9EiNnuUC3fFuL9CZ8WoY3o4k1uJAHY0tXTAIik1MAtzWLSnKeF64GjbWtI
-         Dulw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S0l0HkGStvh8ekqBVw6XOHFtjJQ25u2aSlRE478jryI=;
-        b=Nzgy1gCH8Ty+RCyEkrcrDZ0ZO+RiHxuPJYJ4M7M5snd0zm+7KY8HwqjDCLGPSsOwze
-         jcPG9153Ekjj88aL7+g+Kw0qYnRuxtFY4wH8jiM+HPU/3q+5WcJKIVPEjzekz+ibFzOE
-         rXjyDdac0uTj3lEN7KMrruGBXQRQnOEwe2hB9srqBnSh6/ipaYTCTjnRA0aNyFLHr0j/
-         Tln1MDI1LbjKAEzVV4PYWTR9x+C2bC2Y3/1EvXra2CfpMphTNr0+cvuBLVXGzf4vfNOo
-         +/BdyBo+LQdUi7nWb2z5dK4M5umIIJNaUX32dcWJlVQPdtijhzne69c1j3iDSyPBGvZS
-         tqUA==
-X-Gm-Message-State: ACrzQf3QXYTUIqxb/G54ioTtOQnAcPA5G90j95q/gMHrLrBu3g4v6tSc
-        0HkbkKz1H+YV81hEqoK/ncNEtmfYmBk=
-X-Google-Smtp-Source: AMsMyM4zTRSB8BVNrdlESTGTrSnL6fD7B6/3tGYgHsP1HJVe+eJaoJcH/WGk5G67Culh9KjGUyumFw==
-X-Received: by 2002:a05:6808:1507:b0:35a:5eed:f5ce with SMTP id u7-20020a056808150700b0035a5eedf5cemr17161066oiw.108.1668090112131;
-        Thu, 10 Nov 2022 06:21:52 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b14-20020a056870470e00b0012d939eb0bfsm7564424oaq.34.2022.11.10.06.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 06:21:50 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Nov 2022 06:21:49 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] thermal/core: Protect hwmon accesses to thermal
- operations with thermal zone mutex
-Message-ID: <20221110142149.GC2404288@roeck-us.net>
-References: <20221017130910.2307118-1-linux@roeck-us.net>
- <20221017130910.2307118-7-linux@roeck-us.net>
- <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com>
+        with ESMTP id S230124AbiKJN5h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 08:57:37 -0500
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FC6289;
+        Thu, 10 Nov 2022 05:57:36 -0800 (PST)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7NcR5ZDMzJnVv;
+        Thu, 10 Nov 2022 21:54:31 +0800 (CST)
+Received: from dggpeml500005.china.huawei.com (7.185.36.59) by
+ dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 10 Nov 2022 21:57:34 +0800
+Received: from huawei.com (10.175.112.125) by dggpeml500005.china.huawei.com
+ (7.185.36.59) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
+ 2022 21:57:33 +0800
+From:   Yongqiang Liu <liuyongqiang13@huawei.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>, <tobin@kernel.org>
+CC:     <zhangxiaoxu5@huawei.com>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: Init completion before kobject_init_and_add()
+Date:   Thu, 10 Nov 2022 14:23:07 +0000
+Message-ID: <20221110142307.981883-1-liuyongqiang13@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.112.125]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500005.china.huawei.com (7.185.36.59)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 09, 2022 at 08:19:13PM +0100, Rafael J. Wysocki wrote:
-> On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
-[ ... ]
-> 
-> And I wouldn't change the code below (the ternary operator is out of
-> fashion in particular).
-> 
+In cpufreq_policy_alloc(), it will call uninitialed completion in
+cpufreq_sysfs_release() when kobject_init_and_add() fails. And
+that will cause a crash such as the following page fault in complete:
 
-I tried to introduce some consistency; the ternary operator is used
-in some of the existing thermal code. Guess I went the wrong direction.
-Never mind; I don't have a strong opinion either way.
-I updated the series patches to no longer use ternary operators in
-updated code, but I left existing code alone (changing that should not
-be part of this patch set anyway).
+BUG: unable to handle page fault for address: fffffffffffffff8
+[..]
+RIP: 0010:complete+0x98/0x1f0
+[..]
+Call Trace:
+ kobject_put+0x1be/0x4c0
+ cpufreq_online.cold+0xee/0x1fd
+ cpufreq_add_dev+0x183/0x1e0
+ subsys_interface_register+0x3f5/0x4e0
+ cpufreq_register_driver+0x3b7/0x670
+ acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
+ do_one_initcall+0x13d/0x780
+ do_init_module+0x1c3/0x630
+ load_module+0x6e67/0x73b0
+ __do_sys_finit_module+0x181/0x240
+ do_syscall_64+0x35/0x80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Thanks,
-Guenter
+Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
+Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+---
+ drivers/cpufreq/cpufreq.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 69b3d61852ac..7e56a42750ea 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 	if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
+ 		goto err_free_rcpumask;
+ 
++	init_completion(&policy->kobj_unregister);
+ 	ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
+ 				   cpufreq_global_kobject, "policy%u", cpu);
+ 	if (ret) {
+@@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+ 	init_rwsem(&policy->rwsem);
+ 	spin_lock_init(&policy->transition_lock);
+ 	init_waitqueue_head(&policy->transition_wait);
+-	init_completion(&policy->kobj_unregister);
+ 	INIT_WORK(&policy->update, handle_update);
+ 
+ 	policy->cpu = cpu;
+-- 
+2.25.1
+
