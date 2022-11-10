@@ -2,77 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0BB624B16
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 20:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4996624B9A
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 21:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbiKJT5l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 14:57:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
+        id S231871AbiKJUSU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Nov 2022 15:18:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKJT5k (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 14:57:40 -0500
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4035B7646
-        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 11:57:39 -0800 (PST)
-Received: by mail-pg1-x54a.google.com with SMTP id l63-20020a639142000000b0046f5bbb7372so1474545pge.23
-        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 11:57:39 -0800 (PST)
+        with ESMTP id S231661AbiKJUR7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 15:17:59 -0500
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF9C4E432;
+        Thu, 10 Nov 2022 12:17:46 -0800 (PST)
+Received: by mail-oi1-x22c.google.com with SMTP id s206so3017929oie.3;
+        Thu, 10 Nov 2022 12:17:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=2Nv/CBgytn69NMqK+TFbyBd+BfQKl+kVHWTnPjJGMMU=;
-        b=pQY6f1vDAT8XHF59ZRKV9GgCCjpwYTun9sBF+RHq6hglBXJnPyTL8xHYMWvQgzxaCL
-         9+z7GaGdDxpKBWQa62QPd8TVNNsd3d8BLn8yOV1HUPZmNxLB9Sxz8Bt4+nPxruvDIJTd
-         SRvZwNzqJZVLsgqs3RGK1shyvs/ohYPVqBvfQzrzrXiZu/dxQLYAtSsUGGK5mf5/I8o2
-         qvykPFapJi956aW1SJgg00q+B/cM4pnCB8wuQAG9HoVNK4K9gD0tN0MZKaT2l1rjyd3O
-         t4pi8PCzgjargodRNZ37Z2BiJPOWolc8LJK9mpHraBoFyazSBp7Wg2ubFPp1fovcY5iC
-         gLDw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ou3PQ5Tt3CEALi9RmryRLch6D2GFqIr6CN6604+GjCk=;
+        b=I6C0pJQdn22XVI9xebvjdsrTN1M4+T5dC4bfR4jQw+Rvp/a9PB+0e+3OI0eHQrYw9y
+         V8N18WOwS/rRPB2aB7L8k5wJtyIKILEoHCHP++qGGXCDknZA7RlQFKwpSug3cQ3sbtQo
+         zA0YZ9msOeLyYH1RAHc+SBB8wqgXNyeQ2bw87tqsi7qGE3Jr7m77/GUTWd3Zmn3IMuWf
+         frGAIOTYj4fU+qsyjVNMWRcp+cXXmQ6i8ml4dYZlbiWPzjCOk+kjoMKceh/PMtHW7VEe
+         arJifUm0EnI6eyW3AP2+NC/v9BQG7SrYTM3qPApfy3M8hgd/TKuPk/Uah3/fEozntQg5
+         Cyew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2Nv/CBgytn69NMqK+TFbyBd+BfQKl+kVHWTnPjJGMMU=;
-        b=mAzP6Q4nzjnK3QnZizRr19UZagzWDWR52TmVn73yI+OyFU0fCnCL/Zw/lrrgNyo6KS
-         zxV4MRTFTgCIpOpWLRugRj3nZGMOSxmeDnEpWThKiAFf8OPYQFCRFrIH/6dE/GGOiu4r
-         QvUXXnBOMSHdOe6vC1fxjkuVaLCDSnUEPOXIwiWan/nMPk7abCOBLg2t5wJVV9sNfayh
-         eWYdyXwbRO78at1KKawOI1CqOODHwbCo6qlAdOdv6Pwon7edCuhtC4QoA/S1Q7/x5Wpf
-         GRRrNuup8IJp6e8KEzI9WY3t5HetNX/0IwMGNwuXV2tReEiX6iL/1KBTp4PMZ+FWXap0
-         IyMQ==
-X-Gm-Message-State: ACrzQf3cFj01Y6hEnct2AmaNQe1yfIaw4fqnpLBi8iP7rbybhf+765Ef
-        H1gCHPNFszr+zMIrBH8m100FK7rx0z0l1Q==
-X-Google-Smtp-Source: AMsMyM4IJBP4wy9Zci9wBJ4eUvEOuR3adcZ5+nJrkztQfesx0mZ98JTf83ulHfu5O7HqA8IV7eurhuJDP2DcxA==
-X-Received: from wusamuel-special.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2a8c])
- (user=wusamuel job=sendgmr) by 2002:a17:902:b586:b0:187:30f0:b16b with SMTP
- id a6-20020a170902b58600b0018730f0b16bmr1829832pls.14.1668110258701; Thu, 10
- Nov 2022 11:57:38 -0800 (PST)
-Date:   Thu, 10 Nov 2022 19:57:32 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221110195732.1382314-1-wusamuel@google.com>
-Subject: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
-From:   Sam Wu <wusamuel@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ou3PQ5Tt3CEALi9RmryRLch6D2GFqIr6CN6604+GjCk=;
+        b=tDN/ejIT2mbuDFjOoPQO9gTGJxU61D9NL+JBsfjuoPV+LRN5w+0Gn6ijVg/NsIemWo
+         /pkcVktSJYLpI+b4GEtjKCw4Ke4Ry0fBENRz7hDd6Tkb8jp48upJshRtK0RUyHEm7oEc
+         gH56UKTaIf0s4C0vdPbGGpzD4qKtTU2R66B8kyhfaaro7Pc0NXri5ukOPS3Xdf+1XmWA
+         UV/k315Gsc+qWMp02BJOxtWITbj9KBQFjirduyqEjBuHBdJWD/DqqUkuZFFDJ4FmNCn/
+         5II8Vk4rpQrsPAB3FBWpnmu7qy1yuZJrUaW34BGJPIt7Tl7oww+Tiw+/7TCZzdeg6oh6
+         4JxQ==
+X-Gm-Message-State: ACrzQf3Bxu8NkhKsL6DBmxak0EVyDJ/+daBFIKAjaP7musQm5W+YIrpt
+        xxuPd5fAy++izkGrNE+QJYI=
+X-Google-Smtp-Source: AMsMyM7Ne4sYytUBLN41y3GX5z+cLTd/c9obX4PJ1PtuE32PYo6OURFvkDhEtin5g3aL4jsXHsCZdA==
+X-Received: by 2002:a05:6808:18a4:b0:34e:1fe0:d6ba with SMTP id bi36-20020a05680818a400b0034e1fe0d6bamr1967829oib.275.1668111465725;
+        Thu, 10 Nov 2022 12:17:45 -0800 (PST)
+Received: from ?IPV6:2603:8081:2802:9dfb:2818:2051:efa7:d112? (2603-8081-2802-9dfb-2818-2051-efa7-d112.res6.spectrum.com. [2603:8081:2802:9dfb:2818:2051:efa7:d112])
+        by smtp.gmail.com with ESMTPSA id i13-20020aca2b0d000000b0035a9003b8edsm138271oik.40.2022.11.10.12.17.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Nov 2022 12:17:45 -0800 (PST)
+Message-ID: <d975895b-1ece-9944-8162-c7cc003b86dd@gmail.com>
+Date:   Thu, 10 Nov 2022 14:17:38 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is
+ uninitialized when used here [-Werror,-Wuninitialized]
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Sam Wu <wusamuel@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+References: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
+ <f22ea97e-9d76-4c8b-a0c9-698db6e69a9f@app.fastmail.com>
+From:   stuart hayes <stuart.w.hayes@gmail.com>
+In-Reply-To: <f22ea97e-9d76-4c8b-a0c9-698db6e69a9f@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,144 +82,38 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This reverts commit 6d5afdc97ea71958287364a1f1d07e59ef151b11.
 
-On a Pixel 6 device, it is observed that this commit increases
-latency by approximately 50ms, or 20%, in migrating a task
-that requires full CPU utilization from a LITTLE CPU to Fmax
-on a big CPU. Reverting this change restores the latency back
-to its original baseline value.
 
-Fixes: 6d5afdc97ea7 ("cpufreq: schedutil: Move max CPU capacity to sugov_policy")
-Cc: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Saravana Kannan <saravanak@google.com>
-Cc: Isaac J. Manjarres <isaacmanjarres@google.com>
-Signed-off-by: Sam Wu <wusamuel@google.com>
----
- kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+On 11/10/2022 5:19 AM, Arnd Bergmann wrote:
+> On Thu, Nov 10, 2022, at 12:14, Naresh Kamboju wrote:
+>> [Please ignore email this if it is already reported]
+>>
+>> Kernel build warning noticed on x86_64 with clang toolchain [1].
+>> Build failures noticed from next-20221108 .. next-20221110.
+>>
+>> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>>
+>> make --silent --keep-going --jobs=8
+>> O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+>> ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
+>> CC=clang
+>> drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
+>> uninitialized when used here [-Werror,-Wuninitialized]
+>>          acpi_cpufreq_online = ret;
+>>                                ^~~
+>> drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
+>> 'ret' to silence this warning
+>>          int ret;
+>>                 ^
+>>                  = 0
+>> 1 error generated.
+> 
+> This is caused by 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs"),
+> which removes the initialization of this variable.
+> 
+>        Arnd
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 9161d1136d01..1207c78f85c1 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -25,9 +25,6 @@ struct sugov_policy {
- 	unsigned int		next_freq;
- 	unsigned int		cached_raw_freq;
- 
--	/* max CPU capacity, which is equal for all CPUs in freq. domain */
--	unsigned long		max;
--
- 	/* The next fields are only needed if fast switch cannot be used: */
- 	struct			irq_work irq_work;
- 	struct			kthread_work work;
-@@ -51,6 +48,7 @@ struct sugov_cpu {
- 
- 	unsigned long		util;
- 	unsigned long		bw_dl;
-+	unsigned long		max;
- 
- 	/* The field below is for single-CPU policies only: */
- #ifdef CONFIG_NO_HZ_COMMON
-@@ -160,6 +158,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
- {
- 	struct rq *rq = cpu_rq(sg_cpu->cpu);
- 
-+	sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
- 	sg_cpu->bw_dl = cpu_bw_dl(rq);
- 	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
- 					  FREQUENCY_UTIL, NULL);
-@@ -254,7 +253,6 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
-  */
- static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
- {
--	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	unsigned long boost;
- 
- 	/* No boost currently required */
-@@ -282,8 +280,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
- 	 * sg_cpu->util is already in capacity scale; convert iowait_boost
- 	 * into the same scale so we can compare.
- 	 */
--	boost = sg_cpu->iowait_boost * sg_policy->max;
--	boost >>= SCHED_CAPACITY_SHIFT;
-+	boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
- 	boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
- 	if (sg_cpu->util < boost)
- 		sg_cpu->util = boost;
-@@ -340,7 +337,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
- 	if (!sugov_update_single_common(sg_cpu, time, flags))
- 		return;
- 
--	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
-+	next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
- 	/*
- 	 * Do not reduce the frequency if the CPU has not been idle
- 	 * recently, as the reduction is likely to be premature then.
-@@ -376,7 +373,6 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
- 				     unsigned int flags)
- {
- 	struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
--	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	unsigned long prev_util = sg_cpu->util;
- 
- 	/*
-@@ -403,8 +399,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
- 		sg_cpu->util = prev_util;
- 
- 	cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
--				   map_util_perf(sg_cpu->util),
--				   sg_policy->max);
-+				   map_util_perf(sg_cpu->util), sg_cpu->max);
- 
- 	sg_cpu->sg_policy->last_freq_update_time = time;
- }
-@@ -413,19 +408,25 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
- {
- 	struct sugov_policy *sg_policy = sg_cpu->sg_policy;
- 	struct cpufreq_policy *policy = sg_policy->policy;
--	unsigned long util = 0;
-+	unsigned long util = 0, max = 1;
- 	unsigned int j;
- 
- 	for_each_cpu(j, policy->cpus) {
- 		struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-+		unsigned long j_util, j_max;
- 
- 		sugov_get_util(j_sg_cpu);
- 		sugov_iowait_apply(j_sg_cpu, time);
-+		j_util = j_sg_cpu->util;
-+		j_max = j_sg_cpu->max;
- 
--		util = max(j_sg_cpu->util, util);
-+		if (j_util * max > j_max * util) {
-+			util = j_util;
-+			max = j_max;
-+		}
- 	}
- 
--	return get_next_freq(sg_policy, util, sg_policy->max);
-+	return get_next_freq(sg_policy, util, max);
- }
- 
- static void
-@@ -751,7 +752,7 @@ static int sugov_start(struct cpufreq_policy *policy)
- {
- 	struct sugov_policy *sg_policy = policy->governor_data;
- 	void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
--	unsigned int cpu = cpumask_first(policy->cpus);
-+	unsigned int cpu;
- 
- 	sg_policy->freq_update_delay_ns	= sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
- 	sg_policy->last_freq_update_time	= 0;
-@@ -759,7 +760,6 @@ static int sugov_start(struct cpufreq_policy *policy)
- 	sg_policy->work_in_progress		= false;
- 	sg_policy->limits_changed		= false;
- 	sg_policy->cached_raw_freq		= 0;
--	sg_policy->max				= arch_scale_cpu_capacity(cpu);
- 
- 	sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
- 
--- 
-2.38.1.431.g37b22c650d-goog
+Yes, I apologize for missing that.  A patch has already been submitted to
+fix this:
 
+https://lore.kernel.org/lkml/20221108170103.3375832-1-nathan@kernel.org/
