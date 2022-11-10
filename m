@@ -2,134 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EA5623C1A
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 07:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC62E624123
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 12:14:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232661AbiKJGte (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 01:49:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S230416AbiKJLOx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Nov 2022 06:14:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiKJGtd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 01:49:33 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on20601.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eae::601])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E08F2F03C;
-        Wed,  9 Nov 2022 22:49:32 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ezPI0iW5+Ozb1CkBjqpvwHxGs2fl2uX+ly9I+DfpMl7M2dyTzmBoi9zN8OGEflXHCFgE7AkMSQoicdk0OOCJwGGtjZl1ksnb5EG0jWu0D5nNhq+PLQSt6FMYurjlFHizP9EayKkq2u8hmq79qC+axGEgGvMBoVmZSx2wMSV9P6yFhvtGmqkp4IHsEt/wwkO/nYfFI1Vy/egWAv0BKPYTe4H95DWBNIUYQplTwJicCEQielQ8itkNzPXYBSKh/rOZDbPTDKFT8X0jcycvAhCEOzhS84qsZQqwV2O/IIK7hDVWujiNbVVM/F01//XXQvk5/8ET7tkF+1lJnTSqp2PUMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5yUpJzh6QRUAzZSYvx6zTIHg+TdlbMVNpquqUA0Mhvg=;
- b=R+HEPNsP5HBXebZullUwKlv0bHfoXUY0ESQDJfEeN9A7MEEtiJvpiVZxEFRwV+E/OGfOowr93n7QSA6npNqdmPYdPnqycXkGj/bd0wOY4uQQsTpO5oWpCzsDqwcpiZJntIWnTGO4SZWeID5LrgjojRFb4kB2R8GhzyUcqBbaRy0AkrmkWxefedWJinRIYcffj++Dc5btjdrzS1LO7ZnfW5WW82QK+0f7O4Wfj4lB0491aCN3Ncync1bH4nnmFuvG5u8sseS1el6J70riVHIROcuIDeV7niLvzqjk/V5yWPAk9rAIdXGngquMYvMkUxQCQhABYsP6TIMol8oOHh6Yyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5yUpJzh6QRUAzZSYvx6zTIHg+TdlbMVNpquqUA0Mhvg=;
- b=vCHGEhajLSZkJYDKwymPk+cP2kS6C/hvdftHenN38NpBfnfBuIx80eakIXaZ0hYnwL3dodA4VtzOE5rK7mUc+AZkBlSJ7PQidY6ez9A7j9H+jV0kxbWd6L/6qCDSsYccE2YG8aQYOHyvXN5o2PZoAIZ81zjF5I+EEAO/H9oBwks=
-Received: from MW4PR04CA0377.namprd04.prod.outlook.com (2603:10b6:303:81::22)
- by DS7PR12MB8081.namprd12.prod.outlook.com (2603:10b6:8:e6::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.27; Thu, 10 Nov
- 2022 06:49:29 +0000
-Received: from CO1NAM11FT101.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::b0) by MW4PR04CA0377.outlook.office365.com
- (2603:10b6:303:81::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.13 via Frontend
- Transport; Thu, 10 Nov 2022 06:49:28 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT101.mail.protection.outlook.com (10.13.175.164) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5813.12 via Frontend Transport; Thu, 10 Nov 2022 06:49:28 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
- 2022 00:49:06 -0600
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Sven van Ashbrook <svenva@chromium.org>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        <linux-pm@vger.kernel.org>, <platform-driver-x86@vger.kernel.org>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@intel.com>
-CC:     S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        <rrangel@chromium.org>, "Rajat Jain" <rajatja@google.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Gross <markgross@kernel.org>
-Subject: [RFC v2 3/3] platform/x86/intel/pmc: core: Report duration of time in HW sleep state
-Date:   Thu, 10 Nov 2022 00:47:23 -0600
-Message-ID: <20221110064723.8882-4-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221110064723.8882-1-mario.limonciello@amd.com>
-References: <20221110064723.8882-1-mario.limonciello@amd.com>
+        with ESMTP id S230355AbiKJLOs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 06:14:48 -0500
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E70B2870A
+        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 03:14:21 -0800 (PST)
+Received: by mail-yb1-xb31.google.com with SMTP id j2so1921776ybb.6
+        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 03:14:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=w2bzJsB3PbL2X/ibwn3ezEZIfiFkuOTKtlMfImy68cw=;
+        b=SZpX7Q3VH7kdT2mdWoO/QbBXjTZrWo4vvC/LeRfeAISTPI9+3kKF6QzsnDSlTjhzsz
+         y01yoLLOAGTWPvGFzhGfBuYQOHteTyMuWJzvJLZ8YcJp4563rQJuqMyr9NtiJ1/RXc+5
+         6Zcv+KoRPnYi96FeLJOPtQ1wkq2uvuViyePYA2zNupq1V7SnJVDFLHs/ZXV0Nvqn0zTa
+         JHmbllz/nTATi0fRb7vfjhpD8bpJbN1Rw6PeDUyc+LLZavrgYj5ul2VLSnBKkWDgPgS+
+         BOLMSfKscmE8mG4ImjW3Leym5HYNAkY4LHVbevGDqRFC9E3u5mblGFNltT/zyubmcWRB
+         cO1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w2bzJsB3PbL2X/ibwn3ezEZIfiFkuOTKtlMfImy68cw=;
+        b=ebUGBSJ1DP9gHWKpRu4vFDMAyj1pPHqUijzTcajtM6g9yNabwFCsnJfmZn4Cz91ym6
+         Nuvia7ZBNvvIHhMQ48E2iOWEHq8d4Ymryp63O/BcBVipln5EnWenh29Z1j6i/SCKs/zk
+         oUiIBI0V1z5W7v5y4Nz5ZdQZXkx69F8Ua16DdJr5ggDjVFLxJunnMBi5d6+6k4abgR6h
+         fl1s2yFVK3vADMcJ2H3f9g71AN0+MJ7Cgxg0TcuWtuTBces/7W7BG0S2c533Ov/tZkHj
+         6hiqMSi/8VTwOFuyOSVpxpz3B7MvPLKtnmWiaO3n/Ivhm1NZI7G+6OV6NOS81EsZoPaa
+         vdkQ==
+X-Gm-Message-State: ANoB5plG13EYXPmuPe+jNPHB6qri47kHnI2Olz92/T9ze1ilT4jT74n5
+        bgLJHUg3sTLc/Exc6RDFfMBrgwXbEXQ1HnKCrazBOQ==
+X-Google-Smtp-Source: AA0mqf4HAlvllfiTAy8O9bwGOZY+LqHNa1fYXXmuHTN8m/MtWdK5qYiJCbTluraqvq+eDKvsSspGFDYmqQHDLvDcHGI=
+X-Received: by 2002:a05:6902:b16:b0:6d6:9455:d6c5 with SMTP id
+ ch22-20020a0569020b1600b006d69455d6c5mr20823348ybb.164.1668078860624; Thu, 10
+ Nov 2022 03:14:20 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT101:EE_|DS7PR12MB8081:EE_
-X-MS-Office365-Filtering-Correlation-Id: 592d4884-0d0a-4580-b8ea-08dac2e7b6de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JBWJkffu80cD+caBcBUXI1WkSTHYg/oYSMj2x0pQ/DZ/i3TOaZ6zpXzktjMjijY3Y4dYeOVHbooAAg1pHyv7P5Q7CEuvj3gRCCFfAwwVuUoH2QHBhmRJ99urFnDEnPA+JENIb+TM0IaNd0znV1JfpDNemweiv1XDjrQV8WIoc+l19FIlRM+YrmI39PtRIQwaSC/3ukHTcMTDI/BTw9l4axch7jwfRL/6jobFrFY/TUi/nfyDR3Df2cCZMTCgAjRvargF0O/9Yft2gtkRXMwjexQ9tXSYL90wPYnEVqKeTc2JBwBULdJ70rug2dYAvzd6CPLqleFXQcUkXfCb2MEOQIjd49igCinAVwy3aHgESE2g027eYEvabV+uQcYJLCYS1AKlFk0vfX3TAAPItsczhYsVpWbyHcFUe7CJ9xaWfRGsVaNOocnz5MxE7aadY+ZRoyDtWOIE1/b6bGTzJfqnqBgiR+QN3K0JxZxZywSE+r9LWfbeAswr06x1r0tzL5JBh71EDvl9Z2KP4/oSjp9sKkvC7IqFK52PegfpoZ32YdI0x5jkJYIx/9YKDBe7VJhP4jboCC9r6A9eCLeGrmbSlDAf3CfslW2UjHXCo4bi+LmTqoK+3od7D0IzQTg6r82rm3UuRnQpFI7s7WYH/F16SEdO7b+3udfXu2zuN0TmsGtM0PSljX4/fRc2IQPw0AgoLHlUnTSsgA+4ChmAROe2d8YANnnpQZuKScP4ZkvgihUcHClC8vuJQullgfgKjIQFyLLUlqu8aqjoNMUTnjmpatD10ibm15xQmns9qaUrTx0gXdVwG84W/Y89zIuRuyYk
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(396003)(39860400002)(376002)(451199015)(46966006)(36840700001)(40470700004)(1076003)(47076005)(16526019)(7416002)(2616005)(83380400001)(336012)(81166007)(82310400005)(356005)(44832011)(426003)(186003)(82740400003)(2906002)(36860700001)(4744005)(8936002)(40460700003)(5660300002)(6666004)(40480700001)(41300700001)(478600001)(26005)(4326008)(316002)(70206006)(8676002)(54906003)(110136005)(70586007)(7696005)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Nov 2022 06:49:28.5911
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 592d4884-0d0a-4580-b8ea-08dac2e7b6de
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT101.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8081
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 10 Nov 2022 16:44:09 +0530
+Message-ID: <CA+G9fYtaNmXOKnwH_ih9vZyFeaD+Lvzxf3WTbAV50rBtwkPxpQ@mail.gmail.com>
+Subject: x86: clang: acpi-cpufreq.c:970:24: error: variable 'ret' is
+ uninitialized when used here [-Werror,-Wuninitialized]
+To:     open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org, llvm@lists.linux.dev
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-intel_pmc_core displays a warning when a suspend didn't get to a HW
-sleep state.
+[Please ignore email this if it is already reported]
 
-This information is generally useful to userspace as well which may use
-it to collect further debugging data. Report this to the standard kernel
-reporting infrastructure that can be accessed from sysfs.
+Kernel build warning noticed on x86_64 with clang toolchain [1].
+Build failures noticed from next-20221108 .. next-20221110.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/platform/x86/intel/pmc/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index 17ec5825d13d..ef2055209213 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -2116,6 +2116,8 @@ static __maybe_unused int pmc_core_resume(struct device *dev)
- 	if (!pmcdev->check_counters)
- 		return 0;
- 
-+	pm_set_hw_state_residency(pmcdev->s0ix_counter);
-+
- 	if (!pmc_core_is_s0ix_failed(pmcdev))
- 		return 0;
- 
--- 
-2.34.1
+make --silent --keep-going --jobs=8
+O=/home/tuxbuild/.cache/tuxmake/builds/1/build LLVM=1 LLVM_IAS=1
+ARCH=x86_64 SRCARCH=x86 CROSS_COMPILE=x86_64-linux-gnu- HOSTCC=clang
+CC=clang
+drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is
+uninitialized when used here [-Werror,-Wuninitialized]
+        acpi_cpufreq_online = ret;
+                              ^~~
+drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable
+'ret' to silence this warning
+        int ret;
+               ^
+                = 0
+1 error generated.
 
+tuxmake --runtime podman --target-arch x86_64 --toolchain
+clang-nightly --kconfig defconfig --kconfig-add
+https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/lkft-crypto.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/distro-overrides.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/systemd.config
+--kconfig-add https://raw.githubusercontent.com/Linaro/meta-lkft/kirkstone/meta/recipes-kernel/linux/files/virtio.config
+--kconfig-add CONFIG_IGB=y --kconfig-add
+CONFIG_UNWINDER_FRAME_POINTER=y LLVM=1 LLVM_IAS=1
+
+
+
+Build log:
+[1] https://builds.tuxbuild.com/2HLg3VgMgxRXBn31n6Ig7BFwSy9/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
