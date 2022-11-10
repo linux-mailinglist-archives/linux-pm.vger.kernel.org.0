@@ -2,100 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DADA6243B7
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 14:57:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AAEA624433
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 15:25:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbiKJN5i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 08:57:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39124 "EHLO
+        id S231264AbiKJOZL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Nov 2022 09:25:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230124AbiKJN5h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 08:57:37 -0500
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FC6289;
-        Thu, 10 Nov 2022 05:57:36 -0800 (PST)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N7NcR5ZDMzJnVv;
-        Thu, 10 Nov 2022 21:54:31 +0800 (CST)
-Received: from dggpeml500005.china.huawei.com (7.185.36.59) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 10 Nov 2022 21:57:34 +0800
-Received: from huawei.com (10.175.112.125) by dggpeml500005.china.huawei.com
- (7.185.36.59) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 10 Nov
- 2022 21:57:33 +0800
-From:   Yongqiang Liu <liuyongqiang13@huawei.com>
-To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>, <tobin@kernel.org>
-CC:     <zhangxiaoxu5@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] cpufreq: Init completion before kobject_init_and_add()
-Date:   Thu, 10 Nov 2022 14:23:07 +0000
-Message-ID: <20221110142307.981883-1-liuyongqiang13@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S231175AbiKJOZK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 09:25:10 -0500
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 195C827DDC;
+        Thu, 10 Nov 2022 06:25:10 -0800 (PST)
+Received: by mail-qt1-f174.google.com with SMTP id c15so963062qtw.8;
+        Thu, 10 Nov 2022 06:25:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PYrdIwlw/lJKu3AnvAKe/flDTUx8RRjiQQvOO8furMY=;
+        b=llbB5NAk5NEhzhrsh8ZeFXwW3N7uTFPMdeOX7LQRnU6QCk9njyjwVRsU6EVhxos+zi
+         QRY6C3NtR1MnJriUo96m5KOGuNnZanG0fusD0i/3lnQzpnt3A8q9bAPg+rjgoM9C7w4/
+         PZ20noXpsNzp2Vsi8wU6zhigA+PUVnjmdUzL+hp8wU4IjeDqCl81K4s+h8faDNRXKCfw
+         xGhETgt8NJkj30nyvqYPeAD0tmKAvAo/RnysorSXUcokqcoNbaeczMnWkQMpcAI6pQ6a
+         HwDVD509hLsBuuSrAawzX9XqodeN08TPIyLArC8lFmnUuTT19mun3B/3Q/n52FY2oI5J
+         Acew==
+X-Gm-Message-State: ACrzQf2fZhlsqW4aAx6pbvQghL6Y6jGc43s4u2tdaFi4gND/8VpO1v7Q
+        iLAWFLlC4hlFKQcQiACCYPdNFy6yYswUV8aeAWQ=
+X-Google-Smtp-Source: AMsMyM4FsPdzHNBl+WwP9MoBmdL61DTI6zZH2YMFXCRPO1hibDl0jdOsB052Yb46NanZ6Be+se6kG8vDk/J70gkqF2A=
+X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
+ g21-20020ac87d15000000b003a5044987c3mr51914311qtb.357.1668090309233; Thu, 10
+ Nov 2022 06:25:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500005.china.huawei.com (7.185.36.59)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221017130910.2307118-1-linux@roeck-us.net> <20221017130910.2307118-7-linux@roeck-us.net>
+ <CAJZ5v0hMbzEdLecy_OWquOqdauBc1nsN7Q9mPkt2tOU4nEpHVw@mail.gmail.com> <20221110142149.GC2404288@roeck-us.net>
+In-Reply-To: <20221110142149.GC2404288@roeck-us.net>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 10 Nov 2022 15:24:58 +0100
+Message-ID: <CAJZ5v0j4w_oTZHX4r9QpOV_VYmgc7+HTMS=mDFTgT4F1dp5pyg@mail.gmail.com>
+Subject: Re: [PATCH 6/9] thermal/core: Protect hwmon accesses to thermal
+ operations with thermal zone mutex
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In cpufreq_policy_alloc(), it will call uninitialed completion in
-cpufreq_sysfs_release() when kobject_init_and_add() fails. And
-that will cause a crash such as the following page fault in complete:
+On Thu, Nov 10, 2022 at 3:21 PM Guenter Roeck <linux@roeck-us.net> wrote:
+>
+> On Wed, Nov 09, 2022 at 08:19:13PM +0100, Rafael J. Wysocki wrote:
+> > On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
+> [ ... ]
+> >
+> > And I wouldn't change the code below (the ternary operator is out of
+> > fashion in particular).
+> >
+>
+> I tried to introduce some consistency; the ternary operator is used
+> in some of the existing thermal code. Guess I went the wrong direction.
+> Never mind; I don't have a strong opinion either way.
+> I updated the series patches to no longer use ternary operators in
+> updated code, but I left existing code alone (changing that should not
+> be part of this patch set anyway).
 
-BUG: unable to handle page fault for address: fffffffffffffff8
-[..]
-RIP: 0010:complete+0x98/0x1f0
-[..]
-Call Trace:
- kobject_put+0x1be/0x4c0
- cpufreq_online.cold+0xee/0x1fd
- cpufreq_add_dev+0x183/0x1e0
- subsys_interface_register+0x3f5/0x4e0
- cpufreq_register_driver+0x3b7/0x670
- acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
- do_one_initcall+0x13d/0x780
- do_init_module+0x1c3/0x630
- load_module+0x6e67/0x73b0
- __do_sys_finit_module+0x181/0x240
- do_syscall_64+0x35/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
-Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
----
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 69b3d61852ac..7e56a42750ea 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
- 	if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
- 		goto err_free_rcpumask;
- 
-+	init_completion(&policy->kobj_unregister);
- 	ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
- 				   cpufreq_global_kobject, "policy%u", cpu);
- 	if (ret) {
-@@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
- 	init_rwsem(&policy->rwsem);
- 	spin_lock_init(&policy->transition_lock);
- 	init_waitqueue_head(&policy->transition_wait);
--	init_completion(&policy->kobj_unregister);
- 	INIT_WORK(&policy->update, handle_update);
- 
- 	policy->cpu = cpu;
--- 
-2.25.1
-
+Thanks, that's what I would have done too.
