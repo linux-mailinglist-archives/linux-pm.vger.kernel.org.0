@@ -2,136 +2,241 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B71624D6B
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 23:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 695D9624E4F
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 00:15:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbiKJWFP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 17:05:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
+        id S229528AbiKJXPU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Nov 2022 18:15:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229932AbiKJWFO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 17:05:14 -0500
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23BFC2A94F
-        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 14:05:14 -0800 (PST)
-Received: by mail-pj1-x102e.google.com with SMTP id l6so2905105pjj.0
-        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 14:05:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a34ppdWbivNAxs0hZgRllXVIJs8hvYA2VZe5Kyhs1OM=;
-        b=P6vqEdFmeiejzHVbCjsfMpsQ29zuzTvwlvxMocFOI12tWCjBgBJRuRlA+3jh1ZXKMJ
-         pKwCFuHwJg0GAlwoZUSh+uPcDwx6PD7PMLM78itRlOqjv9aJ6DEiluMK2qYiBzIXn4ff
-         hPrcfEgTfO6Vnm2bGWzIyCbABoCOD/OOkD0GKHd8QfQaiX2UXizd45S+gUzReYaIso5K
-         +6EFD/K2fB668OQhEkpkTtm8DdTAcVBLQxxxLCfPnFsQ9BpxubAIuD9RGxjUG96z2hvs
-         C1sBF2PRjlxLQuF8ilQGh7Z8EhhwqXBhoEY5b76cHp7gHNRdprJR//0/dKheg/k4/s7U
-         AYhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a34ppdWbivNAxs0hZgRllXVIJs8hvYA2VZe5Kyhs1OM=;
-        b=gWpMC8iya918sLn6BENmPsfSM1LPgGu9fVpaoVrcGXuavv0u6csmyChfZzmZPQoZbm
-         mz4keN8fRJ9ii1QfH210P64k4CQddovinDVstN9J8pWsfN3eq70sF1FBiRz5Bf+Wwa+g
-         uxrI96OD3nYbj8HrsE8teqp22yug6rkD89MId2NoK8u7Schck+RIzEHVmvBwrXtj+eu5
-         1glGObYcdYl0ORVMkdTjUC3rJF/QUn/6NK00231lU8JfQ7yymemHeC9I8B0hFIs4vNBj
-         XWqM4sj5cUCTCM8c2wNG9yMnNhG6sYzkW8NMhbvqW4/y4oh0S41dPR/JM5xYrMfxF10k
-         DHYg==
-X-Gm-Message-State: ACrzQf13y3qKwdLdxfvxD9vz0CkhNF5Z5P3GN2/M34O4pkFXOoVEL0rf
-        V35SjpZLg7bkgQ9UZujPrcwF7I+lwzpFlMbavcNsYg==
-X-Google-Smtp-Source: AMsMyM5GZRwbXU2IPHXYp9E6tIoCnNMxsz/56yVCJT0f0ThtNxVVkvDuqpCVob8hLMLuQlSbW/bMatrnBQRCNPQoQx4=
-X-Received: by 2002:a17:902:7b98:b0:186:8558:ded2 with SMTP id
- w24-20020a1709027b9800b001868558ded2mr2238985pll.95.1668117913389; Thu, 10
- Nov 2022 14:05:13 -0800 (PST)
-MIME-Version: 1.0
-References: <20221108170103.3375832-1-nathan@kernel.org>
-In-Reply-To: <20221108170103.3375832-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 10 Nov 2022 14:05:01 -0800
-Message-ID: <CAKwvOdkzs3YrtE9MWMOF=ssxx_9gdXWak06OEcJhHr5z+j0mqg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: ACPI: Remove unused variables
- 'acpi_cpufreq_online' and 'ret'
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Tom Rix <trix@redhat.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+        with ESMTP id S230450AbiKJXPT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 18:15:19 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1238E086;
+        Thu, 10 Nov 2022 15:15:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668122118; x=1699658118;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=2bnIoY+pBkGJTjXFdnqJEaioLPMFfI2z+MLotyzz/o4=;
+  b=DA/Jb2IOB/Ike2KIwNKQlMm8PS7+7Te4x/y0bo1extf5Vy2hmfkDL7O9
+   /XsrOT1tFZQdR0Ts3v4naz6EmswtQ6OEdpZ35RebAc4yRO+jrq/kOR3+p
+   Q8kerLRYJPUVmsgVQMJqSGMKIwmVKMwDTp2mZblaxfptgtzxaVtStaBaO
+   GFI2QtHrEFqR8mGOldEhPJIA7jSBB43L71mBEF0VIYE2RMvUKK+5FTgPb
+   m7Mx0HZwpabrFBvl3mhRIc39RjT3cFzT6dl/Nb7Y4oNzuu5jdsaC6eHE9
+   9X4lU5jTOs1M1oaUvO/SVubK5BksqxYyFhwg8RqVjulDcqrLmZePC5/CT
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="311469675"
+X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
+   d="scan'208";a="311469675"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 15:13:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="615286212"
+X-IronPort-AV: E=Sophos;i="5.96,155,1665471600"; 
+   d="scan'208";a="615286212"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Nov 2022 15:13:55 -0800
+Message-ID: <38fabc3b02db3824314d343bb6cebcc8997a03cb.camel@linux.intel.com>
+Subject: Re: [PATCH 2/4] powercap: idle_inject: Add begin/end callbacks
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Thu, 10 Nov 2022 15:13:55 -0800
+In-Reply-To: <CAJZ5v0jD-a__naERH3MsB1yDQwNkwKcL=aSP3JEdiD11s76gDA@mail.gmail.com>
+References: <20221108030342.1127216-1-srinivas.pandruvada@linux.intel.com>
+         <20221108030342.1127216-3-srinivas.pandruvada@linux.intel.com>
+         <CAJZ5v0jD-a__naERH3MsB1yDQwNkwKcL=aSP3JEdiD11s76gDA@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 8, 2022 at 9:01 AM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> Clang warns:
->
->   drivers/cpufreq/acpi-cpufreq.c:970:24: error: variable 'ret' is uninitialized when used here [-Werror,-Wuninitialized]
->           acpi_cpufreq_online = ret;
->                                 ^~~
->   drivers/cpufreq/acpi-cpufreq.c:960:9: note: initialize the variable 'ret' to silence this warning
->           int ret;
->                 ^
->                   = 0
->   1 error generated.
->
-> Both ret and acpi_cpufreq_online are now unused so they can be safely
-> removed, clearing up the warning.
->
-> Fixes: 13fdbc8b8da6 ("cpufreq: ACPI: Defer setting boost MSRs")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1757
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Wed, 2022-11-09 at 15:48 +0100, Rafael J. Wysocki wrote:
+> On Tue, Nov 8, 2022 at 4:04 AM Srinivas Pandruvada
+> <srinivas.pandruvada@linux.intel.com> wrote:
+> > 
+> > The actual CPU Idle percent can be different than what can be
+> > observed
+> > from the hardware.
+> 
+> Can you expand this a bit, please?  It is not clear what the "CPU
+> idle
+> percent" and "observed from the hardware" phrases mean here.
+Sure.
 
-Thanks for the patch!
+> 
+> > Since the objective for CPU Idle injection is for
+> > thermal control, the idle percent observed by the hardware is more
+> > relevant.
+> > 
+> > To account for hardware feedback the actual runtime/idle time
+> > should be
+> > adjusted.
+> > 
+> > Add a capability to register a begin and end callback during call
+> > to
+> 
+> I would call them "prepare" and "complete" without the "idle_inject_"
+> prefix.
+OK
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> 
+> > idle_inject_register(). If they are not NULL, then begin callback
+> > is
+> > called before calling play_idle_precise() and end callback is
+> > called
+> > after play_idle_precise().
+> > 
+> > If begin callback is present and returns non 0 value then
+> > play_idle_precise() is not called as it means there is some over
+> > compensation.
+> 
+> This behavior needs to be documented somewhere other than the patch
+> changelog.
+We can add a kernel doc and add there.
 
-> ---
->  drivers/cpufreq/acpi-cpufreq.c | 6 ------
->  1 file changed, 6 deletions(-)
->
-> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-> index c8fdfcf659e6..74ef0e05ff7b 100644
-> --- a/drivers/cpufreq/acpi-cpufreq.c
-> +++ b/drivers/cpufreq/acpi-cpufreq.c
-> @@ -953,12 +953,8 @@ static struct cpufreq_driver acpi_cpufreq_driver = {
->         .attr           = acpi_cpufreq_attr,
->  };
->
-> -static enum cpuhp_state acpi_cpufreq_online;
-> -
->  static void __init acpi_cpufreq_boost_init(void)
->  {
-> -       int ret;
-> -
->         if (!(boot_cpu_has(X86_FEATURE_CPB) || boot_cpu_has(X86_FEATURE_IDA))) {
->                 pr_debug("Boost capabilities not present in the processor\n");
->                 return;
-> @@ -966,8 +962,6 @@ static void __init acpi_cpufreq_boost_init(void)
->
->         acpi_cpufreq_driver.set_boost = set_boost;
->         acpi_cpufreq_driver.boost_enabled = boost_state(0);
-> -
-> -       acpi_cpufreq_online = ret;
->  }
->
->  static int __init acpi_cpufreq_init(void)
->
-> base-commit: 21cdb6c18f85fe538ca8740bc79f11fbe08d0197
-> --
-> 2.38.1
->
+> 
+> > Signed-off-by: Srinivas Pandruvada <   
+> > srinivas.pandruvada@linux.intel.com>
+> > ---
+> >  drivers/powercap/idle_inject.c    | 19 ++++++++++++++++++-
+> >  drivers/thermal/cpuidle_cooling.c |  2 +-
+> >  include/linux/idle_inject.h       |  4 +++-
+> >  3 files changed, 22 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/powercap/idle_inject.c
+> > b/drivers/powercap/idle_inject.c
+> > index e73885bd9065..14968b0ff133 100644
+> > --- a/drivers/powercap/idle_inject.c
+> > +++ b/drivers/powercap/idle_inject.c
+> > @@ -70,6 +70,8 @@ struct idle_inject_device {
+> >         unsigned int idle_duration_us;
+> >         unsigned int run_duration_us;
+> >         unsigned int latency_us;
+> > +       int (*idle_inject_begin)(unsigned int cpu);
+> > +       void (*idle_inject_end)(unsigned int cpu);
+> 
+> The comment above needs to be updated.  Also please see the remark
+> above regarding callback names.
+> 
+> >         unsigned long cpumask[];
+> >  };
+> > 
+> > @@ -132,6 +134,7 @@ static void idle_inject_fn(unsigned int cpu)
+> >  {
+> >         struct idle_inject_device *ii_dev;
+> >         struct idle_inject_thread *iit;
+> > +       int ret;
+> > 
+> >         ii_dev = per_cpu(idle_inject_device, cpu);
+> >         iit = per_cpu_ptr(&idle_inject_thread, cpu);
+> > @@ -141,8 +144,18 @@ static void idle_inject_fn(unsigned int cpu)
+> >          */
+> >         iit->should_run = 0;
+> > 
+> > +       if (ii_dev->idle_inject_begin) {
+> > +               ret = ii_dev->idle_inject_begin(cpu);
+> > +               if (ret)
+> > +                       goto skip;
+> > +       }
+> > +
+> >         play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) *
+> > NSEC_PER_USEC,
+> >                           READ_ONCE(ii_dev->latency_us) *
+> > NSEC_PER_USEC);
+> > +
+> > +skip:
+> > +       if (ii_dev->idle_inject_end)
+> > +               ii_dev->idle_inject_end(cpu);
+> >  }
+> > 
+> >  /**
+> > @@ -302,7 +315,9 @@ static int idle_inject_should_run(unsigned int
+> > cpu)
+> >   * Return: NULL if memory allocation fails, idle injection control
+> > device
+> >   * pointer on success.
+> >   */
+> > -struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask)
+> > +struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask,
+> > +                                               int
+> > (*idle_inject_begin)(unsigned int cpu),
+> > +                                               void
+> > (*idle_inject_end)(unsigned int cpu))
+> 
+> Instead of modifying this, I would add something like
+> idle_inject_register_full() that will take the callback arguments and
+> will be called internally by idle_inject_register().
+OK
 
-
--- 
 Thanks,
-~Nick Desaulniers
+Srinivas
+
+> 
+> >  {
+> >         struct idle_inject_device *ii_dev;
+> >         int cpu, cpu_rb;
+> > @@ -315,6 +330,8 @@ struct idle_inject_device
+> > *idle_inject_register(struct cpumask *cpumask)
+> >         hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC,
+> > HRTIMER_MODE_REL);
+> >         ii_dev->timer.function = idle_inject_timer_fn;
+> >         ii_dev->latency_us = UINT_MAX;
+> > +       ii_dev->idle_inject_begin = idle_inject_begin;
+> > +       ii_dev->idle_inject_end = idle_inject_end;
+> > 
+> >         for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
+> > 
+> > diff --git a/drivers/thermal/cpuidle_cooling.c
+> > b/drivers/thermal/cpuidle_cooling.c
+> > index 4f41102e8b16..e8b35b3b5767 100644
+> > --- a/drivers/thermal/cpuidle_cooling.c
+> > +++ b/drivers/thermal/cpuidle_cooling.c
+> > @@ -184,7 +184,7 @@ static int __cpuidle_cooling_register(struct
+> > device_node *np,
+> >                 goto out;
+> >         }
+> > 
+> > -       ii_dev = idle_inject_register(drv->cpumask);
+> > +       ii_dev = idle_inject_register(drv->cpumask, NULL, NULL);
+> 
+> So this change would not be necessary any more.
+> 
+> >         if (!ii_dev) {
+> >                 ret = -EINVAL;
+> >                 goto out_kfree;
+> > diff --git a/include/linux/idle_inject.h
+> > b/include/linux/idle_inject.h
+> > index fb88e23a99d3..73f3414fafe2 100644
+> > --- a/include/linux/idle_inject.h
+> > +++ b/include/linux/idle_inject.h
+> > @@ -11,7 +11,9 @@
+> >  /* private idle injection device structure */
+> >  struct idle_inject_device;
+> > 
+> > -struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask);
+> > +struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask,
+> > +                                               int
+> > (*idle_inject_begin)(unsigned int cpu),
+> > +                                               void
+> > (*idle_inject_end)(unsigned int cpu));
+> > 
+> >  void idle_inject_unregister(struct idle_inject_device *ii_dev);
+> > 
+> > --
+
+
