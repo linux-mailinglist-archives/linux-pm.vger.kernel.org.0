@@ -2,73 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60036243E3
-	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 15:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B53FC6243E7
+	for <lists+linux-pm@lfdr.de>; Thu, 10 Nov 2022 15:13:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiKJOMJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 09:12:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S230484AbiKJONj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 10 Nov 2022 09:13:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiKJOME (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 09:12:04 -0500
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C716DCDD;
-        Thu, 10 Nov 2022 06:12:01 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id cn2-20020a056830658200b0066c74617e3dso1176492otb.2;
-        Thu, 10 Nov 2022 06:12:01 -0800 (PST)
+        with ESMTP id S230274AbiKJONh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 09:13:37 -0500
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13EAD6DCEB;
+        Thu, 10 Nov 2022 06:13:04 -0800 (PST)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-13bef14ea06so2284521fac.3;
+        Thu, 10 Nov 2022 06:13:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qgitUI25orkTm6hu0BUf7qb2z/SQWHD4V7BDy7lOFss=;
-        b=Qof1BVpWA73p43EjL/UhEFiBNyunqnZqTW6lqveRYVwSClwz/+4OgDagYm/Y/HTo6P
-         7gjv9jwo33AqRRMr+wMHHTJoHOf4SitbCZkUE+m55SEVJ+QMkdU/LUXuTG5H/iDdX5J9
-         FPXdjzUiIbYoDm4puM5xAAz8BcmDoU9OoMbabL5N0P8k+CKhlOnCs7xY2I/RpJ90klFV
-         gaAIF1VM0RTZ5zy7qO4cre9azbyyFpZL8sSzav8lMaj08Bq+NGs9w4k8oNhwVIFajlev
-         t0AGRjEsO6Da9ZDq3xdxIWXaA84ZInMkPkBx3s+MEJW4sK+5EtQKBXxdTyI+ilCRkD+j
-         kYPg==
+        bh=DYJeoXlm3yi8zCQziAodIBu91C3vT3wnxmJjU1RBcLg=;
+        b=ZW7iTIRo+gVE9j2/T/pKdnJRA/34++TOOpF9qgmCWUQ7kzL6Bd8WEWkXEqZRv4TYSD
+         kvRVOaDbJe+sjksGPjNA8o48CcucZ/CsceiwbOBYPGy3hbgh+PE1rcdFr3ewnYueU4hU
+         4pyOEgFNsfaG5FEXOjDbRsmMXtb1OaTvDQ0IBVcIxPx+PCgB5zlWmCGJZbWM5FFhnC4a
+         Gl4Lwg9XHT83A74S0QCdCyca+4VUsckvXZN7Zb1FhQmuplYvbSBKtv1fwfLvxbkbLcX+
+         zsDk1f7RgcDLzJw9kOL10QJNTzK6nSh7MXWRRJSV6Iy8iPeCk+DF5AEoGOE0i4DUYe56
+         ai3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qgitUI25orkTm6hu0BUf7qb2z/SQWHD4V7BDy7lOFss=;
-        b=7bZ0b3UJRiJ5/FqVfyQTb256ClhHw53UG5wBdQC/WCy6OCAyskW1+P4GmkhgrCIXHm
-         yfxbbvQDjGjEXL+gb4W91xJG2xxRwYXsmSxqFXbnyRhnIJ1DlySr86P71LLhPA5BSKFV
-         FPBztgKsPWSU9qRRaD4Mewr0M265JJo2thU9pk3/PRSF/ZjTHvILvS1t2eV6Ma2+xHAX
-         OsOhlV3m8c+5yrxj2SGwXl9HZA+Q0gs9m63VJBY0oyrvKW1cCEoohIUlcwYnhaFhdnJf
-         eH5bgHS/k6zsLjWFN/IyfQlhgnBXWtitLRTTPaXj5+ABcgiiRYl2ApVQKVtMWmSuVndh
-         /J5g==
-X-Gm-Message-State: ACrzQf1QYtIXKmS4Yvfj/ZdRjm1L0gWQQ5WY4cpaq48R60Cpr5Rkumlk
-        0EGa7zBA5/lcDq63A1sbZIc=
-X-Google-Smtp-Source: AMsMyM6FNRRmBkuiFe5OHi2HI6hH6b6xDPmqXhlZK1d0kjPEzn36ZBwt9Wvr5U0KJY6mtYfj7evr5Q==
-X-Received: by 2002:a9d:1aa:0:b0:66c:6922:8640 with SMTP id e39-20020a9d01aa000000b0066c69228640mr1402503ote.34.1668089520403;
-        Thu, 10 Nov 2022 06:12:00 -0800 (PST)
+        bh=DYJeoXlm3yi8zCQziAodIBu91C3vT3wnxmJjU1RBcLg=;
+        b=5/sgvuZfrAn9JIuArsUCgFsSV/VA75LO7yMoAi/raixM7GN7CG/sfUsRhYILftdUe+
+         Lh2UsaTcc617mGSiQQt9lxeE4c0I5kd/Zob9dKGn/lseX63FL9skA2R1UxOKn1akceGu
+         CyErIi71/10ai55aNSVk8bGzRWmnaqYM0+YtbY4R2x1boNJasMBe22veXPSYIBoLer/Z
+         DhCgMINtn2DnEDB9AIjfbilkX2xWKT2luQuI5eIKuMyx58jk1kWOCdydiX/7gT2IzEbA
+         48PPf6GLVLivJtngZmFSc59F4k4aQ57HY40uay7mKjB+NDDrW+gLHQt0MP2mgUN4t4tQ
+         LSUA==
+X-Gm-Message-State: ACrzQf3JpA3q0Im9kg8pr3FYjy2JLiLwiQeD4mKcl3yaKzMqogCFwo3Q
+        SYL8V946w7gCsT3J3iFbeBfgnkuFbYc=
+X-Google-Smtp-Source: AMsMyM7FQFew3dlfaZXqZS5BVhdMDahkep5gSS4N1Xn19p40y7TLcmiZuzAVJtpozekQ7qZgYgfOsA==
+X-Received: by 2002:a05:6870:cb8b:b0:13b:c9b3:1508 with SMTP id ov11-20020a056870cb8b00b0013bc9b31508mr1576255oab.236.1668089583423;
+        Thu, 10 Nov 2022 06:13:03 -0800 (PST)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x66-20020acae045000000b0034d8abf42f1sm5709639oig.23.2022.11.10.06.11.58
+        by smtp.gmail.com with ESMTPSA id z20-20020a9d62d4000000b0066c34486aa7sm6341956otk.73.2022.11.10.06.13.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 06:11:59 -0800 (PST)
+        Thu, 10 Nov 2022 06:13:03 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 10 Nov 2022 06:11:57 -0800
+Date:   Thu, 10 Nov 2022 06:13:02 -0800
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] thermal/core: Introduce locked version of
- thermal_zone_device_update
-Message-ID: <20221110141157.GA2404288@roeck-us.net>
+Subject: Re: [PATCH 3/9] thermal/core: Ensure that thermal device is
+ registered in thermal_zone_get_temp
+Message-ID: <20221110141302.GB2404288@roeck-us.net>
 References: <20221017130910.2307118-1-linux@roeck-us.net>
- <20221017130910.2307118-6-linux@roeck-us.net>
- <CAJZ5v0hO9_95uD1qY8aBe094JWsxPrba2wk_PchKHmVqRj0CHw@mail.gmail.com>
- <20221110002549.GA3550654@roeck-us.net>
- <CAJZ5v0je2QSUhU8Knk9UsboGLRpk2sNqE6U4X6eGAe+NUxZt_Q@mail.gmail.com>
+ <20221017130910.2307118-4-linux@roeck-us.net>
+ <CAJZ5v0hcwCqfSh32U5zVnpBxmziJHYYCfhJ9uJLJ0gVvkrP-5w@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0je2QSUhU8Knk9UsboGLRpk2sNqE6U4X6eGAe+NUxZt_Q@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hcwCqfSh32U5zVnpBxmziJHYYCfhJ9uJLJ0gVvkrP-5w@mail.gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -80,51 +78,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 10, 2022 at 02:01:49PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Nov 10, 2022 at 1:25 AM Guenter Roeck <linux@roeck-us.net> wrote:
+On Wed, Nov 09, 2022 at 08:07:48PM +0100, Rafael J. Wysocki wrote:
+[ ... ]
 > >
-> > On Wed, Nov 09, 2022 at 08:15:17PM +0100, Rafael J. Wysocki wrote:
-> > > On Mon, Oct 17, 2022 at 3:09 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> > > >
-> > > > In thermal_zone_device_set_mode(), the thermal zone mutex is released only
-> > > > to be reacquired in the subsequent call to thermal_zone_device_update().
-> > > >
-> > > > Introduce __thermal_zone_device_update() as locked version of
-> > >
-> > > Did you mean "unlocked"?
-> > >
-> > No, I did mean "locked", as in "must be called with thermal zone device
-> > mutex acquired".
+> > diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+> > index c65cdce8f856..3bac0b7a4c62 100644
+> > --- a/drivers/thermal/thermal_helpers.c
+> > +++ b/drivers/thermal/thermal_helpers.c
+> > @@ -115,7 +115,12 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+> >         int ret;
 > >
-> > locked:
-> >
-> > void __thermal_zone_device_update(struct thermal_zone_device *tz,
-> >                                   enum thermal_notify_event event)
-> > {
-> >         ...
-> > }
-> >
-> > unlocked:
-> >
-> > void thermal_zone_device_update(struct thermal_zone_device *tz,
-> >                                 enum thermal_notify_event event)
-> > {
 > >         mutex_lock(&tz->lock);
-> >         if (device_is_registered(&tz->device))
-> >                 __thermal_zone_device_update(tz, event);
-> >         mutex_unlock(&tz->lock);
-> > }
+> > +       if (!device_is_registered(&tz->device)) {
+> > +               ret = -ENODEV;
+> > +               goto unlock;
+> > +       }
+> >         ret = __thermal_zone_get_temp(tz, temp);
+> > +unlock:
 > 
-> Thanks for the explanation.
+> I would do it this way:
 > 
-> > Should I phrase or explain it differently ?
+> if (device_is_registered(&tz->device))
+>         ret = __thermal_zone_get_temp(tz, temp);
+> else
+>         ret = -ENODEV;
 > 
-> I would rather say "bare" or something like that so it is all clear to
-> people like me, but it is your call.
-
-I updated the commit description to use "must be called with thermal
-device mutex held". I kept 'locked' in the subject; I don't think using
-'bare' there would add any clarity. Hope that is ok.
+Done in all patches. Agreed, that looks much better.
 
 Thanks,
 Guenter
