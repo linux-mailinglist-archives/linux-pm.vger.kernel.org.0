@@ -2,139 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F765625FA9
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 17:38:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD4F6260DF
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 19:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233217AbiKKQip (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Nov 2022 11:38:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
+        id S233739AbiKKSI5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Nov 2022 13:08:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233714AbiKKQii (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 11:38:38 -0500
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FAD2497A;
-        Fri, 11 Nov 2022 08:38:33 -0800 (PST)
-Received: by mail-qk1-x730.google.com with SMTP id x21so3303389qkj.0;
-        Fri, 11 Nov 2022 08:38:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cc79vdpftLtKCsTxy/EdUCgt0SXSyffM6ZriKdKDbtw=;
-        b=n1RXtrlzLU+n02CT3soAPseTrXYQVpst+DE5CreTvGRr30AXGfdTHJAwTl5z881kL+
-         4LGEERExB03/Yq1vr6GzRpwkwSaKPi24hnT5xlWWEo9wki0gXDZiJ2kdh91/eoZWqtce
-         YN8dnyK4Ig4DFp/JA3DF3HgJm3iOWfFsD+YfLpg3WMwwLr/0q2yyLMa16q2PWZwlo7c+
-         A3RJwQNMhQT7aEFguxGUvn94tuj5v3Auw0RQPueXCBGczDqhhmhOqT87TdZw4BWB2zqG
-         UpG3eqKjuO05RFHM8jsAQdSqOqf7+B5IwnKB8cCp0fVon9oqGYQ+RTKgb81UW4MrCHiM
-         LHQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cc79vdpftLtKCsTxy/EdUCgt0SXSyffM6ZriKdKDbtw=;
-        b=oZ7zMys6ebWoI3YpBhFQy5m/q8gu6zjbEVO14KnrLxMkQnwn5GCMfN3DbTWY6kGcZ+
-         18Vk0s9z+T8aRFM3SLJt3Zq4dBX0ZFAJ6ddpsq20VN+fQa2r0msCx5xKMI5p5ktE/ys4
-         D0xtbvp569LNlPnIp73bsIcWz0C1uBoarW/CE1mxUcvowCaR1e8veSG9/QyiAtopSigG
-         f0WSeSTiMtQ4xAvlWtWx0RC2lfqyz2mA8zIaP+W3N4jL5R13kh7hBd3Vg8gHka5WD/Ur
-         /yIWxmi7SHviC5jf6/IJA6RQRz6KnBLpye9P2vnEHQmwJiGcZMun9DG5s09KwIJzZvNQ
-         oy+w==
-X-Gm-Message-State: ANoB5pkFKGQOK7hSdqUKeHpxaLlasfd9o0aDe1h4xzYClVyq8ymLA+vA
-        vGJujkR+Tnjg8iYDb8oD0Y8OIB+WCgI=
-X-Google-Smtp-Source: AA0mqf7UFI1m8W80QsrDOx3KAYJvkESRmsawupXo5W/rx00YTtgm89UZ7Lic9sd1Nb5bjpF9d6s9MQ==
-X-Received: by 2002:a37:bf46:0:b0:6ec:5409:5eaf with SMTP id p67-20020a37bf46000000b006ec54095eafmr1716543qkf.404.1668184712630;
-        Fri, 11 Nov 2022 08:38:32 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m15-20020a05622a054f00b003434d3b5938sm1536008qtx.2.2022.11.11.08.38.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Nov 2022 08:38:30 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 11 Nov 2022 08:38:28 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ninad Malwade <nmalwade@nvidia.com>
-Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
-        nicolinc@nvidia.com, rkasirajan@nvidia.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] ina3221: correct the update_interval value
-Message-ID: <20221111163828.GA323658@roeck-us.net>
-References: <20221108050029.24576-1-nmalwade@nvidia.com>
+        with ESMTP id S233681AbiKKSI4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 13:08:56 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8172F11172;
+        Fri, 11 Nov 2022 10:08:55 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EF37CB826C6;
+        Fri, 11 Nov 2022 18:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF649C433D6;
+        Fri, 11 Nov 2022 18:08:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668190132;
+        bh=1LwbWLiM0eqVngc+n5UKw3OXRN8eN1ijL20vt5kIfvc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NQJUR4QerNZHhDnRP7Laix+cZafg1YpBOLxx7wPkLceEDUQOZFS4TNQvtRrE90sa7
+         CjJ7UfMtiXjon7StgiZOBKiQaOikJsp4D8ujESpsZiXlfyh2WBMeT+/Rt4sKAUtb58
+         OqVfmcpk7VnLvx5aYeDjIu5fJd/JMMDSziXi/Seb0FwnbA6UyEXQnk+Op8YCaFyW7W
+         ifR/N6f4dd/cL/o4mQwNVywKm/LqSmQMA8bbnlRqVWJIgkCofb8UVIJnBzjdlur39Q
+         NTfv5qIElFI0LjvcGzqyZ548P73zxN/OTnfLL3lBNfFc+mbE4PD0xzXK0S9kl6A8N5
+         qkK2PpdIWB41w==
+Date:   Fri, 11 Nov 2022 12:08:49 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Sibi Sankar <quic_sibis@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/10] dt-bindings: interconnect: Add sm8350, sc8280xp
+ and generic OSM L3 compatibles
+Message-ID: <20221111180849.hegnho4qeaewuzwz@builder.lan>
+References: <20221111032515.3460-1-quic_bjorande@quicinc.com>
+ <20221111032515.3460-6-quic_bjorande@quicinc.com>
+ <d738cdd8-1963-78d4-2c6f-6597b3b02d0f@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221108050029.24576-1-nmalwade@nvidia.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <d738cdd8-1963-78d4-2c6f-6597b3b02d0f@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 08, 2022 at 01:00:29PM +0800, Ninad Malwade wrote:
-> As per the INA3221 datasheet the samples value should not be
-> considered while calculating the update_interval value.
-> Section 8.4.2.2 from datasheet says - "The conversion-time
-> settings, along with the programmable-averaging mode, enable
-> the INA3221 to optimize available timing requirements in a given
-> application. For example, if a system requires data to be read
-> every 2 ms with all three channels monitored, configure the INA3221
-> with the conversion times for the shunt- and bus-voltage
-> measurements set to 332 μs"
+On Fri, Nov 11, 2022 at 04:02:42PM +0530, Sibi Sankar wrote:
 > 
-> As per above only conversion time and number of channels are
-> required to set the update_interval value. Correcting the same in
-> the driver.
 > 
-> Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
-
-As a bug fix, this patch should come before any functional changes.
-
-> ---
->  Documentation/hwmon/ina3221.rst | 3 +--
->  drivers/hwmon/ina3221.c         | 4 +---
->  2 files changed, 2 insertions(+), 5 deletions(-)
+> On 11/11/22 08:55, Bjorn Andersson wrote:
+> > Add EPSS L3 compatibles for sm8350 and sc8280xp, but while at it also
+> > introduce generic compatible for both qcom,osm-l3 and qcom,epss-l3.
+> > 
+> > Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> > Tested-by: Steev Klimaszewski <steev@kali.org>
+> > ---
+> > 
+> > Changes since v1:
+> > - Fixed oneOf to be valid schema
+> > - Fixed example to follow schema
+> > 
+> >   .../bindings/interconnect/qcom,osm-l3.yaml    | 24 ++++++++++++-------
+> >   1 file changed, 16 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> > index bf538c0c5a81..aadae4424ba9 100644
+> > --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> > +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> > @@ -16,13 +16,21 @@ description:
+> >   properties:
+> >     compatible:
+> > -    enum:
+> > -      - qcom,sc7180-osm-l3
+> > -      - qcom,sc7280-epss-l3
+> > -      - qcom,sc8180x-osm-l3
+> > -      - qcom,sdm845-osm-l3
+> > -      - qcom,sm8150-osm-l3
+> > -      - qcom,sm8250-epss-l3
+> > +    oneOf:
+> > +      - items:
+> > +          - enum:
+> > +              - qcom,sc7180-osm-l3
+> > +              - qcom,sc8180x-osm-l3
+> > +              - qcom,sdm845-osm-l3
+> > +              - qcom,sm8150-osm-l3
+> > +          - const: qcom,osm-l3
+> > +      - items:
+> > +          - enum:
+> > +              - qcom,sc7280-epss-l3
+> > +              - qcom,sc8280xp-epss-l3
+> > +              - qcom,sm8250-epss-l3
+> > +              - qcom,sm8350-epss-l3
+> > +          - const: qcom,epss-l3
 > 
-> diff --git a/Documentation/hwmon/ina3221.rst b/Documentation/hwmon/ina3221.rst
-> index 8c12c54d2c24..a4f107d1e489 100644
-> --- a/Documentation/hwmon/ina3221.rst
-> +++ b/Documentation/hwmon/ina3221.rst
-> @@ -61,10 +61,9 @@ samples                 Number of samples using in the averaging mode.
->  
->  update_interval         Data conversion time in millisecond, following:
->  
-> -                          update_interval = C x S x (BC + SC)
-> +                          update_interval = C x (BC + SC)
->  
->                            * C:	number of enabled channels
-> -                          * S:	number of samples
->                            * BC:	bus-voltage conversion time in millisecond
->                            * SC:	shunt-voltage conversion time in millisecond
->  
-> diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-> index 2a57f4b60c29..e3aa57e3b039 100644
-> --- a/drivers/hwmon/ina3221.c
-> +++ b/drivers/hwmon/ina3221.c
-> @@ -183,11 +183,9 @@ static const int ina3221_avg_samples[] = {
->  static inline u32 ina3221_interval_ms_to_conv_time(u16 config, int interval)
->  {
->  	u32 channels = hweight16(config & INA3221_CONFIG_CHs_EN_MASK);
-> -	u32 samples_idx = INA3221_CONFIG_AVG(config);
-> -	u32 samples = ina3221_avg_samples[samples_idx];
->  
->  	/* Bisect the result to Bus and Shunt conversion times */
-> -	return DIV_ROUND_CLOSEST(interval * 1000 / 2, channels * samples);
-> +	return DIV_ROUND_CLOSEST(interval / 2, channels);
+> isn't it incorrect to describe qcom,epss-l3 as a working
+> backup compatible for sc7280-epss-l3 and sm8250-epss-l3?
+> Shouldn't we just add another items list with those 2 as
+> enums?
+> 
 
-Same question as Thierry: Why drop the multiplication ?
+I was about to agree, but the difference between the two sets are which
+registers we use to request the speed.
 
-Guenter
+And per our recent discussion, I was under the impression that this
+would be a property of BIT(0) in 0xb0 being set, not which platform
+we're running on.
 
->  }
->  
->  /* Converting CONFIG register value to update_interval in usec */
+If that's the case then they are indeed compatible and we should adjust
+.ref_perf_state based on per-core DCVS being set or not.
+
+
+So I do think this description is appropriate...
+
+Regards,
+Bjorn
+
+> >     reg:
+> >       maxItems: 1
+> > @@ -56,7 +64,7 @@ examples:
+> >       #define RPMH_CXO_CLK        0
+> >       osm_l3: interconnect@17d41000 {
+> > -      compatible = "qcom,sdm845-osm-l3";
+> > +      compatible = "qcom,sdm845-osm-l3", "qcom,osm-l3";
+> >         reg = <0x17d41000 0x1400>;
+> >         clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GPLL0>;
