@@ -2,118 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D34625AC5
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 13:58:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C118625AE4
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 14:04:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233194AbiKKM57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Nov 2022 07:57:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
+        id S233758AbiKKNER (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Nov 2022 08:04:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232851AbiKKM56 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 07:57:58 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C457C8F0;
-        Fri, 11 Nov 2022 04:57:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCEF461FB0;
-        Fri, 11 Nov 2022 12:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E697C433D6;
-        Fri, 11 Nov 2022 12:57:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668171475;
-        bh=zwR2CVETYVKkhlVS2uKhYwwfZN8Fws7SwH+daDdD7Q0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o6Hc3y/dSgnkCRu5sF+3+R1DG4UiTP6y1TS1S68pMerhilYcO9WRKyr16tCVpYuqm
-         RZpKJPWmk122BX/lVxLXQVHKMCjXydkTJL/OvUDyA7PiFwUnKSiDbAO8GPfc7iFCP6
-         DyVe29q/MGMMF5WoUjXD10vdjxrdPc/lMfe8j7vuWmr+pSWyw5DeDaOd+WK+a/MT1G
-         I6RAXsZLwmL5rF1tzlPNAhCeG0unjbPPKMySl+Prn7OLvQ5U1QVB07LtvPT25xV8bB
-         2V21njP6uSaGbZLZgi4zzIDhq2TUDDgIHIO+1ve2TDfBC2ebu9uZ3g9PMoY+cizfgh
-         7vZPk5K+MTNcA==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1otTb5-00012W-8l; Fri, 11 Nov 2022 13:57:27 +0100
-Date:   Fri, 11 Nov 2022 13:57:27 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK
- driver
-Message-ID: <Y25Gtwaws9wDU4a+@hovoldconsulting.com>
-References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
- <20220818031512.319310-3-bjorn.andersson@linaro.org>
+        with ESMTP id S233768AbiKKNEN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 08:04:13 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1176E6316A;
+        Fri, 11 Nov 2022 05:04:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668171851; x=1699707851;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YvAEa1CAVQQPhrVNtms+4ZsOo6mHPIuxnq68V1kAw90=;
+  b=DF0cDeDV3faPlW1rq06OY0PgqeXgiLNtUfT7BLFmnl8Ulj4G6GZWdILo
+   MBGgZ0IE+8+UaOQDzLXfNL26n5R9gRo56V3aJWUgNIHJzMBiLAGuoi406
+   lm5TvkrnBhC+oPmlg2TSyOvnFd9BV6kbqypKTIE1zJmU2PJo41G5/Jti7
+   YirQC/iy17qIU0/n8KfAhW2reOB6FgMtDvu8ayUOqs/8zHysVWasqMDyO
+   3d6XseqtERHDy3GpMxoyO7jXfOeSolYTq8RAX1Stlw7hqN7Nk1iQZL/3M
+   uxo8gqKq9BiNlKygWoUNCmMzEyY6ej9nK/fckz0U4nfMLpbqrbLLw7roG
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309218493"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="309218493"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 05:04:08 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="780172454"
+X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
+   d="scan'208";a="780172454"
+Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 Nov 2022 05:04:07 -0800
+Received: from kbuild by e783503266e8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1otThW-0003xF-2c;
+        Fri, 11 Nov 2022 13:04:06 +0000
+Date:   Fri, 11 Nov 2022 21:03:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ f9aff8dbe1e91b0e011ffd9065b79fe3980cd5f5
+Message-ID: <636e483e.U+qW9J5m+lq5Cbbn%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220818031512.319310-3-bjorn.andersson@linaro.org>
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[ Resending to Bjorn's current address. ]
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: f9aff8dbe1e91b0e011ffd9065b79fe3980cd5f5  Merge branch 'acpi-pm' into bleeding-edge
 
-On Wed, Aug 17, 2022 at 08:15:10PM -0700, Bjorn Andersson wrote:
-> The PMIC GLINK service runs on one of the co-processors of some modern
-> Qualcomm platforms and implements USB-C and battery managements. It uses
-> a message based protocol over GLINK for communication with the OS, hence
-> the name.
-> 
-> The driver implemented provides the rpmsg device for communication and
-> uses auxilirary bus to spawn off individual devices in respsective
-> subsystem. The auxilirary devices are spawned off from a
-> platform_device, so that the drm_bridge is available early, to allow the
-> DisplayPort driver to probe even before the remoteproc has spun up.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/soc/qcom/Kconfig            |  14 ++
->  drivers/soc/qcom/Makefile           |   1 +
->  drivers/soc/qcom/pmic_glink.c       | 336 ++++++++++++++++++++++++++++
->  include/linux/soc/qcom/pmic_glink.h |  32 +++
->  4 files changed, 383 insertions(+)
->  create mode 100644 drivers/soc/qcom/pmic_glink.c
->  create mode 100644 include/linux/soc/qcom/pmic_glink.h
-> 
-> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
-> index e0d7a5459562..2289f5e0d5ad 100644
-> --- a/drivers/soc/qcom/Kconfig
-> +++ b/drivers/soc/qcom/Kconfig
-> @@ -91,6 +91,20 @@ config QCOM_PDR_HELPERS
->  	tristate
->  	select QCOM_QMI_HELPERS
->  
-> +config QCOM_PMIC_GLINK
-> +	tristate "Qualcomm PMIC GLINK driver"
-> +	depends on RPMSG
-> +	depends on TYPEC
-> +	depends on DRM
+elapsed time: 1025m
 
-You should add
+configs tested: 56
+configs skipped: 2
 
-	select AUXILIARY_BUS
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-here as this driver will not compile without it. Then you can drop the
-corresponding select from the battery driver.
+gcc tested configs:
+arc                               allnoconfig
+um                             i386_defconfig
+alpha                             allnoconfig
+um                           x86_64_defconfig
+i386                              allnoconfig
+arm                               allnoconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+arc                                 defconfig
+x86_64                    rhel-8.3-kselftests
+s390                             allmodconfig
+x86_64                          rhel-8.3-func
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+x86_64                              defconfig
+ia64                             allmodconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a015
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+sh                               allmodconfig
+mips                             allyesconfig
+alpha                            allyesconfig
+i386                                defconfig
+powerpc                          allmodconfig
+arc                              allyesconfig
+x86_64                        randconfig-a006
+m68k                             allmodconfig
+m68k                             allyesconfig
+arc                  randconfig-r043-20221110
+i386                             allyesconfig
+arm                                 defconfig
+arm64                            allyesconfig
+arm                              allyesconfig
 
-> +	select QCOM_PDR_HELPERS
-> +	help
-> +	  The Qualcomm PMIC GLINK driver provides access, over GLINK, to the
-> +	  USB and battery firmware running on one of the coprocessors in
-> +	  several modern Qualcomm platforms.
-> +
-> +	  Say yes here to support USB-C and battery status on modern Qualcomm
-> +	  platforms.
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a012
+x86_64                        randconfig-a016
+x86_64                        randconfig-a014
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+riscv                randconfig-r042-20221110
+hexagon              randconfig-r041-20221110
+hexagon              randconfig-r045-20221110
+s390                 randconfig-r044-20221110
 
-Johan
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
