@@ -2,138 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C118625AE4
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 14:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D3DD625B4B
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 14:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233758AbiKKNER (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Nov 2022 08:04:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S233338AbiKKNb4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Nov 2022 08:31:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233768AbiKKNEN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 08:04:13 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1176E6316A;
-        Fri, 11 Nov 2022 05:04:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668171851; x=1699707851;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YvAEa1CAVQQPhrVNtms+4ZsOo6mHPIuxnq68V1kAw90=;
-  b=DF0cDeDV3faPlW1rq06OY0PgqeXgiLNtUfT7BLFmnl8Ulj4G6GZWdILo
-   MBGgZ0IE+8+UaOQDzLXfNL26n5R9gRo56V3aJWUgNIHJzMBiLAGuoi406
-   lm5TvkrnBhC+oPmlg2TSyOvnFd9BV6kbqypKTIE1zJmU2PJo41G5/Jti7
-   YirQC/iy17qIU0/n8KfAhW2reOB6FgMtDvu8ayUOqs/8zHysVWasqMDyO
-   3d6XseqtERHDy3GpMxoyO7jXfOeSolYTq8RAX1Stlw7hqN7Nk1iQZL/3M
-   uxo8gqKq9BiNlKygWoUNCmMzEyY6ej9nK/fckz0U4nfMLpbqrbLLw7roG
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="309218493"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="309218493"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2022 05:04:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10527"; a="780172454"
-X-IronPort-AV: E=Sophos;i="5.96,156,1665471600"; 
-   d="scan'208";a="780172454"
-Received: from lkp-server01.sh.intel.com (HELO e783503266e8) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 Nov 2022 05:04:07 -0800
-Received: from kbuild by e783503266e8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1otThW-0003xF-2c;
-        Fri, 11 Nov 2022 13:04:06 +0000
-Date:   Fri, 11 Nov 2022 21:03:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- f9aff8dbe1e91b0e011ffd9065b79fe3980cd5f5
-Message-ID: <636e483e.U+qW9J5m+lq5Cbbn%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232983AbiKKNbz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 08:31:55 -0500
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C67760359
+        for <linux-pm@vger.kernel.org>; Fri, 11 Nov 2022 05:31:49 -0800 (PST)
+Received: from [192.168.1.18] ([86.243.100.34])
+        by smtp.orange.fr with ESMTPA
+        id tU8GonQCiJvOZtU8GoRdhX; Fri, 11 Nov 2022 14:31:47 +0100
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 11 Nov 2022 14:31:47 +0100
+X-ME-IP: 86.243.100.34
+Message-ID: <9a21c0ae-1f6b-fafb-6054-616f85edfba0@wanadoo.fr>
+Date:   Fri, 11 Nov 2022 14:31:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v11 1/2] thermal: loongson-2: add thermal management
+ support
+Content-Language: fr
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     amitk@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        liupeibao@loongson.cn, rafael@kernel.org, robh+dt@kernel.org,
+        rui.zhang@intel.com, zhanghongchen@loongson.cn
+References: <20221111095824.26898-1-zhuyinbo@loongson.cn>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221111095824.26898-1-zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: f9aff8dbe1e91b0e011ffd9065b79fe3980cd5f5  Merge branch 'acpi-pm' into bleeding-edge
+Le 11/11/2022 à 10:58, Yinbo Zhu a écrit :
+> This patch adds the support for Loongson-2 thermal sensor controller,
+> which can support maximum 4 sensors.
+> 
+> It's based on thermal of framework:
+>   - Trip points defined in device tree.
+>   - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+>   - Pwm fan as cooling device registered in hwmon pwm-fan driver.
+> 
+> Signed-off-by: zhanghongchen <zhanghongchen-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> Signed-off-by: Yinbo Zhu <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> ---
 
-elapsed time: 1025m
+[...]
 
-configs tested: 56
-configs skipped: 2
+> +static int loongson2_thermal_set(struct loongson2_thermal_data *data,
+> +					int low, int high, bool enable)
+> +{
+> +	u64 reg_ctrl = 0;
+> +	int reg_off = data->id * 2;
+> +
+> +	if (low > high)
+> +		return -EINVAL;
+> +
+> +	low = min(low, -100);
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Should be max()?
 
-gcc tested configs:
-arc                               allnoconfig
-um                             i386_defconfig
-alpha                             allnoconfig
-um                           x86_64_defconfig
-i386                              allnoconfig
-arm                               allnoconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-arc                                 defconfig
-x86_64                    rhel-8.3-kselftests
-s390                             allmodconfig
-x86_64                          rhel-8.3-func
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-x86_64                              defconfig
-ia64                             allmodconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a015
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-sh                               allmodconfig
-mips                             allyesconfig
-alpha                            allyesconfig
-i386                                defconfig
-powerpc                          allmodconfig
-arc                              allyesconfig
-x86_64                        randconfig-a006
-m68k                             allmodconfig
-m68k                             allyesconfig
-arc                  randconfig-r043-20221110
-i386                             allyesconfig
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
+> +	high = max(high, 155);
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a014
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-riscv                randconfig-r042-20221110
-hexagon              randconfig-r041-20221110
-hexagon              randconfig-r045-20221110
-s390                 randconfig-r044-20221110
+Should be min()?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+CJ
+
+> +
+> +	low += 100;
+> +	high += 100;
+> +
+> +	reg_ctrl |= low;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
+> +
+> +	reg_ctrl = 0;
+> +	reg_ctrl |= high;
+> +	reg_ctrl |= enable ? 0x100 : 0;
+> +	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
+> +
+> +	return 0;
+> +}
+
+[...]
+
