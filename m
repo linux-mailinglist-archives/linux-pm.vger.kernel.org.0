@@ -2,48 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB336252E0
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 05:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B028625308
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 06:20:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiKKExL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 10 Nov 2022 23:53:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
+        id S229579AbiKKFT6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Nov 2022 00:19:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiKKExJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 10 Nov 2022 23:53:09 -0500
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CDB18B21
-        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 20:53:08 -0800 (PST)
-Received: by mail-pl1-f196.google.com with SMTP id io19so3352491plb.8
-        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 20:53:08 -0800 (PST)
+        with ESMTP id S229461AbiKKFT4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 00:19:56 -0500
+Received: from mail-pj1-f65.google.com (mail-pj1-f65.google.com [209.85.216.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006AE6B398
+        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 21:19:55 -0800 (PST)
+Received: by mail-pj1-f65.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso3779806pjc.5
+        for <linux-pm@vger.kernel.org>; Thu, 10 Nov 2022 21:19:55 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
         bh=Wuj86cGn9Y3n9vIX3WOCltOvXF3Lm7Ajtz3DUHiTbVY=;
-        b=VDILLh6ioLOUQGyZcFPft1Y3tWpnujmzBGBky3nqseoWg40aSmFGVLTCQzawumaRJm
-         QlaYKKEnGa12hT5RFrvHaaHU5nqHCfibZemv8Jfjx9h1dlOq6Rbjr9JBuuK0Rt+sKFxG
-         FFVyQkGy6D3Fw6lvIi6ChclEIZU70qca8JLgN+lL8JYm5YFvsfEAJUFHBOX6qfltUh+l
-         mlOUrGeQevfvb9bc/sUu+CbSjhl9z5nXtjYc+JyJS4qESK+soebjO10tR8iXYB9N4j14
-         ZF0fukuN13rADWDBfEuVLaZf+3awz3LDEybWIYPb4SfIZzapdhdaFem5v+dvCN/HtKby
-         iuzw==
-X-Gm-Message-State: ANoB5pmnvnjYbF3All9en2XkZfCZI9CqoaV7LO10fzqkHzDPDcPeQEwW
-        eNU1lTX5JaCn7UlNAQaiVEY=
-X-Google-Smtp-Source: AA0mqf5ee1SESj29J372oTVSMapa6otk7oSeltnQVBQyS5nGUaF0efe7Cad6V/LLz0cF4kBm/JDsUw==
-X-Received: by 2002:a17:903:328c:b0:186:9c2b:3a39 with SMTP id jh12-20020a170903328c00b001869c2b3a39mr873274plb.115.1668142388379;
-        Thu, 10 Nov 2022 20:53:08 -0800 (PST)
+        b=EIJFkupNf5Y7yvKCenbTpb2pYeeegbkWs+EdwTbOeyOeTeVc17NaubgqhxkE6+3Wrz
+         tcTB1N0zyrLhvT6N5QgsIFc0oUrg/Cm2tizcp19gki8rwERH/HtRTlLE2VtvZhmesZMM
+         JP5NKKdDZfYxXYWV/k7lsM7ZJnpBGrps4nwp6nWO9ceNgZjwnMXQ57mdx3rp1J8L4/vN
+         yaGB6fE19/1CIuJRGAEu7hYwfP6c+xy7ZgcAzHohwyvYGWuSykXN4QUriB2N2YGi2hiq
+         g8YoZ5tT1mLWdL87Svot5mkKYFxxcU4XUfvu+TxH1kwC1GDHbV+edxECQH1dPaXD1w4v
+         /Htw==
+X-Gm-Message-State: ANoB5pkWFhsU8cuM6krYv0NEk63ctRgCpmUjTSWae8McAbo0+gNzMdXi
+        lgl09bIYT0hGO9Uaip7GnO4=
+X-Google-Smtp-Source: AA0mqf5afPbkrXYcJ4EXc22soCo1rM8jBlgUl5h+r8XLjhDvZkPcEfwnDTimf8HkfVlsp14osqAvTA==
+X-Received: by 2002:a17:90a:8990:b0:212:dc2f:7ee7 with SMTP id v16-20020a17090a899000b00212dc2f7ee7mr123396pjn.172.1668143995460;
+        Thu, 10 Nov 2022 21:19:55 -0800 (PST)
 Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id k17-20020a63d851000000b004411a054d2dsm472900pgj.82.2022.11.10.20.53.06
+        by smtp.gmail.com with ESMTPSA id mu4-20020a17090b388400b00206023cbcc7sm4017785pjb.15.2022.11.10.21.19.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Nov 2022 20:53:07 -0800 (PST)
+        Thu, 10 Nov 2022 21:19:55 -0800 (PST)
 From:   Xueqin Luo <luoxueqin@kylinos.cn>
 To:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com
 Cc:     linux-pm@vger.kernel.org, xiongxin@kylinos.cn,
         Xueqin Luo <luoxueqin@kylinos.cn>
-Subject: [PATCH] kernel/power : add pr_err() for debugging "Error -14 resuming" error
-Date:   Fri, 11 Nov 2022 12:52:42 +0800
-Message-Id: <20221111045242.530607-1-luoxueqin@kylinos.cn>
+Subject: [PATCH v3] kernel/power : add pr_err() for debugging "Error -14 resuming" error
+Date:   Fri, 11 Nov 2022 13:19:49 +0800
+Message-Id: <20221111051949.532274-1-luoxueqin@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
