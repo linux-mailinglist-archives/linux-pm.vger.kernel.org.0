@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ADA625ABE
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 13:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D34625AC5
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 13:58:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233308AbiKKM4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Nov 2022 07:56:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S233194AbiKKM57 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Nov 2022 07:57:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiKKM4a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 07:56:30 -0500
+        with ESMTP id S232851AbiKKM56 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 07:57:58 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B587BE7C;
-        Fri, 11 Nov 2022 04:56:29 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C457C8F0;
+        Fri, 11 Nov 2022 04:57:56 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A3BA61FCA;
-        Fri, 11 Nov 2022 12:56:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94027C433D7;
-        Fri, 11 Nov 2022 12:56:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCEF461FB0;
+        Fri, 11 Nov 2022 12:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E697C433D6;
+        Fri, 11 Nov 2022 12:57:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668171388;
-        bh=0dF+vWhwIigujdMkwDpIyGj/ZGuMWFPe4VA+7zWBC3I=;
+        s=k20201202; t=1668171475;
+        bh=zwR2CVETYVKkhlVS2uKhYwwfZN8Fws7SwH+daDdD7Q0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kSq3o+VVltt7DphRoQ+Ijpe++hcP8vRXRU55LtNzP2SjQB9bv3mXWellgMQOVxjjR
-         n8wrDWA5ycyWczqdqnHBEEo7GP2e/TsGPBtcAaBjN4ySYFnp7LwPKbpLwqqnCn8akm
-         iwEyKbpmSf5mxql+ZB7UOdUgDVw+uxpU1Hw+crWTajvohZcWyMYkhs3vZaf8L1LBDu
-         aDOC5VK5F9Ztl/aognzhozRDFDPi0m+cJnxMQ7n9O4WLmPn3odwqE5xpBS7tgHxYan
-         9OUqM+BQjL4IoLnSfwufKgdAcRbZkz2Y4XfJEqKTHzfJGifAAED9V3sYzpULgWZmTk
-         kN72pgJsXYc7w==
+        b=o6Hc3y/dSgnkCRu5sF+3+R1DG4UiTP6y1TS1S68pMerhilYcO9WRKyr16tCVpYuqm
+         RZpKJPWmk122BX/lVxLXQVHKMCjXydkTJL/OvUDyA7PiFwUnKSiDbAO8GPfc7iFCP6
+         DyVe29q/MGMMF5WoUjXD10vdjxrdPc/lMfe8j7vuWmr+pSWyw5DeDaOd+WK+a/MT1G
+         I6RAXsZLwmL5rF1tzlPNAhCeG0unjbPPKMySl+Prn7OLvQ5U1QVB07LtvPT25xV8bB
+         2V21njP6uSaGbZLZgi4zzIDhq2TUDDgIHIO+1ve2TDfBC2ebu9uZ3g9PMoY+cizfgh
+         7vZPk5K+MTNcA==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1otTZg-000623-JP; Fri, 11 Nov 2022 13:56:00 +0100
-Date:   Fri, 11 Nov 2022 13:56:00 +0100
+        id 1otTb5-00012W-8l; Fri, 11 Nov 2022 13:57:27 +0100
+Date:   Fri, 11 Nov 2022 13:57:27 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>
 Cc:     Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -46,7 +46,7 @@ Cc:     Andy Gross <agross@kernel.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 Subject: Re: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK
  driver
-Message-ID: <Y25GYAF5n5wpmgub@hovoldconsulting.com>
+Message-ID: <Y25Gtwaws9wDU4a+@hovoldconsulting.com>
 References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
  <20220818031512.319310-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
@@ -61,6 +61,8 @@ X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
+
+[ Resending to Bjorn's current address. ]
 
 On Wed, Aug 17, 2022 at 08:15:10PM -0700, Bjorn Andersson wrote:
 > The PMIC GLINK service runs on one of the co-processors of some modern
