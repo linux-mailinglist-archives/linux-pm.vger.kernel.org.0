@@ -2,112 +2,116 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46DCA625937
-	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 12:19:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ADA625ABE
+	for <lists+linux-pm@lfdr.de>; Fri, 11 Nov 2022 13:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiKKLT5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 11 Nov 2022 06:19:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
+        id S233308AbiKKM4b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 11 Nov 2022 07:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233520AbiKKLT5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 06:19:57 -0500
-Received: from smtp.smtpout.orange.fr (smtp-25.smtpout.orange.fr [80.12.242.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F13D68C58
-        for <linux-pm@vger.kernel.org>; Fri, 11 Nov 2022 03:19:55 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id tS4bobtVag7y2tS4coV3mq; Fri, 11 Nov 2022 12:19:53 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 11 Nov 2022 12:19:53 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <786d9e96-211d-2357-4f5a-38e580d817f8@wanadoo.fr>
-Date:   Fri, 11 Nov 2022 12:19:49 +0100
+        with ESMTP id S233220AbiKKM4a (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 11 Nov 2022 07:56:30 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B587BE7C;
+        Fri, 11 Nov 2022 04:56:29 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4A3BA61FCA;
+        Fri, 11 Nov 2022 12:56:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94027C433D7;
+        Fri, 11 Nov 2022 12:56:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668171388;
+        bh=0dF+vWhwIigujdMkwDpIyGj/ZGuMWFPe4VA+7zWBC3I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kSq3o+VVltt7DphRoQ+Ijpe++hcP8vRXRU55LtNzP2SjQB9bv3mXWellgMQOVxjjR
+         n8wrDWA5ycyWczqdqnHBEEo7GP2e/TsGPBtcAaBjN4ySYFnp7LwPKbpLwqqnCn8akm
+         iwEyKbpmSf5mxql+ZB7UOdUgDVw+uxpU1Hw+crWTajvohZcWyMYkhs3vZaf8L1LBDu
+         aDOC5VK5F9Ztl/aognzhozRDFDPi0m+cJnxMQ7n9O4WLmPn3odwqE5xpBS7tgHxYan
+         9OUqM+BQjL4IoLnSfwufKgdAcRbZkz2Y4XfJEqKTHzfJGifAAED9V3sYzpULgWZmTk
+         kN72pgJsXYc7w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1otTZg-000623-JP; Fri, 11 Nov 2022 13:56:00 +0100
+Date:   Fri, 11 Nov 2022 13:56:00 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 2/4] soc: qcom: pmic_glink: Introduce base PMIC GLINK
+ driver
+Message-ID: <Y25GYAF5n5wpmgub@hovoldconsulting.com>
+References: <20220818031512.319310-1-bjorn.andersson@linaro.org>
+ <20220818031512.319310-3-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v10 1/2] thermal: loongson-2: add thermal management
- support
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     amitk@kernel.org, christophe.jaillet@wanadoo.fr,
-        daniel.lezcano@linaro.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, liupeibao@loongson.cn, rafael@kernel.org,
-        robh+dt@kernel.org, rui.zhang@intel.com, zhanghongchen@loongson.cn
-References: <20221103083407.4039-1-zhuyinbo@loongson.cn>
- <d634c8db-3036-08eb-24d2-568771b0e104@loongson.cn>
- <d975ae16-58b8-a844-7ffd-7fa06159311c@wanadoo.fr>
- <ef7a6f77-9f18-e68d-a6a7-61186346c768@loongson.cn>
-Content-Language: fr, en-GB
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <ef7a6f77-9f18-e68d-a6a7-61186346c768@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220818031512.319310-3-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le 11/11/2022 à 11:05, Yinbo Zhu a écrit :
+On Wed, Aug 17, 2022 at 08:15:10PM -0700, Bjorn Andersson wrote:
+> The PMIC GLINK service runs on one of the co-processors of some modern
+> Qualcomm platforms and implements USB-C and battery managements. It uses
+> a message based protocol over GLINK for communication with the OS, hence
+> the name.
 > 
+> The driver implemented provides the rpmsg device for communication and
+> uses auxilirary bus to spawn off individual devices in respsective
+> subsystem. The auxilirary devices are spawned off from a
+> platform_device, so that the drm_bridge is available early, to allow the
+> DisplayPort driver to probe even before the remoteproc has spun up.
 > 
-> 在 2022/11/10 下午2:01, Christophe JAILLET 写道:
->> Le 09/11/2022 à 09:09, Yinbo Zhu a écrit :
->>> Hi Rafael J.Wysocki,
->>>
->>> I just have a verified on your tree about my patch again, it is okay,
->>> if no other proplems, please help merge it to your tree and sync it 
->>> to linux mainline tree.
->>>
->>> Thanks,
->>> Yinbo.
->>>
->>
->> Hi,
->>
->> I've sent a few nits on v10, that you are obviously free to take into 
->> account or not.
->>
->> However, one of these comments is about thermal_add_hwmon_sysfs() vs 
->> devm_thermal_add_hwmon_sysfs() in loongson2_thermal_probe().
->>
->> IMHO, if I'm correct, at least this comment should be fixed.
-> Hi Christophe JAILLET,
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  drivers/soc/qcom/Kconfig            |  14 ++
+>  drivers/soc/qcom/Makefile           |   1 +
+>  drivers/soc/qcom/pmic_glink.c       | 336 ++++++++++++++++++++++++++++
+>  include/linux/soc/qcom/pmic_glink.h |  32 +++
+>  4 files changed, 383 insertions(+)
+>  create mode 100644 drivers/soc/qcom/pmic_glink.c
+>  create mode 100644 include/linux/soc/qcom/pmic_glink.h
 > 
-> Thanks your addvice, I had send v11 that following your advice,
-> but some it is different. e.g.  devm_request_threaded_irq return value 
-> is integer and use IS_ERR(integer) that isn't appropriate.
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index e0d7a5459562..2289f5e0d5ad 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -91,6 +91,20 @@ config QCOM_PDR_HELPERS
+>  	tristate
+>  	select QCOM_QMI_HELPERS
+>  
+> +config QCOM_PMIC_GLINK
+> +	tristate "Qualcomm PMIC GLINK driver"
+> +	depends on RPMSG
+> +	depends on TYPEC
+> +	depends on DRM
 
-Hi,
-thanks for taking my comments into consideration.
+You should add
 
+	select AUXILIARY_BUS
 
-My point was something like:
+here as this driver will not compile without it. Then you can drop the
+corresponding select from the battery driver.
 
-	ret = devm_request_threaded_irq(dev, data->irq,
-			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
-			IRQF_ONESHOT, "loongson2_thermal", data);
-	if (ret < 0)
-		return dev_err_probe(dev, ret, "failed to request alarm irq\n");
+> +	select QCOM_PDR_HELPERS
+> +	help
+> +	  The Qualcomm PMIC GLINK driver provides access, over GLINK, to the
+> +	  USB and battery firmware running on one of the coprocessors in
+> +	  several modern Qualcomm platforms.
+> +
+> +	  Say yes here to support USB-C and battery status on modern Qualcomm
+> +	  platforms.
 
-But that  mostly a matter of taste. I don't think it worth a re-spin 
-only for that.
-
-
-However, I'll send another comment about the use of min() and max() in 
-v11. I think it is not correct.
-
-CJ
-
-> 
-> Tks,
-> Yinbo
->>
->> CJ
-> 
-> 
-
+Johan
