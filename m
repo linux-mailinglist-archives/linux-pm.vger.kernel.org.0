@@ -2,140 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797C36288E2
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 20:06:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B266288F3
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 20:12:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236195AbiKNTGs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Nov 2022 14:06:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
+        id S236957AbiKNTMv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Nov 2022 14:12:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbiKNTGr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 14:06:47 -0500
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1anam02on2072.outbound.protection.outlook.com [40.107.96.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B219E60F9;
-        Mon, 14 Nov 2022 11:06:45 -0800 (PST)
+        with ESMTP id S236756AbiKNTMs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 14:12:48 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2067.outbound.protection.outlook.com [40.107.220.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45F324BD5;
+        Mon, 14 Nov 2022 11:12:47 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZadDSnrnZcYIJvk/eNk8YPB29JE2Nq4wodC4meU4FYVNydvMzS1fXo5OmwjB223W10SOAcPP4ECV8HLZJmqnhyE1Ye/R0pbE2kT7onqNOyfueYW3E4qEoZYOtkh9a4uT1VKAOFOkGjy1ls39VbdHoPpzQsGn5+eFLjewZCjs04OydzmoCCxvup2mLD+8xziO1kKu7TjGWNJIaQIf0UCA+9WcTv+gI3U3XJ7lpYa/3ySzl1eDR8bqJZtBr1WRdtVLgPQZ3XeGJ7Bx6SRHG6oUigvNnUKYuKTJrc5ZhkSvpSuf0re3kCVUkEw9C+5y/DqCA2kR1dFHfH3Ttjr5vfDIVg==
+ b=ItshIdb4I2XE4pg6j2qM3W4I75GkBYidcg+xEs66oiLVkwquhz4iyS+Z+P/O52EbgJ3nVGTmBeh4r2yITCUAYHLYcuVZ5170MGx6Pefh0so6EPPAm143fs0wQwCOGyjGwe2HdskBK+S6B+8wV4BYtsicT/YuGu7Yni9q/+1XV5WV/Ymsrem0MVl7EO+TcKWjGWVsLKNmX4ryLYenYaRPLe2K97GcxqotzeE/ilfAocGZgrn2WHO2IU/W2c5JulwTegCD1/MX3rsJpbTU+WK2z3YU8BS5/1bRsvLiMSw5AWDV/s9DdeRkyuauC4T2/EK39T7I0UhasiURfwqSsDN/Jg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+WOtBWIm3pQK/tP/1jjvSAjflR9M09ldfyqPpJIjlFE=;
- b=a6u0kRES7CJRh+puqqmrT1rB5LFqkoGiorQ0uBhbqxPRgeNshwc4F+4Jef9f/Lk5wVx/j0mq8+6fl97H+vwlfZ16KPK4aPwe6Xq+WP8pq9Rx+gQUM0kxnMzPnNiNPjFvysbCKucS7khKo9SY1G89M4Zm3AF9z2q/zPqS9x+J+WtOZh/W2BqSw/zYN7/lnm8VkvW1kcsQN5u99pXWG1CPRpzTnI7900nmnhCZnkvRuhZfOmL797rRLIi4Y0K5CZodranENe8XZtcd5VozKkwa8ft7553yL+7J9ass/XrIMlF+Gi0h2r2uCBEVyJ87p4swmjqVzEru3H51zGeeNNnHJg==
+ bh=qYca1CmKSo2swLbkHAPDfmvg0FLkLOqnpnL/x3445bs=;
+ b=hRNDXHcl3MXQ7oWdhpmznU9vcH1K96+1GtklHe/kesU6LocI50OW38ppdfWGqVLgli6WEAFXcnmAtfigZQB8lvIDavGzPnL7Fc11Qgzl6LpqkfiRNdQf9O9HuiDUGEt5sy+miRM2yPq/ukhObcjsWy6hQT5WIIPnKe2i2xs7Mz4fD4rRF6h+wWphnz4St3GMfMDxPqzJZ8PEv4duRI5HhWsYmFK/M0qZDqy30LkcDqHF9zdRhCz3csjx/z9HC6fdxuOD/uELn1x4FWa30yrIX34I0rNr9YWuu90cMUzlG5MrVLJJPszpg9b1OcUXk3FIhl+eo3UtSa2S6cr1I98qkA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+WOtBWIm3pQK/tP/1jjvSAjflR9M09ldfyqPpJIjlFE=;
- b=lSCtZdBmouFT/HKSovt/tk6/KH//McLZFRnrJuV+rc6ffD13fCgp84ixZkNsotVaUex79eXY+UsXhI2X2z6vrGOyCqlL0Cr+aYrGakKyZ8ZTi/vMY+pNwmMIAY/uu7YdTi1RjhRHQILU8VCuKMkttPYF5cZJtMHvfjfqdC5Mb6s=
+ bh=qYca1CmKSo2swLbkHAPDfmvg0FLkLOqnpnL/x3445bs=;
+ b=acJdZmvpW7NookCBjUJWx83DtskVqVWU1o83nUI4c5Oz91uOsx3u4QemelkxFtHeELDvJHGpgZD9+zAGDlRUklyLi72SInY4zS/fPC1A16ZLN5t3bttLOH2K31wq+PR1lJnBTSeCXYyh0dstaGMivHmMt1NzjVNJcCRC1jGzPXY=
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DM6PR12MB4105.namprd12.prod.outlook.com (2603:10b6:5:217::18) with
+ by MW4PR12MB6801.namprd12.prod.outlook.com (2603:10b6:303:1e8::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
- 2022 19:06:42 +0000
+ 2022 19:12:45 +0000
 Received: from MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::44a:a337:ac31:d657]) by MN0PR12MB6101.namprd12.prod.outlook.com
  ([fe80::44a:a337:ac31:d657%4]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
- 19:06:42 +0000
+ 19:12:45 +0000
 From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Sven van Ashbrook <svenva@chromium.org>,
         Rafael J Wysocki <rafael@kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        David E Box <david.e.box@intel.com>
-CC:     "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        <platform-driver-x86@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>
+CC:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
         "rrangel@chromium.org" <rrangel@chromium.org>,
         Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
         Hans de Goede <hdegoede@redhat.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Mark Gross <markgross@kernel.org>
-Subject: RE: [RFC v2 3/3] platform/x86/intel/pmc: core: Report duration of
- time in HW sleep state
-Thread-Topic: [RFC v2 3/3] platform/x86/intel/pmc: core: Report duration of
- time in HW sleep state
-Thread-Index: AQHY9NCbic/3i/An1U+4vQ36413J9q49ja2AgAFAqTA=
-Date:   Mon, 14 Nov 2022 19:06:42 +0000
-Message-ID: <MN0PR12MB6101B9889A1C2ED2CEBBF380E2059@MN0PR12MB6101.namprd12.prod.outlook.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: RE: [RFC v2 1/3] PM: Add a sysfs files to represent sleep duration
+Thread-Topic: [RFC v2 1/3] PM: Add a sysfs files to represent sleep duration
+Thread-Index: AQHY9NCYQ+ZBoZLjL06d4Pfsi7tE0q49jLAAgAFCUuA=
+Date:   Mon, 14 Nov 2022 19:12:45 +0000
+Message-ID: <MN0PR12MB6101BB92574BEF0A0AE2AB11E2059@MN0PR12MB6101.namprd12.prod.outlook.com>
 References: <20221110064723.8882-1-mario.limonciello@amd.com>
- <20221110064723.8882-4-mario.limonciello@amd.com> <87y1ses90k.ffs@tglx>
-In-Reply-To: <87y1ses90k.ffs@tglx>
+ <20221110064723.8882-2-mario.limonciello@amd.com> <871qq6tnqx.ffs@tglx>
+In-Reply-To: <871qq6tnqx.ffs@tglx>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-11-14T19:04:57Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-11-14T19:07:21Z;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=c654afcd-4efb-4e1c-9dbb-1fe6cbe2cc34;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=f947aa2c-1c7e-4ca9-9723-99f444ee3555;
  MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
 msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-11-14T19:06:41Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-11-14T19:12:44Z
 msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
 msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
 msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 2fc85273-f2ce-4a96-8eb6-8c0d3b212204
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 4d15366e-4a90-48f9-bf04-eb8d62cb5c9e
 msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|DM6PR12MB4105:EE_
-x-ms-office365-filtering-correlation-id: afaa4492-d252-4467-957b-08dac6735ddc
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|MW4PR12MB6801:EE_
+x-ms-office365-filtering-correlation-id: b1bc8f60-8ff6-4db7-9949-08dac6743645
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: MA1TgUl+sBAh76dxtHi35DUBa4amiEJ6cWCsDuFMtLUUzzGq3/pK0hbAkroWpvHw3u/3WVAuooBkffu/tWhWQSWs5MsQ2QxXSu2BAdIaCvbmwNh1OK4HiQ0ontqGsNBDBKZqPCs1O5LaZbwUAYhYDchpZI+YGC1IHyPzCjdCiR1un607Ie7b4fhihoOJG3MCP9yoZH3oVWiDXyW2kjfiKL5B++NIE1dbYF0tjo/16VJMShFhqFHGP06H0SHgSp2/ZlmpbwzWzA1gooNBxoArDzIFhkEcZkxPWkk3qewCemjPnEKSKpYWRaFBsLLNTylwIi5bp/pjfz+9ia6CaoDsHXDjloDlkY63C7rkhOIike96k4oOfIRyvL5JvzACN+2i2q2DLcgQGFIU1qm6W60W6lIIlQ4w7o3N2LqFbpUtYsqNxwphEquBi6jHK3q+Tci1UdOsVQSSnqOnLhkWp8RdHQMX77c2+RwopJnMhWtMqzwZ0Po12G1NwBtozguikFsp8rCfyn7mhuMA2RAPgGArQulwDOToxYy8ahdAAp5CpnRhxZShV7NXY4nqAIJot4PircHFNyfvJP9z0cjGmLhRJnfHzoTjcLtk4enE/N9+P9EKQpxrHAKKFAdEX3R9DgOeql3kLVcWfhyiWZhDHR353a8xMDyQpMcFOd67RDxO8YedbnyHUueX4EN8DqWa6rdtQOyNS4s+esJa2VDHk/tWCKqXKrV9U49eCXgLU59xqxm536JT+fRp+E4hbxjwcu48GYtU7/1IzLbJOlHN+SFW8w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(366004)(346002)(136003)(451199015)(26005)(122000001)(110136005)(9686003)(71200400001)(54906003)(66446008)(33656002)(316002)(64756008)(66476007)(76116006)(66556008)(66946007)(2906002)(55016003)(4326008)(186003)(8676002)(86362001)(52536014)(5660300002)(83380400001)(7416002)(6506007)(478600001)(38070700005)(53546011)(41300700001)(7696005)(4744005)(38100700002)(8936002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: la2Gv8jpJzeZg4r5npjNwNPgIxGLDs1k3QYhIIVDpz/hexT1Opfcl08mK1nlZFBCymLxw4iON2Z/cgtHRtHddw7SeQejQ/rihxqDqPlN4HJYUF64JTQGvafwfHiVTJrl1ixw/rivWeO0hD+6TDw7dUfAKaehohsY76kTcYdNO2qgFCIsFC30wM9ouIFnbfbtsGNbznkZkvQ1ascDgVA0b0YJZD3S+x2/im1AmD7vo4MjBYv6FDvBHCpTwX90lxlCNzKmMSGfh08755EfnSASKN9hKVPzLRxsLWjeaM9hLxlTV1PpAcQPnWk8+KN2yQBbQuLnPweJ9VThAqzERpSqrmeDaXH8iIv3DpSV5NqFYsU8GVrWvNHP66z5KyV8IjvTRTDKBy1WAw15CpQeqHEs1Bel/cPwhu9VIhhm0duXCscWgbOA9LL1mgQ3ZaY8/EkcFRTE88XJXR/Y2yQz+IqFLYms1MLWRk1R+zRTI7MFwlScycaWnfU83j7+pZ0vt/+1m8MWM6cq2DIBMX5wfBbf5Llvl2nQNGrD1C7LJ3fU0mRVRfegtg7jHBHhW6MkCeudpo/JE5dgkGHFTQ8Z8Bd01Fnrj+8YWDOohVLLlC8gfJ+qD+6rl+KBVT6QTsbCCKUi5myXsMKAjAdqPI47QyN9aDvewZ4Fhy2iTL7oOMK7JgsFOfqSBMvpn3p6wNFTN9Tif8i8aXjygDwMXbsNlMBN28qBM/i7XQxASyuy3tzjf/VtMuI2cnB04+dX9mfmLoQNAkcWuwuHmJ5mvyJJLrAUyg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(39860400002)(376002)(136003)(396003)(451199015)(55016003)(8936002)(83380400001)(9686003)(186003)(7696005)(26005)(6506007)(38100700002)(66899015)(122000001)(5660300002)(2906002)(7416002)(478600001)(71200400001)(110136005)(66946007)(8676002)(52536014)(64756008)(66446008)(4326008)(76116006)(66476007)(66556008)(41300700001)(54906003)(316002)(86362001)(33656002)(38070700005);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V+9sW8ialJZW8/4vwaw2AnbZpeY5alunJ15n+8psh8XS1HaUWIs0sNL95mnA?=
- =?us-ascii?Q?cigYWlIprv5i9yjEWln7/VLP3XhdWNVCI9tqdqvCfGPwCG4t/hXN+22wz97s?=
- =?us-ascii?Q?jWslDFGXDrcaMr4rIEBFCUeopp/9I8m1UzXAQ16I/nV8PJiMZoEfXU+LgkOc?=
- =?us-ascii?Q?vTD2WTKPbR2wrae0ugG8pHbp7uiyo/dCT0niDzdZXUQEw9ylygSIHLxcXiQW?=
- =?us-ascii?Q?kv/hoTLOeU8g7EV1lvfckc/GFp3JMu/llr+3CcuvGYISZDj6dEulEKLfJC3/?=
- =?us-ascii?Q?vNfy0n0FC56W4WuRotgXzj1VPxnSxVnn2LuFZjHUxZtpOx8A2lqTk+aUIGvv?=
- =?us-ascii?Q?mvu7EJkq+e3Lk7V9XESpdNVThjf6KBbKHzQy4kHG5Jkn+UwrSMTueE8dUu3t?=
- =?us-ascii?Q?dO73gv7qcEFwPsX3fPDryMAjmYGK0MBJzv/pALBOyTKiTdCeeNs8QisU0xfs?=
- =?us-ascii?Q?kCuoD+0T6rF/cgKU5+jCkwKDgCBFyNE/NG5Hcz1rLCAFjSXSZzzAPhgLsR+z?=
- =?us-ascii?Q?ynLyM8kwpwp8Pzz5l6vXPucrQPFvh7W/MNVCJQBxwd+8pexIlYwZOEsK84/r?=
- =?us-ascii?Q?BGZsj9GRo8TYwwud6sZQ8a3tyJHp4/xK8BuKtaypVTh+4BSUeKMvt+CwaDb6?=
- =?us-ascii?Q?7xX+oukASxAsZDqhZ2CVebFShbJ0qRiGi0rTJAngs8KXCI9cFkInFlaloMu6?=
- =?us-ascii?Q?vk8UQLsY1mzE5Gwk78E7NcFnpPDHM2TyBQm3c1ZKmDaF5yJVFOFKDVqygbU2?=
- =?us-ascii?Q?FTBKwOevIaLovt2x62FzzQ4Cz63lpUkZADGhiU2Iv9s8eV/vLdbPIIpyOw9P?=
- =?us-ascii?Q?08QMn2F9LTTuaQy1vvEKgpIWv8X7P5eFbKgpV+TosJ9hkS7ihsw7fIafUw5X?=
- =?us-ascii?Q?ejDPsFfxrV9Xs8zK3iQOhERUXgxrbqQEl1pBCYug4CfPljlM3HxpXPeaIfzr?=
- =?us-ascii?Q?I61hVOIJylzshP5zj/Q+5q9DiPOhuT8DCJ0EgqDftIGIx/bnzWq0aP0FXTWr?=
- =?us-ascii?Q?ls8nYM0dcbkyHde4yzGpqeQlXZYck+zK2RPRRS0/sB4zgeCsUuE2jkGjLvvr?=
- =?us-ascii?Q?TVr1R9DmqsEvdF0q8vYmW0wm6iAaV92Rk6nYoGycqmIxO6hHSqYZiIt9ZtsU?=
- =?us-ascii?Q?dU3JjicL1PyJkdSHKsTTOUD+t6TkurVBra1ATQIC4tnFb8C0nt+BfNXpupZ4?=
- =?us-ascii?Q?cj/XqgLWpayq5FU2u6fY1vQc9hd2lBEI4wGYewdVKEA0AlVSPwnIEt35pPUN?=
- =?us-ascii?Q?PmQUAPHqnW9IuG4cCCwUTac4mZIXdR9OmufuaFJwFq+Cvah44dlNOVC807M3?=
- =?us-ascii?Q?5WFOjMRtjoPeXHLkg0ha8sIZAR6zF1Tt99HBijyxsgg3iKshmpzMrzW1I9TZ?=
- =?us-ascii?Q?xP2n8MUNxg1ZA6nbG75uC3SqzZ1xkOxc19dSzVZAkkIw//HQk6OlkfGqEGFP?=
- =?us-ascii?Q?wzBug64B7J9GXGPYsg6aSBBXj67StOCHlIvLLnLyNqTv7vveORys/N+W5oFy?=
- =?us-ascii?Q?oTYyFMpsqGtfauBKOxmcFfaGGrWFO9NRj4SH0FRQN3EAxsDb+EBwcZwhgdEm?=
- =?us-ascii?Q?6yKrL4MBGONj3aDhM+8=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?R5ROiX9HRBttiSclp8uIFAy99YvMyftOiqQo+wVgUqPOAybEbjt39E7ReaKW?=
+ =?us-ascii?Q?UQyUMJBBe9EcPBYpzLR9vaSQU0QoRkWDs+d2N7ZETCRwKsSfmHvsWE4mPo3d?=
+ =?us-ascii?Q?9fu2OTqQrUKP2TE7kOHftGKQ3ZWzqwCd1bls71w8CjH+/Duxs/MBHKkV5jvN?=
+ =?us-ascii?Q?XRlN74dBsmvpe/GD39Hja6ijo1gLyTDqgZeINyXAT3U0kSldEMQo+IUG9rKz?=
+ =?us-ascii?Q?TrfglpRdhsejRA/0bANiUYVRwGNbsTGVdrfOvHdKuXKCRbEGJqAY7u5prkJN?=
+ =?us-ascii?Q?cqop6BGbHP0bo+/x1c2nw84CBrwElJsMWW+6hnKudt6IlKAkuzjLreAo0bvw?=
+ =?us-ascii?Q?zaE91wI+iT0WgPoEhyEjTcpko88NKcTe8fgVvJ/OB8seCr/EDcjCEgUArEw+?=
+ =?us-ascii?Q?f30X8IASIqq0K4aHAjRKWGN8klTEQzi69jUKe18LNR3JifpzFLdxFd+F8bVa?=
+ =?us-ascii?Q?lo5ranAt2IVxyujkB+71wInbBHCt/GvnzU0x42TTPfnSLt4eFjMVRSZ9Ht1g?=
+ =?us-ascii?Q?Yon/GOmOpix3A/JhKQl4YYyXhpsuWMKDN9joVDGE0cxAmtzxDTaPaPdYdS0T?=
+ =?us-ascii?Q?b2ZPqCdlIFn/pwet3m/TVpBm4PF8fCfY/dEZYUxlY0bXUSOVkMIbzol0XlrS?=
+ =?us-ascii?Q?Nfu0ZkIHVQ1835FhfsD838hIEh/8w6JrlNRH+lsU0ZXBE+KJBYHDJMt4tv2U?=
+ =?us-ascii?Q?WTOwpxhHmJX+ZJu1uTSD+eOwJsoZ0cnkvw1gmALcV32dsbYc2hxYNa4KYdEz?=
+ =?us-ascii?Q?oTaDLaW3tnElVbcqh0cwtmwhvDU0Gy6590ypqZ2Lh8C/9c49wa186KMnCHyV?=
+ =?us-ascii?Q?gLXtsiC67irWcRBmTQxUF1J0MtsAlNcwVCx7MUhJRsmoDqWWvVTZBYADC2Ia?=
+ =?us-ascii?Q?lfeHPe1TWJmjE4pPO8EcKj0ZQzlz6tp/See6nOHNI9b2aLjerGL7abyVRYTP?=
+ =?us-ascii?Q?OAcvDGI5+nvlNdHAN9/jamI5kxzlTYCb0I4anR5EjIYy6e/VnGxva//pja5I?=
+ =?us-ascii?Q?0QLIslHA941+7YiVIrcim8WRBo6aIFeX9j2u7L9EYXxYDY/VApkBaNEkuNXp?=
+ =?us-ascii?Q?YEIxzL3C3VnuZr2ykDLfjXzdUyeJFARD+cOKjWddcHjT7SKI6Xqfw3cqvybF?=
+ =?us-ascii?Q?OnZQ0CsoiXX5al1Ou1HxTBeCfzqSfDnOjcGjiSqL60qe6i3f1+ITQkmwHcy/?=
+ =?us-ascii?Q?XPHeh1k5ZOsgCYV0DVbZ2Y3DPu2ekSfn1fn6MAM1YUwOkP8fJZWlhE8mAX6c?=
+ =?us-ascii?Q?d4+g5SAsZ8FwJ8on9ry+UGO86A+vbQkWyEN2V8eo8bQF1DnmMrkrKU7mvKRG?=
+ =?us-ascii?Q?INOh2l8CLyx0EpInNbXBEj7Y0ddwrgA6y645m4eJRYiIFRNCetIIqyuejL4q?=
+ =?us-ascii?Q?PwohKQ/x4HiCTLdeYL2vsRwAmQSQXUtbUbTAAJN0XI3bX1F/+0seDIJGAWOh?=
+ =?us-ascii?Q?xb91bcHI2w0wnGrBUQgKgH6isINx155TNHfzeqdzyJIeRDKNPL01KguoC0xx?=
+ =?us-ascii?Q?CqsSwGQieObgjaMVoydH68jC6ESsF+5hKHyzpyPLhpocTEv4qpUeboQFSPHs?=
+ =?us-ascii?Q?D/BuDIgltwZHnT0Qc5Q=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: afaa4492-d252-4467-957b-08dac6735ddc
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 19:06:42.4466
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1bc8f60-8ff6-4db7-9949-08dac6743645
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Nov 2022 19:12:45.4914
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: bDTLEMVFukl3pZUqVfCUDh074lDr8BUIZEhln4vr/eQSktpNsfHZM4wBjatKwHwXa1KVP7yjgUJVjQiOAClHOw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4105
+X-MS-Exchange-CrossTenant-userprincipalname: klitxGajXO3x86eHYfWPUhtqyoWmxFgfZg2HFSlRZDokHdNrbDGT7HZ57d4Fp7dGlDmmnuKZkJ4qm/1gKbQs0Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6801
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,TVD_PH_BODY_ACCOUNTS_PRE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -144,31 +145,154 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 [Public]
 
+Thanks! Appreciate the comments.
+At least conceptually is there agreement to this idea for the two sysfs fil=
+es
+and userspace can use them to do this comparison?
 
+A few nested replies below, but I'll clean it up for
+RFC v3 or submit as PATCH v1 if there is conceptual alignment before then.
 
-> -----Original Message-----
-> From: Thomas Gleixner <tglx@linutronix.de>
-> Sent: Sunday, November 13, 2022 17:57
-> To: Limonciello, Mario <Mario.Limonciello@amd.com>; Sven van Ashbrook
-> <svenva@chromium.org>; Rafael J Wysocki <rafael@kernel.org>; linux-
-> pm@vger.kernel.org; platform-driver-x86@vger.kernel.org; Rajneesh
-> Bhardwaj <irenic.rajneesh@gmail.com>; David E Box
-> <david.e.box@intel.com>
-> Cc: S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>;
-> rrangel@chromium.org; Rajat Jain <rajatja@google.com>; Hans de Goede
-> <hdegoede@redhat.com>; linux-kernel@vger.kernel.org; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Mark Gross <markgross@kernel.org>
-> Subject: Re: [RFC v2 3/3] platform/x86/intel/pmc: core: Report duration o=
-f
-> time in HW sleep state
->=20
 > On Thu, Nov 10 2022 at 00:47, Mario Limonciello wrote:
-> > intel_pmc_core displays a warning when a suspend didn't get to a HW
-> > sleep state.
 >=20
-> Where? Copy and paste is wonderful...
+> 'Add a sysfs files'?
+>=20
+> Can you please decide whether that's 'a file' or 'multiple files'?
 
-In current mainline, drivers/platform/x86/intel/pmc/core.c line 2130 will
-show such a warning.
+Yup thanks; bad find and replace in the commit message when I added
+the second file.
 
-"CPU did not enter SLP_S0!!! (S0ix cnt=3D%llu)"
+>=20
+> > Both AMD and Intel SoCs have a concept of reporting whether the
+> hardware
+> > reached a hardware sleep state over s2idle as well as how much
+> > time was spent in such a state.
+>=20
+> Nice, but ...
+>=20
+> > This information is valuable to both chip designers and system designer=
+s
+> > as it helps to identify when there are problems with power consumption
+> > over an s2idle cycle.
+> >
+> > To make the information discoverable, create a new sysfs file and a sym=
+bol
+> > that drivers from supported manufacturers can use to advertise this
+> > information. This file will only be exported when the system supports l=
+ow
+> > power idle in the ACPI table.
+> >
+> > In order to effectively use this information you will ideally want to
+> > compare against the total duration of sleep, so export a second sysfs f=
+ile
+> > that will show total time. This file will be exported on all systems an=
+d
+> > used both for s2idle and s3.
+>=20
+> The above is incomprehensible word salad. Can you come up with some
+> coherent explanation of what you are trying to achieve please?
+>=20
+> > +void pm_set_hw_state_residency(u64 duration)
+> > +{
+> > +	suspend_stats.last_hw_state_residency =3D duration;
+> > +}
+> > +EXPORT_SYMBOL_GPL(pm_set_hw_state_residency);
+> > +
+> > +void pm_account_suspend_type(const struct timespec64 *t)
+> > +{
+> > +	suspend_stats.last_suspend_total +=3D (s64)t->tv_sec *
+> USEC_PER_SEC +
+> > +						 t->tv_nsec /
+> NSEC_PER_USEC;
+>=20
+> Conversion functions for timespecs to scalar nanoseconds exist for a
+> reason. Why does this need special treatment and open code it?
+
+Will fixup to use conversion functions.
+
+>=20
+> > +}
+> > +EXPORT_SYMBOL_GPL(pm_account_suspend_type);
+>=20
+> So none of these functions has any kind of documentation. kernel-doc
+> exists for a reason especially for exported functions.
+>=20
+> That said, what's the justification to export any of these functions at
+> all? AFAICT pm_account_suspend_type() is only used by builtin code...
+
+I think you're right; they shouldn't export; will fix.
+
+>=20
+> > +static umode_t suspend_attr_is_visible(struct kobject *kobj, struct
+> attribute *attr, int idx)
+> > +{
+> > +	if (attr !=3D &last_hw_state_residency.attr)
+> > +		return 0444;
+> > +#ifdef CONFIG_ACPI
+> > +	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
+> > +		return 0444;
+> > +#endif
+> > +	return 0;
+> > +}
+> > +
+> >  static const struct attribute_group suspend_attr_group =3D {
+> >  	.name =3D "suspend_stats",
+> >  	.attrs =3D suspend_attrs,
+> > +	.is_visible =3D suspend_attr_is_visible,
+>=20
+> How is this change related to the changelog above? We are not hiding
+> subtle changes to the existing code in some conglomorate patch. See
+> Documentation/process/...
+
+It was from feedback from RFC v1 from David Box that this file should only
+be visible when s2idle is supported on the hardware.  Will adjust commit
+message to make it clearer.
+
+>=20
+> > --- a/kernel/time/timekeeping.c
+> > +++ b/kernel/time/timekeeping.c
+> > @@ -24,6 +24,7 @@
+> >  #include <linux/compiler.h>
+> >  #include <linux/audit.h>
+> >  #include <linux/random.h>
+> > +#include <linux/suspend.h>
+> >
+> >  #include "tick-internal.h"
+> >  #include "ntp_internal.h"
+> > @@ -1698,6 +1699,7 @@ static void
+> __timekeeping_inject_sleeptime(struct timekeeper *tk,
+> >  	tk_set_wall_to_mono(tk, timespec64_sub(tk->wall_to_monotonic,
+> *delta));
+> >  	tk_update_sleep_time(tk, timespec64_to_ktime(*delta));
+> >  	tk_debug_account_sleep_time(delta);
+> > +	pm_account_suspend_type(delta);
+>=20
+> That function name is really self explaining - NOT !
+>=20
+>      pm_account_suspend_type(delta);
+>=20
+> So this will account a suspend type depending on the time spent in
+> suspend, right?
+>=20
+> It's totally obvious that the suspend type (whatever it is) depends on
+> the time delta argument... especially when the function at hand has
+> absolutely nothing to do with a type:
+>=20
+
+I fat fingered this.  In my mind I thought I wrote pm_account_suspend_time(=
+)
+Will fix.
+
+> > +void pm_account_suspend_type(const struct timespec64 *t)
+> > +{
+> > +	suspend_stats.last_suspend_total +=3D (s64)t->tv_sec *
+> USEC_PER_SEC +
+> > +						 t->tv_nsec /
+> NSEC_PER_USEC;
+> > +}
+>=20
+> Sigh....
+>=20
+> Thanks,
+>=20
+>         tglx
