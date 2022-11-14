@@ -2,278 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EADA9628B99
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 22:53:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E70F628C16
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 23:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiKNVxv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Nov 2022 16:53:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
+        id S237327AbiKNW31 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Nov 2022 17:29:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236128AbiKNVxu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 16:53:50 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B38E3F;
-        Mon, 14 Nov 2022 13:53:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668462829; x=1699998829;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=yPXbgLKjXYDcCWin9eEJ/CpOeATRU45Lm0Im9KdfJzo=;
-  b=UfL39G2AE5g/i5y23EvyAM+gehqIspbL/Al1BVXbb/7CTaPnyJJ/E5Y3
-   u7Uxl/WT98YedQrZp3TO29K4PuEM61LEE6QrirxQmB3/NB9JZFWFPnjG/
-   //00Ddn/L9e525fcUH+mCu11Knaxb0G+MJrcfjEdV+cK87jel4XK12laW
-   IWwrPoj4tTt+kzUJ4PTkbc7UuZiXP7L0Gke44+qa9VknhjNueXMIeKktC
-   vg2Ap+24HNm7yDUpdVlvN/nksqPHBAsjwGFDaEloGa5Pl+9q4w+kfF4/I
-   Bx0J1/RDEektrEe65Oar4N6SJ/iHc5wWHqB0v3W0GiaQGl0WKZcqQbhMM
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313238124"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="313238124"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 13:53:48 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="763651529"
-X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
-   d="scan'208";a="763651529"
-Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 14 Nov 2022 13:53:45 -0800
-Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ouhOi-0000mF-2g;
-        Mon, 14 Nov 2022 21:53:44 +0000
-Date:   Tue, 15 Nov 2022 05:52:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     ntfs3@lists.linux.dev, nouveau@lists.freedesktop.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-afs@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 5c92ddca1053df02387e8006d06094e18cc8538a
-Message-ID: <6372b8ae.03wKgLWGIY41bdTG%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        with ESMTP id S236156AbiKNW30 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 17:29:26 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2053.outbound.protection.outlook.com [40.107.95.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557D9140CB;
+        Mon, 14 Nov 2022 14:29:25 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aYCc3lgcBaMcg1HJBtPs3aIgQa6HqPpn2nlKbLBVF5emd88zJwyASmU0wsAl5YQinHdF8+7G6wscYkB49LQG4MMnIADodS4YLJtPCbs4hszgPJhoPG+18Cg+Ue8EHuQJlFcVG5Kjk0a73ODiChBoJHmtY+c3ZCmPhyhZSFiEGMVPZ/pSGW+AxNSJJ7eFqGhEHoCnW+YNTB6+pipxECve0T1hqzrMceBbrL2jcGjm6uwAY5ORbt27CZsnBl9xSmfYB3zuZl/hBKTHYpQx0rqCIldVubAcLocL6nh28we720F0YGrUoQEg+/tH4yPI8W5w3xfCG2rx9Y84FPy4eSQmiA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RJzGLUimyd4mqDUTklX765i/qc21asPhTZTRjWGgU/I=;
+ b=MvhTPXws9mGA265khPKipZk4lNJmaPtq61OJ7mEoTYFkqloMmV60jzF6bRzMHcXnUyywzrDn01lp8GibLTnFvFmmN5CMf3ysY5mmSgYUVvPcLfJpUg7/URp2qK2AWsoNkk7KX/2GhYZqAc1A3CMS/2EZWiCx2nBiU/r1zsofoKrMUqqo3K3CpZa9al8xAN8AKVNtXMdTlTbogE3hWopX8Fw60uQtXBv5BrcEgNkCou14FNgO5QR6B8GyeAoLKw/JMaXbfM9sXUl8F+GoAvYA4rFeknz4p0pE/jDmZAojTLPxJK7Kn9anTvoUR9hG/YZdNjREnNSe6XaD+uAapAHuKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RJzGLUimyd4mqDUTklX765i/qc21asPhTZTRjWGgU/I=;
+ b=whsIL077aOxo/OY+4/XkP91Bjc26oVSD03fBZGFflnRiFH/UaNo55A/gR/8zErveyGLDmGlHXqz4tvyjY/tE+xZ/TIWZSvqNVyju9LbxJequlYweS+NNsiZonyTBMKg2j1Z0BPl1CsU54awja3vt21jmihbMZfgETbPJ+U1l7CI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by CH2PR12MB4954.namprd12.prod.outlook.com (2603:10b6:610:63::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17; Mon, 14 Nov
+ 2022 22:29:22 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::44a:a337:ac31:d657]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::44a:a337:ac31:d657%4]) with mapi id 15.20.5813.017; Mon, 14 Nov 2022
+ 22:29:22 +0000
+Message-ID: <76570217-12b0-0501-53b6-45100c3effe1@amd.com>
+Date:   Mon, 14 Nov 2022 16:29:19 -0600
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 9/9] Documentation: amd-pstate: add amd pstate driver
+ mode introduction
+Content-Language: en-US
+To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221110175847.3098728-1-Perry.Yuan@amd.com>
+ <20221110175847.3098728-10-Perry.Yuan@amd.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <20221110175847.3098728-10-Perry.Yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: CH0PR04CA0053.namprd04.prod.outlook.com
+ (2603:10b6:610:77::28) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH2PR12MB4954:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26524a71-a05c-4237-bb85-08dac68fade0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 99g/zLTomYtcASkbS4Zk1m5sQZ0rk1IRfp/RfR51phFyXZ7VWqeabIWXQABwdc5kkRtxD6QxeoiAjJ7qoiVmvnQ6W2y4bdvHE5W2NfY8TxC0/u3yiC6AL2bh8BPWVrv9Z4tgmbQiCy4wv6zmRA4fu71Hl1ji18a+y9cWlw7bZWyDysUvOnm2ZLt5YwvWC6WkkVTL1pnU0R6xhBflZNPN7tPhCM7spBDiFqKpBrH6ltZMhU1rXQKAWBoSV/7fD5N7quWju28aDG3tlyeT7y0m76A5nhGfylfSlGco5cnlkU/HFl9Co2/KXnSXaSJxJmi+A25wE9mAmLjP/ATbv0dTxMNMr/MS+rOYVd+tcrI1rkYG98Y+/mUSBKfEM8qpq4dwQ2/I+/YBKYCwzqh3NDYw7Ug6+7G115oB8PSMRBvKKjPTBH5W3BkeR1Qd7cMQlYPZCXYLeZ4r2EKDYHsQdf0CApo4OfS/tCwrR4uztnWagXtcZLPvLr9mSsUwICkEWIakLgXeZzZazXuvFkvbVW1x6Vzxy7RJc2vCHwsbYReX21j27rlHwdcYpGIM95jmzwBYFKM9YL/Hcxm6RQlH2a2JG080p3ypLJnFhOqP5g0LjmvC+OBSRg+55IP+w/bVd1WtDLrWKYoFRmOup52BV2FT6UcLDLqByygx61dePUaBOxqrE+EXZKJwynk3/tpPZSTxFn8MtzrTRN96r4rwL0M+Z8kn03iUNSRFpz/TcdIrxceguyIQZYDicljQYRdpczVhKu1lBMY3AIKqk6wRO7GpLQEjFIy9WS1GAfUDg0YnhoA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(39860400002)(376002)(136003)(451199015)(2616005)(316002)(66556008)(2906002)(66476007)(36756003)(66946007)(186003)(8676002)(4326008)(31696002)(86362001)(6512007)(31686004)(6666004)(6506007)(83380400001)(5660300002)(6486002)(478600001)(41300700001)(53546011)(26005)(38100700002)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NzRBUkF5WTkwQTAxM3d3SjBzRlFIZ2pEVFFkRVQ2dHJGSmlPVWFUTjFoaE1I?=
+ =?utf-8?B?QmJ2Z2F3R0Q3NmpocHJVM29XY0NVRENHbDdIdXVRdHM2UGZXNlFoN05iQzhI?=
+ =?utf-8?B?VlhjUVVlaGxuZnZXR0ZpYjhLUmN6QUw5MmZ1emFLQWQwR1RlN21Jc0xNSHdo?=
+ =?utf-8?B?WUs4NkZQOVBmVVRESEd6R0dyZm0vYUppNGo4M0V5Rlplcnk5cFVTL2VrMjVv?=
+ =?utf-8?B?Y1kvNWFwd2o0cm1HTDJxN0h5OEVoYld6Nk5LaHNpNmVvMHhhVFl6SW0rWmNY?=
+ =?utf-8?B?ZC9NSVgzekg4bGpaNVg1M0lFYzM0K2NyUTFnUDBpOWJUUHNkNmJka3BKeHpx?=
+ =?utf-8?B?c20rTTU4VzNKZjhQU1haL21UbUh5YWh2cXBjeFp4RFE4RDRiNHhaeWFGNHRC?=
+ =?utf-8?B?TitDcDVQSGFnSHVqL05GUDA5YUZNdnpxNE0rSUtXNHdBaUMwakliVnpvd1VL?=
+ =?utf-8?B?TDR2NmIxZzZwWHhBb0Nmbzh5OWMweTdqeGp3Y09hVFA0eHJhYmw2YTVzYnZy?=
+ =?utf-8?B?VEg1K0tlb1ZBVkVKMGEwY2ROUnpRcVNJWk4zZ3lMNHhBSXkzVDZxeVJGWGFN?=
+ =?utf-8?B?ZGdKZlA3T1JrTFRtZG5UTzVBa3dtelVnSXBvRFFORUVGbThMT0RqSWo1UnhK?=
+ =?utf-8?B?bklSQmFpMVhYNW1KRFJUcjFJeVgxVy9LUFBmbkRMN29KdklGTHpVRTk5OUQy?=
+ =?utf-8?B?cXV2ZjVadnNyemg4MFE0VEh0NW5EWHRrSnZvb3B5ekdFdzZiQi9PZG5DS3hw?=
+ =?utf-8?B?WmlzdjA2R0czbWJoOG43WThvZGdRMGdQM1ZidStPWE9raU9LR3ZvZEJzbUJI?=
+ =?utf-8?B?N0s4cUYyajJrMjFweGpnSUJpUXpTMlBXNlRkY21TVkRId3RFbHpKazc3ZGdk?=
+ =?utf-8?B?NnJ6YWg2N1pDOWVlcW9SYTNPRHdkcGhtaGsrNks1TVh3bEhYU1A3Y3ZSOEph?=
+ =?utf-8?B?QklZYjZIUmtWU05oQzBBUHIvOG41dUFmbUtGYVJyUzdZeCtOVTNlVDNjYTlK?=
+ =?utf-8?B?SVEyWnJIai9aSDh6S0NHaFAyOU1ucTVialRRRmc0N24vMGFnTEZESzhZREtG?=
+ =?utf-8?B?c2dEeUk0QjMrNzN1bE1Nd2FJbTZEZ0FHK3pDeUZObVNzLy9LTERndWNNTk9t?=
+ =?utf-8?B?NXp1bFhXS2dVcXpQVmFmMmRhNjVtcWZhK3BIcVhsbUM3WnZCZG9Ddko1cG0w?=
+ =?utf-8?B?bHBhVlhCclNzYW9pTGxMSEdISTJYODhrQ0xKNHN3RTJCdk9IV2dGbmJVRk41?=
+ =?utf-8?B?MENHRzZkMW9MdUovT1lmditoNWxKdFh5c3lESVZxR2x0L1JxMG5PTmwweVBZ?=
+ =?utf-8?B?N1VLTXVDN2Y5MDJWVkV3ZEJNOXJlYlRUTXpzYXRmZ21VcVgweHkzbmdQTER3?=
+ =?utf-8?B?MnZlYkljWld4QSsxLytZdEwzbURqNnY1ZFlKQlhucHhmQXFrd0NSQTR1VVRi?=
+ =?utf-8?B?d3puVFhKNjBmZWRPd2RpdGpQazBVWFBYSi9RTkZGY1NBSjVLR0w1b3VsR2RG?=
+ =?utf-8?B?MmcwbHpHM3NUTDBLQWdUQzZIQkdrNUV1VGNpcFQ1aW0yZ2haVGZFaFpOd0pQ?=
+ =?utf-8?B?amRMZ0ZqdUpmVk43TnhFb0U3bTE4dTREcC9KRXFTVGhtclNrUUZ1MGU5cUc3?=
+ =?utf-8?B?R29HYmNIS09nYUVMOVZzRnBWSmo2SzNmSmtSUkZIQUpzYk0wR0k3bThCai90?=
+ =?utf-8?B?aitOa0MvbHk2NE8zcW5jb21peUZLUi9Gc2wxYzluYUZXQXFVa0JtUzVuNDJR?=
+ =?utf-8?B?c0FaQ0R6aGJKalhIbWhPWENyRHM3blJQN0hMbVlwbW1YWWlPU1FNcXdUd3Bl?=
+ =?utf-8?B?USt5KzJtZmpyWTB0T1R5NThHbUdYYm0xdVZ6K0Z5cDZEeFlMRFE4czNWdXJ0?=
+ =?utf-8?B?bTMrbllzUTlSVThBQnJQTTFlSkpRZC9pcko2b1BsY0ZuTllWaXFHbkExTmoy?=
+ =?utf-8?B?b0lYcWU4UXdDS2EyUXIyQlMxWTlENTZZSWlRbExtUHJmN0hEbFVXTk44QXI1?=
+ =?utf-8?B?MVJuK3BDMU0zRk1YNW85Q2VpSVVlTkljcXRmREJtK0U4WDhpdzJWcC92eFI3?=
+ =?utf-8?B?L21QODdZZHVWcnk3L2xGMC9EZWI3eEp2SjBac2RPQU1TeS85QStVMU4ya256?=
+ =?utf-8?Q?HeVi7fMYeTAxkQjktVxaoym7S?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26524a71-a05c-4237-bb85-08dac68fade0
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2022 22:29:22.7561
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 56Tmtegb4+90l9E+8khkCsZNd3YSQWYzYf+O5VQ4/zz8go6JadBEBST5uhOfK4RkRghuunk43i9g38ssthR+3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4954
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 5c92ddca1053df02387e8006d06094e18cc8538a  Add linux-next specific files for 20221114
+Please run this through a spell checker before v5.
 
-Error/Warning reports:
+On 11/10/2022 11:58, Perry Yuan wrote:
+> Introduce ``amd-pstate`` CPPC has two operation modes:
+> * CPPC Autonomous (active) mode
+> * CPPC non-autonomous (passive) mode.
+> active mode and passive mode can be choosed by whith different kernel parameters.
 
-https://lore.kernel.org/oe-kbuild-all/202211041320.coq8EELJ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211130053.Np70VIdn-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211130943.2q8U5Ndp-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211142244.sGkXbWO2-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211150003.LkfYS4HE-lkp@intel.com
+can be chosen by different kernel parameters
 
-Error/Warning: (recently discovered and may have been fixed)
+> 
+> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>   Documentation/admin-guide/pm/amd-pstate.rst | 47 +++++++++++++++++++--
+>   1 file changed, 43 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
+> index e7488891b12f..6ba02a658b31 100644
+> --- a/Documentation/admin-guide/pm/amd-pstate.rst
+> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
+> @@ -302,11 +302,11 @@ efficiency frequency management method on AMD processors.
+>   Kernel Module Options for ``amd-pstate``
+>   =========================================
+>   
+> -.. _shared_mem:
+> +.. legacy_cppc:
+>   
+> -``shared_mem``
+> -Use a module param (shared_mem) to enable related processors manually with
+> -**amd_pstate.shared_mem=1**.
+> +``legacy_cppc``
+> +Use a module param (legacy_cppc) to enable related processors manually with
+> +**amd_pstate=legacy_cppc**.
+>   Due to the performance issue on the processors with `Shared Memory Support
+>   <perf_cap_>`_, we disable it presently and will re-enable this by default
+>   once we address performance issue with this solution.
+> @@ -321,6 +321,45 @@ If the CPU flags have ``cppc``, then this processor supports `Full MSR Support
+>   <perf_cap_>`_. Otherwise, it supports `Shared Memory Support <perf_cap_>`_.
+>   
+>   
+> +AMD Pstae Driver Operation Modes
 
-ERROR: modpost: "ipv6_icmp_error" [net/rxrpc/rxrpc.ko] undefined!
-arch/arm/mach-s3c/devs.c:32:10: fatal error: 'linux/platform_data/dma-s3c24xx.h' file not found
-arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3c24xx.h: No such file or directory
-arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: 'linux/platform_data/dma-s3c24xx.h' file not found
-drivers/clk/clk.c:1022:5: error: redefinition of 'clk_prepare'
-drivers/clk/clk.c:1268:6: error: redefinition of 'clk_is_enabled_when_prepared'
-drivers/clk/clk.c:941:6: error: redefinition of 'clk_unprepare'
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4887: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5073:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: warning: no previous prototype for 'gf100_fifo_nonstall_block' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:34:1: warning: no previous prototype for 'nvkm_engn_cgrp_get' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: no previous prototype for 'tu102_gr_load' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: warning: no previous prototype for 'wpr_generic_header_dump' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:21: warning: variable 'loc' set but not used [-Wunused-but-set-variable]
-ld.lld: error: .btf.vmlinux.bin.o: unknown file type
-net/rxrpc/local_object.c:36: undefined reference to `ipv6_icmp_error'
-vmlinux.o: warning: objtool: apply_dir_move+0xb1: unreachable instruction
+Pstate
 
-Unverified Error/Warning (likely false positive, please contact us if interested):
+> +=================================
+> +
+> +``amd-pstate`` CPPC has two operation modes: CPPC Autonomous(active) mode and
+> +CPPC non-autonomous(passive) mode.
+> +active mode and passive mode can be choosed by whith different kernel parameters.
 
-drivers/cpufreq/acpi-cpufreq.c:970 acpi_cpufreq_boost_init() error: uninitialized symbol 'ret'.
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: sparse: sparse: symbol 'gf100_fifo_nonstall_block' was not declared. Should it be static?
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:33:18: sparse: sparse: symbol 'nvkm_engn_cgrp_get' was not declared. Should it be static?
-drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: sparse: sparse: symbol 'tu102_gr_load' was not declared. Should it be static?
-drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: sparse: sparse: symbol 'wpr_generic_header_dump' was not declared. Should it be static?
-drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c:49:1: sparse: sparse: symbol 'ga102_gsps' was not declared. Should it be static?
-drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c:51:1: sparse: sparse: symbol 'ga100_mc_device' was not declared. Should it be static?
-fotg210-udc.c:(.text+0x11b8): undefined reference to `usb_del_gadget_udc'
-fotg210-udc.c:(.text+0x3ba): undefined reference to `usb_gadget_giveback_request'
-fotg210-udc.c:(.text+0xb9e): undefined reference to `usb_gadget_udc_reset'
-lib/test_objpool.c:1007:16: sparse: sparse: symbol 'g_ot_async' was not declared. Should it be static?
-lib/test_objpool.c:516:3: sparse: sparse: symbol 'g_ot_sync_ops' was not declared. Should it be static?
-lib/test_objpool.c:76:3: sparse: sparse: symbol 'g_ot_data' was not declared. Should it be static?
-lib/test_objpool.c:824:3: sparse: sparse: symbol 'g_ot_async_ops' was not declared. Should it be static?
-lib/test_objpool.c:989:16: sparse: sparse: symbol 'g_ot_sync' was not declared. Should it be static?
-lib/test_objpool.c:998:16: sparse: sparse: symbol 'g_ot_miss' was not declared. Should it be static?
-lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
-mm/khugepaged.c:2038 collapse_file() warn: iterator used outside loop: 'page'
-riscv32-linux-ld: fotg210-udc.c:(.text+0x13b6): undefined reference to `usb_ep_set_maxpacket_limit'
-riscv32-linux-ld: fotg210-udc.c:(.text+0x14a4): undefined reference to `usb_add_gadget_udc'
+can be chosen by different kernel parameters
 
-Error/Warning ids grouped by kconfigs:
+> +When in Autonomous mode, CPPC ignores requests done in the Desired Performance
+> +Target register and takes into account only the values set to the Minimum requested
+> +performance, Maximum requested performance, and Energy Performance Preference
+> +registers. When Autonomous is disabled, it only considers the Desired Performance Target.
+> +
+> +Active Mode
+> +------------
+> +
+> +``amd-pstate-epp``
+> +
+> +This is the low-level firmware control mode which is implemented by ``amd-pstate-epp``
+> +driver with ``amd-pstate=active`` passed to the kernel in the command line.
+> +In this mode, ``amd-pstate-epp`` driver provides a hint to the hardware if software
+> +wants to bias toward performance (0x0) or energy efficiency (0xff) to the CPPC firmware.
+> +then CPPC power algorithm will calculate the runtime workload and adjust the realtime
+> +cores frequency according to the power supply and thermal, core voltage and some other
+> +hardware conditions.
+> +
+> +Passive Mode
+> +------------
+> +
+> +``amd-pstate``
+> +
+> +It will be enabled if the ``amd_pstate=passive`` is passed to the kernel in the command line.
+> +In this mode, ``amd-pstate``driver software specifies a desired QoS target in the CPPC
+> +performance scale as a relative number. This can be expressed as percentage of nominal
+> +performance (infrastructure max). Below the nominal sustained performance level,
+> +desired performance expresses the average performance level of the processor subject
+> +to the Performance Reduction Tolerance register. Above the nominal performance level,
+> +processor must provide at least nominal performance requested and go higher if current
+> +operating conditions allow.
+> +
+> +
+>   ``cpupower`` tool support for ``amd-pstate``
+>   ===============================================
+>   
 
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- alpha-randconfig-c034-20221114
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- alpha-randconfig-s041-20221114
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:sparse:sparse:symbol-gf100_fifo_nonstall_block-was-not-declared.-Should-it-be-static
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:sparse:sparse:symbol-nvkm_engn_cgrp_get-was-not-declared.-Should-it-be-static
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:sparse:sparse:symbol-tu102_gr_load-was-not-declared.-Should-it-be-static
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:sparse:sparse:symbol-wpr_generic_header_dump-was-not-declared.-Should-it-be-static
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-gsp-ga102.c:sparse:sparse:symbol-ga102_gsps-was-not-declared.-Should-it-be-static
-|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-mc-ga100.c:sparse:sparse:symbol-ga100_mc_device-was-not-declared.-Should-it-be-static
-|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_async-was-not-declared.-Should-it-be-static
-|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_async_ops-was-not-declared.-Should-it-be-static
-|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_data-was-not-declared.-Should-it-be-static
-|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_miss-was-not-declared.-Should-it-be-static
-|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_sync-was-not-declared.-Should-it-be-static
-|   `-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_sync_ops-was-not-declared.-Should-it-be-static
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arc-randconfig-c003-20221114
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arc-randconfig-r036-20221114
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-clang_recent_errors
-|-- arm-s3c2410_defconfig
-|   |-- arch-arm-mach-s3c-devs.c:fatal-error:linux-platform_data-dma-s3c24xx.h-file-not-found
-|   `-- arch-arm-mach-s3c-s3c24xx.c:fatal-error:linux-platform_data-dma-s3c24xx.h-file-not-found
-|-- x86_64-randconfig-a012-20221114
-|   `-- vmlinux.o:warning:objtool:handle_bug:call-to-kmsan_unpoison_entry_regs()-leaves-.noinstr.text-section
-`-- x86_64-randconfig-r023-20221114
-    `-- ld.lld:error:.btf.vmlinux.bin.o:unknown-file-type
-
-elapsed time: 764m
-
-configs tested: 77
-configs skipped: 2
-
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-alpha                               defconfig
-i386                                defconfig
-arc                  randconfig-r043-20221114
-x86_64                              defconfig
-arm                                 defconfig
-x86_64                          rhel-8.3-func
-powerpc                           allnoconfig
-i386                 randconfig-a001-20221114
-x86_64                    rhel-8.3-kselftests
-s390                                defconfig
-i386                 randconfig-a002-20221114
-s390                             allmodconfig
-i386                 randconfig-a005-20221114
-s390                             allyesconfig
-i386                 randconfig-a006-20221114
-i386                 randconfig-a003-20221114
-i386                 randconfig-a004-20221114
-x86_64               randconfig-a005-20221114
-x86_64               randconfig-a006-20221114
-m68k                        stmark2_defconfig
-arm                          simpad_defconfig
-i386                 randconfig-c001-20221114
-powerpc                    klondike_defconfig
-csky                                defconfig
-sh                           se7343_defconfig
-sh                        edosk7760_defconfig
-mips                      fuloong2e_defconfig
-mips                     decstation_defconfig
-powerpc                      ppc6xx_defconfig
-arm                         axm55xx_defconfig
-mips                      loongson3_defconfig
-xtensa                  audio_kc705_defconfig
-xtensa                    smp_lx200_defconfig
-arm                         cm_x300_defconfig
-sh                           se7619_defconfig
-powerpc                    adder875_defconfig
-x86_64                           rhel-8.3-kvm
-x86_64                         rhel-8.3-kunit
-sh                               allmodconfig
-x86_64                           rhel-8.3-syz
-m68k                             allyesconfig
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-mips                             allyesconfig
-arc                              allyesconfig
-x86_64                           allyesconfig
-alpha                            allyesconfig
-powerpc                          allmodconfig
-i386                             allyesconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20221114
-hexagon              randconfig-r041-20221114
-riscv                randconfig-r042-20221114
-s390                 randconfig-r044-20221114
-i386                 randconfig-a011-20221114
-i386                 randconfig-a014-20221114
-x86_64               randconfig-a014-20221114
-x86_64               randconfig-a012-20221114
-i386                 randconfig-a016-20221114
-x86_64               randconfig-a013-20221114
-i386                 randconfig-a013-20221114
-x86_64               randconfig-a011-20221114
-i386                 randconfig-a012-20221114
-x86_64               randconfig-a015-20221114
-i386                 randconfig-a015-20221114
-x86_64               randconfig-a016-20221114
-x86_64                          rhel-8.3-rust
-powerpc                    ge_imp3a_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                       spear13xx_defconfig
-arm                        neponset_defconfig
-mips                   sb1250_swarm_defconfig
-arm                             mxs_defconfig
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
