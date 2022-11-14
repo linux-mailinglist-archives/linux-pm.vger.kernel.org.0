@@ -2,77 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC06628273
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 15:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F31B628352
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 15:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiKNOZx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Nov 2022 09:25:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S234078AbiKNO5M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Nov 2022 09:57:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiKNOZv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 09:25:51 -0500
-X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 14 Nov 2022 06:25:50 PST
-Received: from sender4-of-o54.zoho.com (sender4-of-o54.zoho.com [136.143.188.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8097C332;
-        Mon, 14 Nov 2022 06:25:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1668435040; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=apHDiiwYXYvUFTkgwJPwrDjZkNQQhU5pRiqQzE0P654pbcKIQIxavf6mnse8OtdS1Y23dX3VkSc7ig46Uo3C0ka+VQJ4FCzYE4SCWwRaFonmyK7TUF0J4lxLQ6YqkJRTDmGC7lvDb+BuKDAcXQAKu16732aED+2nlJ3dqQ30xxw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1668435040; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
-        bh=Obamzi7+h416URfz7TCOzXR/hOBh/eTAtx+Zw3J7MNk=; 
-        b=fa7qkLlgeEvgoiwJzHaMiUiv1o1VZgA2BGxmSmP+VrTShLD/tzeUG5AWUme7LQZ4UtN4OuGsogYnRrsgWWPxl4MQFWe8TIsEU0fQ01HodgXBSdrf0TflJy6wj46BNZcCikztU/1ivhrpVE4f08ZZ7pKiNlffIo0zzpG2OYtR75A=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        spf=pass  smtp.mailfrom=business@elijahpepe.com;
-        dmarc=pass header.from=<business@elijahpepe.com>
-Received: from mail.zoho.com by mx.zohomail.com
-        with SMTP id 1668435038060533.7770069828593; Mon, 14 Nov 2022 06:10:38 -0800 (PST)
-Date:   Mon, 14 Nov 2022 06:10:38 -0800
-From:   Elijah Conners <business@elijahpepe.com>
-To:     "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "linux-pm" <linux-pm@vger.kernel.org>
-Cc:     "mszyprowski" <m.szyprowski@samsung.com>
-Message-ID: <184767a4f60.d9a0c3da334147.3171681720569322283@elijahpepe.com>
-In-Reply-To: 
-Subject: [PATCH] drivers: undo simplify POWER_SUPPLY_PROP_ONLINE
+        with ESMTP id S236431AbiKNO4z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 09:56:55 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06EC31B9F1
+        for <linux-pm@vger.kernel.org>; Mon, 14 Nov 2022 06:56:54 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AEEQqfg024050;
+        Mon, 14 Nov 2022 14:56:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : in-reply-to : references : mime-version :
+ content-transfer-encoding; s=pp1;
+ bh=a621prDVU+zXDdD7ylOylSmRzubVK74npGX0+5ko6YM=;
+ b=qznfNdy0+Omk6wpREG43B5m9tHeuWj7YpgIFo7ozNA+QxPGR7f9LR1vIxTWMI1fQ02ZJ
+ vWm+Dfu8fyWTAPGKhkvTC8stJJnoJ72m/xUi9WN3FIwZDBaARh5Rcr0MHPE1lBN+Fk8V
+ lbNrhr+8p3o+Vv96JgzwSVFZECZcMau6UoR0k3B1E4OxDImHnm0t6pkvBBogftvdA9yM
+ zKqvGods7FYjM7xYGGDguMsYVNhQNMReIWeqU+cpGgrVnXnu9+5jWW+kxN93vvYt/CGY
+ rFG8twKqEtTwKWkPAXO9GSz4iWMX+BC02tOOTSCKPwNoXOMMwe8yHsk/ri5A1GW4QEZX Xw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kuqeg8sta-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:56:38 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AEEubbs019318;
+        Mon, 14 Nov 2022 14:56:37 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kuqeg8ssf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:56:37 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AEEoZ4B030064;
+        Mon, 14 Nov 2022 14:56:36 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma06ams.nl.ibm.com with ESMTP id 3kt2rjarda-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 14:56:35 +0000
+Received: from d06av24.portsmouth.uk.ibm.com (mk.ibm.com [9.149.105.60])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AEEuX8q48038260
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 14:56:33 GMT
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B449942047;
+        Mon, 14 Nov 2022 14:56:33 +0000 (GMT)
+Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 106F74203F;
+        Mon, 14 Nov 2022 14:56:30 +0000 (GMT)
+Received: from li-87263a4c-1efe-11b2-a85c-b6723e0c5f8d.ibm.com.com (unknown [9.43.114.49])
+        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 14:56:29 +0000 (GMT)
+From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+To:     mpe@ellerman.id.au, svaidy@linux.vnet.ibm.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, npiggin@gmail.com
+Cc:     srikar@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+Subject: [PATCH v2] powerpc/cpuidle: Set CPUIDLE_FLAG_POLLING for snooze state
+Date:   Mon, 14 Nov 2022 20:26:11 +0530
+Message-Id: <20221114145611.37669-1-aboorvad@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221114073154.30407-1-aboorvad@linux.vnet.ibm.com>
+References: <20221114073154.30407-1-aboorvad@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: w1bGaCcFRLp9E9ZDsulBPIo1ZbIvhQXj
+X-Proofpoint-GUID: JfEUSnslEYL2_4bGGzbaGT8vgFKY7cKd
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_12,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ lowpriorityscore=0 spamscore=0 malwarescore=0 priorityscore=1501
+ adultscore=0 impostorscore=0 mlxlogscore=999 mlxscore=0 clxscore=1015
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140103
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Per the work done by arturo182, the value of max17040() with LiPo
-batteries will always be 1, even if it's not connected. This is
-ambiguous and setting the return value to 1 presents complications for
-anyone working with LiPo batteries, and does not result in significant
-overhead.
+During the comparative study of cpuidle governors, it is noticed that the
+menu governor does not select CEDE state in some scenarios even though when
+the sleep duration of the CPU exceeds the target residency of the CEDE idle
+state this is because the CPU exits the snooze "polling" state when snooze
+time limit is reached in the snooze_loop(), which is not a real wake up
+and it just means that the polling state selection was not adequate.
 
-Signed-off-by: Elijah Conners <business@elijahpepe.com>
+cpuidle governors rely on CPUIDLE_FLAG_POLLING flag to be set for the
+polling states to handle the condition mentioned above.
+
+Hence, set the CPUIDLE_FLAG_POLLING flag for snooze state (polling state)
+in powerpc arch to make the cpuidle governor work as expected.
+
+Reference Commits:
+
+- Timeout enabled for snooze state:
+  commit 78eaa10f027c
+  ("cpuidle: powernv/pseries: Auto-promotion of snooze to deeper idle state")
+
+- commit dc2251bf98c6
+  ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
+
+- Fix wakeup stats in governor for polling states
+  commit 5f26bdceb9c0
+  ("cpuidle: menu: Fix wakeup statistics updates for polling state")
+
+Signed-off-by: Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
 ---
- drivers/power/supply/max17040_battery.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supply/max17040_battery.c
-index a9aef1e8b186..5284f2bf735c 100644
---- a/drivers/power/supply/max17040_battery.c
-+++ b/drivers/power/supply/max17040_battery.c
-@@ -217,7 +217,8 @@ static int max17040_get_version(struct max17040_chip *chip)
+Changelog: (v1 -> v2)
+
+Added CPUIDLE_POLLING_FLAG to the correct cpuidle_state struct.
+
+Previous version of the patch is stale which was sent by mistake, this 
+is the correct version which is tested on powernv, pseries (shared and 
+dedicated partitions)
+
+ drivers/cpuidle/cpuidle-powernv.c | 5 ++++-
+ drivers/cpuidle/cpuidle-pseries.c | 8 ++++++--
+ 2 files changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
+index 0b5461b3d7dd..9ebedd972df0 100644
+--- a/drivers/cpuidle/cpuidle-powernv.c
++++ b/drivers/cpuidle/cpuidle-powernv.c
+@@ -76,6 +76,7 @@ static int snooze_loop(struct cpuidle_device *dev,
+ 	local_irq_enable();
  
- static int max17040_get_online(struct max17040_chip *chip)
- {
--	return 1;
-+	return chip->pdata && chip->pdata->battery_online ?
-+		chip->pdata->battery_online() : 1;
- }
+ 	snooze_exit_time = get_tb() + get_snooze_timeout(dev, drv, index);
++	dev->poll_time_limit = false;
+ 	ppc64_runlatch_off();
+ 	HMT_very_low();
+ 	while (!need_resched()) {
+@@ -86,6 +87,7 @@ static int snooze_loop(struct cpuidle_device *dev,
+ 			 * cleared to order subsequent test of need_resched().
+ 			 */
+ 			clear_thread_flag(TIF_POLLING_NRFLAG);
++			dev->poll_time_limit = true;
+ 			smp_mb();
+ 			break;
+ 		}
+@@ -155,7 +157,8 @@ static struct cpuidle_state powernv_states[CPUIDLE_STATE_MAX] = {
+ 		.desc = "snooze",
+ 		.exit_latency = 0,
+ 		.target_residency = 0,
+-		.enter = snooze_loop },
++		.enter = snooze_loop,
++		.flags = CPUIDLE_FLAG_POLLING },
+ };
  
- static int max17040_get_of_data(struct max17040_chip *chip)
+ static int powernv_cpuidle_cpu_online(unsigned int cpu)
+diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
+index 7e7ab5597d7a..1bad4d2b7be3 100644
+--- a/drivers/cpuidle/cpuidle-pseries.c
++++ b/drivers/cpuidle/cpuidle-pseries.c
+@@ -44,6 +44,7 @@ static int snooze_loop(struct cpuidle_device *dev,
+ 	pseries_idle_prolog();
+ 	local_irq_enable();
+ 	snooze_exit_time = get_tb() + snooze_timeout;
++	dev->poll_time_limit = false;
+ 
+ 	while (!need_resched()) {
+ 		HMT_low();
+@@ -54,6 +55,7 @@ static int snooze_loop(struct cpuidle_device *dev,
+ 			 * loop anyway. Require a barrier after polling is
+ 			 * cleared to order subsequent test of need_resched().
+ 			 */
++			dev->poll_time_limit = true;
+ 			clear_thread_flag(TIF_POLLING_NRFLAG);
+ 			smp_mb();
+ 			break;
+@@ -268,7 +270,8 @@ static struct cpuidle_state dedicated_states[NR_DEDICATED_STATES] = {
+ 		.desc = "snooze",
+ 		.exit_latency = 0,
+ 		.target_residency = 0,
+-		.enter = &snooze_loop },
++		.enter = &snooze_loop,
++		.flags = CPUIDLE_FLAG_POLLING },
+ 	{ /* CEDE */
+ 		.name = "CEDE",
+ 		.desc = "CEDE",
+@@ -286,7 +289,8 @@ static struct cpuidle_state shared_states[] = {
+ 		.desc = "snooze",
+ 		.exit_latency = 0,
+ 		.target_residency = 0,
+-		.enter = &snooze_loop },
++		.enter = &snooze_loop,
++		.flags = CPUIDLE_FLAG_POLLING },
+ 	{ /* Shared Cede */
+ 		.name = "Shared Cede",
+ 		.desc = "Shared Cede",
 -- 
-2.29.2.windows.2
+2.17.1
+
