@@ -2,331 +2,278 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D5F628A95
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 21:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EADA9628B99
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 22:53:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiKNUgf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Nov 2022 15:36:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
+        id S236756AbiKNVxv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Nov 2022 16:53:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235838AbiKNUge (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 15:36:34 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9844EF007
-        for <linux-pm@vger.kernel.org>; Mon, 14 Nov 2022 12:36:30 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso8781231wmp.5
-        for <linux-pm@vger.kernel.org>; Mon, 14 Nov 2022 12:36:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rXJf8DUe+GljbluhhaH+sIK0Dch+Q5AMeV6azEr5owk=;
-        b=Godcagv2q6iSd1mebLm36/ERyS3Z/Q4wDP+EHBIH2nJwZbsRthPs3TE5bPjzklbpWE
-         5TukgWzKbR6RaqgXfs5+nYxG6lmK4ksk8Zec//ZVNFoZcJVUYmyGdz1nNCz8sd8tTrMD
-         buyI/idKHjoVtcxGX8bWM3e9/2PsgFTOPKge8hQgAToltV6lihkc3EmIqzqP+W5BKWMD
-         H4JTya0H5JixRsHHFM1obguSc4C77RRykDAd8cAGxI+ARbOe31qlU3ecQAvq0tZgplMa
-         aYYedPDaGQuxL9GhN6zjOMOqsuh1T/dkz13jqp0fLiGalcQI3rHldnGcD3hHA3PlmNxu
-         YWhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rXJf8DUe+GljbluhhaH+sIK0Dch+Q5AMeV6azEr5owk=;
-        b=wR/0CxSqPTCJgnK/P/QYrEC7+6ip6mXdZW4muTvJnN/tWhi3nSgCspjoeIlawVsZg+
-         7d78DOq3Rr/qjwMfx0aUQ5Ue+pBuko3ZtoqaQV0RHnvlYzgQlfx4UTPHGb114oWqUZEd
-         DfwMdHZUwRB+L7MHKoxUKIhpjIIku0Xdx5zF72xWwuF2p14HmG7ZKybIUtVrt33vc0ag
-         VkjvztEQoik/9VWew/zWHIfcgfnzhYjY3DhWn9LYZTJLGBFOBnTpMmLkAnRDHXdI4Lh5
-         hWskp3e4qqNaGlX/XRu7+GLlVZrxxaw6dJPnK7/sv6pADjsid5nAI/O6laoFXi4F1IDa
-         va2g==
-X-Gm-Message-State: ANoB5pnZhC6J3ox0VzQPOG9qzRIFD2850s+93M6vjw6OYbYQoIshYLXR
-        M1APVezEz1YtwwNpNvlSZTLXag==
-X-Google-Smtp-Source: AA0mqf5vBYllEHNCzsahQ14HUAgGaMg2bogCAsd2tQqfKBieqVKHI45YmTTKXeMlgblS7QZyf96kWQ==
-X-Received: by 2002:a05:600c:2d05:b0:3cf:a3b0:df6a with SMTP id x5-20020a05600c2d0500b003cfa3b0df6amr9072126wmf.126.1668458188788;
-        Mon, 14 Nov 2022 12:36:28 -0800 (PST)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id n128-20020a1ca486000000b003cfd4a50d5asm10481561wme.34.2022.11.14.12.36.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 12:36:28 -0800 (PST)
-Message-ID: <6ef7a3e2-5cd4-808c-a165-01eb4d2edd1c@baylibre.com>
-Date:   Mon, 14 Nov 2022 21:36:26 +0100
+        with ESMTP id S236128AbiKNVxu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 16:53:50 -0500
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B38E3F;
+        Mon, 14 Nov 2022 13:53:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668462829; x=1699998829;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yPXbgLKjXYDcCWin9eEJ/CpOeATRU45Lm0Im9KdfJzo=;
+  b=UfL39G2AE5g/i5y23EvyAM+gehqIspbL/Al1BVXbb/7CTaPnyJJ/E5Y3
+   u7Uxl/WT98YedQrZp3TO29K4PuEM61LEE6QrirxQmB3/NB9JZFWFPnjG/
+   //00Ddn/L9e525fcUH+mCu11Knaxb0G+MJrcfjEdV+cK87jel4XK12laW
+   IWwrPoj4tTt+kzUJ4PTkbc7UuZiXP7L0Gke44+qa9VknhjNueXMIeKktC
+   vg2Ap+24HNm7yDUpdVlvN/nksqPHBAsjwGFDaEloGa5Pl+9q4w+kfF4/I
+   Bx0J1/RDEektrEe65Oar4N6SJ/iHc5wWHqB0v3W0GiaQGl0WKZcqQbhMM
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="313238124"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="313238124"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2022 13:53:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10531"; a="763651529"
+X-IronPort-AV: E=Sophos;i="5.96,164,1665471600"; 
+   d="scan'208";a="763651529"
+Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 14 Nov 2022 13:53:45 -0800
+Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ouhOi-0000mF-2g;
+        Mon, 14 Nov 2022 21:53:44 +0000
+Date:   Tue, 15 Nov 2022 05:52:46 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     ntfs3@lists.linux.dev, nouveau@lists.freedesktop.org,
+        linux-pm@vger.kernel.org, linux-mm@kvack.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-afs@lists.infradead.org, dri-devel@lists.freedesktop.org,
+        amd-gfx@lists.freedesktop.org,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [linux-next:master] BUILD REGRESSION
+ 5c92ddca1053df02387e8006d06094e18cc8538a
+Message-ID: <6372b8ae.03wKgLWGIY41bdTG%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        linux-mediatek@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20221018-up-i350-thermal-bringup-v6-0-c87b9f75550b@baylibre.com>
- <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
- <904faa39-9435-b8a8-fa6f-1ade8d5b61f4@linaro.org>
- <5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com>
-Content-Language: en-US
-In-Reply-To: <5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+branch HEAD: 5c92ddca1053df02387e8006d06094e18cc8538a  Add linux-next specific files for 20221114
 
-Do you have any feedback about my comments on your review before I send V7 ?
+Error/Warning reports:
 
-Regards,
+https://lore.kernel.org/oe-kbuild-all/202211041320.coq8EELJ-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211130053.Np70VIdn-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211130943.2q8U5Ndp-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211142244.sGkXbWO2-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202211150003.LkfYS4HE-lkp@intel.com
 
-Amjad
+Error/Warning: (recently discovered and may have been fixed)
 
-On 11/3/22 15:26, Amjad Ouled-Ameur wrote:
-> Hi Daniel,
->
-> Thank you for the review.
->
-> On 10/22/22 19:03, Daniel Lezcano wrote:
->> On 19/10/2022 16:17, Amjad Ouled-Ameur wrote:
->>> Provide thermal zone to read thermal sensor in the SoC. We can read all the
->>> thermal sensors value in the SoC by the node /sys/class/thermal/
->>>
->>> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
->>> on the first read of sensor that often are bogus values.
->>> This can avoid following warning on boot:
->>>
->>>    thermal thermal_zone6: failed to read out thermal zone (-13)
->>>
->>> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
->>> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
->>> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->>> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->>
->> Overall the series looks good to me, however there is a couple of things to fix. See below
->>
->>> ---
->>>   drivers/thermal/mtk_thermal.c | 104 ++++++++++++++++++++++++++++++++----------
->>>   1 file changed, 79 insertions(+), 25 deletions(-)
->>>
->>> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
->>> index 3a5df1440822..311ad611fdab 100644
->>> --- a/drivers/thermal/mtk_thermal.c
->>> +++ b/drivers/thermal/mtk_thermal.c
->>> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->>>     struct mtk_thermal;
->>>   +struct mtk_thermal_zone {
->>> +    struct mtk_thermal *mt;
->>> +    int id;
->>> +};
->>
->> Do you really need to create a new structure for that ?
->
-> We need to store the sensor index in the private data, along with mtk_thermal.
->
-> Aside from having this new structure, I don't see how .get_temp() can tell which
->
-> sensor index to read.
->
->>
->>>   struct thermal_bank_cfg {
->>>       unsigned int num_sensors;
->>>       const int *sensors;
->>> @@ -307,6 +312,8 @@ struct mtk_thermal {
->>>         const struct mtk_thermal_data *conf;
->>>       struct mtk_thermal_bank banks[MAX_NUM_ZONES];
->>> +
->>> +    int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
->>>   };
->>>     /* MT8183 thermal sensor data */
->>> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->>>           mutex_unlock(&mt->lock);
->>>   }
->>>   +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
->>> +{
->>> +    u32 raw;
->>> +    int temp;
->>> +
->>> +    const struct mtk_thermal_data *conf = mt->conf;
->>> +
->>> +    raw = readl(mt->thermal_base + conf->msr[id]);
->>> +
->>> +    temp = mt->raw_to_mcelsius(mt, id, raw);
->>> +
->>> +    /*
->>> +     * The first read of a sensor often contains very high bogus
->>> +     * temperature value. Filter these out so that the system does
->>> +     * not immediately shut down.
->>> +     */
->>> +
->>> +    if (temp > 200000)
->>> +        return -EAGAIN;
->>> +    else
->>> +        return temp;
->>> +}
->>> +
->>>   /**
->>>    * mtk_thermal_bank_temperature - get the temperature of a bank
->>>    * @bank:    The bank
->>> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->>>       struct mtk_thermal *mt = bank->mt;
->>>       const struct mtk_thermal_data *conf = mt->conf;
->>>       int i, temp = INT_MIN, max = INT_MIN;
->>> -    u32 raw;
->>>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
->>> -        raw = readl(mt->thermal_base + conf->msr[i]);
->>> -
->>> -        if (mt->conf->version == MTK_THERMAL_V1) {
->>> -            temp = raw_to_mcelsius_v1(
->>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
->>> -        } else {
->>> -            temp = raw_to_mcelsius_v2(
->>> -                mt, conf->bank_data[bank->id].sensors[i], raw);
->>> -        }
->>> -
->>> -        /*
->>> -         * The first read of a sensor often contains very high bogus
->>> -         * temperature value. Filter these out so that the system does
->>> -         * not immediately shut down.
->>> -         */
->>> -        if (temp > 200000)
->>> -            temp = 0;
->>> +        temp = _get_sensor_temp(mt, i);
->>>             if (temp > max)
->>>               max = temp;
->>> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->>>       return max;
->>>   }
->>>   -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->>> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
->>>   {
->>> -    struct mtk_thermal *mt = tz->devdata;
->>> +    struct mtk_thermal_zone *tz = tzdev->devdata;
->>> +    struct mtk_thermal *mt = tz->mt;
->>>       int i;
->>>       int tempmax = INT_MIN;
->>>   @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->>>       return 0;
->>>   }
->>>   +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
->>> +{
->>> +    struct mtk_thermal_zone *tz = tzdev->devdata;
->>> +    struct mtk_thermal *mt = tz->mt;
->>> +    int id = tz->id - 1;
->>> +
->>> +    if (id < 0)
->>> +        return -EACCES;
->>> +
->>> +    *temperature = _get_sensor_temp(mt, id);
->>> +
->>> +    return 0;
->>> +}
->>> +
->>>   static const struct thermal_zone_device_ops mtk_thermal_ops = {
->>>       .get_temp = mtk_read_temp,
->>>   };
->>>   +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
->>> +    .get_temp = mtk_read_sensor_temp,
->>> +};
->>> +
->>>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->>>                     u32 apmixed_phys_base, u32 auxadc_phys_base,
->>>                     int ctrl_id)
->>> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>       u64 auxadc_phys_base, apmixed_phys_base;
->>>       struct thermal_zone_device *tzdev;
->>>       void __iomem *apmixed_base, *auxadc_base;
->>> +    struct mtk_thermal_zone *tz;
->>>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->>>       if (!mt)
->>> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>         mtk_thermal_turn_on_buffer(mt, apmixed_base);
->>>   +    mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
->>> +                raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
->>> +
->>>       if (mt->conf->version == MTK_THERMAL_V2) {
->>>           mtk_thermal_release_periodic_ts(mt, auxadc_base);
->>>       }
->>> @@ -1161,11 +1197,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>         platform_set_drvdata(pdev, mt);
->>>   -    tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>> -                          &mtk_thermal_ops);
->>> -    if (IS_ERR(tzdev)) {
->>> -        ret = PTR_ERR(tzdev);
->>> -        goto err_disable_clk_peri_therm;
->>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>> +        if (!tz)
->>> +            return -ENOMEM;
->>> +
->>> +        tz->mt = mt;
->>> +        tz->id = i;
->>> +
->>> +        tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>> +                                 &mtk_thermal_ops :
->>> + &mtk_thermal_sensor_ops);
->>
->> We want to prevent the aggregation from the different sensors within a driver. I know there is already a function doing that for the previous sensor version but that is something we don't want to continue.
->>
->> Using mtk_thermal_ops tries to overcome this.
->>
-> So would it be more proper to have to distinct thermal drivers for each sensor ? Or relatively to the above implementation,
->
-> I think it might be better to have only one thermal_zone_device_ops, with storing the right get_temp callback in mtk_thermal_zone structure.
->
->
->> Also, the userspace needs to know to which device a thermal zone is related to. Here all the thermal zones have the same name so the userspace does not know if it is the GPU, the CPU, the chassis, the NPU, ...
->
-> Which names are you referring to ? In case it is "sys/class/thermal/*/type", it is based on DT thermal nodes, the first sensor is marked as CPU-related,
->
-> The others are used for debugging purposes only.
->
->>
->>
->>> +
->>> +        if (IS_ERR(tzdev)) {
->>> +            if (PTR_ERR(tzdev) == -ENODEV) {
->>> +                dev_warn(&pdev->dev,
->>> +                     "sensor %d not registered in thermal zone in dt\n", i);
->>
->> ENODEV is not considered an error, so the warning can be removed
-> Agreed, will drop this.
->>
->>> +                continue;
->>> +            }
->>> +            if (PTR_ERR(tzdev) == -EACCES) {
->>
->> When devm_thermal_of_zone_register() returns -EACCES ?
->
-> Right, I verified the code, -EACCES is never returned by devm_thermal_of_zone_register().
->
->
-> Regards,
->
-> Amjad
->
->>
->>> +                ret = PTR_ERR(tzdev);
->>> +                goto err_disable_clk_peri_therm;
->>> +            }
->>> +        }
->>>       }
->>>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
->>>
->>
+ERROR: modpost: "ipv6_icmp_error" [net/rxrpc/rxrpc.ko] undefined!
+arch/arm/mach-s3c/devs.c:32:10: fatal error: 'linux/platform_data/dma-s3c24xx.h' file not found
+arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3c24xx.h: No such file or directory
+arch/arm/mach-s3c/s3c24xx.c:21:10: fatal error: 'linux/platform_data/dma-s3c24xx.h' file not found
+drivers/clk/clk.c:1022:5: error: redefinition of 'clk_prepare'
+drivers/clk/clk.c:1268:6: error: redefinition of 'clk_is_enabled_when_prepared'
+drivers/clk/clk.c:941:6: error: redefinition of 'clk_unprepare'
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4887: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5073:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
+drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: warning: no previous prototype for 'gf100_fifo_nonstall_block' [-Wmissing-prototypes]
+drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:34:1: warning: no previous prototype for 'nvkm_engn_cgrp_get' [-Wmissing-prototypes]
+drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: no previous prototype for 'tu102_gr_load' [-Wmissing-prototypes]
+drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: warning: no previous prototype for 'wpr_generic_header_dump' [-Wmissing-prototypes]
+drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:21: warning: variable 'loc' set but not used [-Wunused-but-set-variable]
+ld.lld: error: .btf.vmlinux.bin.o: unknown file type
+net/rxrpc/local_object.c:36: undefined reference to `ipv6_icmp_error'
+vmlinux.o: warning: objtool: apply_dir_move+0xb1: unreachable instruction
+
+Unverified Error/Warning (likely false positive, please contact us if interested):
+
+drivers/cpufreq/acpi-cpufreq.c:970 acpi_cpufreq_boost_init() error: uninitialized symbol 'ret'.
+drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: sparse: sparse: symbol 'gf100_fifo_nonstall_block' was not declared. Should it be static?
+drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:33:18: sparse: sparse: symbol 'nvkm_engn_cgrp_get' was not declared. Should it be static?
+drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: sparse: sparse: symbol 'tu102_gr_load' was not declared. Should it be static?
+drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: sparse: sparse: symbol 'wpr_generic_header_dump' was not declared. Should it be static?
+drivers/gpu/drm/nouveau/nvkm/subdev/gsp/ga102.c:49:1: sparse: sparse: symbol 'ga102_gsps' was not declared. Should it be static?
+drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c:51:1: sparse: sparse: symbol 'ga100_mc_device' was not declared. Should it be static?
+fotg210-udc.c:(.text+0x11b8): undefined reference to `usb_del_gadget_udc'
+fotg210-udc.c:(.text+0x3ba): undefined reference to `usb_gadget_giveback_request'
+fotg210-udc.c:(.text+0xb9e): undefined reference to `usb_gadget_udc_reset'
+lib/test_objpool.c:1007:16: sparse: sparse: symbol 'g_ot_async' was not declared. Should it be static?
+lib/test_objpool.c:516:3: sparse: sparse: symbol 'g_ot_sync_ops' was not declared. Should it be static?
+lib/test_objpool.c:76:3: sparse: sparse: symbol 'g_ot_data' was not declared. Should it be static?
+lib/test_objpool.c:824:3: sparse: sparse: symbol 'g_ot_async_ops' was not declared. Should it be static?
+lib/test_objpool.c:989:16: sparse: sparse: symbol 'g_ot_sync' was not declared. Should it be static?
+lib/test_objpool.c:998:16: sparse: sparse: symbol 'g_ot_miss' was not declared. Should it be static?
+lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
+lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
+lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
+mm/khugepaged.c:2038 collapse_file() warn: iterator used outside loop: 'page'
+riscv32-linux-ld: fotg210-udc.c:(.text+0x13b6): undefined reference to `usb_ep_set_maxpacket_limit'
+riscv32-linux-ld: fotg210-udc.c:(.text+0x14a4): undefined reference to `usb_add_gadget_udc'
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
+|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
+|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
+|-- alpha-randconfig-c034-20221114
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
+|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
+|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
+|-- alpha-randconfig-s041-20221114
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:sparse:sparse:symbol-gf100_fifo_nonstall_block-was-not-declared.-Should-it-be-static
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:sparse:sparse:symbol-nvkm_engn_cgrp_get-was-not-declared.-Should-it-be-static
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:sparse:sparse:symbol-tu102_gr_load-was-not-declared.-Should-it-be-static
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
+|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:sparse:sparse:symbol-wpr_generic_header_dump-was-not-declared.-Should-it-be-static
+|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
+|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
+|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-gsp-ga102.c:sparse:sparse:symbol-ga102_gsps-was-not-declared.-Should-it-be-static
+|   |-- drivers-gpu-drm-nouveau-nvkm-subdev-mc-ga100.c:sparse:sparse:symbol-ga100_mc_device-was-not-declared.-Should-it-be-static
+|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_async-was-not-declared.-Should-it-be-static
+|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_async_ops-was-not-declared.-Should-it-be-static
+|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_data-was-not-declared.-Should-it-be-static
+|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_miss-was-not-declared.-Should-it-be-static
+|   |-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_sync-was-not-declared.-Should-it-be-static
+|   `-- lib-test_objpool.c:sparse:sparse:symbol-g_ot_sync_ops-was-not-declared.-Should-it-be-static
+|-- arc-allyesconfig
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
+|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
+|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
+|-- arc-randconfig-c003-20221114
+|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
+|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
+|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
+|-- arc-randconfig-r036-20221114
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
+|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
+clang_recent_errors
+|-- arm-s3c2410_defconfig
+|   |-- arch-arm-mach-s3c-devs.c:fatal-error:linux-platform_data-dma-s3c24xx.h-file-not-found
+|   `-- arch-arm-mach-s3c-s3c24xx.c:fatal-error:linux-platform_data-dma-s3c24xx.h-file-not-found
+|-- x86_64-randconfig-a012-20221114
+|   `-- vmlinux.o:warning:objtool:handle_bug:call-to-kmsan_unpoison_entry_regs()-leaves-.noinstr.text-section
+`-- x86_64-randconfig-r023-20221114
+    `-- ld.lld:error:.btf.vmlinux.bin.o:unknown-file-type
+
+elapsed time: 764m
+
+configs tested: 77
+configs skipped: 2
+
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+i386                                defconfig
+arc                  randconfig-r043-20221114
+x86_64                              defconfig
+arm                                 defconfig
+x86_64                          rhel-8.3-func
+powerpc                           allnoconfig
+i386                 randconfig-a001-20221114
+x86_64                    rhel-8.3-kselftests
+s390                                defconfig
+i386                 randconfig-a002-20221114
+s390                             allmodconfig
+i386                 randconfig-a005-20221114
+s390                             allyesconfig
+i386                 randconfig-a006-20221114
+i386                 randconfig-a003-20221114
+i386                 randconfig-a004-20221114
+x86_64               randconfig-a005-20221114
+x86_64               randconfig-a006-20221114
+m68k                        stmark2_defconfig
+arm                          simpad_defconfig
+i386                 randconfig-c001-20221114
+powerpc                    klondike_defconfig
+csky                                defconfig
+sh                           se7343_defconfig
+sh                        edosk7760_defconfig
+mips                      fuloong2e_defconfig
+mips                     decstation_defconfig
+powerpc                      ppc6xx_defconfig
+arm                         axm55xx_defconfig
+mips                      loongson3_defconfig
+xtensa                  audio_kc705_defconfig
+xtensa                    smp_lx200_defconfig
+arm                         cm_x300_defconfig
+sh                           se7619_defconfig
+powerpc                    adder875_defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                         rhel-8.3-kunit
+sh                               allmodconfig
+x86_64                           rhel-8.3-syz
+m68k                             allyesconfig
+x86_64                               rhel-8.3
+m68k                             allmodconfig
+mips                             allyesconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+alpha                            allyesconfig
+powerpc                          allmodconfig
+i386                             allyesconfig
+arm                              allyesconfig
+arm64                            allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20221114
+hexagon              randconfig-r041-20221114
+riscv                randconfig-r042-20221114
+s390                 randconfig-r044-20221114
+i386                 randconfig-a011-20221114
+i386                 randconfig-a014-20221114
+x86_64               randconfig-a014-20221114
+x86_64               randconfig-a012-20221114
+i386                 randconfig-a016-20221114
+x86_64               randconfig-a013-20221114
+i386                 randconfig-a013-20221114
+x86_64               randconfig-a011-20221114
+i386                 randconfig-a012-20221114
+x86_64               randconfig-a015-20221114
+i386                 randconfig-a015-20221114
+x86_64               randconfig-a016-20221114
+x86_64                          rhel-8.3-rust
+powerpc                    ge_imp3a_defconfig
+powerpc                  mpc866_ads_defconfig
+arm                       spear13xx_defconfig
+arm                        neponset_defconfig
+mips                   sb1250_swarm_defconfig
+arm                             mxs_defconfig
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
