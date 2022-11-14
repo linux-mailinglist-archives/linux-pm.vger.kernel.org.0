@@ -2,105 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBA84627753
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 09:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF0762775E
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 09:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236278AbiKNITj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Nov 2022 03:19:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
+        id S236329AbiKNIVE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Nov 2022 03:21:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbiKNITi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 03:19:38 -0500
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952772DD8;
-        Mon, 14 Nov 2022 00:19:37 -0800 (PST)
-Received: by mail-qv1-f51.google.com with SMTP id h10so7368151qvq.7;
-        Mon, 14 Nov 2022 00:19:37 -0800 (PST)
+        with ESMTP id S236323AbiKNIVB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 03:21:01 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3602DD8;
+        Mon, 14 Nov 2022 00:21:00 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso13062223pjg.5;
+        Mon, 14 Nov 2022 00:21:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I0FZVAdRpvpy7ZVNcCCnedRrqNVd3d/8wdB1h9T/kfA=;
+        b=aRDRjUJ0AG42neL5MrbmzwWoe6gAIdCyz/bXBZq9i8dttD3TnOKCyPu6XxiqgwR7f2
+         wJ3c/ywrXxV5p9/gBE3ELge8l6nJCYMDTwJjYPOVUJQbvHkI9zb8MjdxZlWhH7N5D5HM
+         IN2tI5f9cvEyRFd+IsBQvyTpTi8k6c/YhgoHwT5mvB789yL16Fwflhpd+yVy0KiPtK8D
+         1Aet/R3nfIRNsMyCqar9XMrmPlW1v0Txq/ov6/cGG1N6sIRE+gvbCD/b0JshwkT8WUxk
+         H4Bf7BownJDU26yo9ki6fZ2o+/wUTkNZeGraNiCAXKrPVnB/e99wo0p2MzwXpIA2/pkG
+         V4Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1f6hcexQwRSjpPtI2b6I+pAA5eVX0oLT0ZXtJfpdDAY=;
-        b=q26T2PjvHvqj3Rnj5sDwXsG4pVQxNyUa1R12sYMmxxmfYdUiELkR3/4WeeSHSVjfN+
-         GnSnFi5XeNQRJPdS46wGOh7ORO+AyVBKUO0zFawS4HaNLh5+hvFqTgcgDo7os29+4oDY
-         9hG1tP9b6j//2SLAyYZuw4pPwJywZG8Bwu8gPZ/iCWxhX2hQoMWUI2wdqeD1Qt3raoX8
-         iJsS9KwAWjYDP/Rcqtf9R047nNRbf1Z9UMQY6AbUR1ni0dsJezjFAuIoVK2axC5C1Fau
-         5y7NtH0nFsVEGdCdvhObYVR/hHhk6n0+wKjy5WPPLLHiwZYwHl/8v38xju71iUknl/k+
-         L/tg==
-X-Gm-Message-State: ANoB5pmc4LImhEWTvIHaA2RfK6rOhxmGTuruwHnQ3lkuagezHaoma+30
-        DmL412zKfGAYc4ZMZkkTZogsXwnPqcqfKw==
-X-Google-Smtp-Source: AA0mqf7QYK0OC4H8/Mw2w7H/+IuvIJwGK6s5kDIZ+o4lozpfmFr1tpvmiWpgEm6b/AjtY0i7rcA4FQ==
-X-Received: by 2002:ad4:43e2:0:b0:4bb:701b:f217 with SMTP id f2-20020ad443e2000000b004bb701bf217mr11417677qvu.46.1668413976620;
-        Mon, 14 Nov 2022 00:19:36 -0800 (PST)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id br38-20020a05620a462600b006cfc01b4461sm6153472qkb.118.2022.11.14.00.19.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Nov 2022 00:19:35 -0800 (PST)
-Received: by mail-yb1-f181.google.com with SMTP id r3so12556666yba.5;
-        Mon, 14 Nov 2022 00:19:35 -0800 (PST)
-X-Received: by 2002:a25:cb4a:0:b0:6dd:b521:a8f2 with SMTP id
- b71-20020a25cb4a000000b006ddb521a8f2mr11133712ybg.380.1668413975373; Mon, 14
- Nov 2022 00:19:35 -0800 (PST)
-MIME-Version: 1.0
-References: <20221111212857.4104308-1-robh@kernel.org>
-In-Reply-To: <20221111212857.4104308-1-robh@kernel.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 14 Nov 2022 09:19:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXT_+_afxBW6=dku+Y1ea8GTaWznM5vzXO7bYQ1Z8sRwQ@mail.gmail.com>
-Message-ID: <CAMuHMdXT_+_afxBW6=dku+Y1ea8GTaWznM5vzXO7bYQ1Z8sRwQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Drop type from 'cpus' property
-To:     Rob Herring <robh@kernel.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I0FZVAdRpvpy7ZVNcCCnedRrqNVd3d/8wdB1h9T/kfA=;
+        b=2aSx0uYb3MGSvljCgMZdNoj0SiXz9Mlk+wb3YFLHrLVEgd9Tz7zA6nQA19+h7xgE4a
+         yDjZnOsjzxIVXL3TDhsOj72UEmG75yDHF4eOaQxbgFTNVSfQCH1XkACZlYptyVhzaiMl
+         vewAQEl7wGVgqrkhPJFsNPGe5Jiegth0VfFN0JkDrdLfH4BOHqstIDqsErJ6Ejfmh5Gn
+         8orqSFU+gKDXpepQRj2ZbvWvlw9TwU3wZjTksbg6vRszYQcBW1+XLu7TlXvG8Cg9MO5r
+         GJ444QkJtObXoV4c/ttO7xZ5lVHlFuUQggeUis4Nkt9mzxjJsGJuLu4bZkdSdB9hxi6p
+         ZUyg==
+X-Gm-Message-State: ANoB5pnIr3AWMJ7B7R6lHsYqx5GLCvo6ZPG0ui2LZAr7lM0qE56yfdzR
+        F5R4OKEGq/KmWoQ9EMwIg+vO9LkFgZE=
+X-Google-Smtp-Source: AA0mqf6LoX/vgZIHrcCyxuW8+uuzUvKUBS3e97QEk+flLyMk8L0KjK1q2GscsvI0Vv63mD+lMT/c/g==
+X-Received: by 2002:a17:902:9f8f:b0:186:b889:dd6f with SMTP id g15-20020a1709029f8f00b00186b889dd6fmr12704804plq.97.1668414059738;
+        Mon, 14 Nov 2022 00:20:59 -0800 (PST)
+Received: from localhost.localdomain ([2402:7500:487:fe99:8803:61a2:a857:2b40])
+        by smtp.gmail.com with ESMTPSA id o38-20020a634e66000000b004639c772878sm5419997pgl.48.2022.11.14.00.20.56
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 14 Nov 2022 00:20:58 -0800 (PST)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org
+Cc:     cy_huang@richtek.com, allen_chiang@richtek.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Add Richtek RT9759 smart cap divider charger support
+Date:   Mon, 14 Nov 2022 16:20:50 +0800
+Message-Id: <1668414053-32728-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 10:29 PM Rob Herring <robh@kernel.org> wrote:
-> 'cpus' is a common property, and it is now defined in dtschema schemas,
-> so drop the type references in the tree.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+From: ChiYuan Huang <cy_huang@richtek.com>
 
->  Documentation/devicetree/bindings/power/renesas,apmu.yaml   | 6 ++----
+This patch set is to add Richtek RT9759 smart cap divider charger.
 
-Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
+The RT9759 is a high efficiency and high charge current charger.
+The efficiency is up to 97.8% when VBAT=4.2V, IBAT=2.5A, and the maximum
+charge current is up to 8A. The device integrates smart cap divider topology
+with a dual-phase charge pump core and 9 channel high speed ADCs to monitor
+the charging process.
 
-Gr{oetje,eeting}s,
+Since v3:
+- Fix 0002 patch title typo (from 'rt9471' to 'rt9759')
+- Remove unused R_VAC_OVP range.
+- Refer to ABI document, use 'status' to control battery charging, not 'online'
+- Refer to ABI document, use 'online' to indicate bus state
 
-                        Geert
+Since v2:
+- Add Reviewed-by tag for dt-binding patch
+- Change ABI document date from Oct 2022 to Nov 2022 and KernelVersion
+  from 6.1 to 6.2
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+ChiYuan Huang (3):
+  dt-bindings: power: supply: Add Richtek RT9759 smart cap divider
+    charger
+  power: supply: rt9759: Add Richtek RT9759 smart cap divider charger
+  Documentation: power: rt9759: Document exported sysfs entries
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+ Documentation/ABI/testing/sysfs-class-power-rt9759 |  37 ++
+ .../bindings/power/supply/richtek,rt9759.yaml      |  61 ++
+ drivers/power/supply/Kconfig                       |  15 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/rt9759.c                      | 613 +++++++++++++++++++++
+ 5 files changed, 727 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9759
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9759.yaml
+ create mode 100644 drivers/power/supply/rt9759.c
+
+-- 
+2.7.4
+
