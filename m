@@ -2,192 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BE462766A
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 08:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBA84627753
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 09:19:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235376AbiKNHcZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 14 Nov 2022 02:32:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60416 "EHLO
+        id S236278AbiKNITj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 14 Nov 2022 03:19:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiKNHcY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 02:32:24 -0500
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C685F186EE
-        for <linux-pm@vger.kernel.org>; Sun, 13 Nov 2022 23:32:23 -0800 (PST)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AE6wrPQ038411;
-        Mon, 14 Nov 2022 07:32:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=5E0yXPl1ftpSTjRgXfzjfIiMloq0mA6tfUDHkX+TFOY=;
- b=EPV8kVYtCG0VjyfDwfOYRzR+Yc80oEl5wrRfwLXpjTHUZYk+J8ffJ19WlZM/ygXSH0Lz
- 48rpJYQdn7i/I56iz1fpJxsOvIKwxlKoaZWDl7EffRTNBOAGC8KUHuswpkzlyeVawZH1
- 2jZ99k7y9ETWAFe7jh1NhAciY/xv87qQI+dPSriKZ5xWmX56KA250PgM4UFBuAmnfhFO
- 4r1hlSUQyTnvZ0chJuNmAPpDJ54iDi91SlUIwV5nDYvuKV/ONRzO9JRqxKSJ+/Yl8yRT
- XQOp5laSfJa4TGn8CSm0MRiEHHsi0ib/ESgx+Eab52DPtb9C157R12sfEEm80bwmP+J3 xA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kugvq0pnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 07:32:08 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AE7KFxV033657;
-        Mon, 14 Nov 2022 07:32:08 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kugvq0pn6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 07:32:08 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AE7KYu7003111;
-        Mon, 14 Nov 2022 07:32:07 GMT
-Received: from b03cxnp07029.gho.boulder.ibm.com (b03cxnp07029.gho.boulder.ibm.com [9.17.130.16])
-        by ppma04wdc.us.ibm.com with ESMTP id 3kt349c885-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 14 Nov 2022 07:32:07 +0000
-Received: from smtpav02.dal12v.mail.ibm.com ([9.208.128.128])
-        by b03cxnp07029.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AE7W4kW16974288
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 14 Nov 2022 07:32:05 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D5DF758051;
-        Mon, 14 Nov 2022 07:32:05 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25AA35805A;
-        Mon, 14 Nov 2022 07:32:02 +0000 (GMT)
-Received: from li-87263a4c-1efe-11b2-a85c-b6723e0c5f8d.ibm.com.com (unknown [9.43.65.55])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 14 Nov 2022 07:32:01 +0000 (GMT)
-From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
-To:     mpe@ellerman.id.au, svaidy@linux.vnet.ibm.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, npiggin@gmail.com
-Cc:     srikar@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
-        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
-Subject: [PATCH] powerpc/cpuidle: Set CPUIDLE_FLAG_POLLING for snooze state
-Date:   Mon, 14 Nov 2022 13:01:54 +0530
-Message-Id: <20221114073154.30407-1-aboorvad@linux.vnet.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S235846AbiKNITi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 14 Nov 2022 03:19:38 -0500
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952772DD8;
+        Mon, 14 Nov 2022 00:19:37 -0800 (PST)
+Received: by mail-qv1-f51.google.com with SMTP id h10so7368151qvq.7;
+        Mon, 14 Nov 2022 00:19:37 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1f6hcexQwRSjpPtI2b6I+pAA5eVX0oLT0ZXtJfpdDAY=;
+        b=q26T2PjvHvqj3Rnj5sDwXsG4pVQxNyUa1R12sYMmxxmfYdUiELkR3/4WeeSHSVjfN+
+         GnSnFi5XeNQRJPdS46wGOh7ORO+AyVBKUO0zFawS4HaNLh5+hvFqTgcgDo7os29+4oDY
+         9hG1tP9b6j//2SLAyYZuw4pPwJywZG8Bwu8gPZ/iCWxhX2hQoMWUI2wdqeD1Qt3raoX8
+         iJsS9KwAWjYDP/Rcqtf9R047nNRbf1Z9UMQY6AbUR1ni0dsJezjFAuIoVK2axC5C1Fau
+         5y7NtH0nFsVEGdCdvhObYVR/hHhk6n0+wKjy5WPPLLHiwZYwHl/8v38xju71iUknl/k+
+         L/tg==
+X-Gm-Message-State: ANoB5pmc4LImhEWTvIHaA2RfK6rOhxmGTuruwHnQ3lkuagezHaoma+30
+        DmL412zKfGAYc4ZMZkkTZogsXwnPqcqfKw==
+X-Google-Smtp-Source: AA0mqf7QYK0OC4H8/Mw2w7H/+IuvIJwGK6s5kDIZ+o4lozpfmFr1tpvmiWpgEm6b/AjtY0i7rcA4FQ==
+X-Received: by 2002:ad4:43e2:0:b0:4bb:701b:f217 with SMTP id f2-20020ad443e2000000b004bb701bf217mr11417677qvu.46.1668413976620;
+        Mon, 14 Nov 2022 00:19:36 -0800 (PST)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id br38-20020a05620a462600b006cfc01b4461sm6153472qkb.118.2022.11.14.00.19.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Nov 2022 00:19:35 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id r3so12556666yba.5;
+        Mon, 14 Nov 2022 00:19:35 -0800 (PST)
+X-Received: by 2002:a25:cb4a:0:b0:6dd:b521:a8f2 with SMTP id
+ b71-20020a25cb4a000000b006ddb521a8f2mr11133712ybg.380.1668413975373; Mon, 14
+ Nov 2022 00:19:35 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: np6J5Jul7JMPH9RKmeQ2x20SbJyex8M8
-X-Proofpoint-ORIG-GUID: ZGyTlQ8YciXcoc66ni_ZRVBtswe1Jtsq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-14_06,2022-11-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 suspectscore=0 mlxscore=0
- impostorscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011
- malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211140055
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221111212857.4104308-1-robh@kernel.org>
+In-Reply-To: <20221111212857.4104308-1-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 14 Nov 2022 09:19:23 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXT_+_afxBW6=dku+Y1ea8GTaWznM5vzXO7bYQ1Z8sRwQ@mail.gmail.com>
+Message-ID: <CAMuHMdXT_+_afxBW6=dku+Y1ea8GTaWznM5vzXO7bYQ1Z8sRwQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Drop type from 'cpus' property
+To:     Rob Herring <robh@kernel.org>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Thara Gopinath <thara.gopinath@linaro.org>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-During the comparative study of cpuidle governors, it is noticed that the
-menu governor does not select CEDE state in some scenarios even though when
-the sleep duration of the CPU exceeds the target residency of the CEDE idle
-state this is because the CPU exits the snooze "polling" state when snooze 
-time limit is reached in the snooze_loop(), which is not a real wake up 
-and it just means that the polling state selection was not adequate.
+On Fri, Nov 11, 2022 at 10:29 PM Rob Herring <robh@kernel.org> wrote:
+> 'cpus' is a common property, and it is now defined in dtschema schemas,
+> so drop the type references in the tree.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-cpuidle governors rely on CPUIDLE_FLAG_POLLING flag to be set for the
-polling states to handle the condition mentioned above.
+>  Documentation/devicetree/bindings/power/renesas,apmu.yaml   | 6 ++----
 
-Hence, set the CPUIDLE_FLAG_POLLING flag for the snooze state (polling state)
-in powerpc arch to make the cpuidle governor work as expected.
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Reference Commits:
+Gr{oetje,eeting}s,
 
-- Timeout enabled for snooze state:
-  commit 78eaa10f027c
-  ("cpuidle: powernv/pseries: Auto-promotion of snooze to deeper idle state")
+                        Geert
 
-- commit dc2251bf98c6
-  ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-- Fix wakeup stats in governor for polling states
-  commit 5f26bdceb9c0
-  ("cpuidle: menu: Fix wakeup statistics updates for polling state")
-
-Signed-off-by: Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
----
- drivers/cpuidle/cpuidle-powernv.c | 5 ++++-
- drivers/cpuidle/cpuidle-pseries.c | 8 ++++++--
- 2 files changed, 10 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/cpuidle/cpuidle-powernv.c b/drivers/cpuidle/cpuidle-powernv.c
-index 0b5461b3d7dd..9ebedd972df0 100644
---- a/drivers/cpuidle/cpuidle-powernv.c
-+++ b/drivers/cpuidle/cpuidle-powernv.c
-@@ -76,6 +76,7 @@ static int snooze_loop(struct cpuidle_device *dev,
- 	local_irq_enable();
- 
- 	snooze_exit_time = get_tb() + get_snooze_timeout(dev, drv, index);
-+	dev->poll_time_limit = false;
- 	ppc64_runlatch_off();
- 	HMT_very_low();
- 	while (!need_resched()) {
-@@ -86,6 +87,7 @@ static int snooze_loop(struct cpuidle_device *dev,
- 			 * cleared to order subsequent test of need_resched().
- 			 */
- 			clear_thread_flag(TIF_POLLING_NRFLAG);
-+			dev->poll_time_limit = true;
- 			smp_mb();
- 			break;
- 		}
-@@ -155,7 +157,8 @@ static struct cpuidle_state powernv_states[CPUIDLE_STATE_MAX] = {
- 		.desc = "snooze",
- 		.exit_latency = 0,
- 		.target_residency = 0,
--		.enter = snooze_loop },
-+		.enter = snooze_loop,
-+		.flags = CPUIDLE_FLAG_POLLING },
- };
- 
- static int powernv_cpuidle_cpu_online(unsigned int cpu)
-diff --git a/drivers/cpuidle/cpuidle-pseries.c b/drivers/cpuidle/cpuidle-pseries.c
-index 7e7ab5597d7a..7538aa63f972 100644
---- a/drivers/cpuidle/cpuidle-pseries.c
-+++ b/drivers/cpuidle/cpuidle-pseries.c
-@@ -44,6 +44,7 @@ static int snooze_loop(struct cpuidle_device *dev,
- 	pseries_idle_prolog();
- 	local_irq_enable();
- 	snooze_exit_time = get_tb() + snooze_timeout;
-+	dev->poll_time_limit = false;
- 
- 	while (!need_resched()) {
- 		HMT_low();
-@@ -54,6 +55,7 @@ static int snooze_loop(struct cpuidle_device *dev,
- 			 * loop anyway. Require a barrier after polling is
- 			 * cleared to order subsequent test of need_resched().
- 			 */
-+			dev->poll_time_limit = true;
- 			clear_thread_flag(TIF_POLLING_NRFLAG);
- 			smp_mb();
- 			break;
-@@ -268,13 +270,15 @@ static struct cpuidle_state dedicated_states[NR_DEDICATED_STATES] = {
- 		.desc = "snooze",
- 		.exit_latency = 0,
- 		.target_residency = 0,
--		.enter = &snooze_loop },
-+		.enter = &snooze_loop,
-+		.flags = CPUIDLE_FLAG_POLLING },
- 	{ /* CEDE */
- 		.name = "CEDE",
- 		.desc = "CEDE",
- 		.exit_latency = 10,
- 		.target_residency = 100,
--		.enter = &dedicated_cede_loop },
-+		.enter = &snooze_loop,
-+		.flags = CPUIDLE_FLAG_POLLING },
- };
- 
- /*
--- 
-2.17.1
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
