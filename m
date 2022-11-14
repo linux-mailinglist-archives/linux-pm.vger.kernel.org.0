@@ -2,124 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5FB6274E5
-	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 04:23:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 848416274FB
+	for <lists+linux-pm@lfdr.de>; Mon, 14 Nov 2022 04:32:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235688AbiKNDXG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 13 Nov 2022 22:23:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53096 "EHLO
+        id S235607AbiKNDcf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 13 Nov 2022 22:32:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbiKNDXF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Nov 2022 22:23:05 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2EA113D0B
-        for <linux-pm@vger.kernel.org>; Sun, 13 Nov 2022 19:23:04 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id l6so9251610pjj.0
-        for <linux-pm@vger.kernel.org>; Sun, 13 Nov 2022 19:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WqzcORU3j8qDZtC3NsFnSoyEDpr6q/ZSnwSL9bohmmw=;
-        b=TLegfkWaaJBJJjAlC99aB4HSDz/LC6A+erI3krS0zu+8eadBsRI83RQYvFB7imBUHb
-         862AHBkYJJWkizisJ8ZndxgurpE7Ge6u0LpNryk4kBg0k7oD5Rp2nr9A1BIXgPhpIOzN
-         7caTsC2qqt1EvjwSazl3mVmNGYCjNW9m7DtNEQogz/khHqdOm6A4b/7GU5gZfv2P551w
-         oDl3vHZ11I5JhGmiIjO3Yl30knKOfhZeAvDaTWDcjcMUMsBJPsYC5dzW4p7N6Kcn7LTR
-         RL7C+s/j3W0knunCntydOmy5mopxJpFwiSLz4HJzpZkWIfPGnrld4b4WcM2RWwbfCOYS
-         rrKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WqzcORU3j8qDZtC3NsFnSoyEDpr6q/ZSnwSL9bohmmw=;
-        b=pJ0y8lfR05FrlZZAkVq+W6n4dag+64Q9p9Evpl4avRePGM8pWusxJxNUw7g81+bfGY
-         74ihS1uGAtytfBvQwvNYdRTBuVM43ds831NokkxOhs/OlcmDyGrTSiHE0SW+4zXKEj2y
-         VV+qrLOr4XR8HTzv6bcTmLq3yNRkVKfOIRmeEDBeJXSihxp0dnVQ3XIpuF2PAxVpn4dz
-         4J+Fut4KNbTitvQHDEINnEF2TdwPkZu9seqf+a2VzWWE7xI5NxtkYPRsulpqnu3tYzcQ
-         IlQJdBo2Ead78ktBKlUUtwzZRux5AwbKKUEGiBJqSgpN3LbyeiimMYm1qMeYXNlGwIBC
-         pOGw==
-X-Gm-Message-State: ANoB5plGoL8c1hqGFocd3ycPDVa80dVfhW59ZARX8KbF+nFGXH2iLeTH
-        ypeOQDvW9zYpgi9nQ2L/n1M/Fg==
-X-Google-Smtp-Source: AA0mqf4u81Tocfgme+KesZOWgHbxi7rntgqUQtsU12Hb9iET1sCjB6PixCY613SzT/9Gtt3uJJySLA==
-X-Received: by 2002:a17:90a:2b08:b0:213:30b2:4e4e with SMTP id x8-20020a17090a2b0800b0021330b24e4emr12222330pjc.193.1668396184242;
-        Sun, 13 Nov 2022 19:23:04 -0800 (PST)
-Received: from localhost ([122.172.85.60])
-        by smtp.gmail.com with ESMTPSA id 66-20020a620445000000b0056ee0d0985asm5440472pfe.82.2022.11.13.19.23.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 13 Nov 2022 19:23:03 -0800 (PST)
-Date:   Mon, 14 Nov 2022 08:53:01 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Yongqiang Liu <liuyongqiang13@huawei.com>
-Cc:     rafael@kernel.org, tobin@kernel.org, zhangxiaoxu5@huawei.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: Init completion before kobject_init_and_add()
-Message-ID: <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
-References: <20221110142307.981883-1-liuyongqiang13@huawei.com>
+        with ESMTP id S235468AbiKNDce (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 13 Nov 2022 22:32:34 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 869B515827;
+        Sun, 13 Nov 2022 19:32:33 -0800 (PST)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.5) with ESMTP id 2AE3NxXv006085;
+        Mon, 14 Nov 2022 03:32:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : content-transfer-encoding : mime-version; s=pp1;
+ bh=KNYKtfhY2k43JD+ZIBssS/J+6Fx6ZqiG51NxfYROhzo=;
+ b=IK0ACtLop+d0ZJvSD9iF9pKOM/7UvZVNPFjIKEjRA5sQ85dlvaWH5akxP0r+Dv83WZq6
+ j6godVft4sBmqQE30TIUUyuMs1Em62NQTXwSX4vgDPdo+TFYwToxwyuwIII6d494OH22
+ mG+i5uBtFo1R3LyJqnYzVEy5xhe9Rod4ylw6Qhg69BHa34coYIIxZ1UHQhk3dSbFih/1
+ 79BBZOEELbTa1VkB93d/QCUe3v82tluTh8TseMVMARYRJvcbmNFCwKRwJt4NuJmFnEnc
+ TsmLtFELlS7pgDbPkhlN6PtUnvJYchuWet5xmzYi6vGjGfs2hHaDwOs7eGRNkoN9q7vQ uw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kudr204c7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 03:32:09 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AE3W8Up000995;
+        Mon, 14 Nov 2022 03:32:08 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kudr204bv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 03:32:08 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AE3LIIm024529;
+        Mon, 14 Nov 2022 03:32:07 GMT
+Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
+        by ppma04dal.us.ibm.com with ESMTP id 3kt349e1d2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 14 Nov 2022 03:32:07 +0000
+Received: from b03ledav004.gho.boulder.ibm.com (b03ledav004.gho.boulder.ibm.com [9.17.130.235])
+        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AE3W65f34734616
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 14 Nov 2022 03:32:06 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1AB47805E;
+        Mon, 14 Nov 2022 04:29:10 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 43A8C7805C;
+        Mon, 14 Nov 2022 04:29:06 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.211.83.197])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 14 Nov 2022 04:29:05 +0000 (GMT)
+Message-ID: <ff23b4e24222037959c2a784496c7ee91024e6c5.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 04/11] security: keys: trusted: Include TPM2 creation
+ data
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Date:   Sun, 13 Nov 2022 22:32:00 -0500
+In-Reply-To: <Y3FfhrgvBNey6T7V@sol.localdomain>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.4.Ieb1215f598bc9df56b0e29e5977eae4fcca25e15@changeid>
+         <Y3FfhrgvBNey6T7V@sol.localdomain>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 9zY-iV916FvnaPEWaeBOeG_pA_xYejKd
+X-Proofpoint-GUID: G_SgRPlbC6_1fY8Mz3XvyT83D3yESpJv
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110142307.981883-1-liuyongqiang13@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-14_02,2022-11-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ phishscore=0 lowpriorityscore=0 clxscore=1011 mlxlogscore=999
+ priorityscore=1501 bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211140019
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 10-11-22, 14:23, Yongqiang Liu wrote:
-> In cpufreq_policy_alloc(), it will call uninitialed completion in
-> cpufreq_sysfs_release() when kobject_init_and_add() fails. And
-> that will cause a crash such as the following page fault in complete:
+On Sun, 2022-11-13 at 13:20 -0800, Eric Biggers wrote:
+> On Fri, Nov 11, 2022 at 03:16:29PM -0800, Evan Green wrote:
+> > diff --git a/security/keys/trusted-keys/tpm2key.asn1
+> > b/security/keys/trusted-keys/tpm2key.asn1
+> > index f57f869ad60068..608f8d9ca95fa8 100644
+> > --- a/security/keys/trusted-keys/tpm2key.asn1
+> > +++ b/security/keys/trusted-keys/tpm2key.asn1
+> > @@ -7,5 +7,18 @@ TPMKey ::= SEQUENCE {
+> >         emptyAuth       [0] EXPLICIT BOOLEAN OPTIONAL,
+> >         parent          INTEGER ({tpm2_key_parent}),
+> >         pubkey          OCTET STRING ({tpm2_key_pub}),
+> > -       privkey         OCTET STRING ({tpm2_key_priv})
+> > +       privkey         OCTET STRING ({tpm2_key_priv}),
+> > +       ---
+> > +       --- A TPM2B_CREATION_DATA struct as returned from the
+> > TPM2_Create command.
+> > +       ---
+> > +       creationData    [1] EXPLICIT OCTET STRING OPTIONAL
+> > ({tpm2_key_creation_data}),
+> > +       ---
+> > +       --- A TPM2B_DIGEST of the creationHash as returned from the
+> > TPM2_Create
+> > +       --- command.
+> > +       ---
+> > +       creationHash    [2] EXPLICIT OCTET STRING OPTIONAL
+> > ({tpm2_key_creation_hash}),
+> > +       ---
+> > +       --- A TPMT_TK_CREATION ticket as returned from the
+> > TPM2_Create command.
+> > +       ---
+> > +       creationTk      [3] EXPLICIT OCTET STRING OPTIONAL
+> > ({tpm2_key_creation_tk})
+> >         }
 > 
-> BUG: unable to handle page fault for address: fffffffffffffff8
-> [..]
-> RIP: 0010:complete+0x98/0x1f0
-> [..]
-> Call Trace:
->  kobject_put+0x1be/0x4c0
->  cpufreq_online.cold+0xee/0x1fd
->  cpufreq_add_dev+0x183/0x1e0
->  subsys_interface_register+0x3f5/0x4e0
->  cpufreq_register_driver+0x3b7/0x670
->  acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
->  do_one_initcall+0x13d/0x780
->  do_init_module+0x1c3/0x630
->  load_module+0x6e67/0x73b0
->  __do_sys_finit_module+0x181/0x240
->  do_syscall_64+0x35/0x80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> The commit that added this file claimed:
 > 
-> Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
-> Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>         "The benefit of the ASN.1 format is that it's a standard and
+> thus the
+>         exported key can be used by userspace tools
+> (openssl_tpm2_engine,
+>         openconnect and tpm2-tss-engine"
 > 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 69b3d61852ac..7e56a42750ea 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
->  	if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
->  		goto err_free_rcpumask;
->  
-> +	init_completion(&policy->kobj_unregister);
->  	ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
->  				   cpufreq_global_kobject, "policy%u", cpu);
->  	if (ret) {
-> @@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
->  	init_rwsem(&policy->rwsem);
->  	spin_lock_init(&policy->transition_lock);
->  	init_waitqueue_head(&policy->transition_wait);
-> -	init_completion(&policy->kobj_unregister);
->  	INIT_WORK(&policy->update, handle_update);
->  
->  	policy->cpu = cpu;
+> Are these new fields in compliance with whatever standard that was
+> referring to?
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Not really, no.  The current use case (and draft standard) is already
+using [1] for policies and [2] for importable keys:
 
--- 
-viresh
+https://git.kernel.org/pub/scm/linux/kernel/git/jejb/openssl_tpm2_engine.git/tree/doc/draft-bottomley-tpm2-keys.xml
+
+I'm actually planning to use [3] for signed policies.  There's no
+reason why you can't use [4] though.  Since the creation data, hash and
+ticket are likely used as a job lot, it strikes me they should be a
+single numbered optional sequence instead of individually numbered,
+since you're unlikely to have one without the others.
+
+James
+
