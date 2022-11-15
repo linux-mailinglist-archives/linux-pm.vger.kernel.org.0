@@ -2,292 +2,284 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DB36295F0
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 11:34:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC24629647
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 11:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232464AbiKOKeD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 05:34:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48626 "EHLO
+        id S238418AbiKOKuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 05:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238192AbiKOKd4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 05:33:56 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D8624F07
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 02:32:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668508375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bbJbC3373kkrEOKgcv9UmDhvbvwdApWRUuMA85jnOVI=;
-        b=M8+JeVjG3OugtN13z2c/NP4rF+6ZaW2SyXIVIizv7oKYCHyCm3i/AlLNg1wpcwLciYvvoi
-        tfPAPJZilzPV9Op+LXG3pD5kdkYPNIjV4rS3zRHboe1nA9LBrPoS5FDeZfLVtOMoUtUXsK
-        hhSwn+6LNboCnti/eCEXDgTHtxYXINc=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-663-B7Me3IrPNliITI3NuRCLQw-1; Tue, 15 Nov 2022 05:32:35 -0500
-X-MC-Unique: B7Me3IrPNliITI3NuRCLQw-1
-Received: by mail-ej1-f72.google.com with SMTP id hq18-20020a1709073f1200b007ade8dd3494so6952826ejc.2
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 02:32:35 -0800 (PST)
+        with ESMTP id S232197AbiKOKty (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 05:49:54 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2180B25C61
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 02:49:53 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id e13so12324132edj.7
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 02:49:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MgfvtjWpUyCcngkAsp0WSy9MN/6jQcOcrSZ1puz0tzE=;
+        b=c7Xb10ntWnmK5qhaPrZ0sSfc94vAt36h7qSx6WdiCXugC/sawwR079ngJ4fBpfSD3l
+         6ZEoSqwQ1Dy7Bbd86I0ALHC97KBFEQ1XBPyiblMq7nyZVdqU98ika0SMk6ud40FaWaof
+         LF446r+u17ZkC0amqvHTVddbbR/H9ofWs7q/s=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bbJbC3373kkrEOKgcv9UmDhvbvwdApWRUuMA85jnOVI=;
-        b=Zoysr+odEyno7OJtbphRKwHeq7e8fQVKL9Hl8DIm+55id/X3//LQ0SVATC4tAGNCNz
-         pEAm6n27VPBiVEsc2Zl+XyfJqssHGuqd8BnAkY8VKfAz+BWMWEGHq98eIVUbVgvzala2
-         u/xf6uwbDWIouoNL8M7SMYUbiddSoIxB/adAbU6TlgLPkKkDZ+z+FIRWCHwTIFp00Goe
-         +ywmojWs7YzRe/rrcvXaxJJBtgv7OdzJtOG9gC4XzvB2sM03fYSsC0CKrjMIrs5Q2mWA
-         jyXEQ7Z18eO4LNGWACQyYdoXkcfLirN2Z9kWaW9rSf7tNkyMBXtAOj4INorZDtC4GYvc
-         4NfA==
-X-Gm-Message-State: ANoB5plj9xMA00JTcKWI/yMOS/JH7r5O2v4dtEqVqBsGibv7JNv5Uiiy
-        y5FuKdsmfftMv19vSScPQoFoP4DgKlkekt4zPmNFCRlQIKSIvm0xIJufPhi4f+mrF9dh1hEhWRK
-        oruheaepQpwoz0J8zwr0=
-X-Received: by 2002:a17:906:7c8d:b0:7af:1233:948d with SMTP id w13-20020a1709067c8d00b007af1233948dmr4023500ejo.698.1668508353979;
-        Tue, 15 Nov 2022 02:32:33 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4wJ1VOZdGGU5QOI9zqTMoKSncxewGjF9i9ZaLSzmNXClbiU2E5pCuqCEjPlbmtEutNDNaugQ==
-X-Received: by 2002:a17:906:7c8d:b0:7af:1233:948d with SMTP id w13-20020a1709067c8d00b007af1233948dmr4023481ejo.698.1668508353756;
-        Tue, 15 Nov 2022 02:32:33 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id i34-20020a0564020f2200b00458947539desm6050012eda.78.2022.11.15.02.32.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 15 Nov 2022 02:32:33 -0800 (PST)
-Message-ID: <f1bff724-252c-e403-f02b-2fff49b2283f@redhat.com>
-Date:   Tue, 15 Nov 2022 11:32:32 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MgfvtjWpUyCcngkAsp0WSy9MN/6jQcOcrSZ1puz0tzE=;
+        b=fmk08M5jhVxBD6x894+FjnN8pNkaHouNzNYTgD8w2jlCfUNWSQCGycxizXM44Rym5o
+         kcwqxW++Hm5gsOVri+i1izmCQDTkXuyC2QPgv6RVWxMGtYFNPDeEw8bumpJg1AQAW8/+
+         uRJ/etpCLbmxe2LhdbWSbGlhKJ10ODFTW7Ml7P38FLkttRQr1kS6WGG/xzhC6hKVA5tp
+         +dd3Kf47zAgRk2dD6bxB1lcTQHThkxKf/8CP/b3JFoRayEZ3UcPjUMTKSY56Gbnvfrhj
+         ptFwlLTWGtklJZgd3XqXPrpsc0c6YqMaBbEWAhVehAVeBCinAa4ZxGnS4BNd9LfjhBP+
+         JgaQ==
+X-Gm-Message-State: ANoB5pkTZuPjdTsjJY5ii+kulusiFYT+kMWlSKYEiMuvtb/q8Mjs5jOu
+        9pMo1Fd4C+WSdDJ/29jfZ6VV5hO7GzzqXVgAONOYsw==
+X-Google-Smtp-Source: AA0mqf7Zyg6WawPT7Tna1gAq72a4ziGX+mFjPdYsJ7neaPLo97UI4HoB6yml4mdouC5vAq58QJOaHg+s1MYMpi1apEI=
+X-Received: by 2002:aa7:d482:0:b0:467:78f2:d81f with SMTP id
+ b2-20020aa7d482000000b0046778f2d81fmr11755071edr.88.1668509391652; Tue, 15
+ Nov 2022 02:49:51 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [RFC v2 1/3] PM: Add a sysfs files to represent sleep duration
-Content-Language: en-US, nl
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Len Brown <len.brown@intel.com>,
-        John Stultz <jstultz@google.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "rrangel@chromium.org" <rrangel@chromium.org>,
-        Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20221110064723.8882-1-mario.limonciello@amd.com>
- <20221110064723.8882-2-mario.limonciello@amd.com> <871qq6tnqx.ffs@tglx>
- <MN0PR12MB6101BB92574BEF0A0AE2AB11E2059@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <MN0PR12MB6101BB92574BEF0A0AE2AB11E2059@MN0PR12MB6101.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20221018-up-i350-thermal-bringup-v6-0-c87b9f75550b@baylibre.com> <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
+In-Reply-To: <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
+From:   Pin-yen Lin <treapking@chromium.org>
+Date:   Tue, 15 Nov 2022 18:49:40 +0800
+Message-ID: <CAEXTbpd2zLdk-VmkGvpk2_Qz0TDyC9aOsQbCz=FpopnMqs9djg@mail.gmail.com>
+Subject: Re: [PATCH v6 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-mediatek@lists.infradead.org, Rob Herring <robh@kernel.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Michael Kao <michael.kao@mediatek.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        TVD_PH_BODY_ACCOUNTS_PRE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Mario,
+Hi Amjad,
 
-On 11/14/22 20:12, Limonciello, Mario wrote:
-> [Public]
-> 
-> Thanks! Appreciate the comments.
-> At least conceptually is there agreement to this idea for the two sysfs files
-> and userspace can use them to do this comparison?
-
-First of all let me say that I think that having some generic mechanism
-which allows userspace to check if deep enough sleep-state were reached
-is a good idea.  And thank you for working on this!
-
-I wonder though if it would not be better to have some mechanism
-where a list of sleep states + time spend in each time is printed ?
-
-E.g. I know that on Intel Bay Trail and Cherry Trail devices (just an
-example I'm familiar with) there are S0i0 - S0i3 and we really want
-to reach S0i3 during suspend.
-
-Sometimes on S0i1 or S0i2 is reached due to some part of the hw
-not getting suspended properly.
-
-So then we have reached "a hardware sleep state over s2idle"
-but no the one we want.
-
-OTOH I can image that if we start adding support for functionality
-like standby-connect under Linux that then we may not always
-reach the deepest hw sleep-state.
-
-So I'm a bit worried that having just a single number for
-last_hw_state_residency is not enough.
-
-I think that it might be better to have a mechanism to set
-a set of names for hw-states (once) and then set the residency
-per state (*) after resume and have the sysfs file print
-the entire list.
-
-This list could then also always include the total suspend time,
-also avoiding the need for a second sysfs file and we could also
-use the same format for non s2idle suspend having it print
-only the total suspend time when no hw-state names are set.
+On Wed, Oct 19, 2022 at 10:17 PM Amjad Ouled-Ameur
+<aouledameur@baylibre.com> wrote:
+>
+> Provide thermal zone to read thermal sensor in the SoC. We can read all the
+> thermal sensors value in the SoC by the node /sys/class/thermal/
+>
+> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
+> on the first read of sensor that often are bogus values.
+> This can avoid following warning on boot:
+>
+>   thermal thermal_zone6: failed to read out thermal zone (-13)
+>
+> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
+> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/thermal/mtk_thermal.c | 104 ++++++++++++++++++++++++++++++++----------
+>  1 file changed, 79 insertions(+), 25 deletions(-)
+>
+> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+> index 3a5df1440822..311ad611fdab 100644
+> --- a/drivers/thermal/mtk_thermal.c
+> +++ b/drivers/thermal/mtk_thermal.c
+> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
+>
+>  struct mtk_thermal;
+>
+> +struct mtk_thermal_zone {
+> +       struct mtk_thermal *mt;
+> +       int id;
+> +};
+> +
+>  struct thermal_bank_cfg {
+>         unsigned int num_sensors;
+>         const int *sensors;
+> @@ -307,6 +312,8 @@ struct mtk_thermal {
+>
+>         const struct mtk_thermal_data *conf;
+>         struct mtk_thermal_bank banks[MAX_NUM_ZONES];
+> +
+> +       int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
+>  };
+>
+>  /* MT8183 thermal sensor data */
+> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
+>                 mutex_unlock(&mt->lock);
+>  }
+>
+> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
+> +{
+> +       u32 raw;
+> +       int temp;
+> +
+> +       const struct mtk_thermal_data *conf = mt->conf;
+> +
+> +       raw = readl(mt->thermal_base + conf->msr[id]);
+> +
+> +       temp = mt->raw_to_mcelsius(mt, id, raw);
+> +
+> +       /*
+> +        * The first read of a sensor often contains very high bogus
+> +        * temperature value. Filter these out so that the system does
+> +        * not immediately shut down.
+> +        */
+> +
+> +       if (temp > 200000)
+> +               return -EAGAIN;
+> +       else
+> +               return temp;
+> +}
+> +
+>  /**
+>   * mtk_thermal_bank_temperature - get the temperature of a bank
+>   * @bank:      The bank
+> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>         struct mtk_thermal *mt = bank->mt;
+>         const struct mtk_thermal_data *conf = mt->conf;
+>         int i, temp = INT_MIN, max = INT_MIN;
+> -       u32 raw;
+>
+>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
+> -               raw = readl(mt->thermal_base + conf->msr[i]);
+> -
+> -               if (mt->conf->version == MTK_THERMAL_V1) {
+> -                       temp = raw_to_mcelsius_v1(
+> -                               mt, conf->bank_data[bank->id].sensors[i], raw);
+> -               } else {
+> -                       temp = raw_to_mcelsius_v2(
+> -                               mt, conf->bank_data[bank->id].sensors[i], raw);
+> -               }
+> -
+> -               /*
+> -                * The first read of a sensor often contains very high bogus
+> -                * temperature value. Filter these out so that the system does
+> -                * not immediately shut down.
+> -                */
+> -               if (temp > 200000)
+> -                       temp = 0;
+> +               temp = _get_sensor_temp(mt, i);
+>
+>                 if (temp > max)
+>                         max = temp;
+> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+>         return max;
+>  }
+>
+> -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
+>  {
+> -       struct mtk_thermal *mt = tz->devdata;
+> +       struct mtk_thermal_zone *tz = tzdev->devdata;
+> +       struct mtk_thermal *mt = tz->mt;
+>         int i;
+>         int tempmax = INT_MIN;
+>
+> @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
+>         return 0;
+>  }
+>
+> +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
+> +{
+> +       struct mtk_thermal_zone *tz = tzdev->devdata;
+> +       struct mtk_thermal *mt = tz->mt;
+> +       int id = tz->id - 1;
+> +
+> +       if (id < 0)
+> +               return -EACCES;
+> +
+> +       *temperature = _get_sensor_temp(mt, id);
+> +
+> +       return 0;
+> +}
+> +
+>  static const struct thermal_zone_device_ops mtk_thermal_ops = {
+>         .get_temp = mtk_read_temp,
+>  };
+>
+> +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
+> +       .get_temp = mtk_read_sensor_temp,
+> +};
+> +
+>  static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
+>                                   u32 apmixed_phys_base, u32 auxadc_phys_base,
+>                                   int ctrl_id)
+> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>         u64 auxadc_phys_base, apmixed_phys_base;
+>         struct thermal_zone_device *tzdev;
+>         void __iomem *apmixed_base, *auxadc_base;
+> +       struct mtk_thermal_zone *tz;
+>
+>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
+>         if (!mt)
+> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>
+>         mtk_thermal_turn_on_buffer(mt, apmixed_base);
+>
+> +       mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
+> +                               raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
+> +
+>         if (mt->conf->version == MTK_THERMAL_V2) {
+>                 mtk_thermal_release_periodic_ts(mt, auxadc_base);
+>         }
+> @@ -1161,11 +1197,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+>
+>         platform_set_drvdata(pdev, mt);
+>
+> -       tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
+> -                                             &mtk_thermal_ops);
+> -       if (IS_ERR(tzdev)) {
+> -               ret = PTR_ERR(tzdev);
+> -               goto err_disable_clk_peri_therm;
+> +       for (i = 0; i < mt->conf->num_sensors + 1; i++) {
+> +               tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
+> +               if (!tz)
+> +                       return -ENOMEM;
+> +
+> +               tz->mt = mt;
+> +               tz->id = i;
+> +
+> +               tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
+> +                                                            &mtk_thermal_ops :
+> +                                                            &mtk_thermal_sensor_ops);
+> +
+> +               if (IS_ERR(tzdev)) {
+> +                       if (PTR_ERR(tzdev) == -ENODEV) {
+> +                               dev_warn(&pdev->dev,
+> +                                        "sensor %d not registered in thermal zone in dt\n", i);
+> +                               continue;
+> +                       }
+> +                       if (PTR_ERR(tzdev) == -EACCES) {
+> +                               ret = PTR_ERR(tzdev);
+> +                               goto err_disable_clk_peri_therm;
+> +                       }
+> +               }
+>         }
+>
+>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
+tzdev can be an error pointer here. I think we should move the line
+into the loop above, so hwmon sysfs is not added when IS_ERR(tzdev) ==
+true.
 
 Regards,
-
-Hans
-
-
-*) Using an array, so up to MAX_HW_RESIDENCY_STATES
-
-
-> 
-> A few nested replies below, but I'll clean it up for
-> RFC v3 or submit as PATCH v1 if there is conceptual alignment before then.
-> 
->> On Thu, Nov 10 2022 at 00:47, Mario Limonciello wrote:
->>
->> 'Add a sysfs files'?
->>
->> Can you please decide whether that's 'a file' or 'multiple files'?
-> 
-> Yup thanks; bad find and replace in the commit message when I added
-> the second file.
-> 
->>
->>> Both AMD and Intel SoCs have a concept of reporting whether the
->> hardware
->>> reached a hardware sleep state over s2idle as well as how much
->>> time was spent in such a state.
->>
->> Nice, but ...
->>
->>> This information is valuable to both chip designers and system designers
->>> as it helps to identify when there are problems with power consumption
->>> over an s2idle cycle.
->>>
->>> To make the information discoverable, create a new sysfs file and a symbol
->>> that drivers from supported manufacturers can use to advertise this
->>> information. This file will only be exported when the system supports low
->>> power idle in the ACPI table.
->>>
->>> In order to effectively use this information you will ideally want to
->>> compare against the total duration of sleep, so export a second sysfs file
->>> that will show total time. This file will be exported on all systems and
->>> used both for s2idle and s3.
->>
->> The above is incomprehensible word salad. Can you come up with some
->> coherent explanation of what you are trying to achieve please?
->>
->>> +void pm_set_hw_state_residency(u64 duration)
->>> +{
->>> +	suspend_stats.last_hw_state_residency = duration;
->>> +}
->>> +EXPORT_SYMBOL_GPL(pm_set_hw_state_residency);
->>> +
->>> +void pm_account_suspend_type(const struct timespec64 *t)
->>> +{
->>> +	suspend_stats.last_suspend_total += (s64)t->tv_sec *
->> USEC_PER_SEC +
->>> +						 t->tv_nsec /
->> NSEC_PER_USEC;
->>
->> Conversion functions for timespecs to scalar nanoseconds exist for a
->> reason. Why does this need special treatment and open code it?
-> 
-> Will fixup to use conversion functions.
-> 
->>
->>> +}
->>> +EXPORT_SYMBOL_GPL(pm_account_suspend_type);
->>
->> So none of these functions has any kind of documentation. kernel-doc
->> exists for a reason especially for exported functions.
->>
->> That said, what's the justification to export any of these functions at
->> all? AFAICT pm_account_suspend_type() is only used by builtin code...
-> 
-> I think you're right; they shouldn't export; will fix.
-> 
->>
->>> +static umode_t suspend_attr_is_visible(struct kobject *kobj, struct
->> attribute *attr, int idx)
->>> +{
->>> +	if (attr != &last_hw_state_residency.attr)
->>> +		return 0444;
->>> +#ifdef CONFIG_ACPI
->>> +	if (acpi_gbl_FADT.flags & ACPI_FADT_LOW_POWER_S0)
->>> +		return 0444;
->>> +#endif
->>> +	return 0;
->>> +}
->>> +
->>>  static const struct attribute_group suspend_attr_group = {
->>>  	.name = "suspend_stats",
->>>  	.attrs = suspend_attrs,
->>> +	.is_visible = suspend_attr_is_visible,
->>
->> How is this change related to the changelog above? We are not hiding
->> subtle changes to the existing code in some conglomorate patch. See
->> Documentation/process/...
-> 
-> It was from feedback from RFC v1 from David Box that this file should only
-> be visible when s2idle is supported on the hardware.  Will adjust commit
-> message to make it clearer.
-> 
->>
->>> --- a/kernel/time/timekeeping.c
->>> +++ b/kernel/time/timekeeping.c
->>> @@ -24,6 +24,7 @@
->>>  #include <linux/compiler.h>
->>>  #include <linux/audit.h>
->>>  #include <linux/random.h>
->>> +#include <linux/suspend.h>
->>>
->>>  #include "tick-internal.h"
->>>  #include "ntp_internal.h"
->>> @@ -1698,6 +1699,7 @@ static void
->> __timekeeping_inject_sleeptime(struct timekeeper *tk,
->>>  	tk_set_wall_to_mono(tk, timespec64_sub(tk->wall_to_monotonic,
->> *delta));
->>>  	tk_update_sleep_time(tk, timespec64_to_ktime(*delta));
->>>  	tk_debug_account_sleep_time(delta);
->>> +	pm_account_suspend_type(delta);
->>
->> That function name is really self explaining - NOT !
->>
->>      pm_account_suspend_type(delta);
->>
->> So this will account a suspend type depending on the time spent in
->> suspend, right?
->>
->> It's totally obvious that the suspend type (whatever it is) depends on
->> the time delta argument... especially when the function at hand has
->> absolutely nothing to do with a type:
->>
-> 
-> I fat fingered this.  In my mind I thought I wrote pm_account_suspend_time()
-> Will fix.
-> 
->>> +void pm_account_suspend_type(const struct timespec64 *t)
->>> +{
->>> +	suspend_stats.last_suspend_total += (s64)t->tv_sec *
->> USEC_PER_SEC +
->>> +						 t->tv_nsec /
->> NSEC_PER_USEC;
->>> +}
->>
->> Sigh....
->>
->> Thanks,
->>
->>         tglx
-> 
-
+Pin-yen
