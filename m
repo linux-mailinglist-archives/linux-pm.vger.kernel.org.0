@@ -2,207 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F19362A40B
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 22:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885D562AE6A
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 23:36:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbiKOV0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 16:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
+        id S230287AbiKOWgw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 17:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238809AbiKOVZy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 16:25:54 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7A5A1BE
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 13:25:52 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id l14so26576722wrw.2
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 13:25:52 -0800 (PST)
+        with ESMTP id S238569AbiKOWgc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 17:36:32 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A6729D
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 14:36:28 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id 136so14905126pga.1
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 14:36:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+RQYtZdy4bFUQhGXuI62wI3n3sEiXL3rrLvArp8C0KQ=;
-        b=sEuBdlDm+Fd/WLiW0/FG+MxIwi5frs55d4RDhx5o/mCxy6wfIG51/944gZCkDVqndN
-         udhKfEzWcdQuVodXWzp48g2ABToxWqwnzf9APbjlvKiM81u8WcD7OxNeiY9g7pb71paF
-         ZmVS/FV7iu2WF4ccHx9+lpnx1caDtd2i4GO9EwlHqzRZmkIV8MafYjvcB+enC8KTM8zl
-         XYzyP9RNZbTaI9WmwAUZ/Om1GQJE2JSmppCbBwoOpDBMmya6Hzzxl8uWjDvJuqBpwRUu
-         x/H7b0zbCqpjyUTUd6uhwBY99CL0sdy+oIKU58KkVdqGxjNEif/eyVDOctl8z7ycbrvQ
-         wmfg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EnzZ3PrFvRLw0UV1tZc+lKh8LoWZRdWTxPKs/T6B6Tg=;
+        b=EA3BaYEhAV3qIo8x8scHhNeqORyHYn0UN1sSuf4eNZoh70u8+/8VR9hNPBgZcGO85M
+         ov/A9rANCd0bayZZRfGdedsEfnBf7dAGzqRMCxVAx0OxxvGHk0hybhJNDsrAja3cI/R2
+         EkPbxC2fyN0bBeg0K5QCPCadSCqho74cxEAYlZfBN6/5CIUdvhew5lPSWsIG+0IpU/1H
+         LjReW6NceacrDBaBq9SB/lXvkVz2DqHgYHbhJGm2ZroTnoYCEeWwCaNnbvc5Qb/dXpWE
+         CqGMFAPg+fitNencffz5F9qggHCRLB/g4ze+5iY1euegysA6NPCg2vHLWHNXKE/qNxSF
+         9Zmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+RQYtZdy4bFUQhGXuI62wI3n3sEiXL3rrLvArp8C0KQ=;
-        b=7wEpkoJ/aQQKJF8jbs4zFWcOQadRP35AJkSX2ZBXlMONlGaQ/6CwRDDb20leNrIooT
-         IOksj58xyGnZWdeIKKgFzJGR+6UrBluAO9CNEjCEUAyrnlYbK2GxG/mfJshPAwnYNuhF
-         UhevvVU4rMygFbDrxc5cvfcKlkPromDZJ6ArlrJnsRwlGtnslcjxIBew4TzPqmbpuulS
-         0oBg8kJHvg/AR8dC543Gkbk98yPJ7loRa8ae1T//8Viw4h52TIhAiyXK8SIUwiW19QCg
-         Tocvunm5UW+Lez8OD2txIGgHI4IqzzeYgZJhgB7zeBJuywef28LjGPCia3iXAHmuaHyF
-         EtaQ==
-X-Gm-Message-State: ANoB5pkCof9sBJiNqfqnmyN9Pu+8mpKcJ7v5QrRaiDf1vRVnzXhl3lWN
-        S1jZfgBbl7P2yJnyOAVk+tt7dA==
-X-Google-Smtp-Source: AA0mqf4Z5kW/mmVJi82pAXIix3yGil/wtSk+5owjAXaWwkoPht0cu1OaAnDVhSOBeccoo+RTjQa5Kg==
-X-Received: by 2002:adf:fcce:0:b0:236:6ab6:a51c with SMTP id f14-20020adffcce000000b002366ab6a51cmr12438387wrs.54.1668547551445;
-        Tue, 15 Nov 2022 13:25:51 -0800 (PST)
-Received: from localhost.localdomain ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id x4-20020a1c7c04000000b003cf7055c014sm25406wmc.1.2022.11.15.13.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 13:25:51 -0800 (PST)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v2] PM: domains: Reverse the order of performance and enabling ops
-Date:   Tue, 15 Nov 2022 23:25:43 +0200
-Message-Id: <20221115212543.1745498-1-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=EnzZ3PrFvRLw0UV1tZc+lKh8LoWZRdWTxPKs/T6B6Tg=;
+        b=AH9WymOTyU349fVPpUXv8QHj53Zr+erTlE1Ick0Kj0xb+eTnkyxjvVZVD1Wkl0bhQs
+         OTTeFJxKanAt6NgjO6ECDAg+dUAiHu8QclU1OkND8ca/t8e6jAtLsC3w9wTLzwAJGDa7
+         vqF9bVNvvkSzbB0fSn8HCLDrv+4dhr+Lq2z2kYHlLkiIy8bpytSSnbjgWWAuAfIFyiNJ
+         4eUNr5ZmcApnmOXm+JKDo8TrWGY4/rFSFxs5MVbntoRhAT5Sy8OlGzaLFtDUYDDef8dE
+         yoTmkI9xTPJk6E2yl5idPF6pyr/IY5+KVsixXzxJILM9KgfcgCJ2nbaBbVU7LotLFK5M
+         CrCA==
+X-Gm-Message-State: ANoB5pnIK4MlKsdLomOkXvz3CyloOe2Ogd1K4bphuQ9f2SaYh1GdrucA
+        E3MwwUlKaqtokRb5amVoBjqhltI/5P5dy7Y9gBUg+Q==
+X-Google-Smtp-Source: AA0mqf7XBLZZKyFqDsGtGIXnKG2kv31n4SF41AI/zqtzj3xKIaWDkenaobC4ToELTJnD9bAEWFOgU5DBt43SRRbpg3U=
+X-Received: by 2002:a63:4d16:0:b0:46f:9c0c:8673 with SMTP id
+ a22-20020a634d16000000b0046f9c0c8673mr18391223pgb.154.1668551788055; Tue, 15
+ Nov 2022 14:36:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221110195732.1382314-1-wusamuel@google.com>
+In-Reply-To: <20221110195732.1382314-1-wusamuel@google.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 15 Nov 2022 14:35:51 -0800
+Message-ID: <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
+To:     Sam Wu <wusamuel@google.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        kernel-team@android.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The ->set_performance_state() needs to be called before ->power_on()
-when a genpd is powered on, and after ->power_off() when a genpd is
-powered off. Do this in order to let the provider know to which
-performance state to power on the genpd, on the power on sequence, and
-also to maintain the performance for that genpd until after powering off,
-on power off sequence.
+On Thu, Nov 10, 2022 at 11:57 AM Sam Wu <wusamuel@google.com> wrote:
+>
+> This reverts commit 6d5afdc97ea71958287364a1f1d07e59ef151b11.
+>
+> On a Pixel 6 device, it is observed that this commit increases
+> latency by approximately 50ms, or 20%, in migrating a task
+> that requires full CPU utilization from a LITTLE CPU to Fmax
+> on a big CPU. Reverting this change restores the latency back
+> to its original baseline value.
+>
+> Fixes: 6d5afdc97ea7 ("cpufreq: schedutil: Move max CPU capacity to sugov_policy")
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Cc: Isaac J. Manjarres <isaacmanjarres@google.com>
+> Signed-off-by: Sam Wu <wusamuel@google.com>
 
-There is no scenario where a consumer would need its genpd enabled and
-then its performance state increased. Instead, in every scenario, the
-consumer needs the genpd to be enabled from the start at a specific
-performance state.
+Rafael, can we pick this up please?
 
-And same logic applies to the powering down. No consumer would need its
-genpd performance state dropped right before powering down.
+Lukasz, no objections to the idea itself, but it's causing regression
+and we'd like to revert and then fix it.
 
-Now, there are currently two vendors which use ->set_performance_state()
-in their genpd providers. One of them is Tegra, but the only genpd provider
-(PMC) that makes use of ->set_performance_state() doesn't implement the
-->power_on() or ->power_off(), and so it will not be affected by the ops
-reversal.
+-Saravana
 
-The other vendor that uses it is Qualcomm, in multiple genpd providers
-actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
-use of ->set_performance_state() need the order between enabling ops and
-the performance setting op to be reversed. And the reason for that is that
-it currently translates into two different voltages in order to power on
-a genpd to a specific performance state. Basically, ->power_on() switches
-to the minimum (enabling) voltage for that genpd, and then
-->set_performance_state() sets it to the voltage level required by the
-consumer.
-
-By reversing the call order, we rely on the provider to know what to do
-on each call, but most popular usecase is to cache the performance state
-and postpone the voltage setting until the ->power_on() gets called.
-
-As for the reason of still needing the ->power_on() and ->power_off() for a
-provider which could get away with just having ->set_performance_state()
-implemented, there are consumers that do not (nor should) provide an
-opp-table. For those consumers, ->set_performance_state() will not be
-called, and so they will enable the genpd to its minimum performance state
-by a ->power_on() call. Same logic goes for the disabling.
-
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
-
-Changes since v1:
- - Added performance state drop on power on failure, like Ulf suggested
-
- drivers/base/power/domain.c | 36 +++++++++++++++++++++---------------
- 1 file changed, 21 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index e5f4e5a2eb9e..967bcf9d415e 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -964,8 +964,8 @@ static int genpd_runtime_suspend(struct device *dev)
- 		return 0;
- 
- 	genpd_lock(genpd);
--	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 	genpd_power_off(genpd, true, 0);
-+	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 	genpd_unlock(genpd);
- 
- 	return 0;
-@@ -1003,9 +1003,8 @@ static int genpd_runtime_resume(struct device *dev)
- 		goto out;
- 
- 	genpd_lock(genpd);
-+	genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
- 	ret = genpd_power_on(genpd, 0);
--	if (!ret)
--		genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
- 	genpd_unlock(genpd);
- 
- 	if (ret)
-@@ -1043,8 +1042,8 @@ static int genpd_runtime_resume(struct device *dev)
- err_poweroff:
- 	if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
- 		genpd_lock(genpd);
--		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 		genpd_power_off(genpd, true, 0);
-+		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
- 		genpd_unlock(genpd);
- 	}
- 
-@@ -2733,17 +2732,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 	dev->pm_domain->detach = genpd_dev_pm_detach;
- 	dev->pm_domain->sync = genpd_dev_pm_sync;
- 
--	if (power_on) {
--		genpd_lock(pd);
--		ret = genpd_power_on(pd, 0);
--		genpd_unlock(pd);
--	}
--
--	if (ret) {
--		genpd_remove_device(pd, dev);
--		return -EPROBE_DEFER;
--	}
--
- 	/* Set the default performance state */
- 	pstate = of_get_required_opp_performance_state(dev->of_node, index);
- 	if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-@@ -2755,6 +2743,24 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
- 			goto err;
- 		dev_gpd_data(dev)->default_pstate = pstate;
- 	}
-+
-+	if (power_on) {
-+		genpd_lock(pd);
-+		ret = genpd_power_on(pd, 0);
-+		genpd_unlock(pd);
-+	}
-+
-+	if (ret) {
-+		/* Drop the default performance state */
-+		if (dev_gpd_data(dev)->default_pstate) {
-+			dev_pm_genpd_set_performance_state(dev, 0);
-+			dev_gpd_data(dev)->default_pstate = 0;
-+		}
-+
-+		genpd_remove_device(pd, dev);
-+		return -EPROBE_DEFER;
-+	}
-+
- 	return 1;
- 
- err:
--- 
-2.34.1
-
+> ---
+>  kernel/sched/cpufreq_schedutil.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
+>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index 9161d1136d01..1207c78f85c1 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -25,9 +25,6 @@ struct sugov_policy {
+>         unsigned int            next_freq;
+>         unsigned int            cached_raw_freq;
+>
+> -       /* max CPU capacity, which is equal for all CPUs in freq. domain */
+> -       unsigned long           max;
+> -
+>         /* The next fields are only needed if fast switch cannot be used: */
+>         struct                  irq_work irq_work;
+>         struct                  kthread_work work;
+> @@ -51,6 +48,7 @@ struct sugov_cpu {
+>
+>         unsigned long           util;
+>         unsigned long           bw_dl;
+> +       unsigned long           max;
+>
+>         /* The field below is for single-CPU policies only: */
+>  #ifdef CONFIG_NO_HZ_COMMON
+> @@ -160,6 +158,7 @@ static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>  {
+>         struct rq *rq = cpu_rq(sg_cpu->cpu);
+>
+> +       sg_cpu->max = arch_scale_cpu_capacity(sg_cpu->cpu);
+>         sg_cpu->bw_dl = cpu_bw_dl(rq);
+>         sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+>                                           FREQUENCY_UTIL, NULL);
+> @@ -254,7 +253,6 @@ static void sugov_iowait_boost(struct sugov_cpu *sg_cpu, u64 time,
+>   */
+>  static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+>  {
+> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         unsigned long boost;
+>
+>         /* No boost currently required */
+> @@ -282,8 +280,7 @@ static void sugov_iowait_apply(struct sugov_cpu *sg_cpu, u64 time)
+>          * sg_cpu->util is already in capacity scale; convert iowait_boost
+>          * into the same scale so we can compare.
+>          */
+> -       boost = sg_cpu->iowait_boost * sg_policy->max;
+> -       boost >>= SCHED_CAPACITY_SHIFT;
+> +       boost = (sg_cpu->iowait_boost * sg_cpu->max) >> SCHED_CAPACITY_SHIFT;
+>         boost = uclamp_rq_util_with(cpu_rq(sg_cpu->cpu), boost, NULL);
+>         if (sg_cpu->util < boost)
+>                 sg_cpu->util = boost;
+> @@ -340,7 +337,7 @@ static void sugov_update_single_freq(struct update_util_data *hook, u64 time,
+>         if (!sugov_update_single_common(sg_cpu, time, flags))
+>                 return;
+>
+> -       next_f = get_next_freq(sg_policy, sg_cpu->util, sg_policy->max);
+> +       next_f = get_next_freq(sg_policy, sg_cpu->util, sg_cpu->max);
+>         /*
+>          * Do not reduce the frequency if the CPU has not been idle
+>          * recently, as the reduction is likely to be premature then.
+> @@ -376,7 +373,6 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+>                                      unsigned int flags)
+>  {
+>         struct sugov_cpu *sg_cpu = container_of(hook, struct sugov_cpu, update_util);
+> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         unsigned long prev_util = sg_cpu->util;
+>
+>         /*
+> @@ -403,8 +399,7 @@ static void sugov_update_single_perf(struct update_util_data *hook, u64 time,
+>                 sg_cpu->util = prev_util;
+>
+>         cpufreq_driver_adjust_perf(sg_cpu->cpu, map_util_perf(sg_cpu->bw_dl),
+> -                                  map_util_perf(sg_cpu->util),
+> -                                  sg_policy->max);
+> +                                  map_util_perf(sg_cpu->util), sg_cpu->max);
+>
+>         sg_cpu->sg_policy->last_freq_update_time = time;
+>  }
+> @@ -413,19 +408,25 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
+>  {
+>         struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+>         struct cpufreq_policy *policy = sg_policy->policy;
+> -       unsigned long util = 0;
+> +       unsigned long util = 0, max = 1;
+>         unsigned int j;
+>
+>         for_each_cpu(j, policy->cpus) {
+>                 struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
+> +               unsigned long j_util, j_max;
+>
+>                 sugov_get_util(j_sg_cpu);
+>                 sugov_iowait_apply(j_sg_cpu, time);
+> +               j_util = j_sg_cpu->util;
+> +               j_max = j_sg_cpu->max;
+>
+> -               util = max(j_sg_cpu->util, util);
+> +               if (j_util * max > j_max * util) {
+> +                       util = j_util;
+> +                       max = j_max;
+> +               }
+>         }
+>
+> -       return get_next_freq(sg_policy, util, sg_policy->max);
+> +       return get_next_freq(sg_policy, util, max);
+>  }
+>
+>  static void
+> @@ -751,7 +752,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+>  {
+>         struct sugov_policy *sg_policy = policy->governor_data;
+>         void (*uu)(struct update_util_data *data, u64 time, unsigned int flags);
+> -       unsigned int cpu = cpumask_first(policy->cpus);
+> +       unsigned int cpu;
+>
+>         sg_policy->freq_update_delay_ns = sg_policy->tunables->rate_limit_us * NSEC_PER_USEC;
+>         sg_policy->last_freq_update_time        = 0;
+> @@ -759,7 +760,6 @@ static int sugov_start(struct cpufreq_policy *policy)
+>         sg_policy->work_in_progress             = false;
+>         sg_policy->limits_changed               = false;
+>         sg_policy->cached_raw_freq              = 0;
+> -       sg_policy->max                          = arch_scale_cpu_capacity(cpu);
+>
+>         sg_policy->need_freq_update = cpufreq_driver_test_flags(CPUFREQ_NEED_UPDATE_LIMITS);
+>
+> --
+> 2.38.1.431.g37b22c650d-goog
+>
