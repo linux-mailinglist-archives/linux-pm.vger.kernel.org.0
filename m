@@ -2,74 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25CF7629A76
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 14:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F43629AA4
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 14:36:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230130AbiKONcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 08:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S238137AbiKONgs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 08:36:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238409AbiKONcA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 08:32:00 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAB329342;
-        Tue, 15 Nov 2022 05:31:39 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id 130so14097234pfu.8;
-        Tue, 15 Nov 2022 05:31:39 -0800 (PST)
+        with ESMTP id S230367AbiKONgr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 08:36:47 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0027BE88
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 05:36:46 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id 130so14109445pfu.8
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 05:36:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SDCfTqp5RHmpPPiYAMZqgPg+FlYe7rD3rpk+dlOlmrs=;
-        b=KrwYvRnprSGRln3TvOkC1YiP6Df+3DLqQfIYTk2EiIbrltz1T4KtUySjLgIBWDzDcb
-         cVg5xSn7ARmm4NQ3818YdLO3qynehO02Svna5kXSG8afMINz3ycoBmCeiJqH8UlkEC+o
-         1vyNhVAtowXtOKXPwT4e8ZUetr1cWzWKL+TfSqssgLWsAPZRAUmziml9jJXaEBLfJwcc
-         Q5KXTWE13kC4/6tvcIxv8ToSD4WDfbFAtEbjqyn7343Q/9VmUZxCdG0CD5BcCWarKb+V
-         SY0H/OW7Fiy0y/0nKLdoLVC0/99/3negtgyRr4/cirsfLrPnMGYZmnI1Z0NXMFu9H5Wy
-         oKag==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3Qz9O5mclsQWUCa8h8Ls/80iLOSAtCwm8No11onRdE8=;
+        b=xjqAeHkSin652jyUxBtTLjlhAbHxfGJDk/B0cGbsSHN3gLA3s3kAgyVNZ0ls0Bi+I1
+         P6vuWiZw/wuTLtOTyhkwxakEDBYdp+AtF5M0UuD3hUpsVvJdDidpf4emu/ZCL6v+uvs7
+         hOnoxpOa92BPa26+ev6AKp4gGE6wWboxYf7DOrwI9LpKvRi3SZ5/hL9cKdd6kMw3KFCS
+         wq0hYOax2ZLH55A/vVOwpXOKeoRSDYVi/qsmaYpSWcMW7/e9E82lJ8+qW1bU2B0jQd5O
+         maiXVBPsIMh9bldXslavWoC5GxDKrStVZBJCsewOq7k1fnOz9CcZSwF3AQXZpg332IXv
+         qADA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SDCfTqp5RHmpPPiYAMZqgPg+FlYe7rD3rpk+dlOlmrs=;
-        b=U05mLKhK1jbGS0CET/i5tE8U/JvnQ6dTnqabCXvq8WhLbmnRDO9No3s3PFNiCo6ODV
-         pfE0sEvOYkao02nWGNzRCWxJKc6T28vcXpuV5C7EyFMb0MM2gTITg969585WGO7GyzJE
-         w1ZW9IWDSPvjVTtBvz7iHI2eYx/cyXbJc602j1qa2a8ShZm4yRNZJZdx6rGiBXBjd4+l
-         r6hlfSGU+O8qCsfm9SpPOY11AeyZ0+knEVxsMUHx/Bw0RGDV5bZeroGyD13H6hM5OtsK
-         ekptxUWRERmb68O4kfbrMhNfSUCP7Ra66k82rkJGW78GCY1Oesx3kZda63/soIZN4PYI
-         xPCA==
-X-Gm-Message-State: ANoB5pkSVyt0Q9DRNTZForL+3g26TA7hUtOhzGqoEftanahkIlsQnwuH
-        YZWcxc0wvGNMYezgEwPPzdM=
-X-Google-Smtp-Source: AA0mqf6ovMAjD8mvMI4/+0p+hFXFvgTHeISLflHSnHfj/zqnwHHXWaPzQysZQnFtnWXnoEXHS5IMYQ==
-X-Received: by 2002:a05:6a00:26c4:b0:563:b88c:8d34 with SMTP id p4-20020a056a0026c400b00563b88c8d34mr18459182pfw.68.1668519098569;
-        Tue, 15 Nov 2022 05:31:38 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i65-20020a628744000000b0056b6c7a17c6sm9085486pfe.12.2022.11.15.05.31.37
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3Qz9O5mclsQWUCa8h8Ls/80iLOSAtCwm8No11onRdE8=;
+        b=Lmpg8zxwp7rJyS5tFS/Yrynu4Xqjqn1woX849v9HuyefcDTQfT+2bXfs9H+tKrTXK+
+         3vDyUDbaFmkUS8+fBn0shkaB88z4cJxENTt8FCG2++DFkMS5a4QQPXa7Q8kBMCCTI5pQ
+         XpcDzaX93lmthea6KhHthywMww7y2acmBph1+ZEYNJfMDHyVZIByRZrgU7+XA9g8WpUZ
+         GRN9om7JnVQt9yk5qAWYCGAafsgoWEbgOReOpLUy4PS1YvbzzytbNnXX2P7pIEkloITV
+         kgszsamWxf4QSJNUV5N+TDLIMHofnOhpIcnakobCMLQYYWDb1WYuIm0a2OIgUEHIUiPi
+         FWtg==
+X-Gm-Message-State: ANoB5pniuDHbePzUKJM9ra5qA7MwQ7d+YuhH7+lh/5IMd9V1ZFB4XAlr
+        UF2Bo/hKIneXtGmJxGfs37fPcA==
+X-Google-Smtp-Source: AA0mqf70Xkcw4toYw9Qek6D/ZpzpD+6aSCGnPTK/HR8G20a2O1VzguMta/9Foen7jrUaVlGHGY3sPQ==
+X-Received: by 2002:a63:f34b:0:b0:476:848e:8baa with SMTP id t11-20020a63f34b000000b00476848e8baamr8316851pgj.592.1668519406502;
+        Tue, 15 Nov 2022 05:36:46 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c19-20020a621c13000000b0056cc538baf0sm8721113pfc.114.2022.11.15.05.36.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Nov 2022 05:31:37 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 15 Nov 2022 05:31:36 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/9] thermal/core: Protect thermal device operations
- against removal
-Message-ID: <20221115133136.GC4189373@roeck-us.net>
-References: <20221110152500.3032655-1-linux@roeck-us.net>
- <CAJZ5v0j50TWszcRWkb_m4BDQ_gEpCuJDR2EuOJWN8zvBf_KkUw@mail.gmail.com>
+        Tue, 15 Nov 2022 05:36:46 -0800 (PST)
+Message-ID: <637395ee.620a0220.e8f41.cafb@mx.google.com>
+Date:   Tue, 15 Nov 2022 05:36:46 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j50TWszcRWkb_m4BDQ_gEpCuJDR2EuOJWN8zvBf_KkUw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.1-rc5-55-g60453df62d30
+X-Kernelci-Branch: testing
+X-Kernelci-Tree: pm
+Subject: pm/testing baseline: 82 runs,
+ 2 regressions (v6.1-rc5-55-g60453df62d30)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +71,100 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 07:06:57PM +0100, Rafael J. Wysocki wrote:
-> On Thu, Nov 10, 2022 at 4:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
-> >
-> > Accesses to thermal zones, and with it to thermal zone device operations,
-> > are still possible after the thermal zone device has been unregistered.
-> > For example, thermal_zone_get_temp() can be called from temp_show()
-> > in thermal_sysfs.c if the sysfs attribute was opened before the thermal
-> > device was unregistered. This is problematic and may result in crashes
-> > since the operations data structure and the underlying code may be gone
-> > when the calls are made.
-> >
-> > The following series solves the problem by protecting accesses to thermal
-> > device operations with the thermal device mutex, and by verifying that the
-> > thermal device is still registered after the mutex has been acquired.
-> >
-> > This was previously sent as RFC/RFT as single patch [1]. The code was reworked
-> > to match thermal subsystem changes made between v6.0 and v6.1, and it was
-> > split into several patches to simplify review.
-> >
-> > [1] https://lore.kernel.org/linux-pm/20221004033936.1047691-1-linux@roeck-us.net/
-> >
-> > v2: Improved documentation, rearranged code.
-> >     No functional changes. See individual patches for details.
-> >
-> > ----------------------------------------------------------------
-> > Guenter Roeck (9):
-> >       thermal/core: Destroy thermal zone device mutex in release function
-> >       thermal/core: Delete device under thermal device zone lock
-> >       thermal/core: Ensure that thermal device is registered in thermal_zone_get_temp
-> >       thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
-> >       thermal/core: Introduce locked version of thermal_zone_device_update
-> >       thermal/core: Protect hwmon accesses to thermal operations with thermal zone mutex
-> >       thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-> >       thermal/core: Remove thermal_zone_set_trips()
-> >       thermal/core: Protect thermal device operations against thermal device removal
-> >
-> >  drivers/thermal/thermal_core.c    | 76 +++++++++++++++++++++++--------------
-> >  drivers/thermal/thermal_core.h    |  3 +-
-> >  drivers/thermal/thermal_helpers.c | 67 +++++++++++++++++++++------------
-> >  drivers/thermal/thermal_hwmon.c   | 10 ++++-
-> >  drivers/thermal/thermal_sysfs.c   | 79 ++++++++++++++++++++++++++++++++-------
-> >  5 files changed, 168 insertions(+), 67 deletions(-)
-> 
-> All applied as 6.2 material, thanks!
+pm/testing baseline: 82 runs, 2 regressions (v6.1-rc5-55-g60453df62d30)
 
-Thanks a lot!
+Regressions Summary
+-------------------
 
-Guenter
+platform           | arch | lab             | compiler | defconfig         =
+ | regressions
+-------------------+------+-----------------+----------+-------------------=
+-+------------
+imx6ul-pico-hobbit | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+imx7ulp-evk        | arm  | lab-nxp         | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.1-rc5=
+-55-g60453df62d30/plan/baseline/
+
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.1-rc5-55-g60453df62d30
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      60453df62d306d285f98efa85de9871855a15233 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform           | arch | lab             | compiler | defconfig         =
+ | regressions
+-------------------+------+-----------------+----------+-------------------=
+-+------------
+imx6ul-pico-hobbit | arm  | lab-pengutronix | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63738f496219120e61e7db9b
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.1-rc5-55-g60453d=
+f62d30/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-h=
+obbit.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.1-rc5-55-g60453d=
+f62d30/arm/multi_v7_defconfig/gcc-10/lab-pengutronix/baseline-imx6ul-pico-h=
+obbit.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221024.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63738f496219120e61e7d=
+b9c
+        failing since 109 days (last pass: v5.19-rc8-79-gb3f10ca8bf191, fir=
+st fail: v5.19-rc8-92-ge240a33f1bc48) =
+
+ =
+
+
+
+platform           | arch | lab             | compiler | defconfig         =
+ | regressions
+-------------------+------+-----------------+----------+-------------------=
+-+------------
+imx7ulp-evk        | arm  | lab-nxp         | gcc-10   | multi_v7_defconfig=
+ | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63738ccf473a5cb7aee7db6d
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.1-rc5-55-g60453d=
+f62d30/arm/multi_v7_defconfig/gcc-10/lab-nxp/baseline-imx7ulp-evk.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.1-rc5-55-g60453d=
+f62d30/arm/multi_v7_defconfig/gcc-10/lab-nxp/baseline-imx7ulp-evk.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20221024.1/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.login: https://kernelci.org/test/case/id/63738ccf473a5cb7aee7d=
+b6e
+        failing since 46 days (last pass: pm-6.0-rc7-143-g00674ddf1b594, fi=
+rst fail: v6.0-rc7-186-gfa11712315997) =
+
+ =20
