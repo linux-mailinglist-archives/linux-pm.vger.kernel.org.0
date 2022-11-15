@@ -2,183 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD83C62A33D
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 21:44:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F02962A354
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 21:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiKOUob (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 15:44:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
+        id S238506AbiKOUsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 15:48:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231776AbiKOUo1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 15:44:27 -0500
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5023E209A2
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 12:44:26 -0800 (PST)
-Received: by mail-vs1-xe33.google.com with SMTP id p4so15900094vsa.11
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 12:44:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fki+0TCoTrte3/BJmTglaCbQEGDgk5B9kayNvnzRPWM=;
-        b=Q+lW7U/1515XSKweAMw5eX05XaxUGZTKGcd7QsyfGV2BIVZ4vO6qOo11M9Bddjyytv
-         DDMWMCivk2+y76oMjBHBSQY+HCarazuvA/bDaWBvlCpuPgBu0JOWsyEeHaZhNQHuBJo7
-         Hvvh2Ow2EfGNHbJVM3I0K9wIbuiRYtl+5vKvUEA3VjNprdirOnD5UCchWEm1zfcR4U+6
-         DuB+MotSK2WwN6SB3IjLk3AuQHc1sb7c4FnPUax24E9fyf75hTVceol07USJCGppACm+
-         AjJKpvCwJUjosvIouvjLNOlPczSbirv331O5CJLTyrLn371E5IS1QZKMs9IfyhMR0XGi
-         uNvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fki+0TCoTrte3/BJmTglaCbQEGDgk5B9kayNvnzRPWM=;
-        b=q3HxAI+lPM1yVf5POOzpQ+9rhQl9WjL3GWAtp9GN6mK6iSlQTUjE2Z7D3H69SPc0a0
-         SBN9A7jbs9zU8t/hNwZ1OUDNSlGmYYP34euK3xewRWvQotSUOeD7NaGAUUsUqyP+LdrI
-         syBYjTNvluiT7NLcFKP83YOlv4bIHfXGGa9dLV/pVbGkqpXNJdIkBFDsqeUqECu9em+4
-         0xhovDcmExoOKpShW9LsByzW3fKFTdR0eLeWgQw4DuZYevzUxrH1ZW8gFaLrg7910FAq
-         m1H4IVyZ+ig+J77C/9TU+u4ppzm1+Ro/cAHsXxe0z6ThQGBUebWFIRKrLLgeXJsgZ7Bw
-         YUeA==
-X-Gm-Message-State: ANoB5pmfVhu5tvfJMpqIDaZ1Fo2PRSMZNNHRLYVGy6QER2AhuWwvDwYN
-        Ap9Yb4bjWDZcV9iqm5AnK+KqHPCNM/hcfkXCuF6r
-X-Google-Smtp-Source: AA0mqf49L62DSbkOhy5QdhSFkosUgoRxnZccam6+NPCc0pWQN1kIdQqfHb6qw+qOMl9/YLMbHuvo2aGXdUCt3JVCiug=
-X-Received: by 2002:a05:6102:3224:b0:3aa:8846:b9a with SMTP id
- x4-20020a056102322400b003aa88460b9amr9477748vsf.58.1668545065335; Tue, 15 Nov
- 2022 12:44:25 -0800 (PST)
+        with ESMTP id S238362AbiKOUsq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 15:48:46 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D5525A;
+        Tue, 15 Nov 2022 12:48:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668545319; x=1700081319;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lztYRjluQ1xzm5255jHZhSxEZVcjuHk08XP3pTKqqCg=;
+  b=U2mWwY/NuyE+SS2n0StuScX9+kXzSMAOW8Ebntwo8L5jPSlrkqHT8pgG
+   kzFbkYM19+sPakjl4R6JkA+befzhJ6i2vOdjpidzomX5o/3bouN4TmUjt
+   ZPMkh2GzO74FmpjEL+MuaKNFc3RC08/udPEXEqQhX9+tHgr5/L3T7NvjY
+   TBZxcXh3BRspd9EISjjafkiRd381e99vtivFvctT1kelvumGXorGeH+sq
+   LMso1+mCVDN11FRRcXo+ickcNFxj1WpO1KkmyY9O8ULCZAObrm70dYzbV
+   JbCq4szN+Ao78zLPiHkJ0EPzzufTWdxMSvsFUSQX2VvJxmFtUsfjcMOnh
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="299891365"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="299891365"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 12:48:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="764058818"
+X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
+   d="scan'208";a="764058818"
+Received: from slmckinn-mobl.amr.corp.intel.com (HELO desk) ([10.255.231.2])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 12:48:35 -0800
+Date:   Tue, 15 Nov 2022 12:48:34 -0800
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>, thomas.lendacky@amd.com,
+        "H. Peter Anvin" <hpa@zytor.com>, hdegoede@redhat.com,
+        Ingo Molnar <mingo@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Pavel Machek <pavel@ucw.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David.Kaplan@amd.com, Borislav Petkov <bp@alien8.de>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+Subject: Re: [PATCH v3 2/2] x86/pm: Add enumeration check before spec MSRs
+ save/restore setup
+Message-ID: <20221115204834.dkb7yecr227lj277@desk>
+References: <cover.1668539735.git.pawan.kumar.gupta@linux.intel.com>
+ <c24db75d69df6e66c0465e13676ad3f2837a2ed8.1668539735.git.pawan.kumar.gupta@linux.intel.com>
+ <CAJZ5v0j6GBAx-UTTx2Oe1Y+bwpRuqifoNx4vBu1Vi9K93TS9JA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221115200156.12218-1-mario.limonciello@amd.com> <20221115200156.12218-2-mario.limonciello@amd.com>
-In-Reply-To: <20221115200156.12218-2-mario.limonciello@amd.com>
-From:   John Stultz <jstultz@google.com>
-Date:   Tue, 15 Nov 2022 12:44:14 -0800
-Message-ID: <CANDhNCqPWV_dC_wo-CCqBuO0J=5TcRAh5AX335PLft2+w19_tQ@mail.gmail.com>
-Subject: Re: [RFC v3 1/4] PM: Add a sysfs file to represent the total sleep duration
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        Raul Rangel <rrangel@chromium.org>, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0j6GBAx-UTTx2Oe1Y+bwpRuqifoNx4vBu1Vi9K93TS9JA@mail.gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 12:02 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+On Tue, Nov 15, 2022 at 08:23:35PM +0100, Rafael J. Wysocki wrote:
+>On Tue, Nov 15, 2022 at 8:17 PM Pawan Gupta
+><pawan.kumar.gupta@linux.intel.com> wrote:
+>>
+>> pm_save_spec_msr() keeps a list of all the MSRs which _might_ need to be
+>> saved and restored at hibernate and resume.  However, it has zero
+>> awareness of CPU support for these MSRs.  It mostly works by
+>> unconditionally attempting to manipulate these MSRs and relying on
+>> rdmsrl_safe() being able to handle a #GP on CPUs where the support is
+>> unavailable.
+>>
+>> However, it's possible for reads (RDMSR) to be supported for a given MSR
+>> while writes (WRMSR) are not.  In this case, msr_build_context() sees a
+>> successful read (RDMSR) and marks the MSR as 'valid'.  Then, later, a
+>> write (WRMSR) fails, producing a nasty (but harmless) error message.
+>> This causes restore_processor_state() to try and restore it, but writing
+>> this MSR is not allowed on the Intel Atom N2600 leading to:
+>>
+>>   unchecked MSR access error: WRMSR to 0x122 (tried to write 0x0000000000000002) \
+>>      at rIP: 0xffffffff8b07a574 (native_write_msr+0x4/0x20)
+>>   Call Trace:
+>>    <TASK>
+>>    restore_processor_state
+>>    x86_acpi_suspend_lowlevel
+>>    acpi_suspend_enter
+>>    suspend_devices_and_enter
+>>    pm_suspend.cold
+>>    state_store
+>>    kernfs_fop_write_iter
+>>    vfs_write
+>>    ksys_write
+>>    do_syscall_64
+>>    ? do_syscall_64
+>>    ? up_read
+>>    ? lock_is_held_type
+>>    ? asm_exc_page_fault
+>>    ? lockdep_hardirqs_on
+>>    entry_SYSCALL_64_after_hwframe
+>>
+>> To fix this, add the corresponding X86_FEATURE bit for each MSR.  Avoid
+>> trying to manipulate the MSR when the feature bit is clear. This
+>> required adding a X86_FEATURE bit for MSRs that do not have one already,
+>> but it's a small price to pay.
+>>
+>> Fixes: 73924ec4d560 ("x86/pm: Save the MSR validity status at context setup")
+>> Reported-by: Hans de Goede <hdegoede@redhat.com>
+>> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+>> Cc: stable@kernel.org
 >
-> For userspace to be able to analyze how much of a suspend cycle was spent
-> in the hardware sleep states userspace software has to use kernel trace
-> points paired with the file `low_power_idle_system_residency_us` on
-> supported systems.
+>Fine with me:
 >
-> To make this information more discoverable, introduce a new sysfs file
-> to represent the duration spent in a sleep state.
-> This file will be present and updated during resume for all suspend
-> types.
->
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
-> RFC v2->v3
->  * Drop one of the sysfs files
->  * Use sysfs_emit instead
->  * Fix symbol name (s/type/time/)
->  * Drop is_visible
->  * Use timespec64 type for suspend stats
->  * Update documentation
->  * Update sysfs file name
-> ---
->  Documentation/ABI/testing/sysfs-power |  8 ++++++++
->  include/linux/suspend.h               |  2 ++
->  kernel/power/main.c                   | 15 +++++++++++++++
->  kernel/power/suspend.c                |  2 ++
->  kernel/time/timekeeping.c             |  2 ++
->  5 files changed, 29 insertions(+)
->
-> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
-> index f99d433ff311..3abe20c47e08 100644
-> --- a/Documentation/ABI/testing/sysfs-power
-> +++ b/Documentation/ABI/testing/sysfs-power
-> @@ -413,6 +413,14 @@ Description:
->                 The /sys/power/suspend_stats/last_failed_step file contains
->                 the last failed step in the suspend/resume path.
->
-> +What:          /sys/power/suspend_stats/last_total
-> +Date:          December 2022
-> +Contact:       Mario Limonciello <mario.limonciello@amd.com>
-> +Description:
-> +               The /sys/power/suspend_stats/last_total file contains
-> +               the total duration of the sleep cycle.
-> +               This is measured in microseconds.
-> +
+>Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Nit/bikeshed: "last_total" seems less straightforward then it should
-be? Maybe "total_suspend_time" instead?
-
-> diff --git a/kernel/power/main.c b/kernel/power/main.c
-> index 31ec4a9b9d70..f33012860699 100644
-> --- a/kernel/power/main.c
-> +++ b/kernel/power/main.c
-> @@ -6,6 +6,7 @@
->   * Copyright (c) 2003 Open Source Development Lab
->   */
->
-> +#include <linux/acpi.h>
->  #include <linux/export.h>
->  #include <linux/kobject.h>
->  #include <linux/string.h>
-> @@ -54,6 +55,11 @@ void unlock_system_sleep(unsigned int flags)
->  }
->  EXPORT_SYMBOL_GPL(unlock_system_sleep);
->
-> +void pm_account_suspend_time(const struct timespec64 t)
-> +{
-> +       suspend_stats.last_total = timespec64_add(suspend_stats.last_total, t);
-> +}
-> +
->  void ksys_sync_helper(void)
->  {
->         ktime_t start;
-> @@ -377,6 +383,14 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
->  }
->  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
->
-> +static ssize_t last_total_show(struct kobject *kobj,
-> +               struct kobj_attribute *attr, char *buf)
-> +{
-> +       return sysfs_emit(buf, "%llu\n",
-> +                         timespec64_to_ns(&suspend_stats.last_total) / NSEC_PER_USEC);
-> +}
-> +static struct kobj_attribute last_total = __ATTR_RO(last_total);
-> +
->  static struct attribute *suspend_attrs[] = {
->         &success.attr,
->         &fail.attr,
-> @@ -391,6 +405,7 @@ static struct attribute *suspend_attrs[] = {
->         &last_failed_dev.attr,
->         &last_failed_errno.attr,
->         &last_failed_step.attr,
-> +       &last_total.attr,
->         NULL,
->  };
-
-While not identical, this has some overlap with the logic in
-kernel/time/timekeeping_debug.c
-I wonder if it would make sense to consolidate some of this accounting?
-
-thanks
--john
+Thanks.
