@@ -2,312 +2,176 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9848E62A21F
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 20:44:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5196C62A25B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 21:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiKOTo4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 14:44:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S231204AbiKOUCe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 15:02:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiKOToy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 14:44:54 -0500
-Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4625E24BEF
-        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 11:44:53 -0800 (PST)
-Message-ID: <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
-        s=default; t=1668541490;
-        bh=8ycYa0l03y2Xy+lTC9umglVnxHlMT3eNSgIFIhpuUdo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Qx9AQKBJMTw172ansrvl8rdCaXJZDz8n1dim4r1ghWqbryDa2A+mdZNpTv4AnTFSH
-         VbWDdGoLCPzsaAEYH8LM83yJFw0qwRvlyKkOcNDgZCetKK6TkXkrB+KZnI1Gao34mL
-         9LTzpsKtZJTS0wSUUTHocxJBuJuKZz+XP9A6ksIbdQl0ax2mm14JdqfjgxP9lO/jzK
-         PpTqUJFib0ElGgN6nnNPdPhsTvYYQ1M6YhKNFtRtiE1zteHegeyBLULOpsqbPgRNMQ
-         paGXxwWmo1bzVfOv++XNRCjMVn9r6x5OOOP7peVGTfLw3xRX/pMv9uVks7nYjY1JML
-         bomuTrzr4deJQ==
-Date:   Tue, 15 Nov 2022 20:44:47 +0100
+        with ESMTP id S231578AbiKOUCK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 15:02:10 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B0BD28E04;
+        Tue, 15 Nov 2022 12:02:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bcxFTn2CEWlBPS1TtN0qOe3XJg+8bRV7zDibP/szvMiNAi4UnMoPS/Fbi0OlRgrgjxUu91Do7gDto3lU3U1ZIQoH8Bbr3mWJ78MKS5gL6OE9E3To83bJ2NvQOFigyQ3tGIL1GZ82Kep8veQAOWuaZCDDwjNBqBG1/xQuTV9j9BTv3ld7oS3+Yub168TWPktWq2WvRhjkFdXbC3WaZuGqvXuEQkE9hE1EQj3HYR2LHQc34Fj+kwW0/Gd6mqxOv1Q0h0GpA99zmCRTbyeYxOmAbqRJq7Fj91Ief5a66iWw7aQxiVxE+BJoc8S1+6u5IWDRtomaStKS06AQEP0oyiP8iQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hh11FskTtxEZqoQn3p0cx0bTGV27W4TXK8VWH4Mxpg0=;
+ b=WSjBy6upYlAYvpd18Z98jVNm5Lv7pyIZhj6dHX6AGxedPxUxbw9wTksJo6aaSjDQYpUiPUGXW2f3jHHpeo5ug93vRaJ+b3wMgq5fPateh6S1UzXEB2gOhe1Ts92EPFy/tj5xIyDC52CETmuD8tHRcQJ0whwUqeIE7AP2IHk3TSZoGVPSMtugMRiwCdibiDbu5zsmwmZ7e0kPISnuIkAg0LrSjA1DmXlRykhoY/yyhLxyFvsr4i4yArcVgTZov5d77EsJ8ZYDGZufdFEZyFjw2hrDAzsIJ3vlQ6/49lOdAce1PffXY7S0WBrzVwxABDNpU1LUdGIr2Tkz2G95paT6qA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hh11FskTtxEZqoQn3p0cx0bTGV27W4TXK8VWH4Mxpg0=;
+ b=n70fFsIpS/tTrMx57PtvSwt1avfK2UqQsLzg6vIm/C+g5MxCyQ566nRbYA36NQLePY/IsYAxaqXXvvQST9bS3bqlPTIq08uLI+F4hNuN5Ny9BmNQWJKFtTHnwGCGW5usTG4pVOC2nJDJDX3lLqS925SPtk80QesAh/5sp7lf/hY=
+Received: from BN8PR07CA0008.namprd07.prod.outlook.com (2603:10b6:408:ac::21)
+ by SA1PR12MB6917.namprd12.prod.outlook.com (2603:10b6:806:24c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Tue, 15 Nov
+ 2022 20:02:06 +0000
+Received: from BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:ac:cafe::5a) by BN8PR07CA0008.outlook.office365.com
+ (2603:10b6:408:ac::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.17 via Frontend
+ Transport; Tue, 15 Nov 2022 20:02:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT039.mail.protection.outlook.com (10.13.177.169) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5834.8 via Frontend Transport; Tue, 15 Nov 2022 20:02:06 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Tue, 15 Nov
+ 2022 14:02:05 -0600
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Sven van Ashbrook <svenva@chromium.org>,
+        Raul Rangel <rrangel@chromium.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        "S-k Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>
+Subject: [RFC v3 0/4] Make it easier to measure % in HW sleep state
+Date:   Tue, 15 Nov 2022 14:01:52 -0600
+Message-ID: <20221115200156.12218-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
-        angelogioacchino.delregno@collabora.com, viresh.kumar@linaro.org,
-        Frank Wunderlich <frank-w@public-files.de>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Daniel Golle <daniel@makrotopia.org>,
-        =?UTF-8?Q?H=c3=bchn=2c_Thomas?= <thomas.huehn@hs-nordhausen.de>
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
-From:   Nick <vincent@systemli.org>
-In-Reply-To: <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT039:EE_|SA1PR12MB6917:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8647c367-90b4-425e-774c-08dac74445b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: wCsupEa1ty64Y/ws9ISHKq0Ep5lTlesQ1u38psGQtY7sw+fSAsvfQUAGL1vEi6oXungcLVC43sGJIUQzJN7KsxQDE32PKRzPG5pCuTK4Pw/Q/OpvpHJFj8wcKmUviTA9SXoMVFmLuGj7yvBHBUC1Wnw02gAvyQ5BEj88Oib/AgoGKSNiYly36KqlvdE5LZ2VhozFPxZ6gIDtZbdPKsC4iFsdvvDVUA8pukQJAkLbe2AZVrYvM8Ts8sJ8aVuFD/hnY7WW7cw7ZkyB7lfAcn1p+jcuDuV7vljoyRSwwdVwwuq4p9HqxN7wgkJTEs2n5wzxyNXayjLuZcI14BYvq+yjAYamW24INGfGXkhuWHjO3J2bpbUVZCeduAz5nKWi6fZMnyroJ/XHKbbCYRuiDdq/3pIXfLWcUQ0VadlGaeUQhUTCCgxsD/ijhcBoq9VF8RfrC01BoJZBTzIeKfItgfX4OEOV8TT8Vm5rDwH4G67yIhyUS3Kn2kBbo54KEiAu4OobFN8OO8cGw5iwFBa/htg4CQAAPCbge3Lp8Me1pvdHfMFjjFSm+M9uzdFQgs6k2CO34st6ObsIZiblcN+xmCVBDq8qsDeDOkLUWkXhyIeZonzXQowpVWwQHRLmD7pZpQp75XJHYonei0qCmYJH3q9o0JbEIixUeCGQI2Q6IPxQlBjJgafNTaP4NSxhcuR7ZoJmEvQ0/RiB9BSxF0NjsX+oGtjkT08PgJ86XAMda3yQqw5J1vzmY0YRR/BXunjf4WeW4RtvT4f4yzRh+ykrK896bStfVZ19CKT4mwwuhPCFRg5ompDZAaVkSrpiDYn+aJNB
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(346002)(136003)(396003)(451199015)(40470700004)(46966006)(36840700001)(70586007)(8676002)(70206006)(82310400005)(4326008)(83380400001)(36756003)(36860700001)(8936002)(44832011)(41300700001)(81166007)(5660300002)(356005)(7416002)(47076005)(2616005)(16526019)(40480700001)(426003)(186003)(336012)(7696005)(26005)(1076003)(6666004)(478600001)(54906003)(110136005)(86362001)(316002)(82740400003)(40460700003)(2906002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Nov 2022 20:02:06.7232
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8647c367-90b4-425e-774c-08dac74445b7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT039.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6917
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-I used now the linux-next kernel tree (with 
-https://patchwork.ozlabs.org/project/linux-mtd/list/?series=327227 so 
-single uImage.FIT will work). Same issue:
+Sven van Ashbrook brought a patch to the kernel mailing list that
+attempted to change the reporting level of a s0ix entry issue to a
+different debugging level so that infastructure used by Google could
+better scan logs to catch problems.
 
-> [ 0.886209] Kernel BUG at regulator_check_voltage+0xb0/0xf0 [verbose 
-> debug info unavailable]
->
-> [ 0.894663] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->
-> [ 0.900759] Modules linked in:
->
-> [ 0.903819] CPU: 1 PID: 79 Comm: kworker/1:1 Tainted: G S 
-> 6.1.0-rc5-next-20221115+ #0
->
-> [ 0.904360] pstore: Using crash dump compression: deflate
->
-> [ 0.913038] Hardware name: Bananapi BPI-R64 (DT)
->
-> [ 0.913043] Workqueue: events dbs_work_handler
->
-> [ 0.913056] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS 
-> BTYPE=--)
->
-> [ 0.913063] pc : regulator_check_voltage+0xb0/0xf0
->
-> [ 0.913070] lr : regulator_set_voltage_unlocked+0x88/0x110
->
-> [ 0.913077] sp : ffffffc00cef3b30
->
-> [ 0.913080] x29: ffffffc00cef3b30 x28: ffffff8006f6f800 x27: 
-> ffffff8006f6fa00
->
-> [ 0.931243] mtk-pcie 1a143000.pcie: host bridge /pcie@1a143000 ranges:
->
-> [ 0.934474]
->
-> [ 0.934475] x26: 00000000001312d0 x25: 0000000000000024
->
-> [ 0.939298] mtk-pcie 1a143000.pcie: Parsing ranges property...
->
-> [ 0.944730] x24: 0000000000118c30
->
-> [ 0.948038] mtk-pcie 1a143000.pcie: MEM 0x0020000000..0x0027ffffff -> 
-> 0x0020000000
->
-> [ 0.955155]
->
-> [ 0.955157] x23: 0000000000149970 x22: ffffff8000861800 x21: 
-> ffffff8006f6f800
->
-> [ 0.955166] x20: 00000000001312d0 x19: 0000000000000000 x18: 
-> 00000000cfad1bd3
->
-> [ 0.955174] x17: 000000000000000c x16: 0000000000000005 x15: 
-> 0000000000000000
->
-> [ 1.008473] x14: 0000000000000000 x13: 0000000000000165 x12: 
-> 0101010101010101
->
-> [ 1.015608] x11: 00000000017d7840 x10: 0000000000000850 x9 : 
-> ffffffc00cef3900
->
-> [ 1.017014] mmc0: new HS200 MMC card at address 0001
->
-> [ 1.022740] x8 : ffffff8005ee9f30 x7 : 0000000000000001 x6 : 
-> 00000000001312d0
->
-> [ 1.022748] x5 : 0000000000118c30 x4 : 0000000000000000 x3 : 
-> 0000000000000000
->
-> [ 1.022756] x2 : ffffffc00cef3b68 x1 : ffffffc00cef3b6c
->
-> [ 1.029034] mmcblk0: mmc0:0001 008G30 7.28 GiB
->
-> [ 1.034833] x0 : ffffff8000861800
->
-> [ 1.034838] Call trace:
->
-> [ 1.044528] Alternate GPT is invalid, using primary GPT.
->
-> [ 1.047175] regulator_check_voltage+0xb0/0xf0
->
-> [ 1.052603] FIT: Selected configuration: "config-1" (OpenWrt 
-> bananapi_bpi-r64)
->
-> [ 1.055090] regulator_set_voltage+0x3c/0x64
->
-> [ 1.057539] FIT: kernel sub-image 0x00001000..0x005200f9 "kernel-1" 
-> (ARM64 OpenWrt Linux-6.1-rc2)
->
-> [ 1.062824] mtk_cpufreq_voltage_tracking+0x12c/0x27c
->
-> [ 1.062831] mtk_cpufreq_set_target+0x1c4/0x350
->
-> [ 1.062837] __cpufreq_driver_target+0x2dc/0x660
->
-> [ 1.067289] FIT: flat_dt sub-image 0x00521000..0x005272d9 "fdt-1" 
-> (ARM64 OpenWrt bananapi_bpi-r64 device tree blob)
->
-> [ 1.074484] od_dbs_update+0xb8/0x19c
->
-> [ 1.074490] dbs_work_handler+0x3c/0x7c
->
-> [ 1.078774] FIT: filesystem sub-image 0x00528000..0x00829fff 
-> "rootfs-1" (ARM64 OpenWrt bananapi_bpi-r64 rootfs)
->
-> [ 1.088560] process_one_work+0x200/0x3a0
->
-> [ 1.093624] mmcblk0: p1 p2 p3 p4 p65(rootfs-1) p66(rootfs_data) p128
->
-> [ 1.098116] worker_thread+0x170/0x4c0
->
-> [ 1.104575] mmcblk0boot0: mmc0:0001 008G30 4.00 MiB
->
-> [ 1.114009] kthread+0xd4/0xe0
->
-> [ 1.114016] ret_from_fork+0x10/0x20
->
-> [ 1.114028] Code: 6b04001f 54fffe6b 2a0003e4 17fffff3 (d4210000)
->
-> [ 1.114033] ---[ end trace 0000000000000000 ]---
-> [ 0.878926] ------------[ cut here ]------------
->
+This approach was rejected, but during the conversation another
+suggestion was made by David E. Box to introduce some infrastructure
+into the kernel to report this information.
 
-Full log:
-https://gist.github.com/PolynomialDivision/4a555079887b288f4795b28eb3607aa9
+As it's information that is reported by both AMD and Intel platforms
+over s2idle, this seems to make sense.
 
-Big thanks to Daniel helping me to build a vanilla kernel with OpenWrt 
-build system.
+RFC v1 and v2 introduced two new sysfs files to report the information, but
+Rafael pointed out that there was already a file that could be used on
+Intel platforms: `low_power_idle_system_residency_us`.
 
-Bests
-Nick
+RFC v3 creates this file for AMD platforms and also introduces another file
+that can be used to determine total sleep time:
+`/sys/power/suspend_stats/last_total`.
 
-On 11/10/22 12:26, Matthias Brugger wrote:
-> Hi Nick,
->
-> On 09/11/2022 14:35, Nick wrote:
->> Hi,
->> while trying to bump OpenWrt Kernel to 6.1rc2 I noticed that the 
->> kernel is crashing while booting on a Banana Pi R64 (MT7622):
->>
->>> [    1.055565] ------------[ cut here ]------------
->>> [    1.060204] Kernel BUG at regulator_check_voltage+0xb0/0xf0 
->>> [verbose debug info unavailable]
->>> [    1.062418] mtk-pcie 1a143000.pcie: host bridge /pcie@1a143000 
->>> ranges:
->>> [    1.068656] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
->>> [    1.075248] mtk-pcie 1a143000.pcie: Parsing ranges property...
->>> [    1.081257] Modules linked in:
->>> [    1.081264] CPU: 1 PID: 328 Comm: kworker/1:7 Tainted: G 
->>> S                 6.1-rc2 #0
->>> [    1.087088] mtk-pcie 1a143000.pcie:      MEM 
->>> 0x0020000000..0x0027ffffff -> 0x0020000000
->>> [    1.090126] Hardware name: Bananapi BPI-R64 (DT)
->>> [    1.110541] Workqueue: events dbs_work_handler
->>> [    1.114988] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS 
->>> BTYPE=--)
->>> [    1.121944] pc : regulator_check_voltage+0xb0/0xf0
->>> [    1.126728] lr : regulator_set_voltage_unlocked+0x88/0x110
->>> [    1.129638] mmc1: host does not support reading read-only switch, 
->>> assuming write-enable
->>> [    1.132207] sp : ffffffc00956bb30
->>> [    1.132209] x29: ffffffc00956bb30 x28: ffffff8000efb400 x27: 
->>> 0000000000000024
->>> [    1.132219] x26: 00000000001312d0 x25: 0000000000118c30 x24: 
->>> 00000000001312d0
->>> [    1.132227] x23: 0000000000149970
->>> [    1.146036] mmc1: new high speed SDHC card at address e624
->>> [    1.150642]  x22: ffffff800038f800
->>> [    1.159192] mmcblk1: mmc1:e624 SL16G 14.8 GiB
->>> [    1.161068]  x21: ffffff8000efb100
->>> [    1.161072] x20: 00000000001312d0
->>> [    1.175424] GPT:partition_entry_array_crc32 values don't match: 
->>> 0xa0b5ce6d != 0xab54d286
->>> [    1.177757]  x19: 0000000000000000 x18: 00000000799b2550
->>> [    1.181067] GPT:Primary header thinks Alt. header is not at the 
->>> end of the disk.
->>> [    1.189143] x17: 0000000000000003 x16: 0000000000000001 x15: 
->>> 0000000000000000
->>> [    1.189151] x14: 0000000000000000 x13: 0000000000000146 x12: 
->>> 00000000fa83b2da
->>> [    1.189159] x11: 000000000000013d x10: 0000000000000850
->>> [    1.194472] GPT:305184 != 31116287
->>> [    1.201842]  x9 : ffffffc00956b910
->>> [    1.201846] x8 : ffffff8000b9edf0 x7 : 0000000000000001
->>> [    1.208970] GPT:Alternate GPT header not at the end of the disk.
->>> [    1.216092]  x6 : 00000000001312d0
->>> [    1.216095] x5 : 0000000000118c30 x4 : 0000000000000000 x3 : 
->>> 0000000000000000
->>> [    1.216103] x2 : ffffffc00956bb68 x1 : ffffffc00956bb6c
->>> [    1.221321] GPT:305184 != 31116287
->>> [    1.224706]  x0 : ffffff800038f800
->>> [    1.228095] GPT: Use GNU Parted to correct GPT errors.
->>> [    1.233307]
->>> [    1.233309] Call trace:
->>> [    1.233312]  regulator_check_voltage+0xb0/0xf0
->>> [    1.242680] FIT: Selected configuration: 
->>> "config-mt7622-bananapi-bpi-r64-pcie1" (OpenWrt bananapi_bpi-r64 
->>> with mt7622-bananapi-bpi-r64-pcie1)
->>> [    1.242694]  regulator_set_voltage+0x3c/0x64
->>> [    1.249831] FIT:           kernel sub-image 
->>> 0x00001000..0x0052fd0a "kernel-1" (ARM64 OpenWrt Linux-6.1-rc2)
->>> [    1.255030]  mtk_cpufreq_voltage_tracking+0x11c/0x26c
->>> [    1.255039]  mtk_cpufreq_set_target+0x1c4/0x350
->>> [    1.258444] FIT:          flat_dt sub-image 
->>> 0x00530000..0x005380c5 "fdt-1" (ARM64 OpenWrt bananapi_bpi-r64 
->>> device tree blob)
->>> [    1.261820]  __cpufreq_driver_target+0x2f4/0x674
->>> [    1.261826]  od_dbs_update+0xb8/0x19c
->>> [    1.266969] FIT:          flat_dt sub-image 
->>> 0x00539000..0x0053911a "fdt-mt7622-bananapi-bpi-r64-pcie1" (ARM64 
->>> OpenWrt bananapi_bpi-r64 device tree overlay 
->>> mt7622-bananapi-bpi-r64-pcie1)
->>> [    1.268431]  dbs_work_handler+0x3c/0x7c
->>> [    1.270883] FIT:          flat_dt sub-image 
->>> 0x0053a000..0x0053a20f "fdt-mt7622-bananapi-bpi-r64-sata" (ARM64 
->>> OpenWrt bananapi_bpi-r64 device tree overlay 
->>> mt7622-bananapi-bpi-r64-sata)
->>> [    1.275297]  process_one_work+0x200/0x3a0
->>> [    1.287998] FIT:       filesystem sub-image 
->>> 0x0053b000..0x00859fff "rootfs-1" (ARM64 OpenWrt bananapi_bpi-r64 
->>> rootfs)
->>> [    1.292237]  worker_thread+0x170/0x4c0
->>> [    1.292244]  kthread+0xd4/0xe0
->>> [    1.302066] FIT: selecting configured loadable "rootfs-1" to be 
->>> root filesystem
->>> [    1.307092]  ret_from_fork+0x10/0x20
->>> [    1.311631]  mmcblk1: p1 p2 p3 p4 p5 p6 p65(rootfs-1) 
->>> p66(rootfs_data) p128
->>> [    1.322903] Code: 6b04001f 54fffe6b 2a0003e4 17fffff3 (d4210000)
->>> [    1.413322] ---[ end trace 0000000000000000 ]---
->> The complete log can be found here:
->> https://gist.githubusercontent.com/PolynomialDivision/395d009c84b426d780549c5fa1f64ff1/raw/886d621d2bf6f03429586adf8a14a6c37c8d8a7d/mt7622-6-1.log 
->>
->>
->> Reverting commit "cpufreq: mediatek: Refine 
->> mtk_cpufreq_voltage_tracking()" fixes the kernel bug:
->> https://github.com/torvalds/linux/commit/6a17b3876bc8303612d7ad59ecf7cbc0db418bcd 
->>
->>
->> The revert commit can be found here:
->> https://github.com/PolynomialDivision/openwrt/commit/1df941d0334000e3aced43b7d50cdac0da8bf427 
->>
->>
->> The branch I use to build the 6.1rc2 on a Banana Pi R64 can be found 
->> here:
->> https://github.com/PolynomialDivision/openwrt/commits/bump-mt7622-rebase
->>
->
-> Thanks for the report.
-> Could you test with a plain upstream kernel? That would help us to 
-> verify that this is a upstream problem and not introduced by some 
-> openwrt patches.
->
-> Regards,
-> Matthias
+With these two files a simple shell script can be run after suspend to
+calculate the percentage.
+
+```
+ #!/bin/sh
+total=$(cat /sys/power/suspend_stats/last_total)
+hw=$(cat /sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us)
+percent=$(awk -v hw=$hw -v total=$total 'BEGIN { printf "%.2f%%", (hw/total*100) }')
+echo "Last ${total}us suspend cycle spent $percent of the time in a hardware sleep state."
+```
+
+A sample run on an AMD platform that was just sleeping with this series on
+top of 6.1-rc5 shows the following:
+ # ./compare.sh
+Last 15699838us suspend cycle spent 98.63% of the time in a hardware sleep state.
+
+Further discussion to be expected on this series:
+
+* What last_total will represent from the suspend cycle
+
+* Whether the semantics of all platforms will be the same for
+  `low_power_idle_system_residency_us`
+  - AMD platforms reset this counter before s2idle entry.  Do Intel? Others?
+
+* Maybe the *kernel* should be responsible to do the calculation and export
+  a `last_hw_sleep_percent` file instead. Platform differences can be
+  abstracted then within individual drivers.
+
+Mario Limonciello (4):
+  PM: Add a sysfs file to represent the total sleep duration
+  platform/x86/intel/pmc: core: Drop check_counters
+  platform/x86/amd: pmc: Report duration of time in deepest hw state
+  platform/x86/amd: pmc: Populate cpuidle sysfs file with hw sleep data
+
+ Documentation/ABI/testing/sysfs-amd-pmc |  6 ++++++
+ Documentation/ABI/testing/sysfs-power   |  8 ++++++++
+ drivers/platform/x86/amd/pmc.c          | 27 ++++++++++++++++++++++---
+ drivers/platform/x86/intel/pmc/core.c   |  7 ++-----
+ drivers/platform/x86/intel/pmc/core.h   |  1 -
+ include/linux/suspend.h                 |  2 ++
+ kernel/power/main.c                     | 15 ++++++++++++++
+ kernel/power/suspend.c                  |  2 ++
+ kernel/time/timekeeping.c               |  2 ++
+ 9 files changed, 61 insertions(+), 9 deletions(-)
+
+-- 
+2.34.1
+
