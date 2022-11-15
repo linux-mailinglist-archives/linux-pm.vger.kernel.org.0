@@ -2,104 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52012629991
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 14:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25CF7629A76
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 14:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiKONFe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 08:05:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39556 "EHLO
+        id S230130AbiKONcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 08:32:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiKONFd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 08:05:33 -0500
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC2BD62E8;
-        Tue, 15 Nov 2022 05:05:29 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id k2so9382935qkk.7;
-        Tue, 15 Nov 2022 05:05:29 -0800 (PST)
+        with ESMTP id S238409AbiKONcA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 08:32:00 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AAB329342;
+        Tue, 15 Nov 2022 05:31:39 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id 130so14097234pfu.8;
+        Tue, 15 Nov 2022 05:31:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SDCfTqp5RHmpPPiYAMZqgPg+FlYe7rD3rpk+dlOlmrs=;
+        b=KrwYvRnprSGRln3TvOkC1YiP6Df+3DLqQfIYTk2EiIbrltz1T4KtUySjLgIBWDzDcb
+         cVg5xSn7ARmm4NQ3818YdLO3qynehO02Svna5kXSG8afMINz3ycoBmCeiJqH8UlkEC+o
+         1vyNhVAtowXtOKXPwT4e8ZUetr1cWzWKL+TfSqssgLWsAPZRAUmziml9jJXaEBLfJwcc
+         Q5KXTWE13kC4/6tvcIxv8ToSD4WDfbFAtEbjqyn7343Q/9VmUZxCdG0CD5BcCWarKb+V
+         SY0H/OW7Fiy0y/0nKLdoLVC0/99/3negtgyRr4/cirsfLrPnMGYZmnI1Z0NXMFu9H5Wy
+         oKag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/SWw5MqqbrdMF1DqGQ9iVp12fT794TfRCEwXQNWKkW4=;
-        b=du7Fk4pGYOelA7kIKc6mkh8N9gQEL10iN6ftIEZh64Mra9LNAgyjAfUAxF4u7bGd3A
-         Kx/DJH0o/ZK2Uqt0OfW6rlANVICcSJyvO9gcyP1vdDnNkNQdr4SGrxUWGE5VIsTyMOSN
-         Ql5NXDn06Fow5CZCPSzMFoM6QWnChSqMrE9gQQTiJHWzRw5/XhzulCYyrmV+BmDLy15a
-         cVRT8riBQIrMvLk6XVDFauZecrp6/rB5zWqkK7yrVEJ8NfroCsYqOGZKlQJ3kuPty/K+
-         hKQs/GirJOsfIfLNZ/zx+QkBweQKuPhlcIoQHruY1JN95Hp0JZJlIrufIcwssR/2bhQm
-         5kZg==
-X-Gm-Message-State: ANoB5pkGZETw83QDgekodrA1bp6nTQ/e1L5+PE/Sqpn+2s8Zt/iD2EXS
-        TciHwD4z3c5Gg5961Lgu/TzONBZSjRxewZhnV/E=
-X-Google-Smtp-Source: AA0mqf4oP3P5ztH1eKigJEfPhPFdnChreVhMR1lypx2DeoaKHME6ppmvibS5H+/XN4zEdVn5sJIQD5I1dfivAPhGmLw=
-X-Received: by 2002:a37:638f:0:b0:6ec:fa04:d97c with SMTP id
- x137-20020a37638f000000b006ecfa04d97cmr14389550qkb.764.1668517528866; Tue, 15
- Nov 2022 05:05:28 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SDCfTqp5RHmpPPiYAMZqgPg+FlYe7rD3rpk+dlOlmrs=;
+        b=U05mLKhK1jbGS0CET/i5tE8U/JvnQ6dTnqabCXvq8WhLbmnRDO9No3s3PFNiCo6ODV
+         pfE0sEvOYkao02nWGNzRCWxJKc6T28vcXpuV5C7EyFMb0MM2gTITg969585WGO7GyzJE
+         w1ZW9IWDSPvjVTtBvz7iHI2eYx/cyXbJc602j1qa2a8ShZm4yRNZJZdx6rGiBXBjd4+l
+         r6hlfSGU+O8qCsfm9SpPOY11AeyZ0+knEVxsMUHx/Bw0RGDV5bZeroGyD13H6hM5OtsK
+         ekptxUWRERmb68O4kfbrMhNfSUCP7Ra66k82rkJGW78GCY1Oesx3kZda63/soIZN4PYI
+         xPCA==
+X-Gm-Message-State: ANoB5pkSVyt0Q9DRNTZForL+3g26TA7hUtOhzGqoEftanahkIlsQnwuH
+        YZWcxc0wvGNMYezgEwPPzdM=
+X-Google-Smtp-Source: AA0mqf6ovMAjD8mvMI4/+0p+hFXFvgTHeISLflHSnHfj/zqnwHHXWaPzQysZQnFtnWXnoEXHS5IMYQ==
+X-Received: by 2002:a05:6a00:26c4:b0:563:b88c:8d34 with SMTP id p4-20020a056a0026c400b00563b88c8d34mr18459182pfw.68.1668519098569;
+        Tue, 15 Nov 2022 05:31:38 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i65-20020a628744000000b0056b6c7a17c6sm9085486pfe.12.2022.11.15.05.31.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 05:31:37 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 15 Nov 2022 05:31:36 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] thermal/core: Protect thermal device operations
+ against removal
+Message-ID: <20221115133136.GC4189373@roeck-us.net>
+References: <20221110152500.3032655-1-linux@roeck-us.net>
+ <CAJZ5v0j50TWszcRWkb_m4BDQ_gEpCuJDR2EuOJWN8zvBf_KkUw@mail.gmail.com>
 MIME-Version: 1.0
-References: <202211150900.CUzIO2xF-lkp@intel.com> <20221115101314.pz53eb54rt4ngojm@bogus>
-In-Reply-To: <20221115101314.pz53eb54rt4ngojm@bogus>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 15 Nov 2022 14:05:16 +0100
-Message-ID: <CAJZ5v0jDMk=0A1ch9P9eeiKXGdaTLS-JnC-vxfKD4u0WmSTp7w@mail.gmail.com>
-Subject: Re: [rafael-pm:bleeding-edge 67/68] arch/arm64/kernel/acpi.c:433:5:
- warning: no previous prototype for 'acpi_ffh_address_space_arch_setup'
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
-        devel@acpica.org, linux-pm@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0j50TWszcRWkb_m4BDQ_gEpCuJDR2EuOJWN8zvBf_KkUw@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 11:13 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Hi Rafael,
->
-> On Tue, Nov 15, 2022 at 09:44:13AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-> > head:   8992b8d17e6c314a528a5bce386de28701f2a2ef
-> > commit: 1d280ce099db396e092cac1aa9bf2ea8beee6d76 [67/68] arm64: Add architecture specific ACPI FFH Opregion callbacks
-> > config: arm64-allyesconfig
-> > compiler: aarch64-linux-gcc (GCC) 12.1.0
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?id=1d280ce099db396e092cac1aa9bf2ea8beee6d76
-> >         git remote add rafael-pm https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-> >         git fetch --no-tags rafael-pm bleeding-edge
-> >         git checkout 1d280ce099db396e092cac1aa9bf2ea8beee6d76
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/kernel/
+On Mon, Nov 14, 2022 at 07:06:57PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Nov 10, 2022 at 4:25 PM Guenter Roeck <linux@roeck-us.net> wrote:
 > >
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
+> > Accesses to thermal zones, and with it to thermal zone device operations,
+> > are still possible after the thermal zone device has been unregistered.
+> > For example, thermal_zone_get_temp() can be called from temp_show()
+> > in thermal_sysfs.c if the sysfs attribute was opened before the thermal
+> > device was unregistered. This is problematic and may result in crashes
+> > since the operations data structure and the underlying code may be gone
+> > when the calls are made.
 > >
-> > All warnings (new ones prefixed by >>):
+> > The following series solves the problem by protecting accesses to thermal
+> > device operations with the thermal device mutex, and by verifying that the
+> > thermal device is still registered after the mutex has been acquired.
 > >
-> >    arch/arm64/kernel/acpi.c:422:30: error: field 'info' has incomplete type
-> >      422 |         struct acpi_ffh_info info;
-> >          |                              ^~~~
-> > >> arch/arm64/kernel/acpi.c:433:5: warning: no previous prototype for 'acpi_ffh_address_space_arch_setup' [-Wmissing-prototypes]
-> >      433 | int acpi_ffh_address_space_arch_setup(void *handler_ctxt, void **region_ctxt)
-> >          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> > >> arch/arm64/kernel/acpi.c:476:5: warning: no previous prototype for 'acpi_ffh_address_space_arch_handler' [-Wmissing-prototypes]
-> >      476 | int acpi_ffh_address_space_arch_handler(acpi_integer *value, void *region_context)
-> >          |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > This was previously sent as RFC/RFT as single patch [1]. The code was reworked
+> > to match thermal subsystem changes made between v6.0 and v6.1, and it was
+> > split into several patches to simplify review.
 > >
->
-> I am aware of these warnings and left it unaddressed for consistency. There
-> are few(6-8) such instance with similar warnings upstream as well. Let me know
-> if you prefer to get them fixed, I can fix them all in one go if you are fine
-> with that.
+> > [1] https://lore.kernel.org/linux-pm/20221004033936.1047691-1-linux@roeck-us.net/
+> >
+> > v2: Improved documentation, rearranged code.
+> >     No functional changes. See individual patches for details.
+> >
+> > ----------------------------------------------------------------
+> > Guenter Roeck (9):
+> >       thermal/core: Destroy thermal zone device mutex in release function
+> >       thermal/core: Delete device under thermal device zone lock
+> >       thermal/core: Ensure that thermal device is registered in thermal_zone_get_temp
+> >       thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
+> >       thermal/core: Introduce locked version of thermal_zone_device_update
+> >       thermal/core: Protect hwmon accesses to thermal operations with thermal zone mutex
+> >       thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
+> >       thermal/core: Remove thermal_zone_set_trips()
+> >       thermal/core: Protect thermal device operations against thermal device removal
+> >
+> >  drivers/thermal/thermal_core.c    | 76 +++++++++++++++++++++++--------------
+> >  drivers/thermal/thermal_core.h    |  3 +-
+> >  drivers/thermal/thermal_helpers.c | 67 +++++++++++++++++++++------------
+> >  drivers/thermal/thermal_hwmon.c   | 10 ++++-
+> >  drivers/thermal/thermal_sysfs.c   | 79 ++++++++++++++++++++++++++++++++-------
+> >  5 files changed, 168 insertions(+), 67 deletions(-)
+> 
+> All applied as 6.2 material, thanks!
 
-Well, it would be good to fix those, at least for the sake of reducing
-noise if nothing else.
+Thanks a lot!
+
+Guenter
