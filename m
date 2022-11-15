@@ -2,125 +2,207 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F02962A354
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 21:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F19362A40B
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 22:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238506AbiKOUsw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 15:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
+        id S238726AbiKOV0N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 16:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238362AbiKOUsq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 15:48:46 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D5525A;
-        Tue, 15 Nov 2022 12:48:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668545319; x=1700081319;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lztYRjluQ1xzm5255jHZhSxEZVcjuHk08XP3pTKqqCg=;
-  b=U2mWwY/NuyE+SS2n0StuScX9+kXzSMAOW8Ebntwo8L5jPSlrkqHT8pgG
-   kzFbkYM19+sPakjl4R6JkA+befzhJ6i2vOdjpidzomX5o/3bouN4TmUjt
-   ZPMkh2GzO74FmpjEL+MuaKNFc3RC08/udPEXEqQhX9+tHgr5/L3T7NvjY
-   TBZxcXh3BRspd9EISjjafkiRd381e99vtivFvctT1kelvumGXorGeH+sq
-   LMso1+mCVDN11FRRcXo+ickcNFxj1WpO1KkmyY9O8ULCZAObrm70dYzbV
-   JbCq4szN+Ao78zLPiHkJ0EPzzufTWdxMSvsFUSQX2VvJxmFtUsfjcMOnh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="299891365"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="299891365"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 12:48:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="764058818"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="764058818"
-Received: from slmckinn-mobl.amr.corp.intel.com (HELO desk) ([10.255.231.2])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 12:48:35 -0800
-Date:   Tue, 15 Nov 2022 12:48:34 -0800
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>, thomas.lendacky@amd.com,
-        "H. Peter Anvin" <hpa@zytor.com>, hdegoede@redhat.com,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        Pavel Machek <pavel@ucw.cz>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David.Kaplan@amd.com, Borislav Petkov <bp@alien8.de>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        antonio.gomez.iglesias@linux.intel.com
-Subject: Re: [PATCH v3 2/2] x86/pm: Add enumeration check before spec MSRs
- save/restore setup
-Message-ID: <20221115204834.dkb7yecr227lj277@desk>
-References: <cover.1668539735.git.pawan.kumar.gupta@linux.intel.com>
- <c24db75d69df6e66c0465e13676ad3f2837a2ed8.1668539735.git.pawan.kumar.gupta@linux.intel.com>
- <CAJZ5v0j6GBAx-UTTx2Oe1Y+bwpRuqifoNx4vBu1Vi9K93TS9JA@mail.gmail.com>
+        with ESMTP id S238809AbiKOVZy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 16:25:54 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7A5A1BE
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 13:25:52 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id l14so26576722wrw.2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 13:25:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+RQYtZdy4bFUQhGXuI62wI3n3sEiXL3rrLvArp8C0KQ=;
+        b=sEuBdlDm+Fd/WLiW0/FG+MxIwi5frs55d4RDhx5o/mCxy6wfIG51/944gZCkDVqndN
+         udhKfEzWcdQuVodXWzp48g2ABToxWqwnzf9APbjlvKiM81u8WcD7OxNeiY9g7pb71paF
+         ZmVS/FV7iu2WF4ccHx9+lpnx1caDtd2i4GO9EwlHqzRZmkIV8MafYjvcB+enC8KTM8zl
+         XYzyP9RNZbTaI9WmwAUZ/Om1GQJE2JSmppCbBwoOpDBMmya6Hzzxl8uWjDvJuqBpwRUu
+         x/H7b0zbCqpjyUTUd6uhwBY99CL0sdy+oIKU58KkVdqGxjNEif/eyVDOctl8z7ycbrvQ
+         wmfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+RQYtZdy4bFUQhGXuI62wI3n3sEiXL3rrLvArp8C0KQ=;
+        b=7wEpkoJ/aQQKJF8jbs4zFWcOQadRP35AJkSX2ZBXlMONlGaQ/6CwRDDb20leNrIooT
+         IOksj58xyGnZWdeIKKgFzJGR+6UrBluAO9CNEjCEUAyrnlYbK2GxG/mfJshPAwnYNuhF
+         UhevvVU4rMygFbDrxc5cvfcKlkPromDZJ6ArlrJnsRwlGtnslcjxIBew4TzPqmbpuulS
+         0oBg8kJHvg/AR8dC543Gkbk98yPJ7loRa8ae1T//8Viw4h52TIhAiyXK8SIUwiW19QCg
+         Tocvunm5UW+Lez8OD2txIGgHI4IqzzeYgZJhgB7zeBJuywef28LjGPCia3iXAHmuaHyF
+         EtaQ==
+X-Gm-Message-State: ANoB5pkCof9sBJiNqfqnmyN9Pu+8mpKcJ7v5QrRaiDf1vRVnzXhl3lWN
+        S1jZfgBbl7P2yJnyOAVk+tt7dA==
+X-Google-Smtp-Source: AA0mqf4Z5kW/mmVJi82pAXIix3yGil/wtSk+5owjAXaWwkoPht0cu1OaAnDVhSOBeccoo+RTjQa5Kg==
+X-Received: by 2002:adf:fcce:0:b0:236:6ab6:a51c with SMTP id f14-20020adffcce000000b002366ab6a51cmr12438387wrs.54.1668547551445;
+        Tue, 15 Nov 2022 13:25:51 -0800 (PST)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id x4-20020a1c7c04000000b003cf7055c014sm25406wmc.1.2022.11.15.13.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Nov 2022 13:25:51 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v2] PM: domains: Reverse the order of performance and enabling ops
+Date:   Tue, 15 Nov 2022 23:25:43 +0200
+Message-Id: <20221115212543.1745498-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0j6GBAx-UTTx2Oe1Y+bwpRuqifoNx4vBu1Vi9K93TS9JA@mail.gmail.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 15, 2022 at 08:23:35PM +0100, Rafael J. Wysocki wrote:
->On Tue, Nov 15, 2022 at 8:17 PM Pawan Gupta
-><pawan.kumar.gupta@linux.intel.com> wrote:
->>
->> pm_save_spec_msr() keeps a list of all the MSRs which _might_ need to be
->> saved and restored at hibernate and resume.  However, it has zero
->> awareness of CPU support for these MSRs.  It mostly works by
->> unconditionally attempting to manipulate these MSRs and relying on
->> rdmsrl_safe() being able to handle a #GP on CPUs where the support is
->> unavailable.
->>
->> However, it's possible for reads (RDMSR) to be supported for a given MSR
->> while writes (WRMSR) are not.  In this case, msr_build_context() sees a
->> successful read (RDMSR) and marks the MSR as 'valid'.  Then, later, a
->> write (WRMSR) fails, producing a nasty (but harmless) error message.
->> This causes restore_processor_state() to try and restore it, but writing
->> this MSR is not allowed on the Intel Atom N2600 leading to:
->>
->>   unchecked MSR access error: WRMSR to 0x122 (tried to write 0x0000000000000002) \
->>      at rIP: 0xffffffff8b07a574 (native_write_msr+0x4/0x20)
->>   Call Trace:
->>    <TASK>
->>    restore_processor_state
->>    x86_acpi_suspend_lowlevel
->>    acpi_suspend_enter
->>    suspend_devices_and_enter
->>    pm_suspend.cold
->>    state_store
->>    kernfs_fop_write_iter
->>    vfs_write
->>    ksys_write
->>    do_syscall_64
->>    ? do_syscall_64
->>    ? up_read
->>    ? lock_is_held_type
->>    ? asm_exc_page_fault
->>    ? lockdep_hardirqs_on
->>    entry_SYSCALL_64_after_hwframe
->>
->> To fix this, add the corresponding X86_FEATURE bit for each MSR.  Avoid
->> trying to manipulate the MSR when the feature bit is clear. This
->> required adding a X86_FEATURE bit for MSRs that do not have one already,
->> but it's a small price to pay.
->>
->> Fixes: 73924ec4d560 ("x86/pm: Save the MSR validity status at context setup")
->> Reported-by: Hans de Goede <hdegoede@redhat.com>
->> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
->> Cc: stable@kernel.org
->
->Fine with me:
->
->Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The ->set_performance_state() needs to be called before ->power_on()
+when a genpd is powered on, and after ->power_off() when a genpd is
+powered off. Do this in order to let the provider know to which
+performance state to power on the genpd, on the power on sequence, and
+also to maintain the performance for that genpd until after powering off,
+on power off sequence.
 
-Thanks.
+There is no scenario where a consumer would need its genpd enabled and
+then its performance state increased. Instead, in every scenario, the
+consumer needs the genpd to be enabled from the start at a specific
+performance state.
+
+And same logic applies to the powering down. No consumer would need its
+genpd performance state dropped right before powering down.
+
+Now, there are currently two vendors which use ->set_performance_state()
+in their genpd providers. One of them is Tegra, but the only genpd provider
+(PMC) that makes use of ->set_performance_state() doesn't implement the
+->power_on() or ->power_off(), and so it will not be affected by the ops
+reversal.
+
+The other vendor that uses it is Qualcomm, in multiple genpd providers
+actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
+use of ->set_performance_state() need the order between enabling ops and
+the performance setting op to be reversed. And the reason for that is that
+it currently translates into two different voltages in order to power on
+a genpd to a specific performance state. Basically, ->power_on() switches
+to the minimum (enabling) voltage for that genpd, and then
+->set_performance_state() sets it to the voltage level required by the
+consumer.
+
+By reversing the call order, we rely on the provider to know what to do
+on each call, but most popular usecase is to cache the performance state
+and postpone the voltage setting until the ->power_on() gets called.
+
+As for the reason of still needing the ->power_on() and ->power_off() for a
+provider which could get away with just having ->set_performance_state()
+implemented, there are consumers that do not (nor should) provide an
+opp-table. For those consumers, ->set_performance_state() will not be
+called, and so they will enable the genpd to its minimum performance state
+by a ->power_on() call. Same logic goes for the disabling.
+
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+---
+
+Changes since v1:
+ - Added performance state drop on power on failure, like Ulf suggested
+
+ drivers/base/power/domain.c | 36 +++++++++++++++++++++---------------
+ 1 file changed, 21 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index e5f4e5a2eb9e..967bcf9d415e 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -964,8 +964,8 @@ static int genpd_runtime_suspend(struct device *dev)
+ 		return 0;
+ 
+ 	genpd_lock(genpd);
+-	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 	genpd_power_off(genpd, true, 0);
++	gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 	genpd_unlock(genpd);
+ 
+ 	return 0;
+@@ -1003,9 +1003,8 @@ static int genpd_runtime_resume(struct device *dev)
+ 		goto out;
+ 
+ 	genpd_lock(genpd);
++	genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+ 	ret = genpd_power_on(genpd, 0);
+-	if (!ret)
+-		genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+ 	genpd_unlock(genpd);
+ 
+ 	if (ret)
+@@ -1043,8 +1042,8 @@ static int genpd_runtime_resume(struct device *dev)
+ err_poweroff:
+ 	if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+ 		genpd_lock(genpd);
+-		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 		genpd_power_off(genpd, true, 0);
++		gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+ 		genpd_unlock(genpd);
+ 	}
+ 
+@@ -2733,17 +2732,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 	dev->pm_domain->detach = genpd_dev_pm_detach;
+ 	dev->pm_domain->sync = genpd_dev_pm_sync;
+ 
+-	if (power_on) {
+-		genpd_lock(pd);
+-		ret = genpd_power_on(pd, 0);
+-		genpd_unlock(pd);
+-	}
+-
+-	if (ret) {
+-		genpd_remove_device(pd, dev);
+-		return -EPROBE_DEFER;
+-	}
+-
+ 	/* Set the default performance state */
+ 	pstate = of_get_required_opp_performance_state(dev->of_node, index);
+ 	if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
+@@ -2755,6 +2743,24 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+ 			goto err;
+ 		dev_gpd_data(dev)->default_pstate = pstate;
+ 	}
++
++	if (power_on) {
++		genpd_lock(pd);
++		ret = genpd_power_on(pd, 0);
++		genpd_unlock(pd);
++	}
++
++	if (ret) {
++		/* Drop the default performance state */
++		if (dev_gpd_data(dev)->default_pstate) {
++			dev_pm_genpd_set_performance_state(dev, 0);
++			dev_gpd_data(dev)->default_pstate = 0;
++		}
++
++		genpd_remove_device(pd, dev);
++		return -EPROBE_DEFER;
++	}
++
+ 	return 1;
+ 
+ err:
+-- 
+2.34.1
+
