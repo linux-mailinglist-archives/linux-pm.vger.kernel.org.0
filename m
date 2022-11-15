@@ -2,246 +2,183 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FF4462A302
-	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 21:33:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD83C62A33D
+	for <lists+linux-pm@lfdr.de>; Tue, 15 Nov 2022 21:44:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238363AbiKOUdQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 15 Nov 2022 15:33:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
+        id S231728AbiKOUob (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 15 Nov 2022 15:44:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiKOUc7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 15:32:59 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1322D751;
-        Tue, 15 Nov 2022 12:30:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668544222; x=1700080222;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=nwVVHGJwYKY5kCjLKGilRmLEBJRYK6W7/9ysp6hMtaQ=;
-  b=d9HHfMeTlUVRnoXO3UiE144L7AMM9YzXa6Qb719N+z5QJ8riwJTBaQIw
-   1+4CuDfweYnYM1qnv4S5CxBMbn1xBUGm6mJh12vreV9vwuBzxxAxPKFdZ
-   Oy6ZZ6LPt0p4FpDvEJG7iaHXlHuVCTpAaSQC9XNEdREqsFwQNg8kSa89e
-   ZDySZAOOXICcNChgBnkvlpiClcEM/gAXJ/Hzl2+EUYhN1IMam7KCrk8aq
-   vJEdxEY9TnOSv0kTVUNeobefnnoI+EqxzJ+e/BnAjv0EzDuajbDraBcbb
-   TGgmOLRB2iuQnVYyGkHrPc0JGGVbXl1R7cCXdC1049Fij2oG53sHyJ4je
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="312367031"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="312367031"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2022 12:30:21 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10532"; a="813814464"
-X-IronPort-AV: E=Sophos;i="5.96,166,1665471600"; 
-   d="scan'208";a="813814464"
-Received: from lkp-server01.sh.intel.com (HELO ebd99836cbe0) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 15 Nov 2022 12:30:18 -0800
-Received: from kbuild by ebd99836cbe0 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1ov2ZV-0001e7-2k;
-        Tue, 15 Nov 2022 20:30:17 +0000
-Date:   Wed, 16 Nov 2022 04:30:07 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     nouveau@lists.freedesktop.org, netdev@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-mm@kvack.org,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-afs@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master] BUILD REGRESSION
- 3c1f24109dfc4fb1a3730ed237e50183c6bb26b3
-Message-ID: <6373f6cf.OhGqx4uDp+acnhuc%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231776AbiKOUo1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 15 Nov 2022 15:44:27 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5023E209A2
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 12:44:26 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id p4so15900094vsa.11
+        for <linux-pm@vger.kernel.org>; Tue, 15 Nov 2022 12:44:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=fki+0TCoTrte3/BJmTglaCbQEGDgk5B9kayNvnzRPWM=;
+        b=Q+lW7U/1515XSKweAMw5eX05XaxUGZTKGcd7QsyfGV2BIVZ4vO6qOo11M9Bddjyytv
+         DDMWMCivk2+y76oMjBHBSQY+HCarazuvA/bDaWBvlCpuPgBu0JOWsyEeHaZhNQHuBJo7
+         Hvvh2Ow2EfGNHbJVM3I0K9wIbuiRYtl+5vKvUEA3VjNprdirOnD5UCchWEm1zfcR4U+6
+         DuB+MotSK2WwN6SB3IjLk3AuQHc1sb7c4FnPUax24E9fyf75hTVceol07USJCGppACm+
+         AjJKpvCwJUjosvIouvjLNOlPczSbirv331O5CJLTyrLn371E5IS1QZKMs9IfyhMR0XGi
+         uNvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fki+0TCoTrte3/BJmTglaCbQEGDgk5B9kayNvnzRPWM=;
+        b=q3HxAI+lPM1yVf5POOzpQ+9rhQl9WjL3GWAtp9GN6mK6iSlQTUjE2Z7D3H69SPc0a0
+         SBN9A7jbs9zU8t/hNwZ1OUDNSlGmYYP34euK3xewRWvQotSUOeD7NaGAUUsUqyP+LdrI
+         syBYjTNvluiT7NLcFKP83YOlv4bIHfXGGa9dLV/pVbGkqpXNJdIkBFDsqeUqECu9em+4
+         0xhovDcmExoOKpShW9LsByzW3fKFTdR0eLeWgQw4DuZYevzUxrH1ZW8gFaLrg7910FAq
+         m1H4IVyZ+ig+J77C/9TU+u4ppzm1+Ro/cAHsXxe0z6ThQGBUebWFIRKrLLgeXJsgZ7Bw
+         YUeA==
+X-Gm-Message-State: ANoB5pmfVhu5tvfJMpqIDaZ1Fo2PRSMZNNHRLYVGy6QER2AhuWwvDwYN
+        Ap9Yb4bjWDZcV9iqm5AnK+KqHPCNM/hcfkXCuF6r
+X-Google-Smtp-Source: AA0mqf49L62DSbkOhy5QdhSFkosUgoRxnZccam6+NPCc0pWQN1kIdQqfHb6qw+qOMl9/YLMbHuvo2aGXdUCt3JVCiug=
+X-Received: by 2002:a05:6102:3224:b0:3aa:8846:b9a with SMTP id
+ x4-20020a056102322400b003aa88460b9amr9477748vsf.58.1668545065335; Tue, 15 Nov
+ 2022 12:44:25 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221115200156.12218-1-mario.limonciello@amd.com> <20221115200156.12218-2-mario.limonciello@amd.com>
+In-Reply-To: <20221115200156.12218-2-mario.limonciello@amd.com>
+From:   John Stultz <jstultz@google.com>
+Date:   Tue, 15 Nov 2022 12:44:14 -0800
+Message-ID: <CANDhNCqPWV_dC_wo-CCqBuO0J=5TcRAh5AX335PLft2+w19_tQ@mail.gmail.com>
+Subject: Re: [RFC v3 1/4] PM: Add a sysfs file to represent the total sleep duration
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        Raul Rangel <rrangel@chromium.org>, linux-pm@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-branch HEAD: 3c1f24109dfc4fb1a3730ed237e50183c6bb26b3  Add linux-next specific files for 20221115
+On Tue, Nov 15, 2022 at 12:02 PM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> For userspace to be able to analyze how much of a suspend cycle was spent
+> in the hardware sleep states userspace software has to use kernel trace
+> points paired with the file `low_power_idle_system_residency_us` on
+> supported systems.
+>
+> To make this information more discoverable, introduce a new sysfs file
+> to represent the duration spent in a sleep state.
+> This file will be present and updated during resume for all suspend
+> types.
+>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> RFC v2->v3
+>  * Drop one of the sysfs files
+>  * Use sysfs_emit instead
+>  * Fix symbol name (s/type/time/)
+>  * Drop is_visible
+>  * Use timespec64 type for suspend stats
+>  * Update documentation
+>  * Update sysfs file name
+> ---
+>  Documentation/ABI/testing/sysfs-power |  8 ++++++++
+>  include/linux/suspend.h               |  2 ++
+>  kernel/power/main.c                   | 15 +++++++++++++++
+>  kernel/power/suspend.c                |  2 ++
+>  kernel/time/timekeeping.c             |  2 ++
+>  5 files changed, 29 insertions(+)
+>
+> diff --git a/Documentation/ABI/testing/sysfs-power b/Documentation/ABI/testing/sysfs-power
+> index f99d433ff311..3abe20c47e08 100644
+> --- a/Documentation/ABI/testing/sysfs-power
+> +++ b/Documentation/ABI/testing/sysfs-power
+> @@ -413,6 +413,14 @@ Description:
+>                 The /sys/power/suspend_stats/last_failed_step file contains
+>                 the last failed step in the suspend/resume path.
+>
+> +What:          /sys/power/suspend_stats/last_total
+> +Date:          December 2022
+> +Contact:       Mario Limonciello <mario.limonciello@amd.com>
+> +Description:
+> +               The /sys/power/suspend_stats/last_total file contains
+> +               the total duration of the sleep cycle.
+> +               This is measured in microseconds.
+> +
 
-Error/Warning reports:
+Nit/bikeshed: "last_total" seems less straightforward then it should
+be? Maybe "total_suspend_time" instead?
 
-https://lore.kernel.org/oe-kbuild-all/202211041320.coq8EELJ-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211090634.RyFKK0WS-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211130053.Np70VIdn-lkp@intel.com
-https://lore.kernel.org/oe-kbuild-all/202211152134.2APMmViw-lkp@intel.com
+> diff --git a/kernel/power/main.c b/kernel/power/main.c
+> index 31ec4a9b9d70..f33012860699 100644
+> --- a/kernel/power/main.c
+> +++ b/kernel/power/main.c
+> @@ -6,6 +6,7 @@
+>   * Copyright (c) 2003 Open Source Development Lab
+>   */
+>
+> +#include <linux/acpi.h>
+>  #include <linux/export.h>
+>  #include <linux/kobject.h>
+>  #include <linux/string.h>
+> @@ -54,6 +55,11 @@ void unlock_system_sleep(unsigned int flags)
+>  }
+>  EXPORT_SYMBOL_GPL(unlock_system_sleep);
+>
+> +void pm_account_suspend_time(const struct timespec64 t)
+> +{
+> +       suspend_stats.last_total = timespec64_add(suspend_stats.last_total, t);
+> +}
+> +
+>  void ksys_sync_helper(void)
+>  {
+>         ktime_t start;
+> @@ -377,6 +383,14 @@ static ssize_t last_failed_step_show(struct kobject *kobj,
+>  }
+>  static struct kobj_attribute last_failed_step = __ATTR_RO(last_failed_step);
+>
+> +static ssize_t last_total_show(struct kobject *kobj,
+> +               struct kobj_attribute *attr, char *buf)
+> +{
+> +       return sysfs_emit(buf, "%llu\n",
+> +                         timespec64_to_ns(&suspend_stats.last_total) / NSEC_PER_USEC);
+> +}
+> +static struct kobj_attribute last_total = __ATTR_RO(last_total);
+> +
+>  static struct attribute *suspend_attrs[] = {
+>         &success.attr,
+>         &fail.attr,
+> @@ -391,6 +405,7 @@ static struct attribute *suspend_attrs[] = {
+>         &last_failed_dev.attr,
+>         &last_failed_errno.attr,
+>         &last_failed_step.attr,
+> +       &last_total.attr,
+>         NULL,
+>  };
 
-Error/Warning: (recently discovered and may have been fixed)
+While not identical, this has some overlap with the logic in
+kernel/time/timekeeping_debug.c
+I wonder if it would make sense to consolidate some of this accounting?
 
-arch/arm/mach-s3c/devs.c:32:10: fatal error: linux/platform_data/dma-s3c24xx.h: No such file or directory
-drivers/clk/clk.c:1022:5: error: redefinition of 'clk_prepare'
-drivers/clk/clk.c:1268:6: error: redefinition of 'clk_is_enabled_when_prepared'
-drivers/clk/clk.c:941:6: error: redefinition of 'clk_unprepare'
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:4887: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc_link_dp.c:5073:24: warning: implicit conversion from 'enum <anonymous>' to 'enum dc_status' [-Wenum-conversion]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/gf100.c:451:1: warning: no previous prototype for 'gf100_fifo_nonstall_block' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/fifo/runl.c:34:1: warning: no previous prototype for 'nvkm_engn_cgrp_get' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/engine/gr/tu102.c:210:1: warning: no previous prototype for 'tu102_gr_load' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/nvfw/acr.c:49:1: warning: no previous prototype for 'wpr_generic_header_dump' [-Wmissing-prototypes]
-drivers/gpu/drm/nouveau/nvkm/subdev/acr/lsfw.c:221:21: warning: variable 'loc' set but not used [-Wunused-but-set-variable]
-ld.lld: error: .btf.vmlinux.bin.o: unknown file type
-ld.lld: error: undefined symbol: ipv6_icmp_error
-net/rxrpc/local_object.c:36: undefined reference to `ipv6_icmp_error'
-vmlinux.o: warning: objtool: __btrfs_map_block+0x1e22: unreachable instruction
-
-Unverified Error/Warning (likely false positive, please contact us if interested):
-
-drivers/cpufreq/acpi-cpufreq.c:970 acpi_cpufreq_boost_init() error: uninitialized symbol 'ret'.
-lib/zstd/compress/huf_compress.c:460 HUF_getIndex() warn: the 'RANK_POSITION_LOG_BUCKETS_BEGIN' macro might need parens
-lib/zstd/decompress/zstd_decompress_block.c:1009 ZSTD_execSequence() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:894 ZSTD_execSequenceEnd() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_block.c:942 ZSTD_execSequenceEndSplitLitBuffer() warn: inconsistent indenting
-lib/zstd/decompress/zstd_decompress_internal.h:206 ZSTD_DCtx_get_bmi2() warn: inconsistent indenting
-mm/khugepaged.c:2038 collapse_file() warn: iterator used outside loop: 'page'
-
-Error/Warning ids grouped by kconfigs:
-
-gcc_recent_errors
-|-- alpha-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- alpha-randconfig-r032-20221114
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arc-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arm-allyesconfig
-|   |-- arch-arm-mach-s3c-devs.c:fatal-error:linux-platform_data-dma-s3c24xx.h:No-such-file-or-directory
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arm-defconfig
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- arm64-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-|-- i386-allyesconfig
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc.c:warning:This-comment-starts-with-but-isn-t-a-kernel-doc-comment.-Refer-Documentation-doc-guide-kernel-doc.rst
-|   |-- drivers-gpu-drm-amd-amdgpu-..-display-dc-core-dc_link_dp.c:warning:implicit-conversion-from-enum-anonymous-to-enum-dc_status
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-gf100.c:warning:no-previous-prototype-for-gf100_fifo_nonstall_block
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-fifo-runl.c:warning:no-previous-prototype-for-nvkm_engn_cgrp_get
-|   |-- drivers-gpu-drm-nouveau-nvkm-engine-gr-tu102.c:warning:no-previous-prototype-for-tu102_gr_load
-|   |-- drivers-gpu-drm-nouveau-nvkm-nvfw-acr.c:warning:no-previous-prototype-for-wpr_generic_header_dump
-|   `-- drivers-gpu-drm-nouveau-nvkm-subdev-acr-lsfw.c:warning:variable-loc-set-but-not-used
-clang_recent_errors
-|-- hexagon-randconfig-r041-20221114
-|   `-- ld.lld:error:undefined-symbol:ipv6_icmp_error
-|-- i386-randconfig-a015
-|   `-- ld.lld:error:undefined-symbol:ipv6_icmp_error
-|-- x86_64-randconfig-a005
-|   |-- ld.lld:error:.btf.vmlinux.bin.o:unknown-file-type
-|   `-- ld.lld:error:undefined-symbol:ipv6_icmp_error
-`-- x86_64-randconfig-a012-20221114
-    `-- vmlinux.o:warning:objtool:handle_bug:call-to-kmsan_unpoison_entry_regs()-leaves-.noinstr.text-section
-
-elapsed time: 734m
-
-configs tested: 64
-configs skipped: 2
-
-gcc tested configs:
-i386                                defconfig
-x86_64                        randconfig-a004
-um                             i386_defconfig
-x86_64                        randconfig-a002
-um                           x86_64_defconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a006
-i386                 randconfig-a001-20221114
-mips                             allyesconfig
-x86_64                              defconfig
-x86_64                           rhel-8.3-syz
-powerpc                           allnoconfig
-i386                 randconfig-a002-20221114
-x86_64                            allnoconfig
-x86_64                         rhel-8.3-kunit
-sh                               allmodconfig
-i386                 randconfig-a005-20221114
-i386                 randconfig-a006-20221114
-arc                  randconfig-r043-20221115
-x86_64                           rhel-8.3-kvm
-arc                                 defconfig
-riscv                randconfig-r042-20221115
-ia64                             allmodconfig
-i386                             allyesconfig
-arm                                 defconfig
-arc                  randconfig-r043-20221114
-i386                 randconfig-a003-20221114
-x86_64                    rhel-8.3-kselftests
-s390                 randconfig-r044-20221115
-x86_64                               rhel-8.3
-x86_64                          rhel-8.3-func
-i386                 randconfig-a004-20221114
-s390                             allmodconfig
-i386                          randconfig-a014
-alpha                               defconfig
-s390                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-s390                             allyesconfig
-arc                              allyesconfig
-i386                          randconfig-a012
-x86_64                           allyesconfig
-i386                          randconfig-a016
-alpha                            allyesconfig
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64               randconfig-a014-20221114
-x86_64               randconfig-a012-20221114
-x86_64               randconfig-a013-20221114
-x86_64               randconfig-a011-20221114
-x86_64               randconfig-a016-20221114
-x86_64               randconfig-a015-20221114
-hexagon              randconfig-r045-20221114
-hexagon              randconfig-r045-20221115
-hexagon              randconfig-r041-20221114
-i386                          randconfig-a013
-s390                 randconfig-r044-20221114
-hexagon              randconfig-r041-20221115
-riscv                randconfig-r042-20221114
-i386                          randconfig-a011
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+thanks
+-john
