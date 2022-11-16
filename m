@@ -2,98 +2,166 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77C5C62BEEB
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 14:04:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAAB62BF03
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 14:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233638AbiKPNEt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Nov 2022 08:04:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S239082AbiKPNH1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Nov 2022 08:07:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233757AbiKPNEo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 08:04:44 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A302A2A710
-        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 05:04:42 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id s8so12243042lfc.8
-        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 05:04:42 -0800 (PST)
+        with ESMTP id S239104AbiKPNG6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 08:06:58 -0500
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C879A3E08C
+        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 05:06:35 -0800 (PST)
+Received: by mail-lj1-x232.google.com with SMTP id k19so21753473lji.2
+        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 05:06:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hC7hAWdXJrbOBhiPtC+d8+UIyRAaqU4u9VT50dOh8F0=;
-        b=yjh/9w0+ChTTMXUeNDeMpHE2gsl6ozXsxhdQZC5YMMbA/CF70a9w2fzV6eAOShCktd
-         SVY5T13Bo+eBi9ZIiS5FKaxPZVaufmQ1V8WFkfY5hLa10/qs5ZDuT6lXT6R7Tl76yhd5
-         BJsuuu+t+WchZhcDT77o0KwLcKcv6lMvAue8ACDUKePMLqU0dhj32rlWs/vPMHKV5XQa
-         j5zrL45KTrRVuafLJDd/FNmyZf2QxDHJPV0aUwtFxESMnMAb4bd0Pg6IhHtHLiqYHem0
-         mDw5SDgPPKn6xp+vvlneE9kD/SdFfQL2uEOQ0I6Y9TQAC1fcT/84CX3f6hv019X8hrbY
-         2v/w==
+        bh=iOBFZUjEPMhwAjsluHyEUpXc+iXpF6wfXywtn4j6o+I=;
+        b=K1ZoTLuqbNukVGP/gtemU1AGYfiMmC2Lctpg2eDfGCmpm/Y31rPT8ebVXjztzO1Oyu
+         SA7MLG6tUjkdLrGcN0aHOlwSh5v9AWxYPKJg6P4pw24VuS9uu5Q6EOrU8P6VzELBk/dX
+         shNnfVNTpkgsD3RHum1Kep36dg6KiBzuYVBa5uokDbLzp/OREK9sO14Jn38qdBUb6m+t
+         ng+rr46wgM5uHDxr3MbxQdgWM4SSydxzbarvrotO4YnH0T9p0epNAWU1EGGdHHkzQakH
+         vRbH3Xr5HeBFq9ggor0g96aZCdEIa9K8XzWIBfq/HdP7OohuQmBexKzb+ONysh2nzu+8
+         ZavA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hC7hAWdXJrbOBhiPtC+d8+UIyRAaqU4u9VT50dOh8F0=;
-        b=eqfT/11hJZe+9xQQc79A6OBoh8k3Ju5keawXZwoByQxYtlpJD/3lc/qCFJ2UtopBLC
-         TtGEK2RT0/9ioUSo5OIfcuM9K/j4JGQfLxSQW+sZsqEPMQHITK1DXgC49lv9vmWuKuZU
-         makjmioe8GdiS7QRNkJXaPpqEqy3AlDQuvJSTYW1O/VEANd40YuFcQ1R1+ghaeXMu8y/
-         RkPLrTw/gxqxKxRhTx4a+q0SF3EY2C7p8Ob5PMJ32nNOk7l6j23lcpudCdgmRnkwweh9
-         sc8oC8VJ0iKw3hbqQYLGHVSvJtiSHjMWCke0GVM4vc4TDc05bEoDsYBXyT39VIrbZutr
-         LLaA==
-X-Gm-Message-State: ANoB5pkyGS9ZAJvnRHgNFmPzZFuhqZO7vkaYL61SC4td8lKITf3BQFTE
-        hu1+juP7zB1dhusZqFO11Sh/TA==
-X-Google-Smtp-Source: AA0mqf72YgutZylIoJBbSinzlh9BACGJygEv22CpJzWaxhQBxOmzTy/UCRLkcZlPBtmWoF9YswXL5w==
-X-Received: by 2002:ac2:530c:0:b0:4b4:aed7:4aa5 with SMTP id c12-20020ac2530c000000b004b4aed74aa5mr1198189lfh.447.1668603881020;
-        Wed, 16 Nov 2022 05:04:41 -0800 (PST)
+        bh=iOBFZUjEPMhwAjsluHyEUpXc+iXpF6wfXywtn4j6o+I=;
+        b=rfrIiftORS3Fx/3nPe718h8kF4qYKfIPTeAgfMmPYy6ahEBaVlnp81ix4nNDGuNCYK
+         01PNJHGsRYDl3s2d2GcLM1VcCrEmmoV633HTtnyuEjT8wUD8D9MIyQ6ePWKPr6+sYDQU
+         Av6axqzbUFrwFKeLYsN4hGDma/lSmz5xgqWYDKx4YBi80Vl7919QfN3DhVi2G8LIXvCT
+         GhajsEwQNVLdljn6yAQgF0NYBMNUkLIm7tX9y/GimJbSmJ6BD7Vdm755DRGoaM+HpCGV
+         cRyEQUPuNqGFZ3wWmdr/GNSmlj5hVpbbEhTK510b/YSC4L5hAltMHMktyN8igCCu6VAF
+         NWqw==
+X-Gm-Message-State: ANoB5pl84oGBe3XfvL+BObMosYp0p/CLLvUq7uw/j5COVL/RgnG3/ZaV
+        6V310Xt/T2B15PYxb3WlRyOXPA==
+X-Google-Smtp-Source: AA0mqf5mPSTbEI6fRwb+KHjKKpDE60Gqc2m+0ToDjFPXSRuOADvXEwvx9u0wRXmJaaudC+2n614clA==
+X-Received: by 2002:a05:651c:1787:b0:277:8d48:27dd with SMTP id bn7-20020a05651c178700b002778d4827ddmr7995138ljb.192.1668603994185;
+        Wed, 16 Nov 2022 05:06:34 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id c6-20020ac25f66000000b0049a4862966fsm2590501lfc.146.2022.11.16.05.04.39
+        by smtp.gmail.com with ESMTPSA id v14-20020a05651203ae00b004b497035243sm1676411lfp.184.2022.11.16.05.06.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Nov 2022 05:04:39 -0800 (PST)
-Message-ID: <623814f5-9abd-2634-bc2d-51de08074abe@linaro.org>
-Date:   Wed, 16 Nov 2022 14:04:38 +0100
+        Wed, 16 Nov 2022 05:06:33 -0800 (PST)
+Message-ID: <19686cfa-a3ec-fce4-04fd-3e047062295f@linaro.org>
+Date:   Wed, 16 Nov 2022 14:06:32 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Add SM8550
- compatible
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: Add Qualcomm SM8550 DT
+ bindings
 Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh@kernel.org>
 Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org
-References: <20221116115046.2687244-1-abel.vesa@linaro.org>
+References: <20221116114526.2679041-1-abel.vesa@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221116115046.2687244-1-abel.vesa@linaro.org>
+In-Reply-To: <20221116114526.2679041-1-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/11/2022 12:50, Abel Vesa wrote:
-> Add compatible for EPSS CPUFREQ-HW on SM8550.
-> Also document the interrupts.
-
-None of other variants had interrupts so far, so you are adding it for
-new SoC, right? Or documenting existing usage? If the first, you need
-allOf:if:then.
-
+On 16/11/2022 12:45, Abel Vesa wrote:
+> The Qualcomm SM8550 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand
 > 
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  .../devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml       | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  .../bindings/interconnect/qcom,rpmh.yaml      |  19 +-
+>  .../dt-bindings/interconnect/qcom,sm8550.h    | 190 ++++++++++++++++++
+>  2 files changed, 208 insertions(+), 1 deletion(-)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm8550.h
 > 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index a429a1ed1006..667ed6815773 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -132,12 +132,29 @@ properties:
+>        - qcom,sm8450-nsp-noc
+>        - qcom,sm8450-pcie-anoc
+>        - qcom,sm8450-system-noc
+> +      - qcom,sm8550-aggre1-noc
+> +      - qcom,sm8550-aggre2-noc
+> +      - qcom,sm8550-clk-virt
+> +      - qcom,sm8550-config-noc
+> +      - qcom,sm8550-cnoc-main
 
+Keep the names sorted alphabetically.
+
+> +      - qcom,sm8550-gem-noc
+> +      - qcom,sm8550-lpass-ag-noc
+> +      - qcom,sm8550-lpass-lpiaon-noc
+> +      - qcom,sm8550-lpass-lpicx-noc
+> +      - qcom,sm8550-mc-virt
+> +      - qcom,sm8550-mmss-noc
+> +      - qcom,sm8550-nsp-noc
+> +      - qcom,sm8550-pcie-anoc
+> +      - qcom,sm8550-system-noc
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+
+Not explained...
+
+>  
+>    '#interconnect-cells': true
+>  
+>  required:
+>    - compatible
+> -  - reg
+
+Nope. This is undocumented change.
+
+See also:
+https://lore.kernel.org/all/20221026190520.4004264-2-quic_molvera@quicinc.com/
+
+>  
+>  unevaluatedProperties: false
+>  
+> diff --git a/include/dt-bindings/interconnect/qcom,sm8550.h b/include/dt-bindings/interconnect/qcom,sm8550.h
+> new file mode 100644
+> index 000000000000..a066460d5a12
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,sm8550.h
+> @@ -0,0 +1,190 @@
+> +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
+> +/*
+> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022, Linaro Limited
+> + */
+> +
+> +#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SM8550_H
+> +#define __DT_BINDINGS_INTERCONNECT_QCOM_SM8550_H
+> +
+> +#define MASTER_QSPI_0				0
+> +#define MASTER_QUP_1				1
+> +#define MASTER_SDCC_4				2
+> +#define MASTER_UFS_MEM				3
+> +#define MASTER_USB3_0				4
+> +#define SLAVE_A1NOC_SNOC			5
+> +
+> +#define	MASTER_QDSS_BAM				0
+
+Drop weird tab/spaces in the middle.
 
 Best regards,
 Krzysztof
