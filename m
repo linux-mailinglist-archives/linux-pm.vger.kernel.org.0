@@ -2,192 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7559362B729
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 11:06:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5888362B732
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 11:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbiKPKGO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Nov 2022 05:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S232409AbiKPKJ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Nov 2022 05:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231629AbiKPKGO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 05:06:14 -0500
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185808F;
-        Wed, 16 Nov 2022 02:06:13 -0800 (PST)
-Received: by mail-lj1-f177.google.com with SMTP id k19so21169539lji.2;
-        Wed, 16 Nov 2022 02:06:13 -0800 (PST)
+        with ESMTP id S232578AbiKPKJ6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 05:09:58 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49182018F
+        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 02:09:55 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id v1so29039955wrt.11
+        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 02:09:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IS4NhixtyW5TeYqdp9/kbVVcuyzIalO1l41VFDtVdNU=;
+        b=hAGvJenW4Og2mAreBZMcIFFcI0BIjoFZ4aGOfVRJ5QO/K2ukidMP6ikxXClzBqeciY
+         DzNaAxq0ZUy+w4M8sMIw/QH1eHuwUapiftptHXpYLudfJu/s7dnOOUQfJx2h7K2NQlMv
+         2QyKJWcTZYgV884sMYySdwt9E007kmh0uq4VviHXRFOSi3qAkOtcB+TQBydG5uQCxdJ2
+         xCQYkB7oWGoWG7eN7J2kRx33MRTyrDU+ZdDAfBJPth2ZB96WnLTNHc/wEe+8d9rA5Nvz
+         tLVsicWdtM80d8+Ml6UooeTFWWW7/GTMsSAsgkm+jNa6Fs93EMi6HIOuU14i4SnMsJT4
+         Vxtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OdCk/i513kMMAJ+DkyLvEiWGOZZpsa1KluZXc3adt2s=;
-        b=gMnLwBENppi0q8Mxp9H8G4bKEGmmGwJOWSaSSdT90HCK5hNtIyvNmGU5mT01YgQCbp
-         keisqPaSfBWp7mPi62c540GP8aVNDDKlQ1v7IF1aamFl/hyCoTMNfVQu0LpfgcFr8oYK
-         NjXs/OMQe0XpgsDTxoT+3ZozMg4hzw91fIp9NCn2h7Aaz4yQBLyFjh+/D4HPe3+G/G8R
-         bAh1NDVpu/J4OBabGB8yJAjQpuCiauOlO8LzpZW3r/nim3TmndNXl1M9yGF8ml4/yrdW
-         JC48diak+YJU4vIOqFMG30qt/pDpYE3G6UCWJGXqvEc3LjeOtVmujjIkA/gk3y/UVYnJ
-         p0UQ==
-X-Gm-Message-State: ANoB5pnxPcKm+Ao2l6CVLrvCCqB7xcz/yQ7Dbgr1x6WHcwRrPkKtkoTU
-        IXVp343Dgr8QGoD8xclbr37cg8myzWE=
-X-Google-Smtp-Source: AA0mqf7v3Z1IOvNFxMwudHwY9nPh40xyL7BRyyG/NI859k8v6Fr1ukOKjNxWPS+RZdvx4AsDQIE7WA==
-X-Received: by 2002:a2e:8706:0:b0:26d:e3ae:886a with SMTP id m6-20020a2e8706000000b0026de3ae886amr8016298lji.531.1668593171311;
-        Wed, 16 Nov 2022 02:06:11 -0800 (PST)
-Received: from dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::7])
-        by smtp.gmail.com with ESMTPSA id s23-20020a2e83d7000000b00268cfcf841asm2920650ljh.56.2022.11.16.02.06.10
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IS4NhixtyW5TeYqdp9/kbVVcuyzIalO1l41VFDtVdNU=;
+        b=jouv9vxG3nG/jXbTAXJNSsUri6xiSVmSu5/kihMCO/b643g+S+ZyZ8O8nVRW1V/7VF
+         2u43/E0S7uaaaVsLQu2rHuxjppO2JjsK6ftkn9R9JTYA/N4MIZuhfj5VjLNROQqgETlh
+         D0xywP8TVlb1Eykw9mnKD5xVk15pYd5M4eFCFWoiHee6pXgso+rKREq3qMDx2hCByG9q
+         L3tjfIzX1ws5yURK9fQ21nCKu8XIJHCNsJwP8vbJx6O2gbUFAmF3FVaDLjtVa45uxxR4
+         ySjMSZqHxpalLxn+3KqIpzwZDOfy7/szNRjvrQKL+SFJW0Y6tli6kHDk0GIvMsIVt8sM
+         uhHg==
+X-Gm-Message-State: ANoB5pmRuT5c8YMYQqkyqFxfawUnVbVjLDvZqVv1XC7FDcjSsk9616Ax
+        /EH5YzZOgFHo5Hjx0Ef44liBgQ==
+X-Google-Smtp-Source: AA0mqf4ho7H2ywGylNwvkqJy3pkJcC2giMqrzoSpvKj0x9mRAyZorDJ++ZPQPO+Ldxl7gjyzjvBsqA==
+X-Received: by 2002:a5d:526d:0:b0:238:3fcb:31ce with SMTP id l13-20020a5d526d000000b002383fcb31cemr13873164wrc.655.1668593394376;
+        Wed, 16 Nov 2022 02:09:54 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
+        by smtp.gmail.com with ESMTPSA id i8-20020a1c3b08000000b003cf5ec79bf9sm1504500wma.40.2022.11.16.02.09.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 02:06:10 -0800 (PST)
-Date:   Wed, 16 Nov 2022 12:05:56 +0200
-From:   Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] power: supply: 88pm860x: simplify using devm
-Message-ID: <Y3S2BPJC+jLLN59z@dc75zzyyyyyyyyyyyyydt-3.rev.dnainternet.fi>
+        Wed, 16 Nov 2022 02:09:53 -0800 (PST)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Wed, 16 Nov 2022 11:09:50 +0100
+Subject: [PATCH] dt-bindings: thermal: qcom-tsens: Add compatible for sm8550
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tiDKVUK3dZKOLXxl"
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20221114-narmstrong-sm8550-upstream-tsens-v1-0-0e169822830f@linaro.org>
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+The Qualcomm SM8550 platform has three instances of the tsens block,
+add a compatible for these instances.
 
---tiDKVUK3dZKOLXxl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@somainline.org>
+To: Amit Kucheria <amitk@kernel.org>
+To: Thara Gopinath <thara.gopinath@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Zhang Rui <rui.zhang@intel.com>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Use devm variants for requesting threaded IRQ and for power-supply
-registration. Clean up error path and remove the .remove-callback.
-
-Signed-off-by: Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index f0bd4b979e28..09dbd96d380e 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -58,6 +58,7 @@ properties:
+               - qcom,sm8250-tsens
+               - qcom,sm8350-tsens
+               - qcom,sm8450-tsens
++              - qcom,sm8550-tsens
+           - const: qcom,tsens-v2
+ 
+       - description: v2 of TSENS with combined interrupt
 
 ---
-Oh, found this commit while cleaning-up my local git branches. Seems
-like I never got around sending this?
+base-commit: 3c1f24109dfc4fb1a3730ed237e50183c6bb26b3
+change-id: 20221114-narmstrong-sm8550-upstream-tsens-dfaec218c321
 
-Please note, commit is untested as I don't have the 88pm860x HW
----
- drivers/power/supply/88pm860x_charger.c | 38 ++++++-------------------
- 1 file changed, 9 insertions(+), 29 deletions(-)
-
-diff --git a/drivers/power/supply/88pm860x_charger.c b/drivers/power/supply=
-/88pm860x_charger.c
-index f21ce52fbc04..2b9fcb7e71d7 100644
---- a/drivers/power/supply/88pm860x_charger.c
-+++ b/drivers/power/supply/88pm860x_charger.c
-@@ -690,8 +690,7 @@ static int pm860x_charger_probe(struct platform_device =
-*pdev)
- 	    (chip->id =3D=3D CHIP_PM8607) ? chip->companion : chip->client;
- 	if (!info->i2c_8606) {
- 		dev_err(&pdev->dev, "Missed I2C address of 88PM8606!\n");
--		ret =3D -EINVAL;
--		goto out;
-+		return -EINVAL;
- 	}
- 	info->dev =3D &pdev->dev;
-=20
-@@ -704,44 +703,26 @@ static int pm860x_charger_probe(struct platform_devic=
-e *pdev)
- 	psy_cfg.drv_data =3D info;
- 	psy_cfg.supplied_to =3D pm860x_supplied_to;
- 	psy_cfg.num_supplicants =3D ARRAY_SIZE(pm860x_supplied_to);
--	info->usb =3D power_supply_register(&pdev->dev, &pm860x_charger_desc,
--					  &psy_cfg);
-+	info->usb =3D devm_power_supply_register(&pdev->dev, &pm860x_charger_desc,
-+					       &psy_cfg);
- 	if (IS_ERR(info->usb)) {
--		ret =3D PTR_ERR(info->usb);
--		goto out;
-+		return PTR_ERR(info->usb);
- 	}
-=20
- 	pm860x_init_charger(info);
-=20
- 	for (i =3D 0; i < ARRAY_SIZE(info->irq); i++) {
--		ret =3D request_threaded_irq(info->irq[i], NULL,
--			pm860x_irq_descs[i].handler,
--			IRQF_ONESHOT, pm860x_irq_descs[i].name, info);
-+		ret =3D devm_request_threaded_irq(&pdev->dev, info->irq[i], NULL,
-+						pm860x_irq_descs[i].handler,
-+						IRQF_ONESHOT,
-+						pm860x_irq_descs[i].name, info);
- 		if (ret < 0) {
- 			dev_err(chip->dev, "Failed to request IRQ: #%d: %d\n",
- 				info->irq[i], ret);
--			goto out_irq;
-+			return ret;
- 		}
- 	}
- 	return 0;
--
--out_irq:
--	power_supply_unregister(info->usb);
--	while (--i >=3D 0)
--		free_irq(info->irq[i], info);
--out:
--	return ret;
--}
--
--static int pm860x_charger_remove(struct platform_device *pdev)
--{
--	struct pm860x_charger_info *info =3D platform_get_drvdata(pdev);
--	int i;
--
--	power_supply_unregister(info->usb);
--	for (i =3D 0; i < info->irq_nums; i++)
--		free_irq(info->irq[i], info);
--	return 0;
- }
-=20
- static struct platform_driver pm860x_charger_driver =3D {
-@@ -749,7 +730,6 @@ static struct platform_driver pm860x_charger_driver =3D=
- {
- 		   .name =3D "88pm860x-charger",
- 	},
- 	.probe =3D pm860x_charger_probe,
--	.remove =3D pm860x_charger_remove,
- };
- module_platform_driver(pm860x_charger_driver);
-=20
-
-base-commit: 094226ad94f471a9f19e8f8e7140a09c2625abaa
---=20
-2.38.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---tiDKVUK3dZKOLXxl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmN0tgAACgkQeFA3/03a
-ocXyXgf+OUGV4IQkSWIAnFyABpjUWCecJIV9WtoTTNDLi2Y/kq//Pc9UWANmvgPD
-FOQfL8tJPXiKg4Gpofnh8U2E4tMD4Z5bwAj6dJtOHNUs2Ecyly0DzAeCCY315xNB
-MA10RujvxDYfU3tBN4cuk+LSlwwXhXhxp6tD0tp+4OzPpAkq9G8PEVq4Y28Qba+9
-rlKKw/L6CBPqytUXqykibgpTKGur3UNjylpWmSN8C1ZONztrwCOMj3dmmiTCUncT
-EylZpRIx8ejJOqMT2ri26DExSlkcuQzPUIZ144Lt+rfJtWORff1nREOfh+UEY+Pv
-+hNs0i3yrr8pEi/5f9lF+rQv6jexew==
-=6GTB
------END PGP SIGNATURE-----
-
---tiDKVUK3dZKOLXxl--
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
