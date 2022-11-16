@@ -2,91 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC7762CCB4
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 22:35:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4212762CE95
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 00:16:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233802AbiKPVf2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Nov 2022 16:35:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
+        id S231300AbiKPXQi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Nov 2022 18:16:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbiKPVf1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 16:35:27 -0500
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0034F6357;
-        Wed, 16 Nov 2022 13:35:26 -0800 (PST)
-Received: by mail-ot1-f49.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so7406128otl.10;
-        Wed, 16 Nov 2022 13:35:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=idXPUIxAsf+qYf9EThRcS2M6+paxv2xPXD1qKx/fNK8=;
-        b=TPCBg6qvlL6CW9P6NJJSWmZd4+enSSBwl/1QT/Fe6QWFbX1W+Tk4RCJJ9BP9+MxcMg
-         QgyV0/Q7y+Nd2W6Sv8iNoDauReW320wAr0sG43Ci8jODlQ9xnx9uvoo34S6Sl+kU+Urb
-         xbQOCOPmxCnPxNmnbKBNWE7ngi6O/CLA0Ms57iLLIg7in+1SZlsZ/P5y8bbZboTGhLRW
-         dJlz9aKDQGnNiek+BvdrV4Tmt7xNugXzPwLIp4BAWYihWSKqBhJDa0emUYe2fxr9VP97
-         SWAnwX63ibyGlyW+cOb7mYK68zF0JRFP75+DvIGyvFm/LsTjdqTBcfMXcKjvkjvNxmos
-         8BDA==
-X-Gm-Message-State: ANoB5pktXDve8++FW7QqrT8lgAINUrRBhFhojVUGR3WJ+KNE0x92ipwX
-        QVnodOZQzE7SCgTVyTfaaHpOG0FQrA==
-X-Google-Smtp-Source: AA0mqf4tDzAedQ8aJ/Bq9xOKRwGQfaKwu4TK0IcHeYg6gaUp0BcHkF0oJkzDGWl29bu14DUJSYbVtA==
-X-Received: by 2002:a05:6830:1605:b0:662:883:99f1 with SMTP id g5-20020a056830160500b00662088399f1mr40102otr.42.1668634526225;
-        Wed, 16 Nov 2022 13:35:26 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t25-20020a4adbd9000000b0049427725e62sm6489225oou.19.2022.11.16.13.35.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 13:35:25 -0800 (PST)
-Received: (nullmailer pid 1004914 invoked by uid 1000);
-        Wed, 16 Nov 2022 21:35:27 -0000
-Date:   Wed, 16 Nov 2022 15:35:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Prabhakar <prabhakar.csengg@gmail.com>
-Cc:     linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
-Message-ID: <166863452714.1004682.13190739210497231524.robh@kernel.org>
-References: <20221115121629.1181667-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+        with ESMTP id S231126AbiKPXQh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 18:16:37 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6A9C10FE8;
+        Wed, 16 Nov 2022 15:16:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668640596; x=1700176596;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qqwWgejappy/k3mRhaxSaxdFyg89ME16FnWhZAGgCI8=;
+  b=AkpUu9MgA5QmBqs9o/a5WDYexpyLpsHsRxxDCeeoJPc1mqV75z0FDnAJ
+   ntZFVhzfZBNYhyk+HsU1IqlseMsv+CSMlBCbYT9aTaRNC8kiw2d3TVnZu
+   GqL7W09AGGT97wiCOu7CuHHF7UHQvZIpB7DQSmoGuwgJKgVo5aFDpmyZX
+   7GILg3ydNrILxx1xMYqWlUmOljraxg8t7euinBFL1ChxAg59WyOnDEPuc
+   Dkhz6+86aHwGASxGZ+VBkpmOj17aCbn/5B9swM3bfWLxZG3MXKQP9H69u
+   +Hd0HygBUNxtL5avL5SJp2cxNiXPIqgILG2xIQiTQZFJNUnLePPCQBQQP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="398981913"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="398981913"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Nov 2022 15:15:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10533"; a="764516508"
+X-IronPort-AV: E=Sophos;i="5.96,169,1665471600"; 
+   d="scan'208";a="764516508"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga004.jf.intel.com with ESMTP; 16 Nov 2022 15:15:02 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Arshad@vger.kernel.org, Adeel <adeel.arshad@intel.com>
+Subject: [PATCH] thermal: intel: hfi: ACK HFI for the same timestamp
+Date:   Wed, 16 Nov 2022 15:14:59 -0800
+Message-Id: <20221116231459.2632710-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221115121629.1181667-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Some processors issue more than one HFI interrupt with the same
+timestamp. Each interrupt must be acknowledged to let the hardware issue
+new HFI interrupts. But this can't be done without some additional flow
+modification in the existing interrupt handling.
 
-On Tue, 15 Nov 2022 12:16:29 +0000, Prabhakar wrote:
-> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> 
-> The TSU block on the RZ/Five SoC is identical to one found on the RZ/G2UL
-> SoC. "renesas,r9a07g043-tsu" compatible string will be used on the
-> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-> SoC.
-> 
-> No driver changes are required as generic compatible string
-> "renesas,rzg2l-tsu" will be used as a fallback on RZ/Five SoC.
-> 
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> ---
->  Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
+For background, the HFI interrupt is a package level thermal interrupt
+delivered via a LVT. This LVT is common for both the CPU and package
+level interrupts. Hence, all CPUs receive the HFI interrupts. But only
+one CPU should process interrupt and others simply exit by issuing EOI
+to LAPIC.
 
-Acked-by: Rob Herring <robh@kernel.org>
+The current HFI interrupt processing flow:
+
+1. Receive Thermal interrupt
+2. Check if there is an active HFI status in MSR_IA32_THERM_STATUS
+3. Try and get spinlock, one CPU will enter spinlock and others
+will simply return from here to issue EOI.
+   (Let's assume CPU 4 is processing interrupt)
+4. Check the stored time-stamp from the HFI memory time-stamp
+5. if same
+6.      ignore interrupt, unlock and return
+7. Copy the HFI message to local buffer
+8. unlock spinlock
+9. ACK HFI interrupt
+10. Queue the message for processing in a work-queue
+
+It is tempting to simply acknowledge all the interrupts even if they
+have the same timestamp. This may cause some interrupts to not be
+processed.
+
+Let's say CPU5 is slightly late and reaches step 4 while CPU4 is
+between steps 8 and 9.
+
+Currently we simply ignore interrupts with the same timestamp. No
+issue here for CPU5. When CPU4 acknowledges the interrupt, the next
+HFI interrupt can be delivered.
+
+If we acknowledge interrupts with the same timestamp (at step 6), there
+is a race condition. Under the same scenario, CPU 5 will acknowledge
+the HFI interrupt. This lets hardware generate another HFI interrupt,
+before CPU 4 start executing step 9. Once CPU 4 complete step 9, it
+will acknowledge the newly arrived HFI interrupt, without actually
+processing it.
+
+Acknowledge the interrupt when holding the spinlock. This avoids
+contention of the interrupt acknowledgment.
+
+Updated flow:
+
+1. Receive HFI Thermal interrupt
+2. Check if there is an active HFI status in MSR_IA32_THERM_STATUS
+3. Try and get spin-lock
+   Let's assume CPU 4 is processing interrupt
+4.1 Read MSR_IA32_PACKAGE_THERM_STATUS and check HFI status bit
+4.2	If hfi status is 0
+4.3		unlock spinlock
+4.4		return
+4.5 Check the stored time-stamp from the HFI memory time-stamp
+5. if same
+6.1      ACK HFI Interrupt,
+6.2	unlock spinlock
+6.3	return
+7. Copy the HFI message to local buffer
+8. ACK HFI interrupt
+9. unlock spinlock
+10. Queue the message for processing in a work-queue
+
+To avoid taking the lock unnecessarily, intel_hfi_process_event() checks
+the status of the HFI interrupt before taking the lock. If CPU5 is late,
+when it starts processing the interrupt there are two scenarios:
+
+a) CPU4 acknowledged the HFI interrupt before CPU5 read
+MSR_IA32_THERM_STATUS. CPU5 exits.
+
+b) CPU5 reads MSR_IA32_THERM_STATUS before CPU4 has acknowledged the
+interrupt. CPU5 will take the lock if CPU4 has released it. It then
+re-reads MSR_IA32_THERM_STATUS. If there is not a new interrupt, the HFI
+status bit is clear and CPU5 exits. If a new HFI interrupt was generated
+it will find that the status bit is set and it will continue to process
+the interrupt. In this case even if timestamp is not changed, the ACK
+can be issued as this is a new interrupt.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Tested-by: Arshad, Adeel<adeel.arshad@intel.com>
+---
+This patch depends on two other patches posted before:
+[PATCH RESEND 1/2] thermal: intel: Prevent accidental clearing of HFI status
+[PATCH RESEND 2/2] thermal: intel: Protect clearing of thermal status bits
+
+ drivers/thermal/intel/intel_hfi.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
+index c9e0827c9ebe..c543a967cd50 100644
+--- a/drivers/thermal/intel/intel_hfi.c
++++ b/drivers/thermal/intel/intel_hfi.c
+@@ -250,7 +250,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+ 	struct hfi_instance *hfi_instance;
+ 	int cpu = smp_processor_id();
+ 	struct hfi_cpu_info *info;
+-	u64 new_timestamp;
++	u64 new_timestamp, msr, hfi;
+ 
+ 	if (!pkg_therm_status_msr_val)
+ 		return;
+@@ -279,9 +279,21 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+ 	if (!raw_spin_trylock(&hfi_instance->event_lock))
+ 		return;
+ 
+-	/* Skip duplicated updates. */
++	rdmsrl(MSR_IA32_PACKAGE_THERM_STATUS, msr);
++	hfi = msr & PACKAGE_THERM_STATUS_HFI_UPDATED;
++	if (!hfi) {
++		raw_spin_unlock(&hfi_instance->event_lock);
++		return;
++	}
++
++	/*
++	 * Ack duplicate update. Since there is an active HFI
++	 * status from HW, it must be a new event, not a case
++	 * where a lagging CPU entered the locked region.
++	 */
+ 	new_timestamp = *(u64 *)hfi_instance->hw_table;
+ 	if (*hfi_instance->timestamp == new_timestamp) {
++		thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
+ 		raw_spin_unlock(&hfi_instance->event_lock);
+ 		return;
+ 	}
+@@ -295,15 +307,15 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
+ 	memcpy(hfi_instance->local_table, hfi_instance->hw_table,
+ 	       hfi_features.nr_table_pages << PAGE_SHIFT);
+ 
+-	raw_spin_unlock(&hfi_instance->table_lock);
+-	raw_spin_unlock(&hfi_instance->event_lock);
+-
+ 	/*
+ 	 * Let hardware know that we are done reading the HFI table and it is
+ 	 * free to update it again.
+ 	 */
+ 	thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
+ 
++	raw_spin_unlock(&hfi_instance->table_lock);
++	raw_spin_unlock(&hfi_instance->event_lock);
++
+ 	queue_delayed_work(hfi_updates_wq, &hfi_instance->update_work,
+ 			   HFI_UPDATE_INTERVAL);
+ }
+-- 
+2.31.1
+
