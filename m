@@ -2,68 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07E662CB4E
-	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 21:44:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC7762CCB4
+	for <lists+linux-pm@lfdr.de>; Wed, 16 Nov 2022 22:35:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiKPUo5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 16 Nov 2022 15:44:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58982 "EHLO
+        id S233802AbiKPVf2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 16 Nov 2022 16:35:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbiKPUo4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 15:44:56 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C763440448
-        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 12:44:55 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id n17so10216248pgh.9
-        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 12:44:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=ODP14gNUQsiRNTrsx3EZkpu6/AOjqqvFxW6DI8MWWyw=;
-        b=L3g1hE83ib/E8eKoAu33dQpKdhg6Dxbf/O4NQCrSvdiqRfk0GvEFeAijmLi6ja9w4z
-         6QQTiA3sebvof4cmu60Fve63DUKVVf97zxhvJBZqtXZcoDYSyJBt7nxCrbwcB6qVP4yD
-         xkbanMZ7uhlwm/5iAlidU63zkIHGm2eKl1tLeLb4bgrenkd05I8uL1zfDMbA68+594WQ
-         6+ArLMMXE1Sbd+f0OwNx+RX82694oo22B63M8bvpQgWjxdSFXINAhZpG3TDEqfKQ3pkK
-         Lw1+/aTpcdsmaksWLoIdOsK9AZSXkvgxdhAB1m8Y2fxCnyySSj9a0OuMv7k3ceEo0UeZ
-         kReA==
+        with ESMTP id S232377AbiKPVf1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 16 Nov 2022 16:35:27 -0500
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0034F6357;
+        Wed, 16 Nov 2022 13:35:26 -0800 (PST)
+Received: by mail-ot1-f49.google.com with SMTP id t19-20020a9d7753000000b0066d77a3d474so7406128otl.10;
+        Wed, 16 Nov 2022 13:35:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ODP14gNUQsiRNTrsx3EZkpu6/AOjqqvFxW6DI8MWWyw=;
-        b=rC2KvzzKbqBptUTNurVGqY5wz8bUGnGYFg8A2Z9hyWElboeQXf+5zeQNkMYcQPNua1
-         chaq4BQLdiYc2fae/zkEMn0GnQ7c9nxu242j5EuJU5krqyFax3xlm2csYHcv5hn+DxOK
-         jaI2UiFGaoU1tbf1uoqe9x713O+a9Py3OojTWem3/OqLVifA/sAYv1g4UJpyamGAy9Ym
-         Ms0RO1mtQ8xnmTMB/Ij9NAOaC+oGu8SH97zFpdkCFKPLjTn3xwnIUxsghdm5qmPFEk/B
-         kaTM2xk1Untc2zk0D25dG0c3PRWr6NBoeHtcGO2vDpn/vAlVOzZZ6wPXyecv2L4jrNiJ
-         4BnQ==
-X-Gm-Message-State: ANoB5plUNZZVquQQgSMMByCEvM4n41F5biu7pFtOR0DEAEmdLuylijSg
-        +DUA74pJXNqMjxZA0p/NHaFgaw==
-X-Google-Smtp-Source: AA0mqf53idl3tvjGm4pHKWINFoYDT1fYriDU7GWUh67ydkIJFetbCZB4GIuaYc1SEIRGt6muOANKQQ==
-X-Received: by 2002:a63:4951:0:b0:476:a396:4908 with SMTP id y17-20020a634951000000b00476a3964908mr10765947pgk.444.1668631495288;
-        Wed, 16 Nov 2022 12:44:55 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ja15-20020a170902efcf00b0017c19d7c89bsm12636709plb.269.2022.11.16.12.44.54
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=idXPUIxAsf+qYf9EThRcS2M6+paxv2xPXD1qKx/fNK8=;
+        b=TPCBg6qvlL6CW9P6NJJSWmZd4+enSSBwl/1QT/Fe6QWFbX1W+Tk4RCJJ9BP9+MxcMg
+         QgyV0/Q7y+Nd2W6Sv8iNoDauReW320wAr0sG43Ci8jODlQ9xnx9uvoo34S6Sl+kU+Urb
+         xbQOCOPmxCnPxNmnbKBNWE7ngi6O/CLA0Ms57iLLIg7in+1SZlsZ/P5y8bbZboTGhLRW
+         dJlz9aKDQGnNiek+BvdrV4Tmt7xNugXzPwLIp4BAWYihWSKqBhJDa0emUYe2fxr9VP97
+         SWAnwX63ibyGlyW+cOb7mYK68zF0JRFP75+DvIGyvFm/LsTjdqTBcfMXcKjvkjvNxmos
+         8BDA==
+X-Gm-Message-State: ANoB5pktXDve8++FW7QqrT8lgAINUrRBhFhojVUGR3WJ+KNE0x92ipwX
+        QVnodOZQzE7SCgTVyTfaaHpOG0FQrA==
+X-Google-Smtp-Source: AA0mqf4tDzAedQ8aJ/Bq9xOKRwGQfaKwu4TK0IcHeYg6gaUp0BcHkF0oJkzDGWl29bu14DUJSYbVtA==
+X-Received: by 2002:a05:6830:1605:b0:662:883:99f1 with SMTP id g5-20020a056830160500b00662088399f1mr40102otr.42.1668634526225;
+        Wed, 16 Nov 2022 13:35:26 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t25-20020a4adbd9000000b0049427725e62sm6489225oou.19.2022.11.16.13.35.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Nov 2022 12:44:55 -0800 (PST)
-Message-ID: <63754bc7.170a0220.f8836.352e@mx.google.com>
-Date:   Wed, 16 Nov 2022 12:44:55 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 16 Nov 2022 13:35:25 -0800 (PST)
+Received: (nullmailer pid 1004914 invoked by uid 1000);
+        Wed, 16 Nov 2022 21:35:27 -0000
+Date:   Wed, 16 Nov 2022 15:35:27 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Prabhakar <prabhakar.csengg@gmail.com>
+Cc:     linux-pm@vger.kernel.org, Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
+Message-ID: <166863452714.1004682.13190739210497231524.robh@kernel.org>
+References: <20221115121629.1181667-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.1-rc5-65-g32e8e1c35ebb
-X-Kernelci-Report-Type: test
-X-Kernelci-Tree: pm
-Subject: pm/testing baseline: 68 runs,
- 1 regressions (v6.1-rc5-65-g32e8e1c35ebb)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221115121629.1181667-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,63 +71,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 68 runs, 1 regressions (v6.1-rc5-65-g32e8e1c35ebb)
 
-Regressions Summary
--------------------
+On Tue, 15 Nov 2022 12:16:29 +0000, Prabhakar wrote:
+> From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> 
+> The TSU block on the RZ/Five SoC is identical to one found on the RZ/G2UL
+> SoC. "renesas,r9a07g043-tsu" compatible string will be used on the
+> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+> SoC.
+> 
+> No driver changes are required as generic compatible string
+> "renesas,rzg2l-tsu" will be used as a fallback on RZ/Five SoC.
+> 
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+>  Documentation/devicetree/bindings/thermal/rzg2l-thermal.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-meson-gxl-s905d-p230 | arm64 | lab-baylibre | gcc-10   | defconfig | 1     =
-     =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.1-rc5=
--65-g32e8e1c35ebb/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.1-rc5-65-g32e8e1c35ebb
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      32e8e1c35ebbe0bb2853f5f8417e247abf87ad05 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform             | arch  | lab          | compiler | defconfig | regres=
-sions
----------------------+-------+--------------+----------+-----------+-------=
------
-meson-gxl-s905d-p230 | arm64 | lab-baylibre | gcc-10   | defconfig | 1     =
-     =
-
-
-  Details:     https://kernelci.org/test/plan/id/637542e6f81543f14d2abcfa
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.1-rc5-65-g32e8e1=
-c35ebb/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.1-rc5-65-g32e8e1=
-c35ebb/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxl-s905d-p230.ht=
-ml
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20221107.1/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/637542e6f81543f14d2ab=
-cfb
-        new failure (last pass: v6.1-rc5-55-g60453df62d30) =
-
- =20
+Acked-by: Rob Herring <robh@kernel.org>
