@@ -2,57 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AB062D765
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 10:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36CE62D769
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 10:48:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234373AbiKQJrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 04:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36872 "EHLO
+        id S233223AbiKQJsT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 04:48:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbiKQJrq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 04:47:46 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918882AC6C
-        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 01:47:44 -0800 (PST)
+        with ESMTP id S234267AbiKQJsR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 04:48:17 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE69951C18
+        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 01:48:16 -0800 (PST)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8796F1F8AB;
-        Thu, 17 Nov 2022 09:47:42 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 883A022601;
+        Thu, 17 Nov 2022 09:48:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1668678462; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1668678495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=WwbAU+9DK69oK+zbOlIxCAegXsZiEaop0LhPn+NOuLg=;
-        b=r/1R/nrzPkR4rjZLDsht1D2wZg07jn6ykWZU8zhPXa5l/tsgnJrPRro5C5UR9g7uFBYhVr
-        HdrUnnT3sSt32EvkiulhKY/kNHzG0ebmlyTNvNgotYdDXegoFzgiOQHyazyz6oQ2AQ6F2d
-        lAyiazFdtLXFqD90IOI2G/VxSQn1B9o=
+        bh=SvgEWTp7c9loGhpwJu2k72IdYmUaElpD7EL84RLe2qY=;
+        b=aJGUqRCFWCD7XrNU8ztr3njAUL34v48T32f3SH7iMppHN9HOhou1e8GJTmZnh5cdrmrba5
+        IE7RyZSLeSYrTjJ2Pbw7lNUeEpPqurf7pRxnUSJ01ipFYCNNKwRxFthvUzs9BFCIq/o8Hy
+        ymshDFFBhOFdRInIO/2DvJ7fNAwgLOg=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1668678462;
+        s=susede2_ed25519; t=1668678495;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=WwbAU+9DK69oK+zbOlIxCAegXsZiEaop0LhPn+NOuLg=;
-        b=l1S25G+FZokJ3ETGW/Jxpf0eOKfog29GuG1tC6B2eQ5sDhcPzqLt1lyk7oTWpMG/BLmZUL
-        +2Cu+LK7Rc8rhzCQ==
+        bh=SvgEWTp7c9loGhpwJu2k72IdYmUaElpD7EL84RLe2qY=;
+        b=Rz4fVco1FXmNdB/gqkibz5KE52L+UivdRnuoHbUt2LnLhVjj3uqXjbL0XMD1SqojAfWjKT
+        ZxC9bFUJp5Ro0QCg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6231D13B56;
-        Thu, 17 Nov 2022 09:47:42 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 629AA13B56;
+        Thu, 17 Nov 2022 09:48:15 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6OahFj4DdmPXEwAAMHmgww
-        (envelope-from <trenn@suse.de>); Thu, 17 Nov 2022 09:47:42 +0000
+        id ye3NFl8DdmMHFAAAMHmgww
+        (envelope-from <trenn@suse.de>); Thu, 17 Nov 2022 09:48:15 +0000
 From:   Thomas Renninger <trenn@suse.de>
-To:     linux-pm@vger.kernel.org
-Cc:     skhan@linuxfoundation.org, Zhang Rui <rui.zhang@intel.com>,
-        daniel.lezcano@linaro.org
-Subject: [PATCH 1/2] cpupower: Introduce powercap intel-rapl library helpers and powercap-info command
-Date:   Thu, 17 Nov 2022 10:47:41 +0100
-Message-ID: <3200810.N7aMVyhfb1@work>
+To:     linux-pm@vger.kernel.org, daniel.lezcano@linaro.org
+Cc:     Zhang Rui <rui.zhang@intel.com>, skhan@linuxfoundation.org
+Subject: [PATCH 2/2] cpupower: rapl monitor - shows the used power consumption in uj for each rapl domain
+Date:   Thu, 17 Nov 2022 10:48:15 +0100
+Message-ID: <14777287.JCcGWNJJiE@work>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -65,200 +64,183 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Read out powercap zone information via:
-cpupower powercap-info
-and show the zone hierarchy to the user:
+This CPU power monitor shows the power consumption
+as exposed by the powercap subsystem, cmp with:
+Documentation/power/powercap/powercap.rst
 
-./cpupower powercap-info
-Driver: intel-rapl
-Powercap domain hierarchy:
+cpupower monitor -m RAPL
+ CPU| pack | core | unco
+   0|6853926|967832|442381
+   8|6853926|967832|442381
+   1|6853926|967832|442381
+   9|6853926|967832|442381
 
-Zone: package-0 (enabled)
-Power consumption can be monitored in micro Watts
+Unfortunately RAPL domains cannot be directly mapped to the corresponding
+CPU socket/package, core it belongs to.
+Not sure this is possible at all with the current data exposed from the kernel.
 
-        Zone: core (disabled)
-        Power consumption can be monitored in micro Watts
-
-        Zone: uncore (disabled)
-        Power consumption can be monitored in micro Watts
-
-        Zone: dram (disabled)
-        Power consumption can be monitored in micro Watts
-
-There is a dummy -a option for powercap-info which can/should be used to show
-more detailed info later. Like that other args can be added easily later as well.
-
-A enable/disable option via powercap-set subcommand is also an enhancement
-for later.
-
-Also not all RAPL domains are shown. The func walking through RAPL subdomains
-is restricted and hardcoded to: "intel-rapl/intel-rapl:0"
-On my system above powercap domains map to:
-intel-rapl/intel-rapl:0
--> pack (age-0)
-intel-rapl/intel-rapl:0/intel-rapl:0:0
--> core
-intel-rapl/intel-rapl:0/intel-rapl:0:1
--> uncore
-
-Missing ones on my system are:
-intel-rapl-mmio/intel-rapl-mmio:0
--> pack (age-0)
-
-intel-rapl/intel-rapl:1
--> psys
-
-This could get enhanced in:
-struct powercap_zone *powercap_init_zones()
-and adopted to walk through all intel-rapl zones, but
-also to other powercap drivers like dtpm
-(Dynamic Thermal Power Management framework),
-cmp with: drivers/powercap/dtpm_*
+Still it can be worthful information for developers trying to optimize
+power consumption of workloads or their system in general.
 
 Signed-off-by: Thomas Renninger <trenn@suse.de>
+CC: Zhang Rui <rui.zhang@intel.com>
 CC: Shuah Khan <skhan@linuxfoundation.org>
 ---
- tools/power/cpupower/Makefile              |  14 ++-
- tools/power/cpupower/utils/builtin.h       |   2 +
- tools/power/cpupower/utils/cpupower.c      |   1 +
- tools/power/cpupower/utils/powercap-info.c | 113 +++++++++++++++++++++
- 4 files changed, 126 insertions(+), 4 deletions(-)
- create mode 100644 tools/power/cpupower/utils/powercap-info.c
+ tools/power/cpupower/Makefile                 |   1 +
+ .../utils/idle_monitor/cpupower-monitor.c     |   7 +-
+ .../utils/idle_monitor/idle_monitors.def      |   1 +
+ .../utils/idle_monitor/rapl_monitor.c         | 147 ++++++++++++++++++
+ 4 files changed, 153 insertions(+), 3 deletions(-)
+ create mode 100644 tools/power/cpupower/utils/idle_monitor/rapl_monitor.c
 
 diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index e9b6de314654..9fd3b309b3a6 100644
+index 9fd3b309b3a6..59bfa05dec5d 100644
 --- a/tools/power/cpupower/Makefile
 +++ b/tools/power/cpupower/Makefile
-@@ -133,7 +133,7 @@ UTIL_OBJS =  utils/helpers/amd.o utils/helpers/msr.o \
+@@ -131,6 +131,7 @@ UTIL_OBJS =  utils/helpers/amd.o utils/helpers/msr.o \
+ 	utils/idle_monitor/hsw_ext_idle.o \
+ 	utils/idle_monitor/amd_fam14h_idle.o utils/idle_monitor/cpuidle_sysfs.o \
  	utils/idle_monitor/mperf_monitor.o utils/idle_monitor/cpupower-monitor.o \
++	utils/idle_monitor/rapl_monitor.o \
  	utils/cpupower.o utils/cpufreq-info.o utils/cpufreq-set.o \
  	utils/cpupower-set.o utils/cpupower-info.o utils/cpuidle-info.o \
--	utils/cpuidle-set.o
-+	utils/cpuidle-set.o utils/powercap-info.o
+ 	utils/cpuidle-set.o utils/powercap-info.o
+diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+index 7c77045fef52..075e766ff1f3 100644
+--- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
++++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
+@@ -459,9 +459,10 @@ int cmd_monitor(int argc, char **argv)
+ 			print_results(1, cpu);
+ 	}
  
- UTIL_SRC := $(UTIL_OBJS:.o=.c)
- 
-@@ -143,9 +143,12 @@ UTIL_HEADERS = utils/helpers/helpers.h utils/idle_monitor/cpupower-monitor.h \
- 	utils/helpers/bitmask.h \
- 	utils/idle_monitor/idle_monitors.h utils/idle_monitor/idle_monitors.def
- 
--LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h lib/acpi_cppc.h
--LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c lib/acpi_cppc.c
--LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o lib/acpi_cppc.o
-+LIB_HEADERS = 	lib/cpufreq.h lib/cpupower.h lib/cpuidle.h lib/acpi_cppc.h \
-+	lib/powercap.h
-+LIB_SRC = 	lib/cpufreq.c lib/cpupower.c lib/cpuidle.c lib/acpi_cppc.c \
-+	lib/powercap.c
-+LIB_OBJS = 	lib/cpufreq.o lib/cpupower.o lib/cpuidle.o lib/acpi_cppc.o \
-+	lib/powercap.o
- LIB_OBJS :=	$(addprefix $(OUTPUT),$(LIB_OBJS))
- 
- override CFLAGS +=	-pipe
-@@ -276,6 +279,7 @@ install-lib: libcpupower
- 	$(INSTALL) -d $(DESTDIR)${includedir}
- 	$(INSTALL_DATA) lib/cpufreq.h $(DESTDIR)${includedir}/cpufreq.h
- 	$(INSTALL_DATA) lib/cpuidle.h $(DESTDIR)${includedir}/cpuidle.h
-+	$(INSTALL_DATA) lib/powercap.h $(DESTDIR)${includedir}/powercap.h
- 
- install-tools: $(OUTPUT)cpupower
- 	$(INSTALL) -d $(DESTDIR)${bindir}
-@@ -292,6 +296,7 @@ install-man:
- 	$(INSTALL_DATA) -D man/cpupower-set.1 $(DESTDIR)${mandir}/man1/cpupower-set.1
- 	$(INSTALL_DATA) -D man/cpupower-info.1 $(DESTDIR)${mandir}/man1/cpupower-info.1
- 	$(INSTALL_DATA) -D man/cpupower-monitor.1 $(DESTDIR)${mandir}/man1/cpupower-monitor.1
-+	$(INSTALL_DATA) -D man/cpupower-powercap-info.1 $(DESTDIR)${mandir}/man1/cpupower-powercap-info.1
- 
- install-gmo: create-gmo
- 	$(INSTALL) -d $(DESTDIR)${localedir}
-@@ -321,6 +326,7 @@ uninstall:
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-set.1
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-info.1
- 	- rm -f $(DESTDIR)${mandir}/man1/cpupower-monitor.1
-+	- rm -f $(DESTDIR)${mandir}/man1/cpupower-powercap-info.1
- 	- for HLANG in $(LANGUAGES); do \
- 		rm -f $(DESTDIR)${localedir}/$$HLANG/LC_MESSAGES/cpupower.mo; \
- 	  done;
-diff --git a/tools/power/cpupower/utils/builtin.h b/tools/power/cpupower/utils/builtin.h
-index f7065ae60a14..e1caefd467cd 100644
---- a/tools/power/cpupower/utils/builtin.h
-+++ b/tools/power/cpupower/utils/builtin.h
-@@ -8,6 +8,8 @@ extern int cmd_freq_set(int argc, const char **argv);
- extern int cmd_freq_info(int argc, const char **argv);
- extern int cmd_idle_set(int argc, const char **argv);
- extern int cmd_idle_info(int argc, const char **argv);
-+extern int cmd_cap_info(int argc, const char **argv);
-+extern int cmd_cap_set(int argc, const char **argv);
- extern int cmd_monitor(int argc, const char **argv);
- 
+-	for (num = 0; num < avail_monitors; num++)
+-		monitors[num]->unregister();
+-
++	for (num = 0; num < avail_monitors; num++) {
++		if (monitors[num]->unregister)
++			monitors[num]->unregister();
++	}
+ 	cpu_topology_release(cpu_top);
+ 	return 0;
+ }
+diff --git a/tools/power/cpupower/utils/idle_monitor/idle_monitors.def b/tools/power/cpupower/utils/idle_monitor/idle_monitors.def
+index 0d6ba4dbb9c7..7c926e90c87e 100644
+--- a/tools/power/cpupower/utils/idle_monitor/idle_monitors.def
++++ b/tools/power/cpupower/utils/idle_monitor/idle_monitors.def
+@@ -4,5 +4,6 @@ DEF(intel_nhm)
+ DEF(intel_snb)
+ DEF(intel_hsw_ext)
+ DEF(mperf)
++DEF(rapl)
  #endif
-diff --git a/tools/power/cpupower/utils/cpupower.c b/tools/power/cpupower/utils/cpupower.c
-index 8ac3304a9957..9ec973165af1 100644
---- a/tools/power/cpupower/utils/cpupower.c
-+++ b/tools/power/cpupower/utils/cpupower.c
-@@ -54,6 +54,7 @@ static struct cmd_struct commands[] = {
- 	{ "frequency-set",	cmd_freq_set,	1	},
- 	{ "idle-info",		cmd_idle_info,	0	},
- 	{ "idle-set",		cmd_idle_set,	1	},
-+	{ "powercap-info",	cmd_cap_info,	0	},
- 	{ "set",		cmd_set,	1	},
- 	{ "info",		cmd_info,	0	},
- 	{ "monitor",		cmd_monitor,	0	},
-diff --git a/tools/power/cpupower/utils/powercap-info.c b/tools/power/cpupower/utils/powercap-info.c
+ DEF(cpuidle_sysfs)
+diff --git a/tools/power/cpupower/utils/idle_monitor/rapl_monitor.c b/tools/power/cpupower/utils/idle_monitor/rapl_monitor.c
 new file mode 100644
-index 000000000000..989fafe581cf
+index 000000000000..1acadf5ef90e
 --- /dev/null
-+++ b/tools/power/cpupower/utils/powercap-info.c
-@@ -0,0 +1,113 @@
-+#include <unistd.h>
++++ b/tools/power/cpupower/utils/idle_monitor/rapl_monitor.c
+@@ -0,0 +1,147 @@
++/*
++ *  (C) 2016      Thomas Renninger <trenn@suse.com>
++ *
++ *  Licensed under the terms of the GNU GPL License version 2.
++ *
++ */
++
++#if defined(__i386__) || defined(__x86_64__)
++
 +#include <stdio.h>
-+#include <errno.h>
 +#include <stdlib.h>
 +#include <stdint.h>
++#include <time.h>
 +#include <string.h>
 +
-+#include <getopt.h>
++#include <pci/pci.h>
 +
-+#include "powercap.h"
++#include "idle_monitor/cpupower-monitor.h"
 +#include "helpers/helpers.h"
++#include "powercap.h"
 +
-+int powercap_show_all = 0;
++#define MAX_RAPL_ZONES 10
 +
-+static struct option info_opts[] =
++int rapl_zone_count = 0;
++cstate_t rapl_zones[MAX_RAPL_ZONES];
++struct powercap_zone *rapl_zones_pt[MAX_RAPL_ZONES] = { 0 };
++
++unsigned long long rapl_zone_previous_count[MAX_RAPL_ZONES];
++unsigned long long rapl_zone_current_count[MAX_RAPL_ZONES];
++unsigned long long rapl_max_count;
++
++static int rapl_get_count_uj(unsigned int id, unsigned long long *count,
++			     unsigned int cpu)
 +{
-+	{ "all",		no_argument,		 NULL,	 'a'},
-+	{ },
-+};
++	if (rapl_zones_pt[id] == NULL)
++		/* error */
++		return -1;
 +
-+static int powercap_print_one_zone(struct powercap_zone *zone)
-+{
-+	int mode, i, ret = 0;
-+	char pr_prefix[1024] = "";
++	*count = rapl_zone_current_count[id] - rapl_zone_previous_count[id];
 +
-+	for (i = 0; i < zone->tree_depth && i < POWERCAP_MAX_TREE_DEPTH; i++)
-+		strcat (pr_prefix, "\t");
-+
-+	printf("%sZone: %s", pr_prefix, zone->name);
-+	ret = powercap_zone_get_enabled(zone, &mode);
-+	if (ret < 0)
-+		return ret;
-+	printf(" (%s)\n", mode ? "enabled" : "disabled");
-+
-+	if (zone->has_power_uw)
-+printf(_("%sEnergy consumption can be monitored in micro Jules\n"),
-+       pr_prefix);
-+
-+	if (zone->has_energy_uj)
-+printf(_("%sPower consumption can be monitored in micro Watts\n"),
-+       pr_prefix);
-+
-+	printf("\n");
-+
-+	if (ret != 0)
-+		return ret;
-+	return ret;
++	return 0;
 +}
 +
-+static int powercap_show()
++static int powercap_count_zones(struct powercap_zone *zone)
++{
++	uint64_t val;
++	int uj;
++	if (rapl_zone_count >= MAX_RAPL_ZONES)
++		return -1;
++
++	if (!zone->has_energy_uj)
++		return 0;
++
++	printf("%s\n", zone->sys_name);
++	uj = powercap_get_energy_uj(zone, &val);
++	printf("%d\n", uj);
++
++	strncpy(rapl_zones[rapl_zone_count].name, zone->name, CSTATE_NAME_LEN - 1);
++	strcpy(rapl_zones[rapl_zone_count].desc, "");
++	rapl_zones[rapl_zone_count].id = rapl_zone_count;
++	rapl_zones[rapl_zone_count].range = RANGE_MACHINE;
++	rapl_zones[rapl_zone_count].get_count = rapl_get_count_uj;
++	rapl_zones_pt[rapl_zone_count] = zone;
++	rapl_zone_count++;
++
++	return 0;
++}
++
++static int rapl_start(void)
++{
++	int i, ret;
++	uint64_t uj_val;
++
++	for (i = 0; i < rapl_zone_count; i++) {
++		ret = powercap_get_energy_uj(rapl_zones_pt[i], &uj_val);
++		if (ret)
++			return ret;
++		rapl_zone_previous_count[i] = uj_val;
++	}
++
++	return 0;
++}
++
++static int rapl_stop(void)
++{
++	int i;
++	uint64_t uj_val;
++
++	for (i = 0; i < rapl_zone_count; i++) {
++		int ret;
++		ret = powercap_get_energy_uj(rapl_zones_pt[i], &uj_val);
++		if (ret)
++			return ret;
++		rapl_zone_current_count[i] = uj_val;
++		if (rapl_max_count < uj_val)
++			rapl_max_count = uj_val - rapl_zone_previous_count[i];
++	}
++	return 0;
++}
++
++struct cpuidle_monitor *rapl_register(void)
 +{
 +	struct powercap_zone *root_zone;
 +	char line[MAX_LINE_LEN] = "";
@@ -266,64 +248,48 @@ index 000000000000..989fafe581cf
 +
 +	ret = powercap_get_driver(line, MAX_LINE_LEN);
 +	if (ret < 0) {
-+		printf(_("No powercapping driver loaded\n"));
-+		return ret;
++		dprint("No powercapping driver loaded\n");
++		return NULL;
 +	}
 +
-+	printf("Driver: %s\n", line);
++	dprint("Driver: %s\n", line);
 +	ret = powercap_get_enabled(&val);
 +	if (ret < 0)
-+		return ret;
++		return NULL;
 +	if (!val) {
-+		printf(_("Powercapping is disabled\n"));
-+		return -1;
++		dprint("Powercapping is disabled\n");
++		return NULL;
 +	}
 +
-+	printf(_("Powercap domain hierarchy:\n\n"));
++	dprint("Powercap domain hierarchy:\n\n");
 +	root_zone = powercap_init_zones();
 +
 +	if (root_zone == NULL) {
-+		printf(_("No powercap info found\n"));
-+		return 1;
++		dprint("No powercap info found\n");
++		return NULL;
 +	}
 +
-+	powercap_walk_zones(root_zone, powercap_print_one_zone);
++	powercap_walk_zones(root_zone, powercap_count_zones);
++	rapl_monitor.hw_states_num = rapl_zone_count;
 +
-+	return 0;
++	return &rapl_monitor;
 +}
 +
-+int cmd_cap_set(int argc, char **argv)
-+{
-+	return 0;
++struct cpuidle_monitor rapl_monitor = {
++	.name			= "RAPL",
++	.hw_states		= rapl_zones,
++	.hw_states_num		= 0,
++	.start			= rapl_start,
++	.stop			= rapl_stop,
++	.do_register		= rapl_register,
++	.flags.needs_root	= 0,
++	.overflow_s		= 60 * 60 * 24 * 100, /* To be implemented */
 +};
-+int cmd_cap_info(int argc, char **argv)
-+{
-+	extern char *optarg;
-+	extern int optind, opterr, optopt;
-+	int ret = 0, cont = 1;
-+	do {
-+		ret = getopt_long(argc, argv, "a", info_opts, NULL);
-+		switch (ret) {
-+		case '?':
-+			cont = 0;
-+			break;
-+		case -1:
-+			cont = 0;
-+			break;
-+		case 'a':
-+			powercap_show_all = 1;
-+			break;
-+		default:
-+			fprintf(stderr, _("invalid or unknown argument\n"));
-+			return EXIT_FAILURE;
-+		}
-+	} while (cont);
 +
-+	powercap_show();
-+	return 0;
-+}
++#endif
 -- 
 2.37.1
+
 
 
 
