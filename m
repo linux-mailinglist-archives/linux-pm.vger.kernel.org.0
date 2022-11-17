@@ -2,172 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30FEC62D297
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 06:08:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EC4762D2B9
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 06:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiKQFIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 00:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33978 "EHLO
+        id S234334AbiKQFb6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 00:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiKQFIq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 00:08:46 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B083A391DB;
-        Wed, 16 Nov 2022 21:08:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eFNyUM24POjfD1w/ghVEgwBR5qbKHtr4P+i9jDXiV1VbwOEfW+rVFcgWKk05TDlgxosTnD7y+XJsalhk1FlwwjkHNW8G5ll2ass56LApb8dWvXko+IDREOeu0M7R0lemPRMZMxWqJUiwjE9jCfw/tEqhEnxb2zv8Crc6PXQHKpORJ92L2JSpfqxe+ZMWpgSD9oiyfYra6nLLNGqT6TppKsFDP1Wmpfsjnl3XLv0cbDBYYuoiNCQuTGzqVBl4qDNXhOjTSecSBQCGrkfkl8aVOkqoNN+/+I6uoPWf7laa53sXVJ3MZ83byrhYoryFWGrPzpSRf+sVLoV7a/9yov9h6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hIl1o7KNtuyIJGXNp6SMhCHksRTQshDUo4cnRUJDhZY=;
- b=Hb/8+j4rtychnWf9M7cLL/SEg6Jv/5T0wV22Icf3evRsCR0YMKqFXQzWW7fu9Ls3Vc4rjXSNhMFRPRMVJPF0BKbWgC6HwoUVNCl36TLMgyD9J8yO3HRRiFMWq0mS9lS+YMZRfR0uHFe6mEZjvzvLQde8g9u0jCoPllu5eSZ7E8I//vllpxdypbSmp8l5Asu1a9mzuYH4GJZermf7khLKfT8YJ7aX7CqhVkbt3edOP9Ne+c/6OgbpOrncK8VStfWxq4+cJLjf1SkBPVHrhXCczbjNl97lr5fglnliEf2aQnzp09sXZ5LXtIe1xjZaHm6KGnqary+qx2kaY+ZFFhTw0w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hIl1o7KNtuyIJGXNp6SMhCHksRTQshDUo4cnRUJDhZY=;
- b=rWb74K009/ydRhFtQRSrJ+xstnrGHLNEugZeI30ZpqK54s1RHMYvwt6j1RpHD0e9PSrRb8x96RRrOonNXyl72WyFSMdY5bHtNWdWrRVby2YTwtJVt2J8JDlNZZMP7Id1XjqHf3HDZlHukwkskKknUfHJ8FeEw5dSX/igbJm0Vp8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by DS0PR12MB6390.namprd12.prod.outlook.com (2603:10b6:8:ce::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.17; Thu, 17 Nov 2022 05:08:43 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::b6f2:3174:a1c2:44b5]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::b6f2:3174:a1c2:44b5%7]) with mapi id 15.20.5813.013; Thu, 17 Nov 2022
- 05:08:43 +0000
-Message-ID: <2b004975-76d7-0db9-1ded-649c2da5a729@amd.com>
-Date:   Thu, 17 Nov 2022 10:38:31 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH 5/5] Documentation: add amd-pstate kernel command line
- options
-Content-Language: en-US
-To:     Perry Yuan <Perry.Yuan@amd.com>, rafael.j.wysocki@intel.com,
-        ray.huang@amd.com, viresh.kumar@linaro.org,
-        Mario.Limonciello@amd.com
-Cc:     Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
-        Deepak.Sharma@amd.com, Shimmer.Huang@amd.com, Li.Meng@amd.com,
-        Xiaojian.Du@amd.com, gautham.shenoy@amd.com,
-        ananth.narayan@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221117024955.3319484-1-Perry.Yuan@amd.com>
- <20221117024955.3319484-6-Perry.Yuan@amd.com>
-From:   Wyes Karny <wyes.karny@amd.com>
-In-Reply-To: <20221117024955.3319484-6-Perry.Yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0133.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:bf::15) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        with ESMTP id S231734AbiKQFb5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 00:31:57 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4964B554DC
+        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 21:31:56 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id t17so19450pjo.3
+        for <linux-pm@vger.kernel.org>; Wed, 16 Nov 2022 21:31:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7oPr2c5sFjkGMsgr2UPxb1pE9bvOecjFKXm2LmIgOts=;
+        b=D156S2K69hV/6I7Gnhas5LRMf/1HeHCRR6mF9kHXuGKmbVj+03aTzr9DUECHUOXQha
+         2Vfu7ELiV13A6ODirlbwv3BmXf6udj+Oe+gQKOOEI05PfKFipqvM8FrFKc1Dw0cXOBhV
+         2HmVnvpEtF3QVsXMIRkNEl+ni+O7w/DPOqyerfNlU0Bt2aldI7MLSwjLevjfvLJKwVEY
+         DQZ7SU/cxtR6L6MyDmT8dicCsfcZP1hk86DbBQG2H4m8u8xk0hHj+BdzwJErD/c3S8fC
+         f+eu5r+uIDGRTBeUwd4jia0qn+v64ncYmMGpoQtzONp+palhU1fRWxds6B3KCTrGsP1p
+         TFhw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7oPr2c5sFjkGMsgr2UPxb1pE9bvOecjFKXm2LmIgOts=;
+        b=iCpz9opvgA5n0lTcumxqOU1Vs2/MBmlWRPA9xxEBj2SqCl9WUOWva7hipWlBaO6yrq
+         PqVbTaT8+B1tGax4uTcpt4898cnSIbDPwheEzlfUxCLT2I4z4sCGSTqQihnE0+XkSzMl
+         h01xCwwI40mEg0cnu7mvKqaq43D4F0XEab9ujVk3q5bIBx6aiHeOi1mdMvdGdA2jc5s0
+         PclUGdZL1lHPGQ1DgXx1D+LuafFh3qVW07XlbfwZL275RLQXt9L53J8YW0mpaiyKeGsZ
+         Jjti9zhXLTT/lJ97EuamN+2tBzx6EAeXar+iCxwRWxGQmUt2tIb3WTduPzVP5FpWl0r/
+         SbpQ==
+X-Gm-Message-State: ANoB5plO2vBXa+ofqwWTclwFUt9EW/DR0aYd1UsdLzWUps6nen+gJNXY
+        OQo6NxZNaUeUEZxQxzPUUXFx
+X-Google-Smtp-Source: AA0mqf7M4odCBsOw9ycvH+5mwO2zaa78y+/Y+XY0Cny6ZmRSUdTkjtaAoOkKpU93SzgySuz9tG37BA==
+X-Received: by 2002:a17:90a:bb16:b0:200:2d7f:18c2 with SMTP id u22-20020a17090abb1600b002002d7f18c2mr1211167pjr.106.1668663115721;
+        Wed, 16 Nov 2022 21:31:55 -0800 (PST)
+Received: from localhost.localdomain ([117.193.208.31])
+        by smtp.gmail.com with ESMTPSA id q4-20020a17090311c400b001865c298588sm96600plh.258.2022.11.16.21.31.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Nov 2022 21:31:54 -0800 (PST)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org
+Cc:     johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
+Date:   Thu, 17 Nov 2022 11:01:41 +0530
+Message-Id: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|DS0PR12MB6390:EE_
-X-MS-Office365-Filtering-Correlation-Id: 490965f4-e07b-4b92-4289-08dac859cc45
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ps4IRCwXQnInmsJhqMxZR8MPgsDtd5eS7DA7nNEuxrItetR+o0bDIvgkWPkbWdBcMTrHrf1Ga4QCL9pn7jGoId2RcIaAytXncT0D+uyFCXCxJEKLVtsAI6FNWuzyj7o5h8/PNVt4uoDXOp2yLIRB9xBHIsRc3xrXHMhxsPu3AcGZD+QXAu44Gk3nDzspGE+dQOoXUmNgQ51s2b9dsNJX2+3vwYMlKA0uXlzIJcDSbd+G/1H8NnZAxojq0H0LGILZkV/2jnA+tNBoc6s4QTcYNAgIK/ZhEcqYf/dF4keMv5p60fFBGUUu0PuW0vNuocEf/mxmsf50tpZGw76v9/jK7oKRl+TCOlW1ds63wWl78Pjqk2rhV0sgBJQMKKx6/j5K+UWMWuakQPQ4r+zgGK1qUqgXIKRJZ6nNoYQkkKHoDMHnKcq6Io9Jw07jcexlONCI3DKguwtTjxK8yIYmFgrMqS6paDkfbzkUcVdACgjitRxtuhKiTRZ0biOCUV2wbD/w6COmwIgH4ONhKCblmtpmDOmCeacQ1uk4BnFnWVp6+4IyD3vS2xAtSFhDAyQPgapKsxB4SIwg0IB0UQgj1EyuFqaqkSzvc6JcF5Gncg1CKNhxKCU4TxZiUHW/dz26d+jHaw/dVoYshZokHXVJ1n+N5d+fWWLsK6d/V+Qy2r2jxQBwejVm3tdVQJzBlOVJHG8+GSvWfPh3SMrCl3rAbDRS7IByBMrzeFkhgpe1331E3Ss=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(376002)(366004)(451199015)(316002)(6636002)(41300700001)(36756003)(4326008)(8676002)(66476007)(66556008)(66946007)(5660300002)(31696002)(2616005)(186003)(38100700002)(83380400001)(8936002)(44832011)(86362001)(26005)(2906002)(53546011)(6666004)(478600001)(6486002)(6506007)(6512007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TnBoNTFvZ1hSck5sZjg0ZlZEeExHRUs4L2dtUE5ZcjVLM1kyNTZ6cjAxU2ox?=
- =?utf-8?B?WTdRNUVzRWNmWDVsci9DN0h5TWtQakhYcjV4dnhlVVdlVlZ1bWk5TGFSUE8v?=
- =?utf-8?B?TSszODBHNy93TlZtcW9DWG0vMkJWRlVEQ0t1NDIrSmJlcVBJUU5JU1NpNXE1?=
- =?utf-8?B?bTRPcnpKWkRIYTJ5VzFZdFZBRURUL3hWN0p4alZYZEl3M3FCWFNwdW5tbWl6?=
- =?utf-8?B?d0dPeExGNzZuUk41VzJoY2xPNnpDWDY4ZUlqc0NLMnArU1JlMFNXQXhjVm5C?=
- =?utf-8?B?UzBMQ2E1SE5MRjVvSm1kVzQ3U3NacW4zWGRWWWI4bklQMWZYYmUyR2cyZU53?=
- =?utf-8?B?UHhsV0E3dEJrNXUyOWVxam45QnZ4L0Y5bU9TUmtBT3RjRlR0SEZtTXora0Nr?=
- =?utf-8?B?R1MxRnhTZGdDU2Y5ZlhlZzVxWGt5QWVrbnNrdUdaWm94UjZJVlhjTTNEWVBO?=
- =?utf-8?B?Ym5ORk1EMzNvVEFOT3hxbXA2NUxhOG1jZWRzdElnVDFMWWJpYjNSUVluUURQ?=
- =?utf-8?B?dGNQRkRYbHltK1h2c1l6THpEZU9FVUxKdHZwV090cW5wMVhvY0pkelRiUHYz?=
- =?utf-8?B?c2UxMzhyNlhZYzB0biswajVpNXQ2VC9JOEtDcDhCcmpYMTE1VTNaSVZSN1Ny?=
- =?utf-8?B?Z3hmdHhtVmdPUE1yWHNmZEtFUjVaUDhxTGY4ZzZ0QTNuYU4rTEdZNUN5U0gx?=
- =?utf-8?B?SVNCa3ZSaUV1L3dDQ1RVRERqVGpBaUtycS9oQ0cyNmZXQ1BlVDBHOTlsL3FG?=
- =?utf-8?B?cEQ0VjNJMU1scWdiNVA5SmdWamRqVHNOQWduSmVudS9kbFo5VjdDTTdWbWo2?=
- =?utf-8?B?bnBnNGhGSHpYTHRJU2pLWWF4Qlk0TW93L2VSTk5ucGNkNnA5N3pLWnZEY2Yy?=
- =?utf-8?B?NEtEN3dIV0VlWVlwcEhPYzRuMEExUXNRZ3JHVitWdkttME8xSGZTMkpoQjMy?=
- =?utf-8?B?TTMxS1BMbXBuVGppTVRDN2RJaVZwOGVObWowOHVjTnNzZXdhSUxXby9BbWdQ?=
- =?utf-8?B?dC8vWGVXWS8wU0lBRmtFU2gyVjhXbVQ1bWZQNWlrUEIyL3hSODAweXhiYnBH?=
- =?utf-8?B?a2UyOHA5VTBCNnJJdnNOQ2paV241eGxEdFRobWVqOS9GTVgyL3dOOXk3cWpM?=
- =?utf-8?B?cGg2Qnl1ck8rZng0L1ZJVTFLanpyaWxkWHBvTlo4QkZ4aGtzU1p2ZkJDb1Vy?=
- =?utf-8?B?c05mMHRHWHN5UitwaUdkM1NZaUplNUNGbFcrZHl1ckNVUFJLYlBERlVieXN5?=
- =?utf-8?B?Tm9sTS9YL1hmMzVoWWNLemR2Q0I3TUdod2xTeEJnbkc2Qk4zL1dyOHliVkF5?=
- =?utf-8?B?c1BjVTkzZXg4Q3dwRVkvQmZqQU1Ma3JOdC80ODRCNjFBQVBsM0tybjRncjFR?=
- =?utf-8?B?Uk4wS0dleUJ1bThNbGdGWFRkNzdoSDkyeHI0alMrTzAvdkJ0RkhaOVFEelhx?=
- =?utf-8?B?bStGMzJyUm9MT0RyN1VVR2Rvd25LV2tJczRGbTJLRlN3U3lBN0dzbDMzTVRr?=
- =?utf-8?B?VitqZkpMekxhaWRoNWhEWG9nekdxSU92WXZSbUZSYjdWQkNqTzRrdUF0YWJw?=
- =?utf-8?B?WHdMeEszLzNpak5SOUlQVmkvMXR4U1ZXVUVURU9UUjJSSTNYdGNPZzJEQTB3?=
- =?utf-8?B?amEyNnMrNmF3MjluVmhHaHc0dE0xcm5uR0lDVXdBeXp5em1tS0VOaGlGWUxq?=
- =?utf-8?B?dS9VcTVKTXExZDY3MlBYNDdCOElsWldRVEVQMm13dDlYZE5YTHhZZktjTk5m?=
- =?utf-8?B?YXFQQ0ZSdkpwMUxTc2RYUHV4cjZpNVVxamRTNzduaVFMN1hFdlZraTAzT0po?=
- =?utf-8?B?MW5HR253QXBMZkhucEJKZzhjTWlIYmI5M1habkRiV3UvbldUQmNEUytnbVZL?=
- =?utf-8?B?TXVoVjNLVFF4R2lDeTY2UHowOW5IaDA1czBIOEJkcU01Vm55aGhTaVlpSlBB?=
- =?utf-8?B?MnNuUTFMdFd5TTQyUEduV3QwUXlTZ2ROcGFoL0dHa1JmdTRXR3JjeGdWeHJL?=
- =?utf-8?B?aW9vRy95d3pCaDVQeU42R1FnOVBzOUtxT1VTdmd5MUlFcGkyNTMweWtPVElX?=
- =?utf-8?B?c1RYTUpySmRWbGJVcUN4SlVtZUVTR1ZmWGNtdy9BRmhnYlkzVHdVVnl0NEpp?=
- =?utf-8?Q?mwcMPDpkgoeke+HMahDGSPe4S?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 490965f4-e07b-4b92-4289-08dac859cc45
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 05:08:43.4206
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LMjNdqvRRSwJlZP9lY7lZJM+5Ixf6MgB2nxRBgXZhHMc1eeUhtRYDign0uoII7D5L4B4SSAZuPoOAdUuhnPfjA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6390
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hello,
 
+This series adds clock provider support to the Qcom CPUFreq driver for
+supplying the clocks to the CPU cores in Qcom SoCs.
 
-On 11/17/2022 8:19 AM, Perry Yuan wrote:
-> Add a new amd pstate driver command line option to enable driver passive
-> working mode via MSR and shared memory interface to request desired
-> performance within abstract scale and the power management firmware
-> (SMU) convert the perf requests into actual hardware pstates.
-> 
-> Also the `disable` parameter can disable the pstate driver loading by
-> adding `amd_pstate=disable` to kernel command line.
-> 
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+clocks to the CPU cores. But this is not represented clearly in devicetree.
+There is no clock coming out of the CPUFreq HW node to the CPU. This created
+an issue [1] with the OPP core when a recent enhancement series was submitted.
+Eventhough the issue got fixed in the OPP framework in the meantime, that's
+not a proper solution and this series aims to fix it properly.
 
-Tested-by: Wyes Karny <wyes.karny@amd.com>
+There was also an attempt made by Viresh [2] to fix the issue by moving the
+clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+since those clocks belong to the CPUFreq HW node only.
 
-> ---
->  Documentation/admin-guide/kernel-parameters.txt | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index a465d5242774..42af9ca0127e 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -6959,3 +6959,14 @@
->  				memory, and other data can't be written using
->  				xmon commands.
->  			off	xmon is disabled.
-> +
-> +	amd_pstate=	[X86]
-> +			disable
-> +			  Do not enable amd_pstate as the default
-> +			  scaling driver for the supported processors
-> +			passive
-> +			  Use amd_pstate as a scaling driver, driver requests a
-> +			  desired performance on this abstract scale and the power
-> +			  management firmware translates the requests into actual
-> +			  hardware states (core frequency, data fabric and memory
-> +			  clocks etc.)
+The proposal here is to add clock provider support to the Qcom CPUFreq HW
+driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+This correctly reflects the hardware implementation.
+
+The clock provider is a simple one that just provides the frequency of the
+clocks supplied to each frequency domain in the SoC using .recalc_rate()
+callback. The frequency supplied by the driver will be the actual frequency
+that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+is not same as what the CPUFreq framework has set but it is the one that gets
+supplied to the CPUs after throttling by LMh.
+
+This series has been tested on SM8450 based dev board with the OPP hack removed
+and hence there is a DTS change only for that platform. Once this series gets
+accepted, rest of the platform DTS can also be modified and finally the hack on
+the OPP core can be dropped.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
+
+Changes in v7:
+
+* Added a patch that returns the throttled frequency for cpufreq_driver->get()
+  callback (Sudeep & Viresh)
+* Added error check for kasprintf and allocated the clk name locally
+
+Changes in v6:
+
+* Removed the local variable clk_name (Matthias)
+* Added the clock id to the error message of devm_clk_hw_register()
+
+Changes in v5:
+
+* Switched to Hz unit for the CPU clocks
+
+Changes in v4:
+
+* Rebased on top of cpufreq/arm/linux-next branch
+
+Changes in v3:
+
+* Submitted the cpufreq driver cleanup patches as a separate series as
+  suggested by Viresh
+* Removed static keyword from clk_init_data declaration
+
+Changes in v2:
+
+* Moved the qcom_cpufreq_data allocation to probe
+* Added single clock provider with multiple clks for each freq domain
+* Moved soc_data to qcom_cpufreq struct
+* Added Rob's review for binding
+
+Manivannan Sadhasivam (4):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+  cpufreq: qcom-hw: Add CPU clock provider support
+  cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 12 +++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |  9 ++
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 87 ++++++++++++++++---
+ 3 files changed, 95 insertions(+), 13 deletions(-)
 
 -- 
-Thanks & Regards,
-Wyes
+2.25.1
+
