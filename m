@@ -2,176 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 144AD62DD9F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 15:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A2062DE0D
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 15:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234880AbiKQOLd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 09:11:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44248 "EHLO
+        id S234551AbiKQO1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 09:27:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240092AbiKQOL1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 09:11:27 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6704E60683
-        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 06:10:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1668694229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZOfT5eurCDMRxlkmRM+KtqZ95XT89veQx2mLMpeWx5s=;
-        b=CLSV3SpJGhwvtmUhPoWN6QciGKUlPdgWCFeM/Coxpp7UAtyMjhw4CQLJpO909I6zLqB86e
-        W8BtOZ3BBn6ab/gJ3VZtSKk8HHR0BQcCXi1u7449mbldS4aCJLsY+P3q16M/Uss6PrL4c1
-        UsTP9hpa0uhdZkb4s4lWjH+nkMiu1NA=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-594-Nthot1JePjiK4B9-9FXM5Q-1; Thu, 17 Nov 2022 09:10:28 -0500
-X-MC-Unique: Nthot1JePjiK4B9-9FXM5Q-1
-Received: by mail-ed1-f70.google.com with SMTP id e15-20020a056402190f00b00461b0576620so1291425edz.2
-        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 06:10:28 -0800 (PST)
+        with ESMTP id S239493AbiKQO1R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 09:27:17 -0500
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B776379E1C;
+        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id k15so1935402pfg.2;
+        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MuPgpre3wzn5WJZUlqLPK4/VfBG9+9DDaXxDqH0YfTg=;
+        b=gDrkj1lVR4IK0kfw/npxyZUbUD2NZG/OGlcfnkWxLkgYEFb7H9Q44NG9P/eKZVCRwy
+         0AqPixB5lzjkrxJ3Tvemmb32exJNXXMaUfqmNPd+pS6qNQmVL/9KPo3l97hnNjAxEk1O
+         ArenFxGlmUYLJW6Xb+oCKHz76UB9OV5SaguCLg7sw2h5AYKN4vncA/euRp4ZbDdK8a94
+         3q6JUUf1s9ejeo59lUs0/Elc1nmbjzHfof/IopD2wfsscm9srbbRuwG8U4jbLkPA4QOv
+         n9RZM0l1pgrBOwrs4yaSCeb11kaNUPzSyAJTbU2E1nUfw3nxmQXX9W1FXtelewruH4yY
+         JpBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZOfT5eurCDMRxlkmRM+KtqZ95XT89veQx2mLMpeWx5s=;
-        b=P1AyTusDwWitgnjMCy7t1l4SJra/j7lHTvgi1X1F+KC4VzF5TYVx2AnvEzwyo5RifU
-         X/+FbcWP/PwkUu5AwmabYh+5CIfJsHil2PTFnJp5vjtQoqCKKUBLAtFJTUibkn0Dp6dY
-         3+SBQnFAaFUH89jitaWmGgqzjNkIFlU12qy5kiNVimPn0wjdlVN2jxjPGAuOoKGgF6AQ
-         E4NGvoycxL/Qgd/gJEBEbgNXv1c1Fr2ptGFAEPvpBAJ2JJ07SxV0+3ABgcFU+PCEJEDo
-         v3uXlkra+GE9doxio4BWn3xEm7GUeiYZgkILOta1t/yF2pDZNFNJ+7dnn+lkksFVPgL7
-         4BgQ==
-X-Gm-Message-State: ANoB5pnLHRgPdxzWLHdhxE4IK7jd+0fsfe4RIfKj11weeycEBrFQ/NUz
-        j5AdvW9NR1iFboQ/7mOOeMYww2YpErzAM8lgQ+DDGg/AglcSB9xv34KMk+MqZdZkXSG2/BVmke0
-        qNW98/m5KNqQ349GcVN8=
-X-Received: by 2002:a17:906:a0d7:b0:7b2:7af0:c231 with SMTP id bh23-20020a170906a0d700b007b27af0c231mr2246809ejb.240.1668694227323;
-        Thu, 17 Nov 2022 06:10:27 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf5yZNP1T9Ajp8UDXy9301jUiAy463N9N6Tnb93rlCZ5crLe0F9/d4DGRRfgxna+qFpfi0BKgg==
-X-Received: by 2002:a17:906:a0d7:b0:7b2:7af0:c231 with SMTP id bh23-20020a170906a0d700b007b27af0c231mr2246782ejb.240.1668694227137;
-        Thu, 17 Nov 2022 06:10:27 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id b2-20020a1709063ca200b007acd04fcedcsm413829ejh.46.2022.11.17.06.10.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 06:10:26 -0800 (PST)
-Message-ID: <de3aae46-58bd-7041-df49-10cfb6be1603@redhat.com>
-Date:   Thu, 17 Nov 2022 15:10:25 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MuPgpre3wzn5WJZUlqLPK4/VfBG9+9DDaXxDqH0YfTg=;
+        b=RXiI5ED/LwcsjBGI+raSsHG7VMnSzVFm/1KDoEzo0ezoPmuRbTUoHNz7lKVsYUStV7
+         3VZvXqyvWAExQLLFfV34MNINDwpw1CUJqIAj3YKmUnvBRUcdckYs3RYm49hc3DQMCKIK
+         3E6+ao+S9XM7LGmiwYEz8Bbofi8EUA3KkU1Pj4Po17R4Ip1wZVZkAx48k5wwXG699S63
+         0Mji1ryWy0ADY/hs/EyCAeubTJXlvb3fAbFcI9HVO4AqKWlgT/k5ilQV1KCJYIRlN00z
+         DODdX9s3aaX+cHXV1HzrwJnGiGx4rCngxxRME8KSKgwbLXdbG9/hLdAdgCwdVlPoTPja
+         T3Cg==
+X-Gm-Message-State: ANoB5pkDQ0ftq3qWrKX+vhmUoDsYO0N3kIM3y9215A+1akdosYQx9tRC
+        kWufMNc2eGlMaxjz0HXkMo4=
+X-Google-Smtp-Source: AA0mqf5j440VkxQLEn4vGPnBkUjnZGHiKjxcKqHgkmTySQfsUCazaibRjFLcAv3i9cDadAoIGIpVgA==
+X-Received: by 2002:a63:e008:0:b0:46f:5979:8889 with SMTP id e8-20020a63e008000000b0046f59798889mr2339672pgh.119.1668695236195;
+        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c5-20020a170902b68500b00186b758c9fasm1448385pls.33.2022.11.17.06.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 06:27:15 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 17 Nov 2022 06:27:14 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Ninad Malwade <nmalwade@nvidia.com>
+Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
+        nicolinc@nvidia.com, rkasirajan@nvidia.com,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] hwmon: (ina3221): tighten attribute sysfs permissions
+Message-ID: <20221117142714.GB664755@roeck-us.net>
+References: <20221117083920.20493-1-nmalwade@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RFC v3 0/4] Make it easier to measure % in HW sleep state
-Content-Language: en-US, nl
-To:     Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sven van Ashbrook <svenva@chromium.org>,
-        Raul Rangel <rrangel@chromium.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>
-References: <20221115200156.12218-1-mario.limonciello@amd.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221115200156.12218-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221117083920.20493-1-nmalwade@nvidia.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
+On Thu, Nov 17, 2022 at 04:39:20PM +0800, Ninad Malwade wrote:
+> The INA3221 device provides voltage and current measurements for
+> various power rails, including the CPU rail, on at least some Jetson
+> boards. This raises the possibility of the Platypus attack being relevant
+> to Jetson. To prevent this possibility, modify all attribute
+> channel permissions so that only root can access the values.
 
-On 11/15/22 21:01, Mario Limonciello wrote:
-> Sven van Ashbrook brought a patch to the kernel mailing list that
-> attempted to change the reporting level of a s0ix entry issue to a
-> different debugging level so that infastructure used by Google could
-> better scan logs to catch problems.
-> 
-> This approach was rejected, but during the conversation another
-> suggestion was made by David E. Box to introduce some infrastructure
-> into the kernel to report this information.
-> 
-> As it's information that is reported by both AMD and Intel platforms
-> over s2idle, this seems to make sense.
-> 
-> RFC v1 and v2 introduced two new sysfs files to report the information, but
-> Rafael pointed out that there was already a file that could be used on
-> Intel platforms: `low_power_idle_system_residency_us`.
-> 
-> RFC v3 creates this file for AMD platforms and also introduces another file
-> that can be used to determine total sleep time:
-> `/sys/power/suspend_stats/last_total`.
-> 
-> With these two files a simple shell script can be run after suspend to
-> calculate the percentage.
-> 
-> ```
->  #!/bin/sh
-> total=$(cat /sys/power/suspend_stats/last_total)
-> hw=$(cat /sys/devices/system/cpu/cpuidle/low_power_idle_system_residency_us)
-> percent=$(awk -v hw=$hw -v total=$total 'BEGIN { printf "%.2f%%", (hw/total*100) }')
-> echo "Last ${total}us suspend cycle spent $percent of the time in a hardware sleep state."
-> ```
-> 
-> A sample run on an AMD platform that was just sleeping with this series on
-> top of 6.1-rc5 shows the following:
->  # ./compare.sh
-> Last 15699838us suspend cycle spent 98.63% of the time in a hardware sleep state.
-> 
-> Further discussion to be expected on this series:
-> 
-> * What last_total will represent from the suspend cycle
-> 
-> * Whether the semantics of all platforms will be the same for
->   `low_power_idle_system_residency_us`
->   - AMD platforms reset this counter before s2idle entry.  Do Intel? Others?
-> 
-> * Maybe the *kernel* should be responsible to do the calculation and export
->   a `last_hw_sleep_percent` file instead. Platform differences can be
->   abstracted then within individual drivers.
+NACK. The hwmon ABI expects all attributes to be readable for everyone.
+Forcing userspace to have root privilege to read sensor values just moves
+the attack vector into the affected applications.
 
-That (`last_hw_sleep_percent` file) is an interesting proposal,
-I can see that being a better interface because as you say this allows
-the kernel / platform-drivers to take care of any platform quirks /
-weirdness, avoiding any userspace monitoring of this to possibly
-give false positive warnings.
+You have a number of options:
 
-Regards,
+1) Make the values reported vague enough to be useless for attacks
+2) Remove the attributes
+3) Remove the driver
 
-Hans
+2) and 3) are obviously unacceptable here. Your option would be to
+disable the driver on the affected system.
 
+Having said that, for me to accept any driver change, you would have to
+prove that the values reported by the chip are really accurate enough to
+be useful in any attack (most chips do not deliver that level of accuracy).
+A generic statement along the line of "raises the possibility" is
+insufficient.
 
+> This is logically equivalent to 949dd0104c49 ("powercap: restrict energy
+> meter to root access") upstream.
+ 
+The change in the powercap driver is not hwmon ABI related and
+irrelevant. If you look for an example, use commit 9049572fb145
+("hwmon: Remove amd_energy driver").
 
-
-
-> 
-> Mario Limonciello (4):
->   PM: Add a sysfs file to represent the total sleep duration
->   platform/x86/intel/pmc: core: Drop check_counters
->   platform/x86/amd: pmc: Report duration of time in deepest hw state
->   platform/x86/amd: pmc: Populate cpuidle sysfs file with hw sleep data
-> 
->  Documentation/ABI/testing/sysfs-amd-pmc |  6 ++++++
->  Documentation/ABI/testing/sysfs-power   |  8 ++++++++
->  drivers/platform/x86/amd/pmc.c          | 27 ++++++++++++++++++++++---
->  drivers/platform/x86/intel/pmc/core.c   |  7 ++-----
->  drivers/platform/x86/intel/pmc/core.h   |  1 -
->  include/linux/suspend.h                 |  2 ++
->  kernel/power/main.c                     | 15 ++++++++++++++
->  kernel/power/suspend.c                  |  2 ++
->  kernel/time/timekeeping.c               |  2 ++
->  9 files changed, 61 insertions(+), 9 deletions(-)
-> 
-
+Guenter
