@@ -2,83 +2,140 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B088762DA47
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 13:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFD1F62DB0B
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 13:38:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240122AbiKQMJC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 07:09:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38920 "EHLO
+        id S234811AbiKQMiv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 07:38:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240131AbiKQMIy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 07:08:54 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 769976EB5E;
-        Thu, 17 Nov 2022 04:08:51 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9481B13D5;
-        Thu, 17 Nov 2022 04:08:57 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0CAE03FA31;
-        Thu, 17 Nov 2022 04:08:48 -0800 (PST)
-Date:   Thu, 17 Nov 2022 12:08:46 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+        with ESMTP id S239391AbiKQMiu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 07:38:50 -0500
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C927A725C8
+        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 04:38:48 -0800 (PST)
+Received: by mail-pg1-x530.google.com with SMTP id v3so1852931pgh.4
+        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 04:38:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zp3c04UgsO642CTDLrQtBDqG8kkhqKp0rcovQL+99UI=;
+        b=IdGUNhLwGzU6Ft16WaaDI69WkZxTSnWWMFM5OCfCjwJp6AYTlRKK8yEYeEBXfQpzAn
+         ZwQb4qA1/IFweomkA/ECAhRqA4U01wUuafmgn6Qa9F9ktepp04hp8xQrAzH/kT/KVbNs
+         ZzyfjwzErH6r/TzqvbFIDYg5LREwJ28M1rw20fir0tKQOYEL3IWwpSwdn38FrjgzhFI7
+         9FYu4SJvvaD6rkDwNrsTWjiz4I1r07qeWCDUkRVVDcoDj3wwcR9VYPqfWBmSzUjTpcIm
+         611qXXCmSvpYGc1TA+nRL6Pzun4MN7R0UsfCiRYEKntVXs7/p5+BHqQu16hPCOk8kDFf
+         8rXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zp3c04UgsO642CTDLrQtBDqG8kkhqKp0rcovQL+99UI=;
+        b=iRCv6eQg/0SJIiDAROIFYYIrBYfmb5ZRNDvZbg58w1L7E6osDffL4o74VJ207qF40X
+         x1gj3nAdOyBIk2Q2UCwb754EZjW0TkB7Z2ytOkHkZuYnMwS9N/vXk3NBu3V3Dc3smDgn
+         u4ytXNU2mt7z/6IKsYWR536Ugyf36cDJpKbn/25p5Ek6a6Xgf7vC0n5Mh1sQmLdUIMP2
+         0Mv5wJlYRsK2mXRwx0q/gjEcaHJTsf7WpUswVvooqhd4xrzdlvcrOkMA8jg/AyDsK9Qo
+         1OzaC3wsNuaozZQaXhrOZquYlk7cqJZGkVstIDXec/wQwg4TQBOVNCEygqOIyMoGpLY5
+         ey9Q==
+X-Gm-Message-State: ANoB5pndXxO6o0pB+Y7IDQH0rXGOpTmyanipgtz9F9bePRFeQB4r4JHD
+        n+Ud6hzw0t6Ve6TEUl+tcGpikYOJMbjC
+X-Google-Smtp-Source: AA0mqf4hm3wB6rMWKzlah1bNY3uCQyjDr05R8iD4P68ORutJSUYHKw2sKcDzbo3XAcxAPjfPAntBmA==
+X-Received: by 2002:a62:442:0:b0:55f:8da3:71d2 with SMTP id 63-20020a620442000000b0055f8da371d2mr2808498pfe.37.1668688728266;
+        Thu, 17 Nov 2022 04:38:48 -0800 (PST)
+Received: from thinkpad ([117.193.208.31])
+        by smtp.gmail.com with ESMTPSA id p12-20020a170902eacc00b00177f82f0789sm1181514pld.198.2022.11.17.04.38.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Nov 2022 04:38:47 -0800 (PST)
+Date:   Thu, 17 Nov 2022 18:08:41 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Sudeep Holla <sudeep.holla@arm.com>
 Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
         krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
         robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-pm@vger.kernel.org
 Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221117120846.yhmilsndw2bmmvnv@bogus>
+Message-ID: <20221117123841.GI93179@thinkpad>
 References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
  <20221117101903.sw3hxaruj5sfhybw@bogus>
  <20221117111207.GA93179@thinkpad>
  <20221117115203.356vexlpca746o6m@bogus>
  <20221117115807.GF93179@thinkpad>
+ <20221117120846.yhmilsndw2bmmvnv@bogus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221117115807.GF93179@thinkpad>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221117120846.yhmilsndw2bmmvnv@bogus>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 05:28:07PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Nov 17, 2022 at 11:52:03AM +0000, Sudeep Holla wrote:
-> > On Thu, Nov 17, 2022 at 04:42:07PM +0530, Manivannan Sadhasivam wrote:
-> > > On Thu, Nov 17, 2022 at 10:19:03AM +0000, Sudeep Holla wrote:
+On Thu, Nov 17, 2022 at 12:08:46PM +0000, Sudeep Holla wrote:
+> On Thu, Nov 17, 2022 at 05:28:07PM +0530, Manivannan Sadhasivam wrote:
+> > On Thu, Nov 17, 2022 at 11:52:03AM +0000, Sudeep Holla wrote:
+> > > On Thu, Nov 17, 2022 at 04:42:07PM +0530, Manivannan Sadhasivam wrote:
+> > > > On Thu, Nov 17, 2022 at 10:19:03AM +0000, Sudeep Holla wrote:
+> > > > > 
+> > > > > Why do you need the above 3 changes if the below(4/4) will ensure
+> > > > > cpufreq_get(cpu) returns the clock frequency. I was expecting to drop the
+> > > > > whole "confusing" clock bindings and the unnecessary clock provider.
+> > > > > 
+> > > > > Can't we just use cpufreq_get(cpu) ?
+> > > > > 
 > > > > 
-> > > > Why do you need the above 3 changes if the below(4/4) will ensure
-> > > > cpufreq_get(cpu) returns the clock frequency. I was expecting to drop the
-> > > > whole "confusing" clock bindings and the unnecessary clock provider.
-> > > > 
-> > > > Can't we just use cpufreq_get(cpu) ?
+> > > > This can be possible for OPP implementations for the CPUs but not for other
+> > > > peripherals making use of OPP framework like GPU etc... Moreover this may end
+> > > > up with different code path for CPUs and other peripherals inside OPP framework.
 > > > > 
 > > > 
-> > > This can be possible for OPP implementations for the CPUs but not for other
-> > > peripherals making use of OPP framework like GPU etc... Moreover this may end
-> > > up with different code path for CPUs and other peripherals inside OPP framework.
+> > > Fair enough, you can use this for non-CPU devices. But you are adding this for
+> > > CPUs here. Is the consumer unaware that this is a CPU or non-CPU device ?
+> > > If so, make sense. Otherwise, it is unnecessary to go through the clk
+> > > framework to get CPU frequency.
 > > > 
 > > 
-> > Fair enough, you can use this for non-CPU devices. But you are adding this for
-> > CPUs here. Is the consumer unaware that this is a CPU or non-CPU device ?
-> > If so, make sense. Otherwise, it is unnecessary to go through the clk
-> > framework to get CPU frequency.
-> > 
+> > The consumer here is the OPP framework and yes it doesn't have the knowledge of
+> > the device it is dealing with (for this context).
 > 
-> The consumer here is the OPP framework and yes it doesn't have the knowledge of
-> the device it is dealing with (for this context).
+> Ah OK, I thought it is something else. Does this mean OPP is tied with clk
+> framework or clock bindings ? Is this for some specific feature ?
 
-Ah OK, I thought it is something else. Does this mean OPP is tied with clk
-framework or clock bindings ? Is this for some specific feature ? Or is it
-compulsory for all the devices using OPP ? Just wondering how this affects
-SCMI which doesn't use or provide clocks yet.
+AFAIK, OPP framework needs to know the current frequency of the device it is
+dealing with for setting the device's OPP. So it uses clk_get_rate() of the
+first clock of the device. If the clock is not available, then it uses the
+frequency in the first entry of the OPP table (since it is going to be the
+minimum freq of the device).
+
+As you can see, the clk_get_rate() is eminent for switching the OPPs and since
+OPP framework doesn't know what device it is dealing with, it cannot use
+cpufreq_get().
+
+> Or is it
+> compulsory for all the devices using OPP ? Just wondering how this affects
+> SCMI which doesn't use or provide clocks yet.
+
+Is SCMI node itself has the OPP tables? Or the consumer nodes of the SCMI?
+
+TLDR; If you tell OPP framework to set a new OPP for a device, it needs to the
+know the current frequency of the device. And it is not manadatory now, but in
+the future maybe.
+
+Thanks,
+Mani
+
+> -- 
+> Regards,
+> Sudeep
 
 -- 
-Regards,
-Sudeep
+மணிவண்ணன் சதாசிவம்
