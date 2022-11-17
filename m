@@ -2,126 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8494062D4D0
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 09:11:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E9462D50F
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 09:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239390AbiKQILk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 03:11:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56986 "EHLO
+        id S239066AbiKQIbY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 17 Nov 2022 03:31:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239512AbiKQILf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 03:11:35 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5436E7299F
-        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 00:11:17 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id h9so2490188wrt.0
-        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 00:11:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=GSDs5LdHc1GClN9BOpJmoylm0WvCAVObkEVsoDAxlO4=;
-        b=r0FZO5s1ap9cOFsk6RQQUgILd1eQ1KJmXqoERRVEk+SDEr69Mqp8/jO3SOq0pPyEfg
-         xyRLsw4Z9JBl1sS1B9KSDjDGNRWdcz4DLmn+arCWrwAx68GIksomq1vpKgpU9a0wRXhJ
-         DhrrAy/1ibC0Ye3Pp4uEXfXAEqWY187CdROqTcy47ex0w0W5GKfRwyUNZDOSYvMaa+Py
-         Ao+RZDsaReU7SGo5IFohN2VHtgwKjUoELoRNZDrbdFUKJ1e+nPzNfWhFGV36f7rZDWMy
-         rPo7RDEOHso8gEQr8Q/5iA9eazVaSLfQ5knRqusznHXuMBxlGE6w2f5wOfeEGkw9q9tb
-         Qlaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GSDs5LdHc1GClN9BOpJmoylm0WvCAVObkEVsoDAxlO4=;
-        b=aktu4fJy2M9A9sagLjUuQ47pyI9FTsGNYjmAF+wnj+uie3CaWjBGc561tcx/a+aJz2
-         ObQqG0Rm5FioYsdB8qyiEyFAaLTGnZahRijQO58+9s+L78GKjv69R170Wb/50T2ezvSX
-         tg0PbfBRDLr9PuXugxTxtZv8ozzonMhpcKf1eJx4oYgRrvKRjwGafSso5zhDxr35vsDv
-         tsBaCG7tRXQTWktoI8SAvCHJoJUJ5nC8d/pjkO9bmQWggxIUnaGNQGoEJjHpg5tSF314
-         CwxAzN6cR/G+zpN2MKU9CH/ZkUcuc8HhYCzO72tgOy3ieD9Cipw8tj+cOeh0CTknnIFF
-         KdJg==
-X-Gm-Message-State: ANoB5plb4DBMIcB1EGpR9cSSWseP4ZhWB2szDr7ciokUpNnvIMHDRyB8
-        xyg0yhnJmkW4o4ckL1+s3UGpsQ==
-X-Google-Smtp-Source: AA0mqf7qpnoW4oon/wCyl92ramVcqcJQ8WoPvAUNR9afh+NQwKZzCFTqLi93tM56RVJUXW9fbx6Kow==
-X-Received: by 2002:a5d:4752:0:b0:236:d479:b0b7 with SMTP id o18-20020a5d4752000000b00236d479b0b7mr679838wrs.559.1668672676540;
-        Thu, 17 Nov 2022 00:11:16 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b? ([2a01:e0a:982:cbb0:aad5:8d14:a22f:2e8b])
-        by smtp.gmail.com with ESMTPSA id l1-20020a5d4bc1000000b0022cd96b3ba6sm285288wrt.90.2022.11.17.00.11.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Nov 2022 00:11:16 -0800 (PST)
-Message-ID: <30034a1e-1a68-65eb-627e-744c53ae854f@linaro.org>
-Date:   Thu, 17 Nov 2022 09:11:15 +0100
+        with ESMTP id S229931AbiKQIbX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 03:31:23 -0500
+X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 00:31:22 PST
+Received: from sender11-of-o51.zoho.eu (sender11-of-o51.zoho.eu [31.186.226.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F105F97;
+        Thu, 17 Nov 2022 00:31:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1668672967; cv=none; 
+        d=zohomail.eu; s=zohoarc; 
+        b=gKBkJc6GTRkb+6rhh5I/c4VXIbERbvAfPuFYx5lFVdmeEPrYTadYLssEpNBknNfbNKj8RXIWT+9BY7qfydn2rufuYtJ86GGyOG8qTl24oDX3dyLSk5R01pmqUXfoqYY8g0yDunVWmHiceXIVb2ZY51uXhJy64QwI0CswF2n/K7M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
+        t=1668672967; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=Pa1GyuFssygNW031okYw8FQUTpsDaU4ApKY8oeGmQ8Q=; 
+        b=HXhJHhxLnjd4pejwRbqVXRPhT/RqDbrVXJ408l0bqkLGKclMwwhdy4mZjSXT9GuqsJCBcM72btE6fds0t1lRMX/z8m9QZGxzp9eGWBvrjVSvE0sMZ3Hw/KICKwaGDWMVg91s/l80kEkFEmAmGFrNG9xUN6SGPEavHPhtyt1TR+E=
+ARC-Authentication-Results: i=1; mx.zohomail.eu;
+        spf=pass  smtp.mailfrom=carl@uvos.xyz;
+        dmarc=pass header.from=<carl@uvos.xyz>
+Received: from [10.8.0.4] (185.53.129.145 [185.53.129.145]) by mx.zoho.eu
+        with SMTPS id 1668672964345220.00348153398488; Thu, 17 Nov 2022 09:16:04 +0100 (CET)
+Message-ID: <a04a2c13d21d3f381fcd525e5f47c217543d2c18.camel@uvos.xyz>
+Subject: Re: [PATCH 2/3] power: supply: cpcap-battery: Fix battery
+ identification
+From:   Carl Klemm <carl@uvos.xyz>
+To:     Tony Lindgren <tony@atomide.com>,
+        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        philipp@uvos.xyz, Pavel Machek <pavel@ucw.cz>
+Date:   Thu, 17 Nov 2022 09:15:55 +0100
+In-Reply-To: <Y3W+M3/7zOutygEZ@atomide.com>
+References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+         <1667647544-12945-3-git-send-email-ivo.g.dimitrov.75@gmail.com>
+         <20221110160559.bsvzr4txum5ed2qz@mercury.elektranox.org>
+         <715a60b5-2f3c-caf7-2b24-61ec92bda9be@gmail.com>
+         <Y3OY/l2ZBX+WbRR4@atomide.com>
+         <90314373-de30-019a-dc0c-f5cab57a48c6@gmail.com>
+         <Y3W+M3/7zOutygEZ@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: narrow interrupts for
- SC8280XP, SM6350 and SM8450
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/11/2022 12:31, Krzysztof Kozlowski wrote:
-> Narrow number of interrupts per variants: SC8280XP, SM6350 and SM8450.
-> The compatibles are already used and described.  They only missed the
-> constraints of number of interrupts.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->   Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
->   1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> index f0bd4b979e28..5bcfddc877d3 100644
-> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
-> @@ -146,11 +146,14 @@ allOf:
->                 - qcom,sc7180-tsens
->                 - qcom,sc7280-tsens
->                 - qcom,sc8180x-tsens
-> +              - qcom,sc8280xp-tsens
->                 - qcom,sdm630-tsens
->                 - qcom,sdm845-tsens
-> +              - qcom,sm6350-tsens
->                 - qcom,sm8150-tsens
->                 - qcom,sm8250-tsens
->                 - qcom,sm8350-tsens
-> +              - qcom,sm8450-tsens
->                 - qcom,tsens-v2
->       then:
->         properties:
+Hi Tony,
 
-Thanks, I will rebase the SM8550 change on this patch,
+We also have a pretty good case having the battery on 4.35V for regular
+amounts of time at a time is not damageing:
 
-Neil
+1. For one thing this corroborated by literature about hvlipos.
+2. Personally i used the d4 for manny years with andorid without issue,
+giveing the battery manny cycles
+3. I think so far we have found very few, if any, devices whos batteris
+where replaced by thair previous owners, judgeing by the condition of
+the stickers and the battery production dates. Even though maemo leste
+has access to manny manny devices.
+
+It is true the hvlipos have a lower cycle lifetime than regular 4.35V
+lipos when charged to 4.35 than regular lipos when charged to 4.2V,
+however it this effect is not as large as you might think.
+It is also true that leaving a Lithium cell of any chemistry on Vmax
+for long periods of time siginifcantly accelerates degradion, if this
+is sufficant cause to drop the "full" soc a couple of percent is a
+debateable and reasonable trade off and would be something we should
+then apply to all batteries if chosen, not just hvlipos as it affects
+regular lipos just the same.
+
+Regards,
+
+Philipp
+
+On Thu, 2022-11-17 at 06:53 +0200, Tony Lindgren wrote:
+> * Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com> [221115 15:31]:
+> > Hi,
+> > 
+> > On 15.11.22 г. 15:49 ч., Tony Lindgren wrote:
+> > > Hi,
+> > > 
+> > > * Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com> [221110 16:40]:
+> > > > On 10.11.22 г. 18:05 ч., Sebastian Reichel wrote:
+> > > > > Why do we care?
+> > > > > 
+> > > > Because if we know the battery is genuine (or at least pretends
+> > > > to be :) ),
+> > > > then we can read battery parameters from nvram, see patch 3/3.
+> > > > This will
+> > > > allow us to charge HV LiPo batteries to 4.35V, using the full
+> > > > capacity.
+> > > 
+> > > Let's not enable charge voltages above 4.2V automatically at all
+> > > unless
+> > > the user chooses to set a higher charge voltage via sysfs
+> > > manually.
+> > > 
+> > > We have had reports of bloated batteries if left connected to the
+> > > charger
+> > > at higher voltage than 4.2V. This seems to happen after connected
+> > > for some
+> > > weeks or months. AFAIK this happens both with Android and
+> > > mainline kernel
+> > > at higher voltages.
+> > > 
+> > 
+> > Not that I sent such patch yet, but still, thinking about it, we
+> > should be
+> > able to easily prevent such damage by not restarting the charging
+> > after
+> > battery is full and voltage has dropped by 50mV or so. There can be
+> > a
+> > threshold (lets say 4.25 or 4.2) above which charging shall not be
+> > re-enabled unless the user reconnects the charger. Even if default
+> > stays 4.2
+> > and it is the user that has enabled 4.35. Just an idea.
+> 
+> Sure the logic to handle max charge voltage and maintenance charge
+> voltage
+> could be there. With commit d4ee021c410f we now just wait for the
+> charge
+> to come down to 4.2V if charged at 4.35V with Android.
+> 
+> We still should not enable higher charge voltages by default though.
+> It
+> still needs to be enabled by the user via sysfs. It's possible that
+> also
+> shorter peaks of higher charge voltage accelerate the battery
+> degration.
+> It just may happen slower than what we've seen earlier. To test this,
+> multiple devices would need to be left connected to a charger for
+> several
+> months :)
+> 
+> Regards,
+> 
+> Tony
+
