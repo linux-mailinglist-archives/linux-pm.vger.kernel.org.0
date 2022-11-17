@@ -2,151 +2,84 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4E9462D50F
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 09:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BB2562D514
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 09:34:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239066AbiKQIbY convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Thu, 17 Nov 2022 03:31:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37356 "EHLO
+        id S234729AbiKQIeF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 03:34:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKQIbX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 03:31:23 -0500
-X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 17 Nov 2022 00:31:22 PST
-Received: from sender11-of-o51.zoho.eu (sender11-of-o51.zoho.eu [31.186.226.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F105F97;
-        Thu, 17 Nov 2022 00:31:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1668672967; cv=none; 
-        d=zohomail.eu; s=zohoarc; 
-        b=gKBkJc6GTRkb+6rhh5I/c4VXIbERbvAfPuFYx5lFVdmeEPrYTadYLssEpNBknNfbNKj8RXIWT+9BY7qfydn2rufuYtJ86GGyOG8qTl24oDX3dyLSk5R01pmqUXfoqYY8g0yDunVWmHiceXIVb2ZY51uXhJy64QwI0CswF2n/K7M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.eu; s=zohoarc; 
-        t=1668672967; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Pa1GyuFssygNW031okYw8FQUTpsDaU4ApKY8oeGmQ8Q=; 
-        b=HXhJHhxLnjd4pejwRbqVXRPhT/RqDbrVXJ408l0bqkLGKclMwwhdy4mZjSXT9GuqsJCBcM72btE6fds0t1lRMX/z8m9QZGxzp9eGWBvrjVSvE0sMZ3Hw/KICKwaGDWMVg91s/l80kEkFEmAmGFrNG9xUN6SGPEavHPhtyt1TR+E=
-ARC-Authentication-Results: i=1; mx.zohomail.eu;
-        spf=pass  smtp.mailfrom=carl@uvos.xyz;
-        dmarc=pass header.from=<carl@uvos.xyz>
-Received: from [10.8.0.4] (185.53.129.145 [185.53.129.145]) by mx.zoho.eu
-        with SMTPS id 1668672964345220.00348153398488; Thu, 17 Nov 2022 09:16:04 +0100 (CET)
-Message-ID: <a04a2c13d21d3f381fcd525e5f47c217543d2c18.camel@uvos.xyz>
-Subject: Re: [PATCH 2/3] power: supply: cpcap-battery: Fix battery
- identification
-From:   Carl Klemm <carl@uvos.xyz>
-To:     Tony Lindgren <tony@atomide.com>,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        philipp@uvos.xyz, Pavel Machek <pavel@ucw.cz>
-Date:   Thu, 17 Nov 2022 09:15:55 +0100
-In-Reply-To: <Y3W+M3/7zOutygEZ@atomide.com>
-References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-         <1667647544-12945-3-git-send-email-ivo.g.dimitrov.75@gmail.com>
-         <20221110160559.bsvzr4txum5ed2qz@mercury.elektranox.org>
-         <715a60b5-2f3c-caf7-2b24-61ec92bda9be@gmail.com>
-         <Y3OY/l2ZBX+WbRR4@atomide.com>
-         <90314373-de30-019a-dc0c-f5cab57a48c6@gmail.com>
-         <Y3W+M3/7zOutygEZ@atomide.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.1 
+        with ESMTP id S229931AbiKQIeD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 03:34:03 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7545A2ED7B
+        for <linux-pm@vger.kernel.org>; Thu, 17 Nov 2022 00:34:02 -0800 (PST)
+Received: from kwepemi500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NCY8z5LH8zRpJY;
+        Thu, 17 Nov 2022 16:33:39 +0800 (CST)
+Received: from huawei.com (10.175.103.91) by kwepemi500024.china.huawei.com
+ (7.221.188.100) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 17 Nov
+ 2022 16:34:00 +0800
+From:   Zeng Heng <zengheng4@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <sre@kernel.org>, <shuah@kernel.org>,
+        <anton@enomsg.org>
+CC:     <zengheng4@huawei.com>, <linux-pm@vger.kernel.org>,
+        <liwei391@huawei.com>
+Subject: [PATCH] power: supply: fix residue sysfs file in error handle route of __power_supply_register()
+Date:   Thu, 17 Nov 2022 16:32:19 +0800
+Message-ID: <20221117083219.4147592-1-zengheng4@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,FROM_SUSPICIOUS_NTLD,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500024.china.huawei.com (7.221.188.100)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Tony,
+If device_add() succeeds, we should call device_del() when want to
+get rid of it, so move it into proper jump symbol.
 
-We also have a pretty good case having the battery on 4.35V for regular
-amounts of time at a time is not damageing:
+Otherwise, when __power_supply_register() returns fail and goto
+wakeup_init_failed to exit, there is still residue device file in sysfs.
+When attempt to probe device again, sysfs would complain as below:
 
-1. For one thing this corroborated by literature about hvlipos.
-2. Personally i used the d4 for manny years with andorid without issue,
-giveing the battery manny cycles
-3. I think so far we have found very few, if any, devices whos batteris
-where replaced by thair previous owners, judgeing by the condition of
-the stickers and the battery production dates. Even though maemo leste
-has access to manny manny devices.
+sysfs: cannot create duplicate filename '/devices/platform/i2c/i2c-0/0-001c/power_supply/adp5061'
+Call Trace:
+ dump_stack_lvl+0x68/0x85
+ sysfs_warn_dup.cold+0x1c/0x29
+ sysfs_create_dir_ns+0x1b1/0x1d0
+ kobject_add_internal+0x143/0x390
+ kobject_add+0x108/0x170
 
-It is true the hvlipos have a lower cycle lifetime than regular 4.35V
-lipos when charged to 4.35 than regular lipos when charged to 4.2V,
-however it this effect is not as large as you might think.
-It is also true that leaving a Lithium cell of any chemistry on Vmax
-for long periods of time siginifcantly accelerates degradion, if this
-is sufficant cause to drop the "full" soc a couple of percent is a
-debateable and reasonable trade off and would be something we should
-then apply to all batteries if chosen, not just hvlipos as it affects
-regular lipos just the same.
+Fixes: 80c6463e2fa3 ("power_supply: Fix Oops from NULL pointer dereference from wakeup_source_activate")
+Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+---
+ drivers/power/supply/power_supply_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-
-Philipp
-
-On Thu, 2022-11-17 at 06:53 +0200, Tony Lindgren wrote:
-> * Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com> [221115 15:31]:
-> > Hi,
-> > 
-> > On 15.11.22 г. 15:49 ч., Tony Lindgren wrote:
-> > > Hi,
-> > > 
-> > > * Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com> [221110 16:40]:
-> > > > On 10.11.22 г. 18:05 ч., Sebastian Reichel wrote:
-> > > > > Why do we care?
-> > > > > 
-> > > > Because if we know the battery is genuine (or at least pretends
-> > > > to be :) ),
-> > > > then we can read battery parameters from nvram, see patch 3/3.
-> > > > This will
-> > > > allow us to charge HV LiPo batteries to 4.35V, using the full
-> > > > capacity.
-> > > 
-> > > Let's not enable charge voltages above 4.2V automatically at all
-> > > unless
-> > > the user chooses to set a higher charge voltage via sysfs
-> > > manually.
-> > > 
-> > > We have had reports of bloated batteries if left connected to the
-> > > charger
-> > > at higher voltage than 4.2V. This seems to happen after connected
-> > > for some
-> > > weeks or months. AFAIK this happens both with Android and
-> > > mainline kernel
-> > > at higher voltages.
-> > > 
-> > 
-> > Not that I sent such patch yet, but still, thinking about it, we
-> > should be
-> > able to easily prevent such damage by not restarting the charging
-> > after
-> > battery is full and voltage has dropped by 50mV or so. There can be
-> > a
-> > threshold (lets say 4.25 or 4.2) above which charging shall not be
-> > re-enabled unless the user reconnects the charger. Even if default
-> > stays 4.2
-> > and it is the user that has enabled 4.35. Just an idea.
-> 
-> Sure the logic to handle max charge voltage and maintenance charge
-> voltage
-> could be there. With commit d4ee021c410f we now just wait for the
-> charge
-> to come down to 4.2V if charged at 4.35V with Android.
-> 
-> We still should not enable higher charge voltages by default though.
-> It
-> still needs to be enabled by the user via sysfs. It's possible that
-> also
-> shorter peaks of higher charge voltage accelerate the battery
-> degration.
-> It just may happen slower than what we've seen earlier. To test this,
-> multiple devices would need to be left connected to a charger for
-> several
-> months :)
-> 
-> Regards,
-> 
-> Tony
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 4b5fb172fa99..9bae94d2ea3a 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1387,8 +1387,8 @@ __power_supply_register(struct device *parent,
+ register_cooler_failed:
+ 	psy_unregister_thermal(psy);
+ register_thermal_failed:
+-	device_del(dev);
+ wakeup_init_failed:
++	device_del(dev);
+ device_add_failed:
+ check_supplies_failed:
+ dev_set_name_failed:
+-- 
+2.25.1
 
