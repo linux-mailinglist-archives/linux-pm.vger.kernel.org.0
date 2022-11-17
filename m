@@ -2,92 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8A862DC8C
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 14:23:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69DBE62DD3A
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 14:52:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239934AbiKQNX3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 08:23:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40644 "EHLO
+        id S233179AbiKQNwF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 08:52:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234870AbiKQNX2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 08:23:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D310D133;
-        Thu, 17 Nov 2022 05:23:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE1A81424;
-        Thu, 17 Nov 2022 05:23:29 -0800 (PST)
-Received: from bogus (unknown [10.57.6.137])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B262E3F663;
-        Thu, 17 Nov 2022 05:23:21 -0800 (PST)
-Date:   Thu, 17 Nov 2022 13:23:19 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, viresh.kumar@linaro.org,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
-        robh+dt@kernel.org, johan@kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221117132319.cx7cwt3dwywlt6wx@bogus>
-References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
- <20221117101903.sw3hxaruj5sfhybw@bogus>
- <20221117111207.GA93179@thinkpad>
- <20221117115203.356vexlpca746o6m@bogus>
- <20221117115807.GF93179@thinkpad>
- <20221117120846.yhmilsndw2bmmvnv@bogus>
- <20221117123841.GI93179@thinkpad>
+        with ESMTP id S240194AbiKQNvz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 08:51:55 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2BB65FE;
+        Thu, 17 Nov 2022 05:51:53 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4FD98B8206D;
+        Thu, 17 Nov 2022 13:51:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1CA0C433C1;
+        Thu, 17 Nov 2022 13:51:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1668693111;
+        bh=6LXtYkaXpc656JJPaAoyFD2EShPivYPbaTNhtrdLYdo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=gB/LH6txua4K9iRxJW/G4/xGWen7nIZdRYKK+McQem6aE/eBmQ1l1hnbtw3qLYRaI
+         Xp2TQt2+HYAYmnZU63u+LTqf9oufu/I2vDMPziP77iPsW0wFLRPuA8ytaYrMf4/0da
+         vuPtN4lZQwojQ85GMcwI2+islUkH59wsrS+P7uVClOkrPpcaLysTMlnGn0P4xrThqT
+         n9nS8k9JvoQWLUoBIuqx2l45okbNMmhirMg3ridfpb1k+IV62W7Iez7z5xSkWCjRnv
+         Ewl7VGsIUHlvSe7kLhi8R4XSg67oaanQqb6wj9fRrasKHZ/N9yBVfilnM1Lqw8QiUh
+         3Vt8bOXJjaSLQ==
+From:   Georgi Djakov <djakov@kernel.org>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        djakov@kernel.org
+Subject: [GIT PULL] interconnect fix for 6.1-rc
+Date:   Thu, 17 Nov 2022 15:51:46 +0200
+Message-Id: <20221117135146.9261-1-djakov@kernel.org>
+X-Mailer: git-send-email 2.29.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221117123841.GI93179@thinkpad>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 06:08:41PM +0530, Manivannan Sadhasivam wrote:
+Hello Greg,
 
-[...]
->
-> AFAIK, OPP framework needs to know the current frequency of the device it is
-> dealing with for setting the device's OPP. So it uses clk_get_rate() of the
-> first clock of the device. If the clock is not available, then it uses the
-> frequency in the first entry of the OPP table (since it is going to be the
-> minimum freq of the device).
->
+This pull request contains a tiny fix for the current cycle. The
+details are in the signed tag. It has been in linux-next for a week.
+Please pull into char-misc-linus when possible.
 
-It has been a while since I followed OPP. Thanks for all the info, helped me
-get updated without looking at the code in detail.
+Thanks,
+Georgi
 
-> As you can see, the clk_get_rate() is eminent for switching the OPPs and since
-> OPP framework doesn't know what device it is dealing with, it cannot use
-> cpufreq_get().
->
 
-Agreed. I had assumed the qcom-cpufreq-hw as setting cpufreq directly pocking
-the hardware but now I see it is using opp library to set some additional
-policy.
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
 
-> Is SCMI node itself has the OPP tables? Or the consumer nodes of the SCMI?
->
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
 
-No, OPPs are read from the f/w and we just use OPP APIs to register them.
-But we don't use OPP library to set the performance.
+are available in the Git repository at:
 
-> TLDR; If you tell OPP framework to set a new OPP for a device, it needs to the
-> know the current frequency of the device. And it is not manadatory now, but in
-> the future maybe.
->
+  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.1-rc6
 
-Hmm, good to know. I prefer it is not coupled with clocks and have some
-alternative mechanism that is suitable for performance domains and don't
-enforce the use of clock bindings and clk framework unnecessarily.
+for you to fetch changes up to 1498a5a79980fb86458297df2b4aaa9cc56503b3:
 
---
-Regards,
-Sudeep`
+  dt-bindings: interconnect: qcom,msm8998-bwmon: Correct SC7280 CPU compatible (2022-10-19 13:16:28 +0300)
+
+----------------------------------------------------------------
+interconnect fix for v6.1-rc
+
+This contains a tiny fix to align the driver compatible string in the
+binding documentation with the one used in DTS.
+
+- dt-bindings: interconnect: qcom,msm8998-bwmon: Correct SC7280 CPU compatible
+
+Signed-off-by: Georgi Djakov <djakov@kernel.org>
+
+----------------------------------------------------------------
+Krzysztof Kozlowski (1):
+      dt-bindings: interconnect: qcom,msm8998-bwmon: Correct SC7280 CPU compatible
+
+ Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
