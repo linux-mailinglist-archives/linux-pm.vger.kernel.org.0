@@ -2,97 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1CA62D512
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 09:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E05DD62D529
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 09:39:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238685AbiKQIc7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 03:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37820 "EHLO
+        id S230114AbiKQIjn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 03:39:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbiKQIc6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 03:32:58 -0500
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2042.outbound.protection.outlook.com [40.107.95.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2203657E1;
-        Thu, 17 Nov 2022 00:32:57 -0800 (PST)
+        with ESMTP id S239581AbiKQIjm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 03:39:42 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2078.outbound.protection.outlook.com [40.107.220.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD6942997;
+        Thu, 17 Nov 2022 00:39:41 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kn1LoSkT5tuPGU/MSHO1Dz5NUoT2D+6kplC9jbAkY90/yyX1vRYBRBSord9bbHOubwE81ZB5l4rrQj7YrlkQKWDBVvMHJlaCfGWjH7OneSBzL2YErgE1KGmDIwLziOXprufAIAr4NJpFbrkZ5n00KaHTT/cvOMNTu6yhduk2nJYtuSjn80tmoUlUBTliBKn3OzbXneNUHB7lQYXiG9bkYP4aJ+7Ct8qkk39A1a4/brtO0ru9PkqgLGBqSwHvCbOCvXpkMNhdnVEKTLwbtD6LrRbN6+dq31t4yWTC3gef5oVG9LUGhO3d15VNejkhlMzmIjieJ7ABfNfm+1jtGqMfYA==
+ b=fTkVcXA/MQ6xz1J4+/Y/p5NT9j3fdtuUUxRZoYDrnbZmVKeK9b6cXv6LZ4Txr+Mr6VT524HuhPq28OwTN+0JAoEFD1bRjns1YuLmAUgCiaGeP2vDV4nqam8fp/dD/uaH1stFWTBzc4mohaUSbInF1iQZTz5DnwIPzgqv8uN4TJhLviSnOZXO9g6xahsmdo517ojjkZfoHilotAZWK4jkbBvGoUSnMz2Q79CUHQqbkqrPXy5EAY42zbEN0CZAfB/MCiE+F25T09QRaD+aRoN8ulAgBZY4Ka3qHTIgUUQQnDhPOhEISALUQqnap6aB8NF56SFjzazTk5UqIe3vhhOj1g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xmXzJ92JDqTq+hUdcoHN8sWObry34wVBmqmWu1Wtohw=;
- b=LcpErL59ujQ49mLyW0YiuesMw1MiGPFv5etRZh+VzifhgYsZ51PkVLjpt3VyRih0m//DviZIGME9vMTSzh6yDOjxGGhf0Ocl/Y68C5JwiNaGx2c+Qt6GmCUSjBNOLSAeurZ4qBC6zdBYCgvxWqnldnDhIIkYXsOin6pFs1lsWWN9k6yOjhcJiYpv91QLpwRSAWIKZUB9mOcbiomj6Q5RiW7bg46bXQOXI5KHiyCD+tHVgYhQ9v/Ewdh2v/H2/a3xffOWeYUKqSREHGh/vaYUkTWYZH8YHU558KotzzydqKpChIylLAHxUNGny7dibCntlLVbfKKVmqsz8aygfDPwNQ==
+ bh=G1Of+jQkBps7U9+07hn86C+onrICmalbopfSm/Lzfng=;
+ b=Et+4QNJUwFfNu8kdD8jEJWbc0BRNBH1RK8VkyhDbIhDe1zq399DsmtAVIT67Pi5weQhiEZNq0CVe1eai6t6MTF+NxV6Li2siMTwpXOP/SoB5qVihXIEEQhdgoQrRXOHUg2Z756w6osdIkC7ofbnTEqKeCF54eCzn5zvMvlrfW7xHylfXGgbqt/IndGayX+rkUumdlVqoamWJBCmu3WpL4/AQkmnhCBICaM+G41qkNX6CdNCwAvh1uuZ5g041UWcenu5X35FmTjbfZI5V4VQeISpT6Q7E41w20wvpPICq7lZV2z64CAx9b0sTXyedibgx8cVPPoTPk6XAgLPrCp9MDA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=roeck-us.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xmXzJ92JDqTq+hUdcoHN8sWObry34wVBmqmWu1Wtohw=;
- b=V4YaVz7zDJmYDy4k4v4pipQZEnVvAuZ4Cq11v7fseQISs56F1hGlTbM4Lyk/AZZH1xFxsaFlOJvpsk6FbMWnUyarJIRbuvou0bbdrxiNC41gq6PLd1hCyWRC/PUU/x1Om7Wo2SNn/zh1urd5Bj4XL2O2xoVyRu03qWDEZVJP1ZyT4mm2GJ47Sd90nX06e78KeyU73hvSc97PTGfFIYjbv/vJjRnB1HaP+CM7LhJhXFa0KwVvmoL3QRiMwmObXH7tIwuaDSWIiUmjZnzx8bwZlAe2TxBDLZivAqEAjZiWWoCfYy084rVIfA5DEV4T2VgU0u1GoawKGQ2YNHMpGsMMxQ==
-Received: from DS7PR03CA0153.namprd03.prod.outlook.com (2603:10b6:5:3b2::8) by
- BY5PR12MB4113.namprd12.prod.outlook.com (2603:10b6:a03:207::15) with
+ bh=G1Of+jQkBps7U9+07hn86C+onrICmalbopfSm/Lzfng=;
+ b=Gl1uCt3p0svKNKH8GTuF/qAz56RojLWu2T6l/gKYrWCQFP5pdzhkX0N3oGlT/UNl+OgfocHgjaGVFD7QN1YmymHJC6JCFifYzey/kVNhcjPKpokYQGy/dAXkd+LMH/xgIa1FzqCzDeE4Z6etzsgtpaMRbuvm8zmKZHg0M8oQMlg93qhWu7xaqfgcKv0LuJGul02UpnE113wZp/UsD+mvUywVmH8oXDqx5p1yiU6M5JIwF1TnE6bQ4yfqRoEAOgtMEhg1eUYOdeuwOGJYThfwwj7syO7aynMBVFIYRXrFYCpVSvuuGkrHcP6suvbJSPkt1hm2ozTsLmGX2HH9yU5cxw==
+Received: from MW4PR04CA0164.namprd04.prod.outlook.com (2603:10b6:303:85::19)
+ by DM4PR12MB5357.namprd12.prod.outlook.com (2603:10b6:5:39b::24) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.18; Thu, 17 Nov
- 2022 08:32:56 +0000
-Received: from CY4PEPF0000C966.namprd02.prod.outlook.com
- (2603:10b6:5:3b2:cafe::27) by DS7PR03CA0153.outlook.office365.com
- (2603:10b6:5:3b2::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20; Thu, 17 Nov
+ 2022 08:39:40 +0000
+Received: from CO1NAM11FT092.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:85:cafe::a5) by MW4PR04CA0164.outlook.office365.com
+ (2603:10b6:303:85::19) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.20 via Frontend
- Transport; Thu, 17 Nov 2022 08:32:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ Transport; Thu, 17 Nov 2022 08:39:40 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- CY4PEPF0000C966.mail.protection.outlook.com (10.167.241.70) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5813.11 via Frontend Transport; Thu, 17 Nov 2022 08:32:55 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CO1NAM11FT092.mail.protection.outlook.com (10.13.175.225) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5834.8 via Frontend Transport; Thu, 17 Nov 2022 08:39:39 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 17 Nov
- 2022 00:32:43 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 17 Nov 2022 00:32:43 -0800
+ 2022 00:39:25 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 17 Nov
+ 2022 00:39:24 -0800
 Received: from nmalwade-dt.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Thu, 17 Nov 2022 00:32:41 -0800
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.36 via Frontend
+ Transport; Thu, 17 Nov 2022 00:39:22 -0800
 From:   Ninad Malwade <nmalwade@nvidia.com>
 To:     <nmalwade@nvidia.com>, <treding@nvidia.com>,
         <jonathanh@nvidia.com>, <linux@roeck-us.net>, <jdelvare@suse.com>,
         <nicolinc@nvidia.com>, <rkasirajan@nvidia.com>
 CC:     <linux-hwmon@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <linux-pm@vger.kernel.org>
-Subject: [PATCH] [WAR] hwmon: (ina3221) Apply software WAR to offset shunt voltage
-Date:   Thu, 17 Nov 2022 16:32:26 +0800
-Message-ID: <20221117083226.20027-1-nmalwade@nvidia.com>
+Subject: [PATCH] hwmon: (ina3221): tighten attribute sysfs permissions
+Date:   Thu, 17 Nov 2022 16:39:20 +0800
+Message-ID: <20221117083920.20493-1-nmalwade@nvidia.com>
 X-Mailer: git-send-email 2.17.1
 X-NVConfidentiality: public
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000C966:EE_|BY5PR12MB4113:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5bfc91e8-6a6b-45d2-4afc-08dac876535f
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT092:EE_|DM4PR12MB5357:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96516c49-4f17-4e45-c789-08dac8774441
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5lxiPrVunREjGi1nIlfaqDWxBZP4H2W/kooIminWtQ3LE7X6bESYWAZSmXTmL6MOETOrnVFo26rs0F4GiA7oQggReLYv9hTyDs7l6ZZsQXN6UT8R+1tKGRcWHPJQ+ZXGiEozsk11pDSdESF41b0vAA3YPAeeKNNQlW11QyRqyJUWZ31yq6RJW8P/2LsU9ZgLy4yBjHpkkjdNm1OlylSqa895EodmhQ7qkE+J206lq4NZt68znat9yAulQqZwVoACWZUC2LOVHtxiV1YWuEVFGb+DhLk/33lI4Hs8/52ymBXdPOyYMbXDh7yqmLn/M3GgLk2hapckkSlsvvOOs3R14b6OL30rwerktJJtQAg81QBj/kvucqqbmoqcBv3Ph6D5h6Fa+5oAQn4WLl2BXYptXmQd0HqTWwAbx+pBld8vu6Y5ZUKyI48lWQgGUsJ11VVTQog6m947EXzRKFo9r0B49bKxjyHR4/jOkHVbJsCNUx2gtClk8e3MJEtlLDWausuaQhKlqWce+a8x0Shyt3YW/PR9bo0NSrAwg5Df+etPd/3Ogjw/Qc+l5lxEpOJ+C4oN4PyxQhYfft7RAC22yLK12Lkpz45E018m5JpuNLTmyIffLM3zK8Soa5LixUakGB5g3yjTgRDAacef41q1FX5vnjkrBNY3KxQ+gQ/9iShcd21yxo1ARaU2dslm+xaVfLMc9VeMvfOBt9/95H5aNy2FAg==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199015)(36840700001)(40470700004)(46966006)(8936002)(41300700001)(2906002)(5660300002)(316002)(70206006)(478600001)(70586007)(36756003)(110136005)(6666004)(8676002)(4326008)(26005)(47076005)(7696005)(86362001)(426003)(82310400005)(83380400001)(7636003)(40480700001)(6636002)(54906003)(36860700001)(40460700003)(1076003)(2616005)(356005)(336012)(82740400003)(186003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: UvfI2zxBTiMjy6ifgqGJG+93IgdCLPk8spcbabkwHMhmn+cEF/BIp27C35xjZsyxDcSZRA0TbuIYw+1hyrsUPBmGl7tAO2U/EuMonLc0N5lKA5OqR85FFkuG4ioVBO1RViD0ntEpObLTryEv6wLWcwyYlYeaKFOKYS0vyxTdPjJ85/l0UJIAs8u+R9bEsoKMPTolXnOJI/F2fEGXDJGWLKtFKmJE73Bb7qelL/PP3DP+gWbHvc81uS1NZQe/ak5aCWCOanewbJjVtEq3z/W74ZJRYV78ziAttmvNgLwKBT0kgCmkCACFLwvObcfX94UCTKeRTN8J7rA3bvPrVToE4otot2nAJTf5ZsSG4g9/XXWa75xSLREOeuyZjMQ9IH2cyFEeJR/uYXvhvQMnmKEi41matFqEniZFkM8zVadEwsYBTOd0qduTeJHD+JFZvPlTOhTXYaKz9C1wUkI26hX3zobXqF2qdZugyOM7OtGjs0/sWZ9DlmK6lZn0WpMXtATd5H6yYHqeIOq6JcLkVzfRHrIe7+nqrnx53p2G1OuVJ5aVOQaSsrVYJl824mNdVwwANWq4S86Pc5pLk+ap+Sa4hkblX5bwK/4wnVkYi/H4sFKirHnknmbT0/rZyuBiVCMRC+7NbgaqAwJ6kqlhVMMISvLw6whS027ApgQTqMmu0Cf36G+jYyycnXB17yI4Gf3bj0ybFFuP2c6OElT9H239WA==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(376002)(346002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(36860700001)(40480700001)(86362001)(36756003)(40460700003)(356005)(7636003)(82740400003)(82310400005)(316002)(26005)(6636002)(54906003)(7696005)(110136005)(426003)(47076005)(8936002)(186003)(336012)(1076003)(5660300002)(83380400001)(2906002)(478600001)(4326008)(8676002)(41300700001)(2616005)(70586007)(70206006);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 08:32:55.5702
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Nov 2022 08:39:39.6609
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5bfc91e8-6a6b-45d2-4afc-08dac876535f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96516c49-4f17-4e45-c789-08dac8774441
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C966.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT092.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4113
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5357
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
@@ -103,204 +103,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is used as a software WAR to offset shunt voltage reading
-from INA3221 to increase its accuracy. This patch implements a
-previous downstream feature by reading the offset information
-from DT and apply it to current readings.
+The INA3221 device provides voltage and current measurements for
+various power rails, including the CPU rail, on at least some Jetson
+boards. This raises the possibility of the Platypus attack being relevant
+to Jetson. To prevent this possibility, modify all attribute
+channel permissions so that only root can access the values.
+
+This is logically equivalent to 949dd0104c49 ("powercap: restrict energy
+meter to root access") upstream.
 
 Signed-off-by: Ninad Malwade <nmalwade@nvidia.com>
 ---
- drivers/hwmon/ina3221.c | 141 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 137 insertions(+), 4 deletions(-)
+ drivers/hwmon/ina3221.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/hwmon/ina3221.c b/drivers/hwmon/ina3221.c
-index e06186986444..726c8b99b8cd 100644
+index e06186986444..ceddcbaa26dc 100644
 --- a/drivers/hwmon/ina3221.c
 +++ b/drivers/hwmon/ina3221.c
-@@ -94,13 +94,39 @@ enum ina3221_channels {
- 	INA3221_NUM_CHANNELS
- };
- 
-+/**
-+ * struct shuntv_offset_range - [WAR] shunt voltage offset sub-range
-+ * @start: range start (uV)
-+ * @end: range end (uV)
-+ * @offset: offset for the current sub-range
-+ */
-+struct shuntv_offset_range {
-+	s32 start;
-+	s32 end;
-+	s32 offset;
-+};
-+
-+/**
-+ * struct shuntv_offset - [WAR] shunt voltage offset information
-+ * @offset: general offset
-+ * @range: pointer to a sub-range of shunt voltage offset (uV)
-+ * @num_range: number of sub-ranges of shunt voltage offset
-+ */
-+struct shuntv_offset {
-+	s32 offset;
-+	struct shuntv_offset_range *range;
-+	s32 num_range;
-+};
-+
- /**
-  * struct ina3221_input - channel input source specific information
-+ * @shuntv_offset: [WAR] shunt voltage offset information
-  * @label: label of channel input source
-  * @shunt_resistor: shunt resistor value of channel input source
-  * @disconnected: connection status of channel input source
-  */
- struct ina3221_input {
-+	struct shuntv_offset *shuntv_offset;
- 	const char *label;
- 	int shunt_resistor;
- 	bool disconnected;
-@@ -329,7 +355,7 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
- 	struct ina3221_data *ina = dev_get_drvdata(dev);
- 	struct ina3221_input *input = ina->inputs;
- 	u8 reg = ina3221_curr_reg[attr][channel];
--	int resistance_uo, voltage_nv;
-+	int resistance_uo, voltage_uv;
- 	int regval, ret;
- 
- 	if (channel > INA3221_CHANNEL3)
-@@ -362,10 +388,34 @@ static int ina3221_read_curr(struct device *dev, u32 attr,
- 		if (ret)
- 			return ret;
- 
--		/* Scale of shunt voltage: LSB is 40uV (40000nV) */
--		voltage_nv = regval * 40000;
-+		/* Scale of shunt voltage: LSB is 40uV */
-+		voltage_uv = regval * 40;
-+
-+		/* Apply software WAR to offset shunt voltage for accuracy */
-+		if (input->shuntv_offset) {
-+			struct shuntv_offset_range *range =
-+						input->shuntv_offset->range;
-+			int num_range = input->shuntv_offset->num_range;
-+			int offset = input->shuntv_offset->offset;
-+
-+			while (num_range--) {
-+				if (voltage_uv >= range->start &&
-+				    voltage_uv <= range->end) {
-+					/* Use range offset instead */
-+					offset = range->offset;
-+					break;
-+				}
-+				range++;
-+			}
-+
-+			if (voltage_uv < 0)
-+				voltage_uv += offset;
-+			else
-+				voltage_uv -= offset;
-+		}
-+
- 		/* Return current in mA */
--		*val = DIV_ROUND_CLOSEST(voltage_nv, resistance_uo);
-+		*val = DIV_ROUND_CLOSEST(voltage_uv * 1000, resistance_uo);
- 		return 0;
- 	case hwmon_curr_crit_alarm:
- 	case hwmon_curr_max_alarm:
-@@ -758,6 +808,84 @@ static const struct regmap_config ina3221_regmap_config = {
- 	.volatile_table = &ina3221_volatile_table,
- };
- 
-+static struct shuntv_offset *
-+ina3221_probe_shuntv_offset_from_dt(struct device *dev,
-+				    struct device_node *child)
-+{
-+	struct device_node *np, *range_np;
-+	struct shuntv_offset *shuntv_offset;
-+	struct shuntv_offset_range *range;
-+	s32 start, end, offset;
-+	const __be32 *prop;
-+	int ret, num_range;
-+
-+	prop = of_get_property(child, "shunt-volt-offset-uv", NULL);
-+	/* Silently return for devices with no need of an offset WAR */
-+	if (!prop)
-+		return NULL;
-+
-+	np = of_find_node_by_phandle(be32_to_cpup(prop));
-+	if (!np) {
-+		dev_err(dev, "corrupted phandle for shunt-volt-offset-uv\n");
-+		return ERR_PTR(-ENODEV);
-+	}
-+
-+	ret = of_property_read_s32(np, "offset", &offset);
-+	if (ret) {
-+		dev_err(dev, "failed to read general shuntv offset\n");
-+		return ERR_PTR(-ENODEV);
-+	}
-+
-+	shuntv_offset = devm_kzalloc(dev, sizeof(*shuntv_offset), GFP_KERNEL);
-+	if (!shuntv_offset)
-+		return ERR_PTR(-ENOMEM);
-+
-+	shuntv_offset->offset = offset;
-+
-+	num_range = of_get_child_count(np);
-+
-+	/* Return upon no sub-range found */
-+	if (!num_range)
-+		return shuntv_offset;
-+
-+	range = devm_kzalloc(dev, sizeof(*range) * num_range, GFP_KERNEL);
-+	if (!range)
-+		return ERR_PTR(-ENOMEM);
-+
-+	shuntv_offset->range = range;
-+	shuntv_offset->num_range = num_range;
-+
-+	for_each_child_of_node(np, range_np) {
-+		ret = of_property_read_s32(range_np, "start", &start);
-+		if (ret) {
-+			dev_warn(dev, "missing start in range node\n");
-+			range++;
-+			continue;
-+		}
-+
-+		ret = of_property_read_s32(range_np, "end", &end);
-+		if (ret) {
-+			dev_warn(dev, "missing end in range node\n");
-+			range++;
-+			continue;
-+		}
-+
-+		ret = of_property_read_s32(range_np, "offset", &offset);
-+		if (ret) {
-+			dev_warn(dev, "missing offset in range node\n");
-+			range++;
-+			continue;
-+		}
-+
-+		range->start = start;
-+		range->end = end;
-+		range->offset = offset;
-+		range++;
-+	}
-+
-+	return shuntv_offset;
-+}
-+
- static int ina3221_probe_child_from_dt(struct device *dev,
- 				       struct device_node *child,
- 				       struct ina3221_data *ina)
-@@ -796,6 +924,11 @@ static int ina3221_probe_child_from_dt(struct device *dev,
- 		input->shunt_resistor = val;
- 	}
- 
-+	/* Apply software WAR to offset shunt voltage for accuracy */
-+	input->shuntv_offset = ina3221_probe_shuntv_offset_from_dt(dev, child);
-+	if (IS_ERR(input->shuntv_offset))
-+		return PTR_ERR(input->shuntv_offset);
-+
- 	return 0;
- }
- 
+@@ -605,7 +605,7 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ 		switch (attr) {
+ 		case hwmon_chip_samples:
+ 		case hwmon_chip_update_interval:
+-			return 0644;
++			return 0600;
+ 		default:
+ 			return 0;
+ 		}
+@@ -619,13 +619,13 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ 			if (channel - 1 <= INA3221_CHANNEL3)
+ 				input = &ina->inputs[channel - 1];
+ 			else if (channel == 7)
+-				return 0444;
++				return 0400;
+ 			/* Hide label node if label is not provided */
+-			return (input && input->label) ? 0444 : 0;
++			return (input && input->label) ? 0400 : 0;
+ 		case hwmon_in_input:
+-			return 0444;
++			return 0400;
+ 		case hwmon_in_enable:
+-			return 0644;
++			return 0600;
+ 		default:
+ 			return 0;
+ 		}
+@@ -634,10 +634,10 @@ static umode_t ina3221_is_visible(const void *drvdata,
+ 		case hwmon_curr_input:
+ 		case hwmon_curr_crit_alarm:
+ 		case hwmon_curr_max_alarm:
+-			return 0444;
++			return 0400;
+ 		case hwmon_curr_crit:
+ 		case hwmon_curr_max:
+-			return 0644;
++			return 0600;
+ 		default:
+ 			return 0;
+ 		}
 -- 
 2.17.1
 
