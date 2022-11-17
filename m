@@ -2,110 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4A2062DE0D
-	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 15:27:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9458862DE22
+	for <lists+linux-pm@lfdr.de>; Thu, 17 Nov 2022 15:32:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234551AbiKQO1q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 17 Nov 2022 09:27:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55090 "EHLO
+        id S239456AbiKQObq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 17 Nov 2022 09:31:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239493AbiKQO1R (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 09:27:17 -0500
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B776379E1C;
-        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id k15so1935402pfg.2;
-        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MuPgpre3wzn5WJZUlqLPK4/VfBG9+9DDaXxDqH0YfTg=;
-        b=gDrkj1lVR4IK0kfw/npxyZUbUD2NZG/OGlcfnkWxLkgYEFb7H9Q44NG9P/eKZVCRwy
-         0AqPixB5lzjkrxJ3Tvemmb32exJNXXMaUfqmNPd+pS6qNQmVL/9KPo3l97hnNjAxEk1O
-         ArenFxGlmUYLJW6Xb+oCKHz76UB9OV5SaguCLg7sw2h5AYKN4vncA/euRp4ZbDdK8a94
-         3q6JUUf1s9ejeo59lUs0/Elc1nmbjzHfof/IopD2wfsscm9srbbRuwG8U4jbLkPA4QOv
-         n9RZM0l1pgrBOwrs4yaSCeb11kaNUPzSyAJTbU2E1nUfw3nxmQXX9W1FXtelewruH4yY
-         JpBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MuPgpre3wzn5WJZUlqLPK4/VfBG9+9DDaXxDqH0YfTg=;
-        b=RXiI5ED/LwcsjBGI+raSsHG7VMnSzVFm/1KDoEzo0ezoPmuRbTUoHNz7lKVsYUStV7
-         3VZvXqyvWAExQLLFfV34MNINDwpw1CUJqIAj3YKmUnvBRUcdckYs3RYm49hc3DQMCKIK
-         3E6+ao+S9XM7LGmiwYEz8Bbofi8EUA3KkU1Pj4Po17R4Ip1wZVZkAx48k5wwXG699S63
-         0Mji1ryWy0ADY/hs/EyCAeubTJXlvb3fAbFcI9HVO4AqKWlgT/k5ilQV1KCJYIRlN00z
-         DODdX9s3aaX+cHXV1HzrwJnGiGx4rCngxxRME8KSKgwbLXdbG9/hLdAdgCwdVlPoTPja
-         T3Cg==
-X-Gm-Message-State: ANoB5pkDQ0ftq3qWrKX+vhmUoDsYO0N3kIM3y9215A+1akdosYQx9tRC
-        kWufMNc2eGlMaxjz0HXkMo4=
-X-Google-Smtp-Source: AA0mqf5j440VkxQLEn4vGPnBkUjnZGHiKjxcKqHgkmTySQfsUCazaibRjFLcAv3i9cDadAoIGIpVgA==
-X-Received: by 2002:a63:e008:0:b0:46f:5979:8889 with SMTP id e8-20020a63e008000000b0046f59798889mr2339672pgh.119.1668695236195;
-        Thu, 17 Nov 2022 06:27:16 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c5-20020a170902b68500b00186b758c9fasm1448385pls.33.2022.11.17.06.27.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Nov 2022 06:27:15 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 17 Nov 2022 06:27:14 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Ninad Malwade <nmalwade@nvidia.com>
-Cc:     treding@nvidia.com, jonathanh@nvidia.com, jdelvare@suse.com,
-        nicolinc@nvidia.com, rkasirajan@nvidia.com,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (ina3221): tighten attribute sysfs permissions
-Message-ID: <20221117142714.GB664755@roeck-us.net>
-References: <20221117083920.20493-1-nmalwade@nvidia.com>
+        with ESMTP id S239133AbiKQObp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 17 Nov 2022 09:31:45 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B3012A940;
+        Thu, 17 Nov 2022 06:31:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1668695315;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=w+x7AFEzmypSUrxRznSvHQYfvNLPiaPgfXtyx9kN1pU=;
+    b=PYJUaDwP87PMnWIGgwgw5R/VaqBgRy36dmcnCdw2JvS4aBZH1GLNaTqcxvGMmLNcsB
+    9ksQ/6/abEF0hw81PfNyS09MZoFBlqR/+8hsOu+HITd+WKsJfpvrEoAUT737whQuklWM
+    L9ZAVUplngu1wSR1i6Mtkb+Cv1IDdu0OES8YAkUIdl6Ck8THcOMxXd1CrSfDBzI70t8n
+    jle4Gp9u6xIRe3r2hFsFyNlWxSeqxoWSRJJ2y0ZP5ZQ2GSOd28TnuaJAq7QGgglnmWD2
+    a75lfd8gdbpwoVmT4U548/znRAhldSkY/ABLo4nDMdU1nGHKeVBOh39pNDxbQWPr+tlJ
+    ssTA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWyvDI"
+X-RZG-CLASS-ID: mo00
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
+    with ESMTPSA id Yce349yAHESZKMF
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 17 Nov 2022 15:28:35 +0100 (CET)
+Date:   Thu, 17 Nov 2022 15:28:29 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: simplify if:then:
+ clauses
+Message-ID: <Y3ZFDRI6ypg18S27@gerhold.net>
+References: <20221117130254.378109-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221117083920.20493-1-nmalwade@nvidia.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221117130254.378109-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Nov 17, 2022 at 04:39:20PM +0800, Ninad Malwade wrote:
-> The INA3221 device provides voltage and current measurements for
-> various power rails, including the CPU rail, on at least some Jetson
-> boards. This raises the possibility of the Platypus attack being relevant
-> to Jetson. To prevent this possibility, modify all attribute
-> channel permissions so that only root can access the values.
+On Thu, Nov 17, 2022 at 02:02:54PM +0100, Krzysztof Kozlowski wrote:
+> Most of the device-specific compatibles have generic fallbacks like
+> qcom,tsens-v1 or qcom,tsens-v2.  The if:then: block mentions these
+> fallbacks, so drop redundant entries for specific compatibles.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Cc: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../devicetree/bindings/thermal/qcom-tsens.yaml  | 16 ----------------
+>  1 file changed, 16 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index f0bd4b979e28..c9949713f714 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -118,12 +118,7 @@ allOf:
+>            contains:
+>              enum:
+>                - qcom,ipq8064-tsens
+> -              - qcom,mdm9607-tsens
+> -              - qcom,msm8916-tsens
+>                - qcom,msm8960-tsens
+> -              - qcom,msm8974-tsens
+> -              - qcom,msm8976-tsens
+> -              - qcom,qcs404-tsens
+>                - qcom,tsens-v0_1
+>                - qcom,tsens-v1
+>      then:
 
-NACK. The hwmon ABI expects all attributes to be readable for everyone.
-Forcing userspace to have root privilege to read sensor values just moves
-the attack vector into the affected applications.
+FWIW: I submitted the same patch for this part a couple of months ago,
+it was never applied for some reason:
+https://lore.kernel.org/linux-arm-msm/20220627131415.2868938-2-stephan.gerhold@kernkonzept.com/
 
-You have a number of options:
+> @@ -140,17 +135,6 @@ allOf:
+>          compatible:
+>            contains:
+>              enum:
+> -              - qcom,msm8953-tsens
+> -              - qcom,msm8996-tsens
+> -              - qcom,msm8998-tsens
+> -              - qcom,sc7180-tsens
+> -              - qcom,sc7280-tsens
+> -              - qcom,sc8180x-tsens
+> -              - qcom,sdm630-tsens
+> -              - qcom,sdm845-tsens
+> -              - qcom,sm8150-tsens
+> -              - qcom,sm8250-tsens
+> -              - qcom,sm8350-tsens
+>                - qcom,tsens-v2
+>      then:
+>        properties:
+> 
 
-1) Make the values reported vague enough to be useless for attacks
-2) Remove the attributes
-3) Remove the driver
+This part was not present back then though. Looks like this was
+introduced recently in "dt-bindings: thermal: tsens: Add ipq8074
+compatible".
 
-2) and 3) are obviously unacceptable here. Your option would be to
-disable the driver on the affected system.
+I don't mind if you take this patch instead of mine. Feel free to add my
 
-Having said that, for me to accept any driver change, you would have to
-prove that the values reported by the chip are really accurate enough to
-be useful in any attack (most chips do not deliver that level of accuracy).
-A generic statement along the line of "raises the possibility" is
-insufficient.
+Reviewed-by: Stephan Gerhold <stephan@gerhold.net>
 
-> This is logically equivalent to 949dd0104c49 ("powercap: restrict energy
-> meter to root access") upstream.
- 
-The change in the powercap driver is not hwmon ABI related and
-irrelevant. If you look for an example, use commit 9049572fb145
-("hwmon: Remove amd_energy driver").
-
-Guenter
+Thanks,
+Stephan
