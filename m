@@ -2,135 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9501E62EF6F
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 09:30:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAE7F62F32E
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 12:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235149AbiKRIaf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Nov 2022 03:30:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
+        id S241191AbiKRLEw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Nov 2022 06:04:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241516AbiKRI35 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 03:29:57 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D10A331DC9
-        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 00:29:25 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso3492132wmp.5
-        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 00:29:25 -0800 (PST)
+        with ESMTP id S235107AbiKRLEu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 06:04:50 -0500
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BF698259
+        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 03:04:44 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id r126-20020a1c4484000000b003cffd336e24so2568634wma.4
+        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 03:04:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MehYhB6F0Q5eHfYcAMk4Q22mdZNFopk2+xLRwUYYDiU=;
-        b=Tc9K7qBbu2jDZJ/r2Eoy+5Uf3qf770e9f+doGH/fjoM30oPsXj2/NidmK5eE09oGzJ
-         +vgJ+4cHDqBbm8HnmUN9MigS6qOjnUnZ28FL8T9i3a3uISZAk9lo3brKybaTF60x/AHz
-         PhULHjqc72htt980FOaq740ETBTbpv+XH20U/atQ+rpsHr08z+HrOC8ImM0dXyEdIjC7
-         WaKd9QDOw7We6YKsO4QRBelPw/0jfOeP+Wtbj9nHeoHD3+D9LcSj0DLBnC9d0OBlsAo2
-         FdPdEao0qROC7JuLuXahe5xk1hTmkvh+CA10NttYBUexvp7GzSWxcJidEWs1eVc+mSOJ
-         CL+g==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=W5utuasYQCY2PHwGIWNvE6GgspjSjL4TUNPHSyHes/I=;
+        b=rSp9wAeTTAd+4EW6fNzgLlHHLU+EUHjuaCW7QbiIc2imX1FEIYxAES8RXClaTTvszF
+         W8YsZh4otqH2pIO/hYL8a9lO0CzpX76WgvRaP99NHKhQPMvWn26pyWvD3xYNoNfDbUqL
+         BtVrBxGY06h/2Yywyu7E8uHCdbLTDMkhLrMfhId2OnRzAcnS8g7Ryw0TpXqxWAWKSUrE
+         +lcxoiJKVtwx8on9X8mrNfx0dheTs1cYexAJ991Y24BajwzMQkfXuH8zT6MmW+zSrG44
+         /1MM9wk07INizSU6dquUIgv1gCP0YliHX2OABjs34fgun6+YPuQXbL9GXvuboPXqRqJB
+         1bbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MehYhB6F0Q5eHfYcAMk4Q22mdZNFopk2+xLRwUYYDiU=;
-        b=lH2F7OmO3JRNUkhcaCAlxn5co1tq/hka5e3WLzS78te8Aa698MoCZ/SuOdfDh/5qmZ
-         1EID4QqBif5RFm2KHJ9znrBRaRsSvMPQ9VYxn0xtBrytDlIKv7TzsisqyG4BbvHcWiPK
-         N0aQkzVx78G8c6ElPMs0aQQukO0VyC/xQ/iLg1YXmkNdTZzhSqaruk7GWZNua4Qq5Xak
-         QU5xmcanro3EuKj+XrIcjnxyoQ6M0gXW7yrq91cNKqCSzzbi7l4dRix7GuDBmtsFmHhi
-         pjE7e8oKz2WeeVerLY05xpbGy55jcbJLEdE86EWCyo55gbpt38OesKWQV7dA2HGSPhfs
-         Oe3w==
-X-Gm-Message-State: ANoB5pnfO25e4a02ESnsxDBYNDVzLAzpTUte1uW0VWDms7p7BXLRJPLW
-        FF9iQXW1xSzI5EjSmJR2AGuT3g==
-X-Google-Smtp-Source: AA0mqf59fUADY3sUukFZnRP7lC2MzZfO/bqTdIj1/GDrGS++AzdDdwEmzyyMRBDBohKIXJizSXbk5Q==
-X-Received: by 2002:a1c:e917:0:b0:3cf:681a:43e1 with SMTP id q23-20020a1ce917000000b003cf681a43e1mr3914195wmc.126.1668760164367;
-        Fri, 18 Nov 2022 00:29:24 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id p18-20020adfe612000000b002366a624bd4sm869268wrm.28.2022.11.18.00.29.23
+        bh=W5utuasYQCY2PHwGIWNvE6GgspjSjL4TUNPHSyHes/I=;
+        b=DzUC1ADeZrwUDzo5uqPFjmC/vsZm4rBGXksSxHnygYyOmuOIiTkFXmIijR2uaqydXt
+         Xs4AfMlYlxzaTFpJJghuhJCHbMYFbpvocHAbWRJFzKozHasynYagwYq6UTgKvqfi29F5
+         CI6arqTTGo1stZpK+cDXH2baQ+DGuohLEMKYhIv4vXEUUTRgdsIB75inXbqx2VG41onN
+         BhUrwseHRM1HPneSspNGBtCP+rtXQLQU4sgrNJ5vdSwttU8mNdzRoC55kTPYQbtoWBo8
+         AMpYlrUvOHcugSBTky9k2aNTc0IAuFZ+zo5OCW53nO5Occ0Qko+jDQq78d+OaBidpVZw
+         c6jg==
+X-Gm-Message-State: ANoB5plVr93g05wwXdIobX2KQS2ejsxZVCNh22VM3FAnCuS6q8WK+eAU
+        z8sKgtUYqeY1QTAOTfaoRWJGBQ==
+X-Google-Smtp-Source: AA0mqf7vxiK6P3WffMyqgJ/8O3L40bk6P5sB2XrwVhiaTgxXC7+NTxtdHsFvSQzKB4yODDsSh9V93g==
+X-Received: by 2002:a05:600c:2241:b0:3cf:9ced:dce4 with SMTP id a1-20020a05600c224100b003cf9ceddce4mr4440637wmm.120.1668769482928;
+        Fri, 18 Nov 2022 03:04:42 -0800 (PST)
+Received: from [127.0.1.1] (210.145.15.109.rev.sfr.net. [109.15.145.210])
+        by smtp.googlemail.com with ESMTPSA id i14-20020adff30e000000b002368a6deaf8sm3316948wro.57.2022.11.18.03.04.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 00:29:24 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 09:29:21 +0100
-Subject: [PATCH v2] dt-bindings: interconnect: qcom-bwmon: document SM8550
- compatibles
+        Fri, 18 Nov 2022 03:04:42 -0800 (PST)
+Subject: [PATCH v7 0/4] thermal: mediatek: Add support for MT8365 SoC
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-bwmon-v2-0-20c555e3ba5d@linaro.org>
-To:     Georgi Djakov <djakov@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
+X-b4-tracking: H4sIALpmd2MC/4WNQQqDMBREryJ/3ZSoJLFd9R6liyR+zYcYJVFBxLv30wt0NbwZZuaEgpmwwLM6Ie
+ NOhebEYG4V+GDTiIJ6Zmhk09Sy7sS2CGqVFGvAPNkoXKY0smn7ttN9a6TSA3Db2YIc2uQD99MWI5uB
+ yjrn4/e2a5b3/+FdCyl8Z9xjMEop6V7OHpFcxrufJ/hc1/UFFjuc5sYAAAA=
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Date:   Fri, 18 Nov 2022 12:04:26 +0100
+Message-Id: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Michael Kao <michael.kao@mediatek.com>,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
 X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1668769481; l=1063;
+ i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
+ bh=pMaGIEwsrzpZmq4GokUNu2T3+sSq40Jxnt5PukxJb8M=;
+ b=q8wORfumvupXVJQ0eIbhIXe7py+37KKcDffQKokfWVSbm5S8yMAD9qYJilKiWAIgwU25Mw2RsN52
+ 5oNC9SGcABiEPep3Vj6BgcRGwlaB+KYwjBL+tHIyQHhDJ5OZEqfc
+X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
+ pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document the compatibles used to describe the Bandwidth Monitors
-present on the SM8550 platform.
+This patchset adds thermal support for MT8365 SoC which contains three
+thermal sensors.
 
-A BWMON v4 IP monitors the CPU bandwidth, and a v5 does the LLCC
-bandwidth monitoring.
+Changes in v7:
+- Fix devm_thermal_of_zone_register() error checks.
+- Link to v6: https://lore.kernel.org/r/20221018-up-i350-thermal-bringup-
+v6-0-c87b9f75550b@baylibre.com
 
-This is described by adding "llcc" and "cpu" into the compatible
-strings to differentiate the BWMON IPs.
-
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 ---
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Andy Gross <agross@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-To: Konrad Dybcio <konrad.dybcio@somainline.org>
-To: Georgi Djakov <djakov@kernel.org>
-To: Rob Herring <robh+dt@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org
-Cc: linux-pm@vger.kernel.org
-Cc: devicetree@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v2:
-- Reworded commit message
-- Added Reviewed-by from Krzysztof
-- Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-bwmon-v1-0-b6dd08927f35@linaro.org
----
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml         | 5 +++++
- 1 file changed, 5 insertions(+)
+Amjad Ouled-Ameur (1):
+      thermal: mediatek: add another get_temp ops for thermal sensors
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-index be29e0b80995..00b635662697 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-@@ -26,8 +26,13 @@ properties:
-           - enum:
-               - qcom,sc7280-cpu-bwmon
-               - qcom,sdm845-bwmon
-+              - qcom,sm8550-cpu-bwmon
-           - const: qcom,msm8998-bwmon
-       - const: qcom,msm8998-bwmon       # BWMON v4
-+      - items:
-+          - enum:
-+              - qcom,sm8550-llcc-bwmon
-+          - const: qcom,sc7280-llcc-bwmon
-       - const: qcom,sc7280-llcc-bwmon   # BWMON v5
-       - const: qcom,sdm845-llcc-bwmon   # BWMON v5
- 
+Fabien Parent (2):
+      dt-bindings: thermal: mediatek: add binding documentation for MT8365 SoC
+      thermal: mediatek: add support for MT8365 SoC
 
+Markus Schneider-Pargmann (1):
+      thermal: mediatek: control buffer enablement tweaks
+
+ .../bindings/thermal/mediatek-thermal.txt          |   1 +
+ drivers/thermal/mtk_thermal.c                      | 192 +++++++++++++++++----
+ 2 files changed, 161 insertions(+), 32 deletions(-)
 ---
-base-commit: 3aec1f3082a7f388d04a1fa1a351aa25fd6335f0
-change-id: 20221114-narmstrong-sm8550-upstream-bwmon-a7c6227fab6d
+base-commit: 9d2bc364f67793cdd115f3ab92a18eaf85fee66f
+change-id: 20221018-up-i350-thermal-bringup-ad386d37056f
 
 Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+Amjad Ouled-Ameur <aouledameur@baylibre.com>
