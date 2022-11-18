@@ -2,109 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CCA262FCA7
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 19:26:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E9CF62FCBB
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 19:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242734AbiKRS0W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Nov 2022 13:26:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
+        id S241882AbiKRS3k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Nov 2022 13:29:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242462AbiKRSZx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 13:25:53 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579A41055A;
-        Fri, 18 Nov 2022 10:24:36 -0800 (PST)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AIDmeYT019263;
-        Fri, 18 Nov 2022 18:24:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=iBFz8VbLM173zxJpLjTImoNVRNfvkMbj4lpHnJkkH+I=;
- b=ozPE8G9pFjmdG8TuH0cACYQuIOCbQ5cOuLMHXwBzH3hMiXkg8Dhdt4IB0rxaiobKg+9i
- UHBeqpx7hSIDsMSigxIXburDiCTwn6+PnUOyhjVToir9I+K2upaa2/JrjOvh7WeLzkdi
- a+atcQQ/7dTCiGMQB6Srjx+sPxv5zh/n8yiNUBG5tGzsdAD71+FItdLdG/QitGiNEPvh
- Jg92LzeObK5YWdSFMDNAOFqvqyyF4kx8L5/56++XpwGnM/VIbmeduOH12/L46r4o/G+H
- NSZ7jIsjJB9xpaNHD4DnYieUUo70Tgu39ZkivSxetxm53x7AMvcPGcA7aoEnJuTvsgBJ gA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kx0mvaj9w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 18:24:33 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AIIOWkk007685
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 18 Nov 2022 18:24:32 GMT
-Received: from hu-molvera-sd.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Fri, 18 Nov 2022 10:24:32 -0800
-From:   Melody Olvera <quic_molvera@quicinc.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>
-CC:     Melody Olvera <quic_molvera@quicinc.com>,
-        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH] dt-bindings: cpufreq: cpufreq-qcom-hw: Add QDU1000/QRU1000 cpufreq
-Date:   Fri, 18 Nov 2022 10:24:16 -0800
-Message-ID: <20221118182416.4920-1-quic_molvera@quicinc.com>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S242772AbiKRS3R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 13:29:17 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4879976EF;
+        Fri, 18 Nov 2022 10:27:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1668796075; x=1700332075;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mqjewkRpUIDxGJT0uKLmbhczG2Cqq27+ixwZGMtIhdE=;
+  b=Gf5GJ0D7NS5WqrS89mlV82ZTta2DMF22TE1aiIVwS0R4MQNoLOKUd9NX
+   wnQcxC+tdAfP+mnhaul9QbpRqxcbVsPiaVh57Hc+IjOa7EP2qxJDvJdAH
+   6CIE6QZlcfcItAFxatlk/qdkTB1EVBIGsbJ4ouNfxSasykaccx7qElAwk
+   QpkexkXUPmybPn2a4KsVHnHA2m9fHLJhR/Zu7uvdfaM9LhFuVCxLc8Mwn
+   eFxjmwJ6h81yd9YDUxcGNhIFJKPQH+QvwirqYx3TAVGVEH46+60uq4f23
+   UoBsP7rY7R9EplJluKHTpXu4AeSdG+n+ITA5YauMB/gIBNtiZaRqE/w0I
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="315022109"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="315022109"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 10:27:55 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="703834773"
+X-IronPort-AV: E=Sophos;i="5.96,175,1665471600"; 
+   d="scan'208";a="703834773"
+Received: from bfan1-mobl1.amr.corp.intel.com (HELO desk) ([10.209.78.213])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 10:27:54 -0800
+Date:   Fri, 18 Nov 2022 10:27:52 -0800
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Andrew Cooper <Andrew.Cooper3@citrix.com>, thomas.lendacky@amd.com,
+        "H. Peter Anvin" <hpa@zytor.com>, hdegoede@redhat.com,
+        Ingo Molnar <mingo@redhat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
+        Pavel Machek <pavel@ucw.cz>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David.Kaplan@amd.com, Borislav Petkov <bp@alien8.de>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        antonio.gomez.iglesias@linux.intel.com
+Subject: Re: [PATCH v3 2/2] x86/pm: Add enumeration check before spec MSRs
+ save/restore setup
+Message-ID: <20221118182752.7ovqckwwle3azzrc@desk>
+References: <cover.1668539735.git.pawan.kumar.gupta@linux.intel.com>
+ <c24db75d69df6e66c0465e13676ad3f2837a2ed8.1668539735.git.pawan.kumar.gupta@linux.intel.com>
+ <dc39988c-7b44-63b2-9ddf-6fa986fe7c3b@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: V_Ykujsj6PWjVgoSwx3L_wfxNXtbujsu
-X-Proofpoint-GUID: V_Ykujsj6PWjVgoSwx3L_wfxNXtbujsu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-18_06,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 bulkscore=0 adultscore=0 mlxscore=0 phishscore=0
- clxscore=1011 suspectscore=0 mlxlogscore=798 spamscore=0
- priorityscore=1501 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211180109
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <dc39988c-7b44-63b2-9ddf-6fa986fe7c3b@intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add cpufreq epss for QDU1000 and QRU1000 SoCs.
+On Fri, Nov 18, 2022 at 10:12:32AM -0800, Dave Hansen wrote:
+>On 11/15/22 11:17, Pawan Gupta wrote:
+>> To fix this, add the corresponding X86_FEATURE bit for each MSR.  Avoid
+>> trying to manipulate the MSR when the feature bit is clear. This
+>> required adding a X86_FEATURE bit for MSRs that do not have one already,
+>> but it's a small price to pay.
+>>
+>> Fixes: 73924ec4d560 ("x86/pm: Save the MSR validity status at context setup")
+>> Reported-by: Hans de Goede <hdegoede@redhat.com>
+>> Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+>> Cc: stable@kernel.org
+>
+>Thanks for fixing this up.  The X86_FEATURE approach is a good one.  The
+>"poking at random MSRs" always seemed a bit wonky.
+>
+>Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
 
-Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
----
-This patch comes from a discussion on this series
-https://lore.kernel.org/all/ae4b2333-d243-17ee-1ebd-6b1c89eef9f3@linaro.org/
-
- Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-index e58c55f78aaa..1516327c7f74 100644
---- a/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-+++ b/Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml
-@@ -25,6 +25,7 @@ properties:
-       - description: v2 of CPUFREQ HW (EPSS)
-         items:
-           - enum:
-+              - qcom,qdu1000-cpufreq-epss
-               - qcom,sm6375-cpufreq-epss
-               - qcom,sm8250-cpufreq-epss
-           - const: qcom,cpufreq-epss
-
-base-commit: 147307c69ba4441ee90c1f8ce8edf5df4ea60f67
--- 
-2.38.1
-
+Thanks.
