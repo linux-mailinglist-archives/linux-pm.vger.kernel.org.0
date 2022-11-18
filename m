@@ -2,62 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAE7F62F32E
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 12:04:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2218262F32F
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 12:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241191AbiKRLEw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Nov 2022 06:04:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
+        id S241100AbiKRLE4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Nov 2022 06:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235107AbiKRLEu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 06:04:50 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BF698259
-        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 03:04:44 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id r126-20020a1c4484000000b003cffd336e24so2568634wma.4
-        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 03:04:44 -0800 (PST)
+        with ESMTP id S241415AbiKRLEz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 06:04:55 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6114899E86
+        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 03:04:45 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id c65-20020a1c3544000000b003cfffd00fc0so3277752wma.1
+        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 03:04:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:from:to:cc:subject:date:message-id:reply-to;
-        bh=W5utuasYQCY2PHwGIWNvE6GgspjSjL4TUNPHSyHes/I=;
-        b=rSp9wAeTTAd+4EW6fNzgLlHHLU+EUHjuaCW7QbiIc2imX1FEIYxAES8RXClaTTvszF
-         W8YsZh4otqH2pIO/hYL8a9lO0CzpX76WgvRaP99NHKhQPMvWn26pyWvD3xYNoNfDbUqL
-         BtVrBxGY06h/2Yywyu7E8uHCdbLTDMkhLrMfhId2OnRzAcnS8g7Ryw0TpXqxWAWKSUrE
-         +lcxoiJKVtwx8on9X8mrNfx0dheTs1cYexAJ991Y24BajwzMQkfXuH8zT6MmW+zSrG44
-         /1MM9wk07INizSU6dquUIgv1gCP0YliHX2OABjs34fgun6+YPuQXbL9GXvuboPXqRqJB
-         1bbg==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GBJERhtOth+rBeLxVgFfkJsarNx9GtznV7fQ6VC3SrY=;
+        b=vvdRx4XhO7STmF3ODXXs9rwYg2sCM9Fbli4LCPgXKFyjJe8pMcz+dyzPGZzvn67Yk8
+         0Na7a9HlLh9G5bnvBX7jfnE6BlcjIgQzODOm7EvmKfOfmwMDXTYlUDWLHHrze0GMO6bo
+         tDwRXzapE4HZWUu0nLh0M4J5sDZfXHI+6u0aoVrkeaarympPczI5z6sajFhWBk+RZwT0
+         hwvixXzgkettkfYltivaVdJ+8X25LCTHQoVTNMUi8CkCYRiv3e4ioHqGPeVvzw042Sii
+         cVsWm3Z2HiKFx9UiZ+V/il7ikboqZB2yg2Og2zVTGt23R/grQuR8WVeZ1yq9rqctmVkb
+         P1vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
-         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=W5utuasYQCY2PHwGIWNvE6GgspjSjL4TUNPHSyHes/I=;
-        b=DzUC1ADeZrwUDzo5uqPFjmC/vsZm4rBGXksSxHnygYyOmuOIiTkFXmIijR2uaqydXt
-         Xs4AfMlYlxzaTFpJJghuhJCHbMYFbpvocHAbWRJFzKozHasynYagwYq6UTgKvqfi29F5
-         CI6arqTTGo1stZpK+cDXH2baQ+DGuohLEMKYhIv4vXEUUTRgdsIB75inXbqx2VG41onN
-         BhUrwseHRM1HPneSspNGBtCP+rtXQLQU4sgrNJ5vdSwttU8mNdzRoC55kTPYQbtoWBo8
-         AMpYlrUvOHcugSBTky9k2aNTc0IAuFZ+zo5OCW53nO5Occ0Qko+jDQq78d+OaBidpVZw
-         c6jg==
-X-Gm-Message-State: ANoB5plVr93g05wwXdIobX2KQS2ejsxZVCNh22VM3FAnCuS6q8WK+eAU
-        z8sKgtUYqeY1QTAOTfaoRWJGBQ==
-X-Google-Smtp-Source: AA0mqf7vxiK6P3WffMyqgJ/8O3L40bk6P5sB2XrwVhiaTgxXC7+NTxtdHsFvSQzKB4yODDsSh9V93g==
-X-Received: by 2002:a05:600c:2241:b0:3cf:9ced:dce4 with SMTP id a1-20020a05600c224100b003cf9ceddce4mr4440637wmm.120.1668769482928;
-        Fri, 18 Nov 2022 03:04:42 -0800 (PST)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GBJERhtOth+rBeLxVgFfkJsarNx9GtznV7fQ6VC3SrY=;
+        b=kC+LRdHmbp9V1YnKA4WfCA4p1TI6HgKFfa1Q9JMOI9VVAj3UkIuHXXIllO+vdlEfyV
+         LHaYOjOwXmba2xeObJST78KAQU4xmk0lriV+SN0+TNgolAzdhjWj4LbtYerNtsWEsWHa
+         /Z/SVf32A+2DiuS7I3f2EwRBdv/K1h/E0dazaDywNAMux2bmkXW8pBed0pln9PiBwH8i
+         EnYvB9u93F4iD3sHnaEb5uAzC1U/h2O9K/YhShr7My6zZMD1/4ErHJCQxgGV3/ePOoZg
+         yFgTy+RG+D/zqFGpxGXA7E6evO3FXXJGKS3UxKkudH7VupKIG6HZOQD6/9EF0G0W31YG
+         wWhw==
+X-Gm-Message-State: ANoB5pnvVCNOz+yt6WnBfPWT3YM6jFsIR3AUsSJSBaOL/EgFuptfY57S
+        tHb0aHP7TFvUeDwpdx9lReXQHg==
+X-Google-Smtp-Source: AA0mqf41qGV0bEND0GwPSMQhFkrT1VnGlLZtWZn2lyPUA5nTaZUlKkh7q3SAfsl6Dc+JAGpnk4/4Gw==
+X-Received: by 2002:a05:600c:1e0f:b0:3cf:e9a4:3261 with SMTP id ay15-20020a05600c1e0f00b003cfe9a43261mr8273759wmb.41.1668769483874;
+        Fri, 18 Nov 2022 03:04:43 -0800 (PST)
 Received: from [127.0.1.1] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.googlemail.com with ESMTPSA id i14-20020adff30e000000b002368a6deaf8sm3316948wro.57.2022.11.18.03.04.41
+        by smtp.googlemail.com with ESMTPSA id i14-20020adff30e000000b002368a6deaf8sm3316948wro.57.2022.11.18.03.04.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 03:04:42 -0800 (PST)
-Subject: [PATCH v7 0/4] thermal: mediatek: Add support for MT8365 SoC
+        Fri, 18 Nov 2022 03:04:43 -0800 (PST)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Date:   Fri, 18 Nov 2022 12:04:27 +0100
+Subject: [PATCH v7 1/4] dt-bindings: thermal: mediatek: add binding documentation for
+ MT8365 SoC
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-b4-tracking: H4sIALpmd2MC/4WNQQqDMBREryJ/3ZSoJLFd9R6liyR+zYcYJVFBxLv30wt0NbwZZuaEgpmwwLM6Ie
- NOhebEYG4V+GDTiIJ6Zmhk09Sy7sS2CGqVFGvAPNkoXKY0smn7ttN9a6TSA3Db2YIc2uQD99MWI5uB
- yjrn4/e2a5b3/+FdCyl8Z9xjMEop6V7OHpFcxrufJ/hc1/UFFjuc5sYAAAA=
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Fri, 18 Nov 2022 12:04:26 +0100
-Message-Id: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+Message-Id: <20221018-up-i350-thermal-bringup-v7-1-ebf08ff2eddb@baylibre.com>
+References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+In-Reply-To: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
@@ -76,49 +77,47 @@ Cc:     AngeloGioacchino Del Regno
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
 X-Mailer: b4 0.10.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1668769481; l=1063;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1668769481; l=1269;
  i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
- bh=pMaGIEwsrzpZmq4GokUNu2T3+sSq40Jxnt5PukxJb8M=;
- b=q8wORfumvupXVJQ0eIbhIXe7py+37KKcDffQKokfWVSbm5S8yMAD9qYJilKiWAIgwU25Mw2RsN52
- 5oNC9SGcABiEPep3Vj6BgcRGwlaB+KYwjBL+tHIyQHhDJ5OZEqfc
+ bh=fY1CncUk6oCKZLxDY+iXmY9IFHJPxuBaTQTmU142aZo=;
+ b=Oqt0uOOMB8WLDgzdVBOKBcnTWdGXbWz+ipYlESQz5dRiUdvgrn/7hHmra43XQrdY49ee/m/RuMPb
+ tUHkhzfMA8azF4mWIrudIIRQqMDPrbMJ5OHNnqlI88SliBqaaPis
 X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
  pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patchset adds thermal support for MT8365 SoC which contains three
-thermal sensors.
+From: Fabien Parent <fparent@baylibre.com>
 
-Changes in v7:
-- Fix devm_thermal_of_zone_register() error checks.
-- Link to v6: https://lore.kernel.org/r/20221018-up-i350-thermal-bringup-
-v6-0-c87b9f75550b@baylibre.com
+Add the binding documentation for the thermal support on MT8365 SoC.
 
+Signed-off-by: Fabien Parent <fparent@baylibre.com>
 Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
-Amjad Ouled-Ameur (1):
-      thermal: mediatek: add another get_temp ops for thermal sensors
+ Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
+ 1 file changed, 1 insertion(+)
 
-Fabien Parent (2):
-      dt-bindings: thermal: mediatek: add binding documentation for MT8365 SoC
-      thermal: mediatek: add support for MT8365 SoC
+diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+index 5c7e7bdd029a..ba4ebffeade4 100644
+--- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
++++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
+@@ -14,6 +14,7 @@ Required properties:
+   - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
+   - "mediatek,mt7622-thermal" : For MT7622 SoC
+   - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
++  - "mediatek,mt8365-thermal" : For MT8365 family of SoCs
+   - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
+ - reg: Address range of the thermal controller
+ - interrupts: IRQ for the thermal controller
 
-Markus Schneider-Pargmann (1):
-      thermal: mediatek: control buffer enablement tweaks
-
- .../bindings/thermal/mediatek-thermal.txt          |   1 +
- drivers/thermal/mtk_thermal.c                      | 192 +++++++++++++++++----
- 2 files changed, 161 insertions(+), 32 deletions(-)
----
-base-commit: 9d2bc364f67793cdd115f3ab92a18eaf85fee66f
-change-id: 20221018-up-i350-thermal-bringup-ad386d37056f
-
-Best regards,
 -- 
-Amjad Ouled-Ameur <aouledameur@baylibre.com>
+b4 0.10.1
