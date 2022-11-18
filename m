@@ -2,851 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F16F62F9AE
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 16:50:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E9E62FC0C
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 18:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242273AbiKRPuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Nov 2022 10:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58380 "EHLO
+        id S235344AbiKRRyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Nov 2022 12:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242379AbiKRPuQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 10:50:16 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969428C49C
-        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 07:50:10 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id v1so9803571wrt.11
-        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 07:50:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hFycxYZ41zzcSWXUMUqzeyTTOR1oiuIa3bzxOOEAhro=;
-        b=eVzNuSgRg514rS+txbNGXcGwWVbdC6ROZJ4JT/ejN3xvH620v4olmru+a+m2smMhMC
-         6bUy/1u8YF74HtkpMJFubA7a+sHAz3styxufs9V3MeKcgsZ2k0750azpEI6Z44hbFbqq
-         H1HFGE9mUGXkUHCx/B2at4/lSM24MM4hBwYrG/sZ9Yqgq2iSmTrmEywA/fEQ43J7J4RV
-         F3qzVyOEOzl++M3ilrQJ0dc/jtDamdHEznJCShuboszs1CLbGJ74oS2c/k1M7W+2ds03
-         X0Q2XziZsTKOhDtkyVtOe4NkIQEj/ok9iRl1G4KixT8QycXO+mTKvGj/zRFFfnd+nozO
-         oTOA==
+        with ESMTP id S235240AbiKRRyt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 12:54:49 -0500
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7AFFCE2;
+        Fri, 18 Nov 2022 09:54:48 -0800 (PST)
+Received: by mail-qt1-f179.google.com with SMTP id z6so3602969qtv.5;
+        Fri, 18 Nov 2022 09:54:48 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hFycxYZ41zzcSWXUMUqzeyTTOR1oiuIa3bzxOOEAhro=;
-        b=R+ggVGsLlYw4qxsAwjXhyxKy+6RY5xjxf7crPga7Cf4L+qMbs64Jx+m+KvT6dEO/Fm
-         LNaxAAioMMvzOvOydGeOEK12l2YwYBnWjbf6U6M1hrlkDLnt8kh/mhJX0tRvU7qinEim
-         nTSu7Sd88e+XbVRZ4clRipoQLfie5lOfVIMuy5Z/lf6HqAap7SlmJWrXqmYd3kceU3hz
-         ZnnCI6rZWqjXYoRaTlJsHAo+wrObAgQo4jPQk8BPHqiUwIau9GiS1+jSySEQeSHbxP1E
-         /DQUaTmC72fL+i02pAawhIyGCyHFynZLJI8DChG898wGiOYUSuIRoRv1/qdroa5rKzZN
-         xC/A==
-X-Gm-Message-State: ANoB5pn4ZVmdW7mBuUZn7Q9WphNISDQ+dMgPziRka62lYtowhf5QD8dv
-        lRwRNQd1dBTF0adXbecDxMoGV3VlJ5XcNQ==
-X-Google-Smtp-Source: AA0mqf7xrmBPJz+XJ7Zx1BH0271wcnLp4SWSEtQ2a2MLSQLprzUhfC7B8KFANOVZQvkmVFpU2JlJTQ==
-X-Received: by 2002:a5d:56d2:0:b0:236:cdf8:1e3f with SMTP id m18-20020a5d56d2000000b00236cdf81e3fmr4515770wrw.80.1668786608720;
-        Fri, 18 Nov 2022 07:50:08 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id a13-20020a5d53cd000000b002383edcde09sm3812465wrw.59.2022.11.18.07.50.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Nov 2022 07:50:08 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Fri, 18 Nov 2022 16:50:06 +0100
-Subject: [PATCH v2 2/2] arm64: dts: amlogic: add initial Odroid Go Ultra DTS
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RlqnSN+qPaBwTzyL2CAPXxMmkHP1kcbHFxxv679aPDE=;
+        b=WETdqozBD//OevXVKteyi25UC0nqPRvrWL03bi7c5q8GlqCrdCdlid/QTNUH2Jtcsf
+         ecvJHnpvp09uGgRUpTLQ5PP3ncwvjljjwpBnhm1wsMaJ5gbXRkk0cM1aRVpAfq3uNnJW
+         zbf2+JzqVNWEsUkGE7OzWuNQu2nSJvmC6JKXxoKqBefvifXL2kSJ+4/CfAwKmsdJOa9q
+         2QymwHX3Z7GA4Oti/xybLm/n7aSMKVVeQEVT5mXnEGrJ3beX6GAs8q/w4iabuxD7hxnI
+         H/tg3h4ObmEpFvuIlu2yv6kqk1VGg7uoyWrKmn0Fr4QmhLzZcOg+U/jPNHSc8OMngolD
+         141w==
+X-Gm-Message-State: ANoB5pllH230MsJTRle7bsX0pyZolGWjSC/Mp3qiwBhKUMZ08ev9g1fr
+        2DLF5jnm2ptL6fTZ/SDJ2qJKXTT0mw660F7uLKc=
+X-Google-Smtp-Source: AA0mqf5GXPkLFnYUu7hHRe0D0Q3l2NJQjtO5Exs/VyMsF1z+ZwcgTiFcEp/8Q8zoNq5Jcw7X8xMG4iLSX1944UD49fg=
+X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
+ u9-20020a05622a198900b003a57cf81a6emr7716974qtc.48.1668794087923; Fri, 18 Nov
+ 2022 09:54:47 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <20221031-b4-odroid-go-ultra-initial-v2-2-a3df1e09b0af@linaro.org>
-References: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org
-X-Mailer: b4 0.10.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221116025417.2590275-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20221116025417.2590275-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 18 Nov 2022 18:54:36 +0100
+Message-ID: <CAJZ5v0hQkZ=jprMc5MNaCudKNATtjs_5Z+N7+a7eeaXRjGpaDQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND 1/2] thermal: intel: Prevent accidental clearing of
+ HFI status
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This adds initial support for the Hardkernel Odroid Go Ultra.
+On Wed, Nov 16, 2022 at 3:54 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> When there is a package thermal interrupt with PROCHOT log, it will be
+> processed and cleared. It is possible that there is an active HFI event
+> status, which is about to get processed or getting processed. While
+> clearing PROCHOT log bit, it will also clear HFI status bit. This means
+> that hardware is free to update HFI memory.
+>
+> When clearing a package thermal interrupt, some processors will generate
+> a "general protection fault" when any of the read only bit is set to 1.
+> The driver maintains a mask of all read-write bits which can be set.
+> This mask doesn't include HFI status bit. This bit will also be cleared,
+> as it will be assumed read-only bit. So, add HFI status bit 26 to the
+> mask.
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 
-The Odroid Go Ultra is a portable gaming device with the following
-characteristics:
-- Amlogic S922X SoC
-- RK817 & RK818 PMICs
-- 2GiB LPDDR4
-- On board 16GiB eMMC
-- Micro SD Card slot
-- 5inch 854×480 MIPI-DSI TFT LCD
-- Earphone stereo jack, 0.5Watt 8Ω Mono speaker
-- Li-Polymer 3.7V/4000mAh Battery
-- USB-A 2.0 Host Connector
-- x16 GPIO Input Buttons
-- 2x ADC Analog Joysticks
-- USB-C Port for USB2 Device and Charging
+Is a Fixes tag missing here?
 
-The following are not yet handled:
-- Battery RK818 Gauge and Charging
-- Earphone stereo jack detect
-- 5inch 854×480 MIPI-DSI TFT LCD
+Also, do you want it in 6.1-rc7 or would 6.2 suffice?
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/amlogic/Makefile               |   1 +
- .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     | 722 +++++++++++++++++++++
- 2 files changed, 723 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index e213aeebb774..97b42e2100e0 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -12,6 +12,7 @@ dtb-$(CONFIG_ARCH_MESON) += meson-g12b-a311d-khadas-vim3.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gsking-x.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking-pro.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-gtking.dtb
-+dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-go-ultra.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2-plus.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-odroid-n2.dtb
- dtb-$(CONFIG_ARCH_MESON) += meson-g12b-s922x-khadas-vim3.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
-new file mode 100644
-index 000000000000..1e40709610c5
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
-@@ -0,0 +1,722 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2022 Neil Armstrong <neil.armstrong@linaro.org>
-+ */
-+
-+/dts-v1/;
-+
-+#include "meson-g12b-s922x.dtsi"
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/gpio/meson-g12a-gpio.h>
-+#include <dt-bindings/sound/meson-g12a-toacodec.h>
-+#include <dt-bindings/sound/meson-g12a-tohdmitx.h>
-+
-+/ {
-+	compatible = "hardkernel,odroid-go-ultra", "amlogic,s922x", "amlogic,g12b";
-+	model = "Hardkernel ODROID-GO-Ultra";
-+
-+	aliases {
-+		serial0 = &uart_AO;
-+		rtc0 = &vrtc;
-+	};
-+
-+	adc-joystick-left {
-+		compatible = "adc-joystick";
-+		io-channels = <&saradc 2>, <&saradc 3>;
-+		poll-interval = <10>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		axis@0 {
-+			reg = <0>;
-+			linux,code = <ABS_Y>;
-+			abs-range = <3150 950>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+		axis@1 {
-+			reg = <1>;
-+			linux,code = <ABS_X>;
-+			abs-range = <700 2900>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+	};
-+
-+	adc-joystick-right {
-+		compatible = "adc-joystick";
-+		io-channels = <&saradc 0>, <&saradc 1>;
-+		poll-interval = <10>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		axis@0 {
-+			reg = <0>;
-+			linux,code = <ABS_RY>;
-+			abs-range = <3150 950>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+		axis@1 {
-+			reg = <1>;
-+			linux,code = <ABS_RX>;
-+			abs-range = <800 3000>;
-+			abs-fuzz = <32>;
-+			abs-flat = <64>;
-+		};
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	codec_clk: codec-clk {
-+		compatible = "fixed-clock";
-+		clock-frequency = <12288000>;
-+		clock-output-names = "codec_clk";
-+		#clock-cells = <0>;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys-polled";
-+		poll-interval = <10>;
-+		pinctrl-0 = <&keypad_gpio_pins>;
-+		pinctrl-names = "default";
-+
-+		volume-up-button {
-+			label = "VOLUME-UP";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&gpio GPIOX_8 GPIO_ACTIVE_LOW>;
-+		};
-+		volume-down-button {
-+			label = "VOLUME-DOWN";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&gpio GPIOX_9 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-up-button {
-+			label = "DPAD-UP";
-+			linux,code = <BTN_DPAD_UP>;
-+			gpios = <&gpio GPIOX_0 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-down-button {
-+			label = "DPAD-DOWN";
-+			linux,code = <BTN_DPAD_DOWN>;
-+			gpios = <&gpio GPIOX_1 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-left-button {
-+			label = "DPAD-LEFT";
-+			linux,code = <BTN_DPAD_LEFT>;
-+			gpios = <&gpio GPIOX_2 GPIO_ACTIVE_LOW>;
-+		};
-+		dpad-right-button {
-+			label = "DPAD-RIGHT";
-+			linux,code = <BTN_DPAD_RIGHT>;
-+			gpios = <&gpio GPIOX_3 GPIO_ACTIVE_LOW>;
-+		};
-+		a-button {
-+			label = "A";
-+			linux,code = <BTN_EAST>;
-+			gpios = <&gpio GPIOX_4 GPIO_ACTIVE_LOW>;
-+		};
-+		b-button {
-+			label = "B";
-+			linux,code = <BTN_SOUTH>;
-+			gpios = <&gpio GPIOX_5 GPIO_ACTIVE_LOW>;
-+		};
-+		y-button {
-+			label = "Y";
-+			linux,code = <BTN_WEST>;
-+			gpios = <&gpio GPIOX_6 GPIO_ACTIVE_LOW>;
-+		};
-+		x-button {
-+			label = "X";
-+			linux,code = <BTN_NORTH>;
-+			gpios = <&gpio GPIOX_7 GPIO_ACTIVE_LOW>;
-+		};
-+		f1-button {
-+			label = "F1";
-+			linux,code = <BTN_TRIGGER_HAPPY1>;
-+			gpios = <&gpio GPIOX_17 GPIO_ACTIVE_LOW>;
-+		};
-+		f2-button {
-+			label = "F2";
-+			linux,code = <BTN_TRIGGER_HAPPY2>;
-+			gpios = <&gpio GPIOX_10 GPIO_ACTIVE_LOW>;
-+		};
-+		f3-button {
-+			label = "F3";
-+			linux,code = <BTN_TRIGGER_HAPPY3>;
-+			gpios = <&gpio GPIOX_11 GPIO_ACTIVE_LOW>;
-+		};
-+		f4-button {
-+			label = "F4";
-+			linux,code = <BTN_TRIGGER_HAPPY4>;
-+			gpios = <&gpio GPIOX_12 GPIO_ACTIVE_LOW>;
-+		};
-+		f5-button {
-+			label = "F5";
-+			linux,code = <BTN_TRIGGER_HAPPY5>;
-+			gpios = <&gpio GPIOX_13 GPIO_ACTIVE_LOW>;
-+		};
-+		f6-button {
-+			label = "F6";
-+			linux,code = <BTN_TRIGGER_HAPPY6>;
-+			gpios = <&gpio GPIOX_16 GPIO_ACTIVE_LOW>;
-+		};
-+		top-left-button {
-+			label = "TOP Left";
-+			linux,code = <BTN_TL>;
-+			gpios = <&gpio GPIOX_14 GPIO_ACTIVE_LOW>;
-+		};
-+		top-left2-button {
-+			label = "TOP Left 2";
-+			linux,code = <BTN_TL2>;
-+			gpios = <&gpio GPIOX_19 GPIO_ACTIVE_LOW>;
-+		};
-+		top-right-button {
-+			label = "TOP Right";
-+			linux,code = <BTN_TR>;
-+			gpios = <&gpio GPIOX_15 GPIO_ACTIVE_LOW>;
-+		};
-+		top-right2-button {
-+			label = "TOP Right 2";
-+			linux,code = <BTN_TR2>;
-+			gpios = <&gpio GPIOX_18 GPIO_ACTIVE_LOW>;
-+		};
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x40000000>;
-+	};
-+
-+	emmc_pwrseq: emmc-pwrseq {
-+		compatible = "mmc-pwrseq-emmc";
-+		reset-gpios = <&gpio BOOT_12 GPIO_ACTIVE_LOW>;
-+	};
-+
-+	leds {
-+		compatible = "gpio-leds";
-+
-+		led-blue {
-+			color = <LED_COLOR_ID_BLUE>;
-+			gpios = <&gpio_ao GPIOAO_11 GPIO_ACTIVE_HIGH>;
-+			linux,default-trigger = "heartbeat";
-+		};
-+	};
-+
-+	vdd_sys: regulator-vdd-sys {
-+		compatible = "regulator-fixed";
-+		regulator-name = "VDD_SYS";
-+		regulator-min-microvolt = <3800000>;
-+		regulator-max-microvolt = <3800000>;
-+		regulator-always-on;
-+	};
-+
-+	sound {
-+		compatible = "amlogic,axg-sound-card";
-+		model = "Odroid GO Ultra";
-+		audio-widgets = "Microphone", "Mic Jack",
-+				"Headphone", "Headphones",
-+				"Speaker", "Internal Speakers";
-+		audio-aux-devs = <&tdmout_b>, <&tdmin_b>, <&speaker_amp>;
-+		audio-routing =	"TDMOUT_B IN 0", "FRDDR_A OUT 1",
-+				"TDM_B Playback", "TDMOUT_B OUT",
-+				"TDMIN_B IN 1", "TDM_B Capture",
-+				"TDMIN_B IN 4", "TDM_B Loopback",
-+				"TODDR_A IN 1", "TDMIN_B OUT",
-+				"MICL", "Mic Jack",
-+				"Headphones", "HPOL",
-+				"Headphones", "HPOR",
-+				"Speaker Amplifier INL", "HPOL",
-+				"Speaker Amplifier INR", "HPOR",
-+				"Internal Speakers", "Speaker Amplifier OUTL",
-+				"Internal Speakers", "Speaker Amplifier OUTR";
-+
-+		assigned-clocks = <&clkc CLKID_MPLL2>,
-+				  <&clkc CLKID_MPLL0>,
-+				  <&clkc CLKID_MPLL1>;
-+		assigned-clock-parents = <0>, <0>, <0>;
-+		assigned-clock-rates = <294912000>,
-+				       <270950400>,
-+				       <393216000>;
-+
-+		dai-link-0 {
-+			sound-dai = <&frddr_a>;
-+		};
-+
-+		dai-link-1 {
-+			sound-dai = <&toddr_a>;
-+		};
-+
-+		dai-link-2 {
-+			sound-dai = <&tdmif_b>;
-+			dai-format = "i2s";
-+			dai-tdm-slot-tx-mask-0 = <1 1>;
-+			mclk-fs = <256>;
-+
-+			codec-0 {
-+				sound-dai = <&rk817>;
-+			};
-+		};
-+	};
-+
-+	speaker_amp: speaker-amplifier {
-+		compatible = "simple-audio-amplifier";
-+		sound-name-prefix = "Speaker Amplifier";
-+		VCC-supply = <&hp_5v>;
-+	};
-+};
-+
-+&arb {
-+	status = "okay";
-+};
-+
-+&cpu0 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu1 {
-+	cpu-supply = <&vddcpu_b>;
-+	operating-points-v2 = <&cpu_opp_table_0>;
-+	clocks = <&clkc CLKID_CPU_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu100 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu101 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu102 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+&cpu103 {
-+	cpu-supply = <&vddcpu_a>;
-+	operating-points-v2 = <&cpub_opp_table_1>;
-+	clocks = <&clkc CLKID_CPUB_CLK>;
-+	clock-latency = <50000>;
-+};
-+
-+/* RK817 only supports 12.5mV steps, round up the values */
-+&cpu_opp_table_0 {
-+	opp-1000000000 {
-+		opp-microvolt = <737500>;
-+	};
-+	opp-1200000000 {
-+		opp-microvolt = <737500>;
-+	};
-+	opp-1398000000 {
-+		opp-microvolt = <762500>;
-+	};
-+	opp-1512000000 {
-+		opp-microvolt = <800000>;
-+	};
-+	opp-1608000000 {
-+		opp-microvolt = <837500>;
-+	};
-+	opp-1704000000 {
-+		opp-microvolt = <862500>;
-+	};
-+	opp-1896000000 {
-+		opp-microvolt = <987500>;
-+	};
-+	opp-1992000000 {
-+		opp-microvolt = <1012500>;
-+	};
-+};
-+
-+/* RK818 only supports 12.5mV steps, round up the values */
-+&cpub_opp_table_1 {
-+	opp-1000000000 {
-+		opp-microvolt = <775000>;
-+	};
-+	opp-1200000000 {
-+		opp-microvolt = <775000>;
-+	};
-+	opp-1398000000 {
-+		opp-microvolt = <800000>;
-+	};
-+	opp-1512000000 {
-+		opp-microvolt = <825000>;
-+	};
-+	opp-1608000000 {
-+		opp-microvolt = <862500>;
-+	};
-+	opp-1704000000 {
-+		opp-microvolt = <900000>;
-+	};
-+	opp-1800000000 {
-+		opp-microvolt = <987500>;
-+	};
-+	opp-1908000000 {
-+		opp-microvolt = <1025000>;
-+	};
-+};
-+
-+&i2c_AO {
-+	status = "okay";
-+	pinctrl-0 = <&i2c_ao_sck_pins>, <&i2c_ao_sda_pins>;
-+	pinctrl-names = "default";
-+
-+	rk818: pmic@1c {
-+		compatible = "rockchip,rk818";
-+		reg = <0x1c>;
-+		interrupt-parent = <&gpio_intc>;
-+		interrupts = <7 IRQ_TYPE_LEVEL_LOW>; /* GPIOAO_7 */
-+
-+		vcc1-supply = <&vdd_sys>;
-+		vcc2-supply = <&vdd_sys>;
-+		vcc3-supply = <&vdd_sys>;
-+		vcc4-supply = <&vdd_sys>;
-+		vcc6-supply = <&vdd_sys>;
-+		vcc7-supply = <&vcc_2v3>;
-+		vcc8-supply = <&vcc_2v3>;
-+		vcc9-supply = <&vddao_3v3>;
-+		boost-supply = <&vdd_sys>;
-+		switch-supply = <&vdd_sys>;
-+
-+		regulators {
-+			vddcpu_a: DCDC_REG1 {
-+				regulator-name = "vddcpu_a";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <775000>;
-+				regulator-max-microvolt = <1025000>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <775000>;
-+				};
-+			};
-+
-+			vdd_ee: DCDC_REG2 {
-+				regulator-name = "vdd_ee";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <875000>;
-+				regulator-max-microvolt = <1250000>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <875000>;
-+				};
-+			};
-+
-+			vddq_1v1: DCDC_REG3 {
-+				regulator-name = "vddq_1v1";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			vddao_3v3: DCDC_REG4 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vddao_3v3";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <3300000>;
-+				};
-+			};
-+
-+			hp_5v: DCDC_BOOST {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-name = "hp_5v";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vddio_ao1v8: LDO_REG5 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-name = "vddio_ao1v8";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1800000>;
-+				};
-+			};
-+
-+			vddq_1v8: LDO_REG7 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <1800000>;
-+				regulator-name = "vddq_1v8";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1800000>;
-+				};
-+			};
-+
-+			vddio_c: LDO_REG9 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <1800000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vddio_c";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <3300000>;
-+				};
-+			};
-+
-+			vcc_sd: SWITCH_REG {
-+				regulator-name = "vcc_sd";
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			OTG_SWITCH {
-+				regulator-name = "otg_switch";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+	pinctrl-0 = <&i2c3_sda_a_pins>, <&i2c3_sck_a_pins>;
-+	pinctrl-names = "default";
-+
-+	rk817: pmic@20 {
-+		compatible = "rockchip,rk817";
-+		reg = <0x20>;
-+		interrupt-parent = <&gpio_intc>;
-+
-+		interrupts = <5 IRQ_TYPE_LEVEL_LOW>; /* GPIOAO_5 */
-+
-+		vcc1-supply = <&vdd_sys>;
-+		vcc2-supply = <&vdd_sys>;
-+		vcc3-supply = <&vdd_sys>;
-+		vcc4-supply = <&vdd_sys>;
-+		vcc5-supply = <&vdd_sys>;
-+		vcc6-supply = <&vdd_sys>;
-+		vcc7-supply = <&vdd_sys>;
-+		vcc8-supply = <&vdd_sys>;
-+		vcc9-supply = <&rk817_boost>;
-+
-+		#sound-dai-cells = <0>;
-+		clocks = <&codec_clk>;
-+		clock-names = "mclk";
-+
-+		#clock-cells = <1>;
-+
-+		regulators {
-+			vddcpu_b: DCDC_REG2 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <737500>;
-+				regulator-max-microvolt = <1012500>;
-+				regulator-ramp-delay = <6001>;
-+				regulator-initial-mode = <0x2>;
-+				regulator-name = "vddcpu_b";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+					regulator-suspend-microvolt = <1000000>;
-+				};
-+			};
-+
-+			vcc_2v3: DCDC_REG3 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <2300000>;
-+				regulator-max-microvolt = <2400000>;
-+				regulator-initial-mode = <0x2>;
-+				regulator-name = "vcc_2v3";
-+				regulator-state-mem {
-+					regulator-on-in-suspend;
-+				};
-+			};
-+
-+			LDO_REG4 {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vdd_codec";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			vcc_lcd: LDO_REG8 {
-+				regulator-min-microvolt = <3300000>;
-+				regulator-max-microvolt = <3300000>;
-+				regulator-name = "vcc_lcd";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			rk817_boost: BOOST {
-+				regulator-always-on;
-+				regulator-boot-on;
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5400000>;
-+				regulator-name = "rk817_boost";
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+
-+			usb_host: OTG_SWITCH {
-+				regulator-name = "usb_host";
-+				regulator-min-microvolt = <5000000>;
-+				regulator-max-microvolt = <5000000>;
-+				regulator-state-mem {
-+					regulator-off-in-suspend;
-+				};
-+			};
-+		};
-+	};
-+};
-+
-+&clkc_audio {
-+	status = "okay";
-+};
-+
-+&eth_phy {
-+	status = "disabled";
-+};
-+
-+&frddr_a {
-+	status = "okay";
-+};
-+
-+&periphs_pinctrl {
-+	keypad_gpio_pins: keypad-gpio {
-+		mux {
-+			groups = "GPIOX_0", "GPIOX_1", "GPIOX_2", "GPIOX_3",
-+			         "GPIOX_4", "GPIOX_5", "GPIOX_6", "GPIOX_7",
-+				 "GPIOX_8", "GPIOX_9", "GPIOX_10", "GPIOX_11",
-+				 "GPIOX_12", "GPIOX_13", "GPIOX_14",  "GPIOX_15",
-+				 "GPIOX_16", "GPIOX_17", "GPIOX_18",  "GPIOX_19";
-+			function = "gpio_periphs";
-+			bias-pull-up;
-+			output-disable;
-+		};
-+	};
-+};
-+
-+&saradc {
-+	status = "okay";
-+	vref-supply = <&vddio_ao1v8>;
-+};
-+
-+/* SD card */
-+&sd_emmc_b {
-+	status = "okay";
-+	pinctrl-0 = <&sdcard_c_pins>;
-+	pinctrl-1 = <&sdcard_clk_gate_c_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <4>;
-+	cap-sd-highspeed;
-+	max-frequency = <50000000>;
-+	disable-wp;
-+
-+	cd-gpios = <&gpio GPIOC_6 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&vcc_sd>;
-+	vqmmc-supply = <&vddio_c>;
-+
-+};
-+
-+/* eMMC */
-+&sd_emmc_c {
-+	status = "okay";
-+	pinctrl-0 = <&emmc_ctrl_pins>, <&emmc_data_8b_pins>, <&emmc_ds_pins>;
-+	pinctrl-1 = <&emmc_clk_gate_pins>;
-+	pinctrl-names = "default", "clk-gate";
-+
-+	bus-width = <8>;
-+	cap-mmc-highspeed;
-+	mmc-ddr-1_8v;
-+	mmc-hs200-1_8v;
-+	max-frequency = <200000000>;
-+	disable-wp;
-+
-+	mmc-pwrseq = <&emmc_pwrseq>;
-+	vmmc-supply = <&vcc_sd>;
-+	vqmmc-supply = <&vddio_ao1v8>;
-+};
-+
-+
-+&tdmif_b {
-+	pinctrl-0 = <&tdm_b_dout0_pins>, <&tdm_b_fs_pins>, <&tdm_b_sclk_pins>, <&tdm_b_din1_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	assigned-clocks = <&clkc_audio AUD_CLKID_TDM_SCLK_PAD1>,
-+			  <&clkc_audio AUD_CLKID_TDM_LRCLK_PAD1>;
-+	assigned-clock-parents = <&clkc_audio AUD_CLKID_MST_B_SCLK>,
-+				 <&clkc_audio AUD_CLKID_MST_B_LRCLK>;
-+	assigned-clock-rates = <0>, <0>;
-+};
-+
-+&tdmin_b {
-+	status = "okay";
-+};
-+
-+&tdmout_b {
-+	status = "okay";
-+};
-+
-+&toddr_a {
-+	status = "okay";
-+};
-+
-+&uart_AO {
-+	status = "okay";
-+	pinctrl-0 = <&uart_ao_a_pins>;
-+	pinctrl-names = "default";
-+};
-+
-+&usb {
-+	status = "okay";
-+	dr_mode = "peripheral";
-+};
-+
-+&usb2_phy0 {
-+	status = "okay";
-+};
-+
-+&usb2_phy1 {
-+	status = "okay";
-+	phy-supply = <&usb_host>;
-+};
-
--- 
-b4 0.10.1
+> ---
+> Email address was wrong, so sending again.
+>
+>  drivers/thermal/intel/therm_throt.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+> index 8352083b87c7..9e8ab31d756e 100644
+> --- a/drivers/thermal/intel/therm_throt.c
+> +++ b/drivers/thermal/intel/therm_throt.c
+> @@ -197,7 +197,7 @@ static const struct attribute_group thermal_attr_group = {
+>  #define THERM_STATUS_PROCHOT_LOG       BIT(1)
+>
+>  #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+> -#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
+> +#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
+>
+>  static void clear_therm_status_log(int level)
+>  {
+> --
+> 2.31.1
+>
