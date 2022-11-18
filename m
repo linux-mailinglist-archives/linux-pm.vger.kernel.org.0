@@ -2,173 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF07E62F893
-	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 15:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 106C762F9B1
+	for <lists+linux-pm@lfdr.de>; Fri, 18 Nov 2022 16:50:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242216AbiKRO6d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 18 Nov 2022 09:58:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
+        id S242228AbiKRPuY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 18 Nov 2022 10:50:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242101AbiKRO5j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 09:57:39 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B0A93732;
-        Fri, 18 Nov 2022 06:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1668783364; x=1700319364;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=0OtRaUHayEMkGM0LZpQdloZpzT7G+P2JPi1mC2cyIyg=;
-  b=RIlc8WCCUfEX1Rj3CNuGIT7/m4bg3rZ5vuiVVbU5exbh5hhAAbCVUYsX
-   89J1BuALE+hwlrYzkS6TP3nX25DUJJ3waFzAyFPzLUcFnyHtjI/5pHzio
-   oKaQ4KTKMPvYvAGJdo6T3QSm/yWy899eYjPPEub4Le7j+2jJVa2SLwh6R
-   hGSU+JqNMrCwpu5JpqLmI0TLv7mXtXBTBqYh9vIuKrAHngEEj9dgWmJWc
-   3bietnlDki07eXtfpYv4lQ1DRtJCwnIPZ1YA1ii4PmM3YGWB2vJ5L1lN/
-   oNwwVKnED5wZvpylPdTnX98kMh+c9f35bdAewVp1feer8gqd9eVA6zo+H
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="293539780"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="293539780"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 06:56:04 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10535"; a="746028573"
-X-IronPort-AV: E=Sophos;i="5.96,174,1665471600"; 
-   d="scan'208";a="746028573"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.138])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2022 06:56:01 -0800
-Message-ID: <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
-Date:   Fri, 18 Nov 2022 16:55:55 +0200
+        with ESMTP id S242406AbiKRPuQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 18 Nov 2022 10:50:16 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6588C48D
+        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 07:50:08 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id w14so9863722wru.8
+        for <linux-pm@vger.kernel.org>; Fri, 18 Nov 2022 07:50:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=CmTL+mg18Z4AepnU6eZyDbtFVjUFILiYsH5hlR5uEro=;
+        b=OKMKBVZQLGFbwj7QynAdCsT1VPXH4Rioy1t2pjuIIwxWZix6jBtDy7618JyJPVVbKc
+         9cyV2lgYpSqGprBK/Zo5n0gBEwNItE5wk5Gn9gntUX2rkuu0ze1qAwFs2OWCJn+nFkcl
+         JAqCvez9iMlY31ZS4LunN34VGNDFXbZ3vWTgbY1e/y+4E+EpNgB7JTLS3KsHPGVn8q3D
+         unjpp+2+9+3F+IeR0mpzwPO5FSgMd1PgXO5xo8ymNxjTuTysCfEcwqT0Z6UAln26Rlcv
+         7+h/5k5SFS9tYojx/tMVyRFw2tCzjRc3rsQ6wEoArQ40uBTijfLSQD+45DjsTzDCm51g
+         ZFHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CmTL+mg18Z4AepnU6eZyDbtFVjUFILiYsH5hlR5uEro=;
+        b=eQCr5AhmuSvu/0GVHTNSWy/4azrWAYi9zNdKk3APzdpObGrKxwtTu1VQACYUF6YjIp
+         hOhGdPlda8Yg/7sOisWLb3K10XJeGvU1akZDZl2AbKhd0jNMAe4l9l5Bt5Ww8qz+0pdR
+         poNxLQj+NIQDwhXwHfpB9sKTJiXbi4c5RaQkdWjGcmtvUwbmiZJTeBH46I13o+3L+QFP
+         UAg/5QxRugpRxSjPdBuv6Mjrn7Suh80Ryfzkgq3ZGOYSGp0VLnWUGQRkTQ6lSaVjRydy
+         kVE6IJ9Yi/fJ7XoYmr/JWj3n84bigHCF1SWg5cdx9toZ91nwTtEs43K8VIxVFcNQWpV2
+         MaZg==
+X-Gm-Message-State: ANoB5pkYUjwnGImIqL05AYgBWQ3yYFCAVxKs1Ifiwz+pcEjuXfCenxc/
+        7qAuCjj4oNG7pGcuiecdsDle79aVyxV7eg==
+X-Google-Smtp-Source: AA0mqf4VUH/lC1IDoaI1Aq0Zpxjp4JBMofLzpxPK1c2Yw11pg5JIQHZmyxkopn1qIikCQ7p5Weaomw==
+X-Received: by 2002:adf:e78e:0:b0:22e:32ab:c37 with SMTP id n14-20020adfe78e000000b0022e32ab0c37mr4831201wrm.317.1668786606917;
+        Fri, 18 Nov 2022 07:50:06 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id a13-20020a5d53cd000000b002383edcde09sm3812465wrw.59.2022.11.18.07.50.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Nov 2022 07:50:06 -0800 (PST)
+Subject: [PATCH v2 0/2] arm64: amlogic: add initial Odroid Go Ultra DTS
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.5.0
-Subject: Re: PM-runtime: supplier looses track of consumer during probe
-Content-Language: en-US
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>, linux-pm@vger.kernel.org,
-        linux-scsi@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        bjorn.andersson@kernel.org,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        quic_mkshah@quicinc.com, quic_lsrao@quicinc.com,
-        bvanassche@acm.org, Peter Wang <peter.wang@mediatek.com>
-References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
- <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-b4-tracking: H4sIAKypd2MC/42NQQrDMAwEv1J0rkrsxKH01H+UHuRYJAJjgZwESsjfa/qCnpbZw8wBlU24wuNygP
+ EuVbQ08NcLTAuVmVFSY/Cd967rHcYBNZlKwllxy6sRSpFVKGPgMUyJA/ueoAkiVcZoVKalKcqWczsX
+ qava5xfcXZvXX+7dYYeD5z5FpvuYwjNLIdOb2gzv8zy/1JQWNcoAAAA=
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Date:   Fri, 18 Nov 2022 16:50:04 +0100
+Message-Id: <20221031-b4-odroid-go-ultra-initial-v2-0-a3df1e09b0af@linaro.org>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-kernel@vger.kernel.org
+X-Mailer: b4 0.10.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 4/11/22 11:19, Tushar Nimkar wrote:
-> Hi linux-pm/linux-scsi,
-> 
-> Gentle reminder!
-> 
-> Can you please provide your suggestions on below race?
-> 
-> Thanks, Tushar Nimkar
-> 
-> On 10/14/2022 4:20 PM, Tushar Nimkar wrote:
->> Hi linux-pm/linux-scsi,
->>
->> We have included fix [1] but continuing to observe supplier loosing track of consumer.
->>
->> Below is trace snippet with additional logging added.
->> Here consumer is 0:0:0:0 and supplier is 0:0:0:49488. In Last three lines consumer resume is completed but supplier is put down.
->>
->>     kworker/u16:0-7     0.880014: rpm_idle:             0:0:0:0 flags-4 cnt-0  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880017: bprint: pm_runtime_mark_last_busy.46700: :#205 dev_name:0:0:0:0 ktime_get_mono_fast_ns():852365364
->>     kworker/u16:0-7     0.880019: rpm_suspend:          0:0:0:0 flags-8 cnt-0  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880022: bprint: pm_runtime_put_noidle.44083: pm_runtime_put_noidle: #112 dev_name:0:0:0:49488 dev usage_count:5 decremented usage count
->>     kworker/u16:0-7     0.880023: bprint: pm_runtime_put_noidle.44083: pm_runtime_put_noidle: #112 dev_name:0:0:0:49488 dev usage_count:4 decremented usage count
->>     kworker/u16:2-142   0.880024: rpm_resume:           0:0:0:0 flags-4 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880025: bprint: __rpm_put_suppliers: __rpm_put_suppliers: #348 consumer:0:0:0:0 supplier:0:0:0:49488 usage_count:4
->>     kworker/u16:0-7     0.880061: rpm_idle:             0:0:0:49488 flags-1 cnt-4  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:0-7     0.880062: rpm_return_int: rpm_idle+0x16c:0:0:0:49488 ret=-11
->>     kworker/u16:2-142   0.880062: bprint: __pm_runtime_resume: __pm_runtime_resume: #1147 dev_name:0:0:0:49488 dev usage_count:5 incremented usage count
->>     kworker/u16:2-142   0.880063: rpm_resume:           0:0:0:49488 flags-4 cnt-5  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:2-142   0.880063: rpm_return_int: rpm_resume+0x690:0:0:0:49488 ret=1
->>     kworker/u16:0-7     0.880063: rpm_return_int: rpm_suspend+0x68:0:0:0:0 ret=0
->>     kworker/u16:2-142   0.880063: bprint: rpm_get_suppliers: rpm_get_suppliers: #300 consumer:0:0:0:0 supplier:0:0:0:49488 usage_count:5
->>     kworker/u16:0-7     0.880065: bprint: pm_runtime_put_noidle.44083: pm_runtime_put_noidle: #112 dev_name:0:0:0:49488 dev usage_count:4 decremented usage count
->>     kworker/u16:2-142   0.880065: bprint: pm_runtime_mark_last_busy.44088: :#205 dev_name:0:0:0:0 ktime_get_mono_fast_ns():852413749
->>     kworker/u16:2-142   0.880065: rpm_idle:             0:0:0:0 flags-1 cnt-1  dep-0  auto-1 p-0 irq-0 child-0
->>     kworker/u16:2-142   0.880065: rpm_return_int: rpm_idle+0x16c:0:0:0:0 ret=-11
->>     kworker/u16:0-7     0.880066: bprint: __rpm_put_suppliers: __rpm_put_suppliers: #348 consumer:0:0:0:0 supplier:0:0:0:49488 usage_count:4
->>     kworker/u16:0-7     0.880067: rpm_return_int: rpm_idle+0x16c:0:0:0:0 ret=-16
->>     kworker/u16:2-142   0.880067: rpm_return_int: rpm_resume+0x690:0:0:0:0 ret=0
->>
->> Upon looking into this further the race looks to be in below two processes running in parallel and process-1 is putting down supplier at [C] because process-2 is setting runtime_status as resuming at [D].
->>
->> Also as per runtime PM documentation
->> In order to use autosuspend, subsystems or drivers must call
->> pm_runtime_use_autosuspend(), and thereafter they should use the various `*_autosuspend()` helper functions...
->>
->> It was also observed that *_autosuspend() API at point [A] was invoked without first invoking pm_runtime_use_autosuspend() which return expiration as zero at point [B] and proceeds ahead for immediate runtime suspend of device which seems lead to this race condition.
->>
->> Process -1
->> ufshcd_async_scan context (process 1)
->> scsi_autopm_put_device() //0:0:0:0
+This adds initial support for the Hardkernel Odroid Go Ultra.
 
-I am having trouble following your description.  What function is calling
-scsi_autopm_put_device() here?
+The Odroid Go Ultra is a portable gaming device with the following
+characteristics:
+- Amlogic S922X SoC
+- RK817 & RK818 PMICs
+- 2GiB LPDDR4
+- On board 16GiB eMMC
+- Micro SD Card slot
+- 5inch 854×480 MIPI-DSI TFT LCD
+- Earphone stereo jack, 0.5Watt 8Ω Mono speaker
+- Li-Polymer 3.7V/4000mAh Battery
+- USB-A 2.0 Host Connector
+- x16 GPIO Input Buttons
+- 2x ADC Analog Joysticks
+- USB-C Port for USB2 Device and Charging
 
->> pm_runtime_put_sync()
->> __pm_runtime_idle()
->> rpm_idle() -- RPM_GET_PUT(4)
->>      __rpm_callback
->>          scsi_runtime_idle()
->>              pm_runtime_mark_last_busy()
->>              pm_runtime_autosuspend()  --[A]
->>                  rpm_suspend() -- RPM_AUTO(8)
->>                      pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
->>                          __update_runtime_status to RPM_SUSPENDING
->>                      __rpm_callback()
->>                          __rpm_put_suppliers(dev, false)
->>                      __update_runtime_status to RPM_SUSPENDED
->>                  rpm_suspend_suppliers()
->>                      rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
->>                  rpm_suspend() – END with return=0
->>          scsi_runtime_idle() END return (-EBUSY) always.
+The following are not yet handled:
+- Battery RK818 Gauge and Charging
+- Earphone stereo jack detect
+- 5inch 854×480 MIPI-DSI TFT LCD
 
-Not following here either.  Which device is EBUSY and why?
+This adds:
+- Device bindings
+- Initial device DT
 
->>       /* Do that if resume fails too.*/
->>      (dev->power.runtime_status == RPM_RESUMING && retval)))  return -EBUSY
->>          __rpm_put_suppliers(dev, false)  -- [C]
->> rpm_idle() END return -EBUSY
->>
->> Process -2
->> sd_probe context (Process 2)
->> scsi_autopm_get_device() //0:0:0:0
->> __pm_runtime_resume(RPM_GET_PUT)
->> rpm_resume() -- RPM_GET_PUT(4)
->>      __update_runtime_status to RPM_RESUMING --[D]
->>      __rpm_callback()
->>          rpm_get_suppliers()
->>              __pm_runtime_resume() - RPM_GET_PUT(4) – supplier
->>                  rpm_resume() for supplier.
->>      __update_runtime_status to RPM_ACTIVE
->>      pm_runtime_mark_last_busy ()
->> rpm_resume() END return 0
->>
->> Can you please provide your suggestions on addressing above race condition?
->>
->> This is also reported at [2].
->>
->> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
->> [2]: https://lkml.org/lkml/2022/10/12/259
->>
->> Thanks,
->> Tushar Nimkar
+This serie depends on:
+- https://lore.kernel.org/all/20221025-rk808-multi-v2-0-d292d51ada81@linaro.org/
 
+To: Sebastian Reichel <sre@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Kevin Hilman <khilman@baylibre.com>
+To: Jerome Brunet <jbrunet@baylibre.com>
+To: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-amlogic@lists.infradead.org
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+
+---
+Changes in v2:
+- Dropped power off driver/bindings, will move to another patchset
+- Fixed DT comments from Krzysztof
+- Dropped poweroff node
+- Add Acked-by from Rob to bindings change
+- Link to v1: https://lore.kernel.org/r/20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org
+
+---
+Neil Armstrong (2):
+      dt-bindings: amlogic: document Odroid Go Ultra compatible
+      arm64: dts: amlogic: add initial Odroid Go Ultra DTS
+
+ Documentation/devicetree/bindings/arm/amlogic.yaml |   1 +
+ arch/arm64/boot/dts/amlogic/Makefile               |   1 +
+ .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     | 722 +++++++++++++++++++++
+ 3 files changed, 724 insertions(+)
+---
+base-commit: 2c3c398ddfabf48b7a0b66b5f01052ba43c36337
+change-id: 20221031-b4-odroid-go-ultra-initial-5e65cde5e23a
+
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
