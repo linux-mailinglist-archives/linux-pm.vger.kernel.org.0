@@ -2,107 +2,217 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C594C630CB5
-	for <lists+linux-pm@lfdr.de>; Sat, 19 Nov 2022 07:50:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8E3630D8B
+	for <lists+linux-pm@lfdr.de>; Sat, 19 Nov 2022 09:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232643AbiKSGuh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 19 Nov 2022 01:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S233069AbiKSIu2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 19 Nov 2022 03:50:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229606AbiKSGuU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Nov 2022 01:50:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6A91704F;
-        Fri, 18 Nov 2022 22:50:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0B52B80D1E;
-        Sat, 19 Nov 2022 06:50:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5944BC433D6;
-        Sat, 19 Nov 2022 06:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1668840616;
-        bh=ak6M5fgrTHQ1MM2vf+n5AubLq+AMYqmK/RRzz3/3gig=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=seXipkg9CAyFA9/DRpiD01V8ITXAB4g0Feuk+M72plAUXo40561rs1dMVurztjC0R
-         UGqXlOdf3JC5VrI2IWVezRWqsbHRKhLTyD3mEBicEAh2WBWvOY+SAmQ5aoJgjdz1Vk
-         5aq4YUvgNncdPRSw5IsP6xY0s8PudX8SdTsR/EyWyOmZxNi+pkZtOu70losD9BrvnB
-         Du21LerJzoVvVs4d9eSLNMvDcUU7T0jOw29zyRduMgSnRBWCRcfu03u6uXJN2UHbLy
-         DMpzJwBt86Z35Odc5hTd6y/3r7eqH4zheZmOWuKtOuYVHcjUBHn5l00sWabdAIfdsG
-         FRNiHf2EtKUDg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 37F78E29F44;
-        Sat, 19 Nov 2022 06:50:16 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229470AbiKSIu0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 19 Nov 2022 03:50:26 -0500
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7776D6A69C
+        for <linux-pm@vger.kernel.org>; Sat, 19 Nov 2022 00:50:25 -0800 (PST)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AJ5EJDt018463;
+        Sat, 19 Nov 2022 08:50:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=ESCf78kXRHVtTaBHIT9tXgQjm5aQsmZ9auxZcdLdJb8=;
+ b=Nkrj5c+8uRRBhCiLEgHa2+AEC/TP9pLYoeDrD5EQ9rOtD74Yr1bBr99KjkQiVWQUoI+F
+ mBfYX5PomMKoxQZ1kWHOQjEdAhGTGglsiltvKCXJyxVznYGhTWCB5ESvR5WXrkrgxDl1
+ u1c8aYYK32dSILeey6F6n9FUPLVm5MxgubFkRXfmxQ3PoZgAGELJojaNbhDguW4FoJoZ
+ Z/SUs+C6jPUkdK7wzukJzCY7ITJkIQd8PTF6WjzM3+7ApLZE3IeluEFTcStW1nu4J3Vw
+ fI7c/+9dKc6TpuoHdnpSwgSG9u0iaXvgrNU3jjqZrVUe8ZzYyhPvPvQypdIb6KT1i0Xc bA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kxrttark5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 19 Nov 2022 08:50:03 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2AJ8lFjD034897;
+        Sat, 19 Nov 2022 08:50:03 GMT
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kxrttarjn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 19 Nov 2022 08:50:03 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2AJ8aGDW027908;
+        Sat, 19 Nov 2022 08:50:01 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3kxps8g61c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 19 Nov 2022 08:50:01 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2AJ8nw4x60490072
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sat, 19 Nov 2022 08:49:58 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B44A211C04A;
+        Sat, 19 Nov 2022 08:49:58 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B372511C04C;
+        Sat, 19 Nov 2022 08:49:55 +0000 (GMT)
+Received: from li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com (unknown [9.43.27.135])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Sat, 19 Nov 2022 08:49:55 +0000 (GMT)
+Date:   Sat, 19 Nov 2022 14:19:52 +0530
+From:   Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+To:     Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+Cc:     mpe@ellerman.id.au, svaidy@linux.vnet.ibm.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, npiggin@gmail.com,
+        srikar@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
+        linux-pm@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        vishalc@linux.vnet.ibm.com
+Subject: Re: [PATCH v2] powerpc/cpuidle: Set CPUIDLE_FLAG_POLLING for snooze
+ state
+Message-ID: <Y3iYsI8FFkwTFfPO@li-05afa54c-330e-11b2-a85c-e3f3aa0db1e9.ibm.com>
+References: <20221114073154.30407-1-aboorvad@linux.vnet.ibm.com>
+ <20221114145611.37669-1-aboorvad@linux.vnet.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <166884061622.19423.870710096225259467.git-patchwork-notify@kernel.org>
-Date:   Sat, 19 Nov 2022 06:50:16 +0000
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-To:     =?utf-8?q?Uwe_Kleine-K=C3=B6nig_=3Cuwe=40kleine-koenig=2Eorg=3E?=@ci.codeaurora.org
-Cc:     ang.iglesiasg@gmail.com, lee.jones@linaro.org,
-        grant.likely@linaro.org, wsa@kernel.org, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, kernel@puri.sm,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Jb20sXGMcYKTqoab"
+Content-Disposition: inline
+In-Reply-To: <20221114145611.37669-1-aboorvad@linux.vnet.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: N-BxId7Zf06Vsw9bWrAoK7uIKsvmijoz
+X-Proofpoint-ORIG-GUID: kAdo53F9_L0T-VYdBxZes0iqvTdRXaep
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-18_08,2022-11-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 phishscore=0
+ mlxscore=0 clxscore=1011 bulkscore=0 malwarescore=0 spamscore=0
+ priorityscore=1501 adultscore=0 suspectscore=0 impostorscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211190059
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello:
 
-This patch was applied to chrome-platform/linux.git (for-kernelci)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+--Jb20sXGMcYKTqoab
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 18 Nov 2022 23:35:34 +0100 you wrote:
-> Hello,
-> 
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
-> 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
-> 
-> [...]
+On Mon, Nov 14, 2022 at 08:26:11PM +0530, Aboorva Devarajan wrote:
+> During the comparative study of cpuidle governors, it is noticed that the
+> menu governor does not select CEDE state in some scenarios even though wh=
+en
+> the sleep duration of the CPU exceeds the target residency of the CEDE id=
+le
+> state this is because the CPU exits the snooze "polling" state when snooze
+> time limit is reached in the snooze_loop(), which is not a real wake up
+> and it just means that the polling state selection was not adequate.
+>=20
+> cpuidle governors rely on CPUIDLE_FLAG_POLLING flag to be set for the
+> polling states to handle the condition mentioned above.
+>=20
+> Hence, set the CPUIDLE_FLAG_POLLING flag for snooze state (polling state)
+> in powerpc arch to make the cpuidle governor work as expected.
+>=20
+> Reference Commits:
+>=20
+> - Timeout enabled for snooze state:
+>   commit 78eaa10f027c
+>   ("cpuidle: powernv/pseries: Auto-promotion of snooze to deeper idle sta=
+te")
+>=20
+> - commit dc2251bf98c6
+>   ("cpuidle: Eliminate the CPUIDLE_DRIVER_STATE_START symbol")
+>=20
+> - Fix wakeup stats in governor for polling states
+>   commit 5f26bdceb9c0
+>   ("cpuidle: menu: Fix wakeup statistics updates for polling state")
+>=20
+> Signed-off-by: Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+> ---
+>=20
+> Changelog: (v1 -> v2)
+>=20
+> Added CPUIDLE_POLLING_FLAG to the correct cpuidle_state struct.
+>=20
+> Previous version of the patch is stale which was sent by mistake, this=20
+> is the correct version which is tested on powernv, pseries (shared and=20
+> dedicated partitions)
+>=20
+>  drivers/cpuidle/cpuidle-powernv.c | 5 ++++-
+>  drivers/cpuidle/cpuidle-pseries.c | 8 ++++++--
+>  2 files changed, 10 insertions(+), 3 deletions(-)
 
-Here is the summary with links:
-  - [512/606] platform/chrome: cros_ec: Convert to i2c's .probe_new()
-    https://git.kernel.org/chrome-platform/c/f9e510dc92df
+Thanks for the patch.
+Tested it on top of v6.0-rc4
+Against workload: https://github.com/gautshen/misc/tree/master/cpuidle-smt-=
+performance
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Reviewed-by: Vishal Chourasia <vishalc@linux.vnet.ibm.com>
+Tested-by: Vishal Chourasia <vishalc@linux.vnet.ibm.com <mailto:vishalc@lin=
+ux.vnet.ibm.com>>
 
+|----------------+--------+-----------------------+----------------------|
+| wake up period | state  | % time spent (before) | % time spent (after) |
+|----------------+--------+-----------------------+----------------------|
+| 110 us         | snooze | 95.40 %               | 1.17 %               |
+|                | CEDE   | 0.03 %                | 92.67 %              |
+|----------------+--------+-----------------------+----------------------|
+| 120 us         | snooze | 96.37 %               | 1.18 %               |
+|                | CEDE   | 0.05 %                | 94.57 %              |
+|----------------+--------+-----------------------+----------------------|
+| 130 us         | snooze | 17.12 %               | 1.21 %               |
+|                | CEDE   | 78.16 %               | 94.71 %              |
+|----------------+--------+-----------------------+----------------------|
+| 230 us         | snooze | 95.38 %               | 0.64 %               |
+|                | CEDE   | 2.55 %                | 97.06 %              |
+|----------------+--------+-----------------------+----------------------|
+| 240 us         | snooze | 96.86 %               | 0.62 %               |
+|                | CEDE   | 1.14 %                | 97.17 %              |
+|----------------+--------+-----------------------+----------------------|
+| 250 us         | snooze | 1.38 %                | 0.59 %               |
+|                | CEDE   | 96.46 %               | 97.28 %              |
+|----------------+--------+-----------------------+----------------------|
+| 350 us         | snooze | 62.91 %               | 0.42 %               |
+|                | CEDE   | 35.56 %               | 98.04 %              |
+|----------------+--------+-----------------------+----------------------|
+| 360 us         | snooze | 11.93 %               | 0.34 %               |
+|                | CEDE   | 86.56 %               | 98.18 %              |
+|----------------+--------+-----------------------+----------------------|
+| 370 us         | snooze | 6.21 %                | 0.40 %               |
+|                | CEDE   | 92.31 %               | 98.16 %              |
+|----------------+--------+-----------------------+----------------------|
+| 470 us         | snooze | 42.06 %               | 0.31 %               |
+|                | CEDE   | 56.74 %               | 98.54 %              |
+|----------------+--------+-----------------------+----------------------|
+| 480 us         | snooze | 64.67 %               | 0.30 %               |
+|                | CEDE   | 34.14 %               | 98.56 %              |
+|----------------+--------+-----------------------+----------------------|
+| 490 us         | snooze | 0.57 %                | 0.30 %               |
+|                | CEDE   | 98.31 %               | 98.60 %              |
+|----------------+--------+-----------------------+----------------------|
+
+Note: *before* and *after* (see table heading), simply mean before applying=
+ the
+patch and after applying the patch
+
+-- vishal.c
+--Jb20sXGMcYKTqoab
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEyetz6oh8pzQ87ZNz8y5vG2Pik+wFAmN4mLAACgkQ8y5vG2Pi
+k+xfOgf8C+57XIH2TLBSQJcftFbncUHmgrOFQbig18/d7zy1u09fERXk1XolXwMO
+MyiTpKjT3qKfvOHrxx4w/VN3nszziAK5G6MrC70flIGQxe6SjxQEsclJ4PIHczzO
+jJvzKsZ6O9EhqyCXSkqwWuFtVHnICeQxEZipSE9sVyPMuLzwoffmcyegr/hW0U+u
+rZMc2ttTWd+9A67jZUnimTeblzvYQywE7cP3Ku2JMq3vIr5mAEvjO8tEfg2Vx4bC
+Ya2fGbs/c8jdertZo02tJerfok0VPYdudcD5ip3rQPT++u8BtEwlRc6+JMfDh+y+
+4kiyZLPaQi1EnmZQyja6yAjjVdUjlw==
+=G8O6
+-----END PGP SIGNATURE-----
+
+--Jb20sXGMcYKTqoab--
 
