@@ -2,76 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECBD56315EF
-	for <lists+linux-pm@lfdr.de>; Sun, 20 Nov 2022 20:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6E3631695
+	for <lists+linux-pm@lfdr.de>; Sun, 20 Nov 2022 22:30:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiKTTnw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 20 Nov 2022 14:43:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S229758AbiKTVav (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 20 Nov 2022 16:30:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiKTTns (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Nov 2022 14:43:48 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703BD1EC46;
-        Sun, 20 Nov 2022 11:43:47 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 981D16602381;
-        Sun, 20 Nov 2022 19:43:45 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1668973425;
-        bh=T3nU7r4TDRBfUE21qBPtx6/vbbqNd5aTZrUhEKVEpe8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTDOl2wCVRsu/tyZH+YPJZtqzX+lTk+zyDWIOt7B5OERtVQXV05JqgkECzvZaxhvq
-         GWHynwzbAdTGjQc4EiizPb4JzuNJErOOA6MGMcIE1OOBJsR2nJxdyKqik4rZXW8I8S
-         YL9hLYJH9B0qYNlv0ofE25pkedfO3Zr0ukRr6nTWoiYIF0ElBn0uG1ehB/KKpnJkB6
-         LmHZCe95IKsjPugXIHsbUyR3TPbe/Uz/FTgEe5YV5fHfIiRZ+dwYB8lU4/MgAmu4vM
-         BZjO4bgM9A0wAKu6Ub+wy7zE/lgrgtzyeA/1iFwakjmg/vd8UL0auYvToqpQCZqsxv
-         +Bmg67/Ow+Rwg==
-Received: by mercury (Postfix, from userid 1000)
-        id 1C1D2106F223; Sun, 20 Nov 2022 20:43:43 +0100 (CET)
-Date:   Sun, 20 Nov 2022 20:43:43 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>
-Cc:     Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Grant Likely <grant.likely@linaro.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        kernel@pengutronix.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-crypto@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-rpi-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
-        linux-input@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-leds@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-media@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-actions@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, alsa-devel@alsa-project.org,
-        linux-omap@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-pm@vger.kernel.org, Purism Kernel Team <kernel@puri.sm>,
-        linux-pwm@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net
-Subject: Re: [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Message-ID: <20221120194343.nnpzhgjapep7iwqk@mercury.elektranox.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        with ESMTP id S229642AbiKTVau (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 20 Nov 2022 16:30:50 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA2D512AC8
+        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 13:29:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1668979795;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bdm31HVF946Bl5tXtQMWTMTgK4/JfbClmpR+W+Eh+IE=;
+        b=a4gFw8xnhctUSApVFdeNhswps9zYMMASOkcV5QDzspbZgxEzzG4nAcJKO3KnArSptmXKok
+        bu2MmXJol/1LWIdMVBh83hhl+KFM6XFKIloMhooXtQvuhohMf798wnGnYi1jpulwqCLr3C
+        kNiwDl0XDo+quDuJtbgVJ06NVxSHk40=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-437-6ByAtjelN8yFB9qPTT581g-1; Sun, 20 Nov 2022 16:29:54 -0500
+X-MC-Unique: 6ByAtjelN8yFB9qPTT581g-1
+Received: by mail-ed1-f70.google.com with SMTP id h9-20020a05640250c900b00461d8ee12e2so5478368edb.23
+        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 13:29:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bdm31HVF946Bl5tXtQMWTMTgK4/JfbClmpR+W+Eh+IE=;
+        b=d9Zv+S83abKKg1sJVUyv+//81yIVhe82h+pgakOKr7XyWGUyZaihv/NicCYlRZYFUt
+         /IsSqloVIdkGPiqT9gSNfuSlLm9/Qkv35jIqovhAipILfJstJopZB4ugbqx9+AaUIc62
+         DxN5y4QW0is5rpJJRSBU9gWQo8G9aIlA+83j72GQ5FfhGUTjzG7UtUjHOyt3JYl/qTFo
+         pbYC2YoTtt9nQKhG97k3PTuvWBwkjw0lHM74uoT7Vy2RLr1+pTPlvFFm5deRG17qK/To
+         HPa2qCPRdaMTYMelPxUgAC1kXv/tXrEyos1H2frH2KpCo9FTVyHM9Ek0H1oJLoAoFhLd
+         gJRA==
+X-Gm-Message-State: ANoB5pmCAlDlDbzSQyHMMlkm/4MHlrZpVghrNnqmc1JRDd9ZEovzNFNY
+        ts82lXNIVSKQnJ46bnhpBbtiLyaurXrAWcT9iGEIu0EKFMzJBGJNfyKt9BlCQ8PYKKN84Q0LJZf
+        PRgCyqX5PgjMaMq9ZfFU=
+X-Received: by 2002:a05:6402:b8c:b0:463:b8dc:893f with SMTP id cf12-20020a0564020b8c00b00463b8dc893fmr14142177edb.28.1668979793139;
+        Sun, 20 Nov 2022 13:29:53 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf43sXRK38/nRt72jQB+rbrpM22LoNHoQZK/DuOpu3iAsPcpjdE29vefYKYVKZQ1SxNVSQa9VA==
+X-Received: by 2002:a05:6402:b8c:b0:463:b8dc:893f with SMTP id cf12-20020a0564020b8c00b00463b8dc893fmr14142170edb.28.1668979792960;
+        Sun, 20 Nov 2022 13:29:52 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id d12-20020a056402078c00b0045b3853c4b7sm4423417edy.51.2022.11.20.13.29.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 20 Nov 2022 13:29:52 -0800 (PST)
+Message-ID: <1cde6f13-c131-332f-44f2-9a6a80b72330@redhat.com>
+Date:   Sun, 20 Nov 2022 22:29:51 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wvm2z6appxwdd5fa"
-Content-Disposition: inline
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] power: supply: bq25890: Add HiZ mode support
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sre@kernel.org>
+References: <20221109221504.79562-1-marex@denx.de>
+ <20221109221504.79562-2-marex@denx.de>
+ <ffd849db-fdb5-8578-85c2-74a8e030d86a@redhat.com>
+In-Reply-To: <ffd849db-fdb5-8578-85c2-74a8e030d86a@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,97 +83,149 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---wvm2z6appxwdd5fa
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On 11/19/22 14:52, Hans de Goede wrote:
+> Hi,
+> 
+> On 11/9/22 23:15, Marek Vasut wrote:
+>> The bq25890 is capable of disconnecting itself from the external supply,
+>> in which case the system is supplied only from the battery. This can be
+>> useful e.g. to test the pure battery operation, or draw no power from
+>> USB port.
+>>
+>> Implement support for this mode, which can be toggled by writing 0 or
+>> non-zero to sysfs 'online' attribute, to select either offline or online
+>> mode.
+>>
+>> The IRQ handler has to be triggered to update chip state, as switching
+>> to and from HiZ mode does not generate an interrupt automatically.
+>>
+>> Signed-off-by: Marek Vasut <marex@denx.de>
+>> ---
+>> Cc: Hans de Goede <hdegoede@redhat.com>
+>> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
+>> Cc: Sebastian Reichel <sre@kernel.org>
+> 
+> Thanks, patch looks good to me:
+> 
+> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> 
+> Also your timing is excellent :)  As a hobby project I'm working
+> on a x86 Lenovo Android tablet which has 2 separate batteries and
+> each battery has its own bq25892 chip.
+> 
+> This requires putting the secondary bq25892 in Hi-Z mode when
+> e.g. enabling the 5V USB/OTG boost regulator on the primary
+> bq25892 to make the micro-usb output 5V.
+> 
+> Which is functionality which I can nicely build on top of this
+> series.
 
-On Fri, Nov 18, 2022 at 11:35:34PM +0100, Uwe Kleine-K=F6nig wrote:
-> Hello,
->=20
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
->=20
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch t=
-hat
-> you can pull into your tree to get it:
->=20
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/client=
-_device_id_helper-immutable
->=20
-> I don't think it's feasable to apply this series in one go, so I ask the
-> maintainers of the changed files to apply via their tree. I guess it
-> will take a few kernel release iterations until all patch are in, but I
-> think a single tree creates too much conflicts.
->=20
-> The last patch changes i2c_driver::probe, all non-converted drivers will
-> fail to compile then. So I hope the build bots will tell me about any
-> driver I missed to convert. This patch is obviously not for application
-> now.
->=20
-> I dropped most individuals from the recipents of this mail to not
-> challenge the mail servers and mailing list filters too much. Sorry if
-> you had extra efforts to find this mail.
->=20
-> Best regards
-> Uwe
+So one thing which I noticed while working on my own stuff
+on top of this, is that the charger IC resets (disables) Hi-Z
+mode when its internal PG (power-good) signal goes from false
+to true.
 
-=2E..
+The Android kernel fork for the tablet I'm working on detects
+the PG false -> true transition in its IRQ handler and then
+re-enabled Hi-Z mode if it was requested.
 
->   power: supply: adp5061: Convert to i2c's .probe_new()
->   power: supply: bq2415x: Convert to i2c's .probe_new()
->   power: supply: bq24190: Convert to i2c's .probe_new()
->   power: supply: bq24257: Convert to i2c's .probe_new()
->   power: supply: bq24735: Convert to i2c's .probe_new()
->   power: supply: bq2515x: Convert to i2c's .probe_new()
->   power: supply: bq256xx: Convert to i2c's .probe_new()
->   power: supply: bq25890: Convert to i2c's .probe_new()
->   power: supply: bq25980: Convert to i2c's .probe_new()
->   power: supply: bq27xxx: Convert to i2c's .probe_new()
->   power: supply: ds2782: Convert to i2c's .probe_new()
->   power: supply: lp8727: Convert to i2c's .probe_new()
->   power: supply: ltc2941: Convert to i2c's .probe_new()
->   power: supply: ltc4162-l: Convert to i2c's .probe_new()
->   power: supply: max14656: Convert to i2c's .probe_new()
->   power: supply: max17040: Convert to i2c's .probe_new()
->   power: supply: max17042_battery: Convert to i2c's .probe_new()
->   power: supply: rt5033_battery: Convert to i2c's .probe_new()
->   power: supply: rt9455: Convert to i2c's .probe_new()
->   power: supply: sbs: Convert to i2c's .probe_new()
->   power: supply: sbs-manager: Convert to i2c's .probe_new()
->   power: supply: smb347: Convert to i2c's .probe_new()
->   power: supply: ucs1002: Convert to i2c's .probe_new()
->   power: supply: z2_battery: Convert to i2c's .probe_new()
->   [...]
+I wonder if we should do something similar: remember the last
+value written to /sys/class/power_supply/bq2589o-charger/online
+and then in the IRQ handler if Hi-Z mode was requested re-enable
+Hi-Z mode ?
 
-Thanks, I queued patches 513-536 to the power-supply subsystem.
+Regards,
 
--- Sebastian
+Hans
 
---wvm2z6appxwdd5fa
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN6g2YACgkQ2O7X88g7
-+pocPA/+MG7rp45xJuAH0zlIFTM8ovBviXnLvra0hpvK+vMB8SVdh4K8vRCAoeoT
-lxML9oRVfhraHzo/3X6+7V87cw+QzEx3GZbYsIasGqic46MoFYkbA2i3Q8s8hS5y
-qpAcKn/efXJaBtdIxWQnOc0xU0YCiteiIik8Idb9MjHFupUspLxtIjCzTAmvKQ0k
-hJ5u5cqv3d/MP6VpsOCUYPDet9nS9ByPeg8Kr9Ux1a0WEldPYUO+dU0ObqRdhliZ
-agftaEtCvFYkfO9k8ubBL/x00gTn002xOB7gp+5s0V0D3wKfT5EPVYOoUZbeYMIu
-QOZaLHkNkBtV85kGm18h7IFdQZQY9ahcaGTYZplyz/YzHlK/AlfjA2umKS1+rs5m
-A+DDqnAkuWw9fLg0MJ4dLSPwOSPX3VfgmVS3By3Do2gotQkCqXsRdhrG1cIoE1aL
-AZYpSwLTn2rAYF59poL3rgSqx/MhgrLwmKQOH3fjwZ3R7PIAWFhYP1We2UtKdCEM
-Gjpr7QfAUiOuXDKi5OrBbWr4m2eX26A4uifwR62OyldwH8pUWAq3umgkw3rotQAA
-hdwOOPM+cHTyLbtP8kaP1XSR6u0ybuTbw8OQE/XPDNVceoMqR4XxUSYbs0Q0UzY6
-fwljGfbakuGbaNlb7s2LBsy0ESZuiz64Za/0gfJhI5rP1eNRR1U=
-=Dh+o
------END PGP SIGNATURE-----
+>> ---
+>>  drivers/power/supply/bq25890_charger.c | 25 ++++++++++++++++++-------
+>>  1 file changed, 18 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+>> index 676eb66374e01..70b5783999345 100644
+>> --- a/drivers/power/supply/bq25890_charger.c
+>> +++ b/drivers/power/supply/bq25890_charger.c
+>> @@ -95,6 +95,7 @@ struct bq25890_init_data {
+>>  
+>>  struct bq25890_state {
+>>  	u8 online;
+>> +	u8 hiz;
+>>  	u8 chrg_status;
+>>  	u8 chrg_fault;
+>>  	u8 vsys_status;
+>> @@ -676,7 +677,8 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
+>>  					     const union power_supply_propval *val)
+>>  {
+>>  	struct bq25890_device *bq = power_supply_get_drvdata(psy);
+>> -	int maxval;
+>> +	struct bq25890_state state;
+>> +	int maxval, ret;
+>>  	u8 lval;
+>>  
+>>  	switch (psp) {
+>> @@ -691,6 +693,10 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
+>>  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+>>  		lval = bq25890_find_idx(val->intval, TBL_IINLIM);
+>>  		return bq25890_field_write(bq, F_IINLIM, lval);
+>> +	case POWER_SUPPLY_PROP_ONLINE:
+>> +		ret = bq25890_field_write(bq, F_EN_HIZ, !val->intval);
+>> +		bq25890_update_state(bq, psp, &state);
+>> +		return ret;
+>>  	default:
+>>  		return -EINVAL;
+>>  	}
+>> @@ -703,6 +709,7 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
+>>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
+>>  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
+>>  	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
+>> +	case POWER_SUPPLY_PROP_ONLINE:
+>>  		return true;
+>>  	default:
+>>  		return false;
+>> @@ -757,6 +764,7 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
+>>  	} state_fields[] = {
+>>  		{F_CHG_STAT,	&state->chrg_status},
+>>  		{F_PG_STAT,	&state->online},
+>> +		{F_EN_HIZ,	&state->hiz},
+>>  		{F_VSYS_STAT,	&state->vsys_status},
+>>  		{F_BOOST_FAULT, &state->boost_fault},
+>>  		{F_BAT_FAULT,	&state->bat_fault},
+>> @@ -772,10 +780,11 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
+>>  		*state_fields[i].data = ret;
+>>  	}
+>>  
+>> -	dev_dbg(bq->dev, "S:CHG/PG/VSYS=%d/%d/%d, F:CHG/BOOST/BAT/NTC=%d/%d/%d/%d\n",
+>> -		state->chrg_status, state->online, state->vsys_status,
+>> -		state->chrg_fault, state->boost_fault, state->bat_fault,
+>> -		state->ntc_fault);
+>> +	dev_dbg(bq->dev, "S:CHG/PG/HIZ/VSYS=%d/%d/%d/%d, F:CHG/BOOST/BAT/NTC=%d/%d/%d/%d\n",
+>> +		state->chrg_status, state->online,
+>> +		state->hiz, state->vsys_status,
+>> +		state->chrg_fault, state->boost_fault,
+>> +		state->bat_fault, state->ntc_fault);
+>>  
+>>  	return 0;
+>>  }
+>> @@ -792,12 +801,14 @@ static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
+>>  	if (!memcmp(&bq->state, &new_state, sizeof(new_state)))
+>>  		return IRQ_NONE;
+>>  
+>> -	if (!new_state.online && bq->state.online) {	    /* power removed */
+>> +	/* power removed or HiZ */
+>> +	if ((!new_state.online || new_state.hiz) && bq->state.online) {
+>>  		/* disable ADC */
+>>  		ret = bq25890_field_write(bq, F_CONV_RATE, 0);
+>>  		if (ret < 0)
+>>  			goto error;
+>> -	} else if (new_state.online && !bq->state.online) { /* power inserted */
+>> +	} else if (new_state.online && !new_state.hiz && !bq->state.online) {
+>> +		/* power inserted and not HiZ */
+>>  		/* enable ADC, to have control of charge current/voltage */
+>>  		ret = bq25890_field_write(bq, F_CONV_RATE, 1);
+>>  		if (ret < 0)
+> 
 
---wvm2z6appxwdd5fa--
