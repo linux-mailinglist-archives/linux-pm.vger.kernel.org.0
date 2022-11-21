@@ -2,112 +2,160 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7508063275E
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 16:09:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD3A76327D1
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 16:24:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbiKUPJu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 10:09:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35838 "EHLO
+        id S232292AbiKUPYP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 10:24:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232047AbiKUPJa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 10:09:30 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DC1D2994;
-        Mon, 21 Nov 2022 06:59:49 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        with ESMTP id S232338AbiKUPXt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 10:23:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B67C77F;
+        Mon, 21 Nov 2022 07:23:41 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A4CEC21F48;
-        Mon, 21 Nov 2022 14:59:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1669042788; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XbU6pJlnqsaZ2ECXXpl266vRcoUTK5bfjkYQl7JTGT0=;
-        b=w5wNzDKc5o5a66YDFf0df334D2mmIQbjszdUQeTr9hiGgzOAsP4qyGiqEtXhNZAPz4YUtv
-        PcurCRZYYCz+agP8TBX0QRvDkRcOS1Zq6qCGrfSqxo9uIIaZNRKRKGSFHlcMOo5cKcYJMA
-        MK4LGlpQqeKSkPU7nc3LMvoEGRMs9ss=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1669042788;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=XbU6pJlnqsaZ2ECXXpl266vRcoUTK5bfjkYQl7JTGT0=;
-        b=EO7VZCQUzdvWwVf3irvBD+SDUznOjSXilBhyPSaGVrZA4hyxrP20upv7CuZRMoqoTj972+
-        yYNmJdMRTpT9qFBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5D4491376E;
-        Mon, 21 Nov 2022 14:59:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id K/esFGSSe2NkLwAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Mon, 21 Nov 2022 14:59:48 +0000
-Date:   Mon, 21 Nov 2022 15:59:46 +0100
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     Georgi Djakov <djakov@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] interconnect: qcom: Drop obsolete dependency on
- COMPILE_TEST
-Message-ID: <20221121155946.3c985500@endymion.delvare>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A004A612A0;
+        Mon, 21 Nov 2022 15:23:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDA66C433C1;
+        Mon, 21 Nov 2022 15:23:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669044220;
+        bh=QQw8NxuV8G4Qi2Nafk+TR8YSN0dQyB1OpYIiPoiXKG4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JhTVilP0jmaBMOHakjdhfUVVZlW4tP3isgRF5S8XzQvcJPkJTcTUijQsfSr/i+m8n
+         S31YVTsEx9jpFiAwhSQp950pCO00gvQdISUOvATioTlGkhbbtM8MZXENUQQvcuUSJ7
+         +s4w5qP0uIryz9YnR0kO39Do1eKUkpZ2ZzYID/JC5OGnO1XpnDywdN5yYzjxB466p/
+         a5pSKrm+LeYQZVmcbqVq98hoEXJJQ+AZVX9B1xW80wOvpDve+SNJRSzne49eIZ8qy0
+         Y4Rii3W2Qy6gy5gTd4+WyjloZ7cta1dqSPfhBhcUrHNRVG0X7e2wtf6rs3usPUWgnT
+         xyEWr2PIA9J4Q==
+Message-ID: <3bc11449-bd5f-f4c4-98da-ebc0d7c8b309@kernel.org>
+Date:   Mon, 21 Nov 2022 17:23:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118182245.31035-1-quic_molvera@quicinc.com>
+ <20221118182245.31035-2-quic_molvera@quicinc.com>
+Content-Language: en-US
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20221118182245.31035-2-quic_molvera@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Jean Delvare <jdelvare@suse.de>
-Subject: interconnect: qcom: Drop obsolete dependency on COMPILE_TEST
+Hi Melody,
 
-Since commit 0166dc11be91 ("of: make CONFIG_OF user selectable"), it
-is possible to test-build any driver which depends on OF on any
-architecture by explicitly selecting OF. Therefore depending on
-COMPILE_TEST as an alternative is no longer needed.
+On 18.11.22 20:22, Melody Olvera wrote:
+> Add documentation for virtual rpmh devices. These interconnects
+> are not controlled by the application processor and thus
+> require separate bindings. Also, move compatibles for sm8450 to
+> this document and add them for QDU1000/QRU1000 platforms.
+> 
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>   .../bindings/interconnect/qcom,rpmh-virt.yaml | 55 +++++++++++++++++++
+>   .../bindings/interconnect/qcom,rpmh.yaml      |  2 -
+>   2 files changed, 55 insertions(+), 2 deletions(-)
+>   create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml
+> new file mode 100644
+> index 000000000000..5cbaa51df863
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh-virt.yaml
+> @@ -0,0 +1,55 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/interconnect/qcom,rpmh-virt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm RPMh Virtual Network-On-Chip Interconnect
+> +
+> +maintainers:
+> +  - Georgi Djakov <georgi.djakov@linaro.org>
 
-It is actually better to always build such drivers with OF enabled,
-so that the test builds are closer to how each driver will actually be
-built on its intended target. Building them without OF may not test
-much as the compiler will optimize out potentially large parts of the
-code. In the worst case, this could even pop false positive warnings.
-Dropping COMPILE_TEST here improves the quality of our testing and
-avoids wasting time on non-existent issues.
+This email is not valid anymore, so please replace it with djakov@kernel.org.
 
-Signed-off-by: Jean Delvare <jdelvare@suse.de>
-Cc: Andy Gross <agross@kernel.org>
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc: Georgi Djakov <djakov@kernel.org>
----
- drivers/interconnect/qcom/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Georgi
 
---- linux-6.0.orig/drivers/interconnect/qcom/Kconfig
-+++ linux-6.0/drivers/interconnect/qcom/Kconfig
-@@ -74,7 +74,7 @@ config INTERCONNECT_QCOM_RPMH_POSSIBLE
- 	default INTERCONNECT_QCOM
- 	depends on QCOM_RPMH || (COMPILE_TEST && !QCOM_RPMH)
- 	depends on QCOM_COMMAND_DB || (COMPILE_TEST && !QCOM_COMMAND_DB)
--	depends on OF || COMPILE_TEST
-+	depends on OF
- 	help
- 	  Compile-testing RPMH drivers is possible on other platforms,
- 	  but in order to avoid link failures, drivers must not be built-in
+> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
+> +
+> +description: |
+> +   RPMh interconnect providers support system bandwidth requirements through
+> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
+> +   associated with each execution environment. Provider nodes must point to at
+> +   least one RPMh device child node pertaining to their RSC and each provider
+> +   can map to multiple RPMh resources. Virtual interconnect providers are not
+> +   controlled by AP and do not support QoS; they should not have associated
+> +   register regions.
+> +
+> +allOf:
+> +  - $ref: qcom,rpmh-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,qdu1000-clk-virt
+> +      - qcom,qdu1000-mc-virt
+> +      - qcom,sm8450-clk-virt
+> +      - qcom,sm8450-mc-virt
+> +
+> +  '#interconnect-cells': true
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +      #include <dt-bindings/interconnect/qcom,sm8450.h>
+> +
+> +      clk_virt: interconnect-0 {
+> +             compatible = "qcom,sm8450-clk-virt";
+> +             #interconnect-cells = <2>;
+> +             qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      mc_virt: interconnect-1 {
+> +             compatible = "qcom,sm8450-mc-virt";
+> +             #interconnect-cells = <2>;
+> +             qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index a429a1ed1006..bd474f49deb0 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -123,11 +123,9 @@ properties:
+>         - qcom,sm8350-system-noc
+>         - qcom,sm8450-aggre1-noc
+>         - qcom,sm8450-aggre2-noc
+> -      - qcom,sm8450-clk-virt
+>         - qcom,sm8450-config-noc
+>         - qcom,sm8450-gem-noc
+>         - qcom,sm8450-lpass-ag-noc
+> -      - qcom,sm8450-mc-virt
+>         - qcom,sm8450-mmss-noc
+>         - qcom,sm8450-nsp-noc
+>         - qcom,sm8450-pcie-anoc
 
-
--- 
-Jean Delvare
-SUSE L3 Support
