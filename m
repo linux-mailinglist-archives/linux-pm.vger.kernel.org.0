@@ -2,69 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137E0632B39
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 18:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F672632B8D
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 18:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKURlJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 12:41:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33266 "EHLO
+        id S229586AbiKURz3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 12:55:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiKURlJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 12:41:09 -0500
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C745FC6BCE
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 09:41:07 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id c7so9114617iof.13
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 09:41:07 -0800 (PST)
+        with ESMTP id S230415AbiKURz1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 12:55:27 -0500
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC32D32AC;
+        Mon, 21 Nov 2022 09:55:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JHEfteEybO+yp2SunH1PQLLQWxGsRzq9s733waC4EBI=;
-        b=YrPjnY+l7Yx1QoELLV8g4hz/vCDSV07YK47/RAEfsby2Se/JnVFY7lM3nP1IaDN/EK
-         eULmPWR7bCOt1fdWWi43hTWo2VdvIf0aI/Xn9Yk7Kf3UcZVFYYywYXujefvRvxFd59BO
-         2RZGFNd6+KEB+mlgDwdVu2VyoI4guXBylXyz8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JHEfteEybO+yp2SunH1PQLLQWxGsRzq9s733waC4EBI=;
-        b=T51ofXfnJtSQ26Kxt3RtxCIfr8h3kbaw6t/M7feMqpFj/VpnrlwTjmSFH1LSf1VwpN
-         3Hch+IS7lTU/Y5tYmP9I/zKx7qm7wUr5nAFE3j16ZpHwinmiqV2KCnNmS/Vc9UzKPg0T
-         b1x53sc8EXTxcYdihZFFsHI/QQCUpc4jVhRvi1Y7KQikEYh41/o2ogj/7wbW1SOLLsrq
-         JCKiFq5QARBK4ae7gUb8hTEBO5vEf2Q+ulnrtAUMX7xYnucRLikHCahPlcFaKRTYn7vV
-         xUguZb/8Uaf1wo/ietGZa7ABpPaGmKxCERJ3z/Lu1KjSue0u3ZcJJcadCHbDY9/c1I34
-         qTGA==
-X-Gm-Message-State: ANoB5pkOolJ6ByttyatYxY34pRoAnmhqCC8+eyuuQMWj7R6bI0hRNt0b
-        1BoKk2WUFCdaThrxa12xI6hXyA==
-X-Google-Smtp-Source: AA0mqf7Sd1S45yKTMXH8j2Pet6i40PTju9sZ3R/eXSOJB0VD57SllNSL2g9L414wfXpnq3nm1i4qkQ==
-X-Received: by 2002:a6b:bc87:0:b0:6d5:1edb:2b9d with SMTP id m129-20020a6bbc87000000b006d51edb2b9dmr720959iof.185.1669052467107;
-        Mon, 21 Nov 2022 09:41:07 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o12-20020a92c04c000000b002eb1137a774sm4024220ilf.59.2022.11.21.09.41.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 09:41:05 -0800 (PST)
-Message-ID: <9d8b88ee-d83b-c0ed-3fe6-5c0a69fe4f9e@linuxfoundation.org>
-Date:   Mon, 21 Nov 2022 10:41:05 -0700
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1669053324; x=1700589324;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qfsa8AbMabrYEp+ISD3eb3o1sx27qrYMkB2inZEHjBw=;
+  b=ShAPLAOcKWM+5VyOVw+JzL5kp0IrmDdXZCcvRBYhqKIJx2vEJq5o66r4
+   gUq01KfJWM4XhskXz/Sw60K/Od3k5QZTEkYOv6XCfmoFbvMZKQkqD91bs
+   ITjx070s5qwZDP5k6b+XTqtgrWYzXbrvWz71zqVhBwEPBkZrWdmQbhWzW
+   Q=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 21 Nov 2022 09:55:23 -0800
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 09:55:09 -0800
+Received: from [10.110.33.239] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 21 Nov
+ 2022 09:55:08 -0800
+Message-ID: <76219489-99cc-7f2e-7df6-b11f6a2c1933@quicinc.com>
+Date:   Mon, 21 Nov 2022 11:55:07 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] Add Georgian translation for cpupower
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 3/3] interconnect: qcom: Add QDU1000/QRU1000
+ interconnect driver
 Content-Language: en-US
-To:     Zurab Kargareteli <zuraxt@gmail.com>
-Cc:     trenn@suse.com, shuah@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20221119100320.10022-1-zuraxt@gmail.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221119100320.10022-1-zuraxt@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221118182245.31035-1-quic_molvera@quicinc.com>
+ <20221118182245.31035-4-quic_molvera@quicinc.com>
+ <6b68b7c2-e070-0a88-35ee-2060dcbdee91@wanadoo.fr>
+From:   Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <6b68b7c2-e070-0a88-35ee-2060dcbdee91@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -73,17 +72,85 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 
-On 11/19/22 03:02, Zurab Kargareteli wrote:
-> Signed-off-by: Zurab Kargareteli <zuraxt@gmail.com>
+On 11/20/2022 6:19 AM, Christophe JAILLET wrote:
+> Le 18/11/2022 à 19:22, Melody Olvera a écrit :
+>> Add interconnect provider driver for Qualcomm QDU1000 and QRU1000
+>> platforms.
+>>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>   drivers/interconnect/qcom/Kconfig   |    9 +
+>>   drivers/interconnect/qcom/Makefile  |    2 +
+>>   drivers/interconnect/qcom/qdu1000.c | 1079 +++++++++++++++++++++++++++
+>>   drivers/interconnect/qcom/qdu1000.h |   95 +++
+>>   4 files changed, 1185 insertions(+)
+>>   create mode 100644 drivers/interconnect/qcom/qdu1000.c
+>>   create mode 100644 drivers/interconnect/qcom/qdu1000.h
+>>
+>
+> [...]
+>
+>> +static int qnoc_probe(struct platform_device *pdev)
+>> +{
+>> +    int ret;
+>> +
+>> +    ret = qcom_icc_rpmh_probe(pdev);
+>> +    if (ret)
+>> +        dev_err(&pdev->dev, "failed to register ICC provider\n");
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int qnoc_remove(struct platform_device *pdev)
+>> +{
+>> +    struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
+>> +
+>> +    icc_nodes_remove(&qp->provider);
+>> +    icc_provider_del(&qp->provider);
+>
+> qcom_icc_rpmh_remove()?
+>
+> (more future proof, less verbose and more consistent with qcom_icc_rpmh_probe() in the probe)
+>
+> CJ
 
-Thank you for the patch.
+Good call. Does it make sense to just set the .probe and .remove functions as
+qcom_icc_rpmh_probe() and qcom_icc_rpmh_remove(), respectively? Probe function
+is just reporting if qcom_icc_rpmh_probe fails.
 
-Missing change log. Also please use thr right prefix in the
-subject:
-
-cpupower: ------
-
-thanks,
--- Shuah
-
+Thanks,
+Melody
+>
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct of_device_id qnoc_of_match[] = {
+>> +    { .compatible = "qcom,qdu1000-clk-virt",
+>> +      .data = &qdu1000_clk_virt
+>> +    },
+>> +    { .compatible = "qcom,qdu1000-gem-noc",
+>> +      .data = &qdu1000_gem_noc
+>> +    },
+>> +    { .compatible = "qcom,qdu1000-mc-virt",
+>> +      .data = &qdu1000_mc_virt
+>> +    },
+>> +    { .compatible = "qcom,qdu1000-system-noc",
+>> +      .data = &qdu1000_system_noc
+>> +    },
+>> +    { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, qnoc_of_match);
+>> +
+>> +static struct platform_driver qnoc_driver = {
+>> +    .probe = qnoc_probe,
+>> +    .remove = qnoc_remove,
+>> +    .driver = {
+>> +        .name = "qnoc-qdu1000",
+>> +        .of_match_table = qnoc_of_match,
+>> +    },
+>> +};
+>
+> [...]
+>
 
