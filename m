@@ -2,61 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3B96321D1
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 13:23:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57A5D6322D7
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 13:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbiKUMXh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 07:23:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43460 "EHLO
+        id S229620AbiKUMuv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 07:50:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229610AbiKUMXg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 07:23:36 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B10EB742EC;
-        Mon, 21 Nov 2022 04:23:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E75A61FB;
-        Mon, 21 Nov 2022 04:23:41 -0800 (PST)
-Received: from e126311.manchester.arm.com (unknown [10.57.69.251])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 83FC53F587;
-        Mon, 21 Nov 2022 04:23:33 -0800 (PST)
-Date:   Mon, 21 Nov 2022 12:22:44 +0000
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        with ESMTP id S229379AbiKUMuv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 07:50:51 -0500
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE3AB54D4;
+        Mon, 21 Nov 2022 04:50:50 -0800 (PST)
+Received: by mail-qt1-f169.google.com with SMTP id l2so7115827qtq.11;
+        Mon, 21 Nov 2022 04:50:50 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1ZWlcs87et1TSZPqyxUAi9M3uvjB0Gjg8BMY4gTTc9Q=;
+        b=j1ap7rezEsS4V87xPK1mnP2bWvXWnxP8M7CkaC3/382B3AAT8gQ6ZsKbrUDswmWUBO
+         vFLgddo9+OXp1GYcoSrOPPXgHe4G2XVJvAcGeO4kmjHTE52xdoMWOFovMw8wdRQIsEL3
+         anJmRjxcp75agi02aP1nqq1OZBcq5XKOcruknub0xSZVd98RdJL2Lbs1sE2vbyxYraIf
+         nZDpPxFkyTfI9qiqtWkiaInn6nLxLV9IhZKhC2xDQ4f4EfKebBCExrSRyP1XVzHCsiFp
+         NNRn2VAnqVds21SLL2vzdDlWo5nxTyIzzUamSED3ff/4S4UwSLRexWzhu1bfvfeeRiPC
+         5jXA==
+X-Gm-Message-State: ANoB5pmLlxZ9lm0gGNMpMnd51XLdWwyoWzU2JmRp68N548GLELhEsWmp
+        KVljaERWLhWymYlHvdxRoJEw6CJJZ3hL3py3gyU=
+X-Google-Smtp-Source: AA0mqf7L7Nf2BFFBq5yvUh3FbBGduEJVCaI7f3nNwUpzYil/EXTLQWN2i51odCO611N3LVmXgCcElrWWs8p8jdrdWl0=
+X-Received: by 2002:ac8:73c4:0:b0:3a5:a53d:a102 with SMTP id
+ v4-20020ac873c4000000b003a5a53da102mr17306577qtp.153.1669035049621; Mon, 21
+ Nov 2022 04:50:49 -0800 (PST)
+MIME-Version: 1.0
+References: <20221102152808.2978590-1-kajetan.puchalski@arm.com> <Y3ttlCCezC+SvFDH@e126311.manchester.arm.com>
+In-Reply-To: <Y3ttlCCezC+SvFDH@e126311.manchester.arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 21 Nov 2022 13:50:34 +0100
+Message-ID: <CAJZ5v0hi0Shr4ae7_Fj=eZ6GUsALJnhwxWJic0ASr=FR5C++Ug@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 0/2] cpuidle: teo: Introduce util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
         Dietmar.Eggemann@arm.com, dsmythies@telus.net,
         yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v4 0/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <Y3ttlCCezC+SvFDH@e126311.manchester.arm.com>
-References: <20221102152808.2978590-1-kajetan.puchalski@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102152808.2978590-1-kajetan.puchalski@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Mon, Nov 21, 2022 at 1:23 PM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> Hi Rafael,
+>
+> On Wed, Nov 02, 2022 at 03:28:06PM +0000, Kajetan Puchalski wrote:
+>
+> [...]
+>
+> > v3 -> v4:
+> > - remove the chunk of code skipping metrics updates when the CPU was utilized
+> > - include new test results and more benchmarks in the cover letter
+>
+> [...]
+>
+> It's been some time so I just wanted to bump this, what do you think
+> about this v4? Doug has already tested it, resuls for his machine are
+> attached to the v3 thread.
 
-On Wed, Nov 02, 2022 at 03:28:06PM +0000, Kajetan Puchalski wrote:
+I have some comments, but it's being pushed down by more urgent things, sorry.
 
-[...]
+First off, I think that the information from your cover letter should
+go into the patch changelog (at least the majority of it), as it's
+relevant for the motivation part.
 
-> v3 -> v4:
-> - remove the chunk of code skipping metrics updates when the CPU was utilized
-> - include new test results and more benchmarks in the cover letter
+Also I think that this optimization is really trading energy for
+performance and that should be emphasized.  IOW, it is not about
+improving the prediction accuracy (which is what the cover letter and
+changelog seem to be claiming), but about reducing the expected CPU
+wakeup latency in some cases.
 
-[...]
-
-It's been some time so I just wanted to bump this, what do you think
-about this v4? Doug has already tested it, resuls for his machine are
-attached to the v3 thread.
-
-Thanks,
-Kajetan
+I'll send more comments later today if I have the time or later this
+week otherwise.
