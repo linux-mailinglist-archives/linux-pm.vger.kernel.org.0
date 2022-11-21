@@ -2,70 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00632632DE6
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 21:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66BE7632E43
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 21:57:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiKUU0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 15:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
+        id S230236AbiKUU5U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 15:57:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiKUU0m (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 15:26:42 -0500
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D2158036
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 12:26:41 -0800 (PST)
-Received: by mail-io1-xd2c.google.com with SMTP id p184so9461620iof.11
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 12:26:41 -0800 (PST)
+        with ESMTP id S229813AbiKUU5R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 15:57:17 -0500
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BFD0DA4C6
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 12:57:17 -0800 (PST)
+Received: by mail-pj1-x1034.google.com with SMTP id q96-20020a17090a1b6900b00218b8f9035cso3266769pjq.5
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 12:57:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BT3mLeHRkLjM2lO8vf497JZzDmMVUHMTAFUn4ckIutY=;
-        b=CdBYlIOSIqKuWicrjZMzvlZNXbIRaST36jwlM8ONNYvOVpe/IC9NEvEOCoewE8Dfl3
-         Lg9Nzn+n7z4wNA+t9/9Tt4vGcZM5eemgz4fghrdkzHQv/ECxyT7YXndJIVPwLXqQSSPD
-         IKbvtR8g4NcmXzURDq13WsIg1muQ9hpnoibAQ=
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=a+8s62R9vB+JzHkkOoet6Cx6GWbxqA3eYfIMwlFnB9o=;
+        b=fniv4c5WvNO/fe0wN9wrXEKEfDwyhJUrFdsvKJuO4y8MLgjdPfrmtbqzVu9910adRx
+         JhWCrZzOw5Y4TMTcRNRUMinuR1pTJc07Ab2uIsBTenDVRwIWcSufF0FviArIpiMuWU+P
+         IPtgSPdMeOKp463RZepfWc5GcgnQ1IXwCnXW25wm8eXMbmVuzAGpXvLVDLRyyao1O19g
+         TSpEVqACWSznUcJxTOOQQB2Hl65J4fAhUqLmy4Dld6xq7YGsBTKCXVwuBv4u7AMIz7/t
+         DTzDtC7BTLu1NCSJNGzUlPFc5UqYceYH3rDOtzavepUkuWizF7c6H8sq7yXjv7CjjjEH
+         Xoaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BT3mLeHRkLjM2lO8vf497JZzDmMVUHMTAFUn4ckIutY=;
-        b=Ai7a+5mChAURZn3ydG7vetszS34SKGyD+RQGYruEtrp7B+MPvJjMFWMw2yoouSJoT0
-         9eMTG4Uhk7AjIEXjpjzvYitgJ7AaCwmBsyqz0mkZkVWpewe7ciWZBnkx42QJ50kP0+Q0
-         bEfTV5Nx+GT2htmKShKrcNJ8nFZGjShkrtrmJX8I3yqtlvLref/JmfFf0bbZItV4yr6I
-         N3N07HwIcZJbcI4A7SnVmacVhInbkR7f+TqN0iRfk6nHXfTr+F+aRnPJ2bMLMts783uL
-         JEAs1cm9p8u/FWz5ACGaw/1oKSF0zuqM/uMch4FrW13NmVydUalj6AIH9V6CfiaViqzj
-         qRnQ==
-X-Gm-Message-State: ANoB5pkQUmnr3cgBO6aj8uSXATcnRmngPi5GYqbgpklCPwJaFi3jcNJf
-        5Qx+LI7MUmTaJpbdv2/e8dwEVfwFWeqpmw==
-X-Google-Smtp-Source: AA0mqf4viaC/2FMw9Yg+yVv4pZ9rf3EjSlzLe32WS/WlhlpTJfMnhBccItkmdgRrDse9ZmhxeOYQrA==
-X-Received: by 2002:a5d:8b5a:0:b0:6de:1b3c:e97d with SMTP id c26-20020a5d8b5a000000b006de1b3ce97dmr3989479iot.202.1669062400804;
-        Mon, 21 Nov 2022 12:26:40 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id m14-20020a92710e000000b0030014a5556bsm4159640ilc.69.2022.11.21.12.26.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 12:26:39 -0800 (PST)
-Message-ID: <25b0ccf5-cc0e-370c-aef9-5fdfd11b2c30@linuxfoundation.org>
-Date:   Mon, 21 Nov 2022 13:26:38 -0700
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a+8s62R9vB+JzHkkOoet6Cx6GWbxqA3eYfIMwlFnB9o=;
+        b=5+jxliLkfixEct27n3B1ymRqndV0brKJY/0J8maJQFBW0GP9AwtjT+EGcIj9w+gxVC
+         7IJAe3gywabHijg9u4/nW5Z812mSPcUgwSH1zsZhWdCPeZ3EMBOZFYzqXc0/15p+fHMS
+         DiO11LL5iHgYZEyuKjjVJeDJhDgrLomjHjNg91pyIOyj24pYjcdSgrIvbjXup090KA5b
+         XYkbBBL2i5nAySO4sVgbTxPoMfyFRMz7jU87yymQ5CdK4UQbYHDfdvrR62hQGNFE00Xs
+         A55IdfltqVKyPXVa0R3BkTqeYCCOXwnaHnKjcQcvzAF/z+kBzFVUqLC4Jz9zn9i3VtXQ
+         B6eA==
+X-Gm-Message-State: ANoB5pkrx6b8nKrxedvelZiDnXBuiQdgPqkKb8yD+pUj2Dg+zpWz9E9/
+        3TChG5NnylJPVv4NUqOR0wYVSw==
+X-Google-Smtp-Source: AA0mqf5sAA/E/U6YfTqD7f0WABcznW3d/e4KdkkWOwum97uDCHlLJhlE8SujKPDevUBcC4tY/ckbTA==
+X-Received: by 2002:a17:90b:3c0d:b0:20d:478a:9d75 with SMTP id pb13-20020a17090b3c0d00b0020d478a9d75mr28239558pjb.149.1669064236510;
+        Mon, 21 Nov 2022 12:57:16 -0800 (PST)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170902650a00b0016d773aae60sm4937091plk.19.2022.11.21.12.57.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 12:57:16 -0800 (PST)
+Subject: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+Date:   Mon, 21 Nov 2022 12:56:47 -0800
+Message-Id: <20221121205647.23343-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] tools/cpupower: Choose first online CPU to display
- details
-Content-Language: en-US
-To:     Saket Kumar Bhaskar <skb99@linux.vnet.ibm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     trenn@suse.com, shuah@kernel.org, ray.huang@amd.com,
-        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20221121053530.103600-1-skb99@linux.vnet.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221121053530.103600-1-skb99@linux.vnet.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Cc:     anup@brainfault.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     Conor Dooley <conor@kernel.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,79 +71,47 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/20/22 22:35, Saket Kumar Bhaskar wrote:
-> The default output of cpupower info utils shows unexpected output
-> when CPU 0 is disabled.
-> 
-> Considering a case where CPU 0 is disabled, output of cpupower idle-info:
-> 
-> Before change:
-> cpupower idle-info
-> CPUidle driver: pseries_idle
-> CPUidle governor: menu
-> analyzing CPU 0:
->   *is offline
-> 
-> After change:
-> ./cpupower idle-info
-> CPUidle driver: pseries_idle
-> CPUidle governor: menu
-> analyzing CPU 0:
->   *is offline
-> analyzing CPU 1:
-> 
-> Number of idle states: 2
-> Available idle states: snooze Shared Cede
-> snooze:
-> Flags/Description: snooze
-> Latency: 0
-> Usage: 919
-> Duration: 68227
-> Shared Cede:
-> Flags/Description: Shared Cede
-> Latency: 10
-> Usage: 99324
-> Duration: 67871518243
-> 
-> If -c option is not passed, CPU 0 was chosen as the default chosen CPU to
-> display details. However when CPU 0 is offline, it results in showing
-> unexpected output. This commit chooses the first online CPU
-> instead of CPU 0, hence keeping the output more relevant in all cases.
-> 
-> Somewhat similar logic to set all CPUs in default case is present in
-> cpufreq-set.c, cpuidle-set.c, cpupower-set.c. But here we have added
-> logic to stop at first online CPU.
-> 
-> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.vnet.ibm.com>
-> ---
->   tools/power/cpupower/utils/cpufreq-info.c  | 15 ++++++++++++---
->   tools/power/cpupower/utils/cpuidle-info.c  | 15 ++++++++++++---
->   tools/power/cpupower/utils/cpupower-info.c | 16 +++++++++++++---
->   3 files changed, 37 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
-> index 0646f615fe2d..4001a5934494 100644
-> --- a/tools/power/cpupower/utils/cpufreq-info.c
-> +++ b/tools/power/cpupower/utils/cpufreq-info.c
-> @@ -508,6 +508,7 @@ int cmd_freq_info(int argc, char **argv)
->   	unsigned int cpu = 0;
->   	unsigned int human = 0;
->   	int output_param = 0;
-> +	bool is_default = false;
->   
->   	do {
->   		ret = getopt_long(argc, argv, "oefwldpgrasmybnc", info_opts,
-> @@ -572,9 +573,11 @@ int cmd_freq_info(int argc, char **argv)
->   
->   	ret = 0;
->   
-> -	/* Default is: show output of CPU 0 only */
-> -	if (bitmask_isallclear(cpus_chosen))
-> -		bitmask_setbit(cpus_chosen, 0);
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-Why can't we just use base_cpu here instead of 0 and it will
-all work without any more code - you can update the comment
-to say default is base_cpu info.
+As per [1], whether or not the core can wake up from non-retentive
+suspend is a platform-specific detail.  We don't have any way to encode
+that, so just stop using them until we've sorted that out.
 
-thanks,
--- Shuah
+Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
+Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+---
+
+This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
+Events are stopped during CPU suspend"), which fixes suspend on the D1
+but breaks timers everywhere.
+---
+ drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+index 05fe2902df9a..9d1063a54495 100644
+--- a/drivers/cpuidle/cpuidle-riscv-sbi.c
++++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+@@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
+ 	if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
+ 	    state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
+ 		return false;
++
++	/*
++	 * Whether or not RISC-V systems deliver interrupts to harts in a
++	 * non-retentive suspend state is a platform-specific detail.  This can
++	 * leave the hart unable to wake up, so just mark these states as
++	 * unsupported until we have a mechanism to expose these
++	 * platform-specific details to Linux.
++	 */
++	if (state & SBI_HSM_SUSP_NON_RET_BIT)
++		return false;
++
+ 	return true;
+ }
+ 
+-- 
+2.38.1
+
