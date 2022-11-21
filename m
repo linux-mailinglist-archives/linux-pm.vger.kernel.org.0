@@ -2,80 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B55BE631B58
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 09:27:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79972631B71
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 09:30:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229921AbiKUI1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 03:27:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S230108AbiKUIau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 03:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiKUI1D (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 03:27:03 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A8F626D
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:27:02 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id k19so13696348lji.2
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:27:02 -0800 (PST)
+        with ESMTP id S230125AbiKUIaq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 03:30:46 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F81DF04
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:30:41 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id g5so1303498pjp.4
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:30:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wYa6qiy8lMPys5blH9J/G1eMKnRjWk2O1ZKygOJRkTQ=;
-        b=Cj2/VIzR/21o/tDbTWZPg8AGCS4nhfSg7B+uN9/AR/5LGg0FRaKRyalpThYZxC53mJ
-         pnbm+WJ9fCqM1NC8ka3B5R0z2fGv7B3oc/AMH+IuYEistzWxn6NkPDevW0qDkJLQuXyZ
-         bYo8jbLfTX6skcVDVIqtgCNxIT6bzhM3f/7GortQZEwVdTwtRwQF/6vEMDST+ioPEA0v
-         kxFNTuOyCF++tItPtJImlhbwQy9qjFTkL4RnpKEPpzwir3xS3iBMNqf4BFRCi3tSOt+T
-         CjEGYpiI5z3UAwO7fSltILV2sIZ0weSNBtrk2EW++azDJJtPkoBgb0OV6y5E0LEU+c3k
-         qCaA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=77nlpT1UtT2f7TDmQ1L0AgCLVss9mxayAo02DMUC5Kg=;
+        b=K4Zsk9gJfvRPRaFFT0pLQvp03kvx7GRM+mBM//6uAQGpXOtu2xB7eGCJGoQ/7lVF0p
+         T5B3dt4waTkqRSPmp5+rriVpIwqMXD2+ndThw9l8XCrgUxfo44sdeSdZShGtaZN8SLz3
+         p08gOlv37G4vpLuksqe4s9Z1roS4cD+q3dMtUFQLBer9yD1/GFFfeQZxcqGG1j6GbcUo
+         bEtU9lhPtttj+2RB9FWmX03DiItSn0/xC2yBBDRLmj+xMZi2rDeLiApC174IZwNh5ya4
+         NLRxfL30VIl1C4DX8RKMP2Kb48qP4yDt9G2VWcLktEd7oAd2tCzi+IGvfS6rxkHP244N
+         ZvMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wYa6qiy8lMPys5blH9J/G1eMKnRjWk2O1ZKygOJRkTQ=;
-        b=JPcJ+8ja33/7hckrsDPQAJcdHwyrXXbkioEzT7cHp70hlXKLDJnm0RTS/yAUX0qeRE
-         lmvm5RmPghf/iqKQygM5wxPAVwZtwHi5fz7nwIRoPTofBRiqGMFy50P9a2AWYCzPZSUU
-         hQKGM2e6MSqoFL4q7UPxNjOFF8rfZaFgdL5U924STm4+aSdW/XT6xoxaHp3nq9Wio7l1
-         MKw8wSlvakB1o93Y3RW/WXO3iE3l4KPXZS7RaZbRz4740dYdUf8N8gHhGBn4ns/mymT8
-         sxZeyCAw0tO7CXSfO4uJOvtK8tcUY17NNGmAnbVu6KTSSvl5F6nu5LjnrDlSOQc1cSa8
-         U0rg==
-X-Gm-Message-State: ANoB5png/2CGrT0TbVXJ0AueWC07P2RRywf2l13q1Ka2dFUDqzXGQnzL
-        /ZRX0uGnizr6FF9GIA5GP6RG/Q==
-X-Google-Smtp-Source: AA0mqf5RPWYa6p3CjzIW6ePaZSL0+GAKbQbFHq0c225RFkodYWsPwYzdEjwB8RTo/+JQghTXRFRFow==
-X-Received: by 2002:a2e:b5ae:0:b0:277:3df:90d0 with SMTP id f14-20020a2eb5ae000000b0027703df90d0mr384156ljn.234.1669019220719;
-        Mon, 21 Nov 2022 00:27:00 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id 9-20020a2eb949000000b0026dcf0cbb97sm1379191ljs.137.2022.11.21.00.26.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:27:00 -0800 (PST)
-Message-ID: <795deac4-71fe-d40b-a3b6-855eb3875ad1@linaro.org>
-Date:   Mon, 21 Nov 2022 09:26:59 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=77nlpT1UtT2f7TDmQ1L0AgCLVss9mxayAo02DMUC5Kg=;
+        b=wK7wWpdtxHfRdQedB54zwxF3HPT8ec0l14O5M++HEdC/Kk8jsU3ugVmlKUkqWaQdcl
+         mC3XVp4Is7/J300w1IWzspiRVRD71eoX5SN9QQeQRN/linHrrmwiYMMsUQudh9X6OTUE
+         87WPjdN1bYFBgqNjpq52diA2XPHHXXExTAKwGNKDNITRcY57LB5GNnR56eqXyb7an0K7
+         YVsBaAbYiiT5mw2s/fLbYJ7HoVE0cCoVii5bjC4dXJAz6qSPSe+zJKz2bO8rVQt2C6ch
+         GdMdds9UbdG0JxW+v1/x1L6MQknagjn/dn5mf0qXhTKSBhpB4ypMe7PYMGb+LUkW0uDp
+         fu4g==
+X-Gm-Message-State: ANoB5plFyT8UaCKvmUNG6gNrEk3uhX4p2VSPTBeoXURfTiOf83NKBY0g
+        V2zYDsybPlQwx9aLOumzRe6GDQ==
+X-Google-Smtp-Source: AA0mqf5O84zrPfVTz1lHk4N+pi0wSmqGktmOWxC6ECtbtk3vPtBCdrUGPm0LJVTCuKEUja7f8Q0BiA==
+X-Received: by 2002:a17:90a:6904:b0:208:4bfa:51e1 with SMTP id r4-20020a17090a690400b002084bfa51e1mr24643533pjj.228.1669019440577;
+        Mon, 21 Nov 2022 00:30:40 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id im15-20020a170902bb0f00b00176c0e055f8sm8823141plb.64.2022.11.21.00.30.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 21 Nov 2022 00:30:39 -0800 (PST)
+Date:   Mon, 21 Nov 2022 14:00:36 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
+ corresponding clk
+Message-ID: <20221121083036.ppwfprrheuf7xl7c@vireshk-i7>
+References: <cover.1669012140.git.viresh.kumar@linaro.org>
+ <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
+ <Y3snGQet8yc7HnJK@hovoldconsulting.com>
+ <20221121073817.7ollj7jeixrx5og5@vireshk-i7>
+ <Y3sryFh84eK/sWKF@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 1/8] dt-bindings: power: supply: Add DT schema for
- Qualcomm SMBCHG
-Content-Language: en-US
-To:     Yassine Oudjana <yassine.oudjana@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Alejandro Tafalla <atafalla@dnyon.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-References: <20221120154625.57095-1-y.oudjana@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221120154625.57095-1-y.oudjana@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y3sryFh84eK/sWKF@hovoldconsulting.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,54 +78,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/11/2022 16:46, Yassine Oudjana wrote:
->>> +  interrupts:
->>> +    items:
->>> +      - description: Charger error
->>> +      - description: Charger inhibited
->>> +      - description: Charger precharge safety timer timeout
->>> +      - description: Charger charge safety timer timeout
->>> +      - description: Charger pre to fast charging switch threshold reached
->>> +      - description: Charger recharge threshold reached
->>> +      - description: Charger taper threshold reached
->>> +      - description: Charger charge termination threshold reached
->>> +      - description: Battery hot
->>> +      - description: Battery warm
->>> +      - description: Battery cold
->>> +      - description: Battery cool
->>> +      - description: Battery overvoltage
->>> +      - description: Battery low
->>> +      - description: Battery missing
->>> +      - description: Battery thermistor missing # unconfirmed
->>> +      - description: USB input undervolt
->>> +      - description: USB input overvolt
->>> +      - description: USB input source detected
->>> +      - description: OTG regulator failure
->>> +      - description: OTG regulator overcurrent
->>> +      - description: Automatic input current limiting done
->>> +      - description: USB ID pin changed
->>> +      - description: DC input undervolt
->>> +      - description: DC input overvolt
->>> +      - description: Power OK
->>> +      - description: Temperature shutdown
->>> +      - description: Watchdog timeout
->>> +      - description: Flash failure
->>> +      - description: OTST2 # unknown
->>> +      - description: OTST3 # unknown
->>
->> It seems you listed register interrupts, not physical pins. This should
->> be interrupt lines.
-> 
-> I'm not sure what I'm supposed to do here. I couldn't find an interrupt-lines
-> property used anywhere so that's not what you meant, right?
+On 21-11-22, 08:42, Johan Hovold wrote:
+> Ok, I was expected the devicetree update to through Bjorn's tree as I
+> imagine there may be conflicts otherwise.
 
-Are these physical interrupt lines this device has, register offsets or
-virtual interrupts (e.g. passed via irq_chip)? Definitely not the first
-and rather offsets for qpnpint_irq_domain_translate. Devicetree is not
-for describing register layout of devices. IOW, register layout does not
-change on different boards, because the device is exactly the same, so
-there is no point to put it into DTS.
+Dropped the DT patch now.
 
-Best regards,
-Krzysztof
+Mani, I believe the first patch in this series is still required.
+Without that, when the cpufreq driver calls dev_pm_opp_set_opp(), the
+OPP core may end up calling clk_set_rate(), which shouldn't be done in
+case of Qcom SoCs.
 
+I am not sure though, how it will work with sc8280xp. Can you please
+check ?
+
+-- 
+viresh
