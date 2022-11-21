@@ -2,99 +2,150 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6407632D43
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 20:49:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00632632DE6
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 21:26:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbiKUTtu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 14:49:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
+        id S230075AbiKUU0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 15:26:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiKUTtt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 14:49:49 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50A792B78
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 11:49:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669060188; x=1700596188;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=38xO/1DYtOcxoY97abJcMljpJqRJDhbQ82dJKHB8T50=;
-  b=azar4VwfGrqC6s4MJIB5/XOAW7HuHKQpEF+I2mG+vaUdmHxDC9+eXK3S
-   iDt4n+EJ6xInrII84bOWmGh28Czvtm76svwUuTeZ1PhlxvcUAtHYKvhDz
-   0rdvES8ArtvOd1NBXfRm2jK08EJjgYraUS0IAoW78UTJl0+26CnJQ+aII
-   f+ATOe+xsKt75ipmLQa2g0ryiYOAdkOvB4VQYWjGTqZ3P0q0uRGmbXB5Y
-   httGkqnqrN7x+n8awcotG21Q0PSy4JvIZjZPyMvbDT8QXLRyw4XRyI9LO
-   p0kHVzv7gAXwQQt0+Qu4txzAX6nwwuiXoD2Ymu8MG+iePL5JnDyte9y8t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="294038544"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="294038544"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 11:49:48 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="591882925"
-X-IronPort-AV: E=Sophos;i="5.96,182,1665471600"; 
-   d="scan'208";a="591882925"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 11:49:48 -0800
-Message-ID: <5d5d0657425b6f6a8e784d97c4fe13615c24d29b.camel@linux.intel.com>
-Subject: Re: [PATCH] platform/x86: intel-uncore-freq: add Emerald Rapids
- support
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Artem Bityutskiy <dedekind1@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux PM Mailing List <linux-pm@vger.kernel.org>
-Date:   Mon, 21 Nov 2022 11:49:47 -0800
-In-Reply-To: <20221121170032.3258772-1-dedekind1@gmail.com>
-References: <20221121170032.3258772-1-dedekind1@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+        with ESMTP id S229920AbiKUU0m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 15:26:42 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D2158036
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 12:26:41 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id p184so9461620iof.11
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 12:26:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BT3mLeHRkLjM2lO8vf497JZzDmMVUHMTAFUn4ckIutY=;
+        b=CdBYlIOSIqKuWicrjZMzvlZNXbIRaST36jwlM8ONNYvOVpe/IC9NEvEOCoewE8Dfl3
+         Lg9Nzn+n7z4wNA+t9/9Tt4vGcZM5eemgz4fghrdkzHQv/ECxyT7YXndJIVPwLXqQSSPD
+         IKbvtR8g4NcmXzURDq13WsIg1muQ9hpnoibAQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BT3mLeHRkLjM2lO8vf497JZzDmMVUHMTAFUn4ckIutY=;
+        b=Ai7a+5mChAURZn3ydG7vetszS34SKGyD+RQGYruEtrp7B+MPvJjMFWMw2yoouSJoT0
+         9eMTG4Uhk7AjIEXjpjzvYitgJ7AaCwmBsyqz0mkZkVWpewe7ciWZBnkx42QJ50kP0+Q0
+         bEfTV5Nx+GT2htmKShKrcNJ8nFZGjShkrtrmJX8I3yqtlvLref/JmfFf0bbZItV4yr6I
+         N3N07HwIcZJbcI4A7SnVmacVhInbkR7f+TqN0iRfk6nHXfTr+F+aRnPJ2bMLMts783uL
+         JEAs1cm9p8u/FWz5ACGaw/1oKSF0zuqM/uMch4FrW13NmVydUalj6AIH9V6CfiaViqzj
+         qRnQ==
+X-Gm-Message-State: ANoB5pkQUmnr3cgBO6aj8uSXATcnRmngPi5GYqbgpklCPwJaFi3jcNJf
+        5Qx+LI7MUmTaJpbdv2/e8dwEVfwFWeqpmw==
+X-Google-Smtp-Source: AA0mqf4viaC/2FMw9Yg+yVv4pZ9rf3EjSlzLe32WS/WlhlpTJfMnhBccItkmdgRrDse9ZmhxeOYQrA==
+X-Received: by 2002:a5d:8b5a:0:b0:6de:1b3c:e97d with SMTP id c26-20020a5d8b5a000000b006de1b3ce97dmr3989479iot.202.1669062400804;
+        Mon, 21 Nov 2022 12:26:40 -0800 (PST)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id m14-20020a92710e000000b0030014a5556bsm4159640ilc.69.2022.11.21.12.26.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 21 Nov 2022 12:26:39 -0800 (PST)
+Message-ID: <25b0ccf5-cc0e-370c-aef9-5fdfd11b2c30@linuxfoundation.org>
+Date:   Mon, 21 Nov 2022 13:26:38 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH] tools/cpupower: Choose first online CPU to display
+ details
+Content-Language: en-US
+To:     Saket Kumar Bhaskar <skb99@linux.vnet.ibm.com>,
+        linux-kernel@vger.kernel.org
+Cc:     trenn@suse.com, shuah@kernel.org, ray.huang@amd.com,
+        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20221121053530.103600-1-skb99@linux.vnet.ibm.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221121053530.103600-1-skb99@linux.vnet.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This should be also sent to
-
-Hans de Goede <hdegoede@redhat.com> (maintainer:X86 PLATFORM DRIVERS)
-Mark Gross <markgross@kernel.org> (maintainer:X86 PLATFORM DRIVERS)
-platform-driver-x86@vger.kernel.org (open list:X86 PLATFORM DRIVERS)
-
-On Mon, 2022-11-21 at 19:00 +0200, Artem Bityutskiy wrote:
-> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+On 11/20/22 22:35, Saket Kumar Bhaskar wrote:
+> The default output of cpupower info utils shows unexpected output
+> when CPU 0 is disabled.
 > 
-> Make Intel uncore frequency driver support Emerald Rapids by adding its
-> CPU
-> model to the match table. Emerald Rapids uncore frequency control is
-> the same
-> as in Sapphire Rapids.
+> Considering a case where CPU 0 is disabled, output of cpupower idle-info:
 > 
-> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Before change:
+> cpupower idle-info
+> CPUidle driver: pseries_idle
+> CPUidle governor: menu
+> analyzing CPU 0:
+>   *is offline
+> 
+> After change:
+> ./cpupower idle-info
+> CPUidle driver: pseries_idle
+> CPUidle governor: menu
+> analyzing CPU 0:
+>   *is offline
+> analyzing CPU 1:
+> 
+> Number of idle states: 2
+> Available idle states: snooze Shared Cede
+> snooze:
+> Flags/Description: snooze
+> Latency: 0
+> Usage: 919
+> Duration: 68227
+> Shared Cede:
+> Flags/Description: Shared Cede
+> Latency: 10
+> Usage: 99324
+> Duration: 67871518243
+> 
+> If -c option is not passed, CPU 0 was chosen as the default chosen CPU to
+> display details. However when CPU 0 is offline, it results in showing
+> unexpected output. This commit chooses the first online CPU
+> instead of CPU 0, hence keeping the output more relevant in all cases.
+> 
+> Somewhat similar logic to set all CPUs in default case is present in
+> cpufreq-set.c, cpuidle-set.c, cpupower-set.c. But here we have added
+> logic to stop at first online CPU.
+> 
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.vnet.ibm.com>
 > ---
->  drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c | 1 +
->  1 file changed, 1 insertion(+)
+>   tools/power/cpupower/utils/cpufreq-info.c  | 15 ++++++++++++---
+>   tools/power/cpupower/utils/cpuidle-info.c  | 15 ++++++++++++---
+>   tools/power/cpupower/utils/cpupower-info.c | 16 +++++++++++++---
+>   3 files changed, 37 insertions(+), 9 deletions(-)
 > 
-> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-
-> frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-
-> frequency.c
-> index 8f9c571d7257..00ac7e381441 100644
-> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-> @@ -203,6 +203,7 @@ static const struct x86_cpu_id
-> intel_uncore_cpu_ids[] = {
->         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,   NULL),
->         X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,   NULL),
->         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
-> +       X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
->         {}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
+> diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
+> index 0646f615fe2d..4001a5934494 100644
+> --- a/tools/power/cpupower/utils/cpufreq-info.c
+> +++ b/tools/power/cpupower/utils/cpufreq-info.c
+> @@ -508,6 +508,7 @@ int cmd_freq_info(int argc, char **argv)
+>   	unsigned int cpu = 0;
+>   	unsigned int human = 0;
+>   	int output_param = 0;
+> +	bool is_default = false;
+>   
+>   	do {
+>   		ret = getopt_long(argc, argv, "oefwldpgrasmybnc", info_opts,
+> @@ -572,9 +573,11 @@ int cmd_freq_info(int argc, char **argv)
+>   
+>   	ret = 0;
+>   
+> -	/* Default is: show output of CPU 0 only */
+> -	if (bitmask_isallclear(cpus_chosen))
+> -		bitmask_setbit(cpus_chosen, 0);
 
+Why can't we just use base_cpu here instead of 0 and it will
+all work without any more code - you can update the comment
+to say default is base_cpu info.
 
+thanks,
+-- Shuah
