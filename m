@@ -2,164 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D542631AEF
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 09:05:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B55BE631B58
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 09:27:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229662AbiKUIFf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 03:05:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S229921AbiKUI1E (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 03:27:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiKUIFe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 03:05:34 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BCC20F5E
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:04:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669017873;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5YGOF7GQAXN3aJbn8jn2NVbd+hFF/RuYzE0Amj271TY=;
-        b=hJeMlu8nNeDznmLseCPK/yPrY0O7IMU7joE6NBHy+OEMFtavse1d2m3+aIVu7LBIuU0yJb
-        fTncJUHhlAvojA6oOSG9Rbav56iFJRWihPzQvNmn+Uyfamu6aO7V/t36zg5h2vBVO1406r
-        nRJNujxx478kmx/gf5rOxIEVTQA0fRw=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-111-tYnUGwPFPHWXSTDJhYHO-Q-1; Mon, 21 Nov 2022 03:04:29 -0500
-X-MC-Unique: tYnUGwPFPHWXSTDJhYHO-Q-1
-Received: by mail-ej1-f72.google.com with SMTP id oz34-20020a1709077da200b007adc8d68e90so6115084ejc.11
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:04:29 -0800 (PST)
+        with ESMTP id S229491AbiKUI1D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 03:27:03 -0500
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A8F626D
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:27:02 -0800 (PST)
+Received: by mail-lj1-x22d.google.com with SMTP id k19so13696348lji.2
+        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 00:27:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wYa6qiy8lMPys5blH9J/G1eMKnRjWk2O1ZKygOJRkTQ=;
+        b=Cj2/VIzR/21o/tDbTWZPg8AGCS4nhfSg7B+uN9/AR/5LGg0FRaKRyalpThYZxC53mJ
+         pnbm+WJ9fCqM1NC8ka3B5R0z2fGv7B3oc/AMH+IuYEistzWxn6NkPDevW0qDkJLQuXyZ
+         bYo8jbLfTX6skcVDVIqtgCNxIT6bzhM3f/7GortQZEwVdTwtRwQF/6vEMDST+ioPEA0v
+         kxFNTuOyCF++tItPtJImlhbwQy9qjFTkL4RnpKEPpzwir3xS3iBMNqf4BFRCi3tSOt+T
+         CjEGYpiI5z3UAwO7fSltILV2sIZ0weSNBtrk2EW++azDJJtPkoBgb0OV6y5E0LEU+c3k
+         qCaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5YGOF7GQAXN3aJbn8jn2NVbd+hFF/RuYzE0Amj271TY=;
-        b=rL4KprhaF/Ga55jSYaqhIFKxwHo3bShyL+vQFetV6XOmvB3kCVZ19V+XtqU8XfVPwA
-         7Y3UGDOfekUMg/qw6irMOFfaYtWhBNj9LALl6ReVPb0tjFXuIg9O6g2dU7iJE9V/dXu7
-         igkhBUVdPd1tfQi+To4+VByV8xJu/xhGHbTniIAZk1rICzL7WIyTNDkL2pWIOTrUqD29
-         bKht/me8LpbfZgpR34H2gDkHLqKI44CBi5kCRdoYQNCWsLiFGOeh9Z/Xbnu2+hdSAx48
-         EXIutlezMjfcXryKcNEyeYfcqKbTAmKP182ClTCGUKfFrVNG9CF7oocDZFZsLoazxBxQ
-         cZSg==
-X-Gm-Message-State: ANoB5plLtmNDR/y4ZhhMxB/h+Nw1p8M8nj/rzQrOB5bibID4nUDaJugd
-        YXgVa0/VuP6smJEZ09xm6M+fT9UA5oDySmcra2Owf3I3bEqZiCuRiTqeRwjV6K5QR4AgkU5FhAT
-        CyUkzAfSIS2ceqI5gWJI=
-X-Received: by 2002:a05:6402:528f:b0:461:9cbd:8fba with SMTP id en15-20020a056402528f00b004619cbd8fbamr963611edb.19.1669017868563;
-        Mon, 21 Nov 2022 00:04:28 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf4Hf/b6wCLi3P9kt6qb4myqp9CrLlBTUp+aEl0sByPyWL1fI6b9pjmjCmu44IKgHz/1hlUzUQ==
-X-Received: by 2002:a05:6402:528f:b0:461:9cbd:8fba with SMTP id en15-20020a056402528f00b004619cbd8fbamr963592edb.19.1669017868340;
-        Mon, 21 Nov 2022 00:04:28 -0800 (PST)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id kz10-20020a17090777ca00b007933047f923sm4741438ejc.118.2022.11.21.00.04.27
+        bh=wYa6qiy8lMPys5blH9J/G1eMKnRjWk2O1ZKygOJRkTQ=;
+        b=JPcJ+8ja33/7hckrsDPQAJcdHwyrXXbkioEzT7cHp70hlXKLDJnm0RTS/yAUX0qeRE
+         lmvm5RmPghf/iqKQygM5wxPAVwZtwHi5fz7nwIRoPTofBRiqGMFy50P9a2AWYCzPZSUU
+         hQKGM2e6MSqoFL4q7UPxNjOFF8rfZaFgdL5U924STm4+aSdW/XT6xoxaHp3nq9Wio7l1
+         MKw8wSlvakB1o93Y3RW/WXO3iE3l4KPXZS7RaZbRz4740dYdUf8N8gHhGBn4ns/mymT8
+         sxZeyCAw0tO7CXSfO4uJOvtK8tcUY17NNGmAnbVu6KTSSvl5F6nu5LjnrDlSOQc1cSa8
+         U0rg==
+X-Gm-Message-State: ANoB5png/2CGrT0TbVXJ0AueWC07P2RRywf2l13q1Ka2dFUDqzXGQnzL
+        /ZRX0uGnizr6FF9GIA5GP6RG/Q==
+X-Google-Smtp-Source: AA0mqf5RPWYa6p3CjzIW6ePaZSL0+GAKbQbFHq0c225RFkodYWsPwYzdEjwB8RTo/+JQghTXRFRFow==
+X-Received: by 2002:a2e:b5ae:0:b0:277:3df:90d0 with SMTP id f14-20020a2eb5ae000000b0027703df90d0mr384156ljn.234.1669019220719;
+        Mon, 21 Nov 2022 00:27:00 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id 9-20020a2eb949000000b0026dcf0cbb97sm1379191ljs.137.2022.11.21.00.26.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 21 Nov 2022 00:04:27 -0800 (PST)
-Message-ID: <2ae29632-58e9-4ee5-3d59-397bff4932fc@redhat.com>
-Date:   Mon, 21 Nov 2022 09:04:27 +0100
+        Mon, 21 Nov 2022 00:27:00 -0800 (PST)
+Message-ID: <795deac4-71fe-d40b-a3b6-855eb3875ad1@linaro.org>
+Date:   Mon, 21 Nov 2022 09:26:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 2/2] power: supply: bq25890: Add HiZ mode support
-To:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sebastian Reichel <sre@kernel.org>
-References: <20221109221504.79562-1-marex@denx.de>
- <20221109221504.79562-2-marex@denx.de>
- <ffd849db-fdb5-8578-85c2-74a8e030d86a@redhat.com>
- <1cde6f13-c131-332f-44f2-9a6a80b72330@redhat.com>
- <c0cc1774-8373-ec5d-29c7-5f7d056821b3@denx.de>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/8] dt-bindings: power: supply: Add DT schema for
+ Qualcomm SMBCHG
 Content-Language: en-US
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <c0cc1774-8373-ec5d-29c7-5f7d056821b3@denx.de>
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alejandro Tafalla <atafalla@dnyon.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+References: <20221120154625.57095-1-y.oudjana@protonmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221120154625.57095-1-y.oudjana@protonmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi,
-
-On 11/21/22 01:50, Marek Vasut wrote:
-> On 11/20/22 22:29, Hans de Goede wrote:
+On 20/11/2022 16:46, Yassine Oudjana wrote:
+>>> +  interrupts:
+>>> +    items:
+>>> +      - description: Charger error
+>>> +      - description: Charger inhibited
+>>> +      - description: Charger precharge safety timer timeout
+>>> +      - description: Charger charge safety timer timeout
+>>> +      - description: Charger pre to fast charging switch threshold reached
+>>> +      - description: Charger recharge threshold reached
+>>> +      - description: Charger taper threshold reached
+>>> +      - description: Charger charge termination threshold reached
+>>> +      - description: Battery hot
+>>> +      - description: Battery warm
+>>> +      - description: Battery cold
+>>> +      - description: Battery cool
+>>> +      - description: Battery overvoltage
+>>> +      - description: Battery low
+>>> +      - description: Battery missing
+>>> +      - description: Battery thermistor missing # unconfirmed
+>>> +      - description: USB input undervolt
+>>> +      - description: USB input overvolt
+>>> +      - description: USB input source detected
+>>> +      - description: OTG regulator failure
+>>> +      - description: OTG regulator overcurrent
+>>> +      - description: Automatic input current limiting done
+>>> +      - description: USB ID pin changed
+>>> +      - description: DC input undervolt
+>>> +      - description: DC input overvolt
+>>> +      - description: Power OK
+>>> +      - description: Temperature shutdown
+>>> +      - description: Watchdog timeout
+>>> +      - description: Flash failure
+>>> +      - description: OTST2 # unknown
+>>> +      - description: OTST3 # unknown
 >>
->>
->> On 11/19/22 14:52, Hans de Goede wrote:
->>> Hi,
->>>
->>> On 11/9/22 23:15, Marek Vasut wrote:
->>>> The bq25890 is capable of disconnecting itself from the external supply,
->>>> in which case the system is supplied only from the battery. This can be
->>>> useful e.g. to test the pure battery operation, or draw no power from
->>>> USB port.
->>>>
->>>> Implement support for this mode, which can be toggled by writing 0 or
->>>> non-zero to sysfs 'online' attribute, to select either offline or online
->>>> mode.
->>>>
->>>> The IRQ handler has to be triggered to update chip state, as switching
->>>> to and from HiZ mode does not generate an interrupt automatically.
->>>>
->>>> Signed-off-by: Marek Vasut <marex@denx.de>
->>>> ---
->>>> Cc: Hans de Goede <hdegoede@redhat.com>
->>>> Cc: Sebastian Reichel <sebastian.reichel@collabora.com>
->>>> Cc: Sebastian Reichel <sre@kernel.org>
->>>
->>> Thanks, patch looks good to me:
->>>
->>> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
->>>
->>> Also your timing is excellent :)  As a hobby project I'm working
->>> on a x86 Lenovo Android tablet which has 2 separate batteries and
->>> each battery has its own bq25892 chip.
->>>
->>> This requires putting the secondary bq25892 in Hi-Z mode when
->>> e.g. enabling the 5V USB/OTG boost regulator on the primary
->>> bq25892 to make the micro-usb output 5V.
->>>
->>> Which is functionality which I can nicely build on top of this
->>> series.
->>
->> So one thing which I noticed while working on my own stuff
->> on top of this, is that the charger IC resets (disables) Hi-Z
->> mode when its internal PG (power-good) signal goes from false
->> to true.
->>
->> The Android kernel fork for the tablet I'm working on detects
->> the PG false -> true transition in its IRQ handler and then
->> re-enabled Hi-Z mode if it was requested.
->>
->> I wonder if we should do something similar: remember the last
->> value written to /sys/class/power_supply/bq2589o-charger/online
->> and then in the IRQ handler if Hi-Z mode was requested re-enable
->> Hi-Z mode ?
+>> It seems you listed register interrupts, not physical pins. This should
+>> be interrupt lines.
 > 
-> Uhhhhh, that sounds like the HiZ mode is unreliable .
+> I'm not sure what I'm supposed to do here. I couldn't find an interrupt-lines
+> property used anywhere so that's not what you meant, right?
 
-I think it is working as designed (although this is not documented)
-the charger is designed to be able to operate autonomously, so it
-makes sense to clear Hi-Z mode when a charger is unplugged + re-plugged.
+Are these physical interrupt lines this device has, register offsets or
+virtual interrupts (e.g. passed via irq_chip)? Definitely not the first
+and rather offsets for qpnpint_irq_domain_translate. Devicetree is not
+for describing register layout of devices. IOW, register layout does not
+change on different boards, because the device is exactly the same, so
+there is no point to put it into DTS.
 
-> Of course, there seems to be no way to completely inhibit the PG detection, is there ?
-
-not that I have been able to find.
-
-> I wonder whether we should support this kind of workaround at all ?
-
-You mean Hi-z mode itself? That is definitely useful to have, necessary
-actually for the tablet I'm working on in my spare time now.
-
-Or do you mean the Android workaround to re-enable Hi-Z mode in the IRQ
-handler ?
-
-Regards,
-
-Hans
+Best regards,
+Krzysztof
 
