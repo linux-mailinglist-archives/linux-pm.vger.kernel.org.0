@@ -2,102 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87031632E70
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 22:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B3E632E7D
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 22:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230024AbiKUVJA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 16:09:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36230 "EHLO
+        id S229882AbiKUVKr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 16:10:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbiKUVI7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 16:08:59 -0500
-Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512C3C6622
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 13:08:48 -0800 (PST)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id xE22ozk4OuZP6xE22oT8A1; Mon, 21 Nov 2022 22:08:46 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 21 Nov 2022 22:08:46 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <2e4c6ee6-d8d5-b4fe-ab60-cb6f440c2dee@wanadoo.fr>
-Date:   Mon, 21 Nov 2022 22:08:45 +0100
+        with ESMTP id S229953AbiKUVKq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 16:10:46 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CC2C661B;
+        Mon, 21 Nov 2022 13:10:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B7432612AE;
+        Mon, 21 Nov 2022 21:10:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF947C433D6;
+        Mon, 21 Nov 2022 21:10:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669065044;
+        bh=wgXhA1V/D2pb+oIfFK+cZa9q7Str/LyaiLVk1+km9N4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aR/tdGKg39lLzLyQ3fFu6wbyWzr+0SwXrkUD/GH3de+xT26VuBfQLFFAPxZWhw/dK
+         H+Ks83eBhTlR79ktC9EdrIfQ35RVhmrrGMxTE43Mi7w8OCmTarbSJPWCfS0cvZH6al
+         AJEmfVPR3AuquPRs9jYK9jTPfG5r3TD1WDpkecNsYmgkqOZ4oTRl4BHQ/ftQknKenk
+         TjjLBwb2cA+EfJ9jcIKpA1od75+lideVx4XZnmF2qS/CIsf0vlwpSJQtnIFAIPzwNX
+         FIo2T1aTVkfAIqC19HIIMV+x8qoUeBsRZso//LGCvsSivdzSy41Co5ep65rWEaU8S6
+         P4CJIeC5Jhbhg==
+Date:   Mon, 21 Nov 2022 21:10:39 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     anup@brainfault.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+Message-ID: <Y3vpT2XoylY4i2kx@spud>
+References: <20221121205647.23343-1-palmer@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] interconnect: qcom: icc-rpmh: Fix an error handling path
- in qcom_icc_rpmh_probe()
-Content-Language: fr
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-References: <ec929c37c655ede7bb42e426354093c8a1377a0b.1668947686.git.christophe.jaillet@wanadoo.fr>
- <COHSZZ9A5570.1P4NTXRE9IRZR@otso>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <COHSZZ9A5570.1P4NTXRE9IRZR@otso>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121205647.23343-1-palmer@rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Le 21/11/2022 à 08:42, Luca Weiss a écrit :
-> Hi Christophe,
+On Mon, Nov 21, 2022 at 12:56:47PM -0800, Palmer Dabbelt wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
 > 
-> On Sun Nov 20, 2022 at 1:35 PM CET, Christophe JAILLET wrote:
->> If of_platform_populate() fails, some resources need to be freed as already
->> done in the other error handling paths.
->>
->> Fixes: 57eb14779dfd ("interconnect: qcom: icc-rpmh: Support child NoC device probe")
-> 
-> I believe the same needs to be applied to icc-rpm.c.
+> As per [1], whether or not the core can wake up from non-retentive
+> suspend is a platform-specific detail.  We don't have any way to encode
+> that, so just stop using them until we've sorted that out.
 
-I'll give it a look and send a v2.
+For anyone playing along at home, Anup had a proposal for encoding this
+information (yoinked from the GH issue below):
+https://lore.kernel.org/all/20220727114302.302201-1-apatel@ventanamicro.com/> 
 
-CJ
+> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
+> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> ---
+> 
+> This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
+> Events are stopped during CPU suspend"), which fixes suspend on the D1
+> but breaks timers everywhere.
 
-> 
-> Also there shouldn't be an empty line here between Fixes: and Signed-off-by:
-> 
-> Regards
-> Luca
-> 
->>
->> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->> ---
->>   drivers/interconnect/qcom/icc-rpmh.c | 7 +++++--
->>   1 file changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
->> index fd17291c61eb..5168bbf3d92f 100644
->> --- a/drivers/interconnect/qcom/icc-rpmh.c
->> +++ b/drivers/interconnect/qcom/icc-rpmh.c
->> @@ -235,8 +235,11 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
->>   	platform_set_drvdata(pdev, qp);
->>   
->>   	/* Populate child NoC devices if any */
->> -	if (of_get_child_count(dev->of_node) > 0)
->> -		return of_platform_populate(dev->of_node, NULL, NULL, dev);
->> +	if (of_get_child_count(dev->of_node) > 0) {
->> +		ret = of_platform_populate(dev->of_node, NULL, NULL, dev);
->> +		if (ret)
->> +			goto err;
->> +	}
->>   
->>   	return 0;
->>   err:
->> -- 
->> 2.34.1
-> 
-> 
+FWIW the revert is at:
+https://lore.kernel.org/linux-riscv/20221023185444.678573-1-conor@kernel.org/
 
+Commit message is probably a little lacking as I didn't understand the
+problem when I wrote it. I'll respin the revert with a tidier message
+tomorrow.
+
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> index 05fe2902df9a..9d1063a54495 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
+>  	if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
+>  	    state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
+>  		return false;
+> +
+> +	/*
+> +	 * Whether or not RISC-V systems deliver interrupts to harts in a
+> +	 * non-retentive suspend state is a platform-specific detail.  This can
+> +	 * leave the hart unable to wake up, so just mark these states as
+> +	 * unsupported until we have a mechanism to expose these
+> +	 * platform-specific details to Linux.
+> +	 */
+> +	if (state & SBI_HSM_SUSP_NON_RET_BIT)
+> +		return false;
+> +
+>  	return true;
+>  }
+>  
+> -- 
+> 2.38.1
+> 
