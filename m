@@ -2,69 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4412F6319D4
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 07:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC286319F2
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 07:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbiKUGpO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 01:45:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
+        id S229568AbiKUG6O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 01:58:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiKUGpN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 01:45:13 -0500
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906371A22D
-        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
-Received: by mail-pg1-x52e.google.com with SMTP id f3so10325923pgc.2
-        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
+        with ESMTP id S229455AbiKUG6D (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 01:58:03 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED32117880
+        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 22:57:54 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id ci10so3432206pjb.1
+        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 22:57:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
-        b=oyqKPJqV6ChsbvcTQN+xTD9PeymSUxzZ4mMliDJurfoOfDB9tEnQWdI7PQaKjC1D0T
-         LIHx/SMR/6Q/7er1lusBloufr8W4xin7Qq2hfmIpZnRdWzTrEgCcgBJA2GhjmelaXvsI
-         V7iWawCflMlMvGxfITd89DW2MG1jgB1MG167Rh5uUUwRYS17aFVz9aT+XBY/hlbLXUwY
-         CII1XP/HqWT5StaQo6HXfG3eMIcMvfjbKa9TWZCNplJ5aPb92KuZsbTfZ/2Z9JSee89L
-         mm+TGdN+02s25vkFuC/G+eQWp3OjSa/6P8LrPLB2/LUD8mcMO7Mxdimiu+/fdxahIwPo
-         NxTg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yAbnAM+ovW8h6+jx0Tfr4v7il7axJFcd8q4vAg9pxqU=;
+        b=YASVB2+1xzQoFStyoTpwjLX16ovU0ApOmI8Zw4lo8GoOiOVAapW0jg44/t2Lh/Y3b8
+         jwlCK2hSH4iBKdv6uZgisHKDqV0ZCo9YNQ2oK0+VbMiPa3hM/Jl4vHb4wJW4dOsZneYQ
+         ZeyWNRNQAboOn5BinYG1bbUpUtQ9SFqd/zR7N3RLL0G/Yt2PTA+SOK9ZhskLc8e05oXe
+         zb0xESU22G4S4QuOPAlUCY7yfeEXaElVUbwSDDjxeyCmqOe2NKnbHIha8i/Gwq7H5FVk
+         jUYppWpZb9RC8AlaRtZUkaju0BTZ6UNB94fsXCna+BkJGgQkVwYTXp1fbEzQW5jnOitC
+         LZJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
-        b=Eej7j3KFhzz2LEmMHyWcVEwI8zbThVUGsmj9RVx8mE8IymW4bEkUSTm+27/q1ojwRM
-         pPOTQcdcd6kbL4wY9kzmtFpZn+9ZpCDN86ZUBd78W3zzK1NpqKdkcQpE3vRKfy04IMUH
-         thSHohmcWl9xYHrZl5vP+39ehkJLNqhEpU2JM3uLRLtOa+2HSl7jejq4ur1vl8XTUcQu
-         6Ke/DefKVC5AV8dxBLDXaI336Ag/P0fOkUmszMf9fjJ42A1lYZgmEK6lv5IcbRmZQC8B
-         WPV8UnoUPA1U2H0hvQgI162pZ9BS7XAS2zeNs+qJG0towqynlWLOH/hKjdrMouPg/Vqp
-         fhxA==
-X-Gm-Message-State: ANoB5pkQS4MrMEQj0r4vwb9cWQMwSiYBPSJTfrz/xmHwjAVDypBSdA2A
-        e6a7OxYOu0IWw+xfYUiXRqk2
-X-Google-Smtp-Source: AA0mqf6ddMnQGXatGtIKDuBbyT3kbY7n1kpxrE0Vd9I/tQTaSSyurICcwD9LRXBLZlh0j9EpMLqbdA==
-X-Received: by 2002:a63:5007:0:b0:45f:beda:4116 with SMTP id e7-20020a635007000000b0045fbeda4116mr789381pgb.618.1669013110909;
-        Sun, 20 Nov 2022 22:45:10 -0800 (PST)
-Received: from thinkpad ([59.92.99.222])
-        by smtp.gmail.com with ESMTPSA id d187-20020a6236c4000000b0053e62b6fd22sm7752028pfa.126.2022.11.20.22.45.06
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yAbnAM+ovW8h6+jx0Tfr4v7il7axJFcd8q4vAg9pxqU=;
+        b=5dDxOPpJXP2gwNYFvdu77UT0gqQGb4oa7rdaCCn/Y5lC3BHPVH6BUlul8/cWGspClM
+         ELeeBiTb+d4J42wDkgaTXSMJwzti4pYSkRwd31LyMqHZj+/MolWeMkLoMgLiJGLwSBKy
+         OgMODvNIAWi5NOiKGuec5N17OVUgAt3E03jPiR14oMYSb3z48SfJvSg04boTfmQRCCEp
+         GkMtisXmJ9RdfrO7OZd9yMn+sTBb3m98Or+/uywSBwng+H6eq0gSgEg+ZXU3aHOwLHgg
+         lqmFAtVkxfYxBJNNyoeMpHhUDHbNb9flpCXtexwlx5z5TyNncM+oDBTzD3u+ouUtuVmd
+         xKiw==
+X-Gm-Message-State: ANoB5plDf/R7e+gpoda3lUWl9kUYMPTOZqN3Hzq8KL5bknKoxyQR6bQ4
+        aWSrtQJAha0b8pjWht5vA6X/SQ==
+X-Google-Smtp-Source: AA0mqf6C0AKgl/pkwD/lEgIAwvxAkNrduTECfE85HLT5JQCnu8FuOzL2mhKwZkrCRZiGS2k9qBRL3g==
+X-Received: by 2002:a17:90a:dc13:b0:212:c87e:dc8b with SMTP id i19-20020a17090adc1300b00212c87edc8bmr19158185pjv.229.1669013874464;
+        Sun, 20 Nov 2022 22:57:54 -0800 (PST)
+Received: from localhost ([122.172.85.60])
+        by smtp.gmail.com with ESMTPSA id y10-20020a17090322ca00b0017bb38e4588sm8905027plg.135.2022.11.20.22.57.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 20 Nov 2022 22:45:09 -0800 (PST)
-Date:   Mon, 21 Nov 2022 12:15:07 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
-Message-ID: <20221121064507.GC11945@thinkpad>
-References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
- <20221121051959.hphzjuaif423xwn6@vireshk-i7>
+        Sun, 20 Nov 2022 22:57:53 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>, johan@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] OPP: Disallow "opp-hz" property without a corresponding clk
+Date:   Mon, 21 Nov 2022 12:27:46 +0530
+Message-Id: <cover.1669012140.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221121051959.hphzjuaif423xwn6@vireshk-i7>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -75,53 +78,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 10:49:59AM +0530, Viresh Kumar wrote:
-> On 17-11-22, 11:01, Manivannan Sadhasivam wrote:
-> > Hello,
-> > 
-> > This series adds clock provider support to the Qcom CPUFreq driver for
-> > supplying the clocks to the CPU cores in Qcom SoCs.
-> > 
-> > The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
-> > clocks to the CPU cores. But this is not represented clearly in devicetree.
-> > There is no clock coming out of the CPUFreq HW node to the CPU. This created
-> > an issue [1] with the OPP core when a recent enhancement series was submitted.
-> > Eventhough the issue got fixed in the OPP framework in the meantime, that's
-> > not a proper solution and this series aims to fix it properly.
-> > 
-> > There was also an attempt made by Viresh [2] to fix the issue by moving the
-> > clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
-> > since those clocks belong to the CPUFreq HW node only.
-> > 
-> > The proposal here is to add clock provider support to the Qcom CPUFreq HW
-> > driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
-> > This correctly reflects the hardware implementation.
-> > 
-> > The clock provider is a simple one that just provides the frequency of the
-> > clocks supplied to each frequency domain in the SoC using .recalc_rate()
-> > callback. The frequency supplied by the driver will be the actual frequency
-> > that comes out of the EPSS/OSM block after the DCVS operation. This frequency
-> > is not same as what the CPUFreq framework has set but it is the one that gets
-> > supplied to the CPUs after throttling by LMh.
-> > 
-> > This series has been tested on SM8450 based dev board with the OPP hack removed
-> > and hence there is a DTS change only for that platform. Once this series gets
-> > accepted, rest of the platform DTS can also be modified and finally the hack on
-> > the OPP core can be dropped.
-> 
-> Applied. Thanks.
-> 
-> If you get review comments later on, please send incremental patches
-> for that.
-> 
+This removes the special code added by the commit 2083da24eb56 ("OPP:
+Allow multiple clocks for a device"), to make it work for Qcom SoC.
 
-Sure thing.
+In qcom-cpufreq-hw driver, we want to skip clk configuration that
+happens via dev_pm_opp_set_opp(), but still want the OPP core to parse
+the "opp-hz" property so we can use the freq based OPP helpers.
 
-Thanks,
-Mani
+The DT for Qcom SoCs is fixed now and contain a valid clk entry, and we
+no longer need the special handling of the same in the OPP core. Update Qcom
+driver as well to disallow freq update to the clk.
 
-> -- 
-> viresh
+Mani, can you give this a try again please, thanks ? I have only compile tested
+this.
+
+Viresh Kumar (2):
+  cpufreq: qcom-cpufreq-hw: Register config_clks helper
+  OPP: Disallow "opp-hz" property without a corresponding clk
+
+ drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++++++++---
+ drivers/opp/core.c                | 14 -------------
+ drivers/opp/debugfs.c             |  2 +-
+ 3 files changed, 32 insertions(+), 18 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.31.1.272.g89b43f80a514
+
