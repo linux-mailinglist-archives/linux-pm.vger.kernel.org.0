@@ -2,101 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C39A632CDF
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 20:19:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031F7632CEF
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 20:24:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbiKUTTJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 14:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
+        id S231447AbiKUTYJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 14:24:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231344AbiKUTS4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 14:18:56 -0500
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03C613DD1;
-        Mon, 21 Nov 2022 11:18:53 -0800 (PST)
-Received: by mail-qv1-f43.google.com with SMTP id df6so6436067qvb.0;
-        Mon, 21 Nov 2022 11:18:53 -0800 (PST)
+        with ESMTP id S229604AbiKUTYH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 14:24:07 -0500
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB96C83E9B;
+        Mon, 21 Nov 2022 11:24:05 -0800 (PST)
+Received: by mail-qt1-f173.google.com with SMTP id a27so7899002qtw.10;
+        Mon, 21 Nov 2022 11:24:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qNAiL7GtA1WBt+BkHFGHuULkAkKvbYHFnVpk3923atI=;
-        b=3P6I+ntXmu4qthWFKbSMEy7vsR752oIf8wVgxeUp+rQ8KdML8kZf4suQf+WANKT7gb
-         A6xQ2AHGXCyUzjWURed/icxFwkORJgqtyjppe0mKRbveAuQ/Xha/3JZCRIgwKwyHRm9s
-         kbgqT3VvK2lQTXXvIBPFmqkF+I5+AWB7G4eE87O15JA8/NdigZJ12rCES1WPfRbrk8JL
-         ruLMna4JaL1YiE45LuX3Et2qzWjOVytTnjjrd0qbV6gixVHLouIv/6M8zq30fSn8oCdb
-         4ZZijVZb3p+7B3rc+lLvQtv4G0d/f6GA1Wkn01t51R56I05F8cIEHCforXlNxTUYOFux
-         hSxw==
-X-Gm-Message-State: ANoB5pliaTndG4Kw6J/Lq2jWBbQIShFL5qt6l3TIrlJ+6GUIu3jRG7by
-        16brzWlfD36phI03LrI62UVf04IfbwFbY9FHuzA=
-X-Google-Smtp-Source: AA0mqf7ZEXQmcbAWV6wu8t13pwcBcGe7f50Iohz07FB/6Nh1Vr2GMqLcKS6mbVlav8zjXuwB7ylqI3uIaHOCTxxVRCo=
-X-Received: by 2002:a0c:c589:0:b0:4b1:a9ac:21de with SMTP id
- a9-20020a0cc589000000b004b1a9ac21demr489868qvj.119.1669058332574; Mon, 21 Nov
- 2022 11:18:52 -0800 (PST)
+        bh=Kbe2rrFrE8iqIK4HOHO2Z5jIsXR7SbwqXE/dnI/lSJc=;
+        b=l0nL01/00rALQo/1Gr/kMRdKau7IctZmFMl8JIosGqGxLBzKA37Reqi/96d8AdcPJs
+         5x6YMYYePKNF3ViOHUj8flL2BDRgZKzmzfuoaH3Q9oS44Qyal5sUEfDl+OdUDetDlWj1
+         F2agUXXLIPVKfyd26IG3B9GPEn6q7iy6yBJmxa0HgfuaxmkShgRPvHpPITIOvgON6UEw
+         5U6MBMrbUyNbx7FKfN1NVt2irk7dRCvY8edVkvqdjNqpFsIss9tbiTjSVx2MGfLgcKS9
+         bE5/gLGVNBIuNl6GlqJODeis/EkVCr4CGwmxansyNEoR79xYZwbVxNNfS5ky/bXqc/Xm
+         kn9g==
+X-Gm-Message-State: ANoB5pmX9OV9cOQVRD86B/JHhYQd8ihgJcYNHGrKf85tPryWk8gCmqqN
+        JPTw0KtdOpKB9hIRFzNPO6RFbohSqK9bmE3HhDI=
+X-Google-Smtp-Source: AA0mqf76HmMbcxJ/PVpJ8gzxxii/dOkbT1+CwiN0eW640s4fyz/ap7xut7oHOZ/8Zqld52IvNGk2fCKQtkXlSKnfS14=
+X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
+ l2-20020ac81482000000b003a51e6f7e05mr1269302qtj.357.1669058644889; Mon, 21
+ Nov 2022 11:24:04 -0800 (PST)
 MIME-Version: 1.0
-References: <20221110195732.1382314-1-wusamuel@google.com> <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
- <880b7332-562c-4934-4e92-493b112568c9@arm.com> <CAG2Kctp_VwryYTYMoqe6EBKFs-FZuNcB94e_MzLgBN9jJ5tpQA@mail.gmail.com>
-In-Reply-To: <CAG2Kctp_VwryYTYMoqe6EBKFs-FZuNcB94e_MzLgBN9jJ5tpQA@mail.gmail.com>
+References: <20221117073541.3350600-1-Perry.Yuan@amd.com>
+In-Reply-To: <20221117073541.3350600-1-Perry.Yuan@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 21 Nov 2022 20:18:41 +0100
-Message-ID: <CAJZ5v0iNjPAAn0-uygpJe0ya_LW7pfF4C8OHd+8EMLg+Ws=02Q@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
-To:     Sam Wu <wusamuel@google.com>
-Cc:     Lukasz Luba <lukasz.luba@arm.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 21 Nov 2022 20:23:54 +0100
+Message-ID: <CAJZ5v0gZxQOmHsx6=rwuKQbhi-tUTW1nvHk2wY3xpSEJgh+AVg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] AMD Pstate driver Urgent Change
+To:     Perry Yuan <Perry.Yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org, Mario.Limonciello@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Deepak.Sharma@amd.com, Shimmer.Huang@amd.com, Li.Meng@amd.com,
+        Xiaojian.Du@amd.com, wyes.karny@amd.com, gautham.shenoy@amd.com,
+        ananth.narayan@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 18, 2022 at 2:00 AM Sam Wu <wusamuel@google.com> wrote:
+On Thu, Nov 17, 2022 at 8:36 AM Perry Yuan <Perry.Yuan@amd.com> wrote:
 >
-> On Wed, Nov 16, 2022 at 3:35 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
-> > Which mainline kernel version you use in pixel6?
-> I am using kernel version 6.1-rc5.
-> >
-> > Could you elaborate a bit how is it possible?
-> > Do you have the sg_policy setup properly (and at right time)?
-> > Do you have the cpu capacity from arch_scale_cpu_capacity()
-> > set correctly and at the right time during this cpufreq
-> > governor setup?
-> >
-> > IIRC in Android there is a different code for setting up the
-> > cpufreq sched governor clones. In mainline we don't have to do
-> > those tricks, so this might be the main difference.
-> This behavior is seen on the mainline kernel. There isn't any vendor code
-> modifying the behavior, and the schedutil governor is being used.
-> >
-> > Could you trace the value that is read from
-> > arch_scale_cpu_capacity() and share it with us?
-> > I suspect this value changes in time in your kernel.
-> There's an additional CPU capacity normalization step during
-> init_cpu_capacity_callback() that does not happen until all the CPUs come
-> online. However, the sugov_start() function can be called for a subset of
-> CPUs before all the CPUs are brought up and before the normalization of
-> the CPU capacity values, so there could be a stale value stored
-> in sugov_policy.max field.
+> The patchset changed amd-pstate driver as built-in type to resolve the
+> driver loading sequence problem, otherwise the acpi-cpufreq driver will
+> be loaded as the default cpufreq scaling driver instead of amd-pstate.
+>
+> Some new kernel parameters are added to allow user to disable pstate driver
+> and load driver with passive mode which use governors to do the
+> frequency scaling control.
+>
+> * `amd_pstate=disabled` or no parameters will not load pstate driver.
+> * `amd_pstate=passive` will load pstate driver with passive mode.
+>
+> Set the `amd_pstate` driver disabled by default because of performance
+> degradation on a number of AMD ASICs in the passive mode driver,
+> especially the shared memory support processors.
+>
+> EPP support for the amd_pstate driver is under review. With EPP support,
+> the said performance issue is resolved. Once that gets upstream,
+> the `active` mode amd_pstate_epp driver may be enabled by default.
+>
+> Changes from v2:
+>  * pick up Acked-by flag of Huang Rui
+>  * fix typo in the cover letter
+>
+> Changes from v1:
+>  * fix commit info in v1 patch PATCH 4/5
+>  * pick up Reviewed-by flag of Gautham R. Shenoy
+>  * pick up Tested-by flag of  Wyes Karny
+>
+> v2: https://lore.kernel.org/lkml/20221117071910.3347052-1-Perry.Yuan@amd.com/
+> v1: https://lore.kernel.org/lkml/20221117024955.3319484-1-Perry.Yuan@amd.com/
+>
+> Perry Yuan (4):
+>   cpufreq: amd-pstate: change amd-pstate driver to be built-in type
+>   cpufreq: amd-pstate: add amd-pstate driver parameter for mode
+>     selection
+>   Documentation: amd-pstate: add driver working mode introduction
+>   Documentation: add amd-pstate kernel command line options
+>
+> Wyes Karny (1):
+>   cpufreq: amd-pstate: cpufreq: amd-pstate: reset MSR_AMD_PERF_CTL
+>     register at init
+>
+>  .../admin-guide/kernel-parameters.txt         | 11 +++++
+>  Documentation/admin-guide/pm/amd-pstate.rst   | 30 +++++-------
+>  drivers/cpufreq/Kconfig.x86                   |  2 +-
+>  drivers/cpufreq/amd-pstate.c                  | 49 +++++++++++++------
+>  4 files changed, 59 insertions(+), 33 deletions(-)
+>
+> --
 
-OK, the revert has been applied as 6.1-rc material, thanks!
+I have applied this series as 6.1-rc7 material.
+
+Please let me know if you'd rather want to defer it till 6.2-rc1.
+
+Thanks!
