@@ -2,146 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACAC06319A5
-	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 07:08:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4412F6319D4
+	for <lists+linux-pm@lfdr.de>; Mon, 21 Nov 2022 07:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiKUGIu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 01:08:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S229747AbiKUGpO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 01:45:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKUGIt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 01:08:49 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4017F26558;
-        Sun, 20 Nov 2022 22:08:49 -0800 (PST)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2AL5cies010378;
-        Mon, 21 Nov 2022 06:08:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ulsqLyWqyRYuCvKnm4ocqOn+XybCvjEB/c2PZ+aWPJs=;
- b=lTp9/U80IFN4vyriIm7yRJb386SRXKWy5Cpxi9Vt7GOWlI96gZfDWh1BHJF+mwGPdzf5
- rvWE8jFghmaMQhrgsmZN/18GXtGVVWOK4ETFlghFP/i5YJujrRHKfgqvmQd6Pi2bhmrK
- 9dzPTYJ3AZETxNGBoyMrQPNX2JtCvFHvumjMg7uZKQB8eYjd4BKsy2Smh0NBL1E5yZLI
- ecyhL7wV/RwcEfkP0AuypiWdQQirYMglo+gOqXDhRxAWnXh6EYees16vN8xGmJRWVg+Q
- wCMtcNtzEVP2JOYGsrJ5OsMCMNi/xqxWvLuG8sEGR8rV/0DYXPO9jbJrRxZpiFgFBXlF 7g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kxrf5kjgb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 06:08:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2AL68YO9021869
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 21 Nov 2022 06:08:34 GMT
-Received: from [10.216.54.201] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Sun, 20 Nov
- 2022 22:08:29 -0800
-Message-ID: <8ca27fcb-b146-3ea7-a042-55f99e0ae3fb@quicinc.com>
-Date:   Mon, 21 Nov 2022 11:38:16 +0530
+        with ESMTP id S229772AbiKUGpN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 01:45:13 -0500
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906371A22D
+        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
+Received: by mail-pg1-x52e.google.com with SMTP id f3so10325923pgc.2
+        for <linux-pm@vger.kernel.org>; Sun, 20 Nov 2022 22:45:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
+        b=oyqKPJqV6ChsbvcTQN+xTD9PeymSUxzZ4mMliDJurfoOfDB9tEnQWdI7PQaKjC1D0T
+         LIHx/SMR/6Q/7er1lusBloufr8W4xin7Qq2hfmIpZnRdWzTrEgCcgBJA2GhjmelaXvsI
+         V7iWawCflMlMvGxfITd89DW2MG1jgB1MG167Rh5uUUwRYS17aFVz9aT+XBY/hlbLXUwY
+         CII1XP/HqWT5StaQo6HXfG3eMIcMvfjbKa9TWZCNplJ5aPb92KuZsbTfZ/2Z9JSee89L
+         mm+TGdN+02s25vkFuC/G+eQWp3OjSa/6P8LrPLB2/LUD8mcMO7Mxdimiu+/fdxahIwPo
+         NxTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T9z6VNHAh5buPLOQbn4DZRIbuRpf7GLAza5o2jIuncE=;
+        b=Eej7j3KFhzz2LEmMHyWcVEwI8zbThVUGsmj9RVx8mE8IymW4bEkUSTm+27/q1ojwRM
+         pPOTQcdcd6kbL4wY9kzmtFpZn+9ZpCDN86ZUBd78W3zzK1NpqKdkcQpE3vRKfy04IMUH
+         thSHohmcWl9xYHrZl5vP+39ehkJLNqhEpU2JM3uLRLtOa+2HSl7jejq4ur1vl8XTUcQu
+         6Ke/DefKVC5AV8dxBLDXaI336Ag/P0fOkUmszMf9fjJ42A1lYZgmEK6lv5IcbRmZQC8B
+         WPV8UnoUPA1U2H0hvQgI162pZ9BS7XAS2zeNs+qJG0towqynlWLOH/hKjdrMouPg/Vqp
+         fhxA==
+X-Gm-Message-State: ANoB5pkQS4MrMEQj0r4vwb9cWQMwSiYBPSJTfrz/xmHwjAVDypBSdA2A
+        e6a7OxYOu0IWw+xfYUiXRqk2
+X-Google-Smtp-Source: AA0mqf6ddMnQGXatGtIKDuBbyT3kbY7n1kpxrE0Vd9I/tQTaSSyurICcwD9LRXBLZlh0j9EpMLqbdA==
+X-Received: by 2002:a63:5007:0:b0:45f:beda:4116 with SMTP id e7-20020a635007000000b0045fbeda4116mr789381pgb.618.1669013110909;
+        Sun, 20 Nov 2022 22:45:10 -0800 (PST)
+Received: from thinkpad ([59.92.99.222])
+        by smtp.gmail.com with ESMTPSA id d187-20020a6236c4000000b0053e62b6fd22sm7752028pfa.126.2022.11.20.22.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 20 Nov 2022 22:45:09 -0800 (PST)
+Date:   Mon, 21 Nov 2022 12:15:07 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v7 0/4] qcom-cpufreq-hw: Add CPU clock provider support
+Message-ID: <20221121064507.GC11945@thinkpad>
+References: <20221117053145.10409-1-manivannan.sadhasivam@linaro.org>
+ <20221121051959.hphzjuaif423xwn6@vireshk-i7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: PM-runtime: supplier looses track of consumer during probe
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <bjorn.andersson@kernel.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        <quic_mkshah@quicinc.com>, <quic_lsrao@quicinc.com>,
-        <bvanassche@acm.org>, Peter Wang <peter.wang@mediatek.com>
-References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
- <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
- <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
-Content-Language: en-US
-From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
-In-Reply-To: <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: T3JxXBcevIV0oMVho7xUP78WLJPM3D61
-X-Proofpoint-ORIG-GUID: T3JxXBcevIV0oMVho7xUP78WLJPM3D61
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-21_03,2022-11-18_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 bulkscore=0 impostorscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211210048
+In-Reply-To: <20221121051959.hphzjuaif423xwn6@vireshk-i7>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Adrian,
-
-On 11/18/2022 8:25 PM, Adrian Hunter wrote:
-> On 4/11/22 11:19, Tushar Nimkar wrote:
->> Hi linux-pm/linux-scsi,
-
->>> Process -1
->>> ufshcd_async_scan context (process 1)
->>> scsi_autopm_put_device() //0:0:0:0
+On Mon, Nov 21, 2022 at 10:49:59AM +0530, Viresh Kumar wrote:
+> On 17-11-22, 11:01, Manivannan Sadhasivam wrote:
+> > Hello,
+> > 
+> > This series adds clock provider support to the Qcom CPUFreq driver for
+> > supplying the clocks to the CPU cores in Qcom SoCs.
+> > 
+> > The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+> > clocks to the CPU cores. But this is not represented clearly in devicetree.
+> > There is no clock coming out of the CPUFreq HW node to the CPU. This created
+> > an issue [1] with the OPP core when a recent enhancement series was submitted.
+> > Eventhough the issue got fixed in the OPP framework in the meantime, that's
+> > not a proper solution and this series aims to fix it properly.
+> > 
+> > There was also an attempt made by Viresh [2] to fix the issue by moving the
+> > clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+> > since those clocks belong to the CPUFreq HW node only.
+> > 
+> > The proposal here is to add clock provider support to the Qcom CPUFreq HW
+> > driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+> > This correctly reflects the hardware implementation.
+> > 
+> > The clock provider is a simple one that just provides the frequency of the
+> > clocks supplied to each frequency domain in the SoC using .recalc_rate()
+> > callback. The frequency supplied by the driver will be the actual frequency
+> > that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+> > is not same as what the CPUFreq framework has set but it is the one that gets
+> > supplied to the CPUs after throttling by LMh.
+> > 
+> > This series has been tested on SM8450 based dev board with the OPP hack removed
+> > and hence there is a DTS change only for that platform. Once this series gets
+> > accepted, rest of the platform DTS can also be modified and finally the hack on
+> > the OPP core can be dropped.
 > 
-> I am having trouble following your description.  What function is calling
-> scsi_autopm_put_device() here?
+> Applied. Thanks.
 > 
-Below is flow which calls scsi_autopm_put_device()
-Process -1
-ufshcd_async_scan()
-	scsi_probe_and_add_lun()
-		scsi_add_lun()
-			slave_configure()
-				scsi_sysfs_add_sdev()
-					scsi_autopm_get_device()
-						device_add()     <- invoked [Process 2] sd_probe()
-							scsi_autopm_put_device()
-
->>> pm_runtime_put_sync()
->>> __pm_runtime_idle()
->>> rpm_idle() -- RPM_GET_PUT(4)
->>>       __rpm_callback
->>>           scsi_runtime_idle()
->>>               pm_runtime_mark_last_busy()
->>>               pm_runtime_autosuspend()  --[A]
->>>                   rpm_suspend() -- RPM_AUTO(8)
->>>                       pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
->>>                           __update_runtime_status to RPM_SUSPENDING
->>>                       __rpm_callback()
->>>                           __rpm_put_suppliers(dev, false)
->>>                       __update_runtime_status to RPM_SUSPENDED
->>>                   rpm_suspend_suppliers()
->>>                       rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
->>>                   rpm_suspend() – END with return=0
->>>           scsi_runtime_idle() END return (-EBUSY) always.
+> If you get review comments later on, please send incremental patches
+> for that.
 > 
-> Not following here either.  Which device is EBUSY and why?
 
-scsi_runtime_idle() return -EBUSY always [3]
-Storage/scsi team can better explain -EBUSY implementation.
+Sure thing.
 
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
-
-
->>>
->>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
->>> [2]: https://lkml.org/lkml/2022/10/12/259
->>>
->>> Thanks,
->>> Tushar Nimkar
-> 
 Thanks,
-Tushar Nimkar
+Mani
+
+> -- 
+> viresh
+
+-- 
+மணிவண்ணன் சதாசிவம்
