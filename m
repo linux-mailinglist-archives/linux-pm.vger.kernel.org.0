@@ -2,68 +2,46 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891A56334B9
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 06:36:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA5F633594
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 08:00:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiKVFg3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 00:36:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45962 "EHLO
+        id S232231AbiKVHAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 02:00:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiKVFg2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 00:36:28 -0500
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE9A1DDE3
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 21:36:27 -0800 (PST)
-Received: by mail-ot1-x336.google.com with SMTP id a7-20020a056830008700b0066c82848060so8681847oto.4
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 21:36:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i5qyeYsVmx6XhfZt4paEL95PnVohNk27++knFv/BVmU=;
-        b=KN63+OhwilsyWIs3Ix3N08+28icP335y7QajHdzDMB50KfNfdj7civnR0ceKzd2jJH
-         JHSud1kQ9O3GDRtMVBGG5jN1CaoMhvqljkwnpJ9496AwKSTZLWEq286LHFy+Zn3NLLHy
-         oUOyD1Awx+2wbbiyeWbyaRyB/WLstJt5KjjQ6xcZV+LJPzOVUjg7O+pxrpGoKLFz20db
-         oOve+lxyeTYSrl0ZfrsA+uSyB4EI5IG+m6x+7MmPtKBBw8k3qcm2BaBNOzbEDbatx6T2
-         f2Hw4I9rt6u4MuvebLwfuxLO5knV9nK1wHqExaw4Kt4254XSny/4iOWmRqj03X+0tJf1
-         i/qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i5qyeYsVmx6XhfZt4paEL95PnVohNk27++knFv/BVmU=;
-        b=daY+wWmpA5NS0zQm6+4+WM7KCvnb4Eo7PXAs8SrPVF0lf+jSMSC6VEuzbldCFPN60o
-         34Z30t/8lTG+5cBK5kVPJ+oileMTAsa4VY+M1NweZNwTBLK0ezRZFdhwRI/K/MsZRAMR
-         zADX8BV4G1xBzLgMCILpQ49AWxCGcjg14TolttED1FK3vHvm7b2uWiOItdD4/tbeQCJ/
-         OINpdZ/wvXtlzEoW6ajJDu7orPwotStsQDMkHnfCBn9TWW5Zq58Stgpi10yAUTMyXj9V
-         BoLFvqzeY4TKwhMvq81mUFVU3En4SwlJngWWtioeDFCTX50q4BvQE+cDLAkBRFsqmyPy
-         /VYg==
-X-Gm-Message-State: ANoB5pmdBrZQdsPZelEmR8pAeCPpvcWu1xWrSG7oV8bikiCeOSHjx/Fj
-        1Hnz3L06T21JszQdg1mzfps9MdxqhtbgeR5f9L7F4g==
-X-Google-Smtp-Source: AA0mqf4SqsUgk4Ll2Vp6cdBMpsPY2pdXBHEOaPLJ82EcWt0/XAv2Ftta9n6K6Eo4FFzvuW+VaDb9RFommyqDRkve6Sw=
-X-Received: by 2002:a9d:5e0f:0:b0:662:2458:3ef7 with SMTP id
- d15-20020a9d5e0f000000b0066224583ef7mr11466185oti.150.1669095386364; Mon, 21
- Nov 2022 21:36:26 -0800 (PST)
+        with ESMTP id S229750AbiKVHAT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 02:00:19 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B0623BF0;
+        Mon, 21 Nov 2022 23:00:18 -0800 (PST)
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="315569508"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="315569508"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 23:00:18 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635448177"
+X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
+   d="scan'208";a="635448177"
+Received: from powerlab.fi.intel.com ([10.237.71.25])
+  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2022 23:00:15 -0800
+From:   Artem Bityutskiy <dedekind1@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>
+Subject: [PATCH resend] platform/x86: intel-uncore-freq: add Emerald Rapids support
+Date:   Tue, 22 Nov 2022 09:00:14 +0200
+Message-Id: <20221122070014.3639277-1-dedekind1@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-References: <CAAhSdy0Fs9ZVoRgtz92RgLnFPvgwUzCP_KpK9SCOiVsA-t3p3Q@mail.gmail.com>
- <mhng-3f44cc1f-7305-41c5-a1cf-dfed096bd364@palmer-ri-x1c9>
-In-Reply-To: <mhng-3f44cc1f-7305-41c5-a1cf-dfed096bd364@palmer-ri-x1c9>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Tue, 22 Nov 2022 11:06:15 +0530
-Message-ID: <CAK9=C2USZHdfBQrrgd2Rs3u3_gTyscpRgxvPU5P6ptOPu1+Axg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     anup@brainfault.org, Conor Dooley <conor@kernel.org>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
+        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
+        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,106 +49,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 10:46 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->
-> On Mon, 21 Nov 2022 19:45:07 PST (-0800), anup@brainfault.org wrote:
-> > On Tue, Nov 22, 2022 at 2:27 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
-> >>
-> >> From: Palmer Dabbelt <palmer@rivosinc.com>
-> >>
-> >> As per [1], whether or not the core can wake up from non-retentive
-> >> suspend is a platform-specific detail.  We don't have any way to encode
-> >> that, so just stop using them until we've sorted that out.
-> >>
-> >> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
-> >> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
-> >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> >
-> > This is just unnecessary maintenance churn and it's not the
-> > right way to go. Better to fix this the right way instead of having
-> > a temporary fix.
-> >
-> > I had already sent-out a patch series 5 months back to describe
-> > this in DT:
-> > https://lore.kernel.org/lkml/20220727114302.302201-1-apatel@ventanamicro.com/
-> >
-> > No one has commented/suggested anything (except Samuel
-> > Holland and Sudeep Holla).
->
-> I see some comments from Krzysztof here
-> <https://lore.kernel.org/lkml/7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org/>
-> as well.  Looks like everyone is pointing out that having our CPU nodes
-> encode timers is a bad idea, my guess is that they're probably right.
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Adding a separate timer DT node, creates a new set of compatibility
-issues for existing platforms. I am fine updating my series to have
-separate timer DT node but do we want to go in this direction ?
+Make Intel uncore frequency driver support Emerald Rapids by adding its CPU
+model to the match table. Emerald Rapids uncore frequency control is the same
+as in Sapphire Rapids.
 
-Even if ARM has a separate timer DT node, the timers are still part
-of the CPU. It depends on how we see the DT bindings aligning with
-actual HW.
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
 
->
-> > Please review this series. I can quickly address comments to
-> > make this available for Linux-6.2. Until this series is merged,
-> > the affected platforms can simply remove non-retentive suspend
-> > states from their DT.
->
-> That leaves us with a dependency between kernel versions and DT
-> bindings: kernels with the current driver will result in broken systems
-> with the non-retentive suspend states in the DT they boot with when
-> those states can't wake up the CPU.
+Re-sending the same patch, but added X86 platform maintainers.
 
-This is not a new problem we are facing. Even in the ARM world,
-the DT bindings grew organically over time based on newer platform
-requirements.
+ drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Now that we have a platform which does not want the time
-C3STOP feature, we need to first come-up with DT bindings
-to support this platform instead of temporarily disabling
-features which don't work on this platform.
+diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+index 8f9c571d7257..00ac7e381441 100644
+--- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
++++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+@@ -203,6 +203,7 @@ static const struct x86_cpu_id intel_uncore_cpu_ids[] = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,	NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,	NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
+ 	{}
+ };
+ MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
+-- 
+2.37.3
 
-Regards,
-Anup
-
->
-> > With all due respect, NACK to this patch from my side.
-> >
-> > Regards,
-> > Anup
-> >
-> >>
-> >> ---
-> >>
-> >> This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
-> >> Events are stopped during CPU suspend"), which fixes suspend on the D1
-> >> but breaks timers everywhere.
-> >> ---
-> >>  drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
-> >>  1 file changed, 11 insertions(+)
-> >>
-> >> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> index 05fe2902df9a..9d1063a54495 100644
-> >> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
-> >> @@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
-> >>         if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
-> >>             state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
-> >>                 return false;
-> >> +
-> >> +       /*
-> >> +        * Whether or not RISC-V systems deliver interrupts to harts in a
-> >> +        * non-retentive suspend state is a platform-specific detail.  This can
-> >> +        * leave the hart unable to wake up, so just mark these states as
-> >> +        * unsupported until we have a mechanism to expose these
-> >> +        * platform-specific details to Linux.
-> >> +        */
-> >> +       if (state & SBI_HSM_SUSP_NON_RET_BIT)
-> >> +               return false;
-> >> +
-> >>         return true;
-> >>  }
-> >>
-> >> --
-> >> 2.38.1
-> >>
