@@ -2,91 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D776F633D52
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 14:15:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0225F633D73
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 14:22:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233381AbiKVNPw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 08:15:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45350 "EHLO
+        id S233613AbiKVNWJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 08:22:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233521AbiKVNPq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 08:15:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180FF63154;
-        Tue, 22 Nov 2022 05:15:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 76BE2616F9;
-        Tue, 22 Nov 2022 13:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 830FFC433D6;
-        Tue, 22 Nov 2022 13:15:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669122944;
-        bh=WM+iRdqzMuNOpZH02f5VGpRug8d7nHfgsrCMsJ+cyFM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WIaMG9Lt6nlTmX0jyKVZ2U/SHOqYXjWoz0/K3oxDGjGtw2TeWRhx+SNOhc46LZgQ9
-         d8ToJoMwc0BedGXgKBnM7ZL5TDhHjdy5+uoWo4+odB1dyosZuRlPPtcXvAohub2FGo
-         oFv5ulf1wF0BIE0oSLklruwZgcrl6wlIReQkHLq8fWOy9vFkGLMv4B6YCgMjLpC5uc
-         6ooWzgLtitdqu1qPlyEAI8o4a8W4AXe4V84YCaU3KfkpoEiNhO44ST2CqizYHcmhzl
-         wnZoCiufjAjuPEUKHL4QDXpMFMLEGUVw1KkVQJZgdC0gTzzN3mgb7sf5+/BOGMtazA
-         2uONIoryR+xrw==
-Date:   Tue, 22 Nov 2022 18:45:36 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        rafael@kernel.org, viresh.kumar@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH -next] cpufreq: qcom-hw: Fix memory leak in
- qcom_cpufreq_hw_driver_probe()
-Message-ID: <20221122131536.GA157542@thinkpad>
-References: <20221122124627.174403-1-xiujianfeng@huawei.com>
+        with ESMTP id S233410AbiKVNWJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 08:22:09 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7688764545;
+        Tue, 22 Nov 2022 05:22:06 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D43AC24E1BB;
+        Tue, 22 Nov 2022 21:22:04 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 21:22:05 +0800
+Received: from [192.168.125.96] (113.72.144.23) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 21:22:03 +0800
+Message-ID: <f21b0aa9-2ac8-ae28-755a-d530171f930a@starfivetech.com>
+Date:   Tue, 22 Nov 2022 21:22:03 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221122124627.174403-1-xiujianfeng@huawei.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v1 2/4] dt-bindings: power: Add starfive,jh71xx-power
+ bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-3-walker.chen@starfivetech.com>
+ <99302e53-c0c9-cfe8-4e6a-c70e8428d9c3@linaro.org>
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <99302e53-c0c9-cfe8-4e6a-c70e8428d9c3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Nov 22, 2022 at 08:46:27PM +0800, Xiu Jianfeng wrote:
-> If devm_clk_hw_register() fails, clk_init.name should be freed before
-> return error, otherwise will cause memory leak issue, fix it.
+On 2022/11/21 18:13, Krzysztof Kozlowski wrote:
+> On 18/11/2022 14:32, Walker Chen wrote:
+>> Add bindings for the power domain controller on the StarFive JH71XX SoC.
+>> 
 > 
-> Fixes: 84063a1cbe9e ("cpufreq: qcom-hw: Add CPU clock provider support")
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
+> Subject: drop second, redundant "bindings".
 
-Reviewed-by: Manivannan Sadhasivam <mani@kernel.org>
+Will fix.
 
-Thanks,
-Mani
-
-> ---
->  drivers/cpufreq/qcom-cpufreq-hw.c | 1 +
->  1 file changed, 1 insertion(+)
 > 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 1bd1e9ae5308..340fed35e45d 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -723,6 +723,7 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  		ret = devm_clk_hw_register(dev, &data->cpu_clk);
->  		if (ret < 0) {
->  			dev_err(dev, "Failed to register clock %d: %d\n", i, ret);
-> +			kfree(clk_init.name);
->  			return ret;
->  		}
->  
-> -- 
-> 2.17.1
+>> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+>> ---
+>>  .../bindings/power/starfive,jh71xx-power.yaml | 46 +++++++++++++++++++
 > 
+> 1st patch should be squashed here. Headers are part of bindings file.
 
--- 
-மணிவண்ணன் சதாசிவம்
+Will be done in the next version of patch.
+
+> 
+>>  1 file changed, 46 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+>> 
+>> diff --git a/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+>> new file mode 100644
+>> index 000000000000..2537303b4829
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/starfive,jh71xx-power.yaml
+> 
+> Filename like compatible.
+
+As mentioned in the previous email, the compatible in the driver should be changed to "starfive,jh7110-power".
+
+> 
+>> @@ -0,0 +1,46 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/starfive,jh71xx-power.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: StarFive JH71xx Power Domains Controller
+>> +
+>> +maintainers:
+>> +  - Walker Chen <walker.chen@starfivetech.com>
+>> +
+>> +description: |
+>> +  StarFive JH71xx SoCs include support for multiple power domains which can be
+>> +  powered on/off by software based on different application scenes to save power.
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+> 
+> No items. You have just one item,
+
+Yes, this issue will be fixed. Thank you for your advice.
+
+Best Regards,
+Walker Chen
+
