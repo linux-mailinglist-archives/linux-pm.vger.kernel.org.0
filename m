@@ -2,366 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7F263311C
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 01:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A81B63318A
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 01:47:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiKVAJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 21 Nov 2022 19:09:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
+        id S231654AbiKVArB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 21 Nov 2022 19:47:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiKVAJE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 19:09:04 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E1E92B50
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 16:09:02 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id w4so3268779plp.1
-        for <linux-pm@vger.kernel.org>; Mon, 21 Nov 2022 16:09:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uKZLqRGf8BJZDh7jHE36jyMimT2zwRKVGJSlSOPTg+U=;
-        b=wQZOIJONcXbHkFZq1G9+Bpu8n0iCVTwZ7lvZrD5WcJphzDlJUz7sExbOZuOqaLexNr
-         oIPGcBT7Mc0PdoZ27QztOPUyPA9Et98Y8Ek/QPpLUPJ9YB448175QKBwIuqa/nUOUQDt
-         OgF8zWAj2CxQhsQWRUg1g+ztNWifkgeeiP/Ek05OwR4MHL4GUsHbOl5jyDvMr3apb+n4
-         kSprFu0hqOwVFO8pWA4EuVUhk4ZZCNwijjn7/dQSYmascGJIKxzw7d7PRao5aDjPJKta
-         CNH5550NIlaxs0eGS4O98OhX8ht1zpYxs+k2FLV2UtfbXEvKmfJv18dshu4eaZADbFy+
-         D75g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uKZLqRGf8BJZDh7jHE36jyMimT2zwRKVGJSlSOPTg+U=;
-        b=aKOQns1xW0Q2BqVWIhYu9/yI0/xjbuCeT8oqa+n3o1ExstMjSWK3Dp9O73+zIQFKKL
-         qY4gtiqPuqBotZXClTkYvaa0tBi7CtPfC4k5x7awatScT/l9RNj0UCmMJ8JoHABjX9MG
-         jnrQ2Mxb3jA40J42uNIXuzMKxFOIRqpdVJPu27Apb2WRyW2IslVQYasZZ5m97uUq4+Dh
-         SWYNPe8pw2o/Vv44LUW5PihBTQPy+36+c8/J5TaA0aH+GQtQpTVuiAdjxIACCBf/Rzcx
-         7xYmF28SsZSdEb1jwHpgpg/qNeftygmccNE4cGMLOEP7K6p6BF4xMGs35cwBnhOQ3KMb
-         pi9Q==
-X-Gm-Message-State: ANoB5pmfJbQxoO4Qp+Vca7JcL3jXD7OQYTLpVjLjbUrKCZ7u6PVbt+H6
-        cDUfXYKX60giknvGswzjnMceILpcYdjdW9kf
-X-Google-Smtp-Source: AA0mqf7M4ltKeAX+jDnV5k1VqRATMO6szxw65EoAXC+2gMC+LMZRb/5GoMTuKt/Ai1V1AsAKWC6sFw==
-X-Received: by 2002:a17:90a:dd82:b0:212:fdb1:720b with SMTP id l2-20020a17090add8200b00212fdb1720bmr29143847pjv.66.1669075742029;
-        Mon, 21 Nov 2022 16:09:02 -0800 (PST)
-Received: from localhost ([75.172.139.56])
-        by smtp.gmail.com with ESMTPSA id x22-20020a170902821600b001873aa85e1fsm10211035pln.305.2022.11.21.16.09.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 21 Nov 2022 16:09:01 -0800 (PST)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
-In-Reply-To: <20221118133216.17037-4-walker.chen@starfivetech.com>
-References: <20221118133216.17037-1-walker.chen@starfivetech.com>
- <20221118133216.17037-4-walker.chen@starfivetech.com>
-Date:   Mon, 21 Nov 2022 16:09:00 -0800
-Message-ID: <7hedtvam03.fsf@baylibre.com>
+        with ESMTP id S231899AbiKVApa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 21 Nov 2022 19:45:30 -0500
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1766A13F2F;
+        Mon, 21 Nov 2022 16:45:29 -0800 (PST)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id C2AE032009D7;
+        Mon, 21 Nov 2022 19:45:27 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Mon, 21 Nov 2022 19:45:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1669077927; x=
+        1669164327; bh=fDo4wIRpT/cr00JSFZyRJXJl6OzORncK/vIgc7ZRQkk=; b=J
+        6CnMjqONXI2E8ioFDyVdFNnyvY9ueuRBNt/1e26aLfKYAlgFhVS2hel8L1xo8We4
+        NTYSTpdzySKpFbIhsX4pkj8++3yIFa1rLeE5J3mz0FM4zKmk7yQNSbGolsbMFq5r
+        M8mXmPB9g4HGNKO1FdbHFuHpvPJbEkd++eT++A2EQxdsIR/uc+7Qzvd20inmEnJs
+        2mPE3SKyf4UX8km4FaZG+ZcQZtF2Tlfc3/EK721qDYW+mIgWsTnoe9sJQrrEjLm4
+        af7LtAi+BSe9MStIZi77K8M41RGKWjO8FKWj4AR0jhOm0n55EwepzYPq1lHHEDrE
+        8hShbPP0pCwmsedUWfJvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1669077927; x=
+        1669164327; bh=fDo4wIRpT/cr00JSFZyRJXJl6OzORncK/vIgc7ZRQkk=; b=V
+        nJZxtfGEVMrF6eg8Ky2o+OwLEwr0qWH4WDtXfKZW4ubG0wPZhoUTcUtV/aF7stxL
+        5R531aiFniq99980T+GAVs9G7ZaEHCJYi6IGjvjG0sMDCvJJu52oDmirdPXZNTss
+        2yxe0hUdqK1pvbH78w/FwN3N8gB7ev+5uZGXQo0QNAcFZWeZC8bvcUCsfIzZIdOY
+        f7TERsbeOhzNMG+BysOGxzQ029YLfXWGWf5TP2DvwPsHIw4BuWdlzHT2q0FAW4Gj
+        gJhOmIBCd+zQHH/GVUhCF369+g60Ohdd9AC7TzYquTDwaXfmPDKLnkGcwugLlc7Q
+        k3z8lJ7qxKAh6LoCc3aOA==
+X-ME-Sender: <xms:pht8YyN3rNC6uJQ2Z3tbMqBvJReCw8urSh3znvc6odcyNAuEhCZzVg>
+    <xme:pht8Yw9IskL-BeP9Cllr-RUzsAzpj5cMnVTiSE1rnIu05wRQtkBwbBW5vw3qzWMvd
+    2N2Uvn3Zyo1xfKy6Q>
+X-ME-Received: <xmr:pht8Y5SA2vkiZu8yuAFfA_h9yIiBZ18polg7Aya-z4cFMzkJwOn1mnYPmp-QBRqXUdE6YhIGUX9Xv1VcvyBUTHVHkpgMn3HT4VkgPacarLTIKUnZNcj1-nW1tQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrheejgddviecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefkffggfgfvvehfhffujggtgfesthejredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepudeuuefgleeludegueegvdeggffhveejgfeileejveegiefhffev
+    ieffiedvkeehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
+    nhgurdhorhhg
+X-ME-Proxy: <xmx:pht8Yysj4datzUUG5edxXJy2MuVRIzBoK2sHeXWKZttbNul8Qj4niw>
+    <xmx:pht8Y6dfXLUOLPyz43Ob75QLXwnUyqWdhTq1F9D8JvtGxnO83rtwow>
+    <xmx:pht8Y21gH7eBzGzthxlJ7A7Ps2F61GJc1hmGOMMa3qxvSUASe4NmVQ>
+    <xmx:pxt8Y7UpRk1RyeyLvm3OglNzb_1tlIWhO1LTvdikdXxmkhbY5AVQqQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Nov 2022 19:45:26 -0500 (EST)
+Message-ID: <bf6d3b1f-f703-4a25-833e-972a44a04114@sholland.org>
+Date:   Mon, 21 Nov 2022 18:45:25 -0600
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>
+Cc:     anup@brainfault.org, rafael@kernel.org, daniel.lezcano@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com
+References: <20221121205647.23343-1-palmer@rivosinc.com>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+In-Reply-To: <20221121205647.23343-1-palmer@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Walker,
+Hi Palmer,
 
-Walker Chen <walker.chen@starfivetech.com> writes:
+On 11/21/22 14:56, Palmer Dabbelt wrote:
+> From: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> As per [1], whether or not the core can wake up from non-retentive
+> suspend is a platform-specific detail.  We don't have any way to encode
+> that, so just stop using them until we've sorted that out.
 
-> Add generic power domain driver for the StarFive JH71XX SoC.
->
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+We do have *exactly* a way to encode that. Specifically, the existence
+or non-existence of a non-retentive CPU suspend state in the DT.
 
-A bit more detail about the features power domain hardware would be
-helpful for reviewers.  I'm assuming there's no public documenation for
-this, but if there is, a link to that would be great also.
+If a hart has no way of resuming from non-retentive suspend (i.e. a
+complete lack of interrupt delivery in non-retentive suspend), then it
+makes zero sense to advertise such a suspend state in the DT. Therefore,
+if the state exists in the DT, you can assume there is *some* interrupt
+that can wake up the hart. And I would extend that to assume at least
+one of those wakeup-capable interrupts is a timer interrupt, although
+not necessarily the architectural timer interrupt.
 
-[...]
+> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
 
-> diff --git a/drivers/soc/starfive/jh71xx_pmu.c b/drivers/soc/starfive/jh71xx_pmu.c
-> new file mode 100644
-> index 000000000000..e6c0083d166e
-> --- /dev/null
-> +++ b/drivers/soc/starfive/jh71xx_pmu.c
-> @@ -0,0 +1,380 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +/*
-> + * StarFive JH71XX Power Domain Controller Driver
-> + *
-> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
-> + */
-> +
-> +#include <linux/interrupt.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_domain.h>
-> +#include <dt-bindings/power/jh7110-power.h>
-> +
-> +/* register offset */
-> +#define HW_EVENT_TURN_ON_MASK		0x04
-> +#define HW_EVENT_TURN_OFF_MASK		0x08
-> +#define SW_TURN_ON_POWER_MODE		0x0C
-> +#define SW_TURN_OFF_POWER_MODE		0x10
-> +#define SW_ENCOURAGE			0x44
-> +#define PMU_INT_MASK			0x48
-> +#define PCH_BYPASS			0x4C
-> +#define PCH_PSTATE			0x50
-> +#define PCH_TIMEOUT			0x54
-> +#define LP_TIMEOUT			0x58
-> +#define HW_TURN_ON_MODE			0x5C
-> +#define CURR_POWER_MODE			0x80
-> +#define PMU_EVENT_STATUS		0x88
-> +#define PMU_INT_STATUS			0x8C
-> +
-> +/* sw encourage cfg */
-> +#define SW_MODE_ENCOURAGE_EN_LO		0x05
-> +#define SW_MODE_ENCOURAGE_EN_HI		0x50
-> +#define SW_MODE_ENCOURAGE_DIS_LO	0x0A
-> +#define SW_MODE_ENCOURAGE_DIS_HI	0xA0
-> +#define SW_MODE_ENCOURAGE_ON		0xFF
-> +
-> +/* pmu int status */
-> +#define PMU_INT_SEQ_DONE		BIT(0)
-> +#define PMU_INT_HW_REQ			BIT(1)
-> +#define PMU_INT_SW_FAIL			GENMASK(3, 2)
-> +#define PMU_INT_HW_FAIL			GENMASK(5, 4)
-> +#define PMU_INT_PCH_FAIL		GENMASK(8, 6)
-> +#define PMU_INT_FAIL_MASK		(PMU_INT_SW_FAIL | \
-> +					PMU_INT_HW_FAIL | \
-> +					PMU_INT_PCH_FAIL)
-> +#define PMU_INT_ALL_MASK		(PMU_INT_SEQ_DONE | \
-> +					PMU_INT_HW_REQ | \
-> +					PMU_INT_FAIL_MASK)
-> +
-> +#define DELAY_US			10
-> +#define TIMEOUT_US			100000
+This comment refers specifically to the architectural timer interrupt,
+not interrupts more generally.
 
-Where do these delay/timeout numbers come from?  Is this just based one
-experimentation, or is this something described by the HW docs.  Please
-add some comments.
+> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
+> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+> 
+> ---
+> 
+> This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
+> Events are stopped during CPU suspend"), which fixes suspend on the D1
+> but breaks timers everywhere.
 
-> +
-> +struct starfive_power_dev {
-> +	struct generic_pm_domain genpd;
-> +	struct starfive_pmu *power;
-> +	uint32_t mask;
-> +};
-> +
-> +struct starfive_pmu {
-> +	void __iomem *base;
-> +	spinlock_t lock;
-> +	int irq;
-> +	struct device *pdev;
-> +	struct starfive_power_dev *dev;
-> +	struct genpd_onecell_data genpd_data;
-> +	struct generic_pm_domain **genpd;
-> +};
-> +
-> +struct starfive_pmu_data {
-> +	const char * const name;
-> +	uint8_t bit;
-> +	unsigned int flags;
-> +};
-> +
-> +static void __iomem *pmu_base;
-> +
-> +static inline void pmu_writel(u32 val, u32 offset)
-> +{
-> +	writel(val, pmu_base + offset);
-> +}
+I understand that reverting 232ccac1bd9b is the easiest way to fix the
+issues you and others are seeing. I do not have any functioning RISC-V
+hardware with SMP, so it is hard for me to help debug the root issue in
+the Linux timer code. I do not know why turning on the C3STOP flag
+breaks RCU stall detection or clock_nanosleep(), but I agree that
+breakage should not happen.
 
-You use writel() in this helper, but __raw_writel() throughout the rest
-of the driver.  If that's intentional, you should explain a bit more
-about why.  If not, please make it consistent.
+So while I still think 232ccac1bd9b is the right change to make from a
+"following the spec" standpoint, I am okay with reverting it for
+pragmatic reasons. Since the D1 has another timer driver that is
+currently used in preference to the RISC-V/SBI timer triver, reverting
+232ccac1bd9b does not break non-retentive suspend for the D1.
 
-If you're going to use a wrapper/helper, you should use it throughout.
-But in this case, I'm not sure it's adding anything to readability.  In
-fact, it's only adding confusion since you don't use it for most of the
-register accesses.
+But please do not make the change below. It is unnecessarily broad, and
+will break something that works fine right now. If the DT advertises a
+CPU suspend state that cannot be woken up from at all, then that is a
+bug in the DT. Linux should not try to work around that.
 
-> +void starfive_pmu_hw_event_turn_on(u32 mask)
-> +{
-> +	pmu_writel(mask, HW_EVENT_TURN_ON_MASK);
-> +}
-> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_on);
-> +
-> +void starfive_pmu_hw_event_turn_off(u32 mask)
-> +{
-> +	pmu_writel(mask, HW_EVENT_TURN_OFF_MASK);
-> +}
-> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_off);
+So revert 232ccac1bd9b for now, and we can figure out what to do about
+the DT property, but please do not merge this.
 
-This looks wrong.  Why are you allowing external users to power on/off the
-domains?  The sate of the domain should be managed by the PM core (and
-runtime PM use-counts etc.) allowing external users to change the domain
-state is going to lead to the PM core being confused about the state of
-the domain.
+Regards,
+Samuel
 
-> +static int starfive_pmu_get_state(struct starfive_power_dev *pmd, bool *is_on)
-> +{
-> +	struct starfive_pmu *pmu = pmd->power;
+> ---
+>  drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> index 05fe2902df9a..9d1063a54495 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
+>  	if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
+>  	    state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
+>  		return false;
 > +
-> +	if (!pmd->mask) {
-> +		*is_on = false;
-> +		return -EINVAL;
-> +	}
+> +	/*
+> +	 * Whether or not RISC-V systems deliver interrupts to harts in a
+> +	 * non-retentive suspend state is a platform-specific detail.  This can
+> +	 * leave the hart unable to wake up, so just mark these states as
+> +	 * unsupported until we have a mechanism to expose these
+> +	 * platform-specific details to Linux.
+> +	 */
+> +	if (state & SBI_HSM_SUSP_NON_RET_BIT)
+> +		return false;
 > +
-> +	*is_on = __raw_readl(pmu->base + CURR_POWER_MODE) & pmd->mask;
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_pmu_set_state(struct starfive_power_dev *pmd, bool on)
-> +{
-> +	struct starfive_pmu *pmu = pmd->power;
-> +	unsigned long flags;
-> +	uint32_t val;
-> +	uint32_t mode;
-> +	uint32_t encourage_lo;
-> +	uint32_t encourage_hi;
-> +	bool is_on;
-> +	int ret;
-> +
-> +	if (!pmd->mask)
-> +		return -EINVAL;
-> +
-> +	if (is_on == on) {
+>  	return true;
+>  }
+>  
 
-Comparing an uninitialzed stack variable to 'on'?
-
-> +		dev_info(pmu->pdev, "pm domain [%s] is already %sable status.\n",
-> +				pmd->genpd.name, on ? "en" : "dis");
-
-Using dev_info() will probably make this a bit verbose.  I'd suggest
-dev_dbg() for this kind of message.
-
-> +		return 0;
-> +	}
-> +
-> +	spin_lock_irqsave(&pmu->lock, flags);
-> +
-> +	if (on) {
-> +		mode = SW_TURN_ON_POWER_MODE;
-> +		encourage_lo = SW_MODE_ENCOURAGE_EN_LO;
-> +		encourage_hi = SW_MODE_ENCOURAGE_EN_HI;
-> +	} else {
-> +		mode = SW_TURN_OFF_POWER_MODE;
-> +		encourage_lo = SW_MODE_ENCOURAGE_DIS_LO;
-> +		encourage_hi = SW_MODE_ENCOURAGE_DIS_HI;
-> +	}
-> +
-> +	__raw_writel(pmd->mask, pmu->base + mode);
-> +
-> +	/* write SW_ENCOURAGE to make the configuration take effect */
-> +	__raw_writel(SW_MODE_ENCOURAGE_ON, pmu->base + SW_ENCOURAGE);
-> +	__raw_writel(encourage_lo, pmu->base + SW_ENCOURAGE);
-> +	__raw_writel(encourage_hi, pmu->base + SW_ENCOURAGE);
-
-This "encourage" feature is peculiar.  What happens if you do not do
-this?  Does it take a lot longer for the domain to change state? or does
-it not change at all?  In the absence of HW specs, a bit of description
-here would be helpful.
-
-> +	spin_unlock_irqrestore(&pmu->lock, flags);
-> +
-> +	if (on) {
-> +		ret = readl_poll_timeout_atomic(pmu->base + CURR_POWER_MODE, val,
-> +						val & pmd->mask, DELAY_US,
-> +						TIMEOUT_US);
-> +		if (ret) {
-> +			dev_err(pmu->pdev, "%s: failed to power on\n", pmd->genpd.name);
-> +			return -ETIMEDOUT;
-> +		}
-> +	} else {
-> +		ret = readl_poll_timeout_atomic(pmu->base + CURR_POWER_MODE, val,
-> +						!(val & pmd->mask), DELAY_US,
-> +						TIMEOUT_US);
-> +		if (ret) {
-> +			dev_err(pmu->pdev, "%s: failed to power off\n", pmd->genpd.name);
-> +			return -ETIMEDOUT;
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int starfive_pmu_on(struct generic_pm_domain *genpd)
-> +{
-> +	struct starfive_power_dev *pmd = container_of(genpd,
-> +		struct starfive_power_dev, genpd);
-> +
-> +	return starfive_pmu_set_state(pmd, true);
-> +}
-> +
-> +static int starfive_pmu_off(struct generic_pm_domain *genpd)
-> +{
-> +	struct starfive_power_dev *pmd = container_of(genpd,
-> +		struct starfive_power_dev, genpd);
-> +
-> +	return starfive_pmu_set_state(pmd, false);
-> +}
-> +
-> +static void starfive_pmu_int_enable(struct starfive_pmu *pmu, u32 mask, bool enable)
-> +{
-> +	u32 val = __raw_readl(pmu->base + PMU_INT_MASK);
-> +
-> +	if (enable)
-> +		val &= ~mask;
-> +	else
-> +		val |= mask;
-> +
-> +	__raw_writel(val, pmu->base + PMU_INT_MASK);
-> +}
-> +
-> +static irqreturn_t starfive_pmu_interrupt(int irq, void *data)
-> +{
-> +	struct starfive_pmu *pmu = data;
-> +	unsigned long flags;
-> +	u32 val;
-> +
-> +	spin_lock_irqsave(&pmu->lock, flags);
-
-I don't think you need to spinlock in the interrupt itself, as
-interrupts will already be disabled, and this handler is not
-IRQF_SHARED.
-
-> +	val = __raw_readl(pmu->base + PMU_INT_STATUS);
-> +
-> +	if (val & PMU_INT_SEQ_DONE)
-> +		dev_dbg(pmu->pdev, "sequence done.\n");
-> +	if (val & PMU_INT_HW_REQ)
-> +		dev_dbg(pmu->pdev, "hardware encourage requestion.\n");
-> +	if (val & PMU_INT_SW_FAIL)
-> +		dev_err(pmu->pdev, "software encourage fail.\n");
-> +	if (val & PMU_INT_HW_FAIL)
-> +		dev_err(pmu->pdev, "hardware encourage fail.\n");
-> +	if (val & PMU_INT_PCH_FAIL)
-> +		dev_err(pmu->pdev, "p-channel fail event.\n");
-> +
-> +	/* clear interrupts */
-> +	__raw_writel(val, pmu->base + PMU_INT_STATUS);
-> +	__raw_writel(val, pmu->base + PMU_EVENT_STATUS);
-> +
-> +	spin_unlock_irqrestore(&pmu->lock, flags);
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-
-[...]
-
-Kevin
