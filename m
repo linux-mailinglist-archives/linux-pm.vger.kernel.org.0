@@ -2,223 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 023C363402B
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 16:28:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 260B3634036
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 16:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232611AbiKVP2d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 10:28:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S233692AbiKVPcG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 10:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232517AbiKVP2c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 10:28:32 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFEF854B11
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 07:28:30 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id d192so14715867pfd.0
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 07:28:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m1U2CqE50WAQsFkSkTubSHuBImMZomnV4Wn5r6ui87s=;
-        b=P+a+dsTfzyD9J7a4fuxFYguFmjAQmFtqoDjheP0peYnbxT6rqPDPWPImtTivXUhCrB
-         y/r/1kApcFVMlWtwXxTVeZAz9B6sRHPSP3inPx9jqsGzaipodBXHf+kbFZm2ZJWjhCAy
-         mzNhGCvC947bZYncxVfihx6vqFvOe9IAn+eG4/e4eotggiZuYSrw+j4EyY5Vqp47kqhz
-         Yn6dIQWZSKGIRwKrDFnyg7K+G1Yi4SsLm1t7lnoP5lC9AnEcWAIf3Bqsd6EKgAfHVF5w
-         hJlSJVfR8TuCd78pfFdPGTDE/yI5okXRrm/VXCR/hVnEAM235A9AyspNeTYUTKDwc1YL
-         T7og==
+        with ESMTP id S233387AbiKVPcE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 10:32:04 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEAB2331
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 07:31:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669131064;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=M9Rq8NAw1T2YjzVTECZnA2JWS2PTg96PRA2tMjqGKL8=;
+        b=Xboar2RhCdbNFdmP2C4+wlxtmm3rgCBwY7AFRfjHCRZaM1pDltSLfFuKkijMQxCj3BGBU/
+        bZyRT86W9uZstRECnua8UR8tyfLKrlussO1AvkSC2JJzAGwsZp64kJSEPy9OjNbFRX00Tn
+        hvyiT120TrnhbJ/AbOhWEezjfwmYYfI=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-267-7t01k15uNiqosnffnWeCOg-1; Tue, 22 Nov 2022 10:31:02 -0500
+X-MC-Unique: 7t01k15uNiqosnffnWeCOg-1
+Received: by mail-ej1-f72.google.com with SMTP id nb1-20020a1709071c8100b007ae4083d6f5so8418639ejc.15
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 07:31:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m1U2CqE50WAQsFkSkTubSHuBImMZomnV4Wn5r6ui87s=;
-        b=7zi6tk0VLb1yb+6cCvrFJYH3Pc3P3M1Z7oyBMtMvKX/kLnvvgjVOV4WX9xZVWQpN+Y
-         JxoKnFMBFcqYcuAY6WUS/1hZlKVFLZ2PAVuSGH5hHxQW4xL0i3rb450bQxOkVvn3nNjY
-         CWtbeSre4kDyv9awEe6uyulnCTdCXbF2WqhXptj5RhYb2eksXo3yVgEBNBt15129Df+g
-         f6RILHBhAks/BtakwMY/aFjYoThjmbvka0MT4v4NZmpkQoPqDqi47Zl2HRv1v5ocYbZK
-         KxSprJXRniYXcOpGiGdhlGz1km6fX1yBB6xtTeHbFzzrO9jMaC05EuaFD0AP/+qLXtcf
-         BOjw==
-X-Gm-Message-State: ANoB5pl+v348oL0meL0sKoiCo/oZnrrnyNjzgByc75d8CUd0w795wuxS
-        4pTwjRfOK0cBnlFArrgVu+NNbg==
-X-Google-Smtp-Source: AA0mqf73esOF9a222BcHdbepaYPJ6aBWIcF1NZukBX7VgD2TPHtufGyqiHUGxzVJjZk6gKlatopnqA==
-X-Received: by 2002:a63:4755:0:b0:477:1bf6:8b1c with SMTP id w21-20020a634755000000b004771bf68b1cmr4099745pgk.25.1669130910041;
-        Tue, 22 Nov 2022 07:28:30 -0800 (PST)
-Received: from localhost ([135.180.226.51])
-        by smtp.gmail.com with ESMTPSA id z11-20020aa79e4b000000b0056bd95259d6sm10794582pfq.189.2022.11.22.07.28.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 07:28:29 -0800 (PST)
-Date:   Tue, 22 Nov 2022 07:28:29 -0800 (PST)
-X-Google-Original-Date: Tue, 22 Nov 2022 07:28:27 PST (-0800)
-Subject:     Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
-In-Reply-To: <Y3ywTzv3vbgRXQGG@wendy>
-CC:     apatel@ventanamicro.com, anup@brainfault.org,
-        Conor Dooley <conor@kernel.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     conor.dooley@microchip.com
-Message-ID: <mhng-6299f108-11af-4e70-9981-d7e7b3be0b9a@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M9Rq8NAw1T2YjzVTECZnA2JWS2PTg96PRA2tMjqGKL8=;
+        b=gFOKCrFO+W8OA9VV/8ayB5XQWD3f/eJVxLThvUNM+TmH2D+W/BiSD8xwZxz1ItAMvA
+         PJGnUkDFy+j0nbVF9aclGezETtdT2ok08AUBI64E2hZ/eTV9SxRSIbvRnbtFJ8uzHZ3a
+         jTBoLFyqe3P/lEQzHhxl+A32Jvop+MYJpCZ54q9/Y3Cv/O4MCH0Ln8mrVqmtjF1mRNKu
+         9Jzo9o/7JX9Wpw60awrBCzjeKdHIJS3oQDu46aqSA5PKHuJy25uO2aWZvssZsmWcZ0xt
+         Z4UhfSrd6eOuYsvLoCRieXdwsjQrMit+ajejV3eM45nE7c4PC9nODSBS+nfUQgAUCzgN
+         sBuA==
+X-Gm-Message-State: ANoB5pky3Um4z2AIBO3IC1h4ZLtz8Cmqmnanete5OExi94sBtu0300LO
+        Ua1PYNVPDT6YZYoVvw9nrKikFD4C0zEV/0BP6fY2HgHqhkmAHosMLnvDbRyBrj3/0WtHBxEXnlN
+        zi9nK5XXUyzSaZA6E39g=
+X-Received: by 2002:a05:6402:1118:b0:467:a8cb:10c9 with SMTP id u24-20020a056402111800b00467a8cb10c9mr6837305edv.123.1669131061176;
+        Tue, 22 Nov 2022 07:31:01 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf4CH+Vx3pIPif4bvQ7VvOOVeImcHVPAHjQC8cn+lp8ryOJqSR/ruqW5OSSaZonQqQi7ybLLrw==
+X-Received: by 2002:a05:6402:1118:b0:467:a8cb:10c9 with SMTP id u24-20020a056402111800b00467a8cb10c9mr6837287edv.123.1669131060931;
+        Tue, 22 Nov 2022 07:31:00 -0800 (PST)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id u26-20020a170906409a00b0078ddb518a90sm6132853ejj.223.2022.11.22.07.31.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 07:31:00 -0800 (PST)
+Message-ID: <0b867f52-5fe8-f0e8-3f05-746b1db0059e@redhat.com>
+Date:   Tue, 22 Nov 2022 16:30:59 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH resend] platform/x86: intel-uncore-freq: add Emerald
+ Rapids support
+Content-Language: en-US, nl
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>
+References: <20221122070014.3639277-1-dedekind1@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221122070014.3639277-1-dedekind1@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 22 Nov 2022 03:19:43 PST (-0800), conor.dooley@microchip.com wrote:
-> On Tue, Nov 22, 2022 at 11:06:15AM +0530, Anup Patel wrote:
->> On Tue, Nov 22, 2022 at 10:46 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->> >
->> > On Mon, 21 Nov 2022 19:45:07 PST (-0800), anup@brainfault.org wrote:
->> > > On Tue, Nov 22, 2022 at 2:27 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
->> > >>
->> > >> From: Palmer Dabbelt <palmer@rivosinc.com>
->> > >>
->> > >> As per [1], whether or not the core can wake up from non-retentive
->> > >> suspend is a platform-specific detail.  We don't have any way to encode
->> > >> that, so just stop using them until we've sorted that out.
->> > >>
->> > >> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
->> > >> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
->> > >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> > >
->> > > This is just unnecessary maintenance churn and it's not the
->> > > right way to go. Better to fix this the right way instead of having
->> > > a temporary fix.
->> > >
->> > > I had already sent-out a patch series 5 months back to describe
->> > > this in DT:
->> > > https://lore.kernel.org/lkml/20220727114302.302201-1-apatel@ventanamicro.com/
->> > >
->> > > No one has commented/suggested anything (except Samuel
->> > > Holland and Sudeep Holla).
->> >
->> > I see some comments from Krzysztof here
->> > <https://lore.kernel.org/lkml/7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org/>
->> > as well.  Looks like everyone is pointing out that having our CPU nodes
->> > encode timers is a bad idea, my guess is that they're probably right.
->>
->> Adding a separate timer DT node, creates a new set of compatibility
->> issues for existing platforms. I am fine updating my series to have
->> separate timer DT node but do we want to go in this direction ?
->
-> I don't really follow. How is there a compatibility issue created by
-> adding a new node that is not added for a new property? Both will
-> require changes to the device tree. (You need not reply here, I am going
-> to review the other thread, it's been on my todo list for too long. Been
-> caught up with non-coherent stuff & our sw release cycle..)
->
->> Even if ARM has a separate timer DT node, the timers are still part
->> of the CPU. It depends on how we see the DT bindings aligning with
->> actual HW.
->>
->> >
->> > > Please review this series. I can quickly address comments to
->> > > make this available for Linux-6.2. Until this series is merged,
->> > > the affected platforms can simply remove non-retentive suspend
->> > > states from their DT.
->> >
->> > That leaves us with a dependency between kernel versions and DT
->> > bindings: kernels with the current driver will result in broken systems
->> > with the non-retentive suspend states in the DT they boot with when
->> > those states can't wake up the CPU.
->
-> Can someone point me at a (non D1 or virt) system that has suspend
-> states in the DT that would need fixing?
->
->> This is not a new problem we are facing. Even in the ARM world,
->> the DT bindings grew organically over time based on newer platform
->> requirements.
->>
->> Now that we have a platform which does not want the time
->> C3STOP feature, we need to first come-up with DT bindings
->> to support this platform instead of temporarily disabling
->> features which don't work on this platform.
->
-> It's the opposite surely? It should be "now that we have a platform that
-> *does want* the C3STOP feature", right?
+Hi,
 
-IMO we just shouldn't be turning on C3STOP at all.  Sure it's making the 
-problem here go away, but it's trying to emulate a bunch of Intel timer 
-features we don't have on RISC-V and ending up in a bunch of fallback 
-paths.
+On 11/22/22 08:00, Artem Bityutskiy wrote:
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> 
+> Make Intel uncore frequency driver support Emerald Rapids by adding its CPU
+> model to the match table. Emerald Rapids uncore frequency control is the same
+> as in Sapphire Rapids.
+> 
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> ---
+> 
+> Re-sending the same patch, but added X86 platform maintainers.
 
-If we need some workaround in the timer subsystem to sort out the 
-non-retentive states then we can sort that out, but my guess is that 
-vendors are just going to 3
+There are 3 different issues with this patch, next time please
+check your patch a bit more thorough before submitting it:
 
->> > > With all due respect, NACK to this patch from my side.
->
-> As Samuel pointed out that the D1 doesn't actually use the timer in
-> question, I think we are okay here?
+1. This is the first time I see this, or that the platform-driver-x86@vger.kernel.org
+list sees this. Next time please make sure you address the patch to the right
+people the first time you send it:
 
-IIUC it just should use the sunxi timer driver, but that requires some 
-priority changes (and presumably breaks 
+[hans@shalem platform-drivers-x86]$ scripts/get_maintainer.pl -f drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com> (maintainer:INTEL UNCORE FREQUENCY CONTROL)
+Hans de Goede <hdegoede@redhat.com> (maintainer:X86 PLATFORM DRIVERS)
+Mark Gross <markgross@kernel.org> (maintainer:X86 PLATFORM DRIVERS)
+platform-driver-x86@vger.kernel.org (open list:INTEL UNCORE FREQUENCY CONTROL)
+linux-kernel@vger.kernel.org (open list)
 
-That said, I guess I'm confused about what's actually broken here.  My 
-understanding of the problem is: The D1's firmware disables some 
-interrupts during non-retentive suspend, which results in SBI timers 
-failing to wake up the core.  The patch to add C3STOP makes the core 
-come back from sleep, but that results in a bunch of other timer-related 
-issues.
 
-So IMO we should revert the C3STOP patch as it's causing regressions 
-(ie, old workloads break in order to make new ones work).  Seems like 
-folks mostly agree on that one?
+2. This has checkpatch warnings which are easily fixable:
 
-I also think we should stop entering non-retentive suspend until we can 
-sort out how reliably wake up from it, as the SBI makes that a 
-platform-specific detail.  If the answer there is "non-retentive suspend 
-is fine on the D1 as long as we don't use the SBI timers" then that 
-seems fine, we just need some way to describe that in Linux -- that 
-doesn't fix other platforms and other interrupts, but at least it's a 
-start.
+[hans@shalem platform-drivers-x86]$ scripts/checkpatch.pl 0001-platform-x86-intel-uncore-freq-add-Emerald-Rapids-su.patch 
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+#7: 
+model to the match table. Emerald Rapids uncore frequency control is the same
 
-Sorry if I've just misunderstood something here?
+total: 0 errors, 1 warnings, 7 lines checked
 
->
->> > >>
->> > >> ---
->> > >>
->> > >> This should allow us to revert 232ccac1bd9b ("clocksource/drivers/riscv:
->> > >> Events are stopped during CPU suspend"), which fixes suspend on the D1
->> > >> but breaks timers everywhere.
->> > >> ---
->> > >>  drivers/cpuidle/cpuidle-riscv-sbi.c | 11 +++++++++++
->> > >>  1 file changed, 11 insertions(+)
->> > >>
->> > >> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
->> > >> index 05fe2902df9a..9d1063a54495 100644
->> > >> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
->> > >> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
->> > >> @@ -214,6 +214,17 @@ static bool sbi_suspend_state_is_valid(u32 state)
->> > >>         if (state > SBI_HSM_SUSPEND_NON_RET_DEFAULT &&
->> > >>             state < SBI_HSM_SUSPEND_NON_RET_PLATFORM)
->> > >>                 return false;
->> > >> +
->> > >> +       /*
->> > >> +        * Whether or not RISC-V systems deliver interrupts to harts in a
->> > >> +        * non-retentive suspend state is a platform-specific detail.  This can
->> > >> +        * leave the hart unable to wake up, so just mark these states as
->> > >> +        * unsupported until we have a mechanism to expose these
->> > >> +        * platform-specific details to Linux.
->> > >> +        */
->> > >> +       if (state & SBI_HSM_SUSP_NON_RET_BIT)
->> > >> +               return false;
->> > >> +
->> > >>         return true;
->> > >>  }
->> > >>
->> > >> --
->> > >> 2.38.1
->> > >>
+NOTE: For some of the reported defects, checkpatch may be able to
+      mechanically convert to the typical style using --fix or --fix-inplace.
+
+0001-platform-x86-intel-uncore-freq-add-Emerald-Rapids-su.patch has style problems, please review.
+
+NOTE: If any of the errors are false positives, please report
+      them to the maintainer, see CHECKPATCH in MAINTAINERS.
+
+
+3. This fails to build on top of:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=for-next
+which is the branch on which this needs to be applied to get upstream, so this is also
+the branch on which you should base the patch (and build test it) before submitting it
+upstream:
+
+In file included from drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c:21:
+./arch/x86/include/asm/cpu_device_id.h:161:46: error: ‘INTEL_FAM6_EMERALDRAPIDS_X’ undeclared here (not in a function); did you mean ‘INTEL_FAM6_SAPPHIRERAPIDS_X’?
+  161 |         X86_MATCH_VENDOR_FAM_MODEL(INTEL, 6, INTEL_FAM6_##model, data)
+      |                                              ^~~~~~~~~~~
+./arch/x86/include/asm/cpu_device_id.h:46:27: note: in definition of macro ‘X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE’
+   46 |         .model          = _model,                                       \
+      |                           ^~~~~~
+./arch/x86/include/asm/cpu_device_id.h:129:9: note: in expansion of macro ‘X86_MATCH_VENDOR_FAM_MODEL_FEATURE’
+  129 |         X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model,       \
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+./arch/x86/include/asm/cpu_device_id.h:161:9: note: in expansion of macro ‘X86_MATCH_VENDOR_FAM_MODEL’
+  161 |         X86_MATCH_VENDOR_FAM_MODEL(INTEL, 6, INTEL_FAM6_##model, data)
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c:206:9: note: in expansion of macro ‘X86_MATCH_INTEL_FAM6_MODEL’
+  206 |         X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
+      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make[6]: *** [scripts/Makefile.build:250: drivers/platform/x86/intel/uncore-frequency/uncore-frequency.o] Error 1
+
+
+Regards,
+
+Hans
+
+
+
+
+
+
+
+> 
+>  drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+> index 8f9c571d7257..00ac7e381441 100644
+> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
+> @@ -203,6 +203,7 @@ static const struct x86_cpu_id intel_uncore_cpu_ids[] = {
+>  	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,	NULL),
+>  	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,	NULL),
+>  	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
+> +	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
+
