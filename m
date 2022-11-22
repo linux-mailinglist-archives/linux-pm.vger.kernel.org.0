@@ -2,178 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D82E63483A
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 21:32:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3261563483B
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 21:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiKVUc5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 15:32:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S234468AbiKVUdr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 15:33:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234468AbiKVUc4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 15:32:56 -0500
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BF18F599
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 12:32:54 -0800 (PST)
-Received: by mail-pj1-x1034.google.com with SMTP id y14-20020a17090a2b4e00b002189a1b84d4so8943677pjc.2
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 12:32:54 -0800 (PST)
+        with ESMTP id S233908AbiKVUdr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 15:33:47 -0500
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6134C265
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 12:33:46 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-39e61d2087dso80362247b3.5
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 12:33:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=jMJItYMF29YfMh/OsZNI6VCCgORdvfB51lyo6jNy2Zc=;
-        b=nh4Eom95rOeFdNvSiGhaLb+5ZIXcTBbgAVqeiUlUmjxsPFF7ReUySznDatdiEmItJY
-         7Ut3a7PDtdIQRiZJWt4FKGKjG/KvG7j0PJRyVGC0+TTU+IxzJAN/iA/0oSBHJ8ntlE3Z
-         duY39XaLbr1wY1etSMgm2MKW6iuU3+erAhMCqD3Q9seq9YZcGIwLJH7QivgTXoivFTuq
-         niCufs7kKpCgBb9W2tcueiJS9DFEA/abYaxmsH/ur9jQs+1b7hIAavuWe80cG+g31ll2
-         JS5H2cTrhv18TNTSlhJN9fPKeCWRbyDG9aAmiDblAJzf/ppBwIZc6ggz9U6Q/I0+HMSr
-         3wZQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SnF/2AOItpjtHhZAOeHmLLPG/kwypU0W2IxPDEf1sKs=;
+        b=S5UN7rv14cIrLw2a9/Ykqsp3+pAiqxDUSdorP3K8QsG9qNCvT3mcqBlozmP1BqhRYU
+         babN3GaESqHuHkqQvOag/DcOD+4pu5g3b3HJL9QFbc22syw8ovQlOk32vocTy0Ioql47
+         AXiouDsx/bTpHypn+XyrlXoHjMeZhALRWn+t/zsVHX/aE6QCjMgLN/nWdSzBxpCC1r4t
+         Ogv43HG+WJ+dHjDdEk1ZgYV3IEt5R+SHlQNtQIdRqT+HX5iSPezP3YMLrxixCLQnwgr3
+         oU90UA++fZkSRW632gaeNi0ZC3qc/j0ml9LX07RrZpp5eSJ1VmyLYyz7/9+R11v4lFJw
+         sH4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jMJItYMF29YfMh/OsZNI6VCCgORdvfB51lyo6jNy2Zc=;
-        b=CH1AmRkHG2cc9i4LijfVzlbkTOdqsW9QoL2ngpGEgA3gAhC1dlwFsk8lioCeRZF4oS
-         D/RLQiT7pvzE62bs+Fdm3V+o/SSVjTd28X0UsjeVmbkOX4/+bw9c2NqgDEUZkhNDuWmJ
-         JPnEOPy/fiWIKpbeIATBTtFtk79NP8wkPyjjv++raNUiiKHsw6bKRcePLiHZ4RDRNQZJ
-         bFbQe/ZLylX+yz/7k7nTgOUBCPISPqOy/s2N0JZ0+WPZ0s9BY7++dCxwFxdXsmCkzUqC
-         S0va6XyEsHzZQCksUFwYZZVe1uk1xwQ1bYX4VrrXJb0SKGSX0D0+sseOHf24uiXsfCZY
-         c29A==
-X-Gm-Message-State: ANoB5pkS1X7aVAzu3AkdFeGarfSq2IdiG5eJPw0P1MwoQB+8puceSU2w
-        SGIy71dFzEoQs7pYobY953WZHh9Qz+6MwedYkdc=
-X-Google-Smtp-Source: AA0mqf74c7flzT/PVmG6Fl9BIBA/54pe8OLtrIaKldc2GJCI4n1uCv+XBUsaQaw28HFo63JYLvTjcQ==
-X-Received: by 2002:a17:90a:9c18:b0:212:fa9a:12df with SMTP id h24-20020a17090a9c1800b00212fa9a12dfmr33552866pjp.231.1669149174077;
-        Tue, 22 Nov 2022 12:32:54 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id w13-20020a63fb4d000000b0046b2ebb0a52sm9466363pgj.17.2022.11.22.12.32.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 12:32:53 -0800 (PST)
-Message-ID: <637d31f5.630a0220.8661a.ec2e@mx.google.com>
-Date:   Tue, 22 Nov 2022 12:32:53 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        bh=SnF/2AOItpjtHhZAOeHmLLPG/kwypU0W2IxPDEf1sKs=;
+        b=4LmmYU5/YIomNIkwezzWtzpNS/i3q9QFbtatZ369vH/O7EhTNehJfBF71O4m9sNDBZ
+         giOhsmy/YqnaLk146yQjcHcBRFZ7rP1e4OH4XAjwGDd56uEUFRXHoSNCnOYZ7OAA036A
+         dQSxaZO+gqCG6yFeDr8qkEUv9GdvIoXxTKPOJRHRRvlrfcZQJoibKW0lMlzras0Wj9yc
+         Dz9KBZkm7WA4k9OcIhUcncJBe+nIgwKfRpHiO16Ra/peNaDpHB614D/PRCV3n3J5t2Rh
+         YAOTvFfItGwWBqZgYxkyMXhcCKTcXOatJVobBBmpC11SWFKz1UbUAlcJtlNmzPBeC69a
+         wyPw==
+X-Gm-Message-State: ANoB5pmpRUaKImZgmFql04ED3M1s5i83HHB/WaE06dTR0sfyfaoMDyHr
+        HhSPcxnPoIQVJZyA/EoxuHwoYnIaszGSnuyQP795mf02PvQ=
+X-Google-Smtp-Source: AA0mqf7KQRnLFWYVu8qmj59uoe8GjqCLrOQx9VNRG9UQS5qsXnl4ZNbR4LfEY3ZOHkNXPkoc5TlJA2Ia4JjONZQ1CMQ=
+X-Received: by 2002:a81:8496:0:b0:36f:d14a:6158 with SMTP id
+ u144-20020a818496000000b0036fd14a6158mr22642352ywf.325.1669149225475; Tue, 22
+ Nov 2022 12:33:45 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.1-rc6-89-g611bfa6eb1e00
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.1-rc6-89-g611bfa6eb1e00)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221121011834.119060-1-zhangqilong3@huawei.com>
+In-Reply-To: <20221121011834.119060-1-zhangqilong3@huawei.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 22 Nov 2022 21:33:34 +0100
+Message-ID: <CACRpkdYwaoGOMNTdPnUbD-2y5PHY7Wp+fSuQvTsZLm2kaNuKeA@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: z2_battery: Fix possible memleak in z2_batt_probe()
+To:     Zhang Qilong <zhangqilong3@huawei.com>
+Cc:     sre@kernel.org, daniel@zonque.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc6-89-g61=
-1bfa6eb1e00)
+On Mon, Nov 21, 2022 at 2:14 AM Zhang Qilong <zhangqilong3@huawei.com> wrote:
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-1-rc6-89-g611bfa6eb1e00/
+> If devm_gpiod_get_optional() returns error, the charger should be
+> freed before z2_batt_probe returns according to the context. We
+> fix it by just gotoing to 'err' branch.
+>
+> Fixes: a3b4388ea19b ("power: supply: z2_battery: Convert to GPIO descriptors")
+> Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
 
-Tree: pm
-Branch: testing
-Git Describe: v6.1-rc6-89-g611bfa6eb1e00
-Git Commit: 611bfa6eb1e00510c7f77ac569929d470984366a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Oops good catch!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Yours,
+Linus Walleij
