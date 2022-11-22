@@ -2,63 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B8FF6335BD
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 08:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30C163362C
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 08:46:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229750AbiKVHPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 02:15:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
+        id S230009AbiKVHqo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 02:46:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKVHPi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 02:15:38 -0500
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E0C83120D;
-        Mon, 21 Nov 2022 23:15:37 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id D17F88061;
-        Tue, 22 Nov 2022 07:05:22 +0000 (UTC)
-Date:   Tue, 22 Nov 2022 09:15:35 +0200
-From:   Tony Lindgren <tony@atomide.com>
-To:     Carl Klemm <carl@uvos.xyz>
-Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        philipp@uvos.xyz, Pavel Machek <pavel@ucw.cz>
-Subject: Re: [PATCH 2/3] power: supply: cpcap-battery: Fix battery
- identification
-Message-ID: <Y3x3F4x+Y26pID0l@atomide.com>
-References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1667647544-12945-3-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <20221110160559.bsvzr4txum5ed2qz@mercury.elektranox.org>
- <715a60b5-2f3c-caf7-2b24-61ec92bda9be@gmail.com>
- <Y3OY/l2ZBX+WbRR4@atomide.com>
- <90314373-de30-019a-dc0c-f5cab57a48c6@gmail.com>
- <Y3W+M3/7zOutygEZ@atomide.com>
- <a04a2c13d21d3f381fcd525e5f47c217543d2c18.camel@uvos.xyz>
+        with ESMTP id S229946AbiKVHqm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 02:46:42 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01E2E31375;
+        Mon, 21 Nov 2022 23:46:37 -0800 (PST)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id ABB6B24E2D9;
+        Tue, 22 Nov 2022 15:46:35 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 15:46:35 +0800
+Received: from [192.168.125.96] (113.72.144.23) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 22 Nov
+ 2022 15:46:34 +0800
+Message-ID: <98866fec-e88a-f241-bb42-78d33f051f11@starfivetech.com>
+Date:   Tue, 22 Nov 2022 15:46:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a04a2c13d21d3f381fcd525e5f47c217543d2c18.camel@uvos.xyz>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+From:   Walker Chen <walker.chen@starfivetech.com>
+Subject: Re: [PATCH v1 1/4] dt-bindings: power: Add StarFive JH7110 power
+ domain definitions
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221118133216.17037-1-walker.chen@starfivetech.com>
+ <20221118133216.17037-2-walker.chen@starfivetech.com>
+ <bc853d76-5b65-676a-040a-edf53034c9ad@linaro.org>
+Content-Language: en-US
+In-Reply-To: <bc853d76-5b65-676a-040a-edf53034c9ad@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.144.23]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-* Carl Klemm <carl@uvos.xyz> [221117 08:06]:
-> 2. Personally i used the d4 for manny years with andorid without issue,
-> giveing the battery manny cycles
+On 2022/11/21 18:12, Krzysztof Kozlowski wrote:
+> On 18/11/2022 14:32, Walker Chen wrote:
+>> Add power domain definitions for the StarFive JH7110 SoC.
+>>
+>> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+>> ---
+>>  include/dt-bindings/power/jh7110-power.h | 18 ++++++++++++++++++
+>>  1 file changed, 18 insertions(+)
+>>  create mode 100644 include/dt-bindings/power/jh7110-power.h
+>>
+>> diff --git a/include/dt-bindings/power/jh7110-power.h b/include/dt-bindings/power/jh7110-power.h
+>> new file mode 100644
+>> index 000000000000..24160c46fbaf
+>> --- /dev/null
+>> +++ b/include/dt-bindings/power/jh7110-power.h
+> 
+> Filename matching compatible or bindings file.
 
-Many cycles does not seem to be the issue, the issue seems to be leaving
-the device connected to the charger for longer periods of time at higher
-charge voltages.
+So the file name should be changed to "starfive,jh7110-power.h" and the compatible in the driver 
+should also be changed to "starfive,jh7110-power". Is it right ?
 
-No objection to having the capability there. But enabling it by default
-is a different story. We need several folks test connected to a charger
-for months with proper Tested-by if we want to enable it by default.
+> 
+>> @@ -0,0 +1,18 @@
+>> +/* SPDX-License-Identifier: (GPL-2.0) */
+> 
+> Dual license for bindings.
 
-Regards,
+Ok, the license will be changed to GPL-2.0 or MIT in the patch v2. 
 
-Tony
+> 
+>> +/*
+>> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
+>> + * Author: Walker Chen <walker.chen@starfivetech.com>
+>> + */
+>> +#ifndef __DT_BINDINGS_POWER_JH7110_POWER_H__
+>> +#define __DT_BINDINGS_POWER_JH7110_POWER_H__
+> 
+> Best regards,
+> Krzysztof
+> 
+
