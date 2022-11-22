@@ -2,109 +2,196 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C97633D9D
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 14:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CB8B633DB1
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 14:30:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiKVN0o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 08:26:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55914 "EHLO
+        id S233378AbiKVNal (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 08:30:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232373AbiKVN0n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 08:26:43 -0500
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D35064A23
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 05:26:42 -0800 (PST)
-Received: by mail-pj1-x102a.google.com with SMTP id w3-20020a17090a460300b00218524e8877so1280835pjg.1
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 05:26:42 -0800 (PST)
+        with ESMTP id S233367AbiKVNaj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 08:30:39 -0500
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E2654F1
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 05:30:35 -0800 (PST)
+Received: by mail-yb1-xb35.google.com with SMTP id c15so17290761ybf.1
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 05:30:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qP1ro1Xp4KmRIYWh++cut3pCh3rHsw4qLAPVjrGPG0A=;
-        b=dv5Q8Hd0KbiTdNFTbG/s9Q1Pk5TVxpzMSp+i6d+ToHSwKLREjLtiJdOKFtCtS9nbdJ
-         gjRh1lmC6Gblwqc2s9zYO/o371Xb9+StZLLOvJffUArp9HOMqVlYlpVs7rTgWe24cyOF
-         VLRMfSSRFLeCRlmszXHQWTaLbyoLXj6D9gXS9X2DBQxfdacFAfDbdzhUi9WliV8lvA/G
-         +HjvrsfR3rHp1yYv2P0FNMv7YzTd5ymASZ++RBGLto8IqtfREujRvAv3Sft8sjPgAMoa
-         7jdJBL0R4UYb3uXrsfGONy+UUbGPFODttbhEdO2ELKV+lg7YGBfE6tKpusfkLod7ydA1
-         ZeBQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3u1XUALavBeR1kKMHVM25AVpNdjJ1fTh/8LVQ3pBSzA=;
+        b=F9q4drH+N1IMCom8ENOvIuU/6OCrrvFECfe5ScOD77fy2QwKAMMxA7EE6TKqT6530F
+         6nVxgo5aulAAf2ZrYhuBo85xMfsvLOcbefPxASO07ofisIfgC+TtyUbafZXMN6/Wng7z
+         TGbjSdoURgZWqEPBx/hqTTCOIjhT/A3Ln5BpM3NpiHauoJwVZXMhCFtmR5rWsbElSFty
+         Qf0AtzT33ML4bIhCbGPUDSL13uA80Tfv6XWhJf2wX9Kg713AQLgqm0w0LDvAn9IaNsr4
+         heAkQ0FiTsh4B1f1WF82/rvezusxEiStHkHoRmAn5P0QUTTxgwaqo6kyUShLBjkrYhwz
+         x0nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qP1ro1Xp4KmRIYWh++cut3pCh3rHsw4qLAPVjrGPG0A=;
-        b=rtY8nrF1wjAvdvvrxbCyy4OxZTbrOs9R8hHuVhJt8M8JuiPtTwLBx1uc+AGX5sH1Hb
-         wu6UZb6bsrjEDl1wltXyFRHuibQ+KgQzyZqxgpXteaHR9JHAcYI9LYCX/vrvmvDkslIZ
-         FBlqIRrp5jEAn7buOOTAQZqBE9tShQWHrIYHaUboM1fXfYyb6Rrow8j7oJG+FCRxvzAD
-         qE0xsYsFeIf/4UzksfRcpMHavNz9I5BZU985kzBOV2vFIGYq7lJr6xLSC4++k+wb9nUz
-         SMwfdBTJAYFSgUm7vCe1/DJul6R+/dLj25fQAqDmXLP1OryxulCTfSF9/MPXXjHv+7vj
-         frgA==
-X-Gm-Message-State: ANoB5pkjCBi+9mWFunbUmSWtb/Inw9b4ikGe44ruzAganMn1XR9DljxN
-        AYLBmnVQ7xRu2p5lw0Um93IY
-X-Google-Smtp-Source: AA0mqf6OxytBkKW5vneFasf2lAqfg9u2xGOOekCmuUuFkrB9iZqEIQD6SB5fsFw2eYAcHp0ne1v3+A==
-X-Received: by 2002:a17:90a:398f:b0:213:5a55:7dd2 with SMTP id z15-20020a17090a398f00b002135a557dd2mr26174391pjb.50.1669123601870;
-        Tue, 22 Nov 2022 05:26:41 -0800 (PST)
-Received: from thinkpad ([59.92.98.84])
-        by smtp.gmail.com with ESMTPSA id t22-20020a63dd16000000b0047791c6cc10sm1856757pgg.93.2022.11.22.05.26.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Nov 2022 05:26:40 -0800 (PST)
-Date:   Tue, 22 Nov 2022 18:56:33 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Johan Hovold <johan@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
- corresponding clk
-Message-ID: <20221122132633.GB157542@thinkpad>
-References: <cover.1669012140.git.viresh.kumar@linaro.org>
- <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
- <Y3snGQet8yc7HnJK@hovoldconsulting.com>
- <20221121073817.7ollj7jeixrx5og5@vireshk-i7>
- <Y3sryFh84eK/sWKF@hovoldconsulting.com>
- <20221121083036.ppwfprrheuf7xl7c@vireshk-i7>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3u1XUALavBeR1kKMHVM25AVpNdjJ1fTh/8LVQ3pBSzA=;
+        b=0Q3HUWHI/d1DymjOMVICSHhMpp6hhugoz+SglR9xHgUIh2IefA4DdS2zLE9xDf+7wn
+         VF6wE6MSqEE35EVJT0Ws+1qMqXUZ4ycIYoTZU/cFg3vNeT2VsXMvhVihYFFAB8E53OQG
+         iCT0+owwLXM/XxtDksqtpM2FSCf5eP0r0viP3TNEjkv2l6t3B7m6Nmpnvb6B3f2I/qjb
+         LhYEeo+OfEE7r7Lc5OR46lFZ8gLEDqh0JkRoIS19/hPrfwks5An3GXjSxn5UrNkyvqeT
+         E1h+DTM5vxPILEuL4XauxezllkmD9/uEpNJgbDLZynId2Ce1P37+hIEUNNpcdkZpNn0a
+         vEQQ==
+X-Gm-Message-State: ANoB5plP2MuFm32twA/OZEP7w8Vb7rQAhVa4Zuwntd5zap0GUAgcDgsO
+        vyfgG7KrvVw6K3ZM+z2OoRK7tc6uaMiJw6mtdXnIhg==
+X-Google-Smtp-Source: AA0mqf5bV7d8p5GauuDP4eZ44mV+c9M00UQOg+30Bt/xSqVCkfos0pcbeU+IN+5jK9Mr48pUHWNEzE7YWUNQ3XsXAsE=
+X-Received: by 2002:a25:510:0:b0:6d2:e45c:71c0 with SMTP id
+ 16-20020a250510000000b006d2e45c71c0mr3906010ybf.153.1669123834422; Tue, 22
+ Nov 2022 05:30:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221121083036.ppwfprrheuf7xl7c@vireshk-i7>
+References: <20221120154625.57095-1-y.oudjana@protonmail.com>
+ <795deac4-71fe-d40b-a3b6-855eb3875ad1@linaro.org> <1H1PLR.S9UFOHIJCU6S@gmail.com>
+ <1419e9da-98f7-c477-9f07-4b54e82be4c4@linaro.org>
+In-Reply-To: <1419e9da-98f7-c477-9f07-4b54e82be4c4@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 22 Nov 2022 15:30:23 +0200
+Message-ID: <CAA8EJpor_LnxLGYy25i-D6RBBO+-G9MsVWw=Qfm1Emp88KRJzQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] dt-bindings: power: supply: Add DT schema for
+ Qualcomm SMBCHG
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Alejandro Tafalla <atafalla@dnyon.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, phone-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 02:00:36PM +0530, Viresh Kumar wrote:
-> On 21-11-22, 08:42, Johan Hovold wrote:
-> > Ok, I was expected the devicetree update to through Bjorn's tree as I
-> > imagine there may be conflicts otherwise.
-> 
-> Dropped the DT patch now.
-> 
-> Mani, I believe the first patch in this series is still required.
-> Without that, when the cpufreq driver calls dev_pm_opp_set_opp(), the
-> OPP core may end up calling clk_set_rate(), which shouldn't be done in
-> case of Qcom SoCs.
-> 
+Hi,
 
-If there is no .set_rate() callback implemented by the clock provider, it won't
-hurt, right?
+On Mon, 21 Nov 2022 at 19:07, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/11/2022 11:36, Yassine Oudjana wrote:
+> >
+> > On Mon, Nov 21 2022 at 09:26:59 +01:00:00, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >> On 20/11/2022 16:46, Yassine Oudjana wrote:
+> >>>>>  +  interrupts:
+> >>>>>  +    items:
+> >>>>>  +      - description: Charger error
+> >>>>>  +      - description: Charger inhibited
+> >>>>>  +      - description: Charger precharge safety timer timeout
+> >>>>>  +      - description: Charger charge safety timer timeout
+> >>>>>  +      - description: Charger pre to fast charging switch
+> >>>>> threshold reached
+> >>>>>  +      - description: Charger recharge threshold reached
+> >>>>>  +      - description: Charger taper threshold reached
+> >>>>>  +      - description: Charger charge termination threshold reached
+> >>>>>  +      - description: Battery hot
+> >>>>>  +      - description: Battery warm
+> >>>>>  +      - description: Battery cold
+> >>>>>  +      - description: Battery cool
+> >>>>>  +      - description: Battery overvoltage
+> >>>>>  +      - description: Battery low
+> >>>>>  +      - description: Battery missing
+> >>>>>  +      - description: Battery thermistor missing # unconfirmed
+> >>>>>  +      - description: USB input undervolt
+> >>>>>  +      - description: USB input overvolt
+> >>>>>  +      - description: USB input source detected
+> >>>>>  +      - description: OTG regulator failure
+> >>>>>  +      - description: OTG regulator overcurrent
+> >>>>>  +      - description: Automatic input current limiting done
+> >>>>>  +      - description: USB ID pin changed
+> >>>>>  +      - description: DC input undervolt
+> >>>>>  +      - description: DC input overvolt
+> >>>>>  +      - description: Power OK
+> >>>>>  +      - description: Temperature shutdown
+> >>>>>  +      - description: Watchdog timeout
+> >>>>>  +      - description: Flash failure
+> >>>>>  +      - description: OTST2 # unknown
+> >>>>>  +      - description: OTST3 # unknown
+> >>>>
+> >>>>  It seems you listed register interrupts, not physical pins. This
+> >>>> should
+> >>>>  be interrupt lines.
+> >>>
+> >>>  I'm not sure what I'm supposed to do here. I couldn't find an
+> >>> interrupt-lines
+> >>>  property used anywhere so that's not what you meant, right?
+> >>
+> >> Are these physical interrupt lines this device has, register offsets
+> >> or
+> >> virtual interrupts (e.g. passed via irq_chip)? Definitely not the
+> >> first
+> >> and rather offsets for qpnpint_irq_domain_translate. Devicetree is not
+> >> for describing register layout of devices. IOW, register layout does
+> >> not
+> >> change on different boards, because the device is exactly the same, so
+> >> there is no point to put it into DTS.
+> >>
+> >
+> > So how would I describe the interrupts then? Or if you are saying I
+> > shouldn't have these interrupts in DT at all, how would I get them and
+> > register handlers for them in the driver? the PMIC arbiter takes 4
+> > interrupt cells, 3 of which are these offsets specifying the peripheral
+> > and interrupt. All other PMIC peripherals currently described in DT
+> > (examples being qcom,pm8916-wcd-analog-codec, qcom,pm8941-pwrkey and
+> > qcom-wled) have their interrupts (if any) described this way, with the
+> > only exceptions perhaps being the GPIO and MPP controllers which are
+> > themselves interrupt controllers. Changing the way PMIC peripheral
+> > interrupts are described would require changing PMIC arbiter bindings
+> > and code which I believe is out of the scope of this patch series.
+>
+> I don't think this would touch PMIC arbiter bindings, rather the PMIC
+> itself. Usually complex devices (like PMICs) have one few physical
+> interrupt lines and many registers related to some specific interrupts.
+> For example:
+> 1. One IRQ line,
+> 2. Register with bits for overvoltage, undervoltage, vharger error etc.
+>
+> Now how the MFD child device accesses them. Since this is strictly
+> related to hardware programming model, it's not something you put to
+> Devicetree. Instead parent device (PMIC) registers IRQ chip for its one
+> interrupt line with several Linux (or virtual) interrupts. The children
+> then just get a virtual IRQ from the parent (PMIC) and setup a
+> handler(s) for them.
 
-Thanks,
-Mani
+Unfortunately this is not how SPMI PMICs work (at least on the
+Qualcomm platforms). Access to interrupt registers is handled via the
+SPMI bus arbiter writes, not through the GPIO pin or typical spmi's
+bus interface (in the other words, not through the PMIC's SPMI
+regmap). I guess we can add an intermediate irq chip to automatically
+handle the USID, etc. However I doubt that it will really bring a lot
+in our case.
 
-> I am not sure though, how it will work with sc8280xp. Can you please
-> check ?
-> 
-> -- 
-> viresh
+> You will find some examples for this, just grep for regmap_irq_get_virq,
+> for the drivers using regmap_irq_chip (or irq_create_mapping for
+> non-regmaps).
+>
+> Since it is *one* device - the PMIC and its child like charger - the
+> register layout is fixed thus I think these virtual (or Linux)
+> interrupts are fixed as well.
+>
+> I don't know why Qualcomm PMIC for SPMI is done differently.
+>
+> Best regards,
+> Krzysztof
+>
+
 
 -- 
-மணிவண்ணன் சதாசிவம்
+With best wishes
+Dmitry
