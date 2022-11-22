@@ -2,80 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA5F633594
-	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 08:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B8FF6335BD
+	for <lists+linux-pm@lfdr.de>; Tue, 22 Nov 2022 08:15:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232231AbiKVHAU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 22 Nov 2022 02:00:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S229750AbiKVHPj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 22 Nov 2022 02:15:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiKVHAT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 02:00:19 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64B0623BF0;
-        Mon, 21 Nov 2022 23:00:18 -0800 (PST)
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="315569508"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="315569508"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2022 23:00:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10538"; a="635448177"
-X-IronPort-AV: E=Sophos;i="5.96,183,1665471600"; 
-   d="scan'208";a="635448177"
-Received: from powerlab.fi.intel.com ([10.237.71.25])
-  by orsmga007.jf.intel.com with ESMTP; 21 Nov 2022 23:00:15 -0800
-From:   Artem Bityutskiy <dedekind1@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>
-Subject: [PATCH resend] platform/x86: intel-uncore-freq: add Emerald Rapids support
-Date:   Tue, 22 Nov 2022 09:00:14 +0200
-Message-Id: <20221122070014.3639277-1-dedekind1@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        with ESMTP id S229516AbiKVHPi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 22 Nov 2022 02:15:38 -0500
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E0C83120D;
+        Mon, 21 Nov 2022 23:15:37 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id D17F88061;
+        Tue, 22 Nov 2022 07:05:22 +0000 (UTC)
+Date:   Tue, 22 Nov 2022 09:15:35 +0200
+From:   Tony Lindgren <tony@atomide.com>
+To:     Carl Klemm <carl@uvos.xyz>
+Cc:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        philipp@uvos.xyz, Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH 2/3] power: supply: cpcap-battery: Fix battery
+ identification
+Message-ID: <Y3x3F4x+Y26pID0l@atomide.com>
+References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <1667647544-12945-3-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <20221110160559.bsvzr4txum5ed2qz@mercury.elektranox.org>
+ <715a60b5-2f3c-caf7-2b24-61ec92bda9be@gmail.com>
+ <Y3OY/l2ZBX+WbRR4@atomide.com>
+ <90314373-de30-019a-dc0c-f5cab57a48c6@gmail.com>
+ <Y3W+M3/7zOutygEZ@atomide.com>
+ <a04a2c13d21d3f381fcd525e5f47c217543d2c18.camel@uvos.xyz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,
-        NML_ADSP_CUSTOM_MED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL,
-        SPOOFED_FREEMAIL,SPOOF_GMAIL_MID autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a04a2c13d21d3f381fcd525e5f47c217543d2c18.camel@uvos.xyz>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+* Carl Klemm <carl@uvos.xyz> [221117 08:06]:
+> 2. Personally i used the d4 for manny years with andorid without issue,
+> giveing the battery manny cycles
 
-Make Intel uncore frequency driver support Emerald Rapids by adding its CPU
-model to the match table. Emerald Rapids uncore frequency control is the same
-as in Sapphire Rapids.
+Many cycles does not seem to be the issue, the issue seems to be leaving
+the device connected to the charger for longer periods of time at higher
+charge voltages.
 
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
+No objection to having the capability there. But enabling it by default
+is a different story. We need several folks test connected to a charger
+for months with proper Tested-by if we want to enable it by default.
 
-Re-sending the same patch, but added X86 platform maintainers.
+Regards,
 
- drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-index 8f9c571d7257..00ac7e381441 100644
---- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-+++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency.c
-@@ -203,6 +203,7 @@ static const struct x86_cpu_id intel_uncore_cpu_ids[] = {
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_X,	NULL),
- 	X86_MATCH_INTEL_FAM6_MODEL(ICELAKE_D,	NULL),
- 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X, NULL),
-+	X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X, NULL),
- 	{}
- };
- MODULE_DEVICE_TABLE(x86cpu, intel_uncore_cpu_ids);
--- 
-2.37.3
-
+Tony
