@@ -2,128 +2,257 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31C8636BBD
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 22:00:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B18B7636E04
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 00:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232341AbiKWVA4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Nov 2022 16:00:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53238 "EHLO
+        id S229669AbiKWXEf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Nov 2022 18:04:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235843AbiKWVAy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 16:00:54 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FAF14D01
-        for <linux-pm@vger.kernel.org>; Wed, 23 Nov 2022 12:59:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669237188;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1sOO24ElSZswZpTQQYOZoAVgnKzXm6MZGjbewnmAv8U=;
-        b=P/oQtAeioNUtVgs6GkqaxHuYZBlHPFePBbcA892H2cGxJuANje91srDv9UPzuMProfkub5
-        xSOFLiMwlFuOp1c2ag1OB9XdqJnyw9TNcluHUa2RYkAgov91fCSlwWoHMZ7q7kbHlvWtd6
-        a7Rl5hziGWhENUamFcwN7VaFaLLnXAU=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-668-HeDrR4sAM6CDYXRZaXqEFg-1; Wed, 23 Nov 2022 15:59:46 -0500
-X-MC-Unique: HeDrR4sAM6CDYXRZaXqEFg-1
-Received: by mail-ej1-f72.google.com with SMTP id dn14-20020a17090794ce00b007ae5d040ca8so10559547ejc.17
-        for <linux-pm@vger.kernel.org>; Wed, 23 Nov 2022 12:59:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1sOO24ElSZswZpTQQYOZoAVgnKzXm6MZGjbewnmAv8U=;
-        b=Mp+kSnp8nZ8gpp0uOhdG4wrNNn/XxjsAwh6QvmASwzipIzbJCIpmk5UwKi85DBzorD
-         JbHc6M+cOO9V904RirDVCnOSRxQ43wZeTcz2ciqjb/5kf9HYREl95t/yvNcVfuSk14kZ
-         UKH8HCgJZ0mkIKKHDIJ2HZmanMsutCyozwBlAkymeElFOCcg6Ohf3ZELFi+naKVNfVib
-         Je4slBHOQLDjB5Tav0YrfwRj6igcTKUmmVn3jyJdkOZK7e6ITMPhv2wrcukPSG406l4d
-         jRLTwi3FtcfGuENoTgC/hLXvgzbCPuGl4QYFtFGQdYCfNFTjO5Lz3QtAXqGxVXJjQNwJ
-         XuPA==
-X-Gm-Message-State: ANoB5pnUthyBy09MWEyWux8cHfZL80hFE3taxuc3uxI7PUf7zu041rRW
-        p+OBiv4yXYTwwAlVZe75IGlNhtZOio0y9fRXWksdg1H8eLo3AaK7mL5jUubfirEYJyJCVb3DT2d
-        brZxaLiULqwZvi95vfOY=
-X-Received: by 2002:a05:6402:448c:b0:461:7378:3501 with SMTP id er12-20020a056402448c00b0046173783501mr10009562edb.35.1669237185810;
-        Wed, 23 Nov 2022 12:59:45 -0800 (PST)
-X-Google-Smtp-Source: AA0mqf7lg6cdlyR3UiGu4Sf8KwL2Xr5DSzhVTEOeKzm4qQnvq22jlFZ3QsZb8jgbKRDR30fOTHQnsg==
-X-Received: by 2002:a05:6402:448c:b0:461:7378:3501 with SMTP id er12-20020a056402448c00b0046173783501mr10009550edb.35.1669237185655;
-        Wed, 23 Nov 2022 12:59:45 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id 25-20020a170906301900b007806c1474e1sm7566389ejz.127.2022.11.23.12.59.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 23 Nov 2022 12:59:45 -0800 (PST)
-Message-ID: <2a7a9407-d5f1-95ae-edd1-c4c41862cd25@redhat.com>
-Date:   Wed, 23 Nov 2022 21:59:44 +0100
+        with ESMTP id S229379AbiKWXEE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 18:04:04 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8828511606C;
+        Wed, 23 Nov 2022 15:04:02 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B742B82503;
+        Wed, 23 Nov 2022 23:04:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4796C433D6;
+        Wed, 23 Nov 2022 23:03:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669244639;
+        bh=fodNWFCnK99nf9cCB5JVdcPjA29jpW8jq+blyhz2q6o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=it+bU4LoTPoaoOCObZ7rvgJQztBfZB50NG5VVnzE2C45MUKwlDYw0IF3DLeiXQn65
+         tAcfhnXAP8eJIznswpxSw699I+MR43nBvvr04+sS0YzbeuFnNN/C79OAgupsPNDXxl
+         GxpfEZDD3XqYu8z6AQ3S7UrOcexqLtpL7NGa1hWjk5q31sPNikwl5c1HWpuauuMXut
+         it+/ww5puGAjmeFjmcCr2eaqQJSa6O9LU4mlrecgLz2kZa3rlctoI28EUoHgafby2F
+         pap8u8c7a3IAbpOi56ANQrQGfo1lDPWzVlR2lPiaM/Jqa13Kd6eP63PHJAvpEcO3T2
+         WgB8oR9Kbe1gQ==
+Date:   Thu, 24 Nov 2022 01:03:54 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Evan Green <evgreen@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-pm@vger.kernel.org, rjw@rjwysocki.net, gwendal@chromium.org,
+        apronin@chromium.org, Pavel Machek <pavel@ucw.cz>,
+        Kees Cook <keescook@chromium.org>,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-integrity@vger.kernel.org, jejb@linux.ibm.com,
+        zohar@linux.ibm.com, dlunev@google.com,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ben Boeckel <me@benboeckel.net>,
+        Matthew Garrett <matthewgarrett@google.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Subject: Re: [PATCH v4 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+Message-ID: <Y36m2i6BDhIyBrTl@kernel.org>
+References: <20221103180120.752659-1-evgreen@chromium.org>
+ <20221103105558.v4.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <Y2jujfZ01h5JriYc@kernel.org>
+ <CAE=gft750QYs-AWQ9MC1Z1E==v=m-tf4aKUWjrjBtoWqRJz5dQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH resend] platform/x86: intel-uncore-freq: add Emerald
- Rapids support
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Artem Bityutskiy <dedekind1@gmail.com>,
-        Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Linux PM Mailing List <linux-pm@vger.kernel.org>
-References: <20221122070014.3639277-1-dedekind1@gmail.com>
- <0b867f52-5fe8-f0e8-3f05-746b1db0059e@redhat.com>
- <635d481206b8945db751ea036cf789fe13b9698e.camel@gmail.com>
- <01c732b1-7211-8298-61da-0a6892988743@redhat.com>
- <CAJZ5v0gqmZNRQ61LiG-HKVLLciC9=7MPUB9di0LhuUe_tjHJGg@mail.gmail.com>
- <ee34cb44-9782-9c91-3ec8-3b9d37353b10@redhat.com>
- <d0f51fe4d653c47d7fb9b464c19b58a866f58459.camel@linux.intel.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <d0f51fe4d653c47d7fb9b464c19b58a866f58459.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAE=gft750QYs-AWQ9MC1Z1E==v=m-tf4aKUWjrjBtoWqRJz5dQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
-
-On 11/23/22 18:25, srinivas pandruvada wrote:
-> Hi Hans,
+On Mon, Nov 07, 2022 at 10:15:27AM -0800, Evan Green wrote:
+> On Mon, Nov 7, 2022 at 3:40 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Thu, Nov 03, 2022 at 11:01:11AM -0700, Evan Green wrote:
+> > > From: Matthew Garrett <matthewgarrett@google.com>
+> > >
+> > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> > > restricts usermode's ability to extend or reset PCR 23.
+> > >
+> > > Under certain circumstances it might be desirable to enable the creation
+> > > of TPM-backed secrets that are only accessible to the kernel. In an
+> > > ideal world this could be achieved by using TPM localities, but these
+> > > don't appear to be available on consumer systems. An alternative is to
+> > > simply block userland from modifying one of the resettable PCRs, leaving
+> > > it available to the kernel. If the kernel ensures that no userland can
+> > > access the TPM while it is carrying out work, it can reset PCR 23,
+> > > extend it to an arbitrary value, create or load a secret, and then reset
+> > > the PCR again. Even if userland somehow obtains the sealed material, it
+> > > will be unable to unseal it since PCR 23 will never be in the
+> > > appropriate state.
+> > >
+> > > This Kconfig is only properly supported for systems with TPM2 devices.
+> > > For systems with TPM1 devices, having this Kconfig enabled completely
+> > > restricts usermode's access to the TPM. TPM1 contains support for
+> > > tunnelled transports, which usermode could use to smuggle commands
+> > > through that this Kconfig is attempting to restrict.
+> > >
+> > > Link: https://lore.kernel.org/lkml/20210220013255.1083202-3-matthewgarrett@google.com/
+> > > Signed-off-by: Matthew Garrett <mjg59@google.com>
+> > > Signed-off-by: Evan Green <evgreen@chromium.org>
+> > > ---
+> > >
+> > > Changes in v4:
+> > >  - Augment the commit message (Jarkko)
+> > >
+> > > Changes in v3:
+> > >  - Fix up commit message (Jarkko)
+> > >  - tpm2_find_and_validate_cc() was split (Jarkko)
+> > >  - Simply fully restrict TPM1 since v2 failed to account for tunnelled
+> > >    transport sessions (Stefan and Jarkko).
+> > >
+> > > Changes in v2:
+> > >  - Fixed sparse warnings
+> > >
+> > >  drivers/char/tpm/Kconfig          | 12 ++++++++++++
+> > >  drivers/char/tpm/tpm-dev-common.c |  8 ++++++++
+> > >  drivers/char/tpm/tpm.h            | 19 +++++++++++++++++++
+> > >  drivers/char/tpm/tpm1-cmd.c       | 13 +++++++++++++
+> > >  drivers/char/tpm/tpm2-cmd.c       | 22 ++++++++++++++++++++++
+> > >  5 files changed, 74 insertions(+)
+> > >
+> > > diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> > > index 927088b2c3d3f2..c8ed54c66e399a 100644
+> > > --- a/drivers/char/tpm/Kconfig
+> > > +++ b/drivers/char/tpm/Kconfig
+> > > @@ -211,4 +211,16 @@ config TCG_FTPM_TEE
+> > >         This driver proxies for firmware TPM running in TEE.
+> > >
+> > >  source "drivers/char/tpm/st33zp24/Kconfig"
+> > > +
+> > > +config TCG_TPM_RESTRICT_PCR
+> > > +     bool "Restrict userland access to PCR 23"
+> > > +     depends on TCG_TPM
+> > > +     help
+> > > +       If set, block userland from extending or resetting PCR 23. This allows it
+> > > +       to be restricted to in-kernel use, preventing userland from being able to
+> > > +       make use of data sealed to the TPM by the kernel. This is required for
+> > > +       secure hibernation support, but should be left disabled if any userland
+> > > +       may require access to PCR23. This is a TPM2-only feature, and if enabled
+> > > +       on a TPM1 machine will cause all usermode TPM commands to return EPERM due
+> > > +       to the complications introduced by tunnelled sessions in TPM1.2.
+> > >  endif # TCG_TPM
+> > > diff --git a/drivers/char/tpm/tpm-dev-common.c b/drivers/char/tpm/tpm-dev-common.c
+> > > index dc4c0a0a512903..7a4e618c7d1942 100644
+> > > --- a/drivers/char/tpm/tpm-dev-common.c
+> > > +++ b/drivers/char/tpm/tpm-dev-common.c
+> > > @@ -198,6 +198,14 @@ ssize_t tpm_common_write(struct file *file, const char __user *buf,
+> > >       priv->response_read = false;
+> > >       *off = 0;
+> > >
+> > > +     if (priv->chip->flags & TPM_CHIP_FLAG_TPM2)
+> > > +             ret = tpm2_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > +     else
+> > > +             ret = tpm1_cmd_restricted(priv->chip, priv->data_buffer, size);
+> > > +
+> > > +     if (ret)
+> > > +             goto out;
+> > > +
+> > >       /*
+> > >        * If in nonblocking mode schedule an async job to send
+> > >        * the command return the size.
+> > > diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
+> > > index f1e0f490176f01..c0845e3f9eda17 100644
+> > > --- a/drivers/char/tpm/tpm.h
+> > > +++ b/drivers/char/tpm/tpm.h
+> > > @@ -245,4 +245,23 @@ void tpm_bios_log_setup(struct tpm_chip *chip);
+> > >  void tpm_bios_log_teardown(struct tpm_chip *chip);
+> > >  int tpm_dev_common_init(void);
+> > >  void tpm_dev_common_exit(void);
+> > > +
+> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > +#define TPM_RESTRICTED_PCR 23
+> > > +
+> > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size);
+> > > +#else
+> > > +static inline int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > +                                   size_t size)
+> > > +{
+> > > +     return 0;
+> > > +}
+> > > +
+> > > +static inline int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer,
+> > > +                                   size_t size)
+> > > +{
+> > > +     return 0;
+> > > +}
+> > > +#endif
+> > >  #endif
+> > > diff --git a/drivers/char/tpm/tpm1-cmd.c b/drivers/char/tpm/tpm1-cmd.c
+> > > index cf64c738510529..1869e89215fcb9 100644
+> > > --- a/drivers/char/tpm/tpm1-cmd.c
+> > > +++ b/drivers/char/tpm/tpm1-cmd.c
+> > > @@ -811,3 +811,16 @@ int tpm1_get_pcr_allocation(struct tpm_chip *chip)
+> > >
+> > >       return 0;
+> > >  }
+> > > +
+> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > +int tpm1_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > > +{
+> > > +     /*
+> > > +      * Restrict all usermode commands on TPM1.2. Ideally we'd just restrict
+> > > +      * TPM_ORD_PCR_EXTEND and TPM_ORD_PCR_RESET, but TPM1.2 also supports
+> > > +      * tunnelled transport sessions where the kernel would be unable to filter
+> > > +      * commands.
+> > > +      */
+> > > +     return -EPERM;
+> > > +}
+> > > +#endif
+> > > diff --git a/drivers/char/tpm/tpm2-cmd.c b/drivers/char/tpm/tpm2-cmd.c
+> > > index 303ce2ea02a4b0..e0503cfd7bcfee 100644
+> > > --- a/drivers/char/tpm/tpm2-cmd.c
+> > > +++ b/drivers/char/tpm/tpm2-cmd.c
+> > > @@ -778,3 +778,25 @@ int tpm2_find_cc(struct tpm_chip *chip, u32 cc)
+> > >
+> > >       return -1;
+> > >  }
+> > > +
+> > > +#ifdef CONFIG_TCG_TPM_RESTRICT_PCR
+> > > +int tpm2_cmd_restricted(struct tpm_chip *chip, u8 *buffer, size_t size)
+> > > +{
+> > > +     int cc = tpm2_find_and_validate_cc(chip, NULL, buffer, size);
+> > > +     __be32 *handle;
+> > > +
+> > > +     switch (cc) {
+> > > +     case TPM2_CC_PCR_EXTEND:
+> > > +     case TPM2_CC_PCR_RESET:
+> > > +             if (size < (TPM_HEADER_SIZE + sizeof(u32)))
+> > > +                     return -EINVAL;
+> > > +
+> > > +             handle = (__be32 *)&buffer[TPM_HEADER_SIZE];
+> > > +             if (be32_to_cpu(*handle) == TPM_RESTRICTED_PCR)
+> > > +                     return -EPERM;
+> > > +             break;
+> > > +     }
+> > > +
+> > > +     return 0;
+> > > +}
+> > > +#endif
+> > > --
+> > > 2.38.1.431.g37b22c650d-goog
+> > >
+> >
+> > This looks otherwise good but I have still one remark: what is the reason
+> > for restricting PCR23 for TPM 1.x?
 > 
->>>>
-> 
-> [...]
-> 
->>>> Ugh, no, *NO*! I really expect Intel to do better here!
->>>>
-> Sorry, I didn't realize the CPUID is not added to rc1. Our internal
-> tree constantly gets rebased. So difficult to catch.
-> 
-> As you rule, I will communicate internally that apply on top of 
-> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=for-next
+> Mostly I was trying to do the least surprising thing for someone who
+> had compiled with this RESTRICT_PCR Kconfig enabled but booted a TPM1
+> system. If we do nothing for TPM1, then the encrypted hibernation
+> mechanism appears to work fine, but leaves a gaping hole where
+> usermode can manipulate PCR23 themselves to create forged encrypted
+> hibernate images. Denying all usermode access makes the Kconfig
+> correct on TPM1 systems, at the expense of all usermode access (rather
+> than just access to PCR23).
 
-Thank you and no worries.
+OK, I buy this. Can you add inline comment perhaps denoting this?
 
-These simple CPUID patches seem to have been causing some
-(minor) merging issues, as I mentioned there was a similar issue with
-"platform/x86/intel: pmc/core: Add Raptor Lake support to pmc core driver"
-last cycle.
 
-It would be nice / good if Intel could try to get patches
-adding new CPU-ids #defines to land in rc1, rather then
-in a post rc1 pull-req as has now happened the last 2
-cycles.
-
-I believe that the CPU-ids #defines landing in rc1
-(as you thought they did) would make things easier for
-everyone.
-
-Regards,
-
-Hans
-
+BR, Jarkko
