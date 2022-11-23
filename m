@@ -2,168 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B536D6350FE
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 08:13:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E1D63511A
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 08:32:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236274AbiKWHNi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Nov 2022 02:13:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35892 "EHLO
+        id S235962AbiKWHch (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Nov 2022 02:32:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236273AbiKWHNh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 02:13:37 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512F128E32
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 23:13:36 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id f27so40831713eje.1
-        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 23:13:36 -0800 (PST)
+        with ESMTP id S235343AbiKWHcf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 02:32:35 -0500
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7203E2673
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 23:32:28 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id ud5so40809313ejc.4
+        for <linux-pm@vger.kernel.org>; Tue, 22 Nov 2022 23:32:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CdDiHpd9Kd9wLkqIN62CS8fwFdp78b61LCL8QytS/8I=;
-        b=x7pPUQ2U0p2bHuzqL/arrNulgTqt2APW4k9iWzEU3nxpDTdXuOdRrmp5yQIeZ660qi
-         YvylxMD8XVpn+79swn3uCU9SFhF6xlhVtakuDT+pplxJaJzCcNkcXqZ4y9peYSnle3Ao
-         0wvJ7josxI/Gd5d/+Ls59YgrF7kTgdEqAcql0vc8wWLkcDd6qSFxP8cw7LnhzfecsqLU
-         x170/jwYDLkszQoW2SnzC45hHKJuJpKznjj2FyD1urEZy5F5QisBPBq09Axe8LjJQ8uV
-         6J4lYUfH0EW/uBAPtTNY15ff1QfFAz62vNTylFH2Rf/3CfRlilPeBLCjWw8ZMpCylTON
-         xn1A==
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=d4qo3fGXZQy+8oZhU7cu78EOId5JBj3qLdZ14a/QvWs=;
+        b=A+BOWQfr+GHxiyky3FGgeGI42YGjsE2iWDptOAvatoeyB9b+yQTLOul0n5laPGqlbe
+         A8piGSB5NYg/4Mx8w+5UKEgUuUDPNeVCoiivRVSTZ+v7IQJABI+rxTTv9og6rk9YteNK
+         46KvaNjHzhJc+JNV46ND6MLRLfneU7Bq3if2AEqmq4uvB1qBgpwg4/LiW9UpX2cF/WJG
+         zRrKF8HL05kapczSgtl+WiYryLavK86jPzLVFl7Pt6cIk5zN7kyYrvTXie5dEcjDEerw
+         B0xxdzXGaCXRdKnoJ2HGdD4lI8QQ02xOFPnp/IoUPQ0/13E6ecEHNzIP8y8jALv0Fp76
+         p3+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CdDiHpd9Kd9wLkqIN62CS8fwFdp78b61LCL8QytS/8I=;
-        b=kPGkuCy0wcqMARRU1Vt9wUHpyAs2w1TRgnvaJnh8tHDyaqf5d4jrd4yeqlYBeZw1LR
-         IZ7SLuUCqmj2ykVlY2sYCqBpL/tcsmsSfJ5MZRp/dZOWnk3f7HxeEySE9pRkfO8K3R7q
-         xPRCNrraMfKQ8DvMyPd634ZFJO7ZBLTrbmw/x3h+LReFbGkVxjo5IpDLO87wmbhA23Un
-         vq9BvraDzfE/r2eAxMX5RrRpnKNQgF/LD9+vwr19v7goQy6KtQYOvC5AJplz3pRgrTzx
-         FI2jzQviFuwJxoAWQrOX/DaOdfIW+yDxRHLCTdqzGF33WPAMFqzwH1N9KJvIy/IuhyBl
-         1xtw==
-X-Gm-Message-State: ANoB5pkrjPIWhRAQLi5+WMZYKYz/Cfv7ve+ezgLx/TvtAj6HXHiSXUaq
-        Hs2pJyDb4uDgh3hYbH6jbKek4FYjmg1hFuYHtg6dIg==
-X-Google-Smtp-Source: AA0mqf7JAjFhax2hraKTvKUP3TvGRf4o+psol3OTyqKMy4AFn0rpnZEmoo+B8ugy77cEVvyL28hiKJ8YrPf79+vBkoU=
-X-Received: by 2002:a17:906:c042:b0:781:541:8f1d with SMTP id
- bm2-20020a170906c04200b0078105418f1dmr23280026ejb.117.1669187614595; Tue, 22
- Nov 2022 23:13:34 -0800 (PST)
-MIME-Version: 1.0
-References: <mhng-6299f108-11af-4e70-9981-d7e7b3be0b9a@palmer-ri-x1c9>
- <57114829-c205-dece-abdb-1100947286d4@sholland.org> <CAK9=C2WLOa_zgboFE5UCgnwMB-kbWMAVtmXsBxoswqY63-5QHw@mail.gmail.com>
- <a591599e-d133-e19a-4898-5645c3862daa@sholland.org> <CAAhSdy2VdX9VivbuRhjN0cPXTi=nFWdiPwFs+hUv6iMqZu-q5g@mail.gmail.com>
- <4e9a46e2-eaa2-04cb-8b95-2fe9a091a96d@sholland.org> <CAAhSdy22jRmeMqAfJKtubo4wuOs29uax6uucz54RmoiySff7Nw@mail.gmail.com>
- <be1cb304-f871-6768-d3ae-a5b55fb17c46@sholland.org>
-In-Reply-To: <be1cb304-f871-6768-d3ae-a5b55fb17c46@sholland.org>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Wed, 23 Nov 2022 12:43:23 +0530
-Message-ID: <CAAhSdy3920xAnc=Jt47tcYfj2nDYS0nGWZLU+Hx8tUjzfg1AxA@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        conor.dooley@microchip.com, Conor Dooley <conor@kernel.org>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=d4qo3fGXZQy+8oZhU7cu78EOId5JBj3qLdZ14a/QvWs=;
+        b=ZE2lD8DvizyyZnS2mrqVpEpDZRU4FMB6PXYqEIbXIWIlANThvt0K5zHDftKc37n0np
+         J0l9X1UjsQHqL/aojkfdQ1tUBkU73g7kSwZhaORwq8FOe095+delsVmQqBu1hoVV4yUT
+         V5v62oxf6oFRpffHQfMQpuMwOjNheB0WLHddtefpG5bgBsJslmDkMhuNVgmqXZtkLdVT
+         nPbnydM/ytppT213dNbvImoJokYbmFyKmh9cmlBDA63WCkfuTXnOaqVFTmP1FeK+MmSz
+         Tu2C78XkirKgI5rH2EvqtZ9xmP67KP5ETtVhO+jk56LwqoFh4eg83IN0hUVlTk1yYSNl
+         DwyA==
+X-Gm-Message-State: ANoB5pkNf5xE2bKjOBdR1O35CP4FlidtZsdGxkHw2snPmws43uoLeeba
+        F7TG49Db+nB6nEqVANwBynivFw==
+X-Google-Smtp-Source: AA0mqf7YzWyH2VU2YnkG3jnX1ifCWu9zwuLgz/9nZTRc2x7pdPbOoX1z9PpmE2lNj2LlqmhLHx0DGA==
+X-Received: by 2002:a17:906:2302:b0:7b9:de77:f0ef with SMTP id l2-20020a170906230200b007b9de77f0efmr1476436eja.5.1669188747005;
+        Tue, 22 Nov 2022 23:32:27 -0800 (PST)
+Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id g16-20020a170906539000b007b935641971sm938539ejo.5.2022.11.22.23.32.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Nov 2022 23:32:26 -0800 (PST)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 23 Nov 2022 08:32:26 +0100
+Message-Id: <COJI0ZYCXF71.26IIP7J1SRHDZ@otso>
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Christophe JAILLET" <christophe.jaillet@wanadoo.fr>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        "Georgi Djakov" <djakov@kernel.org>
+Cc:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH] interconnect: qcom: icc-rpmh: Fix an error handling
+ path in qcom_icc_rpmh_probe()
+X-Mailer: aerc 0.13.0
+References: <ec929c37c655ede7bb42e426354093c8a1377a0b.1668947686.git.christophe.jaillet@wanadoo.fr> <COHSZZ9A5570.1P4NTXRE9IRZR@otso> <253d4aac-62af-15af-90e7-a3cd4bacba92@wanadoo.fr>
+In-Reply-To: <253d4aac-62af-15af-90e7-a3cd4bacba92@wanadoo.fr>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 12:20 PM Samuel Holland <samuel@sholland.org> wrote:
+Hi Christophe,
+
+On Tue Nov 22, 2022 at 10:45 PM CET, Christophe JAILLET wrote:
+> > I believe the same needs to be applied to icc-rpm.c.
 >
-> On 11/23/22 00:41, Anup Patel wrote:
-> > On Wed, Nov 23, 2022 at 11:57 AM Samuel Holland <samuel@sholland.org> wrote:
-> >>
-> >> On 11/23/22 00:10, Anup Patel wrote:
-> >>> On Wed, Nov 23, 2022 at 11:08 AM Samuel Holland <samuel@sholland.org> wrote:
-> >>>>
-> >>>> Hi Anup,
-> >>>>
-> >>>> On 11/22/22 23:35, Anup Patel wrote:
-> >>>>> On Wed, Nov 23, 2022 at 10:41 AM Samuel Holland <samuel@sholland.org> wrote:
-> >>>>>> On 11/22/22 09:28, Palmer Dabbelt wrote:
-> >>>>>>> I also think we should stop entering non-retentive suspend until we can
-> >>>>>>> sort out how reliably wake up from it, as the SBI makes that a
-> >>>>>>> platform-specific detail.  If the answer there is "non-retentive suspend
-> >>>>>>> is fine on the D1 as long as we don't use the SBI timers" then that
-> >>>>>>> seems fine, we just need some way to describe that in Linux -- that
-> >>>>>>> doesn't fix other platforms and other interrupts, but at least it's a
-> >>>>>>> start.
-> >>>>>>
-> >>>>>> We need some way to describe the situation from the SBI implementation
-> >>>>>> to Linux.
-> >>>>>>
-> >>>>>> Non-retentive suspend is fine on the D1 as long as either one of these
-> >>>>>> conditions is met:
-> >>>>>>  1) we don't use the SBI timers, or
-> >>>>>>  2) the SBI timer implementation does not use the CLINT
-> >>>>>>
-> >>>>>> And it is up to the SBI implementation which timer hardware it uses, so
-> >>>>>> the SBI implementation needs to patch this information in to the DT at
-> >>>>>> runtime.
-> >>>>>
-> >>>>> Rather than SBI implementation patching information in DT, it is much
-> >>>>> simpler to add a quirk in RISC-V timer driver for D1 platform (i.e. based
-> >>>>> on D1 compatible string in root node).
-> >>>>
-> >>>> It would be simpler, but it would be wrong, as I just explained.
-> >>>>
-> >>>> Only the SBI implementation knows if the SBI timer extension can wake
-> >>>> any given CPU from any given non-retentive suspend state.
-> >>>
-> >>> The SBI implementation would derive this information from platform
-> >>> compatible string which is already available to the Linux kernel so
-> >>> why does SBI implementation have to patch the DTB and put the
-> >>> same information in a different way ?
-> >>
-> >> It is not the same information. The SBI implementation also chooses, at
-> >> runtime, which timer hardware (CLINT, platform-specific MMIO timer,
-> >> etc.) is used to implement the SBI timer extension. The value of the
-> >> sbi-timer-can-wake-cpu property depends on this choice.
-> >>
-> >> Using D1 as an example, there are two MMIO timer peripherals ("sun4i"
-> >> TIMER and "sun5i" HSTIMER) where the sbi-timer-can-wake-cpu property
-> >> should be set. But the property should not be set if the CLINT is used
-> >> by SBI.
-> >>
-> >> It would be perfectly reasonable for the SBI implementation to claim one
-> >> of the wakeup-capable MMIO timers for itself, mark it as "reserved" in
-> >> the DT passed to Linux, and thus force Linux to use the SBI timer or a
-> >> native CLINT driver (C906 CLINT has S-mode extensions). Then the SBI
-> >> timer _would_ be capable of waking the CPU from non-retentive suspend.
-> >
-> > Fair enough but the DT property should not be SBI specific because same
-> > situation can happen with Sstc as well where a particular non-retentive state
-> > does not preserve the state of stimecmp CSRs in the HARTs.
-> >
-> > Better to keep the DT property name as "riscv,timer-can-wake-cpu".
+> Their are other issues in the error handling path of this file.
 >
-> Consider a platform where the Sstc-based timer cannot wake the CPU, but
-> the SBI timer can, because it uses different timer hardware or a
-> different interrupt delivery method. It seems like we need two different
-> properties, one for Sstc and the other for the SBI timer. If both are
-> supported, firmware cannot know which one S-mode software will use.
+> 1)	if (desc->has_bus_pd) {
+> 		ret =3D dev_pm_domain_attach(dev, true);
+> is unbalanced, both in the error handling path and in the remove function=
+.
+>
+>
+> 2)	clk_bulk_prepare_enable()
+> is not balanced in all error handling paths.
+>
+>
+> 3) the same issue about error handling if of_platform_populate() fails.
+>
+>
+> These issues have been introduced in different commits.
+>
+>
+> Would you prefer several patches, each related to a given Fixes: tag, or=
+=20
+> one bigger "fix all error handling paths"?
 
-On a platform with Sstc, the SBI set_timer() call will internally update
-stimecmp CSR. In fact, this is what OpenSBI already does.
+I don't really have an opinion on this, I guess if the issues were
+introduced in different commits, make separate fixes?
+If it's the wrong way somebody will tell you anyways ;)
 
-Here's the text from Sstc specification:
-"In systems in which a supervisor execution environment (SEE) provides
-timer facilities via an SBI function call, this SBI call will continue
-to support
-requests to schedule a timer interrupt. The SEE will simply make use of
-stimecmp, changing its value as appropriate. This ensures compatibility
-with existing S-mode software that uses this SEE facility, while new S-mode
-software takes advantage of stimecmp directly.)"
+Regards
+Luca
 
-Based on the above, we don't need separate DT property for SBI timer
-and Sstc.
-
-Regards,
-Anup
+>
+>
+> Anyway, fixing the points above would require moving some code around.=20
+> Usually I try to avoid it, because it is not always easy to see=20
+> associated side effects.
+>
+> CJ
