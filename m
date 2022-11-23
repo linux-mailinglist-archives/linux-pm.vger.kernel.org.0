@@ -2,129 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884F46367A7
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 18:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85C146367B5
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 18:54:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239318AbiKWRun (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Nov 2022 12:50:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41094 "EHLO
+        id S238335AbiKWRyk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Nov 2022 12:54:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239320AbiKWRuX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 12:50:23 -0500
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25BDC6947;
-        Wed, 23 Nov 2022 09:50:18 -0800 (PST)
-Received: by mail-qk1-f182.google.com with SMTP id x18so12970275qki.4;
-        Wed, 23 Nov 2022 09:50:18 -0800 (PST)
+        with ESMTP id S236601AbiKWRyj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 12:54:39 -0500
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B073165844;
+        Wed, 23 Nov 2022 09:54:38 -0800 (PST)
+Received: by mail-pj1-x1031.google.com with SMTP id y14-20020a17090a2b4e00b002189a1b84d4so2507498pjc.2;
+        Wed, 23 Nov 2022 09:54:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jn5MZcNh2x03wcluRihWf/zpmE/+RC3E3wxSqrYuECU=;
+        b=XgY+YonMSrw3Jz5ILqJxJY3pwwBDrqgmMg7lExUiJdp4S+QNJq2lIsNmgFOSumeO53
+         2sLqeIv4fR2LCygE9qjR52R/lg6Rmk1I7hU7a0kkPhNuPBbq5r0n1reSonBZcaZQDfNZ
+         Au4Ae56/mSvXYMeP2aUUhJUZoW+wszaNmk3GTNzGencEu3us0+M6jSaZlI/vlM9f0ylJ
+         wMouRrdmo5lxaXdq1QoiIvF04/EkTH0u4NK2l7YJX6y/PZaEVQnIiwGke2gE5HqrGEC+
+         5X4Qkh4HuGUz9z2rLxA4QFedTVZuTyzdjHyu3DGCqzB0VWB025keUsOpPJ6MtWlwrHRZ
+         f//g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AQYsGbGmWS8mt/3FP6A9FVNi0+7SD4qOBvQM5lVpVvI=;
-        b=CW/PRrxZ1jwX84fo3hklMPrIZe+11C9dW+KcChPHnnhskXrbnq5rbQNQeIC8kv4Lza
-         cokiME9AACwYhfTAqWHxbK77eH6NAFUNMVz5rq9h5IIz+poiCiikonaHknZSmaCfpMQA
-         +d6TCcPDLQ+AIu9K/IAPeWllhGw7tZP8jE+R37ZmhnjHNkfV3TPtC+7nMOBe2YEEF7ob
-         QB1YjDCaKTHcaLa33aTi8e0KSEkZ2YYzc6NOGMiFxBR9LFg3UjI6196j01Uu278WaGSP
-         8pap5qVUrgU6XUkZGaQeEmuBhqSrap0Y8gvfgkq487bIsXWIdxfne19d/ACstSklXGg4
-         TOvw==
-X-Gm-Message-State: ANoB5pkPGfig21upI0z/iNs8eGoJ0sQ8gY/8QMk6TCKQd12EwgJ/2Da4
-        Dq1/qdomtd5yc3bInjtrsHcmJgEB3qt1NdvcaEc=
-X-Google-Smtp-Source: AA0mqf6HPbRFjF5IVh+Lq3apDeNFUsgUn4wIas2IdxYm9NEid9MVUenLzwRwxTQMCtkhpTZk14HykpMuh+FBos6bLoU=
-X-Received: by 2002:a05:620a:22fa:b0:6fb:c38e:e5dd with SMTP id
- p26-20020a05620a22fa00b006fbc38ee5ddmr25726838qki.23.1669225818083; Wed, 23
- Nov 2022 09:50:18 -0800 (PST)
+        bh=jn5MZcNh2x03wcluRihWf/zpmE/+RC3E3wxSqrYuECU=;
+        b=DYoY9J7+rIq1B+oUOpaSX/Wn/72SpF5nEgSiFxcb8tV5lIhC/TNuysvzRSU4+/yYUv
+         GN77yNEkSjWwK0O6opPzO0OGJBOfibyqQE0tXfXxmD5sO1vMkmGDRczkAucES/BkLp+k
+         tQfrhymgVyQ+mLawda7HsMB8r599n/F+/KpgiHIHsI0luM/gIJ5u9AGCqZN/zHBs9QvV
+         obHfdba2mAgdJdtYxLhFHfsdm3+vRPmkDiWbiFfN8v8rGY/imRrEmaauN0VoUdtV2w7f
+         f7jtaTnKuXoQBsnTo5DH60HfwCDmYMAtB3UGEsrvbCjj9XXddlTS2AcDU+paLSxqRmra
+         E8tg==
+X-Gm-Message-State: ANoB5plV6CUSRKqPV6pTtKDDRxC0hChHVrJhcigwi6NzAXwYDMzZ9+OR
+        jezMNFKvcBDXRGYajtvo+ZKMOK6mGJU=
+X-Google-Smtp-Source: AA0mqf5ZmsFRAn3ynNCYOWBprdM0Zoj6Lsc0Obskdvrh3K/x0aBaL/MLh+4L1CRBj3W16kZzahobGg==
+X-Received: by 2002:a17:90a:4c:b0:218:b187:d7da with SMTP id 12-20020a17090a004c00b00218b187d7damr16344674pjb.68.1669226078191;
+        Wed, 23 Nov 2022 09:54:38 -0800 (PST)
+Received: from discovery.. ([2401:4900:483b:e422:60e:77bf:baa2:9d8b])
+        by smtp.gmail.com with ESMTPSA id y76-20020a62644f000000b0057470a06694sm837503pfb.40.2022.11.23.09.54.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Nov 2022 09:54:37 -0800 (PST)
+From:   Saravanan Sekar <sravanhome@gmail.com>
+To:     sre@kernel.org, lee@kernel.org, jic23@kernel.org, lars@metafoo.de,
+        andy.shevchenko@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        Saravanan Sekar <sravanhome@gmail.com>
+Subject: [PATCH v6 0/7] Add support for mp2733 battery charger
+Date:   Wed, 23 Nov 2022 18:54:18 +0100
+Message-Id: <20221123175425.564042-1-sravanhome@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221105174225.28673-1-rui.zhang@intel.com> <20221105174225.28673-2-rui.zhang@intel.com>
-In-Reply-To: <20221105174225.28673-2-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 23 Nov 2022 18:50:07 +0100
-Message-ID: <CAJZ5v0gPOUQDb8c_pVYjzBvU3e3U9JoLhJy5vRBF4h2=zvaHHw@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/3] cpuidle: ladder: Tune promotion/demotion threshold
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 5, 2022 at 6:40 PM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> After fixing the bogus comparison between u64 and s64, the ladder
-> governor stops making promotion decisions errornously.
->
-> However, after this, it is found that the ladder governor demotes much
-> easier than promotes.
+changes in v6:
+  - splitted chip id to v6-0003 and support of mp2733 to v6-0004 patch
+  - fixed commit message English grammar
 
-"After fixing an error related to using signed and unsigned integers
-in the ladder governor in a previous patch, that governor turns out to
-demote much easier than promote"
+changes in v5:
+  - fixed commit message on v5-0002 and v5-0004
 
-> Below is captured using turbostat after a 30 seconds runtime idle,
->
-> Without previous patch,
-> Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
-> 0.30    2373    0       0       0       4       9       25      122     326     2857    0.36    0.04    0.57    98.73   1.48
+changes in v4:
+  - fixed attributes groups review comments in v3
+  - added new bug fix patches v4-0007 and v4-0008 
 
-Why is the above relevant?
+changes in v3:
+  - fixed dt_binding_check error
+  - fixed spelling usb->USB
 
-> With previous patch,
-> Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
-> 0.42    3071    0       771     838     447     327     336     382     299     344     34.18   16.21   17.69   31.51   2.00
->
-> And this is caused by the imbalanced PROMOTION_COUNT/DEMOTION_COUNT.
+changes in v2:
+  - fixed spelling
+  - revert back probe to probe_new in mfd driver
 
-I would explain why/how the imbalanced PROMOTION_COUNT/DEMOTION_COUNT
-imbalance causes this.
+add support for mp2733 Battery charger control driver for Monolithic
+Power System's MP2733 chipset 
 
-I guess more residency in the deeper idle state is expected?  Or desired??
+Saravanan Sekar (7):
+  mfd: mp2629: fix failed to get iio channel by device name
+  power: supply: fix wrong interpretation of register value
+  mfd: mp2629: introduce chip id machanism to distinguish chip
+  mfd: mp2629: Add support for mps mp2733 battery charger
+  iio: adc: mp2629: restrict input voltage mask for mp2629
+  power: supply: Add support for mp2733 battery charger
+  power: supply: mp2629: Add USB fast charge settings
 
-> With this patch,
-> Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
-> 0.39    2436    0       1       72      177     51      194     243     799     1883    0.50    0.32    0.35    98.45   1.53
->
-> Note that this is an experimental patch to illustrate the problem,
-> and it is checked with idle scenario only for now.
-> I will try to evaluate with more scenarios, and if someone can help
-> evaluate with more scenarios at the same time and provide data for the
-> benefit with different PROMOTION_COUNT/DEMOTION_COUNT values, that
-> would be great.
+ .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
+ drivers/iio/adc/mp2629_adc.c                  |   5 +-
+ drivers/mfd/mp2629.c                          |   7 +-
+ drivers/power/supply/mp2629_charger.c         | 229 +++++++++++++++---
+ include/linux/mfd/mp2629.h                    |   6 +
+ 5 files changed, 226 insertions(+), 37 deletions(-)
 
-So yes, this requires more work.
+-- 
+2.34.1
 
-Overall, I think that you are concerned that the previous change might
-be regarded as a regression and are trying to compensate for it with a
-PROMOTION_COUNT/DEMOTION_COUNT change.
-
-I'm not sure I can agree with that approach, because the shallower
-idle states might be preferred by the original ladder design
-intentionally, for performance reasons.
-
-> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
-> ---
->  drivers/cpuidle/governors/ladder.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpuidle/governors/ladder.c b/drivers/cpuidle/governors/ladder.c
-> index fb61118aef37..4b47aa0a4da9 100644
-> --- a/drivers/cpuidle/governors/ladder.c
-> +++ b/drivers/cpuidle/governors/ladder.c
-> @@ -20,8 +20,8 @@
->  #include <asm/io.h>
->  #include <linux/uaccess.h>
->
-> -#define PROMOTION_COUNT 4
-> -#define DEMOTION_COUNT 1
-> +#define PROMOTION_COUNT 2
-> +#define DEMOTION_COUNT 4
->
->  struct ladder_device_state {
->         struct {
-> --
