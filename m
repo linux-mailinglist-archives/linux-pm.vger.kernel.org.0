@@ -2,206 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7051B635A85
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 11:50:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55640635AC5
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 11:58:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236634AbiKWKuh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Nov 2022 05:50:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S236816AbiKWK4e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Nov 2022 05:56:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236681AbiKWKuP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 05:50:15 -0500
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927B3169011
-        for <linux-pm@vger.kernel.org>; Wed, 23 Nov 2022 02:36:24 -0800 (PST)
-Received: by mail-oi1-x233.google.com with SMTP id c129so18642076oia.0
-        for <linux-pm@vger.kernel.org>; Wed, 23 Nov 2022 02:36:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=izA04ojZdOp2vjbcI8Xn4ulA1Qxsgm2W27nMnOIGQck=;
-        b=isMAWLed394yYNRK/lL7MVNTnt2iMRbDcNnDLftsejKVjQGNiOMxfOYk5PyOw8psK6
-         8Kp9MPlwlThDRQ8UA6tbYx3m4SEEF4vD83cpLJIxGdFrK4TfLLFVpXvJKUS3HtJFIjjc
-         L9j/XRt3yjsxYgcJeR4oQpUx6pJiv858NAzh2nkCjtyLPUncce4Wdh/F9WmmUXh+zOr+
-         cfGXhju1N0tjkmOdEQpsIPeyeGN313vmqqFjx9T88MMoe1yg8Mo2yUI1O28I0uJcWX1d
-         x8hZCahrcZyFLXkyACWYBWs4vJOwuxK6Mklti2+Flvv4TQcSY1b1QV1RX6xIRjkAExRk
-         dp1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=izA04ojZdOp2vjbcI8Xn4ulA1Qxsgm2W27nMnOIGQck=;
-        b=wEbgVBC4JOXMwh1ryRMbLkdzM/e/UJdLvt913yP9WDUj1tTgmjYzXePSh58UyBI+8l
-         FOnAD/cAax0OHIKw/kvx27ingn+jv0RYmetRHPHygYMb/lH7nMh1IOJ5spkH/WWAJmHE
-         ysL6MNyTg646+Qi+H42VljObF28giAOBFzX+y6GIEj9oZ09LxriO8NwgVxk959vuiRsq
-         pCmymAJJRmieDRBjNPjacpvrmxyjhtEvWsWDaRSjLvMATHwwbIdjxTZKYUM5fD4MNoC3
-         P3zDy+Gu8b9f07OtpBBNe13OcaY2P4+hFWz5J/37dZNJCASEH+TRjZ4yIydKNbIrE25U
-         tAeA==
-X-Gm-Message-State: ANoB5plGiOFRi5znvNs1PPZmVIjlsO1D3Y49CncGtq31D7v0m8HkfV9M
-        KVVoBTIpWCv04bnqb3yEEWfyJecfBgvPjk1Iy4eN5g==
-X-Google-Smtp-Source: AA0mqf50VTeMlsDVEgYgYG7IyvQVE93NFVtPO8FdFRlII63eSio8SrUq1CxeOj+jJnGfz2UPHPFAp4VoOTSwCFZJd3Q=
-X-Received: by 2002:aca:1b02:0:b0:359:c377:6f7 with SMTP id
- b2-20020aca1b02000000b00359c37706f7mr3711054oib.271.1669199782907; Wed, 23
- Nov 2022 02:36:22 -0800 (PST)
-MIME-Version: 1.0
-References: <CAAhSdy0Fs9ZVoRgtz92RgLnFPvgwUzCP_KpK9SCOiVsA-t3p3Q@mail.gmail.com>
- <mhng-3f44cc1f-7305-41c5-a1cf-dfed096bd364@palmer-ri-x1c9>
- <CAK9=C2USZHdfBQrrgd2Rs3u3_gTyscpRgxvPU5P6ptOPu1+Axg@mail.gmail.com>
- <Y3ywTzv3vbgRXQGG@wendy> <CAAhSdy1UwBQwX2jnmJXUAAjFL5TZXTUrs9yf9DRMSH=GV4BcHg@mail.gmail.com>
- <Y33xb0jxZqdexzRc@wendy>
-In-Reply-To: <Y33xb0jxZqdexzRc@wendy>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 23 Nov 2022 16:06:12 +0530
-Message-ID: <CAK9=C2UtAee8eqE_Y3X-9VG3EqSc-GKr0ACe5wcr_MZZ7hrHMg@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Anup Patel <anup@brainfault.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Conor Dooley <conor@kernel.org>, rafael@kernel.org,
-        daniel.lezcano@linaro.org,
+        with ESMTP id S234151AbiKWK4R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 05:56:17 -0500
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7249B26AD4;
+        Wed, 23 Nov 2022 02:46:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1669200415; x=1700736415;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ExYIHLvCt5/rD5+mucH1shR+P7Rdt20GrJ8oCYWI4Bo=;
+  b=F3UKxWJhaMKqmur6G8txAnfnguBXeaCQZSSy23irKaZxbee+zyC0i18p
+   6tfNC/xp5w33fFn5n5bQRzN8sJf0QuKhpk8BmckTyPLOvdZ8yV0doWAvt
+   gOvs7HE+Na0FpagnGK+KaVxjCamGfzEpeppHnpTUQuV+376q37O8xZOxY
+   ZfHhAk5kNDfmuCxTjGxornvxucIftacEfRzZKBTD9hsl/J7JjebQ8wf1K
+   /PO6vFZX3bndWlNeV60m2/G/CT+Tz1APWr1HNuxpBwOGxYcqDrC9Zbe1C
+   MQF3tnb1h70qt3u1zQRtIl9kthhAXmy6QmKOm5x41jTn8S5Xsx9sfm5hT
+   A==;
+X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
+   d="scan'208";a="188309618"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 23 Nov 2022 03:46:54 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 23 Nov 2022 03:46:53 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Wed, 23 Nov 2022 03:46:51 -0700
+Date:   Wed, 23 Nov 2022 10:46:33 +0000
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Samuel Holland <samuel@sholland.org>
+CC:     Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor@kernel.org>, <anup@brainfault.org>,
+        <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux@rivosinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Palmer Dabbelt <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <linux-pm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux@rivosinc.com>
+Subject: Re: [PATCH] cpuidle: riscv-sbi: Stop using non-retentive suspend
+Message-ID: <Y336CQ81NFv7Ev7n@wendy>
+References: <20221121205647.23343-1-palmer@rivosinc.com>
+ <bf6d3b1f-f703-4a25-833e-972a44a04114@sholland.org>
+ <Y3ytSj6NEeU54z7m@wendy>
+ <2309d3e5-0e37-c77b-1c0b-610abf0af62d@sholland.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <2309d3e5-0e37-c77b-1c0b-610abf0af62d@sholland.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 23, 2022 at 3:40 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->
-> Hey Anup,
->
-> On Wed, Nov 23, 2022 at 09:56:31AM +0530, Anup Patel wrote:
-> > On Tue, Nov 22, 2022 at 4:50 PM Conor Dooley <conor.dooley@microchip.com> wrote:
-> > >
-> > > On Tue, Nov 22, 2022 at 11:06:15AM +0530, Anup Patel wrote:
-> > > > On Tue, Nov 22, 2022 at 10:46 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
-> > > > >
-> > > > > On Mon, 21 Nov 2022 19:45:07 PST (-0800), anup@brainfault.org wrote:
-> > > > > > On Tue, Nov 22, 2022 at 2:27 AM Palmer Dabbelt <palmer@rivosinc.com> wrote:
-> > > > > >>
-> > > > > >> From: Palmer Dabbelt <palmer@rivosinc.com>
-> > > > > >>
-> > > > > >> As per [1], whether or not the core can wake up from non-retentive
-> > > > > >> suspend is a platform-specific detail.  We don't have any way to encode
-> > > > > >> that, so just stop using them until we've sorted that out.
-> > > > > >>
-> > > > > >> Link: https://github.com/riscv-non-isa/riscv-sbi-doc/issues/98#issuecomment-1288564687
-> > > > > >> Fixes: 6abf32f1d9c5 ("cpuidle: Add RISC-V SBI CPU idle driver")
-> > > > > >> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > > > >
-> > > > > > This is just unnecessary maintenance churn and it's not the
-> > > > > > right way to go. Better to fix this the right way instead of having
-> > > > > > a temporary fix.
-> > > > > >
-> > > > > > I had already sent-out a patch series 5 months back to describe
-> > > > > > this in DT:
-> > > > > > https://lore.kernel.org/lkml/20220727114302.302201-1-apatel@ventanamicro.com/
-> > > > > >
-> > > > > > No one has commented/suggested anything (except Samuel
-> > > > > > Holland and Sudeep Holla).
-> > > > >
-> > > > > I see some comments from Krzysztof here
-> > > > > <https://lore.kernel.org/lkml/7a0477a0-9f0f-87d6-4070-30321745f4cc@linaro.org/>
-> > > > > as well.  Looks like everyone is pointing out that having our CPU nodes
-> > > > > encode timers is a bad idea, my guess is that they're probably right.
-> > > >
-> > > > Adding a separate timer DT node, creates a new set of compatibility
-> > > > issues for existing platforms. I am fine updating my series to have
-> > > > separate timer DT node but do we want to go in this direction ?
-> > >
-> > > I don't really follow. How is there a compatibility issue created by
-> > > adding a new node that is not added for a new property? Both will
-> > > require changes to the device tree. (You need not reply here, I am going
-> > > to review the other thread, it's been on my todo list for too long. Been
-> > > caught up with non-coherent stuff & our sw release cycle..)
-> >
-> > Adding a new timer DT node would mean, the RISC-V timer driver
-> > will now be probed using the compatible to the new DT node whereas
-> > the RISC-V timer driver is currently probed using CPU DT nodes.
->
-> Ahh, that is what I have missed. I'll continue my thoughts on this in
-> the dt-binding thread.
->
-> > > > Even if ARM has a separate timer DT node, the timers are still part
-> > > > of the CPU. It depends on how we see the DT bindings aligning with
-> > > > actual HW.
-> > > >
-> > > > >
-> > > > > > Please review this series. I can quickly address comments to
-> > > > > > make this available for Linux-6.2. Until this series is merged,
-> > > > > > the affected platforms can simply remove non-retentive suspend
-> > > > > > states from their DT.
-> > > > >
-> > > > > That leaves us with a dependency between kernel versions and DT
-> > > > > bindings: kernels with the current driver will result in broken systems
-> > > > > with the non-retentive suspend states in the DT they boot with when
-> > > > > those states can't wake up the CPU.
-> > >
-> > > Can someone point me at a (non D1 or virt) system that has suspend
-> > > states in the DT that would need fixing?
-> >
-> > For the QEMU virt machine, the default non-retentive suspend state was
-> > tested using a temporary DTB provided separately via QEMU command
-> > line. The QEMU virt machine does not have its own HART suspend
-> > states so OpenSBI will functionally emulate default retentive/non-retentive
-> > suspend states.
->
-> So since I asked for non D1 or virt systems, that's a no & no DTs
-> actually needs to be fixed :)
->
-> > > > This is not a new problem we are facing. Even in the ARM world,
-> > > > the DT bindings grew organically over time based on newer platform
-> > > > requirements.
-> > > >
-> > > > Now that we have a platform which does not want the time
-> > > > C3STOP feature, we need to first come-up with DT bindings
-> > > > to support this platform instead of temporarily disabling
-> > > > features which don't work on this platform.
-> > >
-> > > It's the opposite surely? It should be "now that we have a platform that
-> > > *does want* the C3STOP feature", right?
-> >
-> > Yes, we can think this way as well.
->
-> No, there's no "thinking" involved here from what I can tell. Pre-D1
-> systems do not seem to need the flag and the D1 does want that flag for
-> its riscv,timer. We have to operate with respect to hardware timelines
-> & the corresponding software implementations, not specs in this context.
->
-> If it was the case that you proposed, there would be no chance for
-> regressions if someone updates their kernel but not their DT.
->
-> > > > > > With all due respect, NACK to this patch from my side.
-> > >
-> > > As Samuel pointed out that the D1 doesn't actually use the timer in
-> > > question, I think we are okay here?
-> >
-> > Yes, that's why D1 needs the C3STOP flag.
->
-> I don't understand what you mean here, you don't appear to be replying
-> to what I said.
->
-> I was saying that the current D1 configuration does not actually use
-> the timer-riscv driver as there's another one that has a higher rating
-> & therefore we are okay to not apply this patch as my revert will not
-> cause it to be put into sleep states that it cannot return from.
->
-> Your reply makes no sense to me in that context.
+Hey Samuel,
 
-Sorry for the confusion, I should have written a more complete sentence.
+>On Tue, Nov 22, 2022 at 09:42:24PM -0600, Samuel Holland wrote:
+> On 11/22/22 05:06, Conor Dooley wrote:
+> > On Mon, Nov 21, 2022 at 06:45:25PM -0600, Samuel Holland wrote:
+> > > On 11/21/22 14:56, Palmer Dabbelt wrote:
 
-D1 does not use the RISC-V timer but it still needs to set the C3STOP
-flag to inform the timer subsystem that the RISC-V timer will not work
-in suspend state.
+> > > > As per [1], whether or not the core can wake up from non-retentive
+> > > > suspend is a platform-specific detail.  We don't have any way to encode
+> > > > that, so just stop using them until we've sorted that out.
+> > >
+> > > We do have *exactly* a way to encode that. Specifically, the existence
+> > > or non-existence of a non-retentive CPU suspend state in the DT.
+> > >
+> > > If a hart has no way of resuming from non-retentive suspend (i.e. a
+> > > complete lack of interrupt delivery in non-retentive suspend), then it
+> > > makes zero sense to advertise such a suspend state in the DT.
+> > 
+> > I would have to agree with that. I think the sprawling conversation has
+> > confused us all at this point, I (prior to reading this mail) thought
+> > that suspend was borked on the D1. I don't think anyone is advertising
+> > specific states in the DT at the moment though, I had a check in the D1
+> > patchset and didn't see anything there - unless you're adding it
+> > dynamically from the bootloader?
+> 
+> The availability and latency properties of idle states depend on the SBI
+> implementation, so yes, they need to be added dynamically.
 
-Regards,
-Anup
+Right, thanks for clarifying.
+
+> > > I do not have any functioning RISC-V
+> > > hardware with SMP, so it is hard for me to help debug the root issue in
+> > > the Linux timer code. I do not know why turning on the C3STOP flag
+> > > breaks RCU stall detection or clock_nanosleep(), but I agree that
+> > > breakage should not happen.
+> > >
+> > > So while I still think 232ccac1bd9b is the right change to make from a
+> > > "following the spec" standpoint
+> > 
+> > Right, so the spec says:
+> > Request the SBI implementation to put the calling hart in a platform
+> > specific suspend (or low power) state specified by the suspend_type
+> > parameter. The hart will automatically come out of suspended state and
+> > resume normal execution when it receives an interrupt or platform
+> > specific hardware event.
+> > 
+> > That, as we have discussed a bunch of times, does not say whether a
+> > given interrupt should actually arrive during suspend. The correct
+> > behaviour, to me, is to assume that no events arrive during suspend.
+> 
+> Are you suggesting that we need some property to declare the delivery of
+> each kind of interrupt (software, timer, external, PMU)? 
+
+I'm possibly taking things to an extreme, since if we're having a
+discussion that covers what the spec does and does not allow I see no
+harm in going down the rabbit hole!
+
+Obviously, some sort of event must get the CPU out of suspend - what I
+meant was more like "The correct (software) behaviour, to me, is to
+assume that, when looking at an individual source, its events may not
+arrive during suspend."
+
+I've not looked at the relevant specs to see if they specify whether
+their interrupts *must* arrive, just the SBI one that the issue was
+created against.
+
+> I assumed that
+> external interrupt delivery would be required to consider an idle state
+> "viable", but I suppose it would be _possible_ to have a state where
+> only timer interrupts are deliverable.
+
+Who knows what some hardware folks will come up with! Maybe I am being
+pretty <whatever the modern version of black & white> is here, but I
+fear for a repeat whenever someone does something "creative".
+
+I know I've not answered your question about other kinds of properties
+but I am well outside my comfort zone here.
+
+Thanks,
+Conor.
+
