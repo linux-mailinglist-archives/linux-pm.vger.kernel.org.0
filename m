@@ -2,169 +2,110 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95F82635F51
-	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 14:24:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D811E6360AA
+	for <lists+linux-pm@lfdr.de>; Wed, 23 Nov 2022 14:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237698AbiKWNXz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Nov 2022 08:23:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58164 "EHLO
+        id S237064AbiKWN5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Nov 2022 08:57:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237827AbiKWNXf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 08:23:35 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9819B5E9E0;
-        Wed, 23 Nov 2022 05:04:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669208658; x=1700744658;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=gVy0+k2cvIs3bkI9e8x0s5+bWCHzyHimI7w22Ds6fNE=;
-  b=P2GbHeZLU96ThIvEV1QUZoLL4HGn/FcIXOO6IbM9mDH9GNZODmSfoSNZ
-   WVVqZ4oeq6bjFQVZ1ydGtpMLB8s7ex62V71UBsNet1+YSnfIbEZGYd2qV
-   kPAy8CgSkLvbSK4Nm3ZZmfic9Bak2dRdJAlMe48tfBB74hac+k1O4aMic
-   +SHSRhB1aAlPe/Vhi+NlUWPKDVtolF0MQry/prx1m0XS/M3CkFZw10VeB
-   /TxVWPDXoumZ9zqZvmsYJnlBqz0TDyhCQMo5RbWeWQFqZ8UgJrAtcyVI9
-   /A10cV2whDwBupsrHGRCBL8M31pOsdmzssXzagRVAKp/0QscNtJIccgrN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="297421645"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="297421645"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Nov 2022 05:04:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10539"; a="747783081"
-X-IronPort-AV: E=Sophos;i="5.96,187,1665471600"; 
-   d="scan'208";a="747783081"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 23 Nov 2022 05:04:16 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oxpQF-0002kp-2T;
-        Wed, 23 Nov 2022 13:04:15 +0000
-Date:   Wed, 23 Nov 2022 21:04:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 611bfa6eb1e00510c7f77ac569929d470984366a
-Message-ID: <637e1a44.N+12p42AZlppk/ie%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S236767AbiKWN4v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 08:56:51 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBB3101F;
+        Wed, 23 Nov 2022 05:51:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED9E961CEC;
+        Wed, 23 Nov 2022 13:51:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B70F3C433D6;
+        Wed, 23 Nov 2022 13:51:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669211504;
+        bh=yn6IQg9xUUV9CgWL40Zq6y52rg1mn5sa8oD03o5v7Xs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UKfpNKKUztgIyNLf4JyG/Wh9x1SnC70ZZ6CMkTeLD14mkOzGlAm4+qghDz9TTaJEY
+         oavU1DO373ElaIHQhIEpVZi9OKHf+AB7y5AZ3a0QM4K6Mda5mlxZI6uj77Y+34o3+z
+         tC1+zaqNCkF1IRGWjNnvY9xTloZLlUjIwvwDNzzHVs6iAjJgjo18LVCElB+Z+suDGy
+         RWQBO44v5C47KQUPl5LJXsrQ6VqWTj1W9The96h2CM4sfIP1b0DOy3ZhTq1Wp6bXDL
+         C50DRWElKcd6PEaRVrgU5hEWY/A3MmvIZ+aqD+I2bHVUKaydHWSJ+FVF1rDhM8vyJp
+         Av8NqbWSqNyRA==
+Date:   Wed, 23 Nov 2022 13:51:32 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
+        netdev@vger.kernel.org, linux-can@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-serial@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-watchdog@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 1/9] dt-bindings: drop redundant part of title of
+ shared bindings
+Message-ID: <Y34lZFSBEwuI6G+a@sirena.org.uk>
+References: <20221121110615.97962-1-krzysztof.kozlowski@linaro.org>
+ <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sez8m7aAndejrS5d"
+Content-Disposition: inline
+In-Reply-To: <20221121110615.97962-2-krzysztof.kozlowski@linaro.org>
+X-Cookie: I'm rated PG-34!!
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 611bfa6eb1e00510c7f77ac569929d470984366a  Merge branches 'thermal-core' and 'thermal-intel' into linux-next
 
-elapsed time: 990m
+--sez8m7aAndejrS5d
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-configs tested: 87
-configs skipped: 3
+On Mon, Nov 21, 2022 at 12:06:07PM +0100, Krzysztof Kozlowski wrote:
+> The Devicetree bindings document does not have to say in the title that
+> it is a "binding", but instead just describe the hardware.  For shared
+> (re-usable) schemas, name them all as "common properties".
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Acked-by: Mark Brown <broonie@kernel.org>
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-s390                             allyesconfig
-sh                               allmodconfig
-i386                              allnoconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-arm                               allnoconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-i386                 randconfig-a011-20221121
-i386                 randconfig-a013-20221121
-i386                 randconfig-a012-20221121
-i386                 randconfig-a014-20221121
-i386                 randconfig-a016-20221121
-i386                 randconfig-a015-20221121
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64               randconfig-a012-20221121
-x86_64               randconfig-a011-20221121
-x86_64               randconfig-a013-20221121
-x86_64               randconfig-a014-20221121
-i386                                defconfig
-x86_64               randconfig-a016-20221121
-x86_64               randconfig-a015-20221121
-ia64                             allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-arc                  randconfig-r043-20221121
-arc                              allyesconfig
-riscv                randconfig-r042-20221121
-s390                 randconfig-r044-20221121
-i386                             allyesconfig
-arm                          simpad_defconfig
-powerpc                  iss476-smp_defconfig
-sh                             espt_defconfig
-arc                    vdk_hs38_smp_defconfig
-x86_64                            allnoconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-m68k                             allmodconfig
-arm                                 defconfig
-arc                  randconfig-r043-20221120
-arm64                            allyesconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc                 mpc837x_mds_defconfig
-sh                         microdev_defconfig
-arm                           sunxi_defconfig
-sh                           se7780_defconfig
-sh                         ap325rxa_defconfig
-i386                          debian-10.3-kvm
-i386                        debian-10.3-kunit
-i386                         debian-10.3-func
+--sez8m7aAndejrS5d
+Content-Type: application/pgp-signature; name="signature.asc"
 
-clang tested configs:
-hexagon              randconfig-r041-20221121
-x86_64               randconfig-a004-20221121
-hexagon              randconfig-r045-20221121
-i386                 randconfig-a001-20221121
-x86_64               randconfig-a001-20221121
-i386                 randconfig-a003-20221121
-i386                 randconfig-a002-20221121
-x86_64               randconfig-a003-20221121
-x86_64               randconfig-a002-20221121
-x86_64               randconfig-a005-20221121
-x86_64               randconfig-a006-20221121
-i386                 randconfig-a004-20221121
-i386                 randconfig-a005-20221121
-i386                 randconfig-a006-20221121
-powerpc                 mpc832x_rdb_defconfig
-mips                     cu1000-neo_defconfig
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-powerpc                     tqm5200_defconfig
-powerpc                        fsp2_defconfig
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmN+JWMACgkQJNaLcl1U
+h9CJ0gf/ajSRpLgN3RoHR7wLxFr99y5vWRywVoOaKU+lLq3UY2O6a9ssY8wOblzx
+J9LbUP4Acep2fofTZCX1Ks2sTUHXNBB95SaeCwpSD/MX2HltHr0QvTGh8Lc9EfRf
+f4l/ayjov4DbVsOJ019O7MKSgyuKezLb6Rj/5S38OrqdREbbzDoFe2ah8rSxpA8m
+OQPEsY4eAbVfELEo/JQ86QYXN8gT6p3qA0+8IxDb0D+iLi3JCIz3GTrn+ZCudWRS
+DkbD00vhGbeEaAbI/ufYp/KUWT0wfIoONENSAdGhmGMd+deqbmOt1Ryt+YoEt49j
+pRMeSDCxuBZIpBjQfw7H+5ofOT8jsg==
+=hoZL
+-----END PGP SIGNATURE-----
+
+--sez8m7aAndejrS5d--
