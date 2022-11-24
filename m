@@ -2,53 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFD66380B7
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 22:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A246380C3
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 22:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKXVpZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Nov 2022 16:45:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
+        id S229606AbiKXV6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Nov 2022 16:58:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKXVpY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Nov 2022 16:45:24 -0500
+        with ESMTP id S229504AbiKXV6l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Nov 2022 16:58:41 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AA2270A37;
-        Thu, 24 Nov 2022 13:45:23 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2671E7DC9A
+        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 13:58:40 -0800 (PST)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C66DA6602B47;
-        Thu, 24 Nov 2022 21:45:21 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D69DF6602B47;
+        Thu, 24 Nov 2022 21:58:38 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669326321;
-        bh=rqgJu1oO5oPP9Saq2aP3EVhh6iBrbYAer2nSFnD1yFg=;
+        s=mail; t=1669327118;
+        bh=v9cThGv9HCloRL/Y2LwP/br4wGF0ZUkkNKzhpyb7kT4=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b5ZL3gYpW2AaVUC9FX721XxDdtAa9Yi3jDn1mUPG9a6c2Pm3+xdBt69RkJZMJ/nWg
-         7xdSGxDDZpe/GJUMkyFzgmohlKDeJFci3AWoNtHo3vSC0VoU/Mkvx5I6lzlUFyVStc
-         8pmce4XqFjy/+rjylV6xJWmP/OFZVMJ+3jmY4PcBbdt+F3h2Ufgp6w3llTppYJzJyJ
-         RBdf2KeP4IjcmIt2kA7vOlFv4z12KgpjbUvZOvbrxvpvinKIkC6yLg0HgJy161BZSI
-         Rj2LP6fiaWui7+m1kATl58M3KRYPgK90RfHC6/5uGtWQbLfxfbGv21gk6tpXonn7Qc
-         H7TSdWkpwgSPQ==
+        b=K8o+FvPw4EHtr73ISL1U0fUYS8k2Ue5iC/8JbCjy1yz+GIyQDT1O/uSMZBo6I1zTJ
+         7rGs1OBrXQc9fLR2kiXGYf3Uq2MJBEI+awXPwKdvd+xI4wRFeyNt4Us850pBtO1DrG
+         /OJ0PfRLIokMxN05C/+H5YLa+TSMh0B2Lv3SKR8VzoDt1yY1VL0412EJg8yWmHkLAk
+         qgPXOUhYznKqGWvqO8yT45zbXTdRgU818HKN81w8HtHYOmnfJRZ0ZZxG6V2Vz+uvyX
+         K0NHjPNRTN8jFS+JVgmNqJu0Fom+C3B9KKrv5pbCc433i+OKqF0GhPUCb9uTf3BRgd
+         a3mwE/D5HCiVw==
 Received: by mercury (Postfix, from userid 1000)
-        id 3713C106092D; Thu, 24 Nov 2022 22:45:19 +0100 (CET)
-Date:   Thu, 24 Nov 2022 22:45:19 +0100
+        id B1DFC106092D; Thu, 24 Nov 2022 22:58:35 +0100 (CET)
+Date:   Thu, 24 Nov 2022 22:58:35 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     lee@kernel.org, jic23@kernel.org, lars@metafoo.de,
-        andy.shevchenko@gmail.com, linux-pm@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 2/7] power: supply: fix wrong interpretation of
- register value
-Message-ID: <20221124214519.nqpeuvu62k7eh7ix@mercury.elektranox.org>
-References: <20221123175425.564042-1-sravanhome@gmail.com>
- <20221123175425.564042-3-sravanhome@gmail.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Zhang Qilong <zhangqilong3@huawei.com>, daniel@zonque.org,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: z2_battery: Fix possible memleak in
+ z2_batt_probe()
+Message-ID: <20221124215835.kxzmni2bgcvkgnc6@mercury.elektranox.org>
+References: <20221121011834.119060-1-zhangqilong3@huawei.com>
+ <CACRpkdYwaoGOMNTdPnUbD-2y5PHY7Wp+fSuQvTsZLm2kaNuKeA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xp3w4xuc3bonw7au"
+        protocol="application/pgp-signature"; boundary="pznkkmt6i56i2mtk"
 Content-Disposition: inline
-In-Reply-To: <20221123175425.564042-3-sravanhome@gmail.com>
+In-Reply-To: <CACRpkdYwaoGOMNTdPnUbD-2y5PHY7Wp+fSuQvTsZLm2kaNuKeA@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -59,77 +58,50 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---xp3w4xuc3bonw7au
+--pznkkmt6i56i2mtk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Wed, Nov 23, 2022 at 06:54:20PM +0100, Saravanan Sekar wrote:
-> Fix the switch cases to match the register value.
+On Tue, Nov 22, 2022 at 09:33:34PM +0100, Linus Walleij wrote:
+> On Mon, Nov 21, 2022 at 2:14 AM Zhang Qilong <zhangqilong3@huawei.com> wr=
+ote:
 >=20
-> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
-> ---
+> > If devm_gpiod_get_optional() returns error, the charger should be
+> > freed before z2_batt_probe returns according to the context. We
+> > fix it by just gotoing to 'err' branch.
+> >
+> > Fixes: a3b4388ea19b ("power: supply: z2_battery: Convert to GPIO descri=
+ptors")
+> > Signed-off-by: Zhang Qilong <zhangqilong3@huawei.com>
+>=20
+> Oops good catch!
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Thanks, queued.
 
 -- Sebastian
 
->  drivers/power/supply/mp2629_charger.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/power/supply/mp2629_charger.c b/drivers/power/supply=
-/mp2629_charger.c
-> index bf9c27b463a8..46d620bd23b9 100644
-> --- a/drivers/power/supply/mp2629_charger.c
-> +++ b/drivers/power/supply/mp2629_charger.c
-> @@ -284,10 +284,10 @@ static int mp2629_charger_battery_get_prop(struct p=
-ower_supply *psy,
->  			val->intval =3D POWER_SUPPLY_STATUS_DISCHARGING;
->  			break;
->  		case 0x01:
-> -		case 0x10:
-> +		case 0x02:
->  			val->intval =3D POWER_SUPPLY_STATUS_CHARGING;
->  			break;
-> -		case 0x11:
-> +		case 0x03:
->  			val->intval =3D POWER_SUPPLY_STATUS_FULL;
->  		}
->  		break;
-> @@ -305,7 +305,7 @@ static int mp2629_charger_battery_get_prop(struct pow=
-er_supply *psy,
->  		case 0x01:
->  			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
->  			break;
-> -		case 0x10:
-> +		case 0x02:
->  			val->intval =3D POWER_SUPPLY_CHARGE_TYPE_STANDARD;
->  			break;
->  		default:
-> --=20
-> 2.34.1
->=20
-
---xp3w4xuc3bonw7au
+--pznkkmt6i56i2mtk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN/5eoACgkQ2O7X88g7
-+prFExAAggQla4auvPk4vg3Q5ROt9eHIzhS5N9Rqeg50InU+1TLxSLAtO3pbf1cw
-9hnpCl5WS52qCkZ5thdM9eH7dwL7+xJJoZZn9J2yEsFLR3I+n3Fws6y98ZQe8Qgj
-XxGVda9Jx/tb/7UWSSZEhoeSYItBdghG4sqFgm7Cw4vPLzAL6qQfBMKVmignLjl/
-I0qGwV9mHxAPuQQDjX2fEftIEK3qLMzab5j0N4qW8rZiNavvKhdlSM+pmvFk2MDe
-jsHtaE6WcwTVV/+JMUQb65kr8v2j68OP1t+5DbhJDJ1U2LRawEk4MI9dNZjiXQpL
-X9eRzC4ndxGDDAyqcqY4tI5hjOUVdPeAkJaVB6xk+DMR9tWd1ew0fRLYZ/3HI3Bi
-oJe88c9xSpppoEbuY5MmAsPskwmVhwpsT9laAZPZg2xxNN7NAqCsiYZ11dyltCmL
-+g+HHKO9Wds9Crkgmyjh8i26QCcCDlLqQqCvrGoVtqTriLr8q2uQTFO86hTiYKbT
-LgdAfZMbvK0O9HnyBTHgdxYriN1cmS7GmZM0IvWqwYAfYQBGmwUO4WH7QHVqC9Rn
-fVnMR7UkrX4OhAWXBx2B2WmnxZcLDbWJITvpeTNyLMepCFAQixQcoKStYrZKxJdN
-Y3mhw+NxglEhpqbh3CQdFi+Xg9kY5T4G6wq8c3/g29P6BvowpzI=
-=q1yh
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmN/6QcACgkQ2O7X88g7
++ppYUBAAobl6Ti9OMXtQOr1sW1SlUCixdvvDgS/R2EfWiHO2kHS80e5eWQ6UdbEl
+PM1kx1jZZM7wC4ncVo51WJwc+7bKFf04WhenAfC/xvvWkKbYZBaBylfu8MaEMT37
+XEbESrrA5j9HvPvpwxd6vnPqZYty2dF0IcOdylTKvyN/dJ+zPEirEM9r2yp7LTnf
+VwUHJOb67CiAJnWHAj/WIj3suSsSfCRc8wUEBAJK7G18iInCBkCE53AS4o375m7a
+O9cIjiCBoqS3NesMCWQOahMLP6Zn48Fimm1e3rU+eoJUV9qY2dZbHR8X00zAYXhw
+x+1sf38bvJUL9NTbuStU92jNGHqLdPVOsnYphGsNJSApPKAc8JMZXKcJBjQSwJmC
+Dy+ImAwO1KDz7hNPflLyrukiqa7wwuGYlqKuedZy9wRRThpgq7KwQ42L17Qlsdcv
+BmVHLR37N/AcWGlXVR+d3SfgfdUapao5Eg5KTVVD4bp4qgtSDQnh7g4k5kyJ2qvt
+vquGkVtUvDDeivbaLoVWZsIeRGTU++kwufUb3c9k6gs5wHGcK05+fPksQ5JH7AGG
+QXeF2SPPlNMO9uFJMMAlIzUpxvQIVsNTGe2awj3fms258N4+lNJTRDT9C8ksgaED
+xyJSMZlcNk4aaLseONk3ri8ZVOXvOZoDXDTtJWZifa0xc7oVAHo=
+=09SD
 -----END PGP SIGNATURE-----
 
---xp3w4xuc3bonw7au--
+--pznkkmt6i56i2mtk--
