@@ -2,180 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6ED636E9A
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 00:53:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49AB163704E
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 03:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiKWXxb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 23 Nov 2022 18:53:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S229620AbiKXCQM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 23 Nov 2022 21:16:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKWXx3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 18:53:29 -0500
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559F8DB858
-        for <linux-pm@vger.kernel.org>; Wed, 23 Nov 2022 15:53:28 -0800 (PST)
-Received: by mail-pf1-x433.google.com with SMTP id y13so140108pfp.7
-        for <linux-pm@vger.kernel.org>; Wed, 23 Nov 2022 15:53:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=content-language:thread-index:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xbVYVr0QQE7up62W+h8S7yXFKbxiqK7z6JAjDrkGdqQ=;
-        b=T90d24Inan06RdYDFODCWVMOdPaIwPi47Bor8Q8edEdH5+HQ7O67sy8e25gyNZ7Okw
-         5YumnFE72hKdDjCQ5H+dXByOhp7FE+SPjoVZ1P9hZvT62pJk+i5/uTZiGdqC7enj//Bp
-         ZboQHL5BEXrI5OzXN0o6koU13h+pZcgWoZ8QJ0ix6XoaEx2J/crdT8Qpk+/65s4OBiHg
-         1Aym65hzrBwrfBIa28T2N+EClg+PAgcpZxrb2kk4WzBCrEi+yXUz78/e5yAmhE31+SyL
-         oZCPRx7k7/0OmnU2sJNjY4gFXhJywwXzx4Qeac+pXS8pWLXxFfOYAY894/WOsYJN6mAo
-         1G+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:thread-index:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xbVYVr0QQE7up62W+h8S7yXFKbxiqK7z6JAjDrkGdqQ=;
-        b=sPVdvXHnEnX3raNinYVkbHthIVE7QQYIGVbK7EGjIxpyNcJUJ/EQsWIMw1pHrRcluA
-         L+OsdLKyGiDnjfy3UJHRwLEavm9DeCBKYKatZ/a2dn++ndSh4UtP83zRSKPKrfcVOa2q
-         2p0buLR3jaRwsVMV35h/oXW+PnF+Gn+cp3X9lC+H1r5IycpQIMOp2BdsGagkwkvPPzib
-         V0nis9EdOzIWXNP2/mldaZb6ACbiy7lrWu4pMLWX4uTjVSL9Z9Ko0Bk9ymGgnTFhDiwB
-         awNKks1044D90eYWeHIyr28kgFb/jSR+7MCRJmtmH469RM7B1nhfvgO15wOof9Vl1VWo
-         sWuw==
-X-Gm-Message-State: ANoB5pnxv+JazweKASX4Of48E+8qRK/WRbudgy0nH8z19HOpw1ZxHffD
-        KjPGP3xHhfD6apRXAnWbPu73jVzcBskSHg==
-X-Google-Smtp-Source: AA0mqf4rtADPJsLcq44Zb+CgaPWpWumh7ZTgT8jktY2uei+qCs0Q1YoX9qH8GnqAtRUeFIr7Lz0WdA==
-X-Received: by 2002:a05:6a00:194a:b0:56b:a795:e99c with SMTP id s10-20020a056a00194a00b0056ba795e99cmr20308471pfk.14.1669247607824;
-        Wed, 23 Nov 2022 15:53:27 -0800 (PST)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id s10-20020a170902ea0a00b00186c3af9644sm14864230plg.273.2022.11.23.15.53.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 23 Nov 2022 15:53:27 -0800 (PST)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Zhang Rui'" <rui.zhang@intel.com>
-Cc:     <rjw@rjwysocki.net>, <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>
-References: <20221105174225.28673-1-rui.zhang@intel.com> <20221105174225.28673-2-rui.zhang@intel.com> <CAJZ5v0gPOUQDb8c_pVYjzBvU3e3U9JoLhJy5vRBF4h2=zvaHHw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gPOUQDb8c_pVYjzBvU3e3U9JoLhJy5vRBF4h2=zvaHHw@mail.gmail.com>
-Subject: RE: [RFC PATCH 2/3] cpuidle: ladder: Tune promotion/demotion threshold
-Date:   Wed, 23 Nov 2022 15:53:27 -0800
-Message-ID: <009601d8ff96$c8ffbc50$5aff34f0$@telus.net>
+        with ESMTP id S229555AbiKXCQL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 23 Nov 2022 21:16:11 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF165C6D0C;
+        Wed, 23 Nov 2022 18:16:09 -0800 (PST)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NHhRW5Lp9zmW72;
+        Thu, 24 Nov 2022 10:15:35 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 10:16:08 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 24 Nov 2022 10:16:07 +0800
+Subject: Re: [PATCH] powercap: fix possible name leak while device_register()
+ fails
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221112094048.3614365-1-yangyingliang@huawei.com>
+ <CAJZ5v0g6bct5pTruxHjjJPQpwDNR8WgqhLWaZWo8NKeRH3n6iw@mail.gmail.com>
+ <Y35zwffl7bUdjs93@kroah.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
+Date:   Thu, 24 Nov 2022 10:16:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHjk5ipFmOQvQsq6YVxKlctUdJTtgKSFjv+AX749gOuF2yYgA==
-Content-Language: en-ca
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y35zwffl7bUdjs93@kroah.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022.11.23 09:50 Rafael wrote:
-> On Sat, Nov 5, 2022 at 6:40 PM Zhang Rui <rui.zhang@intel.com> wrote:
+
+On 2022/11/24 3:25, Greg Kroah-Hartman wrote:
+> On Wed, Nov 23, 2022 at 08:00:14PM +0100, Rafael J. Wysocki wrote:
+>> On Sat, Nov 12, 2022 at 10:42 AM Yang Yingliang
+>> <yangyingliang@huawei.com> wrote:
+>>> If device_register() returns error, the name allocated by
+Sorry,
+I didn't describe clearly here, it's not only after device_register()
+failure, but also in the error path before register, the name is not
+freed, see description below.
+>>> dev_set_name() need be freed. In technical, we should call
+>>> put_device() to give up the reference and free the name in
+>>> driver core, but in some cases the device is not intizalized,
+>>> put_device() can not be called, so don't complicate the code,
+>>> just call kfree_const() to free name in the error path.
+>>>
+>>> Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
+>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>> ---
+>>>   drivers/powercap/powercap_sys.c | 2 ++
+>>>   1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+>>> index f0654a932b37..11e742dc83b9 100644
+>>> --- a/drivers/powercap/powercap_sys.c
+>>> +++ b/drivers/powercap/powercap_sys.c
+>>> @@ -572,6 +572,7 @@ struct powercap_zone *powercap_register_zone(
+>>>   err_name_alloc:
+>>>          idr_remove(power_zone->parent_idr, power_zone->id);
+>>>   err_idr_alloc:
+>>> +       kfree_const(dev_name(&power_zone->dev));
+>>>          if (power_zone->allocated)
+>>>                  kfree(power_zone);
+>>>          mutex_unlock(&control_type->lock);
+>>> @@ -622,6 +623,7 @@ struct powercap_control_type *powercap_register_control_type(
+>>>          dev_set_name(&control_type->dev, "%s", name);
+>>>          result = device_register(&control_type->dev);
+>>>          if (result) {
+>>> +               kfree_const(dev_name(&control_type->dev));
+>> Why is it necessary to free a device name explicitly after a failing
+>> device_register()?
+powercap_register_zone()
+{
+     ...
+     dev_set_name() // allocate name
+     ...
+     if (!power_zone->constraints)
+         goto err_const_alloc; //the name is leaked in this path
+     ...
+     if (!power_zone->zone_dev_attrs)
+         goto err_attr_alloc; //the name is leaked in this path
+     ...
+     if (result)
+         goto err_dev_ret; //the name is leaked in this path
+
+     result = device_register(&power_zone->dev);
+     if (result)
+         goto err_dev_ret;//put_device() is not called, the name is 
+leaked in this path
+     ...
+err_dev_ret:
+     kfree(power_zone->zone_dev_attrs);
+err_attr_alloc:
+     kfree(power_zone->constraints);
+err_const_alloc:
+     kfree(power_zone->name);
+err_name_alloc:
+     idr_remove(power_zone->parent_idr, power_zone->id);
+err_idr_alloc:
+     if (power_zone->allocated)
+         kfree(power_zone);
+}
 >>
->> After fixing the bogus comparison between u64 and s64, the ladder
->> governor stops making promotion decisions errornously.
->>
->> However, after this, it is found that the ladder governor demotes much
->> easier than promotes.
+>> If it is really necessary, then there is a problem in
+>> device_register() itself AFAICS, because it uses dev_set_name() at
+>> least in the dev->init_name present case.
+When the dev_set_name() called in device_register(), if register fails, the
+name is freed in its error path. But in this case, dev_set_name() is called
+outside the register, it needs call put_device() to free the name.
+> I think we already fixed this in the driver core, so these types of
+> patches should not be applied.
+driver core free the name by calling put_device(), but
+in these two functions, put_device() is not called.
+
+Thanks,
+Yang
 >
-> "After fixing an error related to using signed and unsigned integers
-> in the ladder governor in a previous patch, that governor turns out to
-> demote much easier than promote"
+> Yang, can you make sure you respond to all of them and say "this is not
+> needed anymore!" and if any got merged, send reverts for them?
 >
->> Below is captured using turbostat after a 30 seconds runtime idle,
->>
->> Without previous patch,
->> Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
->> 0.30    2373    0       0       0       4       9       25      122     326     2857    0.36    0.04    0.57    98.73   1.48
+> thanks,
 >
-> Why is the above relevant?
->
->> With previous patch,
->> Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
->> 0.42    3071    0       771     838     447     327     336     382     299     344     34.18   16.21   17.69   31.51   2.00
->>
->> And this is caused by the imbalanced PROMOTION_COUNT/DEMOTION_COUNT.
->
-> I would explain why/how the imbalanced PROMOTION_COUNT/DEMOTION_COUNT
-> imbalance causes this.
->
-> I guess more residency in the deeper idle state is expected?  Or desired??
->
->> With this patch,
->> Busy%   IRQ     POLL    C1      C1E     C3      C6      C7s     C8      C9      C10     CPU%c1  CPU%c3  CPU%c6  CPU%c7  PkgWatt
->> 0.39    2436    0       1       72      177     51      194     243     799     1883    0.50    0.32    0.35    98.45   1.53
->>
->> Note that this is an experimental patch to illustrate the problem,
->> and it is checked with idle scenario only for now.
->> I will try to evaluate with more scenarios, and if someone can help
->> evaluate with more scenarios at the same time and provide data for the
->> benefit with different PROMOTION_COUNT/DEMOTION_COUNT values, that
->> would be great.
->
-> So yes, this requires more work.
->
-> Overall, I think that you are concerned that the previous change might
-> be regarded as a regression and are trying to compensate for it with a
-> PROMOTION_COUNT/DEMOTION_COUNT change.
->
-> I'm not sure I can agree with that approach, because the shallower
-> idle states might be preferred by the original ladder design
-> intentionally, for performance reasons.
-
-Hi All,
-
-Because I was continuing to test the teo governor with
-the util patch version 4, it was fairly easy for me to test
-this patch set also. However, I have had difficulties having
-enough time to write up my results.
-
-The best improvement was for a slow speed ping-pong
-(I did 3 speeds, fast, medium, and slow)
-2 pairs of ping pongs, not forced CPU affinity,
-schedutil CPU scaling governor,
-intel_cpufreq CPU scaling driver,
-HWP disabled.
-
-The menu governor was considered the master reference:
-
-Old ladder was 44% slower.
-New ladder was 5.9% slower.
-
-Just for reference:
-Old teo was 29% slower.
-teo util V4 was 13% slower.  
-
-The worst degradation was for a fast speed ping-pong
-2 pairs of ping pongs, not forced CPU affinity,
-schedutil CPU scaling governor,
-intel_cpufreq CPU scaling driver,
-HWP disabled.
-
-The menu governor was considered the master reference:
-
-Old ladder was 64% slower.
-New ladder was 71% slower.
-
-Interestingly, the old ladder governor outperformed
-the menu governor on the slow 2 pair ping-pong
-with the performance governor:
-
-Old ladder was 0.56% faster.
-New ladder was 0.81% slower.
-
-Disclaimer: Test results using the schedutil
-CPU scaling governor are noisy, with
-questionable repeatability.
-
-I'll try to get all the test results written up soon.
-
-... Doug
-
-
+> greg k-h
+> .
