@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D4C637888
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 13:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F7AE637891
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 13:07:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiKXMHH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Nov 2022 07:07:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43558 "EHLO
+        id S229849AbiKXMHu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Nov 2022 07:07:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229581AbiKXMGr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Nov 2022 07:06:47 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FB464543
-        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 04:05:20 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id g7so2248534lfv.5
-        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 04:05:20 -0800 (PST)
+        with ESMTP id S229998AbiKXMHb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Nov 2022 07:07:31 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7B9C6202
+        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 04:07:19 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id d6so2235520lfs.10
+        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 04:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4UD2+BwrM4OIYmxXfGtMiwHH7M/T9FxMPWGUo8Plx2Y=;
-        b=VOuR003ZOkZqtUtOjQfaqRbWh1fGzpthkUs9mPEzG+CeS6IetDR+RDBJVqTVW0zttw
-         VJ0L4YifpbSC7AFZxSuBzblLjHetdBS+QvacdWj/e1rHe8OOKILmEEQySuqnn9xNrCei
-         vYZofeCLig9GHuhZJGUKehoX2eHTYC3R8iFtXlXYx1FHQbiB+BFl8Ql22UHIZOon2L/F
-         jdsmlYaqfEMqIePQeqLbpqkWt0ocJAmGN3Cfy0yZCfsA533j1v8Lmo6+IMIBMUCpks0r
-         kK6B/NmLA7QFkOaCra0dqNpRZ02vyvJcvqmXvFX+cev6QtaHbXJrH+lyqkxkBMkLbWVS
-         XOPw==
+        bh=BNX+VAXy5EEQKW4dVQA9t0aNuY53hGn9NMReFt1aw0o=;
+        b=cRMEKs+EvIxDSTnX4Pxu63YUJVx936jfncdnST+d4XiBu0M6AGZfkD3dXww+iM43Jq
+         /9llE34sC/c7SwMLgakL446wRCJWOmg2WtX/i2RzGQkf4wldsiabmEMgGk3nKt54dAAA
+         pp/LTcDPzUVOVuHhkxJXgzmNi0En/Chv6jApZ8EYXOiamGv6NvSuO+XtVRh0bczuVnpF
+         NSbuznn0XDVd4Bq7lT6vN+joOujkus+BB2AzbQJBKqRB4xcZLMIsuJ25sPhDLG7nKiOa
+         UciWV4bc4PokmmV85zItxQpvpawKz0GQVXmmY/DL+LD3Copp8lXgbCc73JVL4mrklxqP
+         RCpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4UD2+BwrM4OIYmxXfGtMiwHH7M/T9FxMPWGUo8Plx2Y=;
-        b=RcXypqe2LUKwPP5W0X4JjXnXVfG0P67ArQcDgLMCILEu907ykfNTYNDHvgDuoYF3DB
-         6+fnvvGDBvQQdpazhREsQSQX4WogcjBJj7CyI6+KIHM5+0W0GZ2Rmg7h3VHm/NsQ5hOA
-         6mwSOXzCIsCy5/n06Quj4B6fPi96UA4VgEZc3/YKiMIozxJu0eOyY+VjgFgdfNfm+f39
-         vFhq1sCPNGtPbiBW9TsVK4UBFtF986E6GwqIVQsAOLArP+XFhHflRu5ZXegn/0pSXgUu
-         MkP1aghtvtFrz1xxgnagGL1s/g4nUNYlu7KzwgrrvKAJgQpxtmdi5Bi5XAMcD5wBV8D8
-         p/Xg==
-X-Gm-Message-State: ANoB5pnKeJeaf/2yV56rfVDLRChUmRW4RpgZ2J+PiPLnmVAb2IvBSF2z
-        hLkVwHw6eKg7faGv1guhPa4RZw==
-X-Google-Smtp-Source: AA0mqf6H5h0Qk3gTJm8eqtQ17NGa3DDlAZJvzsKd6eCbSR2Aj7QnE3MnIEWCQ8MX/Lc4QGAxh1hkPg==
-X-Received: by 2002:a19:4f56:0:b0:4af:cd2:f8df with SMTP id a22-20020a194f56000000b004af0cd2f8dfmr10508208lfk.586.1669291518289;
-        Thu, 24 Nov 2022 04:05:18 -0800 (PST)
+        bh=BNX+VAXy5EEQKW4dVQA9t0aNuY53hGn9NMReFt1aw0o=;
+        b=Fdr2BAQqtIWfj3viuzoBP7Cci3+70cMWk7lUNC+p38urCBzfaUsXExyb3bicRPzM1A
+         shtEq7PzKdEVKXh+Qu1OZ9oDJtWqpo4OcvqRNDh4k3TO/nkIYHjK91dRFEYQLGzkU+Zs
+         91ppS8AcTnrAGugeM3gHDvKg4+NtgQF5d5MK6BuRDU0GOAsnGvAEdFVE2M8QgQIvGcoW
+         eyOXzbd8j5XwErF99h4Wodh1m5wiWBqFt1YLrCYHA8JAky7i7O581E97T4SfFl6c7/cK
+         uJpKzUGKZIFaYs5ujT85d3P90L7fH78f/yDUvbo0N9Kbe+qjF2DlHgreOpyJW0zlV71K
+         4Hew==
+X-Gm-Message-State: ANoB5pmzRDYiYFEGO5KZ59KAQ3GhE2W7+x5Kl8OWYBLn5FV+4w/zbRHj
+        isIMXoMyqTJ1NV7pGM1cEG+3gw==
+X-Google-Smtp-Source: AA0mqf5ZEhxi5T9vhC4MfxPti8Ii3DtWX2M7YeMErlqgqxPTMYbRCpXDU1u9kfwmHh0Qu4T8svZo0Q==
+X-Received: by 2002:a05:6512:ea8:b0:4b4:f6f4:df2b with SMTP id bi40-20020a0565120ea800b004b4f6f4df2bmr580498lfb.321.1669291637677;
+        Thu, 24 Nov 2022 04:07:17 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p22-20020a056512313600b00498f871f33fsm103879lfd.86.2022.11.24.04.05.17
+        by smtp.gmail.com with ESMTPSA id e9-20020ac24e09000000b004afeacffb84sm103378lfr.98.2022.11.24.04.07.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Nov 2022 04:05:17 -0800 (PST)
-Message-ID: <80417bba-2ddb-2730-c9fd-6879d38bf126@linaro.org>
-Date:   Thu, 24 Nov 2022 13:05:16 +0100
+        Thu, 24 Nov 2022 04:07:17 -0800 (PST)
+Message-ID: <89c266f3-9084-42de-b71d-591fe440f001@linaro.org>
+Date:   Thu, 24 Nov 2022 13:07:16 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: interconnect: Add schema for SM8550
+Subject: Re: [PATCH v2 2/3] dt-bindings: interconnect: Add Qualcomm SM8550
 Content-Language: en-US
 To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -68,9 +68,9 @@ Cc:     Melody Olvera <quic_molvera@quicinc.com>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-pm@vger.kernel.org
 References: <20221124112232.1704144-1-abel.vesa@linaro.org>
- <20221124112232.1704144-2-abel.vesa@linaro.org>
+ <20221124112232.1704144-3-abel.vesa@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221124112232.1704144-2-abel.vesa@linaro.org>
+In-Reply-To: <20221124112232.1704144-3-abel.vesa@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,215 +84,25 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 24/11/2022 12:22, Abel Vesa wrote:
-> Add dedicated schema file for SM8500. This allows better constraining
-> of reg property, depending on the type of the NOC node. Also allows
-> better constraining of the clocks property. All of the above while
-> keeping the file itself comprehensible.
+> The Qualcomm SM8550 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand
 > 
 > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > ---
->  .../interconnect/qcom,sm8550-rpmh.yaml        | 141 ++++++++++++++++++
->  1 file changed, 141 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+>  .../dt-bindings/interconnect/qcom,sm8550.h    | 190 ++++++++++++++++++
+>  1 file changed, 190 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sm8550.h
+
+I missed that last time:
+
+Filename matching compatible/bindings file, so:
+qcom,sm8550-rpmh.yaml
+
 > 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
-> new file mode 100644
-> index 000000000000..9627b629d4ce
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
-> @@ -0,0 +1,141 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/interconnect/qcom,sm8550-rpmh.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm RPMh Network-On-Chip Interconnect on SM8550
-> +
-> +maintainers:
-> +  - Georgi Djakov <djakov@kernel.org>
-> +  - Odelu Kukatla <okukatla@codeaurora.org>
-
-I think this is not accurate email. Georgi also might not be interested
-in SM8550 itself, so I propose add here yourself and Neil.
-
-> +
-> +description: |
-> +   RPMh interconnect providers support system bandwidth requirements through
-> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
-> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
-> +   associated with each execution environment. Provider nodes must point to at
-> +   least one RPMh device child node pertaining to their RSC and each provider
-> +   can map to multiple RPMh resources.
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - qcom,sm8550-aggre1-noc
-> +      - qcom,sm8550-aggre2-noc
-> +      - qcom,sm8550-clk-virt
-> +      - qcom,sm8550-cnoc-main
-> +      - qcom,sm8550-config-noc
-> +      - qcom,sm8550-gem-noc
-> +      - qcom,sm8550-lpass-ag-noc
-> +      - qcom,sm8550-lpass-lpiaon-noc
-> +      - qcom,sm8550-lpass-lpicx-noc
-> +      - qcom,sm8550-mc-virt
-> +      - qcom,sm8550-mmss-noc
-> +      - qcom,sm8550-nsp-noc
-> +      - qcom,sm8550-pcie-anoc
-> +      - qcom,sm8550-system-noc
-> +
-
-reg:
-  maxItems: 1
-
-> +allOf:
-> +  - $ref: qcom,rpmh-common.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre1-noc
-> +              - qcom,sm8550-aggre2-noc
-> +              - qcom,sm8550-cnoc-main
-> +              - qcom,sm8550-config-noc
-> +              - qcom,sm8550-gem-noc
-> +              - qcom,sm8550-lpass-ag-noc
-> +              - qcom,sm8550-lpass-lpiaon-noc
-> +              - qcom,sm8550-lpass-lpicx-noc
-> +              - qcom,sm8550-mmss-noc
-> +              - qcom,sm8550-nsp-noc
-> +              - qcom,sm8550-pcie-anoc
-> +              - qcom,sm8550-system-noc
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 1
-> +          maxItems: 1
-
-Instead:
-
-  if:
-     ....
-
-     enum:
-       - virt interconnects
-  then:
-    properties:
-      reg: false
-  else:
-    required:
-      - reg
 
 
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-pcie-anoc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: aggre-NOC PCIe AXI clock
-> +            - description: cfg-NOC PCIe a-NOC AHB clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre1-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: aggre UFS PHY AXI clock
-> +            - description: aggre USB3 PRIM AXI clock
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre2-noc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: RPMH CC IPA clock
-
-This part is in general fine, but I propose to do it differently -
-mentioning clocks in top-level properties, because it's defining
-properties in allOf:if:then is error prone and easy to miss. Better to
-have one definition and customization in if:then:.
-
-Therefore:
-1. in top-level properties:
-  clocks:
-    minItems: 1
-    maxItems: 2
-
-2. All your ifs stay the same.
-
-3. One more if: compatible: enum: pcie/aggre1/aggre2
-
-  then:
-    required:
-      - clocks
-  else:
-    properties:
-      clocks: false
-
-
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/clock/qcom,gcc-sm8550.h>
-> +      #include <dt-bindings/interconnect/qcom,sm8550.h>
-> +      #include <dt-bindings/clock/qcom,rpmh.h>
-> +
-> +      clk_virt: interconnect-0 {
-> +             compatible = "qcom,sm8550-clk-virt";
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      cnoc_main: interconnect@1500000 {
-> +             compatible = "qcom,sm8550-cnoc-main";
-> +             reg = <0x01500000 0x13080>;
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      aggre1_noc: interconnect@16e0000 {
-> +             compatible = "qcom,sm8550-aggre1-noc";
-> +             reg = <0x016e0000 0x14400>;
-> +             #interconnect-cells = <2>;
-> +             clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +                      <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      aggre2_noc: interconnect@1700000 {
-> +             compatible = "qcom,sm8550-aggre2-noc";
-> +             reg = <0x01700000 0x1E400>;
-> +             #interconnect-cells = <2>;
-> +             clocks = <&rpmhcc RPMH_IPA_CLK>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-
-and keep just two examples (e.g. virt and aggre1) - they differ only by
-one or two properties, so it's a bit too much...
+This should have stayed part of your previous patch. The headers are
+part of bindings, so squash it.
 
 Best regards,
 Krzysztof
