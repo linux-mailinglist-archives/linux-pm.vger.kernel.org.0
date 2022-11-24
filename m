@@ -2,114 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8176A637571
-	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 10:44:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831F463767F
+	for <lists+linux-pm@lfdr.de>; Thu, 24 Nov 2022 11:30:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229615AbiKXJoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 24 Nov 2022 04:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53654 "EHLO
+        id S229877AbiKXKag (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 24 Nov 2022 05:30:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiKXJoT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Nov 2022 04:44:19 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1478654CD;
-        Thu, 24 Nov 2022 01:44:16 -0800 (PST)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 0F58D24E2E7;
-        Thu, 24 Nov 2022 17:44:15 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
- 2022 17:44:15 +0800
-Received: from [192.168.125.96] (183.27.97.81) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 24 Nov
- 2022 17:44:14 +0800
-Message-ID: <eeffbdd3-51d3-87cb-dda1-81b99ab51698@starfivetech.com>
-Date:   Thu, 24 Nov 2022 17:44:14 +0800
+        with ESMTP id S229949AbiKXKaM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 24 Nov 2022 05:30:12 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401A914F539
+        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 02:30:05 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id s8so1883182lfc.8
+        for <linux-pm@vger.kernel.org>; Thu, 24 Nov 2022 02:30:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/YGzB1m+A8t24Wyv5LyOx5oUGq5pgFjmcOjHEeeQKKE=;
+        b=P4r8ejXZ4Eg9YNX6ILD2RSHKALTZZ8W/0BRIkyRGGH0Te77UjQKe0yFJNG2u0iOytO
+         P7Ou21TenDgggLj4HVD7H2Wi64jHe369AGMSZ0VC6897W7apN0DYRll4z5n4FKNs0eAZ
+         8h7iQ4ZS7/zSNWfM0Dm9da7UIN8QMhUmEb6w5uDidqX+x1wGVONjkS4wivwkV4jBKayp
+         PJKNHH+CMVoBYIi1BGBZ+c+2k3GmTbqyPe5JMwjcTTf9CiGRc3kLtJeSMaG8QMtY1zD/
+         MhGeJgyoyrNErWBwfhZBs1ByXh6bEAjqob0yVnNjl8krHAcPZJLfrUBo1mnvJJgnJqfe
+         nw4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/YGzB1m+A8t24Wyv5LyOx5oUGq5pgFjmcOjHEeeQKKE=;
+        b=mU4TQbVwuHyzPDrjg82vKZGTV+I4gDG5J8p1gE+0QBPi+VYpV7CVDqmOWE+PGG9vju
+         x9X+x2sbtdZgTH4r3K+c6tEetQMjaK8f8GNRsrmboRcIgZV5b7kNk1HISqifU5Gq5nKX
+         hPnXixQ5uy1XuBKrkdwYSwZ4G6uFPg4/l88ADntaGskTa2AAS42cdiOpvvrvsihLhNQ0
+         9N50Z1B1fqFtxYLD5Psvcm54RN0DqJ24dB4n7chhqGzACNWwDNMh+e6Nfj+lp9k7o8uA
+         IAqb1bS3Ws25BTPPjgfuihHLP2c1GMkA/hzyH5EOrvFeeEfSxXy6QX5MMChOQ29mUnjD
+         2udA==
+X-Gm-Message-State: ANoB5plECxc/+DSq8L0Vy7xleXUTugOHf0fnjde/UIqfauitAW8cvRCG
+        rpZpzrqyci7B3gdNJ1zY4QGw4uA4PHgJBVzB
+X-Google-Smtp-Source: AA0mqf6s5rfKEkFzvxg78RSbw5JHvfM0tIBJH7b0tkR3JUz6rMn6ooziH19gylVOxdcjatJAbJ3jhQ==
+X-Received: by 2002:a05:6512:3da3:b0:4aa:f992:28aa with SMTP id k35-20020a0565123da300b004aaf99228aamr4887349lfv.459.1669285803993;
+        Thu, 24 Nov 2022 02:30:03 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id u21-20020a196a15000000b00498f570aef2sm78922lfu.209.2022.11.24.02.30.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 24 Nov 2022 02:30:03 -0800 (PST)
+Message-ID: <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
+Date:   Thu, 24 Nov 2022 11:30:02 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
 Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>
-CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221118133216.17037-1-walker.chen@starfivetech.com>
- <20221118133216.17037-4-walker.chen@starfivetech.com>
- <CAJM55Z9jfpOW49Z5cdR18T0w4Ae6CQAYF-AsCD8eOcPczwgoZA@mail.gmail.com>
- <6303c341-a691-fd52-2861-74e9d3ea09c9@starfivetech.com>
- <Y385J2m5YByyAz0g@wendy>
-From:   Walker Chen <walker.chen@starfivetech.com>
-In-Reply-To: <Y385J2m5YByyAz0g@wendy>
-Content-Type: text/plain; charset="UTF-8"
+To:     Melody Olvera <quic_molvera@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221118182245.31035-1-quic_molvera@quicinc.com>
+ <20221118182245.31035-2-quic_molvera@quicinc.com>
+ <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
+ <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
+ <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
+ <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.97.81]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022/11/24 17:28, Conor Dooley wrote:
-> Hey Walker,
-> Just jumping in here...
+On 22/11/2022 18:57, Melody Olvera wrote:
+>>>>> +
+>>>>> +maintainers:
+>>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
+>>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
+>>>>> +
+>>>>> +description: |
+>>>>> +   RPMh interconnect providers support system bandwidth requirements through
+>>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+>>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
+>>>>> +   associated with each execution environment. Provider nodes must point to at
+>>>>> +   least one RPMh device child node pertaining to their RSC and each provider
+>>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
+>>>>> +   controlled by AP and do not support QoS; they should not have associated
+>>>>> +   register regions.
+>>>>> +
+>>>>> +allOf:
+>>>>> +  - $ref: qcom,rpmh-common.yaml#
+>>>>> +
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    enum:
+>>>>> +      - qcom,qdu1000-clk-virt
+>>>>> +      - qcom,qdu1000-mc-virt
+>>>>> +      - qcom,sm8450-clk-virt
+>>>>> +      - qcom,sm8450-mc-virt
+>>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
+>>>> qcom,sc8280xp-clk-virt and more.
+>>> Ok. I wasn't sure since some of these entries don't seem to conform to
+>>> these bindings, even though it seems they should.
+>> I have impression that devices I listed conform to these bindings, this
+>> is why I listed them. But if you are sure that they do not, then they
+>> should not be moved.
 > 
-> On Thu, Nov 24, 2022 at 05:08:57PM +0800, Walker Chen wrote:
->> On 2022/11/19 2:31, Emil Renner Berthing wrote:
->> > On Fri, 18 Nov 2022 at 14:35, Walker Chen <walker.chen@starfivetech.com> wrote:
-> 
->> >> diff --git a/include/soc/starfive/pm_domains.h b/include/soc/starfive/pm_domains.h
->> >> new file mode 100644
->> >> index 000000000000..a20e28e9baf3
->> >> --- /dev/null
->> >> +++ b/include/soc/starfive/pm_domains.h
->> >> @@ -0,0 +1,15 @@
->> >> +/* SPDX-License-Identifier: GPL-2.0 */
->> >> +/*
->> >> + * Copyright (C) 2022 StarFive Technology Co., Ltd.
->> >> + * Author: Walker Chen <walker.chen@starfivetech.com>
->> >> + */
->> >> +
->> >> +#ifndef __SOC_STARFIVE_PMDOMAINS_H__
->> >> +#define __SOC_STARFIVE_PMDOMAINS_H__
->> >> +
->> >> +#include <linux/types.h>
->> >> +
->> >> +void starfive_pmu_hw_event_turn_on(u32 mask);
->> >> +void starfive_pmu_hw_event_turn_off(u32 mask);
->> >> +
->> >> +#endif /* __SOC_STARFIVE_PMDOMAINS_H__ */
->> > 
->> > The header and functions within are named very generic, but
->> > implemented by the jh71xx-specific driver.
->> > 
->> > Also who should use this header? These functions are never called by
->> > anything in this series.
->> 
->> These two functions will be used by the GPU module. Only the power-off
->> of the GPU is not controlled by the software through PMU module. So
->> here the functions are needed to export.
-> 
-> ...the general policy is to avoid adding things without users. I think
-> they should be kept as static functions for now & when your GPU driver
-> is being upstreamed you can expose these functions. That way your usage
-> of them can be reviewed with the appropriate context.
-> 
+> You're correct; those you listed do conform to the new bindings and should be moved.
+> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
 
-OK, thank you for your advice. I will modify the code according to your suggestion
- in the next version of patch.
+Actually let's wait a bit with this. For SM8550 we had an idea to move
+interconnect to their own bindings file, because they will grow a bit
+with allOf:if:then clauses.
 
-Best Regards,
-Walker Chen
+Maybe SM8450 and QDU1000 should also go to their own files which will
+describe all their interconnects (the virt and the ones requiring clocks)?
+
+Apologies for bringing it late for your patches, but SM8550 is also
+happening right now, so new things pop-up :)
+
+Best regards,
+Krzysztof
 
