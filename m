@@ -2,298 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6460638FC4
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Nov 2022 19:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2C0638FDB
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Nov 2022 19:33:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiKYS1a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Nov 2022 13:27:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43806 "EHLO
+        id S229486AbiKYSde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Nov 2022 13:33:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKYS12 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 13:27:28 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0638610572;
-        Fri, 25 Nov 2022 10:27:26 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id h24so2962353qta.9;
-        Fri, 25 Nov 2022 10:27:25 -0800 (PST)
+        with ESMTP id S229798AbiKYSdd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 13:33:33 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B926D178A0;
+        Fri, 25 Nov 2022 10:33:32 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id j26so3133416qki.10;
+        Fri, 25 Nov 2022 10:33:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NaVyuL7mKrfx/MfLG1wi9jTgElLj4sZF7DF2LjomlCU=;
-        b=Qq+bNtSFgwqiCgKqhrM60vZiq6Zys6JdgcDM7jL3vJDruOy9L5/gDA8+fXcpmYgfMX
-         vyIlKom+rvJzQ3AtleYaHIUKQ51RZ54GHlOLPMmxRE5ZQMRaI1NvbO9uBmfRM3DZFGlP
-         P+7IeoXRz/pgKqC7OKgdrtmWa1bTnSRht5DjWfRgg8aqDqr/eMUoTk6TRLmjV4HJFfPZ
-         QQmaiDthDFTaqglmLFWBa2XeUS/matlDeB63wBX6B/EWiUQyqV8gzh2yYjqXPIO68kHx
-         DMUJiwPzyltT/3Nb0mcPwoAFveRUKhvhnLcIrnZDUogb+9u2rmYZtAoHZG65qFh/A5VN
-         vyjQ==
-X-Gm-Message-State: ANoB5pkK+ZrR7ICkWcSLwtgYyahxbahGfAVFD0LCk46w9nrni69Setdg
-        J+aiAe+cBXKmUQPp0i+WnpzVlGPR93TRGpOpG8E=
-X-Google-Smtp-Source: AA0mqf6UlCs0QIUDn50HzsSvOw/6dL0421WXAcMOobtGBuidsFBscyjKb25hb/w6Xo+O60UEY50+QeEOXUP0XtbJITc=
-X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
- l2-20020ac81482000000b003a51e6f7e05mr19290235qtj.357.1669400845061; Fri, 25
- Nov 2022 10:27:25 -0800 (PST)
+        bh=382Ipv22ATcQETwtXSjKcd5sERexli0ePl2yzw5JKUY=;
+        b=1dBQbswBLpBa2qyAAR5F67nJ27tl+MZysEng6g1NiQ0kANdf7K1oICX2zHOzb5pf43
+         XP4feRGlILVZjF6YEUrP43Ipg6KXS2kOs6u6y0WTrRSUWstoh+1l9TpLbWgiVOO7VAAg
+         A1iOzWVJqevbM8bkjRcEOh1mzGdKaUikglw7IvKV8TzEq/V1BnWWWCJz3vJ3F7hbTBY8
+         cVTIEY2wjC4cPnZUwZnr2rwBIPvLPRhStiv55hJfVKIi7h3Xj1CamCfxvSzJw8bLggyW
+         PU3WxCD6fOUTSxD+prq/MPM+kHfTWaHkFV8eeMYf7U36tn8ilisj1ALcgcbhbk3ipDv+
+         QqPw==
+X-Gm-Message-State: ANoB5pmKl34IgOwYIf7jfwdqm37sLoj2gRICuvoig1mubWUh/vVuv7GY
+        PPrpMXSBvz/rI5Hwteo9BAsk00CtBxTueomO06U=
+X-Google-Smtp-Source: AA0mqf706YccTLBTzjtsW158rfxgc8i9utdHOGTXGsoKinMjFZrshoPvprfgAFn4TdCy98yUreJU6Z1NakPki0KCWL4=
+X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
+ cx10-20020a05620a51ca00b006ecfa04d97cmr18695469qkb.764.1669401211682; Fri, 25
+ Nov 2022 10:33:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20221031121314.1381472-1-kajetan.puchalski@arm.com> <20221031121314.1381472-3-kajetan.puchalski@arm.com>
-In-Reply-To: <20221031121314.1381472-3-kajetan.puchalski@arm.com>
+References: <20221115212543.1745498-1-abel.vesa@linaro.org> <CAPDyKFoTWrei3QdL27bAtUFOidZ7FsQ41CdY31vxh6NwNEEWWw@mail.gmail.com>
+In-Reply-To: <CAPDyKFoTWrei3QdL27bAtUFOidZ7FsQ41CdY31vxh6NwNEEWWw@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Nov 2022 19:27:13 +0100
-Message-ID: <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Fri, 25 Nov 2022 19:33:20 +0100
+Message-ID: <CAJZ5v0id+D4wCZCU1RCJbLLcQPWRZ0iVA3mqXZg4iEAkG78eJw@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: domains: Reverse the order of performance and
+ enabling ops
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 1:14 PM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
+On Wed, Nov 16, 2022 at 1:48 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> Modern interactive systems, such as recent Android phones, tend to have
-> power efficient shallow idle states. Selecting deeper idle states on a
-> device while a latency-sensitive workload is running can adversely impact
-> performance due to increased latency. Additionally, if the CPU wakes up
-> from a deeper sleep before its target residency as is often the case, it
-> results in a waste of energy on top of that.
+> On Tue, 15 Nov 2022 at 22:25, Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > The ->set_performance_state() needs to be called before ->power_on()
+> > when a genpd is powered on, and after ->power_off() when a genpd is
+> > powered off. Do this in order to let the provider know to which
+> > performance state to power on the genpd, on the power on sequence, and
+> > also to maintain the performance for that genpd until after powering off,
+> > on power off sequence.
+> >
+> > There is no scenario where a consumer would need its genpd enabled and
+> > then its performance state increased. Instead, in every scenario, the
+> > consumer needs the genpd to be enabled from the start at a specific
+> > performance state.
+> >
+> > And same logic applies to the powering down. No consumer would need its
+> > genpd performance state dropped right before powering down.
+> >
+> > Now, there are currently two vendors which use ->set_performance_state()
+> > in their genpd providers. One of them is Tegra, but the only genpd provider
+> > (PMC) that makes use of ->set_performance_state() doesn't implement the
+> > ->power_on() or ->power_off(), and so it will not be affected by the ops
+> > reversal.
+> >
+> > The other vendor that uses it is Qualcomm, in multiple genpd providers
+> > actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
+> > use of ->set_performance_state() need the order between enabling ops and
+> > the performance setting op to be reversed. And the reason for that is that
+> > it currently translates into two different voltages in order to power on
+> > a genpd to a specific performance state. Basically, ->power_on() switches
+> > to the minimum (enabling) voltage for that genpd, and then
+> > ->set_performance_state() sets it to the voltage level required by the
+> > consumer.
+> >
+> > By reversing the call order, we rely on the provider to know what to do
+> > on each call, but most popular usecase is to cache the performance state
+> > and postpone the voltage setting until the ->power_on() gets called.
+> >
+> > As for the reason of still needing the ->power_on() and ->power_off() for a
+> > provider which could get away with just having ->set_performance_state()
+> > implemented, there are consumers that do not (nor should) provide an
+> > opp-table. For those consumers, ->set_performance_state() will not be
+> > called, and so they will enable the genpd to its minimum performance state
+> > by a ->power_on() call. Same logic goes for the disabling.
+> >
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 >
-> This patch extends the TEO governor with a mechanism adding util-awareness,
-> effectively providing a way for the governor to reduce the selected idle
-> state by 1 when the CPU is being utilized over a certain threshold while
-> still trying to select the deepest possible state using TEO's metrics when
-> the CPU is not being utilized. This is now possible since the CPU
-> utilization is exported from the scheduler with the sched_cpu_util function
-> and already used e.g. in the thermal governor IPA.
->
-> Under this implementation, when the CPU is being utilised and the
-> selected candidate state is C1, it will be reduced to C0 as long as C0
-> is not a polling state. This effectively should make the patch have no
-> effect on most Intel systems.
->
-> This can provide drastically decreased latency and performance benefits in
-> certain types of mobile workloads that are sensitive to latency,
-> such as Geekbench 5.
->
-> Signed-off-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-> ---
->  drivers/cpuidle/governors/teo.c | 84 ++++++++++++++++++++++++++++++++-
->  1 file changed, 82 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/cpuidle/governors/teo.c b/drivers/cpuidle/governors/teo.c
-> index e2864474a98d..0f38b3ecab3c 100644
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -2,8 +2,13 @@
->  /*
->   * Timer events oriented CPU idle governor
->   *
-> + * TEO governor:
->   * Copyright (C) 2018 - 2021 Intel Corporation
->   * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> + *
-> + * Util-awareness mechanism:
-> + * Copyright (C) 2022 Arm Ltd.
-> + * Author: Kajetan Puchalski <kajetan.puchalski@arm.com>
->   */
->
->  /**
-> @@ -99,14 +104,49 @@
->   *      select the given idle state instead of the candidate one.
->   *
->   * 3. By default, select the candidate state.
-> + *
-> + * Util-awareness mechanism:
-> + *
-> + * The idea behind the util-awareness extension is that there are two distinct
-> + * scenarios for the CPU which should result in two different approaches to idle
-> + * state selection - utilized and not utilized.
-> + *
-> + * In this case, 'utilized' means that the average runqueue util of the CPU is
-> + * above a certain threshold.
-> + *
-> + * When the CPU is utilized while going into idle, more likely than not it will
-> + * be woken up to do more work soon and so a shallower idle state should be
-> + * selected to minimise latency and maximise performance. When the CPU is not
-> + * being utilized, the usual metrics-based approach to selecting the deepest
-> + * available idle state should be preferred to take advantage of the power
-> + * saving.
-> + *
-> + * In order to achieve this, the governor uses a utilization threshold.
-> + * The threshold is computed per-cpu as a percentage of the CPU's capacity
-> + * by bit shifting the capacity value. Based on testing, the shift of 6 (~1.56%)
-> + * seems to be getting the best results.
-> + *
-> + * Before selecting the next idle state, the governor compares the current CPU
-> + * util to the precomputed util threshold. If it's below, it defaults to the
-> + * TEO metrics mechanism. If it's above and the currently selected candidate is
-> + * C1, the idle state will be reduced to C0 as long as C0 is not a polling state.
->   */
->
->  #include <linux/cpuidle.h>
->  #include <linux/jiffies.h>
->  #include <linux/kernel.h>
-> +#include <linux/sched.h>
->  #include <linux/sched/clock.h>
-> +#include <linux/sched/topology.h>
->  #include <linux/tick.h>
->
-> +/*
-> + * The number of bits to shift the cpu's capacity by in order to determine
-> + * the utilized threshold
-> + */
-> +#define UTIL_THRESHOLD_SHIFT 6
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Why is this particular number regarded as the best one?
+Applied as 6.2 material, thanks!
 
-> +
-> +
->  /*
->   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
->   * is used for decreasing metrics on a regular basis.
-> @@ -137,9 +177,11 @@ struct teo_bin {
->   * @time_span_ns: Time between idle state selection and post-wakeup update.
->   * @sleep_length_ns: Time till the closest timer event (at the selection time).
->   * @state_bins: Idle state data bins for this CPU.
-> - * @total: Grand total of the "intercepts" and "hits" mertics for all bins.
-> + * @total: Grand total of the "intercepts" and "hits" metrics for all bins.
->   * @next_recent_idx: Index of the next @recent_idx entry to update.
->   * @recent_idx: Indices of bins corresponding to recent "intercepts".
-> + * @util_threshold: Threshold above which the CPU is considered utilized
-> + * @utilized: Whether the last sleep on the CPU happened while utilized
->   */
->  struct teo_cpu {
->         s64 time_span_ns;
-> @@ -148,10 +190,24 @@ struct teo_cpu {
->         unsigned int total;
->         int next_recent_idx;
->         int recent_idx[NR_RECENT];
-> +       unsigned long util_threshold;
-> +       bool utilized;
->  };
->
->  static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
->
-> +/**
-> + * teo_get_util - Update the CPU utilized status
-> + * @dev: Target CPU
-> + * @cpu_data: Governor CPU data for the target CPU
-> + */
-> +static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-> +{
-> +       unsigned long util = sched_cpu_util(dev->cpu);
-> +
-> +       cpu_data->utilized = util > cpu_data->util_threshold;
-
-Why exactly do you need the local variable here?
-
-Then, if there's only one caller, maybe this could be folded into it?
-
-> +}
-> +
->  /**
->   * teo_update - Update CPU metrics after wakeup.
->   * @drv: cpuidle driver containing state data.
-> @@ -303,7 +359,9 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         int i;
->
->         if (dev->last_state_idx >= 0) {
-> -               teo_update(drv, dev);
-> +               /* don't update metrics if the cpu was utilized during the last sleep */
-
-Why?
-
-The metrics are related to idle duration and cpu_data->utilized
-indicates whether or not latency should be reduced.  These are
-different things.
-
-Moreover, this is just one data point and there may not be any direct
-connection between it and the decision made in this particular cycle.
-
-> +               if (!cpu_data->utilized)
-> +                       teo_update(drv, dev);
->                 dev->last_state_idx = -1;
->         }
->
-> @@ -323,6 +381,21 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->                         goto end;
->         }
->
-> +       teo_get_util(dev, cpu_data);
-> +       /* the cpu is being utilized and there's only 2 states to choose from */
-> +       /* no need to consider metrics, choose the shallowest non-polling state and exit */
-
-A proper kernel-coding-style 2-line comment, please!
-
-Also I would say "utilized beyond the threshold" instead of just
-"utilized" and "there are only 2 states" (plural).
-
-> +       if (drv->state_count < 3 && cpu_data->utilized) {
-> +               for (i = 0; i < drv->state_count; ++i) {
-> +                       if (dev->states_usage[i].disable ||
-> +                                       drv->states[i].flags & CPUIDLE_FLAG_POLLING)
-> +                               continue;
-> +                       break;
-
-This looks odd.  It would be more straightforward to do
-
-if (!dev->states_usage[i].disable && !(drv->states[i].flags &
-CPUIDLE_FLAG_POLLING)) {
-        idx = i;
-        goto end;
-}
-
-without the "break" and "continue".
-
-> +               }
-> +
-> +               idx = i;
-> +               goto end;
-> +       }
-> +
->         /*
->          * Find the deepest idle state whose target residency does not exceed
->          * the current sleep length and the deepest idle state not deeper than
-> @@ -454,6 +527,11 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         if (idx > constraint_idx)
->                 idx = constraint_idx;
->
-> +       /* if the CPU is being utilized and C1 is the selected candidate */
-> +       /* choose a shallower non-polling state to improve latency */
-
-Again, the kernel coding style for multi-line comments is different
-from the above.
-
-> +       if (cpu_data->utilized && idx == 1)
-
-I've changed my mind with respect to adding the idx == 1 check to
-this.  If the goal is to reduce latency for the "loaded" CPUs, this
-applies to deeper idle states too.
-
-> +               idx = teo_find_shallower_state(drv, dev, idx, duration_ns, true);
-> +
->  end:
->         /*
->          * Don't stop the tick if the selected state is a polling one or if the
-> @@ -510,9 +588,11 @@ static int teo_enable_device(struct cpuidle_driver *drv,
->                              struct cpuidle_device *dev)
->  {
->         struct teo_cpu *cpu_data = per_cpu_ptr(&teo_cpus, dev->cpu);
-> +       unsigned long max_capacity = arch_scale_cpu_capacity(dev->cpu);
->         int i;
->
->         memset(cpu_data, 0, sizeof(*cpu_data));
-> +       cpu_data->util_threshold = max_capacity >> UTIL_THRESHOLD_SHIFT;
->
->         for (i = 0; i < NR_RECENT; i++)
->                 cpu_data->recent_idx[i] = -1;
-> --
+> > ---
+> >
+> > Changes since v1:
+> >  - Added performance state drop on power on failure, like Ulf suggested
+> >
+> >  drivers/base/power/domain.c | 36 +++++++++++++++++++++---------------
+> >  1 file changed, 21 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index e5f4e5a2eb9e..967bcf9d415e 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -964,8 +964,8 @@ static int genpd_runtime_suspend(struct device *dev)
+> >                 return 0;
+> >
+> >         genpd_lock(genpd);
+> > -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+> >         genpd_power_off(genpd, true, 0);
+> > +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+> >         genpd_unlock(genpd);
+> >
+> >         return 0;
+> > @@ -1003,9 +1003,8 @@ static int genpd_runtime_resume(struct device *dev)
+> >                 goto out;
+> >
+> >         genpd_lock(genpd);
+> > +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+> >         ret = genpd_power_on(genpd, 0);
+> > -       if (!ret)
+> > -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
+> >         genpd_unlock(genpd);
+> >
+> >         if (ret)
+> > @@ -1043,8 +1042,8 @@ static int genpd_runtime_resume(struct device *dev)
+> >  err_poweroff:
+> >         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
+> >                 genpd_lock(genpd);
+> > -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+> >                 genpd_power_off(genpd, true, 0);
+> > +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
+> >                 genpd_unlock(genpd);
+> >         }
+> >
+> > @@ -2733,17 +2732,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >         dev->pm_domain->detach = genpd_dev_pm_detach;
+> >         dev->pm_domain->sync = genpd_dev_pm_sync;
+> >
+> > -       if (power_on) {
+> > -               genpd_lock(pd);
+> > -               ret = genpd_power_on(pd, 0);
+> > -               genpd_unlock(pd);
+> > -       }
+> > -
+> > -       if (ret) {
+> > -               genpd_remove_device(pd, dev);
+> > -               return -EPROBE_DEFER;
+> > -       }
+> > -
+> >         /* Set the default performance state */
+> >         pstate = of_get_required_opp_performance_state(dev->of_node, index);
+> >         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
+> > @@ -2755,6 +2743,24 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
+> >                         goto err;
+> >                 dev_gpd_data(dev)->default_pstate = pstate;
+> >         }
+> > +
+> > +       if (power_on) {
+> > +               genpd_lock(pd);
+> > +               ret = genpd_power_on(pd, 0);
+> > +               genpd_unlock(pd);
+> > +       }
+> > +
+> > +       if (ret) {
+> > +               /* Drop the default performance state */
+> > +               if (dev_gpd_data(dev)->default_pstate) {
+> > +                       dev_pm_genpd_set_performance_state(dev, 0);
+> > +                       dev_gpd_data(dev)->default_pstate = 0;
+> > +               }
+> > +
+> > +               genpd_remove_device(pd, dev);
+> > +               return -EPROBE_DEFER;
+> > +       }
+> > +
+> >         return 1;
+> >
+> >  err:
+> > --
+> > 2.34.1
+> >
