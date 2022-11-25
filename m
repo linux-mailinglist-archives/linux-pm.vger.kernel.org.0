@@ -2,205 +2,151 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2C0638FDB
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Nov 2022 19:33:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4050639009
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Nov 2022 19:45:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229486AbiKYSde (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Nov 2022 13:33:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S229813AbiKYSpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Nov 2022 13:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiKYSdd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 13:33:33 -0500
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B926D178A0;
-        Fri, 25 Nov 2022 10:33:32 -0800 (PST)
-Received: by mail-qk1-f178.google.com with SMTP id j26so3133416qki.10;
-        Fri, 25 Nov 2022 10:33:32 -0800 (PST)
+        with ESMTP id S229570AbiKYSpe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 13:45:34 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2432545ECC;
+        Fri, 25 Nov 2022 10:45:33 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id h24so2988062qta.9;
+        Fri, 25 Nov 2022 10:45:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=382Ipv22ATcQETwtXSjKcd5sERexli0ePl2yzw5JKUY=;
-        b=1dBQbswBLpBa2qyAAR5F67nJ27tl+MZysEng6g1NiQ0kANdf7K1oICX2zHOzb5pf43
-         XP4feRGlILVZjF6YEUrP43Ipg6KXS2kOs6u6y0WTrRSUWstoh+1l9TpLbWgiVOO7VAAg
-         A1iOzWVJqevbM8bkjRcEOh1mzGdKaUikglw7IvKV8TzEq/V1BnWWWCJz3vJ3F7hbTBY8
-         cVTIEY2wjC4cPnZUwZnr2rwBIPvLPRhStiv55hJfVKIi7h3Xj1CamCfxvSzJw8bLggyW
-         PU3WxCD6fOUTSxD+prq/MPM+kHfTWaHkFV8eeMYf7U36tn8ilisj1ALcgcbhbk3ipDv+
-         QqPw==
-X-Gm-Message-State: ANoB5pmKl34IgOwYIf7jfwdqm37sLoj2gRICuvoig1mubWUh/vVuv7GY
-        PPrpMXSBvz/rI5Hwteo9BAsk00CtBxTueomO06U=
-X-Google-Smtp-Source: AA0mqf706YccTLBTzjtsW158rfxgc8i9utdHOGTXGsoKinMjFZrshoPvprfgAFn4TdCy98yUreJU6Z1NakPki0KCWL4=
-X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
- cx10-20020a05620a51ca00b006ecfa04d97cmr18695469qkb.764.1669401211682; Fri, 25
- Nov 2022 10:33:31 -0800 (PST)
+        bh=yVnYr+yRHxw7HWghSQNQQghN0tldZQ4+ZOhhs+c595w=;
+        b=LAhVU1SJdEqS6lSb4k6n+oxLjqzB3WBNEisiZqT5830TPbUo1+/ZwjKCYXFBwsR0f+
+         f/7LCMECGqz8SRPxn5x1DQBJmyp/TTdXHQWWkVizSoMhiV1rtZLLEnv8xNz86nZbuc0T
+         AkRPR9KoiamqaG8DXFw6qZs7FM0El+1s9xWmTCnuKH8gN8NU4KW9A2MEUUAXoPdlu/Rr
+         Pvjy6DymFav/bODjmQULtg9pe6B5mBtWjEiorL74JOX4tE1rmZa9aCLakWXqYmbMpEPA
+         BkqTDrPW4IdpBcklf17+/QrdngGHn1SisDBY18tNo/AuGgDMLurAzor92auBf/aA9vLc
+         0o4w==
+X-Gm-Message-State: ANoB5pkVv9Od87Xap/9Hr58pUis5W6PANGzifCBocugpM8/eyNFL4lKq
+        VZa09XUcjo3TAw5+YiTbt1yxAVCtLgorNgNYzZU=
+X-Google-Smtp-Source: AA0mqf7pZVddib+OvYk4FWSEsX10juR9fJpwuUq+tcQQmF+OpBMeEd9dyFDoObmDSDj2qk3A+42WM9Rt+mHZMc0ltjg=
+X-Received: by 2002:ac8:1482:0:b0:3a5:1e6f:7e05 with SMTP id
+ l2-20020ac81482000000b003a51e6f7e05mr19373259qtj.357.1669401932242; Fri, 25
+ Nov 2022 10:45:32 -0800 (PST)
 MIME-Version: 1.0
-References: <20221115212543.1745498-1-abel.vesa@linaro.org> <CAPDyKFoTWrei3QdL27bAtUFOidZ7FsQ41CdY31vxh6NwNEEWWw@mail.gmail.com>
-In-Reply-To: <CAPDyKFoTWrei3QdL27bAtUFOidZ7FsQ41CdY31vxh6NwNEEWWw@mail.gmail.com>
+References: <20221112094048.3614365-1-yangyingliang@huawei.com>
+ <CAJZ5v0g6bct5pTruxHjjJPQpwDNR8WgqhLWaZWo8NKeRH3n6iw@mail.gmail.com>
+ <Y35zwffl7bUdjs93@kroah.com> <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
+In-Reply-To: <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 25 Nov 2022 19:33:20 +0100
-Message-ID: <CAJZ5v0id+D4wCZCU1RCJbLLcQPWRZ0iVA3mqXZg4iEAkG78eJw@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: domains: Reverse the order of performance and
- enabling ops
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org
+Date:   Fri, 25 Nov 2022 19:45:21 +0100
+Message-ID: <CAJZ5v0j+M79zD4Tsskkpsq8gyFQ8enjoZh-f54qOu1Rs_5tojA@mail.gmail.com>
+Subject: Re: [PATCH] powercap: fix possible name leak while device_register() fails
+To:     Yang Yingliang <yangyingliang@huawei.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 16, 2022 at 1:48 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+On Thu, Nov 24, 2022 at 3:16 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
 >
-> On Tue, 15 Nov 2022 at 22:25, Abel Vesa <abel.vesa@linaro.org> wrote:
-> >
-> > The ->set_performance_state() needs to be called before ->power_on()
-> > when a genpd is powered on, and after ->power_off() when a genpd is
-> > powered off. Do this in order to let the provider know to which
-> > performance state to power on the genpd, on the power on sequence, and
-> > also to maintain the performance for that genpd until after powering off,
-> > on power off sequence.
-> >
-> > There is no scenario where a consumer would need its genpd enabled and
-> > then its performance state increased. Instead, in every scenario, the
-> > consumer needs the genpd to be enabled from the start at a specific
-> > performance state.
-> >
-> > And same logic applies to the powering down. No consumer would need its
-> > genpd performance state dropped right before powering down.
-> >
-> > Now, there are currently two vendors which use ->set_performance_state()
-> > in their genpd providers. One of them is Tegra, but the only genpd provider
-> > (PMC) that makes use of ->set_performance_state() doesn't implement the
-> > ->power_on() or ->power_off(), and so it will not be affected by the ops
-> > reversal.
-> >
-> > The other vendor that uses it is Qualcomm, in multiple genpd providers
-> > actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
-> > use of ->set_performance_state() need the order between enabling ops and
-> > the performance setting op to be reversed. And the reason for that is that
-> > it currently translates into two different voltages in order to power on
-> > a genpd to a specific performance state. Basically, ->power_on() switches
-> > to the minimum (enabling) voltage for that genpd, and then
-> > ->set_performance_state() sets it to the voltage level required by the
-> > consumer.
-> >
-> > By reversing the call order, we rely on the provider to know what to do
-> > on each call, but most popular usecase is to cache the performance state
-> > and postpone the voltage setting until the ->power_on() gets called.
-> >
-> > As for the reason of still needing the ->power_on() and ->power_off() for a
-> > provider which could get away with just having ->set_performance_state()
-> > implemented, there are consumers that do not (nor should) provide an
-> > opp-table. For those consumers, ->set_performance_state() will not be
-> > called, and so they will enable the genpd to its minimum performance state
-> > by a ->power_on() call. Same logic goes for the disabling.
-> >
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 >
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> On 2022/11/24 3:25, Greg Kroah-Hartman wrote:
+> > On Wed, Nov 23, 2022 at 08:00:14PM +0100, Rafael J. Wysocki wrote:
+> >> On Sat, Nov 12, 2022 at 10:42 AM Yang Yingliang
+> >> <yangyingliang@huawei.com> wrote:
+> >>> If device_register() returns error, the name allocated by
+> Sorry,
+> I didn't describe clearly here, it's not only after device_register()
+> failure, but also in the error path before register, the name is not
+> freed, see description below.
 
-Applied as 6.2 material, thanks!
+So you would need to update the changelog at least.  But see below.
 
-> > ---
-> >
-> > Changes since v1:
-> >  - Added performance state drop on power on failure, like Ulf suggested
-> >
-> >  drivers/base/power/domain.c | 36 +++++++++++++++++++++---------------
-> >  1 file changed, 21 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> > index e5f4e5a2eb9e..967bcf9d415e 100644
-> > --- a/drivers/base/power/domain.c
-> > +++ b/drivers/base/power/domain.c
-> > @@ -964,8 +964,8 @@ static int genpd_runtime_suspend(struct device *dev)
-> >                 return 0;
-> >
-> >         genpd_lock(genpd);
-> > -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >         genpd_power_off(genpd, true, 0);
-> > +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >         genpd_unlock(genpd);
-> >
-> >         return 0;
-> > @@ -1003,9 +1003,8 @@ static int genpd_runtime_resume(struct device *dev)
-> >                 goto out;
-> >
-> >         genpd_lock(genpd);
-> > +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> >         ret = genpd_power_on(genpd, 0);
-> > -       if (!ret)
-> > -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
-> >         genpd_unlock(genpd);
-> >
-> >         if (ret)
-> > @@ -1043,8 +1042,8 @@ static int genpd_runtime_resume(struct device *dev)
-> >  err_poweroff:
-> >         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
-> >                 genpd_lock(genpd);
-> > -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >                 genpd_power_off(genpd, true, 0);
-> > +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
-> >                 genpd_unlock(genpd);
-> >         }
-> >
-> > @@ -2733,17 +2732,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >         dev->pm_domain->detach = genpd_dev_pm_detach;
-> >         dev->pm_domain->sync = genpd_dev_pm_sync;
-> >
-> > -       if (power_on) {
-> > -               genpd_lock(pd);
-> > -               ret = genpd_power_on(pd, 0);
-> > -               genpd_unlock(pd);
-> > -       }
-> > -
-> > -       if (ret) {
-> > -               genpd_remove_device(pd, dev);
-> > -               return -EPROBE_DEFER;
-> > -       }
-> > -
-> >         /* Set the default performance state */
-> >         pstate = of_get_required_opp_performance_state(dev->of_node, index);
-> >         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> > @@ -2755,6 +2743,24 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
-> >                         goto err;
-> >                 dev_gpd_data(dev)->default_pstate = pstate;
-> >         }
-> > +
-> > +       if (power_on) {
-> > +               genpd_lock(pd);
-> > +               ret = genpd_power_on(pd, 0);
-> > +               genpd_unlock(pd);
-> > +       }
-> > +
-> > +       if (ret) {
-> > +               /* Drop the default performance state */
-> > +               if (dev_gpd_data(dev)->default_pstate) {
-> > +                       dev_pm_genpd_set_performance_state(dev, 0);
-> > +                       dev_gpd_data(dev)->default_pstate = 0;
-> > +               }
-> > +
-> > +               genpd_remove_device(pd, dev);
-> > +               return -EPROBE_DEFER;
-> > +       }
-> > +
-> >         return 1;
-> >
-> >  err:
-> > --
-> > 2.34.1
-> >
+> >>> dev_set_name() need be freed. In technical, we should call
+> >>> put_device() to give up the reference and free the name in
+> >>> driver core, but in some cases the device is not intizalized,
+> >>> put_device() can not be called, so don't complicate the code,
+> >>> just call kfree_const() to free name in the error path.
+> >>>
+> >>> Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
+> >>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+> >>> ---
+> >>>   drivers/powercap/powercap_sys.c | 2 ++
+> >>>   1 file changed, 2 insertions(+)
+> >>>
+> >>> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+> >>> index f0654a932b37..11e742dc83b9 100644
+> >>> --- a/drivers/powercap/powercap_sys.c
+> >>> +++ b/drivers/powercap/powercap_sys.c
+> >>> @@ -572,6 +572,7 @@ struct powercap_zone *powercap_register_zone(
+> >>>   err_name_alloc:
+> >>>          idr_remove(power_zone->parent_idr, power_zone->id);
+> >>>   err_idr_alloc:
+> >>> +       kfree_const(dev_name(&power_zone->dev));
+> >>>          if (power_zone->allocated)
+> >>>                  kfree(power_zone);
+> >>>          mutex_unlock(&control_type->lock);
+> >>> @@ -622,6 +623,7 @@ struct powercap_control_type *powercap_register_control_type(
+> >>>          dev_set_name(&control_type->dev, "%s", name);
+> >>>          result = device_register(&control_type->dev);
+> >>>          if (result) {
+> >>> +               kfree_const(dev_name(&control_type->dev));
+> >> Why is it necessary to free a device name explicitly after a failing
+> >> device_register()?
+> powercap_register_zone()
+> {
+>      ...
+>      dev_set_name() // allocate name
+>      ...
+>      if (!power_zone->constraints)
+>          goto err_const_alloc; //the name is leaked in this path
+>      ...
+>      if (!power_zone->zone_dev_attrs)
+>          goto err_attr_alloc; //the name is leaked in this path
+>      ...
+>      if (result)
+>          goto err_dev_ret; //the name is leaked in this path
+>
+>      result = device_register(&power_zone->dev);
+>      if (result)
+>          goto err_dev_ret;//put_device() is not called, the name is
+> leaked in this path
+>      ...
+> err_dev_ret:
+>      kfree(power_zone->zone_dev_attrs);
+> err_attr_alloc:
+>      kfree(power_zone->constraints);
+> err_const_alloc:
+>      kfree(power_zone->name);
+> err_name_alloc:
+>      idr_remove(power_zone->parent_idr, power_zone->id);
+> err_idr_alloc:
+>      if (power_zone->allocated)
+>          kfree(power_zone);
+> }
+
+So can't the dev_set_name() be reordered closer to device_register(),
+so it is not necessary to worry about freeing the name?
+
+> >>
+> >> If it is really necessary, then there is a problem in
+> >> device_register() itself AFAICS, because it uses dev_set_name() at
+> >> least in the dev->init_name present case.
+> When the dev_set_name() called in device_register(), if register fails, the
+> name is freed in its error path. But in this case, dev_set_name() is called
+> outside the register, it needs call put_device() to free the name.
+
+In any case, device_register() needs to take care of it anyway,
+because it uses dev_set_name() itself in the dev->init_name case,
+doesn't it?
