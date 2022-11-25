@@ -2,118 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9448B6390BE
-	for <lists+linux-pm@lfdr.de>; Fri, 25 Nov 2022 21:33:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A629A6390C4
+	for <lists+linux-pm@lfdr.de>; Fri, 25 Nov 2022 21:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229583AbiKYUd4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Nov 2022 15:33:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S229583AbiKYUi6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Nov 2022 15:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbiKYUdz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 15:33:55 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BC14046F;
-        Fri, 25 Nov 2022 12:33:54 -0800 (PST)
-Date:   Fri, 25 Nov 2022 21:33:40 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1669408432;
-        bh=vVPwweNm6Yg30BDNKJPQ9AahvzbXNoZx/FMS9AZieuw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BAuqxJ6uZVoigG97b8l8kakkNCrK4Z4guxeoB6DlGS8kkAYRGKDYvPtL9ApZ6Ga7L
-         R1xE4CLpAkCVuXT7IMITCp+klXo8QYrz8WmwlLDVcrpMU7x/llRRXpcG2bjuFmY6Y5
-         y/gfI9Pkyr606TgK53tLwUiuwXNRP3qk8E701IoI=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Joe Perches <joe@perches.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
- <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
+        with ESMTP id S229601AbiKYUiu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 15:38:50 -0500
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908F953EFF
+        for <linux-pm@vger.kernel.org>; Fri, 25 Nov 2022 12:38:49 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id z17so246282pff.1
+        for <linux-pm@vger.kernel.org>; Fri, 25 Nov 2022 12:38:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=oP5qF/yJBwC7Un40qezeecPuUXmokcNpLXMO5mDLPlk=;
+        b=I9TxmmqLvatoR+vlWTVl0p7xCQhPABk0XPV8NZvqvogdm+li/EbveAFefFyB/lMpHp
+         7T1hZ6wnIeTIt6xxOnH9/B5YUlc3UBMnmTy9vmmabTuzwuWQ1vX9HqngrRcc2LoofB4m
+         iLeh/NnZw4L80TcECmAx95nrJzsZzVVsdegWcRT1L8McfIZ4KJnFA0vf5A07pppEO8nG
+         oCoO6C/SrkMNIoPBoTpxWp0ZiKYX1++ob5L/WZvb+jirp5Tr8945usFf4xxS0fRlSQLn
+         p9rO/GWbg/zcWiFxtJqYRSTuHjzeYkPM51wihINZ2tXQwWjnq7dppPRVoU6uCvu9mxnj
+         tY+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oP5qF/yJBwC7Un40qezeecPuUXmokcNpLXMO5mDLPlk=;
+        b=4lhEZBb7+ykca4IIX0dkY2lVCJJXuQaE5qNWCs7j3uXNMa7FbjBmoOyYWhuBH1co/R
+         7/wn9Zl9mMT8Jy+D0ziSpI9IIShlSD2UpanA+rOpue40LkBRGD6O7QkimI/N7Y9MFKDy
+         ZhLgGmpK1hhIHsTHQ90F0+t6RiPmLKwkbQNFsCeVBSTt5rROH4TUPnSVDLgPcBK7HUND
+         kiK7jBe54YYXxBG2vnm2bS/1WYMJGwLuqLFKin1WJVr8ksqTxTXVGy72ToMsQlK+bvZi
+         69yrEejQe32dVJY3AYV7JmgWVNpML99JGstDR32DKhc/WezmwVxRCM1LfZj9pXZM9mpx
+         4eww==
+X-Gm-Message-State: ANoB5pnn1qWquQDHeiaNT8VkdReDy87R3b6E4Mtwkqyv/zLrSCC0km8x
+        R5I95nN0M362bx9I8ja6uI8DEhXVCQEDMX6YSD8=
+X-Google-Smtp-Source: AA0mqf5O1sTRa6gGjJeDLyr96GE4k0uHVlSk3bTd+GqB8e0W4JjdmXBAawxeQxv4Yo+EDFD6x2WyFw==
+X-Received: by 2002:a63:5c23:0:b0:46f:b6e1:1966 with SMTP id q35-20020a635c23000000b0046fb6e11966mr26819078pgb.625.1669408729045;
+        Fri, 25 Nov 2022 12:38:49 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id k4-20020a63d844000000b00476e84c3530sm2949032pgj.60.2022.11.25.12.38.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Nov 2022 12:38:48 -0800 (PST)
+Message-ID: <638127d8.630a0220.989b5.3dc5@mx.google.com>
+Date:   Fri, 25 Nov 2022 12:38:48 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: pm-6.1-rc7-97-g0b54caa6f14b
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (pm-6.1-rc7-97-g0b54caa6f14b)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-11-25 12:18-0800, Joe Perches wrote:
-> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
->> These macros emit continuation messages with explicit levels.
->> In case the continuation is logged separately from the original message
->> it will retain its level instead of falling back to KERN_DEFAULT.
->> 
->> This remedies the issue that logs filtered by level contain stray
->> continuation messages without context.
->> 
->> Suggested-by: Petr Mladek <pmladek@suse.com>
->> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->> ---
->>  include/linux/printk.h | 23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->> 
->> diff --git a/include/linux/printk.h b/include/linux/printk.h
->> index 8c81806c2e99..8f564c38f121 100644
->> --- a/include/linux/printk.h
->> +++ b/include/linux/printk.h
->> @@ -537,6 +537,8 @@ struct pi_entry {
->>   * This macro expands to a printk with KERN_CONT loglevel. It should only be
->>   * used when continuing a log message with no newline ('\n') enclosed. Otherwise
->>   * it defaults back to KERN_DEFAULT loglevel.
->> + *
->> + * Use the dedicated pr_<level>_cont() macros instead.
->>   */
->>  #define pr_cont(fmt, ...) \
->>  	printk(KERN_CONT fmt, ##__VA_ARGS__)
->> @@ -701,6 +703,27 @@ do {									\
->>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
->>  #endif
->>  
->> +/*
->> + * Print a continuation message with level. In case the continuation is split
->> + * from the main message it preserves the level.
->> + */
->> +
->> +#define pr_emerg_cont(fmt, ...)					\
->> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> 
-> Aren't this rather backwards?
-> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (pm-6.1-rc7-97-g=
+0b54caa6f14b)
 
-If nobody else disagrees I'll do this for v3.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/pm-=
+6.1-rc7-97-g0b54caa6f14b/
 
->> +#define pr_alert_cont(fmt, ...)					\
->> +	printk(KERN_ALERT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_crit_cont(fmt, ...)					\
->> +	printk(KERN_CRIT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_err_cont(fmt, ...)					\
->> +	printk(KERN_ERR KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_warn_cont(fmt, ...)					\
->> +	printk(KERN_WARN KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_notice_cont(fmt, ...)					\
->> +	printk(KERN_NOTICE KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_info_cont(fmt, ...)					\
->> +	printk(KERN_INFO KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +/* no pr_debug_ratelimited, it doesn't make sense with CONFIG_DYNAMIC_DEBUG. */
->> +
->>  extern const struct file_operations kmsg_fops;
->>  
->>  enum {
-> 
+Tree: pm
+Branch: testing
+Git Describe: pm-6.1-rc7-97-g0b54caa6f14b
+Git Commit: 0b54caa6f14bd6a3817debcba6285aaa870a2835
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
