@@ -2,191 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B8363985A
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 22:57:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E5363985C
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 22:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229518AbiKZV5B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Nov 2022 16:57:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S229534AbiKZV6M (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Nov 2022 16:58:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiKZV5A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Nov 2022 16:57:00 -0500
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE76E17E2A
-        for <linux-pm@vger.kernel.org>; Sat, 26 Nov 2022 13:56:59 -0800 (PST)
-Received: by mail-pf1-x42e.google.com with SMTP id 140so7073417pfz.6
-        for <linux-pm@vger.kernel.org>; Sat, 26 Nov 2022 13:56:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rXvSXsnVgidv7Ztx1d8hz00A7C0Ptolg8ldQ6PqQ4Ic=;
-        b=aevaMChFxRmIohxW8lj24GrZNXqH8YZqBnEmiHnNpDGrrTr+WyQ86sAh4G9f9cI374
-         n2dXSq2lRqt+VlQcbN/pzGWNk5CDCl68IFouBS1oXaytzaVrPquFqJOG2pI/+m2aCUZJ
-         /+rjPUA1lS+oMdsUELOBi8igW8cnmWdYSh1nIi39ngl04dWNsqQTNxThkx8RXA3uNT1S
-         unuIRTdqJ/FcgdDh+iTpHs5jftiJRkb/Y9q2i9m+QBgXCqP0OzxYOGaipR+8tjhJeKoB
-         e5bJAUxVCR3VikgtryKF3KBaOmDx711oFx6UNG/YJ4rBRYbVz2vK5LmHOevvhDdhWPUg
-         ZD/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rXvSXsnVgidv7Ztx1d8hz00A7C0Ptolg8ldQ6PqQ4Ic=;
-        b=LsN2gHSXFVkqkD162lHtU4TALsn8uQ4Q5mcDB6bW5kyXIPdLGirt31+ZXGroIcpnEc
-         fE7trAHEND66Y7ZJgt7+M1DjttCy3/Uj/mdqt+olcHtst2xiNFGRh2Wef90yS3rGIAPp
-         CVu8Q49bX5TVuEWeOJP+Hz8zrj63FkqEJtKNQa3DsgIl5UIpqgHLzOBI/PiW8Hh0uPiF
-         5hahNnRwgLt5whl4wMsisW3g7xM3n2XDVvx+/LCzJOo5cPGOdRiCw6KA4zfcOoJLA5te
-         UAzNmz9EE7rB82h/tn456TeIhIGaM5cs/Bbz3lUMgD3CRqOvXvm9vZu4CeQwEgBe3+mw
-         Z1Gw==
-X-Gm-Message-State: ANoB5pkjZkjW2+Ymb2HDb/DfeENXxDmlaMBr35Nd3gHw4E76nY6R87Lh
-        oWISam2qS/z4PdxNyHCIvHE4MQ==
-X-Google-Smtp-Source: AA0mqf4GiKo4QqdYoLjhknMMRXbR/RmTXtcRR4X+0mPvJiEvUkD4vt54Kn+nNJsZUmK+JdOgd5nIfw==
-X-Received: by 2002:a63:180a:0:b0:470:63e5:5c59 with SMTP id y10-20020a63180a000000b0047063e55c59mr20934227pgl.172.1669499819121;
-        Sat, 26 Nov 2022 13:56:59 -0800 (PST)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id g199-20020a6252d0000000b005742ee445fdsm5135909pfb.70.2022.11.26.13.56.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 26 Nov 2022 13:56:58 -0800 (PST)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Zhang Rui'" <rui.zhang@intel.com>
-Cc:     <daniel.lezcano@linaro.org>, <lukasz.luba@arm.com>,
-        <Dietmar.Eggemann@arm.com>, <yu.chen.surf@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "'Kajetan Puchalski'" <kajetan.puchalski@arm.com>,
-        <rafael@kernel.org>, "Doug Smythies" <dsmythies@telus.net>
-References: <20221102152808.2978590-1-kajetan.puchalski@arm.com>         <Y3ttlCCezC+SvFDH@e126311.manchester.arm.com>   <00a801d8ffba$6cd72a70$46857f50$@telus.net> <044424e924967a1c93649812b6e1670c8c37fce4.camel@intel.com>
-In-Reply-To: <044424e924967a1c93649812b6e1670c8c37fce4.camel@intel.com>
-Subject: RE: [RFC PATCH v4 0/2] cpuidle: teo: Introduce util-awareness
-Date:   Sat, 26 Nov 2022 13:56:58 -0800
-Message-ID: <003d01d901e2$025853c0$0708fb40$@telus.net>
+        with ESMTP id S229491AbiKZV6L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Nov 2022 16:58:11 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C021F186CC
+        for <linux-pm@vger.kernel.org>; Sat, 26 Nov 2022 13:58:10 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 632EF6602A2E;
+        Sat, 26 Nov 2022 21:58:08 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669499888;
+        bh=O5chjqqkCKGREJgHLOrhFq+bsy9Ku4ygZmtlpuoKIGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ThTGQwyXg3FddWotxH8mmenVlFh/ErurdKGrRqfFTjV4mn2dbUDEGHYrWdezICV4c
+         zV03e3oG9yhEfmUtstuBo26hfLUc4D+nAsCev3ZtXmCCiVNWA5Jb4yUqcRYeeyz8I+
+         4QNaifWKVOMAZkU4svRPGUWIk5QGLRb2TZYeaScWClqwLd2VUyjhz4CcDjsYfMl4bj
+         29Pr2rXI9u3/vqWfiLeaEgIfbjZ02vDyLYstNOG9fCsmX9BPTYJyzl9S/ldE7M2UVt
+         6nhAQ0NHC44pZNDgoDdSq32SPqGaWXEdebqnHxaMKvcAKJpsZEpjvJzMW+DMTlnUta
+         PN0GhpOAcetdA==
+Received: by mercury (Postfix, from userid 1000)
+        id 6230010610EE; Sat, 26 Nov 2022 22:58:06 +0100 (CET)
+Date:   Sat, 26 Nov 2022 22:58:06 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Shang XiaoJing <shangxiaojing@huawei.com>
+Cc:     t.schramm@manjaro.org, andriy.shevchenko@linux.intel.com,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH] power: supply: cw2015: Fix potential null-ptr-deref in
+ cw_bat_probe()
+Message-ID: <20221126215806.haysq4kll5a2w5bw@mercury.elektranox.org>
+References: <20221117024558.4014-1-shangxiaojing@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQHHOljlUm50YLRjgI6z6kjqb0X0CQFCgUFLAeYd9UEBNQeK365SV9hQ
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2aixwatijgs55u5g"
+Content-Disposition: inline
+In-Reply-To: <20221117024558.4014-1-shangxiaojing@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022.11.26 08:26 Rui wrote:
-> On Wed, 2022-11-23 at 20:08 -0800, Doug Smythies wrote:
->> On 2022.11.21 04:23 Kajetan Puchalski wrote:
->>> On Wed, Nov 02, 2022 at 03:28:06PM +0000, Kajetan Puchalski wrote:
->>> 
->>> [...]
->>> 
->>>> v3 -> v4:
->>>> - remove the chunk of code skipping metrics updates when the CPU
->>>> was utilized
->>>> - include new test results and more benchmarks in the cover
->>>> letter
->>> 
->>> [...]
->>> 
->>> It's been some time so I just wanted to bump this, what do you
->>> think
->>> about this v4? Doug has already tested it, resuls for his machine
->>> are
->>> attached to the v3 thread.
->> 
->> Hi All,
->> 
->> I continued to test this and included the proposed ladder idle
->> governor in my continued testing.
->> (Which is why I added Rui as an addressee)
->
-> Hi, Doug,
 
-Hi Rui,
+--2aixwatijgs55u5g
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Really appreciated your testing data on this.
-> I have some dumb questions and I need your help so that I can better
-> understand some of the graphs. :)
->
->> However, I ran out of time. Here is what I have:
->> 
->> Kernel: 6.1-rc3 and with patch sets
->> Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
->> CPU scaling driver: intel_cpufreq
->> HWP disabled.
->> Unless otherwsie stated, performance CPU scaling govenor.
->> 
->> Legend:
->> teo: the current teo idle governor
->> util-v4: the RFC utilization teo patch set version 4.
->> menu: the menu idle governor
->> ladder-old: the current ladder idle governor
->> ladder: the RFC ladder patchset.
->> 
->> Workflow: shell-intensive serialized workloads.
->> Variable: PIDs per second.
->> Note: Single threaded.
->> Master reference: forced CPU affinity to 1 CPU.
+Hi,
 
-This is the 1cpu on the graph.
+On Thu, Nov 17, 2022 at 10:45:58AM +0800, Shang XiaoJing wrote:
+> cw_bat_probe() calls create_singlethread_workqueue() and not checked the
+> ret value, which may return NULL. And a null-ptr-deref may happen:
+>=20
+> cw_bat_probe()
+>     create_singlethread_workqueue() # failed, cw_bat->wq is NULL
+>     queue_delayed_work()
+>         queue_delayed_work_on()
+>             __queue_delayed_work()  # warning here, but continue
+>                 __queue_work()      # access wq->flags, null-ptr-deref
+>=20
+> Check the ret value and return -ENOMEM if it is NULL.
+>=20
+> Fixes: b4c7715c10c1 ("power: supply: add CellWise cw2015 fuel gauge drive=
+r")
+> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+> ---
 
->> Performance Results:
->> http://smythies.com/~doug/linux/idle/teo-util/graphs/pids-perf.png
->> Schedutil Results:
->> http://smythies.com/~doug/linux/idle/teo-util/graphs/pids-su.png
->
-> what does 1cpu mean?
+Thanks, queued.
 
-For shell-intensive serialized workflow or:
+-- Sebastian
 
-Dountil the list of tasks is finished:
-    Start the next task in the list of stuff to do (with a new PID).
-    Wait for it to finish
-Enduntil
+>  drivers/power/supply/cw2015_battery.c | 3 +++
+>  1 file changed, 3 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/cw2015_battery.c b/drivers/power/supply=
+/cw2015_battery.c
+> index 6d52641151d9..473522b4326a 100644
+> --- a/drivers/power/supply/cw2015_battery.c
+> +++ b/drivers/power/supply/cw2015_battery.c
+> @@ -699,6 +699,9 @@ static int cw_bat_probe(struct i2c_client *client)
+>  	}
+> =20
+>  	cw_bat->battery_workqueue =3D create_singlethread_workqueue("rk_battery=
+");
+> +	if (!cw_bat->battery_workqueue)
+> +		return -ENOMEM;
+> +
+>  	devm_delayed_work_autocancel(&client->dev,
+>  							  &cw_bat->battery_delay_work, cw_bat_work);
+>  	queue_delayed_work(cw_bat->battery_workqueue,
+> --=20
+> 2.17.1
+>=20
 
-We know it represents a challenge for CPU frequency scaling drivers,
-schedulers, and therefore idle drivers.
+--2aixwatijgs55u5g
+Content-Type: application/pgp-signature; name="signature.asc"
 
-We also know that the best performance is achieved by overriding
-the scheduler and forcing CPU affinity. I use this "best" case as the
-master reference, using the label 1cpu on the graph.
- 
->> Workflow: sleeping ebizzy 128 threads.
->> Variable: interval (uSecs).
->> Performance Results:
->> http://smythies.com/~doug/linux/idle/teo-util/graphs/ebizzy-128-perf.png
->> Performance power and idle data:
->> http://smythies.com/~doug/linux/idle/teo-util/ebizzy/perf/
->
-> for the "Idle state 0/1/2/3 was too deep" graphs, may I know how you
-> assert that an idle state is too deep/shallow?
+-----BEGIN PGP SIGNATURE-----
 
-I get those stats directly from the kernel driver statistics. For example:
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOCi+cACgkQ2O7X88g7
++potXQ//dNN7UXUFwFDxUKR6J2qYRx7AXpbIASYFbq3HTHHij+YmfWtD6p+mOIWJ
+bDkUHeznqS2ivrMXTcyrXh9ido5QhCycN0YusrmRczExNuW6oasCCK0X28nTerck
+2SP4IHhcB8tJ0CRjLzvUhIA+dZi65yW+AlCjNNVPo9H0+JBVoiPhv/8nPoi8gpq6
+Egvy9QoMlFq21jNRCY3JZKPR+PFt3UwDaxGmDWN1Pf9D3iAbfvZn1ihpdH4e0Q9e
+TTr/XMoKJJCuvCufDlrtNF4UFDCrssvPY8TZCOQjhWpAVKLQi8KH6gnNQgnq18sZ
+AN0ahrKYp0YHb3Bi8kRAv6PYDI6rQyWRuKonuY2HJ0XsQNBW5dPe/N9N46Kg0yb0
+BkQH6RJClqLNknTgy15oyPZA8WmX9perageeox1dhHxLDJSreBN4Mp2LLuODgS2S
+AWyi6e27pu+kA4sM5WwQ6GE2ihlFk96FIwM7RnpgXC+evxVJnwWPF04aSt3f9RfL
+tj/z0Kr/oSnCLtcdnZuG6oafWuNpmw0rRB1afS+n+Q3XAerPkNQLtl4Lxmui1OBi
+mKc3DXuEItnSrxeuSx7mQI/aAFIhJYO2OedxElWQh0k45ClorDvKyZjtI2W0ExmV
+jDxCG3Dp4Dne69moMEjxTP8cbl0nOaExlkZPqgP8H0T1pXB4CqY=
+=AOND
+-----END PGP SIGNATURE-----
 
-$ grep . /sys/devices/system/cpu/cpu4/cpuidle/state*/above
-/sys/devices/system/cpu/cpu4/cpuidle/state0/above:0
-/sys/devices/system/cpu/cpu4/cpuidle/state1/above:38085
-/sys/devices/system/cpu/cpu4/cpuidle/state2/above:7668
-/sys/devices/system/cpu/cpu4/cpuidle/state3/above:6823
-
-$ grep . /sys/devices/system/cpu/cpu4/cpuidle/state*/below
-/sys/devices/system/cpu/cpu4/cpuidle/state0/below:72059
-/sys/devices/system/cpu/cpu4/cpuidle/state1/below:246573
-/sys/devices/system/cpu/cpu4/cpuidle/state2/below:7817
-/sys/devices/system/cpu/cpu4/cpuidle/state3/below:0
-
-I keep track of the changes per sample interval and graph
-the sum for all CPUs as a percentage of the usage of
-that idle state.
-
-Because I can never remember what "above" and "below"
-actually mean, I use the terms "was too shallow"
-and "was too deep".
-
-... Doug
-
-
+--2aixwatijgs55u5g--
