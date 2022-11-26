@@ -2,50 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 131226392FB
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 02:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE12763933F
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 03:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbiKZBEr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Nov 2022 20:04:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S230023AbiKZCF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 25 Nov 2022 21:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKZBEq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 20:04:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2174E201B1;
-        Fri, 25 Nov 2022 17:04:46 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B512A61141;
-        Sat, 26 Nov 2022 01:04:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7CDAC433D6;
-        Sat, 26 Nov 2022 01:04:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669424685;
-        bh=TY8IZL8P0GF/A6JPjvDXNXoBU6fP3tYdWjqdkHU4+KQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jdxb7OJTykXTbWY4qVib6VwP1PG4cWONNqmy33EzBOjEuIfgG8Y1Xbi3m6k900lZA
-         TZAD3q8Rzqso3GSvglqjAG17syvH0axtZKPkigdq3ryjzO3UsgHiQ5FyQAn1Bhug5v
-         QuTSWKCN9PBO9dXf94FL/eatVgXdcF8oTOgnwqTortbWGDkrmESwK6HHlzu5skRiMh
-         oVeBP5apE5az3yl6zwmH2RMF6KZGnhCbYgu9aemYBurjgarsLtwzEaey62p/dYtc9d
-         KWJSJqQrjT4g3Ai6jEUo+oX4PPHOsscfDip+TCNekVsdz3iBoTFYAMrE7tgTGNvWRf
-         dRznfnYxAw/6A==
-Received: by mercury (Postfix, from userid 1000)
-        id 4014910613B8; Sat, 26 Nov 2022 02:04:41 +0100 (CET)
-Date:   Sat, 26 Nov 2022 02:04:41 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply fixes for 6.1
-Message-ID: <20221126010441.kkp6iavyvlcporpy@mercury.elektranox.org>
+        with ESMTP id S229733AbiKZCF0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 21:05:26 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A340957B6C;
+        Fri, 25 Nov 2022 18:05:23 -0800 (PST)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NJw66650WzmW57;
+        Sat, 26 Nov 2022 10:04:46 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 10:05:21 +0800
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm500007.china.huawei.com (7.185.36.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Sat, 26 Nov 2022 10:05:21 +0800
+Subject: Re: [PATCH] powercap: fix possible name leak while device_register()
+ fails
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20221112094048.3614365-1-yangyingliang@huawei.com>
+ <CAJZ5v0g6bct5pTruxHjjJPQpwDNR8WgqhLWaZWo8NKeRH3n6iw@mail.gmail.com>
+ <Y35zwffl7bUdjs93@kroah.com>
+ <b4fe247b-0980-40ea-bc69-0430e3b18320@huawei.com>
+ <CAJZ5v0j+M79zD4Tsskkpsq8gyFQ8enjoZh-f54qOu1Rs_5tojA@mail.gmail.com>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <b33cd789-eec7-f8c0-beb3-66b9c9e85a8e@huawei.com>
+Date:   Sat, 26 Nov 2022 10:05:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vts4brejo3q2mbte"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAJZ5v0j+M79zD4Tsskkpsq8gyFQ8enjoZh-f54qOu1Rs_5tojA@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -53,68 +60,101 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---vts4brejo3q2mbte
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 2022/11/26 2:45, Rafael J. Wysocki wrote:
+> On Thu, Nov 24, 2022 at 3:16 AM Yang Yingliang <yangyingliang@huawei.com> wrote:
+>>
+>> On 2022/11/24 3:25, Greg Kroah-Hartman wrote:
+>>> On Wed, Nov 23, 2022 at 08:00:14PM +0100, Rafael J. Wysocki wrote:
+>>>> On Sat, Nov 12, 2022 at 10:42 AM Yang Yingliang
+>>>> <yangyingliang@huawei.com> wrote:
+>>>>> If device_register() returns error, the name allocated by
+>> Sorry,
+>> I didn't describe clearly here, it's not only after device_register()
+>> failure, but also in the error path before register, the name is not
+>> freed, see description below.
+> So you would need to update the changelog at least.  But see below.
+>
+>>>>> dev_set_name() need be freed. In technical, we should call
+>>>>> put_device() to give up the reference and free the name in
+>>>>> driver core, but in some cases the device is not intizalized,
+>>>>> put_device() can not be called, so don't complicate the code,
+>>>>> just call kfree_const() to free name in the error path.
+>>>>>
+>>>>> Fixes: 75d2364ea0ca ("PowerCap: Add class driver")
+>>>>> Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+>>>>> ---
+>>>>>    drivers/powercap/powercap_sys.c | 2 ++
+>>>>>    1 file changed, 2 insertions(+)
+>>>>>
+>>>>> diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
+>>>>> index f0654a932b37..11e742dc83b9 100644
+>>>>> --- a/drivers/powercap/powercap_sys.c
+>>>>> +++ b/drivers/powercap/powercap_sys.c
+>>>>> @@ -572,6 +572,7 @@ struct powercap_zone *powercap_register_zone(
+>>>>>    err_name_alloc:
+>>>>>           idr_remove(power_zone->parent_idr, power_zone->id);
+>>>>>    err_idr_alloc:
+>>>>> +       kfree_const(dev_name(&power_zone->dev));
+>>>>>           if (power_zone->allocated)
+>>>>>                   kfree(power_zone);
+>>>>>           mutex_unlock(&control_type->lock);
+>>>>> @@ -622,6 +623,7 @@ struct powercap_control_type *powercap_register_control_type(
+>>>>>           dev_set_name(&control_type->dev, "%s", name);
+>>>>>           result = device_register(&control_type->dev);
+>>>>>           if (result) {
+>>>>> +               kfree_const(dev_name(&control_type->dev));
+>>>> Why is it necessary to free a device name explicitly after a failing
+>>>> device_register()?
+>> powercap_register_zone()
+>> {
+>>       ...
+>>       dev_set_name() // allocate name
+>>       ...
+>>       if (!power_zone->constraints)
+>>           goto err_const_alloc; //the name is leaked in this path
+>>       ...
+>>       if (!power_zone->zone_dev_attrs)
+>>           goto err_attr_alloc; //the name is leaked in this path
+>>       ...
+>>       if (result)
+>>           goto err_dev_ret; //the name is leaked in this path
+>>
+>>       result = device_register(&power_zone->dev);
+>>       if (result)
+>>           goto err_dev_ret;//put_device() is not called, the name is
+>> leaked in this path
+>>       ...
+>> err_dev_ret:
+>>       kfree(power_zone->zone_dev_attrs);
+>> err_attr_alloc:
+>>       kfree(power_zone->constraints);
+>> err_const_alloc:
+>>       kfree(power_zone->name);
+>> err_name_alloc:
+>>       idr_remove(power_zone->parent_idr, power_zone->id);
+>> err_idr_alloc:
+>>       if (power_zone->allocated)
+>>           kfree(power_zone);
+>> }
+> So can't the dev_set_name() be reordered closer to device_register(),
+> so it is not necessary to worry about freeing the name?
+Just move dev_set_name() closer to device_register() is not enough to free
+the name, it should call put_device() after device_register() failure. I 
+will try
+this.
+>
+>>>> If it is really necessary, then there is a problem in
+>>>> device_register() itself AFAICS, because it uses dev_set_name() at
+>>>> least in the dev->init_name present case.
+>> When the dev_set_name() called in device_register(), if register fails, the
+>> name is freed in its error path. But in this case, dev_set_name() is called
+>> outside the register, it needs call put_device() to free the name.
+> In any case, device_register() needs to take care of it anyway,
+> because it uses dev_set_name() itself in the dev->init_name case,
+> doesn't it?
+Yes, it's right.
 
-Hi Linus,
-
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.1-rc
-
-for you to fetch changes up to 767e684367e4759d9855b184045b7a9d6b19acd2:
-
-  power: supply: ab8500: Defer thermal zone probe (2022-11-01 01:00:32 +0100)
-
-----------------------------------------------------------------
-Power Supply Fixes for 6.1 cycle
-
-Fixes for the 6.1 cycle:
- * rk817: Two error handling fixes
- * ip5xxx: fix inter overflow in current calculation
- * ab8500: fix thermal zone probing
-
-----------------------------------------------------------------
-Chris Morgan (1):
-      power: supply: rk817: Change rk817_chg_cur_to_reg to int
-
-Dan Carpenter (1):
-      power: supply: rk817: check correct variable
-
-Linus Walleij (1):
-      power: supply: ab8500: Defer thermal zone probe
-
-Ondrej Jirman (1):
-      power: supply: ip5xxx: Fix integer overflow in current_now calculation
-
- drivers/power/supply/ab8500_btemp.c  |  9 ++++++++-
- drivers/power/supply/ip5xxx_power.c  |  2 +-
- drivers/power/supply/rk817_charger.c | 14 ++++++--------
- 3 files changed, 15 insertions(+), 10 deletions(-)
-
---vts4brejo3q2mbte
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOBZigACgkQ2O7X88g7
-+ppaDxAAgdH2kiKR3z0PT1/TrudVIhW0k7fHaLfq48WaVMTP5iKzOmoa55Wxf24s
-fRiGV2NU/qJ4pzavY8hi1W+5SRCE0JshHXH6zFoorryEsDUWi9lplTZHDUavOjUD
-U9IJPoyQ4hwmfgnB1GYJYfw3MlBFkypetSsrgbGUxVWQeWsrNh7kTtmoLX9abcHB
-bVnOHWLOeQSsqBlgxdhc8P1J6juOhwPWCVQCBiX7s+80uGs3+o/ZGpmzuBUr9W2n
-W0H+sVAlHAfz44EPi1KGhPpht4rahJv1XHrCPDNe1TB4hF0GlPXStY8+Yh8RicEF
-5jlMwItQdL+eS9JSoRWnlHGsRUHprvgH40xPWPwuWPfqb7r6ghHAkW97g+2HMBe/
-Ghp3BGyI9RV4nx6rDbyHf5/KcSFUeYTbRqrPyk0VcDUDc1PqwttRS9FPhd8EzGZW
-mAF2LuB4AG7OB1KaI2prLELkAU7dZJPtBQ7Ei1Zqp+UcgjTfK7Yu10LAe8prQkYA
-q7eK/V9pVNhEjh/Gf3/2aoQ5tgxIvuOdOzLWgw3V48BAi4u9eA9cp033R5mwbCu7
-34EiN4hxwAUo7FBemW1RGlCEIOU1h1CKBEOrlBLjwTTsKrcm+0OrfwrL0R4ahJcZ
-tlqy29pd1ZbrAWx64j7kv8TxFGYJW2uW67yr71JiJ9mG/pEf3iE=
-=9E2u
------END PGP SIGNATURE-----
-
---vts4brejo3q2mbte--
+Thanks,
+Yang
+>
+> .
