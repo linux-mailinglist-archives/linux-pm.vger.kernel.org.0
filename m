@@ -2,145 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E44763977E
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 18:54:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E2C6397A9
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 19:40:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229480AbiKZRyp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Nov 2022 12:54:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52022 "EHLO
+        id S229518AbiKZSkI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Nov 2022 13:40:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKZRyo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Nov 2022 12:54:44 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3181D14082;
-        Sat, 26 Nov 2022 09:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669485283; x=1701021283;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+HBvBEKjgzLh+b0Rh5KAiXiIJQYa7lQ+EKQIYo9j+Fc=;
-  b=jiZpEOt+TFvAY2OT2IErBssaq1/EiSGqYfRFnVVVfY8p53dKfP1HPoQT
-   2i0tyYHwrWKnSnoMXdoLe9Og5bXY1Vj4XTZxCNOqi0LO+4HEtUcZcbTVZ
-   U3AzK/EGUA8WVOVWpb8VhEJWsuOBpVdAU3ciT4YkXgQp4Mgf0P9ZlmtnS
-   HkumJAiIJ2V/qFWBDofyLXANbOSLu+iwTRetqkIK9ccXSHtIM5bgL7O5d
-   BtSNBKmbYFGJKGlhZ+zRTTZuzOs6EIndMo4+YVb9lapd68suzzMgo6f2H
-   6alhGUkggqT82t79P3qPxm2ptWdq3kvwzrbkZBU6krSmH7ayj7JNhWmfQ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="341520756"
-X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="341520756"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 09:54:42 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="673794897"
-X-IronPort-AV: E=Sophos;i="5.96,196,1665471600"; 
-   d="scan'208";a="673794897"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 26 Nov 2022 09:54:40 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oyzNv-0006Ur-33;
-        Sat, 26 Nov 2022 17:54:39 +0000
-Date:   Sun, 27 Nov 2022 01:53:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 86c625dd876b10c15ec2075d8d0b1fccaa1486bc
-Message-ID: <638252a5.ibwrwvRdXMcEEs8K%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229496AbiKZSkI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Nov 2022 13:40:08 -0500
+Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5224B13F09
+        for <linux-pm@vger.kernel.org>; Sat, 26 Nov 2022 10:40:06 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id B089585073;
+        Sat, 26 Nov 2022 19:40:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1669488005;
+        bh=gNGWQRI0vJlMwMQ4m16cUgCCH3BiBPM5k75nIuYGEsU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cK3gSCMmYmYwkmFqNWKWbcOuI5shwn/tHEi5+7x3uD6ZVpfcPkvjGzfEBw5nhZku1
+         ckGMAammOIX2f5dmbJyJu5V4ZfhXfG2s3djVoT/pT0Etz/rwbHeWvORZazRD+1l6+Z
+         h/45BRS/jAquv9kCB+PXa0BSB5ohdU6UquEYLP6h4upURyVmzKNBx++7JFBSal+fmG
+         ExkwEjoVELbBEVguhliA4Nln/sXuCzoi7zA0Cwx+pep7HBFekdEDY8QKpZYknpmBGe
+         vOgcf6XITCtPVOi2VJYjpG5Id+EicHOXvh7s/BhfremBkCjPAgfANthRq1F2LVjI9n
+         a/FtTkKP/WSKw==
+Message-ID: <a6d61a1a-ac5e-0ced-2fb3-51f6dc8adf24@denx.de>
+Date:   Sat, 26 Nov 2022 19:40:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 2/2] power: supply: bq25890: Add HiZ mode support
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
+        Sebastian Reichel <sre@kernel.org>
+References: <20221109221504.79562-1-marex@denx.de>
+ <20221109221504.79562-2-marex@denx.de>
+ <ffd849db-fdb5-8578-85c2-74a8e030d86a@redhat.com>
+ <1cde6f13-c131-332f-44f2-9a6a80b72330@redhat.com>
+ <c0cc1774-8373-ec5d-29c7-5f7d056821b3@denx.de>
+ <2ae29632-58e9-4ee5-3d59-397bff4932fc@redhat.com>
+ <7e2ee4f1-25d1-86db-7b8d-8785caef6c37@denx.de>
+ <28aec5ab-53fb-4295-3859-6ab29b1cb3dd@redhat.com>
+ <96e20bf6-c5c0-fcce-901d-fd0a292aaf0b@denx.de>
+ <34f1010f-3f6d-b243-ad56-043ab3a7ed04@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <34f1010f-3f6d-b243-ad56-043ab3a7ed04@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 86c625dd876b10c15ec2075d8d0b1fccaa1486bc  Merge branch 'pnp' into bleeding-edge
+On 11/26/22 16:50, Hans de Goede wrote:
+> Hi,
 
-elapsed time: 1353m
+Hi,
 
-configs tested: 62
-configs skipped: 2
+[...]
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+>>> I do like the v2 of your patches better because that really guarantees
+>>> the second charger is "offline" when we want it to be offline and allows
+>>> me to put it in Hi-Z mode before enabling the 5v boost output on the
+>>> main charger instead of letting the secondary battery briefly charge
+>>> from the main battery. It also allows me to remove a struct delayed_Work
+>>> which I added for the 300ms delay ...
+>>
+>> Pardon my ignorance here, but doesn't that implementation above work only in case you have two chargers ? Note that in my case, I have one charger and one battery.
+> 
+> Right the workaround above is specifically for the tablet with
+> 2 chargers which I'm working on. Iy is not a generic fix/WA for
+> the auto-reset of Hi-Z mode issue.
+> 
+>>> Can you please let me know if you want to move forward with your v2,
+>>> or since that version is not strictly necessary if you would prefer
+>>> to rollback to v1 ?
+>>
+>> If we want to have HiZ mode support upstream, we might as well keep the workaround to retain the HiZ mode across replugs. So let's move forward with v2 ?
+> 
+> Ack, sounds good to me, thanks.
+> 
+>>> Then I can adjust my patches accordingly before posting them
+>>>
+>>> I was pretty much about to post them just now :)
+>>
+>> Sorry about the delay this week.
+> 
+> No problem and thank you for your work on this.
 
-gcc tested configs:
-powerpc                           allnoconfig
-arc                  randconfig-r043-20221124
-um                             i386_defconfig
-um                           x86_64_defconfig
-alpha                             allnoconfig
-x86_64                           rhel-8.3-syz
-i386                              allnoconfig
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-arm                               allnoconfig
-arc                               allnoconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-ia64                             allmodconfig
-s390                                defconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-s390                             allyesconfig
-m68k                             allmodconfig
-powerpc                          allmodconfig
-x86_64                          rhel-8.3-func
-mips                             allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                        randconfig-a015
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                        randconfig-a006
-i386                          randconfig-a005
-i386                                defconfig
-i386                             allyesconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm                                 defconfig
-arm                              allyesconfig
-arm64                            allyesconfig
+Glad I could help.
 
-clang tested configs:
-riscv                randconfig-r042-20221124
-hexagon              randconfig-r041-20221124
-hexagon              randconfig-r045-20221124
-s390                 randconfig-r044-20221124
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I dropped the RB from v2 2/2 since there are changes which could use 
+review. If you could have a look again at that patch, that would be nice.
