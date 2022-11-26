@@ -2,72 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3319E639358
-	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 03:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FA4B6394C8
+	for <lists+linux-pm@lfdr.de>; Sat, 26 Nov 2022 10:00:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiKZCZp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 25 Nov 2022 21:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S229583AbiKZJAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 26 Nov 2022 04:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbiKZCZo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 25 Nov 2022 21:25:44 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962E3303D0;
-        Fri, 25 Nov 2022 18:25:42 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DFBE9CE2E61;
-        Sat, 26 Nov 2022 02:25:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 1B16EC433C1;
-        Sat, 26 Nov 2022 02:25:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669429539;
-        bh=rqSJ9+Gremq2STOOSCEkdIfkJu/Lb9mJaGMYQxZsp2w=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=W5mcf1UZ9ek1VZoOg/VJ/sPG/LertVGww+TEIG9Air/cHYuvCG/Lt0yIy1AI0wmvT
-         6KsjgWqkqtPVTmT2YwlggwsOJip9RqGHCO/RrTpDIPYGpF/GADqXZvlwoYVTLEf7fd
-         r9dDI5aGy+uMALYBgwwA3Gz4I/F5JPrTRb50MbKwYzOeqoWZ3l2Yk/BmcM1nr3/hTO
-         X4Kfz2Rw+5hOla1cTgw6zL/bmDBSRGA6VRt9rKIFTbu0DzhPEeRt26Cjh2IYGgf/tg
-         +wbkLy1NQK7tSVzu6tu0IW2O75mWRr0SxeccJmVH6KaK3k7UBg5XTJx3OvSfYklwfR
-         +iiu47IDv0nFw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 02710C395EC;
-        Sat, 26 Nov 2022 02:25:39 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply fixes for 6.1
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20221126010441.kkp6iavyvlcporpy@mercury.elektranox.org>
-References: <20221126010441.kkp6iavyvlcporpy@mercury.elektranox.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20221126010441.kkp6iavyvlcporpy@mercury.elektranox.org>
-X-PR-Tracked-Remote: ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.1-rc
-X-PR-Tracked-Commit-Id: 767e684367e4759d9855b184045b7a9d6b19acd2
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 644e9524388a5dbc6d4f58c492ee9ef7bd4ddf4d
-Message-Id: <166942953900.27056.2773363292394661500.pr-tracker-bot@kernel.org>
-Date:   Sat, 26 Nov 2022 02:25:39 +0000
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229450AbiKZJAK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Nov 2022 04:00:10 -0500
+X-Greylist: delayed 1290 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 26 Nov 2022 01:00:05 PST
+Received: from sp13.canonet.ne.jp (sp13.canonet.ne.jp [210.134.168.90])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BBC802098C;
+        Sat, 26 Nov 2022 01:00:05 -0800 (PST)
+Received: from csp13.canonet.ne.jp (unknown [172.21.160.133])
+        by sp13.canonet.ne.jp (Postfix) with ESMTP id 099161E03D3;
+        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
+Received: from echeck13.canonet.ne.jp ([172.21.160.123])
+        by csp3 with ESMTP
+        id yqNVovGVhxJr5yqNVocUA4; Sat, 26 Nov 2022 17:17:37 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=S49nfKgP c=1 sm=1 tr=0
+ ts=6381cba1 cx=g_jp:t_eml p=JJaDG7uySNsA:10 p=Ik1pXvdftEAPl7FGfynI:22
+ a=c8wCX2VJ6RehaN9m5YqYzw==:117 a=yr9NA9NbXb0B05yJHQEWeQ==:17
+ a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10 a=9xFQ1JgjjksA:10 a=x7bEGLp0ZPQA:10
+ a=JQiPw2jszkcqZPIXoVMA:9 a=CjuIK1q_8ugA:10"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck13.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id 9B11A1C0251;
+        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp13.canonet.ne.jp (unknown [172.21.160.103])
+        by echeck13.canonet.ne.jp (Postfix) with ESMTP id 6BA4E1C0263;
+        Sat, 26 Nov 2022 17:17:37 +0900 (JST)
+Received: from eikohnet.co.jp (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp13.canonet.ne.jp (Postfix) with ESMTPA id A506115F964;
+        Sat, 26 Nov 2022 17:17:36 +0900 (JST)
+MIME-Version: 1.0
+Message-ID: <20221126081736.00001C7B.0156@eikohnet.co.jp>
+Date:   Sat, 26 Nov 2022 17:17:36 +0900
+From:   "Mrs Zainab Abbas" <toda@eikohnet.co.jp>
+To:     <Inbox@eikohnet.co.jp>
+Reply-To: <mrs.zainababbas75@gmail.com>
+Subject: Hi
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Mrs Zainab Abbas
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1669450657;VERSION=7940;MC=3218539519;TRN=0;CRV=0;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=0;RNP=
+X-ESET-Antispam: OK
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_MR_MRS,
+        SPF_HELO_NONE,SPF_PASS,UNRESOLVED_TEMPLATE,XPRIO_SHORT_SUBJ
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5018]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [mrs.zainababbas75[at]gmail.com]
+        *  1.0 HK_NAME_MR_MRS No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  2.4 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Sat, 26 Nov 2022 02:04:41 +0100:
 
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.1-rc
+Hello,
+Good day, I am still waiting for your reply to my previous email, hope you see the email?
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/644e9524388a5dbc6d4f58c492ee9ef7bd4ddf4d
+Regards
+Mrs Zainab Abbas
 
-Thank you!
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
