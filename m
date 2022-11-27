@@ -2,152 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D13639C34
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 19:03:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC226639D56
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 22:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiK0SD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Nov 2022 13:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60528 "EHLO
+        id S229600AbiK0VgK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 16:36:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiK0SDz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 13:03:55 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC8965AD
-        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 10:02:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669572177;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pijH1z+M3PSlhe30cfhOPB6wsddKrVE1+7oCB/HoGw4=;
-        b=ivNJDScpVztE05DbCdkT8WVLcLJN1pOT1s2lDKRRgZ6XS8nG67KeOFKk5SmSOnpehdgmXD
-        fx+P05KL4vpYAJnr4NS2vpwX3gTVLG12WHGNcEl3dFNTikrHUbsGeDCgN3qSghfNq6o5T7
-        C1NmFPsx2dXNozC05F926LuTcuSvUZM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-55-4jdKcoxkNPK68HIljNCrNw-1; Sun, 27 Nov 2022 13:02:53 -0500
-X-MC-Unique: 4jdKcoxkNPK68HIljNCrNw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        with ESMTP id S229607AbiK0VgI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 16:36:08 -0500
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB70BF4B
+        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 13:36:06 -0800 (PST)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E23468027EC;
-        Sun, 27 Nov 2022 18:02:52 +0000 (UTC)
-Received: from localhost.localdomain (unknown [10.39.192.80])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 3B279140EBF5;
-        Sun, 27 Nov 2022 18:02:52 +0000 (UTC)
-From:   Hans de Goede <hdegoede@redhat.com>
-To:     Sebastian Reichel <sre@kernel.org>, Marek Vasut <marex@denx.de>
-Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Subject: [PATCH 10/10] power: supply: bq25890: Add new linux,iinlim-percentage property
-Date:   Sun, 27 Nov 2022 19:02:33 +0100
-Message-Id: <20221127180233.103678-11-hdegoede@redhat.com>
-In-Reply-To: <20221127180233.103678-1-hdegoede@redhat.com>
-References: <20221127180233.103678-1-hdegoede@redhat.com>
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 2254A8400F;
+        Sun, 27 Nov 2022 22:36:04 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1669584964;
+        bh=MdXp/MIH8bRopADfHap0x6lCrMgObIksvn2RwOL7UrQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VWXDzJUWmkdD9q3/RpmQxRm5AG5wvdxjDAQJ3YOdDPwTm9hWe3YWgDlCurgTRcN2D
+         lNLh/KMcT2a349HiXBrsHKvDaQRj9tN2Nd4LqPfBu+dNFNKEgT6AG/XT53Z4OhDhD6
+         KhBu+k+fJ466+JErKYiQ4zHKYwoWKrxQDu9hVwhAujJ+LnfzB/yJhvr+xyu+tkzJ1x
+         8DNxIGADF94GSFb7GApByWaRzGpGLJ16mCUduCq+P32p/t+ofTTACHXO0o4BzSQFM1
+         PshNvZCzNSDRF3xlYzD7Z50/0U36jlJ0QS8WIXAiHjHPKlC/lT/qGEt3tRu52Ud91W
+         BIKWoFg830LTg==
+Message-ID: <4c28094a-de79-cdaf-9449-eddd5039a004@denx.de>
+Date:   Sun, 27 Nov 2022 22:16:20 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH 01/10] power: supply: bq25890: Only use
+ pdata->regulator_init_data for vbus
+Content-Language: en-US
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org
+References: <20221127180233.103678-1-hdegoede@redhat.com>
+ <20221127180233.103678-2-hdegoede@redhat.com>
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <20221127180233.103678-2-hdegoede@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some devices, such as the Lenovo Yoga Tab 3 Pro (YT3-X90F) have
-multiple batteries with a separate bq25890 charger for each battery.
+On 11/27/22 19:02, Hans de Goede wrote:
+> bq25890_platform_data.regulator_init_data is intended to only provide
+> regulator init_data for the vbus regulator.
+> 
+> Remove this from the regulator_config before registering the vsys
+> regulator. Otherwise the regulator_register() call for vsys will fail
+> because it tries to register duplicate consumer_dev_name + supply
+> names from init_data->consumer_supplies[], leading to the entire
+> probe of the bq25890 driver failing:
+> 
+> [   32.017501] bq25890-charger i2c-bq25892_main: Failed to set supply vbus
+> [   32.017525] bq25890-charger i2c-bq25892_main: error -EBUSY: registering vsys regulator
+> [   32.124978] bq25890-charger: probe of i2c-bq25892_main failed with error -16
+> 
+> Fixes: 14a3d159abf8 ("power: supply: bq25890: Add Vsys regulator")
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-This requires the maximum current the external power-supply can deliver
-to be divided over the chargers. The Android vendor kernel shipped
-on the YT3-X90F divides this current with a 40/60 percent split so that
-batteries are done charging at approx. the same time if both were fully
-empty at the start.
-
-Add support for a new "linux,iinlim-percentage" percentage property which
-can be set to indicate that a bq25890 charger should only use that
-percentage of the external power-supply's maximum current.
-
-So far this new property is only used on x86/ACPI (non devicetree) devs,
-IOW it is not used in actual devicetree files. The devicetree-bindings
-maintainers have requested properties like these to not be added to the
-devicetree-bindings, so the new property is deliberately not added
-to the existing devicetree-bindings.
-
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
----
- drivers/power/supply/bq25890_charger.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index b0d07ff24ace..2bd7721b969f 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -126,6 +126,7 @@ struct bq25890_device {
- 	bool read_back_init_data;
- 	bool force_hiz;
- 	u32 pump_express_vbus_max;
-+	u32 iinlim_percentage;
- 	enum bq25890_chip_version chip_version;
- 	struct bq25890_init_data init_data;
- 	struct bq25890_state state;
-@@ -727,6 +728,18 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
- 	}
- }
- 
-+/*
-+ * If there are multiple chargers the maximum current the external power-supply
-+ * can deliver needs to be divided over the chargers. This is done according
-+ * to the bq->iinlim_percentage setting.
-+ */
-+static int bq25890_charger_get_scaled_iinlim_regval(struct bq25890_device *bq,
-+						    int iinlim_ua)
-+{
-+	iinlim_ua = iinlim_ua * bq->iinlim_percentage / 100;
-+	return bq25890_find_idx(iinlim_ua, TBL_IINLIM);
-+}
-+
- /* On the BQ25892 try to get charger-type info from our supplier */
- static void bq25890_charger_external_power_changed(struct power_supply *psy)
- {
-@@ -745,7 +758,7 @@ static void bq25890_charger_external_power_changed(struct power_supply *psy)
- 
- 	switch (val.intval) {
- 	case POWER_SUPPLY_USB_TYPE_DCP:
--		input_current_limit = bq25890_find_idx(2000000, TBL_IINLIM);
-+		input_current_limit = bq25890_charger_get_scaled_iinlim_regval(bq, 2000000);
- 		if (bq->pump_express_vbus_max) {
- 			queue_delayed_work(system_power_efficient_wq,
- 					   &bq->pump_express_work,
-@@ -754,11 +767,11 @@ static void bq25890_charger_external_power_changed(struct power_supply *psy)
- 		break;
- 	case POWER_SUPPLY_USB_TYPE_CDP:
- 	case POWER_SUPPLY_USB_TYPE_ACA:
--		input_current_limit = bq25890_find_idx(1500000, TBL_IINLIM);
-+		input_current_limit = bq25890_charger_get_scaled_iinlim_regval(bq, 1500000);
- 		break;
- 	case POWER_SUPPLY_USB_TYPE_SDP:
- 	default:
--		input_current_limit = bq25890_find_idx(500000, TBL_IINLIM);
-+		input_current_limit = bq25890_charger_get_scaled_iinlim_regval(bq, 500000);
- 	}
- 
- 	bq25890_field_write(bq, F_IINLIM, input_current_limit);
-@@ -1390,6 +1403,11 @@ static int bq25890_fw_probe(struct bq25890_device *bq)
- 	device_property_read_u32(bq->dev, "linux,pump-express-vbus-max",
- 				 &bq->pump_express_vbus_max);
- 
-+	/* Optional, left at 100% if property is not present */
-+	bq->iinlim_percentage = 100;
-+	device_property_read_u32(bq->dev, "linux,iinlim-percentage",
-+				 &bq->iinlim_percentage);
-+
- 	bq->skip_reset = device_property_read_bool(bq->dev, "linux,skip-reset");
- 	bq->read_back_init_data = device_property_read_bool(bq->dev,
- 						"linux,read-back-settings");
--- 
-2.38.1
-
+Reviewed-by: Marek Vasut <marex@denx.de>
