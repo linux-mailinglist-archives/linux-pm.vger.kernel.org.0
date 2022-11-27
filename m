@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC226639D56
+	by mail.lfdr.de (Postfix) with ESMTP id C593D639D55
 	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 22:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbiK0VgK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Nov 2022 16:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37674 "EHLO
+        id S229727AbiK0VgJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 16:36:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiK0VgI (ORCPT
+        with ESMTP id S229600AbiK0VgI (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 16:36:08 -0500
 Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB70BF4B
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD13D2F2
         for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 13:36:06 -0800 (PST)
 Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
         (No client certificate requested)
         (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 2254A8400F;
-        Sun, 27 Nov 2022 22:36:04 +0100 (CET)
+        by phobos.denx.de (Postfix) with ESMTPSA id 5F2BB850D1;
+        Sun, 27 Nov 2022 22:36:05 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669584964;
-        bh=MdXp/MIH8bRopADfHap0x6lCrMgObIksvn2RwOL7UrQ=;
+        s=phobos-20191101; t=1669584965;
+        bh=TzeKo5Mh7ICHTdgMprNU/6fv71pHoypygS2bF0thQA8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VWXDzJUWmkdD9q3/RpmQxRm5AG5wvdxjDAQJ3YOdDPwTm9hWe3YWgDlCurgTRcN2D
-         lNLh/KMcT2a349HiXBrsHKvDaQRj9tN2Nd4LqPfBu+dNFNKEgT6AG/XT53Z4OhDhD6
-         KhBu+k+fJ466+JErKYiQ4zHKYwoWKrxQDu9hVwhAujJ+LnfzB/yJhvr+xyu+tkzJ1x
-         8DNxIGADF94GSFb7GApByWaRzGpGLJ16mCUduCq+P32p/t+ofTTACHXO0o4BzSQFM1
-         PshNvZCzNSDRF3xlYzD7Z50/0U36jlJ0QS8WIXAiHjHPKlC/lT/qGEt3tRu52Ud91W
-         BIKWoFg830LTg==
-Message-ID: <4c28094a-de79-cdaf-9449-eddd5039a004@denx.de>
-Date:   Sun, 27 Nov 2022 22:16:20 +0100
+        b=GscXsRz3YdkEeGug3ixjlvtxWbgm1CNrswgIqJUfuPbfluS+B8ZwkHgxHf0pU6F2G
+         LwHMMesH2CGeF0wN9zngG7VzkrUCBGVO9NSvnOfkfD8m9QIVD1iaewzfYuGeRG6EvS
+         aTZguzn/heHANstyTK3hk6sMMIZeXXn3Yf7JUp9I5WNA+8kUiRRB3z/JnTPAoKUrSD
+         fQCpBV2YfarcUhnd5wrMyjKGgGjetnqugzTUpN2/7bGZgsUMFwynIa14/haX7K3MzT
+         LiGBJyEsGjFWUT7B9s1G+/aafmY28qEXI7qTUa+tfgdv3QjwiprbKZ9v3z0SNu/E/U
+         HYrPwrxBy4wsQ==
+Message-ID: <b20d8c6b-0f1e-382e-27e2-7a3b63b2fb01@denx.de>
+Date:   Sun, 27 Nov 2022 22:17:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 01/10] power: supply: bq25890: Only use
- pdata->regulator_init_data for vbus
+Subject: Re: [PATCH 02/10] power: supply: bq25890: Ensure pump_express_work is
+ cancelled on remove
 Content-Language: en-US
 To:     Hans de Goede <hdegoede@redhat.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-pm@vger.kernel.org
 References: <20221127180233.103678-1-hdegoede@redhat.com>
- <20221127180233.103678-2-hdegoede@redhat.com>
+ <20221127180233.103678-3-hdegoede@redhat.com>
 From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20221127180233.103678-2-hdegoede@redhat.com>
+In-Reply-To: <20221127180233.103678-3-hdegoede@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
@@ -59,20 +59,19 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 11/27/22 19:02, Hans de Goede wrote:
-> bq25890_platform_data.regulator_init_data is intended to only provide
-> regulator init_data for the vbus regulator.
+> The pump_express_work which gets queued from an external_power_changed
+> callback might be pending / running on remove() (or on probe failure).
 > 
-> Remove this from the regulator_config before registering the vsys
-> regulator. Otherwise the regulator_register() call for vsys will fail
-> because it tries to register duplicate consumer_dev_name + supply
-> names from init_data->consumer_supplies[], leading to the entire
-> probe of the bq25890 driver failing:
+> Add a devm action cancelling the work, to ensure that it is cancelled.
 > 
-> [   32.017501] bq25890-charger i2c-bq25892_main: Failed to set supply vbus
-> [   32.017525] bq25890-charger i2c-bq25892_main: error -EBUSY: registering vsys regulator
-> [   32.124978] bq25890-charger: probe of i2c-bq25892_main failed with error -16
+> Note the devm action is added before devm_power_supply_register(), making
+> it run after devm unregisters the power_supply, so that the work cannot
+> be queued anymore (this is also why a devm action is used for this).
 > 
-> Fixes: 14a3d159abf8 ("power: supply: bq25890: Add Vsys regulator")
+> Fixes: 48f45b094dbb ("power: supply: bq25890: Support higher charging voltages through Pump Express+ protocol")
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+
+A comment in the code matching the last paragraph of this commit message 
+would be helpful I think.
 
 Reviewed-by: Marek Vasut <marex@denx.de>
