@@ -2,124 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461EE639D5C
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 22:36:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0A1639E31
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 00:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiK0VgN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Nov 2022 16:36:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37712 "EHLO
+        id S229475AbiK0XRV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 18:17:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiK0VgM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 16:36:12 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0621FD2F2
-        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 13:36:12 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        with ESMTP id S229510AbiK0XRV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 18:17:21 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657DBFD16
+        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 15:17:20 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 80B528400F;
-        Sun, 27 Nov 2022 22:36:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669584970;
-        bh=qMYW/xrR1ezYvEAi6pcUjmuLG3pWKeKIi/bHKw6+iMY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fMPlgu9N5QSOzMJLMGtmSPWENPwzSX1L72SRZEw+Fblkgwhy9nZ4WtTGkfshR8dlQ
-         O6q2OUE487I3ctWR4eWGy33XtMsDBVfGwLdPg03+p6SYMWColmhc6yLISi9IbbU36w
-         k6csvDydpuP4yYGTduHDqDCk5uCaabc9LqUPj3+xAnW0HBIJ6FDbwZoLr9yGG9JcVv
-         2FpNlyWbwiNldKPo58nJwYipt1PE5J3ABgB8wtLtzQWOAZkyxZcl5XNKMuhZwfYwIw
-         654U3U1zYChmtG+G+N/p/+AuGe04nerilT6iZutXxHs4UeniIaPVbihHybkTCKbPDp
-         ++fiOxgn/+EzA==
-Message-ID: <d2f2fe8f-9463-d496-dc4f-e3f27dd84526@denx.de>
-Date:   Sun, 27 Nov 2022 22:34:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 10/10] power: supply: bq25890: Add new
- linux,iinlim-percentage property
-Content-Language: en-US
-To:     Hans de Goede <hdegoede@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>
-Cc:     linux-pm@vger.kernel.org
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C837F660296C;
+        Sun, 27 Nov 2022 23:17:18 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669591038;
+        bh=qziKedAAOFRL56AxUP+/ZF4zfAn/NfQeF+sKoJA8b04=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mn5Dp5/c2S4+mWhako/Zkr7gw16H6mum7PkVXrwTSYfh/lfwWt+aVyo4FM7N7/af8
+         RMQBvjMPagTQdWsrzctmCoOG1Ooy9QOz/vq9HDX8j3ikavDSL/WijN+i/qsEF+xXtz
+         yG+QUKyu+YebwUu+BVdM+7+3T8P2FIjGRryDkKGpweA6h67Q3wsjq5F65ldHO683M9
+         R2Urn++VwLutE2Jmz0y2n1oCQNL+NgjYUUj8jsWB8PKWE9TCXBt4MrI81kY1qKPiuL
+         JFhZuP+WUX+BiCLsNVj5dlrlWkFAnd2EUniMJhYhOBDTnP2V8FClnnOwTp/pOZhcGL
+         osrZwFRa22jWw==
+Received: by mercury (Postfix, from userid 1000)
+        id B308D1060B5B; Mon, 28 Nov 2022 00:17:16 +0100 (CET)
+Date:   Mon, 28 Nov 2022 00:17:16 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 02/10] power: supply: bq25890: Ensure pump_express_work
+ is cancelled on remove
+Message-ID: <20221127231716.dtt5nrpvv7dheeqd@mercury.elektranox.org>
 References: <20221127180233.103678-1-hdegoede@redhat.com>
- <20221127180233.103678-11-hdegoede@redhat.com>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <20221127180233.103678-11-hdegoede@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221127180233.103678-3-hdegoede@redhat.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="w2eepvjfbx4lc5ke"
+Content-Disposition: inline
+In-Reply-To: <20221127180233.103678-3-hdegoede@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/27/22 19:02, Hans de Goede wrote:
-> Some devices, such as the Lenovo Yoga Tab 3 Pro (YT3-X90F) have
-> multiple batteries with a separate bq25890 charger for each battery.
-> 
-> This requires the maximum current the external power-supply can deliver
-> to be divided over the chargers. The Android vendor kernel shipped
-> on the YT3-X90F divides this current with a 40/60 percent split so that
-> batteries are done charging at approx. the same time if both were fully
-> empty at the start.
-> 
-> Add support for a new "linux,iinlim-percentage" percentage property which
-> can be set to indicate that a bq25890 charger should only use that
-> percentage of the external power-supply's maximum current.
-> 
-> So far this new property is only used on x86/ACPI (non devicetree) devs,
-> IOW it is not used in actual devicetree files. The devicetree-bindings
-> maintainers have requested properties like these to not be added to the
-> devicetree-bindings, so the new property is deliberately not added
-> to the existing devicetree-bindings.
-> 
+
+--w2eepvjfbx4lc5ke
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Sun, Nov 27, 2022 at 07:02:25PM +0100, Hans de Goede wrote:
+> The pump_express_work which gets queued from an external_power_changed
+> callback might be pending / running on remove() (or on probe failure).
+>=20
+> Add a devm action cancelling the work, to ensure that it is cancelled.
+>=20
+> Note the devm action is added before devm_power_supply_register(), making
+> it run after devm unregisters the power_supply, so that the work cannot
+> be queued anymore (this is also why a devm action is used for this).
+>=20
+> Fixes: 48f45b094dbb ("power: supply: bq25890: Support higher charging vol=
+tages through Pump Express+ protocol")
 > Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 > ---
->   drivers/power/supply/bq25890_charger.c | 24 +++++++++++++++++++++---
->   1 file changed, 21 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-> index b0d07ff24ace..2bd7721b969f 100644
+>  drivers/power/supply/bq25890_charger.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>=20
+> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
+y/bq25890_charger.c
+> index 512c81662eea..30d77afab839 100644
 > --- a/drivers/power/supply/bq25890_charger.c
 > +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -126,6 +126,7 @@ struct bq25890_device {
->   	bool read_back_init_data;
->   	bool force_hiz;
->   	u32 pump_express_vbus_max;
-> +	u32 iinlim_percentage;
-
-If this is percentage, u8 should be enough, right ?
-
->   	enum bq25890_chip_version chip_version;
->   	struct bq25890_init_data init_data;
->   	struct bq25890_state state;
-> @@ -727,6 +728,18 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
->   	}
->   }
->   
-> +/*
-> + * If there are multiple chargers the maximum current the external power-supply
-> + * can deliver needs to be divided over the chargers. This is done according
-> + * to the bq->iinlim_percentage setting.
-> + */
-> +static int bq25890_charger_get_scaled_iinlim_regval(struct bq25890_device *bq,
-> +						    int iinlim_ua)
+> @@ -1317,6 +1317,13 @@ static int bq25890_fw_probe(struct bq25890_device =
+*bq)
+>  	return 0;
+>  }
+> =20
+> +static void bq25890_non_devm_cleanup(void *data)
 > +{
-> +	iinlim_ua = iinlim_ua * bq->iinlim_percentage / 100;
-
-Can this ever add up to value above 100 ?
-Should this use some clamp() ?
-
-> +	return bq25890_find_idx(iinlim_ua, TBL_IINLIM);
+> +	struct bq25890_device *bq =3D data;
+> +
+> +	cancel_delayed_work_sync(&bq->pump_express_work);
 > +}
 > +
->   /* On the BQ25892 try to get charger-type info from our supplier */
->   static void bq25890_charger_external_power_changed(struct power_supply *psy)
->   {
+>  static int bq25890_probe(struct i2c_client *client)
+>  {
+>  	struct device *dev =3D &client->dev;
+> @@ -1372,6 +1379,10 @@ static int bq25890_probe(struct i2c_client *client)
+>  	/* OTG reporting */
+>  	bq->usb_phy =3D devm_usb_get_phy(dev, USB_PHY_TYPE_USB2);
+> =20
+> +	ret =3D devm_add_action_or_reset(dev, bq25890_non_devm_cleanup, bq);
+> +	if (ret)
+> +		return ret;
 
-[...]
+ret =3D devm_delayed_work_autocancel(dev, &bq->pump_express_work, bq25890_p=
+ump_express_work);
+if (ret)
+    return ret;
+
+(+ removing the INIT_DELAYED_WORK)
+
+-- Sebastian
+
+> +
+>  	ret =3D bq25890_register_regulator(bq);
+>  	if (ret)
+>  		return ret;
+> --=20
+> 2.38.1
+>=20
+
+--w2eepvjfbx4lc5ke
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOD7/gACgkQ2O7X88g7
++pozZg/+PLDhjc4a8UFdq840/S++S7MEHZY2hxQdUEeKCC4xY1F1m3iWpZmcc4xW
+NdtkseA5dXI/VNjP0UBQE3yIUjHt8K9M4E8tUK8nVmPSwRFVCRz/xcyy5+SPVq+P
+9MbyY8D5sLoVym2qBq3ojjxuaRp5OzvVJ8OtatKAsaNsm3ojn1vXuj7LLr3sN+w0
+Ze2aAI12F8/gKeO2B1GltbC9IGcySnkByDZfjHwx6+fYo9zeIQ/OMLJY9WmANwMl
+toRO8ra0Vpj5WQ3H7CNiyZtWMDanjyM9jl7weeR4VcFn0eshIUUwd1GmX7MNp1Mq
+N8A9pJJozl+5SnZghU9gD0CliU7iVbO+9THhbYrFVyEv4wpZzBy/XYmUy5AT4Qvk
+dJogoFQRVQDyJfgRj2Iv0DwNa+jtv0whKnN23hBbgZPDZn2nxv2YwHGA3nSlThbe
+ihyF/ZqHRD7C3/XKpH6TRhZ3M4ZJQpjCQ/XCj715RYHyIA/1zzpozAnajHi97z5x
+b3drzfiHizfDQYotmcT/fmq2r2OMlYJsyNfZfGDBc3PDZvIKNei+w1ky5DJFTzaB
+babXcaD6WAjD8LkXkTtgIwBmWnPWMt1ma7SVylcDdbv3nK6BCQwCCexULalzHDlL
+NK2OJun0xZrw2IEJh88AP6XjPoCHrjtxRQd/KJZZgLF05k2GszE=
+=L/sz
+-----END PGP SIGNATURE-----
+
+--w2eepvjfbx4lc5ke--
