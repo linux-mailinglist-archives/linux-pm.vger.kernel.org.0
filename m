@@ -2,162 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 171A563994A
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 05:29:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 148AB639976
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 07:36:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiK0E3w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 26 Nov 2022 23:29:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
+        id S229513AbiK0Ggr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 01:36:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiK0E3v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 26 Nov 2022 23:29:51 -0500
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7908511163
-        for <linux-pm@vger.kernel.org>; Sat, 26 Nov 2022 20:29:50 -0800 (PST)
-Received: by mail-pf1-x435.google.com with SMTP id x66so7499703pfx.3
-        for <linux-pm@vger.kernel.org>; Sat, 26 Nov 2022 20:29:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqgH8cmHhfTz1Vd5tEGfh30cXpik/rHUE/AA8MWiYIA=;
-        b=QxtOkawsOV8yH3gBwfP3XH7r0/9hh0Xf1MbOjZJPJnwUmxABxSgiKfKds5tVnPf6IP
-         FnkzcXfn+/S/Wc8+/OgFtAxWeAleZrGOHS7pLIUwFagdWBi5DyrFHqCitTpZsd9Rzw6h
-         omDcExhBorMv9Iq+rFOuku0HQIvLs5EC1a+ifE1Tdu2QiPfUwuehXO76BBE58utnksp0
-         3lEMPMcNAH/xIdxeJAqD48uWnep3P41pK4IshNV2sBH0Yyi9xb4z52jSgehGbp1UVLix
-         n5VFOcbK4uiR7EhAP2cOoc/vXYAMQjc+GFPAnSpK7g+A8obPe5FrugzfCpY+1QjHzg12
-         AFUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=thread-index:content-language:content-transfer-encoding
-         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqgH8cmHhfTz1Vd5tEGfh30cXpik/rHUE/AA8MWiYIA=;
-        b=Yhhs+mPCauZgYcJuisJydXocM3ovRGlEPZmT8FpCqKvfqaQLXkdh68ptIJHk8d4jj3
-         4Db19xKzGowquUL8cUU3Z5csVL3vNWEMeNN0QNoR8MBLZli9u86tNTyaKRMEHph+wfQU
-         Q7FMNrb6BucdJF293l5Pq6btIiZC99RAOmZYPtGFX4VW+/+84MNgQY2XvdAyZ3tagibn
-         Yi3DNcgkPGDigxnyof90prRkaUIL06O5oSRW5Gp9TYIC/clKws5PeZz/fQ6J4EWLnAtn
-         RgSqVV2yOpKskJp9CGIoz3UCVGUYb4hGwCYOZIUT3ioplgDCC+Nz6BrYoldI59tjO2Yp
-         TiAw==
-X-Gm-Message-State: ANoB5pkPnLYIEcc2ObAT7B/JK6gnArlFPlwv3RTvGsykfsm6v1lxlD4a
-        MQ0j5fg/rGKnlb9puOQRIeTKG5yulHpImg==
-X-Google-Smtp-Source: AA0mqf5w6Q8t2dnnUcA5QNcjpQJxJ8kEWg+TkaCm7G6FUDiBRGvQjIDHviO3GjIqFnz+XbYO7B3lUA==
-X-Received: by 2002:a05:6a00:1741:b0:563:9203:cc53 with SMTP id j1-20020a056a00174100b005639203cc53mr36158170pfc.20.1669523389987;
-        Sat, 26 Nov 2022 20:29:49 -0800 (PST)
-Received: from DougS18 (s173-180-45-4.bc.hsia.telus.net. [173.180.45.4])
-        by smtp.gmail.com with ESMTPSA id h14-20020a056a00000e00b00574ebfdc721sm1904359pfk.16.2022.11.26.20.29.48
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sat, 26 Nov 2022 20:29:49 -0800 (PST)
-From:   "Doug Smythies" <dsmythies@telus.net>
-To:     "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        "'Kajetan Puchalski'" <kajetan.puchalski@arm.com>
-Cc:     <daniel.lezcano@linaro.org>, <lukasz.luba@arm.com>,
-        <Dietmar.Eggemann@arm.com>, <yu.chen.surf@gmail.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Doug Smythies" <dsmythies@telus.net>
-References: <20221031121314.1381472-1-kajetan.puchalski@arm.com> <20221031121314.1381472-3-kajetan.puchalski@arm.com> <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hHvf-033Oa-nW7UEZq=9cTFzn6e_znccPXBUeNa=YY+Q@mail.gmail.com>
-Subject: RE: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
-Date:   Sat, 26 Nov 2022 20:29:51 -0800
-Message-ID: <004d01d90218$e4631670$ad294350$@telus.net>
+        with ESMTP id S229496AbiK0Ggq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 01:36:46 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6781BDF8F;
+        Sat, 26 Nov 2022 22:36:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669531004; x=1701067004;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=j18kDwi3QaatD8jlibnN39tgtT/ATwnSdJDJnE/5veU=;
+  b=naZw9Ge8a2oXQNfAxNoMJmaU0FD9BdKCnUilaErWD8gzDPdZz+hXn6Wg
+   SnWsOAAB5fntDdqALlfT+xlEqcrqZBjC1imb+FdrYBqFHt6ou1sF5Bjr+
+   sJ8UAxpJWfjGdHS7Mx/XjaLIDxFBOUziqg7hl6rohCpcS4jIDghM7W7Co
+   qud3Wggktk5enO+FDhn7lHVneXlcvDz70oZ05q4e2YOY0rPPn5BtHy/2Q
+   Blhr01Af8CSMosqL66pO26tFU4m1wI9xlp0BfzpzBjd4Wc/Obq2CtdxQv
+   7uvtg3xgC0vTMO6QfBVknNgR1tYn0Gxkv4jo56Xiywi9GPMrHI8nvrbrQ
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="316473420"
+X-IronPort-AV: E=Sophos;i="5.96,197,1665471600"; 
+   d="scan'208";a="316473420"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 22:36:43 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10543"; a="593550769"
+X-IronPort-AV: E=Sophos;i="5.96,197,1665471600"; 
+   d="scan'208";a="593550769"
+Received: from liyi4-mobl1.ccr.corp.intel.com ([10.254.214.186])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2022 22:36:41 -0800
+Message-ID: <876f3b51660b0e3e328c8f9d1ac3d4e14d749b0e.camel@intel.com>
+Subject: Re: [RFC PATCH v4 0/2] cpuidle: teo: Introduce util-awareness
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        'Kajetan Puchalski' <kajetan.puchalski@arm.com>,
+        rafael@kernel.org
+Date:   Sun, 27 Nov 2022 14:36:39 +0800
+In-Reply-To: <003d01d901e2$025853c0$0708fb40$@telus.net>
+References: <20221102152808.2978590-1-kajetan.puchalski@arm.com>
+         <Y3ttlCCezC+SvFDH@e126311.manchester.arm.com>
+         <00a801d8ffba$6cd72a70$46857f50$@telus.net>
+         <044424e924967a1c93649812b6e1670c8c37fce4.camel@intel.com>
+         <003d01d901e2$025853c0$0708fb40$@telus.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Content-Language: en-ca
-Thread-Index: AQJ3niu74TkyFjUbsRqSa0N7+FgHagJieOsRAbWVYo2s8+GpAA==
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022.11.25 10:27 Rafael wrote:
-> On Mon, Oct 31, 2022 at 1:14 PM Kajetan wrote:
+On Sat, 2022-11-26 at 13:56 -0800, Doug Smythies wrote:
+> On 2022.11.26 08:26 Rui wrote:
+> > On Wed, 2022-11-23 at 20:08 -0800, Doug Smythies wrote:
+> > > On 2022.11.21 04:23 Kajetan Puchalski wrote:
+> > > > On Wed, Nov 02, 2022 at 03:28:06PM +0000, Kajetan Puchalski
+> > > > wrote:
+> > > > 
+> > > > [...]
+> > > > 
+> > > > > v3 -> v4:
+> > > > > - remove the chunk of code skipping metrics updates when the
+> > > > > CPU
+> > > > > was utilized
+> > > > > - include new test results and more benchmarks in the cover
+> > > > > letter
+> > > > 
+> > > > [...]
+> > > > 
+> > > > It's been some time so I just wanted to bump this, what do you
+> > > > think
+> > > > about this v4? Doug has already tested it, resuls for his
+> > > > machine
+> > > > are
+> > > > attached to the v3 thread.
+> > > 
+> > > Hi All,
+> > > 
+> > > I continued to test this and included the proposed ladder idle
+> > > governor in my continued testing.
+> > > (Which is why I added Rui as an addressee)
+> > 
+> > Hi, Doug,
+> 
+> Hi Rui,
+> 
+> > Really appreciated your testing data on this.
+> > I have some dumb questions and I need your help so that I can
+> > better
+> > understand some of the graphs. :)
+> > 
+> > > However, I ran out of time. Here is what I have:
+> > > 
+> > > Kernel: 6.1-rc3 and with patch sets
+> > > Processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
+> > > CPU scaling driver: intel_cpufreq
+> > > HWP disabled.
+> > > Unless otherwsie stated, performance CPU scaling govenor.
+> > > 
+> > > Legend:
+> > > teo: the current teo idle governor
+> > > util-v4: the RFC utilization teo patch set version 4.
+> > > menu: the menu idle governor
+> > > ladder-old: the current ladder idle governor
+> > > ladder: the RFC ladder patchset.
+> > > 
+> > > Workflow: shell-intensive serialized workloads.
+> > > Variable: PIDs per second.
+> > > Note: Single threaded.
+> > > Master reference: forced CPU affinity to 1 CPU.
+> 
+> This is the 1cpu on the graph.
+> 
+> > > Performance Results:
+> > > http://smythies.com/~doug/linux/idle/teo-util/graphs/pids-perf.png
+> > > Schedutil Results:
+> > > http://smythies.com/~doug/linux/idle/teo-util/graphs/pids-su.png
+> > 
+> > what does 1cpu mean?
+> 
+> For shell-intensive serialized workflow or:
+> 
+> Dountil the list of tasks is finished:
+>     Start the next task in the list of stuff to do (with a new PID).
+>     Wait for it to finish
+> Enduntil
+> 
+> We know it represents a challenge for CPU frequency scaling drivers,
+> schedulers, and therefore idle drivers.
+> 
+> We also know that the best performance is achieved by overriding
+> the scheduler and forcing CPU affinity. I use this "best" case as the
+> master reference, using the label 1cpu on the graph.
+>  
+Got it.
 
-... [delete some] ...
+> > > Workflow: sleeping ebizzy 128 threads.
+> > > Variable: interval (uSecs).
+> > > Performance Results:
+> > > http://smythies.com/~doug/linux/idle/teo-util/graphs/ebizzy-128-perf.png
+> > > Performance power and idle data:
+> > > http://smythies.com/~doug/linux/idle/teo-util/ebizzy/perf/
+> > 
+> > for the "Idle state 0/1/2/3 was too deep" graphs, may I know how
+> > you
+> > assert that an idle state is too deep/shallow?
+> 
+> I get those stats directly from the kernel driver statistics. For
+> example:
+> 
+> $ grep . /sys/devices/system/cpu/cpu4/cpuidle/state*/above
+> /sys/devices/system/cpu/cpu4/cpuidle/state0/above:0
+> /sys/devices/system/cpu/cpu4/cpuidle/state1/above:38085
+> /sys/devices/system/cpu/cpu4/cpuidle/state2/above:7668
+> /sys/devices/system/cpu/cpu4/cpuidle/state3/above:6823
+> 
+> $ grep . /sys/devices/system/cpu/cpu4/cpuidle/state*/below
+> /sys/devices/system/cpu/cpu4/cpuidle/state0/below:72059
+> /sys/devices/system/cpu/cpu4/cpuidle/state1/below:246573
+> /sys/devices/system/cpu/cpu4/cpuidle/state2/below:7817
+> /sys/devices/system/cpu/cpu4/cpuidle/state3/below:0
+> 
+> I keep track of the changes per sample interval and graph
+> the sum for all CPUs as a percentage of the usage of
+> that idle state.
+> 
+> Because I can never remember what "above" and "below"
+> actually mean, I use the terms "was too shallow"
+> and "was too deep".
 
->>         /*
->>          * Find the deepest idle state whose target residency does not exceed
->>          * the current sleep length and the deepest idle state not deeper than
->> @@ -454,6 +527,11 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->>         if (idx > constraint_idx)
->>                 idx = constraint_idx;
->>
->> +       /* if the CPU is being utilized and C1 is the selected candidate */
->> +       /* choose a shallower non-polling state to improve latency */
->
-> Again, the kernel coding style for multi-line comments is different
-> from the above.
->
->> +       if (cpu_data->utilized && idx == 1)
->
-> I've changed my mind with respect to adding the idx == 1 check to
-> this.  If the goal is to reduce latency for the "loaded" CPUs, this
-> applies to deeper idle states too.
+I just checked the code. My understanding is that
+"above" means the previous idle state residency is too short, and a
+shallower state would have been a better match.
+"below" means the previous idle state residency is too long, and a
+deeper state would have been a better match.
 
-After taking idle state 0 (POLL) out of it, the energy cost for reducing
-the selected idle state by 1 was still high in some cases, at least on my
-Intel processor. That was mainly for idle state 2 being bumped to idle
-state 1. I don't recall significant differences bumping idle state 3 to idle
-state 2, but I don't know about other Intel processors.
+So probably "above" means "should be shallower" or "was too deep", and
+"below" means "should be deeper" or "was to shallow"?
 
-So, there is a trade-off here where we might want to accept this higher
-energy consumption for no gain in some workflows verses the higher
-energy for gain in other workflows, or not.
+thanks,
+rui
 
-Example 1: Higher energy, for no benefit:
-Workflow: a medium load at 211 work/sleep frequency.
-This data is for one thread, but I looked at up to 6 threads.
-No performance metric, the work just has to finish before
-the next cycle begins.
-CPU frequency scaling driver: intel_pstate
-CPU frequency scaling governor: powersave
-No HWP.
-Kernel 6.1-rc3
-
-teo: ~14.8 watts
-util-v4 without the "idx == 1" above: 16.1 watts (+8.8%)
-More info:
-http://smythies.com/~doug/linux/idle/teo-util/consume/dwell-v4/
-
-Example 2: Lower energy, but no loss in performance:
-Workflow: 500 threads, light load per thread,
-approximately 10 hertz work/sleep frequency per thread.
-CPU frequency scaling driver: intel_cpufreq
-CPU frequency scaling governor: schedutil
-No HWP.
-Kernel 6.1-rc3
-
-teo: ~70 watts
-util-v4 without the "idx == 1" above: ~59 watts (-16%)
-Execution times were the same
-More info:
-http://smythies.com/~doug/linux/idle/teo-util/waiter/
-
-Note: legend util-v4-1 is util-v4 without the "idx == 1".
-I have also added util-v4-1 to some of the previous results.
-
-For reference, my testing processor:
-
-Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-
-$ grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/name
-/sys/devices/system/cpu/cpu0/cpuidle/state0/name:POLL
-/sys/devices/system/cpu/cpu0/cpuidle/state1/name:C1_ACPI
-/sys/devices/system/cpu/cpu0/cpuidle/state2/name:C2_ACPI
-/sys/devices/system/cpu/cpu0/cpuidle/state3/name:C3_ACPI
-
-$ grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/desc
-/sys/devices/system/cpu/cpu0/cpuidle/state0/desc:CPUIDLE CORE POLL IDLE
-/sys/devices/system/cpu/cpu0/cpuidle/state1/desc:ACPI FFH MWAIT 0x0
-/sys/devices/system/cpu/cpu0/cpuidle/state2/desc:ACPI FFH MWAIT 0x30
-/sys/devices/system/cpu/cpu0/cpuidle/state3/desc:ACPI FFH MWAIT 0x60
-
-... Doug
 
