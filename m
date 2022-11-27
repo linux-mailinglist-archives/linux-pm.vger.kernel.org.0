@@ -2,56 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D474639C17
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 18:38:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5377639C35
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 19:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229548AbiK0RiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Nov 2022 12:38:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55614 "EHLO
+        id S229475AbiK0SD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 13:03:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbiK0RiJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 12:38:09 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6293BEE28
-        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 09:38:06 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        with ESMTP id S229609AbiK0SDz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 13:03:55 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC6163A1
+        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 10:02:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669572173;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MTY4DO2FIOhTmDrW9V5N/y/N6qxknBVOFxutodlRLvY=;
+        b=CdCM39/c8o89LzLUV9Nah1Lo/NY8JcgB7jWlgm5XwEW74ke4FiS1IeaWgOnJm87Db7cF6E
+        Qf595L3LKh6TD0kdAX1Ifx8u5DiNpCjhYQGWeQdbcIsyFviKVJfGd2hcx2sknM66UpuCdJ
+        w4/aIn4P2GcPn6hzX/OSb8yJ7IE+ftQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-554-W1G1sF4SNwyk_PxXfBaCsQ-1; Sun, 27 Nov 2022 13:02:44 -0500
+X-MC-Unique: W1G1sF4SNwyk_PxXfBaCsQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 53E1A83A26;
-        Sun, 27 Nov 2022 18:38:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669570684;
-        bh=xH6545ZqTFpBcyC4j5tNrn032eTxgrl3gaHqc96gzq8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PMYrDGG/LoQuIF0xk1mQbH0NHMVkpEhxGZeIro3F/m26tCoK3q+1nupdOBFhfRSCQ
-         zAFEaBSn95i3h0EMxeE2HkKa3rytTBUowKuBWJxrnuoSkR09OUWs3mLVAms+tb5zbY
-         G72Lx+IQTQ62Ff7hy6fo+0iNtuYFEi15nWUW6PNFxdchiGNTk9cp+FgkjgCYbk9x9M
-         USOVFoVYxf9qLIWF4w/wjaLZp8/bY8uVg1y5Zh2QYxnqSdDVV2gBijpW2CB10B23sj
-         3xhfQYENYGFQYeqOgmVQGei3/YETAtBK6wv+WAuSBCfhF9+YBDTCz2fl7g9lPi6hfc
-         JxAQbwZu416qQ==
-Message-ID: <81267d70-4db6-d589-d515-e20e40c8b0db@denx.de>
-Date:   Sun, 27 Nov 2022 18:38:03 +0100
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E5A0029AA388;
+        Sun, 27 Nov 2022 18:02:43 +0000 (UTC)
+Received: from localhost.localdomain (unknown [10.39.192.80])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3F8E5140EBF5;
+        Sun, 27 Nov 2022 18:02:43 +0000 (UTC)
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Sebastian Reichel <sre@kernel.org>, Marek Vasut <marex@denx.de>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
+Subject: [PATCH 00/10] power: supply: bq25890: Fixes for 6.2 + further work for 6.3
+Date:   Sun, 27 Nov 2022 19:02:23 +0100
+Message-Id: <20221127180233.103678-1-hdegoede@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 2/2] power: supply: bq25890: Add HiZ mode support
-To:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Cc:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Sebastian Reichel <sre@kernel.org>
-References: <20221126120849.74632-1-marex@denx.de>
- <20221126120849.74632-2-marex@denx.de>
- <0bb3a66a-17ad-74bd-7d1e-0e1402c6c9dd@redhat.com>
-Content-Language: en-US
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <0bb3a66a-17ad-74bd-7d1e-0e1402c6c9dd@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,PDS_OTHER_BAD_TLD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,43 +55,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/27/22 17:43, Hans de Goede wrote:
+Hi Sebastian, Marek,
 
-Hi,
+I have been working on getting a Lenovo Yoga Tab 3 Pro (YT3-X90F) to
+work with the mainline kernel. This tablet has 2 batteries with
+2 bq25892 chargers both connected to a single Micro-USB connector.
 
-[...]
+Supporting the 2 charger board also requires the recent HiZ mode patches
+from Marek, to avoid merging order problems / conflicts I have included
+a copy of Marek's series here so this series obsoletes the:
 
->> @@ -522,7 +525,7 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
->>   		break;
->>   
->>   	case POWER_SUPPLY_PROP_ONLINE:
->> -		val->intval = state.online;
->> +		val->intval = state.online & !state.hiz;
-> 
-> Please use "&&" instead of "&" here, since these are both 1 bit values the "&"
-> will also work but "&&" better expresses that this is a boolean compare and you
-> use "||" in the negated cases above, so using "&&" is consistent with that.
-> 
-> I have fixed this up in my local copy of the patch.
-> 
-> I have also noticed some other issues, which are best addressed with a follow-up
-> patch.
-> 
-> Once I have run a few final tests I plan to submit a bigger bq25890_charger
-> patch series, which includes a bugfix to your previous series, as well as
-> a few follow up patches to this series.
-> 
-> To make things easier for Sebastian, I'm going to include your patches
-> in my bigger series, making that series look like this:
-> 
-> 1. A couple of bug fixes for the current bq25890 code
-> 2. Your patches (this series) with the mentioned small "&" -> "&&" squashed in + my Reviewed-by
-> 3. Some follow up patches from me to this series
-> 4. My recent patches building on top of this series.
-> 
-> This way Sebastian can apply all the patches without conflict,
-> which I hope makes things easier for him.
-> 
-> Marek, I will Cc you on the entire series.
+[PATCH 1/2] power: supply: bq25890: Factor out chip state update
+[PATCH 2/2] power: supply: bq25890: Add HiZ mode support
+[PATCH v2 1/2] power: supply: bq25890: Factor out chip state update
+[PATCH v2 2/2] power: supply: bq25890: Add HiZ mode support
 
-Sounds good, thanks !
+patches from Marek.
+
+While working on adding support for this I also noticed some generic issues
+with the bq25890 driver currently in linux-power-supply/for-next and I also
+have some fixes to the HiZ support on top of Marek's support.
+
+So this entire series consist of 4 parts:
+
+1. Patches 1-3:
+
+Generic bugfixes for the bq25890 charger in its current state
+in linux-power-supply/for-next. Patch 1/10 fixes an actual regression on
+some boards with for-next so that one definitely needs to go to 6.2.
+The other 2 fixes can go to either 6.2 or 6.3
+
+2. Patches 4-5:
+
+Marek's HiZ support work, thank you Marek.
+
+3. Patches 6-7:
+
+Some fixes / improvements from me to Marek's HiZ support.
+
+4. Patch 8-10:
+
+The actual support for boards with 2 chargers.
+
+Stating the obvious here: given where we are in the cycle I expect
+parts 2-4 / patches 4-10 to all be 6.3 material. 
+
+Regards,
+
+Hans
+
+
+
+Hans de Goede (8):
+  power: supply: bq25890: Only use pdata->regulator_init_data for vbus
+  power: supply: bq25890: Ensure pump_express_work is cancelled on
+    remove
+  power: supply: bq25890: Fix usb-notifier probe and remove races
+  power: supply: bq25890: Fix setting of F_CONV_RATE rate when disabling
+    HiZ mode
+  power: supply: bq25890: Always take HiZ mode into account for ADC rate
+  power: supply: bq25890: Support boards with more then one charger IC
+  power: supply: bq25890: Add support for having a secondary charger IC
+  power: supply: bq25890: Add new linux,iinlim-percentage property
+
+Marek Vasut (2):
+  power: supply: bq25890: Factor out chip state update
+  power: supply: bq25890: Add HiZ mode support
+
+ drivers/platform/x86/x86-android-tablets.c |   2 +-
+ drivers/power/supply/bq25890_charger.c     | 213 ++++++++++++++++-----
+ 2 files changed, 169 insertions(+), 46 deletions(-)
+
+-- 
+2.38.1
+
