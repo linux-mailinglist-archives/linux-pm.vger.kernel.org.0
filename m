@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C473D639B4E
-	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 15:18:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A707B639B4F
+	for <lists+linux-pm@lfdr.de>; Sun, 27 Nov 2022 15:18:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiK0OSD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Nov 2022 09:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
+        id S229616AbiK0OSE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 09:18:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiK0OSB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 09:18:01 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5DE8D2CE
-        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 06:18:00 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id b12so13112144wrn.2
-        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 06:18:00 -0800 (PST)
+        with ESMTP id S229551AbiK0OSD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 09:18:03 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11E0CE04
+        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 06:18:02 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id b12so13112223wrn.2
+        for <linux-pm@vger.kernel.org>; Sun, 27 Nov 2022 06:18:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mpiTMs/bm1wIhU66d2WA2juvNisiarCxmVPwVf/noJc=;
-        b=CS03/7Oq3hp6rz4NPYWfXdlenemW21COELMeRig3aC2SYx3NQvXnJwgPiXa7VhXdAc
-         x7AQSSpSpYKrO5mGTEVWZ3zIjl3oMYA7EbIHYDlUA7UkSMQg+QL/e+U+afbTd10fd5wa
-         rlY2Wj4wDmrZzxh9gPAqGv1DzPWGF6UoF6bJhvPLCGvSkOlkPh0zBW5kp9ZomYj2R5Yw
-         MLLz6Q0+C40gnrmzmgoLYiDA+/+VRP7c7bCHwyRMuCyzu5iwYhFdvqZvbael6nAJ0zp6
-         H67jjZaJCEFlaDFPPbjzr+kDA0Ox0JshhQp8hIetJpxgvLwf7ENuL+GaUXReapKD83QJ
-         jIAA==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jkAjMv32NBv57ip/jp/OcgWLx4nOD1X2Vve6sHHv9TI=;
+        b=wJlclZrhZWJJLY4gKqU4fQES98mqQVQVDUvCpoKE/Gxf7/HXho4CZNyqW4HxaSaA8A
+         c4Rjl2N+yZDHwIz+TAKQHxMqUl+6iz1cx7iGstjJmiuD05BD7sCFybcXGkR9d0ny+yOK
+         oBI9Db0+HQLdyQEvb2TKypAG3NuYTaMHOr0n8Taxd1S1qcrD8epAUsRBTxFnX8FXmZr4
+         Jx85SCM6w8UUOtYtI6O0RQ4QKnK30quLo6pY9yXuC96P5PcAq/sfrmUvfOke+4yWCGYj
+         CRmQyr1HTCipxjci3vu5VuqXHFsqJ/5DDx6F2y0Oa/6P+h5DcAMu8eo7y35OSd5E31y7
+         +XvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mpiTMs/bm1wIhU66d2WA2juvNisiarCxmVPwVf/noJc=;
-        b=dTo8+E1cc9T2rdEz8uGqvr+V94QSiKrYwGIxGPsDCB1y6xDzleQJ4nji49rqJ/uW7J
-         nJSiXoWnEJB9ayrxVSy5GsLMJjQL6MOOjByYU9Wc3hJu2Zl1CFYYZKXBWMANgQl1/omr
-         w/tNbuID9LG/2oM61ft7ux3d3W2Gj4YrD1uDs69mZtILqO8egm4ibs7BH/xeqeG8nUS5
-         jf2KmPOnOPC4K1wZba8c9dLJipKLlvtCVrrGGGB8DZYQFabBFUPuScFAYqMJ7pJo6MhJ
-         tXldvN7RvsgC0mSX/vUZdGZ2sxbp89+9EEJt24q0BzJd4lrCj8iLxjMp6mO4eJGtwfar
-         dsTg==
-X-Gm-Message-State: ANoB5pmp9rPPduYXFDrKAmQ2lWVPu+1RjtPBmmuW9Fa1oFntYL3I5Mr+
-        x3PWzYATPxGPE6k/7c93sPgVsg==
-X-Google-Smtp-Source: AA0mqf5iD8x++P3wzr1U6y34gjqkmOnkFDw8fodqu5GlTcetKXVpYtsD+Gn25KFCiMBT6Ke4UxqK4A==
-X-Received: by 2002:adf:d207:0:b0:242:880:20cc with SMTP id j7-20020adfd207000000b00242088020ccmr6337851wrh.467.1669558679398;
-        Sun, 27 Nov 2022 06:17:59 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jkAjMv32NBv57ip/jp/OcgWLx4nOD1X2Vve6sHHv9TI=;
+        b=rjaXEwkMW5baPPl1rqrP76eWIsRTy0nYUH9O7HwPjfncgh8t6Cpr1slfMCVimRtEyi
+         zTRzAr1U8DzypF04dyluefQ3k0nt8J8Ligo8H4Yk2mnawbVpjLZtsR9KaVIWDcbkvoHr
+         XIfODy+cypIk62RklVDV4kUQwmxBzDt1l/siCWIT9SW6DOojDYrgS3SSmVDKdsmZdBac
+         vtG8IusCGcLfNt+pNYU490VUZ3RZG4uZuxqPlCHZtbvj1vDSFdhNkUpPO82+Aih0jPTY
+         mQdTj0GNBaN99TRLzKRLVYaZyeN39VGuj1zl0m1uO3EZN4FdqlJD/+eVxbuciIZSzRTz
+         wBPQ==
+X-Gm-Message-State: ANoB5pmB+dfpsFYKFRwC8JNCLNj9JdvqsBeYQ2B3b/uHsjgkFucGAmay
+        XYbRuX66xQfJhFs/rKxDLt4YGw==
+X-Google-Smtp-Source: AA0mqf4EfcqefMk4H0mjiFRUaLNNXts5OdAKrB9ADHLirI79hJGFJ4cAba3xzfc8lcqsNc3nB0pcRg==
+X-Received: by 2002:a5d:4149:0:b0:242:149c:5690 with SMTP id c9-20020a5d4149000000b00242149c5690mr1303871wrq.491.1669558681519;
+        Sun, 27 Nov 2022 06:18:01 -0800 (PST)
 Received: from localhost.localdomain (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id l1-20020a05600c4f0100b003c6f3f6675bsm17109757wmq.26.2022.11.27.06.17.58
+        by smtp.gmail.com with ESMTPSA id l1-20020a05600c4f0100b003c6f3f6675bsm17109757wmq.26.2022.11.27.06.18.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Nov 2022 06:17:58 -0800 (PST)
+        Sun, 27 Nov 2022 06:18:01 -0800 (PST)
 From:   Qais Yousef <qyousef@layalina.io>
 To:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -60,11 +61,15 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Xuewen Yan <xuewen.yan94@gmail.com>,
         Hank <han.lin@mediatek.com>,
         Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        "Qais Yousef (Google)" <qyousef@layalina.io>
-Subject: [PATCH 0/3] Fixes for uclamp and capacity inversion detection
-Date:   Sun, 27 Nov 2022 14:17:39 +0000
-Message-Id: <20221127141742.1644023-1-qyousef@layalina.io>
+        Qais Yousef <qyousef@layalina.io>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH 1/3] sched/uclamp: Fix a uninitialized variable warnings
+Date:   Sun, 27 Nov 2022 14:17:40 +0000
+Message-Id: <20221127141742.1644023-2-qyousef@layalina.io>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221127141742.1644023-1-qyousef@layalina.io>
+References: <20221127141742.1644023-1-qyousef@layalina.io>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,34 +81,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: "Qais Yousef (Google)" <qyousef@layalina.io>
+Addresses the following warnings:
 
-Patch 1 addresses a smatch warning reported by Dan Carpenter.
+> config: riscv-randconfig-m031-20221111
+> compiler: riscv64-linux-gcc (GCC) 12.1.0
+>
+> smatch warnings:
+> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
+> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
 
-Patch 2 fixes a couple of issues reported by Dietmar in capacity inversion
-logic.
+Fixes: 244226035a1f ("sched/uclamp: Fix fits_capacity() check in feec()")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+---
+ kernel/sched/fair.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Patch 3 is an RFC patch to decouple capacity inversion detection from
-performance domains which is dependent on sched_energy_enabled(). I switched to
-traversing cpufreq policies instead. Rafael, Viresh please check I didn't do
-something stupid here.
-
-
-Thanks!
-
---
-Qais Yousef
-
-Qais Yousef (3):
-  sched/uclamp: Fix a uninitialized variable warnings
-  sched/fair: Fixes for capacity inversion detection
-  sched/fair: Traverse cpufreq policies to detect capacity inversion
-
- drivers/cpufreq/cpufreq.c | 12 +-----------
- include/linux/cpufreq.h   | 26 ++++++++++++++++++++++++++
- kernel/sched/fair.c       | 18 +++++++++---------
- 3 files changed, 36 insertions(+), 20 deletions(-)
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 4cc56c91e06e..89dadaafc1ec 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	eenv_task_busy_time(&eenv, p, prev_cpu);
+ 
+ 	for (; pd; pd = pd->next) {
++		unsigned long util_min = p_util_min, util_max = p_util_max;
+ 		unsigned long cpu_cap, cpu_thermal_cap, util;
+ 		unsigned long cur_delta, max_spare_cap = 0;
+ 		unsigned long rq_util_min, rq_util_max;
+-		unsigned long util_min, util_max;
+ 		unsigned long prev_spare_cap = 0;
+ 		int max_spare_cap_cpu = -1;
+ 		unsigned long base_energy;
+@@ -7258,10 +7258,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			 * aligned with sched_cpu_util().
+ 			 */
+ 			if (uclamp_is_used()) {
+-				if (uclamp_rq_is_idle(cpu_rq(cpu))) {
+-					util_min = p_util_min;
+-					util_max = p_util_max;
+-				} else {
++				if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
+ 					/*
+ 					 * Open code uclamp_rq_util_with() except for
+ 					 * the clamp() part. Ie: apply max aggregation
 -- 
 2.25.1
 
