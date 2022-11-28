@@ -2,41 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0062E639F67
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 03:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF3A639F6F
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 03:29:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbiK1CSL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 27 Nov 2022 21:18:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37360 "EHLO
+        id S229587AbiK1C3n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 27 Nov 2022 21:29:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiK1CSK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 21:18:10 -0500
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2079.outbound.protection.outlook.com [40.107.7.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E861C745;
-        Sun, 27 Nov 2022 18:18:08 -0800 (PST)
+        with ESMTP id S229533AbiK1C3l (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 27 Nov 2022 21:29:41 -0500
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2050.outbound.protection.outlook.com [40.107.14.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916DEE0AC;
+        Sun, 27 Nov 2022 18:29:40 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VP3jwm8DQa8fQa4Hl/++ADf2e7a+KuyDjPN+A+ZJhyU1JSiOgX53BWQ1tMo+/1s4ELFnDTgwo7BrpUeNFghhUo/GU9FS4VwtzGMFyBFcLRj04ACL4ZOSSKITWEEoBKbFOU7ojdMzVqTqbH1aq70cC4g7/CfZTaGFqS3ERvegMexIlwn020Q2/hpe5D2j4gyoPjZTNHKvZmPg/6/QJr6lgi9JPfTXCDDCnEjDEWfPKJTWeLYinzQ9eBFA1D8dy7pgR8S5UJYBNa3lpHQzD2cwsJr9CD/U1MCz3n8Ifcjxtit1hK5C5bKW6//Lu4YNOoEuwn0KUiQgnNnDL93h8o6/uQ==
+ b=F/oeip+roBshqTMzNT4UUHdLL6xDuICG+s9nWVgdDkHhQzZ90izXKsDwoQ8ya2r71A2a04Z9WmS/z1wVB9qq9a31S/0ptbBOQoTGriDnIcwEaOp6yBp7lUwGaT/lhhRDkjP8iDrBg+tvfpDkin3PHa058qfrLgepVHbdun36k5sU/M6BkLWX7iMTbaeCKmPGnLUmhB8PrzqqH788pjk9bCQyBUOsHEkp/dcgXVdckhZDZ3m+nUxXeyP/GWp4EgqcwtKycPxI/ce3Aapt8lrB1Rx99w4zhMr4gvJ0XJxsgo+auJqnuN665Oxku044njXiudnLR5Tj22EZ1wHoVIAV2w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PrMX0KkkV++OXAVWPSFAR1bmfQtsCbTz5wKSom0Carg=;
- b=REcYHFthcgOT02LJIuN+fIQUfReqSUPQDqwSAMQbYZvz8UAHA1aP1QLDATYnKBkv5yH4rfxv9ZAvL34c40rKw1p4kiN09CzPVKRdDYfQOpI7/ZSeW0xa29uOMyAOf/tBkoYPdVHS3vAJAamwWTyWf1sjNUfDHbInUMNtCc1w2w7v+QFxsQVTU1SnZsQGUAedTgZKX/lVt2zfQ3UVcAeQJDy/LTNCZxoFAhaRiiGFcesf3I3KWsW1QPok90Z3k9997hHLVQMz02rzKsARuXLO1QZmH/98UjSfcAn21tTDplF6fcD7Ctbn+CHsMnVskI5kqzPW4JlBrakQ4Ta0FY8Dlg==
+ bh=4669lpI2PbL9mHXh/7hm7VCYR+QieYKC1ACDtrJ7FCk=;
+ b=nqpVz9dcn88FNfGCGfOUK2fR8wrpRhO2wLYsCXBkv/sa++MfCdta1fIC4QdRXQfvlxupfbCK2VgwE/94EQf74RYcy5ZrHNO3Z2i7Gccnb++ZgkxqylLFeur7egqA7z+N6wlFI2nh3D9190LwREdGbzQZISHHKQ3pHzq0SDfNdRkPCuemTsqJBa5/PCXqrVSCGGZWdguYUmvaSoOxXyeIE0mg4ohG7/1erpCIweQVETUZeLGPWRhbWxgnf4GaTInyqtZYcULQuKi7Qnzi1vrhVQpnGGzz9pSYXXiZq+49IG3zpPRSSl8pFz5W79K+YEF7ZHkH5g+wEfL2PDA6rDnUMg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PrMX0KkkV++OXAVWPSFAR1bmfQtsCbTz5wKSom0Carg=;
- b=gQP+MlWA+yXPMN9F5EnbN63+lPJpUsPq+18G3UKddFnPW0BODhG+10cvrd5r3R1sm0pZ4VkzxnVh0SbFtMzk+WmmduBtSwoJj6ck/z0+A8E7mpS6XvNHlksomOaWpC0xVhCVKfB74WfzpMHGERlZt7uVI1CNhyKn/1b28cO+muQ=
+ bh=4669lpI2PbL9mHXh/7hm7VCYR+QieYKC1ACDtrJ7FCk=;
+ b=CtEc6H8uZAMQon5sTSnsEf9Vl3Eydyv0Y8/oVbdZJHvdDqUYNCSKpVCgC5oYjNHGgGu/k6c4XgsU0mqwOOJFhSBh12iS1VsMEAciz9AJh7Atbc3EavHfReG2joD92+iwyxvn3BRTFNnHQzHe4bwXKyf4X15YVmstDKXUvosYN8g=
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
- by VI1PR04MB6975.eurprd04.prod.outlook.com (2603:10a6:803:138::19) with
+ by DBBPR04MB7593.eurprd04.prod.outlook.com (2603:10a6:10:20c::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.20; Mon, 28 Nov
- 2022 02:18:05 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5857.19; Mon, 28 Nov
+ 2022 02:29:37 +0000
 Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::e33c:46f9:ef88:8973]) by DU0PR04MB9417.eurprd04.prod.outlook.com
  ([fe80::e33c:46f9:ef88:8973%5]) with mapi id 15.20.5857.023; Mon, 28 Nov 2022
- 02:18:05 +0000
+ 02:29:37 +0000
 From:   Peng Fan <peng.fan@nxp.com>
 To:     Marek Vasut <marex@denx.de>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
@@ -58,16 +58,16 @@ CC:     Adam Ford <aford173@gmail.com>, Alice Guo <alice.guo@nxp.com>,
         Shawn Guo <shawnguo@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Subject: RE: [PATCH 3/5] arm64: dts: imx8m: Document the fuse address
- calculation
-Thread-Topic: [PATCH 3/5] arm64: dts: imx8m: Document the fuse address
- calculation
-Thread-Index: AQHZAeko/HcNMH13VUuzZNIsSbymoK5Tm01g
-Date:   Mon, 28 Nov 2022 02:18:05 +0000
-Message-ID: <DU0PR04MB941786872C3E910EB41BDB1588139@DU0PR04MB9417.eurprd04.prod.outlook.com>
+Subject: RE: [PATCH 4/5] arm64: dts: imx8m: Add TMU phandle to calibration
+ data in OCOTP
+Thread-Topic: [PATCH 4/5] arm64: dts: imx8m: Add TMU phandle to calibration
+ data in OCOTP
+Thread-Index: AQHZAekprWDy+vIGVkSku0CyFem3Ra5TnpQA
+Date:   Mon, 28 Nov 2022 02:29:37 +0000
+Message-ID: <DU0PR04MB941745CAF0D4BFF1007145FA88139@DU0PR04MB9417.eurprd04.prod.outlook.com>
 References: <20221126224740.311625-1-marex@denx.de>
- <20221126224740.311625-3-marex@denx.de>
-In-Reply-To: <20221126224740.311625-3-marex@denx.de>
+ <20221126224740.311625-4-marex@denx.de>
+In-Reply-To: <20221126224740.311625-4-marex@denx.de>
 Accept-Language: en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
@@ -75,55 +75,55 @@ X-MS-TNEF-Correlator:
 authentication-results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|VI1PR04MB6975:EE_
-x-ms-office365-filtering-correlation-id: be5b5d62-c61c-4d00-27ff-08dad0e6c8d8
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|DBBPR04MB7593:EE_
+x-ms-office365-filtering-correlation-id: c228a0a9-cfd5-4c3f-afb2-08dad0e86543
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: mqBCIk4IoH9xIBajbqULPDOVf/XvFPQjwHpVNsBRqnaVm4PN1jY6Fj3CYcxhH4+eTxF0hnV6nwWO7+pNWZ3Fob+YiaO6MJL0CbIxk9VP8ElI6aEaSkhXhTu4lnOa98/IjlXHouaZb0EgYD6uKGWnbDBjWwnSbuZ2x/wqlSBRz2TWJ0eFTUFDclDtEgABVyLoUITF3TaVL/LFDOt59XV3UmvmNM2NkTV0aN/jhbJZ+6R7FMpJnMV4g6x0do5sgmPDhUqafbvesRIbjI6rYifXMJVeAcWdtdEQbgft24GpupQbFSCCU//M1KqYXORlcdw4zGVGeT2sZEwN6/3A6C/9ikEh12p2sqe8319aUVR/doq/MOWGhbD8fXlcWhfXEMiOpxQ40W11UabqYZ41NhygdKKwzgA9T9g24nLXsVHlw4+s8MfYe6beL1/tnZlcZb4a7JoG4RrXA2dMk3+qpGN3grwXlyKAHCV4d3EM/4dlsgYW1nNXG8ngoV+lskJfWT5knR906IyrVrXN5zZ+iFbDI+XHM7w1zusWVZFTYlCLbzGjtB4qGKm/2QUwJgbhY32PJPjwP1OEstq/BMk5MxiQJ9tOGB0VtFS+AoqE8ztijLiBrU01YQ7a75ojp4DFt6zxOaA1cWrnYABsNocwiYtKXtOtJSQmhhJU/A9ES51Mh/jnxMFZIcRfTW9nF3ddw5LCBncphbl9jqTcHVvEN0ZkDPuFMpVkYdYxRb/9Z9Z4RS4=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(346002)(39850400004)(396003)(376002)(366004)(451199015)(2906002)(44832011)(41300700001)(54906003)(4326008)(66446008)(8676002)(66946007)(66556008)(64756008)(66476007)(316002)(110136005)(52536014)(8936002)(76116006)(33656002)(71200400001)(5660300002)(26005)(86362001)(478600001)(9686003)(7416002)(6506007)(7696005)(186003)(38100700002)(83380400001)(55016003)(122000001)(38070700005)(32563001);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: 9WlFT3462/nJ/USTX/QZbw8xHDpcTHJz2X5EHRAo7NgCNHeTTtzv59kn2lEq0/dB1pqNZAAQckDSUQOrJWbv2RJr0byEg4eZXLrg7JwBiem8+hpSIAGGI215aZSP+IlSU6X0RjBFVXgcLaqXYwmpHtYhM1xm/5I2iuukN8rLQJ26bMdqniO4q9Q6hxkT5Xh48/8zx07vN0tF++TAi82CK48rQkSp08nLpkRyHxFKTUS2zdWadJAkSXq7npPBTSqrVJxMQtT2HEd3JHcou8+Pwr904pjQBjS48Pd1h3uVpjqFchRlZ6cguKQ28ywCtXlj97VcLJHojEFGZ1E2QYYnKPLPU1DoleKzq7axzCj6Q3xHdcJ1kRLCGG+SObdxBrTLiKOGLvAV7TppTGpqhSs4Mtg5Kc2i/KPD8x1JD/tKQW/s0J8Uu1bwoJq6dcSFD30KRtO2N9B3XzV/H2IhdbVBZi/deBuPG74PxJUj+7eSDF4p1JwMBp/oturwblqePBeoJzuwFcF7j1HF+F8lkbEPcLuTNroURTT2YmPLVUpT4YiKQsDkjm0257B3oJejEIXjnxfLnmB0oPLb0fMQPxqrLCICcytbLtbRGE3BwkOqcKEIEfc4FpF/A0ETznuOephsLkZp6kqjz5bdB2NQ/vyvZjuaS6TUZIBTZRxN2kwAlcelOUyhJQGk4ja6Q7Yt0Rt07wM4G7KxI0crnWMyFKAlaOEndRZG9+4fboJvMiuFIdk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(366004)(346002)(39860400002)(451199015)(9686003)(7696005)(83380400001)(2906002)(26005)(6506007)(38100700002)(86362001)(5660300002)(44832011)(52536014)(54906003)(110136005)(38070700005)(316002)(122000001)(71200400001)(478600001)(66556008)(66946007)(7416002)(8936002)(66476007)(76116006)(64756008)(66446008)(8676002)(186003)(41300700001)(4326008)(33656002)(55016003)(32563001);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?guStwDlF+HweDTC4jGfHWIsWCAigDjGhdz9pdtTz1d8n2RkXKBVv+zTGlbO6?=
- =?us-ascii?Q?JyOTNk6SfvKISdFrqmt6PpEoRKjJv2fw4It77b2NKLCjrB8/TghmfqazHPin?=
- =?us-ascii?Q?ZqiPoNsn+QNzTWdKZwILnGG9bBoSuKwQDXBltYfQGWAhYTocyf1ZS5WWa5JC?=
- =?us-ascii?Q?BfDn2qs6EtGhY5aC/yZWzY+Q/uw+oM5Pzb1cXmY+9Drz9S8Lc5BSZ4MFF5Iq?=
- =?us-ascii?Q?5sFaoScpoTHqUD8cgnDNKBGK0/Khk3kI4Zep3dta2CErMcmOnP/BPaGrzFOG?=
- =?us-ascii?Q?9h11UB5MNtZ/MtP8enmEDlMYavxGco+2ctFCh3PO1LJgyBVhmoRKurNHBqyB?=
- =?us-ascii?Q?7SJEELnMWNBGaIKkIcUF5dJ2QSIY925cGg082KmX452HNrZA0H/cGE/eVhza?=
- =?us-ascii?Q?N+s7QpjpESzIocEECa5PbM+ioBSPhv8qITgkN+nDFO+s5rXT5JEtdD9qie9x?=
- =?us-ascii?Q?9zB+aUu0V3DUN73av6FklgnIhpBt7ts+NNixe+6OEbY8125PTFJhJZtbrVoo?=
- =?us-ascii?Q?etg9/Iz7AX73eMuIQGp//tPbtYpErQdsmK0sr/4t4NHcsvkk2MHaKo2+4G8x?=
- =?us-ascii?Q?VO40a60k3KPL9NAvsAFRG9GN0cYIoVWhJgqXH5FWVqBWJernrUaZ7hteaQm1?=
- =?us-ascii?Q?ZlFhn5a3zlprMV7z7//QDhn6LV0FU/oc5tFAgCjQ0qpde7Y3Zj5LhtiJQ+IB?=
- =?us-ascii?Q?vL90HLcEisMc2V2fJNWT1FvSPbyRpScpe3ElFer6Qhu2ibewccOK8Sze+NRf?=
- =?us-ascii?Q?TCB2lSnLebqOhK8RVSqEDyFtjxueaM6mnxsP/kjGC4S5nkTRnY4AN58uIlxd?=
- =?us-ascii?Q?tYlu/nmdD4dytNHEVuSsDUUUtZ5yBS7+oSJcPUZ1UaO4vYxR1f32giHI6s5e?=
- =?us-ascii?Q?K3MnYkInAEYKYnknsnviy0gSkpupyKS3W4mJfEE4I8oS/cwr6yEygVSQj5IY?=
- =?us-ascii?Q?3tTrhzaVy07r86vTI6Y/QEC6WKefXQwgYAGOs2HgUPw+RPUtX1+DLN62wJLj?=
- =?us-ascii?Q?OAbfvsAnkIxIf8pBk8KsyH1v3+5QF2j23X2R6ZI0poau1t3serE9WnH+0a+r?=
- =?us-ascii?Q?rVcjUEkxkIVKUTfZYKv0oGwboAphHedutanItNyO395q1PGXS16u/YKTiNln?=
- =?us-ascii?Q?wCMjeyyrbxiA8Xqh2SZn4l/ESsSa/UgC0xkVulYXusWoaCdu9gcq5d1rN6Ib?=
- =?us-ascii?Q?rtWvx+KVi6+Aa3ic1pP/5VN5FPeQetC7rYy2lt0T6vw4Czhyt3WV2292YC5L?=
- =?us-ascii?Q?EXqGT1nDrnoePjoojv2p3+4MQR0prUBtSs2UqW9GLHspX1Mg6ARle14MMGzR?=
- =?us-ascii?Q?yMOnelQlvH9zAra/wPCieGiJX6r+gPfWAKjoeER6zrfNzgNDu2Ibo2+3/MFb?=
- =?us-ascii?Q?sHk/Z6DNgAhG4J/beofjZxJ0HkJR5tyO2+YRG/DUpDpOtzgIyJnO0nYqSEzj?=
- =?us-ascii?Q?zFk0fvEQBQOScx7Ts1/uhemccnMnRBrQhAITUWYuvZhU1vWUWGUa9rAfuZbi?=
- =?us-ascii?Q?rOmxvIDbVkbPzCQej8BJXAKXy57dp62S6uRTK/rNdLIARiu6oHOm3PKWiSbJ?=
- =?us-ascii?Q?h4kRVZEgqwPBGP2oB4k=3D?=
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iFZOR5eUqQrKsKdW3Y5eGFSrXn/IpbzcEY91sc3NFGvpPoTQ1ted7hoaPtzA?=
+ =?us-ascii?Q?Ylk+3xMhutNzftwEbSeNY0OVz8siI4+ObUsKSF8NUjFlSJk8cfNVaPCdA9a4?=
+ =?us-ascii?Q?oylpMXX+vcA+LAKMq+Y5coepZGRsixzv7Bdy6FK9j0GZOLlebWSRQ5i+JIF9?=
+ =?us-ascii?Q?7GOkYDBUmpp+Se4ih8JE3a4SGEwlvdezgWrq5BEXJ435jchXAgr3Z614aw6p?=
+ =?us-ascii?Q?d9tc1Bd6yt70YugkJ+uPF2R+53xv/RD3HrCiy3dCH2fxYFZgdygNNhUD2kqS?=
+ =?us-ascii?Q?QRe1seSAkNIJtbLID5+9IaIWvbXpc88NEu94DN4YoH5lLV29F4VZdO4eTzyd?=
+ =?us-ascii?Q?aBktbNJRbEQBQ7xDS07YqClXraJplPF50KKqShBsYRt5JWMQaOKtU7uos5cK?=
+ =?us-ascii?Q?J9EC4MoyrwY+7CiPMq/tlVWF5u0zSnOOmtt6mRu8AqXjJizbQ8Dy+lDa09BP?=
+ =?us-ascii?Q?hIsKRwjO8vtlpPHqNSSLpGC09ulBf7HPFSeeYOOMA7ztF9PLy1y16KtqaRUI?=
+ =?us-ascii?Q?GqRjmFV0DdHsf34BqscObLNErToaX6PV7sWt+QIPQ7N8fPJknvmw4BbUBMwC?=
+ =?us-ascii?Q?t5NG2RomHtm2bwD9fpp1YsGg/DMDdX+ns+9Bdskw9OW+Q+QCPReiHq4YsykJ?=
+ =?us-ascii?Q?idBzJ2pZBtDIEhep49h8KF3vloN13pTYnCWCUBYjDdyjg/hcslV3afVGEj7I?=
+ =?us-ascii?Q?dlvRwNkxVjUXpbNYmgjwAskJzNpB9hzhLcz0wzkGu/WS1nmCecMZ7jesO7Bg?=
+ =?us-ascii?Q?hOlizd7M5zveuQye4pJOq+dpcb8d1GqAS+cSii1v8fTBA3YBcU1oPauEv9QG?=
+ =?us-ascii?Q?Si0ddYBEvmaFQaKX9dgTvGilCYadQ9EHlr2N6clvCPYCbQeLkk0AOBrJB0Zr?=
+ =?us-ascii?Q?ur+wRs5A1Cl96dZwd9U5UCJ1sCWaXmmpcgPmAl3/PlBk2zkp4RCgBrdV4t+5?=
+ =?us-ascii?Q?4dsfhCT056fzwvnwXleLKSJrOlW9ShSGiTB6UuJPQbjBC1npKEDJEe288nKD?=
+ =?us-ascii?Q?qetWiKU/Na+kqcw9SeWWCkVNSPvXUs5Iukd7irpEMLeAZ1tecbVn4b31goUd?=
+ =?us-ascii?Q?celTm5PSGVEro2PDcqzqPVxLNSV2IHs1qPtfiYSDVt91xt0o5a5ySwE1a9jP?=
+ =?us-ascii?Q?NfMNUE55w1lekMbJ8KMiBRVb+NZPa/SbFZliThUVJSQGZlyCNndZZPAA2w5d?=
+ =?us-ascii?Q?sjLTvl/OEC9gEUpFy+LMq2ZCBFvZbJGt3lFTVPDZiq2FKJCgmPoHNruKNGww?=
+ =?us-ascii?Q?WBpn5UtYmubyoQAGJRhmJkCHKcY+Kp/3CDBSsL4KWdy7d+xCYAG2MmF9PW8i?=
+ =?us-ascii?Q?kzL79JkOt+u+TA8UBPY6E73ANSd6w5lKF3rAO9fKy5lI+fn3J4JBsHvrIaDt?=
+ =?us-ascii?Q?X1bD3r9+cB5ZhkZgz75XcY1PUmDxWGJYfYvWOeCQQetoZ70+uTenqKYhgYDM?=
+ =?us-ascii?Q?qnpZjiALx5RbTl49HwvCM67YQripkhEBrd2s8k+RM4hbhrrRWD07sd6zQ8/A?=
+ =?us-ascii?Q?2uxTRgVGlKyojG2CQVa7OzIs5BJRABl4I9Cytx34y7dj+9bZlLIfoSVpaZmL?=
+ =?us-ascii?Q?SYUJ/MdfF/csp+IdDFQ=3D?=
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
 X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
 X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be5b5d62-c61c-4d00-27ff-08dad0e6c8d8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 02:18:05.6542
+X-MS-Exchange-CrossTenant-Network-Message-Id: c228a0a9-cfd5-4c3f-afb2-08dad0e86543
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2022 02:29:37.5958
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
 X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1/ugfpyVcm7t7RlAZfxArSDvEjQiPylJvXBeVzQDH5/MfOC1Y92u3zB7u5e+TfHIGf555qjfBaoN4ivyMfYCig==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6975
+X-MS-Exchange-CrossTenant-userprincipalname: FNiLZUnPe41lk4EqkQIJ/9ssnXUovNWW3rNk88qIz9ezG2nURgxsIu5uDSwfQJFR8pPCrOfExTXyRvhoAp+2Cw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7593
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -134,17 +134,22 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> Subject: [PATCH 3/5] arm64: dts: imx8m: Document the fuse address
-> calculation
+> Subject: [PATCH 4/5] arm64: dts: imx8m: Add TMU phandle to calibration da=
+ta
+> in OCOTP
 >=20
-> The mapping from OCOTP reg DT property to Fusemap Descriptions Table in
-> the datasheet is often unclear. Add a comment to make it easier to find o=
-ut
-> how it works. No functional change.
+> The TMU TASR, TCALIVn, TRIM registers must be explicitly programmed with
+> calibration values in OCOTP. Add the OCOTP calibration values phandle so =
+the
+> TMU driver can perform this programming.
+>=20
+> The MX8MM/MX8MN TMUv1 uses only one OCOTP cell, while MX8MP TMUv2
+> uses 4.
 >=20
 > Signed-off-by: Marek Vasut <marex@denx.de>
 
 Reviewed-by: Peng Fan <peng.fan@nxp.com>
+
 > ---
 > Cc: Adam Ford <aford173@gmail.com>
 > Cc: Alice Guo <alice.guo@nxp.com>
@@ -168,177 +173,90 @@ Reviewed-by: Peng Fan <peng.fan@nxp.com>
 > To: linux-pm@vger.kernel.org
 > To: linux-arm-kernel@lists.infradead.org
 > ---
->  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 19 ++++++++++++++++---
-> arch/arm64/boot/dts/freescale/imx8mn.dtsi | 19 ++++++++++++++++---
-> arch/arm64/boot/dts/freescale/imx8mp.dtsi | 21 +++++++++++++++++----
-> arch/arm64/boot/dts/freescale/imx8mq.dtsi | 19 ++++++++++++++++---
->  4 files changed, 65 insertions(+), 13 deletions(-)
+>  arch/arm64/boot/dts/freescale/imx8mm.dtsi | 6 ++++++
+> arch/arm64/boot/dts/freescale/imx8mn.dtsi | 6 ++++++
+> arch/arm64/boot/dts/freescale/imx8mp.dtsi | 6 ++++++
+>  3 files changed, 18 insertions(+)
 >=20
 > diff --git a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
 > b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> index 423cb36cbcd53..513c2de0caa15 100644
+> index 513c2de0caa15..0cd7fff47c44d 100644
 > --- a/arch/arm64/boot/dts/freescale/imx8mm.dtsi
 > +++ b/arch/arm64/boot/dts/freescale/imx8mm.dtsi
-> @@ -563,15 +563,28 @@ ocotp: efuse@30350000 {
->  				#address-cells =3D <1>;
->  				#size-cells =3D <1>;
+> @@ -496,6 +496,8 @@ tmu: tmu@30260000 {
+>  				compatible =3D "fsl,imx8mm-tmu";
+>  				reg =3D <0x30260000 0x10000>;
+>  				clocks =3D <&clk IMX8MM_CLK_TMU_ROOT>;
+> +				nvmem-cells =3D <&tmu_calib>;
+> +				nvmem-cell-names =3D "calib";
+>  				#thermal-sensor-cells =3D <0>;
+>  			};
 >=20
-> -				imx8mm_uid: unique-id@4 {
-> +				/*
-> +				 * The register address below maps to the
-> MX8M
-> +				 * Fusemap Description Table entries this way.
-> +				 * Assuming
-> +				 *   reg =3D <ADDR SIZE>;
-> +				 * then
-> +				 *   Fuse Address =3D (ADDR * 4) + 0x400
-> +				 * Note that if SIZE is greater than 4, then
-> +				 * each subsequent fuse is located at offset
-> +				 * +0x10 in Fusemap Description Table (e.g.
-> +				 * reg =3D <0x4 0x8> describes fuses 0x410 and
-> +				 * 0x420).
-> +				 */
-> +				imx8mm_uid: unique-id@4 { /* 0x410-0x420
-> */
->  					reg =3D <0x4 0x8>;
->  				};
->=20
-> -				cpu_speed_grade: speed-grade@10 {
-> +				cpu_speed_grade: speed-grade@10 { /*
-> 0x440 */
+> @@ -584,6 +586,10 @@ cpu_speed_grade: speed-grade@10 { /* 0x440 */
 >  					reg =3D <0x10 4>;
 >  				};
 >=20
-> -				fec_mac_address: mac-address@90 {
-> +				fec_mac_address: mac-address@90 { /*
+> +				tmu_calib: calib@3c { /* 0x4f0 */
+> +					reg =3D <0x3c 4>;
+> +				};
+> +
+>  				fec_mac_address: mac-address@90 { /*
 > 0x640 */
 >  					reg =3D <0x90 6>;
 >  				};
->  			};
 > diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
 > b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> index 312e3abc35ea8..068f599cdf757 100644
+> index 068f599cdf757..5eef9b274edde 100644
 > --- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
 > +++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
-> @@ -564,15 +564,28 @@ ocotp: efuse@30350000 {
->  				#address-cells =3D <1>;
->  				#size-cells =3D <1>;
+> @@ -498,6 +498,8 @@ tmu: tmu@30260000 {
+>  				compatible =3D "fsl,imx8mn-tmu", "fsl,imx8mm-
+> tmu";
+>  				reg =3D <0x30260000 0x10000>;
+>  				clocks =3D <&clk IMX8MN_CLK_TMU_ROOT>;
+> +				nvmem-cells =3D <&tmu_calib>;
+> +				nvmem-cell-names =3D "calib";
+>  				#thermal-sensor-cells =3D <0>;
+>  			};
 >=20
-> -				imx8mn_uid: unique-id@4 {
-> +				/*
-> +				 * The register address below maps to the
-> MX8M
-> +				 * Fusemap Description Table entries this way.
-> +				 * Assuming
-> +				 *   reg =3D <ADDR SIZE>;
-> +				 * then
-> +				 *   Fuse Address =3D (ADDR * 4) + 0x400
-> +				 * Note that if SIZE is greater than 4, then
-> +				 * each subsequent fuse is located at offset
-> +				 * +0x10 in Fusemap Description Table (e.g.
-> +				 * reg =3D <0x4 0x8> describes fuses 0x410 and
-> +				 * 0x420).
-> +				 */
-> +				imx8mn_uid: unique-id@4 { /* 0x410-0x420 */
->  					reg =3D <0x4 0x8>;
->  				};
->=20
-> -				cpu_speed_grade: speed-grade@10 {
-> +				cpu_speed_grade: speed-grade@10 { /*
-> 0x440 */
+> @@ -585,6 +587,10 @@ cpu_speed_grade: speed-grade@10 { /* 0x440 */
 >  					reg =3D <0x10 4>;
 >  				};
 >=20
-> -				fec_mac_address: mac-address@90 {
-> +				fec_mac_address: mac-address@90 { /*
+> +				tmu_calib: calib@3c { /* 0x4f0 */
+> +					reg =3D <0x3c 4>;
+> +				};
+> +
+>  				fec_mac_address: mac-address@90 { /*
 > 0x640 */
 >  					reg =3D <0x90 6>;
 >  				};
->  			};
 > diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 > b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> index c9459ed21b243..ddcd5e23ba47d 100644
+> index ddcd5e23ba47d..0173e394ad4d8 100644
 > --- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
 > +++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-> @@ -426,19 +426,32 @@ ocotp: efuse@30350000 {
->  				#address-cells =3D <1>;
->  				#size-cells =3D <1>;
+> @@ -380,6 +380,8 @@ tmu: tmu@30260000 {
+>  				compatible =3D "fsl,imx8mp-tmu";
+>  				reg =3D <0x30260000 0x10000>;
+>  				clocks =3D <&clk
+> IMX8MP_CLK_TSENSOR_ROOT>;
+> +				nvmem-cells =3D <&tmu_calib>;
+> +				nvmem-cell-names =3D "calib";
+>  				#thermal-sensor-cells =3D <1>;
+>  			};
 >=20
-> -				imx8mp_uid: unique-id@8 {
-> +				/*
-> +				 * The register address below maps to the
-> MX8M
-> +				 * Fusemap Description Table entries this way.
-> +				 * Assuming
-> +				 *   reg =3D <ADDR SIZE>;
-> +				 * then
-> +				 *   Fuse Address =3D (ADDR * 4) + 0x400
-> +				 * Note that if SIZE is greater than 4, then
-> +				 * each subsequent fuse is located at offset
-> +				 * +0x10 in Fusemap Description Table (e.g.
-> +				 * reg =3D <0x8 0x8> describes fuses 0x420 and
-> +				 * 0x430).
-> +				 */
-> +				imx8mp_uid: unique-id@8 { /* 0x420-0x430 */
->  					reg =3D <0x8 0x8>;
->  				};
->=20
-> -				cpu_speed_grade: speed-grade@10 {
-> +				cpu_speed_grade: speed-grade@10 { /*
-> 0x440 */
->  					reg =3D <0x10 4>;
->  				};
->=20
-> -				eth_mac1: mac-address@90 {
-> +				eth_mac1: mac-address@90 { /* 0x640 */
->  					reg =3D <0x90 6>;
->  				};
->=20
-> -				eth_mac2: mac-address@96 {
-> +				eth_mac2: mac-address@96 { /* 0x658 */
+> @@ -454,6 +456,10 @@ eth_mac1: mac-address@90 { /* 0x640 */
+>  				eth_mac2: mac-address@96 { /* 0x658 */
 >  					reg =3D <0x96 6>;
 >  				};
+> +
+> +				tmu_calib: calib@264 { /* 0xd90-0xdc0 */
+> +					reg =3D <0x264 0x10>;
+> +				};
 >  			};
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> index 2b6d3f4ff5d93..8a2ec90b493d9 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mq.dtsi
-> @@ -593,15 +593,28 @@ ocotp: efuse@30350000 {
->  				#address-cells =3D <1>;
->  				#size-cells =3D <1>;
 >=20
-> -				imx8mq_uid: soc-uid@4 {
-> +				/*
-> +				 * The register address below maps to the
-> MX8M
-> +				 * Fusemap Description Table entries this way.
-> +				 * Assuming
-> +				 *   reg =3D <ADDR SIZE>;
-> +				 * then
-> +				 *   Fuse Address =3D (ADDR * 4) + 0x400
-> +				 * Note that if SIZE is greater than 4, then
-> +				 * each subsequent fuse is located at offset
-> +				 * +0x10 in Fusemap Description Table (e.g.
-> +				 * reg =3D <0x4 0x8> describes fuses 0x410 and
-> +				 * 0x420).
-> +				 */
-> +				imx8mq_uid: soc-uid@4 { /* 0x410-0x420 */
->  					reg =3D <0x4 0x8>;
->  				};
->=20
-> -				cpu_speed_grade: speed-grade@10 {
-> +				cpu_speed_grade: speed-grade@10 { /*
-> 0x440 */
->  					reg =3D <0x10 4>;
->  				};
->=20
-> -				fec_mac_address: mac-address@90 {
-> +				fec_mac_address: mac-address@90 { /*
-> 0x640 */
->  					reg =3D <0x90 6>;
->  				};
->  			};
+>  			anatop: clock-controller@30360000 {
 > --
 > 2.35.1
 
