@@ -2,74 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DB763AA81
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 15:09:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8D2B63AAE6
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 15:29:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232386AbiK1OJL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 09:09:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S232506AbiK1O3g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 09:29:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232385AbiK1OIs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 09:08:48 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE7632188C;
-        Mon, 28 Nov 2022 06:07:54 -0800 (PST)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4NLRyv3vHdzqSk3;
-        Mon, 28 Nov 2022 22:03:51 +0800 (CST)
-Received: from localhost.localdomain (10.175.112.70) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 28 Nov 2022 22:07:51 +0800
-From:   Qiheng Lin <linqiheng@huawei.com>
-To:     <sre@kernel.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Qiheng Lin <linqiheng@huawei.com>
-Subject: [PATCH] power: supply: Fix refcount leak in rk817_charger_probe
-Date:   Mon, 28 Nov 2022 22:27:40 +0800
-Message-ID: <20221128142740.1414-1-linqiheng@huawei.com>
-X-Mailer: git-send-email 2.32.0
+        with ESMTP id S232524AbiK1O3Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 09:29:25 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FCB22291;
+        Mon, 28 Nov 2022 06:29:23 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sendonly@marcansoft.com)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 6E7CA41A42;
+        Mon, 28 Nov 2022 14:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1669645760; bh=r56d4PU2Z6JM/OvZ//Bewks010h3jvwvcNPfumIUlyc=;
+        h=From:To:Cc:Subject:Date;
+        b=zAHKHc++geBjgd0H31hst6+LMrycaXOXIpWW2+rGX0yZYxN7c/FXOcVnnmd3YvQe9
+         UEuXJHeSX7QixANaRGR9amL+5ZSSx+Oo9stKID2cE46zENK6s2SiOs/xa3SwzgdYm4
+         +UVp32w8Lny5sggUz1xqC83tZ18bNEzucayXDIHeLotDDxkKMgcMbvYqupUjX6sXPx
+         WNe4dQvdBskVgdy7kDVm35BgUk3yYIH85VuMDr/4KveaQBzDsW0LS2n2DZt7McvMUj
+         ngtKpRGPaUWiwDbKioFXSoSwEolTrZbowN3IalxGSLXdbVLAmW9637aLha9vQopQon
+         CCQyMp1jhbPng==
+From:   Hector Martin <marcan@marcan.st>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 0/4] Apple SoC cpufreq driver
+Date:   Mon, 28 Nov 2022 23:29:08 +0900
+Message-Id: <20221128142912.16022-1-marcan@marcan.st>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.70]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemi500014.china.huawei.com (7.221.188.232)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-of_get_child_by_name() returns a node pointer with refcount
-incremented, we should use of_node_put() on it when not need anymore.
-Add missing of_node_put() to avoid refcount leak.
+Hi folks,
 
-Fixes: 11cb8da0189b ("power: supply: Add charger driver for Rockchip RK817")
-Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
----
- drivers/power/supply/rk817_charger.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Here's v5 of the cpufreq driver for Apple SoCs. v5 just incorporates
+minor review feedback changes from v3, and no functional changes. v4
+had a DT schema SNAFU; this supersedes it.
 
-diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
-index 635f051b0821..d25a81d79fac 100644
---- a/drivers/power/supply/rk817_charger.c
-+++ b/drivers/power/supply/rk817_charger.c
-@@ -1060,8 +1060,10 @@ static int rk817_charger_probe(struct platform_device *pdev)
- 		return -ENODEV;
+Once reviewed, please merge #3 via the cpufreq tree, and we'll take
+care of #1,#2,#4 via the asahi-soc tree. This lets us merge the DT
+changes in the same cycle without blocking on the binding coming in
+via the cpufreq tree first.
 
- 	charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
--	if (!charger)
-+	if (!charger) {
-+		of_node_put(node);
- 		return -ENOMEM;
-+	}
+This version takes a page from both v1 and v2, keeping the dedicated
+cpufreq style (instead of pretending to be a clock controller) but using
+dedicated DT nodes for each cluster, which accurately represents the
+hardware. In particular, this makes supporting t6002 (M1 Ultra) a lot
+more reasonable on the DT side.
 
- 	charger->rk808 = rk808;
+This version also switches to the standard performance-domains binding,
+so we don't need any more vendor-specific properties. In order to
+support this, I had to make the performance-domains parsing code more
+generic. This required a minor change to the only consumer
+(mediatek-cpufreq-hw).
 
---
-2.32.0
+The Linux driver probes based on platform compatible, and then attempts
+to locate the cluster nodes by following the performance-domains links
+from CPU nodes (this will then fail for any incompatible nodes, e.g. if
+a future SoC needs a new compatible and can't fall back). This approach
+was suggested by robh as the right way to handle the impedance mismatch
+between the hardware, which has separate controllers per cluster, and
+the Linux model where there can only be one CPUFreq driver instance.
+
+Functionality-wise, there are no significant changes from v2. The only
+notable difference is support for t8112 (M2). This works largely the
+same as the other SoCs, but they ran out of bits in the current PState
+register, so that needs a SoC-specific quirk. Since that register is
+not used by macOS (it was discovered experimentally) and is not critical
+for functionality (it just allows accurately reporting the current
+frequency to userspace, given boost clock limitations), I've decided to
+only use it when a SoC-specific compatible is present. The default
+fallback code will simply report the requested frequency as actual.
+I expect this will work for future SoCs.
+
+Hector Martin (4):
+  MAINTAINERS: Add entries for Apple SoC cpufreq driver
+  dt-bindings: cpufreq: apple,soc-cpufreq: Add binding for Apple SoC
+    cpufreq
+  cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+  arm64: dts: apple: Add CPU topology & cpufreq nodes for t8103
+
+ .../cpufreq/apple,cluster-cpufreq.yaml        | 117 ++++++
+ MAINTAINERS                                   |   2 +
+ arch/arm64/boot/dts/apple/t8103.dtsi          | 204 +++++++++-
+ drivers/cpufreq/Kconfig.arm                   |   9 +
+ drivers/cpufreq/Makefile                      |   1 +
+ drivers/cpufreq/apple-soc-cpufreq.c           | 352 ++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c          |   2 +
+ 7 files changed, 677 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
+ create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
+
+-- 
+2.35.1
 
