@@ -2,134 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB48E63A34F
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 09:43:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CCE563A44F
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:10:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiK1InU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 03:43:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S229603AbiK1JKj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 04:10:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiK1InP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 03:43:15 -0500
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D328F11C1C
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 00:43:11 -0800 (PST)
+        with ESMTP id S229720AbiK1JKi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:10:38 -0500
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDEFFD62
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:37 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id b2so7805227eja.7
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1669624992; x=1701160992;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aPqs6bUfvCCU3X46JRSYAS78DbNztu8LeR89gALA0kc=;
-  b=b55hjGmtbIu4aOlKrFPaNZ0bTUwiqetThdwF0v+39LBKLl1OVt7mzfer
-   lI9dwIa4XcCrVs9Nrviuzt8oPOnfIeTxGhi9aqyYDsy62mwJp8Y5OCi1Q
-   HJnhDJpDaqlMbK+2EupB+GP8/5IgN1kmHjPQii851Zpq8Vseeymh2ThFG
-   k+fzt4DoFNCYUe9mhciMjaH2H/nCVXdTAxZ1ZSArrAKdtKxbOGK9aFSha
-   Sr6nJAdPInGWtlvoFvTg4cxBRgVv/4db2K+/oIek+0ujqrR2ljO7nBcK/
-   xXkPUXnKO57irynZ9J8N1priYjiQT9vB3OR/3J+9gHDcEcPFYu/znQFsG
-   w==;
-X-IronPort-AV: E=Sophos;i="5.96,199,1665439200"; 
-   d="scan'208";a="27607862"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 28 Nov 2022 09:43:10 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 28 Nov 2022 09:43:10 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 28 Nov 2022 09:43:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1669624990; x=1701160990;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aPqs6bUfvCCU3X46JRSYAS78DbNztu8LeR89gALA0kc=;
-  b=A8Gr/PO2+o4lavuFVLN0XGc4BiovTdIU/cQsRB6Zw8HSPAnSIaKX9wZR
-   oG6FlRCohlzyScrk2zpdqh5+28GkQK+x6Z74vAbUmap38vnUe0FQZSAcb
-   haevfAvFCdswi0X7dS5RhZ6F94HLJU3KPgXCvZbm9fJ8ItAzX5ojTgrog
-   8aFXhTryP9mTkLJEdLRTpjswXvQazznkOFHoG+0QW3PIS2Vc7SD/ioUd3
-   iRSoIkKN1Jcd34xYj1sV4EjsFP5dDe/Gh2pvhoD/7o64OG7xwmgPOwLCX
-   gartW5kkUh7f9RhR+Ds4lYu257Zki5W9E5G5gygyKB8/NYU3jhkiP2laq
-   g==;
-X-IronPort-AV: E=Sophos;i="5.96,199,1665439200"; 
-   d="scan'208";a="27607861"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 28 Nov 2022 09:43:10 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 11295280056;
-        Mon, 28 Nov 2022 09:43:10 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/1] thermal: imx8mm: Add hwmon support
-Date:   Mon, 28 Nov 2022 09:43:11 +0100
-Message-ID: <5883255.lOV4Wx5bFT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20220726122331.323093-1-alexander.stein@ew.tq-group.com>
-References: <20220726122331.323093-1-alexander.stein@ew.tq-group.com>
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=5cvqz+ywjjARQOy84/P5RN8vJ8kenww9UeNxB2Tv1zU=;
+        b=KdYLxwpXdB8uvJ4n2TshHf2Pu21znKgV7JScKdk87ufOcEbTMcNSjmEMiM31oG2lUt
+         jd2mh7eczTri25hzT4q4SqsLkp4ka+0Bayy5j0iiQupXZAVZXMpU9Y1FjunSiuH/X99B
+         MroTL0ZZ1orEDi/OJDbO34fcVNaP42LHfhTPA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5cvqz+ywjjARQOy84/P5RN8vJ8kenww9UeNxB2Tv1zU=;
+        b=uXqwxla4oqe3b4w86QLh251/hOEfpbRZ2/LXm5tqvuChCGIascYUIXsRfciP7bu5lN
+         lIr3PWDPI94uq2f5m+AgxVybPMlpM9lnJt1g18e+gO8SDfUJbPCCiwhCA7CUOlgSv/8j
+         kYBZuRdea/De8IdkcJNCR8NggbnI5WCKX5z9UPN+H5dK5v5TsHcMLuaUNRGEpqeyQXTA
+         MkHGwlYJSSdI1vIMrCPAgM38CaGPkwbqdgKxB66sRRsyPeXnAbgbOAmUbB/4yg+C2u3I
+         r5RfehWTQ2KS0aq+xiXYd0NF+SCRl7cLFfLRUGpBcdxkGPpMA9CBVcAbXwEqQzjsnChb
+         GXTA==
+X-Gm-Message-State: ANoB5pnDbWLFaw9bX3gt7ng5uVrgpwk6W/myepyG3FAyXksuxD3drYc9
+        GifVUyktuX3jrCChDmIUxqteXQ==
+X-Google-Smtp-Source: AA0mqf5/x4GVybL0srHWZCJjOvBilSnilg35I/vv/sjhbQI9fuXErANJsBWW13rn9G6s7CcZe0hqRw==
+X-Received: by 2002:a17:906:583:b0:78d:9e18:b8f7 with SMTP id 3-20020a170906058300b0078d9e18b8f7mr40928913ejn.657.1669626636589;
+        Mon, 28 Nov 2022 01:10:36 -0800 (PST)
+Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
+        by smtp.gmail.com with ESMTPSA id p35-20020a056402502300b00463b9d47e1fsm4932346eda.71.2022.11.28.01.10.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 01:10:36 -0800 (PST)
+Subject: [PATCH v3 0/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPR6hGMC/3XNQQrCMBAF0KuUrI10Jm1aXXkPcZGmYxNoE0hsQE
+ vv7uBSdDX8D+/PJjIlT1mcq00kKj77GDioQyWsM2Ei6UfOAmtEAOxkDqO8J6IXSSCCRiH2CrVgMJ
+ hMckgmWMckrPPMpfP5EdPz86AAn+vPrQKylm3XaDBKa7J4sS7Fxa/LMaZJ3Hip4H+NrMfeNNiSOW
+ mtvvS+729I71yB6gAAAA==
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Mon, 28 Nov 2022 10:10:12 +0100
+Message-Id: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
+To:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     alsa-devel@alsa-project.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Ricardo Ribalda <ribalda@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+X-Mailer: b4 0.11.0-dev-696ae
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1634; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=UZTGU/fsXJEA3ltnq4F2WvDw+A4ygx9FH7eOzblo+pg=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjhHr/j1G48WlxdIEEOXaXpHgUksIaanU3PEzs5LxT
+ VFYlDcSJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4R6/wAKCRDRN9E+zzrEiDSND/
+ 9bYOi0gOQKQUB1Ke/4A1WAaxC+iY9PHPZmeRlE3w3S+DePSWJocIg9/hq+TqgAi2pdJaB4aKXJMsRF
+ QHXNNgVQuagnDLL8x/aXINyN0DDcRt2XRJUEc7RcKym5rNFVNm+OnKqq4lINr8mzkoEFZQwHbgMllP
+ R2/gr6hy0fUAp9ey/+CgymaNMPc3opkp3bExJH8l1uYcjpPEotNZveVmD13BBBNsseRdJqnBoPdbsD
+ GatYAsLiPW1ahZVyqy9O+i1uSUYNlhwTqeR3m+ARMQVMnVR3mGeegtwU82B1IS3Hn77KLe5jShtayi
+ aEikqMHEoVNjx0MwkvzIwl+DMPlFc0zHo32W2vmqgKojydVa0Jcz1ZXB52bLjmZTnm4d3H1ua+shv9
+ 5n0BNFpvpcxSFrcIKSWQsdQOplU88nw0qLKQ009fS1wvKk44vv5TkO8faZd5xspqYh7zSI4xmHHzeo
+ 76Qak6EHRlI8u0P7uLRxBAcOUSGdgwZTlzZxTsHrIHe7aO27Bc46iLHmBT6cYccRIH1w8322jXlOze
+ TZVSTQNw7NsgV2PcQBi2xHd+waL6wUyEwDIzHjXzv7jOhL7iuXEpSSz9C87P/yaUdDaCtpPPNYgmpA
+ uWZpfP286KbmC0MIgQSFj0eCZ0BnMwVWxScheBjIrE/XViLZ1nZ5d7RB7JmA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello,
+Since 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+we wait for userspace to close its fds.
 
-gentle ping. Any feedback on this?
+But that will never occur with a frozen userspace (like during kexec()).
 
-Thanks
-Alexander
+Lets detect the frozen userpace and act accordingly.
 
-Am Dienstag, 26. Juli 2022, 14:23:31 CET schrieb Alexander Stein:
-> Expose thermal sensors as HWMON devices.
-> 
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
-> Changes in v2:
-> * Split from thermal_helpers patch
-> * No change otherwise
-> 
-> The helper patch need some additional work, but this can go as it is.
-> 
->  drivers/thermal/imx8mm_thermal.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/thermal/imx8mm_thermal.c
-> b/drivers/thermal/imx8mm_thermal.c index af666bd9e8d4..ca8e2c393030 100644
-> --- a/drivers/thermal/imx8mm_thermal.c
-> +++ b/drivers/thermal/imx8mm_thermal.c
-> @@ -16,6 +16,7 @@
->  #include <linux/thermal.h>
-> 
->  #include "thermal_core.h"
-> +#include "thermal_hwmon.h"
-> 
->  #define TER			0x0	/* TMU enable */
->  #define TPS			0x4
-> @@ -176,6 +177,9 @@ static int imx8mm_tmu_probe(struct platform_device
-> *pdev) goto disable_clk;
->  		}
->  		tmu->sensors[i].hw_id = i;
-> +
-> +		if (devm_thermal_add_hwmon_sysfs(tmu->sensors[i].tzd))
-> +			dev_warn(&pdev->dev, "failed to add hwmon sysfs 
-attributes\n");
->  	}
-> 
->  	platform_set_drvdata(pdev, tmu);
+To: Jaroslav Kysela <perex@perex.cz>
+To: Takashi Iwai <tiwai@suse.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+To: Pavel Machek <pavel@ucw.cz>
+To: Len Brown <len.brown@intel.com>
+To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: alsa-devel@alsa-project.org
+Cc: linux-kernel@vger.kernel.org
+Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc: linux-pm@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v3:
+- Wrap pm_freezing in a function
+- Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
 
+Changes in v2:
+- Only use pm_freezing if CONFIG_FREEZER 
+- Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
 
+---
+Ricardo Ribalda (2):
+      freezer: Add processes_frozen()
+      ALSA: core: Fix deadlock when shutdown a frozen userspace
 
+ include/linux/freezer.h |  2 ++
+ kernel/freezer.c        | 11 +++++++++++
+ sound/core/init.c       | 13 +++++++++++++
+ 3 files changed, 26 insertions(+)
+---
+base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+change-id: 20221127-snd-freeze-1ee143228326
 
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
