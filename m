@@ -2,170 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3D0263A451
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:10:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E28563A4A6
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiK1JKl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 04:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
+        id S229773AbiK1JSV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 04:18:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbiK1JKk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:10:40 -0500
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544AB18398
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:39 -0800 (PST)
-Received: by mail-ej1-x629.google.com with SMTP id ho10so24128962ejc.1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9ubdN1bACjKh+qjO28e9C129nQGAl5iy3AArXYr64tA=;
-        b=CGIt3hTLCHNo7o4kNPYEi01hMNFq6HcqbpnhXDpYaolzFNCWPKZDVAiKB0j/C5S+O0
-         0XBTmjLWIAsGP7fP+zKvcfefLmGVkmOKMAulmY0h4aUBuLvXLckOD+81KwAaEuJjZUni
-         TtdfCWzaJp5TO9hlGKgX6DsLDa3FClxwPkUlo=
+        with ESMTP id S230064AbiK1JSR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:18:17 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80742186C2
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:17:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1669627041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iqZWLvhDYohmyhXfOCg4UYHkNCfDkbWm/McuPc5mUYI=;
+        b=bjCLCc95NZNzd8eE8cB2uRZOc/0jc3sfTnJAHpo1t3s5HzIBJC2PFozfJ0eCzGoQ+oxBMI
+        hzpZNxdr7t4V7LOVXdt4bfp3k4ftmQ4PvRrjjE5XoJw6dPyAPnupSXG3QkyI7Z6cn238Ho
+        zKM1Q1BsCXX9foZPyq5pN5MdslNZZMA=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-596-LYs37vvGOra7Gk7nli0r6Q-1; Mon, 28 Nov 2022 04:16:40 -0500
+X-MC-Unique: LYs37vvGOra7Gk7nli0r6Q-1
+Received: by mail-ej1-f69.google.com with SMTP id qw20-20020a1709066a1400b007af13652c92so4026685ejc.20
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:16:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9ubdN1bACjKh+qjO28e9C129nQGAl5iy3AArXYr64tA=;
-        b=ZH5bAhfZmf+J8Fpj+EPABzCg8jAzXj26ksP+JIVaYcBG0gYN4ChqJ4eFliuXZEljQD
-         MlCeKNay4DYdVcEEintiX/3WcgcRXW+yI1OgijkTvcpccVQtPz5L/Yo6z+yJGrb/CYA0
-         ECEUr956i/CT5gwmovp5cgU6m2wMXSUhT7w40F/gAGvdVzde7OEU4kU/DUvOW0hz2SKE
-         sHbO9svfPC2V3RGL9RbOe6bDESMcfeB9VPDrJugpTM1xAz43cue6wDVKnOCVKirU8Ji5
-         0v0TYrV39ltCeOTuCIqthMeKPSsghQiwTFZAeg8O25NmEB1zSTehKl1CsEud2l8pFzLG
-         uZWA==
-X-Gm-Message-State: ANoB5pm47EcgLSIMxTHy3joclzGeObAT4xJ/RF4S3Zo8cFv0N/YujKPP
-        BrKmQeovuJumNXJrE7wmv2QFqg==
-X-Google-Smtp-Source: AA0mqf7CDadNIIxLmDaGMGWeVngi50o9v9Dqym8FZqs9w0o8qAyuABJVXcuAWg331ZRRka79f2HTMg==
-X-Received: by 2002:a17:906:65c4:b0:7ad:d250:b907 with SMTP id z4-20020a17090665c400b007add250b907mr42053835ejn.737.1669626637954;
-        Mon, 28 Nov 2022 01:10:37 -0800 (PST)
-Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p35-20020a056402502300b00463b9d47e1fsm4932346eda.71.2022.11.28.01.10.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 01:10:37 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 28 Nov 2022 10:10:14 +0100
-Subject: [PATCH v3 2/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iqZWLvhDYohmyhXfOCg4UYHkNCfDkbWm/McuPc5mUYI=;
+        b=K/UUNUpP/4RuOJis0udRWCVL5oMGMrKGeGZpMQcv6RSF4cJpSfwOa6rCfjShd1VP/d
+         1+nty3dUxT3md+w6OaY8B+SaXtd25pMBQmjg3BjN/JClwkA2ZxzhnQUo/iMnGKK2/A/T
+         Xq5U6kcS+gXlC+zXcRnw/g7P5TusMwRmEh4N4KDZiWhZvPx+eMa8QJwufm6mcup9SN6/
+         RnOg2sSpWmIuIYBRrd4n5qMCx7CreA/8HcnKI+J3Wn0Gm1P89b8rUqKSeQHKIHuAwKAA
+         yBckFIjfbc0LSTKaUOQCsviWduIINSgA8ZzW6k24CydbBXqvpAtNfXNHe7Bm4Xo9pFGS
+         +IzA==
+X-Gm-Message-State: ANoB5plE00kwAt1W4K9YQa8BwumYqi4EsUQCsjrqJ6sOP2x8ccDt5fJc
+        w9YdrRDvHAZzpmD7k5EczUM2q1n7vhlIHhw+R23uRUYKDDsC2IyciGgZ7iOllOWiFurPBdme8nU
+        vE28pPm2jfw7Da6nD4ZI=
+X-Received: by 2002:a17:906:b241:b0:7bc:1f2c:41b5 with SMTP id ce1-20020a170906b24100b007bc1f2c41b5mr13957588ejb.463.1669626998826;
+        Mon, 28 Nov 2022 01:16:38 -0800 (PST)
+X-Google-Smtp-Source: AA0mqf5OVrM6IqY2RvPqj3bK5i5kKG7ixx0P8IWpyH4EYhY9UlRrdy6qFsAMcrFXQlK/T6Im7GY4+g==
+X-Received: by 2002:a17:906:b241:b0:7bc:1f2c:41b5 with SMTP id ce1-20020a170906b24100b007bc1f2c41b5mr13957577ejb.463.1669626998560;
+        Mon, 28 Nov 2022 01:16:38 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id 10-20020a170906218a00b0077a8fa8ba55sm3014927eju.210.2022.11.28.01.16.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 28 Nov 2022 01:16:37 -0800 (PST)
+Message-ID: <20f66702-18c1-4d2f-cdf3-a18bfc8035c7@redhat.com>
+Date:   Mon, 28 Nov 2022 10:16:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-snd-freeze-v3-2-a2eda731ca14@chromium.org>
-References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
-In-Reply-To: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
-To:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     alsa-devel@alsa-project.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2405; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=kX5q/LQa03Qii9iO9IQ/nJfIRw9n1NXI7ONu/Y5ZJ24=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjhHsK3xG667lVW6abqTwHNWMFth1Fvx2d+BxA++3v
- Kyqt7PGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4R7CgAKCRDRN9E+zzrEiHESEA
- CH6yG+4PYU2KPtT5xs5JZ3tJVMf2A/fn6qpW4cAnsLipCsTlfOiePAN1wcBS5ofPRJp0YcP38QoFX/
- ru3NhJ4QwocI5S9bqFFkLYq2NgKN4/RAwtvl0ODLqIlqsZgS4+QqHUQFyu6x2i6iAAgpSAH7dRWHPQ
- gd1rFeUjycV+Eb7yEPekd2NhF9P8BYCVIvvtceM20Y2G0NFKZaS59NVs8xSssTz4wL39E3dFj08Zne
- AVkUr2z80tttz2l7BKr6LDTC4tJHN+Qm9oEd0uEumZQ/BY3arElxHfG6twOR3Sawt15eWV59bQLLsf
- eWwbgxtUwTjSD2QTGC4aAtd03VrZhUPohtn/sMkvasE86nMJJJvRQlnPldg+h+r2K93jQX8L8FRhZN
- PNoC9mxMuZCRq1falbvBOri3SWEterzZ+ZSg1KN38/e/m+ace1HOWEfIVcU8vB3Hz0CwdLmI38vbrn
- CSJlv31Lpjey1qOwNsnWSAY/Qzko/OqCvzrJkHSbSmYLUtAnvsis01HZJkcsoUTOuOpkSKTxDr4C6d
- 4TCVkwVMjud6BJynkM/qKgHEFJZAsEHG6AfWlHqUzmpEP6PmSe4LvP0UV+tmi4kA7dcHqLwZtxkuE6
- tBq2wZ3oRpgTh8whQ1+4Emlv31nvmWoo58hmWc2V/JKJM+IpxnBDPM/rxU2g==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 10/10] power: supply: bq25890: Add new
+ linux,iinlim-percentage property
+To:     Marek Vasut <marex@denx.de>, Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org
+References: <20221127180233.103678-1-hdegoede@redhat.com>
+ <20221127180233.103678-11-hdegoede@redhat.com>
+ <d2f2fe8f-9463-d496-dc4f-e3f27dd84526@denx.de>
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <d2f2fe8f-9463-d496-dc4f-e3f27dd84526@denx.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If the user space is frozen, we cannot wait for it to complete.
+Hi Marek,
 
-This fixes:
+On 11/27/22 22:34, Marek Vasut wrote:
+> On 11/27/22 19:02, Hans de Goede wrote:
+>> Some devices, such as the Lenovo Yoga Tab 3 Pro (YT3-X90F) have
+>> multiple batteries with a separate bq25890 charger for each battery.
+>>
+>> This requires the maximum current the external power-supply can deliver
+>> to be divided over the chargers. The Android vendor kernel shipped
+>> on the YT3-X90F divides this current with a 40/60 percent split so that
+>> batteries are done charging at approx. the same time if both were fully
+>> empty at the start.
+>>
+>> Add support for a new "linux,iinlim-percentage" percentage property which
+>> can be set to indicate that a bq25890 charger should only use that
+>> percentage of the external power-supply's maximum current.
+>>
+>> So far this new property is only used on x86/ACPI (non devicetree) devs,
+>> IOW it is not used in actual devicetree files. The devicetree-bindings
+>> maintainers have requested properties like these to not be added to the
+>> devicetree-bindings, so the new property is deliberately not added
+>> to the existing devicetree-bindings.
+>>
+>> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+>> ---
+>>   drivers/power/supply/bq25890_charger.c | 24 +++++++++++++++++++++---
+>>   1 file changed, 21 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
+>> index b0d07ff24ace..2bd7721b969f 100644
+>> --- a/drivers/power/supply/bq25890_charger.c
+>> +++ b/drivers/power/supply/bq25890_charger.c
+>> @@ -126,6 +126,7 @@ struct bq25890_device {
+>>       bool read_back_init_data;
+>>       bool force_hiz;
+>>       u32 pump_express_vbus_max;
+>> +    u32 iinlim_percentage;
+> 
+> If this is percentage, u8 should be enough, right ?
 
-[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
-[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
-[  246.819035] Call Trace:
-[  246.821782]  <TASK>
-[  246.824186]  __schedule+0x5f9/0x1263
-[  246.828231]  schedule+0x87/0xc5
-[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
-...
-[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
-[  246.899317]  pci_device_shutdown+0x37/0x61
-[  246.903990]  device_shutdown+0x14c/0x1d6
-[  246.908391]  kernel_kexec+0x45/0xb9
+It is not a charger-chip register value and it is used in
+calculations so it is best if this is native integer size.
 
-And:
+And I was passing its address directly to device_property_read_u32(),
+but that has changed in v2.
 
-[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
-[  246.927709] Call Trace:
-[  246.930461]  <TASK>
-[  246.932819]  __schedule+0x5f9/0x1263
-[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
-[  246.942045]  schedule+0x87/0xc5
-[  246.945567]  schedule_timeout+0x49/0xf3
-[  246.949877]  wait_for_completion+0x86/0xe8
-[  246.954463]  snd_card_free+0x68/0x89
-...
-[  247.001080]  platform_device_unregister+0x12/0x35
+>>       enum bq25890_chip_version chip_version;
+>>       struct bq25890_init_data init_data;
+>>       struct bq25890_state state;
+>> @@ -727,6 +728,18 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
+>>       }
+>>   }
+>>   +/*
+>> + * If there are multiple chargers the maximum current the external power-supply
+>> + * can deliver needs to be divided over the chargers. This is done according
+>> + * to the bq->iinlim_percentage setting.
+>> + */
+>> +static int bq25890_charger_get_scaled_iinlim_regval(struct bq25890_device *bq,
+>> +                            int iinlim_ua)
+>> +{
+>> +    iinlim_ua = iinlim_ua * bq->iinlim_percentage / 100;
+> 
+> Can this ever add up to value above 100 ?
+> Should this use some clamp() ?
 
-Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- sound/core/init.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+bq->iinlim_percentage should never be more then 100. I have added a check
+for this when reading the property for version 2 of the series.
 
-diff --git a/sound/core/init.c b/sound/core/init.c
-index 5377f94eb211..bc038b49d4d3 100644
---- a/sound/core/init.c
-+++ b/sound/core/init.c
-@@ -9,6 +9,7 @@
- #include <linux/module.h>
- #include <linux/device.h>
- #include <linux/file.h>
-+#include <linux/freezer.h>
- #include <linux/slab.h>
- #include <linux/time.h>
- #include <linux/ctype.h>
-@@ -573,6 +574,11 @@ void snd_card_disconnect_sync(struct snd_card *card)
- 		return;
- 	}
- 
-+	if (processes_frozen()) {
-+		dev_err(card->dev, "Userspace is frozen, skipping sync\n");
-+		return;
-+	}
-+
- 	spin_lock_irq(&card->files_lock);
- 	wait_event_lock_irq(card->remove_sleep,
- 			    list_empty(&card->files_list),
-@@ -658,6 +664,13 @@ int snd_card_free(struct snd_card *card)
- 	ret = snd_card_free_when_closed(card);
- 	if (ret)
- 		return ret;
-+
-+	/*
-+	 * If userspace is frozen the wait from completion will never end.
-+	 */
-+	if (processes_frozen())
-+		return 0;
-+
- 	/* wait, until all devices are ready for the free operation */
- 	wait_for_completion(&released);
- 
+Thank you for all the reviews. I've also addressed all your other small
+remarks and I will send out a v2 series with these fixed.
 
--- 
-2.38.1.584.g0f3c55d4c2-goog-b4-0.11.0-dev-696ae
+Regards,
+
+Hans
+
+
+
+> 
+>> +    return bq25890_find_idx(iinlim_ua, TBL_IINLIM);
+>> +}
+>> +
+>>   /* On the BQ25892 try to get charger-type info from our supplier */
+>>   static void bq25890_charger_external_power_changed(struct power_supply *psy)
+>>   {
+> 
+> [...]
+> 
+
