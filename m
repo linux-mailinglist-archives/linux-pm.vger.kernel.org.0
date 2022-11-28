@@ -2,93 +2,215 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6305863A559
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB0A63A572
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:54:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiK1Jqw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 04:46:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S230016AbiK1Jx7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 04:53:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiK1Jqv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:46:51 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F295A19282;
-        Mon, 28 Nov 2022 01:46:49 -0800 (PST)
-Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        with ESMTP id S229773AbiK1Jx7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:53:59 -0500
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E674F95BB;
+        Mon, 28 Nov 2022 01:53:57 -0800 (PST)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 36302851CF;
-        Mon, 28 Nov 2022 10:46:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669628807;
-        bh=e7XPNU+P63BrI5MrDGT/sQA7/99yH4xaM94P9mzp/RM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ryGubBkDsz6zrW8iEYhkdjOPhkHW3CyWMq0I+KbsiiSBihD+MwZ9/xW8nDYD917+v
-         dsFj0cOtSb74W/m/ggjdCi5ZbAHP7OumQTqPuSDT76Z+vXFqEsvtoRcRwJk/SFnWrK
-         ZAlrXIzMbFq1x6bY+4eCYijCc4ubc3F58qAwPfXBFbaPZy86k4sNOa7dRNEuQOkhpm
-         RjVwffv3E+Ur7gD4NBXMw9OoEPI7UUpbMBaMophqBHzQS76+iQtsoacCPv6LMzgcqk
-         lWx9+thfM3h/Zuen5nzrgSTadVXVeSfmL4lzXQCYtiA8FEY7YSOWy646ag56KF3SyY
-         C+AhYmeDko/tQ==
-Message-ID: <9d5c9ced-3ea5-414e-11f0-ab5b843f7482@denx.de>
-Date:   Mon, 28 Nov 2022 10:35:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 4/5] arm64: dts: imx8m: Add TMU phandle to calibration
- data in OCOTP
-Content-Language: en-US
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adam Ford <aford173@gmail.com>, Alice Guo <alice.guo@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Jun <jun.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org
-References: <20221126224740.311625-1-marex@denx.de>
- <20221126224740.311625-4-marex@denx.de> <12103021.O9o76ZdvQC@steina-w>
-From:   Marek Vasut <marex@denx.de>
-In-Reply-To: <12103021.O9o76ZdvQC@steina-w>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 72F081FD99;
+        Mon, 28 Nov 2022 09:53:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1669629236; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hcAPsRKjwfGIqTFf3niuYUk+88SwB3jKyrNLAhms58=;
+        b=G75Y+Ue8ViCx0MK6I4JA+FLD47vZQg56H6snFSCOa96tyv9r2F7qJa9gyapr9Bsvjd9XTS
+        ZaWyejWENfaNzfx7yLm7O4Q8h8XD6nGbwJlZhZ+CtcN0e7diIG6XZzofVtsNVMM5zlSpCR
+        XIBgBbnWMYf6a5tl5Q2JVRpdT6nHl4Y=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1669629236;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+hcAPsRKjwfGIqTFf3niuYUk+88SwB3jKyrNLAhms58=;
+        b=KmbZdHqORB7knhE2TbaV0MNkNg41I+2A8pG5sCxSUwX9QXm3egsN6j2uNufWbg0gqix9j2
+        jcN8uQ/gy4NLV5AQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 35A3C1326E;
+        Mon, 28 Nov 2022 09:53:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ZZtJDDSFhGM0DQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 28 Nov 2022 09:53:56 +0000
+Date:   Mon, 28 Nov 2022 10:53:55 +0100
+Message-ID: <87tu2jz9os.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Ricardo Ribalda <ribalda@chromium.org>
+Cc:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        alsa-devel@alsa-project.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
+In-Reply-To: <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
+References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
+        <87wn7fzb2g.wl-tiwai@suse.de>
+        <CANiDSCtSAM3seszVWfjJPaYFO3v223P-tYEtdpW4+pQQ3bcf0g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 11/28/22 09:34, Alexander Stein wrote:
-> Hi Marek,
-
-Hi,
-
-> Am Samstag, 26. November 2022, 23:47:39 CET schrieb Marek Vasut:
->> The TMU TASR, TCALIVn, TRIM registers must be explicitly programmed with
->> calibration values in OCOTP. Add the OCOTP calibration values phandle so
->> the TMU driver can perform this programming.
->>
->> The MX8MM/MX8MN TMUv1 uses only one OCOTP cell, while MX8MP TMUv2 uses 4.
+On Mon, 28 Nov 2022 10:26:36 +0100,
+Ricardo Ribalda wrote:
 > 
-> Is there any source for the fuse addresses? I can only find
-> OCOTP_OCOTP_HW_OCOTP_ANA1 and a calibration description in TMU section in the
-> IMX8MNRM Rev 2, but I can't find any fuse for imx8mm and imx8mp.
+> Hi Takashi
+> 
+> Thanks for your prompt reply
+> 
+> On Mon, 28 Nov 2022 at 10:24, Takashi Iwai <tiwai@suse.de> wrote:
+> >
+> > On Mon, 28 Nov 2022 10:10:12 +0100,
+> > Ricardo Ribalda wrote:
+> > >
+> > > Since 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
+> > > we wait for userspace to close its fds.
+> >
+> > IMO, the fix above brought more problem.  If you'd need to want to
+> > avoid later accesses during shutdown, the driver should rather just
+> > disconnect devices without waiting for the user-space completion.
+> > And, for that, a simple call of snd_card_disconnect() should suffice.
+> >
+> > > But that will never occur with a frozen userspace (like during kexec()).
+> > >
+> > > Lets detect the frozen userpace and act accordingly.
+> >
+> > ... and skipping the user-space sync at snd_card_disconnect_sync() as
+> > of this patch set is a dangerous move, I'm afraid.  The user-space
+> > gets frozen also at the normal suspend/resume, and it implies that the
+> > sync will be lost even for the normal PM, too (although it must be a
+> > very corner case).
+> >
+> 
+> And what about checking kexec_in_progress instead?
 
-See 5/5 in this series, the offsets are pulled from U-Boot. The 
-documentation seems to be lacking in this case, I couldn't find anything 
-there either.
+I still think that the call of snd_card_disconnect_sync() itself at
+shutdown is somehow wrong.  If this only comes from the SOF code path
+above, we should address in that code path instead.
+
+OTOH, you showed two code paths: one is 
+
+[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+[  246.819035] Call Trace:
+[  246.821782]  <TASK>
+[  246.824186]  __schedule+0x5f9/0x1263
+[  246.828231]  schedule+0x87/0xc5
+[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+...
+[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+[  246.899317]  pci_device_shutdown+0x37/0x61
+[  246.903990]  device_shutdown+0x14c/0x1d6
+[  246.908391]  kernel_kexec+0x45/0xb9
+
+and another is
+
+[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+[  246.927709] Call Trace:
+[  246.930461]  <TASK>
+[  246.932819]  __schedule+0x5f9/0x1263
+[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+[  246.942045]  schedule+0x87/0xc5
+[  246.945567]  schedule_timeout+0x49/0xf3
+[  246.949877]  wait_for_completion+0x86/0xe8
+[  246.954463]  snd_card_free+0x68/0x89
+...
+[  247.001080]  platform_device_unregister+0x12/0x35
+
+The former is likely the SOF code path by the commit you mentioned
+(but it's not 100% clear because you trimmed the stack trace), and
+this should be reconsidered.
+
+But, the latter seems to be independent from that.  If that's the code
+path where the unbind is triggered before kexec, your fix might not
+work, either; it could be already at the wait_event*() when kexec
+starts.
+
+Maybe a simpler workaround would be to replace it with
+wait_event_killable*() stuff.  But whether we can discontinue the sync
+there is still another thing to consider...
+
+
+Takashi
+
+> 
+> Thanks!
+> 
+> >
+> > thanks,
+> >
+> > Takashi
+> >
+> > >
+> > > To: Jaroslav Kysela <perex@perex.cz>
+> > > To: Takashi Iwai <tiwai@suse.com>
+> > > To: "Rafael J. Wysocki" <rafael@kernel.org>
+> > > To: Pavel Machek <pavel@ucw.cz>
+> > > To: Len Brown <len.brown@intel.com>
+> > > To: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > > To: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> > > To: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > > To: Mark Brown <broonie@kernel.org>
+> > > Cc: alsa-devel@alsa-project.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Cc: "Joel Fernandes (Google)" <joel@joelfernandes.org>
+> > > Cc: linux-pm@vger.kernel.org
+> > > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> > > ---
+> > > Changes in v3:
+> > > - Wrap pm_freezing in a function
+> > > - Link to v2: https://lore.kernel.org/r/20221127-snd-freeze-v2-0-d8a425ea9663@chromium.org
+> > >
+> > > Changes in v2:
+> > > - Only use pm_freezing if CONFIG_FREEZER
+> > > - Link to v1: https://lore.kernel.org/r/20221127-snd-freeze-v1-0-57461a366ec2@chromium.org
+> > >
+> > > ---
+> > > Ricardo Ribalda (2):
+> > >       freezer: Add processes_frozen()
+> > >       ALSA: core: Fix deadlock when shutdown a frozen userspace
+> > >
+> > >  include/linux/freezer.h |  2 ++
+> > >  kernel/freezer.c        | 11 +++++++++++
+> > >  sound/core/init.c       | 13 +++++++++++++
+> > >  3 files changed, 26 insertions(+)
+> > > ---
+> > > base-commit: 4312098baf37ee17a8350725e6e0d0e8590252d4
+> > > change-id: 20221127-snd-freeze-1ee143228326
+> > >
+> > > Best regards,
+> > > --
+> > > Ricardo Ribalda <ribalda@chromium.org>
+> > >
+> 
+> 
+> 
+> -- 
+> Ricardo Ribalda
+> 
