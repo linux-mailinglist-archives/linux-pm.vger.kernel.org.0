@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A31E863A50F
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20ADD63A508
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiK1JaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 04:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S230080AbiK1JaG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 04:30:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbiK1JaM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:30:12 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5E3B7E1
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:29:11 -0800 (PST)
+        with ESMTP id S229908AbiK1JaG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:30:06 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AB91901D
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:29:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669627750;
+        s=mimecast20190719; t=1669627751;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5djBAAxpvMvf3hkruGFEa517Y731hVNn5P2G+FLGcDg=;
-        b=A8kmEjFFrtTbCDVfgAKh54W8r953GDJOHEBZZs4PzzRy+RqhDyUEZPIALhL+oq83Qwv1oQ
-        Qduf6gr6cJ8ZCcmpi21x9fXu5FrFPi2pyY6R+oIc28ZGkyvcOMl9YB8UuUl9MTFpUGWs3E
-        sBd+BZVIGoo9YUmBcn96NLF+0+REQNY=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=wbIsOq0599aapcA3NKxnBaZO5RpjRbeD+eqdLLoK6yE=;
+        b=ROieq3Sv0Jbh+9BlQtQ4eIi0GJH1Trgach6iCkRnexeEuYudnht/XQwxgVQ6Pd1TW31jlF
+        NJFIwo6y0q0+PJTBhkC+M/rOPXR8Fo/Foj21g8MotminlimDc47sFVeruDIcGAHtsoM5XR
+        3cUoo86S3mnVOFIE7fzEWWxlkfbW25c=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-382-BaHB9ZWAMW2kcL4paH6i7A-1; Mon, 28 Nov 2022 04:29:06 -0500
-X-MC-Unique: BaHB9ZWAMW2kcL4paH6i7A-1
+ us-mta-587-H3jNyg6SNh2cdiH_q0uiJA-1; Mon, 28 Nov 2022 04:29:08 -0500
+X-MC-Unique: H3jNyg6SNh2cdiH_q0uiJA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A21D729ABA0F;
-        Mon, 28 Nov 2022 09:29:06 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D455F802314;
+        Mon, 28 Nov 2022 09:29:07 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.195.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A2F435429;
-        Mon, 28 Nov 2022 09:29:05 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id E50B1FD48;
+        Mon, 28 Nov 2022 09:29:06 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sebastian Reichel <sre@kernel.org>, Marek Vasut <marex@denx.de>
 Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 5/9] power: supply: bq25890: Fix setting of F_CONV_RATE rate when disabling HiZ mode
-Date:   Mon, 28 Nov 2022 10:28:52 +0100
-Message-Id: <20221128092856.71619-6-hdegoede@redhat.com>
+Subject: [PATCH v2 6/9] power: supply: bq25890: Always take HiZ mode into account for ADC rate
+Date:   Mon, 28 Nov 2022 10:28:53 +0100
+Message-Id: <20221128092856.71619-7-hdegoede@redhat.com>
 In-Reply-To: <20221128092856.71619-1-hdegoede@redhat.com>
 References: <20221128092856.71619-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -58,86 +58,39 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The recent "power: supply: bq25890: Add HiZ mode support" change
-leaves F_CONV_RATE rate unset when disabling HiZ mode (setting
-POWER_SUPPLY_PROP_ONLINE to 1) while a charger is connected.
-
-Separate the resetting HiZ mode (when necessary because of a charger
-(re)plug event) into its own "if {}" block which runs first.
-
-And fix the setting of F_CONV_RATE rate by adding helper variables for
-the old and new F_CONV_RATE state which check both the online and hiz bits
-and then compare the helper variables to see if a F_CONV_RATE update is
-necessary.
+The code to check if F_CONV_RATE has been set, or if a manual ADC
+conversion needs to be triggered, as well as the code to set
+the initial F_CONV_RATE value at probe both where not taking
+HiZ mode into account. Add checks for this.
 
 Reviewed-by: Marek Vasut <marex@denx.de>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/power/supply/bq25890_charger.c | 41 +++++++++++---------------
- 1 file changed, 17 insertions(+), 24 deletions(-)
+ drivers/power/supply/bq25890_charger.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index f5fa39dca832..0d188c0d94ff 100644
+index 0d188c0d94ff..9b3a173b316a 100644
 --- a/drivers/power/supply/bq25890_charger.c
 +++ b/drivers/power/supply/bq25890_charger.c
-@@ -795,6 +795,7 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
- 
- static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
- {
-+	bool adc_conv_rate, new_adc_conv_rate;
- 	struct bq25890_state new_state;
- 	int ret;
- 
-@@ -805,33 +806,25 @@ static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
- 	if (!memcmp(&bq->state, &new_state, sizeof(new_state)))
- 		return IRQ_NONE;
- 
--	/* power removed or HiZ */
--	if ((!new_state.online || new_state.hiz) && bq->state.online) {
--		/* disable ADC */
--		ret = bq25890_field_write(bq, F_CONV_RATE, 0);
-+	/*
-+	 * Restore HiZ bit in case it was set by user. The chip does not retain
-+	 * this bit on cable replug, hence the bit must be reset manually here.
-+	 */
-+	if (new_state.online && !bq->state.online && bq->force_hiz) {
-+		ret = bq25890_field_write(bq, F_EN_HIZ, bq->force_hiz);
- 		if (ret < 0)
- 			goto error;
--	} else if (new_state.online && !bq->state.online) {
--		/*
--		 * Restore HiZ bit in case it was set by user.
--		 * The chip does not retain this bit once the
--		 * cable is re-plugged, hence the bit must be
--		 * reset manually here.
--		 */
--		if (bq->force_hiz) {
--			ret = bq25890_field_write(bq, F_EN_HIZ, bq->force_hiz);
--			if (ret < 0)
--				goto error;
--			new_state.hiz = 1;
--		}
-+		new_state.hiz = 1;
-+	}
- 
--		if (!new_state.hiz) {
--			/* power inserted and not HiZ */
--			/* enable ADC, to have control of charge current/voltage */
--			ret = bq25890_field_write(bq, F_CONV_RATE, 1);
--			if (ret < 0)
--				goto error;
--		}
-+	/* Should period ADC sampling be enabled? */
-+	adc_conv_rate = bq->state.online && !bq->state.hiz;
-+	new_adc_conv_rate = new_state.online && !new_state.hiz;
-+
-+	if (new_adc_conv_rate != adc_conv_rate) {
-+		ret = bq25890_field_write(bq, F_CONV_RATE, new_adc_conv_rate);
-+		if (ret < 0)
-+			goto error;
+@@ -467,7 +467,7 @@ static void bq25890_update_state(struct bq25890_device *bq,
+ 	/* update state in case we lost an interrupt */
+ 	__bq25890_handle_irq(bq);
+ 	*state = bq->state;
+-	do_adc_conv = !state->online && bq25890_is_adc_property(psp);
++	do_adc_conv = (!state->online || state->hiz) && bq25890_is_adc_property(psp);
+ 	if (do_adc_conv)
+ 		bq25890_field_write(bq, F_CONV_START, 1);
+ 	mutex_unlock(&bq->lock);
+@@ -956,7 +956,7 @@ static int bq25890_hw_init(struct bq25890_device *bq)
  	}
  
- 	bq->state = new_state;
+ 	/* Configure ADC for continuous conversions when charging */
+-	ret = bq25890_field_write(bq, F_CONV_RATE, !!bq->state.online);
++	ret = bq25890_field_write(bq, F_CONV_RATE, bq->state.online && !bq->state.hiz);
+ 	if (ret < 0) {
+ 		dev_dbg(bq->dev, "Config ADC failed %d\n", ret);
+ 		return ret;
 -- 
 2.37.3
 
