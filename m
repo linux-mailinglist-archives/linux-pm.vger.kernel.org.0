@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F95D63A50C
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:30:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A31E863A50F
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiK1JaN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 04:30:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S230174AbiK1JaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 04:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiK1JaM (ORCPT
+        with ESMTP id S230088AbiK1JaM (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:30:12 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E275F62
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:29:10 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5E3B7E1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:29:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669627749;
+        s=mimecast20190719; t=1669627750;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ymAdaUOVg/PTZtGMFazS7nrw3mgKfKim5MfI+PVzSfg=;
-        b=TjggX2YXfs+tpGYOkxju02ymlyJdxSD4xibqrlyW5ZZTCdcvUl/wgSyLdNlpJC6Uo2vdqy
-        NEAco3xV33BF8uv+pn+FpaX07KkaE5TVwLbFf/bTIITkP0xKO6fm/TvUc6q6mZOKmV41Rk
-        ls1/OsNwIh/TstZexEETuKHDzTTVzz0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=5djBAAxpvMvf3hkruGFEa517Y731hVNn5P2G+FLGcDg=;
+        b=A8kmEjFFrtTbCDVfgAKh54W8r953GDJOHEBZZs4PzzRy+RqhDyUEZPIALhL+oq83Qwv1oQ
+        Qduf6gr6cJ8ZCcmpi21x9fXu5FrFPi2pyY6R+oIc28ZGkyvcOMl9YB8UuUl9MTFpUGWs3E
+        sBd+BZVIGoo9YUmBcn96NLF+0+REQNY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-320-6iRhRmmVMfG12wD-kAlzXA-1; Mon, 28 Nov 2022 04:29:05 -0500
-X-MC-Unique: 6iRhRmmVMfG12wD-kAlzXA-1
+ us-mta-382-BaHB9ZWAMW2kcL4paH6i7A-1; Mon, 28 Nov 2022 04:29:06 -0500
+X-MC-Unique: BaHB9ZWAMW2kcL4paH6i7A-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45809886063;
-        Mon, 28 Nov 2022 09:29:05 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A21D729ABA0F;
+        Mon, 28 Nov 2022 09:29:06 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.195.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 55BFAFD48;
-        Mon, 28 Nov 2022 09:29:04 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7A2F435429;
+        Mon, 28 Nov 2022 09:29:05 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sebastian Reichel <sre@kernel.org>, Marek Vasut <marex@denx.de>
 Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 4/9] power: supply: bq25890: Add HiZ mode support
-Date:   Mon, 28 Nov 2022 10:28:51 +0100
-Message-Id: <20221128092856.71619-5-hdegoede@redhat.com>
+Subject: [PATCH v2 5/9] power: supply: bq25890: Fix setting of F_CONV_RATE rate when disabling HiZ mode
+Date:   Mon, 28 Nov 2022 10:28:52 +0100
+Message-Id: <20221128092856.71619-6-hdegoede@redhat.com>
 In-Reply-To: <20221128092856.71619-1-hdegoede@redhat.com>
 References: <20221128092856.71619-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -58,172 +58,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Marek Vasut <marex@denx.de>
+The recent "power: supply: bq25890: Add HiZ mode support" change
+leaves F_CONV_RATE rate unset when disabling HiZ mode (setting
+POWER_SUPPLY_PROP_ONLINE to 1) while a charger is connected.
 
-The bq25890 is capable of disconnecting itself from the external supply,
-in which case the system is supplied only from the battery. This can be
-useful e.g. to test the pure battery operation, or draw no power from
-USB port.
+Separate the resetting HiZ mode (when necessary because of a charger
+(re)plug event) into its own "if {}" block which runs first.
 
-Implement support for this mode, which can be toggled by writing 0 or
-non-zero to sysfs 'online' attribute, to select either offline or online
-mode.
+And fix the setting of F_CONV_RATE rate by adding helper variables for
+the old and new F_CONV_RATE state which check both the online and hiz bits
+and then compare the helper variables to see if a F_CONV_RATE update is
+necessary.
 
-The IRQ handler has to be triggered to update chip state, as switching
-to and from HiZ mode does not generate an interrupt automatically.
-
-The IRQ handler reinstates the HiZ mode in case a cable is replugged by
-the user, the chip itself clears the HiZ mode bit when cable is plugged
-in by the user and the chip detects PG bad-to-good transition.
-
-Signed-off-by: Marek Vasut <marex@denx.de>
-[hdegoede@redhat.com: Replace "&" with "&&" in a boolean check]
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Marek Vasut <marex@denx.de>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/power/supply/bq25890_charger.c | 58 +++++++++++++++++++-------
- 1 file changed, 44 insertions(+), 14 deletions(-)
+ drivers/power/supply/bq25890_charger.c | 41 +++++++++++---------------
+ 1 file changed, 17 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index e9f5964f9dcd..f5fa39dca832 100644
+index f5fa39dca832..0d188c0d94ff 100644
 --- a/drivers/power/supply/bq25890_charger.c
 +++ b/drivers/power/supply/bq25890_charger.c
-@@ -95,6 +95,7 @@ struct bq25890_init_data {
+@@ -795,6 +795,7 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
  
- struct bq25890_state {
- 	u8 online;
-+	u8 hiz;
- 	u8 chrg_status;
- 	u8 chrg_fault;
- 	u8 vsys_status;
-@@ -119,6 +120,7 @@ struct bq25890_device {
- 
- 	bool skip_reset;
- 	bool read_back_init_data;
-+	bool force_hiz;
- 	u32 pump_express_vbus_max;
- 	enum bq25890_chip_version chip_version;
- 	struct bq25890_init_data init_data;
-@@ -487,7 +489,7 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 
- 	switch (psp) {
- 	case POWER_SUPPLY_PROP_STATUS:
--		if (!state.online)
-+		if (!state.online || state.hiz)
- 			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
- 		else if (state.chrg_status == STATUS_NOT_CHARGING)
- 			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
-@@ -502,7 +504,8 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 		break;
- 
- 	case POWER_SUPPLY_PROP_CHARGE_TYPE:
--		if (!state.online || state.chrg_status == STATUS_NOT_CHARGING ||
-+		if (!state.online || state.hiz ||
-+		    state.chrg_status == STATUS_NOT_CHARGING ||
- 		    state.chrg_status == STATUS_TERMINATION_DONE)
- 			val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
- 		else if (state.chrg_status == STATUS_PRE_CHARGING)
-@@ -522,7 +525,7 @@ static int bq25890_power_supply_get_property(struct power_supply *psy,
- 		break;
- 
- 	case POWER_SUPPLY_PROP_ONLINE:
--		val->intval = state.online;
-+		val->intval = state.online && !state.hiz;
- 		break;
- 
- 	case POWER_SUPPLY_PROP_HEALTH:
-@@ -676,7 +679,8 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
- 					     const union power_supply_propval *val)
+ static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
  {
- 	struct bq25890_device *bq = power_supply_get_drvdata(psy);
--	int maxval;
-+	struct bq25890_state state;
-+	int maxval, ret;
- 	u8 lval;
++	bool adc_conv_rate, new_adc_conv_rate;
+ 	struct bq25890_state new_state;
+ 	int ret;
  
- 	switch (psp) {
-@@ -691,6 +695,12 @@ static int bq25890_power_supply_set_property(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
- 		lval = bq25890_find_idx(val->intval, TBL_IINLIM);
- 		return bq25890_field_write(bq, F_IINLIM, lval);
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		ret = bq25890_field_write(bq, F_EN_HIZ, !val->intval);
-+		if (!ret)
-+			bq->force_hiz = !val->intval;
-+		bq25890_update_state(bq, psp, &state);
-+		return ret;
- 	default:
- 		return -EINVAL;
- 	}
-@@ -703,6 +713,7 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
- 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
- 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+	case POWER_SUPPLY_PROP_ONLINE:
- 		return true;
- 	default:
- 		return false;
-@@ -757,6 +768,7 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
- 	} state_fields[] = {
- 		{F_CHG_STAT,	&state->chrg_status},
- 		{F_PG_STAT,	&state->online},
-+		{F_EN_HIZ,	&state->hiz},
- 		{F_VSYS_STAT,	&state->vsys_status},
- 		{F_BOOST_FAULT, &state->boost_fault},
- 		{F_BAT_FAULT,	&state->bat_fault},
-@@ -772,10 +784,11 @@ static int bq25890_get_chip_state(struct bq25890_device *bq,
- 		*state_fields[i].data = ret;
- 	}
- 
--	dev_dbg(bq->dev, "S:CHG/PG/VSYS=%d/%d/%d, F:CHG/BOOST/BAT/NTC=%d/%d/%d/%d\n",
--		state->chrg_status, state->online, state->vsys_status,
--		state->chrg_fault, state->boost_fault, state->bat_fault,
--		state->ntc_fault);
-+	dev_dbg(bq->dev, "S:CHG/PG/HIZ/VSYS=%d/%d/%d/%d, F:CHG/BOOST/BAT/NTC=%d/%d/%d/%d\n",
-+		state->chrg_status, state->online,
-+		state->hiz, state->vsys_status,
-+		state->chrg_fault, state->boost_fault,
-+		state->bat_fault, state->ntc_fault);
- 
- 	return 0;
- }
-@@ -792,16 +805,33 @@ static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
+@@ -805,33 +806,25 @@ static irqreturn_t __bq25890_handle_irq(struct bq25890_device *bq)
  	if (!memcmp(&bq->state, &new_state, sizeof(new_state)))
  		return IRQ_NONE;
  
--	if (!new_state.online && bq->state.online) {	    /* power removed */
-+	/* power removed or HiZ */
-+	if ((!new_state.online || new_state.hiz) && bq->state.online) {
- 		/* disable ADC */
- 		ret = bq25890_field_write(bq, F_CONV_RATE, 0);
+-	/* power removed or HiZ */
+-	if ((!new_state.online || new_state.hiz) && bq->state.online) {
+-		/* disable ADC */
+-		ret = bq25890_field_write(bq, F_CONV_RATE, 0);
++	/*
++	 * Restore HiZ bit in case it was set by user. The chip does not retain
++	 * this bit on cable replug, hence the bit must be reset manually here.
++	 */
++	if (new_state.online && !bq->state.online && bq->force_hiz) {
++		ret = bq25890_field_write(bq, F_EN_HIZ, bq->force_hiz);
  		if (ret < 0)
  			goto error;
--	} else if (new_state.online && !bq->state.online) { /* power inserted */
--		/* enable ADC, to have control of charge current/voltage */
--		ret = bq25890_field_write(bq, F_CONV_RATE, 1);
--		if (ret < 0)
--			goto error;
-+	} else if (new_state.online && !bq->state.online) {
-+		/*
-+		 * Restore HiZ bit in case it was set by user.
-+		 * The chip does not retain this bit once the
-+		 * cable is re-plugged, hence the bit must be
-+		 * reset manually here.
-+		 */
-+		if (bq->force_hiz) {
-+			ret = bq25890_field_write(bq, F_EN_HIZ, bq->force_hiz);
-+			if (ret < 0)
-+				goto error;
-+			new_state.hiz = 1;
-+		}
+-	} else if (new_state.online && !bq->state.online) {
+-		/*
+-		 * Restore HiZ bit in case it was set by user.
+-		 * The chip does not retain this bit once the
+-		 * cable is re-plugged, hence the bit must be
+-		 * reset manually here.
+-		 */
+-		if (bq->force_hiz) {
+-			ret = bq25890_field_write(bq, F_EN_HIZ, bq->force_hiz);
+-			if (ret < 0)
+-				goto error;
+-			new_state.hiz = 1;
+-		}
++		new_state.hiz = 1;
++	}
+ 
+-		if (!new_state.hiz) {
+-			/* power inserted and not HiZ */
+-			/* enable ADC, to have control of charge current/voltage */
+-			ret = bq25890_field_write(bq, F_CONV_RATE, 1);
+-			if (ret < 0)
+-				goto error;
+-		}
++	/* Should period ADC sampling be enabled? */
++	adc_conv_rate = bq->state.online && !bq->state.hiz;
++	new_adc_conv_rate = new_state.online && !new_state.hiz;
 +
-+		if (!new_state.hiz) {
-+			/* power inserted and not HiZ */
-+			/* enable ADC, to have control of charge current/voltage */
-+			ret = bq25890_field_write(bq, F_CONV_RATE, 1);
-+			if (ret < 0)
-+				goto error;
-+		}
++	if (new_adc_conv_rate != adc_conv_rate) {
++		ret = bq25890_field_write(bq, F_CONV_RATE, new_adc_conv_rate);
++		if (ret < 0)
++			goto error;
  	}
  
  	bq->state = new_state;
