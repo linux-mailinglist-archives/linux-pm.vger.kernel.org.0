@@ -2,59 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFFF163B4F8
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 23:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3087263B5A2
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 00:08:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234334AbiK1WuX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 17:50:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45660 "EHLO
+        id S234445AbiK1XIr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 18:08:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234546AbiK1WuS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 17:50:18 -0500
-Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353F72A713;
-        Mon, 28 Nov 2022 14:50:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1669675817;
-  x=1701211817;
-  h=date:to:cc:subject:message-id:references:mime-version:
-   content-transfer-encoding:in-reply-to:from;
-  bh=HpUGHmlE/btZ3Zl69nhWBa1kePei32FkpAbSL6yAY/A=;
-  b=OafzhmidsYF0rXd6eLRFSZpjR/BA0qm777qMtFxl18+9/+lnuXLJjg2l
-   wXAk1DjpviT7D5QB/YTsquOb7VlKVZD+8WN41wtsi7xN+ebVHWIKjbTE8
-   Z+cH85rcfbIwK0oW7CTzIlwNz5itBMIekFgwvrlWSxlQeMOP9D/F89XRb
-   HIozNdeoKTi467p6MZFfoGwQgBbnIawIl4zjKctNQiQnACPhS+Xv97x3u
-   tIVVmo8fxtPwslhMwZm1hDFXIe5nShf4nh34l6uFIO9ppZ3jhNblRgqEy
-   TFHrcxSV5vA5DwS+A5kk14kIx89ekD56ik3idwKGXrtVXfJ3FOXaO1NrC
-   A==;
-Date:   Mon, 28 Nov 2022 23:50:14 +0100
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?iso-8859-1?Q?M=E5rten?= Lindahl <Marten.Lindahl@axis.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@axis.com>
-Subject: Re: [PATCH 1/2] PM: runtime: Synchronize PM runtime enable state
- with parent
-Message-ID: <Y4U7Jp+wu1SfGkYW@axis.com>
-References: <20220929144618.1086985-1-marten.lindahl@axis.com>
- <20220929144618.1086985-2-marten.lindahl@axis.com>
- <CAJZ5v0jhk8tGw9iak+BKr=3AUG5iPdn+0_KnmToDLji1ttV7hA@mail.gmail.com>
- <Y1/8Z/Ibqc3B21Tg@axis.com>
- <20221106153315.64952dd3@jic23-huawei>
- <CAJZ5v0hdAkk_GNA5xhaTA0UGb8keJQK9i3UaVgfnc7233nbm8g@mail.gmail.com>
- <20221112153358.52939022@jic23-huawei>
+        with ESMTP id S234459AbiK1XIp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 18:08:45 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5A12E9F4;
+        Mon, 28 Nov 2022 15:08:44 -0800 (PST)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASMvGEa021185;
+        Mon, 28 Nov 2022 23:08:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RtjpXUfD7wnkUSdf4pyQtT7BvRuTHAfWbHQqa5Tvqbg=;
+ b=EctaZAS9oy8GZtf+xU2ZJAwqxyApLbbrq0f2DW/l3BZtV2VsR1TDLJ3VRqxiE6gcSsKY
+ wcRDmekvC1IhnOyJQoYj0XgAl4QQ6d8LmSLRAHp+9EO03+nAc2kE0DOifGpeEUbgkCsO
+ mJBmunn7e7+Bq+B6SPCs8EC+3Rr7k++6Z64swS8mZtmnIIL4p2YgqzL5dqT2BPVRDv2R
+ ZyPha21iQRmDa5gYrhUfKaJoC8yisTSpqG7h/RZE0v48h4e1vGk+SrzncnubJWTbZ6qy
+ X00gFIvRlUgO/hsfTwNCb+mmy4s8HJaZyuGuFMs8d5tvmcFfjdma6z9wQv/XREtILFGI hw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m3ad958vw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 23:08:40 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASN8dju016909
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Nov 2022 23:08:39 GMT
+Received: from [10.110.4.151] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 28 Nov
+ 2022 15:08:38 -0800
+Message-ID: <cb6a434f-9dc1-d24e-4c4a-02a223c12619@quicinc.com>
+Date:   Mon, 28 Nov 2022 15:08:38 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221112153358.52939022@jic23-huawei>
-From:   Marten Lindahl <martenli@axis.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
+Content-Language: en-US
+From:   Melody Olvera <quic_molvera@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221118182245.31035-1-quic_molvera@quicinc.com>
+ <20221118182245.31035-2-quic_molvera@quicinc.com>
+ <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
+ <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
+ <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
+ <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
+ <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
+ <e538affc-5c43-9b40-f6c7-2ceb2fa2fec8@quicinc.com>
+In-Reply-To: <e538affc-5c43-9b40-f6c7-2ceb2fa2fec8@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: okytTpFuOe06DsYnESsZhyvTemaA7tkF
+X-Proofpoint-GUID: okytTpFuOe06DsYnESsZhyvTemaA7tkF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-28_17,2022-11-28_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 lowpriorityscore=0
+ priorityscore=1501 spamscore=0 impostorscore=0 mlxlogscore=999
+ suspectscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211280166
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,131 +91,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Nov 12, 2022 at 04:33:58PM +0100, Jonathan Cameron wrote:
-> On Sun, 6 Nov 2022 18:16:10 +0100
-> "Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> 
-> > On Sun, Nov 6, 2022 at 4:33 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> > >
-> > > On Mon, 31 Oct 2022 17:48:39 +0100
-> > > Marten Lindahl <martenli@axis.com> wrote:
-> > >  
-> > > > On Tue, Oct 25, 2022 at 06:20:10PM +0200, Rafael J. Wysocki wrote:  
-> > > > > On Thu, Sep 29, 2022 at 4:46 PM Mårten Lindahl <marten.lindahl@axis.com> wrote:  
-> > > >
-> > > > Hi! Thanks for your feedback!
-> > > >  
-> > > > > >
-> > > > > > A device that creates a child character device with cdev_device_add by
-> > > > > > default create a PM sysfs group with power attributes for userspace
-> > > > > > control. This means that the power attributes monitors the child device
-> > > > > > only and thus does not reflect the parent device PM runtime behavior.  
-> > > > >
-> > > > > It looks like device_set_pm_not_required() should be used on the child then.
-> > > > >  
-> > > > > > But as the PM runtime framework (rpm_suspend/rpm_resume) operates not
-> > > > > > only on a single device that has been enabled for runtime PM, but also
-> > > > > > on its parent, it should be possible to synchronize the child and the
-> > > > > > parent so that the power attribute monitoring reflects the child and the
-> > > > > > parent as one.
-> > > > > >
-> > > > > > As an example, if an i2c_client device registers an iio_device, the
-> > > > > > iio_device will create sysfs power/attribute nodes for userspace
-> > > > > > control. But if the dev_pm_ops with resume/suspend callbacks is attached
-> > > > > > to the struct i2c_driver.driver.pm, the PM runtime needs to be enabled
-> > > > > > for the i2c_client device and not for the child iio_device.
-> > > > > >
-> > > > > > In this case PM runtime can be enabled for the i2c_client device and
-> > > > > > suspend/resume callbacks will be triggered, but the child sysfs power
-> > > > > > attributes will be visible but marked as 'unsupported' and can not be
-> > > > > > used for control or monitoring. This can be confusing as the sysfs
-> > > > > > device node presents the i2c_client and the iio_device as one device.  
-> > > > >
-> > > > > I don't quite understand the last sentence.
-> > > > >
-> > > > > They are separate struct device objects and so they each have a
-> > > > > directory in sysfs, right?
-> > > > >  
-> > > >
-> > > > Yes, they do have separate directories and if using device_set_pm_not_required
-> > > > on the child it will make it clearer which device is PM runtime regulated, so
-> > > > I guess that is what should be done.
-> > > >
-> > > > I think it all depends on where in sysfs the user accesses the device from. My
-> > > > point with these patches is that the iio_device may be perceived to be an
-> > > > iio device that should be possible to manually power control, as the power
-> > > > directory is visble. If looking at it from here:
-> > > >
-> > > > ~# ls /sys/bus/iio/devices/iio:device0/
-> > > > in_illuminance_raw      in_proximity_raw        power
-> > > > in_illuminance_scale    name                    subsystem
-> > > > in_proximity_nearlevel  of_node                 uevent
-> > > >
-> > > > my idea is to let this power directory inherity the parent power control. But
-> > > > as you say, it is probably better to not create it at all, as the actual manual
-> > > > power control can be done here:
-> > > >
-> > > > ~# ls /sys/devices/platform/soc/.../i2c-2/2-0060/
-> > > > driver       modalias     of_node      subsystem
-> > > > iio:device1  name         power        uevent
-> > > >
-> > > > where it is more clear which device (the i2c parent) that can be power
-> > > > controlled.
-> > > >  
-> > > > > > Add a function to synchronize the runtime PM enable state of a device
-> > > > > > with its parent. As there already exists a link from the child to its
-> > > > > > parent and both are enabled, all sysfs control/monitoring can reflect
-> > > > > > both devices, which from a userspace perspective makes more sense.  
-> > > > >
-> > > > > Except that user space will be able to change "control" to "on" for
-> > > > > the parent alone AFAICS which still will be confusing.  
-> > > >
-> > > > Yes, that is true.  
-> > > > >
-> > > > > For devices that are pure software constructs it only makes sense to
-> > > > > expose the PM-runtime interface for them if the plan is to indirectly
-> > > > > control the parent's runtime PM through them.  
-> > > >
-> > > > I will abandon this patchset and send a single patch for the iio device.  
-> > >
-> > > I entirely agree with the statement that these are pointless and should not
-> > > be exposed.  However I don't want to see a per device tweak.  If we get
-> > > rid of these, we get rid of them for all of the iio:device0/
-> > > devices (and the various other types of device IIO uses).
-> > >
-> > > The risk here is that, although pointless, some userspace is relying on the
-> > > ABI in sysfs.  Do people thing it's worth the gamble of getting rid
-> > > of this non functioning interface for the whole of IIO?  
-> > 
-> > I think so.
-> > 
-> > It is better to avoid exposing garbage to user space even if the scope
-> > of it is limited IMV.
-> 
-> Marten, do you want to spin a patch doing this in the iio core?
-> 
-> If not I'll do so sometime soon.  Given where we are in the cycle,
-> and the need to keep such a patch up for review for at least a few weeks,
-> we can look to get it into next early next cycle and hopefully any issues
-> will become apparent.
 
-Please excuse me Jonathan, I missed this mail. I really do apologize.
 
-Considering a patch for the discussed issue. I think I need to dig into
-the core a bit more before I can do it. I only had the vcnl4000 driver
-in focus, so if you have an idea of how it should be done in the core,
-then I think it's better if you do it.
+On 11/28/2022 9:25 AM, Melody Olvera wrote:
+>
+> On 11/24/2022 2:30 AM, Krzysztof Kozlowski wrote:
+>> On 22/11/2022 18:57, Melody Olvera wrote:
+>>>>>>> +
+>>>>>>> +maintainers:
+>>>>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
+>>>>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
+>>>>>>> +
+>>>>>>> +description: |
+>>>>>>> +   RPMh interconnect providers support system bandwidth requirements through
+>>>>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
+>>>>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
+>>>>>>> +   associated with each execution environment. Provider nodes must point to at
+>>>>>>> +   least one RPMh device child node pertaining to their RSC and each provider
+>>>>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
+>>>>>>> +   controlled by AP and do not support QoS; they should not have associated
+>>>>>>> +   register regions.
+>>>>>>> +
+>>>>>>> +allOf:
+>>>>>>> +  - $ref: qcom,rpmh-common.yaml#
+>>>>>>> +
+>>>>>>> +properties:
+>>>>>>> +  compatible:
+>>>>>>> +    enum:
+>>>>>>> +      - qcom,qdu1000-clk-virt
+>>>>>>> +      - qcom,qdu1000-mc-virt
+>>>>>>> +      - qcom,sm8450-clk-virt
+>>>>>>> +      - qcom,sm8450-mc-virt
+>>>>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
+>>>>>> qcom,sc8280xp-clk-virt and more.
+>>>>> Ok. I wasn't sure since some of these entries don't seem to conform to
+>>>>> these bindings, even though it seems they should.
+>>>> I have impression that devices I listed conform to these bindings, this
+>>>> is why I listed them. But if you are sure that they do not, then they
+>>>> should not be moved.
+>>> You're correct; those you listed do conform to the new bindings and should be moved.
+>>> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
+>> Actually let's wait a bit with this. For SM8550 we had an idea to move
+>> interconnect to their own bindings file, because they will grow a bit
+>> with allOf:if:then clauses.
+>>
+>> Maybe SM8450 and QDU1000 should also go to their own files which will
+>> describe all their interconnects (the virt and the ones requiring clocks)?
+>>
+>> Apologies for bringing it late for your patches, but SM8550 is also
+>> happening right now, so new things pop-up :)
+> Yeah no worries. I can definitely make this change; if this is how we want to do
+> things going forward I'm happy to oblige.
+>
+> Thanks,
+> Melody
 
-If yo ask me to look into it I will try to do it, but I'm afraid it will
-take some time before I can send anything.
+I think though for these PS, I'll stick to doing w QDU1000. So I'll have a file qcom,qdu1000-rpmh.yaml
+and qcom,qdu1000-rpmh-virt.yaml
 
-Kind regards
-Mårten
+Thanks,
+Melody
 
-> 
-> Jonathan
-> 
-> > 
-> > > So far I think this is only been done for a few similar cases
-> > > and for new subsystems.  
-> 
+>> Best regards,
+>> Krzysztof
+>>
+
