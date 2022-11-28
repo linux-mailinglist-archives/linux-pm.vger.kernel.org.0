@@ -2,57 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9088663A450
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:10:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D0263A451
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:10:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbiK1JKl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        id S229846AbiK1JKl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
         Mon, 28 Nov 2022 04:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiK1JKk (ORCPT
+        with ESMTP id S229773AbiK1JKk (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:10:40 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A494D183AB
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:38 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id ud5so24125359ejc.4
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:38 -0800 (PST)
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544AB18398
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:39 -0800 (PST)
+Received: by mail-ej1-x629.google.com with SMTP id ho10so24128962ejc.1
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:10:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0C3tubLwb2GLSH1X3VvRqQXs2H60xiiDuvmjMSeKtSo=;
-        b=Y7Z/PxFaD/VnaXhXyOGe1ep7kAm/dknEPXug0yeRdRkaUlQkVv9MCvcaYEiJvLRkry
-         lrCXQY1WoeLSJF2Z7gMjS6IbqVD1pg69EtBDV99XqW42zef9KsDOYIqKUd+OeVB9qiVy
-         +H1ykGL80zvjtHMdSMcV9/mXB6AqG1c8naFrQ=
+        bh=9ubdN1bACjKh+qjO28e9C129nQGAl5iy3AArXYr64tA=;
+        b=CGIt3hTLCHNo7o4kNPYEi01hMNFq6HcqbpnhXDpYaolzFNCWPKZDVAiKB0j/C5S+O0
+         0XBTmjLWIAsGP7fP+zKvcfefLmGVkmOKMAulmY0h4aUBuLvXLckOD+81KwAaEuJjZUni
+         TtdfCWzaJp5TO9hlGKgX6DsLDa3FClxwPkUlo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0C3tubLwb2GLSH1X3VvRqQXs2H60xiiDuvmjMSeKtSo=;
-        b=E6dLZTXSa1fryVTHIqj96dGRmkucNNADzeZbPqBZKhvy3KZfVNL8wJrkvn229M8KrX
-         V73febho/85IHqCuh7pehGANSaOlr0I55tic0fdDsVH9EOHIHlCZB+qUK2efUewX4Fz6
-         9yGk9F05JPBefYoL1oMXw/sWp0yEbYP/3nL7aB7mAn6sA5dvjCtiY7XK20Z2WgnV4hNj
-         93/GTajnPh38MocvaCXNiXdgl7wuVbDSwHOFshD7GAKrkxkyQESDsuJfwaeC/HdQdoFi
-         rqAwT6iPpH22e/wrbEYcABCsQXx+4rc3HMdrQDR2Ntn5iWc4AS8gOFIXMYTnWdc+v/NV
-         LahQ==
-X-Gm-Message-State: ANoB5pn6oIR0GAqOPGm+i2+hOdhmnb/+jAa3Kv7H2zWlMSFNFLd1fHve
-        SCNMlxuEEUjULqypQ6l2K8mMOA==
-X-Google-Smtp-Source: AA0mqf568e9xybgGK/wRSf+mQyS6fCinnYqI4Pilk6TRGk3gvya6YcaAW/Z72IJuzNUxNiJTm7kIqw==
-X-Received: by 2002:a17:906:f189:b0:7ae:3fa3:d7c6 with SMTP id gs9-20020a170906f18900b007ae3fa3d7c6mr40230014ejb.494.1669626637275;
+        bh=9ubdN1bACjKh+qjO28e9C129nQGAl5iy3AArXYr64tA=;
+        b=ZH5bAhfZmf+J8Fpj+EPABzCg8jAzXj26ksP+JIVaYcBG0gYN4ChqJ4eFliuXZEljQD
+         MlCeKNay4DYdVcEEintiX/3WcgcRXW+yI1OgijkTvcpccVQtPz5L/Yo6z+yJGrb/CYA0
+         ECEUr956i/CT5gwmovp5cgU6m2wMXSUhT7w40F/gAGvdVzde7OEU4kU/DUvOW0hz2SKE
+         sHbO9svfPC2V3RGL9RbOe6bDESMcfeB9VPDrJugpTM1xAz43cue6wDVKnOCVKirU8Ji5
+         0v0TYrV39ltCeOTuCIqthMeKPSsghQiwTFZAeg8O25NmEB1zSTehKl1CsEud2l8pFzLG
+         uZWA==
+X-Gm-Message-State: ANoB5pm47EcgLSIMxTHy3joclzGeObAT4xJ/RF4S3Zo8cFv0N/YujKPP
+        BrKmQeovuJumNXJrE7wmv2QFqg==
+X-Google-Smtp-Source: AA0mqf7CDadNIIxLmDaGMGWeVngi50o9v9Dqym8FZqs9w0o8qAyuABJVXcuAWg331ZRRka79f2HTMg==
+X-Received: by 2002:a17:906:65c4:b0:7ad:d250:b907 with SMTP id z4-20020a17090665c400b007add250b907mr42053835ejn.737.1669626637954;
         Mon, 28 Nov 2022 01:10:37 -0800 (PST)
 Received: from alco.roam.corp.google.com (80.71.134.83.ipv4.parknet.dk. [80.71.134.83])
-        by smtp.gmail.com with ESMTPSA id p35-20020a056402502300b00463b9d47e1fsm4932346eda.71.2022.11.28.01.10.36
+        by smtp.gmail.com with ESMTPSA id p35-20020a056402502300b00463b9d47e1fsm4932346eda.71.2022.11.28.01.10.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Nov 2022 01:10:36 -0800 (PST)
+        Mon, 28 Nov 2022 01:10:37 -0800 (PST)
 From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Mon, 28 Nov 2022 10:10:13 +0100
-Subject: [PATCH v3 1/2] freezer: Add processes_frozen()
+Date:   Mon, 28 Nov 2022 10:10:14 +0100
+Subject: [PATCH v3 2/2] ALSA: core: Fix deadlock when shutdown a frozen userspace
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-snd-freeze-v3-1-a2eda731ca14@chromium.org>
+Message-Id: <20221127-snd-freeze-v3-2-a2eda731ca14@chromium.org>
 References: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
 In-Reply-To: <20221127-snd-freeze-v3-0-a2eda731ca14@chromium.org>
 To:     Takashi Iwai <tiwai@suse.com>, Len Brown <len.brown@intel.com>,
@@ -67,19 +67,19 @@ Cc:     alsa-devel@alsa-project.org,
         Ricardo Ribalda <ribalda@chromium.org>,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1657; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=4IJsRzjRUBmI8ELm76XeH219TKYxoCY1FpvtAWp9NN8=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjhHsGpUmHDy4LbKwnpR9Rk9CtwMEd0pQpdx1IE0fb
- 6zgFBL2JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4R7BgAKCRDRN9E+zzrEiO42EA
- CHpbt3xEX9Nc3qtOSj8Ch4ZuO/hdfkPBhyD4C5+ZvwkIovXOt2hSP+891sKUfkvG7jPbx1tB/SgbSI
- 6sdu+55LjjUnH2dANbcNuS79O2FpFCYNPpE7Ay2qDBZZuDb+WP27IOBVfrv7L8+ACy2tqqjELzCwnT
- Q/cZViMSJcGnr5llb+IkzVUz3GVqKc3UKyglcwyP+e+McJFKPsxcUUXhniivY1uTPl4I/maBS/zhbq
- JqBbCuNwXr6Ef3ySgmBCEYGWwuNhbray7QfkYId1aJJa/JnGQ9jQyMM8cdB23ByMOtwVXsBCFUxTUa
- pV2JI//mgbwcjyFitY+33Alk8p+CsZw5/sWyW7TXQTH6t0nZyRLCz3zBvQPAi2HaL1w2E+++dpVUNz
- a86ZD49Njb4GiF19mePCzi3LfsNW07Bz/82Y8NAvyip9oOn4tHhyg2og9wav1n+LzgJj9Fem71kBlz
- 75EWG3p/2TiX1aZEaHPCDEX6489tafeRTG1taPq/CgRlcPPxrOfQiOu60xgrq5jDxY7kknT/c0sR22
- bZgxjhGx1MwW6PyoDItmvdmEbbPpFnuWZm1THQuvBTpjP+8H6RUt8LvdpbByM41YDFFj/J0qmtyzGX
- eqihKxGfFODDE3f1r8ri8YaQZECqCn/S4KZvPmGqw+WYi2FVvZ9JYmvN0cPQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2405; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=kX5q/LQa03Qii9iO9IQ/nJfIRw9n1NXI7ONu/Y5ZJ24=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjhHsK3xG667lVW6abqTwHNWMFth1Fvx2d+BxA++3v
+ Kyqt7PGJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4R7CgAKCRDRN9E+zzrEiHESEA
+ CH6yG+4PYU2KPtT5xs5JZ3tJVMf2A/fn6qpW4cAnsLipCsTlfOiePAN1wcBS5ofPRJp0YcP38QoFX/
+ ru3NhJ4QwocI5S9bqFFkLYq2NgKN4/RAwtvl0ODLqIlqsZgS4+QqHUQFyu6x2i6iAAgpSAH7dRWHPQ
+ gd1rFeUjycV+Eb7yEPekd2NhF9P8BYCVIvvtceM20Y2G0NFKZaS59NVs8xSssTz4wL39E3dFj08Zne
+ AVkUr2z80tttz2l7BKr6LDTC4tJHN+Qm9oEd0uEumZQ/BY3arElxHfG6twOR3Sawt15eWV59bQLLsf
+ eWwbgxtUwTjSD2QTGC4aAtd03VrZhUPohtn/sMkvasE86nMJJJvRQlnPldg+h+r2K93jQX8L8FRhZN
+ PNoC9mxMuZCRq1falbvBOri3SWEterzZ+ZSg1KN38/e/m+ace1HOWEfIVcU8vB3Hz0CwdLmI38vbrn
+ CSJlv31Lpjey1qOwNsnWSAY/Qzko/OqCvzrJkHSbSmYLUtAnvsis01HZJkcsoUTOuOpkSKTxDr4C6d
+ 4TCVkwVMjud6BJynkM/qKgHEFJZAsEHG6AfWlHqUzmpEP6PmSe4LvP0UV+tmi4kA7dcHqLwZtxkuE6
+ tBq2wZ3oRpgTh8whQ1+4Emlv31nvmWoo58hmWc2V/JKJM+IpxnBDPM/rxU2g==
 X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
  fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -91,56 +91,81 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a way to let the drivers know if the processes are frozen.
+If the user space is frozen, we cannot wait for it to complete.
 
-This is needed by drivers that are waiting for processes to end on their
-shutdown path.
+This fixes:
 
+[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
+[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
+[  246.819035] Call Trace:
+[  246.821782]  <TASK>
+[  246.824186]  __schedule+0x5f9/0x1263
+[  246.828231]  schedule+0x87/0xc5
+[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
+...
+[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
+[  246.899317]  pci_device_shutdown+0x37/0x61
+[  246.903990]  device_shutdown+0x14c/0x1d6
+[  246.908391]  kernel_kexec+0x45/0xb9
+
+And:
+
+[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
+[  246.927709] Call Trace:
+[  246.930461]  <TASK>
+[  246.932819]  __schedule+0x5f9/0x1263
+[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
+[  246.942045]  schedule+0x87/0xc5
+[  246.945567]  schedule_timeout+0x49/0xf3
+[  246.949877]  wait_for_completion+0x86/0xe8
+[  246.954463]  snd_card_free+0x68/0x89
+...
+[  247.001080]  platform_device_unregister+0x12/0x35
+
+Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
 Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 ---
- include/linux/freezer.h |  2 ++
- kernel/freezer.c        | 11 +++++++++++
- 2 files changed, 13 insertions(+)
+ sound/core/init.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/include/linux/freezer.h b/include/linux/freezer.h
-index b303472255be..ca861ace0689 100644
---- a/include/linux/freezer.h
-+++ b/include/linux/freezer.h
-@@ -47,6 +47,7 @@ extern int freeze_processes(void);
- extern int freeze_kernel_threads(void);
- extern void thaw_processes(void);
- extern void thaw_kernel_threads(void);
-+bool processes_frozen(void);
+diff --git a/sound/core/init.c b/sound/core/init.c
+index 5377f94eb211..bc038b49d4d3 100644
+--- a/sound/core/init.c
++++ b/sound/core/init.c
+@@ -9,6 +9,7 @@
+ #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/file.h>
++#include <linux/freezer.h>
+ #include <linux/slab.h>
+ #include <linux/time.h>
+ #include <linux/ctype.h>
+@@ -573,6 +574,11 @@ void snd_card_disconnect_sync(struct snd_card *card)
+ 		return;
+ 	}
  
- static inline bool try_to_freeze(void)
- {
-@@ -80,6 +81,7 @@ static inline int freeze_processes(void) { return -ENOSYS; }
- static inline int freeze_kernel_threads(void) { return -ENOSYS; }
- static inline void thaw_processes(void) {}
- static inline void thaw_kernel_threads(void) {}
-+static inline bool processes_frozen(void) { return false; }
- 
- static inline bool try_to_freeze(void) { return false; }
- 
-diff --git a/kernel/freezer.c b/kernel/freezer.c
-index 4fad0e6fca64..08828c4e12fd 100644
---- a/kernel/freezer.c
-+++ b/kernel/freezer.c
-@@ -233,3 +233,14 @@ bool set_freezable(void)
- 	return try_to_freeze();
- }
- EXPORT_SYMBOL(set_freezable);
++	if (processes_frozen()) {
++		dev_err(card->dev, "Userspace is frozen, skipping sync\n");
++		return;
++	}
 +
-+/**
-+ * processes_frozen - Check if the processes are frozen
-+ *
-+ * Let drivers know if they shall wait for processes.
-+ */
-+bool processes_frozen(void)
-+{
-+	return pm_freezing;
-+}
-+EXPORT_SYMBOL(processes_frozen);
+ 	spin_lock_irq(&card->files_lock);
+ 	wait_event_lock_irq(card->remove_sleep,
+ 			    list_empty(&card->files_list),
+@@ -658,6 +664,13 @@ int snd_card_free(struct snd_card *card)
+ 	ret = snd_card_free_when_closed(card);
+ 	if (ret)
+ 		return ret;
++
++	/*
++	 * If userspace is frozen the wait from completion will never end.
++	 */
++	if (processes_frozen())
++		return 0;
++
+ 	/* wait, until all devices are ready for the free operation */
+ 	wait_for_completion(&released);
+ 
 
 -- 
 2.38.1.584.g0f3c55d4c2-goog-b4-0.11.0-dev-696ae
