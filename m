@@ -2,149 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B75BE63AEE0
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 18:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D862463B266
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 20:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbiK1R0Z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 12:26:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S233666AbiK1Ti6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 14:38:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233002AbiK1R0G (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 12:26:06 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADABC275EF;
-        Mon, 28 Nov 2022 09:26:03 -0800 (PST)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ASFbTh7020069;
-        Mon, 28 Nov 2022 17:26:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=3lHzTVz9MyzHnucBP6Iwrk4ctcJSe2kJF4Ox1EKbZDY=;
- b=fmEI/uSVNvvglR55R1TwxYSRdWO90BH11VGw07cpZhyTYZGNupgP7TNvV4UjWCoRPY9C
- QV1JaEjA6p98+/PnrSahKXi0Z8Xt4g32+n+B8Huy4MVb18SEUtsOnmHJHeO10T30+xL4
- Wkir4twTacQWUhCmuwuT+czzUANNHFn3HDrMz4CXiLP/NyX6cOjeJgeij9O+s/0jI6DX
- BPt0b4IGvu5nqT9bm2sbKIqWfk2cUzvB7xL9EI8mik9GdABIWzfM6+2dEYo2xkjqz+3v
- UomWM/gYlIdzH8nWVD7snng+cWEDeDqxQNBzVyFMU0I6MGhUwGNtk1ahJ5rRWQwF+/YL xA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m39rxw7ps-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 17:26:00 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ASHPx3b026557
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 28 Nov 2022 17:25:59 GMT
-Received: from [10.110.4.151] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 28 Nov
- 2022 09:25:58 -0800
-Message-ID: <e538affc-5c43-9b40-f6c7-2ceb2fa2fec8@quicinc.com>
-Date:   Mon, 28 Nov 2022 09:25:58 -0800
+        with ESMTP id S233652AbiK1Ti5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 14:38:57 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A9325296
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 11:38:56 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id w37so5720520pga.5
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 11:38:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=wPzmsECpWTLQDu+6fp8RIE8LB+MbjYxSbHfiJcH+2TU=;
+        b=rvWGqRFJNSaPhzBGyWCMJjzktGB14wCDnTi8IXy1dnTJxQ/D3dZamRmWvpyLVxIA5X
+         VeHK83DxpT4qq/ECXVSWFsTvYCdiFq04q3TSaCNiYGsw0XbG54OEfjpuhPrxBZZZhLub
+         Dk/A2yR2Rp4raIsexyik1UoMr1aB7uI031+akP5Tlzz066AlinYEtsJ1eVGG2Ah7Li2C
+         0cfJQyki67Xz5etCtFxqC7pb0JOadI6ZrlIVxreT0VbtdLE9shBKXCE75JofK/SpE7IM
+         dLR6vkfyaSt0Ef+rJZEVMRkYUxEWHlDKhYN8uhjz+XsNsro3NHfT9ymTnz4hi2j0Kyf7
+         yT3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wPzmsECpWTLQDu+6fp8RIE8LB+MbjYxSbHfiJcH+2TU=;
+        b=KkUzPVaiuO/XgVLkJMlB8qsptqFOEadNIi8iZg8Pf75ErAhkrciYWna7qD15BglGMf
+         7PQwKmbTh8rWlFiuPLh9XHr9JMWaFTkqkCw1xCOWwTq6JiqpqUnS8P8ay7Fa9ZwlX+Wj
+         Y7MvkrbN62dC3s69wEvsppnRRIzJuoCGDfop2OuuIBSqp87eaA84DW0sslNvc8TkW9LD
+         ih/1GHo5hOsziSMhxhOJcpC5mlINeoCY28k5gkaFK/hw1fpZp4Jd0wE9TmYTMV1wFCtu
+         kQSIFfKlBDXhGbdIw8lpHtMZc0EJK4ww+lFyFRHhGssBQF26yGAje7vrz/0nrvNIATZc
+         8PyQ==
+X-Gm-Message-State: ANoB5pnYbIv1bMDpPe/HFKxGGGDn5pFEGPPcz6dyq4mfSF4j8bGayNYy
+        J9JdvhCtrWW5LyOiFXmwYu0DBg==
+X-Google-Smtp-Source: AA0mqf6UhOK8fli0+TWiNx4AyIEN5omQE8py/axypbBURaEWOBIjLSTmsjjnU1llrylDdk+o3dq/dA==
+X-Received: by 2002:a63:d14f:0:b0:476:95a8:de78 with SMTP id c15-20020a63d14f000000b0047695a8de78mr32663401pgj.66.1669664336415;
+        Mon, 28 Nov 2022 11:38:56 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id p68-20020a625b47000000b0057555d35f79sm1338268pfb.101.2022.11.28.11.38.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 28 Nov 2022 11:38:55 -0800 (PST)
+Message-ID: <63850e4f.620a0220.81446.2ba1@mx.google.com>
+Date:   Mon, 28 Nov 2022 11:38:55 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221118182245.31035-1-quic_molvera@quicinc.com>
- <20221118182245.31035-2-quic_molvera@quicinc.com>
- <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
- <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
- <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
- <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
- <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-In-Reply-To: <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: _VlFAqqNGMKUStcVcVKZrlEP3ZAEK5RE
-X-Proofpoint-ORIG-GUID: _VlFAqqNGMKUStcVcVKZrlEP3ZAEK5RE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-28_15,2022-11-28_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0 mlxscore=0
- malwarescore=0 adultscore=0 impostorscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 spamscore=0 bulkscore=0 mlxlogscore=999 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211280128
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.1-rc7-96-gdee69e7005ce
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.1-rc7-96-gdee69e7005ce)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc7-96-gde=
+e69e7005ce)
+
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+1-rc7-96-gdee69e7005ce/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.1-rc7-96-gdee69e7005ce
+Git Commit: dee69e7005ce309e619155eb6372f287212e27f7
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
 
 
-On 11/24/2022 2:30 AM, Krzysztof Kozlowski wrote:
-> On 22/11/2022 18:57, Melody Olvera wrote:
->>>>>> +
->>>>>> +maintainers:
->>>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
->>>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
->>>>>> +
->>>>>> +description: |
->>>>>> +   RPMh interconnect providers support system bandwidth requirements through
->>>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
->>>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
->>>>>> +   associated with each execution environment. Provider nodes must point to at
->>>>>> +   least one RPMh device child node pertaining to their RSC and each provider
->>>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
->>>>>> +   controlled by AP and do not support QoS; they should not have associated
->>>>>> +   register regions.
->>>>>> +
->>>>>> +allOf:
->>>>>> +  - $ref: qcom,rpmh-common.yaml#
->>>>>> +
->>>>>> +properties:
->>>>>> +  compatible:
->>>>>> +    enum:
->>>>>> +      - qcom,qdu1000-clk-virt
->>>>>> +      - qcom,qdu1000-mc-virt
->>>>>> +      - qcom,sm8450-clk-virt
->>>>>> +      - qcom,sm8450-mc-virt
->>>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
->>>>> qcom,sc8280xp-clk-virt and more.
->>>> Ok. I wasn't sure since some of these entries don't seem to conform to
->>>> these bindings, even though it seems they should.
->>> I have impression that devices I listed conform to these bindings, this
->>> is why I listed them. But if you are sure that they do not, then they
->>> should not be moved.
->> You're correct; those you listed do conform to the new bindings and should be moved.
->> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
-> Actually let's wait a bit with this. For SM8550 we had an idea to move
-> interconnect to their own bindings file, because they will grow a bit
-> with allOf:if:then clauses.
->
-> Maybe SM8450 and QDU1000 should also go to their own files which will
-> describe all their interconnects (the virt and the ones requiring clocks)?
->
-> Apologies for bringing it late for your patches, but SM8550 is also
-> happening right now, so new things pop-up :)
+Warnings summary:
 
-Yeah no worries. I can definitely make this change; if this is how we want to do
-things going forward I'm happy to oblige.
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
 
-Thanks,
-Melody
->
-> Best regards,
-> Krzysztof
->
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
 
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
