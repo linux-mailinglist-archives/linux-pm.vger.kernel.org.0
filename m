@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B40163A510
-	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE0963A50D
+	for <lists+linux-pm@lfdr.de>; Mon, 28 Nov 2022 10:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiK1JaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 04:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S229968AbiK1JaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 04:30:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiK1JaN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:30:13 -0500
+        with ESMTP id S230087AbiK1JaM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 04:30:12 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA04B7F3
-        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:29:16 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC155B857
+        for <linux-pm@vger.kernel.org>; Mon, 28 Nov 2022 01:29:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1669627755;
+        s=mimecast20190719; t=1669627759;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=j1LuRfEf5SKUjpKCDthBmOH2R9bxLXZrk4kFgi8k8Yw=;
-        b=K5lqFISjZiUsXny61GvMLq+t1ePgdrL80VASwaC7LC7uhGtcc5WwuWIVxvbv5iaNHQ0A23
-        tzHUdNho32XJryC8eAImrdeDRcE+gDzOxv+fXWxUxZeKChCA8jH7QYUTNy8JX0R+lUDtdW
-        5Qk4HkBVsdWgZyiZNYkiJ+VhUQTqzBc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=y6zo7UshplGCzPVwuZtrAadrm7Qqig9g2tLMRoXZank=;
+        b=jRJEmwfXhqYaNTb7MDDoaooxPbBYvO9MuiFv78+Y7oxjMBwnpxHakPu1wySQMQ0tqOGwd4
+        s2E2QA3lxihIeIby0gSuH18ot41cJIvS6aUN+TQLOe3d5yulzMtJEzjNa6uHuHove3E/vT
+        A3UDXEesgtYWZPUx9DwQpYDJjeucqZo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-580-8VNf1a1mMCOj5L0UOnvhfw-1; Mon, 28 Nov 2022 04:29:11 -0500
-X-MC-Unique: 8VNf1a1mMCOj5L0UOnvhfw-1
+ us-mta-452-cf37KDH_O2Wob8oN6qjovA-1; Mon, 28 Nov 2022 04:29:13 -0500
+X-MC-Unique: cf37KDH_O2Wob8oN6qjovA-1
 Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5D3F43C10146;
-        Mon, 28 Nov 2022 09:29:11 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0723801585;
+        Mon, 28 Nov 2022 09:29:12 +0000 (UTC)
 Received: from x1.localdomain.com (unknown [10.39.195.70])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 05B32FD48;
-        Mon, 28 Nov 2022 09:29:09 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B571335429;
+        Mon, 28 Nov 2022 09:29:11 +0000 (UTC)
 From:   Hans de Goede <hdegoede@redhat.com>
 To:     Sebastian Reichel <sre@kernel.org>, Marek Vasut <marex@denx.de>
 Cc:     Hans de Goede <hdegoede@redhat.com>, linux-pm@vger.kernel.org
-Subject: [PATCH v2 8/9] power: supply: bq25890: Add support for having a secondary charger IC
-Date:   Mon, 28 Nov 2022 10:28:55 +0100
-Message-Id: <20221128092856.71619-9-hdegoede@redhat.com>
+Subject: [PATCH v2 9/9] power: supply: bq25890: Add new linux,iinlim-percentage property
+Date:   Mon, 28 Nov 2022 10:28:56 +0100
+Message-Id: <20221128092856.71619-10-hdegoede@redhat.com>
 In-Reply-To: <20221128092856.71619-1-hdegoede@redhat.com>
 References: <20221128092856.71619-1-hdegoede@redhat.com>
 MIME-Version: 1.0
@@ -58,25 +58,18 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some devices, such as the Lenovo Yoga Tab 3 Pro (YT3-X90F) have multiple
-batteries with a separate bq25890 charger for each battery.
+Some devices, such as the Lenovo Yoga Tab 3 Pro (YT3-X90F) have
+multiple batteries with a separate bq25890 charger for each battery.
 
-This requires some coordination between the chargers specifically
-the main charger needs to put the secondary charger in Hi-Z mode when:
+This requires the maximum current the external power-supply can deliver
+to be divided over the chargers. The Android vendor kernel shipped
+on the YT3-X90F divides this current with a 40/60 percent split so that
+batteries are done charging at approx. the same time if both were fully
+empty at the start.
 
-1. Enabling its 5V boost (OTG) output to power an external USB device,
-   to avoid the secondary charger IC seeing this as external Vbus and
-   then trying to charge the secondary battery from this.
-
-2. Talking the Pump Express protocol to increase the external Vbus voltage.
-   Having the secondary charger drawing current when the main charger is
-   trying to talk the Pump Express protocol results in the external Vbus
-   voltage not being raised.
-
-Add a new "linux,secondary-charger-name" string device-property, which
-can be set to the power_supply class device's name of the secondary
-charger when there is a secondary charger; and make the Vbus regulator and
-Pump Express code put the secondary charger in Hi-Z mode when necessary.
+Add support for a new "linux,iinlim-percentage" percentage property which
+can be set to indicate that a bq25890 charger should only use that
+percentage of the external power-supply's maximum current.
 
 So far this new property is only used on x86/ACPI (non devicetree) devs,
 IOW it is not used in actual devicetree files. The devicetree-bindings
@@ -84,108 +77,94 @@ maintainers have requested properties like these to not be added to the
 devicetree-bindings, so the new property is deliberately not added
 to the existing devicetree-bindings.
 
-Reviewed-by: Marek Vasut <marex@denx.de>
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- drivers/power/supply/bq25890_charger.c | 45 +++++++++++++++++++++++++-
- 1 file changed, 44 insertions(+), 1 deletion(-)
+Changes in v2:
+- Check that "linux,iinlim-percentage" is not > 100 when reading it
+---
+ drivers/power/supply/bq25890_charger.c | 31 +++++++++++++++++++++++---
+ 1 file changed, 28 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index 30854d08bba9..aff55bf3ecc3 100644
+index aff55bf3ecc3..bfe08d7bfaf3 100644
 --- a/drivers/power/supply/bq25890_charger.c
 +++ b/drivers/power/supply/bq25890_charger.c
-@@ -108,6 +108,7 @@ struct bq25890_device {
- 	struct i2c_client *client;
- 	struct device *dev;
- 	struct power_supply *charger;
-+	struct power_supply *secondary_chrg;
- 	struct power_supply_desc desc;
- 	char name[28]; /* "bq25890-charger-%d" */
- 	int id;
-@@ -1042,10 +1043,17 @@ static void bq25890_pump_express_work(struct work_struct *data)
- {
- 	struct bq25890_device *bq =
- 		container_of(data, struct bq25890_device, pump_express_work.work);
-+	union power_supply_propval value;
- 	int voltage, i, ret;
- 
- 	dev_dbg(bq->dev, "Start to request input voltage increasing\n");
- 
-+	/* If there is a second charger put in Hi-Z mode */
-+	if (bq->secondary_chrg) {
-+		value.intval = 0;
-+		power_supply_set_property(bq->secondary_chrg, POWER_SUPPLY_PROP_ONLINE, &value);
-+	}
-+
- 	/* Enable current pulse voltage control protocol */
- 	ret = bq25890_field_write(bq, F_PUMPX_EN, 1);
- 	if (ret < 0)
-@@ -1077,6 +1085,11 @@ static void bq25890_pump_express_work(struct work_struct *data)
- 
- 	bq25890_field_write(bq, F_PUMPX_EN, 0);
- 
-+	if (bq->secondary_chrg) {
-+		value.intval = 1;
-+		power_supply_set_property(bq->secondary_chrg, POWER_SUPPLY_PROP_ONLINE, &value);
-+	}
-+
- 	dev_info(bq->dev, "Hi-voltage charging requested, input voltage is %d mV\n",
- 		 voltage);
- 
-@@ -1123,6 +1136,17 @@ static int bq25890_usb_notifier(struct notifier_block *nb, unsigned long val,
- static int bq25890_vbus_enable(struct regulator_dev *rdev)
- {
- 	struct bq25890_device *bq = rdev_get_drvdata(rdev);
-+	union power_supply_propval val = {
-+		.intval = 0,
-+	};
-+
-+	/*
-+	 * When enabling 5V boost / Vbus output, we need to put the secondary
-+	 * charger in Hi-Z mode to avoid it trying to charge the secondary
-+	 * battery from the 5V boost output.
-+	 */
-+	if (bq->secondary_chrg)
-+		power_supply_set_property(bq->secondary_chrg, POWER_SUPPLY_PROP_ONLINE, &val);
- 
- 	return bq25890_set_otg_cfg(bq, 1);
- }
-@@ -1130,8 +1154,19 @@ static int bq25890_vbus_enable(struct regulator_dev *rdev)
- static int bq25890_vbus_disable(struct regulator_dev *rdev)
- {
- 	struct bq25890_device *bq = rdev_get_drvdata(rdev);
-+	union power_supply_propval val = {
-+		.intval = 1,
-+	};
-+	int ret;
-+
-+	ret = bq25890_set_otg_cfg(bq, 0);
-+	if (ret)
-+		return ret;
- 
--	return bq25890_set_otg_cfg(bq, 0);
-+	if (bq->secondary_chrg)
-+		power_supply_set_property(bq->secondary_chrg, POWER_SUPPLY_PROP_ONLINE, &val);
-+
-+	return 0;
+@@ -126,6 +126,7 @@ struct bq25890_device {
+ 	bool read_back_init_data;
+ 	bool force_hiz;
+ 	u32 pump_express_vbus_max;
++	u32 iinlim_percentage;
+ 	enum bq25890_chip_version chip_version;
+ 	struct bq25890_init_data init_data;
+ 	struct bq25890_state state;
+@@ -727,6 +728,18 @@ static int bq25890_power_supply_property_is_writeable(struct power_supply *psy,
+ 	}
  }
  
- static int bq25890_vbus_is_enabled(struct regulator_dev *rdev)
-@@ -1342,6 +1377,14 @@ static int bq25890_fw_probe(struct bq25890_device *bq)
++/*
++ * If there are multiple chargers the maximum current the external power-supply
++ * can deliver needs to be divided over the chargers. This is done according
++ * to the bq->iinlim_percentage setting.
++ */
++static int bq25890_charger_get_scaled_iinlim_regval(struct bq25890_device *bq,
++						    int iinlim_ua)
++{
++	iinlim_ua = iinlim_ua * bq->iinlim_percentage / 100;
++	return bq25890_find_idx(iinlim_ua, TBL_IINLIM);
++}
++
+ /* On the BQ25892 try to get charger-type info from our supplier */
+ static void bq25890_charger_external_power_changed(struct power_supply *psy)
  {
+@@ -745,7 +758,7 @@ static void bq25890_charger_external_power_changed(struct power_supply *psy)
+ 
+ 	switch (val.intval) {
+ 	case POWER_SUPPLY_USB_TYPE_DCP:
+-		input_current_limit = bq25890_find_idx(2000000, TBL_IINLIM);
++		input_current_limit = bq25890_charger_get_scaled_iinlim_regval(bq, 2000000);
+ 		if (bq->pump_express_vbus_max) {
+ 			queue_delayed_work(system_power_efficient_wq,
+ 					   &bq->pump_express_work,
+@@ -754,11 +767,11 @@ static void bq25890_charger_external_power_changed(struct power_supply *psy)
+ 		break;
+ 	case POWER_SUPPLY_USB_TYPE_CDP:
+ 	case POWER_SUPPLY_USB_TYPE_ACA:
+-		input_current_limit = bq25890_find_idx(1500000, TBL_IINLIM);
++		input_current_limit = bq25890_charger_get_scaled_iinlim_regval(bq, 1500000);
+ 		break;
+ 	case POWER_SUPPLY_USB_TYPE_SDP:
+ 	default:
+-		input_current_limit = bq25890_find_idx(500000, TBL_IINLIM);
++		input_current_limit = bq25890_charger_get_scaled_iinlim_regval(bq, 500000);
+ 	}
+ 
+ 	bq25890_field_write(bq, F_IINLIM, input_current_limit);
+@@ -1378,6 +1391,7 @@ static int bq25890_fw_probe(struct bq25890_device *bq)
  	int ret;
  	struct bq25890_init_data *init = &bq->init_data;
-+	const char *str;
-+
-+	ret = device_property_read_string(bq->dev, "linux,secondary-charger-name", &str);
-+	if (ret == 0) {
-+		bq->secondary_chrg = power_supply_get_by_name(str);
-+		if (!bq->secondary_chrg)
-+			return -EPROBE_DEFER;
-+	}
+ 	const char *str;
++	u32 val;
  
- 	/* Optional, left at 0 if property is not present */
+ 	ret = device_property_read_string(bq->dev, "linux,secondary-charger-name", &str);
+ 	if (ret == 0) {
+@@ -1390,6 +1404,17 @@ static int bq25890_fw_probe(struct bq25890_device *bq)
  	device_property_read_u32(bq->dev, "linux,pump-express-vbus-max",
+ 				 &bq->pump_express_vbus_max);
+ 
++	ret = device_property_read_u32(bq->dev, "linux,iinlim-percentage", &val);
++	if (ret == 0) {
++		if (val > 100) {
++			dev_err(bq->dev, "Error linux,iinlim-percentage %u > 100\n", val);
++			return -EINVAL;
++		}
++		bq->iinlim_percentage = val;
++	} else {
++		bq->iinlim_percentage = 100;
++	}
++
+ 	bq->skip_reset = device_property_read_bool(bq->dev, "linux,skip-reset");
+ 	bq->read_back_init_data = device_property_read_bool(bq->dev,
+ 						"linux,read-back-settings");
 -- 
 2.37.3
 
