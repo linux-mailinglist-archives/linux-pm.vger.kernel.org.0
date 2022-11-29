@@ -2,51 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1621263C3B4
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 16:27:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC21E63C503
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 17:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230148AbiK2P1X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 10:27:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54942 "EHLO
+        id S235761AbiK2QX2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 11:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235817AbiK2P1V (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 10:27:21 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D94E2EF1E;
-        Tue, 29 Nov 2022 07:27:19 -0800 (PST)
-Received: from mercury (dyndsl-091-096-035-212.ewe-ip-backbone.de [91.96.35.212])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B95D566017D3;
-        Tue, 29 Nov 2022 15:27:17 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669735637;
-        bh=2uWz2A7xOoum4HnLr287oebganaus9nvik9/vnxaEhU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YcOv7KjDCf2hv8Ylk0oMiT6YFxn8vAOAwb3tP/TznAzcB4hNpZRmZ6pFxwW3gq25Y
-         zuXASNgJQAjvk1B1qZsV2R+ySlEhthBy3jLqSrYE5BFAbsqcjijhUv4sQ42Yk7Smqh
-         GKMhhvrVBmdsTX8DFHe1f587dRog3jQIc0MuHVlACdNsdjDkS18ak16EqycpD/DVOX
-         6rbX2LzcHq3KHbT3OHCFKtEUC/Qj+ZlfwHWRTbxMwxM2bgvOfH2oAyASH9O9GSKGeR
-         Q53Z6Rdh02ej78ArkKkUDvadQMPkgJ8Kti4aJj09N8qs30rQMsD6p/z+LE62RbRDX3
-         +vD4vdXESDGYQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 3E5311060AB4; Tue, 29 Nov 2022 16:27:15 +0100 (CET)
-Date:   Tue, 29 Nov 2022 16:27:15 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hermes Zhang <chenhuiz@axis.com>
-Cc:     kernel@axis.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: supply: bq256xx: Remove init ichg/vbat with max
- value
-Message-ID: <20221129152715.4hwtobuv57hrndzu@mercury.elektranox.org>
-References: <20221129090112.3451501-1-chenhuiz@axis.com>
+        with ESMTP id S235766AbiK2QX0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 11:23:26 -0500
+X-Greylist: delayed 2623 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 08:23:24 PST
+Received: from mail.kapsi.fi (mail.kapsi.fi [IPv6:2001:67c:1be8::25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0A729818;
+        Tue, 29 Nov 2022 08:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=kapsi.fi;
+        s=20161220; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=38ZO5dcQL7vEBOSehjzd4koG7jc6NaxBkgnbwvWmh2Y=; b=xlk1fVSDvS2IHfd8DdjH/YnlDh
+        o/+tEzgh7v2gBMCj862rB3kWujZyesuCtaiypcv0V9Lb1JWEUqFHSIDa/Gm1WrcujHNHiFRlKZyMH
+        meq9x6mbCVn8oxAfX9K4OaezgSfwcF1JsYakeak3EW1H8yad0nb3jhaQ3/iMP0rwc1u4kyFYu8f8M
+        jEGAENuEeJr3crC9DMwPB+7AYYBMa07v4wyUemABf4FNE7v6aaYn4EbnPtXFQNJXvQpfSG3Gr2BWU
+        MjHt+tDyp2gyOSEOtPbchQhQ1mswqXMJvhCl9X8wW0hCGL/loGnY31gEOt9r0o4XsxjQdPfDm02HR
+        AQn90mMQ==;
+Received: from 91-158-25-70.elisa-laajakaista.fi ([91.158.25.70] helo=toshino.localdomain)
+        by mail.kapsi.fi with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <cyndis@kapsi.fi>)
+        id 1p02hb-00DfaO-Mo; Tue, 29 Nov 2022 17:39:19 +0200
+From:   Mikko Perttunen <cyndis@kapsi.fi>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Mikko Perttunen <mperttunen@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        linux-pm@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: [PATCH] thermal: tegra-bpmp: Check if BPMP supports trip points
+Date:   Tue, 29 Nov 2022 17:39:14 +0200
+Message-Id: <20221129153914.2699041-1-cyndis@kapsi.fi>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nhxzr54p4jecfeyb"
-Content-Disposition: inline
-In-Reply-To: <20221129090112.3451501-1-chenhuiz@axis.com>
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 91.158.25.70
+X-SA-Exim-Mail-From: cyndis@kapsi.fi
+X-SA-Exim-Scanned: No (on mail.kapsi.fi); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -56,83 +59,102 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: Mikko Perttunen <mperttunen@nvidia.com>
 
---nhxzr54p4jecfeyb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Check if BPMP supports thermal trip points, and if not,
+do not expose the .set_trips callback to the thermal core
+framework. This can happen in virtualized environments
+where asynchronous communication with VM BPMP drivers is not
+available.
 
-Hi,
+Signed-off-by: Mikko Perttunen <mperttunen@nvidia.com>
+---
+ drivers/thermal/tegra/tegra-bpmp-thermal.c | 52 +++++++++++++++++++++-
+ 1 file changed, 51 insertions(+), 1 deletion(-)
 
-On Tue, Nov 29, 2022 at 05:01:12PM +0800, Hermes Zhang wrote:
-> Init the ichg and vbat reg with max value is not good. First the chip
-> already has a default value for ichg and vbat (small value). Init these
-> two reg with max value will result an unsafe case (e.g. battery is over
-> charging in a hot environment) if no user space change them later.
->=20
-> Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
-> ---
+diff --git a/drivers/thermal/tegra/tegra-bpmp-thermal.c b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+index 0b7a1a1948cb..c76e1ea62c8a 100644
+--- a/drivers/thermal/tegra/tegra-bpmp-thermal.c
++++ b/drivers/thermal/tegra/tegra-bpmp-thermal.c
+@@ -163,19 +163,69 @@ static int tegra_bpmp_thermal_get_num_zones(struct tegra_bpmp *bpmp,
+ 	return 0;
+ }
+ 
++static int tegra_bpmp_thermal_trips_supported(struct tegra_bpmp *bpmp, bool *supported)
++{
++	struct mrq_thermal_host_to_bpmp_request req;
++	union mrq_thermal_bpmp_to_host_response reply;
++	struct tegra_bpmp_message msg;
++	int err;
++
++	memset(&req, 0, sizeof(req));
++	req.type = CMD_THERMAL_QUERY_ABI;
++	req.query_abi.type = CMD_THERMAL_SET_TRIP;
++
++	memset(&msg, 0, sizeof(msg));
++	msg.mrq = MRQ_THERMAL;
++	msg.tx.data = &req;
++	msg.tx.size = sizeof(req);
++	msg.rx.data = &reply;
++	msg.rx.size = sizeof(reply);
++
++	err = tegra_bpmp_transfer(bpmp, &msg);
++	if (err)
++		return err;
++
++	if (msg.rx.ret == 0) {
++		*supported = true;
++		return 0;
++	} else if (msg.rx.ret == -BPMP_ENODEV) {
++		*supported = false;
++		return 0;
++	} else {
++		return -EINVAL;
++	}
++}
++
+ static const struct thermal_zone_device_ops tegra_bpmp_of_thermal_ops = {
+ 	.get_temp = tegra_bpmp_thermal_get_temp,
+ 	.set_trips = tegra_bpmp_thermal_set_trips,
+ };
+ 
++static const struct thermal_zone_device_ops tegra_bpmp_of_thermal_ops_notrips = {
++	.get_temp = tegra_bpmp_thermal_get_temp,
++};
++
+ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
+ {
+ 	struct tegra_bpmp *bpmp = dev_get_drvdata(pdev->dev.parent);
++	const struct thermal_zone_device_ops *thermal_ops;
+ 	struct tegra_bpmp_thermal *tegra;
+ 	struct thermal_zone_device *tzd;
+ 	unsigned int i, max_num_zones;
++	bool supported;
+ 	int err;
+ 
++	err = tegra_bpmp_thermal_trips_supported(bpmp, &supported);
++	if (err) {
++		dev_err(&pdev->dev, "failed to determine if trip points are supported\n");
++		return err;
++	}
++
++	if (supported)
++		thermal_ops = &tegra_bpmp_of_thermal_ops;
++	else
++		thermal_ops = &tegra_bpmp_of_thermal_ops_notrips;
++
+ 	tegra = devm_kzalloc(&pdev->dev, sizeof(*tegra), GFP_KERNEL);
+ 	if (!tegra)
+ 		return -ENOMEM;
+@@ -213,7 +263,7 @@ static int tegra_bpmp_thermal_probe(struct platform_device *pdev)
+ 		}
+ 
+ 		tzd = devm_thermal_of_zone_register(
+-			&pdev->dev, i, zone, &tegra_bpmp_of_thermal_ops);
++			&pdev->dev, i, zone, thermal_ops);
+ 		if (IS_ERR(tzd)) {
+ 			if (PTR_ERR(tzd) == -EPROBE_DEFER)
+ 				return -EPROBE_DEFER;
+-- 
+2.37.0
 
-It's the driver's task to setup safe initial maximum values.
-Pre-kernel values may or may not be safe if you consider things
-like kexec. If you get unsafe values programmed, then fix the
-values instead.
-
--- Sebastian
-
->  drivers/power/supply/bq256xx_charger.c | 10 ----------
->  1 file changed, 10 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/suppl=
-y/bq256xx_charger.c
-> index 01ad84fd147c..d1aa92c10c22 100644
-> --- a/drivers/power/supply/bq256xx_charger.c
-> +++ b/drivers/power/supply/bq256xx_charger.c
-> @@ -1562,21 +1562,11 @@ static int bq256xx_hw_init(struct bq256xx_device =
-*bq)
->  	if (ret)
->  		return ret;
-> =20
-> -	ret =3D bq->chip_info->bq256xx_set_ichg(bq,
-> -				bat_info->constant_charge_current_max_ua);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret =3D bq->chip_info->bq256xx_set_iprechg(bq,
->  				bat_info->precharge_current_ua);
->  	if (ret)
->  		return ret;
-> =20
-> -	ret =3D bq->chip_info->bq256xx_set_vbatreg(bq,
-> -				bat_info->constant_charge_voltage_max_uv);
-> -	if (ret)
-> -		return ret;
-> -
->  	ret =3D bq->chip_info->bq256xx_set_iterm(bq,
->  				bat_info->charge_term_current_ua);
->  	if (ret)
-> --=20
-> 2.30.2
->=20
-
---nhxzr54p4jecfeyb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOGJMoACgkQ2O7X88g7
-+pr2/A/+ObAJI1Ihz0lz5Yr5sQVpHXiTtTj+QNVgp7YKWEEFZ3ReQBEL7LPr7ih6
-b15AxbN7PPnELw6tjGOyPA2By87w4ZXScIFR8hiO0wntZI2hbamza+revN+CIvN8
-8qw1t2GhSuGksus+zyHtvWw3Loq60kn3a8IID0LnihdLupZTJuYjD+TzVo0RtZrb
-3N/dPB4nD2XatCNlXkVSA1IFVxMlPy2/i+5SbYXaTbpm5zpETkyYPfa+ywU7EStr
-Ac/eZly+9kIa3q5D3IkZ9ho0EF7FZ7ivPjwbtbszM/6yiHp2KY/qhtJDyfRCCmc8
-f3c6kT/97xQ6vJHSkXpgU13Bs/zud9PXV+QqA0uQUh2eLTquSrYTn2HeV4TV3+/5
-utF4ZNISx6zIQ9S6HafCRlv7gA1XspQy0kEcXPAfifawWBHIkW5tAehv4XQ/PTeE
-jmv9m8r+VFoZhH4upDtT0TLYo3G3eYV75gBgu1RK8OX+I6lzk4E0T6ocaHMJ0ALE
-X6KfKfpIgCW53ZT2XtkErfAYVBFqkOaUIUlO3cXdbutjuzt82MtyJ5YmEZmodLHQ
-CV+rP/V7pzO7MXs6yDrLm1X0LFK6+PVwsu0bqg+GqpFs3aAgroepKGsOUMGpJjVn
-7oXFsBOS4L79tevd51jfT6f0J0+TDLVoutCUsukuoxwGfXMT/fo=
-=TDmG
------END PGP SIGNATURE-----
-
---nhxzr54p4jecfeyb--
