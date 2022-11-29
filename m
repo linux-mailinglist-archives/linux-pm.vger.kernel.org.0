@@ -2,144 +2,144 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27C4C63B5B4
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 00:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2053463B790
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 03:00:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234502AbiK1XOf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 28 Nov 2022 18:14:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37300 "EHLO
+        id S234897AbiK2CAN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 28 Nov 2022 21:00:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiK1XOb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 18:14:31 -0500
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B0FC31DEA;
-        Mon, 28 Nov 2022 15:14:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1669677269; x=1701213269;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=lAVneB4HhOUy6A7D20s1HsKFLRRCUYhOC6HiITdsnQI=;
-  b=bvc1id2gNcSpKI4OaQzN9tWkr/OOiMFdT0axSHhX7+JElL7uHsxhFRv5
-   3pERZzNlm49pTPzsI+sDkUQsCuo3+kb7QKTwLPensGuvTAd8HqllXgpOn
-   6I9UmTqhZwMWCkQY0ALC4UcPNZtX8w41G39DKryJpJoEIMd5ZfSkBKC0j
-   c=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 28 Nov 2022 15:14:29 -0800
-X-QCInternal: smtphost
-Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 15:14:28 -0800
-Received: from [10.110.4.151] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 28 Nov
- 2022 15:14:27 -0800
-Message-ID: <54a474a1-0b44-0cb4-4fcd-e60a76d293c6@quicinc.com>
-Date:   Mon, 28 Nov 2022 15:14:27 -0800
+        with ESMTP id S233934AbiK2CAM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 28 Nov 2022 21:00:12 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5458745A09;
+        Mon, 28 Nov 2022 18:00:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669687211; x=1701223211;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=kokUTO3pNOqizW3Qp3hAUb5tGZM254XvbpWoLKp5c9g=;
+  b=CtnUcz1cDenVfJn6Q8ZRlA5m03LZ9DdFGrbZPgQBFQcB8homyusAYqRQ
+   HPTfYs1JSINgkC26BMP9vMh9nyK287YxV4Z7pnrNipb15ZZa3ONcTQEEQ
+   AmbPb6uZlyPIKp190ktxUyJONG2U2sLw88fqVRjWDtQNEd5D76tVYpc0E
+   BG+0mglsqpTMK+ovV8O8wGs2s/uvCBMWzRqXbdLfVQ1pUtoY2IhYH7r0x
+   Vc+Bq6THfNx0esNupWe9Zkiw0c8ucBNqQDYT/bRbj/feSCW2jyXeFJICV
+   Rk4AMDjZIGkZT+xq5Nd5yNDbsPuyTjRSy6oVYdqArCLU/qOhofL+0oJAa
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="316831917"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="316831917"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2022 18:00:10 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10545"; a="643614243"
+X-IronPort-AV: E=Sophos;i="5.96,201,1665471600"; 
+   d="scan'208";a="643614243"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 28 Nov 2022 18:00:09 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1ozpuq-0008VP-1I;
+        Tue, 29 Nov 2022 02:00:08 +0000
+Date:   Tue, 29 Nov 2022 09:59:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ dee69e7005ce309e619155eb6372f287212e27f7
+Message-ID: <63856782.i3rgzZuq5QnxURN3%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 1/3] dt-bindings: interconnect: Add rpmh virt devices
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221118182245.31035-1-quic_molvera@quicinc.com>
- <20221118182245.31035-2-quic_molvera@quicinc.com>
- <536af0d9-aa00-ddf1-753d-670ec2adef91@linaro.org>
- <3ada611b-96e0-5cf0-d79d-b90ca4202ddb@quicinc.com>
- <b7cc4f5d-c1d6-919c-9604-7855ea802d17@linaro.org>
- <e6ae7c01-47ca-f1da-3b0b-1f17d9e862bf@quicinc.com>
- <333a240a-2c97-8b19-91d1-315d00e1f438@linaro.org>
- <e538affc-5c43-9b40-f6c7-2ceb2fa2fec8@quicinc.com>
- <cb6a434f-9dc1-d24e-4c4a-02a223c12619@quicinc.com>
-In-Reply-To: <cb6a434f-9dc1-d24e-4c4a-02a223c12619@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: dee69e7005ce309e619155eb6372f287212e27f7  Merge branches 'thermal-core' and 'thermal-intel' into linux-next
 
+elapsed time: 733m
 
-On 11/28/2022 3:08 PM, Melody Olvera wrote:
->
-> On 11/28/2022 9:25 AM, Melody Olvera wrote:
->> On 11/24/2022 2:30 AM, Krzysztof Kozlowski wrote:
->>> On 22/11/2022 18:57, Melody Olvera wrote:
->>>>>>>> +
->>>>>>>> +maintainers:
->>>>>>>> +  - Georgi Djakov <georgi.djakov@linaro.org>
->>>>>>>> +  - Odelu Kukatla <quic_okukatla@quicinc.com>
->>>>>>>> +
->>>>>>>> +description: |
->>>>>>>> +   RPMh interconnect providers support system bandwidth requirements through
->>>>>>>> +   RPMh hardware accelerators known as Bus Clock Manager (BCM). The provider is
->>>>>>>> +   able to communicate with the BCM through the Resource State Coordinator (RSC)
->>>>>>>> +   associated with each execution environment. Provider nodes must point to at
->>>>>>>> +   least one RPMh device child node pertaining to their RSC and each provider
->>>>>>>> +   can map to multiple RPMh resources. Virtual interconnect providers are not
->>>>>>>> +   controlled by AP and do not support QoS; they should not have associated
->>>>>>>> +   register regions.
->>>>>>>> +
->>>>>>>> +allOf:
->>>>>>>> +  - $ref: qcom,rpmh-common.yaml#
->>>>>>>> +
->>>>>>>> +properties:
->>>>>>>> +  compatible:
->>>>>>>> +    enum:
->>>>>>>> +      - qcom,qdu1000-clk-virt
->>>>>>>> +      - qcom,qdu1000-mc-virt
->>>>>>>> +      - qcom,sm8450-clk-virt
->>>>>>>> +      - qcom,sm8450-mc-virt
->>>>>>> You should also move qcom,sdx65-mc-virt, qcom,sc8280xp-mc-virt,
->>>>>>> qcom,sc8280xp-clk-virt and more.
->>>>>> Ok. I wasn't sure since some of these entries don't seem to conform to
->>>>>> these bindings, even though it seems they should.
->>>>> I have impression that devices I listed conform to these bindings, this
->>>>> is why I listed them. But if you are sure that they do not, then they
->>>>> should not be moved.
->>>> You're correct; those you listed do conform to the new bindings and should be moved.
->>>> I also caught qcom,sc7280-clk-virt which needs to be moved. I'll add to the new bindings.
->>> Actually let's wait a bit with this. For SM8550 we had an idea to move
->>> interconnect to their own bindings file, because they will grow a bit
->>> with allOf:if:then clauses.
->>>
->>> Maybe SM8450 and QDU1000 should also go to their own files which will
->>> describe all their interconnects (the virt and the ones requiring clocks)?
->>>
->>> Apologies for bringing it late for your patches, but SM8550 is also
->>> happening right now, so new things pop-up :)
->> Yeah no worries. I can definitely make this change; if this is how we want to do
->> things going forward I'm happy to oblige.
->>
->> Thanks,
->> Melody
-> I think though for these PS, I'll stick to doing w QDU1000. So I'll have a file qcom,qdu1000-rpmh.yaml
-> and qcom,qdu1000-rpmh-virt.yaml
->
-> Thanks,
-> Melody
+configs tested: 62
+configs skipped: 2
 
-Nevermind; looks like SM8550 is keeping all in one file, so I'll keep all in one file.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
->
->>> Best regards,
->>> Krzysztof
->>>
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                                 defconfig
+arc                              allyesconfig
+s390                             allmodconfig
+alpha                            allyesconfig
+x86_64                              defconfig
+arc                  randconfig-r043-20221128
+alpha                               defconfig
+x86_64                          rhel-8.3-func
+s390                                defconfig
+x86_64                    rhel-8.3-kselftests
+i386                 randconfig-a002-20221128
+i386                 randconfig-a003-20221128
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+i386                 randconfig-a001-20221128
+x86_64                         rhel-8.3-kunit
+i386                                defconfig
+i386                 randconfig-a005-20221128
+i386                 randconfig-a006-20221128
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a004-20221128
+arc                               allnoconfig
+s390                             allyesconfig
+x86_64                           allyesconfig
+x86_64               randconfig-a002-20221128
+alpha                             allnoconfig
+x86_64               randconfig-a005-20221128
+i386                              allnoconfig
+x86_64               randconfig-a001-20221128
+x86_64               randconfig-a006-20221128
+x86_64               randconfig-a003-20221128
+ia64                             allmodconfig
+arm                               allnoconfig
+x86_64               randconfig-a004-20221128
+powerpc                           allnoconfig
+mips                             allyesconfig
+i386                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
 
+clang tested configs:
+hexagon              randconfig-r045-20221128
+hexagon              randconfig-r041-20221128
+riscv                randconfig-r042-20221128
+s390                 randconfig-r044-20221128
+x86_64               randconfig-a013-20221128
+i386                 randconfig-a012-20221128
+i386                 randconfig-a014-20221128
+i386                 randconfig-a015-20221128
+x86_64               randconfig-a012-20221128
+i386                 randconfig-a016-20221128
+x86_64               randconfig-a014-20221128
+i386                 randconfig-a011-20221128
+i386                 randconfig-a013-20221128
+x86_64               randconfig-a011-20221128
+x86_64               randconfig-a016-20221128
+x86_64               randconfig-a015-20221128
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
