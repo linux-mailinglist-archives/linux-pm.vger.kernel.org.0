@@ -2,99 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEFB163CB8F
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 00:08:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2043463CBCD
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 00:28:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237001AbiK2XIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 18:08:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S229901AbiK2X2p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 18:28:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236885AbiK2XIk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 18:08:40 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41F6DFDF;
-        Tue, 29 Nov 2022 15:08:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1669763319; x=1701299319;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=fLd+RbKdEt5N7t1sQuFBcbp2DIuuw03BqlrwDN3LPTY=;
-  b=FdmIIWf/cCk5cLAVJzF+Giou1iwhxHoIwUTrzJjQEjdYijFnAgOMw2Vb
-   d2LH+M5FTs0DaLy0P8osGCvfaKhKAK2/I8vKtRxzS+jJMo36GfgFN9XgY
-   H0DsED30pNrImxMUiDB4JwUzZldSMYNMFG73BaNb/Awr/gt3lT6lTzmDk
-   401u+7fxdFaA801hwHRybGDK9b4Gvq3qCDL/RORunIQKtlSPC62DAOZdq
-   d0e3px89mP5lYHqyE62tSTTB9Pcoo1sz3guxGcvZFlGkMlAxs6w1K5O3P
-   1ZEwWFWbZrZ++xl7iC87fBOwYcEyFHAeSYCd/xPD5FktDDoAzManpHBvb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342173498"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="342173498"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 15:08:39 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="707416267"
-X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
-   d="scan'208";a="707416267"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga008.fm.intel.com with ESMTP; 29 Nov 2022 15:08:38 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] powercap: idle_inject: Fix warnings with make W=1
-Date:   Tue, 29 Nov 2022 15:08:21 -0800
-Message-Id: <20221129230821.4021932-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S229816AbiK2X2m (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 18:28:42 -0500
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979AC31EE1;
+        Tue, 29 Nov 2022 15:28:39 -0800 (PST)
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-142306beb9aso19014679fac.11;
+        Tue, 29 Nov 2022 15:28:39 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rUKc4mR/Mfwu7jkjJVB/sckWcE9ThlfDvPuBAfuHKEo=;
+        b=ZBkK2YWaNdBmfKD3VYimc/DwPmMzkcuK8+HnzVm/e2/baAKFjrpAN9R8v7IbyKbiL8
+         5i4WtKz0BaCbHQ6aCUQVcPuUnvgKLAaTPjZKoqyLhqKjOq1R7MhZtH8dGrNawKZAekH9
+         m5XbXjSrrBYBSKHnk04za1+mQopDT8eaJu06t8rtdV7mJVpwUohQ+6TMfYj3x0qUloNG
+         jjwKWIb1ffTjR8A/mCIy9QhpKJJWrazYUUpZyDBBe9EFksSpOYyfARBt+z3JoY7XAXXt
+         C210nwnzKtGyIFdpmDV2rVNe6HyTVw1E94GwReng4Yb5cl4v4N4Unfz4DeykyrEdN5Yo
+         eaLg==
+X-Gm-Message-State: ANoB5plbBYIjN9439vIx6gzN9NKpWm84SedogeGgNg024kITjleatmRd
+        1CpC7XQ9zSvtWQprKd2j0shTncwyKA==
+X-Google-Smtp-Source: AA0mqf6FDuUQ7oa2sK/OhFmCAUSB/DBnyAam5tNbnNb+uAHO0524fMqAUn+O+NGJ3cxGm0IrsquNlA==
+X-Received: by 2002:a05:6870:8183:b0:137:5344:7776 with SMTP id k3-20020a056870818300b0013753447776mr31801448oae.208.1669764518884;
+        Tue, 29 Nov 2022 15:28:38 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id w12-20020a056830410c00b006619295af60sm15421ott.70.2022.11.29.15.28.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 15:28:38 -0800 (PST)
+Received: (nullmailer pid 492448 invoked by uid 1000);
+        Tue, 29 Nov 2022 23:28:37 -0000
+Date:   Tue, 29 Nov 2022 17:28:37 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+Message-ID: <20221129232837.GA432535-robh@kernel.org>
+References: <20221128142912.16022-1-marcan@marcan.st>
+ <20221128142912.16022-3-marcan@marcan.st>
+ <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+ <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
+ <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
+ <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Fix following warning at three places:
+On Wed, Nov 30, 2022 at 12:17:08AM +0900, Hector Martin wrote:
+> On 29/11/2022 23.34, Krzysztof Kozlowski wrote:
+> > On 29/11/2022 15:00, Hector Martin wrote:
+> >> On 29/11/2022 20.36, Ulf Hansson wrote:
+> >> Please, let's introspect about this for a moment. Something is deeply
+> >> broken if people with 25+ years being an arch maintainer can't get a
+> > 
+> > If arch maintainer sends patches which does not build (make
+> > dt_binding_check), then what do you exactly expect? Accept them just
+> > because it is 25+ years of experience or a maintainer? So we have
+> > difference processes - for beginners code should compile. For
+> > experienced people, it does not have to build because otherwise they
+> > will get discouraged?
+> 
+> I expect the process to not be so confusing and frustrating that a
+> maintainer with 25+ years of experience gives up. That the bindings
+> didn't pass the checker is besides the point. People say the Linux
+> kernel community is hostile to newbies. This issue proves it's not just
+> newbies, the process is failing even experienced folks.
 
-Function parameter or member 'ii_dev' not described.
+IME, a lack of response is a bigger issue and more frustrating.
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/powercap/idle_inject.c | 3 +++
- 1 file changed, 3 insertions(+)
+> On that specific issue, any other functional open source project would
+> have the binding checks be a CI bot, with a friendly message telling you
+> what to do to fix it, and it would re-run when you push to the PR again,
+> which is a *much* lower friction action than sending a whole new patch
+> series out for review via email (if you don't agree with this, then
+> you're not the average contributor - the Linux kernel is by far the
+> scariest major open source project to contribute to, and I think most
+> people would agree with me on that).
 
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index 999e218d7793..fe86a09e3b67 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -147,6 +147,7 @@ static void idle_inject_fn(unsigned int cpu)
- 
- /**
-  * idle_inject_set_duration - idle and run duration update helper
-+ * @ii_dev: idle injection control device structure
-  * @run_duration_us: CPU run time to allow in microseconds
-  * @idle_duration_us: CPU idle time to inject in microseconds
-  */
-@@ -162,6 +163,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
- 
- /**
-  * idle_inject_get_duration - idle and run duration retrieval helper
-+ * @ii_dev: idle injection control device structure
-  * @run_duration_us: memory location to store the current CPU run time
-  * @idle_duration_us: memory location to store the current CPU idle time
-  */
-@@ -175,6 +177,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
- 
- /**
-  * idle_inject_set_latency - set the maximum latency allowed
-+ * @ii_dev: idle injection control device structure
-  * @latency_us: set the latency requirement for the idle state
-  */
- void idle_inject_set_latency(struct idle_inject_device *ii_dev,
--- 
-2.31.1
+We could probably add a $ci_provider job description to do that. In 
+fact, I did try that once[1]. The challenge would be what to run if 
+there's multiple maintainers doing something. Otherwise, it's a 
+maintainer creating their own thing which we have too much of already.
+
+> I know Rob has a DT checker bot, but its error output is practically
+> line noise,
+
+I'm not sure what to do there beyond the 'hint' lines I've added. It's 
+kind of how json-schema functions unfortunately. I think it stems from 
+each schema keyword being evaluated independently.
+
+>  and the error email doesn't even mention the
+> DT_SCHEMA_FILES= make option (which is the only way to make the check
+> not take *forever* to run).
+
+That's easy enough to add and a specific suggestion I can act on.
+
+However, note that the full thing still has to be run because any 
+schema change can affect any other example (which is a large part of 
+why it's slow).
+
+>  Absolutely nobody is going to look at those
+> emails without already knowing the intricacies of DT bindings and the
+> checker and not find them incredibly frustrating.
+
+I don't know how else to enable someone not understanding DT bindings 
+nor json-schema to write DT bindings. I get that json-schema is not 
+something kernel developers typically know already. Trust me, the 
+alternatives proposed for a schema over the years would have been 
+much worse.
+
+Rob
+
+[1] https://lore.kernel.org/all/20181003222715.28667-1-robh@kernel.org/
 
