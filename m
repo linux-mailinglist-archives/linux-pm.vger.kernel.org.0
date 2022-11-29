@@ -2,74 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E31463C4E9
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 17:14:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84BD263C543
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 17:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234628AbiK2QOv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 11:14:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
+        id S235150AbiK2Qf7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 11:35:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235846AbiK2QOV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 11:14:21 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C076479
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:14:19 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id d6so13878334pll.7
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:14:19 -0800 (PST)
+        with ESMTP id S235964AbiK2Qf4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 11:35:56 -0500
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E08E697DC
+        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:35:55 -0800 (PST)
+Received: by mail-lf1-x129.google.com with SMTP id b3so22910471lfv.2
+        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:35:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kNFxlZ5UZHdqkY5D469ZlAF99iMQpaT7Z5Tb3gRNO6s=;
-        b=mklqGGWoIM/Kk03/T+/9GKUrA6BxCbIlOnGYi47ya+PsGaq5PuQ79ArfHzHUmocpKh
-         UWYRyw2YoIeBkjr3Eqm6k/Gdwca1jZhoqdZYMEv0kDpavQqW0uemlTyNhrp3s8Lyp0wf
-         dfoVI3AWKhWpEbKWDtpXW8RUcscnpr6oqcIWCY5X0aF1OS5tSH/X9xee82Tifpp8sMRD
-         co8Ej+77pmSyRY25H4eiRVWk8ImjBJxYvrt7ksEMgk4BwtOVGzzQd6dW7IwDPPvW45Db
-         MMLLaFIp/OL9/QILpT4+Emv8SB0DSzXuP/u0J5ZxNBL52B7jukWPRDqx1Ry5wVQdlurk
-         K0rQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DozG8slifYUbIeG4p5hbkPUxWwGRFcCdA+vVxiWXmfs=;
+        b=I9CBZQoGxjED9f6Xxs7R1Rh6NnUMmuWqQXJdRRmpJ19Mz89DIjvjAoIuZf7K9iWSBb
+         BiuLtCwS1l8gbw3kmoN3yBnAy0UNEWGDVWoL2sM0tJjSRAYvll5qomZ569ewA9ysgSxU
+         JzfdKhZGEjom0GwBUbMn2PSvs3xj6oK1LcdbY+Tk/SBTR5WTvgMJBNv2HG66Cws6pPO9
+         Sia8hauW5d44/JN0lbQF8CYJlynN0e2tJ0r9jPqXIbic6wHazU6w0R3BFFReizNVGZHf
+         3nghfdGrmHKOK8Kcx91mFYj0lzTVx4zPIFCmuqQfPRQHqdG09bfrB8NBJpuESEprcOvX
+         cnnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kNFxlZ5UZHdqkY5D469ZlAF99iMQpaT7Z5Tb3gRNO6s=;
-        b=6b64fgoH8WVQcxFyHqNzFgqlYQ1/KehIDWYBVNgXlBwLKir5gI+YQpPgDJn9EWPs4u
-         VCwP9AXrofdnxhUH8Jki1AWYr8lMUxUps5QwnAfgxJv/96zVnpytp2F97f9h5+IKroX6
-         PM+pmU56qHuGSZhPoAHCIMFVRZFDsIQIZFxIhqXFTmqtwKeuwFDPvpf8hnDUGYsb4G+P
-         cbg6T/+Vs+derudrIOhHK9XxaP1iIyh/QPvZiz1a5AgJzt5MlT46M9HaM6dWNNAUOVOz
-         oN65IvDiK5GlEdO/O+yoc8Xn+f214LZbXRO4MMN1QrHmDKyINHuhDkAItjaLJV/K1YHa
-         Wf1A==
-X-Gm-Message-State: ANoB5pmuLC1dGCeCCUZ1+8fXfA9D5IGHtZ8o2wzFnQu3pKCTCJi/vZNW
-        8fGDDLbNZuBTF9V8rINl4EfqKgNUoNUsyBJyef/spw==
-X-Google-Smtp-Source: AA0mqf5Rhd9HRwHYXDQMJsdsuHv6CWi3cvL30xHSRd2rhgyF1yVicxH7ZuTFM37ksIosNcYkVDDs3i5NQrVQbGRzqH4=
-X-Received: by 2002:a17:90b:1d45:b0:218:6db5:fd98 with SMTP id
- ok5-20020a17090b1d4500b002186db5fd98mr61969036pjb.164.1669738459171; Tue, 29
- Nov 2022 08:14:19 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DozG8slifYUbIeG4p5hbkPUxWwGRFcCdA+vVxiWXmfs=;
+        b=gF03N4Q1Qhdasc4FSdN1UL9LkNYJGX9v0oixFSHRxPef7/tmc1AoT5b4rQhriev6n1
+         gkQdG5qiQbqzi8K2bL6wxj31joI/I2V7FEQADQgDv60jNWYriiEmqedpdRzjvjcMVich
+         5eq/w954pHx9RK9Z3Si7zHj3r5hKkzUvOqgc+rSFw14Z3f+TUBi2k+l20qmoRGiabU4U
+         hwdiF8cXDWy3dtTBdmgps1mp/R12HnEMMcKLNpVhxS9b5mogRw26LL8Ah2OAb8EGt45p
+         AP1eHi0j4S6O1NVVvucx5ZfGVEOiDFY3PSHehil019ZPgtZJHn5fzblmZXRLcZ1irD00
+         CNog==
+X-Gm-Message-State: ANoB5pkLRZa0FxAfMMNXaoxzprX7nfQbApLV0YagMUqKXx1KqTO7Wy2d
+        mpSp3YpzKCFwJ1GS3KEkUSVVCsHUZN45dnHq
+X-Google-Smtp-Source: AA0mqf6nIP2Y/A3+PfTGlbmjvNTL2zsWVEGp5bBox8UJh3b4flIMVZs/UJDXUOiNFTamoISUgQ+TEQ==
+X-Received: by 2002:ac2:4346:0:b0:4b4:a5c8:cc0f with SMTP id o6-20020ac24346000000b004b4a5c8cc0fmr21241693lfl.138.1669739753191;
+        Tue, 29 Nov 2022 08:35:53 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id a26-20020a056512201a00b0049496608d58sm2240486lfb.155.2022.11.29.08.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 29 Nov 2022 08:35:52 -0800 (PST)
+Message-ID: <bc230481-1c31-6121-6647-8e2b4b80512e@linaro.org>
+Date:   Tue, 29 Nov 2022 17:35:51 +0100
 MIME-Version: 1.0
-References: <20221128142912.16022-1-marcan@marcan.st> <20221128142912.16022-3-marcan@marcan.st>
- <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com> <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-In-Reply-To: <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 29 Nov 2022 17:13:42 +0100
-Message-ID: <CAPDyKFqZJEqijsKMhMSZVCOA-RugnEJ7aqxwRRin1JE3i1WxMA@mail.gmail.com>
-Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
-To:     Hector Martin <marcan@marcan.st>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
+Content-Language: en-US
+To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20221129131203.2197959-1-abel.vesa@linaro.org>
+ <20221129131203.2197959-2-abel.vesa@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221129131203.2197959-2-abel.vesa@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,88 +82,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 29 Nov 2022 at 15:00, Hector Martin <marcan@marcan.st> wrote:
->
-> On 29/11/2022 20.36, Ulf Hansson wrote:
-> > On Mon, 28 Nov 2022 at 15:29, Hector Martin <marcan@marcan.st> wrote:
-> >> +examples:
-> >> +  - |
-> >> +    // This example shows a single CPU per domain and 2 domains,
-> >> +    // with two p-states per domain.
-> >> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
-> >> +    cpus {
-> >> +      #address-cells = <2>;
-> >> +      #size-cells = <0>;
-> >> +
-> >> +      cpu@0 {
-> >> +        compatible = "apple,icestorm";
-> >> +        device_type = "cpu";
-> >> +        reg = <0x0 0x0>;
-> >> +        operating-points-v2 = <&ecluster_opp>;
-> >
-> > To me, it looks like the operating-points-v2 phandle better belongs in
-> > the performance-domains provider node. I mean, isn't the OPPs really a
-> > description of the performance-domain provider?
-> >
-> > That said, I suggest we try to extend the generic performance-domain
-> > binding [1] with an "operating-points-v2". In that way, we should
-> > instead be able to reference it from this binding.
-> >
-> > In fact, that would be very similar to what already exists for the
-> > generic power-domain binding [2]. I think it would be rather nice to
-> > follow a similar pattern for the performance-domain binding.
->
-> While I agree with the technical rationale and the proposed approach
-> being better in principle...
->
-> We're at v5 of bikeshedding this trivial driver's DT binding, and the
-> comment could've been made at v3. To quote IRC just now:
+On 29/11/2022 14:12, Abel Vesa wrote:
+> The Qualcomm SM8550 SoC has several bus fabrics that could be
+> controlled and tuned dynamically according to the bandwidth demand.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
 
-It could and I certainly apologize for that.
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - qcom,sm8550-aggre1-noc
+> +              - qcom,sm8550-aggre2-noc
+> +              - qcom,sm8550-pcie-anoc
+> +    then:
+> +      required:
+> +        - clocks
+> +    else:
+> +      properties:
+> +        clocks: false
+> +
+> +required:
+> +  - compatible
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +      #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+> +      #include <dt-bindings/interconnect/qcom,sm8550-rpmh.h>
+> +      #include <dt-bindings/clock/qcom,rpmh.h>
 
-It's simply been a busy period for me, so I haven't been able to look
-closer at the DT bindings, until now.
+Keep headers sorted.... but actually these two look like not used. If
+you want to mention the header for interconnect IDs, you can add it in
+top level descritpion.
 
->
-> > this way the machines will be obsolete before things are fully upstreamed
->
-> I think it's long overdue for the kernel community to take a deep look
-> at itself and its development and review process, because it is quite
-> honestly insane how pathologically inefficient it is compared to,
-> basically, every other large and healthy open source project of similar
-> or even greater impact and scope.
->
-> Cc Linus, because this is for your Mac and I assume you care. We're at
-> v5 here for this silly driver. Meanwhile, rmk recently threw the towel
-> on upstreaming macsmc for us. We're trying, and I'll keep trying because
-> I actually get paid (by very generous donors) to do this, but if I
-> weren't I'd have given up a long time ago. And while I won't give up, I
-> can't deny this situation affects my morale and willingness to keep
-> pushing on upstreaming on a regular basis.
->
-> Meanwhile, OpenBSD has been *shipping* full M1 support for a while now
-> in official release images (and since Linux is the source of truth for
-> DT bindings, every time we re-bikeshed it we break their users because
-> they, quite reasonably, aren't interested in waiting for us Linux
-> slowpokes to figure it out first).
->
-> Please, let's introspect about this for a moment. Something is deeply
-> broken if people with 25+ years being an arch maintainer can't get a
-> 700-line mfd driver upstreamed before giving up. I don't know how we
-> expect to ever get a Rust GPU driver merged if it takes 6+ versions to
-> upstream the world's easiest cpufreq hardware.
->
-> - Hector
+> +
+> +      clk_virt: interconnect-0 {
+> +             compatible = "qcom,sm8550-clk-virt";
+> +             #interconnect-cells = <2>;
+> +             qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
+> +
+> +      aggre1_noc: interconnect@16e0000 {
+> +             compatible = "qcom,sm8550-aggre1-noc";
+> +             reg = <0x016e0000 0x14400>;
+> +             #interconnect-cells = <2>;
+> +             clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
+> +                      <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
+> +             qcom,bcm-voters = <&apps_bcm_voter>;
+> +      };
 
-I didn't intend to bikesheed this, while I do understand your valid
-concerns from the above statements.
+Your DTS example is oddly indented. I missed it during previous review.
+DTS examples go either with 2 or 4 spaces.
 
-Instead, my intent was to help, by reviewing. Simply, because I care
-about this too.
 
-If you think incorporating the changes I proposed is a too big deal at
-this point, let me not stand in the way of applying this. In the end,
-it's the DT maintainers' decision.
+Best regards,
+Krzysztof
 
-Kind regards
-Uffe
