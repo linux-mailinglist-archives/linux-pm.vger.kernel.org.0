@@ -2,62 +2,41 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DC1563C2AC
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 15:34:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FBC363C369
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 16:17:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233498AbiK2Oeg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 09:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S234834AbiK2PR2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 10:17:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235654AbiK2Oeb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 09:34:31 -0500
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D3755B1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 06:34:29 -0800 (PST)
-Received: by mail-lj1-x229.google.com with SMTP id d3so17510422ljl.1
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 06:34:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yb4TSztLyoh4rIPeJX6N8PljKLgPvaOweLMv0t2KeKo=;
-        b=MFmeuTaqhysIJMoAymRaSNWqDORiLpwZc2g/jhyKH4uzOsVSy2XFdhXSxKw6YsEXQ2
-         qr4VsxkTe8Ju6uBUJcp1OLQDMMvF/i1Ik4yYs7rMySNM/QrKgVtXj47aVtW1MFQQU4Xr
-         RqxMMpOlMoOPxNr3VuejX5YC9Ij1qpRMT0ANuNlrwhlN3N1zCz4DUpIz7oskgGIKI9wu
-         SMTFCEIIx29L73IDZWxHFP1K5DYiGa1RpN24Qkov6a/c1IIch1cD5bXqSTAfBvQIPGO4
-         IbS5y7X7Gq0LTNgAEubBjRylZERLFAi6l5dCRoszXBg+Y4+qUnXU+GZuQj5NVCJkKIC9
-         777w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yb4TSztLyoh4rIPeJX6N8PljKLgPvaOweLMv0t2KeKo=;
-        b=lWfL884mm4+nkfJHU7E2KVfJy/VCoxkbD682jsfy4tO7zfqeGW13H0u3YMtPEr8rkJ
-         FahRHIVCruTsb9woOyAszHq91oo2LomvQaI3YAJx23SCy8h5VoOCu3Xnev5UKca3ZkIl
-         su3jqLn64SsVk4hEjD8ham/IL2lCsbn+DVqicwVQdxl4upUVeLAxB0NX4lA+gtXlJCvB
-         c7/TGDLYKAXlH+omwD0OOklPbA+/0gAPOeR3SW1W1sKCBz5t4xO8ToX3olbmuCm571ol
-         p13yuKQOqTk2ABXGOEsdDVDJUM4TlvuHtdb1XPgX+9av4M9Z/Ml5AC7VnT8gZsYxtb7L
-         2+Jg==
-X-Gm-Message-State: ANoB5plDe72TCM/eGuQhamkNxvzxGwopCxfhLFOYZtdv8J1OM9jypmUm
-        R0NY3LghuXXLm0wEOVrIa7o4lg==
-X-Google-Smtp-Source: AA0mqf4Chw0LBirQnmKUx27euTDQ7XNz3zaqy80g5zFnYAsoozD6M4CZTVp58Bq40rr05Yo5WQ+EEg==
-X-Received: by 2002:a05:6512:2a8d:b0:498:7c7:b98f with SMTP id dt13-20020a0565122a8d00b0049807c7b98fmr18078871lfb.625.1669732467866;
-        Tue, 29 Nov 2022 06:34:27 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id r10-20020a2e994a000000b00279a5b85791sm669608ljj.88.2022.11.29.06.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 06:34:27 -0800 (PST)
-Message-ID: <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
-Date:   Tue, 29 Nov 2022 15:34:26 +0100
+        with ESMTP id S234902AbiK2PR1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 10:17:27 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78062F001;
+        Tue, 29 Nov 2022 07:17:24 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 1DC623FB17;
+        Tue, 29 Nov 2022 15:17:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1669735042; bh=keFMyCTX0usvCrLsU93OmOyWf2zkklBeuPqknM65WaM=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To;
+        b=zOjS9HtnS3Yl6oUchqXhplrO/uVVMgRv5tfIzFIAZFyJUCd/yiM9kl/xE0TFkj+Bm
+         LiDQcFrtPIw6URVVvX6eYu45m+Mgu7iwu53VW5dQg/4pIlsSb0t8SHgwcNRV8M4RlQ
+         x8/bHWU3xirXgdPPSb6IhrvmHxrIpe0Z1A8eOkoE/T54/H+uOJLU96m5buNfyOXh4v
+         3CJ3H6fmr1d3Bfd0pot4fc0vJdmuSB28RPrKv8gmSnLPWNrIrVTYOeEJtH+/mhp7k2
+         96S2itepvmm9tYgKw5fg1KGyu+c3K74nEtvrfqFWoFmM+pgzq3nwde1ZBfV29+kS3r
+         WbTnSwEuSTfLQ==
+Message-ID: <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st>
+Date:   Wed, 30 Nov 2022 00:17:08 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
- binding for Apple SoC cpufreq
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Hector Martin <marcan@marcan.st>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Ulf Hansson <ulf.hansson@linaro.org>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
@@ -75,96 +54,125 @@ References: <20221128142912.16022-1-marcan@marcan.st>
  <20221128142912.16022-3-marcan@marcan.st>
  <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
  <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
+ <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
+From:   Hector Martin <marcan@marcan.st>
+Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+In-Reply-To: <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/11/2022 15:00, Hector Martin wrote:
-> On 29/11/2022 20.36, Ulf Hansson wrote:
->> On Mon, 28 Nov 2022 at 15:29, Hector Martin <marcan@marcan.st> wrote:
->>> +examples:
->>> +  - |
->>> +    // This example shows a single CPU per domain and 2 domains,
->>> +    // with two p-states per domain.
->>> +    // Shipping hardware has 2-4 CPUs per domain and 2-6 domains.
->>> +    cpus {
->>> +      #address-cells = <2>;
->>> +      #size-cells = <0>;
->>> +
->>> +      cpu@0 {
->>> +        compatible = "apple,icestorm";
->>> +        device_type = "cpu";
->>> +        reg = <0x0 0x0>;
->>> +        operating-points-v2 = <&ecluster_opp>;
->>
->> To me, it looks like the operating-points-v2 phandle better belongs in
->> the performance-domains provider node. I mean, isn't the OPPs really a
->> description of the performance-domain provider?
->>
->> That said, I suggest we try to extend the generic performance-domain
->> binding [1] with an "operating-points-v2". In that way, we should
->> instead be able to reference it from this binding.
->>
->> In fact, that would be very similar to what already exists for the
->> generic power-domain binding [2]. I think it would be rather nice to
->> follow a similar pattern for the performance-domain binding.
+On 29/11/2022 23.34, Krzysztof Kozlowski wrote:
+> On 29/11/2022 15:00, Hector Martin wrote:
+>> On 29/11/2022 20.36, Ulf Hansson wrote:
+>> Please, let's introspect about this for a moment. Something is deeply
+>> broken if people with 25+ years being an arch maintainer can't get a
 > 
-> While I agree with the technical rationale and the proposed approach
-> being better in principle...
-> 
-> We're at v5 of bikeshedding this trivial driver's DT binding, and the
-> comment could've been made at v3. To quote IRC just now:
-> 
->> this way the machines will be obsolete before things are fully upstreamed
-> 
-> I think it's long overdue for the kernel community to take a deep look
-> at itself and its development and review process, because it is quite
-> honestly insane how pathologically inefficient it is compared to,
-> basically, every other large and healthy open source project of similar
-> or even greater impact and scope.
-> 
-> Cc Linus, because this is for your Mac and I assume you care. We're at
-> v5 here for this silly driver. Meanwhile, rmk recently threw the towel
-> on upstreaming macsmc for us. We're trying, and I'll keep trying because
-> I actually get paid (by very generous donors) to do this, but if I
-> weren't I'd have given up a long time ago. And while I won't give up, I
-> can't deny this situation affects my morale and willingness to keep
-> pushing on upstreaming on a regular basis.
-> 
-> Meanwhile, OpenBSD has been *shipping* full M1 support for a while now
-> in official release images (and since Linux is the source of truth for
-> DT bindings, every time we re-bikeshed it we break their users because
-> they, quite reasonably, aren't interested in waiting for us Linux
-> slowpokes to figure it out first).
-> 
-> Please, let's introspect about this for a moment. Something is deeply
-> broken if people with 25+ years being an arch maintainer can't get a
+> If arch maintainer sends patches which does not build (make
+> dt_binding_check), then what do you exactly expect? Accept them just
+> because it is 25+ years of experience or a maintainer? So we have
+> difference processes - for beginners code should compile. For
+> experienced people, it does not have to build because otherwise they
+> will get discouraged?
 
-If arch maintainer sends patches which does not build (make
-dt_binding_check), then what do you exactly expect? Accept them just
-because it is 25+ years of experience or a maintainer? So we have
-difference processes - for beginners code should compile. For
-experienced people, it does not have to build because otherwise they
-will get discouraged?
+I expect the process to not be so confusing and frustrating that a
+maintainer with 25+ years of experience gives up. That the bindings
+didn't pass the checker is besides the point. People say the Linux
+kernel community is hostile to newbies. This issue proves it's not just
+newbies, the process is failing even experienced folks.
 
-> 700-line mfd driver upstreamed before giving up. I don't know how we
-> expect to ever get a Rust GPU driver merged if it takes 6+ versions to
-> upstream the world's easiest cpufreq hardware.
+On that specific issue, any other functional open source project would
+have the binding checks be a CI bot, with a friendly message telling you
+what to do to fix it, and it would re-run when you push to the PR again,
+which is a *much* lower friction action than sending a whole new patch
+series out for review via email (if you don't agree with this, then
+you're not the average contributor - the Linux kernel is by far the
+scariest major open source project to contribute to, and I think most
+people would agree with me on that).
 
-While I understand your point about bikeschedding, but I think your
-previous bindings got pretty nice and fast reviews, so using examples of
-non-building case is poor choice.
+I know Rob has a DT checker bot, but its error output is practically
+line noise, and the error email doesn't even mention the
+DT_SCHEMA_FILES= make option (which is the only way to make the check
+not take *forever* to run). Absolutely nobody is going to look at those
+emails without already knowing the intricacies of DT bindings and the
+checker and not find them incredibly frustrating.
 
-Best regards,
-Krzysztof
+But it's not just the DT checker. That came after an argument where the
+MFD maintainer complained about the driver while offering no solution
+nor proposed path forward. I had to have an IRC conversation with him to
+work it out, after which he accepted one of the options I'd already
+proposed over email. If you have to change communication mediums to
+resolve an issue, that means your initial medium failed at its job.
 
+Not to mention the random drive-by reviews, nitpicks, disagreements
+between maintainers about how to do things, or just plain cases of
+maintainers stubbornly being *wrong* and refusing to listen while
+everyone around them is telling them they're wrong (until someone above
+them in the maintainer tree tells them they're wrong - then they finally
+get it. If it takes someone in a position of authority telling you
+you're wrong for you to accept it, you're doing a poor job at your own
+position.)
+
+And then there's the coding style. The rest of the world has
+standardized on formatting tools. Here, every subsystem maintainer has
+their own pet style you have to learn. "Please put your variables in
+reverse christmas tree order". I once got a review comment that
+complained that I re-aligned an existing #define when I added another
+one (to keep them visually aligned, as the new one increased the
+required tab stop). Because "cleanup patches should be separate" (I
+didn't submit a cleanup patch after that, I just left the defines
+misaligned). So now I need to maintain a massive mental map of exactly
+what style conventions and patch breakup conventions every subsystem
+maintainer wants me to use.
+
+I'm so glad `make rustfmt` is a thing now. Maybe 50 years down the line,
+most of the kernel will have been rewritten in Rust and we'll finally
+fix just one of these problems /s
+
+Some of these things are, to some extent, a natural result of working
+with other humans. But the kernel community has both a number of humans
+harder to work with than is reasonable in their position, and an overall
+process that multiplies the resulting pain by an order of magnitude for
+everyone involved.
+
+> While I understand your point about bikeschedding, but I think your
+> previous bindings got pretty nice and fast reviews, so using examples of
+> non-building case is poor choice.
+
+Yeah, after a while, because I learned how to do DT bindings the hard
+way after having to submit a bunch and getting everything wrong (and
+even then I still get the simplest things wrong, see: v4 here). Which is
+why I'll pick up after rmk's attempt and try again with macsmc at some
+point (probably after 6.1). But I'm not holding my breath that I won't
+need another half dozen rounds of bikeshedding.
+
+When it takes 10 times more man-hours to upstream a driver than to
+reverse engineer and write it with zero documentation, never mind the
+calendar time it takes, something is very wrong. I actively dread
+submitting new drivers to new subsystems or some existing ones now. How
+much pain will the next one be? Will I be asked to move files around 3
+times? Spend 4 rounds bikeshedding the DT schema? Think it's finally
+ready only for someone to show up and ask to change a major part of the
+design at the last minute?
+
+And this all when we're actually submitting code of decent quality (I
+think I have enough experience not to submit crap most of the time). Now
+imagine how much worse this all is for a newbie who submits a
+well-intentioned but definitely not up to standard patch. There's a huge
+chance they'll give up before ever getting the submission through.
+
+Again, I'll keep pushing and sending out patches, because this is
+important. But this is the reality. This is how bad it is. The process
+is broken, and everyone outside the kernel community can see that and
+has been saying that for ages. Just because some of us are willing to
+put up with the pain anyway doesn't mean it's working as intended.
+
+- Hector
