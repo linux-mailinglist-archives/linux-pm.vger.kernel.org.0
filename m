@@ -2,115 +2,99 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2610263C9D2
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 21:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEFB163CB8F
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 00:08:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiK2Urn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 15:47:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S237001AbiK2XIk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 18:08:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236480AbiK2UrX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 15:47:23 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4F827DCC;
-        Tue, 29 Nov 2022 12:47:20 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id u27so12876305lfc.9;
-        Tue, 29 Nov 2022 12:47:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8OJbaeSPcoUQhtrSfuzPP+5Xvz9tDw3fpybywrDiLB8=;
-        b=isX5XESaqTPO6t/rIUbSKYmN1N1Dj6iJFY4zi9Q4/cAMTUMA+sX9eL/49g1tvW5Zny
-         rAca4oqEK+DqAek0wERHVCLD3nTdFRwhJ7CscGnoZnKgDpL0RV96PvAfAIqLnEPejxoM
-         Yz70Hahxo6+2JtIbjtQI/tF+uwgYYQfI7G2PF6wHqtAGplmUp3c3i2383B0fjGEYhPQG
-         3i0FCQ/bMG/t3hW1gfm48IPo7p7q53Y1WNf7Vm9jVHFQjcZs6NNLl1/yY25IilHBTgYW
-         bXwk4v9GIAhdmaByNwQsi2txZf/Fko0Vc+SJq7Zc3vPhfnL5cdFq+b5qiZmrl5oAnlB7
-         7f8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8OJbaeSPcoUQhtrSfuzPP+5Xvz9tDw3fpybywrDiLB8=;
-        b=QUHnfYkaD9Vf78nDB2E7TCX+8F0OJMUO9guAATUppNIxK1GSmmuEEA62FJiE3EvOe/
-         Hbs34j9iARrEBjTiXC+FssIdl+anebBP/IcPmB+FW/wT6lmGIs/L296XSaod++L7mouW
-         h7S50LtZIFfK10MZGMjVoztiQ1pfyvSOYGufPnQ1+7D2eu/eDVgF5tUpyQTiqownlIPI
-         LieXDnLS6k4GStd20gWMp5jpOiwVXreoGM3NBR5eg8yHWf3Tlsttfv024W1Z/8KuoeOA
-         0o9iiDxJJuOFC5eaNVBZGvwo++mxv1Gyz/gRkxycjvXzaQU4igGWqjMP04Idu3guiVYq
-         CRJw==
-X-Gm-Message-State: ANoB5pk1oEWa53CziN+5UXLLX+eX/u5+q8Nx/XPssRp1ECyXoAQDVfsb
-        nCgajG5nfT7lWvutXbkevu3r0A+ENYI=
-X-Google-Smtp-Source: AA0mqf54SpyD4y7QdMfh7uhy0hQf6/Lwg3RHDJI54U1OkTsCBQXvOVa2dmVDRScLyX0IIVI4Pm8Ing==
-X-Received: by 2002:ac2:5f9b:0:b0:4a2:5163:f61b with SMTP id r27-20020ac25f9b000000b004a25163f61bmr19237522lfe.177.1669754839327;
-        Tue, 29 Nov 2022 12:47:19 -0800 (PST)
-Received: from localhost.localdomain (ccy110.neoplus.adsl.tpnet.pl. [83.30.148.110])
-        by smtp.gmail.com with ESMTPSA id o11-20020ac24e8b000000b004ae24368195sm2325620lfr.233.2022.11.29.12.47.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Nov 2022 12:47:18 -0800 (PST)
-From:   Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Adam Skladowski <a39.skl@gmail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 12/12] arm64: dts: qcom: sm6115: Fallback smmu to qcom generic compatible
-Date:   Tue, 29 Nov 2022 21:46:16 +0100
-Message-Id: <20221129204616.47006-13-a39.skl@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221129204616.47006-1-a39.skl@gmail.com>
-References: <20221129204616.47006-1-a39.skl@gmail.com>
+        with ESMTP id S236885AbiK2XIk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 18:08:40 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41F6DFDF;
+        Tue, 29 Nov 2022 15:08:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669763319; x=1701299319;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fLd+RbKdEt5N7t1sQuFBcbp2DIuuw03BqlrwDN3LPTY=;
+  b=FdmIIWf/cCk5cLAVJzF+Giou1iwhxHoIwUTrzJjQEjdYijFnAgOMw2Vb
+   d2LH+M5FTs0DaLy0P8osGCvfaKhKAK2/I8vKtRxzS+jJMo36GfgFN9XgY
+   H0DsED30pNrImxMUiDB4JwUzZldSMYNMFG73BaNb/Awr/gt3lT6lTzmDk
+   401u+7fxdFaA801hwHRybGDK9b4Gvq3qCDL/RORunIQKtlSPC62DAOZdq
+   d0e3px89mP5lYHqyE62tSTTB9Pcoo1sz3guxGcvZFlGkMlAxs6w1K5O3P
+   1ZEwWFWbZrZ++xl7iC87fBOwYcEyFHAeSYCd/xPD5FktDDoAzManpHBvb
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="342173498"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="342173498"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2022 15:08:39 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10546"; a="707416267"
+X-IronPort-AV: E=Sophos;i="5.96,204,1665471600"; 
+   d="scan'208";a="707416267"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga008.fm.intel.com with ESMTP; 29 Nov 2022 15:08:38 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] powercap: idle_inject: Fix warnings with make W=1
+Date:   Tue, 29 Nov 2022 15:08:21 -0800
+Message-Id: <20221129230821.4021932-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change fallback to qcom generic compatible
-in order to prevent reboot during SMMU initialization.
+Fix following warning at three places:
 
-Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
+Function parameter or member 'ii_dev' not described.
+
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/powercap/idle_inject.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 36d1cff23d10..b00d74055eb1 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -1222,7 +1222,7 @@ dispcc: clock-controller@5f00000 {
- 		};
+diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+index 999e218d7793..fe86a09e3b67 100644
+--- a/drivers/powercap/idle_inject.c
++++ b/drivers/powercap/idle_inject.c
+@@ -147,6 +147,7 @@ static void idle_inject_fn(unsigned int cpu)
  
- 		apps_smmu: iommu@c600000 {
--			compatible = "qcom,sm6115-smmu-500", "arm,mmu-500";
-+			compatible = "qcom,sm6115-smmu-500", "qcom,smmu-500", "arm,mmu-500";
- 			reg = <0x0c600000 0x80000>;
- 			#iommu-cells = <2>;
- 			#global-interrupts = <1>;
+ /**
+  * idle_inject_set_duration - idle and run duration update helper
++ * @ii_dev: idle injection control device structure
+  * @run_duration_us: CPU run time to allow in microseconds
+  * @idle_duration_us: CPU idle time to inject in microseconds
+  */
+@@ -162,6 +163,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+ 
+ /**
+  * idle_inject_get_duration - idle and run duration retrieval helper
++ * @ii_dev: idle injection control device structure
+  * @run_duration_us: memory location to store the current CPU run time
+  * @idle_duration_us: memory location to store the current CPU idle time
+  */
+@@ -175,6 +177,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
+ 
+ /**
+  * idle_inject_set_latency - set the maximum latency allowed
++ * @ii_dev: idle injection control device structure
+  * @latency_us: set the latency requirement for the idle state
+  */
+ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
 -- 
-2.25.1
+2.31.1
 
