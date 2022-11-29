@@ -2,172 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5420F63C5F5
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 18:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6083F63C67F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 18:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236485AbiK2RAp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 12:00:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
+        id S236019AbiK2Rfu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 12:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236484AbiK2RAN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 12:00:13 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548C6DFF2;
-        Tue, 29 Nov 2022 08:56:30 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATFCEI4002709;
-        Tue, 29 Nov 2022 16:56:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=u9zXB3qqVZ0k/Ms/7UTwwNWaO6cuhnG1yPubtNR+wj0=;
- b=QZLGvXd4PSSC8lmS85vnOI+Dtp2UyIW2PraLvE2ceo8p2aJWT5doqqI7bE7YCgrVRPUn
- eQMosBzs99TFvkNLEHAjCvsA2ebDlgdl78Y0J5/9GQ7P2EWuQQ4iOcK393qf4PhVnI0V
- qWNh1TcSN3knH6p7Svq4uLg3N5IKpD2/7YDYNTCLA169aCd3xwaMB5/JZPtOZamh4E6D
- jiJFiGAjKvyzdqE7QeYtIp5JKNI314nJho/vsdfz+PDJB+2sfnNuJq14jRvnUolvCYo2
- zMcZ9/NDUsumEHbFppR9FtBbm28n1+OGD1NSWeYF8S5+WAeF9Z0iFB9kRLVmFoSCF0lP Tg== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5bnh1u5k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 16:56:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ATGuKjP030058
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 29 Nov 2022 16:56:20 GMT
-Received: from [10.216.8.159] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
- 2022 08:56:16 -0800
-Message-ID: <2a1047a7-3121-6cbe-d4c5-46bbff0c5cc5@quicinc.com>
-Date:   Tue, 29 Nov 2022 22:26:13 +0530
+        with ESMTP id S235553AbiK2Rft (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 12:35:49 -0500
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBC769328;
+        Tue, 29 Nov 2022 09:35:48 -0800 (PST)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-12c8312131fso17916311fac.4;
+        Tue, 29 Nov 2022 09:35:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RPeBrqlLllnhv+/xP5qeiX7uhtM5MABRLvbjSrXNkcA=;
+        b=MUXMaN1YJxqasqEQgWhWdfdl97Sh0ikaRpvu4JTEovhw5IjCe6UgEN1wBKl8gU9+ox
+         adWGbhemjB6+FJr7QdLFcD83cW617n3l2l+Bg57UGM5CBVtqhr5C8Zxv5Xd4nCwFnNLj
+         mu4Df09fC28R1rxL9mgPOdsgKk0sK4iBltpz6WzxqtfGvfyHx7qxN3Xn2Dfe0BzBUWEm
+         YxVx0MDx2ZEIv59Pz67tlKevKxZLszUeEtppSWDl2jPehVm43oL2E0hjFAA33cbd+gvp
+         fkpcWhyXJiGK3XGCIxGLAe2IGNHVdIndFIXCCZ5jm8TGBiTVX6w0AZHmUMQHullmTTXu
+         Ei5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RPeBrqlLllnhv+/xP5qeiX7uhtM5MABRLvbjSrXNkcA=;
+        b=Khw4/0u0BSFfXqMZ61JqFUj3c08WHI4d5BEOnlMBvzdjOdSwKVNh7c4flWZuVfNaYN
+         Rf/XfFxkoAzFoA7tAFBIg7UCh6GXf7k0/LIIHsdf1IgTXxWLN35p22CmBjfdm7E9ep+6
+         zR15/sJ8XO/vctzgqj9jAGJJifDy4+2mMnhgMItvn8f54jslSFXSUQl1qelbP9PfWEL3
+         Kpw+hRlY6AOB6IzLDaVUM2IWINOXFSJ+vzhRoP+EYqevA40Pp890HkuKtQSUMlHITtmT
+         snGqR3MIvH8d7ykJbYpQkWkzDzrRjH1iJkDNHTsPVUf3gRH7M8G9yFs1DAVCtEJPh9ay
+         RPyQ==
+X-Gm-Message-State: ANoB5pmQkbJna1hKrGyJITtA/Nitb+1e/HSZkdQZz78cRoG9MPeui1rr
+        SoOeUqAnx28AkrzO0ew98C95Zvgz3aA=
+X-Google-Smtp-Source: AA0mqf7pQyfHGcbevAT2V2dLYkTWAlVvQ+0+xk5w/L3Olgeiihs6cLvmKb0ae2fdNxG4zoMzto6ZaA==
+X-Received: by 2002:a05:6870:591:b0:13b:bbbb:1623 with SMTP id m17-20020a056870059100b0013bbbbb1623mr24392682oap.115.1669743348085;
+        Tue, 29 Nov 2022 09:35:48 -0800 (PST)
+Received: from wintermute. (76-244-6-13.lightspeed.rcsntx.sbcglobal.net. [76.244.6.13])
+        by smtp.gmail.com with ESMTPSA id p36-20020a056870832400b00132741e966asm7780724oae.51.2022.11.29.09.35.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 29 Nov 2022 09:35:47 -0800 (PST)
+Message-ID: <638642f3.050a0220.8b7f1.d555@mx.google.com>
+X-Google-Original-Message-ID: <20221129173545.GA9712@wintermute.>
+Date:   Tue, 29 Nov 2022 11:35:45 -0600
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     Qiheng Lin <linqiheng@huawei.com>
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: Fix refcount leak in rk817_charger_probe
+References: <20221128142740.1414-1-linqiheng@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: PM-runtime: supplier looses track of consumer during probe
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <bjorn.andersson@kernel.org>, <quic_mkshah@quicinc.com>,
-        <quic_lsrao@quicinc.com>, <bvanassche@acm.org>,
-        Peter Wang <peter.wang@mediatek.com>
-References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
- <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
- <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
- <8ca27fcb-b146-3ea7-a042-55f99e0ae3fb@quicinc.com>
-Content-Language: en-US
-From:   Nitin Rawat <quic_nitirawa@quicinc.com>
-In-Reply-To: <8ca27fcb-b146-3ea7-a042-55f99e0ae3fb@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: PCdJ6YPgUwI8byB6RxkpvBrLF8MLWPan
-X-Proofpoint-GUID: PCdJ6YPgUwI8byB6RxkpvBrLF8MLWPan
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-29_11,2022-11-29_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
- spamscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211290094
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221128142740.1414-1-linqiheng@huawei.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Adrian,
+On Mon, Nov 28, 2022 at 10:27:40PM +0800, Qiheng Lin wrote:
+> of_get_child_by_name() returns a node pointer with refcount
+> incremented, we should use of_node_put() on it when not need anymore.
+> Add missing of_node_put() to avoid refcount leak.
+> 
+> Fixes: 11cb8da0189b ("power: supply: Add charger driver for Rockchip RK817")
+> Signed-off-by: Qiheng Lin <linqiheng@huawei.com>
 
-On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
-> Hi Adrian,
-> 
-> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
->> On 4/11/22 11:19, Tushar Nimkar wrote:
->>> Hi linux-pm/linux-scsi,
-> 
->>>> Process -1
->>>> ufshcd_async_scan context (process 1)
->>>> scsi_autopm_put_device() //0:0:0:0
->>
->> I am having trouble following your description.  What function is calling
->> scsi_autopm_put_device() here?
->>
-> Below is flow which calls scsi_autopm_put_device()
-> Process -1
-> ufshcd_async_scan()
->      scsi_probe_and_add_lun()
->          scsi_add_lun()
->              slave_configure()
->                  scsi_sysfs_add_sdev()
->                      scsi_autopm_get_device()
->                          device_add()     <- invoked [Process 2] sd_probe()
->                              scsi_autopm_put_device()
-> 
->>>> pm_runtime_put_sync()
->>>> __pm_runtime_idle()
->>>> rpm_idle() -- RPM_GET_PUT(4)
->>>>       __rpm_callback
->>>>           scsi_runtime_idle()
->>>>               pm_runtime_mark_last_busy()
->>>>               pm_runtime_autosuspend()  --[A]
->>>>                   rpm_suspend() -- RPM_AUTO(8)
->>>>                       pm_runtime_autosuspend_expiration() 
->>>> use_autosuspend    is false return 0   --- [B]
->>>>                           __update_runtime_status to RPM_SUSPENDING
->>>>                       __rpm_callback()
->>>>                           __rpm_put_suppliers(dev, false)
->>>>                       __update_runtime_status to RPM_SUSPENDED
->>>>                   rpm_suspend_suppliers()
->>>>                       rpm_idle() for supplier -- RPM_ASYNC(1) return 
->>>> (-EAGAIN) [ Other consumer active for supplier]
->>>>                   rpm_suspend() – END with return=0
->>>>           scsi_runtime_idle() END return (-EBUSY) always.
->>
->> Not following here either.  Which device is EBUSY and why?
-> 
-> scsi_runtime_idle() return -EBUSY always [3]
-> Storage/scsi team can better explain -EBUSY implementation.
+Good catch, thank you!
 
-EBUSY is returned from below code for consumer dev 0:0:0:0.
-scsi_runtime_idle is called from scsi_autopm_put_device which inturn is 
-called from ufshcd_async_scan (Process 1 as per above call stack)
-static int scsi_runtime_idle(struct device *dev)
-{
-	:
+Reviewed-by: Chris Morgan <macromorgan@hotmail.com>
 
-	if (scsi_is_sdev_device(dev)) {
-		pm_runtime_mark_last_busy(dev);
-		pm_runtime_autosuspend(dev);
-		return -EBUSY; ---> EBUSY returned from here.
-	}
-
-	
-}
-
+> ---
+>  drivers/power/supply/rk817_charger.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> [3] 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
+> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
+> index 635f051b0821..d25a81d79fac 100644
+> --- a/drivers/power/supply/rk817_charger.c
+> +++ b/drivers/power/supply/rk817_charger.c
+> @@ -1060,8 +1060,10 @@ static int rk817_charger_probe(struct platform_device *pdev)
+>  		return -ENODEV;
 > 
+>  	charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
+> -	if (!charger)
+> +	if (!charger) {
+> +		of_node_put(node);
+>  		return -ENOMEM;
+> +	}
 > 
->>>>
->>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
->>>> [2]: https://lkml.org/lkml/2022/10/12/259
->>>>
->>>> Thanks,
->>>> Tushar Nimkar
->>
-> Thanks,
-> Tushar Nimkar
-
-Thanks,
-Nitin
+>  	charger->rk808 = rk808;
+> 
+> --
+> 2.32.0
+> 
