@@ -2,62 +2,87 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35DB463BC45
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 09:57:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83F0F63BC6F
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 10:01:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbiK2I5n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 03:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39102 "EHLO
+        id S231501AbiK2JB2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 04:01:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbiK2I5l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 03:57:41 -0500
-X-Greylist: delayed 341 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 29 Nov 2022 00:57:41 PST
-Received: from mail.lucidfour.pl (mail.lucidfour.pl [217.61.97.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244DDB26
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 00:57:40 -0800 (PST)
-Received: by mail.lucidfour.pl (Postfix, from userid 1001)
-        id 7B14481C27; Tue, 29 Nov 2022 08:52:07 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lucidfour.pl; s=mail;
-        t=1669711927; bh=CSKXLMgcdpWkXuTgJn5+jsCVobtU9JEF4vCnS5z6McM=;
-        h=Date:From:To:Subject:From;
-        b=U13FWjCWIIqEKBcrn+cvJhjjBf1IBzYk2yOnEwhxDGcnCObN6Ou2KmcrbCOkgLvEA
-         Efe41dm+cz1FVnHY8C0gZ3mKqIwz3J7dPujwm13jJxysPn3nD+xDP9TY7SJ4dk8ks/
-         YRY6DJp9dbCtXquALjwvHb3YG4oJRa4FFP/CH79Ei+KApjBOKFEc/pD86GlcOHc0CS
-         6ekSE0Rp7rotjOo1UnOAqg+erXwlvOz638L1A5vHCN3CCuZ1yFgZiGeT0ENvP1AYiO
-         4ZkPsDFoaq6VgHKPNc2sGQG56kLYTbRkZ+zONIOT1PoK4Ab7jeF87ZEo6tnZ5AtrzY
-         c2gaveVvM98qg==
-Received: by mail.lucidfour.pl for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:50:01 GMT
-Message-ID: <20221129074501-0.1.e.1gde.0.7fdi5fg79k@lucidfour.pl>
-Date:   Tue, 29 Nov 2022 08:50:01 GMT
-From:   "Wiktor Nurek" <wiktor.nurek@lucidfour.pl>
-To:     <linux-pm@vger.kernel.org>
-Subject: =?UTF-8?Q?Nap=C5=82yw_Klient=C3=B3w_ze_strony?=
-X-Mailer: mail.lucidfour.pl
+        with ESMTP id S229712AbiK2JB0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 04:01:26 -0500
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBB7B65AE;
+        Tue, 29 Nov 2022 01:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1669712485;
+  x=1701248485;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=cXRJQL3OW0O3RetIWNaCoK87alGVsI/co+OWhHfGavI=;
+  b=pqZPtrTWuLZVz68ulQUUcsI3AQbCRlHv+bGAx/s2prnkA3yIJLoJv4V0
+   WpQKcpdcgyBBiOIQre3DbYpmdTYw1MYjyQmQpZZHLlhXxiOVcYAPXlNKq
+   yXd4Qjp5Qlzkugqh0OQOdaoKHHtmiy9sPmtFjUeOWkxYP0rWte3/1ZLGQ
+   qTCPXvDXMZxBRT9VyfRxh7XtaNpxARNvc26MSzzdBOfanyhumbM0EUvLx
+   vHFXx2hufYfIMAqq2NbW+JXCFvpAMbXxhKN+66pheL5LwhOFpHZ6Lqo7W
+   3RB7tfvr095se+WCexzPheIp2WNzfrMB+dv8vpzPD91blCbCrfYBauOTD
+   Q==;
+From:   Hermes Zhang <chenhuiz@axis.com>
+To:     Sebastian Reichel <sre@kernel.org>
+CC:     <kernel@axis.com>, Hermes Zhang <chenhuiz@axis.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] power: supply: bq256xx: Remove init ichg/vbat with max value
+Date:   Tue, 29 Nov 2022 17:01:12 +0800
+Message-ID: <20221129090112.3451501-1-chenhuiz@axis.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,
+Init the ichg and vbat reg with max value is not good. First the chip
+already has a default value for ichg and vbat (small value). Init these
+two reg with max value will result an unsafe case (e.g. battery is over
+charging in a hot environment) if no user space change them later.
 
-chcia=C5=82bym poinformowa=C4=87 Pa=C5=84stwa o mo=C5=BCliwo=C5=9Bci pozy=
-skania nowych zlece=C5=84 ze strony www.
+Signed-off-by: Hermes Zhang <chenhuiz@axis.com>
+---
+ drivers/power/supply/bq256xx_charger.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-Widzimy zainteresowanie potencjalnych Klient=C3=B3w Pa=C5=84stwa firm=C4=85=
-, dlatego ch=C4=99tnie pomo=C5=BCemy Pa=C5=84stwu dotrze=C4=87 z ofert=C4=
-=85 do wi=C4=99kszego grona odbiorc=C3=B3w poprzez efektywne metody pozyc=
-jonowania strony w Google.
+diff --git a/drivers/power/supply/bq256xx_charger.c b/drivers/power/supply/bq256xx_charger.c
+index 01ad84fd147c..d1aa92c10c22 100644
+--- a/drivers/power/supply/bq256xx_charger.c
++++ b/drivers/power/supply/bq256xx_charger.c
+@@ -1562,21 +1562,11 @@ static int bq256xx_hw_init(struct bq256xx_device *bq)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = bq->chip_info->bq256xx_set_ichg(bq,
+-				bat_info->constant_charge_current_max_ua);
+-	if (ret)
+-		return ret;
+-
+ 	ret = bq->chip_info->bq256xx_set_iprechg(bq,
+ 				bat_info->precharge_current_ua);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = bq->chip_info->bq256xx_set_vbatreg(bq,
+-				bat_info->constant_charge_voltage_max_uv);
+-	if (ret)
+-		return ret;
+-
+ 	ret = bq->chip_info->bq256xx_set_iterm(bq,
+ 				bat_info->charge_term_current_ua);
+ 	if (ret)
+-- 
+2.30.2
 
-Czy m=C3=B3g=C5=82bym liczy=C4=87 na kontakt zwrotny?
-
-
-Pozdrawiam serdecznie,
-Wiktor Nurek
