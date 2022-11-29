@@ -2,143 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BD263C543
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 17:36:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5420F63C5F5
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 18:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235150AbiK2Qf7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 11:35:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33274 "EHLO
+        id S236485AbiK2RAp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 12:00:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235964AbiK2Qf4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 11:35:56 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E08E697DC
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:35:55 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id b3so22910471lfv.2
-        for <linux-pm@vger.kernel.org>; Tue, 29 Nov 2022 08:35:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DozG8slifYUbIeG4p5hbkPUxWwGRFcCdA+vVxiWXmfs=;
-        b=I9CBZQoGxjED9f6Xxs7R1Rh6NnUMmuWqQXJdRRmpJ19Mz89DIjvjAoIuZf7K9iWSBb
-         BiuLtCwS1l8gbw3kmoN3yBnAy0UNEWGDVWoL2sM0tJjSRAYvll5qomZ569ewA9ysgSxU
-         JzfdKhZGEjom0GwBUbMn2PSvs3xj6oK1LcdbY+Tk/SBTR5WTvgMJBNv2HG66Cws6pPO9
-         Sia8hauW5d44/JN0lbQF8CYJlynN0e2tJ0r9jPqXIbic6wHazU6w0R3BFFReizNVGZHf
-         3nghfdGrmHKOK8Kcx91mFYj0lzTVx4zPIFCmuqQfPRQHqdG09bfrB8NBJpuESEprcOvX
-         cnnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DozG8slifYUbIeG4p5hbkPUxWwGRFcCdA+vVxiWXmfs=;
-        b=gF03N4Q1Qhdasc4FSdN1UL9LkNYJGX9v0oixFSHRxPef7/tmc1AoT5b4rQhriev6n1
-         gkQdG5qiQbqzi8K2bL6wxj31joI/I2V7FEQADQgDv60jNWYriiEmqedpdRzjvjcMVich
-         5eq/w954pHx9RK9Z3Si7zHj3r5hKkzUvOqgc+rSFw14Z3f+TUBi2k+l20qmoRGiabU4U
-         hwdiF8cXDWy3dtTBdmgps1mp/R12HnEMMcKLNpVhxS9b5mogRw26LL8Ah2OAb8EGt45p
-         AP1eHi0j4S6O1NVVvucx5ZfGVEOiDFY3PSHehil019ZPgtZJHn5fzblmZXRLcZ1irD00
-         CNog==
-X-Gm-Message-State: ANoB5pkLRZa0FxAfMMNXaoxzprX7nfQbApLV0YagMUqKXx1KqTO7Wy2d
-        mpSp3YpzKCFwJ1GS3KEkUSVVCsHUZN45dnHq
-X-Google-Smtp-Source: AA0mqf6nIP2Y/A3+PfTGlbmjvNTL2zsWVEGp5bBox8UJh3b4flIMVZs/UJDXUOiNFTamoISUgQ+TEQ==
-X-Received: by 2002:ac2:4346:0:b0:4b4:a5c8:cc0f with SMTP id o6-20020ac24346000000b004b4a5c8cc0fmr21241693lfl.138.1669739753191;
-        Tue, 29 Nov 2022 08:35:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id a26-20020a056512201a00b0049496608d58sm2240486lfb.155.2022.11.29.08.35.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Nov 2022 08:35:52 -0800 (PST)
-Message-ID: <bc230481-1c31-6121-6647-8e2b4b80512e@linaro.org>
-Date:   Tue, 29 Nov 2022 17:35:51 +0100
+        with ESMTP id S236484AbiK2RAN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 12:00:13 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2548C6DFF2;
+        Tue, 29 Nov 2022 08:56:30 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2ATFCEI4002709;
+        Tue, 29 Nov 2022 16:56:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=u9zXB3qqVZ0k/Ms/7UTwwNWaO6cuhnG1yPubtNR+wj0=;
+ b=QZLGvXd4PSSC8lmS85vnOI+Dtp2UyIW2PraLvE2ceo8p2aJWT5doqqI7bE7YCgrVRPUn
+ eQMosBzs99TFvkNLEHAjCvsA2ebDlgdl78Y0J5/9GQ7P2EWuQQ4iOcK393qf4PhVnI0V
+ qWNh1TcSN3knH6p7Svq4uLg3N5IKpD2/7YDYNTCLA169aCd3xwaMB5/JZPtOZamh4E6D
+ jiJFiGAjKvyzdqE7QeYtIp5JKNI314nJho/vsdfz+PDJB+2sfnNuJq14jRvnUolvCYo2
+ zMcZ9/NDUsumEHbFppR9FtBbm28n1+OGD1NSWeYF8S5+WAeF9Z0iFB9kRLVmFoSCF0lP Tg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m5bnh1u5k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 16:56:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2ATGuKjP030058
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 29 Nov 2022 16:56:20 GMT
+Received: from [10.216.8.159] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 29 Nov
+ 2022 08:56:16 -0800
+Message-ID: <2a1047a7-3121-6cbe-d4c5-46bbff0c5cc5@quicinc.com>
+Date:   Tue, 29 Nov 2022 22:26:13 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: PM-runtime: supplier looses track of consumer during probe
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        <linux-pm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <bjorn.andersson@kernel.org>, <quic_mkshah@quicinc.com>,
+        <quic_lsrao@quicinc.com>, <bvanassche@acm.org>,
+        Peter Wang <peter.wang@mediatek.com>
+References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
+ <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
+ <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
+ <8ca27fcb-b146-3ea7-a042-55f99e0ae3fb@quicinc.com>
 Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20221129131203.2197959-1-abel.vesa@linaro.org>
- <20221129131203.2197959-2-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221129131203.2197959-2-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Nitin Rawat <quic_nitirawa@quicinc.com>
+In-Reply-To: <8ca27fcb-b146-3ea7-a042-55f99e0ae3fb@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: PCdJ6YPgUwI8byB6RxkpvBrLF8MLWPan
+X-Proofpoint-GUID: PCdJ6YPgUwI8byB6RxkpvBrLF8MLWPan
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-29_11,2022-11-29_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ phishscore=0 adultscore=0 lowpriorityscore=0 mlxlogscore=999
+ suspectscore=0 malwarescore=0 bulkscore=0 impostorscore=0 mlxscore=0
+ spamscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211290094
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/11/2022 14:12, Abel Vesa wrote:
-> The Qualcomm SM8550 SoC has several bus fabrics that could be
-> controlled and tuned dynamically according to the bandwidth demand.
+Hi Adrian,
+
+On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
+> Hi Adrian,
 > 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
+> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
+>> On 4/11/22 11:19, Tushar Nimkar wrote:
+>>> Hi linux-pm/linux-scsi,
+> 
+>>>> Process -1
+>>>> ufshcd_async_scan context (process 1)
+>>>> scsi_autopm_put_device() //0:0:0:0
+>>
+>> I am having trouble following your description.  What function is calling
+>> scsi_autopm_put_device() here?
+>>
+> Below is flow which calls scsi_autopm_put_device()
+> Process -1
+> ufshcd_async_scan()
+>      scsi_probe_and_add_lun()
+>          scsi_add_lun()
+>              slave_configure()
+>                  scsi_sysfs_add_sdev()
+>                      scsi_autopm_get_device()
+>                          device_add()     <- invoked [Process 2] sd_probe()
+>                              scsi_autopm_put_device()
+> 
+>>>> pm_runtime_put_sync()
+>>>> __pm_runtime_idle()
+>>>> rpm_idle() -- RPM_GET_PUT(4)
+>>>>       __rpm_callback
+>>>>           scsi_runtime_idle()
+>>>>               pm_runtime_mark_last_busy()
+>>>>               pm_runtime_autosuspend()  --[A]
+>>>>                   rpm_suspend() -- RPM_AUTO(8)
+>>>>                       pm_runtime_autosuspend_expiration() 
+>>>> use_autosuspend    is false return 0   --- [B]
+>>>>                           __update_runtime_status to RPM_SUSPENDING
+>>>>                       __rpm_callback()
+>>>>                           __rpm_put_suppliers(dev, false)
+>>>>                       __update_runtime_status to RPM_SUSPENDED
+>>>>                   rpm_suspend_suppliers()
+>>>>                       rpm_idle() for supplier -- RPM_ASYNC(1) return 
+>>>> (-EAGAIN) [ Other consumer active for supplier]
+>>>>                   rpm_suspend() – END with return=0
+>>>>           scsi_runtime_idle() END return (-EBUSY) always.
+>>
+>> Not following here either.  Which device is EBUSY and why?
+> 
+> scsi_runtime_idle() return -EBUSY always [3]
+> Storage/scsi team can better explain -EBUSY implementation.
 
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8550-aggre1-noc
-> +              - qcom,sm8550-aggre2-noc
-> +              - qcom,sm8550-pcie-anoc
-> +    then:
-> +      required:
-> +        - clocks
-> +    else:
-> +      properties:
-> +        clocks: false
-> +
-> +required:
-> +  - compatible
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +      #include <dt-bindings/clock/qcom,sm8550-gcc.h>
-> +      #include <dt-bindings/interconnect/qcom,sm8550-rpmh.h>
-> +      #include <dt-bindings/clock/qcom,rpmh.h>
+EBUSY is returned from below code for consumer dev 0:0:0:0.
+scsi_runtime_idle is called from scsi_autopm_put_device which inturn is 
+called from ufshcd_async_scan (Process 1 as per above call stack)
+static int scsi_runtime_idle(struct device *dev)
+{
+	:
 
-Keep headers sorted.... but actually these two look like not used. If
-you want to mention the header for interconnect IDs, you can add it in
-top level descritpion.
+	if (scsi_is_sdev_device(dev)) {
+		pm_runtime_mark_last_busy(dev);
+		pm_runtime_autosuspend(dev);
+		return -EBUSY; ---> EBUSY returned from here.
+	}
 
-> +
-> +      clk_virt: interconnect-0 {
-> +             compatible = "qcom,sm8550-clk-virt";
-> +             #interconnect-cells = <2>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
-> +
-> +      aggre1_noc: interconnect@16e0000 {
-> +             compatible = "qcom,sm8550-aggre1-noc";
-> +             reg = <0x016e0000 0x14400>;
-> +             #interconnect-cells = <2>;
-> +             clocks = <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-> +                      <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>;
-> +             qcom,bcm-voters = <&apps_bcm_voter>;
-> +      };
+	
+}
 
-Your DTS example is oddly indented. I missed it during previous review.
-DTS examples go either with 2 or 4 spaces.
+> 
+> [3] 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
+> 
+> 
+>>>>
+>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
+>>>> [2]: https://lkml.org/lkml/2022/10/12/259
+>>>>
+>>>> Thanks,
+>>>> Tushar Nimkar
+>>
+> Thanks,
+> Tushar Nimkar
 
-
-Best regards,
-Krzysztof
-
+Thanks,
+Nitin
