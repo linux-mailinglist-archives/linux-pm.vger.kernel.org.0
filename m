@@ -2,73 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B48B63C19C
-	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 15:00:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B7063C1AE
+	for <lists+linux-pm@lfdr.de>; Tue, 29 Nov 2022 15:03:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbiK2OAv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 29 Nov 2022 09:00:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S233851AbiK2ODK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 29 Nov 2022 09:03:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiK2OAu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 09:00:50 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689A532B88;
-        Tue, 29 Nov 2022 06:00:48 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        with ESMTP id S234516AbiK2ODA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 29 Nov 2022 09:03:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BD9140CB;
+        Tue, 29 Nov 2022 06:02:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 33E213FB17;
-        Tue, 29 Nov 2022 14:00:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1669730446; bh=adS46JVWH1WlaPbDZblMEFJYiqhfkyXnDs8IpAPLC2w=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=IWzbqBPmY10XvuyP3B89YIfdQPitUUc8VmOhJdYYoFvGO6o3rEW+9bPt3rhVg6WYw
-         Io36r7PLmxsCpw+cSXJPEMJabwGTe+KLxK+R1UGR6mTj3wLIgKrOc0+uP2do0C5Kc4
-         JpeYbXAxFezVdpDv7Lo2DsBIzYapRii4GyUd/zDt9HXVPgw7nfSMNDHiG4jwsD7IgX
-         0f3nV4yp1tx0RHSlBf1wK9zh4OhDOhEuShnm8Y7Kdh8WY4jnL+171EqVQRHNS5Yxjz
-         ESIDwC0CxOL39402m8cm6gFBkbIEG4vgtZT0BdOPx2p5/eR3l/8qEZYwoT6LC7nLQA
-         65PJAxTtnhSyQ==
-Message-ID: <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st>
-Date:   Tue, 29 Nov 2022 23:00:38 +0900
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C72761752;
+        Tue, 29 Nov 2022 14:02:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99E28C433D7;
+        Tue, 29 Nov 2022 14:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669730577;
+        bh=rO7yqgdWyNq3EM/Oqp68vfyfQaLdzq20dcvot8x/GeM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=S6mFhxcoZLEdjKmV1WrgU2HV039yJTJzw9l6X4o6Si0KSGt+jLRzK2Tt9yaq9knHo
+         c5h6COBslmC+6FRv3Vupa4s3hJSycD8jLOzsUQbskmTAwtMy0HDRSLkddlea8s6MXq
+         IP7JfMh7OJfLtRZpVD2K8L1g1xbzZs7w5OWGuoueJBBO13GVUI4DKrdV2H4nr+JCXa
+         puQfx0NtuPhgC40ca/U1Z12mg4w9EKuR68Y2TTQtqKAXoeSgjgvBF7tGSKeOeoJ1Nl
+         lrB0Cf3X6jin0aXPn25h+lh98J1+JgzEtXaRz6blkf0FxWA0kt+rfF68D2vwJWTXy9
+         4NyEL+4P0/dpg==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1p01CJ-009Mgz-8B;
+        Tue, 29 Nov 2022 14:02:55 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
+Date:   Tue, 29 Nov 2022 14:02:54 +0000
+From:   Marc Zyngier <maz@kernel.org>
 To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     Hector Martin <marcan@marcan.st>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>,
         Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
         Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
         linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-References: <20221128142912.16022-1-marcan@marcan.st>
- <20221128142912.16022-3-marcan@marcan.st>
- <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
-From:   Hector Martin <marcan@marcan.st>
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
  binding for Apple SoC cpufreq
 In-Reply-To: <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+References: <20221128142912.16022-1-marcan@marcan.st>
+ <20221128142912.16022-3-marcan@marcan.st>
+ <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <44c746aee96ebf13bd701d78f1c2b9c0@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: ulf.hansson@linaro.org, marcan@marcan.st, rafael@kernel.org, viresh.kumar@linaro.org, matthias.bgg@gmail.com, sven@svenpeter.dev, alyssa@rosenzweig.io, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org, mark.kettenis@xs4all.nl, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 29/11/2022 20.36, Ulf Hansson wrote:
+On 2022-11-29 11:36, Ulf Hansson wrote:
 > On Mon, 28 Nov 2022 at 15:29, Hector Martin <marcan@marcan.st> wrote:
+>> 
 >> +examples:
 >> +  - |
 >> +    // This example shows a single CPU per domain and 2 domains,
@@ -96,38 +108,26 @@ On 29/11/2022 20.36, Ulf Hansson wrote:
 > generic power-domain binding [2]. I think it would be rather nice to
 > follow a similar pattern for the performance-domain binding.
 
-While I agree with the technical rationale and the proposed approach
-being better in principle...
+I'm not going to rabbit-hole into whether this is a good
+or a bad binding. As far as I'm concerned, and as a user
+of the HW it describes, it does the job in a satisfactory
+manner.
 
-We're at v5 of bikeshedding this trivial driver's DT binding, and the
-comment could've been made at v3. To quote IRC just now:
+What I'm concerned about is that this constant, last minute
+bikeshedding that actively prevents upstreaming of support
+for HW that people are actively using.
 
-> this way the machines will be obsolete before things are fully upstreamed
+If anything, this is only causing people to stop trying to
+contribute to the upstream kernel because of this constant
+DT bikeshed. Honestly, writing code to support this HW is
+a lot less effort than trying to get 3 different people to
+agree on a binding.
 
-I think it's long overdue for the kernel community to take a deep look
-at itself and its development and review process, because it is quite
-honestly insane how pathologically inefficient it is compared to,
-basically, every other large and healthy open source project of similar
-or even greater impact and scope.
+It also affects other OSs that rely on the the same bindings,
+and will eventually only result in developers not submitting
+bindings anymore. After all, nothing says that bindings and
+device trees have to exist in the Linux kernel tree.
 
-Cc Linus, because this is for your Mac and I assume you care. We're at
-v5 here for this silly driver. Meanwhile, rmk recently threw the towel
-on upstreaming macsmc for us. We're trying, and I'll keep trying because
-I actually get paid (by very generous donors) to do this, but if I
-weren't I'd have given up a long time ago. And while I won't give up, I
-can't deny this situation affects my morale and willingness to keep
-pushing on upstreaming on a regular basis.
-
-Meanwhile, OpenBSD has been *shipping* full M1 support for a while now
-in official release images (and since Linux is the source of truth for
-DT bindings, every time we re-bikeshed it we break their users because
-they, quite reasonably, aren't interested in waiting for us Linux
-slowpokes to figure it out first).
-
-Please, let's introspect about this for a moment. Something is deeply
-broken if people with 25+ years being an arch maintainer can't get a
-700-line mfd driver upstreamed before giving up. I don't know how we
-expect to ever get a Rust GPU driver merged if it takes 6+ versions to
-upstream the world's easiest cpufreq hardware.
-
-- Hector
+         M.
+-- 
+Jazz is not dead. It just smells funny...
