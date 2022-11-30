@@ -2,76 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7198A63D678
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 14:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDB0263D680
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 14:21:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiK3NUs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 08:20:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57468 "EHLO
+        id S235769AbiK3NVR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 08:21:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiK3NUr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 08:20:47 -0500
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BB627920;
-        Wed, 30 Nov 2022 05:20:46 -0800 (PST)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1p0N12-0006Bf-9f; Wed, 30 Nov 2022 14:20:44 +0100
-Date:   Wed, 30 Nov 2022 13:20:38 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
+        with ESMTP id S235771AbiK3NVL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 08:21:11 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5071D6DFDC
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 05:21:04 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id b2so24989455eja.7
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 05:21:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gt+M81Eqax/B9E6ID1NKT7PSGx4EF8eZ9cLrbLUN/GU=;
+        b=NLy0rbEBnyFn6jBjr9qKS6/tr2EzWXrVtc0VSMkNkR3WAxH6M9DJFfBEEKKHBpDNVM
+         Si8/JG+dZLaqyK8AO2OIkHKqetRUyCsvELWFogjyPyPvNbJahTMayozY+0YO/Z8bVDsr
+         bGKMX0bKMFgbgXycQXgP5uWVHVacJdsabKb6tI2h3dxPidvyd4K95Wv8lnGV7Lx2Rw0f
+         eZcd3A44euo4ANvlUT6Jeg3KbyuhVlVtqeER8UT8H6h7eDhS1eBHpYfvCQTrG4pM134h
+         Js6iJujMRSRa0c1SNKjY9vIhHulg5nqWF6cx/AXjWntqNK/EDA5uPNaZ+Xyd6fC2SFEw
+         y0JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Gt+M81Eqax/B9E6ID1NKT7PSGx4EF8eZ9cLrbLUN/GU=;
+        b=P4xRI+jMKCUitXrcruEMxlqCjG9NidTRtnqdfRoS0IzigdfQLat7kJ4rG4Qh+Ihaga
+         YTp7TwjDsqd/fbIUgeZLDfDFt7L5ppKFhj4t269PSgtQMmAC8MLCElytSPd8RAUMAdbc
+         WcBdbttg3CLrSsIcT/ebVo3Caj2rYXneeiZCuJ5VhzH2ej+LUPJ94PLknRvaw0bQkMkQ
+         Rya65d44hFjiW0P7/p2RpseONjcuGhHBf7bPVPv0goDJVOIwnRCXbgZJ1o3sVBCRYuFN
+         A3hcWe4FcCn2eg3yJrew5sjZ+uEz78A42o8s1vDUuxQ4zQUpBrGuJusZxipXKpYbIVMw
+         0lZg==
+X-Gm-Message-State: ANoB5pkdFP0TDOpDQ4hqy9XfG85wDRgfgJcdUNDCQUWeTX2vxPdykaII
+        XZNIlhYEiQ5juoXXyVTuqySpOQ==
+X-Google-Smtp-Source: AA0mqf5bPSTVc1ENyQlLFALsPp7erwFsC70U3GUIkkRDxbrOAz+U2EMEY5JXLRD5ynowcwyncXGs4g==
+X-Received: by 2002:a17:907:989a:b0:7c0:7bd1:6436 with SMTP id ja26-20020a170907989a00b007c07bd16436mr10613264ejc.718.1669814462390;
+        Wed, 30 Nov 2022 05:21:02 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id y20-20020a056402135400b0046856c307d0sm650800edw.5.2022.11.30.05.21.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 05:21:01 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Steven Liu <steven.liu@mediatek.com>,
-        Henry Yen <Henry.Yen@mediatek.com>
-Subject: [PATCH v2 2/2] dt-bindings: thermal: mediatek: add compatible string
- for MT7986 and MT7981 SoC
-Message-ID: <Y4dYpoVBmKZSaX2q@makrotopia.org>
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/2] interconnect: qcom: Add support for SM8550
+Date:   Wed, 30 Nov 2022 15:20:57 +0200
+Message-Id: <20221130132059.3145243-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document compatible string 'mediatek,mt7986-thermal' for V3 thermal
-unit found in MT7986 SoCs.
-'mediatek,mt7981-thermal' is also added as it is identical with the
-thermal unit of MT7986.
+This patchset adds interconnect support for SM8550.
 
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
-Changes since v1: Properly document both supported SoCs
+The v3 of this patchset is here:
+https://lore.kernel.org/all/20221129131203.2197959-1-abel.vesa@linaro.org/
 
- Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 2 ++
- 1 file changed, 2 insertions(+)
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Georgi Djakov <djakov@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-index 5c7e7bdd029a..38b32bb447e3 100644
---- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-+++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-@@ -13,6 +13,8 @@ Required properties:
-   - "mediatek,mt2701-thermal" : For MT2701 family of SoCs
-   - "mediatek,mt2712-thermal" : For MT2712 family of SoCs
-   - "mediatek,mt7622-thermal" : For MT7622 SoC
-+  - "mediatek,mt7981-thermal", "mediatek,mt7986-thermal" : For MT7981 SoC
-+  - "mediatek,mt7986-thermal" : For MT7986 SoC
-   - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
-   - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
- - reg: Address range of the thermal controller
+Abel Vesa (2):
+  dt-bindings: interconnect: Add Qualcomm SM8550
+  interconnect: qcom: Add SM8550 interconnect provider driver
+
+ .../interconnect/qcom,sm8550-rpmh.yaml        |  139 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/sm8550.c            | 2319 +++++++++++++++++
+ drivers/interconnect/qcom/sm8550.h            |  178 ++
+ .../interconnect/qcom,sm8550-rpmh.h           |  190 ++
+ 6 files changed, 2837 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sm8550.c
+ create mode 100644 drivers/interconnect/qcom/sm8550.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
+
 -- 
-2.38.1
+2.34.1
 
