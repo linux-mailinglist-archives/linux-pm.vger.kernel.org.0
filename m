@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C5563DE23
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:34:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4D363DE92
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:38:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbiK3SeW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 13:34:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42624 "EHLO
+        id S230445AbiK3Sic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 13:38:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiK3SeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:34:05 -0500
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DEDE24BF9;
-        Wed, 30 Nov 2022 10:34:03 -0800 (PST)
-Received: by mail-qt1-f182.google.com with SMTP id jr1so3609318qtb.7;
-        Wed, 30 Nov 2022 10:34:03 -0800 (PST)
+        with ESMTP id S230434AbiK3Sib (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:38:31 -0500
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8D02C1;
+        Wed, 30 Nov 2022 10:38:30 -0800 (PST)
+Received: by mail-qt1-f178.google.com with SMTP id l15so11800304qtv.4;
+        Wed, 30 Nov 2022 10:38:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HSephSpMMLyS6GN7D/yNJ77wfgPj8H/yF2e6L0lmOsc=;
-        b=OHnZ2LOaj4D6fl61/+Rlfit1bTzNY1WXnBkJ7f6jmax27yDYmUS8gFyLaNem4oNaeR
-         HGGf0MZypqZ1qQWAHWzwnskPuLttf5BsIVa/mKweuwkt/lSTW3zn1fcGYwrimuY8uQnW
-         BNOQPsD6DO1bIs46w6nJksvRaEaGVikwyvLTy5js6nzXRwtODJzH0tR0nR/m9WlC3/l2
-         6+InOtYWRqavLF8gyWxSvK0KLfZqJjv7iqs0KAEE+oFFX3kvhy3zrAKLrI9OjHW3Xf5g
-         Cl1G/uQvBUt1jVl8rIPVEBEmj453umqjGCfR7CdBUPK0y7S/vZ1uSzFGSjp4zEP3Jix1
-         zHYA==
-X-Gm-Message-State: ANoB5pmHOBKQQpDX+7BNpRlnQnQuo/x06YoLNHgrojvgXKFX5Zn/f5wD
-        ou6wFEK8OR7+eejCBvmGwJ+BAJhBjX18l+/Vfo4=
-X-Google-Smtp-Source: AA0mqf4jqExznIzftIUudzBQv83qor16LP4gntamj8CEAmg2OtwLcqcuiwLxBpbfLMQYpJH2mnWCxgRGwH44i5cPT1I=
+        bh=vvYccHRItsFtfbX1LjYVA7khVN/vC5lTWUwZfNTayMk=;
+        b=4siRStvvjiA7bK4OCI/bDRbSoJSYGyoJM92jCLMx3vamOZ7vjyM9nbc2ViRmfuhCDe
+         aFzxT8zkkOBHyhV0W2s4F0HVfhhaRvjpF5Vnqxj9i/+t2KOv63EUPPnT6/1iD/hwmWpf
+         3rqwcrz3fm8eObVL5FG7tqdCc8/4KJ/Kev36aObEtRFeCCrIZwdgYc/OiFpQAS2ef2tS
+         MVXQqAU1v1RBKh3fK24/je7CmNnzlakb/EoscSoNXJSCYPFi2D4VJgjLMKIJaMupYsNW
+         5mfGR+Z6+n4uFUYYhMrt4SwFzXZ0mibgeqoQyrCsSBnIGfh892ItAebKO2iqGEI7TjsB
+         bLsA==
+X-Gm-Message-State: ANoB5pm9o7+rR9VR0/guo+KneK+3VWJu1pP0qteuSglNjIvvvFagrFpc
+        HwG+Altv6Y05D0+DCSFMcowFeOsNoxIaHaW3dSbEHJJO
+X-Google-Smtp-Source: AA0mqf60AJyzMPy+rgqZSrXCq1fakf/7vJvxHcra023KFbFYnzvwGfrSiSUxWXZe7dndQx1LZkzn70lE2HD7JJ52NpQ=
 X-Received: by 2002:ac8:73c4:0:b0:3a5:a53d:a102 with SMTP id
- v4-20020ac873c4000000b003a5a53da102mr58446428qtp.153.1669833242643; Wed, 30
- Nov 2022 10:34:02 -0800 (PST)
+ v4-20020ac873c4000000b003a5a53da102mr58461117qtp.153.1669833509483; Wed, 30
+ Nov 2022 10:38:29 -0800 (PST)
 MIME-Version: 1.0
-References: <20221107105657.19002-1-lukas.bulwahn@gmail.com>
-In-Reply-To: <20221107105657.19002-1-lukas.bulwahn@gmail.com>
+References: <20221110142307.981883-1-liuyongqiang13@huawei.com> <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
+In-Reply-To: <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:33:51 +0100
-Message-ID: <CAJZ5v0jFO=6WLNZUe4vqUXxxWuhZuaq1Sifk7+094YFXUWp2wA@mail.gmail.com>
-Subject: Re: [PATCH] notifier: repair slips in kernel-doc comments
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+Date:   Wed, 30 Nov 2022 19:38:18 +0100
+Message-ID: <CAJZ5v0iQ1=zDmcHW_JLEtzd6UHV4MFHF_HM9RXSY0j0+QpLVpg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: Init completion before kobject_init_and_add()
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Yongqiang Liu <liuyongqiang13@huawei.com>
+Cc:     rafael@kernel.org, tobin@kernel.org, zhangxiaoxu5@huawei.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,58 +56,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 7, 2022 at 11:57 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+On Mon, Nov 14, 2022 at 4:23 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> Invoking ./scripts/kernel-doc -none kernel/notifier.c warns:
+> On 10-11-22, 14:23, Yongqiang Liu wrote:
+> > In cpufreq_policy_alloc(), it will call uninitialed completion in
+> > cpufreq_sysfs_release() when kobject_init_and_add() fails. And
+> > that will cause a crash such as the following page fault in complete:
+> >
+> > BUG: unable to handle page fault for address: fffffffffffffff8
+> > [..]
+> > RIP: 0010:complete+0x98/0x1f0
+> > [..]
+> > Call Trace:
+> >  kobject_put+0x1be/0x4c0
+> >  cpufreq_online.cold+0xee/0x1fd
+> >  cpufreq_add_dev+0x183/0x1e0
+> >  subsys_interface_register+0x3f5/0x4e0
+> >  cpufreq_register_driver+0x3b7/0x670
+> >  acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
+> >  do_one_initcall+0x13d/0x780
+> >  do_init_module+0x1c3/0x630
+> >  load_module+0x6e67/0x73b0
+> >  __do_sys_finit_module+0x181/0x240
+> >  do_syscall_64+0x35/0x80
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >
+> > Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
+> > Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 69b3d61852ac..7e56a42750ea 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+> >       if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
+> >               goto err_free_rcpumask;
+> >
+> > +     init_completion(&policy->kobj_unregister);
+> >       ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
+> >                                  cpufreq_global_kobject, "policy%u", cpu);
+> >       if (ret) {
+> > @@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
+> >       init_rwsem(&policy->rwsem);
+> >       spin_lock_init(&policy->transition_lock);
+> >       init_waitqueue_head(&policy->transition_wait);
+> > -     init_completion(&policy->kobj_unregister);
+> >       INIT_WORK(&policy->update, handle_update);
+> >
+> >       policy->cpu = cpu;
 >
->   kernel/notifier.c:71: warning: Excess function parameter 'returns' description in 'notifier_call_chain'
->   kernel/notifier.c:119: warning: Function parameter or member 'v' not described in 'notifier_call_chain_robust'
->
-> These two warning are easy to fix, as they are just due to some minor slips
-> that makes the comment not follow kernel-doc's syntactic expectation.
->
-> Fix those minor slips in kernel-doc comments for make W=1 happiness.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
-> Rafael, please pick this minor non-urgent patch for your pm tree. Thanks.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied as 6.2 material, but I'm kind of wondering why you decided to
-send this to me.
-
->
->  kernel/notifier.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/notifier.c b/kernel/notifier.c
-> index 0d5bd62c480e..ab75637fd904 100644
-> --- a/kernel/notifier.c
-> +++ b/kernel/notifier.c
-> @@ -62,7 +62,7 @@ static int notifier_chain_unregister(struct notifier_block **nl,
->   *                     value of this parameter is -1.
->   *     @nr_calls:      Records the number of notifications sent. Don't care
->   *                     value of this field is NULL.
-> - *     @returns:       notifier_call_chain returns the value returned by the
-> + *     Return:         notifier_call_chain returns the value returned by the
->   *                     last notifier function called.
->   */
->  static int notifier_call_chain(struct notifier_block **nl,
-> @@ -105,13 +105,13 @@ NOKPROBE_SYMBOL(notifier_call_chain);
->   * @val_up:    Value passed unmodified to the notifier function
->   * @val_down:  Value passed unmodified to the notifier function when recovering
->   *              from an error on @val_up
-> - * @v          Pointer passed unmodified to the notifier function
-> + * @v:         Pointer passed unmodified to the notifier function
->   *
->   * NOTE:       It is important the @nl chain doesn't change between the two
->   *             invocations of notifier_call_chain() such that we visit the
->   *             exact same notifier callbacks; this rules out any RCU usage.
->   *
-> - * Returns:    the return value of the @val_up call.
-> + * Return:     the return value of the @val_up call.
->   */
->  static int notifier_call_chain_robust(struct notifier_block **nl,
->                                      unsigned long val_up, unsigned long val_down,
-> --
-> 2.17.1
->
+Applied as 6.2 material, thanks!
