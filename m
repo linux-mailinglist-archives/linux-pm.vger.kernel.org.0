@@ -2,147 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4C263E1CE
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 21:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12BB163E2D4
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 22:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbiK3UXZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 15:23:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33938 "EHLO
+        id S229456AbiK3Vfp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 16:35:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiK3UW5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 15:22:57 -0500
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7AB82AFA;
-        Wed, 30 Nov 2022 12:21:29 -0800 (PST)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3a7081e3b95so183342147b3.1;
-        Wed, 30 Nov 2022 12:21:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/E33WRItmkoiLgpHDHd24EmIcJsNGQPAC7NQMjlLAgo=;
-        b=evY1rXJKVKWb3sgc1Zd+kNKUwFZR8XT+XEsQIFIOsi+1jnzs47YHmQRW6OzLy4Xay1
-         KI2cGjwBHegJJuzuaROFf0+mpgTCEx2oKA+GjgbvG8t4C/TJ+0ZbLFNPahJdwarIf8od
-         Wtk+Yvq2pEaTqp8NBvXzV3bWj781yLKxNft/aooRBgBR5ChEvcFDIFn+5nYLWQrp1W1Y
-         iCkH7WB0mBgSQvkyuyVeBQkZRar9F0w8wq0y1OWrkF1rP0XPgSQRoJwGGmjoeSS/p+/D
-         PzS4+Uo6oicJ3lGsZMTYFbIbX3Y2kMjOn4CUFnNS6VjGoqAg31p92NJRT1RNpxPPfMbC
-         2cGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/E33WRItmkoiLgpHDHd24EmIcJsNGQPAC7NQMjlLAgo=;
-        b=iD5giEzTq3MvfTNWKiHClvXfEws1pOwy7wFd9SY/QZbNpAjKnIZSwhbFj0QFxLOuB+
-         m3YQEGxJghire0mI/wb5L5lz8CP4KFvq3O7cIMsCjEt02tQoeOTH2iVMSwOo57IB3L0m
-         PPyQJVd10saFVacp8egIm3j9PiJHr0b8Ovz8kPnyQEyo0sSEKSRfxBkZDrMLTR0zz/sN
-         2A191sh0RseK3ljTzyGqPeghGGrr5cHivjovZWaqtYP6cs4IhbuntD9T15Qk3YPXeBwT
-         hdCpgQITtO/Y0LDwv2US4wrzy2DPQIOx/aOY7iVpl1h2SnRQrBocWmy3RvDIXV316ObU
-         F5YQ==
-X-Gm-Message-State: ANoB5pmAXkFhcrHueIRS8yDjrbWijUu4wFHGja00ymGBVrVGQMu3v8nZ
-        hhSmMjHmj/9wQEfpG4MVCu3Tp7k5yWMy837q0oU=
-X-Google-Smtp-Source: AA0mqf4QYVeo8noGqZEeUSQP0QhYgoUL9V5zvLRwNvCg7F5rTZturd/1+QWGiFv5o3YnBp/PokoRl9Q0AlpS0hzTsWY=
-X-Received: by 2002:a0d:ea8c:0:b0:3c3:5477:68c1 with SMTP id
- t134-20020a0dea8c000000b003c3547768c1mr19055436ywe.464.1669839688853; Wed, 30
- Nov 2022 12:21:28 -0800 (PST)
-MIME-Version: 1.0
-References: <20221107105657.19002-1-lukas.bulwahn@gmail.com> <CAJZ5v0jFO=6WLNZUe4vqUXxxWuhZuaq1Sifk7+094YFXUWp2wA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jFO=6WLNZUe4vqUXxxWuhZuaq1Sifk7+094YFXUWp2wA@mail.gmail.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 30 Nov 2022 21:21:18 +0100
-Message-ID: <CAKXUXMz_M5z00yZiBkYWxBmuQGFwMD4JwMH11qs4EHfPOawUvQ@mail.gmail.com>
-Subject: Re: [PATCH] notifier: repair slips in kernel-doc comments
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229445AbiK3Vfo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 16:35:44 -0500
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 30 Nov 2022 13:35:43 PST
+Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DFE4900F4
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 13:35:43 -0800 (PST)
+Received: from wind.enjellic.com (localhost [127.0.0.1])
+        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 2AUKMMDE013659;
+        Wed, 30 Nov 2022 14:22:22 -0600
+Received: (from greg@localhost)
+        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 2AUKMKYG013658;
+        Wed, 30 Nov 2022 14:22:20 -0600
+Date:   Wed, 30 Nov 2022 14:22:20 -0600
+From:   "Dr. Greg" <greg@enjellic.com>
+To:     James Bottomley <jejb@linux.ibm.com>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com,
+        Matthew Garrett <mgarrett@aurora.tech>,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>, casey@schaufler-ca.com
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
+Message-ID: <20221130202220.GA13122@wind.enjellic.com>
+Reply-To: "Dr. Greg" <greg@enjellic.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <Y4ORZT2t/KhL5jfn@kernel.org> <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com>
+User-Agent: Mutt/1.4i
+X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Wed, 30 Nov 2022 14:22:22 -0600 (CST)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 7:34 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Mon, Nov 7, 2022 at 11:57 AM Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> >
-> > Invoking ./scripts/kernel-doc -none kernel/notifier.c warns:
-> >
-> >   kernel/notifier.c:71: warning: Excess function parameter 'returns' description in 'notifier_call_chain'
-> >   kernel/notifier.c:119: warning: Function parameter or member 'v' not described in 'notifier_call_chain_robust'
-> >
-> > These two warning are easy to fix, as they are just due to some minor slips
-> > that makes the comment not follow kernel-doc's syntactic expectation.
-> >
-> > Fix those minor slips in kernel-doc comments for make W=1 happiness.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> > Rafael, please pick this minor non-urgent patch for your pm tree. Thanks.
->
-> Applied as 6.2 material, but I'm kind of wondering why you decided to
-> send this to me.
->
+On Sun, Nov 27, 2022 at 11:41:26AM -0500, James Bottomley wrote:
 
-Well, kernel/notifier.c is one of those files, with no specific
-maintainer and no specific obvious subsystem... so the next patch goes
-to the last one touching it ;)
+Good afternoon, I hope the week is going well for everyone.
 
-More seriously:
+> On Sun, 2022-11-27 at 18:33 +0200, Jarkko Sakkinen wrote:
+> > On Mon, Nov 14, 2022 at 12:11:20PM -0500, James Bottomley wrote:
+> > > On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+> > > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> > > > restricts usermode's ability to extend or reset PCR 23.
+> > > 
+> > > Could I re ask the question here that I asked of Matthew's patch
+> > > set:
+> > > 
+> > > https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
+> > > 
+> > > Which was could we use an NVRAM index in the TPM instead of a PCR???
+> > > The reason for asking was that PCRs are rather precious and might
+> > > get more so now that Lennart has some grand scheme for using more
+> > > of them in his unified boot project.?? Matthew promised to play with
+> > > the idea but never got back to the patch set to say whether he
+> > > investigated this or not.
+> > 
+> > Even for PCR case it would be better to have it configurable through
+> > kernel command-line, including a disabled state, which would the
+> > default.
+> > 
+> > This would be backwards compatible, and if designed properly, could
+> > more easily extended for NV index later on.
+> 
+> Um how?  The observation is in the above referenced email is that PCR23
+> is reserved in the TCG literature for application usage.  If any
+> application is actually using PCR23 based on that spec then revoking
+> access to user space will cause it to break.  This is an ABI change
+> which is not backwards compatible.  You can call it a distro problem if
+> it's command line configurable, but the default would be what most
+> distros take, so it's rather throwing them under the bus if there is an
+> application using it.
+> 
+> Of course, if no application is actually using PCR23, then it's
+> probably OK to use it in the kernel and make it invisible to user
+> space, but no evidence about this has actually been presented.
 
-get_maintainer.pl -f kernel/notifier.c does state:
+If there isn't, there will be in in the next week or so, if we can
+stay on schedule.  Otherwise, I fear that Casey Schaufler, who I
+believe is holding his breath, may turn irretrievably blue.... :-)
 
-"Rafael J. Wysocki" <rafael.j.wysocki@intel.com> (commit_signer:2/3=67%)
+The Trust Orchestration System, Quixote, that we are releasing for
+Linux uses PCR23 to generate an attestation of the functional state
+value for an internally modeled security domain.
 
-Rafael, you took the only two patches in 2022 and carried them forward
-to Linus. So, that was my thinking for this minor patch as well; no
-deeper thought than that.
+TSEM, the LSM based kernel component in all of this, supports the
+ability to implement multiple 'domains', nee namespaces, each of which
+can have a security modeling function attached to it.  Each internally
+modeled domain has to have the ability to independently attest the
+functional value of the security model implemented for the
+domain/namespace.
 
-If you would not have accepted them, I might have tried Andrew Morton
-in a few weeks for the next merge window (v6.3) as a last resort.
+We have found, and I believe others will find that, particularly the
+resettable registers, are too precious to be constrained from general
+usage.  We actually just finished lifting the PCR23 extension
+functionality out of the TSEM driver and into userspace because having
+it in the kernel was too constraining.
 
-Rafael, thanks for picking up this patch.
+With respect to making the behavior a command-line option.  We've
+slogged through 2+ years of conversations with sizable players who
+have indicated that if the 'distys' don't implement something, it
+isn't a relevant Linux technology, so a command-line option poses a
+barrier to innovation.
 
-Lukas
+> James
 
-> >
-> >  kernel/notifier.c | 6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/notifier.c b/kernel/notifier.c
-> > index 0d5bd62c480e..ab75637fd904 100644
-> > --- a/kernel/notifier.c
-> > +++ b/kernel/notifier.c
-> > @@ -62,7 +62,7 @@ static int notifier_chain_unregister(struct notifier_block **nl,
-> >   *                     value of this parameter is -1.
-> >   *     @nr_calls:      Records the number of notifications sent. Don't care
-> >   *                     value of this field is NULL.
-> > - *     @returns:       notifier_call_chain returns the value returned by the
-> > + *     Return:         notifier_call_chain returns the value returned by the
-> >   *                     last notifier function called.
-> >   */
-> >  static int notifier_call_chain(struct notifier_block **nl,
-> > @@ -105,13 +105,13 @@ NOKPROBE_SYMBOL(notifier_call_chain);
-> >   * @val_up:    Value passed unmodified to the notifier function
-> >   * @val_down:  Value passed unmodified to the notifier function when recovering
-> >   *              from an error on @val_up
-> > - * @v          Pointer passed unmodified to the notifier function
-> > + * @v:         Pointer passed unmodified to the notifier function
-> >   *
-> >   * NOTE:       It is important the @nl chain doesn't change between the two
-> >   *             invocations of notifier_call_chain() such that we visit the
-> >   *             exact same notifier callbacks; this rules out any RCU usage.
-> >   *
-> > - * Returns:    the return value of the @val_up call.
-> > + * Return:     the return value of the @val_up call.
-> >   */
-> >  static int notifier_call_chain_robust(struct notifier_block **nl,
-> >                                      unsigned long val_up, unsigned long val_down,
-> > --
-> > 2.17.1
-> >
+Have a good day.
+
+As always,
+Dr. Greg
+
+The Quixote Project - Flailing at the Travails of Cybersecurity
