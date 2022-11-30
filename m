@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C7F63E572
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 00:29:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C335F63E596
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 00:37:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbiK3X3l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 18:29:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S230034AbiK3Xhw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 18:37:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiK3X30 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 18:29:26 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7D9AD985;
-        Wed, 30 Nov 2022 15:19:46 -0800 (PST)
-Date:   Wed, 30 Nov 2022 15:56:33 +0100
+        with ESMTP id S230073AbiK3Xhk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 18:37:40 -0500
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E5330558;
+        Wed, 30 Nov 2022 15:37:21 -0800 (PST)
+Date:   Thu, 1 Dec 2022 00:37:15 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1669850360;
-        bh=lMd/Ab2MOUBi5t1VUZde5XMv406zWEvfnprZnZ23DB0=;
+        s=mail; t=1669851439;
+        bh=gCjQ7v9MiSprJKAXVgQSc3QwycT+eoWtbLZH/ib/kuY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KK36kGVJJsHbA+RE+PK9eplFpMUZn84XFvP0AWuGpZMiaLLFM8PVqHOEclWBeXttd
-         iSjdOeh2tvQc4VerOM0mv7ZqcHkjvryo4tUfbvGNuCKrzIrTmxa6zM6nCl7hTMDjrc
-         0PICaw9/tMrR4pbEtxIUoeIfHLgG/+I3COMhpTLA=
+        b=psBRQAE+7XvBm97cEAeXI4A+z18YICLeLxtzacCWac3q9okGnsfzcr389b4NC3XCJ
+         GFuc1YVLbI2PmPqxc/KUMvPo/u2PenmGyXfag3PQJa3fM6zbjXCqTbaRAiaEPObgn7
+         PlefG2fEPty/Cj6Y24KmsJrtaPqUYLKoNRNJAI/I=
 From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Petr Mladek <pmladek@suse.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         linux-pm@vger.kernel.org,
         Sergey Senozhatsky <senozhatsky@chromium.org>,
         Andy Whitcroft <apw@canonical.com>,
@@ -33,120 +33,142 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Steven Rostedt <rostedt@goodmis.org>,
         Dwaipayan Ray <dwaipayanray1@gmail.com>,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <6bc60e00-30b8-40ff-81f4-e7973c701ad4@t-8ch.de>
+Subject: Re: [PATCH v2 0/3] printk: introduce new macros pr_<level>_cont()
+Message-ID: <d31b4a2b-fc6b-4084-9cac-ced83a37a8ad@t-8ch.de>
 References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
- <Y4dndyIiosT7l4RG@alley>
+ <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y4dndyIiosT7l4RG@alley>
+In-Reply-To: <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
 Jabber-ID: thomas@t-8ch.de
 X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
 X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-11-30 15:23+0100, Petr Mladek wrote:
-> On Fri 2022-11-25 20:09:46, Thomas Weißschuh wrote:
->> These macros emit continuation messages with explicit levels.
->> In case the continuation is logged separately from the original message
->> it will retain its level instead of falling back to KERN_DEFAULT.
->> 
->> This remedies the issue that logs filtered by level contain stray
->> continuation messages without context.
->> 
->> Suggested-by: Petr Mladek <pmladek@suse.com>
->> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->> ---
->>  include/linux/printk.h | 23 +++++++++++++++++++++++
->>  1 file changed, 23 insertions(+)
->> 
->> diff --git a/include/linux/printk.h b/include/linux/printk.h
->> index 8c81806c2e99..8f564c38f121 100644
->> --- a/include/linux/printk.h
->> +++ b/include/linux/printk.h
->> @@ -537,6 +537,8 @@ struct pi_entry {
->>   * This macro expands to a printk with KERN_CONT loglevel. It should only be
->>   * used when continuing a log message with no newline ('\n') enclosed. Otherwise
->>   * it defaults back to KERN_DEFAULT loglevel.
->> + *
->> + * Use the dedicated pr_<level>_cont() macros instead.
->>   */
->>  #define pr_cont(fmt, ...) \
->>  	printk(KERN_CONT fmt, ##__VA_ARGS__)
->> @@ -701,6 +703,27 @@ do {									\
->>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
->>  #endif
->>  
->> +/*
->> + * Print a continuation message with level. In case the continuation is split
->> + * from the main message it preserves the level.
->> + */
->> +
->> +#define pr_emerg_cont(fmt, ...)					\
->> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_alert_cont(fmt, ...)					\
->> +	printk(KERN_ALERT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_crit_cont(fmt, ...)					\
->> +	printk(KERN_CRIT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_err_cont(fmt, ...)					\
->> +	printk(KERN_ERR KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_warn_cont(fmt, ...)					\
->> +	printk(KERN_WARN KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_notice_cont(fmt, ...)					\
->> +	printk(KERN_NOTICE KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +#define pr_info_cont(fmt, ...)					\
->> +	printk(KERN_INFO KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
->> +/* no pr_debug_ratelimited, it doesn't make sense with CONFIG_DYNAMIC_DEBUG. */
+On 2022-11-30 18:57+0100, Rafael J. Wysocki wrote:
+> On Fri, Nov 25, 2022 at 8:10 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+>>
+>> This series adds new printk wrapper macros pr_<level>_cont().
+>> These create continuation messages with an explicit level.
+>>
+>> Explicit levels are useful when a continuation message is split from its main
+>> message. Without the explicit level KERN_DEFAULT ("warn" by default) is used
+>> which can lead to stray partial log messages when filtering by level.
+>>
+>> Also checkpatch is modified to recommend the new macros over plain pr_cont().
+>>
+>> Lastly the new macros are used in kernel/power/process.c as this file uses
+>> continuation messages during system suspend-resume which creates a high
+>> likelyhood of interspersed messages.
 > 
-> I guess that you wanted to write "pr_debug_cont".
+> Well, if process.c is the only problematic piece of code in this
+> respect, I'm not sure if adding the new infrastructure for its benefit
+> alone is worth it, because it can very well do without pr_cont() at
+> all.
 
-Indeed.
+In general all usages of pr_cont() are problematic.
+Any continuation can be split from its main message, leading to misleved
+continuations.
+process.c is just the one that I noticed reliably hitting this problem on my
+machine.
 
-> Also I am not sure what you mean with "doesn't make sense". IMHO, it
-> might  make sense. But it would be hard to use and error prone
-> with CONFIG_DYNAMIC_DEBUG.
+> Please see the patch below (compiled only, sorry for gmail-induced
+> white space damage).  I'll submit it properly later if it works for
+> everyone.
+
+The patch looks fine to me and getting rid of usages of pr_cont() seems to be
+the better aproach where it is possible.
+
+Petr: do you still want me to submit the new macros even if it is not used
+directly anymore?
+
+> ---
+>  kernel/power/process.c |   25 ++++++++++---------------
+>  1 file changed, 10 insertions(+), 15 deletions(-)
 > 
-> And more importantly, it probably would not work properly. If I get
-> it corretly the dynamic debug messages are printed by the wrapper:
+> Index: linux-pm/kernel/power/process.c
+> ===================================================================
+> --- linux-pm.orig/kernel/power/process.c
+> +++ linux-pm/kernel/power/process.c
+> @@ -27,6 +27,8 @@ unsigned int __read_mostly freeze_timeou
 > 
-> void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...)
-> {
-> [...]
-> 	vaf.fmt = fmt;
-> 	vaf.va = &args;
+>  static int try_to_freeze_tasks(bool user_only)
+>  {
+> +    const char *what = user_only ? "user space processes" :
+> +                    "remaining freezable tasks";
+>      struct task_struct *g, *p;
+>      unsigned long end_time;
+>      unsigned int todo;
+> @@ -36,6 +38,8 @@ static int try_to_freeze_tasks(bool user
+>      bool wakeup = false;
+>      int sleep_usecs = USEC_PER_MSEC;
 > 
-> 	printk(KERN_DEBUG "%s%pV", dynamic_emit_prefix(descriptor, buf), &vaf);
-> [...]
+> +    pr_info("Freezing %s\n", what);
+> +
+>      start = ktime_get_boottime();
 > 
-> This clearly does not support KERN_CONT in "fmt".
-
-Good point.
-
-My doubt was more that it would force users to know which message
-continuations belong together and always enable all of them together with
-dynamic debug.
-Which would be very errorprone and annoying to use.
-
-But if it doesn't work at all that's an even stronger point.
-
-> I suggest to either remove the comment completely. Or write something
-> like:
+>      end_time = jiffies + msecs_to_jiffies(freeze_timeout_msecs);
+> @@ -82,9 +86,8 @@ static int try_to_freeze_tasks(bool user
+>      elapsed_msecs = ktime_to_ms(elapsed);
 > 
-> /* no pr_debug_cont(), can't be supported easily with CONFIG_DYNAMIC_DEBUG */
-
-What about:
-
-/* no pr_debug_cont(), it's errorprone to use
- * and can't be supported easily with CONFIG_DYNAMIC_DEBUG */
-
-Thomas
+>      if (todo) {
+> -        pr_cont("\n");
+> -        pr_err("Freezing of tasks %s after %d.%03d seconds "
+> -               "(%d tasks refusing to freeze, wq_busy=%d):\n",
+> +        pr_err("Freezing %s %s after %d.%03d seconds "
+> +               "(%d tasks refusing to freeze, wq_busy=%d):\n", what,
+>                 wakeup ? "aborted" : "failed",
+>                 elapsed_msecs / 1000, elapsed_msecs % 1000,
+>                 todo - wq_busy, wq_busy);
+> @@ -101,8 +104,8 @@ static int try_to_freeze_tasks(bool user
+>              read_unlock(&tasklist_lock);
+>          }
+>      } else {
+> -        pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
+> -            elapsed_msecs % 1000);
+> +        pr_info("Freezing %s completed (elapsed %d.%03d seconds)\n",
+> +            what, elapsed_msecs / 1000, elapsed_msecs % 1000);
+>      }
+> 
+>      return todo ? -EBUSY : 0;
+> @@ -130,14 +133,11 @@ int freeze_processes(void)
+>          static_branch_inc(&freezer_active);
+> 
+>      pm_wakeup_clear(0);
+> -    pr_info("Freezing user space processes ... ");
+>      pm_freezing = true;
+>      error = try_to_freeze_tasks(true);
+> -    if (!error) {
+> +    if (!error)
+>          __usermodehelper_set_disable_depth(UMH_DISABLED);
+> -        pr_cont("done.");
+> -    }
+> -    pr_cont("\n");
+> +
+>      BUG_ON(in_atomic());
+> 
+>      /*
+> @@ -166,14 +166,9 @@ int freeze_kernel_threads(void)
+>  {
+>      int error;
+> 
+> -    pr_info("Freezing remaining freezable tasks ... ");
+> -
+>      pm_nosig_freezing = true;
+>      error = try_to_freeze_tasks(false);
+> -    if (!error)
+> -        pr_cont("done.");
+> 
+> -    pr_cont("\n");
+>      BUG_ON(in_atomic());
+> 
+>      if (error)
