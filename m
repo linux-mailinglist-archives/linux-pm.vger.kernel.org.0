@@ -2,126 +2,275 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BEA63D60B
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 13:55:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01A8E63D676
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 14:19:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234308AbiK3MzQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 07:55:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
+        id S232035AbiK3NT4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 08:19:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiK3MzP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 07:55:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9113F2A73E;
-        Wed, 30 Nov 2022 04:55:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 26AD261B2F;
-        Wed, 30 Nov 2022 12:55:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671D9C433B5;
-        Wed, 30 Nov 2022 12:55:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669812913;
-        bh=caKgaaIV0oXMwRYscFbFUjaVc2wY6Y6lLAE0QR29CR4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=KrQKNeBqB9TdkZXpD4zXCNJ059Bhfn4Ojq39TYC1dhPtSM6nJZTLfeXAzgntMRqbe
-         7RFlEyXNeO0lfslP+QAcZcE8h1mv6n+p0l8E3x7oS8U7Re1lncgtPEhLJtKI69mYTj
-         5RH3RhxNGYHLoTgJ1QlfF3njkdoyyfnSDFDezH2WhlkwZoPtDSxPHjQYJab8+Di7y7
-         hw2JhjfLGBm9Dqdv9tFXr0hipf2oYhNFv+YSLnJv+JaOEfLlQBjv9UlrCVu15wbDz9
-         tTpIK9b2EiNO6PB3sARRvkUpAx7jg6fQL1XH1eyzl5T+bBNEWh+hZIH4VmSWPw4MFL
-         xs9LeWtRIpG8g==
-From:   Georgi Djakov <djakov@kernel.org>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        djakov@kernel.org
-Subject: [GIT PULL] interconnect changes for 6.2
-Date:   Wed, 30 Nov 2022 14:55:08 +0200
-Message-Id: <20221130125508.4349-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.29.0
+        with ESMTP id S229971AbiK3NT4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 08:19:56 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F84327920;
+        Wed, 30 Nov 2022 05:19:53 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.94.2)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1p0N05-0006BA-NZ; Wed, 30 Nov 2022 14:19:45 +0100
+Date:   Wed, 30 Nov 2022 13:19:39 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>
+Subject: [PATCH v2 1/2] thermal: mediatek: add support for MT7986 and MT7981
+Message-ID: <Y4dYazyXF02eRGC5@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hello Greg,
+Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+Brings code to assign values from efuse as well as new function to
+convert raw temperature to millidegree celsius, as found in MediaTek's
+SDK sources (but cleaned up and de-duplicated)
 
-This is the pull request with interconnect changes for the 6.2-rc1 merge
-window. It contains a new driver and misc fixes. The details are in the
-signed tag.
+[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
+Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+---
+Changes since v1: Drop use of adc_oe field in efuse, Henry Yen confirmed
+its use has been dropped intentionally in MTK SDK as well.
 
-All patches have been in linux-next during the last two weeks. Please pull
-into char-misc-next when possible.
+ drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 119 insertions(+), 3 deletions(-)
 
-Thanks,
-Georgi
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index 8440692e3890..6a69419f8960 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -150,6 +150,21 @@
+ #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
+ #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
+ 
++/*
++ * Layout of the fuses providing the calibration data
++ * These macros can be used for MT7981 and MT7986.
++ */
++#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
++#define CALIB_BUF0_ADC_OE_V3(x)		(((x) >> 10) & 0x3ff)
++#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
++#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
++#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
++#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
++#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
++#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
++#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
++#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
++
+ enum {
+ 	VTS1,
+ 	VTS2,
+@@ -163,6 +178,7 @@ enum {
+ enum mtk_thermal_version {
+ 	MTK_THERMAL_V1 = 1,
+ 	MTK_THERMAL_V2,
++	MTK_THERMAL_V3,
+ };
+ 
+ /* MT2701 thermal sensors */
+@@ -245,6 +261,27 @@ enum mtk_thermal_version {
+ /* The calibration coefficient of sensor  */
+ #define MT8183_CALIBRATION	153
+ 
++/* AUXADC channel 11 is used for the temperature sensors */
++#define MT7986_TEMP_AUXADC_CHANNEL	11
++
++/* The total number of temperature sensors in the MT7986 */
++#define MT7986_NUM_SENSORS		1
++
++/* The number of banks in the MT7986 */
++#define MT7986_NUM_ZONES		1
++
++/* The number of sensing points per bank */
++#define MT7986_NUM_SENSORS_PER_ZONE	1
++
++/* MT7986 thermal sensors */
++#define MT7986_TS1			0
++
++/* The number of controller in the MT7986 */
++#define MT7986_NUM_CONTROLLER		1
++
++/* The calibration coefficient of sensor  */
++#define MT7986_CALIBRATION		165
++
+ struct mtk_thermal;
+ 
+ struct thermal_bank_cfg {
+@@ -386,6 +423,14 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
+ static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
+ static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
+ 
++/* MT7986 thermal sensor data */
++static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
++static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
++static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
++static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
++static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
++static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
++
+ /*
+  * The MT8173 thermal controller has four banks. Each bank can read up to
+  * four temperature sensors simultaneously. The MT8173 has a total of 5
+@@ -549,6 +594,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
+ 	.version = MTK_THERMAL_V1,
+ };
+ 
++/*
++ * MT7986 uses AUXADC Channel 11 for raw data access.
++ */
++static const struct mtk_thermal_data mt7986_thermal_data = {
++	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
++	.num_banks = MT7986_NUM_ZONES,
++	.num_sensors = MT7986_NUM_SENSORS,
++	.vts_index = mt7986_vts_index,
++	.cali_val = MT7986_CALIBRATION,
++	.num_controller = MT7986_NUM_CONTROLLER,
++	.controller_offset = mt7986_tc_offset,
++	.need_switch_bank = true,
++	.bank_data = {
++		{
++			.num_sensors = 1,
++			.sensors = mt7986_bank_data,
++		},
++	},
++	.msr = mt7986_msr,
++	.adcpnp = mt7986_adcpnp,
++	.sensor_mux_values = mt7986_mux_values,
++	.version = MTK_THERMAL_V3,
++};
++
+ /**
+  * raw_to_mcelsius - convert a raw ADC value to mcelsius
+  * @mt:	The thermal controller
+@@ -603,6 +672,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
+ 	return (format_2 - tmp) * 100;
+ }
+ 
++static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
++{
++	s32 tmp;
++
++	if (raw == 0)
++		return 0;
++
++	raw &= 0xfff;
++	tmp = 100000 * 15 / 16 * 10000;
++	tmp /= 4096 - 512 + mt->adc_ge;
++	tmp /= 1490;
++	tmp *= raw - mt->vts[sensno] - 2900;
++
++	return mt->degc_cali * 500 - tmp;
++}
++
+ /**
+  * mtk_thermal_get_bank - get bank
+  * @bank:	The bank
+@@ -659,9 +744,12 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
+ 		if (mt->conf->version == MTK_THERMAL_V1) {
+ 			temp = raw_to_mcelsius_v1(
+ 				mt, conf->bank_data[bank->id].sensors[i], raw);
+-		} else {
++		} else if (mt->conf->version == MTK_THERMAL_V2) {
+ 			temp = raw_to_mcelsius_v2(
+ 				mt, conf->bank_data[bank->id].sensors[i], raw);
++		} else {
++			temp = raw_to_mcelsius_v3(
++				mt, conf->bank_data[bank->id].sensors[i], raw);
+ 		}
+ 
+ 		/*
+@@ -887,6 +975,26 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
+ 	return 0;
+ }
+ 
++static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
++{
++	if (!CALIB_BUF1_VALID_V3(buf[1]))
++		return -EINVAL;
++
++	mt->adc_oe = CALIB_BUF0_ADC_OE_V3(buf[0]);
++	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
++	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
++	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
++	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
++	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
++	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
++	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
++
++	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
++		mt->o_slope = 0;
++
++	return 0;
++}
++
+ static int mtk_thermal_get_calibration_data(struct device *dev,
+ 					    struct mtk_thermal *mt)
+ {
+@@ -897,6 +1005,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
+ 
+ 	/* Start with default values */
+ 	mt->adc_ge = 512;
++	mt->adc_oe = 512;
+ 	for (i = 0; i < mt->conf->num_sensors; i++)
+ 		mt->vts[i] = 260;
+ 	mt->degc_cali = 40;
+@@ -924,8 +1033,10 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
+ 
+ 	if (mt->conf->version == MTK_THERMAL_V1)
+ 		ret = mtk_thermal_extract_efuse_v1(mt, buf);
+-	else
++	else if (mt->conf->version == MTK_THERMAL_V2)
+ 		ret = mtk_thermal_extract_efuse_v2(mt, buf);
++	else
++		ret = mtk_thermal_extract_efuse_v3(mt, buf);
+ 
+ 	if (ret) {
+ 		dev_info(dev, "Device not calibrated, using default calibration values\n");
+@@ -955,6 +1066,10 @@ static const struct of_device_id mtk_thermal_of_match[] = {
+ 		.compatible = "mediatek,mt7622-thermal",
+ 		.data = (void *)&mt7622_thermal_data,
+ 	},
++	{
++		.compatible = "mediatek,mt7986-thermal",
++		.data = (void *)&mt7986_thermal_data,
++	},
+ 	{
+ 		.compatible = "mediatek,mt8183-thermal",
+ 		.data = (void *)&mt8183_thermal_data,
+@@ -1070,7 +1185,8 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		goto err_disable_clk_auxadc;
+ 	}
+ 
+-	if (mt->conf->version == MTK_THERMAL_V2) {
++	if (mt->conf->version == MTK_THERMAL_V2 ||
++	    mt->conf->version == MTK_THERMAL_V3) {
+ 		mtk_thermal_turn_on_buffer(apmixed_base);
+ 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+ 	}
+-- 
+2.38.1
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.2-rc1
-
-for you to fetch changes up to 26e90ec7a8403fc8f7a4507098d7d262e9c2d302:
-
-  Merge branch 'icc-sc8280xp-l3' into icc-next (2022-11-17 17:44:14 +0200)
-
-----------------------------------------------------------------
-interconnect changes for 6.2
-
-These are the interconnect changes for the 6.2-rc1 merge window consisting
-of new drivers to enable both L3 and DDR scaling on sc8280xp platforms.
-There are also a few miscellaneous fixes.
-
-New osm-l3 driver:
-- interconnect: qcom: osm-l3: Use platform-independent node ids
-- interconnect: qcom: osm-l3: Squash common descriptors
-- interconnect: qcom: osm-l3: Add per-core EPSS L3 support
-- interconnect: qcom: osm-l3: Simplify osm_l3_set()
-- dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3 compatibles
-- dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon instances
-
-Fixes:
- - interconnect: qcom: icc-rpm: Remove redundant dev_err call
- - interconnect: qcom: sc7180: fix dropped const of qcom_icc_bcm
- - interconnect: qcom: sc7180: drop double space
- - interconnect: qcom: sc8180x: constify pointer to qcom_icc_node
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Bjorn Andersson (6):
-      interconnect: qcom: osm-l3: Use platform-independent node ids
-      interconnect: qcom: osm-l3: Squash common descriptors
-      interconnect: qcom: osm-l3: Add per-core EPSS L3 support
-      interconnect: qcom: osm-l3: Simplify osm_l3_set()
-      dt-bindings: interconnect: Add sm8350, sc8280xp and generic OSM L3 compatibles
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Add sc8280xp bwmon instances
-
-Georgi Djakov (1):
-      Merge branch 'icc-sc8280xp-l3' into icc-next
-
-Krzysztof Kozlowski (4):
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Correct SC7280 CPU compatible
-      interconnect: qcom: sc7180: fix dropped const of qcom_icc_bcm
-      interconnect: qcom: sc7180: drop double space
-      interconnect: qcom: sc8180x: constify pointer to qcom_icc_node
-
-Shang XiaoJing (1):
-      interconnect: qcom: icc-rpm: Remove redundant dev_err call
-
- .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml    |   7 +-
- Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml |  24 +-
- drivers/interconnect/qcom/icc-rpm.c                             |   5 +-
- drivers/interconnect/qcom/osm-l3.c                              | 126 ++------
- drivers/interconnect/qcom/sc7180.c                              |   4 +-
- drivers/interconnect/qcom/sc8180x.c                             |   2 +-
- 6 files changed, 61 insertions(+), 107 deletions(-)
