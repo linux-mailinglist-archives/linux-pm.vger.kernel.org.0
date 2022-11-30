@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A643A63D432
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 12:18:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44C1B63D438
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 12:18:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234328AbiK3LR6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 06:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40312 "EHLO
+        id S234599AbiK3LS1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 06:18:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234113AbiK3LRn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 06:17:43 -0500
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD5CBFCE
-        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 03:17:41 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id x11so1423640ljh.7
-        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 03:17:41 -0800 (PST)
+        with ESMTP id S234338AbiK3LSG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 06:18:06 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04428275E7
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 03:18:05 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id bn5so20509374ljb.2
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 03:18:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DghhzdLC70p88Ph3mhaw98h7VRYL9qUr3MH4/vlNzpU=;
-        b=pk2KRXvukRhqgVJJ2HWK9+/xZSC8gf1lZmcPUA7LHq5GXsNg6AGRRUS4lRYB6yRxPX
-         SxFOIYM3+sncwsmGoDUpXXdWiA+zE5JtPKkqOpFGaOThZ3lfUNm6lHaPxIP9sheMaFgi
-         G/iAZWe/ZM/w8hEvpd5in4w6pZU4clr0BxvT4e1XZ5bTcZ+Sz6Qj+xTz9Od2n1SetIvS
-         xTK1MBgKxc2kyS+heZJDRA2FklCoYpNnIWYPwFi4Ep4DZd9uJCEkObi0HGpXQV4oGYqu
-         qFz4MXJlIk2dq12cfnEiidPD4InWa/WW1fng7QEU7ZcgpZ+EHVlkevvXXVk4CmGNjCdo
-         /0oQ==
+        bh=otStQxmxOG6LpjBUQIYuow/PF/UV5Z7DPxX9LVFmQEo=;
+        b=fa9DTGfn6miiSdGDtIzetZ3cP+Y//XHFAUdhDMe/rcDBMGLkWiIlAIXblHykz3XBdq
+         YzC0fnxzFt/60yWvxiqVbFIVXSJ+vvPP7rzKgGOIGzZ8p4rczzLY/n7Jh0d3pSP6asmS
+         7GIf+V6LW3muePp0QgVBYwDrtglEYK8SCNEgQmgKpQhlICmt+y8IaUUoeshYPm5bZ4Y0
+         PG6iXABOS/F6ufJVLLCEuzHlIzBc+YhSNmcYiVRL4gfQItJ34mAZq32Mnrbtno7K0rl/
+         g7f0JjDMNEMQP/zEIVKTJcQ4yvgxgWRd4HROJpKo9uYKlGAB1AJ6i3yiZVXORWvn6uCv
+         ILhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DghhzdLC70p88Ph3mhaw98h7VRYL9qUr3MH4/vlNzpU=;
-        b=yEHbIZOiKksTuUFUZingPkk+qeSwN1wePpFrAYtXJ3K0iTWaqPz+UQ9+dbkQLXsJew
-         hLsSs0QP61SnA3/Obc7DIV3FMLcIZJy+YQ8fjdaFCFHxln2CKlK+MP3lVssAab2AHg29
-         mcL7eYXwjE+DsgjD4VwCEZsajJfHKMfhvDAibTK2m2LhIpRonIfc4ruhHqa3Uo8In8Cq
-         949s71//xqeXhS+u9oAwXhdrEPrmhn15qhjIDyDY9sQfVUqG0KKXkm9Pkved/ByUAv/O
-         aR69SIUlHdbVlgr5VbJ2gYemZQ5/nSvZwcqILaEDn1ev4D7dREz5y5jL15hiNLUMZfpa
-         6ykA==
-X-Gm-Message-State: ANoB5pnu5kyTZ4W0EnFglxRkyXkwoTG9vi/RRaUk5Gw+IpVdJZY/chMP
-        WK2FT4AFHCO4Xo6Jv2chlTh3ag==
-X-Google-Smtp-Source: AA0mqf7FAZUmUwdxZIfnK1o0qwCU14VpcIfdB0vtB8H9/H3zj6Ulagqt8uLHVWQ63VwAvOGTlNU2hQ==
-X-Received: by 2002:a2e:9c4e:0:b0:26e:2bda:1821 with SMTP id t14-20020a2e9c4e000000b0026e2bda1821mr14090758ljj.241.1669807060137;
-        Wed, 30 Nov 2022 03:17:40 -0800 (PST)
+        bh=otStQxmxOG6LpjBUQIYuow/PF/UV5Z7DPxX9LVFmQEo=;
+        b=OYkrGLpTy4kl2g8DW4fBnrLxCKnnJj5X6ruD9J1KiHU/5pjK4P3f9hK8U7GA12v2M0
+         IWTw2d1hN9Jt86XS2tTylD5VxiWzzbI9ECXvioXjPkQ4NY3alGPuaXKkE8BSkYRdSVRU
+         f05/6fFMZC6KZvcZZ2x8z5dpdX1XhT3ODVlgV+OIBUkczejlbgndAqw4jpShWj73akD8
+         QWmzcM+YTP31S+ZJWXiEfqk6dNtUFFsJPPnFB3Gy13Fq8rSmmp9pldFdW1ZA2tMkJ7hA
+         D5ZVy50CJ70HjPuGQ8yVLE2Hl3Va0udRNMPpkfIuwNnVQUQ0LwQ3WWzdRRbkxTuZc5uT
+         2SbA==
+X-Gm-Message-State: ANoB5pngOzcw6ONecyahcMbNlwbqX6hlWlrqf0i53ZBz44lkv88ZK0Zw
+        Lx8e9qnu/+QIClZt3sx2S0rLFA==
+X-Google-Smtp-Source: AA0mqf6wG9cAljfGq/fOblhbS+7rNoNwLhQu0yt79NeJDaajfzWbs9CAdx2+LxPPPMd07rqtVe40Hw==
+X-Received: by 2002:a05:651c:88c:b0:26c:4e3a:516 with SMTP id d12-20020a05651c088c00b0026c4e3a0516mr14687322ljq.510.1669807083389;
+        Wed, 30 Nov 2022 03:18:03 -0800 (PST)
 Received: from [192.168.1.101] (95.49.125.236.neoplus.adsl.tpnet.pl. [95.49.125.236])
-        by smtp.gmail.com with ESMTPSA id s22-20020a056512315600b0049ade93ad24sm218501lfi.156.2022.11.30.03.17.35
+        by smtp.gmail.com with ESMTPSA id u22-20020ac258d6000000b0049e9122bd1bsm216515lfo.164.2022.11.30.03.18.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Nov 2022 03:17:37 -0800 (PST)
-Message-ID: <f508a01d-55e3-259b-d648-7125a2606c96@linaro.org>
-Date:   Wed, 30 Nov 2022 12:17:34 +0100
+        Wed, 30 Nov 2022 03:18:02 -0800 (PST)
+Message-ID: <46202b25-e253-0a5a-0c90-9d699906d3d7@linaro.org>
+Date:   Wed, 30 Nov 2022 12:18:00 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH 06/12] arm64: dts: qcom: sm6115: Add rpm-stats node
+Subject: Re: [PATCH 07/12] arm64: dts: qcom: sm6115: Add dispcc node
 Content-Language: en-US
 To:     Adam Skladowski <a39.skl@gmail.com>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
@@ -77,9 +77,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
 References: <20221129204616.47006-1-a39.skl@gmail.com>
- <20221129204616.47006-7-a39.skl@gmail.com>
+ <20221129204616.47006-8-a39.skl@gmail.com>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221129204616.47006-7-a39.skl@gmail.com>
+In-Reply-To: <20221129204616.47006-8-a39.skl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,29 +95,45 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 On 29.11.2022 21:46, Adam Skladowski wrote:
-> Add rpm stats node.
+> Add display clock controller to allow controlling display related clocks.
 > 
 > Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 > ---
 Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
 Konrad
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 5 +++++
->  1 file changed, 5 insertions(+)
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
 > diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 04620c272227..6d14bbcda9d3 100644
+> index 6d14bbcda9d3..ea0e0b3c5d84 100644
 > --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 > +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -538,6 +538,11 @@ rpm_msg_ram: sram@45f0000 {
->  			reg = <0x045f0000 0x7000>;
+> @@ -4,6 +4,7 @@
+>   */
+>  
+>  #include <dt-bindings/clock/qcom,gcc-sm6115.h>
+> +#include <dt-bindings/clock/qcom,sm6115-dispcc.h>
+>  #include <dt-bindings/clock/qcom,rpmcc.h>
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> @@ -717,6 +718,19 @@ usb_1_dwc3: usb@4e00000 {
+>  			};
 >  		};
 >  
-> +		sram@4690000 {
-> +			compatible = "qcom,rpm-stats";
-> +			reg = <0x04690000 0x10000>;
+> +		dispcc: clock-controller@5f00000 {
+> +			compatible = "qcom,sm6115-dispcc";
+> +			reg = <0x05f00000 0x20000>;
+> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +				 <&sleep_clk>,
+> +				 <&dsi0_phy 0>,
+> +				 <&dsi0_phy 1>,
+> +				 <&gcc GCC_DISP_GPLL0_DIV_CLK_SRC>;
+> +			#clock-cells = <1>;
+> +			#reset-cells = <1>;
+> +			#power-domain-cells = <1>;
 > +		};
 > +
->  		sdhc_1: mmc@4744000 {
->  			compatible = "qcom,sm6115-sdhci", "qcom,sdhci-msm-v5";
->  			reg = <0x04744000 0x1000>, <0x04745000 0x1000>, <0x04748000 0x8000>;
+>  		apps_smmu: iommu@c600000 {
+>  			compatible = "qcom,sm6115-smmu-500", "arm,mmu-500";
+>  			reg = <0x0c600000 0x80000>;
