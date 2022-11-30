@@ -2,112 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4D363DE92
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:38:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 336B463DF4C
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:45:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbiK3Sic (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 13:38:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49120 "EHLO
+        id S231393AbiK3Spu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 13:45:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230434AbiK3Sib (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:38:31 -0500
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8D02C1;
-        Wed, 30 Nov 2022 10:38:30 -0800 (PST)
-Received: by mail-qt1-f178.google.com with SMTP id l15so11800304qtv.4;
-        Wed, 30 Nov 2022 10:38:30 -0800 (PST)
+        with ESMTP id S231394AbiK3Sp2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:45:28 -0500
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEFD97013
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 10:45:25 -0800 (PST)
+Received: by mail-qv1-f49.google.com with SMTP id a17so10872239qvt.9
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 10:45:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vvYccHRItsFtfbX1LjYVA7khVN/vC5lTWUwZfNTayMk=;
-        b=4siRStvvjiA7bK4OCI/bDRbSoJSYGyoJM92jCLMx3vamOZ7vjyM9nbc2ViRmfuhCDe
-         aFzxT8zkkOBHyhV0W2s4F0HVfhhaRvjpF5Vnqxj9i/+t2KOv63EUPPnT6/1iD/hwmWpf
-         3rqwcrz3fm8eObVL5FG7tqdCc8/4KJ/Kev36aObEtRFeCCrIZwdgYc/OiFpQAS2ef2tS
-         MVXQqAU1v1RBKh3fK24/je7CmNnzlakb/EoscSoNXJSCYPFi2D4VJgjLMKIJaMupYsNW
-         5mfGR+Z6+n4uFUYYhMrt4SwFzXZ0mibgeqoQyrCsSBnIGfh892ItAebKO2iqGEI7TjsB
-         bLsA==
-X-Gm-Message-State: ANoB5pm9o7+rR9VR0/guo+KneK+3VWJu1pP0qteuSglNjIvvvFagrFpc
-        HwG+Altv6Y05D0+DCSFMcowFeOsNoxIaHaW3dSbEHJJO
-X-Google-Smtp-Source: AA0mqf60AJyzMPy+rgqZSrXCq1fakf/7vJvxHcra023KFbFYnzvwGfrSiSUxWXZe7dndQx1LZkzn70lE2HD7JJ52NpQ=
-X-Received: by 2002:ac8:73c4:0:b0:3a5:a53d:a102 with SMTP id
- v4-20020ac873c4000000b003a5a53da102mr58461117qtp.153.1669833509483; Wed, 30
- Nov 2022 10:38:29 -0800 (PST)
+        bh=8Ci03k9+jtZTzCMSgyBPFBr2TOw3ZtUAnLxVlp1INCI=;
+        b=OovIQ12Kk6QlyZIVrZtmgcmKfdinQyqwvM/iITFpYEihZSRLKe4j94Q62l75E1Z4yR
+         HDF5lAwSz9BSar2tE8e2tflpMXuWnPZhqlIoDcR3p9/PeuQKKN5lTX4KSfHCuikVwBEJ
+         oVXytmM+cgxOlNIWYEDCghKLZMTvKkFmgBLK29QaEofwSRb/N8KSLdr5XPwaZLMKkDk3
+         Iq0pqEKwDiJIzYc8Cz7eAPpk7g5H9y18pX4gaR9Ox7vlGL5KwlwQm5w5Dcv8h1yrYyVv
+         I9zJgXpYY1pfKHsxpHK1uiuX6vm/N8X+VoZEDuZabb1bDlFYsPmShie4Tojsp7Hj+8tC
+         TB1w==
+X-Gm-Message-State: ANoB5pkwsBlE1mEgXEOUqnR89bcvkFj7VG9ELMcWFF8989X6El7VAUTy
+        uwFyETccpnc57UlUmyL3tKyBpkEm1kpvuDEfcta1lnQ2
+X-Google-Smtp-Source: AA0mqf4wRW5HtNLtDkEG8F1vwGCf8uODr+yItkv9beuyeZSjzkfUzKyL1UMb64hquN1TtDY3n+mdCLVE9k64cPSrzOo=
+X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id
+ a2-20020a0cc582000000b004afb750b569mr41473204qvj.83.1669833924916; Wed, 30
+ Nov 2022 10:45:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20221110142307.981883-1-liuyongqiang13@huawei.com> <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
-In-Reply-To: <20221114032301.gipu5l3fcndq7oy3@vireshk-i7>
+References: <20221111045242.530607-1-luoxueqin@kylinos.cn>
+In-Reply-To: <20221111045242.530607-1-luoxueqin@kylinos.cn>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:38:18 +0100
-Message-ID: <CAJZ5v0iQ1=zDmcHW_JLEtzd6UHV4MFHF_HM9RXSY0j0+QpLVpg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: Init completion before kobject_init_and_add()
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Yongqiang Liu <liuyongqiang13@huawei.com>
-Cc:     rafael@kernel.org, tobin@kernel.org, zhangxiaoxu5@huawei.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Wed, 30 Nov 2022 19:45:14 +0100
+Message-ID: <CAJZ5v0hdP_=DecQCfwcdX4hm=i5WFKhmJexLWKN4SMkFdzrhvQ@mail.gmail.com>
+Subject: Re: [PATCH] kernel/power : add pr_err() for debugging "Error -14
+ resuming" error
+To:     Xueqin Luo <luoxueqin@kylinos.cn>
+Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        linux-pm@vger.kernel.org, xiongxin@kylinos.cn
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 14, 2022 at 4:23 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+On Fri, Nov 11, 2022 at 5:53 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
 >
-> On 10-11-22, 14:23, Yongqiang Liu wrote:
-> > In cpufreq_policy_alloc(), it will call uninitialed completion in
-> > cpufreq_sysfs_release() when kobject_init_and_add() fails. And
-> > that will cause a crash such as the following page fault in complete:
-> >
-> > BUG: unable to handle page fault for address: fffffffffffffff8
-> > [..]
-> > RIP: 0010:complete+0x98/0x1f0
-> > [..]
-> > Call Trace:
-> >  kobject_put+0x1be/0x4c0
-> >  cpufreq_online.cold+0xee/0x1fd
-> >  cpufreq_add_dev+0x183/0x1e0
-> >  subsys_interface_register+0x3f5/0x4e0
-> >  cpufreq_register_driver+0x3b7/0x670
-> >  acpi_cpufreq_init+0x56c/0x1000 [acpi_cpufreq]
-> >  do_one_initcall+0x13d/0x780
-> >  do_init_module+0x1c3/0x630
-> >  load_module+0x6e67/0x73b0
-> >  __do_sys_finit_module+0x181/0x240
-> >  do_syscall_64+0x35/0x80
-> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> >
-> > Fixes: 4ebe36c94aed ("cpufreq: Fix kobject memleak")
-> > Signed-off-by: Yongqiang Liu <liuyongqiang13@huawei.com>
-> > ---
-> >  drivers/cpufreq/cpufreq.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 69b3d61852ac..7e56a42750ea 100644
-> > --- a/drivers/cpufreq/cpufreq.c
-> > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -1207,6 +1207,7 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
-> >       if (!zalloc_cpumask_var(&policy->real_cpus, GFP_KERNEL))
-> >               goto err_free_rcpumask;
-> >
-> > +     init_completion(&policy->kobj_unregister);
-> >       ret = kobject_init_and_add(&policy->kobj, &ktype_cpufreq,
-> >                                  cpufreq_global_kobject, "policy%u", cpu);
-> >       if (ret) {
-> > @@ -1245,7 +1246,6 @@ static struct cpufreq_policy *cpufreq_policy_alloc(unsigned int cpu)
-> >       init_rwsem(&policy->rwsem);
-> >       spin_lock_init(&policy->transition_lock);
-> >       init_waitqueue_head(&policy->transition_wait);
-> > -     init_completion(&policy->kobj_unregister);
-> >       INIT_WORK(&policy->update, handle_update);
-> >
-> >       policy->cpu = cpu;
+> The system memory map can change over a hibernation-restore cycle due
+> to a defect in the platform firmware, and some of the page frames used
+> by the kernel before hibernation may not be available any more during
+> the subsequent restore which leads to the error below.
 >
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+> [  T357] PM: Image loading progress:   0%
+> [  T357] PM: Read 2681596 kbytes in 0.03 seconds (89386.53 MB/s)
+> [  T357] PM: Error -14 resuming
+> [  T357] PM: Failed to load hibernation image, recovering.
+> [  T357] PM: Basic memory bitmaps freed
+> [  T357] OOM killer enabled.
+> [  T357] Restarting tasks ... done.
+> [  T357] PM: resume from hibernation failed (-14)
+> [  T357] PM: Hibernation image not present or could not be loaded.
+>
+> So, by adding an Error message to the unpack () function, you can quickly
+> navigate to the Error page number and analyze the cause when an "Error -14
+> resuming" error occurs in S4. This can save developers the cost of
+> debugging time.
+>
+> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+> ---
+> v3: Modify the pr_err() function output again
+>
+> v2: Modify the commit message and pr_err() function output
+>
+>  kernel/power/snapshot.c | 8 ++++++--
+>  1 file changed, 6 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index c20ca5fb9adc..e7bd4531faf2 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -2259,10 +2259,14 @@ static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
+>                 if (unlikely(buf[j] == BM_END_OF_MAP))
+>                         break;
+>
+> -               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j]))
+> +               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
+>                         memory_bm_set_bit(bm, buf[j]);
+> -               else
+> +               } else {
+> +                       if (!pfn_valid(buf[j]))
+> +                               pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
+> +                                               PFN_PHYS(buf[j]));
+>                         return -EFAULT;
+> +               }
+>         }
+>
+>         return 0;
+> --
 
-Applied as 6.2 material, thanks!
+Applied as 6.2 material under a new subject and with some edits in the
+changelog.
+
+Thanks!
