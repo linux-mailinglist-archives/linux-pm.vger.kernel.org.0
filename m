@@ -2,80 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1076E63D811
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 15:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 398BB63D84D
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 15:34:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbiK3OaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 09:30:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
+        id S229601AbiK3OeZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 09:34:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbiK3OaN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 09:30:13 -0500
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB254745
-        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 06:30:11 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id e189so12408987iof.1
-        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 06:30:11 -0800 (PST)
+        with ESMTP id S230092AbiK3OeB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 09:34:01 -0500
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9644813A3
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 06:33:18 -0800 (PST)
+Received: by mail-lj1-x22c.google.com with SMTP id x11so2006265ljh.7
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 06:33:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/Y6JfFohmJ3Rvsl0Sh/xfP65FizKCMZT85La1Uopwg=;
-        b=b/Gj5j1bXT22qxr3wLHfYKT9tFptmaXZVPwMIaIDifwBWb9HTyAwFvD+WaREAgL2Df
-         pWlTpGE5HTetahStiRBlUxLtEtSmgTaR/Z+TOB8vS5u2ea3aYdjNA1XgePMPs9168NyL
-         71E98kacyf/2WEdn+FM95hAe9MTmSdPX+38FpnVoL6mQbTe1vV6YOiOcuKB0dHI1bsdP
-         70eVvzGK7xFUONE8KW/VzCNC1XPhS84k6czdLzLLycRkw5YyUMvn1r0DXl2wytt/mY7p
-         LQ4byboM4I/bWmmZgqWGXn4/vokHmjSD6WGOeEA/mnTeiZalPCYWfNGIPMv64DzsZtMq
-         JRHQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w35jd49HPhO+Jqkn0712oB2y+7R5nYXhRRJ8iiiiBus=;
+        b=sQf9QPXHnJLO5ms9yq3mJa19QPCRxDiHgkuCupOOOnVwn/hNs5DO/urR3joJkyBpky
+         Vvr8NxI8potWAj+yauWxbTn7o/eBvAWkDYd7Bv7+lKbk7rlqBjaFR9vK2J6I/Jjz9w4l
+         Ok1f5qxKhUDqXlFpHTswJlz7tnBK+QTpVna6h1OESNxClbPQv7AmNc+S+HfpqQ008csF
+         d1fbLtpUQafRh03JUyoZHo8CNVytb7fZV3Uu9IWs0+6tPkHcDsRbo4UZcnsTvUvy1/L/
+         4d5JWGHdX4qENUsreyoMeL9cJd2Qd3I/Ca1d11VbwJeKBiQRTBV21OwEmS37XZuujvzY
+         dL/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e/Y6JfFohmJ3Rvsl0Sh/xfP65FizKCMZT85La1Uopwg=;
-        b=4yLagAgaN3AgRmcRislQjrV+CDv9ENrbPTTZ9pgIIkY6s/w2crhwt5yURu5fItUwI7
-         jSifpNlnhTxRoB5YMITdDz9jEIitx16eTmx/53nRmIJsVX9GoezaDM+21k3ynkjEhMTD
-         vTbBYnibib+PsmLcAVeQo/BxxL1qrF1QXOIjgPHnkpNtWJNk7RRo9GICAsITq4TCm8Ni
-         SI/98h6jmnzbEg5YFc3FTBTgzHixLDzeqZjC/eyJefeMFWSdBxUHEl5qUNteFeucxRi8
-         hBmK3Sdn4it5ZbbNAkNm56DzN1OyJJNK1pw+5qLRQG4y6OyG5rVuR/kvDDRtRcQzh9cz
-         C4kw==
-X-Gm-Message-State: ANoB5pm6LmE6ifaZ/ZIt6z9Do59pYG0uKGLsTZaUqpwDXhvvGykaMSxp
-        oDiYgotnQGkllk4TS9wHCndMsD28d7Yx2/1QqxxUzQ==
-X-Google-Smtp-Source: AA0mqf5zySZLEHJnlYwInWzy0W/FGXYBQN1FoIQ1TLD+7TDdTSAIe71NporRYBjZu8oXnxSvkq3rvprfO5JXOndmpZs=
-X-Received: by 2002:a02:2b01:0:b0:374:fe84:1e9 with SMTP id
- h1-20020a022b01000000b00374fe8401e9mr29409189jaa.71.1669818610739; Wed, 30
- Nov 2022 06:30:10 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w35jd49HPhO+Jqkn0712oB2y+7R5nYXhRRJ8iiiiBus=;
+        b=IrGP+T3adbIwIOQYwhGpbh+FaQhfz2ZHAXFmnJd4zMAopiCtkxA+jBbmsGKq0CT3Pe
+         xwLdJdFG+8R9Wv00Z9mZN73gnMAmll0v3W7M9tSYBatWmx6sPO1l4igWEdDq98AL5QvQ
+         qn9U7DxQDreqEYLH8p+fFZ4l4u8Jx8ZXxslqZevIdc/faUYAnuv5KV6JcdJlCyA2GxFH
+         kWI80UebccRS0FpogV9lXUdI8XOyY/KYVhOBLIGmkO5tdHGeIh8g7lNOlM336vE/GFjX
+         oWQMkW8I+3PBY2JJ99Vi4rxlVoSmnVYGMqCQw0dY0VlOK2lWTCjt/lNqiuJjkHY8vnaR
+         +ADQ==
+X-Gm-Message-State: ANoB5pkzPDBqb/c06Ytpn82itrS4iASD1DlhN/BFBuy5mGbOLUQL+Qpn
+        WpDl4V46Y7l8OFBzxS/Zv1Gf4SLLe4Rak8ix
+X-Google-Smtp-Source: AA0mqf5EuFHOvQQ+d29A0qJ/hg77DBRn0DLxyzPRKkxCGimdR2KB25/MA7ihtCKVDWU6yit8fGpjdg==
+X-Received: by 2002:a05:651c:904:b0:277:210:41d1 with SMTP id e4-20020a05651c090400b00277021041d1mr14659593ljq.507.1669818797203;
+        Wed, 30 Nov 2022 06:33:17 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b28-20020a19645c000000b004a100c21eaesm279073lfj.97.2022.11.30.06.33.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Nov 2022 06:33:16 -0800 (PST)
+Message-ID: <f7eb06a5-9c2d-568a-d363-4f70ffd0c581@linaro.org>
+Date:   Wed, 30 Nov 2022 15:33:15 +0100
 MIME-Version: 1.0
-References: <20221110195732.1382314-1-wusamuel@google.com> <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
- <880b7332-562c-4934-4e92-493b112568c9@arm.com> <CAG2Kctp_VwryYTYMoqe6EBKFs-FZuNcB94e_MzLgBN9jJ5tpQA@mail.gmail.com>
- <CAJZ5v0iNjPAAn0-uygpJe0ya_LW7pfF4C8OHd+8EMLg+Ws=02Q@mail.gmail.com>
- <97af1300-541d-a79c-404c-92886f10b220@arm.com> <CAKfTPtAPniqQyDzh=Yu8Z9R9+H2PzBKkHT0SJgHZiUOdNdw3Mg@mail.gmail.com>
- <75bba88a-0516-a6a2-d4e6-8cedabadf413@arm.com>
-In-Reply-To: <75bba88a-0516-a6a2-d4e6-8cedabadf413@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 30 Nov 2022 15:29:59 +0100
-Message-ID: <CAKfTPtA=7DkjADnNijLPDm_6hh9XkFjC9ZUVQ_5_NSU2Fn5pHQ@mail.gmail.com>
-Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sam Wu <wusamuel@google.com>,
-        Saravana Kannan <saravanak@google.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 2/2] dt-bindings: thermal: mediatek: add compatible
+ string for MT7986 and MT7981 SoC
+Content-Language: en-US
+To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>
+References: <Y4dYpoVBmKZSaX2q@makrotopia.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Y4dYpoVBmKZSaX2q@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,157 +84,19 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 30 Nov 2022 at 15:04, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi Vincent,
->
-> On 11/30/22 10:42, Vincent Guittot wrote:
-> > Hi All
-> >
-> > Just for the log and because it took me a while to figure out the root
-> > cause of the problem: This patch also creates a regression for
-> > snapdragon845 based systems and probably on any QC chipsets that use a
-> > LUT to update the OPP table at boot. The behavior is the same as
-> > described by Sam with a staled value in sugov_policy.max field.
->
-> Thanks for sharing this info and apologies that you spent cycles
-> on it.
->
-> I have checked that whole setup code (capacity + cpufreq policy and
-> governor). It looks like to have a proper capacity of CPUs, we need
-> to wait till the last policy is created. It's due to the arch_topology.c
-> mechanism which is only triggered after all CPUs' got the policy.
-> Unfortunately, this leads to a chicken & egg situation for this
-> schedutil setup of max capacity.
->
-> I have experimented with this code, which triggers an update in
-> the schedutil, when all CPUs got the policy and sugov gov
-> (with trace_printk() to mach the output below)
+On 30/11/2022 14:20, Daniel Golle wrote:
+> Document compatible string 'mediatek,mt7986-thermal' for V3 thermal
+> unit found in MT7986 SoCs.
+> 'mediatek,mt7981-thermal' is also added as it is identical with the
+> thermal unit of MT7986.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+> Changes since v1: Properly document both supported SoCs
 
-Your proposal below looks similar to what is done in arch_topology.c.
-arch_topology.c triggers a rebuild of sched_domain and removes its
-cpufreq notifier cb once it has visited all CPUs, could it also
-trigger an update of CPU's policy with cpufreq_update_policy() ?
 
-At this point you will be sure that the normalization has happened and
-the max capacity will not change.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I don't know if it's a global problem or only for systems using arch_topology
+Best regards,
+Krzysztof
 
->
-> -------------------------8<-----------------------------------------
-> diff --git a/kernel/sched/cpufreq_schedutil.c
-> b/kernel/sched/cpufreq_schedutil.c
-> index 9161d1136d01..f1913a857218 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -59,6 +59,7 @@ struct sugov_cpu {
->   };
->
->   static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
-> +static cpumask_var_t cpus_to_visit;
->
->   /************************ Governor internals ***********************/
->
-> @@ -783,6 +784,22 @@ static int sugov_start(struct cpufreq_policy *policy)
->
->                  cpufreq_add_update_util_hook(cpu, &sg_cpu->update_util,
-> uu);
->          }
-> +
-> +       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
-> +
-> +       if (cpumask_empty(cpus_to_visit)) {
-> +               trace_printk("schedutil the visit cpu mask is empty now\n");
-> +               for_each_possible_cpu(cpu) {
-> +                       struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
-> +                       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> +
-> +                       sg_policy->max = arch_scale_cpu_capacity(cpu);
-> +
-> +                       trace_printk("SCHEDUTIL: NEW  CPU%u
-> cpu_capacity=%lu\n",
-> +                               cpu, sg_policy->max);
-> +               }
-> +       }
-> +
->          return 0;
->   }
->
-> @@ -800,6 +817,8 @@ static void sugov_stop(struct cpufreq_policy *policy)
->                  irq_work_sync(&sg_policy->irq_work);
->                  kthread_cancel_work_sync(&sg_policy->work);
->          }
-> +
-> +       cpumask_or(cpus_to_visit, cpus_to_visit, policy->related_cpus);
->   }
->
->   static void sugov_limits(struct cpufreq_policy *policy)
-> @@ -829,6 +848,11 @@ struct cpufreq_governor schedutil_gov = {
->   #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
->   struct cpufreq_governor *cpufreq_default_governor(void)
->   {
-> +       if (!alloc_cpumask_var(&cpus_to_visit, GFP_KERNEL))
-> +               return NULL;
-> +
-> +       cpumask_copy(cpus_to_visit, cpu_possible_mask);
-> +
->          return &schedutil_gov;
->   }
->   #endif
->
-> ---------------------------------->8---------------------------------
->
->
-> That simple approach fixes the issue. I have also tested it with
-> governor change a few times and setting back the schedutil.
->
-> -------------------------------------------
->     kworker/u12:1-48      [004] .....     2.208847: sugov_start:
-> schedutil the visit cpu mask is empty now
->     kworker/u12:1-48      [004] .....     2.208854: sugov_start:
-> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
->     kworker/u12:1-48      [004] .....     2.208857: sugov_start:
-> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
->     kworker/u12:1-48      [004] .....     2.208860: sugov_start:
-> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
->     kworker/u12:1-48      [004] .....     2.208862: sugov_start:
-> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
->     kworker/u12:1-48      [004] .....     2.208864: sugov_start:
-> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
->     kworker/u12:1-48      [004] .....     2.208866: sugov_start:
-> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
->              bash-615     [005] .....    35.317113: sugov_start:
-> schedutil the visit cpu mask is empty now
->              bash-615     [005] .....    35.317120: sugov_start:
-> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
->              bash-615     [005] .....    35.317123: sugov_start:
-> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
->              bash-615     [005] .....    35.317125: sugov_start:
-> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
->              bash-615     [005] .....    35.317127: sugov_start:
-> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
->              bash-615     [005] .....    35.317129: sugov_start:
-> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
->              bash-615     [005] .....    35.317131: sugov_start:
-> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
->              bash-623     [003] .....    57.633328: sugov_start:
-> schedutil the visit cpu mask is empty now
->              bash-623     [003] .....    57.633336: sugov_start:
-> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
->              bash-623     [003] .....    57.633339: sugov_start:
-> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
->              bash-623     [003] .....    57.633340: sugov_start:
-> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
->              bash-623     [003] .....    57.633342: sugov_start:
-> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
->              bash-623     [003] .....    57.633343: sugov_start:
-> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
->              bash-623     [003] .....    57.633344: sugov_start:
-> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
-> ----------------------------------------------------
->
-> It should work.
->
-> Regards,
-> Lukasz
