@@ -2,142 +2,238 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A9BB63D804
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 15:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1076E63D811
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 15:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229754AbiK3OX4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 09:23:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
+        id S229716AbiK3OaP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 09:30:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiK3OXz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 09:23:55 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E480EE3D;
-        Wed, 30 Nov 2022 06:23:54 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id CDF1A21B0D;
-        Wed, 30 Nov 2022 14:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669818232; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f6/R06ZLjcP0IHW9GkimXvHdcr2jcSymIvv43sVAbBA=;
-        b=XchEVe6mSZKxBg6HslGhZ+8br4VVqMoWqIMQStOhUCtVTM79x4wcnQ100/VMN1xBBLfmZu
-        cYA9kvLiXAOQjMyCbswLWv6mQAcABZMYAv6ad7A5q0c+abGOV0ENvJ/HIwsVvCEVCjE1mV
-        YLgjMd6es6ccW+X6WjEX6urC5/WNPeA=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 735822C14F;
-        Wed, 30 Nov 2022 14:23:52 +0000 (UTC)
-Date:   Wed, 30 Nov 2022 15:23:51 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <Y4dndyIiosT7l4RG@alley>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
+        with ESMTP id S229514AbiK3OaN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 09:30:13 -0500
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EB254745
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 06:30:11 -0800 (PST)
+Received: by mail-io1-xd30.google.com with SMTP id e189so12408987iof.1
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 06:30:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e/Y6JfFohmJ3Rvsl0Sh/xfP65FizKCMZT85La1Uopwg=;
+        b=b/Gj5j1bXT22qxr3wLHfYKT9tFptmaXZVPwMIaIDifwBWb9HTyAwFvD+WaREAgL2Df
+         pWlTpGE5HTetahStiRBlUxLtEtSmgTaR/Z+TOB8vS5u2ea3aYdjNA1XgePMPs9168NyL
+         71E98kacyf/2WEdn+FM95hAe9MTmSdPX+38FpnVoL6mQbTe1vV6YOiOcuKB0dHI1bsdP
+         70eVvzGK7xFUONE8KW/VzCNC1XPhS84k6czdLzLLycRkw5YyUMvn1r0DXl2wytt/mY7p
+         LQ4byboM4I/bWmmZgqWGXn4/vokHmjSD6WGOeEA/mnTeiZalPCYWfNGIPMv64DzsZtMq
+         JRHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e/Y6JfFohmJ3Rvsl0Sh/xfP65FizKCMZT85La1Uopwg=;
+        b=4yLagAgaN3AgRmcRislQjrV+CDv9ENrbPTTZ9pgIIkY6s/w2crhwt5yURu5fItUwI7
+         jSifpNlnhTxRoB5YMITdDz9jEIitx16eTmx/53nRmIJsVX9GoezaDM+21k3ynkjEhMTD
+         vTbBYnibib+PsmLcAVeQo/BxxL1qrF1QXOIjgPHnkpNtWJNk7RRo9GICAsITq4TCm8Ni
+         SI/98h6jmnzbEg5YFc3FTBTgzHixLDzeqZjC/eyJefeMFWSdBxUHEl5qUNteFeucxRi8
+         hBmK3Sdn4it5ZbbNAkNm56DzN1OyJJNK1pw+5qLRQG4y6OyG5rVuR/kvDDRtRcQzh9cz
+         C4kw==
+X-Gm-Message-State: ANoB5pm6LmE6ifaZ/ZIt6z9Do59pYG0uKGLsTZaUqpwDXhvvGykaMSxp
+        oDiYgotnQGkllk4TS9wHCndMsD28d7Yx2/1QqxxUzQ==
+X-Google-Smtp-Source: AA0mqf5zySZLEHJnlYwInWzy0W/FGXYBQN1FoIQ1TLD+7TDdTSAIe71NporRYBjZu8oXnxSvkq3rvprfO5JXOndmpZs=
+X-Received: by 2002:a02:2b01:0:b0:374:fe84:1e9 with SMTP id
+ h1-20020a022b01000000b00374fe8401e9mr29409189jaa.71.1669818610739; Wed, 30
+ Nov 2022 06:30:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221125190948.2062-2-linux@weissschuh.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221110195732.1382314-1-wusamuel@google.com> <CAGETcx_aAynvykDSL4aue3zf5Pv7+hELUHQ=MWOzBbyZBPySDA@mail.gmail.com>
+ <880b7332-562c-4934-4e92-493b112568c9@arm.com> <CAG2Kctp_VwryYTYMoqe6EBKFs-FZuNcB94e_MzLgBN9jJ5tpQA@mail.gmail.com>
+ <CAJZ5v0iNjPAAn0-uygpJe0ya_LW7pfF4C8OHd+8EMLg+Ws=02Q@mail.gmail.com>
+ <97af1300-541d-a79c-404c-92886f10b220@arm.com> <CAKfTPtAPniqQyDzh=Yu8Z9R9+H2PzBKkHT0SJgHZiUOdNdw3Mg@mail.gmail.com>
+ <75bba88a-0516-a6a2-d4e6-8cedabadf413@arm.com>
+In-Reply-To: <75bba88a-0516-a6a2-d4e6-8cedabadf413@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 30 Nov 2022 15:29:59 +0100
+Message-ID: <CAKfTPtA=7DkjADnNijLPDm_6hh9XkFjC9ZUVQ_5_NSU2Fn5pHQ@mail.gmail.com>
+Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to sugov_policy"
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sam Wu <wusamuel@google.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        kernel-team@android.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri 2022-11-25 20:09:46, Thomas Weiﬂschuh wrote:
-> These macros emit continuation messages with explicit levels.
-> In case the continuation is logged separately from the original message
-> it will retain its level instead of falling back to KERN_DEFAULT.
-> 
-> This remedies the issue that logs filtered by level contain stray
-> continuation messages without context.
-> 
-> Suggested-by: Petr Mladek <pmladek@suse.com>
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  include/linux/printk.h | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
-> 
-> diff --git a/include/linux/printk.h b/include/linux/printk.h
-> index 8c81806c2e99..8f564c38f121 100644
-> --- a/include/linux/printk.h
-> +++ b/include/linux/printk.h
-> @@ -537,6 +537,8 @@ struct pi_entry {
->   * This macro expands to a printk with KERN_CONT loglevel. It should only be
->   * used when continuing a log message with no newline ('\n') enclosed. Otherwise
->   * it defaults back to KERN_DEFAULT loglevel.
-> + *
-> + * Use the dedicated pr_<level>_cont() macros instead.
->   */
->  #define pr_cont(fmt, ...) \
->  	printk(KERN_CONT fmt, ##__VA_ARGS__)
-> @@ -701,6 +703,27 @@ do {									\
->  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
->  #endif
->  
-> +/*
-> + * Print a continuation message with level. In case the continuation is split
-> + * from the main message it preserves the level.
-> + */
+On Wed, 30 Nov 2022 at 15:04, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+> Hi Vincent,
+>
+> On 11/30/22 10:42, Vincent Guittot wrote:
+> > Hi All
+> >
+> > Just for the log and because it took me a while to figure out the root
+> > cause of the problem: This patch also creates a regression for
+> > snapdragon845 based systems and probably on any QC chipsets that use a
+> > LUT to update the OPP table at boot. The behavior is the same as
+> > described by Sam with a staled value in sugov_policy.max field.
+>
+> Thanks for sharing this info and apologies that you spent cycles
+> on it.
+>
+> I have checked that whole setup code (capacity + cpufreq policy and
+> governor). It looks like to have a proper capacity of CPUs, we need
+> to wait till the last policy is created. It's due to the arch_topology.c
+> mechanism which is only triggered after all CPUs' got the policy.
+> Unfortunately, this leads to a chicken & egg situation for this
+> schedutil setup of max capacity.
+>
+> I have experimented with this code, which triggers an update in
+> the schedutil, when all CPUs got the policy and sugov gov
+> (with trace_printk() to mach the output below)
+
+Your proposal below looks similar to what is done in arch_topology.c.
+arch_topology.c triggers a rebuild of sched_domain and removes its
+cpufreq notifier cb once it has visited all CPUs, could it also
+trigger an update of CPU's policy with cpufreq_update_policy() ?
+
+At this point you will be sure that the normalization has happened and
+the max capacity will not change.
+
+I don't know if it's a global problem or only for systems using arch_topology
+
+>
+> -------------------------8<-----------------------------------------
+> diff --git a/kernel/sched/cpufreq_schedutil.c
+> b/kernel/sched/cpufreq_schedutil.c
+> index 9161d1136d01..f1913a857218 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -59,6 +59,7 @@ struct sugov_cpu {
+>   };
+>
+>   static DEFINE_PER_CPU(struct sugov_cpu, sugov_cpu);
+> +static cpumask_var_t cpus_to_visit;
+>
+>   /************************ Governor internals ***********************/
+>
+> @@ -783,6 +784,22 @@ static int sugov_start(struct cpufreq_policy *policy)
+>
+>                  cpufreq_add_update_util_hook(cpu, &sg_cpu->update_util,
+> uu);
+>          }
 > +
-> +#define pr_emerg_cont(fmt, ...)					\
-> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_alert_cont(fmt, ...)					\
-> +	printk(KERN_ALERT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_crit_cont(fmt, ...)					\
-> +	printk(KERN_CRIT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_err_cont(fmt, ...)					\
-> +	printk(KERN_ERR KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_warn_cont(fmt, ...)					\
-> +	printk(KERN_WARN KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_notice_cont(fmt, ...)					\
-> +	printk(KERN_NOTICE KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +#define pr_info_cont(fmt, ...)					\
-> +	printk(KERN_INFO KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> +/* no pr_debug_ratelimited, it doesn't make sense with CONFIG_DYNAMIC_DEBUG. */
-
-I guess that you wanted to write "pr_debug_cont".
-
-Also I am not sure what you mean with "doesn't make sense". IMHO, it
-might  make sense. But it would be hard to use and error prone
-with CONFIG_DYNAMIC_DEBUG.
-
-And more importantly, it probably would not work properly. If I get
-it corretly the dynamic debug messages are printed by the wrapper:
-
-void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...)
-{
-[...]
-	vaf.fmt = fmt;
-	vaf.va = &args;
-
-	printk(KERN_DEBUG "%s%pV", dynamic_emit_prefix(descriptor, buf), &vaf);
-[...]
-
-This clearly does not support KERN_CONT in "fmt".
-
-I suggest to either remove the comment completely. Or write something
-like:
-
-/* no pr_debug_cont(), can't be supported easily with CONFIG_DYNAMIC_DEBUG */
-
-
-Best Regards,
-Petr
+> +       cpumask_andnot(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+> +
+> +       if (cpumask_empty(cpus_to_visit)) {
+> +               trace_printk("schedutil the visit cpu mask is empty now\n");
+> +               for_each_possible_cpu(cpu) {
+> +                       struct sugov_cpu *sg_cpu = &per_cpu(sugov_cpu, cpu);
+> +                       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
+> +
+> +                       sg_policy->max = arch_scale_cpu_capacity(cpu);
+> +
+> +                       trace_printk("SCHEDUTIL: NEW  CPU%u
+> cpu_capacity=%lu\n",
+> +                               cpu, sg_policy->max);
+> +               }
+> +       }
+> +
+>          return 0;
+>   }
+>
+> @@ -800,6 +817,8 @@ static void sugov_stop(struct cpufreq_policy *policy)
+>                  irq_work_sync(&sg_policy->irq_work);
+>                  kthread_cancel_work_sync(&sg_policy->work);
+>          }
+> +
+> +       cpumask_or(cpus_to_visit, cpus_to_visit, policy->related_cpus);
+>   }
+>
+>   static void sugov_limits(struct cpufreq_policy *policy)
+> @@ -829,6 +848,11 @@ struct cpufreq_governor schedutil_gov = {
+>   #ifdef CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL
+>   struct cpufreq_governor *cpufreq_default_governor(void)
+>   {
+> +       if (!alloc_cpumask_var(&cpus_to_visit, GFP_KERNEL))
+> +               return NULL;
+> +
+> +       cpumask_copy(cpus_to_visit, cpu_possible_mask);
+> +
+>          return &schedutil_gov;
+>   }
+>   #endif
+>
+> ---------------------------------->8---------------------------------
+>
+>
+> That simple approach fixes the issue. I have also tested it with
+> governor change a few times and setting back the schedutil.
+>
+> -------------------------------------------
+>     kworker/u12:1-48      [004] .....     2.208847: sugov_start:
+> schedutil the visit cpu mask is empty now
+>     kworker/u12:1-48      [004] .....     2.208854: sugov_start:
+> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208857: sugov_start:
+> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208860: sugov_start:
+> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208862: sugov_start:
+> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
+>     kworker/u12:1-48      [004] .....     2.208864: sugov_start:
+> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
+>     kworker/u12:1-48      [004] .....     2.208866: sugov_start:
+> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
+>              bash-615     [005] .....    35.317113: sugov_start:
+> schedutil the visit cpu mask is empty now
+>              bash-615     [005] .....    35.317120: sugov_start:
+> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
+>              bash-615     [005] .....    35.317123: sugov_start:
+> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
+>              bash-615     [005] .....    35.317125: sugov_start:
+> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
+>              bash-615     [005] .....    35.317127: sugov_start:
+> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
+>              bash-615     [005] .....    35.317129: sugov_start:
+> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
+>              bash-615     [005] .....    35.317131: sugov_start:
+> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
+>              bash-623     [003] .....    57.633328: sugov_start:
+> schedutil the visit cpu mask is empty now
+>              bash-623     [003] .....    57.633336: sugov_start:
+> SCHEDUTIL: NEW  CPU0 cpu_capacity=381
+>              bash-623     [003] .....    57.633339: sugov_start:
+> SCHEDUTIL: NEW  CPU1 cpu_capacity=381
+>              bash-623     [003] .....    57.633340: sugov_start:
+> SCHEDUTIL: NEW  CPU2 cpu_capacity=381
+>              bash-623     [003] .....    57.633342: sugov_start:
+> SCHEDUTIL: NEW  CPU3 cpu_capacity=381
+>              bash-623     [003] .....    57.633343: sugov_start:
+> SCHEDUTIL: NEW  CPU4 cpu_capacity=1024
+>              bash-623     [003] .....    57.633344: sugov_start:
+> SCHEDUTIL: NEW  CPU5 cpu_capacity=1024
+> ----------------------------------------------------
+>
+> It should work.
+>
+> Regards,
+> Lukasz
