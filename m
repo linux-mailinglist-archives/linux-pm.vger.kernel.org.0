@@ -2,169 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC0163DC82
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 18:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068A263DD87
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:28:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbiK3R5X convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Wed, 30 Nov 2022 12:57:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52052 "EHLO
+        id S230000AbiK3S2P (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 13:28:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbiK3R5W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 12:57:22 -0500
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7824A9FE;
-        Wed, 30 Nov 2022 09:57:21 -0800 (PST)
-Received: by mail-qt1-f173.google.com with SMTP id c15so11673774qtw.8;
-        Wed, 30 Nov 2022 09:57:21 -0800 (PST)
+        with ESMTP id S229704AbiK3S2K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:28:10 -0500
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1C431227;
+        Wed, 30 Nov 2022 10:28:08 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id q10so12544151qvt.10;
+        Wed, 30 Nov 2022 10:28:08 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0r+qoVGex27F3PzpZtPMiTDGjKKV7o+719GPjal98r0=;
-        b=xgP9Zgnzclog5C0xh73dpDMbpSBdkRz5hwCpkRFDaTOSkM0USojRQH6pFsO5bWkjDf
-         mI3vXuUhu7734xmuViMatJIae3U5EZMDacnwtyrs0sBVyIFMT8D3MNjsPxb3iwKlmiJb
-         mUiz6cJm1eouECCdW9l0x7G392F3KaiMcJMGavvjUTEfou4aoIoTfFqAEZTBkwHkWS5C
-         //oKPeLsbraXdeRcrOfcDOmdMXGjCi+JhGJdWW8DvgEapimfE3KHMRfqIMAk6nC1j08P
-         VVzeYu0g6mGHKsQVtza/Ok97AvxQpV4jXo4xAhc+s/isrbmqUIt6HjY47/MKPk5wzl/Q
-         2hDg==
-X-Gm-Message-State: ANoB5pkp2+ptf8OI253W3owQC1lDtI1/XvqYPtISnhmDsd/qdAw5BSNf
-        8niXZNkvbg2zr9ziAVdaoTY9aagGD/SGPocX0z0=
-X-Google-Smtp-Source: AA0mqf5MSsQw2lo+u3a2PKwj4cdrb0LTqNXPpvKWPMiVbpzw5t7TBdFnrCeYShTgtv8eCF5xSqWvP/Pw5cSrcCQYQeA=
-X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
- u9-20020a05622a198900b003a57cf81a6emr58578957qtc.48.1669831040582; Wed, 30
- Nov 2022 09:57:20 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=W0EPxSHKLwUkp9GfQcmrWQus4zn97Y8+iM+7ar1o1NI=;
+        b=U+6kGX4z8NqRonIy2fnNn4BaS7V0xm1vLc+EayXtFUu+s7+ZVUfyUjNV1AgP/kyjEs
+         AOtbmxAFeSEEXaewNBgFLMu/3hEauETt9YIEMozW26/sJvbWydCugzjZGWLZsi2nG/nz
+         dXIOlg3Wn51ANv5TrPC0Ax2jc1SaEU9DDNZeNwEUfhtNjttVekeERqSwavTJh0pM+GeB
+         0z02V44gUmVtw1IXDabElOj4I+436haiyw0Tw7muHRricmZ9S+0B6yCR0bZf4Xbxj2Cb
+         81fmTJpL5mwksruRH8cY+mgEnwEetgtgQe/w9DnBiXc8O4qdY87uavhx07hp2fFQjgMm
+         4hrw==
+X-Gm-Message-State: ANoB5pkdlehrQ4BlaN7xxMpriK2Ts51yOX3e/Egv57Utm+yZ2lGu6JSZ
+        MUmJBkTyBatkRN0hbzWVhjyVY0cdt+9fUojylS0=
+X-Google-Smtp-Source: AA0mqf7iKJsG2tfIdtRsRPZ/mBT5XS9NuLsM3E/fHiwUqiTx7KAS29G5ozAABSA8UNm8u7h+1Kp535NolvbJK/4hzjI=
+X-Received: by 2002:a0c:c589:0:b0:4b1:a9ac:21de with SMTP id
+ a9-20020a0cc589000000b004b1a9ac21demr39706799qvj.119.1669832887399; Wed, 30
+ Nov 2022 10:28:07 -0800 (PST)
 MIME-Version: 1.0
-References: <20221125190948.2062-1-linux@weissschuh.net>
-In-Reply-To: <20221125190948.2062-1-linux@weissschuh.net>
+References: <20221127141742.1644023-1-qyousef@layalina.io> <20221127141742.1644023-4-qyousef@layalina.io>
+In-Reply-To: <20221127141742.1644023-4-qyousef@layalina.io>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 18:57:09 +0100
-Message-ID: <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] printk: introduce new macros pr_<level>_cont()
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 30 Nov 2022 19:27:52 +0100
+Message-ID: <CAJZ5v0iew=_pTq-v-2EdZN==8QY3donu9YUBtRYWdL18KBxs4Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 25, 2022 at 8:10 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+On Sun, Nov 27, 2022 at 3:18 PM Qais Yousef <qyousef@layalina.io> wrote:
 >
-> This series adds new printk wrapper macros pr_<level>_cont().
-> These create continuation messages with an explicit level.
+> We used performance domains to traverse the list of domains that share
+> the same cpufreq policy to detect when this domain is severely impacted
+> by thermal pressure to cause it to be lower than another domain in the
+> system - capacity inversion.
 >
-> Explicit levels are useful when a continuation message is split from its main
-> message. Without the explicit level KERN_DEFAULT ("warn" by default) is used
-> which can lead to stray partial log messages when filtering by level.
+> Since performance domains are only available for when energy model or
+> schedutil are present, this makes the detection mechanism unavailable
+> for Capacity Aware Scheduling (CAS).
 >
-> Also checkpatch is modified to recommend the new macros over plain pr_cont().
+> Since we only care about traversing the capacity_orig() of any cpu
+> within that domain; export for_each_active_policy() to traverse the
+> cpufreq policies instead of performance domains.
 >
-> Lastly the new macros are used in kernel/power/process.c as this file uses
-> continuation messages during system suspend-resume which creates a high
-> likelyhood of interspersed messages.
+> Introduce a new for_each_active_policy_safe() to protect against races
+> with deletion. Races against additions are fine since we can't
+> eliminate the race without having to do heavy handed locking which is
+> unacceptable in this path. The policy should be visible in the next
+> tick if we missed it.
+>
+> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+>
+> Rafael, Viresh, I hope it's okay to export these macros in the public header.
+> And that my usage is okay; I'm not sure if I missed important locking rules.
+>
+>
+>  drivers/cpufreq/cpufreq.c | 12 +-----------
+>  include/linux/cpufreq.h   | 26 ++++++++++++++++++++++++++
+>  kernel/sched/fair.c       | 13 +++++--------
+>  3 files changed, 32 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 69b3d61852ac..b11e7c545fc1 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -31,17 +31,7 @@
+>  #include <linux/units.h>
+>  #include <trace/events/power.h>
+>
+> -static LIST_HEAD(cpufreq_policy_list);
+> -
+> -/* Macros to iterate over CPU policies */
+> -#define for_each_suitable_policy(__policy, __active)                    \
+> -       list_for_each_entry(__policy, &cpufreq_policy_list, policy_list) \
+> -               if ((__active) == !policy_is_inactive(__policy))
+> -
+> -#define for_each_active_policy(__policy)               \
+> -       for_each_suitable_policy(__policy, true)
+> -#define for_each_inactive_policy(__policy)             \
+> -       for_each_suitable_policy(__policy, false)
+> +LIST_HEAD(cpufreq_policy_list);
+>
+>  /* Iterate over governors */
+>  static LIST_HEAD(cpufreq_governor_list);
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index d5595d57f4e5..c3c79d4ad821 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -780,6 +780,32 @@ static inline void dev_pm_opp_free_cpufreq_table(struct device *dev,
+>                         continue;                                               \
+>                 else
+>
+> +#ifdef CONFIG_CPU_FREQ
+> +extern struct list_head cpufreq_policy_list;
+> +
+> +/* Macros to iterate over CPU policies */
+> +#define for_each_suitable_policy(__policy, __active)                    \
+> +       list_for_each_entry(__policy, &cpufreq_policy_list, policy_list) \
+> +               if ((__active) == !policy_is_inactive(__policy))
+> +
+> +#define for_each_suitable_policy_safe(__policy, __n, __active)                    \
+> +       list_for_each_entry_safe(__policy, __n, &cpufreq_policy_list, policy_list) \
+> +               if ((__active) == !policy_is_inactive(__policy))
+> +#else
+> +#define for_each_suitable_policy(__policy, __active)           while (0)
+> +#define for_each_suitable_policy_safe(__policy, __n, __active) while (0)
+> +#endif
+> +
+> +#define for_each_active_policy(__policy)               \
+> +       for_each_suitable_policy(__policy, true)
+> +#define for_each_inactive_policy(__policy)             \
+> +       for_each_suitable_policy(__policy, false)
+> +
+> +#define for_each_active_policy_safe(__policy, __n)             \
+> +       for_each_suitable_policy_safe(__policy, __n, true)
+> +#define for_each_inactive_policy_safe(__policy, __n)           \
+> +       for_each_suitable_policy_safe(__policy, __n, false)
+> +
+>
+>  int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
+>                                     struct cpufreq_frequency_table *table);
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 7c0dd57e562a..4bbbca85134b 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+>          *   * Thermal pressure will impact all cpus in this perf domain
+>          *     equally.
+>          */
+> -       if (sched_energy_enabled()) {
+> +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+>                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
+>
+>                 rq->cpu_capacity_inverted = 0;
+>
+> -               SCHED_WARN_ON(!rcu_read_lock_held());
+> -
+> -               for (; pd; pd = pd->next) {
+> -                       struct cpumask *pd_span = perf_domain_span(pd);
+> +               for_each_active_policy_safe(policy, policy_n) {
 
-Well, if process.c is the only problematic piece of code in this
-respect, I'm not sure if adding the new infrastructure for its benefit
-alone is worth it, because it can very well do without pr_cont() at
-all.
+1. Is the "safe" part sufficient for protection against concurrent
+deletion and freeing of list entries?  cpufreq driver removal can do
+that AFAICS.
+2. For a casual reader of this code it may not be clear why cpufreq
+policies matter here.
 
-Please see the patch below (compiled only, sorry for gmail-induced
-white space damage).  I'll submit it properly later if it works for
-everyone.
-
----
- kernel/power/process.c |   25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
-
-Index: linux-pm/kernel/power/process.c
-===================================================================
---- linux-pm.orig/kernel/power/process.c
-+++ linux-pm/kernel/power/process.c
-@@ -27,6 +27,8 @@ unsigned int __read_mostly freeze_timeou
-
- static int try_to_freeze_tasks(bool user_only)
- {
-+    const char *what = user_only ? "user space processes" :
-+                    "remaining freezable tasks";
-     struct task_struct *g, *p;
-     unsigned long end_time;
-     unsigned int todo;
-@@ -36,6 +38,8 @@ static int try_to_freeze_tasks(bool user
-     bool wakeup = false;
-     int sleep_usecs = USEC_PER_MSEC;
-
-+    pr_info("Freezing %s\n", what);
-+
-     start = ktime_get_boottime();
-
-     end_time = jiffies + msecs_to_jiffies(freeze_timeout_msecs);
-@@ -82,9 +86,8 @@ static int try_to_freeze_tasks(bool user
-     elapsed_msecs = ktime_to_ms(elapsed);
-
-     if (todo) {
--        pr_cont("\n");
--        pr_err("Freezing of tasks %s after %d.%03d seconds "
--               "(%d tasks refusing to freeze, wq_busy=%d):\n",
-+        pr_err("Freezing %s %s after %d.%03d seconds "
-+               "(%d tasks refusing to freeze, wq_busy=%d):\n", what,
-                wakeup ? "aborted" : "failed",
-                elapsed_msecs / 1000, elapsed_msecs % 1000,
-                todo - wq_busy, wq_busy);
-@@ -101,8 +104,8 @@ static int try_to_freeze_tasks(bool user
-             read_unlock(&tasklist_lock);
-         }
-     } else {
--        pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
--            elapsed_msecs % 1000);
-+        pr_info("Freezing %s completed (elapsed %d.%03d seconds)\n",
-+            what, elapsed_msecs / 1000, elapsed_msecs % 1000);
-     }
-
-     return todo ? -EBUSY : 0;
-@@ -130,14 +133,11 @@ int freeze_processes(void)
-         static_branch_inc(&freezer_active);
-
-     pm_wakeup_clear(0);
--    pr_info("Freezing user space processes ... ");
-     pm_freezing = true;
-     error = try_to_freeze_tasks(true);
--    if (!error) {
-+    if (!error)
-         __usermodehelper_set_disable_depth(UMH_DISABLED);
--        pr_cont("done.");
--    }
--    pr_cont("\n");
-+
-     BUG_ON(in_atomic());
-
-     /*
-@@ -166,14 +166,9 @@ int freeze_kernel_threads(void)
- {
-     int error;
-
--    pr_info("Freezing remaining freezable tasks ... ");
--
-     pm_nosig_freezing = true;
-     error = try_to_freeze_tasks(false);
--    if (!error)
--        pr_cont("done.");
-
--    pr_cont("\n");
-     BUG_ON(in_atomic());
-
-     if (error)
+>                         unsigned long pd_cap_orig, pd_cap;
+>
+>                         /* We can't be inverted against our own pd */
+> -                       if (cpumask_test_cpu(cpu_of(rq), pd_span))
+> +                       if (cpumask_test_cpu(cpu_of(rq), policy->cpus))
+>                                 continue;
+>
+> -                       cpu = cpumask_any(pd_span);
+> +                       cpu = cpumask_any(policy->cpus);
+>                         pd_cap_orig = arch_scale_cpu_capacity(cpu);
+>
+>                         if (capacity_orig < pd_cap_orig)
+> --
+> 2.25.1
+>
