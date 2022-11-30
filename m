@@ -2,49 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336B463DF4C
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0802D63DFEA
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:51:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiK3Spu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 13:45:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58182 "EHLO
+        id S230344AbiK3Svp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 13:51:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbiK3Sp2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:45:28 -0500
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEEFD97013
-        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 10:45:25 -0800 (PST)
-Received: by mail-qv1-f49.google.com with SMTP id a17so10872239qvt.9
-        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 10:45:25 -0800 (PST)
+        with ESMTP id S231522AbiK3Svg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:51:36 -0500
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E947263D51
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 10:51:34 -0800 (PST)
+Received: by mail-qk1-f181.google.com with SMTP id z1so12989423qkl.9
+        for <linux-pm@vger.kernel.org>; Wed, 30 Nov 2022 10:51:34 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8Ci03k9+jtZTzCMSgyBPFBr2TOw3ZtUAnLxVlp1INCI=;
-        b=OovIQ12Kk6QlyZIVrZtmgcmKfdinQyqwvM/iITFpYEihZSRLKe4j94Q62l75E1Z4yR
-         HDF5lAwSz9BSar2tE8e2tflpMXuWnPZhqlIoDcR3p9/PeuQKKN5lTX4KSfHCuikVwBEJ
-         oVXytmM+cgxOlNIWYEDCghKLZMTvKkFmgBLK29QaEofwSRb/N8KSLdr5XPwaZLMKkDk3
-         Iq0pqEKwDiJIzYc8Cz7eAPpk7g5H9y18pX4gaR9Ox7vlGL5KwlwQm5w5Dcv8h1yrYyVv
-         I9zJgXpYY1pfKHsxpHK1uiuX6vm/N8X+VoZEDuZabb1bDlFYsPmShie4Tojsp7Hj+8tC
-         TB1w==
-X-Gm-Message-State: ANoB5pkwsBlE1mEgXEOUqnR89bcvkFj7VG9ELMcWFF8989X6El7VAUTy
-        uwFyETccpnc57UlUmyL3tKyBpkEm1kpvuDEfcta1lnQ2
-X-Google-Smtp-Source: AA0mqf4wRW5HtNLtDkEG8F1vwGCf8uODr+yItkv9beuyeZSjzkfUzKyL1UMb64hquN1TtDY3n+mdCLVE9k64cPSrzOo=
-X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id
- a2-20020a0cc582000000b004afb750b569mr41473204qvj.83.1669833924916; Wed, 30
- Nov 2022 10:45:24 -0800 (PST)
+        bh=LcnDPX9svyHzAY+SGpfsstGlxBbhhE6arJq/FM0DFsI=;
+        b=UzNc4sNHMDRcT5K8+5FU51ykJ9PpRl2t8kg0YWXgwJCOuzd7ghDWz7+6ZRJjvgld4x
+         +xAaNP1EG491Wy4BycS0l0/6KX9yAfZZVllN9JZ4lYcENcbF8gcKevFYAweA3zxMrMci
+         3laEd6LXq7L9OTf8zOnYpxGgYYyRXpaYb+qhlW/NrXMtSN8IFhhX1c7tQ5oLk6vSHnqI
+         baiBWJoR43V9+gO6E26I9a7GcDU1Lsr4ZMsQJpkarBoLeSPKFtjW/WpQFiEJ/XMXUJ5f
+         R5ZDuBDm1PM6ZDw6hgEiRpyagpSZ1zBoEed2xetttEtinWwmHmb4/SupsMJWW6uOngiu
+         cn8Q==
+X-Gm-Message-State: ANoB5pkddKlNkWp1x/Z0rv43mKdioPEuSuLOscBu5zim+LgYz0IT58gA
+        mhFtcpPgTjlolXZjlztjqpH1WNXhfY3GojIGrwS2Ikxf
+X-Google-Smtp-Source: AA0mqf4fMcc2IuUNojATTHFCRTc90S4Z4/JN23knTpBlzZUQkjt/MEyns/mHZFK/8AQ8+V415jZM3LnXh+iOlogZoys=
+X-Received: by 2002:a37:b901:0:b0:6ec:2b04:5099 with SMTP id
+ j1-20020a37b901000000b006ec2b045099mr42858826qkf.501.1669834294052; Wed, 30
+ Nov 2022 10:51:34 -0800 (PST)
 MIME-Version: 1.0
-References: <20221111045242.530607-1-luoxueqin@kylinos.cn>
-In-Reply-To: <20221111045242.530607-1-luoxueqin@kylinos.cn>
+References: <20221116113339.177740-1-wangxiongfeng2@huawei.com>
+In-Reply-To: <20221116113339.177740-1-wangxiongfeng2@huawei.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:45:14 +0100
-Message-ID: <CAJZ5v0hdP_=DecQCfwcdX4hm=i5WFKhmJexLWKN4SMkFdzrhvQ@mail.gmail.com>
-Subject: Re: [PATCH] kernel/power : add pr_err() for debugging "Error -14
- resuming" error
-To:     Xueqin Luo <luoxueqin@kylinos.cn>
-Cc:     rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        linux-pm@vger.kernel.org, xiongxin@kylinos.cn
+Date:   Wed, 30 Nov 2022 19:51:22 +0100
+Message-ID: <CAJZ5v0jKL+bEwVw0SS_O2wZCa5EbH1KQZ09Q3kWFpWsrFRCPvg@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: amd_freq_sensitivity: Add missing pci_dev_put()
+To:     Xiongfeng Wang <wangxiongfeng2@huawei.com>
+Cc:     rafael@kernel.org, viresh.kumar@linaro.org, Akshu.Agrawal@amd.com,
+        linux-pm@vger.kernel.org, yangyingliang@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,61 +55,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Nov 11, 2022 at 5:53 AM Xueqin Luo <luoxueqin@kylinos.cn> wrote:
+On Wed, Nov 16, 2022 at 12:15 PM Xiongfeng Wang
+<wangxiongfeng2@huawei.com> wrote:
 >
-> The system memory map can change over a hibernation-restore cycle due
-> to a defect in the platform firmware, and some of the page frames used
-> by the kernel before hibernation may not be available any more during
-> the subsequent restore which leads to the error below.
+> pci_get_device() will increase the reference count for the returned
+> pci_dev. We need to use pci_dev_put() to decrease the reference count
+> after using pci_get_device(). Let's add it.
 >
-> [  T357] PM: Image loading progress:   0%
-> [  T357] PM: Read 2681596 kbytes in 0.03 seconds (89386.53 MB/s)
-> [  T357] PM: Error -14 resuming
-> [  T357] PM: Failed to load hibernation image, recovering.
-> [  T357] PM: Basic memory bitmaps freed
-> [  T357] OOM killer enabled.
-> [  T357] Restarting tasks ... done.
-> [  T357] PM: resume from hibernation failed (-14)
-> [  T357] PM: Hibernation image not present or could not be loaded.
->
-> So, by adding an Error message to the unpack () function, you can quickly
-> navigate to the Error page number and analyze the cause when an "Error -14
-> resuming" error occurs in S4. This can save developers the cost of
-> debugging time.
->
-> Signed-off-by: Xueqin Luo <luoxueqin@kylinos.cn>
+> Fixes: 59a3b3a8db16 ("cpufreq: AMD: Ignore the check for ProcFeedback in ST/CZ")
+> Signed-off-by: Xiongfeng Wang <wangxiongfeng2@huawei.com>
 > ---
-> v3: Modify the pr_err() function output again
+>  drivers/cpufreq/amd_freq_sensitivity.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> v2: Modify the commit message and pr_err() function output
->
->  kernel/power/snapshot.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index c20ca5fb9adc..e7bd4531faf2 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -2259,10 +2259,14 @@ static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
->                 if (unlikely(buf[j] == BM_END_OF_MAP))
->                         break;
->
-> -               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j]))
-> +               if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
->                         memory_bm_set_bit(bm, buf[j]);
-> -               else
-> +               } else {
-> +                       if (!pfn_valid(buf[j]))
-> +                               pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
-> +                                               PFN_PHYS(buf[j]));
->                         return -EFAULT;
-> +               }
+> diff --git a/drivers/cpufreq/amd_freq_sensitivity.c b/drivers/cpufreq/amd_freq_sensitivity.c
+> index 6448e03bcf48..59b19b9975e8 100644
+> --- a/drivers/cpufreq/amd_freq_sensitivity.c
+> +++ b/drivers/cpufreq/amd_freq_sensitivity.c
+> @@ -125,6 +125,8 @@ static int __init amd_freq_sensitivity_init(void)
+>         if (!pcidev) {
+>                 if (!boot_cpu_has(X86_FEATURE_PROC_FEEDBACK))
+>                         return -ENODEV;
+> +       } else {
+> +               pci_dev_put(pcidev);
 >         }
 >
->         return 0;
+>         if (rdmsrl_safe(MSR_AMD64_FREQ_SENSITIVITY_ACTUAL, &val))
 > --
 
-Applied as 6.2 material under a new subject and with some edits in the
-changelog.
-
-Thanks!
+Applied as 6.2 material, thanks!
