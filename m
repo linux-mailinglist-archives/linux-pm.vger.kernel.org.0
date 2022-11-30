@@ -2,95 +2,126 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E709963E060
-	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 19:58:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC7263E104
+	for <lists+linux-pm@lfdr.de>; Wed, 30 Nov 2022 20:50:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbiK3S60 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 13:58:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
+        id S229476AbiK3TuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 14:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiK3S6Q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 13:58:16 -0500
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FD69D810;
-        Wed, 30 Nov 2022 10:58:08 -0800 (PST)
-Received: by mail-qv1-f52.google.com with SMTP id s14so837193qvo.11;
-        Wed, 30 Nov 2022 10:58:08 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NV+aRXYKE3DBJkVT9Hd67uMEpdGk6soKLvDOrRjSNtA=;
-        b=w4RcxxKftt4X0fjNm1LtCCzIouoJuiFvvtWEAidXDB1FWV63JtNxl/fa9Zkm7A4EpD
-         R4jBWHuRs4dxmzzCbBiTeqKzHcecpKTUGh4ikKC0rYtbB7GEltLWUZLlbD6dF2hQIA5E
-         qXM0LzeFIAfyi+jwp6YutV9YoPT6d2L6Fika/aNqWoQnLuhnfsi0iHb4xrqRvr0e+WPq
-         UlMjF745nyPwEuUz3aHljRZf60C4M3mrEcrUiMxUGIbvsP19q6VjmYmxHG7JvU2Wwq3s
-         KRECC6iS9iLHu/q1w1UPZ+V0SmDC6jIRsFknTStQ+Tu+bighz4lY6KiM0GhdWSNhnCEo
-         5+PA==
-X-Gm-Message-State: ANoB5pnMhM6HC124U5od+fMbwmacBUwQfKpc5eDQ5e+Ft80D7EkFKXCs
-        H4xxaSCY95dIBI39HFq8a8rbMPck9H43mGwvyd2tY78H
-X-Google-Smtp-Source: AA0mqf6JIen0xJ+raeq9RHWsftljVBvuBEfkR0LnNkUAF/LU5cSSc7sUepqo5TOLYZwnlMqJAXGMlMdNc3ZKRmn74o8=
-X-Received: by 2002:a0c:c582:0:b0:4af:b750:b569 with SMTP id
- a2-20020a0cc582000000b004afb750b569mr41510179qvj.83.1669834687400; Wed, 30
- Nov 2022 10:58:07 -0800 (PST)
+        with ESMTP id S229614AbiK3TuY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 14:50:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3792754375;
+        Wed, 30 Nov 2022 11:50:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E328AB81CCD;
+        Wed, 30 Nov 2022 19:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97FCFC43147;
+        Wed, 30 Nov 2022 19:50:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669837820;
+        bh=QOqw927fxRzrbF/F3Jnf30+Wco4wM1OzEviRcFlVUEM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=V3zEJ+E37k+PcTuehrx445ZgWfK+r063zKQF13cD/Q9IDc5a1UsKXM1vM0X3PxAW8
+         5A+ubiQPnrThXbkKEw6Kas8R20BH+ZffyYOlLplY9Cz6jJzjpdQr/IKrLZGoe3Hw3V
+         7KO0pKJnrRcemGaKShSL6r0H8va1Bb3nUOMqiZ7sP6zme8H4HOKDWoqmt3Z8K8yauc
+         VFdkNnx4PeUcl6Amnm2yeRQ59w1vNAPMuX7E9taqMesk+ekaBkPRmsYtnUjScumNIg
+         qvr5PiSgJ7PIzDXlula4TqQ+eexBUq8hqnQlv+3C/2UmD/HvlInYbEMbQT3/2MIvTL
+         M762HhtGWxJwg==
+Received: by mail-vs1-f54.google.com with SMTP id c184so18394904vsc.3;
+        Wed, 30 Nov 2022 11:50:20 -0800 (PST)
+X-Gm-Message-State: ANoB5pkkpV7QGdpbTJjNkAHDZOolERjNh3nUniDGGT/NzfSsl9Su2xQE
+        5YrRMMgxHF1MpqF6QDeVlnzcevvZHXZRe5SUWQ==
+X-Google-Smtp-Source: AA0mqf52Y1Vj9n3ybkEc5FmCE5sMcIYABT3Rc5wjqxKa7c1Iw7w12pQuxt5Kk2YnjZv2U8m3ZeRxCLTHwseH2sbP40I=
+X-Received: by 2002:a05:6102:2381:b0:3b0:c6ec:cc6a with SMTP id
+ v1-20020a056102238100b003b0c6eccc6amr5171717vsr.0.1669837819471; Wed, 30 Nov
+ 2022 11:50:19 -0800 (PST)
 MIME-Version: 1.0
-References: <20221121153540.10494-1-ggherdovich@suse.cz>
-In-Reply-To: <20221121153540.10494-1-ggherdovich@suse.cz>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 30 Nov 2022 19:57:56 +0100
-Message-ID: <CAJZ5v0iFe-jeVw_VfqG+xgxN_VVWXHEx9r4S_dGERWsWDNPxPA@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq: intel_pstate: Add Sapphire Rapids support in
- no-HWP mode
-To:     Giovanni Gherdovich <ggherdovich@suse.cz>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+References: <20221128142912.16022-1-marcan@marcan.st> <20221128142912.16022-3-marcan@marcan.st>
+ <CAPDyKFobMvef_BWGMR=7avODh2r5XNMGpwO3xYgrN-u=DqRwbg@mail.gmail.com>
+ <41c6882a-bff0-378c-edd3-160b54be7c1d@marcan.st> <a297079e-2dc9-d311-5415-a58332e7a711@linaro.org>
+ <e8c481ba-02a7-f1c7-6314-ea1ddf136998@marcan.st> <20221129232837.GA432535-robh@kernel.org>
+In-Reply-To: <20221129232837.GA432535-robh@kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 30 Nov 2022 13:50:08 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqJFEBFSeTrCc6QSCAN8C7rsiyoiy8D-9ZFr6Xk35TqhGg@mail.gmail.com>
+Message-ID: <CAL_JsqJFEBFSeTrCc6QSCAN8C7rsiyoiy8D-9ZFr6Xk35TqhGg@mail.gmail.com>
+Subject: Re: [PATCH v5 2/4] dt-bindings: cpufreq: apple,soc-cpufreq: Add
+ binding for Apple SoC cpufreq
+To:     Hector Martin <marcan@marcan.st>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Nov 21, 2022 at 4:35 PM Giovanni Gherdovich <ggherdovich@suse.cz> wrote:
+On Tue, Nov 29, 2022 at 5:28 PM Rob Herring <robh@kernel.org> wrote:
 >
-> Users may disable HWP in firmware, in which case intel_pstate wouldn't load
-> unless the CPU model is explicitly supported.
+> On Wed, Nov 30, 2022 at 12:17:08AM +0900, Hector Martin wrote:
+> > On 29/11/2022 23.34, Krzysztof Kozlowski wrote:
+> > > On 29/11/2022 15:00, Hector Martin wrote:
+> > >> On 29/11/2022 20.36, Ulf Hansson wrote:
+> > >> Please, let's introspect about this for a moment. Something is deeply
+> > >> broken if people with 25+ years being an arch maintainer can't get a
+> > >
+> > > If arch maintainer sends patches which does not build (make
+> > > dt_binding_check), then what do you exactly expect? Accept them just
+> > > because it is 25+ years of experience or a maintainer? So we have
+> > > difference processes - for beginners code should compile. For
+> > > experienced people, it does not have to build because otherwise they
+> > > will get discouraged?
+> >
+> > I expect the process to not be so confusing and frustrating that a
+> > maintainer with 25+ years of experience gives up. That the bindings
+> > didn't pass the checker is besides the point. People say the Linux
+> > kernel community is hostile to newbies. This issue proves it's not just
+> > newbies, the process is failing even experienced folks.
 >
-> See also the following past commits:
+> IME, a lack of response is a bigger issue and more frustrating.
 >
-> commit d8de7a44e11f ("cpufreq: intel_pstate: Add Skylake servers support")
-> commit 706c5328851d ("cpufreq: intel_pstate: Add Cometlake support in
-> no-HWP mode")
-> commit fbdc21e9b038 ("cpufreq: intel_pstate: Add Icelake servers support in
-> no-HWP mode")
-> commit 71bb5c82aaae ("cpufreq: intel_pstate: Add Tigerlake support in
-> no-HWP mode")
+> > On that specific issue, any other functional open source project would
+> > have the binding checks be a CI bot, with a friendly message telling you
+> > what to do to fix it, and it would re-run when you push to the PR again,
+> > which is a *much* lower friction action than sending a whole new patch
+> > series out for review via email (if you don't agree with this, then
+> > you're not the average contributor - the Linux kernel is by far the
+> > scariest major open source project to contribute to, and I think most
+> > people would agree with me on that).
 >
-> Signed-off-by: Giovanni Gherdovich <ggherdovich@suse.cz>
-> ---
->  drivers/cpufreq/intel_pstate.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
-> index 6ff73c30769f..181cd6b045ff 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2378,6 +2378,7 @@ static const struct x86_cpu_id intel_pstate_cpu_ids[] = {
->         X86_MATCH(COMETLAKE,            core_funcs),
->         X86_MATCH(ICELAKE_X,            core_funcs),
->         X86_MATCH(TIGERLAKE,            core_funcs),
-> +       X86_MATCH(SAPPHIRERAPIDS_X,     core_funcs),
->         {}
->  };
->  MODULE_DEVICE_TABLE(x86cpu, intel_pstate_cpu_ids);
-> --
+> We could probably add a $ci_provider job description to do that. In
+> fact, I did try that once[1]. The challenge would be what to run if
+> there's multiple maintainers doing something. Otherwise, it's a
+> maintainer creating their own thing which we have too much of already.
 
-Applied as 6.2 material, thanks!
+Actually, turns out this pretty much already exists with my CI. I just
+had to turn on merge requests on the project. If anyone actually uses
+it, I'll have to tweak it to not do 'make dtbs_check' because that is
+really slow. And this all runs on my machines, so that is another
+issue. It already is just running it for patches on the list (which is
+a different CI job).
+
+Just create a MR here:
+
+https://gitlab.com/robherring/linux-dt/-/merge_requests
+
+Rob
