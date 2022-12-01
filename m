@@ -2,218 +2,329 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEB1763F32C
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 15:55:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0585963F355
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 16:09:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiLAOy6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 09:54:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36556 "EHLO
+        id S231191AbiLAPJF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 10:09:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbiLAOy5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 09:54:57 -0500
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4224BB7E5;
-        Thu,  1 Dec 2022 06:54:55 -0800 (PST)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B1ClA0Z020865;
-        Thu, 1 Dec 2022 14:54:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=AHZfeKWHAigykHXpKG+U8KPxZRTpKcXcySDW/Tm6oVE=;
- b=XEObTR86tM5OKA5pYb3W3XUgT35IpeEJ2kIPLC4bh68BRVbaw66AAlnV9JvJsxnCJIjK
- SIKvy+zJd5Um0bExQTDe5OsonJ3eEQcOKpb+0rYYoQPtqBQKFTBMRBVlc1zRoKaz8Lkz
- T1IkqRqED2W+fUGB4nA3XEsoFLrvDKlPwLRcMFBa4ooolLI7PEhr1pm8DnzlZoX0whrK
- FIEU5KCqbet9MK1iFkhVRcPitswHIBZnBZt5iM14wNJUlzQiU3peIzsENgAQrNlvfS0D
- PkAwGu5DjBc22IihAzB+CFg0x6L2WIIRIooVqc6FsjU1+4JgfNsFcG6TXr3nox0Y0tI1 GA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m6k2c29t7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Dec 2022 14:54:31 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B1EsSnx024355
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Dec 2022 14:54:28 GMT
-Received: from [10.216.42.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 1 Dec 2022
- 06:54:23 -0800
-Message-ID: <50578b41-8894-24fe-a768-25c55fa38a78@quicinc.com>
-Date:   Thu, 1 Dec 2022 20:24:20 +0530
+        with ESMTP id S231330AbiLAPJC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 10:09:02 -0500
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7104AF36
+        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 07:09:00 -0800 (PST)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1p0lBD-0008QJ-By; Thu, 01 Dec 2022 16:08:51 +0100
+Message-ID: <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
+Date:   Thu, 1 Dec 2022 16:08:50 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: PM-runtime: supplier looses track of consumer during probe
-Content-Language: en-US
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        <linux-pm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        <bjorn.andersson@kernel.org>, <quic_mkshah@quicinc.com>,
-        <quic_lsrao@quicinc.com>, <bvanassche@acm.org>,
-        Peter Wang <peter.wang@mediatek.com>
-References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
- <8c0a715a-d626-aa70-15f1-79f1e23fbc67@quicinc.com>
- <a5e2aab6-7f0e-7f3b-f34b-6d222450c97d@intel.com>
- <8ca27fcb-b146-3ea7-a042-55f99e0ae3fb@quicinc.com>
- <2a1047a7-3121-6cbe-d4c5-46bbff0c5cc5@quicinc.com>
- <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com>
-From:   Nitin Rawat <quic_nitirawa@quicinc.com>
-In-Reply-To: <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
+ mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
+Content-Language: en-US, de-DE
+To:     Nick <vincent@systemli.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        angelogioacchino.delregno@collabora.com, viresh.kumar@linaro.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Daniel Golle <daniel@makrotopia.org>,
+        =?UTF-8?Q?H=c3=bchn=2c_Thomas?= <thomas.huehn@hs-nordhausen.de>
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+ <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
+ <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2U8UlMOvKdvPcZqq1DNliUaSbNr2AG7r
-X-Proofpoint-GUID: 2U8UlMOvKdvPcZqq1DNliUaSbNr2AG7r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-01_11,2022-12-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 spamscore=0 clxscore=1015
- bulkscore=0 phishscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212010108
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1669907340;e2d48654;
+X-HE-SMSGID: 1p0lBD-0008QJ-By
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_PDS_OTHER_BAD_TLD
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Adrian,
-Thanks for the patch.
-I Agree, using local variable to store the runtime status before 
-dev->power.lock is released and using this variable later in the code 
-can meet the intention of code and can help to solve this race.
+Hi, this is your Linux kernel regression tracker. Top-posting for once,
+to make this easily accessible to everyone.
 
-We will get it tested and update you.
+I noticed this regression didn't make any progress
 
+Matthias, is that because Nick didn't exactly do what you asked for (he
+afaics tried -next, but nevertheless patches it)? Or is there another
+reason?
 
-Regards,
-Nitin
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
 
-On 12/1/2022 6:39 PM, Adrian Hunter wrote:
-> On 29/11/22 18:56, Nitin Rawat wrote:
->> Hi Adrian,
->>
->> On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
->>> Hi Adrian,
->>>
->>> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
->>>> On 4/11/22 11:19, Tushar Nimkar wrote:
->>>>> Hi linux-pm/linux-scsi,
->>>
->>>>>> Process -1
->>>>>> ufshcd_async_scan context (process 1)
->>>>>> scsi_autopm_put_device() //0:0:0:0
->>>>
->>>> I am having trouble following your description.  What function is calling
->>>> scsi_autopm_put_device() here?
->>>>
->>> Below is flow which calls scsi_autopm_put_device()
->>> Process -1
->>> ufshcd_async_scan()
->>>       scsi_probe_and_add_lun()
->>>           scsi_add_lun()
->>>               slave_configure()
->>>                   scsi_sysfs_add_sdev()
->>>                       scsi_autopm_get_device()
->>>                           device_add()     <- invoked [Process 2] sd_probe()
->>>                               scsi_autopm_put_device()
->>>
->>>>>> pm_runtime_put_sync()
->>>>>> __pm_runtime_idle()
->>>>>> rpm_idle() -- RPM_GET_PUT(4)
->>>>>>        __rpm_callback
->>>>>>            scsi_runtime_idle()
->>>>>>                pm_runtime_mark_last_busy()
->>>>>>                pm_runtime_autosuspend()  --[A]
->>>>>>                    rpm_suspend() -- RPM_AUTO(8)
->>>>>>                        pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
->>>>>>                            __update_runtime_status to RPM_SUSPENDING
->>>>>>                        __rpm_callback()
->>>>>>                            __rpm_put_suppliers(dev, false)
->>>>>>                        __update_runtime_status to RPM_SUSPENDED
->>>>>>                    rpm_suspend_suppliers()
->>>>>>                        rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
->>>>>>                    rpm_suspend() – END with return=0
->>>>>>            scsi_runtime_idle() END return (-EBUSY) always.
->>>>
->>>> Not following here either.  Which device is EBUSY and why?
->>>
->>> scsi_runtime_idle() return -EBUSY always [3]
->>> Storage/scsi team can better explain -EBUSY implementation.
->>
->> EBUSY is returned from below code for consumer dev 0:0:0:0.
->> scsi_runtime_idle is called from scsi_autopm_put_device which inturn is called from ufshcd_async_scan (Process 1 as per above call stack)
->> static int scsi_runtime_idle(struct device *dev)
->> {
->>      :
->>
->>      if (scsi_is_sdev_device(dev)) {
->>          pm_runtime_mark_last_busy(dev);
->>          pm_runtime_autosuspend(dev);
->>          return -EBUSY; ---> EBUSY returned from here.
->>      }
->>
->>      
->> }
->>
->>>
->>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
->>>
->>>
->>>>>>
->>>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
->>>>>> [2]: https://lkml.org/lkml/2022/10/12/259
+P.S.: As the Linux kernel's regression tracker I deal with a lot of
+reports and sometimes miss something important when writing mails like
+this. If that's the case here, don't hesitate to tell me in a public
+reply, it's in everyone's interest to set the public record straight.
+
+On 15.11.22 20:44, Nick wrote:
+> I used now the linux-next kernel tree (with
+> https://patchwork.ozlabs.org/project/linux-mtd/list/?series=327227 so
+> single uImage.FIT will work).
+>
+> Same issue:
 > 
-> It looks to me like __rpm_callback() makes assumptions about
-> dev->power.runtime_status that are not necessarily true because
-> dev->power.lock is dropped.  AFAICT the intention of the code
-> would be fulfilled by instead using the status as it was before
-> the lock was dropped.
+>> [ 0.886209] Kernel BUG at regulator_check_voltage+0xb0/0xf0 [verbose
+>> debug info unavailable]
+>>
+>> [ 0.894663] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+>>
+>> [ 0.900759] Modules linked in:
+>>
+>> [ 0.903819] CPU: 1 PID: 79 Comm: kworker/1:1 Tainted: G S
+>> 6.1.0-rc5-next-20221115+ #0
+>>
+>> [ 0.904360] pstore: Using crash dump compression: deflate
+>>
+>> [ 0.913038] Hardware name: Bananapi BPI-R64 (DT)
+>>
+>> [ 0.913043] Workqueue: events dbs_work_handler
+>>
+>> [ 0.913056] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS
+>> BTYPE=--)
+>>
+>> [ 0.913063] pc : regulator_check_voltage+0xb0/0xf0
+>>
+>> [ 0.913070] lr : regulator_set_voltage_unlocked+0x88/0x110
+>>
+>> [ 0.913077] sp : ffffffc00cef3b30
+>>
+>> [ 0.913080] x29: ffffffc00cef3b30 x28: ffffff8006f6f800 x27:
+>> ffffff8006f6fa00
+>>
+>> [ 0.931243] mtk-pcie 1a143000.pcie: host bridge /pcie@1a143000 ranges:
+>>
+>> [ 0.934474]
+>>
+>> [ 0.934475] x26: 00000000001312d0 x25: 0000000000000024
+>>
+>> [ 0.939298] mtk-pcie 1a143000.pcie: Parsing ranges property...
+>>
+>> [ 0.944730] x24: 0000000000118c30
+>>
+>> [ 0.948038] mtk-pcie 1a143000.pcie: MEM 0x0020000000..0x0027ffffff ->
+>> 0x0020000000
+>>
+>> [ 0.955155]
+>>
+>> [ 0.955157] x23: 0000000000149970 x22: ffffff8000861800 x21:
+>> ffffff8006f6f800
+>>
+>> [ 0.955166] x20: 00000000001312d0 x19: 0000000000000000 x18:
+>> 00000000cfad1bd3
+>>
+>> [ 0.955174] x17: 000000000000000c x16: 0000000000000005 x15:
+>> 0000000000000000
+>>
+>> [ 1.008473] x14: 0000000000000000 x13: 0000000000000165 x12:
+>> 0101010101010101
+>>
+>> [ 1.015608] x11: 00000000017d7840 x10: 0000000000000850 x9 :
+>> ffffffc00cef3900
+>>
+>> [ 1.017014] mmc0: new HS200 MMC card at address 0001
+>>
+>> [ 1.022740] x8 : ffffff8005ee9f30 x7 : 0000000000000001 x6 :
+>> 00000000001312d0
+>>
+>> [ 1.022748] x5 : 0000000000118c30 x4 : 0000000000000000 x3 :
+>> 0000000000000000
+>>
+>> [ 1.022756] x2 : ffffffc00cef3b68 x1 : ffffffc00cef3b6c
+>>
+>> [ 1.029034] mmcblk0: mmc0:0001 008G30 7.28 GiB
+>>
+>> [ 1.034833] x0 : ffffff8000861800
+>>
+>> [ 1.034838] Call trace:
+>>
+>> [ 1.044528] Alternate GPT is invalid, using primary GPT.
+>>
+>> [ 1.047175] regulator_check_voltage+0xb0/0xf0
+>>
+>> [ 1.052603] FIT: Selected configuration: "config-1" (OpenWrt
+>> bananapi_bpi-r64)
+>>
+>> [ 1.055090] regulator_set_voltage+0x3c/0x64
+>>
+>> [ 1.057539] FIT: kernel sub-image 0x00001000..0x005200f9 "kernel-1"
+>> (ARM64 OpenWrt Linux-6.1-rc2)
+>>
+>> [ 1.062824] mtk_cpufreq_voltage_tracking+0x12c/0x27c
+>>
+>> [ 1.062831] mtk_cpufreq_set_target+0x1c4/0x350
+>>
+>> [ 1.062837] __cpufreq_driver_target+0x2dc/0x660
+>>
+>> [ 1.067289] FIT: flat_dt sub-image 0x00521000..0x005272d9 "fdt-1"
+>> (ARM64 OpenWrt bananapi_bpi-r64 device tree blob)
+>>
+>> [ 1.074484] od_dbs_update+0xb8/0x19c
+>>
+>> [ 1.074490] dbs_work_handler+0x3c/0x7c
+>>
+>> [ 1.078774] FIT: filesystem sub-image 0x00528000..0x00829fff
+>> "rootfs-1" (ARM64 OpenWrt bananapi_bpi-r64 rootfs)
+>>
+>> [ 1.088560] process_one_work+0x200/0x3a0
+>>
+>> [ 1.093624] mmcblk0: p1 p2 p3 p4 p65(rootfs-1) p66(rootfs_data) p128
+>>
+>> [ 1.098116] worker_thread+0x170/0x4c0
+>>
+>> [ 1.104575] mmcblk0boot0: mmc0:0001 008G30 4.00 MiB
+>>
+>> [ 1.114009] kthread+0xd4/0xe0
+>>
+>> [ 1.114016] ret_from_fork+0x10/0x20
+>>
+>> [ 1.114028] Code: 6b04001f 54fffe6b 2a0003e4 17fffff3 (d4210000)
+>>
+>> [ 1.114033] ---[ end trace 0000000000000000 ]---
+>> [ 0.878926] ------------[ cut here ]------------
+>>
 > 
-> Consequently, perhaps you could try this:
+> Full log:
+> https://gist.github.com/PolynomialDivision/4a555079887b288f4795b28eb3607aa9
 > 
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index b52049098d4e..3cf9abc3b2c2 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -365,6 +365,7 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
->   {
->   	int retval = 0, idx;
->   	bool use_links = dev->power.links_count > 0;
-> +	enum rpm_status runtime_status = dev->power.runtime_status;
->   
->   	if (dev->power.irq_safe) {
->   		spin_unlock(&dev->power.lock);
-> @@ -378,7 +379,7 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
->   		 * routine returns, so it is safe to read the status outside of
->   		 * the lock.
->   		 */
-> -		if (use_links && dev->power.runtime_status == RPM_RESUMING) {
-> +		if (use_links && runtime_status == RPM_RESUMING) {
->   			idx = device_links_read_lock();
->   
->   			retval = rpm_get_suppliers(dev);
-> @@ -405,8 +406,8 @@ static int __rpm_callback(int (*cb)(struct device *), struct device *dev)
->   		 * Do that if resume fails too.
->   		 */
->   		if (use_links
-> -		    && ((dev->power.runtime_status == RPM_SUSPENDING && !retval)
-> -		    || (dev->power.runtime_status == RPM_RESUMING && retval))) {
-> +		    && ((runtime_status == RPM_SUSPENDING && !retval)
-> +		    || (runtime_status == RPM_RESUMING && retval))) {
->   			idx = device_links_read_lock();
->   
->   			__rpm_put_suppliers(dev, false);
+> Big thanks to Daniel helping me to build a vanilla kernel with OpenWrt
+> build system.
 > 
+> Bests
+> Nick
 > 
+> On 11/10/22 12:26, Matthias Brugger wrote:
+>> Hi Nick,
+>>
+>> On 09/11/2022 14:35, Nick wrote:
+>>> Hi,
+>>> while trying to bump OpenWrt Kernel to 6.1rc2 I noticed that the
+>>> kernel is crashing while booting on a Banana Pi R64 (MT7622):
+>>>
+>>>> [    1.055565] ------------[ cut here ]------------
+>>>> [    1.060204] Kernel BUG at regulator_check_voltage+0xb0/0xf0
+>>>> [verbose debug info unavailable]
+>>>> [    1.062418] mtk-pcie 1a143000.pcie: host bridge /pcie@1a143000
+>>>> ranges:
+>>>> [    1.068656] Internal error: Oops - BUG: 00000000f2000800 [#1] SMP
+>>>> [    1.075248] mtk-pcie 1a143000.pcie: Parsing ranges property...
+>>>> [    1.081257] Modules linked in:
+>>>> [    1.081264] CPU: 1 PID: 328 Comm: kworker/1:7 Tainted: G
+>>>> S                 6.1-rc2 #0
+>>>> [    1.087088] mtk-pcie 1a143000.pcie:      MEM
+>>>> 0x0020000000..0x0027ffffff -> 0x0020000000
+>>>> [    1.090126] Hardware name: Bananapi BPI-R64 (DT)
+>>>> [    1.110541] Workqueue: events dbs_work_handler
+>>>> [    1.114988] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS
+>>>> BTYPE=--)
+>>>> [    1.121944] pc : regulator_check_voltage+0xb0/0xf0
+>>>> [    1.126728] lr : regulator_set_voltage_unlocked+0x88/0x110
+>>>> [    1.129638] mmc1: host does not support reading read-only switch,
+>>>> assuming write-enable
+>>>> [    1.132207] sp : ffffffc00956bb30
+>>>> [    1.132209] x29: ffffffc00956bb30 x28: ffffff8000efb400 x27:
+>>>> 0000000000000024
+>>>> [    1.132219] x26: 00000000001312d0 x25: 0000000000118c30 x24:
+>>>> 00000000001312d0
+>>>> [    1.132227] x23: 0000000000149970
+>>>> [    1.146036] mmc1: new high speed SDHC card at address e624
+>>>> [    1.150642]  x22: ffffff800038f800
+>>>> [    1.159192] mmcblk1: mmc1:e624 SL16G 14.8 GiB
+>>>> [    1.161068]  x21: ffffff8000efb100
+>>>> [    1.161072] x20: 00000000001312d0
+>>>> [    1.175424] GPT:partition_entry_array_crc32 values don't match:
+>>>> 0xa0b5ce6d != 0xab54d286
+>>>> [    1.177757]  x19: 0000000000000000 x18: 00000000799b2550
+>>>> [    1.181067] GPT:Primary header thinks Alt. header is not at the
+>>>> end of the disk.
+>>>> [    1.189143] x17: 0000000000000003 x16: 0000000000000001 x15:
+>>>> 0000000000000000
+>>>> [    1.189151] x14: 0000000000000000 x13: 0000000000000146 x12:
+>>>> 00000000fa83b2da
+>>>> [    1.189159] x11: 000000000000013d x10: 0000000000000850
+>>>> [    1.194472] GPT:305184 != 31116287
+>>>> [    1.201842]  x9 : ffffffc00956b910
+>>>> [    1.201846] x8 : ffffff8000b9edf0 x7 : 0000000000000001
+>>>> [    1.208970] GPT:Alternate GPT header not at the end of the disk.
+>>>> [    1.216092]  x6 : 00000000001312d0
+>>>> [    1.216095] x5 : 0000000000118c30 x4 : 0000000000000000 x3 :
+>>>> 0000000000000000
+>>>> [    1.216103] x2 : ffffffc00956bb68 x1 : ffffffc00956bb6c
+>>>> [    1.221321] GPT:305184 != 31116287
+>>>> [    1.224706]  x0 : ffffff800038f800
+>>>> [    1.228095] GPT: Use GNU Parted to correct GPT errors.
+>>>> [    1.233307]
+>>>> [    1.233309] Call trace:
+>>>> [    1.233312]  regulator_check_voltage+0xb0/0xf0
+>>>> [    1.242680] FIT: Selected configuration:
+>>>> "config-mt7622-bananapi-bpi-r64-pcie1" (OpenWrt bananapi_bpi-r64
+>>>> with mt7622-bananapi-bpi-r64-pcie1)
+>>>> [    1.242694]  regulator_set_voltage+0x3c/0x64
+>>>> [    1.249831] FIT:           kernel sub-image
+>>>> 0x00001000..0x0052fd0a "kernel-1" (ARM64 OpenWrt Linux-6.1-rc2)
+>>>> [    1.255030]  mtk_cpufreq_voltage_tracking+0x11c/0x26c
+>>>> [    1.255039]  mtk_cpufreq_set_target+0x1c4/0x350
+>>>> [    1.258444] FIT:          flat_dt sub-image
+>>>> 0x00530000..0x005380c5 "fdt-1" (ARM64 OpenWrt bananapi_bpi-r64
+>>>> device tree blob)
+>>>> [    1.261820]  __cpufreq_driver_target+0x2f4/0x674
+>>>> [    1.261826]  od_dbs_update+0xb8/0x19c
+>>>> [    1.266969] FIT:          flat_dt sub-image
+>>>> 0x00539000..0x0053911a "fdt-mt7622-bananapi-bpi-r64-pcie1" (ARM64
+>>>> OpenWrt bananapi_bpi-r64 device tree overlay
+>>>> mt7622-bananapi-bpi-r64-pcie1)
+>>>> [    1.268431]  dbs_work_handler+0x3c/0x7c
+>>>> [    1.270883] FIT:          flat_dt sub-image
+>>>> 0x0053a000..0x0053a20f "fdt-mt7622-bananapi-bpi-r64-sata" (ARM64
+>>>> OpenWrt bananapi_bpi-r64 device tree overlay
+>>>> mt7622-bananapi-bpi-r64-sata)
+>>>> [    1.275297]  process_one_work+0x200/0x3a0
+>>>> [    1.287998] FIT:       filesystem sub-image
+>>>> 0x0053b000..0x00859fff "rootfs-1" (ARM64 OpenWrt bananapi_bpi-r64
+>>>> rootfs)
+>>>> [    1.292237]  worker_thread+0x170/0x4c0
+>>>> [    1.292244]  kthread+0xd4/0xe0
+>>>> [    1.302066] FIT: selecting configured loadable "rootfs-1" to be
+>>>> root filesystem
+>>>> [    1.307092]  ret_from_fork+0x10/0x20
+>>>> [    1.311631]  mmcblk1: p1 p2 p3 p4 p5 p6 p65(rootfs-1)
+>>>> p66(rootfs_data) p128
+>>>> [    1.322903] Code: 6b04001f 54fffe6b 2a0003e4 17fffff3 (d4210000)
+>>>> [    1.413322] ---[ end trace 0000000000000000 ]---
+>>> The complete log can be found here:
+>>> https://gist.githubusercontent.com/PolynomialDivision/395d009c84b426d780549c5fa1f64ff1/raw/886d621d2bf6f03429586adf8a14a6c37c8d8a7d/mt7622-6-1.log
+>>>
+>>> Reverting commit "cpufreq: mediatek: Refine
+>>> mtk_cpufreq_voltage_tracking()" fixes the kernel bug:
+>>> https://github.com/torvalds/linux/commit/6a17b3876bc8303612d7ad59ecf7cbc0db418bcd
+>>>
+>>> The revert commit can be found here:
+>>> https://github.com/PolynomialDivision/openwrt/commit/1df941d0334000e3aced43b7d50cdac0da8bf427
+>>>
+>>> The branch I use to build the 6.1rc2 on a Banana Pi R64 can be found
+>>> here:
+>>> https://github.com/PolynomialDivision/openwrt/commits/bump-mt7622-rebase
+>>>
+>>
+>> Thanks for the report.
+>> Could you test with a plain upstream kernel? That would help us to
+>> verify that this is a upstream problem and not introduced by some
+>> openwrt patches.
+>>
+>> Regards,
+>> Matthias
+
+#regzbot ignore-activity
