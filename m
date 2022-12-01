@@ -2,30 +2,30 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0AE963FAAA
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 23:39:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E8063FAB8
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 23:40:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231271AbiLAWjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 17:39:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S231558AbiLAWkX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 17:40:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiLAWjI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 17:39:08 -0500
+        with ESMTP id S231434AbiLAWkE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 17:40:04 -0500
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22276BEC4A;
-        Thu,  1 Dec 2022 14:39:06 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EBE6AC4CCD;
+        Thu,  1 Dec 2022 14:39:53 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6156D2B;
-        Thu,  1 Dec 2022 14:39:12 -0800 (PST)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DCB82B;
+        Thu,  1 Dec 2022 14:40:00 -0800 (PST)
 Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AE193F73D;
-        Thu,  1 Dec 2022 14:39:03 -0800 (PST)
-Message-ID: <927e4ffc-8400-b615-2d58-9e88ee4bdc3c@arm.com>
-Date:   Thu, 1 Dec 2022 23:38:37 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A228E3F73D;
+        Thu,  1 Dec 2022 14:39:51 -0800 (PST)
+Message-ID: <f06321f0-def6-6f9d-b72f-f700e7e9a60a@arm.com>
+Date:   Thu, 1 Dec 2022 23:39:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] sched/uclamp: Fix a uninitialized variable warnings
+Subject: Re: [PATCH 2/3] sched/fair: Fixes for capacity inversion detection
 Content-Language: en-US
 To:     Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -36,13 +36,11 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
         Xuewen Yan <xuewen.yan94@gmail.com>,
         Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
 References: <20221127141742.1644023-1-qyousef@layalina.io>
- <20221127141742.1644023-2-qyousef@layalina.io>
+ <20221127141742.1644023-3-qyousef@layalina.io>
 From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20221127141742.1644023-2-qyousef@layalina.io>
+In-Reply-To: <20221127141742.1644023-3-qyousef@layalina.io>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -55,100 +53,64 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 27/11/2022 15:17, Qais Yousef wrote:
-> Addresses the following warnings:
+> Traversing the Perf Domains requires rcu_read_lock() to be held and is
+> conditional on sched_energy_enabled(). rcu_read_lock() is held while in
+> load_balance(), add an assert to ensure this is always the case.
 > 
->> config: riscv-randconfig-m031-20221111
->> compiler: riscv64-linux-gcc (GCC) 12.1.0
->>
->> smatch warnings:
->> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
->> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
+> Also skip capacity inversion detection for our own pd; which was an
+> error.
 > 
-> Fixes: 244226035a1f ("sched/uclamp: Fix fits_capacity() check in feec()")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
+> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
+> Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
 > Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
 > ---
->  kernel/sched/fair.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>  kernel/sched/fair.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 > 
 > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 4cc56c91e06e..89dadaafc1ec 100644
+> index 89dadaafc1ec..7c0dd57e562a 100644
 > --- a/kernel/sched/fair.c
 > +++ b/kernel/sched/fair.c
-> @@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  	eenv_task_busy_time(&eenv, p, prev_cpu);
+> @@ -8856,16 +8856,22 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+>  	 *   * Thermal pressure will impact all cpus in this perf domain
+>  	 *     equally.
+>  	 */
+> -	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> +	if (sched_energy_enabled()) {
+>  		unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+>  		struct perf_domain *pd = rcu_dereference(rq->rd->pd);
 >  
->  	for (; pd; pd = pd->next) {
-> +		unsigned long util_min = p_util_min, util_max = p_util_max;
->  		unsigned long cpu_cap, cpu_thermal_cap, util;
->  		unsigned long cur_delta, max_spare_cap = 0;
->  		unsigned long rq_util_min, rq_util_max;
-> -		unsigned long util_min, util_max;
->  		unsigned long prev_spare_cap = 0;
->  		int max_spare_cap_cpu = -1;
->  		unsigned long base_energy;
-> @@ -7258,10 +7258,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
->  			 * aligned with sched_cpu_util().
->  			 */
->  			if (uclamp_is_used()) {
-> -				if (uclamp_rq_is_idle(cpu_rq(cpu))) {
-> -					util_min = p_util_min;
-> -					util_max = p_util_max;
-> -				} else {
-> +				if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
->  					/*
->  					 * Open code uclamp_rq_util_with() except for
->  					 * the clamp() part. Ie: apply max aggregation
+>  		rq->cpu_capacity_inverted = 0;
+>  
+> +		SCHED_WARN_ON(!rcu_read_lock_held());
 
-Can we use `struct rq *rq = cpu_rq(cpu)` to reduce nesting and comply
-with 80 columns line length?
+This will trigger in CPU hotplug via build_sched_domains() ->
+update_group_capacity() -> update_cpu_capacity() on an EAS system.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 89dadaafc1ec..6a2fc2ca5078 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7239,6 +7239,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 		eenv.pd_cap = 0;
- 
- 		for_each_cpu(cpu, cpus) {
-+			struct rq *rq = cpu_rq(cpu);
-+
- 			eenv.pd_cap += cpu_thermal_cap;
- 
- 			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
-@@ -7257,21 +7259,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			 * much capacity we can get out of the CPU; this is
- 			 * aligned with sched_cpu_util().
- 			 */
--			if (uclamp_is_used()) {
--				if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
--					/*
--					 * Open code uclamp_rq_util_with() except for
--					 * the clamp() part. Ie: apply max aggregation
--					 * only. util_fits_cpu() logic requires to
--					 * operate on non clamped util but must use the
--					 * max-aggregated uclamp_{min, max}.
--					 */
--					rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
--					rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
--
--					util_min = max(rq_util_min, p_util_min);
--					util_max = max(rq_util_max, p_util_max);
--				}
-+			if (uclamp_is_used() && !uclamp_rq_is_idle(rq)) {
-+				/*
-+				 * Open code uclamp_rq_util_with() except for
-+				 * the clamp() part. Ie: apply max aggregation
-+				 * only. util_fits_cpu() logic requires to
-+				 * operate on non clamped util but must use the
-+				 * max-aggregated uclamp_{min, max}.
-+				 */
-+				rq_util_min = uclamp_rq_get(rq, UCLAMP_MIN);
-+				rq_util_max = uclamp_rq_get(rq, UCLAMP_MAX);
-+
-+				util_min = max(rq_util_min, p_util_min);
-+				util_max = max(rq_util_max, p_util_max);
- 			}
- 			if (!util_fits_cpu(util, util_min, util_max, cpu))
- 				continue;
+> +
+>  		for (; pd; pd = pd->next) {
+>  			struct cpumask *pd_span = perf_domain_span(pd);
+>  			unsigned long pd_cap_orig, pd_cap;
+>  
+> +			/* We can't be inverted against our own pd */
+> +			if (cpumask_test_cpu(cpu_of(rq), pd_span))
+> +				continue;
+> +
+
+This should fix the issue with `cpu` function parameter in its own PD.
+
+>  			cpu = cpumask_any(pd_span);
+>  			pd_cap_orig = arch_scale_cpu_capacity(cpu);
+>  
+
+I still don't get the benefit of the CPU capacity inversion patches in
+tip/sched/core which should be fixed by this patch:
+
+aa69c36f31aa - sched/fair: Consider capacity inversion in
+               util_fits_cpu()
+44c7b80bffc3 - sched/fair: Detect capacity inversion
+
+I have to ask again. Why should we use thermal_load_avg() instead of
+arch_scale_thermal_pressure() for a CPUx in `CPU capacity inversion
+state` (i.e. w/ higher `CPU capacity orig` but lower `CPU capacity` than
+CPUy?
