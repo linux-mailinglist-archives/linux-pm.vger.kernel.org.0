@@ -2,119 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD34F63EDE1
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 11:33:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD4963EDFC
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 11:37:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiLAKdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 05:33:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S229892AbiLAKhj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 05:37:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiLAKdV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 05:33:21 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9403731DD6;
-        Thu,  1 Dec 2022 02:32:52 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D57E321B1C;
-        Thu,  1 Dec 2022 10:32:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669890769; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y2yuajcyNF+KtJPwi+UUylTPzDzWLHsw1+1hqHwfGNw=;
-        b=ckALftw8qzsnAkNw5MgvyuuU71o9wQpiLuaktpcS+hJt/efqDV1ds8P8Tttvd1NFm6/kiL
-        XuDOtSg6uhg/rn9/9CxHXtsmTb4Er7kJyC1/3XQQMSmhkK3zXT/HRya14/g+4uv905YHRn
-        eb3PDwSYIQHjWCUWJe5z67aunsI+Ngw=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 691432C141;
-        Thu,  1 Dec 2022 10:32:49 +0000 (UTC)
-Date:   Thu, 1 Dec 2022 11:32:46 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 0/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <Y4iCzsAeEgaBZ4o4@alley>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
- <d31b4a2b-fc6b-4084-9cac-ced83a37a8ad@t-8ch.de>
+        with ESMTP id S230116AbiLAKhg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 05:37:36 -0500
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 937832EA
+        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 02:37:32 -0800 (PST)
+Received: by mail-lj1-x233.google.com with SMTP id x11so1383782ljh.7
+        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 02:37:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CIit3J5M4bcdITVWI6ie/I3FGXLXgR6m6GwfusmdrJE=;
+        b=oRuEXXERKZYYDV9WimFhxi+n+W16yYt2dtOc7P5QG08IRUKnts1REggwWcSWA2K7GS
+         CFWqZfYbNsg/vcgWQQ6gDHeVl1xTmW6BEWAWnS5pbY+gqcMzZsnq8L7hVPgEOrI+27Hw
+         SPbvb6eW8+fT07BwkeFkFtubmtV5KF3Jvsky2iUBjMnzlpMQycRNe3Ezvx7xJEAcUhNG
+         +Lgp1rl1ekNfciXbfK+C+cv2ofczu6yn0K8XW9aEDCNpWEGEK8awHimGAY5/lhZxjwwj
+         5mTVf+6Jg1X0Nm1Krh54WT05EljJ43fEtjcKBJ7mDa00Sxbyc6tQuE766VVTCZjfEOXZ
+         igYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CIit3J5M4bcdITVWI6ie/I3FGXLXgR6m6GwfusmdrJE=;
+        b=OZ/6qB73gI4RldPzVAmYKlWH703rEXZga4Hm7oUthIQnO4xhvF/ej85rxEywXSLqyi
+         f02VuFxWWpAlPWPTitr5DVGbyDFbi0rojYY2QqQ53ZiYHi4ho6u/ZTLKj6+CxLtv78Sq
+         0fyIOLMciXRw9nwZzkZWAvkm/thAwP0pHFjsyKpy0TCp7bfx0TGHEHXvUOXSUNmrFSYB
+         aiagT/6r/qxY026o1qsWRygflfVQwoib44giVvpHUWQspMYdU1Npfw/oR3VWjdZbqUwZ
+         EKhpvuau+6RdqjOhaK0nU2LltpR/EZqpNOd1gX5wn+YNrEOilPtwEuRBUxeb/GmCNGUc
+         W2oA==
+X-Gm-Message-State: ANoB5pn7kwCPZpbitTCm2kcecf7cslKFtou34aCQnF+1xDuAdHMKwCkJ
+        Ivh7GGMICM7AlsfZde2wbOZK6Q==
+X-Google-Smtp-Source: AA0mqf7ynKkshYTZoTQ3GRH//Z1ZR04OWdvwe5TEjKbt7pYwLviofbMpiBkGttO94vlLg2DiroAsTg==
+X-Received: by 2002:a2e:940f:0:b0:277:5df:9728 with SMTP id i15-20020a2e940f000000b0027705df9728mr14128145ljh.337.1669891050977;
+        Thu, 01 Dec 2022 02:37:30 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s21-20020a056512203500b004ab98cd5644sm601503lfs.182.2022.12.01.02.37.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Dec 2022 02:37:30 -0800 (PST)
+Message-ID: <dfd2d1b5-4d1b-2381-ad11-5ea9e6654a55@linaro.org>
+Date:   Thu, 1 Dec 2022 11:37:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d31b4a2b-fc6b-4084-9cac-ced83a37a8ad@t-8ch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 01/12] dt-bindings: display: msm: Rename mdss node name
+ in example
+Content-Language: en-US
+To:     Adam Skladowski <a39.skl@gmail.com>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221130200950.144618-1-a39.skl@gmail.com>
+ <20221130200950.144618-2-a39.skl@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221130200950.144618-2-a39.skl@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu 2022-12-01 00:37:15, Thomas Weiﬂschuh wrote:
-> On 2022-11-30 18:57+0100, Rafael J. Wysocki wrote:
-> > On Fri, Nov 25, 2022 at 8:10 PM Thomas Weiﬂschuh <linux@weissschuh.net> wrote:
-> >>
-> >> This series adds new printk wrapper macros pr_<level>_cont().
-> >> These create continuation messages with an explicit level.
-> >>
-> >> Explicit levels are useful when a continuation message is split from its main
-> >> message. Without the explicit level KERN_DEFAULT ("warn" by default) is used
-> >> which can lead to stray partial log messages when filtering by level.
-> >>
-> >> Also checkpatch is modified to recommend the new macros over plain pr_cont().
-> >>
-> >> Lastly the new macros are used in kernel/power/process.c as this file uses
-> >> continuation messages during system suspend-resume which creates a high
-> >> likelyhood of interspersed messages.
-> > 
-> > Well, if process.c is the only problematic piece of code in this
-> > respect, I'm not sure if adding the new infrastructure for its benefit
-> > alone is worth it, because it can very well do without pr_cont() at
-> > all.
+On 30/11/2022 21:09, Adam Skladowski wrote:
+> Follow other YAMLs and replace mdss name into display-subystem.
 > 
-> In general all usages of pr_cont() are problematic.
-> Any continuation can be split from its main message, leading to misleved
-> continuations.
-
-In most cases this happens "only" when a message from another CPU
-or interrupt context is printed in parallel.
-
-> process.c is just the one that I noticed reliably hitting this problem on my
-> machine.
-
-The situation in process.c was even worse. The error message was
-printed in the middle of the to-be-continued message. As a result,
-the loglevel of the pr_cont() part was always (reliably) broken
-when the error message was printed.
+> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
 
 
-> > Please see the patch below (compiled only, sorry for gmail-induced
-> > white space damage).  I'll submit it properly later if it works for
-> > everyone.
-> 
-> The patch looks fine to me and getting rid of usages of pr_cont() seems to be
-> the better aproach where it is possible.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I agree. It is always better to avoid pr_cont() when possible.
+Best regards,
+Krzysztof
 
-> Petr: do you still want me to submit the new macros even if it is not used
-> directly anymore?
-
-Good question. In general, new API should not be added if there is
-no user. So, I would prefer to do not add the API if the problem
-will be fixed without it.
-
-Best Regards,
-Petr
