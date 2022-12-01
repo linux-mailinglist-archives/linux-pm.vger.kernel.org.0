@@ -2,191 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03E1063EF25
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 12:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 227F663F012
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 13:01:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiLALPy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 06:15:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57534 "EHLO
+        id S230377AbiLAMBa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 07:01:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiLALOy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 06:14:54 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FAE0B68DA
-        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 03:08:53 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id fy37so3296668ejc.11
-        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 03:08:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SFyJfR2WUZBDHeWemxJgoKouNxxtAGHlmHCCEO9QQfg=;
-        b=ihhHeh07lyLQ9+bLJAT02xtbEUUwBhwmY6NbvI/an2JMfUbxhGOKl7udb7lLh5mId9
-         jw5dKTuvmRP+w2K8ZYng51eJLaluDUotqflfy43/10yqWgw/yG+fgTeB0ukeRPMWa9sh
-         dgPYzjd9Y05h6Utm7j5Kxf9v/xCIYLObtVbqg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SFyJfR2WUZBDHeWemxJgoKouNxxtAGHlmHCCEO9QQfg=;
-        b=I5FzgAu+0H2zQ1GBgb7zUV2GO1oNODHfoZRh6mvwVbnW0riSuWvJfegG/ZrbZ59bhx
-         6goYUYEyzK0G0u6JZE2MEM7JAqwm7PKJGUtf/xCvjW0flHipqiYST2kStmwq4aQL9jc+
-         dwN98stgQkejVIpkDHypGBPx5twSinP8c7mIcAn9XDRFqXgHNrfRr7ItqaZJeMJgOCna
-         2IEDeoAMszLoaC/3Ugo/TfsXoFRTzIYNoU9uAu0RoA8AObH5vVeTVq5eWXJQWDtHZioo
-         9icmRtw8DoRzqoXvQ2AaPZY1bXTs8rAtDPGz7KzNMk/5I6RzTVm6Ur5xX5Hn6Ul3SLpz
-         VKlg==
-X-Gm-Message-State: ANoB5pngk0tWT9ia8eQVRBQdl3VuSO5jrTGO0e0mmZe4Xx5BeX2rcV5+
-        p3Ir4GJ4wmqmzppHfMzLMGLqBQ==
-X-Google-Smtp-Source: AA0mqf5n8q8ZMG+bv3DehJEYX5ANkxpTsyIzmCnCUsZmiYp8gdzbFTHhMnsW4dhR0VzoX//sUAQsMg==
-X-Received: by 2002:a17:906:7f09:b0:7c0:b3a8:a5f9 with SMTP id d9-20020a1709067f0900b007c0b3a8a5f9mr1338546ejr.154.1669892932820;
-        Thu, 01 Dec 2022 03:08:52 -0800 (PST)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:f554:724a:f89a:73db])
-        by smtp.gmail.com with ESMTPSA id v17-20020a170906293100b0078e0973d1f5sm1663824ejd.0.2022.12.01.03.08.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 03:08:52 -0800 (PST)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Thu, 01 Dec 2022 12:08:23 +0100
-Subject: [PATCH v8 3/3] ASoC: SOF: Fix deadlock when shutdown a frozen userspace
+        with ESMTP id S229598AbiLAMB2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 07:01:28 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B889793E;
+        Thu,  1 Dec 2022 04:01:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1669896087; x=1701432087;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GfIiJBr3rgkLbVVlt2Amfmbman0nvV3Uioq9A1ZnpGY=;
+  b=WT6rOO29aEDFJxED3uQWX64HMsR9erYroSRjv5VNh+9zpFGtiKhLnouA
+   ZQ0xeKRsDNxz31MyOm+LM0gBYqRcgvnYQ98U1+UV+2km+zG1CaEYzM/Hz
+   x3Hl1FB98www6IP6hwxyJU98ZBhvvsoKhVhCI3VuXcajt9cuLP/iZITXZ
+   iqBVv7sqUQ8lnwiV5Lo7J0t/tODhdxv2il8/2p8z1n4m3kHfESc1ivaKW
+   /M1+f76L7IFhhAhAjQmOvW+yee0LQZffzHZJHD4NTCCOAXnfB31iio1Ei
+   8hurXfbVLB/kWj8foRS06+y9tw8Ry3smdEG9LDkfnmt9EFb7I8tZDcikU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="299034181"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="299034181"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 04:01:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10547"; a="644617684"
+X-IronPort-AV: E=Sophos;i="5.96,209,1665471600"; 
+   d="scan'208";a="644617684"
+Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 01 Dec 2022 04:01:24 -0800
+Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p0iFn-000CWX-1d;
+        Thu, 01 Dec 2022 12:01:23 +0000
+Date:   Thu, 01 Dec 2022 20:01:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS WITH WARNING
+ 3a412a9c62334b8d9327b3759548d22cca3effe3
+Message-ID: <6388978a.9d+LHb1cp7RaFrtk%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221127-snd-freeze-v8-3-3bc02d09f2ce@chromium.org>
-References: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
-In-Reply-To: <20221127-snd-freeze-v8-0-3bc02d09f2ce@chromium.org>
-To:     Juergen Gross <jgross@suse.com>, Mark Brown <broonie@kernel.org>,
-        Chromeos Kdump <chromeos-kdump@google.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Len Brown <len.brown@intel.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org
-Cc:     kexec@lists.infradead.org, alsa-devel@alsa-project.org,
-        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
-        sound-open-firmware@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-efi@vger.kernel.org,
-        xen-devel@lists.xenproject.org
-X-Mailer: b4 0.11.0-dev-696ae
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2398; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=GWM+B74HgZm8hg965LkIrG7utJXhrwWC6OA28kyyUjA=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjiIs5X8qunJcdzh4yNadWVeViZgDn3gq/06nr8kdj
- kdUAnBmJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY4iLOQAKCRDRN9E+zzrEiBePD/
- 4n9U/k8s8PcSMHwaDWquOwoHUGMa1OTSXQAeS+zkfPMUpMhgcoTNo49nWa43GN+Y810XaYiML51562
- eLirizXRSalXPpYVLlUge+rUD8YTV54zGi5OoX528K7lwHG8z+THm4BSy0/gmpmwdgB3GttlQH5Xh0
- P4IRFzzQUndzF5+V+rD7ZDsOIqsqHLEl2xVrPlelt3OtQTf7xzm+FTwEgxz8fg42kpdkTUjKNidLBa
- PVVihXzxaPSrNmIcrlXDWrTscOrbX2UGlosoMD4NyfKwacu0juZk+QLlYCoIBu78E/d04Top6bsU/I
- uqQOeIB3UrGvmdWb9fO9H/WX4GIFLG+w7VCfaLbEd22SI+WITCvp/dDA/ZO8fzX1wgQBHvFZRLIuM4
- 0mqtOEszlCVB4pMNrAVJcSULhKWOxrKI7MkUyf/otZRJ67hrWlDDaOmlBsOkJTF1T5obHSRoblMSSE
- UwMVB1vp64JD4LAxJGmFWSPjZ3BMJJK0mblOTi/qOiMm2QR7iraSkhMsUcpx9HI4IeSwbTJszKQ1Hb
- BgqjW0c2l0BpHzIlEvkoUHxIGQdKJLMfmy8GbTMKne5zBzPRx9+b+cGgNvRa/zWp72+v9Fm0r2l8rk
- 2c1+78340GIwSb9Ffj750Evz1ISy6b5FAAiC5q+SWoZEFW2mWMAN+3crcCZw==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-If we are shutting down due to kexec and the userspace is frozen, the
-system will stall forever waiting for userspace to complete.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 3a412a9c62334b8d9327b3759548d22cca3effe3  Merge branch 'pm-cpufreq' into bleeding-edge
 
-Do not wait for the clients to complete in that case.
+Warning reports:
 
-This fixes:
+https://lore.kernel.org/oe-kbuild-all/202212011201.ZdXxc4K3-lkp@intel.com
+https://lore.kernel.org/oe-kbuild-all/202212011819.GxYjfhWJ-lkp@intel.com
 
-[   84.943749] Freezing user space processes ... (elapsed 0.111 seconds) done.
-[  246.784446] INFO: task kexec-lite:5123 blocked for more than 122 seconds.
-[  246.819035] Call Trace:
-[  246.821782]  <TASK>
-[  246.824186]  __schedule+0x5f9/0x1263
-[  246.828231]  schedule+0x87/0xc5
-[  246.831779]  snd_card_disconnect_sync+0xb5/0x127
-...
-[  246.889249]  snd_sof_device_shutdown+0xb4/0x150
-[  246.899317]  pci_device_shutdown+0x37/0x61
-[  246.903990]  device_shutdown+0x14c/0x1d6
-[  246.908391]  kernel_kexec+0x45/0xb9
+Warning: (recently discovered and may have been fixed)
 
-And:
+include/linux/kern_levels.h:5:25: warning: format '%llx' expects argument of type 'long long unsigned int', but argument 2 has type 'unsigned int' [-Wformat=]
+kernel/power/snapshot.c:2267:7: warning: format specifies type 'unsigned long long' but the argument has type 'phys_addr_t' (aka 'unsigned int') [-Wformat]
 
-[  246.893222] INFO: task kexec-lite:4891 blocked for more than 122 seconds.
-[  246.927709] Call Trace:
-[  246.930461]  <TASK>
-[  246.932819]  __schedule+0x5f9/0x1263
-[  246.936855]  ? fsnotify_grab_connector+0x5c/0x70
-[  246.942045]  schedule+0x87/0xc5
-[  246.945567]  schedule_timeout+0x49/0xf3
-[  246.949877]  wait_for_completion+0x86/0xe8
-[  246.954463]  snd_card_free+0x68/0x89
-...
-[  247.001080]  platform_device_unregister+0x12/0x35
+Warning ids grouped by kconfigs:
 
-Cc: stable@vger.kernel.org
-Fixes: 83bfc7e793b5 ("ASoC: SOF: core: unregister clients and machine drivers in .shutdown")
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- sound/soc/sof/core.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+gcc_recent_errors
+|-- arm-allyesconfig
+|   `-- include-linux-kern_levels.h:warning:format-llx-expects-argument-of-type-long-long-unsigned-int-but-argument-has-type-unsigned-int
+`-- mips-allyesconfig
+    `-- include-linux-kern_levels.h:warning:format-llx-expects-argument-of-type-long-long-unsigned-int-but-argument-has-type-unsigned-int
+clang_recent_errors
+|-- i386-randconfig-a011-20221128
+|   `-- kernel-power-snapshot.c:warning:format-specifies-type-unsigned-long-long-but-the-argument-has-type-phys_addr_t-(aka-unsigned-int-)
+`-- powerpc-randconfig-r013-20221128
+    `-- kernel-power-snapshot.c:warning:format-specifies-type-unsigned-long-long-but-the-argument-has-type-phys_addr_t-(aka-unsigned-int-)
 
-diff --git a/sound/soc/sof/core.c b/sound/soc/sof/core.c
-index 3e6141d03770..9587b6a85103 100644
---- a/sound/soc/sof/core.c
-+++ b/sound/soc/sof/core.c
-@@ -9,6 +9,8 @@
- //
- 
- #include <linux/firmware.h>
-+#include <linux/kexec.h>
-+#include <linux/freezer.h>
- #include <linux/module.h>
- #include <sound/soc.h>
- #include <sound/sof.h>
-@@ -484,9 +486,10 @@ int snd_sof_device_shutdown(struct device *dev)
- 	 * make sure clients and machine driver(s) are unregistered to force
- 	 * all userspace devices to be closed prior to the DSP shutdown sequence
- 	 */
--	sof_unregister_clients(sdev);
--
--	snd_sof_machine_unregister(sdev, pdata);
-+	if (!(kexec_in_progress() && pm_freezing())) {
-+		sof_unregister_clients(sdev);
-+		snd_sof_machine_unregister(sdev, pdata);
-+	}
- 
- 	if (sdev->fw_state == SOF_FW_BOOT_COMPLETE)
- 		return snd_sof_shutdown(sdev);
+elapsed time: 838m
+
+configs tested: 62
+configs skipped: 2
+
+gcc tested configs:
+arm                                 defconfig
+arc                               allnoconfig
+alpha                             allnoconfig
+i386                              allnoconfig
+arm                               allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+x86_64                           rhel-8.3-syz
+s390                                defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+um                           x86_64_defconfig
+um                             i386_defconfig
+s390                             allyesconfig
+powerpc                           allnoconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                              defconfig
+sh                               allmodconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                               rhel-8.3
+arc                  randconfig-r043-20221128
+ia64                             allmodconfig
+x86_64                           allyesconfig
+i386                 randconfig-a002-20221128
+i386                 randconfig-a003-20221128
+i386                 randconfig-a001-20221128
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+i386                 randconfig-a005-20221128
+x86_64                        randconfig-a011
+i386                 randconfig-a004-20221128
+i386                 randconfig-a006-20221128
+i386                                defconfig
+x86_64               randconfig-a002-20221128
+x86_64               randconfig-a001-20221128
+x86_64               randconfig-a003-20221128
+x86_64               randconfig-a004-20221128
+x86_64               randconfig-a005-20221128
+i386                             allyesconfig
+x86_64               randconfig-a006-20221128
+arm64                            allyesconfig
+arm                              allyesconfig
+
+clang tested configs:
+hexagon              randconfig-r045-20221128
+riscv                randconfig-r042-20221128
+hexagon              randconfig-r041-20221128
+s390                 randconfig-r044-20221128
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                 randconfig-a012-20221128
+i386                 randconfig-a011-20221128
+i386                 randconfig-a013-20221128
+i386                 randconfig-a015-20221128
+i386                 randconfig-a014-20221128
+i386                 randconfig-a016-20221128
 
 -- 
-2.39.0.rc0.267.gcb52ba06e7-goog-b4-0.11.0-dev-696ae
+0-DAY CI Kernel Test Service
+https://01.org/lkp
