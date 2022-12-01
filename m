@@ -2,68 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12B0963FA8B
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 23:27:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0AE963FAAA
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 23:39:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiLAW06 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 17:26:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
+        id S231271AbiLAWjJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 17:39:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiLAW04 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 17:26:56 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6AB5AE3D
-        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 14:26:55 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id s7so3002225plk.5
-        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 14:26:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3OB2gxc6zE/eDGAkTZ84q/Ynk0mkqUy8h0mwl/rBk5Y=;
-        b=LNpfCUfwefO50A7FL81mSyfyOzj9zHgyBEkGYZcqUfWIu4gGcE76uaJSA3mehLaCdZ
-         UBmoeVe1jkm/mwvkz50qFDy8GhOXVVOPOhvMO/59Pm52zIMtSNIu0mb3jfTqgsVZIW0c
-         P6kGGnGLvsh33ebRS6MED7567w0a0JBu/pbCZf3seXLe2pbOXIQCVigJFYD3MiTH0zp0
-         T5F32pNk82PrCPIe8xHmAc0jpjVZq2kagxDA0QKIsCWauz04NRE/Daapd/NFqxoR0mv/
-         AxdIWgXI37yiUFbUEREOBAvBu+YolsGqpfbVvDViLrkMkAqigAnzqLQQY1yGQiZ5HdpG
-         05vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3OB2gxc6zE/eDGAkTZ84q/Ynk0mkqUy8h0mwl/rBk5Y=;
-        b=TPsGFcZziwT2KlIEV7SEIRwGy2Pvp53jZJ4tADcc0Dpv8bwZSekdruzGPhXl6+5DUd
-         aZ5s7cqUd712+c/jZa4GhJL9vDk9lHo+e0CJvY66XkD/IJbJa+AiNfCPjSBQr4zeGi5q
-         WzIEcnHFvZKgP3c/rIVtV9HnfdAuoU/hwWE7yIq2lSBifXPvB+iSZmtTh2k9mmB1ZYDT
-         YjdDpda+X3PQc/Ffg6ih+vVl+b64Lpd3aHEF36amDLPhEWEBvoDho6ZzJ3xL/OJ5vL0+
-         HVJWVhHl6r7gfn31MSCxbAZIEgA28iQyjk1O3S0YVNv3P4Lro8EY0/FFKK6DoJpBMtvj
-         u20g==
-X-Gm-Message-State: ANoB5pmJfT802Sq2eZ9K6dQdlnST4KZHJiPkIh/RMseEoOWeX7D/rFic
-        z6sv2jDiq/9obtFKToVYjPuwpg==
-X-Google-Smtp-Source: AA0mqf7NNn3mTVS5I4uVyN+nO2jRcO1Kt0wIsUx23cqrsdwg/26fzc68+176tezXPp/HpKqq7r7Qag==
-X-Received: by 2002:a17:90b:2642:b0:219:55d5:f30a with SMTP id pa2-20020a17090b264200b0021955d5f30amr14807330pjb.23.1669933614808;
-        Thu, 01 Dec 2022 14:26:54 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id c11-20020a170903234b00b00186c3afb49esm4056611plh.209.2022.12.01.14.26.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 14:26:53 -0800 (PST)
-Message-ID: <63892a2d.170a0220.96441.84a6@mx.google.com>
-Date:   Thu, 01 Dec 2022 14:26:53 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S230292AbiLAWjI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 17:39:08 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 22276BEC4A;
+        Thu,  1 Dec 2022 14:39:06 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6156D2B;
+        Thu,  1 Dec 2022 14:39:12 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8AE193F73D;
+        Thu,  1 Dec 2022 14:39:03 -0800 (PST)
+Message-ID: <927e4ffc-8400-b615-2d58-9e88ee4bdc3c@arm.com>
+Date:   Thu, 1 Dec 2022 23:38:37 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.1-rc7-101-g0ed70fd3fac1
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.1-rc7-101-g0ed70fd3fac1)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/3] sched/uclamp: Fix a uninitialized variable warnings
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>, Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+References: <20221127141742.1644023-1-qyousef@layalina.io>
+ <20221127141742.1644023-2-qyousef@layalina.io>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <20221127141742.1644023-2-qyousef@layalina.io>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,109 +54,101 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc7-101-g0=
-ed70fd3fac1)
+On 27/11/2022 15:17, Qais Yousef wrote:
+> Addresses the following warnings:
+> 
+>> config: riscv-randconfig-m031-20221111
+>> compiler: riscv64-linux-gcc (GCC) 12.1.0
+>>
+>> smatch warnings:
+>> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
+>> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
+> 
+> Fixes: 244226035a1f ("sched/uclamp: Fix fits_capacity() check in feec()")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+>  kernel/sched/fair.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 4cc56c91e06e..89dadaafc1ec 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  	eenv_task_busy_time(&eenv, p, prev_cpu);
+>  
+>  	for (; pd; pd = pd->next) {
+> +		unsigned long util_min = p_util_min, util_max = p_util_max;
+>  		unsigned long cpu_cap, cpu_thermal_cap, util;
+>  		unsigned long cur_delta, max_spare_cap = 0;
+>  		unsigned long rq_util_min, rq_util_max;
+> -		unsigned long util_min, util_max;
+>  		unsigned long prev_spare_cap = 0;
+>  		int max_spare_cap_cpu = -1;
+>  		unsigned long base_energy;
+> @@ -7258,10 +7258,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  			 * aligned with sched_cpu_util().
+>  			 */
+>  			if (uclamp_is_used()) {
+> -				if (uclamp_rq_is_idle(cpu_rq(cpu))) {
+> -					util_min = p_util_min;
+> -					util_max = p_util_max;
+> -				} else {
+> +				if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
+>  					/*
+>  					 * Open code uclamp_rq_util_with() except for
+>  					 * the clamp() part. Ie: apply max aggregation
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-1-rc7-101-g0ed70fd3fac1/
+Can we use `struct rq *rq = cpu_rq(cpu)` to reduce nesting and comply
+with 80 columns line length?
 
-Tree: pm
-Branch: testing
-Git Describe: v6.1-rc7-101-g0ed70fd3fac1
-Git Commit: 0ed70fd3fac1e58af85c571c2d003319eb24ce1a
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 89dadaafc1ec..6a2fc2ca5078 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7239,6 +7239,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		eenv.pd_cap = 0;
+ 
+ 		for_each_cpu(cpu, cpus) {
++			struct rq *rq = cpu_rq(cpu);
++
+ 			eenv.pd_cap += cpu_thermal_cap;
+ 
+ 			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
+@@ -7257,21 +7259,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			 * much capacity we can get out of the CPU; this is
+ 			 * aligned with sched_cpu_util().
+ 			 */
+-			if (uclamp_is_used()) {
+-				if (!uclamp_rq_is_idle(cpu_rq(cpu))) {
+-					/*
+-					 * Open code uclamp_rq_util_with() except for
+-					 * the clamp() part. Ie: apply max aggregation
+-					 * only. util_fits_cpu() logic requires to
+-					 * operate on non clamped util but must use the
+-					 * max-aggregated uclamp_{min, max}.
+-					 */
+-					rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+-					rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+-
+-					util_min = max(rq_util_min, p_util_min);
+-					util_max = max(rq_util_max, p_util_max);
+-				}
++			if (uclamp_is_used() && !uclamp_rq_is_idle(rq)) {
++				/*
++				 * Open code uclamp_rq_util_with() except for
++				 * the clamp() part. Ie: apply max aggregation
++				 * only. util_fits_cpu() logic requires to
++				 * operate on non clamped util but must use the
++				 * max-aggregated uclamp_{min, max}.
++				 */
++				rq_util_min = uclamp_rq_get(rq, UCLAMP_MIN);
++				rq_util_max = uclamp_rq_get(rq, UCLAMP_MAX);
++
++				util_min = max(rq_util_min, p_util_min);
++				util_max = max(rq_util_max, p_util_max);
+ 			}
+ 			if (!util_fits_cpu(util, util_min, util_max, cpu))
+ 				continue;
