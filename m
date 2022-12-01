@@ -2,140 +2,331 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E058363E9D4
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 07:21:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291E563EA0A
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 07:58:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbiLAGVc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 01:21:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59276 "EHLO
+        id S229775AbiLAG6Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 01:58:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbiLAGVb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 01:21:31 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC08FAB001;
-        Wed, 30 Nov 2022 22:21:30 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5874061E8F;
-        Thu,  1 Dec 2022 06:21:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC4F8C433D6;
-        Thu,  1 Dec 2022 06:21:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1669875689;
-        bh=1TShYY6JkDucSJo1cjYSsWtnGpEz8gTWzbxvY/gsAVc=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=Nmr6EadOg/rHV11uZ4icZPKLjWkG9u5exEWuXjcet49ziPi6lKPVIKjGUOYp6CcWx
-         Y12Z/NwkhsvhLIEHSbtm15Y2RB65kw6eZsRUaz2Phq9LxaG7FxUh1g9l8+F7qBS+HD
-         CGeOtlLQauyAR3MBwsA3p8GfaCD9Z9dbk/yh4BUovT3UVpuVYIqfDFshlSc0Qsgaat
-         xX1b8CE466ljiqmJHjjcrMiKQTkwBAH9gx4pQ3hDXQLOp5daBTG65U9wqGD+K0uJkf
-         MbDMzGCSBHmedPkE/bR2v0ikovVSHk5K7DiOGBkIqQXcHADL1iSgVygFDQE1SThq5o
-         Rv80Q+9vzjyTA==
-Date:   Thu, 01 Dec 2022 06:21:25 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>,
-        Conor Dooley <conor.dooley@microchip.com>
-CC:     linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S229449AbiLAG6P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 01:58:15 -0500
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014CC4B9A6;
+        Wed, 30 Nov 2022 22:58:14 -0800 (PST)
+Received: by mail-lf1-x136.google.com with SMTP id j4so1137580lfk.0;
+        Wed, 30 Nov 2022 22:58:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aHk4ubp9Ca3KujkAW0PO2oU0zwiL+OQVBVrVMDS+Mno=;
+        b=OZH8XOvhleFajWJqbCwM2m8XZEAsCFhIkykNg3JiaCM+PNgFxQ5QRNmX2twuE5aDNX
+         G7tFa8SoGtoTXeJx4oRx4OlKjbUtOBX7pzAcIhEqdzBjcOU3F63Rfkicd2Q2p0gIzodQ
+         o+NVwpxLnQWEyYOBpiFH5YESk4+2Zp+SUjZsCIFWDkS0ImhxNDuAiqMbLhZIUrmO3Fyj
+         LiHE3GbzQbrfOB39LBiyh0jgf0lN2jHtBtUW9r1exbC5U8Q/AwmD9kYUaRETf0z1Zzsg
+         K5MxFPFaR1OLl8I8I1DazxqwG/4cM6NvL9ngTX3KDCZDNF2n7J3mvmDDRrpXB3LYSA3R
+         8S+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aHk4ubp9Ca3KujkAW0PO2oU0zwiL+OQVBVrVMDS+Mno=;
+        b=ijFaSV2fQulf2SZXSKpYq/SV1gO3WXfNqjo6Uyso6waQ0TPNCfhdf8yFUdk6ZGIxQU
+         GkgFYrS4CeNQqhwoTphU/WoNaVhYKsHJ3HrOHK0BWcl9o8pmyTkGspJ5ienDRZ75VBJ7
+         gGyTkDXcvVP9UITUGYRkxxVqIF6vs+GoF9FFJkc0J9+t0S1OkJOgUMybitE5/k2Cat0f
+         jjP5F6w2KXXiG6eg0r5fcOk/wJghWFWUnsYxEbRBKaMS5cdjJfSGfEJRKj8IlXcY1YjM
+         tMIL5YJCSuAN0tC+b3jNGe6EFdXAd+N0Pk18HaUFRPrY4WRcfa4UqXMffL+kNLJyn6kB
+         QpVQ==
+X-Gm-Message-State: ANoB5plr04DcwKDlw1LqRBhfIhvw7OZPRekT0z0ya2y0ydV+KtqY5q5g
+        72BOjJbH5C62DfwyLWn6Jj8=
+X-Google-Smtp-Source: AA0mqf7rZYRuKDlBpo9tnOcKFzExqESQgx/4FnXkIR4qz+SE0pcKPX0QOsr7z8F3HMwBfWDbqRVHvA==
+X-Received: by 2002:a19:6a0c:0:b0:4b4:c67:1e8a with SMTP id u12-20020a196a0c000000b004b40c671e8amr20702475lfu.126.1669877892125;
+        Wed, 30 Nov 2022 22:58:12 -0800 (PST)
+Received: from dc75zzyyyyyyyyyyyyygt-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyygt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::b])
+        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b00492d064e8f8sm541094lfr.263.2022.11.30.22.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Nov 2022 22:58:11 -0800 (PST)
+Date:   Thu, 1 Dec 2022 08:57:52 +0200
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/4] soc: starfive: Add StarFive JH71XX pmu driver
-User-Agent: K-9 Mail for Android
-In-Reply-To: <e0cf51d3-ba58-36a7-5c70-1d070e5fb12a@starfivetech.com>
-References: <20221118133216.17037-1-walker.chen@starfivetech.com> <20221118133216.17037-4-walker.chen@starfivetech.com> <Y3giSQ0YccyY2tVk@spud> <95b05ac3-31a9-50dc-8eeb-eb3a9f883a6b@starfivetech.com> <Y4CkVnmdEhCsyckH@wendy> <e0cf51d3-ba58-36a7-5c70-1d070e5fb12a@starfivetech.com>
-Message-ID: <42D09618-DB39-4A8B-9327-4C6CC9DA2000@kernel.org>
+        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH] dt-bindings: Fix maintainer email for a few ROHM ICs
+Message-ID: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="2josFjUH3kiM3YoD"
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey Walker,
 
-Apologies for my formatting here=2E=20
+--2josFjUH3kiM3YoD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 1 December 2022 03:56:27 GMT, Walker Chen <walker=2Echen@starfivetech=
-=2Ecom> wrote:
->On 2022/11/25 19:17, Conor Dooley wrote:
->> On Fri, Nov 25, 2022 at 06:04:59PM +0800, Walker Chen wrote:
->>> On 2022/11/19 8:24, Conor Dooley wrote:
->>> > On Fri, Nov 18, 2022 at 09:32:15PM +0800, Walker Chen wrote:
->>=20
->>> >> +void starfive_pmu_hw_event_turn_off(u32 mask)
->>> >> +{
->>> >> +	pmu_writel(mask, HW_EVENT_TURN_OFF_MASK);
->>> >> +}
->>> >> +EXPORT_SYMBOL(starfive_pmu_hw_event_turn_off);
->>> >=20
->>> > Where are the users for these exports? Also, should they be exported=
- as
->>> > GPL?
->>> >=20
->>> > Either way, what is the point of the extra layer of abstraction here
->>> > around the writel()?
->>>=20
->>> The two export functions are only prepared for GPU module=2E But accor=
-dint to
->>>  the latest information, it seems that there is no open source plan fo=
-r GPU=2E=20
->>> So the two functions will be drop in next version of patch=2E
->>=20
->> That's a shame!
->
->Need to comply with certain commercial terms=2E
->
->>=20
->>> >> +static int starfive_pmu_get_state(struct starfive_power_dev *pmd, =
-bool *is_on)
->>> >> +{
->>> >> +	struct starfive_pmu *pmu =3D pmd->power;
->>> >> +
->>> >> +	if (!pmd->mask) {
->>> >> +		*is_on =3D false;
->>> >> +		return -EINVAL;
->>> >> +	}
->>> >> +
->>> >> +	*is_on =3D __raw_readl(pmu->base + CURR_POWER_MODE) & pmd->mask;
->>> >=20
->>> > Is there a specific reason that you are using the __raw variants her=
-e
->>> > (and elsewhere) in the driver?
->>>=20
->>> Will use unified function '__raw_readl' and '__raw_writel'
->>=20
->> No no, I want to know *why* you are using the __raw accessors here=2E M=
-y
->> understanding was that __raw variants are unbarriered & unordered with
->> respect to other io accesses=2E
->>=20
->> I do notice that the bcm driver you mentioned uses the __raw variants,
->> but only __raw variants - whereas you use readl() which is ordered and
->> barriered & __raw_readl()=2E
->>=20
->> Is there a reason why you would not use readl() or readl_relaxed()?
->
->Your question led me to deeply understand the usage of these io accessors=
-=2E
->__raw_readl / __raw_writel denotes native byte order, no memory barrier=
-=2E
->readl / writel do guarantee the byte order with barrier, ensure that prev=
-ious writes are done=2E
->Seem that non-raw accessors are more safe=2E
+The email backend used by ROHM keeps labeling patches as spam. This can
+result to missing the patches.
 
-Yeah, if there's no good reason to use these "raw"  versions then please u=
-se readl/readl_relaxed=2E
+Switch my mail address from a company mail to a personal one.
+
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
+---
+
+I did this a while ago for my email addresses at the MAINTAINERS. Forgot
+the dt-bindings and doing the conversion for bindings now.
+---
+ Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml   | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml    | 2 +-
+ Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml     | 2 +-
+ .../devicetree/bindings/power/supply/rohm,bd99954.yaml          | 2 +-
+ .../devicetree/bindings/regulator/rohm,bd71815-regulator.yaml   | 2 +-
+ .../devicetree/bindings/regulator/rohm,bd71828-regulator.yaml   | 2 +-
+ .../devicetree/bindings/regulator/rohm,bd71837-regulator.yaml   | 2 +-
+ .../devicetree/bindings/regulator/rohm,bd71847-regulator.yaml   | 2 +-
+ .../devicetree/bindings/regulator/rohm,bd9576-regulator.yaml    | 2 +-
+ 12 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml =
+b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+index 86a37c92b834..d48c404c848e 100644
+--- a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
++++ b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71828 Power Management Integrated Circuit LED driver
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   This module is part of the ROHM BD71828 MFD device. For more details
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml b=
+/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+index fbface720678..7cda8adc178e 100644
+--- a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71815 Power Management Integrated Circuit bindings
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   BD71815AGW is a single-chip power management ICs for battery-powered
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml b=
+/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
+index 8380166d176c..c13730aa34d9 100644
+--- a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71828 Power Management Integrated Circuit bindings
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   BD71828GW is a single-chip power management IC for battery-powered porta=
+ble
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml b=
+/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
+index 3bfdd33702ad..3ab8dcf0e8f1 100644
+--- a/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71837 Power Management Integrated Circuit bindings
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   BD71837MWV is programmable Power Management ICs for powering single-core,
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml b=
+/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
+index 5d531051a153..8ed4390bb43f 100644
+--- a/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71847 and BD71850 Power Management Integrated Circuit bindin=
+gs
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   BD71847AMWV and BD71850MWV are programmable Power Management ICs for pow=
+ering
+diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml b/=
+Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+index 6483860da955..e1ebea9ad5da 100644
+--- a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD9576MUF and BD9573MUF Power Management Integrated Circuit bi=
+ndings
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   BD9576MUF and BD9573MUF are power management ICs primarily intended for
+diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.ya=
+ml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+index 24b06957b4ca..6a0756e33eb8 100644
+--- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
++++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD99954 Battery charger
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+   - Markus Laine <markus.laine@fi.rohmeurope.com>
+   - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
+=20
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regul=
+ator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regula=
+tor.yaml
+index d61e8675f067..027fab3dc181 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.ya=
+ml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.ya=
+ml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71815 Power Management Integrated Circuit regulators
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   This module is part of the ROHM BD718215 MFD device. For more details
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regul=
+ator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regula=
+tor.yaml
+index 5ce587fff961..3cbe3b76ccee 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.ya=
+ml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.ya=
+ml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71828 Power Management Integrated Circuit regulators
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   This module is part of the ROHM BD71828 MFD device. For more details
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71837-regul=
+ator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regula=
+tor.yaml
+index 1941b36cf1ef..ab842817d847 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.ya=
+ml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.ya=
+ml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71837 Power Management Integrated Circuit regulators
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   List of regulators provided by this controller. BD71837 regulators node
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71847-regul=
+ator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regula=
+tor.yaml
+index a1b806373853..65fc3d15f693 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.ya=
+ml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.ya=
+ml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD71847 and BD71850 Power Management Integrated Circuit regula=
+tors
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   List of regulators provided by this controller. BD71847 regulators node
+diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regula=
+tor.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulato=
+r.yaml
+index 7cb74cc8c5d9..1e41168a4980 100644
+--- a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml
++++ b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.yaml
+@@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ title: ROHM BD9576 and BD9573 Power Management Integrated Circuit regulato=
+rs
+=20
+ maintainers:
+-  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
++  - Matti Vaittinen <mazziesaccount@gmail.com>
+=20
+ description: |
+   This module is part of the ROHM BD9576 MFD device. For more details
+
+base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
+--=20
+2.38.1
 
 
->> No worries, looking forward to getting my board :)
->>=20
->Have you purchased a VisionFive 2 board online? =20
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-I have :)
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--2josFjUH3kiM3YoD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmOIUGIACgkQeFA3/03a
+ocWX1ggAn7iYEYQUsB1aEk8w52fSQkaebQqwHDFPNUMQCQpoPJTRVsMG/BXLd3Hu
+vXffwrSx26kVHiGM+8lhkZVTSHKDBcVMJp2yhhVr824vHtGmP0wIULlX+v8xmlpM
+jL5Nj4U4oj4gBtkOYdr4pdETzUyQVe1Kez97ncqAQ/AhMsCswjCAkIcUwfRgr7pP
+nCJWDLdU4skM6xZFFeg0CM1dwWkFiD+4iYzQ/dVZhpNjYXAdV5en/JT1a/wUTPP4
+MMdZ9DV/A3tNmrXuwu4J5r8ozpSKISHoj70jIKSqCuCYS6NiIzM8bBkjHp5QEruU
+Ndqku6m3Xfo27EUow04N0asO0y2wHQ==
+=5EM4
+-----END PGP SIGNATURE-----
+
+--2josFjUH3kiM3YoD--
