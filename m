@@ -2,305 +2,335 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F37BC63F185
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 14:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0776363F191
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 14:27:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiLANY0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 08:24:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36118 "EHLO
+        id S231532AbiLAN1J (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 08:27:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiLANYZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 08:24:25 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19ACE4E69E;
-        Thu,  1 Dec 2022 05:24:23 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        with ESMTP id S231518AbiLAN1H (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 08:27:07 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D8FA897B;
+        Thu,  1 Dec 2022 05:27:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 002906602AA1;
-        Thu,  1 Dec 2022 13:24:20 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669901061;
-        bh=W4oiVr5wu3WAPK6sr8VuvGqiEL/dy9kQpNxqOD3eRpA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ofQVYHGP2yx6yoxUD13+v3tIREioSOMoxBXNNyhSYE5Q9Xx2arU1P7HTdqDYRF5xa
-         FNLIKtdVQuRMjwSx0iEQp1vzvZAK0C+KnwF6juunWlsVfDnpw6Zv2roAmexkuybXos
-         LjKoOYg1SGihvhQakzEV8KDhf3Scn/5NyuB31u1i0LzcJoufmFFx422iW2vYAdPFeL
-         F3iAD23XyYQYaVPm20CUNaDuq2ALwhza6eJWId2YpoAVjBpFAPUDJfEktqidh01SzL
-         SMeVrvtYyp7fvhZdNEST7UVRl6pHXZhHBUlp4/yPdJAsZj3KG3sIcY2eqFJ6XhSbOj
-         NWPiOfL7uPHKA==
-Message-ID: <0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com>
-Date:   Thu, 1 Dec 2022 14:24:17 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F17996200F;
+        Thu,  1 Dec 2022 13:27:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C47C433C1;
+        Thu,  1 Dec 2022 13:27:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1669901225;
+        bh=NFIvcHXQ+/ERF3OpK8I1hJFW+cU//2XvbCqp4ucNeSM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iObA3Dleu2jdelwAijdwi5+2YZTfvqGM59aZBZlE30aS8f8ETH931ZNCziK1j9mAn
+         DBpEjNBMPqB7gQ49g1mdAGKkOajDDuNKZic92I7fNZvNixJwh9h37PubJr9tf1hzOY
+         cFh71oKgj6OgiT7MC/dVaYyQRMxldK6ymjUeCoFVSZ9S4q/hduXMPl0pEOzkYNeKbF
+         oP9kkvSzjX34VdUl2wuaxPHT6QKAiQQ2vRi2VWht6x50hrUs515CWL4gfWsQMj/gkp
+         qclsVVs03aiOIfzKjKgpJq9JEoaOg7WLRFRHdQ5vJp5jsQ8nNGFTP+oRKBfrp4DkCn
+         4Wa5/phsqCaTg==
+Received: by mercury (Postfix, from userid 1000)
+        id 849AB1060E96; Thu,  1 Dec 2022 14:27:02 +0100 (CET)
+Date:   Thu, 1 Dec 2022 14:27:02 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Fix maintainer email for a few ROHM ICs
+Message-ID: <20221201132702.y2tdgopcqjtbqkiw@mercury.elektranox.org>
+References: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 1/2] thermal: mediatek: add support for MT7986 and
- MT7981
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Steven Liu <steven.liu@mediatek.com>,
-        Henry Yen <Henry.Yen@mediatek.com>
-References: <Y4dYazyXF02eRGC5@makrotopia.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <Y4dYazyXF02eRGC5@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="olgbnsuo2og2janb"
+Content-Disposition: inline
+In-Reply-To: <7986d30480df6179a3989fba4cd13817738635c5.1669877740.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 30/11/22 14:19, Daniel Golle ha scritto:
-> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
-> Brings code to assign values from efuse as well as new function to
-> convert raw temperature to millidegree celsius, as found in MediaTek's
-> SDK sources (but cleaned up and de-duplicated)
-> 
-> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> Reviewed-by: Henry Yen <henry.yen@mediatek.com>
+
+--olgbnsuo2og2janb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Thu, Dec 01, 2022 at 08:57:52AM +0200, Matti Vaittinen wrote:
+> The email backend used by ROHM keeps labeling patches as spam. This can
+> result to missing the patches.
+>=20
+> Switch my mail address from a company mail to a personal one.
+>=20
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>=20
 > ---
-> Changes since v1: Drop use of adc_oe field in efuse, Henry Yen confirmed
-> its use has been dropped intentionally in MTK SDK as well.
-> 
->   drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
->   1 file changed, 119 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 8440692e3890..6a69419f8960 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -150,6 +150,21 @@
->   #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
->   #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
->   
-> +/*
-> + * Layout of the fuses providing the calibration data
-> + * These macros can be used for MT7981 and MT7986.
-> + */
-> +#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
-> +#define CALIB_BUF0_ADC_OE_V3(x)		(((x) >> 10) & 0x3ff)
-> +#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
-> +#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
-> +#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
-> +#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
-> +#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
-> +#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
-> +#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
-> +#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
-> +
->   enum {
->   	VTS1,
->   	VTS2,
-> @@ -163,6 +178,7 @@ enum {
->   enum mtk_thermal_version {
->   	MTK_THERMAL_V1 = 1,
->   	MTK_THERMAL_V2,
-> +	MTK_THERMAL_V3,
->   };
->   
->   /* MT2701 thermal sensors */
-> @@ -245,6 +261,27 @@ enum mtk_thermal_version {
->   /* The calibration coefficient of sensor  */
->   #define MT8183_CALIBRATION	153
->   
-> +/* AUXADC channel 11 is used for the temperature sensors */
-> +#define MT7986_TEMP_AUXADC_CHANNEL	11
-> +
-> +/* The total number of temperature sensors in the MT7986 */
-> +#define MT7986_NUM_SENSORS		1
-> +
-> +/* The number of banks in the MT7986 */
-> +#define MT7986_NUM_ZONES		1
-> +
-> +/* The number of sensing points per bank */
-> +#define MT7986_NUM_SENSORS_PER_ZONE	1
-> +
-> +/* MT7986 thermal sensors */
-> +#define MT7986_TS1			0
-> +
-> +/* The number of controller in the MT7986 */
-> +#define MT7986_NUM_CONTROLLER		1
-> +
-> +/* The calibration coefficient of sensor  */
-> +#define MT7986_CALIBRATION		165
-> +
->   struct mtk_thermal;
->   
->   struct thermal_bank_cfg {
-> @@ -386,6 +423,14 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
->   static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
->   static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
->   
-> +/* MT7986 thermal sensor data */
-> +static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
-> +static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
-> +static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
-> +static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
-> +static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
-> +static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
-> +
->   /*
->    * The MT8173 thermal controller has four banks. Each bank can read up to
->    * four temperature sensors simultaneously. The MT8173 has a total of 5
-> @@ -549,6 +594,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
->   	.version = MTK_THERMAL_V1,
->   };
->   
-> +/*
-> + * MT7986 uses AUXADC Channel 11 for raw data access.
-> + */
-> +static const struct mtk_thermal_data mt7986_thermal_data = {
-> +	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
-> +	.num_banks = MT7986_NUM_ZONES,
-> +	.num_sensors = MT7986_NUM_SENSORS,
-> +	.vts_index = mt7986_vts_index,
-> +	.cali_val = MT7986_CALIBRATION,
-> +	.num_controller = MT7986_NUM_CONTROLLER,
-> +	.controller_offset = mt7986_tc_offset,
-> +	.need_switch_bank = true,
-> +	.bank_data = {
-> +		{
-> +			.num_sensors = 1,
-> +			.sensors = mt7986_bank_data,
-> +		},
-> +	},
-> +	.msr = mt7986_msr,
-> +	.adcpnp = mt7986_adcpnp,
-> +	.sensor_mux_values = mt7986_mux_values,
-> +	.version = MTK_THERMAL_V3,
-> +};
-> +
->   /**
->    * raw_to_mcelsius - convert a raw ADC value to mcelsius
->    * @mt:	The thermal controller
-> @@ -603,6 +672,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
->   	return (format_2 - tmp) * 100;
->   }
->   
-> +static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
-> +{
-> +	s32 tmp;
-> +
-> +	if (raw == 0)
-> +		return 0;
-> +
-> +	raw &= 0xfff;
-> +	tmp = 100000 * 15 / 16 * 10000;
-> +	tmp /= 4096 - 512 + mt->adc_ge;
-> +	tmp /= 1490;
-> +	tmp *= raw - mt->vts[sensno] - 2900;
-> +
-> +	return mt->degc_cali * 500 - tmp;
-> +}
-> +
->   /**
->    * mtk_thermal_get_bank - get bank
->    * @bank:	The bank
-> @@ -659,9 +744,12 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   		if (mt->conf->version == MTK_THERMAL_V1) {
->   			temp = raw_to_mcelsius_v1(
->   				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		} else {
-> +		} else if (mt->conf->version == MTK_THERMAL_V2) {
->   			temp = raw_to_mcelsius_v2(
->   				mt, conf->bank_data[bank->id].sensors[i], raw);
-> +		} else {
-> +			temp = raw_to_mcelsius_v3(
-> +				mt, conf->bank_data[bank->id].sensors[i], raw);
->   		}
+>=20
+> I did this a while ago for my email addresses at the MAINTAINERS. Forgot
+> the dt-bindings and doing the conversion for bindings now.
+> ---
 
-What about optimizing this with assigning a function pointer?
-Like that, we wouldn't check any version in there... as in that case we'd
-simply do something like
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-temp = conf->raw_to_mcelsius(mt, conf->bank...blahblah...);
+-- Sebastian
 
-...and this would also mean that the snippet saying "the first read of a sensor
-often contains very high bogus temperature value [...]" would get merged in the v2
-of raw_to_mcelsius (as that function is used only in mtk_thermal_bank_temperature).
+>  Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml   | 2 +-
+>  Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml    | 2 +-
+>  Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml    | 2 +-
+>  Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml    | 2 +-
+>  Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml    | 2 +-
+>  Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml     | 2 +-
+>  .../devicetree/bindings/power/supply/rohm,bd99954.yaml          | 2 +-
+>  .../devicetree/bindings/regulator/rohm,bd71815-regulator.yaml   | 2 +-
+>  .../devicetree/bindings/regulator/rohm,bd71828-regulator.yaml   | 2 +-
+>  .../devicetree/bindings/regulator/rohm,bd71837-regulator.yaml   | 2 +-
+>  .../devicetree/bindings/regulator/rohm,bd71847-regulator.yaml   | 2 +-
+>  .../devicetree/bindings/regulator/rohm,bd9576-regulator.yaml    | 2 +-
+>  12 files changed, 12 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yam=
+l b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+> index 86a37c92b834..d48c404c848e 100644
+> --- a/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+> +++ b/Documentation/devicetree/bindings/leds/rohm,bd71828-leds.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71828 Power Management Integrated Circuit LED driver
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    This module is part of the ROHM BD71828 MFD device. For more details
+> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml=
+ b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+> index fbface720678..7cda8adc178e 100644
+> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71815-pmic.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71815 Power Management Integrated Circuit bindings
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    BD71815AGW is a single-chip power management ICs for battery-powered
+> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml=
+ b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
+> index 8380166d176c..c13730aa34d9 100644
+> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71828-pmic.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71828 Power Management Integrated Circuit bindings
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    BD71828GW is a single-chip power management IC for battery-powered por=
+table
+> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml=
+ b/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
+> index 3bfdd33702ad..3ab8dcf0e8f1 100644
+> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71837-pmic.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71837 Power Management Integrated Circuit bindings
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    BD71837MWV is programmable Power Management ICs for powering single-co=
+re,
+> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml=
+ b/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
+> index 5d531051a153..8ed4390bb43f 100644
+> --- a/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd71847-pmic.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71847 and BD71850 Power Management Integrated Circuit bind=
+ings
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    BD71847AMWV and BD71850MWV are programmable Power Management ICs for p=
+owering
+> diff --git a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml =
+b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+> index 6483860da955..e1ebea9ad5da 100644
+> --- a/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/rohm,bd9576-pmic.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD9576MUF and BD9573MUF Power Management Integrated Circuit =
+bindings
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    BD9576MUF and BD9573MUF are power management ICs primarily intended for
+> diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.=
+yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+> index 24b06957b4ca..6a0756e33eb8 100644
+> --- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+> +++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD99954 Battery charger
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+>    - Markus Laine <markus.laine@fi.rohmeurope.com>
+>    - Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>
+> =20
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71815-reg=
+ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regu=
+lator.yaml
+> index d61e8675f067..027fab3dc181 100644
+> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.=
+yaml
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71815-regulator.=
+yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71815 Power Management Integrated Circuit regulators
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    This module is part of the ROHM BD718215 MFD device. For more details
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71828-reg=
+ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regu=
+lator.yaml
+> index 5ce587fff961..3cbe3b76ccee 100644
+> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.=
+yaml
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71828-regulator.=
+yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71828 Power Management Integrated Circuit regulators
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    This module is part of the ROHM BD71828 MFD device. For more details
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71837-reg=
+ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regu=
+lator.yaml
+> index 1941b36cf1ef..ab842817d847 100644
+> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.=
+yaml
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71837-regulator.=
+yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71837 Power Management Integrated Circuit regulators
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    List of regulators provided by this controller. BD71837 regulators node
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd71847-reg=
+ulator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regu=
+lator.yaml
+> index a1b806373853..65fc3d15f693 100644
+> --- a/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.=
+yaml
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd71847-regulator.=
+yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD71847 and BD71850 Power Management Integrated Circuit regu=
+lators
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    List of regulators provided by this controller. BD71847 regulators node
+> diff --git a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regu=
+lator.yaml b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regula=
+tor.yaml
+> index 7cb74cc8c5d9..1e41168a4980 100644
+> --- a/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.y=
+aml
+> +++ b/Documentation/devicetree/bindings/regulator/rohm,bd9576-regulator.y=
+aml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: ROHM BD9576 and BD9573 Power Management Integrated Circuit regula=
+tors
+> =20
+>  maintainers:
+> -  - Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+> +  - Matti Vaittinen <mazziesaccount@gmail.com>
+> =20
+>  description: |
+>    This module is part of the ROHM BD9576 MFD device. For more details
+>=20
+> base-commit: b7b275e60bcd5f89771e865a8239325f86d9927d
+> --=20
+> 2.38.1
+>=20
+>=20
+> --=20
+> Matti Vaittinen, Linux device drivers
+> ROHM Semiconductors, Finland SWDC
+> Kiviharjunlenkki 1E
+> 90220 OULU
+> FINLAND
+>=20
+> ~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+> Simon says - in Latin please.
+> ~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+> Thanks to Simon Glass for the translation =3D]=20
 
->   
->   		/*
-> @@ -887,6 +975,26 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
->   	return 0;
->   }
->   
-> +static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
-> +{
-> +	if (!CALIB_BUF1_VALID_V3(buf[1]))
-> +		return -EINVAL;
-> +
-> +	mt->adc_oe = CALIB_BUF0_ADC_OE_V3(buf[0]);
-> +	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
-> +	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
-> +	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
-> +	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
-> +	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
-> +	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
-> +	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
-> +
-> +	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
-> +		mt->o_slope = 0;
-> +
-> +	return 0;
-> +}
-> +
->   static int mtk_thermal_get_calibration_data(struct device *dev,
->   					    struct mtk_thermal *mt)
->   {
-> @@ -897,6 +1005,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
->   
->   	/* Start with default values */
->   	mt->adc_ge = 512;
-> +	mt->adc_oe = 512;
->   	for (i = 0; i < mt->conf->num_sensors; i++)
->   		mt->vts[i] = 260;
->   	mt->degc_cali = 40;
-> @@ -924,8 +1033,10 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
->   
->   	if (mt->conf->version == MTK_THERMAL_V1)
->   		ret = mtk_thermal_extract_efuse_v1(mt, buf);
-> -	else
-> +	else if (mt->conf->version == MTK_THERMAL_V2)
->   		ret = mtk_thermal_extract_efuse_v2(mt, buf);
-> +	else
-> +		ret = mtk_thermal_extract_efuse_v3(mt, buf);
-
-I propose to use a switch here instead.
-
-	switch(mt->conf->version) {
-	case MTK_THERMAL_V1:
-		....
-	case MTK_THERMAL_V2:
-		....
-	case MTK_THERMAL_V3:
-		....
-	default:
-		ret = -EINVAL;
-		break;
-	};
-
-This would also prevent a potential issue with getting an invalid calibration
-due to us calling the wrong version of the get_calibration() function, in which
-case, using the default calibration values would be at that point preferred.
-
-Regards,
-Angelo
 
 
+--olgbnsuo2og2janb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOIq5wACgkQ2O7X88g7
++pp1pg//dnrex19LVaxeoRcryBpQCbZZ4lSDJkXbbn3LcD6JZQtZymXViKEBkTi4
+L5xhsh/lVYl6HdbJVuMYe7T1ToBO0pRWVS92oVqDwarsaKn3vX7vJuhi8k5THdxg
+prUNv3zpaYAiS2zp5rr43ojRSS+3/FlcY2WSlyT8xaaPTD8EZjUIwbftyXCvGUpn
+GlTDvidKQp06slW0ef+EYYY3sCFlI2MArrCSZYtKqwz8KhczFTVv4e9S4L/ubwLx
+CM5thTdqW7poNUNVe/8D/0QI+OeCUpzabzgBjldWBajrxeIA9i2EDOODhe2Ebk1M
+j1WC41T55FkjAW7QJIKPVZWT7jiY7bSKpHCpEA0+crrUhCtXq3EmNOl4exewul9z
+um/ZOCdJubuL9YfzpHhBlWagWf1hUVqTZMdMOGnx21T3c0dEDrFjaxPwU+SzOmQT
+TS9VxWqN6N533a6RD7k4fNVu0JQ2MHNmIuyI2jSr1xS7z9EpZ4ne2NjzEP9ScPc7
+5jOnXK/hMx/10rFE/1odqyemGk+TVN74V62W1mzcUEAVzrqUHYFnlk43rda/T8Xn
+GQTMABXrMZykLfac3PMssIrBJWAfMwjs0bWRhHuoaIfASXmHmBvCCcuE8XXW01iN
+rXSuJIU2vNgf+YcEpqLon3n9i/ly9qYV7aLCa3oyqAv2xkVQta0=
+=oRzv
+-----END PGP SIGNATURE-----
+
+--olgbnsuo2og2janb--
