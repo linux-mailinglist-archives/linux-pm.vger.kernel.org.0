@@ -2,95 +2,186 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8410963F875
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 20:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3D8963F888
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 20:44:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbiLATka (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 14:40:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
+        id S229901AbiLAToL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 1 Dec 2022 14:44:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbiLATk3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 14:40:29 -0500
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C914A98023;
-        Thu,  1 Dec 2022 11:40:28 -0800 (PST)
-Received: by mail-oi1-f173.google.com with SMTP id h132so3154184oif.2;
-        Thu, 01 Dec 2022 11:40:28 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=boNQPL0i0ILb4HhKeMVQSoaXUT08m5V8+ybujR0N0TI=;
-        b=AJUBE2ZeaJEKmqH/l3qPIVoL+bw6jQuKlALZrh/nFfQnX+OLXn2RC7WGSmQMGLqA08
-         FmEKYOPTiu8xPwa0tkTZ3xyEXBMNiVfriFIq1eKlep6dHGqSQj/C9gpEbiFmQ+1FkLCv
-         W7dToC3YhRopc2DE7qKJZV/PLDdCZRM4FcdrtG8kciFYoHrrzRImBZOAWb6YWBPobt0u
-         hqQhqHplqcgPfSvUFiPyq45UQQMfGu7hXrxZhwvmOYNge1TEYLUGwsBw4AWZ4mybU4C6
-         dZuxvmYdVNZpx4q6AS7eBnA0IHTX8n85I4hF2qDTMOcEpolLaiP5rpS6eG1thz66SpB2
-         tObg==
-X-Gm-Message-State: ANoB5pmDZUJxkv5Gq7fpbPkCG9kNHpYi6uJy8PiK+dTMmOHWe8qXlXnH
-        SVVKaI5zGsz3eJz3TpjP6B5iAasYDA==
-X-Google-Smtp-Source: AA0mqf7EHzfleKI7CO0oX8lnmi1IYx3XscnTMOaiB0J2r2agG3qDO8nklTcidrANIVj1NAux24DAbA==
-X-Received: by 2002:a05:6808:152c:b0:354:da02:c05f with SMTP id u44-20020a056808152c00b00354da02c05fmr22940884oiw.290.1669923627983;
-        Thu, 01 Dec 2022 11:40:27 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o6-20020acad706000000b003549db40f38sm2128071oig.46.2022.12.01.11.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 11:40:27 -0800 (PST)
-Received: (nullmailer pid 1216496 invoked by uid 1000);
-        Thu, 01 Dec 2022 19:40:26 -0000
-Date:   Thu, 1 Dec 2022 13:40:26 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        David Airlie <airlied@gmail.com>, linux-kernel@vger.kernel.org,
-        phone-devel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, Sean Paul <sean@poorly.run>,
+        with ESMTP id S229714AbiLAToL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 14:44:11 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B9114D04;
+        Thu,  1 Dec 2022 11:44:09 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 25ab7833bb94707f; Thu, 1 Dec 2022 20:44:07 +0100
+Received: from kreacher.localnet (unknown [213.134.188.161])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 60D7527C06A2;
+        Thu,  1 Dec 2022 20:44:05 +0100 (CET)
+Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        Tushar Nimkar <quic_tnimkar@quicinc.com>,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v2 02/12] dt-bindings: thermal: tsens: Add SM6115
- compatible
-Message-ID: <166992359520.1215696.1988935137698769756.robh@kernel.org>
-References: <20221130200950.144618-1-a39.skl@gmail.com>
- <20221130200950.144618-3-a39.skl@gmail.com>
+        linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        bjorn.andersson@kernel.org, quic_mkshah@quicinc.com,
+        quic_lsrao@quicinc.com, bvanassche@acm.org,
+        Peter Wang <peter.wang@mediatek.com>
+Subject: Re: PM-runtime: supplier looses track of consumer during probe
+Date:   Thu, 01 Dec 2022 20:44:03 +0100
+Message-ID: <12104185.O9o76ZdvQC@kreacher>
+In-Reply-To: <CAJZ5v0gdg=PUz-j0yd_QJRPmjhZ7pCuRrHt30U60H4QyTHCmdA@mail.gmail.com>
+References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com> <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com> <CAJZ5v0gdg=PUz-j0yd_QJRPmjhZ7pCuRrHt30U60H4QyTHCmdA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130200950.144618-3-a39.skl@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.188.161
+X-CLIENT-HOSTNAME: 213.134.188.161
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrtdehgdduvdelucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtqhertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffelhfeiuefgudelhefftdekfeetkeelvdduhedvgfffhfetudfffeevkefgkeefnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdplhhkmhhlrdhorhhgnecukfhppedvudefrddufeegrddukeekrdduiedunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudeiuddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepudegpdhrtghpthhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghnihhtihhrrgifrgesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehquhhitggpthhnihhm
+ khgrrhesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhstghsihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhmshhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghjohhrnhdrrghnuggvrhhsshhonheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghmkhhshhgrhhesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehquhhitggplhhsrhgrohesqhhuihgtihhntgdrtghomhdprhgtphhtthhopegsvhgrnhgrshhstghhvgesrggtmhdrohhrghdprhgtphhtthhopehpvghtvghrrdifrghnghesmhgvughirghtvghkrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=14 Fuz1=14 Fuz2=14
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 30 Nov 2022 21:09:40 +0100, Adam Skladowski wrote:
-> Document compatible for tsens on Qualcomm SM6115 platform
-> according to downstream dts it ship v2.4 of IP
+On Thursday, December 1, 2022 8:28:25 PM CET Rafael J. Wysocki wrote:
+> On Thu, Dec 1, 2022 at 2:10 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >
+> > On 29/11/22 18:56, Nitin Rawat wrote:
+> > > Hi Adrian,
+> > >
+> > > On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
+> > >> Hi Adrian,
+> > >>
+> > >> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
+> > >>> On 4/11/22 11:19, Tushar Nimkar wrote:
+> > >>>> Hi linux-pm/linux-scsi,
+> > >>
+> > >>>>> Process -1
+> > >>>>> ufshcd_async_scan context (process 1)
+> > >>>>> scsi_autopm_put_device() //0:0:0:0
+> > >>>
+> > >>> I am having trouble following your description.  What function is calling
+> > >>> scsi_autopm_put_device() here?
+> > >>>
+> > >> Below is flow which calls scsi_autopm_put_device()
+> > >> Process -1
+> > >> ufshcd_async_scan()
+> > >>      scsi_probe_and_add_lun()
+> > >>          scsi_add_lun()
+> > >>              slave_configure()
+> > >>                  scsi_sysfs_add_sdev()
+> > >>                      scsi_autopm_get_device()
+> > >>                          device_add()     <- invoked [Process 2] sd_probe()
+> > >>                              scsi_autopm_put_device()
+> > >>
+> > >>>>> pm_runtime_put_sync()
+> > >>>>> __pm_runtime_idle()
+> > >>>>> rpm_idle() -- RPM_GET_PUT(4)
+> > >>>>>       __rpm_callback
+> > >>>>>           scsi_runtime_idle()
+> > >>>>>               pm_runtime_mark_last_busy()
+> > >>>>>               pm_runtime_autosuspend()  --[A]
+> > >>>>>                   rpm_suspend() -- RPM_AUTO(8)
+> > >>>>>                       pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
+> > >>>>>                           __update_runtime_status to RPM_SUSPENDING
+> > >>>>>                       __rpm_callback()
+> > >>>>>                           __rpm_put_suppliers(dev, false)
+> > >>>>>                       __update_runtime_status to RPM_SUSPENDED
+> > >>>>>                   rpm_suspend_suppliers()
+> > >>>>>                       rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
+> > >>>>>                   rpm_suspend() – END with return=0
+> > >>>>>           scsi_runtime_idle() END return (-EBUSY) always.
+> > >>>
+> > >>> Not following here either.  Which device is EBUSY and why?
+> > >>
+> > >> scsi_runtime_idle() return -EBUSY always [3]
+> > >> Storage/scsi team can better explain -EBUSY implementation.
+> > >
+> > > EBUSY is returned from below code for consumer dev 0:0:0:0.
+> > > scsi_runtime_idle is called from scsi_autopm_put_device which inturn is called from ufshcd_async_scan (Process 1 as per above call stack)
+> > > static int scsi_runtime_idle(struct device *dev)
+> > > {
+> > >     :
+> > >
+> > >     if (scsi_is_sdev_device(dev)) {
+> > >         pm_runtime_mark_last_busy(dev);
+> > >         pm_runtime_autosuspend(dev);
+> > >         return -EBUSY; ---> EBUSY returned from here.
+> > >     }
+> > >
+> > >
+> > > }
+> > >
+> > >>
+> > >> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
+> > >>
+> > >>
+> > >>>>>
+> > >>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
+> > >>>>> [2]: https://lkml.org/lkml/2022/10/12/259
+> >
+> > It looks to me like __rpm_callback() makes assumptions about
+> > dev->power.runtime_status that are not necessarily true because
+> > dev->power.lock is dropped.
 > 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
+> Well, this happens because rpm_idle() calls __rpm_callback() and
+> allows it to run concurrently with rpm_suspend() and rpm_resume(), so
+> one of them may change runtime_status to RPM_SUSPENDING or
+> RPM_RESUMING while __rpm_callback() is running.
 > 
+> It is somewhat questionable whether or not this should be allowed to
+> happen, but since it is generally allowed to suspend the device from
+> its .runtime_idle callback, there is not too much that can be done
+> about it.
 
-Since Daniel is out, applied, thanks!
+But this means that the patch below should help too.
+
+I actually think that we can do both, because rpm_idle() doesn't have to do
+the whole device links dance and the fact that it still calls __rpm_callback()
+is a clear oversight.
+
+---
+ drivers/base/power/runtime.c |   12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
+ 
+ 	dev->power.idle_notification = true;
+ 
+-	retval = __rpm_callback(callback, dev);
++	if (dev->power.irq_safe)
++		spin_unlock(&dev->power.lock);
++	else
++		spin_unlock_irq(&dev->power.lock);
++
++	retval = callback(dev);
++
++	if (dev->power.irq_safe)
++		spin_lock(&dev->power.lock);
++	else
++		spin_lock_irq(&dev->power.lock);
+ 
+ 	dev->power.idle_notification = false;
+ 	wake_up_all(&dev->power.wait_queue);
+
+
+
