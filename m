@@ -2,319 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3570C63FA23
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 22:57:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B0963FA8B
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 23:27:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiLAV51 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 16:57:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S229763AbiLAW06 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 17:26:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbiLAV5W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 16:57:22 -0500
-Received: from phobos.denx.de (phobos.denx.de [IPv6:2a01:238:438b:c500:173d:9f52:ddab:ee01])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28112C3FEE;
-        Thu,  1 Dec 2022 13:57:20 -0800 (PST)
-Received: from tr.lan (ip-86-49-120-218.bb.vodafone.cz [86.49.120.218])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: marex@denx.de)
-        by phobos.denx.de (Postfix) with ESMTPSA id 094B7853FD;
-        Thu,  1 Dec 2022 22:57:18 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
-        s=phobos-20191101; t=1669931838;
-        bh=s4J5199AP1UBWW6sNUicFcJ6IO+EISPlx1VkTXLGyTQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LgrM5nfGqkYpeIuh9efV1uU0xyfns2glUfHeeWPgd6hHfuHsq0aeYRS1dJgAUj+JZ
-         KCiNKB42Fm31vaE75xrlHZacabqZRZkoZ7pPVEAUGkYGFWIHPi6Vm8G8dYn0vvE7uk
-         O9YHdM7OTBP8LjFtUQp3Z2E1lwnYIj7oePdojr7eeE1z/dawa1nyCUpsHPAVquX2xL
-         CR89ZnJMZIFn5pwAOXaUpqHBny94Bo7BRrDgWn7UAqFzxnrRV04LXIb3isjS+NxhRC
-         lUGgWysV/npPOTTJ9dWsgm8+efK2nAfRvoQiQO4yUxALHBi+4tQM/HSPWyeQeqJsb/
-         IuoT5RZcFvoGQ==
-From:   Marek Vasut <marex@denx.de>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Marek Vasut <marex@denx.de>, Peng Fan <peng.fan@nxp.com>,
-        Adam Ford <aford173@gmail.com>, Alice Guo <alice.guo@nxp.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Li Jun <jun.li@nxp.com>, Lucas Stach <l.stach@pengutronix.de>,
-        Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, devicetree@vger.kernel.org
-Subject: [PATCH v2 5/5] thermal/drivers/imx: Add support for loading calibration data from OCOTP
-Date:   Thu,  1 Dec 2022 22:56:51 +0100
-Message-Id: <20221201215651.152497-5-marex@denx.de>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221201215651.152497-1-marex@denx.de>
-References: <20221201215651.152497-1-marex@denx.de>
+        with ESMTP id S231246AbiLAW04 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 17:26:56 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6AB5AE3D
+        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 14:26:55 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id s7so3002225plk.5
+        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 14:26:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OB2gxc6zE/eDGAkTZ84q/Ynk0mkqUy8h0mwl/rBk5Y=;
+        b=LNpfCUfwefO50A7FL81mSyfyOzj9zHgyBEkGYZcqUfWIu4gGcE76uaJSA3mehLaCdZ
+         UBmoeVe1jkm/mwvkz50qFDy8GhOXVVOPOhvMO/59Pm52zIMtSNIu0mb3jfTqgsVZIW0c
+         P6kGGnGLvsh33ebRS6MED7567w0a0JBu/pbCZf3seXLe2pbOXIQCVigJFYD3MiTH0zp0
+         T5F32pNk82PrCPIe8xHmAc0jpjVZq2kagxDA0QKIsCWauz04NRE/Daapd/NFqxoR0mv/
+         AxdIWgXI37yiUFbUEREOBAvBu+YolsGqpfbVvDViLrkMkAqigAnzqLQQY1yGQiZ5HdpG
+         05vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3OB2gxc6zE/eDGAkTZ84q/Ynk0mkqUy8h0mwl/rBk5Y=;
+        b=TPsGFcZziwT2KlIEV7SEIRwGy2Pvp53jZJ4tADcc0Dpv8bwZSekdruzGPhXl6+5DUd
+         aZ5s7cqUd712+c/jZa4GhJL9vDk9lHo+e0CJvY66XkD/IJbJa+AiNfCPjSBQr4zeGi5q
+         WzIEcnHFvZKgP3c/rIVtV9HnfdAuoU/hwWE7yIq2lSBifXPvB+iSZmtTh2k9mmB1ZYDT
+         YjdDpda+X3PQc/Ffg6ih+vVl+b64Lpd3aHEF36amDLPhEWEBvoDho6ZzJ3xL/OJ5vL0+
+         HVJWVhHl6r7gfn31MSCxbAZIEgA28iQyjk1O3S0YVNv3P4Lro8EY0/FFKK6DoJpBMtvj
+         u20g==
+X-Gm-Message-State: ANoB5pmJfT802Sq2eZ9K6dQdlnST4KZHJiPkIh/RMseEoOWeX7D/rFic
+        z6sv2jDiq/9obtFKToVYjPuwpg==
+X-Google-Smtp-Source: AA0mqf7NNn3mTVS5I4uVyN+nO2jRcO1Kt0wIsUx23cqrsdwg/26fzc68+176tezXPp/HpKqq7r7Qag==
+X-Received: by 2002:a17:90b:2642:b0:219:55d5:f30a with SMTP id pa2-20020a17090b264200b0021955d5f30amr14807330pjb.23.1669933614808;
+        Thu, 01 Dec 2022 14:26:54 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id c11-20020a170903234b00b00186c3afb49esm4056611plh.209.2022.12.01.14.26.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 14:26:53 -0800 (PST)
+Message-ID: <63892a2d.170a0220.96441.84a6@mx.google.com>
+Date:   Thu, 01 Dec 2022 14:26:53 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: clamav-milter 0.103.6 at phobos.denx.de
-X-Virus-Status: Clean
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.1-rc7-101-g0ed70fd3fac1
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.1-rc7-101-g0ed70fd3fac1)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The TMU TASR, TCALIVn, TRIM registers must be explicitly programmed with
-calibration values in OCOTP. Add support for reading the OCOTP calibration
-data and programming those into the TMU hardware.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc7-101-g0=
+ed70fd3fac1)
 
-The MX8MM/MX8MN TMUv1 uses only one OCOTP cell, while MX8MP TMUv2 uses 4,
-the programming differs in each case.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+1-rc7-101-g0ed70fd3fac1/
 
-Based on U-Boot commits:
-70487ff386c ("imx8mm: Load fuse for TMU TCALIV and TASR")
-ebb9aab318b ("imx: load calibration parameters from fuse for i.MX8MP")
+Tree: pm
+Branch: testing
+Git Describe: v6.1-rc7-101-g0ed70fd3fac1
+Git Commit: 0ed70fd3fac1e58af85c571c2d003319eb24ce1a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
-Signed-off-by: Marek Vasut <marex@denx.de>
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
-Cc: Adam Ford <aford173@gmail.com>
-Cc: Alice Guo <alice.guo@nxp.com>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc: Li Jun <jun.li@nxp.com>
-Cc: Lucas Stach <l.stach@pengutronix.de>
-Cc: Markus Niebel <Markus.Niebel@ew.tq-group.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Rafael J. Wysocki <rafael@kernel.org>
-Cc: Richard Cochran <richardcochran@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: devicetree@vger.kernel.org
-To: linux-pm@vger.kernel.org
-To: linux-arm-kernel@lists.infradead.org
----
-V2: - Add RB from Peng
-    - Include slab.h to get kfree() definition
----
- drivers/thermal/imx8mm_thermal.c | 164 +++++++++++++++++++++++++++++++
- 1 file changed, 164 insertions(+)
-
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index e2c2673025a7a..e95b4accab40e 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -10,9 +10,11 @@
- #include <linux/err.h>
- #include <linux/io.h>
- #include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/platform_device.h>
-+#include <linux/slab.h>
- #include <linux/thermal.h>
- 
- #include "thermal_core.h"
-@@ -20,6 +22,22 @@
- #define TER			0x0	/* TMU enable */
- #define TPS			0x4
- #define TRITSR			0x20	/* TMU immediate temp */
-+/* TMU calibration data registers */
-+#define TASR			0x28
-+#define TASR_BUF_SLOPE_MASK	GENMASK(19, 16)
-+#define TASR_BUF_VREF_MASK	GENMASK(4, 0)	/* TMU_V1 */
-+#define TASR_BUF_VERF_SEL_MASK	GENMASK(1, 0)	/* TMU_V2 */
-+#define TCALIV(n)		(0x30 + ((n) * 4))
-+#define TCALIV_EN		BIT(31)
-+#define TCALIV_HR_MASK		GENMASK(23, 16)	/* TMU_V1 */
-+#define TCALIV_RT_MASK		GENMASK(7, 0)	/* TMU_V1 */
-+#define TCALIV_SNSR105C_MASK	GENMASK(27, 16)	/* TMU_V2 */
-+#define TCALIV_SNSR25C_MASK	GENMASK(11, 0)	/* TMU_V2 */
-+#define TRIM			0x3c
-+#define TRIM_BJT_CUR_MASK	GENMASK(23, 20)
-+#define TRIM_BGR_MASK		GENMASK(31, 28)
-+#define TRIM_VLSB_MASK		GENMASK(15, 12)
-+#define TRIM_EN_CH		BIT(7)
- 
- #define TER_ADC_PD		BIT(30)
- #define TER_EN			BIT(31)
-@@ -32,6 +50,25 @@
- #define SIGN_BIT		BIT(7)
- #define TEMP_VAL_MASK		GENMASK(6, 0)
- 
-+/* TMU OCOTP calibration data bitfields */
-+#define ANA0_EN			BIT(25)
-+#define ANA0_BUF_VREF_MASK	GENMASK(24, 20)
-+#define ANA0_BUF_SLOPE_MASK	GENMASK(19, 16)
-+#define ANA0_HR_MASK		GENMASK(15, 8)
-+#define ANA0_RT_MASK		GENMASK(7, 0)
-+#define TRIM2_VLSB_MASK		GENMASK(23, 20)
-+#define TRIM2_BGR_MASK		GENMASK(19, 16)
-+#define TRIM2_BJT_CUR_MASK	GENMASK(15, 12)
-+#define TRIM2_BUF_SLOP_SEL_MASK	GENMASK(11, 8)
-+#define TRIM2_BUF_VERF_SEL_MASK	GENMASK(7, 6)
-+#define TRIM3_TCA25_0_LSB_MASK	GENMASK(31, 28)
-+#define TRIM3_TCA40_0_MASK	GENMASK(27, 16)
-+#define TRIM4_TCA40_1_MASK	GENMASK(31, 20)
-+#define TRIM4_TCA105_0_MASK	GENMASK(19, 8)
-+#define TRIM4_TCA25_0_MSB_MASK	GENMASK(7, 0)
-+#define TRIM5_TCA105_1_MASK	GENMASK(23, 12)
-+#define TRIM5_TCA25_1_MASK	GENMASK(11, 0)
-+
- #define VER1_TEMP_LOW_LIMIT	10000
- #define VER2_TEMP_LOW_LIMIT	-40000
- #define VER2_TEMP_HIGH_LIMIT	125000
-@@ -128,6 +165,129 @@ static void imx8mm_tmu_probe_sel_all(struct imx8mm_tmu *tmu)
- 	writel_relaxed(val, tmu->base + TPS);
- }
- 
-+static int imx8mm_tmu_probe_set_calib_v1(struct platform_device *pdev,
-+					 struct imx8mm_tmu *tmu)
-+{
-+	struct device *dev = &pdev->dev;
-+	u32 ana0;
-+	int ret;
-+
-+	ret = nvmem_cell_read_u32(&pdev->dev, "calib", &ana0);
-+	if (ret) {
-+		dev_warn(dev, "Failed to read OCOTP nvmem cell (%d).\n", ret);
-+		return ret;
-+	}
-+
-+	writel(FIELD_PREP(TASR_BUF_VREF_MASK,
-+			  FIELD_GET(ANA0_BUF_VREF_MASK, ana0)) |
-+	       FIELD_PREP(TASR_BUF_SLOPE_MASK,
-+			  FIELD_GET(ANA0_BUF_SLOPE_MASK, ana0)),
-+	       tmu->base + TASR);
-+
-+	writel(FIELD_PREP(TCALIV_RT_MASK, FIELD_GET(ANA0_RT_MASK, ana0)) |
-+	       FIELD_PREP(TCALIV_HR_MASK, FIELD_GET(ANA0_HR_MASK, ana0)) |
-+	       ((ana0 & ANA0_EN) ? TCALIV_EN : 0),
-+	       tmu->base + TCALIV(0));
-+
-+	return 0;
-+}
-+
-+static int imx8mm_tmu_probe_set_calib_v2(struct platform_device *pdev,
-+					 struct imx8mm_tmu *tmu)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct nvmem_cell *cell;
-+	u32 trim[4] = { 0 };
-+	size_t len;
-+	void *buf;
-+
-+	cell = nvmem_cell_get(dev, "calib");
-+	if (IS_ERR(cell))
-+		return PTR_ERR(cell);
-+
-+	buf = nvmem_cell_read(cell, &len);
-+	nvmem_cell_put(cell);
-+
-+	if (IS_ERR(buf))
-+		return PTR_ERR(buf);
-+
-+	memcpy(trim, buf, min(len, sizeof(trim)));
-+	kfree(buf);
-+
-+	if (len != 16) {
-+		dev_err(dev,
-+			"OCOTP nvmem cell length is %ld, must be 16.\n", len);
-+		return -EINVAL;
-+	}
-+
-+	/* Blank sample hardware */
-+	if (!trim[0] && !trim[1] && !trim[2] && !trim[3]) {
-+		/* Use a default 25C binary codes */
-+		writel(FIELD_PREP(TCALIV_SNSR25C_MASK, 0x63c),
-+		       tmu->base + TCALIV(0));
-+		writel(FIELD_PREP(TCALIV_SNSR25C_MASK, 0x63c),
-+		       tmu->base + TCALIV(1));
-+		return 0;
-+	}
-+
-+	writel(FIELD_PREP(TASR_BUF_VERF_SEL_MASK,
-+			  FIELD_GET(TRIM2_BUF_VERF_SEL_MASK, trim[0])) |
-+	       FIELD_PREP(TASR_BUF_SLOPE_MASK,
-+			  FIELD_GET(TRIM2_BUF_SLOP_SEL_MASK, trim[0])),
-+	       tmu->base + TASR);
-+
-+	writel(FIELD_PREP(TRIM_BJT_CUR_MASK,
-+			  FIELD_GET(TRIM2_BJT_CUR_MASK, trim[0])) |
-+	       FIELD_PREP(TRIM_BGR_MASK, FIELD_GET(TRIM2_BGR_MASK, trim[0])) |
-+	       FIELD_PREP(TRIM_VLSB_MASK, FIELD_GET(TRIM2_VLSB_MASK, trim[0])) |
-+	       TRIM_EN_CH,
-+	       tmu->base + TRIM);
-+
-+	writel(FIELD_PREP(TCALIV_SNSR25C_MASK,
-+			  FIELD_GET(TRIM3_TCA25_0_LSB_MASK, trim[1]) |
-+			  (FIELD_GET(TRIM4_TCA25_0_MSB_MASK, trim[2]) << 4)) |
-+	       FIELD_PREP(TCALIV_SNSR105C_MASK,
-+			  FIELD_GET(TRIM4_TCA105_0_MASK, trim[2])),
-+	       tmu->base + TCALIV(0));
-+
-+	writel(FIELD_PREP(TCALIV_SNSR25C_MASK,
-+			  FIELD_GET(TRIM5_TCA25_1_MASK, trim[3])) |
-+	       FIELD_PREP(TCALIV_SNSR105C_MASK,
-+			  FIELD_GET(TRIM5_TCA105_1_MASK, trim[3])),
-+	       tmu->base + TCALIV(1));
-+
-+	writel(FIELD_PREP(TCALIV_SNSR25C_MASK,
-+			  FIELD_GET(TRIM3_TCA40_0_MASK, trim[1])) |
-+	       FIELD_PREP(TCALIV_SNSR105C_MASK,
-+			  FIELD_GET(TRIM4_TCA40_1_MASK, trim[2])),
-+	       tmu->base + TCALIV(2));
-+
-+	return 0;
-+}
-+
-+static int imx8mm_tmu_probe_set_calib(struct platform_device *pdev,
-+				      struct imx8mm_tmu *tmu)
-+{
-+	struct device *dev = &pdev->dev;
-+
-+	/*
-+	 * Lack of calibration data OCOTP reference is not considered
-+	 * fatal to retain compatibility with old DTs. It is however
-+	 * strongly recommended to update such old DTs to get correct
-+	 * temperature compensation values for each SoC.
-+	 */
-+	if (!of_find_property(pdev->dev.of_node, "nvmem-cells", NULL)) {
-+		dev_warn(dev,
-+			 "No OCOTP nvmem reference found, SoC-specific calibration not loaded. Please update your DT.\n");
-+		return 0;
-+	}
-+
-+	if (tmu->socdata->version == TMU_VER1)
-+		return imx8mm_tmu_probe_set_calib_v1(pdev, tmu);
-+
-+	return imx8mm_tmu_probe_set_calib_v2(pdev, tmu);
-+}
-+
- static int imx8mm_tmu_probe(struct platform_device *pdev)
- {
- 	const struct thermal_soc_data *data;
-@@ -180,6 +340,10 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, tmu);
- 
-+	ret = imx8mm_tmu_probe_set_calib(pdev, tmu);
-+	if (ret)
-+		goto disable_clk;
-+
- 	/* enable all the probes for V2 TMU */
- 	if (tmu->socdata->version == TMU_VER2)
- 		imx8mm_tmu_probe_sel_all(tmu);
--- 
-2.35.1
-
+For more info write to <info@kernelci.org>
