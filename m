@@ -2,173 +2,408 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C335F63E596
-	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 00:37:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E767263E6D9
+	for <lists+linux-pm@lfdr.de>; Thu,  1 Dec 2022 02:03:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbiK3Xhw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 30 Nov 2022 18:37:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55866 "EHLO
+        id S229593AbiLABDd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 30 Nov 2022 20:03:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiK3Xhk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 18:37:40 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E5330558;
-        Wed, 30 Nov 2022 15:37:21 -0800 (PST)
-Date:   Thu, 1 Dec 2022 00:37:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1669851439;
-        bh=gCjQ7v9MiSprJKAXVgQSc3QwycT+eoWtbLZH/ib/kuY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=psBRQAE+7XvBm97cEAeXI4A+z18YICLeLxtzacCWac3q9okGnsfzcr389b4NC3XCJ
-         GFuc1YVLbI2PmPqxc/KUMvPo/u2PenmGyXfag3PQJa3fM6zbjXCqTbaRAiaEPObgn7
-         PlefG2fEPty/Cj6Y24KmsJrtaPqUYLKoNRNJAI/I=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 0/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <d31b4a2b-fc6b-4084-9cac-ced83a37a8ad@t-8ch.de>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
+        with ESMTP id S229476AbiLABDc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 30 Nov 2022 20:03:32 -0500
+Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89DDC63D5C;
+        Wed, 30 Nov 2022 17:03:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1669856610; x=1701392610;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=l7qdM11g2Q88DnuvqTyrd+YRVKlmM2c79NJWWE3+t6c=;
+  b=L1XMi1qWYCXd9h9HwE7bWCZKjVdbBLdB+VBGHcFtwADInAlA8GyPd1aZ
+   ZIr33sMk+JPAXb1X4eA3vZXknSwjyohCJy6s41P9miw9t6hewz0xtp7Eu
+   WHk8+fS6E+ViFJeFu5DWFbIoJNRTXQlxRzBtSe9Gty4rPo1QI4Z5zi6ds
+   c=;
+X-IronPort-AV: E=Sophos;i="5.96,207,1665446400"; 
+   d="scan'208";a="156617174"
+Subject: Re: Using nr_cpus breaks no_turbo setting of pstate driver
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Dec 2022 01:03:30 +0000
+Received: from EX13MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com (Postfix) with ESMTPS id 05F99416FF;
+        Thu,  1 Dec 2022 01:03:29 +0000 (UTC)
+Received: from EX19D002UWC004.ant.amazon.com (10.13.138.186) by
+ EX13MTAUWC001.ant.amazon.com (10.43.162.135) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 1 Dec 2022 01:03:29 +0000
+Received: from [192.168.29.61] (10.43.160.223) by
+ EX19D002UWC004.ant.amazon.com (10.13.138.186) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.20;
+ Thu, 1 Dec 2022 01:03:28 +0000
+Message-ID: <8af0c78c-6017-bd99-a4e6-29295b8f646a@amazon.com>
+Date:   Wed, 30 Nov 2022 17:03:27 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.5.0
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lenb@kernel.org>
+CC:     <surajjs@amazon.com>
+References: <9b23e9d4-7c7a-a74f-3a6b-939a4a469c2b@amazon.com>
+ <2b3c7457d34f05ab42c7577bbda10033147d5f4b.camel@linux.intel.com>
+From:   "Bhatnagar, Rishabh" <risbhat@amazon.com>
+In-Reply-To: <2b3c7457d34f05ab42c7577bbda10033147d5f4b.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0i8pm1vxQeQu4GJqvf=rinU9dO2gswsLseyEt3E2CgbtA@mail.gmail.com>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.43.160.223]
+X-ClientProxiedBy: EX13D49UWC001.ant.amazon.com (10.43.162.217) To
+ EX19D002UWC004.ant.amazon.com (10.13.138.186)
+X-Spam-Status: No, score=-12.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 2022-11-30 18:57+0100, Rafael J. Wysocki wrote:
-> On Fri, Nov 25, 2022 at 8:10 PM Thomas Weißschuh <linux@weissschuh.net> wrote:
+
+On 11/30/22 8:40 AM, srinivas pandruvada wrote:
+> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
+>
+>
+>
+> Hi Rishabh,
+>
+> I think this is because of request of SMT and the the following CPUID
+> flag is set to false.
+> # cpuid -1 -l 6 | grep ignoring
+> ignoring idle logical processor HWP req = false
+>
+No this flag is not there in my cpuid output. here are the HWP flags i 
+could see:
+
+       HWP base registers                      = true
+       HWP notification                        = false
+       HWP activity window                     = true
+       HWP energy performance preference       = true
+       HWP package level request               = true
+
+> The way CPUs are numbered, the SMT starts at number 24. So, nr_cpus=24
+> didn't bring up any SMT for driver to control.
+
+I tried experiment with nr_cpus=25. Seems like the core which has both 
+cpus enabled follows the turbo limits and rest do not.
+Can you explain how SMT is related to cpus staying in turbo frequency? 
+Also if i dynamically offline 24 cpus then i don't see this issue. It 
+only appears when booted with 24 cpus.
+
+^CPackage       Core    CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ     
+SMI     POLL    C1      POLL%   C1%     CPU%c1  CPU%c6 CoreTmp PkgTmp  
+Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
+-       -       -       4379    99.64   4395    3800    3780 0       
+0       0       0.00    0.00    0.36    0.00    88 88      0.00    
+0.00    479.85  66.88   0.00    0.00
+*0       0       0       3788    99.68   3800    3800    146 0       
+0       0       0.00    0.00    0.32    0.00    72 88      0.00    
+0.00    239.97  30.38   0.00    0.00**
+**0       0       24      3788    99.68   3800    3800 146     0       
+0       0       0.00    0.00    0.32*
+0       1       1       4372    99.63   4388    3800    146 0       
+0       0       0.00    0.00    0.37    0.00    84
+0       2       2       4372    99.63   4388    3800    146 0       
+0       0       0.00    0.00    0.37    0.00    88
+0       4       3       4372    99.63   4388    3800    174 0       
+0       0       0.00    0.00    0.37    0.00    83
+0       9       4       4372    99.63   4388    3800    146 0       
+0       0       0.00    0.00    0.37    0.00    86
+0       10      5       4372    99.63   4388    3800    150 0       
+0       0       0.00    0.00    0.37    0.00    87
+0       11      6       4372    99.63   4388    3800    146 0       
+0       0       0.00    0.00    0.37    0.00    87
+0       16      7       4372    99.63   4388    3800    146 0       
+0       0       0.00    0.00    0.37    0.00    84
+0       17      8       4372    99.64   4388    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    86
+0       18      9       4372    99.64   4388    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    84
+0       19      10      4372    99.63   4388    3800    146 0       
+0       0       0.00    0.00    0.37    0.00    84
+0       27      11      4372    99.62   4388    3800    148 0       
+0       0       0.00    0.00    0.38    0.00    84
+1       1       12      4484    99.64   4500    3800    147 0       
+0       0       0.00    0.00    0.36    0.00    69 73      0.00    
+0.00    239.83  36.49   0.00    0.00
+1       2       13      4484    99.64   4500    3800    147 0       
+0       0       0.00    0.00    0.36    0.00    73
+1       4       14      4484    99.64   4500    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    67
+1       8       15      4484    99.65   4500    3800    146 0       
+0       0       0.00    0.00    0.35    0.00    68
+1       9       16      4484    99.64   4500    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    70
+1       10      17      4484    99.64   4500    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    68
+1       11      18      4484    99.64   4500    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    72
+1       16      19      4484    99.65   4500    3800    146 0       
+0       0       0.00    0.00    0.35    0.00    69
+1       18      20      4484    99.65   4500    3800    146 0       
+0       0       0.00    0.00    0.35    0.00    64
+1       19      21      4484    99.65   4500    3800    146 0       
+0       0       0.00    0.00    0.35    0.00    67
+1       24      22      4484    99.64   4500    3800    146 0       
+0       0       0.00    0.00    0.36    0.00    72
+1       27      23      4484    99.64   4500    3800    240 0       
+0       0       0.00    0.00    0.36    0.00    65
+
+> The default power up MSR_HWP_REQ.max is 0xFF, this will also play role
+> in resolving the max frequency. Here driver is disabling turbo by
+> controlling MSR_HWP_REQ.max.
+>
+> If you want to disable turbo here with reduced nr_cpus, you can set bit
+> 38 of MSR 0x1a0 using msr tools.
+Trying to get more understanding on why does the default way of setting 
+no_turbo not work with reduced cpus?
+I verified this works for nr_cpus=24/25.
+>
+> Thanks,
+> Srinivas
+>
+>
+> On Wed, 2022-11-30 at 08:10 -0800, Bhatnagar, Rishabh wrote:
+>> "Having some issue with my mails failing to deliver. So trying once
+>> again after disabling HTML."
 >>
->> This series adds new printk wrapper macros pr_<level>_cont().
->> These create continuation messages with an explicit level.
 >>
->> Explicit levels are useful when a continuation message is split from its main
->> message. Without the explicit level KERN_DEFAULT ("warn" by default) is used
->> which can lead to stray partial log messages when filtering by level.
+>> Hi Srinivas/Len,
 >>
->> Also checkpatch is modified to recommend the new macros over plain pr_cont().
 >>
->> Lastly the new macros are used in kernel/power/process.c as this file uses
->> continuation messages during system suspend-resume which creates a high
->> likelyhood of interspersed messages.
-> 
-> Well, if process.c is the only problematic piece of code in this
-> respect, I'm not sure if adding the new infrastructure for its benefit
-> alone is worth it, because it can very well do without pr_cont() at
-> all.
-
-In general all usages of pr_cont() are problematic.
-Any continuation can be split from its main message, leading to misleved
-continuations.
-process.c is just the one that I noticed reliably hitting this problem on my
-machine.
-
-> Please see the patch below (compiled only, sorry for gmail-induced
-> white space damage).  I'll submit it properly later if it works for
-> everyone.
-
-The patch looks fine to me and getting rid of usages of pr_cont() seems to be
-the better aproach where it is possible.
-
-Petr: do you still want me to submit the new macros even if it is not used
-directly anymore?
-
-> ---
->  kernel/power/process.c |   25 ++++++++++---------------
->  1 file changed, 10 insertions(+), 15 deletions(-)
-> 
-> Index: linux-pm/kernel/power/process.c
-> ===================================================================
-> --- linux-pm.orig/kernel/power/process.c
-> +++ linux-pm/kernel/power/process.c
-> @@ -27,6 +27,8 @@ unsigned int __read_mostly freeze_timeou
-> 
->  static int try_to_freeze_tasks(bool user_only)
->  {
-> +    const char *what = user_only ? "user space processes" :
-> +                    "remaining freezable tasks";
->      struct task_struct *g, *p;
->      unsigned long end_time;
->      unsigned int todo;
-> @@ -36,6 +38,8 @@ static int try_to_freeze_tasks(bool user
->      bool wakeup = false;
->      int sleep_usecs = USEC_PER_MSEC;
-> 
-> +    pr_info("Freezing %s\n", what);
-> +
->      start = ktime_get_boottime();
-> 
->      end_time = jiffies + msecs_to_jiffies(freeze_timeout_msecs);
-> @@ -82,9 +86,8 @@ static int try_to_freeze_tasks(bool user
->      elapsed_msecs = ktime_to_ms(elapsed);
-> 
->      if (todo) {
-> -        pr_cont("\n");
-> -        pr_err("Freezing of tasks %s after %d.%03d seconds "
-> -               "(%d tasks refusing to freeze, wq_busy=%d):\n",
-> +        pr_err("Freezing %s %s after %d.%03d seconds "
-> +               "(%d tasks refusing to freeze, wq_busy=%d):\n", what,
->                 wakeup ? "aborted" : "failed",
->                 elapsed_msecs / 1000, elapsed_msecs % 1000,
->                 todo - wq_busy, wq_busy);
-> @@ -101,8 +104,8 @@ static int try_to_freeze_tasks(bool user
->              read_unlock(&tasklist_lock);
->          }
->      } else {
-> -        pr_cont("(elapsed %d.%03d seconds) ", elapsed_msecs / 1000,
-> -            elapsed_msecs % 1000);
-> +        pr_info("Freezing %s completed (elapsed %d.%03d seconds)\n",
-> +            what, elapsed_msecs / 1000, elapsed_msecs % 1000);
->      }
-> 
->      return todo ? -EBUSY : 0;
-> @@ -130,14 +133,11 @@ int freeze_processes(void)
->          static_branch_inc(&freezer_active);
-> 
->      pm_wakeup_clear(0);
-> -    pr_info("Freezing user space processes ... ");
->      pm_freezing = true;
->      error = try_to_freeze_tasks(true);
-> -    if (!error) {
-> +    if (!error)
->          __usermodehelper_set_disable_depth(UMH_DISABLED);
-> -        pr_cont("done.");
-> -    }
-> -    pr_cont("\n");
-> +
->      BUG_ON(in_atomic());
-> 
->      /*
-> @@ -166,14 +166,9 @@ int freeze_kernel_threads(void)
->  {
->      int error;
-> 
-> -    pr_info("Freezing remaining freezable tasks ... ");
-> -
->      pm_nosig_freezing = true;
->      error = try_to_freeze_tasks(false);
-> -    if (!error)
-> -        pr_cont("done.");
-> 
-> -    pr_cont("\n");
->      BUG_ON(in_atomic());
-> 
->      if (error)
+>> I have been doing some testing on m5zn.metal AWS instances which
+>> provides 48 vcpus and 192GB memory.
+>>
+>> Test includes loading all cpus with maximum capacity (using stress)
+>> and
+>> observing the frequency after enabling and disabling turbo
+>> frequencies.
+>> Intel_pstate is enabled with hwp.
+>>
+>>
+>> lscpu output for reference:
+>>
+>> *# lscpu*
+>> Architecture:        x86_64
+>> CPU op-mode(s):      32-bit, 64-bit
+>> Byte Order:          Little Endian
+>> CPU(s):              48
+>> On-line CPU(s) list: 0-47
+>> Thread(s) per core:  2
+>> Core(s) per socket:  12
+>> Socket(s):           2
+>> NUMA node(s):        2
+>> Vendor ID:           GenuineIntel
+>> CPU family:          6
+>> Model:               85
+>> Model name:          Intel(R) Xeon(R) Platinum 8252C CPU @ 3.80GHz
+>> Stepping:            7
+>> CPU MHz:             3800.000
+>> CPU max MHz:         4500.0000
+>> CPU min MHz:         1200.0000
+>> BogoMIPS:            7600.00
+>> Virtualization:      VT-x
+>> L1d cache:           32K
+>> L1i cache:           32K
+>> L2 cache:            1024K
+>> L3 cache:            25344K
+>> NUMA node0 CPU(s):   0-11,24-35
+>> NUMA node1 CPU(s):   12-23,36-47
+>> Flags:               fpu vme de pse tsc msr pae mce cx8 apic sep mtrr
+>> pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm
+>> pbe
+>> syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts
+>> rep_good nopl xtopology nonstop_tsc cpuid aperfmperf pni pclmulqdq
+>> dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm
+>> pcid
+>> dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave
+>> avx
+>> f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault epb cat_l3 cdp_l3
+>> invpcid_single intel_ppin ssbd mba ibrs ibpb stibp ibrs_enhanced
+>> tpr_shadow vnmi flexpriority ept vpid ept_ad fsgsbase tsc_adjust bmi1
+>> avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx
+>> smap clflushopt clwb intel_pt avx512cd avx512bw avx512vl xsaveopt
+>> xsavec
+>> xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local
+>> dtherm
+>> ida arat pln pts hwp hwp_act_window hwp_epp hwp_pkg_req pku ospke
+>> avx512_vnni md_clear flush_l1d arch_capabilities
+>>
+>> When testing with all cpus online I don't see any issue. CPUs reach
+>> turbo frequency when intel_pstate/no_turbo is disabled and stay below
+>> turbo frequencies when no_turbo is enabled as expected.
+>>
+>> However, issue occurs when I boot with nr_cpus argument specifying
+>> less
+>> than 48 cpus. e.g. cmdline:
+>>
+>>
+>> */# cat /proc/cmdline/*/
+>> /mmio_stale_data=off mds=off tsx=off tsx_async_abort=off
+>> intel_idle.max_cstate=0
+>> BOOT_IMAGE=/boot/vmlinuz-5.10.154-119.671.amzn2.x86_64
+>> root=UUID=d8605abb-d6cd-4a46-a657-b6bd206da2ab ro console=tty0
+>> console=ttyS0,115200n8 net.ifnames=0 biosdevname=0
+>> nvme_core.io_timeout=4294967295 rd.emergency=poweroff
+>> rd.shell=0*nr_cpus=24 intel_idle.max_cstate=1 processor.max_cstate=1*
+>>
+>> # echo 1 > /sys/devices/system/cpu/intel_pstate/no_turbo
+>> # turbostat
+>>
+>>
+>> ^CPackage       Core CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ
+>> SMI     POLL C1      POLL%   C1%     CPU%c1  CPU%c6  CoreTmp PkgTmp
+>> Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
+>> -       -       -       4370    99.76   4381    3800    6374 0
+>> 0       0       0.00    0.00    0.24    0.00    96 96      0.00
+>> 0.00    479.79  69.20   0.00    0.00
+>> 0       0       0       4292    99.93   4295    3800    266 0
+>> 0       0       0.00    0.00    0.07    0.00    88 96      0.00
+>> 0.00    239.89  33.62   0.00    0.00
+>> 0       2       1       4292    99.92   4295    3800    270 0
+>> 0       0       0.00    0.00    0.08    0.00    92
+>> 0       4       2       4292    99.92   4295    3800    264 0
+>> 0       0       0.00    0.00    0.08    0.00    92
+>> 0       8       3       4292    99.93   4295    3800    268 0
+>> 0       0       0.00    0.00    0.07    0.00    90
+>> 0       9       4       4292    99.93   4295    3800    264 0
+>> 0       0       0.00    0.00    0.07    0.00    91
+>> 0       10      5       4292    99.92   4295    3800    264 0
+>> 0       0       0.00    0.00    0.08    0.00    92
+>> 0       11      6       4292    99.92   4295    3800    265 0
+>> 0       0       0.00    0.00    0.08    0.00    96
+>> 0       17      7       4292    99.93   4295    3800    266 0
+>> 0       0       0.00    0.00    0.07    0.00    91
+>> 0       19      8       4292    99.93   4295    3800    266 0
+>> 0       0       0.00    0.00    0.07    0.00    91
+>> 0       25      9       4292    99.92   4295    3800    264 0
+>> 0       0       0.00    0.00    0.08    0.00    91
+>> 0       26      10      4292    99.92   4295    3800    264 0
+>> 0       0       0.00    0.00    0.08    0.00    93
+>> 0       27      11      4292    99.92   4295    3800    264 0
+>> 0       0       0.00    0.00    0.08    0.00    94
+>> 1       1       12      4449    99.61   4466    3800    264 0
+>> 0       0       0.00    0.00    0.39    0.00    80 88      0.00
+>> 0.00    239.90  35.58   0.00    0.00
+>> 1       2       13      4448    99.60   4466    3800    264 0
+>> 0       0       0.00    0.00    0.40    0.00    86
+>> 1       3       14      4449    99.61   4466    3800    267 0
+>> 0       0       0.00    0.00    0.39    0.00    81
+>> 1       8       15      4449    99.61   4466    3800    264 0
+>> 0       0       0.00    0.00    0.39    0.00    79
+>> 1       9       16      4448    99.60   4466    3800    264 0
+>> 0       0       0.00    0.00    0.40    0.00    79
+>> 1       10      17      4449    99.61   4466    3800    264 0
+>> 0       0       0.00    0.00    0.39    0.00    83
+>> 1       17      18      4448    99.60   4466    3800    264 0
+>> 0       0       0.00    0.00    0.40    0.00    82
+>> 1       18      19      4449    99.61   4466    3800    281 0
+>> 0       0       0.00    0.00    0.39    0.00    80
+>> 1       19      20      4449    99.61   4466    3800    264 0
+>> 0       0       0.00    0.00    0.39    0.00    83
+>> 1       20      21      4448    99.59   4466    3800    264 0
+>> 0       0       0.00    0.00    0.41    0.00    83
+>> 1       25      22      4448    99.60   4466    3800    264 0
+>> 0       0       0.00    0.00    0.40    0.00    81
+>> 1       27      23      4448    99.59   4466    3800    265 0
+>> 0       0       0.00    0.00    0.41    0.00    88
+>>
+>> /
+>> /
+>>
+>> As part of the turbostat output I could see that pstate driver is
+>> setting the hints correctly in MSR_HWP_REQUEST. But somehow these
+>> limits
+>> are not being honored by HWP logic.
+>>
+>>
+>> cpu0: MSR_PM_ENABLE: 0x00000001 (HWP)
+>> cpu0: MSR_HWP_CAPABILITIES: 0x070c262d (high 45 guar 38 eff 12 low 7)
+>> *cpu0: MSR_HWP_REQUEST: 0x00002626 (min 38 max 38 des 0 epp 0x0
+>> window
+>> 0x0 pkg 0x0)*
+>> cpu0: MSR_HWP_REQUEST_PKG: 0x8000ff00 (min 0 max 255 des 0 epp 0x80
+>> window 0x0)
+>> cpu0: MSR_HWP_STATUS: 0x00000004 (No-Guaranteed_Perf_Change,
+>> No-Excursion_Min)
+>>
+>> I tried the same experiment after disabling hwp by
+>> specifying*intel_pstate=no_hwp*in cmdline. In this case the pstate
+>> driver seems to be selecting pstates correctly.
+>>
+>> ^CPackage       Core CPU     Avg_MHz Busy%   Bzy_MHz TSC_MHz IRQ
+>> SMI     POLL C1      POLL%   C1%     CPU%c1  CPU%c6  CoreTmp PkgTmp
+>> Pkg%pc2 Pkg%pc6 PkgWatt RAMWatt PKG_%   RAM_%
+>> -       -       -       3800    100.00  3800    3800    1646 0
+>> 0       0       0.00    0.00    0.00    0.00    85 85      0.00
+>> 0.00    328.38  62.14   0.00    0.00
+>> 0       0       0       3800    100.00  3800    3800    66 0
+>> 0       0       0.00    0.00    0.00    0.00    85 85      0.00
+>> 0.00    175.42  36.96   0.00    0.00
+>> 0       0       24      3800    100.00  3800    3800    70 0
+>> 0       0       0.00    0.00    0.00
+>> 0       1       1       3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    82
+>> 0       2       2       3800    100.00  3800    3800    67 0
+>> 0       0       0.00    0.00    0.00    0.00    84
+>> 0       3       3       3800    100.00  3800    3800    67 0
+>> 0       0       0.00    0.00    0.00    0.00    83
+>> 0       4       4       3800    100.00  3800    3800    68 0
+>> 0       0       0.00    0.00    0.00    0.00    85
+>> 0       8       5       3800    100.00  3800    3800    68 0
+>> 0       0       0.00    0.00    0.00    0.00    83
+>> 0       9       6       3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    85
+>> 0       10      7       3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    82
+>> 0       11      8       3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    84
+>> 0       17      9       3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    83
+>> 0       18      10      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    83
+>> 0       27      11      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    85
+>> 1       0       12      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    66 68      0.00
+>> 0.00    152.95  25.18   0.00    0.00
+>> 1       2       13      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    65
+>> 1       4       14      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    68
+>> 1       8       15      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    63
+>> 1       9       16      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    65
+>> 1       10      17      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    64
+>> 1       17      18      3800    100.00  3800    3800    66 0
+>> 0       0       0.00    0.00    0.00    0.00    63
+>> 1       18      19      3800    100.00  3800    3800    66 0
+>> 0       0       0.00    0.00    0.00    0.00    63
+>> 1       19      20      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    63
+>> 1       20      21      3800    100.00  3800    3800    66 0
+>> 0       0       0.00    0.00    0.00    0.00    66
+>> 1       25      22      3800    100.00  3800    3800    65 0
+>> 0       0       0.00    0.00    0.00    0.00    64
+>> 1       27      23      3800    100.00  3800    3800    67 0
+>> 0       0       0.00    0.00    0.00    0.00    67
+>>
+>> [root@ip-172-31-36-94 ec2-user]# cat
+>> /sys/devices/system/cpu/intel_pstate/no_turbo
+>> 1
+>>
+>>
+>> Thanks,
+>> Rishabh
+>>
