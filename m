@@ -2,103 +2,180 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5FAE63FD81
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 02:11:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA2A863FE34
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 03:38:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiLBBLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 20:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S230211AbiLBCiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 1 Dec 2022 21:38:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiLBBLa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 20:11:30 -0500
-Received: from wind.enjellic.com (wind.enjellic.com [76.10.64.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BF267CF785;
-        Thu,  1 Dec 2022 17:11:27 -0800 (PST)
-Received: from wind.enjellic.com (localhost [127.0.0.1])
-        by wind.enjellic.com (8.15.2/8.15.2) with ESMTP id 2B21AUHv025989;
-        Thu, 1 Dec 2022 19:10:30 -0600
-Received: (from greg@localhost)
-        by wind.enjellic.com (8.15.2/8.15.2/Submit) id 2B21ATfW025988;
-        Thu, 1 Dec 2022 19:10:29 -0600
-Date:   Thu, 1 Dec 2022 19:10:29 -0600
-From:   "Dr. Greg" <greg@enjellic.com>
-To:     Casey Schaufler <casey@schaufler-ca.com>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to kernel-only use
-Message-ID: <20221202011028.GA25824@wind.enjellic.com>
-Reply-To: "Dr. Greg" <greg@enjellic.com>
-References: <20221111231636.3748636-1-evgreen@chromium.org> <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid> <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <Y4ORZT2t/KhL5jfn@kernel.org> <53e3d7f9cc50e1fe9cf67e7889c6b5498580e5d9.camel@linux.ibm.com> <20221130202220.GA13122@wind.enjellic.com> <5d4b205a-9a6c-aa6a-0c83-17e9861fecf8@schaufler-ca.com>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d4b205a-9a6c-aa6a-0c83-17e9861fecf8@schaufler-ca.com>
-User-Agent: Mutt/1.4i
-X-Greylist: Sender passed SPF test, not delayed by milter-greylist-4.2.3 (wind.enjellic.com [127.0.0.1]); Thu, 01 Dec 2022 19:10:30 -0600 (CST)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S230193AbiLBCiV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 21:38:21 -0500
+Received: from out29-5.mail.aliyun.com (out29-5.mail.aliyun.com [115.124.29.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D9693837;
+        Thu,  1 Dec 2022 18:38:19 -0800 (PST)
+X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07438342|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0033058-0.00464087-0.992053;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.QLqU9kr_1669948695;
+Received: from SunxiBot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.QLqU9kr_1669948695)
+          by smtp.aliyun-inc.com;
+          Fri, 02 Dec 2022 10:38:16 +0800
+From:   Kant Fan <kant@allwinnertech.com>
+To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com
+Cc:     cw00.choi@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH 5.4-] PM/devfreq: governor: Add a private governor_data for governor
+Date:   Fri,  2 Dec 2022 10:38:12 +0800
+Message-Id: <20221202023812.84174-1-kant@allwinnertech.com>
+X-Mailer: git-send-email 2.29.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 01:34:28PM -0800, Casey Schaufler wrote:
+Commit fbd567e56942ecc4da906c4f3f3652c94773af5b upstream.
 
-Good evening to everyone.
+The member void *data in the structure devfreq can be overwrite
+by governor_userspace. For example:
+1. The device driver assigned the devfreq governor to simple_ondemand
+by the function devfreq_add_device() and init the devfreq member
+void *data to a pointer of a static structure devfreq_simple_ondemand_data
+by the function devfreq_add_device().
+2. The user changed the devfreq governor to userspace by the command
+"echo userspace > /sys/class/devfreq/.../governor".
+3. The governor userspace alloced a dynamic memory for the struct
+userspace_data and assigend the member void *data of devfreq to
+this memory by the function userspace_init().
+4. The user changed the devfreq governor back to simple_ondemand
+by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
+5. The governor userspace exited and assigned the member void *data
+in the structure devfreq to NULL by the function userspace_exit().
+6. The governor simple_ondemand fetched the static information of
+devfreq_simple_ondemand_data in the function
+devfreq_simple_ondemand_func() but the member void *data of devfreq was
+assigned to NULL by the function userspace_exit().
+7. The information of upthreshold and downdifferential is lost
+and the governor simple_ondemand can't work correctly.
 
-> On 11/30/2022 12:22 PM, Dr. Greg wrote:
-> > On Sun, Nov 27, 2022 at 11:41:26AM -0500, James Bottomley wrote:
-> >> Of course, if no application is actually using PCR23, then it's
-> >> probably OK to use it in the kernel and make it invisible to user
-> >> space, but no evidence about this has actually been presented.
-> >
-> > If there isn't, there will be in in the next week or so, if we can
-> > stay on schedule.  Otherwise, I fear that Casey Schaufler, who I
-> > believe is holding his breath, may turn irretrievably blue.... :-)
->
-> Sorry to disappoint, but my supply of apoplexy is firmly rooted
-> elsewhere for the time being. :-( Also, you overestimate my interest
-> in things TPM related.
+The member void *data in the structure devfreq is designed for
+a static pointer used in a governor and inited by the function
+devfreq_add_device(). This patch add an element named governor_data
+in the devfreq structure which can be used by a governor(E.g userspace)
+who want to assign a private data to do some private things.
 
-I was being too clever by half, my comment had nothing to do with your
-interest, or lack thereof about TPM's.... :-)
+Fixes: ce26c5bb9569 ("PM / devfreq: Add basic governors")
+Cc: stable@vger.kernel.org # 5.4-
+Signed-off-by: Kant Fan <kant@allwinnertech.com>
+---
+ drivers/devfreq/devfreq.c            |  6 ++----
+ drivers/devfreq/governor_userspace.c | 12 ++++++------
+ include/linux/devfreq.h              |  7 ++++---
+ 3 files changed, 12 insertions(+), 13 deletions(-)
 
-I had replied to one of the threads where LSM stacking and IMA
-integration issues were being discussed and I commented that TSEM may
-contribute to those conversations.  You had replied back and said that
-sending teasers was unfair, I was suggesting with my comment that you
-were holding your breath waiting for the release of TSEM.... :-)
+diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
+index c79652ee94be..93efaf69d08e 100644
+--- a/drivers/devfreq/devfreq.c
++++ b/drivers/devfreq/devfreq.c
+@@ -603,8 +603,7 @@ static void devfreq_dev_release(struct device *dev)
+  * @dev:	the device to add devfreq feature.
+  * @profile:	device-specific profile to run devfreq.
+  * @governor_name:	name of the policy to choose frequency.
+- * @data:	private data for the governor. The devfreq framework does not
+- *		touch this value.
++ * @data:	devfreq driver pass to governors, governor should not change it.
+  */
+ struct devfreq *devfreq_add_device(struct device *dev,
+ 				   struct devfreq_dev_profile *profile,
+@@ -788,8 +787,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
+  * @dev:	the device to add devfreq feature.
+  * @profile:	device-specific profile to run devfreq.
+  * @governor_name:	name of the policy to choose frequency.
+- * @data:	private data for the governor. The devfreq framework does not
+- *		touch this value.
++ * @data:	devfreq driver pass to governors, governor should not change it.
+  *
+  * This function manages automatically the memory of devfreq device using device
+  * resource management and simplify the free operation for memory of devfreq
+diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
+index af94942fcf95..a3ae4dc4668b 100644
+--- a/drivers/devfreq/governor_userspace.c
++++ b/drivers/devfreq/governor_userspace.c
+@@ -21,7 +21,7 @@ struct userspace_data {
+ 
+ static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
+ {
+-	struct userspace_data *data = df->data;
++	struct userspace_data *data = df->governor_data;
+ 
+ 	if (data->valid)
+ 		*freq = data->user_frequency;
+@@ -40,7 +40,7 @@ static ssize_t store_freq(struct device *dev, struct device_attribute *attr,
+ 	int err = 0;
+ 
+ 	mutex_lock(&devfreq->lock);
+-	data = devfreq->data;
++	data = devfreq->governor_data;
+ 
+ 	sscanf(buf, "%lu", &wanted);
+ 	data->user_frequency = wanted;
+@@ -60,7 +60,7 @@ static ssize_t show_freq(struct device *dev, struct device_attribute *attr,
+ 	int err = 0;
+ 
+ 	mutex_lock(&devfreq->lock);
+-	data = devfreq->data;
++	data = devfreq->governor_data;
+ 
+ 	if (data->valid)
+ 		err = sprintf(buf, "%lu\n", data->user_frequency);
+@@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
+ 		goto out;
+ 	}
+ 	data->valid = false;
+-	devfreq->data = data;
++	devfreq->governor_data = data;
+ 
+ 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
+ out:
+@@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
+ 	if (devfreq->dev.kobj.sd)
+ 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+ 
+-	kfree(devfreq->data);
+-	devfreq->data = NULL;
++	kfree(devfreq->governor_data);
++	devfreq->governor_data = NULL;
+ }
+ 
+ static int devfreq_userspace_handler(struct devfreq *devfreq,
+diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
+index 2bae9ed3c783..6cbc6d1ae32f 100644
+--- a/include/linux/devfreq.h
++++ b/include/linux/devfreq.h
+@@ -121,8 +121,8 @@ struct devfreq_dev_profile {
+  *		devfreq.nb to the corresponding register notifier call chain.
+  * @work:	delayed work for load monitoring.
+  * @previous_freq:	previously configured frequency value.
+- * @data:	Private data of the governor. The devfreq framework does not
+- *		touch this.
++ * @data:	devfreq driver pass to governors, governor should not change it.
++ * @governor_data:	private data for governors, devfreq core doesn't touch it.
+  * @min_freq:	Limit minimum frequency requested by user (0: none)
+  * @max_freq:	Limit maximum frequency requested by user (0: none)
+  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
+@@ -159,7 +159,8 @@ struct devfreq {
+ 	unsigned long previous_freq;
+ 	struct devfreq_dev_status last_status;
+ 
+-	void *data; /* private data for governors */
++	void *data;
++	void *governor_data;
+ 
+ 	unsigned long min_freq;
+ 	unsigned long max_freq;
+-- 
+2.29.0
 
-On a related note to this thread, a major component of Quixote/TSEM is
-the notion of raising the question and opportunity for shaping what
-TPM's should be when they grow up, given the limited resources they
-bring to the table, let alone the notion that they are about
-retrospective rather than prospective trust.
-
-> I am very interested to see TSEM. I have heard nothing of it to
-> date.
-
-Hardly anyone has, small team, very focused, working in a deep dive
-for the last couple of years to bring this forward.
-
-Hopefully it will prove of interest and utility, I don't believe there
-is a reference in the literature to an equivalent approach.
-
-Have a good evening.
-
-As always,
-Dr. Greg
-
-The Quixote Project - Flailing at the Travails of Cybersecurity
