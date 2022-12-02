@@ -2,106 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B532B641151
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Dec 2022 00:06:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06C21641165
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Dec 2022 00:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbiLBXGA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 18:06:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
+        id S234746AbiLBXVM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 18:21:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234457AbiLBXF7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 18:05:59 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21090F2314;
-        Fri,  2 Dec 2022 15:05:59 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id b21so5950577plc.9;
-        Fri, 02 Dec 2022 15:05:59 -0800 (PST)
+        with ESMTP id S234661AbiLBXVL (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 18:21:11 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFECF7A2C
+        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 15:21:08 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id i15so171138edf.2
+        for <linux-pm@vger.kernel.org>; Fri, 02 Dec 2022 15:21:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2YFuCwIlw0b5okxJ2mEKW4RttLYygMDqsm34g7nURCo=;
-        b=HtLVTMXIoRPWCsiKh96L+qwOfJo0GDvkOvoTAS74lm8TqvPq8c65lv8HPwhgO/GIy1
-         vOjUvgUHbCKVvw5pSkz1wMKJb2p2J4seBtPUz2RQKUHaUU0xSW/e5ZkiwRbCqCWgKej+
-         smea1GelQOfZz/ojZLxrM2yqny7YFjmFX1qcl5lME4Pez95up0mYRflVGkrJbQAIMRTn
-         uXELLAVZhoEF7j4Gn0Hkk9Bu1+xf/N6EHmtWv6zeBgFmygLFRIjNUymElrZoLlPq/10e
-         k73soIM/GnbbRBgrLd9l5EAkyuT72D1m2Ne8Gv/rF+YFcrOjWrnl8/LkMkyOJqIdsUPf
-         DP6A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EtvKUnumnzVEtCCrGx2jX9RV0tsvIRbyk1vAVgd4Pdw=;
+        b=Sbi+S+gPjUHT3arab+0NNvc+l7IToOHQQvdPU6a6+GqAdbg2QiUETyaF/z7tRNYTUS
+         j04lTgJHOz0Nj9twV8qFbA/f9IcmTJrnD/IUt8xBcvAnRMp7BIQJ11yGUgltPn42iizc
+         KFwvbFvgi/r7AUxtIBavnmJw17Lbcv4ojBgggctwVZQHv+3I0FiNx9+jebwvYKP+0GSm
+         Df67eymGA+VyjeyshaJPdja2R96NEaGgQQUjbxSV8UbMAqmjaEyRPn9bWGonA0cnNVSH
+         bi2TI0MetEqMssIMtO6e+kjU8XFvJwkaxz4yAIdEPYrInVwOJvETlbf/RDhb2TtKq4l1
+         AEaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2YFuCwIlw0b5okxJ2mEKW4RttLYygMDqsm34g7nURCo=;
-        b=PcWV0ueMYmeHzukDC2V9duq3tRBXv4ayXSzyTpdDaWXSYX6OJKXOw4GJNaIoHbLzHy
-         tdQEMJ795x3w/0tfmqU79LLVerrdABXptWZds6P2XbhUs52vUa25ZXL/d03cR3cNHLna
-         zcIjETGLjVIj6EoxmZGXVeZKtodRihjiuX5M2GQwlWFhXEC4H9tVi8JiEOpnSRqaVZv7
-         OHnomMGj0GQ1xGQWW/TzczVnwMHGQd5q+QRzLGUl0XkcvMc6RG9qFbXEVs1ZWP9EXu1C
-         QGr71H5zOj2gUMiW9afXs+/C1mX0SLI9sk1ghX4h7lmL43NHs7ZFV4SAmL+3Kc/ir1oM
-         nqSg==
-X-Gm-Message-State: ANoB5pn++RK/8c9zCaGzPRiaU2lhXRkU/IVKP9ZwGlXwOSvvId2MKEMP
-        EiL9HKprp53BsHSMJcidCF3CCsy2nW2lwQ==
-X-Google-Smtp-Source: AA0mqf7YlJVKridhyQaYG2+KsYrOzTdd14JbhT14eHkcZEVq3pLI1Xng1cRmLdORJA+5FWrKfmkx9Q==
-X-Received: by 2002:a17:90a:d18b:b0:219:6be1:7ff2 with SMTP id fu11-20020a17090ad18b00b002196be17ff2mr14496896pjb.79.1670022358555;
-        Fri, 02 Dec 2022 15:05:58 -0800 (PST)
-Received: from [172.30.1.1] ([14.32.163.5])
-        by smtp.gmail.com with ESMTPSA id f88-20020a17090a28e100b001f94d25bfabsm7063029pjd.28.2022.12.02.15.05.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 15:05:55 -0800 (PST)
-Message-ID: <be501519-8ff6-6777-3dec-6abe6648fadc@gmail.com>
-Date:   Sat, 3 Dec 2022 08:05:51 +0900
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EtvKUnumnzVEtCCrGx2jX9RV0tsvIRbyk1vAVgd4Pdw=;
+        b=qUQpBVujzeFt/3ENcrtvshgNW4vsC1tuSoqjy4u+2nTn75wAXjIY58n+O8cRo3+ZB4
+         3AY+w1H/P4zoGCFUVYopyyHDcN97c88P6q888AH36slZC/8GzbUjaijMmYLJJZ923Gng
+         kEh5t8QViGReif9vEdUocmg4lxv210PTlRG3S9Z3GYGx6bDpwTqXXbSvAgfVi/JJJORP
+         u0ez9rrSQEZr78YlRioqnkK68sXT1pkrOOaByCLqcMW8gWZX/TkDO9GI3MxYlW4L54Pp
+         FsBKqn9V3dttnizMyqg0VIpLilJYWGaI9qq5R0+isnSNl2hY1cyZixav91LX9p3xCduc
+         bDrQ==
+X-Gm-Message-State: ANoB5pnHpbuWpKJWUGpVO8iY5VOmiDgHl54YJFDiflrSMfiP617cynV+
+        axgBX37g/G5tjVvo31mr4iBTSA==
+X-Google-Smtp-Source: AA0mqf5X6CKep4syQrVvp+4miTb0w9B9WPX/2DEJN2hNrBOeCbq56fmA/M6dGpCSh7vzFv5HUXAFJQ==
+X-Received: by 2002:aa7:cad9:0:b0:461:60e8:7ac1 with SMTP id l25-20020aa7cad9000000b0046160e87ac1mr18659661edt.45.1670023266561;
+        Fri, 02 Dec 2022 15:21:06 -0800 (PST)
+Received: from hackbox.lan ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id d4-20020a170906304400b007b2a3cad2cfsm3521293ejd.132.2022.12.02.15.21.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Dec 2022 15:21:06 -0800 (PST)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v5 0/2] interconnect: qcom: Add support for SM8550
+Date:   Sat,  3 Dec 2022 01:20:52 +0200
+Message-Id: <20221202232054.2666830-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] PM / devfreq: event: Use device_match_of_node()
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, cw00.choi@samsung.com
-Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <202211251510047017670@zte.com.cn>
-From:   Chanwoo Choi <cwchoi00@gmail.com>
-In-Reply-To: <202211251510047017670@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22. 11. 25. 16:10, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Replace the open-code with device_match_of_node().
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/devfreq/devfreq-event.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/devfreq/devfreq-event.c b/drivers/devfreq/devfreq-event.c
-> index 6765c03334bc..f041edccd107 100644
-> --- a/drivers/devfreq/devfreq-event.c
-> +++ b/drivers/devfreq/devfreq-event.c
-> @@ -233,7 +233,7 @@ struct devfreq_event_dev *devfreq_event_get_edev_by_phandle(struct device *dev,
-> 
->  	mutex_lock(&devfreq_event_list_lock);
->  	list_for_each_entry(edev, &devfreq_event_list, node) {
-> -		if (edev->dev.parent && edev->dev.parent->of_node == node)
-> +		if (edev->dev.parent && device_match_of_node(edev->dev.parent, node))
->  			goto out;
->  	}
-> 
+This patchset adds interconnect support for SM8550.
 
-Applied it.
+The v4 of this patchset is here:
+https://lore.kernel.org/all/20221130132059.3145243-1-abel.vesa@linaro.org/
+
+To: Andy Gross <agross@kernel.org>
+To: Bjorn Andersson <andersson@kernel.org>
+To: Konrad Dybcio <konrad.dybcio@linaro.org>
+To: Georgi Djakov <djakov@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org
+Cc: linux-pm@vger.kernel.org
+Cc: devicetree@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+Abel Vesa (2):
+  dt-bindings: interconnect: Add Qualcomm SM8550
+  interconnect: qcom: Add SM8550 interconnect provider driver
+
+ .../interconnect/qcom,sm8550-rpmh.yaml        |  139 +
+ drivers/interconnect/qcom/Kconfig             |    9 +
+ drivers/interconnect/qcom/Makefile            |    2 +
+ drivers/interconnect/qcom/sm8550.c            | 2319 +++++++++++++++++
+ drivers/interconnect/qcom/sm8550.h            |  178 ++
+ .../interconnect/qcom,sm8550-rpmh.h           |  190 ++
+ 6 files changed, 2837 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8550-rpmh.yaml
+ create mode 100644 drivers/interconnect/qcom/sm8550.c
+ create mode 100644 drivers/interconnect/qcom/sm8550.h
+ create mode 100644 include/dt-bindings/interconnect/qcom,sm8550-rpmh.h
 
 -- 
-Best Regards,
-Samsung Electronics
-Chanwoo Choi
+2.34.1
 
