@@ -2,310 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 797E4640697
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:18:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5DAC6406AD
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiLBMSO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 07:18:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
+        id S232190AbiLBMVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 07:21:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbiLBMSL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:18:11 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265B298E99;
-        Fri,  2 Dec 2022 04:18:10 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id fp23so4497041qtb.0;
-        Fri, 02 Dec 2022 04:18:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DuwvGudsv0NtoGLtvfgyPP/TQW5AhHw0IVTCNeOwnBw=;
-        b=y1JDIN/SGP/KzFubFKbi1SxGOaz1uNbOIGQwXK8/uF+u1p8RWBVN5Zm/3CHgBVPrMD
-         SjSyFS5yeYmJ4L2DPowQEve3lQr/8zZl+UD4Rv3AzCvFfaRC6CLAu188dF1GxGgBBTMd
-         Ctpo4cxsw794WBIBQtoHgoPsOg9EMVnhPhe2/O5NI1XxfzPeBk8ncNkB6RxugCeAk3IQ
-         G4ScVXVdSLL4SSqtKy7rAGBEY4kY0jUMkVp/Z3fn6F+QKlkoICezvta2ZHU68CvK9JAs
-         09d5t7MgBdrFVuc9hVC6mqr1/tTHsR51XqyV/q2XUojhvUbY4PZQhu8AVJe4GUeYzDmp
-         c6lQ==
-X-Gm-Message-State: ANoB5pmKp91nyICUUjBr+RoEbNOWQR8RMe/mxIubZV35zARbwblweNZ+
-        eEh/rsdzvaxApPscOPhS+Pnod4XcvnMzLCfe70A=
-X-Google-Smtp-Source: AA0mqf47UpzJNAwavczJqxL1OfduIXAIqgAfLoludYj2DCWEzTTWY3GlrV+IR/EQxF8HCLz7qvm435/BStLvSXZoyCM=
-X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
- cx10-20020a05620a51ca00b006ecfa04d97cmr45648191qkb.764.1669983489227; Fri, 02
- Dec 2022 04:18:09 -0800 (PST)
-MIME-Version: 1.0
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org> <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
-In-Reply-To: <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 2 Dec 2022 13:17:56 +0100
-Message-ID: <CAJZ5v0ixHocQbu6-zs3dMDsiw8vdPyv=8Re7N4kUckeGkLhUzg@mail.gmail.com>
-Subject: Re: [PATCH] Revert "cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()"
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
+        with ESMTP id S233206AbiLBMVh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:21:37 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3973865A5;
+        Fri,  2 Dec 2022 04:21:36 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 86B2421C56;
+        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1669983695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d49Oc3S+6muyb1GOiqMcaSOmUuf1KCcSk2Xm3eq+yyg=;
+        b=XnuckT+/lzXYI4qDySsV8Hxn7menm+zUi52vv7O/r7vdGLdiqdO47blqVwleNUjU/cEfgB
+        Bwq3VsB7Uc7SrPfdrrEwqeA6gvttsjhdLQir6Jap3oEnhALiTLCvSr2aNGZXQHcyhCPqL8
+        omMnUHann3fVoS+UBEqAWLzB8gQkLvU=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 0CEEF2C142;
+        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
+Date:   Fri, 2 Dec 2022 13:21:34 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Joe Perches <joe@perches.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        regressions@leemhuis.info, daniel@makrotopia.org,
-        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
-        Nick <vincent@systemli.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
+Message-ID: <Y4ntzmsvsr7gU8x0@alley>
+References: <20221125190948.2062-1-linux@weissschuh.net>
+ <20221125190948.2062-2-linux@weissschuh.net>
+ <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
+ <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
+ <Y4dhs1G3mcX/YraJ@alley>
+ <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 2, 2022 at 6:26 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
->
-> This commit caused regression on Banana Pi R64 (MT7622), revert until
-> the problem is identified and fixed properly.
->
-> Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
-> Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
-> Reported-by: Nick <vincent@systemli.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+On Wed 2022-11-30 15:50:55, Thomas Weißschuh wrote:
+> On 2022-11-30 14:59+0100, Petr Mladek wrote:
+> > On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
+> >> On 2022-11-25 12:18-0800, Joe Perches wrote:
+> >>> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
+> >>>> These macros emit continuation messages with explicit levels.
+> >>>> In case the continuation is logged separately from the original message
+> >>>> it will retain its level instead of falling back to KERN_DEFAULT.
+> >>>> 
+> >>>> This remedies the issue that logs filtered by level contain stray
+> >>>> continuation messages without context.
+> >>>> 
+> >>>> --- a/include/linux/printk.h
+> >>>> +++ b/include/linux/printk.h
+> >>>> @@ -701,6 +703,27 @@ do {									\
+> >>>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+> >>>>  #endif
+> >>>>  
+> >>>> +/*
+> >>>> + * Print a continuation message with level. In case the continuation is split
+> >>>> + * from the main message it preserves the level.
+> >>>> + */
+> >>>> +
+> >>>> +#define pr_emerg_cont(fmt, ...)					\
+> >>>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
+> >>> 
+> >>> Aren't this rather backwards?
+> >>> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
+> >> 
+> >> If nobody else disagrees I'll do this for v3.
+> > 
+> > I slightly prefer the way how it is now. IMHO, it makes it easier
+> > to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
+> > 
+> > <6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
+> > <6,c> kernel/power/process.c:218 thaw_processes "done.\n"
+> > <6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
+> > <6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
+> > <6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
+> > <6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
+> > <6,c> kernel/power/process.c:140 freeze_processes "\n"
+> > <6,c> kernel/power/process.c:138 freeze_processes "done."
+> > <6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
+> > <6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
+> 
+> I did not test it (will do so later) but it seems to me that the code in
+> kernel/printk/index.c should do this correctly in either case. At least it
+> tries to:
+> 
+> if (flags & LOG_CONT) {
+> 	/*
+> 	 * LOGLEVEL_DEFAULT here means "use the same level as the
+> 	 * message we're continuing from", not the default message
+> 	 * loglevel, so don't display it as such.
+> 	 */
+> 	if (level == LOGLEVEL_DEFAULT)
+> 		seq_puts(s, "<c>");
+> 		else
+> 		seq_printf(s, "<%d,c>", level);
+> 	} else
+> 		seq_printf(s, "<%d>", level);
+> 	}
 
-Do you want me to push this revert for -rc8?
+Great. It makes the index consistent. I should have checked the code ;-)
 
-> ---
->  drivers/cpufreq/mediatek-cpufreq.c | 147 +++++++++++++++++++----------
->  1 file changed, 96 insertions(+), 51 deletions(-)
->
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 7f2680bc9a0f..4466d0c91a6a 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -8,7 +8,6 @@
->  #include <linux/cpu.h>
->  #include <linux/cpufreq.h>
->  #include <linux/cpumask.h>
-> -#include <linux/minmax.h>
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_platform.h>
-> @@ -16,6 +15,8 @@
->  #include <linux/pm_opp.h>
->  #include <linux/regulator/consumer.h>
->
-> +#define VOLT_TOL               (10000)
-> +
->  struct mtk_cpufreq_platform_data {
->         int min_volt_shift;
->         int max_volt_shift;
-> @@ -55,7 +56,6 @@ struct mtk_cpu_dvfs_info {
->         unsigned int opp_cpu;
->         unsigned long current_freq;
->         const struct mtk_cpufreq_platform_data *soc_data;
-> -       int vtrack_max;
->         bool ccifreq_bound;
->  };
->
-> @@ -82,7 +82,6 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->         struct regulator *proc_reg = info->proc_reg;
->         struct regulator *sram_reg = info->sram_reg;
->         int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
-> -       int retry = info->vtrack_max;
->
->         pre_vproc = regulator_get_voltage(proc_reg);
->         if (pre_vproc < 0) {
-> @@ -90,44 +89,91 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->                         "invalid Vproc value: %d\n", pre_vproc);
->                 return pre_vproc;
->         }
-> +       /* Vsram should not exceed the maximum allowed voltage of SoC. */
-> +       new_vsram = min(new_vproc + soc_data->min_volt_shift,
-> +                       soc_data->sram_max_volt);
-> +
-> +       if (pre_vproc < new_vproc) {
-> +               /*
-> +                * When scaling up voltages, Vsram and Vproc scale up step
-> +                * by step. At each step, set Vsram to (Vproc + 200mV) first,
-> +                * then set Vproc to (Vsram - 100mV).
-> +                * Keep doing it until Vsram and Vproc hit target voltages.
-> +                */
-> +               do {
-> +                       pre_vsram = regulator_get_voltage(sram_reg);
-> +                       if (pre_vsram < 0) {
-> +                               dev_err(info->cpu_dev,
-> +                                       "invalid Vsram value: %d\n", pre_vsram);
-> +                               return pre_vsram;
-> +                       }
-> +                       pre_vproc = regulator_get_voltage(proc_reg);
-> +                       if (pre_vproc < 0) {
-> +                               dev_err(info->cpu_dev,
-> +                                       "invalid Vproc value: %d\n", pre_vproc);
-> +                               return pre_vproc;
-> +                       }
->
-> -       pre_vsram = regulator_get_voltage(sram_reg);
-> -       if (pre_vsram < 0) {
-> -               dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
-> -               return pre_vsram;
-> -       }
-> +                       vsram = min(new_vsram,
-> +                                   pre_vproc + soc_data->min_volt_shift);
->
-> -       new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
-> -                         soc_data->sram_min_volt, soc_data->sram_max_volt);
-> +                       if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
-> +                               vsram = soc_data->sram_max_volt;
->
-> -       do {
-> -               if (pre_vproc <= new_vproc) {
-> -                       vsram = clamp(pre_vproc + soc_data->max_volt_shift,
-> -                                     soc_data->sram_min_volt, new_vsram);
-> -                       ret = regulator_set_voltage(sram_reg, vsram,
-> -                                                   soc_data->sram_max_volt);
-> +                               /*
-> +                                * If the target Vsram hits the maximum voltage,
-> +                                * try to set the exact voltage value first.
-> +                                */
-> +                               ret = regulator_set_voltage(sram_reg, vsram,
-> +                                                           vsram);
-> +                               if (ret)
-> +                                       ret = regulator_set_voltage(sram_reg,
-> +                                                       vsram - VOLT_TOL,
-> +                                                       vsram);
->
-> -                       if (ret)
-> -                               return ret;
-> -
-> -                       if (vsram == soc_data->sram_max_volt ||
-> -                           new_vsram == soc_data->sram_min_volt)
->                                 vproc = new_vproc;
-> -                       else
-> +                       } else {
-> +                               ret = regulator_set_voltage(sram_reg, vsram,
-> +                                                           vsram + VOLT_TOL);
-> +
->                                 vproc = vsram - soc_data->min_volt_shift;
-> +                       }
-> +                       if (ret)
-> +                               return ret;
->
->                         ret = regulator_set_voltage(proc_reg, vproc,
-> -                                                   soc_data->proc_max_volt);
-> +                                                   vproc + VOLT_TOL);
->                         if (ret) {
->                                 regulator_set_voltage(sram_reg, pre_vsram,
-> -                                                     soc_data->sram_max_volt);
-> +                                                     pre_vsram);
->                                 return ret;
->                         }
-> -               } else if (pre_vproc > new_vproc) {
-> +               } while (vproc < new_vproc || vsram < new_vsram);
-> +       } else if (pre_vproc > new_vproc) {
-> +               /*
-> +                * When scaling down voltages, Vsram and Vproc scale down step
-> +                * by step. At each step, set Vproc to (Vsram - 200mV) first,
-> +                * then set Vproc to (Vproc + 100mV).
-> +                * Keep doing it until Vsram and Vproc hit target voltages.
-> +                */
-> +               do {
-> +                       pre_vproc = regulator_get_voltage(proc_reg);
-> +                       if (pre_vproc < 0) {
-> +                               dev_err(info->cpu_dev,
-> +                                       "invalid Vproc value: %d\n", pre_vproc);
-> +                               return pre_vproc;
-> +                       }
-> +                       pre_vsram = regulator_get_voltage(sram_reg);
-> +                       if (pre_vsram < 0) {
-> +                               dev_err(info->cpu_dev,
-> +                                       "invalid Vsram value: %d\n", pre_vsram);
-> +                               return pre_vsram;
-> +                       }
-> +
->                         vproc = max(new_vproc,
->                                     pre_vsram - soc_data->max_volt_shift);
->                         ret = regulator_set_voltage(proc_reg, vproc,
-> -                                                   soc_data->proc_max_volt);
-> +                                                   vproc + VOLT_TOL);
->                         if (ret)
->                                 return ret;
->
-> @@ -137,24 +183,32 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->                                 vsram = max(new_vsram,
->                                             vproc + soc_data->min_volt_shift);
->
-> -                       ret = regulator_set_voltage(sram_reg, vsram,
-> -                                                   soc_data->sram_max_volt);
-> +                       if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
-> +                               vsram = soc_data->sram_max_volt;
-> +
-> +                               /*
-> +                                * If the target Vsram hits the maximum voltage,
-> +                                * try to set the exact voltage value first.
-> +                                */
-> +                               ret = regulator_set_voltage(sram_reg, vsram,
-> +                                                           vsram);
-> +                               if (ret)
-> +                                       ret = regulator_set_voltage(sram_reg,
-> +                                                       vsram - VOLT_TOL,
-> +                                                       vsram);
-> +                       } else {
-> +                               ret = regulator_set_voltage(sram_reg, vsram,
-> +                                                           vsram + VOLT_TOL);
-> +                       }
-> +
->                         if (ret) {
->                                 regulator_set_voltage(proc_reg, pre_vproc,
-> -                                                     soc_data->proc_max_volt);
-> +                                                     pre_vproc);
->                                 return ret;
->                         }
-> -               }
-> -
-> -               pre_vproc = vproc;
-> -               pre_vsram = vsram;
-> -
-> -               if (--retry < 0) {
-> -                       dev_err(info->cpu_dev,
-> -                               "over loop count, failed to set voltage\n");
-> -                       return -EINVAL;
-> -               }
-> -       } while (vproc != new_vproc || vsram != new_vsram);
-> +               } while (vproc > new_vproc + VOLT_TOL ||
-> +                        vsram > new_vsram + VOLT_TOL);
-> +       }
->
->         return 0;
->  }
-> @@ -250,8 +304,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->          * If the new voltage or the intermediate voltage is higher than the
->          * current voltage, scale up voltage first.
->          */
-> -       target_vproc = max(inter_vproc, vproc);
-> -       if (pre_vproc <= target_vproc) {
-> +       target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
-> +       if (pre_vproc < target_vproc) {
->                 ret = mtk_cpufreq_set_voltage(info, target_vproc);
->                 if (ret) {
->                         dev_err(cpu_dev,
-> @@ -513,15 +567,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->          */
->         info->need_voltage_tracking = (info->sram_reg != NULL);
->
-> -       /*
-> -        * We assume min voltage is 0 and tracking target voltage using
-> -        * min_volt_shift for each iteration.
-> -        * The vtrack_max is 3 times of expeted iteration count.
-> -        */
-> -       info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
-> -                                               info->soc_data->proc_max_volt),
-> -                                           info->soc_data->min_volt_shift);
-> -
->         return 0;
->
->  out_disable_inter_clock:
-> --
-> 2.31.1.272.g89b43f80a514
->
+I do not mind then about the ordering in the macro definitions.
+It really seems to be only an implementation detail.
+
+Best Regards,
+Petr
