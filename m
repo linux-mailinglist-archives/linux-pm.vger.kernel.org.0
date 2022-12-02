@@ -2,78 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B169663FFD2
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 06:27:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAB263FFF2
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 06:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiLBF1Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 00:27:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
+        id S232260AbiLBFpP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 00:45:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiLBF1W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 00:27:22 -0500
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2FFAD15AF
-        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 21:27:19 -0800 (PST)
-Received: by mail-pl1-x632.google.com with SMTP id k7so3689134pll.6
-        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 21:27:19 -0800 (PST)
+        with ESMTP id S231195AbiLBFpO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 00:45:14 -0500
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E895FD2D8D
+        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 21:45:12 -0800 (PST)
+Received: by mail-pj1-x1033.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so4211564pjm.2
+        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 21:45:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eSxc/vuw8b8ZlV/zQQB1AHYxMkA7FyAjq/UT8DAx5EM=;
-        b=JxjJFek7AAPKxa74aAl5FtksMKDZBRv8UpjC6oDgN8cTcnEoLw1Ea1XvcpICJmfCP/
-         B0u5qpGMP6zAnvqu4HscpVX9p3enKr5Ji9GaHQV1SvFteYNQIcjkhB4jZ4jZTaPg6Zu+
-         5pMLjpVs2ZOskNgLywnTUs5/YKE964gxJSTMstdhauLcD9QjTTYVDenmBEjTC+k4XgNe
-         PTFuOJt+wifphpsprqfu42xfYcMzG9jSudpYrHsfdu0rvxrfvUHJf8V3yJP9BLdW7hJb
-         0zm9U5Rzsdc+BjbzYcj2mISlYjxGzgzWFYZGzYcBasXnskxBtAJSbsqztCRjO9MN2VD7
-         OUXg==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h+zEK6axvFIyAjhlFdh6KytUwkG1a72zTer3GTGMlwg=;
+        b=IlOFxp/DA9IWiYacYPi9QR0masyco5aWsfZ6ELzqWtD77JbLAyiuDHyST/ZDkaPz3O
+         tj0knQrXiOIjt4M6AIXbcY5cy561yVUXgtvnQitUuUHSIFWY/s074NFXLUmRwFmCB+AT
+         yhK2Om1yArm526i6JD/CxefBV3QckGLFn8a5aNvQtLdhQwuytqx3C4rRBZMU4UMpLThg
+         eYI9W3GKz1D+s4ajYvP9IOhVSJaM62JyrUutg6t3g/V44l+wmr6pW21WhEesfV5zeG/M
+         P/4GqPAiiW/16WafMoVXWTooxgRj8BZhTUbuyVLapvCQVmZ/h2uuIkgU+b+v976oCRia
+         GEbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eSxc/vuw8b8ZlV/zQQB1AHYxMkA7FyAjq/UT8DAx5EM=;
-        b=6dFo5TbXIxYsoNQYW7rdLy/17usWMnJFO5WXEdY8fRdmBKM3aQtfTtj+tM5vbP0eCe
-         NOXwbENSlyBbSG5RZ4RMFIfdK5rKkDukrK7EATrKw0cF4MhqgmJytj8363qzyUL8i0se
-         tfrF+6946izo+LafSzu/B/b8R0OUlKuLfM3QAmlH2dwosxhKsML1W9zsLxs+wq+T6Lat
-         2Z1VTPIFP0xbZrHWxUexC0qYdzT2PPDRRxhYF+xOwAXAcC6zNZWnpJ+sNxBJ8Syu94R+
-         sEFE3kGUFiUpqHuvibMXU0JWxMDFcm8xpJ7dpuEbBX1z7LsmeTgpmLn2VcCkterTZagi
-         ePug==
-X-Gm-Message-State: ANoB5plx7SGNtA+C8bH9xYc4qHhmQot0RGUV+1f1JVAVlZLKgDDFWvui
-        Bvt8Aqmc5pPnKiLaiQLMkCcPBQ==
-X-Google-Smtp-Source: AA0mqf4qhJ72iEB1qNdRF4ONDN4xQ7Tu4gAgw2SXdas1iORjFhdOikJ95Q7LaqhRV0EwhSaiwVYZHg==
-X-Received: by 2002:a17:90a:5991:b0:218:47f1:b47b with SMTP id l17-20020a17090a599100b0021847f1b47bmr73243982pji.201.1669958839315;
-        Thu, 01 Dec 2022 21:27:19 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h+zEK6axvFIyAjhlFdh6KytUwkG1a72zTer3GTGMlwg=;
+        b=onZCOu7t93ma4z6RwilcashYvd29K795rB+s8Y99YAtkvRqWaSrkNHNEMO9QnY0jHM
+         b+kikL4jIhmN1GMMMiB4GlN11NmRNWInLbntNI94kr4BUS9BYB02b4OZrINNc318sbBy
+         /di0Dn7oOYWfog2gHa/H61S/ybgwtGKzUTVpe2rtDWiA8aUPuTyRfcSj2eraJ6LxGepu
+         7VokctWXWTT9jkMxqe17ZP7E98tK+xTu7l2DDEPKyoXbJxB6BlzEUozfLUeXG+pPMQLA
+         /P079UUuLSsDNxkn/wWlDdQiNkEgWjog+tXjMtkVCNaXzgiPx1ITVFH/GFfqvNQMQPT3
+         qW+g==
+X-Gm-Message-State: ANoB5pnr/eX8n8n7pVp1QZL9xmmAuVeHkEv1H8ktVjyKrpNje6k/3cnp
+        EbKg8mS3eFUzGJCWYWc7bFVruA==
+X-Google-Smtp-Source: AA0mqf5Vi/i22eoSUMrWqCNIOpm4wAFX63aC5wlgIv8b/MIhgZ82FoDehKuobcR+zLTZUstpJ1tJmQ==
+X-Received: by 2002:a17:902:64d6:b0:189:8427:e5c1 with SMTP id y22-20020a17090264d600b001898427e5c1mr26177398pli.24.1669959912443;
+        Thu, 01 Dec 2022 21:45:12 -0800 (PST)
 Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id b65-20020a62cf44000000b0056f0753390csm4273317pfg.96.2022.12.01.21.27.18
+        by smtp.gmail.com with ESMTPSA id e12-20020a170902784c00b001888cadf8f6sm4608654pln.49.2022.12.01.21.45.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Dec 2022 21:27:18 -0800 (PST)
-Date:   Fri, 2 Dec 2022 10:57:16 +0530
+        Thu, 01 Dec 2022 21:45:11 -0800 (PST)
+Date:   Fri, 2 Dec 2022 11:15:10 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     jia-wei.chang@mediatek.com, Nick <vincent@systemli.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        rex-bc.chen@mediatek.com, angelogioacchino.delregno@collabora.com,
-        Frank Wunderlich <frank-w@public-files.de>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        =?utf-8?B?SMO8aG4s?= Thomas <thomas.huehn@hs-nordhausen.de>,
-        Daniel Golle <daniel@makrotopia.org>
-Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
-Message-ID: <20221202052716.uj3kzkunazmgazeq@vireshk-i7>
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
- <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
- <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
- <Y4jHvomTrU8guBox@makrotopia.org>
- <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] OPP updates for 6.2
+Message-ID: <20221202054510.2dsvqjfxy7vaxfiu@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -83,16 +65,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01-12-22, 16:39, Thorsten Leemhuis wrote:
-> Thx for clarifying. And I noticed I made a mistake: I should have
-> directed my earlier question wrt to any progress here more into the
-> direction of Jia-Wei Chang (who authored 6a17b3876b) and Viresh Kumar
-> (who committed it).
+Hi Rafael,
 
-I was waiting for the platform maintainers to come up with a fix. I
-have sent a patch now to revert this, in-reply-to this thread.
+The following changes since commit c7e31e36d8a262eb0bc2daf8f9b7481c83284386:
 
-Please confirm this is working fine. Thanks.
+  dt-bindings: opp: Add missing (unevaluated|additional)Properties on child nodes (2022-08-24 11:34:22 +0530)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/opp-updates-6.2
+
+for you to fetch changes up to dba79b78ecc18f7788fd08eb998388e226817fb5:
+
+  dt-bindings: opp-v2: Fix clock-latency-ns prop in example (2022-11-08 09:50:44 +0530)
+
+----------------------------------------------------------------
+OPP updates for 6.2
+
+- Several DT fixes and code reorganization around opp-microvolt-<named>
+  DT property (Viresh Kumar).
+
+- Allow any of opp-microvolt, opp-microamp, or opp-microwatt properties
+  to be present without the others present (James Calligeros).
+
+- Fix clock-latency-ns prop in DT example (Serge Semin).
+
+----------------------------------------------------------------
+James Calligeros (1):
+      OPP: decouple dt properties in opp_parse_supplies()
+
+Serge Semin (1):
+      dt-bindings: opp-v2: Fix clock-latency-ns prop in example
+
+Viresh Kumar (4):
+      dt-bindings: opp: Fix usage of current in microwatt property
+      dt-bindings: opp: Fix named microwatt property
+      OPP: Parse named opp-microwatt property too
+      OPP: Simplify opp_parse_supplies() by restructuring it
+
+ Documentation/devicetree/bindings/opp/opp-v2-base.yaml |   6 ++--
+ Documentation/devicetree/bindings/opp/opp-v2.yaml      |   2 +-
+ drivers/opp/of.c                                       | 228 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++------------------------------------------------------------------------------------
+ 3 files changed, 103 insertions(+), 133 deletions(-)
 
 -- 
 viresh
