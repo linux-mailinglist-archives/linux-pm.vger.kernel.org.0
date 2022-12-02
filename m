@@ -2,136 +2,222 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5DAC6406AD
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:21:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C28E46406B6
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:23:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbiLBMVi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 07:21:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45402 "EHLO
+        id S233396AbiLBMXM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 07:23:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233206AbiLBMVh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:21:37 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3973865A5;
-        Fri,  2 Dec 2022 04:21:36 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 86B2421C56;
-        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669983695; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d49Oc3S+6muyb1GOiqMcaSOmUuf1KCcSk2Xm3eq+yyg=;
-        b=XnuckT+/lzXYI4qDySsV8Hxn7menm+zUi52vv7O/r7vdGLdiqdO47blqVwleNUjU/cEfgB
-        Bwq3VsB7Uc7SrPfdrrEwqeA6gvttsjhdLQir6Jap3oEnhALiTLCvSr2aNGZXQHcyhCPqL8
-        omMnUHann3fVoS+UBEqAWLzB8gQkLvU=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0CEEF2C142;
-        Fri,  2 Dec 2022 12:21:35 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 13:21:34 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Joe Perches <joe@perches.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <Y4ntzmsvsr7gU8x0@alley>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
- <1fb146231e1810b4c9923f384afa166e07e7f253.camel@perches.com>
- <cf45b62e-6248-42f3-807f-5df0954437e0@t-8ch.de>
- <Y4dhs1G3mcX/YraJ@alley>
- <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
+        with ESMTP id S233332AbiLBMXK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:23:10 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0817BF013;
+        Fri,  2 Dec 2022 04:23:09 -0800 (PST)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B2AresJ010708;
+        Fri, 2 Dec 2022 12:23:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=cQZvQoTwciKJEJStvGK0dTVTwyNTXTDVMusv/IDHPdI=;
+ b=N9Oz15O0Kz/yCT/evWuqRfYB/ack3SRNrukhp3XUD7zDi1vMcW/XPQRfKDa2v07T2xV3
+ vHFXvHVjdN5zWRqvxk/Kn7h7qHeMD4KcUtz8gEPsbsLV1Ris5nqBU7TlHTVwVPm14Zf8
+ o2rSq3sNa48P/9Janv8MyY+w/71+IcCY3ZQNjwCy4svaS+L27QRbJ1g9xpVSn1Na7h1y
+ wQ1RMaWvV9O/ZZdfATAOkMjQVc3rdL4GSPoGdSlqwdnThZlJNBCIahK6SI7Cm9MsiUNn
+ KRR7pa/s+PEV2qyOmBvoZolN02KMJf87uY/w2TIlMRTVQZOx3JmaETIHX25VHo21O58o gA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3m7c22172v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 02 Dec 2022 12:23:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B2CMxOk026345
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 2 Dec 2022 12:22:59 GMT
+Received: from [10.216.7.250] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 2 Dec 2022
+ 04:22:55 -0800
+Message-ID: <5f129a61-0311-0b80-2e74-8425650bbd26@quicinc.com>
+Date:   Fri, 2 Dec 2022 17:52:41 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: PM-runtime: supplier looses track of consumer during probe
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Adrian Hunter <adrian.hunter@intel.com>
+CC:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        <linux-pm@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        <bjorn.andersson@kernel.org>, <quic_mkshah@quicinc.com>,
+        <quic_lsrao@quicinc.com>, <bvanassche@acm.org>,
+        Peter Wang <peter.wang@mediatek.com>
+References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
+ <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com>
+ <CAJZ5v0gdg=PUz-j0yd_QJRPmjhZ7pCuRrHt30U60H4QyTHCmdA@mail.gmail.com>
+ <12104185.O9o76ZdvQC@kreacher>
+Content-Language: en-US
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <12104185.O9o76ZdvQC@kreacher>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <42950773-aac6-4ec6-8cbe-543489afe316@t-8ch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6zxY9HzKvhb9W5GVdFFZEfdDwCzu4vQS
+X-Proofpoint-GUID: 6zxY9HzKvhb9W5GVdFFZEfdDwCzu4vQS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-02_05,2022-12-01_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ adultscore=0 phishscore=0 mlxscore=0 impostorscore=0 malwarescore=0
+ priorityscore=1501 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2212020096
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 2022-11-30 15:50:55, Thomas Weißschuh wrote:
-> On 2022-11-30 14:59+0100, Petr Mladek wrote:
-> > On Fri 2022-11-25 21:33:40, Thomas Weißschuh wrote:
-> >> On 2022-11-25 12:18-0800, Joe Perches wrote:
-> >>> On Fri, 2022-11-25 at 20:09 +0100, Thomas Weißschuh wrote:
-> >>>> These macros emit continuation messages with explicit levels.
-> >>>> In case the continuation is logged separately from the original message
-> >>>> it will retain its level instead of falling back to KERN_DEFAULT.
-> >>>> 
-> >>>> This remedies the issue that logs filtered by level contain stray
-> >>>> continuation messages without context.
-> >>>> 
-> >>>> --- a/include/linux/printk.h
-> >>>> +++ b/include/linux/printk.h
-> >>>> @@ -701,6 +703,27 @@ do {									\
-> >>>>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> >>>>  #endif
-> >>>>  
-> >>>> +/*
-> >>>> + * Print a continuation message with level. In case the continuation is split
-> >>>> + * from the main message it preserves the level.
-> >>>> + */
-> >>>> +
-> >>>> +#define pr_emerg_cont(fmt, ...)					\
-> >>>> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >>> 
-> >>> Aren't this rather backwards?
-> >>> KERN_CONT KERN_<LEVEL> seems to make more sense to me.
-> >> 
-> >> If nobody else disagrees I'll do this for v3.
-> > 
-> > I slightly prefer the way how it is now. IMHO, it makes it easier
-> > to check the related levels in /sys/kernel/debug/printk/index/vmlinux [*]:
-> > 
-> > <6> kernel/power/process.c:227 thaw_kernel_threads "Restarting kernel threads ... "
-> > <6,c> kernel/power/process.c:218 thaw_processes "done.\n"
-> > <6> kernel/power/process.c:197 thaw_processes "Restarting tasks ... "
-> > <6,c> kernel/power/process.c:176 freeze_kernel_threads "\n"
-> > <6,c> kernel/power/process.c:174 freeze_kernel_threads "done."
-> > <6> kernel/power/process.c:169 freeze_kernel_threads "Freezing remaining freezable tasks ... "
-> > <6,c> kernel/power/process.c:140 freeze_processes "\n"
-> > <6,c> kernel/power/process.c:138 freeze_processes "done."
-> > <6> kernel/power/process.c:133 freeze_processes "Freezing user space processes ... "
-> > <6,c> kernel/power/process.c:105 try_to_freeze_tasks "(elapsed %d.%03d seconds) "
+Thanks Adrian and Rafael,
+We are trying both patches separately. And will update result once we get.
+
+Thanks,
+Tushar Nimkar
+
+On 12/2/2022 1:14 AM, Rafael J. Wysocki wrote:
+> On Thursday, December 1, 2022 8:28:25 PM CET Rafael J. Wysocki wrote:
+>> On Thu, Dec 1, 2022 at 2:10 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>>
+>>> On 29/11/22 18:56, Nitin Rawat wrote:
+>>>> Hi Adrian,
+>>>>
+>>>> On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
+>>>>> Hi Adrian,
+>>>>>
+>>>>> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
+>>>>>> On 4/11/22 11:19, Tushar Nimkar wrote:
+>>>>>>> Hi linux-pm/linux-scsi,
+>>>>>
+>>>>>>>> Process -1
+>>>>>>>> ufshcd_async_scan context (process 1)
+>>>>>>>> scsi_autopm_put_device() //0:0:0:0
+>>>>>>
+>>>>>> I am having trouble following your description.  What function is calling
+>>>>>> scsi_autopm_put_device() here?
+>>>>>>
+>>>>> Below is flow which calls scsi_autopm_put_device()
+>>>>> Process -1
+>>>>> ufshcd_async_scan()
+>>>>>       scsi_probe_and_add_lun()
+>>>>>           scsi_add_lun()
+>>>>>               slave_configure()
+>>>>>                   scsi_sysfs_add_sdev()
+>>>>>                       scsi_autopm_get_device()
+>>>>>                           device_add()     <- invoked [Process 2] sd_probe()
+>>>>>                               scsi_autopm_put_device()
+>>>>>
+>>>>>>>> pm_runtime_put_sync()
+>>>>>>>> __pm_runtime_idle()
+>>>>>>>> rpm_idle() -- RPM_GET_PUT(4)
+>>>>>>>>        __rpm_callback
+>>>>>>>>            scsi_runtime_idle()
+>>>>>>>>                pm_runtime_mark_last_busy()
+>>>>>>>>                pm_runtime_autosuspend()  --[A]
+>>>>>>>>                    rpm_suspend() -- RPM_AUTO(8)
+>>>>>>>>                        pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
+>>>>>>>>                            __update_runtime_status to RPM_SUSPENDING
+>>>>>>>>                        __rpm_callback()
+>>>>>>>>                            __rpm_put_suppliers(dev, false)
+>>>>>>>>                        __update_runtime_status to RPM_SUSPENDED
+>>>>>>>>                    rpm_suspend_suppliers()
+>>>>>>>>                        rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
+>>>>>>>>                    rpm_suspend() â€“ END with return=0
+>>>>>>>>            scsi_runtime_idle() END return (-EBUSY) always.
+>>>>>>
+>>>>>> Not following here either.  Which device is EBUSY and why?
+>>>>>
+>>>>> scsi_runtime_idle() return -EBUSY always [3]
+>>>>> Storage/scsi team can better explain -EBUSY implementation.
+>>>>
+>>>> EBUSY is returned from below code for consumer dev 0:0:0:0.
+>>>> scsi_runtime_idle is called from scsi_autopm_put_device which inturn is called from ufshcd_async_scan (Process 1 as per above call stack)
+>>>> static int scsi_runtime_idle(struct device *dev)
+>>>> {
+>>>>      :
+>>>>
+>>>>      if (scsi_is_sdev_device(dev)) {
+>>>>          pm_runtime_mark_last_busy(dev);
+>>>>          pm_runtime_autosuspend(dev);
+>>>>          return -EBUSY; ---> EBUSY returned from here.
+>>>>      }
+>>>>
+>>>>
+>>>> }
+>>>>
+>>>>>
+>>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
+>>>>>
+>>>>>
+>>>>>>>>
+>>>>>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
+>>>>>>>> [2]: https://lkml.org/lkml/2022/10/12/259
+>>>
+>>> It looks to me like __rpm_callback() makes assumptions about
+>>> dev->power.runtime_status that are not necessarily true because
+>>> dev->power.lock is dropped.
+>>
+>> Well, this happens because rpm_idle() calls __rpm_callback() and
+>> allows it to run concurrently with rpm_suspend() and rpm_resume(), so
+>> one of them may change runtime_status to RPM_SUSPENDING or
+>> RPM_RESUMING while __rpm_callback() is running.
+>>
+>> It is somewhat questionable whether or not this should be allowed to
+>> happen, but since it is generally allowed to suspend the device from
+>> its .runtime_idle callback, there is not too much that can be done
+>> about it.
 > 
-> I did not test it (will do so later) but it seems to me that the code in
-> kernel/printk/index.c should do this correctly in either case. At least it
-> tries to:
+> But this means that the patch below should help too.
 > 
-> if (flags & LOG_CONT) {
-> 	/*
-> 	 * LOGLEVEL_DEFAULT here means "use the same level as the
-> 	 * message we're continuing from", not the default message
-> 	 * loglevel, so don't display it as such.
-> 	 */
-> 	if (level == LOGLEVEL_DEFAULT)
-> 		seq_puts(s, "<c>");
-> 		else
-> 		seq_printf(s, "<%d,c>", level);
-> 	} else
-> 		seq_printf(s, "<%d>", level);
-> 	}
-
-Great. It makes the index consistent. I should have checked the code ;-)
-
-I do not mind then about the ordering in the macro definitions.
-It really seems to be only an implementation detail.
-
-Best Regards,
-Petr
+> I actually think that we can do both, because rpm_idle() doesn't have to do
+> the whole device links dance and the fact that it still calls __rpm_callback()
+> is a clear oversight.
+> 
+> ---
+>   drivers/base/power/runtime.c |   12 +++++++++++-
+>   1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> Index: linux-pm/drivers/base/power/runtime.c
+> ===================================================================
+> --- linux-pm.orig/drivers/base/power/runtime.c
+> +++ linux-pm/drivers/base/power/runtime.c
+> @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
+>   
+>   	dev->power.idle_notification = true;
+>   
+> -	retval = __rpm_callback(callback, dev);
+> +	if (dev->power.irq_safe)
+> +		spin_unlock(&dev->power.lock);
+> +	else
+> +		spin_unlock_irq(&dev->power.lock);
+> +
+> +	retval = callback(dev);
+> +
+> +	if (dev->power.irq_safe)
+> +		spin_lock(&dev->power.lock);
+> +	else
+> +		spin_lock_irq(&dev->power.lock);
+>   
+>   	dev->power.idle_notification = false;
+>   	wake_up_all(&dev->power.wait_queue);
+> 
+> 
+> 
