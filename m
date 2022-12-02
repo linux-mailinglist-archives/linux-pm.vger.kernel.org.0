@@ -2,174 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8BED6406CF
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC8C6406ED
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:37:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232825AbiLBM2A (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 07:28:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S232752AbiLBMhd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 07:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233183AbiLBM17 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:27:59 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999844E6AD;
-        Fri,  2 Dec 2022 04:27:58 -0800 (PST)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 438812188A;
-        Fri,  2 Dec 2022 12:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1669984077; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2gqeCZM5OYJ+JIW5Pild9FTDbugF31mKRKD6SyEG6wA=;
-        b=oco5GF9PtWap+DR+4x4hnFUWZSasnV6H+asW7NISvNIAkDmHbDLkaZgswwhSVctsJKQFw7
-        VpS0/C7MS+Iz2n/w/8Iy32Z2HYtND7P46JLowFpyeAm9ZmnVIVK54JfwGlEHtmJ/kBzKEa
-        o1FgrzK7cyZbhTMIP3TGUNz/GxDrNi4=
-Received: from suse.cz (unknown [10.100.208.146])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 0C8C22C141;
-        Fri,  2 Dec 2022 12:27:57 +0000 (UTC)
-Date:   Fri, 2 Dec 2022 13:27:53 +0100
-From:   Petr Mladek <pmladek@suse.com>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Dwaipayan Ray <dwaipayanray1@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH v2 1/3] printk: introduce new macros pr_<level>_cont()
-Message-ID: <Y4nvSTTPdSEIZ+zl@alley>
-References: <20221125190948.2062-1-linux@weissschuh.net>
- <20221125190948.2062-2-linux@weissschuh.net>
- <Y4dndyIiosT7l4RG@alley>
- <6bc60e00-30b8-40ff-81f4-e7973c701ad4@t-8ch.de>
+        with ESMTP id S232539AbiLBMhc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:37:32 -0500
+Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C8D9A47E6
+        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 04:37:30 -0800 (PST)
+Message-ID: <75216e0c-9d36-7ada-1507-1bb4a91a3326@systemli.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
+        s=default; t=1669984648;
+        bh=VgZKVlX8mJZVYidqK5M73GMcS0SohrhprD5SzdTqO9U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=OKlvyaKVTP6rTdMIXGrVpKU+rS+BYHRAm7/JDodazYINJMZ1W2N8UH9EtjrvTgcX0
+         yigXPcO8SGlrpsL6BFG6QDTpQZ9N3k/sQWfOczz0YAvYCkXOOJCNsa//dy6sY/4z9C
+         BrLIVJnT/PsfnCiRtn7ijhVM/0DsruXG5um1shac3ciCmvcO5IlibE9tvyHyHq4CiM
+         TpW3PHXPM+BQThl41Oht9nffLEEAtPdqtbNr1u8nfQTRUNLwS4SOe/uIMLTPbwOIaQ
+         GaxsXEryMId8/8pOzQSH3iUKCg8N6RpNslkgzxjrusxjacmymc3CsXOAFLO+WH5ZUr
+         wUsj1OlWVnIig==
+Date:   Fri, 2 Dec 2022 13:37:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Subject: Re: [PATCH] cpufreq: mediatek: Raise proc and sram max voltage for
+ MT7622/7623
+Content-Language: en-US
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, viresh.kumar@linaro.org
+Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, frank-w@public-files.de,
+        daniel@makrotopia.org
+References: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
+From:   Nick <vincent@systemli.org>
+In-Reply-To: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6bc60e00-30b8-40ff-81f4-e7973c701ad4@t-8ch.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed 2022-11-30 15:56:33, Thomas Weiﬂschuh wrote:
-> On 2022-11-30 15:23+0100, Petr Mladek wrote:
-> > On Fri 2022-11-25 20:09:46, Thomas Weiﬂschuh wrote:
-> >> These macros emit continuation messages with explicit levels.
-> >> In case the continuation is logged separately from the original message
-> >> it will retain its level instead of falling back to KERN_DEFAULT.
-> >> 
-> >> This remedies the issue that logs filtered by level contain stray
-> >> continuation messages without context.
-> >> 
-> >> Suggested-by: Petr Mladek <pmladek@suse.com>
-> >> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> >> ---
-> >>  include/linux/printk.h | 23 +++++++++++++++++++++++
-> >>  1 file changed, 23 insertions(+)
-> >> 
-> >> diff --git a/include/linux/printk.h b/include/linux/printk.h
-> >> index 8c81806c2e99..8f564c38f121 100644
-> >> --- a/include/linux/printk.h
-> >> +++ b/include/linux/printk.h
-> >> @@ -537,6 +537,8 @@ struct pi_entry {
-> >>   * This macro expands to a printk with KERN_CONT loglevel. It should only be
-> >>   * used when continuing a log message with no newline ('\n') enclosed. Otherwise
-> >>   * it defaults back to KERN_DEFAULT loglevel.
-> >> + *
-> >> + * Use the dedicated pr_<level>_cont() macros instead.
-> >>   */
-> >>  #define pr_cont(fmt, ...) \
-> >>  	printk(KERN_CONT fmt, ##__VA_ARGS__)
-> >> @@ -701,6 +703,27 @@ do {									\
-> >>  	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-> >>  #endif
-> >>  
-> >> +/*
-> >> + * Print a continuation message with level. In case the continuation is split
-> >> + * from the main message it preserves the level.
-> >> + */
-> >> +
-> >> +#define pr_emerg_cont(fmt, ...)					\
-> >> +	printk(KERN_EMERG KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +#define pr_alert_cont(fmt, ...)					\
-> >> +	printk(KERN_ALERT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +#define pr_crit_cont(fmt, ...)					\
-> >> +	printk(KERN_CRIT KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +#define pr_err_cont(fmt, ...)					\
-> >> +	printk(KERN_ERR KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +#define pr_warn_cont(fmt, ...)					\
-> >> +	printk(KERN_WARN KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +#define pr_notice_cont(fmt, ...)					\
-> >> +	printk(KERN_NOTICE KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +#define pr_info_cont(fmt, ...)					\
-> >> +	printk(KERN_INFO KERN_CONT pr_fmt(fmt), ##__VA_ARGS__)
-> >> +/* no pr_debug_ratelimited, it doesn't make sense with CONFIG_DYNAMIC_DEBUG. */
-> > 
-> > I guess that you wanted to write "pr_debug_cont".
-> 
-> Indeed.
-> 
-> > Also I am not sure what you mean with "doesn't make sense". IMHO, it
-> > might  make sense. But it would be hard to use and error prone
-> > with CONFIG_DYNAMIC_DEBUG.
-> > 
-> > And more importantly, it probably would not work properly. If I get
-> > it corretly the dynamic debug messages are printed by the wrapper:
-> > 
-> > void __dynamic_pr_debug(struct _ddebug *descriptor, const char *fmt, ...)
-> > {
-> > [...]
-> > 	vaf.fmt = fmt;
-> > 	vaf.va = &args;
-> > 
-> > 	printk(KERN_DEBUG "%s%pV", dynamic_emit_prefix(descriptor, buf), &vaf);
-> > [...]
-> > 
-> > This clearly does not support KERN_CONT in "fmt".
-> 
-> Good point.
-> 
-> My doubt was more that it would force users to know which message
-> continuations belong together and always enable all of them together with
-> dynamic debug.
-> Which would be very errorprone and annoying to use.
+It now starts, however, with a lot of those messages (I applied the 
+patch to linux/master and not to linux-next, because next is currently 
+not compiling anymore for me):
 
-Yes. This is what I meant with "hard to use" but I was not clear
-enough :-)
+> [¬†¬† 10.777041] cpufreq: __target_index: Failed to change cpu 
+> frequency: -22
+> [¬†¬† 10.791577] cpu cpu0: cpu0: failed to scale up voltage!
+The complete log:
+https://gist.githubusercontent.com/PolynomialDivision/267c83c7a21a359cbb4e8d99d0303201/raw/28d3568a26634bebef2d91ebe37fc5f76ae58add/mt7622-patch-cpufreq.log
 
-> 
-> But if it doesn't work at all that's an even stronger point.
-> 
-> > I suggest to either remove the comment completely. Or write something
-> > like:
-> > 
-> > /* no pr_debug_cont(), can't be supported easily with CONFIG_DYNAMIC_DEBUG */
-> 
-> What about:
-> 
-> /* no pr_debug_cont(), it's errorprone to use
->  * and can't be supported easily with CONFIG_DYNAMIC_DEBUG */
+Bests
+Nick
 
-Sounds good to me.
-
-Best Regards,
-Petr
-
-PS: Heh, I just realized that we actually abandoned these changes because
-    the continuous lines in kernel/power/process.c are going to be
-    removed. (/me doing too many things in parallel).
-
-    Anyway, it is possible that someone would take this patches to fix
-    another continuous lines in the future.
+On 12/2/22 10:52, AngeloGioacchino Del Regno wrote:
+> During the addition of SRAM voltage tracking for CCI scaling, this
+> driver got some voltage limits set for the vtrack algorithm: these
+> were moved to platform data first, then enforced in a later commit
+> 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> using these as max values for the regulator_set_voltage() calls.
+>
+> In this case, the vsram/vproc constraints for MT7622 and MT7623
+> were supposed to be the same as MT2701 (and a number of other SoCs),
+> but that turned out to be a mistake because the aforementioned two
+> SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
+>
+> Fix that by adding new platform data for MT7622/7623 declaring the
+> right {proc,sram}_max_volt parameter.
+>
+> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>   drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 7f2680bc9a0f..f9a9f08c75c4 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -695,6 +695,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+>   	.ccifreq_supported = false,
+>   };
+>   
+> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 200000,
+> +	.proc_max_volt = 1360000,
+> +	.sram_min_volt = 0,
+> +	.sram_max_volt = 1360000,
+> +	.ccifreq_supported = false,
+> +};
+> +
+>   static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+>   	.min_volt_shift = 100000,
+>   	.max_volt_shift = 200000,
+> @@ -717,8 +726,8 @@ static const struct mtk_cpufreq_platform_data mt8186_platform_data = {
+>   static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>   	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
+> +	{ .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
+>   	{ .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
