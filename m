@@ -2,307 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01365640718
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 13:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7486407A0
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 14:23:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233469AbiLBMsO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 07:48:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45308 "EHLO
+        id S232517AbiLBNXG convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Fri, 2 Dec 2022 08:23:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233578AbiLBMsI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 07:48:08 -0500
-X-Greylist: delayed 630 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 02 Dec 2022 04:48:03 PST
-Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE202494E;
-        Fri,  2 Dec 2022 04:47:56 -0800 (PST)
-Message-ID: <b525cb57-7f21-fb23-1b15-9560f4685cdd@systemli.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
-        s=default; t=1669985274;
-        bh=6o9KP6kk5p2qtH3EKpvc3oXBWluqaPokZJCRc6pucdk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Sav1K2dr+Fe+ZJblCqzRzKIAxb7Z9mQbTT+C9VM8f4VilNbSjT7cpqWNHz6TZpI72
-         c91l7HUr4aFLJyV3Rz1BSq+HppZ1xelUfeOBtz8Zx+Pt8NTiRJYHHb8Wo0yGixTF1H
-         jm2XnE+PxTD3fj8VajoWqZNCWFxmNGXbIh0DywvVfsZBim3y2jgjUdnzxEXSPkr02m
-         NicVaWEvgZHjqimlrOT1OTwpSbFn3Bat449Ot79AK9Z8ycHBKkQ6siE9wxVSWb+BIj
-         9Br/TadK9URtjB6gPfoqAQbOnZpixt8YZTeLt/Yn/5NUmrXg7hgAJunrKyRLsuQO1I
-         vUfrTH7ndOung==
-Date:   Fri, 2 Dec 2022 13:47:51 +0100
+        with ESMTP id S229530AbiLBNXF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 08:23:05 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA246723F;
+        Fri,  2 Dec 2022 05:23:03 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id e15so5008734qts.1;
+        Fri, 02 Dec 2022 05:23:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uB0EJbwNDLUzHJGWsxp/Ffm7ffwt2LXwWWQALhl5JaM=;
+        b=QtP2i+caY+YdEj6OLFTnQKAnZ1DrMryw0+syM2EtnpL70K0ep96nhGBduxTHXUQqTN
+         JrEIz58zfzAyoMsoa7SdlnFQDqFNumWjgTrHUoTsvGghuqQjJrcLsv3CWHtqUVZqy9Qv
+         xe+mKpnwFBSQXv+LcwEe09JP/1wLYVtPk9KUPwHT1j6Vqh+rjynkhmEH/xI42tPuTDTZ
+         5Dl8RSi67sgnt7yuRx2vxegUJa+OUVpRWqHYefCtQwZ31V+Co7iqkVQkf5yP9aBAg4/V
+         sUdyu1sLmSgSscB9QAW0CUOLlBFg3h2qsYsuBkR8XZJZAE0fAyjQknedd3HhtDpcRuhQ
+         74fQ==
+X-Gm-Message-State: ANoB5pmsSw3O5f07ijB8kY6kfJ9A810H2Y+WROpGcm4TeXLn2AfEI9hB
+        6xDKuJ0V3W3Z4U7hzR5YBxShTujVJ/iG+a/enSU1RmCu
+X-Google-Smtp-Source: AA0mqf55TDX7u9F3kG/xbZtS8Suh1tAWhAP0HJL1HMeiMk0lAXO9Sc6v6x1pGZeNNoHjfCmNzfLF7KGFXrmI1GWKhIk=
+X-Received: by 2002:a05:622a:410a:b0:3a5:5987:42c6 with SMTP id
+ cc10-20020a05622a410a00b003a5598742c6mr65643174qtb.147.1669987382578; Fri, 02
+ Dec 2022 05:23:02 -0800 (PST)
 MIME-Version: 1.0
-Subject: Re: [PATCH] Revert "cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()"
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
+References: <36aed941-a73e-d937-2721-4f0decd61ce0@quicinc.com>
+ <20aae21e-62d2-8fdb-b57a-7b5a180266d8@intel.com> <CAJZ5v0gdg=PUz-j0yd_QJRPmjhZ7pCuRrHt30U60H4QyTHCmdA@mail.gmail.com>
+ <12104185.O9o76ZdvQC@kreacher> <5f129a61-0311-0b80-2e74-8425650bbd26@quicinc.com>
+In-Reply-To: <5f129a61-0311-0b80-2e74-8425650bbd26@quicinc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 2 Dec 2022 14:22:51 +0100
+Message-ID: <CAJZ5v0h6wskR+bQPsG3A5xV6kwupoj3XLdLS-FCz0caEGKpXeQ@mail.gmail.com>
+Subject: Re: PM-runtime: supplier looses track of consumer during probe
+To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Adrian Hunter <adrian.hunter@intel.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        regressions@leemhuis.info, daniel@makrotopia.org,
-        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
-From:   Nick <vincent@systemli.org>
-In-Reply-To: <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Nitin Rawat <quic_nitirawa@quicinc.com>,
+        linux-pm@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        bjorn.andersson@kernel.org, quic_mkshah@quicinc.com,
+        quic_lsrao@quicinc.com, bvanassche@acm.org,
+        Peter Wang <peter.wang@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I tested this again on linux/master on the Banana Pi R64 (mt7622). Seems 
-to work fine:
-https://gist.githubusercontent.com/PolynomialDivision/5022dec1874a1c411ece6c9dabec59b5/raw/7ac62b38d10e41a56ff1db3142571117ee6f4c26/mt7622-cpufreq-revert.log
-
-So if you want you can add:
-Reported-by: Nick Hainke <vincent@systemli.org>
-Tested-by: Nick Hainke <vincent@systemli.org>
-
-Bests
-Nick
-
-On 12/2/22 06:26, Viresh Kumar wrote:
-> This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
+On Fri, Dec 2, 2022 at 1:23 PM Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
 >
-> This commit caused regression on Banana Pi R64 (MT7622), revert until
-> the problem is identified and fixed properly.
->
-> Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
-> Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
-> Reported-by: Nick <vincent@systemli.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/mediatek-cpufreq.c | 147 +++++++++++++++++++----------
->   1 file changed, 96 insertions(+), 51 deletions(-)
->
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 7f2680bc9a0f..4466d0c91a6a 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -8,7 +8,6 @@
->   #include <linux/cpu.h>
->   #include <linux/cpufreq.h>
->   #include <linux/cpumask.h>
-> -#include <linux/minmax.h>
->   #include <linux/module.h>
->   #include <linux/of.h>
->   #include <linux/of_platform.h>
-> @@ -16,6 +15,8 @@
->   #include <linux/pm_opp.h>
->   #include <linux/regulator/consumer.h>
->   
-> +#define VOLT_TOL		(10000)
-> +
->   struct mtk_cpufreq_platform_data {
->   	int min_volt_shift;
->   	int max_volt_shift;
-> @@ -55,7 +56,6 @@ struct mtk_cpu_dvfs_info {
->   	unsigned int opp_cpu;
->   	unsigned long current_freq;
->   	const struct mtk_cpufreq_platform_data *soc_data;
-> -	int vtrack_max;
->   	bool ccifreq_bound;
->   };
->   
-> @@ -82,7 +82,6 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->   	struct regulator *proc_reg = info->proc_reg;
->   	struct regulator *sram_reg = info->sram_reg;
->   	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
-> -	int retry = info->vtrack_max;
->   
->   	pre_vproc = regulator_get_voltage(proc_reg);
->   	if (pre_vproc < 0) {
-> @@ -90,44 +89,91 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->   			"invalid Vproc value: %d\n", pre_vproc);
->   		return pre_vproc;
->   	}
-> +	/* Vsram should not exceed the maximum allowed voltage of SoC. */
-> +	new_vsram = min(new_vproc + soc_data->min_volt_shift,
-> +			soc_data->sram_max_volt);
-> +
-> +	if (pre_vproc < new_vproc) {
-> +		/*
-> +		 * When scaling up voltages, Vsram and Vproc scale up step
-> +		 * by step. At each step, set Vsram to (Vproc + 200mV) first,
-> +		 * then set Vproc to (Vsram - 100mV).
-> +		 * Keep doing it until Vsram and Vproc hit target voltages.
-> +		 */
-> +		do {
-> +			pre_vsram = regulator_get_voltage(sram_reg);
-> +			if (pre_vsram < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vsram value: %d\n", pre_vsram);
-> +				return pre_vsram;
-> +			}
-> +			pre_vproc = regulator_get_voltage(proc_reg);
-> +			if (pre_vproc < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vproc value: %d\n", pre_vproc);
-> +				return pre_vproc;
-> +			}
->   
-> -	pre_vsram = regulator_get_voltage(sram_reg);
-> -	if (pre_vsram < 0) {
-> -		dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
-> -		return pre_vsram;
-> -	}
-> +			vsram = min(new_vsram,
-> +				    pre_vproc + soc_data->min_volt_shift);
->   
-> -	new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
-> -			  soc_data->sram_min_volt, soc_data->sram_max_volt);
-> +			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
-> +				vsram = soc_data->sram_max_volt;
->   
-> -	do {
-> -		if (pre_vproc <= new_vproc) {
-> -			vsram = clamp(pre_vproc + soc_data->max_volt_shift,
-> -				      soc_data->sram_min_volt, new_vsram);
-> -			ret = regulator_set_voltage(sram_reg, vsram,
-> -						    soc_data->sram_max_volt);
-> +				/*
-> +				 * If the target Vsram hits the maximum voltage,
-> +				 * try to set the exact voltage value first.
-> +				 */
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram);
-> +				if (ret)
-> +					ret = regulator_set_voltage(sram_reg,
-> +							vsram - VOLT_TOL,
-> +							vsram);
->   
-> -			if (ret)
-> -				return ret;
-> -
-> -			if (vsram == soc_data->sram_max_volt ||
-> -			    new_vsram == soc_data->sram_min_volt)
->   				vproc = new_vproc;
-> -			else
-> +			} else {
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram + VOLT_TOL);
-> +
->   				vproc = vsram - soc_data->min_volt_shift;
-> +			}
-> +			if (ret)
-> +				return ret;
->   
->   			ret = regulator_set_voltage(proc_reg, vproc,
-> -						    soc_data->proc_max_volt);
-> +						    vproc + VOLT_TOL);
->   			if (ret) {
->   				regulator_set_voltage(sram_reg, pre_vsram,
-> -						      soc_data->sram_max_volt);
-> +						      pre_vsram);
->   				return ret;
->   			}
-> -		} else if (pre_vproc > new_vproc) {
-> +		} while (vproc < new_vproc || vsram < new_vsram);
-> +	} else if (pre_vproc > new_vproc) {
-> +		/*
-> +		 * When scaling down voltages, Vsram and Vproc scale down step
-> +		 * by step. At each step, set Vproc to (Vsram - 200mV) first,
-> +		 * then set Vproc to (Vproc + 100mV).
-> +		 * Keep doing it until Vsram and Vproc hit target voltages.
-> +		 */
-> +		do {
-> +			pre_vproc = regulator_get_voltage(proc_reg);
-> +			if (pre_vproc < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vproc value: %d\n", pre_vproc);
-> +				return pre_vproc;
-> +			}
-> +			pre_vsram = regulator_get_voltage(sram_reg);
-> +			if (pre_vsram < 0) {
-> +				dev_err(info->cpu_dev,
-> +					"invalid Vsram value: %d\n", pre_vsram);
-> +				return pre_vsram;
-> +			}
-> +
->   			vproc = max(new_vproc,
->   				    pre_vsram - soc_data->max_volt_shift);
->   			ret = regulator_set_voltage(proc_reg, vproc,
-> -						    soc_data->proc_max_volt);
-> +						    vproc + VOLT_TOL);
->   			if (ret)
->   				return ret;
->   
-> @@ -137,24 +183,32 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
->   				vsram = max(new_vsram,
->   					    vproc + soc_data->min_volt_shift);
->   
-> -			ret = regulator_set_voltage(sram_reg, vsram,
-> -						    soc_data->sram_max_volt);
-> +			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
-> +				vsram = soc_data->sram_max_volt;
-> +
-> +				/*
-> +				 * If the target Vsram hits the maximum voltage,
-> +				 * try to set the exact voltage value first.
-> +				 */
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram);
-> +				if (ret)
-> +					ret = regulator_set_voltage(sram_reg,
-> +							vsram - VOLT_TOL,
-> +							vsram);
-> +			} else {
-> +				ret = regulator_set_voltage(sram_reg, vsram,
-> +							    vsram + VOLT_TOL);
-> +			}
-> +
->   			if (ret) {
->   				regulator_set_voltage(proc_reg, pre_vproc,
-> -						      soc_data->proc_max_volt);
-> +						      pre_vproc);
->   				return ret;
->   			}
-> -		}
-> -
-> -		pre_vproc = vproc;
-> -		pre_vsram = vsram;
-> -
-> -		if (--retry < 0) {
-> -			dev_err(info->cpu_dev,
-> -				"over loop count, failed to set voltage\n");
-> -			return -EINVAL;
-> -		}
-> -	} while (vproc != new_vproc || vsram != new_vsram);
-> +		} while (vproc > new_vproc + VOLT_TOL ||
-> +			 vsram > new_vsram + VOLT_TOL);
-> +	}
->   
->   	return 0;
->   }
-> @@ -250,8 +304,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
->   	 * If the new voltage or the intermediate voltage is higher than the
->   	 * current voltage, scale up voltage first.
->   	 */
-> -	target_vproc = max(inter_vproc, vproc);
-> -	if (pre_vproc <= target_vproc) {
-> +	target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
-> +	if (pre_vproc < target_vproc) {
->   		ret = mtk_cpufreq_set_voltage(info, target_vproc);
->   		if (ret) {
->   			dev_err(cpu_dev,
-> @@ -513,15 +567,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
->   	 */
->   	info->need_voltage_tracking = (info->sram_reg != NULL);
->   
-> -	/*
-> -	 * We assume min voltage is 0 and tracking target voltage using
-> -	 * min_volt_shift for each iteration.
-> -	 * The vtrack_max is 3 times of expeted iteration count.
-> -	 */
-> -	info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
-> -						info->soc_data->proc_max_volt),
-> -					    info->soc_data->min_volt_shift);
-> -
->   	return 0;
->   
->   out_disable_inter_clock:
+> Thanks Adrian and Rafael,
+> We are trying both patches separately. And will update result once we get.
+
+Thank you!
+
+I'm going to submit the change in rpm_idle() regardless of whether or
+not it is sufficient to address the issue, because it is a clear
+mistake to still call __rpm_callback() from there after adding the
+handling of device links to it.
+
+> On 12/2/2022 1:14 AM, Rafael J. Wysocki wrote:
+> > On Thursday, December 1, 2022 8:28:25 PM CET Rafael J. Wysocki wrote:
+> >> On Thu, Dec 1, 2022 at 2:10 PM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>>
+> >>> On 29/11/22 18:56, Nitin Rawat wrote:
+> >>>> Hi Adrian,
+> >>>>
+> >>>> On 11/21/2022 11:38 AM, Tushar Nimkar wrote:
+> >>>>> Hi Adrian,
+> >>>>>
+> >>>>> On 11/18/2022 8:25 PM, Adrian Hunter wrote:
+> >>>>>> On 4/11/22 11:19, Tushar Nimkar wrote:
+> >>>>>>> Hi linux-pm/linux-scsi,
+> >>>>>
+> >>>>>>>> Process -1
+> >>>>>>>> ufshcd_async_scan context (process 1)
+> >>>>>>>> scsi_autopm_put_device() //0:0:0:0
+> >>>>>>
+> >>>>>> I am having trouble following your description.  What function is calling
+> >>>>>> scsi_autopm_put_device() here?
+> >>>>>>
+> >>>>> Below is flow which calls scsi_autopm_put_device()
+> >>>>> Process -1
+> >>>>> ufshcd_async_scan()
+> >>>>>       scsi_probe_and_add_lun()
+> >>>>>           scsi_add_lun()
+> >>>>>               slave_configure()
+> >>>>>                   scsi_sysfs_add_sdev()
+> >>>>>                       scsi_autopm_get_device()
+> >>>>>                           device_add()     <- invoked [Process 2] sd_probe()
+> >>>>>                               scsi_autopm_put_device()
+> >>>>>
+> >>>>>>>> pm_runtime_put_sync()
+> >>>>>>>> __pm_runtime_idle()
+> >>>>>>>> rpm_idle() -- RPM_GET_PUT(4)
+> >>>>>>>>        __rpm_callback
+> >>>>>>>>            scsi_runtime_idle()
+> >>>>>>>>                pm_runtime_mark_last_busy()
+> >>>>>>>>                pm_runtime_autosuspend()  --[A]
+> >>>>>>>>                    rpm_suspend() -- RPM_AUTO(8)
+> >>>>>>>>                        pm_runtime_autosuspend_expiration() use_autosuspend    is false return 0   --- [B]
+> >>>>>>>>                            __update_runtime_status to RPM_SUSPENDING
+> >>>>>>>>                        __rpm_callback()
+> >>>>>>>>                            __rpm_put_suppliers(dev, false)
+> >>>>>>>>                        __update_runtime_status to RPM_SUSPENDED
+> >>>>>>>>                    rpm_suspend_suppliers()
+> >>>>>>>>                        rpm_idle() for supplier -- RPM_ASYNC(1) return (-EAGAIN) [ Other consumer active for supplier]
+> >>>>>>>>                    rpm_suspend() – END with return=0
+> >>>>>>>>            scsi_runtime_idle() END return (-EBUSY) always.
+> >>>>>>
+> >>>>>> Not following here either.  Which device is EBUSY and why?
+> >>>>>
+> >>>>> scsi_runtime_idle() return -EBUSY always [3]
+> >>>>> Storage/scsi team can better explain -EBUSY implementation.
+> >>>>
+> >>>> EBUSY is returned from below code for consumer dev 0:0:0:0.
+> >>>> scsi_runtime_idle is called from scsi_autopm_put_device which inturn is called from ufshcd_async_scan (Process 1 as per above call stack)
+> >>>> static int scsi_runtime_idle(struct device *dev)
+> >>>> {
+> >>>>      :
+> >>>>
+> >>>>      if (scsi_is_sdev_device(dev)) {
+> >>>>          pm_runtime_mark_last_busy(dev);
+> >>>>          pm_runtime_autosuspend(dev);
+> >>>>          return -EBUSY; ---> EBUSY returned from here.
+> >>>>      }
+> >>>>
+> >>>>
+> >>>> }
+> >>>>
+> >>>>>
+> >>>>> [3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/scsi/scsi_pm.c?h=next-20221118#n210
+> >>>>>
+> >>>>>
+> >>>>>>>>
+> >>>>>>>> [1]: https://lore.kernel.org/lkml/4748074.GXAFRqVoOG@kreacher/T/
+> >>>>>>>> [2]: https://lkml.org/lkml/2022/10/12/259
+> >>>
+> >>> It looks to me like __rpm_callback() makes assumptions about
+> >>> dev->power.runtime_status that are not necessarily true because
+> >>> dev->power.lock is dropped.
+> >>
+> >> Well, this happens because rpm_idle() calls __rpm_callback() and
+> >> allows it to run concurrently with rpm_suspend() and rpm_resume(), so
+> >> one of them may change runtime_status to RPM_SUSPENDING or
+> >> RPM_RESUMING while __rpm_callback() is running.
+> >>
+> >> It is somewhat questionable whether or not this should be allowed to
+> >> happen, but since it is generally allowed to suspend the device from
+> >> its .runtime_idle callback, there is not too much that can be done
+> >> about it.
+> >
+> > But this means that the patch below should help too.
+> >
+> > I actually think that we can do both, because rpm_idle() doesn't have to do
+> > the whole device links dance and the fact that it still calls __rpm_callback()
+> > is a clear oversight.
+> >
+> > ---
+> >   drivers/base/power/runtime.c |   12 +++++++++++-
+> >   1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > Index: linux-pm/drivers/base/power/runtime.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/runtime.c
+> > +++ linux-pm/drivers/base/power/runtime.c
+> > @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
+> >
+> >       dev->power.idle_notification = true;
+> >
+> > -     retval = __rpm_callback(callback, dev);
+> > +     if (dev->power.irq_safe)
+> > +             spin_unlock(&dev->power.lock);
+> > +     else
+> > +             spin_unlock_irq(&dev->power.lock);
+> > +
+> > +     retval = callback(dev);
+> > +
+> > +     if (dev->power.irq_safe)
+> > +             spin_lock(&dev->power.lock);
+> > +     else
+> > +             spin_lock_irq(&dev->power.lock);
+> >
+> >       dev->power.idle_notification = false;
+> >       wake_up_all(&dev->power.wait_queue);
+> >
+> >
+> >
