@@ -2,68 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD28F640FC3
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 22:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A066410A2
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 23:33:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiLBVFr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 16:05:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S234610AbiLBWdk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 17:33:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiLBVFq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 16:05:46 -0500
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B272EAB7D
-        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 13:05:45 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id 140so6011110pfz.6
-        for <linux-pm@vger.kernel.org>; Fri, 02 Dec 2022 13:05:45 -0800 (PST)
+        with ESMTP id S234590AbiLBWdj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 17:33:39 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82504B2751;
+        Fri,  2 Dec 2022 14:33:38 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id d20so8324337edn.0;
+        Fri, 02 Dec 2022 14:33:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=wFotzBZEznDLcqCJjjRQxtY/hHfDFvYP1oqtqFi1lu0=;
-        b=cq5xFNbWepaovI+GnM9D6ZUz103+a7E5fNSKt7xduqd6+P9Nue4MvI87jz8jsN+4AF
-         Rlg8n4ozXSycKNf9P/VQaOpoICKewAwJaGkLzrpjAI8WK0MeOw7sLpVai4q0g71YhZmJ
-         Es7C3CmZDKjKKj87ktBX51BG+eiqBIFTWdAdmddeY7/AwzjMaGZZLbmGD4C9VvVvAg20
-         khpVv9ACqN218lB+dC3ux81qHad58WBl9kSCUW/tiwlaeoeCWImHzwykMhjzPjkQ0Xnr
-         n8AdCYgcb852PS/+CMujAPv6ry+z5YpDqXnBsKJb4CavF3fKCr2hDjWCVu80cRnmg3sR
-         Uihg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LthvsFA3uIpPeqEsqymC8dZfIMWYhUwLsZlEoJ0BTkk=;
+        b=n/Vghe9upjOsF6LwurV4lq9TyyVrgieFNfscFY6ux1kxDlV1lifno0WwUA3W3j/yMm
+         sFWJfJszC41AiIKxMz7bxl4cqWgaQ4ofFrGrlJv6PJZFdAMe7sAdj7MtA37iA4iaJ3Z6
+         tH9iRcJ/nTi2doR1GSVmy01Jz7L4klm/31dlBMDLGfg1dV+bUQIQTVreJ3qzHZB3SkXX
+         6KWB5XmeJjBBZnesGCO4z3E/NyMhL1wNrwxqZOq1NerLqwJ1bV4m6VKka6JYCEYCPkWJ
+         UT2sJ1Gd79zilIhgM74LmP1CQCplxfpkL2YhmLux6FpwEnpl1oeJGvRvp8bzQc7ZjX4d
+         8paQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wFotzBZEznDLcqCJjjRQxtY/hHfDFvYP1oqtqFi1lu0=;
-        b=U0kNFioO5QVbl4PxveMgqAyp7Tchg3dXuTOVvN5COMiIBzYcJidc/sCq3VbTILNOIt
-         iJeRouoRWi4SHFMOjwyFvZNs7YnpgdthPOCeoQ7gU0JFQvo/I1K7pogl47tVLoQV14dQ
-         JzKodxcYdLT23t+cDUYPCCpI/KdZ3S0erUafvMKgPxg2LU3w5s9TbGJbLPTd+uHlX3hi
-         2BtI9qrsMDsRZJs3I2A6RbqTqFXNPxTGcTVifs12RC9oZTv1eQWqgTUuGI5Ne5+OXbWY
-         xePQnn6bawjSqySwoutgkPZXm7CijnZ6wl3v8nTWPBWyhjk78jNsQFa156p5eht8DDKQ
-         2VCw==
-X-Gm-Message-State: ANoB5pk68uRAuhFqbG56MKY2xvFJTiWHif3M+jCdrw6K0/sumyXwxtR5
-        Pxw3DxRMcFCYqUBq0PurvGK/eyt3mklxjuVnz14dwg==
-X-Google-Smtp-Source: AA0mqf4viezhSf6Gg/8mcaDD6wbUmhL5uGVq5tP5VX9m4Cmd4S0jvcKkshMCsGPyULz5G9PavwUisg==
-X-Received: by 2002:a05:6a00:4c8f:b0:575:4bb2:d67d with SMTP id eb15-20020a056a004c8f00b005754bb2d67dmr24325268pfb.32.1670015144778;
-        Fri, 02 Dec 2022 13:05:44 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id o13-20020a170902d4cd00b0017f7c4e260fsm6065057plg.150.2022.12.02.13.05.43
+        bh=LthvsFA3uIpPeqEsqymC8dZfIMWYhUwLsZlEoJ0BTkk=;
+        b=7Vy28ooBDN1CPXaKpFj7SOt/iCrQWjifqdVZbCo4gtR0gMZytUN1bzQoj2HeFj0tFf
+         ARp4dCWsv4DLl+3JfG0ANZL82YKWzy18g+C9jgoU12eeUub89vmunZOHUxnxQArJYAmw
+         6u73qLmIN+NccFbaEm5ZfkOp6fJdvNva7azRH/+Myl03J847PRXPyz5qYp+JYex0KBAe
+         0UczCY9rsiSnWK+3muJQ+EKiD+lo4EaFHMB09jTOnZUzw4JYw1hE0TJQXLBNBlE1wlL2
+         JVZQa+KQuX75jJ9Fw/kQI2e32Xkrxw0ZqMZgYYWjvPcdq1z4JPzoBD4sIQOd6KhDKEKz
+         xXvA==
+X-Gm-Message-State: ANoB5pk9bdcQbfcjziHAfr9mE5AaaX/xKga+/WxSQyM7nbRC9d+Ox8oX
+        XcQsLE3xgOcRcecaHUj8jGE=
+X-Google-Smtp-Source: AA0mqf6HUUrFzheW72d2FhqqR2nNUAOq0Ke5eowpfK/U+FuBAgma/Ew9i2DQWNPXGwHu2bCxys45zQ==
+X-Received: by 2002:a05:6402:104b:b0:461:7d1f:1a7b with SMTP id e11-20020a056402104b00b004617d1f1a7bmr47054751edu.400.1670020416848;
+        Fri, 02 Dec 2022 14:33:36 -0800 (PST)
+Received: from xws.localdomain ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id j17-20020a17090623f100b007c0d0dad9c6sm575340ejg.108.2022.12.02.14.33.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Dec 2022 13:05:44 -0800 (PST)
-Message-ID: <638a68a8.170a0220.88ca.bc47@mx.google.com>
-Date:   Fri, 02 Dec 2022 13:05:44 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 02 Dec 2022 14:33:36 -0800 (PST)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/9] platform/surface: aggregator: Improve target/source handling in SSH messages
+Date:   Fri,  2 Dec 2022 23:33:18 +0100
+Message-Id: <20221202223327.690880-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.1-rc7-111-ge1ca6bc96dff
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.1-rc7-111-ge1ca6bc96dff)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,109 +75,82 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc7-111-ge=
-1ca6bc96dff)
+We have some new insights into the Serial Hub protocol, obtained through
+reverse engineering. In particular, regarding the command structure. The
+input/output target IDs actually represent source and target IDs of
+(what looks like) physical entities (specifically: host, SAM EC, KIP EC,
+debug connector, and SurfLink connector).
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-1-rc7-111-ge1ca6bc96dff/
+This series aims to improve handling of messages with regards to those
+new findings and, mainly, improve clarity of the documentation and usage
+around those fields.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.1-rc7-111-ge1ca6bc96dff
-Git Commit: e1ca6bc96dff669de20cfd5474a5e4cd5b7465b0
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+See the discussion in
 
-Warnings Detected:
+    https://github.com/linux-surface/surface-aggregator-module/issues/64
 
-arc:
+for more details.
 
-arm64:
+There are a couple of standouts:
 
-arm:
+- Patch 1 ensures that we only handle commands actually intended for us.
+  It's possible that we receive messages not intended for us when we
+  enable debugging. I've kept it intentionally minimal to simplify
+  backporting. The rest of the series patch 9 focuses more on clarity
+  and documentation, which is probably too much to backport.
 
-i386:
+- Patch 8 touches on multiple subsystems. The intention is to enforce
+  proper usage and documentation of target IDs in the SSAM_SDEV() /
+  SSAM_VDEV() macros. As it directly touches those macros I
+  unfortunately can't split it up by subsystem.
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+- Patch 9 is a loosely connected cleanup for consistency.
 
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
+Hans, Jiri, Benjamin, Sebastian: While patch 8 ("platform/surface:
+aggregator: Enforce use of target-ID enum in device ID macros") touches
+multiple subsystems, it should be possible to take the whole series
+through the pdx86 tree. The changes in other subsystems are fairly
+limited.
 
 
-Warnings summary:
+Maximilian Luz (9):
+  platform/surface: aggregator: Ignore command messages not intended for
+    us
+  platform/surface: aggregator: Improve documentation and handling of
+    message target and source IDs
+  platform/surface: aggregator: Add target and source IDs to command
+    trace events
+  platform/surface: aggregator_hub: Use target-ID enum instead of
+    hard-coding values
+  platform/surface: aggregator_tabletsw: Use target-ID enum instead of
+    hard-coding values
+  platform/surface: dtx: Use target-ID enum instead of hard-coding
+    values
+  HID: surface-hid: Use target-ID enum instead of hard-coding values
+  platform/surface: aggregator: Enforce use of target-ID enum in device
+    ID macros
+  platform/surface: aggregator_registry: Fix target-ID of base-hub
 
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
+ .../driver-api/surface_aggregator/client.rst  |  4 +-
+ .../driver-api/surface_aggregator/ssh.rst     | 36 ++++-----
+ drivers/hid/surface-hid/surface_hid.c         |  2 +-
+ drivers/hid/surface-hid/surface_kbd.c         |  2 +-
+ .../platform/surface/aggregator/controller.c  | 12 +--
+ .../platform/surface/aggregator/ssh_msgb.h    |  4 +-
+ .../surface/aggregator/ssh_request_layer.c    | 15 ++++
+ drivers/platform/surface/aggregator/trace.h   | 73 +++++++++++++++++--
+ .../platform/surface/surface_aggregator_hub.c |  8 +-
+ .../surface/surface_aggregator_registry.c     |  2 +-
+ .../surface/surface_aggregator_tabletsw.c     | 10 +--
+ drivers/platform/surface/surface_dtx.c        | 20 ++---
+ .../surface/surface_platform_profile.c        |  2 +-
+ drivers/power/supply/surface_battery.c        |  4 +-
+ drivers/power/supply/surface_charger.c        |  2 +-
+ include/linux/surface_aggregator/controller.h |  4 +-
+ include/linux/surface_aggregator/device.h     | 50 ++++++-------
+ include/linux/surface_aggregator/serial_hub.h | 40 ++++++----
+ 18 files changed, 191 insertions(+), 99 deletions(-)
 
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
+-- 
+2.38.1
 
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
