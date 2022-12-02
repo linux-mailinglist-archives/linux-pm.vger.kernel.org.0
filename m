@@ -2,119 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E01640541
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 11:53:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D3964056B
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 12:00:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232893AbiLBKxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 05:53:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S232538AbiLBLAt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 06:00:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233410AbiLBKw5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 05:52:57 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CB2D20A7
-        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 02:52:16 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id c1so6818828lfi.7
-        for <linux-pm@vger.kernel.org>; Fri, 02 Dec 2022 02:52:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2WV3hu6UK29+s0ALK9dx8GPMaHWMWWZBkgAQWdnJIgM=;
-        b=qXvw2WdO15cC5leZhy1ybNVXkWVe6yyrSIT3B7vV+oNDpLWW7rHGoZO74d4/yPFjWn
-         HWnN92NNeps3n0HOytoZyceBIkCtYCtK3M8ktz9uWVmJAz9LIOERMQQGmJOfKt7B8pnv
-         eahhmYz9ien371VQ7Pyu+unTgNOOXCs6VUPAmgWfd95nSHu1NNj0XMMx8VXqDknU6D+B
-         GcGA+/LkFkXbqHKiPg5BgOwPyTffmmL+oKOZPRLUDrn1ZV+eMntHUEnf0fAL9aOFRARL
-         y35WWukKWJmN5dLBXuzvgXCx1QGNehCzzT4ydwlvews9GFTtMIyo/XntCGhv8UdIuAH8
-         SGrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WV3hu6UK29+s0ALK9dx8GPMaHWMWWZBkgAQWdnJIgM=;
-        b=EUobvKz1nS7/Tpq9tmPkoeZl/5Mc6DkbxKoc1fFT6xFL1F238cHY0sVfzuvpMiQmia
-         INzo1MW9yLo7ums4FtVxHkhtBtLmy7JHfplGg2ijZlKJbiBsdiqF5sR8bVu+g3q0KGmU
-         sJ6AKZtA5Dx7dPiGD8So+IJhUg31G1MnPL8QLOwBSjXieu754kS+jCuOdkoew4NjDN/4
-         bVcmuIX7iarR/yvhq/VsezA3vQklCG6pNuMD+2MdfcJVYwUhIOajroGEqZ7jskpkeCmK
-         Ihh90F7nyEiAYWvhDK2ca/yANEowEKM3tA1Xah7uCDFh2xfBYIhemXrfbATQ1o372yVr
-         Mx0A==
-X-Gm-Message-State: ANoB5pkgxpSsFUHxtq2y861ssGcOF389by9Diu4nwjasRc0xnKmRs/Yo
-        lvzfRmvd6zAKxa/O/sERvaON7A==
-X-Google-Smtp-Source: AA0mqf41H5eGnGIB9G1oi4r1GojwonsUxZ5eSSh4/4tBP7XCusdlnst0g4hA1FRPNHRCYdlo/dGfew==
-X-Received: by 2002:a05:6512:746:b0:4a2:4f74:f47c with SMTP id c6-20020a056512074600b004a24f74f47cmr22895346lfs.367.1669978324002;
-        Fri, 02 Dec 2022 02:52:04 -0800 (PST)
-Received: from [192.168.1.101] (95.49.125.2.neoplus.adsl.tpnet.pl. [95.49.125.2])
-        by smtp.gmail.com with ESMTPSA id v1-20020a197401000000b0049876c1bb24sm972082lfe.225.2022.12.02.02.52.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Dec 2022 02:52:03 -0800 (PST)
-Message-ID: <c168cf10-8bcf-2dc8-29ca-d94e448a7c65@linaro.org>
-Date:   Fri, 2 Dec 2022 11:52:01 +0100
+        with ESMTP id S232530AbiLBLAs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 06:00:48 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FBF393A5D
+        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 03:00:46 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 077756602BBC;
+        Fri,  2 Dec 2022 11:00:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669978844;
+        bh=ImyF3LBwQuJj0NtUGxM/9EVhT91WQ2WRRYpMkYLSKTE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=UtsUdwd2wxqzJ9t310+AggFqfN1AOlhV/PJPNW9X7H319Xyz1NdP1PYb8gNBWy2AI
+         7JFORXfkuAYKPXdzLAy1ky6CpTYp/HIHksJkbU/Vzv72IJz2rxWSnY2JbUYXY6VVoo
+         YCgrE0A7IQEJVucgwStgxhnv4wViwXKUW5EzHBcASRlRGAXGQuwqnsK+YkxMLSQV3n
+         X0R4wvC3xAWuUvBMJRIBmbuEubu9ZoQRedi7e5kq8q8k+K696BIfYtUJs0mBPRWdw9
+         B4i0/tqyj4aKpUsWxXMq9KdUsPn+/DX4yu4FNI+hlQXIUSnJXKBbQmyu7Bj92Xus4m
+         QOSvrDb7zqP8A==
+Message-ID: <37468027-6a27-dcb8-9c14-8f8426ec50d1@collabora.com>
+Date:   Fri, 2 Dec 2022 12:00:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sm6115: Add smmu fallback to
- qcom generic compatible
+ Thunderbird/102.5.0
+Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
+ mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
 Content-Language: en-US
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221130200950.144618-1-a39.skl@gmail.com>
- <20221130200950.144618-13-a39.skl@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20221130200950.144618-13-a39.skl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>
+Cc:     "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "vincent@systemli.org" <vincent@systemli.org>,
+        "frank-w@public-files.de" <frank-w@public-files.de>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        =?UTF-8?B?SmlhLXdlaSBDaGFuZyAo5by15L2z5YGJKQ==?= 
+        <Jia-wei.Chang@mediatek.com>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "thomas.huehn@hs-nordhausen.de" <thomas.huehn@hs-nordhausen.de>,
+        "daniel@makrotopia.org" <daniel@makrotopia.org>
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+ <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
+ <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
+ <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
+ <Y4jHvomTrU8guBox@makrotopia.org>
+ <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
+ <20221202052716.uj3kzkunazmgazeq@vireshk-i7>
+ <0ebef1a2-6b5a-04b9-a79b-79eb3349c32b@collabora.com>
+ <c76bd301-0e8d-2d2b-0d3e-a57ece9b496f@collabora.com>
+ <b1822bbc3775730c4cedf9652323c7d72e663e4b.camel@mediatek.com>
+ <8be3e050-f32a-6761-8ebd-49c38dfcf9eb@collabora.com>
+ <c186d104-43e0-ca10-3ce2-c2f922acd8bf@leemhuis.info>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <c186d104-43e0-ca10-3ce2-c2f922acd8bf@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 30.11.2022 21:09, Adam Skladowski wrote:
-> Add fallback to generic qcom mmu-500 implementation.
+Il 02/12/22 11:41, Thorsten Leemhuis ha scritto:
+> On 02.12.22 11:02, AngeloGioacchino Del Regno wrote:
+>> Il 02/12/22 10:43, Allen-KH Cheng (程冠勳) ha scritto:
+>>>
+>>> Jia-wei is working on this issue.
+>>> We will update progress ASAP.
+>>>
+>>
+>> I think I've found something: the MT7622/7623 voltage constraints
+>> set in mediatek-cpufreq's platform data seem to be wrong.
 > 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Thx for looking into this.
+>> I've sent a commit to fix those [1]
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 38b903592a57..572bf04adf90 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -1233,7 +1233,7 @@ dispcc: clock-controller@5f00000 {
->  		};
->  
->  		apps_smmu: iommu@c600000 {
-> -			compatible = "qcom,sm6115-smmu-500", "arm,mmu-500";
-> +			compatible = "qcom,sm6115-smmu-500", "qcom,smmu-500", "arm,mmu-500";
->  			reg = <0x0c600000 0x80000>;
->  			#iommu-cells = <2>;
->  			#global-interrupts = <1>;
+> Quick question: is that relative to apply at this point of the 6.1 devel
+> cycle? Or would it be better to revert the culprit (already introduced
+> in 5.19) for now and reapply it together with that fix for 6.2 (and then
+> backport to 6.1 stable later)?
+> 
+>> and that should solve the issue
+>> that was seen on MT7622, but the code in the voltage tracking algorithm
+>> is unsafe: this crash should be happening because we may be calling
+>> regulator_set_voltage() with max_uV < min_uV --- and this is not legal.
+> 
+> [...]
+> 
+>> [1]:
+>> https://lore.kernel.org/lkml/20221202095227.167492-1-angelogioacchino.delregno@collabora.com/
+> 
+> Side note, that patch afaics should have:
+> 
+> Reported-by: Nick <vincent@systemli.org>
+> Link:
+> https://lore.kernel.org/r/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
+> 
+
+I'm sorry, forgot about those. I'll wait for feedback on that patch first.
+
+If Viresh can add those while applying the patch, that's fine for me - otherwise
+I can send a v2 adding the two suggested missing tags.
+
+Thanks all!
+Angelo
+
+> To explain: Linus[1] and others considered proper link tags important in
+> cases like this, as they allow anyone to look into the backstory of a
+> commit weeks or years later. That's nothing new, the documentation[2]
+> for some time says to place tags in cases like this. I care personally
+> (and made it a bit more explicit in the docs a while ago), because these
+> tags make my regression tracking efforts a whole lot easier, as they
+> allow my tracking bot 'regzbot' to automatically connect reports with
+> patches posted or committed to fix tracked regressions.
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> 
+> [1] for details, see:
+> https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
+> https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
+> https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+> 
+> [2] see Documentation/process/submitting-patches.rst
+> (http://docs.kernel.org/process/submitting-patches.html) and
+> Documentation/process/5.Posting.rst
+> (https://docs.kernel.org/process/5.Posting.html)
+> 
+> 
+> 
+>>> Thanks,
+>>> Allen
+>>>
+>>> On Fri, 2022-12-02 at 10:19 +0100, AngeloGioacchino Del Regno wrote:
+>>>> Il 02/12/22 09:57, AngeloGioacchino Del Regno ha scritto:
+>>>>> Il 02/12/22 06:27, Viresh Kumar ha scritto:
+>>>>>> On 01-12-22, 16:39, Thorsten Leemhuis wrote:
+>>>>>>> Thx for clarifying. And I noticed I made a mistake: I should
+>>>>>>> have
+>>>>>>> directed my earlier question wrt to any progress here more into
+>>>>>>> the
+>>>>>>> direction of Jia-Wei Chang (who authored 6a17b3876b) and Viresh
+>>>>>>> Kumar
+>>>>>>> (who committed it).
+>>>>>>
+>>>>>> I was waiting for the platform maintainers to come up with a fix.
+>>>>>> I
+>>>>>> have sent a patch now to revert this, in-reply-to this thread.
+>>>>>>
+>>>>>> Please confirm this is working fine. Thanks.
+>>>>>>
+>>>>>
+>>>>> Can you guys try this patch that I've sent a while ago?
+>>>>>
+>>>>>
+>>> https://lore.kernel.org/lkml/20220909093724.40078-1-angelogioacchino.delregno@collabora.com/T/#u
+>>>>>
+>>>>> There were comments on it, but if that solves your issue I can push
+>>>>> a v2
+>>>>> to solve what was reported.
+>>>>>
+>>>>> Regards,
+>>>>> Angelo
+>>>>
+>>>> Wait, sorry, I've re-read the stacktrace and that won't help at all.
+>>>> MediaTek, can you please look at this issue?
+>>>>
+>>>> Reverting the proposed commit will make MT8183 unstable.
+>>>>
+>>>>
+> 
+> #regzbot monitor:
+> https://lore.kernel.org/r/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
+
+-- 
+AngeloGioacchino Del Regno
+Software Engineer
+
+Collabora Ltd.
+Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718
+
