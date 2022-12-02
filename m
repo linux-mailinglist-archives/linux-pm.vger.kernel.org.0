@@ -2,44 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE6F6402FB
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 10:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1FB64031A
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 10:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiLBJMj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 04:12:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S232011AbiLBJUF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 04:20:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232288AbiLBJMj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 04:12:39 -0500
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04CEC1F;
-        Fri,  2 Dec 2022 01:12:36 -0800 (PST)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 2B29BagW034842
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Fri, 2 Dec 2022 17:11:36 +0800 (CST)
-        (envelope-from Di.Shen@unisoc.com)
-Received: from bj10906pcu1.spreadtrum.com (10.0.74.51) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Fri, 2 Dec 2022 17:11:33 +0800
-From:   Di Shen <di.shen@unisoc.com>
-To:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
-        <amitk@kernel.org>, <rui.zhang@intel.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xuewen.yan@unisoc.com>, <di.shen@unisoc.com>
-Subject: [PATCH V2] thermal/of: Allow users to set governor for a thermal zone in DT
-Date:   Fri, 2 Dec 2022 17:11:11 +0800
-Message-ID: <20221202091111.1682-1-di.shen@unisoc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <202212020239.CufwkKiR-lkp@intel.com>
-References: <202212020239.CufwkKiR-lkp@intel.com>
+        with ESMTP id S230094AbiLBJUE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 04:20:04 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58FAA9591
+        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 01:20:03 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F7DC6602BB8;
+        Fri,  2 Dec 2022 09:20:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1669972802;
+        bh=WsnwT6RMOoj+xc9Gp4IEpzEBUTanWc1prySPc8HuK6E=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=dEBPz/hn/fyvVtgwd3/q4Ub8zC0o8CPcW2O4z2nqGWK6gPTT8Qbv/IBzO9jEMVdR0
+         T2McSzLvYSqCwSUTE0J5bsLnFtxag4MJBlOAFg1c9TpSgw+aPe3E8rhk7gEu7LFSuI
+         6Ws3tQXtqGV2Kmefm3bqfCvIzhznUV/M/QOKgtb3MNg1mB+oHcwNLlBcDRumHI9VPf
+         9W6M2NCyeZJGg7nWp/zcRU7rhMqkwne9dNMyuh+kJQ4GRvYElXMUVXhgDRmsW4Lvz0
+         aL0bsjMjRO46SxQqiFJ0gwSWUHgNEUYdV6iuWYFLM1mrHzdyUH6wAhdTHPjxp90QT7
+         EDW6rpxPnc40g==
+Message-ID: <c76bd301-0e8d-2d2b-0d3e-a57ece9b496f@collabora.com>
+Date:   Fri, 2 Dec 2022 10:19:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.51]
-X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 2B29BagW034842
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
+ mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     jia-wei.chang@mediatek.com, Nick <vincent@systemli.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        rex-bc.chen@mediatek.com,
+        Frank Wunderlich <frank-w@public-files.de>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        =?UTF-8?Q?H=c3=bchn=2c_Thomas?= <thomas.huehn@hs-nordhausen.de>,
+        Daniel Golle <daniel@makrotopia.org>
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+ <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
+ <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
+ <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
+ <Y4jHvomTrU8guBox@makrotopia.org>
+ <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
+ <20221202052716.uj3kzkunazmgazeq@vireshk-i7>
+ <0ebef1a2-6b5a-04b9-a79b-79eb3349c32b@collabora.com>
+In-Reply-To: <0ebef1a2-6b5a-04b9-a79b-79eb3349c32b@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,43 +73,33 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The governor of all thermal zones can be initialized in
-thermal_zone_device_register_with_trips(), but it is always the
-def_governor, this means the governor of all thermal zones are
-the same.
+Il 02/12/22 09:57, AngeloGioacchino Del Regno ha scritto:
+> Il 02/12/22 06:27, Viresh Kumar ha scritto:
+>> On 01-12-22, 16:39, Thorsten Leemhuis wrote:
+>>> Thx for clarifying. And I noticed I made a mistake: I should have
+>>> directed my earlier question wrt to any progress here more into the
+>>> direction of Jia-Wei Chang (who authored 6a17b3876b) and Viresh Kumar
+>>> (who committed it).
+>>
+>> I was waiting for the platform maintainers to come up with a fix. I
+>> have sent a patch now to revert this, in-reply-to this thread.
+>>
+>> Please confirm this is working fine. Thanks.
+>>
+> 
+> Can you guys try this patch that I've sent a while ago?
+> 
+> https://lore.kernel.org/lkml/20220909093724.40078-1-angelogioacchino.delregno@collabora.com/T/#u
+> 
+> There were comments on it, but if that solves your issue I can push a v2
+> to solve what was reported.
+> 
+> Regards,
+> Angelo
 
-Allow users to set governor for a specific thermal zone in DT, in
-this way, users can use different policies for thermal management.
+Wait, sorry, I've re-read the stacktrace and that won't help at all.
+MediaTek, can you please look at this issue?
 
-Signed-off-by: Di Shen <di.shen@unisoc.com>
----
- drivers/thermal/thermal_of.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Reverting the proposed commit will make MT8183 unstable.
 
-diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-index d4b6335ace15..4a29ac3be2ac 100644
---- a/drivers/thermal/thermal_of.c
-+++ b/drivers/thermal/thermal_of.c
-@@ -355,6 +355,7 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
- 	int coef[2];
- 	int ncoef = ARRAY_SIZE(coef);
- 	int prop, ret;
-+	const char *governor_name;
- 
- 	tzp = kzalloc(sizeof(*tzp), GFP_KERNEL);
- 	if (!tzp)
-@@ -365,6 +366,11 @@ static struct thermal_zone_params *thermal_of_parameters_init(struct device_node
- 	if (!of_property_read_u32(np, "sustainable-power", &prop))
- 		tzp->sustainable_power = prop;
- 
-+	if (!of_property_read_string(np, "policy", &governor_name)) {
-+		strncpy(tzp->governor_name, governor_name, THERMAL_NAME_LENGTH - 1);
-+		tzp->governor_name[THERMAL_NAME_LENGTH - 1] = '\0';
-+	}
-+
- 	/*
- 	 * For now, the thermal framework supports only one sensor per
- 	 * thermal zone. Thus, we are considering only the first two
--- 
-2.17.1
 
