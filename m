@@ -2,155 +2,211 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE3D640876
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 15:32:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F3A66408D6
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 15:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiLBOc3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 09:32:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S233663AbiLBO5p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 09:57:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233385AbiLBOc1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 09:32:27 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A9C8BDB;
-        Fri,  2 Dec 2022 06:32:26 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 9a89291df2bf92d8; Fri, 2 Dec 2022 15:32:23 +0100
-Received: from kreacher.localnet (unknown [213.134.188.181])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 371D52602969;
-        Fri,  2 Dec 2022 15:32:22 +0100 (CET)
-Authentication-Results: v370.home.net.pl; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: v370.home.net.pl; spf=fail smtp.mailfrom=rjwysocki.net
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Subject: [PATCH v1 2/2] PM: runtime: Relocate rpm_callback() right after __rpm_callback()
-Date:   Fri, 02 Dec 2022 15:32:09 +0100
-Message-ID: <2264402.ElGaqSPkdT@kreacher>
-In-Reply-To: <5627469.DvuYhMxLoT@kreacher>
-References: <5627469.DvuYhMxLoT@kreacher>
+        with ESMTP id S233630AbiLBO5j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 09:57:39 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA971005
+        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 06:57:35 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id g26so3190495iob.11
+        for <linux-pm@vger.kernel.org>; Fri, 02 Dec 2022 06:57:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x4xtfWqm0VBdxXINhuzVFH0cJGa0pOD8BzSG440kVww=;
+        b=Sgko14KGjslS+9wNiiOvq4rSW4EOqC3A6uGWr1jhRwDCpFGeJh0zNWBjps/e+e5I6g
+         U0wMdM6GAtM3B0QKruxdxeyCgtZ+Ty7vT+B4vxOe6JfW2kK5QS8stKNJ0ON/cbRCazpW
+         zfwNbDPLhkgcygKUd7VkLdft/rewDoonz+iXHKpv9kBLwm5mN3AepeErq3Idjldr/vQK
+         QsFIl52HytP3bX8rXf8ko1NGdUwLnsFMfuu/RQ6kdprb++SwdjjYIWhxcmZDSOi8WPbT
+         Of+kfkSp5tpb8I1S6/gNFayMceSvz074qIHR3uUTsyLW3/eOmPGyPMizNSzbUJqxG4fD
+         rXqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x4xtfWqm0VBdxXINhuzVFH0cJGa0pOD8BzSG440kVww=;
+        b=ZqOXOHcWQ9PjTEaIGK9uRnhvGqb0BjENHnfVsw2S08/84Ml4VJfCGBWSV7zwmjZCyU
+         T0ARqErUqryY2+C6sGsBu9MbvaecNLziEWNCZKes2oHlaS4BhdUuoET4oDzSadS6YNfS
+         BEVlkO+FKNTLRQp3z+bZNeZ2uC6FjXXZQJEjQ8AFHQt5mXTEp1fX7iUVMkQgM/FhuWr9
+         IBSKSy+12Cd4BLPLuoQX2TGyiDWgy8qn0O/RNTK8JUlnugk3o9jer8DEZp2nfp8yJIxd
+         iOD1YVUT/CmXGibGZIqYyhDgf7GD/juwN6p6CJraFoDH80WaRdGmZStLe/wmBeGTXA2s
+         8LVw==
+X-Gm-Message-State: ANoB5pkRfO2JbYUfcLnQOWTFVmXNsxZfQSfcQSj6slM9yJNYnPllp+XF
+        1dZ5hZb/bymDOdTZJq+xS4MLUvTNiPHFTIM5pDD2mA==
+X-Google-Smtp-Source: AA0mqf4QY3SlD0WC3ohtBGQXShjnq8KTAp1lFR2uzP+wJsgxgSseTME2s3tDT7eTQiBIwftv5gcrSxKEK+aI5yxas/g=
+X-Received: by 2002:a6b:e714:0:b0:6df:7332:70f0 with SMTP id
+ b20-20020a6be714000000b006df733270f0mr14036957ioh.154.1669993054658; Fri, 02
+ Dec 2022 06:57:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20221127141742.1644023-1-qyousef@layalina.io> <20221127141742.1644023-4-qyousef@layalina.io>
+In-Reply-To: <20221127141742.1644023-4-qyousef@layalina.io>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 2 Dec 2022 15:57:21 +0100
+Message-ID: <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.188.181
-X-CLIENT-HOSTNAME: 213.134.188.181
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrtdekgdegvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepvddufedrudefgedrudekkedrudekudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeekrddukedupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghtnhhimhhkrghrsehquhhitghinhgtrdgtohhmpdhrtghpthhtoheprggurhhirghnrdhhuhhnthgvrhesihhnthgvlhdrtghomhdprhgtphht
- thhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepqhhuihgtpghnihhtihhrrgifrgesqhhuihgtihhntgdrtghomhdprhgtphhtthhopehpvghtvghrrdifrghnghesmhgvughirghtvghkrdgtohhmpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=9 Fuz1=9 Fuz2=9
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Sun, 27 Nov 2022 at 15:18, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> We used performance domains to traverse the list of domains that share
+> the same cpufreq policy to detect when this domain is severely impacted
+> by thermal pressure to cause it to be lower than another domain in the
+> system - capacity inversion.
+>
+> Since performance domains are only available for when energy model or
+> schedutil are present, this makes the detection mechanism unavailable
+> for Capacity Aware Scheduling (CAS).
+>
+> Since we only care about traversing the capacity_orig() of any cpu
+> within that domain; export for_each_active_policy() to traverse the
+> cpufreq policies instead of performance domains.
+>
+> Introduce a new for_each_active_policy_safe() to protect against races
+> with deletion. Races against additions are fine since we can't
+> eliminate the race without having to do heavy handed locking which is
+> unacceptable in this path. The policy should be visible in the next
+> tick if we missed it.
+>
+> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+>
+> Rafael, Viresh, I hope it's okay to export these macros in the public header.
+> And that my usage is okay; I'm not sure if I missed important locking rules.
+>
+>
+>  drivers/cpufreq/cpufreq.c | 12 +-----------
+>  include/linux/cpufreq.h   | 26 ++++++++++++++++++++++++++
+>  kernel/sched/fair.c       | 13 +++++--------
+>  3 files changed, 32 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 69b3d61852ac..b11e7c545fc1 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -31,17 +31,7 @@
+>  #include <linux/units.h>
+>  #include <trace/events/power.h>
+>
+> -static LIST_HEAD(cpufreq_policy_list);
+> -
+> -/* Macros to iterate over CPU policies */
+> -#define for_each_suitable_policy(__policy, __active)                    \
+> -       list_for_each_entry(__policy, &cpufreq_policy_list, policy_list) \
+> -               if ((__active) == !policy_is_inactive(__policy))
+> -
+> -#define for_each_active_policy(__policy)               \
+> -       for_each_suitable_policy(__policy, true)
+> -#define for_each_inactive_policy(__policy)             \
+> -       for_each_suitable_policy(__policy, false)
+> +LIST_HEAD(cpufreq_policy_list);
+>
+>  /* Iterate over governors */
+>  static LIST_HEAD(cpufreq_governor_list);
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index d5595d57f4e5..c3c79d4ad821 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -780,6 +780,32 @@ static inline void dev_pm_opp_free_cpufreq_table(struct device *dev,
+>                         continue;                                               \
+>                 else
+>
+> +#ifdef CONFIG_CPU_FREQ
+> +extern struct list_head cpufreq_policy_list;
+> +
+> +/* Macros to iterate over CPU policies */
+> +#define for_each_suitable_policy(__policy, __active)                    \
+> +       list_for_each_entry(__policy, &cpufreq_policy_list, policy_list) \
+> +               if ((__active) == !policy_is_inactive(__policy))
+> +
+> +#define for_each_suitable_policy_safe(__policy, __n, __active)                    \
+> +       list_for_each_entry_safe(__policy, __n, &cpufreq_policy_list, policy_list) \
+> +               if ((__active) == !policy_is_inactive(__policy))
+> +#else
+> +#define for_each_suitable_policy(__policy, __active)           while (0)
+> +#define for_each_suitable_policy_safe(__policy, __n, __active) while (0)
+> +#endif
+> +
+> +#define for_each_active_policy(__policy)               \
+> +       for_each_suitable_policy(__policy, true)
+> +#define for_each_inactive_policy(__policy)             \
+> +       for_each_suitable_policy(__policy, false)
+> +
+> +#define for_each_active_policy_safe(__policy, __n)             \
+> +       for_each_suitable_policy_safe(__policy, __n, true)
+> +#define for_each_inactive_policy_safe(__policy, __n)           \
+> +       for_each_suitable_policy_safe(__policy, __n, false)
+> +
+>
+>  int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
+>                                     struct cpufreq_frequency_table *table);
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 7c0dd57e562a..4bbbca85134b 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+>          *   * Thermal pressure will impact all cpus in this perf domain
+>          *     equally.
+>          */
+> -       if (sched_energy_enabled()) {
+> +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+>                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
+>
+>                 rq->cpu_capacity_inverted = 0;
+>
+> -               SCHED_WARN_ON(!rcu_read_lock_held());
+> -
+> -               for (; pd; pd = pd->next) {
+> -                       struct cpumask *pd_span = perf_domain_span(pd);
+> +               for_each_active_policy_safe(policy, policy_n) {
 
-Because rpm_callback() is a wrapper around __rpm_callback(), and the
-only caller of it after the change eliminating an invocation of it
-from rpm_idle(), move the former next to the latter to make the code
-a bit easier to follow.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/runtime.c |   64 +++++++++++++++++++++----------------------
- 1 file changed, 32 insertions(+), 32 deletions(-)
-
-Index: linux-pm/drivers/base/power/runtime.c
-===================================================================
---- linux-pm.orig/drivers/base/power/runtime.c
-+++ linux-pm/drivers/base/power/runtime.c
-@@ -422,6 +422,38 @@ fail:
- }
- 
- /**
-+ * rpm_callback - Run a given runtime PM callback for a given device.
-+ * @cb: Runtime PM callback to run.
-+ * @dev: Device to run the callback for.
-+ */
-+static int rpm_callback(int (*cb)(struct device *), struct device *dev)
-+{
-+	int retval;
-+
-+	if (dev->power.memalloc_noio) {
-+		unsigned int noio_flag;
-+
-+		/*
-+		 * Deadlock might be caused if memory allocation with
-+		 * GFP_KERNEL happens inside runtime_suspend and
-+		 * runtime_resume callbacks of one block device's
-+		 * ancestor or the block device itself. Network
-+		 * device might be thought as part of iSCSI block
-+		 * device, so network device and its ancestor should
-+		 * be marked as memalloc_noio too.
-+		 */
-+		noio_flag = memalloc_noio_save();
-+		retval = __rpm_callback(cb, dev);
-+		memalloc_noio_restore(noio_flag);
-+	} else {
-+		retval = __rpm_callback(cb, dev);
-+	}
-+
-+	dev->power.runtime_error = retval;
-+	return retval != -EACCES ? retval : -EIO;
-+}
-+
-+/**
-  * rpm_idle - Notify device bus type if the device can be suspended.
-  * @dev: Device to notify the bus type about.
-  * @rpmflags: Flag bits.
-@@ -505,38 +537,6 @@ static int rpm_idle(struct device *dev,
- }
- 
- /**
-- * rpm_callback - Run a given runtime PM callback for a given device.
-- * @cb: Runtime PM callback to run.
-- * @dev: Device to run the callback for.
-- */
--static int rpm_callback(int (*cb)(struct device *), struct device *dev)
--{
--	int retval;
--
--	if (dev->power.memalloc_noio) {
--		unsigned int noio_flag;
--
--		/*
--		 * Deadlock might be caused if memory allocation with
--		 * GFP_KERNEL happens inside runtime_suspend and
--		 * runtime_resume callbacks of one block device's
--		 * ancestor or the block device itself. Network
--		 * device might be thought as part of iSCSI block
--		 * device, so network device and its ancestor should
--		 * be marked as memalloc_noio too.
--		 */
--		noio_flag = memalloc_noio_save();
--		retval = __rpm_callback(cb, dev);
--		memalloc_noio_restore(noio_flag);
--	} else {
--		retval = __rpm_callback(cb, dev);
--	}
--
--	dev->power.runtime_error = retval;
--	return retval != -EACCES ? retval : -EIO;
--}
--
--/**
-  * rpm_suspend - Carry out runtime suspend of given device.
-  * @dev: Device to suspend.
-  * @rpmflags: Flag bits.
+So you are looping all cpufreq policy (and before the perf domain) in
+the period load balance. That' really not something we should or want
+to do
 
 
-
+>                         unsigned long pd_cap_orig, pd_cap;
+>
+>                         /* We can't be inverted against our own pd */
+> -                       if (cpumask_test_cpu(cpu_of(rq), pd_span))
+> +                       if (cpumask_test_cpu(cpu_of(rq), policy->cpus))
+>                                 continue;
+>
+> -                       cpu = cpumask_any(pd_span);
+> +                       cpu = cpumask_any(policy->cpus);
+>                         pd_cap_orig = arch_scale_cpu_capacity(cpu);
+>
+>                         if (capacity_orig < pd_cap_orig)
+> --
+> 2.25.1
+>
