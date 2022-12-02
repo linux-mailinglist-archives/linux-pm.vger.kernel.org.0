@@ -2,180 +2,320 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA2A863FE34
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 03:38:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF1663FFCF
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 06:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiLBCiW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 1 Dec 2022 21:38:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54798 "EHLO
+        id S232177AbiLBF0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 00:26:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiLBCiV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 1 Dec 2022 21:38:21 -0500
-Received: from out29-5.mail.aliyun.com (out29-5.mail.aliyun.com [115.124.29.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D9693837;
-        Thu,  1 Dec 2022 18:38:19 -0800 (PST)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07438342|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0033058-0.00464087-0.992053;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=kant@allwinnertech.com;NM=1;PH=DS;RN=6;RT=6;SR=0;TI=SMTPD_---.QLqU9kr_1669948695;
-Received: from SunxiBot.allwinnertech.com(mailfrom:kant@allwinnertech.com fp:SMTPD_---.QLqU9kr_1669948695)
-          by smtp.aliyun-inc.com;
-          Fri, 02 Dec 2022 10:38:16 +0800
-From:   Kant Fan <kant@allwinnertech.com>
-To:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com
-Cc:     cw00.choi@samsung.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: [PATCH 5.4-] PM/devfreq: governor: Add a private governor_data for governor
-Date:   Fri,  2 Dec 2022 10:38:12 +0800
-Message-Id: <20221202023812.84174-1-kant@allwinnertech.com>
-X-Mailer: git-send-email 2.29.0
+        with ESMTP id S231629AbiLBF0N (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 00:26:13 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F126D159D
+        for <linux-pm@vger.kernel.org>; Thu,  1 Dec 2022 21:26:12 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id f9so3529728pgf.7
+        for <linux-pm@vger.kernel.org>; Thu, 01 Dec 2022 21:26:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+7CLY/cg5ojs9SWtTqzajbZDLdfKBEhfLiZf2rmzvKo=;
+        b=lXKxGX6WE0PEpSZ3htACVAs0aK8M0kYePPgSv8PdJq6TPyHlZ+z54XkOZ2nITnpHzf
+         qptpwXUsP7AcWoSyiHhoLn4Dl4yojBl99u3WehwDcbgZrO6B/pLb4eA89ur8UU3XuP7n
+         9XkcBmDUiq1714lciG8O5wzArf4phIcYc0mLXI1MnX5yKfMeg2kbk5Ity/U+9Q6H03Nz
+         ts9OK3esqBi3I0z67EqjQDb2N4HQ3xesjW3Bu0OXK5us05gOq5AogY2nmmf7meBekLZk
+         VMhY1NMBYLtTwb0qeR4P4NWaUBRavI0G7Q7OwB2vUSIMrBq9GzzTxRFnKE3Iowy6mRfq
+         8vnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+7CLY/cg5ojs9SWtTqzajbZDLdfKBEhfLiZf2rmzvKo=;
+        b=a8Gx2Cz+zR1hJk/8NeIJVcs+lQd+sGUhxiHjfS60U2kF/utbHAexsy99gWLxyRNHqL
+         guAw10pCU98X3+jgGFYfA2OAC+xbPloy2ZCnCb3DtT/ojsKyNA7XcxRAAsGCYJtAyJQo
+         x2I0em1JEZo6ers9jU4LjdTq+R/ZDSm7D+U0miiCQ0t4zRWdNefX3OPtCCjNz92Z3nvC
+         9wTyeNkzMstWhU36isFmNG4IPlRAsJMES0TtSdXAazEZLuuIc5DtuzFwFAYR0KJrmomI
+         5rMT/a77+cBS/AnsDXgV85QG5avLzwZL5gs1f0lvcDaW7ta+QJm7b0vwO6DSiUnq+xql
+         +3qQ==
+X-Gm-Message-State: ANoB5plYQNX+oy83dQMoe8IS+xO2htxtVfuWFeyP6gNUUvKQp/3frblc
+        CSW0yktEbyic7hf6eewuV6s2jQ==
+X-Google-Smtp-Source: AA0mqf4gLNzfw4IqDl++LKk9PBLXk4Rf0Xbt66bkQ6IAWTukB70GJgv1O47OinugE/tSm16nmV8uwA==
+X-Received: by 2002:a63:5042:0:b0:46f:e658:a8ff with SMTP id q2-20020a635042000000b0046fe658a8ffmr47515928pgl.493.1669958771316;
+        Thu, 01 Dec 2022 21:26:11 -0800 (PST)
+Received: from localhost ([122.172.87.149])
+        by smtp.gmail.com with ESMTPSA id n9-20020a170902e54900b001898ca438fcsm4595052plf.282.2022.12.01.21.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Dec 2022 21:26:10 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        regressions@leemhuis.info, daniel@makrotopia.org,
+        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
+        Nick <vincent@systemli.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH] Revert "cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()"
+Date:   Fri,  2 Dec 2022 10:56:07 +0530
+Message-Id: <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
+References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit fbd567e56942ecc4da906c4f3f3652c94773af5b upstream.
+This reverts commit 6a17b3876bc8303612d7ad59ecf7cbc0db418bcd.
 
-The member void *data in the structure devfreq can be overwrite
-by governor_userspace. For example:
-1. The device driver assigned the devfreq governor to simple_ondemand
-by the function devfreq_add_device() and init the devfreq member
-void *data to a pointer of a static structure devfreq_simple_ondemand_data
-by the function devfreq_add_device().
-2. The user changed the devfreq governor to userspace by the command
-"echo userspace > /sys/class/devfreq/.../governor".
-3. The governor userspace alloced a dynamic memory for the struct
-userspace_data and assigend the member void *data of devfreq to
-this memory by the function userspace_init().
-4. The user changed the devfreq governor back to simple_ondemand
-by the command "echo simple_ondemand > /sys/class/devfreq/.../governor".
-5. The governor userspace exited and assigned the member void *data
-in the structure devfreq to NULL by the function userspace_exit().
-6. The governor simple_ondemand fetched the static information of
-devfreq_simple_ondemand_data in the function
-devfreq_simple_ondemand_func() but the member void *data of devfreq was
-assigned to NULL by the function userspace_exit().
-7. The information of upthreshold and downdifferential is lost
-and the governor simple_ondemand can't work correctly.
+This commit caused regression on Banana Pi R64 (MT7622), revert until
+the problem is identified and fixed properly.
 
-The member void *data in the structure devfreq is designed for
-a static pointer used in a governor and inited by the function
-devfreq_add_device(). This patch add an element named governor_data
-in the devfreq structure which can be used by a governor(E.g userspace)
-who want to assign a private data to do some private things.
-
-Fixes: ce26c5bb9569 ("PM / devfreq: Add basic governors")
-Cc: stable@vger.kernel.org # 5.4-
-Signed-off-by: Kant Fan <kant@allwinnertech.com>
+Link: https://lore.kernel.org/all/930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org/
+Cc: v5.19+ <stable@vger.kernel.org> # v5.19+
+Reported-by: Nick <vincent@systemli.org>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/devfreq/devfreq.c            |  6 ++----
- drivers/devfreq/governor_userspace.c | 12 ++++++------
- include/linux/devfreq.h              |  7 ++++---
- 3 files changed, 12 insertions(+), 13 deletions(-)
+ drivers/cpufreq/mediatek-cpufreq.c | 147 +++++++++++++++++++----------
+ 1 file changed, 96 insertions(+), 51 deletions(-)
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index c79652ee94be..93efaf69d08e 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -603,8 +603,7 @@ static void devfreq_dev_release(struct device *dev)
-  * @dev:	the device to add devfreq feature.
-  * @profile:	device-specific profile to run devfreq.
-  * @governor_name:	name of the policy to choose frequency.
-- * @data:	private data for the governor. The devfreq framework does not
-- *		touch this value.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-  */
- struct devfreq *devfreq_add_device(struct device *dev,
- 				   struct devfreq_dev_profile *profile,
-@@ -788,8 +787,7 @@ static void devm_devfreq_dev_release(struct device *dev, void *res)
-  * @dev:	the device to add devfreq feature.
-  * @profile:	device-specific profile to run devfreq.
-  * @governor_name:	name of the policy to choose frequency.
-- * @data:	private data for the governor. The devfreq framework does not
-- *		touch this value.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-  *
-  * This function manages automatically the memory of devfreq device using device
-  * resource management and simplify the free operation for memory of devfreq
-diff --git a/drivers/devfreq/governor_userspace.c b/drivers/devfreq/governor_userspace.c
-index af94942fcf95..a3ae4dc4668b 100644
---- a/drivers/devfreq/governor_userspace.c
-+++ b/drivers/devfreq/governor_userspace.c
-@@ -21,7 +21,7 @@ struct userspace_data {
+diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+index 7f2680bc9a0f..4466d0c91a6a 100644
+--- a/drivers/cpufreq/mediatek-cpufreq.c
++++ b/drivers/cpufreq/mediatek-cpufreq.c
+@@ -8,7 +8,6 @@
+ #include <linux/cpu.h>
+ #include <linux/cpufreq.h>
+ #include <linux/cpumask.h>
+-#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+@@ -16,6 +15,8 @@
+ #include <linux/pm_opp.h>
+ #include <linux/regulator/consumer.h>
  
- static int devfreq_userspace_func(struct devfreq *df, unsigned long *freq)
- {
--	struct userspace_data *data = df->data;
-+	struct userspace_data *data = df->governor_data;
++#define VOLT_TOL		(10000)
++
+ struct mtk_cpufreq_platform_data {
+ 	int min_volt_shift;
+ 	int max_volt_shift;
+@@ -55,7 +56,6 @@ struct mtk_cpu_dvfs_info {
+ 	unsigned int opp_cpu;
+ 	unsigned long current_freq;
+ 	const struct mtk_cpufreq_platform_data *soc_data;
+-	int vtrack_max;
+ 	bool ccifreq_bound;
+ };
  
- 	if (data->valid)
- 		*freq = data->user_frequency;
-@@ -40,7 +40,7 @@ static ssize_t store_freq(struct device *dev, struct device_attribute *attr,
- 	int err = 0;
+@@ -82,7 +82,6 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 	struct regulator *proc_reg = info->proc_reg;
+ 	struct regulator *sram_reg = info->sram_reg;
+ 	int pre_vproc, pre_vsram, new_vsram, vsram, vproc, ret;
+-	int retry = info->vtrack_max;
  
- 	mutex_lock(&devfreq->lock);
--	data = devfreq->data;
-+	data = devfreq->governor_data;
- 
- 	sscanf(buf, "%lu", &wanted);
- 	data->user_frequency = wanted;
-@@ -60,7 +60,7 @@ static ssize_t show_freq(struct device *dev, struct device_attribute *attr,
- 	int err = 0;
- 
- 	mutex_lock(&devfreq->lock);
--	data = devfreq->data;
-+	data = devfreq->governor_data;
- 
- 	if (data->valid)
- 		err = sprintf(buf, "%lu\n", data->user_frequency);
-@@ -91,7 +91,7 @@ static int userspace_init(struct devfreq *devfreq)
- 		goto out;
+ 	pre_vproc = regulator_get_voltage(proc_reg);
+ 	if (pre_vproc < 0) {
+@@ -90,44 +89,91 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 			"invalid Vproc value: %d\n", pre_vproc);
+ 		return pre_vproc;
  	}
- 	data->valid = false;
--	devfreq->data = data;
-+	devfreq->governor_data = data;
++	/* Vsram should not exceed the maximum allowed voltage of SoC. */
++	new_vsram = min(new_vproc + soc_data->min_volt_shift,
++			soc_data->sram_max_volt);
++
++	if (pre_vproc < new_vproc) {
++		/*
++		 * When scaling up voltages, Vsram and Vproc scale up step
++		 * by step. At each step, set Vsram to (Vproc + 200mV) first,
++		 * then set Vproc to (Vsram - 100mV).
++		 * Keep doing it until Vsram and Vproc hit target voltages.
++		 */
++		do {
++			pre_vsram = regulator_get_voltage(sram_reg);
++			if (pre_vsram < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vsram value: %d\n", pre_vsram);
++				return pre_vsram;
++			}
++			pre_vproc = regulator_get_voltage(proc_reg);
++			if (pre_vproc < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vproc value: %d\n", pre_vproc);
++				return pre_vproc;
++			}
  
- 	err = sysfs_create_group(&devfreq->dev.kobj, &dev_attr_group);
- out:
-@@ -107,8 +107,8 @@ static void userspace_exit(struct devfreq *devfreq)
- 	if (devfreq->dev.kobj.sd)
- 		sysfs_remove_group(&devfreq->dev.kobj, &dev_attr_group);
+-	pre_vsram = regulator_get_voltage(sram_reg);
+-	if (pre_vsram < 0) {
+-		dev_err(info->cpu_dev, "invalid Vsram value: %d\n", pre_vsram);
+-		return pre_vsram;
+-	}
++			vsram = min(new_vsram,
++				    pre_vproc + soc_data->min_volt_shift);
  
--	kfree(devfreq->data);
--	devfreq->data = NULL;
-+	kfree(devfreq->governor_data);
-+	devfreq->governor_data = NULL;
+-	new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
+-			  soc_data->sram_min_volt, soc_data->sram_max_volt);
++			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
++				vsram = soc_data->sram_max_volt;
+ 
+-	do {
+-		if (pre_vproc <= new_vproc) {
+-			vsram = clamp(pre_vproc + soc_data->max_volt_shift,
+-				      soc_data->sram_min_volt, new_vsram);
+-			ret = regulator_set_voltage(sram_reg, vsram,
+-						    soc_data->sram_max_volt);
++				/*
++				 * If the target Vsram hits the maximum voltage,
++				 * try to set the exact voltage value first.
++				 */
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram);
++				if (ret)
++					ret = regulator_set_voltage(sram_reg,
++							vsram - VOLT_TOL,
++							vsram);
+ 
+-			if (ret)
+-				return ret;
+-
+-			if (vsram == soc_data->sram_max_volt ||
+-			    new_vsram == soc_data->sram_min_volt)
+ 				vproc = new_vproc;
+-			else
++			} else {
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram + VOLT_TOL);
++
+ 				vproc = vsram - soc_data->min_volt_shift;
++			}
++			if (ret)
++				return ret;
+ 
+ 			ret = regulator_set_voltage(proc_reg, vproc,
+-						    soc_data->proc_max_volt);
++						    vproc + VOLT_TOL);
+ 			if (ret) {
+ 				regulator_set_voltage(sram_reg, pre_vsram,
+-						      soc_data->sram_max_volt);
++						      pre_vsram);
+ 				return ret;
+ 			}
+-		} else if (pre_vproc > new_vproc) {
++		} while (vproc < new_vproc || vsram < new_vsram);
++	} else if (pre_vproc > new_vproc) {
++		/*
++		 * When scaling down voltages, Vsram and Vproc scale down step
++		 * by step. At each step, set Vproc to (Vsram - 200mV) first,
++		 * then set Vproc to (Vproc + 100mV).
++		 * Keep doing it until Vsram and Vproc hit target voltages.
++		 */
++		do {
++			pre_vproc = regulator_get_voltage(proc_reg);
++			if (pre_vproc < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vproc value: %d\n", pre_vproc);
++				return pre_vproc;
++			}
++			pre_vsram = regulator_get_voltage(sram_reg);
++			if (pre_vsram < 0) {
++				dev_err(info->cpu_dev,
++					"invalid Vsram value: %d\n", pre_vsram);
++				return pre_vsram;
++			}
++
+ 			vproc = max(new_vproc,
+ 				    pre_vsram - soc_data->max_volt_shift);
+ 			ret = regulator_set_voltage(proc_reg, vproc,
+-						    soc_data->proc_max_volt);
++						    vproc + VOLT_TOL);
+ 			if (ret)
+ 				return ret;
+ 
+@@ -137,24 +183,32 @@ static int mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+ 				vsram = max(new_vsram,
+ 					    vproc + soc_data->min_volt_shift);
+ 
+-			ret = regulator_set_voltage(sram_reg, vsram,
+-						    soc_data->sram_max_volt);
++			if (vsram + VOLT_TOL >= soc_data->sram_max_volt) {
++				vsram = soc_data->sram_max_volt;
++
++				/*
++				 * If the target Vsram hits the maximum voltage,
++				 * try to set the exact voltage value first.
++				 */
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram);
++				if (ret)
++					ret = regulator_set_voltage(sram_reg,
++							vsram - VOLT_TOL,
++							vsram);
++			} else {
++				ret = regulator_set_voltage(sram_reg, vsram,
++							    vsram + VOLT_TOL);
++			}
++
+ 			if (ret) {
+ 				regulator_set_voltage(proc_reg, pre_vproc,
+-						      soc_data->proc_max_volt);
++						      pre_vproc);
+ 				return ret;
+ 			}
+-		}
+-
+-		pre_vproc = vproc;
+-		pre_vsram = vsram;
+-
+-		if (--retry < 0) {
+-			dev_err(info->cpu_dev,
+-				"over loop count, failed to set voltage\n");
+-			return -EINVAL;
+-		}
+-	} while (vproc != new_vproc || vsram != new_vsram);
++		} while (vproc > new_vproc + VOLT_TOL ||
++			 vsram > new_vsram + VOLT_TOL);
++	}
+ 
+ 	return 0;
  }
+@@ -250,8 +304,8 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+ 	 * If the new voltage or the intermediate voltage is higher than the
+ 	 * current voltage, scale up voltage first.
+ 	 */
+-	target_vproc = max(inter_vproc, vproc);
+-	if (pre_vproc <= target_vproc) {
++	target_vproc = (inter_vproc > vproc) ? inter_vproc : vproc;
++	if (pre_vproc < target_vproc) {
+ 		ret = mtk_cpufreq_set_voltage(info, target_vproc);
+ 		if (ret) {
+ 			dev_err(cpu_dev,
+@@ -513,15 +567,6 @@ static int mtk_cpu_dvfs_info_init(struct mtk_cpu_dvfs_info *info, int cpu)
+ 	 */
+ 	info->need_voltage_tracking = (info->sram_reg != NULL);
  
- static int devfreq_userspace_handler(struct devfreq *devfreq,
-diff --git a/include/linux/devfreq.h b/include/linux/devfreq.h
-index 2bae9ed3c783..6cbc6d1ae32f 100644
---- a/include/linux/devfreq.h
-+++ b/include/linux/devfreq.h
-@@ -121,8 +121,8 @@ struct devfreq_dev_profile {
-  *		devfreq.nb to the corresponding register notifier call chain.
-  * @work:	delayed work for load monitoring.
-  * @previous_freq:	previously configured frequency value.
-- * @data:	Private data of the governor. The devfreq framework does not
-- *		touch this.
-+ * @data:	devfreq driver pass to governors, governor should not change it.
-+ * @governor_data:	private data for governors, devfreq core doesn't touch it.
-  * @min_freq:	Limit minimum frequency requested by user (0: none)
-  * @max_freq:	Limit maximum frequency requested by user (0: none)
-  * @scaling_min_freq:	Limit minimum frequency requested by OPP interface
-@@ -159,7 +159,8 @@ struct devfreq {
- 	unsigned long previous_freq;
- 	struct devfreq_dev_status last_status;
+-	/*
+-	 * We assume min voltage is 0 and tracking target voltage using
+-	 * min_volt_shift for each iteration.
+-	 * The vtrack_max is 3 times of expeted iteration count.
+-	 */
+-	info->vtrack_max = 3 * DIV_ROUND_UP(max(info->soc_data->sram_max_volt,
+-						info->soc_data->proc_max_volt),
+-					    info->soc_data->min_volt_shift);
+-
+ 	return 0;
  
--	void *data; /* private data for governors */
-+	void *data;
-+	void *governor_data;
- 
- 	unsigned long min_freq;
- 	unsigned long max_freq;
+ out_disable_inter_clock:
 -- 
-2.29.0
+2.31.1.272.g89b43f80a514
 
