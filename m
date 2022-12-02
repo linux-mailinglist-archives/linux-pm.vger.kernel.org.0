@@ -2,79 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587666403F6
-	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 11:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ECF2640409
+	for <lists+linux-pm@lfdr.de>; Fri,  2 Dec 2022 11:05:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233191AbiLBKCn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 05:02:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S233213AbiLBKFG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 2 Dec 2022 05:05:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiLBKCl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 05:02:41 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242C26307
-        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 02:02:39 -0800 (PST)
+        with ESMTP id S233223AbiLBKFC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 05:05:02 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D3E391FD;
+        Fri,  2 Dec 2022 02:05:01 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 68DE86602BB8;
-        Fri,  2 Dec 2022 10:02:37 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3D1846601811;
+        Fri,  2 Dec 2022 10:04:59 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1669975358;
-        bh=poI1DdXBGmBKMUaqisonZlBsnUTOhLk7p//2IBOv5KA=;
+        s=mail; t=1669975499;
+        bh=qXooxeaYPL0DnLqOyBm5Di9kxLBGZnJQo6KXGjxoNM8=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=F+95N8g09sJEqWdOUCBPf1gVr+C9BGexRNdiI7ZSTBtxQWES+WBcmXus0D7tXM+Er
-         tNkYZZwWk+VdrKxY4sgD5OBDxO2EMGUhaQgI5ZIwsgPOtl1WjEYjHgq8y7Df0Ys2sa
-         1Obbdvy2RF/FIOPlbpZ+ZHcT2Wz7uKocEa2Le1H3yoBjsvnQxDbEiM8YwSuMHXs96L
-         DhTkdfIa6veQlL6cmW9+3JIY9DC9ZhRs28sAyt6grM4Iso0kzaQuB8jSIh516H/y8Z
-         Jzf4yuBtKT/7ZTwDe9GJ8EdGtfJ02hYK3WVsIGQr39ToFfPUIoRGYX5hjGX1rmPePf
-         5Nhbg8mW0znfA==
-Message-ID: <8be3e050-f32a-6761-8ebd-49c38dfcf9eb@collabora.com>
-Date:   Fri, 2 Dec 2022 11:02:34 +0100
+        b=dCrSK40tOhEvndX0TcUkgQZ3tWruAWImx9aV5SS84xfjEhMgqsJjo91NpTc7Y+VzO
+         CWpltP1YsvzKD9lYDuWqBq/z6V6MIHhQOnLYVbXDOhzx/HyuAgdxkrCqMou6hWDg7o
+         JMxNCbipyYUYQISFWijvcvH5qFiDb3tO2yIuYVxvzyarPTNF2FPZGELUyvLCAW9HwE
+         5lYWpEiilJOiq9BjLh3yHFoTvSTJB6pjgTqKrSX4docMHOlvPxRfAROjSqwWCyv94P
+         b7szNmDxMNBgDhE6fNx58arGrxwxPogDy2MNWitrFi6jHIWasoYJitRXHov0d4Wvh4
+         imJQRznN8IWuA==
+Message-ID: <64ac15de-3324-6d48-5199-587f01b565e0@collabora.com>
+Date:   Fri, 2 Dec 2022 11:04:56 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
+Subject: Re: [PATCH] cpufreq: mediatek: Raise proc and sram max voltage for
+ MT7622/7623
 Content-Language: en-US
-To:     =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "regressions@leemhuis.info" <regressions@leemhuis.info>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>
-Cc:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "vincent@systemli.org" <vincent@systemli.org>,
-        "frank-w@public-files.de" <frank-w@public-files.de>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        =?UTF-8?B?SmlhLXdlaSBDaGFuZyAo5by15L2z5YGJKQ==?= 
-        <Jia-wei.Chang@mediatek.com>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>,
-        "thomas.huehn@hs-nordhausen.de" <thomas.huehn@hs-nordhausen.de>,
-        "daniel@makrotopia.org" <daniel@makrotopia.org>
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <eb142a22-b35e-ec3f-ee0a-9e3e7b24cea6@gmail.com>
- <bf8d2a8f-7654-29be-1104-a842c6657b5e@systemli.org>
- <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
- <Y4jHvomTrU8guBox@makrotopia.org>
- <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
- <20221202052716.uj3kzkunazmgazeq@vireshk-i7>
- <0ebef1a2-6b5a-04b9-a79b-79eb3349c32b@collabora.com>
- <c76bd301-0e8d-2d2b-0d3e-a57ece9b496f@collabora.com>
- <b1822bbc3775730c4cedf9652323c7d72e663e4b.camel@mediatek.com>
+To:     vincent@systemli.org
+Cc:     rafael@kernel.org, matthias.bgg@gmail.com,
+        jia-wei.chang@mediatek.com, rex-bc.chen@mediatek.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, frank-w@public-files.de,
+        daniel@makrotopia.org, viresh.kumar@linaro.org
+References: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <b1822bbc3775730c4cedf9652323c7d72e663e4b.camel@mediatek.com>
+In-Reply-To: <20221202095227.167492-1-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -84,81 +61,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 02/12/22 10:43, Allen-KH Cheng (程冠勳) ha scritto:
-> Hi Angelo,
+Il 02/12/22 10:52, AngeloGioacchino Del Regno ha scritto:
+> During the addition of SRAM voltage tracking for CCI scaling, this
+> driver got some voltage limits set for the vtrack algorithm: these
+> were moved to platform data first, then enforced in a later commit
+> 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> using these as max values for the regulator_set_voltage() calls.
 > 
-> Jia-wei is working on this issue.
+> In this case, the vsram/vproc constraints for MT7622 and MT7623
+> were supposed to be the same as MT2701 (and a number of other SoCs),
+> but that turned out to be a mistake because the aforementioned two
+> SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
 > 
-> We will update progress ASAP.
+> Fix that by adding new platform data for MT7622/7623 declaring the
+> right {proc,sram}_max_volt parameter.
 > 
+> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-I think I've found something: the MT7622/7623 voltage constraints
-set in mediatek-cpufreq's platform data seem to be wrong.
+Hello Vincent,
+in regard to the regression that you've (not so) recently reported, can you please
+give this commit a try and check if this helps resolving your issue?
 
-I've sent a commit to fix those [1] and that should solve the issue
-that was seen on MT7622, but the code in the voltage tracking algorithm
-is unsafe: this crash should be happening because we may be calling
-regulator_set_voltage() with max_uV < min_uV --- and this is not legal.
-
-That's happening due to the OPP tables in devicetree asking for a voltage
-that is higher than the {proc,sram}_max_volt declared by the platform data
-in the mediatek-cpufreq driver: the solution would be to either check the
-validity of the constraints everytime se call regulator_set_voltage there,
-which wouldn't be optimal IMO, or walk the OPP table at mediatek-cpufreq
-probe time (or init time) to either:
-
-1. Print a big warning in kmsg and always ignore all of the OPP entries
-    that request a voltage that's higher than the maximum that we declared; or
-2. Fail probe/init with an error explicitly saying that the OPP entries
-    are declaring an out of range voltage for sram/proc.
-
-Anyway, thanks for the response, hope that Jia-wei confirms, or denies
-my findings and makes this driver more robust ASAP.
-
-Thank you!
+Many thanks,
 Angelo
 
-[1]: 
-https://lore.kernel.org/lkml/20221202095227.167492-1-angelogioacchino.delregno@collabora.com/
-
-> Thanks,
-> Allen
+> ---
+>   drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
+>   1 file changed, 11 insertions(+), 2 deletions(-)
 > 
-> On Fri, 2022-12-02 at 10:19 +0100, AngeloGioacchino Del Regno wrote:
->> Il 02/12/22 09:57, AngeloGioacchino Del Regno ha scritto:
->>> Il 02/12/22 06:27, Viresh Kumar ha scritto:
->>>> On 01-12-22, 16:39, Thorsten Leemhuis wrote:
->>>>> Thx for clarifying. And I noticed I made a mistake: I should
->>>>> have
->>>>> directed my earlier question wrt to any progress here more into
->>>>> the
->>>>> direction of Jia-Wei Chang (who authored 6a17b3876b) and Viresh
->>>>> Kumar
->>>>> (who committed it).
->>>>
->>>> I was waiting for the platform maintainers to come up with a fix.
->>>> I
->>>> have sent a patch now to revert this, in-reply-to this thread.
->>>>
->>>> Please confirm this is working fine. Thanks.
->>>>
->>>
->>> Can you guys try this patch that I've sent a while ago?
->>>
->>>
-> https://lore.kernel.org/lkml/20220909093724.40078-1-angelogioacchino.delregno@collabora.com/T/#u
->>>
->>> There were comments on it, but if that solves your issue I can push
->>> a v2
->>> to solve what was reported.
->>>
->>> Regards,
->>> Angelo
->>
->> Wait, sorry, I've re-read the stacktrace and that won't help at all.
->> MediaTek, can you please look at this issue?
->>
->> Reverting the proposed commit will make MT8183 unstable.
->>
->>
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 7f2680bc9a0f..f9a9f08c75c4 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -695,6 +695,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+>   	.ccifreq_supported = false,
+>   };
+>   
+> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 200000,
+> +	.proc_max_volt = 1360000,
+> +	.sram_min_volt = 0,
+> +	.sram_max_volt = 1360000,
+> +	.ccifreq_supported = false,
+> +};
+> +
+>   static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+>   	.min_volt_shift = 100000,
+>   	.max_volt_shift = 200000,
+> @@ -717,8 +726,8 @@ static const struct mtk_cpufreq_platform_data mt8186_platform_data = {
+>   static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>   	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
+> +	{ .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
+>   	{ .compatible = "mediatek,mt8167", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+>   	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
 
