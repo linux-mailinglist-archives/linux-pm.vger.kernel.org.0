@@ -2,143 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CADE26414ED
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Dec 2022 09:23:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1E886416DE
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Dec 2022 14:24:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiLCIWz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 3 Dec 2022 03:22:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S229619AbiLCNYj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Dec 2022 08:24:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiLCIWu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Dec 2022 03:22:50 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F020ECE35;
-        Sat,  3 Dec 2022 00:22:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670055767; x=1701591767;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/7ZmB/olwIpq9rajt/gYdYYv/t7DoHBJPtGGxWjh20o=;
-  b=aBbVEcZ8oG6z8xuYCZgiP3PqbDe3nwQWPIbVSIPajAR3L3jnE/Etc0qz
-   jaGSLfuRcUcLLM5JT7kiDGC22GQ+k8NMIH+QB5Kn/JslWcXxjQsVLV2N/
-   ijXwtrTLITyN+WForA8embMwAOkKUYEaRec4h0J2MfS3d+DDqwHLZn8Gz
-   d/ruSZKJQ00JYkLu1sXF39BLJwHGoBVoacLOJ7ggYDoSpskiGl1YeDi/B
-   FTJ1GHRKf8PN2+FX6185NXU/4fNyyfnbVhQpwNU/uvcdY9QaYG8am54LY
-   T9GzkqvHtW1fbCmGrqxXEng2qHRhB+MlYeF+ypjXLE8p6JDl+enjDGWRH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="313745977"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="313745977"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2022 00:22:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10549"; a="819679510"
-X-IronPort-AV: E=Sophos;i="5.96,214,1665471600"; 
-   d="scan'208";a="819679510"
-Received: from lkp-server01.sh.intel.com (HELO 64a2d449c951) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 03 Dec 2022 00:22:44 -0800
-Received: from kbuild by 64a2d449c951 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p1NnH-000EPC-1e;
-        Sat, 03 Dec 2022 08:22:43 +0000
-Date:   Sat, 03 Dec 2022 16:22:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- edef46079c571f859ca90f29c76d3bb568060652
-Message-ID: <638b073c.bV7W6uIVAVN4Zxr+%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S229514AbiLCNYj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Dec 2022 08:24:39 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9C7131F9F;
+        Sat,  3 Dec 2022 05:24:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2753D601D9;
+        Sat,  3 Dec 2022 13:24:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335A5C433C1;
+        Sat,  3 Dec 2022 13:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1670073877;
+        bh=ojR43rsS1kVOk3YKwtWt2Cp45BWXchvmMHKWe+SKOKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DceOYrNSzFIcnrJALcx2UQzq+02vGYRUcluzKhb4gCXPZLExIjL3s/TAFf9rtoLon
+         I71OfyYJPpfLQvqkzTrOJlTntsSBjiRx1vSJrillCyro+ze3UJ1JKgmxCy3zdKQgFD
+         ArAKZdrCi3YuFJ7Z95KY5cYNxO9ZPz8yX3hI2zcY=
+Date:   Sat, 3 Dec 2022 14:24:33 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Kant Fan <kant@allwinnertech.com>
+Cc:     myungjoo.ham@samsung.com, kyungmin.park@samsung.com,
+        cw00.choi@samsung.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 5.4-] PM/devfreq: governor: Add a private governor_data
+ for governor
+Message-ID: <Y4tOEY4ga4OCWzbc@kroah.com>
+References: <20221202023812.84174-1-kant@allwinnertech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+In-Reply-To: <20221202023812.84174-1-kant@allwinnertech.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: edef46079c571f859ca90f29c76d3bb568060652  Merge branch 'powercap' into bleeding-edge
+On Fri, Dec 02, 2022 at 10:38:12AM +0800, Kant Fan wrote:
+> Commit fbd567e56942ecc4da906c4f3f3652c94773af5b upstream.
 
-elapsed time: 720m
+This is not a valid git commit in Linus's tree :(
 
-configs tested: 61
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-sh                               allmodconfig
-arc                               allnoconfig
-alpha                             allnoconfig
-i386                              allnoconfig
-arm                               allnoconfig
-x86_64                              defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-x86_64                           rhel-8.3-syz
-arc                              allyesconfig
-x86_64                         rhel-8.3-kunit
-alpha                            allyesconfig
-x86_64                           rhel-8.3-kvm
-i386                                defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                               rhel-8.3
-arc                  randconfig-r043-20221201
-x86_64                        randconfig-a006
-i386                          randconfig-a001
-riscv                randconfig-r042-20221201
-x86_64                        randconfig-a013
-i386                          randconfig-a003
-x86_64                        randconfig-a011
-x86_64                           allyesconfig
-s390                 randconfig-r044-20221201
-x86_64                        randconfig-a015
-i386                          randconfig-a005
-i386                          randconfig-a014
-i386                             allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm                                 defconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-
-clang tested configs:
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-hexagon              randconfig-r041-20221201
-x86_64                        randconfig-a014
-x86_64                        randconfig-a005
-i386                          randconfig-a013
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-hexagon              randconfig-r045-20221201
-i386                          randconfig-a004
-x86_64                        randconfig-a016
-i386                          randconfig-a011
-i386                          randconfig-a015
-i386                          randconfig-a006
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
