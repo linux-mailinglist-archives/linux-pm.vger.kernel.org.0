@@ -2,179 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47600641321
-	for <lists+linux-pm@lfdr.de>; Sat,  3 Dec 2022 03:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A420964145F
+	for <lists+linux-pm@lfdr.de>; Sat,  3 Dec 2022 06:55:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234865AbiLCCJa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 2 Dec 2022 21:09:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52656 "EHLO
+        id S230125AbiLCFzJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 3 Dec 2022 00:55:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbiLCCJ3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 2 Dec 2022 21:09:29 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E365A7BC09
-        for <linux-pm@vger.kernel.org>; Fri,  2 Dec 2022 18:09:28 -0800 (PST)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC7066601811;
-        Sat,  3 Dec 2022 02:09:27 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670033367;
-        bh=ngc7WI+aXsGmY9tly7Zo9v661qRIKzlALyctUoCzbaQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fyLnbO/NgKJjbAq1F1hr87D50+Bzex76BdbV8k+7JI6HsXFfV+dAX5BQ3bYulj/J8
-         Vfn0UtG/gbhcSWWmo+zLzirsl2GY36uVAqcD8xUtUCVDzfUu3o542HCb8S90rtP7fM
-         p253Usvvc5PJTtrWoyy7nNuabyKZyVozmOsezNwedMteWn9fFphjloipgX5ga7MUg0
-         if9DwG6u1VMOMGZBkG4UGwFqdiOrpdPDQdTKwQNMNWDjIw5Yz87ENRiHIov17h9p7j
-         95y+zimOOHAhDrTGELmEmdX2av07R6pumOB33CH5dtPyBiVl8fub4VZWdEJmXVHCCf
-         kV+4nwMm5BOjw==
-Received: by mercury (Postfix, from userid 1000)
-        id 397231060E96; Sat,  3 Dec 2022 03:09:25 +0100 (CET)
-Date:   Sat, 3 Dec 2022 03:09:25 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 2/9] power: supply: bq25890: Fix usb-notifier probe
- and remove races
-Message-ID: <20221203020925.4kqbaxuf36audzjb@mercury.elektranox.org>
-References: <20221128092856.71619-1-hdegoede@redhat.com>
- <20221128092856.71619-3-hdegoede@redhat.com>
+        with ESMTP id S229872AbiLCFzI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 3 Dec 2022 00:55:08 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193165A7;
+        Fri,  2 Dec 2022 21:55:08 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id e7-20020a17090a77c700b00216928a3917so10185375pjs.4;
+        Fri, 02 Dec 2022 21:55:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:subject:cc:to:content-language:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OTHDa295CBWIk+1vhMIy+MTRnCaDXV9tIFZkRldLOFk=;
+        b=WCM4rFFLuNVDg5vHE/cPD2ioLVFfmpBFVj/gQtp7jGorYlitAYDy1KDOgpyOK0dtEw
+         iojHK4s2+H67T+/ssGjMC7YQLkM1V3MJNkorOcuumlxx1OG8Jge+NQTwe+7CwIQeENe3
+         4MUvs1gvni+Oq9HO+tlTycaLYaisVpIm78SQDFmOjP+mxFILNOLFsVGZQiacAi8eawmh
+         PDLITU/C8XrxGrcuAx8GAOSLt3jbE0hIZTCf2DJlreHsWsouGLSJgbiILiFEqLyjx3sR
+         nSh6XN6cfBXhWI+VlVoWUEhbomUs/+jSvGpJvhTzY3Y6yITxNtrmKk43AOvRvPC+W+gt
+         42GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:cc:to:content-language:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=OTHDa295CBWIk+1vhMIy+MTRnCaDXV9tIFZkRldLOFk=;
+        b=MB5xHEuiHkAaw4fqAR6SqelvSTSMxbctnGK0B6nnb6GrNn+8K8+hCIuA4GXvCNjJDm
+         D979G6XxGUdTIzZuk6MUluXFefx9V9rjFqC1lNSok04iX3nvEnkrdulyjJbwcG5TdTDr
+         qWYWkgkPSIu+2Wj80hSF8IlDQ158HDX6a0S/psAIasaUcDvLf/lHeiHxNNn9Q5cnRxom
+         iwwLhgPzjAVekH3lAGh09HkBFIifchDpeOK/71BFN44M+17EfKqiAmJeiwsd2/KUjHfm
+         QccXNu2tpOOa2m9fV8WeONeKCPXhjuxVs8wVbSIORHiEyHOMIqWX/3uHD0e+bq807CI7
+         XOpg==
+X-Gm-Message-State: ANoB5pleHYpy1/9MISRwtlR4T0CKUMgZ2t3J0qfR0OLUFLfbIzdWLcsM
+        BgBSJOICbzVObM/VhrgPVFc=
+X-Google-Smtp-Source: AA0mqf67QfVNIiUGRgSiBOyiHVO+tE8OYN+Eyih3Br3uK3XXPBkXpauVLtADWFtjl6j+8Hi5QwQODQ==
+X-Received: by 2002:a17:90a:9f46:b0:219:b1db:f7e3 with SMTP id q6-20020a17090a9f4600b00219b1dbf7e3mr258444pjv.64.1670046907245;
+        Fri, 02 Dec 2022 21:55:07 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id y1-20020aa79421000000b005765a5ff1fasm2390494pfo.213.2022.12.02.21.55.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Dec 2022 21:55:06 -0800 (PST)
+Message-ID: <13b17bbe-8b72-8c87-0a08-073cafd04d71@gmail.com>
+Date:   Sat, 3 Dec 2022 14:55:02 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="oyzfeu46wyxa6cuk"
-Content-Disposition: inline
-In-Reply-To: <20221128092856.71619-3-hdegoede@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Subject: [GIT PULL] devfreq next for 6.2
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Dear Rafael,
 
---oyzfeu46wyxa6cuk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is devfreq-next pull request for v6.2. I add detailed description of
+this pull request on the following tag. Please pull devfreq with
+following updates.
 
-Hi,
+I'm so sorry for late pull request.
 
-On Mon, Nov 28, 2022 at 10:28:49AM +0100, Hans de Goede wrote:
-> There are 2 races surrounding the usb-notifier:
->=20
-> 1. The notifier, and thus usb_work, may run before the bq->charger
->    power_supply class device is registered. But usb_work may call
->    power_supply_changed() which relies on the psy device being registered.
->=20
-> 2. usb_work may be pending/running at remove() time, so it needs to be
->    cancelled on remove after unregistering the usb-notifier.
->=20
-> Fix 1. by moving usb-notifier registration to after the power_supply
-> registration.
->=20
-> Fix 2. by adding a cancel_work_sync() call directly after the usb-notifier
-> unregistration.
->=20
-> Reviewed-by: Marek Vasut <marex@denx.de>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> ---
-> Changes in v2:
-> - Use return dev_err_probe() for the exit path previously using goto
-> ---
+Best Regards,
+Chanwoo Choi
 
-Thanks, queued.
+The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
 
--- Sebastian
+  Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
 
->  drivers/power/supply/bq25890_charger.c | 30 +++++++++++---------------
->  1 file changed, 12 insertions(+), 18 deletions(-)
->=20
-> diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/suppl=
-y/bq25890_charger.c
-> index 866c475bb735..2d731ea58323 100644
-> --- a/drivers/power/supply/bq25890_charger.c
-> +++ b/drivers/power/supply/bq25890_charger.c
-> @@ -1391,40 +1391,34 @@ static int bq25890_probe(struct i2c_client *clien=
-t)
->  	if (ret)
->  		return ret;
-> =20
-> -	if (!IS_ERR_OR_NULL(bq->usb_phy)) {
-> -		INIT_WORK(&bq->usb_work, bq25890_usb_work);
-> -		bq->usb_nb.notifier_call =3D bq25890_usb_notifier;
-> -		usb_register_notifier(bq->usb_phy, &bq->usb_nb);
-> -	}
-> -
->  	ret =3D bq25890_power_supply_init(bq);
-> -	if (ret < 0) {
-> -		dev_err(dev, "Failed to register power supply\n");
-> -		goto err_unregister_usb_notifier;
-> -	}
-> +	if (ret < 0)
-> +		return dev_err_probe(dev, ret, "registering power supply\n");
-> =20
->  	ret =3D devm_request_threaded_irq(dev, client->irq, NULL,
->  					bq25890_irq_handler_thread,
->  					IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
->  					BQ25890_IRQ_PIN, bq);
->  	if (ret)
-> -		goto err_unregister_usb_notifier;
-> -
-> -	return 0;
-> +		return ret;
-> =20
-> -err_unregister_usb_notifier:
-> -	if (!IS_ERR_OR_NULL(bq->usb_phy))
-> -		usb_unregister_notifier(bq->usb_phy, &bq->usb_nb);
-> +	if (!IS_ERR_OR_NULL(bq->usb_phy)) {
-> +		INIT_WORK(&bq->usb_work, bq25890_usb_work);
-> +		bq->usb_nb.notifier_call =3D bq25890_usb_notifier;
-> +		usb_register_notifier(bq->usb_phy, &bq->usb_nb);
-> +	}
-> =20
-> -	return ret;
-> +	return 0;
->  }
-> =20
->  static void bq25890_remove(struct i2c_client *client)
->  {
->  	struct bq25890_device *bq =3D i2c_get_clientdata(client);
-> =20
-> -	if (!IS_ERR_OR_NULL(bq->usb_phy))
-> +	if (!IS_ERR_OR_NULL(bq->usb_phy)) {
->  		usb_unregister_notifier(bq->usb_phy, &bq->usb_nb);
-> +		cancel_work_sync(&bq->usb_work);
-> +	}
-> =20
->  	if (!bq->skip_reset) {
->  		/* reset all registers to default values */
-> --=20
-> 2.37.3
->=20
+are available in the Git repository at:
 
---oyzfeu46wyxa6cuk
-Content-Type: application/pgp-signature; name="signature.asc"
+  git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.2
 
------BEGIN PGP SIGNATURE-----
+for you to fetch changes up to 378e392fa97e869cb5f90e42ae2959444dac7d47:
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOKr9QACgkQ2O7X88g7
-+pprFRAAhum4zAQBwK/oBf9qacAi/7Z16VI1HHXrkX6Gx9kWb4KNYmcP7bN+anwC
-mBtxpsHp29G3CEYCMnAJABY9y5Mp0auldTqqwsfFZaEviHk3Kndw+izwA1qnhQOh
-wDTXF4RNONiIC+N857s0pDv0fFKixGmDdN6+pardKL7fMMWj6JnirNlC/RHApU7f
-0ZDdxk/3W0QecqaI+525g2jnyHd8WCLn2o+GHTJkcQBfNFeGy1PqWX1qHpQ3ZJ+c
-tzU2DxpZGGGZjOA5h6b+g4ecVOOkl4yU3qrO66p/5flY5HlTeGylzm4qmzmGZ1MN
-T3Dk7zt8Ue39JZR33cCNmp+zpIsLE3oefepbQpB6QZUoammWbtzaXM0PhiJWXOK6
-z/PTA4ziRrOmosokWJS062nf3mMAiNsxf8I/QyXFxtmJLcPr5oyF0VzDs7pTAf4i
-fR8bQxcacCXh0HAuAB3YWTefg8Vo2/AnaqD2yJUWvEynLhgdilMH5WxY9/pd06Gr
-w2TCInqsaVae9ZWcoUUPIy4OVncisAYbgtGfr3Cc1KNf3EwGOp5KAO86kE31LbjX
-4vBq2h/0pawpSxUZYgEr0Smdw0DJsQgOp0yZ1dnqS1vdHdH6/CnK01irGTGDcfQY
-w3XbKkMmdgXuO8EC1UsU5Ehr2NvSVOTqpcjUQJ9teVp/P80frpM=
-=Bs9T
------END PGP SIGNATURE-----
+  PM / devfreq: event: use devm_platform_get_and_ioremap_resource() (2022-12-03 08:22:12 +0900)
 
---oyzfeu46wyxa6cuk--
+----------------------------------------------------------------
+
+Update devfreq next for v6.2
+
+Detailed description for this pull request:
+- Add a private governor_data for governor. The private governor_data
+is allocated and handled by governor regardless of passing the data
+from devfreq driver via devfreq_add_device. The added private governor
+keeps the governor own data when switching from userspace
+governor and other governors.
+
+- Replace code by using defined functions of
+  device_match_of_node and devm_platform_get_and_ioremap_resource
+
+----------------------------------------------------------------
+
+Kant Fan (1):
+      PM/devfreq: governor: Add a private governor_data for governor
+
+Minghao Chi (1):
+      PM / devfreq: event: use devm_platform_get_and_ioremap_resource()
+
+ye xingchen (2):
+      PM / devfreq: Use device_match_of_node()
+      PM / devfreq: event: Use device_match_of_node()
+
+ drivers/devfreq/devfreq-event.c      |  2 +-
+ drivers/devfreq/devfreq.c            |  8 +++-----
+ drivers/devfreq/event/exynos-nocp.c  |  3 +--
+ drivers/devfreq/governor_userspace.c | 12 ++++++------
+ include/linux/devfreq.h              |  7 ++++---
+ 5 files changed, 15 insertions(+), 17 deletions(-)
