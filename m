@@ -2,293 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D39641E3A
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 18:26:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C35BF641EA0
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 19:29:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbiLDR0O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Dec 2022 12:26:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
+        id S229960AbiLDS3S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Dec 2022 13:29:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiLDR0N (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 12:26:13 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0694910FF4
-        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 09:26:11 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id 125-20020a1c0283000000b003d076ee89d6so7522380wmc.0
-        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 09:26:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IyVxjv62ICSdTmYSJi3Pk6d9R9ZML1anTEBMQvI7O98=;
-        b=ZchEcdQe+WoS+hV2IegjeHkiuZJHTsYsZQBliOfBF7yCt8VaH5piuSwzb+ecMWiq9D
-         YI4UTS3680++QmeX3hvanqiK3/eBiucfVgE50qKCn4/tTNgqQCnfcWMSYBeU8LDugw/E
-         HvVjQ4mLSv03zy6Xcqyeb0I+cNyYWXKIyAu84px63RDwvCIBVfNx3rxvCq1SS8h6CsGQ
-         utp6zgTKgOhQsFl+x99BhMkDLK4N63DVM4pCSUL+Elmg0mAbTP7VXP0JkOPFqMGm+E2v
-         XNzcHTh1ZWS6kVvMbimUVE5YWFHL2o14A54fpOj409LZ75qRPIl/8IWwWmjaStZY4hEv
-         dF+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IyVxjv62ICSdTmYSJi3Pk6d9R9ZML1anTEBMQvI7O98=;
-        b=KMBwv+TKP6Kmh/F6uV9xic1F7ZacPVoUb7rx0YBkBsLcetC8LMHLZFLc/9z5EgVtsM
-         ESbJ2wIoFmEMYmjcBxYCX0nF0HrU4/WztcGvVA6cfIWgNUKvXRAwE5dvDfCRBjqY+Sjr
-         WSt8LH9eN/tJumxjhUJp5V3668a9YpPY6j7pfcOqUFCqPAn8yAlegVcflVy+Q2+1MTLS
-         hWWMUOFm0FSgpt6xa/BWTUGy9CyhAUv4m7SXKUafTxJxLTTpRWBs6XtHTEX/eJr0jDNT
-         V2/hVj6xNGi5ydDbX8xZozCA7p7PUVXStanI5oZTgI7kpnRBalx4Ha82xEN7TN+4jW57
-         cUOQ==
-X-Gm-Message-State: ANoB5pn99LIKZuQJF+uQyE6x6SvuwUwgfyl0t72CiBQOPXk7FWhjashF
-        Segn2+WkjOO9sS68embfkopTTg==
-X-Google-Smtp-Source: AA0mqf4Dmk6Xhul/0QDQbwXSSkgcxM2Nco1IWbx4FTjdbxA83oGpudrXdh2T3PP9My4vswF6zfR4Uw==
-X-Received: by 2002:a05:600c:4386:b0:3cf:a4a6:a048 with SMTP id e6-20020a05600c438600b003cfa4a6a048mr43362304wmn.202.1670174769498;
-        Sun, 04 Dec 2022 09:26:09 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l28-20020a05600c1d1c00b003c6b7f5567csm24874714wms.0.2022.12.04.09.26.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 09:26:09 -0800 (PST)
-Message-ID: <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
-Date:   Sun, 4 Dec 2022 18:26:07 +0100
+        with ESMTP id S229834AbiLDS3R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 13:29:17 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8730112A9B;
+        Sun,  4 Dec 2022 10:29:16 -0800 (PST)
+Received: from zn.tnic (p200300ea9733e799329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e799:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 755611EC0662;
+        Sun,  4 Dec 2022 19:29:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1670178554;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=lN8frKuhbaasaQJGEoiPgCA0LmRdK0VQNNyuQB2MjRA=;
+        b=lozCNi0LBzmr7CUeSL4cou2nl9OvNILUvzB3GVvOsT9ipRAQtwJUuTW8PtWXidk8f2iOY+
+        enYjO4utqS2T0OIq/jYTGYu11SgE2LUFQpxUV9gYqXtWgVBdq2en3lVhfCpbDM1TU5lOC6
+        kLlZZ9FKrjAts/rT747ygAescekIKfA=
+Date:   Sun, 4 Dec 2022 19:29:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+Message-ID: <Y4zm9T+WYmyWwik4@zn.tnic>
+References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+ <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/11/2022 12:04, Amjad Ouled-Ameur wrote:
-> Provide thermal zone to read thermal sensor in the SoC. We can read all the
-> thermal sensors value in the SoC by the node /sys/class/thermal/
-> 
-> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-> on the first read of sensor that often are bogus values.
-> This can avoid following warning on boot:
-> 
->    thermal thermal_zone6: failed to read out thermal zone (-13)
-> 
-> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->   drivers/thermal/mtk_thermal.c | 99 ++++++++++++++++++++++++++++++++-----------
->   1 file changed, 74 insertions(+), 25 deletions(-)
-> 
-> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-> index 3a5df1440822..b1f4d19edd4f 100644
-> --- a/drivers/thermal/mtk_thermal.c
-> +++ b/drivers/thermal/mtk_thermal.c
-> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->   
->   struct mtk_thermal;
->   
-> +struct mtk_thermal_zone {
-> +	struct mtk_thermal *mt;
-> +	int id;
-> +};
-> +
->   struct thermal_bank_cfg {
->   	unsigned int num_sensors;
->   	const int *sensors;
-> @@ -307,6 +312,8 @@ struct mtk_thermal {
->   
->   	const struct mtk_thermal_data *conf;
->   	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-> +
-> +	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
->   };
->   
->   /* MT8183 thermal sensor data */
-> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->   		mutex_unlock(&mt->lock);
->   }
->   
-> +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
-> +{
-> +	u32 raw;
-> +	int temp;
-> +
-> +	const struct mtk_thermal_data *conf = mt->conf;
-> +
-> +	raw = readl(mt->thermal_base + conf->msr[id]);
-> +
-> +	temp = mt->raw_to_mcelsius(mt, id, raw);
-> +
-> +	/*
-> +	 * The first read of a sensor often contains very high bogus
-> +	 * temperature value. Filter these out so that the system does
-> +	 * not immediately shut down.
-> +	 */
-> +
-> +	if (temp > 200000)
-> +		return -EAGAIN;
-> +	else
-> +		return temp;
-> +}
-> +
->   /**
->    * mtk_thermal_bank_temperature - get the temperature of a bank
->    * @bank:	The bank
-> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   	struct mtk_thermal *mt = bank->mt;
->   	const struct mtk_thermal_data *conf = mt->conf;
->   	int i, temp = INT_MIN, max = INT_MIN;
-> -	u32 raw;
->   
->   	for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
-> -		raw = readl(mt->thermal_base + conf->msr[i]);
-> -
-> -		if (mt->conf->version == MTK_THERMAL_V1) {
-> -			temp = raw_to_mcelsius_v1(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		} else {
-> -			temp = raw_to_mcelsius_v2(
-> -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> -		}
-> -
-> -		/*
-> -		 * The first read of a sensor often contains very high bogus
-> -		 * temperature value. Filter these out so that the system does
-> -		 * not immediately shut down.
-> -		 */
-> -		if (temp > 200000)
-> -			temp = 0;
-> +		temp = _get_sensor_temp(mt, i);
->   
->   		if (temp > max)
->   			max = temp;
-> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->   	return max;
->   }
->   
-> -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
-> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
->   {
-> -	struct mtk_thermal *mt = tz->devdata;
-> +	struct mtk_thermal_zone *tz = tzdev->devdata;
-> +	struct mtk_thermal *mt = tz->mt;
->   	int i;
->   	int tempmax = INT_MIN;
->   
-> @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->   	return 0;
->   }
->   
-> +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
-> +{
-> +	struct mtk_thermal_zone *tz = tzdev->devdata;
-> +	struct mtk_thermal *mt = tz->mt;
-> +	int id = tz->id - 1;
-> +
-> +	if (id < 0)
-> +		return -EACCES;
-> +
-> +	*temperature = _get_sensor_temp(mt, id);
-> +
-> +	return 0;
-> +}
-> +
->   static const struct thermal_zone_device_ops mtk_thermal_ops = {
->   	.get_temp = mtk_read_temp,
->   };
->   
-> +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
-> +	.get_temp = mtk_read_sensor_temp,
-> +};
-> +
->   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
->   				  int ctrl_id)
-> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   	u64 auxadc_phys_base, apmixed_phys_base;
->   	struct thermal_zone_device *tzdev;
->   	void __iomem *apmixed_base, *auxadc_base;
-> +	struct mtk_thermal_zone *tz;
->   
->   	mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->   	if (!mt)
-> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	mtk_thermal_turn_on_buffer(mt, apmixed_base);
->   
-> +	mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
-> +				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
-> +
->   	if (mt->conf->version == MTK_THERMAL_V2) {
->   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
->   	}
-> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->   
->   	platform_set_drvdata(pdev, mt);
->   
-> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
-> -					      &mtk_thermal_ops);
-> -	if (IS_ERR(tzdev)) {
-> -		ret = PTR_ERR(tzdev);
-> -		goto err_disable_clk_peri_therm;
-> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
-> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-> +		if (!tz)
-> +			return -ENOMEM;
-> +
-> +		tz->mt = mt;
-> +		tz->id = i;
-> +
-> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
-> +							     &mtk_thermal_ops :
-> +							     &mtk_thermal_sensor_ops);
+On Thu, Nov 03, 2022 at 07:19:47PM +0100, Rafael J. Wysocki wrote:
+> On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
+> >
+> > When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+> > MSR) before the driver is registered with cpufreq.  This can be very time
+> > consuming, because it is done with a CPU hotplug startup callback, and
+> > cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+> > on each CPU one at a time, waiting for each to run before calling the next.
+> >
+> > If cpufreq_register_driver() fails--if, for example, there are no ACPI
+> > P-states present--this is wasted time.
+> >
+> > Since cpufreq already sets up a CPU hotplug startup callback if and when
+> > acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+> > which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+> > exit quickly if it is loaded but not needed.
+> >
+> > On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
+> >
+> > Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> > ---
+> >  drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+> >  1 file changed, 3 insertions(+), 28 deletions(-)
 
-Here you use again the aggregation
+...
 
-> +
-> +		if (IS_ERR(tzdev)) {
-> +			ret = PTR_ERR(tzdev);
-> +			if (ret == -ENODEV)
-> +				continue;
-> +			goto err_disable_clk_peri_therm;
-> +		}
->   	}
->   
->   	ret = devm_thermal_add_hwmon_sysfs(tzdev);
-> 
+> Applied as 6.2 material, thanks!
+
+My 32-bit Atom doesn't like this one. Reverting fixes it ofc.
+
+[   22.780260] unchecked MSR access error: WRMSR to 0x1a0 (tried to write 0x0000004364950488) at rIP: 0xf80b37d4 (boost_set_msr.isra.0+0x9c/0x114 [acpi_cpufreq])
+[   22.781186] Call Trace:
+[   22.781186]  boost_set_msr_each+0x15/0x1c [acpi_cpufreq]
+[   22.781186]  __flush_smp_call_function_queue+0x132/0x1cc
+[   22.781186]  ? sysvec_call_function+0x30/0x30
+[   22.781186]  generic_smp_call_function_single_interrupt+0x12/0x18
+[   22.781186]  __sysvec_call_function_single.constprop.0+0x43/0x1d8
+[   22.781186]  sysvec_call_function_single+0x18/0x30
+[   22.781186]  handle_exception+0x133/0x133
+[   22.781186] EIP: finish_task_switch.isra.0+0x124/0x3a8
+[   22.781186] Code: d8 e8 8c 16 92 00 85 f6 75 e8 a1 04 24 6c c2 85 c0 0f 8f 9b 00 00 00 89 d8 e8 e4 02 92 00 e8 53 9e 0b 00 fb 64 a1 40 f9 69 c2 <8b> 80 5c 0f 00 00 85 c0 0f 85 72 01 00 00 a1 28 24 6c c2 64 8b 15
+[   22.781186] EAX: c32e2700 EBX: f748af40 ECX: 00000000 EDX: c1c3876e
+[   22.781186] ESI: 00000000 EDI: 00000000 EBP: c3241f90 ESP: c3241f78
+[   22.781186] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00000206
+[   22.781186]  ? uevent_seqnum_show+0x1b/0x28
+[   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+[   22.781186]  ? sysvec_call_function+0x30/0x30
+[   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+[   22.781186]  ? sysvec_call_function+0x30/0x30
+[   22.781186]  ? finish_task_switch.isra.0+0x124/0x3a8
+[   22.781186]  schedule_tail+0x12/0x78
+[   22.781186]  schedule_tail_wrapper+0x9/0x10
+[   22.781186]  ret_from_fork+0x5/0x28
+[   22.781186] EIP: 0xb7fba549
+[   22.781186] Code: Unable to access opcode bytes at 0xb7fba51f.
+[   22.781186] EAX: 00000000 EBX: 01200011 ECX: 00000000 EDX: 00000000
+[   22.781186] ESI: 00000000 EDI: b7bfe868 EBP: 00000000 ESP: bfcfedc0
+[   22.781186] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Regards/Gruss,
+    Boris.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+https://people.kernel.org/tglx/notes-about-netiquette
