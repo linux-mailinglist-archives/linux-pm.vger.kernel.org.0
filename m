@@ -2,100 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3657F641B9A
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 09:31:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60BE641CA4
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 12:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229579AbiLDIbh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Dec 2022 03:31:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S229805AbiLDLfw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Dec 2022 06:35:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiLDIbe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 03:31:34 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451A717897
-        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 00:31:33 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id q7so10165405ljp.9
-        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 00:31:33 -0800 (PST)
+        with ESMTP id S229680AbiLDLfv (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 06:35:51 -0500
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7A801182C
+        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 03:35:50 -0800 (PST)
+Received: by mail-il1-x136.google.com with SMTP id d14so3944440ilq.11
+        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 03:35:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KNUZkKkSN/8RkV/qHyHCbRY1TQQfCZSuhLJUO8SmPX0=;
-        b=MxGsobdil6ch66e6fgLeA7Jb3CDXcr0RlpdbBUyKGXLfJTGmYhxj8cChO4fnAoXXev
-         oxW7DfHljqvk4ogcz9APC6tHQjqH+S7wDx4T6BXcvW/5Eg8dXDIpdyVAEb6nmx8Zwjsc
-         FxD10QIA0MzZx/F7zPGncwxHnWv68+D1MdgiykGE9+eSG+h1htjtxsBzMpHWsGvC0T2f
-         X8IUgW/Wt6qeN1WrDyMHdkZI0mWrMAeBzEZe2T0tKnV71hZY03IjCXomoH537fWsE0YD
-         M1ssZsN0e1tJ2u8krwGqcG2NqI5tXhA/IPSB84xW2pbG3UFtRgr3fHY5YKcCKW+qG/Md
-         K00w==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wCqCVlm2gWWxwc47amlLDLZQfBgu2mBenlFlBGkMsAs=;
+        b=peS3N8wnkuNUsfo2yCWLAmkMZJYQBcfR6BcAAC7dYHwjsrPOuFdr+Y9c32SSb22aeH
+         4KD/hwNVucWb3JgqqFv+5GrqdTwDTs9OEhl/mehCCgqlLxyQl9oOnDpvITU99EkhxaOC
+         mTWC/K/AXXOg/21DKwAQaxnYFZYuVReS1rUwcLFlZ++lRul7PYtWEGCCYaO3IwAQe2mr
+         6GYVMZm3mjLoaXvsPjP16AkO9a6KD5bIrb5DJHeyAcfcgTiNG7oRditafWmQId01/cv2
+         AFAYBUfAVG+tfMV7t8pbgbFhAm8J8XLNMk9kevCNHfQ8YRq/GYwiV13EHKpRnr79UfSI
+         dGXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KNUZkKkSN/8RkV/qHyHCbRY1TQQfCZSuhLJUO8SmPX0=;
-        b=Djyc1J7PAy8SDOMfeOFQ6Owys3YQKnUKb5hZZSIv6esmuptG287GUd6jT3MvGGFWMS
-         Etna1VCRm7RLpC52rkIxlI7oELY5ReSifC2DQ9gYRgA1LpDzDO8LfNRd5AmXf1V3oO9r
-         1WRMIAkxsvax+YugRvEZLtsXeHuSuoI2vVNsC0XkZ8pFw0DymRRIR+LT9zIz6YIeiqsF
-         wmJYjPqgIf5ZSyIUNlV2H5Rbz/4n8kfX0SNmAinSjKyHfRi3PKs/s2wAwPs75VoqoEi5
-         IAhhKZuePwSOeEJD4MuUocRLonAVt2pz073xTco3hD/Ad1J1wXuupIozy/suTZHxEOp3
-         ryNQ==
-X-Gm-Message-State: ANoB5pmm+FQG++ENwbp666rC2L9a9t1Oh7Qd2ko6T0z9tlvud+I9Zztt
-        hGsz0zIBIsC91Xsym0PQRkhpXw==
-X-Google-Smtp-Source: AA0mqf5AYKtgGCfYbFWwFwc4gN67WxFdMjUCiH9GR+ezag0gvhhKQgHYxzd2VkRt7+c/YtHbqyX4XQ==
-X-Received: by 2002:a05:651c:554:b0:279:dfe:898f with SMTP id q20-20020a05651c055400b002790dfe898fmr19968384ljp.375.1670142691651;
-        Sun, 04 Dec 2022 00:31:31 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id r11-20020a2e80cb000000b00279dadba337sm686413ljg.68.2022.12.04.00.31.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 00:31:31 -0800 (PST)
-Message-ID: <fbd0222b-5370-0896-e98d-bf1f71e0877d@linaro.org>
-Date:   Sun, 4 Dec 2022 09:31:30 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wCqCVlm2gWWxwc47amlLDLZQfBgu2mBenlFlBGkMsAs=;
+        b=l0UVC/xVWnUi4Ki2Wpp+8WmKTXUfzqm/Gyqj2Yh/yuFdlsHwVSQDrej/RnidVjt9NI
+         OKMAvgUnqo+tQn/9z8cXvuxz/P4FNDeEBkMYw2RcEjv6TqC07CrPd1elfpgqNx2Y3aDR
+         lFfxmIcEzvZGtuvpQUQQKbRtzgngrXbE2Ve6lR6OUu0j+YkeRZk9ay93nWGPrUdPwif8
+         GHQqxfB/NljDQPS8trMC6JE8ojUKGzJge949pEjgt8wvBTSKJN5nZcUh0abdh/qXen9L
+         aY1rV+IXJYZriO+kvkD8Q+WK9YB0/R6CY4+MekhGGws2hAIs123mK77DSdHgJythv+zH
+         ASqg==
+X-Gm-Message-State: ANoB5pn735orD9Rnkrxq1V2qjpD0tbBERMV+CgxW9iZWrAhq9chQTUpF
+        pluZW8mohqcFrj2PjPT1zsHN73bexakbsBeb6MkaFg==
+X-Google-Smtp-Source: AA0mqf6ZLuFHP3u6fxB7to0Z1Lp4auDKOZyLkChhXPrxA9/ylEdCwf2HQtdpoTv3Ibyh68PnLyvD1dIEYFKLEZHSHt8=
+X-Received: by 2002:a92:7c0c:0:b0:302:efa3:6230 with SMTP id
+ x12-20020a927c0c000000b00302efa36230mr21867381ilc.232.1670153750075; Sun, 04
+ Dec 2022 03:35:50 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v2 03/15] dt-bindings: thermal: tsens: add per-sensor
- cells for msm8974
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
+References: <20221127141742.1644023-1-qyousef@layalina.io> <20221127141742.1644023-4-qyousef@layalina.io>
+ <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com> <20221203143323.w32boxa6asqvvdnp@airbuntu>
+In-Reply-To: <20221203143323.w32boxa6asqvvdnp@airbuntu>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Sun, 4 Dec 2022 12:35:39 +0100
+Message-ID: <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221204055909.1351895-1-dmitry.baryshkov@linaro.org>
- <20221204055909.1351895-4-dmitry.baryshkov@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221204055909.1351895-4-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/12/2022 06:58, Dmitry Baryshkov wrote:
-> The msm8974 platform uses two sets of calibration data, add a special
-> case to handle both of them.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
+On Sat, 3 Dec 2022 at 15:33, Qais Yousef <qyousef@layalina.io> wrote:
+>
+> On 12/02/22 15:57, Vincent Guittot wrote:
+>
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index 7c0dd57e562a..4bbbca85134b 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> > >          *   * Thermal pressure will impact all cpus in this perf domain
+> > >          *     equally.
+> > >          */
+> > > -       if (sched_energy_enabled()) {
+> > > +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> > >                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> > > -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> > > +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
+> > >
+> > >                 rq->cpu_capacity_inverted = 0;
+> > >
+> > > -               SCHED_WARN_ON(!rcu_read_lock_held());
+> > > -
+> > > -               for (; pd; pd = pd->next) {
+> > > -                       struct cpumask *pd_span = perf_domain_span(pd);
+> > > +               for_each_active_policy_safe(policy, policy_n) {
+> >
+> > So you are looping all cpufreq policy (and before the perf domain) in
+> > the period load balance. That' really not something we should or want
+> > to do
+>
+> Why is it not acceptable in the period load balance but acceptable in the hot
+> wake up path in feec()? What's the difference?
 
+This patch loops on all cpufreq policy in sched softirq, how can this
+be sane ? and not only in eas mode but also in the default asymmetric
+performance  one.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This inverted detection doesn't look like the right way to fix your
+problem IMO. That being said, i agree that I haven't made any other
+proposal apart that I think that you should use a different rules for
+task and for overutilized and part of your problem comes from this.
 
-Best regards,
-Krzysztof
+Then this make eas and util_fits_cpu even more Arm specific and I
+still hope to merge sched_asym_cpucapacity and asym_packing a some
+levels because they looks  more and more similar but each side is
+trying to add some SoC specific policy
 
+Vincent
+
+>
+>
+> Thanks!
+>
+> --
+> Qais Yousef
