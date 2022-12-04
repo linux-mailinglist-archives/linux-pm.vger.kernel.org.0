@@ -2,70 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA7C641DF7
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 17:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6CC9641DFD
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 17:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbiLDQkX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Dec 2022 11:40:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
+        id S230196AbiLDQnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Dec 2022 11:43:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230164AbiLDQkW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 11:40:22 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F11E1E
-        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 08:40:21 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id w15so15308991wrl.9
-        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 08:40:21 -0800 (PST)
+        with ESMTP id S230192AbiLDQna (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 11:43:30 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B3115707
+        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 08:43:28 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id u12so14357690wrr.11
+        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 08:43:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wbNKJgqamf76QS4A7riHRQ/K/kQjFtOAWIhBQTumKHQ=;
-        b=xHGdBi84weUIxIzDT1mYhxwPaFtjMpVnPXMwVxTFMk7BsowhXoG0D+2gWtYa8z4h2d
-         3pEmiAP1v1p4mmjjSOtZOGg8n+9uQpo+6sRaaVXtEntR5fdes3m/JKSvT8+uxrHweGoe
-         xxHls0AWWr+ZGFrCoaOlcl8qcHF2zKEAhhGKxH5NDD/b/6tSrRV3DvBOBqXnMaTllqu2
-         ZKLKy/5zkflIEB8bAC2OOjVpa4tfCvqJ/Ln07AZlgU2zlwc4FEplE+qgZGtLZGqrF703
-         PpM8kVKCZTuYhdaLowtdnOkoBwiv/2O1WTpfzT95IJh0yfUXUWdspjLiqzgSYPobxVRl
-         wBqQ==
+        bh=gT/B/EAWvvQ3x+0gmDPuocEhB6PCpHAkErzF+d1wppY=;
+        b=GZ1kDmpbbIPKd0G/oggHqKbaOzNeRecnfrW9VNrGs/KovxgXNa2vcg/54YMCTO2Xai
+         pI96qy/5HEI/+1OEPKKQPGrTKkCuPipVBy5gMXKeI9K5J2f/Jyo6G1p1U2O9QOKG7wKE
+         P4XqqO4dkq8KBeql5lJa1NWUBNZl+mQCWqbc1whrC5nA4giONxRyIzIUuYx7VnCnrboJ
+         Sm93EcBT7B8RCSH5v+IZF5Bwfa4yfnD4UsK7QCI/W0B/KOqU0pNcJFtl6iuyjx5T7B8V
+         fKPy5ReHyk9AAFDcx9/CMoGJ1XKEImc0Rc8SlYM61N9nEIE0IyDRCwR9fMbI6nVQ9nX8
+         JFnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wbNKJgqamf76QS4A7riHRQ/K/kQjFtOAWIhBQTumKHQ=;
-        b=lkxRt+3kP0ogTs05TdHcJDcBoiSjXKwtrTeMWxWsoRSJc2P+SPhcyLK8Ij6gttOYyt
-         +fab8T6BYX7iHf2gcAzDDIhked9MryNYMpe5ucrQj8xTkRIQo+j5D8LjX1mEUHjWWjny
-         LiaW90DXk9XPvBY3BAWcPmlO4DDA7BKQzStnNVWG9BuCgvPzoOKNGuBxaV9U4IpNTF3s
-         /7WlUqASUCV/PcGsCTko8N4nwM5eXOfGUSG7WEfF2hZ556a3itQ8/+4Hdw5iiE4fZ/gC
-         ODFGL2OwZCI7zBYF8j0f3cjRxhHJ/R7nCVSMg7tdXhI02gpASG+eBjll+xdFT4wVRlhI
-         C1xw==
-X-Gm-Message-State: ANoB5pkedphIV87SPC9G+uph4PGTycMep/7Qk/QYS1B82A/RCHVtezWU
-        BMld+i0vjzqas4sJmkwdnLbdKQ==
-X-Google-Smtp-Source: AA0mqf5pX7sHWt7L7PETaiw7GUTCGcD+YISEEYnvFmfUMY9ugjib98oKRwTOzTkkFV1fgorTt7rgbw==
-X-Received: by 2002:adf:efcb:0:b0:242:5ff0:6d8a with SMTP id i11-20020adfefcb000000b002425ff06d8amr1553837wrp.135.1670172019766;
-        Sun, 04 Dec 2022 08:40:19 -0800 (PST)
+        bh=gT/B/EAWvvQ3x+0gmDPuocEhB6PCpHAkErzF+d1wppY=;
+        b=Ipw/WOu0oKanfFRfUPEHfo7ZasWvzOPDoEbLZtV1xRJBz6O5MiwDjx284DF81ej8J5
+         0udtDY2/LVNkAUpgTJ1ogvNKPdg+1N+Y/8JtyZezoc60OGqvACKWsj8r2GbFEvrOavo7
+         b8TT/QTOpqSo5yJR8kOPt7ZEEcq7KPyz7+VAyG4nxslw+ArzvcP+SxV+NET7Ols8/LGg
+         Wk0IOpG7yVV6893kqrAq7u+PjgT8zUbi7EelUzzC9c092Ex1ZTaVlJquWgWCrZAw6b9q
+         XbuLMwixXO9yDlgpWKreeQTfxGeO04MBKCaEieNkV4S1pASm8a9ZBaXLuea/uetpz1e2
+         yK/Q==
+X-Gm-Message-State: ANoB5pml4srjurUf+G0y/eQauf/T9QBFiPq5VsY9pJzhuNZnfr3NVV8x
+        eZ0N5qbkfjscdrKUYX+pWWCfHg==
+X-Google-Smtp-Source: AA0mqf4sAuxjvaOBDZhtrGGYt7BstKJKEBiKdUr3ZkgAhbTJspC6aS7UljKY//5yJR5pedqGj15Pqw==
+X-Received: by 2002:adf:f5c9:0:b0:242:10ac:e8c with SMTP id k9-20020adff5c9000000b0024210ac0e8cmr22318955wrp.67.1670172207444;
+        Sun, 04 Dec 2022 08:43:27 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l9-20020a05600c1d0900b003cf878c4468sm21165858wms.5.2022.12.04.08.40.18
+        by smtp.googlemail.com with ESMTPSA id bs4-20020a056000070400b0023677081f3asm12202573wrb.42.2022.12.04.08.43.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 08:40:19 -0800 (PST)
-Message-ID: <c2155e23-d381-c4fb-f98f-be505665f49a@linaro.org>
-Date:   Sun, 4 Dec 2022 17:40:18 +0100
+        Sun, 04 Dec 2022 08:43:26 -0800 (PST)
+Message-ID: <0a91ac56-f888-8127-8a1e-69519223177c@linaro.org>
+Date:   Sun, 4 Dec 2022 17:43:25 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH] thermal/core/power allocator: Remove a useless include
+Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: narrow interrupts for
+ SC8280XP, SM6350 and SM8450
 Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <9adeec47cb5a8193016272d5c8bf936235c1711d.1669459337.git.christophe.jaillet@wanadoo.fr>
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>
+References: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <9adeec47cb5a8193016272d5c8bf936235c1711d.1669459337.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -78,14 +85,12 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/11/2022 11:42, Christophe JAILLET wrote:
-> This file does not use rcu, so there is no point in including
-> <linux/rculist.h>.
+On 16/11/2022 12:31, Krzysztof Kozlowski wrote:
+> Narrow number of interrupts per variants: SC8280XP, SM6350 and SM8450.
+> The compatibles are already used and described.  They only missed the
+> constraints of number of interrupts.
 > 
-> Remove it.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Applied, thanks
 
