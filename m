@@ -2,59 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89C49641B96
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 09:30:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3657F641B9A
+	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 09:31:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229703AbiLDIaO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Dec 2022 03:30:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S229579AbiLDIbh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Dec 2022 03:31:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiLDIaN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 03:30:13 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B623E17885
-        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 00:30:11 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id x6so10159020lji.10
-        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 00:30:11 -0800 (PST)
+        with ESMTP id S229765AbiLDIbe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 03:31:34 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 451A717897
+        for <linux-pm@vger.kernel.org>; Sun,  4 Dec 2022 00:31:33 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id q7so10165405ljp.9
+        for <linux-pm@vger.kernel.org>; Sun, 04 Dec 2022 00:31:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NEAdA2tVF8LZsf2n1iXOw7OGaaP2byXd0qqESevi+8I=;
-        b=KEBOyL1H3wNxjNsCsrflL9EbNiiXkVxCp5C4hjn4Hr8zHQfX9sqaXAA6omrLiM3/B1
-         NiwIl+tjZVJXnT4eQi7GJG0eRAWGU9XSO9UHU/FQmg2JUc3X83dkUzksPZsnAfSdA1/x
-         dEQ49WCHjJq6Txvc7ccAke9CottCxLUY0LtONsCqKURYa1YXNvvX3jRc4tF8qimmdzWi
-         gYHLvcXBoWlzCQupbHyZDPvcSW39mKDMpALiQRLF021DWcjIhQOcIARheZic4q2CEvO6
-         lt34gekM3ahYf+43pRrDo6RX5uSPlgz9C31g4d/1QFkIP0640anP3CqAsdZ5/Ly8C0/D
-         P4jA==
+        bh=KNUZkKkSN/8RkV/qHyHCbRY1TQQfCZSuhLJUO8SmPX0=;
+        b=MxGsobdil6ch66e6fgLeA7Jb3CDXcr0RlpdbBUyKGXLfJTGmYhxj8cChO4fnAoXXev
+         oxW7DfHljqvk4ogcz9APC6tHQjqH+S7wDx4T6BXcvW/5Eg8dXDIpdyVAEb6nmx8Zwjsc
+         FxD10QIA0MzZx/F7zPGncwxHnWv68+D1MdgiykGE9+eSG+h1htjtxsBzMpHWsGvC0T2f
+         X8IUgW/Wt6qeN1WrDyMHdkZI0mWrMAeBzEZe2T0tKnV71hZY03IjCXomoH537fWsE0YD
+         M1ssZsN0e1tJ2u8krwGqcG2NqI5tXhA/IPSB84xW2pbG3UFtRgr3fHY5YKcCKW+qG/Md
+         K00w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEAdA2tVF8LZsf2n1iXOw7OGaaP2byXd0qqESevi+8I=;
-        b=0Xsf8YkTsrSU+8TAOWTQFk6EPCc9BvanegEQytOn6/C+TEYwDJHgFJj4cP3j6tToSF
-         oAW4jBWil7R9/36lAVmKgQDGh51W2knE82xUpUC/0OJVg/yYa5oxiA6QmCTsymWh4zi5
-         wh9J2C04KeNZzOJSVVAEbf5/Sq5RvPbAiTDU3mBSK4kd/HgQLUzitIfINn4ACdqQ/MJr
-         C/haM4MYWWlX/JFBa6Kw7imfiQwBU3H0W586rEyryWHaLouQO+bXkcV7YivLp+rSp0On
-         ke32AmmyujbO52T68G1JTxPlbvZDdbRHYq++geyZIo3GMCKiS4lzsQbxGvzodm2BVpQB
-         Vggg==
-X-Gm-Message-State: ANoB5pn5EKgxRS60eucK5VhqiYJse7opxr1vkRgaJOHWlNetcco0h/DN
-        KzfWbZba6QqWpj245WXuFAvPGg==
-X-Google-Smtp-Source: AA0mqf5C7jR+6hYSd6dpy0tVAxQpBI7eTmjIBiT886Zz8Nn3VihEMxKjc3qUdA7dDL0h1CFKel4yHQ==
-X-Received: by 2002:a2e:875a:0:b0:26e:1d9:c2a5 with SMTP id q26-20020a2e875a000000b0026e01d9c2a5mr24793234ljj.353.1670142609979;
-        Sun, 04 Dec 2022 00:30:09 -0800 (PST)
+        bh=KNUZkKkSN/8RkV/qHyHCbRY1TQQfCZSuhLJUO8SmPX0=;
+        b=Djyc1J7PAy8SDOMfeOFQ6Owys3YQKnUKb5hZZSIv6esmuptG287GUd6jT3MvGGFWMS
+         Etna1VCRm7RLpC52rkIxlI7oELY5ReSifC2DQ9gYRgA1LpDzDO8LfNRd5AmXf1V3oO9r
+         1WRMIAkxsvax+YugRvEZLtsXeHuSuoI2vVNsC0XkZ8pFw0DymRRIR+LT9zIz6YIeiqsF
+         wmJYjPqgIf5ZSyIUNlV2H5Rbz/4n8kfX0SNmAinSjKyHfRi3PKs/s2wAwPs75VoqoEi5
+         IAhhKZuePwSOeEJD4MuUocRLonAVt2pz073xTco3hD/Ad1J1wXuupIozy/suTZHxEOp3
+         ryNQ==
+X-Gm-Message-State: ANoB5pmm+FQG++ENwbp666rC2L9a9t1Oh7Qd2ko6T0z9tlvud+I9Zztt
+        hGsz0zIBIsC91Xsym0PQRkhpXw==
+X-Google-Smtp-Source: AA0mqf5AYKtgGCfYbFWwFwc4gN67WxFdMjUCiH9GR+ezag0gvhhKQgHYxzd2VkRt7+c/YtHbqyX4XQ==
+X-Received: by 2002:a05:651c:554:b0:279:dfe:898f with SMTP id q20-20020a05651c055400b002790dfe898fmr19968384ljp.375.1670142691651;
+        Sun, 04 Dec 2022 00:31:31 -0800 (PST)
 Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id f27-20020a19381b000000b0049fff3f645esm1692861lfa.70.2022.12.04.00.30.08
+        by smtp.gmail.com with ESMTPSA id r11-20020a2e80cb000000b00279dadba337sm686413ljg.68.2022.12.04.00.31.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 00:30:09 -0800 (PST)
-Message-ID: <e78b8c4c-81e3-3d36-10b4-36f8b52e6131@linaro.org>
-Date:   Sun, 4 Dec 2022 09:30:08 +0100
+        Sun, 04 Dec 2022 00:31:31 -0800 (PST)
+Message-ID: <fbd0222b-5370-0896-e98d-bf1f71e0877d@linaro.org>
+Date:   Sun, 4 Dec 2022 09:31:30 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH v2 01/15] dt-bindings: thermal: tsens: add msm8956 compat
+Subject: Re: [PATCH v2 03/15] dt-bindings: thermal: tsens: add per-sensor
+ cells for msm8974
+Content-Language: en-US
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -69,10 +71,9 @@ To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20221204055909.1351895-1-dmitry.baryshkov@linaro.org>
- <20221204055909.1351895-2-dmitry.baryshkov@linaro.org>
-Content-Language: en-US
+ <20221204055909.1351895-4-dmitry.baryshkov@linaro.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221204055909.1351895-2-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221204055909.1351895-4-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -86,12 +87,8 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 04/12/2022 06:58, Dmitry Baryshkov wrote:
-> When adding support for msm8976 it was thought that msm8956 would reuse
-> the same compat. However checking the vendor kernel revealed that these
-> two platforms use different slope values for calculating the calibration
-> data.
-> 
-> Add new compatible for the tsens on msm8956 SoC.
+> The msm8974 platform uses two sets of calibration data, add a special
+> case to handle both of them.
 > 
 > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > ---
