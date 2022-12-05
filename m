@@ -2,100 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D76CC64397D
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 00:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2ED16439AE
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 00:53:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230246AbiLEXbL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 18:31:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
+        id S229982AbiLEXxt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 18:53:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbiLEXbK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 18:31:10 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9529313F40
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 15:31:04 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id q15so11705065pja.0
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 15:31:04 -0800 (PST)
+        with ESMTP id S230381AbiLEXxs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 18:53:48 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2951D0FD
+        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 15:53:47 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id 62so11872198pgb.13
+        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 15:53:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B64nahlnQTvizzFWN/MKOqXMuPOFiJayfJ71EF7WbGA=;
-        b=OdoCO3aIPMdfROqUjmXL7OEIA9CYBS2QJpBEQA/J/lXle82NRW52w+zlIhfg8ms1LH
-         /TaN9ef8SYhihXbLecW289xcKfk+r8jWkj++QJwpEkQ1fXVsZ/FXGTthxTDx3eTv2LqU
-         aF9+9jCAsL/TJziFYfMd+KTj2pD0QOxM5LCYt8tjyk5XsS1+uOrVx9Njw5OmkcBBVEYX
-         KSGIvwzQcHLKi0zMkznu7zvWfx7VwIEZnBvI3Jh70JzLhhauK0TvqwYPjpm562G4twQ5
-         bH2/dgjDSmgv5Ucv41xkKot6rQ9Ok5rWk8g0NNt3g0bAOZFq60lEilO/MyCxX0rMGr7l
-         LCBA==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=w4ie4UMV0uG2oaXDURy++NSgKMjRLAwxHyFCEQOdgRk=;
+        b=yA1xHL8jbbrBbQH1b7lv3D7gJMDtUNaDoicb62Lymjy7UqjEKXM7RNFCMQbA7jr5fE
+         9Hndjd22dt1a5x9N9CVffcAMnA+TZ6/4EXP+Kbnlitn8bz7nK6MbpW+rRPLU4QgpZcPq
+         0Nv1dWdancmeKecLDe2hFgWMO+BeilXsphaBocwvXSHQSOcoZF5fHO7BOHGJHdNjXtfW
+         G7oE8o7qiSU2NUXbK3XtInJrFYD7gViYMWrwgbPiuQ6Ikd/sF1X2p7k/Ha5Y5omiYqUR
+         MiTq7gtru/q5+hmADI4kI/CX98NDPNKZnMJULOcErssfPWG6qPfdQucK91Es+V6mnmlU
+         nRNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B64nahlnQTvizzFWN/MKOqXMuPOFiJayfJ71EF7WbGA=;
-        b=S1q6zLNKj7jgWYieOA4UaW86GoJspTXh18Q/yD29rjMjKpyrCJgteUNmx/nCPBPlY/
-         TohvOED7512eRROUtSjU3hexZsHI7huHaWDX7DdkKxblwy2M97DzYfSkMAy92THFQFTy
-         Xk6z44V45eMjAsDXaXu1vihI7nCpluXKlJSApoSvU0r9wLjWUKxrlF1AUHFOurV1wAwS
-         OFFccp5Ki09v5ej3R8B0NIHA0VlhH8qfXWpYLXeSF0YpMdxkFWJ5LLivvZeLwHD9bvUd
-         278Orwku12LfemLc9Y8rEPoH3HACVAbsmJ8CTbKZyYfWq7RFjiOcGu4taGDd9+WXHLYh
-         x2Ug==
-X-Gm-Message-State: ANoB5pnmvsDm9MqZwXBj8ok9wD0rAvo28RO2CsEcCBGM0V08dUkGqBZl
-        i38JXx1uQgIdjVsumZO7Vm2rZQ==
-X-Google-Smtp-Source: AA0mqf5QjTlWvI5ubzCjEUZ2XSBplUYzhwiX2VZlK2wbZvvlG5QcSd1Z2Q5+Y5Ulo+DwDdjITx4zAA==
-X-Received: by 2002:a17:902:b685:b0:186:5e2f:44b4 with SMTP id c5-20020a170902b68500b001865e2f44b4mr59374pls.29.1670283064040;
-        Mon, 05 Dec 2022 15:31:04 -0800 (PST)
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w4ie4UMV0uG2oaXDURy++NSgKMjRLAwxHyFCEQOdgRk=;
+        b=ONRHcpbrmN6oJmsKbknD24N6NIQv2OKGtAdQqzZ4lM3BXpuCtdrL3jVvTPBRRzP8lL
+         rW6XSAChlmCpnkOfSEiM9dci6hOAO0rBsWEEc2yCI/20RPEyGXSUJH6sFUTd/x+fY9gN
+         aWd4pGpKlsAmQg0mFOp564Zs42r1Xceg4OwmJI7eq4TDjelPNRTj8aLozyWiveEbtUT3
+         k3YRrhsdfQqRdI1m5Np5b+yZ0CLX8gRpcoq+cTnZil7Hv3e6I0LrDBzK6i4r5RgSgSuO
+         703cXy1kXzLUyNhV/HRt+DNmzlsh43hZBvfQCERw0543DM2d1+wMq7xQK/8Et+6zHHKc
+         iVdw==
+X-Gm-Message-State: ANoB5pmAMn7Q9DPAOCCKR8LuTptGUuXE63okJHD7/QtsTG2WlEln4VoU
+        OYwYvFNVl2GueNQt+athB1B/0g==
+X-Google-Smtp-Source: AA0mqf7ei0eDlwKzskIaQPa14ViXVyUcNPCtBuTxowEnbLrCVqOly+bVQ/x26yoqi94btJDsBq1IEg==
+X-Received: by 2002:a63:5560:0:b0:478:c3a4:4568 with SMTP id f32-20020a635560000000b00478c3a44568mr5085696pgm.94.1670284427186;
+        Mon, 05 Dec 2022 15:53:47 -0800 (PST)
 Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id e8-20020a17090301c800b00189b2b8dbedsm9188203plh.228.2022.12.05.15.31.02
+        by smtp.gmail.com with ESMTPSA id g5-20020a63e605000000b004785c24ffb4sm8750641pgh.26.2022.12.05.15.53.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 15:31:03 -0800 (PST)
-Date:   Tue, 6 Dec 2022 05:00:59 +0530
+        Mon, 05 Dec 2022 15:53:46 -0800 (PST)
+Date:   Tue, 6 Dec 2022 05:23:41 +0530
 From:   Viresh Kumar <viresh.kumar@linaro.org>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        regressions@leemhuis.info, daniel@makrotopia.org,
-        thomas.huehn@hs-nordhausen.de, "v5 . 19+" <stable@vger.kernel.org>,
-        Nick <vincent@systemli.org>, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] Revert "cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()"
-Message-ID: <20221205233059.izdqcilbhjmkh6ew@vireshk-i7>
-References: <930778a1-5e8b-6df6-3276-42dcdadaf682@systemli.org>
- <18947e09733a17935af9a123ccf9b6e92faeaf9b.1669958641.git.viresh.kumar@linaro.org>
- <CAJZ5v0ixHocQbu6-zs3dMDsiw8vdPyv=8Re7N4kUckeGkLhUzg@mail.gmail.com>
- <CAJZ5v0hc8CsvqLKxi5iRq7iR0bkt25dRnLBd23mx-zdi2Sjgsw@mail.gmail.com>
- <20221205043044.bgecubnw7d3xlyi5@vireshk-i7>
- <CAJZ5v0gTV5LM_qRKncPq5Z2TRENMgVer6oZiGAKJn6ndrNSKxg@mail.gmail.com>
+Cc:     Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm updates for 6.2
+Message-ID: <20221205235341.bs7v3nr5bnhllteu@vireshk-i7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gTV5LM_qRKncPq5Z2TRENMgVer6oZiGAKJn6ndrNSKxg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 05-12-22, 13:08, Rafael J. Wysocki wrote:
-> Well, this was a bit unclear.
+Hi Rafael,
 
-Hmm, yeah. I assumed that the arm stuff will go via my tree and you
-will be in sync with this. But yeah, a comment in the patch won't have
-hurt.
+The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
 
-> Alright then, I'll assume that the proper fix will come in through
-> your pull request for 6.2 (but please send that one before the merge
-> window opens), thanks!
+  Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
 
-I was ready with pull request since several days, was just waiting for
-this to get sorted out. And I think this may get delayed a bit too, so
-I better send the first pull request now and worry about this later.
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.2
+
+for you to fetch changes up to 8ff150aa6fe252e9b7713cf737c4dc5cbaa263ab:
+
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add QDU1000/QRU1000 cpufreq (2022-12-01 14:50:47 +0530)
+
+----------------------------------------------------------------
+Cpufreq arm updates for 6.2
+
+- Generalize of_perf_domain_get_sharing_cpumask phandle format (Hector Martin).
+
+- New cpufreq driver for Apple SoC CPU P-states (Hector Martin).
+
+- Lots of Qualcomm cpufreq driver updates, that include CPU clock
+  provider support, generic cleanups or reorganization, fixed a
+  potential memleak and the return value of cpufreq_driver->get()
+  (Manivannan Sadhasivam, and Chen Hui).
+
+- Few updates to Qualcomm cpufreq driver's DT bindings, that include
+  support for CPU clock provider, fixing missing cache related
+  properties, and support for QDU1000/QRU1000 (Manivannan Sadhasivam,
+  Rob Herring, and Melody Olvera).
+
+- Add support for ti,am625 SoC and enable build of ti-cpufreq for
+  ARCH_K3 (Dave Gerlach, and Vibhore Vardhan).
+
+- tegra186: Use flexible array to simplify memory allocation (Christophe
+  JAILLET).
+
+----------------------------------------------------------------
+Chen Hui (1):
+      cpufreq: qcom-hw: Fix memory leak in qcom_cpufreq_hw_read_lut()
+
+Christophe JAILLET (1):
+      cpufreq: tegra186: Use flexible array to simplify memory allocation
+
+Dave Gerlach (4):
+      cpufreq: ti-cpufreq: Add support for AM625
+      cpufreq: dt-platdev: Blacklist ti,am625 SoC
+      arm64: dts: ti: k3-am625: Introduce operating-points table
+      cpufreq: ti: Enable ti-cpufreq for ARCH_K3
+
+Hector Martin (2):
+      cpufreq: Generalize of_perf_domain_get_sharing_cpumask phandle format
+      cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+
+Manivannan Sadhasivam (7):
+      cpufreq: qcom-hw: Remove un-necessary cpumask_empty() check
+      cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe
+      cpufreq: qcom-hw: Use cached dev pointer in probe()
+      cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq
+      cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+      cpufreq: qcom-hw: Add CPU clock provider support
+
+Melody Olvera (1):
+      dt-bindings: cpufreq: cpufreq-qcom-hw: Add QDU1000/QRU1000 cpufreq
+
+Rob Herring (1):
+      dt-bindings: cpufreq: qcom: Add missing cache related properties
+
+Vibhore Vardhan (1):
+      arm64: dts: ti: k3-am625-sk: Add 1.4GHz OPP
+
+ Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml |  31 +++++++++++++
+ arch/arm64/boot/dts/ti/k3-am625-sk.dts                         |   9 ++++
+ arch/arm64/boot/dts/ti/k3-am625.dtsi                           |  51 +++++++++++++++++++++
+ drivers/cpufreq/Kconfig.arm                                    |  13 +++++-
+ drivers/cpufreq/Makefile                                       |   1 +
+ drivers/cpufreq/apple-soc-cpufreq.c                            | 352 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c                           |   3 ++
+ drivers/cpufreq/mediatek-cpufreq-hw.c                          |  14 ++++--
+ drivers/cpufreq/qcom-cpufreq-hw.c                              | 206 ++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------
+ drivers/cpufreq/tegra186-cpufreq.c                             |  11 ++---
+ drivers/cpufreq/ti-cpufreq.c                                   |  36 +++++++++++++++
+ include/linux/cpufreq.h                                        |  28 +++++++-----
+ 12 files changed, 650 insertions(+), 105 deletions(-)
+ create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
 
 -- 
 viresh
