@@ -2,161 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 617CF6428C9
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 13:52:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0056C642976
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 14:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbiLEMv6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 07:51:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51224 "EHLO
+        id S230517AbiLENeU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 08:34:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiLEMv5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 07:51:57 -0500
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87481A228;
-        Mon,  5 Dec 2022 04:51:54 -0800 (PST)
-Received: by mail-qk1-f173.google.com with SMTP id z1so4802251qkl.9;
-        Mon, 05 Dec 2022 04:51:54 -0800 (PST)
+        with ESMTP id S229982AbiLENeT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 08:34:19 -0500
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496981B78C
+        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 05:34:18 -0800 (PST)
+Received: by mail-pj1-x102d.google.com with SMTP id q17-20020a17090aa01100b002194cba32e9so14856116pjp.1
+        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 05:34:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=gSVmwYRM796Ouau4wGBscH89Bzk2g2ljL1Zu3WpPiNk=;
+        b=4B6t7T+F4/E7/BGw54W6tcNQEsbKxeX65OtnhDnugBvdrFXtLaO0L8G6min6nmfq79
+         9051yGmJKMclXAtIHHv1WBsymwDIBbV/kKXqSwuR/N5gbsGsueXsl700jYmpVmbH9O7c
+         FneD6UBKLrM+KlVv0VzaT4NcNzxWSOQ+GicQYMMWVTi11FrKJEGLQtRNmV4XIx7uddQ5
+         1SJxSayGIvwH+GnuRvCq17SZSieSBm8TPZbgsqZTy/zbXFNinl4h1C8aWM0c4R/xzMV8
+         f6avh7jkm2xKRfaOxqKlQ4mDDsCVyroTg6IwvnY8sZ9ID886EyUleE9hlI0IqWukn5Dc
+         3OvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MT4bJVVHqTGTFiANb5Sn2kAnn0LAo6SX5n0rM8AMQ1Q=;
-        b=Aq6VQNCzviL9IuOv3UkS920w36CDB9e20ZT4ECIc1GhjtuLCy0vORhbYdHxj9JEM34
-         rRyoIe2XDnaLHHh6CVEXu5oeqGovJiNcqdcqusLMYrev6/ubJW9Jt5M9psrdHyvrNv6K
-         6iUQRHugJXimPgmTFK/FQcltt+LyETI0y81yckkwmBoKxouDkEYBH0ii8ZezBJfBc44A
-         sNvjhM3HNbvnCAGGOVLukrWw4OVhnaDOLURYtQisnJNHs8GsnEZ6h5LdMY1ZQfLFY0Tp
-         JqwSLbip/FDSXrSvMVI86YjySOQhUtqS8oyv+Xy9AA7jwDEpMNPXyl7wRzNJSj5pz3Lg
-         zrsA==
-X-Gm-Message-State: ANoB5pklNn7ZLPwkEzY0fMM8gDt6/aFu3AQnYiUlsje6HWLg+Oys3siC
-        GvYy0rPnGnIdZxmIt7JMVthSngYoqdmpZPRtbks=
-X-Google-Smtp-Source: AA0mqf4ngeYnQ3TrHinNFM1AaUvB7TGTd/46gT1fsUA+FmtaiUVl/JWP3NWe9ibnkzlB08ZXS6DiglWmVTO21P6i49w=
-X-Received: by 2002:a37:b901:0:b0:6ec:2b04:5099 with SMTP id
- j1-20020a37b901000000b006ec2b045099mr59952260qkf.501.1670244713941; Mon, 05
- Dec 2022 04:51:53 -0800 (PST)
+        bh=gSVmwYRM796Ouau4wGBscH89Bzk2g2ljL1Zu3WpPiNk=;
+        b=W18nYE/ycTXXTM2fOmtWGxPP3x6DDgmrLLvSD0dKmQobtWmncrH3c/lzC5KQchPFu1
+         bS7Q7ucdS0lVmC9zlh1Q1xaRC6NFNlNt5qq/fXUXLh7cfeZCwt/ifcBVCUASqYLDIcUo
+         J/Kginakl4j1GcfN9wrGYc7qZth/Won2KQ97Qi1NFo2gmZLUPGZUm9b6CwvLFNWY6LJk
+         QnBhG1Qtf7ZMSxc22bYa/68Ex3zxOi6L/1+l1WUSVpELgr7ngEigdGd+dbAK9HF/Qztp
+         iV7JOQdlAQ84ky5sxOxgj150GXFG2S9lXOI+R2udnXpg/In3bF3j93I8BwnPUPXIctGl
+         YmVg==
+X-Gm-Message-State: ANoB5pnuhIBXWIo6E/7M/vxmhwNm9oeJiFZHWi+8IXWNh2bEi8WTmzjN
+        5EkdDa4f+ouSnvrmZgGDEVAYdg==
+X-Google-Smtp-Source: AA0mqf7Db36Ee+Z3PmSh7B5C+/RIwfaSn6W0fdYA3PgD1X1A4gpBRpMVEeMG7IVBOdsvcHRXct7A7Q==
+X-Received: by 2002:a17:90a:2f62:b0:219:14b9:ac05 with SMTP id s89-20020a17090a2f6200b0021914b9ac05mr48861407pjd.175.1670247257733;
+        Mon, 05 Dec 2022 05:34:17 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id m8-20020a1709026bc800b001897e2fd65dsm10603518plt.9.2022.12.05.05.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 05:34:17 -0800 (PST)
+Message-ID: <638df359.170a0220.cc445.3031@mx.google.com>
+Date:   Mon, 05 Dec 2022 05:34:17 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <5627469.DvuYhMxLoT@kreacher> <4789678.31r3eYUQgx@kreacher>
- <CAPDyKFqu9-=L9B-Vkzqom6akVpim0R2_DPj__3t3dp9Y_oUEEg@mail.gmail.com>
- <CAJZ5v0jWBREsP4UN98+d8f35zDNA3PwisAxZDq03mZ1JkAg1ww@mail.gmail.com> <CAPDyKFp+5cXE8RLP=Q=i06uE1DyE0vzttFj46pQt_hTwmAm6_Q@mail.gmail.com>
-In-Reply-To: <CAPDyKFp+5cXE8RLP=Q=i06uE1DyE0vzttFj46pQt_hTwmAm6_Q@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Dec 2022 13:51:39 +0100
-Message-ID: <CAJZ5v0hiVxL_6ZE=RF9+5w2VAcpy4v0nGeEAjWB-t7+G75KSBw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] PM: runtime: Do not call __rpm_callback() from rpm_idle()
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tushar Nimkar <quic_tnimkar@quicinc.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Nitin Rawat <quic_nitirawa@quicinc.com>,
-        Peter Wang <peter.wang@mediatek.com>,
-        Alan Stern <stern@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.1-rc8-118-gcbb91738df5e
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.1-rc8-118-gcbb91738df5e)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 5, 2022 at 1:47 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> On Mon, 5 Dec 2022 at 13:13, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Mon, Dec 5, 2022 at 1:08 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> > >
-> > > On Fri, 2 Dec 2022 at 15:32, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
-> > > >
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > Calling __rpm_callback() from rpm_idle() after adding device links
-> > > > support to the former is a clear mistake.
-> > > >
-> > > > Not only it causes rpm_idle() to carry out unnecessary actions, but it
-> > > > is also against the assumption regarding the stability of PM-runtime
-> > > > status accross __rpm_callback() invocations, because rpm_suspend() and
-> > > > rpm_resume() may run in parallel with __rpm_callback() when it is called
-> > > > by rpm_idle() and the device's PM-runtime status can be updated by any
-> > > > of them.
-> > >
-> > > Urgh, that's a nasty bug you are fixing here. Is there perhaps some
-> > > links to some error reports that can make sense to include here?
-> >
-> > There is a bug report, but I have no confirmation that this fix is
-> > sufficient to address it (even though I'm quite confident that it will
-> > be).
-> >
-> > > >
-> > > > Fixes: 21d5c57b3726 ("PM / runtime: Use device links")
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >  drivers/base/power/runtime.c |   12 +++++++++++-
-> > > >  1 file changed, 11 insertions(+), 1 deletion(-)
-> > > >
-> > > > Index: linux-pm/drivers/base/power/runtime.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/base/power/runtime.c
-> > > > +++ linux-pm/drivers/base/power/runtime.c
-> > > > @@ -484,7 +484,17 @@ static int rpm_idle(struct device *dev,
-> > > >
-> > > >         dev->power.idle_notification = true;
-> > > >
-> > > > -       retval = __rpm_callback(callback, dev);
-> > >
-> > > Couldn't we just extend __rpm_callback() to take another in-parameter,
-> > > rather than open-coding the below?
-> >
-> > I'd rather not do that.
-> >
-> > I'd prefer rpm_callback() to be used only in rpm_suspend() and
-> > rpm_resume() where all of the assumptions hold and rpm_idle() really
-> > is a special case.
-> >
-> > And there is not much open-coding here, just the locking part.
->
-> That and the actual call to the callback. Not much, but still.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc8-118-gc=
+bb91738df5e)
 
-Note that it doesn't need to check the callback pointer, though.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+1-rc8-118-gcbb91738df5e/
 
-Moreover, IMO this code is easier to read without having to look at
-__rpm_callback() and reverse engineer all of the different use cases
-covered by it.
+Tree: pm
+Branch: testing
+Git Describe: v6.1-rc8-118-gcbb91738df5e
+Git Commit: cbb91738df5e16fcce8b627a7d0714cb21ade0ff
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> > > Note that, __rpm_callback() already uses a "bool use_links" internal
-> > > variable, that indicates whether the device links should be used or
-> > > not.
-> >
-> > Yes, it does, but why does that matter?
->
-> It means that __rpm_callback() is already prepared to (almost) cover this case.
+Warnings Detected:
 
-Well, why does it have to cover all of the cases that are even somewhat related?
+arc:
 
-> >
-> > > > +       if (dev->power.irq_safe)
-> > > > +               spin_unlock(&dev->power.lock);
-> > > > +       else
-> > > > +               spin_unlock_irq(&dev->power.lock);
-> > > > +
-> > > > +       retval = callback(dev);
-> > > > +
-> > > > +       if (dev->power.irq_safe)
-> > > > +               spin_lock(&dev->power.lock);
-> > > > +       else
-> > > > +               spin_lock_irq(&dev->power.lock);
-> > > >
-> > > >         dev->power.idle_notification = false;
-> > > >         wake_up_all(&dev->power.wait_queue);
-> > > >
-> > > >
-> > > >
->
-> Note, it's not a big deal to me, if you feel strongly that your
-> current approach is better, I am fine with that too.
+arm64:
 
-OK, thanks!
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
