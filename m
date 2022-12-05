@@ -2,145 +2,223 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEE6641F3E
-	for <lists+linux-pm@lfdr.de>; Sun,  4 Dec 2022 20:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 591036420BD
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 01:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiLDTUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 4 Dec 2022 14:20:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S230428AbiLEA23 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 4 Dec 2022 19:28:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiLDTUm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 14:20:42 -0500
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F6110064;
-        Sun,  4 Dec 2022 11:20:41 -0800 (PST)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-13bd2aea61bso11269327fac.0;
-        Sun, 04 Dec 2022 11:20:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yeg3edC/r39iIOK6guEWh/CYd2mkGIMBeuem4TqRves=;
-        b=PBjsnfXRRHhZf7FuPDQII/O9XoCBbkiewPEChkEudn/gfnYugmKwmn8LAKPzydScaQ
-         ZpYwGb6hnHHSjEnxqDajnPYpgTOhyQTI538m1yCrIbGirZcJ002DURcR1Gg3NCDCNP0e
-         I2VZMvNt1Z7oXFQTZZGgMN8H4mMXCszbW6GEiFoyuAWj4Jg5nM7GeWPi2unOJpunAQED
-         OiMsqcimGHZsf1BEZPk8CiqZoVrEcaBLNw1e1jUozv3SrMVmb3n3I3TxTWGNZwXSrMJs
-         DX8o34VKQPe/4y/DFrKhSMAN3rDmh+8On3VR/rptnainIrumtDM6sQ5lemSiniPr+NIb
-         tbaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yeg3edC/r39iIOK6guEWh/CYd2mkGIMBeuem4TqRves=;
-        b=XyTayFqioo7f0+qV1dx4nDJDhls0cGPIZao6MNGBiFf3taWMkxYKVmCgfMugWh9C/R
-         SCFjXSYvlPfB/CgrGzA5Kx45Cip08Nx5MWSl9AAAtJPQcwmy43bTwn4Pjfv3aFc5Eqfn
-         6P1K93xLxpyKWPucy7VW7Mf9csUNtPoV+uhGw6U+tNjK4Db+qqCU9XieishG+l/TO4oM
-         Ha70mziVnWevShhnwBL5SncmAcEmZqwKjgD4xyStY2ZCtyf8Ebf379t0c7OAbCzxfvbm
-         S+U+Nlb3dsH0wRR9DjuP3IQQhiSHd7NoV7O4EJQyJ2+iNf6SpKwn+7INSoowegpZ3GDq
-         haGA==
-X-Gm-Message-State: ANoB5pnovpyQDxfCbnSoGmxldxsAuy5vhNYg9m4xvQRHrlHEVrdYz4+V
-        z++0EpwEQ+FUNzFvKGgK6+Q=
-X-Google-Smtp-Source: AA0mqf7SUmshliU5Vd590jvKFPnvm1M+dCWq120e8JWYZFkQ1NPx24+qr/n0vnjvTgoNYHNHbXNVZw==
-X-Received: by 2002:a05:6870:4b91:b0:142:fe1c:7a4 with SMTP id lx17-20020a0568704b9100b00142fe1c07a4mr34038313oab.114.1670181640695;
-        Sun, 04 Dec 2022 11:20:40 -0800 (PST)
-Received: from ?IPV6:2603:8081:2802:9dfb:b9b:12f2:9a60:2073? (2603-8081-2802-9dfb-0b9b-12f2-9a60-2073.res6.spectrum.com. [2603:8081:2802:9dfb:b9b:12f2:9a60:2073])
-        by smtp.gmail.com with ESMTPSA id 67-20020a9d02c9000000b0066ac42bc8a4sm6569154otl.33.2022.12.04.11.20.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 04 Dec 2022 11:20:40 -0800 (PST)
-Message-ID: <7a094893-0c2e-a09b-3a10-02fe7aa8680b@gmail.com>
-Date:   Sun, 4 Dec 2022 13:20:34 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
- <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
- <Y4zm9T+WYmyWwik4@zn.tnic>
-From:   stuart hayes <stuart.w.hayes@gmail.com>
-In-Reply-To: <Y4zm9T+WYmyWwik4@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S229479AbiLEA22 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 4 Dec 2022 19:28:28 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4436911144;
+        Sun,  4 Dec 2022 16:28:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670200107; x=1701736107;
+  h=from:to:cc:subject:date:message-id;
+  bh=ZimJ2YT8aZQnfEYHIFHtH8PzMXMZ8Iim/gsgYv7dtTE=;
+  b=cAISHqtFY124yCpy7VvoCQfUV7oH0T64w4CRQ2HJoHyHM/Bb0j+x/wtV
+   T0XxXSBN5DogQGY83QzxNiLj1ouAGEYjpTP58Snt1mIw+hqvnYW9z67gi
+   nv7h6r8hI7oyd9T3N/4E4xYdxjwmjcZCh6njUfgZl0L3f0KHjxkTXSNI3
+   wiKHqQ5fxBre/HwUVp1HJ8F+iv0S9OS3AlpTKZbK33YUZjc293m3jY7Ny
+   KF6dKoylRNIIts/gdcKKOe6w6/N8ojEvCLcQwzaMmNS0TlnocrulwBlyj
+   2oM1fMm8wppiGCFKKQLTx/bl21qs2HjP+wI2KoEQWb1SZSAXSb2ntYeOV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="313880497"
+X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
+   d="scan'208";a="313880497"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2022 16:28:26 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10551"; a="639304976"
+X-IronPort-AV: E=Sophos;i="5.96,218,1665471600"; 
+   d="scan'208";a="639304976"
+Received: from kartikka-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.212.241.109])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2022 16:28:25 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc:     rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] x86/hibernate: Use fixmap for saving unmapped pages
+Date:   Sun,  4 Dec 2022 16:28:04 -0800
+Message-Id: <20221205002804.21225-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hibernate uses the direct map to read memory it saves to disk. Since
+sometimes pages are not accessible on the direct map ("not present" on
+x86), it has special case logic to temporarily make a page present. On x86
+these direct map addresses can be mapped at various page sizes, but the
+logic works ok as long as the not present pages are always mapped as
+PAGE_SIZE such that they don't require a split to map the region as
+present. If the address was mapped not present by a larger page size, the
+split may fail and hibernate would then try to read an address mapped not
+present.
 
+Today on x86 there are no known cases of this (huge not present pages on
+the direct map), but it has come up from time to time when developing
+things that operate on the direct map. It blocked making
+VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+has been a complication for various direct map protection efforts.
 
-On 12/4/2022 12:29 PM, Borislav Petkov wrote:
-> On Thu, Nov 03, 2022 at 07:19:47PM +0100, Rafael J. Wysocki wrote:
->> On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
->>>
->>> When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
->>> MSR) before the driver is registered with cpufreq.  This can be very time
->>> consuming, because it is done with a CPU hotplug startup callback, and
->>> cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
->>> on each CPU one at a time, waiting for each to run before calling the next.
->>>
->>> If cpufreq_register_driver() fails--if, for example, there are no ACPI
->>> P-states present--this is wasted time.
->>>
->>> Since cpufreq already sets up a CPU hotplug startup callback if and when
->>> acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
->>> which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
->>> exit quickly if it is loaded but not needed.
->>>
->>> On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
->>>
->>> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
->>> ---
->>>   drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
->>>   1 file changed, 3 insertions(+), 28 deletions(-)
-> 
-> ...
-> 
->> Applied as 6.2 material, thanks!
-> 
-> My 32-bit Atom doesn't like this one. Reverting fixes it ofc.
-> 
-> [   22.780260] unchecked MSR access error: WRMSR to 0x1a0 (tried to write 0x0000004364950488) at rIP: 0xf80b37d4 (boost_set_msr.isra.0+0x9c/0x114 [acpi_cpufreq])
-> [   22.781186] Call Trace:
-> [   22.781186]  boost_set_msr_each+0x15/0x1c [acpi_cpufreq]
-> [   22.781186]  __flush_smp_call_function_queue+0x132/0x1cc
-> [   22.781186]  ? sysvec_call_function+0x30/0x30
-> [   22.781186]  generic_smp_call_function_single_interrupt+0x12/0x18
-> [   22.781186]  __sysvec_call_function_single.constprop.0+0x43/0x1d8
-> [   22.781186]  sysvec_call_function_single+0x18/0x30
-> [   22.781186]  handle_exception+0x133/0x133
-> [   22.781186] EIP: finish_task_switch.isra.0+0x124/0x3a8
-> [   22.781186] Code: d8 e8 8c 16 92 00 85 f6 75 e8 a1 04 24 6c c2 85 c0 0f 8f 9b 00 00 00 89 d8 e8 e4 02 92 00 e8 53 9e 0b 00 fb 64 a1 40 f9 69 c2 <8b> 80 5c 0f 00 00 85 c0 0f 85 72 01 00 00 a1 28 24 6c c2 64 8b 15
-> [   22.781186] EAX: c32e2700 EBX: f748af40 ECX: 00000000 EDX: c1c3876e
-> [   22.781186] ESI: 00000000 EDI: 00000000 EBP: c3241f90 ESP: c3241f78
-> [   22.781186] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00000206
-> [   22.781186]  ? uevent_seqnum_show+0x1b/0x28
-> [   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
-> [   22.781186]  ? sysvec_call_function+0x30/0x30
-> [   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
-> [   22.781186]  ? sysvec_call_function+0x30/0x30
-> [   22.781186]  ? finish_task_switch.isra.0+0x124/0x3a8
-> [   22.781186]  schedule_tail+0x12/0x78
-> [   22.781186]  schedule_tail_wrapper+0x9/0x10
-> [   22.781186]  ret_from_fork+0x5/0x28
-> [   22.781186] EIP: 0xb7fba549
-> [   22.781186] Code: Unable to access opcode bytes at 0xb7fba51f.
-> [   22.781186] EAX: 00000000 EBX: 01200011 ECX: 00000000 EDX: 00000000
-> [   22.781186] ESI: 00000000 EDI: b7bfe868 EBP: 00000000 ESP: bfcfedc0
-> [   22.781186] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
-> 
+This dependency is also pretty hidden and easily missed by people poking at
+the direct map. For this reason, there are warnings in place to complain
+but not handle this scenario.
 
-I believe I see the problem... acpi_cpufreq_cpu_init is calling set_boost() directly without checking to see if acpi_cpufreq_driver.set_boost was set, so it is trying to set the MSR on CPUs that don't support it.
+One way to make this more robust would be to create some new CPA
+functionality that can know to map and reset the whole huge page in the
+case of trying to map a subpage. But for simplicity and smaller code, just
+make x86 hibernate have its own fixmap PTE that it can use to point
+to 4k pages when it encounters an unmapped direct map page.
 
-Thanks, I can submit a patch to fix this.
+Move do_copy_page() to a header such that it can be used in an arch
+breakout. Rename it hib_copy_page() to be more hibernate specific since
+it could appear in other files.
+
+Use __weak for the arch breakout because there is not a suitable arch
+specific header to use the #define method.
+
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
+
+Hi,
+
+Since none of the module space allocation overhauls ever seem to go smoothly
+and it may be awhile before VM_FLUSH_RESET_PERMS in not needed, I thought I
+would try and fix up some of its deficiencies in the meantime. This is
+pre-work for that, but I thought it was useful enough on it's own.
+
+The testing was hacking up hibernate to load some data to a huge NP mapping
+and making sure the data was there when it came back.
+
+Thanks,
+
+Rick
+
+ arch/x86/include/asm/fixmap.h |  3 +++
+ arch/x86/power/hibernate.c    | 10 ++++++++++
+ include/linux/suspend.h       | 13 +++++++++++++
+ kernel/power/snapshot.c       | 21 +++++++--------------
+ 4 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59..0fceed9a4152 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -108,6 +108,9 @@ enum fixed_addresses {
+ #ifdef CONFIG_PARAVIRT_XXL
+ 	FIX_PARAVIRT_BOOTMAP,
+ #endif
++#ifdef CONFIG_HIBERNATION
++	FIX_HIBERNATE,
++#endif
+ 
+ #ifdef CONFIG_ACPI_APEI_GHES
+ 	/* Used for GHES mapping from assorted contexts */
+diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+index 6f955eb1e163..473b6b5f6b7e 100644
+--- a/arch/x86/power/hibernate.c
++++ b/arch/x86/power/hibernate.c
+@@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
+ 	return 0;
+ }
+ 
++void copy_unmapped_page(void *dst, struct page *page)
++{
++	WARN_ON(!preempt_count());
++
++	set_fixmap(FIX_HIBERNATE, page_to_phys(page));
++	__flush_tlb_all();
++	hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
++	clear_fixmap(FIX_HIBERNATE);
++}
++
+ int relocate_restore_code(void)
+ {
+ 	pgd_t *pgd;
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index cfe19a028918..0b19b910526e 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+ asmlinkage int swsusp_save(void);
+ extern struct pbe *restore_pblist;
+ int pfn_is_nosave(unsigned long pfn);
++void copy_unmapped_page(void *dst, struct page *page);
++
++/*
++ * This is needed, because copy_page and memcpy are not usable for copying
++ * task structs.
++ */
++static inline void hib_copy_page(long *dst, long *src)
++{
++	int n;
++
++	for (n = PAGE_SIZE / sizeof(long); n; n--)
++		*dst++ = *src++;
++}
+ 
+ int hibernate_quiet_exec(int (*func)(void *data), void *data);
+ #else /* CONFIG_HIBERNATION */
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2a406753af90..ccf123b5019c 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+ 	return n;
+ }
+ 
+-/*
+- * This is needed, because copy_page and memcpy are not usable for copying
+- * task structs.
+- */
+-static inline void do_copy_page(long *dst, long *src)
++void __weak copy_unmapped_page(void *dst, struct page *page)
+ {
+-	int n;
+-
+-	for (n = PAGE_SIZE / sizeof(long); n; n--)
+-		*dst++ = *src++;
++	hibernate_map_page(page);
++	hib_copy_page(dst, page_address(page));
++	hibernate_unmap_page(page);
+ }
+ 
+ /**
+@@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
+ static void safe_copy_page(void *dst, struct page *s_page)
+ {
+ 	if (kernel_page_present(s_page)) {
+-		do_copy_page(dst, page_address(s_page));
++		hib_copy_page(dst, page_address(s_page));
+ 	} else {
+-		hibernate_map_page(s_page);
+-		do_copy_page(dst, page_address(s_page));
+-		hibernate_unmap_page(s_page);
++		copy_unmapped_page(dst, s_page);
+ 	}
+ }
+ 
+@@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 	if (PageHighMem(s_page)) {
+ 		src = kmap_atomic(s_page);
+ 		dst = kmap_atomic(d_page);
+-		do_copy_page(dst, src);
++		hib_copy_page(dst, src);
+ 		kunmap_atomic(dst);
+ 		kunmap_atomic(src);
+ 	} else {
+-- 
+2.17.1
+
