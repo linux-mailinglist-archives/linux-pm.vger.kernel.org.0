@@ -2,76 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629406435A8
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 21:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B456436B3
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 22:21:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233236AbiLEU3d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 15:29:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36784 "EHLO
+        id S232916AbiLEVVI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 16:21:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiLEU3c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 15:29:32 -0500
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE892A25A;
-        Mon,  5 Dec 2022 12:29:31 -0800 (PST)
-Received: by mail-ej1-x633.google.com with SMTP id vp12so1278296ejc.8;
-        Mon, 05 Dec 2022 12:29:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iF8+b4oOLJzfCMJAyK34nfIu5+WDu75TlYxOjfJ4OOw=;
-        b=lJlS2gST7Fd/dDSeFwi1xRtVoo19ol6NMhB/uPMdYM+JQasi25cOxfUiX4a1h7i3XR
-         gebaHTDuVuHRz1NWePyu6ccKXDTxl9O59zBlWUykaQbBcHEPdYdmEUkTWoFWgr2+A/r3
-         spYYr5+JjveEkW7P9JSZS001vD40Myl2qUrERo1unhEHH8f6ptj6Wb9ePMgF2OX1nvCs
-         2DUADnqt0n8X1ZcHVY8+Bp/e4jrLgh3F6tYt7U4jgkg2Sq6Wq38XlLODXWQ8lIQDaJMi
-         IMzKaA3n3rbIaJn8Glf5bLzgrcojlbYrmAwv5MNXF2nwExEfC8OmrRZUYS27H006hMZ2
-         Awtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:references:cc:to:from:subject
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iF8+b4oOLJzfCMJAyK34nfIu5+WDu75TlYxOjfJ4OOw=;
-        b=EIOVFGox12vC5G3LAH5mp88tMQuGDlkuqZrETNeGloF1fLNPRdVweLUbWuMUmGiGEc
-         2Y0I/UF6oAe15iIjU6O8j6X38TI4LmrVwJZE59w2ING8g0RmzSvH0IspTztsbBc1meq8
-         Gg1+hoCaYXAKrgHpHz5PWVxI58QdwaV9pYAfm+3VvvK1/Jy7DVnI2YTxA9HFL/zh6Sh7
-         BnW7ZEnqvTlBA4aellOBgNW4/Pm385InnclqxhOKO7o0PasdlTqyDpcNmAg40i/6YAQE
-         aT9Al5fAEbBxXOe0oPGr6piiML2fUIPUbMaCo6Zyx+4kFpgY1iPGgRBrf8FjNxyMWtuc
-         Cy6Q==
-X-Gm-Message-State: ANoB5pnD2kKevzBsTjwNaGFjJNaFIPMbx/AXY+kQ7yPW23aLXd7I4NYv
-        6C/dhqytsX91DuVQ83C+GmU=
-X-Google-Smtp-Source: AA0mqf5xGXWBdK2CtWvcPyPy+O0GCKJmvoVnT18A8LprlMrZPX6+a0B5znG1yBwpo7gVgZaSgECDUQ==
-X-Received: by 2002:a17:906:d78d:b0:7c0:fa81:ac42 with SMTP id pj13-20020a170906d78d00b007c0fa81ac42mr4059147ejb.526.1670272170168;
-        Mon, 05 Dec 2022 12:29:30 -0800 (PST)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id dy25-20020a05640231f900b004643f1524f3sm193986edb.44.2022.12.05.12.29.29
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 05 Dec 2022 12:29:29 -0800 (PST)
-Subject: Re: [PATCH] usb: phy: add dedicated notifier for charger events
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     Greg KH <gregkh@linuxfoundation.org>, felipe.balbi@linux.intel.com
-Cc:     sre@kernel.org, orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
-        zhang.lyra@gmail.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@opensource.cirrus.com,
-        linux-usb@vger.kernel.org, tony@atomide.com,
-        Pavel Machek <pavel@ucw.cz>
-References: <1668430562-27114-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <Y3JpfDU7T2Ks/H4m@kroah.com> <ec4edd51-3915-a798-2310-8ceadcd8152f@gmail.com>
- <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
-Message-ID: <af63dc7c-6641-13a3-067f-c58923ee510e@gmail.com>
-Date:   Mon, 5 Dec 2022 22:29:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+        with ESMTP id S231156AbiLEVVH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 16:21:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6742224BE1;
+        Mon,  5 Dec 2022 13:21:04 -0800 (PST)
+Received: from mercury (unknown [185.209.196.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2A3CB66015B4;
+        Mon,  5 Dec 2022 21:21:03 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670275263;
+        bh=yZ1n3g/TSJjCi84p9pjKVWPvGbn2hvORKezmMbo0dSg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LR5y41FJKwR6V4TCoOJBGsIjIdLh5jW5VlCZXgaXsWn+DYysi+8QzId+Cc7PyUVZf
+         +ulkePN40TWCHVysoqlea5VLOpat/IUxuh4LWHt9FEoIAzH/Ph736/cLv3xGhvIFRL
+         FZ8zSuzQucky9s2tLpAznxsDuTCmoT3chzFRlFQXt6lzeZKZ6Iy/RcOr12qG2c3HNi
+         7vgH6NM7TC1+W5vx+0++M0oW14SHcLyCPDfdt+MNj5F0FyJuHLejy7ApXim9uzQtjq
+         rTZuDfhQHDsNaLXttsmj/RAwu5dGBQbCX62yMNrVE0RUCkHuLBFENo9wFMQ6HLIEEb
+         8zoRoZXzydbaA==
+Received: by mercury (Postfix, from userid 1000)
+        id 6C1611060F2F; Mon,  5 Dec 2022 22:21:00 +0100 (CET)
+Date:   Mon, 5 Dec 2022 22:21:00 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Hermes Zhang <Hermes.Zhang@axis.com>
+Cc:     kernel <kernel@axis.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] power: supply: bq256xx: Remove init ichg/vbat with max
+ value
+Message-ID: <20221205212100.mldqqlv3mp5z7gwg@mercury.elektranox.org>
+References: <20221129090112.3451501-1-chenhuiz@axis.com>
+ <20221129152715.4hwtobuv57hrndzu@mercury.elektranox.org>
+ <60ca0aa6-508a-4350-f892-98d1368e3783@axis.com>
+ <20221203010303.it5urfo2i7pj4n3n@mercury.elektranox.org>
+ <cf37715e-8bff-b38c-cee9-fdcc3b1d3a6b@axis.com>
 MIME-Version: 1.0
-In-Reply-To: <590de096-5843-eab2-a48c-ca2742cb329b@gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="icjjtdliya2ciysi"
+Content-Disposition: inline
+In-Reply-To: <cf37715e-8bff-b38c-cee9-fdcc3b1d3a6b@axis.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,115 +61,112 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-ping
 
-On 16.11.22 г. 9:11 ч., Ivaylo Dimitrov wrote:
-> 
-> 
-> On 14.11.22 г. 18:46 ч., Ivaylo Dimitrov wrote:
->> Hi,
->>
->> On 14.11.22 г. 18:14 ч., Greg KH wrote:
->>> On Mon, Nov 14, 2022 at 02:56:02PM +0200, Ivaylo Dimitrov wrote:
->>>> usb_phy::notifier is already used by various PHY drivers (including
->>>> phy_generic) to report VBUS status changes and its usage conflicts with
->>>> charger current limit changes reporting.
->>>
->>> How exactly does it conflict?
->>>
->>
->> see below
->>
->>>> Fix that by introducing a second notifier that is dedicated to usb 
->>>> charger
->>>> notifications. Add usb_charger_XXX_notifier functions. Fix charger 
->>>> drivers
->>>> that currently (ab)use usb_XXX_notifier() to use the new API.
->>>
->>> Why not just set the notifier type to be a new one instead of adding a
->>> whole new notifier list?  Or use a real callback?  notifier lists are
->>> really horrid and should be avoided whenever possible.
->>>
->>
->> Not sure what you mean by "notifier type', but if that is that val 
->> parameter of atomic_notifier_call_chain(), the way it is used by usb 
->> charger FW:
->>
->> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy.c#L132
->>
->> is not compatible with:
->>
->> https://elixir.bootlin.com/linux/latest/source/drivers/usb/phy/phy-generic.c#L185 
->>
->>
->> for example, IIUC.
->>
->> The former wants to send max current as val, while latter sends event 
->> type as val. Sure, I may create some kind of hack, like using the MSB 
->> to denote charger events, but that doesn't feel right.
->>
->> Or, shall I do something else and fix the usage all over the place? 
->> Please elaborate.
->>
-> 
-> Digging further into that, it seems phy-ab8500-usb.c is also using 
-> usb_phy::notifier in non-standard way, it sends events from 
-> ux500_musb_vbus_id_status instead of usb_phy_events. I don't know the 
-> history behind, but right now we have at least 3 incompatible usages of 
-> usb_phy::notifier:
-> 
-> 1. Most of the phy and charger drivers use usb_phy_events as notifier type
-> 
-> 2. phy-ab8500-usb.c uses ux500_musb_vbus_id_status as notifier type, I 
-> am not the only one to hit that it seems 
-> https://elixir.bootlin.com/linux/v6.1-rc5/source/drivers/power/supply/ab8500_charger.c#L3191 
-> 
-> 
-> 3. USB charger framework uses max charging current as notifier type.
-> 
-> Moreover, a charger driver in a system that has gadget drivers support 
-> and phy that has extcon charger cable detection support and registers to 
-> phy notifier, will inevitably receive (1) and (3) types of 
-> notifications, without any way to distinguish I was able to find.
-> 
-> I don't really see how those can be merged to use one notifier only, 
-> without fixing most of USB phy and gadget drivers and half of charger 
-> drivers. Not that I like adding the second notifier, I just don;t see 
-> other way.
-> 
-> Regards,
-> Ivo
-> 
->> In regards to callback - I didn't want to come-up with a whole new 
->> API, but just fix the current one. Also, a single callback will not be 
->> enough - imagine a case with 2 batteries that have to be charged by a 
->> single USB port, so 2 separate charger devices, most-probably. We will 
->> have to keep a list of callback functions somehow. I admit my lack of 
->> knowledge, but, do we already have such API to use?
->>
->>>> Fixes: a9081a008f84 ("usb: phy: Add USB charger support")
->>>>
->>>> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
->>>
->>> You can't have a blank line between there, checkpatch.pl should have
->>> complained.
->>>
->>
->> it didn't:
->>
->> ./scripts/checkpatch.pl 
->> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch
->> total: 0 errors, 0 warnings, 90 lines checked
->>
->> 0001-usb-phy-add-dedicated-notifier-for-charger-events.patch has no 
->> obvious style problems and is ready for submission.
->>
->> Will fix, if I am to send v2
->>
->> Thanks,
->> Ivo
->>
->>> thanks,
->>>
->>> greg k-h
->>>
+--icjjtdliya2ciysi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Mon, Dec 05, 2022 at 03:23:53AM +0000, Hermes Zhang wrote:
+> Init the ichg and vbat reg with max value is not good. First the chip
+> already has a default value for ichg and vbat (small value). Init these
+> two reg with max value will result an unsafe case (e.g. battery is over
+> charging in a hot environment) if no user space change them later.
+>=20
+> Signed-off-by: Hermes Zhang <chenhuiz@axis.com><mailto:chenhuiz@axis.com>
+> ---
+>=20
+>=20
+> It's the driver's task to setup safe initial maximum values.
+> Pre-kernel values may or may not be safe if you consider things
+> like kexec. If you get unsafe values programmed, then fix the
+> values instead.
+>=20
+> -- Sebastian
+>=20
+>=20
+>=20
+> The constant_charge_current_max_ua is either from dts or default value
+> for each chip in the code, but I guess I could ot change them because it
+> has their own meaning (it will be used to check if the setting is valid
+> or not). Do you mean I can set some other value here instead of
+> constant_xxx_max?
+>=20
+>=20
+>=20
+> You can just change the DT value to something safe as it is meant to be?
+>=20
+>=20
+> Hi,
+
+Please use proper quoting.
+
+> I tried it but it doesn't work. As the property in dts (constant_charge_c=
+urrent_max_microamp
+> and constant_charge_voltage_max_microvolt) means the max current and volt=
+age in CC phase, if
+> I change them to a safe(small) value, we could not apply any vlaue bigger=
+ than them in the
+> furture:
+
+Right, because the bigger values are not safe.
+
+> in
+> bq256xx_set_ichg_curr()
+>=20
+> ichg =3D clamp(ichg, BQ256XX_ICHG_MIN_uA, ichg_max);
+>=20
+> So the DT value are not match/sutiable for what we want to set here. Eith=
+er we introduce two
+> new DT property (for init purpose) to set here or we just remove the sett=
+ing here as the chip
+> already has the default values.
+
+There are no chip defaults if you use kexec.
+
+I'm trying to read between the lines. My understanding is, that you
+have some kind of userspace based solution to monitor the charging
+process and reduce the current if it gets dangerous. This process
+should use higher charge currents then what is considered safe; when
+it's not running charging should not go above the safe threshold.
+
+This effectively means, that you want to take over the decision what
+is considered safe to userspace. So I suggest adding a module parameter
+to disable the safety clamp like this:
+
+static unsigned bool no_safety =3D false;
+module_param(no_safety, bool, 0644);
+MODULE_PARM_DESC(no_safety, "allow charge currents/voltages considered unsa=
+fe by the kernel [default: disallowed]");
+
+=2E..
+
+int ichg_max =3D bq->init_data.ichg_max;
+if (no_safety)
+    ichg_max =3D bq->init_data.ichg_chip_max;
+
+-- Sebastian
+
+--icjjtdliya2ciysi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOOYLgACgkQ2O7X88g7
++pqcLhAAp68cKmwqkijxcISHP0G69lgr9wDaxmI8FQxiWiREZSHipD7wYP0ViNy1
+nyOsaOakKIkSDbxwyzutJHvv5+kmZAghwRcrPaI04FXuSTJPf1jnGirCcRFi366h
+WNyrzUdk+i7TkG0OMDMK8phvkKp5HGrAS7CuL97pB78lmTc0DPGHJ8AsGpb9sUK2
+tLGCrhacg4BSzaR2nwSIbHSvqkHxfPsbOTolze+zgz3/PmYJhXqqnjCsem9UhcKk
+An3+fWUORKbTEmT+m7eH/P9HZtQ9x+Y1vepgNhEIh9x9/XGqgbdtDRxheSkHdazI
+CV1e2dOPLEoRg2hNmYPd2fU3lW0wjcyjaOkKp6FIHTij3FvsHkNZqKdYygXVapV+
+Yqz+HUp3a201vdbBmzDxTMSjdl2eWpJm0cFoNtm+sITVgJ4rOGc6xvS2cgE+uMqz
+pqSSMRqGI6bdWYqa+aNOOXhDjp5wRhbBiHwwbUEtI6FnfYqmz6xMqNprWurE/DC1
+Q2ZlOI/SjZZaAQbNVfUYJRsA5ClMPcxDdPlhOrnKr/p0GkMKjiHVPF/NxOFOPQ6u
+Z1jcNGTvTTCt2cM3xWanplaKjm8v7KHbGAaYyojY+hi6QmqQ48kNlILorgiBKAEs
+bx7X0DLAv2p0s1nbv6FJps+OKFbLGqVZ+quXPppDuakC9OUphDM=
+=2hXN
+-----END PGP SIGNATURE-----
+
+--icjjtdliya2ciysi--
