@@ -2,139 +2,213 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82AE643422
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 20:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B69CF6435A1
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 21:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234899AbiLETmU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 14:42:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45066 "EHLO
+        id S231855AbiLEU2X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 15:28:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234943AbiLETly (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 14:41:54 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FCBB6373
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 11:39:33 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id l26so3354595wms.4
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 11:39:33 -0800 (PST)
+        with ESMTP id S230459AbiLEU2W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 15:28:22 -0500
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48FE27DF8;
+        Mon,  5 Dec 2022 12:28:20 -0800 (PST)
+Received: by mail-ej1-x62b.google.com with SMTP id td2so1302600ejc.5;
+        Mon, 05 Dec 2022 12:28:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7pzik94DCRnikniychtCYn/if7UtyQkTWFCyd0BXZAs=;
-        b=mPhxALAdZmhXA3LNUW3pO/6N9g17MLwyztZmXWZVb6a+DOYDAztdnk9+7GRr2lj+ON
-         g3Y0gaqlIYyK/dkcOudswwzJYkV4QDFemDAKFOZfsxvEDrRuEjyHENJguwDr9rneRstQ
-         Ys/AJ4BPPEWzUWUgGjyHCjTxK4WjajfsVRjLXweIKCPHc4b78j6VizaBs97dSVp/C2Wr
-         DutF4W6xrJ9/AQ15NTZHpvCKMvVTx0MJokJnFrUyyrCJn29dWhmWmnTYaJIQAYF8vkik
-         kVbQT0V0Gi2ZLbKIsBVfaoZJYRpYr41h4whRPg/iNg0swzNE/nmLIdcYYFZ9ixr3heC+
-         uHGw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BOm4Ju1oY7JNly88Z9jr4bM+kyrgfVTIA8UOp54ZnS8=;
+        b=VoAZ9iRnD7OWa2NtOuGYMpK0lhHrmoL0kGMEa9eNe+kBBDUPRiwG2SEXWZ3HZhymRZ
+         TmuVE3fZ0G9roCSFUCFHlfFzZm0eBhGZTL3kG/kJ0cLhfMHQHshEcCQN986OxRMps/ir
+         CaMTyuUMgat2EzwzsuAGs8KpRZYr4/Dzk5eqqwg9pNy2vkOLTA8mKwjzQ0suSc/xOAhX
+         Ca8HU7nBwtb7YtUcX4aXCp4EE11D4itlLwoSMM8BwiJcTOvQp7j5GSl9cUI8k6nP711p
+         9LP4gJA71MTAedmrBGuELhy4njVE2ol354w/xa6GqnZM/vZ+seorNynJJ5suFCK8nnRT
+         31EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7pzik94DCRnikniychtCYn/if7UtyQkTWFCyd0BXZAs=;
-        b=mVnlNNNY1Eb0/Ga5HgAGxmpYQ9eWDqpZlIh3mEh6z+jXt1LgSTaqcKFIdnMTcJUAq9
-         oakkRCeNkG4VTJg2H9XEnxRD4Q+HyOLsyDq/lArUZ9eg9h8GGYj2Ac+xnm41/bYGOZpv
-         K0Y6nH50CMdzfOoyDC+vQXsrQE6K+qJpzFRK7aTC7ql2rXtwc9D4+Wi+w/E2kWwOq/Vs
-         KkbYEAaQXUE4PA7WOyTSVSqdVoBtkLG4XKnu+tT4QnouLgShBdu3fb1QOGJtEgia3i3r
-         rHIE6DAoBCLgm7F60Wirg4x/VvBiIkj5IBFMvEdXPbOoUuzY3YRAmGAGGwUUB4Ff5E1c
-         cBwA==
-X-Gm-Message-State: ANoB5plNE//Q5J2rTpdw5fGprcfOTQ82V28iWX6PJzdt2bfqMSflMshr
-        PSbpknHBV1+/LleUzYu8ivdrHA==
-X-Google-Smtp-Source: AA0mqf7D6o5HZCbdZtrrkeiqgEkjfSmeglDG8CxGKl4IAXFIfOgqAXoQLydm+9jhl4i4m7nwJHIssA==
-X-Received: by 2002:a05:600c:1da2:b0:3cf:147d:ad9a with SMTP id p34-20020a05600c1da200b003cf147dad9amr48581382wms.33.1670269171966;
-        Mon, 05 Dec 2022 11:39:31 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id v14-20020a05600c444e00b003a1980d55c4sm23867622wmn.47.2022.12.05.11.39.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 11:39:31 -0800 (PST)
-Message-ID: <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
-Date:   Mon, 5 Dec 2022 20:39:29 +0100
+        bh=BOm4Ju1oY7JNly88Z9jr4bM+kyrgfVTIA8UOp54ZnS8=;
+        b=Gp63bIV7pb5OfzfmF3qd+La4E9RhP58FODFLfZr+KhzEa8o1naqRnJr3LPasnDHkx8
+         OIpG1CPBU0ypGP58whi5YI1KKYzh9Cu9pMl00xYbuOR/pgLnLzTqj0gSmCFiF3Fe9Vm/
+         bHKPEPMoEFq3NQWnXhZHTTGOiMzbJQKEa9XrWyU2LOLIjA/nwBjDTUFVlp/88X4rHwwy
+         H8GwHzklFtr81e/J6oTTQGuX4rZroU6rmj0dOBfEHKqHjB87VoOS7X2N26+BChQTX8d9
+         X+AnKXpLbfVkacNd4n9gpp4U3sTeuKXgXdR1XA5sCTkdDmAk+NZv6rMkwsU35DN/bQqD
+         d8Pw==
+X-Gm-Message-State: ANoB5plVkfXbAWF4gw8WV86NyOM54PmEFKh4p+xRjM/wHHMT4GXEr5Zq
+        vALB98ZH1c88ch5V6KTmGp4ugsMJ7Mo=
+X-Google-Smtp-Source: AA0mqf4t87c1wxtRGXDTt0NYKzSKRwqAVQGWw+m0qslWVZxokhkcz3N3ZAONdmH1WEZ/+JxjRNNaWA==
+X-Received: by 2002:a17:906:9f10:b0:7ad:86f9:1d70 with SMTP id fy16-20020a1709069f1000b007ad86f91d70mr49313297ejc.179.1670272099322;
+        Mon, 05 Dec 2022 12:28:19 -0800 (PST)
+Received: from [192.168.1.10] ([46.249.74.23])
+        by smtp.googlemail.com with ESMTPSA id gh22-20020a170906e09600b007bd7178d311sm6592437ejb.51.2022.12.05.12.28.18
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 05 Dec 2022 12:28:18 -0800 (PST)
+Subject: Re: [PATCH 3/3] power: supply: cpcap_battery: Read battery parameters
+ from nvram
+To:     sre@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tony@atomide.com, philipp@uvos.xyz
+References: <1667647544-12945-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <1667647544-12945-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Message-ID: <6d5e2890-a86b-1b9b-bb8f-474838d9bd86@gmail.com>
+Date:   Mon, 5 Dec 2022 22:28:02 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 Thunderbird/60.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <1667647544-12945-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+ping
 
-Hi Amjad,
-
-
-On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
-
-[ ... ]
-
->>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>    
->>>    	platform_set_drvdata(pdev, mt);
->>>    
->>> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>> -					      &mtk_thermal_ops);
->>> -	if (IS_ERR(tzdev)) {
->>> -		ret = PTR_ERR(tzdev);
->>> -		goto err_disable_clk_peri_therm;
->>> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>> +		if (!tz)
->>> +			return -ENOMEM;
->>> +
->>> +		tz->mt = mt;
->>> +		tz->id = i;
->>> +
->>> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>> +							     &mtk_thermal_ops :
->>> +							     &mtk_thermal_sensor_ops);
->>
->> Here you use again the aggregation
-> I addressed this concern in V6, could you please take a look and let me
-> know what you think [0].
+On 5.11.22 г. 13:25 ч., Ivaylo Dimitrov wrote:
+> Formulas were taken from android blob
 > 
-> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
-
-May I misunderstanding but AFAICS, this patch is setting the 
-mtk_thermal_ops if the sensor id is zero. The get_temp is computing the 
-max temperature in this ops which is what we don't want to do.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+> Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+> ---
+>   drivers/power/supply/cpcap-battery.c | 88 ++++++++++++++++++++----------------
+>   1 file changed, 48 insertions(+), 40 deletions(-)
+> 
+> diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
+> index ca6ee2b..92aa66c 100644
+> --- a/drivers/power/supply/cpcap-battery.c
+> +++ b/drivers/power/supply/cpcap-battery.c
+> @@ -74,9 +74,6 @@
+>   
+>   #define CPCAP_BATTERY_CC_SAMPLE_PERIOD_MS	250
+>   
+> -#define CPCAP_BATTERY_EB41_HW4X_ID 0x9E
+> -#define CPCAP_BATTERY_BW8X_ID 0x98
+> -
+>   enum {
+>   	CPCAP_BATTERY_IIO_BATTDET,
+>   	CPCAP_BATTERY_IIO_VOLTAGE,
+> @@ -388,22 +385,9 @@ static int cpcap_battery_cc_to_ua(struct cpcap_battery_ddata *ddata,
+>    * kernel on droid 4, full is 4351000 and software initiates shutdown
+>    * at 3078000. The device will die around 2743000.
+>    */
+> -static const struct cpcap_battery_config cpcap_battery_eb41_data = {
+> -	.cd_factor = 0x3cc,
+> -	.info.technology = POWER_SUPPLY_TECHNOLOGY_LION,
+> -	.info.voltage_max_design = 4351000,
+> -	.info.voltage_min_design = 3100000,
+> -	.info.charge_full_design = 1740000,
+> -	.bat.constant_charge_voltage_max_uv = 4200000,
+> -};
+> -
+> -/* Values for the extended Droid Bionic battery bw8x. */
+> -static const struct cpcap_battery_config cpcap_battery_bw8x_data = {
+> +static struct cpcap_battery_config cpcap_battery_mot_data = {
+>   	.cd_factor = 0x3cc,
+>   	.info.technology = POWER_SUPPLY_TECHNOLOGY_LION,
+> -	.info.voltage_max_design = 4200000,
+> -	.info.voltage_min_design = 3200000,
+> -	.info.charge_full_design = 2760000,
+>   	.bat.constant_charge_voltage_max_uv = 4200000,
+>   };
+>   
+> @@ -431,39 +415,63 @@ static int cpcap_battery_match_nvmem(struct device *dev, const void *data)
+>   static void cpcap_battery_detect_battery_type(struct cpcap_battery_ddata *ddata)
+>   {
+>   	struct nvmem_device *nvmem;
+> -	u8 battery_id = 0;
+> +	char buf[24];
+> +	u8 capacity;
+> +	u8 mul_idx;
+> +	u8 charge_voltage;
+> +	u32 v;
+> +	static const u32 multipliers[] = {20, 10, 10, 10, 10, 40, 10, 20, 40};
+>   
+>   	ddata->check_nvmem = false;
+>   
+>   	nvmem = nvmem_device_find(NULL, &cpcap_battery_match_nvmem);
+>   	if (IS_ERR_OR_NULL(nvmem)) {
+> -		ddata->check_nvmem = true;
+>   		dev_info_once(ddata->dev, "Can not find battery nvmem device. Assuming generic lipo battery\n");
+> -	} else {
+> -		char buf[24];
+> -
+> -		if (nvmem_device_read(nvmem, 96, 4, buf) < 0 ||
+> -		    strncmp(buf, "COPR", 4) != 0 ||
+> -		    nvmem_device_read(nvmem, 104, 24, buf) < 0 ||
+> -		    strncmp(buf, "MOTOROLA E.P CHARGE ONLY", 24) != 0 ||
+> -		    nvmem_device_read(nvmem, 2, 1, &battery_id) < 0) {
+> -			battery_id = 0;
+> -			ddata->check_nvmem = true;
+> -			dev_warn(ddata->dev, "Can not read battery nvmem device. Assuming generic lipo battery\n");
+> -		}
+> +		goto unknown;
+> +	}
+>   
+> +	if (nvmem_device_read(nvmem, 96, 4, buf) < 0 ||
+> +	    strncmp(buf, "COPR", 4) != 0 ||
+> +	    nvmem_device_read(nvmem, 104, 24, buf) < 0 ||
+> +	    strncmp(buf, "MOTOROLA E.P CHARGE ONLY", 24) != 0) {
+> +		dev_warn(ddata->dev, "Unknown battery nvmem device. Assuming generic lipo battery\n");
+> +		goto unknown;
+>   	}
+>   
+> -	switch (battery_id) {
+> -	case CPCAP_BATTERY_EB41_HW4X_ID:
+> -		ddata->config = cpcap_battery_eb41_data;
+> -		break;
+> -	case CPCAP_BATTERY_BW8X_ID:
+> -		ddata->config = cpcap_battery_bw8x_data;
+> -		break;
+> -	default:
+> -		ddata->config = cpcap_battery_unkown_data;
+> +	if (nvmem_device_read(nvmem, 49, 1, &mul_idx) < 0 ||
+> +	    nvmem_device_read(nvmem, 34, 1, &capacity) < 0 ||
+> +	    nvmem_device_read(nvmem, 65, 1, &charge_voltage) < 0) {
+> +		dev_warn(ddata->dev, "Can not read battery nvmem device. Assuming generic lipo battery\n");
+> +		goto unknown;
+>   	}
+> +
+> +	/* design capacity */
+> +	mul_idx -= 2;
+> +
+> +	if (mul_idx < ARRAY_SIZE(multipliers))
+> +		v = multipliers[mul_idx];
+> +	else
+> +		v = 10;
+> +
+> +	cpcap_battery_mot_data.info.charge_full_design = 1000 * v * capacity;
+> +
+> +	/* design max voltage */
+> +	v = 1000 * ((16702 * charge_voltage) / 1000 + 1260);
+> +	cpcap_battery_mot_data.info.voltage_max_design = v;
+> +
+> +	/* design min voltage */
+> +	if (v > 4200000)
+> +		cpcap_battery_mot_data.info.voltage_min_design = 3100000;
+> +	else
+> +		cpcap_battery_mot_data.info.voltage_min_design = 3200000;
+> +
+> +	ddata->config = cpcap_battery_mot_data;
+> +
+> +	return;
+> +
+> +unknown:
+> +	ddata->check_nvmem = true;
+> +	ddata->config = cpcap_battery_unkown_data;
+>   }
+>   
+>   /**
+> 
