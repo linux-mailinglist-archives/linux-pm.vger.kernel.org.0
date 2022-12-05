@@ -2,133 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 644D46428AD
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 13:42:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D376428B2
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 13:44:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbiLEMmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 07:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
+        id S231890AbiLEMoD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 07:44:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230385AbiLEMmm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 07:42:42 -0500
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7405F56
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 04:42:41 -0800 (PST)
-Received: by mail-wm1-x32b.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so9871019wmi.3
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 04:42:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wBq0xf1ib+5rVsU/RG/zffg8sAypcSuxfGRRhzzRwog=;
-        b=IQ+TxF85ix2dk31TwICOEahYelRxviIJs2I91vJQKzNosbIqkCBA3F1peo/glFipUN
-         xTjv6j0c+3ELEKvdZNQcXYQ3g3OMkJoew81Z8gLjm8lIWDJ5Hcoi3haWOiUVWF17vw9N
-         qI6t7Fp+QgTQSeXb8d+RgwPtAE1Thaxs0vTkVvGcbD/z7oK+ansLRFgO92N5NoRGvGna
-         wl1AyzIz6e5YWub5udBTo+HnqYpm8rOYmcmcC7EOm8Qzig7G7g+2TxwrQZkhiyfYLRzx
-         1pPg2/ROtVoKgjh6JvvFex9HSh0fcCAAHGqndRtq2pdJKXJa1LnSu7tuN9VE1MoECNkh
-         MmTw==
+        with ESMTP id S231916AbiLEMoC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 07:44:02 -0500
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EAF655B9;
+        Mon,  5 Dec 2022 04:44:01 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id g10so4794417qkl.6;
+        Mon, 05 Dec 2022 04:44:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wBq0xf1ib+5rVsU/RG/zffg8sAypcSuxfGRRhzzRwog=;
-        b=3jSATWnyEgqvkeBbPo2bMCUjOq2qEUqr9rDGQcpoCWDmIOZXEHg2Zi5f5y6tQpRtmS
-         HAe44hIa60cJaODf4m1dmFDm1WOs/CIuYeAiN/ZIsvxm0/M+TsqUWPyg2qzcgN+EPbmT
-         lSJeB/fE6wR9N8+t4eSq2gA1tlh/hnQ/EcpR6C6EZxooLFRYeICEJ252hCGDSnYkGQl7
-         E/Tcmx96Ov6vU7ipTB3qJXMO8xfDScEtZvRlONUPjipcWg1An/cbuT+m7Oc7OYIywT4/
-         iKWD1o0D45FvlcsvLt/14la/RSV0lpNFeAUL97QqrJTOVTSxOte4U75fZ6zG1h1XTUyD
-         GuCw==
-X-Gm-Message-State: ANoB5pkZO57pEUcs3uBWipWNPuXMtpPwrWsKtg/LNJh3P4nbotAA4SKi
-        fVwfDXbF7r/5ogIuZneEykE5ow==
-X-Google-Smtp-Source: AA0mqf67Bcdu4x+N7rcLCItnV2vvyODsCAzYBgt0W9/YevLByMxiT7zcuwZvLU4ITpwtPup7R2Qa5w==
-X-Received: by 2002:a05:600c:a3a2:b0:3cf:7267:5b40 with SMTP id hn34-20020a05600ca3a200b003cf72675b40mr60542237wmb.164.1670244159517;
-        Mon, 05 Dec 2022 04:42:39 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id c2-20020a05600c0a4200b003cfd4cf0761sm23298106wmq.1.2022.12.05.04.42.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 04:42:39 -0800 (PST)
-Message-ID: <97651945-428e-c667-b7d8-7e627f900d05@linaro.org>
-Date:   Mon, 5 Dec 2022 12:42:38 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TzUzCOp5X19qeZL1cceQwqgkE2PSOUqJ0E86UtOHRyA=;
+        b=SP9lITzDqy5eX7H4sqNy5xHmfdl8TBUlplVspn6L1KswcRtTJcLHwhVl4gBBstf3ML
+         VzUg+fklykSsQIXHh43vReEzTEYhUadJw81l1mYmDyIGwriacFp1+2XLwn8RWyyIPjuJ
+         QIJQNGuYiThVY4MhKuROBHNWJOiv9ZvTrdxEBwakaseP8aIKwZfZqe+96rjwNmClGGqx
+         GBK3HgEufrby6Z7+ylEWNqzse7c/y+eEqmxdlXSLmTTEoU2TSaNccFHjDbSdlEFJJwSK
+         WLLcH5ufd9RuZgV8/08/QNw3qKjbNkwI60l6DuR2FsBKHXWXpBLsnh427I6yjgZr2wmf
+         u8Gw==
+X-Gm-Message-State: ANoB5pnOf6AjAWVGqfCSiYXc25tSpOADnhHwkPbp31Ugk4cmuIr7MLSl
+        RIJjX57keDeglf/vWjC9pGgux5tp0cOwPi0vfpc=
+X-Google-Smtp-Source: AA0mqf7S7sVxeiHwSk0PWz9FjQsjzPmSWEmNWlCSfo35QAYSIjKR/w40D+fWE7Xl8AAOqsw1/bu/5QeSfAflW3D8jGM=
+X-Received: by 2002:a05:620a:22fa:b0:6fb:c38e:e5dd with SMTP id
+ p26-20020a05620a22fa00b006fbc38ee5ddmr72744089qki.23.1670244240586; Mon, 05
+ Dec 2022 04:44:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2 08/15] thermal/drivers/tsens: Drop single-cell code for
- msm8939
-Content-Language: en-US
-To:     Vincent Knecht <vincent.knecht@mailoo.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
+References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+ <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
+ <Y4zm9T+WYmyWwik4@zn.tnic> <7a094893-0c2e-a09b-3a10-02fe7aa8680b@gmail.com>
+In-Reply-To: <7a094893-0c2e-a09b-3a10-02fe7aa8680b@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Dec 2022 13:43:45 +0100
+Message-ID: <CAJZ5v0gthM-shi9udDmjiknKV29DYOr5o6b4b=taJEwZedM5=w@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+To:     stuart hayes <stuart.w.hayes@gmail.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-References: <20221204055909.1351895-1-dmitry.baryshkov@linaro.org>
- <20221204055909.1351895-9-dmitry.baryshkov@linaro.org>
- <2186df0393c6cf4dab88772aceed7202090f5a1d.camel@mailoo.org>
- <b0d37b049ebedd5e04f69d505afb36ab6f0a1492.camel@mailoo.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <b0d37b049ebedd5e04f69d505afb36ab6f0a1492.camel@mailoo.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/12/2022 19:25, Vincent Knecht wrote:
-> Le dimanche 04 décembre 2022 à 19:42 +0100, Vincent Knecht a écrit :
->> Le dimanche 04 décembre 2022 à 07:59 +0200, Dmitry Baryshkov a écrit :
->>> There is no dtsi file for msm8939 in the kernel sources. Drop the
->>> compatibility with unofficial dtsi and remove support for handling the
->>> single-cell calibration data on msm8939.
->>
->> Could one invoke a "msm8916-like exemption" here ?
-> 
-> Ignore that, guess we'll just have to implement it like there:
-> https://lore.kernel.org/linux-arm-msm/20221204055909.1351895-9-dmitry.baryshkov@linaro.org/T/#m19cffb13114b6f4f153058e3e7a1943251acaf81
-> 
->> Also, msm8939.dtsi was submitted once [1],
->> and if helps we could send a v2 this month...
->>
->> [1] https://lore.kernel.org/linux-arm-msm/20220419010903.3109514-1-bryan.odonoghue@linaro.org/
-> 
-> Offer still stands, the current community one is here:
-> https://github.com/msm8916-mainline/linux/blob/msm8916/6.1-rc7/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> 
-> 
-> 
+On Sun, Dec 4, 2022 at 8:20 PM stuart hayes <stuart.w.hayes@gmail.com> wrote:
+>
+>
+>
+> On 12/4/2022 12:29 PM, Borislav Petkov wrote:
+> > On Thu, Nov 03, 2022 at 07:19:47PM +0100, Rafael J. Wysocki wrote:
+> >> On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
+> >>>
+> >>> When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+> >>> MSR) before the driver is registered with cpufreq.  This can be very time
+> >>> consuming, because it is done with a CPU hotplug startup callback, and
+> >>> cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+> >>> on each CPU one at a time, waiting for each to run before calling the next.
+> >>>
+> >>> If cpufreq_register_driver() fails--if, for example, there are no ACPI
+> >>> P-states present--this is wasted time.
+> >>>
+> >>> Since cpufreq already sets up a CPU hotplug startup callback if and when
+> >>> acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+> >>> which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+> >>> exit quickly if it is loaded but not needed.
+> >>>
+> >>> On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
+> >>>
+> >>> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> >>> ---
+> >>>   drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+> >>>   1 file changed, 3 insertions(+), 28 deletions(-)
+> >
+> > ...
+> >
+> >> Applied as 6.2 material, thanks!
+> >
+> > My 32-bit Atom doesn't like this one. Reverting fixes it ofc.
+> >
+> > [   22.780260] unchecked MSR access error: WRMSR to 0x1a0 (tried to write 0x0000004364950488) at rIP: 0xf80b37d4 (boost_set_msr.isra.0+0x9c/0x114 [acpi_cpufreq])
+> > [   22.781186] Call Trace:
+> > [   22.781186]  boost_set_msr_each+0x15/0x1c [acpi_cpufreq]
+> > [   22.781186]  __flush_smp_call_function_queue+0x132/0x1cc
+> > [   22.781186]  ? sysvec_call_function+0x30/0x30
+> > [   22.781186]  generic_smp_call_function_single_interrupt+0x12/0x18
+> > [   22.781186]  __sysvec_call_function_single.constprop.0+0x43/0x1d8
+> > [   22.781186]  sysvec_call_function_single+0x18/0x30
+> > [   22.781186]  handle_exception+0x133/0x133
+> > [   22.781186] EIP: finish_task_switch.isra.0+0x124/0x3a8
+> > [   22.781186] Code: d8 e8 8c 16 92 00 85 f6 75 e8 a1 04 24 6c c2 85 c0 0f 8f 9b 00 00 00 89 d8 e8 e4 02 92 00 e8 53 9e 0b 00 fb 64 a1 40 f9 69 c2 <8b> 80 5c 0f 00 00 85 c0 0f 85 72 01 00 00 a1 28 24 6c c2 64 8b 15
+> > [   22.781186] EAX: c32e2700 EBX: f748af40 ECX: 00000000 EDX: c1c3876e
+> > [   22.781186] ESI: 00000000 EDI: 00000000 EBP: c3241f90 ESP: c3241f78
+> > [   22.781186] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00000206
+> > [   22.781186]  ? uevent_seqnum_show+0x1b/0x28
+> > [   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+> > [   22.781186]  ? sysvec_call_function+0x30/0x30
+> > [   22.781186]  ? pid_list_refill_irq+0x128/0x1c0
+> > [   22.781186]  ? sysvec_call_function+0x30/0x30
+> > [   22.781186]  ? finish_task_switch.isra.0+0x124/0x3a8
+> > [   22.781186]  schedule_tail+0x12/0x78
+> > [   22.781186]  schedule_tail_wrapper+0x9/0x10
+> > [   22.781186]  ret_from_fork+0x5/0x28
+> > [   22.781186] EIP: 0xb7fba549
+> > [   22.781186] Code: Unable to access opcode bytes at 0xb7fba51f.
+> > [   22.781186] EAX: 00000000 EBX: 01200011 ECX: 00000000 EDX: 00000000
+> > [   22.781186] ESI: 00000000 EDI: b7bfe868 EBP: 00000000 ESP: bfcfedc0
+> > [   22.781186] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00000246
+> >
+>
+> I believe I see the problem... acpi_cpufreq_cpu_init is calling set_boost() directly without checking to see if acpi_cpufreq_driver.set_boost was set, so it is trying to set the MSR on CPUs that don't support it.
+>
+> Thanks, I can submit a patch to fix this.
 
-heh - here's my current
+Yes, please.
 
-https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-msm8939
-
-I've been working on clearing out blockages in legacy yaml conversions
-
-phy
-mdss-dsi-ctrl
-
-which thrown up errors on 8939
-
-I took a good bunch of feedback from the list for v1 into that dtsi - 
-there's not much left blocking v2.
-
-I'll see if I can get that out this week
-
----
-bod
-
-
+Note that I need to get this fix shortly, though, or I will just
+revert the problemating commit before the 6.2 merge window opens.
