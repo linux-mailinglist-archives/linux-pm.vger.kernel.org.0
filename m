@@ -2,116 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEAC64259A
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 10:19:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D942164264D
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 11:03:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiLEJTD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 04:19:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37690 "EHLO
+        id S230246AbiLEKDj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 05:03:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiLEJSl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 04:18:41 -0500
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612012A85
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 01:18:34 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id q1so9943485pgl.11
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 01:18:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=RU0EbWEBXFTTYKd6dj/Z3UvzwEwK63Rxz3z+L6vr4Dw=;
-        b=whJOuRXQHyEQIV4vaxbJArTYaaA92Dp1YGO7kPBbWHQ48nCetaNBUIRIVfU3F2RZNt
-         Z525IMzUv+VRUeduRo/t30JB9SQkianm77FHk0G/zJqj7pr5lIM7GY1mAZfOTBFTQs5C
-         TAxXhTl44hwetuXrx076SP1r0ksFzKdelZ1EWnxvEPJUIrgmejr2TP86WpaTaLuVdhXL
-         /nztUHNeprxeJrBBtdmtCcuPhn/NvyHIQaXNTHC5rWia9bY5mBs8K4Hf/H8627lG0EPF
-         QT/nqcLJUNyY6Eb0oaM8VNYN7CEnfh6FlfusxE2sfsD+svizrB9aAQ5GwOJraMHxD8MD
-         NNbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RU0EbWEBXFTTYKd6dj/Z3UvzwEwK63Rxz3z+L6vr4Dw=;
-        b=AEFzkTsse+nD3I2VzwmjtC8JEmggNidxua/TNiPvHWjOPewdOysvd9P5v1PQ5G9Fap
-         TV7yqdOvCG+6hAscpLkvfl1Qukv5g9owu5W5uPvQOJge/DweKCUDbuVKPkb8LJ8oHg+5
-         UJwexcOw8VR29YbDQ3s3P8Hd77+dHCxPTg7JYpMfNiXcw5c3IrlXYY/+ZonAwMDk0n/Q
-         HwwThJE4Fk3DFZ6/lXyjeIyiALlcj7vZ6xt/2qMwgG88mbTlkYA1MoXRPbMDzxaL5INR
-         r9i9MVuyQscD2rtyFeG0Sv4C7yJtYJKdSBIclzjPHKGRGcsJSVM4FLkMXNXHVyGs+DdG
-         xjhg==
-X-Gm-Message-State: ANoB5plldvMNdH5whadJu31cfWJP2xsCAgvsMWQRxG+Cbz3r9TZG4RQt
-        UN/4XXOnJFdwf1cHutYjCPXwcg==
-X-Google-Smtp-Source: AA0mqf6f1oXQeON5ByRWnaKzwD6/i/Xw+QWo6jUkq+PgCtM5/VgWj7mMIf0bBdXyyNTAZm/Rw8pnrw==
-X-Received: by 2002:a63:5016:0:b0:478:538a:aec6 with SMTP id e22-20020a635016000000b00478538aaec6mr24570161pgb.290.1670231913300;
-        Mon, 05 Dec 2022 01:18:33 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id f11-20020a17090a664b00b00216df8f03fdsm10497273pjm.50.2022.12.05.01.18.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 01:18:32 -0800 (PST)
-Date:   Mon, 5 Dec 2022 14:48:30 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Sam Wu <wusamuel@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to
- sugov_policy"
-Message-ID: <20221205091830.pttdbyts4hujkpq2@vireshk-i7>
-References: <20221110195732.1382314-1-wusamuel@google.com>
+        with ESMTP id S230133AbiLEKDi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 05:03:38 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016D7C0F;
+        Mon,  5 Dec 2022 02:03:37 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7A3CC66003EF;
+        Mon,  5 Dec 2022 10:03:35 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1670234616;
+        bh=3myGzgoCY0AcXvZSkCZnjZ8vlQZf+gbCK1V/oN4UuRk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=QM08QN3dE5CltqFKkcy3x9/UUUu1jXqS4Wc783Ombkmf5bSa9wOfp7TNXpHS1P3Cn
+         1UWQZbBu5HLHU8xGSH6Q6FfoyVqHfXjXInA5QPw3ZnBFGAWLEpocJdWrB+q7YyuRgg
+         kHXByw29h+y5tj7tkOGb5Qf2oqsRx+hSfZaN/U6dVJXiXp7fQAeZxTLtcqcnc82mYY
+         MMpnXcUzFDxdtbY3FHyuyLGD8xfFH5a1sJjQEiZG5ul5J2yg1IyJx2UOOwbxELOz5K
+         Ld8Qa4L99R1FqjADrzcrWz/Y5pia0sSKfPX2qS4BSPBlvTvrqHbo6FKLuqAFu+qpH/
+         TqTyYr9Ft3X6g==
+Message-ID: <1196ef87-0be0-6c0c-8851-e58919a81ade@collabora.com>
+Date:   Mon, 5 Dec 2022 11:03:32 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221110195732.1382314-1-wusamuel@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 06/15] thermal/drivers/tsens: Sort out msm8976 vs
+ msm8956 data
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221204055909.1351895-1-dmitry.baryshkov@linaro.org>
+ <20221204055909.1351895-7-dmitry.baryshkov@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221204055909.1351895-7-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Lukasz,
+Il 04/12/22 06:59, Dmitry Baryshkov ha scritto:
+> Tsens driver mentions that msm8976 data should be used for both msm8976
+> and msm8956 SoCs. This is not quite correct, as according to the
+> vendor kernels, msm8976 should use standard slope values (3200), while
+> msm8956 really uses the slope values found in the driver.
+> 
+> Add separate compatibility string for msm8956, move slope value
+> overrides to the corresponding init function and use the standard
+> compute_intercept_slope() function for both platforms.
+> 
+> Fixes: 0e580290170d ("thermal: qcom: tsens-v1: Add support for MSM8956 and MSM8976")
+> Cc: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/thermal/qcom/tsens-v1.c | 56 ++++++++++++++++++---------------
+>   drivers/thermal/qcom/tsens.c    |  3 ++
+>   drivers/thermal/qcom/tsens.h    |  2 +-
+>   3 files changed, 34 insertions(+), 27 deletions(-)
+> 
 
-On 10-11-22, 19:57, Sam Wu wrote:
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> index 9161d1136d01..1207c78f85c1 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -25,9 +25,6 @@ struct sugov_policy {
->  	unsigned int		next_freq;
->  	unsigned int		cached_raw_freq;
->  
-> -	/* max CPU capacity, which is equal for all CPUs in freq. domain */
-> -	unsigned long		max;
-> -
->  	/* The next fields are only needed if fast switch cannot be used: */
->  	struct			irq_work irq_work;
->  	struct			kthread_work work;
-> @@ -51,6 +48,7 @@ struct sugov_cpu {
->  
->  	unsigned long		util;
->  	unsigned long		bw_dl;
-> +	unsigned long		max;
+..snip..
 
-IIUC, this part, i.e. moving max to sugov_policy, wasn't the problem
-here, right ? Can you send a patch for that at least first, since this
-is fully reverted now.
+> @@ -357,6 +333,22 @@ static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+>   	[TRDY] = REG_FIELD(TM_TRDY_OFF, 0, 0),
+>   };
+>   
+> +int __init init_8956(struct tsens_priv *priv) {
 
-Or it doesn't make sense?
+That function should be static as it's both defined and used only in here,
+plus, brace goes on a new line. Please fix.
 
--- 
-viresh
+static int __init init_8956(struct tsens_priv *priv)
+{
+
+
+....after which....
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+Cheers,
+Angelo
