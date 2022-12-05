@@ -2,81 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64CE46426DC
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 11:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B31642718
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 12:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiLEKlK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 05:41:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42024 "EHLO
+        id S230480AbiLELCG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 06:02:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbiLEKlJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 05:41:09 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB35EB1CF
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 02:41:04 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id bg10so8403335wmb.1
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 02:41:04 -0800 (PST)
+        with ESMTP id S230350AbiLELCF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 06:02:05 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E78167D7
+        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 03:02:03 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id m14so17975945wrh.7
+        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 03:02:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+puc7EehSj2l1wYCIAHi1SQ7iD7xNS5o4aYLSrDYx5I=;
-        b=D4TMfQ78LyNXcaS0GDygRNPWw/l1RoccJb4kWCusR/c12TF3CHwn5+8B041WRmsv8a
-         7sdTh+uteBGDYQxMUs65T/uTh9VbNFmOUGQR4Kxw7m4EfeYcioB8N8pskB41o36d04mn
-         JxYxB1ZTlMjal1kf3GPFP2E7lOxg1ukh1OnJAzpeKZ25ic0sEUGPJodcB04CAWMFzWZs
-         iM+BEQDblxWF+1xtsfFlx2qHotlugHXOTtazuXk/LOsMnf9GdyHx8Y1/fXGXIv68auh8
-         +ovAK5Htg4UpbTaPBLK3bF+UNHTNL4FoE7cqO395sG4WdWfCQhULoYcju80J8xgcehos
-         svDA==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=50n9+I4ZxZRBd4Gzgxnr+F5t6glYKeTWrpBn2vhsZRE=;
+        b=k6LIQd5Iev9CRSssx9gOdJxTMz6B/GodnspKI9plJT4mnElcDfYL/C6O2GzZSQG4uJ
+         kZV8xkD0fGRN5PWuAqtrKW+FOq7Va24G6hgmtAmtVa9bzmEhHe2UqfjagkG7EC8jyNbN
+         GPC+MaUgIo8FSovEfpkMbBit5cKQjAzi7v8EvH7Zk+5SG9xuMujJCzjSL3+vP6PDs+7x
+         QC0DV55+7C6Nx5Fr7dFDrhGvgQw/4Xeqi6+MCNYCrGy1GrO9s5H6GRmHY6SiZmWd8jZ5
+         +Ge5s0T1GJTM4K4+uC29OEvM09ycL7f9KdrUq0Kak+zWvtd4oI0edjm+6k5Ym9e3GyQH
+         xrdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+puc7EehSj2l1wYCIAHi1SQ7iD7xNS5o4aYLSrDYx5I=;
-        b=MIFeNbFFCow7QdXQkAEYK4ZZ2XHCMwIq0MxaQVvIim7ObhNPTrktB17GAs1pqSRsr1
-         y7f/2L4+kEkovXYWgv7F/SEotYSPXlOwCAIJaS82DvxCfIhLk5CnQJekm3WWbvaum3if
-         LgAsLZkj6jPcW8eNqvSATGFlJ9aTw51Bm+sQEhznD3nmAEsonE6k4FDy7NJEmL31apGb
-         bHSrlpwAqxLp6xp/19yZ5eVFPMlRqaLrDQ4opRVEzRljpkLzhSdkOB7HNKKxUNAXswzW
-         2w713Yao9TzNYyfMj+pcXlUU4lCkcIQypxzHOYvno6XM8armdHw9VU18QKg3sZ7RoXQQ
-         i3Mw==
-X-Gm-Message-State: ANoB5pmOGN8SKxvSZvsQQdrt3IVfX2XgwOXb0xS8CzB8IsddQtE2/mZ4
-        wXY6KZ/FjpBloa57/Edtasto9Q==
-X-Google-Smtp-Source: AA0mqf4ZIrxBqTKxt2otvM8/XX6LTqqSsZuT5BLpT79uglDkq7o8t/uIRo+/18fAEpJ0EfAWBR7TQw==
-X-Received: by 2002:a1c:f015:0:b0:3cf:7818:b123 with SMTP id a21-20020a1cf015000000b003cf7818b123mr63209276wmb.8.1670236863061;
-        Mon, 05 Dec 2022 02:41:03 -0800 (PST)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id j9-20020a5d5649000000b0022cdeba3f83sm13685769wrw.84.2022.12.05.02.41.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Dec 2022 02:41:02 -0800 (PST)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 05 Dec 2022 11:41:00 +0100
-Message-Id: <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
-To:     "Daniel Lezcano" <daniel.lezcano@linaro.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=50n9+I4ZxZRBd4Gzgxnr+F5t6glYKeTWrpBn2vhsZRE=;
+        b=xm0lFPX1Z3Kg/SrMoOSCyPdu7EqZodnddIVaY8G1VaHyASBNALlc/Iawsfgn0R/RVc
+         08T0T3q07U+tkfPB/LICfJ6SiZCy5MWJqfCUpPW6MceI5OAVRbuwcZ7cXJCGmPRtKuM5
+         icPUUiweF+Brf352zoVeKIXRtD/nW8kTBaJtgmXeIl3bJvBzKQuz4UbVn40Iwoisl2vS
+         hX3cnb53VWbBFu5CcqKqI8YsHNkAJBylQfjKNcc0xB8Kf5UUk/M2cF9A7koC4HJAu56x
+         YRvr/131diKiDPf0GjHzXWe3vNaIWy2kMzWRK8YkdTmRuQGJlUvB9iU1uuiX7v4v/UEh
+         Iz2w==
+X-Gm-Message-State: ANoB5pmVA1LZeuYJMbXLvAwOnYT4XXPoAvG4VA8bZ7qjGS5QcrtZ5tju
+        ha0LwZFxlOw+VDT2P8OOFW87eQ==
+X-Google-Smtp-Source: AA0mqf6GC/DR99Gk2V2xSkqMAURWxlcI35iVbq9UMoouyXgZDMFQIevH6e6v28xtjFDFcu4GhmK56Q==
+X-Received: by 2002:adf:e305:0:b0:236:6089:cc5e with SMTP id b5-20020adfe305000000b002366089cc5emr40746437wrj.118.1670238122223;
+        Mon, 05 Dec 2022 03:02:02 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id j11-20020a05600c190b00b003b47e75b401sm23742162wmq.37.2022.12.05.03.02.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Dec 2022 03:02:01 -0800 (PST)
+Date:   Mon, 5 Dec 2022 11:01:59 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Amit Kucheria" <amitk@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Zhang Rui" <rui.zhang@intel.com>
-Cc:     "AngeloGioacchino Del Regno" 
-        <angelogioacchino.delregno@collabora.com>,
-        "Fabien Parent" <fparent@baylibre.com>,
-        "Matthias Brugger" <matthias.bgg@gmail.com>,
-        "Markus Schneider-Pargmann" <msp@baylibre.com>,
-        <linux-pm@vger.kernel.org>, "Rob Herring" <robh@kernel.org>,
-        "Michael Kao" <michael.kao@mediatek.com>,
-        <linux-kernel@vger.kernel.org>,
-        "Hsin-Yi Wang" <hsinyi@chromium.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-From:   "Amjad Ouled-Ameur" <aouledameur@baylibre.com>
-X-Mailer: aerc 0.13.0-78-g9db3710dd73b
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com> <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com> <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
-In-Reply-To: <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+Message-ID: <20221205110159.nd5igwvsaj55jar7@airbuntu>
+References: <20221127141742.1644023-1-qyousef@layalina.io>
+ <20221127141742.1644023-4-qyousef@layalina.io>
+ <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
+ <20221203143323.w32boxa6asqvvdnp@airbuntu>
+ <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -86,233 +82,106 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
-On Sun Dec 4, 2022 at 6:26 PM CET, Daniel Lezcano wrote:
-> On 18/11/2022 12:04, Amjad Ouled-Ameur wrote:
-> > Provide thermal zone to read thermal sensor in the SoC. We can read all=
- the
-> > thermal sensors value in the SoC by the node /sys/class/thermal/
-> >=20
-> > In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
-> > on the first read of sensor that often are bogus values.
-> > This can avoid following warning on boot:
-> >=20
-> >    thermal thermal_zone6: failed to read out thermal zone (-13)
-> >=20
-> > Signed-off-by: Michael Kao <michael.kao@mediatek.com>
-> > Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
-> > Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> > ---
-> >   drivers/thermal/mtk_thermal.c | 99 ++++++++++++++++++++++++++++++++--=
----------
-> >   1 file changed, 74 insertions(+), 25 deletions(-)
-> >=20
-> > diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_therma=
-l.c
-> > index 3a5df1440822..b1f4d19edd4f 100644
-> > --- a/drivers/thermal/mtk_thermal.c
-> > +++ b/drivers/thermal/mtk_thermal.c
-> > @@ -259,6 +259,11 @@ enum mtk_thermal_version {
-> >  =20
-> >   struct mtk_thermal;
-> >  =20
-> > +struct mtk_thermal_zone {
-> > +	struct mtk_thermal *mt;
-> > +	int id;
-> > +};
-> > +
-> >   struct thermal_bank_cfg {
-> >   	unsigned int num_sensors;
-> >   	const int *sensors;
-> > @@ -307,6 +312,8 @@ struct mtk_thermal {
-> >  =20
-> >   	const struct mtk_thermal_data *conf;
-> >   	struct mtk_thermal_bank banks[MAX_NUM_ZONES];
-> > +
-> > +	int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
-> >   };
-> >  =20
-> >   /* MT8183 thermal sensor data */
-> > @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_therma=
-l_bank *bank)
-> >   		mutex_unlock(&mt->lock);
-> >   }
-> >  =20
-> > +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
-> > +{
-> > +	u32 raw;
-> > +	int temp;
-> > +
-> > +	const struct mtk_thermal_data *conf =3D mt->conf;
-> > +
-> > +	raw =3D readl(mt->thermal_base + conf->msr[id]);
-> > +
-> > +	temp =3D mt->raw_to_mcelsius(mt, id, raw);
-> > +
-> > +	/*
-> > +	 * The first read of a sensor often contains very high bogus
-> > +	 * temperature value. Filter these out so that the system does
-> > +	 * not immediately shut down.
-> > +	 */
-> > +
-> > +	if (temp > 200000)
-> > +		return -EAGAIN;
-> > +	else
-> > +		return temp;
-> > +}
-> > +
-> >   /**
-> >    * mtk_thermal_bank_temperature - get the temperature of a bank
-> >    * @bank:	The bank
-> > @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk=
-_thermal_bank *bank)
-> >   	struct mtk_thermal *mt =3D bank->mt;
-> >   	const struct mtk_thermal_data *conf =3D mt->conf;
-> >   	int i, temp =3D INT_MIN, max =3D INT_MIN;
-> > -	u32 raw;
-> >  =20
-> >   	for (i =3D 0; i < conf->bank_data[bank->id].num_sensors; i++) {
-> > -		raw =3D readl(mt->thermal_base + conf->msr[i]);
-> > -
-> > -		if (mt->conf->version =3D=3D MTK_THERMAL_V1) {
-> > -			temp =3D raw_to_mcelsius_v1(
-> > -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> > -		} else {
-> > -			temp =3D raw_to_mcelsius_v2(
-> > -				mt, conf->bank_data[bank->id].sensors[i], raw);
-> > -		}
-> > -
-> > -		/*
-> > -		 * The first read of a sensor often contains very high bogus
-> > -		 * temperature value. Filter these out so that the system does
-> > -		 * not immediately shut down.
-> > -		 */
-> > -		if (temp > 200000)
-> > -			temp =3D 0;
-> > +		temp =3D _get_sensor_temp(mt, i);
-> >  =20
-> >   		if (temp > max)
-> >   			max =3D temp;
-> > @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk=
-_thermal_bank *bank)
-> >   	return max;
-> >   }
-> >  =20
-> > -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperat=
-ure)
-> > +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *tempe=
-rature)
-> >   {
-> > -	struct mtk_thermal *mt =3D tz->devdata;
-> > +	struct mtk_thermal_zone *tz =3D tzdev->devdata;
-> > +	struct mtk_thermal *mt =3D tz->mt;
-> >   	int i;
-> >   	int tempmax =3D INT_MIN;
-> >  =20
-> > @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_devi=
-ce *tz, int *temperature)
-> >   	return 0;
-> >   }
-> >  =20
-> > +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int=
- *temperature)
-> > +{
-> > +	struct mtk_thermal_zone *tz =3D tzdev->devdata;
-> > +	struct mtk_thermal *mt =3D tz->mt;
-> > +	int id =3D tz->id - 1;
-> > +
-> > +	if (id < 0)
-> > +		return -EACCES;
-> > +
-> > +	*temperature =3D _get_sensor_temp(mt, id);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >   static const struct thermal_zone_device_ops mtk_thermal_ops =3D {
-> >   	.get_temp =3D mtk_read_temp,
-> >   };
-> >  =20
-> > +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops =3D=
- {
-> > +	.get_temp =3D mtk_read_sensor_temp,
-> > +};
-> > +
-> >   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
-> >   				  u32 apmixed_phys_base, u32 auxadc_phys_base,
-> >   				  int ctrl_id)
-> > @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_devi=
-ce *pdev)
-> >   	u64 auxadc_phys_base, apmixed_phys_base;
-> >   	struct thermal_zone_device *tzdev;
-> >   	void __iomem *apmixed_base, *auxadc_base;
-> > +	struct mtk_thermal_zone *tz;
-> >  =20
-> >   	mt =3D devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
-> >   	if (!mt)
-> > @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_devi=
-ce *pdev)
-> >  =20
-> >   	mtk_thermal_turn_on_buffer(mt, apmixed_base);
-> >  =20
-> > +	mt->raw_to_mcelsius =3D (mt->conf->version =3D=3D MTK_THERMAL_V1) ?
-> > +				raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
-> > +
-> >   	if (mt->conf->version =3D=3D MTK_THERMAL_V2) {
-> >   		mtk_thermal_release_periodic_ts(mt, auxadc_base);
-> >   	}
-> > @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_de=
-vice *pdev)
-> >  =20
-> >   	platform_set_drvdata(pdev, mt);
-> >  =20
-> > -	tzdev =3D devm_thermal_of_zone_register(&pdev->dev, 0, mt,
-> > -					      &mtk_thermal_ops);
-> > -	if (IS_ERR(tzdev)) {
-> > -		ret =3D PTR_ERR(tzdev);
-> > -		goto err_disable_clk_peri_therm;
-> > +	for (i =3D 0; i < mt->conf->num_sensors + 1; i++) {
-> > +		tz =3D devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
-> > +		if (!tz)
-> > +			return -ENOMEM;
-> > +
-> > +		tz->mt =3D mt;
-> > +		tz->id =3D i;
-> > +
-> > +		tzdev =3D devm_thermal_of_zone_register(&pdev->dev, i, tz, (i =3D=3D=
- 0) ?
-> > +							     &mtk_thermal_ops :
-> > +							     &mtk_thermal_sensor_ops);
->
-> Here you use again the aggregation
-I addressed this concern in V6, could you please take a look and let me
-know what you think [0].
+On 12/04/22 12:35, Vincent Guittot wrote:
+> On Sat, 3 Dec 2022 at 15:33, Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > On 12/02/22 15:57, Vincent Guittot wrote:
+> >
+> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > > index 7c0dd57e562a..4bbbca85134b 100644
+> > > > --- a/kernel/sched/fair.c
+> > > > +++ b/kernel/sched/fair.c
+> > > > @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
+> > > >          *   * Thermal pressure will impact all cpus in this perf domain
+> > > >          *     equally.
+> > > >          */
+> > > > -       if (sched_energy_enabled()) {
+> > > > +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
+> > > >                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
+> > > > -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
+> > > > +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
+> > > >
+> > > >                 rq->cpu_capacity_inverted = 0;
+> > > >
+> > > > -               SCHED_WARN_ON(!rcu_read_lock_held());
+> > > > -
+> > > > -               for (; pd; pd = pd->next) {
+> > > > -                       struct cpumask *pd_span = perf_domain_span(pd);
+> > > > +               for_each_active_policy_safe(policy, policy_n) {
+> > >
+> > > So you are looping all cpufreq policy (and before the perf domain) in
+> > > the period load balance. That' really not something we should or want
+> > > to do
+> >
+> > Why is it not acceptable in the period load balance but acceptable in the hot
+> > wake up path in feec()? What's the difference?
+> 
+> This patch loops on all cpufreq policy in sched softirq, how can this
+> be sane ? and not only in eas mode but also in the default asymmetric
 
-[0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@bayli=
-bre.com/
+Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
+in the wake up path in feec()?
 
-Regards,
-Amjad
->
-> > +
-> > +		if (IS_ERR(tzdev)) {
-> > +			ret =3D PTR_ERR(tzdev);
-> > +			if (ret =3D=3D -ENODEV)
-> > +				continue;
-> > +			goto err_disable_clk_peri_therm;
-> > +		}
-> >   	}
-> >  =20
-> >   	ret =3D devm_thermal_add_hwmon_sysfs(tzdev);
-> >=20
->
-> --=20
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
+AFAICT the number of cpufreq policies and perf domains have 1:1 mapping. In
+feec() we not only loop perf domains, but we go through each cpu of each domain
+to find max_spare_cap then compute_energy(). Which is more intensive.
 
+In worst case scenario where there's a perf domain for each cpu, then we'll
+loop through every CPU *and* compute energy its energy cost in the wake up
+path.
+
+Why it's deemed acceptable in wake up path which is more critical AFAIU but not
+period load balance which is expected to do more work? What am I missing?
+
+> performance  one.
+> 
+> This inverted detection doesn't look like the right way to fix your
+> problem IMO. That being said, i agree that I haven't made any other
+> proposal apart that I think that you should use a different rules for
+> task and for overutilized and part of your problem comes from this.
+
+We discussed this before; I need to revisit the thread but I can't see how
+overutilized different than task will fix the issue. They should be unified by
+design.
+
+I'm all ears if there's a simpler way to address the problem :-)
+
+The problem is that thermal pressure on big cpu is not important from
+uclamp perspective until it is in inversion state. It is quite common to have
+a system where the medium capacity is in 500 range. If the big is under thermal
+pressure that it drops to 800, then it is still a fitting CPU from uclamp
+perspective. Keep in mind uclamp_min is useful for tasks whose utilization is
+small So we need to be selective when thermal pressure is actually helping out
+or just creating unnecessary problems.
+
+The only other option I had in mind was to do the detection when we update the
+thermal_pressure in the topology code. But that didn't look better alternative
+to me.
+
+> 
+> Then this make eas and util_fits_cpu even more Arm specific and I
+
+What is the Arm specific part about it? Why it wouldn't work on non-Arm
+systems?
+
+> still hope to merge sched_asym_cpucapacity and asym_packing a some
+> levels because they looks  more and more similar but each side is
+> trying to add some SoC specific policy
+
+Oh, it seems Intel relies on asym_packing for their hybrid support approach?
+I think sched_asym_cpucapacity was designed to be generic. If I gathered
+correctly lack of support for SMT and inability to provide energy model outside
+of DT were some required extensions.
+
+To be honest, I personally think EAS can be useful on SMP systems and it would
+be nice to enable it outside of sched_asym_cpucapacity.
+
+I'm interested to hear more about this unification idea actually. If you feel
+a bit chatty to describe in more detail how do you see this being unified, that
+could be enlightening for some of us who work in this area :-)
+
+
+Thanks!
+
+--
+Qais Yousef
