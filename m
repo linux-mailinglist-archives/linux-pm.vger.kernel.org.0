@@ -2,140 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF366428A6
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 13:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 644D46428AD
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 13:42:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231786AbiLEMkS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 07:40:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
+        id S231298AbiLEMmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 07:42:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbiLEMkI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 07:40:08 -0500
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA701A808;
-        Mon,  5 Dec 2022 04:40:07 -0800 (PST)
-Received: by mail-qk1-f174.google.com with SMTP id k2so4781867qkk.7;
-        Mon, 05 Dec 2022 04:40:07 -0800 (PST)
+        with ESMTP id S230385AbiLEMmm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 07:42:42 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7405F56
+        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 04:42:41 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id j5-20020a05600c410500b003cfa9c0ea76so9871019wmi.3
+        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 04:42:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wBq0xf1ib+5rVsU/RG/zffg8sAypcSuxfGRRhzzRwog=;
+        b=IQ+TxF85ix2dk31TwICOEahYelRxviIJs2I91vJQKzNosbIqkCBA3F1peo/glFipUN
+         xTjv6j0c+3ELEKvdZNQcXYQ3g3OMkJoew81Z8gLjm8lIWDJ5Hcoi3haWOiUVWF17vw9N
+         qI6t7Fp+QgTQSeXb8d+RgwPtAE1Thaxs0vTkVvGcbD/z7oK+ansLRFgO92N5NoRGvGna
+         wl1AyzIz6e5YWub5udBTo+HnqYpm8rOYmcmcC7EOm8Qzig7G7g+2TxwrQZkhiyfYLRzx
+         1pPg2/ROtVoKgjh6JvvFex9HSh0fcCAAHGqndRtq2pdJKXJa1LnSu7tuN9VE1MoECNkh
+         MmTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N9AByblogyksZmUUDYbnQyVNZj7XMWQtmh4r5hKiB7g=;
-        b=wxBS0fJ1lmwiwMEoEdaQWdjPpas0pU4AYBJyctcII+bk0tdHaLWW+fj+aaNpl8aKyE
-         KPRbT/6NqTH1rlECTvmlM6ozZ7LEmozTFoc0qLkJ/hMJD/mlElj6czDEXl1a6Uk1phtq
-         C/LZdkes1uDmyY2D0S3IQqVNfnCl3YF6K6DHlddd7aMYTyn/IOT6rxevDJ7RpRIjN+U8
-         Ip565WSbDQdJoa64piDmH3upYenhLOGocc83isZApXI11YX4e2Kfv7xe2B5Y/5LTKcs8
-         TLmpgxqPeyaHd4AvvxhhdJ2d/KQgiW6uiTqVhL1wzQC66CNSxGWtZ9BESipzf27gnhvC
-         zzyg==
-X-Gm-Message-State: ANoB5pk8yvrCVY/L2q9hJ9oBgsJpY/9UvduOHj3k8S3ZHxAL4g15lNQh
-        yAheUtpPWfn2qAGmo6SVgHd9CGpDcI+lwntkbAY=
-X-Google-Smtp-Source: AA0mqf6UaErJSxu/hsgPFuWBr6jR1KyzAl26lmCBDmbpS6RY6ac2om2uoXJLB0ipJg6sSc2xecUv3EMbUvjJ1JnT2to=
-X-Received: by 2002:a05:620a:4611:b0:6fa:af7e:927c with SMTP id
- br17-20020a05620a461100b006faaf7e927cmr71442383qkb.443.1670244007067; Mon, 05
- Dec 2022 04:40:07 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wBq0xf1ib+5rVsU/RG/zffg8sAypcSuxfGRRhzzRwog=;
+        b=3jSATWnyEgqvkeBbPo2bMCUjOq2qEUqr9rDGQcpoCWDmIOZXEHg2Zi5f5y6tQpRtmS
+         HAe44hIa60cJaODf4m1dmFDm1WOs/CIuYeAiN/ZIsvxm0/M+TsqUWPyg2qzcgN+EPbmT
+         lSJeB/fE6wR9N8+t4eSq2gA1tlh/hnQ/EcpR6C6EZxooLFRYeICEJ252hCGDSnYkGQl7
+         E/Tcmx96Ov6vU7ipTB3qJXMO8xfDScEtZvRlONUPjipcWg1An/cbuT+m7Oc7OYIywT4/
+         iKWD1o0D45FvlcsvLt/14la/RSV0lpNFeAUL97QqrJTOVTSxOte4U75fZ6zG1h1XTUyD
+         GuCw==
+X-Gm-Message-State: ANoB5pkZO57pEUcs3uBWipWNPuXMtpPwrWsKtg/LNJh3P4nbotAA4SKi
+        fVwfDXbF7r/5ogIuZneEykE5ow==
+X-Google-Smtp-Source: AA0mqf67Bcdu4x+N7rcLCItnV2vvyODsCAzYBgt0W9/YevLByMxiT7zcuwZvLU4ITpwtPup7R2Qa5w==
+X-Received: by 2002:a05:600c:a3a2:b0:3cf:7267:5b40 with SMTP id hn34-20020a05600ca3a200b003cf72675b40mr60542237wmb.164.1670244159517;
+        Mon, 05 Dec 2022 04:42:39 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id c2-20020a05600c0a4200b003cfd4cf0761sm23298106wmq.1.2022.12.05.04.42.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Dec 2022 04:42:39 -0800 (PST)
+Message-ID: <97651945-428e-c667-b7d8-7e627f900d05@linaro.org>
+Date:   Mon, 5 Dec 2022 12:42:38 +0000
 MIME-Version: 1.0
-References: <20221127141742.1644023-1-qyousef@layalina.io> <20221127141742.1644023-4-qyousef@layalina.io>
- <CAJZ5v0iew=_pTq-v-2EdZN==8QY3donu9YUBtRYWdL18KBxs4Q@mail.gmail.com> <20221203143216.oezd2u6dpxodpuc3@airbuntu>
-In-Reply-To: <20221203143216.oezd2u6dpxodpuc3@airbuntu>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 5 Dec 2022 13:39:52 +0100
-Message-ID: <CAJZ5v0h_uoja87NUZb-tWmG_6Fb+1bATB03VRO0Foi5nFadiVQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
- capacity inversion
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 08/15] thermal/drivers/tsens: Drop single-cell code for
+ msm8939
+Content-Language: en-US
+To:     Vincent Knecht <vincent.knecht@mailoo.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, Shawn Guo <shawn.guo@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20221204055909.1351895-1-dmitry.baryshkov@linaro.org>
+ <20221204055909.1351895-9-dmitry.baryshkov@linaro.org>
+ <2186df0393c6cf4dab88772aceed7202090f5a1d.camel@mailoo.org>
+ <b0d37b049ebedd5e04f69d505afb36ab6f0a1492.camel@mailoo.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <b0d37b049ebedd5e04f69d505afb36ab6f0a1492.camel@mailoo.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Dec 3, 2022 at 3:32 PM Qais Yousef <qyousef@layalina.io> wrote:
->
-> On 11/30/22 19:27, Rafael J. Wysocki wrote:
->
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index 7c0dd57e562a..4bbbca85134b 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
-> > >          *   * Thermal pressure will impact all cpus in this perf domain
-> > >          *     equally.
-> > >          */
-> > > -       if (sched_energy_enabled()) {
-> > > +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-> > >                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-> > > -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-> > > +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
-> > >
-> > >                 rq->cpu_capacity_inverted = 0;
-> > >
-> > > -               SCHED_WARN_ON(!rcu_read_lock_held());
-> > > -
-> > > -               for (; pd; pd = pd->next) {
-> > > -                       struct cpumask *pd_span = perf_domain_span(pd);
-> > > +               for_each_active_policy_safe(policy, policy_n) {
-> >
-> > 1. Is the "safe" part sufficient for protection against concurrent
-> > deletion and freeing of list entries?  cpufreq driver removal can do
-> > that AFAICS.
->
-> The freeing part is not safe probably.
+On 04/12/2022 19:25, Vincent Knecht wrote:
+> Le dimanche 04 décembre 2022 à 19:42 +0100, Vincent Knecht a écrit :
+>> Le dimanche 04 décembre 2022 à 07:59 +0200, Dmitry Baryshkov a écrit :
+>>> There is no dtsi file for msm8939 in the kernel sources. Drop the
+>>> compatibility with unofficial dtsi and remove support for handling the
+>>> single-cell calibration data on msm8939.
+>>
+>> Could one invoke a "msm8916-like exemption" here ?
+> 
+> Ignore that, guess we'll just have to implement it like there:
+> https://lore.kernel.org/linux-arm-msm/20221204055909.1351895-9-dmitry.baryshkov@linaro.org/T/#m19cffb13114b6f4f153058e3e7a1943251acaf81
+> 
+>> Also, msm8939.dtsi was submitted once [1],
+>> and if helps we could send a v2 this month...
+>>
+>> [1] https://lore.kernel.org/linux-arm-msm/20220419010903.3109514-1-bryan.odonoghue@linaro.org/
+> 
+> Offer still stands, the current community one is here:
+> https://github.com/msm8916-mainline/linux/blob/msm8916/6.1-rc7/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> 
+> 
+> 
 
-Well, I don't even think that the traversal part is safe against
-concurrent removal of list entries (it is safe against removal of list
-entries in the loop itself).
+heh - here's my current
 
-list_for_each_entry_safe() assumes that n will always point to a valid
-list entry, but what if the entry pointed to by it is deleted by a
-concurrent thread?
+https://git.linaro.org/landing-teams/working/qualcomm/kernel.git/log/?h=tracking-qcomlt-msm8939
 
-> I need to research this more. Do you
-> have issues against the exportation of this traversal in principle?
->
-> Switching them to be RCU protected could be the best safe option, anything
-> against that too?
+I've been working on clearing out blockages in legacy yaml conversions
 
-Not really, it just occurred to me that you may end up dealing with a
-corrupted list here.
+phy
+mdss-dsi-ctrl
 
-> I might not end up needing that. I need to dig more.
->
-> > 2. For a casual reader of this code it may not be clear why cpufreq
-> > policies matter here.
->
-> I'm looking for a way to traverse the list of capacities of the system and
-> know their related CPUs.
+which thrown up errors on 8939
 
-So why don't you mention this in a comment, for instance?
+I took a good bunch of feedback from the list for v1 into that dtsi - 
+there's not much left blocking v2.
 
-> AFAICT this information already exists in the performance domains and
-> cpufreq_policy. Performance domains are conditional to energy model and
-> schedutil. So trying to switch to cpufreq_policy.
->
-> Assuming this question wasn't a request to add a comment :-)
+I'll see if I can get that out this week
 
-Yes, it was. :-)
+---
+bod
 
-That said though, this change makes the scheduler kind of depend on
-cpufreq which feels a bit like a corner cut TBH.
 
-I do realize that cpufreq happens to be maintaining a data structure
-that turns out to be useful here, but the reason why it is there has
-nothing to do with this code AFAICS.
