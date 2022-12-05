@@ -2,240 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1169642A19
-	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 15:09:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C54DF642A43
+	for <lists+linux-pm@lfdr.de>; Mon,  5 Dec 2022 15:22:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiLEOJb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 09:09:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56796 "EHLO
+        id S231867AbiLEOV5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 09:21:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiLEOJa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 09:09:30 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 601416552
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 06:09:28 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id bx10so18827715wrb.0
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 06:09:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jpFyROjz1L+eqiyq1o9kVVnYvtLdIPNCiOE0RPzkwwo=;
-        b=1gq3ReJzxgbkMV+vHUCQ8JDB9r+kHVxenV5tMKSLdUU82/B2bh5ytPlqrYG34Oz/Zk
-         RzIkqYPwMX6vKH9Rg/OocZf0kxQXWV1ju4LEngMw87OOF7uCOUkj8/Ob5r9cmEHv24fX
-         haxsHWWo/wCt6bsEMbB6hgu8ehURKjU7jNT69xZCqT8bbEfT3JJ9v1CtD0H3+jmrbSnY
-         ykknROwYrms4f9smJH/ifqLyxriSpN9HG55JGA8PDyCA6ICKX//F1v6sY1plR/JLeZ27
-         Nuiku0vNJRxBJ/f35k9dnCdtz/hGEr4iQWs8NT6SB3Fqo2B8S8o8v2VPzunCsGJAa0b4
-         qhuA==
+        with ESMTP id S230309AbiLEOVq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 09:21:46 -0500
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11411A239;
+        Mon,  5 Dec 2022 06:21:40 -0800 (PST)
+Received: by mail-qt1-f171.google.com with SMTP id a27so11439965qtw.10;
+        Mon, 05 Dec 2022 06:21:40 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jpFyROjz1L+eqiyq1o9kVVnYvtLdIPNCiOE0RPzkwwo=;
-        b=beiXEFpGmQQB26TzGCPa/ijNz+ISLkDJLIV2hl6y6CnrVBezPvN5Y8SYp4qvHr7aDR
-         OhrAa1NvcO6iRx0/ZiNaCA82Bf9D/9mBjiLFE1hPY/cD/4r6Djpyf4c8wIyeuLEwI7AN
-         LKhQrBCxGOCpGgAM9SbhJ0iItKnoizTEq6ABISL8YCzX8Fo+8FwAmXORQB337J4Gtxq6
-         p3WKo/uyiO25xcMsyiD9hldCDARMjcl370uhKAV77CdWhpdaJvnOP2HHccYnucZ8RK8G
-         FsrCdMvCVI7mWURdsdruKrjycIprQrneKL2PQGqP5r6olT2Vvu10ivRrliCpmIQGt34y
-         4SVg==
-X-Gm-Message-State: ANoB5pnz7+j9QGor/2vujITSJIybwsid69j39oe3WCB22hYVRKPbbHa4
-        IE6H4R7IzVcZJBxhVRg6Rt7CKQ==
-X-Google-Smtp-Source: AA0mqf6FVMkKs68rdD+2cGg5Zl18rhVwCvPB9N3z4yAwOITdD/PsA2pTln0N6jUcoeFTej8oSMdO3Q==
-X-Received: by 2002:adf:f549:0:b0:242:591c:89dd with SMTP id j9-20020adff549000000b00242591c89ddmr4979579wrp.696.1670249366861;
-        Mon, 05 Dec 2022 06:09:26 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id f21-20020a1c6a15000000b003cf4d99fd2asm17254019wmc.6.2022.12.05.06.09.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 06:09:25 -0800 (PST)
-Date:   Mon, 5 Dec 2022 14:09:24 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
- capacity inversion
-Message-ID: <20221205140924.mzx62sijl3kujh53@airbuntu>
-References: <20221127141742.1644023-1-qyousef@layalina.io>
- <20221127141742.1644023-4-qyousef@layalina.io>
- <CAJZ5v0iew=_pTq-v-2EdZN==8QY3donu9YUBtRYWdL18KBxs4Q@mail.gmail.com>
- <20221203143216.oezd2u6dpxodpuc3@airbuntu>
- <CAJZ5v0h_uoja87NUZb-tWmG_6Fb+1bATB03VRO0Foi5nFadiVQ@mail.gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mTmnwF7nNYUpPF0H8ufj+wVqBqVF7NgkLQ5UXOghKzE=;
+        b=YI77pt8r745T4YtwDBpdKjxSavYwnTOqcgu3+cBfiZBWsFTNybCSLiPZkGwDzW1mir
+         BJGb5Roo2ATbxNGWsb6gWGIYvHgOWvYcfRXv3VZV22FiY9C9Ws9r9Zx4bBHP1/EvhYhu
+         jxzaF9hHwR4NYCkMitp4A9aAeF5zRIwQdG7mMv0lHuxOQllE7fc/VNoqn6rsz5M2XZbn
+         XLHXkY/TA2ZEDzQZCegt/1Nq1dJn262ucO1/OCmRsAIPU9STyxe4LPAeEfUpsl4hK/Jj
+         qA0Kh7oOJbu4ge3y9iJtakaxHG8sFp4JsCAg9wsmiR8Z3Csfrd7/uWr6Oswprhi4vfMZ
+         rqvw==
+X-Gm-Message-State: ANoB5pkVHi9JZgkt80J+QZKGExJiG4o5oSMHwOe5VhUAd8R9WmX31RZ7
+        dQRxuEFDknKhNE/AqiwuIzIyMowxHSZK9eNj1DU=
+X-Google-Smtp-Source: AA0mqf7rM1MD6wY/TBBY8HslZmhZqoRLBPXLfa3FlArzhLsDzXyY280ykAi2hlilceTzGIcTOkCUhdfYttJhfhwsOd8=
+X-Received: by 2002:a05:622a:1989:b0:3a5:7cf8:1a6e with SMTP id
+ u9-20020a05622a198900b003a57cf81a6emr76774129qtc.48.1670250100107; Mon, 05
+ Dec 2022 06:21:40 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0h_uoja87NUZb-tWmG_6Fb+1bATB03VRO0Foi5nFadiVQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <13b17bbe-8b72-8c87-0a08-073cafd04d71@gmail.com>
+In-Reply-To: <13b17bbe-8b72-8c87-0a08-073cafd04d71@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 5 Dec 2022 15:21:29 +0100
+Message-ID: <CAJZ5v0h4AnXq0BbgLWk5BGQp8Kx4FhbGOacDCxH6SNoz6bR+rA@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.2
+To:     Chanwoo Choi <cwchoi00@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Chanwoo Choi <chanwoo@kernel.org>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/05/22 13:39, Rafael J. Wysocki wrote:
-> On Sat, Dec 3, 2022 at 3:32 PM Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > On 11/30/22 19:27, Rafael J. Wysocki wrote:
-> >
-> > > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > > index 7c0dd57e562a..4bbbca85134b 100644
-> > > > --- a/kernel/sched/fair.c
-> > > > +++ b/kernel/sched/fair.c
-> > > > @@ -8856,23 +8856,20 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
-> > > >          *   * Thermal pressure will impact all cpus in this perf domain
-> > > >          *     equally.
-> > > >          */
-> > > > -       if (sched_energy_enabled()) {
-> > > > +       if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-> > > >                 unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
-> > > > -               struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-> > > > +               struct cpufreq_policy *policy, __maybe_unused *policy_n;
-> > > >
-> > > >                 rq->cpu_capacity_inverted = 0;
-> > > >
-> > > > -               SCHED_WARN_ON(!rcu_read_lock_held());
-> > > > -
-> > > > -               for (; pd; pd = pd->next) {
-> > > > -                       struct cpumask *pd_span = perf_domain_span(pd);
-> > > > +               for_each_active_policy_safe(policy, policy_n) {
-> > >
-> > > 1. Is the "safe" part sufficient for protection against concurrent
-> > > deletion and freeing of list entries?  cpufreq driver removal can do
-> > > that AFAICS.
-> >
-> > The freeing part is not safe probably.
-> 
-> Well, I don't even think that the traversal part is safe against
-> concurrent removal of list entries (it is safe against removal of list
-> entries in the loop itself).
-> 
-> list_for_each_entry_safe() assumes that n will always point to a valid
-> list entry, but what if the entry pointed to by it is deleted by a
-> concurrent thread?
+On Sat, Dec 3, 2022 at 6:55 AM Chanwoo Choi <cwchoi00@gmail.com> wrote:
+>
+> Dear Rafael,
+>
+> This is devfreq-next pull request for v6.2. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
+>
+> I'm so sorry for late pull request.
+>
+> Best Regards,
+> Chanwoo Choi
+>
+> The following changes since commit 094226ad94f471a9f19e8f8e7140a09c2625abaa:
+>
+>   Linux 6.1-rc5 (2022-11-13 13:12:55 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.2
+>
+> for you to fetch changes up to 378e392fa97e869cb5f90e42ae2959444dac7d47:
+>
+>   PM / devfreq: event: use devm_platform_get_and_ioremap_resource() (2022-12-03 08:22:12 +0900)
+>
+> ----------------------------------------------------------------
+>
+> Update devfreq next for v6.2
+>
+> Detailed description for this pull request:
+> - Add a private governor_data for governor. The private governor_data
+> is allocated and handled by governor regardless of passing the data
+> from devfreq driver via devfreq_add_device. The added private governor
+> keeps the governor own data when switching from userspace
+> governor and other governors.
+>
+> - Replace code by using defined functions of
+>   device_match_of_node and devm_platform_get_and_ioremap_resource
+>
+> ----------------------------------------------------------------
+>
+> Kant Fan (1):
+>       PM/devfreq: governor: Add a private governor_data for governor
+>
+> Minghao Chi (1):
+>       PM / devfreq: event: use devm_platform_get_and_ioremap_resource()
+>
+> ye xingchen (2):
+>       PM / devfreq: Use device_match_of_node()
+>       PM / devfreq: event: Use device_match_of_node()
+>
+>  drivers/devfreq/devfreq-event.c      |  2 +-
+>  drivers/devfreq/devfreq.c            |  8 +++-----
+>  drivers/devfreq/event/exynos-nocp.c  |  3 +--
+>  drivers/devfreq/governor_userspace.c | 12 ++++++------
+>  include/linux/devfreq.h              |  7 ++++---
+>  5 files changed, 15 insertions(+), 17 deletions(-)
 
-Yeah I was being too hopeful here that safe does magic.
-
-> 
-> > I need to research this more. Do you
-> > have issues against the exportation of this traversal in principle?
-> >
-> > Switching them to be RCU protected could be the best safe option, anything
-> > against that too?
-> 
-> Not really, it just occurred to me that you may end up dealing with a
-> corrupted list here.
-
-Yes.
-
-> 
-> > I might not end up needing that. I need to dig more.
-> >
-> > > 2. For a casual reader of this code it may not be clear why cpufreq
-> > > policies matter here.
-> >
-> > I'm looking for a way to traverse the list of capacities of the system and
-> > know their related CPUs.
-> 
-> So why don't you mention this in a comment, for instance?
-
-Sorry my bad. I realize my questions could have been clearer now.
-
-> 
-> > AFAICT this information already exists in the performance domains and
-> > cpufreq_policy. Performance domains are conditional to energy model and
-> > schedutil. So trying to switch to cpufreq_policy.
-> >
-> > Assuming this question wasn't a request to add a comment :-)
-> 
-> Yes, it was. :-)
-> 
-> That said though, this change makes the scheduler kind of depend on
-> cpufreq which feels a bit like a corner cut TBH.
-
-I share your sentiment; hence my request for feedback before I spend more time
-on this. And apologies for not being clearer about my questions.
-
-The deps is soft and it already exist in the form that performance domains,
-schedutil, thermal pressure are all interacting with cpufreq subsystem already.
-
-I can add a better comment for sure; if this ends up being the right thing to
-do.
-
-> I do realize that cpufreq happens to be maintaining a data structure
-> that turns out to be useful here, but the reason why it is there has
-> nothing to do with this code AFAICS.
-
-The comments about needing to check for performance domains to detect capacity
-inversion is not clear? Sorry I realize again now that all of this might look
-out of the blue for you.
-
-The issue I'm dealing with is that I want to know when thermal pressure has
-gone too far that the capacity of the performance domain now is lower than
-another domain in the system; aka capacity inversion.
-
-The issue at hand is that when using uclamp_min; we need to consider thermal
-pressure. But not unconditionally as we have corner cases like this one:
-
-	p->util_avg = 10%
-	p->uclamp_min = 90%
-
-	capacity_orig_of(big) = 100%
-	capacity_orig_of(med) = 60%
-
-the task wants to run near the top perf level of the system; but if we take
-thermal pressure blindly then we will fail to place the task on the big core
-even though it's the most performant core. For example if
-
-	capacity_orig_of(big) - thermal_pressure = 80%
-
-then from uclamp_min hint perspective, the big core is fine and it's the best
-placement we can get. The task is not getting what it gets, but 80% is better
-than going down to 60% or lower.
-
-On the other hand if
-
-	p->util_avg = 10%
-	p->uclamp_min = 60%
-
-The task can be placed on a medium or big core. But if medium core is under
-thermal pressure; then we do have the option to place it on big; and if we
-ignore thermal pressure the task could miss a deadline because of this
-unnecessary bad placement decision.
-
-By knowing when we are in capacity inversion; we can ignore thermal pressure
-for big cores until we hit the inversion point since then we know that we do
-have another higher performance point in the system to consider.
-
-We do update the capacity of the CPUs in this code. Hence why I added this
-extra logic to detect the inversion here. And for that; the only way I found to
-do it is by going via perf domain, but Dietmar made me realize it's dependent
-on energy_model; so I'm trying to use cpufreq policies instead. If cpufreq is
-not present, then there's no thermal pressure signals too; and this whole loop
-should be optimized out by the compiler.
-
-Hope this helps to clarify and not add more confusion! This logic is used in
-the scheduler when deciding whether a task fits the CPU based on its util_avg
-and uclamp values.
-
-I wanted to check if it's alright to make these macros visible in cpufreq.h and
-use them here. And check with the right locking rules. It seems converting the
-list to be rcu protected is the right way forward.
-
-Assuming Vincent (or you) don't tell me there's actually a better way to handle
-all of that that I missed :-)
-
-
-Thanks!
-
---
-Qais Yousef
+Pulled and added to my linux-next branch, thanks!
