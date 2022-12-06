@@ -2,145 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459CA643CBC
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 06:38:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7498643D64
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 08:02:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiLFFiw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Dec 2022 00:38:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S230348AbiLFHCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Dec 2022 02:02:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiLFFiu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 00:38:50 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8EF32;
-        Mon,  5 Dec 2022 21:38:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670305128; x=1701841128;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Qb6x4KMmFv+kMSSIJXLwgNFFQDpONt0kydV1UpadZPI=;
-  b=ZnytBrp6Qoo0Kmve4HZ35ZdLaq6J0wzQqO4ZMF5gc9yNIbkvPQys7Rli
-   OKRlAGU6GprmwaodcRwdwWSzSyul0LBVtcxegL2gbxKjVm9q4MKLJBm/B
-   RhVjjFssQawft61HYxX43Y3lS9B+Q1E7XkUd/7wYFNd6Bs1xGX1MwTl+5
-   8e5ujaIGi5A4J9h6fFvcQLH5MrH3gKVJXRjrK0F5hQaQSnJ2T6FdeSggb
-   7TvVnbGN0QLmRRG3LA4SbtsCiMVem5UlGOW+tijwzK8YoDY+jWTsWQGlg
-   vYQwj0CHFZfvyY+sNrpMljqD0m09ddaXB92X2yu/ifZMW4DXxsDr4/o31
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="314185292"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="314185292"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2022 21:38:47 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10552"; a="770606582"
-X-IronPort-AV: E=Sophos;i="5.96,220,1665471600"; 
-   d="scan'208";a="770606582"
-Received: from lkp-server01.sh.intel.com (HELO b3c45e08cbc1) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 05 Dec 2022 21:38:45 -0800
-Received: from kbuild by b3c45e08cbc1 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p2QfF-0000d9-0t;
-        Tue, 06 Dec 2022 05:38:45 +0000
-Date:   Tue, 06 Dec 2022 13:37:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- fcb7e07f5d234133c36b3f511bbcdd518fbd5436
-Message-ID: <638ed531.nt5TLSg2hKQs944Z%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231527AbiLFHCJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 02:02:09 -0500
+X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 05 Dec 2022 23:02:06 PST
+Received: from mx417.baidu.com (mx411.baidu.com [124.64.200.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDE8E23393
+        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 23:02:06 -0800 (PST)
+Received: from bjhw-sys-rpm015653cc5.bjhw.baidu.com (bjhw-sys-rpm015653cc5.bjhw.baidu.com [10.227.53.39])
+        by mx417.baidu.com (Postfix) with ESMTP id B68D219B80406;
+        Tue,  6 Dec 2022 14:43:18 +0800 (CST)
+Received: from localhost (localhost [127.0.0.1])
+        by bjhw-sys-rpm015653cc5.bjhw.baidu.com (Postfix) with ESMTP id B00A7D9932;
+        Tue,  6 Dec 2022 14:43:18 +0800 (CST)
+From:   lirongqing@baidu.com
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, rafael@kernel.org,
+        daniel.lezcano@linaro.org, peterz@infradead.org,
+        akpm@linux-foundation.org, tony.luck@intel.com,
+        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when mwait_idle is used
+Date:   Tue,  6 Dec 2022 14:43:18 +0800
+Message-Id: <1670308998-12313-1-git-send-email-lirongqing@baidu.com>
+X-Mailer: git-send-email 1.7.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: fcb7e07f5d234133c36b3f511bbcdd518fbd5436  Merge branches 'pm-sleep' and 'pm-core' into bleeding-edge
+From: Li RongQing <lirongqing@baidu.com>
 
-elapsed time: 720m
+when KVM guest has mwait and mwait_idle is used as default idle function,
+Loading cpuidle-haltpoll will make idle function back to default_idle which
+is using HLT, As the commit aebef63cf7ff ("x86: Remove vendor checks from
+prefer_mwait_c1_over_halt") explains that mwait is preferred
 
-configs tested: 63
-configs skipped: 3
+so disable kvm guest polling in this conditions to improve performance,
+like sockperf localhost test shows that latency is reduced by about 20%
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Li RongQing <lirongqing@baidu.com>
+---
+ arch/x86/include/asm/processor.h   | 2 ++
+ arch/x86/kernel/process.c          | 6 ++++++
+ drivers/cpuidle/cpuidle-haltpoll.c | 4 ++++
+ 3 files changed, 12 insertions(+)
 
-gcc tested configs:
-i386                                defconfig
-um                           x86_64_defconfig
-um                             i386_defconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allmodconfig
-s390                                defconfig
-x86_64                              defconfig
-powerpc                           allnoconfig
-x86_64                    rhel-8.3-kselftests
-ia64                             allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                               rhel-8.3
-arc                               allnoconfig
-alpha                             allnoconfig
-i386                              allnoconfig
-arm                               allnoconfig
-s390                             allyesconfig
-i386                             allyesconfig
-mips                             allyesconfig
-arc                  randconfig-r043-20221205
-powerpc                          allmodconfig
-x86_64                           allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-riscv                randconfig-r042-20221205
-sh                               allmodconfig
-m68k                             allmodconfig
-x86_64               randconfig-a011-20221205
-x86_64               randconfig-a012-20221205
-alpha                            allyesconfig
-x86_64               randconfig-a013-20221205
-x86_64               randconfig-a015-20221205
-x86_64               randconfig-a016-20221205
-s390                 randconfig-r044-20221205
-arc                              allyesconfig
-x86_64               randconfig-a014-20221205
-arm                                 defconfig
-m68k                             allyesconfig
-i386                 randconfig-a014-20221205
-i386                 randconfig-a012-20221205
-i386                 randconfig-a015-20221205
-i386                 randconfig-a011-20221205
-i386                 randconfig-a013-20221205
-i386                 randconfig-a016-20221205
-arm                              allyesconfig
-arm64                            allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r045-20221205
-x86_64               randconfig-a003-20221205
-arm                  randconfig-r046-20221205
-x86_64               randconfig-a004-20221205
-x86_64               randconfig-a006-20221205
-x86_64               randconfig-a005-20221205
-hexagon              randconfig-r041-20221205
-x86_64               randconfig-a001-20221205
-x86_64               randconfig-a002-20221205
-i386                 randconfig-a001-20221205
-i386                 randconfig-a002-20221205
-i386                 randconfig-a005-20221205
-i386                 randconfig-a004-20221205
-i386                 randconfig-a003-20221205
-i386                 randconfig-a006-20221205
-
+diff --git a/arch/x86/include/asm/processor.h b/arch/x86/include/asm/processor.h
+index 67c9d73..159ef33 100644
+--- a/arch/x86/include/asm/processor.h
++++ b/arch/x86/include/asm/processor.h
+@@ -862,4 +862,6 @@ bool arch_is_platform_page(u64 paddr);
+ #define arch_is_platform_page arch_is_platform_page
+ #endif
+ 
++bool is_mwait_idle(void);
++
+ #endif /* _ASM_X86_PROCESSOR_H */
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index c21b734..330972c 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -896,6 +896,12 @@ void select_idle_routine(const struct cpuinfo_x86 *c)
+ 		x86_idle = default_idle;
+ }
+ 
++bool is_mwait_idle(void)
++{
++	return x86_idle == mwait_idle;
++}
++EXPORT_SYMBOL_GPL(is_mwait_idle);
++
+ void amd_e400_c1e_apic_setup(void)
+ {
+ 	if (boot_cpu_has_bug(X86_BUG_AMD_APIC_C1E)) {
+diff --git a/drivers/cpuidle/cpuidle-haltpoll.c b/drivers/cpuidle/cpuidle-haltpoll.c
+index 3a39a7f..8cf1ddf 100644
+--- a/drivers/cpuidle/cpuidle-haltpoll.c
++++ b/drivers/cpuidle/cpuidle-haltpoll.c
+@@ -17,6 +17,7 @@
+ #include <linux/sched/idle.h>
+ #include <linux/kvm_para.h>
+ #include <linux/cpuidle_haltpoll.h>
++#include <linux/processor.h>
+ 
+ static bool force __read_mostly;
+ module_param(force, bool, 0444);
+@@ -111,6 +112,9 @@ static int __init haltpoll_init(void)
+ 	if (!kvm_para_available() || !haltpoll_want())
+ 		return -ENODEV;
+ 
++	if (is_mwait_idle())
++		return -ENODEV;
++
+ 	cpuidle_poll_state_init(drv);
+ 
+ 	ret = cpuidle_register_driver(drv);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.9.4
+
