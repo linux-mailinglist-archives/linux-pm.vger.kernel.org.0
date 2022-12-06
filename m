@@ -2,178 +2,300 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BE8643B9D
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 04:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6AC643BB3
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 04:14:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbiLFDCf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 5 Dec 2022 22:02:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35322 "EHLO
+        id S232113AbiLFDOS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 5 Dec 2022 22:14:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbiLFDCd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 22:02:33 -0500
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E272253E
-        for <linux-pm@vger.kernel.org>; Mon,  5 Dec 2022 19:02:31 -0800 (PST)
-Received: by mail-pg1-x52d.google.com with SMTP id h33so12180202pgm.9
-        for <linux-pm@vger.kernel.org>; Mon, 05 Dec 2022 19:02:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=gJdmdYqPsQhqsZwzyouEKHpkv31OANLnnv8Kq2hGmcw=;
-        b=EEAPb/arO0mo3m7mVu9kOEkKgFhpFxLdvYMHTXPwVjkAG4Urs1O/BJWPcuMVU8v2jh
-         CrcxuckmukCpoy6nlUvo3U9/9Opns+gOlZSmbO6fGrj2ZhYDVeDnzvDuLtk/ejtU60Wn
-         cszOk0oqa4SepvpVQwJEET4gVUNbvmwuSnOW+TJBYIHwTQn+3crUBipZQ8C5fA5tva0/
-         3ChZ0ECVBlmqaxqB9Dyk8wrKCn9aAxwJAeyD00fa0nnHe+UjASJVZheZEQweq0Sahg9a
-         iUcahSSCgzUxEfm5gdEyjI02VE2vx+bGLWPJcROoFNYFMNRC+HXxKn8pLZvcCKpLcU6c
-         /LJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gJdmdYqPsQhqsZwzyouEKHpkv31OANLnnv8Kq2hGmcw=;
-        b=R91eZ06Mr9zvLwlsBEXm0N2NVyS24aj0PZrB6zD9OTZmBS8VivuI/IdLtkJ8y8hzN9
-         1BDgyD2On89VlKZzXxugd6ujYDtgdyuuoegyZ3cuZ3qqVY0yT785euiQr+XntcjZCJUJ
-         nzzmkoBlxw2sIGReu28MxgYxUTfgTMqVf+PbmA9gzS8exO2nt1x9J6zcGx9LfgpIK6eA
-         HZpSJyiC3/VMM3WO9IGbU2ykvqGdHqm/Kkviw6+KR1642ImJyVwzYq0txt6dIHFSQ3NW
-         Ji9jqSDOicmWrshMVAGVvNz9o7noswTpAxOtHzPXlaTxZTUCEd/Pipym1oWzdIsyIt1C
-         FuaA==
-X-Gm-Message-State: ANoB5pm5spjnij4W/mvY1fwV5nWWUKZpvpZyWDdRMf+h0t8UaG4uKfKQ
-        sJAG8mIRYVWqYLsa25PLVughzr8kob7Cu1IJOZ+aIQ==
-X-Google-Smtp-Source: AA0mqf6LjJ7B1P3fgI4/O9YdfSdVnhIY2w64j5Z/5gLpgsNMeL+NiKqS3iugJ8mwAa0J/jEhcbNYvw==
-X-Received: by 2002:a63:f545:0:b0:477:e3ce:739c with SMTP id e5-20020a63f545000000b00477e3ce739cmr45180948pgk.363.1670295751243;
-        Mon, 05 Dec 2022 19:02:31 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id z14-20020a1709027e8e00b00176a2d23d1asm11261056pla.56.2022.12.05.19.02.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Dec 2022 19:02:30 -0800 (PST)
-Message-ID: <638eb0c6.170a0220.fef0a.51ea@mx.google.com>
-Date:   Mon, 05 Dec 2022 19:02:30 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.1-rc8-130-gd1f5732ae3e3
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.1-rc8-130-gd1f5732ae3e3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        with ESMTP id S231737AbiLFDOR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 5 Dec 2022 22:14:17 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA77220CE;
+        Mon,  5 Dec 2022 19:14:15 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NR59f0sSqz4xVnZ;
+        Tue,  6 Dec 2022 11:14:14 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2B63E7hG050650;
+        Tue, 6 Dec 2022 11:14:07 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Tue, 6 Dec 2022 11:14:08 +0800 (CST)
+Date:   Tue, 6 Dec 2022 11:14:08 +0800 (CST)
+X-Zmail-TransId: 2af9638eb380ffffffff8c971ebb
+X-Mailer: Zmail v1.0
+Message-ID: <202212061114083350005@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <sre@kernel.org>
+Cc:     <linus.walleij@linaro.org>, <krzysztof.kozlowski@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHQgdjJdIHBvd2VyOiBzdXBwbHk6IHVzZSBzeXNmc19lbWl0KCkgdG8gaW5zdGVhZCBvZiBzY25wcmludGYoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2B63E7hG050650
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 638EB386.000 by FangMail milter!
+X-FangMail-Envelope: 1670296454/4NR59f0sSqz4xVnZ/638EB386.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 638EB386.000/4NR59f0sSqz4xVnZ
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc8-130-gd=
-1f5732ae3e3)
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-1-rc8-130-gd1f5732ae3e3/
+Follow the advice of the Documentation/filesystems/sysfs.rst and show()
+should only use sysfs_emit() or sysfs_emit_at() when formatting the
+value to be returned to user space.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.1-rc8-130-gd1f5732ae3e3
-Git Commit: d1f5732ae3e3170a8bace96bd51be6896d566d33
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
-
-Warnings Detected:
-
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+v1 -> v2
+Convert to use sysfs_emit_at() API in power/supply/twl4030_charger.c.
 ---
-For more info write to <info@kernelci.org>
+ drivers/power/supply/ab8500_fg.c        | 18 +++++++++---------
+ drivers/power/supply/bq24190_charger.c  |  2 +-
+ drivers/power/supply/bq24257_charger.c  |  8 +++-----
+ drivers/power/supply/lp8788-charger.c   |  7 +++----
+ drivers/power/supply/max14577_charger.c |  2 +-
+ drivers/power/supply/max77693_charger.c |  6 +++---
+ drivers/power/supply/twl4030_charger.c  |  6 ++----
+ 7 files changed, 22 insertions(+), 27 deletions(-)
+
+diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab8500_fg.c
+index c6c9804280db..d989eadaa933 100644
+--- a/drivers/power/supply/ab8500_fg.c
++++ b/drivers/power/supply/ab8500_fg.c
+@@ -2594,7 +2594,7 @@ static ssize_t ab8505_powercut_flagtime_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
++	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+
+ fail:
+ 	return ret;
+@@ -2644,7 +2644,7 @@ static ssize_t ab8505_powercut_maxtime_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
++	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+
+ fail:
+ 	return ret;
+@@ -2695,7 +2695,7 @@ static ssize_t ab8505_powercut_restart_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0xF));
++	return sysfs_emit(buf, "%d\n", (reg_value & 0xF));
+
+ fail:
+ 	return ret;
+@@ -2746,7 +2746,7 @@ static ssize_t ab8505_powercut_timer_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
++	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+
+ fail:
+ 	return ret;
+@@ -2769,7 +2769,7 @@ static ssize_t ab8505_powercut_restart_counter_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0xF0) >> 4);
++	return sysfs_emit(buf, "%d\n", (reg_value & 0xF0) >> 4);
+
+ fail:
+ 	return ret;
+@@ -2790,7 +2790,7 @@ static ssize_t ab8505_powercut_read(struct device *dev,
+ 	if (ret < 0)
+ 		goto fail;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x1));
++	return sysfs_emit(buf, "%d\n", (reg_value & 0x1));
+
+ fail:
+ 	return ret;
+@@ -2841,7 +2841,7 @@ static ssize_t ab8505_powercut_flag_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ((reg_value & 0x10) >> 4));
++	return sysfs_emit(buf, "%d\n", ((reg_value & 0x10) >> 4));
+
+ fail:
+ 	return ret;
+@@ -2864,7 +2864,7 @@ static ssize_t ab8505_powercut_debounce_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7));
++	return sysfs_emit(buf, "%d\n", (reg_value & 0x7));
+
+ fail:
+ 	return ret;
+@@ -2914,7 +2914,7 @@ static ssize_t ab8505_powercut_enable_status_read(struct device *dev,
+ 		goto fail;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ((reg_value & 0x20) >> 5));
++	return sysfs_emit(buf, "%d\n", ((reg_value & 0x20) >> 5));
+
+ fail:
+ 	return ret;
+diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/supply/bq24190_charger.c
+index 2b2c3a4391c1..be34b9848450 100644
+--- a/drivers/power/supply/bq24190_charger.c
++++ b/drivers/power/supply/bq24190_charger.c
+@@ -463,7 +463,7 @@ static ssize_t bq24190_sysfs_show(struct device *dev,
+ 	if (ret)
+ 		count = ret;
+ 	else
+-		count = scnprintf(buf, PAGE_SIZE, "%hhx\n", v);
++		count = sysfs_emit(buf, "%hhx\n", v);
+
+ 	pm_runtime_mark_last_busy(bdi->dev);
+ 	pm_runtime_put_autosuspend(bdi->dev);
+diff --git a/drivers/power/supply/bq24257_charger.c b/drivers/power/supply/bq24257_charger.c
+index ab4c49788c58..103ddc2b3def 100644
+--- a/drivers/power/supply/bq24257_charger.c
++++ b/drivers/power/supply/bq24257_charger.c
+@@ -767,8 +767,7 @@ static ssize_t bq24257_show_ovp_voltage(struct device *dev,
+ 	struct power_supply *psy = dev_get_drvdata(dev);
+ 	struct bq24257_device *bq = power_supply_get_drvdata(psy);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n",
+-			 bq24257_vovp_map[bq->init_data.vovp]);
++	return sysfs_emit(buf, "%u\n", bq24257_vovp_map[bq->init_data.vovp]);
+ }
+
+ static ssize_t bq24257_show_in_dpm_voltage(struct device *dev,
+@@ -778,8 +777,7 @@ static ssize_t bq24257_show_in_dpm_voltage(struct device *dev,
+ 	struct power_supply *psy = dev_get_drvdata(dev);
+ 	struct bq24257_device *bq = power_supply_get_drvdata(psy);
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n",
+-			 bq24257_vindpm_map[bq->init_data.vindpm]);
++	return sysfs_emit(buf, "%u\n", bq24257_vindpm_map[bq->init_data.vindpm]);
+ }
+
+ static ssize_t bq24257_sysfs_show_enable(struct device *dev,
+@@ -800,7 +798,7 @@ static ssize_t bq24257_sysfs_show_enable(struct device *dev,
+ 	if (ret < 0)
+ 		return ret;
+
+-	return scnprintf(buf, PAGE_SIZE, "%d\n", ret);
++	return sysfs_emit(buf, "%d\n", ret);
+ }
+
+ static ssize_t bq24257_sysfs_set_enable(struct device *dev,
+diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply/lp8788-charger.c
+index f5f47a0aa1e3..755b6a4379b8 100644
+--- a/drivers/power/supply/lp8788-charger.c
++++ b/drivers/power/supply/lp8788-charger.c
+@@ -602,7 +602,7 @@ static ssize_t lp8788_show_charger_status(struct device *dev,
+ 	lp8788_read_byte(pchg->lp, LP8788_CHG_STATUS, &data);
+ 	state = (data & LP8788_CHG_STATE_M) >> LP8788_CHG_STATE_S;
+
+-	return scnprintf(buf, PAGE_SIZE, "%s\n", desc[state]);
++	return sysfs_emit(buf, "%s\n", desc[state]);
+ }
+
+ static ssize_t lp8788_show_eoc_time(struct device *dev,
+@@ -618,8 +618,7 @@ static ssize_t lp8788_show_eoc_time(struct device *dev,
+ 	lp8788_read_byte(pchg->lp, LP8788_CHG_EOC, &val);
+ 	val = (val & LP8788_CHG_EOC_TIME_M) >> LP8788_CHG_EOC_TIME_S;
+
+-	return scnprintf(buf, PAGE_SIZE, "End Of Charge Time: %s\n",
+-			stime[val]);
++	return sysfs_emit(buf, "End Of Charge Time: %s\n", stime[val]);
+ }
+
+ static ssize_t lp8788_show_eoc_level(struct device *dev,
+@@ -642,7 +641,7 @@ static ssize_t lp8788_show_eoc_level(struct device *dev,
+ 	val = (val & LP8788_CHG_EOC_LEVEL_M) >> LP8788_CHG_EOC_LEVEL_S;
+ 	level = mode ? abs_level[val] : relative_level[val];
+
+-	return scnprintf(buf, PAGE_SIZE, "End Of Charge Level: %s\n", level);
++	return sysfs_emit(buf, "End Of Charge Level: %s\n", level);
+ }
+
+ static DEVICE_ATTR(charger_status, S_IRUSR, lp8788_show_charger_status, NULL);
+diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supply/max14577_charger.c
+index f244cd902eb9..96f9de775043 100644
+--- a/drivers/power/supply/max14577_charger.c
++++ b/drivers/power/supply/max14577_charger.c
+@@ -532,7 +532,7 @@ static ssize_t show_fast_charge_timer(struct device *dev,
+ 		break;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static ssize_t store_fast_charge_timer(struct device *dev,
+diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supply/max77693_charger.c
+index a2c5c9858639..794c8c054450 100644
+--- a/drivers/power/supply/max77693_charger.c
++++ b/drivers/power/supply/max77693_charger.c
+@@ -296,7 +296,7 @@ static ssize_t fast_charge_timer_show(struct device *dev,
+ 		break;
+ 	}
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static int max77693_set_fast_charge_timer(struct max77693_charger *chg,
+@@ -357,7 +357,7 @@ static ssize_t top_off_threshold_current_show(struct device *dev,
+ 	else
+ 		val = data * 50000;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static int max77693_set_top_off_threshold_current(struct max77693_charger *chg,
+@@ -405,7 +405,7 @@ static ssize_t top_off_timer_show(struct device *dev,
+
+ 	val = data * 10;
+
+-	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
++	return sysfs_emit(buf, "%u\n", val);
+ }
+
+ static int max77693_set_top_off_timer(struct max77693_charger *chg,
+diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/supply/twl4030_charger.c
+index 1bc49b2e12e8..53a0ea5a61da 100644
+--- a/drivers/power/supply/twl4030_charger.c
++++ b/drivers/power/supply/twl4030_charger.c
+@@ -726,11 +726,9 @@ twl4030_bci_mode_show(struct device *dev,
+
+ 	for (i = 0; i < ARRAY_SIZE(modes); i++)
+ 		if (mode == i)
+-			len += scnprintf(buf+len, PAGE_SIZE-len,
+-					"[%s] ", modes[i]);
++			len += sysfs_emit_at(buf, len, "[%s] ", modes[i]);
+ 		else
+-			len += scnprintf(buf+len, PAGE_SIZE-len,
+-					"%s ", modes[i]);
++			len += sysfs_emit_at(buf, len, "%s ", modes[i]);
+ 	buf[len-1] = '\n';
+ 	return len;
+ }
+-- 
+2.25.1
