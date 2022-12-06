@@ -2,92 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BAF36441D8
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 12:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57AD56441F0
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 12:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233672AbiLFLI3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Dec 2022 06:08:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
+        id S232001AbiLFLRc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Dec 2022 06:17:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbiLFLI2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 06:08:28 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3596B86D;
-        Tue,  6 Dec 2022 03:08:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 525D023A;
-        Tue,  6 Dec 2022 03:08:32 -0800 (PST)
-Received: from [10.57.7.134] (unknown [10.57.7.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 803593F73D;
-        Tue,  6 Dec 2022 03:08:22 -0800 (PST)
-Message-ID: <c2dc2ff0-b565-a2da-b3fa-2f50eb2b2e77@arm.com>
-Date:   Tue, 6 Dec 2022 11:08:20 +0000
+        with ESMTP id S232839AbiLFLRa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 06:17:30 -0500
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21C324F17
+        for <linux-pm@vger.kernel.org>; Tue,  6 Dec 2022 03:17:29 -0800 (PST)
+Received: by mail-qv1-f48.google.com with SMTP id p12so10144737qvu.5
+        for <linux-pm@vger.kernel.org>; Tue, 06 Dec 2022 03:17:29 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GyM92lwgC+wq7Yv52eP4igek3NPEKur8jvXL6ZOPoaI=;
+        b=Xl8/lHE82EB+B1v7a4wiTjOWpOdYUmrfhD+r9vdHdav0n7VwvCf5yDZAGFPoZ4MQwB
+         juIOe8QONjSwGgoqewth9IqsQG63q01PRzVmFGDAKjC2qBtId7eM3wR/mawKMuuTFWjp
+         2DE42NhgsrspOh7C0Qf4wYtEJ+QN1E/42u/LB0xLV0kc44M9nV0ALy4QCGeoICYU3J5s
+         S89sH55NluriVReZH03mDn4deksw4Ur17/gX5HYWjJ9BvGvi/hjT9iEmmyHXdu6/zxRm
+         pdfSr67nAQ0zjctKKRb+Ys68tb+NUuB/Hsairu91A0C/pM5go6eXjQlPE0EPxeRfyFOk
+         DOaA==
+X-Gm-Message-State: ANoB5pmW5LhG5DhcWJVlbLVHUYT7xm2Gle4Mul7Hf0/PHSRUk62Mrec1
+        HKrQ3EUNW0jN6gZWAiaCBzbRlHFtGz210a+5AHvggWxi
+X-Google-Smtp-Source: AA0mqf5I0XUQZ4vUcJXJtB18N+uw07pbheor3qBgS+O+KYkUK808pVYOra0y9v7NTYmojyr9HHBpZoI/IgdMSqQUuBc=
+X-Received: by 2002:ad4:534b:0:b0:4b1:8429:a8a7 with SMTP id
+ v11-20020ad4534b000000b004b18429a8a7mr61151259qvs.52.1670325449016; Tue, 06
+ Dec 2022 03:17:29 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] cpufreq: schedutil: Optimize operations with single max
- CPU capacity
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        dietmar.eggemann@arm.com, vincent.guittot@linaro.org,
-        saravanak@google.com, wusamuel@google.com,
-        isaacmanjarres@google.com, kernel-team@android.com,
-        juri.lelli@redhat.com, peterz@infradead.org, mingo@redhat.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de
-References: <20221206101021.18113-1-lukasz.luba@arm.com>
- <20221206101629.dbcuv3zdso44w3cq@vireshk-i7>
- <2a97cf28-7e47-04c7-edcb-41adbd20ccd9@arm.com>
- <CAJZ5v0hRW2Px4LP9OCgFqyUQUiVr0xZL6dYPrWrmGerGqCq1PQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0hRW2Px4LP9OCgFqyUQUiVr0xZL6dYPrWrmGerGqCq1PQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221205235341.bs7v3nr5bnhllteu@vireshk-i7>
+In-Reply-To: <20221205235341.bs7v3nr5bnhllteu@vireshk-i7>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 6 Dec 2022 12:17:16 +0100
+Message-ID: <CAJZ5v0hNOs63gGUKGxR2-OGm8yJNrwmmXJGPOjW+VO2k7oxwbw@mail.gmail.com>
+Subject: Re: [GIT PULL] cpufreq/arm updates for 6.2
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Dec 6, 2022 at 12:53 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>
+> Hi Rafael,
+>
+> The following changes since commit 30a0b95b1335e12efef89dd78518ed3e4a71a763:
+>
+>   Linux 6.1-rc3 (2022-10-30 15:19:28 -0700)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.2
+>
+> for you to fetch changes up to 8ff150aa6fe252e9b7713cf737c4dc5cbaa263ab:
+>
+>   dt-bindings: cpufreq: cpufreq-qcom-hw: Add QDU1000/QRU1000 cpufreq (2022-12-01 14:50:47 +0530)
+>
+> ----------------------------------------------------------------
+> Cpufreq arm updates for 6.2
+>
+> - Generalize of_perf_domain_get_sharing_cpumask phandle format (Hector Martin).
+>
+> - New cpufreq driver for Apple SoC CPU P-states (Hector Martin).
+>
+> - Lots of Qualcomm cpufreq driver updates, that include CPU clock
+>   provider support, generic cleanups or reorganization, fixed a
+>   potential memleak and the return value of cpufreq_driver->get()
+>   (Manivannan Sadhasivam, and Chen Hui).
+>
+> - Few updates to Qualcomm cpufreq driver's DT bindings, that include
+>   support for CPU clock provider, fixing missing cache related
+>   properties, and support for QDU1000/QRU1000 (Manivannan Sadhasivam,
+>   Rob Herring, and Melody Olvera).
+>
+> - Add support for ti,am625 SoC and enable build of ti-cpufreq for
+>   ARCH_K3 (Dave Gerlach, and Vibhore Vardhan).
+>
+> - tegra186: Use flexible array to simplify memory allocation (Christophe
+>   JAILLET).
+>
+> ----------------------------------------------------------------
+> Chen Hui (1):
+>       cpufreq: qcom-hw: Fix memory leak in qcom_cpufreq_hw_read_lut()
+>
+> Christophe JAILLET (1):
+>       cpufreq: tegra186: Use flexible array to simplify memory allocation
+>
+> Dave Gerlach (4):
+>       cpufreq: ti-cpufreq: Add support for AM625
+>       cpufreq: dt-platdev: Blacklist ti,am625 SoC
+>       arm64: dts: ti: k3-am625: Introduce operating-points table
+>       cpufreq: ti: Enable ti-cpufreq for ARCH_K3
+>
+> Hector Martin (2):
+>       cpufreq: Generalize of_perf_domain_get_sharing_cpumask phandle format
+>       cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states
+>
+> Manivannan Sadhasivam (7):
+>       cpufreq: qcom-hw: Remove un-necessary cpumask_empty() check
+>       cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe
+>       cpufreq: qcom-hw: Use cached dev pointer in probe()
+>       cpufreq: qcom-hw: Move soc_data to struct qcom_cpufreq
+>       cpufreq: qcom-hw: Fix the frequency returned by cpufreq_driver->get()
+>       dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+>       cpufreq: qcom-hw: Add CPU clock provider support
+>
+> Melody Olvera (1):
+>       dt-bindings: cpufreq: cpufreq-qcom-hw: Add QDU1000/QRU1000 cpufreq
+>
+> Rob Herring (1):
+>       dt-bindings: cpufreq: qcom: Add missing cache related properties
+>
+> Vibhore Vardhan (1):
+>       arm64: dts: ti: k3-am625-sk: Add 1.4GHz OPP
+>
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml |  31 +++++++++++++
+>  arch/arm64/boot/dts/ti/k3-am625-sk.dts                         |   9 ++++
+>  arch/arm64/boot/dts/ti/k3-am625.dtsi                           |  51 +++++++++++++++++++++
+>  drivers/cpufreq/Kconfig.arm                                    |  13 +++++-
+>  drivers/cpufreq/Makefile                                       |   1 +
+>  drivers/cpufreq/apple-soc-cpufreq.c                            | 352 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  drivers/cpufreq/cpufreq-dt-platdev.c                           |   3 ++
+>  drivers/cpufreq/mediatek-cpufreq-hw.c                          |  14 ++++--
+>  drivers/cpufreq/qcom-cpufreq-hw.c                              | 206 ++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------
+>  drivers/cpufreq/tegra186-cpufreq.c                             |  11 ++---
+>  drivers/cpufreq/ti-cpufreq.c                                   |  36 +++++++++++++++
+>  include/linux/cpufreq.h                                        |  28 +++++++-----
+>  12 files changed, 650 insertions(+), 105 deletions(-)
+>  create mode 100644 drivers/cpufreq/apple-soc-cpufreq.c
+>
+> --
 
-
-On 12/6/22 11:00, Rafael J. Wysocki wrote:
-> On Tue, Dec 6, 2022 at 11:30 AM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 12/6/22 10:16, Viresh Kumar wrote:
->>> On 06-12-22, 10:10, Lukasz Luba wrote:
->>>> The max CPU capacity is the same for all CPUs sharing frequency domain
->>>> and thus 'policy' object. There is a way to avoid heavy operations
->>>> in a loop for each CPU by leveraging this knowledge. Thus, simplify
->>>> the looping code in the sugov_next_freq_shared() and drop heavy
->>>> multiplications. Instead, use simple max() to get the highest utilization
->>>> from these CPUs. This is useful for platforms with many (4 or 6) little
->>>> CPUs.
->>>>
->>>> The max CPU capacity must be fetched every time we are called, due to
->>>> difficulties during the policy setup, where we are not able to get the
->>>> normalized CPU capacity at the right time.
->>>>
->>>> The stored value in sugov_policy::max is also than used in
->>>> sugov_iowait_apply() to calculate the right boost. Thus, that field is
->>>> useful to have in that sugov_policy struct.
->>>>
->>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->>>
->>> Can you please divide this into two patches, one for just moving max
->>> and one for looping optimization ? Else we may end up reverting
->>> everything once again.
->>>
->>
->> OK, I can do that. Thanks for having a look!
-> 
-> Also, please note that this material is unlikely to go into 6.2, so
-> I'd prefer going back to it after 6.2-rc1 is out.
-
-Yes, I understand. Thanks Rafael!
+Pulled and added to my linux-next branch, thanks!
