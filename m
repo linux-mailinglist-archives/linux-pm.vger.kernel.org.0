@@ -2,50 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D1F643E38
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 09:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AC7643E59
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 09:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiLFIPl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Dec 2022 03:15:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
+        id S231259AbiLFITc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Dec 2022 03:19:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbiLFIPk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 03:15:40 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448D8DF08;
-        Tue,  6 Dec 2022 00:15:38 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NRCsM5PYCz8RV7D;
-        Tue,  6 Dec 2022 16:15:35 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl1.zte.com.cn with SMTP id 2B68FKto091781;
-        Tue, 6 Dec 2022 16:15:20 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Tue, 6 Dec 2022 16:15:22 +0800 (CST)
-Date:   Tue, 6 Dec 2022 16:15:22 +0800 (CST)
-X-Zmail-TransId: 2af9638efa1affffffffe3a57249
-X-Mailer: Zmail v1.0
-Message-ID: <202212061615227896127@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <rafael@kernel.org>
-Cc:     <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSBjcHVmcmVxOiBzdGF0czogQ29udmVydCB0byB1c2Ugc3lzZnNfZW1pdF9hdCgpIEFQSQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 2B68FKto091781
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 638EFA27.001 by FangMail milter!
-X-FangMail-Envelope: 1670314535/4NRCsM5PYCz8RV7D/638EFA27.001/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 638EFA27.001/4NRCsM5PYCz8RV7D
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        with ESMTP id S233289AbiLFISq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 03:18:46 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA233DA5;
+        Tue,  6 Dec 2022 00:17:34 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA82523A;
+        Tue,  6 Dec 2022 00:17:17 -0800 (PST)
+Received: from [10.57.7.134] (unknown [10.57.7.134])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB2403F73B;
+        Tue,  6 Dec 2022 00:17:07 -0800 (PST)
+Message-ID: <d38e1cba-23f1-a19d-54dd-b9e18e852bee@arm.com>
+Date:   Tue, 6 Dec 2022 08:17:05 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to
+ sugov_policy"
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Sam Wu <wusamuel@google.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Saravana Kannan <saravanak@google.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        kernel-team@android.com,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221110195732.1382314-1-wusamuel@google.com>
+ <20221205091830.pttdbyts4hujkpq2@vireshk-i7>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20221205091830.pttdbyts4hujkpq2@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,65 +60,58 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hi Viresh,
 
-Follow the advice of the Documentation/filesystems/sysfs.rst and show()
-should only use sysfs_emit() or sysfs_emit_at() when formatting the
-value to be returned to user space.
+On 12/5/22 09:18, Viresh Kumar wrote:
+> Lukasz,
+> 
+> On 10-11-22, 19:57, Sam Wu wrote:
+>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+>> index 9161d1136d01..1207c78f85c1 100644
+>> --- a/kernel/sched/cpufreq_schedutil.c
+>> +++ b/kernel/sched/cpufreq_schedutil.c
+>> @@ -25,9 +25,6 @@ struct sugov_policy {
+>>   	unsigned int		next_freq;
+>>   	unsigned int		cached_raw_freq;
+>>   
+>> -	/* max CPU capacity, which is equal for all CPUs in freq. domain */
+>> -	unsigned long		max;
+>> -
+>>   	/* The next fields are only needed if fast switch cannot be used: */
+>>   	struct			irq_work irq_work;
+>>   	struct			kthread_work work;
+>> @@ -51,6 +48,7 @@ struct sugov_cpu {
+>>   
+>>   	unsigned long		util;
+>>   	unsigned long		bw_dl;
+>> +	unsigned long		max;
+> 
+> IIUC, this part, i.e. moving max to sugov_policy, wasn't the problem
+> here, right ? Can you send a patch for that at least first, since this
+> is fully reverted now.
+> 
+> Or it doesn't make sense?
+> 
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/cpufreq/cpufreq_stats.c | 16 +++++++---------
- 1 file changed, 7 insertions(+), 9 deletions(-)
+Yes, that still could make sense. We could still optimize a bit that
+code in the sugov_next_freq_shared(). Look at that function. It loops
+over all CPUs in the policy and calls sugov_get_util() which calls
+this arch_scale_cpu_capacity() N times. Then it does those
+multiplications below:
 
-diff --git a/drivers/cpufreq/cpufreq_stats.c b/drivers/cpufreq/cpufreq_stats.c
-index 1570d6f3e75d..55c7ffd37d1c 100644
---- a/drivers/cpufreq/cpufreq_stats.c
-+++ b/drivers/cpufreq/cpufreq_stats.c
-@@ -128,25 +128,23 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
- 	ssize_t len = 0;
- 	int i, j, count;
+if (j_util * max > j_max * util)
 
--	len += scnprintf(buf + len, PAGE_SIZE - len, "   From  :    To\n");
--	len += scnprintf(buf + len, PAGE_SIZE - len, "         : ");
-+	len += sysfs_emit_at(buf, len, "   From  :    To\n");
-+	len += sysfs_emit_at(buf, len, "         : ");
- 	for (i = 0; i < stats->state_num; i++) {
- 		if (len >= PAGE_SIZE)
- 			break;
--		len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ",
--				stats->freq_table[i]);
-+		len += sysfs_emit_at(buf, len, "%9u ", stats->freq_table[i]);
- 	}
- 	if (len >= PAGE_SIZE)
- 		return PAGE_SIZE;
+which will be 2*N mul operations...
+IMO this is pointless and heavy for LITTLE cores which are 4 or
+sometimes 6 in the policy.
 
--	len += scnprintf(buf + len, PAGE_SIZE - len, "\n");
-+	len += sysfs_emit_at(buf, len, "\n");
+As you could see, my code just left that loop with a simple
+max() operation.
 
- 	for (i = 0; i < stats->state_num; i++) {
- 		if (len >= PAGE_SIZE)
- 			break;
+I might just attack this code differently. Switch to that
+sugov_policy::max, fetch the cpu capacity only once, before that loop.
+I will rewrite a bit the sugov_get_util() and adjust the
+2nd user of it: sugov_update_single_common()
 
--		len += scnprintf(buf + len, PAGE_SIZE - len, "%9u: ",
--				stats->freq_table[i]);
-+		len += sysfs_emit_at(buf, len, "%9u: ", stats->freq_table[i]);
-
- 		for (j = 0; j < stats->state_num; j++) {
- 			if (len >= PAGE_SIZE)
-@@ -157,11 +155,11 @@ static ssize_t show_trans_table(struct cpufreq_policy *policy, char *buf)
- 			else
- 				count = stats->trans_table[i * stats->max_state + j];
-
--			len += scnprintf(buf + len, PAGE_SIZE - len, "%9u ", count);
-+			len += sysfs_emit_at(buf, len, "%9u ", count);
- 		}
- 		if (len >= PAGE_SIZE)
- 			break;
--		len += scnprintf(buf + len, PAGE_SIZE - len, "\n");
-+		len += sysfs_emit_at(buf, len, "\n");
- 	}
-
- 	if (len >= PAGE_SIZE) {
--- 
-2.25.1
+Regards,
+Lukasz
