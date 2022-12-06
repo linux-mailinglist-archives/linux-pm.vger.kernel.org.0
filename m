@@ -2,116 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83AC7643E59
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 09:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C09643E65
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 09:22:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiLFITc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Dec 2022 03:19:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46228 "EHLO
+        id S229591AbiLFIWV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Dec 2022 03:22:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233289AbiLFISq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 03:18:46 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA233DA5;
-        Tue,  6 Dec 2022 00:17:34 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA82523A;
-        Tue,  6 Dec 2022 00:17:17 -0800 (PST)
-Received: from [10.57.7.134] (unknown [10.57.7.134])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB2403F73B;
-        Tue,  6 Dec 2022 00:17:07 -0800 (PST)
-Message-ID: <d38e1cba-23f1-a19d-54dd-b9e18e852bee@arm.com>
-Date:   Tue, 6 Dec 2022 08:17:05 +0000
+        with ESMTP id S230262AbiLFIWU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 03:22:20 -0500
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54557BA6;
+        Tue,  6 Dec 2022 00:22:17 -0800 (PST)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 1043721C00;
+        Tue,  6 Dec 2022 08:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1670314935; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WaCu1Ojq4kfH2gp2d92pnAhcFNf7wSvBwoos1Dg52Z4=;
+        b=FahdYhpuOA/qTKpNsfBSSERYQqID5rfXSpwFO+xZphaMEyZsP+zAeUki946qxFfiKgaM67
+        eLmdcGTw/Pyu1Z9hfzft2pD+PZAnZ0uj/rfWcQWGG8inS7uLhBV1VUWXcab+P76tbcHfsy
+        Z2f/mA6mTNtPbbUdNJTZZQXX0h7kBJQ=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 9B7A62C141;
+        Tue,  6 Dec 2022 08:22:14 +0000 (UTC)
+Date:   Tue, 6 Dec 2022 09:22:14 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: Re: [PATCH v1 0/2] PM: sleep: Avoid using pr_cont() in tasks
+ freezing code
+Message-ID: <Y477tlqofSqUpd8M@alley>
+References: <4441789.LvFx2qVVIh@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v1] Revert "cpufreq: schedutil: Move max CPU capacity to
- sugov_policy"
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Sam Wu <wusamuel@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Saravana Kannan <saravanak@google.com>,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221110195732.1382314-1-wusamuel@google.com>
- <20221205091830.pttdbyts4hujkpq2@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221205091830.pttdbyts4hujkpq2@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4441789.LvFx2qVVIh@kreacher>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh,
-
-On 12/5/22 09:18, Viresh Kumar wrote:
-> Lukasz,
+On Thu 2022-12-01 19:31:59, Rafael J. Wysocki wrote:
+> Hi All,
 > 
-> On 10-11-22, 19:57, Sam Wu wrote:
->> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
->> index 9161d1136d01..1207c78f85c1 100644
->> --- a/kernel/sched/cpufreq_schedutil.c
->> +++ b/kernel/sched/cpufreq_schedutil.c
->> @@ -25,9 +25,6 @@ struct sugov_policy {
->>   	unsigned int		next_freq;
->>   	unsigned int		cached_raw_freq;
->>   
->> -	/* max CPU capacity, which is equal for all CPUs in freq. domain */
->> -	unsigned long		max;
->> -
->>   	/* The next fields are only needed if fast switch cannot be used: */
->>   	struct			irq_work irq_work;
->>   	struct			kthread_work work;
->> @@ -51,6 +48,7 @@ struct sugov_cpu {
->>   
->>   	unsigned long		util;
->>   	unsigned long		bw_dl;
->> +	unsigned long		max;
+> The first patch in this series rearranges the tasks freezing code used during
+> system-wide suspend and hibernation to avoid printing continuation messages
+> with pr_cont() which is problematic.
 > 
-> IIUC, this part, i.e. moving max to sugov_policy, wasn't the problem
-> here, right ? Can you send a patch for that at least first, since this
-> is fully reverted now.
-> 
-> Or it doesn't make sense?
-> 
+> The second patch refines one more message in that code on top of the first one.
 
-Yes, that still could make sense. We could still optimize a bit that
-code in the sugov_next_freq_shared(). Look at that function. It loops
-over all CPUs in the policy and calls sugov_get_util() which calls
-this arch_scale_cpu_capacity() N times. Then it does those
-multiplications below:
+Both patches seems to do what they are supposed to do. Feel free to use:
 
-if (j_util * max > j_max * util)
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-which will be 2*N mul operations...
-IMO this is pointless and heavy for LITTLE cores which are 4 or
-sometimes 6 in the policy.
+That said, I am not familiar with the freezer code. For example, I was
+not aware of linux-pm/tools/power/pm-graph/sleepgraph.py. Anyway,
+both changes make perfect sense and I do not see any problem.
 
-As you could see, my code just left that loop with a simple
-max() operation.
-
-I might just attack this code differently. Switch to that
-sugov_policy::max, fetch the cpu capacity only once, before that loop.
-I will rewrite a bit the sugov_get_util() and adjust the
-2nd user of it: sugov_update_single_common()
-
-Regards,
-Lukasz
+Best Regards,
+Petr
