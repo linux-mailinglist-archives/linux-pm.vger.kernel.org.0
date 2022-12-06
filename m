@@ -2,101 +2,276 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A35644A45
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 18:24:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 992A9644A79
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 18:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiLFRYZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Dec 2022 12:24:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58386 "EHLO
+        id S232865AbiLFRkr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Dec 2022 12:40:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234407AbiLFRYX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 12:24:23 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46662FA46
-        for <linux-pm@vger.kernel.org>; Tue,  6 Dec 2022 09:24:22 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id bs21so24495884wrb.4
-        for <linux-pm@vger.kernel.org>; Tue, 06 Dec 2022 09:24:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wkjOSaePaW4cwPgy6cKdaGFLlxgNwbwbhmDlbNQQNyA=;
-        b=pv4LiDYE7+vhr0QpgKXN4tARx11ydjiGR6pmv/PBZOummq3valRAL64ufcMh2ZhvKj
-         fp+vbWUsAoANZLgwe0ROiC3DBWrUUAlKDaDqBV6bRbzoI0f4CUdfHO4ULR8FnHwfuz+U
-         3Fm4d3T3lNaMPJ2Cp44HIhmEHaQNNAyw368ERNcK/IPEMEPzOfSdqYDIhVSeJzYzjxJ8
-         1PXBqBA7tb+GRL3a2SVZFpgnnHQbTJA1jOH4IpWnPtmXqDpOYrSuf5PodlZ4tCv7nM3V
-         CXHyuVnnLQivwN/zagQDOYLKS0QGISD/Bzz6p7u0THaRR1fqLq79dvsFi7DzHqqdI78X
-         hmHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wkjOSaePaW4cwPgy6cKdaGFLlxgNwbwbhmDlbNQQNyA=;
-        b=Po4A1Vm++7Uj/ij4Av5l6/qis+d7IG456Mj8CXz73Bx7OYkL/ojDcK4kjZrY9ldGcD
-         bz4C5CsRhnWilmCp3pqt7Bds0S5ZDzhOD2lwiWULXZzYkcU/cifdaCa6rruFWZ4f/jI2
-         i0pKRN1dnRBmZu0kT1YY0zhvMUKgLkCVQoSXaYC8mfrWbrIozMgkpXUjqGzX/mNAl569
-         ToXefankZXR0EOMX74ojlQDKJXP8H0/2iAvHKCuScrK8uJwm/rctw7jQXYB9RBa39GLQ
-         jJjdAuhUtIAic5Oha9hgkbJ58mGmmRQwr+5FkOafPWlS8PYZ3HtL0kFFat2/VW+kUY4T
-         5LPg==
-X-Gm-Message-State: ANoB5plVMRu1pVEH1s4nNcQqdaYlyY4siqc5sI3uuANqdJ0jjBY6sR1z
-        tbYzi6cIT8CuIMK7DZgNFrxSew==
-X-Google-Smtp-Source: AA0mqf7uX5D13d2dZmniVhruFUG6up8wnz4YlxpwhY4ufp1N31TFjORCg9NlqaJoWvsPgHZG0SDxMg==
-X-Received: by 2002:adf:e990:0:b0:242:6c62:84ee with SMTP id h16-20020adfe990000000b002426c6284eemr4667192wrm.598.1670347461335;
-        Tue, 06 Dec 2022 09:24:21 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id u17-20020a05600c19d100b003c6f8d30e40sm27920686wmq.31.2022.12.06.09.24.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Dec 2022 09:24:20 -0800 (PST)
-Message-ID: <df1f3014-9432-60b9-a29b-3af77858bcff@linaro.org>
-Date:   Tue, 6 Dec 2022 18:24:19 +0100
+        with ESMTP id S235513AbiLFRkY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 12:40:24 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FDF53C6E9;
+        Tue,  6 Dec 2022 09:39:09 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 36286B81AE2;
+        Tue,  6 Dec 2022 17:39:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E956EC433D7;
+        Tue,  6 Dec 2022 17:39:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670348346;
+        bh=+tdEznI/g0L7siq0SlLmZAepq7d3jTdsbku3dgHfOfE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=YYo1ndUG1+bV2uRuoYCxh78TVHlUUOMKcPeNRetKFQNjwXSsggo+aWkaw+7M0yud1
+         MP0scbJIDw7a9FrEnCc8ex7H3/HLqyB3rd2n7nqha+tCiRd6pyk1GhI/QvcVgGNb6q
+         ZY6xkFhiw2L+baF3WJlOACspyLwb6E1O+nZntdK6pTKDQ3jxR0sSEuOwCdejoTHu8E
+         l747il4hWHyftjyDkli6B97TuWZ789rgr6qK8rYFVodUrDzmUfvYeB1azXeqj7rn0k
+         uxL3BT9zervvZB4JwIwU2k0XXyF17jTXf1rxwhtxboNNcI3zKCy21FFXKGiEeGWn16
+         jZkBQVdcJuE/Q==
+Received: by mail-vs1-f51.google.com with SMTP id 3so14026976vsq.7;
+        Tue, 06 Dec 2022 09:39:06 -0800 (PST)
+X-Gm-Message-State: ANoB5pmN1oZ/BLc9Dyp+w5ZMoIoBMZpXHoggscs4AR8VtFD/JDfC5ijD
+        wuTStZHlQ+nzFYbSI5Uw8Qj1MEFU76YmKTM3Fg==
+X-Google-Smtp-Source: AA0mqf4PpwoI1ggVpjpVZszVRkunYLheMlcwUDFh5/UuwLgs7caqmMUTxdiMDcyl4E9LOSFxuYu4a7YIhDk5ts2lZvk=
+X-Received: by 2002:a05:6102:370a:b0:3af:c63c:5536 with SMTP id
+ s10-20020a056102370a00b003afc63c5536mr46010667vst.85.1670348345753; Tue, 06
+ Dec 2022 09:39:05 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Add compatible for
- sm8550
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
+References: <20221111162729.3381835-1-robh@kernel.org> <52d2e0c2-a04a-1ae8-cab5-b89a79150fe6@linaro.org>
+In-Reply-To: <52d2e0c2-a04a-1ae8-cab5-b89a79150fe6@linaro.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Tue, 6 Dec 2022 11:38:51 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+UOJcBKSiVpCsBO+VF8e0BA6JVfGhRtgoED0YbfD=W+g@mail.gmail.com>
+Message-ID: <CAL_Jsq+UOJcBKSiVpCsBO+VF8e0BA6JVfGhRtgoED0YbfD=W+g@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: thermal: thermal-idle: Fix example paths
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20221114-narmstrong-sm8550-upstream-tsens-v1-0-0e169822830f@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221114-narmstrong-sm8550-upstream-tsens-v1-0-0e169822830f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/11/2022 11:09, Neil Armstrong wrote:
-> The Qualcomm SM8550 platform has three instances of the tsens block,
-> add a compatible for these instances.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
+On Tue, Dec 6, 2022 at 11:15 AM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 11/11/2022 17:27, Rob Herring wrote:
+> > The reference by path (&{/cpus/cpu@101/thermal-idle}) in the example causes
+> > an error with new version of dtc:
+> >
+> > FATAL ERROR: Can't generate fixup for reference to path &{/cpus/cpu@100/thermal-idle}
+> >
+> > This is because the examples are built as an overlay and absolute paths
+> > are not valid as references must be by label. The path was also not
+> > resolvable because, by default, examples are placed under 'example-N'
+> > nodes.
+> >
+> > As the example contains top-level nodes, the root node must be explicit for
+> > the example to be extracted as-is. This changes the indentation for the
+> > whole example, but the existing indentation is a mess of of random amounts.
+> > Clean this up to be 4 spaces everywhere.
+> >
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> > The dtc update is in my tree, so I'd prefer to take this via the DT
+> > tree.
+> >
+> >   .../bindings/thermal/thermal-idle.yaml        | 154 +++++++++---------
+> >   1 file changed, 80 insertions(+), 74 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/thermal/thermal-idle.yaml b/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+> > index cc938d7ad1f3..72d85eb64247 100644
+> > --- a/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+> > +++ b/Documentation/devicetree/bindings/thermal/thermal-idle.yaml
+> > @@ -48,99 +48,105 @@ additionalProperties: false
+> >
+> >   examples:
+> >     - |
+> > -    #include <dt-bindings/thermal/thermal.h>
+> > +    /{
+> > +        #include <dt-bindings/thermal/thermal.h>
+> >
+> > -    // Example: Combining idle cooling device on big CPUs with cpufreq cooling device
+> > -    cpus {
+> > +        compatible = "foo";
+> > +        model = "foo";
+> > +        #address-cells = <1>;
+> > +        #size-cells = <1>;
+> > +
+> > +        // Example: Combining idle cooling device on big CPUs with cpufreq cooling device
+> > +        cpus {
+> >               #address-cells = <2>;
+> >               #size-cells = <0>;
+> >
+> >               /* ... */
+> >
+> > -                 cpu_b0: cpu@100 {
+> > -                         device_type = "cpu";
+> > -                         compatible = "arm,cortex-a72";
+> > -                         reg = <0x0 0x100>;
+> > -                         enable-method = "psci";
+> > -                         capacity-dmips-mhz = <1024>;
+> > -                         dynamic-power-coefficient = <436>;
+> > -                         #cooling-cells = <2>; /* min followed by max */
+> > -                         cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> > -                         thermal-idle {
+> > -                                 #cooling-cells = <2>;
+> > -                                 duration-us = <10000>;
+> > -                                 exit-latency-us = <500>;
+> > -                         };
+> > +            cpu_b0: cpu@100 {
+> > +                device_type = "cpu";
+> > +                compatible = "arm,cortex-a72";
+> > +                reg = <0x0 0x100>;
+> > +                enable-method = "psci";
+> > +                capacity-dmips-mhz = <1024>;
+> > +                dynamic-power-coefficient = <436>;
+> > +                #cooling-cells = <2>; /* min followed by max */
+> > +                cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> > +                thermal-idle {
+> > +                    #cooling-cells = <2>;
+> > +                    duration-us = <10000>;
+> > +                    exit-latency-us = <500>;
+> > +                };
+> > +            };
+> > +
+> > +            cpu_b1: cpu@101 {
+> > +                device_type = "cpu";
+> > +                compatible = "arm,cortex-a72";
+> > +                reg = <0x0 0x101>;
+> > +                enable-method = "psci";
+> > +                capacity-dmips-mhz = <1024>;
+> > +                dynamic-power-coefficient = <436>;
+> > +                #cooling-cells = <2>; /* min followed by max */
+> > +                cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> > +                thermal-idle {
+> > +                    #cooling-cells = <2>;
+> > +                    duration-us = <10000>;
+> > +                    exit-latency-us = <500>;
+> >                   };
+> > +            };
+> >
+> > -                cpu_b1: cpu@101 {
+> > -                        device_type = "cpu";
+> > -                        compatible = "arm,cortex-a72";
+> > -                        reg = <0x0 0x101>;
+> > -                        enable-method = "psci";
+> > -                        capacity-dmips-mhz = <1024>;
+> > -                        dynamic-power-coefficient = <436>;
+> > -                        #cooling-cells = <2>; /* min followed by max */
+> > -                        cpu-idle-states = <&CPU_SLEEP>, <&CLUSTER_SLEEP>;
+> > -                        thermal-idle {
+> > -                                #cooling-cells = <2>;
+> > -                                duration-us = <10000>;
+> > -                                exit-latency-us = <500>;
+> > -                        };
+> > -                 };
+> > -
+> > -          /* ... */
+> > +            /* ... */
+> >
+> > -    };
+> > +        };
+> >
+> > -    /* ... */
+> > +        /* ... */
+> >
+> > -    thermal_zones {
+> > -         cpu_thermal: cpu {
+> > +        thermal_zones {
+> > +            cpu_thermal: cpu {
+> >                   polling-delay-passive = <100>;
+> >                   polling-delay = <1000>;
+> >
+> >                   /* ... */
+> >
+> >                   trips {
+> > -                        cpu_alert0: cpu_alert0 {
+> > -                                    temperature = <65000>;
+> > -                                    hysteresis = <2000>;
+> > -                                    type = "passive";
+> > -                        };
+> > -
+> > -                        cpu_alert1: cpu_alert1 {
+> > -                                    temperature = <70000>;
+> > -                                    hysteresis = <2000>;
+> > -                                    type = "passive";
+> > -                        };
+> > -
+> > -                        cpu_alert2: cpu_alert2 {
+> > -                                    temperature = <75000>;
+> > -                                    hysteresis = <2000>;
+> > -                                    type = "passive";
+> > -                        };
+> > -
+> > -                        cpu_crit: cpu_crit {
+> > -                                    temperature = <95000>;
+> > -                                    hysteresis = <2000>;
+> > -                                    type = "critical";
+> > -                        };
+> > +                    cpu_alert0: cpu_alert0 {
+> > +                        temperature = <65000>;
+> > +                        hysteresis = <2000>;
+> > +                        type = "passive";
+> > +                    };
+> > +
+> > +                    cpu_alert1: cpu_alert1 {
+> > +                        temperature = <70000>;
+> > +                        hysteresis = <2000>;
+> > +                        type = "passive";
+> > +                    };
+> > +
+> > +                    cpu_alert2: cpu_alert2 {
+> > +                        temperature = <75000>;
+> > +                        hysteresis = <2000>;
+> > +                        type = "passive";
+> > +                    };
+> > +
+> > +                    cpu_crit: cpu_crit {
+> > +                        temperature = <95000>;
+> > +                        hysteresis = <2000>;
+> > +                        type = "critical";
+> > +                    };
+> >                   };
+> >
+> >                   cooling-maps {
+> > -                        map0 {
+> > -                             trip = <&cpu_alert1>;
+> > -                             cooling-device = <&{/cpus/cpu@100/thermal-idle} 0 15 >,
+> > -                                              <&{/cpus/cpu@101/thermal-idle} 0 15>;
+> > -                        };
+> > -
+> > -                        map1 {
+> > -                             trip = <&cpu_alert2>;
+> > -                             cooling-device =
+> > -                                        <&cpu_b0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+> > -                                        <&cpu_b1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+> > -                       };
+> > +                    map0 {
+> > +                        trip = <&cpu_alert1>;
+> > +                        cooling-device = <&cpu_b0 0 15 >,
+> > +                                         <&cpu_b1 0 15>;
+>
+> This is pointing to the DVFS cooling device, not the idle cooling
+> device. Should it be <&cpu_b0_idle 0 15> and that label defined in
+> thermal_idle ?
 
-Applied, thanks
+Ah, yes indeed. I'll fix that up with a label to the correct node.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+And note that 'thermal-idle' needs to be added to cpu node schema.
+That one currently allows anything extra which I'm working on
+addressing.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Rob
