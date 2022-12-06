@@ -2,86 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC84E6442F4
-	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 13:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 647FA6448DC
+	for <lists+linux-pm@lfdr.de>; Tue,  6 Dec 2022 17:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232896AbiLFMIe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 6 Dec 2022 07:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33210 "EHLO
+        id S235464AbiLFQLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 6 Dec 2022 11:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235163AbiLFMIO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 07:08:14 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 049D21054C;
-        Tue,  6 Dec 2022 04:08:12 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670328490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOchanOPT3T0rVYg76BTFT5x8A0i2ssn7xjg7cU7rxM=;
-        b=hizXk9UtkbIMwyGTvGhaGw+ur1NmQ++i8IvREyxa01nMiTNKqM358HeqcM7nmCXf6tq+4m
-        kAdee5lyKv5lMtRirM/V7xV9PDW7Uh95PkX1J+1SVzo6tERYDcKpdQRAAstft5BgnNXFEK
-        VYb4i4tjZvME8ngrPbqI78sl5CPJmWMjyHA5ZwcWt94K9NH5RRxcdrTbyZTBBOCT31dXBs
-        5HDcMdjVzsr3r3ro2mjXSW3QtsPAJFxAfOJKYBxoe50vYTMqbBjoH6PMj/BpsmY2rCzixW
-        Eye+ZrrOhGZMMc99udiI4lpsUOIGOrNiUSCNZMYwjJbgJ6Rx0JLzgdY+at48NQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670328490;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zOchanOPT3T0rVYg76BTFT5x8A0i2ssn7xjg7cU7rxM=;
-        b=7JhFV7EGr8y99Ay5PQGR08/BewXnw4DPgoTHp1ZMKTVoUVueEyoQ13iXdHX47dbFMpr4yu
-        UlCOD/wM7BPC7FDA==
-To:     "Rafael J. Wysocki" <rafael@kernel.org>, lirongqing@baidu.com
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        peterz@infradead.org, akpm@linux-foundation.org,
-        tony.luck@intel.com, jpoimboe@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when
- mwait_idle is used
-In-Reply-To: <CAJZ5v0gG93BXZWOcRVpng_EN-h4+sOyUqTc1XRt4xZkqMnaZZw@mail.gmail.com>
-References: <1670308998-12313-1-git-send-email-lirongqing@baidu.com>
- <CAJZ5v0gG93BXZWOcRVpng_EN-h4+sOyUqTc1XRt4xZkqMnaZZw@mail.gmail.com>
-Date:   Tue, 06 Dec 2022 13:08:10 +0100
-Message-ID: <87mt80g2fp.ffs@tglx>
+        with ESMTP id S235144AbiLFQKy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 11:10:54 -0500
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E1072FA76;
+        Tue,  6 Dec 2022 08:05:34 -0800 (PST)
+Received: by mail-pf1-x433.google.com with SMTP id 140so14926201pfz.6;
+        Tue, 06 Dec 2022 08:05:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FAF09lvySfCr9oD5/MSAZ2ZKkui8tlf346USIK81Ewg=;
+        b=ET5bu7KZ+b3PLr23c6ZY7TBKqH7J9r4p8fSs1kGwnwlQGvKSbAvNJJE7i/QvzQC/G3
+         JZQGJvQDRICcIgcSqJhTmDmY6VotE1BdjT8gYmGeSH7QlBvLbs/Xl6MAxE8FKwsjvByZ
+         AlhoWt9neFd7dtZZLa3ymAd7QuD6cM2H/huRRs8c90W0CsFRVeEhkoeJqZ285BbAQ+R2
+         kDMLp9L0Lw1PxHurTRb1C/4WaSs6iAnhw+y1AmgKZxqd2bWrUN8haRVaoQu5/idvan36
+         FdZZn+iS877KAniIZ7ri6s0sy0aAzbrse3o82vEC+r8vGg5F2HYH+kIIa5Ao15QDQX8A
+         b8+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FAF09lvySfCr9oD5/MSAZ2ZKkui8tlf346USIK81Ewg=;
+        b=UagJYEqWM4GXLO+HXaWl+zNiJZxcujFyxN/QKplYbg1ICtqi4KNQFAcWMvClZQXkDE
+         dJ1rGqUUKOpP0vprmuc54J2iS4+PCUysoFbqpplcgRdIq3JTvZD4RtlF41oIxZfRyRwv
+         U3fYS8xKcWZKocDWwfP+Va+Y0Ri10fOAegE13nQL/l4LxucM7X2DPg+akoy6RBuLXPwN
+         vLWwWnPKkL9Go2Of8YVry+et7PdA3TFHjHQ6vtphhUszCHqklWbxdDDpFLRtls2k/BlJ
+         oHPQgtlaTC1rcCiu88wp9bvhghERLituwncCa08KUr/vL27pUIM87JYac7+SNiD38DFW
+         im2g==
+X-Gm-Message-State: ANoB5pmZ1bUb/5eRoJ8zpsOt+Jq+CSAwoVocUMCP9Fbnuu6bwsqO4oqb
+        ncuqupy9Xu0pPxjkZBTRm8k=
+X-Google-Smtp-Source: AA0mqf5E975rSJhCjVpoOsl9BLBfA8yf9jvyon7FW9ThXld/B7d+h1fP54pcGkdHIbs346+qxeGVfQ==
+X-Received: by 2002:a62:5f81:0:b0:56b:bb06:7dd5 with SMTP id t123-20020a625f81000000b0056bbb067dd5mr70943644pfb.3.1670342733634;
+        Tue, 06 Dec 2022 08:05:33 -0800 (PST)
+Received: from ?IPV6:2401:4900:25ca:bfbf:ce0f:fb63:adb8:7efe? ([2401:4900:25ca:bfbf:ce0f:fb63:adb8:7efe])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa79a49000000b0056b9df2a15esm6280264pfj.62.2022.12.06.08.05.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Dec 2022 08:05:33 -0800 (PST)
+Message-ID: <eedcf790-5447-d988-f9cb-9103f34f27ae@gmail.com>
+Date:   Tue, 6 Dec 2022 17:05:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 0/7] Add support for mp2733 battery charger
+To:     sre@kernel.org, lee@kernel.org, jic23@kernel.org, lars@metafoo.de,
+        andy.shevchenko@gmail.com
+Cc:     linux-pm@vger.kernel.org, linux-iio@vger.kernel.org
+References: <20221123175425.564042-1-sravanhome@gmail.com>
+Content-Language: en-US
+From:   saravanan sekar <sravanhome@gmail.com>
+In-Reply-To: <20221123175425.564042-1-sravanhome@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 06 2022 at 12:59, Rafael J. Wysocki wrote:
-> On Tue, Dec 6, 2022 at 7:43 AM <lirongqing@baidu.com> wrote:
->>
->> +bool is_mwait_idle(void)
->> +{
->> +       return x86_idle == mwait_idle;
->> +}
->> +EXPORT_SYMBOL_GPL(is_mwait_idle);
+On 23/11/22 18:54, Saravanan Sekar wrote:
+> changes in v6:
+>    - splitted chip id to v6-0003 and support of mp2733 to v6-0004 patch
+>    - fixed commit message English grammar
+> 
+> changes in v5:
+>    - fixed commit message on v5-0002 and v5-0004
+> 
+> changes in v4:
+>    - fixed attributes groups review comments in v3
+>    - added new bug fix patches v4-0007 and v4-0008
+> 
+> changes in v3:
+>    - fixed dt_binding_check error
+>    - fixed spelling usb->USB
+> 
+> changes in v2:
+>    - fixed spelling
+>    - revert back probe to probe_new in mfd driver
+> 
+> add support for mp2733 Battery charger control driver for Monolithic
+> Power System's MP2733 chipset
+> 
+> Saravanan Sekar (7):
+>    mfd: mp2629: fix failed to get iio channel by device name
+>    power: supply: fix wrong interpretation of register value
+>    mfd: mp2629: introduce chip id machanism to distinguish chip
+>    mfd: mp2629: Add support for mps mp2733 battery charger
+>    iio: adc: mp2629: restrict input voltage mask for mp2629
+>    power: supply: Add support for mp2733 battery charger
+>    power: supply: mp2629: Add USB fast charge settings
+> 
+>   .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
+>   drivers/iio/adc/mp2629_adc.c                  |   5 +-
+>   drivers/mfd/mp2629.c                          |   7 +-
+>   drivers/power/supply/mp2629_charger.c         | 229 +++++++++++++++---
+>   include/linux/mfd/mp2629.h                    |   6 +
+>   5 files changed, 226 insertions(+), 37 deletions(-)
+> 
 
-No, this is just another adhoc check, which scratches ONE particular itch.
+Hi,
 
->> @@ -111,6 +112,9 @@ static int __init haltpoll_init(void)
->>         if (!kvm_para_available() || !haltpoll_want())
->>                 return -ENODEV;
->>
->> +       if (is_mwait_idle())
->> +               return -ENODEV;
->> +
->
-> So perhaps you could make default_enter_idle() be a bit more careful
-> about what it calls as the "default idle" routine?
-
-Correct. arch_cpu_idle() is the one which should be called.
+Can someone give me share the plan for this series?
 
 Thanks,
-
-        tglx
+Saravanan
