@@ -2,120 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB9D645319
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Dec 2022 05:39:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD20D645387
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Dec 2022 06:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229546AbiLGEjh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Tue, 6 Dec 2022 23:39:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34534 "EHLO
+        id S229573AbiLGFuk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Dec 2022 00:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiLGEjh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 6 Dec 2022 23:39:37 -0500
-X-Greylist: delayed 1896 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 06 Dec 2022 20:39:35 PST
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8FD0456D73;
-        Tue,  6 Dec 2022 20:39:35 -0800 (PST)
-From:   "Li,Rongqing" <lirongqing@baidu.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-CC:     "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when
- mwait_idle is used
-Thread-Topic: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when
- mwait_idle is used
-Thread-Index: AQHZCWttIym3Q6GeZEeVWIMC3IQoba5hyAuw
-Date:   Wed, 7 Dec 2022 03:45:03 +0000
-Message-ID: <bd15822f364145228de8ad83a38c9d26@baidu.com>
-References: <1670308998-12313-1-git-send-email-lirongqing@baidu.com>
- <CAJZ5v0gG93BXZWOcRVpng_EN-h4+sOyUqTc1XRt4xZkqMnaZZw@mail.gmail.com>
- <87mt80g2fp.ffs@tglx>
-In-Reply-To: <87mt80g2fp.ffs@tglx>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.22.206.14]
-x-baidu-bdmsfe-datecheck: 1_BJHW-Mail-Ex16_2022-12-07 11:45:03:504
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-FEAS-Client-IP: 10.127.64.32
-X-FE-Last-Public-Client-IP: 100.100.100.38
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229448AbiLGFui (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 00:50:38 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2D556EF7;
+        Tue,  6 Dec 2022 21:50:35 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id v3so15351954pgh.4;
+        Tue, 06 Dec 2022 21:50:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ztdTBdFFzUgQtkWJUCxW6jiR87PJzZ+mXWctPgKolvM=;
+        b=cwaZlpRJcZkWrW1FyxsDLEheAAy0epxJZIGVnF2OHn+vxCTv9Gx1WPd2EYZzlC2atf
+         /8i3aEbTRITS1FSxe/j6ZGozNNti9FaDRbOcmEyFYVuKEgSExDemoMc0IFJSFBm5WKgQ
+         DW0uH5ReUEnIi4wXXWMBUp6e5SQYj9oeGm8tTiYlhev8KWakKvAMnBfexG1HcwIrJgYJ
+         RUWLSFWSlJOI9+0jNiAzQh4of1wd1WwP04bX0YNmLXAqctvMYYqMRX3lXBaa3BZm0TJp
+         x8lCxvjzAGNSvnfC2Mxh9F30DXCoJq+oAk0lzAeRDRJDuclluxWXsp3LxtpsV/gZ/Elg
+         6fdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ztdTBdFFzUgQtkWJUCxW6jiR87PJzZ+mXWctPgKolvM=;
+        b=8FbmzSUj5VhSdi9XTzfoWHHGAW/tlvsbPvvEpJx06lP6h0RnxMuxG1pnomki+86bDQ
+         A7rgW5D/RIFQMav90cnHD4MbTVyromK7uzUNBkHvNNd6YMqbsZxb3TQ5u3LVYT9w/Bc5
+         wliwhKkgUJUM8rUbgAqHN2xLgPakD+EzjVnhbVAJdPgrQflMf0TnTRM5d+NSN3iG/7tx
+         Tx1+4wQoiOVk/yi7Y1EO8Fx2shFkye5HCH4RFyp6QWjqlJEH7seRNcdjxAMgaxn0OQXY
+         fELouO5uTsp6eEJmDpzI1nLxOHjMPKZN0BnAEzRnBnzsUFMR4CL07S89dGEeqE2UxCU9
+         dDTQ==
+X-Gm-Message-State: ANoB5pkULcLtEChWz58Hl0Tb0ykzsGbQNsNvbIpd8U3eXoH4br7c4MbQ
+        ZtwIFCPqomJVzDNEQc9iEDk=
+X-Google-Smtp-Source: AA0mqf5mbJs2dMxZ6PHqkjyrhifzu6YOoUOjBC8Ai/bTwE1VvdZ4l/P23iP+6RwVJNQPxuiZqFSnUg==
+X-Received: by 2002:a63:1055:0:b0:46e:f011:9548 with SMTP id 21-20020a631055000000b0046ef0119548mr63000322pgq.553.1670392234534;
+        Tue, 06 Dec 2022 21:50:34 -0800 (PST)
+Received: from scdiu3.sunplus.com ([113.196.136.192])
+        by smtp.googlemail.com with ESMTPSA id e7-20020a630f07000000b004777c56747csm10585615pgl.11.2022.12.06.21.50.31
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 06 Dec 2022 21:50:33 -0800 (PST)
+From:   Li-hao Kuo <lhjeff911@gmail.com>
+To:     rafael@kernel.org, krzk@kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org, robh+dt@kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     lh.kuo@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
+Subject: [PATCH v13 0/2] Add thermal control driver for Sunplus SoC
+Date:   Wed,  7 Dec 2022 13:50:34 +0800
+Message-Id: <cover.1665990345.git.lhjeff911@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+This is a patch series for thermal driver for Sunplus SoC.
 
+Sunplus SP7021 is an ARM Cortex A7 (4 cores) based SoC. It integrates
+many peripherals (ex: UART, I2C, SPI, SDIO, eMMC, USB, SD card and
+etc.) into a single chip. It is designed for industrial control.
 
-> -----Original Message-----
-> From: Thomas Gleixner <tglx@linutronix.de>
-> Sent: Tuesday, December 6, 2022 8:08 PM
-> To: Rafael J. Wysocki <rafael@kernel.org>; Li,Rongqing <lirongqing@baidu.com>
-> Cc: mingo@redhat.com; bp@alien8.de; dave.hansen@linux.intel.com;
-> x86@kernel.org; rafael@kernel.org; daniel.lezcano@linaro.org;
-> peterz@infradead.org; akpm@linux-foundation.org; tony.luck@intel.com;
-> jpoimboe@kernel.org; linux-kernel@vger.kernel.org; linux-pm@vger.kernel.org
-> Subject: Re: [PATCH] cpuidle-haltpoll: Disable kvm guest polling when
-> mwait_idle is used
-> 
-> On Tue, Dec 06 2022 at 12:59, Rafael J. Wysocki wrote:
-> > On Tue, Dec 6, 2022 at 7:43 AM <lirongqing@baidu.com> wrote:
-> >>
-> >> +bool is_mwait_idle(void)
-> >> +{
-> >> +       return x86_idle == mwait_idle; }
-> >> +EXPORT_SYMBOL_GPL(is_mwait_idle);
-> 
-> No, this is just another adhoc check, which scratches ONE particular itch.
-> 
-> >> @@ -111,6 +112,9 @@ static int __init haltpoll_init(void)
-> >>         if (!kvm_para_available() || !haltpoll_want())
-> >>                 return -ENODEV;
-> >>
-> >> +       if (is_mwait_idle())
-> >> +               return -ENODEV;
-> >> +
-> >
-> > So perhaps you could make default_enter_idle() be a bit more careful
-> > about what it calls as the "default idle" routine?
-> 
-> Correct. arch_cpu_idle() is the one which should be called.
-> 
+Refer to:
+https://sunplus-tibbo.atlassian.net/wiki/spaces/doc/overview
+https://tibbo.com/store/plus1.html
 
-Greats,  using arch_cpu_idle() can get best latency,
+Li-hao Kuo (2):
+  thermal: Add thermal driver for Sunplus
+  dt-bindings: thermal: Add Sunplus schema
 
-Before change, "sockperf ping-pong -i 127.0.0.1 -p 20001  --tcp " latency is:
-sockperf: Summary: Latency is 6.245 usec
+ .../bindings/thermal/sunplus,sp7021-thermal.yaml   |  43 +++++++
+ MAINTAINERS                                        |   7 ++
+ drivers/thermal/Kconfig                            |  10 ++
+ drivers/thermal/Makefile                           |   1 +
+ drivers/thermal/sunplus_thermal.c                  | 130 +++++++++++++++++++++
+ 5 files changed, 191 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
+ create mode 100644 drivers/thermal/sunplus_thermal.c
 
-this patch, disable cpuidle-haltpoll
-sockperf: Summary: Latency is 4.671 usec
+-- 
+2.7.4
 
-
-using arch_cpu_idle() in default_enter_idle()
-sockperf: Summary: Latency is 4.285 usec
-
-
-thanks
-
--LiRongQing
-
-
-> Thanks,
-> 
->         tglx
