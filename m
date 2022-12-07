@@ -2,446 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC8D8646509
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 00:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6687646595
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 01:03:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiLGX0Q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Dec 2022 18:26:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S230229AbiLHADF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Dec 2022 19:03:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbiLGX0O (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 18:26:14 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C838930D;
-        Wed,  7 Dec 2022 15:26:12 -0800 (PST)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2B7NQ4HD014549;
-        Wed, 7 Dec 2022 23:26:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=V2RHTNYj+y3MoQL8XxgBIwmq8NM9acbI0Zw8SiwpklU=;
- b=f+MkYFL0jkfY9rOscS11AOd6ZlBMqCqrRd2ccYFqMGIlNihfAjk+xBniGYIsZ+Hl6PRz
- QImci5mCQLzvkhbICeGBfIYPHIrA3CTI8sgORZGpGPcFagoNYEnGjdHRkqxQ2eInRAMs
- 2ieOiLJovBkhOy66/UKuS+H4eWTFrKY1D5tJaQwugDQ78/Zc8OEgjbJW5T7ick5CXYee
- 9PcSOQFZotNiY84+VkaSmQAWkgStKj90+pf2y6ld4e1R1EEED49fB6dZIkI++d7mfLJQ
- vOEXv6hoZTZ0O+F/F2nrYf6AfsseEJBcgzHz2/6y4+ZrX3YQ3own84uxrUdkLYknRK1H pw== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3maype0gck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 07 Dec 2022 23:26:04 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2B7NQ3tx002834
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 7 Dec 2022 23:26:03 GMT
-Received: from hu-collinsd-lv.qualcomm.com (10.49.16.6) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Wed, 7 Dec 2022 15:26:02 -0800
-From:   David Collins <quic_collinsd@quicinc.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-CC:     David Collins <quic_collinsd@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 3/3] thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
-Date:   Wed, 7 Dec 2022 15:24:58 -0800
-Message-ID: <c3caecfa96f0c4370463f8b3410a09ef63aad221.1670454176.git.quic_collinsd@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1670454176.git.quic_collinsd@quicinc.com>
-References: <cover.1670454176.git.quic_collinsd@quicinc.com>
+        with ESMTP id S230237AbiLHACs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 19:02:48 -0500
+Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F10862E0
+        for <linux-pm@vger.kernel.org>; Wed,  7 Dec 2022 16:02:46 -0800 (PST)
+Received: by mail-ot1-x336.google.com with SMTP id m6-20020a9d7e86000000b0066ec505ae93so6752616otp.9
+        for <linux-pm@vger.kernel.org>; Wed, 07 Dec 2022 16:02:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pys7YHXlD6v5DSBXAVWpucw13OzZ4BiOPZmXbiQzjAA=;
+        b=Vj44kd0ygeqnZ6PZpXz4+6ktl2PMHONahY1zAdD5HAfm8zcg7KVDmU8h6/3V5MJKwZ
+         hrxmda5sOojj4G8VI9CwdoU+UaZUrPS6fkrZglSVUePffkg5HlUDS21p8TAcbplh5xZo
+         TnX9g8LyhRBUi6HDUo56xgYU4jVuOUlpGnYog=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pys7YHXlD6v5DSBXAVWpucw13OzZ4BiOPZmXbiQzjAA=;
+        b=Hbisnf35PAmMtYpowbugGW6NnMJJFKM5/MZGq+lcUD/ZgmWRGqnhCQhJOG8Xv/oQpJ
+         8OvdgcFcbrDHS+7OT7IBaRi9LD+2Dky2+pNBrLWGf4gk9TROlYphSXYcw3tE4Zs0ah4x
+         j4ul9JEpWgRG6kKzHejjT0y4Pxgu4tSzlsc+iFoP7cewmQJ+JAgS+Ptdp265sGTNZLAc
+         e7I/OaqIuXJrWWGxbrs+YfepXoMKxoL8XcJycLThcYeAYMM+OOPPC5/aUlpJ9j8ioy8t
+         eJQE/yh/pswgRE+MBEYJOjqUbr0b2AwmYt4I0J8mCbk0MzgvfI4KGFViOLMWVktJAlD1
+         XBNQ==
+X-Gm-Message-State: ANoB5pmr5OegIncUuVaOuPAiy3YUvDpMSl0F7BOX79pzFJr5ZPTuPF27
+        osq18rncPS4/iri0jjAwsgxH95GIrxqhkzgb
+X-Google-Smtp-Source: AA0mqf4Y12MFkHAp+sFuCPqOSsCH0c5CqLDrIogZ4Ja953l/t9iOWMrjF/edEIAhDhBJZfUBgthjwA==
+X-Received: by 2002:a9d:6514:0:b0:661:dfeb:a975 with SMTP id i20-20020a9d6514000000b00661dfeba975mr473404otl.32.1670457764970;
+        Wed, 07 Dec 2022 16:02:44 -0800 (PST)
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com. [209.85.161.46])
+        by smtp.gmail.com with ESMTPSA id i21-20020a9d68d5000000b00662228a27d3sm10864438oto.57.2022.12.07.16.02.44
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Dec 2022 16:02:44 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id q6-20020a4aa886000000b004a083f945a6so4695oom.6
+        for <linux-pm@vger.kernel.org>; Wed, 07 Dec 2022 16:02:44 -0800 (PST)
+X-Received: by 2002:a25:d642:0:b0:6f7:15b:70f5 with SMTP id
+ n63-20020a25d642000000b006f7015b70f5mr45506521ybg.172.1670457334085; Wed, 07
+ Dec 2022 15:55:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: uH_dleP4cT9BAGG7ZZmCTha0BR2SOmq8
-X-Proofpoint-ORIG-GUID: uH_dleP4cT9BAGG7ZZmCTha0BR2SOmq8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-07_11,2022-12-07_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- bulkscore=0 suspectscore=0 priorityscore=1501 adultscore=0 mlxlogscore=999
- impostorscore=0 malwarescore=0 phishscore=0 lowpriorityscore=0 mlxscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2212070198
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+In-Reply-To: <20221111231636.3748636-1-evgreen@chromium.org>
+From:   Evan Green <evgreen@chromium.org>
+Date:   Wed, 7 Dec 2022 15:54:57 -0800
+X-Gmail-Original-Message-ID: <CAE=gft46BNGmfy7u6gXQvmSzq=W2kpT6GYG_NH5Tg5NSH=MEiQ@mail.gmail.com>
+Message-ID: <CAE=gft46BNGmfy7u6gXQvmSzq=W2kpT6GYG_NH5Tg5NSH=MEiQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/11] Encrypted Hibernation
+To:     linux-kernel@vger.kernel.org
+Cc:     corbet@lwn.net, linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, jejb@linux.ibm.com,
+        Kees Cook <keescook@chromium.org>, dlunev@google.com,
+        zohar@linux.ibm.com, Matthew Garrett <mgarrett@aurora.tech>,
+        jarkko@kernel.org, linux-pm@vger.kernel.org,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Len Brown <len.brown@intel.com>,
+        Matthew Garrett <mjg59@google.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, axelj <axelj@axis.com>,
+        keyrings@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-security-module@vger.kernel.org, greg@enjellic.com,
+        casey@schaufler-ca.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add support for TEMP_ALARM LITE PMIC peripherals.  This subtype
-utilizes a pair of registers to configure a warning interrupt
-threshold temperature and an automatic hardware shutdown
-threshold temperature.
+Hello, it's me again!
 
-Signed-off-by: David Collins <quic_collinsd@quicinc.com>
----
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 217 +++++++++++++++++++-
- 1 file changed, 208 insertions(+), 9 deletions(-)
+On Fri, Nov 11, 2022 at 3:19 PM Evan Green <evgreen@chromium.org> wrote:
+>
+> We are exploring enabling hibernation in some new scenarios. However,
+> our security team has a few requirements, listed below:
+> 1. The hibernate image must be encrypted with protection derived from
+>    both the platform (eg TPM) and user authentication data (eg
+>    password).
+> 2. Hibernation must not be a vector by which a malicious userspace can
+>    escalate to the kernel.
+>
+> Requirement #1 can be achieved solely with uswsusp, however requirement
+> 2 necessitates mechanisms in the kernel to guarantee integrity of the
+> hibernate image. The kernel needs a way to authenticate that it generated
+> the hibernate image being loaded, and that the image has not been tampered
+> with. Adding support for in-kernel AEAD encryption with a TPM-sealed key
+> allows us to achieve both requirements with a single computation pass.
+>
+> Matthew Garrett published a series [1] that aligns closely with this
+> goal. His series utilized the fact that PCR23 is a resettable PCR that
+> can be blocked from access by usermode. The TPM can create a sealed key
+> tied to PCR23 in two ways. First, the TPM can attest to the value of
+> PCR23 when the key was created, which the kernel can use on resume to
+> verify that the kernel must have created the key (since it is the only
+> one capable of modifying PCR23). It can also create a policy that enforces
+> PCR23 be set to a specific value as a condition of unsealing the key,
+> preventing usermode from unsealing the key by talking directly to the
+> TPM.
+>
+> This series adopts that primitive as a foundation, tweaking and building
+> on it a bit. Where Matthew's series used the TPM-backed key to encrypt a
+> hash of the image, this series uses the key directly as a gcm(aes)
+> encryption key, which the kernel uses to encrypt and decrypt the
+> hibernate image in chunks of 16 pages. This provides both encryption and
+> integrity, which turns out to be a noticeable performance improvement over
+> separate passes for encryption and hashing.
+>
+> The series also introduces the concept of mixing user key material into
+> the encryption key. This allows usermode to introduce key material
+> based on unspecified external authentication data (in our case derived
+> from something like the user password or PIN), without requiring
+> usermode to do a separate encryption pass.
+>
+> Matthew also documented issues his series had [2] related to generating
+> fake images by booting alternate kernels without the PCR23 limiting.
+> With access to PCR23 on the same machine, usermode can create fake
+> hibernate images that are indistinguishable to the new kernel from
+> genuine ones. His post outlines a solution that involves adding more
+> PCRs into the creation data and policy, with some gyrations to make this
+> work well on a standard PC.
+>
+> Our approach would be similar: on our machines PCR 0 indicates whether
+> the system is booted in secure/verified mode or developer mode. By
+> adding PCR0 to the policy, we can reject hibernate images made in
+> developer mode while in verified mode (or vice versa).
+>
+> Additionally, mixing in the user authentication data limits both
+> data exfiltration attacks (eg a stolen laptop) and forged hibernation
+> image attacks to attackers that already know the authentication data (eg
+> user's password). This, combined with our relatively sealed userspace
+> (dm-verity on the rootfs), and some judicious clearing of the hibernate
+> image (such as across an OS update) further reduce the risk of an online
+> attack. The remaining attack space of a forgery from someone with
+> physical access to the device and knowledge of the authentication data
+> is out of scope for us, given that flipping to developer mode or
+> reflashing RO firmware trivially achieves the same thing.
+>
+> A couple of patches still need to be written on top of this series. The
+> generalized functionality to OR in additional PCRs via Kconfig (like PCR
+> 0 or 5) still needs to be added. We'll also need a patch that disallows
+> unencrypted forms of resume from hibernation, to fully close the door
+> to malicious userspace. However, I wanted to get this series out first
+> and get reactions from upstream before continuing to add to it.
+>
+> [1] https://patchwork.kernel.org/project/linux-pm/cover/20210220013255.1083202-1-matthewgarrett@google.com/
+> [2] https://mjg59.dreamwidth.org/58077.html
+>
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index a8b288de6b52..8fde75e8fd16 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-  */
- 
-+#include <linux/bitfield.h>
- #include <linux/bitops.h>
- #include <linux/delay.h>
- #include <linux/err.h>
-@@ -24,21 +25,28 @@
- #define QPNP_TM_REG_TYPE		0x04
- #define QPNP_TM_REG_SUBTYPE		0x05
- #define QPNP_TM_REG_STATUS		0x08
-+#define QPNP_TM_REG_IRQ_STATUS		0x10
- #define QPNP_TM_REG_SHUTDOWN_CTRL1	0x40
- #define QPNP_TM_REG_ALARM_CTRL		0x46
- /* TEMP_DAC_* registers are only present for TEMP_GEN2 v2.0 */
- #define QPNP_TM_REG_TEMP_DAC_STG1	0x47
- #define QPNP_TM_REG_TEMP_DAC_STG2	0x48
- #define QPNP_TM_REG_TEMP_DAC_STG3	0x49
-+#define QPNP_TM_REG_LITE_TEMP_CFG1	0x50
-+#define QPNP_TM_REG_LITE_TEMP_CFG2	0x51
- 
- #define QPNP_TM_TYPE			0x09
- #define QPNP_TM_SUBTYPE_GEN1		0x08
- #define QPNP_TM_SUBTYPE_GEN2		0x09
-+#define QPNP_TM_SUBTYPE_LITE		0xC0
- 
- #define STATUS_GEN1_STAGE_MASK		GENMASK(1, 0)
- #define STATUS_GEN2_STATE_MASK		GENMASK(6, 4)
- #define STATUS_GEN2_STATE_SHIFT		4
- 
-+/* IRQ status only needed for TEMP_ALARM_LITE */
-+#define IRQ_STATUS_MASK			BIT(0)
-+
- #define SHUTDOWN_CTRL1_OVERRIDE_S2	BIT(6)
- #define SHUTDOWN_CTRL1_THRESHOLD_MASK	GENMASK(1, 0)
- 
-@@ -46,6 +54,8 @@
- 
- #define ALARM_CTRL_FORCE_ENABLE		BIT(7)
- 
-+#define LITE_TEMP_CFG_THRESHOLD_MASK	GENMASK(3, 2)
-+
- #define THRESH_COUNT			4
- #define STAGE_COUNT			3
- 
-@@ -90,6 +100,19 @@ static const long temp_dac_max[STAGE_COUNT] = {
- 	119375, 159375, 159375
- };
- 
-+/*
-+ * TEMP_ALARM_LITE has two stages: warning and shutdown with independently
-+ * configured threshold temperatures.
-+ */
-+
-+static const long temp_map_lite_warning[THRESH_COUNT] = {
-+	115000, 125000, 135000, 145000
-+};
-+
-+static const long temp_map_lite_shutdown[THRESH_COUNT] = {
-+	135000, 145000, 160000, 175000
-+};
-+
- /* Temperature in Milli Celsius reported during stage 0 if no ADC is present */
- #define DEFAULT_TEMP			37000
- 
-@@ -146,7 +169,7 @@ static int qpnp_tm_write(struct qpnp_tm_chip *chip, u16 addr, u8 data)
-  */
- static long qpnp_tm_decode_temp(struct qpnp_tm_chip *chip, unsigned int stage)
- {
--	if (chip->has_temp_dac) {
-+	if (chip->has_temp_dac || chip->subtype == QPNP_TM_SUBTYPE_LITE) {
- 		if (stage == 0 || stage > STAGE_COUNT)
- 			return 0;
- 
-@@ -164,19 +187,26 @@ static long qpnp_tm_decode_temp(struct qpnp_tm_chip *chip, unsigned int stage)
-  * qpnp_tm_get_temp_stage() - return over-temperature stage
-  * @chip:		Pointer to the qpnp_tm chip
-  *
-- * Return: stage (GEN1) or state (GEN2) on success, or errno on failure.
-+ * Return: stage (GEN1), state (GEN2), or alarm interrupt state (LITE) on
-+ *	   success; or errno on failure.
-  */
- static int qpnp_tm_get_temp_stage(struct qpnp_tm_chip *chip)
- {
- 	int ret;
-+	u16 addr = QPNP_TM_REG_STATUS;
- 	u8 reg = 0;
- 
--	ret = qpnp_tm_read(chip, QPNP_TM_REG_STATUS, &reg);
-+	if (chip->subtype == QPNP_TM_SUBTYPE_LITE)
-+		addr = QPNP_TM_REG_IRQ_STATUS;
-+
-+	ret = qpnp_tm_read(chip, addr, &reg);
- 	if (ret < 0)
- 		return ret;
- 
- 	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1)
- 		ret = reg & STATUS_GEN1_STAGE_MASK;
-+	else if (chip->subtype == QPNP_TM_SUBTYPE_LITE)
-+		ret = reg & IRQ_STATUS_MASK;
- 	else
- 		ret = (reg & STATUS_GEN2_STATE_MASK) >> STATUS_GEN2_STATE_SHIFT;
- 
-@@ -199,7 +229,8 @@ static int qpnp_tm_update_temp_no_adc(struct qpnp_tm_chip *chip)
- 		return ret;
- 	stage = ret;
- 
--	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1) {
-+	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1
-+	    || chip->subtype == QPNP_TM_SUBTYPE_LITE) {
- 		stage_new = stage;
- 		stage_old = chip->stage;
- 	} else {
-@@ -282,6 +313,78 @@ static int qpnp_tm_set_temp_dac_thresh(struct qpnp_tm_chip *chip, int trip,
- 	return 0;
- }
- 
-+static int qpnp_tm_set_temp_lite_thresh(struct qpnp_tm_chip *chip, int trip,
-+				       int temp)
-+{
-+	int ret, temp_cfg, i;
-+	const long *temp_map;
-+	u16 addr;
-+	u8 reg, thresh;
-+
-+	if (trip < 0 || trip >= STAGE_COUNT) {
-+		dev_err(chip->dev, "invalid TEMP_LITE trip = %d\n", trip);
-+		return -EINVAL;
-+	}
-+
-+	switch (trip) {
-+	case 0:
-+		temp_map = temp_map_lite_warning;
-+		addr = QPNP_TM_REG_LITE_TEMP_CFG1;
-+		break;
-+	case 1:
-+		/*
-+		 * The second trip point is purely in software to facilitate
-+		 * a controlled shutdown after the warning threshold is crossed
-+		 * but before the automatic hardware shutdown threshold is
-+		 * crossed.
-+		 */
-+		return 0;
-+	case 2:
-+		temp_map = temp_map_lite_shutdown;
-+		addr = QPNP_TM_REG_LITE_TEMP_CFG2;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	if (temp < temp_map[THRESH_MIN] || temp > temp_map[THRESH_MAX]) {
-+		dev_err(chip->dev, "invalid TEMP_LITE temp = %d\n", temp);
-+		return -EINVAL;
-+	}
-+
-+	thresh = 0;
-+	temp_cfg = temp_map[thresh];
-+	for (i = THRESH_MAX; i >= THRESH_MIN; i--) {
-+		if (temp >= temp_map[i]) {
-+			thresh = i;
-+			temp_cfg = temp_map[i];
-+			break;
-+		}
-+	}
-+
-+	if (temp_cfg == chip->temp_dac_map[trip])
-+		return 0;
-+
-+	ret = qpnp_tm_read(chip, addr, &reg);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "LITE_TEMP_CFG read failed, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	reg &= ~LITE_TEMP_CFG_THRESHOLD_MASK;
-+	reg |= FIELD_PREP(LITE_TEMP_CFG_THRESHOLD_MASK, thresh);
-+
-+	ret = qpnp_tm_write(chip, addr, reg);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "LITE_TEMP_CFG write failed, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	chip->temp_dac_map[trip] = temp_cfg;
-+
-+	return 0;
-+}
-+
- static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
- 					     int temp)
- {
-@@ -387,6 +490,24 @@ static const struct thermal_zone_device_ops qpnp_tm_sensor_temp_dac_ops = {
- 	.set_trip_temp = qpnp_tm_set_temp_dac_trip_temp,
- };
- 
-+static int qpnp_tm_set_temp_lite_trip_temp(struct thermal_zone_device *tz,
-+					   int trip, int temp)
-+{
-+	struct qpnp_tm_chip *chip = tz->devdata;
-+	int ret;
-+
-+	mutex_lock(&chip->lock);
-+	ret = qpnp_tm_set_temp_lite_thresh(chip, trip, temp);
-+	mutex_unlock(&chip->lock);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_zone_device_ops qpnp_tm_sensor_temp_lite_ops = {
-+	.get_temp = qpnp_tm_get_temp,
-+	.set_trip_temp = qpnp_tm_set_temp_lite_trip_temp,
-+};
-+
- static irqreturn_t qpnp_tm_isr(int irq, void *data)
- {
- 	struct qpnp_tm_chip *chip = data;
-@@ -473,6 +594,71 @@ static int qpnp_tm_temp_dac_init(struct qpnp_tm_chip *chip)
- 	return 0;
- }
- 
-+/* Configure TEMP_LITE registers based on DT thermal_zone trips */
-+static int qpnp_tm_temp_lite_update_trip_temps(struct qpnp_tm_chip *chip)
-+{
-+	const struct thermal_trip *trips;
-+	int ret, ntrips, i;
-+
-+	ntrips = of_thermal_get_ntrips(chip->tz_dev);
-+	/* Keep hardware defaults if no DT trips are defined. */
-+	if (ntrips <= 0)
-+		return 0;
-+
-+	trips = of_thermal_get_trip_points(chip->tz_dev);
-+	if (!trips)
-+		return -EINVAL;
-+
-+	for (i = 0; i < ntrips; i++) {
-+		if (of_thermal_is_trip_valid(chip->tz_dev, i)) {
-+			ret = qpnp_tm_set_temp_lite_thresh(chip, i,
-+							  trips[i].temperature);
-+			if (ret < 0)
-+				return ret;
-+		}
-+	}
-+
-+	/* Verify that trips are strictly increasing. */
-+	if (chip->temp_dac_map[2] <= chip->temp_dac_map[0]) {
-+		dev_err(chip->dev, "Threshold 2=%ld <= threshold 0=%ld\n",
-+			chip->temp_dac_map[2], chip->temp_dac_map[0]);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+/* Read the hardware default TEMP_LITE stage threshold temperatures */
-+static int qpnp_tm_temp_lite_init(struct qpnp_tm_chip *chip)
-+{
-+	int ret, thresh;
-+	u8 reg = 0;
-+
-+	/*
-+	 * Store the warning trip temp in temp_dac_map[0] and the shutdown trip
-+	 * temp in temp_dac_map[2].  The second trip point is purely in software
-+	 * to facilitate a controlled shutdown after the warning threshold is
-+	 * crossed but before the automatic hardware shutdown threshold is
-+	 * crossed.  Thus, there is no register to read for the second trip
-+	 * point.
-+	 */
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_LITE_TEMP_CFG1, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
-+	chip->temp_dac_map[0] = temp_map_lite_warning[thresh];
-+
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_LITE_TEMP_CFG2, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
-+	chip->temp_dac_map[2] = temp_map_lite_shutdown[thresh];
-+
-+	return 0;
-+}
-+
- /*
-  * This function initializes the internal temp value based on only the
-  * current thermal stage and threshold. Setup threshold control and
-@@ -499,13 +685,18 @@ static int qpnp_tm_init(struct qpnp_tm_chip *chip)
- 		goto out;
- 	chip->stage = ret;
- 
--	stage = chip->subtype == QPNP_TM_SUBTYPE_GEN1
--		? chip->stage : alarm_state_map[chip->stage];
-+	stage = (chip->subtype == QPNP_TM_SUBTYPE_GEN1
-+		 || chip->subtype == QPNP_TM_SUBTYPE_LITE)
-+			? chip->stage : alarm_state_map[chip->stage];
- 
- 	if (stage)
- 		chip->temp = qpnp_tm_decode_temp(chip, stage);
- 
--	if (chip->has_temp_dac) {
-+	if (chip->subtype == QPNP_TM_SUBTYPE_LITE) {
-+		ret = qpnp_tm_temp_lite_update_trip_temps(chip);
-+		if (ret < 0)
-+			goto out;
-+	} else if (chip->has_temp_dac) {
- 		ret = qpnp_tm_temp_dac_update_trip_temps(chip);
- 		if (ret < 0)
- 			goto out;
-@@ -597,7 +788,8 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 	chip->dig_revision = (dig_major << 8) | dig_minor;
- 
- 	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
--				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
-+				     && subtype != QPNP_TM_SUBTYPE_GEN2
-+				     && subtype != QPNP_TM_SUBTYPE_LITE)) {
- 		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
- 			type, subtype);
- 		return -ENODEV;
-@@ -609,7 +801,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 		chip->has_temp_dac = true;
- 	else if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 1)
- 		chip->temp_map = &temp_map_gen2_v1;
--	else
-+	else if (subtype == QPNP_TM_SUBTYPE_GEN1)
- 		chip->temp_map = &temp_map_gen1;
- 
- 	if (chip->has_temp_dac) {
-@@ -619,6 +811,13 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 			return ret;
- 	}
- 
-+	if (chip->subtype == QPNP_TM_SUBTYPE_LITE) {
-+		ops = &qpnp_tm_sensor_temp_lite_ops;
-+		ret = qpnp_tm_temp_lite_init(chip);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
- 	/*
- 	 * Register the sensor before initializing the hardware to be able to
- 	 * read the trip points. get_temp() returns the default temperature
--- 
-2.25.1
+Doug found a practical problem with this design. The security of this
+mechanism depends on the kernel being able to prevent usermode from
+manipulating PCR23. While this series has managed to add that gating
+to the standard /dev/tpm interface, at least on ChromeOS, there are
+still many "dangerous toys" lying around that might allow a malicious
+root to communicate directly with the TPM. This raw access could allow
+usermode to extend PCR23 manually and forge malicious hibernate images
+that appear genuine. Examples of raw access include 1) i2cget -F, 2)
+unbinding the driver and binding i2c-dev instead, 3) using /dev/mem to
+manipulate the i2c controller registers directly, and 4) my favorite,
+remuxing the i2c pins to GPIO and bitbanging.
 
+We did some brainstorming and came up with a pivot that has the
+benefits of 1) reusing a decent chunk of this series, 2) not taking
+PCR23 away from usermode (which based on other comments seemed like it
+might not fly anyway), and 3) pushing the TPM interaction back down
+into usermode. The new element we take advantage of is that our early
+userspace is still considered trusted, as we sign the rootfs and
+protect it with dm-verity.
+
+The idea is to have early userspace ask the TPM to create a sealed key
+bound to a (non-resettable) PCR. We then save the blob to disk, extend
+the PCR (to prevent future unsealings in this boot), and push the key
+material up to the kernel for use as a "hibernate seed". The kernel
+will hold this seed in memory, and at hibernate time will use it to
+encrypt a randomly generated "bulk key". The bulk key is then used to
+encrypt the main hibernate image. So on disk at hibernate, we have 1)
+the encrypted hibernate image, protected by the bulk key, 2) the bulk
+key, protected by the seed, and finally 3) the seed, a TPM-protected
+key blob that can only be unsealed when a PCR is set to its boot
+value. In our own userspace implementation we'd seal this against a
+firmware PCR as well, to differentiate between Verified mode and
+Developer mode.
+
+At resume time, early userspace would find the blob, successfully
+unseal it (because the PCRs had reset back to the value that matches
+the policy), and push the recovered seed to the kernel. It can then
+push the encrypted bulk key and encrypted hibernate image. On our
+systems, this works fine as the PCRs seem to always reset across
+hibernate. Is that true generally as well?
+
+So my plan for the next spin of this series looks something like:
+ * Drop the tpm: and security: subsystem patches
+ * Keep the gist of the PM: patches as is, but instead of the TPM stuff...
+ * Introduce two new sysfs files, one to allow usermode to save the
+seed into kernel memory, and another to lock out future changes to the
+hibernate seed (until the next reboot).
+ * Use the hibernate seed to encrypt a randomly generated bulk key,
+which is then used to encrypt the main hibernate image.
+ * Keep the "PM: mix user key in" patch, as we still need the image to
+be encrypted with a key based on user authentication data, which this
+new mechanism alone doesn't provide.
+
+Anyone have any big objections to that plan, or see new gaping holes
+in the idea? In the end I think it's actually a little nicer, as it
+decouples all of the TPM-specific machinery from the concept of secure
+hibernate, as well as not trying to police PCR access. Casey and Greg,
+I'm going to guess you don't want to be CCed on the next spin, given
+that I'm dropping the notion of taking PCR23 away from userspace.
+Please holler if you would like to be CCed.
+
+-Evan
