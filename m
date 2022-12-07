@@ -2,145 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EE1645F85
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Dec 2022 18:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E07645F8F
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Dec 2022 18:01:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiLGRAP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Dec 2022 12:00:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44538 "EHLO
+        id S229605AbiLGRA5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Dec 2022 12:00:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiLGQ7x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 11:59:53 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B736933D;
-        Wed,  7 Dec 2022 08:59:36 -0800 (PST)
-Received: from mercury (dyndsl-091-096-059-166.ewe-ip-backbone.de [91.96.59.166])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F4976602BC8;
-        Wed,  7 Dec 2022 16:59:34 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1670432374;
-        bh=bEvlL0mnv13cihi3HCIkl9DCfnP1k298XjhbL7LAufA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fVlDFCTzOHXdtF44MPRDBp745dkSoal+m9XlgbrVk0eVveZ4SV+Bv1Rnj0ZBG6Rt3
-         iZzkYM/8F/qgm/5INpH4ZuEVZdheQuxkmKnjbF4NYwKekrccgWZ80uTQ5fVMnlVnEK
-         7sz8TmoCZwYK3OEI28mJ6n6F3xGALBFdeq22ossum96yZrYwJqiWDu1PsWPLAsHI7x
-         hRrGzEFqetXXh+ZUi+bUOEraSs2OtVyf9i/MzyAzh8Cjc9+JImlrgZ8QqwdNdYumLv
-         0XdveLAuHK+do5iCZu9zBRZS6X/efajXc1hQZdTXVcNAcNiE0Vb1uyxHCLrTy7hmA0
-         6hG/oUhpNGlZw==
-Received: by mercury (Postfix, from userid 1000)
-        id 119591060F43; Wed,  7 Dec 2022 17:59:32 +0100 (CET)
-Date:   Wed, 7 Dec 2022 17:59:32 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Gene Chen <gene_chen@richtek.com>,
-        Daniel Mack <zonque@gmail.com>,
-        Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: Add missing 'unevaluatedProperties' to
- regulator nodes
-Message-ID: <20221207165932.hmgj4giz5ivei46i@mercury.elektranox.org>
-References: <20221206211554.92005-1-robh@kernel.org>
+        with ESMTP id S229660AbiLGRAx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 12:00:53 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5C5496723B;
+        Wed,  7 Dec 2022 09:00:52 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 36A5D23A;
+        Wed,  7 Dec 2022 09:00:58 -0800 (PST)
+Received: from [192.168.178.6] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A349F3F73B;
+        Wed,  7 Dec 2022 09:00:48 -0800 (PST)
+Message-ID: <71a0f27d-68e0-f118-c117-bae48f5f1996@arm.com>
+Date:   Wed, 7 Dec 2022 18:00:32 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tn5la4fl5slxzyzl"
-Content-Disposition: inline
-In-Reply-To: <20221206211554.92005-1-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+Subject: Re: [PATCH v2 06/22] sched/fair: Collect load-balancing stats for IPC
+ classes
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-7-ricardo.neri-calderon@linux.intel.com>
+Content-Language: en-US
+In-Reply-To: <20221128132100.30253-7-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 28/11/2022 14:20, Ricardo Neri wrote:
 
---tn5la4fl5slxzyzl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[...]
 
-Hi,
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 224107278471..3a1d6c50a19b 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9100,6 +9100,57 @@ group_type group_classify(unsigned int imbalance_pct,
+>  	return group_has_spare;
+>  }
+>  
+> +struct sg_lb_ipcc_stats {
+> +	int min_score;	/* Min(score(rq->curr->ipcc)) */
+> +	int min_ipcc;	/* Min(rq->curr->ipcc) */
+> +	long sum_score; /* Sum(score(rq->curr->ipcc)) */
+> +};
 
-On Tue, Dec 06, 2022 at 03:15:55PM -0600, Rob Herring wrote:
-> Several regulator schemas are missing 'unevaluatedProperties' constraint
-> which means any extra properties are allowed. Upon adding the
-> constraint, there's numerous warnings from using the deprecated
-> 'regulator-compatible' property. Remove the usage as examples shouldn't
-> be using long since deprecated properties.
->=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-> I'd suggest that Mark take this if that's okay with Lee. Or I can take=20
-> it.
->=20
->  Documentation/devicetree/bindings/mfd/max77650.yaml  |  2 --
->  .../devicetree/bindings/mfd/mediatek,mt6360.yaml     |  9 ---------
->  .../bindings/power/supply/mt6360_charger.yaml        |  2 +-
->  .../bindings/regulator/max77650-regulator.yaml       |  1 +
->  .../devicetree/bindings/regulator/max8660.yaml       |  6 +-----
->  .../bindings/regulator/mt6360-regulator.yaml         | 12 +++---------
->  6 files changed, 6 insertions(+), 26 deletions(-)
->=20
-> [...]
->
-> diff --git a/Documentation/devicetree/bindings/power/supply/mt6360_charge=
-r.yaml b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
-> index b89b15a5bfa4..4c74cc78729e 100644
-> --- a/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/mt6360_charger.yaml
-> @@ -26,6 +26,7 @@ properties:
->      type: object
->      description: OTG boost regulator.
->      $ref: /schemas/regulator/regulator.yaml#
-> +    unevaluatedProperties: false
-> =20
->  required:
->    - compatible
-> @@ -39,7 +40,6 @@ examples:
->        richtek,vinovp-microvolt =3D <14500000>;
-> =20
->        otg_vbus_regulator: usb-otg-vbus-regulator {
-> -        regulator-compatible =3D "usb-otg-vbus";
->          regulator-name =3D "usb-otg-vbus";
->          regulator-min-microvolt =3D <4425000>;
->          regulator-max-microvolt =3D <5825000>;
+Wouldn't it be cleaner to put `min_score`, `min_ipcc` and `sum_score`
+into `struct sg_lb_stats` next to `ipcc_score_{after, before}` under the
+same #ifdef CONFIG_IPC_CLASSES?
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Looks like those IPCC stats would only be needed in the specific
+condition under which update_sg_lb_stats_scores() is called?
 
-> [...]
+> +#ifdef CONFIG_IPC_CLASSES
+> +static void init_rq_ipcc_stats(struct sg_lb_ipcc_stats *sgcs)
+> +{
+> +	*sgcs = (struct sg_lb_ipcc_stats) {
+> +		.min_score = INT_MAX,
+> +	};
+> +}
+> +
+> +/** Called only if cpu_of(@rq) is not idle and has tasks running. */
+> +static void update_sg_lb_ipcc_stats(struct sg_lb_ipcc_stats *sgcs,
+> +				    struct rq *rq)
+> +{
+> +	struct task_struct *curr;
+> +	unsigned short ipcc;
+> +	int score;
+> +
+> +	if (!sched_ipcc_enabled())
+> +		return;
+> +
+> +	curr = rcu_dereference(rq->curr);
+> +	if (!curr || (curr->flags & PF_EXITING) || is_idle_task(curr))
 
--- Sebastian
+So the Idle task is excluded but RT, DL, (Stopper) tasks are not. Looks
+weird if non-CFS tasks could influence CFS load-balancing.
+AFAICS, RT and DL tasks could have p->ipcc != IPC_CLASS_UNCLASSIFIED?
 
---tn5la4fl5slxzyzl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOQxmgACgkQ2O7X88g7
-+pqenQ/9Ho8lsTUBjGsxEgwS8RpLC8U1AP8yglgqBuUrbdcwAuL3g0yWJMB4Cm4a
-trhgJgCBr2fd4LLFbJzQH/tVrcUZtFJ957ZmvKr0E1xcVkiDgR8ujhhCCCOgB5vG
-IpjFq+8lXplomNmb3hOlRKkuC+2YWYM1cXvEQyFyPOYZAThebqOpYQcETx5rxegs
-VTdhV4cB6b+jG2fsR+3BVw+rJ9U3oxjbY5XuwUJ2GyA15InCnBOh0945mc6vLDvN
-vNCwgsgvS8D7emYsLt666/gI3LKRLH6H+3p8Vu2yYAU58mu21gg7L6z6jswSlm+V
-MsMVDTiwzLYq/EaYQbGaTazJjigroldPnUf268xI6OgG7tSqowA0PuYaT+GkKfrY
-0dPGbQf1K6NbCQ4V+Fh1BO1h0kOtX6FCjkLJ0d1ZZTC7DwIMe1tLgXZux0mETsQo
-aCli/01Y+oVc6vulRN9HRGvthS01OoByy5vdikomiO6cJH3l8Jwb7gNz07kVrJyF
-aDzTDqorec2e7bMleqRGwncCINLYqw0z/Mh0ZLKPgbs/L2YXOI7nhGVaCj5p4wNb
-44Nky3qwmg0iu12vbmydFMWjRIICBnOU3xCqfe7tDfi4jDCJqKkHcHU15JR2bPPC
-LYL6vJb5f66lQGyI+SWJoXT+q5bps6L/KhDMea6xKmWTjss81gM=
-=VLUI
------END PGP SIGNATURE-----
-
---tn5la4fl5slxzyzl--
+[...]
