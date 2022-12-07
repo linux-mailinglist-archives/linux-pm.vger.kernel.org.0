@@ -2,91 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1953C645CC6
-	for <lists+linux-pm@lfdr.de>; Wed,  7 Dec 2022 15:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F08CB645DB8
+	for <lists+linux-pm@lfdr.de>; Wed,  7 Dec 2022 16:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229623AbiLGOjU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Dec 2022 09:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S229441AbiLGPep (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Dec 2022 10:34:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLGOjT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 09:39:19 -0500
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 565B528E2F;
-        Wed,  7 Dec 2022 06:39:18 -0800 (PST)
-Received: by mail-qt1-f179.google.com with SMTP id g7so4942740qts.1;
-        Wed, 07 Dec 2022 06:39:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=st69qTJtNhLQP+45bZZhSRzLZ9Ow1Uh7dUebsxtqTbs=;
-        b=rZ9P0EGiGdp7TwlzuqpQl29OwsXX6vVKzjDW0iUfHq1FgQIviFnEfa+um0/3HziqBI
-         sviKN3TO9zuiMhzlvgO7N1PjptB/LCxCAJnlhHYAzZRVzjKiBWEWE1lLOvQt9RTw3AB6
-         AziGfmRZH9AQuAxlmRUShty9XXnOX8q2D/fMISSRsZuyji+rX1TuYCPi6XW7qUhMepon
-         HL+AWC4C4dov0Mw1+5yKRfJAl+19jpkXp0WmWTIg4f1xC1V6W4NPrJO5e4P5dnxt31b+
-         HRMEarwjTrsg82+wAAuGVkQXInlEloKSR9U0Pm3bfk88mLxMg2U2PdHf3Ouej4WDgfa+
-         ssSg==
-X-Gm-Message-State: ANoB5pkH1WzrLmpAF32rSTHzTIT/KaeFo6iHO5qaFF8nZKljOkr8uWuT
-        FKQ6G83lK7EAaS4qbXaZI1Tv1vTVtOKUtu68srM=
-X-Google-Smtp-Source: AA0mqf6F7hRchNoSenvN19KkCmprz9FxYTZLsuAvm+FIKPdB9bG4wIPaOnsioD3rFZktc2SkAHISX/QhjJAStmaiBGo=
-X-Received: by 2002:ac8:6b08:0:b0:3a7:eaad:3367 with SMTP id
- w8-20020ac86b08000000b003a7eaad3367mr6855723qts.153.1670423957465; Wed, 07
- Dec 2022 06:39:17 -0800 (PST)
+        with ESMTP id S229514AbiLGPeo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 10:34:44 -0500
+Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF8FF63
+        for <linux-pm@vger.kernel.org>; Wed,  7 Dec 2022 07:34:42 -0800 (PST)
+Message-ID: <f70d7c09-df0d-4fa9-92c9-63f31cf56483@systemli.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
+        s=default; t=1670427276;
+        bh=zRMPmx2g25b+oz+4Mu5sled5OxjCCJuBKdM0iCwdVr0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=bLmXw34wygi9IeMNToIo0OUgRMES3iZz5BKgSQyYWcZMw24MUENAxbOCbdj1/nysB
+         93SDqY+t0EZAC3Sf4ONqJNaKRhXxakVMJuZp113XkDNgdsjMwtVjwg7Nh+oBzVIaXx
+         /jAMidL4GPsHJUrpcbaBfr4QqiezlLHtQyJFBbZoRtnfpS9oobEa7B7pildvD/Hf6g
+         vUDPXSAXmwktv+NJvbEOIn8itSn2MFeEClcv/pHdrTacYx9Uyu6TQcZg7llUqaPLu1
+         a7kqKRWFT/reUwg24YdLruFOVoapoVgnqDpWHd7SWTOHlE5ImRgplZ8tiJiO0wlF9h
+         Bi9OviGvQyd9w==
+Date:   Wed, 7 Dec 2022 16:34:33 +0100
 MIME-Version: 1.0
-References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com> <1670416895-50172-2-git-send-email-lirongqing@baidu.com>
-In-Reply-To: <1670416895-50172-2-git-send-email-lirongqing@baidu.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 7 Dec 2022 15:39:06 +0100
-Message-ID: <CAJZ5v0i9J2YimfQsqJiZjFMR9MLG0fdBf+Regr+_PcsYrAE=SQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2][v2] cpuidle-haltpoll: Build as module by default
-To:     lirongqing@baidu.com
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, peterz@infradead.org,
-        akpm@linux-foundation.org, tony.luck@intel.com,
-        jpoimboe@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
+ mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
+        <Allen-KH.Cheng@mediatek.com>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "frank-w@public-files.de" <frank-w@public-files.de>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        =?UTF-8?B?SmlhLXdlaSBDaGFuZyAo5by15L2z5YGJKQ==?= 
+        <Jia-wei.Chang@mediatek.com>,
+        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
+        <Rex-BC.Chen@mediatek.com>,
+        "thomas.huehn@hs-nordhausen.de" <thomas.huehn@hs-nordhausen.de>,
+        "daniel@makrotopia.org" <daniel@makrotopia.org>
+References: <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
+ <Y4jHvomTrU8guBox@makrotopia.org>
+ <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
+ <20221202052716.uj3kzkunazmgazeq@vireshk-i7>
+ <0ebef1a2-6b5a-04b9-a79b-79eb3349c32b@collabora.com>
+ <c76bd301-0e8d-2d2b-0d3e-a57ece9b496f@collabora.com>
+ <b1822bbc3775730c4cedf9652323c7d72e663e4b.camel@mediatek.com>
+ <8be3e050-f32a-6761-8ebd-49c38dfcf9eb@collabora.com>
+ <c186d104-43e0-ca10-3ce2-c2f922acd8bf@leemhuis.info>
+ <37468027-6a27-dcb8-9c14-8f8426ec50d1@collabora.com>
+ <20221202110139.vmwcmoudakm2nap4@vireshk-i7>
+Content-Language: en-US
+From:   Nick <vincent@systemli.org>
+In-Reply-To: <20221202110139.vmwcmoudakm2nap4@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 7, 2022 at 1:41 PM <lirongqing@baidu.com> wrote:
+Did something changed on master? I compiled now the image I use on the 
+BPI-R64 a bit differently.
+I used the openwrt toolchain "aarch64-openwrt-linux-musl-" to 
+cross-compile the original linux repository on current master. Than I 
+compiled with OpenWrt-Buildsystem a initramfs, put that together with 
+mkimage to a "itb" and booted it. Suddenly it works:
+https://gist.githubusercontent.com/PolynomialDivision/5e49529206ba5d273bf6a416c42c6234/raw/7ecff7be397a6e9a41ef120c3fa61060c488cf5b/mt7622-bpi-vanilla
+
+Bests
+Nick
+
+On 12/2/22 12:01, Viresh Kumar wrote:
+> On 02-12-22, 12:00, AngeloGioacchino Del Regno wrote:
+>> If Viresh can add those while applying the patch, that's fine for me - otherwise
+>> I can send a v2 adding the two suggested missing tags.
+> Sure, no problem.
 >
-> From: Li RongQing <lirongqing@baidu.com>
->
-> Allow user to unload it in running
-
-Just like that?  And corrupt things left and right while at it?
-
-No way.
-
-And why do you need this?
-
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
-> ---
->  drivers/cpuidle/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-> index ff71dd6..43ddb84 100644
-> --- a/drivers/cpuidle/Kconfig
-> +++ b/drivers/cpuidle/Kconfig
-> @@ -74,7 +74,7 @@ endmenu
->  config HALTPOLL_CPUIDLE
->         tristate "Halt poll cpuidle driver"
->         depends on X86 && KVM_GUEST
-> -       default y
-> +       default m
->         help
->          This option enables halt poll cpuidle driver, which allows to poll
->          before halting in the guest (more efficient than polling in the
-> --
