@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB45864672A
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 03:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 118F3646764
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 04:00:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbiLHCmX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 7 Dec 2022 21:42:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35046 "EHLO
+        id S229940AbiLHDAX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 7 Dec 2022 22:00:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiLHCmS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 21:42:18 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2CB9491E;
-        Wed,  7 Dec 2022 18:42:17 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id u15-20020a17090a3fcf00b002191825cf02so163576pjm.2;
-        Wed, 07 Dec 2022 18:42:17 -0800 (PST)
+        with ESMTP id S229911AbiLHC76 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 7 Dec 2022 21:59:58 -0500
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7098969;
+        Wed,  7 Dec 2022 18:59:44 -0800 (PST)
+Received: by mail-pf1-x434.google.com with SMTP id c7so202609pfc.12;
+        Wed, 07 Dec 2022 18:59:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=achaGfwLVcz//s9rN8HUEx5yTqaG6dusI+1bnuC2BJ8=;
-        b=YF2alemNOqW+b4n6/YaV+HM7qLtzzD0fB0oaLMUgDCRkTb0a9ByBtqr6uBUeBQlzjJ
-         WSDel6JjgSY593zI26HUeZQDjwo1B2eb8CcdNNJSpIkA3eoCWioIOO+Ap9YRnC1feILL
-         T4aD9GGYoh6k8JeJ5HnMZo59kJq0K+lgcCpdY4hsj5DUrSHs8NLvn8TuBspZwTyN96nl
-         jYEKKP2sU5bzzpCrORxfUGgadn7npFXE3N0QRbvXt5UQHRrJAydpPmlgKVvjNtezb2Up
-         2Axr1sNX1LGk8JQ5r+LU0Bi2leDORjQdR6A1uG2S3126B3MeeJnfQbad5IyOWmC4AYDC
-         haDg==
+        bh=ufBqNuhKpdmINsIT2AuDETk3f8xiEIq/4Et5u9ZmeT0=;
+        b=AJJuyEs8o3C+1ZzbTLOJxPFvfBHqcMYvVVU/Ze85J80RSvNEJC1tT7ibe/I8T77Zbv
+         ttORwzcONAMqd0xaOsqUV1VVNlA7aj3PeZP8yQoU9bMZi/rc62YUGySRUxhxYTf++Lqf
+         yxgjYXyNtcF59jLCnuJdiW7XWcghLxB5zKgum0yC7RVQrFPQ+Szx4UhBKGLajriFXl1w
+         CLxkpIoP9ujp9t4tqkoqMo92eJ7YzkWQ5jKkKRnfDECJTmo6WGq/R6xzrXaMviEK+VMC
+         SREDPH2FPkSK29Fujt5AtAOI/ZR5TQg1j2t3sqYhG0RnkFXptWWSXty6OEktwAr60lYn
+         HsKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=achaGfwLVcz//s9rN8HUEx5yTqaG6dusI+1bnuC2BJ8=;
-        b=wtkVPel5UDcULJkctj9Z+jKmIn724PUgz1fTtb+1/9p3MA+meV3iPoQsf2n+4QNrNs
-         E9brk+EL8el0pIZiSsJjIkk9b78eRjkWSsy2b24y4ysuPQx6/A1XoWdrqRkILZPbqkr+
-         l4ktjyc6KiO5dNae8NIiX58qbW/jOVq8Pklmj4USHRt2Xf3iVG+YNDQI0e7gvnlWXv+n
-         5760o/I3mIWr26fvbHHZOUdQgH49z5lViRXtcxhdHdITUaiFy+jGFKaTzBIBJlGj+pZo
-         nB/NPJVrd1O7s6BewrtOWkMn0W9YUAfsxSvwCgQiE5Cc4ijYoqOV4RIs3oRmgxDEo2IP
-         X3tg==
-X-Gm-Message-State: ANoB5pmCISF1850SAOVwU7GEzq87HkxYujfQW7kYsDadFsNbEl9RuljX
-        vmObxhCqZB8Z4gtuZABq9AU=
-X-Google-Smtp-Source: AA0mqf7xBj7Zgb8jxIMAmYlRVl5PSaTTre7/DjyExaucIS8pUSvSq2AcaRXmTuX6p+sMqWaq8Mj6bA==
-X-Received: by 2002:a17:902:efd6:b0:186:9c25:7ef0 with SMTP id ja22-20020a170902efd600b001869c257ef0mr16824893plb.164.1670467337250;
-        Wed, 07 Dec 2022 18:42:17 -0800 (PST)
+        bh=ufBqNuhKpdmINsIT2AuDETk3f8xiEIq/4Et5u9ZmeT0=;
+        b=nJRDMCKJULEz1o15x3Pz67goG8+l7t3aOo+PBztybRTGfSWXKGpw6cC3mgejxLlIbo
+         xnater/0USA649lH2DO3x5Ok+zqEKuZlLTywVIEzj/Noij7/+IjOKZAlEjJoIpK5srAs
+         K3SDpZJubC7CYVZm8BQvt8LLdG7hOeJc1x/J0GHIks3/WpImb3p4gOIVRahNx4cRkCtZ
+         Bb6kequu0b09HhEaGm6lXwYA+M0hN9YNQADZb+mb0UR5nd2XKyCsd4ix4JWMHQKc4O7C
+         5hLav/CcQIWD8UQlggt+1fayrEqsvntEGe8ECXUI8q7gnZ/tKjO1NUCPNtZEz/up74nP
+         Pz8g==
+X-Gm-Message-State: ANoB5pmkGfYNsftYtZcfVY94i9BSyiwXLlaK8U75TbjofhxXXcR6d8jZ
+        EVz0sCLqrzMXTMIhMGkZxb8=
+X-Google-Smtp-Source: AA0mqf7ME3EwFa+0up66g1p7HCAw30RkByxDfhaWymUJP2UKE3ijU+vKE+UeTIt1uI4H6j7CSP65Nw==
+X-Received: by 2002:a63:ea15:0:b0:457:7285:fd2d with SMTP id c21-20020a63ea15000000b004577285fd2dmr67222477pgi.580.1670468383924;
+        Wed, 07 Dec 2022 18:59:43 -0800 (PST)
 Received: from debian.me (subs02-180-214-232-5.three.co.id. [180.214.232.5])
-        by smtp.gmail.com with ESMTPSA id iw1-20020a170903044100b0017f5ad327casm15224298plb.103.2022.12.07.18.42.16
+        by smtp.gmail.com with ESMTPSA id c133-20020a621c8b000000b00575cdd7c0adsm14176211pfc.80.2022.12.07.18.59.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Dec 2022 18:42:16 -0800 (PST)
+        Wed, 07 Dec 2022 18:59:43 -0800 (PST)
 Received: by debian.me (Postfix, from userid 1000)
-        id AF8EC104460; Thu,  8 Dec 2022 09:42:12 +0700 (WIB)
-Date:   Thu, 8 Dec 2022 09:42:12 +0700
+        id B4C58104460; Thu,  8 Dec 2022 09:59:40 +0700 (WIB)
+Date:   Thu, 8 Dec 2022 09:59:40 +0700
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Wyes Karny <wyes.karny@amd.com>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
@@ -59,16 +59,16 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Huang Rui <ray.huang@amd.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Mario.Limonciello@amd.com, Perry.Yuan@amd.com,
         Ananth Narayan <ananth.narayan@amd.com>, gautham.shenoy@amd.com
-Subject: Re: [PATCH 2/4] Documentation: amd_pstate: Move amd_pstate param to
- alphabetical order
-Message-ID: <Y5FPBNawZgvk7GBe@debian.me>
+Subject: Re: [PATCH 4/4] Documentation: amd_pstate: Add amd_pstate state
+ sysfs file
+Message-ID: <Y5FTHGsezkdzwvUa@debian.me>
 References: <20221207154648.233759-1-wyes.karny@amd.com>
- <20221207154648.233759-3-wyes.karny@amd.com>
+ <20221207154648.233759-5-wyes.karny@amd.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="0HevvGWFK2mj9IxW"
+        protocol="application/pgp-signature"; boundary="w3Iq/EiQLaZI2tbc"
 Content-Disposition: inline
-In-Reply-To: <20221207154648.233759-3-wyes.karny@amd.com>
+In-Reply-To: <20221207154648.233759-5-wyes.karny@amd.com>
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
@@ -80,46 +80,119 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---0HevvGWFK2mj9IxW
+--w3Iq/EiQLaZI2tbc
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 07, 2022 at 03:46:46PM +0000, Wyes Karny wrote:
-> +	amd_pstate=3D	[X86]
-> +			disable
-> +			  Do not enable amd_pstate as the default
-> +			  scaling driver for the supported processors
-> +			passive
-> +			  Use amd_pstate as a scaling driver, driver requests a
-> +			  desired performance on this abstract scale and the power
-> +			  management firmware translates the requests into actual
-> +			  hardware states (core frequency, data fabric and memory
-> +			  clocks etc.)
+On Wed, Dec 07, 2022 at 03:46:48PM +0000, Wyes Karny wrote:
+> +``state``
+> +
+> +``amd_pstate`` also exposes a sysfs interface to view and control the dr=
+iver state.
+> +The driver state can be one of the following:
+> +``disable``     : indicates driver is in unloaded state.
+> +``passive``     : indicates driver is loaded and currently in passive mo=
+de.
+> +``guided`` : indicates driver is loaded and currenlty in guided autonomo=
+us mode.
 
-Device drivers request certain performance level?
+Use bullet lists for above:
 
-> +			guided
-> +			  Activate guided autonomous mode. Driver requests minimum
-> +			  performance and maximum performance and the PMFW autonomously
-> +			  selects frequencies in this range.
+---- >8 ----
 
-Same here.
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/ad=
+min-guide/pm/amd-pstate.rst
+index 4d3783516ddc2c..0d0e0affa3adb2 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -269,9 +269,12 @@ Other performance and frequency values can be read bac=
+k from
+=20
+ ``amd_pstate`` also exposes a sysfs interface to view and control the driv=
+er state.
+ The driver state can be one of the following:
+-``disable``     : indicates driver is in unloaded state.
+-``passive``     : indicates driver is loaded and currently in passive mode.
+-``guided`` : indicates driver is loaded and currenlty in guided autonomous=
+ mode.
++
++  - ``disable``     : indicates driver is in unloaded state.
++  - ``passive``     : indicates driver is loaded and currently in passive =
+mode.
++  - ``guided``      : indicates driver is loaded and currenlty in guided
++    autonomous mode.
++
+ This file can be found here: ``/sys/devices/system/cpu/amd_pstate/state``.
+=20
+ To switch to passive mode: ``echo passive > /sys/devices/system/cpu/amd_ps=
+tate/state``
 
-Thanks.=20
+> +This file can be found here: ``/sys/devices/system/cpu/amd_pstate/state`=
+`.
+> +
+> +To switch to passive mode: ``echo passive > /sys/devices/system/cpu/amd_=
+pstate/state``
+> +To switch to guided mode: ``echo guided > /sys/devices/system/cpu/amd_ps=
+tate/state``
+> =20
+
+What about these wordings instead?
+
+---- >8 ----
+=20
+diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/ad=
+min-guide/pm/amd-pstate.rst
+index 4d3783516ddc2c..6465bd39b7dcbc 100644
+--- a/Documentation/admin-guide/pm/amd-pstate.rst
++++ b/Documentation/admin-guide/pm/amd-pstate.rst
+@@ -267,15 +267,16 @@ Other performance and frequency values can be read ba=
+ck from
+=20
+ ``state``
+=20
+-``amd_pstate`` also exposes a sysfs interface to view and control the driv=
+er state.
+-The driver state can be one of the following:
+-``disable``     : indicates driver is in unloaded state.
+-``passive``     : indicates driver is loaded and currently in passive mode.
+-``guided`` : indicates driver is loaded and currenlty in guided autonomous=
+ mode.
+-This file can be found here: ``/sys/devices/system/cpu/amd_pstate/state``.
++``amd_pstate`` also exposes a sysfs interface to view and control the driv=
+er
++state, named ``/sys/devices/system/cpu/amd_pstate/state``. The driver state
++can be one of the following:
+=20
+-To switch to passive mode: ``echo passive > /sys/devices/system/cpu/amd_ps=
+tate/state``
+-To switch to guided mode: ``echo guided > /sys/devices/system/cpu/amd_psta=
+te/state``
++  - ``disable``     : the driver is disabled
++  - ``passive``     : the driver is in passive mode.
++  - ``guided``      : the driver is in guided autonomous mode.
++
++To switch between these modes above, write the appropriate value to the
++aforementioned sysfs file.
+=20
+ ``amd-pstate`` vs ``acpi-cpufreq``
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+
+Thanks.
 
 --=20
 An old man doll... just what I always wanted! - Clara
 
---0HevvGWFK2mj9IxW
+--w3Iq/EiQLaZI2tbc
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5FO/gAKCRD2uYlJVVFO
-oyFTAQCc1iBOvpPXJWhiJOB4d7tHPqf2UWT/kzSYLg1ZnMO1owEAtAICze7VaJF/
-HQBuzhbrneFSnRB6H8zJox4xQTxRnwU=
-=O3T7
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY5FTFwAKCRD2uYlJVVFO
+o7/DAQDPXGzLP5B1ne8T+5hevkqKMCiwgB/oB/HYAhJZ1jExZwD9HbebcQeg02sU
+qzgZxy4OPhhoERSe5BwnLYt0kWYvJgk=
+=x2DH
 -----END PGP SIGNATURE-----
 
---0HevvGWFK2mj9IxW--
+--w3Iq/EiQLaZI2tbc--
