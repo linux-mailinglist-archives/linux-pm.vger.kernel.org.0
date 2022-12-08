@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8470647243
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 15:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB52647253
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 15:58:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiLHOzH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 09:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S229877AbiLHO6b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 09:58:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbiLHOzF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 09:55:05 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B771C89300
-        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 06:55:02 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id ay8-20020a05600c1e0800b003d0808d2826so4237585wmb.1
-        for <linux-pm@vger.kernel.org>; Thu, 08 Dec 2022 06:55:02 -0800 (PST)
+        with ESMTP id S229517AbiLHO63 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 09:58:29 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3AB4BF71
+        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 06:58:28 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id h10so1924212wrx.3
+        for <linux-pm@vger.kernel.org>; Thu, 08 Dec 2022 06:58:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lwow+FQpjW2ep1FliQEBGTwsCEydRxIkqCnEq1m12V8=;
-        b=XDLBxNq5R90wi5DLKbADIeRyoSa0yFGPjOwvPYJkK+Gp8+0NUig2HhYQbipF08HgB5
-         uDua9QdHjM3N+wu05Ds/WDRlfvTijDsTseP3oOw6W2/1zJfnLyguFrDLLZ5O4J6LcIXg
-         vO4tNneZ+ps7oGgVX7b0BAg8mw2PP64aXfJ2o0XMGpp1UpvTwPPdgPW47yPAp0JRU8Mp
-         Ia9pi74grSNcRaoHiBN94MWe1kDW7BSmH3l0WomTRCW4NNhDQv4unjYDQz6KK+O8RPWP
-         bK4axa2l0lG+mzQ7rFNxIa+/h4buoxClyW+W6unX0FoFy4fNIAlrb4gP7ao/8sR4gcTg
-         t8PQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=U59H1v37fnrRuO5gY9YEIJq45nAGp9i0WZRmt0YHAV0=;
+        b=sAtKmSnbD3QKlav53j+c7KsUgjOq+FGOo1ZO8mmvgQ+fXCpIh1w5ZUV4IsTe4/5jf1
+         N/7HntUn2cy/4FaPDS1Jr3ka1ji2N5wEnWHkBr0AMbLSjm9O0I5MQu9MNWjuiC5DjLqI
+         Ihz3U5McYq50fi8U71OooOUR9kZ7lLQWdEwlJwx7YbhWUeeqkuqa5p6vSN4bntoSka77
+         MDvi+ysyOuJZHI6tcSDufLHoY+tPfRA6ySlW910Ap+grOTNNBDnxxdIBQoNU8RnPYe/+
+         ywJC6uI3ietCuxNqCr8M2UFcFBQYT9GH+jbBZOjdinKbftXtU+b0GiNYpLBTNcZuAI5/
+         fAsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lwow+FQpjW2ep1FliQEBGTwsCEydRxIkqCnEq1m12V8=;
-        b=kf/LoPsE+uPFJpeWdozo/5JmF4YyI82/Ew5cpjok5cos+SIWxjjAu43+N6kD4pG+Ti
-         zew+sB5GqSu1M6Fb5vnSpIhKIoC5PCZLCtDlnrf+aLPudoV74cCPQLOjelOnJHp0DR64
-         mZ4eW56vkrgLoBBb560iHh0OpkHbb5FCGuvHV5V7txd2nrORKtGvwAHYbfe4RcSA73FJ
-         p4pKYWbPJ7Z+mrNcOW28MqmBuXmnXMbomu4CRftxQtRNp2t1CKKILsEZvKBFeEnAAnc+
-         fKJFEUSulJmCI7uyFhHx76T+vPXfQZCBkAPIOglwi5fcsfEJB76oOMSNADyPPYzLYxFA
-         c0cA==
-X-Gm-Message-State: ANoB5pkIKIhLrPah06K4CRCF+5C5sY/LhKTQnkydSN3B/HBCpchj7ZUo
-        UugoAUSSs3PoJ9tOg+fMip588Q==
-X-Google-Smtp-Source: AA0mqf4yz1Hvjz6iO79R15fZbsPhiI/S62JWD6dOgWvntEQOhsbR7q2pGK+RgxCw9KtzWrK3izrDOA==
-X-Received: by 2002:a05:600c:6899:b0:3d1:cf66:3afa with SMTP id fn25-20020a05600c689900b003d1cf663afamr2093112wmb.19.1670511301333;
-        Thu, 08 Dec 2022 06:55:01 -0800 (PST)
-Received: from localhost.localdomain ([2a00:79e1:abc:9:c7d:8d2a:a83c:450a])
-        by smtp.gmail.com with ESMTPSA id 16-20020a05600c021000b003d1e4f3ac8esm4993931wmi.33.2022.12.08.06.55.00
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U59H1v37fnrRuO5gY9YEIJq45nAGp9i0WZRmt0YHAV0=;
+        b=xOkId7R9zn8x37I4rB2ejFu+terCyyBbNb4kvevgYQNTaZ5hvPUUV/Hc0e706JPhre
+         czdfmHFo0qN/xn9COVm4vEHa+R0+9c2CkZ/D/sAKtucDzHYfCIKzpS9i/vR9WtywA6fJ
+         6AIhAgF61rbe7Tqeoxb9djJ0C6qJg9lBtznyjTIHIUqy92FvzNHtWK4JzCl0TkHGYOpd
+         fDCKT6oFqMVyC8dZ2a97eq8tlqjKMRvkF08Uv2SWGZbUxbv9ALcV2XA+V8hbMSbelX6o
+         d1PXPUke6UhM5NeNdEC9yhhKs93CRMazENP/DbPVw6AI2OEIXTU0roI7eBZLOOJK///y
+         LbvQ==
+X-Gm-Message-State: ANoB5plEcJ+qK6up2TseNDo1puXJnZtivZnsiQrwrhJi888VANBcy0sZ
+        UMVTUd2ligCKAlVQihHM1V5www==
+X-Google-Smtp-Source: AA0mqf71X822z99TPqBxMJl7WdxzFzoHxz7hLc2sjMC48Lwb6t6ILfwEwxrbDYxx+lyPmkhLqm6ytQ==
+X-Received: by 2002:a5d:51cd:0:b0:242:17d3:a9f9 with SMTP id n13-20020a5d51cd000000b0024217d3a9f9mr1590705wrv.68.1670511507440;
+        Thu, 08 Dec 2022 06:58:27 -0800 (PST)
+Received: from airbuntu ([2a00:79e1:abc:9:c7d:8d2a:a83c:450a])
+        by smtp.gmail.com with ESMTPSA id p1-20020adf9d81000000b0024258722a7fsm13289723wre.37.2022.12.08.06.58.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 06:55:00 -0800 (PST)
+        Thu, 08 Dec 2022 06:58:27 -0800 (PST)
+Date:   Thu, 8 Dec 2022 14:58:25 +0000
 From:   Qais Yousef <qyousef@layalina.io>
 To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
         Ingo Molnar <mingo@kernel.org>,
@@ -60,84 +60,53 @@ Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
         Xuewen Yan <xuewen.yan94@gmail.com>,
         Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
-        Qais Yousef <qyousef@layalina.io>
-Subject: [PATCH v2] sched/fair: Fixes for capacity inversion detection
-Date:   Thu,  8 Dec 2022 14:54:09 +0000
-Message-Id: <20221208145409.453308-1-qyousef@layalina.io>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <f06321f0-def6-6f9d-b72f-f700e7e9a60a@arm.com>
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [PATCH v2] sched/fair: Fixes for capacity inversion detection
+Message-ID: <20221208145825.gt3rsysykqaklrwt@airbuntu>
 References: <f06321f0-def6-6f9d-b72f-f700e7e9a60a@arm.com>
+ <20221208145409.453308-1-qyousef@layalina.io>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221208145409.453308-1-qyousef@layalina.io>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Traversing the Perf Domains requires rcu_read_lock() to be held and is
-conditional on sched_energy_enabled(). rcu_read_lock() is held while in
-load_balance(), add an assert to ensure this is always the case.
+On 12/08/22 14:54, Qais Yousef wrote:
+> Traversing the Perf Domains requires rcu_read_lock() to be held and is
+> conditional on sched_energy_enabled(). rcu_read_lock() is held while in
+> load_balance(), add an assert to ensure this is always the case.
 
-Also skip capacity inversion detection for our own pd; which was an
-error.
+Err that should say instead
 
-Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
-Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
----
+	Traversing the Perf Domains requires rcu_read_lock() to be held and is
+	conditional on sched_energy_enabled(). Ensure right protections applied.
 
-Changes in v2:
+Peter, let me know if you want me to resend with that fixed or happy to apply
+yourself.
 
-	* Make sure to hold rcu_read_lock() as we need it's not held in all
-	  paths (thanks Dietmar!)
 
- kernel/sched/fair.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 6a2fc2ca5078..2b1442093bd6 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8856,16 +8856,23 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
- 	 *   * Thermal pressure will impact all cpus in this perf domain
- 	 *     equally.
- 	 */
--	if (static_branch_unlikely(&sched_asym_cpucapacity)) {
-+	if (sched_energy_enabled()) {
- 		unsigned long inv_cap = capacity_orig - thermal_load_avg(rq);
--		struct perf_domain *pd = rcu_dereference(rq->rd->pd);
-+		struct perf_domain *pd;
-+
-+		rcu_read_lock();
- 
-+		pd = rcu_dereference(rq->rd->pd);
- 		rq->cpu_capacity_inverted = 0;
- 
- 		for (; pd; pd = pd->next) {
- 			struct cpumask *pd_span = perf_domain_span(pd);
- 			unsigned long pd_cap_orig, pd_cap;
- 
-+			/* We can't be inverted against our own pd */
-+			if (cpumask_test_cpu(cpu_of(rq), pd_span))
-+				continue;
-+
- 			cpu = cpumask_any(pd_span);
- 			pd_cap_orig = arch_scale_cpu_capacity(cpu);
- 
-@@ -8890,6 +8897,8 @@ static void update_cpu_capacity(struct sched_domain *sd, int cpu)
- 				break;
- 			}
- 		}
-+
-+		rcu_read_unlock();
- 	}
- 
- 	trace_sched_cpu_capacity_tp(rq);
--- 
-2.25.1
+--
+Qais Yousef
 
+> 
+> Also skip capacity inversion detection for our own pd; which was an
+> error.
+> 
+> Fixes: 44c7b80bffc3 ("sched/fair: Detect capacity inversion")
+> Reported-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+> ---
+> 
+> Changes in v2:
+> 
+> 	* Make sure to hold rcu_read_lock() as we need it's not held in all
+> 	  paths (thanks Dietmar!)
