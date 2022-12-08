@@ -2,405 +2,170 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6AED6471FB
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 15:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3774C647234
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 15:53:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbiLHOlC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 09:41:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34266 "EHLO
+        id S229841AbiLHOxB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 09:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbiLHOk2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 09:40:28 -0500
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2056.outbound.protection.outlook.com [40.107.100.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F504299F;
-        Thu,  8 Dec 2022 06:40:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DI2rf0aqaklL+uHodRoQDYrUOE2FXAygH9ANH5kRFbTsVod0Ao0AI2hvx/aH8dYvVc6iyfd58mavHDk0cuuFDepA/WdLckHXeiFOBOn238FjiYR/4oiTZmgR30nDZx700bIkYAkjMSlZjOWylG+qjQyDOuev9ag3OGG5Ir5gsMspUVDHznaXqm46BiddxMhMbZk1wkF+Hn8p7/xk1jFR9SzHvb5zPxPQcAmEe6rfmqOweBpXZi1ctJYfEtElcUODO0KTjZ2A+pJK9g1pMOV6JPpt7OYl184+VmWSfaFsFTH8twCfemEa4xLd0epGoKFRMqeVJcTvl7AdGMgfQidy+Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1Mgvz71D2VVBx2pWZe8TdrzkOEpK24mA3cnlhi2aEts=;
- b=EnFGEAUvhmCjsRtvqjUm9z+PLvRT3SgGdOPwIHGt6kCcWkQwWMvHIn855cb9vjlecAP1SRNzdJhuR9OJMtCHeQ/g9YhSLUUDl7T4I795eXHGDkFjT4wrWV4G4PSe4B4STLKfuq3W9Auz99kuoTW6TJgeMo8dJYfPfTekDDRMFFLOxWxrd4MP58Cfadktmcu+fa7yi2DO+y//P4zK6hy1oderA3N65auRs3khP8Me7UJGtf7fbtX+xPLfkvywUrV+8PfqI6CNVZO08EPXHvf7jCN7/fzeSXvIWQyeS9b0ycSxbNIG/ZmMonX8b0oJk5ZK9pdgITWnBhGKxMGwcRHC7A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1Mgvz71D2VVBx2pWZe8TdrzkOEpK24mA3cnlhi2aEts=;
- b=FyOS1UVe8725SH/WqpiCwTnae9gsQ1vEUW5RtEpymcL5OFqb9gxWqXs6JYtM/Tc10+kYvhtQ81jifFh98kmNce+L2E+zkO8/G3xEnL3oyLG3lDbyNM35VqLJ5/o9TSZjXc8nV4oa7rprq4BYDLZ/ttm3ZdTRoJepcdnAspWTLqU=
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
- by DM4PR12MB5264.namprd12.prod.outlook.com (2603:10b6:5:39c::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.14; Thu, 8 Dec
- 2022 14:40:24 +0000
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::960b:6963:b27e:f9ed]) by DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::960b:6963:b27e:f9ed%8]) with mapi id 15.20.5880.014; Thu, 8 Dec 2022
- 14:40:24 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>
-CC:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6 03/11] cpufreq: intel_pstate: use common macro
- definition for Energy Preference Performance(EPP)
-Thread-Topic: [PATCH v6 03/11] cpufreq: intel_pstate: use common macro
- definition for Energy Preference Performance(EPP)
-Thread-Index: AQHZBiLQ6rZzYmBFTkKNjTIz9JAdfq5fMtqAgAAvbfCAACM3AIAEbe3A
-Date:   Thu, 8 Dec 2022 14:40:23 +0000
-Message-ID: <DM4PR12MB5278E435D3DCF8AAFF3EDF539C1D9@DM4PR12MB5278.namprd12.prod.outlook.com>
-References: <20221202074719.623673-1-perry.yuan@amd.com>
- <20221202074719.623673-4-perry.yuan@amd.com> <Y43aq2gMKnFRIhxh@amd.com>
- <DM4PR12MB52782BAACEE08C09D704F0BE9C189@DM4PR12MB5278.namprd12.prod.outlook.com>
- <MN0PR12MB6101CA08E8D0BB0B43420FC5E2189@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB6101CA08E8D0BB0B43420FC5E2189@MN0PR12MB6101.namprd12.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-12-05T16:42:42Z;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=9b83cc6a-25de-4115-90a6-c882a1c6dbc0;
- MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-12-08T14:40:19Z
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: 1a041d67-3db1-4dda-8c50-7533554732b4
-msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|DM4PR12MB5264:EE_
-x-ms-office365-filtering-correlation-id: 5f210a4b-48c0-4068-f966-08dad92a23d1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: SThLeT3ui/GIbPXemubv5H7UCaNxLyrafqzThQ3jSXZIq1+cyVSJIbyZazMeUNwRooDeiiNG47HPn64B3aHZUI/Kttc8wjzLPAay6MZ3abMNRL9gCFY2Ti9XUhFnDeN3+8aiM+7iI8OBNurP36OOPgah0KLRr1Yaipcm+x20ipvGWv2ib0/xHpygHdalMkOSawCXgMesmBM6vzWbslaa79qEfHLn4I5GrRYwE36cQqJ8KXAbiyHfd4nVDv8U36ChY+tNLNDt55GFzFzPrsngx9Tk6EYbJkdc203juaRewWodlu62kfBMb3cGQje7KW8VpAaqBTPBP31rrpqdOg2OmiUUMrQ+9HeJDj99rQK3InUqyEtOHCyn4g27+aCCmpJ4yv4uUcH372YjaIKZlfWmFnb7UrxnoonM1kWM4EqD7w227JzGiwFYzsGV7TfZxp92lWTnzlY/MDpb58fBMsBQTC8TyBpCDwESlxoRulaUStwPh162EZYSvSJ1Z+ymTLLwtVimkszynpKgQf6bK4Rh05JNFF4zeVSVJob7nJug6Zd0gQ4712X/XDIQKuP3atKmUW5XXQ1JvcwEGAdX8hAhlWQBEl+Io06zuxyHcxfgG9H7VoLCFh/RXca7hfKhrtLshb8ZlAL78sJG6hhbeXVEbi5kuTfmWoZxNkh8TgapIK41cU2n+bHIW4bP8boLUgJsmyrGdJbb2c9NNrxUt7bQ5A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(136003)(346002)(39860400002)(376002)(451199015)(122000001)(33656002)(2906002)(38100700002)(55016003)(86362001)(8936002)(83380400001)(186003)(38070700005)(52536014)(316002)(6636002)(66446008)(5660300002)(478600001)(9686003)(26005)(54906003)(71200400001)(64756008)(4326008)(41300700001)(8676002)(53546011)(66556008)(66476007)(66946007)(7696005)(76116006)(6506007)(110136005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?arr6i2x6JiCECSgvyt9Z/TJ0atzvRgZyWw4D99cxeAaugvmK/f/Qf+cCsfmo?=
- =?us-ascii?Q?W7Dqp4mzFifLHw4jSnKYQEpDHWbJ3d6jiygm6ZZMApdhEa6MEjGtFQAefUQd?=
- =?us-ascii?Q?z7ppDo1mh18jfI3aD5iZfkYy1+fAcRfjCD722Kt9wcnByjMUmCP+Fxpddo57?=
- =?us-ascii?Q?LAg6iaDeTUrQ10wnVV0KpLFJvtWDZ2jTS/ffMju4nsyVdTzO7vW1yfm0FWck?=
- =?us-ascii?Q?7TdJUM4Ylgxcwb1mxbV4FlhluSLU6cgFfLMzh2v7jkiG1sEx/Y/gCkq7d8Sb?=
- =?us-ascii?Q?y9hitwYC1eFM2+SwvVYlgKE6Xb81b5DOkVH+wVKtUmRvMpz8WxIKh1sqvc4I?=
- =?us-ascii?Q?Ppx7SR4CHJT0m9Ldfx8SPobK6L5Kt9gHybdbXIwDFlHkx9mGvChFxWH261eD?=
- =?us-ascii?Q?+xH2Dwu3Zg2FW+/o1h7Zwk2qoJd4/+sMFf3fEpfiqQYpF9a849HGBObtX5Oq?=
- =?us-ascii?Q?vxWadBfUuxpSL7F1tXJiAMcfQv9a8QX0rR9gDJ9M3XMKoHjjRzn5eD+MMUqp?=
- =?us-ascii?Q?DbRO5dPIgO0dfYQ7ImyfgBfJO+ar5OhWpvcEsrwme5ohpLGw7wiHcirUVW1X?=
- =?us-ascii?Q?tnd1/mmWh3u5OvC4rj620DZXywzb7nTJZivy8t7OK9f5mlHfVT0XPZ/V7Ity?=
- =?us-ascii?Q?yN0JtPO0GThZRYTCEszKOIKJDlPiiMLI/BQeGshM7icn429qXi0+n2VMH7GD?=
- =?us-ascii?Q?wRuIztSg3Xjlkfa6w4tfVhHeQ26yZfqMhnngJvDMNMHV0/GQXIik0fNSE20L?=
- =?us-ascii?Q?QGhEEIYPNswhj9uGEnc/5SS4eEaYx4F6GVYhH91x4SwdHPP0zTBVyMRAfB1M?=
- =?us-ascii?Q?K/vhyef2Stn7FxI3HKo64Wsbccg3q9oFp1zD7yMca5z6aufy87E09eeoWdU5?=
- =?us-ascii?Q?81ALbTILBGRbxGUKcj8LzPoYwcbuazBkbTD4TqwzWhJHGXr7AfzGT1huqh47?=
- =?us-ascii?Q?CZ80hhWCU/tD8+A9hoaCXOUHRLgkixV53ZfMydPLwp9tYbqFXt9yurL8jzDf?=
- =?us-ascii?Q?TPOfGwRMkSnrVeFcQEgk+zqlMKsCNVFOPVyayNhBust7gE1s5qK6vXbIi/zN?=
- =?us-ascii?Q?CerJPBCs8wspw0iUKD92rYXwKNrSrFGxZMJjbt8zyqnrgWlaQs9TlceNq1Mw?=
- =?us-ascii?Q?9tXpE97Uh6YRo9S2Vk4C0IwXORNENWLxn5+8flCbJw3JXLhvVPNe0+Y/fLqN?=
- =?us-ascii?Q?uJvI2ebiQeeZD4h4b8I6MB6/LgR/jKBm0eD2R1E7toenUDmbd2v7s/EhlaK+?=
- =?us-ascii?Q?rnGD61qnWhnV1n8r50Pd7NL/ikPWcpPO4nhxyqW4qSL/QPZqL2Gf5DMIXe5N?=
- =?us-ascii?Q?I/aSYQnwZduHpr+DUzgbqCyyXsxXAbupsuxzfWpRQk6f6pBA/mvH/AD2TUMO?=
- =?us-ascii?Q?R4Gfd52QluDQbW28LEiB/PWknKySeo48KKKBmmwrijXzM2XAsXAaZ0uNQvu6?=
- =?us-ascii?Q?/npwjKPIvMvj7MYycu4blIQVmTj6Zmrs+MI5A4vt4cil0mLd0imxswXpfG7/?=
- =?us-ascii?Q?14UJs/Rlu8smQzA8kGlFqSwRXWsna4+1zlUx3foYumxRwKikCTqRSbvJAZeX?=
- =?us-ascii?Q?UaOm+BgPwXshREaR5MOd9ZwF1O68hUSH9OZQAClE?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229941AbiLHOw6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 09:52:58 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F33A4E6A8
+        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 06:52:54 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id n7so1221800wms.3
+        for <linux-pm@vger.kernel.org>; Thu, 08 Dec 2022 06:52:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5EQRHK9ZlDWtgRsVXiI0JZkXJchjbzgSFU+bI1duxL4=;
+        b=pcESBS62/zG7V+GsJWrKU7/PXisfwFgAymJ/MUMxWu15xwo3i4GDWcQX9v6VF15qe2
+         D5EwLMHkbvtc9csuGVfJBFiRVWQ2a1NMbJQpgmuG8ujbi2Q7bEsnDCSrmmy8bnlXYpcf
+         ENb5qESpp7R5LgDTYr4Zp8cuQghWlo1KI+z1C4OIxXnILkxM3A5TcTzLN4sLhOkzh0Kw
+         Rno6hezMZki5uOXCT5vLotDr+tE+LL0ewYH+K/MmgRaHbavncKZQSfpIoF1VRKWf015X
+         jR+i0mIyq9ycIRR+onCBLzC4CLPA+n973t7v/PgfWIf+v4UuilplNhNjKpK7O2pJa3I/
+         jXiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5EQRHK9ZlDWtgRsVXiI0JZkXJchjbzgSFU+bI1duxL4=;
+        b=WuusNqsIMrnInxI+F/bNaYisI2T1Z1MToxrGcYLoKvZoIBJSCgpqy75VqWWaQAtn/h
+         ciwGFW7hsM1ufz2dhUCfThmKBvJcliLbVmlc5dmZPDO2znj06GTrusGkzziF+v9LtM5r
+         MqIOnWBSOuZEVaAurpy/kUfITPIAH/4OEOfYpbcese46L/37blg2mql6FN/Bln+nme1U
+         x4BQG0Cy5KLKR/+SfalwgxM5lco/6ZvrsZrs3stBcMhCTKaCqr5I8jXyGOfXHIoE2Yio
+         nFntBXTp7Ik6f86rdi7Az5Adu0qbaShWG01310dOLDOLJ1ItzhmwEd6Pp0G48QTN2AF5
+         ZFuA==
+X-Gm-Message-State: ANoB5pm8gr2ZTnh6ULfICVtFHXYvNmbzSTpVoaZ5S9lwx/KPuHg69KKO
+        RXfodNdwdM7ND5Rt5fG5R26/CA==
+X-Google-Smtp-Source: AA0mqf6NnqFP55HRb79YXq9Xi7imG/OjrWKxmg2AHykMJvlL7/gHosi71god0CG5G865JNWhc7OHtw==
+X-Received: by 2002:a05:600c:6888:b0:3d1:d746:7bca with SMTP id fn8-20020a05600c688800b003d1d7467bcamr2106872wmb.4.1670511172700;
+        Thu, 08 Dec 2022 06:52:52 -0800 (PST)
+Received: from localhost.localdomain ([2a00:79e1:abc:9:c7d:8d2a:a83c:450a])
+        by smtp.gmail.com with ESMTPSA id f13-20020a7bcd0d000000b003b47ff307e1sm4973469wmj.31.2022.12.08.06.52.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 06:52:52 -0800 (PST)
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Qais Yousef <qyousef@layalina.io>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: [PATCH v2] sched/uclamp: Fix a uninitialized variable warnings
+Date:   Thu,  8 Dec 2022 14:51:08 +0000
+Message-Id: <20221208145108.452032-1-qyousef@layalina.io>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <927e4ffc-8400-b615-2d58-9e88ee4bdc3c@arm.com>
+References: <927e4ffc-8400-b615-2d58-9e88ee4bdc3c@arm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f210a4b-48c0-4068-f966-08dad92a23d1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Dec 2022 14:40:23.8538
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Px3LF79Wr4LiqnzZ4zcn1IWNYII+0xA1Dw/ylZ6SczGTlVN6UwEcHU/F0YlGb0r6WC+Au8EbqHaECJNuRQ854Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5264
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[Public]
+Addresses the following warnings:
 
-Hi Mario.=20
+> config: riscv-randconfig-m031-20221111
+> compiler: riscv64-linux-gcc (GCC) 12.1.0
+>
+> smatch warnings:
+> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_min'.
+> kernel/sched/fair.c:7263 find_energy_efficient_cpu() error: uninitialized symbol 'util_max'.
 
-> -----Original Message-----
-> From: Limonciello, Mario <Mario.Limonciello@amd.com>
-> Sent: Tuesday, December 6, 2022 12:45 AM
-> To: Yuan, Perry <Perry.Yuan@amd.com>; Huang, Ray <Ray.Huang@amd.com>
-> Cc: rafael.j.wysocki@intel.com; viresh.kumar@linaro.org; Sharma, Deepak
-> <Deepak.Sharma@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Huang, Shimmer
-> <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng,
-> Li (Jassmine) <Li.Meng@amd.com>; Karny, Wyes <Wyes.Karny@amd.com>;
-> linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: RE: [PATCH v6 03/11] cpufreq: intel_pstate: use common macro
-> definition for Energy Preference Performance(EPP)
->=20
-> [Public]
->=20
->=20
->=20
-> > -----Original Message-----
-> > From: Yuan, Perry <Perry.Yuan@amd.com>
-> > Sent: Monday, December 5, 2022 08:41
-> > To: Huang, Ray <Ray.Huang@amd.com>
-> > Cc: rafael.j.wysocki@intel.com; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; viresh.kumar@linaro.org; Sharma, Deepak
-> > <Deepak.Sharma@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>;
-> > Deucher, Alexander <Alexander.Deucher@amd.com>; Huang, Shimmer
-> > <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>;
-> Meng, Li
-> > (Jassmine) <Li.Meng@amd.com>; Karny, Wyes <Wyes.Karny@amd.com>;
-> > linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: RE: [PATCH v6 03/11] cpufreq: intel_pstate: use common macro
-> > definition for Energy Preference Performance(EPP)
-> >
-> > [AMD Official Use Only - General]
-> >
-> > Hi Ray.
-> >
-> > > -----Original Message-----
-> > > From: Huang, Ray <Ray.Huang@amd.com>
-> > > Sent: Monday, December 5, 2022 7:49 PM
-> > > To: Yuan, Perry <Perry.Yuan@amd.com>
-> > > Cc: rafael.j.wysocki@intel.com; Limonciello, Mario
-> > > <Mario.Limonciello@amd.com>; viresh.kumar@linaro.org; Sharma,
-> Deepak
-> > > <Deepak.Sharma@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>;
-> > > Deucher, Alexander <Alexander.Deucher@amd.com>; Huang, Shimmer
-> > > <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>;
-> > Meng,
-> > > Li (Jassmine) <Li.Meng@amd.com>; Karny, Wyes
-> > <Wyes.Karny@amd.com>;
-> > > linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> > > Subject: Re: [PATCH v6 03/11] cpufreq: intel_pstate: use common
-> > > macro definition for Energy Preference Performance(EPP)
-> > >
-> > > On Fri, Dec 02, 2022 at 03:47:11PM +0800, Yuan, Perry wrote:
-> > > > make the energy preference performance strings and profiles using
-> > > > one common header for intel_pstate driver, then the amd_pstate epp
-> > > > driver can use the common header as well. This will simpify the
-> > > > intel_pstate and amd_pstate driver.
-> > > >
-> > > > Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> > > > ---
-> > > >  arch/x86/include/asm/msr-index.h |  4 ---
-> > > >  drivers/cpufreq/intel_pstate.c   | 37 +--------------------
-> > > >  include/linux/cpufreq_common.h   | 56
-> > > ++++++++++++++++++++++++++++++++
-> > >
-> > > I don't find any specific reason why you have to use another common
-> > > cpufreq_common header instead of include/linux/cpufreq.h.
-> > >
-> > > Thanks,
-> > > Ray
-> >
-> > That is fine for me to use the cpufreq.h to store the common vars.
-> > I will move the declaration to that header file.
-> >
-> > Thanks for the review.
-> >
-> > Perry.
-> >
-> > >
-> > > >  3 files changed, 57 insertions(+), 40 deletions(-)  create mode
-> > > > 100644 include/linux/cpufreq_common.h
-> > > >
-> > > > diff --git a/arch/x86/include/asm/msr-index.h
-> > > > b/arch/x86/include/asm/msr-index.h
-> > > > index 4a2af82553e4..3983378cff5b 100644
-> > > > --- a/arch/x86/include/asm/msr-index.h
-> > > > +++ b/arch/x86/include/asm/msr-index.h
-> > > > @@ -472,10 +472,6 @@
-> > > >  #define HWP_MAX_PERF(x) 		((x & 0xff) << 8)
-> > > >  #define HWP_DESIRED_PERF(x)		((x & 0xff) << 16)
-> > > >  #define HWP_ENERGY_PERF_PREFERENCE(x)	(((unsigned long long)
-> > > x & 0xff) << 24)
-> > > > -#define HWP_EPP_PERFORMANCE		0x00
-> > > > -#define HWP_EPP_BALANCE_PERFORMANCE	0x80
-> > > > -#define HWP_EPP_BALANCE_POWERSAVE	0xC0
-> > > > -#define HWP_EPP_POWERSAVE		0xFF
-> > > >  #define HWP_ACTIVITY_WINDOW(x)		((unsigned long
-> > > long)(x & 0xff3) << 32)
-> > > >  #define HWP_PACKAGE_CONTROL(x)		((unsigned long
-> > > long)(x & 0x1) << 42)
-> > > >
-> > > > diff --git a/drivers/cpufreq/intel_pstate.c
-> > > > b/drivers/cpufreq/intel_pstate.c index ad9be31753b6..65036ca21719
-> > > > 100644
-> > > > --- a/drivers/cpufreq/intel_pstate.c
-> > > > +++ b/drivers/cpufreq/intel_pstate.c
-> > > > @@ -25,6 +25,7 @@
-> > > >  #include <linux/acpi.h>
-> > > >  #include <linux/vmalloc.h>
-> > > >  #include <linux/pm_qos.h>
-> > > > +#include <linux/cpufreq_common.h>
-> > > >  #include <trace/events/power.h>
-> > > >
-> > > >  #include <asm/cpu.h>
-> > > > @@ -628,42 +629,6 @@ static int intel_pstate_set_epb(int cpu, s16 p=
-ref)
-> > > >  	return 0;
-> > > >  }
-> > > >
-> > > > -/*
-> > > > - * EPP/EPB display strings corresponding to EPP index in the
-> > > > - * energy_perf_strings[]
-> > > > - *	index		String
-> > > > - *-------------------------------------
-> > > > - *	0		default
-> > > > - *	1		performance
-> > > > - *	2		balance_performance
-> > > > - *	3		balance_power
-> > > > - *	4		power
-> > > > - */
-> > > > -
-> > > > -enum energy_perf_value_index {
-> > > > -	EPP_INDEX_DEFAULT =3D 0,
-> > > > -	EPP_INDEX_PERFORMANCE,
-> > > > -	EPP_INDEX_BALANCE_PERFORMANCE,
-> > > > -	EPP_INDEX_BALANCE_POWERSAVE,
-> > > > -	EPP_INDEX_POWERSAVE,
-> > > > -};
-> > > > -
-> > > > -static const char * const energy_perf_strings[] =3D {
-> > > > -	[EPP_INDEX_DEFAULT] =3D "default",
-> > > > -	[EPP_INDEX_PERFORMANCE] =3D "performance",
-> > > > -	[EPP_INDEX_BALANCE_PERFORMANCE] =3D "balance_performance",
-> > > > -	[EPP_INDEX_BALANCE_POWERSAVE] =3D "balance_power",
-> > > > -	[EPP_INDEX_POWERSAVE] =3D "power",
-> > > > -	NULL
-> > > > -};
-> > > > -static unsigned int epp_values[] =3D {
-> > > > -	[EPP_INDEX_DEFAULT] =3D 0, /* Unused index */
-> > > > -	[EPP_INDEX_PERFORMANCE] =3D HWP_EPP_PERFORMANCE,
-> > > > -	[EPP_INDEX_BALANCE_PERFORMANCE] =3D
-> > > HWP_EPP_BALANCE_PERFORMANCE,
-> > > > -	[EPP_INDEX_BALANCE_POWERSAVE] =3D
-> > > HWP_EPP_BALANCE_POWERSAVE,
-> > > > -	[EPP_INDEX_POWERSAVE] =3D HWP_EPP_POWERSAVE,
-> > > > -};
-> > > > -
-> > > >  static int intel_pstate_get_energy_pref_index(struct cpudata
-> > > > *cpu_data, int *raw_epp)  {
-> > > >  	s16 epp;
-> > > > diff --git a/include/linux/cpufreq_common.h
-> > > > b/include/linux/cpufreq_common.h new file mode 100644 index
-> > > > 000000000000..2d14b0b0f55c
-> > > > --- /dev/null
-> > > > +++ b/include/linux/cpufreq_common.h
-> > > > @@ -0,0 +1,56 @@
-> > > > +/* SPDX-License-Identifier: GPL-2.0-only */
-> > > > +/*
-> > > > + * linux/include/linux/cpufreq_common.h
-> > > > + *
-> > > > + * Copyright (C) 2022 Advanced Micro Devices, Inc.
-> > > > + *
-> > > > + * Author: Perry Yuan <Perry.Yuan@amd.com>  */
-> > > > +
-> > > > +#ifndef _LINUX_CPUFREQ_COMMON_H
-> > > > +#define _LINUX_CPUFREQ_COMMON_H
-> > > > +
-> > > > +#include <asm/msr.h>
-> > > > +/*
-> > > > + * EPP/EPB display strings corresponding to EPP index in the
-> > > > + * energy_perf_strings[]
-> > > > + *	index		String
-> > > > + *-------------------------------------
-> > > > + *	0		default
-> > > > + *	1		performance
-> > > > + *	2		balance_performance
-> > > > + *	3		balance_power
-> > > > + *	4		power
-> > > > + */
-> > > > +
-> > > > +#define HWP_EPP_PERFORMANCE		0x00
-> > > > +#define HWP_EPP_BALANCE_PERFORMANCE	0x80
-> > > > +#define HWP_EPP_BALANCE_POWERSAVE	0xC0
-> > > > +#define HWP_EPP_POWERSAVE		0xFF
-> > > > +
-> > > > +enum energy_perf_value_index {
-> > > > +	EPP_INDEX_DEFAULT =3D 0,
-> > > > +	EPP_INDEX_PERFORMANCE,
-> > > > +	EPP_INDEX_BALANCE_PERFORMANCE,
-> > > > +	EPP_INDEX_BALANCE_POWERSAVE,
-> > > > +	EPP_INDEX_POWERSAVE,
-> > > > +};
-> > > > +
-> > > > +static const char * const energy_perf_strings[] =3D {
-> > > > +	[EPP_INDEX_DEFAULT] =3D "default",
-> > > > +	[EPP_INDEX_PERFORMANCE] =3D "performance",
-> > > > +	[EPP_INDEX_BALANCE_PERFORMANCE] =3D "balance_performance",
-> > > > +	[EPP_INDEX_BALANCE_POWERSAVE] =3D "balance_power",
-> > > > +	[EPP_INDEX_POWERSAVE] =3D "power",
-> > > > +	NULL
-> > > > +};
-> > > > +
-> > > > +static unsigned int epp_values[] =3D {
-> > > > +	[EPP_INDEX_DEFAULT] =3D 0, /* Unused index */
-> > > > +	[EPP_INDEX_PERFORMANCE] =3D HWP_EPP_PERFORMANCE,
-> > > > +	[EPP_INDEX_BALANCE_PERFORMANCE] =3D
-> > > HWP_EPP_BALANCE_PERFORMANCE,
-> > > > +	[EPP_INDEX_BALANCE_POWERSAVE] =3D
-> > > HWP_EPP_BALANCE_POWERSAVE,
-> > > > +	[EPP_INDEX_POWERSAVE] =3D HWP_EPP_POWERSAVE, };
-> > > > +
->=20
-> I don't believe you should be making these static in the header file.
+Fixes: 244226035a1f ("sched/uclamp: Fix fits_capacity() check in feec()")
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Signed-off-by: Qais Yousef (Google) <qyousef@layalina.io>
+---
 
-If I do not make these arrays as static type, it will be reporting lots of =
-build errors.
+Changes in v2:
 
-ld: drivers/scsi/lpfc/lpfc_sli.o:(.data+0xa0): multiple definition of `epp_=
-values'; drivers/scsi/lpfc/lpfc_mem.o:(.data+0x0): first defined here
-ld: drivers/scsi/lpfc/lpfc_sli.o:(.rodata+0x120): multiple definition of `e=
-nergy_perf_strings'; drivers/scsi/lpfc/lpfc_mem.o:(.rodata+0x0): first defi=
-ned here
-ld: drivers/scsi/lpfc/lpfc_ct.o:(.data+0x150): multiple definition of `epp_=
-values'; drivers/scsi/lpfc/lpfc_mem.o:(.data+0x0): first defined here
-ld: drivers/scsi/lpfc/lpfc_ct.o:(.rodata+0x60): multiple definition of `ene=
-rgy_perf_strings'; drivers/scsi/lpfc/lpfc_mem.o:(.rodata+0x0): first define=
-d here
-ld: drivers/scsi/lpfc/lpfc_els.o:(.data+0x0): multiple definition of `epp_v=
-alues'; drivers/scsi/lpfc/lpfc_mem.o:(.data+0x0): first defined here
- ....
+	* Improve indentation as suggested by Dietmar
 
+ kernel/sched/fair.c | 35 ++++++++++++++++-------------------
+ 1 file changed, 16 insertions(+), 19 deletions(-)
 
-I will check how to get this fixed if we really need set it as static in V8=
-.
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 4cc56c91e06e..6a2fc2ca5078 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -7217,10 +7217,10 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	eenv_task_busy_time(&eenv, p, prev_cpu);
+ 
+ 	for (; pd; pd = pd->next) {
++		unsigned long util_min = p_util_min, util_max = p_util_max;
+ 		unsigned long cpu_cap, cpu_thermal_cap, util;
+ 		unsigned long cur_delta, max_spare_cap = 0;
+ 		unsigned long rq_util_min, rq_util_max;
+-		unsigned long util_min, util_max;
+ 		unsigned long prev_spare_cap = 0;
+ 		int max_spare_cap_cpu = -1;
+ 		unsigned long base_energy;
+@@ -7239,6 +7239,8 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		eenv.pd_cap = 0;
+ 
+ 		for_each_cpu(cpu, cpus) {
++			struct rq *rq = cpu_rq(cpu);
++
+ 			eenv.pd_cap += cpu_thermal_cap;
+ 
+ 			if (!cpumask_test_cpu(cpu, sched_domain_span(sd)))
+@@ -7257,24 +7259,19 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			 * much capacity we can get out of the CPU; this is
+ 			 * aligned with sched_cpu_util().
+ 			 */
+-			if (uclamp_is_used()) {
+-				if (uclamp_rq_is_idle(cpu_rq(cpu))) {
+-					util_min = p_util_min;
+-					util_max = p_util_max;
+-				} else {
+-					/*
+-					 * Open code uclamp_rq_util_with() except for
+-					 * the clamp() part. Ie: apply max aggregation
+-					 * only. util_fits_cpu() logic requires to
+-					 * operate on non clamped util but must use the
+-					 * max-aggregated uclamp_{min, max}.
+-					 */
+-					rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+-					rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+-
+-					util_min = max(rq_util_min, p_util_min);
+-					util_max = max(rq_util_max, p_util_max);
+-				}
++			if (uclamp_is_used() && !uclamp_rq_is_idle(rq)) {
++				/*
++				 * Open code uclamp_rq_util_with() except for
++				 * the clamp() part. Ie: apply max aggregation
++				 * only. util_fits_cpu() logic requires to
++				 * operate on non clamped util but must use the
++				 * max-aggregated uclamp_{min, max}.
++				 */
++				rq_util_min = uclamp_rq_get(rq, UCLAMP_MIN);
++				rq_util_max = uclamp_rq_get(rq, UCLAMP_MAX);
++
++				util_min = max(rq_util_min, p_util_min);
++				util_max = max(rq_util_max, p_util_max);
+ 			}
+ 			if (!util_fits_cpu(util, util_min, util_max, cpu))
+ 				continue;
+-- 
+2.25.1
 
-Perry.
-
->=20
-> > > > +#endif /* _LINUX_CPUFREQ_COMMON_H */
-> > > > \ No newline at end of file
-> > > > --
-> > > > 2.34.1
-> > > >
