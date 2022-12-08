@@ -2,60 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CB88646FF9
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 13:49:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A71A9646FED
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 13:44:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbiLHMth (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 07:49:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47704 "EHLO
+        id S229677AbiLHMoX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 07:44:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbiLHMth (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 07:49:37 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D5027CD1
-        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 04:49:35 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4NSYrZ0Zg9z4xN1;
-        Thu,  8 Dec 2022 23:49:34 +1100 (AEDT)
-From:   Michael Ellerman <patch-notifications@ellerman.id.au>
-To:     rafael@kernel.org, npiggin@gmail.com,
-        Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>,
-        mpe@ellerman.id.au, daniel.lezcano@linaro.org,
-        svaidy@linux.vnet.ibm.com
-Cc:     srikar@linux.vnet.ibm.com, christophe.leroy@csgroup.eu,
-        linuxppc-dev@lists.ozlabs.org, linux-pm@vger.kernel.org
-In-Reply-To: <20221114145611.37669-1-aboorvad@linux.vnet.ibm.com>
-References: <20221114073154.30407-1-aboorvad@linux.vnet.ibm.com> <20221114145611.37669-1-aboorvad@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2] powerpc/cpuidle: Set CPUIDLE_FLAG_POLLING for snooze state
-Message-Id: <167050321754.1457988.14917789901150069869.b4-ty@ellerman.id.au>
-Date:   Thu, 08 Dec 2022 23:40:17 +1100
-MIME-Version: 1.0
+        with ESMTP id S229568AbiLHMoW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 07:44:22 -0500
+Received: from baidu.com (mx20.baidu.com [111.202.115.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7C860B7B;
+        Thu,  8 Dec 2022 04:44:19 -0800 (PST)
+From:   "Li,Rongqing" <lirongqing@baidu.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: RE: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with
+ arch_cpu_idle
+Thread-Topic: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with
+ arch_cpu_idle
+Thread-Index: AQHZCkl35vAH2p6SAUK3SxvI0ANPyq5jOG4AgAAgUwCAAJTQoA==
+Date:   Thu, 8 Dec 2022 12:41:23 +0000
+Message-ID: <3fb3526aa012449db95767c6092da8f6@baidu.com>
+References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
+ <080936167059.CAJZ5v0g5kTRE+x-8xC2WwQr11j01ox=Nk0aguiC1_HGPU8W=Rw@mail.gmail.com>
+ <9e19c594bcf144fbb433fb4cfee54e08@baidu.com>
+ <CAJZ5v0jofKbdRbKzLSEMkjQjP1GTcbt7OYqO=0ZYvpt_HwTQTg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jofKbdRbKzLSEMkjQjP1GTcbt7OYqO=0ZYvpt_HwTQTg@mail.gmail.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.22.204.59]
+x-baidu-bdmsfe-datecheck: 1_BJHW-Mail-Ex15_2022-12-08 20:41:24:190
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-FEAS-Client-IP: 10.127.64.38
+X-FE-Last-Public-Client-IP: 100.100.100.38
+X-FE-Policy-ID: 15:10:21:SYSTEM
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 14 Nov 2022 20:26:11 +0530, Aboorva Devarajan wrote:
-> During the comparative study of cpuidle governors, it is noticed that the
-> menu governor does not select CEDE state in some scenarios even though when
-> the sleep duration of the CPU exceeds the target residency of the CEDE idle
-> state this is because the CPU exits the snooze "polling" state when snooze
-> time limit is reached in the snooze_loop(), which is not a real wake up
-> and it just means that the polling state selection was not adequate.
-> 
-> [...]
-
-Applied to powerpc/next.
-
-[1/1] powerpc/cpuidle: Set CPUIDLE_FLAG_POLLING for snooze state
-      https://git.kernel.org/powerpc/c/5ddcc03a07ae1ab5062f89a946d9495f1fd8eaa4
-
-cheers
+PiA+DQo+ID4gV2hlbiBjcHVpZGxlLWhhbHRwb2xsIGlzIGJ1aWx0IGFzIG1vZHVsZSwNCj4gDQo+
+IEJ1dCBpdCBpc24ndCBub3cuDQoNCkNlbnRvcyBpcyBjb21waWxpbmcgaXQgYXMgbW9kdWxlLCBp
+dCB3aWxsIGZhaWw7DQpPdGhlciB1c2VyIHdhbnRzIHRvIGNvbXBpbGUgaXQgYXMgbW9kdWxlLCB0
+aGV5IHdpbGwgZmFpbCwgDQpTeXpib3QgcmFuZG9tIGNvbmZpZ3VyYXRpb24gYnVpbGRpbmcgd2ls
+bCBmYWlsDQoNClVubGVzcyBwcm9oaWJpdCB0byBidWlsZCBpdCBhcyBtb2R1bGUgYXMgYmVsb3c6
+DQoNCmNvbmZpZyBIQUxUUE9MTF9DUFVJRExFDQotICAgICAgICB0cmlzdGF0ZSAiSGFsdCBwb2xs
+IGNwdWlkbGUgZHJpdmVyIg0KKyAgICAgICAgYm9vbCAiSGFsdCBwb2xsIGNwdWlkbGUgZHJpdmVy
+Ig0KICAgICAgICBkZXBlbmRzIG9uIFg4NiAmJiBLVk1fR1VFU1QNCiAgICAgICAgZGVmYXVsdCB5
+DQogICAgICAgIGhlbHANCg0KDQp0aGFua3MNCg0KLUxpDQoNCg0K
