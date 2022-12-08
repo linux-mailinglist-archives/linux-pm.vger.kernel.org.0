@@ -2,157 +2,390 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB1A64749E
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 17:49:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 725BD6474A3
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 17:49:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229724AbiLHQtD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 11:49:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S230198AbiLHQt3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 11:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiLHQtC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 11:49:02 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3A484B7B;
-        Thu,  8 Dec 2022 08:49:01 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id bg10so1545705wmb.1;
-        Thu, 08 Dec 2022 08:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hsMzTABogzUqVL36MXI4Bwqt7GP8Ha0onsCnHRYRh2Q=;
-        b=e+OlhxTZHCHii+mvM9NfCnSblX7FBij0qENhHrczpDVDiCwFtRHDuAdo6XWJ5QF3JE
-         7Rv7ISBUuPaQnkTavXdh8PZpXUsyQ5X/rFCbQN6Qi3KSVOst/Hne2jk5T5J/b/4X9L9c
-         zRjZsEOwAALYowiKHRW0U3ytsQ75K0Hgf/JEVL56gOyggrjHopg/Oi3Jw5+Er2aeXoMQ
-         LxPN54jur8VssuTAOCD7Flubto77DxtNNm/0wCKhZatrNMgRvnHDXDkx2hzpf9c3wKnx
-         +p8W7lt7zEGWPaEI29gmfoE6UoAIRs9kmHYvRhchB/b+RLoBX+z6UXaEmyE+xHU/n5We
-         uP7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hsMzTABogzUqVL36MXI4Bwqt7GP8Ha0onsCnHRYRh2Q=;
-        b=O3iWD/nh5Zurjbzdblg0baL5BtOJPIFhjBwBHg3v8CcnqWD5109wE+kAOkQCGVnFhP
-         QLHnFYeqXVK69mXMUEpTgzxa8b9vkY98DsBcOezmQcl5LISaXpW/fKbaWcJCfGJu6j3B
-         ABGdyZfiglogq4fKEAuMZzAnLFpbnsnQWy6PhQf9aWcrKqj/mwcriJ6bJ7vlPMWIIy0a
-         kGEBARjyfxWQv/lIecjt/VfiGV9YuGpqrTBPrVonHa5GF/keZoFP3kMKC6qMwufR04nI
-         Xtdz36lKBd8lxjAoHBjm0OU58yo2RNaWQgaAk5SHKVABraf1n0OOXclTl25PSMYK2v4+
-         pflA==
-X-Gm-Message-State: ANoB5pkztUKmSlJyyhldOWtzbHAU3PFpBwt6qQJtsDyBCGao/dVIsRGw
-        dwbyJmpap15ro32zhsOqOckuMnqD/Bw=
-X-Google-Smtp-Source: AA0mqf5QDcku8ZmuMe+If076NirJOAg6E6rKq1NI+0ipqaoHovwlZ8rCjVLB2oZhe6DwAhF1Qm7V1Q==
-X-Received: by 2002:a05:600c:3592:b0:3d1:bc32:2447 with SMTP id p18-20020a05600c359200b003d1bc322447mr2413839wmq.21.1670518140088;
-        Thu, 08 Dec 2022 08:49:00 -0800 (PST)
-Received: from [10.20.0.4] ([89.36.76.136])
-        by smtp.gmail.com with ESMTPSA id t15-20020a7bc3cf000000b003a3170a7af9sm5452003wmj.4.2022.12.08.08.48.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 08 Dec 2022 08:48:59 -0800 (PST)
-Message-ID: <304bce39-2ece-863c-33b3-b432685faa2d@gmail.com>
-Date:   Thu, 8 Dec 2022 17:48:58 +0100
+        with ESMTP id S229844AbiLHQt2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 11:49:28 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F8C84B7B
+        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 08:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670518167; x=1702054167;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=mxS2PotpsGz8+tw2+kXpzz3/78UFhWc80yCB3ZDPPGY=;
+  b=Q2oQbUfYKyzqQ0AkzgKYjPh1hhIBbiG2X3VRK7fjcML3zqKcdLZOJ4rb
+   UU04fBZuqF6XEyaYOWAO3TTic6xIS9lF6vETuQ2PfFuNNz3hA29qZDMhq
+   j6Dbst9FTjg6tbDC+PkWCrCGuQMMLZXQqvUlgOZ0NRLEX/WBzqUszsrH/
+   K7sOnxDGW7Z18SFtDHpMVIta6GEfrZXeSJpVihxxnom7JI7zTofHny+N4
+   BUR44ZcfAqLy9xvy6zdlzA73wL9De2HBYrKRjtDb2fcIPjrcLmPXj5eP5
+   APz3to4+nuDMKwR1UuWpuTJmU5016KcevC6eVodgkBTfW89CPObzyO317
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="297577344"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="297577344"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 08:49:27 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10555"; a="892302677"
+X-IronPort-AV: E=Sophos;i="5.96,227,1665471600"; 
+   d="scan'208";a="892302677"
+Received: from hlin7-mobl.ccr.corp.intel.com ([10.255.30.254])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2022 08:49:24 -0800
+Message-ID: <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
+Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Date:   Fri, 09 Dec 2022 00:49:21 +0800
+In-Reply-To: <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
+References: <20221108033332.27760-1-rui.zhang@intel.com>
+         <20221108033332.27760-2-rui.zhang@intel.com>
+         <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 0/9] platform/surface: aggregator: Improve target/source
- handling in SSH messages
-Content-Language: en-US
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     Jiri Kosina <jikos@kernel.org>, Sebastian Reichel <sre@kernel.org>,
-        Mark Gross <markgross@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221202223327.690880-1-luzmaximilian@gmail.com>
- <c09c9cef-14ac-2ab3-5e01-13189823a053@redhat.com>
- <CAO-hwJLHzRCJF96gKJwj7zCCPxRLoEw=cQ2w8=yLBOfyZz-c8w@mail.gmail.com>
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-In-Reply-To: <CAO-hwJLHzRCJF96gKJwj7zCCPxRLoEw=cQ2w8=yLBOfyZz-c8w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/8/22 17:24, Benjamin Tissoires wrote:
-> On Thu, Dec 8, 2022 at 5:03 PM Hans de Goede <hdegoede@redhat.com> wrote:
->>
->> Hi Maximilian,
->>
->> On 12/2/22 23:33, Maximilian Luz wrote:
->>> We have some new insights into the Serial Hub protocol, obtained through
->>> reverse engineering. In particular, regarding the command structure. The
->>> input/output target IDs actually represent source and target IDs of
->>> (what looks like) physical entities (specifically: host, SAM EC, KIP EC,
->>> debug connector, and SurfLink connector).
->>>
->>> This series aims to improve handling of messages with regards to those
->>> new findings and, mainly, improve clarity of the documentation and usage
->>> around those fields.
->>>
->>> See the discussion in
->>>
->>>      https://github.com/linux-surface/surface-aggregator-module/issues/64
->>>
->>> for more details.
->>>
->>> There are a couple of standouts:
->>>
->>> - Patch 1 ensures that we only handle commands actually intended for us.
->>>    It's possible that we receive messages not intended for us when we
->>>    enable debugging. I've kept it intentionally minimal to simplify
->>>    backporting. The rest of the series patch 9 focuses more on clarity
->>>    and documentation, which is probably too much to backport.
->>>
->>> - Patch 8 touches on multiple subsystems. The intention is to enforce
->>>    proper usage and documentation of target IDs in the SSAM_SDEV() /
->>>    SSAM_VDEV() macros. As it directly touches those macros I
->>>    unfortunately can't split it up by subsystem.
->>>
->>> - Patch 9 is a loosely connected cleanup for consistency.
->>
->> Thank you for the patches. Unfortunately I don't have time atm to
->> review this.
->>
->> And the next 2 weeks are the merge window, followed by 2 weeks
->> of christmas vacation.
->>
->> So I'm afraid that I likely won't get around to reviewing
->> this until the week of January 9th.
->>
->>> Hans, Jiri, Benjamin, Sebastian: While patch 8 ("platform/surface:
->>> aggregator: Enforce use of target-ID enum in device ID macros") touches
->>> multiple subsystems, it should be possible to take the whole series
->>> through the pdx86 tree. The changes in other subsystems are fairly
->>> limited.
->>
->> I agree that it will be best to take all of this upstream through the
->> pdx86 tree. Sebastian thank you for the ack for patch 8/9.
->>
->> Jiri or Benjamin may we have your ack for merging patch 7/9 + 8/9
->> through the pdx86 tree ?
+On Thu, 2022-12-08 at 14:49 +0100, Rafael J. Wysocki wrote:
+> On Tue, Nov 8, 2022 at 4:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
+> > There are several different drivers that accesses the Intel TCC
+> > (thermal control circuitry) MSRs, and each of them has its own
+> > implementation for the same functionalities, e.g. getting the
+> > current
+> > temperature, getting the tj_max, and getting/setting the tj_max
+> > offset.
+> > 
+> > Introduce a library to unify the code for Intel CPU TCC MSR access.
+> > 
+> > At the same time, ensure the temperature is got based on the
+> > updated
+> > tjmax value because tjmax can be changed at runtime for cases like
+> > the Intel SST-PP (Intel Speed Select Technology - Performance
+> > Profile)
+> > level change.
+> > 
+> > Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 > 
-> I can give you an ack for taking those through your tree, but I can
-> not review the patches themselves because I was only CC-ed to those 2,
-> and so was linux-input. Given that SSAM_SSH_TID_KIP is not in my
-> current tree I assume it comes from this series.
+> Nice series, overall I like it a lot, but I have some comments
+> regarding this particular patch (below).  Some of them are arguably
+> minor, but at least one thing is more serious.
+
+Hi, Rafael,
+
+Thanks for reviewing the patch set.
 > 
-> Anyway, enough ranting :)
+> > ---
+> >  drivers/thermal/intel/Kconfig     |   4 +
+> >  drivers/thermal/intel/Makefile    |   1 +
+> >  drivers/thermal/intel/intel_tcc.c | 131
+> > ++++++++++++++++++++++++++++++
+> >  include/linux/intel_tcc.h         |  18 ++++
+> >  4 files changed, 154 insertions(+)
+> >  create mode 100644 drivers/thermal/intel/intel_tcc.c
+> >  create mode 100644 include/linux/intel_tcc.h
+> > 
+> > diff --git a/drivers/thermal/intel/Kconfig
+> > b/drivers/thermal/intel/Kconfig
+> > index f0c845679250..6b938c040d6e 100644
+> > --- a/drivers/thermal/intel/Kconfig
+> > +++ b/drivers/thermal/intel/Kconfig
+> > @@ -12,6 +12,10 @@ config X86_THERMAL_VECTOR
+> >         def_bool y
+> >         depends on X86 && CPU_SUP_INTEL && X86_LOCAL_APIC
+> > 
+> > +config INTEL_TCC
+> > +       bool
+> > +       depends on X86
+> > +
+> >  config X86_PKG_TEMP_THERMAL
+> >         tristate "X86 package temperature thermal driver"
+> >         depends on X86_THERMAL_VECTOR
+> > diff --git a/drivers/thermal/intel/Makefile
+> > b/drivers/thermal/intel/Makefile
+> > index 9a8d8054f316..5d8833c82ab6 100644
+> > --- a/drivers/thermal/intel/Makefile
+> > +++ b/drivers/thermal/intel/Makefile
+> > @@ -2,6 +2,7 @@
+> >  #
+> >  # Makefile for various Intel thermal drivers.
+> > 
+> > +obj-$(CONFIG_INTEL_TCC)        += intel_tcc.o
+> >  obj-$(CONFIG_INTEL_POWERCLAMP) += intel_powerclamp.o
+> >  obj-$(CONFIG_X86_PKG_TEMP_THERMAL)     += x86_pkg_temp_thermal.o
+> >  obj-$(CONFIG_INTEL_SOC_DTS_IOSF_CORE)  += intel_soc_dts_iosf.o
+> > diff --git a/drivers/thermal/intel/intel_tcc.c
+> > b/drivers/thermal/intel/intel_tcc.c
+> > new file mode 100644
+> > index 000000000000..74b434914975
+> > --- /dev/null
+> > +++ b/drivers/thermal/intel/intel_tcc.c
+> > @@ -0,0 +1,131 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * intel_tcc.c - Library for Intel TCC (thermal control circuitry)
+> > MSR access
+> > + * Copyright (c) 2022, Intel Corporation.
+> > + */
+> > +
+> > +#include <linux/errno.h>
+> > +#include <linux/intel_tcc.h>
+> > +#include <asm/msr.h>
+> > +
+> > +/**
+> > + * intel_tcc_get_tjmax() - returns the default TCC activation
+> > Temperature
+> > + * @cpu: cpu that the MSR should be run on.
+> > + * @tjmax: a valid pointer to where to store the Tjmax value
+> > + *
+> > + * Get the TjMax value, which is the default thermal throttling or
+> > TCC
+> > + * activation temperature in degrees C.
+> > + *
+> > + * Return: On success returns 0, an error code otherwise
+> > + */
+> > +
+> 
+> This extra empty line is not needed (and not desirable even).  And
+> same below.
 
-Apologies for that. I should have included you in the CC on at least
-patch 2 as well, which introduces this symbol.
+Sure. will remove it.
+> 
+> > +int intel_tcc_get_tjmax(int cpu, int *tjmax)
+> > +{
+> > +       u32 eax, edx;
+> > +       int err;
+> > +
+> > +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> > +                                       &eax, &edx);
+> 
+> The current trend is to align the arguments after a line break with
+> the first one, but I would just put them all on the same line (and
+> below too).
 
-FWIW, here's the patchwork link to this series:
+I agree putting them in the same line looks prettier.
 
-   https://patchwork.kernel.org/project/platform-driver-x86/list/?series=701392
+> 
+> > +       if (err)
+> > +               return err;
+> > +
+> > +       *tjmax = (eax >> 16) & 0xff;
+> 
+> This means that the tjmax value cannot be negative.
+> 
+> > +
+> > +       return *tjmax ? 0 : -EINVAL;
+> 
+> So the return value of this function could be tjmax if positive or a
+> negative error code otherwise.  No return pointers needed.
 
-Regards,
-Max
+I tried both. And I think I chose this solution just because it makes
+the following cleanup patches in this series looks prettier.
+
+I will try your suggestion, and if there is any other reason I wrote it
+in this way, I will find it out again. :p
+
+> 
+> And why do you want to return -EINVAL (rather than any other error
+> code) if tjmax turns out to be 0?
+
+Because x86_pkg_temp_thermal driver returns -EINVAL previously.
+Any suggestions on this?
+
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, INTEL_TCC);
+> > +
+> > +/**
+> > + * intel_tcc_get_offset() - returns the TCC Offset value to Tjmax
+> > + * @cpu: cpu that the MSR should be run on.
+> > + * @offset: a valid pointer to where to store the offset value
+> > + *
+> > + * Get the TCC offset value to Tjmax. The effective thermal
+> > throttling or TCC
+> > + * activation temperature equals "Tjmax" - "TCC Offset", in
+> > degrees C.
+> > + *
+> > + * Return: On success returns 0, an error code otherwise
+> > + */
+> > +
+> > +int intel_tcc_get_offset(int cpu, int *offset)
+> > +{
+> > +       u32 eax, edx;
+> > +       int err;
+> > +
+> > +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> > +                                       &eax, &edx);
+> > +       if (err)
+> > +               return err;
+> > +
+> > +       *offset = (eax >> 24) & 0x3f;
+> 
+> Well, offset cannot be negative here, so (again) the return value of
+> this function could be interpreted as the offsent (if non-negative)
+> or
+> a negative error code on failure.
+> 
+> > +
+> > +       return 0;
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, INTEL_TCC);
+> > +
+> > +/**
+> > + * intel_tcc_set_offset() - set the TCC offset value to Tjmax
+> > + * @cpu: cpu that the MSR should be run on.
+> > + * @offset: TCC offset value in degree C
+> 
+> I think that this cannot be negative, so maybe say "in K" instead of
+> "in degree C"?
+
+degree C is the unit used in the Intel SDM, so better to keep this
+comment aligned.
+
+> 
+> And maybe it's better to pass u8 here?
+
+sounds good, will do in next version.
+
+> 
+> > + *
+> > + * Set the TCC Offset value to Tjmax. The effective thermal
+> > throttling or TCC
+> > + * activation temperature equals "Tjmax" - "TCC Offset", in degree
+> > C.
+> > + *
+> > + * Return: On success returns 0, an error code otherwise
+> > + */
+> > +
+> > +int intel_tcc_set_offset(int cpu, int offset)
+> > +{
+> > +       u32 eax, edx;
+> > +       int err;
+> > +
+> > +       if (offset > 0x3f)
+> > +               return -EINVAL;
+> > +
+> > +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> > +                                       &eax, &edx);
+> > +       if (err)
+> > +               return err;
+> > +
+> > +       if (eax & BIT(31))
+> > +               return -EPERM;
+> 
+> Why -EPERM?
+
+Bit 31 set means the MSR is locked, and os software cannot write it.
+should I use -EACCES instead?
+
+> 
+> > +
+> > +       eax &= ~(0x3f << 24);
+> > +       eax |= (offset << 24);
+> 
+> The parens are not needed AFAICS.
+> 
+Agreed.
+
+> > +
+> > +       return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> > eax, edx);
+> 
+> So is any protection against concurrent access needed here?  Like
+> what
+> if two different callers invoke this function at the same time for
+> the
+> same CPU?
+
+Given that the tcc offset is the only field that kernel code writes,
+all the other bits won't change, so this is not a problem.
+
+> 
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
+> > +
+> > +/**
+> > + * intel_tcc_get_temp() - returns the current temperature
+> > + * @cpu: cpu that the MSR should be run on.
+> > + * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
+> > + * @temp: a valid pointer to where to store the resulting
+> > temperature
+> > + *
+> > + * Get the current temperature returned by the CPU core/package
+> > level
+> > + * thermal sensor, in degrees C.
+> > + *
+> > + * Return: On success returns 0, an error code otherwise
+> > + */
+> > +int intel_tcc_get_temp(int cpu, bool pkg, int *temp)
+> > +{
+> > +       u32 eax, edx;
+> > +       u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS :
+> > MSR_IA32_THERM_STATUS;
+> > +       int tjmax, err;
+> > +
+> > +       err = intel_tcc_get_tjmax(cpu, &tjmax);
+> > +       if (err)
+> > +               return err;
+> 
+> Well, what if somebody change tjmax on this cpu while this function
+> is running?
+
+tjmax is read only. Only firmware can change its value at runtime, say
+this field is updated when SST-PP level is changed.
+
+thanks,
+rui
+> 
+> > +
+> > +       err = rdmsr_safe_on_cpu(cpu, msr, &eax, &edx);
+> > +       if (err)
+> > +               return err;
+> > +
+> > +       if (eax & 0x80000000) {
+> > +               *temp = tjmax - ((eax >> 16) & 0x7f);
+> > +               return 0;
+> > +       }
+> > +       return -EINVAL;
+> > +}
+> > +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_temp, INTEL_TCC);
+> > +
+> > diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
+> > new file mode 100644
+> > index 000000000000..94f8ceab5dd0
+> > --- /dev/null
+> > +++ b/include/linux/intel_tcc.h
+> > @@ -0,0 +1,18 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +/*
+> > + *  header for Intel TCC (thermal control circuitry) library
+> > + *
+> > + *  Copyright (C) 2022  Intel Corporation.
+> > + */
+> > +
+> > +#ifndef __INTEL_TCC_H__
+> > +#define __INTEL_TCC_H__
+> > +
+> > +#include <linux/types.h>
+> > +
+> > +int intel_tcc_get_tjmax(int cpu, int *tjmax);
+> > +int intel_tcc_get_offset(int cpu, int *offset);
+> > +int intel_tcc_set_offset(int cpu, int offset);
+> > +int intel_tcc_get_temp(int cpu, bool pkg, int *temp);
+> > +
+> > +#endif /* __INTEL_TCC_H__ */
+> > --
+
