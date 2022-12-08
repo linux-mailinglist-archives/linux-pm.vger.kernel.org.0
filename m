@@ -2,228 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29906470B2
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 14:20:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1888F6470CD
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 14:31:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiLHNUy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 08:20:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42894 "EHLO
+        id S229897AbiLHNbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 08:31:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiLHNUv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 08:20:51 -0500
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B22C043AD5
-        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 05:20:50 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id x13so652575ilp.8
-        for <linux-pm@vger.kernel.org>; Thu, 08 Dec 2022 05:20:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=l+8f7R5Bh5XH8mXZ7Mq9vlU+wLO8F2293iNf6qWF9/8=;
-        b=L6bqhDcFLpV3GdkbsEF+3lJo4zdCBjgntAGQ6+aPoi7Y8vAXvA3whIvadIqKvOSwPR
-         /1fuwwFAi/PO4lZZ3WvAMd5spOSoPOi5mgp0Ox1YYPmz0CZGuJUHYqNzdJ8vMIjU9xCn
-         pGkmJmS3LPkICuOeTOxD4gQHUlmFjXxDsrPSfz9x2wVDgw/5lO7irz8ez/TJKAu9D5wC
-         0R5uh1NCQEmwKqwCqjLEh9hswKkZLO0HhwIbhW6QlZFnBphH+v+kqiGWEV0DTbJ3tMT7
-         C1SH0mXRHh4tXxrVR5y+VB3L2TibA+J/5iMr0SH3QtEtVsg9vqzXkJMG59HM41XEyBnS
-         w9PQ==
+        with ESMTP id S229651AbiLHNbo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 08:31:44 -0500
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D228658F;
+        Thu,  8 Dec 2022 05:31:42 -0800 (PST)
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-144b21f5e5fso1793724fac.12;
+        Thu, 08 Dec 2022 05:31:42 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=l+8f7R5Bh5XH8mXZ7Mq9vlU+wLO8F2293iNf6qWF9/8=;
-        b=LgDmTwYYREnPPjJRgFq7poVSbcTfPuOQFxjsKc5CTaLhd12cauV/WcWoAJwRxdfZs8
-         M7e7gtV0C/eWh4SbkV/4jjiOoOGOAQrPmX3d3bklYknUoF5nbnSDn32DLAHR8sJi+k8V
-         7k9E1Q4/2Soz8USFDOW79J7vIJ2cGxtiRgNjVrVSxSgYxQbHANYHoGj7LVgu/LHCXkGK
-         7N7YY3WMaS26cyUxc2b0J5nIa/WfxqzUI33fLX/NC7Vp1j9Xb4F6Eq6+REB/kZBZHXpg
-         uo9paIWOZcXgjh46hGZeOsgR28FgepRuA5EGa+vskljBH0ykBTXNOGnshaqvOM0DzDhy
-         oIOA==
-X-Gm-Message-State: ANoB5plEMblSHTgtm7zaq2f0IAvhqNqLi9B+4Epin7eMoZ/UIQsApq9B
-        whFyLSMtMUzZfJagXjzkLq8l9Cf8yo5kXSOetOXx4Q==
-X-Google-Smtp-Source: AA0mqf7aBhqmCKG9No0zjuDlXHqzG4ImOJbXaMaWLJOjSjM0KR+tkyQ8O0Ucex7P96Fyy6STfpboH2OO6VQtZBaGmKE=
-X-Received: by 2002:a92:7c0c:0:b0:302:efa3:6230 with SMTP id
- x12-20020a927c0c000000b00302efa36230mr29267158ilc.232.1670505649909; Thu, 08
- Dec 2022 05:20:49 -0800 (PST)
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wdryjHBfKth8/hD6fCw95fsa+h8Ry8TUfw1B23x19eA=;
+        b=FQvAyw9Iq6FvlPV/b7Alx/rJ6Cb1yOvELgKUoQ7Xn4Ggr4hgH7GjIsbAjGfKj3xPr3
+         Z6gTN7S44nA7fCDbickRFKO8bQNfffJGrhwGPAI+Ru3aJPrHiLOoRhuaKzk21glZzpBi
+         2Xuz1vZeAzcLmSpEDjRG65C2WRjButPJRspLiAR94kL0YIEab6CoL8wlzpj00hAVzihB
+         1LN8MsRMYThh5rdLdEfnqIAPWrUSkyrpfAVb8t1o62VnO9CsV2EWCBTj3nsCtFev3GIG
+         jA7CO5L25lC98k48DyBmqAek/cyyNmbbQbD71IMhFwU/DjbnXq46zkdTCLqMNPQtj7mG
+         e4IA==
+X-Gm-Message-State: ANoB5plaYC6w25p5kzpF4BnoHT0NioGXsyw1qpu0xZynYAqbK5n0JvnG
+        p2Vues9OP7yr0WunAX7OJRre4Z5Pww==
+X-Google-Smtp-Source: AA0mqf5jYIx6OuCiREELp2iTWD6/DFP6YpGy19CgJhpulghI/ol7bDHOxjgZBOg0u/Ao9SYOXOztYA==
+X-Received: by 2002:a05:6870:1696:b0:144:7a85:63ea with SMTP id j22-20020a056870169600b001447a8563eamr1404205oae.23.1670506301925;
+        Thu, 08 Dec 2022 05:31:41 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g13-20020a056870c14d00b001375188dae9sm13560046oad.16.2022.12.08.05.31.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 05:31:41 -0800 (PST)
+Received: (nullmailer pid 539976 invoked by uid 1000);
+        Thu, 08 Dec 2022 13:31:40 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-References: <20221207101705.9460-1-lukasz.luba@arm.com> <20221207101705.9460-3-lukasz.luba@arm.com>
- <CAKfTPtB8f0RH4qToLrWS+HSZhm8pyUe42DijiXZqo+mQQPWetQ@mail.gmail.com>
- <7428f6dd-9403-180b-d4b4-7ef1aee3dcb1@arm.com> <CAKfTPtDoZ2paL7DW+JsML8aKeVzwu4oSnojij1osqJzNhO4ceA@mail.gmail.com>
- <4a648e81-e529-e09c-ed8b-10b703f1c305@arm.com>
-In-Reply-To: <4a648e81-e529-e09c-ed8b-10b703f1c305@arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 8 Dec 2022 14:20:38 +0100
-Message-ID: <CAKfTPtBPJma6DtDnheM3AeD_wEAyMPE+Buckvx8AQ3AzO4mN8A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] cpufreq: schedutil: Optimize operations with
- single max CPU capacity
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        rafael@kernel.org, dietmar.eggemann@arm.com, saravanak@google.com,
-        wusamuel@google.com, isaacmanjarres@google.com,
-        kernel-team@android.com, juri.lelli@redhat.com,
-        peterz@infradead.org, mingo@redhat.com, rostedt@goodmis.org,
-        bsegall@google.com, mgorman@suse.de, viresh.kumar@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Walker Chen <walker.chen@starfivetech.com>
+Cc:     linux-riscv@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+In-Reply-To: <20221208084523.9733-2-walker.chen@starfivetech.com>
+References: <20221208084523.9733-1-walker.chen@starfivetech.com>
+ <20221208084523.9733-2-walker.chen@starfivetech.com>
+Message-Id: <167050594063.531467.3185697679617153248.robh@kernel.org>
+Subject: Re: [RESEND PATCH v2 1/3] dt-bindings: power: Add starfive,jh71xx-pmu
+Date:   Thu, 08 Dec 2022 07:31:40 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, 8 Dec 2022 at 11:56, Lukasz Luba <lukasz.luba@arm.com> wrote:
->
->
->
-> On 12/8/22 10:31, Vincent Guittot wrote:
-> > On Thu, 8 Dec 2022 at 11:06, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>
-> >>
-> >>
-> >> On 12/8/22 08:37, Vincent Guittot wrote:
-> >>> On Wed, 7 Dec 2022 at 11:17, Lukasz Luba <lukasz.luba@arm.com> wrote:
-> >>>>
-> >>>> The max CPU capacity is the same for all CPUs sharing frequency domain
-> >>>> and thus 'policy' object. There is a way to avoid heavy operations
-> >>>> in a loop for each CPU by leveraging this knowledge. Thus, simplify
-> >>>> the looping code in the sugov_next_freq_shared() and drop heavy
-> >>>> multiplications. Instead, use simple max() to get the highest utilization
-> >>>> from these CPUs. This is useful for platforms with many (4 or 6) little
-> >>>> CPUs.
-> >>>>
-> >>>> The max CPU capacity must be fetched every time we are called, due to
-> >>>> difficulties during the policy setup, where we are not able to get the
-> >>>> normalized CPU capacity at the right time.
-> >>>>
-> >>>> The stored value in sugov_policy::max is also than used in
-> >>>> sugov_iowait_apply() to calculate the right boost. Thus, that field is
-> >>>> useful to have in that sugov_policy struct.
-> >>>>
-> >>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> >>>> ---
-> >>>>    kernel/sched/cpufreq_schedutil.c | 22 +++++++++++-----------
-> >>>>    1 file changed, 11 insertions(+), 11 deletions(-)
-> >>>>
-> >>>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-> >>>> index c19d6de67b7a..f9881f3d9488 100644
-> >>>> --- a/kernel/sched/cpufreq_schedutil.c
-> >>>> +++ b/kernel/sched/cpufreq_schedutil.c
-> >>>> @@ -158,10 +158,8 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
-> >>>>
-> >>>>    static void sugov_get_util(struct sugov_cpu *sg_cpu)
-> >>>>    {
-> >>>> -       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> >>>>           struct rq *rq = cpu_rq(sg_cpu->cpu);
-> >>>>
-> >>>> -       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>>           sg_cpu->bw_dl = cpu_bw_dl(rq);
-> >>>>           sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
-> >>>>                                             FREQUENCY_UTIL, NULL);
-> >>>> @@ -317,6 +315,8 @@ static inline void ignore_dl_rate_limit(struct sugov_cpu *sg_cpu)
-> >>>>    static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> >>>>                                                 u64 time, unsigned int flags)
-> >>>>    {
-> >>>> +       struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> >>>> +
-> >>>>           sugov_iowait_boost(sg_cpu, time, flags);
-> >>>>           sg_cpu->last_update = time;
-> >>>>
-> >>>> @@ -325,6 +325,9 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
-> >>>>           if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
-> >>>>                   return false;
-> >>>>
-> >>>> +       /* Fetch the latest CPU capcity to avoid stale data */
-> >>>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>> +
-> >>>>           sugov_get_util(sg_cpu);
-> >>>>           sugov_iowait_apply(sg_cpu, time);
-> >>>>
-> >>>> @@ -414,25 +417,22 @@ static unsigned int sugov_next_freq_shared(struct sugov_cpu *sg_cpu, u64 time)
-> >>>>    {
-> >>>>           struct sugov_policy *sg_policy = sg_cpu->sg_policy;
-> >>>>           struct cpufreq_policy *policy = sg_policy->policy;
-> >>>> -       unsigned long util = 0, max = 1;
-> >>>> +       unsigned long util = 0;
-> >>>>           unsigned int j;
-> >>>>
-> >>>> +       /* Fetch the latest CPU capcity to avoid stale data */
-> >>>> +       sg_policy->max = arch_scale_cpu_capacity(sg_cpu->cpu);
-> >>>> +
-> >>>>           for_each_cpu(j, policy->cpus) {
-> >>>>                   struct sugov_cpu *j_sg_cpu = &per_cpu(sugov_cpu, j);
-> >>>> -               unsigned long j_util, j_max;
-> >>>>
-> >>>>                   sugov_get_util(j_sg_cpu);
-> >>>>                   sugov_iowait_apply(j_sg_cpu, time);
-> >>>> -               j_util = j_sg_cpu->util;
-> >>>> -               j_max = j_sg_cpu->max;
-> >>>>
-> >>>> -               if (j_util * max > j_max * util) {
-> >>>> -                       util = j_util;
-> >>>> -                       max = j_max;
-> >>>> -               }
-> >>>
-> >>> With the code removed above, max is only used in 2 places:
-> >>> - sugov_iowait_apply
-> >>> - map_util_freq
-> >>>
-> >>> I wonder if it would be better to just call arch_scale_cpu_capacity()
-> >>> in these 2 places instead of saving a copy in sg_policy and then
-> >>> reading it twice.
-> >>
-> >> The sugov_iowait_apply() is called in that loop, so probably I will
-> >> add a new argument to that call and just feed it with the capacity value
-> >> from one CPU, which was read before the loop. So, similarly what is in
-> >> this patch. Otherwise, all of those per-cpu capacity vars would be
-> >> accessed inside the sugov_iowait_apply() with sg_cpu->cpu.
-> >
-> > Yes make sense
-> >
-> >>
-> >>>
-> >>> arch_scaleu_cpu_capacity is already a per_cpu variable so accessing it
-> >>> should be pretty cheap.
-> >>
-> >> Yes and no, as you said this is per-cpu variable and would access them
-> >> from one CPU, which is running that loop. They will have different pages
-> >> and addresses so cache lines on that CPU. to avoiding trashing a cache
-> >> lines on this running CPU let's read that capacity once, before the
-> >> loop. Let's use the new arg to pass that value via one of the
-> >> registers. In such, only one cache line would have to fetch that data
-> >> into.
-> >>
-> >> So I thought this simple sg_policy->max would do the trick w/o a lot
-> >> of hassle.
-> >
-> > For the shared mode, everything is located in sugov_next_freq_shared
-> > so you don't need to save the max value with your proposal above to
-> > change sugov_iowait_apply interface.
-> >
-> > This should be doable as well for single mode
-> >
-> >>>
-> >>> Thought ?
-> >>>
-> >>
-> >> I can change that and drop the sg_policy->max and call differently
-> >> those capacity values. I will have to unfortunately drop Viresh's ACKs,
-> >> since this will be a way different code.
-> >>
-> >> Thanks Vincent for the suggestion. Do you want me to go further with
-> >> such approach and send a v3?
-> >
-> > Don't know what Rafael and Viresh think but it seems that we don't
-> > need to save the return of arch_scale_cpu_capacity in ->max field but
-> > directly use it
->
-> Yes I agree, we don't need to, but I will have to modify a few function
-> calls and args.
->
-> So IMO we have agreed. I won't call the call arch_scale_cpu_capacity()
-> in these 2 places, but I will make it with the local var and data
-> fetched as little as possible.
 
-yes
+On Thu, 08 Dec 2022 16:45:21 +0800, Walker Chen wrote:
+> Add bindings for Power Management Unit (PMU) on the StarFive JH71XX SoC.
+> 
+> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+> ---
+>  .../bindings/power/starfive,jh71xx-pmu.yaml   | 45 +++++++++++++++++++
+>  .../dt-bindings/power/starfive,jh7110-pmu.h   | 17 +++++++
+>  2 files changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml
+>  create mode 100644 include/dt-bindings/power/starfive,jh7110-pmu.h
+> 
+
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml:18:7: [warning] wrong indentation: expected 4 but found 6 (indentation)
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml: properties:compatible: [{'enum': ['starfive,jh7110-pmu']}] is not of type 'object', 'boolean'
+	from schema $id: http://json-schema.org/draft-07/schema#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml: ignoring, error in schema: properties: compatible
+Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.example.dtb:0:0: /example-0/power-controller@17030000: failed to match any schema with compatible: ['starfive,jh7110-pmu']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221208084523.9733-2-walker.chen@starfivetech.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
