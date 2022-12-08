@@ -2,44 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF916475B5
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 19:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6564B64777F
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 21:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229976AbiLHSld (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 13:41:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S229662AbiLHUso (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 15:48:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbiLHSla (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 13:41:30 -0500
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E80884248;
-        Thu,  8 Dec 2022 10:41:29 -0800 (PST)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1p3Lpn-00007C-NX; Thu, 08 Dec 2022 19:41:27 +0100
-Message-ID: <dec37fc9-1a69-74dc-d613-d806c732ffd7@leemhuis.info>
-Date:   Thu, 8 Dec 2022 19:41:27 +0100
+        with ESMTP id S229463AbiLHUsm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 15:48:42 -0500
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1385450A5
+        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 12:48:40 -0800 (PST)
+Received: by mail-pj1-x1032.google.com with SMTP id w4-20020a17090ac98400b002186f5d7a4cso5926155pjt.0
+        for <linux-pm@vger.kernel.org>; Thu, 08 Dec 2022 12:48:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=xRiXkXIn1D4OIPWOOyfSvNStoYLvpRZSuQmUTNM0/r4=;
+        b=bnpVDgsQITZ608FnP/h2uVlL6y/1pjU9kHo7ibY3KAe9SecpeXCSKuEvn34reQ76BT
+         RoC1BApWOABHbla1twSWxA1fOQMWiQCVJQIPV7c5H6j80yR7EDGUzt3a2m98JbmKpnGt
+         4soun2LVN8st2DMZYyFYFkY4RQ3XYCt3yl5FOfiai3XCErnuYj6ThrXueIOiDZI7mh9M
+         8ysnQgK+g3hVgSemuWoYTPNOLCLctuypl+ysM1sdDB4skwk1NvZQ+R42HoxPob92IxwD
+         cBCWDJyNe1xuaVlY+l5mDmjCu7OHmCOBG0l3aZ1LkIBlyJ9elmuiOuxEPg4un7U+hDrz
+         KsZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xRiXkXIn1D4OIPWOOyfSvNStoYLvpRZSuQmUTNM0/r4=;
+        b=eh/9bd8pEPvr8BEOazP9D8jST8hggyh131y6NRA3u7DxBfccxvgkm32kZYSug5x/j7
+         E82pc4sU1O48ExcZEAwQGUqJLpbXqh5j6tD/kmJ/GPGVLMfU8Rrc/N68O5q3GCYbW0yJ
+         K0Rj4v4Y6rI/Ji1ixNcxTskjVFS/RkmpHLyeEYfqpfQAz75dE/ogr4mpeFVgUd7k6Wik
+         kNIJ4i+/F5zvIQ0rwoa160SxRDQsuiYXkfiafCC35BMw/V34C5FhdVtdLIp6FpvtIh5z
+         NrYW2l/PThRlcOeLfvtnCklSXj3S1Kc+HF4gUs2e6x9iK8Q0VvWSp8Jr+t+GEi0XNvt3
+         W8dQ==
+X-Gm-Message-State: ANoB5pmCNMCCIq1Dxd0dWtpfkjuAdA/2Kcd1RBhrCRTuWz2zJK8wF5Oa
+        tcDpVQs/VKfCxbTB2LK/O0LvwA==
+X-Google-Smtp-Source: AA0mqf7QYam2+3EjuGQupKMZsm78MxVoAhKEcrb4leJccLY281gMHfQfoWm+XqK+tag8qZn+IIdykA==
+X-Received: by 2002:a05:6a21:1084:b0:a7:8e19:e59d with SMTP id nl4-20020a056a21108400b000a78e19e59dmr3284892pzb.24.1670532520401;
+        Thu, 08 Dec 2022 12:48:40 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id w81-20020a627b54000000b0057255b7c8easm15728445pfc.33.2022.12.08.12.48.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Dec 2022 12:48:39 -0800 (PST)
+Message-ID: <63924da7.620a0220.b38c4.fc87@mx.google.com>
+Date:   Thu, 08 Dec 2022 12:48:39 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: =?UTF-8?Q?Re=3a_=5bregression=5d_Bug=c2=a0216782_-_resume_from_susp?=
- =?UTF-8?Q?end_broken_on_Asus_UX305FA?=
-Content-Language: en-US, de-DE
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-References: <5e8317f7-170a-588b-7a94-e0a546fbc9f3@leemhuis.info>
-Cc:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Tasev Nikola <tasev.stefanoska@skynet.be>
-In-Reply-To: <5e8317f7-170a-588b-7a94-e0a546fbc9f3@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1670524889;762026d0;
-X-HE-SMSGID: 1p3Lpn-00007C-NX
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.1-rc8-176-gcb06e36a6532
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.1-rc8-176-gcb06e36a6532)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,45 +71,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc8-176-gc=
+b06e36a6532)
 
-On 08.12.22 15:43, Thorsten Leemhuis wrote:
-> 
-> I noticed a regression report in bugzilla.kernel.org. It afaics needs
-> more debugging, but I nevertheless want add it to the tracking.
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+1-rc8-176-gcb06e36a6532/
 
-Bjorn, if you have a minute, could you please take a quick look at this
-please: https://bugzilla.kernel.org/show_bug.cgi?id=216782
+Tree: pm
+Branch: testing
+Git Describe: v6.1-rc8-176-gcb06e36a6532
+Git Commit: cb06e36a6532c9040ad4118ca3857d6e96d30c40
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-To quote
+Warnings Detected:
 
-```
-> Starting from kernel 6.1-rc1 for the first time in 8 years the
-> resume
-> from suspend is broken on my Asus UX305FA. After resume the sysrsq keys
-> do not work and a hard reset is the only solution for shutdown, the
-> screen is black, keyboard and mouse do not respond.
-> 
-> After bisecting the first bad commit is:
-> 
-> commit a47126ec29f538e1197862919f94d3b6668144a4
-> Author: Bjorn Helgaas <bhelgaas@google.com>
-> Date:   Fri Sep 9 15:24:57 2022 -0500
-> 
->     PCI/PTM: Cache PTM Capability offset
->     
->     Cache the PTM Capability offset instead of searching for it every time we
->     enable/disable PTM or save/restore PTM state.  No functional change
->     intended.
-```
+arc:
 
-The reporter has some trouble with the bisection (see the ticket for
-details), but it looks a bit like the problems are actually caused by
-that patch or something in that series.
+arm64:
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+arm:
 
-P.S.: As the Linux kernel's regression tracker I deal with a lot of
-reports and sometimes miss something important when writing mails like
-this. If that's the case here, don't hesitate to tell me in a public
-reply, it's in everyone's interest to set the public record straight.
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
