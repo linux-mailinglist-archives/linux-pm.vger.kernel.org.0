@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A71A9646FED
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 13:44:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E10D9646FF2
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 13:46:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbiLHMoX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 07:44:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S229604AbiLHMqH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 07:46:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLHMoW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 07:44:22 -0500
+        with ESMTP id S229568AbiLHMqF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 07:46:05 -0500
 Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7C860B7B;
-        Thu,  8 Dec 2022 04:44:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4D760B7B;
+        Thu,  8 Dec 2022 04:46:03 -0800 (PST)
 From:   "Li,Rongqing" <lirongqing@baidu.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>
 CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
@@ -28,28 +28,26 @@ CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
         "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with
- arch_cpu_idle
-Thread-Topic: [PATCH 1/2][v2] cpuidle-haltpoll: Replace default_idle with
- arch_cpu_idle
-Thread-Index: AQHZCkl35vAH2p6SAUK3SxvI0ANPyq5jOG4AgAAgUwCAAJTQoA==
-Date:   Thu, 8 Dec 2022 12:41:23 +0000
-Message-ID: <3fb3526aa012449db95767c6092da8f6@baidu.com>
+Subject: RE: [PATCH 2/2][v2] cpuidle-haltpoll: Build as module by default
+Thread-Topic: [PATCH 2/2][v2] cpuidle-haltpoll: Build as module by default
+Thread-Index: AQHZCqVuBk64DdfxrUS//1lI5X8lq65jOKYwgAAgWoCAAJajoA==
+Date:   Thu, 8 Dec 2022 12:42:45 +0000
+Message-ID: <f10ae18cb250456c8ad420b0a3e45571@baidu.com>
 References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
- <080936167059.CAJZ5v0g5kTRE+x-8xC2WwQr11j01ox=Nk0aguiC1_HGPU8W=Rw@mail.gmail.com>
- <9e19c594bcf144fbb433fb4cfee54e08@baidu.com>
- <CAJZ5v0jofKbdRbKzLSEMkjQjP1GTcbt7OYqO=0ZYvpt_HwTQTg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jofKbdRbKzLSEMkjQjP1GTcbt7OYqO=0ZYvpt_HwTQTg@mail.gmail.com>
+ <1670416895-50172-2-git-send-email-lirongqing@baidu.com>
+ <080936016634.CAJZ5v0i9J2YimfQsqJiZjFMR9MLG0fdBf+Regr+_PcsYrAE=SQ@mail.gmail.com>
+ <17a6782c79a44aada31246ddefe02bfb@baidu.com>
+ <CAJZ5v0gXSUdFeHajUcjV-eh3eW1aRoJ8Yvp9J95czQg0cMetTA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gXSUdFeHajUcjV-eh3eW1aRoJ8Yvp9J95czQg0cMetTA@mail.gmail.com>
 Accept-Language: zh-CN, en-US
 Content-Language: zh-CN
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [172.22.204.59]
-x-baidu-bdmsfe-datecheck: 1_BJHW-Mail-Ex15_2022-12-08 20:41:24:190
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-FEAS-Client-IP: 10.127.64.38
+X-FEAS-Client-IP: 10.127.64.36
 X-FE-Last-Public-Client-IP: 100.100.100.38
 X-FE-Policy-ID: 15:10:21:SYSTEM
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
@@ -60,12 +58,7 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-PiA+DQo+ID4gV2hlbiBjcHVpZGxlLWhhbHRwb2xsIGlzIGJ1aWx0IGFzIG1vZHVsZSwNCj4gDQo+
-IEJ1dCBpdCBpc24ndCBub3cuDQoNCkNlbnRvcyBpcyBjb21waWxpbmcgaXQgYXMgbW9kdWxlLCBp
-dCB3aWxsIGZhaWw7DQpPdGhlciB1c2VyIHdhbnRzIHRvIGNvbXBpbGUgaXQgYXMgbW9kdWxlLCB0
-aGV5IHdpbGwgZmFpbCwgDQpTeXpib3QgcmFuZG9tIGNvbmZpZ3VyYXRpb24gYnVpbGRpbmcgd2ls
-bCBmYWlsDQoNClVubGVzcyBwcm9oaWJpdCB0byBidWlsZCBpdCBhcyBtb2R1bGUgYXMgYmVsb3c6
-DQoNCmNvbmZpZyBIQUxUUE9MTF9DUFVJRExFDQotICAgICAgICB0cmlzdGF0ZSAiSGFsdCBwb2xs
-IGNwdWlkbGUgZHJpdmVyIg0KKyAgICAgICAgYm9vbCAiSGFsdCBwb2xsIGNwdWlkbGUgZHJpdmVy
-Ig0KICAgICAgICBkZXBlbmRzIG9uIFg4NiAmJiBLVk1fR1VFU1QNCiAgICAgICAgZGVmYXVsdCB5
-DQogICAgICAgIGhlbHANCg0KDQp0aGFua3MNCg0KLUxpDQoNCg0K
+PiBBbHNvLCB0aGVyZSBpcyBhbiBpbnRlcmZhY2UgZm9yIHN3aXRjaGluZyBjcHVpZGxlIGdvdmVy
+bm9ycyBhdCBydW4gdGltZSBhbHJlYWR5LCBzbw0KPiB3aHkgY2FuICd0IGl0IGJlIHVzZWQgdG8g
+YWRkcmVzcyB0aGlzIGNhc2U/DQoNCg0KSSB3aWxsIHN0dWR5IHRoaXMgaW50ZXJmYWNlLCB0aGFu
+a3MNCg0KLUxpDQo=
