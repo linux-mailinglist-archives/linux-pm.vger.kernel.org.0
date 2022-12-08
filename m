@@ -2,100 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7264164705C
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 14:02:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A110364708B
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 14:11:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbiLHNCi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 08:02:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
+        id S230072AbiLHNLW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 08:11:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiLHNCh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 08:02:37 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C40631F;
-        Thu,  8 Dec 2022 05:02:36 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 377ADB823B2;
-        Thu,  8 Dec 2022 13:02:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D752EC433C1;
-        Thu,  8 Dec 2022 13:02:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1670504553;
-        bh=HF/CT0qe8YpFOKtPjeRHyYkiJf0CwH4GR79yo9n3q3U=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=jH5e6c8f849b8XDNRljqZMzdQjJUarDYzIfv9F1yBeld8zD/0aRo/sJfPTnt7sV1A
-         vihQJrDaeqAPCkSJEF3929KEVyVZLcRjaBgwft+3zvWH4dDLeRqmPvzakPZplUV29o
-         QxLJZi2q8QIbw9Jk9zIm4j66lufJD2HGxZOjyQVqTYai9ze8Ze/E8ogATA10bokRYA
-         7rSZF0lvpNacNjOGYJS4um3efdxrADYZrIveP00ieN2znQddVIuHDZMWg0cD2VMMqE
-         Vdi2h6NQVYLcpT7bmZelyOsBD70dDzcjgBDA9Z3HZtG0hwZ2qG6esrqJcfJVXpBHrw
-         rilDxPN/YI3Aw==
-From:   Mark Brown <broonie@kernel.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Gene Chen <gene_chen@richtek.com>,
-        Daniel Mack <zonque@gmail.com>, Rob Herring <robh@kernel.org>
-Cc:     Bartosz Golaszewski <bgolaszewski@baylibre.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
-In-Reply-To: <20221206211554.92005-1-robh@kernel.org>
-References: <20221206211554.92005-1-robh@kernel.org>
-Subject: Re: [PATCH] dt-bindings: Add missing 'unevaluatedProperties' to
- regulator nodes
-Message-Id: <167050455059.159009.6147291983377925638.b4-ty@kernel.org>
-Date:   Thu, 08 Dec 2022 13:02:30 +0000
+        with ESMTP id S229960AbiLHNLQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 08:11:16 -0500
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C29F81DBD;
+        Thu,  8 Dec 2022 05:11:12 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id m5so719005qkg.0;
+        Thu, 08 Dec 2022 05:11:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zzijxs6s3oM9V6vsOC7KVyJM8HxmDMIIR252FdDbeTk=;
+        b=xiNeh4q8H7gBybznkpi+JFC4WEdDoh7MktROdcROZz4MVrhfkwtu6CXpqjps7uEw5d
+         sCV+iGu83Kh7rD9sWqs8HZ2EaGu46KsTXpC/Tii3vl9KtfozFaEtji3RiYMzuFzh3EDL
+         4knTttPjemKnV1Jj41MP3LzEjgTZT9r3b7lxd1FumqjzB+2uR/lsBou9FLqhEQ3sLG0A
+         Srj/GcKR7r1hMp9ybtNieuVi9y9P7xxdA840Nl/kPz/heOXSlh+e5BSv/51mIjLXTWYP
+         DtBpW+g7XB0p7DAbGT4gGnR11pG8OlPzy/5jVSA5ClCHMKdLxNqENj3Q4K85e74JpKYz
+         jkdA==
+X-Gm-Message-State: ANoB5pko23+qXD17HeycPhpWPQs4KTgmjIkRKczeyD3dlV8UNGvXh0tP
+        B0LkG2ePrH/PeChLpvNR+eC3frppn8B7ji8IewA=
+X-Google-Smtp-Source: AA0mqf7TqEl9KBCBj1oxKtpOMuDmbCfWvhIij9yIkAa3B9r9V34NWxafKCf1ZjA5M945KvetK6plSQ35Y0Gvi5IAlc4=
+X-Received: by 2002:a05:620a:51ca:b0:6ec:fa04:d97c with SMTP id
+ cx10-20020a05620a51ca00b006ecfa04d97cmr64554591qkb.764.1670505071465; Thu, 08
+ Dec 2022 05:11:11 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.11.0-dev-b77ec
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <1670416895-50172-1-git-send-email-lirongqing@baidu.com>
+ <1670416895-50172-2-git-send-email-lirongqing@baidu.com> <080936016634.CAJZ5v0i9J2YimfQsqJiZjFMR9MLG0fdBf+Regr+_PcsYrAE=SQ@mail.gmail.com>
+ <17a6782c79a44aada31246ddefe02bfb@baidu.com> <CAJZ5v0gXSUdFeHajUcjV-eh3eW1aRoJ8Yvp9J95czQg0cMetTA@mail.gmail.com>
+ <f10ae18cb250456c8ad420b0a3e45571@baidu.com>
+In-Reply-To: <f10ae18cb250456c8ad420b0a3e45571@baidu.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Dec 2022 14:11:00 +0100
+Message-ID: <CAJZ5v0jjR0bP0rGfUaYDEU8_vawo-HFKZOjOdTqkd2-w_OoPzw@mail.gmail.com>
+Subject: Re: [PATCH 2/2][v2] cpuidle-haltpoll: Build as module by default
+To:     "Li,Rongqing" <lirongqing@baidu.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "jpoimboe@kernel.org" <jpoimboe@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 06 Dec 2022 15:15:55 -0600, Rob Herring wrote:
-> Several regulator schemas are missing 'unevaluatedProperties' constraint
-> which means any extra properties are allowed. Upon adding the
-> constraint, there's numerous warnings from using the deprecated
-> 'regulator-compatible' property. Remove the usage as examples shouldn't
-> be using long since deprecated properties.
-> 
-> 
-> [...]
+On Thu, Dec 8, 2022 at 1:45 PM Li,Rongqing <lirongqing@baidu.com> wrote:
+>
+> > Also, there is an interface for switching cpuidle governors at run time already, so
+> > why can 't it be used to address this case?
+>
+>
+> I will study this interface, thanks
 
-Applied to
+Sorry, this patch series is about the haltpoll driver, not the
+haltpoll governor (which is there too), so you are right, it can be
+modular, but it is not modular by default.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[1/1] dt-bindings: Add missing 'unevaluatedProperties' to regulator nodes
-      commit: 2a17ddfdca25ac4cbb0d317362608ec32f98fd82
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+I guess it would be fine to make it modular by default, unless there
+are expectations regarding it being present on system startup in the
+field and that part is unclear.  I think it would be better to defer
+this change until it can be clarified.
