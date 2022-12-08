@@ -2,112 +2,317 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1888F6470CD
-	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 14:31:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07095647106
+	for <lists+linux-pm@lfdr.de>; Thu,  8 Dec 2022 14:49:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiLHNbp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 8 Dec 2022 08:31:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
+        id S229479AbiLHNt4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 8 Dec 2022 08:49:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiLHNbo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 08:31:44 -0500
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2D228658F;
-        Thu,  8 Dec 2022 05:31:42 -0800 (PST)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-144b21f5e5fso1793724fac.12;
-        Thu, 08 Dec 2022 05:31:42 -0800 (PST)
+        with ESMTP id S229463AbiLHNtz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 8 Dec 2022 08:49:55 -0500
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43285E3FA
+        for <linux-pm@vger.kernel.org>; Thu,  8 Dec 2022 05:49:53 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id j16so1021794qtv.4
+        for <linux-pm@vger.kernel.org>; Thu, 08 Dec 2022 05:49:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wdryjHBfKth8/hD6fCw95fsa+h8Ry8TUfw1B23x19eA=;
-        b=FQvAyw9Iq6FvlPV/b7Alx/rJ6Cb1yOvELgKUoQ7Xn4Ggr4hgH7GjIsbAjGfKj3xPr3
-         Z6gTN7S44nA7fCDbickRFKO8bQNfffJGrhwGPAI+Ru3aJPrHiLOoRhuaKzk21glZzpBi
-         2Xuz1vZeAzcLmSpEDjRG65C2WRjButPJRspLiAR94kL0YIEab6CoL8wlzpj00hAVzihB
-         1LN8MsRMYThh5rdLdEfnqIAPWrUSkyrpfAVb8t1o62VnO9CsV2EWCBTj3nsCtFev3GIG
-         jA7CO5L25lC98k48DyBmqAek/cyyNmbbQbD71IMhFwU/DjbnXq46zkdTCLqMNPQtj7mG
-         e4IA==
-X-Gm-Message-State: ANoB5plaYC6w25p5kzpF4BnoHT0NioGXsyw1qpu0xZynYAqbK5n0JvnG
-        p2Vues9OP7yr0WunAX7OJRre4Z5Pww==
-X-Google-Smtp-Source: AA0mqf5jYIx6OuCiREELp2iTWD6/DFP6YpGy19CgJhpulghI/ol7bDHOxjgZBOg0u/Ao9SYOXOztYA==
-X-Received: by 2002:a05:6870:1696:b0:144:7a85:63ea with SMTP id j22-20020a056870169600b001447a8563eamr1404205oae.23.1670506301925;
-        Thu, 08 Dec 2022 05:31:41 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g13-20020a056870c14d00b001375188dae9sm13560046oad.16.2022.12.08.05.31.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Dec 2022 05:31:41 -0800 (PST)
-Received: (nullmailer pid 539976 invoked by uid 1000);
-        Thu, 08 Dec 2022 13:31:40 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yNQcMlXT0JuJ0uvJ6vXQItqRhMUbCV2fZepHPHdBnJU=;
+        b=nQO69V3TaXLNk1kFKYP7pGy2932jA+rbYq9Kyj7JSFbugnbi59YOOYF4/PMbJFJI3K
+         G2zgEwRHS81O1Wbc8BEnIrz/cD+F+7nCYxCHE+8ADWKHiCwvTBhMG1ArQ45wEmfL3Qrs
+         1yxQ+HhA8qrxeICzNhMeOlkFkrGrQSAA/tl0CRxKk5yYIXI+SFHqA6PNleleCzSNt9pf
+         mh9NNutZxIphuATXqVB8CRJsdmhkpKqvbumWvgMpBRqFkI/XG68S8oDuxAZupx7nd1am
+         TIACEY+0gkQ9KrAMuNhn0QzCs1YeWVxtLGgx0LXLnLiTOgfwi3NwruBfAZPnIsUOGgzl
+         1iCw==
+X-Gm-Message-State: ANoB5pmxNv6X2WtSrBX+K9cXIS+pUZBMyLW9XBCghDXXHPlvqwbkmpCT
+        hCsQKhhd8vyuOreQw9k5OOKh9E5S5cYhziPb5jHJxkvf
+X-Google-Smtp-Source: AA0mqf5Cm+PM+TfGfNkO3y+rtY0yyMY5GCLGYzuLj3/42j96Yhg8dKELB4ImdlrY+z4pmHIog+BO1wocnPmc9rrFwEY=
+X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
+ c11-20020ac87dcb000000b003a68dd04712mr30584668qte.411.1670507392847; Thu, 08
+ Dec 2022 05:49:52 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>
-In-Reply-To: <20221208084523.9733-2-walker.chen@starfivetech.com>
-References: <20221208084523.9733-1-walker.chen@starfivetech.com>
- <20221208084523.9733-2-walker.chen@starfivetech.com>
-Message-Id: <167050594063.531467.3185697679617153248.robh@kernel.org>
-Subject: Re: [RESEND PATCH v2 1/3] dt-bindings: power: Add starfive,jh71xx-pmu
-Date:   Thu, 08 Dec 2022 07:31:40 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221108033332.27760-1-rui.zhang@intel.com> <20221108033332.27760-2-rui.zhang@intel.com>
+In-Reply-To: <20221108033332.27760-2-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 8 Dec 2022 14:49:41 +0100
+Message-ID: <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Tue, Nov 8, 2022 at 4:31 AM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> There are several different drivers that accesses the Intel TCC
+> (thermal control circuitry) MSRs, and each of them has its own
+> implementation for the same functionalities, e.g. getting the current
+> temperature, getting the tj_max, and getting/setting the tj_max offset.
+>
+> Introduce a library to unify the code for Intel CPU TCC MSR access.
+>
+> At the same time, ensure the temperature is got based on the updated
+> tjmax value because tjmax can be changed at runtime for cases like
+> the Intel SST-PP (Intel Speed Select Technology - Performance Profile)
+> level change.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 
-On Thu, 08 Dec 2022 16:45:21 +0800, Walker Chen wrote:
-> Add bindings for Power Management Unit (PMU) on the StarFive JH71XX SoC.
-> 
-> Signed-off-by: Walker Chen <walker.chen@starfivetech.com>
+Nice series, overall I like it a lot, but I have some comments
+regarding this particular patch (below).  Some of them are arguably
+minor, but at least one thing is more serious.
+
 > ---
->  .../bindings/power/starfive,jh71xx-pmu.yaml   | 45 +++++++++++++++++++
->  .../dt-bindings/power/starfive,jh7110-pmu.h   | 17 +++++++
->  2 files changed, 62 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml
->  create mode 100644 include/dt-bindings/power/starfive,jh7110-pmu.h
-> 
+>  drivers/thermal/intel/Kconfig     |   4 +
+>  drivers/thermal/intel/Makefile    |   1 +
+>  drivers/thermal/intel/intel_tcc.c | 131 ++++++++++++++++++++++++++++++
+>  include/linux/intel_tcc.h         |  18 ++++
+>  4 files changed, 154 insertions(+)
+>  create mode 100644 drivers/thermal/intel/intel_tcc.c
+>  create mode 100644 include/linux/intel_tcc.h
+>
+> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+> index f0c845679250..6b938c040d6e 100644
+> --- a/drivers/thermal/intel/Kconfig
+> +++ b/drivers/thermal/intel/Kconfig
+> @@ -12,6 +12,10 @@ config X86_THERMAL_VECTOR
+>         def_bool y
+>         depends on X86 && CPU_SUP_INTEL && X86_LOCAL_APIC
+>
+> +config INTEL_TCC
+> +       bool
+> +       depends on X86
+> +
+>  config X86_PKG_TEMP_THERMAL
+>         tristate "X86 package temperature thermal driver"
+>         depends on X86_THERMAL_VECTOR
+> diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
+> index 9a8d8054f316..5d8833c82ab6 100644
+> --- a/drivers/thermal/intel/Makefile
+> +++ b/drivers/thermal/intel/Makefile
+> @@ -2,6 +2,7 @@
+>  #
+>  # Makefile for various Intel thermal drivers.
+>
+> +obj-$(CONFIG_INTEL_TCC)        += intel_tcc.o
+>  obj-$(CONFIG_INTEL_POWERCLAMP) += intel_powerclamp.o
+>  obj-$(CONFIG_X86_PKG_TEMP_THERMAL)     += x86_pkg_temp_thermal.o
+>  obj-$(CONFIG_INTEL_SOC_DTS_IOSF_CORE)  += intel_soc_dts_iosf.o
+> diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
+> new file mode 100644
+> index 000000000000..74b434914975
+> --- /dev/null
+> +++ b/drivers/thermal/intel/intel_tcc.c
+> @@ -0,0 +1,131 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * intel_tcc.c - Library for Intel TCC (thermal control circuitry) MSR access
+> + * Copyright (c) 2022, Intel Corporation.
+> + */
+> +
+> +#include <linux/errno.h>
+> +#include <linux/intel_tcc.h>
+> +#include <asm/msr.h>
+> +
+> +/**
+> + * intel_tcc_get_tjmax() - returns the default TCC activation Temperature
+> + * @cpu: cpu that the MSR should be run on.
+> + * @tjmax: a valid pointer to where to store the Tjmax value
+> + *
+> + * Get the TjMax value, which is the default thermal throttling or TCC
+> + * activation temperature in degrees C.
+> + *
+> + * Return: On success returns 0, an error code otherwise
+> + */
+> +
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+This extra empty line is not needed (and not desirable even).  And same below.
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml:18:7: [warning] wrong indentation: expected 4 but found 6 (indentation)
+> +int intel_tcc_get_tjmax(int cpu, int *tjmax)
+> +{
+> +       u32 eax, edx;
+> +       int err;
+> +
+> +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> +                                       &eax, &edx);
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml: properties:compatible: [{'enum': ['starfive,jh7110-pmu']}] is not of type 'object', 'boolean'
-	from schema $id: http://json-schema.org/draft-07/schema#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.yaml: ignoring, error in schema: properties: compatible
-Documentation/devicetree/bindings/power/starfive,jh71xx-pmu.example.dtb:0:0: /example-0/power-controller@17030000: failed to match any schema with compatible: ['starfive,jh7110-pmu']
+The current trend is to align the arguments after a line break with
+the first one, but I would just put them all on the same line (and
+below too).
 
-doc reference errors (make refcheckdocs):
+> +       if (err)
+> +               return err;
+> +
+> +       *tjmax = (eax >> 16) & 0xff;
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221208084523.9733-2-walker.chen@starfivetech.com
+This means that the tjmax value cannot be negative.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+> +
+> +       return *tjmax ? 0 : -EINVAL;
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+So the return value of this function could be tjmax if positive or a
+negative error code otherwise.  No return pointers needed.
 
-pip3 install dtschema --upgrade
+And why do you want to return -EINVAL (rather than any other error
+code) if tjmax turns out to be 0?
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+> +}
+> +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, INTEL_TCC);
+> +
+> +/**
+> + * intel_tcc_get_offset() - returns the TCC Offset value to Tjmax
+> + * @cpu: cpu that the MSR should be run on.
+> + * @offset: a valid pointer to where to store the offset value
+> + *
+> + * Get the TCC offset value to Tjmax. The effective thermal throttling or TCC
+> + * activation temperature equals "Tjmax" - "TCC Offset", in degrees C.
+> + *
+> + * Return: On success returns 0, an error code otherwise
+> + */
+> +
+> +int intel_tcc_get_offset(int cpu, int *offset)
+> +{
+> +       u32 eax, edx;
+> +       int err;
+> +
+> +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> +                                       &eax, &edx);
+> +       if (err)
+> +               return err;
+> +
+> +       *offset = (eax >> 24) & 0x3f;
 
+Well, offset cannot be negative here, so (again) the return value of
+this function could be interpreted as the offsent (if non-negative) or
+a negative error code on failure.
+
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, INTEL_TCC);
+> +
+> +/**
+> + * intel_tcc_set_offset() - set the TCC offset value to Tjmax
+> + * @cpu: cpu that the MSR should be run on.
+> + * @offset: TCC offset value in degree C
+
+I think that this cannot be negative, so maybe say "in K" instead of
+"in degree C"?
+
+And maybe it's better to pass u8 here?
+
+> + *
+> + * Set the TCC Offset value to Tjmax. The effective thermal throttling or TCC
+> + * activation temperature equals "Tjmax" - "TCC Offset", in degree C.
+> + *
+> + * Return: On success returns 0, an error code otherwise
+> + */
+> +
+> +int intel_tcc_set_offset(int cpu, int offset)
+> +{
+> +       u32 eax, edx;
+> +       int err;
+> +
+> +       if (offset > 0x3f)
+> +               return -EINVAL;
+> +
+> +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
+> +                                       &eax, &edx);
+> +       if (err)
+> +               return err;
+> +
+> +       if (eax & BIT(31))
+> +               return -EPERM;
+
+Why -EPERM?
+
+> +
+> +       eax &= ~(0x3f << 24);
+> +       eax |= (offset << 24);
+
+The parens are not needed AFAICS.
+
+> +
+> +       return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, eax, edx);
+
+So is any protection against concurrent access needed here?  Like what
+if two different callers invoke this function at the same time for the
+same CPU?
+
+> +}
+> +EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
+> +
+> +/**
+> + * intel_tcc_get_temp() - returns the current temperature
+> + * @cpu: cpu that the MSR should be run on.
+> + * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
+> + * @temp: a valid pointer to where to store the resulting temperature
+> + *
+> + * Get the current temperature returned by the CPU core/package level
+> + * thermal sensor, in degrees C.
+> + *
+> + * Return: On success returns 0, an error code otherwise
+> + */
+> +int intel_tcc_get_temp(int cpu, bool pkg, int *temp)
+> +{
+> +       u32 eax, edx;
+> +       u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_STATUS;
+> +       int tjmax, err;
+> +
+> +       err = intel_tcc_get_tjmax(cpu, &tjmax);
+> +       if (err)
+> +               return err;
+
+Well, what if somebody change tjmax on this cpu while this function is running?
+
+> +
+> +       err = rdmsr_safe_on_cpu(cpu, msr, &eax, &edx);
+> +       if (err)
+> +               return err;
+> +
+> +       if (eax & 0x80000000) {
+> +               *temp = tjmax - ((eax >> 16) & 0x7f);
+> +               return 0;
+> +       }
+> +       return -EINVAL;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_temp, INTEL_TCC);
+> +
+> diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
+> new file mode 100644
+> index 000000000000..94f8ceab5dd0
+> --- /dev/null
+> +++ b/include/linux/intel_tcc.h
+> @@ -0,0 +1,18 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + *  header for Intel TCC (thermal control circuitry) library
+> + *
+> + *  Copyright (C) 2022  Intel Corporation.
+> + */
+> +
+> +#ifndef __INTEL_TCC_H__
+> +#define __INTEL_TCC_H__
+> +
+> +#include <linux/types.h>
+> +
+> +int intel_tcc_get_tjmax(int cpu, int *tjmax);
+> +int intel_tcc_get_offset(int cpu, int *offset);
+> +int intel_tcc_set_offset(int cpu, int offset);
+> +int intel_tcc_get_temp(int cpu, bool pkg, int *temp);
+> +
+> +#endif /* __INTEL_TCC_H__ */
+> --
