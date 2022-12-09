@@ -2,98 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5EE664856D
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72EA364868B
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 17:37:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiLIP1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S229545AbiLIQhI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 11:37:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiLIP0s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59098F70A
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:42 -0800 (PST)
-Date:   Fri, 09 Dec 2022 15:26:39 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599599;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=n1Yv7x4DAhLB1jZ5aV02TrryESpXZ6xL+NjPjWCPf0Q=;
-        b=3MXY577iAmDN0FCZgnNB09V7/TduDlmbCrf/gNTPfBstc1CRyHwfnt5iPzR1BcFDCOTG37
-        N0c0zdhI6EmtYBtIaGSlHjheqUhy9HrgdYdmAoPbgTGQlaRhxSulNEUN8ZDKL/Eaiec2q2
-        RndxuO1qMIM5xQwQsRDzwJVFMFe5w6igP37XDYvQ8SJTem28fXGTuWS7RwXXBUvNQZgt6S
-        khWy+ZzCTd1rP3RDMCNO185fB9YMhL9ZUjy50MYn2ltBydqGoDMz1vGCN/f51/sqES19so
-        j3pq3+9Kjlm4odwzbB8Weho97c+WTxPvwlwPdRW+EpxZt0vqRmZsZeGiZUA2cA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599599;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=n1Yv7x4DAhLB1jZ5aV02TrryESpXZ6xL+NjPjWCPf0Q=;
-        b=Ol9NfAIXM/o8hVXyngPpBZG5Cb8zLaZ5Uxyhe0WpS3YI72//A8+zTN+q1msiydV58xRerS
-        bpIjr8aCGW85mmDg==
-From:   "thermal-bot for Ricardo Neri" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-pm@vger.kernel.org
-To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: intel: hfi: Improve the type of
- hfi_features::nr_table_pages
-Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+        with ESMTP id S229604AbiLIQhG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 11:37:06 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4933077232
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 08:37:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670603826; x=1702139826;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=rORKLOHOyteXx0dvKZTOtZky1LF0KwCiwhKjixq1jcY=;
+  b=ObcGKFnWu0LxNCouCCXJ2L4bNCBJ9Rjc86KxoFkY7Ke9P+dcyf0mGDiB
+   6QUiO6+DWzJj0Hg1Zaoyjcl0fOGmWNg70UVSNSo/MCzKGIY00aVJzOBKO
+   GyV9pBzjuzFPZ+Ua6npaGk5liTAzBX7m+uR/3Ms32zbNyNacAT9X+aSf9
+   5fkIKwSu1cZtp8o8XAP6d7IzG6Rg2yWRJhyDhwkkKauh171ayWmJgCi86
+   O1F6Bl4WK1tKmuB1gIPQEJw5WZc0qEnRHUDqy9z9ai1hoDJGNVpC9KuSN
+   f7tpXvxPHB9ofVWu2cqY6wxuVX/kbAmvSbmYsOS3acFOfWl9AiiNjfojb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300914729"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="300914729"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 08:28:36 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="679976984"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="679976984"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 08:28:36 -0800
+Message-ID: <fd4b11f8f9ce4b592c6fdfed2d14f7b8a6c3e4f0.camel@linux.intel.com>
+Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Zhang Rui <rui.zhang@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org
+Date:   Fri, 09 Dec 2022 08:28:35 -0800
+In-Reply-To: <015c7c006b0bbe935a31c837ed0fc5da9d7e43cd.camel@intel.com>
+References: <20221108033332.27760-1-rui.zhang@intel.com>
+         <20221108033332.27760-2-rui.zhang@intel.com>
+         <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
+         <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
+         <CAJZ5v0gFMewt-paH4D3sDpgUSAfGJojGHOdUxXH9ahSHA6P7+Q@mail.gmail.com>
+         <015c7c006b0bbe935a31c837ed0fc5da9d7e43cd.camel@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
 MIME-Version: 1.0
-Message-ID: <167059959938.4906.9514132250300945843.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following commit has been merged into the thermal/next branch of thermal:
+On Fri, 2022-12-09 at 21:32 +0800, Zhang Rui wrote:
+> > > 
+> > > > 
 
-Commit-ID:     54d9135cf223f221546bd51b0f5e4a73e99891f4
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//54d9135cf223f221546bd51b0f5e4a73e99891f4
-Author:        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-AuthorDate:    Tue, 18 Oct 2022 04:22:40 -07:00
-Committer:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CommitterDate: Fri, 28 Oct 2022 20:11:48 +02:00
+[...]
 
-thermal: intel: hfi: Improve the type of hfi_features::nr_table_pages
+> > > > Well, what if somebody change tjmax on this cpu while this
+> > > > function
+> > > > is running?
+> > > 
+> > > tjmax is read only. Only firmware can change its value at
+> > > runtime,
+> > > say
+> > > this field is updated when SST-PP level is changed.
+> > 
+> > Do we get any type of notification on tjmax changes, or do we need
+> > to
+> > poll for it?
+> 
+> I'm not aware of such a notification.
+> Srinivas, do you know if there is one?
+There is no explicit notification. You can infer from HWP guaranteed
+change interrupt.
 
-A Coverity static code scan raised a potential overflow_before_widen
-warning when hfi_features::nr_table_pages is used as an argument to
-memcpy in intel_hfi_process_event().
+Thanks,
+Srinivas
 
-Even though the overflow can never happen (the maximum number of pages of
-the HFI table is 0x10 and 0x10 << PAGE_SHIFT = 0x10000), using size_t as
-the data type of hfi_features::nr_table_pages makes Coverity happy and
-matches the data type of the argument 'size' of memcpy().
+> 
+> thanks,
+> rui
+> 
+> 
 
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/thermal/intel/intel_hfi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index a0640f7..239afe0 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -137,7 +137,7 @@ struct hfi_instance {
-  * Parameters and supported features that are common to all HFI instances
-  */
- struct hfi_features {
--	unsigned int	nr_table_pages;
-+	size_t		nr_table_pages;
- 	unsigned int	cpu_stride;
- 	unsigned int	hdr_size;
- };
