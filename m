@@ -2,57 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C72DA648517
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DC7648514
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229512AbiLIP0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:26:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
+        id S230392AbiLIP0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiLIP03 (ORCPT
+        with ESMTP id S229900AbiLIP03 (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:29 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E241C8D647
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5C68BD2B
         for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:27 -0800 (PST)
 Date:   Fri, 09 Dec 2022 15:26:25 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1670599585;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NINAlGXEw/T4c5ZeaG+W4Ck8KSNs7sQEQr+5Bn2f5gw=;
-        b=SvKis5ahfyP02Z788WA1qjs1KOLmWrmwAjfabUDz557jawwd3VfLkoc69o375cUhTS2ak3
-        7CUfiLp5aIhImp7yayyEVVXbx3SShzZAgtgM3B0ur0Z8cP1WgeYty8S/PwPAtAM0awo2gW
-        QgSSZLrnph22XRGlqHHXitowI10J1g2KETseaYvWihNnvGsrqlU3NtlHCuAkvjnsQjh3Cz
-        BwIYBJ9RH1RxVellzm6w9DRBsWheIkdiLzWJcnTEKg+Bq7Oa5yFLmFFFiYD1pA85qniLOQ
-        LOUO6JR0zChKMZIH/Md7MtpTkV178+yrYAkVdfKRFy87BwkrqacCbSigjq+3JQ==
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=cgeCRvlLqgjQY1aLRBMU8wIgfvaVWMNeSB1dAbow240=;
+        b=WV28B3P2+ThX5Q1I6BGNhokiTdQcwD5JdZwM/r79O088TwsSDbHBQfe86IhMMZfydk/bLi
+        KGFlY424xuFGNAtkfQTOVUtAlN8iom7l91Jt7qjI/l0Up38YOuzfHCY0yQeRbvJ0Ghky3q
+        sIZimcGs920kFPWzdDZ27rWmCZu7ZykIL1BK1io720ickZQkROEw/1atTy2WchkpqwKU7P
+        PhAAj+lB92Xbx/swKcdIstr575sjewQ2r6+rVo9gITT76/qD9g3YifR3VuS/3Aoa78w2iu
+        UdxQ+mPTyyaXho+aBIgFVToBTubcGRnhBedI5Jf6WG+Q8qn89MFqJM3a8fxeeA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1670599585;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NINAlGXEw/T4c5ZeaG+W4Ck8KSNs7sQEQr+5Bn2f5gw=;
-        b=pWU8htUDDCq/gSAWSNeBkMUIB9+vsGl/r2bjgE85RQtvIsAye/n/r03Z179mOciujGp46M
-        ANnoShPbDSV/FHAQ==
-From:   "thermal-bot for Bjorn Andersson" <tip-bot2@linutronix.de>
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=cgeCRvlLqgjQY1aLRBMU8wIgfvaVWMNeSB1dAbow240=;
+        b=TIcGHUEfAM4jT6MxE+JCdFcGmngSV2Wr988g7iUXhDpwjzAQF0u/7STReWpeqVL9R5sQ0c
+        YsaCaY7kasjf7SBg==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/qcom/lmh: Fix irq handler
- return value
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20220316180322.88132-1-bjorn.andersson@linaro.org>
-References: <20220316180322.88132-1-bjorn.andersson@linaro.org>
+Subject: [thermal: thermal/next] Revert "thermal/sysfs: Remove unnecessary
+ check in trip_point_hyst_show()"
+Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, amitk@kernel.org
 MIME-Version: 1.0
-Message-ID: <167059958526.4906.8006447666823780139.tip-bot2@tip-bot2>
+Message-ID: <167059958500.4906.5675491872553769249.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,38 +59,35 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     1c5ec8178db2c71a9c20bd5da03eb1a7165121d3
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//1c5ec8178db2c71a9c20bd5da03eb1a7165121d3
-Author:        Bjorn Andersson <bjorn.andersson@linaro.org>
-AuthorDate:    Wed, 16 Mar 2022 11:03:22 -07:00
+Commit-ID:     f3ce48d06440a712de3c5ef1d26003c1e77afd74
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//f3ce48d06440a712de3c5ef1d26003c1e77afd74
+Author:        Daniel Lezcano <daniel.lezcano@kernel.org>
+AuthorDate:    Thu, 08 Dec 2022 21:03:41 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
-CommitterDate: Thu, 08 Dec 2022 17:45:04 +01:00
+CommitterDate: Fri, 09 Dec 2022 16:23:16 +01:00
 
-thermal/drivers/qcom/lmh: Fix irq handler return value
+Revert "thermal/sysfs: Remove unnecessary check in trip_point_hyst_show()"
 
-After enough invocations the LMh irq is eventually reported as bad, because the
-handler doesn't return IRQ_HANDLED, fix this.
+With the commit 05eeee2b51b44c, the assertion is no longer true. The
+'ret' variable can contain an error.
 
-Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
-Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20220316180322.88132-1-bjorn.andersson@linaro.org
+This reverts commit 1627cd2f820ad90d3249e6b4e6f1dbadfbed0d33.
+
 Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 ---
- drivers/thermal/qcom/lmh.c | 2 +-
+ drivers/thermal/thermal_sysfs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index d3d9b9f..4122a51 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -45,7 +45,7 @@ static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
- 	if (irq)
- 		generic_handle_irq(irq);
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index d37133a..cef860d 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -226,7 +226,7 @@ trip_point_hyst_show(struct device *dev, struct device_attribute *attr,
  
--	return 0;
-+	return IRQ_HANDLED;
+ 	mutex_unlock(&tz->lock);
+ 
+-	return sprintf(buf, "%d\n", trip.hysteresis);
++	return ret ? ret : sprintf(buf, "%d\n", trip.hysteresis);
  }
  
- static void lmh_enable_interrupt(struct irq_data *d)
+ static ssize_t
