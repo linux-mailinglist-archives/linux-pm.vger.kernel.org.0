@@ -2,50 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4161A648562
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C93964855E
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiLIP1i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
+        id S230340AbiLIP1f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:27:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbiLIP0r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 912EB8F0A7
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:40 -0800 (PST)
+        with ESMTP id S230467AbiLIP0q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:46 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C969231C
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:39 -0800 (PST)
 Date:   Fri, 09 Dec 2022 15:26:36 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599597;
+        s=2020; t=1670599596;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=SA7aP9HJEm7lLpjdEMMhaStDXu4fW2+SsWEH6Sb1eQI=;
-        b=EBh85ct9vfKmkxkSb9gGtbzgtwympWvbijVWoY9WKB4H4JRch5wk0eepKgl+MYbZKStkZ6
-        eMfFy9r/1jiKnIY2hEH2QIADjNBFtBqKF14mH+Zc/K89DaRe3PPWO7DbX1gJNV71ovz8fJ
-        8NUxHJzok7HKYzRcywpumH4JUhp3Gf3bgniilVzs0V/6AOLQdb/sXmtphLe4HsL4DyBUgA
-        ZDNznLgTIH7lV4qg8T7Xfi/Nyq9FWY8N0uDEyPkvdQNs3CdqV4psI8ocEhkOP0V74+OKNY
-        iVIQJMtF+4zodmlvqH7uAN+ziiekY/QwKI8Tdrb0boSgTfOiVrjX0+ylbAaO2A==
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XWgD4a0oExOUCsr3IEgF4HkciMHyABZumJo5U1lJaFY=;
+        b=242T2sp2kHBUbTc253rpcpiBYGX0DOWBjocCezTJQngw0Z2//llYr48zLMnd8XE2RtD624
+        MgLey537EK6CTQcV49o6b6yn6ZNaGzXA1iSOQ98daLVZTt5Kp5dxB7enYiA8dPEIHN0kS/
+        5YWGH0GpMXO1uta2cUkVm86eQN5mSTCEEYbYudSIrisdpPZqbFd/1tR9cXJ+sZSBwjWSVe
+        UMGdut8dhadxkrQp40N00vuB0HQSLzSwOKUvcXNiBv0rkEC0KIuZEebm+KEljfOuZod6+D
+        fV/+AUaVASaNeBZ/MgYRJYXIH9H2NR98tBxPl2Mfem9r3WzTf+ocKyfcoq2e1Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599597;
+        s=2020e; t=1670599596;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=SA7aP9HJEm7lLpjdEMMhaStDXu4fW2+SsWEH6Sb1eQI=;
-        b=UlHln5S4O4DU48D9ubVSPzlS7HcX+fKLhApAqjjFJprHfMLNWQki28oBeTCvEoicBOc8Bn
-        T1hAH8pEYdcymsCg==
-From:   "thermal-bot for Srinivas Pandruvada" <tip-bot2@linutronix.de>
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XWgD4a0oExOUCsr3IEgF4HkciMHyABZumJo5U1lJaFY=;
+        b=Yy4GPiEQ0BBXzXqpe3sfRh+qgKGDEiadANU3XkEoRf7p3htOh/uRLIu9k714B5KVgQRkxu
+        7PAWYhOymIAJHIDA==
+From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: intel: hfi: ACK HFI for the same timestamp
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        "Arshad, Adeel" <adeel.arshad@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+Subject: [thermal: thermal/next] thermal/core/governors: Use
+ thermal_zone_get_trip() instead of ops functions
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, amitk@kernel.org
+In-Reply-To: <20221003092602.1323944-5-daniel.lezcano@linaro.org>
+References: <20221003092602.1323944-5-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <167059959687.4906.5952922094488556473.tip-bot2@tip-bot2>
+Message-ID: <167059959602.4906.4944440999955328252.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,157 +67,339 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     c0e3acdcdeb14099765de38224dfe0ad019c8482
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//c0e3acdcdeb14099765de38224dfe0ad019c8482
-Author:        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-AuthorDate:    Wed, 16 Nov 2022 15:14:59 -08:00
-Committer:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CommitterDate: Wed, 23 Nov 2022 20:13:22 +01:00
+Commit-ID:     598b0cbd91f5b2359c3abc2ac88f7ac03b86049c
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//598b0cbd91f5b2359c3abc2ac88f7ac03b86049c
+Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
+AuthorDate:    Mon, 03 Oct 2022 11:25:37 +02:00
+Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
+CommitterDate: Thu, 08 Dec 2022 14:30:42 +01:00
 
-thermal: intel: hfi: ACK HFI for the same timestamp
+thermal/core/governors: Use thermal_zone_get_trip() instead of ops functions
 
-Some processors issue more than one HFI interrupt with the same
-timestamp. Each interrupt must be acknowledged to let the hardware issue
-new HFI interrupts. But this can't be done without some additional flow
-modification in the existing interrupt handling.
+The governors are using the ops->get_trip_* functions, Replace these
+calls with thermal_zone_get_trip().
 
-For background, the HFI interrupt is a package level thermal interrupt
-delivered via a LVT. This LVT is common for both the CPU and package
-level interrupts. Hence, all CPUs receive the HFI interrupts. But only
-one CPU should process interrupt and others simply exit by issuing EOI
-to LAPIC.
-
-The current HFI interrupt processing flow:
-
-  1. Receive Thermal interrupt
-  2. Check if there is an active HFI status in MSR_IA32_THERM_STATUS
-  3. Try and get spinlock, one CPU will enter spinlock and others
-     will simply return from here to issue EOI.
-    (Let's assume CPU 4 is processing interrupt)
-  4. Check the stored time-stamp from the HFI memory time-stamp
-  5. if same
-  6.      ignore interrupt, unlock and return
-  7. Copy the HFI message to local buffer
-  8. unlock spinlock
-  9. ACK HFI interrupt
- 10. Queue the message for processing in a work-queue
-
-It is tempting to simply acknowledge all the interrupts even if they
-have the same timestamp. This may cause some interrupts to not be
-processed.
-
-Let's say CPU5 is slightly late and reaches step 4 while CPU4 is
-between steps 8 and 9.
-
-Currently we simply ignore interrupts with the same timestamp. No
-issue here for CPU5. When CPU4 acknowledges the interrupt, the next
-HFI interrupt can be delivered.
-
-If we acknowledge interrupts with the same timestamp (at step 6), there
-is a race condition. Under the same scenario, CPU 5 will acknowledge
-the HFI interrupt. This lets hardware generate another HFI interrupt,
-before CPU 4 start executing step 9. Once CPU 4 complete step 9, it
-will acknowledge the newly arrived HFI interrupt, without actually
-processing it.
-
-Acknowledge the interrupt when holding the spinlock. This avoids
-contention of the interrupt acknowledgment.
-
-Updated flow:
-
-  1. Receive HFI Thermal interrupt
-  2. Check if there is an active HFI status in MSR_IA32_THERM_STATUS
-  3. Try and get spin-lock
-     Let's assume CPU 4 is processing interrupt
-  4.1 Read MSR_IA32_PACKAGE_THERM_STATUS and check HFI status bit
-  4.2	If hfi status is 0
-  4.3		unlock spinlock
-  4.4		return
-  4.5 Check the stored time-stamp from the HFI memory time-stamp
-  5. if same
-  6.1      ACK HFI Interrupt,
-  6.2	unlock spinlock
-  6.3	return
-  7. Copy the HFI message to local buffer
-  8. ACK HFI interrupt
-  9. unlock spinlock
- 10. Queue the message for processing in a work-queue
-
-To avoid taking the lock unnecessarily, intel_hfi_process_event() checks
-the status of the HFI interrupt before taking the lock. If CPU5 is late,
-when it starts processing the interrupt there are two scenarios:
-
- a) CPU4 acknowledged the HFI interrupt before CPU5 read
-    MSR_IA32_THERM_STATUS. CPU5 exits.
-
- b) CPU5 reads MSR_IA32_THERM_STATUS before CPU4 has acknowledged the
-    interrupt. CPU5 will take the lock if CPU4 has released it. It then
-    re-reads MSR_IA32_THERM_STATUS. If there is not a new interrupt,
-    the HFI status bit is clear and CPU5 exits. If a new HFI interrupt
-    was generated it will find that the status bit is set and it will
-    continue to process the interrupt. In this case even if timestamp
-    is not changed, the ACK can be issued as this is a new interrupt.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Tested-by: Arshad, Adeel<adeel.arshad@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com> # IPA
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://lore.kernel.org/r/20221003092602.1323944-5-daniel.lezcano@linaro.org
 ---
- drivers/thermal/intel/intel_hfi.c | 22 +++++++++++++++++-----
- 1 file changed, 17 insertions(+), 5 deletions(-)
+ drivers/thermal/gov_bang_bang.c       | 37 +++++++++++--------
+ drivers/thermal/gov_fair_share.c      | 18 +++------
+ drivers/thermal/gov_power_allocator.c | 51 +++++++++++---------------
+ drivers/thermal/gov_step_wise.c       | 22 +++++------
+ 4 files changed, 61 insertions(+), 67 deletions(-)
 
-diff --git a/drivers/thermal/intel/intel_hfi.c b/drivers/thermal/intel/intel_hfi.c
-index 65b9029..90a11ee 100644
---- a/drivers/thermal/intel/intel_hfi.c
-+++ b/drivers/thermal/intel/intel_hfi.c
-@@ -250,7 +250,7 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 	struct hfi_instance *hfi_instance;
- 	int cpu = smp_processor_id();
- 	struct hfi_cpu_info *info;
--	u64 new_timestamp;
-+	u64 new_timestamp, msr, hfi;
+diff --git a/drivers/thermal/gov_bang_bang.c b/drivers/thermal/gov_bang_bang.c
+index a08bbe3..1b12106 100644
+--- a/drivers/thermal/gov_bang_bang.c
++++ b/drivers/thermal/gov_bang_bang.c
+@@ -13,26 +13,28 @@
  
- 	if (!pkg_therm_status_msr_val)
- 		return;
-@@ -279,9 +279,21 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 	if (!raw_spin_trylock(&hfi_instance->event_lock))
- 		return;
+ #include "thermal_core.h"
  
--	/* Skip duplicated updates. */
-+	rdmsrl(MSR_IA32_PACKAGE_THERM_STATUS, msr);
-+	hfi = msr & PACKAGE_THERM_STATUS_HFI_UPDATED;
-+	if (!hfi) {
-+		raw_spin_unlock(&hfi_instance->event_lock);
-+		return;
+-static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
++static int thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id)
+ {
+-	int trip_temp, trip_hyst;
++	struct thermal_trip trip;
+ 	struct thermal_instance *instance;
++	int ret;
+ 
+-	tz->ops->get_trip_temp(tz, trip, &trip_temp);
++	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
++	if (ret) {
++		pr_warn_once("Failed to retrieve trip point %d\n", trip_id);
++		return ret;
 +	}
-+
-+	/*
-+	 * Ack duplicate update. Since there is an active HFI
-+	 * status from HW, it must be a new event, not a case
-+	 * where a lagging CPU entered the locked region.
-+	 */
- 	new_timestamp = *(u64 *)hfi_instance->hw_table;
- 	if (*hfi_instance->timestamp == new_timestamp) {
-+		thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
- 		raw_spin_unlock(&hfi_instance->event_lock);
- 		return;
+ 
+-	if (!tz->ops->get_trip_hyst) {
+-		pr_warn_once("Undefined get_trip_hyst for thermal zone %s - "
+-				"running with default hysteresis zero\n", tz->type);
+-		trip_hyst = 0;
+-	} else
+-		tz->ops->get_trip_hyst(tz, trip, &trip_hyst);
++	if (!trip.hysteresis)
++		dev_info_once(&tz->device,
++			      "Zero hysteresis value for thermal zone %s\n", tz->type);
+ 
+ 	dev_dbg(&tz->device, "Trip%d[temp=%d]:temp=%d:hyst=%d\n",
+-				trip, trip_temp, tz->temperature,
+-				trip_hyst);
++				trip_id, trip.temperature, tz->temperature,
++				trip.hysteresis);
+ 
+ 	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+-		if (instance->trip != trip)
++		if (instance->trip != trip_id)
+ 			continue;
+ 
+ 		/* in case fan is in initial state, switch the fan off */
+@@ -50,10 +52,10 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ 		 * enable fan when temperature exceeds trip_temp and disable
+ 		 * the fan in case it falls below trip_temp minus hysteresis
+ 		 */
+-		if (instance->target == 0 && tz->temperature >= trip_temp)
++		if (instance->target == 0 && tz->temperature >= trip.temperature)
+ 			instance->target = 1;
+ 		else if (instance->target == 1 &&
+-				tz->temperature <= trip_temp - trip_hyst)
++			 tz->temperature <= trip.temperature - trip.hysteresis)
+ 			instance->target = 0;
+ 
+ 		dev_dbg(&instance->cdev->device, "target=%d\n",
+@@ -63,6 +65,8 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ 		instance->cdev->updated = false; /* cdev needs update */
+ 		mutex_unlock(&instance->cdev->lock);
  	}
-@@ -295,15 +307,15 @@ void intel_hfi_process_event(__u64 pkg_therm_status_msr_val)
- 	memcpy(hfi_instance->local_table, hfi_instance->hw_table,
- 	       hfi_features.nr_table_pages << PAGE_SHIFT);
- 
--	raw_spin_unlock(&hfi_instance->table_lock);
--	raw_spin_unlock(&hfi_instance->event_lock);
--
- 	/*
- 	 * Let hardware know that we are done reading the HFI table and it is
- 	 * free to update it again.
- 	 */
- 	thermal_clear_package_intr_status(PACKAGE_LEVEL, PACKAGE_THERM_STATUS_HFI_UPDATED);
- 
-+	raw_spin_unlock(&hfi_instance->table_lock);
-+	raw_spin_unlock(&hfi_instance->event_lock);
 +
- 	queue_delayed_work(hfi_updates_wq, &hfi_instance->update_work,
- 			   HFI_UPDATE_INTERVAL);
++	return 0;
  }
+ 
+ /**
+@@ -95,10 +99,13 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ static int bang_bang_control(struct thermal_zone_device *tz, int trip)
+ {
+ 	struct thermal_instance *instance;
++	int ret;
+ 
+ 	lockdep_assert_held(&tz->lock);
+ 
+-	thermal_zone_trip_update(tz, trip);
++	ret = thermal_zone_trip_update(tz, trip);
++	if (ret)
++		return ret;
+ 
+ 	list_for_each_entry(instance, &tz->thermal_instances, tz_node)
+ 		thermal_cdev_update(instance->cdev);
+diff --git a/drivers/thermal/gov_fair_share.c b/drivers/thermal/gov_fair_share.c
+index 1cfeac1..aad7d5f 100644
+--- a/drivers/thermal/gov_fair_share.c
++++ b/drivers/thermal/gov_fair_share.c
+@@ -21,16 +21,12 @@
+  */
+ static int get_trip_level(struct thermal_zone_device *tz)
+ {
+-	int count = 0;
+-	int trip_temp;
+-	enum thermal_trip_type trip_type;
+-
+-	if (tz->num_trips == 0 || !tz->ops->get_trip_temp)
+-		return 0;
++	struct thermal_trip trip;
++	int count;
+ 
+ 	for (count = 0; count < tz->num_trips; count++) {
+-		tz->ops->get_trip_temp(tz, count, &trip_temp);
+-		if (tz->temperature < trip_temp)
++		__thermal_zone_get_trip(tz, count, &trip);
++		if (tz->temperature < trip.temperature)
+ 			break;
+ 	}
+ 
+@@ -38,10 +34,8 @@ static int get_trip_level(struct thermal_zone_device *tz)
+ 	 * count > 0 only if temperature is greater than first trip
+ 	 * point, in which case, trip_point = count - 1
+ 	 */
+-	if (count > 0) {
+-		tz->ops->get_trip_type(tz, count - 1, &trip_type);
+-		trace_thermal_zone_trip(tz, count - 1, trip_type);
+-	}
++	if (count > 0)
++		trace_thermal_zone_trip(tz, count - 1, trip.type);
+ 
+ 	return count;
+ }
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 2d1aeab..eafb288 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -125,16 +125,15 @@ static void estimate_pid_constants(struct thermal_zone_device *tz,
+ 				   u32 sustainable_power, int trip_switch_on,
+ 				   int control_temp)
+ {
++	struct thermal_trip trip;
++	u32 temperature_threshold = control_temp;
+ 	int ret;
+-	int switch_on_temp;
+-	u32 temperature_threshold;
+ 	s32 k_i;
+ 
+-	ret = tz->ops->get_trip_temp(tz, trip_switch_on, &switch_on_temp);
+-	if (ret)
+-		switch_on_temp = 0;
++	ret = __thermal_zone_get_trip(tz, trip_switch_on, &trip);
++	if (!ret)
++		temperature_threshold -= trip.temperature;
+ 
+-	temperature_threshold = control_temp - switch_on_temp;
+ 	/*
+ 	 * estimate_pid_constants() tries to find appropriate default
+ 	 * values for thermal zones that don't provide them. If a
+@@ -520,10 +519,10 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+ 	last_passive = INVALID_TRIP;
+ 
+ 	for (i = 0; i < tz->num_trips; i++) {
+-		enum thermal_trip_type type;
++		struct thermal_trip trip;
+ 		int ret;
+ 
+-		ret = tz->ops->get_trip_type(tz, i, &type);
++		ret = __thermal_zone_get_trip(tz, i, &trip);
+ 		if (ret) {
+ 			dev_warn(&tz->device,
+ 				 "Failed to get trip point %d type: %d\n", i,
+@@ -531,14 +530,14 @@ static void get_governor_trips(struct thermal_zone_device *tz,
+ 			continue;
+ 		}
+ 
+-		if (type == THERMAL_TRIP_PASSIVE) {
++		if (trip.type == THERMAL_TRIP_PASSIVE) {
+ 			if (!found_first_passive) {
+ 				params->trip_switch_on = i;
+ 				found_first_passive = true;
+ 			} else  {
+ 				last_passive = i;
+ 			}
+-		} else if (type == THERMAL_TRIP_ACTIVE) {
++		} else if (trip.type == THERMAL_TRIP_ACTIVE) {
+ 			last_active = i;
+ 		} else {
+ 			break;
+@@ -633,7 +632,7 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ {
+ 	int ret;
+ 	struct power_allocator_params *params;
+-	int control_temp;
++	struct thermal_trip trip;
+ 
+ 	ret = check_power_actors(tz);
+ 	if (ret)
+@@ -659,13 +658,12 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 	get_governor_trips(tz, params);
+ 
+ 	if (tz->num_trips > 0) {
+-		ret = tz->ops->get_trip_temp(tz,
+-					params->trip_max_desired_temperature,
+-					&control_temp);
++		ret = __thermal_zone_get_trip(tz, params->trip_max_desired_temperature,
++					      &trip);
+ 		if (!ret)
+ 			estimate_pid_constants(tz, tz->tzp->sustainable_power,
+ 					       params->trip_switch_on,
+-					       control_temp);
++					       trip.temperature);
+ 	}
+ 
+ 	reset_pid_controller(params);
+@@ -695,11 +693,11 @@ static void power_allocator_unbind(struct thermal_zone_device *tz)
+ 	tz->governor_data = NULL;
+ }
+ 
+-static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
++static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+ {
+-	int ret;
+-	int switch_on_temp, control_temp;
+ 	struct power_allocator_params *params = tz->governor_data;
++	struct thermal_trip trip;
++	int ret;
+ 	bool update;
+ 
+ 	lockdep_assert_held(&tz->lock);
+@@ -708,13 +706,12 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+ 	 * We get called for every trip point but we only need to do
+ 	 * our calculations once
+ 	 */
+-	if (trip != params->trip_max_desired_temperature)
++	if (trip_id != params->trip_max_desired_temperature)
+ 		return 0;
+ 
+-	ret = tz->ops->get_trip_temp(tz, params->trip_switch_on,
+-				     &switch_on_temp);
+-	if (!ret && (tz->temperature < switch_on_temp)) {
+-		update = (tz->last_temperature >= switch_on_temp);
++	ret = __thermal_zone_get_trip(tz, params->trip_switch_on, &trip);
++	if (!ret && (tz->temperature < trip.temperature)) {
++		update = (tz->last_temperature >= trip.temperature);
+ 		tz->passive = 0;
+ 		reset_pid_controller(params);
+ 		allow_maximum_power(tz, update);
+@@ -723,16 +720,14 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip)
+ 
+ 	tz->passive = 1;
+ 
+-	ret = tz->ops->get_trip_temp(tz, params->trip_max_desired_temperature,
+-				&control_temp);
++	ret = __thermal_zone_get_trip(tz, params->trip_max_desired_temperature, &trip);
+ 	if (ret) {
+-		dev_warn(&tz->device,
+-			 "Failed to get the maximum desired temperature: %d\n",
++		dev_warn(&tz->device, "Failed to get the maximum desired temperature: %d\n",
+ 			 ret);
+ 		return ret;
+ 	}
+ 
+-	return allocate_power(tz, control_temp);
++	return allocate_power(tz, trip.temperature);
+ }
+ 
+ static struct thermal_governor thermal_gov_power_allocator = {
+diff --git a/drivers/thermal/gov_step_wise.c b/drivers/thermal/gov_step_wise.c
+index cdd3354..31235e1 100644
+--- a/drivers/thermal/gov_step_wise.c
++++ b/drivers/thermal/gov_step_wise.c
+@@ -95,30 +95,28 @@ static void update_passive_instance(struct thermal_zone_device *tz,
+ 		tz->passive += value;
+ }
+ 
+-static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
++static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip_id)
+ {
+-	int trip_temp;
+-	enum thermal_trip_type trip_type;
+ 	enum thermal_trend trend;
+ 	struct thermal_instance *instance;
++	struct thermal_trip trip;
+ 	bool throttle = false;
+ 	int old_target;
+ 
+-	tz->ops->get_trip_temp(tz, trip, &trip_temp);
+-	tz->ops->get_trip_type(tz, trip, &trip_type);
++	__thermal_zone_get_trip(tz, trip_id, &trip);
+ 
+-	trend = get_tz_trend(tz, trip);
++	trend = get_tz_trend(tz, trip_id);
+ 
+-	if (tz->temperature >= trip_temp) {
++	if (tz->temperature >= trip.temperature) {
+ 		throttle = true;
+-		trace_thermal_zone_trip(tz, trip, trip_type);
++		trace_thermal_zone_trip(tz, trip_id, trip.type);
+ 	}
+ 
+ 	dev_dbg(&tz->device, "Trip%d[type=%d,temp=%d]:trend=%d,throttle=%d\n",
+-				trip, trip_type, trip_temp, trend, throttle);
++				trip_id, trip.type, trip.temperature, trend, throttle);
+ 
+ 	list_for_each_entry(instance, &tz->thermal_instances, tz_node) {
+-		if (instance->trip != trip)
++		if (instance->trip != trip_id)
+ 			continue;
+ 
+ 		old_target = instance->target;
+@@ -132,11 +130,11 @@ static void thermal_zone_trip_update(struct thermal_zone_device *tz, int trip)
+ 		/* Activate a passive thermal instance */
+ 		if (old_target == THERMAL_NO_TARGET &&
+ 			instance->target != THERMAL_NO_TARGET)
+-			update_passive_instance(tz, trip_type, 1);
++			update_passive_instance(tz, trip.type, 1);
+ 		/* Deactivate a passive thermal instance */
+ 		else if (old_target != THERMAL_NO_TARGET &&
+ 			instance->target == THERMAL_NO_TARGET)
+-			update_passive_instance(tz, trip_type, -1);
++			update_passive_instance(tz, trip.type, -1);
+ 
+ 		instance->initialized = true;
+ 		mutex_lock(&instance->cdev->lock);
