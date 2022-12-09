@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A92CC64851C
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 353BA648525
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbiLIP0k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:26:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
+        id S230484AbiLIP0t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:26:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiLIP0e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:34 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8CF8F08B
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:30 -0800 (PST)
-Date:   Fri, 09 Dec 2022 15:26:27 -0000
+        with ESMTP id S230406AbiLIP0h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:37 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C525C8F0BF
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:32 -0800 (PST)
+Date:   Fri, 09 Dec 2022 15:26:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599587;
+        s=2020; t=1670599588;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PcVWJd9ElP4s5dpyhiw9umTDqqrH0LH6f0MqsA5xgO4=;
-        b=oChr19G74vkDrbksxwde4+AjRPogAxn2sN1YQjCyTV6dg/J61dZcG02RxTybnokXVFNDos
-        bskOccUSxTqbaha+Mo0/fAvOcaP/gVzjhw+GLZOUa1kd9vStegQeLVzsqUWBnkPIyJJUby
-        RmMjsyuyvr9zzYGgZeho9PbUzeLD7d99Y9LjB9HuwGWI/128QNDnwcTqIezdUHcgFt+WaQ
-        iwntR89hnz9g8tjf5Z6Nv+G1nnMaVVpifNkfsH+uvZkJ74jXyvElhdea5AKx1vLZYscdqz
-        Lx8wDA7rOGlVDpQWZqNq1bWHdgnSy8jkq7HisH0SYEwz6u2Lp0f3YlyV7ycDQw==
+        bh=464kAP3bXu9jbNWQOT6aJi5FVrJbCMlzBfw/A21xNYM=;
+        b=Sm2JSX+zKnQxlv3unIF67kZZL5MKhEsYKgK0fTrCKtHjiHd7R7B/RSfxyXo+0OitsJ31LT
+        /5CGvTTA635LoNyMAyN+NeV9lqXYd8T9wNRr2+IICiHB5qttkkP93d2jjEr89TmphXKMky
+        3yOuJ8WGpC7rJ15vb8Q1/N5YNdddwbCJh5X25uO/oJyfWKvXQtoSPhAEg6ByeV/5QEk7Xs
+        yTIp/dpEZNKE1qOSuzVIek+q9IaaQqozK/y7dfDKKGYBDFWniVB8zhfZaXt5JhV1OyeYDn
+        K3QUmReEOHkfDATnwTXrA1Un2o9DlToDk53++dth1B25/5hRqPELsssESHvagQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599587;
+        s=2020e; t=1670599588;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=PcVWJd9ElP4s5dpyhiw9umTDqqrH0LH6f0MqsA5xgO4=;
-        b=sQ12iXJ08pbovQhTjLvhfDTQ3+VPaxTEEThQs5b6CITJHif7QQ0yfm264Yt5XEgAIi+PhY
-        BPR7rooNsKNyuTDQ==
-From:   "thermal-bot for Bryan Brattlof" <tip-bot2@linutronix.de>
+        bh=464kAP3bXu9jbNWQOT6aJi5FVrJbCMlzBfw/A21xNYM=;
+        b=K6ucULKHJ93eBFDrbFMFOCygREYZg5ENsCiPA1Ls/wrPfCBUigzOUY6NA8aLVnm1BE4W0o
+        nS/ofYDrvVbXQPAw==
+From:   "thermal-bot for Alexander Stein" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/k3_j72xx_bandgap: Simplify
- k3_thermal_get_temp() function
-Cc:     Bryan Brattlof <bb@ti.com>,
+Subject: [thermal: thermal/next] thermal/drivers/imx8mm: Add hwmon support
+Cc:     Alexander Stein <alexander.stein@ew.tq-group.com>,
         Daniel Lezcano <daniel.lezcano@kernel.org>,
         rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-In-Reply-To: <20221031232702.10339-2-bb@ti.com>
-References: <20221031232702.10339-2-bb@ti.com>
+In-Reply-To: <20220726122331.323093-1-alexander.stein@ew.tq-group.com>
+References: <20220726122331.323093-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Message-ID: <167059958735.4906.597495666808063069.tip-bot2@tip-bot2>
+Message-ID: <167059958815.4906.3651022751204904731.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,42 +65,43 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     277958b1c90fc5818fc9dea870cc5aec9af3d152
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//277958b1c90fc5818fc9dea870cc5aec9af3d152
-Author:        Bryan Brattlof <bb@ti.com>
-AuthorDate:    Mon, 31 Oct 2022 18:26:52 -05:00
+Commit-ID:     7dccad3e0d79edc7a5b3947dc6d63ec683114c51
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//7dccad3e0d79edc7a5b3947dc6d63ec683114c51
+Author:        Alexander Stein <alexander.stein@ew.tq-group.com>
+AuthorDate:    Tue, 26 Jul 2022 14:23:31 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
 CommitterDate: Thu, 08 Dec 2022 14:30:44 +01:00
 
-thermal/drivers/k3_j72xx_bandgap: Simplify k3_thermal_get_temp() function
+thermal/drivers/imx8mm: Add hwmon support
 
-The k3_thermal_get_temp() function can be simplified to return only
-the result of k3_bgp_read_temp() without needing the 'ret' variable
+Expose thermal sensors as HWMON devices.
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
-Link: https://lore.kernel.org/r/20221031232702.10339-2-bb@ti.com
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20220726122331.323093-1-alexander.stein@ew.tq-group.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 ---
- drivers/thermal/k3_j72xx_bandgap.c |  9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/thermal/imx8mm_thermal.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
-index c073b10..a9f99a1 100644
---- a/drivers/thermal/k3_j72xx_bandgap.c
-+++ b/drivers/thermal/k3_j72xx_bandgap.c
-@@ -249,14 +249,7 @@ static inline int k3_bgp_read_temp(struct k3_thermal_data *devdata,
- /* Get temperature callback function for thermal zone */
- static int k3_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
- {
--	struct k3_thermal_data *data = tz->devdata;
--	int ret = 0;
--
--	ret = k3_bgp_read_temp(data, temp);
--	if (ret)
--		return ret;
--
--	return ret;
-+	return k3_bgp_read_temp(tz->devdata, temp);
- }
+diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
+index e709c03..d247b48 100644
+--- a/drivers/thermal/imx8mm_thermal.c
++++ b/drivers/thermal/imx8mm_thermal.c
+@@ -18,6 +18,7 @@
+ #include <linux/thermal.h>
  
- static const struct thermal_zone_device_ops k3_of_thermal_ops = {
+ #include "thermal_core.h"
++#include "thermal_hwmon.h"
+ 
+ #define TER			0x0	/* TMU enable */
+ #define TPS			0x4
+@@ -342,6 +343,9 @@ static int imx8mm_tmu_probe(struct platform_device *pdev)
+ 			goto disable_clk;
+ 		}
+ 		tmu->sensors[i].hw_id = i;
++
++		if (devm_thermal_add_hwmon_sysfs(tmu->sensors[i].tzd))
++			dev_warn(&pdev->dev, "failed to add hwmon sysfs attributes\n");
+ 	}
+ 
+ 	platform_set_drvdata(pdev, tmu);
