@@ -2,17 +2,17 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3780648522
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 632F064851F
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiLIP0q (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:26:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47280 "EHLO
+        id S230448AbiLIP0m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:26:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230340AbiLIP0g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2518F0A8
+        with ESMTP id S230396AbiLIP0e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7038F098
         for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:30 -0800 (PST)
 Date:   Fri, 09 Dec 2022 15:26:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,12 +22,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MTXNiWXqNHbhHNZVk5henJg6w8OqPfX9VoTnwc7DVNo=;
-        b=stejIZq4M/k7peR3NmAPbNFLXE4lSSuJWpSKIolCKNIlEr7poqGgzSMo9xTBkKMO0c3f/X
-        CZPlfIxE5UgqY5YN/WxOY5PpEQHf09HC13VKY131fTOpNFGsLE/rSK+skPTTxQkzo2xqL1
-        jLnVZbI8EdfylmF+c0+nKw1/6lXjswVGOf5jJIL5XKHu5EuvAHu9C0uIAnKHNfXhkK2sob
-        g06qjeRtQgil22WUR/9CNF/wp95ktto1pAxlpntPXVPVKNKDdJBtHRVkPhQOzcaTh64sCE
-        2J9MmCA6jG1Uzte7sE6thlptDG/xHOAol8T39KTKvWgVIESXfLWarH2IiGr56w==
+        bh=CfNidTnQB4F52eMK1hmMioyq+qkw1Xg/s7rzgZYmnYQ=;
+        b=QsPTieMdGeL/Hbk1UDU4Nq+Swzok5OkxZ3snEeAjgqXFtljMjju1sV22emsClj3PIAhKs/
+        kJxgaDuqBHB0A8fHnFdl5XKoeMO5VowTHvfA50HDskP4lbAoqlNYr2c6wM6bM1IlzSD4dx
+        K6CZPje0hVwQGWNUney3xGkw49ucZjinKmCyzh4rSA3eZonaUb170Oq6JEtaMrPNF8is9e
+        nlsiY1QF+Haa9zXdLlFaokbhez1Z+SeJtnxsqJeyd8wksUfqcrxBwoIj9gclNMHK3db+9/
+        1EXoPP3FdebZmdJFu7QhP8/qimaEUhQ6ZECQ7EAN+ez3e42GTn5meg+U17yn/A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1670599588;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -35,23 +35,25 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MTXNiWXqNHbhHNZVk5henJg6w8OqPfX9VoTnwc7DVNo=;
-        b=NC1gGUK2j6tR7YKJFdRu9VSsmyB3AsutD4zHopNxpd6fF+Pseq4pt/YMcDshj/Urjso+Au
-        FMoZEHbbgPowG9AQ==
-From:   "thermal-bot for Luca Weiss" <tip-bot2@linutronix.de>
+        bh=CfNidTnQB4F52eMK1hmMioyq+qkw1Xg/s7rzgZYmnYQ=;
+        b=//uu8NGkkwMGV0pS+J6On7j0aP5a8zkVoduqO6WJ5/MSpBsO5Km/gqKD/BA7UrF0nyIucT
+        kohSSerpgoEa3IBQ==
+From:   "thermal-bot for Christophe JAILLET" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/qcom/temp-alarm: Fix
- inaccurate warning for gen2
-Cc:     Luca Weiss <luca.weiss@fairphone.com>,
-        Amit Kucheria <amitk@kernel.org>,
+Subject: [thermal: thermal/next] thermal/core/power allocator: Remove a
+ useless include
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Lukasz Luba <lukasz.luba@arm.com>,
         Daniel Lezcano <daniel.lezcano@kernel.org>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org
-In-Reply-To: <20221020145237.942146-1-luca.weiss@fairphone.com>
-References: <20221020145237.942146-1-luca.weiss@fairphone.com>
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+In-Reply-To: =?utf-8?q?=3C9adeec47cb5a8193016272d5c8bf936235c1711d=2E16694?=
+ =?utf-8?q?59337=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
+References: =?utf-8?q?=3C9adeec47cb5a8193016272d5c8bf936235c1711d=2E166945?=
+ =?utf-8?q?9337=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
 MIME-Version: 1.0
-Message-ID: <167059958770.4906.12040365971188617496.tip-bot2@tip-bot2>
+Message-ID: <167059958799.4906.16455516656871309686.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,40 +69,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     34cd4caf06bc4f7d73afe84e9c51da6d941c0d69
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//34cd4caf06bc4f7d73afe84e9c51da6d941c0d69
-Author:        Luca Weiss <luca.weiss@fairphone.com>
-AuthorDate:    Thu, 20 Oct 2022 16:52:37 +02:00
+Commit-ID:     8bd477942348cec5841be3f1ce4bef6c26c6b2e0
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//8bd477942348cec5841be3f1ce4bef6c26c6b2e0
+Author:        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+AuthorDate:    Sat, 26 Nov 2022 11:42:25 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
 CommitterDate: Thu, 08 Dec 2022 14:30:44 +01:00
 
-thermal/drivers/qcom/temp-alarm: Fix inaccurate warning for gen2
+thermal/core/power allocator: Remove a useless include
 
-On gen2 chips the stage2 threshold is not 140 degC but 125 degC.
+This file does not use rcu, so there is no point in including
+<linux/rculist.h>.
 
-Make the warning message clearer by using this variable and also by
-including the temperature that was checked for.
+Remove it.
 
-Fixes: aa92b3310c55 ("thermal/drivers/qcom-spmi-temp-alarm: Add support for GEN2 rev 1 PMIC peripherals")
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-Reviewed-by: Amit Kucheria <amitk@kernel.org>
-Link: https://lore.kernel.org/r/20221020145237.942146-1-luca.weiss@fairphone.com
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Link: https://lore.kernel.org/r/9adeec47cb5a8193016272d5c8bf936235c1711d.1669459337.git.christophe.jaillet@wanadoo.fr
 Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 ---
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/thermal/gov_power_allocator.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index 127e8c9..58055a7 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -252,7 +252,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
- 			disable_s2_shutdown = true;
- 		else
- 			dev_warn(chip->dev,
--				 "No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.\n");
-+				 "No ADC is configured and critical temperature %d mC is above the maximum stage 2 threshold of %ld mC! Configuring stage 2 shutdown at %ld mC.\n",
-+				 temp, stage2_threshold_max, stage2_threshold_max);
- 	}
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index eafb288..0eaf152 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -8,7 +8,6 @@
  
- skip:
+ #define pr_fmt(fmt) "Power allocator: " fmt
+ 
+-#include <linux/rculist.h>
+ #include <linux/slab.h>
+ #include <linux/thermal.h>
+ 
