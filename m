@@ -2,50 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E74364855C
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C30E9648572
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiLIP1c (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S229724AbiLIP1w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:27:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiLIP0r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:47 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37928F0A9
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:40 -0800 (PST)
-Date:   Fri, 09 Dec 2022 15:26:37 -0000
+        with ESMTP id S230436AbiLIP0t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:49 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E36A8F0AE
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:41 -0800 (PST)
+Date:   Fri, 09 Dec 2022 15:26:38 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599597;
+        s=2020; t=1670599599;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=ess20CBh9/5OyZSgIAjT52wxZOYsIni3iwxwHSSJSwo=;
-        b=nWmLpaMxIi+5dfOnBDdzECIieYrdA/wcQBKO1K+1t9UMPTFSUBMqsqxUf6LafhhZu4H9lc
-        kXrmS2eQNbep0PebB3CfQ0fyjDgmsxuCtMHy0ovBVziKHPgVccQ6YH+u6Vr7hFgmIVc1/I
-        g/fR08BWfI2P8PgXV4Ktst5ZnsI3iFkatcYaqTrRmMQyQ35ErnXoFOYBnbl4uRbcljECj+
-        ZvaY1pS2j7pU6UkQsdtZpQgYLiHekLMsXH38IyUzcLyfC2KYV4YeUNSeg2oGKrPA5i5qJg
-        UmXDruTjGO5SV8GaL1aDaMWFQFoczXImDZIvESjb4L2y0D0Ur8Xj/dXbA0z0xQ==
+        bh=+KhKRF0mXMYZnesJMZZnXrK8jyczBWJM1pPh3LEYKPA=;
+        b=TeNeeDfbESaqmpe5eoJZZjctMPCqmE4xE0txGiP8r7NOCu2Q4VQjup0Z80jOQliH9R/5/V
+        cKRtbaNVRFsZ1UtXQaxBO7j2mWvj5IY/GJ69rW4lQ2wDWXMm9CgkVF7Li6BMBgE9SKREix
+        +32BIsDWfKeNM17pzJdtxNXArhaJCTbcPEpNSlkV/q+XeQ2q9oS7puo3pSlo4OUVy45tam
+        WOTwX4e7YeDoetGiHBU1G4vlq6bG45BjBwTZDBCzJJwEDWoHb3VMPDFcn5VhHBGlSC5QYX
+        ytT/7spNE82DT/cLSfiB2AyG8Ibu/QWVSY3RXQKneutLn4p3I0/d44S8h5UmYg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599597;
+        s=2020e; t=1670599599;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=ess20CBh9/5OyZSgIAjT52wxZOYsIni3iwxwHSSJSwo=;
-        b=PjLnPw1shuYoGFBuRxHQbfE+w2xcuoYrRihy/37qJmFYqVBXpjsZqcRb8WzaJmIayUEHrB
-        pFmzUol3r4Ww8JBg==
-From:   "thermal-bot for Srinivas Pandruvada" <tip-bot2@linutronix.de>
+        bh=+KhKRF0mXMYZnesJMZZnXrK8jyczBWJM1pPh3LEYKPA=;
+        b=m5g7ysbvuYTUNYac7NwOXYiJOS3dRsZlFxK9U4pU2fIL3WtwfNqdpvJTTTwHHgTnABBOW5
+        2K8yF7JQyg8P7uAg==
+From:   "thermal-bot for Guenter Roeck" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal: intel: Prevent accidental clearing
- of HFI status
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+Subject: [thermal: thermal/next] thermal/core: Delete device under thermal
+ device zone lock
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
 MIME-Version: 1.0
-Message-ID: <167059959722.4906.8964362807961283510.tip-bot2@tip-bot2>
+Message-ID: <167059959868.4906.12329659841412199047.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -61,47 +60,47 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     6fe1e64b60269aa58fa00568807738025ae3bd05
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//6fe1e64b60269aa58fa00568807738025ae3bd05
-Author:        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-AuthorDate:    Tue, 15 Nov 2022 18:54:16 -08:00
+Commit-ID:     30b2ae07d3d60a4f9763b08a1f696b789e777337
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//30b2ae07d3d60a4f9763b08a1f696b789e777337
+Author:        Guenter Roeck <linux@roeck-us.net>
+AuthorDate:    Thu, 10 Nov 2022 07:24:53 -08:00
 Committer:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CommitterDate: Wed, 23 Nov 2022 20:09:06 +01:00
+CommitterDate: Mon, 14 Nov 2022 19:04:37 +01:00
 
-thermal: intel: Prevent accidental clearing of HFI status
+thermal/core: Delete device under thermal device zone lock
 
-When there is a package thermal interrupt with PROCHOT log, it will be
-processed and cleared. It is possible that there is an active HFI event
-status, which is about to get processed or getting processed. While
-clearing PROCHOT log bit, it will also clear HFI status bit. This means
-that hardware is free to update HFI memory.
+Thermal device attributes may still be opened after unregistering
+the thermal zone and deleting the thermal device.
 
-When clearing a package thermal interrupt, some processors will generate
-a "general protection fault" when any of the read only bit is set to 1.
+Currently there is no protection against accessing thermal device
+operations after unregistering a thermal zone. To enable adding
+such protection, protect the device delete operation with the
+thermal zone device mutex. This requires splitting the call to
+device_unregister() into its components, device_del() and put_device().
+Only the first call can be executed under mutex protection, since
+put_device() may result in releasing the thermal zone device memory.
 
-The driver maintains a mask of all read-write bits which can be set.
-
-This mask doesn't include HFI status bit. This bit will also be cleared,
-as it will be assumed read-only bit. So, add HFI status bit 26 to the
-mask.
-
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/intel/therm_throt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/thermal/thermal_core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-index 8352083..9e8ab31 100644
---- a/drivers/thermal/intel/therm_throt.c
-+++ b/drivers/thermal/intel/therm_throt.c
-@@ -197,7 +197,7 @@ static const struct attribute_group thermal_attr_group = {
- #define THERM_STATUS_PROCHOT_LOG	BIT(1)
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index b31d324..5d19dc6 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1391,7 +1391,12 @@ void thermal_zone_device_unregister(struct thermal_zone_device *tz)
+ 	thermal_remove_hwmon_sysfs(tz);
+ 	ida_free(&thermal_tz_ida, tz->id);
+ 	ida_destroy(&tz->ida);
+-	device_unregister(&tz->device);
++
++	mutex_lock(&tz->lock);
++	device_del(&tz->device);
++	mutex_unlock(&tz->lock);
++
++	put_device(&tz->device);
  
- #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
--#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
-+#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
- 
- static void clear_therm_status_log(int level)
- {
+ 	thermal_notify_tz_delete(tz_id);
+ }
