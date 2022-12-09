@@ -2,128 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0CE6484AA
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C72DA648517
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiLIPIb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:08:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S229512AbiLIP0g (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:26:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiLIPIG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:08:06 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E75958A
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:08:04 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id j4so7522377lfk.0
-        for <linux-pm@vger.kernel.org>; Fri, 09 Dec 2022 07:08:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pHsbFWG8VGfSFHxz3J5zcYdNhYft8cDHvZVuoaK7gTI=;
-        b=SHj5xUS38pmlYs4MHhz+rCpnhS0aSA1eDs0B2Xz0nI7TeqxyK49qa6XIhFefPs5L7G
-         YBkhhVMupwYCULFJd9G309qVX4hbVHkAaFvtP+CblRTbxWwA5kMHyK7MFK1R9y10ccRc
-         A8X7ZOaa+SxnJiAinjbEthKHllOsgKgMs0DzNr8ilhJioXQEF3RMCWgqMfxxD3FOaXHh
-         2T7hCj575qTXya1iVgpvnJJ3vpu/+amF4tbxs5jsKqweE5f7gesj/e7wgQhX/4oPp3G7
-         p8oCGZx1LWdpeh+0iDR4fXEoBKMOYijJqdeKzxPHxCOlMTPLk+o6ZDZEgFgnPFYowoF0
-         R+fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pHsbFWG8VGfSFHxz3J5zcYdNhYft8cDHvZVuoaK7gTI=;
-        b=w6Ksvn//OGvu2nuxetxtLCAbHtgcJPNCtKZca+dywpwxaGYaTESs4xLpPwvvtN/wEk
-         fCpxIbqv9pUcvSTbvitz3/TdKYJZ7l9NwXIQ17U8n4NHZhtPSnWTstikp3EtswOxlZwF
-         SKpovjXl9R9/R9hUhCXryRKs1dHtl2YngqUJ7hyvzIVx2bamI1xJ+vF3XXcr0l//9yWB
-         pakh0zb0PngOEPeGnMos3Jdf0GCSj3T9SKToidQ4grgb8LJbqgVDlidJhyKDwOnepIn5
-         NdKYb8CjuOlMhzSkj1DshpKxWLSCvj3O2RjjAqRi2mvoISp3fsQ0/kQdgCOL6X8jRsqr
-         n2vw==
-X-Gm-Message-State: ANoB5pn9wvp9fErxtRFW7bO0LOYDCfVzr5xt/TI9MlgyxahVB2xfuNkV
-        pxVxbkZnSmD+xEpUOfib/oT+uw==
-X-Google-Smtp-Source: AA0mqf6/6y3zfT68FyCfvmjzCCC/sY99Qr6ncKEdxeDRuQDQMp+3y3UEm6hcVbrytRyRuJJVD0hTmA==
-X-Received: by 2002:a05:6512:3d01:b0:4b5:ab93:bb1a with SMTP id d1-20020a0565123d0100b004b5ab93bb1amr1724395lfv.24.1670598482958;
-        Fri, 09 Dec 2022 07:08:02 -0800 (PST)
-Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
-        by smtp.gmail.com with ESMTPSA id m20-20020a05651202f400b004994117b0fdsm290509lfq.281.2022.12.09.07.08.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 07:08:02 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     patches@linaro.org, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2
-Date:   Fri,  9 Dec 2022 16:07:58 +0100
-Message-Id: <20221209150759.396255-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S230300AbiLIP03 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:29 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E241C8D647
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:27 -0800 (PST)
+Date:   Fri, 09 Dec 2022 15:26:25 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1670599585;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NINAlGXEw/T4c5ZeaG+W4Ck8KSNs7sQEQr+5Bn2f5gw=;
+        b=SvKis5ahfyP02Z788WA1qjs1KOLmWrmwAjfabUDz557jawwd3VfLkoc69o375cUhTS2ak3
+        7CUfiLp5aIhImp7yayyEVVXbx3SShzZAgtgM3B0ur0Z8cP1WgeYty8S/PwPAtAM0awo2gW
+        QgSSZLrnph22XRGlqHHXitowI10J1g2KETseaYvWihNnvGsrqlU3NtlHCuAkvjnsQjh3Cz
+        BwIYBJ9RH1RxVellzm6w9DRBsWheIkdiLzWJcnTEKg+Bq7Oa5yFLmFFFiYD1pA85qniLOQ
+        LOUO6JR0zChKMZIH/Md7MtpTkV178+yrYAkVdfKRFy87BwkrqacCbSigjq+3JQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1670599585;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NINAlGXEw/T4c5ZeaG+W4Ck8KSNs7sQEQr+5Bn2f5gw=;
+        b=pWU8htUDDCq/gSAWSNeBkMUIB9+vsGl/r2bjgE85RQtvIsAye/n/r03Z179mOciujGp46M
+        ANnoShPbDSV/FHAQ==
+From:   "thermal-bot for Bjorn Andersson" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-pm@vger.kernel.org
+To:     linux-pm@vger.kernel.org
+Subject: [thermal: thermal/next] thermal/drivers/qcom/lmh: Fix irq handler
+ return value
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20220316180322.88132-1-bjorn.andersson@linaro.org>
+References: <20220316180322.88132-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Message-ID: <167059958526.4906.8006447666823780139.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during
-probe") assumed that every reg variable is 4*u32 wide (as most new qcom
-SoCs set #address- and #size-cells to <2>. That is not the case for all of
-them though. Check the cells values dynamically to ensure the proper
-region of the DTB is being read.
+The following commit has been merged into the thermal/next branch of thermal:
 
-Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Commit-ID:     1c5ec8178db2c71a9c20bd5da03eb1a7165121d3
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//1c5ec8178db2c71a9c20bd5da03eb1a7165121d3
+Author:        Bjorn Andersson <bjorn.andersson@linaro.org>
+AuthorDate:    Wed, 16 Mar 2022 11:03:22 -07:00
+Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
+CommitterDate: Thu, 08 Dec 2022 17:45:04 +01:00
+
+thermal/drivers/qcom/lmh: Fix irq handler return value
+
+After enough invocations the LMh irq is eventually reported as bad, because the
+handler doesn't return IRQ_HANDLED, fix this.
+
+Fixes: 53bca371cdf7 ("thermal/drivers/qcom: Add support for LMh driver")
+Reported-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20220316180322.88132-1-bjorn.andersson@linaro.org
+Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 20 ++++++++++++++++++--
- 1 file changed, 18 insertions(+), 2 deletions(-)
+ drivers/thermal/qcom/lmh.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 340fed35e45d..22f48f789557 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -649,9 +649,10 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- {
- 	struct clk_hw_onecell_data *clk_data;
- 	struct device *dev = &pdev->dev;
-+	struct device_node *soc_node;
- 	struct device *cpu_dev;
- 	struct clk *clk;
--	int ret, i, num_domains;
-+	int ret, i, num_domains, reg_sz;
+diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
+index d3d9b9f..4122a51 100644
+--- a/drivers/thermal/qcom/lmh.c
++++ b/drivers/thermal/qcom/lmh.c
+@@ -45,7 +45,7 @@ static irqreturn_t lmh_handle_irq(int hw_irq, void *data)
+ 	if (irq)
+ 		generic_handle_irq(irq);
  
- 	clk = clk_get(dev, "xo");
- 	if (IS_ERR(clk))
-@@ -679,7 +680,22 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 		return ret;
+-	return 0;
++	return IRQ_HANDLED;
+ }
  
- 	/* Allocate qcom_cpufreq_data based on the available frequency domains in DT */
--	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * 4);
-+	soc_node = of_get_parent(dev->of_node);
-+	if (!soc_node)
-+		return -EINVAL;
-+
-+	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
-+	if (ret)
-+		return ret;
-+
-+	/* Reuse 'i', as it's only used later in the loop */
-+	ret = of_property_read_u32(soc_node, "#size-cells", &i);
-+	if (ret)
-+		return ret;
-+
-+	reg_sz += i;
-+
-+	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
- 	if (num_domains <= 0)
- 		return num_domains;
- 
--- 
-2.38.1
-
+ static void lmh_enable_interrupt(struct irq_data *d)
