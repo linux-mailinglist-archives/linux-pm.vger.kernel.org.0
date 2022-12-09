@@ -2,54 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F7D648550
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B4F64854E
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbiLIP1W (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47482 "EHLO
+        id S230388AbiLIP1U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbiLIP0n (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:43 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4793192300
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:37 -0800 (PST)
-Date:   Fri, 09 Dec 2022 15:26:34 -0000
+        with ESMTP id S230416AbiLIP0o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:44 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71DA69230C
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:38 -0800 (PST)
+Date:   Fri, 09 Dec 2022 15:26:35 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599594;
+        s=2020; t=1670599595;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hzVwJSX5pEKcAgUuGe53dl4uJp9go2HvW9cfJnbgICA=;
-        b=oo0iwqlptnX9GVCg+Bc+bCP3R8+o6KS440ECthpVDX+jkiUrLe10R5INM3LzywF5doKwRW
-        FrzTbxRL0Gw281JrgrQPnPMk8p0UTHEVYSY+G8h20Cv1ItB4xd1RErsLn1sfLF50w4NKX7
-        xL3LLwEw85QLg21zg4eHOD4Fs3YBoiSg6BO9tWwlDgb2dBDshsGGAwT8QwJa4TmzMqJk0p
-        Jny0HL56ZZ1QnNnzzq2i4XVe6YcoWaKxz1l9QhiFbsTHCRQDGWygoNU3LKHOW+EmUzqqgI
-        MDMMXMSh4CB1KNkvZyDKWEyw5X0LA/L1eKhXV8SGGD63EVjFrp3AM6ofOYIJJg==
+        bh=Xc9u2vBj0HROTHxo6Z4vpg5CRTILML+0MZ7EBmIB1aw=;
+        b=4jSkZDy6/7ghQYxneoKlldCqXgT7yGXd0A8UCF7B2N+URWm34gh8yUtigGdu8r7ydHaq2j
+        Mjhx8+69tsJqvoIcMI+l86N9bVaq65VRBcySyHAuQlJgSI7rSVUvUtOwSnLBnRGSCeDrhq
+        bQG/S19Y+5wROuXl9yGIjNaY5LsASiBy5wMu6amsNuBPlexDFm1cMiQt1JcUjGz44vpgYL
+        x659PamdSVTnyICWBDk7VEI6Mk7GD/jMyRWfmC/XzoYvgUydR/O9Tn27rHD0pSk9gswUEc
+        NJt63gdfGRE2EPuST1TZM85MRnBaxu2RDfAg8uQ/D0AxEtxm2tDvNBL2IHk1Mw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599594;
+        s=2020e; t=1670599595;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=hzVwJSX5pEKcAgUuGe53dl4uJp9go2HvW9cfJnbgICA=;
-        b=ri8UNr1mEb8bo43K8ZtIqHJbYASM1BQYHkBV4db4KBIdODE+FN7lNfNIHt08Ys38zifT1t
-        INNHo4T58P+uFmDg==
+        bh=Xc9u2vBj0HROTHxo6Z4vpg5CRTILML+0MZ7EBmIB1aw=;
+        b=wlSEnYQjMNbMpKiw/ectDJTQOxsZ7KYwQo3yAIA89UwhChi/NEIWhaTnvNnvo+nY0jfGsX
+        ek4ujKBFRYNh+DCQ==
 From:   "thermal-bot for Daniel Lezcano" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/armada: Use generic
- thermal_zone_get_trip() function
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
-        amitk@kernel.org
-In-Reply-To: <20221003092602.1323944-15-daniel.lezcano@linaro.org>
-References: <20221003092602.1323944-15-daniel.lezcano@linaro.org>
+Subject: [thermal: thermal/next] thermal/drivers/exynos: Replace
+ of_thermal_is_trip_valid() by thermal_zone_get_trip()
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        rui.zhang@intel.com, amitk@kernel.org
+In-Reply-To: <20221003092602.1323944-10-daniel.lezcano@linaro.org>
+References: <20221003092602.1323944-10-daniel.lezcano@linaro.org>
 MIME-Version: 1.0
-Message-ID: <167059959441.4906.13766676550501587988.tip-bot2@tip-bot2>
+Message-ID: <167059959521.4906.16098238206019279549.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,82 +66,75 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     79162ca505adc1cf8d44474c349e27da9813908d
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//79162ca505adc1cf8d44474c349e27da9813908d
+Commit-ID:     41bbeae4762e260b1fdfe8d761f2476b364e4013
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//41bbeae4762e260b1fdfe8d761f2476b364e4013
 Author:        Daniel Lezcano <daniel.lezcano@linaro.org>
-AuthorDate:    Mon, 03 Oct 2022 11:25:47 +02:00
+AuthorDate:    Mon, 03 Oct 2022 11:25:42 +02:00
 Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
 CommitterDate: Thu, 08 Dec 2022 14:30:42 +01:00
 
-thermal/drivers/armada: Use generic thermal_zone_get_trip() function
+thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by thermal_zone_get_trip()
 
-The thermal framework gives the possibility to register the trip
-points with the thermal zone. When that is done, no get_trip_* ops are
-needed and they can be removed.
-
-Convert ops content logic into generic trip points and register them with the
-thermal zone.
+The thermal_zone_get_trip() does the same check as
+of_thermal_is_trip_valid(). Replace the call to
+of_thermal_is_trip_valid() by thermal_zone_get_trip().
 
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-Link: https://lore.kernel.org/r/20221003092602.1323944-15-daniel.lezcano@linaro.org
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20221003092602.1323944-10-daniel.lezcano@linaro.org
 ---
- drivers/thermal/armada_thermal.c | 37 +++++++++++++++----------------
- 1 file changed, 19 insertions(+), 18 deletions(-)
+ drivers/thermal/samsung/exynos_tmu.c |  9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index 52d63b3..b28695a 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -785,33 +785,34 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
- 					 int sensor_id)
+diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+index 2541387..5a1ffe2 100644
+--- a/drivers/thermal/samsung/exynos_tmu.c
++++ b/drivers/thermal/samsung/exynos_tmu.c
+@@ -554,13 +554,14 @@ static void exynos4210_tmu_control(struct platform_device *pdev, bool on)
  {
- 	/* Retrieve the critical trip point to enable the overheat interrupt */
--	const struct thermal_trip *trips = of_thermal_get_trip_points(tz);
+ 	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+ 	struct thermal_zone_device *tz = data->tzd;
 +	struct thermal_trip trip;
- 	int ret;
- 	int i;
+ 	unsigned int con, interrupt_en = 0, i;
  
--	if (!trips)
--		return -EINVAL;
-+	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
+ 	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
  
--	for (i = 0; i < of_thermal_get_ntrips(tz); i++)
--		if (trips[i].type == THERMAL_TRIP_CRITICAL)
--			break;
-+		ret = thermal_zone_get_trip(tz, i, &trip);
-+		if (ret)
-+			return ret;
+ 	if (on) {
+ 		for (i = 0; i < data->ntrip; i++) {
+-			if (!of_thermal_is_trip_valid(tz, i))
++			if (thermal_zone_get_trip(tz, i, &trip))
+ 				continue;
  
--	if (i == of_thermal_get_ntrips(tz))
--		return -EINVAL;
-+		if (trip.type != THERMAL_TRIP_CRITICAL)
-+			continue;
+ 			interrupt_en |=
+@@ -584,13 +585,14 @@ static void exynos5433_tmu_control(struct platform_device *pdev, bool on)
+ {
+ 	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+ 	struct thermal_zone_device *tz = data->tzd;
++	struct thermal_trip trip;
+ 	unsigned int con, interrupt_en = 0, pd_det_en, i;
  
--	ret = armada_select_channel(priv, sensor_id);
--	if (ret)
--		return ret;
-+		ret = armada_select_channel(priv, sensor_id);
-+		if (ret)
-+			return ret;
+ 	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
  
--	armada_set_overheat_thresholds(priv,
--				       trips[i].temperature,
--				       trips[i].hysteresis);
--	priv->overheat_sensor = tz;
--	priv->interrupt_source = sensor_id;
-+		armada_set_overheat_thresholds(priv, trip.temperature,
-+					       trip.hysteresis);
-+		priv->overheat_sensor = tz;
-+		priv->interrupt_source = sensor_id;
+ 	if (on) {
+ 		for (i = 0; i < data->ntrip; i++) {
+-			if (!of_thermal_is_trip_valid(tz, i))
++			if (thermal_zone_get_trip(tz, i, &trip))
+ 				continue;
  
--	armada_enable_overheat_interrupt(priv);
-+		armada_enable_overheat_interrupt(priv);
+ 			interrupt_en |=
+@@ -615,13 +617,14 @@ static void exynos7_tmu_control(struct platform_device *pdev, bool on)
+ {
+ 	struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+ 	struct thermal_zone_device *tz = data->tzd;
++	struct thermal_trip trip;
+ 	unsigned int con, interrupt_en = 0, i;
  
--	return 0;
-+		return 0;
-+	}
-+
-+	return -EINVAL;
- }
+ 	con = get_con_reg(data, readl(data->base + EXYNOS_TMU_REG_CONTROL));
  
- static int armada_thermal_probe(struct platform_device *pdev)
+ 	if (on) {
+ 		for (i = 0; i < data->ntrip; i++) {
+-			if (!of_thermal_is_trip_valid(tz, i))
++			if (thermal_zone_get_trip(tz, i, &trip))
+ 				continue;
+ 
+ 			interrupt_en |=
