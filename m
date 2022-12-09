@@ -2,172 +2,138 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00690648216
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 13:00:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB276482CD
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 14:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiLIMAx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 07:00:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37358 "EHLO
+        id S229571AbiLINdF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 08:33:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiLIMAt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 07:00:49 -0500
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0D118B02
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 04:00:48 -0800 (PST)
-Received: by mail-lj1-x22a.google.com with SMTP id h10so4686726ljk.11
-        for <linux-pm@vger.kernel.org>; Fri, 09 Dec 2022 04:00:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=blV6eki9f/dE3yt8k9vQjmYbdmKqtjXhWL8aRDi0+PTy9DZ7PoASn6Hb4YDawt6/Pq
-         TOTWkNyJ1bQ0LXeAOKmZsgrohPEAxg4I9Vxq8Iql4MCfOpzd9bk59Kg8A1l2aCabzc1i
-         Pwb8zUD5pTagBDWz9wlqw8be8RXHOe4ntLhBEh7HXgPppKgizTPX68btz3fJ69iSfJef
-         zAFAyKFjvCY4s0mBfuw+77i/sj6ivMcyXsKkk5Q+7miuQY1uqqYMcxvazgbad3gQhSeN
-         osKwSC1CYREx2mikz7Rsbjiro/V/gVq1uBZVJYbtUMGcexuFEHFb/xJK0jJPCO1YVyoF
-         GpZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CCwzWMPdgO9Dcc0FuYTNg8nT6gaYsC62geOPdirkTlQ=;
-        b=Urv3Qr1dIJhmECfbListVRTSBdW1QfMhywDAiSJAPnkPCn7lD6oZImglFffeSml4bx
-         f+i8G59Q//QtuEKZu3qT/Mlk63wNjzbQ2XJKtCBwUU3ggeIt5XXFO5//DFbYVULIwxj5
-         94qgS87WQnjXTI4DoTDzrxNyyFDRKbIyUcKtdUdXrIiMFchrxrgmkNfR/FRDFHRUgJQt
-         mfuU43ca8pfqw8xC/8JQMcuwON8fQRLNyXgaoxgC1WxqVam1KuhmVfmmITHTiT54NweD
-         xlKgodFam2m/u7vXdJBrCrPAeOK2QnqTM2FMtJaex5T+SHVuB4LcT/S0N5ro5WogrlOA
-         hv1A==
-X-Gm-Message-State: ANoB5plR4eOdcyuF73hBY0VkIFoU6rt3Qskw4qRF/tFP/zfY8dG/QZaF
-        5PEab+9gXlM9A2AiRTKyNgN5+IrSPcl/YqVD
-X-Google-Smtp-Source: AA0mqf7P1uuFrcKToZQL1Qs7OSMRUELHntqUphTx86r+y9eGx8OMntNtg5Twtz4wxSVo6DNFFYUZgg==
-X-Received: by 2002:a17:906:4907:b0:7c0:d4fa:3151 with SMTP id b7-20020a170906490700b007c0d4fa3151mr4765674ejq.17.1670587236522;
-        Fri, 09 Dec 2022 04:00:36 -0800 (PST)
-Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id o23-20020a170906861700b007c0a7286c0asm489597ejx.58.2022.12.09.04.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Dec 2022 04:00:35 -0800 (PST)
-From:   Robert Foss <robert.foss@linaro.org>
-To:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <uwe@kleine-koenig.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        Grant Likely <grant.likely@linaro.org>,
-        Lee Jones <lee.jones@linaro.org>
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-media@vger.kernel.org,
-        openipmi-developer@lists.sourceforge.net,
-        linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-spi@vger.kernel.org, kernel@pengutronix.de,
-        Purism Kernel Team <kernel@puri.sm>,
-        linux-rpi-kernel@lists.infradead.org, linux-leds@vger.kernel.org,
-        linux-actions@lists.infradead.org, netdev@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-staging@lists.linux.dev, chrome-platform@lists.linux.dev,
-        linux-crypto@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-amlogic@lists.infradead.org, linux-fbdev@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com,
-        linux-omap@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: (subset) [PATCH 000/606] i2c: Complete conversion to i2c_probe_new
-Date:   Fri,  9 Dec 2022 13:00:14 +0100
-Message-Id: <167058708567.1651663.18170722235132459286.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221118224540.619276-1-uwe@kleine-koenig.org>
-References: <20221118224540.619276-1-uwe@kleine-koenig.org>
+        with ESMTP id S229482AbiLINdE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 08:33:04 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90F31C925
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 05:32:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1670592773; x=1702128773;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KrBHiuS4qk3yA9BhTeW61+O4/x4QsFPWF0vLm4QwNbI=;
+  b=G+JAh7P59XW1+IqcElH4BkSQEIVWI1F3P/grEtmGkg6KVzAJ3Huqw1iw
+   g+Ydq+FpyguRS7LwrAms4QAiC3GU0b1VW2VUc1E8AbpsdZo2OnHFJreTn
+   a1hWa8NNy4pu2d/nPtxfovt5VzKq+CzMBmXCKJkl04dNWvKq5p0hXdRO5
+   lalbwrEvPCgNkwUnSVcVyM/nhgw8+/qtut1ZwCU1dt45c/ViIFZtYuj1p
+   NgFZ99C7mCVwJj4mtk+hky0/U8M6ziIeK/cQLOddPQXl9GnO2MHJluhj6
+   SIpM+tR7nROqbjX5lZp9IGhCk/oHWvn8VJgn1t/RdA4T3LZ5VqyM073MP
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="300879320"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="300879320"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 05:32:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10556"; a="625115496"
+X-IronPort-AV: E=Sophos;i="5.96,230,1665471600"; 
+   d="scan'208";a="625115496"
+Received: from zhiyongy-mobl.gar.corp.intel.com ([10.249.169.157])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2022 05:32:48 -0800
+Message-ID: <015c7c006b0bbe935a31c837ed0fc5da9d7e43cd.camel@intel.com>
+Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Date:   Fri, 09 Dec 2022 21:32:43 +0800
+In-Reply-To: <CAJZ5v0gFMewt-paH4D3sDpgUSAfGJojGHOdUxXH9ahSHA6P7+Q@mail.gmail.com>
+References: <20221108033332.27760-1-rui.zhang@intel.com>
+         <20221108033332.27760-2-rui.zhang@intel.com>
+         <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
+         <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
+         <CAJZ5v0gFMewt-paH4D3sDpgUSAfGJojGHOdUxXH9ahSHA6P7+Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 18 Nov 2022 23:35:34 +0100, Uwe Kleine-König wrote:
-> since commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type") from 2016 there is a "temporary" alternative probe
-> callback for i2c drivers.
+> > > 
+> > > > +
+> > > > +       return *tjmax ? 0 : -EINVAL;
+> > > 
+> > > So the return value of this function could be tjmax if positive
+> > > or a
+> > > negative error code otherwise.  No return pointers needed.
+> > 
+> > I tried both. And I think I chose this solution just because it
+> > makes
+> > the following cleanup patches in this series looks prettier.
+> > 
+> > I will try your suggestion, and if there is any other reason I
+> > wrote it
+> > in this way, I will find it out again. :p
+> > 
+> > > And why do you want to return -EINVAL (rather than any other
+> > > error
+> > > code) if tjmax turns out to be 0?
+> > 
+> > Because x86_pkg_temp_thermal driver returns -EINVAL previously.
+> > Any suggestions on this?
 > 
-> This series completes all drivers to this new callback (unless I missed
-> something). It's based on current next/master.
-> A part of the patches depend on commit 662233731d66 ("i2c: core:
-> Introduce i2c_client_get_device_id helper function"), there is a branch that
-> you can pull into your tree to get it:
+> I would use -ENODATA.
+
+Sure, will do.
+
+> > > > +}
+> > > > +EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
+> > > > +
+> > > > +/**
+> > > > + * intel_tcc_get_temp() - returns the current temperature
+> > > > + * @cpu: cpu that the MSR should be run on.
+> > > > + * @pkg: true: Package Thermal Sensor. false: Core Thermal
+> > > > Sensor.
+> > > > + * @temp: a valid pointer to where to store the resulting
+> > > > temperature
+> > > > + *
+> > > > + * Get the current temperature returned by the CPU
+> > > > core/package
+> > > > level
+> > > > + * thermal sensor, in degrees C.
+> > > > + *
+> > > > + * Return: On success returns 0, an error code otherwise
+> > > > + */
+> > > > +int intel_tcc_get_temp(int cpu, bool pkg, int *temp)
+> > > > +{
+> > > > +       u32 eax, edx;
+> > > > +       u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS :
+> > > > MSR_IA32_THERM_STATUS;
+> > > > +       int tjmax, err;
+> > > > +
+> > > > +       err = intel_tcc_get_tjmax(cpu, &tjmax);
+> > > > +       if (err)
+> > > > +               return err;
+> > > 
+> > > Well, what if somebody change tjmax on this cpu while this
+> > > function
+> > > is running?
+> > 
+> > tjmax is read only. Only firmware can change its value at runtime,
+> > say
+> > this field is updated when SST-PP level is changed.
 > 
-> [...]
+> Do we get any type of notification on tjmax changes, or do we need to
+> poll for it?
 
-Applied all patches that build.
+I'm not aware of such a notification.
+Srinivas, do you know if there is one?
 
-Patches excluded:
- - ps8622
- - ti-sn65dsi83
- - adv7511
+thanks,
+rui
 
-Repo: https://cgit.freedesktop.org/drm/drm-misc/
-
-
-[014/606] drm/bridge: adv7511: Convert to i2c's .probe_new()
-          (no commit info)
-[015/606] drm/bridge/analogix/anx6345: Convert to i2c's .probe_new()
-          (no commit info)
-[016/606] drm/bridge/analogix/anx78xx: Convert to i2c's .probe_new()
-          (no commit info)
-[017/606] drm/bridge: anx7625: Convert to i2c's .probe_new()
-          (no commit info)
-[018/606] drm/bridge: icn6211: Convert to i2c's .probe_new()
-          (no commit info)
-[019/606] drm/bridge: chrontel-ch7033: Convert to i2c's .probe_new()
-          commit: 8dc6de280f01c0f7b8d40435736f3c975368ad70
-[020/606] drm/bridge: it6505: Convert to i2c's .probe_new()
-          (no commit info)
-[021/606] drm/bridge: it66121: Convert to i2c's .probe_new()
-          (no commit info)
-[022/606] drm/bridge: lt8912b: Convert to i2c's .probe_new()
-          (no commit info)
-[023/606] drm/bridge: lt9211: Convert to i2c's .probe_new()
-          (no commit info)
-[024/606] drm/bridge: lt9611: Convert to i2c's .probe_new()
-          (no commit info)
-[025/606] drm/bridge: lt9611uxc: Convert to i2c's .probe_new()
-          (no commit info)
-[026/606] drm/bridge: megachips: Convert to i2c's .probe_new()
-          (no commit info)
-[027/606] drm/bridge: nxp-ptn3460: Convert to i2c's .probe_new()
-          (no commit info)
-[028/606] drm/bridge: parade-ps8622: Convert to i2c's .probe_new()
-          (no commit info)
-[029/606] drm/bridge: sii902x: Convert to i2c's .probe_new()
-          (no commit info)
-[030/606] drm/bridge: sii9234: Convert to i2c's .probe_new()
-          (no commit info)
-[031/606] drm/bridge: sii8620: Convert to i2c's .probe_new()
-          (no commit info)
-[032/606] drm/bridge: tc358767: Convert to i2c's .probe_new()
-          (no commit info)
-[033/606] drm/bridge: tc358768: Convert to i2c's .probe_new()
-          (no commit info)
-[034/606] drm/bridge/tc358775: Convert to i2c's .probe_new()
-          (no commit info)
-[035/606] drm/bridge: ti-sn65dsi83: Convert to i2c's .probe_new()
-          (no commit info)
-[037/606] drm/bridge: tfp410: Convert to i2c's .probe_new()
-          (no commit info)
-
-
-
-rob
 
