@@ -2,18 +2,18 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04E8C648539
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFF2D648536
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiLIP1G (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S231143AbiLIP1D (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:27:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiLIP0l (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:41 -0500
+        with ESMTP id S230427AbiLIP0k (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:40 -0500
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4289F900DA
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615EA8F73A
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:34 -0800 (PST)
 Date:   Fri, 09 Dec 2022 15:26:31 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1670599591;
@@ -22,12 +22,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uckS2QwrpCYgIrHInOz9Wl2S3qNfB2UqvtZywmiySCs=;
-        b=wfJn+vp/8NjuNbojoWKiS0zMfNP3hElNSLAJHTZ0IIdafyypC/QAZKVd2o5x5CG+6dWc3q
-        Z3vzHDH4ZdmBvUZojWBXoCXqtFvBjELCEke4zCIu60ZKi491Q2qk5u6aFEOTEdlzlWGCNs
-        uMJbDMBzV0loxyTs5HGNO2pV3HRvua1AbHlmib6YuMoCjV5cbXBYt4mlbl6dMfTZ8WUgRB
-        oOLVJJfACD2hXAfeizaXq8NzkZ/dKMDv36H4h/Uh8RiqccVr2L8N0OJ8M54g4GuM7iIRMh
-        cH1xPOvQ+n58q6zBZjhgsnkkB1D8F4WImZFugRjdQ0AxGkLGfLyO+Z5TZtiyrw==
+        bh=T14P9q04VmMxu/EEfvlHiAko6STCyXYU/6FDTqUIYQo=;
+        b=sSP11xpBiMmmIDbfVY+OhvFPT9pd+7C1VjoOyTS2PeddnVFHExxhWrr6RbPeQQwWgKu2A3
+        Djqz+QRYIeJGQMfENo6a7XoQFPloTKJ3plLX0Ykjy3VGPQ9G23dQ967N9OrYYWirMieFCE
+        668ybkWllhW5CeLW/C4r1+m+xk3O36chXlnLkr9cdrCones0gaB7w4bM4CQyx1tzykEPUX
+        ul0iEuIQw0HnBWbArElvUjjoe9+xEYnTUtA+ePhhGMCiZfW9kCV74vWDbHAu7+qZBocDjC
+        UG0v0YW1squGHqesD1T17djORsTCFgTyjUAg/mN+uQoX0UW7Riaa48zgr+i4yA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1670599591;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -35,23 +35,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uckS2QwrpCYgIrHInOz9Wl2S3qNfB2UqvtZywmiySCs=;
-        b=bM6XkcITY9OydwDUXCWDlgLEQWfO7LQK/NAPQFFTkhrRskDxOOFs29sZiWbDg/Uxae1jFb
-        YOzachjkQjzy1FCQ==
-From:   "thermal-bot for Marcus Folkesson" <tip-bot2@linutronix.de>
+        bh=T14P9q04VmMxu/EEfvlHiAko6STCyXYU/6FDTqUIYQo=;
+        b=VmhSQNjjqOh5BVEagwmJxqqmfd/WFqJkbTfzqu0FbhaS8KM+UQlyYQey/48tzzzFQ41G8d
+        hz1umgG/+2ml9zCQ==
+From:   "thermal-bot for Keerthy" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/imx8mm_thermal: Validate
- temperature range
-Cc:     Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Jacky Bai <ping.bai@nxp.com>,
+Subject: [thermal: thermal/next] thermal/drivers/k3_j72xx_bandgap: Fix the
+ debug print message
+Cc:     Bryan Brattlof <bb@ti.com>, Keerthy <j-keerthy@ti.com>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         rui.zhang@intel.com, amitk@kernel.org
-In-Reply-To: <20221014073507.1594844-1-marcus.folkesson@gmail.com>
-References: <20221014073507.1594844-1-marcus.folkesson@gmail.com>
+In-Reply-To: <20221010034126.3550-1-j-keerthy@ti.com>
+References: <20221010034126.3550-1-j-keerthy@ti.com>
 MIME-Version: 1.0
-Message-ID: <167059959145.4906.16158658500498892747.tip-bot2@tip-bot2>
+Message-ID: <167059959114.4906.12982835997203907122.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,44 +66,37 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     86f0836ca9f6669993da7feba0a04d21506e05e0
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//86f0836ca9f6669993da7feba0a04d21506e05e0
-Author:        Marcus Folkesson <marcus.folkesson@gmail.com>
-AuthorDate:    Fri, 14 Oct 2022 09:35:07 +02:00
+Commit-ID:     94f26962392cac2f467744c11bf2aec9ea199cc9
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//94f26962392cac2f467744c11bf2aec9ea199cc9
+Author:        Keerthy <j-keerthy@ti.com>
+AuthorDate:    Mon, 10 Oct 2022 09:11:26 +05:30
 Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
 CommitterDate: Thu, 08 Dec 2022 14:30:43 +01:00
 
-thermal/drivers/imx8mm_thermal: Validate temperature range
+thermal/drivers/k3_j72xx_bandgap: Fix the debug print message
 
-Check against the upper temperature limit (125 degrees C) before
-consider the temperature valid.
+The debug print message to check the workaround applicability is inverted.
+Fix the same.
 
-Fixes: 5eed800a6811 ("thermal: imx8mm: Add support for i.MX8MM thermal monitoring unit")
-Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
-Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-Link: https://lore.kernel.org/r/20221014073507.1594844-1-marcus.folkesson@gmail.com
+Fixes: ffcb2fc86eb7 ("thermal: k3_j72xx_bandgap: Add the bandgap driver support")
+Reported-by: Bryan Brattlof <bb@ti.com>
+Signed-off-by: Keerthy <j-keerthy@ti.com>
+Link: https://lore.kernel.org/r/20221010034126.3550-1-j-keerthy@ti.com
 Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- drivers/thermal/imx8mm_thermal.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ drivers/thermal/k3_j72xx_bandgap.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thermal/imx8mm_thermal.c b/drivers/thermal/imx8mm_thermal.c
-index 68608d8..182cc20 100644
---- a/drivers/thermal/imx8mm_thermal.c
-+++ b/drivers/thermal/imx8mm_thermal.c
-@@ -65,8 +65,14 @@ static int imx8mm_tmu_get_temp(void *data, int *temp)
- 	u32 val;
+diff --git a/drivers/thermal/k3_j72xx_bandgap.c b/drivers/thermal/k3_j72xx_bandgap.c
+index 16b6bcf..c073b10 100644
+--- a/drivers/thermal/k3_j72xx_bandgap.c
++++ b/drivers/thermal/k3_j72xx_bandgap.c
+@@ -439,7 +439,7 @@ static int k3_j72xx_bandgap_probe(struct platform_device *pdev)
+ 		workaround_needed = false;
  
- 	val = readl_relaxed(tmu->base + TRITSR) & TRITSR_TEMP0_VAL_MASK;
-+
-+	/*
-+	 * Do not validate against the V bit (bit 31) due to errata
-+	 * ERR051272: TMU: Bit 31 of registers TMU_TSCR/TMU_TRITSR/TMU_TRATSR invalid
-+	 */
-+
- 	*temp = val * 1000;
--	if (*temp < VER1_TEMP_LOW_LIMIT)
-+	if (*temp < VER1_TEMP_LOW_LIMIT || *temp > VER2_TEMP_HIGH_LIMIT)
- 		return -EAGAIN;
+ 	dev_dbg(bgp->dev, "Work around %sneeded\n",
+-		workaround_needed ? "not " : "");
++		workaround_needed ? "" : "not ");
  
- 	return 0;
+ 	if (!workaround_needed)
+ 		init_table(5, ref_table, golden_factors);
