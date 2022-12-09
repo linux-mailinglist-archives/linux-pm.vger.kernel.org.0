@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C91648521
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA31E64851D
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:26:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbiLIP0p (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:26:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S230439AbiLIP0l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:26:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiLIP0g (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:36 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EAE8F0A7
+        with ESMTP id S230397AbiLIP0e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:34 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB20B8F08D
         for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:30 -0800 (PST)
 Date:   Fri, 09 Dec 2022 15:26:27 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599587;
+        s=2020; t=1670599588;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xyhlxR0Qa9e5YHCBMtM54ct3txgg/Q0JoUDwivsIucI=;
-        b=fGOYS0J7zsAqbMd2yZyUuwuT6s4fQB9F/lWM1Ipe83pLvBdINsoiF+q6Fcyvmt48VChkLx
-        uwx4q9fZOC3vSK18fI3pdEdtSZfVBlH8+XGOcLi765Yf/P9ZQDwBECc3EY4gwZPDTVjf0m
-        2DJ8jPZsSAlz9vIE3AcsKZI7JeLdwfvO/RrLum6bxPm0J5cMuAtKGwCKngej/zfapmolYb
-        q3zndFT8UYZGk1UUng5OA2qj+jOb2ShICK3PSd+hJKys2PJDNtdtAzm5T45LJaGXkW9zka
-        eBanSz5LYIbKaeQxw6/uqD4dvKfrU7YNKkbvTrHsNfz99z+FMzU30Uv9BWmefQ==
+        bh=rMrabYRj2/CttKMFYVgdk2uynK9d2UUAJGvXmuHNp1I=;
+        b=L4rCHU5FwWGiwf1UNPlrc7bcQO00q5aFeuM6o7OlyvKAqfeSGndqYxwJVQLnHZY1Ao1MXF
+        kn6caAKvCJ2u2C4TMeKrsFOKDZMB0qAZ3KY+3Uu+gUgDCBbcASNVPYyBk8/NTbEoVbtq2O
+        33KryXSswSMJwXi7k3UX9ko3hx3Mla/QqGPMLNhk3SrP2+xZ17i38oYlp9mWYMGCxbXOy6
+        LVXwpBv9g2PoOrR48YS4I1OYs85Cm9xQrzV2ZaJldKWi7VVbXM2mAkqIZi0IDLbwxkmwwx
+        ZNTI2T/5meNEfm3Y/YZlmd3Q1PVoENchY5Lb5QQS3dLpcFKepG5S26hspNSW+Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599587;
+        s=2020e; t=1670599588;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=xyhlxR0Qa9e5YHCBMtM54ct3txgg/Q0JoUDwivsIucI=;
-        b=+wfLE5vY2kVNY60RbxrYzobiNKolWSDm/5PFHoYVYd2jtyxWzwxauu1rP9BualAPKVyptY
-        sYg9s8dl4PkXw8Aw==
-From:   "thermal-bot for Manivannan Sadhasivam" <tip-bot2@linutronix.de>
+        bh=rMrabYRj2/CttKMFYVgdk2uynK9d2UUAJGvXmuHNp1I=;
+        b=xWcUloq3ja+VdljWaXoMYGs2zwDMoCrj/6dH3ZrxWMuXj/dhabPcoQN29CR3zrbBFo2j+L
+        cZzjjaLdSsDD73BA==
+From:   "thermal-bot for Krzysztof Kozlowski" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/drivers/qcom: Demote error log of
- thermal zone register to debug
-Cc:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+Subject: [thermal: thermal/next] dt-bindings: thermal: qcom-tsens: narrow
+ interrupts for SC8280XP, SM6350 and SM8450
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Daniel Lezcano <daniel.lezcano@kernel.org>,
         rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
-In-Reply-To: <20221029052933.32421-1-manivannan.sadhasivam@linaro.org>
-References: <20221029052933.32421-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
+References: <20221116113140.69587-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Message-ID: <167059958753.4906.3836580325590770835.tip-bot2@tip-bot2>
+Message-ID: <167059958785.4906.8220628123764778872.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,38 +66,42 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     ddbac90afd071aab37d7041b6b526222384d9d04
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//ddbac90afd071aab37d7041b6b526222384d9d04
-Author:        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-AuthorDate:    Sat, 29 Oct 2022 10:59:33 +05:30
+Commit-ID:     37ab48c365e6f89d0e228725eeca66828f04a985
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//37ab48c365e6f89d0e228725eeca66828f04a985
+Author:        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+AuthorDate:    Wed, 16 Nov 2022 12:31:40 +01:00
 Committer:     Daniel Lezcano <daniel.lezcano@kernel.org>
 CommitterDate: Thu, 08 Dec 2022 14:30:44 +01:00
 
-thermal/drivers/qcom: Demote error log of thermal zone register to debug
+dt-bindings: thermal: qcom-tsens: narrow interrupts for SC8280XP, SM6350 and SM8450
 
-devm_thermal_of_zone_register() can fail with -ENODEV if thermal zone for
-the channel is not represented in DT. This is perfectly fine since not all
-sensors needs to be used for thermal zones but only a few in real world.
+Narrow number of interrupts per variants: SC8280XP, SM6350 and SM8450.
+The compatibles are already used and described.  They only missed the
+constraints of number of interrupts.
 
-So demote the error log to debug to avoid spamming users.
-
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Link: https://lore.kernel.org/r/20221029052933.32421-1-manivannan.sadhasivam@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Link: https://lore.kernel.org/r/20221116113140.69587-1-krzysztof.kozlowski@linaro.org
 Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 ---
- drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-index 88462a4..ff47fc9 100644
---- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-+++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
-@@ -678,7 +678,7 @@ static int adc_tm5_register_tzd(struct adc_tm5_chip *adc_tm)
- 						    &adc_tm5_thermal_ops);
- 		if (IS_ERR(tzd)) {
- 			if (PTR_ERR(tzd) == -ENODEV) {
--				dev_warn(adc_tm->dev, "thermal sensor on channel %d is not used\n",
-+				dev_dbg(adc_tm->dev, "thermal sensor on channel %d is not used\n",
- 					 adc_tm->channels[i].channel);
- 				continue;
- 			}
+diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+index f0bd4b9..5bcfddc 100644
+--- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
++++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+@@ -146,11 +146,14 @@ allOf:
+               - qcom,sc7180-tsens
+               - qcom,sc7280-tsens
+               - qcom,sc8180x-tsens
++              - qcom,sc8280xp-tsens
+               - qcom,sdm630-tsens
+               - qcom,sdm845-tsens
++              - qcom,sm6350-tsens
+               - qcom,sm8150-tsens
+               - qcom,sm8250-tsens
+               - qcom,sm8350-tsens
++              - qcom,sm8450-tsens
+               - qcom,tsens-v2
+     then:
+       properties:
