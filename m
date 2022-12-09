@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25522648573
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B18648570
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbiLIP1x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
+        id S230452AbiLIP1u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:27:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiLIP0t (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:49 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0477F8F711
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:43 -0800 (PST)
+        with ESMTP id S230482AbiLIP0s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:48 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89E58F701
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:42 -0800 (PST)
 Date:   Fri, 09 Dec 2022 15:26:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1670599599;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=9fJuK9JOfdNzSKi3ZL2CJivZHeONURg+hRiQr1HYle4=;
-        b=4THGJTQ5sRVTgEYPa8uikco3NbrzQS3RZyQtYh166lzvECQNcqA9jdjchQpiN1+RQnPvxF
-        xMNOItNiCbUb5sIGx483838GyeoWAeWYsi/0StbK4TxrBnCMiyfN1aZ2voUj1E5R5XeMcs
-        JI7YnPNmUq7YyspYZaHza6EOvHPqm5EJHb72EyhzCzI6NAaNrHQXzSQuxFWnjrtjffBEMG
-        fITf8eRDUi5RRCWe624Zkive/AHeq6vKfix/aBBG65I1oDneALSNgHwvRjw52nh6xvdNP3
-        VnOA9csxv1fWiAK8v6EQwhL7E8Qm7++RObi3Csfw733/JnPhSjo8id7g9pqbhw==
+        bh=ob1RkAbRhZ2AtEFnH6z5mlrDf+gUffIhl67W1j1RCIU=;
+        b=cWVDI7BhxxKRs//GGreIJGRj1msQ2GQHT8oQIkfAcubWjola0R5P1E1qhmjFOxT2VdjbYD
+        zskZsvRtTDszqZCFV2Q9DlifbVmPPKJm1ud0t1uk2BM7+s5nyD4t6yJk6kTrff2uSVY0yU
+        SwffsHu3x9pWiTMgt3fvfhGZ1tlv4wZhI8bkFu4exTLDaaGQuflnNVlrs3oJnVKFXLBkS9
+        n2DzMcOsDhhkOm9xxzbWpW6oayB72jIcRWvLJUmLS39VVdhvv9Vp5AzrT0tGK+mmNP8n4I
+        HsaXUi1njriCTu034QXG49g2rgsBfRAapQB8N0SXmSp1QSgYqQMFqc8w3lBcOg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1670599599;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=9fJuK9JOfdNzSKi3ZL2CJivZHeONURg+hRiQr1HYle4=;
-        b=nDETW9HHZ79L6tJoTlMrsigC0Tmf2/0pCIvdLpC0x3R5vKEaEjjOEaNEVgsEjm2+os1/wn
-        1r8FCXaF7ckb4wAA==
-From:   "thermal-bot for Dan Carpenter" <tip-bot2@linutronix.de>
+        bh=ob1RkAbRhZ2AtEFnH6z5mlrDf+gUffIhl67W1j1RCIU=;
+        b=uVqb2bQYsvhkNH7bKi6FqAZ/h3kf6/SJMzwkzTnSZYCbDiafaqBollhcIoA1nwkny+xWYM
+        9Ge7psA2abvYglCg==
+From:   "thermal-bot for Zhang Rui" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/core: fix error code in
- __thermal_cooling_device_register()
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
+Subject: [thermal: thermal/next] thermal: intel: intel_tcc_cooling: Add TCC
+ cooling support for RaptorLake-S
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+        daniel.lezcano@linaro.org, amitk@kernel.org
 MIME-Version: 1.0
-Message-ID: <167059959957.4906.9470621151778548023.tip-bot2@tip-bot2>
+Message-ID: <167059959907.4906.5100288226387491188.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,36 +60,33 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     e49a1e1ee078aee21006192076a8d93335e0daa9
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e49a1e1ee078aee21006192076a8d93335e0daa9
-Author:        Dan Carpenter <dan.carpenter@oracle.com>
-AuthorDate:    Fri, 28 Oct 2022 18:02:34 +03:00
+Commit-ID:     e77f069fd6cea822efd15ea79aa61aa6422d4f67
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//e77f069fd6cea822efd15ea79aa61aa6422d4f67
+Author:        Zhang Rui <rui.zhang@intel.com>
+AuthorDate:    Tue, 08 Nov 2022 16:12:20 +08:00
 Committer:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CommitterDate: Fri, 28 Oct 2022 19:59:51 +02:00
+CommitterDate: Wed, 09 Nov 2022 14:58:02 +01:00
 
-thermal/core: fix error code in __thermal_cooling_device_register()
+thermal: intel: intel_tcc_cooling: Add TCC cooling support for RaptorLake-S
 
-Return an error pointer if ->get_max_state() fails.  The current code
-returns NULL which will cause an oops in the callers.
+Add RaptorLake to the list of processor models supported by the Intel
+TCC cooling driver.
 
-Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/thermal/intel/intel_tcc_cooling.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 08de593..e0ca631 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -896,7 +896,8 @@ __thermal_cooling_device_register(struct device_node *np,
- 	cdev->device.class = &thermal_class;
- 	cdev->devdata = devdata;
+diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+index c9e84e6..a89e7e1 100644
+--- a/drivers/thermal/intel/intel_tcc_cooling.c
++++ b/drivers/thermal/intel/intel_tcc_cooling.c
+@@ -85,6 +85,7 @@ static const struct x86_cpu_id tcc_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N, NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE, NULL),
+ 	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P, NULL),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S, NULL),
+ 	{}
+ };
  
--	if (cdev->ops->get_max_state(cdev, &cdev->max_state))
-+	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
-+	if (ret)
- 		goto out_kfree_type;
- 
- 	thermal_cooling_device_setup_sysfs(cdev);
