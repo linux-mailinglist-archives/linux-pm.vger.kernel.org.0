@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09966648566
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBCA64856B
+	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 16:27:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbiLIP1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 10:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S230443AbiLIP1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 9 Dec 2022 10:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbiLIP0s (ORCPT
+        with ESMTP id S230401AbiLIP0s (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 10:26:48 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4588F0BF
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:41 -0800 (PST)
-Date:   Fri, 09 Dec 2022 15:26:38 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9847E8BD2B
+        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 07:26:42 -0800 (PST)
+Date:   Fri, 09 Dec 2022 15:26:39 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1670599598;
+        s=2020; t=1670599599;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=frS3EzYa2XR/D6WbzPF+EQ7AWO1d3yfGz8sx8Bc8OyM=;
-        b=kheYFCsQ2w6ooglmeLeaZex2upz8FYJNvIOCzMqO9TxjSl+6aZ7ey2dcDVJVsXe/1RIxXb
-        xT/lhqYgTA7Hg5SyT+DcX4U6O1oHXVIMuEpaT9qMdgSpX5fP9N0Htpk9vwfizIkeAY4J3s
-        rD7nJTnw0M/iUJajMtRePe/2SDh97Rn4jvx9+jlhv+nFQ+I3KgWrA8vIj8+ibrE45jurGl
-        zWbGmFWg2R0A7P3oqFR6Sk2bdJME0QKwUTUs1M0NebogY++/wUQ/pzYM5UmpFYOTAS119m
-        ZYadpr8XDKMnrJjxNASV/cPNK2vJgpC4j89P11VlQwbau/eIO/+Fe/5TFftAfA==
+        bh=jYAC19tP7GFY88+8181iigvJPB2Q4meSKlJJf4+qUQk=;
+        b=hY8gzRRID1+oYDdAY3u/JBueIUZLelx9ONRS3ILChyRqEi+plhKpUz80PC3m0sivhZ7+Wt
+        MqV1P2lhcSHIpvhkJ19ZIzddLGEpuwitNVKmLzfymE6baM3uEV6thJctj9MTErFCDwuQ3/
+        YXWdJ0LVTFDKbmzFSh0sLljD9OynWMCFnzsHfn/TBkYYTltVUV1ez9agZKPQTED3VDCuic
+        +pRBDHhTV9NqKAlBr9gZaS+bRy3hvHmQ4g7Y2E0AVCzrYbVOgIBHdbvEOcc9CTfjH89I07
+        bjCKl40vru4JUDorRSNc+8oiYn+OW6aP1o9WG82qhYKAYFGNygOPDR49SiPsiQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1670599598;
+        s=2020e; t=1670599599;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=frS3EzYa2XR/D6WbzPF+EQ7AWO1d3yfGz8sx8Bc8OyM=;
-        b=Nl9oJiQDqNF+qPb98u8RiNXCGLK3lvt3/Acztc8D2f2VrnERvqDcHvhxeahtFzVQmsAY4L
-        UnwLJ+IP8VTVJ+Bw==
-From:   "thermal-bot for Guenter Roeck" <tip-bot2@linutronix.de>
+        bh=jYAC19tP7GFY88+8181iigvJPB2Q4meSKlJJf4+qUQk=;
+        b=RWEGH+9Gn6sl5Rsl62IIuTTO9ef+uK2BFzcp7BJQDXnmWQZQ6EZhoBULr04/AJphBwkJj5
+        Z1Kh2ZTzTCBeeuDA==
+From:   "thermal-bot for Zhang Rui" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-pm@vger.kernel.org
 To:     linux-pm@vger.kernel.org
-Subject: [thermal: thermal/next] thermal/core: Move parameter validation from
- __thermal_zone_get_temp to thermal_zone_get_temp
-Cc:     Guenter Roeck <linux@roeck-us.net>,
+Subject: [thermal: thermal/next] thermal: intel: intel_tcc_cooling: Detect TCC
+ lock bit
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org
+        daniel.lezcano@linaro.org, amitk@kernel.org
 MIME-Version: 1.0
-Message-ID: <167059959830.4906.18053139639944296768.tip-bot2@tip-bot2>
+Message-ID: <167059959922.4906.755625363628346108.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -60,83 +60,51 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 The following commit has been merged into the thermal/next branch of thermal:
 
-Commit-ID:     ed97d10a8b2c78d1664b01658c5f581e6791ff7d
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//ed97d10a8b2c78d1664b01658c5f581e6791ff7d
-Author:        Guenter Roeck <linux@roeck-us.net>
-AuthorDate:    Thu, 10 Nov 2022 07:24:55 -08:00
+Commit-ID:     be6abd3ed65678f8c7bd212808a9841785c2d5ca
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//be6abd3ed65678f8c7bd212808a9841785c2d5ca
+Author:        Zhang Rui <rui.zhang@intel.com>
+AuthorDate:    Tue, 08 Nov 2022 16:12:19 +08:00
 Committer:     Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-CommitterDate: Mon, 14 Nov 2022 19:04:37 +01:00
+CommitterDate: Wed, 09 Nov 2022 14:58:02 +01:00
 
-thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
+thermal: intel: intel_tcc_cooling: Detect TCC lock bit
 
-All callers of __thermal_zone_get_temp() already validated the
-thermal zone parameters. Move validation to thermal_zone_get_temp()
-where it is actually needed. Also add kernel documentation for
-__thermal_zone_get_temp(), listing the requirement that the
-function must be called with validated parameters and with thermal
-device mutex held.
+When MSR_IA32_TEMPERATURE_TARGET is locked, TCC Offset can not be
+updated even if the PROGRAMMABE Bit is set.
 
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Yield the driver on platforms with MSR_IA32_TEMPERATURE_TARGET locked.
+
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/thermal/thermal_helpers.c | 26 +++++++++++++++++++++++---
- 1 file changed, 23 insertions(+), 3 deletions(-)
+ drivers/thermal/intel/intel_tcc_cooling.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-index fca0b23..321f802 100644
---- a/drivers/thermal/thermal_helpers.c
-+++ b/drivers/thermal/thermal_helpers.c
-@@ -64,6 +64,20 @@ get_thermal_instance(struct thermal_zone_device *tz,
- }
- EXPORT_SYMBOL(get_thermal_instance);
+diff --git a/drivers/thermal/intel/intel_tcc_cooling.c b/drivers/thermal/intel/intel_tcc_cooling.c
+index 95adac4..c9e84e6 100644
+--- a/drivers/thermal/intel/intel_tcc_cooling.c
++++ b/drivers/thermal/intel/intel_tcc_cooling.c
+@@ -14,6 +14,7 @@
+ #define TCC_SHIFT 24
+ #define TCC_MASK	(0x3fULL<<24)
+ #define TCC_PROGRAMMABLE	BIT(30)
++#define TCC_LOCKED		BIT(31)
  
-+/**
-+ * __thermal_zone_get_temp() - returns the temperature of a thermal zone
-+ * @tz: a valid pointer to a struct thermal_zone_device
-+ * @temp: a valid pointer to where to store the resulting temperature.
-+ *
-+ * When a valid thermal zone reference is passed, it will fetch its
-+ * temperature and fill @temp.
-+ *
-+ * Both tz and tz->ops must be valid pointers when calling this function,
-+ * and the tz->ops->get_temp callback must be provided.
-+ * The function must be called under tz->lock.
-+ *
-+ * Return: On success returns 0, an error code otherwise
-+ */
- int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	int ret = -EINVAL;
-@@ -73,9 +87,6 @@ int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+ static struct thermal_cooling_device *tcc_cdev;
  
- 	lockdep_assert_held(&tz->lock);
+@@ -108,6 +109,15 @@ static int __init tcc_cooling_init(void)
+ 	if (!(val & TCC_PROGRAMMABLE))
+ 		return -ENODEV;
  
--	if (!tz || IS_ERR(tz) || !tz->ops->get_temp)
--		return -EINVAL;
--
- 	ret = tz->ops->get_temp(tz, temp);
- 
- 	if (IS_ENABLED(CONFIG_THERMAL_EMULATION) && tz->emul_temperature) {
-@@ -114,13 +125,22 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	int ret;
- 
-+	if (IS_ERR_OR_NULL(tz))
-+		return -EINVAL;
++	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
++	if (err)
++		return err;
 +
- 	mutex_lock(&tz->lock);
- 
-+	if (!tz->ops->get_temp) {
-+		ret = -EINVAL;
-+		goto unlock;
++	if (val & TCC_LOCKED) {
++		pr_info("TCC Offset locked\n");
++		return -ENODEV;
 +	}
 +
- 	if (device_is_registered(&tz->device))
- 		ret = __thermal_zone_get_temp(tz, temp);
- 	else
- 		ret = -ENODEV;
+ 	pr_info("Programmable TCC Offset detected\n");
  
-+unlock:
- 	mutex_unlock(&tz->lock);
- 
- 	return ret;
+ 	tcc_cdev =
