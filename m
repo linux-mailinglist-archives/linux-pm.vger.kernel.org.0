@@ -2,361 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977A6648758
-	for <lists+linux-pm@lfdr.de>; Fri,  9 Dec 2022 18:09:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D00D64907E
+	for <lists+linux-pm@lfdr.de>; Sat, 10 Dec 2022 21:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbiLIRJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 9 Dec 2022 12:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
+        id S229728AbiLJUEI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 10 Dec 2022 15:04:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiLIRJD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 9 Dec 2022 12:09:03 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C3913DE0
-        for <linux-pm@vger.kernel.org>; Fri,  9 Dec 2022 09:08:36 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id h11so5806488wrw.13
-        for <linux-pm@vger.kernel.org>; Fri, 09 Dec 2022 09:08:36 -0800 (PST)
+        with ESMTP id S229704AbiLJUEH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 10 Dec 2022 15:04:07 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83D9A13F6D
+        for <linux-pm@vger.kernel.org>; Sat, 10 Dec 2022 12:04:06 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id b3so12252956lfv.2
+        for <linux-pm@vger.kernel.org>; Sat, 10 Dec 2022 12:04:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=RheTipnQ3FDrtTGK6Np18Wan6gzAfSArggbEI3Dq53k=;
-        b=zWgsiFzMpcRPWGKoDVH3cYFEzNOv4VAygMAq5QC4IbDeO+baY+9Dsp7GIqah0AHUQX
-         iHSIBEdiAAB3WE+M7F8+RiCgiCP2hlWHXsG4fJPGfS9maavMvsg1c3xQmv9z6sQvvHmO
-         eXhtnyyW3iVQp8DQbJM+xF2RQ17Xt7aaSheTwuexnLgcWYiE3gY3515r7YAVeq2DxSRr
-         kL9vX0Z6CRPrlnlDo2gg4U3gVZohtDb+oAm53mUfHmWgId7P61AmBMcLyQZnjCcmg0NS
-         3oYqtQMsEbZr6e54vpmLVy5Aop5Vw/cMTj6zzF04tGaqQfeMRR2C/r+VclBJ9cXnCI1y
-         9npA==
+        bh=OBRVlbrqRCLQh/hPYQMZj1j2VXHf/Xbb2WuXE+iQo4s=;
+        b=OVMoskt21DvWG921R245YlH5xYu83EndxKpsNu/6SOS9yo9CCQi3wHGEMVYI5vTed0
+         puCgJbz0X7tScfYkgR20KfO/Yf0tb6IPESJb0xLtaGV1h92nKfnLMVhZnMoTJn9JScJd
+         QXPvZMXHQbdT0Im2MBVxm7UWsaov7Jg2ehM6yHAt+huRWeQTnBIOYyqaKGh9m5PI6zQ+
+         kmn/6S5tg/Y/CAcKgkab9HEuM6tdkeBm2ZP+VhshFUwNm+gZj+n3NivgcaJdcqihkLFx
+         ihlptI/KB3kl6Ohr0MEeVUKX7ZRE7+KyI6OHmhK5mr9Ngd6UmjqYonEVx8qgbmJyyYFi
+         RtSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RheTipnQ3FDrtTGK6Np18Wan6gzAfSArggbEI3Dq53k=;
-        b=ceUmCKXeEtRRLNdXrja5z9QSuClORfkWf/9dwAMdJDTwlm3CSN/o0QuxmTgjriTX7g
-         jZ4yw0MLxQlWQLjrJkKYCa5SD0s/W1qYt8cHkKJEjIEth/v4Hs+ev4uyq6/3kruwLDxg
-         kEXin+WA2G4o9BUCVLyq7nRjUQVD9v3DiajQbHjy7x2PCqgL3JTFbEkkmrQb4K6jGc9D
-         AWOs7VbtMq8w9k98NdlbadKicNu5dL5ZC73ZWoON0bNH5e6PhcoGZVMxwCZyHiMCh8VL
-         gvqTqnzZHPxHO9jn9xqS/HjYjDGeEntU7mMZyMSyGOVLZkgJ+ty1guwkp88QUF0eLoKD
-         8MHQ==
-X-Gm-Message-State: ANoB5pnMwT5pgI1C6JR402eYFRypu4TpndWINkq3VFWhj1UX1YeY2SeV
-        rUTJoBdtWpBLB9e1tnfhQ8IhdiWoHBBucC5J
-X-Google-Smtp-Source: AA0mqf43vIOxMkbH0YO61S1oWFrFyWdHAJCsHFjp1CaTcvxmKq8ulp9v0lTjzb60sYAOgcIOYp/yPw==
-X-Received: by 2002:a5d:5c11:0:b0:242:704e:c3f8 with SMTP id cc17-20020a5d5c11000000b00242704ec3f8mr5616472wrb.46.1670605714940;
-        Fri, 09 Dec 2022 09:08:34 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a5d5954000000b0023657e1b980sm1814180wri.53.2022.12.09.09.08.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Dec 2022 09:08:34 -0800 (PST)
-Message-ID: <3ccca41f-0899-b205-903b-ec8c742f3e91@linaro.org>
-Date:   Fri, 9 Dec 2022 18:08:33 +0100
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OBRVlbrqRCLQh/hPYQMZj1j2VXHf/Xbb2WuXE+iQo4s=;
+        b=44WnOKPKThx+0XzNtsZABufIFygxJE1fqa9ahRwn7BnSADAxfE00iXDBXpQmHWTvAx
+         PB2cZVYOJeFmi3UojIn9TJgIBNnyf4EjLCQwOs4gwzCji7htXh79bgTqP5cPX+4bepcD
+         wO57abjT9mq6gicN9LXHdAJpgRDO7R77cE+Js45MSbvmbHNXnYh2XQA2xWpQzuT6exSK
+         FtBrSFBOd8eCak0137Dc5CcQWzzeL3Oek1cQJdPb7dmYTZjHn8mi83KByO54Jjz6+hQl
+         e4tTWMUMxxppslDjbXj175PeOOSdhkJCVIPSbEq2yUuFgFyyVJAQgWe5UGHLFX9psjEB
+         3YUg==
+X-Gm-Message-State: ANoB5pl14Y9SQ4J/ECVTqC7joWWGsQ7CQ1KstkYomWrlWqqa6y+2j2N9
+        LkKRK7AVetNm77W93fCD0liQew==
+X-Google-Smtp-Source: AA0mqf6Ms8jSQh1Mioo+UobLsSKiXCn3pnnxKj/xfyKNT6+AHp7ldUSx1xBzJkF2v+xrCd+Z7OkHpA==
+X-Received: by 2002:a05:6512:340c:b0:4b6:e22f:51a6 with SMTP id i12-20020a056512340c00b004b6e22f51a6mr529683lfr.53.1670702644949;
+        Sat, 10 Dec 2022 12:04:04 -0800 (PST)
+Received: from localhost.localdomain (abxh44.neoplus.adsl.tpnet.pl. [83.9.1.44])
+        by smtp.gmail.com with ESMTPSA id h28-20020ac2597c000000b004b4f1ea713csm839628lfp.73.2022.12.10.12.04.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Dec 2022 12:04:04 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] dt-bindings: interconnect: Add UFS clocks to MSM8996 A2NoC
+Date:   Sat, 10 Dec 2022 21:03:49 +0100
+Message-Id: <20221210200353.418391-2-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221210200353.418391-1-konrad.dybcio@linaro.org>
+References: <20221210200353.418391-1-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] thermal drivers for v6.2-rc1
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Robert Marko <robimarko@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The following changes since commit 7d4b19ab6b89903fde8ad02f28a8943a4734e7b0:
+MSM8996 A2NoC contains a UFS master, which means the UFS hardware is
+accessed every time sync_state is called within the interconnect
+framework. It's all good on devices where this clock is already enabled
+(most likely from the bootloader), but devices with eMMC storage are
+rather unlikely to have it like that. Add the missing 2 clocks to the
+binding.
 
-   Merge Intel thermal control drivers changes for v6.2 (2022-12-02 
-19:39:07 +0100)
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ .../bindings/interconnect/qcom,rpm.yaml       | 24 ++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.2-rc1
-
-for you to fetch changes up to f3ce48d06440a712de3c5ef1d26003c1e77afd74:
-
-   Revert "thermal/sysfs: Remove unnecessary check in 
-trip_point_hyst_show()" (2022-12-09 16:23:16 +0100)
-
-----------------------------------------------------------------
-- Rework a large bunch of drivers to use the generic thermal trip
-   structure and the opportunity to do more cleanups by removing unused
-   functions in the OF code (Daniel Lezcano)
-
-- Add the sm8450 QCom compatible string in the DT bindings (Luca
-   Weiss)
-
-- Use devm_platform_get_and_ioremap_resource on the ST platform to
-   group two calls into a single one (Minghao Chi)
-
-- Add the sm8550 QCom compatible string in the DT bindings (Neil
-   Armstrong)
-
-- Use GENMASK instead of bitmaps and validate the temperature after
-   reading it (Marcus Folkesson)
-
-- Convert generic-adc-thermal to DT schema (Rob Herring)
-
-- Fix the debug print message where the logic is inverted (Keerthy)
-
-- Fix NULL pointer dereference when getting the critical temp (Daniel
-   Lezcano)
-
-- Fix memory leak on thermal_of_zone_register() failure (Ido Schimmel)
-
-- Add support for IPQ8074 in the tsens driver along with the DT
-   bindings (Robert Marko)
-
-- Fix and rework the debugfs code in the tsens driver (Christian
-   Marangi)
-
-- Add calibration and DT documentation for the imx8mm driver (Marek
-   Vasut)
-
-- Add DT bindings and compatible for the Mediatek SoCs mt7981 and
-   mt7983 (Daniel Golle)
-
-- Don't show an error message if it happens at probe time while it
-   will be deferred on the QCom SPMI ADC driver (Johan Hovold)
-
-- Add the HWMon support on the imx8mm board (Alexander Stein)
-
-- Remove a pointless include in the power allocator governor
-   (Christophe JAILLET)
-
-- Add interrupt DT bindings for QCom SoCs SC8280XP, SM6350 and SM8450
-   (Krzysztof Kozlowski)
-
-- Fix inaccurate warning message for the QCom tsens gen2 (Luca Weiss)
-
-- Demote error log of thermal zone register to debug on the tsens QCom
-   driver (Manivannan Sadhasivam)
-
-- Consolidate the TI Bandgap driver regarding how is handled the efuse
-   values and the errata handling (Bryan Brattlof)
-
-- Document the Renesas RZ/Five as compatible with RZ/G2UL in the DT
-   bindings (Lad Prabhakar)
-
-- Fix the irq handler return value in the LMh driver (Bjorn Andersson)
-
-----------------------------------------------------------------
-Alexander Stein (1):
-       thermal/drivers/imx8mm: Add hwmon support
-
-Bjorn Andersson (1):
-       thermal/drivers/qcom/lmh: Fix irq handler return value
-
-Bryan Brattlof (6):
-       thermal/drivers/k3_j72xx_bandgap: Simplify k3_thermal_get_temp() 
-function
-       thermal/drivers/k3_j72xx_bandgap: Use bool for i2128 erratum flag
-       thermal/drivers/k3_j72xx_bandgap: Remove fuse_base from structure
-       thermal/drivers/k3_j72xx_bandgap: Map fuse_base only for erratum 
-workaround
-       dt-bindings: thermal: k3-j72xx: elaborate on binding description
-       dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
-
-Christian Marangi (3):
-       thermal/drivers/qcom/tsens: Init debugfs only with successful probe
-       thermal/drivers/qcom/tsens: Fix wrong version id dbg_version_show
-       thermal/drivers/qcom/tsens: Rework debugfs file structure
-
-Christophe JAILLET (1):
-       thermal/core/power allocator: Remove a useless include
-
-Dan Carpenter (1):
-       thermal/sysfs: remove unnecessary check in trip_point_hyst_show()
-
-Daniel Golle (1):
-       dt-bindings: thermal: mediatek: add compatible string for MT7986 
-and MT7981 SoC
-
-Daniel Lezcano (33):
-       thermal/core: Add a generic thermal_zone_get_trip() function
-       thermal/sysfs: Always expose hysteresis attributes
-       thermal/core: Add a generic thermal_zone_set_trip() function
-       thermal/core/governors: Use thermal_zone_get_trip() instead of 
-ops functions
-       thermal/of: Use generic thermal_zone_get_trip() function
-       thermal/of: Remove unused functions
-       thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
-       thermal/drivers/exynos: of_thermal_get_ntrips()
-       thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by 
-thermal_zone_get_trip()
-       thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-       thermal/drivers/uniphier: Use generic thermal_zone_get_trip() 
-function
-       thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-       thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
-       thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-       thermal/drivers/rcar_gen3: Use the generic function to get the 
-number of trips
-       thermal/of: Remove of_thermal_get_ntrips()
-       thermal/of: Remove of_thermal_is_trip_valid()
-       thermal/of: Remove of_thermal_set_trip_hyst()
-       thermal/of: Remove of_thermal_get_crit_temp()
-       thermal/drivers/st: Use generic trip points
-       thermal/drivers/imx: Use generic thermal_zone_get_trip() function
-       thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
-       thermal/drivers/broadcom: Use generic thermal_zone_get_trip() 
-function
-       thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
-       thermal/drivers/ti: Remove unused macros 
-ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
-       thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-       thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
-       thermal/intel/int340x: Replace parameter to simplify
-       thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-       thermal/drivers/exynos: Fix NULL pointer dereference when getting 
-the critical temp
-       wifi: iwlwifi: Use generic thermal_zone_get_trip() function
-       thermal/drivers/mellanox: Use generic thermal_zone_get_trip() 
-function
-       Revert "thermal/sysfs: Remove unnecessary check in 
-trip_point_hyst_show()"
-
-Geert Uytterhoeven (1):
-       thermal: ti-soc-thermal: Drop comma after SoC match table sentinel
-
-Ido Schimmel (1):
-       thermal/of: Fix memory leak on thermal_of_zone_register() failure
-
-Johan Hovold (1):
-       thermal: qcom-spmi-adc-tm5: suppress probe-deferral error message
-
-Jon Hunter (1):
-       thermal/drivers/tegra: Fix crash when getting critical temp
-
-Keerthy (1):
-       thermal/drivers/k3_j72xx_bandgap: Fix the debug print message
-
-Krzysztof Kozlowski (1):
-       dt-bindings: thermal: qcom-tsens: narrow interrupts for SC8280XP, 
-SM6350 and SM8450
-
-Lad Prabhakar (1):
-       dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
-
-Luca Weiss (2):
-       dt-bindings: thermal: tsens: Add sm8450 compatible
-       thermal/drivers/qcom/temp-alarm: Fix inaccurate warning for gen2
-
-Manivannan Sadhasivam (1):
-       thermal/drivers/qcom: Demote error log of thermal zone register 
-to debug
-
-Marcus Folkesson (2):
-       thermal/drivers/imx8mm_thermal: Use GENMASK() when appropriate
-       thermal/drivers/imx8mm_thermal: Validate temperature range
-
-Marek Vasut (2):
-       dt-bindings: thermal: imx8mm-thermal: Document optional nvmem-cells
-       thermal/drivers/imx: Add support for loading calibration data 
-from OCOTP
-
-Minghao Chi (1):
-       thermal/drivers/st: Use devm_platform_get_and_ioremap_resource()
-
-Neil Armstrong (1):
-       dt-bindings: thermal: qcom-tsens: Add compatible for sm8550
-
-Rob Herring (1):
-       dt-bindings: thermal: Convert generic-adc-thermal to DT schema
-
-Robert Marko (4):
-       dt-bindings: thermal: tsens: Add ipq8074 compatible
-       thermal/drivers/tsens: Add support for combined interrupt
-       thermal/drivers/tsens: Allow configuring min and max trips
-       thermal/drivers/tsens: Add IPQ8074 support
-
-  .../bindings/thermal/generic-adc-thermal.yaml      |  84 +++++++++
-  .../bindings/thermal/imx8mm-thermal.yaml           |   7 +
-  .../bindings/thermal/mediatek-thermal.txt          |   2 +
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  81 ++++++--
-  .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +-
-  .../bindings/thermal/thermal-generic-adc.txt       |  95 ----------
-  .../bindings/thermal/ti,j72xx-thermal.yaml         |  35 +++-
-  drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
-  drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
-  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 
-+++++----------------
-  drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
-  drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
-  drivers/platform/x86/acerhdf.c                     |  73 +++----
-  drivers/thermal/armada_thermal.c                   |  37 ++--
-  drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
-  drivers/thermal/da9062-thermal.c                   |  52 +----
-  drivers/thermal/gov_bang_bang.c                    |  37 ++--
-  drivers/thermal/gov_fair_share.c                   |  18 +-
-  drivers/thermal/gov_power_allocator.c              |  52 +++--
-  drivers/thermal/gov_step_wise.c                    |  22 +--
-  drivers/thermal/hisi_thermal.c                     |  11 +-
-  drivers/thermal/imx8mm_thermal.c                   | 180 
-+++++++++++++++++-
-  drivers/thermal/imx_thermal.c                      |  72 +++----
-  .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
-  .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
-  .../int340x_thermal/processor_thermal_device.c     |  10 +-
-  drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
-  drivers/thermal/k3_j72xx_bandgap.c                 |  67 +++----
-  drivers/thermal/qcom/lmh.c                         |   2 +-
-  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   8 +-
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  42 ++---
-  drivers/thermal/qcom/tsens-8960.c                  |   3 +
-  drivers/thermal/qcom/tsens-v0_1.c                  |   3 +
-  drivers/thermal/qcom/tsens-v1.c                    |   3 +
-  drivers/thermal/qcom/tsens-v2.c                    |  20 ++
-  drivers/thermal/qcom/tsens.c                       |  68 ++++---
-  drivers/thermal/qcom/tsens.h                       |   8 +-
-  drivers/thermal/rcar_gen3_thermal.c                |   2 +-
-  drivers/thermal/rcar_thermal.c                     |  53 +-----
-  drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
-  drivers/thermal/st/st_thermal.c                    |  47 +----
-  drivers/thermal/st/stm_thermal.c                   |   4 +-
-  drivers/thermal/tegra/soctherm.c                   |  35 ++--
-  drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
-  drivers/thermal/thermal_core.c                     | 153 ++++++++++++---
-  drivers/thermal/thermal_core.h                     |  24 +--
-  drivers/thermal/thermal_helpers.c                  |  28 +--
-  drivers/thermal/thermal_netlink.c                  |  19 +-
-  drivers/thermal/thermal_of.c                       | 124 +-----------
-  drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
-  drivers/thermal/ti-soc-thermal/ti-bandgap.c        |   2 +-
-  drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
-  drivers/thermal/uniphier_thermal.c                 |  27 ++-
-  include/linux/thermal.h                            |  10 +
-  54 files changed, 1115 insertions(+), 1224 deletions(-)
-  create mode 100644 
-Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-  delete mode 100644 
-Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
-
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+index 4b37aa88a375..5e6be4e79201 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,rpm.yaml
+@@ -84,7 +84,6 @@ allOf:
+               - qcom,msm8939-pcnoc
+               - qcom,msm8939-snoc
+               - qcom,msm8996-a1noc
+-              - qcom,msm8996-a2noc
+               - qcom,msm8996-bimc
+               - qcom,msm8996-cnoc
+               - qcom,msm8996-pnoc
+@@ -186,6 +185,29 @@ allOf:
+       required:
+         - power-domains
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - qcom,msm8996-a2noc
++
++    then:
++      properties:
++        clock-names:
++          items:
++            - const: bus
++            - const: bus_a
++            - const: aggre2_ufs_axi
++            - const: ufs_axi
++
++        clocks:
++          items:
++            - description: Bus Clock
++            - description: Bus A Clock
++            - description: Aggregate2 NoC UFS AXI Clock
++            - description: UFS AXI Clock
++
+   - if:
+       properties:
+         compatible:
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.38.1
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
