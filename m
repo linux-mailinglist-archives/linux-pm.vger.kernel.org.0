@@ -2,120 +2,113 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60F1764931B
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Dec 2022 08:50:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F1C6493F1
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Dec 2022 12:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229475AbiLKHuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Dec 2022 02:50:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S229995AbiLKLhx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Dec 2022 06:37:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbiLKHuY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Dec 2022 02:50:24 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023F5EE07
-        for <linux-pm@vger.kernel.org>; Sat, 10 Dec 2022 23:50:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670745023; x=1702281023;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=48BwlvPNLSRZ7gIgEY4Ru+7dcmAn8bYZZ5d54CQbcxo=;
-  b=XHGD5J0DloLCCEiHtDtwvgdZuuE4p6NzoJ3V81RPtHdUNR6FqT059oVk
-   KNBaZFECAaK5iJVpekkRmy4f4HYYhbRt1dDOx4QPGLc2j8j0AjzsqHOvP
-   qYMww48JBTaqNI9v08vEXvZkYqDpsXld0zZjbvnmLGSfsztgVKpKEhStD
-   TzHYTAenx3XoYCsy+BzQ0pS7VYMCGHgUBervV0IIOdE1ymkufMRApiYeV
-   273sy9B6S7cr2ciW/yvH4/ilp7URghR+iEskolS6eYEg2NjzWSDv0TGpw
-   5C9p15zCG8Nx6F8qvQDK/alOV685GjQotgguRW3bDSiCnzSgXkKus69JV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="344732370"
-X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
-   d="scan'208";a="344732370"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 23:50:23 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="641415846"
-X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
-   d="scan'208";a="641415846"
-Received: from zhenzhu-mobl1.ccr.corp.intel.com ([10.255.30.120])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 23:50:20 -0800
-Message-ID: <5c0e237bc3338ea61e04643b0077e4d55479e4fc.camel@intel.com>
-Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org
-Date:   Sun, 11 Dec 2022 15:50:17 +0800
-In-Reply-To: <fd4b11f8f9ce4b592c6fdfed2d14f7b8a6c3e4f0.camel@linux.intel.com>
-References: <20221108033332.27760-1-rui.zhang@intel.com>
-         <20221108033332.27760-2-rui.zhang@intel.com>
-         <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
-         <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
-         <CAJZ5v0gFMewt-paH4D3sDpgUSAfGJojGHOdUxXH9ahSHA6P7+Q@mail.gmail.com>
-         <015c7c006b0bbe935a31c837ed0fc5da9d7e43cd.camel@intel.com>
-         <fd4b11f8f9ce4b592c6fdfed2d14f7b8a6c3e4f0.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        with ESMTP id S230172AbiLKLhw (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Dec 2022 06:37:52 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DC7BE02;
+        Sun, 11 Dec 2022 03:37:50 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7E00EB80975;
+        Sun, 11 Dec 2022 11:37:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB66C433D2;
+        Sun, 11 Dec 2022 11:37:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1670758668;
+        bh=MB3W7c91XD6Sbro663PUKZYskWcJMHbqsYaC/wZrcBk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=acbE7Oujt+dyIv2BCN39WmWmY6TxrQG+fHyLC72z1bcHaOWReg9WszETr2biqPLs/
+         XMB8HB3TclIcsrc8aYURgCeAR4ycnkYb4BDkOuL45kOMvP+YFqXeW7clmT7rkGlcAn
+         QIpHmfWFf5moC1YVV/jXJC1G/5YCqDmoNZ2kHjh4A9K+iTdUn1mMfyuy2/m1pFAhY2
+         wHNS2+p3ZTtnYvt4Yr+GFjNAZuR6ExbNUb3LOuSIfZHf/Q3PhYegSqwwaC9v1EbHNY
+         IGFY56NuoWpAke07Fi2TNQVA09ezZLwD9f1B2+FsGAxhCqbWgaf3S61oOl6qMQ2me8
+         XQb8TKhQO6sVA==
+Date:   Sun, 11 Dec 2022 11:50:42 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     saravanan sekar <sravanhome@gmail.com>
+Cc:     sre@kernel.org, lee@kernel.org, lars@metafoo.de,
+        andy.shevchenko@gmail.com, linux-pm@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v6 0/7] Add support for mp2733 battery charger
+Message-ID: <20221211115042.5ec91c3f@jic23-huawei>
+In-Reply-To: <eedcf790-5447-d988-f9cb-9103f34f27ae@gmail.com>
+References: <20221123175425.564042-1-sravanhome@gmail.com>
+        <eedcf790-5447-d988-f9cb-9103f34f27ae@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-12-09 at 08:28 -0800, srinivas pandruvada wrote:
-> On Fri, 2022-12-09 at 21:32 +0800, Zhang Rui wrote:
-> 
-> [...]
-> 
-> > > > > Well, what if somebody change tjmax on this cpu while this
-> > > > > function
-> > > > > is running?
-> > > > 
-> > > > tjmax is read only. Only firmware can change its value at
-> > > > runtime,
-> > > > say
-> > > > this field is updated when SST-PP level is changed.
-> > > 
-> > > Do we get any type of notification on tjmax changes, or do we
-> > > need
-> > > to
-> > > poll for it?
+On Tue, 6 Dec 2022 17:05:26 +0100
+saravanan sekar <sravanhome@gmail.com> wrote:
+
+> On 23/11/22 18:54, Saravanan Sekar wrote:
+> > changes in v6:
+> >    - splitted chip id to v6-0003 and support of mp2733 to v6-0004 patch
+> >    - fixed commit message English grammar
 > > 
-> > I'm not aware of such a notification.
-> > Srinivas, do you know if there is one?
-> There is no explicit notification. You can infer from HWP guaranteed
-> change interrupt.
+> > changes in v5:
+> >    - fixed commit message on v5-0002 and v5-0004
+> > 
+> > changes in v4:
+> >    - fixed attributes groups review comments in v3
+> >    - added new bug fix patches v4-0007 and v4-0008
+> > 
+> > changes in v3:
+> >    - fixed dt_binding_check error
+> >    - fixed spelling usb->USB
+> > 
+> > changes in v2:
+> >    - fixed spelling
+> >    - revert back probe to probe_new in mfd driver
+> > 
+> > add support for mp2733 Battery charger control driver for Monolithic
+> > Power System's MP2733 chipset
+> > 
+> > Saravanan Sekar (7):
+> >    mfd: mp2629: fix failed to get iio channel by device name
+> >    power: supply: fix wrong interpretation of register value
+> >    mfd: mp2629: introduce chip id machanism to distinguish chip
+> >    mfd: mp2629: Add support for mps mp2733 battery charger
+> >    iio: adc: mp2629: restrict input voltage mask for mp2629
+> >    power: supply: Add support for mp2733 battery charger
+> >    power: supply: mp2629: Add USB fast charge settings
+> > 
+> >   .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
+> >   drivers/iio/adc/mp2629_adc.c                  |   5 +-
+> >   drivers/mfd/mp2629.c                          |   7 +-
+> >   drivers/power/supply/mp2629_charger.c         | 229 +++++++++++++++---
+> >   include/linux/mfd/mp2629.h                    |   6 +
+> >   5 files changed, 226 insertions(+), 37 deletions(-)
+> >   
+> 
+> Hi,
+> 
+> Can someone give me share the plan for this series?
 
-But
-1. tjmax may or may not change when HWP guaranteed change interrupt
-fires. And it does not change in most cases, right?
-2. HWP guaranteed change interrupt is per CPU, so if we update tjmax in
-the interrupt handler, we also need to cache the timestamp to avoid
-duplicate updates from multiple CPUs in the same package/die.
+Given some cross dependencies I think the whole lot should go through
+mfd.  Lee?
 
-Given that the TCC lib APIs may or may not be called, depends on the
-usersapce behavior, do you think this is a win by adding this extra
-cost?
+Thanks,
 
-Instead, update the tjmax value only when the API is called, and then
-cache it to handle frequent read is sufficient. what do you think?
-
-thanks,
-rui
-
+Jonathan
 > 
 > Thanks,
-> Srinivas
-> 
-> > thanks,
-> > rui
-> > 
-> > 
-> 
-> 
+> Saravanan
 
