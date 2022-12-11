@@ -2,263 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54A0B649311
-	for <lists+linux-pm@lfdr.de>; Sun, 11 Dec 2022 08:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F1764931B
+	for <lists+linux-pm@lfdr.de>; Sun, 11 Dec 2022 08:50:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbiLKHYE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 11 Dec 2022 02:24:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44902 "EHLO
+        id S229475AbiLKHuZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 11 Dec 2022 02:50:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiLKHYD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Dec 2022 02:24:03 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FFA1209F
-        for <linux-pm@vger.kernel.org>; Sat, 10 Dec 2022 23:23:59 -0800 (PST)
+        with ESMTP id S229568AbiLKHuY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 11 Dec 2022 02:50:24 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023F5EE07
+        for <linux-pm@vger.kernel.org>; Sat, 10 Dec 2022 23:50:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670743439; x=1702279439;
+  t=1670745023; x=1702281023;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=S2GdPNkTTWvBRzYVmjQkQA9UjLpvqvak8n/l1HyK2ek=;
-  b=UNAUcRdvLr2Ufkmduy3ov7zN8PnpWvZBqjtmif9U073Rcke8zQuq8AHY
-   47CJjvgq/LrjJXzivNyOChTOk3JQFnHKHGOYIRHptl+eGYH9/SuDbknSW
-   W0ZICp3MijZaeyI2JUVz3cl3i8cyHdBa80UiAbxJKQEl84jmwoW0KvL8r
-   ED/njV29rBgivZYtlTll7bET4AzHg9AdZynpVMJuEJeFifJKEfmU1qC8D
-   AzxB2mSaq0p2/I15N1nLLShWKgYjXyTt784Q774x4koPMmLn+IjiBI+uM
-   FqYb/eaX0gnB9m+wYeag/cUq77KkJOK/lkBZi5gspKD/dhavu2MeVDrSa
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="403932157"
+  bh=48BwlvPNLSRZ7gIgEY4Ru+7dcmAn8bYZZ5d54CQbcxo=;
+  b=XHGD5J0DloLCCEiHtDtwvgdZuuE4p6NzoJ3V81RPtHdUNR6FqT059oVk
+   KNBaZFECAaK5iJVpekkRmy4f4HYYhbRt1dDOx4QPGLc2j8j0AjzsqHOvP
+   qYMww48JBTaqNI9v08vEXvZkYqDpsXld0zZjbvnmLGSfsztgVKpKEhStD
+   TzHYTAenx3XoYCsy+BzQ0pS7VYMCGHgUBervV0IIOdE1ymkufMRApiYeV
+   273sy9B6S7cr2ciW/yvH4/ilp7URghR+iEskolS6eYEg2NjzWSDv0TGpw
+   5C9p15zCG8Nx6F8qvQDK/alOV685GjQotgguRW3bDSiCnzSgXkKus69JV
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="344732370"
 X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
-   d="scan'208";a="403932157"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 23:23:58 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="736617072"
+   d="scan'208";a="344732370"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 23:50:23 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10557"; a="641415846"
 X-IronPort-AV: E=Sophos;i="5.96,235,1665471600"; 
-   d="scan'208";a="736617072"
+   d="scan'208";a="641415846"
 Received: from zhenzhu-mobl1.ccr.corp.intel.com ([10.255.30.120])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 23:23:56 -0800
-Message-ID: <b40f141c0266b6971f8dec0e63964dd1311b1747.camel@intel.com>
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2022 23:50:20 -0800
+Message-ID: <5c0e237bc3338ea61e04643b0077e4d55479e4fc.camel@intel.com>
 Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
 From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
-Date:   Sun, 11 Dec 2022 15:23:54 +0800
-In-Reply-To: <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
+        linux-pm@vger.kernel.org
+Date:   Sun, 11 Dec 2022 15:50:17 +0800
+In-Reply-To: <fd4b11f8f9ce4b592c6fdfed2d14f7b8a6c3e4f0.camel@linux.intel.com>
 References: <20221108033332.27760-1-rui.zhang@intel.com>
          <20221108033332.27760-2-rui.zhang@intel.com>
          <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
          <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
+         <CAJZ5v0gFMewt-paH4D3sDpgUSAfGJojGHOdUxXH9ahSHA6P7+Q@mail.gmail.com>
+         <015c7c006b0bbe935a31c837ed0fc5da9d7e43cd.camel@intel.com>
+         <fd4b11f8f9ce4b592c6fdfed2d14f7b8a6c3e4f0.camel@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-> > > +       if (err)
-> > > +               return err;
-> > > +
-> > > +       *tjmax = (eax >> 16) & 0xff;
+On Fri, 2022-12-09 at 08:28 -0800, srinivas pandruvada wrote:
+> On Fri, 2022-12-09 at 21:32 +0800, Zhang Rui wrote:
+> 
+> [...]
+> 
+> > > > > Well, what if somebody change tjmax on this cpu while this
+> > > > > function
+> > > > > is running?
+> > > > 
+> > > > tjmax is read only. Only firmware can change its value at
+> > > > runtime,
+> > > > say
+> > > > this field is updated when SST-PP level is changed.
+> > > 
+> > > Do we get any type of notification on tjmax changes, or do we
+> > > need
+> > > to
+> > > poll for it?
 > > 
-> > This means that the tjmax value cannot be negative.
-> > 
-> > > +
-> > > +       return *tjmax ? 0 : -EINVAL;
-> > 
-> > So the return value of this function could be tjmax if positive or
-> > a
-> > negative error code otherwise.  No return pointers needed.
-> 
-> I tried both. And I think I chose this solution just because it makes
-> the following cleanup patches in this series looks prettier.
-> 
-> I will try your suggestion, and if there is any other reason I wrote
-> it
-> in this way, I will find it out again. :p
+> > I'm not aware of such a notification.
+> > Srinivas, do you know if there is one?
+> There is no explicit notification. You can infer from HWP guaranteed
+> change interrupt.
 
-I see.
-Say, we have to use
+But
+1. tjmax may or may not change when HWP guaranteed change interrupt
+fires. And it does not change in most cases, right?
+2. HWP guaranteed change interrupt is per CPU, so if we update tjmax in
+the interrupt handler, we also need to cache the timestamp to avoid
+duplicate updates from multiple CPUs in the same package/die.
 
-intel_tcc_get_temp(int cpu, int *temp)
+Given that the TCC lib APIs may or may not be called, depends on the
+usersapce behavior, do you think this is a win by adding this extra
+cost?
 
-so I keep the same format for all the intel_tcc_get_XXX APIs
-
-intel_tcc_get_tjmax(int cpu, int *tjmax)
-intel_tcc_get_offset(int cpu, int *offset)
-
-so that the return value is decoded in the same way. This helps avoid
-return value check mistakes for the callers.
-
-surely I can remove the return pointer if you still prefer that. :p
-
-> > > +
-> > > +       return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, INTEL_TCC);
-> > > +
-> > > +/**
-> > > + * intel_tcc_set_offset() - set the TCC offset value to Tjmax
-> > > + * @cpu: cpu that the MSR should be run on.
-> > > + * @offset: TCC offset value in degree C
-> > 
-> > I think that this cannot be negative, so maybe say "in K" instead
-> > of
-> > "in degree C"?
-> 
-> degree C is the unit used in the Intel SDM, so better to keep this
-> comment aligned.
-> 
-> > And maybe it's better to pass u8 here?
-> 
-> sounds good, will do in next version.
-> 
-to keep consistent, we can use either
-int intel_tcc_get_offset(int cpu)
-int intel_tcc_set_offset(int cpu, int offset)
-or
-int intel_tcc_get_offset(int cpu, u8 *offset)
-int intel_tcc_set_offset(int cpu, u8 offset)
-
-or else callers need to declare 'offset' but with different type, when
-getting and setting it, which looks strange.
+Instead, update the tjmax value only when the API is called, and then
+cache it to handle frequent read is sufficient. what do you think?
 
 thanks,
 rui
-> > > + *
-> > > + * Set the TCC Offset value to Tjmax. The effective thermal
-> > > throttling or TCC
-> > > + * activation temperature equals "Tjmax" - "TCC Offset", in
-> > > degree
-> > > C.
-> > > + *
-> > > + * Return: On success returns 0, an error code otherwise
-> > > + */
-> > > +
-> > > +int intel_tcc_set_offset(int cpu, int offset)
-> > > +{
-> > > +       u32 eax, edx;
-> > > +       int err;
-> > > +
-> > > +       if (offset > 0x3f)
-> > > +               return -EINVAL;
-> > > +
-> > > +       err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET,
-> > > +                                       &eax, &edx);
-> > > +       if (err)
-> > > +               return err;
-> > > +
-> > > +       if (eax & BIT(31))
-> > > +               return -EPERM;
+
+> 
+> Thanks,
+> Srinivas
+> 
+> > thanks,
+> > rui
 > > 
-> > Why -EPERM?
-> 
-> Bit 31 set means the MSR is locked, and os software cannot write it.
-> should I use -EACCES instead?
-> 
-> > > +
-> > > +       eax &= ~(0x3f << 24);
-> > > +       eax |= (offset << 24);
 > > 
-> > The parens are not needed AFAICS.
-> > 
-> Agreed.
 > 
-> > > +
-> > > +       return wrmsr_safe_on_cpu(cpu,
-> > > MSR_IA32_TEMPERATURE_TARGET,
-> > > eax, edx);
-> > 
-> > So is any protection against concurrent access needed here?  Like
-> > what
-> > if two different callers invoke this function at the same time for
-> > the
-> > same CPU?
 > 
-> Given that the tcc offset is the only field that kernel code writes,
-> all the other bits won't change, so this is not a problem.
-> 
-> > > +}
-> > > +EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
-> > > +
-> > > +/**
-> > > + * intel_tcc_get_temp() - returns the current temperature
-> > > + * @cpu: cpu that the MSR should be run on.
-> > > + * @pkg: true: Package Thermal Sensor. false: Core Thermal
-> > > Sensor.
-> > > + * @temp: a valid pointer to where to store the resulting
-> > > temperature
-> > > + *
-> > > + * Get the current temperature returned by the CPU core/package
-> > > level
-> > > + * thermal sensor, in degrees C.
-> > > + *
-> > > + * Return: On success returns 0, an error code otherwise
-> > > + */
-> > > +int intel_tcc_get_temp(int cpu, bool pkg, int *temp)
-> > > +{
-> > > +       u32 eax, edx;
-> > > +       u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS :
-> > > MSR_IA32_THERM_STATUS;
-> > > +       int tjmax, err;
-> > > +
-> > > +       err = intel_tcc_get_tjmax(cpu, &tjmax);
-> > > +       if (err)
-> > > +               return err;
-> > 
-> > Well, what if somebody change tjmax on this cpu while this function
-> > is running?
-> 
-> tjmax is read only. Only firmware can change its value at runtime,
-> say
-> this field is updated when SST-PP level is changed.
-> 
-> thanks,
-> rui
-> > > +
-> > > +       err = rdmsr_safe_on_cpu(cpu, msr, &eax, &edx);
-> > > +       if (err)
-> > > +               return err;
-> > > +
-> > > +       if (eax & 0x80000000) {
-> > > +               *temp = tjmax - ((eax >> 16) & 0x7f);
-> > > +               return 0;
-> > > +       }
-> > > +       return -EINVAL;
-> > > +}
-> > > +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_temp, INTEL_TCC);
-> > > +
-> > > diff --git a/include/linux/intel_tcc.h
-> > > b/include/linux/intel_tcc.h
-> > > new file mode 100644
-> > > index 000000000000..94f8ceab5dd0
-> > > --- /dev/null
-> > > +++ b/include/linux/intel_tcc.h
-> > > @@ -0,0 +1,18 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0 */
-> > > +/*
-> > > + *  header for Intel TCC (thermal control circuitry) library
-> > > + *
-> > > + *  Copyright (C) 2022  Intel Corporation.
-> > > + */
-> > > +
-> > > +#ifndef __INTEL_TCC_H__
-> > > +#define __INTEL_TCC_H__
-> > > +
-> > > +#include <linux/types.h>
-> > > +
-> > > +int intel_tcc_get_tjmax(int cpu, int *tjmax);
-> > > +int intel_tcc_get_offset(int cpu, int *offset);
-> > > +int intel_tcc_set_offset(int cpu, int offset);
-> > > +int intel_tcc_get_temp(int cpu, bool pkg, int *temp);
-> > > +
-> > > +#endif /* __INTEL_TCC_H__ */
-> > > --
 
