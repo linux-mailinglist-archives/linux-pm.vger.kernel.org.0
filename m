@@ -2,96 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C8A64A9E3
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Dec 2022 23:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF2364AB8E
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 00:29:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233097AbiLLWCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Dec 2022 17:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51844 "EHLO
+        id S232978AbiLLX3o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Dec 2022 18:29:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiLLWCo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 17:02:44 -0500
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2BE2ED
-        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 14:02:42 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4qsX-0001hb-7b; Mon, 12 Dec 2022 23:02:29 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4qsU-0046gN-Bm; Mon, 12 Dec 2022 23:02:27 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1p4qsU-004bNd-B3; Mon, 12 Dec 2022 23:02:26 +0100
-From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] thermal: imx_sc_thermal: Drop empty platform remove function
-Date:   Mon, 12 Dec 2022 23:02:17 +0100
-Message-Id: <20221212220217.3777176-1-u.kleine-koenig@pengutronix.de>
-X-Mailer: git-send-email 2.38.1
+        with ESMTP id S232611AbiLLX3n (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 18:29:43 -0500
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DB11AA06
+        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 15:29:42 -0800 (PST)
+Received: by mail-pf1-x429.google.com with SMTP id c13so1031057pfp.5
+        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 15:29:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kxRCcZeXP5wunzbOgRNWC95RoWdHGih2CvP8S53b49U=;
+        b=u1ptlhYqxMpkYuAhNdF+//Qd28uugmDGcNttPBnIHJPiy+BPPntsgGxclDL+k82000
+         c6hGuL9LDJi4luBiJrzcPC7iBYNDgfkGNmbh9ZG14nGS3dReexIgNnUUfozGTPMlrLjz
+         GR9/fg/CZZ/fGyjjHsnhbt2qX82QxeYANQovwupol6joGoF4Nn3PmZML9Q9rJZJ04BnA
+         qMuUey8md0YqaGEuF1AIeq1hIn/xqyfpgA+gqOt5P5eY7ilw5BQGIFF6yhqtMtz89jsO
+         bNL9MDaqX+nz6U2AjgiRPNNiVKUsEFY4auSkGl1ICTUq6jVh6MhH/705Rmn46dmwUE3M
+         7DTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kxRCcZeXP5wunzbOgRNWC95RoWdHGih2CvP8S53b49U=;
+        b=rMn4ynhrj8nj52vgKIPuRZ3EwV0EX9ffO0iqpfqN9ycgpmyyEAygPcl148eogahOzw
+         yCUTv3tUgGT9e8h9v8vh6Vu57KpPNLB2XYS+XDUN1m2KE96EKhqcVdNFYcrGZOKyZl95
+         jvclwtqJxl0TGOsY72evpD9GYyr0Uu7oRSmklfUtJ4Vw5clts7uUOHYCI1ibUqrXn3mL
+         eSoM6Y69SBMUqZdA7jeGSAqSi6ugrs7SQuKrE/MUQcUHT3RD1KPHwxPgLFRZmdNTOgb3
+         ApSo50C0/67VsOMPUUkJIXGzUQ2wlo5P4xDZwfOxwo/ghY3ASgyPPioRiWPMFyE2v28C
+         EDcw==
+X-Gm-Message-State: ANoB5pn2LK/RDJKyJ08E7AdyOvTM0FY89SvDVhCmwYBr66u4tkrGwBQH
+        OHpkdidjK93gOpOyLcurIe8JBWJozjXF4yHIeO2Tog==
+X-Google-Smtp-Source: AA0mqf5jt1IyJdmTi7ED4cAgNxjK4JMnyj7LR6aX51g4KPmJswNVzLpXDc0gxfs9JUvwwHildywb7w==
+X-Received: by 2002:a05:6a00:1411:b0:574:a541:574a with SMTP id l17-20020a056a00141100b00574a541574amr21121386pfu.0.1670887781768;
+        Mon, 12 Dec 2022 15:29:41 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id x3-20020aa79ac3000000b00574ffc5976fsm6315827pfp.159.2022.12.12.15.29.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Dec 2022 15:29:41 -0800 (PST)
+Message-ID: <6397b965.a70a0220.526ad.b49d@mx.google.com>
+Date:   Mon, 12 Dec 2022 15:29:41 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1164; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=B+W99yawunGBul1VpXtz23cSOrdcTrugEON1rL8oNEM=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBjl6TmPgJGnaz5jcTZ3lfVOPRAZS8yH6adoDziyQTz YOpKUNqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCY5ek5gAKCRDB/BR4rcrsCZW1B/ 0WhJjQuxmfWcgWJCPchMw7CPUllDFPaWMt3kNFcCCur+103ruZwmjT1Ib81r+vUmo7rU9xuH7Okr5E aIVIHL72qePwEhEU8A4PMHeUuYeiMSxXkY66aQ7TBXOeaN3UizYe5YzoADHNyDbJ00Kk3c8mGTIkTh tHuz308NQIluMNcfjcGlu9c4sVfOg7ewQXC1DWs8I37snQMBlPCjwjJ9n8WyciAOGNAlvyU1J1wWWA e1Klu/ySTPg4qPWEy/FH+mHaRk8xmLg9UZ9PnSpVL3uLCWE8LhiJoSmkDuzDGOjsUe+lo0U7T4ypYe 4SgCLV4UpkD5hMCvDMQ2I0Xa6sijX0
-X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.1-rc8-185-g25f35436e149
+X-Kernelci-Report-Type: build
+X-Kernelci-Tree: pm
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.1-rc8-185-g25f35436e149)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-A remove callback just returning 0 is equivalent to no remove callback
-at all. So drop the useless function.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc8-185-g2=
+5f35436e149)
 
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+1-rc8-185-g25f35436e149/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.1-rc8-185-g25f35436e149
+Git Commit: 25f35436e1490a17b9e0ed35c727af082cf00069
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/thermal/imx_sc_thermal.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/thermal/imx_sc_thermal.c b/drivers/thermal/imx_sc_thermal.c
-index 5d92b70a5d53..4df925e3a80b 100644
---- a/drivers/thermal/imx_sc_thermal.c
-+++ b/drivers/thermal/imx_sc_thermal.c
-@@ -127,11 +127,6 @@ static int imx_sc_thermal_probe(struct platform_device *pdev)
- 	return 0;
- }
- 
--static int imx_sc_thermal_remove(struct platform_device *pdev)
--{
--	return 0;
--}
--
- static int imx_sc_sensors[] = { IMX_SC_R_SYSTEM, IMX_SC_R_PMIC_0, -1 };
- 
- static const struct of_device_id imx_sc_thermal_table[] = {
-@@ -142,7 +137,6 @@ MODULE_DEVICE_TABLE(of, imx_sc_thermal_table);
- 
- static struct platform_driver imx_sc_thermal_driver = {
- 		.probe = imx_sc_thermal_probe,
--		.remove	= imx_sc_thermal_remove,
- 		.driver = {
- 			.name = "imx-sc-thermal",
- 			.of_match_table = imx_sc_thermal_table,
-
-base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
--- 
-2.38.1
-
+For more info write to <info@kernelci.org>
