@@ -2,142 +2,89 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FB364A991
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Dec 2022 22:34:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BD764A9BB
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Dec 2022 22:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiLLVeB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Dec 2022 16:34:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S233558AbiLLVtj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Dec 2022 16:49:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiLLVeA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 16:34:00 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C063B63EA;
-        Mon, 12 Dec 2022 13:33:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670880839; x=1702416839;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6g+nJ9xvo8cwu5PEAdWzY2kdOBYFu9N983QpNMGg6Cc=;
-  b=ImX9lxUrf8h/2o7KZdbZKEdBlzJ6ddA/i76WlgI3iqwlQSHxzYde6Pnz
-   lbsfE0fcsJF2C6nb/U1zXotAYos5/4GLwBMFbuwXQT/1H3dtBW4vAPrjN
-   g2SG8kBlxAtWNPwbO+pPwJuRI7po0OJRcPJu3R0OaBK/RpOqQAfkIVU3B
-   4mRdkisEDGtuSlKoPOymQYO/p/7OZ6iRWx5xC4AuoPXntbrUvJfKOIqNT
-   jkmRvVqDtC9DJc90cB1qs41UiOzM3dKrgI1jIVa2HxvFXCTPg+Xphm+Pa
-   MlYOn9ZR+w2ONNrbw1kQ/MUH42Cc9VKJL/SGDPPt2+YRVDm6nauIYCXTe
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="319111292"
-X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="319111292"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 13:33:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="626049352"
-X-IronPort-AV: E=Sophos;i="5.96,239,1665471600"; 
-   d="scan'208";a="626049352"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga006.jf.intel.com with ESMTP; 12 Dec 2022 13:33:48 -0800
-Date:   Mon, 12 Dec 2022 13:41:52 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 06/22] sched/fair: Collect load-balancing stats for
- IPC classes
-Message-ID: <20221212214152.GF27353@ranerica-svr.sc.intel.com>
-References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
- <20221128132100.30253-7-ricardo.neri-calderon@linux.intel.com>
- <71a0f27d-68e0-f118-c117-bae48f5f1996@arm.com>
+        with ESMTP id S232995AbiLLVtY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 16:49:24 -0500
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025EE1A045
+        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 13:49:24 -0800 (PST)
+Received: by mail-qt1-x82c.google.com with SMTP id j16so10256007qtv.4
+        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 13:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sdm5LPHSgYM9xIUawQXpRV3gt1/XB5UGwiqZUgZf9G0=;
+        b=LbrNyZXHaOXAy+bQv/etbIYZ6VZoVPUi2kRpqwN6E+F/8a9V2FyFOqw87rg8zkpx6A
+         KWKB8da+Sp646sBYb4v/MUPjndRmHI+KOjVPKVdtrGt6fRTcp91l2koXjnApcd+mFyEJ
+         Xc63/McYW91ONI2KZvYwCGQk+pFyjTkIyGNE4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sdm5LPHSgYM9xIUawQXpRV3gt1/XB5UGwiqZUgZf9G0=;
+        b=U8Iomtw6axIci/VXc1yMsQVOT0/Ol8mut2+rj9hNN2+dcFB88/1FKABO2Z8/dBoiio
+         vIA6H4OsPgDspjbQqRj4PEcmcwr/1JU4cajAJUxPXYp1u80aRgqQaQJc2DosB+5ul745
+         zaiMPplmuVkleT350Q/uF7mxvVUYAPgUp/HSdB+1AG4yq/feoTFIs3LVvYMn+1sBF2oh
+         KWyWycQS5txrNThJomyjOktuRMzmjFvC+hKpsND1tejNCTO0f0/h8z+Ds3BQXD5gpAxX
+         jBYqx7mhM4uONo9GB6oufYFYqx9d1bSInHq8NaGmRmDZSoYULVKACU5XDrDWRp+Ual4G
+         EcLg==
+X-Gm-Message-State: ANoB5pnQ2skseLjtdFD1zVW4La2StEs0Z4x9xAayjQSjuI4LTwPcPtwO
+        1m09zASdm5mnSKAf43EIzI70KN7ybLvX7j9j
+X-Google-Smtp-Source: AA0mqf6rluRwrFVd/0Ly+bdcEpPTRvA+cx50WsHx61YJ3tdE4KQuUJmdiC8GlcBVP4ZMvjqTtb88RA==
+X-Received: by 2002:ac8:6607:0:b0:3a6:a43a:8ba9 with SMTP id c7-20020ac86607000000b003a6a43a8ba9mr24206350qtp.3.1670881762685;
+        Mon, 12 Dec 2022 13:49:22 -0800 (PST)
+Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com. [209.85.219.46])
+        by smtp.gmail.com with ESMTPSA id de36-20020a05620a372400b006fae7e6204bsm6514026qkb.108.2022.12.12.13.49.22
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Dec 2022 13:49:22 -0800 (PST)
+Received: by mail-qv1-f46.google.com with SMTP id c14so9162527qvq.0
+        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 13:49:22 -0800 (PST)
+X-Received: by 2002:ad4:4101:0:b0:4b1:856b:4277 with SMTP id
+ i1-20020ad44101000000b004b1856b4277mr70612302qvp.129.1670881761832; Mon, 12
+ Dec 2022 13:49:21 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71a0f27d-68e0-f118-c117-bae48f5f1996@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAJZ5v0j=CNHAC-H9ci6qpTEeG4R1TD78oQWoKZXALN4TzPZubw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j=CNHAC-H9ci6qpTEeG4R1TD78oQWoKZXALN4TzPZubw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 12 Dec 2022 13:49:06 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whBn0PmD0pV5RZnnO=75tMd9XLFVstKfNxH5eM6MCK1-g@mail.gmail.com>
+Message-ID: <CAHk-=whBn0PmD0pV5RZnnO=75tMd9XLFVstKfNxH5eM6MCK1-g@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal control updates for v6.2-rc1
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 07, 2022 at 06:00:32PM +0100, Dietmar Eggemann wrote:
-> On 28/11/2022 14:20, Ricardo Neri wrote:
-> 
-> [...]
-> 
-> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > index 224107278471..3a1d6c50a19b 100644
-> > --- a/kernel/sched/fair.c
-> > +++ b/kernel/sched/fair.c
-> > @@ -9100,6 +9100,57 @@ group_type group_classify(unsigned int imbalance_pct,
-> >  	return group_has_spare;
-> >  }
-> >  
-> > +struct sg_lb_ipcc_stats {
-> > +	int min_score;	/* Min(score(rq->curr->ipcc)) */
-> > +	int min_ipcc;	/* Min(rq->curr->ipcc) */
-> > +	long sum_score; /* Sum(score(rq->curr->ipcc)) */
-> > +};
-> 
-> Wouldn't it be cleaner to put `min_score`, `min_ipcc` and `sum_score`
-> into `struct sg_lb_stats` next to `ipcc_score_{after, before}` under the
-> same #ifdef CONFIG_IPC_CLASSES?
+On Mon, Dec 12, 2022 at 9:33 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> I would really appreciate it if you please give me your recommendation
+> regarding the extra thermal control material.  Would you like to
+> receive a pull request with it later during this merge window, or
+> would you prefer it to wait for the 6.3 one?
 
-Yes, that is a good observation. I initially wanted to hide these
-intermediate and only expose the end result ipcc_score_{after, before} to
-struct sg_lb_stats. I agree, it would look cleaner as you suggest.
-> 
-> Looks like those IPCC stats would only be needed in the specific
-> condition under which update_sg_lb_stats_scores() is called?
+If you are happy with it, and feel like you can review it and get it
+to me in a couple of days, then fine. But I really don't want to deal
+with it after that point - I'm on the road over the weekend, and then
+the week after that is xmas week. So at that point I'm solidly in the
+"it can wait until next release..
 
-True.
-
-> 
-> > +#ifdef CONFIG_IPC_CLASSES
-> > +static void init_rq_ipcc_stats(struct sg_lb_ipcc_stats *sgcs)
-> > +{
-> > +	*sgcs = (struct sg_lb_ipcc_stats) {
-> > +		.min_score = INT_MAX,
-> > +	};
-> > +}
-> > +
-> > +/** Called only if cpu_of(@rq) is not idle and has tasks running. */
-> > +static void update_sg_lb_ipcc_stats(struct sg_lb_ipcc_stats *sgcs,
-> > +				    struct rq *rq)
-> > +{
-> > +	struct task_struct *curr;
-> > +	unsigned short ipcc;
-> > +	int score;
-> > +
-> > +	if (!sched_ipcc_enabled())
-> > +		return;
-> > +
-> > +	curr = rcu_dereference(rq->curr);
-> > +	if (!curr || (curr->flags & PF_EXITING) || is_idle_task(curr))
-> 
-> So the Idle task is excluded but RT, DL, (Stopper) tasks are not. Looks
-> weird if non-CFS tasks could influence CFS load-balancing.
-> AFAICS, RT and DL tasks could have p->ipcc != IPC_CLASS_UNCLASSIFIED?
-
-Agreed. Perhaps I can also check for !(task_is_realtime()), which see
-seems to cover all these cases.
-> 
-> [...]
+            Linus
