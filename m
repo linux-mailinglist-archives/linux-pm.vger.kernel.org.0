@@ -2,44 +2,44 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AD0649A93
-	for <lists+linux-pm@lfdr.de>; Mon, 12 Dec 2022 10:03:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 60748649AA0
+	for <lists+linux-pm@lfdr.de>; Mon, 12 Dec 2022 10:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbiLLJC5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Dec 2022 04:02:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S229452AbiLLJFW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 12 Dec 2022 04:05:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231723AbiLLJCw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 04:02:52 -0500
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2082.outbound.protection.outlook.com [40.107.220.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EDDB54;
-        Mon, 12 Dec 2022 01:02:50 -0800 (PST)
+        with ESMTP id S231727AbiLLJFV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 04:05:21 -0500
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2049.outbound.protection.outlook.com [40.107.220.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5286F2DC4;
+        Mon, 12 Dec 2022 01:05:20 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i/aPSPKLAZwPVeraDYZJA/HL7PpemWuBe28aFEI/Wg3SrH6i0dyHJfaR/SZhOtX7I/xImpFhS/3LOxg7v0TlZYhVKvhK6x7D/YPtoh+qg1WyRjitzB2al8xnoEPO14Fob5mEJ/kp65yYpd78LNBanXt4KCfME15hK2pL2NbfNYM/uR7WCjrFhuUg22UaBUlGP00U6ooLO6KzfWRxn8uWwNUVgUmlh8d7WSUq+E9dlrFuMtkqlh0ZCtqAPwJOdsJr1L+pAZcsG8GYWStaIGdsLRVZYm/LfcJ1rzFJW0wwhY3f46I15HmjPDbgcKwGA3sryGVrwuhTcb5pggOjTliySQ==
+ b=DcviVB5zJDklJcJKIaK1QyxkjgVgYyG35OAuUQM7XsuDOEIhHG+HU9ftL9b53Y4vMv37KE+uNtS1j5QMjIyTvOLMs+RUdB2fWBk65W00Kb39IfY+L26/Zr1/vuQhrQlz4srJLYAnsHsxLZwpDnGKwsr5yaqwli91aGDHbQH0c28lL0l64+RjhCXlWkWFEQQxc0V/ePHwCcWHHe7jmgeGZ0wHXCIuAtuxa+RmrbS6dW2Vszu2nMxT8qA2XnYTYF/rVQbq2Ds1l4IMPCkzO/K1GlkwMaBxAlglsjNPUu722YY18Vah23QnkXuHeHjj/ekeBAQ63wKO+veQ5m4U4A2wgA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uZv5grP2mx5MaE2FOqdwDdQcjzFJYa9uXF8Jedq4KzQ=;
- b=nKdInLfCsBIyiJ5EHlITkgxMSjVDP0osw/opUd4th1DnhlCQg6TU9A/j8RWlKjAzDFdUxz/HPPzid4cqsipmW9T5eZ0Rb/Lw+cEh1Y9UJDLmShHuT/FzIcy/iFTfM8v/cP3zYWzy1i5oXMQQpK6+7FCrPXgu+p2SXJk0s+2EGV+efr03LzxJuvFqTQSbieCVbVjZKrtFtJ1aMludRQzI8roN4cmjeu3cdKyJnOTUYhvPPKxu0sB6E93MmY4/otG4BRXIHLWsz9ba9II8g02CgK75lPiqYkxO4qjYBQK3kCwT3EGIlLIUfOH/J5oykwjQy6tR3aHszQy1moJrqhRfVg==
+ bh=6Lj+2N+uVoM9B3ZzI11e2ITzx4UCP6AJ9n67tqpLgCs=;
+ b=Pc/8vvG+tRMxedD9DMDvxKOJuDLvLdY+SjUXqbg8uRIIZmUKkhDD89c1/Wa7NSaZ12hixXNdcACMoqjdBmewW39T7SP7JiK+PLkU5oj9zhjn1iPCslucVth+rNjfyDw/Z/GTtemr4SAMQyKqT7/IdDHgpwnkoijdGQOYdcyqpSR9y6HaVd/8haa91V/7eo04xoa2zA6B4iokBaM4Tkjy5ErZZ0cU2oZGiZvs3zC/UyGm5idFwT4PgOs56OeXKwaruTh+vvFlUe0m0/83f2aKM6I1nZIuIqq8qSP5TXIXSviPIG0dXgi99rOcQYevFJrSW1KO6aa32AE7yVzlT7KAQQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uZv5grP2mx5MaE2FOqdwDdQcjzFJYa9uXF8Jedq4KzQ=;
- b=uQKScHI12B/ohdyrLTqIrS9NBFTqc4Th0CfiarB2g4u04D/vGFPlrCW5i8ilX2tqujFuZNctRXezWNcBJ5IEo3561aROrCaNdEtYjf39LDe5qSjgh4r5WwWadtuv+IwsgzsWiKGyaD0WxaWpeJJUSB84WgERgg3SogEmU2oxOUQ=
+ bh=6Lj+2N+uVoM9B3ZzI11e2ITzx4UCP6AJ9n67tqpLgCs=;
+ b=vEc8g3/GIoaWuOUtHPosNYiEKwWxyFI5t6+DQg58dwKvncWZQMZDF5XMe2sxmgutn+joBG+U6wTjF3Nw45kaA/eIXrRp52lj4TFEEZtFbmcpyZS+EiNYMKaG0Y9qZ92unWoJnZff2NCCjTCJQSuNzM9aWRbki1nvdOFx1boYcDg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
  SN7PR12MB6957.namprd12.prod.outlook.com (2603:10b6:806:263::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5880.19; Mon, 12 Dec
- 2022 09:02:47 +0000
+ 2022 09:05:17 +0000
 Received: from DM5PR12MB2504.namprd12.prod.outlook.com
  ([fe80::2443:424:1c7c:17cc]) by DM5PR12MB2504.namprd12.prod.outlook.com
  ([fe80::2443:424:1c7c:17cc%6]) with mapi id 15.20.5857.023; Mon, 12 Dec 2022
- 09:02:47 +0000
-Date:   Mon, 12 Dec 2022 17:02:24 +0800
+ 09:05:17 +0000
+Date:   Mon, 12 Dec 2022 17:04:52 +0800
 From:   Huang Rui <ray.huang@amd.com>
 To:     "Yuan, Perry" <Perry.Yuan@amd.com>
 Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
@@ -54,64 +54,64 @@ Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
         "Karny, Wyes" <Wyes.Karny@amd.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v7 06/13] cpufreq: amd-pstate: implement amd pstate cpu
- online and offline callback
-Message-ID: <Y5buIL08ovNxYp5f@amd.com>
+Subject: Re: [PATCH v7 07/13] cpufreq: amd-pstate: implement suspend and
+ resume callbacks
+Message-ID: <Y5butE2biSRddti+@amd.com>
 References: <20221208111852.386731-1-perry.yuan@amd.com>
- <20221208111852.386731-7-perry.yuan@amd.com>
+ <20221208111852.386731-8-perry.yuan@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221208111852.386731-7-perry.yuan@amd.com>
-X-ClientProxiedBy: SI1PR02CA0046.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::14) To DM5PR12MB2504.namprd12.prod.outlook.com
+In-Reply-To: <20221208111852.386731-8-perry.yuan@amd.com>
+X-ClientProxiedBy: SI2PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:4:194::11) To DM5PR12MB2504.namprd12.prod.outlook.com
  (2603:10b6:4:b5::19)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|SN7PR12MB6957:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2a5689f8-7ddb-403f-5647-08dadc1fa397
+X-MS-Office365-Filtering-Correlation-Id: 33de95a5-4b6e-445f-e5e2-08dadc1ffce3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ruMxLcXFkBs8PJEj/w1QPudz8yxDrQ3fh9hIp9DMhNIsKawDjyqI3OBR0/z5OiisHLQUjTqYBtUJhNcXpUoAHXk/JzkqQxzJz5ec6/Cud26LeKMf0tfNTBv54TJxao5G/gCtYLaOx+VMbF8c2sMef7IWqzSgZm9xnhwpfV0lSZNRYqxJ3TcibUmToBgsfNqaDxibxbZSZmFWX2Ru/rrY49pBbqMZhISwk52E7IObjyq0da+x88qNIAL1H3jm+sEXz9Sr456kpqlRkD3SY0ResGd49MUDrIkyYNqj0qXubH1W2SSkWpBvShicDVQ4XrMINHLnD0mcRZWMBOzjNf9V9XbSZz+YkSOuHS1QX3BBzXGvXwtT9yI10CUdsgK5tYkYDVwfe/Aoxjc9ETlarkTajIKGdncbYAqA44jClY7zpaW0UA9MQLQ0JYTl6jTCBYI8nUxzzPpMCFRKAeSFHSZGHawdDAnLu7Oqh/NKjDaLaSY3RqeukCxKBalgGteWVWsmCveM6WX+wFjxKn0R46OWngXDa5voL2+g8eXr2EHHSNV1RlME5kxblfl7yUWcLWqBcaJu39RMMtrO4W4KN7xb3OgY7nt2MPUcJraDlIkC4pEWuPoX3BosZ9BYZ+x0ZZFFYqwn6RXPq1SEP6Ja+gdgBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(366004)(346002)(376002)(396003)(39860400002)(451199015)(8936002)(83380400001)(86362001)(38100700002)(2906002)(5660300002)(6862004)(8676002)(66556008)(4326008)(66946007)(66476007)(41300700001)(2616005)(26005)(6512007)(6666004)(6506007)(186003)(316002)(37006003)(6636002)(54906003)(478600001)(6486002)(36756003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: r5jJPMMGsjHWZ45fWtVEbTyUZ4QgAxCuHOYt9Xz9XMclpuqqFIpfmt1UFHnTYSN/eti61B1dDntQS5PiBkOoh3Jkpy+H2PZMoWGu0yN5V4VWQqhLIXrBRWHfU9QwctGQ/j+jVhjHN0JPpV07thNHvx6GllW8MdGnJESI89XLokxXxgvgoVUwaMr7fVQqCL86iHsFdfVZYnrwc1D183ULzLTZ5NUdM28CbMdcnIr3DyuoyZ00cPLJJE5aV65VpFnUihsu4dkDtlwM5Gt2EGvT2MD7+gdECxC2nSF62U/Fpu5etk9VOsKqxSjBqPvfSPuTohNge58+Mb+MxNvcldSDglkendwsgYLpf9S+PgrrA40jH6AXVP59OO9pf6Bq45RKi8h9X500JkInA0B+818cw+ZtpagLlZNpD0KwlCLN+xMYgmsgWJuNuG1hoKRaaC0h29UMDUNUWdI+wNH/TnmBFOnV2hUaMpcCDWeUtHgkBZ9lsb6LPid3ZVG/d0f69YvF6yaGAc7JfU/KWwpuQg7mxeJZnfeXZIUvHMBrRrMdmcb5R9GjY+3z50YjcASywoq7y0QeeeubHuyGWb/wamCgMWRAVLQXzDrvlBHdtAm+rgG+sNvmadjH9LP4eqYmFHW6jSGBW0FXqTr1fM5kCQKRXA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(346002)(366004)(136003)(451199015)(36756003)(38100700002)(8676002)(15650500001)(66556008)(66476007)(66946007)(4326008)(2906002)(5660300002)(6862004)(8936002)(86362001)(83380400001)(478600001)(186003)(6636002)(54906003)(316002)(37006003)(6486002)(26005)(41300700001)(2616005)(6506007)(6666004)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CpyMNu4M9ms7J5hYKYgzZPsuMZLMDM2RdOKQ0Y1BZbFkzdFiR1jkdq8wARjS?=
- =?us-ascii?Q?zjvCyWYPsyFo2oO1Jj7mInjcdbdZ8MaOKb2sx1bVZ0GLXJHMVY/jhtdwfh+x?=
- =?us-ascii?Q?DoTjIOZTlLSt7nAHcRb+9D8xPimN+yNSajNtUPLzpcrL5MDm5HThhASuz0AY?=
- =?us-ascii?Q?hISCtwG9ThAZgwhArYpLiOOfvSgLB6sMXwEbnw61ZIb4RxyiP6+lMpiqPdZB?=
- =?us-ascii?Q?4xoKUotydhTDbmMKAcQtj5mHewHsP03sfljH0efuH7govgemqjBKT3kNZkux?=
- =?us-ascii?Q?TjVlj3mzAUfsWDnXNiYZsBO2v6mXONHOfgWJDWiLvITreU3amSdi1GS5B+o8?=
- =?us-ascii?Q?a7FY6jx0cDSw9265W4BZj0asM5yzb8JvtNN/Acu8ru/kMO48fHjpCz/ZCNMa?=
- =?us-ascii?Q?/5OtP8Qw5+gp8JXMgUac8EdPSHHQQ1YmU1pCYwnOkPFVSytP1vLso11v+q3c?=
- =?us-ascii?Q?pEPOK99go3UX8aRav+LF0MTiA+HeR37ywvEzlaN/jei2VDp3TUVTZrWJ2LNz?=
- =?us-ascii?Q?SsmyehzuyIUDs77YosMj1GF4C67PynRowLoIbJEamzkoCxD0aTVTiITMdy5U?=
- =?us-ascii?Q?LW60xdBIRNXOuZCRHn4LCqEHOxxS8z1+CTP5tUiSWgnnhCU6h5j0D2tGspnw?=
- =?us-ascii?Q?n2Vx57mlnRCxakj1FV9MbG+tIshMgVoO7GDB7ZWhigvd1JyxM88hZMaB1O5R?=
- =?us-ascii?Q?KqPuJkJgDWgcrN/plJ/rLo0kteVHouXOUQck1TkoIclmD12GxA72m1p2R9gQ?=
- =?us-ascii?Q?Fx+wnd3+ty6cZWotX6ciRszIQR1vNlJWGANOi1s/w2ByRD0uEzW8acH0fzVr?=
- =?us-ascii?Q?WKZDn++R8R7BOsLoGqr687M7FnPyp3mEvjD/pXpx0+qgHU1VVmeq05BM4Z76?=
- =?us-ascii?Q?+FC1mJuX6FcyQkOQzfot/2TsX7lYg4jZrbqzaI63X6GJiclPUakn6SFgD140?=
- =?us-ascii?Q?oyt56HLTEjJsZPszWALe/i4iNChzYOonGs3vIvnwmHzBSwnqCecYFcZb2kP4?=
- =?us-ascii?Q?eYfae9jP+GpohlpAj3ncdQ8TkUhKXgAqI+cIlovyM0G1jvQjcOLYBwwDAGVf?=
- =?us-ascii?Q?XVnZQX8uTuZwvqIBEFxjtOW1McR4V5NsaQEjKnXsfsimNU+8xmIrM561w6mp?=
- =?us-ascii?Q?CnP4v0zqbDJPdcpMWxzflAZpeIpeTuAa+S1q6gHSQQSG7GQmnzP1SRstyBcX?=
- =?us-ascii?Q?8Ggb70Vs2i2GKhCnjFkW1MY71sxE0p/DeJqUoNEPrwPG0/RoM0zir16gwsg+?=
- =?us-ascii?Q?nTKHvn6VYG+cVNveDChy5JZIDGOLahFUM/z2bREHC21QBqxxaMuIx6p9NuFU?=
- =?us-ascii?Q?+Kn+frYV5LyYPqqIDxJqTfCtSYUujUYgi07X9YEbhnGOcTS3ONk2ZkIUYQ9l?=
- =?us-ascii?Q?S+i4aFEWDLCgq4ZPFIjCqS0wcXLK+kV7k6j5vt5BGWnWw5Iex2jcotEPHIyf?=
- =?us-ascii?Q?0NQU++T/tjnTUsU0hEDHq/koMjRcKVPDvqEo6mThRMqUoy8ry2sVJK6YWy/p?=
- =?us-ascii?Q?YzqFWrSqsloCh6i/SRvVIsPgoVVaoXVtAzc9cEA+P8ZEJ6dza5Nn6q2qkrJJ?=
- =?us-ascii?Q?nCWA0/clnGps0M7d+qYRe9okPRaSOdPl1TOK/QC4?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Hv91WBf87AOS0IUlh2g22R1h6neaLnaZqAvCZgYKoTd37O1+wL/BgqYV148m?=
+ =?us-ascii?Q?3/P2HH3AGC6HcmSzwKHTdUJDYrT8NnGoa2UOXFoBdQhw3gMWUTUR3vSpMH8P?=
+ =?us-ascii?Q?4vnsYOyo9gvSXSAiANnM/qSkqMUHvjBoQidwGhYS2Er8/06fngeFq/h9BRiw?=
+ =?us-ascii?Q?YjLu0z0nmNpcDA1kNp2XOyUwFTP4geaCTgvDevSwh2T9pLwvNDVnuB7N45gy?=
+ =?us-ascii?Q?er+8y7wt7XUlwhbDQnNd/vHeBIW6DP0ni5dUETWVU+vlCcXwE3gasy6H08Pf?=
+ =?us-ascii?Q?KvVXWO8nmO3UtU32vn70BWJsMOpE5QrhfidVyyFSrzOMnqzll9MQ+huHZWtD?=
+ =?us-ascii?Q?bKq3GvdMJztYYzz3yyXiAc6pc8fi/sDODHP02liTtrhngfU6LUrmwBDZ9eCI?=
+ =?us-ascii?Q?ExBkhimXB69ZvlKour3OzbhAF85hkKYwNLTihZbOpTzF4b/mc4sTvJIy1d3r?=
+ =?us-ascii?Q?+1bkY4M+uV1vlJH8B9klhJ4gucaj6wTMq7iLkmhkPjh9vHnRYYZ67AK4ocif?=
+ =?us-ascii?Q?EIJuYLqFx6lsMtak42V2SH0zxwVHbrpX4SqTGmgAKwGbCbYfXiP9BhYATqZN?=
+ =?us-ascii?Q?sUmueptZGZ0ZlgvkYJvhVidAg47Jni/Aa7qCaBoYGNJU0ghJZ7sOrZkD3Uy2?=
+ =?us-ascii?Q?wqZMeKS0d/aaMIds1ix80cSEcYvVE4BILDSnbGokcDPid4d0fyTJGH+kEjpj?=
+ =?us-ascii?Q?rmAe0kiTsb65+rUeOXcJhcT2IO6IP8So7OQdEdeNOvACV4ZsAvoYq4kQnhek?=
+ =?us-ascii?Q?H42Zw8SPDBzoKug47m1Gg+trsWGZP+vJQU1WUIbD8GqJEHplu+Zk9ChcHgcl?=
+ =?us-ascii?Q?CmDy5CK/x3aftBVaRcnuyZNQqxjJirUbvjF07EEU3CJcCFmHWuTw4k9ZM5bY?=
+ =?us-ascii?Q?mk7QLE2zq8/h7MYjMGgLh2N4rRGz8DR0HxZclB3rzYxfOuXiu88Ow6H+x6oU?=
+ =?us-ascii?Q?5V+H5q3jtNu4BWdkPLTIUah35uoffIAOoW1w09NGzmuJjV64HdsUpglLRweh?=
+ =?us-ascii?Q?gOC4U6/EnPnLIPI+qti9KdpyUlGTLLG56q4BZP10U2zf/G41rpxX/QEAvG9c?=
+ =?us-ascii?Q?9g+CMEOkwRTHPKdiW7/g3emCNXafDI7N/rpBa+TSbJ6wap9CxC68fXXyxwSc?=
+ =?us-ascii?Q?JQNo+timtw9vPiNOa42YLUv5LiMnXYdYLW+uSu5c8c7Fnd+KBeED/lmEB1q9?=
+ =?us-ascii?Q?ybuogHnLy777UlWfWnr9Vd3GE60yT6vTTMtNHJr6AHWxxVf0DgYY65dHbtcA?=
+ =?us-ascii?Q?CosOjZo6foKGY+RU/AZGnXFZjusCqFJKoBiKOMl2BuP7R4/CDnnB3/rPtEou?=
+ =?us-ascii?Q?w7Tk273d1jaSbSGngniUPzmleT1j336QtgEfcGbDEXckh/QoF0Qaj2lq0aPh?=
+ =?us-ascii?Q?WR857WKRAp8LdESonhQsdA3RjyMyNj04Uc03R2qgPLxLGd8cf5pGFTAcE8HW?=
+ =?us-ascii?Q?RIKXmx2tf5EXt1kfzQAlrp2gmk3AlxMegakl7lLEBz6LC3sxrfAaokGd3tvt?=
+ =?us-ascii?Q?D3adTsxP7b1RFWvwMpR8Zx29uZiQtiwOVMK0dcobaEPrb6vDgUP8akkzdIpa?=
+ =?us-ascii?Q?9+bXTxD6Ah+sqeZkSVOUMFVV9upcMOVVXc8Pt8fA?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2a5689f8-7ddb-403f-5647-08dadc1fa397
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33de95a5-4b6e-445f-e5e2-08dadc1ffce3
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 09:02:47.5234
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2022 09:05:17.2487
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lYI79ZUuhnx7I/R25mNGGTwW6TjgC4FIb7wYfd5QbeFXj6X5atTxqIUdkc3yRJ/25Hj24dDRv3AS/YizLfejHw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 03yog/pL7WQTgcP2+Qu1+ZUfXZiCbfZsoJVhzwcl4XDRl56CqEH22wFZxgIJa8AOISxKrdjcC1aAAzcXljr51A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6957
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -123,147 +123,84 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 07:18:45PM +0800, Yuan, Perry wrote:
+On Thu, Dec 08, 2022 at 07:18:46PM +0800, Yuan, Perry wrote:
 > From: Perry Yuan <Perry.Yuan@amd.com>
 > 
-> Adds online and offline driver callback support to allow cpu cores go
-> offline and help to restore the previous working states when core goes
-> back online later for EPP driver mode.
+> add suspend and resume support for the AMD processors by amd_pstate_epp
+> driver instance.
+> 
+> When the CPPC is suspended, EPP driver will set EPP profile to 'power'
+> profile and set max/min perf to lowest perf value.
+> When resume happens, it will restore the MSR registers with
+> previous cached value.
 > 
 > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 89 ++++++++++++++++++++++++++++++++++++
->  include/linux/amd-pstate.h   |  1 +
->  2 files changed, 90 insertions(+)
+>  drivers/cpufreq/amd-pstate.c | 40 ++++++++++++++++++++++++++++++++++++
+>  1 file changed, 40 insertions(+)
 > 
 > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 0a521be1be8a..412accab7bda 100644
+> index 412accab7bda..ea9255bdc9ac 100644
 > --- a/drivers/cpufreq/amd-pstate.c
 > +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -1186,6 +1186,93 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
->  	return 0;
+> @@ -1273,6 +1273,44 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+>  	return amd_pstate_cpu_offline(policy);
 >  }
 >  
-> +static void amd_pstate_epp_reenable(struct amd_cpudata *cpudata)
+> +static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
 > +{
-> +	struct cppc_perf_ctrls perf_ctrls;
-> +	u64 value, max_perf;
+> +	struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
 > +	int ret;
 > +
-> +	ret = amd_pstate_enable(true);
+> +	/* avoid suspending when EPP is not enabled */
+> +	if (!cppc_active)
+> +		return 0;
+> +
+> +	/* set this flag to avoid setting core offline*/
+> +	cpudata->suspended = true;
+> +
+> +	/* disable CPPC in lowlevel firmware */
+> +	ret = amd_pstate_enable(false);
 > +	if (ret)
-> +		pr_err("failed to enable amd pstate during resume, return %d\n", ret);
+> +		pr_err("failed to suspend, return %d\n", ret);
 > +
-> +	value = READ_ONCE(cpudata->cppc_req_cached);
-> +	max_perf = READ_ONCE(cpudata->highest_perf);
-> +
-> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> +		wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, value);
-> +	} else {
-> +		perf_ctrls.max_perf = max_perf;
-> +		perf_ctrls.energy_perf = AMD_CPPC_ENERGY_PERF_PREF(cpudata->epp_cached);
-> +		cppc_set_perf(cpudata->cpu, &perf_ctrls);
-> +	}
+> +	return 0;
 > +}
 > +
-> +static int amd_pstate_epp_cpu_online(struct cpufreq_policy *policy)
+> +static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
 > +{
 > +	struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
 > +
-> +	pr_debug("AMD CPU Core %d going online\n", cpudata->cpu);
+> +	if (cpudata->suspended) {
+> +		mutex_lock(&amd_pstate_limits_lock);
 > +
-> +	if (cppc_active) {
+> +		/* enable amd pstate from suspend state*/
 > +		amd_pstate_epp_reenable(cpudata);
+
+The same comment, could you please double confirm whether the perfo_ctrls
+registers will be cleared while we execute a round of S3 suspend/resume?
+
+> +
+> +		mutex_unlock(&amd_pstate_limits_lock);
+> +
 > +		cpudata->suspended = false;
 > +	}
 > +
 > +	return 0;
 > +}
 > +
-> +static void amd_pstate_epp_offline(struct cpufreq_policy *policy)
-> +{
-> +	struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
-> +	struct cppc_perf_ctrls perf_ctrls;
-> +	int min_perf;
-> +	u64 value;
-> +
-> +	min_perf = READ_ONCE(cpudata->lowest_perf);
-> +	value = READ_ONCE(cpudata->cppc_req_cached);
-> +
-> +	mutex_lock(&amd_pstate_limits_lock);
-> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> +		cpudata->epp_policy = CPUFREQ_POLICY_UNKNOWN;
-> +
-> +		/* Set max perf same as min perf */
-> +		value &= ~AMD_CPPC_MAX_PERF(~0L);
-> +		value |= AMD_CPPC_MAX_PERF(min_perf);
-> +		value &= ~AMD_CPPC_MIN_PERF(~0L);
-> +		value |= AMD_CPPC_MIN_PERF(min_perf);
-> +		wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, value);
-> +	} else {
-> +		perf_ctrls.desired_perf = 0;
-> +		perf_ctrls.max_perf = min_perf;
-> +		perf_ctrls.energy_perf = AMD_CPPC_ENERGY_PERF_PREF(HWP_EPP_POWERSAVE);
-> +		cppc_set_perf(cpudata->cpu, &perf_ctrls);
-> +	}
-
-Could you double confirm whether these registers will be cleared or
-modified while the CPU cores enter/exit online/offline? I remember Joe gave
-a test before, the register value will be saved even it gets back to
-idle/offline.
-
-Thanks,
-Ray
-
-> +	mutex_unlock(&amd_pstate_limits_lock);
-> +}
-> +
-> +static int amd_pstate_cpu_offline(struct cpufreq_policy *policy)
-> +{
-> +	struct amd_cpudata *cpudata = all_cpu_data[policy->cpu];
-> +
-> +	pr_debug("AMD CPU Core %d going offline\n", cpudata->cpu);
-> +
-> +	if (cpudata->suspended)
-> +		return 0;
-> +
-> +	if (cppc_active)
-> +		amd_pstate_epp_offline(policy);
-> +
-> +	return 0;
-> +}
-> +
-> +static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
-> +{
-> +	amd_pstate_clear_update_util_hook(policy->cpu);
-> +
-> +	return amd_pstate_cpu_offline(policy);
-> +}
-> +
 >  static void amd_pstate_verify_cpu_policy(struct amd_cpudata *cpudata,
 >  					   struct cpufreq_policy_data *policy)
 >  {
-> @@ -1220,6 +1307,8 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
->  	.init		= amd_pstate_epp_cpu_init,
->  	.exit		= amd_pstate_epp_cpu_exit,
+> @@ -1309,6 +1347,8 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
 >  	.update_limits	= amd_pstate_epp_update_limits,
-> +	.offline	= amd_pstate_epp_cpu_offline,
-> +	.online		= amd_pstate_epp_cpu_online,
+>  	.offline	= amd_pstate_epp_cpu_offline,
+>  	.online		= amd_pstate_epp_cpu_online,
+> +	.suspend	= amd_pstate_epp_suspend,
+> +	.resume		= amd_pstate_epp_resume,
 >  	.name		= "amd_pstate_epp",
 >  	.attr		= amd_pstate_epp_attr,
 >  };
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 888af62040f1..3dd26a3d104c 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -99,6 +99,7 @@ struct amd_cpudata {
->  	u64	cppc_cap1_cached;
->  	struct	update_util_data update_util;
->  	struct	amd_aperf_mperf sample;
-> +	bool suspended;
->  };
->  
->  /**
 > -- 
 > 2.34.1
 > 
