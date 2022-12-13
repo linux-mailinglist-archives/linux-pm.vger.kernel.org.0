@@ -2,181 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90F3664BB40
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 18:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21C1864BB83
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 19:04:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234027AbiLMRmt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Dec 2022 12:42:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
+        id S236212AbiLMSEO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Dec 2022 13:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiLMRmr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 12:42:47 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97ECB13F25;
-        Tue, 13 Dec 2022 09:42:45 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E3B182F4;
-        Tue, 13 Dec 2022 09:43:25 -0800 (PST)
-Received: from [10.57.9.1] (unknown [10.57.9.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F39A93F73B;
-        Tue, 13 Dec 2022 09:42:42 -0800 (PST)
-Message-ID: <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
-Date:   Tue, 13 Dec 2022 17:42:40 +0000
+        with ESMTP id S236117AbiLMSEN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 13:04:13 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 591F923E99;
+        Tue, 13 Dec 2022 10:04:12 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id jr11so489282qtb.7;
+        Tue, 13 Dec 2022 10:04:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XTTQLHgy9Q/Zctr5X5z89kcadx7K+UFZq2P5wu79Zh8=;
+        b=j4AXUeYzmJbO4UujOehIus62UjSHhJiFdCHJ0fVY3JjJ006MT+mEtA1MjoE5Yrd1Cy
+         O22T59p2O5Xcio6bEXfRhv+5q7zjfmqte0cZJsdCMRhWcxtchK8zLrY0arPO+Jk5EB30
+         2+4yvGmtPk0ATXyhfYgEbyL50FPoPWbPyDi85qFJlgxCzYENI6d7VkyCzvwYbRKksQPA
+         SOtgmdgSz0OdydmIdoXgHOIVSBKaoBFYglEnfmwpwFq/A1MpxqfJAsZvuP1MiFmyaJX9
+         C6mVexM196z+evhtUh7PvYj6cWJr9GYOYkNahWwpWT6drPWFTzvL1Oj7WE5lluNfcKq5
+         Qqww==
+X-Gm-Message-State: ANoB5pnDWMeiaub8Xj6dWL164sdtwMWE6bYirCnRe56E2ph/a48Cec5H
+        D/YJciS+APN21w/g9Jnudcn0JutSwI48Yoni91A=
+X-Google-Smtp-Source: AA0mqf5k3z1ddVGLk4Eslp0YhKDVfCT8B7U2a+2B2dIOu2IxOmw56qEXzwTNGuLLRWxeG9p3gPnXQqT6q1Y9FOoff9Y=
+X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
+ c11-20020ac87dcb000000b003a68dd04712mr32048520qte.411.1670954651440; Tue, 13
+ Dec 2022 10:04:11 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
- capacity inversion
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>,
-        Hank <han.lin@mediatek.com>,
-        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
-References: <20221127141742.1644023-1-qyousef@layalina.io>
- <20221127141742.1644023-4-qyousef@layalina.io>
- <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
- <20221203143323.w32boxa6asqvvdnp@airbuntu>
- <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
- <20221205110159.nd5igwvsaj55jar7@airbuntu>
- <CAKfTPtAOhQyfyH_qRArC2SZ1sQOBnRZ4CXARiWu2fvb+KPGsXw@mail.gmail.com>
- <20221208140526.vvmjxlz6akgqyoma@airbuntu>
- <20221209164739.GA24368@vingu-book>
- <20221212184317.sntxy3h6k44oz4mo@airbuntu>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20221212184317.sntxy3h6k44oz4mo@airbuntu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CAJZ5v0j=CNHAC-H9ci6qpTEeG4R1TD78oQWoKZXALN4TzPZubw@mail.gmail.com>
+ <CAHk-=whBn0PmD0pV5RZnnO=75tMd9XLFVstKfNxH5eM6MCK1-g@mail.gmail.com>
+In-Reply-To: <CAHk-=whBn0PmD0pV5RZnnO=75tMd9XLFVstKfNxH5eM6MCK1-g@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 13 Dec 2022 19:04:00 +0100
+Message-ID: <CAJZ5v0gPYdjz40mTdWZmh84NAf10ivkyBFVgkMERTnnu4PrR9w@mail.gmail.com>
+Subject: Re: [GIT PULL] Thermal control updates for v6.2-rc1
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Qais,
+On Mon, Dec 12, 2022 at 10:49 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Mon, Dec 12, 2022 at 9:33 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > I would really appreciate it if you please give me your recommendation
+> > regarding the extra thermal control material.  Would you like to
+> > receive a pull request with it later during this merge window, or
+> > would you prefer it to wait for the 6.3 one?
+>
+> If you are happy with it, and feel like you can review it and get it
+> to me in a couple of days, then fine. But I really don't want to deal
+> with it after that point - I'm on the road over the weekend, and then
+> the week after that is xmas week. So at that point I'm solidly in the
+> "it can wait until next release..
 
-I thought I could help with this issue.
+Thanks a lot, this helps.
 
-On 12/12/22 18:43, Qais Yousef wrote:
-> On 12/09/22 17:47, Vincent Guittot wrote:
-> 
-> [...]
-> 
->>>>>> This patch loops on all cpufreq policy in sched softirq, how can this
->>>>>> be sane ? and not only in eas mode but also in the default asymmetric
->>>>>
->>>>> Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
->>>>> in the wake up path in feec()?
->>>>
->>>> feec() should be considered as an exception not as the default rule.
->>>> Thing like above which loops for_each on external subsystem should be
->>>> prevented and the fact that feec loops all PDs doesn't means that we
->>>> can put that everywhere else
->>>
->>> Fair enough. But really understanding the root cause behind this limitation
->>> will be very helpful. I don't have the same appreciation of why this is
->>> a problem, and shedding more light will help me to think more about it in the
->>> future.
->>>
->>
->> Take the example of 1k cores with per cpu policy. Do you really think a
->> for_each_cpufreq_policy would be reasonable ?
-> 
-> Hmm I don't think such an HMP system makes sense to ever exist.
-> 
-> That system has to be a multi-socket system and I doubt inversion detection is
-> something of value.
-> 
-> Point taken anyway. Let's find another way to do this.
-> 
+I'll see if I can get the pull request out by Thursday (or please let
+me know if that will be too late already).  Otherwise it will wait for
+the next merge window.
 
-Another way might be to use the 'update' code path, which sets this
-information source, for the thermal pressure. That code path isn't as
-hot as this in the task scheduler. Furthermore, we would also
-have time and handle properly CPU hotplug callbacks there.
-
-So something like this, I have in mind:
-
-------------------------------8<-----------------------------
-diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
-index e7d6e6657ffa..7f372a93e21b 100644
---- a/drivers/base/arch_topology.c
-+++ b/drivers/base/arch_topology.c
-@@ -16,6 +16,7 @@
-  #include <linux/sched/topology.h>
-  #include <linux/cpuset.h>
-  #include <linux/cpumask.h>
-+#include <linux/mutex.h>
-  #include <linux/init.h>
-  #include <linux/rcupdate.h>
-  #include <linux/sched.h>
-@@ -153,6 +154,33 @@ void topology_set_freq_scale(const struct cpumask 
-*cpus, unsigned long cur_freq,
-  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
-  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
-  EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
-
-+static struct cpumask highest_capacity_mask;
-
-+static struct cpumask highest_capacity_mask;
-+static unsigned int max_possible_capacity;
-+static DEFINE_MUTEX(max_capacity_lock);
-+
-+static void max_capacity_update(const struct cpumask *cpus,
-+                               unsigned long capacity)
-+{
-+       mutex_lock(&max_capacity_lock);
-+
-+       if (max_possible_capacity < capacity) {
-+               max_possible_capacity = capacity;
-+
-+               cpumask_clear(&highest_capacity_mask);
-+
-+               cpumask_or(&highest_capacity_mask,
-+                          &highest_capacity_mask, cpus);
-+       }
-+
-+       mutex_unlock(&max_capacity_lock);
-+}
-+
-+bool topology_test_max_cpu_capacity(unsigned int cpu)
-+{
-+       return cpumask_test_cpu(cpu, &highest_capacity_mask);
-+}
-+EXPORT_SYMBOL_GPL(topology_test_max_cpu_capacity);
-+
-  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
-  {
-         per_cpu(cpu_scale, cpu) = capacity;
-@@ -203,6 +231,8 @@ void topology_update_thermal_pressure(const struct 
-cpumask *cpus,
-
-         for_each_cpu(cpu, cpus)
-                 WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
-+
-+       max_capacity_update(cpus, capacity);
-  }
-  EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
-
-
---------------------------->8--------------------------------
-
-We could use the RCU if there is a potential to read racy date
-while the updater modifies the mask in the meantime. Mutex is to
-serialize the thermal writers which might be kicked for two
-policies at the same time.
-
-If you like I can develop and test such code in the arch_topology.c
-
-Regards,
-Lukasz
+Cheers,
+Rafael
