@@ -2,170 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA7FB64AD33
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 02:39:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAFEE64B005
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 07:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbiLMBjC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 12 Dec 2022 20:39:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54644 "EHLO
+        id S233730AbiLMGqY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Dec 2022 01:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234252AbiLMBi1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 12 Dec 2022 20:38:27 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E0E95A3
-        for <linux-pm@vger.kernel.org>; Mon, 12 Dec 2022 17:38:26 -0800 (PST)
+        with ESMTP id S231888AbiLMGqX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 01:46:23 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB3EDF21;
+        Mon, 12 Dec 2022 22:46:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670895506; x=1702431506;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=F4wPUPfxF5k+WMzEUncwFNzeTARJIlhOv/ZY9EGkYUo=;
-  b=Ub0b/40gIVx7TJGG12nmn/Vy7xRK/Fxe+cuhsQ8ezGxVDWXcsmWKeoA3
-   8wdRjlGwyPjBOV+BdSSksmrf2dx6lzXIixNluSlb3H3gaJmshx/G+01Wt
-   qPtNJUGrITQdk3etiC5hmp3u6xGbH1r/VxdEE/KJ6+YLqQejZeyP9Zb8Y
-   Jk1sjMk1EaGH/8t3cNJY2DweHnR2PkwrE4L116yzAwU1PBAVR8WTb8ljU
-   QGLIUCIKq/Gddb9Ch8bgLhMxn2sGoYuh5b4a7t+4MEL11g8ywT4Af27gI
-   Ie/AHVDLtvGf0zct7JVGSNZXMTgBvefCCtQg7SCv7FrbclVfshDQAld0n
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="382321090"
+  t=1670913982; x=1702449982;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=CERc3Okb1nSH7mJUU1OJuEvxVUFeSI855RFu3APAyHY=;
+  b=O5pjswJ7q6/nrygYhahHOYXJevn3PZAgQzLBJ3J06uLKHwg3prOMe4fD
+   UGFDCUJLxFbnot2ekrdl/4pzWTSUu9OZqKfVHF2Zo/POiGnGd10hFuipU
+   BAbMwdNZaQLIJMqV6hw5LgcrNzrA6syrWrYkwW+t1dCmgOePORNb3DyNu
+   ETSyHYHvI7RxCNrCB9oKoqpY2rm4wCUXRPI6dNmZhIUkrT18zAUOlMpqw
+   w2uu1h6mpRowlVEqYUYpYGR46hCbXo9jX8tu2PDkHFtekbFfERJAauIPa
+   RqPCxI5cGcbNb4PO7PqkOnk2rjhL6lEiOX3FWmc+gOci87KJN/QalTb2x
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="301471074"
 X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="382321090"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 17:38:25 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="680891075"
+   d="scan'208";a="301471074"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 22:46:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10559"; a="679204396"
 X-IronPort-AV: E=Sophos;i="5.96,240,1665471600"; 
-   d="scan'208";a="680891075"
-Received: from yujiedou-mobl1.ccr.corp.intel.com ([10.255.29.106])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2022 17:38:22 -0800
-Message-ID: <10cae7a3db86278c39ecb8837ec000b054c51ebc.camel@intel.com>
-Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
-Date:   Tue, 13 Dec 2022 09:38:17 +0800
-In-Reply-To: <CAJZ5v0j=x6ofgTFcoRw1bsoCbsbA7uAqQNddXVeXXOuwQzcNBQ@mail.gmail.com>
-References: <20221108033332.27760-1-rui.zhang@intel.com>
-         <20221108033332.27760-2-rui.zhang@intel.com>
-         <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
-         <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
-         <b40f141c0266b6971f8dec0e63964dd1311b1747.camel@intel.com>
-         <CAJZ5v0j=x6ofgTFcoRw1bsoCbsbA7uAqQNddXVeXXOuwQzcNBQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+   d="scan'208";a="679204396"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 12 Dec 2022 22:46:19 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p4z3S-000496-2Q;
+        Tue, 13 Dec 2022 06:46:18 +0000
+Date:   Tue, 13 Dec 2022 14:46:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d480bd09fb2e112ccfaca8989453c5c74dc585a8
+Message-ID: <63981fab.82DZk2BamCFFqBIV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2022-12-12 at 13:11 +0100, Rafael J. Wysocki wrote:
-> On Sun, Dec 11, 2022 at 8:24 AM Zhang Rui <rui.zhang@intel.com>
-> wrote:
-> > 
-> > > > > +       if (err)
-> > > > > +               return err;
-> > > > > +
-> > > > > +       *tjmax = (eax >> 16) & 0xff;
-> > > > 
-> > > > This means that the tjmax value cannot be negative.
-> > > > 
-> > > > > +
-> > > > > +       return *tjmax ? 0 : -EINVAL;
-> > > > 
-> > > > So the return value of this function could be tjmax if positive
-> > > > or
-> > > > a
-> > > > negative error code otherwise.  No return pointers needed.
-> > > 
-> > > I tried both. And I think I chose this solution just because it
-> > > makes
-> > > the following cleanup patches in this series looks prettier.
-> > > 
-> > > I will try your suggestion, and if there is any other reason I
-> > > wrote
-> > > it
-> > > in this way, I will find it out again. :p
-> > 
-> > I see.
-> > Say, we have to use
-> > 
-> > intel_tcc_get_temp(int cpu, int *temp)
-> 
-> Do we?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d480bd09fb2e112ccfaca8989453c5c74dc585a8  Merge branch 'thermal-next' into bleeding-edge
 
-temp = tjmax - digital_readout
+elapsed time: 724m
 
-tjmax and digital_readout are from MSR and they are both positive
-values, but temp can be negative in theory.
-so are you suggesting that we should treat the negative CPU temperature
-as an error because this won't happen in real world?
+configs tested: 73
+configs skipped: 2
 
-thanks,
-rui
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> 
-> > so I keep the same format for all the intel_tcc_get_XXX APIs
-> > 
-> > intel_tcc_get_tjmax(int cpu, int *tjmax)
-> > intel_tcc_get_offset(int cpu, int *offset)
-> > 
-> > so that the return value is decoded in the same way. This helps
-> > avoid
-> > return value check mistakes for the callers.
-> > 
-> > surely I can remove the return pointer if you still prefer that. :p
-> 
-> Using a function value directly is very much preferred unless there
-> really are two values to return.
-> 
-> In these particular cases a negative return value can be clearly
-> interpreted as an error condition, so using the return value directly
-> is sufficient.
-> 
-> > > > > +
-> > > > > +       return 0;
-> > > > > +}
-> > > > > +EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, INTEL_TCC);
-> > > > > +
-> > > > > +/**
-> > > > > + * intel_tcc_set_offset() - set the TCC offset value to
-> > > > > Tjmax
-> > > > > + * @cpu: cpu that the MSR should be run on.
-> > > > > + * @offset: TCC offset value in degree C
-> > > > 
-> > > > I think that this cannot be negative, so maybe say "in K"
-> > > > instead
-> > > > of
-> > > > "in degree C"?
-> > > 
-> > > degree C is the unit used in the Intel SDM, so better to keep
-> > > this
-> > > comment aligned.
-> > > 
-> > > > And maybe it's better to pass u8 here?
-> > > 
-> > > sounds good, will do in next version.
-> > > 
-> > to keep consistent, we can use either
-> > int intel_tcc_get_offset(int cpu)
-> > int intel_tcc_set_offset(int cpu, int offset)
-> 
-> What about intel_tcc_set_offset(int cpu, u8 offset)?
-> 
-> > or
-> > int intel_tcc_get_offset(int cpu, u8 *offset)
-> > int intel_tcc_set_offset(int cpu, u8 offset)
-> > 
-> > or else callers need to declare 'offset' but with different type,
-> > when
-> > getting and setting it, which looks strange.
-> 
-> Well, one can surely pass an int as a u8 argument and assign a u8
-> return value to an int variable.
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+x86_64                           rhel-8.3-bpf
+alpha                               defconfig
+x86_64                           rhel-8.3-syz
+s390                                defconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+arm                                 defconfig
+s390                             allyesconfig
+x86_64                              defconfig
+i386                 randconfig-a013-20221212
+i386                 randconfig-a014-20221212
+i386                 randconfig-a012-20221212
+i386                 randconfig-a011-20221212
+alpha                             allnoconfig
+arm                              allyesconfig
+i386                                defconfig
+x86_64                          rhel-8.3-rust
+i386                              allnoconfig
+arm64                            allyesconfig
+arm                               allnoconfig
+i386                 randconfig-a016-20221212
+x86_64                               rhel-8.3
+arc                               allnoconfig
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
+ia64                             allmodconfig
+i386                 randconfig-a015-20221212
+x86_64                    rhel-8.3-kselftests
+i386                             allyesconfig
+riscv                randconfig-r042-20221212
+powerpc                           allnoconfig
+arc                  randconfig-r043-20221211
+arc                  randconfig-r043-20221212
+arm                  randconfig-r046-20221211
+s390                 randconfig-r044-20221212
+mips                             allyesconfig
+powerpc                          allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+sh                               allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64               randconfig-a014-20221212
+x86_64               randconfig-a012-20221212
+x86_64               randconfig-a011-20221212
+x86_64               randconfig-a015-20221212
+x86_64               randconfig-a013-20221212
+x86_64               randconfig-a016-20221212
+x86_64                            allnoconfig
+riscv                             allnoconfig
 
+clang tested configs:
+x86_64               randconfig-a002-20221212
+x86_64               randconfig-a001-20221212
+x86_64               randconfig-a004-20221212
+x86_64               randconfig-a003-20221212
+x86_64               randconfig-a006-20221212
+i386                 randconfig-a002-20221212
+x86_64               randconfig-a005-20221212
+i386                 randconfig-a003-20221212
+i386                 randconfig-a001-20221212
+i386                 randconfig-a004-20221212
+i386                 randconfig-a006-20221212
+i386                 randconfig-a005-20221212
+arm                  randconfig-r046-20221212
+riscv                randconfig-r042-20221211
+hexagon              randconfig-r045-20221211
+hexagon              randconfig-r041-20221211
+hexagon              randconfig-r045-20221212
+s390                 randconfig-r044-20221211
+hexagon              randconfig-r041-20221212
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
