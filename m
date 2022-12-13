@@ -2,115 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D031C64B87D
-	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 16:34:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA70664B8FE
+	for <lists+linux-pm@lfdr.de>; Tue, 13 Dec 2022 16:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236185AbiLMPea (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Dec 2022 10:34:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S236100AbiLMPzB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Dec 2022 10:55:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236187AbiLMPe1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 10:34:27 -0500
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2493015806
-        for <linux-pm@vger.kernel.org>; Tue, 13 Dec 2022 07:34:25 -0800 (PST)
-Received: by mail-qt1-f181.google.com with SMTP id jr11so97672qtb.7
-        for <linux-pm@vger.kernel.org>; Tue, 13 Dec 2022 07:34:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eIiQYT82dtR/WutVbP/oAjtK866sSgjVHyiB131BJLg=;
-        b=GdLixKT1tWh6b3EIQI2RCc+p+U90W8NH72YXf1K9BHs644Pim9+w/j2UCs7+jaHw52
-         +U2x60DEhSW0MHuhXFjhSr/7FDYpgOkE2I6IfYPmznTQt7GhLjZbWRB705MXM8beJ9B5
-         udLicdP2Wv12BrpfVwyU/HedV7xb5Xnpq+RAk4bFpoJJrEI3HPJw81v6Q9pVcK529IpZ
-         Pjj0qfZTUhMC7bvncmG8h2GzVtoDwWFcUTzWcTPcb6QZln331fVG+tUqaSjLj3X4lys9
-         F6HBQKE9HFC+vJpTB2RQAJw1MHzKehwsMM6NJlC5uELgrie1zUIs6pVOtWZtHz3vtg9p
-         y+wg==
-X-Gm-Message-State: ANoB5plCNG4tMyfcK4bMH3flUwgJZsSH0VhLdGYKjet8625utGVYj69R
-        cjrqzkp+IfndO0Xrn1VEloCo7RTAm+gKZ25iER0=
-X-Google-Smtp-Source: AA0mqf7jQII52uQ8/skZLNxh8NfghSakgzCeZ9QIiNOHAEzH3wpGXmP0GxBCUfy0nUD+viI/9LFHxyCbORKg19IfsPU=
-X-Received: by 2002:ac8:7dcb:0:b0:3a6:8dd0:4712 with SMTP id
- c11-20020ac87dcb000000b003a68dd04712mr32016249qte.411.1670945664253; Tue, 13
- Dec 2022 07:34:24 -0800 (PST)
+        with ESMTP id S235622AbiLMPzB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 10:55:01 -0500
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0618563B7;
+        Tue, 13 Dec 2022 07:54:59 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BDC6Dkq026377;
+        Tue, 13 Dec 2022 09:54:51 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=H9bD4vEGhPnw3EnUsCGAUmQGYOk16+ZEqAiPgLivwFI=;
+ b=H2Y6St4cDt4F+GA/ZneeEQrS6FWzrum+Dss3jegqVV2UvHIKrFiiWncspHMZt7rttqM+
+ DTd4RPbUyPr5nTaRPWhDo8IfMNkEWDq/HdrUr8JyJA8xfPm0+yMWiK46pY8gzOTaQfx5
+ 1hY9YIsXwZrtIKPOQp7/KJ+lt8lRfmeLnFDUyDrQ6jB61Q8+T5m0cFJ18emnj+bg+WZr
+ ltPl5yVja+ZZWOgFmawjD5E3+iMgcUku+IJl/Xt0/0K7d6kOmYF4IZK1w7AqMxopHFPF
+ DdlNaxjGWgxGHjf/VOVH/5brU++wFNKD9bZXUThFiOOE9y19xz3qNf/6E3tqOGv0QM/L ww== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3mcrd63f2x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 13 Dec 2022 09:54:51 -0600
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.20; Tue, 13 Dec
+ 2022 09:54:48 -0600
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.20 via Frontend Transport; Tue, 13 Dec 2022 09:54:48 -0600
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.111])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DA528B10;
+        Tue, 13 Dec 2022 15:54:48 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] PM: runtime: Document that force_suspend() is incompatible with SMART_SUSPEND
+Date:   Tue, 13 Dec 2022 15:54:48 +0000
+Message-ID: <20221213155448.385167-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20221108033332.27760-1-rui.zhang@intel.com> <20221108033332.27760-2-rui.zhang@intel.com>
- <CAJZ5v0hOzCRnoH52EEMZm+CRDNKSYg2iZax2CnowzdMXjX8QYA@mail.gmail.com>
- <c827d96fcf50a39ebd219cd09d9b4bd1db2f0398.camel@intel.com>
- <b40f141c0266b6971f8dec0e63964dd1311b1747.camel@intel.com>
- <CAJZ5v0j=x6ofgTFcoRw1bsoCbsbA7uAqQNddXVeXXOuwQzcNBQ@mail.gmail.com> <10cae7a3db86278c39ecb8837ec000b054c51ebc.camel@intel.com>
-In-Reply-To: <10cae7a3db86278c39ecb8837ec000b054c51ebc.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 13 Dec 2022 16:34:11 +0100
-Message-ID: <CAJZ5v0gscS-b+B-uqSFOVX=wA-gABP8f9n+oJ5WMZTRcrs66bQ@mail.gmail.com>
-Subject: Re: [PATCH 1/6] thermal/intel: Introduce Intel TCC library
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rjw@rjwysocki.net,
-        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-        srinivas.pandruvada@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: M77udDUM_cpgyAKQhTe-BiCX7ukNhgJ1
+X-Proofpoint-ORIG-GUID: M77udDUM_cpgyAKQhTe-BiCX7ukNhgJ1
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Dec 13, 2022 at 2:38 AM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> On Mon, 2022-12-12 at 13:11 +0100, Rafael J. Wysocki wrote:
-> > On Sun, Dec 11, 2022 at 8:24 AM Zhang Rui <rui.zhang@intel.com>
-> > wrote:
-> > >
-> > > > > > +       if (err)
-> > > > > > +               return err;
-> > > > > > +
-> > > > > > +       *tjmax = (eax >> 16) & 0xff;
-> > > > >
-> > > > > This means that the tjmax value cannot be negative.
-> > > > >
-> > > > > > +
-> > > > > > +       return *tjmax ? 0 : -EINVAL;
-> > > > >
-> > > > > So the return value of this function could be tjmax if positive
-> > > > > or
-> > > > > a
-> > > > > negative error code otherwise.  No return pointers needed.
-> > > >
-> > > > I tried both. And I think I chose this solution just because it
-> > > > makes
-> > > > the following cleanup patches in this series looks prettier.
-> > > >
-> > > > I will try your suggestion, and if there is any other reason I
-> > > > wrote
-> > > > it
-> > > > in this way, I will find it out again. :p
-> > >
-> > > I see.
-> > > Say, we have to use
-> > >
-> > > intel_tcc_get_temp(int cpu, int *temp)
-> >
-> > Do we?
->
-> temp = tjmax - digital_readout
->
-> tjmax and digital_readout are from MSR and they are both positive
-> values, but temp can be negative in theory.
+pm_runtime_force_suspend() cannot be used with DPM_FLAG_SMART_SUSPEND, so
+note this in the kerneldoc.
 
-I know, but is this ever expected to happen?
+If DPM_FLAG_SMART_SUSPEND is set and the PM core cannot skip system resume
+it will call pm_runtime_active() on the driver. This can lead to an
+inconsistent state where:
 
-> so are you suggesting that we should treat the negative CPU temperature
-> as an error because this won't happen in real world?
+  pm_runtime_force_suspend() called ->runtime_suspend
 
-No.
+but
 
-If it's necessary to handle negative temperatures, an int is needed
-and the additional return value is useful.
+  device_resume_noirq() called pm_runtime_set_active()
 
-Now there is also the question of what the callers will do with a
-negative temperature value.  Do they care?
+This leaves the driver actually suspended but marked as active.
+
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ drivers/base/power/runtime.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 50e726b6c2cf..b29be7d4d7d0 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1864,6 +1864,10 @@ static bool pm_runtime_need_not_resume(struct device *dev)
+  * sure the device is put into low power state and it should only be used during
+  * system-wide PM transitions to sleep states.  It assumes that the analogous
+  * pm_runtime_force_resume() will be used to resume the device.
++ *
++ * Do not use with DPM_FLAG_SMART_SUSPEND as this can lead to an inconsistent
++ * state where this function has called the ->runtime_suspend callback but the
++ * PM core marks the driver as runtime active.
+  */
+ int pm_runtime_force_suspend(struct device *dev)
+ {
+-- 
+2.30.2
+
