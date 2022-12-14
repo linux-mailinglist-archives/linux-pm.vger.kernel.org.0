@@ -2,63 +2,48 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A479964CBC1
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 15:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F9DE64CBD6
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 15:10:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238574AbiLNOC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Dec 2022 09:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33088 "EHLO
+        id S238000AbiLNOK1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Dec 2022 09:10:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238548AbiLNOCZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 09:02:25 -0500
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58511E3EC;
-        Wed, 14 Dec 2022 06:02:23 -0800 (PST)
-Received: by mail-qv1-f43.google.com with SMTP id u10so12557814qvp.4;
-        Wed, 14 Dec 2022 06:02:23 -0800 (PST)
+        with ESMTP id S229781AbiLNOK0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 09:10:26 -0500
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF6EC1CB07;
+        Wed, 14 Dec 2022 06:10:25 -0800 (PST)
+Received: by mail-qk1-f178.google.com with SMTP id k3so1275584qki.13;
+        Wed, 14 Dec 2022 06:10:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5J5l9PHNH3hAPkvemcjxbJ/Q/3nbdWjzIYM+AXgHrFA=;
-        b=41HwYnyiwXLeTftAUEDCuwO0jDXGdJSaNNA/PUjeDm1t7SP/+iAE8nkCz3nVe1c82c
-         BTJE0LqAKmmZ0XImyC0AFkE/qKttl4RthV3++9xuRFjoH/1Wc60hB1SutgEECG1T9xQn
-         yOiq8HXQ8zMWKlOKpxdKrWUEhJyOf7Dive8ow3TaG7ndEL76YnL6lT+TbHGomJnfdkQ2
-         7+jMOf4QYs20+KZTjoWqGSs3cKOzr2sAQ+CfOrrYNdWAoGsu5B0YjDDk8FHQ7wa3zsuC
-         qAHmmjW43IFDcPsj/CIAxKuiDDF+dP1om4kybQD9b/1kGdfusr2OFp4GJ8qDI0Qb+opa
-         TnGQ==
-X-Gm-Message-State: ANoB5pm8KhXimx/uROFW7Cge42Sj+RgPZSuM/LeNduxfMGu6vnt+AMef
-        64AZmUNjHg/lXLWB6/gJO9ai3Ns85S7wBZD5VC4=
-X-Google-Smtp-Source: AA0mqf7xzEzMqCeas0yquK7x82mUOIhnAdFVlNjmSgz6/8Cv2sAjkGMVNZQlSV+dzJnDteLF4AnlNeFIX5JoxiM/ciE=
-X-Received: by 2002:ad4:534b:0:b0:4b1:8429:a8a7 with SMTP id
- v11-20020ad4534b000000b004b18429a8a7mr69941479qvs.52.1671026543044; Wed, 14
- Dec 2022 06:02:23 -0800 (PST)
+        bh=ZOaoIjTxLglAaa4ZBfF7fq+YBzzQI1dyFt1768d7s6Q=;
+        b=buJDK7XncEQgo95HJ4y/PaymrvZ4y5asEKchOP6Xxt/V4IXwlQmCOLbvJyRjy5wmoH
+         Ogk//mGarC8idhWAsPY6VCZ/iTP7vF0WopJGQjM/jmmHIxdd/48Qjbl9gP2R25/y2m3c
+         wZc9MY8OBcp3WtwdksIdSPFgny3Lt2W7AFsTPXnZKIFSS9lfh1CCSp6KCXkQtydDyMZM
+         Z0e/mLWx1aqAS9YAULjDFlpgKdIzMkeFWy4Iy9PW//3fYBj/lzGNl+hf9EngGcqvQWBf
+         SuD6BUbuFcM2vv19FP01AsoGoP5vubhPILV28wmTmCQ6MIcryAUSJkCWywP3FAIUXbfZ
+         aPeA==
+X-Gm-Message-State: ANoB5pnPUbg5VTXV6F8d0nEJEA4fwmjgZd3+Yfw+JLptoWsvKllllNAg
+        WmMYsX2f8AaM/kLy5yVq/hIvAJvN+ro8yd3o5bM=
+X-Google-Smtp-Source: AA0mqf4yN0p9XnWYWoCSWnpNDe91cxcXAlCLQp6mS1ey6TXfOyrXeqP7I6OJ99zfGyO7fmNAUIppldBwc28eaDKDOC8=
+X-Received: by 2002:a05:620a:ec4:b0:6ff:86de:55f with SMTP id
+ x4-20020a05620a0ec400b006ff86de055fmr695889qkm.648.1671027024912; Wed, 14 Dec
+ 2022 06:10:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20221214131617.2447-1-johan+linaro@kernel.org>
-In-Reply-To: <20221214131617.2447-1-johan+linaro@kernel.org>
+References: <20221212205843.3119407-1-daniel.lezcano@kernel.org>
+In-Reply-To: <20221212205843.3119407-1-daniel.lezcano@kernel.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 14 Dec 2022 15:02:12 +0100
-Message-ID: <CAJZ5v0gY-Lhgf_1Kfg6P5O8s+YMkP4TxggxyS=LU9jVgJikAkg@mail.gmail.com>
-Subject: Re: [PATCH 0/4] thermal: fix locking regressions in linux-next
-To:     Johan Hovold <johan+linaro@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
+Date:   Wed, 14 Dec 2022 15:10:13 +0100
+Message-ID: <CAJZ5v0h4RCnGv2C+x1m_Uvu5Hmy273wHDLNzYUuJxT_GFxS5qQ@mail.gmail.com>
+Subject: Re: [PATCH 0/5] Add ACPI trip points parser helpers
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -70,29 +55,49 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 2:18 PM Johan Hovold <johan+linaro@kernel.org> wrote:
+On Mon, Dec 12, 2022 at 9:59 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
 >
-> This series fixes some of the fallout after the thermal changes that
-> just landed in linux-next.
+> Regarding thermal, the ACPI code parsing the trip points is duplicated
+> inside different Intel drivers. The generic ACPI thermal driver also
+> duplicates this code.
 >
-> Lockdep reported a lock inversion in one of the Qualcomm drivers and a
-> closer review revealed that the changes had also broken the sysfs
-> interface for at least three drivers.
+> Those ACPI parsing actions are used to define trip points and these
+> ones are defined by, and specific to, the backend driver.
 >
-> Note that a simple revert of the offending patches was not an option as
-> some of the infrastructure that the old implementation relied on has
-> also been removed.
+> The different get_trip_* ops, also very similar between each other,
+> are using the specific trip point structure to return the requested
+> trip point information.
+>
+> From there, there is nothing new, all this can be converted to the
+> generic trip point.
+>
+> The first patch provides the functions to parse trip point description
+> from the ACPI table but based on the generic trip point structure. The
+> other patches convert the different Intel driver to use the ACPI
+> functions along with a migration to the generic trip point.
 
-I've dropped that material from my linux-next branch and Daniel,
-please also remove it from your branch that is pulled by linux-next so
-that it doesn't show up in there until 6.2-rc1 is out.
+First off, please resend this series with CCs to linux-acpi.
 
-It clearly is not ready for merging in its current form.
+Second, what does it depend on?  I think that it depends on the new
+material that hasn't been integrated yet, doesn't it?
 
-It is still present in my bleeding-edge branch, though, so please
-apply the patches from Johan on top of it and send a new PR to me, so
-I can add it back to my linux-next branch once 6.2-rc1 appears.
-
-It would be good to check the code again too for any more similar fallout.
-
-Thanks!
+> Daniel Lezcano (5):
+>   thermal/acpi: Add ACPI trip point routines
+>   thermal/drivers/intel: Use generic trip points for intel_pch
+>   thermal/drivers/intel: Use generic trip points int340x
+>   thermal/drivers/intel: Use generic trip points for quark_dts
+>   thermal/drivers/intel: Use generic trip points for
+>     processor_thermal_device_pci
+>
+>  drivers/thermal/Kconfig                       |  13 +
+>  drivers/thermal/Makefile                      |   1 +
+>  .../int340x_thermal/int340x_thermal_zone.c    | 175 +++---------
+>  .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+>  .../processor_thermal_device_pci.c            |  53 ++--
+>  drivers/thermal/intel/intel_pch_thermal.c     |  88 ++-----
+>  .../thermal/intel/intel_quark_dts_thermal.c   |  45 ++--
+>  drivers/thermal/thermal_acpi.c                | 249 ++++++++++++++++++
+>  include/linux/thermal.h                       |  15 ++
+>  9 files changed, 377 insertions(+), 272 deletions(-)
+>  create mode 100644 drivers/thermal/thermal_acpi.c
