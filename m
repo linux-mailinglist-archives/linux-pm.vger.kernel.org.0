@@ -2,178 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EE0564D1DA
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 22:35:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DF964D31F
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 00:16:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229460AbiLNVfC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Dec 2022 16:35:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35408 "EHLO
+        id S229726AbiLNXQB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Dec 2022 18:16:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiLNVfB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 16:35:01 -0500
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C58EE389E1
-        for <linux-pm@vger.kernel.org>; Wed, 14 Dec 2022 13:35:00 -0800 (PST)
-Received: by mail-pj1-x1029.google.com with SMTP id u5so8349713pjy.5
-        for <linux-pm@vger.kernel.org>; Wed, 14 Dec 2022 13:35:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=SmJdHwrNncv2zg9KAsiw1biNKVUjX6L6HVBX44gKAnY=;
-        b=1DwLXnzMnRzJ2tCJ7flk7BtfPmVz0IuKuus2+V+ArbrpEw/gqNiZtdAw5EgDUfxB/7
-         CVb7zIJFiWvZGMfs+wXZpv/TyvIDqrIiDq1FNIjlR/oblpf7D1OuEJJLFSzZ0jUuS5Ja
-         vqMV/WsuTCGzvilp9XP6IPDqjMSHc/N2gM+TeBGhAFa8T/mxnAE0pCe8coO/cbTcvjKa
-         RUhGWq3jbYHHN7WJ0EE+60o59C8USDdZwHZKpLeYC/E8bsUnKz/lvB80whWIAxfH8rOt
-         CI9K9+7sju7TdTCkZLO7Exg7XcjICX2Dp1ouQ4ZXpG4bjZS8RNuxJEBZDK+ZVrPEeEEi
-         bdBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SmJdHwrNncv2zg9KAsiw1biNKVUjX6L6HVBX44gKAnY=;
-        b=HwQx02wmX63xGn7UDTGJNp10AdiBjaf+ESBBXJp+tZfeyE29P52TjfaTXZ0grH4Rmc
-         WuqqWqWHQAZ9hU12mgWS/BGFNH4cWdEsfcqlYJu2NPCF5+slRyv2LZSiwhKtO4lXS65Z
-         Ah6hkpbd9me8sUv45eUjA04HHTiEIsAOHXT8ruIYmSgNa3E4f/X9pcOTZAoeLvkouY+1
-         Enbl4UD8rGArTgFdPh7joOAYjQUM+pVY21iv7wlJ2NL5bWlucv1w70yt4P6uMuuBZxLd
-         1z35XINW3MEZiO8CQZBc3T8RZJvpaZlMUgI15uN5p+25kVgbi3aTskTCJKVApsBpJT6x
-         D2Dw==
-X-Gm-Message-State: ANoB5plWwwC9LbWnRCiI/03SJ3hop1EiqVu1PWvpXMGA7XdjXkQOGHoN
-        xb2AJFCl6xmMUOTZZ+Cif1gsVUvYscEinWsaqmRw4Q==
-X-Google-Smtp-Source: AA0mqf6kwPK6BAbLHnPvyq9NX1QoXEjWzo65RlVF8W2n4UPSmj19a1zjSN7ESUl2sCbrkUscgiOzBQ==
-X-Received: by 2002:a17:90a:9f42:b0:219:36c6:f06d with SMTP id q2-20020a17090a9f4200b0021936c6f06dmr26247882pjv.20.1671053700311;
-        Wed, 14 Dec 2022 13:35:00 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id s1-20020a17090a13c100b0021932f01929sm1793052pjf.26.2022.12.14.13.34.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Dec 2022 13:34:59 -0800 (PST)
-Message-ID: <639a4183.170a0220.edc26.4134@mx.google.com>
-Date:   Wed, 14 Dec 2022 13:34:59 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229511AbiLNXQA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 18:16:00 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B5722CE00;
+        Wed, 14 Dec 2022 15:15:59 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 73176FEC;
+        Wed, 14 Dec 2022 15:16:39 -0800 (PST)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 70D7B3F5A1;
+        Wed, 14 Dec 2022 15:15:58 -0800 (PST)
+Date:   Wed, 14 Dec 2022 23:15:56 +0000
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v2 02/22] sched: Add interfaces for IPC classes
+Message-ID: <Y5pZGu0NnXsOyfUv@arm.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-3-ricardo.neri-calderon@linux.intel.com>
+ <Y5Gf9wGB5nFa4EDv@arm.com>
+ <20221214003128.GA30234@ranerica-svr.sc.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.1-rc8-224-g02f29b079520
-X-Kernelci-Report-Type: build
-X-Kernelci-Tree: pm
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.1-rc8-224-g02f29b079520)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214003128.GA30234@ranerica-svr.sc.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.1-rc8-224-g0=
-2f29b079520)
+Hi,
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-1-rc8-224-g02f29b079520/
+On Tuesday 13 Dec 2022 at 16:31:28 (-0800), Ricardo Neri wrote:
+> On Thu, Dec 08, 2022 at 08:48:46AM +0000, Ionela Voinescu wrote:
+> > Hi,
+> > 
+> > On Monday 28 Nov 2022 at 05:20:40 (-0800), Ricardo Neri wrote:
+> > [..]
+> > > +#ifndef arch_has_ipc_classes
+> > > +/**
+> > > + * arch_has_ipc_classes() - Check whether hardware supports IPC classes of tasks
+> > > + *
+> > > + * Returns: true of IPC classes of tasks are supported.
+> > > + */
+> > > +static __always_inline
+> > > +bool arch_has_ipc_classes(void)
+> > > +{
+> > > +	return false;
+> > > +}
+> > > +#endif
+> > > +
+> > > +#ifndef arch_update_ipcc
+> > > +/**
+> > > + * arch_update_ipcc() - Update the IPC class of the current task
+> > > + * @curr:		The current task
+> > > + *
+> > > + * Request that the IPC classification of @curr is updated.
+> > > + *
+> > > + * Returns: none
+> > > + */
+> > > +static __always_inline
+> > > +void arch_update_ipcc(struct task_struct *curr)
+> > > +{
+> > > +}
+> > > +#endif
+> > > +
+> > > +#ifndef arch_get_ipcc_score
+> > > +/**
+> > > + * arch_get_ipcc_score() - Get the IPC score of a class of task
+> > > + * @ipcc:	The IPC class
+> > > + * @cpu:	A CPU number
+> > > + *
+> > > + * Returns the performance score of an IPC class when running on @cpu.
+> > > + * Error when either @class or @cpu are invalid.
+> > > + */
+> > > +static __always_inline
+> > > +int arch_get_ipcc_score(unsigned short ipcc, int cpu)
+> > > +{
+> > > +	return 1;
+> > > +}
+> > > +#endif
+> 
+> Thank you very much for your feedback Ionela!
+> 
+> > 
+> > The interface looks mostly alright but this arch_get_ipcc_score() leaves
+> > unclear what are the characteristics of the returned value.
+> 
+> Fair point. I mean for the return value to be defined by architectures;
+> but yes, architectures need to know how to implement this function.
+> 
+> > 
+> > Does it have a meaning as an absolute value or is it a value on an
+> > abstract scale? If it should be interpreted as instructions per cycle,
+> > if I wanted to have a proper comparison between the ability of two CPUs
+> > to handle this class of tasks then I would need to take into consideration
+> > the maximum frequency of each CPU.
+> 
+> Do you mean when calling arch_get_ipcc_score()? If yes, then I agree, IPC
+> class may not be the only factor, but the criteria to use the return value
+> is up to the caller.
+> 
 
-Tree: pm
-Branch: testing
-Git Describe: v6.1-rc8-224-g02f29b079520
-Git Commit: 02f29b079520d658643d9f1cf1d2e815bc38d396
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Yes, but if different architectures give different meanings to this score
+(scale, relative difference between two values, etc) while the policies
+are common (uses of arch_get_ipcc_score() in common scheduler paths)
+then the outcome can be vastly different.
 
-Warnings Detected:
+If the "criteria to use the returned value is up to the caller", then
+the caller of arch_get_ipcc_score() should always be architecture
+specific code, which currently is not (see 09/22).
 
-arc:
+> In asym_packing it is assumed that higher-priority CPUs are preferred.
+> When balancing load, IPC class scores are used to select between otherwise
+> identical runqueues. This should also be the case for migrate_misfit: we
+> know already that the tasks being considered do not fit on their current
+> CPU.
+> 
+> We would need to think what to do with other type of balancing, if at all.
+> 
+> That said, arch_get_ipcc_score() should only return a metric of the
+> instructions-per-*cycle*, independent of frequency, no?
+> 
 
-arm64:
+Yes, performance on an abstract scale is preferred here. We would not
+want to have to scale the score by frequency :). It was just an example
+showing that the description of arch_get_ipcc_score() should be clarified.
+Another possible clarification: is it expected that the scores scale
+linearly with performance (does double the score mean double the
+performance?).
 
-arm:
+> > If it's a performance value on an
+> > abstract scale (more likely), similar cu capacity, then it might be good
+> > to better define this abstract scale. That would help with the default
+> > implementation where possibly the best choice for a return value would
+> > be the maximum value on the scale, suggesting equal/maximum performance
+> > for different CPUs handling the class of tasks.
+> 
+> I guess something like:
+> 
+> #define SCHED_IPCC_DEFAULT_SCALE 1024
+> 
+> ?
+> 
+> I think I am fine with this value being the default. I also think that it
+> is up to architectures to whether scale all IPC class scores from the
+> best-performing class on the best-performing CPU. Doing so would introduce
+> overhead, especially if hardware updates the IPC class scores multiple
+> times during runtime.
+>
 
-i386:
+Yes, it's a very good point. Initially I thought that one would need to
+rescale the values anyway for them to make sense relative to each other,
+but I now realise that would not be needed.
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+Therefore, you are right, to avoid this extra work it's best to leave
+the range of possible score values up to the implementer and not force
+something like [0 - 1024].
 
-riscv:
+But again, this raises the point that if one architecture decides to
+return its scores on a scale [0 - 1024] and possibly use these scores to
+scale utilization/alter capacity for example, this cannot be generic
+policy as not all architectures are guaranteed to use this scale for its
+scores.
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
+So leaving the score unrestricted makes it more difficult to have
+generic policies across architectures that use them.
 
-x86_64:
+> > 
+> > I suppose you avoided returning 0 for the default implementation as you
+> > intend that to mean the inability of the CPU to handle that class of
+> > tasks? It would be good to document this.
+> 
+> I meant this to be minimum possible IPC class score for any CPU: any
+> CPU should be able handle any IPC class. If not implemented, all CPUs
+> handle all IPC classes equally.
+> 
 
+Ah, I see. In this case you might as well return 0 in the default
+implementation of arch_get_ipcc_score(). I know it does not matter much
+what gets returned there, but returning a meaningless "1" is strange to
+me :).
 
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
+Thanks,
+Ionela.
