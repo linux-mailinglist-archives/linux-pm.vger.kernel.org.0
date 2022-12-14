@@ -2,314 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D6664CCF2
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 16:19:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC17464CDBC
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 17:11:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiLNPT1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Dec 2022 10:19:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S238814AbiLNQLD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Dec 2022 11:11:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbiLNPTZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 10:19:25 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 190A5F18
-        for <linux-pm@vger.kernel.org>; Wed, 14 Dec 2022 07:19:24 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id r186-20020a1c44c3000000b003d1e906ca23so1087119wma.3
-        for <linux-pm@vger.kernel.org>; Wed, 14 Dec 2022 07:19:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/mbKCBo2UJJd6vmfSyM6UGB92s9H0LLOHg9t5nwtMIQ=;
-        b=LNb4EXa+m3OftUmzbRJZDPQiS2P9iVz8Qbh5hVpJ/iBBkxEDwPFlCxxlHBPhlr10YB
-         6zFzXtfRxbdiTbtE6Lqp3cyDKfkVdiXxfdOdILo5Ec8tR1DenhO+u9GWnxw3++j5RKhJ
-         o8WZzHcz91bl9zAXQ1rXABdPy4ey9rQS/wmYK3rTuKsC9DlJkpGiZWe3tb16csvsF9r0
-         dN1MUMMsY1nLaNINlhDEpz+v3leGbE4whzYA27TsuvXg3oQsxi6A+61owTKXuISM2ZTd
-         +S7LcA22NGC3mMqa5F0jc77RChFtNanSt2KOYfM5W3ZcCtyV4HFR2Rx7iI6e91TgG2Qn
-         aL2Q==
+        with ESMTP id S238137AbiLNQLC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 11:11:02 -0500
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C2F5FF9;
+        Wed, 14 Dec 2022 08:11:00 -0800 (PST)
+Received: by mail-oi1-f173.google.com with SMTP id q186so2975177oia.9;
+        Wed, 14 Dec 2022 08:11:00 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/mbKCBo2UJJd6vmfSyM6UGB92s9H0LLOHg9t5nwtMIQ=;
-        b=rz5IGOLilj6WE3fuZyeka1oBXM7RzgTcOlcrT2y0wmtXOXwLFzAlfCxIHxCSOLOXuv
-         KlMqn0cVTjr8itlnhKlnusuta4aWDNuUN4bvi+5Aolk5BP7gMA7tA/sFc+nEobLZFIUU
-         9cPbMTA9Vn5bqN587VYUYXZC1aANlpDqjk+52EqkNXk/A7/4INb/fg87sOqPYPH4kCfz
-         82AI3vDppv7zPTDnDG0aOlmQpKp0gRvjePdcBHoUZ8rTMPmndxhpjvwpD6mKFNzwoBuo
-         8fEc541830gwFVofd0FmeCgGq6yKXeNSINDymyhLS3JVAjGpDLVEuHz1J33ryhjOucdA
-         4pRQ==
-X-Gm-Message-State: ANoB5pn4Xm+VIBw/BuP3aciMTWEYbVAeSAo7UPh4Rm48tQsAd5Z8WOIA
-        zkC8fZjlWPX3wLNXzxGoUxRjuQ==
-X-Google-Smtp-Source: AA0mqf4fV+sUDilc9pJy6AUbhF8Ceksa2WvhSKAwSekANGWztEfaPVvG5pUMW5WL1pn6aE5/AUp6Hw==
-X-Received: by 2002:a05:600c:1d02:b0:3cf:6d9a:7b1f with SMTP id l2-20020a05600c1d0200b003cf6d9a7b1fmr19604174wms.32.1671031162432;
-        Wed, 14 Dec 2022 07:19:22 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id x13-20020a5d60cd000000b00241e8d00b79sm3817849wrt.54.2022.12.14.07.19.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 14 Dec 2022 07:19:21 -0800 (PST)
-Message-ID: <ab7e7005-594a-eccd-7435-5dc9034af482@linaro.org>
-Date:   Wed, 14 Dec 2022 16:19:20 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B+Y5vTM3pQvYcZm+fACx/th4V+5YzgsjC2PpcvfomHM=;
+        b=WxyJ6pdChADAII1Z+1MzNO5Shuj3vIxoRY3LRXz4AAhkvtl7N5QCuFJtsl/dWFzK8B
+         NiU8Q+aqtVxpW/O7HzBtvFGfM4Xbx/NH4/SKTPq5+VlWa3WyQNzrpbbXHAP3G53qjkBi
+         3HMQv9cexdNuMxjZAZodxFCOrdGBV701k1byJsKdRvM9+tmK+/yBXnoZDC8yfcwAra+7
+         meBcN0HzzGf+gg5lLm/fbW8BrurD9psqnwmGqHJctmPSmfCdJ1KPdMkcOxiOKoefdPcU
+         i4tbjzn/FAq8N9PTcjtf1S/vyTJo/VJYc7MwMr5gvcNmP1hYJdiVzauuF0cQA1lBWYvr
+         5kwg==
+X-Gm-Message-State: ANoB5plgmwhmh+9ey6AdveQx59As7/yWsLUlkc3SQB23ypHLHnr/YF7b
+        yGBgHGHuwmBGigdobAB95w==
+X-Google-Smtp-Source: AA0mqf7h5V1qucOJz0P9YiShlGP25PabesIM2tnEtrtK66kIXbCTEEj1KyvkE9/7hnY5RFk43+qrpw==
+X-Received: by 2002:a05:6808:2116:b0:35a:66c4:2225 with SMTP id r22-20020a056808211600b0035a66c42225mr16057479oiw.17.1671034260031;
+        Wed, 14 Dec 2022 08:11:00 -0800 (PST)
+Received: from robh_at_kernel.org (rrcs-98-6-157-194.sw.biz.rr.com. [98.6.157.194])
+        by smtp.gmail.com with ESMTPSA id dq12-20020a056808428c00b0035c21f1a570sm66334oib.6.2022.12.14.08.10.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Dec 2022 08:10:59 -0800 (PST)
+Received: (nullmailer pid 1153609 invoked by uid 1000);
+        Wed, 14 Dec 2022 16:10:57 -0000
+Date:   Wed, 14 Dec 2022 10:10:57 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH 1/5] dt-bindings: gpio: Add RZ/V2M PWC GPIO driver
+ bindings
+Message-ID: <20221214161057.GA1140718-robh@kernel.org>
+References: <20221213224310.543243-1-fabrizio.castro.jz@renesas.com>
+ <20221213224310.543243-2-fabrizio.castro.jz@renesas.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL][resend] thermal drivers for v6.2-rc1
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Marcus Folkesson <marcus.folkesson@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Keerthy <j-keerthy@ti.com>,
-        Ido Schimmel <idosch@mellanox.com>,
-        Robert Marko <robimarko@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Marek Vasut <marex@denx.de>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Johan Hovold <johan@kernel.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221213224310.543243-2-fabrizio.castro.jz@renesas.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Rafael,
-
-please consider pulling the thermal changes for v6.2-rc1 (again).
-
-This PR contains the same changes as the last one but without the 
-generic trip point rework where a problem appeared with the locks.
-
-When the series was submitted, the problem was not there but meanwhile 
-my absence the commit 05eeee2b51b introduced a lock in the set_trip_temp 
-call path. On the other side the lock was also taken by the generic trip 
-point work series.
-
-That was not spotted before because these two changes were in different 
-branches (thermal/linux-next and linux-pm/thermal) and the merge 
-resulted in this lock conflict.
-
-I was surprised to see the deadlock issue as the series has been tested 
-and was in the linux-next branch during a while. Understanding the lock 
-issue helped to clarify what happened.
-
-Given it is not a problem to post pone the generic trip rework, it is 
-more secure to drop the series from the pull request and make sure there 
-is no another subtle changes happening with the locks.
-
-Please note I added a trivial change from Uwe Kleine-König removing an 
-empty function [1].
-
-Thanks
-   -- Daniel
-
-[1] 
-https://lore.kernel.org/r/20221212220217.3777176-1-u.kleine-koenig@pengutronix.de
-
-
-The following changes since commit 7d4b19ab6b89903fde8ad02f28a8943a4734e7b0:
-
-   Merge Intel thermal control drivers changes for v6.2 (2022-12-02 
-19:39:07 +0100)
-
-are available in the Git repository at:
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/thermal-v6.2-rc1
-
-for you to fetch changes up to 5011a110295d25418f5918a6af7bfcdb00dd4e34:
-
-   thermal/drivers/imx_sc_thermal: Drop empty platform remove function 
-(2022-12-14 15:27:30 +0100)
-
-----------------------------------------------------------------
-- Add the sm8450 QCom compatible string in the DT bindings (Luca
-   Weiss)
-
-- Use devm_platform_get_and_ioremap_resource on the ST platform to
-   group two calls into a single one (Minghao Chi)
-
-- Add the sm8550 QCom compatible string in the DT bindings (Neil
-   Armstrong)
-
-- Use GENMASK instead of bitmaps and validate the temperature after
-   reading it (Marcus Folkesson)
-
-- Convert generic-adc-thermal to DT schema (Rob Herring)
-
-- Fix the debug print message where the logic is inverted (Keerthy)
-
-- Fix memory leak on thermal_of_zone_register() failure (Ido Schimmel)
-
-- Add support for IPQ8074 in the tsens driver along with the DT
-   bindings (Robert Marko)
-
-- Fix and rework the debugfs code in the tsens driver (Christian
-   Marangi)
-
-- Add calibration and DT documentation for the imx8mm driver (Marek
-   Vasut)
-
-- Add DT bindings and compatible for the Mediatek SoCs mt7981 and
-   mt7983 (Daniel Golle)
-
-- Don't show an error message if it happens at probe time while it
-   will be deferred on the QCom SPMI ADC driver (Johan Hovold)
-
-- Add the HWMon support on the imx8mm board (Alexander Stein)
-
-- Remove a pointless include in the power allocator governor
-   (Christophe JAILLET)
-
-- Add interrupt DT bindings for QCom SoCs SC8280XP, SM6350 and SM8450
-   (Krzysztof Kozlowski)
-
-- Fix inaccurate warning message for the QCom tsens gen2 (Luca Weiss)
-
-- Demote error log of thermal zone register to debug on the tsens QCom
-   driver (Manivannan Sadhasivam)
-
-- Consolidate the TI Bandgap driver regarding how is handled the efuse
-   values and the errata handling (Bryan Brattlof)
-
-- Document the Renesas RZ/Five as compatible with RZ/G2UL in the DT
-   bindings (Lad Prabhakar)
-
-- Fix the irq handler return value in the LMh driver (Bjorn Andersson)
-
-- Delete platform remove callback as it is empty (Uwe Kleine-König)
-
-----------------------------------------------------------------
-Alexander Stein (1):
-       thermal/drivers/imx8mm: Add hwmon support
-
-Bjorn Andersson (1):
-       thermal/drivers/qcom/lmh: Fix irq handler return value
-
-Bryan Brattlof (6):
-       thermal/drivers/k3_j72xx_bandgap: Simplify k3_thermal_get_temp() 
-function
-       thermal/drivers/k3_j72xx_bandgap: Use bool for i2128 erratum flag
-       thermal/drivers/k3_j72xx_bandgap: Remove fuse_base from structure
-       thermal/drivers/k3_j72xx_bandgap: Map fuse_base only for erratum 
-workaround
-       dt-bindings: thermal: k3-j72xx: elaborate on binding description
-       dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
-
-Christian Marangi (3):
-       thermal/drivers/qcom/tsens: Init debugfs only with successful probe
-       thermal/drivers/qcom/tsens: Fix wrong version id dbg_version_show
-       thermal/drivers/qcom/tsens: Rework debugfs file structure
-
-Christophe JAILLET (1):
-       thermal/core/power allocator: Remove a useless include
-
-Daniel Golle (1):
-       dt-bindings: thermal: mediatek: add compatible string for MT7986 
-and MT7981 SoC
-
-Geert Uytterhoeven (1):
-       thermal: ti-soc-thermal: Drop comma after SoC match table sentinel
-
-Ido Schimmel (1):
-       thermal/of: Fix memory leak on thermal_of_zone_register() failure
-
-Johan Hovold (1):
-       thermal: qcom-spmi-adc-tm5: suppress probe-deferral error message
-
-Keerthy (1):
-       thermal/drivers/k3_j72xx_bandgap: Fix the debug print message
-
-Krzysztof Kozlowski (1):
-       dt-bindings: thermal: qcom-tsens: narrow interrupts for SC8280XP, 
-SM6350 and SM8450
-
-Lad Prabhakar (1):
-       dt-bindings: thermal: rzg2l-thermal: Document RZ/Five SoC
-
-Luca Weiss (2):
-       dt-bindings: thermal: tsens: Add sm8450 compatible
-       thermal/drivers/qcom/temp-alarm: Fix inaccurate warning for gen2
-
-Manivannan Sadhasivam (1):
-       thermal/drivers/qcom: Demote error log of thermal zone register 
-to debug
-
-Marcus Folkesson (2):
-       thermal/drivers/imx8mm_thermal: Use GENMASK() when appropriate
-       thermal/drivers/imx8mm_thermal: Validate temperature range
-
-Marek Vasut (2):
-       dt-bindings: thermal: imx8mm-thermal: Document optional nvmem-cells
-       thermal/drivers/imx: Add support for loading calibration data 
-from OCOTP
-
-Minghao Chi (1):
-       thermal/drivers/st: Use devm_platform_get_and_ioremap_resource()
-
-Neil Armstrong (1):
-       dt-bindings: thermal: qcom-tsens: Add compatible for sm8550
-
-Rob Herring (1):
-       dt-bindings: thermal: Convert generic-adc-thermal to DT schema
-
-Robert Marko (4):
-       dt-bindings: thermal: tsens: Add ipq8074 compatible
-       thermal/drivers/tsens: Add support for combined interrupt
-       thermal/drivers/tsens: Allow configuring min and max trips
-       thermal/drivers/tsens: Add IPQ8074 support
-
-Uwe Kleine-König (1):
-       thermal/drivers/imx_sc_thermal: Drop empty platform remove function
-
-  .../bindings/thermal/generic-adc-thermal.yaml      |  84 ++++++++++
-  .../bindings/thermal/imx8mm-thermal.yaml           |   7 +
-  .../bindings/thermal/mediatek-thermal.txt          |   2 +
-  .../devicetree/bindings/thermal/qcom-tsens.yaml    |  81 ++++++++--
-  .../devicetree/bindings/thermal/rzg2l-thermal.yaml |   2 +-
-  .../bindings/thermal/thermal-generic-adc.txt       |  95 -----------
-  .../bindings/thermal/ti,j72xx-thermal.yaml         |  35 +++-
-  drivers/thermal/gov_power_allocator.c              |   1 -
-  drivers/thermal/imx8mm_thermal.c                   | 180 
-++++++++++++++++++++-
-  drivers/thermal/imx_sc_thermal.c                   |   6 -
-  drivers/thermal/k3_j72xx_bandgap.c                 |  67 ++++----
-  drivers/thermal/qcom/lmh.c                         |   2 +-
-  drivers/thermal/qcom/qcom-spmi-adc-tm5.c           |   8 +-
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |   3 +-
-  drivers/thermal/qcom/tsens-8960.c                  |   3 +
-  drivers/thermal/qcom/tsens-v0_1.c                  |   3 +
-  drivers/thermal/qcom/tsens-v1.c                    |   3 +
-  drivers/thermal/qcom/tsens-v2.c                    |  20 +++
-  drivers/thermal/qcom/tsens.c                       |  68 +++++---
-  drivers/thermal/qcom/tsens.h                       |   8 +-
-  drivers/thermal/st/stm_thermal.c                   |   4 +-
-  drivers/thermal/thermal_of.c                       |   8 +-
-  drivers/thermal/ti-soc-thermal/ti-bandgap.c        |   2 +-
-  23 files changed, 506 insertions(+), 186 deletions(-)
-  create mode 100644 
-Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-  delete mode 100644 
-Documentation/devicetree/bindings/thermal/thermal-generic-adc.txt
-
-
-
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+On Tue, Dec 13, 2022 at 10:43:06PM +0000, Fabrizio Castro wrote:
+> Add dt-bindings document for the RZ/V2M PWC GPIO driver.
+
+Bindings are for h/w blocks/devices, not a specific driver.
+
+> 
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
+>  .../bindings/gpio/renesas,rzv2m-pwc-gpio.yaml | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-gpio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-gpio.yaml b/Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-gpio.yaml
+> new file mode 100644
+> index 000000000000..ecc034d53259
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-gpio.yaml
+> @@ -0,0 +1,62 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/renesas,rzv2m-pwc-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Renesas RZ/V2M External Power Sequence Controller (PWC) GPIO
+> +
+> +description: |+
+> +  The PWC IP found in the RZ/V2M family of chips comes with General-Purpose
+> +  Output pins, alongside the below functions
+> +    - external power supply on/off sequence generation
+> +    - on/off signal generation for the LPDDR4 core power supply (LPVDD)
+> +    - key input signals processing
+> +  This node uses syscon to map the register used to control the GPIOs
+> +  (the register map is retrieved from the parent dt-node), and the node should
+> +  be represented as a sub node of a "syscon", "simple-mfd" node.
+> +
+> +maintainers:
+> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - renesas,r9a09g011-pwc-gpio # RZ/V2M
+> +          - renesas,r9a09g055-pwc-gpio # RZ/V2MA
+> +      - const: renesas,rzv2m-pwc-gpio
+> +
+> +  offset:
+
+Too generic of a name. We want any given property name (globally) to 
+have 1 type. With the below comment, this should be replaced with 'reg' 
+instead if you have child nodes.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Offset in the register map for controlling the GPIOs (in bytes).
+> +
+> +  regmap:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Phandle to the register map node.
+
+Looks like GPIO is a sub-function of some other block. Define the 
+binding for that entire block. GPIO can be either either a function of 
+that node (just add GPIO provider properties) or you can have GPIO child 
+nodes. Depends on what the entire block looks like to decide. Do you 
+have multiple instances of the GPIO block would be one reason to have 
+child nodes.
+
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +required:
+> +  - compatible
+> +  - regmap
+> +  - offset
+> +  - gpio-controller
+> +  - '#gpio-cells'
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    gpio {
+> +            compatible = "renesas,r9a09g011-pwc-gpio",
+> +                         "renesas,rzv2m-pwc-gpio";
+> +            regmap = <&regmapnode>;
+> +            offset = <0x80>;
+> +            gpio-controller;
+> +            #gpio-cells = <2>;
+> +    };
+> -- 
+> 2.34.1
+> 
+> 
