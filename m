@@ -2,43 +2,43 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D98B64CC87
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 15:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9550E64CC94
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 15:45:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238370AbiLNOmu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Dec 2022 09:42:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
+        id S238502AbiLNOpe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 14 Dec 2022 09:45:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiLNOms (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 09:42:48 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05F318374;
-        Wed, 14 Dec 2022 06:42:47 -0800 (PST)
+        with ESMTP id S237426AbiLNOpc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 09:45:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B8B24BE2;
+        Wed, 14 Dec 2022 06:45:32 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ACED61AE3;
-        Wed, 14 Dec 2022 14:42:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D7AC433EF;
-        Wed, 14 Dec 2022 14:42:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CBBECB818DD;
+        Wed, 14 Dec 2022 14:45:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B60C433D2;
+        Wed, 14 Dec 2022 14:45:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671028967;
-        bh=tb2AsELIIZzyGSpjpE700QAuHM3wBVWwcbsHaNbdiQ0=;
+        s=k20201202; t=1671029129;
+        bh=6crdpQu6PnoHcLYg/cjhFX11SdiyxzhNVPnXM3li/Uc=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AsdAE/eiZF+bh9VidavDiRp/P5bLlWFFF5fbv0+4RXMLBD0v2eHcUtPAXujZ6TFEC
-         KxrmPCe0HHgMUog8LYj7hXV1fYpAKJXTjDXMqYXiaUuO3Nm5uKZsTH2wENMm31aZkR
-         zrsBP1ZAVSGc5+LfjX/6NkVyX9CAhEuDp5iXvBol+tXGNd0JjLA2o118gvMy2toHS+
-         nYSBEVW5VlnWpSM8/fhAw0DSRb16ayX4FWeVMNa6CmQ+P2mWvCPDa8cRIwQSraO5Jr
-         qnzc/XjJABe1FGjhvJZcQ3dyiObBJDZduu0arQyL9LFI4NvAik78h7mT1gGlw3elvz
-         wriBGkgHvhHIA==
+        b=ZS5cjf5DnEw77me9L035TN8JwVZmbtVW3QEk3lKQIZ7IPu5izeKXzxHyP7c19oXA1
+         sZEFm1n91/Rc8LEgmNIEFCiHS0M2jGjUYGg4jkTjsuDPAUkHhqNIogD5/TiS5aRw86
+         lrF6TGhyp6fEZQMqmwzi4DF8P8qzvdstUeLI3slZSNl6VunCTPQpfQVKqAzAuXRPX4
+         D69dy1KYDDhCn3ZvsZF46R8hsQw6pBCh+aIxdHhSjYReUYdSH+JbKEvux5knqubHc8
+         Njoe87mi/TXVQEHNABHDm1orsvjkeKHXgLGjMFJDhyAtDPtU34y33eTItsOCYHdFcY
+         aieSwgo9gusaQ==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan@kernel.org>)
-        id 1p5SyY-0001lF-C2; Wed, 14 Dec 2022 15:43:15 +0100
-Date:   Wed, 14 Dec 2022 15:43:14 +0100
+        id 1p5T1B-0001nr-Qh; Wed, 14 Dec 2022 15:45:57 +0100
+Date:   Wed, 14 Dec 2022 15:45:57 +0100
 From:   Johan Hovold <johan@kernel.org>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
         Amit Kucheria <amitk@kernel.org>,
         Thara Gopinath <thara.gopinath@gmail.com>,
         Andy Gross <agross@kernel.org>,
@@ -54,15 +54,14 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH 0/4] thermal: fix locking regressions in linux-next
-Message-ID: <Y5nhAr+kb02kwQHg@hovoldconsulting.com>
+Subject: Re: [PATCH 2/4] thermal/drivers/exynos: fix set_trip_temp() deadlock
+Message-ID: <Y5nhpfAislGiIQOU@hovoldconsulting.com>
 References: <20221214131617.2447-1-johan+linaro@kernel.org>
- <CAJZ5v0gY-Lhgf_1Kfg6P5O8s+YMkP4TxggxyS=LU9jVgJikAkg@mail.gmail.com>
- <cc48a248-5dc1-eba8-d91b-ee24300bab52@linaro.org>
+ <20221214131617.2447-3-johan+linaro@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cc48a248-5dc1-eba8-d91b-ee24300bab52@linaro.org>
+In-Reply-To: <20221214131617.2447-3-johan+linaro@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -72,26 +71,34 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Dec 14, 2022 at 03:37:43PM +0100, Daniel Lezcano wrote:
-> On 14/12/2022 15:02, Rafael J. Wysocki wrote:
-> > On Wed, Dec 14, 2022 at 2:18 PM Johan Hovold <johan+linaro@kernel.org> wrote:
-> >>
-> >> This series fixes some of the fallout after the thermal changes that
-> >> just landed in linux-next.
-> >>
-> >> Lockdep reported a lock inversion in one of the Qualcomm drivers and a
-> >> closer review revealed that the changes had also broken the sysfs
-> >> interface for at least three drivers.
-
-> > It is still present in my bleeding-edge branch, though, so please
-> > apply the patches from Johan on top of it and send a new PR to me, so
-> > I can add it back to my linux-next branch once 6.2-rc1 appears.
-> > 
-> > It would be good to check the code again too for any more similar fallout.
+On Wed, Dec 14, 2022 at 02:16:15PM +0100, Johan Hovold wrote:
+> The set_trip_temp() callback is used when changing the trip temperature
+> through sysfs. As it is called with the thermal-zone-device lock held
+> it must not use thermal_zone_get_trip() directly or it will deadlock.
 > 
-> I've been through already, the exynos fix is not necessary.
+> Fixes: 169865e317f2 ("thermal/drivers/exynos: Use generic thermal_zone_get_trip() function")
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/thermal/samsung/exynos_tmu.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> index 37465af59262..cf9028f80415 100644
+> --- a/drivers/thermal/samsung/exynos_tmu.c
+> +++ b/drivers/thermal/samsung/exynos_tmu.c
+> @@ -354,7 +354,7 @@ static void exynos4210_tmu_set_trip_temp(struct exynos_tmu_data *data,
+>  	struct thermal_trip trip;
+>  	u8 ref, th_code;
+>  
+> -	if (thermal_zone_get_trip(data->tzd, 0, &trip))
+> +	if (__thermal_zone_get_trip(data->tzd, 0, &trip))
+>  		return;
+>  
+>  	ref = trip.temperature / MCELSIUS;
 
-Right, I failed to notice that tmu_set_trip_temp() was not actually a
-thermal_zone_device_ops callback. So that one can be dropped.
+As Daniel noted, this patch is not correct as this function is not
+actually a thermal_zone_device_ops::set_trip_temp callback.
+
+Please drop this one.
 
 Johan
