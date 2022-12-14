@@ -2,73 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B8C64C11F
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 01:24:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 623DC64C221
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 03:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237302AbiLNAYy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Dec 2022 19:24:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S236739AbiLNCHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Dec 2022 21:07:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236780AbiLNAYx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 19:24:53 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B1EB1C1;
-        Tue, 13 Dec 2022 16:24:52 -0800 (PST)
+        with ESMTP id S236871AbiLNCHa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 21:07:30 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D43275D6;
+        Tue, 13 Dec 2022 18:07:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670977492; x=1702513492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BLlZbzmH6uKjXZKh08qdpfS+kNsRZLagHkkibALfGyw=;
-  b=TqrHchrU3qe9u0L4dS+RC6jYUM/sze7vQrXMsumMwZby8EpmThFzPanx
-   5Zwj5f9TF3eBCZXl8nocL6uPaGSbiCqm6wARwe5f+6CNGEWG3jgwj2fLf
-   3715nXtSO/LvSBHAgQPBoUSiBEO2X4R09VONegEFwjBUiY/8p0zbdvG8B
-   MBWXXIEI6Axzu2J7yfnGUfOOoC1SqEqE1kw4jybauJwdmnRwgYVv4+kl6
-   aBWSSVyXBfpfgyXhz4H9NEWwMWINpSXXl1BepGtpUIOv6m9I+ocTGzVmQ
-   2plF6SVf2Kdh4iGljkPX7oqmPmj2Xu6gmxduduUrLvHAAwR7xzP4qqLUe
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="298619820"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="298619820"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 16:24:32 -0800
+  t=1670983648; x=1702519648;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=5g2Oe9zCYZKtQPNgkgYOsDcVAbBTFpcRbE/PaSDyVHU=;
+  b=M72iTOAocFIOcKjyTwwCXI5IrZjxZENdm9ldGYvYsCdMGSqhfhXjV3ml
+   WmTp3QlrRotuq3PEUKeBgcc6R2nP6gPysjzf7D9MBESKa7tUfaVkNy2Gv
+   mncFM1WKRAY6T0V+sd8Ptk061oANFzqlJsbtzDHjSZ5+84X778x/4+T7y
+   qCJ649ZCSNdSqvQuS2YftD6TX9I3parEXs2vOyIYlqOhw0Lqh81OqNQGK
+   cAgPknu28tIiB/2IBN8STpmN7kSpqIh1YH0Ym1HdBPX1+p3yqlzaXHr5S
+   Je3cL3pIFwM9m8fP7iRIWBuEIaxiYlCClVsXNMqIDaV1tl81rTJY0MYhm
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380497715"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="380497715"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 18:07:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="977619192"
-X-IronPort-AV: E=Sophos;i="5.96,242,1665471600"; 
-   d="scan'208";a="977619192"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Dec 2022 16:24:32 -0800
-Date:   Tue, 13 Dec 2022 16:32:43 -0800
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Ionela Voinescu <ionela.voinescu@arm.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 09/22] sched/fair: Use IPC class score to select a
- busiest runqueue
-Message-ID: <20221214003243.GC30234@ranerica-svr.sc.intel.com>
-References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
- <20221128132100.30253-10-ricardo.neri-calderon@linux.intel.com>
- <Y5Gld+cThNOPFvgX@arm.com>
+X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="894105112"
+X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
+   d="scan'208";a="894105112"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Dec 2022 18:07:27 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        amitk@kernel.org, torvalds@linux-foundation.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] thermal: intel: Don't set HFI status bit to 1
+Date:   Tue, 13 Dec 2022 18:06:51 -0800
+Message-Id: <20221214020651.1362731-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y5Gld+cThNOPFvgX@arm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -78,112 +58,42 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 08, 2022 at 08:51:03AM +0000, Ionela Voinescu wrote:
-> Hi,
-> 
-> On Monday 28 Nov 2022 at 05:20:47 (-0800), Ricardo Neri wrote:
-> > For two runqueues of equal priority and equal number of running of tasks,
-> > select the one whose current task would have the highest IPC class score
-> > if placed on the destination CPU.
-> > 
-> [..]
-> > +static int ipcc_score_delta(struct task_struct *p, int alt_cpu)
-> > +{
-> > +	unsigned long ipcc = p->ipcc;
-> > +
-> > +	if (!sched_ipcc_enabled())
-> > +		return INT_MIN;
-> > +
-> > +	return arch_get_ipcc_score(ipcc, alt_cpu) -
-> > +	       arch_get_ipcc_score(ipcc, task_cpu(p));
-> 
-> Nit: arch_get_ipcc_score() return values are never checked for error.
+When CPU doesn't support HFI (Hardware Feedback Interface), don't include
+BIT 26 in the mask to prevent clearing. otherwise this results in:
+    unchecked MSR access error: WRMSR to 0x1b1
+      (tried to write 0x0000000004000aa8)
+      at rIP: 0xffffffff8b8559fe (throttle_active_work+0xbe/0x1b0)
 
-Fair point. I will handle error values.
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing of HFI status")
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+ drivers/thermal/intel/therm_throt.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-> 
-> > +}
-> > +
-> >  #else /* CONFIG_IPC_CLASSES */
-> >  static void update_sg_lb_ipcc_stats(struct sg_lb_ipcc_stats *sgcs,
-> >  				    struct rq *rq)
-> > @@ -9258,6 +9276,11 @@ static bool sched_asym_ipcc_pick(struct sched_group *a,
-> >  	return false;
-> >  }
-> >  
-> > +static int ipcc_score_delta(struct task_struct *p, int alt_cpu)
-> > +{
-> > +	return INT_MIN;
-> > +}
-> > +
-> >  #endif /* CONFIG_IPC_CLASSES */
-> >  
-> >  /**
-> > @@ -10419,8 +10442,8 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  {
-> >  	struct rq *busiest = NULL, *rq;
-> >  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> > +	int i, busiest_ipcc_delta = INT_MIN;
-> >  	unsigned int busiest_nr = 0;
-> > -	int i;
-> >  
-> >  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
-> >  		unsigned long capacity, load, util;
-> > @@ -10526,8 +10549,37 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> >  
-> >  		case migrate_task:
-> >  			if (busiest_nr < nr_running) {
-> > +				struct task_struct *curr;
-> > +
-> >  				busiest_nr = nr_running;
-> >  				busiest = rq;
-> > +
-> > +				/*
-> > +				 * Remember the IPC score delta of busiest::curr.
-> > +				 * We may need it to break a tie with other queues
-> > +				 * with equal nr_running.
-> > +				 */
-> > +				curr = rcu_dereference(busiest->curr);
-> > +				busiest_ipcc_delta = ipcc_score_delta(curr,
-> > +								      env->dst_cpu);
-> > +			/*
-> > +			 * If rq and busiest have the same number of running
-> > +			 * tasks, pick rq if doing so would give rq::curr a
-> > +			 * bigger IPC boost on dst_cpu.
-> > +			 */
-> > +			} else if (sched_ipcc_enabled() &&
-> > +				   busiest_nr == nr_running) {
-> > +				struct task_struct *curr;
-> > +				int delta;
-> > +
-> > +				curr = rcu_dereference(rq->curr);
-> > +				delta = ipcc_score_delta(curr, env->dst_cpu);
-> > +
-> > +				if (busiest_ipcc_delta < delta) {
-> > +					busiest_ipcc_delta = delta;
-> > +					busiest_nr = nr_running;
-> > +					busiest = rq;
-> > +				}
-> >  			}
-> >  			break;
-> >  
-> 
-> While in the commit message you describe this as breaking a tie for
-> asym_packing,
+diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
+index 4bb7fddaa143..2e22bb82b738 100644
+--- a/drivers/thermal/intel/therm_throt.c
++++ b/drivers/thermal/intel/therm_throt.c
+@@ -194,7 +194,7 @@ static const struct attribute_group thermal_attr_group = {
+ #define THERM_STATUS_PROCHOT_LOG	BIT(1)
+ 
+ #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
+-#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
++#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
+ 
+ /*
+  * Clear the bits in package thermal status register for bit = 1
+@@ -211,6 +211,9 @@ void thermal_clear_package_intr_status(int level, u64 bit_mask)
+ 	} else {
+ 		msr  = MSR_IA32_PACKAGE_THERM_STATUS;
+ 		msr_val = THERM_STATUS_CLEAR_PKG_MASK;
++		if (boot_cpu_has(X86_FEATURE_HFI))
++			msr_val |= BIT(26);
++
+ 	}
+ 
+ 	msr_val &= ~bit_mask;
+-- 
+2.31.1
 
-Are you referring to the overall series or this specific patch? I checked
-commit message and I do not see references to asym_packing.
-
-> the code here does not only affect asym_packing. If
-> another architecture would have sched_ipcc_enabled() it would use this
-> as generic policy, and that might not be desired.
-
-Indeed, the patchset implements support to use IPCC classes for asym_packing,
-but it is not limited to it.
-
-It is true that I don't check here for asym_packing, but it should not be a
-problem, IMO. I compare two runqueues with equal nr_running, either runqueue
-is a good choice. This tie breaker is an overall improvement, no?
-
-Thanks and BR,
-Ricardo
