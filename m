@@ -2,98 +2,95 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623DC64C221
-	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 03:07:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C66564C2AB
+	for <lists+linux-pm@lfdr.de>; Wed, 14 Dec 2022 04:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236739AbiLNCHb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 13 Dec 2022 21:07:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
+        id S237255AbiLNDQx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 13 Dec 2022 22:16:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236871AbiLNCHa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 21:07:30 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D43275D6;
-        Tue, 13 Dec 2022 18:07:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1670983648; x=1702519648;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=5g2Oe9zCYZKtQPNgkgYOsDcVAbBTFpcRbE/PaSDyVHU=;
-  b=M72iTOAocFIOcKjyTwwCXI5IrZjxZENdm9ldGYvYsCdMGSqhfhXjV3ml
-   WmTp3QlrRotuq3PEUKeBgcc6R2nP6gPysjzf7D9MBESKa7tUfaVkNy2Gv
-   mncFM1WKRAY6T0V+sd8Ptk061oANFzqlJsbtzDHjSZ5+84X778x/4+T7y
-   qCJ649ZCSNdSqvQuS2YftD6TX9I3parEXs2vOyIYlqOhw0Lqh81OqNQGK
-   cAgPknu28tIiB/2IBN8STpmN7kSpqIh1YH0Ym1HdBPX1+p3yqlzaXHr5S
-   Je3cL3pIFwM9m8fP7iRIWBuEIaxiYlCClVsXNMqIDaV1tl81rTJY0MYhm
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="380497715"
-X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
-   d="scan'208";a="380497715"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2022 18:07:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10560"; a="894105112"
-X-IronPort-AV: E=Sophos;i="5.96,243,1665471600"; 
-   d="scan'208";a="894105112"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Dec 2022 18:07:27 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
-        amitk@kernel.org, torvalds@linux-foundation.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [PATCH] thermal: intel: Don't set HFI status bit to 1
-Date:   Tue, 13 Dec 2022 18:06:51 -0800
-Message-Id: <20221214020651.1362731-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S236910AbiLNDQu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 13 Dec 2022 22:16:50 -0500
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CDA5186DF
+        for <linux-pm@vger.kernel.org>; Tue, 13 Dec 2022 19:16:50 -0800 (PST)
+Received: by mail-qt1-x82a.google.com with SMTP id cg5so1544555qtb.12
+        for <linux-pm@vger.kernel.org>; Tue, 13 Dec 2022 19:16:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZvzT+B+8onz0XwW8tP7LZhFUkgvaUBUIsKTNifavDD0=;
+        b=Zpf+UnsSBWVTB+EqduW0e2YPidtcRNJDiUZFTqjdKl9peWQfa19zD9cGRcDCcGtzYv
+         w2crcz/k4rACxCPkIFnpfWBWIPjCb5QkxMupBOa0l8NWOiLahZqk2XL0MIrEH0J33AQi
+         kS35fgrt7ZGpdQNle240eiv95Mh/374MXgw6U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZvzT+B+8onz0XwW8tP7LZhFUkgvaUBUIsKTNifavDD0=;
+        b=6yXetep/if0rUSZlgIeM24PqfpwopDX6XppCHp+s+0QWfNTtORb24QYOZnL/JVFhRN
+         ko28YzfyV46Gr3HPbnF+Y98voF7JR+DY15pYXc43qcQp2s82FhYYQOBCU4iAYe6/wX9G
+         /YA7QXIqIXeZCqh+a3kqzk+zHLSXHVkcmCaEWuevE1sbA+mkwwtFMH9dAeafwVerJOak
+         myjkuIGVcdRzaVd+pfCE2AJZrBAEDlHHMU2AS0WboGyHXp48zWFG5FQfOxNMGXsNMuS9
+         p3I/acfzifHU0eQE41H/cHVZerR190eW3dl8q4Bpo8EV8bgo3qOVl0Ed/U/YMjpBHdy7
+         tR9w==
+X-Gm-Message-State: ANoB5pkBv8/B+HHQFDoLKHjMn/2fiZ9qA3GVk626rX0rPHRNdNrWAE8m
+        jQZfFCJoTZ6tbLL3VSmxmtCG/BBaa3d5pps5
+X-Google-Smtp-Source: AA0mqf7EODFsEexxq6sjVdQP0k+Eg36EcGWHln1SjR/8m4oK8mylz7Hpe2adKIwugxzYh/ugv0W6YQ==
+X-Received: by 2002:ac8:7286:0:b0:39c:da21:6b7e with SMTP id v6-20020ac87286000000b0039cda216b7emr30318543qto.3.1670987808651;
+        Tue, 13 Dec 2022 19:16:48 -0800 (PST)
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com. [209.85.160.172])
+        by smtp.gmail.com with ESMTPSA id fz24-20020a05622a5a9800b003a57a317c17sm975543qtb.74.2022.12.13.19.16.47
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 13 Dec 2022 19:16:47 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id c7so1561022qtw.8
+        for <linux-pm@vger.kernel.org>; Tue, 13 Dec 2022 19:16:47 -0800 (PST)
+X-Received: by 2002:a05:622a:5a87:b0:3a5:47de:a214 with SMTP id
+ fz7-20020a05622a5a8700b003a547dea214mr71172620qtb.304.1670987806759; Tue, 13
+ Dec 2022 19:16:46 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221214020651.1362731-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20221214020651.1362731-1-srinivas.pandruvada@linux.intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 13 Dec 2022 19:16:30 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wi-bq6-d=aoVRDWpLxU-2c2vjkU3OTv37hcK5q781aK+w@mail.gmail.com>
+Message-ID: <CAHk-=wi-bq6-d=aoVRDWpLxU-2c2vjkU3OTv37hcK5q781aK+w@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: Don't set HFI status bit to 1
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com,
+        amitk@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When CPU doesn't support HFI (Hardware Feedback Interface), don't include
-BIT 26 in the mask to prevent clearing. otherwise this results in:
-    unchecked MSR access error: WRMSR to 0x1b1
-      (tried to write 0x0000000004000aa8)
-      at rIP: 0xffffffff8b8559fe (throttle_active_work+0xbe/0x1b0)
+On Tue, Dec 13, 2022 at 6:07 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> When CPU doesn't support HFI (Hardware Feedback Interface), don't include
+> BIT 26 in the mask to prevent clearing. otherwise this results in:
+>     unchecked MSR access error: WRMSR to 0x1b1
+>       (tried to write 0x0000000004000aa8)
+>       at rIP: 0xffffffff8b8559fe (throttle_active_work+0xbe/0x1b0)
+>
+> Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing of HFI status")
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
-Fixes: 6fe1e64b6026 ("thermal: intel: Prevent accidental clearing of HFI status")
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/thermal/intel/therm_throt.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+You can add my tested-by as well, it seems to fix the issue.
 
-diff --git a/drivers/thermal/intel/therm_throt.c b/drivers/thermal/intel/therm_throt.c
-index 4bb7fddaa143..2e22bb82b738 100644
---- a/drivers/thermal/intel/therm_throt.c
-+++ b/drivers/thermal/intel/therm_throt.c
-@@ -194,7 +194,7 @@ static const struct attribute_group thermal_attr_group = {
- #define THERM_STATUS_PROCHOT_LOG	BIT(1)
- 
- #define THERM_STATUS_CLEAR_CORE_MASK (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(13) | BIT(15))
--#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11) | BIT(26))
-+#define THERM_STATUS_CLEAR_PKG_MASK  (BIT(1) | BIT(3) | BIT(5) | BIT(7) | BIT(9) | BIT(11))
- 
- /*
-  * Clear the bits in package thermal status register for bit = 1
-@@ -211,6 +211,9 @@ void thermal_clear_package_intr_status(int level, u64 bit_mask)
- 	} else {
- 		msr  = MSR_IA32_PACKAGE_THERM_STATUS;
- 		msr_val = THERM_STATUS_CLEAR_PKG_MASK;
-+		if (boot_cpu_has(X86_FEATURE_HFI))
-+			msr_val |= BIT(26);
-+
- 	}
- 
- 	msr_val &= ~bit_mask;
--- 
-2.31.1
+Of course, it could be that I just didn't happen to trigger the
+throttling in my test just now, so that testing is pretty limited, but
+at least from a very quick check it seems good.
 
+                 Linus
