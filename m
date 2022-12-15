@@ -2,177 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130BC64DD61
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 16:12:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9EE64DDB0
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 16:20:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiLOPMF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 10:12:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41202 "EHLO
+        id S230209AbiLOPU3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 10:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230082AbiLOPLv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 10:11:51 -0500
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9F430575;
-        Thu, 15 Dec 2022 07:11:46 -0800 (PST)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BFAjkI2018902;
-        Thu, 15 Dec 2022 15:11:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=NQjuWdRJhlzvQflQiWmSjH+nZpjlOK16M6kbc7ZMIv4=;
- b=MjYlOQcCGoJhiESaeavfM6gxfW7Xn+jK53Jip20RGxsTMbT2NB6HQJ7rZ/YSWWVW3ymW
- 0tOj1sRiZIs/gBWRB2H8bow0imZ3sNiCN7s0zMosGe9LO26sIog4JRoDESqNvYc4Mzap
- Z9SfllnVXZxM5IVCLQ6kE/azQFIX2VU+DfmU6CSMRPkdpy4sA4qLpgOTorfQQ6jMotWy
- yDfjtFmaE5afTbGwNgDbJgVK7wemFS4+d7+n6YSvyphYjxazxb9lx+KeRWvYqysd0GO9
- R2pTak/MfSb1ba0qN0Jn99NcGq3VXwfiyZDLjnfFcVcohJatE0kydL6KrrKxl7aOVz18 tw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mfukhstj5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 15:11:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BFFBSss012483
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 15 Dec 2022 15:11:28 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Thu, 15 Dec 2022 07:11:24 -0800
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
-Subject: [PATCH 1/5] PM: domains: Allow a genpd consumer to require a synced power off
-Date:   Thu, 15 Dec 2022 20:40:57 +0530
-Message-ID: <20221215203751.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1671117062-26276-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1671117062-26276-1-git-send-email-quic_akhilpo@quicinc.com>
+        with ESMTP id S230210AbiLOPTt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 10:19:49 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F9663CF
+        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 07:18:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1671117504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7KUNZyPDGe0XK6FnhpWbuMdnMhrHJ4f42gZN22/tCOo=;
+        b=f1RTiFDWQlzxhOgSKEXIp5xlHf0FAD9c49mHTbQDTzwYWnpQ7zy5wxfd1u5sHKRcsx1k42
+        ApEWdS+nRHJqlHuuQ87ISpYKYN96oHiCTbKnZrj0TvwUtuOeKoyebBVHveJ9uxGrxWXa7v
+        dVt+GyBccXILCnl/AiUqLtDBCPZuAYA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-675-hnmgHrxRMBy57xI71Rg9wg-1; Thu, 15 Dec 2022 10:18:20 -0500
+X-MC-Unique: hnmgHrxRMBy57xI71Rg9wg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 82B4518F0243;
+        Thu, 15 Dec 2022 15:18:20 +0000 (UTC)
+Received: from prarit.7a2m.lab.eng.bos.redhat.com (prarit-guest.7a2m.lab.eng.bos.redhat.com [10.16.222.26])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 60A3640C2064;
+        Thu, 15 Dec 2022 15:18:20 +0000 (UTC)
+From:   Prarit Bhargava <prarit@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Prarit Bhargava <prarit@redhat.com>, Len Brown <lenb@kernel.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH] turbostat.c: Fix /dev/cpu_dma_latency warnings
+Date:   Thu, 15 Dec 2022 10:18:16 -0500
+Message-Id: <20221215151816.19956-1-prarit@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3ozT3s2LygexvKrtlfkWG3Is6S-kalNQ
-X-Proofpoint-ORIG-GUID: 3ozT3s2LygexvKrtlfkWG3Is6S-kalNQ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-15_08,2022-12-15_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 clxscore=1015
- mlxscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 bulkscore=0
- mlxlogscore=602 spamscore=0 priorityscore=1501 adultscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2212150123
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Ulf Hansson <ulf.hansson@linaro.org>
+When running as non-root the following error is seen in turbostat:
 
-Some genpd providers doesn't ensure that it has turned off at hardware.
-This is fine until the consumer really requires during some special
-scenarios that the power domain collapse at hardware before it is
-turned ON again.
+turbostat: fopen /dev/cpu_dma_latency
+: Permission denied
 
-An example is the reset sequence of Adreno GPU which requires that the
-'gpucc cx gdsc' power domain should move to OFF state in hardware at
-least once before turning in ON again to clear the internal state.
+turbostat and the man page have information on how to avoid other
+permission errors, so these can be fixed the same way.
 
-Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Provide better /dev/cpu_dma_latency warnings that provide instructions on
+how to avoid the error, and update the man page.
+
+Signed-off-by: Prarit Bhargava <prarit@redhat.com>
+Cc: Len Brown <lenb@kernel.org>
+Cc: linux-pm@vger.kernel.org
 ---
-@Ulf, I took the liberty to cleanup and post your patch.
+ tools/power/x86/turbostat/turbostat.8 | 2 ++
+ tools/power/x86/turbostat/turbostat.c | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
 
- drivers/base/power/domain.c | 23 +++++++++++++++++++++++
- include/linux/pm_domain.h   |  5 +++++
- 2 files changed, 28 insertions(+)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 967bcf9d415e..4fa624218967 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -519,6 +519,28 @@ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
+diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turbostat/turbostat.8
+index c7b26a3603af..3e1a4c4be001 100644
+--- a/tools/power/x86/turbostat/turbostat.8
++++ b/tools/power/x86/turbostat/turbostat.8
+@@ -344,6 +344,8 @@ Alternatively, non-root users can be enabled to run turbostat this way:
  
-+/*
-+ * dev_pm_genpd_synced_poweroff - Next power off should be synchronous
-+ *
-+ * @dev: A device that is attached to the genpd.
-+ *
-+ * Allows a consumer of the genpd to notify the provider that the next power off
-+ * should be synchronous.
-+ */
-+void dev_pm_genpd_synced_poweroff(struct device *dev)
-+{
-+	struct generic_pm_domain *genpd;
-+
-+	genpd = dev_to_genpd_safe(dev);
-+	if (!genpd)
-+		return;
-+
-+	genpd_lock(genpd);
-+		genpd->synced_poweroff = true;
-+	genpd_unlock(genpd);
-+}
-+EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
-+
- static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
- {
- 	unsigned int state_idx = genpd->state_idx;
-@@ -562,6 +584,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+ # chmod +r /dev/cpu/*/msr
  
- out:
- 	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
-+	genpd->synced_poweroff = false;
- 	return 0;
- err:
- 	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
-diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
-index 1cd41bdf73cf..f776fb93eaa0 100644
---- a/include/linux/pm_domain.h
-+++ b/include/linux/pm_domain.h
-@@ -136,6 +136,7 @@ struct generic_pm_domain {
- 	unsigned int prepared_count;	/* Suspend counter of prepared devices */
- 	unsigned int performance_state;	/* Aggregated max performance state */
- 	cpumask_var_t cpus;		/* A cpumask of the attached CPUs */
-+	bool synced_poweroff;		/* A consumer needs a synced poweroff */
- 	int (*power_off)(struct generic_pm_domain *domain);
- 	int (*power_on)(struct generic_pm_domain *domain);
- 	struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
-@@ -235,6 +236,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
- int dev_pm_genpd_remove_notifier(struct device *dev);
- void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
- ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
-+void dev_pm_genpd_synced_poweroff(struct device *dev);
- 
- extern struct dev_power_governor simple_qos_governor;
- extern struct dev_power_governor pm_domain_always_on_gov;
-@@ -300,6 +302,9 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
- {
- 	return KTIME_MAX;
- }
-+static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
-+{ }
++# chmod +r /dev/cpu_dma_latency
 +
- #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
- #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
- #endif
+ .B "turbostat "
+ reads hardware counters, but doesn't write them.
+ So it will not interfere with the OS or other programs, including
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index aba460410dbd..fef76ed294fc 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -5476,13 +5476,13 @@ void print_dev_latency(void)
+ 
+ 	fd = open(path, O_RDONLY);
+ 	if (fd < 0) {
+-		warn("fopen %s\n", path);
++		warn("open failed, try chmod +r %s\n", path);
+ 		return;
+ 	}
+ 
+ 	retval = read(fd, (void *)&value, sizeof(int));
+ 	if (retval != sizeof(int)) {
+-		warn("read %s\n", path);
++		warn("read failed %s\n", path);
+ 		close(fd);
+ 		return;
+ 	}
 -- 
-2.7.4
+2.38.1
 
