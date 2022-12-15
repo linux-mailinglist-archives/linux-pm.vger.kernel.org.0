@@ -2,171 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3079664E123
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 19:43:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAAB64E182
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 20:04:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiLOSnc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 13:43:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S230171AbiLOTEU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 14:04:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229975AbiLOSna (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 13:43:30 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C55C20BEC;
-        Thu, 15 Dec 2022 10:43:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671129809; x=1702665809;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=alyrCRpg7VFefOZMHRABhidPtpezk2Hp/kqcUajm0NM=;
-  b=AONdNd28/CS/Exz0LcHeyhZMxNxS1k6F018I0F7wdvj9cAUECAi73cwg
-   WK1nuN+306ej0rzqhjrfZ6WnnTfRQfTFW5tkTyNfGZoyjEUKeSgsFg+1N
-   b1A8mvDgrD938q6gUfTGnhAZHnZ3vzlLqeoSm6DqbASEcgClP8ucL81Qa
-   q/XdWDqqeKYtySe7IH5jaQ0dlNqZZuVo6EqidV6W6DoEHPgJK5m4B2vYm
-   stDxiNR4zGUSp52LwyEr+CW9Wb7fuMCTbQer2roa19yrxhlMUZbwVWSbf
-   Xz6NyjanVaLDC+4wq76Xn2e/cKk+TQufMbXvFE7+c/MFfFkHMmstewKLF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="299112646"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="299112646"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2022 10:43:28 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10562"; a="756442196"
-X-IronPort-AV: E=Sophos;i="5.96,248,1665471600"; 
-   d="scan'208";a="756442196"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga002.fm.intel.com with ESMTP; 15 Dec 2022 10:43:28 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, peterz@infradead.org, frederic@kernel.org,
-        daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        len.brown@intel.com,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Subject: [RFC/RFT PATCH 2/2] sched/core: Add max duration to play_precise_idle()
-Date:   Thu, 15 Dec 2022 10:43:00 -0800
-Message-Id: <20221215184300.1592872-3-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
-References: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
+        with ESMTP id S229848AbiLOTET (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 14:04:19 -0500
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46144379C8;
+        Thu, 15 Dec 2022 11:04:18 -0800 (PST)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1433ef3b61fso436146fac.10;
+        Thu, 15 Dec 2022 11:04:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=2AOozFIty5EkdA/CcLLeXdwtUlPwrAgRICt90mI5rTM=;
+        b=H1KE6ri4mnp4XVqEcDY7zPo88mPOJwu9+tz3ObwvnDniqYPKdObUPGSE0KegGKj95G
+         dTZao0Ay/oRmjS5TzTCbCA/T0h6ugVBScILe4Neh1DHs4ZyUlCKBx2NLqhaEsUjxr5c2
+         bXsGKbuxEN6vgVy5SMkZ+8OpQcdL4gmrkuN61zyaOiP3sEwwJKHAuSbZ3m1JB6LPd/9z
+         V+jigdVg3VgdWz0jZCbhubd7COoLQcldUCzMHHD4PI84T09+PSJZZhyvvXNAONd9A3i9
+         wLTehUCfWdlxaFueULisgbg/ApB1pA3h8bWGRHC7zk6fUbc8lheF5ZtFwDAJ5J6UdP4p
+         IolQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2AOozFIty5EkdA/CcLLeXdwtUlPwrAgRICt90mI5rTM=;
+        b=GXmWLVNjKLZb9dzjWKLGVG3CcmFi76VXQvwMWwVBfNO9hmmOpPlFE7iwrtuqX73SZN
+         cKljqVdteBinzHnZW2e0HQPQH+p1nn4GfGw2phL7nAoHlBAW1KxRJUwbq9VD6aBS+sK+
+         eDVe60Wk+u4sx7qt1VnmXMz1hwnP88zgDZZLXQTNg80Un68pB0aM2HoilH7L6ee+ypbw
+         N3W+Zj9OeDZwGPF9CEVW8eTKCq8p+dmrLolEac+A6G5RvSkbacCNREh8vMLWIGJRnEip
+         1Q1FZJS7wczvzM5RBDWlqn6xiXizXLdC5gLU9MkmO1a8H8gjyiyyVoT329SZCGe4LUFp
+         D0FQ==
+X-Gm-Message-State: ANoB5pk5QiLb6rTHmfMr/qzbxH7JEqAeaiHmUZNrwYFFwG3wSbw+JItg
+        ouec0dwn/6adg9YQFIzBz+Y=
+X-Google-Smtp-Source: AA0mqf6RRqS2vDRqkGsMPdmpVwGN/Y3NvskbmxxLkZ3lNds8XNOid3RRqWTtN3fJHiMg4NohT5LFPg==
+X-Received: by 2002:a05:6870:f10f:b0:144:3cda:a95c with SMTP id k15-20020a056870f10f00b001443cdaa95cmr17884182oac.18.1671131057576;
+        Thu, 15 Dec 2022 11:04:17 -0800 (PST)
+Received: from neuromancer. ([76.244.6.13])
+        by smtp.gmail.com with ESMTPSA id d14-20020a4aaa8e000000b004a0ad937ccdsm97158oon.1.2022.12.15.11.04.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Dec 2022 11:04:16 -0800 (PST)
+Message-ID: <639b6fb0.4a0a0220.f7fcf.0b2f@mx.google.com>
+X-Google-Original-Message-ID: <Y5tvrpi7u+MqX7eH@neuromancer.>
+Date:   Thu, 15 Dec 2022 13:04:14 -0600
+From:   Chris Morgan <macroalpha82@gmail.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     sre@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH v2] power: supply: rk817: Fix unsigned comparison with
+ less than zero
+References: <20221214032316.22392-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221214032316.22392-1-jiapeng.chong@linux.alibaba.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-When there is a storm of soft irqs, it is possible that caller
-spends lot more time in play_idle_precise() than the actual
-idle time requested.
+On Wed, Dec 14, 2022 at 11:23:16AM +0800, Jiapeng Chong wrote:
+> The tmp is defined as u32 type, which results in invalid processing of
+> tmp<0 in function rk817_read_or_set_full_charge_on_boot(). Therefore,
+> drop the comparison.
+> 
+> drivers/power/supply/rk817_charger.c:828 rk817_read_or_set_full_charge_on_boot() warn: unsigned 'tmp' is never less than zero.
+> drivers/power/supply/rk817_charger.c:788 rk817_read_or_set_full_charge_on_boot() warn: unsigned 'tmp' is never less than zero.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3444
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Add a pramater to play_precise_idle() to specify a maximum time to
-exit the loop in play_precise_idle(), even if the the total forced idle
-time is less than the desired. If exit before the required forced idle
-duration return error to the caller, otherwise return 0.
+Looks good to me, thank you.
 
-For powercap/idle_inject, the maximum wait will be capped to two times
-of idle duration.
+Tested-by: Chris Morgan <macromorgan@hotmail.com>
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
- drivers/powercap/idle_inject.c |  4 +++-
- include/linux/cpu.h            |  4 ++--
- kernel/sched/idle.c            | 13 +++++++++++--
- 3 files changed, 16 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-index fe86a09e3b67..2764155d184e 100644
---- a/drivers/powercap/idle_inject.c
-+++ b/drivers/powercap/idle_inject.c
-@@ -132,6 +132,7 @@ static void idle_inject_fn(unsigned int cpu)
- {
- 	struct idle_inject_device *ii_dev;
- 	struct idle_inject_thread *iit;
-+	u64 idle_duration_ns;
- 
- 	ii_dev = per_cpu(idle_inject_device, cpu);
- 	iit = per_cpu_ptr(&idle_inject_thread, cpu);
-@@ -140,8 +141,9 @@ static void idle_inject_fn(unsigned int cpu)
- 	 * Let the smpboot main loop know that the task should not run again.
- 	 */
- 	iit->should_run = 0;
-+	idle_duration_ns = READ_ONCE(ii_dev->idle_duration_us) * NSEC_PER_USEC;
- 
--	play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) * NSEC_PER_USEC,
-+	play_idle_precise(idle_duration_ns, idle_duration_ns << 1,
- 			  READ_ONCE(ii_dev->latency_us) * NSEC_PER_USEC);
- }
- 
-diff --git a/include/linux/cpu.h b/include/linux/cpu.h
-index 314802f98b9d..9969940553e5 100644
---- a/include/linux/cpu.h
-+++ b/include/linux/cpu.h
-@@ -190,11 +190,11 @@ void arch_cpu_idle_dead(void);
- int cpu_report_state(int cpu);
- int cpu_check_up_prepare(int cpu);
- void cpu_set_state_online(int cpu);
--void play_idle_precise(u64 duration_ns, u64 latency_ns);
-+int play_idle_precise(u64 duration_ns, u64 max_duration_ns, u64 latency_ns);
- 
- static inline void play_idle(unsigned long duration_us)
- {
--	play_idle_precise(duration_us * NSEC_PER_USEC, U64_MAX);
-+	play_idle_precise(duration_us * NSEC_PER_USEC, 0, U64_MAX);
- }
- 
- #ifdef CONFIG_HOTPLUG_CPU
-diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
-index 77d6168288cf..c98b77ff84f5 100644
---- a/kernel/sched/idle.c
-+++ b/kernel/sched/idle.c
-@@ -360,10 +360,10 @@ static enum hrtimer_restart idle_inject_timer_fn(struct hrtimer *timer)
- 	return HRTIMER_NORESTART;
- }
- 
--void play_idle_precise(u64 duration_ns, u64 latency_ns)
-+int play_idle_precise(u64 duration_ns, u64 duration_ns_max, u64 latency_ns)
- {
- 	struct idle_timer it;
--	ktime_t remaining;
-+	ktime_t remaining, end_time;
- 
- 	/*
- 	 * Only FIFO tasks can disable the tick since they don't need the forced
-@@ -378,6 +378,8 @@ void play_idle_precise(u64 duration_ns, u64 latency_ns)
- 
- 	remaining = ns_to_ktime(duration_ns);
- 
-+	end_time = ktime_add_ns(ktime_get(), duration_ns_max);
-+
- 	do {
- 		rcu_sleep_check();
- 		preempt_disable();
-@@ -402,12 +404,19 @@ void play_idle_precise(u64 duration_ns, u64 latency_ns)
- 		preempt_fold_need_resched();
- 		preempt_enable();
- 
-+		if (!READ_ONCE(it.done) && duration_ns_max) {
-+			if (ktime_after(ktime_get(), end_time))
-+				return -EAGAIN;
-+		}
-+
- 		/* Give ksoftirqd 1 jiffy to get a chance to start its job */
- 		if (!READ_ONCE(it.done) && task_is_running(__this_cpu_read(ksoftirqd))) {
- 			__set_current_state(TASK_UNINTERRUPTIBLE);
- 			schedule_timeout(1);
- 		}
- 	} while (!READ_ONCE(it.done));
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(play_idle_precise);
- 
--- 
-2.38.1
-
+> ---
+> Changes in v2:
+>   -Drop the comparison 'tmp<0'.
+> 
+>  drivers/power/supply/rk817_charger.c | 4 ----
+>  1 file changed, 4 deletions(-)
+> 
+> diff --git a/drivers/power/supply/rk817_charger.c b/drivers/power/supply/rk817_charger.c
+> index 4f9c1c417916..36f807b5ec44 100644
+> --- a/drivers/power/supply/rk817_charger.c
+> +++ b/drivers/power/supply/rk817_charger.c
+> @@ -785,8 +785,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
+>  		regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
+>  				 bulk_reg, 4);
+>  		tmp = get_unaligned_be32(bulk_reg);
+> -		if (tmp < 0)
+> -			tmp = 0;
+>  		boot_charge_mah = ADC_TO_CHARGE_UAH(tmp,
+>  						    charger->res_div) / 1000;
+>  		/*
+> @@ -825,8 +823,6 @@ rk817_read_or_set_full_charge_on_boot(struct rk817_charger *charger,
+>  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_Q_PRES_H3,
+>  			 bulk_reg, 4);
+>  	tmp = get_unaligned_be32(bulk_reg);
+> -	if (tmp < 0)
+> -		tmp = 0;
+>  	boot_charge_mah = ADC_TO_CHARGE_UAH(tmp, charger->res_div) / 1000;
+>  	regmap_bulk_read(rk808->regmap, RK817_GAS_GAUGE_OCV_VOL_H,
+>  			 bulk_reg, 2);
+> -- 
+> 2.20.1.7.g153144c
+> 
