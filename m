@@ -2,47 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5950064E087
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 19:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 242FB64E0D6
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 19:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbiLOSTN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 13:19:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
+        id S229979AbiLOSau (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 13:30:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiLOSTE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 13:19:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC1248746;
-        Thu, 15 Dec 2022 10:19:02 -0800 (PST)
+        with ESMTP id S230314AbiLOS3i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 13:29:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906344D5CA;
+        Thu, 15 Dec 2022 10:28:55 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2A23B81C1F;
-        Thu, 15 Dec 2022 18:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67BEDC433D2;
-        Thu, 15 Dec 2022 18:18:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4ED76B81B0B;
+        Thu, 15 Dec 2022 18:28:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 17CEBC433F2;
+        Thu, 15 Dec 2022 18:28:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671128339;
-        bh=78tX3t6kUkY6BMXVJo5OYZXMdsWwwpj5lrEjbZ2nP5k=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FskV9TVhDGw/J3zgBg0l/b33IrEveHitlVioGB/zPpBgsy+Rqi5GUybZXmQB+EPT/
-         MGo8+xWqRtpyI5EJpJmAtwbcP+WWKjKJ5cSKfRNS/R0OWeVhnOcscgK5+W9/ge/k8c
-         FKckAFwV/A/vWObAeBKHTZy9+oOuvoKKM9+Hj9SV4KyvMdkLC0q+hJVKVupUS0ghpO
-         8SYIt57hOCe7GOq141BQiwSW7Qe4IHyTnga7w5Jw4L4dvfUyKqR+gOMUFhC1njhh07
-         eZachBoK9k5ZPm+Xzt2DuLkOqMv3HluGy7fcPsPtb3q+kiMG+Nuy4OJDH5Im01BQOU
-         zYj2RdwEuXUyQ==
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH] PM: runtime: Simplify __rpm_get_callback()
-Date:   Thu, 15 Dec 2022 12:18:48 -0600
-Message-Id: <20221215181848.129326-1-helgaas@kernel.org>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        s=k20201202; t=1671128933;
+        bh=cQAzEIvaQ4bGZ4cz3i/Uwnhd5yk4LNogwTN1klWJH68=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cVvV6ee9SgzTBWMenRthkzclDKDk2QtodeB5+ymrJv6XbMI+O+g30wQYPk7Ay9vvH
+         vi2v3Yk5w2OzGwrTT6hlDC1fUjFo/hu0z9PXxTW3PBY6/lC5Z4zlIwIcceKte3WMEj
+         ThFVyJRQ3XXHG7u638WgPNqmkkTmByONf1Ivdp0eSpEhHHuQI/hK1NhB4+vJfdzf85
+         Osvo/mhmmFqYZ4GtdObefNp90nV1ejngHG61bDWq/rifAYf5Y5BBpdJURqv9I91gF2
+         bVdeCz79tJNYbgzuB+Ns5020VOibR4sqMrSKiKC4kPXuEflwyeK9g3SSUVH+I4dBQp
+         HdQNCEZcmO9yA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 068BFC197B4;
+        Thu, 15 Dec 2022 18:28:53 +0000 (UTC)
+Subject: Re: [GIT PULL] More thermal control updates for v6.2-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0hu5P+xmLnwhTN1S1mXfUC0ZNzPdiuK_1Ebq29x8aa8Ug@mail.gmail.com>
+References: <CAJZ5v0hu5P+xmLnwhTN1S1mXfUC0ZNzPdiuK_1Ebq29x8aa8Ug@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0hu5P+xmLnwhTN1S1mXfUC0ZNzPdiuK_1Ebq29x8aa8Ug@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.2-rc1-2
+X-PR-Tracked-Commit-Id: bd7bcc4f963c8898176ad864288959375154e038
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 601c1aa855a686643259c4a34e96ee692cdaf01f
+Message-Id: <167112893302.20649.17355760380342337963.pr-tracker-bot@kernel.org>
+Date:   Thu, 15 Dec 2022 18:28:53 +0000
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,53 +60,15 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Bjorn Helgaas <bhelgaas@google.com>
+The pull request you sent on Thu, 15 Dec 2022 19:05:35 +0100:
 
-Simplify __rpm_get_callback() slightly by returning as soon as the return
-value is known.  No functional change intended.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.2-rc1-2
 
-Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
----
- drivers/base/power/runtime.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/601c1aa855a686643259c4a34e96ee692cdaf01f
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 50e726b6c2cf..7171ed0668f3 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
- 
- static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
- {
--	pm_callback_t cb;
--	const struct dev_pm_ops *ops;
-+	const struct dev_pm_ops *ops = NULL;
- 
- 	if (dev->pm_domain)
- 		ops = &dev->pm_domain->ops;
-@@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
- 		ops = dev->class->pm;
- 	else if (dev->bus && dev->bus->pm)
- 		ops = dev->bus->pm;
--	else
--		ops = NULL;
- 
- 	if (ops)
--		cb = *(pm_callback_t *)((void *)ops + cb_offset);
--	else
--		cb = NULL;
-+		return *(pm_callback_t *)((void *)ops + cb_offset);
- 
--	if (!cb && dev->driver && dev->driver->pm)
--		cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-+	if (dev->driver && dev->driver->pm)
-+		return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
- 
--	return cb;
-+	return NULL;
- }
- 
- #define RPM_GET_CALLBACK(dev, callback) \
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
