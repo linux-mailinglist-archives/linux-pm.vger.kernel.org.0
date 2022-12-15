@@ -2,61 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF8464D648
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 06:53:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E860A64D66D
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 07:20:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiLOFxp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 00:53:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
+        id S229530AbiLOGUt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 01:20:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbiLOFxo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 00:53:44 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13CD2AE3F;
-        Wed, 14 Dec 2022 21:53:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671083623; x=1702619623;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=vBYIKub1ILlCxfTrAPE1vLqEgAoyGgoHOBktpWHdYAU=;
-  b=Iq5kW4BjR3QDf7N8jsE7BplxG98ufixNTBPz1JtT6hgqOYyGuSeSyrq/
-   /b5FCQ3hCGJulFeXQ+FrUswK5SGk5ihxUhM76XkA2XCGIdlBCtUc0JT97
-   rqDJApw4TYeTC8d2bBtre9gB1R9uaaq5+dDUBOFgIzxL6Emy5i3wO6Zm7
-   nIlA+78N35r+tOK6OVE09E1STQMImUk1to2J6617fWOopyjpi5PKSsspw
-   ShKIp4JMz7rY7x6sVSbIsZnNiizooN0vlnoSXa5yqcGdpZHzuaK/H0Oiq
-   OPZQp4qA1/Neqco203lWQHZtmu3yki8Xg9OTZZCCVoEWRxdXMv7VFVN3R
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="345678573"
-X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
-   d="scan'208";a="345678573"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 21:53:43 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="756221835"
-X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
-   d="scan'208";a="756221835"
-Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Dec 2022 21:53:42 -0800
-Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1p5hBd-00064K-09;
-        Thu, 15 Dec 2022 05:53:41 +0000
-Date:   Thu, 15 Dec 2022 13:52:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 02f29b079520d658643d9f1cf1d2e815bc38d396
-Message-ID: <639ab635.cM9cGaA97WfPlvIt%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        with ESMTP id S229601AbiLOGUt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 01:20:49 -0500
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59DE85445B;
+        Wed, 14 Dec 2022 22:20:48 -0800 (PST)
+Received: by linux.microsoft.com (Postfix, from userid 1134)
+        id 089FA20A67F7; Wed, 14 Dec 2022 22:20:48 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 089FA20A67F7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1671085248;
+        bh=txxZyi1fNvIRHpcRd9K+cXPr9cLQU3hMoUsOwHCO7+c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JQ1Y+sAEo6sEG5h4xiaOtmSAdNZWGQsvnWygTZhRmYSSK34IJw0WGsLWAgCx+MXVe
+         SG0+su7trpA41/t/CGq5cDvNVqRQxf1uM9EL5+I2JDtgEOcySWQVDX1cPzEQBYdJ2o
+         1QbMXJnK1nlDzfBgH5Bv5XYbnqMSsyscHgIJPWC4=
+From:   Shradha Gupta <shradhagupta@linux.microsoft.com>
+To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Cc:     Shradha Gupta <shradhagupta@linux.microsoft.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: [PATCH] kernel: power: swap: Suppress expected 'Image not found'  error on Ubuntu
+Date:   Wed, 14 Dec 2022 22:20:26 -0800
+Message-Id: <1671085226-21347-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,96 +45,37 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 02f29b079520d658643d9f1cf1d2e815bc38d396  Merge branch 'thermal-next' into linux-next
+In 'systemctl hibernate' if resume device is written to the sysfs
+resume parameter, a software_resume() call is triggerred. This call
+is expected to fail in swsusp_check() call with -EBUSY error and an
+'Image not found' error message. This fix suppresses the expected
+failure message from getting logged in Ubuntu setups where
+CONFIG_DYNAMIC_DEBUG is enabled by default.
 
-elapsed time: 725m
+Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+---
+ kernel/power/swap.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-configs tested: 75
-configs skipped: 2
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-powerpc                           allnoconfig
-i386                                defconfig
-um                           x86_64_defconfig
-alpha                             allnoconfig
-i386                              allnoconfig
-um                             i386_defconfig
-arc                               allnoconfig
-arm                               allnoconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                          randconfig-a014
-x86_64                           rhel-8.3-bpf
-s390                 randconfig-r044-20221214
-riscv                randconfig-r042-20221214
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a012
-s390                                defconfig
-sh                               allmodconfig
-s390                             allyesconfig
-x86_64                         rhel-8.3-kunit
-mips                             allyesconfig
-i386                          randconfig-a016
-arc                  randconfig-r043-20221214
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                        randconfig-a006
-i386                             allyesconfig
-i386                          randconfig-a005
-x86_64                              defconfig
-m68k                             allyesconfig
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a013
-m68k                             allmodconfig
-x86_64                        randconfig-a011
-arc                              allyesconfig
-alpha                            allyesconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a015
-x86_64                          rhel-8.3-rust
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                            allnoconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-ia64                             allmodconfig
-riscv                             allnoconfig
-mips                        bcm47xx_defconfig
-sparc                       sparc32_defconfig
-loongarch                        alldefconfig
-mips                       bmips_be_defconfig
-sh                   rts7751r2dplus_defconfig
-sh                          rsk7269_defconfig
-parisc                generic-64bit_defconfig
-powerpc                 mpc834x_itx_defconfig
-
-clang tested configs:
-i386                          randconfig-a013
-arm                  randconfig-r046-20221214
-x86_64                        randconfig-a001
-i386                          randconfig-a011
-x86_64                        randconfig-a003
-i386                          randconfig-a015
-x86_64                        randconfig-a005
-i386                          randconfig-a002
-hexagon              randconfig-r041-20221214
-hexagon              randconfig-r045-20221214
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-k001
-i386                          randconfig-a006
-
+diff --git a/kernel/power/swap.c b/kernel/power/swap.c
+index 277434b6c0bf..9cbd3edc8339 100644
+--- a/kernel/power/swap.c
++++ b/kernel/power/swap.c
+@@ -1552,6 +1552,14 @@ int swsusp_check(void)
+ 			pr_debug("Image signature found, resuming\n");
+ 	} else {
+ 		error = PTR_ERR(hib_resume_bdev);
++		/*
++		 * If this call is triggered by `systemctl hibernate`, the
++		 * call is expected to fail with -EBUSY error.
++		 * TODO: Figure out a better way to suppress the error msg
++		 * in this case.
++		 */
++		if (error == -EBUSY)
++			return error;
+ 	}
+ 
+ 	if (error)
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+
