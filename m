@@ -2,152 +2,307 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF4764D7B2
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 09:24:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F07F864D8FB
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 10:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiLOIYg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 03:24:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59926 "EHLO
+        id S230215AbiLOJuF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 04:50:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiLOIY1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 03:24:27 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCECE2D1F7;
-        Thu, 15 Dec 2022 00:24:26 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id t11-20020a17090a024b00b0021932afece4so1962842pje.5;
-        Thu, 15 Dec 2022 00:24:26 -0800 (PST)
+        with ESMTP id S230225AbiLOJtY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 04:49:24 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5AC20F60
+        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 01:49:21 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id 1so14831394lfz.4
+        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 01:49:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=p1Kmh8wc8B768hb6NEwxEyoQrVxe7sg2+tN2PZX5I48=;
-        b=ZUU6fRFAgDHWMOOBwLjYmWgSBGlGPLj4j9IhUifgPy48cmwsioOZ5sdfYqx1kA5X8v
-         O1SV1490pzV8ti7HOlXU+xnw+f60w+sreKkrlPNmSWSYWI5o/NwbfSsZRNS/aZPx+oJ4
-         2Ur1AC6EzqYScIUDJ6wFsaiUONLIAWmJhZHoptn+ESiMNcGMg/9On/LbY6OfRE96UybT
-         IWscjxu8vVOvc+KasOnZy3EqIjv1DzI/0PiNxJCu93MCtGlVrb1T7OKYP+6ZRuVRZvjD
-         JiWyZzti++qhiTvrimQsdc+mMyIcDjx1WVWr7d4aDAlyUqn4Q6w6LVV+AgcQNI/eg25y
-         1vBw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yY96EIpEYo2WvzK5TLn9sy1o8NsGtoNUVSSOvpliiac=;
+        b=NWjRT0VljK2M8aptatHJ8aLxWUf4BSSb7gtfVo4p2OixaPp17M2vyQAVBEqOHOemj3
+         N+AQEz6MpApP9/2/ceTUgN4RLCN+vrmm4+TXtkQEROSrVdQeLaxneWEmj2uy+/1jfTTE
+         gjZ7DblQriWzYDQ3xeB/XCaArVES8ccpi+XpnAWUszGdvlk5IQOc2zLal/XTd4nNbcx+
+         FvScg3QKnn1vADCaOBHKqwIsMueohg++CwoN1eyFwqrOIGkFl16qj0ZrFk8BRpY33ZHX
+         h77sAQY21iUugI02FlpmSXECFYCLsv3mvPUAJhSCZlIMox7uW/2360vTxa31ytPcM06a
+         ANHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=references:in-reply-to:references:in-reply-to:message-id:date
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p1Kmh8wc8B768hb6NEwxEyoQrVxe7sg2+tN2PZX5I48=;
-        b=uMZhFk38AIXFJRD0e3skecyNYOHe+k00l2NMsriRK4MecBhfWJ78RmDkECLFrguu+I
-         wapk0lSlqgp+dGV2a+mpTMXryVEn1qEX6rBOE7cJ50EXRS9AjhV86Q96jYGOe3k6xv6S
-         NDdFYaQBuK2t/RKi0DcjCAmGyLlFrcB+sGaXcX26DGmSl4hMmgag39U5iNlc/x4Gd4Ub
-         T/KMchWvgyB7s/EPM4/0yL3Qr/q8OaL03Ss92LN0bK6zeSJGtaKZ6rauFWZq3ArNncLD
-         oyQX2zxlVDHUBXomhpWpWtbkmfgW6M+n+2IC87L+8BgR5BgcxzyKbhq7ihdMaiiRG9DV
-         RA7A==
-X-Gm-Message-State: ANoB5pnB+aej5YEdBEmOgneLW/XQiWEKqJODsn40ytnfEbkZSds+y5fg
-        DMQu/mAu1HyiGyZpXNtmKbQ=
-X-Google-Smtp-Source: AA0mqf4H0xtf9PlO/ezZzhfvfMwH42TTqZAVpNPj+UUZjOqyfBIClcGHZKe61nqT7FufFf6yywo45g==
-X-Received: by 2002:a17:90a:6845:b0:218:cbf6:733 with SMTP id e5-20020a17090a684500b00218cbf60733mr27943740pjm.21.1671092666157;
-        Thu, 15 Dec 2022 00:24:26 -0800 (PST)
-Received: from localhost.localdomain ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id k14-20020a17090a404e00b0020aacde1964sm2594606pjg.32.2022.12.15.00.24.23
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 15 Dec 2022 00:24:25 -0800 (PST)
-From:   Li-hao Kuo <lhjeff911@gmail.com>
-To:     rafael@kernel.org, krzk@kernel.org, rui.zhang@intel.com,
-        daniel.lezcano@linaro.org, amitk@kernel.org, robh+dt@kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     lh.kuo@sunplus.com, Li-hao Kuo <lhjeff911@gmail.com>
-Subject: [PATCH v14 2/2] dt-bindings: thermal: Add Sunplus schema
-Date:   Thu, 15 Dec 2022 16:23:50 +0800
-Message-Id: <038211f33e4d5dd5129712aef2738a83577c7745.1665990345.git.lhjeff911@gmail.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <cover.1665990345.git.lhjeff911@gmail.com>
-References: <cover.1665990345.git.lhjeff911@gmail.com>
-In-Reply-To: <cover.1665990345.git.lhjeff911@gmail.com>
-References: <cover.1665990345.git.lhjeff911@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yY96EIpEYo2WvzK5TLn9sy1o8NsGtoNUVSSOvpliiac=;
+        b=qtLuvAS9zmPuY4IuqQEHzHy/icTeKcHp03DYdq68TbruIPnxC38MAthBd0JNL8o3jn
+         CG6DD/Nv+gXtLyLgoWvIsSBZ3buaY4sn6krS19JVz/ZGv07Cw/GFZ6CuTDrVcvbzCT8/
+         m+S40xHzVtC8ruO7N7OHqoYie++c5dyfwd/QBvVc3CpBx/2AiEZW94HB5vaaoAVOv9Ae
+         H668qni0mNItFUXufquPlWCw51d5UIlcwSP8h1CxTsYvitHwsv1zQQH9/fb8xNj/RsnP
+         x7hOCREwvsJMXJaltADOCWdolLZqDM31TF0NfV22zupH+cMzTmmIaTxzSlehrDKK29S5
+         BOzg==
+X-Gm-Message-State: ANoB5plpBbmlS1cEEPRatW17GkGqtXZFXNhUa4XHUpwgkyWTTt0Got56
+        BXaqyCIhDUSXSIQUT4TgLzpm4Q==
+X-Google-Smtp-Source: AA0mqf7zAnoMebFACZks9GUm6dwE1ZHAdzdmTbCibv2fl5cvIUrtTdpngz8fSmPdZ5KR7LlEFDr/jQ==
+X-Received: by 2002:ac2:44d8:0:b0:4a4:68b8:9c2e with SMTP id d24-20020ac244d8000000b004a468b89c2emr7468340lfm.22.1671097759677;
+        Thu, 15 Dec 2022 01:49:19 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id s12-20020a056512202c00b00494935ddb88sm1114271lfs.240.2022.12.15.01.49.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Dec 2022 01:49:19 -0800 (PST)
+Message-ID: <8199105f-4c67-1af3-65fe-a5c8ddababca@linaro.org>
+Date:   Thu, 15 Dec 2022 10:49:17 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH 1/5] dt-bindings: gpio: Add RZ/V2M PWC GPIO driver
+ bindings
+Content-Language: en-US
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lee Jones <lee@kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+References: <20221213224310.543243-1-fabrizio.castro.jz@renesas.com>
+ <20221213224310.543243-2-fabrizio.castro.jz@renesas.com>
+ <20221214161057.GA1140718-robh@kernel.org>
+ <TYWPR01MB87759AE2651E96276F6CAE94C2E09@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <TYWPR01MB87759AE2651E96276F6CAE94C2E09@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add bindings for Sunplus thermal driver
+On 14/12/2022 19:26, Fabrizio Castro wrote:
+> Hi Rob,
+> 
+> Thanks for your feedback!
+> 
+>> From: Rob Herring <robh@kernel.org>
+>> Sent: 14 December 2022 16:11
+>> To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+>> Subject: Re: [PATCH 1/5] dt-bindings: gpio: Add RZ/V2M PWC GPIO driver
+>> bindings
+>>
+>> On Tue, Dec 13, 2022 at 10:43:06PM +0000, Fabrizio Castro wrote:
+>>> Add dt-bindings document for the RZ/V2M PWC GPIO driver.
+>>
+>> Bindings are for h/w blocks/devices, not a specific driver.
+> 
+> Apologies, I will reword the changelog in v2.
+> 
+>>
+>>>
+>>> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+>>> ---
+>>>  .../bindings/gpio/renesas,rzv2m-pwc-gpio.yaml | 62 +++++++++++++++++++
+>>>  1 file changed, 62 insertions(+)
+>>>  create mode 100644
+>> Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-gpio.yaml
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-
+>> gpio.yaml b/Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-
+>> gpio.yaml
+>>> new file mode 100644
+>>> index 000000000000..ecc034d53259
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/gpio/renesas,rzv2m-pwc-gpio.yaml
+>>> @@ -0,0 +1,62 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id:
+>> https://jpn01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetre
+>> e.org%2Fschemas%2Fgpio%2Frenesas%2Crzv2m-pwc-
+>> gpio.yaml%23&amp;data=05%7C01%7Cfabrizio.castro.jz%40renesas.com%7C603623c
+>> 766f4421b85bd08daddedcb8c%7C53d82571da1947e49cb4625a166a4a2a%7C0%7C0%7C638
+>> 066310628408926%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMz
+>> IiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=o46ncDZK8YK5HYJ
+>> ZYDXuq3yfEA34vnaxEsIDBlcroc0%3D&amp;reserved=0
+>>> +$schema:
+>> https://jpn01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fdevicetre
+>> e.org%2Fmeta-
+>> schemas%2Fcore.yaml%23&amp;data=05%7C01%7Cfabrizio.castro.jz%40renesas.com
+>> %7C603623c766f4421b85bd08daddedcb8c%7C53d82571da1947e49cb4625a166a4a2a%7C0
+>> %7C0%7C638066310628408926%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQ
+>> IjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=VoWvV
+>> pW782DVH2zdTKIesyzqm6sjiFyacbl833%2BjRis%3D&amp;reserved=0
+>>> +
+>>> +title: Renesas RZ/V2M External Power Sequence Controller (PWC) GPIO
+>>> +
+>>> +description: |+
+>>> +  The PWC IP found in the RZ/V2M family of chips comes with General-
+>> Purpose
+>>> +  Output pins, alongside the below functions
+>>> +    - external power supply on/off sequence generation
+>>> +    - on/off signal generation for the LPDDR4 core power supply (LPVDD)
+>>> +    - key input signals processing
+>>> +  This node uses syscon to map the register used to control the GPIOs
+>>> +  (the register map is retrieved from the parent dt-node), and the node
+>> should
+>>> +  be represented as a sub node of a "syscon", "simple-mfd" node.
+>>> +
+>>> +maintainers:
+>>> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - renesas,r9a09g011-pwc-gpio # RZ/V2M
+>>> +          - renesas,r9a09g055-pwc-gpio # RZ/V2MA
+>>> +      - const: renesas,rzv2m-pwc-gpio
+>>> +
+>>> +  offset:
+>>
+>> Too generic of a name. We want any given property name (globally) to
+>> have 1 type. With the below comment, this should be replaced with 'reg'
+>> instead if you have child nodes.
+> 
+> My understanding is that syscon subnodes normally use this name for exactly
+> the same purpose, for example:
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/power/reset/syscon-poweroff.yaml#L27
+> https://github.com/torvalds/linux/blob/master/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml#L30
+> 
+> What am I missing?
 
-Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
----
-Changes in v12:
- - no change.
+These are generic drivers, so they need offset as they do not match any
+specific programming model. You are not making a generic device. Address
+offsets are not suitable in most cases for DTS. There are of course
+exceptions so you can present reasons why this one is exception.
+> 
+>>
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description: |
+>>> +      Offset in the register map for controlling the GPIOs (in bytes).
+>>> +
+>>> +  regmap:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>>> +    description: Phandle to the register map node.
+>>
+>> Looks like GPIO is a sub-function of some other block. Define the
+>> binding for that entire block.
+> 
+> That's defined in patch 3 from this series.
+> I have sent it as patch 3 because that document references:
+> * /schemas/gpio/renesas,rzv2m-pwc-gpio.yaml
+> * /schemas/power/reset/renesas,rzv2m-pwc-poweroff.yaml
+> Which are defined in this patch and in patch 2 in the series.
+> 
+> Do you want me to move patch 3 to patch 1 in v2?
 
-Changes in v13:
- - no change.
+We do not want regmap, but proper definition of entire hardware.
 
- .../bindings/thermal/sunplus,sp7021-thermal.yaml   | 43 ++++++++++++++++++++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
+> 
+>> GPIO can be either either a function of
+>> that node (just add GPIO provider properties) or you can have GPIO child
+>> nodes. Depends on what the entire block looks like to decide. Do you
+>> have multiple instances of the GPIO block would be one reason to have
+>> child nodes.
+> 
+> From a pure HW point of view, this GPIO block is contained inside the PWC block
+> (as PWC is basically a MFD device), and it only deals with 2 General-Purpose
+> Output pins, both controlled by 1 (and the same) register, therefore the GPIO
+> block is only 1 child.
+> 
+> If possible, I would like to keep the functionality offered by the sub-blocks of
+> PWC contained in separated drivers and DT nodes (either non-child nodes or child
+> nodes).
 
-diff --git a/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml b/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-new file mode 100644
-index 0000000..98b5674
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+# Copyright (C) Sunplus Co., Ltd.
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/sunplus,sp7021-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Sunplus Thermal controller
-+
-+maintainers:
-+  - Li-hao Kuo <lhjeff911@gmail.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - sunplus,sp7021-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  nvmem-cells:
-+    maxItems: 1
-+
-+  nvmem-cell-names:
-+    const: calib
-+
-+required:
-+  - compatible
-+  - reg
-+  - nvmem-cells
-+  - nvmem-cell-names
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    thermal@9c000280 {
-+        compatible = "sunplus,sp7021-thermal";
-+        reg = <0x9c000280 0xc>;
-+        nvmem-cells = <&calib>;
-+        nvmem-cell-names = "calib";
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index bf22c53..f41e625 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -19757,6 +19757,7 @@ SUNPLUS THERMAL DRIVER
- M:	Li-hao Kuo <lhjeff911@gmail.com>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/sunplus,sp7021-thermal.yaml
- F:	drivers/thermal/sunplus_thermal.c
- 
- SUNPLUS UART DRIVER
--- 
-2.7.4
+Driver do not matter for bindings. We talk about regmap field which - as
+you explained above - is not needed.
+
+
+> 
+> My understanding is that simple-mfd will automatically probe the children of the
+> simple-mfd node, and also hierarchically it makes sense to me to have the DT nodes
+> of the PWC sub-blocks as children of the "syscon", "simple-mfd" node. I have found
+> other instances of this same architecture in the kernel already (plenty from NXP/Freescale),
+> for example:
+
+I don't understand. You do not have here simple-mfd and it still does
+not explain Rob's comment and regmap.
+
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/freescale/imx8mm.dtsi#L585
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/freescale/imx8mn.dtsi#L586
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/freescale/imx8mp.dtsi#L451
+> https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/freescale/imx8mq.dtsi#L616
+> https://github.com/torvalds/linux/blob/master/arch/mips/boot/dts/mti/sead3.dts#L93
+> etc...
+> 
+> Something like the below could also work, but I don't think it would represent the
+> HW accurately:
+> pwc: pwc@a3700000 {
+> 	compatible = "renesas,r9a09g011-pwc", "renesas,rzv2m-pwc",
+> 		     "syscon", "simple-mfd";
+> 	reg = <0 0xa3700000 0 0x800>;
+> };
+> 
+> pwc-gpio {
+> 	compatible = "renesas,r9a09g011-pwc-gpio",
+> 		     "renesas,rzv2m-pwc-gpio";
+> 	regmap = <&pwc>;
+> 	gpio-controller;
+> 	#gpio-cells = <2>;
+> };
+> 
+> pwc-poweroff {
+> 	compatible = "renesas,r9a09g011-pwc-poweroff",
+> 		     "renesas,rzv2m-pwc-poweroff";
+> 	regmap = <&pwc>;
+> };
+> 
+> 
+> I think the below describes things better:
+> pwc: pwc@a3700000 {
+> 	compatible = "renesas,r9a09g011-pwc", "renesas,rzv2m-pwc",
+> 		     "syscon", "simple-mfd";
+> 	reg = <0 0xa3700000 0 0x800>;
+> 
+> 	gpio {
+> 		compatible = "renesas,r9a09g011-pwc-gpio",
+> 			     "renesas,rzv2m-pwc-gpio";
+> 		regmap = <&pwc>;
+
+You speak about two different things. So again - drop regmap. You do not
+need it.
+
+> 		offset = <0x80>;
+> 		gpio-controller;
+> 		#gpio-cells = <2>;
+> 	};
+> 
+> 	poweroff {
+> 		compatible = "renesas,r9a09g011-pwc-poweroff",
+> 			     "renesas,rzv2m-pwc-poweroff";
+> 		regmap = <&pwc>;
+
+Drop regmap.
+
+> 	};
+> };
+> 
+
+Best regards,
+Krzysztof
 
