@@ -2,166 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B8564D902
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 10:51:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 152F164DBFA
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 14:10:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbiLOJvc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 04:51:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46276 "EHLO
+        id S229656AbiLONKV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 08:10:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiLOJvJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 04:51:09 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C45005B587
-        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 01:50:21 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b3so14820316lfv.2
-        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 01:50:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GHzqsSvslMQj7aaAMRNWFcMOjD6mUD/ZMpwlfykKSKw=;
-        b=S56nXRJWIWIcfqQKWlqA8nNkrOjKgfGHlcgVASmDbpQZVtcDnlMnvG8vKQaBf9JyjM
-         8jtl6WE5nUl0ZtaLbuD4akaR4A/0rX2fobzqo/B6zvBikwXFrf6NfHNJB8AeZrHEOiyg
-         IE1IaMqQOw0FZAm0Vk/ij9U1IotgPWL1711eAdEl9xGzU0ejIyN0kViYtz5u8IYXEJnH
-         Um18b6K2cZowduD3f1s5g4yIUDVXnlHFk/o8HkkuvThEfoqjFXUFMGaPC7OIMw4NEi0O
-         xLyoJapEQfjX5PyUqZrMHu4x+XlqbyUgkFBnUo7P0iUPLWaT5LXa+81uUAZKEO8zidWT
-         IsHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GHzqsSvslMQj7aaAMRNWFcMOjD6mUD/ZMpwlfykKSKw=;
-        b=EEf1GtxgPu+H83zR7cjs7Im6gQMIo4wYyW36Dznjk22X90xlBxF1TtNBn5TG92ZG/O
-         wbaEOuKDhFV2nhOWauOXEKWxJAC+iigEVb5bqqa3AqSpNOA6LP1kI1ZUTJE1a9ojdY1C
-         Lf9WuZBpcWlAF1JzzeMje7CRbidmn0LOhZXVL26VXclE7JldTRYHOwd3eCMlPT9jhGd2
-         joJq8WcQxRTZLtzkpXtFAj/JN1JY7fzHMmGKCgCVlMuO1fSfZs7FcvoP48+RETb+Ihq7
-         c9sZTG50ZnEQ+tGrfb9coVEVa50dXzqoHNej/+TtV2fj5sJzm1pawj0iXPWCQeYIB1Wd
-         gl6Q==
-X-Gm-Message-State: ANoB5pnt2ijs5m9FbJg8rgDiSy4katJjjdSsXS7jhvo0zaqTGPvu0tBk
-        GAbZMyT7M/QjarR0pkUYb217pA==
-X-Google-Smtp-Source: AA0mqf5xGIT7lIRMsBLXsAkmeEH1QBzeR1ZB+qbINWxUEPgNpjUVrG2f0n4VK4CoW4/cA+f3IOsSZA==
-X-Received: by 2002:ac2:4bcb:0:b0:4a4:68b9:66bc with SMTP id o11-20020ac24bcb000000b004a468b966bcmr7260898lfq.7.1671097820112;
-        Thu, 15 Dec 2022 01:50:20 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id v1-20020ac258e1000000b004946b549a19sm1115937lfo.45.2022.12.15.01.50.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Dec 2022 01:50:19 -0800 (PST)
-Message-ID: <0161902f-1a0c-0be2-2141-3c14d6e6fe54@linaro.org>
-Date:   Thu, 15 Dec 2022 10:50:18 +0100
+        with ESMTP id S229462AbiLONKT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 08:10:19 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4EF32BB25;
+        Thu, 15 Dec 2022 05:10:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FC6261CF8;
+        Thu, 15 Dec 2022 13:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10104C433EF;
+        Thu, 15 Dec 2022 13:10:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1671109817;
+        bh=eXqB5wBx6ldyx3WnmnFI9DbCmJ6qg7OnLYn5htvtC+o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=GlJeLrmBOBHAew9fzsQmTrx1TmEuLtTIP+BbFQjFJWSzHlcrjgx98QVTC+pXu2WS/
+         UMq7CmEQFnnnLrhvT4oSCXmr35Khx8wQVeeS7LgXQTBGSEVM5hC+4HQIAvDjO/dFeb
+         NbwMlCO4T+WBvu78R25apZo47roRd0ES1carQew0q4M5bfSF5SJaMhm9Lwp5NYERyh
+         aEmolh2zEyA9ZQTR94CofDW1vR8flsy9hkPL8VQGaLzBYo9ceqVfzWkt+GX0X2Eyud
+         xUE4Ls8kILiIZTXA4Hnuv07neG1du0AYbCqbLxJGzjV09eqNUmH0A7JKM+N1907/4G
+         MUNF0iC2Y8wPA==
+Message-ID: <5a8c636f-b8b4-69d2-344b-66dbcfd2b710@kernel.org>
+Date:   Thu, 15 Dec 2022 14:10:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.1
-Subject: Re: [PATCH 2/5] dt-bindings: power: reset: Add RZ/V2M PWC Power OFF
- bindings
+Subject: Re: [PATCH v14 2/2] dt-bindings: thermal: Add Sunplus schema
+To:     Li-hao Kuo <lhjeff911@gmail.com>, rafael@kernel.org,
+        rui.zhang@intel.com, daniel.lezcano@linaro.org, amitk@kernel.org,
+        robh+dt@kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lh.kuo@sunplus.com
+References: <cover.1665990345.git.lhjeff911@gmail.com>
+ <038211f33e4d5dd5129712aef2738a83577c7745.1665990345.git.lhjeff911@gmail.com>
 Content-Language: en-US
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-References: <20221213224310.543243-1-fabrizio.castro.jz@renesas.com>
- <20221213224310.543243-3-fabrizio.castro.jz@renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221213224310.543243-3-fabrizio.castro.jz@renesas.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <038211f33e4d5dd5129712aef2738a83577c7745.1665990345.git.lhjeff911@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 13/12/2022 23:43, Fabrizio Castro wrote:
-> Add dt-bindings document for the RZ/V2M PWC Power OFF driver.
-
-Drop driver.
-
-Subject: drop second, redundant "bindings".
-
+On 15/12/2022 09:23, Li-hao Kuo wrote:
+> Add bindings for Sunplus thermal driver
 > 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
 > ---
->  .../reset/renesas,rzv2m-pwc-poweroff.yaml     | 48 +++++++++++++++++++
->  1 file changed, 48 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/reset/renesas,rzv2m-pwc-poweroff.yaml
+> Changes in v12:
+>  - no change.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/renesas,rzv2m-pwc-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/renesas,rzv2m-pwc-poweroff.yaml
-> new file mode 100644
-> index 000000000000..12456e3e93e6
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/renesas,rzv2m-pwc-poweroff.yaml
-> @@ -0,0 +1,48 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/renesas,rzv2m-pwc-poweroff.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/V2M External Power Sequence Controller (PWC) Power OFF
-> +
-> +description: |+
-> +  The PWC IP found in the RZ/V2M family of chips comes with the below
-> +  capabilities
-> +    - external power supply on/off sequence generation
-> +    - on/off signal generation for the LPDDR4 core power supply (LPVDD)
-> +    - key input signals processing
-> +    - general-purpose output pins
-> +  This node uses syscon to map the registers relevant to Power OFF (the
-> +  register map is retrieved from the parent dt-node), and the node should be
-> +  represented as a sub node of a "syscon", "simple-mfd" node.
-> +
-> +maintainers:
-> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a09g011-pwc-poweroff # RZ/V2M
-> +          - renesas,r9a09g055-pwc-poweroff # RZ/V2MA
-> +      - const: renesas,rzv2m-pwc-poweroff
-> +
-> +  regmap:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      Phandle to the register map node.
+> Changes in v13:
+>  - no change.
 
-This also has to go.
-
-> +
-> +required:
-> +  - compatible
-> +  - regmap
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    poweroff {
-> +            compatible = "renesas,r9a09g011-pwc-poweroff",
-
-Use 4 spaces for example indentation.
-
-> +                         "renesas,rzv2m-pwc-poweroff";
-> +            regmap = <&regmapnode>;
-> +    };
+You got comment which you ignored. Stop sending the same while ignoring
+feedback.
 
 Best regards,
 Krzysztof
