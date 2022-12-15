@@ -2,160 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A666464D324
-	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 00:16:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF8464D648
+	for <lists+linux-pm@lfdr.de>; Thu, 15 Dec 2022 06:53:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229771AbiLNXQt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 14 Dec 2022 18:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S229689AbiLOFxp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 15 Dec 2022 00:53:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiLNXQp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 14 Dec 2022 18:16:45 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FFF249B5A;
-        Wed, 14 Dec 2022 15:16:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00A69FEC;
-        Wed, 14 Dec 2022 15:17:22 -0800 (PST)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.1.196.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2F8A3F5A1;
-        Wed, 14 Dec 2022 15:16:40 -0800 (PST)
-Date:   Wed, 14 Dec 2022 23:16:39 +0000
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>
-Subject: Re: [PATCH v2 09/22] sched/fair: Use IPC class score to select a
- busiest runqueue
-Message-ID: <Y5pZV0txyK2Fkkg6@arm.com>
-References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
- <20221128132100.30253-10-ricardo.neri-calderon@linux.intel.com>
- <Y5Gld+cThNOPFvgX@arm.com>
- <20221214003243.GC30234@ranerica-svr.sc.intel.com>
+        with ESMTP id S229588AbiLOFxo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 00:53:44 -0500
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C13CD2AE3F;
+        Wed, 14 Dec 2022 21:53:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671083623; x=1702619623;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vBYIKub1ILlCxfTrAPE1vLqEgAoyGgoHOBktpWHdYAU=;
+  b=Iq5kW4BjR3QDf7N8jsE7BplxG98ufixNTBPz1JtT6hgqOYyGuSeSyrq/
+   /b5FCQ3hCGJulFeXQ+FrUswK5SGk5ihxUhM76XkA2XCGIdlBCtUc0JT97
+   rqDJApw4TYeTC8d2bBtre9gB1R9uaaq5+dDUBOFgIzxL6Emy5i3wO6Zm7
+   nIlA+78N35r+tOK6OVE09E1STQMImUk1to2J6617fWOopyjpi5PKSsspw
+   ShKIp4JMz7rY7x6sVSbIsZnNiizooN0vlnoSXa5yqcGdpZHzuaK/H0Oiq
+   OPZQp4qA1/Neqco203lWQHZtmu3yki8Xg9OTZZCCVoEWRxdXMv7VFVN3R
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="345678573"
+X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
+   d="scan'208";a="345678573"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2022 21:53:43 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10561"; a="756221835"
+X-IronPort-AV: E=Sophos;i="5.96,246,1665471600"; 
+   d="scan'208";a="756221835"
+Received: from lkp-server01.sh.intel.com (HELO b5d47979f3ad) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 14 Dec 2022 21:53:42 -0800
+Received: from kbuild by b5d47979f3ad with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1p5hBd-00064K-09;
+        Thu, 15 Dec 2022 05:53:41 +0000
+Date:   Thu, 15 Dec 2022 13:52:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ 02f29b079520d658643d9f1cf1d2e815bc38d396
+Message-ID: <639ab635.cM9cGaA97WfPlvIt%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221214003243.GC30234@ranerica-svr.sc.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Ricardo,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: 02f29b079520d658643d9f1cf1d2e815bc38d396  Merge branch 'thermal-next' into linux-next
 
-On Tuesday 13 Dec 2022 at 16:32:43 (-0800), Ricardo Neri wrote:
-[..]
-> > >  /**
-> > > @@ -10419,8 +10442,8 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > >  {
-> > >  	struct rq *busiest = NULL, *rq;
-> > >  	unsigned long busiest_util = 0, busiest_load = 0, busiest_capacity = 1;
-> > > +	int i, busiest_ipcc_delta = INT_MIN;
-> > >  	unsigned int busiest_nr = 0;
-> > > -	int i;
-> > >  
-> > >  	for_each_cpu_and(i, sched_group_span(group), env->cpus) {
-> > >  		unsigned long capacity, load, util;
-> > > @@ -10526,8 +10549,37 @@ static struct rq *find_busiest_queue(struct lb_env *env,
-> > >  
-> > >  		case migrate_task:
-> > >  			if (busiest_nr < nr_running) {
-> > > +				struct task_struct *curr;
-> > > +
-> > >  				busiest_nr = nr_running;
-> > >  				busiest = rq;
-> > > +
-> > > +				/*
-> > > +				 * Remember the IPC score delta of busiest::curr.
-> > > +				 * We may need it to break a tie with other queues
-> > > +				 * with equal nr_running.
-> > > +				 */
-> > > +				curr = rcu_dereference(busiest->curr);
-> > > +				busiest_ipcc_delta = ipcc_score_delta(curr,
-> > > +								      env->dst_cpu);
-> > > +			/*
-> > > +			 * If rq and busiest have the same number of running
-> > > +			 * tasks, pick rq if doing so would give rq::curr a
-> > > +			 * bigger IPC boost on dst_cpu.
-> > > +			 */
-> > > +			} else if (sched_ipcc_enabled() &&
-> > > +				   busiest_nr == nr_running) {
-> > > +				struct task_struct *curr;
-> > > +				int delta;
-> > > +
-> > > +				curr = rcu_dereference(rq->curr);
-> > > +				delta = ipcc_score_delta(curr, env->dst_cpu);
-> > > +
-> > > +				if (busiest_ipcc_delta < delta) {
-> > > +					busiest_ipcc_delta = delta;
-> > > +					busiest_nr = nr_running;
-> > > +					busiest = rq;
-> > > +				}
-> > >  			}
-> > >  			break;
-> > >  
-> > 
-> > While in the commit message you describe this as breaking a tie for
-> > asym_packing,
-> 
-> Are you referring to the overall series or this specific patch? I checked
-> commit message and I do not see references to asym_packing.
+elapsed time: 725m
 
-Sorry, my bad, I was thinking about the cover letter, not the commit
-message. It's under "+++ Balancing load using classes of tasks. Theory
-of operation".
+configs tested: 75
+configs skipped: 2
 
-> 
-> > the code here does not only affect asym_packing. If
-> > another architecture would have sched_ipcc_enabled() it would use this
-> > as generic policy, and that might not be desired.
-> 
-> Indeed, the patchset implements support to use IPCC classes for asym_packing,
-> but it is not limited to it.
-> 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-So is your current intention to support IPC classes only for asym_packing
-for now? What would be the impact on you if you were to limit the
-functionality in this patch to asym_packing only?
+gcc tested configs:
+powerpc                           allnoconfig
+i386                                defconfig
+um                           x86_64_defconfig
+alpha                             allnoconfig
+i386                              allnoconfig
+um                             i386_defconfig
+arc                               allnoconfig
+arm                               allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a014
+x86_64                           rhel-8.3-bpf
+s390                 randconfig-r044-20221214
+riscv                randconfig-r042-20221214
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a012
+s390                                defconfig
+sh                               allmodconfig
+s390                             allyesconfig
+x86_64                         rhel-8.3-kunit
+mips                             allyesconfig
+i386                          randconfig-a016
+arc                  randconfig-r043-20221214
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a006
+i386                             allyesconfig
+i386                          randconfig-a005
+x86_64                              defconfig
+m68k                             allyesconfig
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a013
+m68k                             allmodconfig
+x86_64                        randconfig-a011
+arc                              allyesconfig
+alpha                            allyesconfig
+x86_64                               rhel-8.3
+x86_64                        randconfig-a015
+x86_64                          rhel-8.3-rust
+x86_64                    rhel-8.3-kselftests
+x86_64                           allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                            allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+ia64                             allmodconfig
+riscv                             allnoconfig
+mips                        bcm47xx_defconfig
+sparc                       sparc32_defconfig
+loongarch                        alldefconfig
+mips                       bmips_be_defconfig
+sh                   rts7751r2dplus_defconfig
+sh                          rsk7269_defconfig
+parisc                generic-64bit_defconfig
+powerpc                 mpc834x_itx_defconfig
 
-> It is true that I don't check here for asym_packing, but it should not be a
-> problem, IMO. I compare two runqueues with equal nr_running, either runqueue
-> is a good choice. This tie breaker is an overall improvement, no?
-> 
+clang tested configs:
+i386                          randconfig-a013
+arm                  randconfig-r046-20221214
+x86_64                        randconfig-a001
+i386                          randconfig-a011
+x86_64                        randconfig-a003
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+hexagon              randconfig-r041-20221214
+hexagon              randconfig-r045-20221214
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-k001
+i386                          randconfig-a006
 
-It could be, but equally there could be other better policies as well -
-other ways to consider IPC class information to break the tie.
-
-If other architectures start having sched_ipcc_enabled() they would
-automatically use the policy you've decided on here. If other policies
-are better for those architectures this generic policy would be difficult
-to modify to ensure there are no regressions for all other architectures
-that use it, or it would be difficult to work around it.
-
-For this and for future support of IPC classes I am just wondering if we
-can better design how we enable different architectures to have different
-policies.
-
-Thanks,
-Ionela.
-
-> Thanks and BR,
-> Ricardo
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
