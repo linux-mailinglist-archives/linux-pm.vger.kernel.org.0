@@ -2,79 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1F464EFE6
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 17:59:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C92364F176
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 20:11:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbiLPQ67 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Dec 2022 11:58:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55566 "EHLO
+        id S231534AbiLPTL3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Dec 2022 14:11:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiLPQ66 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 11:58:58 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F38F50D71;
-        Fri, 16 Dec 2022 08:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671209936; x=1702745936;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=X2mDf4J1WrwbdWmHR5CTw1rV/tL2BDpIGIomR+yeuAY=;
-  b=ZND9L71Q0vqMQgp7RGwQmf8dUmuaBw6A17ffETgK3KnpnT1bdWP1qrBA
-   StQ/cbiRzAaKuQnpCESu2dEN+V0xigAy3+2aYC9zcXSPB2gzwr8a/zhVB
-   mNwdQX2z543jKTrM9RquEeld5wA+bJA/VqHqJicQLJF0rU6Waor3kwQgC
-   Syc1+XqcDWnx5dajaAJNob2YZsHX9dspha0HB3DjsgIH9szWVaj4jfgja
-   7INYn9+GUhvXOHYuXM4PDiVBEmwPTuuvOPebmf4oiQ1EST85VHihn9UY5
-   UjWmPAPgux7V5wraRaSTL/Wk/4aDOMMrY1eT2jviqvGLZooywmER/NScF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="381227653"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="381227653"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 08:58:55 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="824166028"
-X-IronPort-AV: E=Sophos;i="5.96,249,1665471600"; 
-   d="scan'208";a="824166028"
-Received: from wchakrab-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.231.66])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 08:58:55 -0800
-Message-ID: <21925b706eb55d78afe40ae3e8d5778875821009.camel@linux.intel.com>
-Subject: Re: [RFC/RFT PATCH 1/2] sched/core: Check and schedule ksoftirq
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rafael@kernel.org, frederic@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        len.brown@intel.com
-Date:   Fri, 16 Dec 2022 08:58:55 -0800
-In-Reply-To: <Y5xURk3CkzhIjmmq@hirez.programming.kicks-ass.net>
-References: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
-         <20221215184300.1592872-2-srinivas.pandruvada@linux.intel.com>
-         <Y5xURk3CkzhIjmmq@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S231678AbiLPTL0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 14:11:26 -0500
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF52E17594;
+        Fri, 16 Dec 2022 11:11:23 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id r11so2724582oie.13;
+        Fri, 16 Dec 2022 11:11:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iICHxs+fVPGU44NzU0jFKB0wNXIsk0IGg9J6YieQbNc=;
+        b=3RwJP7szG7sqBa7YIe5UlidZCw4pDL/U1tv86C6kwH53o4OWgPB6mpobit0OoLFVM7
+         iYi+C5DlQZ3kwOScuB/+fJ+TBxOJ35SqncrncDbigYfy6ivNzUWgrYIuK6uakH9SPmlY
+         gNO8lhXs2miYeDn5DsFqU9IZsZYKHhCdnivXnw7zaJQFrVgruQMlLj4ri3eRIPUSF1ca
+         BPnTgiyKV84ZqjZfa0F2HdUXgbLEiN8Tium8p/vC4WakSNmKAIadVfM//jF+dA9FqLg1
+         KdMwK+yGboP/iYHPr0bguwU8+0fibo0AwTk7m4QN9x4M+OHa+FQv4wG5N4YKQaKiXtwE
+         qStw==
+X-Gm-Message-State: ANoB5pm5OxyQW3d8dwMY5hwaaDOvfNt4pLEk4AwQo3KJtjqRCG2cnd4G
+        Gv4NZFJ5cgx10RCTyNPUyxew0FsTMw==
+X-Google-Smtp-Source: AA0mqf55+U2fyE3OPrwBSS8rTTBYCgKegHzm54AsFVB4oQAfpItuG0ho04zIobJB5bcnReSGZ6WLJQ==
+X-Received: by 2002:a54:438d:0:b0:35a:97dd:ba55 with SMTP id u13-20020a54438d000000b0035a97ddba55mr13508024oiv.39.1671217883020;
+        Fri, 16 Dec 2022 11:11:23 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id be4-20020a056808218400b0035418324b78sm1099330oib.11.2022.12.16.11.11.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 11:11:22 -0800 (PST)
+Received: (nullmailer pid 3359747 invoked by uid 1000);
+        Fri, 16 Dec 2022 19:11:22 -0000
+Date:   Fri, 16 Dec 2022 13:11:22 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH v3 0/9] dt-bindings: cleanup titles
+Message-ID: <20221216191122.GA3358487-robh@kernel.org>
+References: <20221216163815.522628-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221216163815.522628-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, 2022-12-16 at 12:19 +0100, Peter Zijlstra wrote:
-> On Thu, Dec 15, 2022 at 10:42:59AM -0800, Srinivas Pandruvada wrote:
-> > +               /* Give ksoftirqd 1 jiffy to get a chance to start
-> > its job */
-> > +               if (!READ_ONCE(it.done) &&
-> > task_is_running(__this_cpu_read(ksoftirqd))) {
-> > +                       __set_current_state(TASK_UNINTERRUPTIBLE);
-> > +                       schedule_timeout(1);
-> > +               }
+On Fri, Dec 16, 2022 at 05:38:06PM +0100, Krzysztof Kozlowski wrote:
+> Possible conflicts
+> ==================
+> 1. CONFLICT (content), choose this patchset:
+>    Documentation/devicetree/bindings/clock/qcom,gcc.yaml
 > 
-> That's absolutely disgusting :-/
-What is the alternative? Process softirq in this task context for one
-time?
+> 2. CONFLICT (modify/delete) - files not present in robh/linux.git:
+>    Documentation/devicetree/bindings/net/bluetooth/bluetooth-controller.yaml
+>    Documentation/devicetree/bindings/power/reset/restart-handler.yaml
+>    Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
+>    Documentation/devicetree/bindings/media/i2c/ovti,ov5645.yaml
+>    Documentation/devicetree/bindings/media/i2c/st,st-vgxy61.yaml
+>    Documentation/devicetree/bindings/input/touchscreen/himax,hx83112b.yaml
+>    Documentation/devicetree/bindings/mips/cpus.yaml
+>    Documentation/devicetree/bindings/gpu/host1x/nvidia,tegra234-nvdec.yaml
+>    Documentation/devicetree/bindings/clock/qcom,dispcc-sc8280xp.yaml
+> 
+> Changes since v2
+> ================
+> 1. trailling => trailing.
+> 2. Add tags.
+> 3. Rebase on Linus' tree, mid-merge window: v6.1-12782-g71a7507afbc3
+> 4. Drop change to power/reset/restart-handler.yaml because it is not yet there.
+> 
+> Changes since v1
+> ================
+> 1. "common parts" -> "Common Properties".
+> 2. Capitalize titles in other patches doing manual fixups.
+> 3. Drop change of quotes in common DMA bindings.
+> 4. Drop also "schema" from titles in few files.
+> 5. Add tags.
+> 
+> Merging
+> =======
+> Intention is to regenerate the commits with commands at the end of merge
+> window.  This should go then via Rob's tree.
+> 
+> Description
+> ===========
+> The Devicetree bindings document does not have to say in the title that it is a
+> "Devicetree binding" or "schema', but instead just describe the hardware.  We
+> have several of such patterns, so when people copy existing bindings into new
+> ones, they make similar mistake.
+> 
+> Goal is to get rid of cases:
+>   git grep -h 'title: .*[bB]inding' Documentation/devicetree/bindings/
+>   git grep -h 'title: .*[sS]chema' Documentation/devicetree/bindings/
+> 
+> Clean this stuff with:
+> 1. Automated find+sed commands.
+> 
+> Krzysztof Kozlowski (9):
+>   dt-bindings: drop redundant part of title of shared bindings
+>   dt-bindings: memory-controllers: ti,gpmc-child: drop redundant part of
+>     title
+>   dt-bindings: clock: st,stm32mp1-rcc: add proper title
+>   dt-bindings: drop redundant part of title (end)
+>   dt-bindings: drop redundant part of title (end, part two)
+>   dt-bindings: drop redundant part of title (end, part three)
+>   dt-bindings: drop redundant part of title (beginning)
+>   dt-bindings: clock: drop redundant part of title
+>   dt-bindings: drop redundant part of title (manual)
 
-Thanks,
-Srinivas
+Series applied.
+
+Rob
