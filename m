@@ -2,80 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2434264ED12
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 15:42:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C46D264ED32
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 15:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiLPOmj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Dec 2022 09:42:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57872 "EHLO
+        id S230232AbiLPO6L (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Dec 2022 09:58:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiLPOmi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 09:42:38 -0500
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C03062E9
-        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 06:42:35 -0800 (PST)
-Received: by mail-lf1-x136.google.com with SMTP id b13so3787514lfo.3
-        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 06:42:34 -0800 (PST)
+        with ESMTP id S229583AbiLPO6K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 09:58:10 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2B115D6AB
+        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 06:58:09 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id p36so3784844lfa.12
+        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 06:58:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZKET8qSCU/kooErGkLjKkAuZxwmPKDJA+s7NSMosmIQ=;
-        b=tqdVUD9nV8k7X4TMgWmqAN8YNJvOfP1pYLLTieRzzWjp6a6ypLcDJkoZcM+TwQHiFl
-         uIZb+Thj6pRWSgH/+OBHc523GILmKu9dKRP0ul4DdU0ln0grfHQf84TMXHFkfsi9mWnx
-         zpjk7mPbcy4iSXP2ll/mYzO1PYaZ6qjA5kI718ri29vYmUQpItIhTVYJOaBYNjcpzSVk
-         9vg1fZGE4OJhvOUIypxVBAZ99G+XjZ/OEjj3SlAnKqYmB3+IK9uzcKY0+oIkZA6ejtqo
-         TIS1fl9QZNEu8HfHUAa4nSjuo0yBtI+Fmrqn3/VGhpdr/nG/cSnkNN4Eapntd7QXvuM6
-         M6yA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qnQ8WVqn39lloqLDzY0u45TgwEZ131RficcHAU+KQ+E=;
+        b=oeFrpbC9q5PPAqJO+kaJZzPL/fa2Oy9hVNpADsk/a8586GWPaS1aCP5E7xjAKGysDA
+         u9aJDkLjv5XtEcv+PyCVB2tKVfbcCaWGGl90UHXLsBUV9JbaMOhDCJK5nVL28Ogh9FT6
+         8EH3i8jPcclhrjL/7QtkKfZ9Z1lQpEq1oEgF7dsL7ljqit9fRlajx09JAriSqqj2kQ50
+         lgCAuRBHTUlI+u1m752A7ICLwBXy8xPK1HTkVqNbxWCQ+X08LjDEVoTuJHJgdgIZr8Zr
+         0hqHwcbROUkSAzBNkVy7AJwHjxdM8sJAWwlFV1wOr52xphNz8+l4UcUGYMfb66MR1rc9
+         x2/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZKET8qSCU/kooErGkLjKkAuZxwmPKDJA+s7NSMosmIQ=;
-        b=k8FM16FNbBoKSL5U3FJ41OC6YpCav49QcWjqTcbY2T5y8UOeZGC8ne76bykYg1RkSg
-         LSBL+xkF6B1tE5kpBdu4H7UZFKmZj8rjkCMKAF+mgXagoh78Rdg8Ze0sfbLvJYOzYiee
-         Hz6YwkJvXltcSFNdn8O4vkAMEgdSMfi78+nwrT9p2PrP5kqvorn2Hg2R/lktVV2EbLT0
-         U+wrzgKyzN4nBK3x2uWChP2QDA4Ic8YWChwHOmN86yk7TLr/sDPPR+QqucppjhQx7HvI
-         gmvWTR5pHLJARlk9T+yD23UnAd192o47VR0GuzxaSj8rRcZSDSMS2sIINj79yiIGhUr0
-         3Q2A==
-X-Gm-Message-State: ANoB5pkhwTH4Kxos4B3QFOgosIzI00ji9rYSAXABNQnJwxvM4mnlfk/U
-        PKD2hibhAZVpwSt/N/shjwhzyVTZWHjgX/1F
-X-Google-Smtp-Source: AA0mqf7XPrlzGq9Do6FkmILBfJGoJhZjLA4FgBYnCkKP6CHzLp5oNCqg0cCn+f0iyTHo/ADnrF43pA==
-X-Received: by 2002:a05:6512:308a:b0:4b6:f51e:b8b6 with SMTP id z10-20020a056512308a00b004b6f51eb8b6mr5809984lfd.56.1671201753456;
-        Fri, 16 Dec 2022 06:42:33 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id p13-20020a056512328d00b00497a61453a9sm230389lfe.243.2022.12.16.06.42.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 06:42:32 -0800 (PST)
-Message-ID: <7a6de63d-759b-8d8f-144a-f93f36376d0f@linaro.org>
-Date:   Fri, 16 Dec 2022 15:42:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH RFC] base: power: replace generic_pm_domain spinlock by
- raw spinlock
-Content-Language: en-US
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     linux-rt-users@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qnQ8WVqn39lloqLDzY0u45TgwEZ131RficcHAU+KQ+E=;
+        b=gPORZC/IcV+slqZxJ7bBvARG5q8zudHPUslPmjNISVumD6hoXZLfKJD7chwOqelTTG
+         dLnDRNtX9TzzFyJppW8yWEtlB5RvEytH7A9qQN+cH0CKtywFgzA3NvknJm7L7mNru8IH
+         fzEsFfnrkUJpQVsTbNjTTgLLhdqr3tqnarXmJaXggOW4RbqOmrrzgbExbMyAa0cUukhz
+         gG/GPvVhEu0V4j6FTIHDqEAR4oacPo0jct/Udv3eT7IQ9LAd3AogOyDNYLL8T/pDBlln
+         zBXWeD7FHxg+UfZ000z7EmeR7/nHDiv4aVqE7H39MJfKCaB+rCW3DwoAOsa0BYSc42R4
+         ZUfw==
+X-Gm-Message-State: ANoB5pmSQ+MZU0zJ4sJDzf2pqE8mYFhxcoi+GmQs3RvZQxZRNU3R1Qa8
+        y4jX4/i7gzgcdfKRWr0RPoBtqQ==
+X-Google-Smtp-Source: AA0mqf5zVAxsQWpDKAT+cihDzTutK+yPkquZd6gx5FEZQi1/4SqpZkDMvO905N9BPjowSzn5q4YqQw==
+X-Received: by 2002:a05:6512:2102:b0:4b5:6c36:79a4 with SMTP id q2-20020a056512210200b004b56c3679a4mr8644808lfr.65.1671202688023;
+        Fri, 16 Dec 2022 06:58:08 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id c18-20020ac25f72000000b004b59b43ec61sm238491lfc.179.2022.12.16.06.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Dec 2022 06:58:07 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Kevin Hilman <khilman@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Eric Chanudet <echanude@redhat.com>,
-        Brian Masney <bmasney@redhat.com>, linux-pm@vger.kernel.org,
-        Nicolas Dechesne <nicolas.dechesne@linaro.org>
-References: <20220615203605.1068453-1-athierry@redhat.com>
- <cefad5f6-8aa4-acb8-231c-91170ec10bcf@linaro.org> <Y5x9DEIsnLG7HoaQ@fedora>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y5x9DEIsnLG7HoaQ@fedora>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>
+Subject: [PATCH RFC 1/2] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
+Date:   Fri, 16 Dec 2022 15:58:01 +0100
+Message-Id: <20221216145802.102374-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,22 +75,133 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/12/2022 15:13, Adrien Thierry wrote:
-> Hi Krzysztof,
-> 
->> I also hit it now on v6.1 RT kernel. I see no more discussions happened
->> here. Do you have any progress on your side for this issue?
-> 
-> Unfortunately I haven't investigated more since June. I was hoping RT
-> people could chime in.
-> 
+Realtime kernels with PREEMPT_RT must use raw_spinlock_t, so add a flag
+allowing a power domain provider to indicate it is RT safe.  The flag is
+supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
 
-OK. I have a fix (change) for this which might be acceptable by Ulf and
-others, so let me send a patch soon.
+Cc: Adrien Thierry <athierry@redhat.com>
+Cc: Brian Masney <bmasney@redhat.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-As Ulf said, even after fixing this, we have PSCI
-psci_enter_domain_idle_state problem....
+---
 
-Best regards,
-Krzysztof
+Independently from Adrien, I encountered the same problem around genpd
+when using PREEMPT_RT kernel.
+
+Previous patch by Adrien:
+https://lore.kernel.org/all/20220615203605.1068453-1-athierry@redhat.com/
+---
+ drivers/base/power/domain.c | 51 +++++++++++++++++++++++++++++++++++--
+ include/linux/pm_domain.h   | 13 ++++++++++
+ 2 files changed, 62 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+index a539d6bc6fe0..478862ae478a 100644
+--- a/drivers/base/power/domain.c
++++ b/drivers/base/power/domain.c
+@@ -119,6 +119,48 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+ 	.unlock = genpd_unlock_spin,
+ };
+ 
++static void genpd_lock_rawspin(struct generic_pm_domain *genpd)
++	__acquires(&genpd->rslock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&genpd->rslock, flags);
++	genpd->rlock_flags = flags;
++}
++
++static void genpd_lock_nested_rawspin(struct generic_pm_domain *genpd,
++					int depth)
++	__acquires(&genpd->rslock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave_nested(&genpd->rslock, flags, depth);
++	genpd->rlock_flags = flags;
++}
++
++static int genpd_lock_interruptible_rawspin(struct generic_pm_domain *genpd)
++	__acquires(&genpd->rslock)
++{
++	unsigned long flags;
++
++	raw_spin_lock_irqsave(&genpd->rslock, flags);
++	genpd->rlock_flags = flags;
++	return 0;
++}
++
++static void genpd_unlock_rawspin(struct generic_pm_domain *genpd)
++	__releases(&genpd->rslock)
++{
++	raw_spin_unlock_irqrestore(&genpd->rslock, genpd->rlock_flags);
++}
++
++static const struct genpd_lock_ops genpd_rawspin_ops = {
++	.lock = genpd_lock_rawspin,
++	.lock_nested = genpd_lock_nested_rawspin,
++	.lock_interruptible = genpd_lock_interruptible_rawspin,
++	.unlock = genpd_unlock_rawspin,
++};
++
+ #define genpd_lock(p)			p->lock_ops->lock(p)
+ #define genpd_lock_nested(p, d)		p->lock_ops->lock_nested(p, d)
+ #define genpd_lock_interruptible(p)	p->lock_ops->lock_interruptible(p)
+@@ -2048,8 +2090,13 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
+ static void genpd_lock_init(struct generic_pm_domain *genpd)
+ {
+ 	if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+-		spin_lock_init(&genpd->slock);
+-		genpd->lock_ops = &genpd_spin_ops;
++		if (genpd->flags & GENPD_FLAG_RT_SAFE) {
++			raw_spin_lock_init(&genpd->rslock);
++			genpd->lock_ops = &genpd_rawspin_ops;
++		} else {
++			spin_lock_init(&genpd->slock);
++			genpd->lock_ops = &genpd_spin_ops;
++		}
+ 	} else {
+ 		mutex_init(&genpd->mlock);
+ 		genpd->lock_ops = &genpd_mtx_ops;
+diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+index c6cda024ff99..6b0f9de2be1c 100644
+--- a/include/linux/pm_domain.h
++++ b/include/linux/pm_domain.h
+@@ -61,6 +61,14 @@
+  * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
+  *				components' next wakeup when determining the
+  *				optimal idle state.
++ *
++ * GENPD_FLAG_RT_SAFE:		When used with GENPD_FLAG_IRQ_SAFE, this informs
++ *				genpd that its backend callbacks, ->power_on|off(),
++ *				do not use other spinlocks. They might use
++ *				raw_spinlocks or other pre-emption-disable
++ *				methods, all of which are PREEMPT_RT safe. Note
++ *				that, a genpd having this flag set, requires its
++ *				masterdomains to also have it set.
+  */
+ #define GENPD_FLAG_PM_CLK	 (1U << 0)
+ #define GENPD_FLAG_IRQ_SAFE	 (1U << 1)
+@@ -69,6 +77,7 @@
+ #define GENPD_FLAG_CPU_DOMAIN	 (1U << 4)
+ #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+ #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
++#define GENPD_FLAG_RT_SAFE	 (1U << 7)
+ 
+ enum gpd_status {
+ 	GENPD_STATE_ON = 0,	/* PM domain is on */
+@@ -164,6 +173,10 @@ struct generic_pm_domain {
+ 			spinlock_t slock;
+ 			unsigned long lock_flags;
+ 		};
++		struct {
++			raw_spinlock_t rslock;
++			unsigned long rlock_flags;
++		};
+ 	};
+ 
+ };
+-- 
+2.34.1
 
