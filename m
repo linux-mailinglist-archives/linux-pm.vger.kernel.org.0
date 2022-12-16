@@ -2,119 +2,139 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22B1364E946
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 11:20:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 064F464E957
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 11:22:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbiLPKU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Dec 2022 05:20:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S230349AbiLPKWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Dec 2022 05:22:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiLPKUZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 05:20:25 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A43E37205
-        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 02:20:24 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id bf43so2779418lfb.6
-        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 02:20:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uXLwuG2ES9YsBUnvXZ4iNqCmom6VONPXoTbb+R4XyYE=;
-        b=f0ptqrcUjHpXFvbGCXXcuELvSFgXRRsHJvjUin6ydG+ZZgt2l5b32J4NH6D9GkagHt
-         MxYjeOYzw5Fxm+09qVb9eh6+oj19g5/bpmyQ/7IuMIxEFIKMYXutZlU6hwRIIP18EYxN
-         IHXv/aeMODitj2XB5yyGCcpjFEsk8M8hodi59cFUDdeyaSo43Pa6sIfkJlfyqTG8SoEP
-         wfXQ3SiYpZnCdDIet352VOZ39X9ZO4XT8W3w+0jEcECjP3BuaXODqtSW31PODOcUbPV1
-         QU2Ov+nz7cGnR9oFlZKuJbzpAy/d4CE/vLW4p+AlstbiJeqKPMb1goCTGtdtQbKl8sOa
-         KtjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uXLwuG2ES9YsBUnvXZ4iNqCmom6VONPXoTbb+R4XyYE=;
-        b=AuibR1LFgGxhXCyipIcKtOJXms1g+Pjn7KNr32BqcdpK1gxPRepIA0EDyxw3moqyuv
-         OqFGkXaDEGyH8+N/OzJu3qXGw/Mwc9Scat8wYlHPT6M/XPywijT7IrsAXMJpyDQxWb96
-         YZ3h1mqP3dloqcGOZFwkI0c0TAY4lkF9usK8E4MmAAt8wktlkufu68amF7e/aELt9H94
-         LICUPhl7jDIWxihsuJ7JM93GbzCbT0loI6ircB1iHCSYoBAJzYJdkvDUyCyzqqUjwaaR
-         JNlehGLZ120LfuVKSU/SLyT5peLI4Jl+Kf6N1BDJpSzJwcZ9Hctp3EclIJSaWoBXaRsB
-         ha0w==
-X-Gm-Message-State: ANoB5pnj6uhOOYTban1ztJzrsl3jQ0pcdq2upBwjuswq5EL2qr2Sbeis
-        quuXo/TOo5sov3S/aUXc5chU+Q==
-X-Google-Smtp-Source: AA0mqf7JccL0NaLEUm1TWH37w4VIiZYqkO5I7s5GVGnjDzkT922ouNfUqRbSMWarqik1MzR4m+cvVg==
-X-Received: by 2002:a05:6512:3caa:b0:4b5:7f79:f8bd with SMTP id h42-20020a0565123caa00b004b57f79f8bdmr13397292lfv.22.1671186022382;
-        Fri, 16 Dec 2022 02:20:22 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id i6-20020a2ea366000000b0027eb5903568sm117195ljn.72.2022.12.16.02.20.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 16 Dec 2022 02:20:21 -0800 (PST)
-Message-ID: <cefad5f6-8aa4-acb8-231c-91170ec10bcf@linaro.org>
-Date:   Fri, 16 Dec 2022 11:20:20 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.1
-Subject: Re: [PATCH RFC] base: power: replace generic_pm_domain spinlock by
- raw spinlock
-To:     Adrien Thierry <athierry@redhat.com>,
-        linux-rt-users@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
+        with ESMTP id S229952AbiLPKWl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 05:22:41 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E11E50D6A;
+        Fri, 16 Dec 2022 02:22:32 -0800 (PST)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BGAAmjT002282;
+        Fri, 16 Dec 2022 10:21:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=7WZgQQGfLi75ZWNskFxxTaZq35gnqysSKNpwvvUbTxA=;
+ b=SCXgLrkORiqWOfmhyNkKGkJlG+mvSM3T1zbsSLttZK8bfuykdkGyZ6k8loOWplx80w95
+ 6W484tAQeuEpcE+BTVSM2wanLdJH2veox6GhooD8ArG7Wupm3foOkSSjTtCgy5x7h+VX
+ Xc/h2S+/VXazNC9fwd0HKYpNCOG43LGNrS47E4hHiV12BQRVGMC8OB5EhFzRDbEltnUG
+ T0QNigE6UcyaLMt/6UEM7i5a6fUQTFpydWSGEWMXcGOKb8+5AoispgP7KRmxNsm+moGQ
+ nopWsJ/JiwdGhBzFgkiHbr6gM0TQHXCtt08UWgJALvTGD/vyWmbaFgn9UojBYJhIpOVq ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mgpdb02cq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 10:21:57 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2BGALubP029954
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 16 Dec 2022 10:21:56 GMT
+Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Fri, 16 Dec 2022 02:21:47 -0800
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+To:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Andrew Halaney <ahalaney@redhat.com>,
-        Eric Chanudet <echanude@redhat.com>,
-        Brian Masney <bmasney@redhat.com>, linux-pm@vger.kernel.org
-References: <20220615203605.1068453-1-athierry@redhat.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220615203605.1068453-1-athierry@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Bjorn Andersson <andersson@kernel.org>
+CC:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Len Brown" <len.brown@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Paul <sean@poorly.run>, Stephen Boyd <sboyd@kernel.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+Subject: [PATCH v2 0/5] Improve GPU reset sequence for Adreno GPU
+Date:   Fri, 16 Dec 2022 15:51:19 +0530
+Message-ID: <1671186084-11356-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KkV3VQBqqnBlhADXXe1t6BFfV39C_5Jy
+X-Proofpoint-ORIG-GUID: KkV3VQBqqnBlhADXXe1t6BFfV39C_5Jy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-12-16_06,2022-12-15_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ mlxlogscore=942 phishscore=0 mlxscore=0 adultscore=0 impostorscore=0
+ malwarescore=0 priorityscore=1501 lowpriorityscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2212160091
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15/06/2022 22:36, Adrien Thierry wrote:
-> We've been encountering a BUG: scheduling while atomic while running the
-> 5.18.0-rt11 kernel on a Qualcomm SoC (see stacktrace below).
-> 
-> It seems to occur because a spinlock is taken in the PSCI idle code path
-> in the idle loop. With the RT patchset applied and CONFIG_PREEMPT_RT
-> enabled, spinlocks can sleep, thus triggering the bug.
-> 
-> In order to prevent this, replace the generic_pm_domain spinlock by a
-> raw spinlock.
-> 
-> [    2.994433] BUG: scheduling while atomic: swapper/6/0/0x00000002
-> [    2.994439] Modules linked in:
-> [    2.994447] [<ffff80000810b0ec>] migrate_enable+0x3c/0x160
-> [    2.994461] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 5.18.0-rt11+ #1
-> [    2.994464] Hardware name: Qualcomm SA8295P ADP (DT)
-> [    2.994466] Call trace:
-> [    2.994467]  dump_backtrace+0xb0/0x120
-> [    2.994473]  show_stack+0x1c/0x6c
-> [    2.994477]  dump_stack_lvl+0x64/0x7c
-> [    2.994483]  dump_stack+0x14/0x2c
-> [    2.994487]  __schedule_bug+0xa8/0xc0
-> [    2.994489]  schedule_debug.constprop.0+0x154/0x170
-> [    2.994492]  __schedule+0x58/0x520
-> [    2.994496]  schedule_rtlock+0x20/0x44
-> [    2.994499]  rtlock_slowlock_locked+0x110/0x260
-> [    2.994503]  rt_spin_lock+0x74/0x94
-> [    2.994505]  genpd_lock_nested_spin+0x20/0x30
 
-Hi Adrian,
+This is a rework of [1] using genpd instead of 'reset' framework.
 
-I also hit it now on v6.1 RT kernel. I see no more discussions happened
-here. Do you have any progress on your side for this issue?
+As per the recommended reset sequence of Adreno gpu, we should ensure that
+gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
+Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
+wait until its hw status says OFF.
 
-Best regards,
-Krzysztof
+So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
+provide a hint to the gdsc driver to poll for the hw status and use genpd
+notifier to wait from adreno gpu driver until gdsc is turned OFF.
+
+This series is rebased on top of linux-next (20221215) since the changes span
+multiple drivers.
+
+[1] https://patchwork.freedesktop.org/series/107507/
+
+Changes in v2:
+- Minor formatting fix
+- Select PM_GENERIC_DOMAINS from Kconfig
+
+Akhil P Oommen (4):
+  clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
+  drm/msm/a6xx: Vote for cx gdsc from gpu driver
+  drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+  drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
+
+Ulf Hansson (1):
+  PM: domains: Allow a genpd consumer to require a synced power off
+
+ drivers/base/power/domain.c           | 23 ++++++++++++++++++
+ drivers/clk/qcom/gdsc.c               | 11 +++++----
+ drivers/gpu/drm/msm/Kconfig           |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
+ drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
+ drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
+ include/linux/pm_domain.h             |  5 ++++
+ 9 files changed, 94 insertions(+), 20 deletions(-)
+
+-- 
+2.7.4
 
