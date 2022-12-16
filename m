@@ -2,73 +2,78 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEE7264E6CC
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 05:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22B1364E946
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 11:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229625AbiLPEzN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 15 Dec 2022 23:55:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S229873AbiLPKU0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Dec 2022 05:20:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiLPEzL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 15 Dec 2022 23:55:11 -0500
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F6749B4B
-        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 20:55:10 -0800 (PST)
-Received: by mail-pj1-x102b.google.com with SMTP id z8-20020a17090abd8800b00219ed30ce47so4878414pjr.3
-        for <linux-pm@vger.kernel.org>; Thu, 15 Dec 2022 20:55:10 -0800 (PST)
+        with ESMTP id S229475AbiLPKUZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 05:20:25 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A43E37205
+        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 02:20:24 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bf43so2779418lfb.6
+        for <linux-pm@vger.kernel.org>; Fri, 16 Dec 2022 02:20:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W0Tj2k/1t7IFFkY/9dHnLGaWG8Wc/rSGoUwoxjZjG0c=;
-        b=w/aIbkNZ8GVpY67t83q0gZDEpwPlUa/DEFNFj1k4B142i9zxQXDk7NCxvdpQIAknQm
-         BWjMTJf+Solsk8eeHIzQmf5UfsCuHC+K2SWHeEONhtYNf4a0GlFP0/ZGOG4ias6KUzxg
-         CKgDHBLcpbUCtMkP42h8ifGqe9rHkgXgKlQhWNXpJXgJfxqhZTACM8TqUf0Cxw51zdMe
-         fiq3nwuRFylCxcAMfq/1QIIxl+Akd+jOjVsf552hgkgRcOqvxJXuqdqD0SocmFyg5YHw
-         B2zEMQ6zrCkrimzljP2BQS6+wq/xNLrgS/oGLlS1zdsuuVG0QaeSx2Af2HoQAU21ThOB
-         fb9g==
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uXLwuG2ES9YsBUnvXZ4iNqCmom6VONPXoTbb+R4XyYE=;
+        b=f0ptqrcUjHpXFvbGCXXcuELvSFgXRRsHJvjUin6ydG+ZZgt2l5b32J4NH6D9GkagHt
+         MxYjeOYzw5Fxm+09qVb9eh6+oj19g5/bpmyQ/7IuMIxEFIKMYXutZlU6hwRIIP18EYxN
+         IHXv/aeMODitj2XB5yyGCcpjFEsk8M8hodi59cFUDdeyaSo43Pa6sIfkJlfyqTG8SoEP
+         wfXQ3SiYpZnCdDIet352VOZ39X9ZO4XT8W3w+0jEcECjP3BuaXODqtSW31PODOcUbPV1
+         QU2Ov+nz7cGnR9oFlZKuJbzpAy/d4CE/vLW4p+AlstbiJeqKPMb1goCTGtdtQbKl8sOa
+         KtjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W0Tj2k/1t7IFFkY/9dHnLGaWG8Wc/rSGoUwoxjZjG0c=;
-        b=gOnnHSmi4AizNuJGMiWhxufkI9nDZJd3AXcwk6PldK+Tmr5pAHJQPvR3uP+yL4YvLM
-         YiatdUmN3ETIcJ1vxXBU5P7lH58DkuwzNQnphktgaKzgXgDsq5CZeus5QnncG3fOH9x9
-         EsS5ACGKgYknPbXu6JbKLzu2DX9IqnXVYtd2FhYa9f4RTBCOgEsKMoEGJi4tAdu8pOT3
-         z4JEjnFbAaO0B9JFeEl9VOBclzRfNHHtQzYnB0VU7QqXOcNx6+sxbgIc67s2ru+qrcMd
-         uJWJj1B1c5LbEo9T/HA1tv4ZRjioMupgkz/BM4XliAlbF5Oso3nAKWNWCbz+NtLp/yhF
-         OvcA==
-X-Gm-Message-State: ANoB5pnYQ3GTnBpr9b3IctmyvAc/VCYVNQxtCx6b4HGpK3SJeWou4RxX
-        E/AaZqrWSXquXHmCv8sYhb+MnQ==
-X-Google-Smtp-Source: AA0mqf57oecpu1XU54PlDJZcjwZdwR4smxE5Zu9aOaFo5PtlUFwVlK19poM3sY1qyj6L5LO2/x79KQ==
-X-Received: by 2002:a17:902:7143:b0:189:5ff6:903a with SMTP id u3-20020a170902714300b001895ff6903amr30167034plm.52.1671166509616;
-        Thu, 15 Dec 2022 20:55:09 -0800 (PST)
-Received: from localhost ([122.172.87.149])
-        by smtp.gmail.com with ESMTPSA id g6-20020a170902c38600b0017f64ab80e5sm509175plg.179.2022.12.15.20.55.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Dec 2022 20:55:08 -0800 (PST)
-Date:   Fri, 16 Dec 2022 10:25:06 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Eric Curtin <ecurtin@redhat.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Marc Zyngier <maz@kernel.org>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: apple: remove duplicate intializer
-Message-ID: <20221216045506.edsjlxkkhma4mh5h@vireshk-i7>
-References: <20221215165523.1920672-1-arnd@kernel.org>
- <CAOgh=Fw4BXvGNV0bsTXfSxy+ks09ed=nbJhkOWE+UrT7LW+r6A@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uXLwuG2ES9YsBUnvXZ4iNqCmom6VONPXoTbb+R4XyYE=;
+        b=AuibR1LFgGxhXCyipIcKtOJXms1g+Pjn7KNr32BqcdpK1gxPRepIA0EDyxw3moqyuv
+         OqFGkXaDEGyH8+N/OzJu3qXGw/Mwc9Scat8wYlHPT6M/XPywijT7IrsAXMJpyDQxWb96
+         YZ3h1mqP3dloqcGOZFwkI0c0TAY4lkF9usK8E4MmAAt8wktlkufu68amF7e/aELt9H94
+         LICUPhl7jDIWxihsuJ7JM93GbzCbT0loI6ircB1iHCSYoBAJzYJdkvDUyCyzqqUjwaaR
+         JNlehGLZ120LfuVKSU/SLyT5peLI4Jl+Kf6N1BDJpSzJwcZ9Hctp3EclIJSaWoBXaRsB
+         ha0w==
+X-Gm-Message-State: ANoB5pnj6uhOOYTban1ztJzrsl3jQ0pcdq2upBwjuswq5EL2qr2Sbeis
+        quuXo/TOo5sov3S/aUXc5chU+Q==
+X-Google-Smtp-Source: AA0mqf7JccL0NaLEUm1TWH37w4VIiZYqkO5I7s5GVGnjDzkT922ouNfUqRbSMWarqik1MzR4m+cvVg==
+X-Received: by 2002:a05:6512:3caa:b0:4b5:7f79:f8bd with SMTP id h42-20020a0565123caa00b004b57f79f8bdmr13397292lfv.22.1671186022382;
+        Fri, 16 Dec 2022 02:20:22 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id i6-20020a2ea366000000b0027eb5903568sm117195ljn.72.2022.12.16.02.20.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 16 Dec 2022 02:20:21 -0800 (PST)
+Message-ID: <cefad5f6-8aa4-acb8-231c-91170ec10bcf@linaro.org>
+Date:   Fri, 16 Dec 2022 11:20:20 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAOgh=Fw4BXvGNV0bsTXfSxy+ks09ed=nbJhkOWE+UrT7LW+r6A@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.1
+Subject: Re: [PATCH RFC] base: power: replace generic_pm_domain spinlock by
+ raw spinlock
+To:     Adrien Thierry <athierry@redhat.com>,
+        linux-rt-users@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Andrew Halaney <ahalaney@redhat.com>,
+        Eric Chanudet <echanude@redhat.com>,
+        Brian Masney <bmasney@redhat.com>, linux-pm@vger.kernel.org
+References: <20220615203605.1068453-1-athierry@redhat.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220615203605.1068453-1-athierry@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,25 +81,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 15-12-22, 17:10, Eric Curtin wrote:
-> On Thu, 15 Dec 2022 at 17:05, Arnd Bergmann <arnd@kernel.org> wrote:
-> >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > When -Woverride-init is enabled, gcc notices that the .attr
-> > field is initialized twice:
-> >
-> > drivers/cpufreq/apple-soc-cpufreq.c:331:27: error: initialized field overwritten [-Werror=override-init]
-> >   331 |         .attr           = apple_soc_cpufreq_hw_attr,
-> >       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Remove the first one, since this is not actually used.
-> >
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+On 15/06/2022 22:36, Adrien Thierry wrote:
+> We've been encountering a BUG: scheduling while atomic while running the
+> 5.18.0-rt11 kernel on a Qualcomm SoC (see stacktrace below).
 > 
-> Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+> It seems to occur because a spinlock is taken in the PSCI idle code path
+> in the idle loop. With the RT patchset applied and CONFIG_PREEMPT_RT
+> enabled, spinlocks can sleep, thus triggering the bug.
+> 
+> In order to prevent this, replace the generic_pm_domain spinlock by a
+> raw spinlock.
+> 
+> [    2.994433] BUG: scheduling while atomic: swapper/6/0/0x00000002
+> [    2.994439] Modules linked in:
+> [    2.994447] [<ffff80000810b0ec>] migrate_enable+0x3c/0x160
+> [    2.994461] CPU: 6 PID: 0 Comm: swapper/6 Not tainted 5.18.0-rt11+ #1
+> [    2.994464] Hardware name: Qualcomm SA8295P ADP (DT)
+> [    2.994466] Call trace:
+> [    2.994467]  dump_backtrace+0xb0/0x120
+> [    2.994473]  show_stack+0x1c/0x6c
+> [    2.994477]  dump_stack_lvl+0x64/0x7c
+> [    2.994483]  dump_stack+0x14/0x2c
+> [    2.994487]  __schedule_bug+0xa8/0xc0
+> [    2.994489]  schedule_debug.constprop.0+0x154/0x170
+> [    2.994492]  __schedule+0x58/0x520
+> [    2.994496]  schedule_rtlock+0x20/0x44
+> [    2.994499]  rtlock_slowlock_locked+0x110/0x260
+> [    2.994503]  rt_spin_lock+0x74/0x94
+> [    2.994505]  genpd_lock_nested_spin+0x20/0x30
 
-Applied. Thanks.
+Hi Adrian,
 
--- 
-viresh
+I also hit it now on v6.1 RT kernel. I see no more discussions happened
+here. Do you have any progress on your side for this issue?
+
+Best regards,
+Krzysztof
+
