@@ -2,246 +2,231 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B8064F308
-	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 22:15:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8E464F376
+	for <lists+linux-pm@lfdr.de>; Fri, 16 Dec 2022 22:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbiLPVPR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 16 Dec 2022 16:15:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S229676AbiLPVsG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 16 Dec 2022 16:48:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbiLPVPQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 16:15:16 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E65D61D69;
-        Fri, 16 Dec 2022 13:15:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D31DB81DA0;
-        Fri, 16 Dec 2022 21:15:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F72C433EF;
-        Fri, 16 Dec 2022 21:15:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1671225311;
-        bh=BhKUvHili8P/IlCGNPbXXOBNfa2kM82Ro/0ibRWF4Fs=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tMcsZU/opCaa9XFdbV7HwfzVX3bKeOt1VshwwMHaiqtlY5Q/SCWXPfvR3y7h93rJs
-         2pMAs18hT5DrDl+Db+WKvdplaT9zEYgwRHlr9e8INy0NE8J1cUKQHZLK69lZNpDfdd
-         YT0lhmQELg9POsI9Ro68SxRUMAY36gOMCgGSiMd83HZYbJC9NhOWkNXo7KaCwa6uxs
-         uYRixzPtYt0bPRkhSknz64/1dzJUX0NOzprl4HZ94HYvnzqvdvuKfMbsrFISPwTLCq
-         yyIko+QZNXRay+6980nDA7KDYsinNuyZQPCVsC3kwNSDWk1Tnird22SupNGtJt0+mm
-         0l0Ee0ErNkLJg==
-Received: by mercury (Postfix, from userid 1000)
-        id F2FAB1060F45; Fri, 16 Dec 2022 22:15:08 +0100 (CET)
-Date:   Fri, 16 Dec 2022 22:15:08 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 6.2
-Message-ID: <20221216211508.dxifq5nrw62jh75g@mercury.elektranox.org>
+        with ESMTP id S229582AbiLPVsD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 16 Dec 2022 16:48:03 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72BAE92;
+        Fri, 16 Dec 2022 13:48:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671227281; x=1702763281;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ksNfalkQyDabn07PqqHgYcoufSAawYeGA5A7ZSrxgho=;
+  b=HxCbEzjKVfSaQlz/f4batEHPfOGctkFev27k3L1Nb4peCUrxcnoUyN+6
+   ufdMZZP2++MAIFaKUEIo9CB65B879E9Atm8I5GoUGSE1vDcW5GA8zRN4n
+   /+8ky/swRg6P9i1t04ClcQ6m//xYRxS8zPfdF6+cm+wYHTsfrbECROfq4
+   FKGcRlBhunRSVniTDhSnoDt9DGpsTKR/V0hqXGMY1YLjpmd1Uf1HA1BxS
+   razUCqYhF8L5k6nLRLIMIBRzZtiylhHgP2hXV0MKuGeWOv66jNiAiffy7
+   WRuWmFdzvGd/wPtqhCH99qZx6y3Ju9qV9aPSO/nJeAF+Q93KFSGjH/Gde
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="317755503"
+X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
+   d="scan'208";a="317755503"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2022 13:48:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10563"; a="718509508"
+X-IronPort-AV: E=Sophos;i="5.96,251,1665471600"; 
+   d="scan'208";a="718509508"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga004.fm.intel.com with ESMTP; 16 Dec 2022 13:48:01 -0800
+Date:   Fri, 16 Dec 2022 13:56:19 -0800
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Subject: Re: [PATCH v2 02/22] sched: Add interfaces for IPC classes
+Message-ID: <20221216215619.GA23285@ranerica-svr.sc.intel.com>
+References: <20221128132100.30253-1-ricardo.neri-calderon@linux.intel.com>
+ <20221128132100.30253-3-ricardo.neri-calderon@linux.intel.com>
+ <b343821d-78b8-0c46-bf03-bfd645d99a2e@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3ggljl3sowcsgady"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b343821d-78b8-0c46-bf03-bfd645d99a2e@arm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, Dec 14, 2022 at 07:36:44AM +0000, Lukasz Luba wrote:
+> Hi Richardo,
+> 
+> I have some generic comment for the design of those interfaces.
+> 
+> On 11/28/22 13:20, Ricardo Neri wrote:
+> > Add the interfaces that architectures shall implement to convey the data
+> > to support IPC classes.
+> > 
+> > arch_update_ipcc() updates the IPC classification of the current task as
+> > given by hardware.
+> > 
+> > arch_get_ipcc_score() provides a performance score for a given IPC class
+> > when placed on a specific CPU. Higher scores indicate higher performance.
+> > 
+> > The number of classes and the score of each class of task are determined
+> > by hardware.
+> > 
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-pm@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > Changes since v1:
+> >   * Shortened the names of the IPCC interfaces (PeterZ):
+> >     sched_task_classes_enabled >> sched_ipcc_enabled
+> >     arch_has_task_classes >> arch_has_ipc_classes
+> >     arch_update_task_class >> arch_update_ipcc
+> >     arch_get_task_class_score >> arch_get_ipcc_score
+> >   * Removed smt_siblings_idle argument from arch_update_ipcc(). (PeterZ)
+> > ---
+> >   kernel/sched/sched.h    | 60 +++++++++++++++++++++++++++++++++++++++++
+> >   kernel/sched/topology.c |  8 ++++++
+> >   2 files changed, 68 insertions(+)
+> > 
+> > diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> > index b1d338a740e5..75e22baa2622 100644
+> > --- a/kernel/sched/sched.h
+> > +++ b/kernel/sched/sched.h
+> > @@ -2531,6 +2531,66 @@ void arch_scale_freq_tick(void)
+> >   }
+> >   #endif
+> > +#ifdef CONFIG_IPC_CLASSES
+> > +DECLARE_STATIC_KEY_FALSE(sched_ipcc);
+> > +
+> > +static inline bool sched_ipcc_enabled(void)
+> > +{
+> > +	return static_branch_unlikely(&sched_ipcc);
+> > +}
+> > +
+> > +#ifndef arch_has_ipc_classes
+> > +/**
+> > + * arch_has_ipc_classes() - Check whether hardware supports IPC classes of tasks
+> > + *
+> > + * Returns: true of IPC classes of tasks are supported.
+> > + */
+> > +static __always_inline
+> > +bool arch_has_ipc_classes(void)
+> > +{
+> > +	return false;
+> > +}
+> > +#endif
+> > +
+> > +#ifndef arch_update_ipcc
+> > +/**
+> > + * arch_update_ipcc() - Update the IPC class of the current task
+> > + * @curr:		The current task
+> > + *
+> > + * Request that the IPC classification of @curr is updated.
+> > + *
+> > + * Returns: none
+> > + */
+> > +static __always_inline
+> > +void arch_update_ipcc(struct task_struct *curr)
+> > +{
+> > +}
+> > +#endif
+> > +
+> > +#ifndef arch_get_ipcc_score
+> > +/**
+> > + * arch_get_ipcc_score() - Get the IPC score of a class of task
+> > + * @ipcc:	The IPC class
+> > + * @cpu:	A CPU number
+> > + *
+> > + * Returns the performance score of an IPC class when running on @cpu.
+> > + * Error when either @class or @cpu are invalid.
+> > + */
+> > +static __always_inline
+> > +int arch_get_ipcc_score(unsigned short ipcc, int cpu)
+> > +{
+> > +	return 1;
+> > +}
+> > +#endif
+> 
+> Those interfaces are quite simple, probably work really OK with
+> your HW/FW. If any other architecture is going to re-use them
+> in future, we might face some issue. Let me explain why.
+> 
+> These kernel functions are start to be used very early in boot.
+> Your HW/FW is probably instantly ready to work from the very
+> beginning during boot. What is some other HW needs some
+> preparation code, like setup communication channel to FW or enable
+> needed clocks/events/etc.
+> 
+> What I would like to see is a similar mechanism to the one in schedutil.
+> Schedutil governor has to wait till cpufreq initialize the cpu freq
+> driver and policy objects (which sometimes takes ~2-3 sec). After that
+> cpufreq fwk starts the governor which populates this hook [1].
+> It's based on RCU mechanism with function pointer that can be then
+> called from the task scheduler when everything is ready to work.
+> 
+> If we (Arm) is going to use your proposed interfaces, we might need
+> different mechanisms because the platform likely would be ready after
+> our SCMI FW channels and cpufreq are setup.
+> 
+> Would it be possible to address such need now or I would have to
+> change that interface code later?
 
---3ggljl3sowcsgady
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you very much for your feeback, Lukas!
 
-Hi Linus,
+I took a look a cpufreq implementation you refer. I can certainly try to
+accommodate your requirements. Before jumping into it, I have a few
+questions.
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+I see that cpufreq_update_util() only does something when the per-CPU
+pointers cpufreq_update_util_data become non-NULL. I use static key for the
+same purpose. Is this not usable for you?
 
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+Indeed, arch_has_ipc_classes() implies that has to return true very early
+after boot if called, as per Ionela's suggestion from sched_init_smp(). I
+can convert this interface to an arch_enable_ipc_classes() that drivers or
+preparation code can call when ready. Would this be acceptable?
 
-are available in the Git repository at:
+Do think that a hook per CPU would be needed? If unsure, perhaps this can
+be left for future work.
 
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-su=
-pply.git tags/for-v6.2
-
-for you to fetch changes up to 104bb8a663451404a26331263ce5b96c34504049:
-
-  power: supply: fix null pointer dereferencing in power_supply_get_battery=
-_info (2022-12-05 22:56:16 +0100)
-
-----------------------------------------------------------------
-power supply and reset changes for the v6.2 series
-
-- bq25890: add charge voltage/current support
-- bd99954: convert to linear range
-- convert all i2c drivers to use probe_new
-- misc. fixes and cleanups
-
-----------------------------------------------------------------
-Angel Iglesias (1):
-      i2c: core: Introduce i2c_client_get_device_id helper function
-
-Colin Ian King (1):
-      power: supply: lp8788: make const array name static
-
-Hans de Goede (3):
-      power: supply: bq25890: Only use pdata->regulator_init_data for vbus
-      power: supply: bq25890: Ensure pump_express_work is cancelled on remo=
-ve
-      power: supply: bq25890: Fix usb-notifier probe and remove races
-
-Krzysztof Kozlowski (5):
-      dt-bindings: power: reset: restart-handler: add common schema
-      dt-bindings: power: supply: define monitored-battery in common place
-      dt-bindings: power: supply: bq25890: allow power-supply fields
-      dt-bindings: power: supply: maxim,max17042: allow power-supplies
-      dt-bindings: power: supply: bq25890: use one fallback compatible
-
-Lukas Bulwahn (1):
-      power: supply: core: repair kernel-doc for power_supply_vbat2ri()
-
-Marek Vasut (7):
-      power: supply: bq25890: Document POWER_SUPPLY_PROP_CURRENT_NOW
-      power: supply: bq25890: Clean up POWER_SUPPLY_PROP_CONSTANT_CHARGE_CU=
-RRENT
-      power: supply: bq25890: Clean up POWER_SUPPLY_PROP_CONSTANT_CHARGE_VO=
-LTAGE
-      power: supply: bq25890: Add support for setting user charge current a=
-nd voltage limit
-      power: supply: bq25890: Factor out regulator registration code
-      power: supply: bq25890: Add get_voltage support to Vbus regulator
-      power: supply: bq25890: Add Vsys regulator
-
-Matti Vaittinen (3):
-      power: supply: bd99954: Use LINEAR_RANGE()
-      power: supply: mt6360: Use LINEAR_RANGE_IDX()
-      power: supply: 88pm860x: simplify using devm
-
-Qiheng Lin (1):
-      power: supply: Fix refcount leak in rk817_charger_probe
-
-Sebastian Reichel (1):
-      Merge 'i2c/client_device_id_helper-immutable'
-
-Shang XiaoJing (1):
-      power: supply: cw2015: Fix potential null-ptr-deref in cw_bat_probe()
-
-Uwe Kleine-K=F6nig (24):
-      power: supply: adp5061: Convert to i2c's .probe_new()
-      power: supply: bq2415x: Convert to i2c's .probe_new()
-      power: supply: bq24190: Convert to i2c's .probe_new()
-      power: supply: bq24257: Convert to i2c's .probe_new()
-      power: supply: bq24735: Convert to i2c's .probe_new()
-      power: supply: bq2515x: Convert to i2c's .probe_new()
-      power: supply: bq256xx: Convert to i2c's .probe_new()
-      power: supply: bq25890: Convert to i2c's .probe_new()
-      power: supply: bq25980: Convert to i2c's .probe_new()
-      power: supply: bq27xxx: Convert to i2c's .probe_new()
-      power: supply: ds2782: Convert to i2c's .probe_new()
-      power: supply: lp8727: Convert to i2c's .probe_new()
-      power: supply: ltc2941: Convert to i2c's .probe_new()
-      power: supply: ltc4162-l: Convert to i2c's .probe_new()
-      power: supply: max14656: Convert to i2c's .probe_new()
-      power: supply: max17040: Convert to i2c's .probe_new()
-      power: supply: max17042_battery: Convert to i2c's .probe_new()
-      power: supply: rt5033_battery: Convert to i2c's .probe_new()
-      power: supply: rt9455: Convert to i2c's .probe_new()
-      power: supply: sbs: Convert to i2c's .probe_new()
-      power: supply: sbs-manager: Convert to i2c's .probe_new()
-      power: supply: smb347: Convert to i2c's .probe_new()
-      power: supply: ucs1002: Convert to i2c's .probe_new()
-      power: supply: z2_battery: Convert to i2c's .probe_new()
-
-Yuan Can (1):
-      power: supply: ab8500: Fix error handling in ab8500_charger_init()
-
-Zeng Heng (1):
-      power: supply: fix residue sysfs file in error handle route of __powe=
-r_supply_register()
-
-Zhang Qilong (1):
-      power: supply: z2_battery: Fix possible memleak in z2_batt_probe()
-
-ruanjinjie (1):
-      power: supply: fix null pointer dereferencing in power_supply_get_bat=
-tery_info
-
-wangjianli (1):
-      power/supply: fix repeated words in comments
-
- .../devicetree/bindings/mfd/ene-kb930.yaml         |   6 +-
- .../devicetree/bindings/mfd/rockchip,rk817.yaml    |   2 +
- .../bindings/power/reset/gpio-restart.yaml         |  13 +-
- .../bindings/power/reset/restart-handler.yaml      |  30 +++
- .../devicetree/bindings/power/supply/bq25890.yaml  |  16 +-
- .../devicetree/bindings/power/supply/bq27xxx.yaml  |   2 -
- .../bindings/power/supply/ingenic,battery.yaml     |   4 +-
- .../bindings/power/supply/maxim,max17042.yaml      |   2 +
- .../bindings/power/supply/power-supply.yaml        |   6 +
- .../bindings/power/supply/rohm,bd99954.yaml        |   1 +
- .../bindings/power/supply/sc2731-charger.yaml      |   1 -
- drivers/i2c/i2c-core-base.c                        |  14 ++
- drivers/power/supply/88pm860x_charger.c            |  38 +--
- drivers/power/supply/ab8500_charger.c              |  11 +-
- drivers/power/supply/adp5061.c                     |   5 +-
- drivers/power/supply/bd99954-charger.c             |  84 +------
- drivers/power/supply/bq2415x_charger.c             |   6 +-
- drivers/power/supply/bq24190_charger.c             |   6 +-
- drivers/power/supply/bq24257_charger.c             |   6 +-
- drivers/power/supply/bq24735-charger.c             |   5 +-
- drivers/power/supply/bq2515x_charger.c             |   6 +-
- drivers/power/supply/bq256xx_charger.c             |   6 +-
- drivers/power/supply/bq25890_charger.c             | 277 +++++++++++++++--=
-----
- drivers/power/supply/bq25980_charger.c             |   6 +-
- drivers/power/supply/bq27xxx_battery_i2c.c         |   6 +-
- drivers/power/supply/cw2015_battery.c              |   3 +
- drivers/power/supply/ds2782_battery.c              |   6 +-
- drivers/power/supply/lp8727_charger.c              |   4 +-
- drivers/power/supply/lp8788-charger.c              |   2 +-
- drivers/power/supply/ltc2941-battery-gauge.c       |   5 +-
- drivers/power/supply/ltc4162-l-charger.c           |   5 +-
- drivers/power/supply/max14656_charger_detector.c   |   5 +-
- drivers/power/supply/max17040_battery.c            |   6 +-
- drivers/power/supply/max17042_battery.c            |   6 +-
- drivers/power/supply/mt6360_charger.c              |  15 +-
- drivers/power/supply/power_supply_core.c           |   8 +-
- drivers/power/supply/rk817_charger.c               |   4 +-
- drivers/power/supply/rt5033_battery.c              |   5 +-
- drivers/power/supply/rt9455_charger.c              |   5 +-
- drivers/power/supply/sbs-charger.c                 |   5 +-
- drivers/power/supply/sbs-manager.c                 |   6 +-
- drivers/power/supply/smb347-charger.c              |   6 +-
- drivers/power/supply/ucs1002_power.c               |   5 +-
- drivers/power/supply/z2_battery.c                  |  11 +-
- include/linux/i2c.h                                |   1 +
- 45 files changed, 387 insertions(+), 285 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/power/reset/restart-h=
-andler.yaml
-
---3ggljl3sowcsgady
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOc39wACgkQ2O7X88g7
-+ppCFg//cJ2RvL2YP25YPKh/5Ys+qY6EIoGujnbYmu2/oh6puokTxvfAw9CnC2XW
-9jcFaB4g1pAxyggEjrDmd6g6qsTvLZrUsaUC+9/uFoo6un7bAtlnF0SZNdGWU8jG
-rY/Bq7rc9bLYoL+G6mh9FVNEDxI+Y3ilTfNQn8JSRys9RyIGM+TKCBLJ7hGX4DzA
-SxAc0ZHjxRylSDcr/VQON7g2eAzQ8oHt65h29ZgCcBr3qVJwXqoG+tXt8OWzLILW
-tMwfjqMEEHgJO4buOSHl6LA8/8FhE9qbSPtRQl8J24cqJXK2GfrzXSJB/VcVutRB
-Da10wFtOFWtnAToFSaNi4pvMUc53JHedaH4QBW2YZ7hmUOYO0I7W6jJNuaRQJfnw
-33Rf0dxPXcJ10VWd6recK/7G/Kb18UIshze/n9lZOwF475uyCWLnsL9vTdOCrrdn
-HZJB+SxaPW5OJ9YNc+kiz/Zsbd+etGRhgarttExSEUwaN/Lm8oU/xHZ8S+zBJCAw
-Fc+XzcOLOjjl6eEFbJVTly8Fub4O7d8vOn4FyWY1c4T+I8ZZSXRHyIU4WSLrdmVH
-ZxSsvVbbQF62SFTTXqrWh80BawqD6NHLU91vRCru4yZ9vqvp6l5rlSzZYOVMTCop
-ClTacCL/5CSgroxDiKov1BbEqQLfyfDa6Y4DyreCPKaWS3bm75k=
-=F1Wc
------END PGP SIGNATURE-----
-
---3ggljl3sowcsgady--
+Thanks and BR,
+Ricardo
+>
+> [1]
+> https://elixir.bootlin.com/linux/latest/source/kernel/sched/cpufreq.c#L29
+> 
