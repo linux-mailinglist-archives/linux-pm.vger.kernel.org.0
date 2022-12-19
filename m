@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F77650EBF
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Dec 2022 16:39:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FD0C650EC0
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Dec 2022 16:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbiLSPjN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Dec 2022 10:39:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56238 "EHLO
+        id S229781AbiLSPjP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Dec 2022 10:39:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232268AbiLSPjM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 10:39:12 -0500
+        with ESMTP id S232268AbiLSPjO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 10:39:14 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35AA11178
-        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 07:39:11 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33691180D
+        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 07:39:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671464351; x=1703000351;
+  t=1671464353; x=1703000353;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=+upwQwze58+VXG+39ATg90l00WT7gm0SqCvuLlxgE3E=;
-  b=fugq2C28dNIt3SjEuyhkICIyDYAEie6iDVdPdtrgG8Fxct7fCUG2T83a
-   EDPEzZrQzsAse1dqY1XdEnsibfd599foMqAEYS+hdg3pBcQ2mO9gyOhXn
-   oTCZUBlUuYflJLGDkw+1CgSYy+VjZhMapMsqf9M4uMdpa8Zz/PQdUeSDe
-   bPSNYPgc+4nd9XtW8TRZyKgiv4wBY7LwkxEcwhkvDqlHbUGh7Mmcm/ExT
-   uNybNwgcA+UCJj+Xi6rTcERVZ2oEEJ60M53TcWNAtGDm9btJhxqPvJrFn
-   QoJ5HPLWxrr2CWtM3air16vRoL21KZuO0jhQqt4aoygbkElFxq7dHeWhH
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307051207"
+  bh=WjLjJqVpr9ryArdMJb+Zb1klQB3M0pfezXp+V752k6c=;
+  b=C8XbRsRtt8NCEzpkA4zSSKTrWghYkO9UqlzupPpNzFxmrdzNPMCCF1tr
+   jNb9yEHKx2nDSW2wOYptmtF6bkYM/i4cDd4ayDowGlLGKZ/eC67dq51Nk
+   XTndZsBkhGDMpTqjEP9WT8T2NcEyFhh2i297N4fsgrNEepT5y68TxbX7U
+   yCOZKzig80iZ867oo4sm7LJTrz/Ay1MRzc419pYulUEkNQJSnEIatcTWS
+   cc8As6pvzEqrcVNt870XZcp9M9jpKpyz6WRqddloLEgIlbHAjKj2uPVNI
+   9Yv9CDMKBQ+VPxmjhASWPnWgsc/MRS9iAimBuvdIzQcgLDa2fgOE09o8g
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307051223"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="307051207"
+   d="scan'208";a="307051223"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 07:39:11 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 07:39:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="774960313"
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="774960325"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="774960313"
+   d="scan'208";a="774960325"
 Received: from power-sh.sh.intel.com ([10.239.183.7])
-  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 07:39:09 -0800
+  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 07:39:11 -0800
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
         rui.zhang@intel.com
-Subject: [PATCH V2 1/6] thermal/intel: Introduce Intel TCC library
-Date:   Mon, 19 Dec 2022 23:46:15 +0800
-Message-Id: <20221219154620.3630-2-rui.zhang@intel.com>
+Subject: [PATCH V2 2/6] thermal/int340x/processor_thermal: Use Intel TCC library
+Date:   Mon, 19 Dec 2022 23:46:16 +0800
+Message-Id: <20221219154620.3630-3-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221219154620.3630-1-rui.zhang@intel.com>
 References: <20221219154620.3630-1-rui.zhang@intel.com>
@@ -58,224 +58,221 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are several different drivers that accesses the Intel TCC
-(thermal control circuitry) MSRs, and each of them has its own
-implementation for the same functionalities, e.g. getting the current
-temperature, getting the tj_max, and getting/setting the tj_max offset.
-
-Introduce a library to unify the code for Intel CPU TCC MSR access.
-
-At the same time, ensure the temperature is got based on the updated
-tjmax value because tjmax can be changed at runtime for cases like
-the Intel SST-PP (Intel Speed Select Technology - Performance Profile)
-level change.
+Cleanup the code by using Intel TCC library for TCC (Thermal Control
+Circuitry) MSR access.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/thermal/intel/Kconfig     |   4 +
- drivers/thermal/intel/Makefile    |   1 +
- drivers/thermal/intel/intel_tcc.c | 139 ++++++++++++++++++++++++++++++
- include/linux/intel_tcc.h         |  18 ++++
- 4 files changed, 162 insertions(+)
- create mode 100644 drivers/thermal/intel/intel_tcc.c
- create mode 100644 include/linux/intel_tcc.h
+ drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
+ .../processor_thermal_device.c                | 119 ++++--------------
+ 2 files changed, 22 insertions(+), 98 deletions(-)
 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index f0c845679250..6b938c040d6e 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -12,6 +12,10 @@ config X86_THERMAL_VECTOR
- 	def_bool y
- 	depends on X86 && CPU_SUP_INTEL && X86_LOCAL_APIC
- 
-+config INTEL_TCC
-+	bool
-+	depends on X86
-+
- config X86_PKG_TEMP_THERMAL
- 	tristate "X86 package temperature thermal driver"
- 	depends on X86_THERMAL_VECTOR
-diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-index 9a8d8054f316..5d8833c82ab6 100644
---- a/drivers/thermal/intel/Makefile
-+++ b/drivers/thermal/intel/Makefile
-@@ -2,6 +2,7 @@
- #
- # Makefile for various Intel thermal drivers.
- 
-+obj-$(CONFIG_INTEL_TCC)	+= intel_tcc.o
- obj-$(CONFIG_INTEL_POWERCLAMP)	+= intel_powerclamp.o
- obj-$(CONFIG_X86_PKG_TEMP_THERMAL)	+= x86_pkg_temp_thermal.o
- obj-$(CONFIG_INTEL_SOC_DTS_IOSF_CORE)	+= intel_soc_dts_iosf.o
-diff --git a/drivers/thermal/intel/intel_tcc.c b/drivers/thermal/intel/intel_tcc.c
-new file mode 100644
-index 000000000000..2e5c741c41ca
---- /dev/null
-+++ b/drivers/thermal/intel/intel_tcc.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * intel_tcc.c - Library for Intel TCC (thermal control circuitry) MSR access
-+ * Copyright (c) 2022, Intel Corporation.
-+ */
-+
-+#include <linux/errno.h>
+diff --git a/drivers/thermal/intel/int340x_thermal/Kconfig b/drivers/thermal/intel/int340x_thermal/Kconfig
+index 5d046de96a5d..0f511917e0e1 100644
+--- a/drivers/thermal/intel/int340x_thermal/Kconfig
++++ b/drivers/thermal/intel/int340x_thermal/Kconfig
+@@ -10,6 +10,7 @@ config INT340X_THERMAL
+ 	select ACPI_THERMAL_REL
+ 	select ACPI_FAN
+ 	select INTEL_SOC_DTS_IOSF_CORE
++	select INTEL_TCC
+ 	select PROC_THERMAL_MMIO_RAPL if POWERCAP
+ 	help
+ 	  Newer laptops and tablets that use ACPI may have thermal sensors and
+diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+index a8d98f1bd6c6..a2ea22f2bffd 100644
+--- a/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
++++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_device.c
+@@ -4,6 +4,7 @@
+  * Copyright (c) 2014, Intel Corporation.
+  */
+ #include <linux/acpi.h>
 +#include <linux/intel_tcc.h>
-+#include <asm/msr.h>
-+
-+/**
-+ * intel_tcc_get_tjmax() - returns the default TCC activation Temperature
-+ * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ *
-+ * Get the TjMax value, which is the default thermal throttling or TCC
-+ * activation temperature in degrees C.
-+ *
-+ * Return: Tjmax value in degrees C on success, negative error code otherwise.
-+ */
-+int intel_tcc_get_tjmax(int cpu)
-+{
-+	u32 low, high;
-+	int val, err;
-+
-+	if (cpu < 0)
-+		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+	else
-+		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+	if (err)
-+		return err;
-+
-+	val = (low >> 16) & 0xff;
-+
-+	return val ? val : -ENODATA;
-+}
-+EXPORT_SYMBOL_NS_GPL(intel_tcc_get_tjmax, INTEL_TCC);
-+
-+/**
-+ * intel_tcc_get_offset() - returns the TCC Offset value to Tjmax
-+ * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ *
-+ * Get the TCC offset value to Tjmax. The effective thermal throttling or TCC
-+ * activation temperature equals "Tjmax" - "TCC Offset", in degrees C.
-+ *
-+ * Return: Tcc offset value in degrees C on success, negative error code otherwise.
-+ */
-+int intel_tcc_get_offset(int cpu)
-+{
-+	u32 low, high;
-+	int err;
-+
-+	if (cpu < 0)
-+		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+	else
-+		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+	if (err)
-+		return err;
-+
-+	return (low >> 24) & 0x3f;
-+}
-+EXPORT_SYMBOL_NS_GPL(intel_tcc_get_offset, INTEL_TCC);
-+
-+/**
-+ * intel_tcc_set_offset() - set the TCC offset value to Tjmax
-+ * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @offset: TCC offset value in degree C
-+ *
-+ * Set the TCC Offset value to Tjmax. The effective thermal throttling or TCC
-+ * activation temperature equals "Tjmax" - "TCC Offset", in degree C.
-+ *
-+ * Return: On success returns 0, negative error code otherwise.
-+ */
-+
-+int intel_tcc_set_offset(int cpu, int offset)
-+{
-+	u32 low, high;
-+	int err;
-+
-+	if (offset < 0 || offset > 0x3f)
-+		return -EINVAL;
-+
-+	if (cpu < 0)
-+		err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+	else
-+		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &low, &high);
-+	if (err)
-+		return err;
-+
-+	/* MSR Locked */
-+	if (low & BIT(31))
-+		return -EPERM;
-+
-+	low &= ~(0x3f << 24);
-+	low |= offset << 24;
-+
-+	if (cpu < 0)
-+		return wrmsr_safe(MSR_IA32_TEMPERATURE_TARGET, low, high);
-+	else
-+		return wrmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, low, high);
-+}
-+EXPORT_SYMBOL_NS_GPL(intel_tcc_set_offset, INTEL_TCC);
-+
-+/**
-+ * intel_tcc_get_temp() - returns the current temperature
-+ * @cpu: cpu that the MSR should be run on, nagative value means any cpu.
-+ * @pkg: true: Package Thermal Sensor. false: Core Thermal Sensor.
-+ *
-+ * Get the current temperature returned by the CPU core/package level
-+ * thermal sensor, in degrees C.
-+ *
-+ * Return: Temperature in degrees C on success, negative error code otherwise.
-+ */
-+int intel_tcc_get_temp(int cpu, bool pkg)
-+{
-+	u32 low, high;
-+	u32 msr = pkg ? MSR_IA32_PACKAGE_THERM_STATUS : MSR_IA32_THERM_STATUS;
-+	int tjmax, temp, err;
-+
-+	tjmax = intel_tcc_get_tjmax(cpu);
-+	if (tjmax < 0)
-+		return tjmax;
-+
-+	if (cpu < 0)
-+		err = rdmsr_safe(msr, &low, &high);
-+	else
-+		err = rdmsr_safe_on_cpu(cpu, msr, &low, &high);
-+	if (err)
-+		return err;
-+
-+	/* Temperature is beyond the valid thermal sensor range */
-+	if (!(low & BIT(31)))
-+		return -ENODATA;
-+
-+	temp = tjmax - ((low >> 16) & 0x7f);
-+
-+	/* Do not allow negative CPU temperature */
-+	return temp >= 0 ? temp : -ENODATA;
-+}
-+EXPORT_SYMBOL_NS_GPL(intel_tcc_get_temp, INTEL_TCC);
-diff --git a/include/linux/intel_tcc.h b/include/linux/intel_tcc.h
-new file mode 100644
-index 000000000000..f422612c28d6
---- /dev/null
-+++ b/include/linux/intel_tcc.h
-@@ -0,0 +1,18 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ *  header for Intel TCC (thermal control circuitry) library
-+ *
-+ *  Copyright (C) 2022  Intel Corporation.
-+ */
-+
-+#ifndef __INTEL_TCC_H__
-+#define __INTEL_TCC_H__
-+
-+#include <linux/types.h>
-+
-+int intel_tcc_get_tjmax(int cpu);
-+int intel_tcc_get_offset(int cpu);
-+int intel_tcc_set_offset(int cpu, int offset);
-+int intel_tcc_get_temp(int cpu, bool pkg);
-+
-+#endif /* __INTEL_TCC_H__ */
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/pci.h>
+@@ -68,54 +69,17 @@ static const struct attribute_group power_limit_attribute_group = {
+ 	.name = "power_limits"
+ };
+ 
+-static int tcc_get_offset(void)
+-{
+-	u64 val;
+-	int err;
+-
+-	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
+-	if (err)
+-		return err;
+-
+-	return (val >> 24) & 0x3f;
+-}
+-
+ static ssize_t tcc_offset_degree_celsius_show(struct device *dev,
+ 					      struct device_attribute *attr,
+ 					      char *buf)
+ {
+-	int tcc;
+-
+-	tcc = tcc_get_offset();
+-	if (tcc < 0)
+-		return tcc;
++	int offset;
+ 
+-	return sprintf(buf, "%d\n", tcc);
+-}
+-
+-static int tcc_offset_update(unsigned int tcc)
+-{
+-	u64 val;
+-	int err;
+-
+-	if (tcc > 63)
+-		return -EINVAL;
+-
+-	err = rdmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, &val);
+-	if (err)
+-		return err;
+-
+-	if (val & BIT(31))
+-		return -EPERM;
+-
+-	val &= ~GENMASK_ULL(29, 24);
+-	val |= (tcc & 0x3f) << 24;
+-
+-	err = wrmsrl_safe(MSR_IA32_TEMPERATURE_TARGET, val);
+-	if (err)
+-		return err;
++	offset = intel_tcc_get_offset(-1);
++	if (offset < 0)
++		return offset;
+ 
+-	return 0;
++	return sprintf(buf, "%d\n", offset);
+ }
+ 
+ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+@@ -136,7 +100,7 @@ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+ 	if (kstrtouint(buf, 0, &tcc))
+ 		return -EINVAL;
+ 
+-	err = tcc_offset_update(tcc);
++	err = intel_tcc_set_offset(-1, tcc);
+ 	if (err)
+ 		return err;
+ 
+@@ -145,66 +109,25 @@ static ssize_t tcc_offset_degree_celsius_store(struct device *dev,
+ 
+ static DEVICE_ATTR_RW(tcc_offset_degree_celsius);
+ 
+-static int stored_tjmax; /* since it is fixed, we can have local storage */
+-
+-static int get_tjmax(void)
+-{
+-	u32 eax, edx;
+-	u32 val;
+-	int err;
+-
+-	err = rdmsr_safe(MSR_IA32_TEMPERATURE_TARGET, &eax, &edx);
+-	if (err)
+-		return err;
+-
+-	val = (eax >> 16) & 0xff;
+-	if (val)
+-		return val;
+-
+-	return -EINVAL;
+-}
+-
+-static int read_temp_msr(int *temp)
++static int proc_thermal_get_zone_temp(struct thermal_zone_device *zone,
++					 int *temp)
+ {
+ 	int cpu;
+-	u32 eax, edx;
+-	int err;
+-	unsigned long curr_temp_off = 0;
++	int curr_temp;
+ 
+ 	*temp = 0;
+ 
+ 	for_each_online_cpu(cpu) {
+-		err = rdmsr_safe_on_cpu(cpu, MSR_IA32_THERM_STATUS, &eax,
+-					&edx);
+-		if (err)
+-			goto err_ret;
+-		else {
+-			if (eax & 0x80000000) {
+-				curr_temp_off = (eax >> 16) & 0x7f;
+-				if (!*temp || curr_temp_off < *temp)
+-					*temp = curr_temp_off;
+-			} else {
+-				err = -EINVAL;
+-				goto err_ret;
+-			}
+-		}
++		curr_temp = intel_tcc_get_temp(cpu, false);
++		if (curr_temp < 0)
++			return curr_temp;
++		if (!*temp || curr_temp > *temp)
++			*temp = curr_temp;
+ 	}
+ 
+-	return 0;
+-err_ret:
+-	return err;
+-}
+-
+-static int proc_thermal_get_zone_temp(struct thermal_zone_device *zone,
+-					 int *temp)
+-{
+-	int ret;
+-
+-	ret = read_temp_msr(temp);
+-	if (!ret)
+-		*temp = (stored_tjmax - *temp) * 1000;
++	*temp *= 1000;
+ 
+-	return ret;
++	return 0;
+ }
+ 
+ static struct thermal_zone_device_ops proc_thermal_local_ops = {
+@@ -302,8 +225,7 @@ int proc_thermal_add(struct device *dev, struct proc_thermal_device *proc_priv)
+ 	status = acpi_evaluate_integer(adev->handle, "_TMP", NULL, &tmp);
+ 	if (ACPI_FAILURE(status)) {
+ 		/* there is no _TMP method, add local method */
+-		stored_tjmax = get_tjmax();
+-		if (stored_tjmax > 0)
++		if (intel_tcc_get_tjmax(-1) > 0)
+ 			ops = &proc_thermal_local_ops;
+ 	}
+ 
+@@ -356,7 +278,7 @@ static int tcc_offset_save = -1;
+ 
+ int proc_thermal_suspend(struct device *dev)
+ {
+-	tcc_offset_save = tcc_get_offset();
++	tcc_offset_save = intel_tcc_get_offset(-1);
+ 	if (tcc_offset_save < 0)
+ 		dev_warn(dev, "failed to save offset (%d)\n", tcc_offset_save);
+ 
+@@ -373,7 +295,7 @@ int proc_thermal_resume(struct device *dev)
+ 
+ 	/* Do not update if saving failed */
+ 	if (tcc_offset_save >= 0)
+-		tcc_offset_update(tcc_offset_save);
++		intel_tcc_set_offset(-1, tcc_offset_save);
+ 
+ 	return 0;
+ }
+@@ -460,6 +382,7 @@ void proc_thermal_mmio_remove(struct pci_dev *pdev, struct proc_thermal_device *
+ }
+ EXPORT_SYMBOL_GPL(proc_thermal_mmio_remove);
+ 
++MODULE_IMPORT_NS(INTEL_TCC);
+ MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
+ MODULE_DESCRIPTION("Processor Thermal Reporting Device Driver");
+ MODULE_LICENSE("GPL v2");
 -- 
 2.25.1
 
