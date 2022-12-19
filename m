@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF613650EC3
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Dec 2022 16:39:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D7A650EC4
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Dec 2022 16:39:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231370AbiLSPjX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Dec 2022 10:39:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
+        id S231739AbiLSPjZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Dec 2022 10:39:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232299AbiLSPjU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 10:39:20 -0500
+        with ESMTP id S232341AbiLSPjW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 10:39:22 -0500
 Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E70911815
-        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 07:39:19 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4028411838
+        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 07:39:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671464359; x=1703000359;
+  t=1671464361; x=1703000361;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=sHoWlnZF2lxigqX1MPRD5MgEFvKhfKxiXtw5H2qwB8k=;
-  b=gFGOp3b5lckexdj3CU0p13/KpoqlQa2VX9yF4KHpnxPv7niSUpGKb/+Z
-   /CCM1Z8wq1ud4tw9qe7zmWwBv6fvFdICzi7VCmxFjerB9s3fApGLaz40j
-   ZgFUgwoO4jLzSx3vBk9o9YOqMSPDSG0/T+zzbsa+GtCffmhk8VIxbxr/u
-   zAlYV//95R7g1Kk5P1nRDzbpALloDmXGYgfhXlwNZ9PaXy25iWe9XH3MC
-   t3j50pvIKu1dUV025FREeTTBwrPcAj0l3v9lrmvyGBM403Ha3VlC3AXl3
-   v6T9bIoZY2AlrrW0SZqVeQPII3mIrY1PUZrKL5bDx1gNQRESgEYR7W7zk
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307051265"
+  bh=z54DaDYRtkOEulF9x0NJLtJ7Ea+wxw4HXszOh07R6Qg=;
+  b=iUks4BU1LFRz2ER2JQ9rsk2O6/qmHOU+zBmtCXbuEwKLXy+M8pjRs4AM
+   n5OrcQwtClM4Yhkd1LwprQMwWUOnqAPLCRA9pDgADZQs3cGCSGExfiSHv
+   11aJZKmRSdr2gYe/9xtyNcKOyyTnBJ8MZbhv+yFvtCnhGesDihQhuJqFH
+   czkGFmU4cd7pxvy/90MkchA8UEZa/wDi6NEKh3RIdRL1ZAsCDIv1HZrTS
+   Mam8WgP4js0G1VlPBIaFtF+EWOQmhTGYu8diyXboEJ09YAmAHVCwtD29z
+   DCNNQNWVrGrSM+hJm2IEhZXo0txO9+G/NhhV9lJ2Xzu3MHfFX/J25dtTt
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="307051276"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="307051265"
+   d="scan'208";a="307051276"
 Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 07:39:18 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2022 07:39:20 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="774960348"
+X-IronPort-AV: E=McAfee;i="6500,9779,10566"; a="774960355"
 X-IronPort-AV: E=Sophos;i="5.96,255,1665471600"; 
-   d="scan'208";a="774960348"
+   d="scan'208";a="774960355"
 Received: from power-sh.sh.intel.com ([10.239.183.7])
-  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 07:39:17 -0800
+  by orsmga004.jf.intel.com with ESMTP; 19 Dec 2022 07:39:19 -0800
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     rjw@rjwysocki.net, daniel.lezcano@linaro.org
 Cc:     linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
         rui.zhang@intel.com
-Subject: [PATCH V2 5/6] thermal/x86_pkg_temp_thermal: Use Intel TCC library
-Date:   Mon, 19 Dec 2022 23:46:19 +0800
-Message-Id: <20221219154620.3630-6-rui.zhang@intel.com>
+Subject: [PATCH V2 6/6] thermal/x86_pkg_temp_thermal: Add support for handling dynamic tjmax
+Date:   Mon, 19 Dec 2022 23:46:20 +0800
+Message-Id: <20221219154620.3630-7-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20221219154620.3630-1-rui.zhang@intel.com>
 References: <20221219154620.3630-1-rui.zhang@intel.com>
@@ -58,107 +58,116 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Cleanup the code by using Intel TCC library for TCC (Thermal Control
-Circuitry) MSR access.
+Tjmax value retrieved from MSR_IA32_TEMPERATURE_TARGET can be changed at
+runtime when the Intel SST-PP (Intel Speed Select Technology -
+Performance Profile) level is changed.
+
+Enhance the code to use updated tjmax when programming the thermal
+interrupt thresholds.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/thermal/intel/Kconfig                |  1 +
- drivers/thermal/intel/x86_pkg_temp_thermal.c | 44 ++++++--------------
- 2 files changed, 14 insertions(+), 31 deletions(-)
+ drivers/thermal/intel/x86_pkg_temp_thermal.c | 30 +++++++++++++-------
+ 1 file changed, 19 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index dafdb3dd3fc7..fd41c810629b 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -21,6 +21,7 @@ config X86_PKG_TEMP_THERMAL
- 	depends on X86_THERMAL_VECTOR
- 	select THERMAL_GOV_USER_SPACE
- 	select THERMAL_WRITABLE_TRIPS
-+	select INTEL_TCC
- 	default m
- 	help
- 	  Enable this to register CPU digital sensor for package temperature as
 diff --git a/drivers/thermal/intel/x86_pkg_temp_thermal.c b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-index a0e234fce71a..416ff23da4de 100644
+index 416ff23da4de..954cbceaf786 100644
 --- a/drivers/thermal/intel/x86_pkg_temp_thermal.c
 +++ b/drivers/thermal/intel/x86_pkg_temp_thermal.c
-@@ -7,6 +7,7 @@
+@@ -49,7 +49,6 @@ MODULE_PARM_DESC(notify_delay_ms,
+ struct zone_device {
+ 	int				cpu;
+ 	bool				work_scheduled;
+-	u32				tj_max;
+ 	u32				msr_pkg_therm_low;
+ 	u32				msr_pkg_therm_high;
+ 	struct delayed_work		work;
+@@ -125,7 +124,7 @@ static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+ 	struct zone_device *zonedev = tzd->devdata;
+ 	unsigned long thres_reg_value;
+ 	u32 mask, shift, eax, edx;
+-	int ret;
++	int tj_max, ret;
  
- #include <linux/module.h>
- #include <linux/init.h>
-+#include <linux/intel_tcc.h>
- #include <linux/err.h>
- #include <linux/param.h>
- #include <linux/device.h>
-@@ -104,38 +105,18 @@ static struct zone_device *pkg_temp_thermal_get_dev(unsigned int cpu)
- 	return NULL;
- }
+ 	if (trip >= MAX_NUMBER_OF_TRIPS)
+ 		return -EINVAL;
+@@ -138,6 +137,11 @@ static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+ 		shift = THERM_SHIFT_THRESHOLD0;
+ 	}
  
--/*
--* tj-max is interesting because threshold is set relative to this
--* temperature.
--*/
--static int get_tj_max(int cpu, u32 *tj_max)
--{
--	u32 eax, edx, val;
--	int err;
--
--	err = rdmsr_safe_on_cpu(cpu, MSR_IA32_TEMPERATURE_TARGET, &eax, &edx);
--	if (err)
--		return err;
--
--	val = (eax >> 16) & 0xff;
--	*tj_max = val * 1000;
--
--	return val ? 0 : -EINVAL;
--}
--
- static int sys_get_curr_temp(struct thermal_zone_device *tzd, int *temp)
++	tj_max = intel_tcc_get_tjmax(zonedev->cpu);
++	if (tj_max < 0)
++		return tj_max;
++	tj_max *= 1000;
++
+ 	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
+ 			   &eax, &edx);
+ 	if (ret < 0)
+@@ -145,7 +149,7 @@ static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+ 
+ 	thres_reg_value = (eax & mask) >> shift;
+ 	if (thres_reg_value)
+-		*temp = zonedev->tj_max - thres_reg_value * 1000;
++		*temp = tj_max - thres_reg_value * 1000;
+ 	else
+ 		*temp = THERMAL_TEMP_INVALID;
+ 	pr_debug("sys_get_trip_temp %d\n", *temp);
+@@ -158,9 +162,14 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
  {
  	struct zone_device *zonedev = tzd->devdata;
--	u32 eax, edx;
-+	int val;
+ 	u32 l, h, mask, shift, intr;
+-	int ret;
++	int tj_max, ret;
  
--	rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_STATUS,
--			&eax, &edx);
--	if (eax & 0x80000000) {
--		*temp = zonedev->tj_max - ((eax >> 16) & 0x7f) * 1000;
--		pr_debug("sys_get_curr_temp %d\n", *temp);
--		return 0;
--	}
--	return -EINVAL;
-+	val = intel_tcc_get_temp(zonedev->cpu, true);
-+	if (val < 0)
-+		return val;
+-	if (trip >= MAX_NUMBER_OF_TRIPS || temp >= zonedev->tj_max)
++	tj_max = intel_tcc_get_tjmax(zonedev->cpu);
++	if (tj_max < 0)
++		return tj_max;
++	tj_max *= 1000;
 +
-+	*temp = val * 1000;
-+	pr_debug("sys_get_curr_temp %d\n", *temp);
-+	return 0;
- }
++	if (trip >= MAX_NUMBER_OF_TRIPS || temp >= tj_max)
+ 		return -EINVAL;
  
- static int sys_get_trip_temp(struct thermal_zone_device *tzd,
-@@ -345,9 +326,9 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
+ 	ret = rdmsr_on_cpu(zonedev->cpu, MSR_IA32_PACKAGE_THERM_INTERRUPT,
+@@ -185,7 +194,7 @@ sys_set_trip_temp(struct thermal_zone_device *tzd, int trip, int temp)
+ 	if (!temp) {
+ 		l &= ~intr;
+ 	} else {
+-		l |= (zonedev->tj_max - temp)/1000 << shift;
++		l |= (tj_max - temp)/1000 << shift;
+ 		l |= intr;
+ 	}
+ 
+@@ -312,7 +321,7 @@ static int pkg_thermal_notify(u64 msr_val)
+ static int pkg_temp_thermal_device_add(unsigned int cpu)
+ {
+ 	int id = topology_logical_die_id(cpu);
+-	u32 tj_max, eax, ebx, ecx, edx;
++	u32 eax, ebx, ecx, edx;
+ 	struct zone_device *zonedev;
+ 	int thres_count, err;
+ 
+@@ -326,9 +335,9 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
  
  	thres_count = clamp_val(thres_count, 0, MAX_NUMBER_OF_TRIPS);
  
--	err = get_tj_max(cpu, &tj_max);
--	if (err)
--		return err;
-+	tj_max = intel_tcc_get_tjmax(cpu);
-+	if (tj_max < 0)
-+		return tj_max;
+-	tj_max = intel_tcc_get_tjmax(cpu);
+-	if (tj_max < 0)
+-		return tj_max;
++	err = intel_tcc_get_tjmax(cpu);
++	if (err < 0)
++		return err;
  
  	zonedev = kzalloc(sizeof(*zonedev), GFP_KERNEL);
  	if (!zonedev)
-@@ -536,6 +517,7 @@ static void __exit pkg_temp_thermal_exit(void)
- }
- module_exit(pkg_temp_thermal_exit)
+@@ -336,7 +345,6 @@ static int pkg_temp_thermal_device_add(unsigned int cpu)
  
-+MODULE_IMPORT_NS(INTEL_TCC);
- MODULE_DESCRIPTION("X86 PKG TEMP Thermal Driver");
- MODULE_AUTHOR("Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>");
- MODULE_LICENSE("GPL v2");
+ 	INIT_DELAYED_WORK(&zonedev->work, pkg_temp_thermal_threshold_work_fn);
+ 	zonedev->cpu = cpu;
+-	zonedev->tj_max = tj_max;
+ 	zonedev->tzone = thermal_zone_device_register("x86_pkg_temp",
+ 			thres_count,
+ 			(thres_count == MAX_NUMBER_OF_TRIPS) ? 0x03 : 0x01,
 -- 
 2.25.1
 
