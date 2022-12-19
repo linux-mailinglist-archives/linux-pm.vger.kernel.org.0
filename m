@@ -2,121 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF305650E26
-	for <lists+linux-pm@lfdr.de>; Mon, 19 Dec 2022 15:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B869B650E67
+	for <lists+linux-pm@lfdr.de>; Mon, 19 Dec 2022 16:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232215AbiLSO7O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Dec 2022 09:59:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S232842AbiLSPPP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Dec 2022 10:15:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232221AbiLSO6c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 09:58:32 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0987C384;
-        Mon, 19 Dec 2022 06:57:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IxbTudA4feCy7V4StycL6z3Gw08KgIGquvj8lJQM3zk=; b=MjHPsuR/gNwPkXqJiBXeujMeaF
-        MbcU+ntQeEnKkeD8AIYI5Om7Zla+mCZpC1yZu2/IqzTf47X8cKwI+esGRtLusDM4jWw67zF+0ZBek
-        5QZcF4CcHPoUgkKj55+Aj9daMz0U1XNluJouvy/rOoXUEGmV9U+bAkMSGA8zww1aJpKr2AZkpGsIV
-        PcsJRKSZl/bLvAdWKdD8t3JVWV2HHGdJLFKWHd8fkVjy3p2OTtqj+xfqoCdi70KUcNZ/1YI6WN5RB
-        Q+Hkj1sX772uV3M9jjvlw5re2MPAO7GjmZLOeLTmCdQmKZU8Q1h+wnvVDe05b8p1J/q3t3VSYGOwn
-        gfNMjmVg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1p7HZZ-00CdMu-17;
-        Mon, 19 Dec 2022 14:56:57 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B53E8300348;
-        Mon, 19 Dec 2022 15:56:56 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 92EC620A1489F; Mon, 19 Dec 2022 15:56:56 +0100 (CET)
-Date:   Mon, 19 Dec 2022 15:56:56 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        len.brown@intel.com, Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [RFC/RFT PATCH 1/2] sched/core: Check and schedule ksoftirq
-Message-ID: <Y6B7uOBjzYrLhmOu@hirez.programming.kicks-ass.net>
-References: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
- <20221215184300.1592872-2-srinivas.pandruvada@linux.intel.com>
- <Y5xURk3CkzhIjmmq@hirez.programming.kicks-ass.net>
- <20221216220748.GA1967978@lothringen>
- <Y6BMAp6A731F8ZL4@hirez.programming.kicks-ass.net>
- <Y6BPLoHJNWjjMUv8@linutronix.de>
+        with ESMTP id S232829AbiLSPPN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 10:15:13 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 752F7DF6E
+        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 07:15:12 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id q6so14075528lfm.10
+        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 07:15:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBscDX32Qyn/0CwIAUKmTYxHhuxi4NwStBcWmmpiMug=;
+        b=zFNgrdyF+mttnjY4vXjQS7/2/LOBBOMHjS4QQ1GQbSuki5CJHo1Sc7vndREPKidnCJ
+         W52Uiaf5xR/3oRbV4gtSZjKNFGnAIz0KnLbAlhSTpGewIrVz5WYC8LI07G/K1i0lCW5n
+         HFIMShYHlST+6CBpC6TxoNsPBLs14k7BSeaywzbVWHMmUiZXtgIsNowRmTtxSWFOhY/M
+         SBwRlymqHmjH4Il/F4uADvtt/6aj6Vl6onDta5RS/Ez8DmrpXHXRzGhARbJn7VOXXnfO
+         mGakFNEnt86QOoBuSGd79CM6yRoysSWFOr/4VLZBrR4Yk5MYhR9C0GnfKKx8p5128QrB
+         jRCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UBscDX32Qyn/0CwIAUKmTYxHhuxi4NwStBcWmmpiMug=;
+        b=di6RvyRxUiM7ta/ZXRpqYKr8XjNPOilMqm9oIPHD+ZHFf9BJGSzOHfehWwMaB37dWc
+         jrqQCtf3/MjBtOmIq81MiRQhHRd/MwFX1bsbOK3kSnc5JQegC4KywdX4aZuSD0+4A1kv
+         LiUx9t3BwcKrzKOmJxqQgNkDzdEDo6XNw2KZ6dv0RyQg0UpwBWbl+Gb0ro1ioSBnd1PT
+         ldcj1+YCsPu7TOQRmm/TVcVwflslB0yHKANLeMfo4P2sW4nrwGlO+fYLhHq2JrBNHL2N
+         EcgikcZHaOtm8CPJ4PtAX8Hj8YcC0PBlVaqdqqtMQG0Bk2bG7XCa89POBlpA7oR/+V/h
+         AXsw==
+X-Gm-Message-State: ANoB5pkY9XeCdwkIRuBQHmlbnXaluKil4dHNjzxHL0eLt3i7eZFpUGCj
+        PUgpgvfk0HHLb3ARjCuLbawmFQ==
+X-Google-Smtp-Source: AA0mqf5UKUVcABReRnF5CXRK5v5ErUJaXMBrfO1u9voQcZQt9jDNWPYiCt5ftYFKFKtZJKWhskqvYA==
+X-Received: by 2002:a05:6512:c09:b0:4b6:e64c:aec6 with SMTP id z9-20020a0565120c0900b004b6e64caec6mr12127074lfu.63.1671462910742;
+        Mon, 19 Dec 2022 07:15:10 -0800 (PST)
+Received: from krzk-bin.NAT.warszawa.vectranet.pl (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id e1-20020a05651236c100b004bd8534ebbcsm1109894lfs.37.2022.12.19.07.15.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Dec 2022 07:15:10 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: [PATCH v2 0/5] PM: Fixes for Realtime systems
+Date:   Mon, 19 Dec 2022 16:14:58 +0100
+Message-Id: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y6BPLoHJNWjjMUv8@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 12:46:54PM +0100, Sebastian Andrzej Siewior wrote:
-> On 2022-12-19 12:33:22 [+0100], Peter Zijlstra wrote:
-> > ksoftirq is typically a CFS task while idle injection is required to be
-> > a FIFO (typically FIFO-1) task -- so that would require lifting
-> > ksoftirqd to FIFO and that has other problems.
-> > 
-> > I'm guessing the problem case is where idle injection comes in while
-> > ksoftirq is running (and preempted), because in that case you cannot run
-> > the softirq stuff in-place.
-> > 
-> > The 'right' thing to do would be to PI boost ksoftirqd in that case I
-> > suppose. Perhaps something like so, it would boost ksoftirq when it's
-> > running, and otherwise runs the ksoftirqd thing in-situ.
-> > 
-> > I've not really throught hard about this though, so perhaps I completely
-> > wrecked things.
-> 
-> I don't know why you intend to run ksoftirqd but in general it breaks RT
+Hi,
 
-So the upstream problem is where softirq is punted to ksoftirq (obvious
-from hardirq tail) and idle-injection comes in and either:
+The goal is to make Linux kernel PM / PM domains / cpuidle friendlier for
+Realtime systsems (PREEMPT_RT).  Realtime changes regular spinlocks into
+sleeping primitives, thus other parts of the code must be ready for it.
 
- - runs before ksoftirq had a chance to run, or
- - preempts ksoftirqd.
+Changes since v1
+================
+1. Patch #1: Add missing WARN for parent domain
+2. New patches 3-5 for other issues encountered with PREEMPT_RT.
 
-In both cases we'll appear to go idle with softirqs pending -- which
-triggers a pesky warning, because obviously undesirable.
+Best regards,
+Krzysztof
 
-In the first case we can run 'ksoftirqd' in-context, but then need to
-serialize against the actual ksoftirqd. In the second case we need to
-serialize against ksoftirqd and ensure it is complete before proceeding
-with going 'idle'.
+---
 
-Since idle-injection runs FIFO and ksoftirqd typically does not, some
-form of PI is required.
+Cc: Adrien Thierry <athierry@redhat.com>
+Cc: Brian Masney <bmasney@redhat.com>
+Cc: linux-rt-users@vger.kernel.org
 
-> left and right and we attempt to avoid running ksoftirqd as much as
-> possible. If it runs and you go and boost it then it probably gets even
-> worse from RT point of view.
+Krzysztof Kozlowski (5):
+  PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
+  cpuidle: psci: Mark as PREEMPT_RT safe
+  cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
+  PM: Allow calling dev_pm_domain_set() with raw spinlock
+  PM: domains: Do not call device_pm_check_callbacks() when holding
+    genpd_lock()
 
-So if you never run ksoftirqd, the above problem doesn't happen. If
-ksoftirqd *can* run, you still need to deal with it somehow. Boosting
-ksoftirqd to whatever priority the idle-injection thread has should not
-be worse than anything the idle-injection already does, no?
+ drivers/base/power/common.c           | 27 ++++++++++-
+ drivers/base/power/domain.c           | 65 +++++++++++++++++++++++++--
+ drivers/cpuidle/cpuidle-psci-domain.c |  3 +-
+ drivers/cpuidle/cpuidle-psci.c        |  4 +-
+ include/linux/pm_domain.h             | 16 +++++++
+ 5 files changed, 107 insertions(+), 8 deletions(-)
 
-Specifically, without idle-injection involved the patch as proposed (+-
-fixes required to make it compile and work) should be a no-op.
-
-> ksoftirqd runs softirqs from hardirq context. Everything else is handled
-> in is handled within local-bh-disable+enable loop. We already have have
-> the boost-ksoftird hammer which is the per-CPU BLK called
-> local_bh_disable(). In general everything should be moved out of it.
-> For timers we have the ktimerd thread which needs clean up. 
-
+-- 
+2.34.1
 
