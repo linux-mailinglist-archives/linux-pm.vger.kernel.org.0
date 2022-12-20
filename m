@@ -2,172 +2,94 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D776665269B
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 19:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 402A1652811
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 21:51:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiLTSwo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Dec 2022 13:52:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S233781AbiLTUv3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Dec 2022 15:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbiLTSwn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 13:52:43 -0500
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F332DF06;
-        Tue, 20 Dec 2022 10:52:41 -0800 (PST)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        with ESMTP id S229684AbiLTUv2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 15:51:28 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C22C81DDF4;
+        Tue, 20 Dec 2022 12:51:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=utF2L97VTLzBvBE0W7STX0hn0LhXyXYGIWEv+sIJxEw=; b=bUQ67hcytEz9bTHS66gO5YXbS2
+        nZKStusnH31EMAAIxxg0Sqo4hNxktWHcY1H0sSPBzPZXI07VthxrU2+UvNgfZGbLmaOhLF71eSTLu
+        AvZ+uyH2nbkV4ezLjfHgwXokdvwYg+eTbParlPlnsY3rZPpPN7D9HDS95JDcqTeRnA29hKoIrhtkr
+        aZPYLyIYe+G7E66U/hnQWjJr2ziv0h4VH6hHCgwGVlbajSRU6STkwRuiBchfv+jgzdvelfpdYabzC
+        rj4zVZBP1uD6o7yz9CUtZRirDtzuHV79rQGfW3OJUB4LqvxAJUEie5nvEgfP4hB1dXKA27sutfhDi
+        nphYSDbw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1p7ja5-002AbV-4e; Tue, 20 Dec 2022 20:51:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Nc5Kv36mdz9sW1;
-        Tue, 20 Dec 2022 19:52:35 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1671562355;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mEIhlEMRgSrhEhC6C4CxZMy+wH2/EZjfbZsB0XqjGr8=;
-        b=kypl6NEAt1bO3rlLFxV+xzGLR2bNiC/b8dIHDFzkSe7gkoKl6x65eAXmNfgRsuipiso3yq
-        AuXZH/MCUI72wrQoxESe1XLRAZsqmpWe1Iy03ASnjzv1N1aWu5sqKN+5Qa6XYKGJbKhTjS
-        sqmj4SJhrUDQoxEVSBaly19mQgjHv5IPpnnhc5jziYG5QrQK903tPjxvjRlLH63itOCVVf
-        663OrLNzC4VsRK9w2u8lejZHM94oP2dcrMs9X75QJhKD0Oge7njXY1cz3bCWeI6h5womcW
-        EyKBC4vWTQCS6LdTCTjdu6kx60m40t5F/U8CFgy9+aMJmXDzfSbR5Ra/qJVUNQ==
-Message-ID: <7602a0c7-df8c-5d6d-401d-55620d28c584@mailbox.org>
-Date:   Tue, 20 Dec 2022 18:52:32 +0000
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EF6D7300E86;
+        Tue, 20 Dec 2022 21:51:09 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C5D2B20F04E94; Tue, 20 Dec 2022 21:51:09 +0100 (CET)
+Date:   Tue, 20 Dec 2022 21:51:09 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, len.brown@intel.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [RFC/RFT PATCH 1/2] sched/core: Check and schedule ksoftirq
+Message-ID: <Y6IgPVacKInH9tgv@hirez.programming.kicks-ass.net>
+References: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
+ <20221215184300.1592872-2-srinivas.pandruvada@linux.intel.com>
+ <Y5xURk3CkzhIjmmq@hirez.programming.kicks-ass.net>
+ <20221216220748.GA1967978@lothringen>
+ <Y6BMAp6A731F8ZL4@hirez.programming.kicks-ass.net>
+ <5ae0d53990c29aa25648cbf32ef3b16e9bec911c.camel@linux.intel.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 00/13] Implement AMD Pstate EPP Driver
-Content-Language: en-US
-From:   Tor Vic <torvic9@mailbox.org>
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        Mario.Limonciello@amd.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221219064042.661122-1-perry.yuan@amd.com>
- <73b77acd-813a-458b-61e2-87116720cc38@mailbox.org>
-In-Reply-To: <73b77acd-813a-458b-61e2-87116720cc38@mailbox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-META: sm93bp8fq3sn8gq5spgrwj9wrs4osy43
-X-MBO-RS-ID: 6afee3298071c47f3a0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ae0d53990c29aa25648cbf32ef3b16e9bec911c.camel@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Dec 19, 2022 at 02:54:55PM -0800, srinivas pandruvada wrote:
 
-On 20.12.22 18:13, Tor Vic wrote:
-> 
-> On 19.12.22 06:40, Perry Yuan wrote:
->> Hi all,
->>
->> This patchset implements one new AMD CPU frequency driver
->> `amd-pstate-epp` instance for better performance and power control.
->> CPPC has a parameter called energy preference performance (EPP).
->> The EPP is used in the CCLK DPM controller to drive the frequency that 
->> a core
->> is going to operate during short periods of activity.
->> EPP values will be utilized for different OS profiles (balanced, 
->> performance, power savings).
->>
-> 
-> Using v8 and clang-15 on 6.1 I get:
-> 
+> But after ksoftirqd_run_end(), which will renable local irq, this may
+> further cause more soft irq pending. Here RCU soft irq entry continues
 
-Got it.
-Mario was right. INTEL_PSTATE must be selected, it has become a dependency.
+Right you are.. what about if we spell the idle.c thing like so instead?
 
-That doesn't seem correct.
+Then we repeat the softirq thing every time we drop out of the idle loop
+for a reschedule.
 
-With it selected, it builds just fine. Not tested though.
-
-> ---
-> ld.lld: error: undefined symbol: energy_perf_strings
->  >>> referenced by amd-pstate.c:789 
-> (/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:789)
->  >>>               vmlinux.o:(show_energy_performance_preference)
->  >>> referenced by amd-pstate.c:768 
-> (/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:768)
->  >>>               vmlinux.o:(store_energy_performance_preference)
->  >>> referenced by amd-pstate.c:749 
-> (/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:749)
->  >>>               
-> vmlinux.o:(show_energy_performance_available_preferences)
->  >>> referenced 1 more times
->  >>> did you mean: energy_perf_strings
->  >>> defined in: vmlinux.o
-> 
-> ld.lld: error: undefined symbol: epp_values
->  >>> referenced by amd-pstate.c:189 
-> (/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:189)
->  >>>               vmlinux.o:(store_energy_performance_preference)
-> ---
-> 
-> and a few warnings:
-> 
-> ---
-> drivers/cpufreq/amd-pstate.c:966:6: warning: variable 'ret' is used 
-> uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->          if (rc)
->              ^~
-> drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
->          return ret;
->                 ^~~
-> drivers/cpufreq/amd-pstate.c:966:2: note: remove the 'if' if its 
-> condition is always false
->          if (rc)
->          ^~~~~~~
-> drivers/cpufreq/amd-pstate.c:962:6: warning: variable 'ret' is used 
-> uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->          if (!dev)
->              ^~~~
-> drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
->          return ret;
->                 ^~~
-> drivers/cpufreq/amd-pstate.c:962:2: note: remove the 'if' if its 
-> condition is always false
->          if (!dev)
->          ^~~~~~~~~
-> drivers/cpufreq/amd-pstate.c:949:66: note: initialize the variable 'ret' 
-> to silence this warning
->          int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
->                                                                          ^
-> 
->   = 0
-> drivers/cpufreq/amd-pstate.c:996:52: warning: variable 'value' is 
-> uninitialized when used here [-Wuninitialized]
->          cpudata->epp_cached = amd_pstate_get_epp(cpudata, value);
->                                                            ^~~~~
-> drivers/cpufreq/amd-pstate.c:953:11: note: initialize the variable 
-> 'value' to silence this warning
->          u64 value;
->                   ^
->                    = 0
-> drivers/cpufreq/amd-pstate.c:1085:6: warning: variable 'epp' is used 
-> uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
->          if (cpudata->epp_policy == cpudata->policy)
->              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/cpufreq/amd-pstate.c:1110:30: note: uninitialized use occurs here
->          amd_pstate_set_epp(cpudata, epp);
->                                      ^~~
-> drivers/cpufreq/amd-pstate.c:1085:2: note: remove the 'if' if its 
-> condition is always false
->          if (cpudata->epp_policy == cpudata->policy)
->          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> drivers/cpufreq/amd-pstate.c:1064:9: note: initialize the variable 'epp' 
-> to silence this warning
->          s16 epp;
->                 ^
->                  = 0
-> ---
-> 
-> Cheers,
-> 
-> Tor Vic
-> 
+diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+index f26ab2675f7d..6dce49813bcc 100644
+--- a/kernel/sched/idle.c
++++ b/kernel/sched/idle.c
+@@ -381,8 +381,13 @@ void play_idle_precise(u64 duration_ns, u64 latency_ns)
+ 	hrtimer_start(&it.timer, ns_to_ktime(duration_ns),
+ 		      HRTIMER_MODE_REL_PINNED_HARD);
+ 
+-	while (!READ_ONCE(it.done))
++	while (!READ_ONCE(it.done)) {
++		rt_mutex_lock(&per_cpu(ksoftirq_lock, cpu));
++		__run_ksoftirqd(smp_processor_id());
++		rt_mutex_unlock(&per_cpu(ksoftirq_lock, cpu));
++
+ 		do_idle();
++	}
+ 
+ 	cpuidle_use_deepest_state(0);
+ 	current->flags &= ~PF_IDLE;
