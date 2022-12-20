@@ -2,138 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4589E652187
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 14:27:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DA2B652191
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 14:29:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbiLTN1o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Dec 2022 08:27:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S233256AbiLTN3v (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Dec 2022 08:29:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233604AbiLTN1L (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 08:27:11 -0500
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80F21AF1E;
-        Tue, 20 Dec 2022 05:26:50 -0800 (PST)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2BKCZscx021683;
-        Tue, 20 Dec 2022 08:26:47 -0500
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3mk9nd1798-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Dec 2022 08:26:47 -0500
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2BKDQkMp044123
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 20 Dec 2022 08:26:46 -0500
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 20 Dec 2022 08:26:45 -0500
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 20 Dec 2022 08:26:45 -0500
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 20 Dec 2022 08:26:45 -0500
-Received: from IST-LT-42339.ad.analog.com (IST-LT-42339.ad.analog.com [10.117.192.221])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2BKDNoP8010583;
-        Tue, 20 Dec 2022 08:26:34 -0500
-From:   Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-To:     <lee@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <sre@kernel.org>,
-        <lgirdwood@gmail.com>, <broonie@kernel.org>
-CC:     <Zeynep.Arslanbenzer@analog.com>, <Nurettin.Bolucu@analog.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-Subject: [PATCH 6/6] dt-bindings: regulator: add MAX77659 regulator binding
-Date:   Tue, 20 Dec 2022 16:22:50 +0300
-Message-ID: <20221220132250.19383-7-Zeynep.Arslanbenzer@analog.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
-References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+        with ESMTP id S233657AbiLTN3Z (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 08:29:25 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBBE61A21C
+        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 05:29:16 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3c090251d59so169016447b3.4
+        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 05:29:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=oSclea5t/EHK831/eF1SrpTE7OWI2NY6v81C77Yofd4=;
+        b=f46lShXy84IxgyYF2vHTjL6qsCkkxy1vWCjsdPNZic65rYaQvXJLtOt5Bz4mBCeC5x
+         9aQLk6Nal4p+JV+OTbnsKIlKrNhtkdexFui3haEZs0Z/XDUcY8KJGQI9BYqM8Z1wpHtD
+         1Ll9L4tUVkqh3Ta8yMBBnlEmWfakx5sL/ZoH8JosDnjBWUb03exbzacffGN5e5ZT1/8N
+         Wmf25PmRGheEX8o3zqajCMCj6V0ilcsOExbQHRSyQtoXdT0Ku14PkNJnECGgUBX0Myrz
+         dFwMZWUnChHZFC2UfZ2ZpTr3gQkSyyci96BvqQPjFcgJf8wQnHrx7ZhKjE294j15Hxge
+         8o7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=oSclea5t/EHK831/eF1SrpTE7OWI2NY6v81C77Yofd4=;
+        b=w3UXHn9IxHSm7YyJDYfgMnVCezb08bMr0V5KJBGi+aPOfjhko6s0bg9CRAtt7DWuCC
+         3am7jyU1UGm5aqi361tAOb3lnOWZN0ISXlWZ/0T+mBafPpbePcRyB0r81IayLeh4byGY
+         PxeK8tYQ0UvHVlyrRZHsep9gR8iCJKKn+FZhc0XkPhHd5YvrIRVl2PICLOZQC820eSDK
+         1wJe8XP7vicI/HHPksjVsWvG24refQLOq00TTW0Jajbgutsw5YP7F7pf6IMsC2SSFw0G
+         +6GL8ht7kiig5t+3IfBgWKrb64rGmSKrvsIkRLw2ilUUHhH6uzcfuwluFHI/kPRwoCYY
+         X85g==
+X-Gm-Message-State: AFqh2kr4UIBlh8u5VCydL4RWTEmUZqv2ywCfuQKx9632acWerybzTYz/
+        HLZ5D1TM5F1waMx+aCE34BgXwjkOgMuX0IsK6vYZ+Q==
+X-Google-Smtp-Source: AMrXdXu10DMhqBX/4ZfrloHoabKd1riMpcrNEFyueUml0ffOGBeLAy+i49BhV5SAwdLzvY+/gPhP2PhFVcJtXGoRgi0=
+X-Received: by 2002:a0d:e081:0:b0:3d6:2151:4038 with SMTP id
+ j123-20020a0de081000000b003d621514038mr2104778ywe.418.1671542956095; Tue, 20
+ Dec 2022 05:29:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: an5GGlJpfBHJWBmydkABLektlr9cV1G8
-X-Proofpoint-ORIG-GUID: an5GGlJpfBHJWBmydkABLektlr9cV1G8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-12-20_05,2022-12-20_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- priorityscore=1501 spamscore=0 phishscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=999 lowpriorityscore=0 adultscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2212200110
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221220024721.947147-1-dmitry.baryshkov@linaro.org>
+ <20221220024721.947147-9-dmitry.baryshkov@linaro.org> <78fd7174-9aa4-f067-72ca-514c8fb09ee5@linaro.org>
+ <d0a6b9cb-f321-7d5b-5767-acd12cfd78f1@linaro.org> <5bd2c0cd-741c-8865-5f35-25baf6787480@nexus-software.ie>
+ <5f4046df-906b-5673-81b9-ab37294ba443@linaro.org> <2ddd32c8-b69c-0da9-af5c-22a8cb8eaaf0@linaro.org>
+In-Reply-To: <2ddd32c8-b69c-0da9-af5c-22a8cb8eaaf0@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 20 Dec 2022 15:29:05 +0200
+Message-ID: <CAA8EJpqDDi+U4QO9_B=gChbZgXT8hs1QeTtxAY2z3iUtekz4aQ@mail.gmail.com>
+Subject: Re: [PATCH v3 08/15] thermal/drivers/tsens: Drop single-cell code for msm8939
+To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Bryan O'Donoghue" <pure.logic@nexus-software.ie>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This patch adds device tree binding documentation for MAX77659 regulator.
+Hello Bryan,
 
-Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
----
- .../regulator/adi,max77659-regulator.yaml     | 31 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 32 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
+On Tue, 20 Dec 2022 at 12:34, Bryan O'Donoghue
+<bryan.odonoghue@linaro.org> wrote:
+>
+> On 20/12/2022 10:32, Konrad Dybcio wrote:
+> > Mainline does not and will not (for the most part) care about
+> > out of tree code, so cleanups of parts like this with no users
+> > are wholly expected if your DT hasn't landed upstream (or has been
+> > stuck in review for a long long time like it is the case with
+> > various parts of 8939).. Keeping this old iteration is blocking
+> > progress, as the other similar ones (that*do*  have mainline users)
+> > are left in place just to be backwards compatible with old DTs
+> > that may have been pulled from torvalds/linux by third party projects,
+> > like U-Boot, *BSDs or something. Trimming away this now-duplicated
+> > code will shrink the driver, reducing bloat for everyone that
+> > compiles it in and doesn't use the 8939-specific path.
+>
+> I entirely take your point on duration Konrad but, I think we can be
+> just a little more pragmatic and hold off on dropping working code and
+> land the dtsi.
+>
+> We went to the trouble of upstreaming the enabling code for the 8939,
+> the right thing to do, IMO is to finish off the job.
 
-diff --git a/Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml b/Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
-new file mode 100644
-index 000000000000..c1e2d88be25b
---- /dev/null
-+++ b/Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
-@@ -0,0 +1,31 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/regulator/adi,max77659-regulator.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Regulator driver for MAX77659 PMIC from ADI.
-+
-+maintainers:
-+  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
-+  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
-+
-+description: |
-+  This module is part of the MAX77659 MFD device. For more details
-+  see Documentation/devicetree/bindings/mfd/adi,max77659.yaml.
-+
-+  The regulator is represented as a sub-node of the PMIC node on the device tree.
-+
-+properties:
-+  compatible:
-+    const: adi,max77650-regulator
-+
-+  regulator-boot-on: true
-+  regulator-always-on: true
-+
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 13c062a8cda2..a10fff677b0b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12647,6 +12647,7 @@ L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/mfd/adi,max77659.yaml
- F:	Documentation/devicetree/bindings/power/supply/adi,max77659-charger.yaml
-+F:	Documentation/devicetree/bindings/regulator/adi,max77659-regulator.yaml
- F:	drivers/mfd/max77659.c
- F:	drivers/power/supply/max77659-charger.c
- F:	drivers/regulator/max77659-regulator.c
+I'm pretty sorry to step on your toes here. It's up to the maintainers
+of the platform and of the thermal subsystem. However I'd suggest
+getting rid of this code.
+Would me doing the dtsi patch for you to test on 8939 help you in any way?
+
 -- 
-2.25.1
-
+With best wishes
+Dmitry
