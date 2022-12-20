@@ -2,68 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61E33651FE7
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 12:50:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA379651FEE
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 12:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbiLTLuM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Dec 2022 06:50:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53242 "EHLO
+        id S233295AbiLTLvk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Dec 2022 06:51:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiLTLuL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 06:50:11 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AD7102B
-        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 03:50:10 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso8567836wmo.1
-        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 03:50:10 -0800 (PST)
+        with ESMTP id S233240AbiLTLve (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 06:51:34 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31798AE58
+        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 03:51:33 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id h11so11436373wrw.13
+        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 03:51:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=layalina-io.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qEpSAjhLP8gIxC9dCi/+iFI+n2gBQG/RSMdt2E9cWHU=;
-        b=kAOZpmUkYEpzga2KnMTZuxPUgzvBlnt76n6i1BA303YUDbS2lpP2lATkScmpfd8jdy
-         6CYvm+/2igFszL6hXbwOV5LQBTPg/dbmiaREk4WESkeO1NaGoOgerSuKxfvmCymAqh69
-         ndW8FxjBopXATfA3epT+GUGq77pZzsqX5ryC2GnyjK7Dm51rEa5X3cwjTJGfekqcNKjG
-         9pJSlRXLApGiY3pf6YeGZkhf4a/AaRoDwQazscwRRlm4Yl0HoQTqPnz4OsOxse8RF7eq
-         oDsWrFsCVCdUGHIbAtyiI6vXLFgSeg+vwo1M9vlEvZ2FGS/ZVmlOWJ23/xjwtu03Ek6n
-         xoJw==
+        bh=2IFHwf3PZoIlb3TFc7LKyLHPvFKgU3mx6c729/ao6P8=;
+        b=KGBOMCVcGVKBXskn32NrUuRBQsNEZGoWTiRBlVrmOwTdCYTkMp08EVAkvjN2E1gls5
+         AjBv7U4VTcBXUqaGK1TIgnWA//h9h2684PY3noMtSij6DU4TaImgmd8ju275B+nC4fRx
+         JApm7FXhBPqF/ZYwOrSO+dumozi1gUELkBzj8njaJpHH9q0VpBEcKZ9whf6Vx+5foqJm
+         sb5b7WGKYmTSup4mtfFCUi8RR0bn7qRuPc9UWwDFy6dVdd1bSYRvqvhGr1/T23Z7fy/P
+         3jhlBt/CLBO5q2KsJmgLX9QenXspEfq7SBT+TSdxS/HdmC8zGpd6XxKn19uPYVYLeCSa
+         LYvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qEpSAjhLP8gIxC9dCi/+iFI+n2gBQG/RSMdt2E9cWHU=;
-        b=pdYpFkobVnBSzb54FSYTrpbAGs+di7UzEY5zLwThA6cpE/jyGVnZGKaTYYblrSsudG
-         5hogDIh/2ZZ5tIc6xgngONvl4x3kBcTx1ToQ24UAND85HoPZ6thvptZNcqnTUO31gRti
-         M8N3w5wJPyXFCQOBIuFCjJbR7SuC6ZJ9dJYfpQ4JNAdZ0Q7qWoDwKydvdkTbc4NS1Rx8
-         jxmfXwU4OV8LuR6IIRhoFubwYZ9zjYodeRbPnkRgxTSTpyTP7uDqGYI3aI+f3rUsApSZ
-         jqhZ1ZAG3fvAEqcZiE7P0vlMh9aECBaiZ/J2whNAsrAEYOV9hMoDCs2bVU9bs1RA5KHm
-         IP7A==
-X-Gm-Message-State: ANoB5plcBLgJ836ECcKSN05fpRXG/y+xGAq03oz5CUOIWFMpDd6JSNeI
-        dPu0bUDtCQazcg/sTyWOMB+0tkRmig8D2/ZG
-X-Google-Smtp-Source: AA0mqf483onNCTc+lfAEEtNKanNAyb6BeS40TZwzPR3NegFtpMtQVjaaZW7py5k7+qqQzt5OCW2sjg==
-X-Received: by 2002:a05:600c:1da8:b0:3d1:e04f:9bf1 with SMTP id p40-20020a05600c1da800b003d1e04f9bf1mr35397538wms.35.1671537008687;
-        Tue, 20 Dec 2022 03:50:08 -0800 (PST)
+        bh=2IFHwf3PZoIlb3TFc7LKyLHPvFKgU3mx6c729/ao6P8=;
+        b=54quaSGia0Zhw5cLWB7Oqz1Qu8RxfL6yxutmaFbpszCSaIQBgXcx0Sh6cdt0UHTZUu
+         9cLd4opfL+jFxpvHIJy9bxPeUZmDORS82s1wytNDecPVxuvNGV2Gco0/ZJJL8D/wSS/l
+         9Qr/jNudIV+1qMy7GiCou9FXAsZTwQ15cJmFow8HQ6VXpHi0Iz2422DgALHHcCmcgvpI
+         2K928os4B29ZIKT3xYdflxWLTi5rPzqQzomhYMIJFtFFr1ESoMmh4E2juB6FjUKyCLus
+         huWe5EUlep67NlASxYCG02nvv7MUER0raAAGeOUIRg1BbSh2Z01P1S0/jzRj6ccAz+EQ
+         8ZQw==
+X-Gm-Message-State: ANoB5pkAklwLaGC+F5qFlZ17ICNhTV5Y3N/azbo4N9vDoFXv93vKZXny
+        5Yqctslq8vXjuFTiLLQ6PJBlhw==
+X-Google-Smtp-Source: AA0mqf4I34hp/H6yiZNrwzo77ElvDz1txdC/DrS3wQ8HbZCxejNZplEulTAGEtxTj3odeydSdYNQuw==
+X-Received: by 2002:a5d:5950:0:b0:242:88f8:a67c with SMTP id e16-20020a5d5950000000b0024288f8a67cmr27941684wri.42.1671537091800;
+        Tue, 20 Dec 2022 03:51:31 -0800 (PST)
 Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id bn22-20020a056000061600b002366e3f1497sm12748314wrb.6.2022.12.20.03.50.07
+        by smtp.gmail.com with ESMTPSA id s13-20020a5d510d000000b00241e5b917d0sm14811325wrt.36.2022.12.20.03.51.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Dec 2022 03:50:08 -0800 (PST)
-Date:   Tue, 20 Dec 2022 11:50:07 +0000
+        Tue, 20 Dec 2022 03:51:31 -0800 (PST)
+Date:   Tue, 20 Dec 2022 11:51:30 +0000
 From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Ingo Molnar <mingo@kernel.org>,
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
         Xuewen Yan <xuewen.yan94@gmail.com>,
         Hank <han.lin@mediatek.com>,
         Jonathan JMChen <Jonathan.JMChen@mediatek.com>
 Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
  capacity inversion
-Message-ID: <20221220115007.ouqsj5ejnhdyqwkn@airbuntu>
+Message-ID: <20221220115130.lhhakj36kn3opqtz@airbuntu>
 References: <20221127141742.1644023-4-qyousef@layalina.io>
  <CAKfTPtCawKvhMwJYVUskYcX7eR2K7SziWVzvjGh6JCVB+WT5tQ@mail.gmail.com>
  <20221203143323.w32boxa6asqvvdnp@airbuntu>
@@ -73,11 +74,11 @@ References: <20221127141742.1644023-4-qyousef@layalina.io>
  <20221208140526.vvmjxlz6akgqyoma@airbuntu>
  <20221209164739.GA24368@vingu-book>
  <20221212184317.sntxy3h6k44oz4mo@airbuntu>
- <1c3c1245-2576-df2e-246b-fc30657fcb56@arm.com>
+ <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1c3c1245-2576-df2e-246b-fc30657fcb56@arm.com>
+In-Reply-To: <19bd3f60-63ea-4ccc-b5a2-6507276c8f0d@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
@@ -87,53 +88,134 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/13/22 18:38, Dietmar Eggemann wrote:
-> On 12/12/2022 19:43, Qais Yousef wrote:
+On 12/13/22 17:42, Lukasz Luba wrote:
+> Hi Qais,
+> 
+> I thought I could help with this issue.
+
+Thanks Lukasz!
+
+> 
+> On 12/12/22 18:43, Qais Yousef wrote:
 > > On 12/09/22 17:47, Vincent Guittot wrote:
-> 
-> [...]
-> 
-> > HMP systems for 1k servers just don't make any sense. A desktop with 128 or
-> > even 256 HMP cores is a big stretch; and if that exist I don't think there's an
-> > overhead to worry about here; and I *did* consider this. I measured the impact
-> > if we have 128 and it was mere 1 or 2 us extra.  And that's on under powered
-> > pine book pro. If such a system exist it'd probably be more performant.
 > > 
-> >> uclamp_min must not set a CPU overutilized because the CPU is not overutilized
-> >> in this case. It's only the task that is misfit. You mostly try to bias some
-> >> behavior to fit your use case.
+> > [...]
 > > 
-> > Maybe we are talking about different things over here. As long as we agree it's
-> > a misfit task then we are aligned.
+> > > > > > > This patch loops on all cpufreq policy in sched softirq, how can this
+> > > > > > > be sane ? and not only in eas mode but also in the default asymmetric
+> > > > > > 
+> > > > > > Hmm I'm still puzzled. Why it's not sane to do it here but it's okay to do it
+> > > > > > in the wake up path in feec()?
+> > > > > 
+> > > > > feec() should be considered as an exception not as the default rule.
+> > > > > Thing like above which loops for_each on external subsystem should be
+> > > > > prevented and the fact that feec loops all PDs doesn't means that we
+> > > > > can put that everywhere else
+> > > > 
+> > > > Fair enough. But really understanding the root cause behind this limitation
+> > > > will be very helpful. I don't have the same appreciation of why this is
+> > > > a problem, and shedding more light will help me to think more about it in the
+> > > > future.
+> > > > 
+> > > 
+> > > Take the example of 1k cores with per cpu policy. Do you really think a
+> > > for_each_cpufreq_policy would be reasonable ?
+> > 
+> > Hmm I don't think such an HMP system makes sense to ever exist.
+> > 
+> > That system has to be a multi-socket system and I doubt inversion detection is
+> > something of value.
+> > 
+> > Point taken anyway. Let's find another way to do this.
+> > 
 > 
-> IMHO, utilization is about the running task and uclamp is maintained
-> taking the runnable tasks into consideration as well. Maybe that's the
-> source of the different views here?
-
-I don't think so, see below.
-
+> Another way might be to use the 'update' code path, which sets this
+> information source, for the thermal pressure. That code path isn't as
+> hot as this in the task scheduler. Furthermore, we would also
+> have time and handle properly CPU hotplug callbacks there.
 > 
-> > As far as I know misfit required overutilized to re-enable load balance. But
-> > maybe there's a detail that's creating this confusion.
+> So something like this, I have in mind:
 > 
-> I think that Vincent is suggesting to let MF load balance happening even
-> in !OverUtilized (OU). We gather the necessary load-balance statistics
-> already today in !OU so it is easily to do.
+> ------------------------------8<-----------------------------
+> diff --git a/drivers/base/arch_topology.c b/drivers/base/arch_topology.c
+> index e7d6e6657ffa..7f372a93e21b 100644
+> --- a/drivers/base/arch_topology.c
+> +++ b/drivers/base/arch_topology.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/sched/topology.h>
+>  #include <linux/cpuset.h>
+>  #include <linux/cpumask.h>
+> +#include <linux/mutex.h>
+>  #include <linux/init.h>
+>  #include <linux/rcupdate.h>
+>  #include <linux/sched.h>
+> @@ -153,6 +154,33 @@ void topology_set_freq_scale(const struct cpumask
+> *cpus, unsigned long cur_freq,
+>  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
+>  DEFINE_PER_CPU(unsigned long, cpu_scale) = SCHED_CAPACITY_SCALE;
+>  EXPORT_PER_CPU_SYMBOL_GPL(cpu_scale);
+> 
+> +static struct cpumask highest_capacity_mask;
+> 
+> +static struct cpumask highest_capacity_mask;
+> +static unsigned int max_possible_capacity;
+> +static DEFINE_MUTEX(max_capacity_lock);
+> +
+> +static void max_capacity_update(const struct cpumask *cpus,
+> +                               unsigned long capacity)
+> +{
+> +       mutex_lock(&max_capacity_lock);
+> +
+> +       if (max_possible_capacity < capacity) {
+> +               max_possible_capacity = capacity;
+> +
+> +               cpumask_clear(&highest_capacity_mask);
+> +
+> +               cpumask_or(&highest_capacity_mask,
+> +                          &highest_capacity_mask, cpus);
+> +       }
+> +
+> +       mutex_unlock(&max_capacity_lock);
+> +}
+> +
+> +bool topology_test_max_cpu_capacity(unsigned int cpu)
+> +{
+> +       return cpumask_test_cpu(cpu, &highest_capacity_mask);
+> +}
+> +EXPORT_SYMBOL_GPL(topology_test_max_cpu_capacity);
+> +
+>  void topology_set_cpu_scale(unsigned int cpu, unsigned long capacity)
+>  {
+>         per_cpu(cpu_scale, cpu) = capacity;
+> @@ -203,6 +231,8 @@ void topology_update_thermal_pressure(const struct
+> cpumask *cpus,
+> 
+>         for_each_cpu(cpu, cpus)
+>                 WRITE_ONCE(per_cpu(thermal_pressure, cpu), th_pressure);
+> +
+> +       max_capacity_update(cpus, capacity);
+>  }
+>  EXPORT_SYMBOL_GPL(topology_update_thermal_pressure);
+> 
+> 
+> --------------------------->8--------------------------------
+> 
+> We could use the RCU if there is a potential to read racy date
+> while the updater modifies the mask in the meantime. Mutex is to
+> serialize the thermal writers which might be kicked for two
+> policies at the same time.
+> 
+> If you like I can develop and test such code in the arch_topology.c
 
-I think this is the cause of confusion. The current as it stands relies on OU
-being set to enable misfit load balance.
+As we discussed offline, Vincent is keen on decoupling the util_fits_cpu()
+logic from HMP - which means I need to reword this differently.
 
-If we decouple them as Vincent suggested - which is a good and independent
-improvement - then yeah uclamp_min raising overutilized is not necessary. It's
-just an artifact of how misfit load balance works today.
+Let's keep this in the back burner in case we need to revisit it again.
 
-It's a general good improvement to not load misfit raise overutilized.
-
-As discussed offline, Vincent will post independent patch with this
-improvement.
+Appreciate the proposal!!
 
 
-Thanks!
+Many thanks
 
 --
 Qais Yousef
