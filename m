@@ -2,165 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782D5652449
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 17:06:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EFC6524D0
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 17:41:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbiLTQGs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Dec 2022 11:06:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S229684AbiLTQlC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Dec 2022 11:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234037AbiLTQGF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 11:06:05 -0500
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2060.outbound.protection.outlook.com [40.107.244.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04351218F;
-        Tue, 20 Dec 2022 08:05:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oO1Fk6I8olRhW/qxD6uS/Em4TwgH1mglADoTQ6tMEWS+LrwWK7KQGzq1YLgsM57CHF1RLTLMvoUQFc8y35EwQDq4HI8A4D1EmV0uoukFCYJR/8v9RznRFCtIVtsEuHpJDLBsMuJnguEpwxQmPRpiZtCc2zz7v8trwwA4zBHnj6eoT4V3thagS70dURomr+DuybuM8+eNHbIaTBqhDDW83H4SioD2p3ZiPKcnupcXwdr0E2yrdiAoNlTbNiiq/dS6D1ePnrx9Q5E3/BSbvj69YkicUO/Rs6c/5dFicLidJBwvUj2yjACR7e9bY0e125sYp0uxAt+Pve1ohVmdXVgjsg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f7+QXpWUFrLpq09T95bIRvlU8/tN8LUwtOHD15PgyQk=;
- b=ZPwU/dah3D9ugr4Fv6c7cIYHW3kzEerPjbOhS7X9Ka/SZb48JOjVGCKasRBZFc+2FO8pkFZCl15CoF+itc5QjHrhGOCEL7F5kAGdzLAJIS71DlwONolV0YHx3H1UFk85vfYEfdpD/X2CCVuROJF7F9Fdrjw2Ej0BJZB1I82jPtZqGpms7DBmIDPNErcjBzk8ghgh13ub9NkhWdcYZrZMei8SOFc3daz/3tJN+m7LsS2PwMydM/KqYI6PMOCicn6URKYHPI2rZHUB1+vGEV5elXdeea8RWYlKWlbf82IP1Lj0yo8HjVhyd8bXxdRiYOEcn6xf/mSun8TKh4lcA6JnVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f7+QXpWUFrLpq09T95bIRvlU8/tN8LUwtOHD15PgyQk=;
- b=dZD0b0iVB453LjOmuZrZt31c+O4rFw9qaD+iBT0vnGc0SADhnBcEpTHA5rcXAcsYxc/cjN9mbvaCTerbx82JsrBDDPLNdQDMLISq+IbhV71MMEwnpTK8pG+/0f1FASleJcoZvq2fBrdMilbGSzl4KY+aVweNurmrswr6DOQhOrA21SNqcFBbxUBEMYI9c1X1cdMmhAfg4DEi2KjOfxdl0VoQjmQrukO4o4oyxb8qCm3sptg+E5AvZnJhUi2ZfdaS5DfHbx9RayebJfr0m3a8MWW0k4NCAtf/YR9TuvwqdpubaEoRVW114VELw6ITR/d/1lcCf/mYuCAZnKgQMQMxvA==
-Received: from BN8PR15CA0008.namprd15.prod.outlook.com (2603:10b6:408:c0::21)
- by MN2PR12MB4487.namprd12.prod.outlook.com (2603:10b6:208:264::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
- 2022 16:05:41 +0000
-Received: from BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:c0:cafe::c2) by BN8PR15CA0008.outlook.office365.com
- (2603:10b6:408:c0::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.21 via Frontend
- Transport; Tue, 20 Dec 2022 16:05:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT106.mail.protection.outlook.com (10.13.177.7) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5944.6 via Frontend Transport; Tue, 20 Dec 2022 16:05:41 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 20 Dec
- 2022 08:05:25 -0800
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 20 Dec 2022 08:05:25 -0800
-Received: from sumitg-l4t.nvidia.com (10.127.8.10) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Tue, 20 Dec 2022 08:05:21 -0800
-From:   Sumit Gupta <sumitg@nvidia.com>
-To:     <treding@nvidia.com>, <krzysztof.kozlowski@linaro.org>,
-        <dmitry.osipenko@collabora.com>, <viresh.kumar@linaro.org>,
-        <rafael@kernel.org>, <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, <sumitg@nvidia.com>
-Subject: [Patch v1 10/10] memory: tegra: make cluster bw request a multiple of mc_channels
-Date:   Tue, 20 Dec 2022 21:32:40 +0530
-Message-ID: <20221220160240.27494-11-sumitg@nvidia.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221220160240.27494-1-sumitg@nvidia.com>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
-X-NVConfidentiality: public
+        with ESMTP id S229514AbiLTQk7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 11:40:59 -0500
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6504F6436;
+        Tue, 20 Dec 2022 08:40:58 -0800 (PST)
+Received: by mail-oi1-f180.google.com with SMTP id k189so11035846oif.7;
+        Tue, 20 Dec 2022 08:40:58 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=chwYKrVGBIhdy9wrtIZn6F96I3NcHCo/+rJY4lOg0AQ=;
+        b=I38hg+wWRrTkLVWPEfaMTa48mMZsV7vGBK5rnCvzDQVkf6/mVXunQp9rZDlBn0O2mO
+         Ip9TRDvmvQFsCBfZXXct0WiOhfINI53UE6EVgskT37LauUM29kLJpEwRk0xs6LcCAGwh
+         wK/W/vvp2P8rNWuRdPffKpinLe73D/M28zxaG+7mHTCU4I1Sji5YxGruR6tyfoxryzpQ
+         dAnrt2HI3lZY4A8vBUGS3TEFGqhKqRBPWejo7zJ1NuB4+Eu6305S7V4PbBmukxh1x9b0
+         25FuRGwfYsYHYlqK9jxCz6KwWky5TKwomxENpxRWpflvvadTYbJKyJ3N0nWef7CLMRGf
+         d56Q==
+X-Gm-Message-State: ANoB5pl22Rhfbzifi6+aEZFjm7/2ANTWWeQ2Sd8NgLWoz4FT6O9RoDUU
+        U0IcwPBUKiD97uJaumdgGw==
+X-Google-Smtp-Source: AA0mqf7b7KYOGLj9+YtsU0829OeLadtCcX/pXvT3VNyawaN69N+NwtqV18JjGGH8M2/RA52SQgfF1A==
+X-Received: by 2002:a05:6808:a04:b0:35e:885e:1c53 with SMTP id n4-20020a0568080a0400b0035e885e1c53mr15580391oij.21.1671554457642;
+        Tue, 20 Dec 2022 08:40:57 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id es10-20020a056808278a00b00359ad661d3csm5673557oib.30.2022.12.20.08.40.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Dec 2022 08:40:57 -0800 (PST)
+Received: (nullmailer pid 709595 invoked by uid 1000);
+        Tue, 20 Dec 2022 16:40:56 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT106:EE_|MN2PR12MB4487:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8ccb5cd1-3ef7-4100-85dc-08dae2a40b23
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E39BhzSpKJNVoaClfWttTnsavOwGqxI0Xc4jCYvANKu6WYQ4PaRKVj7s9TOlqby9SZXb0B4SJMSa6E2Sys0A4ZMOd+Pz4r3h799i5v3VtJF/vEblCq49jETe0neASogTyXMoXibbpDWggBcQWnTC58uW7CuLPk6gjeqQHijU8Ca9SFDqFVmxc5wNKetRnzgpMlPnW5/Yzh8e+NLj4iqHu5SOPzgogskqkkCAvIfGQvNTxYTAC9m5kQQeqeCfWyTbYFzDCKUAQYoSb3zhJiDiKeWFz2tN7HFkFhzVOLp0e9mgiV6pda7RgplKC+04j9sLMahFesiPQcrEpshyZsQp4qmuiO0o4rfTJRuq+6dCgtJ1GjS/38EpcFURHsrPPupPMj83G9C0wU509mKd3uPtZu3pxeY6irmJ8FOgl6P6IUpZIPEX5KqXGbiJXeZh4C06lW3q6NnFMzcGRaO9Sjai+0LW2YIXG9T2K/iNP19MT6sGutrMWMdUDHTji47eOpDoRcFmvpUCVui5jIU8gB1bfDIXzQVM5/XJ0yFcgs1JbeApf8qXmXqdmg2Rr1cp5CfO5OE0la0rRNX8qme3auYUZ+tu4QfigOwORqwAyJQGnuGGOXXf0ip+durzwvQ8AH/ujDbWlv4C+Kr6cbNt+TFS6Acq6YXjBbdbyOHIzA9z+i0VsQbrX3QEvRIzfPeqQPtmcJHndvg1uGRFCBvJkQZEPDwne3rPvOXYcXrMjJmOmbk=
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(396003)(376002)(346002)(136003)(451199015)(46966006)(40470700004)(36840700001)(86362001)(82740400003)(36756003)(8936002)(921005)(356005)(7636003)(36860700001)(107886003)(82310400005)(5660300002)(47076005)(40460700003)(83380400001)(2906002)(8676002)(1076003)(70586007)(41300700001)(70206006)(4326008)(2616005)(336012)(426003)(7696005)(186003)(478600001)(110136005)(6666004)(54906003)(316002)(40480700001)(26005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 16:05:41.3706
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8ccb5cd1-3ef7-4100-85dc-08dae2a40b23
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT106.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4487
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+Cc:     lgirdwood@gmail.com, linux-pm@vger.kernel.org, broonie@kernel.org,
+        lee@kernel.org, Nurettin.Bolucu@analog.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com>
+References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+ <20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com>
+Message-Id: <167155420720.690036.18231060148928716465.robh@kernel.org>
+Subject: Re: [PATCH 2/6] dt-bindings: mfd: add MAX77659 binding
+Date:   Tue, 20 Dec 2022 10:40:56 -0600
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-CPU opp table have bandwidth data per MC channel. The actual bandwidth
-depends on number of MC channels which can change as per the boot config
-for a board. So, multiply the bandwidth request for CPU clusters with
-number of enabled MC channels. This is not required to be done for other
-MC clients.
 
-Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
----
- drivers/memory/tegra/tegra234.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+On Tue, 20 Dec 2022 16:22:46 +0300, Zeynep Arslanbenzer wrote:
+> This patch adds binding document for MAX77659 MFD driver.
+> 
+> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/mfd/adi,max77659.yaml | 70 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+> 
 
-diff --git a/drivers/memory/tegra/tegra234.c b/drivers/memory/tegra/tegra234.c
-index 82ce6c3c3eb0..a45fc99b9c82 100644
---- a/drivers/memory/tegra/tegra234.c
-+++ b/drivers/memory/tegra/tegra234.c
-@@ -834,6 +834,29 @@ static int tegra234_mc_icc_set(struct icc_node *src, struct icc_node *dst)
- 	return 0;
- }
- 
-+static int tegra234_mc_icc_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
-+				     u32 peak_bw, u32 *agg_avg, u32 *agg_peak)
-+{
-+	struct tegra_icc_node *tnode = NULL;
-+	struct tegra_mc *mc = NULL;
-+
-+	if (node->id == TEGRA_ICC_MC_CPU_CLUSTER0 ||
-+	    node->id == TEGRA_ICC_MC_CPU_CLUSTER1 ||
-+	    node->id == TEGRA_ICC_MC_CPU_CLUSTER2) {
-+		if (node->data) {
-+			tnode = node->data;
-+			mc = tnode->mc;
-+			if (mc)
-+				peak_bw = peak_bw * mc->num_channels;
-+		}
-+	}
-+
-+	*agg_avg += avg_bw;
-+	*agg_peak = max(*agg_peak, peak_bw);
-+
-+	return 0;
-+}
-+
- static struct icc_node*
- tegra234_mc_of_icc_xlate(struct of_phandle_args *spec, void *data)
- {
-@@ -866,7 +889,7 @@ static int tegra234_mc_icc_get_init_bw(struct icc_node *node, u32 *avg, u32 *pea
- static const struct tegra_mc_icc_ops tegra234_mc_icc_ops = {
- 	.xlate = tegra234_mc_of_icc_xlate,
- 	.get_bw = tegra234_mc_icc_get_init_bw,
--	.aggregate = icc_std_aggregate,
-+	.aggregate = tegra234_mc_icc_aggregate,
- 	.set = tegra234_mc_icc_set,
- };
- 
--- 
-2.17.1
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+./Documentation/devicetree/bindings/mfd/adi,max77659.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/power/supply/adi,max77659-charger.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77659.example.dtb: pmic@40: charger: False schema does not allow {'compatible': ['adi,max77659-charger'], 'adi,fast-charge-timer': [[5]], 'adi,fast-charge-microamp': [[15000]], 'adi,topoff-timer': [[30]]}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77659.example.dtb: pmic@40: regulator: False schema does not allow {'compatible': ['adi,max77659-regulator'], 'regulator-boot-on': True, 'regulator-always-on': True}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77659.example.dtb: pmic@40: '#interrupt-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+Documentation/devicetree/bindings/mfd/adi,max77659.example.dtb:0:0: /example-0/i2c/pmic@40/regulator: failed to match any schema with compatible: ['adi,max77659-regulator']
+Documentation/devicetree/bindings/mfd/adi,max77659.example.dtb:0:0: /example-0/i2c/pmic@40/charger: failed to match any schema with compatible: ['adi,max77659-charger']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
