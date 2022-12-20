@@ -2,137 +2,201 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 189806522D0
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 15:37:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225F96522E8
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 15:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234089AbiLTOhZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Dec 2022 09:37:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36040 "EHLO
+        id S234009AbiLTOn6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Dec 2022 09:43:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbiLTOhY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 09:37:24 -0500
-Received: from mail1.systemli.org (mail1.systemli.org [IPv6:2a11:7980:3::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DDAFD8
-        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 06:37:18 -0800 (PST)
-Message-ID: <3599ec46-20d2-a233-a7c0-d2e363ebdf93@systemli.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=systemli.org;
-        s=default; t=1671547032;
-        bh=yP0BJycuMz69XX36ckvDbYRjSenHxDRGxNn7G1F0iiU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O7+QOtBFOqXxrZErlWzwB4rO0Hnd3Im8G5/JdmIvB1WYH2T9hZtm38tVuj0IvZGSO
-         4HeMPY9OIlYKc5FXHedygciJgJlLX0rd5a86uivEWi4zexWNglhKrEAkN3CFRarJp1
-         yShcf91jPYOXHkAYQG1+jxwxM5ibWFW6e4jprP5Slu3ZKPJ27zj0zv2knxENIGYUr8
-         WLqQy3prK8JDz5uwlaj5S6XKCmi+WbKzqh69Vkzp5bNsbjS+OhQyk9E9T1ZpmOUEI/
-         ETVRPM4I2E2fwEFSJ0MjUsSQ4rK6SOtX+02+70dLtxf2v8dzslfKewb8BINwcM9zIw
-         5YH2kdhIw8eKw==
-Date:   Tue, 20 Dec 2022 15:37:10 +0100
+        with ESMTP id S234032AbiLTOn5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 09:43:57 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5541ADA2
+        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 06:43:55 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id j4so19004331lfk.0
+        for <linux-pm@vger.kernel.org>; Tue, 20 Dec 2022 06:43:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HohHf39oSurGOCgSZ1vXA2EUahkSr4A+Gq02PFcucLQ=;
+        b=u0XcuAXXcRkOW3gsXtqP1C10lIs8mGZ0IQKt6SlNapl2SsVp+83HYw99tPJtj/1kCT
+         KOkq4WN697oPUDW4MYWjrVuR3rQLYHD0sxBklvokpXdRPyoBFAzD8bWa4RgzF667BfWa
+         OyF1i99R/sfj+kBvbXA11NLiXN5mkf0fuON28zVlUhssbplZsfkxiDYd+IYYd1TQk285
+         eFO8BKg0qVmtd0JmzMe4o+BlZb8LIB59BNsyI6GsmBjy+2SLAHhBXmmIbq8+AKQHAM4G
+         MRvs6Ljr51To9qBf4VmEe0PnzkGzuFaLyViTRHFT0o+fuA5bJ2zbPTs3NT53EEgzNRC8
+         1+8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HohHf39oSurGOCgSZ1vXA2EUahkSr4A+Gq02PFcucLQ=;
+        b=7J/1b0DP6vYCRNgxbIk96eXgwa7fLc3jAkm9+CErbhV8hqQKze4pl9hRGQrpzu8tcg
+         HdKfNfpiNJ4kQMeVr2gx+U4iwbCLWKZy4Dsobf41qxqnjVelekxigaF3taNjBPCMNkx6
+         JMTeUZGLyRnfGKLVxU5aQbYAlw/+y1t/YRdolFVQm63XlpXohEG4npdYKrGpXnpVZcRs
+         xB0BIi2WU4afCyScgL131Yqavh0NroCoip/uM7NnzJ+9O8X8+dNLTDd6Rqa26c1raaCL
+         H8PNxz7PMvOjfE01eY7XpL4IiS+cNLnHb3CV4xi4GSnZMolrTVol0g270fmnpyyIFL9a
+         V6gw==
+X-Gm-Message-State: ANoB5pleB7/o+mokyD1xSKkOvwaUdT5S7b5GwV09ldK9rli6yGZv20xA
+        rEktwvZ8NQ8v+B7nMoOeXbOfWw==
+X-Google-Smtp-Source: AA0mqf6MGqCcqLPuSOjIizAtHLhT18Ci+phi9dXJfAhatT9rs0Ufw/hl3iaU6iyyQsJeq62Vcd35tQ==
+X-Received: by 2002:ac2:5233:0:b0:4b5:b661:5c5e with SMTP id i19-20020ac25233000000b004b5b6615c5emr17135242lfl.55.1671547433798;
+        Tue, 20 Dec 2022 06:43:53 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id b6-20020a056512070600b004b51ab265f8sm1483925lfs.193.2022.12.20.06.43.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Dec 2022 06:43:53 -0800 (PST)
+Message-ID: <65345e03-d82b-89b1-ed86-b0606368b709@linaro.org>
+Date:   Tue, 20 Dec 2022 15:43:52 +0100
 MIME-Version: 1.0
-Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
- mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
-To:     =?UTF-8?B?QWxsZW4tS0ggQ2hlbmcgKOeoi+WGoOWLsyk=?= 
-        <Allen-KH.Cheng@mediatek.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
-        "regressions@leemhuis.info" <regressions@leemhuis.info>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "daniel@makrotopia.org" <daniel@makrotopia.org>,
-        =?UTF-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>,
-        "thomas.huehn@hs-nordhausen.de" <thomas.huehn@hs-nordhausen.de>,
-        =?UTF-8?B?SmlhLXdlaSBDaGFuZyAo5by15L2z5YGJKQ==?= 
-        <Jia-wei.Chang@mediatek.com>
-References: <02c2c955-940b-b315-0474-85d0eddad7a3@leemhuis.info>
- <Y4jHvomTrU8guBox@makrotopia.org>
- <47a4665e-333d-a6e7-a2da-96cb06c2d87b@leemhuis.info>
- <20221202052716.uj3kzkunazmgazeq@vireshk-i7>
- <0ebef1a2-6b5a-04b9-a79b-79eb3349c32b@collabora.com>
- <c76bd301-0e8d-2d2b-0d3e-a57ece9b496f@collabora.com>
- <b1822bbc3775730c4cedf9652323c7d72e663e4b.camel@mediatek.com>
- <8be3e050-f32a-6761-8ebd-49c38dfcf9eb@collabora.com>
- <c186d104-43e0-ca10-3ce2-c2f922acd8bf@leemhuis.info>
- <37468027-6a27-dcb8-9c14-8f8426ec50d1@collabora.com>
- <20221202110139.vmwcmoudakm2nap4@vireshk-i7>
- <f70d7c09-df0d-4fa9-92c9-63f31cf56483@systemli.org>
- <5e07eb07de0fea2232c32f58691ffb7cfd2303f8.camel@mediatek.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 2/6] dt-bindings: mfd: add MAX77659 binding
 Content-Language: en-US
-From:   Nick <vincent@systemli.org>
-In-Reply-To: <5e07eb07de0fea2232c32f58691ffb7cfd2303f8.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org,
+        lgirdwood@gmail.com, broonie@kernel.org
+Cc:     Nurettin.Bolucu@analog.com, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221220132250.19383-1-Zeynep.Arslanbenzer@analog.com>
+ <20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221220132250.19383-3-Zeynep.Arslanbenzer@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hey,
-thanks for all your help. I guess it's fine now.
-If someone wants to reproduce my setup, I published the exact steps here:
-https://forum.openwrt.org/t/running-vanilla-kernel-on-banana-pi-r64/145351
+On 20/12/2022 14:22, Zeynep Arslanbenzer wrote:
+> This patch adds binding document for MAX77659 MFD driver.
 
-I still wonder why my initial try using the OpenWrt build-environment 
-together with the 6.1 kernel failed.
+1. Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-Bests
-Nick
+2. Subject: drop second, redundant "binding".
 
-On 12/19/22 13:21, Allen-KH Cheng (程冠勳) wrote:
-> Hi Nick,
->
-> This issue doesn't seem to be going to happen.
-> Is there anything else we need help confirming?
->
-> Thanks,
-> Allen
->
-> -----Original Message-----
-> From: Linux-mediatek <linux-mediatek-bounces@lists.infradead.org> On
-> Behalf Of Nick
-> Sent: Wednesday, December 7, 2022 11:35 PM
-> To: Viresh Kumar <viresh.kumar@linaro.org>; AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com>
-> Cc: Allen-KH Cheng (程冠勳) <Allen-KH.Cheng@mediatek.com>;
-> linux-pm@vger.kernel.org; daniel@makrotopia.org;
-> Project_Global_Chrome_Upstream_Group <
-> Project_Global_Chrome_Upstream_Group@mediatek.com>; Rex-BC Chen (陳柏辰) <
-> Rex-BC.Chen@mediatek.com>; Thorsten Leemhuis <regressions@leemhuis.info
->> ; linux-mediatek@lists.infradead.org; matthias.bgg@gmail.com;
-> thomas.huehn@hs-nordhausen.de; Jia-wei Chang (張佳偉) <
-> Jia-wei.Chang@mediatek.com>; linux-arm-kernel@lists.infradead.org;
-> regressions@lists.linux.dev
-> Subject: Re: Kernel Kernel bug caused by (cpufreq: mediatek: Refine
-> mtk_cpufreq_voltage_tracking()) on Banana Pi R64 (MT7622)
->
-> Did something changed on master? I compiled now the image I use on the
-> BPI-R64 a bit differently.
-> I used the openwrt toolchain "aarch64-openwrt-linux-musl-" to cross-
-> compile the original linux repository on current master. Than I
-> compiled with OpenWrt-Buildsystem a initramfs, put that together with
-> mkimage to a "itb" and booted it. Suddenly it works:
->
-> https://urldefense.com/v3/__https://gist.githubusercontent.com/PolynomialDivision/5e49529206ba5d273bf6a416c42c6234/raw/7ecff7be397a6e9a41ef120c3fa61060c488cf5b/mt7622-bpi-vanilla__;!!CTRNKA9wMg0ARbw!glNhziJx8pjvVsVoRm0LO8wshXJL_b2P_jYV5vO_9uhe1EnbMpWRnIEcj_561Ijxurd8C-Fjc7uCbBNIM_E-7YYc$
->   
->
-> Bests
-> Nick
->
-> On 12/2/22 12:01, Viresh Kumar wrote:
->> On 02-12-22, 12:00, AngeloGioacchino Del Regno wrote:
->>> If Viresh can add those while applying the patch, that's fine for
->>> me
->>> - otherwise I can send a v2 adding the two suggested missing tags.
->> Sure, no problem.
->>
->
+> 
+> Signed-off-by: Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> Signed-off-by: Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> ---
+>  .../devicetree/bindings/mfd/adi,max77659.yaml | 70 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 71 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/adi,max77659.yaml b/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+> new file mode 100644
+> index 000000000000..6bec11607615
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/adi,max77659.yaml
+> @@ -0,0 +1,70 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/adi,max77659.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: MAX77659 SIMO PMIC from ADI.
+
+Drop full stop.
+
+> +
+> +maintainers:
+> +  - Nurettin Bolucu <Nurettin.Bolucu@analog.com>
+> +  - Zeynep Arslanbenzer <Zeynep.Arslanbenzer@analog.com>
+> +
+> +description: |
+> +  MAX77659 is an PMIC providing battery charging and power
+> +  supply solutions for low-power applications.
+> +
+> +  For device-tree bindings of other sub-modules (regulator, power supply
+> +  refer to the binding documents under the respective
+> +  sub-system directories.
+
+Drop this part, not really relevant.
+
+> +
+> +properties:
+> +  compatible:
+> +    const: adi,max77659
+> +
+> +  reg:
+> +    description:
+> +      I2C device address.
+
+Drop description.
+
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  charger:
+> +    $ref: ../power/supply/adi,max77659-charger.yaml
+
+Full path, so /schemas/
+
+There is no such file so you did not test the patch.
+
+> +
+> +  regulator:
+> +    $ref: ../regulator/adi,max77659-regulator.yaml
+
+Ditto
+
+
+There is no such file so you did not test the patch.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        pmic@40 {
+> +            compatible = "adi,max77659";
+> +            reg = <0x40>;
+> +            interrupt-parent = <&gpio>;
+> +            #interrupt-cells = <2>;
+> +            interrupts = <16 IRQ_TYPE_EDGE_FALLING>;
+> +            regulator {
+> +                compatible = "adi,max77659-regulator";
+> +                regulator-boot-on;
+> +                regulator-always-on;
+> +            };
+> +            charger {
+> +                compatible = "adi,max77659-charger";
+> +                adi,fast-charge-timer   = <5>;
+
+That's not DT coding style...
+
+> +                adi,fast-charge-microamp = <15000>;
+> +                adi,topoff-timer  =  <30>;
+
+Same problem.
+
+
+>  
+
+Best regards,
+Krzysztof
+
