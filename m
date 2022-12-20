@@ -2,373 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77537651923
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 03:47:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4079165192D
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 03:53:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbiLTCrr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 19 Dec 2022 21:47:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39370 "EHLO
+        id S229647AbiLTCxS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 19 Dec 2022 21:53:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229703AbiLTCrk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 21:47:40 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E92F513D17
-        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 18:47:36 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id p36so16543398lfa.12
-        for <linux-pm@vger.kernel.org>; Mon, 19 Dec 2022 18:47:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6jyq4dFoSz2Fyu1tkmi8RjA5wzVwQNYzG7qMhqzsEhY=;
-        b=FNWIFKKBVLk17DLcDUk1ZGnkJd3wfgsQHo6SNX0nZXQmeJ0fGHhjJDAtNK9zAJaTn0
-         IEhO4UBfN3jPgxdsiyIDGjVBmWliQ+CrRoBls4oWydSB46l6DwrqpUfvlnC1Igmin64B
-         uD1gRRAhw7VsAAQmO6x3lF582eiBLBZ39EO3bvUUwHDsAIlqkeUSqlldhoiLtltIOMyA
-         hvP9SaB5LX8kl7AbeGFq7tY3MrfflcFKhx3/0qUER3zILjribrVQW1JBfrlXF+TVbGEz
-         fS4U6RtnogdU0X8Zvptu7dBEmsoIPiHazx709uQP48RoyGHQ4fCXnciCLBMCVx1zAhWT
-         jtrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6jyq4dFoSz2Fyu1tkmi8RjA5wzVwQNYzG7qMhqzsEhY=;
-        b=6LbpNfm27XJ2YwN6Dqwu+X8kDtc/0lTAuebfyFDaQPOpTaAdnJBoValDfjOpmzhdm8
-         egeEx4u3MI+vXV3zZhroAfy1Fsqpg9xjBEXA/QMG/fQHX6UrhEZLxif9Z6WlTjLMR08s
-         r2ZXYpQzhvbkFe2TV/DEWxjmLfYnkVkjduFr3aNRBEKizlCvpsDI5nXifpmhDGnIjukF
-         ReBOLaVTKcbzX9hIQcy/D66Me9RDQel6KTrTpUDDM4+eTgyed5LOtEEARcKdgeug52pq
-         Gwaq6k+sLOWi0UGTGHKL9CQxvrGIhMVqsK5lL0LI+6rnBnLj/dqPleHDYD2wljFznFMk
-         xqDg==
-X-Gm-Message-State: ANoB5pnKBpBW9sF5ZIcbl629b7TkFbIhcVcVtV0hzXmDlMlO/I7HJ01Z
-        MmrKeFS8gIBp5KahKXBPqq8ujA==
-X-Google-Smtp-Source: AA0mqf76yiNtw9TGeAreezsItZkhKL8GugSrmc2SrKe06FMU3WojFzNMNnolYg/FpQXopOUfvI13Qg==
-X-Received: by 2002:a05:6512:13a2:b0:4a4:68b7:d61d with SMTP id p34-20020a05651213a200b004a468b7d61dmr15172886lfa.4.1671504456458;
-        Mon, 19 Dec 2022 18:47:36 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id e13-20020a05651236cd00b004b5a85e369asm1274866lfs.252.2022.12.19.18.47.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Dec 2022 18:47:36 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: [PATCH v3 15/15] ARM: dts: qcom-apq8084: specify per-sensor calibration cells
-Date:   Tue, 20 Dec 2022 04:47:21 +0200
-Message-Id: <20221220024721.947147-16-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221220024721.947147-1-dmitry.baryshkov@linaro.org>
-References: <20221220024721.947147-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S229564AbiLTCxR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 19 Dec 2022 21:53:17 -0500
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2082.outbound.protection.outlook.com [40.107.237.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46E4B13CD0;
+        Mon, 19 Dec 2022 18:53:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H9sj9XvtXCa+heyOfQGa65R+xbqB2FI0G9xQB/v3MbFq4voI84hqin7bMmTz/PYpbU3uefUzU4utlgLdjlD4i90OCLy8zGTMZCR3KZ4128VazWXlIDnn0Qzh6oNzzRdes1i7cOOXlTf9mRF1mmUfbbtf8GwJQkUci2eWtmqQXlbwltORgLEbBlNq7xnlbrCp/ty0keoCnAd3Hd2kxTmYmLxz4MySyXvhVX2aLW4Yz/aj5o9VjtkNpxG3mfF7G6zYGcbsFdIh2t1oFN9gWLNPpALiKA7VxBLqSg7naV7y0ytYXiwR7haT4GEMGiI7ZA20kh7nb4x2299LTzVoqyc1Gg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qRzpDxDhl1vFJdBU2Z3i1SGucCoSxHMAFn/muFgtPic=;
+ b=UB9hOoeYhKoOHN+BIdCuYHRwF/ldBSjapj5ncKs5L4V31ppw7GPLwR+P2LumTrpQ3VziPTmePnBjKHzPYNBxtmO/YdNoN0M91ToVvxbvQ1DxSSyDTu4QD3uvYqqDaE+jLXRVOKPPnYy6vkcn81u433Qu5WJE9baeC0fqH/5wl42z6y+vhsXsF48zUJZK+w0s9hVFVO8oZC3Cu32AydSOeyQjv265BSSoUOu78PV1QSdMSKMdKC2eMHikPLS8P6b9Z1RBZzHKvSiNzvntRfbVu+4hZZQ4xK7E8kepNiMflZ2dhPR3086lCeGsGrCOGIUsxahAg0cVCJPPn5AwDwRxBw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qRzpDxDhl1vFJdBU2Z3i1SGucCoSxHMAFn/muFgtPic=;
+ b=nlWFtqf9wPM8gLj16UFqLFhena+cLRMYXBRdsKyAd6M9fih1edQUE3ppoamhTFhoV+XShzXc3pbGgpD+8rX9FFplz+sqmfJLY+CX0VktaMZug2IatIg7+Ry+1gD1XRbvr8qBEUWnXa3IwGYJd9e/txsdnlLfyIXGpCdlsTMWqlE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DM4PR12MB5360.namprd12.prod.outlook.com (2603:10b6:5:39f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Tue, 20 Dec
+ 2022 02:53:14 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::ff3c:2d37:75f3:442a]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::ff3c:2d37:75f3:442a%4]) with mapi id 15.20.5924.016; Tue, 20 Dec 2022
+ 02:53:14 +0000
+Message-ID: <4da9ffcd-34f6-d756-1ab5-95ba99a8739c@amd.com>
+Date:   Mon, 19 Dec 2022 20:53:11 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v8 03/13] cpufreq: intel_pstate: use common macro
+ definition for Energy Preference Performance(EPP)
+Content-Language: en-US
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221219064042.661122-1-perry.yuan@amd.com>
+ <20221219064042.661122-4-perry.yuan@amd.com>
+From:   Mario Limonciello <mario.limonciello@amd.com>
+In-Reply-To: <20221219064042.661122-4-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN1PR12CA0081.namprd12.prod.outlook.com
+ (2603:10b6:802:21::16) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DM4PR12MB5360:EE_
+X-MS-Office365-Filtering-Correlation-Id: c0017403-74cf-467b-99ac-08dae235566a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: MR8KmBuCUHdQaE1LIKLTSmQgsmXH0PGfnhR75lwBcPM/60yRomxQPVXPaxl+pfnsVoFyBvmQ2DEJY+vqsUNB5PE0/WYGPtDE7yfYwl0qq7WfjeEzbmXfN9RssAfhphzo+1FbbvIlbYUKntSkmzJ2iAWb3G2MxvTfQMvjG46cWV/5WyYWaR7G7jkr1/ccbRau7VWkvHez6HrBSgaBvsr8Zbj/2PhDImUtUJMYQ+ptSmhxMzs9quJim4t1LFUbXfQROIxCUTDViBYdTgONvjbX6KCCx4ksSl20lul+gNifjHBPG36NDGifPF5mD5A4ZzRp6ffu+npsJrnSU+TxpTvGkFLbxo9li69QjW+R0ZpClenuFuaNpQ3wjXaD2xVcdiFZdjnEe4lEGQc9qrv1DgDQza54JmVkiB0vYxVeETE+X5CiLyijoDrhtzKDV8MyJk5B9bly2prbObNO7XdbudgMGfOsIe4AYQA4sONZNBkUjSEw6uhlA7xautl2kLAOrZLx4SjaRrnkMbL5aDyopyuK51vZobSPv7heMZhK62QWqjywed7wp13rEbQa213zZS5UQYX12R40ZAS96fWlcCUHOwirh+UQID6G2T8s0cEGJBa/mu3RwPwmbosBLWAsfcU4IZ0boVK2K5kG+Vn5wgPxHcB3pCwW3ysW7HxTdIU6DbADD/ovv9HcV/WTGmYtpUaL9qdmMYkq07QrR5jDW8cA0Du8bu2hpp9JORXU1GPXaUA=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(366004)(396003)(39860400002)(376002)(136003)(451199015)(31686004)(2616005)(86362001)(38100700002)(6666004)(53546011)(186003)(2906002)(6512007)(26005)(6506007)(478600001)(6486002)(36756003)(8936002)(316002)(66556008)(44832011)(4326008)(66946007)(31696002)(66476007)(41300700001)(83380400001)(5660300002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WndqSHB0UG1WVDBtZGc0OUYwMTVXZThGNGJ1SXVtZU1SZVJKOXI1VGs2V21I?=
+ =?utf-8?B?bTk2SWE4eGFsdUNoYVlrN3FzT0Y3S1J5bHo1a0loOXMwN0c2aDlMRjB1dnFq?=
+ =?utf-8?B?WnlpSUJpTElZNWIyTVBBT2ZRRDl5TktrK25qWFhadU9oVEl2U2hEbzJ6NjVR?=
+ =?utf-8?B?TmtNc2JHQmcxS1E3UFpmYW4zUCs1dzlZOXRLQ2dBT3JTUmQ0dGFkbkc2aEIr?=
+ =?utf-8?B?TTNNUkRYWFVaUmwvUUdHSFpudjhqYU91aGkrOU5kMDJMM0gvYjQwU1ROK0JH?=
+ =?utf-8?B?ZFhHRjZZbGpsMTlwNUJZbGpEdjdzTjV3dlBGT3VlWFFpQzIwQ2VZZS9WdlV1?=
+ =?utf-8?B?c2ZmWHdEaERYRUFkTFpzMEpVSmw5Y01IdXZESzBuNkc1TzVlNXd2QVFNOGVv?=
+ =?utf-8?B?cllTZWt2L21XbjFNanlqdFZpblF2aWhuS1p6Y0xtc0NlMnF0bk1sdHY4T3oy?=
+ =?utf-8?B?d1RULy9LNGE5M05vVlYwNXFEdXEzWVUwa3hqZzZ6MUVKY2tzalhGVnFuS3Bx?=
+ =?utf-8?B?Zk1IQk82Z0NGMXBSa0lpRC91QVI3R2NYYnZDVFBLUmFsWW5udXUzYmFhcWpv?=
+ =?utf-8?B?bGpEc0NJSk4xaFg5aXMyTFprUDY1VE1TVlJ3NkMwbDlBMjd5dFpPTFNWMUFK?=
+ =?utf-8?B?c1RXOEQ2VW9HRkhSS2lsQUxUZUJXUktjeEYyNVRHN3JZdnBXNkZXcFN0NUZ6?=
+ =?utf-8?B?NC9EdjlyclVTcUNRMmlNVlQ5aHNIUFo1U0RFRTh0dFFrZ3ZNRUhXYjlMcEtQ?=
+ =?utf-8?B?ZXRRTGd1aUMrRGxrK0pGV0RqMHBDUjhWWTlRWjlxckZKZSsvOVVZOXRMSThO?=
+ =?utf-8?B?VEhuZE5IdFF6TlMzWEZGZDhpTzl6VmFRTTI2RjcyVmxxd21sODdBa09xZHRF?=
+ =?utf-8?B?YStuTXRwMVVmRG9IWDljdDl6eXhrRGJqeUVJMWcvZy8rc2VpUXBtanorWHc2?=
+ =?utf-8?B?dGN6R1FwcVB1NzRUcUQxT0xMSGxzMkY5anRSbXFRSDViaEhURkNPN2lhOVBl?=
+ =?utf-8?B?Uk1WNUlHRUQ3NGZPZThKOVR4SUlhcld1bTVGWXZZQmtCR0FadmJhTnc3aFVV?=
+ =?utf-8?B?NmVULzkzc2JrMU1Yb2hFYjlmakJtOEoyS0lhMGZWbzBUVHJla0c4dVQ3WEZl?=
+ =?utf-8?B?OEs2Wlk4L1lvUXVtc1hXdlBsbStvaldENVlTYkNveUVQNlQxMmp4L0xhblRF?=
+ =?utf-8?B?UVI5NUhsV0owTituYkpXQVh3cURhcVlBNVRweTJEZ3oxSktNQ1dtaDZiTjdq?=
+ =?utf-8?B?cnozbEgrUzFNcnFxYnd1bWUzVnlGck5HTnBoWVdBdERzMEE4SHZpZ0lKaEVt?=
+ =?utf-8?B?SlFOaDl3MG9VMnVXY09tMVR4T1VxY0VGSHJsUS9ITGRIamZBWWFJK3JpQ01n?=
+ =?utf-8?B?LzNtU0d5RmNnT3RHN010bVJ0MGdkbVlRL21BRWRPRDVTS0RCOHpXL1FwRFJL?=
+ =?utf-8?B?VXYvNE9QcEQ1dFQxRmtlaXJEMGNjSlg2SHFPRlR1K1BJK0tyd3RXYW5mbXQy?=
+ =?utf-8?B?VWM2UGdXMEUvUUlMamxjVWxXUThJcG16Z1puRnh4Uy83K2sxSVAybzJLL014?=
+ =?utf-8?B?ZmsxdmVFTE1JUW8yMHFWRGNyb0FJSWEwWFA4T3ZTRUQ2MzkxaHQ4MTNITXNZ?=
+ =?utf-8?B?NmVkQ1FXdCtyNWNwcGZNTzhYYmJ0VisvZGZEZjdFd2FId3l4ckxEeUZzSVFm?=
+ =?utf-8?B?OUVhMTF6bVVEWmp1RUVJZjFYV1o1K0EvMUxNbXU3R2VOaitXVG85Q2Jhak5L?=
+ =?utf-8?B?TU5ibVUrUk83NWZRallZMldtTzJyUmN5Rkw4QXlnTFVSYWYwTGwyTWV3OEE2?=
+ =?utf-8?B?WFdTR096bC9mRFlUQUJZWitYZWYzM3pVMmFpb1VvcTBIYko4T013b1kybEtm?=
+ =?utf-8?B?M1VNQ3JZaWJ1Q1pqMnI2UW9TYTlic0VCS29VWkIwZW05UDVqa1RxQUJQQjZG?=
+ =?utf-8?B?TVE4WkpUcjFmejEvcnh4aWtCYkVpTU5JUjVqUUlIcEZ1c3l6eGdsMVYrSnhU?=
+ =?utf-8?B?ZEFSK2JsenVzU1dHWDRmOS9GTjNQdmtYS21Ga3psNkprUk9PUFhNbEdINC8r?=
+ =?utf-8?B?TWhLUjNzeE9LTEh5N0dxZlZhQ1RZZjNQNlZIbmtLRUtlMHdGTlJQRkVjUXdN?=
+ =?utf-8?Q?w54CjjKfvsIDi08mPyt96wUNL?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c0017403-74cf-467b-99ac-08dae235566a
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2022 02:53:13.8723
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vZbaPxqK8+h1VnQhPeX866d8aV96Vg9xOcP+juOU+M6rWllikoB7RO2t7FkLlluD+z7t0ermDFd/ugE5eXVQHA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5360
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Specify pre-parsed per-sensor calibration nvmem cells in the tsens
-device node rather than parsing the whole data blob in the driver.
+On 12/19/22 00:40, Perry Yuan wrote:
+> make the energy preference performance strings and profiles using one
+> common header for intel_pstate driver, then the amd_pstate epp driver can
+> use the common header as well. This will simpify the intel_pstate and
+> amd_pstate driver.
+> 
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> ---
+>   drivers/cpufreq/intel_pstate.c | 13 +++----------
+>   include/linux/cpufreq.h        | 11 +++++++++++
+>   2 files changed, 14 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> index ad9be31753b6..93a60fdac0fc 100644
+> --- a/drivers/cpufreq/intel_pstate.c
+> +++ b/drivers/cpufreq/intel_pstate.c
+> @@ -640,15 +640,7 @@ static int intel_pstate_set_epb(int cpu, s16 pref)
+>    *	4		power
+>    */
+>   
+> -enum energy_perf_value_index {
+> -	EPP_INDEX_DEFAULT = 0,
+> -	EPP_INDEX_PERFORMANCE,
+> -	EPP_INDEX_BALANCE_PERFORMANCE,
+> -	EPP_INDEX_BALANCE_POWERSAVE,
+> -	EPP_INDEX_POWERSAVE,
+> -};
+> -
+> -static const char * const energy_perf_strings[] = {
+> +const char * const energy_perf_strings[] = {
+>   	[EPP_INDEX_DEFAULT] = "default",
+>   	[EPP_INDEX_PERFORMANCE] = "performance",
+>   	[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
+> @@ -656,7 +648,8 @@ static const char * const energy_perf_strings[] = {
+>   	[EPP_INDEX_POWERSAVE] = "power",
+>   	NULL
+>   };
+> -static unsigned int epp_values[] = {
+> +
+> +unsigned int epp_values[] = {
+>   	[EPP_INDEX_DEFAULT] = 0, /* Unused index */
+>   	[EPP_INDEX_PERFORMANCE] = HWP_EPP_PERFORMANCE,
+>   	[EPP_INDEX_BALANCE_PERFORMANCE] = HWP_EPP_BALANCE_PERFORMANCE,
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8084.dtsi | 262 +++++++++++++++++++++++++++-
- 1 file changed, 256 insertions(+), 6 deletions(-)
+I think this is going to make CONFIG_AMD_PSTATE depend on 
+CONFIG_INTEL_PSTATE.  What you'll want to do is put these symbols in a 
+"common" C file used by both.  How about in the cppc lib stuff?
 
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index fe30abfff90a..f0f788ac38f0 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -249,11 +249,209 @@ qfprom: qfprom@fc4bc000 {
- 			reg = <0xfc4bc000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
--			tsens_calib: calib@d0 {
--				reg = <0xd0 0x18>;
-+			tsens_base1: base1@d0 {
-+				reg = <0xd0 0x1>;
-+				bits = <0 8>;
- 			};
--			tsens_backup: backup@440 {
--				reg = <0x440 0x10>;
-+			tsens_s0_p1: s0_p1@d1 {
-+				reg = <0xd1 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s1_p1: s1_p1@d2 {
-+				reg = <0xd1 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s2_p1: s2_p1@d2 {
-+				reg = <0xd2 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s3_p1: s3_p1@d3 {
-+				reg = <0xd3 0x1>;
-+				bits = <2 6>;
-+			};
-+			tsens_s4_p1: s4_p1@d4 {
-+				reg = <0xd4 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s5_p1: s5_p1@d4 {
-+				reg = <0xd4 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s6_p1: s6_p1@d5 {
-+				reg = <0xd5 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s7_p1: s7_p1@d6 {
-+				reg = <0xd6 0x1>;
-+				bits = <2 6>;
-+			};
-+			tsens_s8_p1: s8_p1@d7 {
-+				reg = <0xd7 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_mode: mode@d7 {
-+				reg = <0xd7 0x1>;
-+				bits = <6 2>;
-+			};
-+			tsens_s9_p1: s9_p1@d8 {
-+				reg = <0xd8 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s10_p1: s10_p1@d8 {
-+				reg = <0xd8 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_base2: base2@d9 {
-+				reg = <0xd9 0x2>;
-+				bits = <4 8>;
-+			};
-+			tsens_s0_p2: s0_p2@da {
-+				reg = <0xda 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s1_p2: s1_p2@db {
-+				reg = <0xdb 0x1>;
-+				bits = <2 6>;
-+			};
-+			tsens_s2_p2: s2_p2@dc {
-+				reg = <0xdc 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s3_p2: s3_p2@dc {
-+				reg = <0xdc 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s4_p2: s4_p2@dd {
-+				reg = <0xdd 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s5_p2: s5_p2@de {
-+				reg = <0xde 0x2>;
-+				bits = <2 6>;
-+			};
-+			tsens_s6_p2: s6_p2@df {
-+				reg = <0xdf 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s7_p2: s7_p2@e0 {
-+				reg = <0xe0 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s8_p2: s8_p2@e0 {
-+				reg = <0xe0 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s9_p2: s9_p2@e1 {
-+				reg = <0xe1 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s10_p2: s10_p2@e2 {
-+				reg = <0xe2 0x2>;
-+				bits = <2 6>;
-+			};
-+			tsens_s5_p2_backup: s5_p2_backup@e3 {
-+				reg = <0xe3 0x2>;
-+				bits = <0 6>;
-+			};
-+			tsens_mode_backup: mode_backup@e3 {
-+				reg = <0xe3 0x1>;
-+				bits = <6 2>;
-+			};
-+			tsens_s6_p2_backup: s6_p2_backup@e4 {
-+				reg = <0xe4 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s7_p2_backup: s7_p2_backup@e4 {
-+				reg = <0xe4 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s8_p2_backup: s8_p2_backup@e5 {
-+				reg = <0xe5 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s9_p2_backup: s9_p2_backup@e6 {
-+				reg = <0xe6 0x2>;
-+				bits = <2 6>;
-+			};
-+			tsens_s10_p2_backup: s10_p2_backup@e7 {
-+				reg = <0xe7 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_base1_backup: base1_backup@440 {
-+				reg = <0x440 0x1>;
-+				bits = <0 8>;
-+			};
-+			tsens_s0_p1_backup: s0_p1_backup@441 {
-+				reg = <0x441 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s1_p1_backup: s1_p1_backup@442 {
-+				reg = <0x441 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s2_p1_backup: s2_p1_backup@442 {
-+				reg = <0x442 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s3_p1_backup: s3_p1_backup@443 {
-+				reg = <0x443 0x1>;
-+				bits = <2 6>;
-+			};
-+			tsens_s4_p1_backup: s4_p1_backup@444 {
-+				reg = <0x444 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s5_p1_backup: s5_p1_backup@444 {
-+				reg = <0x444 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s6_p1_backup: s6_p1_backup@445 {
-+				reg = <0x445 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s7_p1_backup: s7_p1_backup@446 {
-+				reg = <0x446 0x1>;
-+				bits = <2 6>;
-+			};
-+			tsens_use_backup: use_backup@447 {
-+				reg = <0x447 0x1>;
-+				bits = <5 3>;
-+			};
-+			tsens_s8_p1_backup: s8_p1_backup@448 {
-+				reg = <0x448 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s9_p1_backup: s9_p1_backup@448 {
-+				reg = <0x448 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s10_p1_backup: s10_p1_backup@449 {
-+				reg = <0x449 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_base2_backup: base2_backup@44a {
-+				reg = <0x44a 0x2>;
-+				bits = <2 8>;
-+			};
-+			tsens_s0_p2_backup: s0_p2_backup@44b {
-+				reg = <0x44b 0x3>;
-+				bits = <2 6>;
-+			};
-+			tsens_s1_p2_backup: s1_p2_backup@44c {
-+				reg = <0x44c 0x1>;
-+				bits = <0 6>;
-+			};
-+			tsens_s2_p2_backup: s2_p2_backup@44c {
-+				reg = <0x44c 0x2>;
-+				bits = <6 6>;
-+			};
-+			tsens_s3_p2_backup: s3_p2_backup@44d {
-+				reg = <0x44d 0x2>;
-+				bits = <4 6>;
-+			};
-+			tsens_s4_p2_backup: s4_p2_backup@44e {
-+				reg = <0x44e 0x1>;
-+				bits = <2 6>;
- 			};
- 		};
- 
-@@ -261,8 +459,60 @@ tsens: thermal-sensor@fc4a8000 {
- 			compatible = "qcom,msm8974-tsens", "qcom,tsens-v0_1";
- 			reg = <0xfc4a9000 0x1000>, /* TM */
- 			      <0xfc4a8000 0x1000>; /* SROT */
--			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
--			nvmem-cell-names = "calib", "calib_backup";
-+			nvmem-cells = <&tsens_mode>,
-+				      <&tsens_base1>, <&tsens_base2>,
-+				      <&tsens_s0_p1>, <&tsens_s0_p2>,
-+				      <&tsens_s1_p1>, <&tsens_s1_p2>,
-+				      <&tsens_s2_p1>, <&tsens_s2_p2>,
-+				      <&tsens_s3_p1>, <&tsens_s3_p2>,
-+				      <&tsens_s4_p1>, <&tsens_s4_p2>,
-+				      <&tsens_s5_p1>, <&tsens_s5_p2>,
-+				      <&tsens_s6_p1>, <&tsens_s6_p2>,
-+				      <&tsens_s7_p1>, <&tsens_s7_p2>,
-+				      <&tsens_s8_p1>, <&tsens_s8_p2>,
-+				      <&tsens_s9_p1>, <&tsens_s9_p2>,
-+				      <&tsens_s10_p1>, <&tsens_s10_p2>,
-+				      <&tsens_use_backup>,
-+				      <&tsens_mode_backup>,
-+				      <&tsens_base1_backup>, <&tsens_base2_backup>,
-+				      <&tsens_s0_p1_backup>, <&tsens_s0_p2_backup>,
-+				      <&tsens_s1_p1_backup>, <&tsens_s1_p2_backup>,
-+				      <&tsens_s2_p1_backup>, <&tsens_s2_p2_backup>,
-+				      <&tsens_s3_p1_backup>, <&tsens_s3_p2_backup>,
-+				      <&tsens_s4_p1_backup>, <&tsens_s4_p2_backup>,
-+				      <&tsens_s5_p1_backup>, <&tsens_s5_p2_backup>,
-+				      <&tsens_s6_p1_backup>, <&tsens_s6_p2_backup>,
-+				      <&tsens_s7_p1_backup>, <&tsens_s7_p2_backup>,
-+				      <&tsens_s8_p1_backup>, <&tsens_s8_p2_backup>,
-+				      <&tsens_s9_p1_backup>, <&tsens_s9_p2_backup>,
-+				      <&tsens_s10_p1_backup>, <&tsens_s10_p2_backup>;
-+			nvmem-cell-names = "mode",
-+					   "base1", "base2",
-+					   "s0_p1", "s0_p2",
-+					   "s1_p1", "s1_p2",
-+					   "s2_p1", "s2_p2",
-+					   "s3_p1", "s3_p2",
-+					   "s4_p1", "s4_p2",
-+					   "s5_p1", "s5_p2",
-+					   "s6_p1", "s6_p2",
-+					   "s7_p1", "s7_p2",
-+					   "s8_p1", "s8_p2",
-+					   "s9_p1", "s9_p2",
-+					   "s10_p1", "s10_p2",
-+					   "use_backup",
-+					   "mode_backup",
-+					   "base1_backup", "base2_backup",
-+					   "s0_p1_backup", "s0_p2_backup",
-+					   "s1_p1_backup", "s1_p2_backup",
-+					   "s2_p1_backup", "s2_p2_backup",
-+					   "s3_p1_backup", "s3_p2_backup",
-+					   "s4_p1_backup", "s4_p2_backup",
-+					   "s5_p1_backup", "s5_p2_backup",
-+					   "s6_p1_backup", "s6_p2_backup",
-+					   "s7_p1_backup", "s7_p2_backup",
-+					   "s8_p1_backup", "s8_p2_backup",
-+					   "s9_p1_backup", "s9_p2_backup",
-+					   "s10_p1_backup", "s10_p2_backup";
- 			#qcom,sensors = <11>;
- 			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "uplow";
--- 
-2.35.1
+Please make sure that you test compile/link of v9 both with 
+CONFIG_AMD_PSTATE/CONFIG_INTEL_PSTATE set and either or set.
+
+> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> index d5595d57f4e5..e63309d497fe 100644
+> --- a/include/linux/cpufreq.h
+> +++ b/include/linux/cpufreq.h
+> @@ -20,6 +20,7 @@
+>   #include <linux/pm_qos.h>
+>   #include <linux/spinlock.h>
+>   #include <linux/sysfs.h>
+> +#include <asm/msr.h>
+>   
+>   /*********************************************************************
+>    *                        CPUFREQ INTERFACE                          *
+> @@ -185,6 +186,16 @@ struct cpufreq_freqs {
+>   	u8 flags;		/* flags of cpufreq_driver, see below. */
+>   };
+>   
+> +enum energy_perf_value_index {
+> +	EPP_INDEX_DEFAULT = 0,
+> +	EPP_INDEX_PERFORMANCE,
+> +	EPP_INDEX_BALANCE_PERFORMANCE,
+> +	EPP_INDEX_BALANCE_POWERSAVE,
+> +	EPP_INDEX_POWERSAVE,
+> +};
+> +extern const char * const energy_perf_strings[];
+> +extern unsigned int epp_values[];
+> +
+>   /* Only for ACPI */
+>   #define CPUFREQ_SHARED_TYPE_NONE (0) /* None */
+>   #define CPUFREQ_SHARED_TYPE_HW	 (1) /* HW does needed coordination */
 
