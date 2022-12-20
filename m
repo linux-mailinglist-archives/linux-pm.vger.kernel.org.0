@@ -2,92 +2,158 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07ED065260A
-	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 19:11:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D078D652613
+	for <lists+linux-pm@lfdr.de>; Tue, 20 Dec 2022 19:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbiLTSLB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 20 Dec 2022 13:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52870 "EHLO
+        id S232195AbiLTSN7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 20 Dec 2022 13:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233711AbiLTSLA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 13:11:00 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7292A12D2C;
-        Tue, 20 Dec 2022 10:10:58 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id f16so13194689ljc.8;
-        Tue, 20 Dec 2022 10:10:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YCgvLxGszpcqBmYL7G26fw2zZ2/wqSpCHLDM+cNyPgI=;
-        b=JflZ991nO9+q3StleuPYPYvI/SYtKxCV57+m2ta6t9PMPKDqmD8KqrZGSEjnbhACAf
-         f3GTO4rdd6omXL/Lk00wxSUeoACwLmO2Yy/j8LdGpAok4aafVK86coQ1VAXKjn8dmHRz
-         YaXg1ebaI5OuDYTEj/Eb2GTL3idtNktkpdlc3hg2uDctk9XGaqLRqLdgZFizmhybwcnT
-         jPK1sheetvmtAF3DGG0pxOkyWaY+B/mjmFxnl9w2clkRWPHA59hX3lEJEk1bYUF8yLqS
-         hjyUC58RzVyKFQkPejKQGXzdz7fVHeTxLdb9UllXhjsN0hIA189VHR0NQvHWwhDQh3a0
-         l8Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YCgvLxGszpcqBmYL7G26fw2zZ2/wqSpCHLDM+cNyPgI=;
-        b=kTXqLvyQHtNOaMadeXQQS0rs92I+vWqbz+/CIHNKTBJ9AI5jwUKq2QkwEhGYP7ojgx
-         HGcB79dusGwkU56GQjZsi+V5b/B23TeXEPnJw5Z2kG+Yo+o0na+XzYFLK7ICH8avOwig
-         OXYp9GyEk++qBqHOUGkenjkGj8HuKDaDR+a/Vs6gsjso4krC+ECED/W32U0VwpTqHI8y
-         EUQBTbsjwqpEVrQm0ONJTqnVu1RiHcJldX1SG1cFKL5LVQBRYp+qN0NiwR8rSdYougJY
-         JYYwPpehvMdqA/7z6T3d+Ac3FFFSBxDR9aJ9AXwxa2Yr+fij+pvviKSPecQvwyKQ422m
-         GcDA==
-X-Gm-Message-State: ANoB5pmeoIFxw2DhzF1Y/+2j+tnKlFLtF4SbetGCZxvrV/jm923dnJ3Y
-        hfxSYUW/Ohn9aslvVx/pUfA=
-X-Google-Smtp-Source: AA0mqf4aKschK9ygVYnNCcRfkDlSGFMATrw4+unJGjXm+d3l3pObcsb2tfiatDf4kFWqCaNWs4g1Dw==
-X-Received: by 2002:a05:651c:198c:b0:279:6514:54e6 with SMTP id bx12-20020a05651c198c00b00279651454e6mr16704634ljb.45.1671559856707;
-        Tue, 20 Dec 2022 10:10:56 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id q14-20020a2eb4ae000000b002790fbb5f89sm1088848ljm.44.2022.12.20.10.10.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Dec 2022 10:10:56 -0800 (PST)
-Message-ID: <4d562b75-854d-1997-8969-e7ef222e4e37@gmail.com>
-Date:   Tue, 20 Dec 2022 21:10:49 +0300
+        with ESMTP id S233912AbiLTSN4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 20 Dec 2022 13:13:56 -0500
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FBA186A9;
+        Tue, 20 Dec 2022 10:13:54 -0800 (PST)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4Nc4TB5pRLz9sc0;
+        Tue, 20 Dec 2022 19:13:50 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1671560030;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oBh94zxafkf8iTW1Whfw20TE2z6rdPEY1QkbgbOuVtQ=;
+        b=FjllJCc5aV+4Vb4wmDNbcI/umMRd6w96wSaDdSTmt8OIeMZWc+uqcQ3EBZC63eENDn4dx5
+        v/wN203UciUlRNvPUsSqrOZpc8iOOd8pSnfXSFz6oA++RuJM8fo+xKpMvy0q+Um8zHalMw
+        k05k+P3N/6PLomS5k25kSIDZir+AzZJyXTMVYy085sHzDM1HLUWH8h3mfj39/sRYlcjV3J
+        Kn6pt5HWpBcrVdRw6vmZcJM8otvMyXvNAI0J/8ZMSQHx3ZqExL7E/9fOvLaiBVJfHOk7Hn
+        Xp06hp1MYIV2YRvdcXY6MUr8If5Lx35SSyzrQiMk0eeEgIM42UeDbl4n48AZ/w==
+Message-ID: <73b77acd-813a-458b-61e2-87116720cc38@mailbox.org>
+Date:   Tue, 20 Dec 2022 18:13:41 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
+Subject: Re: [PATCH v8 00/13] Implement AMD Pstate EPP Driver
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, wyes.karny@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221219064042.661122-1-perry.yuan@amd.com>
 Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20221220160240.27494-2-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Tor Vic <torvic9@mailbox.org>
+In-Reply-To: <20221219064042.661122-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-MBO-RS-ID: 661c4c9fef32c1424ae
+X-MBO-RS-META: 87fq1ukmy3s3oekqxsiqibqdpwt7uebx
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-20.12.2022 19:02, Sumit Gupta пишет:
-> +static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32 *avg, u32 *peak)
-> +{
-> +	*avg = 0;
-> +	*peak = 0;
-> +
-> +	return 0;
-> +}
 
-Looks wrong, you should add ICC support to all the drivers first and
-only then enable ICC. I think you added this init_bw() to work around
-the fact that ICC isn't supported by T234 drivers.
+On 19.12.22 06:40, Perry Yuan wrote:
+> Hi all,
+> 
+> This patchset implements one new AMD CPU frequency driver
+> `amd-pstate-epp` instance for better performance and power control.
+> CPPC has a parameter called energy preference performance (EPP).
+> The EPP is used in the CCLK DPM controller to drive the frequency that a core
+> is going to operate during short periods of activity.
+> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+> 
+
+Using v8 and clang-15 on 6.1 I get:
+
+---
+ld.lld: error: undefined symbol: energy_perf_strings
+ >>> referenced by amd-pstate.c:789 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:789)
+ >>>               vmlinux.o:(show_energy_performance_preference)
+ >>> referenced by amd-pstate.c:768 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:768)
+ >>>               vmlinux.o:(store_energy_performance_preference)
+ >>> referenced by amd-pstate.c:749 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:749)
+ >>>               vmlinux.o:(show_energy_performance_available_preferences)
+ >>> referenced 1 more times
+ >>> did you mean: energy_perf_strings
+ >>> defined in: vmlinux.o
+
+ld.lld: error: undefined symbol: epp_values
+ >>> referenced by amd-pstate.c:189 
+(/tmp/makepkg/linux61-vd/src/linux-stable/drivers/cpufreq/amd-pstate.c:189)
+ >>>               vmlinux.o:(store_energy_performance_preference)
+---
+
+and a few warnings:
+
+---
+drivers/cpufreq/amd-pstate.c:966:6: warning: variable 'ret' is used 
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+         if (rc)
+             ^~
+drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
+         return ret;
+                ^~~
+drivers/cpufreq/amd-pstate.c:966:2: note: remove the 'if' if its 
+condition is always false
+         if (rc)
+         ^~~~~~~
+drivers/cpufreq/amd-pstate.c:962:6: warning: variable 'ret' is used 
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+         if (!dev)
+             ^~~~
+drivers/cpufreq/amd-pstate.c:1025:9: note: uninitialized use occurs here
+         return ret;
+                ^~~
+drivers/cpufreq/amd-pstate.c:962:2: note: remove the 'if' if its 
+condition is always false
+         if (!dev)
+         ^~~~~~~~~
+drivers/cpufreq/amd-pstate.c:949:66: note: initialize the variable 'ret' 
+to silence this warning
+         int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+                                                                         ^
+ 
+  = 0
+drivers/cpufreq/amd-pstate.c:996:52: warning: variable 'value' is 
+uninitialized when used here [-Wuninitialized]
+         cpudata->epp_cached = amd_pstate_get_epp(cpudata, value);
+                                                           ^~~~~
+drivers/cpufreq/amd-pstate.c:953:11: note: initialize the variable 
+'value' to silence this warning
+         u64 value;
+                  ^
+                   = 0
+drivers/cpufreq/amd-pstate.c:1085:6: warning: variable 'epp' is used 
+uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+         if (cpudata->epp_policy == cpudata->policy)
+             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/cpufreq/amd-pstate.c:1110:30: note: uninitialized use occurs here
+         amd_pstate_set_epp(cpudata, epp);
+                                     ^~~
+drivers/cpufreq/amd-pstate.c:1085:2: note: remove the 'if' if its 
+condition is always false
+         if (cpudata->epp_policy == cpudata->policy)
+         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+drivers/cpufreq/amd-pstate.c:1064:9: note: initialize the variable 'epp' 
+to silence this warning
+         s16 epp;
+                ^
+                 = 0
+---
+
+Cheers,
+
+Tor Vic
+
