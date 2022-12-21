@@ -2,148 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17DC65379B
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 21:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20B4E6537B7
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 21:43:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiLUUgR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 15:36:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33892 "EHLO
+        id S234659AbiLUUnb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 15:43:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229491AbiLUUgR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 15:36:17 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E546580;
-        Wed, 21 Dec 2022 12:36:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1671654975; x=1703190975;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Pm+AJyr6vEiR2uv5BRun3YZb1cegwZ2UTBD3o38XlSE=;
-  b=nw2kkJTBNL6A18AtWlG1kl7T9yojbp7MuXcAk0SbPAeaj5W1zFCn89qG
-   nVa79gAlvmNzbr67OxLAquUElqL0+f5r+xPqt/v6id+jFmudE+gakcyu9
-   M5MIO8lOe2nCL7Cdvfz6qlMmPF6svaHFsNhWIfiJWvWIqGMME/d1zFK9P
-   a/L76nvxNZVQWariGw7F2KnI+EQoJ2BKoPPf5/s9myffGOOJIExGbHikd
-   Xcag1FqpVHW3funrU64kZSnFYxebU+D0afuDuX6VUdmoAzEJWWW2x46l5
-   4XrlZ9/5av9O3iTFg1FwKkTpRlXV7DeGCkKKqkG47up3Vt49QZwj7+VJz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="347103677"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="347103677"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:36:14 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="682158034"
-X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
-   d="scan'208";a="682158034"
-Received: from lijieqi-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.64.202])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:36:14 -0800
-Message-ID: <838cf73badd8e0c1126dbc64db3aed2f20cbfe9c.camel@linux.intel.com>
-Subject: Re: [RFC][PATCH] thermal/idle_inject: Support 100% idle injection
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 21 Dec 2022 12:36:14 -0800
-In-Reply-To: <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
-References: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
-         <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S229647AbiLUUna (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 15:43:30 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C915EB29
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 12:43:28 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id h7so16127680wrs.6
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 12:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f2IQLZGlT7yhkKQbuMJYkAG86xxOo83aPEdZnsUHwEc=;
+        b=L8yGES2m8qfdje+sg6Bttv7uJNZRNv0Qt1jO2DYzZolmGJpdZgAvp4JVEConERyj7c
+         oZoFJ942umf3ZoCpr7sWeYTgwTnQFY5dG1swYCiuW4ggoj0NTzj+17CmEguxyGFdDE06
+         qojG6GoucyhCXu21XttSfxY/TPE035JVLI4fUqcBnfgvRUeCpIt1cuI8eoaNDnX7/Be+
+         I+RO32lnM8C+xbmj7IruIOhMiZqBWLSFK4WvrIBGdo958hIDTJAjordFyditV9paLumH
+         6TFaE74R7GgmJvD+SsNgjW1tlvIfjxS4tZLjSoa+TJV0ZG9195niA5fDwlyTkbWaHkiz
+         NB+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2IQLZGlT7yhkKQbuMJYkAG86xxOo83aPEdZnsUHwEc=;
+        b=MuhD8HcG/QwZqi7ccbIOqQwuvWO+BK332vBap2B3wMfPAE+VTa3Tb2HJuEJ2RDXc1+
+         vatZEXQVtZt7ERGT/ZD7tdPE7rKaCcQF26gYk3WUn6R5RWYCku7mdstetdak6nd6GysU
+         LRuSxS9mIoaRLqNPnKECbaHc/WYZ7ez0TgctYIStgzUplzPan/wYSgxXqTg+uuxQOzjO
+         15BpS6e921SBTBT00yiplqbEcOyMje4XR6RIpMi6Vl4Bep+BxnkiS4QxwEpS6q6Egswj
+         pjPsd+ZEn1LV6mfvJiNzPr6IxH13r3ypT3bO/TmiLxc40BNiziH73xl9rf+L7nVbCdBE
+         Ic7w==
+X-Gm-Message-State: AFqh2krmMkk+uWqPDTPZ6h73Vc4CETQs3ct2ADlWlVXYvnwjyWsYGhWt
+        RKRvoH9t6pRb4iDp0dC8le8DvDaL2FGo3PXL
+X-Google-Smtp-Source: AMrXdXtuPBW+mzLCSwiREgz/5nS5iLmvzAbGtF5RHR5KkYF6cprT0yoBbMzvJ1089yCTeGo8BFDrGw==
+X-Received: by 2002:a5d:440f:0:b0:24a:acbe:4105 with SMTP id z15-20020a5d440f000000b0024aacbe4105mr2114018wrq.53.1671655407083;
+        Wed, 21 Dec 2022 12:43:27 -0800 (PST)
+Received: from [192.168.175.23] ([37.167.18.49])
+        by smtp.googlemail.com with ESMTPSA id k2-20020a5d5242000000b0024287d9d4a8sm16166850wrc.74.2022.12.21.12.43.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Dec 2022 12:43:26 -0800 (PST)
+Message-ID: <8ebd3fba-f2a1-9fbd-917e-05d5d1a41735@linaro.org>
+Date:   Wed, 21 Dec 2022 21:43:24 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC][PATCH] thermal/idle_inject: Support 100% idle injection
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
+ <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
+ <838cf73badd8e0c1126dbc64db3aed2f20cbfe9c.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <838cf73badd8e0c1126dbc64db3aed2f20cbfe9c.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2022-12-21 at 14:43 +0100, Daniel Lezcano wrote:
+On 21/12/2022 21:36, srinivas pandruvada wrote:
+> On Wed, 2022-12-21 at 14:43 +0100, Daniel Lezcano wrote:
+>>
+>> Hi Srinivas,
+>>
+>>
+>> On 09/12/2022 02:36, Srinivas Pandruvada wrote:
+>>> The users of idle injection framework allow 100% idle injection.
+>>> For
+>>> example: thermal/cpuidle_cooling.c driver. When the ratio set to
+>>> 100%,
+>>> the runtime_duration becomes zero.
+>>>
+>>> In the function idle_inject_set_duration() in idle injection
+>>> framework
+>>> run_duration_us == 0 is silently ignored, without any error (it is
+>>> a
+>>> void function). So, the caller will assume that everything is fine
+>>> and
+>>> 100% idle is effective. But in reality the idle inject will be
+>>> whatever
+>>> set before.
+>>
+>> Good catch
+>>
+>>> There are two options:
+>>> - The caller change their max state to 99% instead of 100% and
+>>> document that 100% is not supported by idle inject framework
+>>> - Support 100% idle support in idle inject framework
+>>
+>> Yes, from my POV a CPU being impossible to cool down for any reason
+>> should end up by staying off.
+>>
+>>> Since there are other protections via RT throttling, this framework
+>>> can
+>>> allow 100% idle. The RT throttling will be activated at 95% idle by
+>>> default. The caller disabling RT throttling and injecting 100%
+>>> idle,
+>>> should be aware that CPU can't be used at all.
+>>
+>> Would it make sense to write a trace in this case ?
 > 
-> Hi Srinivas,
+> There is one printk already:
+> printk_deferred_once("sched: RT throttling activated\n")
+> You mean we should add
 > 
-> 
-> On 09/12/2022 02:36, Srinivas Pandruvada wrote:
-> > The users of idle injection framework allow 100% idle injection.
-> > For
-> > example: thermal/cpuidle_cooling.c driver. When the ratio set to
-> > 100%,
-> > the runtime_duration becomes zero.
-> > 
-> > In the function idle_inject_set_duration() in idle injection
-> > framework
-> > run_duration_us == 0 is silently ignored, without any error (it is
-> > a
-> > void function). So, the caller will assume that everything is fine
-> > and
-> > 100% idle is effective. But in reality the idle inject will be
-> > whatever
-> > set before.
-> 
-> Good catch
-> 
-> > There are two options:
-> > - The caller change their max state to 99% instead of 100% and
-> > document that 100% is not supported by idle inject framework
-> > - Support 100% idle support in idle inject framework
-> 
-> Yes, from my POV a CPU being impossible to cool down for any reason 
-> should end up by staying off.
-> 
-> > Since there are other protections via RT throttling, this framework
-> > can
-> > allow 100% idle. The RT throttling will be activated at 95% idle by
-> > default. The caller disabling RT throttling and injecting 100%
-> > idle,
-> > should be aware that CPU can't be used at all.
-> 
-> Would it make sense to write a trace in this case ?
+> trace_sched_* for this?
 
-There is one printk already:
-printk_deferred_once("sched: RT throttling activated\n")
 
-You mean we should add
+I meant the CPU is going 100% idle
 
-trace_sched_* for this?
 
+>>> The idle inject timer is started for (run_duration_us +
+>>> idle_duration_us)
+>>> duration. Hence replace (run_duration_us && idle_duration_us) with
+>>> (run_duration_us + idle_duration_us) in the function
+>>> idle_inject_set_duration().
+>>
+>> Sounds good to me
+>>
+> I will submit a patch for this.
 > 
-> > The idle inject timer is started for (run_duration_us +
-> > idle_duration_us)
-> > duration. Hence replace (run_duration_us && idle_duration_us) with
-> > (run_duration_us + idle_duration_us) in the function
-> > idle_inject_set_duration().
+> Thanks,
+> Srinivas
 > 
-> Sounds good to me
+>>> Signed-off-by: Srinivas Pandruvada
+>>> <srinivas.pandruvada@linux.intel.com>
+>>> ---
+>>>    drivers/powercap/idle_inject.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/powercap/idle_inject.c
+>>> b/drivers/powercap/idle_inject.c
+>>> index f48e71501429..4a4fe60d2563 100644
+>>> --- a/drivers/powercap/idle_inject.c
+>>> +++ b/drivers/powercap/idle_inject.c
+>>> @@ -184,7 +184,7 @@ void idle_inject_set_duration(struct
+>>> idle_inject_device *ii_dev,
+>>>                                unsigned int run_duration_us,
+>>>                                unsigned int idle_duration_us)
+>>>    {
+>>> -       if (run_duration_us && idle_duration_us) {
+>>> +       if (run_duration_us + idle_duration_us) {
+>>>                  WRITE_ONCE(ii_dev->run_duration_us,
+>>> run_duration_us);
+>>>                  WRITE_ONCE(ii_dev->idle_duration_us,
+>>> idle_duration_us);
+>>>          }
+>>
 > 
-I will submit a patch for this.
 
-Thanks,
-Srinivas
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > ---
-> >   drivers/powercap/idle_inject.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/powercap/idle_inject.c
-> > b/drivers/powercap/idle_inject.c
-> > index f48e71501429..4a4fe60d2563 100644
-> > --- a/drivers/powercap/idle_inject.c
-> > +++ b/drivers/powercap/idle_inject.c
-> > @@ -184,7 +184,7 @@ void idle_inject_set_duration(struct
-> > idle_inject_device *ii_dev,
-> >                               unsigned int run_duration_us,
-> >                               unsigned int idle_duration_us)
-> >   {
-> > -       if (run_duration_us && idle_duration_us) {
-> > +       if (run_duration_us + idle_duration_us) {
-> >                 WRITE_ONCE(ii_dev->run_duration_us,
-> > run_duration_us);
-> >                 WRITE_ONCE(ii_dev->idle_duration_us,
-> > idle_duration_us);
-> >         }
-> 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
