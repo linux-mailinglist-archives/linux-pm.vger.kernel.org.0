@@ -2,175 +2,319 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B4E6537B7
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 21:43:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0038E6537E2
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 21:58:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234659AbiLUUnb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 15:43:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37278 "EHLO
+        id S230336AbiLUU6K (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 15:58:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiLUUna (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 15:43:30 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C915EB29
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 12:43:28 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id h7so16127680wrs.6
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 12:43:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f2IQLZGlT7yhkKQbuMJYkAG86xxOo83aPEdZnsUHwEc=;
-        b=L8yGES2m8qfdje+sg6Bttv7uJNZRNv0Qt1jO2DYzZolmGJpdZgAvp4JVEConERyj7c
-         oZoFJ942umf3ZoCpr7sWeYTgwTnQFY5dG1swYCiuW4ggoj0NTzj+17CmEguxyGFdDE06
-         qojG6GoucyhCXu21XttSfxY/TPE035JVLI4fUqcBnfgvRUeCpIt1cuI8eoaNDnX7/Be+
-         I+RO32lnM8C+xbmj7IruIOhMiZqBWLSFK4WvrIBGdo958hIDTJAjordFyditV9paLumH
-         6TFaE74R7GgmJvD+SsNgjW1tlvIfjxS4tZLjSoa+TJV0ZG9195niA5fDwlyTkbWaHkiz
-         NB+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f2IQLZGlT7yhkKQbuMJYkAG86xxOo83aPEdZnsUHwEc=;
-        b=MuhD8HcG/QwZqi7ccbIOqQwuvWO+BK332vBap2B3wMfPAE+VTa3Tb2HJuEJ2RDXc1+
-         vatZEXQVtZt7ERGT/ZD7tdPE7rKaCcQF26gYk3WUn6R5RWYCku7mdstetdak6nd6GysU
-         LRuSxS9mIoaRLqNPnKECbaHc/WYZ7ez0TgctYIStgzUplzPan/wYSgxXqTg+uuxQOzjO
-         15BpS6e921SBTBT00yiplqbEcOyMje4XR6RIpMi6Vl4Bep+BxnkiS4QxwEpS6q6Egswj
-         pjPsd+ZEn1LV6mfvJiNzPr6IxH13r3ypT3bO/TmiLxc40BNiziH73xl9rf+L7nVbCdBE
-         Ic7w==
-X-Gm-Message-State: AFqh2krmMkk+uWqPDTPZ6h73Vc4CETQs3ct2ADlWlVXYvnwjyWsYGhWt
-        RKRvoH9t6pRb4iDp0dC8le8DvDaL2FGo3PXL
-X-Google-Smtp-Source: AMrXdXtuPBW+mzLCSwiREgz/5nS5iLmvzAbGtF5RHR5KkYF6cprT0yoBbMzvJ1089yCTeGo8BFDrGw==
-X-Received: by 2002:a5d:440f:0:b0:24a:acbe:4105 with SMTP id z15-20020a5d440f000000b0024aacbe4105mr2114018wrq.53.1671655407083;
-        Wed, 21 Dec 2022 12:43:27 -0800 (PST)
-Received: from [192.168.175.23] ([37.167.18.49])
-        by smtp.googlemail.com with ESMTPSA id k2-20020a5d5242000000b0024287d9d4a8sm16166850wrc.74.2022.12.21.12.43.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 12:43:26 -0800 (PST)
-Message-ID: <8ebd3fba-f2a1-9fbd-917e-05d5d1a41735@linaro.org>
-Date:   Wed, 21 Dec 2022 21:43:24 +0100
+        with ESMTP id S229620AbiLUU6K (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 15:58:10 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CDF66561;
+        Wed, 21 Dec 2022 12:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1671656289; x=1703192289;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=jC4yCS27B22MgIBp66C0aP/YE780Xq2kMCQfMMWlUzU=;
+  b=hYIqsUQcfr9p6zw5gE6u4+kCnRVwOV6fpTpZPCXAmVB0/5NfTSTd1H91
+   MpqkuzqPe1eEbvQ6GVGVrzY5VtvGdthy0weF9f58Eu1bg5HFAvBtFmA2m
+   8IMBmu+rkUtzA/RutEZTGgIcZpPntK/ue1ZZGYXVFVCek/T3YDHad2ZN0
+   h+h/bZ40u1yom9l3uPz3zpdVsinT3AbEBhbMfaCnlITIYig4JUn2X24VC
+   CawZf4FWV86sGdrG32G3887JjaSMD7zOlD/O2MBhaOtKBNdsWjDvQut6O
+   TVd/uRt+DvAtiPnZ9mcjVFILiqr7ODH8xbnlaYSystKlYTrJENojBuPj3
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="320025091"
+X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
+   d="scan'208";a="320025091"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:58:08 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10568"; a="825745425"
+X-IronPort-AV: E=Sophos;i="5.96,263,1665471600"; 
+   d="scan'208";a="825745425"
+Received: from lijieqi-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.64.202])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2022 12:58:07 -0800
+Message-ID: <3e59c5216fad003f079224cd08a7da9b30f6365d.camel@linux.intel.com>
+Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete
+ callbacks
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Date:   Wed, 21 Dec 2022 12:58:07 -0800
+In-Reply-To: <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org>
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+         <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com>
+         <e2af7a4b-99f4-f88e-fbe7-5d3595d6211b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC][PATCH] thermal/idle_inject: Support 100% idle injection
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
- <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
- <838cf73badd8e0c1126dbc64db3aed2f20cbfe9c.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <838cf73badd8e0c1126dbc64db3aed2f20cbfe9c.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 21/12/2022 21:36, srinivas pandruvada wrote:
-> On Wed, 2022-12-21 at 14:43 +0100, Daniel Lezcano wrote:
->>
->> Hi Srinivas,
->>
->>
->> On 09/12/2022 02:36, Srinivas Pandruvada wrote:
->>> The users of idle injection framework allow 100% idle injection.
->>> For
->>> example: thermal/cpuidle_cooling.c driver. When the ratio set to
->>> 100%,
->>> the runtime_duration becomes zero.
->>>
->>> In the function idle_inject_set_duration() in idle injection
->>> framework
->>> run_duration_us == 0 is silently ignored, without any error (it is
->>> a
->>> void function). So, the caller will assume that everything is fine
->>> and
->>> 100% idle is effective. But in reality the idle inject will be
->>> whatever
->>> set before.
->>
->> Good catch
->>
->>> There are two options:
->>> - The caller change their max state to 99% instead of 100% and
->>> document that 100% is not supported by idle inject framework
->>> - Support 100% idle support in idle inject framework
->>
->> Yes, from my POV a CPU being impossible to cool down for any reason
->> should end up by staying off.
->>
->>> Since there are other protections via RT throttling, this framework
->>> can
->>> allow 100% idle. The RT throttling will be activated at 95% idle by
->>> default. The caller disabling RT throttling and injecting 100%
->>> idle,
->>> should be aware that CPU can't be used at all.
->>
->> Would it make sense to write a trace in this case ?
+Hi Daniel,
+
+On Wed, 2022-12-21 at 15:52 +0100, Daniel Lezcano wrote:
 > 
-> There is one printk already:
-> printk_deferred_once("sched: RT throttling activated\n")
-> You mean we should add
+> Hi Srinivas,
 > 
-> trace_sched_* for this?
-
-
-I meant the CPU is going 100% idle
-
-
->>> The idle inject timer is started for (run_duration_us +
->>> idle_duration_us)
->>> duration. Hence replace (run_duration_us && idle_duration_us) with
->>> (run_duration_us + idle_duration_us) in the function
->>> idle_inject_set_duration().
->>
->> Sounds good to me
->>
-> I will submit a patch for this.
+> On 30/11/2022 00:34, Srinivas Pandruvada wrote:
+> > The actual idle percentage can be less than the desired because of
+> > interrupts. Since the objective for CPU Idle injection is for
+> > thermal
+> > control, there should be some way to compensate for lost idle
+> > percentage.
+> > Some architectures provide interface to get actual idle percent
+> > observed
+> > by the hardware. So, the idle percent can be adjusted using the
+> > hardware
+> > feedback. For example, Intel CPUs provides package idle counters,
+> > which
+> > is currently used by intel powerclamp driver to adjust idle time.
+> Can you provide an example in terms of timings?
 > 
-> Thanks,
-> Srinivas
+> I'm not getting how 'prepare' would do by returning a positive value
+> to 
+> skip the play_idle_precise() and what will do 'complete' ?
 > 
->>> Signed-off-by: Srinivas Pandruvada
->>> <srinivas.pandruvada@linux.intel.com>
->>> ---
->>>    drivers/powercap/idle_inject.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/powercap/idle_inject.c
->>> b/drivers/powercap/idle_inject.c
->>> index f48e71501429..4a4fe60d2563 100644
->>> --- a/drivers/powercap/idle_inject.c
->>> +++ b/drivers/powercap/idle_inject.c
->>> @@ -184,7 +184,7 @@ void idle_inject_set_duration(struct
->>> idle_inject_device *ii_dev,
->>>                                unsigned int run_duration_us,
->>>                                unsigned int idle_duration_us)
->>>    {
->>> -       if (run_duration_us && idle_duration_us) {
->>> +       if (run_duration_us + idle_duration_us) {
->>>                  WRITE_ONCE(ii_dev->run_duration_us,
->>> run_duration_us);
->>>                  WRITE_ONCE(ii_dev->idle_duration_us,
->>> idle_duration_us);
->>>          }
->>
+intel_powerclamp has a logic where if the current idle percentage
+observed from hardware is more than the desired target inject percent,
+it skips calling play_idle().
+
+For example if you want to inject 50% idle and system is naturally idle
+for 60%, there is no use of calling play_idle in the idle injection
+framework to induce more idle. In this way a workload can run
+immediately.
+
+So trying to emulate the same logic by using powercap/idle_inject
+framework. So prepare() callback in the intel_powerclamp driver calls
+the existing function to check if idle-inject should skip for this time
+or not.
+
+The complete() callback is to do just to adjust run duration. I don't
+have a use case, but to add complementary callback to prepare() if
+required.
+
+Thanks,
+Srinivas
+
 > 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> > The only way this can be done currently is by monitoring hardware
+> > idle
+> > percent from a different software thread. This can be avoided by
+> > adding
+> > callbacks.
+> > 
+> > Add a capability to register a prepare and complete callback during
+> > idle
+> > inject registry. Add a new register function
+> > idle_inject_register_full()
+> > which also allows to register callbacks.
+> > 
+> > If they are not NULL, then prepare callback is called before
+> > calling
+> > play_idle_precise() and complete callback is called after calling
+> > play_idle_precise().
+> > 
+> > If prepare callback is present and returns non 0 value then
+> > play_idle_precise() is not called to avoid over compensation.
+> > 
+> > Signed-off-by: Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com>
+> > ---
+> > v2
+> > - Replace begin/end with prepare/complete
+> > - Add new interface idle_inject_register_full with callbacks
+> > - Update kernel doc
+> > - Update commit description
+> > 
+> >   drivers/powercap/idle_inject.c | 62
+> > +++++++++++++++++++++++++++++++---
+> >   include/linux/idle_inject.h    |  4 +++
+> >   2 files changed, 62 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/powercap/idle_inject.c
+> > b/drivers/powercap/idle_inject.c
+> > index dfa989182e71..f48e71501429 100644
+> > --- a/drivers/powercap/idle_inject.c
+> > +++ b/drivers/powercap/idle_inject.c
+> > @@ -63,13 +63,31 @@ struct idle_inject_thread {
+> >    * @idle_duration_us: duration of CPU idle time to inject
+> >    * @run_duration_us: duration of CPU run time to allow
+> >    * @latency_us: max allowed latency
+> > + * @prepare: Callback function which is called before calling
+> > + *             play_idle_precise()
+> > + * @complete: Callback function which is called after calling
+> > + *             play_idle_precise()
+> >    * @cpumask: mask of CPUs affected by idle injection
+> > + *
+> > + * This structure is used to define per instance idle inject
+> > device data. Each
+> > + * instance has an idle duration, a run duration and mask of CPUs
+> > to inject
+> > + * idle.
+> > + * Actual idle is injected by calling kernel scheduler interface
+> > + * play_idle_precise(). There are two optional callbacks which the
+> > caller can
+> > + * register by calling idle_inject_register_full():
+> > + * prepare() - This callback is called just before calling
+> > play_idle_precise()
+> > + *             If this callback returns non zero value then
+> > + *             play_idle_precise() is not called. This means skip
+> > injecting
+> > + *             idle during this period.
+> > + * complete() - This callback is called after calling
+> > play_idle_precise().
+> >    */
+> >   struct idle_inject_device {
+> >         struct hrtimer timer;
+> >         unsigned int idle_duration_us;
+> >         unsigned int run_duration_us;
+> >         unsigned int latency_us;
+> > +       int (*prepare)(unsigned int cpu);
+> > +       void (*complete)(unsigned int cpu);
+> >         unsigned long cpumask[];
+> >   };
+> >   
+> > @@ -132,6 +150,7 @@ static void idle_inject_fn(unsigned int cpu)
+> >   {
+> >         struct idle_inject_device *ii_dev;
+> >         struct idle_inject_thread *iit;
+> > +       int ret;
+> >   
+> >         ii_dev = per_cpu(idle_inject_device, cpu);
+> >         iit = per_cpu_ptr(&idle_inject_thread, cpu);
+> > @@ -141,8 +160,18 @@ static void idle_inject_fn(unsigned int cpu)
+> >          */
+> >         iit->should_run = 0;
+> >   
+> > +       if (ii_dev->prepare) {
+> > +               ret = ii_dev->prepare(cpu);
+> > +               if (ret)
+> > +                       goto skip;
+> > +       }
+> > +
+> >         play_idle_precise(READ_ONCE(ii_dev->idle_duration_us) *
+> > NSEC_PER_USEC,
+> >                           READ_ONCE(ii_dev->latency_us) *
+> > NSEC_PER_USEC);
+> > +
+> > +skip:
+> > +       if (ii_dev->complete)
+> > +               ii_dev->complete(cpu);
+> >   }
+> >   
+> >   /**
+> > @@ -295,17 +324,23 @@ static int idle_inject_should_run(unsigned
+> > int cpu)
+> >   }
+> >   
+> >   /**
+> > - * idle_inject_register - initialize idle injection on a set of
+> > CPUs
+> > + * idle_inject_register_full - initialize idle injection on a set
+> > of CPUs
+> >    * @cpumask: CPUs to be affected by idle injection
+> > + * @prepare: callback called before calling play_idle_precise()
+> > + * @complete: callback called after calling play_idle_precise()
+> >    *
+> >    * This function creates an idle injection control device
+> > structure for the
+> > - * given set of CPUs and initializes the timer associated with
+> > it.  It does not
+> > - * start any injection cycles.
+> > + * given set of CPUs and initializes the timer associated with it.
+> > This
+> > + * function also allows to register prepare() and complete()
+> > callbacks.
+> > + * It does not start any injection cycles.
+> >    *
+> >    * Return: NULL if memory allocation fails, idle injection
+> > control device
+> >    * pointer on success.
+> >    */
+> > -struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask)
+> > +
+> > +struct idle_inject_device *idle_inject_register_full(struct
+> > cpumask *cpumask,
+> > +                                                    int
+> > (*prepare)(unsigned int cpu),
+> > +                                                    void
+> > (*complete)(unsigned int cpu))
+> >   {
+> >         struct idle_inject_device *ii_dev;
+> >         int cpu, cpu_rb;
+> > @@ -318,6 +353,8 @@ struct idle_inject_device
+> > *idle_inject_register(struct cpumask *cpumask)
+> >         hrtimer_init(&ii_dev->timer, CLOCK_MONOTONIC,
+> > HRTIMER_MODE_REL);
+> >         ii_dev->timer.function = idle_inject_timer_fn;
+> >         ii_dev->latency_us = UINT_MAX;
+> > +       ii_dev->prepare = prepare;
+> > +       ii_dev->complete = complete;
+> >   
+> >         for_each_cpu(cpu, to_cpumask(ii_dev->cpumask)) {
+> >   
+> > @@ -342,6 +379,23 @@ struct idle_inject_device
+> > *idle_inject_register(struct cpumask *cpumask)
+> >   
+> >         return NULL;
+> >   }
+> > +EXPORT_SYMBOL_NS_GPL(idle_inject_register_full, IDLE_INJECT);
+> > +
+> > +/**
+> > + * idle_inject_register - initialize idle injection on a set of
+> > CPUs
+> > + * @cpumask: CPUs to be affected by idle injection
+> > + *
+> > + * This function creates an idle injection control device
+> > structure for the
+> > + * given set of CPUs and initializes the timer associated with
+> > it.  It does not
+> > + * start any injection cycles.
+> > + *
+> > + * Return: NULL if memory allocation fails, idle injection control
+> > device
+> > + * pointer on success.
+> > + */
+> > +struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask)
+> > +{
+> > +       return idle_inject_register_full(cpumask, NULL, NULL);
+> > +}
+> >   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+> >   
+> >   /**
+> > diff --git a/include/linux/idle_inject.h
+> > b/include/linux/idle_inject.h
+> > index fb88e23a99d3..e18d89793490 100644
+> > --- a/include/linux/idle_inject.h
+> > +++ b/include/linux/idle_inject.h
+> > @@ -13,6 +13,10 @@ struct idle_inject_device;
+> >   
+> >   struct idle_inject_device *idle_inject_register(struct cpumask
+> > *cpumask);
+> >   
+> > +struct idle_inject_device *idle_inject_register_full(struct
+> > cpumask *cpumask,
+> > +                                                    int
+> > (*prepare)(unsigned int cpu),
+> > +                                                    void
+> > (*complete)(unsigned int cpu));
+> > +
+> >   void idle_inject_unregister(struct idle_inject_device *ii_dev);
+> >   
+> >   int idle_inject_start(struct idle_inject_device *ii_dev);
+> 
 
