@@ -2,113 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9601065372B
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 20:44:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6F8653767
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 21:13:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbiLUToD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 14:44:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S234775AbiLUUN3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 15:13:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbiLUToC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 14:44:02 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC08726483;
-        Wed, 21 Dec 2022 11:43:59 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x11so1222176lfn.0;
-        Wed, 21 Dec 2022 11:43:59 -0800 (PST)
+        with ESMTP id S230014AbiLUUN1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 15:13:27 -0500
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95D9BBDE
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 12:13:26 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id f34so9939522lfv.10
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 12:13:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=5yhX4t62CgBOAzk9oajDp2zi20+XuGUD+OQN8cgrarE=;
-        b=e3soypW6T1YaXIhKWFqwwC6bg4Hmx4hukwse2r3jzMy1L6/a6JBaRI6r1veTli4qCR
-         y0oBGu+fot/if3at3qL6Vba9iXiohMlcK2qrOC47F1Q0tri0Ub1XbcwX4mgqQq3iMrto
-         6GATAFPwSzcmqCvWgT0W0ZdmXjzjHoKgeqPOkpRwy5sPANabM8nXejBNkaM80Fx9xojE
-         xLks/yg9WPDYXNdXS81dpk0cpu15BtGfAL/KwzPURNjS1DH68+TxcdsoN8Ln7t9IE8SH
-         e62/anQTdKfAwaHUFJYT/Uzb0SeENFKLoBo8Mpe2YlHfp/TtqtN+tYs9Swlw7fJ7KbFP
-         2+vg==
+        bh=xMyITnYC6iA3G/LtEs1ZWz7dfXVBOhvaku8kkCxxo2s=;
+        b=NJ8AI4l2bQDByL8abuo9ZMfM5BPB4rECN8H01ymKifVUY+P87GD6cLLj1DOw8UYrXJ
+         RFj0+t9/IMWcKCfvpaHXpHjAn8jiwV/W6dJmariZAs0zaIQC27W6YLXL83pkN9LJofS7
+         sWKSxrAIlzfqj1KmTovKHodA+XZN86a5usHWzOFMUwEnlQMqkKT5yXpmlymD1ASRwS9b
+         O5ZYDOZGSNYO896EYzazZhQI25k7JEwA4bka5JyJmOFLXIpCX0QvDDJvssCvHX69ea98
+         GZ8tE+9HSrIapYUsDAlESvqazowB1JwXFO5oZIzKT+HgKLJxBN1x1QEOWdBtaQb5U6VQ
+         Gjtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5yhX4t62CgBOAzk9oajDp2zi20+XuGUD+OQN8cgrarE=;
-        b=sVJrYmoPDjAGzSOZUU9d0Mn84II0Mxwdq+aXAblTfxx+807gTWbtZhnmAB0MCavJMQ
-         SRf3mza6gVaCp9osswmq6flLWGeWK1ZoHTJPK1tAx9i9LBD2jlDZxusDhtEKkMAZ+yDN
-         oyYt/NdpiJTGfQ44w4EkSNFSr8gK7eANYqrdMEr1BE74Hju7ceSVaK9FtzAodbT0sEzr
-         mEtVov1UAX1EET3E/1xiG9TrVnHAEPdWgSKmAQGAWAvyoZkKb59+vFxEvUTGcqzqnKvp
-         EZQXsqJZR/HsOPL6S9nyBPnrp285UxaCfXDneae0LI6TtK5Z7qwueWD6rYHqRpzYseq5
-         3euQ==
-X-Gm-Message-State: AFqh2kpIhFCzmO7XZt+N+tNWFJwkTwrEW85bIuaJfmM3zGvd9sRaJ9Bc
-        EhWhYJ5ybFTkWGo2QRReBX4=
-X-Google-Smtp-Source: AMrXdXsV/ij7KNcpK3vKFU9CRNwV/i+T2IsbPudEraBj3KtTY7B4owbjphjmrJMlkjb/mwunYc1QQw==
-X-Received: by 2002:a05:6512:2527:b0:4b5:8504:7072 with SMTP id be39-20020a056512252700b004b585047072mr893881lfb.14.1671651838124;
-        Wed, 21 Dec 2022 11:43:58 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id a12-20020a056512200c00b004b580a526c3sm1935467lfb.295.2022.12.21.11.43.57
+        bh=xMyITnYC6iA3G/LtEs1ZWz7dfXVBOhvaku8kkCxxo2s=;
+        b=6PjoLGneC8PbpxGG1f1uZ4kmYFEb7asLjAgDy6k6OAmZRbDSA6I4lR+1m3229Y2K9m
+         ZXROqq8hxHrioxMJdELOzARa9f1G1bwN4maL7dYF+2ltlgVQYFSJCqgVJ3E8/inVBRjp
+         ywocLbDfpj3dpmfRtbBOCmwcn+EjFL7GYrtB7qLHBl31yvr+1EhRk8KNAuEdk1TBmDWB
+         aDlIN52v/nJinxOtwCckQP1V350aAAykK52YyxYnu0Ikyydg3c7nOe22ATYmDNtZamX7
+         5r9JwAzaLpll7SlDytC9lW9I+/NI0gfMOebDKrgmZWRQW9ySqToukxMkWzfupDwUibhA
+         I7AQ==
+X-Gm-Message-State: AFqh2koj0ewm9hZljB90lch/3IRmWLo8R+82jRfDComryRTWY/Os7lb9
+        wOyRVVt/seoIdxa9lOBElPNuwQ==
+X-Google-Smtp-Source: AMrXdXute0xsVtVJ10dXcWI2H6DJdIl5HiEylBrKZzmX9Ceo5peUrYXWQp5vg+dwntUF5danaNmPtQ==
+X-Received: by 2002:ac2:5975:0:b0:4b5:8f03:a2bc with SMTP id h21-20020ac25975000000b004b58f03a2bcmr756347lfp.9.1671653604897;
+        Wed, 21 Dec 2022 12:13:24 -0800 (PST)
+Received: from [192.168.1.101] (abyl184.neoplus.adsl.tpnet.pl. [83.9.31.184])
+        by smtp.gmail.com with ESMTPSA id s16-20020a056512215000b004ca0ea7af24sm788834lfr.174.2022.12.21.12.13.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 11:43:57 -0800 (PST)
-Message-ID: <a1c8c353-3f27-ddb2-6058-d6bea57480d1@gmail.com>
-Date:   Wed, 21 Dec 2022 22:43:50 +0300
+        Wed, 21 Dec 2022 12:13:24 -0800 (PST)
+Message-ID: <37ee797c-02e5-f35b-2066-feb58e48fb0f@linaro.org>
+Date:   Wed, 21 Dec 2022 21:13:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+Subject: Re: [PATCH v4 07/20] thermal/drivers/tsens: limit num_sensors to 9
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
-From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <20221220160240.27494-2-sumitg@nvidia.com>
+References: <20221221020520.1326964-1-dmitry.baryshkov@linaro.org>
+ <20221221020520.1326964-8-dmitry.baryshkov@linaro.org>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221221020520.1326964-8-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-20.12.2022 19:02, Sumit Gupta пишет:
->  static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
->  {
-> +	struct tegra_icc_node *tnode;
->  	struct icc_node *node;
->  	unsigned int i;
->  	int err;
-> @@ -792,7 +794,11 @@ static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
->  	mc->provider.data = &mc->provider;
->  	mc->provider.set = mc->soc->icc_ops->set;
->  	mc->provider.aggregate = mc->soc->icc_ops->aggregate;
-> -	mc->provider.xlate_extended = mc->soc->icc_ops->xlate_extended;
-> +	mc->provider.get_bw = mc->soc->icc_ops->get_bw;
-> +	if (mc->soc->icc_ops->xlate)
-> +		mc->provider.xlate = mc->soc->icc_ops->xlate;
-> +	if (mc->soc->icc_ops->xlate_extended)
-> +		mc->provider.xlate_extended = mc->soc->icc_ops->xlate_extended;
+
+
+On 21.12.2022 03:05, Dmitry Baryshkov wrote:
+> According to the vendor kernels (msm-3.10, 3.14 and 3.18), msm8939
+> supports only 9 sensors. Remove the rogue sensor's hw_id.
+msm-3.18 and 8939.. I would have never thought it was there!
+
+
+> 
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+>  drivers/thermal/qcom/tsens-v0_1.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index 0bc4e5cec184..57ac23f9d9b7 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -605,9 +605,9 @@ static const struct tsens_ops ops_8939 = {
+>  };
 >  
->  	err = icc_provider_add(&mc->provider);
->  	if (err)
-> @@ -814,6 +820,10 @@ static int tegra_mc_interconnect_setup(struct tegra_mc *mc)
->  		goto remove_nodes;
+>  struct tsens_plat_data data_8939 = {
+> -	.num_sensors	= 10,
+> +	.num_sensors	= 9,
+>  	.ops		= &ops_8939,
+> -	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9, 10 },
+> +	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9 },
 >  
->  	for (i = 0; i < mc->soc->num_clients; i++) {
-> +		tnode = kzalloc(sizeof(*tnode), GFP_KERNEL);
-
-devm_kzalloc
-
-On the other hand, the tnode is unnecessary at all. Use struct
-tegra_mc_client for sw clients.
-
+>  	.feat		= &tsens_v0_1_feat,
+>  	.fields	= tsens_v0_1_regfields,
