@@ -2,60 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF8565338C
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 16:38:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ABE365339E
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 16:45:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbiLUPiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 10:38:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
+        id S231871AbiLUPpo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 10:45:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234713AbiLUPi0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 10:38:26 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6038911F
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:37:58 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id m14so15315810wrh.7
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:37:58 -0800 (PST)
+        with ESMTP id S231702AbiLUPpn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 10:45:43 -0500
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA4E25E9
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:45:40 -0800 (PST)
+Received: by mail-wm1-x330.google.com with SMTP id o5-20020a05600c510500b003d21f02fbaaso1860779wms.4
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:45:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=9m8USarmvldzMr+J44XS7SpGQ8hCtef881SAyiDae8Q=;
-        b=L6UvxrJjfXcNoJPQpXOwq96HLNwZzbk+cHnU6uoWhGine4wKZIgJkQamSrBub9siJw
-         gxPJkjfA3kY7F4qSZFvCHkbvUBe0aNkhZ4GzpKh+r4Dh4g5de0sx5Xvww63M+7St4+5m
-         ku7HPG+dxmp7eBhgJYbDGH6+zt6STAFkhCVTxIO346CzavEADITyo2kCLjNzXKmKe25D
-         wJKESrkMiE5hr+yx26pfJW17O32gBG0gmxw+mxoK2Ki4OrmfWpyPxbZORrV5mED2EvSa
-         evyUayoGxEdPEeOesCCy3VjeMGYG/bbdpg4L/XPbc4Ttv4XlJtNL48ssjHRCxeSzbcg1
-         xVlA==
+        bh=KGbeBQRjTmGtaWEzjEWMVtiqNlsW5lW0CoNY9zIiLc4=;
+        b=k81vhdDhN4j7y0R2uh1f2NxwYOxgXJp7lobsFLPPvq/M6F8hB3TFqsN9lZCSAyYnEd
+         w8o1nWeu7EELY58lSlSwPPEf7OHtsaeK5VqI5NdERLRgDlkuD8VoffEoiseBO4Me6Xwa
+         ifuxfqerftFrPqfHxkggSkp/dgjNFkopcT3j7tY3CoHu1j/tr6DqJjhfL2jhzkknG2rW
+         IWHIdkiqSdq/Pns8ulArC0uAW88dF2pnfmWI7AL3zmnA+w8GrN/9mTN8E/U3g+CIdDvs
+         Oo5yH1AG6gEDamjIdU0nuUxw+S7xyIawnU/iFCFr8jrFNF/KdSPBc+13/EGs2AsfNPYz
+         dHQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9m8USarmvldzMr+J44XS7SpGQ8hCtef881SAyiDae8Q=;
-        b=J399uizZ5a+lcyUWGaIRpIwULtMMklkrRFLvGJLm2+YxDakNstJUEksFfLMPYur1L8
-         NjZN1bi6x0dQaFyrj57cIfXnzB+pIXDVBWCL1hK+J9jvdNjsTsu4qedNHNEcll0MiUi0
-         zqRmPIlLp/Z9COwzcJfrN5Vrc7PfnLkBJ4MpjQOXC7vmutuyqnoEG08tPKvMVLNQ4B9d
-         XV4SgJtvEsaUqfivc4H1xAa3jtKZkBWTj3bxoIldML5AO6+hSueh368lno1VpwXCwT7K
-         sPLT+wC7UUVE1bQmBP//weUConChzSmkzrnKm4rfOWFtVWM4Nk0oxFFjyNyVsXDc9k8s
-         twyQ==
-X-Gm-Message-State: AFqh2krgpaw3P2UJSzKdIYhduT0SYCL1PVXndyHmpMjvvuY1xOARE4fi
-        c+v4V/VPJrzG5CpYkP8TcKrVFw==
-X-Google-Smtp-Source: AMrXdXu2fSetxXEsruEVdCSb86lzCy9KSvy0WpIy6GHQMl6GZ5Bsu8URGnddADll0uNcxHjWk/URNA==
-X-Received: by 2002:a5d:4b84:0:b0:242:5b60:e23c with SMTP id b4-20020a5d4b84000000b002425b60e23cmr1295315wrt.19.1671637076795;
-        Wed, 21 Dec 2022 07:37:56 -0800 (PST)
+        bh=KGbeBQRjTmGtaWEzjEWMVtiqNlsW5lW0CoNY9zIiLc4=;
+        b=ekSII8c8ejvtedz6PlMgYqKvZ/f9SCpxzavU3FP7R1BsLL2J3Ue+iMuUOd4ZbjvFxf
+         5ShcvWj+a3FJLXnoXlKEqhbhLAw1g5oFQYcQ3B1EaeeFq96YsYbLsourjdHfXTJvj92v
+         bmAYuMxph5pzytHK6Ywm6TrzQ/pLBALgE8+JxnpoQ2FW2yGKVof/qb2r5SUKpwmSnIiT
+         9lwqROwxbNAXJ4zzGN3050+pxU2lPHvQ1WEVtdHk3i92K3qDV91iwnPRvyBS4yLw1r2C
+         xBWjy3jB5v3Uysq/bdNXNz1SDjjGOOqMXPkbLjz12NWjdLMXLNm7mmwj9pXy2MhZJj04
+         YiFA==
+X-Gm-Message-State: AFqh2koBRS1LNYcJEYezR7jcOCNvgxOpR5LFarcx5BwiiMhQmgeGWwWV
+        Jjscv/aSOpJFmrHCaSvNpyI0ug==
+X-Google-Smtp-Source: AMrXdXsMuyF2s0KfLk6G49bLBkUwiohwuGsdWlz+hiiVccvbYcehjbTwlBshzkeCA5pNWrZvwQufJQ==
+X-Received: by 2002:a05:600c:a51:b0:3d2:3376:6f38 with SMTP id c17-20020a05600c0a5100b003d233766f38mr2020662wmq.20.1671637538618;
+        Wed, 21 Dec 2022 07:45:38 -0800 (PST)
 Received: from [192.168.175.23] (pur13-1-78-242-214-186.fbx.proxad.net. [78.242.214.186])
-        by smtp.googlemail.com with ESMTPSA id w16-20020adfee50000000b002420dba6447sm15416255wro.59.2022.12.21.07.37.53
+        by smtp.googlemail.com with ESMTPSA id v192-20020a1cacc9000000b003cfd4e6400csm2531518wme.19.2022.12.21.07.45.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 07:37:55 -0800 (PST)
-Message-ID: <be2b4fef-b047-7dd5-c375-af90083e4417@linaro.org>
-Date:   Wed, 21 Dec 2022 16:37:52 +0100
+        Wed, 21 Dec 2022 07:45:37 -0800 (PST)
+Message-ID: <ed4aafb9-c33e-6f24-1e9c-7c7efa0e58ae@linaro.org>
+Date:   Wed, 21 Dec 2022 16:45:34 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v4 00/15] thermal/drivers/tsens: specify nvmem cells in DT
- rather than parsing them manually
+Subject: Re: [PATCH v4 07/20] thermal/drivers/tsens: limit num_sensors to 9
 Content-Language: en-US
 To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Andy Gross <agross@kernel.org>,
@@ -71,115 +70,51 @@ Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
 References: <20221221020520.1326964-1-dmitry.baryshkov@linaro.org>
+ <20221221020520.1326964-8-dmitry.baryshkov@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221221020520.1326964-1-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20221221020520.1326964-8-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Dmitry,
-
 On 21/12/2022 03:05, Dmitry Baryshkov wrote:
-> Historically the tsens driver fetches the calibration data as a blob and
-> then parses the blob on its own. This results in semi-duplicated code
-> spreading over the platform-specific functions.
+> According to the vendor kernels (msm-3.10, 3.14 and 3.18), msm8939
+> supports only 9 sensors. Remove the rogue sensor's hw_id.
 > 
-> This patch series changes tsens calibration code to per-value nvmem
-> cells rather than parsing the blob in the driver. For backwards
-> compatibility the old code is left in place for msm8916, msm8974 and
-> qcs404, the platforms which have in-tree DT files. For all other
-> affected platforms the old parsing code has been dropped as a part of
-> this series.
+> Fixes: 332bc8ebab2c ("thermal: qcom: tsens-v0_1: Add support for MSM8939")
+> Cc: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/thermal/qcom/tsens-v0_1.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> The code was tested on msm8916 and qcs404 only.
-> 
-> Note: the DTs changes depend on driver changes. Tsens driver will not
-> work if DT patches are merged, but the driver bits are not. As the
-> thermal sense is critical for device safety, I'd suggest merging binding
-> and driver during one merge window and then merging DT changes in the
-> next merge window.
+> diff --git a/drivers/thermal/qcom/tsens-v0_1.c b/drivers/thermal/qcom/tsens-v0_1.c
+> index 0bc4e5cec184..57ac23f9d9b7 100644
+> --- a/drivers/thermal/qcom/tsens-v0_1.c
+> +++ b/drivers/thermal/qcom/tsens-v0_1.c
+> @@ -605,9 +605,9 @@ static const struct tsens_ops ops_8939 = {
+>   };
+>   
+>   struct tsens_plat_data data_8939 = {
+> -	.num_sensors	= 10,
+> +	.num_sensors	= 9,
+>   	.ops		= &ops_8939,
+> -	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9, 10 },
+> +	.hw_ids		= (unsigned int []){ 0, 1, 2, 3, 5, 6, 7, 8, 9 },
 
-We can avoid an extra release cycle with a common *immutable* branch 
-shared between the two trees.
+Does not patch 4 says we can drop those hw_ids ?
 
-
-> Note2:
-> For v3 I have reworked the legacy bindings support into the small and
-> manageable data-driven piece of code.
-> 
-> I still have included patches to drop legacy support for 8939
-> (msm8939.dtsi is on the list, I have provided Bryan with the patch to
-> update it to new bindings) and 8976 (msm8976.dtsi and msm8956.dtsi,
-> which use single-blob bindings, have been accepted for 6.2, dropping old
-> bindings support depends on mutual consensuns of platform and thermal
-> code maintainers). The patches are the last ones in the thermal part of
-> the series, thus if they are declined, the reset of the series still can
-> be applied without any problems.
-> 
-> Changes since v3:
-> - Added a patch to fix the tsens compatible string on msm8956 SoC,
-> - Fixed num-sensors and slope coefficients for the msm8939 SoC,
-> - Rewrote code supporting old bindings into the simple data-driven
->    parser common to all legacy platforms which made dropping support for
->    old bindings less demanding.
-> 
-> Changes since v2:
-> - Made init_8956 static, as pointed out by the testing robot and by
->    AngeloGioacchino Del Regno.
-> 
-> Changes since the RFC:
-> - Sorted out the msm8976/msm8956, custom slopes are used only for msm8956,
-> - Implemented proper support for msm8974/apq8084,
-> - Added tsens_calibrate_common() and ops_v0_1 which can be used in
->    common cases,
-> - Removed superfluous identity hw_ids
-> - Fixed calibration calculation in tsens_calibrate_nvmem() for
->    ONE_PT_CALIB case
-> 
-> Dmitry Baryshkov (20):
->    dt-bindings: thermal: tsens: add msm8956 compat
->    dt-bindings: thermal: tsens: support per-sensor calibration cells
->    dt-bindings: thermal: tsens: add per-sensor cells for msm8974
->    thermal/drivers/tsens: Drop unnecessary hw_ids
->    thermal/drivers/tsens: Drop msm8976-specific defines
->    thermal/drivers/tsens: Sort out msm8976 vs msm8956 data
->    thermal/drivers/tsens: limit num_sensors to 9
->    thermal/drivers/tsens: fix slope values for msm8939
->    thermal/drivers/tsens: Support using nvmem cells for calibration data
->    thermal/drivers/tsens: Support using nvmem cells for msm8974
->      calibration
->    thermal/drivers/tsens: Rework legacy calibration data parsers
->    thermal/drivers/tsens: Drop single-cell code for mdm9607
->    thermal/drivers/tsens: Drop single-cell code for msm8939
->    thermal/drivers/tsens: Drop single-cell code for msm8976/msm8956
->    arm64: dts: qcom: msm8956: use SoC-specific compat for tsens
->    arm64: dts: qcom: msm8916: specify per-sensor calibration cells
->    arm64: dts: qcom: msm8976: specify per-sensor calibration cells
->    arm64: dts: qcom: qcs404: specify per-sensor calibration cells
->    ARM: dts: qcom-msm8974: specify per-sensor calibration cells
->    ARM: dts: qcom-apq8084: specify per-sensor calibration cells
-> 
->   .../bindings/thermal/qcom-tsens.yaml          | 123 +++-
->   arch/arm/boot/dts/qcom-apq8084.dtsi           | 313 ++++++++-
->   arch/arm/boot/dts/qcom-msm8974.dtsi           | 313 ++++++++-
->   arch/arm64/boot/dts/qcom/msm8916.dtsi         |  81 ++-
->   arch/arm64/boot/dts/qcom/msm8956.dtsi         |   4 +
->   arch/arm64/boot/dts/qcom/msm8976.dtsi         | 153 +++-
->   arch/arm64/boot/dts/qcom/qcs404.dtsi          | 145 +++-
->   drivers/thermal/qcom/tsens-v0_1.c             | 653 +++++-------------
->   drivers/thermal/qcom/tsens-v1.c               | 340 +++------
->   drivers/thermal/qcom/tsens.c                  | 166 +++++
->   drivers/thermal/qcom/tsens.h                  |  46 +-
->   11 files changed, 1572 insertions(+), 765 deletions(-)
-> 
+>   
+>   	.feat		= &tsens_v0_1_feat,
+>   	.fields	= tsens_v0_1_regfields,
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
