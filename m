@@ -2,140 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D78536531F0
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 14:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 022EB653291
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 15:43:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233685AbiLUNny (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 08:43:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43438 "EHLO
+        id S229522AbiLUOnl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 09:43:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232455AbiLUNnv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 08:43:51 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9274A2037A
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 05:43:44 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id o15so11186312wmr.4
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 05:43:44 -0800 (PST)
+        with ESMTP id S229491AbiLUOnj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 09:43:39 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFA51EEFB
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 06:43:38 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id d7so15703151pll.9
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 06:43:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2PpNtCpDSzPsflwXjljiwDro3Ig3Yd6W5cEBWGQHsHU=;
-        b=MUPGmOoWU5FKo3PIgscvq/wlBf9WsS+MzmH1bFytWwftO3cs1RCgYaJF+e8jP15Ub+
-         pHneK+AatBhypXqVXohsw9jnnLKjoB378iojd2+Y8XXYS2/L4flDfR9+5Ly6wmpbSjJq
-         OgYguaGxnb6Icgw5GEsVNTZFFx2b6vWKS92m+iBuV7B4xZkKFE/aD8zO31PRrGoL19Pd
-         7S+BXdpWX9nnzJqzl6MLkeENZ158iJBVRluV4Mo/QIkJkBZW6SGYBJjnhxQn6/aK3PWu
-         jb5D3iwoxi5K1ov/PgyiHPALheOjtAueOPox1F8f5NeMDf4+MjUxwnLotQqtB/ryStQ4
-         2Wqg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=IyW++2grHjl8J45d/2q3DxB6TJXLGyoaKqQ8S90iPAw=;
+        b=JwcBi8Mk+n+BRfCLl7cSqbrJjPeQAMpIMzuzVVbz7UEk9bGfgDNKY8nXyg0CyOyIt/
+         ubbg606HpZ/6sJlH/0CZitVijUPDKFXn69O+XpmGg6+dLyrQysjwKEpLZM+HMcSFFeqU
+         T3IRNg6mZ4F/aqnC/4beIRjC33YQwVSPSixMeE23GyB3wSywM1HVdTOaD8dktnTVMMrK
+         dl7QplP1kP60YXb5UK1GvRUH5B+Zj/cyt/XD4X2nH4arqpOqBJJD44ljqlSbMP2xXsLW
+         zS+NvuqhG8MTh1LmpSe/CVuOy1AMoHw+vHzsEtnHD/7qTFy45Auw9eJZTJQTLts8KxhS
+         jkvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2PpNtCpDSzPsflwXjljiwDro3Ig3Yd6W5cEBWGQHsHU=;
-        b=JwbzEpGhMDWQH7V5scQf0AbJgm0ZSXMPxE+wqwtuzzFIbB4jpTWVXjyYCXr6HOYNuH
-         IMYgLErkfrYrueYSZXNQIr4dOucZ2Qc09PjY7U+alpfKNZ3kTqjNHnKdM9MrZOkXkA3v
-         1oHHCuaz7nI7kX7xrALMiA/Qeittz3W5epAnMGfDuEXAeGbNPHj+aEx+iKBFZ5Ffv2YD
-         zPD3F4JlBP899rrG01tHqDADRCxYkah2yaioXqEe8GP6OalnUYdfXMB9OawqUPqh7BQG
-         1y8rBj+MXDPmoyJM0zODPdT5F2Pfl1sFXl86j2VaxRVpcidBbw6ZNUkJ00skEx1bIykI
-         tKxw==
-X-Gm-Message-State: AFqh2kpwFXf2RZdnEpcK3EyUheCqnVBH8IvWdsVVQgNA/M/U3NzVpe0z
-        MOVc1CudI6ssB8M6qLW9qL85jA==
-X-Google-Smtp-Source: AMrXdXtfM8xXfEIX4F72BRhv9jv0H3v+5tDr4GJoGD2yHYECtBSa2XlImRu6/9aMGAcIhgbgRXqh9w==
-X-Received: by 2002:a7b:ce89:0:b0:3d2:3239:2fd7 with SMTP id q9-20020a7bce89000000b003d232392fd7mr1655018wmj.41.1671630222970;
-        Wed, 21 Dec 2022 05:43:42 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id z13-20020a5d640d000000b002365730eae8sm15558523wru.55.2022.12.21.05.43.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 05:43:42 -0800 (PST)
-Message-ID: <5276e5b8-8596-2811-e03f-c4f3f0d3ab5b@linaro.org>
-Date:   Wed, 21 Dec 2022 14:43:39 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IyW++2grHjl8J45d/2q3DxB6TJXLGyoaKqQ8S90iPAw=;
+        b=sjVTolPW89DnOrkZ8wG88/D0NHG5MgVhskWAH2xVYCgHEB/9a+GcdNb9j3HMgpyUCd
+         N4Vjlbau25SSdBVq8E+t4FXR8/uWUrauBD0X+dxcZFkRMzlpQ+Qdn/uXPaUtCskVXe7o
+         Wnj0DEbb7UpDeBNsK/ILBy3HZ8raoOSj4+D8Pj+r44J6HGJmz8HTotLa/M+XnF0QxEGj
+         D1Gh6dHk7GXjWQ8Od0DfrVkOVs9cF7sN2MWUpo72xejuvnwM/VAmiQ29BpU65QPaI7B4
+         X0FlNnVw/XXBnm3gVfJ2TeOvtsqPuoQc/m1XTtJ0uy1MdwlXrSOv/N/nbgKmz4BA7LmX
+         RLiQ==
+X-Gm-Message-State: AFqh2krciiW6ouTsdfy9w7K8tvaJyuALD70znZN1cZGKPxOuh46ZH0Hu
+        /NPPCHa81NwoBIA8N5lAkb97gtZijXcz90NcOgDidw==
+X-Google-Smtp-Source: AMrXdXvCHGKgNiRJjAKvBrn8TFRX9lSKbtiwl6JC1JfpRNHfJRtETCwT+Zv/FXciPqBeqqKNLPL9r+PBfxqx5PpG9q0=
+X-Received: by 2002:a17:90a:be0c:b0:219:ef02:a5eb with SMTP id
+ a12-20020a17090abe0c00b00219ef02a5ebmr226260pjs.84.1671633818076; Wed, 21 Dec
+ 2022 06:43:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC][PATCH] thermal/idle_inject: Support 100% idle injection
-Content-Language: en-US
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221209013640.943210-1-srinivas.pandruvada@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+References: <1671522257-38778-1-git-send-email-quic_akhilpo@quicinc.com> <20221220131255.v3.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
+In-Reply-To: <20221220131255.v3.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 21 Dec 2022 15:43:01 +0100
+Message-ID: <CAPDyKFr6Hf5gbJ9T9scYqDrg9tmKmVAm=h1J7r3GZzcogk5HpQ@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] PM: domains: Allow a genpd consumer to require a
+ synced power off
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-Hi Srinivas,
-
-
-On 09/12/2022 02:36, Srinivas Pandruvada wrote:
-> The users of idle injection framework allow 100% idle injection. For
-> example: thermal/cpuidle_cooling.c driver. When the ratio set to 100%,
-> the runtime_duration becomes zero.
-> 
-> In the function idle_inject_set_duration() in idle injection framework
-> run_duration_us == 0 is silently ignored, without any error (it is a
-> void function). So, the caller will assume that everything is fine and
-> 100% idle is effective. But in reality the idle inject will be whatever
-> set before.
-
-Good catch
-
-> There are two options:
-> - The caller change their max state to 99% instead of 100% and
-> document that 100% is not supported by idle inject framework
-> - Support 100% idle support in idle inject framework
-
-Yes, from my POV a CPU being impossible to cool down for any reason 
-should end up by staying off.
-
-> Since there are other protections via RT throttling, this framework can
-> allow 100% idle. The RT throttling will be activated at 95% idle by
-> default. The caller disabling RT throttling and injecting 100% idle,
-> should be aware that CPU can't be used at all.
-
-Would it make sense to write a trace in this case ?
-
-> The idle inject timer is started for (run_duration_us + idle_duration_us)
-> duration. Hence replace (run_duration_us && idle_duration_us) with
-> (run_duration_us + idle_duration_us) in the function
-> idle_inject_set_duration().
-
-Sounds good to me
-
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+On Tue, 20 Dec 2022 at 08:44, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
+>
+> From: Ulf Hansson <ulf.hansson@linaro.org>
+>
+> Some genpd providers doesn't ensure that it has turned off at hardware.
+> This is fine until the consumer really requires during some special
+> scenarios that the power domain collapse at hardware before it is
+> turned ON again.
+>
+> An example is the reset sequence of Adreno GPU which requires that the
+> 'gpucc cx gdsc' power domain should move to OFF state in hardware at
+> least once before turning in ON again to clear the internal state.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 > ---
->   drivers/powercap/idle_inject.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-> index f48e71501429..4a4fe60d2563 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -184,7 +184,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
->   			      unsigned int run_duration_us,
->   			      unsigned int idle_duration_us)
->   {
-> -	if (run_duration_us && idle_duration_us) {
-> +	if (run_duration_us + idle_duration_us) {
->   		WRITE_ONCE(ii_dev->run_duration_us, run_duration_us);
->   		WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
->   	}
+>
+> (no changes since v2)
+>
+> Changes in v2:
+> - Minor formatting fix
+>
+>  drivers/base/power/domain.c | 23 +++++++++++++++++++++++
+>  include/linux/pm_domain.h   |  5 +++++
+>  2 files changed, 28 insertions(+)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 967bcf9d415e..53524a102321 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -519,6 +519,28 @@ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
+>
+> +/*
+> + * dev_pm_genpd_synced_poweroff - Next power off should be synchronous
+> + *
+> + * @dev: A device that is attached to the genpd.
+> + *
+> + * Allows a consumer of the genpd to notify the provider that the next power off
+> + * should be synchronous.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Nitpick; similar to other dev_pm_genpd_* function-descriptions, I
+think it's important to add the below information.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+"It is assumed that the users guarantee that the genpd wouldn't be
+detached while this routine is getting called."
 
+Can you please add that?
+
+> + */
+> +void dev_pm_genpd_synced_poweroff(struct device *dev)
+> +{
+> +       struct generic_pm_domain *genpd;
+> +
+> +       genpd = dev_to_genpd_safe(dev);
+> +       if (!genpd)
+> +               return;
+> +
+> +       genpd_lock(genpd);
+> +       genpd->synced_poweroff = true;
+> +       genpd_unlock(genpd);
+> +}
+> +EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+> +
+>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>  {
+>         unsigned int state_idx = genpd->state_idx;
+> @@ -562,6 +584,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>
+>  out:
+>         raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
+> +       genpd->synced_poweroff = false;
+>         return 0;
+>  err:
+>         raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 1cd41bdf73cf..f776fb93eaa0 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -136,6 +136,7 @@ struct generic_pm_domain {
+>         unsigned int prepared_count;    /* Suspend counter of prepared devices */
+>         unsigned int performance_state; /* Aggregated max performance state */
+>         cpumask_var_t cpus;             /* A cpumask of the attached CPUs */
+> +       bool synced_poweroff;           /* A consumer needs a synced poweroff */
+>         int (*power_off)(struct generic_pm_domain *domain);
+>         int (*power_on)(struct generic_pm_domain *domain);
+>         struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
+> @@ -235,6 +236,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>  int dev_pm_genpd_remove_notifier(struct device *dev);
+>  void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+>  ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
+> +void dev_pm_genpd_synced_poweroff(struct device *dev);
+>
+>  extern struct dev_power_governor simple_qos_governor;
+>  extern struct dev_power_governor pm_domain_always_on_gov;
+> @@ -300,6 +302,9 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+>  {
+>         return KTIME_MAX;
+>  }
+> +static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
+> +{ }
+> +
+>  #define simple_qos_governor            (*(struct dev_power_governor *)(NULL))
+>  #define pm_domain_always_on_gov                (*(struct dev_power_governor *)(NULL))
+>  #endif
+> --
+> 2.7.4
+>
+
+Kind regards
+Uffe
