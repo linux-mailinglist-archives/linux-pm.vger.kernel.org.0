@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CFD653445
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 17:44:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810E8653465
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 17:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234661AbiLUQoT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 11:44:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S233016AbiLUQzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 11:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234674AbiLUQoP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 11:44:15 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CA8C248CB;
-        Wed, 21 Dec 2022 08:44:11 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id x11so513240lfn.0;
-        Wed, 21 Dec 2022 08:44:11 -0800 (PST)
+        with ESMTP id S234296AbiLUQzJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 11:55:09 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD542240B8;
+        Wed, 21 Dec 2022 08:55:07 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id 1so24385890lfz.4;
+        Wed, 21 Dec 2022 08:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=V1GxVlFtu0zCkDwe7OA4gE30k4+6vDGKypeT2LbMmpY=;
-        b=ohLeKa4fWkqEflcAjGdhW0fc9PIllRxRoAK6t2D8h9ZtsESxHGlRCTGEwQfA4URDZi
-         GW5vtWM3dCIdYbM8QfULNCWgJmcA8lIByKbsJDsv/p2BU7qkI/mzS/kgQ/ZqzdNW5edm
-         jSSh02un1IgbrC/LHsbMKVR/Ab43Z5qSd2FpEGsZJ3iG8g0s70lTmhgADPGUzprPHtfa
-         CMt2hoLWRYaSYyCREVyQmUlqmUH9o4k+fboqNEvMintawy+IY166zU3Bk7XEVi9tiI36
-         b0DmlCmxY2MozgfFUfvJmwbA4QSA9k9whl8enTpnzwKWxBtXxTg6wS/l5+CmxMIHSuXw
-         6xrw==
+        bh=pKpFopFM+2p/s1rCGdP6Z1nsO+BxLqf3LvQx/9wlFY0=;
+        b=ChA+yVv3lB6Fzz5kJ1UE+vuKF2qz6h08hFftpVh0TotNethlWSKylrQR5xIP+QxAk6
+         sSzxD+z9NTp84P+QTcNTScu5QrEzHEDr9pcDPoxlVTX9bm0guls39R0GyjTkcK/ymMFs
+         aL1oFCKZymTRxAjCchuiA9b5LvonHJDYrjfYaTjZD0gqs6cEmyC2Erna5KxDaKkEB1Ek
+         RLJ8QXCE7ovCElVoHQcBtcSCxeiY70Z3RUxDa/uA8BLvsyQ2BlcFthcUsEF0eDpqrXeF
+         58zYI9hq2x7FvMhGJ0ojI89z7iu/ysDBQZOjKuobznqo36Wo6QGSdkA5SAn0HYjAGwjI
+         ecpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1GxVlFtu0zCkDwe7OA4gE30k4+6vDGKypeT2LbMmpY=;
-        b=U+dvNHDFdkMpVvzg5feaNb7AMTAFbIVzN9wgCemanmL+rWP1b/FMb5T84fkiXUvaLu
-         Ikj/Ucye4CzSkZ7clmawaua2qJ+Iw17yJOgVFx3qRE+8mwPHPVGnmr06b2BLiEhUlgjX
-         fwHYdiEIrvagmQ8Ms6/Aa1DUg8Tj4+SOHT7wPCt4GKBucwhtLPmsuaHnnFiEb/PtR4Lx
-         isWfmc8TMkcXmQYQw9YOrrj6VC6pwzn9R8XXPZeAkhYGF7n90kO5DO/Z1BclDTA0q5rF
-         aBUaiOFEPLnJDjrYnNBdiZHwe+AB8SBCSd1s3r8kzAuqwD/Va38XnkZl6f6350y0o2BD
-         R02Q==
-X-Gm-Message-State: AFqh2kpU+sqgE86cZmUVXfwT05pKHSHELzsHrIRVM8gikWhTGrI+scMh
-        aPPi3fVGOWykHMViDFQAh5Q=
-X-Google-Smtp-Source: AMrXdXuhxpnbu3WNSK/2fBzR2ROsxfxciQceZtoHHQ/NorD7dRS7cd1FyIECjUesI2KCr2l9BxDb5A==
-X-Received: by 2002:a19:6508:0:b0:4bc:8c94:82f7 with SMTP id z8-20020a196508000000b004bc8c9482f7mr706475lfb.13.1671641049928;
-        Wed, 21 Dec 2022 08:44:09 -0800 (PST)
+        bh=pKpFopFM+2p/s1rCGdP6Z1nsO+BxLqf3LvQx/9wlFY0=;
+        b=S1aYCp5x6ejABxDsnGGvswv78vbV+7sK/snLO7UPmqWgGOI/Wwv+pqd8VrzLT51oxC
+         681NJI+cdYbmeF6EBrucfwFThsv916tgFx0Ee09CnQ2fstgJoHQX9VyjjBiyipdRRffp
+         M/htQvw11F0ZV7bx2TINuE08FON5CyTOET189glVauLApN5uCW1DEbG61M39jt8CGfHJ
+         10tt36QeHAfLJ6aWdheNaVM85L5y4Fw3ne765AJA8gQ5Wqajkw9y6jHm0wDgmtPNRQvR
+         rcnIH1hHBcrG/4r+hqWfGBr9wAImnYOEescizvnB0DBtF4BAKhreFBoPZuKdTCvT7/C+
+         Dd7w==
+X-Gm-Message-State: AFqh2kptMjmtjaOn8bgDAThsoJytyoWHCZ+nCwJcidVlsPjUGYadnIE1
+        Z1HkW4nVBqGOnCIhZ7nP7dE=
+X-Google-Smtp-Source: AMrXdXsE0hc14q00/Ji4tJF2zXxYjgrpZbqAN7yU8tEF5zJcQPgy7AKxaPcyNetQ1YqvfdfczeZc2Q==
+X-Received: by 2002:ac2:5b12:0:b0:4b5:6fa3:5d63 with SMTP id v18-20020ac25b12000000b004b56fa35d63mr2192589lfn.13.1671641706009;
+        Wed, 21 Dec 2022 08:55:06 -0800 (PST)
 Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id s21-20020a195e15000000b004b575d239besm1893177lfb.237.2022.12.21.08.44.09
+        by smtp.googlemail.com with ESMTPSA id bi26-20020a05651c231a00b0027a2a26a655sm1395056ljb.8.2022.12.21.08.55.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 08:44:09 -0800 (PST)
-Message-ID: <98b5a73d-be59-457f-e7ce-71cfbbdd025f@gmail.com>
-Date:   Wed, 21 Dec 2022 19:44:02 +0300
+        Wed, 21 Dec 2022 08:55:05 -0800 (PST)
+Message-ID: <8641fad2-7170-4c0c-fbd6-6e2e784b3106@gmail.com>
+Date:   Wed, 21 Dec 2022 19:54:58 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
@@ -67,10 +67,8 @@ Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
         bbasu@nvidia.com
 References: <20221220160240.27494-1-sumitg@nvidia.com>
  <20221220160240.27494-2-sumitg@nvidia.com>
- <f4e05666-d094-18cf-2641-ebf92da85dc8@gmail.com>
- <221c1bab-8f4d-9dbb-bb12-4f7ab5dc5d90@nvidia.com>
 From:   Dmitry Osipenko <digetx@gmail.com>
-In-Reply-To: <221c1bab-8f4d-9dbb-bb12-4f7ab5dc5d90@nvidia.com>
+In-Reply-To: <20221220160240.27494-2-sumitg@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,34 +81,43 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-21.12.2022 11:05, Sumit Gupta пишет:
-> On 20/12/22 23:37, Dmitry Osipenko wrote:
->> External email: Use caution opening links or attachments
->>
->>
->> 20.12.2022 19:02, Sumit Gupta пишет:
->>> +#ifndef MEMORY_TEGRA_ICC_H
->>> +#define MEMORY_TEGRA_ICC_H
->>> +
->>> +enum tegra_icc_client_type {
->>> +     TEGRA_ICC_NONE,
->>> +     TEGRA_ICC_NISO,
->>> +     TEGRA_ICC_ISO_DISPLAY,
->>> +     TEGRA_ICC_ISO_VI,
->>> +     TEGRA_ICC_ISO_AUDIO,
->>> +     TEGRA_ICC_ISO_VIFAL,
->>> +};
->>
->> You using only TEGRA_ICC_NISO and !TEGRA_ICC_NISO in the code.
->>
->> include/soc/tegra/mc.h defines TAG_DEFAULT/ISO, please drop all these
->> duplicated and unused "types" unless there is a good reason to keep them
->>
-> 
-> These type are used while defining clients in "tegra234_mc_clients[]"
-> and its passed to BPMP-FW which has handling for each client type.
+20.12.2022 19:02, Sumit Gupta пишет:
+>  static int tegra186_emc_probe(struct platform_device *pdev)
+>  {
+>  	struct mrq_emc_dvfs_latency_response response;
+>  	struct tegra_bpmp_message msg;
+>  	struct tegra186_emc *emc;
+> +	struct tegra_mc *mc;
+>  	unsigned int i;
+>  	int err;
+>  
+> @@ -158,6 +307,9 @@ static int tegra186_emc_probe(struct platform_device *pdev)
+>  	if (!emc)
+>  		return -ENOMEM;
+>  
+> +	platform_set_drvdata(pdev, emc);
+> +	emc->dev = &pdev->dev;
+> +
+>  	emc->bpmp = tegra_bpmp_get(&pdev->dev);
+>  	if (IS_ERR(emc->bpmp))
+>  		return dev_err_probe(&pdev->dev, PTR_ERR(emc->bpmp), "failed to get BPMP\n");
+> @@ -236,6 +388,19 @@ static int tegra186_emc_probe(struct platform_device *pdev)
+>  	debugfs_create_file("max_rate", S_IRUGO | S_IWUSR, emc->debugfs.root,
+>  			    emc, &tegra186_emc_debug_max_rate_fops);
+>  
+> +	mc = dev_get_drvdata(emc->dev->parent);
+> +	if (mc && mc->soc->icc_ops) {
+> +		if (tegra_bpmp_mrq_is_supported(emc->bpmp, MRQ_BWMGR_INT)) {
+> +			err = tegra_emc_interconnect_init(emc);
+> +			if (!err)
+> +				return err;
+> +			dev_err(&pdev->dev, "tegra_emc_interconnect_init failed:%d\n", err);
+> +			goto put_bpmp;
+> +		} else {
+> +			dev_info(&pdev->dev, "MRQ_BWMGR_INT not present\n");
+> +		}
 
-The type should be based on the ICC tag, IMO. AFAICS, type isn't fixed
-in FW and you can set both ISO and NISO BW, hence it's up to a device
-driver to select the appropriate tag.
+If there is no MRQ_BWMGR_INT, then device drivers using ICC won't probe.
+This is either a error condition, or ICC should inited and then ICC
+changes should be skipped.
 
