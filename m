@@ -2,412 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130F56532FE
-	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 16:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CF8565338C
+	for <lists+linux-pm@lfdr.de>; Wed, 21 Dec 2022 16:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233234AbiLUPLX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 21 Dec 2022 10:11:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49350 "EHLO
+        id S234650AbiLUPiy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 21 Dec 2022 10:38:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233988AbiLUPLJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 10:11:09 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2518240AD
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:11:02 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id m14so15237265wrh.7
-        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:11:02 -0800 (PST)
+        with ESMTP id S234713AbiLUPi0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 21 Dec 2022 10:38:26 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6038911F
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:37:58 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id m14so15315810wrh.7
+        for <linux-pm@vger.kernel.org>; Wed, 21 Dec 2022 07:37:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Bw2F6YBCyWT6LrHFf8PAgZA6IxYBs+l4kXWh41DccKU=;
-        b=nygxj8xgrHsjfwwGV6oH0HeqGlPTpkeXTB47Z9H8Af/zqFEHuOBweqzlaGkG9dZzLF
-         4u+9zjGsQifpSdQnZOCqZVsMcDh4l6p+fzdi1XQNHQljI/rpj1RvpC5WPf6onrkOkCed
-         DIlLPyFzCZzABGX0CvD9QykMjvuFmO50B8eaw+xi389TkJ/wMFSIBylYoV1tQRSxPzkQ
-         6iu9ubzseQsXbyaRN7HRW1bDTBNE21f0ycRofOmIRkEKhUlMFXAbImd+gX4FfydtEKmr
-         N9bpUY2o0+jo1vre87NQW67XI2h3Bk1rJzWPLPHMITfSG0aU5zcYm3awD28bKSezZ7zy
-         uB2g==
+        bh=9m8USarmvldzMr+J44XS7SpGQ8hCtef881SAyiDae8Q=;
+        b=L6UvxrJjfXcNoJPQpXOwq96HLNwZzbk+cHnU6uoWhGine4wKZIgJkQamSrBub9siJw
+         gxPJkjfA3kY7F4qSZFvCHkbvUBe0aNkhZ4GzpKh+r4Dh4g5de0sx5Xvww63M+7St4+5m
+         ku7HPG+dxmp7eBhgJYbDGH6+zt6STAFkhCVTxIO346CzavEADITyo2kCLjNzXKmKe25D
+         wJKESrkMiE5hr+yx26pfJW17O32gBG0gmxw+mxoK2Ki4OrmfWpyPxbZORrV5mED2EvSa
+         evyUayoGxEdPEeOesCCy3VjeMGYG/bbdpg4L/XPbc4Ttv4XlJtNL48ssjHRCxeSzbcg1
+         xVlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bw2F6YBCyWT6LrHFf8PAgZA6IxYBs+l4kXWh41DccKU=;
-        b=dlz8tC9WzLEYi/sDx6VLyFry7sv9xsESU8f81fmSdvDl7N3vhQHxv0wZ/0MTwJAfRX
-         FAoKD+70ICwmObOIQGrnwEiPrs1z5UnaUSp2FHj5Go2rKcocy0gvEhiwL+kLQ8vGsJp4
-         B9a9ON0RslnfKn7/lqDQUh5nR5clmLO2GjQpcQcFHRmaMcFN6B9ond/QjARqkbHDkKCa
-         m7ZYtm/XZ0Frms3qHCjvrBcgtdWm0lpWym8/DQK3UjxycC/c4uF8qbjUhkbFwlNs67+k
-         r4ecn6EW8pVJVSqAcvpQ2yOoMpmcckRpPX+pOGwajqhpcDTseHELws6Of5AKSGg+JvoO
-         lVIg==
-X-Gm-Message-State: AFqh2ko4aInFAUz+lLMu6n3i3ZFsah0G2qpb5wREbTuYqf+fGy5Hc7Da
-        dn4wpkJ2miA2shBQvNU141GkMQ==
-X-Google-Smtp-Source: AMrXdXsVfiyeWsiMdZoF2anbCkN+kSMwBTexEp3CrlKMRT16xw5Sf6OTugVSJynF7gGyKDkEhjVUhA==
-X-Received: by 2002:adf:f781:0:b0:242:1ba0:208b with SMTP id q1-20020adff781000000b002421ba0208bmr1552145wrp.64.1671635461308;
-        Wed, 21 Dec 2022 07:11:01 -0800 (PST)
-Received: from [192.168.2.1] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id u18-20020adfeb52000000b002423dc3b1a9sm15420179wrn.52.2022.12.21.07.10.59
+        bh=9m8USarmvldzMr+J44XS7SpGQ8hCtef881SAyiDae8Q=;
+        b=J399uizZ5a+lcyUWGaIRpIwULtMMklkrRFLvGJLm2+YxDakNstJUEksFfLMPYur1L8
+         NjZN1bi6x0dQaFyrj57cIfXnzB+pIXDVBWCL1hK+J9jvdNjsTsu4qedNHNEcll0MiUi0
+         zqRmPIlLp/Z9COwzcJfrN5Vrc7PfnLkBJ4MpjQOXC7vmutuyqnoEG08tPKvMVLNQ4B9d
+         XV4SgJtvEsaUqfivc4H1xAa3jtKZkBWTj3bxoIldML5AO6+hSueh368lno1VpwXCwT7K
+         sPLT+wC7UUVE1bQmBP//weUConChzSmkzrnKm4rfOWFtVWM4Nk0oxFFjyNyVsXDc9k8s
+         twyQ==
+X-Gm-Message-State: AFqh2krgpaw3P2UJSzKdIYhduT0SYCL1PVXndyHmpMjvvuY1xOARE4fi
+        c+v4V/VPJrzG5CpYkP8TcKrVFw==
+X-Google-Smtp-Source: AMrXdXu2fSetxXEsruEVdCSb86lzCy9KSvy0WpIy6GHQMl6GZ5Bsu8URGnddADll0uNcxHjWk/URNA==
+X-Received: by 2002:a5d:4b84:0:b0:242:5b60:e23c with SMTP id b4-20020a5d4b84000000b002425b60e23cmr1295315wrt.19.1671637076795;
+        Wed, 21 Dec 2022 07:37:56 -0800 (PST)
+Received: from [192.168.175.23] (pur13-1-78-242-214-186.fbx.proxad.net. [78.242.214.186])
+        by smtp.googlemail.com with ESMTPSA id w16-20020adfee50000000b002420dba6447sm15416255wro.59.2022.12.21.07.37.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Dec 2022 07:11:00 -0800 (PST)
-Message-ID: <b8ea3995-3f35-3459-4882-ad7c4dcf18db@linaro.org>
-Date:   Wed, 21 Dec 2022 16:10:57 +0100
+        Wed, 21 Dec 2022 07:37:55 -0800 (PST)
+Message-ID: <be2b4fef-b047-7dd5-c375-af90083e4417@linaro.org>
+Date:   Wed, 21 Dec 2022 16:37:52 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2 4/4] thermal/drivers/intel_cpu_idle_cooling: Introduce
- Intel cpu idle cooling driver
+Subject: Re: [PATCH v4 00/15] thermal/drivers/tsens: specify nvmem cells in DT
+ rather than parsing them manually
 Content-Language: en-US
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
- <20221129233419.4022830-5-srinivas.pandruvada@linux.intel.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20221221020520.1326964-1-dmitry.baryshkov@linaro.org>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20221129233419.4022830-5-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20221221020520.1326964-1-dmitry.baryshkov@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 30/11/2022 00:34, Srinivas Pandruvada wrote:
-> The cpu idle cooling is used to cool down a CPU by injecting idle cycles
-> at runtime. The objective is similar to intel_powerclamp driver, which is
-> used for system wide cooling by injecting idle on each CPU.
-> 
-> This driver is modeled after drivers/thermal/cpuidle_cooling.c by reusing
-> powercap/idle_inject framework.
-> 
-> On each CPU online a thermal cooling device is registered. The minimum
-> state of the cooling device is 0 and maximum is 100. When user space
-> changes the current state to non zero, then register with idle inject
-> framework and start idle inject.
-> 
-> The default idle duration is 24 milli seconds, matching intel_powerclamp,
-> which doesn't change based on the current state of cooling device. The
-> runtime is changed based on the current state.
-> 
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> ---
-> v2:
-> - Removed callback arguments for idle_inject_register
-> 
->   drivers/thermal/intel/Kconfig                 |  10 +
->   drivers/thermal/intel/Makefile                |   1 +
->   .../thermal/intel/intel_cpu_idle_cooling.c    | 261 ++++++++++++++++++
->   3 files changed, 272 insertions(+)
->   create mode 100644 drivers/thermal/intel/intel_cpu_idle_cooling.c
-> 
-> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-> index 6c2a95f41c81..8c88d6e18414 100644
-> --- a/drivers/thermal/intel/Kconfig
-> +++ b/drivers/thermal/intel/Kconfig
-> @@ -115,3 +115,13 @@ config INTEL_HFI_THERMAL
->   	  These capabilities may change as a result of changes in the operating
->   	  conditions of the system such power and thermal limits. If selected,
->   	  the kernel relays updates in CPUs' capabilities to userspace.
-> +
-> +config INTEL_CPU_IDLE_COOLING
-> +	tristate "Intel CPU idle cooling device"
-> +	depends on IDLE_INJECT
-> +	help
-> +	  This implements the CPU cooling mechanism through
-> +	  idle injection. This will throttle the CPU by injecting
-> +	  idle cycle.
-> +	  Unlike Intel Power clamp driver, this driver provides
-> +	  idle injection for each CPU.
-> diff --git a/drivers/thermal/intel/Makefile b/drivers/thermal/intel/Makefile
-> index 9a8d8054f316..8d5f7b5cf9b7 100644
-> --- a/drivers/thermal/intel/Makefile
-> +++ b/drivers/thermal/intel/Makefile
-> @@ -14,3 +14,4 @@ obj-$(CONFIG_INTEL_TCC_COOLING)	+= intel_tcc_cooling.o
->   obj-$(CONFIG_X86_THERMAL_VECTOR) += therm_throt.o
->   obj-$(CONFIG_INTEL_MENLOW)	+= intel_menlow.o
->   obj-$(CONFIG_INTEL_HFI_THERMAL) += intel_hfi.o
-> +obj-$(CONFIG_INTEL_CPU_IDLE_COOLING) += intel_cpu_idle_cooling.o
-> diff --git a/drivers/thermal/intel/intel_cpu_idle_cooling.c b/drivers/thermal/intel/intel_cpu_idle_cooling.c
-> new file mode 100644
-> index 000000000000..cdd62756cc3d
-> --- /dev/null
-> +++ b/drivers/thermal/intel/intel_cpu_idle_cooling.c
-> @@ -0,0 +1,261 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Per CPU Idle injection cooling device implementation
-> + *
-> + * Copyright (c) 2022, Intel Corporation.
-> + * All rights reserved.
-> + *
-> + */
-> +
-> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> +
-> +#include <linux/cpufeature.h>
-> +#include <linux/cpuhotplug.h>
-> +#include <linux/idle_inject.h>
-> +#include <linux/module.h>
-> +#include <linux/kernel.h>
-> +#include <linux/slab.h>
-> +#include <linux/thermal.h>
-> +#include <linux/topology.h>
-> +
-> +#include <asm/cpu_device_id.h>
-> +
-> +/* Duration match with intel_powerclamp driver */
-> +#define IDLE_DURATION		24000
-> +#define IDLE_LATENCY		UINT_MAX
-> +
-> +static int idle_duration_us = IDLE_DURATION;
-> +static int idle_latency_us = IDLE_LATENCY;
-> +
-> +module_param(idle_duration_us, int, 0644);
-> +MODULE_PARM_DESC(idle_duration_us,
-> +		 "Idle duration in us.");
-> +
-> +module_param(idle_latency_us, int, 0644);
-> +MODULE_PARM_DESC(idle_latency_us,
-> +		 "Idle latency in us.");
-> +
-> +/**
-> + * struct cpuidle_cooling - Per instance data for cooling device
-> + * @cpu: CPU number for this cooling device
-> + * @ii_dev: Idle inject core instance pointer
-> + * @cdev: Thermal core cooling device instance
-> + * @state:  Current cooling device state
-> + *
-> + * Stores per instance cooling device state.
-> + */
-> +struct cpuidle_cooling {
-> +	int cpu;
-> +	struct idle_inject_device *ii_dev;
-> +	struct thermal_cooling_device *cdev;
-> +	unsigned long state;
-> +};
-> +
-> +static DEFINE_PER_CPU(struct cpuidle_cooling, cooling_devs);
-> +static cpumask_t cpuidle_cpu_mask;
 
-I don't see where it is used except its affectation
+Hi Dmitry,
 
-> +/* Used for module unload protection with idle injection operations */
-> +static DEFINE_MUTEX(idle_cooling_lock);
-> +
-> +static unsigned int cpuidle_cooling_runtime(unsigned int idle_duration_us,
-> +					    unsigned long state)
-> +{
-> +	if (!state)
-> +		return 0;
-> +
-> +	return ((idle_duration_us * 100) / state) - idle_duration_us;
-> +}
-> +
-> +static int cpuidle_idle_injection_register(struct cpuidle_cooling *cooling_dev)
-> +{
-> +	struct idle_inject_device *ii_dev;
-> +
-> +	ii_dev = idle_inject_register((struct cpumask *)cpumask_of(cooling_dev->cpu));
-> +	if (!ii_dev) {
-> +		/*
-> +		 * It is busy as some other device claimed idle injection for this CPU
-> +		 * Also it is possible that memory allocation failure.
-> +		 */
-> +		pr_err("idle_inject_register failed for cpu:%d\n", cooling_dev->cpu);
-> +		return -EAGAIN;
-> +	}
-> +
-> +	idle_inject_set_duration(ii_dev, TICK_USEC, idle_duration_us);
-> +	idle_inject_set_latency(ii_dev, idle_latency_us);
-> +
-> +	cooling_dev->ii_dev = ii_dev;
-> +
-> +	return 0;
-> +}
-> +
-> +static void cpuidle_idle_injection_unregister(struct cpuidle_cooling *cooling_dev)
-> +{
-> +	idle_inject_unregister(cooling_dev->ii_dev);
-> +}
-> +
-> +static int cpuidle_cooling_get_max_state(struct thermal_cooling_device *cdev,
-> +					 unsigned long *state)
-> +{
-> +	*state = 100;
-> +
-> +	return 0;
-> +}
-> +
-> +static int cpuidle_cooling_get_cur_state(struct thermal_cooling_device *cdev,
-> +					 unsigned long *state)
-> +{
-> +	struct cpuidle_cooling *cooling_dev = cdev->devdata;
-> +
-> +	*state = READ_ONCE(cooling_dev->state);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cpuidle_cooling_set_cur_state(struct thermal_cooling_device *cdev,
-> +					 unsigned long state)
-> +{
-> +	struct cpuidle_cooling *cooling_dev = cdev->devdata;
-> +	unsigned int runtime_us;
-> +	unsigned long curr_state;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&idle_cooling_lock);
-> +
-> +	curr_state = READ_ONCE(cooling_dev->state);
-> +
-> +	if (!curr_state && state > 0) {
-> +		/*
-> +		 * This is the first time to start cooling, so register with
-> +		 * idle injection framework.
-> +		 */
-> +		if (!cooling_dev->ii_dev) {
-> +			ret = cpuidle_idle_injection_register(cooling_dev);
-> +			if (ret)
-> +				goto unlock_set_state;
-> +		}
-> +
-> +		runtime_us = cpuidle_cooling_runtime(idle_duration_us, state);
-> +
-> +		idle_inject_set_duration(cooling_dev->ii_dev, runtime_us, idle_duration_us);
-> +		idle_inject_start(cooling_dev->ii_dev);
-> +	} else if (curr_state > 0 && state) {
-> +		/* Simply update runtime */
-> +		runtime_us = cpuidle_cooling_runtime(idle_duration_us, state);
-> +		idle_inject_set_duration(cooling_dev->ii_dev, runtime_us, idle_duration_us);
-> +	} else if (curr_state > 0 && !state) {
-> +		idle_inject_stop(cooling_dev->ii_dev);
-> +		cpuidle_idle_injection_unregister(cooling_dev);
-> +		cooling_dev->ii_dev = NULL;
-> +	}
-> +
-> +	WRITE_ONCE(cooling_dev->state, state);
-> +
-> +unlock_set_state:
-> +	mutex_unlock(&idle_cooling_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +/**
-> + * cpuidle_cooling_ops - thermal cooling device ops
-> + */
-> +static struct thermal_cooling_device_ops cpuidle_cooling_ops = {
-> +	.get_max_state = cpuidle_cooling_get_max_state,
-> +	.get_cur_state = cpuidle_cooling_get_cur_state,
-> +	.set_cur_state = cpuidle_cooling_set_cur_state,
-> +};
-> +
-> +static int cpuidle_cooling_register(int cpu)
-> +{
-> +	struct cpuidle_cooling *cooling_dev = &per_cpu(cooling_devs, cpu);
-> +	struct thermal_cooling_device *cdev;
-> +	char name[14]; /* storage for cpuidle-XXXX */
-> +	int ret = 0;
+On 21/12/2022 03:05, Dmitry Baryshkov wrote:
+> Historically the tsens driver fetches the calibration data as a blob and
+> then parses the blob on its own. This results in semi-duplicated code
+> spreading over the platform-specific functions.
+> 
+> This patch series changes tsens calibration code to per-value nvmem
+> cells rather than parsing the blob in the driver. For backwards
+> compatibility the old code is left in place for msm8916, msm8974 and
+> qcs404, the platforms which have in-tree DT files. For all other
+> affected platforms the old parsing code has been dropped as a part of
+> this series.
+> 
+> The code was tested on msm8916 and qcs404 only.
+> 
+> Note: the DTs changes depend on driver changes. Tsens driver will not
+> work if DT patches are merged, but the driver bits are not. As the
+> thermal sense is critical for device safety, I'd suggest merging binding
+> and driver during one merge window and then merging DT changes in the
+> next merge window.
 
-Why not register idle_inject here before calling 
-thermal_cooling_device_register() so you get ride of the lock.
+We can avoid an extra release cycle with a common *immutable* branch 
+shared between the two trees.
 
-Well actually, I'm wondering if you can just have the same code than 
-cpuidle_cooling_device and just replace the of_device cpu initialization 
-by the cpu hotplug.
 
-> +	mutex_lock(&idle_cooling_lock);
-> +
-> +	snprintf(name, sizeof(name), "cpuidle-%d", cpu);
-> +	cdev = thermal_cooling_device_register(name, cooling_dev, &cpuidle_cooling_ops);
-> +	if (IS_ERR(cdev)) {
-> +		ret = PTR_ERR(cdev);
-> +		goto unlock_register;
-> +	}
-> +
-> +	cooling_dev->cdev = cdev;
-> +	cpumask_set_cpu(cpu, &cpuidle_cpu_mask);
-> +	cooling_dev->cpu = cpu;
-> +
-> +unlock_register:
-> +	mutex_unlock(&idle_cooling_lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static void cpuidle_cooling_unregister(int cpu)
-> +{
-> +	struct cpuidle_cooling *cooling_dev = &per_cpu(cooling_devs, cpu);
-> +
-> +	mutex_lock(&idle_cooling_lock);
-> +
-> +	if (cooling_dev->state) {
-> +		idle_inject_stop(cooling_dev->ii_dev);
-> +		cpuidle_idle_injection_unregister(cooling_dev);
-> +	}
-> +
-> +	thermal_cooling_device_unregister(cooling_dev->cdev);
-> +	cooling_dev->state = 0;
-> +
-> +	mutex_unlock(&idle_cooling_lock);
-> +}
-> +
-> +static int cpuidle_cooling_cpu_online(unsigned int cpu)
-> +{
-> +	cpuidle_cooling_register(cpu);
-> +
-> +	return 0;
-> +}
-> +
-> +static int cpuidle_cooling_cpu_offline(unsigned int cpu)
-> +{
-> +	cpuidle_cooling_unregister(cpu);
-> +
-> +	return 0;
-> +}
-> +
-> +static enum cpuhp_state cpuidle_cooling_hp_state __read_mostly;
-> +
-> +static const struct x86_cpu_id intel_cpuidle_cooling_ids[] __initconst = {
-> +	X86_MATCH_VENDOR_FEATURE(INTEL, X86_FEATURE_MWAIT, NULL),
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(x86cpu, intel_cpuidle_cooling_ids);
-> +
-> +static int __init cpuidle_cooling_init(void)
-> +{
-> +	int ret;
-> +
-> +	if (!x86_match_cpu(intel_cpuidle_cooling_ids))
-> +		return -ENODEV;
-> +
-> +	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-> +				"thermal/cpuidle_cooling:online",
-> +				cpuidle_cooling_cpu_online,
-> +				cpuidle_cooling_cpu_offline);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	cpuidle_cooling_hp_state = ret;
-> +
-> +	return 0;
-> +}
-> +module_init(cpuidle_cooling_init)
-> +
-> +static void __exit cpuidle_cooling_exit(void)
-> +{
-> +	cpuhp_remove_state(cpuidle_cooling_hp_state);
-> +}
-> +module_exit(cpuidle_cooling_exit)
-> +
-> +MODULE_IMPORT_NS(IDLE_INJECT);
-> +
-> +MODULE_LICENSE("GPL");
+> Note2:
+> For v3 I have reworked the legacy bindings support into the small and
+> manageable data-driven piece of code.
+> 
+> I still have included patches to drop legacy support for 8939
+> (msm8939.dtsi is on the list, I have provided Bryan with the patch to
+> update it to new bindings) and 8976 (msm8976.dtsi and msm8956.dtsi,
+> which use single-blob bindings, have been accepted for 6.2, dropping old
+> bindings support depends on mutual consensuns of platform and thermal
+> code maintainers). The patches are the last ones in the thermal part of
+> the series, thus if they are declined, the reset of the series still can
+> be applied without any problems.
+> 
+> Changes since v3:
+> - Added a patch to fix the tsens compatible string on msm8956 SoC,
+> - Fixed num-sensors and slope coefficients for the msm8939 SoC,
+> - Rewrote code supporting old bindings into the simple data-driven
+>    parser common to all legacy platforms which made dropping support for
+>    old bindings less demanding.
+> 
+> Changes since v2:
+> - Made init_8956 static, as pointed out by the testing robot and by
+>    AngeloGioacchino Del Regno.
+> 
+> Changes since the RFC:
+> - Sorted out the msm8976/msm8956, custom slopes are used only for msm8956,
+> - Implemented proper support for msm8974/apq8084,
+> - Added tsens_calibrate_common() and ops_v0_1 which can be used in
+>    common cases,
+> - Removed superfluous identity hw_ids
+> - Fixed calibration calculation in tsens_calibrate_nvmem() for
+>    ONE_PT_CALIB case
+> 
+> Dmitry Baryshkov (20):
+>    dt-bindings: thermal: tsens: add msm8956 compat
+>    dt-bindings: thermal: tsens: support per-sensor calibration cells
+>    dt-bindings: thermal: tsens: add per-sensor cells for msm8974
+>    thermal/drivers/tsens: Drop unnecessary hw_ids
+>    thermal/drivers/tsens: Drop msm8976-specific defines
+>    thermal/drivers/tsens: Sort out msm8976 vs msm8956 data
+>    thermal/drivers/tsens: limit num_sensors to 9
+>    thermal/drivers/tsens: fix slope values for msm8939
+>    thermal/drivers/tsens: Support using nvmem cells for calibration data
+>    thermal/drivers/tsens: Support using nvmem cells for msm8974
+>      calibration
+>    thermal/drivers/tsens: Rework legacy calibration data parsers
+>    thermal/drivers/tsens: Drop single-cell code for mdm9607
+>    thermal/drivers/tsens: Drop single-cell code for msm8939
+>    thermal/drivers/tsens: Drop single-cell code for msm8976/msm8956
+>    arm64: dts: qcom: msm8956: use SoC-specific compat for tsens
+>    arm64: dts: qcom: msm8916: specify per-sensor calibration cells
+>    arm64: dts: qcom: msm8976: specify per-sensor calibration cells
+>    arm64: dts: qcom: qcs404: specify per-sensor calibration cells
+>    ARM: dts: qcom-msm8974: specify per-sensor calibration cells
+>    ARM: dts: qcom-apq8084: specify per-sensor calibration cells
+> 
+>   .../bindings/thermal/qcom-tsens.yaml          | 123 +++-
+>   arch/arm/boot/dts/qcom-apq8084.dtsi           | 313 ++++++++-
+>   arch/arm/boot/dts/qcom-msm8974.dtsi           | 313 ++++++++-
+>   arch/arm64/boot/dts/qcom/msm8916.dtsi         |  81 ++-
+>   arch/arm64/boot/dts/qcom/msm8956.dtsi         |   4 +
+>   arch/arm64/boot/dts/qcom/msm8976.dtsi         | 153 +++-
+>   arch/arm64/boot/dts/qcom/qcs404.dtsi          | 145 +++-
+>   drivers/thermal/qcom/tsens-v0_1.c             | 653 +++++-------------
+>   drivers/thermal/qcom/tsens-v1.c               | 340 +++------
+>   drivers/thermal/qcom/tsens.c                  | 166 +++++
+>   drivers/thermal/qcom/tsens.h                  |  46 +-
+>   11 files changed, 1572 insertions(+), 765 deletions(-)
+> 
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
