@@ -2,95 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0719B6545D7
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Dec 2022 19:09:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 126FF65484A
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Dec 2022 23:18:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiLVSJt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Dec 2022 13:09:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S230183AbiLVWSQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Dec 2022 17:18:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiLVSJr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Dec 2022 13:09:47 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0258E15804;
-        Thu, 22 Dec 2022 10:09:47 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id r205so2573841oib.9;
-        Thu, 22 Dec 2022 10:09:46 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f80xyDOk9KHf4uJK6arjWJwVRc80XWsAqw622e+2d9I=;
-        b=WjjX6ssCoVnP0c+K+hxsLtrqtF/y05DUpLRooP+0T86UHmIZ/uZuXMbNz7T54ZXWZ9
-         fegWZqKuZFoJNkn8MqAVAriaw0XWGM6YQiaMgk+BKAiXXN71TEthY7e8rMO1lrnwJeuQ
-         BzRNw6Fxnr01r298QCnLF6OcVIDJ6FUyl3+ULWN1xl3t2WTB8okzaV4hzHFgnEzvubRc
-         oETUpu0awoE3eaN8NPaka/+ci/nnguob+Sjcdc8haRJ4IlaCOeLUpzUnlpEDozRZq0hc
-         F2akBF/ES0P8d+yiU4VSxuI5oWU9oUHVrChhoz/c1W+yQqJHfhTbdQguGxY9nvJdEXP8
-         oQTQ==
-X-Gm-Message-State: AFqh2kq5bJyIeIBQ5hHu2I/aestXd5wRXvXSBKZuKDPYgYlqcAAPalw1
-        rLToN9k9hbjn2Yw9ut8MBQ==
-X-Google-Smtp-Source: AMrXdXsf5t0zjQgu0bp4rIu0RQlpGNwMex6n3Tknbcjzee6r9WtvrQsaOzukDzzJMGUlkmjLBBgQfQ==
-X-Received: by 2002:a05:6808:13c1:b0:35e:66a4:1b19 with SMTP id d1-20020a05680813c100b0035e66a41b19mr4305245oiw.8.1671732586235;
-        Thu, 22 Dec 2022 10:09:46 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r70-20020acaa849000000b00354932bae03sm598371oie.10.2022.12.22.10.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Dec 2022 10:09:45 -0800 (PST)
-Received: (nullmailer pid 1836501 invoked by uid 1000);
-        Thu, 22 Dec 2022 18:09:45 -0000
-Date:   Thu, 22 Dec 2022 12:09:45 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-pm@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Biju Das <biju.das@bp.renesas.com>, linux-gpio@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-renesas-soc@vger.kernel.org, Lee Jones <lee@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add RZ/V2M PWC
-Message-ID: <167173258412.1836090.16333363777384274301.robh@kernel.org>
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com>
- <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
+        with ESMTP id S230116AbiLVWSP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Dec 2022 17:18:15 -0500
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9862666;
+        Thu, 22 Dec 2022 14:18:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1671747494; x=1703283494;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=UwKdVjpYLkRqGESN/NcUvn6sDkhajOztv9Cw8D+KxY4=;
+  b=Fv4eeOfs891uuujrf+t+KVo5G8Xs2yDTt/EHFiyEnbjW6JgZ4R2rlCzx
+   n/fzVpmPDI595tFmldDC7gnBGheKY+OKalwZ2AcI2vsFD/zEPe7+60cjw
+   cL9M+ndcitTIAKTaaJI0+O3eqJDUUZR8PH+5A5pIPPtdgBxZXafGAUF53
+   A=;
+X-IronPort-AV: E=Sophos;i="5.96,266,1665446400"; 
+   d="scan'208";a="250387884"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2022 22:18:07 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 431A482186;
+        Thu, 22 Dec 2022 22:18:06 +0000 (UTC)
+Received: from EX13D34UEA003.ant.amazon.com (10.43.61.16) by
+ EX13MTAUEA001.ant.amazon.com (10.43.61.243) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 22 Dec 2022 22:18:06 +0000
+Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
+ EX13D34UEA003.ant.amazon.com (10.43.61.16) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Thu, 22 Dec 2022 22:18:05 +0000
+Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
+ by mail-relay.amazon.com (10.43.61.243) with Microsoft SMTP Server id
+ 15.0.1497.42 via Frontend Transport; Thu, 22 Dec 2022 22:18:05 +0000
+Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
+        id 5DACF20D15; Thu, 22 Dec 2022 23:18:04 +0100 (CET)
+From:   Pratyush Yadav <ptyadav@amazon.de>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     <linux-pm@vger.kernel.org>, Len Brown <lenb@kernel.org>,
+        "Srinivas Pandruvada" <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devel@acpica.org>
+Subject: Re: [PATCH 1/2] acpi: processor: allow fixing up the frequency for
+ a performance state
+References: <20221221155203.11347-1-ptyadav@amazon.de>
+        <20221221155203.11347-2-ptyadav@amazon.de>
+        <CAJZ5v0i-mrt57=2ROywn4Na_N3YVk+3D869QpHWqp9eo2NtGAw@mail.gmail.com>
+Date:   Thu, 22 Dec 2022 23:18:04 +0100
+In-Reply-To: <CAJZ5v0i-mrt57=2ROywn4Na_N3YVk+3D869QpHWqp9eo2NtGAw@mail.gmail.com>       (Rafael
+ J. Wysocki's message of "Thu, 22 Dec 2022 17:23:41 +0100")
+Message-ID: <mafs0edsrdqw3.fsf_-_@amazon.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Dec 22 2022, Rafael J. Wysocki wrote:
+> On Wed, Dec 21, 2022 at 4:52 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
+>>
+>> In some cases the ACPI table can have an incorrect frequency populated
+>> for a performance state. For example, in Intel platforms, the Turbo
+>> frequency is just listed as +1 MHz above the max non-turbo frequency.
+>
+> Which is a known convention based on compatibility with some older OSes.
 
-On Wed, 21 Dec 2022 21:09:14 +0000, Fabrizio Castro wrote:
-> The Renesas RZ/V2M External Power Sequence Controller (PWC)
-> IP is a multi-function device, and it's capable of:
-> * external power supply on/off sequence generation
-> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
-> * key input signals processing
-> * general-purpose output pins
-> 
-> Add the corresponding dt-bindings.
-> 
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
-> 
-> v1->v2: I have dropped syscon, simple-mfd, regmap, offset, and the child nodes.
-> 
->  .../bindings/mfd/renesas,rzv2m-pwc.yaml       | 56 +++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
-> 
+Interesting. I did not know that.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+>
+>> The frequency can actually go much higher based on various factors like
+>> temperature, voltage, etc.
+>
+> It can.
+>
+>> Allow drivers like intel_pstate to fix up performance state frequencies
+>> with the actual maximum value.
+>
+> Why do you want to do that?
+
+To be able to use my processors at the full frequency they are capable
+of. See [0] for more details.
+
+[0] https://lore.kernel.org/linux-pm/mafs0k02jd8oh.fsf_-_@dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com/
+
+>
+[...]
+
+-- 
+Regards,
+Pratyush Yadav
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
