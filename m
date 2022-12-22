@@ -2,113 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51BA6544AA
-	for <lists+linux-pm@lfdr.de>; Thu, 22 Dec 2022 16:57:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D19654509
+	for <lists+linux-pm@lfdr.de>; Thu, 22 Dec 2022 17:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbiLVP4d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 22 Dec 2022 10:56:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S230046AbiLVQXz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 22 Dec 2022 11:23:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229904AbiLVP4c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Dec 2022 10:56:32 -0500
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85CC56595;
-        Thu, 22 Dec 2022 07:56:31 -0800 (PST)
-Received: by mail-lj1-x22c.google.com with SMTP id y4so2312054ljc.9;
-        Thu, 22 Dec 2022 07:56:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F96RJDidpidVjpAMCz7zq3Z+CFLpO9DsBw3nyLpGt2Q=;
-        b=B3lncGg4Dzq95xAkmu+C1az6ltl+mDL3a+i60Jh2B+NSMLwvb+eRP22S4QGAzjAXuG
-         x+Goml3Jq8yGzrTC9f91NmmeeJwrU/PuCfGOxuAce6GaA9NPhJ/bW0eng0H+zWav4ceC
-         qDuUjdKcG4Y4zS/bieYoh85HQP5W7ihYiCePGrKNjcTjCYAeMMrzD8oQYewhhGgn83Jf
-         pTjtxGXOLt29oHy9VXoM8y7Y8tH9MqZW+iwZeLS3ZoLxsG9MfQLS+HnhiYqqvge+o7wS
-         y90aeqfYXcrK5lvm0jb6p8RGVwalIqpWlDzvykizVNsLhzPQMGeI/QL+Isef9682g2p2
-         Wysw==
+        with ESMTP id S229545AbiLVQXy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 22 Dec 2022 11:23:54 -0500
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B90E23BDF;
+        Thu, 22 Dec 2022 08:23:53 -0800 (PST)
+Received: by mail-qv1-f41.google.com with SMTP id d2so1528158qvp.12;
+        Thu, 22 Dec 2022 08:23:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F96RJDidpidVjpAMCz7zq3Z+CFLpO9DsBw3nyLpGt2Q=;
-        b=YxF1ySqahyzOHjr5bQVTGId+8hykf+GApkrvQyAANmOiT8FhCzYOvkYDORW/bWRZrW
-         kGgfuZxQq4jeZGw46Wc5oPcfa4bq5qPq8/rk6heG+ec3HPPyA58IaMGS2kVqU10VhY6Q
-         WPrM5RqYqXH71Et92g+NK1fylrIN4WPX0Cn1X/vYimTnWubkwcNb3877icDTo1PakkwF
-         q6RtqiJRDDGHlgu/K8D0ddO8uYsqsFsjshtT72YzRehO2RE9HfDj9/R5Hijc6oZupdp/
-         VWdbv7fAmp9k3Y4Y5HYTVYp0S96rS3lAnsI+9VBvxFqtdXlIVaijV8dBdNiVMyj1Plbi
-         VFaQ==
-X-Gm-Message-State: AFqh2krD2YX4kx38igRBBecFvoio7a9XEzbIxvKSm1QMInXWJZBf5JjA
-        PljjSyYIRwJPb4dHXw7Hzg/HI9yfcXc=
-X-Google-Smtp-Source: AMrXdXvdgoKtg5dMQONAK6q/GptxY+yvMH4riZfYIewdvX0/oOdpo1YTdRkyuS0V/ffonFuPTuBYtw==
-X-Received: by 2002:a2e:9588:0:b0:277:413:7da3 with SMTP id w8-20020a2e9588000000b0027704137da3mr2155659ljh.49.1671724589747;
-        Thu, 22 Dec 2022 07:56:29 -0800 (PST)
-Received: from [192.168.2.145] (109-252-113-89.nat.spd-mgts.ru. [109.252.113.89])
-        by smtp.googlemail.com with ESMTPSA id z13-20020a2e350d000000b0027eb5903568sm83550ljz.72.2022.12.22.07.56.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Dec 2022 07:56:29 -0800 (PST)
-Message-ID: <791f5e52-6035-2501-7bc2-2795e43ae1c1@gmail.com>
-Date:   Thu, 22 Dec 2022 18:56:27 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6F4Pdl1w0uJ/Dj5PshnD7dKmjPpVZhf3+ujj3GIsvkc=;
+        b=QrUrlL0glPYAh7QSMkWy9mJk5uKLkgmzrLnpwQjic6ABSc28VRx5h9b+IBj0DBzxPW
+         4KrIdPlrbCLnIXE3m9FnrBmmKCQgPy48gmofYjIZpewevdbsnnGWjj3dMMkUpBqKsW2+
+         f4oz5i0GQ+bBDFR4OKGU1nWZlGeNhSB0ZU4m3tfJ0m+nvxw6XFDGUQ1KhWHTDifFUOCS
+         RhFhjlEs2tdIgd33aH5E52d3fvbii84qY/Uvvh5HFHoKDCiPcNN/GCsvtjcfLY77LRB2
+         2szDTccKM3ocLDli6tVXQx2xF3nr3lE8aqR1JN4O8eHBf4fPVhL6B2/DHbJj/IR3DI7B
+         R6lw==
+X-Gm-Message-State: AFqh2kqj2xnsHKKqiplICiMmiZzHm5kGW3D0sQHQMbx/H45wPqpTuzRs
+        w01eceWEK2b54IcQAWKEDTVdjGxdvIb366qVnKi/HCtL
+X-Google-Smtp-Source: AMrXdXurfuRqQTflDUkqlaJ6hSuTf3f6g7DGp7yvtz9AE6HsJKpctve7bbgi+dRkkUmDQqQUupj2l7oq2Y7cbFDnK2w=
+X-Received: by 2002:a0c:c345:0:b0:4c7:27cf:dfca with SMTP id
+ j5-20020a0cc345000000b004c727cfdfcamr268581qvi.3.1671726232692; Thu, 22 Dec
+ 2022 08:23:52 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-From:   Dmitry Osipenko <digetx@gmail.com>
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        krzysztof.kozlowski@linaro.org, dmitry.osipenko@collabora.com,
-        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
-        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
- <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
-In-Reply-To: <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221221155203.11347-1-ptyadav@amazon.de> <20221221155203.11347-2-ptyadav@amazon.de>
+In-Reply-To: <20221221155203.11347-2-ptyadav@amazon.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 22 Dec 2022 17:23:41 +0100
+Message-ID: <CAJZ5v0i-mrt57=2ROywn4Na_N3YVk+3D869QpHWqp9eo2NtGAw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] acpi: processor: allow fixing up the frequency for a
+ performance state
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Robert Moore <robert.moore@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@acpica.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-21.12.2022 22:20, Dmitry Osipenko пишет:
-> 20.12.2022 19:02, Sumit Gupta пишет:
->> +static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
->> +{
->> +	struct tegra186_emc *emc = to_tegra186_emc(dst->provider);
->> +	struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
->> +	struct mrq_bwmgr_int_request bwmgr_req = { 0 };
->> +	struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
->> +	struct tegra_icc_node *tnode = mc->curr_tnode;
->> +	struct tegra_bpmp_message msg;
->> +	int ret = 0;
->> +
->> +	/*
->> +	 * Same Src and Dst node will happen during boot from icc_node_add().
->> +	 * This can be used to pre-initialize and set bandwidth for all clients
->> +	 * before their drivers are loaded. We are skipping this case as for us,
->> +	 * the pre-initialization already happened in Bootloader(MB2) and BPMP-FW.
->> +	 */
->> +	if (src->id == dst->id)
->> +		return 0;
->> +
->> +	if (mc->curr_tnode->type == TEGRA_ICC_NISO)
-> 
-> The mc->curr_tnode usage looks suspicious, why you can't use src node?
-> 
+On Wed, Dec 21, 2022 at 4:52 PM Pratyush Yadav <ptyadav@amazon.de> wrote:
+>
+> In some cases the ACPI table can have an incorrect frequency populated
+> for a performance state. For example, in Intel platforms, the Turbo
+> frequency is just listed as +1 MHz above the max non-turbo frequency.
 
-This function sets memory BW for a memory client and not for EMC.
-Apparently, you should move the BW setting to tegra234_mc_icc_set() and
-then tegra_emc_icc_set_bw() will be a noop.
+Which is a known convention based on compatibility with some older OSes.
 
+> The frequency can actually go much higher based on various factors like
+> temperature, voltage, etc.
+
+It can.
+
+> Allow drivers like intel_pstate to fix up performance state frequencies
+> with the actual maximum value.
+
+Why do you want to do that?
+
+> While at it, also update the QoS
+> constraints if needed to match the new frequency values.
+>
+> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+> ---
+>  drivers/acpi/processor_perflib.c | 40 ++++++++++++++++++++++++++++++++
+>  include/acpi/processor.h         |  2 ++
+>  2 files changed, 42 insertions(+)
+>
+> diff --git a/drivers/acpi/processor_perflib.c b/drivers/acpi/processor_perflib.c
+> index 970f04a958cd..4958aee4c024 100644
+> --- a/drivers/acpi/processor_perflib.c
+> +++ b/drivers/acpi/processor_perflib.c
+> @@ -766,3 +766,43 @@ void acpi_processor_unregister_performance(unsigned int cpu)
+>         mutex_unlock(&performance_mutex);
+>  }
+>  EXPORT_SYMBOL(acpi_processor_unregister_performance);
+> +
+> +int acpi_processor_fixup_perf_state(unsigned int cpu, unsigned int state,
+> +                                   unsigned int frequency)
+> +{
+> +       struct acpi_processor *pr;
+> +       int ret;
+> +
+> +       mutex_lock(&performance_mutex);
+> +
+> +       pr = per_cpu(processors, cpu);
+> +       if (!pr) {
+> +               mutex_unlock(&performance_mutex);
+> +               return -ENODEV;
+> +       }
+> +
+> +       if (!pr->performance) {
+> +               mutex_unlock(&performance_mutex);
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (state >= pr->performance->state_count) {
+> +               mutex_unlock(&performance_mutex);
+> +               return -EINVAL;
+> +       }
+> +
+> +       pr->performance->states[state].core_frequency = frequency;
+> +
+> +       if (ignore_ppc != 1 && state == pr->performance_platform_limit &&
+> +           freq_qos_request_active(&pr->perflib_req)) {
+> +               ret = freq_qos_update_request(&pr->perflib_req,
+> +                                             frequency * 1000);
+> +               if (ret < 0)
+> +                       pr_warn("Failed to update perflib freq constraint: CPU%d (%d)\n",
+> +                               pr->id, ret);
+> +       }
+> +
+> +       mutex_unlock(&performance_mutex);
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL(acpi_processor_fixup_perf_state);
+> diff --git a/include/acpi/processor.h b/include/acpi/processor.h
+> index 94181fe9780a..daff978cfa7d 100644
+> --- a/include/acpi/processor.h
+> +++ b/include/acpi/processor.h
+> @@ -258,6 +258,8 @@ extern int acpi_processor_preregister_performance(struct
+>  extern int acpi_processor_register_performance(struct acpi_processor_performance
+>                                                *performance, unsigned int cpu);
+>  extern void acpi_processor_unregister_performance(unsigned int cpu);
+> +extern int acpi_processor_fixup_perf_state(unsigned int cpu, unsigned int state,
+> +                                          unsigned int frequency);
+>
+>  int acpi_processor_pstate_control(void);
+>  /* note: this locks both the calling module and the processor module
+> --
+> 2.38.1
+>
