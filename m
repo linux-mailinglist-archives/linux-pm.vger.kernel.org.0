@@ -2,188 +2,464 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D103C654ED3
-	for <lists+linux-pm@lfdr.de>; Fri, 23 Dec 2022 10:52:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6145E654FEC
+	for <lists+linux-pm@lfdr.de>; Fri, 23 Dec 2022 12:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiLWJwJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 23 Dec 2022 04:52:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40816 "EHLO
+        id S229658AbiLWL7C (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 23 Dec 2022 06:59:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236238AbiLWJvR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Dec 2022 04:51:17 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20623.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::623])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004C8532F9;
-        Fri, 23 Dec 2022 01:46:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ntEVMQhmTyuEE4aI7/95Pu7JCmTXOWhJO6PXrqHxd5QLknljh0dr7Q6qvJARe0RWWEvD6gdnFWkelr+AfdJEx4SfuLru8xS7gKR7vP8S+AESLgSJiKhTGyrfIj8goP6qycFkjrsQufTuXdj8k3XI3/D6ySN3NH4nR6ZGEOigIA1+jCMzSlJhKKNjdlXscYDI/+OcrjzseuOquTPF7oymAD9nF8DACw5XVARgXwsMJi9JdxEUCCeY+cspC4dOnJZxFphUPDDIudRqZIs6eEMhIXN55vuQVDLmJhkZPFiajFoCNbhCVcyniaS6X3og6NMEx6Fh3Iz9slMNCvgcgEx68Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3RvGZfYD+G/FTQ8q/x7aHO2SJ7lH52wWIS3WHPY1Dz4=;
- b=MzxxpdTVD+9XDt/ArgHjSyAw/nYdjv3Up9Im1rZLDXpmNyTR15WM600TstQUpspuhnKZ10n0l3n0ggY58hq1vqvCANk0+0Q4xfqFr9tngJJeNC0dpKXKVyHYW6yayd/Yxa6nZLx5LYB3k5It9muE+dtxVYuHz1s0mc8OaYPC9jMHo9bYXjKrxsJEiwJoly9CLiS0KvT69S+76rlh4aJ0WLirE3VZagtPknolLLW63ijtCn9PLsOYWXPU87FcNqKeJ00Job2tU7K2erDL5x3JSnEoG9zrqWi+G/jSqyzqEabimxbqlZzZYJVhdmIfPn8r6VRSbNQSkRYUXQ32q7CIYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3RvGZfYD+G/FTQ8q/x7aHO2SJ7lH52wWIS3WHPY1Dz4=;
- b=jK+pxbq5yY/fuRF/cQMqob9gM83fM4sJ8Ry9Y2U0A8gR6UiZty5Vm0bB6skDT4DN8Ox2UjD3xB4rArWYsTnkhJkxerbfrpB0QVi7+JgwsrINvLYZznhtJF+CrVhHK09llkdmh2g75DU13YzQbXdjhfzCsHn4fJgliEJofRxkFuA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by MN2PR12MB4238.namprd12.prod.outlook.com (2603:10b6:208:199::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5924.16; Fri, 23 Dec
- 2022 09:45:47 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::45ef:724b:4b64:b98]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::45ef:724b:4b64:b98%3]) with mapi id 15.20.5944.013; Fri, 23 Dec 2022
- 09:45:36 +0000
-Message-ID: <bce86f79-9757-530b-b34e-1d2a71281e75@amd.com>
-Date:   Fri, 23 Dec 2022 15:15:25 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v8 05/13] cpufreq: amd-pstate: optimize driver working
- mode selection in amd_pstate_param()
-Content-Language: en-US
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        Mario.Limonciello@amd.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221219064042.661122-1-perry.yuan@amd.com>
- <20221219064042.661122-6-perry.yuan@amd.com>
-From:   Wyes Karny <wyes.karny@amd.com>
-In-Reply-To: <20221219064042.661122-6-perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA0PR01CA0099.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:af::7) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        with ESMTP id S236196AbiLWL7B (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 23 Dec 2022 06:59:01 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB352A270
+        for <linux-pm@vger.kernel.org>; Fri, 23 Dec 2022 03:58:49 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so374661wmb.2
+        for <linux-pm@vger.kernel.org>; Fri, 23 Dec 2022 03:58:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QFykJKkljHq1zxipWJqyItHeh9wp3t9C/FpL2hqjeNU=;
+        b=n1lL47ELUa+Z5B1hqY/hjwds8D2IPotIHP9ED2v4Wvkftga55K1fcG5tBDxKaD+pyj
+         OAhCwevJh6TZLg04cUJ/agzoMMvfGpGYo3vxdG0OzTcSrJMScwSjzL13ENYQ4XFRB1Id
+         tCgsAhuw4rcJIXr9bCxumqkKKTLEOvDJL7VKbFYTiQh12Rhq48G5dDsHwkn5NufxgYb/
+         XDRpJZR0+LOVDd9lWW7cyxod9ROv7AN9FCSRTdbZVQQNXZMKpd/nRq+l76xDqsqUL/4Z
+         tcR/9Be+QOsa/97NtRc5yjLPVbr4UCLPv5iDHjtYwDe+hgnzQw0VamMNcErg3TDHj14u
+         1fgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QFykJKkljHq1zxipWJqyItHeh9wp3t9C/FpL2hqjeNU=;
+        b=HKBW1T/K2qU817BdNAts5jy9kdIaISY+3u33erscA6PGRnUvnxig2tR7sCc0MGE9lG
+         rcDvwASvHehfg0r46ocowCwyVopz4SLuvvxd1aZL/8WvYrmckhRe2EHLC1LwnueTJzuN
+         5ZL9gqdhsHl2ag/UEj5u2g9U5IdThiwpaoXKcRlLhO+YkdHJBuEVGfp3CSVDdXy866iK
+         xHaY+sP2K5tNKXXrsXEpk/H5M5n7XaL4ROjzEp9ydLQ9dRM4e6BgWYVYkh+YKQeQ1JCK
+         k4OZIfoDrLxDJ4s+31uG5wWrL/kOP9ZwxCC6j39kCD6aFs2ExTKFdJbMgE9fgK9iuZsE
+         cCxg==
+X-Gm-Message-State: AFqh2kpevXMBZH4dVnWyakXbGIKRIKP+r3Rcymi1VWjlUXo0rtcisJne
+        WXjuatXv4OslkS43o5piuiShDQ==
+X-Google-Smtp-Source: AMrXdXuFoZiL9IoX+ZUDUHjMbjVOQNlJbEaazrmrno8sfJtdfs4uoZXcoWDzE9SvGsZUdpxEjKtJ0A==
+X-Received: by 2002:a05:600c:34cf:b0:3d0:7415:c5a9 with SMTP id d15-20020a05600c34cf00b003d07415c5a9mr6889777wmq.21.1671796728010;
+        Fri, 23 Dec 2022 03:58:48 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id fc7-20020a05600c524700b003a3442f1229sm10347035wmb.29.2022.12.23.03.58.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Dec 2022 03:58:47 -0800 (PST)
+Date:   Fri, 23 Dec 2022 11:58:45 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+Message-ID: <20221223115845.3azncwqlyo4zx262@airbuntu>
+References: <20221203143323.w32boxa6asqvvdnp@airbuntu>
+ <CAKfTPtCZYGEvDBe5X1v7TiNZag0atUozGKip6EAgvZDWyo8e-g@mail.gmail.com>
+ <20221205110159.nd5igwvsaj55jar7@airbuntu>
+ <CAKfTPtAOhQyfyH_qRArC2SZ1sQOBnRZ4CXARiWu2fvb+KPGsXw@mail.gmail.com>
+ <20221208140526.vvmjxlz6akgqyoma@airbuntu>
+ <20221209164739.GA24368@vingu-book>
+ <20221212184317.sntxy3h6k44oz4mo@airbuntu>
+ <CAKfTPtBX0ugM87CEjAXUbVhnTZTwAAnjXu2fRfc6ezHE8=aC6w@mail.gmail.com>
+ <20221220123254.to6tzznxloxq725q@airbuntu>
+ <20221220135034.GA12359@vingu-book>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|MN2PR12MB4238:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3d25ea5-6f62-49ac-4b3c-08dae4ca7171
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: A55iuc+8Z4H4HPaMHFMBcfBiYRo9YLCQ8q0t2F1FDOF8zsQomqIfCQgsT+dvuEtsqF5DJBem1/tOT6zh586In3lbBlluHbtoGYG4AbzpBt3n9pcz+/8cE26Fdx+4Xv/ncZI/SFaHvsKb/Z5/QMwRZ862au/O8tJQ+gGXN2m5c1jBV5oeSbUDoD5YDGpEvEjd8sMUnJDv/pX5JkBYgDazaB7/mksA5cwTQ0THwPS9Y3TtLuDY7B6WhlOgfm2VfOxao5+dbsR2UhMS68H6qVVJWKLeB1SmTjs1DnJyDvnE57RXD5ldJ2D8qNM7O+sk0WP0mi4Q2twNFcYdhN5eKOxOhiPgLjUrvIdne1If52ALnx5+92qiCHLxgqt9LC07GpZUZ9X1qDZeJxi7Nwd0yOyjIEyfxJz8KiMRyV6o8CD2qDeYjg5VOoz12ZV1fPBJJsta1CB1xUT46w+bVnijm+QpHm/uyJrQQgyUl7MprpYjGvKOk4KvZ8dwQN5peeVIV6f2/5Ef9BVzXk1fKCO3aDNEKpkIoOxLH65dhcflE3CZ79LcnDnRPlEqs5gjkxAM+HK9yOHvRZmSqLO9qAxYGDsY/fx7Rzn+kSdkY7ApHRswXGynMNxkjOlmp5hFtYmOyYttkFaJEHOrJk9A3d3G/moFREO5eOPP+RuhiaDQELCO2VyYFQUxf/4nXk0uxCsoVYIEN+blAx6d3SR8iAkMlzia7Ogroh0BYWLeBKazYaprq/4=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(39860400002)(346002)(396003)(451199015)(2906002)(44832011)(316002)(36756003)(86362001)(2616005)(83380400001)(6486002)(26005)(6666004)(31696002)(38100700002)(478600001)(186003)(6512007)(31686004)(4326008)(53546011)(8936002)(41300700001)(6506007)(66476007)(5660300002)(66556008)(8676002)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjdvcTBVa0srYzNIUXRCU2hUc252dXBOaWRSV3FCSFJaeVpvOC9qVXpwQXZu?=
- =?utf-8?B?eXBvSVZidFg1cWM5Zm0rd1cvUit3L09jc3ltWXdFKzhubUdiRzlIOStmQito?=
- =?utf-8?B?RWFReFQwc3pRbTcrMnFLZENucjJCMWU3K0dBS3craUo5VExwUGZmcnc2U1RL?=
- =?utf-8?B?UFNtWTAvS0d6TFg5NnFPaWg3V1ZwVWh1KzJxZjhPTTd2amt2TDNneTFhQXRS?=
- =?utf-8?B?c3Z5L2t5aytEMDBxTTI1T2JYQXB2VUp6bU5lUUdaWEdOUE94eEJlTzNRSXRP?=
- =?utf-8?B?UlBKSXJwZ2lqc2NmS3RmOHF6aS83L2FVZXZlNkRiNEdmTVkrTFc4Y2dhemFB?=
- =?utf-8?B?M3RyT2FBMHpLcjE1bWczWFhnVUgyQnd4ejh6OWNPcmFqeFIyRmhVZ3BubkxJ?=
- =?utf-8?B?REdFZktOQzJlTjY3dm54Sm02Q1AwV2pwVlF6MitVL2M4eHdzY1VQQ2dMRDE0?=
- =?utf-8?B?NWk5dTdkRVVuZ1BMai9veWxicG5PNXhIdXJNamN5eUgvZEMwUWVOVTdkSm5S?=
- =?utf-8?B?WGVLZDJkU1cweTk5U0J3S2p2eDg3Y0NRaXFjak9OUDQ5M1JDY2lLLzY4dnZw?=
- =?utf-8?B?TWtVS1dKRG9PNmFDd3owRkNUQ0o5cldzUGpVZEVML2NjWlBVMjgxL3BmKytO?=
- =?utf-8?B?T2lrR0VwWWREcU16RGg0Uk8vN2FvOWU0SjJPRXMrUjJoVXVGa2NrZjRWVitN?=
- =?utf-8?B?WGNZcjNPUUZreWJDK0JQV1ZmMTdrY0pRUzBsTkwzTS9ncm44azNoMXZub3JN?=
- =?utf-8?B?cUhGSGt6eWc5aTVLT1gyTy9iSnExdlU3cWdQUkZER2N5WkRUSzFnMkw2Zm5Q?=
- =?utf-8?B?NUxtei8vY1ZXMEgrTzF1ZTk1N2crbXdnNjdOOWF4WnNHdUpHM3krRGNtMERE?=
- =?utf-8?B?QmZyYkM2cGlyMm40Z1BDM3E4RDlCUnkzMUpZOFFZMlQzQkkwL3V5WjlhTm1l?=
- =?utf-8?B?Tk54ems2Nm1NT3F6bitieCtKZEhUbUhKekVnWVlpRlAweE52d000N3B3MjIx?=
- =?utf-8?B?MkdRRCs1dmxuWmtSa2Vuc29xTkpUMVpNMVo4WGMvc2lsb3QxM0VEZVllaFU1?=
- =?utf-8?B?UlZwdU5VcTkrN2dhNmxzWHpsN3F4UUl6eWtWNE5tNVlNYUVocFZrRG14dUlw?=
- =?utf-8?B?U0JzR0pxMVc3VWsyTjFDbnVrMG9lYlZqR1NkN1JyWFdzbGVlN3lQUk5HVUZm?=
- =?utf-8?B?WXYyRURDeFF6d0M1dythOW9ubUdPaGFhUjdDMzJpaUd0RmltcDIyWVZBQWlj?=
- =?utf-8?B?cHRlNDQ1ZkM1MC9YdU41TUxscnNUejQzbHFGSVVSTlVhZ3ovNzF3V05meTRw?=
- =?utf-8?B?ZXJ3bzVtTlQ3RUJGZko2MGhId2hEQWJ2SXJINUJZcUg3SFlwbnczS0ljZ1hC?=
- =?utf-8?B?cVRNS1RoYStVYXB6M1RTUUo3bGJML1NjOVh1dXRDV1lnaGcxMmhkL0ZRNDZN?=
- =?utf-8?B?WG1ZZ0RkV3crU3dhTkorWFdqTERzSTBsSjdHWCsyVHhzS3ZhKzBZdzN0OE9H?=
- =?utf-8?B?R3Z2dFlxMXhNdGtGVjNjZEhnUW1tQ1JFalltYjFEcXBBMitnMTk5N2ZIZTRT?=
- =?utf-8?B?ZGM5cGtSRzFuWXpmVnptNngxYURQSXV2YXFZVXNSS3NyREZkYjUrOEVyMkJI?=
- =?utf-8?B?N2M3ODVOZjVFU3d2MVpJeTB3ZEE1cTRZaU82aTNlR29lMXF4bkdWa1Nxa1k3?=
- =?utf-8?B?ekhQbjZRRzhraDVCVEdJcllCUm9Xd1Y3RjJuK3MwYzRZSjY3d2g5aFRNaWJO?=
- =?utf-8?B?T3BUZitXVmVBdks2aHE3NUhUTjFqTG50bHJiM3QweUl2OWNxQTVYdVRaaFlK?=
- =?utf-8?B?QVFIQURkUUVyazRWbDhqdmw4TDhGY21ZSlBhV2Z0R0VWNGIxam5TQ0RqdzJY?=
- =?utf-8?B?L0pGZ29mQnZBVHlzYkMxdjIySzNZSm53QVM0L1loL0E2Wk1xWXZrcHpHTE1a?=
- =?utf-8?B?OUhFSmRGcVFPcnUxakRvZVR3dHhmRTFyQmxGdG80SWR3UkFpV3pLMy9FYTc2?=
- =?utf-8?B?YzR4ZUQyUGFBVGd5RGhwZzd3Uk1HUDZmVkIwbjJKa04wT2FlWnlTc2pwOFha?=
- =?utf-8?B?bGszYjlSNnBzRkNBVkdFblQyV2l5R3hEeFVqbDgwNTNnTmJUTnV4Wk5LS0VD?=
- =?utf-8?Q?Nh66oEm8f+aCRig5AvuSiskyq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3d25ea5-6f62-49ac-4b3c-08dae4ca7171
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2022 09:45:36.7873
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KQ5Jw8zkwOzrAE2xtok1c7dO5rPFoSa/hzxnMY+TcygF91aA6w4zxmLDb/5JzLElv8h5evX2itG2EHyUxGuvYA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4238
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221220135034.GA12359@vingu-book>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_TEMPERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On 12/20/22 14:50, Vincent Guittot wrote:
 
+Thanks for the patch!
 
-On 12/19/2022 12:10 PM, Perry Yuan wrote:
---------------------->8-----------------------------
+> Hereafter is what I came with in order to decouple misfit task with cpu
+> overutilized. We keep using util_fits_cpu but with 3 values so we can keep
+> using it with cpu_overutilized but exclude the case of misfit task
+> because uclmap_min. Also select_idle_capacity() and feec() keep selecting the
+> big cpu even if it doesn't fit only because of uclamp_min
+> 
+> 
+> Subject: [PATCH] sched/fair: unlink misfit task from cpu overutilized
+> 
+> By taking into account uclamp_min, the 1:1 relation between task misfit and
+> cpu overutilized is no more true as a task with a util_avg of 20as an
+> example may not fit a 1024 capacity cpu because of a uclamp_min constraint.
+> 
+> Add a new state in util_fits_cpu() to reflect the case that task would fit
+> a CPU except for the uclamp_min hint which is a bandwidth requriement.
+
+nit: mixing uclamp with bandwidth has been a source of a lot of confusion when
+discussing uclamp. Can we use performance requirement instead please?
+
+> 
+> Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> can use this new value to take additional action to select the best cpu
+> that doesn't match uclamp_min.
+> 
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+>  kernel/sched/fair.c | 73 ++++++++++++++++++++++++++++++---------------
+>  1 file changed, 49 insertions(+), 24 deletions(-)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 4423681baf15..705335d6af65 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -4578,8 +4578,7 @@ static inline int util_fits_cpu(unsigned long util,
+>  	 *     2. The system is being saturated when we're operating near
+>  	 *        max capacity, it doesn't make sense to block overutilized.
+>  	 */
+> -	uclamp_max_fits = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> -	uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
+> +	uclamp_max_fits = (uclamp_max <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE);
+>  	fits = fits || uclamp_max_fits;
 >  
-> +/**
-> + * enum amd_pstate_mode - driver working mode of amd pstate
-> + */
-> +
-> +enum amd_pstate_mode {
-> +	/** @AMD_PSTATE_DISABLE: Driver mode is disabled */
-> +	AMD_PSTATE_DISABLE = 0,
-> +
-> +	/** @AMD_PSTATE_PASSIVE: Drier mode is passive mode */
-> +	AMD_PSTATE_PASSIVE = 1,
-> +
-> +	/** @AMD_PSTATE_ACTIVE: Driver mode is active mode */
-> +	AMD_PSTATE_ACTIVE = 2,
-> +
-> +	/** @AMD_PSTATE_GUIDE: Driver mode is guided mode */
-> +	AMD_PSTATE_GUIDE = 3,
-> +
-> +	/** @AMD_PSTATE_MAX */
-> +	AMD_PSTATE_MAX = 4,
-> +};
+>  	/*
+> @@ -4614,8 +4613,8 @@ static inline int util_fits_cpu(unsigned long util,
+>  	 * handle the case uclamp_min > uclamp_max.
+>  	 */
+>  	uclamp_min = min(uclamp_min, uclamp_max);
+> -	if (util < uclamp_min && capacity_orig != SCHED_CAPACITY_SCALE)
+> -		fits = fits && (uclamp_min <= capacity_orig_thermal);
+> +	if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
+> +		return -1;
+>  
+>  	return fits;
 
-IMO the above enum is self explanatory we don't need to annotate.
+nit: return !!fits?
 
-what about below?
+We check explicitly == 1 below and I'm not sure all the boolean check above
+will guarantee we will end up return 1 for true on all combination of
+compilerls/archs.
 
-/**
- * enum amd_pstate_mode - driver working mode
- * All supported modes are explained in kernel-parameters.txt
- */
-enum amd_pstate_mode {
-	AMD_PSTATE_DISABLE = 0,
-	AMD_PSTATE_PASSIVE,
-	AMD_PSTATE_ACTIVE,
-	AMD_PSTATE_MAX,
-};
+>  }
+> @@ -4625,7 +4624,7 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
+>  	unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
+>  	unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
+>  	unsigned long util = task_util_est(p);
+> -	return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
+> +	return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) == 1);
 
-Plz remove GUIDED mode here because it allows user to pass "amd_pstate=guided"
-in kernel cmdline. Therefore it breaks the driver flow without guided patches.
-I can update the enum in my guided patch.
+Or make this >  0?
 
+>  }
+>  
+>  static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
+> @@ -6064,7 +6063,10 @@ static inline void hrtick_update(struct rq *rq)
+>  #ifdef CONFIG_SMP
+>  static inline bool cpu_overutilized(int cpu)
+>  {
+> -	return !fits_capacity(cpu_util_cfs(cpu), capacity_of(cpu));
+> +	unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> +	unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
 > +
-> +static const char * const amd_pstate_mode_string[] = {
-> +	[AMD_PSTATE_DISABLE]     = "disable",
-> +	[AMD_PSTATE_PASSIVE]     = "passive",
-> +	[AMD_PSTATE_ACTIVE]      = "active",
-> +	[AMD_PSTATE_GUIDE]      = "guide",
-> +	NULL,
-> +};
+> +	return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+>  }
+>  
+>  static inline void update_overutilized_status(struct rq *rq)
+> @@ -6857,6 +6859,7 @@ static int
+>  select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+>  {
+>  	unsigned long task_util, util_min, util_max, best_cap = 0;
+> +	int fits, best_fits = -1;
+>  	int cpu, best_cpu = -1;
+>  	struct cpumask *cpus;
+>  
+> @@ -6872,12 +6875,24 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+>  
+>  		if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+>  			continue;
+> -		if (util_fits_cpu(task_util, util_min, util_max, cpu))
 > +
->  #endif /* _LINUX_AMD_PSTATE_H */
+> +		fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> +
+> +		/* This cpu fits with all capacity requirements */
 
--- 
-Thanks & Regards,
-Wyes
+nit: s#capacity#capacity & performance#?
+
+> +		if (fits > 0)
+>  			return cpu;
+> +		/*
+> +		 * Only the min bandwidth (i.e. uclamp_min) doesn't fit. Look
+> +		 * for the cpu with highest bandwidth capacity.
+> +		 */
+
+s/bandwidth/performance/?
+
+> +		else if (fits < 0)
+> +			cpu_cap = capacity_of(cpu) - thermal_load_avg(cpu_rq(cpu));
+
+Hmm. Isn't capacity_of() already takes into account thermal_load_avg()?
+
+Did you mean capacity_orig_of()?
+
+>  
+> -		if (cpu_cap > best_cap) {
+> +		if ((fits > best_fits) ||
+> +		    ((fits == best_fits) && (cpu_cap > best_cap))) {
+>  			best_cap = cpu_cap;
+>  			best_cpu = cpu;
+> +			best_fits = fits;
+
+I'm not sure if this logic is correct. It's a bit of a mind  bender.
+
+	@iter#0
+
+		fits <= 0
+		best_fits <= -1
+
+		if (fits > best_fits) // 0 > -1 => True
+			...	// update best_cap if larger
+			best_fits <= 0
+
+	@iter#1
+
+		fits <= -1
+		best_fits <= 0
+
+		if (fits > best_fits) // -1 > 0 => False
+
+		if (fits == best_fits) // -1 == 0 => False
+
+		// We will never update best_cap for all fits = -1 after
+		// encountering the first fits = 0
+
+I think we should reverse the initial values and split the conditions
+
+	int fits, best_fits = 0;
+
+		if ((fits < best_fits)) {
+			/* Reset best_cap for first "fits_but" */
+			best_cap = cpu_cap;
+			best_cpu = cpu;
+			best_fits = fits;
+		} else if ((fits == best_fits) && (cpu_cap > best_cap))) {
+			best_cap = cpu_cap;
+			best_cpu = cpu;
+		}
+
+Which give us
+
+	@iter#0
+
+		fits <= 0
+		best_fits <= 0
+
+		if (fits < best_fits) // 0 < 0 => False
+
+		if (fits == best_fits) // 0 == 0 => True
+			...	// update best_cap if larger
+
+	@iter#1
+
+		fits <= -1
+		best_fits <= 0
+
+		if (fits < best_fits) // -1 < 0 => True
+			...	// reset best_cap to first "fits_but" hit
+			best_fits <= -1
+
+	@iter#2
+
+		fits <= 0
+		best_fits <= -1
+
+		if (fits < best_fits) // 0 < -1 => False
+
+		if (fits == best_fits) // 0 == -1 => False
+
+		// We should never update best_cap for all fits == 0 now
+
+	@iter#3
+
+		fits <= -1
+		best_fits <= -1
+
+		if (fits < best_fits) // -1 < -1 => False
+
+		if (fits == best_fits) // -1 == -1 => True
+			...	// update best_cap if larger
+
+		// Only fits = -1 will update best_cap if larger now
+
+Of course any hit with fits = 1 will return the cpu immediately.
+
+
+>  		}
+>  	}
+>  
+> @@ -6890,7 +6905,7 @@ static inline bool asym_fits_cpu(unsigned long util,
+>  				 int cpu)
+>  {
+>  	if (sched_asym_cpucap_active())
+> -		return util_fits_cpu(util, util_min, util_max, cpu);
+> +		return (util_fits_cpu(util, util_min, util_max, cpu) > 0);
+>  
+>  	return true;
+>  }
+> @@ -7257,6 +7272,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  	unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
+>  	struct root_domain *rd = this_rq()->rd;
+>  	int cpu, best_energy_cpu, target = -1;
+> +	int prev_fits = -1, best_fits = -1;
+>  	struct sched_domain *sd;
+>  	struct perf_domain *pd;
+>  	struct energy_env eenv;
+> @@ -7288,10 +7304,11 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  		unsigned long cpu_cap, cpu_thermal_cap, util;
+>  		unsigned long cur_delta, max_spare_cap = 0;
+>  		unsigned long rq_util_min, rq_util_max;
+> -		unsigned long util_min, util_max;
+> +		unsigned long util_min = 0, util_max = 1024;
+
+Why this change? Are you hitting the same warning reported by Dan?
+
+>  		unsigned long prev_spare_cap = 0;
+>  		int max_spare_cap_cpu = -1;
+>  		unsigned long base_energy;
+> +		int fits, max_fits = -1;
+>  
+>  		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+>  
+> @@ -7344,7 +7361,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  					util_max = max(rq_util_max, p_util_max);
+>  				}
+>  			}
+> -			if (!util_fits_cpu(util, util_min, util_max, cpu))
+> +
+> +			fits = util_fits_cpu(util, util_min, util_max, cpu);
+> +			if (!fits)
+>  				continue;
+>  
+>  			lsub_positive(&cpu_cap, util);
+> @@ -7352,7 +7371,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  			if (cpu == prev_cpu) {
+>  				/* Always use prev_cpu as a candidate. */
+>  				prev_spare_cap = cpu_cap;
+> -			} else if (cpu_cap > max_spare_cap) {
+> +				prev_fits = fits;
+> +			} else if ((fits > max_fits) ||
+> +				   ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
+>  				/*
+>  				 * Find the CPU with the maximum spare capacity
+>  				 * among the remaining CPUs in the performance
+> @@ -7360,6 +7381,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  				 */
+>  				max_spare_cap = cpu_cap;
+>  				max_spare_cap_cpu = cpu;
+> +				max_fits = fits;
+
+Should we reset best_delta here?
+
+Because we update max_fits here..
+
+>  			}
+>  		}
+>  
+> @@ -7389,15 +7411,18 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+>  			if (cur_delta < base_energy)
+>  				goto unlock;
+>  			cur_delta -= base_energy;
+> -			if (cur_delta < best_delta) {
+> +			if ((fits > max_fits) ||
+> +			    ((fits == max_fits) && (cur_delta < best_delta))) {
+
+.. on first first transitions from -1 to 1; this condition will be
+skipped if cur_delta is lower than best delta. best_delta here could be the
+previous -1 fitting cpu.
+
+We should reset best_delta on first transition then look if we encounter
+something with a better delta?
+
+
+Thanks!
+
+--
+Qais Yousef
+
+>  				best_delta = cur_delta;
+>  				best_energy_cpu = max_spare_cap_cpu;
+> +				best_fits = max_fits;
+>  			}
+>  		}
+>  	}
+>  	rcu_read_unlock();
+>  
+> -	if (best_delta < prev_delta)
+> +	if ((best_fits > prev_fits) ||
+> +	    ((best_fits == prev_fits) && (best_delta < prev_delta)))
+>  		target = best_energy_cpu;
+>  
+>  	return target;
+> @@ -10164,24 +10189,23 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+>  	 */
+>  	update_sd_lb_stats(env, &sds);
+>  
+> -	if (sched_energy_enabled()) {
+> -		struct root_domain *rd = env->dst_rq->rd;
+> -
+> -		if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
+> -			goto out_balanced;
+> -	}
+> -
+> -	local = &sds.local_stat;
+> -	busiest = &sds.busiest_stat;
+> -
+>  	/* There is no busy sibling group to pull tasks from */
+>  	if (!sds.busiest)
+>  		goto out_balanced;
+>  
+> +	busiest = &sds.busiest_stat;
+> +
+>  	/* Misfit tasks should be dealt with regardless of the avg load */
+>  	if (busiest->group_type == group_misfit_task)
+>  		goto force_balance;
+>  
+> +	if (sched_energy_enabled()) {
+> +		struct root_domain *rd = env->dst_rq->rd;
+> +
+> +		if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
+> +			goto out_balanced;
+> +	}
+> +
+>  	/* ASYM feature bypasses nice load balance check */
+>  	if (busiest->group_type == group_asym_packing)
+>  		goto force_balance;
+> @@ -10194,6 +10218,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+>  	if (busiest->group_type == group_imbalanced)
+>  		goto force_balance;
+>  
+> +	local = &sds.local_stat;
+>  	/*
+>  	 * If the local group is busier than the selected busiest group
+>  	 * don't try and pull any tasks.
+> -- 
+> 2.17.1
+> 
+> 
+> 
+> > 
+> > 
+> > Thanks!!
+> > 
+> > --
+> > Qais Yousef
