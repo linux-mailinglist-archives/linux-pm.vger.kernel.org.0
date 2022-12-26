@@ -2,151 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8030C6561DC
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Dec 2022 11:27:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 376A565624E
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Dec 2022 12:58:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiLZK1j (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Dec 2022 05:27:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45448 "EHLO
+        id S231738AbiLZL6I (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Dec 2022 06:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbiLZK1j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Dec 2022 05:27:39 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C75891113
-        for <linux-pm@vger.kernel.org>; Mon, 26 Dec 2022 02:27:36 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id g25-20020a7bc4d9000000b003d97c8d4941so1510722wmk.4
-        for <linux-pm@vger.kernel.org>; Mon, 26 Dec 2022 02:27:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=KALJq/V5r25unN7gpBUsW9CyIRW7TsaG7eOK1RtrxG4=;
-        b=XzoOX9nL0mKaY5BM2p/ifqJKZH4E/8KMeSnguCGzpxWpEBvgYTmiK+K1kVTtCCt5ux
-         OyeIMNGwB/MHMmzj4+0bTPPRaXqZJYUtFh8+g3Int9c4AnhoS6LOwB4zNkd40tvX2IFm
-         D07fTPm/juu0sQOmHMoKo96EpBDk9YKJJTvnEa6MUGtyvlTJMFtHsV2ezn3fhkfhVAEv
-         uQwMrri1uBw4vqyHiz5Mn38wOqmP/b8UtUC0vynz3Y5gGeG9nVIScx+Zy+rAMPzDeu3e
-         /FQ4P4KDt9S1O2HqkspgszzZSn5be/Vush6RLNcG+RoOwUGv9MPa0k9fB79P+aPZSb6W
-         aZ3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KALJq/V5r25unN7gpBUsW9CyIRW7TsaG7eOK1RtrxG4=;
-        b=EBbbUyRxKrm2hvtY9pj5AdDr0+7Sdiry4F26wHzuvhzQ1oeJjfn1jFg2azu7Nvx6JJ
-         /qhfF5f7kL3WwvXNJRr81lV7GLWo1TJx9fNeK6qmck+LJEDEv54mGkx9xe5bqGQhxnqs
-         /V30aokMcTl/trZqaPXNwuwf0DAOZ0Kt+BlCLHhaPOfm2Yr/buz3yYsSNyxfXplUpoH4
-         GirvaLzvgJNaCXyKKVC+961o5QwQq6lIGQHgQwSauBtKwdReGw8jxcAwCIJ1qDgy9icJ
-         3KFqbKR+XcFTQOrL9COrdxedqDxMxhmZ9h3WLk7wnk9y/JqiQqHJEywQ+ZoXwesXSLzS
-         ml3w==
-X-Gm-Message-State: AFqh2kr7rH1/r1Mxnmg7u66I7q3YEvd3Z7pms/oYcE98nSUyrVBkUNCp
-        cBEH7u+gJODoD0wEbTqKiCNwUA==
-X-Google-Smtp-Source: AMrXdXvPOLaWe2a9phpQit63w0mHUGY18F/dL/xLYS/XbGC0BC2+uZqL8drVpMoEOVKN6hV2HSTLSQ==
-X-Received: by 2002:a05:600c:3209:b0:3cf:5fd2:87a0 with SMTP id r9-20020a05600c320900b003cf5fd287a0mr12566712wmp.40.1672050455288;
-        Mon, 26 Dec 2022 02:27:35 -0800 (PST)
-Received: from [192.168.0.20] (117.215.132.195.rev.sfr.net. [195.132.215.117])
-        by smtp.gmail.com with ESMTPSA id l17-20020adfe9d1000000b0024165454262sm9841286wrn.11.2022.12.26.02.27.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Dec 2022 02:27:34 -0800 (PST)
-Message-ID: <fa6ec5ae-3c09-6a8d-b6bd-46fbdfcb4f26@baylibre.com>
-Date:   Mon, 26 Dec 2022 11:27:33 +0100
+        with ESMTP id S229686AbiLZL6G (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Dec 2022 06:58:06 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E2C16179;
+        Mon, 26 Dec 2022 03:58:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3AA24B80C75;
+        Mon, 26 Dec 2022 11:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 895F8C433EF;
+        Mon, 26 Dec 2022 11:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672055882;
+        bh=BCmdieMBicJXuI4/ZzBxG2C09Q8TUmVSKdBVNnqsWpU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=te4U/bKJZYL4EQq81SVivnn5sAAcIlPZSoc8sgbMclBd6VwxkgzF/U449dFkQGQy+
+         c6fLeqQ1NzSM2BW0L3AD0BhSaV+h7beqCBfjXtXDjzGCVfYh9IW/nXXSDdy4sax1yy
+         QXyXhpZXX+KeyY93fGKGpgtWJveehZdNgZ+BNKJY3Ki/CUQLyw9UuddKrLtXZtoBrx
+         N56P9F1qyQuPWFyvmRhTXjmakqk4bB5mpKoEe3SlQTofARTV4vzWfSElvPWRPBnLld
+         KKCHDiVjimTxpRFN7nVBYDzwoaa4GcNpHAP4vKns7souAh0XrUWjJEiJixhyIAMUMq
+         +EyBEB9UvCr5Q==
+Received: by pali.im (Postfix)
+        id A794D77D; Mon, 26 Dec 2022 12:57:59 +0100 (CET)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/3] dt-bindings: reset: syscon-reboot: Add priority property
+Date:   Mon, 26 Dec 2022 12:45:11 +0100
+Message-Id: <20221226114513.4569-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20220820102925.29476-1-pali@kernel.org>
+References: <20220820102925.29476-1-pali@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
-Content-Language: en-US
-In-Reply-To: <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+This new optional priority property allows to specify custom priority level
+of reset device. Prior this change priority level was hardcoded to 192 and
+not possible to specify or change. Specifying other value is needed for
+some boards. Default level when not specified stays at 192 as before.
 
-On 12/6/22 10:18, Amjad Ouled-Ameur wrote:
-> Hi Daniel,
-> On Mon Dec 5, 2022 at 8:39 PM CET, Daniel Lezcano wrote:
->> Hi Amjad,
->>
->>
->> On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
->>
->> [ ... ]
->>
->>>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>>>     
->>>>>     	platform_set_drvdata(pdev, mt);
->>>>>     
->>>>> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>>>> -					      &mtk_thermal_ops);
->>>>> -	if (IS_ERR(tzdev)) {
->>>>> -		ret = PTR_ERR(tzdev);
->>>>> -		goto err_disable_clk_peri_therm;
->>>>> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>>>> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>>>> +		if (!tz)
->>>>> +			return -ENOMEM;
->>>>> +
->>>>> +		tz->mt = mt;
->>>>> +		tz->id = i;
->>>>> +
->>>>> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>>>> +							     &mtk_thermal_ops :
->>>>> +							     &mtk_thermal_sensor_ops);
->>>> Here you use again the aggregation
->>> I addressed this concern in V6, could you please take a look and let me
->>> know what you think [0].
->>>
->>> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
->> May I misunderstanding but AFAICS, this patch is setting the
->> mtk_thermal_ops if the sensor id is zero. The get_temp is computing the
->> max temperature in this ops which is what we don't want to do.
-> Correct, but I think that is out of scope of this patchset, as the current
-> driver already uses mtk_thermal_ops for sensor 0. The focus of this patchset
-> is to add support for the other sensors.
->
-> Besides, what do you suggest as a clean implementation if the current one
-> no longer meets thermal core requirements ?
+Signed-off-by: Pali Rohár <pali@kernel.org>
 
-Could you please address this ?
+---
+Changes in v4:
+* Use restart-handler.yaml
 
+Changes in v3:
+* Add explanation into commit message
 
-Kindly,
+Changes in v2:
+* Change sint32 to int32
+* Add default
+---
+ .../devicetree/bindings/power/reset/syscon-reboot.yaml      | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Amjad
+diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+index da2509724812..f721bdf63a98 100644
+--- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
++++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
+@@ -19,6 +19,9 @@ description: |+
+   sub-node of a "syscon", "simple-mfd" node. Though the regmap property
+   pointing to the system controller node is also supported.
+ 
++allOf:
++  - $ref: restart-handler.yaml#
++
+ properties:
+   compatible:
+     const: syscon-reboot
+@@ -42,6 +45,9 @@ properties:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     description: The reset value written to the reboot register (32 bit access).
+ 
++  priority:
++    default: 192
++
+ required:
+   - compatible
+   - offset
+-- 
+2.20.1
 
-> Regards,
-> Amjad
->>
->> -- 
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
