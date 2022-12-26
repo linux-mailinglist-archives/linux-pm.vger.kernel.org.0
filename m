@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F48B65658E
-	for <lists+linux-pm@lfdr.de>; Mon, 26 Dec 2022 23:50:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9015D656595
+	for <lists+linux-pm@lfdr.de>; Mon, 26 Dec 2022 23:50:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbiLZWuV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 26 Dec 2022 17:50:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S232433AbiLZWuW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 26 Dec 2022 17:50:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232433AbiLZWuC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Dec 2022 17:50:02 -0500
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3DF25E7;
-        Mon, 26 Dec 2022 14:50:01 -0800 (PST)
-Received: by mail-il1-x129.google.com with SMTP id o13so6049255ilc.7;
-        Mon, 26 Dec 2022 14:50:01 -0800 (PST)
+        with ESMTP id S232486AbiLZWuF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 26 Dec 2022 17:50:05 -0500
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D986D25DC;
+        Mon, 26 Dec 2022 14:50:02 -0800 (PST)
+Received: by mail-io1-xd36.google.com with SMTP id p6so6193112iod.13;
+        Mon, 26 Dec 2022 14:50:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zQtc0XYFcinmJ8ut/fhiEKUZ5qeGkZJwZ2bSsqd62BA=;
-        b=HnmC8189q+Fa9iTc9WdQSuCmoD3ft+rlvNX0tvoaxddna5UeJ9KxSrQMa8lQKGAqpm
-         eKZBWPCOAbszl2V2zwuffgzM7+A1tFDsoXWp4XsneEubRpjmlCnugK1tFKrSLdyFc4u3
-         S1GSRS/GMngf01Y5xvc2ZI4hcivJX3jkthEAHZ7klhNd6r8mZaRBWyAGB9YRN7ZzBOF4
-         E7Cfksn/7ZcNTiPgFf6P+UdoULi0YPIyYT59q72cL064K0BQS9MybdQRAhoIwrPt70f7
-         EYr7h1ybkzPwDp8+q/p6Qxw8VEGK9CaIvIXFnNK4IcJJw5vX4IGGU6CO/KKm7lTbgJC7
-         mDuA==
+        bh=b9Q8Kf8tnAoCtIkijPMYK9AMS2/w/uLrYTFo3S8QaxE=;
+        b=HXVphSTuKuqdwjOg6EInVVjY2sW3WVpRyiWnLD2xRRPKgZRI7Y//eU2k4qeJZz2sEN
+         y/jfPtC+O0zzqfSoQFkpL7WDQdGhlQ749v3vfg8eIDHh9CFanJRYaWDeCzv/1ybIok1j
+         q29OdU9PJkLjx7eJ0YXZIu8pvQOYaCPG/fRkQXFsEEoReKjBAFvailUSAyZKTr+patEZ
+         sF7o6SaEBUZ377DfhncCG1D+g2jNFymAjOhxIcQUlVTuvD2yRgNSGswwhp97amtlqJ+y
+         9Mf2tzcJdtSZJ22K5Qv9sSw0wqN7HUTeVp3JXLRocwwLA/afp7PFdcUxIB+vwnlkT1ZJ
+         eY6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zQtc0XYFcinmJ8ut/fhiEKUZ5qeGkZJwZ2bSsqd62BA=;
-        b=RrXwD1YmeqV7wcj0QHND5N1rDZah8GNls4wc/pu0bQyS1K0Afc6xRtDHyGdseGxSGt
-         tdKwOUkpNX20TsmEpM1rRiJzYRyV3nvNh5EAu6uoRaiOVmUiqAN/qpJGag++J/5MF36e
-         +4UV/MkqRTo3MmFAEgFr2QMbQYDNtme9N2YLgwzOx08j/W0sfjM9QYGtMcVl4zGGuBJk
-         p4SroEF8yzrsMU+yTdusGBJxBIdH54cmgABrlCB1r7rIbt+LXz56yGLhvQ0ElhGdnBrY
-         3ziH712tK3X4iYhzUJL5d1WVms/fC9tHxboOd9eiHkpNByK67cwE45sFLoEZMRZw9lDz
-         TiwA==
-X-Gm-Message-State: AFqh2krenTRCZcB+9l1BYj+rdZObATRozRobnsbWRIcUD+RbhmrOi0j+
-        zwo6ilwkA8JfOSKmtBqyw4A=
-X-Google-Smtp-Source: AMrXdXusiLnMoLTf2dq5BsvLFznZMZjOTWFjnS+kPUj90XehpeHn3pjfD7+DIgCz8ix1nafGDGCWng==
-X-Received: by 2002:a92:a806:0:b0:30b:ecf9:82f5 with SMTP id o6-20020a92a806000000b0030becf982f5mr7579719ilh.30.1672095000398;
-        Mon, 26 Dec 2022 14:50:00 -0800 (PST)
+        bh=b9Q8Kf8tnAoCtIkijPMYK9AMS2/w/uLrYTFo3S8QaxE=;
+        b=t/TGgYrYQM+fh5Zpoj9d0A8mZohNXoKw/E++4rlxxS3gC4I4gGiVaIzd6koZVjKeik
+         A11LL3shyPJzR9O/lkEvT1MX6g92ygtdUVA+sb4O+DceWgjQ3QT6xiX7Hth7ieNep1VA
+         HWr47JtBwMuI/ow9WMr6RojuhczDaBmk72z/1mILrCuReYWTuwK8b00HgEnbeqDUcE9e
+         yjzOOv+wHFLMEjWHWWoCEtsolkBGSiJDhCmYGRT3ZKDmOh932ic5tit7NSzOrGt8pz8+
+         hMNblpMSbUbYPzWOhY3P9lHKy3nfhQtM6kdXd4xr0v3vDO80zmNCtB4O+nlzPROSWs3i
+         0Iaw==
+X-Gm-Message-State: AFqh2kooRMvztJkvuuH3gPbDmtQ8cChUHIE/BnS7j0h8mEn0AnUda21m
+        OwE8Ea3xapfMcnx2aPCDqSI=
+X-Google-Smtp-Source: AMrXdXt98Zoy2AyCl+eoguYHVqMivOedmekvL5bS8RFNYEWY3ycnpB1YM9OpKd+b8Jf0d/pZiTtMnA==
+X-Received: by 2002:a6b:e50d:0:b0:6e0:164a:3500 with SMTP id y13-20020a6be50d000000b006e0164a3500mr15910212ioc.21.1672095002064;
+        Mon, 26 Dec 2022 14:50:02 -0800 (PST)
 Received: from localhost ([2607:fea8:a2df:3d00::e694])
-        by smtp.gmail.com with ESMTPSA id m30-20020a02a15e000000b0037508cc0bc2sm3700707jah.12.2022.12.26.14.49.59
+        by smtp.gmail.com with ESMTPSA id k130-20020a6bba88000000b006e0577610e2sm4549516iof.45.2022.12.26.14.50.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Dec 2022 14:50:00 -0800 (PST)
+        Mon, 26 Dec 2022 14:50:01 -0800 (PST)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
         Luca Weiss <luca@z3ntu.xyz>,
         Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH 1/4] dt-bindings: interconnect: add sdm670 interconnects
-Date:   Mon, 26 Dec 2022 17:49:41 -0500
-Message-Id: <20221226224944.37242-2-mailingradian@gmail.com>
+Subject: [PATCH 2/4] interconnect: qcom: add sdm670 interconnects
+Date:   Mon, 26 Dec 2022 17:49:42 -0500
+Message-Id: <20221226224944.37242-3-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20221226224944.37242-1-mailingradian@gmail.com>
 References: <20221226224944.37242-1-mailingradian@gmail.com>
@@ -79,178 +79,641 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-There are controllable interconnects on Snapdragon 670. Add the
-compatible strings to the documentation and interconnect ID definitions.
+The interconnects for Snapdragon 670 can be controlled via RPMh. Add
+driver support for this.
 
-The device tree header was generated by
-linux-interconnect-driver-generator and the copyright year was changed.
+This driver was generated by the linux-interconnect-driver-generator and
+the virtual NoC's were merged with their parents.
 
+Link: https://git.sr.ht/~z3ntu/linux-interconnect-driver-generator
 Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 ---
- .../bindings/interconnect/qcom,rpmh.yaml      |   8 ++
- .../dt-bindings/interconnect/qcom,sdm670.h    | 136 ++++++++++++++++++
- 2 files changed, 144 insertions(+)
- create mode 100644 include/dt-bindings/interconnect/qcom,sdm670.h
+ drivers/interconnect/qcom/Kconfig  |   9 +
+ drivers/interconnect/qcom/Makefile |   2 +
+ drivers/interconnect/qcom/sdm670.c | 440 +++++++++++++++++++++++++++++
+ drivers/interconnect/qcom/sdm670.h | 128 +++++++++
+ 4 files changed, 579 insertions(+)
+ create mode 100644 drivers/interconnect/qcom/sdm670.c
+ create mode 100644 drivers/interconnect/qcom/sdm670.h
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-index a429a1ed1006..db1e93583554 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-@@ -75,6 +75,14 @@ properties:
-       - qcom,sc8280xp-nspa-noc
-       - qcom,sc8280xp-nspb-noc
-       - qcom,sc8280xp-system-noc
-+      - qcom,sdm670-aggre1-noc
-+      - qcom,sdm670-aggre2-noc
-+      - qcom,sdm670-config-noc
-+      - qcom,sdm670-dc-noc
-+      - qcom,sdm670-gladiator-noc
-+      - qcom,sdm670-mem-noc
-+      - qcom,sdm670-mmss-noc
-+      - qcom,sdm670-system-noc
-       - qcom,sdm845-aggre1-noc
-       - qcom,sdm845-aggre2-noc
-       - qcom,sdm845-config-noc
-diff --git a/include/dt-bindings/interconnect/qcom,sdm670.h b/include/dt-bindings/interconnect/qcom,sdm670.h
+diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+index 1a1c941635a2..795b94b90c1a 100644
+--- a/drivers/interconnect/qcom/Kconfig
++++ b/drivers/interconnect/qcom/Kconfig
+@@ -128,6 +128,15 @@ config INTERCONNECT_QCOM_SDM660
+ 	  This is a driver for the Qualcomm Network-on-Chip on sdm660-based
+ 	  platforms.
+ 
++config INTERCONNECT_QCOM_SDM670
++	tristate "Qualcomm SDM670 interconnect driver"
++	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
++	select INTERCONNECT_QCOM_RPMH
++	select INTERCONNECT_QCOM_BCM_VOTER
++	help
++	  This is a driver for the Qualcomm Network-on-Chip on sdm670-based
++	  platforms.
++
+ config INTERCONNECT_QCOM_SDM845
+ 	tristate "Qualcomm SDM845 interconnect driver"
+ 	depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+index 8e357528185d..d70dcd35a545 100644
+--- a/drivers/interconnect/qcom/Makefile
++++ b/drivers/interconnect/qcom/Makefile
+@@ -17,6 +17,7 @@ qnoc-sc7280-objs                        := sc7280.o
+ qnoc-sc8180x-objs			:= sc8180x.o
+ qnoc-sc8280xp-objs			:= sc8280xp.o
+ qnoc-sdm660-objs			:= sdm660.o
++qnoc-sdm670-objs			:= sdm670.o
+ qnoc-sdm845-objs			:= sdm845.o
+ qnoc-sdx55-objs				:= sdx55.o
+ qnoc-sdx65-objs				:= sdx65.o
+@@ -41,6 +42,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_SC7280) += qnoc-sc7280.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SC8180X) += qnoc-sc8180x.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SC8280XP) += qnoc-sc8280xp.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SDM660) += qnoc-sdm660.o
++obj-$(CONFIG_INTERCONNECT_QCOM_SDM670) += qnoc-sdm670.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SDM845) += qnoc-sdm845.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SDX55) += qnoc-sdx55.o
+ obj-$(CONFIG_INTERCONNECT_QCOM_SDX65) += qnoc-sdx65.o
+diff --git a/drivers/interconnect/qcom/sdm670.c b/drivers/interconnect/qcom/sdm670.c
 new file mode 100644
-index 000000000000..d26dedb9deb7
+index 000000000000..b7326fee81ce
 --- /dev/null
-+++ b/include/dt-bindings/interconnect/qcom,sdm670.h
-@@ -0,0 +1,136 @@
-+/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
++++ b/drivers/interconnect/qcom/sdm670.c
+@@ -0,0 +1,440 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Qualcomm SDM670 interconnect IDs
-+ *
 + * Copyright (c) 2022, The Linux Foundation. All rights reserved.
 + */
 +
-+#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SDM670_H
-+#define __DT_BINDINGS_INTERCONNECT_QCOM_SDM670_H
++#include <linux/device.h>
++#include <linux/interconnect.h>
++#include <linux/interconnect-provider.h>
++#include <linux/module.h>
++#include <linux/of_platform.h>
++#include <dt-bindings/interconnect/qcom,sdm670.h>
 +
-+#define MASTER_A1NOC_CFG		0
-+#define MASTER_BLSP_1			1
-+#define MASTER_TSIF			2
-+#define MASTER_EMMC			3
-+#define MASTER_SDCC_2			4
-+#define MASTER_SDCC_4			5
-+#define MASTER_UFS_MEM			6
-+#define SLAVE_A1NOC_SNOC		7
-+#define SLAVE_SERVICE_A1NOC		8
++#include "bcm-voter.h"
++#include "icc-rpmh.h"
++#include "sdm670.h"
 +
-+#define MASTER_A2NOC_CFG		0
-+#define MASTER_QDSS_BAM			1
-+#define MASTER_BLSP_2			2
-+#define MASTER_CNOC_A2NOC		3
-+#define MASTER_CRYPTO_CORE_0		4
-+#define MASTER_IPA			5
-+#define MASTER_QDSS_ETR			6
-+#define MASTER_USB3			7
-+#define SLAVE_A2NOC_SNOC		8
-+#define SLAVE_SERVICE_A2NOC		9
++DEFINE_QNODE(qhm_a1noc_cfg, SDM670_MASTER_A1NOC_CFG, 1, 4, SDM670_SLAVE_SERVICE_A1NOC);
++DEFINE_QNODE(qhm_qup1, SDM670_MASTER_BLSP_1, 1, 4, SDM670_SLAVE_A1NOC_SNOC);
++DEFINE_QNODE(qhm_tsif, SDM670_MASTER_TSIF, 1, 4, SDM670_SLAVE_A1NOC_SNOC);
++DEFINE_QNODE(xm_emmc, SDM670_MASTER_EMMC, 1, 8, SDM670_SLAVE_A1NOC_SNOC);
++DEFINE_QNODE(xm_sdc2, SDM670_MASTER_SDCC_2, 1, 8, SDM670_SLAVE_A1NOC_SNOC);
++DEFINE_QNODE(xm_sdc4, SDM670_MASTER_SDCC_4, 1, 8, SDM670_SLAVE_A1NOC_SNOC);
++DEFINE_QNODE(xm_ufs_mem, SDM670_MASTER_UFS_MEM, 1, 8, SDM670_SLAVE_A1NOC_SNOC);
++DEFINE_QNODE(qhm_a2noc_cfg, SDM670_MASTER_A2NOC_CFG, 1, 4, SDM670_SLAVE_SERVICE_A2NOC);
++DEFINE_QNODE(qhm_qdss_bam, SDM670_MASTER_QDSS_BAM, 1, 4, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(qhm_qup2, SDM670_MASTER_BLSP_2, 1, 4, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(qnm_cnoc, SDM670_MASTER_CNOC_A2NOC, 1, 8, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(qxm_crypto, SDM670_MASTER_CRYPTO_CORE_0, 1, 8, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(qxm_ipa, SDM670_MASTER_IPA, 1, 8, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(xm_qdss_etr, SDM670_MASTER_QDSS_ETR, 1, 8, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(xm_usb3_0, SDM670_MASTER_USB3, 1, 8, SDM670_SLAVE_A2NOC_SNOC);
++DEFINE_QNODE(qxm_camnoc_hf0_uncomp, SDM670_MASTER_CAMNOC_HF0_UNCOMP, 1, 32, SDM670_SLAVE_CAMNOC_UNCOMP);
++DEFINE_QNODE(qxm_camnoc_hf1_uncomp, SDM670_MASTER_CAMNOC_HF1_UNCOMP, 1, 32, SDM670_SLAVE_CAMNOC_UNCOMP);
++DEFINE_QNODE(qxm_camnoc_sf_uncomp, SDM670_MASTER_CAMNOC_SF_UNCOMP, 1, 32, SDM670_SLAVE_CAMNOC_UNCOMP);
++DEFINE_QNODE(qhm_spdm, SDM670_MASTER_SPDM, 1, 4, SDM670_SLAVE_CNOC_A2NOC);
++DEFINE_QNODE(qnm_snoc, SDM670_MASTER_SNOC_CNOC, 1, 8, SDM670_SLAVE_TLMM_SOUTH, SDM670_SLAVE_CAMERA_CFG, SDM670_SLAVE_SDCC_4, SDM670_SLAVE_SDCC_2, SDM670_SLAVE_CNOC_MNOC_CFG, SDM670_SLAVE_UFS_MEM_CFG, SDM670_SLAVE_GLM, SDM670_SLAVE_PDM, SDM670_SLAVE_A2NOC_CFG, SDM670_SLAVE_QDSS_CFG, SDM670_SLAVE_DISPLAY_CFG, SDM670_SLAVE_TCSR, SDM670_SLAVE_DCC_CFG, SDM670_SLAVE_CNOC_DDRSS, SDM670_SLAVE_SNOC_CFG, SDM670_SLAVE_SOUTH_PHY_CFG, SDM670_SLAVE_GRAPHICS_3D_CFG, SDM670_SLAVE_VENUS_CFG, SDM670_SLAVE_TSIF, SDM670_SLAVE_CDSP_CFG, SDM670_SLAVE_AOP, SDM670_SLAVE_BLSP_2, SDM670_SLAVE_SERVICE_CNOC, SDM670_SLAVE_USB3, SDM670_SLAVE_IPA_CFG, SDM670_SLAVE_RBCPR_CX_CFG, SDM670_SLAVE_A1NOC_CFG, SDM670_SLAVE_AOSS, SDM670_SLAVE_PRNG, SDM670_SLAVE_VSENSE_CTRL_CFG, SDM670_SLAVE_EMMC_CFG, SDM670_SLAVE_BLSP_1, SDM670_SLAVE_SPDM_WRAPPER, SDM670_SLAVE_CRYPTO_0_CFG, SDM670_SLAVE_PIMEM_CFG, SDM670_SLAVE_TLMM_NORTH, SDM670_SLAVE_CLK_CTL, SDM670_SLAVE_IMEM_CFG);
++DEFINE_QNODE(qhm_cnoc, SDM670_MASTER_CNOC_DC_NOC, 1, 4, SDM670_SLAVE_MEM_NOC_CFG, SDM670_SLAVE_LLCC_CFG);
++DEFINE_QNODE(acm_l3, SDM670_MASTER_AMPSS_M0, 1, 16, SDM670_SLAVE_SERVICE_GNOC, SDM670_SLAVE_GNOC_SNOC, SDM670_SLAVE_GNOC_MEM_NOC);
++DEFINE_QNODE(pm_gnoc_cfg, SDM670_MASTER_GNOC_CFG, 1, 4, SDM670_SLAVE_SERVICE_GNOC);
++DEFINE_QNODE(llcc_mc, SDM670_MASTER_LLCC, 2, 4, SDM670_SLAVE_EBI_CH0);
++DEFINE_QNODE(acm_tcu, SDM670_MASTER_TCU_0, 1, 8, SDM670_SLAVE_MEM_NOC_GNOC, SDM670_SLAVE_LLCC, SDM670_SLAVE_MEM_NOC_SNOC);
++DEFINE_QNODE(qhm_memnoc_cfg, SDM670_MASTER_MEM_NOC_CFG, 1, 4, SDM670_SLAVE_SERVICE_MEM_NOC, SDM670_SLAVE_MSS_PROC_MS_MPU_CFG);
++DEFINE_QNODE(qnm_apps, SDM670_MASTER_GNOC_MEM_NOC, 2, 32, SDM670_SLAVE_LLCC);
++DEFINE_QNODE(qnm_mnoc_hf, SDM670_MASTER_MNOC_HF_MEM_NOC, 2, 32, SDM670_SLAVE_LLCC);
++DEFINE_QNODE(qnm_mnoc_sf, SDM670_MASTER_MNOC_SF_MEM_NOC, 1, 32, SDM670_SLAVE_MEM_NOC_GNOC, SDM670_SLAVE_LLCC, SDM670_SLAVE_MEM_NOC_SNOC);
++DEFINE_QNODE(qnm_snoc_gc, SDM670_MASTER_SNOC_GC_MEM_NOC, 1, 8, SDM670_SLAVE_LLCC);
++DEFINE_QNODE(qnm_snoc_sf, SDM670_MASTER_SNOC_SF_MEM_NOC, 1, 16, SDM670_SLAVE_MEM_NOC_GNOC, SDM670_SLAVE_LLCC);
++DEFINE_QNODE(qxm_gpu, SDM670_MASTER_GRAPHICS_3D, 2, 32, SDM670_SLAVE_MEM_NOC_GNOC, SDM670_SLAVE_LLCC, SDM670_SLAVE_MEM_NOC_SNOC);
++DEFINE_QNODE(qhm_mnoc_cfg, SDM670_MASTER_CNOC_MNOC_CFG, 1, 4, SDM670_SLAVE_SERVICE_MNOC);
++DEFINE_QNODE(qxm_camnoc_hf0, SDM670_MASTER_CAMNOC_HF0, 1, 32, SDM670_SLAVE_MNOC_HF_MEM_NOC);
++DEFINE_QNODE(qxm_camnoc_hf1, SDM670_MASTER_CAMNOC_HF1, 1, 32, SDM670_SLAVE_MNOC_HF_MEM_NOC);
++DEFINE_QNODE(qxm_camnoc_sf, SDM670_MASTER_CAMNOC_SF, 1, 32, SDM670_SLAVE_MNOC_SF_MEM_NOC);
++DEFINE_QNODE(qxm_mdp0, SDM670_MASTER_MDP_PORT0, 1, 32, SDM670_SLAVE_MNOC_HF_MEM_NOC);
++DEFINE_QNODE(qxm_mdp1, SDM670_MASTER_MDP_PORT1, 1, 32, SDM670_SLAVE_MNOC_HF_MEM_NOC);
++DEFINE_QNODE(qxm_rot, SDM670_MASTER_ROTATOR, 1, 32, SDM670_SLAVE_MNOC_SF_MEM_NOC);
++DEFINE_QNODE(qxm_venus0, SDM670_MASTER_VIDEO_P0, 1, 32, SDM670_SLAVE_MNOC_SF_MEM_NOC);
++DEFINE_QNODE(qxm_venus1, SDM670_MASTER_VIDEO_P1, 1, 32, SDM670_SLAVE_MNOC_SF_MEM_NOC);
++DEFINE_QNODE(qxm_venus_arm9, SDM670_MASTER_VIDEO_PROC, 1, 8, SDM670_SLAVE_MNOC_SF_MEM_NOC);
++DEFINE_QNODE(qhm_snoc_cfg, SDM670_MASTER_SNOC_CFG, 1, 4, SDM670_SLAVE_SERVICE_SNOC);
++DEFINE_QNODE(qnm_aggre1_noc, SDM670_MASTER_A1NOC_SNOC, 1, 16, SDM670_SLAVE_PIMEM, SDM670_SLAVE_SNOC_MEM_NOC_SF, SDM670_SLAVE_OCIMEM, SDM670_SLAVE_APPSS, SDM670_SLAVE_SNOC_CNOC, SDM670_SLAVE_QDSS_STM);
++DEFINE_QNODE(qnm_aggre2_noc, SDM670_MASTER_A2NOC_SNOC, 1, 16, SDM670_SLAVE_PIMEM, SDM670_SLAVE_SNOC_MEM_NOC_SF, SDM670_SLAVE_OCIMEM, SDM670_SLAVE_APPSS, SDM670_SLAVE_SNOC_CNOC, SDM670_SLAVE_TCU, SDM670_SLAVE_QDSS_STM);
++DEFINE_QNODE(qnm_gladiator_sodv, SDM670_MASTER_GNOC_SNOC, 1, 8, SDM670_SLAVE_PIMEM, SDM670_SLAVE_OCIMEM, SDM670_SLAVE_APPSS, SDM670_SLAVE_SNOC_CNOC, SDM670_SLAVE_TCU, SDM670_SLAVE_QDSS_STM);
++DEFINE_QNODE(qnm_memnoc, SDM670_MASTER_MEM_NOC_SNOC, 1, 8, SDM670_SLAVE_OCIMEM, SDM670_SLAVE_APPSS, SDM670_SLAVE_PIMEM, SDM670_SLAVE_SNOC_CNOC, SDM670_SLAVE_QDSS_STM);
++DEFINE_QNODE(qxm_pimem, SDM670_MASTER_PIMEM, 1, 8, SDM670_SLAVE_OCIMEM, SDM670_SLAVE_SNOC_MEM_NOC_GC);
++DEFINE_QNODE(xm_gic, SDM670_MASTER_GIC, 1, 8, SDM670_SLAVE_OCIMEM, SDM670_SLAVE_SNOC_MEM_NOC_GC);
++DEFINE_QNODE(qns_a1noc_snoc, SDM670_SLAVE_A1NOC_SNOC, 1, 16, SDM670_MASTER_A1NOC_SNOC);
++DEFINE_QNODE(srvc_aggre1_noc, SDM670_SLAVE_SERVICE_A1NOC, 1, 4);
++DEFINE_QNODE(qns_a2noc_snoc, SDM670_SLAVE_A2NOC_SNOC, 1, 16, SDM670_MASTER_A2NOC_SNOC);
++DEFINE_QNODE(srvc_aggre2_noc, SDM670_SLAVE_SERVICE_A2NOC, 1, 4);
++DEFINE_QNODE(qns_camnoc_uncomp, SDM670_SLAVE_CAMNOC_UNCOMP, 1, 32);
++DEFINE_QNODE(qhs_a1_noc_cfg, SDM670_SLAVE_A1NOC_CFG, 1, 4, SDM670_MASTER_A1NOC_CFG);
++DEFINE_QNODE(qhs_a2_noc_cfg, SDM670_SLAVE_A2NOC_CFG, 1, 4, SDM670_MASTER_A2NOC_CFG);
++DEFINE_QNODE(qhs_aop, SDM670_SLAVE_AOP, 1, 4);
++DEFINE_QNODE(qhs_aoss, SDM670_SLAVE_AOSS, 1, 4);
++DEFINE_QNODE(qhs_camera_cfg, SDM670_SLAVE_CAMERA_CFG, 1, 4);
++DEFINE_QNODE(qhs_clk_ctl, SDM670_SLAVE_CLK_CTL, 1, 4);
++DEFINE_QNODE(qhs_compute_dsp_cfg, SDM670_SLAVE_CDSP_CFG, 1, 4);
++DEFINE_QNODE(qhs_cpr_cx, SDM670_SLAVE_RBCPR_CX_CFG, 1, 4);
++DEFINE_QNODE(qhs_crypto0_cfg, SDM670_SLAVE_CRYPTO_0_CFG, 1, 4);
++DEFINE_QNODE(qhs_dcc_cfg, SDM670_SLAVE_DCC_CFG, 1, 4, SDM670_MASTER_CNOC_DC_NOC);
++DEFINE_QNODE(qhs_ddrss_cfg, SDM670_SLAVE_CNOC_DDRSS, 1, 4);
++DEFINE_QNODE(qhs_display_cfg, SDM670_SLAVE_DISPLAY_CFG, 1, 4);
++DEFINE_QNODE(qhs_emmc_cfg, SDM670_SLAVE_EMMC_CFG, 1, 4);
++DEFINE_QNODE(qhs_glm, SDM670_SLAVE_GLM, 1, 4);
++DEFINE_QNODE(qhs_gpuss_cfg, SDM670_SLAVE_GRAPHICS_3D_CFG, 1, 8);
++DEFINE_QNODE(qhs_imem_cfg, SDM670_SLAVE_IMEM_CFG, 1, 4);
++DEFINE_QNODE(qhs_ipa, SDM670_SLAVE_IPA_CFG, 1, 4);
++DEFINE_QNODE(qhs_mnoc_cfg, SDM670_SLAVE_CNOC_MNOC_CFG, 1, 4, SDM670_MASTER_CNOC_MNOC_CFG);
++DEFINE_QNODE(qhs_pdm, SDM670_SLAVE_PDM, 1, 4);
++DEFINE_QNODE(qhs_phy_refgen_south, SDM670_SLAVE_SOUTH_PHY_CFG, 1, 4);
++DEFINE_QNODE(qhs_pimem_cfg, SDM670_SLAVE_PIMEM_CFG, 1, 4);
++DEFINE_QNODE(qhs_prng, SDM670_SLAVE_PRNG, 1, 4);
++DEFINE_QNODE(qhs_qdss_cfg, SDM670_SLAVE_QDSS_CFG, 1, 4);
++DEFINE_QNODE(qhs_qupv3_north, SDM670_SLAVE_BLSP_2, 1, 4);
++DEFINE_QNODE(qhs_qupv3_south, SDM670_SLAVE_BLSP_1, 1, 4);
++DEFINE_QNODE(qhs_sdc2, SDM670_SLAVE_SDCC_2, 1, 4);
++DEFINE_QNODE(qhs_sdc4, SDM670_SLAVE_SDCC_4, 1, 4);
++DEFINE_QNODE(qhs_snoc_cfg, SDM670_SLAVE_SNOC_CFG, 1, 4, SDM670_MASTER_SNOC_CFG);
++DEFINE_QNODE(qhs_spdm, SDM670_SLAVE_SPDM_WRAPPER, 1, 4);
++DEFINE_QNODE(qhs_tcsr, SDM670_SLAVE_TCSR, 1, 4);
++DEFINE_QNODE(qhs_tlmm_north, SDM670_SLAVE_TLMM_NORTH, 1, 4);
++DEFINE_QNODE(qhs_tlmm_south, SDM670_SLAVE_TLMM_SOUTH, 1, 4);
++DEFINE_QNODE(qhs_tsif, SDM670_SLAVE_TSIF, 1, 4);
++DEFINE_QNODE(qhs_ufs_mem_cfg, SDM670_SLAVE_UFS_MEM_CFG, 1, 4);
++DEFINE_QNODE(qhs_usb3_0, SDM670_SLAVE_USB3, 1, 4);
++DEFINE_QNODE(qhs_venus_cfg, SDM670_SLAVE_VENUS_CFG, 1, 4);
++DEFINE_QNODE(qhs_vsense_ctrl_cfg, SDM670_SLAVE_VSENSE_CTRL_CFG, 1, 4);
++DEFINE_QNODE(qns_cnoc_a2noc, SDM670_SLAVE_CNOC_A2NOC, 1, 8, SDM670_MASTER_CNOC_A2NOC);
++DEFINE_QNODE(srvc_cnoc, SDM670_SLAVE_SERVICE_CNOC, 1, 4);
++DEFINE_QNODE(qhs_llcc, SDM670_SLAVE_LLCC_CFG, 1, 4);
++DEFINE_QNODE(qhs_memnoc, SDM670_SLAVE_MEM_NOC_CFG, 1, 4, SDM670_MASTER_MEM_NOC_CFG);
++DEFINE_QNODE(qns_gladiator_sodv, SDM670_SLAVE_GNOC_SNOC, 1, 8, SDM670_MASTER_GNOC_SNOC);
++DEFINE_QNODE(qns_gnoc_memnoc, SDM670_SLAVE_GNOC_MEM_NOC, 2, 32, SDM670_MASTER_GNOC_MEM_NOC);
++DEFINE_QNODE(srvc_gnoc, SDM670_SLAVE_SERVICE_GNOC, 1, 4);
++DEFINE_QNODE(ebi, SDM670_SLAVE_EBI_CH0, 2, 4);
++DEFINE_QNODE(qhs_mdsp_ms_mpu_cfg, SDM670_SLAVE_MSS_PROC_MS_MPU_CFG, 1, 4);
++DEFINE_QNODE(qns_apps_io, SDM670_SLAVE_MEM_NOC_GNOC, 1, 32);
++DEFINE_QNODE(qns_llcc, SDM670_SLAVE_LLCC, 2, 16, SDM670_MASTER_LLCC);
++DEFINE_QNODE(qns_memnoc_snoc, SDM670_SLAVE_MEM_NOC_SNOC, 1, 8, SDM670_MASTER_MEM_NOC_SNOC);
++DEFINE_QNODE(srvc_memnoc, SDM670_SLAVE_SERVICE_MEM_NOC, 1, 4);
++DEFINE_QNODE(qns2_mem_noc, SDM670_SLAVE_MNOC_SF_MEM_NOC, 1, 32, SDM670_MASTER_MNOC_SF_MEM_NOC);
++DEFINE_QNODE(qns_mem_noc_hf, SDM670_SLAVE_MNOC_HF_MEM_NOC, 2, 32, SDM670_MASTER_MNOC_HF_MEM_NOC);
++DEFINE_QNODE(srvc_mnoc, SDM670_SLAVE_SERVICE_MNOC, 1, 4);
++DEFINE_QNODE(qhs_apss, SDM670_SLAVE_APPSS, 1, 8);
++DEFINE_QNODE(qns_cnoc, SDM670_SLAVE_SNOC_CNOC, 1, 8, SDM670_MASTER_SNOC_CNOC);
++DEFINE_QNODE(qns_memnoc_gc, SDM670_SLAVE_SNOC_MEM_NOC_GC, 1, 8, SDM670_MASTER_SNOC_GC_MEM_NOC);
++DEFINE_QNODE(qns_memnoc_sf, SDM670_SLAVE_SNOC_MEM_NOC_SF, 1, 16, SDM670_MASTER_SNOC_SF_MEM_NOC);
++DEFINE_QNODE(qxs_imem, SDM670_SLAVE_OCIMEM, 1, 8);
++DEFINE_QNODE(qxs_pimem, SDM670_SLAVE_PIMEM, 1, 8);
++DEFINE_QNODE(srvc_snoc, SDM670_SLAVE_SERVICE_SNOC, 1, 4);
++DEFINE_QNODE(xs_qdss_stm, SDM670_SLAVE_QDSS_STM, 1, 4);
++DEFINE_QNODE(xs_sys_tcu_cfg, SDM670_SLAVE_TCU, 1, 8);
 +
++DEFINE_QBCM(bcm_acv, "ACV", false, &ebi);
++DEFINE_QBCM(bcm_mc0, "MC0", true, &ebi);
++DEFINE_QBCM(bcm_sh0, "SH0", true, &qns_llcc);
++DEFINE_QBCM(bcm_mm0, "MM0", true, &qns_mem_noc_hf);
++DEFINE_QBCM(bcm_sh1, "SH1", false, &qns_apps_io);
++DEFINE_QBCM(bcm_mm1, "MM1", true, &qxm_camnoc_hf0_uncomp, &qxm_camnoc_hf1_uncomp, &qxm_camnoc_sf_uncomp, &qxm_camnoc_hf0, &qxm_camnoc_hf1, &qxm_mdp0, &qxm_mdp1);
++DEFINE_QBCM(bcm_sh2, "SH2", false, &qns_memnoc_snoc);
++DEFINE_QBCM(bcm_mm2, "MM2", false, &qns2_mem_noc);
++DEFINE_QBCM(bcm_sh3, "SH3", false, &acm_tcu);
++DEFINE_QBCM(bcm_mm3, "MM3", false, &qxm_camnoc_sf, &qxm_rot, &qxm_venus0, &qxm_venus1, &qxm_venus_arm9);
++DEFINE_QBCM(bcm_sh5, "SH5", false, &qnm_apps);
++DEFINE_QBCM(bcm_sn0, "SN0", true, &qns_memnoc_sf);
++DEFINE_QBCM(bcm_ce0, "CE0", false, &qxm_crypto);
++DEFINE_QBCM(bcm_cn0, "CN0", true, &qhm_spdm, &qnm_snoc, &qhs_a1_noc_cfg, &qhs_a2_noc_cfg, &qhs_aop, &qhs_aoss, &qhs_camera_cfg, &qhs_clk_ctl, &qhs_compute_dsp_cfg, &qhs_cpr_cx, &qhs_crypto0_cfg, &qhs_dcc_cfg, &qhs_ddrss_cfg, &qhs_display_cfg, &qhs_emmc_cfg, &qhs_glm, &qhs_gpuss_cfg, &qhs_imem_cfg, &qhs_ipa, &qhs_mnoc_cfg, &qhs_pdm, &qhs_phy_refgen_south, &qhs_pimem_cfg, &qhs_prng, &qhs_qdss_cfg, &qhs_qupv3_north, &qhs_qupv3_south, &qhs_sdc2, &qhs_sdc4, &qhs_snoc_cfg, &qhs_spdm, &qhs_tcsr, &qhs_tlmm_north, &qhs_tlmm_south, &qhs_tsif, &qhs_ufs_mem_cfg, &qhs_usb3_0, &qhs_venus_cfg, &qhs_vsense_ctrl_cfg, &qns_cnoc_a2noc, &srvc_cnoc);
++DEFINE_QBCM(bcm_qup0, "QUP0", false, &qhm_qup1, &qhm_qup2);
++DEFINE_QBCM(bcm_sn1, "SN1", false, &qxs_imem);
++DEFINE_QBCM(bcm_sn2, "SN2", false, &qns_memnoc_gc);
++DEFINE_QBCM(bcm_sn3, "SN3", false, &qns_cnoc);
++DEFINE_QBCM(bcm_sn4, "SN4", false, &qxm_pimem, &qxs_pimem);
++DEFINE_QBCM(bcm_sn5, "SN5", false, &xs_qdss_stm);
++DEFINE_QBCM(bcm_sn8, "SN8", false, &qnm_aggre1_noc, &srvc_aggre1_noc);
++DEFINE_QBCM(bcm_sn10, "SN10", false, &qnm_aggre2_noc, &srvc_aggre2_noc);
++DEFINE_QBCM(bcm_sn11, "SN11", false, &qnm_gladiator_sodv, &xm_gic);
++DEFINE_QBCM(bcm_sn13, "SN13", false, &qnm_memnoc);
 +
-+#define MASTER_SPDM			0
-+#define MASTER_SNOC_CNOC		1
-+#define SLAVE_A1NOC_CFG			2
-+#define SLAVE_A2NOC_CFG			3
-+#define SLAVE_AOP			4
-+#define SLAVE_AOSS			5
-+#define SLAVE_CAMERA_CFG		6
-+#define SLAVE_CLK_CTL			7
-+#define SLAVE_CDSP_CFG			8
-+#define SLAVE_RBCPR_CX_CFG		9
-+#define SLAVE_CRYPTO_0_CFG		10
-+#define SLAVE_DCC_CFG			11
-+#define SLAVE_CNOC_DDRSS		12
-+#define SLAVE_DISPLAY_CFG		13
-+#define SLAVE_EMMC_CFG			14
-+#define SLAVE_GLM			15
-+#define SLAVE_GRAPHICS_3D_CFG		16
-+#define SLAVE_IMEM_CFG			17
-+#define SLAVE_IPA_CFG			18
-+#define SLAVE_CNOC_MNOC_CFG		19
-+#define SLAVE_PDM			20
-+#define SLAVE_SOUTH_PHY_CFG		21
-+#define SLAVE_PIMEM_CFG			22
-+#define SLAVE_PRNG			23
-+#define SLAVE_QDSS_CFG			24
-+#define SLAVE_BLSP_2			25
-+#define SLAVE_BLSP_1			26
-+#define SLAVE_SDCC_2			27
-+#define SLAVE_SDCC_4			28
-+#define SLAVE_SNOC_CFG			29
-+#define SLAVE_SPDM_WRAPPER		30
-+#define SLAVE_TCSR			31
-+#define SLAVE_TLMM_NORTH		32
-+#define SLAVE_TLMM_SOUTH		33
-+#define SLAVE_TSIF			34
-+#define SLAVE_UFS_MEM_CFG		35
-+#define SLAVE_USB3			36
-+#define SLAVE_VENUS_CFG			37
-+#define SLAVE_VSENSE_CTRL_CFG		38
-+#define SLAVE_CNOC_A2NOC		39
-+#define SLAVE_SERVICE_CNOC		40
++static struct qcom_icc_bcm * const aggre1_noc_bcms[] = {
++	&bcm_qup0,
++	&bcm_sn8,
++};
 +
-+#define MASTER_CNOC_DC_NOC		0
-+#define SLAVE_LLCC_CFG			1
-+#define SLAVE_MEM_NOC_CFG		2
++static struct qcom_icc_node * const aggre1_noc_nodes[] = {
++	[MASTER_A1NOC_CFG] = &qhm_a1noc_cfg,
++	[MASTER_BLSP_1] = &qhm_qup1,
++	[MASTER_TSIF] = &qhm_tsif,
++	[MASTER_EMMC] = &xm_emmc,
++	[MASTER_SDCC_2] = &xm_sdc2,
++	[MASTER_SDCC_4] = &xm_sdc4,
++	[MASTER_UFS_MEM] = &xm_ufs_mem,
++	[SLAVE_A1NOC_SNOC] = &qns_a1noc_snoc,
++	[SLAVE_SERVICE_A1NOC] = &srvc_aggre1_noc,
++};
 +
-+#define MASTER_AMPSS_M0			0
-+#define MASTER_GNOC_CFG			1
-+#define SLAVE_GNOC_SNOC			2
-+#define SLAVE_GNOC_MEM_NOC		3
-+#define SLAVE_SERVICE_GNOC		4
++static const struct qcom_icc_desc sdm670_aggre1_noc = {
++	.nodes = aggre1_noc_nodes,
++	.num_nodes = ARRAY_SIZE(aggre1_noc_nodes),
++	.bcms = aggre1_noc_bcms,
++	.num_bcms = ARRAY_SIZE(aggre1_noc_bcms),
++};
 +
-+#define MASTER_TCU_0			0
-+#define MASTER_MEM_NOC_CFG		1
-+#define MASTER_GNOC_MEM_NOC		2
-+#define MASTER_MNOC_HF_MEM_NOC		3
-+#define MASTER_MNOC_SF_MEM_NOC		4
-+#define MASTER_SNOC_GC_MEM_NOC		5
-+#define MASTER_SNOC_SF_MEM_NOC		6
-+#define MASTER_GRAPHICS_3D		7
-+#define SLAVE_MSS_PROC_MS_MPU_CFG	8
-+#define SLAVE_MEM_NOC_GNOC		9
-+#define SLAVE_LLCC			10
-+#define SLAVE_MEM_NOC_SNOC		11
-+#define SLAVE_SERVICE_MEM_NOC		12
-+#define MASTER_LLCC			13
-+#define SLAVE_EBI_CH0			14
++static struct qcom_icc_bcm * const aggre2_noc_bcms[] = {
++	&bcm_ce0,
++	&bcm_qup0,
++	&bcm_sn10,
++};
 +
-+#define MASTER_CNOC_MNOC_CFG		0
-+#define MASTER_CAMNOC_HF0		1
-+#define MASTER_CAMNOC_HF1		2
-+#define MASTER_CAMNOC_SF		3
-+#define MASTER_MDP_PORT0		4
-+#define MASTER_MDP_PORT1		5
-+#define MASTER_ROTATOR			6
-+#define MASTER_VIDEO_P0			7
-+#define MASTER_VIDEO_P1			8
-+#define MASTER_VIDEO_PROC		9
-+#define SLAVE_MNOC_SF_MEM_NOC		10
-+#define SLAVE_MNOC_HF_MEM_NOC		11
-+#define SLAVE_SERVICE_MNOC		12
++static struct qcom_icc_node * const aggre2_noc_nodes[] = {
++	[MASTER_A2NOC_CFG] = &qhm_a2noc_cfg,
++	[MASTER_QDSS_BAM] = &qhm_qdss_bam,
++	[MASTER_BLSP_2] = &qhm_qup2,
++	[MASTER_CNOC_A2NOC] = &qnm_cnoc,
++	[MASTER_CRYPTO_CORE_0] = &qxm_crypto,
++	[MASTER_IPA] = &qxm_ipa,
++	[MASTER_QDSS_ETR] = &xm_qdss_etr,
++	[MASTER_USB3] = &xm_usb3_0,
++	[SLAVE_A2NOC_SNOC] = &qns_a2noc_snoc,
++	[SLAVE_SERVICE_A2NOC] = &srvc_aggre2_noc,
++};
 +
-+#define MASTER_SNOC_CFG			0
-+#define MASTER_A1NOC_SNOC		1
-+#define MASTER_A2NOC_SNOC		2
-+#define MASTER_GNOC_SNOC		3
-+#define MASTER_MEM_NOC_SNOC		4
-+#define MASTER_PIMEM			5
-+#define MASTER_GIC			6
-+#define SLAVE_APPSS			7
-+#define SLAVE_SNOC_CNOC			8
-+#define SLAVE_SNOC_MEM_NOC_GC		9
-+#define SLAVE_SNOC_MEM_NOC_SF		10
-+#define SLAVE_OCIMEM			11
-+#define SLAVE_PIMEM			12
-+#define SLAVE_SERVICE_SNOC		13
-+#define SLAVE_QDSS_STM			14
-+#define SLAVE_TCU			15
-+#define MASTER_CAMNOC_HF0_UNCOMP	16
-+#define MASTER_CAMNOC_HF1_UNCOMP	17
-+#define MASTER_CAMNOC_SF_UNCOMP		18
-+#define SLAVE_CAMNOC_UNCOMP		19
++static const struct qcom_icc_desc sdm670_aggre2_noc = {
++	.nodes = aggre2_noc_nodes,
++	.num_nodes = ARRAY_SIZE(aggre2_noc_nodes),
++	.bcms = aggre2_noc_bcms,
++	.num_bcms = ARRAY_SIZE(aggre2_noc_bcms),
++};
++
++static struct qcom_icc_bcm * const config_noc_bcms[] = {
++	&bcm_cn0,
++};
++
++static struct qcom_icc_node * const config_noc_nodes[] = {
++	[MASTER_SPDM] = &qhm_spdm,
++	[MASTER_SNOC_CNOC] = &qnm_snoc,
++	[SLAVE_A1NOC_CFG] = &qhs_a1_noc_cfg,
++	[SLAVE_A2NOC_CFG] = &qhs_a2_noc_cfg,
++	[SLAVE_AOP] = &qhs_aop,
++	[SLAVE_AOSS] = &qhs_aoss,
++	[SLAVE_CAMERA_CFG] = &qhs_camera_cfg,
++	[SLAVE_CLK_CTL] = &qhs_clk_ctl,
++	[SLAVE_CDSP_CFG] = &qhs_compute_dsp_cfg,
++	[SLAVE_RBCPR_CX_CFG] = &qhs_cpr_cx,
++	[SLAVE_CRYPTO_0_CFG] = &qhs_crypto0_cfg,
++	[SLAVE_DCC_CFG] = &qhs_dcc_cfg,
++	[SLAVE_CNOC_DDRSS] = &qhs_ddrss_cfg,
++	[SLAVE_DISPLAY_CFG] = &qhs_display_cfg,
++	[SLAVE_EMMC_CFG] = &qhs_emmc_cfg,
++	[SLAVE_GLM] = &qhs_glm,
++	[SLAVE_GRAPHICS_3D_CFG] = &qhs_gpuss_cfg,
++	[SLAVE_IMEM_CFG] = &qhs_imem_cfg,
++	[SLAVE_IPA_CFG] = &qhs_ipa,
++	[SLAVE_CNOC_MNOC_CFG] = &qhs_mnoc_cfg,
++	[SLAVE_PDM] = &qhs_pdm,
++	[SLAVE_SOUTH_PHY_CFG] = &qhs_phy_refgen_south,
++	[SLAVE_PIMEM_CFG] = &qhs_pimem_cfg,
++	[SLAVE_PRNG] = &qhs_prng,
++	[SLAVE_QDSS_CFG] = &qhs_qdss_cfg,
++	[SLAVE_BLSP_2] = &qhs_qupv3_north,
++	[SLAVE_BLSP_1] = &qhs_qupv3_south,
++	[SLAVE_SDCC_2] = &qhs_sdc2,
++	[SLAVE_SDCC_4] = &qhs_sdc4,
++	[SLAVE_SNOC_CFG] = &qhs_snoc_cfg,
++	[SLAVE_SPDM_WRAPPER] = &qhs_spdm,
++	[SLAVE_TCSR] = &qhs_tcsr,
++	[SLAVE_TLMM_NORTH] = &qhs_tlmm_north,
++	[SLAVE_TLMM_SOUTH] = &qhs_tlmm_south,
++	[SLAVE_TSIF] = &qhs_tsif,
++	[SLAVE_UFS_MEM_CFG] = &qhs_ufs_mem_cfg,
++	[SLAVE_USB3] = &qhs_usb3_0,
++	[SLAVE_VENUS_CFG] = &qhs_venus_cfg,
++	[SLAVE_VSENSE_CTRL_CFG] = &qhs_vsense_ctrl_cfg,
++	[SLAVE_CNOC_A2NOC] = &qns_cnoc_a2noc,
++	[SLAVE_SERVICE_CNOC] = &srvc_cnoc,
++};
++
++static const struct qcom_icc_desc sdm670_config_noc = {
++	.nodes = config_noc_nodes,
++	.num_nodes = ARRAY_SIZE(config_noc_nodes),
++	.bcms = config_noc_bcms,
++	.num_bcms = ARRAY_SIZE(config_noc_bcms),
++};
++
++static struct qcom_icc_bcm * const dc_noc_bcms[] = {
++};
++
++static struct qcom_icc_node * const dc_noc_nodes[] = {
++	[MASTER_CNOC_DC_NOC] = &qhm_cnoc,
++	[SLAVE_LLCC_CFG] = &qhs_llcc,
++	[SLAVE_MEM_NOC_CFG] = &qhs_memnoc,
++};
++
++static const struct qcom_icc_desc sdm670_dc_noc = {
++	.nodes = dc_noc_nodes,
++	.num_nodes = ARRAY_SIZE(dc_noc_nodes),
++	.bcms = dc_noc_bcms,
++	.num_bcms = ARRAY_SIZE(dc_noc_bcms),
++};
++
++static struct qcom_icc_bcm * const gladiator_noc_bcms[] = {
++};
++
++static struct qcom_icc_node * const gladiator_noc_nodes[] = {
++	[MASTER_AMPSS_M0] = &acm_l3,
++	[MASTER_GNOC_CFG] = &pm_gnoc_cfg,
++	[SLAVE_GNOC_SNOC] = &qns_gladiator_sodv,
++	[SLAVE_GNOC_MEM_NOC] = &qns_gnoc_memnoc,
++	[SLAVE_SERVICE_GNOC] = &srvc_gnoc,
++};
++
++static const struct qcom_icc_desc sdm670_gladiator_noc = {
++	.nodes = gladiator_noc_nodes,
++	.num_nodes = ARRAY_SIZE(gladiator_noc_nodes),
++	.bcms = gladiator_noc_bcms,
++	.num_bcms = ARRAY_SIZE(gladiator_noc_bcms),
++};
++
++static struct qcom_icc_bcm * const mem_noc_bcms[] = {
++	&bcm_acv,
++	&bcm_mc0,
++	&bcm_sh0,
++	&bcm_sh1,
++	&bcm_sh2,
++	&bcm_sh3,
++	&bcm_sh5,
++};
++
++static struct qcom_icc_node * const mem_noc_nodes[] = {
++	[MASTER_TCU_0] = &acm_tcu,
++	[MASTER_MEM_NOC_CFG] = &qhm_memnoc_cfg,
++	[MASTER_GNOC_MEM_NOC] = &qnm_apps,
++	[MASTER_MNOC_HF_MEM_NOC] = &qnm_mnoc_hf,
++	[MASTER_MNOC_SF_MEM_NOC] = &qnm_mnoc_sf,
++	[MASTER_SNOC_GC_MEM_NOC] = &qnm_snoc_gc,
++	[MASTER_SNOC_SF_MEM_NOC] = &qnm_snoc_sf,
++	[MASTER_GRAPHICS_3D] = &qxm_gpu,
++	[SLAVE_MSS_PROC_MS_MPU_CFG] = &qhs_mdsp_ms_mpu_cfg,
++	[SLAVE_MEM_NOC_GNOC] = &qns_apps_io,
++	[SLAVE_LLCC] = &qns_llcc,
++	[SLAVE_MEM_NOC_SNOC] = &qns_memnoc_snoc,
++	[SLAVE_SERVICE_MEM_NOC] = &srvc_memnoc,
++	[MASTER_LLCC] = &llcc_mc,
++	[SLAVE_EBI_CH0] = &ebi,
++};
++
++static const struct qcom_icc_desc sdm670_mem_noc = {
++	.nodes = mem_noc_nodes,
++	.num_nodes = ARRAY_SIZE(mem_noc_nodes),
++	.bcms = mem_noc_bcms,
++	.num_bcms = ARRAY_SIZE(mem_noc_bcms),
++};
++
++static struct qcom_icc_bcm * const mmss_noc_bcms[] = {
++	&bcm_mm0,
++	&bcm_mm1,
++	&bcm_mm2,
++	&bcm_mm3,
++};
++
++static struct qcom_icc_node * const mmss_noc_nodes[] = {
++	[MASTER_CNOC_MNOC_CFG] = &qhm_mnoc_cfg,
++	[MASTER_CAMNOC_HF0] = &qxm_camnoc_hf0,
++	[MASTER_CAMNOC_HF1] = &qxm_camnoc_hf1,
++	[MASTER_CAMNOC_SF] = &qxm_camnoc_sf,
++	[MASTER_MDP_PORT0] = &qxm_mdp0,
++	[MASTER_MDP_PORT1] = &qxm_mdp1,
++	[MASTER_ROTATOR] = &qxm_rot,
++	[MASTER_VIDEO_P0] = &qxm_venus0,
++	[MASTER_VIDEO_P1] = &qxm_venus1,
++	[MASTER_VIDEO_PROC] = &qxm_venus_arm9,
++	[SLAVE_MNOC_SF_MEM_NOC] = &qns2_mem_noc,
++	[SLAVE_MNOC_HF_MEM_NOC] = &qns_mem_noc_hf,
++	[SLAVE_SERVICE_MNOC] = &srvc_mnoc,
++};
++
++static const struct qcom_icc_desc sdm670_mmss_noc = {
++	.nodes = mmss_noc_nodes,
++	.num_nodes = ARRAY_SIZE(mmss_noc_nodes),
++	.bcms = mmss_noc_bcms,
++	.num_bcms = ARRAY_SIZE(mmss_noc_bcms),
++};
++
++static struct qcom_icc_bcm * const system_noc_bcms[] = {
++	&bcm_mm1,
++	&bcm_sn0,
++	&bcm_sn1,
++	&bcm_sn10,
++	&bcm_sn11,
++	&bcm_sn13,
++	&bcm_sn2,
++	&bcm_sn3,
++	&bcm_sn4,
++	&bcm_sn5,
++	&bcm_sn8,
++};
++
++static struct qcom_icc_node * const system_noc_nodes[] = {
++	[MASTER_SNOC_CFG] = &qhm_snoc_cfg,
++	[MASTER_A1NOC_SNOC] = &qnm_aggre1_noc,
++	[MASTER_A2NOC_SNOC] = &qnm_aggre2_noc,
++	[MASTER_GNOC_SNOC] = &qnm_gladiator_sodv,
++	[MASTER_MEM_NOC_SNOC] = &qnm_memnoc,
++	[MASTER_PIMEM] = &qxm_pimem,
++	[MASTER_GIC] = &xm_gic,
++	[SLAVE_APPSS] = &qhs_apss,
++	[SLAVE_SNOC_CNOC] = &qns_cnoc,
++	[SLAVE_SNOC_MEM_NOC_GC] = &qns_memnoc_gc,
++	[SLAVE_SNOC_MEM_NOC_SF] = &qns_memnoc_sf,
++	[SLAVE_OCIMEM] = &qxs_imem,
++	[SLAVE_PIMEM] = &qxs_pimem,
++	[SLAVE_SERVICE_SNOC] = &srvc_snoc,
++	[SLAVE_QDSS_STM] = &xs_qdss_stm,
++	[SLAVE_TCU] = &xs_sys_tcu_cfg,
++	[MASTER_CAMNOC_HF0_UNCOMP] = &qxm_camnoc_hf0_uncomp,
++	[MASTER_CAMNOC_HF1_UNCOMP] = &qxm_camnoc_hf1_uncomp,
++	[MASTER_CAMNOC_SF_UNCOMP] = &qxm_camnoc_sf_uncomp,
++	[SLAVE_CAMNOC_UNCOMP] = &qns_camnoc_uncomp,
++};
++
++static const struct qcom_icc_desc sdm670_system_noc = {
++	.nodes = system_noc_nodes,
++	.num_nodes = ARRAY_SIZE(system_noc_nodes),
++	.bcms = system_noc_bcms,
++	.num_bcms = ARRAY_SIZE(system_noc_bcms),
++};
++
++static const struct of_device_id qnoc_of_match[] = {
++	{ .compatible = "qcom,sdm670-aggre1-noc",
++	  .data = &sdm670_aggre1_noc},
++	{ .compatible = "qcom,sdm670-aggre2-noc",
++	  .data = &sdm670_aggre2_noc},
++	{ .compatible = "qcom,sdm670-config-noc",
++	  .data = &sdm670_config_noc},
++	{ .compatible = "qcom,sdm670-dc-noc",
++	  .data = &sdm670_dc_noc},
++	{ .compatible = "qcom,sdm670-gladiator-noc",
++	  .data = &sdm670_gladiator_noc},
++	{ .compatible = "qcom,sdm670-mem-noc",
++	  .data = &sdm670_mem_noc},
++	{ .compatible = "qcom,sdm670-mmss-noc",
++	  .data = &sdm670_mmss_noc},
++	{ .compatible = "qcom,sdm670-system-noc",
++	  .data = &sdm670_system_noc},
++	{ }
++};
++MODULE_DEVICE_TABLE(of, qnoc_of_match);
++
++static struct platform_driver qnoc_driver = {
++	.probe = qcom_icc_rpmh_probe,
++	.remove = qcom_icc_rpmh_remove,
++	.driver = {
++		.name = "qnoc-sdm670",
++		.of_match_table = qnoc_of_match,
++		.sync_state = icc_sync_state,
++	},
++};
++module_platform_driver(qnoc_driver);
++
++MODULE_DESCRIPTION("Qualcomm SDM670 NoC driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/interconnect/qcom/sdm670.h b/drivers/interconnect/qcom/sdm670.h
+new file mode 100644
+index 000000000000..14155f244c43
+--- /dev/null
++++ b/drivers/interconnect/qcom/sdm670.h
+@@ -0,0 +1,128 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Qualcomm #define SDM670 interconnect IDs
++ *
++ * Copyright (c) 2020, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef __DRIVERS_INTERCONNECT_QCOM_SDM670_H
++#define __DRIVERS_INTERCONNECT_QCOM_SDM670_H
++
++#define SDM670_MASTER_A1NOC_CFG			0
++#define SDM670_MASTER_A1NOC_SNOC		1
++#define SDM670_MASTER_A2NOC_CFG			2
++#define SDM670_MASTER_A2NOC_SNOC		3
++#define SDM670_MASTER_AMPSS_M0			4
++#define SDM670_MASTER_BLSP_1			5
++#define SDM670_MASTER_BLSP_2			6
++#define SDM670_MASTER_CAMNOC_HF0		7
++#define SDM670_MASTER_CAMNOC_HF0_UNCOMP		8
++#define SDM670_MASTER_CAMNOC_HF1		9
++#define SDM670_MASTER_CAMNOC_HF1_UNCOMP		10
++#define SDM670_MASTER_CAMNOC_SF			11
++#define SDM670_MASTER_CAMNOC_SF_UNCOMP		12
++#define SDM670_MASTER_CNOC_A2NOC		13
++#define SDM670_MASTER_CNOC_DC_NOC		14
++#define SDM670_MASTER_CNOC_MNOC_CFG		15
++#define SDM670_MASTER_CRYPTO_CORE_0		16
++#define SDM670_MASTER_EMMC			17
++#define SDM670_MASTER_GIC			18
++#define SDM670_MASTER_GNOC_CFG			19
++#define SDM670_MASTER_GNOC_MEM_NOC		20
++#define SDM670_MASTER_GNOC_SNOC			21
++#define SDM670_MASTER_GRAPHICS_3D		22
++#define SDM670_MASTER_IPA			23
++#define SDM670_MASTER_LLCC			24
++#define SDM670_MASTER_MDP_PORT0			25
++#define SDM670_MASTER_MDP_PORT1			26
++#define SDM670_MASTER_MEM_NOC_CFG		27
++#define SDM670_MASTER_MEM_NOC_SNOC		28
++#define SDM670_MASTER_MNOC_HF_MEM_NOC		29
++#define SDM670_MASTER_MNOC_SF_MEM_NOC		30
++#define SDM670_MASTER_PIMEM			31
++#define SDM670_MASTER_QDSS_BAM			32
++#define SDM670_MASTER_QDSS_ETR			33
++#define SDM670_MASTER_ROTATOR			34
++#define SDM670_MASTER_SDCC_2			35
++#define SDM670_MASTER_SDCC_4			36
++#define SDM670_MASTER_SNOC_CFG			37
++#define SDM670_MASTER_SNOC_CNOC			38
++#define SDM670_MASTER_SNOC_GC_MEM_NOC		39
++#define SDM670_MASTER_SNOC_SF_MEM_NOC		40
++#define SDM670_MASTER_SPDM			41
++#define SDM670_MASTER_TCU_0			42
++#define SDM670_MASTER_TSIF			43
++#define SDM670_MASTER_UFS_MEM			44
++#define SDM670_MASTER_USB3			45
++#define SDM670_MASTER_VIDEO_P0			46
++#define SDM670_MASTER_VIDEO_P1			47
++#define SDM670_MASTER_VIDEO_PROC		48
++#define SDM670_SLAVE_A1NOC_CFG			49
++#define SDM670_SLAVE_A1NOC_SNOC			50
++#define SDM670_SLAVE_A2NOC_CFG			51
++#define SDM670_SLAVE_A2NOC_SNOC			52
++#define SDM670_SLAVE_AOP			53
++#define SDM670_SLAVE_AOSS			54
++#define SDM670_SLAVE_APPSS			55
++#define SDM670_SLAVE_BLSP_1			56
++#define SDM670_SLAVE_BLSP_2			57
++#define SDM670_SLAVE_CAMERA_CFG			58
++#define SDM670_SLAVE_CAMNOC_UNCOMP		59
++#define SDM670_SLAVE_CDSP_CFG			60
++#define SDM670_SLAVE_CLK_CTL			61
++#define SDM670_SLAVE_CNOC_A2NOC			62
++#define SDM670_SLAVE_CNOC_DDRSS			63
++#define SDM670_SLAVE_CNOC_MNOC_CFG		64
++#define SDM670_SLAVE_CRYPTO_0_CFG		65
++#define SDM670_SLAVE_DCC_CFG			66
++#define SDM670_SLAVE_DISPLAY_CFG		67
++#define SDM670_SLAVE_EBI_CH0			68
++#define SDM670_SLAVE_EMMC_CFG			69
++#define SDM670_SLAVE_GLM			70
++#define SDM670_SLAVE_GNOC_MEM_NOC		71
++#define SDM670_SLAVE_GNOC_SNOC			72
++#define SDM670_SLAVE_GRAPHICS_3D_CFG		73
++#define SDM670_SLAVE_IMEM_CFG			74
++#define SDM670_SLAVE_IPA_CFG			75
++#define SDM670_SLAVE_LLCC			76
++#define SDM670_SLAVE_LLCC_CFG			77
++#define SDM670_SLAVE_MEM_NOC_CFG		78
++#define SDM670_SLAVE_MEM_NOC_GNOC		79
++#define SDM670_SLAVE_MEM_NOC_SNOC		80
++#define SDM670_SLAVE_MNOC_HF_MEM_NOC		81
++#define SDM670_SLAVE_MNOC_SF_MEM_NOC		82
++#define SDM670_SLAVE_MSS_PROC_MS_MPU_CFG	83
++#define SDM670_SLAVE_OCIMEM			84
++#define SDM670_SLAVE_PDM			85
++#define SDM670_SLAVE_PIMEM			86
++#define SDM670_SLAVE_PIMEM_CFG			87
++#define SDM670_SLAVE_PRNG			88
++#define SDM670_SLAVE_QDSS_CFG			89
++#define SDM670_SLAVE_QDSS_STM			90
++#define SDM670_SLAVE_RBCPR_CX_CFG		91
++#define SDM670_SLAVE_SDCC_2			92
++#define SDM670_SLAVE_SDCC_4			93
++#define SDM670_SLAVE_SERVICE_A1NOC		94
++#define SDM670_SLAVE_SERVICE_A2NOC		95
++#define SDM670_SLAVE_SERVICE_CNOC		96
++#define SDM670_SLAVE_SERVICE_GNOC		97
++#define SDM670_SLAVE_SERVICE_MEM_NOC		98
++#define SDM670_SLAVE_SERVICE_MNOC		99
++#define SDM670_SLAVE_SERVICE_SNOC		100
++#define SDM670_SLAVE_SNOC_CFG			101
++#define SDM670_SLAVE_SNOC_CNOC			102
++#define SDM670_SLAVE_SNOC_MEM_NOC_GC		103
++#define SDM670_SLAVE_SNOC_MEM_NOC_SF		104
++#define SDM670_SLAVE_SOUTH_PHY_CFG		105
++#define SDM670_SLAVE_SPDM_WRAPPER		106
++#define SDM670_SLAVE_TCSR			107
++#define SDM670_SLAVE_TCU			108
++#define SDM670_SLAVE_TLMM_NORTH			109
++#define SDM670_SLAVE_TLMM_SOUTH			110
++#define SDM670_SLAVE_TSIF			111
++#define SDM670_SLAVE_UFS_MEM_CFG		112
++#define SDM670_SLAVE_USB3			113
++#define SDM670_SLAVE_VENUS_CFG			114
++#define SDM670_SLAVE_VSENSE_CTRL_CFG		115
 +
 +#endif
 -- 
