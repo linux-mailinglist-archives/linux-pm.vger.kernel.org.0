@@ -2,206 +2,129 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE152656782
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Dec 2022 07:33:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D7A5656816
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Dec 2022 08:59:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiL0Gc7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Dec 2022 01:32:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
+        id S229564AbiL0H7i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Dec 2022 02:59:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiL0Gc5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Dec 2022 01:32:57 -0500
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C16081150;
-        Mon, 26 Dec 2022 22:32:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VWymgOZ6rKVifJRTS+JbBCbB/y10NVUtR2ajw+qipYfCgN9mBQhHBT5RbA7fNoLp/Jc+z1c5VtPXbQIpecezes5dFsakUNqDzHcstMs5IrfmWy5ArBmvkjawfwI14A3QKZttIHJNs4gMVwrCEuzlh5eM7+bIjNoc/Xl/CdRKyjBgUb/F+1nA5ySQq5t8nN4XCO2rWM28X/kScHqLlULT3XHuIi0BYbJWKpJfaRMdbIko6JpU6Hu+FazJuzRwusr1LDsgHAiuOjtxdk0Lbq6wrK8wxbcOIwASnjZGsSAvR8KtF2YcWg/QWZmpmOj4T4YS8tbcjVfdNoCuJIZogVbVqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IjWHGenckhD16iDSCH2O0Op/JXQFR25z5oRedR7W7rY=;
- b=PM5RN0f7Zel3QRuGLNDBFR641XUyg4MRC6yhA57RzI6PArC7PunduTsxPlCehhEJ4in7jCNRR2WQtcnpL8bnmaWWek4xnD7jsY5Z6ip1sHjCUwyZ4G4rJqCRB7PzRVgSDaJb7i5AgkMt41v44e84A9T0/KeNe8810UjrnpX07dxEFo6NN14aLxozqqeGknYDB/tbVYFDryVp8WE77wOt7GNlQXAqQ3TK71/ElBjrsRbDv6/qqksXKcMeG3lgVy3QOYdze5j7w7p5SrUulKxUHd7sdaVrWahL5MTwjBCGmSlB+FaNksW/WmSROfsTxflu6gkHUkVxqRwulsTu9dNy3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IjWHGenckhD16iDSCH2O0Op/JXQFR25z5oRedR7W7rY=;
- b=pfO9HA6LvZNQqSgcT/AAGUPAFOZigKcSF5gd8Ms40ez8615hQJs6LayYJBVHaeZA5ESz2joiPQZwwjNf9F/0cVTIXgbTAbSSuBQsNLjAK/p+PVr/lqbwdp3OEc8nNpze4sjrJEqANtdSXB3h+myi6JQptZqRZ1XOT0f8lACqrUU=
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
- by CY8PR12MB8266.namprd12.prod.outlook.com (2603:10b6:930:79::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.16; Tue, 27 Dec
- 2022 06:32:53 +0000
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::960b:6963:b27e:f9ed]) by DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::960b:6963:b27e:f9ed%8]) with mapi id 15.20.5944.016; Tue, 27 Dec 2022
- 06:32:53 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v9 04/13] cpufreq: amd-pstate: fix kernel hang issue while
- amd-pstate unregistering
-Thread-Topic: [PATCH v9 04/13] cpufreq: amd-pstate: fix kernel hang issue
- while amd-pstate unregistering
-Thread-Index: AQHZGH7vRxnVcMpGo0CiDLBuoiyY0a6BC+qAgAAzD/A=
-Date:   Tue, 27 Dec 2022 06:32:53 +0000
-Message-ID: <DM4PR12MB52787E62D6B70F124182B2F39CED9@DM4PR12MB5278.namprd12.prod.outlook.com>
-References: <20221225163442.2205660-1-perry.yuan@amd.com>
- <20221225163442.2205660-5-perry.yuan@amd.com>
- <20221227025353.gbgdcmmi6vomhpqp@vireshk-i7>
-In-Reply-To: <20221227025353.gbgdcmmi6vomhpqp@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-12-27T05:56:37Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=7137478b-d5a5-406a-806e-611af51a1ee6;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-12-27T06:32:51Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: bb87317f-e60a-4149-b060-53e2601ff9d2
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR12MB5278:EE_|CY8PR12MB8266:EE_
-x-ms-office365-filtering-correlation-id: 02c1b33b-d9c1-48bc-28cc-08dae7d42f20
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iqCKfGIQ2jeiHu0vpwtL+AGDSGpTg2v9c/Wp2lwnwmCpyezNCrAVKidC/NyEYOkczkK+49twfxKIhzjOQr0EWaK/j3CKdQCooGFkiO/yEpsmGkOadmTSiPxlvsHW4xc15JQnanEXBAczEmAAUTOZIl/4gWpb7u/j9OsRm6ScZHkukM1NsAMRbCENvE9oxD/R2GNnm0vsQnVpaI4BiYLgRbHwufOzD2FnsF4KnLd2D5zLMk/4cNUMw91szjDJ0KWfcF7fHCM+wR9Yf17wAiJXiVYS9uf2GB6HxnlHnQx3EbmGJMrC0yVgcCnPu0+SpxKFUAlwWe1mjwO7adHEbIdhAFzmdy9OOxbwikAMMfU/J4+5BwNEdDWQzHS8yslfZwVSi8U9EHhvDqmmUpU//QMILQVfuLxYhQZwrsgFCPMnFDp/qwa7L4SGaurbRG89lJ0QIjBVLJk+SfaTrAhmecnphT8CHeBrehgtwlml9ff0aUELNWWlR8TFWAxAsR5x8io1an3wE4PyJTqQCNJFokrSJxe3EeNP5if7yYOPp9Jycobh4CaEBQPWFqZYWfZh8cNQeIYjLKuPBhVn2c7ZwghutWqaN0J4yAEvgKN/MQ1/QHt7byUkDTuQcsDO0qZ74nmG9tILhcVVU7COW1cSb2MGEEuvTFddmGMZZhQZq5FEe1akGLRzZwxL87kxR78uWe7sqb6h01p9anIDYCh0/fjtgQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(39860400002)(396003)(136003)(376002)(451199015)(38070700005)(53546011)(9686003)(478600001)(6506007)(55016003)(186003)(26005)(33656002)(54906003)(316002)(6916009)(86362001)(41300700001)(71200400001)(2906002)(52536014)(7696005)(8936002)(83380400001)(5660300002)(64756008)(8676002)(66476007)(66446008)(66556008)(122000001)(66946007)(76116006)(4326008)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?gc7dYbtHAGA4jZ73Nqs1HdhSODHgSptkMxUUaNU2I/WWdrfqO5m7wStAmUSU?=
- =?us-ascii?Q?k0DpkzynkAWTKYhSPuKr9FmbN6bZO4amcAA9y8hx35tIu++4TXDQHqv+jM3X?=
- =?us-ascii?Q?U8JVUq6Qus0BneVU3aWpgRiK8kzaFPKMNym52hS5o74HNrQNNTNHlf2Jy6Jq?=
- =?us-ascii?Q?V2TOd3nIiNOEzry6T5XH0HebD8Dm23TQ31Vv4csZGauTwpPiZ0FYMJtPTmfR?=
- =?us-ascii?Q?6TwvNmTwAUtXFScnwceZ9E/M2B2PBL91iwSnvg4BMvoTy50/hrlKXLxyCulC?=
- =?us-ascii?Q?TU+Y/gWjJKiIqBmsRoloq/yGH7gekgdFixt9Jyuf6M80ZKDljpWyVDrvq0dJ?=
- =?us-ascii?Q?guBsHXRKqCWgU1UbkFZ/msPFS3mWA91unQs1MwAvEPs+q92u6XbL7osWnOGH?=
- =?us-ascii?Q?lqWEfJrrpMnvVr+nVDTfEh9F3sE6Wcf+lCPP7BAlu0P+GopLI2Cbv7bFW7hd?=
- =?us-ascii?Q?92CjXZqZ7Co7MqOGHCYWYXd0qAhYUwzSRCgDteJRpYq4xnn/QJCmgKzQKCv/?=
- =?us-ascii?Q?4JDK+JwfI8OsixUf/n44R3Sh8MCx4D00MIR/40z5AbH7sZGdeeBKflBlJuxF?=
- =?us-ascii?Q?NChfm0FYqMQWymSMBEKz+GmNS8DDzFVp3SSf6oH5RJCRuLOno09nliL2jb3T?=
- =?us-ascii?Q?iP25NMhG8DdiYffGgRjO6LxNvCuXXdTV8sITaokpcwYnz6MF8Veg+9Zu2pT2?=
- =?us-ascii?Q?lozbKv3wkp0Qr3EA3UO2qIxyp2DLf6G20BGq+Fobm1Jt71xjanHXrN8kfMvz?=
- =?us-ascii?Q?gJoqPsIxHZ5amHNJb6LNn37ZSlpl53d0U2pXtDIiUtHLVjg6bL+hkassfeSa?=
- =?us-ascii?Q?pP8s6d5GHLdzLxGPM1JqbhMbt4vMU31Wu/nSj8slqgxnwgjCNnNe1AnrD8ur?=
- =?us-ascii?Q?Xnu+b9vL+ISEaP2wjrBgGLalxe6cSpxzfd9884etAA2bjqYNxiwK/Q9xCqEE?=
- =?us-ascii?Q?Lrw5ra2evSaif7YWci0N6BR2ob2hSdqDhMda04j7tmS0Gjo/D2IdQ8uTWVeC?=
- =?us-ascii?Q?Kf5YAd4RSYC0u+sYLtqVNdFnzIrc0qJQneXvQBStT5c/LXn/BFlt+b6ziLUq?=
- =?us-ascii?Q?n/TZ92YX0Li/z+vcU41on+pG5TeiZTiecWtLSZ6u5Xns5eOIIw+wrwwYWOx/?=
- =?us-ascii?Q?0amL1C5fOkk+hmGWNaKZ/WDn5TlKN94+fRomD0gS3HMpjUjJubeLpDd80Ird?=
- =?us-ascii?Q?u/bBG3XkYU6f6Xf92ZDFXyNAXbYnvrkBFZF6tSfEy4imkEL4f8rfVIcm48Ok?=
- =?us-ascii?Q?XwYI05NMpuFhQjTPWEs9L/PQP0rlaODTfxL9inn5qvxGM+ji2WqON+JpiBeB?=
- =?us-ascii?Q?gAW9mwubDuBUlRiGSmCWYPr8cHvhPipt/18ysFcw6pCQyeSOcNRvYp7M2JY6?=
- =?us-ascii?Q?lpLd59nJDpPlV8Aj6pS9iMjtWAkSidMYx7gsJQ7I0DK002bwmsasK7npGR9v?=
- =?us-ascii?Q?2EVAGzxuK3lIOBiPcbACrYI1YVxiz8qQ1w5bqcUFXMZIuVIs6C0+gEdxS20z?=
- =?us-ascii?Q?Q9vdj1Kixc1dHEfTTDEXXrGNTie7Wzzyr6Vo3Z03TY2jg6BefkpTc5N6Lblu?=
- =?us-ascii?Q?fZ49gy9zoqH1WFv62bt3oJe8wwbrZhj+TcXyo6oB?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        with ESMTP id S229614AbiL0H7h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Dec 2022 02:59:37 -0500
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E7763B0
+        for <linux-pm@vger.kernel.org>; Mon, 26 Dec 2022 23:59:35 -0800 (PST)
+Received: by mail-lj1-x235.google.com with SMTP id x37so6157809ljq.1
+        for <linux-pm@vger.kernel.org>; Mon, 26 Dec 2022 23:59:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jNkfjEICeM7PbhM37J2f+PuUg/PwpxFMIPMIoac4to8=;
+        b=eLOiqNg1HnXzDAAU4zFmnkTbsq02Ukr/RajUs7jEv+R0R/o7xQtUrwqODLJBtwtu1N
+         uqN0XfOUAH48mNcdQGQlChkJjreCLLc1oFAeexzfYCHA6zfEHHGWYDrRGK1gjOJFoAwg
+         d8dVROH+78lWrPfZUQhmKda9p4gDcYhg7qNmTizgcYGy4WbHuoQif7WIHvzNbegiRx8X
+         GoeLJ0ir9UnzcgUzxGg5QiB/YVPXxISSwpOpcR7wkpF9OfF0NGyjpxrdwkm226HEdgxp
+         1cLPYo4Wx9QM6JPfaHiKHP660AoIiU10eWD6S0RfzBmMufNVPw3NR04hWW4PUujDn6mD
+         O0OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jNkfjEICeM7PbhM37J2f+PuUg/PwpxFMIPMIoac4to8=;
+        b=i8pR2IG06onflvvVwDDw9WuaLm91FfyWAVJGjvJZfJYifQ1C2lhmGr2kBvuBT7Dg7E
+         +kvtPibHrIEZoG9FFq5GK8bH/wBsSKFm0dcdhUAWmWaxPoDuFFryj7s8QEdcUcFR7dYz
+         ts3K7GEDaU7mRllqUz9tV2xc332qPAQQd0SxDHweLUkZDRF1rhWQQrYN5zB6ZyY9c9pT
+         EQGPU3vd6KGhzT03zCeJH6+lzZdwf/Ah8rioUg0gs8YbzLxMJSoZ0wIV4igDIlqA3PRE
+         h30KpbuIvDdgwcmwHFNmzAFujR7avfIPYJWyqm4hOCpJAEmTjKmDRv03wb36Qj/n9rf9
+         aTCg==
+X-Gm-Message-State: AFqh2kq2Y7IZwo9Q1+IESTg9gcQ4wr3QZ6KE1LP/wwOKf/H4cFQbb0AK
+        gdpBgh7CgC+lz+ar/Iz0wSK/Eg==
+X-Google-Smtp-Source: AMrXdXvRSwMGnIBHRfxosdlVq8JTa7MkayGC6tu+7KVrj+jnN+lEDMSZ2lV/DFNMQ3n+isMk1ojfZw==
+X-Received: by 2002:a2e:9186:0:b0:27a:3afd:de6d with SMTP id f6-20020a2e9186000000b0027a3afdde6dmr6549276ljg.48.1672127973845;
+        Mon, 26 Dec 2022 23:59:33 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id k21-20020a2e8895000000b00277025ddc9esm1540641lji.54.2022.12.26.23.59.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Dec 2022 23:59:33 -0800 (PST)
+Message-ID: <7fd3c28c-993b-bd90-738d-17793dcfe96f@linaro.org>
+Date:   Tue, 27 Dec 2022 08:59:31 +0100
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 02c1b33b-d9c1-48bc-28cc-08dae7d42f20
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Dec 2022 06:32:53.5909
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vGg3XFbacuwCrt0S6cORDud5zd+hPQCrvx7xH5fo7CSrmlsk42Vzk6shMQQjtQtS/QNOvQJjbBYWFmZzRyrxpw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8266
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] dt-bindings: interconnect: add sdm670 interconnects
+Content-Language: en-US
+To:     Richard Acayan <mailingradian@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
+        Luca Weiss <luca@z3ntu.xyz>
+References: <20221226224944.37242-1-mailingradian@gmail.com>
+ <20221226224944.37242-2-mailingradian@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221226224944.37242-2-mailingradian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[AMD Official Use Only - General]
+On 26/12/2022 23:49, Richard Acayan wrote:
+> There are controllable interconnects on Snapdragon 670. Add the
+> compatible strings to the documentation and interconnect ID definitions.
+> 
+> The device tree header was generated by
+> linux-interconnect-driver-generator and the copyright year was changed.
+> 
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+> ---
+>  .../bindings/interconnect/qcom,rpmh.yaml      |   8 ++
+>  .../dt-bindings/interconnect/qcom,sdm670.h    | 136 ++++++++++++++++++
+>  2 files changed, 144 insertions(+)
+>  create mode 100644 include/dt-bindings/interconnect/qcom,sdm670.h
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index a429a1ed1006..db1e93583554 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -75,6 +75,14 @@ properties:
+>        - qcom,sc8280xp-nspa-noc
+>        - qcom,sc8280xp-nspb-noc
+>        - qcom,sc8280xp-system-noc
+> +      - qcom,sdm670-aggre1-noc
+> +      - qcom,sdm670-aggre2-noc
+> +      - qcom,sdm670-config-noc
+> +      - qcom,sdm670-dc-noc
+> +      - qcom,sdm670-gladiator-noc
+> +      - qcom,sdm670-mem-noc
+> +      - qcom,sdm670-mmss-noc
+> +      - qcom,sdm670-system-noc
+>        - qcom,sdm845-aggre1-noc
+>        - qcom,sdm845-aggre2-noc
+>        - qcom,sdm845-config-noc
+> diff --git a/include/dt-bindings/interconnect/qcom,sdm670.h b/include/dt-bindings/interconnect/qcom,sdm670.h
+> new file mode 100644
+> index 000000000000..d26dedb9deb7
+> --- /dev/null
+> +++ b/include/dt-bindings/interconnect/qcom,sdm670.h
 
-Hi Viresh.
+Let's follow new convention, so: qcom,sdm670-rpmh.h
 
-> -----Original Message-----
-> From: Viresh Kumar <viresh.kumar@linaro.org>
-> Sent: Tuesday, December 27, 2022 10:54 AM
-> To: Yuan, Perry <Perry.Yuan@amd.com>
-> Cc: rafael.j.wysocki@intel.com; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Huang, Ray <Ray.Huang@amd.com>;
-> Sharma, Deepak <Deepak.Sharma@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Huang, Shimmer
-> <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Meng,
-> Li (Jassmine) <Li.Meng@amd.com>; Karny, Wyes <Wyes.Karny@amd.com>;
-> linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v9 04/13] cpufreq: amd-pstate: fix kernel hang issue
-> while amd-pstate unregistering
->=20
-> On 26-12-22, 00:34, Perry Yuan wrote:
-> > In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call
-> > to increase increments the kobject reference count of policy and make
-> > it as busy. Therefore, a corresponding call to cpufreq_cpu_put() is
-> > needed to decrement the kobject reference count back, it will resolve
-> > the kernel hang issue when unregistering the amd-pstate driver and
-> > register the `amd_pstate_epp` driver instance.
-> >
-> > Acked-by: Huang Rui <ray.huang@amd.com>
-> > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-> > Cc: stable@vger.kernel.org
-> > ---
-> >  drivers/cpufreq/amd-pstate.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/cpufreq/amd-pstate.c
-> > b/drivers/cpufreq/amd-pstate.c index 204e39006dda..c17bd845f5fc 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int
-> cpu,
-> >  		max_perf =3D min_perf;
-> >
-> >  	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
-> > +	cpufreq_cpu_put(policy);
-> >  }
-> >
-> >  static int amd_get_min_freq(struct amd_cpudata *cpudata)
->=20
-> This should have been sent separately and not in this series. It is a bug=
- fix,
-> which could have been merged in the 6.1 itself and now is candidate for 6=
-.2-
-> rc1, while the rest of the series needs to wait for 6.3.
->=20
-> --
-> Viresh
 
-Thanks for your feedback, will extract the patch and send it out separately=
-.
+Best regards,
+Krzysztof
 
-Perry.=20
-=20
