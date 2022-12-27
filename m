@@ -2,80 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D7A5656816
-	for <lists+linux-pm@lfdr.de>; Tue, 27 Dec 2022 08:59:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B1A656A81
+	for <lists+linux-pm@lfdr.de>; Tue, 27 Dec 2022 13:09:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbiL0H7i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Dec 2022 02:59:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55026 "EHLO
+        id S231616AbiL0MJg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Dec 2022 07:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbiL0H7h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Dec 2022 02:59:37 -0500
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E7763B0
-        for <linux-pm@vger.kernel.org>; Mon, 26 Dec 2022 23:59:35 -0800 (PST)
-Received: by mail-lj1-x235.google.com with SMTP id x37so6157809ljq.1
-        for <linux-pm@vger.kernel.org>; Mon, 26 Dec 2022 23:59:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jNkfjEICeM7PbhM37J2f+PuUg/PwpxFMIPMIoac4to8=;
-        b=eLOiqNg1HnXzDAAU4zFmnkTbsq02Ukr/RajUs7jEv+R0R/o7xQtUrwqODLJBtwtu1N
-         uqN0XfOUAH48mNcdQGQlChkJjreCLLc1oFAeexzfYCHA6zfEHHGWYDrRGK1gjOJFoAwg
-         d8dVROH+78lWrPfZUQhmKda9p4gDcYhg7qNmTizgcYGy4WbHuoQif7WIHvzNbegiRx8X
-         GoeLJ0ir9UnzcgUzxGg5QiB/YVPXxISSwpOpcR7wkpF9OfF0NGyjpxrdwkm226HEdgxp
-         1cLPYo4Wx9QM6JPfaHiKHP660AoIiU10eWD6S0RfzBmMufNVPw3NR04hWW4PUujDn6mD
-         O0OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jNkfjEICeM7PbhM37J2f+PuUg/PwpxFMIPMIoac4to8=;
-        b=i8pR2IG06onflvvVwDDw9WuaLm91FfyWAVJGjvJZfJYifQ1C2lhmGr2kBvuBT7Dg7E
-         +kvtPibHrIEZoG9FFq5GK8bH/wBsSKFm0dcdhUAWmWaxPoDuFFryj7s8QEdcUcFR7dYz
-         ts3K7GEDaU7mRllqUz9tV2xc332qPAQQd0SxDHweLUkZDRF1rhWQQrYN5zB6ZyY9c9pT
-         EQGPU3vd6KGhzT03zCeJH6+lzZdwf/Ah8rioUg0gs8YbzLxMJSoZ0wIV4igDIlqA3PRE
-         h30KpbuIvDdgwcmwHFNmzAFujR7avfIPYJWyqm4hOCpJAEmTjKmDRv03wb36Qj/n9rf9
-         aTCg==
-X-Gm-Message-State: AFqh2kq2Y7IZwo9Q1+IESTg9gcQ4wr3QZ6KE1LP/wwOKf/H4cFQbb0AK
-        gdpBgh7CgC+lz+ar/Iz0wSK/Eg==
-X-Google-Smtp-Source: AMrXdXvRSwMGnIBHRfxosdlVq8JTa7MkayGC6tu+7KVrj+jnN+lEDMSZ2lV/DFNMQ3n+isMk1ojfZw==
-X-Received: by 2002:a2e:9186:0:b0:27a:3afd:de6d with SMTP id f6-20020a2e9186000000b0027a3afdde6dmr6549276ljg.48.1672127973845;
-        Mon, 26 Dec 2022 23:59:33 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id k21-20020a2e8895000000b00277025ddc9esm1540641lji.54.2022.12.26.23.59.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Dec 2022 23:59:33 -0800 (PST)
-Message-ID: <7fd3c28c-993b-bd90-738d-17793dcfe96f@linaro.org>
-Date:   Tue, 27 Dec 2022 08:59:31 +0100
+        with ESMTP id S231424AbiL0MJa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Dec 2022 07:09:30 -0500
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E52C2D7;
+        Tue, 27 Dec 2022 04:09:25 -0800 (PST)
+X-UUID: aee440c3112d4fd3890a3a25bfbc1400-20221227
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=m8+6n1e6RQmmFLnT3yJSrxkphZnpo8Y8/MUK4VmiN4E=;
+        b=s+pAjSW3N4cgqEx+6c7udRkOaNgOfY9bVuzG6oFLUzf45WV61ZcXaNVwlBp4hfnVmv36rLN/p2M8jeaWVU4U//Ck9s/S/36ZlrA7mTvhDhqajLqoR8ETJ8lYxw/OwdIIQl7BXJiEALDmBBO+WVpKNoD7NfHeK8FUbU1c2ZkuCto=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.14,REQID:848857ac-7e35-4a31-8b72-de367fdba419,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:dcaaed0,CLOUDID:e59bee52-dd49-462e-a4be-2143a3ddc739,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: aee440c3112d4fd3890a3a25bfbc1400-20221227
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <roger.lu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 696239125; Tue, 27 Dec 2022 20:09:18 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 27 Dec 2022 20:09:16 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 27 Dec 2022 20:09:17 +0800
+From:   Roger Lu <roger.lu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+CC:     Fan Chen <fan.chen@mediatek.com>, Roger Lu <roger.lu@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v2 0/13] Enhance SVS's robustness
+Date:   Tue, 27 Dec 2022 20:09:01 +0800
+Message-ID: <20221227120914.11346-1-roger.lu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 1/4] dt-bindings: interconnect: add sdm670 interconnects
-Content-Language: en-US
-To:     Richard Acayan <mailingradian@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Luca Weiss <luca@z3ntu.xyz>
-References: <20221226224944.37242-1-mailingradian@gmail.com>
- <20221226224944.37242-2-mailingradian@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221226224944.37242-2-mailingradian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,48 +66,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 26/12/2022 23:49, Richard Acayan wrote:
-> There are controllable interconnects on Snapdragon 670. Add the
-> compatible strings to the documentation and interconnect ID definitions.
-> 
-> The device tree header was generated by
-> linux-interconnect-driver-generator and the copyright year was changed.
-> 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  .../bindings/interconnect/qcom,rpmh.yaml      |   8 ++
->  .../dt-bindings/interconnect/qcom,sdm670.h    | 136 ++++++++++++++++++
->  2 files changed, 144 insertions(+)
->  create mode 100644 include/dt-bindings/interconnect/qcom,sdm670.h
-> 
-> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> index a429a1ed1006..db1e93583554 100644
-> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-> @@ -75,6 +75,14 @@ properties:
->        - qcom,sc8280xp-nspa-noc
->        - qcom,sc8280xp-nspb-noc
->        - qcom,sc8280xp-system-noc
-> +      - qcom,sdm670-aggre1-noc
-> +      - qcom,sdm670-aggre2-noc
-> +      - qcom,sdm670-config-noc
-> +      - qcom,sdm670-dc-noc
-> +      - qcom,sdm670-gladiator-noc
-> +      - qcom,sdm670-mem-noc
-> +      - qcom,sdm670-mmss-noc
-> +      - qcom,sdm670-system-noc
->        - qcom,sdm845-aggre1-noc
->        - qcom,sdm845-aggre2-noc
->        - qcom,sdm845-config-noc
-> diff --git a/include/dt-bindings/interconnect/qcom,sdm670.h b/include/dt-bindings/interconnect/qcom,sdm670.h
-> new file mode 100644
-> index 000000000000..d26dedb9deb7
-> --- /dev/null
-> +++ b/include/dt-bindings/interconnect/qcom,sdm670.h
+SVS driver got accepted upstream but still has room to be improved.
+Therefore, we add these patches to fix issues and coding style.
 
-Let's follow new convention, so: qcom,sdm670-rpmh.h
+Change since v1:
+- Reorder patch for helping readness
+- Re-write patch [9/13] to fix the corner case issue
+- Remove redundant codes in patch [13/13]
 
+Matthias Brugger (4):
+  soc: mediatek: mtk-svs: clean up platform probing
+  soc: mediatek: mtk-svs: improve readability of platform_probe
+  soc: mediatek: mtk-svs: move svs_platform_probe into probe
+  soc: mediatek: mtk-svs: delete superfluous platform data entries
 
-Best regards,
-Krzysztof
+Ricardo Ribalda (1):
+  soc: mediatek: mtk-svs: enable the IRQ later
+
+Roger Lu (7):
+  soc: mtk-svs: mt8183: refactor o_slope calculation
+  soc: mediatek: mtk-svs: use svs get efuse common function
+  soc: mediatek: mtk-svs: use svs clk control APIs
+  soc: mediatek: mtk-svs: use common function to disable restore
+    voltages
+  soc: mediatek: mtk-svs: restore default voltages when svs_init02()
+    fail
+  soc: mediatek: mtk-svs: add thermal voltage compensation if needed
+  soc: mediatek: mtk-svs: keep svs alive even though debug cmd create
+    fail
+
+Shang XiaoJing (1):
+  soc: mediatek: mtk-svs: Use pm_runtime_resume_and_get() in
+    svs_init01()
+
+ drivers/soc/mediatek/mtk-svs.c | 341 ++++++++++++++++-----------------
+ 1 file changed, 167 insertions(+), 174 deletions(-)
+
 
