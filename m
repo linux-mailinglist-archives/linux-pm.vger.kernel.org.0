@@ -2,111 +2,83 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 329B865715F
-	for <lists+linux-pm@lfdr.de>; Wed, 28 Dec 2022 01:10:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 021FA6571B6
+	for <lists+linux-pm@lfdr.de>; Wed, 28 Dec 2022 02:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiL1AKK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 27 Dec 2022 19:10:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S232357AbiL1BqD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 27 Dec 2022 20:46:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbiL1AKJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Dec 2022 19:10:09 -0500
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64DF640E;
-        Tue, 27 Dec 2022 16:10:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672186208; x=1703722208;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=9ghHj+7n5QxlxDJTPpbTtR6onyMlMoEJnX1YQU4DYpA=;
-  b=lgAfibZssH1IasVGYcDzjCAoBpYZsmtIlQKjaiCuoTG0N81Z1Sr3Rrkv
-   yxMuq1eFrnvyqQCn1O96BpHGA5h3t2Mlos3vCTVhXxukULLkFeRUYtXqQ
-   YxUfWARbloYpV+HnrYaELTvV4+OcRmIPPU7DtcyTW4Gd4S/Yy0gl6yREc
-   85WjFZ2RoWUcZr/jc1wVyQxYqXlJOHsvM8cfhyEyyj/Jx76iEh2sidgXU
-   hanTdohZfyudmgZNFUM7dtdsKxaML5EFdnIOfjTslVw+xY8NALRXxmz1r
-   2/YiKwVZFOm0JQ9DU9hvwvWe9JiCoHbqkxQ3/ToufI7FvfzEwQtr6gZlT
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="308531228"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="308531228"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2022 16:10:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10573"; a="795492241"
-X-IronPort-AV: E=Sophos;i="5.96,279,1665471600"; 
-   d="scan'208";a="795492241"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
-  by fmsmga001.fm.intel.com with ESMTP; 27 Dec 2022 16:10:07 -0800
-From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] thermal/drivers/int340x: Add missing attribute for data rate base
-Date:   Tue, 27 Dec 2022 16:10:05 -0800
-Message-Id: <20221228001005.2690278-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.31.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S232081AbiL1BqA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 27 Dec 2022 20:46:00 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A17DF21;
+        Tue, 27 Dec 2022 17:45:59 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NhZ9d6Rw2z8R039;
+        Wed, 28 Dec 2022 09:45:57 +0800 (CST)
+Received: from szxlzmapp07.zte.com.cn ([10.5.230.251])
+        by mse-fl2.zte.com.cn with SMTP id 2BS1jmRr028047;
+        Wed, 28 Dec 2022 09:45:48 +0800 (+08)
+        (envelope-from yang.yang29@zte.com.cn)
+Received: from mapi (szxlzmapp01[null])
+        by mapi (Zmail) with MAPI id mid14;
+        Wed, 28 Dec 2022 09:45:49 +0800 (CST)
+Date:   Wed, 28 Dec 2022 09:45:49 +0800 (CST)
+X-Zmail-TransId: 2b0363ab9fcd23463af5
+X-Mailer: Zmail v1.0
+Message-ID: <202212280945491860150@zte.com.cn>
+Mime-Version: 1.0
+From:   <yang.yang29@zte.com.cn>
+To:     <miquel.raynal@bootlin.com>
+Cc:     <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+        <amitk@kernel.org>, <rui.zhang@intel.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <xu.panda@zte.com.cn>, <yang.yang29@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHRoZXJtYWw6IGFybWFkYTogdXNlIHN0cnNjcHkoKSB0byBpbnN0ZWFkIG9mIHN0cm5jcHkoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2BS1jmRr028047
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63AB9FD5.000 by FangMail milter!
+X-FangMail-Envelope: 1672191957/4NhZ9d6Rw2z8R039/63AB9FD5.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<yang.yang29@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63AB9FD5.000/4NhZ9d6Rw2z8R039
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-commit 473be51142ad ("thermal: int340x: processor_thermal: Add RFIM
-driver")'
-added rfi_restriction_data_rate_base string, mmio details and
-documentation, but missed adding attribute to sysfs.
+From: Xu Panda <xu.panda@zte.com.cn>
 
-Add missing sysfs attribute.
+The implementation of strscpy() is more robust and safer.
+That's now the recommended way to copy NUL-terminated strings.
 
-Fixes: 473be51142ad ("thermal: int340x: processor_thermal: Add RFIM driver")
-Cc: stable@vger.kernel.org # v5.11+
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Signed-off-by: Xu Panda <xu.panda@zte.com.cn>
+Signed-off-by: Yang Yang <yang.yang29@zte.com>
 ---
- .../thermal/intel/int340x_thermal/processor_thermal_rfim.c    | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/thermal/armada_thermal.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-index 8c42e7662033..92ed1213fe37 100644
---- a/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-+++ b/drivers/thermal/intel/int340x_thermal/processor_thermal_rfim.c
-@@ -172,6 +172,7 @@ static const struct attribute_group fivr_attribute_group = {
- RFIM_SHOW(rfi_restriction_run_busy, 1)
- RFIM_SHOW(rfi_restriction_err_code, 1)
- RFIM_SHOW(rfi_restriction_data_rate, 1)
-+RFIM_SHOW(rfi_restriction_data_rate_base, 1)
- RFIM_SHOW(ddr_data_rate_point_0, 1)
- RFIM_SHOW(ddr_data_rate_point_1, 1)
- RFIM_SHOW(ddr_data_rate_point_2, 1)
-@@ -181,11 +182,13 @@ RFIM_SHOW(rfi_disable, 1)
- RFIM_STORE(rfi_restriction_run_busy, 1)
- RFIM_STORE(rfi_restriction_err_code, 1)
- RFIM_STORE(rfi_restriction_data_rate, 1)
-+RFIM_STORE(rfi_restriction_data_rate_base, 1)
- RFIM_STORE(rfi_disable, 1)
- 
- static DEVICE_ATTR_RW(rfi_restriction_run_busy);
- static DEVICE_ATTR_RW(rfi_restriction_err_code);
- static DEVICE_ATTR_RW(rfi_restriction_data_rate);
-+static DEVICE_ATTR_RW(rfi_restriction_data_rate_base);
- static DEVICE_ATTR_RO(ddr_data_rate_point_0);
- static DEVICE_ATTR_RO(ddr_data_rate_point_1);
- static DEVICE_ATTR_RO(ddr_data_rate_point_2);
-@@ -248,6 +251,7 @@ static struct attribute *dvfs_attrs[] = {
- 	&dev_attr_rfi_restriction_run_busy.attr,
- 	&dev_attr_rfi_restriction_err_code.attr,
- 	&dev_attr_rfi_restriction_data_rate.attr,
-+	&dev_attr_rfi_restriction_data_rate_base.attr,
- 	&dev_attr_ddr_data_rate_point_0.attr,
- 	&dev_attr_ddr_data_rate_point_1.attr,
- 	&dev_attr_ddr_data_rate_point_2.attr,
+diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
+index 52d63b3997fe..e06a0468d95d 100644
+--- a/drivers/thermal/armada_thermal.c
++++ b/drivers/thermal/armada_thermal.c
+@@ -761,8 +761,7 @@ static void armada_set_sane_name(struct platform_device *pdev,
+ 	}
+
+ 	/* Save the name locally */
+-	strncpy(priv->zone_name, name, THERMAL_NAME_LENGTH - 1);
+-	priv->zone_name[THERMAL_NAME_LENGTH - 1] = '\0';
++	strscpy(priv->zone_name, name, THERMAL_NAME_LENGTH);
+
+ 	/* Then check there are no '-' or hwmon core will complain */
+ 	do {
 -- 
-2.31.1
-
+2.15.2
