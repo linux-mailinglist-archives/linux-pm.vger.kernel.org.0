@@ -2,55 +2,63 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241D765890B
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Dec 2022 04:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A1A658A92
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Dec 2022 09:35:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233093AbiL2DBp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 28 Dec 2022 22:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
+        id S233209AbiL2Ifu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Dec 2022 03:35:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233104AbiL2DBb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 28 Dec 2022 22:01:31 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D4E13E15
-        for <linux-pm@vger.kernel.org>; Wed, 28 Dec 2022 19:01:25 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id z26so25912619lfu.8
-        for <linux-pm@vger.kernel.org>; Wed, 28 Dec 2022 19:01:25 -0800 (PST)
+        with ESMTP id S233208AbiL2Ifs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Dec 2022 03:35:48 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C68B2BDE
+        for <linux-pm@vger.kernel.org>; Thu, 29 Dec 2022 00:35:47 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id p36so26618750lfa.12
+        for <linux-pm@vger.kernel.org>; Thu, 29 Dec 2022 00:35:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vOXCojF6nMUqcnzqXxwpAmyJSgWY8gTmzuaLk5ZSLYc=;
-        b=H1EaOKzRy/Jxn8G2Yr8NF7Cp1/b/ecLkf9nW9Yep35p38f8xZmZ3BuKKW0bKm2QUMk
-         fIvuCmTKyDV5yP+5fW3hlrk+yJ8ghqrvwX2Kmp/cgpndH0nHPzSdWmrlwBYGU90Lz11u
-         7G8VDQXtZa933rpStVfu2svs57HLCmT6nOzWUyo7e0BLVmaYeL70/3FqAWoZizc1pGSD
-         Gag1E9OZQ7SMeIAIjGDpus2dFV3khu+D40T3vfsjY8Nrk2GJ6qufKNnI5/KwC5sOSf8y
-         6P9awTWWPvSeGzRt6kzZr7QNwe9V47KEokEVQDJLkYW+MZ0ApzHuQ1fgWK0e/EHMfNyk
-         OGxw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nn+L7ZFW/RK3/kCOolsV87i3HVKdOq4YpEDAmCcTxBM=;
+        b=UgJuilLIQDUhAmJ6TlExHb682enSnsoybnVOxhzesUJ473aemV7pUT7ZOuvdzKt991
+         Ng0r5nSA9aMFYBrQ7bfyJGkFcixVHevpJgYRTWr8uknKzRa21ljLaayNvdyFuWPgkkYn
+         sHS8BNcfFxz9N9ZNHFvRAB1epi97g3pniYBu7O9WxFETtYp0hB+x4LmdevPDKoJO25VO
+         yFRgL5KxqS7imE53ybKT/4wNwLPjRlWZmyqRvQiaq/8nuEEd97EQTKvWgW/f3tLPs5+D
+         Jg0312reonBJkcjYr5mhlCDN0CgOSd3AhqYhS8SXwngBrqIAWABey7S7cqypf/ZEKZF3
+         +XFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vOXCojF6nMUqcnzqXxwpAmyJSgWY8gTmzuaLk5ZSLYc=;
-        b=at7/ff6EBgId3F37t7HqX4IcOPCVBn44YD0EeIAiJxsnHOejkmZSpvFxcUiS7mSTcY
-         qrASyoi7eIsqRGLL8MgQkW6SgTbEWrVOTRAIcUWXAgF0yqykql5Q2dUTsWlZl0y0PiQA
-         L+zBh+bVAsGpzWk+tXtJAlirL8Yen5kQd5J2xNVGKy2rV8Tl4rtFj/UX/IUT+yqofyiy
-         RPXMx1VYqY5vEhPYJVrOiDD7CwnOOFVV2R5etRy/MWN0iYgkDjxrvPG6VE0uLhztzCos
-         /odNSEEk/qcfe19JoQaiyM17Fs7LfqOyTxR9WqBfF2XtJfMHtayUqn4acp8t5ixsxi8S
-         2ezg==
-X-Gm-Message-State: AFqh2kpxlu9S8/zUSVaAt61hESLQja4387tXhA9n9bSY/IyNtVR6azvS
-        GIU3vv9RJx1oBS1dEczOC7QzMA==
-X-Google-Smtp-Source: AMrXdXsUTACC7UrSpRyosww7bvX9J3AINUCVm60231BThj02TmLcwp+bOoe6DW1Kg7bfV2r3sLx9dg==
-X-Received: by 2002:a05:6512:4005:b0:4b5:9183:5ad0 with SMTP id br5-20020a056512400500b004b591835ad0mr10050207lfb.63.1672282884658;
-        Wed, 28 Dec 2022 19:01:24 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id b11-20020a056512024b00b004b57277474esm2883070lfo.106.2022.12.28.19.01.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Dec 2022 19:01:24 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nn+L7ZFW/RK3/kCOolsV87i3HVKdOq4YpEDAmCcTxBM=;
+        b=Iv8Ja7b3t2KRvURLXXMBhbHjYU9iqr1ofDh88rD+yztRjOEdnjptkxHdgSXhUT7pHu
+         C2nX+iIZbzLG76FcCkm8ak36JNJ3haJf7Y8CE3f2A4rSkbbemMkUR/Nfj6d4QQNO0m7w
+         nA2nNLJVS3rZF6rpY8ejA8SFmm02TPUCQ1KzVDLu6GVeUXAsPPlReckZhkp8NJU9Oh/5
+         chVxRh862JNwecgvQ+XkU5qMuojYep5B5EK1yYf4TKa3XeNsATlcJLzcqIDegRN8CNkS
+         CqHCXAzPNJnxSOtxOW5SL6FXcO9uqlTrfz3lIEbLDJCOLSqBeyIxai11EbSrNndHncxE
+         CIOg==
+X-Gm-Message-State: AFqh2krqgqK99fAyHTfUxhJUxwZFepmz4HO8ZvYLlwH81e7TduOYiVO7
+        vx1nV+3EUmIXKZMPjMGiuxEUPA==
+X-Google-Smtp-Source: AMrXdXsenEXFrzEM+P6NXUEyIR8Q04dG1lJhUB27Nv56yKOGvZGysmx5i31pwnnDdK8i0WWOkNWlmw==
+X-Received: by 2002:ac2:5318:0:b0:4b5:7720:5fe4 with SMTP id c24-20020ac25318000000b004b577205fe4mr8365186lfh.67.1672302945497;
+        Thu, 29 Dec 2022 00:35:45 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id o6-20020ac25e26000000b004b01305732bsm2977571lfg.216.2022.12.29.00.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Dec 2022 00:35:45 -0800 (PST)
+Message-ID: <ef9d5f72-e39a-e32c-5d7d-4a6ee57101aa@linaro.org>
+Date:   Thu, 29 Dec 2022 09:35:43 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v5 02/20] dt-bindings: thermal: tsens: support per-sensor
+ calibration cells
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -60,367 +68,97 @@ To:     Andy Gross <agross@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Zhang Rui <rui.zhang@intel.com>
-Cc:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         Shawn Guo <shawn.guo@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org
-Subject: [PATCH v5 20/20] ARM: dts: qcom-apq8084: specify per-sensor calibration cells
-Date:   Thu, 29 Dec 2022 05:01:06 +0200
-Message-Id: <20221229030106.3303205-21-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20221229030106.3303205-1-dmitry.baryshkov@linaro.org>
 References: <20221229030106.3303205-1-dmitry.baryshkov@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20221229030106.3303205-3-dmitry.baryshkov@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221229030106.3303205-3-dmitry.baryshkov@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Specify pre-parsed per-sensor calibration nvmem cells in the tsens
-device node rather than parsing the whole data blob in the driver.
+On 29/12/2022 04:00, Dmitry Baryshkov wrote:
+> Allow specifying the exact calibration mode and calibration data as nvmem
+> cells, rather than specifying just a single calibration data blob.
+> 
+> Note, unlike the vendor kernel the calibration data uses hw_ids rather
+> than software sensor indices (to match actual tsens usage in
+> thermal zones).
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  .../bindings/thermal/qcom-tsens.yaml          | 95 +++++++++++++++++--
+>  1 file changed, 85 insertions(+), 10 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> index f3660af0b3bf..4bb689f4602d 100644
+> --- a/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/qcom-tsens.yaml
+> @@ -81,18 +81,63 @@ properties:
+>      maxItems: 2
+>  
+>    nvmem-cells:
+> -    minItems: 1
+> -    maxItems: 2
+> -    description:
+> -      Reference to an nvmem node for the calibration data
+> +    oneOf:
+> +      - minItems: 1
+> +        maxItems: 2
+> +        description:
+> +          Reference to an nvmem node for the calibration data
+> +      - minItems: 5
+> +        maxItems: 35
+> +        description: |
+> +          Reference to nvmem cells for the calibration mode, two calibration
+> +          bases and two cells per each sensor
+>  
+>    nvmem-cell-names:
+> -    minItems: 1
+> -    items:
+> -      - const: calib
+> -      - enum:
+> -          - calib_backup
+> -          - calib_sel
+> +    oneOf:
+> +      - minItems: 1
+> +        items:
+> +          - const: calib
+> +          - enum:
+> +              - calib_backup
+> +              - calib_sel
+> +      - minItems: 5
+> +        items:
+> +          enum:
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm/boot/dts/qcom-apq8084.dtsi | 313 +++++++++++++++++++++++++++-
- 1 file changed, 307 insertions(+), 6 deletions(-)
+This should not be an enum but a list of const... unless "holes" are
+expected (e.g. s0_p1 and s5_p2, without ones in between).
 
-diff --git a/arch/arm/boot/dts/qcom-apq8084.dtsi b/arch/arm/boot/dts/qcom-apq8084.dtsi
-index fe30abfff90a..22e56ee82a20 100644
---- a/arch/arm/boot/dts/qcom-apq8084.dtsi
-+++ b/arch/arm/boot/dts/qcom-apq8084.dtsi
-@@ -249,11 +249,260 @@ qfprom: qfprom@fc4bc000 {
- 			reg = <0xfc4bc000 0x1000>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
--			tsens_calib: calib@d0 {
--				reg = <0xd0 0x18>;
-+
-+			tsens_base1: base1@d0 {
-+				reg = <0xd0 0x1>;
-+				bits = <0 8>;
-+			};
-+
-+			tsens_s0_p1: s0-p1@d1 {
-+				reg = <0xd1 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s1_p1: s1-p1@d2 {
-+				reg = <0xd1 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s2_p1: s2-p1@d2 {
-+				reg = <0xd2 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s3_p1: s3-p1@d3 {
-+				reg = <0xd3 0x1>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s4_p1: s4-p1@d4 {
-+				reg = <0xd4 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s5_p1: s5-p1@d4 {
-+				reg = <0xd4 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s6_p1: s6-p1@d5 {
-+				reg = <0xd5 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s7_p1: s7-p1@d6 {
-+				reg = <0xd6 0x1>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s8_p1: s8-p1@d7 {
-+				reg = <0xd7 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_mode: mode@d7 {
-+				reg = <0xd7 0x1>;
-+				bits = <6 2>;
-+			};
-+
-+			tsens_s9_p1: s9-p1@d8 {
-+				reg = <0xd8 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s10_p1: s10_p1@d8 {
-+				reg = <0xd8 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_base2: base2@d9 {
-+				reg = <0xd9 0x2>;
-+				bits = <4 8>;
-+			};
-+
-+			tsens_s0_p2: s0-p2@da {
-+				reg = <0xda 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s1_p2: s1-p2@db {
-+				reg = <0xdb 0x1>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s2_p2: s2-p2@dc {
-+				reg = <0xdc 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s3_p2: s3-p2@dc {
-+				reg = <0xdc 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s4_p2: s4-p2@dd {
-+				reg = <0xdd 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s5_p2: s5-p2@de {
-+				reg = <0xde 0x2>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s6_p2: s6-p2@df {
-+				reg = <0xdf 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s7_p2: s7-p2@e0 {
-+				reg = <0xe0 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s8_p2: s8-p2@e0 {
-+				reg = <0xe0 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s9_p2: s9-p2@e1 {
-+				reg = <0xe1 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s10_p2: s10_p2@e2 {
-+				reg = <0xe2 0x2>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s5_p2_backup: s5-p2_backup@e3 {
-+				reg = <0xe3 0x2>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_mode_backup: mode_backup@e3 {
-+				reg = <0xe3 0x1>;
-+				bits = <6 2>;
-+			};
-+
-+			tsens_s6_p2_backup: s6-p2_backup@e4 {
-+				reg = <0xe4 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s7_p2_backup: s7-p2_backup@e4 {
-+				reg = <0xe4 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s8_p2_backup: s8-p2_backup@e5 {
-+				reg = <0xe5 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s9_p2_backup: s9-p2_backup@e6 {
-+				reg = <0xe6 0x2>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s10_p2_backup: s10_p2_backup@e7 {
-+				reg = <0xe7 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_base1_backup: base1_backup@440 {
-+				reg = <0x440 0x1>;
-+				bits = <0 8>;
-+			};
-+
-+			tsens_s0_p1_backup: s0-p1_backup@441 {
-+				reg = <0x441 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s1_p1_backup: s1-p1_backup@442 {
-+				reg = <0x441 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s2_p1_backup: s2-p1_backup@442 {
-+				reg = <0x442 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s3_p1_backup: s3-p1_backup@443 {
-+				reg = <0x443 0x1>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s4_p1_backup: s4-p1_backup@444 {
-+				reg = <0x444 0x1>;
-+				bits = <0 6>;
- 			};
--			tsens_backup: backup@440 {
--				reg = <0x440 0x10>;
-+
-+			tsens_s5_p1_backup: s5-p1_backup@444 {
-+				reg = <0x444 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s6_p1_backup: s6-p1_backup@445 {
-+				reg = <0x445 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s7_p1_backup: s7-p1_backup@446 {
-+				reg = <0x446 0x1>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_use_backup: use_backup@447 {
-+				reg = <0x447 0x1>;
-+				bits = <5 3>;
-+			};
-+
-+			tsens_s8_p1_backup: s8-p1_backup@448 {
-+				reg = <0x448 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s9_p1_backup: s9-p1_backup@448 {
-+				reg = <0x448 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s10_p1_backup: s10_p1_backup@449 {
-+				reg = <0x449 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_base2_backup: base2_backup@44a {
-+				reg = <0x44a 0x2>;
-+				bits = <2 8>;
-+			};
-+
-+			tsens_s0_p2_backup: s0-p2_backup@44b {
-+				reg = <0x44b 0x3>;
-+				bits = <2 6>;
-+			};
-+
-+			tsens_s1_p2_backup: s1-p2_backup@44c {
-+				reg = <0x44c 0x1>;
-+				bits = <0 6>;
-+			};
-+
-+			tsens_s2_p2_backup: s2-p2_backup@44c {
-+				reg = <0x44c 0x2>;
-+				bits = <6 6>;
-+			};
-+
-+			tsens_s3_p2_backup: s3-p2_backup@44d {
-+				reg = <0x44d 0x2>;
-+				bits = <4 6>;
-+			};
-+
-+			tsens_s4_p2_backup: s4-p2_backup@44e {
-+				reg = <0x44e 0x1>;
-+				bits = <2 6>;
- 			};
- 		};
- 
-@@ -261,8 +510,60 @@ tsens: thermal-sensor@fc4a8000 {
- 			compatible = "qcom,msm8974-tsens", "qcom,tsens-v0_1";
- 			reg = <0xfc4a9000 0x1000>, /* TM */
- 			      <0xfc4a8000 0x1000>; /* SROT */
--			nvmem-cells = <&tsens_calib>, <&tsens_backup>;
--			nvmem-cell-names = "calib", "calib_backup";
-+			nvmem-cells = <&tsens_mode>,
-+				      <&tsens_base1>, <&tsens_base2>,
-+				      <&tsens_s0_p1>, <&tsens_s0_p2>,
-+				      <&tsens_s1_p1>, <&tsens_s1_p2>,
-+				      <&tsens_s2_p1>, <&tsens_s2_p2>,
-+				      <&tsens_s3_p1>, <&tsens_s3_p2>,
-+				      <&tsens_s4_p1>, <&tsens_s4_p2>,
-+				      <&tsens_s5_p1>, <&tsens_s5_p2>,
-+				      <&tsens_s6_p1>, <&tsens_s6_p2>,
-+				      <&tsens_s7_p1>, <&tsens_s7_p2>,
-+				      <&tsens_s8_p1>, <&tsens_s8_p2>,
-+				      <&tsens_s9_p1>, <&tsens_s9_p2>,
-+				      <&tsens_s10_p1>, <&tsens_s10_p2>,
-+				      <&tsens_use_backup>,
-+				      <&tsens_mode_backup>,
-+				      <&tsens_base1_backup>, <&tsens_base2_backup>,
-+				      <&tsens_s0_p1_backup>, <&tsens_s0_p2_backup>,
-+				      <&tsens_s1_p1_backup>, <&tsens_s1_p2_backup>,
-+				      <&tsens_s2_p1_backup>, <&tsens_s2_p2_backup>,
-+				      <&tsens_s3_p1_backup>, <&tsens_s3_p2_backup>,
-+				      <&tsens_s4_p1_backup>, <&tsens_s4_p2_backup>,
-+				      <&tsens_s5_p1_backup>, <&tsens_s5_p2_backup>,
-+				      <&tsens_s6_p1_backup>, <&tsens_s6_p2_backup>,
-+				      <&tsens_s7_p1_backup>, <&tsens_s7_p2_backup>,
-+				      <&tsens_s8_p1_backup>, <&tsens_s8_p2_backup>,
-+				      <&tsens_s9_p1_backup>, <&tsens_s9_p2_backup>,
-+				      <&tsens_s10_p1_backup>, <&tsens_s10_p2_backup>;
-+			nvmem-cell-names = "mode",
-+					   "base1", "base2",
-+					   "s0_p1", "s0_p2",
-+					   "s1_p1", "s1_p2",
-+					   "s2_p1", "s2_p2",
-+					   "s3_p1", "s3_p2",
-+					   "s4_p1", "s4_p2",
-+					   "s5_p1", "s5_p2",
-+					   "s6_p1", "s6_p2",
-+					   "s7_p1", "s7_p2",
-+					   "s8_p1", "s8_p2",
-+					   "s9_p1", "s9_p2",
-+					   "s10_p1", "s10_p2",
-+					   "use_backup",
-+					   "mode_backup",
-+					   "base1_backup", "base2_backup",
-+					   "s0_p1_backup", "s0_p2_backup",
-+					   "s1_p1_backup", "s1_p2_backup",
-+					   "s2_p1_backup", "s2_p2_backup",
-+					   "s3_p1_backup", "s3_p2_backup",
-+					   "s4_p1_backup", "s4_p2_backup",
-+					   "s5_p1_backup", "s5_p2_backup",
-+					   "s6_p1_backup", "s6_p2_backup",
-+					   "s7_p1_backup", "s7_p2_backup",
-+					   "s8_p1_backup", "s8_p2_backup",
-+					   "s9_p1_backup", "s9_p2_backup",
-+					   "s10_p1_backup", "s10_p2_backup";
- 			#qcom,sensors = <11>;
- 			interrupts = <GIC_SPI 184 IRQ_TYPE_LEVEL_HIGH>;
- 			interrupt-names = "uplow";
--- 
-2.39.0
+> +            - mode
+> +            - base1
+> +            - base2
+> +            - s0_p1
+> +            - s0_p2
+> +            - s1_p1
+> +            - s1_p2
+> +            - s2_p1
+> +            - s2_p2
+> +            - s3_p1
+> +            - s3_p2
+> +            - s4_p1
+
+
+Best regards,
+Krzysztof
 
