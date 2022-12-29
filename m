@@ -2,169 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C85658E6D
-	for <lists+linux-pm@lfdr.de>; Thu, 29 Dec 2022 16:49:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90FED658F80
+	for <lists+linux-pm@lfdr.de>; Thu, 29 Dec 2022 18:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiL2PtU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Dec 2022 10:49:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39882 "EHLO
+        id S230369AbiL2RUZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Dec 2022 12:20:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiL2PtT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Dec 2022 10:49:19 -0500
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5596713E26
-        for <linux-pm@vger.kernel.org>; Thu, 29 Dec 2022 07:49:17 -0800 (PST)
-Received: by mail-wm1-x332.google.com with SMTP id bi26-20020a05600c3d9a00b003d3404a89faso11533199wmb.1
-        for <linux-pm@vger.kernel.org>; Thu, 29 Dec 2022 07:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OcHD+68JKivFTNKn8cO/CBcZZAARu6aqYEBF3jaYXXY=;
-        b=wov4t/Dp6UbuGwqLvgc4vMkRfInBScyFz5VfMRxkFh9qxszC85YMpmSHny1gXPrVsS
-         g32f4reKOVtWQMJ8tXOoxbkRbjZCZ1m5SUTFsEeNVyo3qe4fzbUv7mzyONTfBVWN/ygF
-         VCv0lEJwgaS8OQpQtH1AmoCHEbO8WSsmtXkJwQMKbTVyQhOUnzPNh5aURydy23AIStHq
-         7IW6dSqOnW/cLTthbtNHuMUuvGcSnsN4MUGA1Z6MgEXnnWMIIXtkOr33tpHLHB4icRu/
-         EKo8oFJTgXBFfNfzRgvO95/Kqn05D0Qao4eQAzZ4kyo7nkuPJ1BIRmhp7+wC87dbet08
-         SVKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OcHD+68JKivFTNKn8cO/CBcZZAARu6aqYEBF3jaYXXY=;
-        b=ceaf/DMmgppXGxNedSv/fLWGp4d4vcJnvnWU6yespys4ahh9JftlEdpGpAc5MMzuTO
-         /NsKMhyTO8zu+zGqnZ4dEeJ5Xx+AT4jKHaC+QbsYxvkz0LX95BYWUqJiPKgf96CwC+Uo
-         rD1TcE/W9uOYo2+O19gXDRSTeeALP6sAOJIymdk+lGvp0kFPCPhO0tuRnrVB766fLLyG
-         pA2PfnyXw1yROJswVVOZTZYgAAX/KsSzD8uliF66idt36MG/yahosR8qFLC5VcRSSJ0W
-         T8nw0AKj9ZX6ScSdlk8awogUcTppXURvJMcjLMW41L90hl8PHjAKdqusoN7lRzl2OHu2
-         yFlQ==
-X-Gm-Message-State: AFqh2kpDWFyy2xDlxNhD0zplkIg3cQhoF1wGWmkk8sKs9OBvJQvL2IpI
-        r460quKXyKcEgR+sMQHBPzDGXg==
-X-Google-Smtp-Source: AMrXdXtGRRh5vsIthQvg5P5kw1KkeD+SE+4wsU583Cr1cJtcHYeGo9tuCyPGsdjApkph9RNzbdVSaQ==
-X-Received: by 2002:a05:600c:3b02:b0:3c7:18:b339 with SMTP id m2-20020a05600c3b0200b003c70018b339mr25804533wms.37.1672328955770;
-        Thu, 29 Dec 2022 07:49:15 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id d10-20020a05600c3aca00b003d34faca949sm24381530wms.39.2022.12.29.07.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Dec 2022 07:49:15 -0800 (PST)
-Message-ID: <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
-Date:   Thu, 29 Dec 2022 16:49:13 +0100
+        with ESMTP id S229615AbiL2RUY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Dec 2022 12:20:24 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1FCE09;
+        Thu, 29 Dec 2022 09:20:23 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CA01561838;
+        Thu, 29 Dec 2022 17:20:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2CDC433EF;
+        Thu, 29 Dec 2022 17:20:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672334422;
+        bh=ax//aKS4OFvOYlenqfGxR9Ia+jouRNwGuuCUW0WKpPM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MdiiEjQKJJZhFLhOPyM0YakToLJeXtOSCqGYp+7Ky61v1vg+u0KBd1+YTz1WHfaZr
+         t1k7ZW5clKqa7Ive3BcdDHv1RzX3UY0TFPBHmrw2OQ/YTfXuroo1viF8yt4RL3Olph
+         k0eDd41tSXGJhhiWJed+MubtrB2WtMx7sjnfPJ3prYrev4eBPoU7jZbRtR51AiDd2Q
+         UFYUUU6IWFqpjhRlQ/Cr5Hvwu/j9U+ZCSqgb958fGnlH9+x4hIGzsVRWsSnJe2guMv
+         vrHCK42KFvw+T40kLl4qaT68ul+9GMpLOXj4T5MpZpAwmDr5HUnlPPTrBmT91zdoYW
+         wCtSY2qbYw78g==
+Message-ID: <b5bd2314-e51e-94c8-c4a8-2426950160ba@kernel.org>
+Date:   Thu, 29 Dec 2022 19:20:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
+Subject: Re: [PATCH v5 1/2] dt-bindings: interconnect: Add Qualcomm SM8550
+To:     Bjorn Andersson <andersson@kernel.org>,
+        Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221202232054.2666830-1-abel.vesa@linaro.org>
+ <20221202232054.2666830-2-abel.vesa@linaro.org>
+ <20221205221425.c6eiserur27clirp@builder.lan>
+ <20221228185700.4tyziwqiiopafstl@builder.lan>
+Content-Language: en-US
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <20221228185700.4tyziwqiiopafstl@builder.lan>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 06/12/2022 10:18, Amjad Ouled-Ameur wrote:
-> Hi Daniel,
-> On Mon Dec 5, 2022 at 8:39 PM CET, Daniel Lezcano wrote:
->>
->> Hi Amjad,
->>
->>
->> On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
->>
->> [ ... ]
->>
->>>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>>>     
->>>>>     	platform_set_drvdata(pdev, mt);
->>>>>     
->>>>> -	tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>>>> -					      &mtk_thermal_ops);
->>>>> -	if (IS_ERR(tzdev)) {
->>>>> -		ret = PTR_ERR(tzdev);
->>>>> -		goto err_disable_clk_peri_therm;
->>>>> +	for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>>>> +		tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>>>> +		if (!tz)
->>>>> +			return -ENOMEM;
->>>>> +
->>>>> +		tz->mt = mt;
->>>>> +		tz->id = i;
->>>>> +
->>>>> +		tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>>>> +							     &mtk_thermal_ops :
->>>>> +							     &mtk_thermal_sensor_ops);
->>>>
->>>> Here you use again the aggregation
->>> I addressed this concern in V6, could you please take a look and let me
->>> know what you think [0].
+On 28.12.22 20:57, Bjorn Andersson wrote:
+> On Mon, Dec 05, 2022 at 04:14:25PM -0600, Bjorn Andersson wrote:
+>> On Sat, Dec 03, 2022 at 01:20:53AM +0200, Abel Vesa wrote:
+>>> The Qualcomm SM8550 SoC has several bus fabrics that could be
+>>> controlled and tuned dynamically according to the bandwidth demand.
 >>>
->>> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
+>>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 >>
->> May I misunderstanding but AFAICS, this patch is setting the
->> mtk_thermal_ops if the sensor id is zero. The get_temp is computing the
->> max temperature in this ops which is what we don't want to do.
-> 
-> Correct, but I think that is out of scope of this patchset, as the current
-> driver already uses mtk_thermal_ops for sensor 0. The focus of this patchset
-> is to add support for the other sensors.
-> 
-> Besides, what do you suggest as a clean implementation if the current one
-> no longer meets thermal core requirements ?
-
-IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 
-Little, right ?
-
-If it is the case, then a thermal zone per sensor with the trip points 
-and a cooling device for each of them.
-
-The two thermal zones for the big will share the same cooling device. 
-The little thermal zone will have its own cooling device.
-
-If there is the GPU, then its own cooling device also with devfreq.
-
-
->> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>> @Georgi, would you mind picking this patch on its own, create a git tag
+>> and share that tag with me (and then merge the tag into your tree...),
+>> so that I can merge the dts patches ontop?
 >>
->> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->> <http://twitter.com/#!/linaroorg> Twitter |
->> <http://www.linaro.org/linaro-blog/> Blog
 > 
+> dt-bindings/clock/qcom,sm8550-gcc.h has now made it into v6.2-rc1, so
+> you should be able to merge this now,Georgi.
+> 
+> In order for me to pick the dts patches I still would need a immutable
+> branch/tag.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Hi Bjorn, here is a branch:
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git/log/?h=icc-sm8550-immutable
 
+Thanks,
+Georgi
