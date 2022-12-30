@@ -2,207 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB555659A8E
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 17:34:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96D6D659A9A
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 17:35:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235236AbiL3Qeu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Dec 2022 11:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
+        id S235242AbiL3QfI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Dec 2022 11:35:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235176AbiL3Qer (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Dec 2022 11:34:47 -0500
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F34521C41E;
-        Fri, 30 Dec 2022 08:34:42 -0800 (PST)
-Received: by mail-io1-f49.google.com with SMTP id n63so11335934iod.7;
-        Fri, 30 Dec 2022 08:34:42 -0800 (PST)
+        with ESMTP id S235240AbiL3Qey (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Dec 2022 11:34:54 -0500
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCF21C413;
+        Fri, 30 Dec 2022 08:34:52 -0800 (PST)
+Received: by mail-io1-f46.google.com with SMTP id q190so11329824iod.10;
+        Fri, 30 Dec 2022 08:34:52 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=IVMuYU/vHF21K2lU7GvEDrbozOGbCPgQ7TCMzyTk+uk=;
-        b=wZi7Q2nf//sCl9k7VltUioqd28xzWcNk8syJXCa3KCv2MxYk/9pkxx37QGwuARna+N
-         udX1q0v/B7SSN0UjnfCOQfqTQMXGRcZReLi/GsITP42FyDt1Hnx9C5IkNnnHZPwJZTNN
-         JZWIaZoPAMgHMvILYlzXr+yVSpIYWf+sTJfk1xgnSzGg1QwGo0P9YLqonqHZ8n8ilxNl
-         jveZsxBlDoLN+kn+vBkYn3V6rjEmTT34DcystnSfh2Sl1okcbfRvPUWgYzTjIS8PSvMf
-         or7+iwPRFg4JOXSXVfsru7Wjw/wgaEoY+ywOSZRLyFAWTiM3SNU/nzWt+CIQx5zLK5PZ
-         2NQQ==
-X-Gm-Message-State: AFqh2ko88Hily23todooZdoMZ5komLWLMI6dKZ6UcFMgyCBLs341Eyxw
-        7KXeFlcHzmJ0KBcHeq/Jk/hlgLnOqA==
-X-Google-Smtp-Source: AMrXdXt0zJP+koONqfFZC0NfkxNdtKlpaZUPY1hKOqMFpfmsDx1palO47uHfosnYAYiLZTtyJW2w1w==
-X-Received: by 2002:a05:6602:4189:b0:6f1:f493:7240 with SMTP id bx9-20020a056602418900b006f1f4937240mr23844642iob.3.1672418082443;
-        Fri, 30 Dec 2022 08:34:42 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b20-20020a026f54000000b003987df8bccdsm7045959jae.43.2022.12.30.08.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Dec 2022 08:34:42 -0800 (PST)
-Received: (nullmailer pid 1935061 invoked by uid 1000);
-        Fri, 30 Dec 2022 16:34:28 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JZa9jFc0rYlW/9i71Z6myIIyNiNlltKYl5kYSw6SvQs=;
+        b=W/K5zN95VhjSS6SB5s/k8+eVWfqx2bEOG940beJ1j469HdaGZ78WAxR2IHF5I+/FOf
+         /K5GkFDiaYuNf2JmeUX9gAnvEh72nzlO5LHqkOFup8RkXXYgxcb37cpNhjT1odHxzqkL
+         d0ikjRki135XKek9oGA3+3all4tsrgE7L5JRFFRYqOoM/vJqaPv6A291o45rUkGUaGP0
+         i4gBuT8EPoYNAGJpVFKz4AvovDEZ7tLzO3z4fJZDzhkPAFDzScOkKAI7NVCh5f6+Z+jV
+         QKGnirTQjQxqnBIX/Nkj4apuKMJJVDg1LAI0Wtc4F2iY69ZbpwkiDdV6uQBOtvTgjCox
+         2blw==
+X-Gm-Message-State: AFqh2koknlxMvnDDVPauxd9n0/kRq5tyKu3J1CEZ0/Bc3XblsJuDLFK3
+        Suzd4kv6K+NQz8QDmarFT2vQJkdhETNcl6mlcXZ8beoKmOc=
+X-Google-Smtp-Source: AMrXdXvEShAMrQSZAI4E82NI7DN4CJwEfGZ2mIXmEQ1/N4IDPgOFOJvUM/AjG3AhxajWllnwwmc0EkUyGkyFsXB+TJQ=
+X-Received: by 2002:a5e:8808:0:b0:6e2:bed4:c2d5 with SMTP id
+ l8-20020a5e8808000000b006e2bed4c2d5mr1850046ioj.177.1672418092227; Fri, 30
+ Dec 2022 08:34:52 -0800 (PST)
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Richard Acayan <mailingradian@gmail.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-In-Reply-To: <20221230001442.369608-2-mailingradian@gmail.com>
-References: <20221230001442.369608-1-mailingradian@gmail.com>
- <20221230001442.369608-2-mailingradian@gmail.com>
-Message-Id: <167241775321.1928629.8586378707373499445.robh@kernel.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: interconnect: add sdm670 interconnects
-Date:   Fri, 30 Dec 2022 10:34:28 -0600
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Dec 2022 17:34:40 +0100
+Message-ID: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
+Subject: [GIT PULL] ACPI fixes for v6.2-rc2
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Hi Linus,
 
-On Thu, 29 Dec 2022 19:14:39 -0500, Richard Acayan wrote:
-> There are controllable interconnects on Snapdragon 670. Add the
-> compatible strings to the documentation and interconnect ID definitions.
-> 
-> The device tree header was generated by
-> linux-interconnect-driver-generator and the copyright year was changed.
-> 
-> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
-> ---
->  .../bindings/interconnect/qcom,rpmh.yaml      |   8 ++
->  .../interconnect/qcom,sdm670-rpmh.h           | 136 ++++++++++++++++++
->  2 files changed, 144 insertions(+)
->  create mode 100644 include/dt-bindings/interconnect/qcom,sdm670-rpmh.h
-> 
+Please pull from the tag
 
-Running 'make dtbs_check' with the schema in this patch gives the
-following warnings. Consider if they are expected or the schema is
-incorrect. These may not be new warnings.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ acpi-6.2-rc2
 
-Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-This will change in the future.
+with top-most commit 0948a9ef1d59d1bc7fae29f32058e463bbff4a6c
 
-Full log is available here: https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20221230001442.369608-2-mailingradian@gmail.com
+ Merge branches 'acpi-resource' and 'acpi-video'
+
+on top of commit 057b40f43ce429a02e793adf3cfbf2446a19a38e
+
+ Merge tag 'acpi-6.2-rc1-2' of
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm
+
+to receive ACPI fixes for 6.2-rc2.
+
+These are new ACPI IRQ override quirks, low-power S0 idle (S0ix) support
+adjustments and ACPI backlight handling fixes, mostly for platforms
+using AMD chips.
+
+Specifics:
+
+ - Add ACPI IRQ override quirks for Asus ExpertBook B2502, Lenovo
+   14ALC7, and XMG Core 15 (Hans de Goede, Adrian Freund,  Erik
+   Schumacher).
+
+ - Adjust ACPI video detection fallback path to prevent non-operational
+   ACPI backlight devices from being created on systems where the native
+   driver does not detect a suitable panel (Mario Limonciello).
+
+ - Fix Apple GMUX backlight detection (Hans de Goede).
+
+ - Add a low-power S0 idle (S0ix) handling quirk for HP Elitebook 865
+   and stop using AMD-specific low-power S0 idle code path for systems
+   with Rembrandt chips and newer (Mario Limonciello).
+
+Thanks!
 
 
-interconnect-0: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sm8450-hdk.dtb
-	arch/arm64/boot/dts/qcom/sm8450-qrd.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dtb
+---------------
 
-interconnect@16e0000: Unevaluated properties are not allowed ('clocks' was unexpected)
-	arch/arm64/boot/dts/qcom/sm8450-hdk.dtb
-	arch/arm64/boot/dts/qcom/sm8450-qrd.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dtb
+Adrian Freund (1):
+      ACPI: resource: do IRQ override on Lenovo 14ALC7
 
-interconnect@1700000: Unevaluated properties are not allowed ('clocks' was unexpected)
-	arch/arm64/boot/dts/qcom/sm8450-hdk.dtb
-	arch/arm64/boot/dts/qcom/sm8450-qrd.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dtb
+Erik Schumacher (1):
+      ACPI: resource: do IRQ override on XMG Core 15
 
-interconnect-1: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sm8450-hdk.dtb
-	arch/arm64/boot/dts/qcom/sm8450-qrd.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx223.dtb
-	arch/arm64/boot/dts/qcom/sm8450-sony-xperia-nagara-pdx224.dtb
+Hans de Goede (2):
+      ACPI: resource: Add Asus ExpertBook B2502 to Asus quirks
+      ACPI: video: Fix Apple GMUX backlight detection
 
-interconnect-aggre1-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
+Mario Limonciello (5):
+      ACPI: video: Allow GPU drivers to report no panels
+      drm/amd/display: Report to ACPI video if no panels were found
+      ACPI: video: Don't enable fallback path for creating ACPI
+backlight by default
+      ACPI: x86: s2idle: Force AMD GUID/_REV 2 on HP Elitebook 865
+      ACPI: x86: s2idle: Stop using AMD specific codepath for Rembrandt+
 
-interconnect-aggre2-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
+---------------
 
-interconnect-clk-virt: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-config-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-dc-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-gem-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-lpass-ag-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-mc-virt: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-	arch/arm/boot/dts/qcom-sdx65-mtp.dtb
-
-interconnect-mmss-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-nspa-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect-nspb-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
-interconnect: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sc7280-crd-r3.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-crd.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-herobrine-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r0.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie.dtb
-	arch/arm64/boot/dts/qcom/sc7280-herobrine-zombie-lte.dtb
-	arch/arm64/boot/dts/qcom/sc7280-idp2.dtb
-	arch/arm64/boot/dts/qcom/sc7280-idp.dtb
-
-interconnect-system-noc: 'reg' is a required property
-	arch/arm64/boot/dts/qcom/sa8295p-adp.dtb
-	arch/arm64/boot/dts/qcom/sa8540p-ride.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-crd.dtb
-	arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dtb
-
+ drivers/acpi/acpi_video.c                         | 17 +++--
+ drivers/acpi/resource.c                           | 32 ++++++++-
+ drivers/acpi/video_detect.c                       | 23 +++++-
+ drivers/acpi/x86/s2idle.c                         | 87 ++++-------------------
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c |  4 ++
+ include/acpi/video.h                              |  2 +
+ 6 files changed, 82 insertions(+), 83 deletions(-)
