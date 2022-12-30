@@ -2,52 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86D926593AB
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 01:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D72B96593AF
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 01:15:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234183AbiL3APx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 29 Dec 2022 19:15:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54930 "EHLO
+        id S234196AbiL3APy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 29 Dec 2022 19:15:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiL3APX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Dec 2022 19:15:23 -0500
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFE913D55;
-        Thu, 29 Dec 2022 16:15:22 -0800 (PST)
-Received: by mail-il1-x12a.google.com with SMTP id g2so7372548ila.4;
-        Thu, 29 Dec 2022 16:15:22 -0800 (PST)
+        with ESMTP id S234095AbiL3APZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 29 Dec 2022 19:15:25 -0500
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD6313D55;
+        Thu, 29 Dec 2022 16:15:24 -0800 (PST)
+Received: by mail-io1-xd2a.google.com with SMTP id b192so10433986iof.8;
+        Thu, 29 Dec 2022 16:15:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vgvoEEnyjKhsQK10130Jze9YY2KZ/Q9IY37GnBFEgKI=;
-        b=gNGRGSxl8V4wHDSPwtt4bphd8lyOKtJ62I6Ng6kLm+jQDhfbjWzgcaLBW1pZifh1PG
-         goFH83WAlXYiMYST4WESMUWO2jJBp1StIjbMxhYo4zSnyAiu42b/eI4mwiM5lbRcUP3o
-         HlQ1dzXGUh60H4y7wgq5RpptUKiX2HZ7FDHO9dqJAVGDddpaHTxFsa5kBXQ3nR9joLfy
-         TABo7umBHYqGX/N0fcgwG3yTy16kOHqKgz9O0xSyuSj8yMBsLWNziJwcoVK7g9vZEuLo
-         kN/lRXqpmLT67xBi8Hg8WHjl8Cf+hKSRmXnLQTtdyXo6ddaJ02ABEKbP/3tEh7QcdF+p
-         JHzQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=An/DHPOzYlA56mFl25ZWIQFNyLyQD8HjVPW/J3DhoM8=;
+        b=T0yK+mEbZdLur50AVO8FAVHDC0r+AG/tD32Izdz6VU0Xv/vBypEWrCXScKJCG5fUfk
+         q853XKoUNkrluZ/TJbIQJVRtgYPCCdacNlSfCVTg05WrrJlq/57p69UqjYp6JZefhUB9
+         78BscwJ0fBc2xmKfSa9Wjj7PhAhLhh6utGBaN+/IyIBatHyF04C0GTZLdXmGmXkU+5hq
+         ra6L8CW03Mao8nZ7BV82YT3WxvYk1mNfPT+0zbPSl0leROg2QzkuiOeY0xJ3SbWc8Ojz
+         t3kN+GnhVN6VeQZsHZPOF3Gw1hKkjzEuNK4OU7LoLp1Kl331V138MRXZBUjUMaKKyYY2
+         wgLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vgvoEEnyjKhsQK10130Jze9YY2KZ/Q9IY37GnBFEgKI=;
-        b=AO/IbvKl/J/N+KvBypKgx6xAyXrhNBZN0bDmrpl1tinTkDj7VeGS21zV4vp2Y6TEM7
-         QJxxLmYVEavG1xhH5T0r6TjIsKn59uRTiKYNczoTVqNpvErAHd27D7lsbsANX/mySy8p
-         M3LHRpkZF7FFUcOIggNdP2CccZd2sabS3gF8tAz+ssjT/6+UuH4PjTiY7WdGebXGW88B
-         Wo/NMhkEcm635QWVua2JRHasw6ESpKWaWkcu3vPNUi8gErsH7nXqvzEw6CGTAyuLiAg4
-         f8N4tSR6qcdDWdQa/3b5KuSY0dNeKkLLdmZt1BUqyWmVtiUVoYbmAIjQE9xZKBVpGfD1
-         R+Tw==
-X-Gm-Message-State: AFqh2kqq4UI/HouYiG/zchCB/neN4Fa7C35bfay8c8K26QcwYO2FEjY0
-        PsDHWYjTgV//nlVwjt02cOE=
-X-Google-Smtp-Source: AMrXdXu47pJ52bYyRnQiS09cn2wkVFPR3q8S55x0BzwGHbUPrR4BqtZZoU8EylarKxHLB1j1h9H76g==
-X-Received: by 2002:a05:6e02:1d91:b0:302:3883:e567 with SMTP id h17-20020a056e021d9100b003023883e567mr38620194ila.29.1672359322227;
-        Thu, 29 Dec 2022 16:15:22 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=An/DHPOzYlA56mFl25ZWIQFNyLyQD8HjVPW/J3DhoM8=;
+        b=Qaf/KebOdEWfeDwN0X6dzRmbxjZoX2TvhNiarbM77R+mv+rYwmB5ltx4HoaRNO6AXE
+         EQ3HTDsXEl34xyEPvmCF6eI757m8saAQo+gZsmyAnTH7tFdfs4QiWLFdeOrarbaYAMWJ
+         w6PW535Atkpbj0+Iio+jY0EjH2uVsW97dQC5pN+3ChskphJcFclGFigbOL5aIG6uw0Cg
+         gr81tfCCfA3ou/GELfzvesamRBueFwRNi3hsco7QltewVop+7FE+zQ4KjqfvvQTHnLBZ
+         X3IU9r1RngVzjNfY5ZTmLABf50qzQF47yzzjxMGKWGSWv20pO1+BKXPwPcT2rPupC7HK
+         asyA==
+X-Gm-Message-State: AFqh2kqLNBr0TKDAZ/OdT98WsgX0S5YMlaMdnuRpX/2FDyV3zZRpzEui
+        WWv1amUtVS9/VYPFx7PBL3k=
+X-Google-Smtp-Source: AMrXdXvoeXKW11XuHcNezUMu8wGZNMvBoFfCeoVhGDStD8WUZ6D6XmsQ419lV7fymKewkQwREmDr9Q==
+X-Received: by 2002:a6b:6010:0:b0:6df:9d01:3376 with SMTP id r16-20020a6b6010000000b006df9d013376mr19152662iog.21.1672359323967;
+        Thu, 29 Dec 2022 16:15:23 -0800 (PST)
 Received: from localhost ([2607:fea8:a2df:3d00::b8e2])
-        by smtp.gmail.com with ESMTPSA id g20-20020a02b714000000b0038a56594026sm6443996jam.66.2022.12.29.16.15.21
+        by smtp.gmail.com with ESMTPSA id i23-20020a5e8517000000b006f8b45e858asm2264523ioj.29.2022.12.29.16.15.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 29 Dec 2022 16:15:21 -0800 (PST)
+        Thu, 29 Dec 2022 16:15:23 -0800 (PST)
 From:   Richard Acayan <mailingradian@gmail.com>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -60,10 +61,12 @@ To:     Andy Gross <agross@kernel.org>,
 Cc:     Odelu Kukatla <quic_okukatla@quicinc.com>,
         Luca Weiss <luca@z3ntu.xyz>,
         Richard Acayan <mailingradian@gmail.com>
-Subject: [PATCH v2 0/4] SDM670 Interconnects
-Date:   Thu, 29 Dec 2022 19:14:38 -0500
-Message-Id: <20221230001442.369608-1-mailingradian@gmail.com>
+Subject: [PATCH v2 1/4] dt-bindings: interconnect: add sdm670 interconnects
+Date:   Thu, 29 Dec 2022 19:14:39 -0500
+Message-Id: <20221230001442.369608-2-mailingradian@gmail.com>
 X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20221230001442.369608-1-mailingradian@gmail.com>
+References: <20221230001442.369608-1-mailingradian@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -76,29 +79,180 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This series adds interconnects and consumers to the Snapdragon 670.
+There are controllable interconnects on Snapdragon 670. Add the
+compatible strings to the documentation and interconnect ID definitions.
 
-Changes:
- - change qcom,sdm670.h to qcom,sdm670-rpmh.h (1/4, 4/4)
+The device tree header was generated by
+linux-interconnect-driver-generator and the copyright year was changed.
 
-Richard Acayan (4):
-  dt-bindings: interconnect: add sdm670 interconnects
-  interconnect: qcom: add sdm670 interconnects
-  arm64: dts: qcom: sdm670: add interconnects
-  arm64: dts: qcom: sdm670: add opps for peripherals
-
- .../bindings/interconnect/qcom,rpmh.yaml      |   8 +
- arch/arm64/boot/dts/qcom/sdm670.dtsi          | 165 +++++++
- drivers/interconnect/qcom/Kconfig             |   9 +
- drivers/interconnect/qcom/Makefile            |   2 +
- drivers/interconnect/qcom/sdm670.c            | 440 ++++++++++++++++++
- drivers/interconnect/qcom/sdm670.h            | 128 +++++
- .../interconnect/qcom,sdm670-rpmh.h           | 136 ++++++
- 7 files changed, 888 insertions(+)
- create mode 100644 drivers/interconnect/qcom/sdm670.c
- create mode 100644 drivers/interconnect/qcom/sdm670.h
+Signed-off-by: Richard Acayan <mailingradian@gmail.com>
+---
+ .../bindings/interconnect/qcom,rpmh.yaml      |   8 ++
+ .../interconnect/qcom,sdm670-rpmh.h           | 136 ++++++++++++++++++
+ 2 files changed, 144 insertions(+)
  create mode 100644 include/dt-bindings/interconnect/qcom,sdm670-rpmh.h
 
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+index a429a1ed1006..db1e93583554 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+@@ -75,6 +75,14 @@ properties:
+       - qcom,sc8280xp-nspa-noc
+       - qcom,sc8280xp-nspb-noc
+       - qcom,sc8280xp-system-noc
++      - qcom,sdm670-aggre1-noc
++      - qcom,sdm670-aggre2-noc
++      - qcom,sdm670-config-noc
++      - qcom,sdm670-dc-noc
++      - qcom,sdm670-gladiator-noc
++      - qcom,sdm670-mem-noc
++      - qcom,sdm670-mmss-noc
++      - qcom,sdm670-system-noc
+       - qcom,sdm845-aggre1-noc
+       - qcom,sdm845-aggre2-noc
+       - qcom,sdm845-config-noc
+diff --git a/include/dt-bindings/interconnect/qcom,sdm670-rpmh.h b/include/dt-bindings/interconnect/qcom,sdm670-rpmh.h
+new file mode 100644
+index 000000000000..d26dedb9deb7
+--- /dev/null
++++ b/include/dt-bindings/interconnect/qcom,sdm670-rpmh.h
+@@ -0,0 +1,136 @@
++/* SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause */
++/*
++ * Qualcomm SDM670 interconnect IDs
++ *
++ * Copyright (c) 2022, The Linux Foundation. All rights reserved.
++ */
++
++#ifndef __DT_BINDINGS_INTERCONNECT_QCOM_SDM670_H
++#define __DT_BINDINGS_INTERCONNECT_QCOM_SDM670_H
++
++#define MASTER_A1NOC_CFG		0
++#define MASTER_BLSP_1			1
++#define MASTER_TSIF			2
++#define MASTER_EMMC			3
++#define MASTER_SDCC_2			4
++#define MASTER_SDCC_4			5
++#define MASTER_UFS_MEM			6
++#define SLAVE_A1NOC_SNOC		7
++#define SLAVE_SERVICE_A1NOC		8
++
++#define MASTER_A2NOC_CFG		0
++#define MASTER_QDSS_BAM			1
++#define MASTER_BLSP_2			2
++#define MASTER_CNOC_A2NOC		3
++#define MASTER_CRYPTO_CORE_0		4
++#define MASTER_IPA			5
++#define MASTER_QDSS_ETR			6
++#define MASTER_USB3			7
++#define SLAVE_A2NOC_SNOC		8
++#define SLAVE_SERVICE_A2NOC		9
++
++
++#define MASTER_SPDM			0
++#define MASTER_SNOC_CNOC		1
++#define SLAVE_A1NOC_CFG			2
++#define SLAVE_A2NOC_CFG			3
++#define SLAVE_AOP			4
++#define SLAVE_AOSS			5
++#define SLAVE_CAMERA_CFG		6
++#define SLAVE_CLK_CTL			7
++#define SLAVE_CDSP_CFG			8
++#define SLAVE_RBCPR_CX_CFG		9
++#define SLAVE_CRYPTO_0_CFG		10
++#define SLAVE_DCC_CFG			11
++#define SLAVE_CNOC_DDRSS		12
++#define SLAVE_DISPLAY_CFG		13
++#define SLAVE_EMMC_CFG			14
++#define SLAVE_GLM			15
++#define SLAVE_GRAPHICS_3D_CFG		16
++#define SLAVE_IMEM_CFG			17
++#define SLAVE_IPA_CFG			18
++#define SLAVE_CNOC_MNOC_CFG		19
++#define SLAVE_PDM			20
++#define SLAVE_SOUTH_PHY_CFG		21
++#define SLAVE_PIMEM_CFG			22
++#define SLAVE_PRNG			23
++#define SLAVE_QDSS_CFG			24
++#define SLAVE_BLSP_2			25
++#define SLAVE_BLSP_1			26
++#define SLAVE_SDCC_2			27
++#define SLAVE_SDCC_4			28
++#define SLAVE_SNOC_CFG			29
++#define SLAVE_SPDM_WRAPPER		30
++#define SLAVE_TCSR			31
++#define SLAVE_TLMM_NORTH		32
++#define SLAVE_TLMM_SOUTH		33
++#define SLAVE_TSIF			34
++#define SLAVE_UFS_MEM_CFG		35
++#define SLAVE_USB3			36
++#define SLAVE_VENUS_CFG			37
++#define SLAVE_VSENSE_CTRL_CFG		38
++#define SLAVE_CNOC_A2NOC		39
++#define SLAVE_SERVICE_CNOC		40
++
++#define MASTER_CNOC_DC_NOC		0
++#define SLAVE_LLCC_CFG			1
++#define SLAVE_MEM_NOC_CFG		2
++
++#define MASTER_AMPSS_M0			0
++#define MASTER_GNOC_CFG			1
++#define SLAVE_GNOC_SNOC			2
++#define SLAVE_GNOC_MEM_NOC		3
++#define SLAVE_SERVICE_GNOC		4
++
++#define MASTER_TCU_0			0
++#define MASTER_MEM_NOC_CFG		1
++#define MASTER_GNOC_MEM_NOC		2
++#define MASTER_MNOC_HF_MEM_NOC		3
++#define MASTER_MNOC_SF_MEM_NOC		4
++#define MASTER_SNOC_GC_MEM_NOC		5
++#define MASTER_SNOC_SF_MEM_NOC		6
++#define MASTER_GRAPHICS_3D		7
++#define SLAVE_MSS_PROC_MS_MPU_CFG	8
++#define SLAVE_MEM_NOC_GNOC		9
++#define SLAVE_LLCC			10
++#define SLAVE_MEM_NOC_SNOC		11
++#define SLAVE_SERVICE_MEM_NOC		12
++#define MASTER_LLCC			13
++#define SLAVE_EBI_CH0			14
++
++#define MASTER_CNOC_MNOC_CFG		0
++#define MASTER_CAMNOC_HF0		1
++#define MASTER_CAMNOC_HF1		2
++#define MASTER_CAMNOC_SF		3
++#define MASTER_MDP_PORT0		4
++#define MASTER_MDP_PORT1		5
++#define MASTER_ROTATOR			6
++#define MASTER_VIDEO_P0			7
++#define MASTER_VIDEO_P1			8
++#define MASTER_VIDEO_PROC		9
++#define SLAVE_MNOC_SF_MEM_NOC		10
++#define SLAVE_MNOC_HF_MEM_NOC		11
++#define SLAVE_SERVICE_MNOC		12
++
++#define MASTER_SNOC_CFG			0
++#define MASTER_A1NOC_SNOC		1
++#define MASTER_A2NOC_SNOC		2
++#define MASTER_GNOC_SNOC		3
++#define MASTER_MEM_NOC_SNOC		4
++#define MASTER_PIMEM			5
++#define MASTER_GIC			6
++#define SLAVE_APPSS			7
++#define SLAVE_SNOC_CNOC			8
++#define SLAVE_SNOC_MEM_NOC_GC		9
++#define SLAVE_SNOC_MEM_NOC_SF		10
++#define SLAVE_OCIMEM			11
++#define SLAVE_PIMEM			12
++#define SLAVE_SERVICE_SNOC		13
++#define SLAVE_QDSS_STM			14
++#define SLAVE_TCU			15
++#define MASTER_CAMNOC_HF0_UNCOMP	16
++#define MASTER_CAMNOC_HF1_UNCOMP	17
++#define MASTER_CAMNOC_SF_UNCOMP		18
++#define SLAVE_CAMNOC_UNCOMP		19
++
++#endif
 -- 
 2.39.0
 
