@@ -2,82 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A60659B8B
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 19:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 276FE659B9C
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 20:23:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiL3S7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Dec 2022 13:59:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S235069AbiL3TXy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Dec 2022 14:23:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiL3S7s (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Dec 2022 13:59:48 -0500
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525DA1B9CC
-        for <linux-pm@vger.kernel.org>; Fri, 30 Dec 2022 10:59:47 -0800 (PST)
-Received: by mail-io1-f50.google.com with SMTP id e129so2990178iof.3
-        for <linux-pm@vger.kernel.org>; Fri, 30 Dec 2022 10:59:47 -0800 (PST)
+        with ESMTP id S231443AbiL3TXx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Dec 2022 14:23:53 -0500
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82791C109;
+        Fri, 30 Dec 2022 11:23:52 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id pe2so10737978qkn.1;
+        Fri, 30 Dec 2022 11:23:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=D84WOL4GXwiTJJrpeQ62xovhe59CcQCnUedXOg/LW00=;
+        b=EuHJC6PQvaT3bny/WLU7UySyxKy95WJVrh6K52HROLylITYzIzx8pU2j83UreqPVEc
+         PqDU7/HtRPUwJDIfShHAI30gshq21vjYX8Ya4wYqfv29tAtZrHnWIoc+6ySZCllxu5Px
+         BuCJHLe/JkpcjSkgVJ5e4qYjRZjsuavGN+oFEyYa5BCL5RjUJdCG+j2ZMZMapUQjuTef
+         x3h73DVJucewKBWWkKey5PHchnWCX10wy3YUL4YpA1E2v+3D0ElkSFl/6rO5JX9pAX7d
+         AmPx+cgpvQEifQ0yph+liQ0/LxcX9GXjMgQlP8u5dCcivLlWgL/Kb3cNTmhzTt2sMzyA
+         BQ/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=MK4oifJwOcgMAJLU5hcuFQ8G7NNAj/OrFBTOLL1gi30=;
-        b=Pvsot89YqQrYr+wRevxMXm3hx9BiT5GSkXrZKGn8ph2yIRQCPmL3az5xxMfsI2R+N5
-         wbM3lbMDB5riOVVqlaZGOVNA+DRrKRlqPOffrmbAwx3TKQXhkPzoyqy4fvXZHp/6smuX
-         bV9TqbzQo8D7tG/EQyyesM83+/ixEYoUhAoyrNoPlXx0ckwEQwms8Wxgv49eg4k6rcj0
-         MUXvSedPIiWJGxSH85lTEWYEY3UOuE817RwcyRVoICN39wCmRFTYDDw9dCgmS/ALJn/q
-         3FwVfJtPq7MvLZ3Itvhx5V8TbQgBwQjhdL5uftSmYp1RidSUqHEQfezm+JNyzDvJUeDm
-         dEtw==
-X-Gm-Message-State: AFqh2krtQU86Colg3CI1ZBdV25riNhIY5jF+m8VcMap89Gcqe7DokqdH
-        uWF7S8XFfR78DzPSR84OEYfHwUnvue0sf9eepwQ=
-X-Google-Smtp-Source: AMrXdXvsCFpb/9szGTVxsEz8rdSODgG8ai8X6ImlxNaSdOw3B0lKYxKtvWqudw/hIvjKqJ0NslbpSjxQ5gmJz/Wh+/8=
-X-Received: by 2002:a02:3b4f:0:b0:39a:98b:480e with SMTP id
- i15-20020a023b4f000000b0039a098b480emr2498897jaf.125.1672426786633; Fri, 30
- Dec 2022 10:59:46 -0800 (PST)
+        bh=D84WOL4GXwiTJJrpeQ62xovhe59CcQCnUedXOg/LW00=;
+        b=iOcamezx6w+qDAsFoAsG0JsaudwINpRu0M3LVRZfd8mPif1eOqUtJC4516QsyCkYBs
+         sY3NNFAVCLns98tJeU4fYByIuq93hnp0Ie4BetYXUd7BV2+X+5bUMkB1Up+SIYLMsgBg
+         zkx7DRJ8HyHZjGXSuzWbV0js+FPuMYsM509yjAvvHW+MclD0K7x47E+XXONmsesgGKrB
+         e/9+OmyDDpGz3T8/BQg2CjR/gAvXfc7a3AmljOmgIl9S6nnqqRyR6seUzCvImsmJn/r0
+         sHqmTfmjtiiqITZrv+JgK1m8fh84oL4ZEjklKsJtPLeDmwjTZdscp572v9EbV/YKxmpk
+         1R7w==
+X-Gm-Message-State: AFqh2kqVirx77ry0MPMXOx//FcRYfh7x3nTnrcB07wSQbHy/IyyK3jok
+        oxeyUATsLNELRQFnOc3PzFZiI757tmM0xkSIyUA=
+X-Google-Smtp-Source: AMrXdXsFvWJtbCWpXfh/Kc6BBBK6TYIxePUMGUDDiNyUVAnHli5E78muOTSd4Ltgq1cgxiR/M2U9BV1e5ti0TJ9NNjE=
+X-Received: by 2002:a37:a96:0:b0:6ff:3ebb:500 with SMTP id 144-20020a370a96000000b006ff3ebb0500mr1836335qkk.320.1672428231949;
+ Fri, 30 Dec 2022 11:23:51 -0800 (PST)
 MIME-Version: 1.0
-References: <20221219154620.3630-1-rui.zhang@intel.com>
-In-Reply-To: <20221219154620.3630-1-rui.zhang@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 30 Dec 2022 19:59:34 +0100
-Message-ID: <CAJZ5v0gXsvHi_iW06aWFfvmN2MUJ8mK0T6_jHjFhy3qOJWuytg@mail.gmail.com>
-Subject: Re: [PATCH V2 0/6] thermal/intel: Introduce intel-tcc lib and enhance
- tjmax handling
-To:     Zhang Rui <rui.zhang@intel.com>
-Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+References: <20221229125957.45923-1-andriy.shevchenko@linux.intel.com>
+ <20221229125957.45923-2-andriy.shevchenko@linux.intel.com> <CAJZ5v0j3Dv5DJh4oN+i2qXi=zU8PhGeMsUY2v-mZU5tKJWmsxg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0j3Dv5DJh4oN+i2qXi=zU8PhGeMsUY2v-mZU5tKJWmsxg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 30 Dec 2022 21:23:15 +0200
+Message-ID: <CAHp75Vdca1bMJeJwrOK5fOp8+TnJYwus3z6PyYyvhg+LDgyufg@mail.gmail.com>
+Subject: Re: [PATCH v1 1/3] pm: Introduce DEFINE_NOIRQ_DEV_PM_OPS() helper
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, Andy Shevchenko <andy@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Dec 19, 2022 at 4:39 PM Zhang Rui <rui.zhang@intel.com> wrote:
->
-> Currently, all the thermal drivers that access the Intel CPU TCC (thermal
-> control circuitry) MSRs have two problems,
-> 1. they have their own implementation for the same TCC functionalities,
->    including getting the tjmax/temperature, getting/setting the TCC offset.
->    This introduces a lot of duplicate code.
-> 2. they get TjMax value once and always use the cached value later.
->    But Tjmax value retrieved from MSR_IA32_TEMPERATURE_TARGET can be changed
->    at runtime for cases like the Intel SST-PP (Intel Speed Select Technology-
->    Performance Profile) level change.
->
-> The intel-tcc library is introduced in patch 1/6 for cleaning up the duplicate
-> code among these drivers, and it also ensures the temperature is alway got
-> based on the updated tjmax value.
->
-> Patch 2 ~ 5 cleans up the drivers by using the new Intel TCC lib APIs.
->
-> Patch 6/6 enhances the x86_pkg_temp driver to handle dynamic tjmax when
-> progamming the thermal interrupt threshold.
-> Actually, the thermal interrupt threshold programming can also be part of the
-> TCC library, but I didn't do it in this version because x86_pkg_temp is the
-> only user for now.
+On Fri, Dec 30, 2022 at 8:43 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> On Thu, Dec 29, 2022 at 1:59 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > There are a few drivers and might be more in the future that
+> > open code the functionality of proposed DEFINE_NOIRQ_DEV_PM_OPS()
+> > helper. From now on they may switch to the new helper and save
+> > a few lines of code.
 
-All patches applied as 6.3 material, thanks!
+...
+
+> > +#define DEFINE_NOIRQ_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+> > +const struct dev_pm_ops name = { \
+> > +       NOIRQ_SYSTEM_SLEEP_PM_OPS(suspend_fn, resume_fn) \
+> > +}
+>
+> There is NOIRQ_SYSTEM_SLEEP_PM_OPS(), so why is the above needed in addition?
+
+It defines the constant object of struct dev_pm_ops type with this
+included and as the commit message says, allows to save a few lines of
+code in each of the drivers that uses NOIRQ_SYSTEM_SLEEP_PM_OPS()
+currently. The examples on how to convert are provided in the patches
+2 and 3.
+
+-- 
+With Best Regards,
+Andy Shevchenko
