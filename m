@@ -2,74 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D137659B86
-	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 19:51:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A60659B8B
+	for <lists+linux-pm@lfdr.de>; Fri, 30 Dec 2022 19:59:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235438AbiL3SvF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 30 Dec 2022 13:51:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
+        id S229832AbiL3S7s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 30 Dec 2022 13:59:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235408AbiL3SvF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Dec 2022 13:51:05 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02E25F85;
-        Fri, 30 Dec 2022 10:51:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 080AFCE1752;
-        Fri, 30 Dec 2022 18:51:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 484AAC433EF;
-        Fri, 30 Dec 2022 18:51:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672426260;
-        bh=1gkjexlbXixD/Ce8m9KezHD+yhOtdTHY76LnIQuHK9o=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=PjMP7l74/gH0jQwNw8DM5o31c5fQ2WSLCjA5f1pgVfUq3g+EgmcWr/evqxAz7R9fO
-         dkpff5MFeK8rxWb27pY+YYnKPDPlPOm9rZ0G6PY7jVYMOpnnjzvzgu1upAopGbiAY1
-         Q0/b1HxHlFH6mRUcLV77dWQ2YNkK1zzMRs+Zn9rvpBU99OxPgb32cp3dfwqunW8XDX
-         fcm8yHvzl1vi+Xb+fyvz0A33fKaL++WhqphCvcvNFbHAuRDGXZcn9K9/EWm8yRI/yL
-         drz56D8WlXICaRMa4mXY1fhwOPZkDrCxLodNE1OTWv97dcwrhnnv8lcZLgFa7vk0Io
-         sy3/mYgm9RFYg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3172EC395DF;
-        Fri, 30 Dec 2022 18:51:00 +0000 (UTC)
-Subject: Re: [GIT PULL] ACPI fixes for v6.2-rc2
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
-References: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0iP4EgejNBO8EXejaSObSbpeuOh+vTz8CAvfu8bMXXTOQ@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.2-rc2
-X-PR-Tracked-Commit-Id: 0948a9ef1d59d1bc7fae29f32058e463bbff4a6c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
-Message-Id: <167242626019.31406.3835683663655257393.pr-tracker-bot@kernel.org>
-Date:   Fri, 30 Dec 2022 18:51:00 +0000
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229527AbiL3S7s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 30 Dec 2022 13:59:48 -0500
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525DA1B9CC
+        for <linux-pm@vger.kernel.org>; Fri, 30 Dec 2022 10:59:47 -0800 (PST)
+Received: by mail-io1-f50.google.com with SMTP id e129so2990178iof.3
+        for <linux-pm@vger.kernel.org>; Fri, 30 Dec 2022 10:59:47 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MK4oifJwOcgMAJLU5hcuFQ8G7NNAj/OrFBTOLL1gi30=;
+        b=Pvsot89YqQrYr+wRevxMXm3hx9BiT5GSkXrZKGn8ph2yIRQCPmL3az5xxMfsI2R+N5
+         wbM3lbMDB5riOVVqlaZGOVNA+DRrKRlqPOffrmbAwx3TKQXhkPzoyqy4fvXZHp/6smuX
+         bV9TqbzQo8D7tG/EQyyesM83+/ixEYoUhAoyrNoPlXx0ckwEQwms8Wxgv49eg4k6rcj0
+         MUXvSedPIiWJGxSH85lTEWYEY3UOuE817RwcyRVoICN39wCmRFTYDDw9dCgmS/ALJn/q
+         3FwVfJtPq7MvLZ3Itvhx5V8TbQgBwQjhdL5uftSmYp1RidSUqHEQfezm+JNyzDvJUeDm
+         dEtw==
+X-Gm-Message-State: AFqh2krtQU86Colg3CI1ZBdV25riNhIY5jF+m8VcMap89Gcqe7DokqdH
+        uWF7S8XFfR78DzPSR84OEYfHwUnvue0sf9eepwQ=
+X-Google-Smtp-Source: AMrXdXvsCFpb/9szGTVxsEz8rdSODgG8ai8X6ImlxNaSdOw3B0lKYxKtvWqudw/hIvjKqJ0NslbpSjxQ5gmJz/Wh+/8=
+X-Received: by 2002:a02:3b4f:0:b0:39a:98b:480e with SMTP id
+ i15-20020a023b4f000000b0039a098b480emr2498897jaf.125.1672426786633; Fri, 30
+ Dec 2022 10:59:46 -0800 (PST)
+MIME-Version: 1.0
+References: <20221219154620.3630-1-rui.zhang@intel.com>
+In-Reply-To: <20221219154620.3630-1-rui.zhang@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 30 Dec 2022 19:59:34 +0100
+Message-ID: <CAJZ5v0gXsvHi_iW06aWFfvmN2MUJ8mK0T6_jHjFhy3qOJWuytg@mail.gmail.com>
+Subject: Re: [PATCH V2 0/6] thermal/intel: Introduce intel-tcc lib and enhance
+ tjmax handling
+To:     Zhang Rui <rui.zhang@intel.com>
+Cc:     rjw@rjwysocki.net, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, srinivas.pandruvada@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The pull request you sent on Fri, 30 Dec 2022 17:34:40 +0100:
+On Mon, Dec 19, 2022 at 4:39 PM Zhang Rui <rui.zhang@intel.com> wrote:
+>
+> Currently, all the thermal drivers that access the Intel CPU TCC (thermal
+> control circuitry) MSRs have two problems,
+> 1. they have their own implementation for the same TCC functionalities,
+>    including getting the tjmax/temperature, getting/setting the TCC offset.
+>    This introduces a lot of duplicate code.
+> 2. they get TjMax value once and always use the cached value later.
+>    But Tjmax value retrieved from MSR_IA32_TEMPERATURE_TARGET can be changed
+>    at runtime for cases like the Intel SST-PP (Intel Speed Select Technology-
+>    Performance Profile) level change.
+>
+> The intel-tcc library is introduced in patch 1/6 for cleaning up the duplicate
+> code among these drivers, and it also ensures the temperature is alway got
+> based on the updated tjmax value.
+>
+> Patch 2 ~ 5 cleans up the drivers by using the new Intel TCC lib APIs.
+>
+> Patch 6/6 enhances the x86_pkg_temp driver to handle dynamic tjmax when
+> progamming the thermal interrupt threshold.
+> Actually, the thermal interrupt threshold programming can also be part of the
+> TCC library, but I didn't do it in this version because x86_pkg_temp is the
+> only user for now.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git acpi-6.2-rc2
-
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c8451c141e07a8d05693f6c8d0e418fbb4b68bb7
-
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+All patches applied as 6.3 material, thanks!
