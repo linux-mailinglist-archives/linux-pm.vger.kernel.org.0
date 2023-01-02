@@ -2,178 +2,114 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768C365B451
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 16:37:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AE365B617
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 19:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236403AbjABPhM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 10:37:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S231908AbjABSBZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 13:01:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232151AbjABPg4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 10:36:56 -0500
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55115C0
-        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 07:36:55 -0800 (PST)
-Received: by mail-pl1-x62d.google.com with SMTP id b2so29836083pld.7
-        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 07:36:55 -0800 (PST)
+        with ESMTP id S232103AbjABSBZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 13:01:25 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D602DF0
+        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 10:01:23 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id w1so14867459wrt.8
+        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 10:01:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=3xbPAAoR5TNNaXxpt5BXhcyV4DPiLkdBlfg+2MuRDz4=;
-        b=Y8ESOzQgsgIbS1fDjDq7NWStVXvuq97bW50NeYZ80/CcYdFbggpe3EUa/6bWc2PxTX
-         yhmnhokNDwzbqhBWbnJMHEkt3MhtwEHxpkBNCQGxOADVv6oXZH3nyCLgHepryskepL7V
-         G4HTUj7yxQDti6iU40LWMTTYgveUOrT2XAAC12c2nT3dPcCTlDOqHcj6SftUWwM2bWLd
-         YaxjBoO1wm7geqjRFtqjINkxr5ltHC/RbQNmofP51BdORyLZa6xuOexCm5W/QpWVgMKs
-         4U6LMVm3tGAEgovftEKst40yDDoIt/cZ8T0jMGNzUwiTSBKby279/o2WZaFULn0oWmC9
-         0f4w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aa5rfp9VJf2+PTqFf57RAAtNyvl58KCXDQKlQWDHvTE=;
+        b=h3jwXZizSoXbx0Ldi15X+Cor8OycomS3cWRqIO91vgMLAvC3ooYZlBnq+m2QteUsoP
+         3XYqHPvwzz1nIUVdhV2hrZUpOtZ8N+A0NeQNSRbhX7OOXqxl5DQxa1C75mmHjE7ranck
+         7h3q2t51WHOmynMvk/tLK61Qa9i2mSunYB8OFc9kxM6hgufGjD8LINCV6cvR16ETlJA0
+         XMTsODVK9Y64yOONSIbLSQMCzCm52LyPBsrYrf2y+8W5LfGHPWqhozX2YbQoSliY6iFG
+         9M4jVt6HP3wCoGKCYcNZcv8gOC/ThGrsNo09dmKEJBDG6eXPNwGhRDJ7/Anha10ZlFEx
+         I+GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3xbPAAoR5TNNaXxpt5BXhcyV4DPiLkdBlfg+2MuRDz4=;
-        b=TWOlGZbz4rBE8GqjzLYSb2fe5xdYq3f8+Fkq5ZOh73Y8hrn9G7UtiVHEzjg0wnk2k5
-         ZWLbd2J7nvoT073qmrdsa2pSKigXmJORqIWkV1f4Eub3T9HJn8XcDVWOlkXDwHAW+wZs
-         1iX3Ps9IoNX+Jh2huQ3rms3tsJ1IsSH9oaMQ26x65sI3wdGJwYWFwDJW4O+YRrCM/oyZ
-         mrDFNrVCdc64kICpzdird4bWTSQ2yFrssMD5ivNCPEsp5G+9ZdD1fMWV6kWyC3bFayWd
-         7o4IMxoubXaC/FSksbVNHA2Y7OMi3V8wgOiSz4kUAnkrIQbPJznl/+B+VgNoNIQNGgC9
-         zKRA==
-X-Gm-Message-State: AFqh2kpb4H6JjhNk8bm1Wo6AZtlWrzNcI+nbv0PpyFO2eb2zRsVWdIEt
-        Y0bO1R8sHHicYc7vLJvAEk1KytF8jKxrZVHc+zc=
-X-Google-Smtp-Source: AMrXdXuiGlwpKwZR/lv5FNJx19v1zqHFnTCxHSzsP5m/O0I/ApOiyiQE5JX5OnRsvhQ0s35oQJ1vaQ==
-X-Received: by 2002:a17:902:da86:b0:186:865c:ea17 with SMTP id j6-20020a170902da8600b00186865cea17mr59479328plx.38.1672673814817;
-        Mon, 02 Jan 2023 07:36:54 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id a2-20020a170902ecc200b0017f64ab80e5sm20303629plh.179.2023.01.02.07.36.54
+        bh=aa5rfp9VJf2+PTqFf57RAAtNyvl58KCXDQKlQWDHvTE=;
+        b=YPTNBu8/mlEBMzCpwrQphTkgmMzYhC0VMC1sjHF98eatBbuDJYyYqCvmkAerimz3l3
+         1d4EJJZPmAsbY9Upkyo+qfGChBsaNAAFkgpurxOT0iHsRoozUNw/59xMXrGIFNWRHwed
+         5nv/fgr1oE0TcW5MrvgW11kI25nWUItlOCYsp37wDhNQpIWbXigOIzdxyGaJoQCTO/oO
+         lmZ4ogStNvLOmNqhuLDwdbnPhg8aGdJwEuaHNjD4+iOJE3W3+xpKy9upbS/HQpxtY1sf
+         71Wou3PNWggpDm/Or+Y2ohweja6EVrMo6+ihAU/G9YcM8Jsrq2TLEo/ba9xMWnAfVKpr
+         J8Bw==
+X-Gm-Message-State: AFqh2kr5PskZfpN9aRX5UK2LmRhfSyW94y+4vgQi6AFwLALXBUIBTr4k
+        UmaRSpFvbilQ/MDT2qfdcZnXug==
+X-Google-Smtp-Source: AMrXdXuorMhJZ+hEqbdQC2iDTfPryxIrLt5l667lYwxxqEb/4WWFLz5a8z/OQ9P0uPn5copr/Q1vGg==
+X-Received: by 2002:a5d:430f:0:b0:244:48b3:d12b with SMTP id h15-20020a5d430f000000b0024448b3d12bmr24639329wrq.45.1672682482028;
+        Mon, 02 Jan 2023 10:01:22 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id c17-20020adffb51000000b0027cb20605e3sm21375588wrs.105.2023.01.02.10.01.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 07:36:54 -0800 (PST)
-Message-ID: <63b2fa16.170a0220.c1eec.0089@mx.google.com>
-Date:   Mon, 02 Jan 2023 07:36:54 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 02 Jan 2023 10:01:21 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        srinivas.pandruvada@linux.intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, rui.zhang@intel.com
+Subject: [PATCH v2 0/3] Thermal ACPI APIs for generic trip points
+Date:   Mon,  2 Jan 2023 19:01:09 +0100
+Message-Id: <20230102180112.1954082-1-daniel.lezcano@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.2-rc2-20-g2804f848d8e3
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.2-rc2-20-g2804f848d8e3)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc2-20-g28=
-04f848d8e3)
+Recently sent as a RFC, the thermal ACPI for generic trip points is a set of
+functions to fill the generic trip points structure which will become the
+standard structure for the thermal framework and its users.
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-2-rc2-20-g2804f848d8e3/
+Different Intel drivers and the ACPI thermal driver are using the ACPI tables to
+get the thermal zone information. As those are getting the same information,
+providing this set of ACPI function with the generic trip points will
+consolidate the code.
 
-Tree: pm
-Branch: testing
-Git Describe: v6.2-rc2-20-g2804f848d8e3
-Git Commit: 2804f848d8e3541dc77038a8d9b0b3385e93495f
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+Also, the Intel PCH and the Intel 34xx drivers are converted to use the generic
+trip points relying on the ACPI generic trip point parsing functions.
 
-Warnings Detected:
+These changes have been tested on a Thinkpad Lenovo x280 with the PCH and
+INT34xx drivers. No regression have been observed, the trip points remain the
+same for what is described on this system.
 
-arc:
+Changelog:
 
-arm64:
+ - V2:
+   - Fix the thermal ACPI patch where the thermal_acpi.c was not included in
+     the series
 
-arm:
+   - Provide a couple of users of this API which could have been tested on a
+     real system
 
-i386:
+Daniel Lezcano (3):
+  thermal/acpi: Add ACPI trip point routines
+  thermal/drivers/intel: Use generic trip points for intel_pch
+  thermal/drivers/intel: Use generic trip points int340x
 
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
+ drivers/thermal/Kconfig                       |  13 +
+ drivers/thermal/Makefile                      |   1 +
+ .../int340x_thermal/int340x_thermal_zone.c    | 175 +++--------
+ .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+ drivers/thermal/intel/intel_pch_thermal.c     |  88 ++----
+ drivers/thermal/thermal_acpi.c                | 279 ++++++++++++++++++
+ include/linux/thermal.h                       |  16 +
+ 7 files changed, 368 insertions(+), 214 deletions(-)
+ create mode 100644 drivers/thermal/thermal_acpi.c
 
-riscv:
+-- 
+2.34.1
 
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
----
-For more info write to <info@kernelci.org>
