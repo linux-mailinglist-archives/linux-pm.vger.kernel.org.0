@@ -2,52 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D0EB65B799
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 23:21:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E78E65B81C
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 00:15:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236473AbjABWVA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 17:21:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S230154AbjABXPg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 18:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236499AbjABWUl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 17:20:41 -0500
+        with ESMTP id S230390AbjABXPf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 18:15:35 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2644BC767;
-        Mon,  2 Jan 2023 14:19:46 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D135C5FF7
+        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 15:15:33 -0800 (PST)
 Received: from mercury (unknown [185.209.196.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 365476600363;
-        Mon,  2 Jan 2023 22:19:44 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 73FDD660038D;
+        Mon,  2 Jan 2023 23:15:32 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672697984;
-        bh=DNtlXpKIC0EdNIYdf8lj6Wk9BsIcMijC32TABZnsYPo=;
+        s=mail; t=1672701332;
+        bh=jZvW+7rNsA/r37u4/TXqK05SmZSFv5Wu4Z4b2L6LZxQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dEbDU3pb/CgbERQln4UcdFK+hR2FQ62OF1SR7f7kacRyoL4Nik4rsCQyfvppU3OIH
-         l7BQch+U6ItxEhld6LRP5yG/nA90OAPmT+7W9IBdFN9bicoxreK/G0F0rqtBuPXMne
-         n5BYzlB0DCCYdOWqRgxKUAgZuLoRsfuqxUzgdIIMs1JFOWetFDWViTq4ia/Fzv0m8A
-         i8Vy53V0sVlgoQXJGjoXCx18XaNYxb5IVBDGNpWJ4PfSpTG4zGP3KqsUJ0uY3uZzoy
-         aLCj5YbVPNzWp1lJfRXn7VVqCBOXY0+0k1chwKCX4Do67v0Vd0fPNFB6vNkFyF2RJ1
-         aR46ltf8XDy7g==
+        b=PP+Xps4QgvJCfIf7DSxaXzYYJtKyyM2NkYzkYH+Q2hvQeT2UakQqo226DGmRkyEtP
+         YN9VlLNFGhWDnoU0zisbia1XVOKc54cZFORdsLLD/fq1LHcv6aDfF0xyNiKBT90+6J
+         an8WHSLEmpCTp+M1ffZlUULY37YmnxFxhZf+MN1AXwzWNI8VBFVjtnhoWZR76aK8Oi
+         /Qs8ICohxNcH3r/OqmmDCjDvJHNu3/C0w446Gg2WoJSs3cuv6jAKk4dYqWiIPKYigI
+         Tx8Ye0+GSx/Mu5jwv97bWFPcK9xltiOBb1mJym78TUbXqSc+hG+OSqhzNhoyS72EwQ
+         jhiRfU8Xxnfug==
 Received: by mercury (Postfix, from userid 1000)
-        id AAE38106076E; Mon,  2 Jan 2023 23:19:41 +0100 (CET)
-Date:   Mon, 2 Jan 2023 23:19:41 +0100
+        id 35EBD106076E; Tue,  3 Jan 2023 00:15:30 +0100 (CET)
+Date:   Tue, 3 Jan 2023 00:15:30 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Denis Arefev <arefev@swemel.ru>, Chen-Yu Tsai <wens@csie.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org, trufanov@swemel.ru, vfh@swemel.ru
-Subject: Re: [PATCH] power: supply: Added check for negative values
-Message-ID: <20230102221941.hw35od6uhu7fbfny@mercury.elektranox.org>
-References: <20221206091723.28656-1-arefev@swemel.ru>
- <1184e45f-d88c-b8b1-952d-7d6bd1ae2129@redhat.com>
+Cc:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 0/9] power: supply: bq25890: Fixes for 6.2 + further
+ work for 6.3
+Message-ID: <20230102231530.3eumtnr6jqjv5jlt@mercury.elektranox.org>
+References: <20221128092856.71619-1-hdegoede@redhat.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6z3y7co7hg7rakoo"
+        protocol="application/pgp-signature"; boundary="o4w24wzwcjvmsufd"
 Content-Disposition: inline
-In-Reply-To: <1184e45f-d88c-b8b1-952d-7d6bd1ae2129@redhat.com>
+In-Reply-To: <20221128092856.71619-1-hdegoede@redhat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -58,77 +56,116 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---6z3y7co7hg7rakoo
+--o4w24wzwcjvmsufd
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Dec 06, 2022 at 06:11:23PM +0100, Hans de Goede wrote:
-> Hi,
+On Mon, Nov 28, 2022 at 10:28:47AM +0100, Hans de Goede wrote:
+> Hi Sebastian, Marek,
 >=20
-> On 12/6/22 10:17, Denis Arefev wrote:
-> > Variable 'pirq', which may receive negative value
-> > in platform_get_irq().
-> > Used as an index in a function regmap_irq_get_virq().
-> >=20
-> > Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> >=20
-> > Signed-off-by: Denis Arefev <arefev@swemel.ru>
+> Here is v2 of my bq25890 series from yesterday, addressing the few
+> small remarks from Marek + adding Marek's Reviewed-by to most of
+> my patches. Note I dropped patch 1/10 from the v1 series since that
+> has already been merged.
 >=20
-> Thanks, patch looks good to me:
+> Here is a (slightly updated) copy of the v1 cover letter:
 >=20
-> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> I have been working on getting a Lenovo Yoga Tab 3 Pro (YT3-X90F) to
+> work with the mainline kernel. This tablet has 2 batteries with
+> 2 bq25892 chargers both connected to a single Micro-USB connector.
 >=20
-> Regards,
+> Supporting the 2 charger board also requires the recent HiZ mode patches
+> from Marek, to avoid merging order problems / conflicts I have included
+> a copy of Marek's series here so this series obsoletes the:
 >=20
-> Hans
+> [PATCH 1/2] power: supply: bq25890: Factor out chip state update
+> [PATCH 2/2] power: supply: bq25890: Add HiZ mode support
+> [PATCH v2 1/2] power: supply: bq25890: Factor out chip state update
+> [PATCH v2 2/2] power: supply: bq25890: Add HiZ mode support
+>=20
+> patches from Marek.
+>=20
+> While working on adding support for this I also noticed some generic issu=
+es
+> with the bq25890 driver currently in linux-power-supply/for-next and I al=
+so
+> have some fixes to the HiZ support on top of Marek's support.
+>=20
+> So this entire series consist of 4 parts:
+>=20
+> 1. Patches 1-2:
+>=20
+> Generic bugfixes for the bq25890 charger in its current state
+> in linux-power-supply/for-next.
+>=20
+> 2. Patches 3-4:
+>=20
+> Marek's HiZ support work, thank you Marek.
+>=20
+> 3. Patches 5-6:
+>=20
+> Some fixes / improvements from me to Marek's HiZ support.
+>=20
+> 4. Patch 7-9:
+>=20
+> The actual support for boards with 2 chargers.
 
-Thanks, queued to power-supply's fixes branch.
+I just queued patches 3-7 to power-supply's for-next branch.
+
+Thanks,
 
 -- Sebastian
 
 >=20
-> > ---
-> >  drivers/power/supply/axp288_fuel_gauge.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >=20
-> > diff --git a/drivers/power/supply/axp288_fuel_gauge.c b/drivers/power/s=
-upply/axp288_fuel_gauge.c
-> > index 148eb8105803..36c7039c99c2 100644
-> > --- a/drivers/power/supply/axp288_fuel_gauge.c
-> > +++ b/drivers/power/supply/axp288_fuel_gauge.c
-> > @@ -640,6 +640,8 @@ static void fuel_gauge_init_irq(struct axp288_fg_in=
-fo *info)
-> > =20
-> >  	for (i =3D 0; i < AXP288_FG_INTR_NUM; i++) {
-> >  		pirq =3D platform_get_irq(info->pdev, i);
-> > +		if (pirq < 0)
-> > +			continue;
-> >  		info->irq[i] =3D regmap_irq_get_virq(info->regmap_irqc, pirq);
-> >  		if (info->irq[i] < 0) {
-> >  			dev_warn(&info->pdev->dev,
+> Regards,
+>=20
+> Hans
+>=20
+>=20
+> Hans de Goede (7):
+>   power: supply: bq25890: Ensure pump_express_work is cancelled on
+>     remove
+>   power: supply: bq25890: Fix usb-notifier probe and remove races
+>   power: supply: bq25890: Fix setting of F_CONV_RATE rate when disabling
+>     HiZ mode
+>   power: supply: bq25890: Always take HiZ mode into account for ADC rate
+>   power: supply: bq25890: Support boards with more then one charger IC
+>   power: supply: bq25890: Add support for having a secondary charger IC
+>   power: supply: bq25890: Add new linux,iinlim-percentage property
+>=20
+> Marek Vasut (2):
+>   power: supply: bq25890: Factor out chip state update
+>   power: supply: bq25890: Add HiZ mode support
+>=20
+>  drivers/platform/x86/x86-android-tablets.c |   2 +-
+>  drivers/power/supply/bq25890_charger.c     | 226 ++++++++++++++++-----
+>  2 files changed, 179 insertions(+), 49 deletions(-)
+>=20
+> --=20
+> 2.37.3
 >=20
 
---6z3y7co7hg7rakoo
+--o4w24wzwcjvmsufd
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOzWH0ACgkQ2O7X88g7
-+prkow//WeGRJ+8c+zBWyca2ncxQuK0f5OqpVwrMJN8p6yHN8roPoMMszV4T3PYG
-/kkWcgJ3SAHs5qolXwGGsSJ+1ehh2I/4fKrhn8aKokbFGfq/IS9lIa6B5nd6xJsV
-l1reydmzHvs0FK8SAYV/hx852Bw9ZA0epi0bxClzbzor5AUu2ALHRVoNAIGz/KX6
-nHry0NIKurs2tOdYXdIpmJutuaKG2oTFyzNmYQ3SRDrFSXRCHkpYtyWIYSqPI/BF
-u4Ov7G1YvSf3TfNkVEWkYn1d/pyhe68JgAUpGYLwCMA/qSnZBIBHur56HE/n+a6Q
-v/pMNSoEVReBEgvh8SGsmEEFzC9MSOMLG3KYIwqb9AEWHfHUMztMwJuPJzC0dsAt
-d7ltTqzVnEvJruhGAex2vOkM7EHMKmgidvjp44g0LyD87E3P8Th7l/3vmyxg0wLG
-ey//FLIEUjb885TV26RLRJi2YHkqJy2574hjNNedK3LEU0oM9Sz1uuqukfZp9B6e
-H0Ld442yT0DEix5lqmcg8Tvhw80iUlCjt9Kt5vguaY1r9lvr+rVb1sUJL8Oeg7yM
-pGyDYnJjlwuNgUf8f940uVkg8A0Hbq6fX87q3Q9TRMdtcM+sij+1Cbi7cUceQEiM
-U0dg7TcjPJyUsXNozZri6tHqMP4IziZ6cL5mP8mV//fInB/vmQg=
-=rXS/
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOzZY0ACgkQ2O7X88g7
++pr0/hAAjrMYnoWtVCe1RsH11M8T01kxMT++hEBn9g/9LbVwizv3VFZUjwL9fxtR
+qJ1Q/FS7AGjhjNhRwfhxkH9R1IpEgoUjZwh+ebbs/x5VXRnp9nTcjkT7m1cgYbW8
+hmn6Mm4CnxJ71hf+kYGIDaWEtkXIP63E2m2kT4rdeZO0sIpRpsxxHj9rGbgtckns
+noph3VYnIKLnX2EgT1tz/ugWulWjc30B1jSeHqk5DgA+tyzJPvQ3/8p5eAGsCwuU
+0xwGjTcsyQPY+ho/xvRmCPsoUEqu4QJYOsTRXBjv9VOUoY4rxZnB8yykvYvZBaEn
+x6GcFAA+YCcXdpM7kaazpXEAasydoXj9uHzh4933iYNvA2NDXWyzsGtDONj0XcFC
+aMzwccDBwy3TIVdgWA9Wdg299bTWOSN/hXUH2fkEKnGmpjRAdI6TOtvX2YOnLHHY
+n4BElwZionDezgGqiwkihbp/l39lY/26ytM/+ZxlmnxPOMGsMl3r2jMLXs285GGX
+fVOfteFr+oZ8CskGdSQ4wXZHvtqTFjQ4TSD9PXdkxkSerZnmTEmld/AqHlQXf8Xw
+gifUIYZARy4cA9Bil46KffRZOIeeHNRpJh+TwrApCZRIFahHZXzJg+4O5ku/Bzv7
+CYxxYrA85o6iz4ML+ipnGad0fBH/3wRCg0i0F85vM3FbOW/SO+Y=
+=Jv9a
 -----END PGP SIGNATURE-----
 
---6z3y7co7hg7rakoo--
+--o4w24wzwcjvmsufd--
