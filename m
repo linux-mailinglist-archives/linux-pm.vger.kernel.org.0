@@ -2,104 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFE265AE4B
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 09:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F7865AE93
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 10:14:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjABIm0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 03:42:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
+        id S231736AbjABJN7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 04:13:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231923AbjABImN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 03:42:13 -0500
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5FCF21BA
-        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 00:42:11 -0800 (PST)
-Received: by mail-lf1-x12d.google.com with SMTP id f34so40704701lfv.10
-        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 00:42:11 -0800 (PST)
+        with ESMTP id S231890AbjABJN5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 04:13:57 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E74F21A1;
+        Mon,  2 Jan 2023 01:13:56 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso20206876wmb.0;
+        Mon, 02 Jan 2023 01:13:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=44Gg/E+60UvNm/zwJ/GwqJLenp9GbVRI1kXpTzUKZJk=;
-        b=BFqeumzb49ZeMtVivm9iBOL5l7oADVEsqpP+abm4S/L7kSHd11pXNPQAmJb/v6PerF
-         8PEX+9DNdoXUP3UUrEdEGRZ7B/tDxA0m+UEwuTu0lH8iyQv66HWJGXiiEamhZ4wNmAPu
-         wpdCzdfs4PwiUtt7+iKmhXupaTwpB24GNdQjWyyLdwE9C9kCh1r75BRmXyaSXg4X9sbh
-         RGIz2C7MeTHRqMR/owAFOgNK0X53P2LDrwZU7VHN7hH5sc+9UAiI/nzHiF+UhbJT339F
-         l+0tLhYBCEfNh5DCo6T8qMmx/Vs+dVb9rCU8uOEb+1GIyZ9sam5E7ccSCBWOAt2habR6
-         LsYg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ce6OmGFq9VZBpGi1vGDY3sSx/S75wdoRU07kB2bZ+9c=;
+        b=EoquokVRhdtRVmPK97+iSE9uIv6hKX8ijtFzvLhlHxCQgVpsA/Klrh3kAwvmp0I9GN
+         mT7ApOawKh6TRpw0JR23VMK8dGs77ilsEb3PxzEkGfxtB5+slDO/xkeyN5klkwApnrQ5
+         T/U5qy38glE2KT/4QQq5mMKtozmgU6fGbcY+9xx22QnRaNLD7J7YzwBosFbdUgbpXuLX
+         40NArEMJdV0GHO6ioE9Nl3NllJtW0BKD+P4AdDMfXy3BF6Ub6YYzlh9wP1QHcD0tCuH8
+         AHekCt22XUdTKCBVdjWvTrn6drZgLVRnQuEOmQdatJmCGQHTWPsosqCh7Yzj6Wlo7ueq
+         ku3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=44Gg/E+60UvNm/zwJ/GwqJLenp9GbVRI1kXpTzUKZJk=;
-        b=Y3ku126v8/rBT8rTIqGY6C/wcFjXVVuTU1RBepSy6aL3nkXjA0DxPyucVadLVKbmTW
-         VmYyFqkx6lwnsTRnFxyRsFDEuiKjdUgJ2a5wfhzkCAnWmfhhXQU+tQuWc3LCcKs5VDuE
-         PCz+nsLFxv14bVXJlOALUC+Sj4ljnNDVFRHfcAR7Tj1chrjFRGSBenst4w5gDiFf86l4
-         tUw2nZWX5SWgXz7wQK4QL/JJrPUdcIOPCJYCzZEDfhwwXIdn46jAck7q2q9REG2v4rBh
-         eR8592p+D5LJHkkN2zkMx7+XIoAz4/Bzl8zeDR8vV4qI2Rs+8kuSq6SUn+GJtxL2ywyR
-         OipQ==
-X-Gm-Message-State: AFqh2kp/h4LolZeha5ieczhtUaxuXUONa94K4kP3ltH7aemZoFiDapCt
-        IJwLR4dcMD24VcyVz2eu+fd+9w==
-X-Google-Smtp-Source: AMrXdXuSYB6Ypu8VhVshvFBUv0zv6QTztaMRnbrMlzbnT36iZpGXUpCoiWEkKwO4z9aYrwQM12IEDQ==
-X-Received: by 2002:a05:6512:224d:b0:4b4:b5d3:6603 with SMTP id i13-20020a056512224d00b004b4b5d36603mr18605012lfu.32.1672648930209;
-        Mon, 02 Jan 2023 00:42:10 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id bq28-20020a056512151c00b004b1a5086485sm4399091lfb.2.2023.01.02.00.42.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Jan 2023 00:42:09 -0800 (PST)
-Message-ID: <c6671d78-33c4-226e-b0de-ea8daaab0019@linaro.org>
-Date:   Mon, 2 Jan 2023 09:42:08 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ce6OmGFq9VZBpGi1vGDY3sSx/S75wdoRU07kB2bZ+9c=;
+        b=5QaulAi87A8G3p4CQZxmJTQg8DIqZg5P1sdi5tatQdK38OjS9+WZdnfaSDqqeEYIVU
+         m63uQ9/o59WSL2Ux2vr/j5lbjn+TiFA0k6QFxekkfEmXZb/9UZUgP+ZPUP3TMn1PQdHr
+         e6Jcq9Rm6e9TGSyKH0ftC6rMoPBLe7nSmKTliwOJntAWhLoQVbeubrb1Mh4LF85SZvhd
+         TPkNtsP6Vm6Tnm4GP+vSInYu3bhb49RAzCDetNBvRXG5TQEbVr0hP/2lAYCOlcpPzEgR
+         0adZZ+ALY4QcEw6td3R+6rqi07L3fsf6TyWxbtHinM2zyGXi+Ko0qnnQNLLyGUmFTHQ2
+         UceQ==
+X-Gm-Message-State: AFqh2krPltyBo0ZSmtmPrDXq/ve0wWO5yuYoc7980jHwu0CRWAg57oJR
+        mscOgCFLT+u0Xhb6ajM+/dEmLdZe8Xitrw==
+X-Google-Smtp-Source: AMrXdXs7SCQj0wzyqzkSFxedhqj0UniP7iPuFeZsaG7t8JL9TtTJCkLv4L0H/xAJdi/B+dRMYcN/mg==
+X-Received: by 2002:a05:600c:1da3:b0:3d3:4dbc:75ef with SMTP id p35-20020a05600c1da300b003d34dbc75efmr28346951wms.17.1672650835101;
+        Mon, 02 Jan 2023 01:13:55 -0800 (PST)
+Received: from tpt440p.steeds.sam ([2602:fbf6:10:8::2])
+        by smtp.gmail.com with ESMTPSA id n36-20020a05600c3ba400b003b49bd61b19sm44700735wms.15.2023.01.02.01.13.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 01:13:54 -0800 (PST)
+From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
+To:     linux-pm@vger.kernel.org
+Cc:     pali@kernel.org, sre@kernel.org, brauner@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Sicelo A. Mhlongo" <absicsz@gmail.com>
+Subject: [PATCH 1/1] power: supply: bq27xxx: fix reporting critical level
+Date:   Mon,  2 Jan 2023 11:13:26 +0200
+Message-Id: <20230102091326.3959978-1-absicsz@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v6 02/20] dt-bindings: thermal: tsens: support per-sensor
- calibration cells
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230101194034.831222-1-dmitry.baryshkov@linaro.org>
- <20230101194034.831222-3-dmitry.baryshkov@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230101194034.831222-3-dmitry.baryshkov@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/01/2023 20:40, Dmitry Baryshkov wrote:
-> Allow specifying the exact calibration mode and calibration data as nvmem
-> cells, rather than specifying just a single calibration data blob.
-> 
-> Note, unlike the vendor kernel the calibration data uses hw_ids rather
-> than software sensor indices (to match actual tsens usage in
-> thermal zones).
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+The EDV1/SOC1 flag is set when the battery voltage drops below the
+threshold set in EEPROM. From observing the capacity_level reported by
+the driver, and reading the datasheet, EDV1 remains set even when
+EDVF/SOCF gets set. Thus, bq27xxx_battery_capacity_level() never reaches
+the CAPACITY_LEVEL_CRITICAL code path, since CAPACITY_LEVEL_LOW takes
+precedence.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This commit fixes the issue by swapping the order in which the flags are
+tested. It was tested with bq27200 in the Nokia N900.
 
-Best regards,
-Krzysztof
+Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
+---
+ drivers/power/supply/bq27xxx_battery.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
+index 8bf048fbd36a..5ff6f44fd47b 100644
+--- a/drivers/power/supply/bq27xxx_battery.c
++++ b/drivers/power/supply/bq27xxx_battery.c
+@@ -1917,10 +1917,10 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
+ 	if (di->opts & BQ27XXX_O_ZERO) {
+ 		if (di->cache.flags & BQ27000_FLAG_FC)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
+-		else if (di->cache.flags & BQ27000_FLAG_EDV1)
+-			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else if (di->cache.flags & BQ27000_FLAG_EDVF)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
++		else if (di->cache.flags & BQ27000_FLAG_EDV1)
++			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
+ 	} else if (di->opts & BQ27Z561_O_BITS) {
+@@ -1933,10 +1933,10 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
+ 	} else {
+ 		if (di->cache.flags & BQ27XXX_FLAG_FC)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
+-		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
+-			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else if (di->cache.flags & BQ27XXX_FLAG_SOCF)
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
++		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
++			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
+ 		else
+ 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
+ 	}
+-- 
+2.39.0
 
