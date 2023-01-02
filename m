@@ -2,119 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9EA465B3EA
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 16:13:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 768C365B451
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 16:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236227AbjABPNO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 10:13:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53824 "EHLO
+        id S236403AbjABPhM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 10:37:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236291AbjABPNM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 10:13:12 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7177C8FE8
-        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 07:13:11 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id o2so24703427pjh.4
-        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 07:13:11 -0800 (PST)
+        with ESMTP id S232151AbjABPg4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 10:36:56 -0500
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55115C0
+        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 07:36:55 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id b2so29836083pld.7
+        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 07:36:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=otygSCeqYmw+ATuRegxvbEPgY/sYQb9Ip6+W2rvVaQg=;
-        b=a9G0rqbfwcOQy3clY+Qqml/pRfbYB3tTnEXqDNbOVsZW/oJt/kC1Xv5lyiLa4kBSGm
-         3zoAcBlS5kMS0qrWlWmDeRRvjU/4kShoMy3tdgdkOca2QT5m3Yy4UFIqYmKYOfG1cCVD
-         DspfzOTfaWX+1uQEbN+pxBIyru80S5a524q2+1d9UKlKhK3+IxBRP4BRIRcq8py39qJH
-         lrx4pvoREYQh8usxT//rKsGVjLyJcrKovhip8OypTd+udn34vdUF5uXXcYPD5DvFmcmG
-         T19ru4YhFZTvPcjU4VdACf1K0ozGQDY4gh7CZ/H++N9vbkRR+fQjGzyJ61hBbxoY9CJA
-         z94w==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3xbPAAoR5TNNaXxpt5BXhcyV4DPiLkdBlfg+2MuRDz4=;
+        b=Y8ESOzQgsgIbS1fDjDq7NWStVXvuq97bW50NeYZ80/CcYdFbggpe3EUa/6bWc2PxTX
+         yhmnhokNDwzbqhBWbnJMHEkt3MhtwEHxpkBNCQGxOADVv6oXZH3nyCLgHepryskepL7V
+         G4HTUj7yxQDti6iU40LWMTTYgveUOrT2XAAC12c2nT3dPcCTlDOqHcj6SftUWwM2bWLd
+         YaxjBoO1wm7geqjRFtqjINkxr5ltHC/RbQNmofP51BdORyLZa6xuOexCm5W/QpWVgMKs
+         4U6LMVm3tGAEgovftEKst40yDDoIt/cZ8T0jMGNzUwiTSBKby279/o2WZaFULn0oWmC9
+         0f4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=otygSCeqYmw+ATuRegxvbEPgY/sYQb9Ip6+W2rvVaQg=;
-        b=TZClTKLj0n1Q+a3mdTxxPEyBHF+bNle0s5uplAxCrAHdzsttyUNRLCcChfQVe5g86k
-         zMZstNaVPIyBdhLT7ZWfs197ayL2os0v5163CO0rHfTwdxSZpGXADdnPSlWx1HS5/S2x
-         47AzuT4kODZpj/fIYfc8VPwtmDXFOR2O6HssrYDXXaYVK98wnaQY2g4FQkQ5YfhU0n2E
-         Qpxxh8Ndb+27QBsJyJ+hCrCatYMUnt3zOpIAtiIDdWKkklupdxR7FYNZ1S8YA9ZW2en8
-         YuRWiLwe3vs7UiwpzD0tNCwq5tQP0e4i+LIviqE50+D4hfbC/WOVZnr2rJmnfUJ7fr2T
-         lfVw==
-X-Gm-Message-State: AFqh2kprcB60u82PoPfY/ovp8T/aDYYJteNRcBPcAQoaD6yPRNY5nUDH
-        Bp47D+HkNka7W+g4kjO0wzYs6HoaJ/OHFYT9YUoeVg==
-X-Google-Smtp-Source: AMrXdXvBbRg+gwuK3zo3zJqn8sbYYAEgGNQd6plGlB7o9px13hy9RfXgRvDIwUhQ9Hr1LwldjrkE3KnikV8v2+McWew=
-X-Received: by 2002:a17:902:e053:b0:192:8d55:4599 with SMTP id
- x19-20020a170902e05300b001928d554599mr1261766plx.165.1672672390946; Mon, 02
- Jan 2023 07:13:10 -0800 (PST)
+        bh=3xbPAAoR5TNNaXxpt5BXhcyV4DPiLkdBlfg+2MuRDz4=;
+        b=TWOlGZbz4rBE8GqjzLYSb2fe5xdYq3f8+Fkq5ZOh73Y8hrn9G7UtiVHEzjg0wnk2k5
+         ZWLbd2J7nvoT073qmrdsa2pSKigXmJORqIWkV1f4Eub3T9HJn8XcDVWOlkXDwHAW+wZs
+         1iX3Ps9IoNX+Jh2huQ3rms3tsJ1IsSH9oaMQ26x65sI3wdGJwYWFwDJW4O+YRrCM/oyZ
+         mrDFNrVCdc64kICpzdird4bWTSQ2yFrssMD5ivNCPEsp5G+9ZdD1fMWV6kWyC3bFayWd
+         7o4IMxoubXaC/FSksbVNHA2Y7OMi3V8wgOiSz4kUAnkrIQbPJznl/+B+VgNoNIQNGgC9
+         zKRA==
+X-Gm-Message-State: AFqh2kpb4H6JjhNk8bm1Wo6AZtlWrzNcI+nbv0PpyFO2eb2zRsVWdIEt
+        Y0bO1R8sHHicYc7vLJvAEk1KytF8jKxrZVHc+zc=
+X-Google-Smtp-Source: AMrXdXuiGlwpKwZR/lv5FNJx19v1zqHFnTCxHSzsP5m/O0I/ApOiyiQE5JX5OnRsvhQ0s35oQJ1vaQ==
+X-Received: by 2002:a17:902:da86:b0:186:865c:ea17 with SMTP id j6-20020a170902da8600b00186865cea17mr59479328plx.38.1672673814817;
+        Mon, 02 Jan 2023 07:36:54 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a2-20020a170902ecc200b0017f64ab80e5sm20303629plh.179.2023.01.02.07.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Jan 2023 07:36:54 -0800 (PST)
+Message-ID: <63b2fa16.170a0220.c1eec.0089@mx.google.com>
+Date:   Mon, 02 Jan 2023 07:36:54 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <0f520597dbad89ab99c217c8986912fa53eaf5f9.1671293108.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <0f520597dbad89ab99c217c8986912fa53eaf5f9.1671293108.git.christophe.jaillet@wanadoo.fr>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 2 Jan 2023 16:12:34 +0100
-Message-ID: <CAPDyKFrhHnk21qKK0Losg02KCN18JdVZb1CgA=LYj4NwN33_Bw@mail.gmail.com>
-Subject: Re: [PATCH] PM: AVS: qcom-cpr: Fix an error handling path in cpr_probe()
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Niklas Cassel <nks@flawful.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jorge Ramirez-Ortiz <jorge.ramirez-ortiz@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Niklas Cassel <niklas.cassel@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.2-rc2-20-g2804f848d8e3
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.2-rc2-20-g2804f848d8e3)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 17 Dec 2022 at 17:05, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
->
-> If an error occurs after a successful pm_genpd_init() call, it should be
-> undone by a corresponding pm_genpd_remove().
->
-> Add the missing call in the error handling path, as already done in the
-> remove function.
->
-> Fixes: bf6910abf548 ("power: avs: Add support for CPR (Core Power Reduction)")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc2-20-g28=
+04f848d8e3)
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+2-rc2-20-g2804f848d8e3/
 
-Kind regards
-Uffe
+Tree: pm
+Branch: testing
+Git Describe: v6.2-rc2-20-g2804f848d8e3
+Git Commit: 2804f848d8e3541dc77038a8d9b0b3385e93495f
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-> ---
->  drivers/soc/qcom/cpr.c | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/soc/qcom/cpr.c b/drivers/soc/qcom/cpr.c
-> index e9b854ed1bdf..144ea68e0920 100644
-> --- a/drivers/soc/qcom/cpr.c
-> +++ b/drivers/soc/qcom/cpr.c
-> @@ -1708,12 +1708,16 @@ static int cpr_probe(struct platform_device *pdev)
->
->         ret = of_genpd_add_provider_simple(dev->of_node, &drv->pd);
->         if (ret)
-> -               return ret;
-> +               goto err_remove_genpd;
->
->         platform_set_drvdata(pdev, drv);
->         cpr_debugfs_init(drv);
->
->         return 0;
-> +
-> +err_remove_genpd:
-> +       pm_genpd_remove(&drv->pd);
-> +       return ret;
->  }
->
->  static int cpr_remove(struct platform_device *pdev)
-> --
-> 2.34.1
->
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
