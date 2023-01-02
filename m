@@ -2,51 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D4E65B622
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 19:02:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3195265B62C
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 19:05:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbjABSCr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 13:02:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S236510AbjABSE6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 13:04:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236275AbjABSCU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 13:02:20 -0500
+        with ESMTP id S232873AbjABSEi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 13:04:38 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B75FFB7E0;
-        Mon,  2 Jan 2023 10:02:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65222BF6A;
+        Mon,  2 Jan 2023 10:04:26 -0800 (PST)
 Received: from mercury (dyndsl-091-096-062-126.ewe-ip-backbone.de [91.96.62.126])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7890E6600366;
-        Mon,  2 Jan 2023 18:02:16 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 14B186600366;
+        Mon,  2 Jan 2023 18:04:25 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672682536;
-        bh=rCN0bORNHGMMvVYTDOpdREa4PfuJcHc63quH0/3CZXo=;
+        s=mail; t=1672682665;
+        bh=MxmlT3WLy971sqhwpS/hMtl16U1BeuAWVN5G0J0bkVQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KqKNgmMIZRyfV2jyPLqo19uy9KoJXpgTYomeh7/vxhrMQCBV0rgSkAnNJ16gKOspI
-         PHk6gLLUp52WSPxOCdOhd9bdpM3BtdnNIfVOjKaunQ+fFYlbwXYWkLDM3Gj9ilhHem
-         2/YQvN241nqcej1tk1ieVkk6QSOwDX+AGSlDP3pn40yxcjph78bcvgRipUUG8/o93R
-         Llny5qpJEC/Nno5nXRk2uaBKWzjopkzzy/lA/0nyiXLL6UWKmqW/dGIAeJHlhMRR5+
-         AbElKwZmxeRAn07Cxj+vRmHqRaMDk54XjQ2b/zFn8ef14wPP8Pe27KK7wqzIyGSQy5
-         yhWJGGstc5VUg==
+        b=YBed19zoA4imIZC40OK8mfKU2TBWwqdOsgMlcU2cEdaOYUo6F+KmD1geeqtcY5OR3
+         1j4CJBJ3R2tqRI8jrwS0XiAiHq1UZ44XMISvDXXtgdZpMpJ7GKxereD06BwYOr8i4a
+         H4MUnZrlOYe4v7mOsPlEPq/+HClpv3bFVIoR7oXZ9tT5oYf0ZqYRKbZYuV4LNHc1Ey
+         4APj2qs9AHa3dQBK6YbzZiz4Pg8l9ZGo3Df0pUCiHkwrTkjv06DJFHXIM7WWeqSs2L
+         JeR76dNjyaOE8woWCcVzIDOcSVFDf3/evRhfx2iaSlJ27sEDBXlPi86ZUm0jIPy8m7
+         uLzs9TXsADfRQ==
 Received: by mercury (Postfix, from userid 1000)
-        id 6F46310606C9; Mon,  2 Jan 2023 19:02:13 +0100 (CET)
-Date:   Mon, 2 Jan 2023 19:02:13 +0100
+        id 580D110606C9; Mon,  2 Jan 2023 19:04:23 +0100 (CET)
+Date:   Mon, 2 Jan 2023 19:04:23 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     ye.xingchen@zte.com.cn
-Cc:     linus.walleij@linaro.org, krzysztof.kozlowski@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH linux-next v2] power: supply: use sysfs_emit() to instead
- of scnprintf()
-Message-ID: <20230102180213.h5mbyyqnmpgaf3br@mercury.elektranox.org>
-References: <202212061114083350005@zte.com.cn>
+Cc:     linus.walleij@linaro.org, pali@kernel.org, bleung@chromium.org,
+        groeck@chromium.org, sravanhome@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        chrome-platform@lists.linux.dev, patches@opensource.cirrus.com
+Subject: Re: [PATCH linux-next] power: supply: convert sprintf with
+ sysfs_emit()
+Message-ID: <20230102180423.zh46wghlxpykvqjr@mercury.elektranox.org>
+References: <202212061116089380072@zte.com.cn>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w4bxyprcvdwgi7zj"
+        protocol="application/pgp-signature"; boundary="f3yz5l3p3l5jdjtn"
 Content-Disposition: inline
-In-Reply-To: <202212061114083350005@zte.com.cn>
+In-Reply-To: <202212061116089380072@zte.com.cn>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -57,14 +59,14 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---w4bxyprcvdwgi7zj
+--f3yz5l3p3l5jdjtn
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Tue, Dec 06, 2022 at 11:14:08AM +0800, ye.xingchen@zte.com.cn wrote:
+On Tue, Dec 06, 2022 at 11:16:08AM +0800, ye.xingchen@zte.com.cn wrote:
 > From: ye xingchen <ye.xingchen@zte.com.cn>
 >=20
 > Follow the advice of the Documentation/filesystems/sysfs.rst and show()
@@ -72,298 +74,675 @@ On Tue, Dec 06, 2022 at 11:14:08AM +0800, ye.xingchen@zte.com.cn wrote:
 > value to be returned to user space.
 >=20
 > Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> v1 -> v2
-> Convert to use sysfs_emit_at() API in power/supply/twl4030_charger.c.
 > ---
 
-Thanks, queued. I fixed up the commit message. The changelog should
-be below the ---.
+You changed all sprintf instances, incl. those not related to sysfs.
+That's obviously not ok. I dropped those changes and queued this
+patch with a fixed up commit message. Please be more careful next
+time.
+
+Thanks,
 
 -- Sebastian
 
->  drivers/power/supply/ab8500_fg.c        | 18 +++++++++---------
->  drivers/power/supply/bq24190_charger.c  |  2 +-
->  drivers/power/supply/bq24257_charger.c  |  8 +++-----
->  drivers/power/supply/lp8788-charger.c   |  7 +++----
->  drivers/power/supply/max14577_charger.c |  2 +-
->  drivers/power/supply/max77693_charger.c |  6 +++---
->  drivers/power/supply/twl4030_charger.c  |  6 ++----
->  7 files changed, 22 insertions(+), 27 deletions(-)
+>  drivers/power/supply/ab8500_fg.c          |  4 +--
+>  drivers/power/supply/bq2415x_charger.c    | 44 +++++++++++------------
+>  drivers/power/supply/charger-manager.c    |  6 ++--
+>  drivers/power/supply/cros_usbpd-charger.c |  4 +--
+>  drivers/power/supply/ds2780_battery.c     |  8 ++---
+>  drivers/power/supply/ds2781_battery.c     |  8 ++---
+>  drivers/power/supply/isp1704_charger.c    |  2 +-
+>  drivers/power/supply/ltc4162-l-charger.c  | 12 +++----
+>  drivers/power/supply/mp2629_charger.c     |  2 +-
+>  drivers/power/supply/olpc_battery.c       |  4 +--
+>  drivers/power/supply/pcf50633-charger.c   |  6 ++--
+>  drivers/power/supply/pmu_battery.c        |  2 +-
+>  drivers/power/supply/power_supply_sysfs.c | 12 +++----
+>  drivers/power/supply/sbs-battery.c        |  2 +-
+>  drivers/power/supply/test_power.c         | 12 +++----
+>  drivers/power/supply/wm8350_power.c       |  2 +-
+>  16 files changed, 65 insertions(+), 65 deletions(-)
 >=20
 > diff --git a/drivers/power/supply/ab8500_fg.c b/drivers/power/supply/ab85=
 00_fg.c
-> index c6c9804280db..d989eadaa933 100644
+> index d989eadaa933..41a7bff9ac37 100644
 > --- a/drivers/power/supply/ab8500_fg.c
 > +++ b/drivers/power/supply/ab8500_fg.c
-> @@ -2594,7 +2594,7 @@ static ssize_t ab8505_powercut_flagtime_read(struct=
- device *dev,
->  		goto fail;
->  	}
+> @@ -2453,7 +2453,7 @@ struct ab8500_fg_sysfs_entry {
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+>  static ssize_t charge_full_show(struct ab8500_fg *di, char *buf)
+>  {
+> -	return sprintf(buf, "%d\n", di->bat_cap.max_mah);
+> +	return sysfs_emit(buf, "%d\n", di->bat_cap.max_mah);
+>  }
 >=20
->  fail:
->  	return ret;
-> @@ -2644,7 +2644,7 @@ static ssize_t ab8505_powercut_maxtime_read(struct =
-device *dev,
->  		goto fail;
->  	}
+>  static ssize_t charge_full_store(struct ab8500_fg *di, const char *buf,
+> @@ -2472,7 +2472,7 @@ static ssize_t charge_full_store(struct ab8500_fg *=
+di, const char *buf,
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
+>  static ssize_t charge_now_show(struct ab8500_fg *di, char *buf)
+>  {
+> -	return sprintf(buf, "%d\n", di->bat_cap.prev_mah);
+> +	return sysfs_emit(buf, "%d\n", di->bat_cap.prev_mah);
+>  }
 >=20
->  fail:
->  	return ret;
-> @@ -2695,7 +2695,7 @@ static ssize_t ab8505_powercut_restart_read(struct =
-device *dev,
->  		goto fail;
->  	}
->=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0xF));
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0xF));
->=20
->  fail:
->  	return ret;
-> @@ -2746,7 +2746,7 @@ static ssize_t ab8505_powercut_timer_read(struct de=
-vice *dev,
->  		goto fail;
->  	}
->=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7F));
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7F));
->=20
->  fail:
->  	return ret;
-> @@ -2769,7 +2769,7 @@ static ssize_t ab8505_powercut_restart_counter_read=
-(struct device *dev,
->  		goto fail;
->  	}
->=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0xF0) >> 4);
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0xF0) >> 4);
->=20
->  fail:
->  	return ret;
-> @@ -2790,7 +2790,7 @@ static ssize_t ab8505_powercut_read(struct device *=
-dev,
+>  static ssize_t charge_now_store(struct ab8500_fg *di, const char *buf,
+> diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/suppl=
+y/bq2415x_charger.c
+> index d2cb7431dced..0e8bbc2e3e07 100644
+> --- a/drivers/power/supply/bq2415x_charger.c
+> +++ b/drivers/power/supply/bq2415x_charger.c
+> @@ -1059,7 +1059,7 @@ static ssize_t bq2415x_sysfs_show_status(struct dev=
+ice *dev,
+>  	ret =3D bq2415x_exec_command(bq, command);
 >  	if (ret < 0)
->  		goto fail;
+>  		return ret;
+> -	return sprintf(buf, "%d\n", ret);
+> +	return sysfs_emit(buf, "%d\n", ret);
+>  }
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x1));
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x1));
+>  /*
+> @@ -1098,11 +1098,11 @@ static ssize_t bq2415x_sysfs_show_timer(struct de=
+vice *dev,
+>  	struct bq2415x_device *bq =3D power_supply_get_drvdata(psy);
 >=20
->  fail:
->  	return ret;
-> @@ -2841,7 +2841,7 @@ static ssize_t ab8505_powercut_flag_read(struct dev=
+>  	if (bq->timer_error)
+> -		return sprintf(buf, "%s\n", bq->timer_error);
+> +		return sysfs_emit(buf, "%s\n", bq->timer_error);
+>=20
+>  	if (bq->autotimer)
+> -		return sprintf(buf, "auto\n");
+> -	return sprintf(buf, "off\n");
+> +		return sysfs_emit(buf, "auto\n");
+> +	return sysfs_emit(buf, "off\n");
+>  }
+>=20
+>  /*
+> @@ -1175,30 +1175,30 @@ static ssize_t bq2415x_sysfs_show_mode(struct dev=
 ice *dev,
->  		goto fail;
+>  	ssize_t ret =3D 0;
+>=20
+>  	if (bq->automode > 0)
+> -		ret +=3D sprintf(buf+ret, "auto (");
+> +		ret +=3D sysfs_emit_at(buf, ret, "auto (");
+>=20
+>  	switch (bq->mode) {
+>  	case BQ2415X_MODE_OFF:
+> -		ret +=3D sprintf(buf+ret, "off");
+> +		ret +=3D sysfs_emit_at(buf, ret, "off");
+>  		break;
+>  	case BQ2415X_MODE_NONE:
+> -		ret +=3D sprintf(buf+ret, "none");
+> +		ret +=3D sysfs_emit_at(buf, ret, "none");
+>  		break;
+>  	case BQ2415X_MODE_HOST_CHARGER:
+> -		ret +=3D sprintf(buf+ret, "host");
+> +		ret +=3D sysfs_emit_at(buf, ret, "host");
+>  		break;
+>  	case BQ2415X_MODE_DEDICATED_CHARGER:
+> -		ret +=3D sprintf(buf+ret, "dedicated");
+> +		ret +=3D sysfs_emit_at(buf, ret, "dedicated");
+>  		break;
+>  	case BQ2415X_MODE_BOOST:
+> -		ret +=3D sprintf(buf+ret, "boost");
+> +		ret +=3D sysfs_emit_at(buf, ret, "boost");
+>  		break;
 >  	}
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", ((reg_value & 0x10) >> 4));
-> +	return sysfs_emit(buf, "%d\n", ((reg_value & 0x10) >> 4));
+>  	if (bq->automode > 0)
+> -		ret +=3D sprintf(buf+ret, ")");
+> +		ret +=3D sysfs_emit_at(buf, ret, ")");
 >=20
->  fail:
+> -	ret +=3D sprintf(buf+ret, "\n");
+> +	ret +=3D sysfs_emit_at(buf, ret, "\n");
 >  	return ret;
-> @@ -2864,7 +2864,7 @@ static ssize_t ab8505_powercut_debounce_read(struct=
- device *dev,
->  		goto fail;
->  	}
+>  }
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", (reg_value & 0x7));
-> +	return sysfs_emit(buf, "%d\n", (reg_value & 0x7));
->=20
->  fail:
->  	return ret;
-> @@ -2914,7 +2914,7 @@ static ssize_t ab8505_powercut_enable_status_read(s=
+> @@ -1215,15 +1215,15 @@ static ssize_t bq2415x_sysfs_show_reported_mode(s=
 truct device *dev,
->  		goto fail;
+>=20
+>  	switch (bq->reported_mode) {
+>  	case BQ2415X_MODE_OFF:
+> -		return sprintf(buf, "off\n");
+> +		return sysfs_emit(buf, "off\n");
+>  	case BQ2415X_MODE_NONE:
+> -		return sprintf(buf, "none\n");
+> +		return sysfs_emit(buf, "none\n");
+>  	case BQ2415X_MODE_HOST_CHARGER:
+> -		return sprintf(buf, "host\n");
+> +		return sysfs_emit(buf, "host\n");
+>  	case BQ2415X_MODE_DEDICATED_CHARGER:
+> -		return sprintf(buf, "dedicated\n");
+> +		return sysfs_emit(buf, "dedicated\n");
+>  	case BQ2415X_MODE_BOOST:
+> -		return sprintf(buf, "boost\n");
+> +		return sysfs_emit(buf, "boost\n");
 >  	}
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", ((reg_value & 0x20) >> 5));
-> +	return sysfs_emit(buf, "%d\n", ((reg_value & 0x20) >> 5));
+>  	return -EINVAL;
+> @@ -1261,8 +1261,8 @@ static ssize_t bq2415x_sysfs_print_reg(struct bq241=
+5x_device *bq,
+>  	int ret =3D bq2415x_i2c_read(bq, reg);
 >=20
->  fail:
->  	return ret;
-> diff --git a/drivers/power/supply/bq24190_charger.c b/drivers/power/suppl=
-y/bq24190_charger.c
-> index 2b2c3a4391c1..be34b9848450 100644
-> --- a/drivers/power/supply/bq24190_charger.c
-> +++ b/drivers/power/supply/bq24190_charger.c
-> @@ -463,7 +463,7 @@ static ssize_t bq24190_sysfs_show(struct device *dev,
->  	if (ret)
->  		count =3D ret;
->  	else
-> -		count =3D scnprintf(buf, PAGE_SIZE, "%hhx\n", v);
-> +		count =3D sysfs_emit(buf, "%hhx\n", v);
->=20
->  	pm_runtime_mark_last_busy(bdi->dev);
->  	pm_runtime_put_autosuspend(bdi->dev);
-> diff --git a/drivers/power/supply/bq24257_charger.c b/drivers/power/suppl=
-y/bq24257_charger.c
-> index ab4c49788c58..103ddc2b3def 100644
-> --- a/drivers/power/supply/bq24257_charger.c
-> +++ b/drivers/power/supply/bq24257_charger.c
-> @@ -767,8 +767,7 @@ static ssize_t bq24257_show_ovp_voltage(struct device=
- *dev,
->  	struct power_supply *psy =3D dev_get_drvdata(dev);
->  	struct bq24257_device *bq =3D power_supply_get_drvdata(psy);
->=20
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n",
-> -			 bq24257_vovp_map[bq->init_data.vovp]);
-> +	return sysfs_emit(buf, "%u\n", bq24257_vovp_map[bq->init_data.vovp]);
+>  	if (ret < 0)
+> -		return sprintf(buf, "%#.2x=3Derror %d\n", reg, ret);
+> -	return sprintf(buf, "%#.2x=3D%#.2x\n", reg, ret);
+> +		return sysfs_emit(buf, "%#.2x=3Derror %d\n", reg, ret);
+> +	return sysfs_emit(buf, "%#.2x=3D%#.2x\n", reg, ret);
 >  }
 >=20
->  static ssize_t bq24257_show_in_dpm_voltage(struct device *dev,
-> @@ -778,8 +777,7 @@ static ssize_t bq24257_show_in_dpm_voltage(struct dev=
+>  /* show all raw values of chip register, format per line: 'register=3Dva=
+lue' */
+> @@ -1338,7 +1338,7 @@ static ssize_t bq2415x_sysfs_show_limit(struct devi=
+ce *dev,
+>=20
+>  	if (ret < 0)
+>  		return ret;
+> -	return sprintf(buf, "%d\n", ret);
+> +	return sysfs_emit(buf, "%d\n", ret);
+>  }
+>=20
+>  /* set *_enable entries */
+> @@ -1401,7 +1401,7 @@ static ssize_t bq2415x_sysfs_show_enable(struct dev=
 ice *dev,
->  	struct power_supply *psy =3D dev_get_drvdata(dev);
->  	struct bq24257_device *bq =3D power_supply_get_drvdata(psy);
->=20
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n",
-> -			 bq24257_vindpm_map[bq->init_data.vindpm]);
-> +	return sysfs_emit(buf, "%u\n", bq24257_vindpm_map[bq->init_data.vindpm]=
-);
+>  	ret =3D bq2415x_exec_command(bq, command);
+>  	if (ret < 0)
+>  		return ret;
+> -	return sprintf(buf, "%d\n", ret);
+> +	return sysfs_emit(buf, "%d\n", ret);
 >  }
 >=20
->  static ssize_t bq24257_sysfs_show_enable(struct device *dev,
-> @@ -800,7 +798,7 @@ static ssize_t bq24257_sysfs_show_enable(struct devic=
+>  static DEVICE_ATTR(current_limit, S_IWUSR | S_IRUGO,
+> @@ -1498,7 +1498,7 @@ static int bq2415x_power_supply_init(struct bq2415x=
+_device *bq)
+>  	if (ret < 0)
+>  		strcpy(revstr, "unknown");
+>  	else
+> -		sprintf(revstr, "1.%d", ret);
+> +		sysfs_emit(revstr, "1.%d", ret);
+>=20
+>  	bq->model =3D kasprintf(GFP_KERNEL,
+>  				"chip %s, revision %s, vender code %.3d",
+> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/suppl=
+y/charger-manager.c
+> index 92db79400a6a..c9e8450c646f 100644
+> --- a/drivers/power/supply/charger-manager.c
+> +++ b/drivers/power/supply/charger-manager.c
+> @@ -1075,7 +1075,7 @@ static ssize_t charger_name_show(struct device *dev,
+>  	struct charger_regulator *charger
+>  		=3D container_of(attr, struct charger_regulator, attr_name);
+>=20
+> -	return sprintf(buf, "%s\n", charger->regulator_name);
+> +	return sysfs_emit(buf, "%s\n", charger->regulator_name);
+>  }
+>=20
+>  static ssize_t charger_state_show(struct device *dev,
+> @@ -1088,7 +1088,7 @@ static ssize_t charger_state_show(struct device *de=
+v,
+>  	if (!charger->externally_control)
+>  		state =3D regulator_is_enabled(charger->consumer);
+>=20
+> -	return sprintf(buf, "%s\n", state ? "enabled" : "disabled");
+> +	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
+>  }
+>=20
+>  static ssize_t charger_externally_control_show(struct device *dev,
+> @@ -1097,7 +1097,7 @@ static ssize_t charger_externally_control_show(stru=
+ct device *dev,
+>  	struct charger_regulator *charger =3D container_of(attr,
+>  			struct charger_regulator, attr_externally_control);
+>=20
+> -	return sprintf(buf, "%d\n", charger->externally_control);
+> +	return sysfs_emit(buf, "%d\n", charger->externally_control);
+>  }
+>=20
+>  static ssize_t charger_externally_control_store(struct device *dev,
+> diff --git a/drivers/power/supply/cros_usbpd-charger.c b/drivers/power/su=
+pply/cros_usbpd-charger.c
+> index cadb6a0c2cc7..effd5dc4eb79 100644
+> --- a/drivers/power/supply/cros_usbpd-charger.c
+> +++ b/drivers/power/supply/cros_usbpd-charger.c
+> @@ -630,14 +630,14 @@ static int cros_usbpd_charger_probe(struct platform=
+_device *pd)
+>  		psy_cfg.drv_data =3D port;
+>=20
+>  		if (cros_usbpd_charger_port_is_dedicated(port)) {
+> -			sprintf(port->name, CHARGER_DEDICATED_DIR_NAME);
+> +			sysfs_emit(port->name, CHARGER_DEDICATED_DIR_NAME);
+>  			psy_desc->type =3D POWER_SUPPLY_TYPE_MAINS;
+>  			psy_desc->properties =3D
+>  				cros_usbpd_dedicated_charger_props;
+>  			psy_desc->num_properties =3D
+>  				ARRAY_SIZE(cros_usbpd_dedicated_charger_props);
+>  		} else {
+> -			sprintf(port->name, CHARGER_USBPD_DIR_NAME, i);
+> +			sysfs_emit(port->name, CHARGER_USBPD_DIR_NAME, i);
+>  			psy_desc->type =3D POWER_SUPPLY_TYPE_USB;
+>  			psy_desc->properties =3D cros_usbpd_charger_props;
+>  			psy_desc->num_properties =3D
+> diff --git a/drivers/power/supply/ds2780_battery.c b/drivers/power/supply=
+/ds2780_battery.c
+> index 2b8c90d84325..1e7f297f6cb1 100644
+> --- a/drivers/power/supply/ds2780_battery.c
+> +++ b/drivers/power/supply/ds2780_battery.c
+> @@ -454,7 +454,7 @@ static ssize_t ds2780_get_pmod_enabled(struct device =
+*dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	return sprintf(buf, "%d\n",
+> +	return sysfs_emit(buf, "%d\n",
+>  		 !!(control_reg & DS2780_CONTROL_REG_PMOD));
+>  }
+>=20
+> @@ -507,7 +507,7 @@ static ssize_t ds2780_get_sense_resistor_value(struct=
+ device *dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	ret =3D sprintf(buf, "%d\n", sense_resistor);
+> +	ret =3D sysfs_emit(buf, "%d\n", sense_resistor);
+>  	return ret;
+>  }
+>=20
+> @@ -545,7 +545,7 @@ static ssize_t ds2780_get_rsgain_setting(struct devic=
 e *dev,
 >  	if (ret < 0)
 >  		return ret;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%d\n", ret);
-> +	return sysfs_emit(buf, "%d\n", ret);
+> -	return sprintf(buf, "%d\n", rsgain);
+> +	return sysfs_emit(buf, "%d\n", rsgain);
 >  }
 >=20
->  static ssize_t bq24257_sysfs_set_enable(struct device *dev,
-> diff --git a/drivers/power/supply/lp8788-charger.c b/drivers/power/supply=
-/lp8788-charger.c
-> index f5f47a0aa1e3..755b6a4379b8 100644
-> --- a/drivers/power/supply/lp8788-charger.c
-> +++ b/drivers/power/supply/lp8788-charger.c
-> @@ -602,7 +602,7 @@ static ssize_t lp8788_show_charger_status(struct devi=
-ce *dev,
->  	lp8788_read_byte(pchg->lp, LP8788_CHG_STATUS, &data);
->  	state =3D (data & LP8788_CHG_STATE_M) >> LP8788_CHG_STATE_S;
+>  static ssize_t ds2780_set_rsgain_setting(struct device *dev,
+> @@ -588,7 +588,7 @@ static ssize_t ds2780_get_pio_pin(struct device *dev,
+>  	if (ret < 0)
+>  		return ret;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%s\n", desc[state]);
-> +	return sysfs_emit(buf, "%s\n", desc[state]);
+> -	ret =3D sprintf(buf, "%d\n", sfr & DS2780_SFR_REG_PIOSC);
+> +	ret =3D sysfs_emit(buf, "%d\n", sfr & DS2780_SFR_REG_PIOSC);
+>  	return ret;
 >  }
 >=20
->  static ssize_t lp8788_show_eoc_time(struct device *dev,
-> @@ -618,8 +618,7 @@ static ssize_t lp8788_show_eoc_time(struct device *de=
+> diff --git a/drivers/power/supply/ds2781_battery.c b/drivers/power/supply=
+/ds2781_battery.c
+> index 05b859bf2dc0..c4f8ccc687f9 100644
+> --- a/drivers/power/supply/ds2781_battery.c
+> +++ b/drivers/power/supply/ds2781_battery.c
+> @@ -456,7 +456,7 @@ static ssize_t ds2781_get_pmod_enabled(struct device =
+*dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	return sprintf(buf, "%d\n",
+> +	return sysfs_emit(buf, "%d\n",
+>  		 !!(control_reg & DS2781_CONTROL_PMOD));
+>  }
+>=20
+> @@ -509,7 +509,7 @@ static ssize_t ds2781_get_sense_resistor_value(struct=
+ device *dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	ret =3D sprintf(buf, "%d\n", sense_resistor);
+> +	ret =3D sysfs_emit(buf, "%d\n", sense_resistor);
+>  	return ret;
+>  }
+>=20
+> @@ -547,7 +547,7 @@ static ssize_t ds2781_get_rsgain_setting(struct devic=
+e *dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	return sprintf(buf, "%d\n", rsgain);
+> +	return sysfs_emit(buf, "%d\n", rsgain);
+>  }
+>=20
+>  static ssize_t ds2781_set_rsgain_setting(struct device *dev,
+> @@ -590,7 +590,7 @@ static ssize_t ds2781_get_pio_pin(struct device *dev,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	ret =3D sprintf(buf, "%d\n", sfr & DS2781_SFR_PIOSC);
+> +	ret =3D sysfs_emit(buf, "%d\n", sfr & DS2781_SFR_PIOSC);
+>  	return ret;
+>  }
+>=20
+> diff --git a/drivers/power/supply/isp1704_charger.c b/drivers/power/suppl=
+y/isp1704_charger.c
+> index b6efc454e4f0..7e82b0c17672 100644
+> --- a/drivers/power/supply/isp1704_charger.c
+> +++ b/drivers/power/supply/isp1704_charger.c
+> @@ -367,7 +367,7 @@ static inline int isp1704_test_ulpi(struct isp1704_ch=
+arger *isp)
+>=20
+>  	for (i =3D 0; i < ARRAY_SIZE(isp170x_id); i++) {
+>  		if (product =3D=3D isp170x_id[i]) {
+> -			sprintf(isp->model, "isp%x", product);
+> +			sysfs_emit(isp->model, "isp%x", product);
+>  			return product;
+>  		}
+>  	}
+> diff --git a/drivers/power/supply/ltc4162-l-charger.c b/drivers/power/sup=
+ply/ltc4162-l-charger.c
+> index db2bb5233570..0e95c65369b8 100644
+> --- a/drivers/power/supply/ltc4162-l-charger.c
+> +++ b/drivers/power/supply/ltc4162-l-charger.c
+> @@ -525,7 +525,7 @@ static ssize_t charge_status_show(struct device *dev,
+>  		}
+>  	}
+>=20
+> -	return sprintf(buf, "%s\n", result);
+> +	return sysfs_emit(buf, "%s\n", result);
+>  }
+>  static DEVICE_ATTR_RO(charge_status);
+>=20
+> @@ -541,7 +541,7 @@ static ssize_t vbat_show(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>=20
+> -	return sprintf(buf, "%d\n", val.intval);
+> +	return sysfs_emit(buf, "%d\n", val.intval);
+>  }
+>  static DEVICE_ATTR_RO(vbat);
+>=20
+> @@ -557,7 +557,7 @@ static ssize_t vbat_avg_show(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>=20
+> -	return sprintf(buf, "%d\n", val.intval);
+> +	return sysfs_emit(buf, "%d\n", val.intval);
+>  }
+>  static DEVICE_ATTR_RO(vbat_avg);
+>=20
+> @@ -573,7 +573,7 @@ static ssize_t ibat_show(struct device *dev,
+>  	if (ret)
+>  		return ret;
+>=20
+> -	return sprintf(buf, "%d\n", val.intval);
+> +	return sysfs_emit(buf, "%d\n", val.intval);
+>  }
+>  static DEVICE_ATTR_RO(ibat);
+>=20
+> @@ -589,7 +589,7 @@ static ssize_t force_telemetry_show(struct device *de=
 v,
->  	lp8788_read_byte(pchg->lp, LP8788_CHG_EOC, &val);
->  	val =3D (val & LP8788_CHG_EOC_TIME_M) >> LP8788_CHG_EOC_TIME_S;
+>  	if (ret)
+>  		return ret;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "End Of Charge Time: %s\n",
-> -			stime[val]);
-> +	return sysfs_emit(buf, "End Of Charge Time: %s\n", stime[val]);
+> -	return sprintf(buf, "%u\n", regval & BIT(2) ? 1 : 0);
+> +	return sysfs_emit(buf, "%u\n", regval & BIT(2) ? 1 : 0);
 >  }
 >=20
->  static ssize_t lp8788_show_eoc_level(struct device *dev,
-> @@ -642,7 +641,7 @@ static ssize_t lp8788_show_eoc_level(struct device *d=
-ev,
->  	val =3D (val & LP8788_CHG_EOC_LEVEL_M) >> LP8788_CHG_EOC_LEVEL_S;
->  	level =3D mode ? abs_level[val] : relative_level[val];
+>  static ssize_t force_telemetry_store(struct device *dev,
+> @@ -628,7 +628,7 @@ static ssize_t arm_ship_mode_show(struct device *dev,
+>  	if (ret)
+>  		return ret;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "End Of Charge Level: %s\n", level);
-> +	return sysfs_emit(buf, "End Of Charge Level: %s\n", level);
+> -	return sprintf(buf, "%u\n",
+> +	return sysfs_emit(buf, "%u\n",
+>  		regval =3D=3D LTC4162L_ARM_SHIP_MODE_MAGIC ? 1 : 0);
 >  }
 >=20
->  static DEVICE_ATTR(charger_status, S_IRUSR, lp8788_show_charger_status, =
-NULL);
-> diff --git a/drivers/power/supply/max14577_charger.c b/drivers/power/supp=
-ly/max14577_charger.c
-> index f244cd902eb9..96f9de775043 100644
-> --- a/drivers/power/supply/max14577_charger.c
-> +++ b/drivers/power/supply/max14577_charger.c
-> @@ -532,7 +532,7 @@ static ssize_t show_fast_charge_timer(struct device *=
-dev,
+> diff --git a/drivers/power/supply/mp2629_charger.c b/drivers/power/supply=
+/mp2629_charger.c
+> index bf9c27b463a8..3a2a28fbba73 100644
+> --- a/drivers/power/supply/mp2629_charger.c
+> +++ b/drivers/power/supply/mp2629_charger.c
+> @@ -519,7 +519,7 @@ static ssize_t batt_impedance_compensation_show(struc=
+t device *dev,
+>  		return ret;
+>=20
+>  	rval =3D (rval >> 4) * 10;
+> -	return sprintf(buf, "%d mohm\n", rval);
+> +	return sysfs_emit(buf, "%d mohm\n", rval);
+>  }
+>=20
+>  static ssize_t batt_impedance_compensation_store(struct device *dev,
+> diff --git a/drivers/power/supply/olpc_battery.c b/drivers/power/supply/o=
+lpc_battery.c
+> index a5da20ffd685..4751e5e6b3b2 100644
+> --- a/drivers/power/supply/olpc_battery.c
+> +++ b/drivers/power/supply/olpc_battery.c
+> @@ -460,7 +460,7 @@ static int olpc_bat_get_property(struct power_supply =
+*psy,
+>  		if (ret)
+>  			return ret;
+>=20
+> -		sprintf(data->bat_serial, "%016llx", (long long)be64_to_cpu(ser_buf));
+> +		sysfs_emit(data->bat_serial, "%016llx", (long long)be64_to_cpu(ser_buf=
+));
+>  		val->strval =3D data->bat_serial;
 >  		break;
->  	}
+>  	case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
+> @@ -568,7 +568,7 @@ static ssize_t olpc_bat_error_read(struct device *dev,
+>  	if (ret < 0)
+>  		return ret;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-> +	return sysfs_emit(buf, "%u\n", val);
+> -	return sprintf(buf, "%d\n", ec_byte);
+> +	return sysfs_emit(buf, "%d\n", ec_byte);
 >  }
 >=20
->  static ssize_t store_fast_charge_timer(struct device *dev,
-> diff --git a/drivers/power/supply/max77693_charger.c b/drivers/power/supp=
-ly/max77693_charger.c
-> index a2c5c9858639..794c8c054450 100644
-> --- a/drivers/power/supply/max77693_charger.c
-> +++ b/drivers/power/supply/max77693_charger.c
-> @@ -296,7 +296,7 @@ static ssize_t fast_charge_timer_show(struct device *=
-dev,
->  		break;
->  	}
+>  static struct device_attribute olpc_bat_error =3D {
+> diff --git a/drivers/power/supply/pcf50633-charger.c b/drivers/power/supp=
+ly/pcf50633-charger.c
+> index 8c5d892f6350..fd44cb8ac0e2 100644
+> --- a/drivers/power/supply/pcf50633-charger.c
+> +++ b/drivers/power/supply/pcf50633-charger.c
+> @@ -153,7 +153,7 @@ show_chgmode(struct device *dev, struct device_attrib=
+ute *attr, char *buf)
+>  	u8 mbcs2 =3D pcf50633_reg_read(mbc->pcf, PCF50633_REG_MBCS2);
+>  	u8 chgmod =3D (mbcs2 & PCF50633_MBCS2_MBC_MASK);
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-> +	return sysfs_emit(buf, "%u\n", val);
+> -	return sprintf(buf, "%d\n", chgmod);
+> +	return sysfs_emit(buf, "%d\n", chgmod);
 >  }
+>  static DEVICE_ATTR(chgmode, S_IRUGO, show_chgmode, NULL);
 >=20
->  static int max77693_set_fast_charge_timer(struct max77693_charger *chg,
-> @@ -357,7 +357,7 @@ static ssize_t top_off_threshold_current_show(struct =
-device *dev,
+> @@ -174,7 +174,7 @@ show_usblim(struct device *dev, struct device_attribu=
+te *attr, char *buf)
 >  	else
->  		val =3D data * 50000;
+>  		ma =3D 0;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-> +	return sysfs_emit(buf, "%u\n", val);
+> -	return sprintf(buf, "%u\n", ma);
+> +	return sysfs_emit(buf, "%u\n", ma);
 >  }
 >=20
->  static int max77693_set_top_off_threshold_current(struct max77693_charge=
-r *chg,
-> @@ -405,7 +405,7 @@ static ssize_t top_off_timer_show(struct device *dev,
+>  static ssize_t set_usblim(struct device *dev,
+> @@ -207,7 +207,7 @@ show_chglim(struct device *dev, struct device_attribu=
+te *attr, char *buf)
 >=20
->  	val =3D data * 10;
+>  	ma =3D (mbc->pcf->pdata->charger_reference_current_ma *  mbcc5) >> 8;
 >=20
-> -	return scnprintf(buf, PAGE_SIZE, "%u\n", val);
-> +	return sysfs_emit(buf, "%u\n", val);
+> -	return sprintf(buf, "%u\n", ma);
+> +	return sysfs_emit(buf, "%u\n", ma);
 >  }
 >=20
->  static int max77693_set_top_off_timer(struct max77693_charger *chg,
-> diff --git a/drivers/power/supply/twl4030_charger.c b/drivers/power/suppl=
-y/twl4030_charger.c
-> index 1bc49b2e12e8..53a0ea5a61da 100644
-> --- a/drivers/power/supply/twl4030_charger.c
-> +++ b/drivers/power/supply/twl4030_charger.c
-> @@ -726,11 +726,9 @@ twl4030_bci_mode_show(struct device *dev,
+>  static ssize_t set_chglim(struct device *dev,
+> diff --git a/drivers/power/supply/pmu_battery.c b/drivers/power/supply/pm=
+u_battery.c
+> index eaab7500d99b..623a4e80a21f 100644
+> --- a/drivers/power/supply/pmu_battery.c
+> +++ b/drivers/power/supply/pmu_battery.c
+> @@ -165,7 +165,7 @@ static int __init pmu_bat_init(void)
+>  		if (!pbat)
+>  			break;
 >=20
->  	for (i =3D 0; i < ARRAY_SIZE(modes); i++)
->  		if (mode =3D=3D i)
-> -			len +=3D scnprintf(buf+len, PAGE_SIZE-len,
-> -					"[%s] ", modes[i]);
-> +			len +=3D sysfs_emit_at(buf, len, "[%s] ", modes[i]);
->  		else
-> -			len +=3D scnprintf(buf+len, PAGE_SIZE-len,
-> -					"%s ", modes[i]);
-> +			len +=3D sysfs_emit_at(buf, len, "%s ", modes[i]);
->  	buf[len-1] =3D '\n';
->  	return len;
+> -		sprintf(pbat->name, "PMU_battery_%d", i);
+> +		sysfs_emit(pbat->name, "PMU_battery_%d", i);
+>  		pbat->bat_desc.name =3D pbat->name;
+>  		pbat->bat_desc.properties =3D pmu_bat_props;
+>  		pbat->bat_desc.num_properties =3D ARRAY_SIZE(pmu_bat_props);
+> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/su=
+pply/power_supply_sysfs.c
+> index 6ca7d3985a40..9915b701c894 100644
+> --- a/drivers/power/supply/power_supply_sysfs.c
+> +++ b/drivers/power/supply/power_supply_sysfs.c
+> @@ -249,11 +249,11 @@ static ssize_t power_supply_show_usb_type(struct de=
+vice *dev,
+>  		usb_type =3D desc->usb_types[i];
+>=20
+>  		if (value->intval =3D=3D usb_type) {
+> -			count +=3D sprintf(buf + count, "[%s] ",
+> +			count +=3D sysfs_emit_at(buf, count, "[%s] ",
+>  					 POWER_SUPPLY_USB_TYPE_TEXT[usb_type]);
+>  			match =3D true;
+>  		} else {
+> -			count +=3D sprintf(buf + count, "%s ",
+> +			count +=3D sysfs_emit_at(buf, count, "%s ",
+>  					 POWER_SUPPLY_USB_TYPE_TEXT[usb_type]);
+>  		}
+>  	}
+> @@ -297,7 +297,7 @@ static ssize_t power_supply_show_property(struct devi=
+ce *dev,
+>=20
+>  	if (ps_attr->text_values_len > 0 &&
+>  	    value.intval < ps_attr->text_values_len && value.intval >=3D 0) {
+> -		return sprintf(buf, "%s\n", ps_attr->text_values[value.intval]);
+> +		return sysfs_emit(buf, "%s\n", ps_attr->text_values[value.intval]);
+>  	}
+>=20
+>  	switch (psp) {
+> @@ -306,10 +306,10 @@ static ssize_t power_supply_show_property(struct de=
+vice *dev,
+>  						&value, buf);
+>  		break;
+>  	case POWER_SUPPLY_PROP_MODEL_NAME ... POWER_SUPPLY_PROP_SERIAL_NUMBER:
+> -		ret =3D sprintf(buf, "%s\n", value.strval);
+> +		ret =3D sysfs_emit(buf, "%s\n", value.strval);
+>  		break;
+>  	default:
+> -		ret =3D sprintf(buf, "%d\n", value.intval);
+> +		ret =3D sysfs_emit(buf, "%d\n", value.intval);
+>  	}
+>=20
+>  	return ret;
+> @@ -413,7 +413,7 @@ void power_supply_init_attrs(struct device_type *dev_=
+type)
+>  		if (!power_supply_attrs[i].prop_name) {
+>  			pr_warn("%s: Property %d skipped because it is missing from power_sup=
+ply_attrs\n",
+>  				__func__, i);
+> -			sprintf(power_supply_attrs[i].attr_name, "_err_%d", i);
+> +			sysfs_emit(power_supply_attrs[i].attr_name, "_err_%d", i);
+>  		} else {
+>  			str_to_lower(power_supply_attrs[i].attr_name);
+>  		}
+> diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sb=
+s-battery.c
+> index c4a95b01463a..2a9fa843707e 100644
+> --- a/drivers/power/supply/sbs-battery.c
+> +++ b/drivers/power/supply/sbs-battery.c
+> @@ -830,7 +830,7 @@ static int sbs_get_battery_serial_number(struct i2c_c=
+lient *client,
+>  	if (ret < 0)
+>  		return ret;
+>=20
+> -	sprintf(sbs_serial, "%04x", ret);
+> +	sysfs_emit(sbs_serial, "%04x", ret);
+>  	val->strval =3D sbs_serial;
+>=20
+>  	return 0;
+> diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/tes=
+t_power.c
+> index 5f510ddc946d..751c9b0f4adf 100644
+> --- a/drivers/power/supply/test_power.c
+> +++ b/drivers/power/supply/test_power.c
+> @@ -352,7 +352,7 @@ static int param_set_ac_online(const char *key, const=
+ struct kernel_param *kp)
+>=20
+>  static int param_get_ac_online(char *buffer, const struct kernel_param *=
+kp)
+>  {
+> -	return sprintf(buffer, "%s\n",
+> +	return sysfs_emit(buffer, "%s\n",
+>  			map_get_key(map_ac_online, ac_online, "unknown"));
 >  }
+>=20
+> @@ -365,7 +365,7 @@ static int param_set_usb_online(const char *key, cons=
+t struct kernel_param *kp)
+>=20
+>  static int param_get_usb_online(char *buffer, const struct kernel_param =
+*kp)
+>  {
+> -	return sprintf(buffer, "%s\n",
+> +	return sysfs_emit(buffer, "%s\n",
+>  			map_get_key(map_ac_online, usb_online, "unknown"));
+>  }
+>=20
+> @@ -379,7 +379,7 @@ static int param_set_battery_status(const char *key,
+>=20
+>  static int param_get_battery_status(char *buffer, const struct kernel_pa=
+ram *kp)
+>  {
+> -	return sprintf(buffer, "%s\n",
+> +	return sysfs_emit(buffer, "%s\n",
+>  			map_get_key(map_ac_online, battery_status, "unknown"));
+>  }
+>=20
+> @@ -393,7 +393,7 @@ static int param_set_battery_health(const char *key,
+>=20
+>  static int param_get_battery_health(char *buffer, const struct kernel_pa=
+ram *kp)
+>  {
+> -	return sprintf(buffer, "%s\n",
+> +	return sysfs_emit(buffer, "%s\n",
+>  			map_get_key(map_ac_online, battery_health, "unknown"));
+>  }
+>=20
+> @@ -408,7 +408,7 @@ static int param_set_battery_present(const char *key,
+>  static int param_get_battery_present(char *buffer,
+>  					const struct kernel_param *kp)
+>  {
+> -	return sprintf(buffer, "%s\n",
+> +	return sysfs_emit(buffer, "%s\n",
+>  			map_get_key(map_ac_online, battery_present, "unknown"));
+>  }
+>=20
+> @@ -424,7 +424,7 @@ static int param_set_battery_technology(const char *k=
+ey,
+>  static int param_get_battery_technology(char *buffer,
+>  					const struct kernel_param *kp)
+>  {
+> -	return sprintf(buffer, "%s\n",
+> +	return sysfs_emit(buffer, "%s\n",
+>  			map_get_key(map_ac_online, battery_technology,
+>  					"unknown"));
+>  }
+> diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/w=
+m8350_power.c
+> index 908cfd45d262..f2786761299c 100644
+> --- a/drivers/power/supply/wm8350_power.c
+> +++ b/drivers/power/supply/wm8350_power.c
+> @@ -176,7 +176,7 @@ static ssize_t charger_state_show(struct device *dev,
+>  		return 0;
+>  	}
+>=20
+> -	return sprintf(buf, "%s\n", charge);
+> +	return sysfs_emit(buf, "%s\n", charge);
+>  }
+>=20
+>  static DEVICE_ATTR_RO(charger_state);
 > --=20
 > 2.25.1
 
---w4bxyprcvdwgi7zj
+--f3yz5l3p3l5jdjtn
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOzHA4ACgkQ2O7X88g7
-+pqmYxAAg7vFX2NI07MtNId6zrrChtgIzTO/Tc2x0p+1EAjTcfkf2CtjbemfsDwK
-qZs1jyaUkTODJGARjtuv/mi1jevh7QJM9517s45BuHMBK6u9Qb75WIosF9X4qW8w
-GDbgsD5iG67xPkFt+JJ6qsKT4BLANbKqJu+nbFeflKk9SzKUXsH6DGPO3rZTLTwQ
-fochOkjrBDbxfdfx31v7xCX+TPMYVIN6oUceUkplmbL+QmHDDpo58GmWedfSiXfw
-SVXE2S3TcGVpP9uBCKqRukRT7tPrhzvtLq0WfhHIcbaV+1loG9LEXuGnZyxArOJ7
-jRAXFMZvxM1/+UTOHnrHFrg59ufN//VeZ62jf42ASz7hkfvGGjWOJhYgYivP2kWh
-8tXSLikyhefDdlhPxKmnkVBIiu9ygg8n9Jdt5LN72yvh8Jwn+YWWuatYT9lq1Hkl
-+bqDaolRfR6QJYJhAWVGfyRKOnVCc6GMaqZIF1qMaWBIjeSms/eswDDYWsOC3N7U
-E/byA44isyPlGaCDOZUqlMvgGgWeFxmPQqrRLiLCzUov7AckuM7o5lwdm85k9g28
-XCXSsotxLSJkIHKKsY1H7ZnYu4Uz8FN4Rm+Cc7JY7pQQEdadXkUDx8XqCbbf0Xnj
-gEG8ihm2TtOjL9LzUuMRcKnSaOKST6jbJYbETIgViH72ERxXrEQ=
-=KhCT
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmOzHKcACgkQ2O7X88g7
++prhqg//YzYJWz25B03MOL3nKz/0x9f6/YOVHUcYBiG/RtJtU1cxAHArHT1HKYp4
+b0YsGmuEdtYX83/AkRRMvQr6C4I9KclR5W6NHdOtpTtQT+nltoxgvxjyL7EtlEk5
+bZUDup9OFjprJoGpp1UF3EoK+IqpfRsDC8JyjriH4UqPJ0mFgkXrh+ZM3tmoAWC3
+v/m5xaZKbg/xG6a9X40DjUE70Skdmpw81p9BpFT3wyWFS9GhlfPAvCCMZo35VW+a
+YIY43exBwYYtPDK3kgTOb+uDrULPHZ8QTW2sfsvuCfhexpUwHpXzwbH10EpXdc1w
+nNb/B/jeN9tpfGDFEeu8gu8FVo0HMHweztC7aM+pdBIDpnYyZeyApeJCXIBmrt3Q
+9Q+BYgdxYtj5FZUvOuMm8xFq9Z9iz5z7b+yfrBY9XBe6jEkC00sF5+gOgYYJzhaU
+NLlbXmnV5rfDpGSu8Es1wHmZT9Q07T9FUWno7bY+lCvYCw6p89NFmKjN+nROBPUw
+KDJvKwJM0HZxGMXyAOfbY4gS5u20wRt0Rl4gtKQjram6wWiH7QuszFJ7obwkjPbW
+EytuRJhgatymqKCIa8CNVqc3P2GkdzI5rNX1OjOzVRewg6kgfEs35U3H0XdFxkrG
+qP55UnohJHfsfhv8T6cO8IZuFQdD02eruxQaGmA6JW7ZmrgnvkU=
+=QSA9
 -----END PGP SIGNATURE-----
 
---w4bxyprcvdwgi7zj--
+--f3yz5l3p3l5jdjtn--
