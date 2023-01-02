@@ -2,118 +2,206 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F7865AE93
-	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 10:14:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D782665AF1C
+	for <lists+linux-pm@lfdr.de>; Mon,  2 Jan 2023 10:57:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbjABJN7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 04:13:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37458 "EHLO
+        id S232130AbjABJ5O (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 04:57:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231890AbjABJN5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 04:13:57 -0500
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E74F21A1;
-        Mon,  2 Jan 2023 01:13:56 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id ay2-20020a05600c1e0200b003d22e3e796dso20206876wmb.0;
-        Mon, 02 Jan 2023 01:13:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ce6OmGFq9VZBpGi1vGDY3sSx/S75wdoRU07kB2bZ+9c=;
-        b=EoquokVRhdtRVmPK97+iSE9uIv6hKX8ijtFzvLhlHxCQgVpsA/Klrh3kAwvmp0I9GN
-         mT7ApOawKh6TRpw0JR23VMK8dGs77ilsEb3PxzEkGfxtB5+slDO/xkeyN5klkwApnrQ5
-         T/U5qy38glE2KT/4QQq5mMKtozmgU6fGbcY+9xx22QnRaNLD7J7YzwBosFbdUgbpXuLX
-         40NArEMJdV0GHO6ioE9Nl3NllJtW0BKD+P4AdDMfXy3BF6Ub6YYzlh9wP1QHcD0tCuH8
-         AHekCt22XUdTKCBVdjWvTrn6drZgLVRnQuEOmQdatJmCGQHTWPsosqCh7Yzj6Wlo7ueq
-         ku3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ce6OmGFq9VZBpGi1vGDY3sSx/S75wdoRU07kB2bZ+9c=;
-        b=5QaulAi87A8G3p4CQZxmJTQg8DIqZg5P1sdi5tatQdK38OjS9+WZdnfaSDqqeEYIVU
-         m63uQ9/o59WSL2Ux2vr/j5lbjn+TiFA0k6QFxekkfEmXZb/9UZUgP+ZPUP3TMn1PQdHr
-         e6Jcq9Rm6e9TGSyKH0ftC6rMoPBLe7nSmKTliwOJntAWhLoQVbeubrb1Mh4LF85SZvhd
-         TPkNtsP6Vm6Tnm4GP+vSInYu3bhb49RAzCDetNBvRXG5TQEbVr0hP/2lAYCOlcpPzEgR
-         0adZZ+ALY4QcEw6td3R+6rqi07L3fsf6TyWxbtHinM2zyGXi+Ko0qnnQNLLyGUmFTHQ2
-         UceQ==
-X-Gm-Message-State: AFqh2krPltyBo0ZSmtmPrDXq/ve0wWO5yuYoc7980jHwu0CRWAg57oJR
-        mscOgCFLT+u0Xhb6ajM+/dEmLdZe8Xitrw==
-X-Google-Smtp-Source: AMrXdXs7SCQj0wzyqzkSFxedhqj0UniP7iPuFeZsaG7t8JL9TtTJCkLv4L0H/xAJdi/B+dRMYcN/mg==
-X-Received: by 2002:a05:600c:1da3:b0:3d3:4dbc:75ef with SMTP id p35-20020a05600c1da300b003d34dbc75efmr28346951wms.17.1672650835101;
-        Mon, 02 Jan 2023 01:13:55 -0800 (PST)
-Received: from tpt440p.steeds.sam ([2602:fbf6:10:8::2])
-        by smtp.gmail.com with ESMTPSA id n36-20020a05600c3ba400b003b49bd61b19sm44700735wms.15.2023.01.02.01.13.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 01:13:54 -0800 (PST)
-From:   "Sicelo A. Mhlongo" <absicsz@gmail.com>
-To:     linux-pm@vger.kernel.org
-Cc:     pali@kernel.org, sre@kernel.org, brauner@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Sicelo A. Mhlongo" <absicsz@gmail.com>
-Subject: [PATCH 1/1] power: supply: bq27xxx: fix reporting critical level
-Date:   Mon,  2 Jan 2023 11:13:26 +0200
-Message-Id: <20230102091326.3959978-1-absicsz@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        with ESMTP id S232651AbjABJ5L (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 04:57:11 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69294DCB;
+        Mon,  2 Jan 2023 01:57:10 -0800 (PST)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3029i4Xt024889;
+        Mon, 2 Jan 2023 09:56:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=pN14Ku/R5oS6jwPsJMmldiWfAUHtnStZiqYP0Pe5dk0=;
+ b=h4J2x2xyqmO3RVWDP06VfIqJ5R11gPQCYxzDnY7Qn9xKnr+k7rt1rrYXQY6+oVzCDCoZ
+ cKXighasqSrlJS4UDuwy9aweVCi2smdESh7F4FIeUXuVfcYRRFTn3L0l9utXWVn63zmd
+ G+LkovkxAzkdh9b30j/btU214fCxZCvoZKpEUdecC0xFJB6MlqF1afoTvJ0doAYOmDQG
+ nvnOkkrlAUmj7GrQry4LMebDfJtmoO83M3zWlZcq8WdSvL9srqsf7YSpT8NCh6YZf/uE
+ RfEIa5m21dOn9MQK6veew9GgpHsnIvND4qAVcAu+pSTeuGzDOuVC+9ONrctv+S+Wersl MQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3mtaewb18t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 02 Jan 2023 09:56:49 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 3029umSu004946
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 2 Jan 2023 09:56:48 GMT
+Received: from [10.216.21.21] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Mon, 2 Jan 2023
+ 01:56:43 -0800
+Message-ID: <8140a64b-3f3e-b8c7-7edc-03f5cc7d14e7@quicinc.com>
+Date:   Mon, 2 Jan 2023 15:26:39 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH v4 1/5] PM: domains: Allow a genpd consumer to require a
+ synced power off
+Content-Language: en-US
+To:     Bjorn Andersson <andersson@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+CC:     freedreno <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>
+References: <1671642843-5244-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20221221224338.v4.1.I3e6b1f078ad0f1ca9358c573daa7b70ec132cdbe@changeid>
+ <20221228184304.4lldh7dxp2pnplzc@builder.lan>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20221228184304.4lldh7dxp2pnplzc@builder.lan>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8mlf8f69kRu3DTGol2s9lk1KbUy_9zpc
+X-Proofpoint-GUID: 8mlf8f69kRu3DTGol2s9lk1KbUy_9zpc
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-02_06,2022-12-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ phishscore=0 priorityscore=1501 malwarescore=0 mlxscore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301020090
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The EDV1/SOC1 flag is set when the battery voltage drops below the
-threshold set in EEPROM. From observing the capacity_level reported by
-the driver, and reading the datasheet, EDV1 remains set even when
-EDVF/SOCF gets set. Thus, bq27xxx_battery_capacity_level() never reaches
-the CAPACITY_LEVEL_CRITICAL code path, since CAPACITY_LEVEL_LOW takes
-precedence.
+On 12/29/2022 12:13 AM, Bjorn Andersson wrote:
+> On Wed, Dec 21, 2022 at 10:43:59PM +0530, Akhil P Oommen wrote:
+>> From: Ulf Hansson <ulf.hansson@linaro.org>
+>>
+>> Some genpd providers doesn't ensure that it has turned off at hardware.
+>> This is fine until the consumer really requires during some special
+>> scenarios that the power domain collapse at hardware before it is
+>> turned ON again.
+>>
+>> An example is the reset sequence of Adreno GPU which requires that the
+>> 'gpucc cx gdsc' power domain should move to OFF state in hardware at
+>> least once before turning in ON again to clear the internal state.
+>>
+>> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+>
+> @Rafael, would you be willing to share an immutable branch with this
+> change? Or would you be okay with me doing so from the qcom clock tree?
+>
+> Regards,
+> Bjorn
+Rafael, gentle ping. Could you please check Bjorn's question here?
 
-This commit fixes the issue by swapping the order in which the flags are
-tested. It was tested with bq27200 in the Nokia N900.
-
-Signed-off-by: Sicelo A. Mhlongo <absicsz@gmail.com>
----
- drivers/power/supply/bq27xxx_battery.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/power/supply/bq27xxx_battery.c b/drivers/power/supply/bq27xxx_battery.c
-index 8bf048fbd36a..5ff6f44fd47b 100644
---- a/drivers/power/supply/bq27xxx_battery.c
-+++ b/drivers/power/supply/bq27xxx_battery.c
-@@ -1917,10 +1917,10 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
- 	if (di->opts & BQ27XXX_O_ZERO) {
- 		if (di->cache.flags & BQ27000_FLAG_FC)
- 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
--		else if (di->cache.flags & BQ27000_FLAG_EDV1)
--			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
- 		else if (di->cache.flags & BQ27000_FLAG_EDVF)
- 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-+		else if (di->cache.flags & BQ27000_FLAG_EDV1)
-+			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
- 		else
- 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
- 	} else if (di->opts & BQ27Z561_O_BITS) {
-@@ -1933,10 +1933,10 @@ static int bq27xxx_battery_capacity_level(struct bq27xxx_device_info *di,
- 	} else {
- 		if (di->cache.flags & BQ27XXX_FLAG_FC)
- 			level = POWER_SUPPLY_CAPACITY_LEVEL_FULL;
--		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
--			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
- 		else if (di->cache.flags & BQ27XXX_FLAG_SOCF)
- 			level = POWER_SUPPLY_CAPACITY_LEVEL_CRITICAL;
-+		else if (di->cache.flags & BQ27XXX_FLAG_SOC1)
-+			level = POWER_SUPPLY_CAPACITY_LEVEL_LOW;
- 		else
- 			level = POWER_SUPPLY_CAPACITY_LEVEL_NORMAL;
- 	}
--- 
-2.39.0
+-Akhil.
+>
+>> ---
+>>
+>> Changes in v4:
+>> - Update genpd function documentation (Ulf)
+>>
+>> Changes in v2:
+>> - Minor formatting fix
+>>
+>>  drivers/base/power/domain.c | 26 ++++++++++++++++++++++++++
+>>  include/linux/pm_domain.h   |  5 +++++
+>>  2 files changed, 31 insertions(+)
+>>
+>> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+>> index 967bcf9d415e..84662d338188 100644
+>> --- a/drivers/base/power/domain.c
+>> +++ b/drivers/base/power/domain.c
+>> @@ -519,6 +519,31 @@ ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+>>  }
+>>  EXPORT_SYMBOL_GPL(dev_pm_genpd_get_next_hrtimer);
+>>  
+>> +/*
+>> + * dev_pm_genpd_synced_poweroff - Next power off should be synchronous
+>> + *
+>> + * @dev: A device that is attached to the genpd.
+>> + *
+>> + * Allows a consumer of the genpd to notify the provider that the next power off
+>> + * should be synchronous.
+>> + *
+>> + * It is assumed that the users guarantee that the genpd wouldn't be detached
+>> + * while this routine is getting called.
+>> + */
+>> +void dev_pm_genpd_synced_poweroff(struct device *dev)
+>> +{
+>> +	struct generic_pm_domain *genpd;
+>> +
+>> +	genpd = dev_to_genpd_safe(dev);
+>> +	if (!genpd)
+>> +		return;
+>> +
+>> +	genpd_lock(genpd);
+>> +	genpd->synced_poweroff = true;
+>> +	genpd_unlock(genpd);
+>> +}
+>> +EXPORT_SYMBOL_GPL(dev_pm_genpd_synced_poweroff);
+>> +
+>>  static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>>  {
+>>  	unsigned int state_idx = genpd->state_idx;
+>> @@ -562,6 +587,7 @@ static int _genpd_power_on(struct generic_pm_domain *genpd, bool timed)
+>>  
+>>  out:
+>>  	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_ON, NULL);
+>> +	genpd->synced_poweroff = false;
+>>  	return 0;
+>>  err:
+>>  	raw_notifier_call_chain(&genpd->power_notifiers, GENPD_NOTIFY_OFF,
+>> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+>> index 1cd41bdf73cf..f776fb93eaa0 100644
+>> --- a/include/linux/pm_domain.h
+>> +++ b/include/linux/pm_domain.h
+>> @@ -136,6 +136,7 @@ struct generic_pm_domain {
+>>  	unsigned int prepared_count;	/* Suspend counter of prepared devices */
+>>  	unsigned int performance_state;	/* Aggregated max performance state */
+>>  	cpumask_var_t cpus;		/* A cpumask of the attached CPUs */
+>> +	bool synced_poweroff;		/* A consumer needs a synced poweroff */
+>>  	int (*power_off)(struct generic_pm_domain *domain);
+>>  	int (*power_on)(struct generic_pm_domain *domain);
+>>  	struct raw_notifier_head power_notifiers; /* Power on/off notifiers */
+>> @@ -235,6 +236,7 @@ int dev_pm_genpd_add_notifier(struct device *dev, struct notifier_block *nb);
+>>  int dev_pm_genpd_remove_notifier(struct device *dev);
+>>  void dev_pm_genpd_set_next_wakeup(struct device *dev, ktime_t next);
+>>  ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev);
+>> +void dev_pm_genpd_synced_poweroff(struct device *dev);
+>>  
+>>  extern struct dev_power_governor simple_qos_governor;
+>>  extern struct dev_power_governor pm_domain_always_on_gov;
+>> @@ -300,6 +302,9 @@ static inline ktime_t dev_pm_genpd_get_next_hrtimer(struct device *dev)
+>>  {
+>>  	return KTIME_MAX;
+>>  }
+>> +static inline void dev_pm_genpd_synced_poweroff(struct device *dev)
+>> +{ }
+>> +
+>>  #define simple_qos_governor		(*(struct dev_power_governor *)(NULL))
+>>  #define pm_domain_always_on_gov		(*(struct dev_power_governor *)(NULL))
+>>  #endif
+>> -- 
+>> 2.7.4
+>>
 
