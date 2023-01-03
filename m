@@ -2,92 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F5E65BCFA
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 10:19:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E0065BE59
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 11:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbjACJTz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 04:19:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47376 "EHLO
+        id S237368AbjACKod (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 05:44:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233084AbjACJTy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 04:19:54 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC61E029
-        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 01:19:53 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id cf42so44833785lfb.1
-        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 01:19:53 -0800 (PST)
+        with ESMTP id S236963AbjACKoc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 05:44:32 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1E49FFF
+        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 02:44:31 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id j17so23631941wrr.7
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 02:44:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=k29kTYk/fyEajMJT5Y6nVdRZzrBvWVfpKO93j6wdobI=;
-        b=yMQKMyGYbk7JeV2/SdBBiIWFbHPF90s8Bb5oV7KqmO+Z7Qv4R/7zFhJ4i8j9frTMtM
-         ii/8HNc+utlz2P5GHJIagBylErA5iHVwy100wLS2yZEyUWAjx1OEH9TEqq8uLrr/uSUJ
-         5t4ctDSC9BVfT6moOtmLP/LwBIL3kvl+fwk0vZrdlp46OHo8FPn6qVpEXQy4/cwaQMuv
-         L6skgZoEEhaaHmV35jf2si/LJ2fS2g+7PuGvZepEXsOh4wlrY9JqJFAzJZLUnI7KQdic
-         c6tVguKt5lrSQe+VdPP/RcuL4X/U7pcBww2XrxqoYPG+A0nyK2b6eg78GxiwMtEnpT0L
-         z7Ww==
+        bh=wRoXjucpyLnrH29TmQH3kHfWwQiVFXi4441mn81bzmo=;
+        b=bI2vh4rxKWeKspU9/ZPqPG3vPgaWqLwxtO0SJ1dRGwpE+7+Cis5H771DOGU1PPuQn2
+         hIbb5746ZX5nA3/J6Ggh7IWv0v8BgF1VQQKiBmjGgUrHRofisEUfijOPaqUJ42m8SVBo
+         L6ocjjAF9jiM+FchSniD+aaHLwJMuqcx177gP/6p5vrCIQqDQ00CGyMyH7xixe9MxwXn
+         dwwm+WT0UaGkm2tdGOphjfMkPNuAgzvc5bRKylgoa5m6vZoQ3BJ9HG9JT5dPVrFyzJdt
+         Dejp+ZuFNM9yAnIFicyjqKnv+EOfSTtgddlYfDbuJW9Yie6O2fsNlSDF/x4it893Rs75
+         gK/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k29kTYk/fyEajMJT5Y6nVdRZzrBvWVfpKO93j6wdobI=;
-        b=b+2nFB7IvrK5FJh6IWKAJpjsQDV4k44YHmwG37JG6WT8cfrTHdfpZ4RqJfYi30CcID
-         MReHx98g0k54sVBho7y++Fgn5JifYm6pZPcMcr4m4XW09Qj0q1aSw6Za8QXGHSabxASj
-         PkuPxiqxQ8m9/P+enaVX5aXo8c2/O6By8ZiJcrAkDJDwuNQPwGcn26D81JHXr0gvDzby
-         HhGQknnysGCgIZWWCso9uzWvTbatIFFcDYTwqD0BZzGKRmU6LCezb0Ppf+RHrcEb809N
-         AmazwN5NjELIKpWzK0a6eAgliKV3ZwN2pOlNn6zZG8+cmoJ7elatJE2Se6uQCp0bSwNS
-         iP5g==
-X-Gm-Message-State: AFqh2koRh6C520WRspT52UNok1vCPdv8i+RU1l2ibOTTJOEOdWnITfFR
-        Mf1+2oPMFGwdM0LVHu4aEjVVXg==
-X-Google-Smtp-Source: AMrXdXvVa2Smipe1pr1eL/rE6XfdziNGKFptbRu8ur2UY3JmFQx2pr/oNfJQJZpJsXtVMeGoOL2AiA==
-X-Received: by 2002:a05:6512:4014:b0:4b6:f22c:8001 with SMTP id br20-20020a056512401400b004b6f22c8001mr18964614lfb.56.1672737593017;
-        Tue, 03 Jan 2023 01:19:53 -0800 (PST)
-Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b004b572ad14b2sm4787147lfg.251.2023.01.03.01.19.51
+        bh=wRoXjucpyLnrH29TmQH3kHfWwQiVFXi4441mn81bzmo=;
+        b=ZYUxVaESy2KS3DfFhOJt9LsFr2Y3JTk6UqYhc/urbgTnF/bxuAvcvQ9sRrq/GKX5Ev
+         ZNv4z1hnkjFFNhSTYdxtglJyyF23qDtSD72uec8LgpxOgf/hRg9OiDsFd8sC1k+WqHhw
+         dDS5WsfQk7GLRIyd1+JbyexkjfvviJMwAimuKUPrqJ+vf6w+XMzZMI6+R4N8QzHOv7KN
+         bxJxM59MlA6k6a9MXO1vy4KWnhNGSDVT7UfEL8BAlbNzsk95TXhi8D/7wCPgz2RS3MNY
+         SDW+83SAAIsVFE/xerpwOzhFX8HDE5NqOEJY8MyCc7c0NtDSpssCftTCilTnWuiZ8CGh
+         Vpmg==
+X-Gm-Message-State: AFqh2kqamwe+P+F6CA4xCyBC9gRk5/5yWrLZWh+HnsY/7xJ7VzP7oHHk
+        CMfhQNsMQUUpvl6DNHeIAAamNg==
+X-Google-Smtp-Source: AMrXdXtFSmoF42unxb1LeYspKdW6lxrRsmyrUcAh2YIgs98/DEKrf/yuN2BfXO8BdljgfVlP5eDseQ==
+X-Received: by 2002:adf:f54a:0:b0:236:611b:e8eb with SMTP id j10-20020adff54a000000b00236611be8ebmr28438067wrp.37.1672742669404;
+        Tue, 03 Jan 2023 02:44:29 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id k1-20020a5d5181000000b0024207478de3sm30751719wrv.93.2023.01.03.02.44.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 01:19:52 -0800 (PST)
-Message-ID: <ae2b9bb0-49cf-a322-3841-974a31209809@linaro.org>
-Date:   Tue, 3 Jan 2023 10:19:51 +0100
+        Tue, 03 Jan 2023 02:44:29 -0800 (PST)
+Message-ID: <6eac88de-637d-468e-2119-d9cab4f8b7dc@linaro.org>
+Date:   Tue, 3 Jan 2023 11:44:27 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 3/7] dt-bindings: soc: qcom: smd-rpm: Exclude MSM8936
- from glink-channels
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v2 1/3] thermal/acpi: Add ACPI trip point routines
 Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
-References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
- <20230103010904.3201835-4-bryan.odonoghue@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230103010904.3201835-4-bryan.odonoghue@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>
+References: <20230102180112.1954082-1-daniel.lezcano@kernel.org>
+ <20230102180112.1954082-2-daniel.lezcano@kernel.org>
+ <CAJZ5v0hBtjkZxSN+B9WEwe4WR6+zwzY5QAPCE5Cq7ONB7x80YA@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0hBtjkZxSN+B9WEwe4WR6+zwzY5QAPCE5Cq7ONB7x80YA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/01/2023 02:09, Bryan O'Donoghue wrote:
-> MSM8936/MSM8939 should like MSM8916 not require glink-channels.
+On 02/01/2023 19:22, Rafael J. Wysocki wrote:
+> On Mon, Jan 2, 2023 at 7:01 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>>
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>
+>> The ACPI specification describes the trip points, the device tree
+>> bindings as well.
+>>
+>> The OF code uses the generic trip point structures.
+>>
+>> The ACPI has their own trip points structure and uses the get_trip_*
+>> ops to retrieve them.
+>>
+>> We can do the same as the OF code and create a set of ACPI functions
+>> to retrieve a trip point description. Having a common code for ACPI
+>> will help to cleanup the remaining Intel drivers and get rid of the
+>> get_trip_* functions.
+>>
+>> These changes add the ACPI thermal calls to retrieve the basic
+>> information we need to be reused in the thermal ACPI and Intel
+>> drivers.
+>>
+>> The different ACPI functions have the generic trip point structure
+>> passed as parameter where it is filled.
+>>
+>> This structure aims to be the one used by all the thermal drivers and
+>> the thermal framework.
+>>
+>> After this series, a couple of Intel drivers and the ACPI thermal
+>> driver will still have their own trip points definition but a new
+>> series on top of this one will finish the conversion to the generic
+>> trip point handling.
+>>
+>> This series depends on the generic trip point added to the thermal
+>> framework and available in the thermal/linux-next branch.
+>>
+>>   https://lkml.org/lkml/2022/10/3/456
+>>
+>> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
+>> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+>> ---
+>>   drivers/thermal/Kconfig        |  13 ++
+>>   drivers/thermal/Makefile       |   1 +
+>>   drivers/thermal/thermal_acpi.c | 279 +++++++++++++++++++++++++++++++++
+>>   include/linux/thermal.h        |  16 ++
+>>   4 files changed, 309 insertions(+)
+>>   create mode 100644 drivers/thermal/thermal_acpi.c
+>>
+>> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+>> index e052dae614eb..2c19bccd1223 100644
+>> --- a/drivers/thermal/Kconfig
+>> +++ b/drivers/thermal/Kconfig
+>> @@ -76,6 +76,19 @@ config THERMAL_OF
+>>            Say 'Y' here if you need to build thermal infrastructure
+>>            based on device tree.
+>>
+>> +config THERMAL_ACPI
 > 
-> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> ---
+> Not needed.
+> 
+> Or if you want it to be built only if there are any users, call it
+> ACPI_THERMAL_LIB and do
+> 
+> config ACPI_THERMAL_LIB
+>      depends on ACPI_THERMAL
+>      bool
+> 
+> and let the users select it.
+
+Yes, I think it makes more sense to not provide any option and just 
+compile the wrappers when ACPI_THERMAL is set.
 
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+>> index 2506c6c8ca83..60f0dfa9aae2 100644
+>> --- a/drivers/thermal/Makefile
+>> +++ b/drivers/thermal/Makefile
+>> @@ -13,6 +13,7 @@ thermal_sys-$(CONFIG_THERMAL_NETLINK)         += thermal_netlink.o
+>>   # interface to/from other layers providing sensors
+>>   thermal_sys-$(CONFIG_THERMAL_HWMON)            += thermal_hwmon.o
+>>   thermal_sys-$(CONFIG_THERMAL_OF)               += thermal_of.o
+>> +thermal_sys-$(CONFIG_THERMAL_ACPI)             += thermal_acpi.o
+>>
+>>   # governors
+>>   thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)   += gov_fair_share.o
+>> diff --git a/drivers/thermal/thermal_acpi.c b/drivers/thermal/thermal_acpi.c
+>> new file mode 100644
+>> index 000000000000..28c629b4d814
+>> --- /dev/null
+>> +++ b/drivers/thermal/thermal_acpi.c
+>> @@ -0,0 +1,279 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Copyright 2022 Linaro Limited
+>> + *
+>> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> + *
+>> + * ACPI thermal configuration
+>> + */
+>> +#include <linux/acpi.h>
+>> +#include <linux/module.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/units.h>
+>> +#include <uapi/linux/thermal.h>
+>> +
+>> +#include "thermal_core.h"
+>> +
+>> +int thermal_acpi_trip_gtsh(struct acpi_device *adev)
+>> +{
+>> +       unsigned long long hyst;
+>> +       acpi_status status;
+>> +
+>> +       status = acpi_evaluate_integer(adev->handle, "GTSH", NULL, &hyst);
+>> +       if (ACPI_FAILURE(status))
+>> +               return 0;
+>> +
+>> +       return (int)(hyst * 100);
+> 
+> What if the result is larger than INT_MAX?
 
-Best regards,
-Krzysztof
+That would mean ACPI is returning more than 4 billions degree hysteresis 
+value.
+
+What strategy should we use in these functions? Trust the values 
+returned by ACPI or double check if they are consistent ?
+
+
+>> +}
+>> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_gtsh);
+>> +
+>> +int thermal_acpi_get_tzd(struct acpi_device *adev, struct acpi_handle_list *devices)
+>> +{
+>> +       acpi_status status;
+>> +
+>> +       /*
+>> +        * _TZD (Thermal zone device): This optional object evaluates
+>> +        * to a package of device names. Each name corresponds to a
+>> +        * device in the ACPI namespace that is associated with the
+>> +        * thermal zone. The temperature reported by the thermal zone
+>> +        * is roughly correspondent to that of each of the devices.
+>> +        */
+> 
+> I don't think that the comment is necessary.
+> 
+> The spec already contains a definition of this object.
+
+Yes, this comment is the description from the spec. I put them there to 
+save time for those who are reading the code so they don't have to go 
+back and forth between the documentation and the code.
+
+Do you really want me to remove all of them ?
+
+[ ... ]
+
+
+> Overall, I'm not sure about simple wrappers around
+> acpi_evaluate_integer/reference() that effectively discard the return
+> value and don't even bother to sanitize the return value before
+> returning it to the caller.
+
+Ok, so we don't want to trust the values returned by ACPI.
+
+If all the sanity checks are done in the functions, would it make more 
+sense then ?
+
+
+> The ones that initialize a trip point make more sense IMO.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
