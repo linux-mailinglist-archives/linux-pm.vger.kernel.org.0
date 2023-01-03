@@ -2,54 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE81B65BC2E
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 09:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC0C465BC3B
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 09:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236868AbjACI02 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 03:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
+        id S236937AbjACI3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 03:29:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbjACI01 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 03:26:27 -0500
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8331145;
-        Tue,  3 Jan 2023 00:26:26 -0800 (PST)
-Received: by mail-qt1-f177.google.com with SMTP id x11so24023023qtv.13;
-        Tue, 03 Jan 2023 00:26:26 -0800 (PST)
+        with ESMTP id S233032AbjACI3e (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 03:29:34 -0500
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2F9DF72;
+        Tue,  3 Jan 2023 00:29:33 -0800 (PST)
+Received: by mail-qt1-f180.google.com with SMTP id v14so21283351qtq.3;
+        Tue, 03 Jan 2023 00:29:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TxY7lYagEltChXxjXpBI7TNvNH+bp0AemQt8uZEkx4g=;
-        b=WU9iVXYQB3f+21qGwwO6qq6QQcuE0MTy5AXxBp58A7Kqiq3D3nxenRYOU55KNG4Haz
-         hxpze0FK9/BpxerOrppratUXs9SeftOAhYedp1zicx/8HbhvFT1JL78Q29gdNvTdVeya
-         Fz5YB6R09/5HOInBNtImxR+mURxaOXk4ekLUWf+AjRdVbdjxdpHBgMhyJSnd+Acp3DPe
-         ExHZ+zkZwSQ7MT5fLKiiyCgrJAzPd96yT9OpzEe36GV0e0t7nn8a01yxN6DH75HEQ+6j
-         xsHPRaGOwe2obeMRIslvLyYy2F/bRz370JufE37p5GrzlbnIADSLF4aLGeIGOCFVEn4N
-         Q22A==
-X-Gm-Message-State: AFqh2kopLq2u4jzQoWH6Tl2bvp/kihZiF/tExQbA/II4auO52PQA5iyO
-        X2l78PupZHuAHNtRJt2Z8L7mo16FMMb5qA==
-X-Google-Smtp-Source: AMrXdXsX5bpUtOjavY/iBODyUrtNmbXYW102JwUKMI3uk9w8FTabk1Brmvz93rhFuq3A83+K7R8S/w==
-X-Received: by 2002:ac8:7ef7:0:b0:3a8:1bae:4cc with SMTP id r23-20020ac87ef7000000b003a81bae04ccmr60310636qtc.55.1672734385720;
-        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05620a291000b007056237b41bsm1715551qkp.67.2023.01.03.00.26.25
+        bh=Wqnt5jb7LUMCbm7+oOTpWLIPFgOcnGyLYItooGklte4=;
+        b=kWHJWhxc/EznciNc4y+aYaTOZ6JlhJFuU/Ty8V9+bvch89IIwp0kuGMLvqW3N/OR0t
+         boukk2AY8l/QuF73CkZm4CmZG8vDoz4vjINX8B91oKOzmBAQzEEo2zANnPuN5JzQi7Bk
+         Ma1syxy26pOZiS9MTXxn6hy9S2KYsMuZLjMnQZFfp4THR+3DhLJpLfUmL75FuAwrWKbH
+         cgS9sra+u9GXKs2eze5eDg2+yK9FKX3j9WyexixJuBMq3ATkNV+vhr8+jFwo1TWuOcsW
+         iE4NznTf8VvREN3SmduIrDowzL4rnnt72ZvVztspCl45iK8UZu8SjHwD2nL2KBBHl9Op
+         GuAA==
+X-Gm-Message-State: AFqh2krwDwi8Rc7SVA11EB4q1SZp0QkEfwn9wO+BacZGaHupsQaLAKo5
+        aDKsyiLuVWwza4ywdoV+2pdPvVDi0vnRdA==
+X-Google-Smtp-Source: AMrXdXsmPQ59b5t00pt4H0fRF/QvL/D6CvX89z38+RucVgGq/UykubrdhIhSTjHh7oChp6RAP7kavg==
+X-Received: by 2002:a05:622a:4d47:b0:3a7:f183:7f66 with SMTP id fe7-20020a05622a4d4700b003a7f1837f66mr65841102qtb.22.1672734571898;
+        Tue, 03 Jan 2023 00:29:31 -0800 (PST)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id bp33-20020a05620a45a100b006e99290e83fsm13454936qkb.107.2023.01.03.00.29.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-45c11d1bfc8so427191537b3.9;
-        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
-X-Received: by 2002:a81:1b0a:0:b0:37e:6806:a5f9 with SMTP id
- b10-20020a811b0a000000b0037e6806a5f9mr5025447ywb.47.1672734384919; Tue, 03
- Jan 2023 00:26:24 -0800 (PST)
+        Tue, 03 Jan 2023 00:29:31 -0800 (PST)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-482363a1232so272500187b3.3;
+        Tue, 03 Jan 2023 00:29:31 -0800 (PST)
+X-Received: by 2002:a81:4fcf:0:b0:488:724d:4413 with SMTP id
+ d198-20020a814fcf000000b00488724d4413mr1732163ywb.502.1672734571012; Tue, 03
+ Jan 2023 00:29:31 -0800 (PST)
 MIME-Version: 1.0
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-5-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221221210917.458537-5-fabrizio.castro.jz@renesas.com>
+References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 09:26:13 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUv41kssEnat9PFTcb11sYCP3_9p=5hQFAVRqRa-G7gSg@mail.gmail.com>
-Message-ID: <CAMuHMdUv41kssEnat9PFTcb11sYCP3_9p=5hQFAVRqRa-G7gSg@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] power: reset: Add new driver for RZ/V2M PWC poweroff
+Date:   Tue, 3 Jan 2023 09:29:19 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdW=+0JU5-d6tSKPsvO7ZxWQzNVf0LvSTfimYoBgg4RrHg@mail.gmail.com>
+Message-ID: <CAMuHMdW=+0JU5-d6tSKPsvO7ZxWQzNVf0LvSTfimYoBgg4RrHg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add RZ/V2M PWC
 To:     fabrizio.castro.jz@renesas.com
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -78,62 +78,66 @@ Hi Fabrizio,
 
 On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> The RZ/V2M PWC IP controls external power supplies and therefore
-> can turn the power supplies off when powering down the system.
+> The Renesas RZ/V2M External Power Sequence Controller (PWC)
+> IP is a multi-function device, and it's capable of:
+> * external power supply on/off sequence generation
+> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
+> * key input signals processing
+> * general-purpose output pins
 >
-> Add driver to poweroff the system.
+> Add the corresponding dt-bindings.
 >
 > Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 > ---
 >
-> v1->v2: Dropped OF match table and syscon as a result of the change in
->         DT model
+> v1->v2: I have dropped syscon, simple-mfd, regmap, offset, and the child nodes.
 
-Thanks for your patch!
+Thanks for the update!
 
 > --- /dev/null
-> +++ b/drivers/power/reset/rzv2m-pwc-poweroff.c
-> @@ -0,0 +1,67 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2022 Renesas Electronics Corporation
-> + *
-> + * Reset driver for Renesas RZ/V2M External Power Sequence Controller (PWC)
-> + */
+> +++ b/Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
+> @@ -0,0 +1,56 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/renesas,rzv2m-pwc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reboot.h>
-> +#include "../../mfd/rzv2m-pwc.h"
+> +title: Renesas RZ/V2M External Power Sequence Controller (PWC)
 > +
-> +#define PWC_PWCRST_RSTSOFTAX           0x1
-> +#define PWC_PWCCKEN_ENGCKMAIN          0x1
-> +#define PWC_PWCCTL_PWOFF               0x1
+> +description: |+
+> +  The PWC IP found in the RZ/V2M family of chips comes with the below
+> +  capabilities
+> +    - external power supply on/off sequence generation
+> +    - on/off signal generation for the LPDDR4 core power supply (LPVDD)
+> +    - key input signals processing
+> +    - general-purpose output pins
 > +
-> +struct rzv2m_pwc_poweroff_priv {
-> +       void __iomem *base;
-> +       struct device *dev;
-> +};
+> +maintainers:
+> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
 > +
-> +static int rzv2m_pwc_poweroff(struct sys_off_data *data)
-> +{
-> +       struct rzv2m_pwc_poweroff_priv *priv =
-> +               (struct rzv2m_pwc_poweroff_priv *)data->cb_data;
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - renesas,r9a09g011-pwc # RZ/V2M
+> +          - renesas,r9a09g055-pwc # RZ/V2MA
+> +      - const: renesas,rzv2m-pwc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  renesas,rzv2m-pwc-power:
+> +    description: The PWC is used to control the system power supplies.
+> +    type: boolean
 
-No need for this cast.
-
-> +
-> +       writel(PWC_PWCRST_RSTSOFTAX, priv->base + PWC_PWCRST);
-> +       writel(PWC_PWCCKEN_ENGCKMAIN, priv->base + PWC_PWCCKEN);
-> +       writel(PWC_PWCCTL_PWOFF, priv->base + PWC_PWCCTL);
-> +
-> +       mdelay(150);
-> +
-> +       dev_err(priv->dev, "Failed to power off the system");
-> +
-> +       return NOTIFY_DONE;
-> +}
+I'm wondering if there is some other way to represent this, e.g.
+using DT topology? Some regulator relation?
 
 Gr{oetje,eeting}s,
 
