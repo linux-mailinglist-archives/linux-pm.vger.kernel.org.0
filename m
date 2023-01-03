@@ -2,107 +2,96 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6C765C1C2
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 15:23:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1300265C250
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 15:54:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbjACOWZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 09:22:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38988 "EHLO
+        id S233189AbjACOx1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 09:53:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238183AbjACOWY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 09:22:24 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 920B025C3;
-        Tue,  3 Jan 2023 06:22:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 091E62F4;
-        Tue,  3 Jan 2023 06:23:05 -0800 (PST)
-Received: from e126311.manchester.arm.com (unknown [10.57.76.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ECCAF3F587;
-        Tue,  3 Jan 2023 06:22:21 -0800 (PST)
-Date:   Tue, 3 Jan 2023 14:22:18 +0000
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     rafael@kernel.org
-Cc:     daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
-        yu.chen.surf@gmail.com, kajetan.puchalski@arm.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v5 0/2] cpuidle: teo: Introduce util-awareness
-Message-ID: <Y7Q6GnjKKhCVp1Zf@e126311.manchester.arm.com>
-References: <20221130153204.2085591-1-kajetan.puchalski@arm.com>
+        with ESMTP id S230131AbjACOx0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 09:53:26 -0500
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E31EE2D;
+        Tue,  3 Jan 2023 06:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1672757606; x=1704293606;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nmgA4X1w0YFqP1zuZHiRaCJZkppNc/Hvf0BjeUCElGU=;
+  b=l9Nm0Vl5FmA4DihuHORdFsyJBVoZKCyAvxOlVCn3zYdt/5sxnUl6nuzC
+   DbEaQ88iHxYrbAw2P/qDapIxCjTHwr5j1kiZk4Pk6oUEsfY/49rrQXBgi
+   TZj+QoXtmCgg48P2pE7cW4e7sqgqdxgXQGPvpYqpHsprkMRcTO/O4FNq9
+   t+Sp7w7Q2XlfiWLMOgV2pFemGhakEhZMIi12Ia0Fw09mPYa5aHTUnQz1+
+   jHQJBVq6qh4/iJK2ah4NCCok/4FNqepGrM8/gApF1u+KqOVkUOFaPhBHI
+   KoP8f9Z/I4zEM34IkqqigRWNNU+Ral49EZdrEPvq4Hbk9pB8gudn81+VA
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="309443930"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="309443930"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2023 06:53:14 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10579"; a="604832048"
+X-IronPort-AV: E=Sophos;i="5.96,297,1665471600"; 
+   d="scan'208";a="604832048"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga003.jf.intel.com with ESMTP; 03 Jan 2023 06:53:10 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 8D0EAF4; Tue,  3 Jan 2023 16:53:42 +0200 (EET)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linexp.org>,
+        Jishnu Prakash <quic_jprakash@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] thermal: qcom-spmi-adc-tm5: Use asm intead of asm-generic
+Date:   Tue,  3 Jan 2023 16:53:39 +0200
+Message-Id: <20230103145339.40501-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221130153204.2085591-1-kajetan.puchalski@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 03:32:02PM +0000, Kajetan Puchalski wrote:
+There is no point to specify asm-generic for the unaligned.h.
+Drop the 'generic' suffix.
 
-Hi Rafael,
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-As it's been a while since the last email I wanted to bump this thread
-and ask what you think about the last changes.
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index ff47fc9ac9c5..31164ade2dd1 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -18,7 +18,8 @@
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/thermal.h>
+-#include <asm-generic/unaligned.h>
++
++#include <asm/unaligned.h>
+ 
+ #include "../thermal_hwmon.h"
+ 
+-- 
+2.35.1
 
-Additionally, I got some emails from the kernel test robot and noticed
-that sched_cpu_util is contingent on CONFIG_SMP so in the current form
-there's build errors on !SMP machines.
-
-The following change should fix the problem, do you think it's all right to add?
-
-@@ -207,10 +207,17 @@ static DEFINE_PER_CPU(struct teo_cpu, teo_cpus);
-  * @dev: Target CPU
-  * @cpu_data: Governor CPU data for the target CPU
-  */
-+#ifdef CONFIG_SMP
- static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
- {
-        cpu_data->utilized = sched_cpu_util(dev->cpu) > cpu_data->util_threshold;
- }
-+#else
-+static void teo_get_util(struct cpuidle_device *dev, struct teo_cpu *cpu_data)
-+{
-+       cpu_data->utilized = false;
-+}
-+#endif
-
-Thanks in advance for your time,
-Kajetan
-
-> v4 -> v5:
-> - remove the restriction to only apply the mechanism for C1 candidate state
-> - clarify some code comments, fix comment style
-> - refactor the fast-exit path loop implementation
-> - move some cover letter information into the commit description
-> 
-> v3 -> v4:
-> - remove the chunk of code skipping metrics updates when the CPU was utilized
-> - include new test results and more benchmarks in the cover letter
-> 
-> v2 -> v3:
-> - add a patch adding an option to skip polling states in teo_find_shallower_state()
-> - only reduce the state if the candidate state is C1 and C0 is not a polling state
-> - add a check for polling states in the 2-states fast-exit path
-> - remove the ifdefs and Kconfig option
-> 
-> v1 -> v2:
-> - rework the mechanism to reduce selected state by 1 instead of directly selecting C0 (suggested by Doug Smythies)
-> - add a fast-exit path for systems with 2 idle states to not waste cycles on metrics when utilized
-> - fix typos in comments
-> - include a missing header
-> 
-> Kajetan Puchalski (2):
->   cpuidle: teo: Optionally skip polling states in teo_find_shallower_state()
->   cpuidle: teo: Introduce util-awareness
-> 
->  drivers/cpuidle/governors/teo.c | 93 +++++++++++++++++++++++++++++++--
->  1 file changed, 89 insertions(+), 4 deletions(-)
-> 
-> -- 
-> 2.37.1
-> 
