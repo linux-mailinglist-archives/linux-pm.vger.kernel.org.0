@@ -2,62 +2,64 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC0C465BC3B
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 09:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3CC365BC51
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 09:37:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236937AbjACI3i (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 03:29:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S237075AbjACIhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 03:37:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233032AbjACI3e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 03:29:34 -0500
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2F9DF72;
-        Tue,  3 Jan 2023 00:29:33 -0800 (PST)
-Received: by mail-qt1-f180.google.com with SMTP id v14so21283351qtq.3;
-        Tue, 03 Jan 2023 00:29:33 -0800 (PST)
+        with ESMTP id S231255AbjACIhE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 03:37:04 -0500
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27BDDB1;
+        Tue,  3 Jan 2023 00:37:03 -0800 (PST)
+Received: by mail-qt1-f176.google.com with SMTP id bp44so21441981qtb.0;
+        Tue, 03 Jan 2023 00:37:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Wqnt5jb7LUMCbm7+oOTpWLIPFgOcnGyLYItooGklte4=;
-        b=kWHJWhxc/EznciNc4y+aYaTOZ6JlhJFuU/Ty8V9+bvch89IIwp0kuGMLvqW3N/OR0t
-         boukk2AY8l/QuF73CkZm4CmZG8vDoz4vjINX8B91oKOzmBAQzEEo2zANnPuN5JzQi7Bk
-         Ma1syxy26pOZiS9MTXxn6hy9S2KYsMuZLjMnQZFfp4THR+3DhLJpLfUmL75FuAwrWKbH
-         cgS9sra+u9GXKs2eze5eDg2+yK9FKX3j9WyexixJuBMq3ATkNV+vhr8+jFwo1TWuOcsW
-         iE4NznTf8VvREN3SmduIrDowzL4rnnt72ZvVztspCl45iK8UZu8SjHwD2nL2KBBHl9Op
-         GuAA==
-X-Gm-Message-State: AFqh2krwDwi8Rc7SVA11EB4q1SZp0QkEfwn9wO+BacZGaHupsQaLAKo5
-        aDKsyiLuVWwza4ywdoV+2pdPvVDi0vnRdA==
-X-Google-Smtp-Source: AMrXdXsmPQ59b5t00pt4H0fRF/QvL/D6CvX89z38+RucVgGq/UykubrdhIhSTjHh7oChp6RAP7kavg==
-X-Received: by 2002:a05:622a:4d47:b0:3a7:f183:7f66 with SMTP id fe7-20020a05622a4d4700b003a7f1837f66mr65841102qtb.22.1672734571898;
-        Tue, 03 Jan 2023 00:29:31 -0800 (PST)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id bp33-20020a05620a45a100b006e99290e83fsm13454936qkb.107.2023.01.03.00.29.31
+        bh=IWeWb1u/JuV5suDY2SKD5PHzHvJTULCOtib+YqqeP4w=;
+        b=6pPcU23hufQ0FbTfWOEFYYMq7ukQcGJKYZkP3PeuF9RsynMxSiqewcraIOC1ClXCph
+         +d1hikONp8vHGpIscUSdpLMJUNhXQhZDH3CmrucGOlUnVgIbBZYW16m16vPEGSeilL1+
+         oYwFKWHxAUeOV3Z8JsPzdhKDgW0EIrfdhf51CoP/KJXXuNIteug1+xSpdger1fn/vWYi
+         KMVeOhyManSxNkcZpUZYuLl5m2Or5qlCbfM4qTvyjp8QQajUgkOsZgr4oCLjz0RkxAgZ
+         m7pDoTRj0pbMAC3NSkWwJgCRy6xu2u5H4b9Wez6ywrj8UUvaCs3/nwNnBURsMMobCgTJ
+         vdCw==
+X-Gm-Message-State: AFqh2kqgLb7YmSPZwsoaOz8izhK2lV5PrXwRFT7EiyBiBaDCwFJr7y8w
+        Bu5yxf16A/mN9xM1HW1mnc9S03jV2/zoCg==
+X-Google-Smtp-Source: AMrXdXtbGNYMhz5ktOx4uqOZ2ZZLBZXcDFAhoE/101XXHKJ6Ss6r/3Hy8DKiDiL5Cwy0PB9H6l+8kQ==
+X-Received: by 2002:a05:622a:5c89:b0:3ab:71c2:62d3 with SMTP id ge9-20020a05622a5c8900b003ab71c262d3mr55968748qtb.55.1672735022859;
+        Tue, 03 Jan 2023 00:37:02 -0800 (PST)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05622a124600b003a606428a59sm18683968qtx.91.2023.01.03.00.37.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:29:31 -0800 (PST)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-482363a1232so272500187b3.3;
-        Tue, 03 Jan 2023 00:29:31 -0800 (PST)
-X-Received: by 2002:a81:4fcf:0:b0:488:724d:4413 with SMTP id
- d198-20020a814fcf000000b00488724d4413mr1732163ywb.502.1672734571012; Tue, 03
- Jan 2023 00:29:31 -0800 (PST)
+        Tue, 03 Jan 2023 00:37:02 -0800 (PST)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-476e643d1d5so311084297b3.1;
+        Tue, 03 Jan 2023 00:37:01 -0800 (PST)
+X-Received: by 2002:a05:690c:c02:b0:48d:1334:6e38 with SMTP id
+ cl2-20020a05690c0c0200b0048d13346e38mr2327636ywb.316.1672735021431; Tue, 03
+ Jan 2023 00:37:01 -0800 (PST)
 MIME-Version: 1.0
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221221210917.458537-2-fabrizio.castro.jz@renesas.com>
+References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 09:29:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdW=+0JU5-d6tSKPsvO7ZxWQzNVf0LvSTfimYoBgg4RrHg@mail.gmail.com>
-Message-ID: <CAMuHMdW=+0JU5-d6tSKPsvO7ZxWQzNVf0LvSTfimYoBgg4RrHg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: mfd: Add RZ/V2M PWC
+Date:   Tue, 3 Jan 2023 09:36:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
+Message-ID: <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
 To:     fabrizio.castro.jz@renesas.com
 Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
         Chris Paterson <Chris.Paterson2@renesas.com>,
         Biju Das <biju.das@bp.renesas.com>,
         linux-renesas-soc@vger.kernel.org,
@@ -66,8 +68,8 @@ Cc:     Linus Walleij <linus.walleij@linaro.org>,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,66 +80,44 @@ Hi Fabrizio,
 
 On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
 <fabrizio.castro.jz@renesas.com> wrote:
-> The Renesas RZ/V2M External Power Sequence Controller (PWC)
-> IP is a multi-function device, and it's capable of:
-> * external power supply on/off sequence generation
-> * on/off signal generation for the LPDDR4 core power supply (LPVDD)
-> * key input signals processing
-> * general-purpose output pins
->
-> Add the corresponding dt-bindings.
->
-> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> ---
->
-> v1->v2: I have dropped syscon, simple-mfd, regmap, offset, and the child nodes.
+> The External Power Sequence Controller (PWC) IP (found in the
+> RZ/V2M SoC) is a controller for external power supplies (regulators
+> and power switches), and it supports the following features: it
+> generates a power on/off sequence for external power supplies,
+> it generates an on/off sequence for the LPDDR4 core power supply
+> (LPVDD), it comes with General-Purpose Outputs, and it processes
+> key input signals.
 
-Thanks for the update!
+Thanks for your patch!
+
+> The PWC is basically a Multi-Function Device (MFD), its software
+> support comes with a core driver, and specialized drivers for
+> its specific features.
+
+I have to admit I'm not such a big fan of MFD.  In this driver,
+you are not even sharing resources in the MFD cells, just the mapped
+register base.  So I think you can easily save +100 LoC and reduce
+maintenance synchronization overhead across subsystems by just having
+a single non-MFD driver instead.
+
+Did you pick MFD because the PWC poweroff feature depends on board
+wiring, and thus is optional?
+
+Are there any other MFD cells planned (e.g. regulators) to be added
+later? The public datasheet does not list the actual registers of the
+block, only a high-level overview with (rather detailed) behavioral
+information.
+
+Thanks!
 
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
-> @@ -0,0 +1,56 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mfd/renesas,rzv2m-pwc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/V2M External Power Sequence Controller (PWC)
-> +
-> +description: |+
-> +  The PWC IP found in the RZ/V2M family of chips comes with the below
-> +  capabilities
-> +    - external power supply on/off sequence generation
-> +    - on/off signal generation for the LPDDR4 core power supply (LPVDD)
-> +    - key input signals processing
-> +    - general-purpose output pins
-> +
-> +maintainers:
-> +  - Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - renesas,r9a09g011-pwc # RZ/V2M
-> +          - renesas,r9a09g055-pwc # RZ/V2MA
-> +      - const: renesas,rzv2m-pwc
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  gpio-controller: true
-> +
-> +  '#gpio-cells':
-> +    const: 2
-> +
-> +  renesas,rzv2m-pwc-power:
-> +    description: The PWC is used to control the system power supplies.
-> +    type: boolean
+> +++ b/drivers/mfd/rzv2m-pwc.h
 
-I'm wondering if there is some other way to represent this, e.g.
-using DT topology? Some regulator relation?
+> +struct rzv2m_pwc_priv {
+> +       void __iomem *base;
+> +};
+> +
+> +#endif /* __LINUX_RZV2M_PWC_H__ */
 
 Gr{oetje,eeting}s,
 
