@@ -2,117 +2,107 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D22565BFF9
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 13:37:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326F265C04F
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 13:55:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233103AbjACMhV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 07:37:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
+        id S237570AbjACMyu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 07:54:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230337AbjACMhU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 07:37:20 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E610563BA;
-        Tue,  3 Jan 2023 04:37:18 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        with ESMTP id S233216AbjACMtl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 07:49:41 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA38D30C;
+        Tue,  3 Jan 2023 04:49:40 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E70E612F3;
-        Tue,  3 Jan 2023 12:37:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82135C433D2;
-        Tue,  3 Jan 2023 12:37:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672749437;
-        bh=dB/QDWMWjPvnvJtwYHuiDSHxla5EZBvL/ZWB+joq7w0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y+aabUelfstOIDqoO/0JWYLu6/dFlO9zksv+ub/3pQGAy+kaUznWjlY0BqJgZK/hR
-         bWId+uyeiT8RCnXX5jrYc08e4Rq290BvT0hotIBXivh+cVG7FyUGDKh0ii6NuRwJdp
-         ZoCcJmVLOfHCoMO1d2+1tSPcxJ3mH6KVxA/egzFQH9fSVhiqDpvdgeABu7pnvki/Ti
-         r250DNouxBqS9bir2kjL2hMyCWilnkn+Ju3ryXnZOu9nTABAHdAoDt7NyklaBFK9uH
-         ELIP3euShWo81qZIquUQ2JkkZgafED4ECJxhpulAgZDFJnp9mFz5y5YdHBoGo7/0EU
-         2p7vIvXV9wc2A==
-Date:   Tue, 3 Jan 2023 12:37:11 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     saravanan sekar <sravanhome@gmail.com>, sre@kernel.org,
-        lars@metafoo.de, andy.shevchenko@gmail.com,
-        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 0/7] Add support for mp2733 battery charger
-Message-ID: <Y7Qhd2uoHOHUh9h2@google.com>
-References: <20221123175425.564042-1-sravanhome@gmail.com>
- <eedcf790-5447-d988-f9cb-9103f34f27ae@gmail.com>
- <20221211115042.5ec91c3f@jic23-huawei>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A2BB56602CF4;
+        Tue,  3 Jan 2023 12:49:38 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672750179;
+        bh=8ji9uM0rPrYHIz3P734RsmkYAcXteBVac3pmsXFW90Q=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=n6G0SNZjtaBdV/0/2Fd7PbL6pO+oO5JW0vDldxzUZnOI8gHX8lJ/Wx/uX0mxAjmJp
+         OZrxOV6gtRankj1cdmrQ+kKsUDtV2DiWe626RinwkegpPV7iaTicYmbYaUtwd0on3w
+         bXEAzTRbbxZaybjJg0o5JsmAT/He8PPj1HLIM4Pyi/2OV3UeMcQjGsMtN9a62cYSVw
+         Rgi4RkDum2H+Xxrk1TFz+zvBw05dWj/+w7f+sktffPBao72r69/l1GDV72/+ALTyXE
+         6slxPKIpLjNW70nc8hxFwgaIfh7P9IXeqVLkmCQZCjVFQS4gR3sBPuH/rZdc46nuX/
+         OkAls005mxgMg==
+Message-ID: <2f4a78f8-9cdd-9e44-20a2-b3bd6abd5cc7@collabora.com>
+Date:   Tue, 3 Jan 2023 13:49:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221211115042.5ec91c3f@jic23-huawei>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v1 13/13] soc: mediatek: mtk-svs: keep svs alive even
+ though debug cmd create fail
+Content-Language: en-US
+To:     Roger Lu <roger.lu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Enric Balletbo Serra <eballetbo@gmail.com>,
+        Kevin Hilman <khilman@kernel.org>,
+        Nicolas Boichat <drinkcat@google.com>
+Cc:     Fan Chen <fan.chen@mediatek.com>,
+        Jia-wei Chang <jia-wei.chang@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221226094248.4506-1-roger.lu@mediatek.com>
+ <20221226094248.4506-14-roger.lu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221226094248.4506-14-roger.lu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 11 Dec 2022, Jonathan Cameron wrote:
-
-> On Tue, 6 Dec 2022 17:05:26 +0100
-> saravanan sekar <sravanhome@gmail.com> wrote:
+Il 26/12/22 10:42, Roger Lu ha scritto:
+> Some projects might not support DEBUG_FS but still needs svs to be
+> supported. Therefore, keep svs alive even though debug cmd create fail.
 > 
-> > On 23/11/22 18:54, Saravanan Sekar wrote:
-> > > changes in v6:
-> > >    - splitted chip id to v6-0003 and support of mp2733 to v6-0004 patch
-> > >    - fixed commit message English grammar
-> > > 
-> > > changes in v5:
-> > >    - fixed commit message on v5-0002 and v5-0004
-> > > 
-> > > changes in v4:
-> > >    - fixed attributes groups review comments in v3
-> > >    - added new bug fix patches v4-0007 and v4-0008
-> > > 
-> > > changes in v3:
-> > >    - fixed dt_binding_check error
-> > >    - fixed spelling usb->USB
-> > > 
-> > > changes in v2:
-> > >    - fixed spelling
-> > >    - revert back probe to probe_new in mfd driver
-> > > 
-> > > add support for mp2733 Battery charger control driver for Monolithic
-> > > Power System's MP2733 chipset
-> > > 
-> > > Saravanan Sekar (7):
-> > >    mfd: mp2629: fix failed to get iio channel by device name
-> > >    power: supply: fix wrong interpretation of register value
-> > >    mfd: mp2629: introduce chip id machanism to distinguish chip
-> > >    mfd: mp2629: Add support for mps mp2733 battery charger
-> > >    iio: adc: mp2629: restrict input voltage mask for mp2629
-> > >    power: supply: Add support for mp2733 battery charger
-> > >    power: supply: mp2629: Add USB fast charge settings
-> > > 
-> > >   .../ABI/testing/sysfs-class-power-mp2629      |  16 ++
-> > >   drivers/iio/adc/mp2629_adc.c                  |   5 +-
-> > >   drivers/mfd/mp2629.c                          |   7 +-
-> > >   drivers/power/supply/mp2629_charger.c         | 229 +++++++++++++++---
-> > >   include/linux/mfd/mp2629.h                    |   6 +
-> > >   5 files changed, 226 insertions(+), 37 deletions(-)
-> > >   
-> > 
-> > Hi,
-> > 
-> > Can someone give me share the plan for this series?
+> Signed-off-by: Roger Lu <roger.lu@mediatek.com>
+> ---
+>   drivers/soc/mediatek/mtk-svs.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> Given some cross dependencies I think the whole lot should go through
-> mfd.  Lee?
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index af3a12e29e78..c780a115543e 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -2390,10 +2390,8 @@ static int svs_probe(struct platform_device *pdev)
+>   	}
+>   
 
-That's fine by me.
+Instead of ignoring a planned failure, it's sensible to not fail at all:
+enclose this call and the svs_create_debug_cmds() function in an ifdef.
 
-I have some serious catching up to do though.
+#ifdef CONFIG_DEBUG_FS
 
-Please bear with me.
+>   	ret = svs_create_debug_cmds(svsp);
+> -	if (ret) {
+> +	if (ret)
+>   		dev_err(svsp->dev, "svs create debug cmds fail: %d\n", ret);
+> -		goto svs_probe_iounmap;
+> -	}
 
--- 
-Lee Jones [李琼斯]
+#endif
+
+>   
+>   	return 0;
+>   
+> 
+
+Regards,
+Angelo
+
+
