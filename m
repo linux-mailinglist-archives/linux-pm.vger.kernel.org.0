@@ -2,114 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8632865BB3C
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 08:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE81B65BC2E
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 09:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236917AbjACHam (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 02:30:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S236868AbjACI02 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 03:26:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236920AbjACHa1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 02:30:27 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A4ADEF6;
-        Mon,  2 Jan 2023 23:30:25 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id fz16-20020a17090b025000b002269d6c2d83so532842pjb.0;
-        Mon, 02 Jan 2023 23:30:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MgJSdtU2k5DHs16MCkmtC7fasexNDJAPB3/Jh9qcLJg=;
-        b=SdwB+zDXEaHU4oZBTmY3m+dKSnLVICNSo4jmK0Sm24mrrb221JNuCBqCCuiMucr0xs
-         rTq5xyPdch4Bb7MwXhY8jg3U8MnxIUQhZKdk2MyCXQJMSTxwg3A6C6JknW5BZJC5ocrL
-         eMep2xFGfKWN1G+v49tZjvM17vX7lnhw9roGcsmJxC0wUNSW3ZhLnbaptQC1ZGk6fQ+p
-         AGBUb8EgZMjJ6sKwTecymAD2bInIbhWF94NzQNB56qRBBTCWH5q2mt+9rM/D1GxtOU1D
-         Cya0XlIbbj7JsZsHLEkxh/Nnc+QWkL1MVKHHmrHJjYwalKcfCcojchmmu6nyun02AMBi
-         zQWw==
+        with ESMTP id S230211AbjACI01 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 03:26:27 -0500
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF8331145;
+        Tue,  3 Jan 2023 00:26:26 -0800 (PST)
+Received: by mail-qt1-f177.google.com with SMTP id x11so24023023qtv.13;
+        Tue, 03 Jan 2023 00:26:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MgJSdtU2k5DHs16MCkmtC7fasexNDJAPB3/Jh9qcLJg=;
-        b=tLTk9G2QBp3HiO6qEoWZA1VeNEUpGfysxT5GFw3MnTWSng72Y1UTFHsDliAsYba1f0
-         L+3NVu6qQ/NMSSbPn5yycYZYubou9/BND0T0tpqhSXjC9ucjn+j1vqHTYQFegiKh6FZx
-         M1yAW5+/50hzpaoPLujSuiDrgmN4iL2zXiFakxzUftkqQZyXfRryUvumKLHEn2mVlI6A
-         2sFgUotnxLYaYPQbYguaFbQLfb7xZ9ilWvNbExctIQoA1cn+aRXXD8QlMs0D4mYaxGWV
-         zwqVML/EFj5sjkLdBw1A1uF0H87gNXLaDvXZiYw9nOSQsTGEtvEALN8H6rrFn8atxLPM
-         5n7A==
-X-Gm-Message-State: AFqh2kqcURzshbTFJeApu4T0JGi3Qv1rKMrGriBJkZN6Qs0FtnRZg0qA
-        5iKro7euCBdx8Z6/2BfoI7s=
-X-Google-Smtp-Source: AMrXdXvUuXdKoMPhYrQ4CL42w/GutPax/jxQe+hCIf8hVLahv8NxGX+p3w2jRq7WDBOq0mI81Pz20w==
-X-Received: by 2002:a17:903:181:b0:191:1b93:e391 with SMTP id z1-20020a170903018100b001911b93e391mr59557428plg.63.1672731024733;
-        Mon, 02 Jan 2023 23:30:24 -0800 (PST)
-Received: from RD-3580-24288.rt.l (42-73-255-34.emome-ip.hinet.net. [42.73.255.34])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902684400b00189f69c1aa0sm21449839pln.270.2023.01.02.23.30.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 23:30:24 -0800 (PST)
-From:   ChiaEn Wu <peterwu.pub@gmail.com>
-To:     sre@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     chiaen_wu@richtek.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3 RESEND 3/3] Documentation: power: rt9467: Document exported sysfs entries
-Date:   Tue,  3 Jan 2023 15:29:58 +0800
-Message-Id: <9dfc9e50a96cac7f0ef9e3d40cee3ef42b2f9034.1672730839.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1672730839.git.chiaen_wu@richtek.com>
-References: <cover.1672730839.git.chiaen_wu@richtek.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TxY7lYagEltChXxjXpBI7TNvNH+bp0AemQt8uZEkx4g=;
+        b=WU9iVXYQB3f+21qGwwO6qq6QQcuE0MTy5AXxBp58A7Kqiq3D3nxenRYOU55KNG4Haz
+         hxpze0FK9/BpxerOrppratUXs9SeftOAhYedp1zicx/8HbhvFT1JL78Q29gdNvTdVeya
+         Fz5YB6R09/5HOInBNtImxR+mURxaOXk4ekLUWf+AjRdVbdjxdpHBgMhyJSnd+Acp3DPe
+         ExHZ+zkZwSQ7MT5fLKiiyCgrJAzPd96yT9OpzEe36GV0e0t7nn8a01yxN6DH75HEQ+6j
+         xsHPRaGOwe2obeMRIslvLyYy2F/bRz370JufE37p5GrzlbnIADSLF4aLGeIGOCFVEn4N
+         Q22A==
+X-Gm-Message-State: AFqh2kopLq2u4jzQoWH6Tl2bvp/kihZiF/tExQbA/II4auO52PQA5iyO
+        X2l78PupZHuAHNtRJt2Z8L7mo16FMMb5qA==
+X-Google-Smtp-Source: AMrXdXsX5bpUtOjavY/iBODyUrtNmbXYW102JwUKMI3uk9w8FTabk1Brmvz93rhFuq3A83+K7R8S/w==
+X-Received: by 2002:ac8:7ef7:0:b0:3a8:1bae:4cc with SMTP id r23-20020ac87ef7000000b003a81bae04ccmr60310636qtc.55.1672734385720;
+        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
+        by smtp.gmail.com with ESMTPSA id m16-20020a05620a291000b007056237b41bsm1715551qkp.67.2023.01.03.00.26.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-45c11d1bfc8so427191537b3.9;
+        Tue, 03 Jan 2023 00:26:25 -0800 (PST)
+X-Received: by 2002:a81:1b0a:0:b0:37e:6806:a5f9 with SMTP id
+ b10-20020a811b0a000000b0037e6806a5f9mr5025447ywb.47.1672734384919; Tue, 03
+ Jan 2023 00:26:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-5-fabrizio.castro.jz@renesas.com>
+In-Reply-To: <20221221210917.458537-5-fabrizio.castro.jz@renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 3 Jan 2023 09:26:13 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUv41kssEnat9PFTcb11sYCP3_9p=5hQFAVRqRa-G7gSg@mail.gmail.com>
+Message-ID: <CAMuHMdUv41kssEnat9PFTcb11sYCP3_9p=5hQFAVRqRa-G7gSg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] power: reset: Add new driver for RZ/V2M PWC poweroff
+To:     fabrizio.castro.jz@renesas.com
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ChiaEn Wu <chiaen_wu@richtek.com>
+Hi Fabrizio,
 
-Document the settings exported by rt9467 charger driver through sysfs
-entries:
-- sysoff_enable
+On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
+<fabrizio.castro.jz@renesas.com> wrote:
+> The RZ/V2M PWC IP controls external power supplies and therefore
+> can turn the power supplies off when powering down the system.
+>
+> Add driver to poweroff the system.
+>
+> Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> ---
+>
+> v1->v2: Dropped OF match table and syscon as a result of the change in
+>         DT model
 
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
----
- .../ABI/testing/sysfs-class-power-rt9467      | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-power-rt9467
+Thanks for your patch!
 
-diff --git a/Documentation/ABI/testing/sysfs-class-power-rt9467 b/Documentation/ABI/testing/sysfs-class-power-rt9467
-new file mode 100644
-index 000000000000..dd0b962f6fd4
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-rt9467
-@@ -0,0 +1,19 @@
-+What:		/sys/class/power_supply/rt9467-*/sysoff_enable
-+Date:		Oct 2022
-+KernelVersion:	6.0
-+Contact:	ChiaEn Wu <chiaen_wu@richtek.com>
-+Description:
-+		This entry allows enabling the sysoff mode of rt9467 charger
-+		devices.
-+		If enabled and the input is removed, the internal battery FET
-+		is turned off to reduce the leakage from the BAT pin. See
-+		device datasheet for details. It's commonly used when the
-+		product enter shipping stage. After entering shipping mode,
-+		only 'VBUS' or 'Power key" pressed can make it leave this mode.
-+		'Disable' also can help to leave it, but it's more like to
-+		abort the action before the device really enter shipping mode.
-+
-+		Access: Read, Write
-+		Valid values:
-+		- 1: enabled
-+		- 0: disabled
--- 
-2.25.1
+> --- /dev/null
+> +++ b/drivers/power/reset/rzv2m-pwc-poweroff.c
+> @@ -0,0 +1,67 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2022 Renesas Electronics Corporation
+> + *
+> + * Reset driver for Renesas RZ/V2M External Power Sequence Controller (PWC)
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/reboot.h>
+> +#include "../../mfd/rzv2m-pwc.h"
+> +
+> +#define PWC_PWCRST_RSTSOFTAX           0x1
+> +#define PWC_PWCCKEN_ENGCKMAIN          0x1
+> +#define PWC_PWCCTL_PWOFF               0x1
+> +
+> +struct rzv2m_pwc_poweroff_priv {
+> +       void __iomem *base;
+> +       struct device *dev;
+> +};
+> +
+> +static int rzv2m_pwc_poweroff(struct sys_off_data *data)
+> +{
+> +       struct rzv2m_pwc_poweroff_priv *priv =
+> +               (struct rzv2m_pwc_poweroff_priv *)data->cb_data;
 
+No need for this cast.
+
+> +
+> +       writel(PWC_PWCRST_RSTSOFTAX, priv->base + PWC_PWCRST);
+> +       writel(PWC_PWCCKEN_ENGCKMAIN, priv->base + PWC_PWCCKEN);
+> +       writel(PWC_PWCCTL_PWOFF, priv->base + PWC_PWCCTL);
+> +
+> +       mdelay(150);
+> +
+> +       dev_err(priv->dev, "Failed to power off the system");
+> +
+> +       return NOTIFY_DONE;
+> +}
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
