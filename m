@@ -2,162 +2,134 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A152C65C464
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 18:00:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B977665C42A
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 17:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238189AbjACRAV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 12:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S238060AbjACQpq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 11:45:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238180AbjACRAG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 12:00:06 -0500
-X-Greylist: delayed 929 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Jan 2023 09:00:05 PST
-Received: from fx302.security-mail.net (mxout.security-mail.net [85.31.212.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C648713CC4
-        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 09:00:04 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by fx302.security-mail.net (Postfix) with ESMTP id 070801C3E5EA
-        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 17:44:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1672764274;
-        bh=UW//XMfsyLwkNUQC+hmGNX+dObS72OyhB+hvng4FX9w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=LbXJ+BBqOT90Zk15dr8oHAdyVpBOrW5foZ4LMrpaD2Jsat0XryuNuNYnEmZ1PKuy/
-         Gzq0Mw9aL+kGGvbQX35o2Sk1wFHMki2Uru2O5K6mlizrxmtjxHD3xXUq0Q3HgFOL4N
-         fyEbIJPEQpz9CQcMQM0ZiTtvUI+iBM+3JyBFwNtQ=
-Received: from fx302 (localhost [127.0.0.1]) by fx302.security-mail.net
- (Postfix) with ESMTP id D3D071C3E518; Tue,  3 Jan 2023 17:44:33 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx302.security-mail.net (Postfix) with ESMTPS id 6E4DE1C3E441; Tue,  3 Jan
- 2023 17:44:33 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 20C4927E03FC; Tue,  3 Jan 2023
- 17:44:33 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id E568C27E03F4; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- eQRWjyMH1xxK; Tue,  3 Jan 2023 17:44:32 +0100 (CET)
-Received: from junon.lin.mbt.kalray.eu (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 9D90127E03FE; Tue,  3 Jan 2023
- 17:44:32 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <b491.63b45b71.48f14.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu E568C27E03F4
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672764273;
- bh=J+L8c7UszbJKFAVPwsLki0REM9sesctiXlzfsKWWtFs=;
- h=From:To:Date:Message-Id:MIME-Version;
- b=Zzm4jH2j3YflQyM6ODdFeopmtrDe6SbBb4GpP3nI5Jm7oUW0X04KWW6YOTiSz5DU/
- V7IzaRW+sQcoNWoZ+h3i1ANwVbZnu80+FfNMX3mS4bII27V0HGezV0SPlvXdOuii5t
- 6sYrKPDKK4REwLB1jv+ADFo5Bz6EWfDhSaPcJXA0=
-From:   Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Yann Sionneau <ysionneau@kalray.eu>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Clement Leger <clement.leger@bootlin.com>,
-        Julian Vetter <jvetter@kalray.eu>
-Subject: [RFC PATCH 19/25] kvx: power: scall poweroff driver
-Date:   Tue,  3 Jan 2023 17:43:53 +0100
-Message-ID: <20230103164359.24347-20-ysionneau@kalray.eu>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
+        with ESMTP id S238013AbjACQpo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 11:45:44 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED6412AAA
+        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 08:45:43 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso17308666wms.5
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 08:45:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xlYFaDLIw+oAuyNiE146AeJuLBHMHdcHhEkHNkvVnSs=;
+        b=D3dzLJP0pXGKVY3j1ccUWQui4pkpfLeR4ND2+sWriliqjNFjkMCUXMtwXp/h9SGzJW
+         Mv39ldb6fAtFUZDbgHnnO203NhsDxfKijTUiyqF+Qnppy2UK96zvIpF9ZHof8j/CoaQv
+         YBDQWfLsK5KJp6L5k9CftP/LxJa0W5DCHiww+k26Spikf2LWadgr6YlDZEAdcVQdIZaO
+         8Ogr+KN53/od5wCc2wZtPtDzoEPCmnclxV/f+AlKuWe2130FRt2f2SfAS3CkA/8pAK3u
+         86EjmIzNvH4v9ieAYayS7EHU39y3LZj14aunGuBvh9XXzTaiQ8l2WxdhL+4bxyO0jTpX
+         di8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xlYFaDLIw+oAuyNiE146AeJuLBHMHdcHhEkHNkvVnSs=;
+        b=jk/Qtaryz29++G5A1MpMVEy41vHScPg2LYgXNW210LgI6YRj+c4wzK4LNUmN3C+tIB
+         w71B62ZvaIC57VvC44kXSr9TqmqRz8YPpaoJQrLkRC8t3fHidw+iuqgorm6MMGVTCTWB
+         U9LC5qEFxcU8Fft1MIHSp/ofOyF29MtXdMH254gaZX3m+R18Rvxxju9+tEzN0O5CYR8j
+         DTWsBsOSMAa+wE0vuTZaVl9K0en+lVl4m6vT03Jo/kQJsZFsjzFj5gU+ERGqLzt5ZAfs
+         OBlGh6RZuHWOwyRhNyCI6sw4jBVjd0C07Ppn4LJwxKa2CMgmLptWcy6A1PGqnz9W6wYa
+         6OZA==
+X-Gm-Message-State: AFqh2krNQ1PdCwqLtlqrs9LkvbMkTFO8jZ8CaIAsMIglCavnEqIlGtij
+        DGGKyIkqGa5i5pydPi/olYDPXg==
+X-Google-Smtp-Source: AMrXdXuBkdEVYRyzV637IRsANdT+wsKSwkHeuoVGQhf55lma77GGWA6gTgGEKzfcisTABGdPz6/Y4A==
+X-Received: by 2002:a05:600c:3d12:b0:3d3:5027:89a4 with SMTP id bh18-20020a05600c3d1200b003d3502789a4mr35599970wmb.7.1672764341689;
+        Tue, 03 Jan 2023 08:45:41 -0800 (PST)
+Received: from [192.168.1.12] (host-92-24-101-87.as13285.net. [92.24.101.87])
+        by smtp.gmail.com with ESMTPSA id o27-20020a05600c511b00b003c6f8d30e40sm51473426wms.31.2023.01.03.08.45.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Jan 2023 08:45:41 -0800 (PST)
+Message-ID: <27e14346-597f-e3d1-250c-081595eb1759@linaro.org>
+Date:   Tue, 3 Jan 2023 16:45:40 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset=utf-8
-X-ALTERMIMEV2_out: done
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] thermal/core: fix potential unbalanced put_device during
+ register
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20221231210301.6968-1-caleb.connolly@linaro.org>
+ <20230102053144.eheohvixllp3mtnd@vireshk-i7>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <20230102053144.eheohvixllp3mtnd@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a driver to poweroff the Coolidge SoC
-when running under Qemu, ISS or when
-the debugger (jtag-runner) runs on PL0
-to catch the scall.
 
-CC: Sebastian Reichel <sre@kernel.org>
-CC: linux-kernel@vger.kernel.org
-CC: linux-pm@vger.kernel.org
-Co-developed-by: Clement Leger <clement.leger@bootlin.com>
-Signed-off-by: Clement Leger <clement.leger@bootlin.com>
-Co-developed-by: Julian Vetter <jvetter@kalray.eu>
-Signed-off-by: Julian Vetter <jvetter@kalray.eu>
-Signed-off-by: Yann Sionneau <ysionneau@kalray.eu>
----
- drivers/power/reset/kvx-scall-poweroff.c | 53 ++++++++++++++++++++++++
- 1 file changed, 53 insertions(+)
- create mode 100644 drivers/power/reset/kvx-scall-poweroff.c
 
-diff --git a/drivers/power/reset/kvx-scall-poweroff.c b/drivers/power/reset/kvx-scall-poweroff.c
-new file mode 100644
-index 000000000000..586d93fbcaed
---- /dev/null
-+++ b/drivers/power/reset/kvx-scall-poweroff.c
-@@ -0,0 +1,53 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (c) 2017 - 2022 Kalray Inc.
-+ * Author(s): Clement Leger
-+ */
-+
-+#include <linux/pm.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+
-+#define SCALL_NUM_EXIT	"0xfff"
-+
-+static void kvx_scall_poweroff(void)
-+{
-+	register int status asm("r0") = 0;
-+
-+	asm volatile ("scall " SCALL_NUM_EXIT "\n\t;;"
-+		      : /* out */
-+		      : "r"(status));
-+
-+	unreachable();
-+}
-+
-+static int kvx_scall_poweroff_probe(struct platform_device *pdev)
-+{
-+	pm_power_off = kvx_scall_poweroff;
-+
-+	return 0;
-+}
-+
-+static int kvx_scall_poweroff_remove(struct platform_device *pdev)
-+{
-+	if (pm_power_off == kvx_scall_poweroff)
-+		pm_power_off = NULL;
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id kvx_scall_poweroff_of_match[] = {
-+	{ .compatible = "kalray,kvx-scall-poweroff" },
-+	{}
-+};
-+
-+static struct platform_driver kvx_scall_poweroff_driver = {
-+	.probe = kvx_scall_poweroff_probe,
-+	.remove = kvx_scall_poweroff_remove,
-+	.driver = {
-+		.name = "kvx-scall-poweroff",
-+		.of_match_table = kvx_scall_poweroff_of_match,
-+	},
-+};
-+module_platform_driver(kvx_scall_poweroff_driver);
+On 02/01/2023 05:31, Viresh Kumar wrote:
+> On 31-12-22, 21:03, Caleb Connolly wrote:
+>> Commit c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+>> causes device_put() to be called if the get_max_state() callback fails
+>> during __thermal_cooling_device_register().
+>>
+>> Fix the cleanup ordering to only call device_put() if initialization
+>> fails after the matching device_register() call.
+>>
+>> Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+>> Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+>> ---
+>>  drivers/thermal/thermal_core.c | 5 +++--
+>>  1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index f17ab2316dbd..2c6995b5dcb0 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -920,7 +920,7 @@ __thermal_cooling_device_register(struct device_node *np,
+>>  	}
+>>  	ret = device_register(&cdev->device);
+>>  	if (ret)
+>> -		goto out_kfree_type;
+>> +		goto out_put_device;
+>>  
+>>  	/* Add 'this' new cdev to the global cdev list */
+>>  	mutex_lock(&thermal_list_lock);
+>> @@ -939,10 +939,11 @@ __thermal_cooling_device_register(struct device_node *np,
+>>  
+>>  	return cdev;
+>>  
+>> +out_put_device:
+>> +	put_device(&cdev->device);
+>>  out_kfree_type:
+>>  	thermal_cooling_device_destroy_sysfs(cdev);
+> 
+> What about this one ? This shouldn't be called in case get_max_state() fails,
+> right ?
+
+Right, I missed that one! It even gets called twice if dev_set_name()
+fails...
+> 
+>>  	kfree(cdev->type);
+>> -	put_device(&cdev->device);
+>>  	cdev = NULL;
+>>  out_ida_remove:
+>>  	ida_free(&thermal_cdev_ida, id);
+> 
+
 -- 
-2.37.2
-
-
-
-
-
+Kind Regards,
+Caleb (they/them)
