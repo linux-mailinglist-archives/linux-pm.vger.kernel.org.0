@@ -2,215 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30BBF65C873
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 21:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EBBF65C899
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 22:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234175AbjACUxD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 15:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
+        id S237815AbjACVG1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 16:06:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232129AbjACUw6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 15:52:58 -0500
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78EDFFC;
-        Tue,  3 Jan 2023 12:52:57 -0800 (PST)
-Received: by mail-il1-f171.google.com with SMTP id a9so6321030ilk.6;
-        Tue, 03 Jan 2023 12:52:57 -0800 (PST)
+        with ESMTP id S233586AbjACVFI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 16:05:08 -0500
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A541408A;
+        Tue,  3 Jan 2023 13:05:07 -0800 (PST)
+Received: by mail-ua1-x92a.google.com with SMTP id q3so6334528uao.2;
+        Tue, 03 Jan 2023 13:05:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1BpgH2JExWhLYwx16JSRZTh0GkhP5q2EUrahmB7s1do=;
+        b=ccvD8F2bv5jXTZjdbF27x/Y8owkiRaw/1iscjN3qC4sSz+hZsjSgXf2x5o8nJw4WJI
+         OtEfcSpQuOYVVmXAskTxFHOBPDQEYe8GABS/3WsemdAF9MtmyJezankDZN+WUvxMPTHO
+         dyXoaaAx9Fnu+nlFasNQSoTbQ8Z5TPgi+lbSH7mv5SnGIL9tQ0XTCehCcUmky5D3ZqvT
+         VmJeB8iV4NemPjLnFfCiR1WXra6OaQtMt4mR4s+aYcGsXkYw4pqK8Qj99fOY6Cz/XKDh
+         FphiQZxROts6gnWx223bixxdk3hht4OLI439WOy85ZRi3o61bE4QN/RkbOKLy8f4mjZV
+         /5KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TcjxuWhsew0S4JMMZ0LVIr9mYr0ZItiOrBsIyKBjzxA=;
-        b=2NToks0C7J1Ro1UvG/6kt01FVvqSE9HR9qVAMAfaZb06yTAwrVLN65XEVXoYdk2sb/
-         FMDH86QOTkf1wdMlMR0dleIvp+iKloeh8GdzK1VfMzIR5mKBmjC5nnJFQD8eXF3nkv2c
-         dY7pzjpWv1OB2HULmgz9jZIO8vW435au8tXaxTXsClyEWgoz1g9qzlEG3Rvr13+3bRd2
-         sVlR2JmEJsANGr6A5u4z8LXD9rOrFNBNl2fwYhTpwN6SRkp5lS/7jyhfQVKayBh/JXLn
-         MlcxThMHg4KRVQgojY41+30qpXSL/0YXGHsHVLY34H6PJw+HYfF8wXBSBQUNQjTOidrU
-         gmMw==
-X-Gm-Message-State: AFqh2kqZ2tsPOgwVUCwTSoEgDRfiW27l+kCz1xXxrsewl87pch2FncLQ
-        Id3nHQnTweBl/NWr7CvSoQ==
-X-Google-Smtp-Source: AMrXdXs7CLCkBhA2bAs8+otIJJ87HLmOu2iBxk7dmL/ZdUhdNLgBmJbpCAkIQKJL5QLEGLa5kGxn6A==
-X-Received: by 2002:a05:6e02:549:b0:306:d1b4:f3c7 with SMTP id i9-20020a056e02054900b00306d1b4f3c7mr25689876ils.20.1672779176867;
-        Tue, 03 Jan 2023 12:52:56 -0800 (PST)
-Received: from robh_at_kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id c24-20020a023b18000000b00388b6508ec8sm9836486jaa.115.2023.01.03.12.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Jan 2023 12:52:56 -0800 (PST)
-Received: (nullmailer pid 3961459 invoked by uid 1000);
-        Tue, 03 Jan 2023 20:52:50 -0000
-Date:   Tue, 3 Jan 2023 14:52:50 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-Message-ID: <20230103205250.GB3942221-robh@kernel.org>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1BpgH2JExWhLYwx16JSRZTh0GkhP5q2EUrahmB7s1do=;
+        b=N+EIL9xPQ/Ior0sXRBS/IAbiH634MF1o1L3UjnztFpKt/Lp8yO8ig6fpNG96c9h14O
+         EEN10VgfFzpPS8msVdJbR/KqjQOF6Gap6ka7g6fnGKyuqs77W3f99PVWCC3MzFZh7RzO
+         kfE13ES68CFp8k6Ikx7E9xYpIClijhrQpdXhQ6/oN+P6/1yTy+XDvWWonGT331Q6WpvG
+         EHDTj43+hoSqY5lpmqvnT22P98st8/NiP1rx3kMVQliA3LxOUtwaelLxdSwXyIzl2VFs
+         rZKXKtZCQQ2mRXk6dDienzsMon9iTjaWmgn1MObDCbFTsqRq/ITYvRS3hzf65ZbeeIPm
+         8lGQ==
+X-Gm-Message-State: AFqh2krNEQ2eMIN7LiiSTAXYIHkx/6QMlN5oZL7L8aAjdKZFdon1eTRi
+        ITRrEZhYIxcc9tdPbbhshmTb76ghdPJ9STNTT1A=
+X-Google-Smtp-Source: AMrXdXvnFOqsyc/ytllllcjQjhKZoHWk94A3zikvtODEWsLFPjX3cxdD5uVhmOezj6h7ULdkTTxyei6MoednrJmmo5U=
+X-Received: by 2002:ab0:7a61:0:b0:4c2:5fc2:47fb with SMTP id
+ c1-20020ab07a61000000b004c25fc247fbmr3089670uat.58.1672779906917; Tue, 03 Jan
+ 2023 13:05:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230103164359.24347-1-ysionneau@kalray.eu>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+ <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+ <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com> <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+In-Reply-To: <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+From:   William Roberts <bill.c.roberts@gmail.com>
+Date:   Tue, 3 Jan 2023 15:04:55 -0600
+Message-ID: <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+To:     Matthew Garrett <mgarrett@aurora.tech>
+Cc:     jejb@linux.ibm.com, Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
+        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 03, 2023 at 05:43:34PM +0100, Yann Sionneau wrote:
-> This patch series adds support for the kv3-1 CPU architecture of the kvx family
-> found in the Coolidge (aka MPPA3-80) SoC of Kalray.
-> 
-> This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
-> therefore this patch series cannot be merged into Linux for now.
-> 
-> The goal is to have preliminary reviews and to fix problems early.
-> 
-> The Kalray VLIW processor family (kvx) has the following features:
-> * 32/64 bits execution mode
-> * 6-issue VLIW architecture
-> * 64 x 64bits general purpose registers
-> * SIMD instructions
-> * little-endian
-> * deep learning co-processor
-> 
-> Kalray kv3-1 core which is the third of the kvx family is embedded in Kalray
-> Coolidge SoC currently used on K200 and K200-LP boards.
-> 
-> The Coolidge SoC contains 5 clusters each of which is made of:
-> * 4MiB of on-chip memory (SMEM)
-> * 1 dedicated safety/security core (kv3-1 core).
-> * 16 PEs (Processing Elements) (kv3-1 cores).
-> * 16 Co-processors (one per PE)
-> * 2 Crypto accelerators
-> 
-> The Coolidge SoC contains the following features:
-> * 5 Clusters
-> * 2 100G Ethernet controllers
-> * 8 PCIe GEN4 controllers (Root Complex and Endpoint capable)
-> * 2 USB 2.0 controllers
-> * 1 Octal SPI-NOR flash controller
-> * 1 eMMC controller
-> * 3 Quad SPI controllers
-> * 6 UART
-> * 5 I2C controllers (3 of which are SMBus capable)
-> * 4 CAN controllers
-> * 1 OTP memory
-> 
-> A kvx toolchain can be built using:
-> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
-> $ git clone https://github.com/kalray/build-scripts
-> $ cd build-scripts
-> $ source last.refs
-> $ ./build-kvx-xgcc.sh output
-> 
-> The kvx toolchain will be installed in the "output" directory.
-> 
-> A buildroot image (kernel+rootfs) and toolchain can be built using:
-> $ git clone -b coolidge-for-upstream https://github.com/kalray/buildroot
-> $ cd buildroot
-> $ make O=build_kvx kvx_defconfig
-> $ make O=build_kvx
-> 
-> The vmlinux image can be found in buildroot/build_kvx/images/vmlinux.
-> 
-> If you are just interested in building the Linux kernel with no rootfs you can
-> just do this with the kvx-elf- toolchain:
-> $ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- default_defconfig
-> $ make ARCH=kvx O=build_kvx CROSS_COMPILE=kvx-elf- -j$(($(nproc) + 1))
-> 
-> The vmlinux ELF can be run with qemu by doing:
-> # install dependencies: ninja pkg-config libglib-2.0-dev cmake libfdt-dev libpixman-1-dev zlib1g-dev
-> $ git clone https://github.com/kalray/qemu-builder
-> $ cd qemu-builder
-> $ git submodule update --init
-> $ make -j$(($(nproc) + 1))
-> $ ./qemu-system-kvx -m 1024 -nographic -kernel <path/to/vmlinux>
-> 
-> Yann Sionneau (25):
->   Documentation: kvx: Add basic documentation
->   kvx: Add ELF-related definitions
->   kvx: Add build infrastructure
->   kvx: Add CPU definition headers
->   kvx: Add atomic/locking headers
->   kvx: Add other common headers
->   kvx: Add boot and setup routines
->   kvx: Add exception/interrupt handling
->   kvx: irqchip: Add support for irq controllers
->   kvx: Add process management
->   kvx: Add memory management
->   kvx: Add system call support
->   kvx: Add signal handling support
->   kvx: Add ELF relocations and module support
->   kvx: Add misc common routines
->   kvx: Add some library functions
->   kvx: Add multi-processor (SMP) support
->   kvx: Add kvx default config file
->   kvx: power: scall poweroff driver
->   kvx: gdb: add kvx related gdb helpers
->   kvx: Add support for ftrace
->   kvx: Add support for jump labels
->   kvx: Add debugging related support
->   kvx: Add support for CPU Perf Monitors
->   kvx: Add support for cpuinfo
+On Tue, Jan 3, 2023 at 2:43 PM Matthew Garrett <mgarrett@aurora.tech> wrote:
+>
+> On Mon, Nov 14, 2022 at 9:11 AM James Bottomley <jejb@linux.ibm.com> wrote:
+> >
+> > On Fri, 2022-11-11 at 15:16 -0800, Evan Green wrote:
+> > > Introduce a new Kconfig, TCG_TPM_RESTRICT_PCR, which if enabled
+> > > restricts usermode's ability to extend or reset PCR 23.
+> >
+> > Could I re ask the question here that I asked of Matthew's patch set:
+> >
+> > https://lore.kernel.org/all/b0c4980c8fad14115daa3040979c52f07f7fbe2c.camel@linux.ibm.com/
+> >
+> > Which was could we use an NVRAM index in the TPM instead of a PCR?  The
+> > reason for asking was that PCRs are rather precious and might get more
+> > so now that Lennart has some grand scheme for using more of them in his
+> > unified boot project.  Matthew promised to play with the idea but never
+> > got back to the patch set to say whether he investigated this or not.
+>
+> Is there any way to get key creation data to include NV indexes?
 
-You should strip this series down to just what's needed to boot. You 
-don't need the last 7 patches at least.
+Not that I am aware of and the spec seems to be a no.
 
-Rob
+> If not, no, we can't use NVRAM.
+
+What's the use case of using the creation data and ticket in this
+context? Who gets the
+creationData and the ticket?
+Could a user supplied outsideInfo work? IIRC I saw some patches flying around
+where the sessions will get encrypted and presumably correctly as well. This
+would allow the transfer of that outsideInfo, like the NV Index PCR value to
+be included and integrity protected by the session HMAC.
