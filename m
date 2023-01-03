@@ -2,130 +2,105 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CC365BC51
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 09:37:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3604E65BCAC
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 10:02:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237075AbjACIhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 03:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S236814AbjACJCz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 04:02:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjACIhE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 03:37:04 -0500
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27BDDB1;
-        Tue,  3 Jan 2023 00:37:03 -0800 (PST)
-Received: by mail-qt1-f176.google.com with SMTP id bp44so21441981qtb.0;
-        Tue, 03 Jan 2023 00:37:03 -0800 (PST)
+        with ESMTP id S236786AbjACJCy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 04:02:54 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332CFDFB9
+        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 01:02:53 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id bq39so36996847lfb.0
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 01:02:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rma1OXXtPwZorAATSPbIGVsCt0s7nGTGyXy8BRV6/bU=;
+        b=OlLux7s2JLGz6488fEjnlO/wdyBRA8JLHewattA+W86HDetZuNSdSSyeYNWvNCL9At
+         UrqMqQA9O1BIyBnAYes7Ng0KTegwNeqM/pSfkXxM/QTltEQLBBne7P5OCeh7z4nLZsFJ
+         prkibeotV5EdIscZre8uQstBPFL6CsLCvOv4Z3KiTY8fKrNZ0M9nZxwahPfaNkf+tUwj
+         vnJtuPY0DxGvDY3FCMkj37lG1Dw+G6ksRnLNHr9KvAb+V0GPX4CH2QD64V2hBAlIMWOz
+         VGAp2X4dU3hGD0VlN2Lb2l+qpE1NThSOGUTs37dxlWrGBfCt++zXFQ3/T5JeKO7UAk63
+         /GYw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IWeWb1u/JuV5suDY2SKD5PHzHvJTULCOtib+YqqeP4w=;
-        b=6pPcU23hufQ0FbTfWOEFYYMq7ukQcGJKYZkP3PeuF9RsynMxSiqewcraIOC1ClXCph
-         +d1hikONp8vHGpIscUSdpLMJUNhXQhZDH3CmrucGOlUnVgIbBZYW16m16vPEGSeilL1+
-         oYwFKWHxAUeOV3Z8JsPzdhKDgW0EIrfdhf51CoP/KJXXuNIteug1+xSpdger1fn/vWYi
-         KMVeOhyManSxNkcZpUZYuLl5m2Or5qlCbfM4qTvyjp8QQajUgkOsZgr4oCLjz0RkxAgZ
-         m7pDoTRj0pbMAC3NSkWwJgCRy6xu2u5H4b9Wez6ywrj8UUvaCs3/nwNnBURsMMobCgTJ
-         vdCw==
-X-Gm-Message-State: AFqh2kqgLb7YmSPZwsoaOz8izhK2lV5PrXwRFT7EiyBiBaDCwFJr7y8w
-        Bu5yxf16A/mN9xM1HW1mnc9S03jV2/zoCg==
-X-Google-Smtp-Source: AMrXdXtbGNYMhz5ktOx4uqOZ2ZZLBZXcDFAhoE/101XXHKJ6Ss6r/3Hy8DKiDiL5Cwy0PB9H6l+8kQ==
-X-Received: by 2002:a05:622a:5c89:b0:3ab:71c2:62d3 with SMTP id ge9-20020a05622a5c8900b003ab71c262d3mr55968748qtb.55.1672735022859;
-        Tue, 03 Jan 2023 00:37:02 -0800 (PST)
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
-        by smtp.gmail.com with ESMTPSA id z6-20020a05622a124600b003a606428a59sm18683968qtx.91.2023.01.03.00.37.01
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rma1OXXtPwZorAATSPbIGVsCt0s7nGTGyXy8BRV6/bU=;
+        b=E1TvmrrNUHdeSH54RhJEEXQB2xbkRmyE8xvutaU8CMvZEICtgUEkTys7lO0r+4Nwy2
+         5WW03EKUurnzsm8TVvD1WOSBaFwmkKEvDF8xZM0l6aq/nLF0ubbuqTprUDYw2wVdCxKV
+         2jXpTVcWeAsdWPUmkNk8ZSwAnKYZ4iAodAC7RzwIpEkNEgqy6oAhU9QYCuOErTsNJvXI
+         0rjbigdDupr/aUSr7kdjneyP2zdhuC8BJfbS/7oH2RpkQn4qjvwP853Hryq5Vnfs8GWP
+         QFB4P4KVGpSQuSArq3oJ0Alf0+SgE0vF3z4jPmDKGCG1OLbwwYyfiWE4nZzSHfBmOQlp
+         jXgA==
+X-Gm-Message-State: AFqh2kowdi0vDjT2OxHOI8HvfOr0VuWU8GFBABkEnpJi8494kfKol8sm
+        gxkZ2SnDrrZ98WNhwlSMyLNr9A==
+X-Google-Smtp-Source: AMrXdXuKSKb4fXDliXY3IUZECvd6jGgLhEO6HXKkRbrr0zxUThMGA6Ko67tu68FtPxF7Lu0U9qP6fg==
+X-Received: by 2002:ac2:43a4:0:b0:4cb:3a60:65cc with SMTP id t4-20020ac243a4000000b004cb3a6065ccmr1399538lfl.5.1672736571492;
+        Tue, 03 Jan 2023 01:02:51 -0800 (PST)
+Received: from [192.168.0.20] (088156142067.dynamic-2-waw-k-3-2-0.vectranet.pl. [88.156.142.67])
+        by smtp.gmail.com with ESMTPSA id w4-20020a05651234c400b0049d0a98f73csm4739133lfr.154.2023.01.03.01.02.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 00:37:02 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-476e643d1d5so311084297b3.1;
-        Tue, 03 Jan 2023 00:37:01 -0800 (PST)
-X-Received: by 2002:a05:690c:c02:b0:48d:1334:6e38 with SMTP id
- cl2-20020a05690c0c0200b0048d13346e38mr2327636ywb.316.1672735021431; Tue, 03
- Jan 2023 00:37:01 -0800 (PST)
+        Tue, 03 Jan 2023 01:02:50 -0800 (PST)
+Message-ID: <ba4ec52a-d6ee-b471-bfa5-521f876aef2d@linaro.org>
+Date:   Tue, 3 Jan 2023 10:02:49 +0100
 MIME-Version: 1.0
-References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com> <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
-In-Reply-To: <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 3 Jan 2023 09:36:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
-Message-ID: <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
-To:     fabrizio.castro.jz@renesas.com
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 1/7] dt-bindings: interconnect: Move interconnect child
+ node definition
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org
+References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
+ <20230103010904.3201835-2-bryan.odonoghue@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230103010904.3201835-2-bryan.odonoghue@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Fabrizio,
+On 03/01/2023 02:08, Bryan O'Donoghue wrote:
+> New properties should be defined before the allOf. Move the
+> patternProperties definition to before the additionalProperties: false in
+> this file.
 
-On Wed, Dec 21, 2022 at 10:09 PM Fabrizio Castro
-<fabrizio.castro.jz@renesas.com> wrote:
-> The External Power Sequence Controller (PWC) IP (found in the
-> RZ/V2M SoC) is a controller for external power supplies (regulators
-> and power switches), and it supports the following features: it
-> generates a power on/off sequence for external power supplies,
-> it generates an on/off sequence for the LPDDR4 core power supply
-> (LPVDD), it comes with General-Purpose Outputs, and it processes
-> key input signals.
+Your commit description suggests it is just a move but it is not.
+Instead you make these properties available for all compatibles, which
+is not justified here.
 
-Thanks for your patch!
+Either provide full explanation why making such change or make the move
+equivalent by disallowing the properties for other variants.
 
-> The PWC is basically a Multi-Function Device (MFD), its software
-> support comes with a core driver, and specialized drivers for
-> its specific features.
+> 
+> Fixes: dfeef93fe3ee ("dt-bindings: interconnect: Convert snoc-mm to a sub-node of snoc")
 
-I have to admit I'm not such a big fan of MFD.  In this driver,
-you are not even sharing resources in the MFD cells, just the mapped
-register base.  So I think you can easily save +100 LoC and reduce
-maintenance synchronization overhead across subsystems by just having
-a single non-MFD driver instead.
+There is no bug to fix, at least no bug described in commit msg. Style
+and convention issues are not bugs and not worth backporting. Drop the
+Fixes.
 
-Did you pick MFD because the PWC poweroff feature depends on board
-wiring, and thus is optional?
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> ---
+Best regards,
+Krzysztof
 
-Are there any other MFD cells planned (e.g. regulators) to be added
-later? The public datasheet does not list the actual registers of the
-block, only a high-level overview with (rather detailed) behavioral
-information.
-
-Thanks!
-
-> --- /dev/null
-> +++ b/drivers/mfd/rzv2m-pwc.h
-
-> +struct rzv2m_pwc_priv {
-> +       void __iomem *base;
-> +};
-> +
-> +#endif /* __LINUX_RZV2M_PWC_H__ */
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
