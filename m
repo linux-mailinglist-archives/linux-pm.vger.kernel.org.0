@@ -2,162 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A3B65BA23
-	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 05:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADEE165BA25
+	for <lists+linux-pm@lfdr.de>; Tue,  3 Jan 2023 05:57:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236572AbjACE52 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 2 Jan 2023 23:57:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41486 "EHLO
+        id S236679AbjACE5u (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 2 Jan 2023 23:57:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230159AbjACE5W (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 23:57:22 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8E8B7E6
-        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 20:57:20 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id z26so44174261lfu.8
-        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 20:57:20 -0800 (PST)
+        with ESMTP id S230159AbjACE5s (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 2 Jan 2023 23:57:48 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7D5B7EA
+        for <linux-pm@vger.kernel.org>; Mon,  2 Jan 2023 20:57:47 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id j17so34689603lfr.3
+        for <linux-pm@vger.kernel.org>; Mon, 02 Jan 2023 20:57:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=032AleYKwYBfKPehAkrDGenXwgSPtz3uJUu4le8LKMc=;
-        b=lFrCd8Mwwx57UQRYDLwiNFuDZNpzzYyFKc6Bg0c4hz1+VUfURjwMxXq+we23rxXipu
-         x5aTH9qXEN9JxeKj7Tk5yfbtGE7iZBTfxMffSUkKWEF6d/7tZpq5ToR0BId4XzPZvmLH
-         BcmcgdgRRkve5V6Pru5fazsTeU8LfG+ltHjPpSqdLh2MQwYn/gpm4m2qHNRzDJX9V+vY
-         sNlcm1QmqjodEPGgwDiUmUZ8QZ68QtJ+Gt7JsGYGM01fPL9KbYSLq2j050CjIuwWEpAW
-         m0RjcmVkXPTZAyME1vZoN+i+KVpTOS9TiGwLSLYOypkWNPZiqPMmBDuzLRjXt+EQ2ZiL
-         pXCA==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMLK9393vsk45KoAAuQX7xoCHqdhg1Mb1LXZfDbbblo=;
+        b=fA/eTJo0OdeTBAQCzHnEQWLk8K5MK+rM0nSsQVxxIhRMQRMKRnYyvPmi5BijFhZLMt
+         7WHjRDRtmv7i1HRB3RYJpUjwHQg9leb/3fDfI/yiHqkS5r8zinKYdgOvWFO79vqS4qz3
+         AysauDzdq3rGBlzvx+WcR+vyFW4nV2HtwF5ZbtglX+QxqhmoTlKZl9AwmzvlY2lAX4fj
+         +/ylykCpVwzpUl8875NV38yOQZaZWnnJw6IVqNhz50/eVQQ08hidTrFL3znONWIqJOGV
+         qvTbxF+vHo2wt1IOsoZJJrblCwj1Rmuj2jd0nfAkmto7F8rirI9E9T0OIhQ+ob4Yu92y
+         yw6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=032AleYKwYBfKPehAkrDGenXwgSPtz3uJUu4le8LKMc=;
-        b=SLO68Az9IO1bOzmIfi2dgAH5aMx18+42knhvsW9PRqdCTh3gqvK8VGFi4YxKhmWiYL
-         zaVkT5EJ6UL7b8TYIRBQgVKfsOb9ZRhWxgo4o4e+295cbAzY3Y7EGMkvduTeT/GCkEmg
-         FMFcOnOFQzxA5olDBxYnT4DNLJhA7QlhtrBTw7txSxVgWPPyCWi/uYOgEKlIM5a/VQjC
-         4o23mD6w9A20Prz5mU3eQcHrrGMgety6pLmSqdZCgYj4aZrkGUnw5ujGtKxtbA8JmIMf
-         m1cEapdAXsLam9TxQ9TiQ46hX1zE/1wEgjxjho4uMQlZzhbzQTKjsNX9LeG2GL86S9ZD
-         xCUw==
-X-Gm-Message-State: AFqh2kqUCGrcG7YLwKvRuxKvbSd7rIdwL0i9jqq6ziUf2MghVKNhpuvQ
-        J1wiDjO2DYc27X/cx3rT/0xk8g==
-X-Google-Smtp-Source: AMrXdXtlJGFF8EVeegodK0AhKIktQmt6sVGC0J0pRQSxmmPRjZk7zKnSNTtan9Pa0vLwh5tsWJ/TkA==
-X-Received: by 2002:a05:6512:168d:b0:4ca:fd5f:ce82 with SMTP id bu13-20020a056512168d00b004cafd5fce82mr9663992lfb.49.1672721838408;
-        Mon, 02 Jan 2023 20:57:18 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id y26-20020a0565123f1a00b00494603953b6sm4714819lfa.6.2023.01.02.20.57.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Jan 2023 20:57:17 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH] interconnect: qcom: drop obsolete OSM_L3/EPSS defines
-Date:   Tue,  3 Jan 2023 06:57:17 +0200
-Message-Id: <20230103045717.1079067-1-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.0
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZMLK9393vsk45KoAAuQX7xoCHqdhg1Mb1LXZfDbbblo=;
+        b=HIlGIDdomJc7vValbF8JaVwD6md7z2Wq+SHyg106uFxBDths46Pd/C/fcktS5J6MHy
+         M8kvXiBwZQvtb4Twj8+MfU+QS2fVvavGG076Pq59hkR2eNDDH9cBIwgd+WuWiY9ROM5Z
+         a+WeJpfaUtklV1mPBO8m82VuYybqryIFPgnvXJlNcKKpfn6C33fPR5wlNRIUolUJaSmZ
+         qve8wjmUUso5sIjPSPvOFwTOhfFI3J75z16Z+bQs7n0LvocVAzDdk27YZNrzgNTZ6OQJ
+         gvuFbqT7sSuE+4FkG1h27LmNxOnp+dTgCAr2E25w45PTBFEUdHyiRGztPZVAJWO0ISQ/
+         Nvmw==
+X-Gm-Message-State: AFqh2kqXmqTHMIWfoTH7nJ8PRs+1AIlfc5QkQg8OJbnvgSDHGd0LVqxs
+        ilyeFQizh4CC20jiMBZUk8m6qw==
+X-Google-Smtp-Source: AMrXdXsL85tdAisf1j3SvFD/c9oTbrZZ+YN1oUn99uDGhGY39XhQzCpiOS5q8lSn3DcY/QTwhyZ/rg==
+X-Received: by 2002:a05:6512:131d:b0:4cb:c3:9363 with SMTP id x29-20020a056512131d00b004cb00c39363mr9950107lfu.11.1672721866767;
+        Mon, 02 Jan 2023 20:57:46 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id x2-20020a0565123f8200b004b590b0c084sm4644874lfa.3.2023.01.02.20.57.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Jan 2023 20:57:46 -0800 (PST)
+Message-ID: <7c20ec09-a8a4-b7cb-2763-2bf187b762a9@linaro.org>
+Date:   Tue, 3 Jan 2023 06:57:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH] interconnect: qcom: osm-l3: drop unuserd header inclusion
+Content-Language: en-GB
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230103031159.1060075-1-dmitry.baryshkov@linaro.org>
+ <20230103033353.u3gzssofbmxlmn7o@builder.lan>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230103033353.u3gzssofbmxlmn7o@builder.lan>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Since Qualcomm platforms have switched to the separate OSM_L3/EPSS
-driver, old related defines became unused. Drop them now.
+On 03/01/2023 05:33, Bjorn Andersson wrote:
+> On Tue, Jan 03, 2023 at 05:11:59AM +0200, Dmitry Baryshkov wrote:
+>> The commit 4529992c9474 ("interconnect: qcom: osm-l3: Use
+>> platform-independent node ids") made osm-l3 driver use
+>> platform-independent IDs, removing the need to include platform headers.
+>>
+>> Fixes: 4529992c9474 ("interconnect: qcom: osm-l3: Use platform-independent node ids")
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/osm-l3.c | 7 -------
+>>   1 file changed, 7 deletions(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+>> index 5fa171087425..0c907765783e 100644
+>> --- a/drivers/interconnect/qcom/osm-l3.c
+>> +++ b/drivers/interconnect/qcom/osm-l3.c
+>> @@ -14,13 +14,6 @@
+>>   
+>>   #include <dt-bindings/interconnect/qcom,osm-l3.h>
+>>   
+>> -#include "sc7180.h"
+>> -#include "sc7280.h"
+>> -#include "sc8180x.h"
+>> -#include "sdm845.h"
+>> -#include "sm8150.h"
+>> -#include "sm8250.h"
+>> -
+> 
+> Thanks for cleaning this up Dmitry. The <platform>_MASTER_OSM_L3_APPS
+> and <platform>_SLAVE_OSM_L3 in these header files could also be removed,
+> if you would like.
 
-Suggested-by: Bjorn Andersson <andersson@kernel.org>
-Fixes: 4529992c9474 ("interconnect: qcom: osm-l3: Use platform-independent node ids")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/interconnect/qcom/sc7180.h  | 2 --
- drivers/interconnect/qcom/sc7280.h  | 2 --
- drivers/interconnect/qcom/sc8180x.h | 2 --
- drivers/interconnect/qcom/sdm845.h  | 2 --
- drivers/interconnect/qcom/sm8150.h  | 2 --
- drivers/interconnect/qcom/sm8250.h  | 2 --
- 6 files changed, 12 deletions(-)
+Nice suggestion, thank you. I've send a separate patch.
 
-diff --git a/drivers/interconnect/qcom/sc7180.h b/drivers/interconnect/qcom/sc7180.h
-index c6212a10c2f6..c2d8388bb880 100644
---- a/drivers/interconnect/qcom/sc7180.h
-+++ b/drivers/interconnect/qcom/sc7180.h
-@@ -145,7 +145,5 @@
- #define SC7180_SLAVE_SERVICE_SNOC			134
- #define SC7180_SLAVE_QDSS_STM				135
- #define SC7180_SLAVE_TCU				136
--#define SC7180_MASTER_OSM_L3_APPS			137
--#define SC7180_SLAVE_OSM_L3				138
- 
- #endif
-diff --git a/drivers/interconnect/qcom/sc7280.h b/drivers/interconnect/qcom/sc7280.h
-index 1fb9839b2c14..175e400305c5 100644
---- a/drivers/interconnect/qcom/sc7280.h
-+++ b/drivers/interconnect/qcom/sc7280.h
-@@ -150,7 +150,5 @@
- #define SC7280_SLAVE_PCIE_1			139
- #define SC7280_SLAVE_QDSS_STM			140
- #define SC7280_SLAVE_TCU			141
--#define SC7280_MASTER_EPSS_L3_APPS		142
--#define SC7280_SLAVE_EPSS_L3			143
- 
- #endif
-diff --git a/drivers/interconnect/qcom/sc8180x.h b/drivers/interconnect/qcom/sc8180x.h
-index 2eafd35543c7..ce32295af8f3 100644
---- a/drivers/interconnect/qcom/sc8180x.h
-+++ b/drivers/interconnect/qcom/sc8180x.h
-@@ -168,8 +168,6 @@
- #define SC8180X_SLAVE_EBI_CH0_DISPLAY		158
- #define SC8180X_SLAVE_MNOC_SF_MEM_NOC_DISPLAY	159
- #define SC8180X_SLAVE_MNOC_HF_MEM_NOC_DISPLAY	160
--#define SC8180X_MASTER_OSM_L3_APPS		161
--#define SC8180X_SLAVE_OSM_L3			162
- 
- #define SC8180X_MASTER_QUP_CORE_0		163
- #define SC8180X_MASTER_QUP_CORE_1		164
-diff --git a/drivers/interconnect/qcom/sdm845.h b/drivers/interconnect/qcom/sdm845.h
-index 776e9c2acb27..bc7e425ce985 100644
---- a/drivers/interconnect/qcom/sdm845.h
-+++ b/drivers/interconnect/qcom/sdm845.h
-@@ -136,7 +136,5 @@
- #define SDM845_SLAVE_SERVICE_SNOC			128
- #define SDM845_SLAVE_QDSS_STM				129
- #define SDM845_SLAVE_TCU				130
--#define SDM845_MASTER_OSM_L3_APPS			131
--#define SDM845_SLAVE_OSM_L3				132
- 
- #endif /* __DRIVERS_INTERCONNECT_QCOM_SDM845_H__ */
-diff --git a/drivers/interconnect/qcom/sm8150.h b/drivers/interconnect/qcom/sm8150.h
-index 97996f64d799..3e01ac76ae1d 100644
---- a/drivers/interconnect/qcom/sm8150.h
-+++ b/drivers/interconnect/qcom/sm8150.h
-@@ -148,7 +148,5 @@
- #define SM8150_SLAVE_VSENSE_CTRL_CFG		137
- #define SM8150_SNOC_CNOC_MAS			138
- #define SM8150_SNOC_CNOC_SLV			139
--#define SM8150_MASTER_OSM_L3_APPS		140
--#define SM8150_SLAVE_OSM_L3			141
- 
- #endif
-diff --git a/drivers/interconnect/qcom/sm8250.h b/drivers/interconnect/qcom/sm8250.h
-index b31fb431a20f..7eb6c709c30d 100644
---- a/drivers/interconnect/qcom/sm8250.h
-+++ b/drivers/interconnect/qcom/sm8250.h
-@@ -158,7 +158,5 @@
- #define SM8250_SLAVE_VSENSE_CTRL_CFG		147
- #define SM8250_SNOC_CNOC_MAS			148
- #define SM8250_SNOC_CNOC_SLV			149
--#define SM8250_MASTER_EPSS_L3_APPS		150
--#define SM8250_SLAVE_EPSS_L3			151
- 
- #endif
+> 
+> Either way, you have my:
+> 
+> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+> 
+> Regards,
+> Bjorn
+> 
+>>   #define LUT_MAX_ENTRIES			40U
+>>   #define LUT_SRC				GENMASK(31, 30)
+>>   #define LUT_L_VAL			GENMASK(7, 0)
+>> -- 
+>> 2.39.0
+>>
+
 -- 
-2.39.0
+With best wishes
+Dmitry
 
