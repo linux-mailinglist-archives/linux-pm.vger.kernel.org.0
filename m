@@ -2,80 +2,177 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F61965D555
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 15:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F47F65D5C6
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 15:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjADORW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Jan 2023 09:17:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
+        id S239504AbjADOef (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Jan 2023 09:34:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239541AbjADORA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 09:17:00 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D4217424
-        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 06:16:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1672841819; x=1704377819;
-  h=from:to:cc:subject:date:message-id;
-  bh=K2Xq4JISotYBFghaTBAdgS1F9YIJdw76QRERW/X0HNM=;
-  b=Y+JbrCWnxYEPHFsGp/eLt8y4xcuFATnf6WDuDN4hY7Y81YELo/8nH1xI
-   P92jy99IpISeBsKpTVuZnE8zuIs1MeTyp+4GblSqkWAKWAa7Kf0UKXDRz
-   NjdPGd2Le++BkmwOQdBgUBiHSG930Grnl66JlNKDF+4X+MhwcD+7HrdwP
-   DerblR1A/RDQ8AsbmNiH68uDsUpWc4ntdr+r5xL2+8mJLGhssC8I9x9sZ
-   Wst+QyvkVgl63HOuHurknX2AVujt4nMdWrsGm8wfOI7ghZH5sX+KrtX/B
-   f2/8fNEzeb2NT+Mu3MSGNaqFGzkNrBM5gFd0wYe8bACnuf8UmdUXDbx+b
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="349163459"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="349163459"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2023 06:16:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10580"; a="723658185"
-X-IronPort-AV: E=Sophos;i="5.96,300,1665471600"; 
-   d="scan'208";a="723658185"
-Received: from power-sh.sh.intel.com ([10.239.183.7])
-  by fmsmga004.fm.intel.com with ESMTP; 04 Jan 2023 06:16:58 -0800
-From:   Zhang Rui <rui.zhang@intel.com>
-To:     linux-pm@vger.kernel.org, rafael.j.wysocki@intel.com,
-        len.brown@intel.com
-Cc:     artem.bityutskiy@linux.intel.com
-Subject: [PATCH] tools/power turbostat: Introduce support for EMR
-Date:   Wed,  4 Jan 2023 22:23:53 +0800
-Message-Id: <20230104142353.22871-1-rui.zhang@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S239580AbjADOec (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 09:34:32 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 142FF373A6;
+        Wed,  4 Jan 2023 06:34:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C83C4B81674;
+        Wed,  4 Jan 2023 14:34:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E62C433D2;
+        Wed,  4 Jan 2023 14:34:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672842868;
+        bh=gRkCSnXk5MjxVH+vyivnl3Fj49JHVY24sOY1WJh8QEg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=k5MykoyoJXROrSbBrVfL6RN/UKCq7OIH2LH9suxKq1RhPopZd0KV9VzH9OZArvVAi
+         OjeULj7tH4EBtWom9/n4D8+Bq67oYBDRuS79zCMcnKeV3uohIyY7Yg9vF3LtdZ5ijX
+         OME+yvl/61fF7eMF7/j3La0XQbhVDW/PFfRXTx0EWs3N9hO6BZC25sGAKUkzS9+gGU
+         nCNXqaSlXkppnNS1gAnozooIQ0Ex1pEkn2m96QOmGFIJL8fF8o3QxsObi4Rpb0wi7O
+         4gL8y75HZVvL7qRenCVdHz77J3/DFblD9V+fjJ41jwtSpdkfZBGYUEV6pAlarxz3bP
+         hgZjXGlhHRxJA==
+Date:   Wed, 4 Jan 2023 14:34:21 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
+Message-ID: <Y7WObZFfsCJuMdLW@google.com>
+References: <20221221210917.458537-1-fabrizio.castro.jz@renesas.com>
+ <20221221210917.458537-3-fabrizio.castro.jz@renesas.com>
+ <CAMuHMdXDwEUzBpG+w_G6=CzKo=n92cdVw6v8JwOwf9o86HnOZQ@mail.gmail.com>
+ <TYWPR01MB87758FB15ED12D396AE738DDC2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+ <Y7Qk/EgOI9mkJIjn@google.com>
+ <TYWPR01MB87753C261831519F4D6788E5C2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <TYWPR01MB87753C261831519F4D6788E5C2F49@TYWPR01MB8775.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Introduce support for EMR.
+On Tue, 03 Jan 2023, Fabrizio Castro wrote:
 
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
----
- tools/power/x86/turbostat/turbostat.c | 3 +++
- 1 file changed, 3 insertions(+)
+> Hi Lees,
+> 
+> Thanks for your feedback!
+> 
+> > From: Lee Jones <lee@kernel.org>
+> > Sent: 03 January 2023 12:52
+> > Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
+> > 
+> > On Tue, 03 Jan 2023, Fabrizio Castro wrote:
+> > 
+> > > Hi Geert,
+> > >
+> > > Thanks for your feedback!
+> > >
+> > > > -----Original Message-----
+> > > > From: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > Sent: 03 January 2023 08:37
+> > > > To: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+> > > > Cc: Linus Walleij <linus.walleij@linaro.org>; Bartosz Golaszewski
+> > > > <brgl@bgdev.pl>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
+> > > > <krzysztof.kozlowski+dt@linaro.org>; Sebastian Reichel
+> > <sre@kernel.org>;
+> > > > Geert Uytterhoeven <geert+renesas@glider.be>; Lee Jones
+> > <lee@kernel.org>;
+> > > > linux-gpio@vger.kernel.org; devicetree@vger.kernel.org; linux-
+> > > > kernel@vger.kernel.org; linux-pm@vger.kernel.org; Chris Paterson
+> > > > <Chris.Paterson2@renesas.com>; Biju Das <biju.das@bp.renesas.com>;
+> > linux-
+> > > > renesas-soc@vger.kernel.org; Laurent Pinchart
+> > > > <laurent.pinchart@ideasonboard.com>; Jacopo Mondi <jacopo@jmondi.org>
+> > > > Subject: Re: [PATCH v2 2/4] mfd: Add RZ/V2M PWC core driver
 
-diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index aba460410dbd..5073e5cdfec5 100644
---- a/tools/power/x86/turbostat/turbostat.c
-+++ b/tools/power/x86/turbostat/turbostat.c
-@@ -5463,6 +5463,9 @@ unsigned int intel_model_duplicates(unsigned int model)
- 
- 	case INTEL_FAM6_ICELAKE_D:
- 		return INTEL_FAM6_ICELAKE_X;
-+
-+	case INTEL_FAM6_EMERALDRAPIDS_X:
-+		return INTEL_FAM6_SAPPHIRERAPIDS_X;
- 	}
- 	return model;
- }
+Could you please tell your mailer to remove mail headers from the body
+please.
+
+> > > > > The External Power Sequence Controller (PWC) IP (found in the
+> > > > > RZ/V2M SoC) is a controller for external power supplies (regulators
+> > > > > and power switches), and it supports the following features: it
+> > > > > generates a power on/off sequence for external power supplies,
+> > > > > it generates an on/off sequence for the LPDDR4 core power supply
+> > > > > (LPVDD), it comes with General-Purpose Outputs, and it processes
+> > > > > key input signals.
+> > > >
+> > > > Thanks for your patch!
+> > > >
+> > > > > The PWC is basically a Multi-Function Device (MFD), its software
+> > > > > support comes with a core driver, and specialized drivers for
+> > > > > its specific features.
+> > > >
+> > > > I have to admit I'm not such a big fan of MFD.  In this driver,
+> > > > you are not even sharing resources in the MFD cells, just the mapped
+> > > > register base.  So I think you can easily save +100 LoC and reduce
+> > > > maintenance synchronization overhead across subsystems by just having
+> > > > a single non-MFD driver instead.
+> > > >
+> > > > Did you pick MFD because the PWC poweroff feature depends on board
+> > > > wiring, and thus is optional?
+> > >
+> > > I am not a big fan of MFD, either.
+> > 
+> > Interesting.
+> > 
+> > Could you both elaborate further please?
+> 
+> I have nothing against MFD
+
+Okay, just checking.  I'll withdraw my next command then. :)
+
+$ rm -rf drivers/mfd
+
+> > If you do not have any resources to share, you can simply register each
+> > of the devices via Device Tree.  I do not see a valid reason to force a
+> > parent / child relationship for your use-case.
+> 
+> There would probably be overlapping on the same memory region, which would
+> lead to ioremapping the same region multiple times, which is something
+> I would prefer to avoid if possible.
+
+Okay, so you *do* have shared resources.
+
+In which case, why is simple-mfd not working for you?
+
+> > Many people attempt to use MFD as a dumping ground / workaround for a
+> > bunch of reasons.  Some valid, others not so much.
+> 
+> As it turns out, it looks like I don't have valid reasons to use MFD,
+> therefore I'll switch to a single, non MFD, driver.
+> 
+> Thank you for taking the time to look into this though! Really
+> appreciated.
+
+Although it is considered okay to have a multi-purpose driver in any one
+of the subsystems, it's sometimes nicer to split the various
+functionality to be looked after (maintained) by their respective
+subject matter experts.  You have to do what's right in any given
+situation.
+
+Ultimately it's a call you need to make with the maintainer(s).
+
 -- 
-2.25.1
-
+Lee Jones [李琼斯]
