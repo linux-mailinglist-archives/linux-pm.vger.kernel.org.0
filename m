@@ -2,147 +2,120 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1034A65DC36
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 19:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DB1F965DFD5
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 23:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbjADSeu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Jan 2023 13:34:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43202 "EHLO
+        id S235406AbjADWVe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Jan 2023 17:21:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240181AbjADSea (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 13:34:30 -0500
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6E163D1F1
-        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 10:34:09 -0800 (PST)
-Received: by mail-io1-xd36.google.com with SMTP id g20so18455755iob.2
-        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 10:34:09 -0800 (PST)
+        with ESMTP id S240537AbjADWVd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 17:21:33 -0500
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5F913FA0C
+        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 14:21:31 -0800 (PST)
+Received: by mail-wr1-x42f.google.com with SMTP id w1so22353032wrt.8
+        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 14:21:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=og5W/pf+GC35o306sZo7M+U9bRheLryDvrZbfbaDyxs=;
-        b=O7auC2m9bx6mUqQqnZN9CUlfJT6TP4fWluRnhPbjmVgetTy7ua6wNbYEv2jxIHZS8X
-         vbuWRV96tsVSNPAWDrOwL1ngFzWeHYpkwnspdSJxHEgcxBJoAx3m06b5T1Dkp0/X0sNh
-         DBVjEWBJYOLF+63tkogSgZuHnoW378XoyyxPE=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=weOUQoZCFA8L0eGcVwVPrrrKunEzGQwEXtU4PkZVHt4=;
+        b=xodKISgLoCBgs7Su4XuU1EVy+K1ccTNKgy5OUIBCl4ZgLURBRepzOs6ysodIVYWbD6
+         Qai8K2QUiSCLVoTwy0ua8/dpIqnrVityd1Z+acPWEaHhElugyxJongd6SV5Kv2Fgzao6
+         LjyjXT5ygRgf4y07HMRVWtDqea1kDvkp0zy70qxrafDOgeUgg/0P1niqhYTa/0pM2sUX
+         TDRYNY+2iw9JwYj4S6s0qXd1SzKjkIxrw5/TZg2FAuTN6UBaikT90pwmBpcfstWFP/MY
+         tS59vs8hXAnAMmTQtT0FRr3sIy6R7xmx9x0wgimFNCYeZ4Y+ynpkRyeNBEWx6/loDOyq
+         zCiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=og5W/pf+GC35o306sZo7M+U9bRheLryDvrZbfbaDyxs=;
-        b=cHFJvLxpg3jfTfrP75i4j3nJQWjWqNG1DPpCreN5Zhn2a6hJPqhifRgNfxAFL+rR+4
-         W138y3kJjUu0XSyFwq1I66X+BSgkPn/XZnw1WAthMGeKfI88df7LJ3kE9hgC1jRW+/p0
-         ObwJD2xt/M+YIoaEqfZsBKlUGl0ImqWKVC1Lu7CHvf54pM/2z+5sRr7kITWsGDdO8qC+
-         IQqcLjdmBwrSAyQQs6wwnRcnT/tP+iWdFUbEHqY4px1p3ANHSZs9+eLDDBbI/mEpkrlI
-         YFPrcsuIiS68xXlkrOCc0sIki4G+5mVxeTT4TtT4la9y67ZHeNNoXjQPVYwXM6yYykKJ
-         MrAw==
-X-Gm-Message-State: AFqh2koGEtV6Ex7/B0MccldonkrxFLsHBZa9GrVm8VdgSFomG4C9RZ9v
-        k438CWo9cDpJ9Ec8trYSiyldavG8U3RYdBn6rMfRWQ==
-X-Google-Smtp-Source: AMrXdXv7d2HqnjPOksgFTlUuTo3bNaY6y2c16rjCrih6M9+5a1aCxEFZtLPXVz2wEdreVgMmwVc19HaSqSkP3yNnFBk=
-X-Received: by 2002:a6b:b2c5:0:b0:6e0:34aa:4548 with SMTP id
- b188-20020a6bb2c5000000b006e034aa4548mr2844680iof.72.1672857248764; Wed, 04
- Jan 2023 10:34:08 -0800 (PST)
+        bh=weOUQoZCFA8L0eGcVwVPrrrKunEzGQwEXtU4PkZVHt4=;
+        b=h98a4MMQcqnfGa6URvrYS4bxtCWaEafC0mRDvlwYfDs0BUiK9lB0gvXB8uKageEQq2
+         9LTLexF/RjwBPAyA8CFcojqfxjhmTZNkhE/A2X4iGFxdtAhiXT5GKe7Sd/RKABxKc1Cb
+         LRMdSLVTpddjQSxizwiYFB+vyaJB/tCQx0XbLlXgPnfcL/o0DXuBY9/AQSnM175MTnNy
+         0Lqu5prW19UoInfQI/OcpFiJllliEW+0jALMxwq1ytUybrZm5Q+aWuA6HLTz1mbrL4JP
+         Iwpr7164PAtvwc/brnKm2mjefS0fFwp0kSXKubFeprhj09uJEOYm6TFyh5urL7UiftuV
+         KpJA==
+X-Gm-Message-State: AFqh2kpRqgVy/hhkcnfYhsRefYw5rHFwwl/UbuOk68/CzH3LQU2XJ4qB
+        0PdXBnhDSlAQdY4YWFxjyaWZ3w==
+X-Google-Smtp-Source: AMrXdXuz1EnvJFYd7vhdPhtANn7B/Gb8pTWJCW+Q8og+hzlk95NlwAEE218zp3R96Tnx+71zqwC93g==
+X-Received: by 2002:a05:6000:609:b0:242:eda:dda5 with SMTP id bn9-20020a056000060900b002420edadda5mr33338899wrb.25.1672870890389;
+        Wed, 04 Jan 2023 14:21:30 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id l7-20020adfc787000000b002238ea5750csm42430278wrg.72.2023.01.04.14.21.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 14:21:30 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        srinivas.pandruvada@linux.intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, rui.zhang@intel.com,
+        christophe.jaillet@wanadoo.fr
+Subject: [PATCH v3 0/3] Thermal ACPI APIs for generic trip points
+Date:   Wed,  4 Jan 2023 23:21:24 +0100
+Message-Id: <20230104222127.2364396-1-daniel.lezcano@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221212213857.3636830-1-grundler@chromium.org>
- <CABXOdTd34M1fCEdYfT7F7RAMDmvEj=Ak_Wcg+HgcU83nOFor8w@mail.gmail.com>
- <CANEJEGtOE8HYDPJi80=TQ==4bwLh2=c7Dn3450Girxm5Uhgz9A@mail.gmail.com> <20230102221907.i474olwdaxjfbyns@mercury.elektranox.org>
-In-Reply-To: <20230102221907.i474olwdaxjfbyns@mercury.elektranox.org>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Wed, 4 Jan 2023 10:33:57 -0800
-Message-ID: <CANEJEGvY01tSVB=LyEcrWk+s07cS7Upk+LOa9T0nLHy1adZ5Vg@mail.gmail.com>
-Subject: Re: [PATCH] power: supply: cros_usbpd: reclassify "default case!" as debug
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Grant Grundler <grundler@chromium.org>,
-        Guenter Roeck <groeck@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[plain text this time]
+Recently sent as a RFC, the thermal ACPI for generic trip points is a set of
+functions to fill the generic trip points structure which will become the
+standard structure for the thermal framework and its users.
 
-On Mon, Jan 2, 2023 at 2:19 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
-> Hi,
->
-> Thanks, queued to power-supply's fixes branch.
+Different Intel drivers and the ACPI thermal driver are using the ACPI tables to
+get the thermal zone information. As those are getting the same information,
+providing this set of ACPI function with the generic trip points will
+consolidate the code.
 
-Awesome - thanks Sebastian!
+Also, the Intel PCH and the Intel 34xx drivers are converted to use the generic
+trip points relying on the ACPI generic trip point parsing functions.
 
-I'll pull from that branch when backporting to  the Chrome OS kernels.
-   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/commit/?h=fixes&id=bb6bbf5df16201ece2dacabeb489fc2180c7cfcd
+These changes have been tested on a Thinkpad Lenovo x280 with the PCH and
+INT34xx drivers. No regression have been observed, the trip points remain the
+same for what is described on this system.
 
-cheers,
-grant
+Changelog:
 
->
-> -- Sebastian
->
-> On Thu, Dec 29, 2022 at 11:53:55PM -0800, Grant Grundler wrote:
-> > Hi Sebastian, linux-pm folks, Benson,
-> > Can I get feedback on this patch please?
-> >
-> > I was just told another user feedback report had 70% of the dmesg buffer
-> > filled with the cros-usbpd-charger output.
-> >
-> > cheers,
-> > grant
-> >
-> >
-> > On Mon, Dec 12, 2022 at 1:49 PM Guenter Roeck <groeck@google.com> wrote:
-> >
-> > > On Mon, Dec 12, 2022 at 1:39 PM Grant Grundler <grundler@chromium.org>
-> > > wrote:
-> > > >
-> > > > This doesn't need to be printed every second as an error:
-> > > > ...
-> > > > <3>[17438.628385] cros-usbpd-charger cros-usbpd-charger.3.auto: Port 1:
-> > > default case!
-> > > > <3>[17439.634176] cros-usbpd-charger cros-usbpd-charger.3.auto: Port 1:
-> > > default case!
-> > > > <3>[17440.640298] cros-usbpd-charger cros-usbpd-charger.3.auto: Port 1:
-> > > default case!
-> > > > ...
-> > > >
-> > > > Reduce priority from ERROR to DEBUG.
-> > > >
-> > > > Signed-off-by: Grant Grundler <grundler@chromium.org>
-> > >
-> > > Reviewed-by: Guenter Roeck <groeck@chromium.org>
-> > >
-> > > >
-> > > > ---
-> > > >  drivers/power/supply/cros_usbpd-charger.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > >
-> > > > diff --git a/drivers/power/supply/cros_usbpd-charger.c
-> > > b/drivers/power/supply/cros_usbpd-charger.c
-> > > > index cadb6a0c2cc7..b6c96376776a 100644
-> > > > --- a/drivers/power/supply/cros_usbpd-charger.c
-> > > > +++ b/drivers/power/supply/cros_usbpd-charger.c
-> > > > @@ -276,7 +276,7 @@ static int cros_usbpd_charger_get_power_info(struct
-> > > port_data *port)
-> > > >                 port->psy_current_max = 0;
-> > > >                 break;
-> > > >         default:
-> > > > -               dev_err(dev, "Port %d: default case!\n",
-> > > port->port_number);
-> > > > +               dev_dbg(dev, "Port %d: default case!\n",
-> > > port->port_number);
-> > > >                 port->psy_usb_type = POWER_SUPPLY_USB_TYPE_SDP;
-> > > >         }
-> > > >
-> > > > --
-> > > > 2.39.0.rc1.256.g54fd8350bd-goog
-> > > >
-> > >
+ - V3:
+   - Took into account Rafael's comments
+   - Used a silence option THERMAL_ACPI in order to stay consistent
+     with THERMAL_OF. It is up to the API user to select the option.
+
+ - V2:
+   - Fix the thermal ACPI patch where the thermal_acpi.c was not included in
+     the series
+   - Provide a couple of users of this API which could have been tested on a
+     real system
+
+Daniel Lezcano (3):
+  thermal/acpi: Add ACPI trip point routines
+  thermal/drivers/intel: Use generic trip points for intel_pch
+  thermal/drivers/intel: Use generic trip points int340x
+
+ drivers/thermal/Kconfig                       |   4 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/intel/Kconfig                 |   1 +
+ drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
+ .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++----------
+ .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+ drivers/thermal/intel/intel_pch_thermal.c     |  88 ++-----
+ drivers/thermal/thermal_acpi.c                | 218 ++++++++++++++++++
+ include/linux/thermal.h                       |   8 +
+ 9 files changed, 294 insertions(+), 214 deletions(-)
+ create mode 100644 drivers/thermal/thermal_acpi.c
+
+-- 
+2.34.1
+
