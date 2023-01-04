@@ -2,70 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D32C65D34C
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 13:56:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A88D65D433
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 14:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239269AbjADMz2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Jan 2023 07:55:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
+        id S239354AbjADNcG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Jan 2023 08:32:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238977AbjADMyz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 07:54:55 -0500
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177E51DDDA
-        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 04:54:53 -0800 (PST)
-Received: by mail-qt1-x82b.google.com with SMTP id v14so24302602qtq.3
-        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 04:54:53 -0800 (PST)
+        with ESMTP id S234536AbjADNbY (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 08:31:24 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F36E2620
+        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 05:29:21 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id s22so35401114ljp.5
+        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 05:29:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=BQfo1+41q2NZR57Q7BFlMODaOza2AgrRvUpAp3daCd4t1w84OEhFtXAM1g7CkVTr/y
-         mvXWkJvXCDM96Iy3cSf9E37Th3uZX5TzmwlIsHFzK3DAyLuSjJ8d3uR9drr/ahkzPGkt
-         iW+sw+gZOJCd7bumtfoM4UR2xOfXz6tdmGq2f+IJJhoSBazdofAm5Gs9PxuweXnk264c
-         knSGf1CtrqZScdeov1GoaGbl2sApMUXYjJGPCObPVA0UTlHx2t6+wdp4VOKHmsqLWM8X
-         lQt15zqigA6uJCG+q37n0r4mLK1MKtsniT1i9jhRA9qlN9E2Mf0sYN4W9Jd0n+39BoCK
-         yzWA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BN1HuBOcO1xYyZSvoay0D2AQ+5agsRugOrVDoErpX48=;
+        b=uMe1/V2U49qWV8NEZPXnBhv604lrMCVmp6V05gDvgxyyTl20RkdTh00exLaCUIaY4Q
+         IvLpwr+q71gbuCtjpDyihO6jOPT2cJ24BsFGEmiMp6HLVS0CYA0JomJmC8qRaADhCwNT
+         fX+C6Zx7R9vdr5inLwnj1LgcLe1NP0KgnOBMUjsPCAeN14UIaJZFvvReWGnr3DyxAvVd
+         mmSPx+ridlbM0fgTSxazMOshc/VqIHt4c3eM+hXC4hx7lr5T5YKIx+WjsPsLNfhd1l5u
+         LLqVdkMj18OK9Ti0eu7HoQfNYK+UBqszfOR2Zi5iaa04EeLZkszuuxntIZyRg+fI9d3J
+         rcEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g2m/uNsCm/OsAUZxAnJOSdXXDa9Gh4wg88n4VPL2lMU=;
-        b=il5zEvHU/0zvrKk2JWLt+9RIkgpolXBjWh4vNrP4E6j2U4GPZV6YaUCpLXxQHjnaER
-         mcAt/VfxegYeHEEb6WxQ1JzaXCUva9dLmIxrEr0yGlN/V4sVqoTFex+MW5XRir/Ch0RS
-         p414VP/d2uJnaMkU2iGQ9H/35Or2A6VxXIEnshPkQ8UYSNtCuoIfFvZDAPhwjHRX4kIA
-         0W6lj5UAeGzyhIGKjdzPqKGsOVEPgH81vMMp9CWbV6C7bEn9RShzIVOa6r6BswuWqTaI
-         TM+QjgOKyR/QsHIOOhtR7SROW+tQlZ0SsyVkCXlOwlc9FS/m60l3w4XGs4wGf3mFBAUH
-         s9XQ==
-X-Gm-Message-State: AFqh2krW+mHKm5u4LVXd9uyWVx+XC8vg5iJQl2eOK7VTHd1nbG+RShMy
-        0aIig+wsfHNOy0QTT/A4DPxPowqR8k1BGEhlHQQQpyUC+tw=
-X-Google-Smtp-Source: AMrXdXuKXTvNK0aSB9vnyjtdhrZfKmRzvU9Jw1W0zhcD7x19AMFVNgTh5oL+8ilZBOfTDf/bL64QVz1mYULxa/ftADs=
-X-Received: by 2002:ac8:568a:0:b0:3a9:688d:fad2 with SMTP id
- h10-20020ac8568a000000b003a9688dfad2mr1976067qta.646.1672836882017; Wed, 04
- Jan 2023 04:54:42 -0800 (PST)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BN1HuBOcO1xYyZSvoay0D2AQ+5agsRugOrVDoErpX48=;
+        b=RU6Mz/ZlTYDFUpq0kMK+nDWpbWXubeVmVbvq0yuOVlEB1bEsFepMWZeIdURk/HJ11q
+         LPD7qtk3UaoKsRvLfqHAxnJj5t0SgdLe7u/IYL+DjA0EtyFz+VtwUYJhgoxonxoLQWTh
+         G2VjJJhq+nqS8p+XZyjNh/0i58dNcQmnJftlF0PfshMQy4Cd6CD97IomOgqUK6Y7/1kU
+         8ZWWvXR2/vqRF9SsuLjJJ4uwgfpqnJcoY0MjJx5dJc4ychnYtOAIrVQqZaWEcWctGqRC
+         KgGz0FDOrmNq1PaYG4iCAZeLyCk/c8W8fMuMzaUZcBHoYs9pCedHdk2yoz54Lk9ZHw58
+         rXzg==
+X-Gm-Message-State: AFqh2kpFhSvHsn8Y1SqWl7CUgt9sc+QY38dmC9KpUCwUZirw4vvrAIAV
+        SlYRfqmgAhc5KawEcSOfHQDkmg==
+X-Google-Smtp-Source: AMrXdXsXU/nsbyBQ9CPaj3vZFjbU28wyzDRKxpG4BSqgr17viXzaeC0sFPTLEdg2UJcwsic716/a0w==
+X-Received: by 2002:a2e:a988:0:b0:27f:e6e6:9bdf with SMTP id x8-20020a2ea988000000b0027fe6e69bdfmr4940249ljq.36.1672838959487;
+        Wed, 04 Jan 2023 05:29:19 -0800 (PST)
+Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id k23-20020a2e92d7000000b0027fd02c99d4sm1947071ljh.75.2023.01.04.05.29.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Jan 2023 05:29:18 -0800 (PST)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: interconnect: OSM L3: Add SM6350 OSM L3 compatible
+Date:   Wed,  4 Jan 2023 14:29:13 +0100
+Message-Id: <20230104132915.667946-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-Received: by 2002:a05:6200:5d91:b0:4a5:78e9:2012 with HTTP; Wed, 4 Jan 2023
- 04:54:41 -0800 (PST)
-Reply-To: Gregdenzell9@gmail.com
-From:   Greg Denzell <mzsophie@gmail.com>
-Date:   Wed, 4 Jan 2023 12:54:41 +0000
-Message-ID: <CAEoj5=ZpJ15GRz-U33Ocbu5-P3Va+3bNv3476+mmJJ52cwx7tA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Seasons Greetings!
+SM6350, similarly to SDM845, uses OSM hardware for L3 scaling.
+Document it.
 
-This will remind you again that I have not yet received your reply to
-my last message to you.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+index 00afbbca9038..9d0a98d77ae9 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+@@ -22,6 +22,7 @@ properties:
+               - qcom,sc7180-osm-l3
+               - qcom,sc8180x-osm-l3
+               - qcom,sdm845-osm-l3
++              - qcom,sm6350-osm-l3
+               - qcom,sm8150-osm-l3
+           - const: qcom,osm-l3
+       - items:
+-- 
+2.39.0
+
