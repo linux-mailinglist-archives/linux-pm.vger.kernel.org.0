@@ -2,59 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F3D365D6F7
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 16:15:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ED3F65D77C
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 16:47:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234927AbjADPPv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Jan 2023 10:15:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S234103AbjADPqf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Jan 2023 10:46:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233916AbjADPPn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 10:15:43 -0500
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DEF1AA33
-        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 07:15:42 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id c9so18156688pfj.5
-        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 07:15:42 -0800 (PST)
+        with ESMTP id S239704AbjADPq1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 10:46:27 -0500
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2336321B7
+        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 07:46:24 -0800 (PST)
+Received: by mail-pf1-x431.google.com with SMTP id b145so19022272pfb.2
+        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 07:46:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NcHEJMiIJ2CTsxxcy2YLVjiMLnHtyJJbhyDHZkGM4Oc=;
-        b=F9bpsh37Sd0YglgZi0WpS89CpHqfv0diullW3FFmTO9bOi7hfscSE/OjGPxPEPQkEN
-         30dLoca9DbFdO0h28yq/V0+zKhhwP7if4KzONvm0C5e4ZGN7RR/mJV/dX+GglLwSPMpc
-         Gck5P/9AM6XxWAH5yODKBjx04KGJHJrt3cUGzkNpLz7TtkHshqQEQMmgpRlw05G6wUeV
-         5W4gvQ8VVwwjaGsE/rtTb24nlbbWIKIJVIXrbhMZpYUq/nPtkr3qwhzF10vZuWlV1+AP
-         2/8yaiwVmq1nGEh+/72E1SVue5OHi7WQ+fmXOrDqBI08/KLZ3ui1bKaArAvMh6A4NakM
-         rQ1w==
+        bh=77fIouPB3CBo9hdk97EBnQZpnfI803efx1airl6rq5E=;
+        b=enIH8aaZueLgX1MGtHL7ltJPuMsimaTiFPZLqexb/VlKTutGZXchcAGzfdKr8olD9S
+         SZ7CV37QHQVHGEHNV/uLAQO44Zjmheixc5pd1r2v9AMtW/FmT9k29f3wVIhzsIvp7POR
+         qo4MNY5TPmuFlAnXMNo2E6zThwrUXOn4ZOmbE0OLNGTQudfcDpZc/oSHy0gOu287qaX6
+         XWGhXLXdo66hZGwMzehaFf2k7pEZwPshmuBGWxORmosyMSvqSv3JdO87nGjocLhXq/lJ
+         lXP7E4E9l+BzQ+Mb5BbhuRi+FauHOyFhkknP/3dJ06wJdpVJTchipPMy0MtyE2pQU+gJ
+         YctA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NcHEJMiIJ2CTsxxcy2YLVjiMLnHtyJJbhyDHZkGM4Oc=;
-        b=VQOkKhe8GFCCoov3A0T+KSodJ/EVKjJ2Oi1ImgQHZ3Gh1ngB+BArRdl8HPVSXzOT8J
-         nWwy6QwrnEbT/emdfD/h8bztZe8lK92GatSCAn54PNjLgAOjKwkisc2dSvTmaghJG1Pr
-         auG/7k4GTLW/vcpX3Tfcf8Y5jTam+dyAvhDYHPrd6NihsBc9gss2dMm4LM9YrDpY3Bc2
-         MQqpfYcai4KrVQEt5M04f/kvChkaW9KLhsSTszMraA/rvkg+yt2xLJAXxe5H6BdhusLg
-         ml/HKd6Ya7I5qKggl4h+BwTh8/6YaHDHCxCTObdyFM8vmmDnlyW8ceVdKNfrSy0RG9+l
-         PaBw==
-X-Gm-Message-State: AFqh2krD673nS4YCHRl0B6scWLfIqBh2jL3m4Pv+8RMKxEN74RYoJKWd
-        oUc3WCWOSFqckSKOJL/9dfDVCtc2rKG0e8Y+599GYeo0873gau67
-X-Google-Smtp-Source: AMrXdXt93Kj3tA2/Y9cGuM6OLuxk7FuAuBumQ9h/vxk1VLQQewgTolksdOkOGf5EMaiCJCDrv92isJrfu7ZsSe9hYkE=
+        bh=77fIouPB3CBo9hdk97EBnQZpnfI803efx1airl6rq5E=;
+        b=iwMj2UGaWq1gbh5sON0uAArEz1zUSwnMQ7YqL8N7PwkKcwDF6sIHoTtlZ3u5AE75Ul
+         rRffGqSlrYgL42osJAJfb7JtpZdZGIPknyqeKgv9+DHpikP7B63CrjJtpklpK+u9oWA6
+         Gz4Y07fTee96pJCzZBZ4RK1469steVi3vX5fDkhcO5IxQijt5BKgZDVGyomhubi+n0a3
+         G4220fw2o4ZvMWMVbBFHRY9iUvXlGyJr2UwNdXssYegY0wXYb4MCdyM+hSmkPszxnffi
+         +N8QezDPzE/DPqZ88sxFGOhO26mrFanz30hf46nPazRuKmAhFkNUvLVPs9jrWW/28RpN
+         YE7A==
+X-Gm-Message-State: AFqh2kp5S1YkE/NPuLAEUcZMco9xtKh/+uXTi/4gvObaFBTpr2m0B/e6
+        3rAbuU8o9k6nkIg3cSohSWbBDgr/bidegw28zrvflg==
+X-Google-Smtp-Source: AMrXdXvCb6udar7PNArrd6qU/zxQY3pjAsYcJ8Psr3n5jsAIiclTlRIqmXn1z0KYUKEvBKNApw0/HUxNliZkrrwTnjc=
 X-Received: by 2002:a63:ba09:0:b0:479:2227:3aa1 with SMTP id
- k9-20020a63ba09000000b0047922273aa1mr2127830pgf.595.1672845341858; Wed, 04
- Jan 2023 07:15:41 -0800 (PST)
+ k9-20020a63ba09000000b0047922273aa1mr2133298pgf.595.1672847184356; Wed, 04
+ Jan 2023 07:46:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org> <Y6Iq1CyHScvZM++Y@fedora>
-In-Reply-To: <Y6Iq1CyHScvZM++Y@fedora>
+References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org> <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 4 Jan 2023 16:15:05 +0100
-Message-ID: <CAPDyKFpCK-z5TH02rFTUHwsFTz83xtiAq=Vp0iE+iztB-CcB5w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/5] PM: Fixes for Realtime systems
-To:     Adrien Thierry <athierry@redhat.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+Date:   Wed, 4 Jan 2023 16:45:48 +0100
+Message-ID: <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kevin Hilman <khilman@kernel.org>,
@@ -62,6 +61,7 @@ Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
         Brian Masney <bmasney@redhat.com>,
         linux-rt-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
@@ -75,68 +75,175 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 20 Dec 2022 at 22:36, Adrien Thierry <athierry@redhat.com> wrote:
+On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> Hi Krzysztof,
-> Thanks for looking into this!
->
-> I tested your patchset on the QDrive3 on a CentOS Stream 9 RT kernel (I
-> couldn't test it on mainline because the latest RT patchset only supports
-> 6.1 which is missing some bits needed to boot QDrive3).
->
-> It fixes the PSCI cpuidle issue I was encountering in [1]. However, I may
-> have found another code path that triggers a similar issue:
->
-> BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:46
-> in_atomic(): 1, irqs_disabled(): 128, non_block: 0, pid: 113, name: kworker/4:2
-> preempt_count: 1, expected: 0
-> RCU nest depth: 0, expected: 0
-> 4 locks held by kworker/4:2/113:
->  #0: ffff09b0c2376928 ((wq_completion)pm){+.+.}-{0:0}, at: process_one_work+0x1f4/0x7c0
->  #1: ffff800008bf3dd0 ((work_completion)(&genpd->power_off_work)){+.+.}-{0:0}, at: process_one_work+0x1f4/0x7c0
->  #2: ffff09b0c2e44860 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x20/0x30
->  #3: ffff09b0c6696a20 (&dev->power.lock){+.+.}-{2:2}, at: dev_pm_qos_flags+0x2c/0x60
-> irq event stamp: 170
-> hardirqs last  enabled at (169): [<ffffa1be822f8a78>] _raw_spin_unlock_irq+0x48/0xc4
-> hardirqs last disabled at (170): [<ffffa1be822f8df4>] _raw_spin_lock_irqsave+0xb0/0xfc
-> softirqs last  enabled at (0): [<ffffa1be814cfff0>] copy_process+0x68c/0x1500
-> softirqs last disabled at (0): [<0000000000000000>] 0x0
-> Preemption disabled at:
-> [<ffffa1be81d7e620>] genpd_lock_rawspin+0x20/0x30
-> CPU: 4 PID: 113 Comm: kworker/4:2 Tainted: G               X --------- ---  5.14.0-rt14+ #2
-> Hardware name: Qualcomm SA8540 ADP (DT)
-> Workqueue: pm genpd_power_off_work_fn
-> Call trace:
->  dump_backtrace+0xb4/0x12c
->  show_stack+0x1c/0x70
->  dump_stack_lvl+0x98/0xd0
->  dump_stack+0x14/0x2c
->  __might_resched+0x180/0x220
->  rt_spin_lock+0x74/0x11c
->  dev_pm_qos_flags+0x2c/0x60
->  genpd_power_off.part.0.isra.0+0xac/0x2d0
->  genpd_power_off_work_fn+0x68/0x8c
->  process_one_work+0x2b8/0x7c0
->  worker_thread+0x15c/0x44c
->  kthread+0xf8/0x104
->  ret_from_fork+0x10/0x20
->
-> This happens consistently during boot. But on the mainline kernel, this
-> code path has changed: genpd_power_off no longer calls dev_pm_qos_flags.
-> So it might not happen on mainline. I hope to be able to test your
-> patchset again soon on mainline with the next version of the RT patchset
-> (which should be able to boot the QDrive3).
+> Realtime kernels with PREEMPT_RT must use raw_spinlock_t for domains
+> which are invoked from CPU idle (thus from atomic section).  Example is
+> cpuidle PSCI domain driver which itself is PREEMPT_RT safe, but is being
+> called as part of cpuidle.
 
-You are right, since commit 3f9ee7da724a ("PM: domains: Don't check
-PM_QOS_FLAG_NO_POWER_OFF in genpd") dev_pm_qos_flags() doesn't get
-called in genpd_power_off() anymore. That patch was introduced in
-v5.19.
+Just so I don't get this wrong, since the cpuidle-psci also calls
+pm_runtime_* functions so it isn't PREEMPT_RT safe, at least not yet?
+
 >
-> Best,
-> Adrien
+> Add a flag allowing a power domain provider to indicate it is RT safe.
+> The flag is supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
 >
-> [1] https://lore.kernel.org/all/20220615203605.1068453-1-athierry@redhat.com/
->
+> Cc: Adrien Thierry <athierry@redhat.com>
+> Cc: Brian Masney <bmasney@redhat.com>
+> Cc: linux-rt-users@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+For genpd, overall, I think this looks like an okay approach to me.
+Although, let me check the whole series (I need some more time to do
+that) before I give this my blessing.
 
 Kind regards
 Uffe
+
+>
+> ---
+>
+> Independently from Adrien, I encountered the same problem around genpd
+> when using PREEMPT_RT kernel.
+>
+> Previous patch by Adrien:
+> https://lore.kernel.org/all/20220615203605.1068453-1-athierry@redhat.com/
+> ---
+>  drivers/base/power/domain.c | 59 +++++++++++++++++++++++++++++++++++--
+>  include/linux/pm_domain.h   | 13 ++++++++
+>  2 files changed, 70 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 967bcf9d415e..4dfce1d476f4 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -119,6 +119,48 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>         .unlock = genpd_unlock_spin,
+>  };
+>
+> +static void genpd_lock_rawspin(struct generic_pm_domain *genpd)
+> +       __acquires(&genpd->rslock)
+> +{
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave(&genpd->rslock, flags);
+> +       genpd->rlock_flags = flags;
+> +}
+> +
+> +static void genpd_lock_nested_rawspin(struct generic_pm_domain *genpd,
+> +                                       int depth)
+> +       __acquires(&genpd->rslock)
+> +{
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave_nested(&genpd->rslock, flags, depth);
+> +       genpd->rlock_flags = flags;
+> +}
+> +
+> +static int genpd_lock_interruptible_rawspin(struct generic_pm_domain *genpd)
+> +       __acquires(&genpd->rslock)
+> +{
+> +       unsigned long flags;
+> +
+> +       raw_spin_lock_irqsave(&genpd->rslock, flags);
+> +       genpd->rlock_flags = flags;
+> +       return 0;
+> +}
+> +
+> +static void genpd_unlock_rawspin(struct generic_pm_domain *genpd)
+> +       __releases(&genpd->rslock)
+> +{
+> +       raw_spin_unlock_irqrestore(&genpd->rslock, genpd->rlock_flags);
+> +}
+> +
+> +static const struct genpd_lock_ops genpd_rawspin_ops = {
+> +       .lock = genpd_lock_rawspin,
+> +       .lock_nested = genpd_lock_nested_rawspin,
+> +       .lock_interruptible = genpd_lock_interruptible_rawspin,
+> +       .unlock = genpd_unlock_rawspin,
+> +};
+> +
+>  #define genpd_lock(p)                  p->lock_ops->lock(p)
+>  #define genpd_lock_nested(p, d)                p->lock_ops->lock_nested(p, d)
+>  #define genpd_lock_interruptible(p)    p->lock_ops->lock_interruptible(p)
+> @@ -126,6 +168,8 @@ static const struct genpd_lock_ops genpd_spin_ops = {
+>
+>  #define genpd_status_on(genpd)         (genpd->status == GENPD_STATE_ON)
+>  #define genpd_is_irq_safe(genpd)       (genpd->flags & GENPD_FLAG_IRQ_SAFE)
+> +#define genpd_is_rt_safe(genpd)                (genpd_is_irq_safe(genpd) && \
+> +                                        (genpd->flags & GENPD_FLAG_RT_SAFE))
+>  #define genpd_is_always_on(genpd)      (genpd->flags & GENPD_FLAG_ALWAYS_ON)
+>  #define genpd_is_active_wakeup(genpd)  (genpd->flags & GENPD_FLAG_ACTIVE_WAKEUP)
+>  #define genpd_is_cpu_domain(genpd)     (genpd->flags & GENPD_FLAG_CPU_DOMAIN)
+> @@ -1838,6 +1882,12 @@ static int genpd_add_subdomain(struct generic_pm_domain *genpd,
+>                 return -EINVAL;
+>         }
+>
+> +       if (!genpd_is_rt_safe(genpd) && genpd_is_rt_safe(subdomain)) {
+> +               WARN(1, "Parent %s of subdomain %s must be RT safe\n",
+> +                    genpd->name, subdomain->name);
+> +               return -EINVAL;
+> +       }
+> +
+>         link = kzalloc(sizeof(*link), GFP_KERNEL);
+>         if (!link)
+>                 return -ENOMEM;
+> @@ -2008,8 +2058,13 @@ static void genpd_free_data(struct generic_pm_domain *genpd)
+>  static void genpd_lock_init(struct generic_pm_domain *genpd)
+>  {
+>         if (genpd->flags & GENPD_FLAG_IRQ_SAFE) {
+> -               spin_lock_init(&genpd->slock);
+> -               genpd->lock_ops = &genpd_spin_ops;
+> +               if (genpd->flags & GENPD_FLAG_RT_SAFE) {
+> +                       raw_spin_lock_init(&genpd->rslock);
+> +                       genpd->lock_ops = &genpd_rawspin_ops;
+> +               } else {
+> +                       spin_lock_init(&genpd->slock);
+> +                       genpd->lock_ops = &genpd_spin_ops;
+> +               }
+>         } else {
+>                 mutex_init(&genpd->mlock);
+>                 genpd->lock_ops = &genpd_mtx_ops;
+> diff --git a/include/linux/pm_domain.h b/include/linux/pm_domain.h
+> index 1cd41bdf73cf..0a1600244963 100644
+> --- a/include/linux/pm_domain.h
+> +++ b/include/linux/pm_domain.h
+> @@ -61,6 +61,14 @@
+>   * GENPD_FLAG_MIN_RESIDENCY:   Enable the genpd governor to consider its
+>   *                             components' next wakeup when determining the
+>   *                             optimal idle state.
+> + *
+> + * GENPD_FLAG_RT_SAFE:         When used with GENPD_FLAG_IRQ_SAFE, this informs
+> + *                             genpd that its backend callbacks, ->power_on|off(),
+> + *                             do not use other spinlocks. They might use
+> + *                             raw_spinlocks or other pre-emption-disable
+> + *                             methods, all of which are PREEMPT_RT safe. Note
+> + *                             that, a genpd having this flag set, requires its
+> + *                             masterdomains to also have it set.
+>   */
+>  #define GENPD_FLAG_PM_CLK       (1U << 0)
+>  #define GENPD_FLAG_IRQ_SAFE     (1U << 1)
+> @@ -69,6 +77,7 @@
+>  #define GENPD_FLAG_CPU_DOMAIN   (1U << 4)
+>  #define GENPD_FLAG_RPM_ALWAYS_ON (1U << 5)
+>  #define GENPD_FLAG_MIN_RESIDENCY (1U << 6)
+> +#define GENPD_FLAG_RT_SAFE      (1U << 7)
+>
+>  enum gpd_status {
+>         GENPD_STATE_ON = 0,     /* PM domain is on */
+> @@ -164,6 +173,10 @@ struct generic_pm_domain {
+>                         spinlock_t slock;
+>                         unsigned long lock_flags;
+>                 };
+> +               struct {
+> +                       raw_spinlock_t rslock;
+> +                       unsigned long rlock_flags;
+> +               };
+>         };
+>
+>  };
+> --
+> 2.34.1
+>
