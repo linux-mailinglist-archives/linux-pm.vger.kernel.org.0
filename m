@@ -2,94 +2,145 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 964F365CA8B
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 00:49:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E2465CAC6
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 01:25:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238067AbjACXtG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 18:49:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55306 "EHLO
+        id S238555AbjADAZn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 19:25:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234572AbjACXtB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 18:49:01 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A73B13F73
-        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 15:49:00 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id k22-20020a05600c1c9600b003d1ee3a6289so25237901wms.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 15:49:00 -0800 (PST)
+        with ESMTP id S238403AbjADAZ3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 19:25:29 -0500
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3172717065
+        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 16:25:21 -0800 (PST)
+Received: by mail-lf1-x12b.google.com with SMTP id bf43so48188837lfb.6
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 16:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=VzuSR66Slw5b05LQRX+L6Dh2f0E0qoPcnQ6jREbJakU=;
-        b=agQyEtUFxmGDkoWjDyOI0o/0JqJACgRXWCKdkS/Q0xy3nHi3tzh6xENmQfiW6E07Ow
-         0dGc5o+2Dcd3L8A33jsUDtQBQmDz/8LJfsxK+3h5bicVrnDXxg4gLDNfHVvOzl9rw+1s
-         OFR573pi7R+8Me6Bv0/mS26YHdsOfPZ/MsDnZfbIppabS1DsMKXHTJDQpG9pu6ZRv27O
-         fDXN6g+fBtD9+icYb27T2Jm0uzVXU9uZrKlNgxRvGG8CGE8uJ+BobF08F/KjcFPM1mAZ
-         ueA3q8UFFjaL0LE6NmM2VfGmZW30KaXjlcoHcOmQ65PBTnH7BnzMw+35yDlC8NWkZij1
-         biXg==
+        bh=lHvYK3MFqjttdQWMiOHkYctTXu2WUFxG+8qUCFSB91A=;
+        b=FWXlyH0DAQ3qjP4Q2pgF0o5aG6p4f7qR3FOS2CBLCo1QzxsiBPk7duiTskSFrNN1Kb
+         RgpUWyJLf4huPnauN9j6DAk1jZr4qSTitFN47DiHK7pAHjDN8rM0KEQ1JIRYhs1UHqfQ
+         ieXQ8J1Y9gDKxl3n8vY8zrLhJ4LVy3iDdU9Ive6Wv4TWIe7cQNgpO1NsE3jS6Fri0bMr
+         FlvRjORSjmBgWs9LVilG47sy3nKVh+ix1RH/CnC8xiuxOZpmVwelEz0JI3s/O8eAYiqo
+         TmUoz+vTTgDQ/Jmpq8DUpJ8nxkiSpm8cLLGTsudLURsQr8OcVOmKvATN7FWPaYogOJa9
+         9ESw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VzuSR66Slw5b05LQRX+L6Dh2f0E0qoPcnQ6jREbJakU=;
-        b=n4UrxhwV3Pyn4CrKN2/1uHvzp7Ir8zGuIFqUh2LJBs/sAv49r89DmmOMVrlLe8+/oT
-         u21dcZbj3cQ8JAQ5xodwfceT8VRJO0GzItashOpdU6GwOy9iMr6T0Uo/uex56SoYnfr1
-         A6uAvVJ7E5DECoCFJWgKNCXS1lRuVaICfo8z7sAQVoRp6tdsvAULsZ3G1OHhjGX4Ut+o
-         8s6sDfwX9lvjvtGEln+hGYdv6zW1Zsg6fZSvcGcVM5k8Dkc7SECn8Mun/Vy7vjyCylAC
-         LcNn9OMGRG30OnG7xL8F2aq1ab3uAjNKqWxR/6uffQ+bBxXpzLm70zuQ0tjOi15fVJLS
-         Sa+g==
-X-Gm-Message-State: AFqh2kp1yvvgNgdglVk7knwrNrh3/o8DFQLy1ZhqGihi0LkWILGy8inU
-        g4WfBgEdiOcoAu3snQfi9yV89w==
-X-Google-Smtp-Source: AMrXdXtK+qKI4wPxZ+4Hzl1jsGs9t3tiExxTJkvyc3L0CgmqC4vFQIO2kTCgUti8j7DGFEgLKnNdkQ==
-X-Received: by 2002:a7b:cbd4:0:b0:3d3:3d51:7d44 with SMTP id n20-20020a7bcbd4000000b003d33d517d44mr32813918wmi.33.1672789739088;
-        Tue, 03 Jan 2023 15:48:59 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id k39-20020a05600c1ca700b003a84375d0d1sm54410904wms.44.2023.01.03.15.48.58
+        bh=lHvYK3MFqjttdQWMiOHkYctTXu2WUFxG+8qUCFSB91A=;
+        b=YE/AWcjnHwQSMKPtJutQqhYh7/tChAhASMF2GO5CzCC4rKNy7zkk57TjkWPpK/NGBD
+         GCDelw8OHEkAz5ZrNRoEwLObcHz9ouAZIW26I539Z1JXxVOPwbTEtNRAY7Ohx43hZHlZ
+         E5W9wbzbcfGao7/t/18viDeUwypomD0f698AxpDGLzQKgVnoEZyJJ8z9dRdgxQCOwCoS
+         /4kXVt2cSFop4ya4PQHKdPpkRcI9YX6x1ULeLG3tuvhHZPBYNvHJmebYiITRqGyq3a15
+         z2ia+d73VPQBOsKcmrW/JOO2JYP9mfLltnmuh4345+E2RdNPEjOb7vEkvMx54+/h/+pD
+         xwoA==
+X-Gm-Message-State: AFqh2kpUMBFZPqjK81H1bzgK7jxcM3M6B7AkQ8y5p6JS1BJa7QIRYt3c
+        yWPulPZoDeVY3R2lZlxPNk6ryg==
+X-Google-Smtp-Source: AMrXdXtuuKCKPyNVd7CcOz8YCpIOur3HAg7vUMbcUsAGJKMF6k4Cmoo7HHKVO8xqJ066BUBm3YOLqg==
+X-Received: by 2002:a05:6512:3d9f:b0:4a4:68b7:f878 with SMTP id k31-20020a0565123d9f00b004a468b7f878mr19118870lfv.28.1672791919499;
+        Tue, 03 Jan 2023 16:25:19 -0800 (PST)
+Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
+        by smtp.gmail.com with ESMTPSA id f2-20020a056512228200b004ca0ea7af24sm4969112lfu.174.2023.01.03.16.25.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 15:48:58 -0800 (PST)
-Message-ID: <ca7bcae0-2427-fe65-92c2-9ca1f1526ef0@linaro.org>
-Date:   Tue, 3 Jan 2023 23:48:57 +0000
+        Tue, 03 Jan 2023 16:25:19 -0800 (PST)
+Message-ID: <14e06574-f95e-8960-0243-8c95a1c294e9@linaro.org>
+Date:   Wed, 4 Jan 2023 01:25:17 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH 2/4] interconnect: qcom: rpm: Set QoS parameters
- regardless of RPM bw setting
+ Thunderbird/102.6.1
+Subject: Re: [PATCH 1/4] interconnect: qcom: rpm: Don't set QoS params before
+ non-zero bw is requested
 Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
         linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
 Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230103173059.265856-1-konrad.dybcio@linaro.org>
- <20230103173059.265856-2-konrad.dybcio@linaro.org>
- <0e2bdaec-b7ba-0474-8b80-8901fcc87a0f@linaro.org>
-In-Reply-To: <0e2bdaec-b7ba-0474-8b80-8901fcc87a0f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+ <735088f7-2888-04b1-7751-a3ad7e13a857@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <735088f7-2888-04b1-7751-a3ad7e13a857@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 03/01/2023 23:43, Bryan O'Donoghue wrote:
+
+
+On 4.01.2023 00:07, Bryan O'Donoghue wrote:
 > On 03/01/2023 17:30, Konrad Dybcio wrote:
-> I agree your code does what it says on the tin but, whats the overall 
-> justification to depart from the downstream logic ?
+>> Until now, the icc-rpm driver unconditionally set QoS params, even on
+>> empty requests. This is superfluous and the downstream counterpart does
+>> not do it. Follow it by doing the same.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/icc-rpm.c | 6 ++++++
+>>   1 file changed, 6 insertions(+)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index 43b9ce0dcb6a..06e0fee547ab 100644
+>> --- a/drivers/interconnect/qcom/icc-rpm.c
+>> +++ b/drivers/interconnect/qcom/icc-rpm.c
+>> @@ -193,6 +193,12 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
+>>       struct qcom_icc_provider *qp = to_qcom_provider(node->provider);
+>>       struct qcom_icc_node *qn = node->data;
+>>   +    /* Defer setting QoS until the first non-zero bandwidth request. */
+>> +    if (!(node->avg_bw || node->peak_bw)) {
+>> +        dev_dbg(node->provider->dev, "NOT Setting QoS for %s\n", qn->name);
+>> +        return 0;
+>> +    }
+>> +
+>>       dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
+>>         switch (qp->type) {
+> 
+> Doesn't downstream clear the registers on a zero allocation request ?
+> 
+> https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.BR.1.2.9-00810-8x09.0/drivers/platform/msm/msm_bus/msm_bus_bimc.c#L1302
+> 
+> https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.BR.1.2.9-00810-8x09.0/drivers/platform/msm/msm_bus/msm_bus_bimc.c#L1318
+> 
+> https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.BR.1.2.9-00810-8x09.0/drivers/platform/msm/msm_bus/msm_bus_bimc.c#L1367
+> 
+> msm_bus_bimc_set_qos_bw()
+> {
+>     /* Only calculate if there's a requested bandwidth and window */
+>     if (qbw->bw && qbw->ws) {
+>     }else
+>         /* Clear bandwidth registers */
+>         set_qos_bw_regs(base, mas_index, 0, 0, 0, 0, 0);
+> }
+Yes, looks like that's the case, but also it's only for BIMC, not
+for NOC:
+
+https://git.codelinaro.org/clo/la/kernel/msm-3.18/-/blob/LA.BR.1.2.9-00810-8x09.0/drivers/platform/msm/msm_bus/msm_bus_noc.c#L246
+
+Moreover, it only concerns QoS parameters that are not supported on
+mainline (Grant Period, Grant Count, Threshold Lo/Me/Hi) [1], so that
+pretty much addresses your worries, I think..
+
+And FWIW that's definitely not the case anymore for QNOC (and BIMC
+for that matter) on msm-5.4:
+
+https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.9.14.r1/drivers/interconnect/qcom/icc-rpm.c#L217
+
+
+Konrad
+
+[1] Note: msm8939 seems to be a somewhat heavy user of these properties,
+maybe it would be worth looking into implementing them?
 > 
 > ---
 > bod
-
-and can we prove with a meaningful test a behaviour change ? Better 
-throughput ? Lower thermals ?
-
----
-bod
