@@ -2,55 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC90E65CAF9
-	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 01:39:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C56F65CB17
+	for <lists+linux-pm@lfdr.de>; Wed,  4 Jan 2023 01:48:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233699AbjADAjl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 3 Jan 2023 19:39:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46268 "EHLO
+        id S238877AbjADAsi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 3 Jan 2023 19:48:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230352AbjADAjk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 19:39:40 -0500
+        with ESMTP id S238836AbjADAsh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 3 Jan 2023 19:48:37 -0500
 Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B2822A
-        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 16:39:39 -0800 (PST)
-Received: by mail-lf1-x134.google.com with SMTP id b3so48246122lfv.2
-        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 16:39:39 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4F4164A3
+        for <linux-pm@vger.kernel.org>; Tue,  3 Jan 2023 16:48:35 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id b3so48266689lfv.2
+        for <linux-pm@vger.kernel.org>; Tue, 03 Jan 2023 16:48:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WVBnuKlPE/oUTRqhFq4kUqzVA1XN6vIiFknTafswgoQ=;
-        b=LDmdQjzOsglTDJU1x/UviTH05DPRnDwLZeI4jv3+hfRYH9DCbcrkdDi3eH9Bj/iyKt
-         60Ej2buIMkhP/Q2nLxlaHt/7odf6abDi81TO5fZ37hcuVKNAFyBn4efgA6usvVYKG73D
-         tiaBtjbGpFvlTg/JF+8JbBuSl+zm7Mq24HZFM+phBQVFqyyjRLDHPJgzcCya6paeHe28
-         R04FRlvHifbFkGbPiVF17EajIdPdri3u2IXcdoPAsPALkzuCTKXu5IbCXzXEtyx556/l
-         GohsuuSjcAW67UZI/r7Kr1HLgPywNRGtdq5LSdmLyiyssg+AdIdtZ7GA3p8JL0AQ2jeR
-         19QQ==
+        bh=BKu/VauqBCYgezBQrQES+QSt580NOfOFvIsxFY1xklM=;
+        b=aNnURh34uv0pBnVClleJ/1Ml04l/3rLsPGa6vlFNRtHhR5qe3umW4RNR/f/wVl+cTn
+         8gPmT5Wlmr7vOXw+N8hCC3vNEheaogyh1+IhDRFH5md10IxTXygVG6NP42cL6970K/+N
+         wUwxzk+QMw+eJb3iWIO9xfRqmpnyLEDZDDv7hk84tMbHDwHhblTJFOKp2TXFi5Nm5nwP
+         fm42XeQpE71XI9srQlTc3iICpg0Ww1irI6Fz9z8I84G/ZQPXe4wGlVuR57sUYns/OyhX
+         mOp3oKhDV4RaBkXcUeEx9seQEvct81nID68hXTYNKEgozM//yr6JVnoKYvZ4BdWog00o
+         CQyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WVBnuKlPE/oUTRqhFq4kUqzVA1XN6vIiFknTafswgoQ=;
-        b=E38EKFY1mzk7e50ZVcy33rYkYGGuCmn8FCYnckFbiwB6sPjcodo7LYgFFcUdwFO62U
-         217wH6DRuq1X/RrWpzM+cYpmBHtH7EuC+huSuidN57UnuN50Nea5+BBruY1duWUztjoV
-         sC5K76oqy8Z/UWpwtUe+jBssb2Jgg6whNNz1p/+I2fN6cbi7AfSJdR8LbOkcwWwIiDax
-         U3xFIzWoX//otEQ3f4pSSDuiaqst+VO/dZklhCVwvD4+VU/+CvuBksUub25DCIhFOf1V
-         W4A145tAgWHAsExNT6/b6xBtYIuBM8ulv6TfY4Tjg1L6r04fPnf7Bn3C3YUIndkj5xNV
-         rTgA==
-X-Gm-Message-State: AFqh2kqtWrWuOnEfLhREyEY3EIdQuzEvkQ2hRVXmzxcCo7Q/OH71lkBD
-        Y/i7+lRXZ+txQAVSa3wVulKzm9IbdWoA6aQW
-X-Google-Smtp-Source: AMrXdXtLoi8JfPAeyx/akMXTY99ljU6r9amWVkiMz5z+fAPp28qXKnsS1TqW/vrHX5b/zqcEafDqEg==
-X-Received: by 2002:a05:6512:3e0c:b0:4b5:a5c7:3286 with SMTP id i12-20020a0565123e0c00b004b5a5c73286mr15789966lfv.9.1672792777825;
-        Tue, 03 Jan 2023 16:39:37 -0800 (PST)
+        bh=BKu/VauqBCYgezBQrQES+QSt580NOfOFvIsxFY1xklM=;
+        b=p0CIQ1P1rxFnqclyw3m5WNMmaisMWUemCe61fdfgZhwKbcWL6EY4EaCVLen/o4h3lb
+         bGfl7/ykcYW2KyQyZLNX+OlrB2LMVbNAIMjTNs9deLS3W1odscEqC4DHGpy6O5mw6xkR
+         WkecGJma+NSfc09HRefpdZ2G4argqWQC7Rkz3rXs4hZ2ucWp643vJLsEGqIAUVXjRiTu
+         SpjAKsQ9aV81i+j5CjnLoP6xcS0vOkwh3FYB1aK/1/fYknIKnqVjahD4C4oZjrya2Rqr
+         fa4pc6A2UiMhMDM2uGA4BTi8bivkOUZlxslHuFeMLvghXSx23jYZQyZkUD31eeln14z4
+         O24g==
+X-Gm-Message-State: AFqh2kqCII5ujoXwPqHnenw+FNmzllS/N/jSiKWuSlS3j9NyaK1G9DGY
+        uTGSJwnSt/rV5g2Dwu71F/2gjQ==
+X-Google-Smtp-Source: AMrXdXtFwlBTAINRE3QlKZUsoy3/Un3r6y8+Qs/P30nEzQxFBlXIG3z+/Y+dx7xRT1oEEDcxiLDtBw==
+X-Received: by 2002:a19:645b:0:b0:4a4:68b8:f4e7 with SMTP id b27-20020a19645b000000b004a468b8f4e7mr11338362lfj.45.1672793313687;
+        Tue, 03 Jan 2023 16:48:33 -0800 (PST)
 Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id p21-20020a05651212d500b00494a603953dsm4942374lfg.89.2023.01.03.16.39.36
+        by smtp.gmail.com with ESMTPSA id l18-20020ac24312000000b00485caa0f5dfsm5015288lfh.44.2023.01.03.16.48.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Jan 2023 16:39:37 -0800 (PST)
-Message-ID: <108e52fa-e53b-220c-b0a8-b5b746aafde6@linaro.org>
-Date:   Wed, 4 Jan 2023 01:39:36 +0100
+        Tue, 03 Jan 2023 16:48:33 -0800 (PST)
+Message-ID: <00e2ba61-c64d-0ef9-c802-f96c72109712@linaro.org>
+Date:   Wed, 4 Jan 2023 01:48:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
@@ -72,7 +72,8 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -165,6 +166,11 @@ On 4.01.2023 00:43, Bryan O'Donoghue wrote:
 > 
 > if (qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
 >     /* bod: this will run */
+Also, this will not run with the next patch, perhaps i should
+have ordered them differently (or perhaps the issue it solves
+should have never been introduced :P).
+
+Konrad
 >     /* set bandwidth directly from the AP */
 >     ret = qcom_icc_qos_set(n, sum_bw);
 >     if (ret)
@@ -185,32 +191,6 @@ On 4.01.2023 00:43, Bryan O'Donoghue wrote:
 > }
 > 
 > I agree your code does what it says on the tin but, whats the overall justification to depart from the downstream logic ?
-Okay, so maybe it would be worth checking with Qualcomm what it's
-supposed to do. On msm-5.4 setting QoS is done unconditionally,
-no matter if the node has valid (!= -1) rpm mas/slv IDs.
-
-https://github.com/sonyxperiadev/kernel/blob/aosp/LA.UM.9.14.r1/drivers/interconnect/qcom/icc-rpm.c#L97
-
-It may be something that began with newer SoCs, or maybe the
-carried-with-us-ever-since-3.4 chonky msm_bus driver had a bug..
-or maybe the msm-5.4 interconnect impl has a bug.. We really
-won't know unless somebody can confirm it for us..
-
-My understanding would be such that the QoS parameters are always
-set from the AP and RPM just scales the bandwidth on certain nodes,
-like it scales power and frequency for some lines/devices. That
-may or may not be true or might also depend on the SoC / RPM fw..
-
-And even if RPM sets these values internally, it shouldn't hurt to
-adjust them from AP again, but that would both deserve a different
-comment and would be a rather bad design, as tuning the values
-would require a rpm firmware update (and we know how vendors treat
-firmware updates), so that might have been something qc engineers
-took into account..
-
-tldr: new soc good (*), old soc bad-or-no-effect (*), should ask QC
-
-Konrad
 > 
 > ---
 > bod
