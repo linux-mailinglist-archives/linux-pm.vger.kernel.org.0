@@ -2,88 +2,81 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4894B65F356
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 19:04:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A3A65F3BD
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 19:34:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234968AbjAESD5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Jan 2023 13:03:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S235127AbjAESdv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Jan 2023 13:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235445AbjAESDv (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 13:03:51 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7003564E8;
-        Thu,  5 Jan 2023 10:03:49 -0800 (PST)
-Received: from jupiter.universe (dyndsl-085-016-198-020.ewe-ip-backbone.de [85.16.198.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DED7D6602D40;
-        Thu,  5 Jan 2023 18:03:47 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672941828;
-        bh=HWf3Bker04XVluyDrFFMhig5t6mPNRA+lOaEFDDHk4w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ur5e9FV2G7idP0ty3L6Gvm8Y+hc7aSKg0k8WtLgAHVLf7Ud2H5CjtIwMNotFqzwe7
-         x3WspQknNnwh130/YVkhUJLe58lZXPpScOCbKt02orJQKcYl231SaYkSV6/piJge8l
-         YJnG2DvCARhkrcuU5Mf3gQsEzotxYgxgZGFFOUNCId5z38bbQfEoJq4KEqyTZhyKD1
-         4ofZnwln3ZHqGhHmyAikwuPeFzwgPOwifGSh7BNnPxyhu8y0lLLCtn9T7MuC/8jIci
-         4AHZHWctLUgnrNszG+xXodUOd8eXxivN/rnJeuv++mHK2HSYPum2eeQrahJhfg2Ykm
-         I2MMCEkz7vY6g==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id AF9EE48011E; Thu,  5 Jan 2023 19:03:42 +0100 (CET)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Heiko Stuebner <heiko@sntech.de>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        with ESMTP id S234833AbjAESdl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 13:33:41 -0500
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4BF8E59F95;
+        Thu,  5 Jan 2023 10:33:40 -0800 (PST)
+X-IronPort-AV: E=Sophos;i="5.96,303,1665414000"; 
+   d="scan'208";a="148283520"
+Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
+  by relmlie6.idc.renesas.com with ESMTP; 06 Jan 2023 03:33:39 +0900
+Received: from mulinux.example.org (unknown [10.226.92.64])
+        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 6FE2E40065A8;
+        Fri,  6 Jan 2023 03:33:34 +0900 (JST)
+From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        Sebastian Reichel <sre@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCHv3 7/7] dt-bindings: rockchip-thermal: Support the RK3588 SoC compatible
-Date:   Thu,  5 Jan 2023 19:03:40 +0100
-Message-Id: <20230105180340.29140-8-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105180340.29140-1-sebastian.reichel@collabora.com>
-References: <20230105180340.29140-1-sebastian.reichel@collabora.com>
+        linux-pm@vger.kernel.org,
+        Chris Paterson <Chris.Paterson2@renesas.com>,
+        Biju Das <biju.das@bp.renesas.com>,
+        linux-renesas-soc@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>
+Subject: [PATCH v3 0/2] Driver support for RZ/V2M PWC
+Date:   Thu,  5 Jan 2023 18:33:17 +0000
+Message-Id: <20230105183319.144366-1-fabrizio.castro.jz@renesas.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Add a new compatible for the thermal sensor device on RK3588 SoCs.
+The PWC IP found in the RZ/V2M family of chips fits the Multi-Function
+Device (MFD) model quite well, and comes with the below capabilities:
+* external power supply on/off sequence generation
+* on/off signal generation for the LPDDR4 core power supply (LPVDD)
+* key input signals processing
+* general-purpose output pins
 
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml | 1 +
- 1 file changed, 1 insertion(+)
+This new version of the series merges the 3 drivers from version 2
+(MFD core driver, GPIO driver, and poweroff driver) into a single
+driver.
 
-diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-index f6c1be226aaa..55f8ec0bec01 100644
---- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-+++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
-@@ -19,6 +19,7 @@ properties:
-       - rockchip,rk3368-tsadc
-       - rockchip,rk3399-tsadc
-       - rockchip,rk3568-tsadc
-+      - rockchip,rk3588-tsadc
-       - rockchip,rv1108-tsadc
- 
-   reg:
+Thanks,
+Fab
+
+Fabrizio Castro (2):
+  dt-bindings: mfd: Add RZ/V2M PWC
+  soc: renesas: Add PWC support for RZ/V2M
+
+ .../bindings/mfd/renesas,rzv2m-pwc.yaml       |  56 +++++++
+ drivers/soc/renesas/Kconfig                   |   4 +
+ drivers/soc/renesas/Makefile                  |   1 +
+ drivers/soc/renesas/pwc-rzv2m.c               | 141 ++++++++++++++++++
+ 4 files changed, 202 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/renesas,rzv2m-pwc.yaml
+ create mode 100644 drivers/soc/renesas/pwc-rzv2m.c
+
 -- 
-2.39.0
+2.34.1
 
