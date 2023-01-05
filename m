@@ -2,207 +2,227 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB7A65E8C7
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 11:19:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38ADD65E966
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 11:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbjAEKTh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Jan 2023 05:19:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S232319AbjAEKzO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Jan 2023 05:55:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbjAEKTH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 05:19:07 -0500
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2086.outbound.protection.outlook.com [40.107.6.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099BB5005B;
-        Thu,  5 Jan 2023 02:18:58 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kadPkrs2jc94yc/RkJnkZXjldXeNev+Ynwzg9e4f/TNim6B+irXxblVRhE2Rsw6627U7T/LXMnPFggOabfEfgNu3qzYFDT4NGRRxXU2LXA9wRVGkKPEbCBQLn5CaFTUT7XMoEWxGPjgWGPCxsNEzvTo1Z/cmeJ/WaPE8D2cHI7qct204UfmrhOECd3sAprL6d7u1eJPSObiFyosS0QDLuw7mLmK+ZjAeqUE/XEd0mF1wmmIqKw6J49nEOkolIqpLBI/S+71lrtDmpS37uclRd3GdelEWs/PWcCsR5pamBfOP7ze3EMt3uHavX0XS02xzpddddDTrxsdejIhrrGCIeg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sDD4GprmS+yHjZjuXjeyJi0vUb73DUTgY7ZaCawyKpU=;
- b=fkqKPkiqcPM8uSWGb39/2ug7pUv5uhuHO7DeGaiLzNHzC8I+/036alZZE50Z84jLnFhafUgLv9Ho8Zw1oaqz1fV4A+2ySBdYVptiJXi4WgymXZY5VvULMobcBs6yBT52cwhpxVWn5rws5S16dowmLCIjV5KkQ/Jzi8l+GSx0FZwOQU8aoJ7minDE9OkgYRu8bvpI9JYwrX5MymOhv5rTWfCvFalXDYWiv4a7fwF6hGIQLx3MXq711orGwcTyYZ59XSA+Ij3wxvk0rNSvREU+WeemYljennSthB+Qa094pK5o1hejrqea+ibPsZl5sjTCw8ydFMyX0vmle0XTkxGSiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sDD4GprmS+yHjZjuXjeyJi0vUb73DUTgY7ZaCawyKpU=;
- b=NA27xZtiad1TUxmP5n8nYrPyV34J9DhaIwytn14WwgdDuG8bYBQ+7WRUZKtHVwb1LfmhlAJN02ZybwA+oodJx3hUR22W+7/JFW8QfPmBO2N2NKBrziOyY8O5FAtHjirO/BBHXFT2Qi/QEhW6ct5LAnrYk4emEuT7iEp7VyJnZ0A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM6PR04MB6053.eurprd04.prod.outlook.com (2603:10a6:20b:b9::10)
- by DBBPR04MB7625.eurprd04.prod.outlook.com (2603:10a6:10:202::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 10:18:56 +0000
-Received: from AM6PR04MB6053.eurprd04.prod.outlook.com
- ([fe80::f75a:918f:6b4c:4a00]) by AM6PR04MB6053.eurprd04.prod.outlook.com
- ([fe80::f75a:918f:6b4c:4a00%4]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 10:18:56 +0000
-From:   "Alice Guo (OSS)" <alice.guo@oss.nxp.com>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
-        rui.zhang@intel.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, festevam@gmail.com
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-imx@nxp.com
-Subject: [PATCH v1 4/4] arm64: dts: imx93: Add CPU thermal zone
-Date:   Thu,  5 Jan 2023 18:17:48 +0800
-Message-Id: <20230105101748.6714-5-alice.guo@oss.nxp.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230105101748.6714-1-alice.guo@oss.nxp.com>
-References: <20230105101748.6714-1-alice.guo@oss.nxp.com>
-Content-Type: text/plain
-X-ClientProxiedBy: SI2P153CA0009.APCP153.PROD.OUTLOOK.COM
- (2603:1096:4:140::18) To AM6PR04MB6053.eurprd04.prod.outlook.com
- (2603:10a6:20b:b9::10)
+        with ESMTP id S232814AbjAEKzG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 05:55:06 -0500
+X-Greylist: delayed 881 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 05 Jan 2023 02:55:04 PST
+Received: from fx308.security-mail.net (smtpout30.security-mail.net [85.31.212.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB0644C77
+        for <linux-pm@vger.kernel.org>; Thu,  5 Jan 2023 02:55:04 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by fx308.security-mail.net (Postfix) with ESMTP id 8AC1575A6BF
+        for <linux-pm@vger.kernel.org>; Thu,  5 Jan 2023 11:40:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1672915221;
+        bh=HozEVKpsnPTz1W+OmWAJHb2nflwGQpHJX/pPziyjbkU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=z8nnqsOPLAZ31pVTrEaSU8Vi1jwkux3kRJ9jir01BPlgH3Vm0rvu0GKLTqA8QcOvp
+         kLczG4JPQ06aIFlsEnPWzgHdo4KICmI9A0K7HrUsCBAfrXYX+XrUXZNvGHj/AcXF+p
+         bTvO3vB+RrFhkrZgRrmVTSG9wbJg55lN4Wsmg9nc=
+Received: from fx308 (localhost [127.0.0.1]) by fx308.security-mail.net
+ (Postfix) with ESMTP id 6DB4A75AF9C; Thu,  5 Jan 2023 11:40:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx308.security-mail.net (Postfix) with ESMTPS id 0F44375AB2B; Thu,  5 Jan
+ 2023 11:40:21 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id D52FF27E0373; Thu,  5 Jan 2023
+ 11:40:20 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id B47A227E02E4; Thu,  5 Jan 2023 11:40:20 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ h9vZft-QceM0; Thu,  5 Jan 2023 11:40:20 +0100 (CET)
+Received: from tellis.lin.mbt.kalray.eu (unknown [192.168.36.206]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 5854D27E02AC; Thu,  5 Jan 2023
+ 11:40:20 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <141b8.63b6a915.e31d.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu B47A227E02E4
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1672915220;
+ bh=rBdSTEj4sEHV5aOdgiMVbZa0c1+4vHmKGKt/utxqTFU=;
+ h=Date:From:To:Message-ID:MIME-Version;
+ b=pKs+CePZ3R3W41fZHlmw/owOk940TBb9jGKa8X1N/B6at/r5t/99lcM7BYNSm1sbm
+ GgU4FIb/vUiDD0dGYY0QwPK6QJVEAcqdlcP4MzXTRQlqlJaTfeeQw469yNJ0IyFuvr
+ H4nRIuARzCz4d0RA5Dr/HYW0RULCkMt83j3YDunc=
+Date:   Thu, 5 Jan 2023 11:40:19 +0100
+From:   Jules Maselbas <jmaselbas@kalray.eu>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Yann Sionneau <ysionneau@kalray.eu>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-audit@redhat.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Message-ID: <20230105104019.GA7446@tellis.lin.mbt.kalray.eu>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB6053:EE_|DBBPR04MB7625:EE_
-X-MS-Office365-Filtering-Correlation-Id: f017a1f1-6a98-411e-b8e7-08daef0640a1
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CXGWI7ZGSp4FAXo63NMAqL7HElr7toulMtfFxR9uzeVnNyqUvcrMB9v0NjMuY0NyFB+P3H2JSY7n7cefnY74JBeFqOu6KJA4kgcWiOZ33giGjj99FH+oqfKHEDeWMQvlwNa70TutAkbrL80tyfj/3L/3yWYPviZ5iOMDtOKAYpGV91TTtN5mh0qEt8uyrzlt3/hLh1ziSE4zYmwJka+C6EE9KrQvMNzhED7pJjyJHcGFZt1Ha3b99vEy4nap8mofHYZ/4gxA+WglE+NQvXAGji3BiWV7Fw92kQd7nrt+nU2gDe+cxev5yKdf7zRfSCAd01vrrHDdu+xAWd8HH93Tt4thADvcqmC9PP1FzlU7HjithH2qx0j4wGcoXr50R7+4Ip+RitCZqIa9Bv4OLUAcLUaKmh/0rV2vUm3QqRDhadsIiKf/m0h0BqBObk/VcHyv4Xi4DBL9M0P02ykM9d5/1cGqLLf3RJXojxtRoRFc4y/J+x6W5LPqYYa9xenD67bLtoiRA07XJBSErVYQHX9HJLFuSCwiW4JiFIjACfK9pkD8zGEMpWmf1sB/zpf87TeercsMqlzbU7yvoiA+1UHSY1t9sHvGoIhdr0A7unRhVySS8JLC0NwdxvHXydx6o92ni1LV8dO24fw6PPnNQv9JvwO+YF8hP6CF7vQ4IfsfxAOwWQ4wWyRbV8nrojvJdLiF
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(376002)(136003)(366004)(396003)(451199015)(6666004)(2616005)(6506007)(52116002)(186003)(6512007)(86362001)(26005)(316002)(8676002)(1076003)(66946007)(4326008)(66556008)(66476007)(5660300002)(7416002)(41300700001)(478600001)(8936002)(38100700002)(38350700002)(83380400001)(6486002)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/oiH+aHcO07cjfeGgqIWFjoJB4Hf6dh/B0LscMUamPouFU6M25mZoOD7VxRy?=
- =?us-ascii?Q?drXkqBs9X6b4l1DQHwCQzS2lRIWjEWJ717YlL9n3d1KSA4TrUnaG7FEsvTvR?=
- =?us-ascii?Q?netKyeTNq+dltTGNbCoRD7XPdyN/qSBnA4MwPW1/+5UXlK13appAuuHiNcP0?=
- =?us-ascii?Q?HiWsKZbgyUxpqJz0pfFdYuN5NAAihJ5dSwwJ/DyP+zt1QWGo7Xjdx27FkkAo?=
- =?us-ascii?Q?K7RaExgz1SEbISz33Tccpuuh+xbo0mpxrk8Pu3zEapt47tt4tXQ0NEdph5JZ?=
- =?us-ascii?Q?fUCB5FNeGzJH0gBJlERir1siPgrLQpI7UfwTR6yXQryltPLvlnZgfuqxaIM6?=
- =?us-ascii?Q?XRCBlGCMoiG67NCbp2lma7NcwIL3dduOTA/XZX9xrJj0jNE1xOdRKHOSMP3q?=
- =?us-ascii?Q?Wj2m/y8pV98EKZChxw84+TqwyXBX+Uxr4J35XqedER6qwDSNSyjSBGRR8JrE?=
- =?us-ascii?Q?G4UQvp5bDj3/kV2xQDKzAEw3hJyt9eW0HEW2Wv4TQH2/anptCYgRGD9/VBMe?=
- =?us-ascii?Q?JTOympifnjV6ApKZKLazZ5JSkVmrY5tIPlkFJ28vJeVDIoUVATSeeQ7gdud0?=
- =?us-ascii?Q?9PR5cLOcjzI2BDkTk0daI6PuHU214Mkm6KKw+RrORC7vpCTbZdczBpJnxum4?=
- =?us-ascii?Q?sGxOBhEH+2Y/0L5mV/jWmMhtoHRCvPTGSTzkC3CdaE+2jVFahyUQYOVADmGk?=
- =?us-ascii?Q?Vihv+W4LcFaPxzwTPgwVvGIvdGosi7S9KWjVYcNxd3H+I9mfl0x1qNoUf+qj?=
- =?us-ascii?Q?WZZhlx/No4PjowXQDm+Uhk/yDYQPpouvjJJ5UMpu0zuv/HrtnsA+9rUFZV3N?=
- =?us-ascii?Q?mlZBCLS+HO0XQxL8XrBOdiTmN9XdZtj3iSEN4L2pUxYD283cOr1n+B/W1GA1?=
- =?us-ascii?Q?2SQzdxC0BSrQmQUhGhuJF4WMuRgouafYeiS822p0D63O8e5oid/itlF/xnR4?=
- =?us-ascii?Q?82LGUHLosJQigMRn5LJwalJJK7e/P8LZ4zI04RFlqqX3+AwTe+pFOW3UgXXM?=
- =?us-ascii?Q?CIwc8oenCjAi2Xsb1hPfs+1xgSmfV5AB2tCMazfCpv1HNeHKEkOs42HdOapq?=
- =?us-ascii?Q?H6lCLvuktBanEao/tuIzoiqSdAHkfmbIY05T53uZWCfLjBgZDz7HKRmLy/bX?=
- =?us-ascii?Q?ZjzhH5W9xYKwIAMvRFrppgXY+h0ck0DClQwxW7a/BlP8YbTdikllzM6e8oSV?=
- =?us-ascii?Q?1uuZ3p+mvEVoqLrqT0bNQZeIQSxv7F6K9KDRZJ3YphmAYoeqs46fVMdls1MV?=
- =?us-ascii?Q?62rJxRxyoQI8DjvcoD6NBhjFEK/prx690Om7+f3coGOkf1Zhij8vD+aTg9Ly?=
- =?us-ascii?Q?NZWJE8XbA+Aeiqq+uHDKwcVPwAGB2FlGrGkhWKypVKCWz34bsexl7L2kBPyU?=
- =?us-ascii?Q?OYcFVunM2eKqjpcgV3ftCUAhS+7RxugdvwqPXZpuThbAS/T678F2nxEoXDpt?=
- =?us-ascii?Q?BGqQeyaeHlXbuXAYyj0fXqUKVzK8hceMxLVei1+aJcyStIuA3NhQjBNpYcWg?=
- =?us-ascii?Q?PAsA+wf/XBCYFpNiJQC0imyirldqC3FSKvQz1bSOsnvYAvV3BD2PNcaXFnxO?=
- =?us-ascii?Q?u+rn4p0MJjBDUqlURw8Y4rMH+SlIlIyQMso+c907?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f017a1f1-6a98-411e-b8e7-08daef0640a1
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6053.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 10:18:56.1247
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: P/dVaYGpHpyzePPTM750rTohAIlNDfDGXgy187XbNzu+SaWDcp4B3cOBfjo1JNBXjSgA82y+SeJhxz7hva/Lzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR04MB7625
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <7c531595-e987-422b-bcf7-48ad0ba49ce6@app.fastmail.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Alice Guo <alice.guo@nxp.com>
+Hi,
 
-Add CPU thermal zone and attach it to the TMU which monitors the CPU
-temperature.
+On Wed, Jan 04, 2023 at 04:58:25PM +0100, Arnd Bergmann wrote:
+> On Tue, Jan 3, 2023, at 17:43, Yann Sionneau wrote:
+> > This patch series adds support for the kv3-1 CPU architecture of the kvx family
+> > found in the Coolidge (aka MPPA3-80) SoC of Kalray.
+> >
+> > This is an RFC, since kvx support is not yet upstreamed into gcc/binutils,
+> > therefore this patch series cannot be merged into Linux for now.
+> >
+> > The goal is to have preliminary reviews and to fix problems early.
+> >
+> > The Kalray VLIW processor family (kvx) has the following features:
+> > * 32/64 bits execution mode
+> > * 6-issue VLIW architecture
+> > * 64 x 64bits general purpose registers
+> > * SIMD instructions
+> > * little-endian
+> > * deep learning co-processor
+> 
+> Thanks for posting these, I had been wondering about the
+> state of the port. Overall this looks really nice, I can
+> see that you and the team have looked at other ports
+> and generally made the right decisions.
 
-Signed-off-by: Alice Guo <alice.guo@nxp.com>
-Reviewed-by: Jacky Bai <ping.bai@nxp.com>
-Reviewed-by: Ye Li <ye.li@nxp.com>
-Signed-off-by: Dong Aisheng <aisheng.dong@nxp.com>
----
- arch/arm64/boot/dts/freescale/imx93.dtsi | 48 ++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Thank you and all for the reviews. We are currently going
+through every remarks and we are trying to do our best to
+send a new patch series with everything addressed.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
-index 6808321ed809..60306f3c5e7f 100644
---- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-@@ -8,6 +8,7 @@
- #include <dt-bindings/input/input.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/power/fsl,imx93-power.h>
-+#include <dt-bindings/thermal/thermal.h>
- 
- #include "imx93-pinfunc.h"
- 
-@@ -116,6 +117,38 @@
- 		interrupt-parent = <&gic>;
- 	};
- 
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <2000>;
-+
-+			thermal-sensors = <&tmu 0>;
-+
-+			trips {
-+				cpu_alert: cpu-alert {
-+					temperature = <80000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				cpu_crit: cpu-crit {
-+					temperature = <90000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+		};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu_alert>;
-+					cooling-device =
-+						<&A55_0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+						<&A55_1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
-+		};
-+	};
-+
- 	soc@0 {
- 		compatible = "simple-bus";
- 		#address-cells = <1>;
-@@ -280,6 +313,21 @@
- 				compatible = "fsl,imx93-anatop", "syscon";
- 				reg = <0x44480000 0x10000>;
- 			};
-+
-+			tmu: tmu@44482000 {
-+				compatible = "fsl,imx93-tmu";
-+				reg = <0x44482000 0x1000>;
-+				clocks = <&clk IMX93_CLK_TMC_GATE>;
-+				little-endian;
-+				fsl,tmu-calibration = <0x0000000e 0x800000da
-+						       0x00000029 0x800000e9
-+						       0x00000056 0x80000102
-+						       0x000000a2 0x8000012a
-+						       0x00000116 0x80000166
-+						       0x00000195 0x800001a7
-+						       0x000001b2 0x800001b6>;
-+				#thermal-sensor-cells = <1>;
-+			};
- 		};
- 
- 		aips2: bus@42000000 {
--- 
-2.17.1
+> I commented on the syscall patch directly, I think it's
+> important to stop using the deprecated syscalls as soon
+> as possible to avoid having dependencies in too many
+> libc binaries. Almost everything else can be changed
+> easily as you get closer to upstream inclusion.
+> 
+> I did not receive most of the other patches as I'm
+> not subscribed to all the mainline lists. For future 
+> submissions, can you add the linux-arch list to Cc for
+> all patches?
+
+We misused get_maintainers.pl, running it on each patch instead
+of using it on the whole series. next time every one will be in
+copy of every patch in the series and including linux-arch.
+
+> Reading the rest of the series through lore.kernel.org,
+> most of the comments I have are for improvements that
+> you may find valuable rather than serious mistakes:
+> 
+> - the {copy_to,copy_from,clear}_user functions are
+>   well worth optimizing better than the byte-at-a-time
+>   version you have, even just a C version built around
+>   your __get_user/__put_user inline asm should help, and
+>   could be added to lib/usercopy.c.
+
+right, we are using memcpy for {copy_to,copy_from}_user_page
+which has a simple optimized version introduced in
+(kvx: Add some library functions).
+I wonder if it is possible to do the same for copy_*_user functions.
+
+> - The __raw_{read,write}{b,w,l,q} helpers should
+>   normally be defined as inline asm instead of
+>   volatile pointer dereferences, I've seen cases where
+>   the compiler ends up splitting the access or does
+>   other things you may not want on MMIO areas.
+>
+> - I would recomment implementing HAVE_ARCH_VMAP_STACK
+>   as well as IRQ stacks, both of these help to
+>   avoid data corruption from stack overflow that you
+>   will eventually run into.
+> 
+> - You use qspinlock as the only available spinlock
+>   implementation, but only support running on a
+>   single cluster of 16 cores. It may help to use
+>   the generic ticket spinlock instead, or leave it
+>   as a Kconfig option, in particular since you only
+>   have the emulated xchg16() atomic for qspinlock.
+> 
+> - Your defconfig file enables CONFIG_EMBEDDED, which
+>   in turn enables CONFIG_EXPERT. This is probably
+>   not what you want, so better turn off both of these.
+> 
+> - The GENERIC_CALIBRATE_DELAY should not be necessary
+>   since you have a get_cycles() based delay loop.
+>   Just set loops_per_jiffy to the correct value based
+>   on the frequency of the cycle counter, to save
+>   a little time during boot and get a more accurate
+>   delay loop.
+>
+Ack !
+
+   Jules
+
+
+
 
