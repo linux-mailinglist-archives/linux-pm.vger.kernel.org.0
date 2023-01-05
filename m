@@ -2,53 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2771665EDAA
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 14:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C547665EDA9
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 14:47:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232803AbjAENrd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Jan 2023 08:47:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S231802AbjAENrc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Jan 2023 08:47:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjAENrE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 08:47:04 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6C73D9DF;
-        Thu,  5 Jan 2023 05:47:03 -0800 (PST)
+        with ESMTP id S233744AbjAENr0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 08:47:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDA53E0F7;
+        Thu,  5 Jan 2023 05:47:25 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 812EFB81ADD;
-        Thu,  5 Jan 2023 13:47:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56FD3C433EF;
-        Thu,  5 Jan 2023 13:46:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7C08F61A94;
+        Thu,  5 Jan 2023 13:47:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDB1C433EF;
+        Thu,  5 Jan 2023 13:47:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1672926421;
-        bh=dEuDRHQ7Sm3N5Gxt4MXi3ZvxmHYSAXFo1vd8BJvQn2w=;
+        s=k20201202; t=1672926444;
+        bh=FJKWxab8jgdL8QRSTYPu5QbZT8XQ3r9MStsrq3HgraI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OchErH5pzoqwPQBxaeD1KmpvM0Qf2mQyORTo8uiK9ZSVEqrBoYdnvxeA9fgltxI2w
-         K+lt7wSpOAQhtFngzLS1YPMeDa7u8YyYfUQzWhLEXx//v+NcMwVVGMZ14j5B4yYwtc
-         Gz2llC+hREtLN7T2j8TJhoapsu4Tvl9H9Ea4U+iywIe1WfdqiSsa91X/PN/QU6vkOj
-         vpceBO4bgkeM8GC/d+9oF8hnTDs4VEmb/5XPegk8IVnpcFPmYY/oaZHAn80aeJ5bzl
-         P3e/3RKK1j7yO5jllOrMfT/qGfdO1mmg+SQO7/JuMeTPBucaMAGW81RqdaLxPIKrsw
-         0Y6heMtAHqsQg==
+        b=TnoemKZzlRtc4RbEDYwYrCxMaldvoq9hyvkFjNaiMs5ONNoYxKPPzSjf43HdnWHT7
+         Jv74JP+8X5YGEHqPaIgTm3LPX1TA5JwLc/VA8FKXaqF+4RDrdoBrQkBLP1yk2Ux1cw
+         He4/DRqeYpjZ+mjxs6CxmaJfUgGXwaJDMCYs+GhhL35wsZ66DwI7ciwkwZOahik8kG
+         Iu31DzXvHzbi8gD0KfPvb0wXW1fj0Hyv8+p4NN19KO9YdblTjiCKI5PiAit7Ls4IAy
+         /gh112XMwrQWYIkRKDAtGUSYs9atY1N+eydNJENVGsRQyZO+R79V93XCTvl/d63IYp
+         wcA2KTxneqmYQ==
 From:   Arnd Bergmann <arnd@kernel.org>
 To:     Robert Jarzmik <robert.jarzmik@free.fr>
 Cc:     Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Arnd Bergmann <arnd@arndb.de>,
-        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
-Subject: [PATCH 07/27] power: remove tosa_battery driver
-Date:   Thu,  5 Jan 2023 14:46:02 +0100
-Message-Id: <20230105134622.254560-8-arnd@kernel.org>
+        Sebastian Reichel <sre@kernel.org>,
+        Anton Vorontsov <cbou@mail.ru>, linux-pm@vger.kernel.org
+Subject: [PATCH 16/27] power: remove pda_power supply driver
+Date:   Thu,  5 Jan 2023 14:46:11 +0100
+Message-Id: <20230105134622.254560-17-arnd@kernel.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230105134622.254560-1-arnd@kernel.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,TVD_SUBJ_WIPE_DEBT autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,52 +59,90 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-The PXA tosa machine is removed, so this driver is no longer
-in use.
+This driver was used for a couple of Intel PXA and Samsung S3C24xx
+based PDAs, but all of those are now removed from the kernel, so
+the driver itself is no longer useful.
 
 Cc: Sebastian Reichel <sre@kernel.org>
+Cc: Anton Vorontsov <cbou@mail.ru>
 Cc: linux-pm@vger.kernel.org
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- drivers/power/supply/Kconfig        |   7 -
- drivers/power/supply/Makefile       |   1 -
- drivers/power/supply/tosa_battery.c | 512 ----------------------------
- 3 files changed, 520 deletions(-)
- delete mode 100644 drivers/power/supply/tosa_battery.c
+ Documentation/power/power_supply_class.rst |   4 +-
+ arch/arm/mach-tegra/tegra.c                |   1 -
+ drivers/power/supply/Kconfig               |   9 -
+ drivers/power/supply/Makefile              |   1 -
+ drivers/power/supply/pda_power.c           | 520 ---------------------
+ include/linux/pda_power.h                  |  39 --
+ 6 files changed, 2 insertions(+), 572 deletions(-)
+ delete mode 100644 drivers/power/supply/pda_power.c
+ delete mode 100644 include/linux/pda_power.h
 
+diff --git a/Documentation/power/power_supply_class.rst b/Documentation/power/power_supply_class.rst
+index c04fabee0a58..da8e275a14ff 100644
+--- a/Documentation/power/power_supply_class.rst
++++ b/Documentation/power/power_supply_class.rst
+@@ -40,8 +40,8 @@ kind of power supply, and can process/present them to a user in consistent
+ manner. Results for different power supplies and machines are also directly
+ comparable.
+ 
+-See drivers/power/supply/ds2760_battery.c and drivers/power/supply/pda_power.c
+-for the example how to declare and handle attributes.
++See drivers/power/supply/ds2760_battery.c for the example how to declare
++and handle attributes.
+ 
+ 
+ Units
+diff --git a/arch/arm/mach-tegra/tegra.c b/arch/arm/mach-tegra/tegra.c
+index ab5008f35803..9ef1dfa7b926 100644
+--- a/arch/arm/mach-tegra/tegra.c
++++ b/arch/arm/mach-tegra/tegra.c
+@@ -19,7 +19,6 @@
+ #include <linux/of_fdt.h>
+ #include <linux/of.h>
+ #include <linux/of_platform.h>
+-#include <linux/pda_power.h>
+ #include <linux/platform_device.h>
+ #include <linux/serial_8250.h>
+ #include <linux/slab.h>
 diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index b7fdcfd5d4e7..3c37f3a6431c 100644
+index 3c37f3a6431c..e2f8dfcdd2a9 100644
 --- a/drivers/power/supply/Kconfig
 +++ b/drivers/power/supply/Kconfig
-@@ -195,13 +195,6 @@ config BATTERY_SAMSUNG_SDI
- 	  Say Y to enable support for Samsung SDI battery data.
- 	  These batteries are used in Samsung mobile phones.
+@@ -28,15 +28,6 @@ config POWER_SUPPLY_HWMON
+ 	  Say 'Y' here if you want power supplies to
+ 	  have hwmon sysfs interface too.
  
--config BATTERY_TOSA
--	tristate "Sharp SL-6000 (tosa) battery"
--	depends on MACH_TOSA && MFD_TC6393XB && TOUCHSCREEN_WM97XX
--	help
--	  Say Y to enable support for the battery on the Sharp Zaurus
--	  SL-6000 (tosa) models.
 -
- config BATTERY_COLLIE
- 	tristate "Sharp SL-5500 (collie) battery"
- 	depends on SA1100_COLLIE && MCP_UCB1200
+-config PDA_POWER
+-	tristate "Generic PDA/phone power driver"
+-	depends on !S390
+-	help
+-	  Say Y here to enable generic power driver for PDAs and phones with
+-	  one or two external power supplies (AC/USB) connected to main and
+-	  backup batteries, and optional builtin charger.
+-
+ config APM_POWER
+ 	tristate "APM emulation for class batteries"
+ 	depends on APM_EMULATION
 diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 38737ea9b9d5..55c1aae91d1d 100644
+index 55c1aae91d1d..8cb3c7f5c111 100644
 --- a/drivers/power/supply/Makefile
 +++ b/drivers/power/supply/Makefile
-@@ -36,7 +36,6 @@ obj-$(CONFIG_BATTERY_LEGO_EV3)	+= lego_ev3_battery.o
- obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
- obj-$(CONFIG_BATTERY_OLPC)	+= olpc_battery.o
- obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+= samsung-sdi-battery.o
--obj-$(CONFIG_BATTERY_TOSA)	+= tosa_battery.o
- obj-$(CONFIG_BATTERY_COLLIE)	+= collie_battery.o
- obj-$(CONFIG_BATTERY_INGENIC)	+= ingenic-battery.o
- obj-$(CONFIG_BATTERY_IPAQ_MICRO) += ipaq_micro_battery.o
-diff --git a/drivers/power/supply/tosa_battery.c b/drivers/power/supply/tosa_battery.c
+@@ -9,7 +9,6 @@ obj-$(CONFIG_POWER_SUPPLY)	+= power_supply.o
+ obj-$(CONFIG_POWER_SUPPLY_HWMON) += power_supply_hwmon.o
+ obj-$(CONFIG_GENERIC_ADC_BATTERY)	+= generic-adc-battery.o
+ 
+-obj-$(CONFIG_PDA_POWER)		+= pda_power.o
+ obj-$(CONFIG_APM_POWER)		+= apm_power.o
+ obj-$(CONFIG_AXP20X_POWER)	+= axp20x_usb_power.o
+ obj-$(CONFIG_IP5XXX_POWER)	+= ip5xxx_power.o
+diff --git a/drivers/power/supply/pda_power.c b/drivers/power/supply/pda_power.c
 deleted file mode 100644
-index 73d4aca4c386..000000000000
+index 03a37fd6be27..000000000000
+diff --git a/include/linux/pda_power.h b/include/linux/pda_power.h
+deleted file mode 100644
+index 2a69db4b60b7..000000000000
 -- 
 2.39.0
 
