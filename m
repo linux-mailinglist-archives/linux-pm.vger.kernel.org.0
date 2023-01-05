@@ -2,151 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B86765F154
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 17:42:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92FFE65F267
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 18:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229484AbjAEQmz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Jan 2023 11:42:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38560 "EHLO
+        id S231997AbjAERRz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Jan 2023 12:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231539AbjAEQmy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 11:42:54 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445E844C41;
-        Thu,  5 Jan 2023 08:42:51 -0800 (PST)
-Received: from mercury (dyndsl-085-016-198-020.ewe-ip-backbone.de [85.16.198.20])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C58986602D31;
-        Thu,  5 Jan 2023 16:42:49 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672936969;
-        bh=8aKuVcvKaY4ukEOxg5ehSqgBbLHOwST3J9TZePpwcKg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IUKKhUv7xHnNabr8CGt6dkPSycsVA6oQ9gxQaeJB+iVpjfb0/mdr1Wh07+3Y5mBxT
-         uMFvCBLPSmnkPg2Fr07UtZIXQW4O3c9spI3AwEysQOHU8XHa7JVRS6FstSuEquplXI
-         vu96FvtWX6WTCQE2X1n0AfzmwqM7S9DSvhpCQOt3Opp1IItMRAyBHQ6MolwqWaDiy0
-         c7dcFMUupxHQZI16Q4WdoREnsaSAo2iHNOCyQWVeIjuDEI6f5f5f5ZqunJ+ByfTnOL
-         eB/6kadzAmObqYJWy/9p9HZA87niXSqhwRobknGLoWWCsgWXICc4aGLJFbCD+pprN/
-         ugjiDeF7Uwr5Q==
-Received: by mercury (Postfix, from userid 1000)
-        id 36CB81060772; Thu,  5 Jan 2023 17:42:47 +0100 (CET)
-Date:   Thu, 5 Jan 2023 17:42:47 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 07/27] power: remove tosa_battery driver
-Message-ID: <20230105164247.ss7yckr54ce6xg6n@mercury.elektranox.org>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-8-arnd@kernel.org>
+        with ESMTP id S235266AbjAERRe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 12:17:34 -0500
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 064726C11E;
+        Thu,  5 Jan 2023 09:10:12 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id x22so91471780ejs.11;
+        Thu, 05 Jan 2023 09:10:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n/BBQ+OPgvYUKXce2y29vr0ZH4HpWLk2tV8gs/xaSNg=;
+        b=PHxx42S5qwOs5QJUigFbwPIUrDHofqsN+r3FkGec9ZulreOWVNHcKO+Cr4SKvAup+P
+         2QNvrppTdDEhp+ZYMTzilzCHGx0zFbBqVV4rqtLA/+2mQ3QqpGJofEVlC/wlz8knvIwL
+         5fu8A/YRUpwArQkuy0DSO4PIOYoUJo8VEiXTpYWeu75PWlNhr6Lgs1oI9a7mpctZN5vZ
+         vOjMt+hid/iXbSehZdG+gUySRKpjI3GMH+nZT9gugLMZzPzMkdVNWgyamdjH76V+TthH
+         dCeRftiH35CPF/btNd9rcLnhq4t/qngW/3NwTYCzP4ll0ilquj2X4SSRfnBwZtI7yhFD
+         cbww==
+X-Gm-Message-State: AFqh2krbYFNCRZ51PhMMJ1G9xs8u3J6shSZ2I0jo71sRnAmYflAbptf4
+        gO6yc1N/qwiK3mpAi1c1GRmDhWq2SmTwqZk3F4E=
+X-Google-Smtp-Source: AMrXdXu73bgFfbjER4ngLAu94zLLsU74bQE1340TgBNQOo3hhRlDLQUN8GaWP0URpOHlBHtGV9UxVWKctXVu+bazkwM=
+X-Received: by 2002:a17:907:98ee:b0:7c1:5ff0:6cc2 with SMTP id
+ ke14-20020a17090798ee00b007c15ff06cc2mr3688622ejc.246.1672938610886; Thu, 05
+ Jan 2023 09:10:10 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="bpfqr5dgxvb62ozq"
-Content-Disposition: inline
-In-Reply-To: <20230105134622.254560-8-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105041059.39366-1-kvijayab@amd.com>
+In-Reply-To: <20230105041059.39366-1-kvijayab@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 5 Jan 2023 18:09:59 +0100
+Message-ID: <CAJZ5v0g1Mu8ip68one_gsAR3xmyua+6m1uJqb3n92xxYWeR+FA@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
+ be onlined for x2apic
+To:     Kishon Vijay Abraham I <kvijayab@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Borislav Petkov <bpetkov@amd.com>,
+        Leo Duran <leo.duran@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jan 5, 2023 at 5:11 AM Kishon Vijay Abraham I <kvijayab@amd.com> wrote:
+>
+> Section 5.2.12.12 Processor Local x2APIC Structure in the ACPI v6.5
+> spec mandates that both "enabled" and "online capable" Local APIC Flags
+> should be used to determine if the processor is usable or not.
+>
+> However, Linux doesn't use the "online capable" flag for x2APIC to
+> determine if the processor is usable. As a result, cpu_possible_mask has
+> incorrect value and results in more memory getting allocated for per_cpu
+> variables than it is going to be used.
+>
+> Make sure Linux parses both "enabled" and "online capable" flags for
+> x2APIC to correctly determine if the processor is usable.
+>
+> Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+> Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+> Reported-by: Leo Duran <leo.duran@amd.com>
+> Signed-off-by: Kishon Vijay Abraham I <kvijayab@amd.com>
 
---bpfqr5dgxvb62ozq
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Hi,
-
-On Thu, Jan 05, 2023 at 02:46:02PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The PXA tosa machine is removed, so this driver is no longer
-> in use.
->=20
-> Cc: Sebastian Reichel <sre@kernel.org>
-> Cc: linux-pm@vger.kernel.org
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
-
-I suppose I could queue this directly, but feel free to just
-take it with the other two power-supply driver removal patches:
-
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/power/supply/Kconfig        |   7 -
->  drivers/power/supply/Makefile       |   1 -
->  drivers/power/supply/tosa_battery.c | 512 ----------------------------
->  3 files changed, 520 deletions(-)
->  delete mode 100644 drivers/power/supply/tosa_battery.c
->=20
-> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index b7fdcfd5d4e7..3c37f3a6431c 100644
-> --- a/drivers/power/supply/Kconfig
-> +++ b/drivers/power/supply/Kconfig
-> @@ -195,13 +195,6 @@ config BATTERY_SAMSUNG_SDI
->  	  Say Y to enable support for Samsung SDI battery data.
->  	  These batteries are used in Samsung mobile phones.
-> =20
-> -config BATTERY_TOSA
-> -	tristate "Sharp SL-6000 (tosa) battery"
-> -	depends on MACH_TOSA && MFD_TC6393XB && TOUCHSCREEN_WM97XX
-> -	help
-> -	  Say Y to enable support for the battery on the Sharp Zaurus
-> -	  SL-6000 (tosa) models.
-> -
->  config BATTERY_COLLIE
->  	tristate "Sharp SL-5500 (collie) battery"
->  	depends on SA1100_COLLIE && MCP_UCB1200
-> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index 38737ea9b9d5..55c1aae91d1d 100644
-> --- a/drivers/power/supply/Makefile
-> +++ b/drivers/power/supply/Makefile
-> @@ -36,7 +36,6 @@ obj-$(CONFIG_BATTERY_LEGO_EV3)	+=3D lego_ev3_battery.o
->  obj-$(CONFIG_BATTERY_PMU)	+=3D pmu_battery.o
->  obj-$(CONFIG_BATTERY_OLPC)	+=3D olpc_battery.o
->  obj-$(CONFIG_BATTERY_SAMSUNG_SDI)	+=3D samsung-sdi-battery.o
-> -obj-$(CONFIG_BATTERY_TOSA)	+=3D tosa_battery.o
->  obj-$(CONFIG_BATTERY_COLLIE)	+=3D collie_battery.o
->  obj-$(CONFIG_BATTERY_INGENIC)	+=3D ingenic-battery.o
->  obj-$(CONFIG_BATTERY_IPAQ_MICRO) +=3D ipaq_micro_battery.o
-> diff --git a/drivers/power/supply/tosa_battery.c b/drivers/power/supply/t=
-osa_battery.c
-> deleted file mode 100644
-> index 73d4aca4c386..000000000000
-> --=20
-> 2.39.0
->=20
-
---bpfqr5dgxvb62ozq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO2/gYACgkQ2O7X88g7
-+ppXtg//dXM5dD/nKB5FH4VpqRZ7yuXae/+iP+3qjW3N/FDEJ78zDeC5krZddlIr
-cQ3Ak1OBwjnTKASHu145mBvEqNNz+qWznvQhDPev1mWcpjapBK/44P96NPb/uC4u
-zQdKZOynNPZcEE9vP96XxB4Yorwffc01FiRYZ3IqdpvScT8f90IR32cwGntSMy3E
-W62LTzDClL3qeeuFenCkzReprfO+Xq2m9n7JeuSulHWzCH+nJwl9jqGZ9tmMMUIm
-vSTqEslb6Nygvlc/+WDp/T79iZ5HkhKyNsGe1NeVLZ0LGuoohgAVrdYDYksOHUTI
-OCQsy4SAUUM7wxPigJlBq+iEDLb4Gi3OIhDpEp3coc2t5kkldt4ZfAM/Jlt+8Wly
-nx5RTZdEfiCbRWzVeraXetl5XyZmadAVDZpdnpTzAQO46hbMWsmTofRR+15rH0xg
-NlJqPqe/Bu0mgyhIi+w/S86ZtXZSp1eazsKd10Ugh9S62ZGd2exsn9s1hA0zE7aw
-woDz0ok+/eidO39ZKpyWLwEbhZh5TBJjYWUudObGjwlwiBK4DRcKZsY3Zlaub4Cs
-ej03HZ89BoCMzKfm4GR/TWPfKQOVEAQVNl8blYWOBk58Leb936Zx1v8N3GFDBrj3
-p6KvH2qL3pWutzHxc60rN/uvksUiuldPhjTiQAgdz/80u8Peg6c=
-=VJog
------END PGP SIGNATURE-----
-
---bpfqr5dgxvb62ozq--
+> Changes from v1:
+> 1) Changed the ACPI spec version to 6.5 in the commit log
+> 2) Changed the Fixes tag to point to commit aa06e20f1be6
+> 3) Added "Reported-by: Leo Duran <leo.duran@amd.com>"
+>  arch/x86/kernel/acpi/boot.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+> index 907cc98b1938..518bda50068c 100644
+> --- a/arch/x86/kernel/acpi/boot.c
+> +++ b/arch/x86/kernel/acpi/boot.c
+> @@ -188,6 +188,17 @@ static int acpi_register_lapic(int id, u32 acpiid, u8 enabled)
+>         return cpu;
+>  }
+>
+> +static bool __init acpi_is_processor_usable(u32 lapic_flags)
+> +{
+> +       if (lapic_flags & ACPI_MADT_ENABLED)
+> +               return true;
+> +
+> +       if (acpi_support_online_capable && (lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+>  static int __init
+>  acpi_parse_x2apic(union acpi_subtable_headers *header, const unsigned long end)
+>  {
+> @@ -212,6 +223,10 @@ acpi_parse_x2apic(union acpi_subtable_headers *header, const unsigned long end)
+>         if (apic_id == 0xffffffff)
+>                 return 0;
+>
+> +       /* don't register processors that cannot be onlined */
+> +       if (!acpi_is_processor_usable(processor->lapic_flags))
+> +               return 0;
+> +
+>         /*
+>          * We need to register disabled CPU as well to permit
+>          * counting disabled CPUs. This allows us to size
+> @@ -250,9 +265,7 @@ acpi_parse_lapic(union acpi_subtable_headers * header, const unsigned long end)
+>                 return 0;
+>
+>         /* don't register processors that can not be onlined */
+> -       if (acpi_support_online_capable &&
+> -           !(processor->lapic_flags & ACPI_MADT_ENABLED) &&
+> -           !(processor->lapic_flags & ACPI_MADT_ONLINE_CAPABLE))
+> +       if (!acpi_is_processor_usable(processor->lapic_flags))
+>                 return 0;
+>
+>         /*
+> --
+> 2.34.1
+>
