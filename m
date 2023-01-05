@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8408B65F146
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 17:36:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA3C765F14F
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 17:40:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbjAEQgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Jan 2023 11:36:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
+        id S232058AbjAEQj5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Jan 2023 11:39:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbjAEQgH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 11:36:07 -0500
+        with ESMTP id S231854AbjAEQj4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 11:39:56 -0500
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECED5C1F5;
-        Thu,  5 Jan 2023 08:36:02 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A775C93A;
+        Thu,  5 Jan 2023 08:39:55 -0800 (PST)
 Received: from mercury (dyndsl-085-016-198-020.ewe-ip-backbone.de [85.16.198.20])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8CB856602D05;
-        Thu,  5 Jan 2023 16:36:00 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19B5C6602D2E;
+        Thu,  5 Jan 2023 16:39:54 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1672936560;
-        bh=MnPwaUoQ0C35/ls1pQRopCEmVNldekDhFBc4/K3a63M=;
+        s=mail; t=1672936794;
+        bh=yXwx9n9SOieuowPORXakwLQHMJ/JC6ORQetamn1DCkw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MIVk0nC0fhdlpYVwVdFKP6GsCvnu2MD4i17ThhL6mjqgCBcqBZp3DG+zSNgNo/X2Q
-         hUkiQwIzq4700Um86Q4d9BcFs2R/2mcbnXCfBdLfMMx+1pxzLpZWkM2YLjzfuytPfG
-         wwhOrbUO/DHrKjcrfhsBgwsPd4n4H5jbfpsnPloVVla4AeqXxsRzPnr/D7mTGw/eBz
-         /5L1jqxUBmLJ3Ol19fDcGVKtnCrAOdVDmuD16mRqM9WPdoQb3Tx2/4DoUdJCWL6Pr0
-         FQPOIYvVLpHOHwQeBGy0ZPpLwRhwAbAg8WeAfv6mzPDxh6xSGyPex2SAEiC6wv8BWB
-         tagVxMwSVBFTw==
+        b=faNUYQzIkgwCvrSX0W7O408Z7BzZ/E85sc2/yCn78J+7GcX3FKtGP2sX21VvLswIk
+         Y7mGik2LLnGkzSL7BQbmlEhsNbM7uifdSELmEWE3jepqDcWfCUckVJlAV1Xd/q2A1R
+         OYTR1nlHibodYkKRoMtNqVyl3U2UTzO+SCMxRS17qUraAjEGmZdO2azg7KSsplUam0
+         ilCOLI2okAmY1ySXFg0Ne2VSv1naENIPx/epeXnsw+KVN1ChBFPv8aySK8HcujCGKv
+         3H4B2UrakjfZzNrf6Hu7qTweT5raSiB6o2bJIqCRjJNSY/BVtANQ31LCR1jnOj3kDr
+         tgaprobQfs0+g==
 Received: by mercury (Postfix, from userid 1000)
-        id 00DCF1060772; Thu,  5 Jan 2023 17:35:57 +0100 (CET)
-Date:   Thu, 5 Jan 2023 17:35:57 +0100
+        id 0FB661060772; Thu,  5 Jan 2023 17:39:51 +0100 (CET)
+Date:   Thu, 5 Jan 2023 17:39:51 +0100
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Arnd Bergmann <arnd@kernel.org>
 Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
         Daniel Mack <daniel@zonque.org>,
         Haojian Zhuang <haojian.zhuang@gmail.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
-        Peter Edwards <sweetlilmre@gmail.com>
-Subject: Re: [PATCH 06/27] power: remove z2_battery driver
-Message-ID: <20230105163557.waq3ckjshtkzu357@mercury.elektranox.org>
+        Arnd Bergmann <arnd@arndb.de>, Anton Vorontsov <cbou@mail.ru>,
+        linux-pm@vger.kernel.org
+Subject: Re: [PATCH 16/27] power: remove pda_power supply driver
+Message-ID: <20230105163951.jidh4fu5bjpjvrj4@mercury.elektranox.org>
 References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-7-arnd@kernel.org>
+ <20230105134622.254560-17-arnd@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5scsoqmnkympzuvc"
+        protocol="application/pgp-signature"; boundary="eprnmz3cd337hg2r"
 Content-Disposition: inline
-In-Reply-To: <20230105134622.254560-7-arnd@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230105134622.254560-17-arnd@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        TVD_SUBJ_WIPE_DEBT autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -61,98 +61,135 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---5scsoqmnkympzuvc
+--eprnmz3cd337hg2r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Thu, Jan 05, 2023 at 02:46:01PM +0100, Arnd Bergmann wrote:
+On Thu, Jan 05, 2023 at 02:46:11PM +0100, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 >=20
-> The PXA z2 platform is gone, and this driver is now orphaned.
+> This driver was used for a couple of Intel PXA and Samsung S3C24xx
+> based PDAs, but all of those are now removed from the kernel, so
+> the driver itself is no longer useful.
 >=20
-> Cc: linux-pm@vger.kernel.org
-> Cc: Peter Edwards <sweetlilmre@gmail.com>
 > Cc: Sebastian Reichel <sre@kernel.org>
+> Cc: Anton Vorontsov <cbou@mail.ru>
+> Cc: linux-pm@vger.kernel.org
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
 
-This should go through the same tree as the patch removing
-arch/arm/mach-pxa/z2.c, which includes z2_battery.h removed
-by this patch, so:
+This needs to go through the same tree as the patch removing the PXA
+boards, since they include pda_power.h:
 
 Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
->  drivers/power/supply/Kconfig      |   6 -
->  drivers/power/supply/Makefile     |   1 -
->  drivers/power/supply/z2_battery.c | 318 ------------------------------
->  include/linux/z2_battery.h        |  17 --
->  4 files changed, 342 deletions(-)
->  delete mode 100644 drivers/power/supply/z2_battery.c
->  delete mode 100644 include/linux/z2_battery.h
+>  Documentation/power/power_supply_class.rst |   4 +-
+>  arch/arm/mach-tegra/tegra.c                |   1 -
+>  drivers/power/supply/Kconfig               |   9 -
+>  drivers/power/supply/Makefile              |   1 -
+>  drivers/power/supply/pda_power.c           | 520 ---------------------
+>  include/linux/pda_power.h                  |  39 --
+>  6 files changed, 2 insertions(+), 572 deletions(-)
+>  delete mode 100644 drivers/power/supply/pda_power.c
+>  delete mode 100644 include/linux/pda_power.h
 >=20
+> diff --git a/Documentation/power/power_supply_class.rst b/Documentation/p=
+ower/power_supply_class.rst
+> index c04fabee0a58..da8e275a14ff 100644
+> --- a/Documentation/power/power_supply_class.rst
+> +++ b/Documentation/power/power_supply_class.rst
+> @@ -40,8 +40,8 @@ kind of power supply, and can process/present them to a=
+ user in consistent
+>  manner. Results for different power supplies and machines are also direc=
+tly
+>  comparable.
+> =20
+> -See drivers/power/supply/ds2760_battery.c and drivers/power/supply/pda_p=
+ower.c
+> -for the example how to declare and handle attributes.
+> +See drivers/power/supply/ds2760_battery.c for the example how to declare
+> +and handle attributes.
+> =20
+> =20
+>  Units
+> diff --git a/arch/arm/mach-tegra/tegra.c b/arch/arm/mach-tegra/tegra.c
+> index ab5008f35803..9ef1dfa7b926 100644
+> --- a/arch/arm/mach-tegra/tegra.c
+> +++ b/arch/arm/mach-tegra/tegra.c
+> @@ -19,7 +19,6 @@
+>  #include <linux/of_fdt.h>
+>  #include <linux/of.h>
+>  #include <linux/of_platform.h>
+> -#include <linux/pda_power.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/serial_8250.h>
+>  #include <linux/slab.h>
 > diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-> index 98d4e9364606..b7fdcfd5d4e7 100644
+> index 3c37f3a6431c..e2f8dfcdd2a9 100644
 > --- a/drivers/power/supply/Kconfig
 > +++ b/drivers/power/supply/Kconfig
-> @@ -422,12 +422,6 @@ config BATTERY_MAX1721X
->  	  Say Y here to enable support for the MAX17211/MAX17215 standalone
->  	  battery gas-gauge.
+> @@ -28,15 +28,6 @@ config POWER_SUPPLY_HWMON
+>  	  Say 'Y' here if you want power supplies to
+>  	  have hwmon sysfs interface too.
 > =20
-> -config BATTERY_Z2
-> -	tristate "Z2 battery driver"
-> -	depends on I2C && MACH_ZIPIT2
-> -	help
-> -	  Say Y to include support for the battery on the Zipit Z2.
 > -
->  config BATTERY_TWL4030_MADC
->  	tristate "TWL4030 MADC battery driver"
->  	depends on TWL4030_MADC
+> -config PDA_POWER
+> -	tristate "Generic PDA/phone power driver"
+> -	depends on !S390
+> -	help
+> -	  Say Y here to enable generic power driver for PDAs and phones with
+> -	  one or two external power supplies (AC/USB) connected to main and
+> -	  backup batteries, and optional builtin charger.
+> -
+>  config APM_POWER
+>  	tristate "APM emulation for class batteries"
+>  	depends on APM_EMULATION
 > diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-> index 2fb02f19a9e0..38737ea9b9d5 100644
+> index 55c1aae91d1d..8cb3c7f5c111 100644
 > --- a/drivers/power/supply/Makefile
 > +++ b/drivers/power/supply/Makefile
-> @@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_DA9150)	+=3D da9150-fg.o
->  obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
->  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
->  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
-> -obj-$(CONFIG_BATTERY_Z2)	+=3D z2_battery.o
->  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
->  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
->  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
-> diff --git a/drivers/power/supply/z2_battery.c b/drivers/power/supply/z2_=
-battery.c
+> @@ -9,7 +9,6 @@ obj-$(CONFIG_POWER_SUPPLY)	+=3D power_supply.o
+>  obj-$(CONFIG_POWER_SUPPLY_HWMON) +=3D power_supply_hwmon.o
+>  obj-$(CONFIG_GENERIC_ADC_BATTERY)	+=3D generic-adc-battery.o
+> =20
+> -obj-$(CONFIG_PDA_POWER)		+=3D pda_power.o
+>  obj-$(CONFIG_APM_POWER)		+=3D apm_power.o
+>  obj-$(CONFIG_AXP20X_POWER)	+=3D axp20x_usb_power.o
+>  obj-$(CONFIG_IP5XXX_POWER)	+=3D ip5xxx_power.o
+> diff --git a/drivers/power/supply/pda_power.c b/drivers/power/supply/pda_=
+power.c
 > deleted file mode 100644
-> index 0ba4a590a0a5..000000000000
-> diff --git a/include/linux/z2_battery.h b/include/linux/z2_battery.h
+> index 03a37fd6be27..000000000000
+> diff --git a/include/linux/pda_power.h b/include/linux/pda_power.h
 > deleted file mode 100644
-> index 9e8be7a7cd25..000000000000
+> index 2a69db4b60b7..000000000000
 > --=20
 > 2.39.0
 >=20
 
---5scsoqmnkympzuvc
+--eprnmz3cd337hg2r
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO2/GkACgkQ2O7X88g7
-+ppsfg/+LK69xDiO3ua++NzncMxGfJn1kFs4h46Nsekit7Kr90tHmoz/cbe1bLJ/
-4BcasBHgOaSxtjZhs5gfRczdoMVK8dlzH0ghAMbxton0jvFch4FvqlqmLqWYbxJZ
-n2rRgaLWSk+3zysi9efnLr7IB2Z8YaWakI2OGSPkPd94kmZt8QZ9x7gpb3Zhn8Nc
-Yhinw92K3Mbtai1+SWYroeXasw/H0ilqOfd9Pb3NCnLjqaY3ynA2UXcgqubuRpLM
-qAbSP7rFfbCYeqGzRxUg/HpDrg34WvqfSE5lqzru47Q6yP2gkwQAS/rR35wa1/Yx
-JVdJg1C7maLe7lpCI1At2V0RkYdGgg5+5cHD24KgDPCr6IubFUCrU+ixAKcoY9f5
-qSa0tbh5kfBF0u4jFGMtjcJ7f7/G7pKPcNWFnlJeqTXHik9Oo+fOZJCwp4t0PApY
-Yj4OUcP18QXHH1lF0yDzTN0bwKRRE+iM+Yl97e6+4TV8msYrOCOhgLL6jvFtqw0l
-A4dN57nQvvKFcJyf7M1r3p7J7EUYyLupDZFQv7r/TCtpL2MLWl8giRBXhaT6UnJE
-WP8KhOAkSyBFXZJieTed5fPmFKITtoAvyfESXb7onQCQ8aEaT1po5yhFiP+GfXow
-CaJNAuHrlb1x2sxxNg7O8HolsL0VUWGqYLFX854FBNUFnypWoKs=
-=cFGK
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO2/VYACgkQ2O7X88g7
++ppWRA/9H5z/ZHsm6NrlNVwy9rJomhqv7MipFRX5IdVE+yMSXCD+aqWydfHkQGtd
+q3CR91BZMcs7SoQLHOKHrDbpxzVgRvqYLjMdzjwn98KN0p7KkmvlMBIoA1dnvDbp
+EVfkexgvZZF3j1NJo/jW/uSggBAEmb1QZAHmlXM7cBMqkMpRdXk0Q4YFEX+wvjqr
+A6EnMWajRfy7meisBop7Un8keWG56nrtP0PkQcgdRUTtHy2k9CIfeCnov1KZJsoI
+KfEcQznb21OoXgsDycU59P+YCl0GiVRCoTFvZhFfJ2HNf42EVBZv3GnUTeUc5qDV
+cX5fBRcG/R4Vkbr8Stlmcj2R+5c24RpNb1+7vLnrnyGhBaxwCtrBepZBkrka1b03
+6TEWZIp9ywDdiXKqqd7BO5Teknm/PS+L8lVcXUIYYTNrmz6g0NYCZ31PU6/7kcJl
+Z2+y4p9cAZA8Uu+kJ6EmNpWs5PdSs1qEE8rr8rG+ZznUZ+nu07nPwPHVhrxvLgHz
+EcaN7Od6CDZ8B0mRKIa9GScdZv2+ZszwmllVaxbjfueln8qYZA8tSUnjKcKbWTKS
+jOj1pE8XeFckgcEY7KQU6/Iol0Tf0tkquvVnQOS6PVV39NtXGMPo1QqaFQbeFTV2
+5GaqmDHtXRb/UPBqXUoh0ULsT561OK7etxHjjTseNImELiftQks=
+=NWFd
 -----END PGP SIGNATURE-----
 
---5scsoqmnkympzuvc--
+--eprnmz3cd337hg2r--
