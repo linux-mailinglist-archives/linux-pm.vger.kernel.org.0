@@ -2,150 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DA0C65F0B7
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 17:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8408B65F146
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 17:36:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbjAEQDt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 5 Jan 2023 11:03:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47932 "EHLO
+        id S233993AbjAEQgI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 5 Jan 2023 11:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjAEQDs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 11:03:48 -0500
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2067.outbound.protection.outlook.com [40.107.94.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6CB1AA15;
-        Thu,  5 Jan 2023 08:03:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ROAseuMe4YCoWbPIDpX8sP45nvgYXNttKf9AC4Jn9dfaWvEjSLN0Pj1H0360CWkMRXFcCIHhbwtGcL/xWi+onBJaqyqWAt5cf7vqcjm4HOhboDzRUJnu3TVojB8ZLUk3lMjhekZqzNnuctF/MzAXclQ9aM+2WSfGA13EbvQCzmW2oH+kVTDYfioEdCPRS5964TjqySKpGJdZSMRI5qBM72Ie2k/21jOaCpwve/v27YZ8xhVpawqNb5FhscuPNaEELCJtmyaS9pUf/jmph6dGjPMmAiD9mXuy6dl4h79Vmwagin8m4hO5CR4k9rgnEgpUfmA/XC468QUrXEgTvJqozg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/KrvlfgFRbiBZnZNVBR4TV983B7OdZZM7IQ+32PNCpA=;
- b=LJaWQIUh5oCxa5r/BX1SwR9S4wwAgMf6v6Tpa9qWhBCVGGqAB5OqzYdANvgPJc3dLmYifHMvIs2zCKGqty7SKEBV0a/XssNOTJhheLQF9gjyybm1U4kp6ZTom015930qv0A/lIriVJA32Zwb/ZImSRwdWIgBcUY7xz6vvm6qMTsbDmeZfdVO+smmFNx5vn8Zvdw9qKNH8RZExgT15KIybZqgyy5mf4PkErenMD0Q9BJQIhG56gp+TvI72QxkSmXERHOMis02EzeIYxhahYFrkJd/6dQPkpsvuE2WYv6ku0+9W605NkXzIR4645exdMVDDW2qnEjJeajmQAeWHhsmsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/KrvlfgFRbiBZnZNVBR4TV983B7OdZZM7IQ+32PNCpA=;
- b=gHecbSP9PllK2i3JTFqSpDeZj/R9walMO+jkzmTujjdZWG3jaxvsvAd2iza/+c7lp4ragXs1Tf8vgpfYXPtAA6XYx37FHMBHu5w1adsIpkLcUwQR5boevUg1fPxNoHes3LOURqbCIDWDNvaB9r1mdSJ0jKVL6trOyB5SBkqzkJc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
- by DM4PR12MB7549.namprd12.prod.outlook.com (2603:10b6:8:10f::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Thu, 5 Jan
- 2023 16:03:45 +0000
-Received: from BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::45ef:724b:4b64:b98]) by BY5PR12MB3876.namprd12.prod.outlook.com
- ([fe80::45ef:724b:4b64:b98%3]) with mapi id 15.20.5944.019; Thu, 5 Jan 2023
- 16:03:45 +0000
-Message-ID: <9afd6384-fb1a-933f-7873-eaeec38cc65c@amd.com>
-Date:   Thu, 5 Jan 2023 21:33:30 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH v9 09/13] cpufreq: amd-pstate: add driver working mode
- switch support
-Content-Language: en-US
-To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
-        Mario.Limonciello@amd.com, ray.huang@amd.com,
-        viresh.kumar@linaro.org
-Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
-        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
-        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221225163442.2205660-1-perry.yuan@amd.com>
- <20221225163442.2205660-10-perry.yuan@amd.com>
-From:   Wyes Karny <wyes.karny@amd.com>
-In-Reply-To: <20221225163442.2205660-10-perry.yuan@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0229.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:eb::11) To BY5PR12MB3876.namprd12.prod.outlook.com
- (2603:10b6:a03:1a7::26)
+        with ESMTP id S232270AbjAEQgH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 5 Jan 2023 11:36:07 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECED5C1F5;
+        Thu,  5 Jan 2023 08:36:02 -0800 (PST)
+Received: from mercury (dyndsl-085-016-198-020.ewe-ip-backbone.de [85.16.198.20])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8CB856602D05;
+        Thu,  5 Jan 2023 16:36:00 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1672936560;
+        bh=MnPwaUoQ0C35/ls1pQRopCEmVNldekDhFBc4/K3a63M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MIVk0nC0fhdlpYVwVdFKP6GsCvnu2MD4i17ThhL6mjqgCBcqBZp3DG+zSNgNo/X2Q
+         hUkiQwIzq4700Um86Q4d9BcFs2R/2mcbnXCfBdLfMMx+1pxzLpZWkM2YLjzfuytPfG
+         wwhOrbUO/DHrKjcrfhsBgwsPd4n4H5jbfpsnPloVVla4AeqXxsRzPnr/D7mTGw/eBz
+         /5L1jqxUBmLJ3Ol19fDcGVKtnCrAOdVDmuD16mRqM9WPdoQb3Tx2/4DoUdJCWL6Pr0
+         FQPOIYvVLpHOHwQeBGy0ZPpLwRhwAbAg8WeAfv6mzPDxh6xSGyPex2SAEiC6wv8BWB
+         tagVxMwSVBFTw==
+Received: by mercury (Postfix, from userid 1000)
+        id 00DCF1060772; Thu,  5 Jan 2023 17:35:57 +0100 (CET)
+Date:   Thu, 5 Jan 2023 17:35:57 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org,
+        Peter Edwards <sweetlilmre@gmail.com>
+Subject: Re: [PATCH 06/27] power: remove z2_battery driver
+Message-ID: <20230105163557.waq3ckjshtkzu357@mercury.elektranox.org>
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-7-arnd@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|DM4PR12MB7549:EE_
-X-MS-Office365-Filtering-Correlation-Id: a39a8a03-e118-4f9e-00b4-08daef366bed
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tQElmYx4FsZC4d+gfNtdudf9LRNLNZ5SHbkD7R77lp6+36pRubAA/W3R67grDCdpiCRyB7vwpbIgqFg/yyce9EQP4l27PjV7VULnlM5GdD7DCKSwfSByRAUcEVSU9xMy2WYQs6N83mWW9b5RK50TA/nMoWWjFxB0fKQhkIucJdsJvNCurQmP0ozlQfsr53aYE9D/KgmrthFM4iosE0bmnvgrVf1Y9N17ObwfYFtjc0C1jn2Pb+85vV3R3JjWWRuaDUPkTQrDthqyP/5sr70n1xvU5XcMslfXyilet0Dm+EZgO3APD9jL64zIlLU5Iz44n77LePBNHbr6zZvx9TuW5stGROMQYFo//AsXAWPj79RQYZfNmdiUTu4j35FQHCLGlzwgUxWwCYw/7KU7VqjqqZ2RRxzzTLKGskAjDu1OCs30ZYZVjL9jJfgpJwX+GrzyT8Ha1SOXnpk8euo3lkhAJU1TmSLiv31DfXgslwgVK8LrQjsLeBnqsR2CLdZkd1d12ziEuxiDvSM4m92fCYWDBndXVAFbNELuJBsFDzhD0dz7ugbBqJHCkU2AImpxRK0sziReU3RZK1T/BrzpJBqtuyE6V0gtyvmf0W7HtIbv7Wi6r9jcWRByK55pn6HsV8gbyEFWoPmLuQzfbCTgs98KhGLk1Nsch2AnKU1kalAr15m+SvEEezA9/lbBoKmdW9ZvPAWZZlC18ChUhtSGvF8AWA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(366004)(136003)(376002)(396003)(451199015)(2616005)(83380400001)(31696002)(86362001)(38100700002)(4744005)(36756003)(44832011)(2906002)(41300700001)(5660300002)(4326008)(66946007)(8676002)(66556008)(66476007)(8936002)(316002)(478600001)(26005)(53546011)(186003)(6486002)(6512007)(31686004)(6506007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RW9FenJUcytkTWtNNTlkL0tRUnBvQzVMSVFyRW5WcS9pbjJ3T2tTN3lhQ0NR?=
- =?utf-8?B?b0g3aUl0U1o5ajhVcHgrNmdnQitwVUJiSW1EWWlqWHNxWGtUTkRmWmpTdHpZ?=
- =?utf-8?B?YTIxSkk0QlhwdERNc1ZPYzVnM2ErZXQyYWNaU3l3bmxiK2dZUFFTb1VLaVpa?=
- =?utf-8?B?MDlHTFRuUTR4aVBLdDVsQ3ZuZmJBbThoWTRFc2N6cFpkRkdKY2FDZTJQamVj?=
- =?utf-8?B?d3FZNFhKRzRzckF2SHFCemVDZzhqQ0RMM0FHN0N0OUthOFAzRkxNY3VEVjB5?=
- =?utf-8?B?YlFxUTZrcGh3NzVxeExhSzc0d3ltMXRXQzVTcEdCVm1XaE5hVlBiWFVYVG1U?=
- =?utf-8?B?MVAyUFpvalJJaU1Kc1BKL3A4L1l5V2p2bldTNk84UUJsd2p2amNXUHNlVS9W?=
- =?utf-8?B?amF3SXN3NlJsQ2ZLT2hweEpqNEYvM1ltYlEyNjRwMUxJSVgrOHJPa3luS25o?=
- =?utf-8?B?TlFoNVBSWUdScktFUGdXV1phdXQ5Mmd2WDRjcml6dy9pZzUvYS9sbENBNzRU?=
- =?utf-8?B?YUQzMW9qdUw5SzdTMHdlL3VTQ01hVjk2NzZyaUpCZlFyeFFNajZzZ0s5bkM5?=
- =?utf-8?B?WGFzWDc2ZVNOWWZGM2dqQ1JXR3krZnYxZ3M4TnVXOHhweWxZaFdYd1JOWGtO?=
- =?utf-8?B?VDM0bzBQeERCQ1Iva3hSTEtYVzludkZRemMweDJxc1JHbjV6bVF1SG81T1Bz?=
- =?utf-8?B?eC9lK0hGYXQrTnRTTU9pbFVpRzd1RnNKcEVSdS9pM2s3aFNJRFhjY0hmc3Zk?=
- =?utf-8?B?UVcwNmNUNFlJUFRFRlN3clNEdEZxVWZzQ2RzLzZlL0JUMWQ4SFRvUWVUYytx?=
- =?utf-8?B?aXZVdGNkTllGcXpsdWxOdWNPUkxwNmxkREMyRldOK1NaSnNSajgzVkpCKzhQ?=
- =?utf-8?B?dTF1QWI2NTRERkQxc3BaNStMQ1hEcFZuNjZPOUdxT0FzQlJtVEpCa3lDQ2JK?=
- =?utf-8?B?SkRQK0N4Zk55emk3R3hDenpYbkpORTlBbm5aRGJXb2xla3g2QlVrZ1YzSWdm?=
- =?utf-8?B?QlhORkJNOWY2SnozSmNTNE1ZMFltUnFXN29aNEZVeTlncHVDbGFad3hMSWtk?=
- =?utf-8?B?TzVPM1JWMVFkZmRLS3Q1cjdxM1QvTkhZL0lOYlZtNXY0SUtud0FseUVSVEFP?=
- =?utf-8?B?U0dNbXY2ZnJON1RubGdZdE1ySlNiNFplTWxsc2c4Qm4yUjdMWmp6UE9NZE52?=
- =?utf-8?B?Y0x3dnl4ZW1RR04yZFZtc3gvRkNHUlB5NjNGVWdubGZsN0Ezbm1JVEhRMEFR?=
- =?utf-8?B?TVgyNDNJZk1aQzNscTRHeE54V0Y2VlFpZDhKSzBNQVR4U0NrdnFWeTA5K3l4?=
- =?utf-8?B?VTVwc1FKMStlakhqY0JRMjc4WTNLT1NRbkpwaEwxZ2NTakdFMkM3RnFYR2lO?=
- =?utf-8?B?U2FMRkQ4bzM5aEdBeGQvZnc5KzljODVaeHFKb3prUW1vNzV5NWpiMDRzSFZY?=
- =?utf-8?B?M2E4WVVQZXU1MnduOWZndVhGdDVzWVNNMVpjM3JoYkYvY3lQUGlTdFVONmpF?=
- =?utf-8?B?QXZ1R2tBQVVvaU1vbjhRcVM5R0FYczF5czc0aHk1Tmw5bE84Q0FBRnV6SzJz?=
- =?utf-8?B?eWR0YlVmNlJ4dXF5Sjd2ZTFHcjV1ZnE0NFdMTWZYMGFhVFhjTjR0NXg2YU1V?=
- =?utf-8?B?N3A1S1JGd251SWg2cTBPc1Jaa0xqWnJIU2wxcWsxazdMZ0RUUUF3L04wbG9o?=
- =?utf-8?B?dGJmNnh5R3J2ZUo0dTZ4TUJDQ2hoWFB5Und4RXZKd2VJN0ZJMC9Wb3hMZmdp?=
- =?utf-8?B?c2t4U3kwZVQ2Y01qTmNMbzJiSnVGeGF1N21rdklYUzZXazhjS1RoV3V6VUc1?=
- =?utf-8?B?MTh1QVlYNmJOb3B0SnJsNlNlazF2OUFIdkZoMlZzSlV0N0hTWmtVSlFXTHJ6?=
- =?utf-8?B?NTlxWXcvTU9WbmtGc2lxamkyaWZDQ2V3dWY1Y2t5MnBWRFczUWl6dkg2S0hx?=
- =?utf-8?B?anY0MTVGa0pxbVgxNlAvZG9nQnBUWS8yWEk5cUVGUTVVdlNlSVFFOHM3MXhN?=
- =?utf-8?B?QmU2RXlQdHd6VEpqS25vVVQrU3pFbURnYVFwMDJRMkE5dVlZc3JvYVpqSTZI?=
- =?utf-8?B?OVJsa2tJT29uRnpnY2N6ZWp6MDIzTFBINnpxN2xCaUdHRHhpWG54cElRN0Qx?=
- =?utf-8?Q?jNLCGkdo5PoLX59C3BUpsbSvs?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a39a8a03-e118-4f9e-00b4-08daef366bed
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2023 16:03:45.1187
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2370xOi4IMtRMSa1fkeOzNgW1E0z3sEhbe6XRuPnBxEQXxexHA/Zol9pY02ITCfLDt3zNhaL1LS1arwWUOAw3g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7549
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5scsoqmnkympzuvc"
+Content-Disposition: inline
+In-Reply-To: <20230105134622.254560-7-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Perry,
 
-On 12/25/2022 10:04 PM, Perry Yuan wrote:
--------------------------------->8--------------------------------
-> +
-> +static int amd_pstate_update_status(const char *buf, size_t size)
-> +{
-> +	int ret;
-> +	int mode_idx;
-> +
-> +	if (size > 7 || size < 3)
-> +		return -EINVAL;
-> +	mode_idx = get_mode_idx_from_str(buf, size);
+--5scsoqmnkympzuvc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-if (size > 7 || size < 6) right?
-because possible strings are: "disable", "passive" and "active".
+Hi,
 
--- 
-Thanks & Regards,
-Wyes
+On Thu, Jan 05, 2023 at 02:46:01PM +0100, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> The PXA z2 platform is gone, and this driver is now orphaned.
+>=20
+> Cc: linux-pm@vger.kernel.org
+> Cc: Peter Edwards <sweetlilmre@gmail.com>
+> Cc: Sebastian Reichel <sre@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+
+This should go through the same tree as the patch removing
+arch/arm/mach-pxa/z2.c, which includes z2_battery.h removed
+by this patch, so:
+
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+>  drivers/power/supply/Kconfig      |   6 -
+>  drivers/power/supply/Makefile     |   1 -
+>  drivers/power/supply/z2_battery.c | 318 ------------------------------
+>  include/linux/z2_battery.h        |  17 --
+>  4 files changed, 342 deletions(-)
+>  delete mode 100644 drivers/power/supply/z2_battery.c
+>  delete mode 100644 include/linux/z2_battery.h
+>=20
+> diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+> index 98d4e9364606..b7fdcfd5d4e7 100644
+> --- a/drivers/power/supply/Kconfig
+> +++ b/drivers/power/supply/Kconfig
+> @@ -422,12 +422,6 @@ config BATTERY_MAX1721X
+>  	  Say Y here to enable support for the MAX17211/MAX17215 standalone
+>  	  battery gas-gauge.
+> =20
+> -config BATTERY_Z2
+> -	tristate "Z2 battery driver"
+> -	depends on I2C && MACH_ZIPIT2
+> -	help
+> -	  Say Y to include support for the battery on the Zipit Z2.
+> -
+>  config BATTERY_TWL4030_MADC
+>  	tristate "TWL4030 MADC battery driver"
+>  	depends on TWL4030_MADC
+> diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+> index 2fb02f19a9e0..38737ea9b9d5 100644
+> --- a/drivers/power/supply/Makefile
+> +++ b/drivers/power/supply/Makefile
+> @@ -54,7 +54,6 @@ obj-$(CONFIG_BATTERY_DA9150)	+=3D da9150-fg.o
+>  obj-$(CONFIG_BATTERY_MAX17040)	+=3D max17040_battery.o
+>  obj-$(CONFIG_BATTERY_MAX17042)	+=3D max17042_battery.o
+>  obj-$(CONFIG_BATTERY_MAX1721X)	+=3D max1721x_battery.o
+> -obj-$(CONFIG_BATTERY_Z2)	+=3D z2_battery.o
+>  obj-$(CONFIG_BATTERY_RT5033)	+=3D rt5033_battery.o
+>  obj-$(CONFIG_CHARGER_RT9455)	+=3D rt9455_charger.o
+>  obj-$(CONFIG_BATTERY_TWL4030_MADC)	+=3D twl4030_madc_battery.o
+> diff --git a/drivers/power/supply/z2_battery.c b/drivers/power/supply/z2_=
+battery.c
+> deleted file mode 100644
+> index 0ba4a590a0a5..000000000000
+> diff --git a/include/linux/z2_battery.h b/include/linux/z2_battery.h
+> deleted file mode 100644
+> index 9e8be7a7cd25..000000000000
+> --=20
+> 2.39.0
+>=20
+
+--5scsoqmnkympzuvc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmO2/GkACgkQ2O7X88g7
++ppsfg/+LK69xDiO3ua++NzncMxGfJn1kFs4h46Nsekit7Kr90tHmoz/cbe1bLJ/
+4BcasBHgOaSxtjZhs5gfRczdoMVK8dlzH0ghAMbxton0jvFch4FvqlqmLqWYbxJZ
+n2rRgaLWSk+3zysi9efnLr7IB2Z8YaWakI2OGSPkPd94kmZt8QZ9x7gpb3Zhn8Nc
+Yhinw92K3Mbtai1+SWYroeXasw/H0ilqOfd9Pb3NCnLjqaY3ynA2UXcgqubuRpLM
+qAbSP7rFfbCYeqGzRxUg/HpDrg34WvqfSE5lqzru47Q6yP2gkwQAS/rR35wa1/Yx
+JVdJg1C7maLe7lpCI1At2V0RkYdGgg5+5cHD24KgDPCr6IubFUCrU+ixAKcoY9f5
+qSa0tbh5kfBF0u4jFGMtjcJ7f7/G7pKPcNWFnlJeqTXHik9Oo+fOZJCwp4t0PApY
+Yj4OUcP18QXHH1lF0yDzTN0bwKRRE+iM+Yl97e6+4TV8msYrOCOhgLL6jvFtqw0l
+A4dN57nQvvKFcJyf7M1r3p7J7EUYyLupDZFQv7r/TCtpL2MLWl8giRBXhaT6UnJE
+WP8KhOAkSyBFXZJieTed5fPmFKITtoAvyfESXb7onQCQ8aEaT1po5yhFiP+GfXow
+CaJNAuHrlb1x2sxxNg7O8HolsL0VUWGqYLFX854FBNUFnypWoKs=
+=cFGK
+-----END PGP SIGNATURE-----
+
+--5scsoqmnkympzuvc--
