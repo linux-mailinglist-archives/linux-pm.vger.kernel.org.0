@@ -2,204 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D6565E177
-	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 01:23:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66FC65E1B6
+	for <lists+linux-pm@lfdr.de>; Thu,  5 Jan 2023 01:41:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235073AbjAEAWb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 4 Jan 2023 19:22:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60404 "EHLO
+        id S235071AbjAEAlC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 4 Jan 2023 19:41:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbjAEAWa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 19:22:30 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040BB43A34
-        for <linux-pm@vger.kernel.org>; Wed,  4 Jan 2023 16:22:29 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id cf42so52847389lfb.1
-        for <linux-pm@vger.kernel.org>; Wed, 04 Jan 2023 16:22:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ndoGo0L0trdB1SJI5vVwfFWDuQ8EsWjbtAz+We2f9E=;
-        b=oTeMSShq7t40VB0qniYCwFnFoh8geFbWJjFWyePKeAgjzdjoGs8O8EFAeApKozOWrH
-         EGJE4pajj7MZByog8CGg4xqNnal86ET28iJMtUwQgcXKaxTyPJmi+5/fO7GRCUPtbNr3
-         xreAh/8FA+czumvdHjpIfPbAzfcegE1Po5Lor2dyfc8kx9E2l3r1PsU4k9qKgThJ6r0Q
-         Kzo+VHWpzWkf666Rk2YMLQnee2l7EvzQYYfPudKauT12hMj7Ba0NLNr+MyO80M8l/amv
-         5OH7+QunZ6eKii+k+egFL8DAhh6uLd0w6GVwsb8sWUtbsm9Fx3TZ7cbGDvG5UbQYEUms
-         hyew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+ndoGo0L0trdB1SJI5vVwfFWDuQ8EsWjbtAz+We2f9E=;
-        b=1wMsEj9jyqGrxI9xROSH4VvH+29YLyp7UR0ozrEa3XUZ30SEwOaJ1k9jn/+e2Xqa98
-         q5S1z2XrdVRSq313aFXNKt+ZQJJ6syTGuy5o3rcaufvqjC7Y09YGx5cJTZyDZNIi2hAJ
-         NscHMZact80Whtou3PPJ4UXoh/Cbb5OZAKbNrUssIt7tgE82GJ0Q9jecaDQJRSB3+Zud
-         ESJcV+9LThbIr1eL1IiVnEAXsSQd+mHuz4Bi/p1NCrIPeswu6m8o60R7MONOsVR+sGBN
-         aAlwTb+0lBOhEwzNygMZ1reyHrtF+O/w0WRgycpxXHluTC6nR6Q6tF0ZQ58p+clRCesf
-         PDxw==
-X-Gm-Message-State: AFqh2kpM5t8EbgfusGEH5JBBD2kN2rcJHxfAdZULdG7AhcnJWGd1EEBJ
-        o0u0s4co/s31fLt/EMxA3w/VPA==
-X-Google-Smtp-Source: AMrXdXtJFiQ17gwDglGRIuACrY0HZ132bP+xsoouZJ5HYi6uoB0LGj6sS88T+m8y9bEInVaCzLsxEg==
-X-Received: by 2002:a05:6512:142:b0:4b5:a207:8d73 with SMTP id m2-20020a056512014200b004b5a2078d73mr12928034lfo.52.1672878147385;
-        Wed, 04 Jan 2023 16:22:27 -0800 (PST)
-Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id d18-20020ac241d2000000b004b4cbc942a3sm5291992lfi.127.2023.01.04.16.22.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Jan 2023 16:22:25 -0800 (PST)
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 3/3] interconnect: qcom: sm8550: switch to qcom_icc_rpmh_* function
-Date:   Thu,  5 Jan 2023 02:22:21 +0200
-Message-Id: <20230105002221.1416479-4-dmitry.baryshkov@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230105002221.1416479-1-dmitry.baryshkov@linaro.org>
-References: <20230105002221.1416479-1-dmitry.baryshkov@linaro.org>
+        with ESMTP id S240642AbjAEAio (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 4 Jan 2023 19:38:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 585FEB27;
+        Wed,  4 Jan 2023 16:38:18 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EDAF2B81986;
+        Thu,  5 Jan 2023 00:38:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7163AC433A8;
+        Thu,  5 Jan 2023 00:38:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1672879095;
+        bh=pmxqtakK705BzwWvBQE+dFM2C0amDkuSHY8pS0YL7kk=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=HpSI7DbJwfDBWYWgnC3IJV+TI4i6HhdV6ftIZTP9kjj7A2r1PmhVeTQws6/gUgjDs
+         XEQy8I/22rLla93nUH7+psF462w8zVdSkSxfm653ChDRnwsKoUFdeSzNOlfaovrG8x
+         SLJEf0QpDfhXfqRdoVtBFf8VKGvauavkCOaXK10ECfChVXH2aK0a+7HLrGlIhPkZ3y
+         fZe8ZgdnI434TREiF11EoMDELv0sEtrlHlO3Ae/mVYE6Y93BmNBBNInfpU9p2JWKJ/
+         dUMSkDfHSDLbUoLKVeBuja49ZAfWR/pM2lv4uHfIw6UHW7TNcg1NOqyAKScHLYVh2D
+         xEpk9dir8p4mA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id C78D35C1C64; Wed,  4 Jan 2023 16:38:14 -0800 (PST)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org
+Subject: [PATCH rcu 10/27] drivers/cpufreq: Remove "select SRCU"
+Date:   Wed,  4 Jan 2023 16:37:56 -0800
+Message-Id: <20230105003813.1770367-10-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Change sm8550 interconnect driver to use generic qcom_icc_rpmh_*
-functions rather than embedding a copy of thema. This also fixes an
-overallocation of memory for icc_onecell_data structure.
+Now that the SRCU Kconfig option is unconditionally selected, there is
+no longer any point in selecting it.  Therefore, remove the "select SRCU"
+Kconfig statements.
 
-Fixes: e6f0d6a30f73 ("interconnect: qcom: Add SM8550 interconnect provider driver")
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: <linux-pm@vger.kernel.org>
 ---
- drivers/interconnect/qcom/sm8550.c | 99 +-----------------------------
- 1 file changed, 2 insertions(+), 97 deletions(-)
+ drivers/cpufreq/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/interconnect/qcom/sm8550.c b/drivers/interconnect/qcom/sm8550.c
-index 54fa027ab961..d823ba988ef6 100644
---- a/drivers/interconnect/qcom/sm8550.c
-+++ b/drivers/interconnect/qcom/sm8550.c
-@@ -2165,101 +2165,6 @@ static const struct qcom_icc_desc sm8550_system_noc = {
- 	.num_bcms = ARRAY_SIZE(system_noc_bcms),
- };
+diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+index 2a84fc63371e2..785541df59379 100644
+--- a/drivers/cpufreq/Kconfig
++++ b/drivers/cpufreq/Kconfig
+@@ -3,7 +3,6 @@ menu "CPU Frequency scaling"
  
--static int qnoc_probe(struct platform_device *pdev)
--{
--	const struct qcom_icc_desc *desc;
--	struct icc_onecell_data *data;
--	struct icc_provider *provider;
--	struct qcom_icc_node * const *qnodes;
--	struct qcom_icc_provider *qp;
--	struct icc_node *node;
--	size_t num_nodes, i;
--	int ret;
--
--	desc = device_get_match_data(&pdev->dev);
--	if (!desc)
--		return -EINVAL;
--
--	qnodes = desc->nodes;
--	num_nodes = desc->num_nodes;
--
--	qp = devm_kzalloc(&pdev->dev, sizeof(*qp), GFP_KERNEL);
--	if (!qp)
--		return -ENOMEM;
--
--	data = devm_kcalloc(&pdev->dev, num_nodes, sizeof(*node), GFP_KERNEL);
--	if (!data)
--		return -ENOMEM;
--
--	provider = &qp->provider;
--	provider->dev = &pdev->dev;
--	provider->set = qcom_icc_set;
--	provider->pre_aggregate = qcom_icc_pre_aggregate;
--	provider->aggregate = qcom_icc_aggregate;
--	provider->xlate_extended = qcom_icc_xlate_extended;
--	INIT_LIST_HEAD(&provider->nodes);
--	provider->data = data;
--
--	qp->dev = &pdev->dev;
--	qp->bcms = desc->bcms;
--	qp->num_bcms = desc->num_bcms;
--
--	qp->voter = of_bcm_voter_get(qp->dev, NULL);
--	if (IS_ERR(qp->voter))
--		return PTR_ERR(qp->voter);
--
--	ret = icc_provider_add(provider);
--	if (ret) {
--		dev_err_probe(&pdev->dev, ret,
--			      "error adding interconnect provider\n");
--		return ret;
--	}
--
--	for (i = 0; i < qp->num_bcms; i++)
--		qcom_icc_bcm_init(qp->bcms[i], &pdev->dev);
--
--	for (i = 0; i < num_nodes; i++) {
--		size_t j;
--
--		if (!qnodes[i])
--			continue;
--
--		node = icc_node_create(qnodes[i]->id);
--		if (IS_ERR(node)) {
--			ret = PTR_ERR(node);
--			goto err;
--		}
--
--		node->name = qnodes[i]->name;
--		node->data = qnodes[i];
--		icc_node_add(node, provider);
--
--		for (j = 0; j < qnodes[i]->num_links; j++)
--			icc_link_create(node, qnodes[i]->links[j]);
--
--		data->nodes[i] = node;
--	}
--	data->num_nodes = num_nodes;
--
--	platform_set_drvdata(pdev, qp);
--
--	return 0;
--err:
--	icc_nodes_remove(provider);
--	icc_provider_del(provider);
--	return ret;
--}
--
--static int qnoc_remove(struct platform_device *pdev)
--{
--	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
--
--	icc_nodes_remove(&qp->provider);
--	icc_provider_del(&qp->provider);
--
--	return 0;
--}
--
- static const struct of_device_id qnoc_of_match[] = {
- 	{ .compatible = "qcom,sm8550-aggre1-noc",
- 	  .data = &sm8550_aggre1_noc},
-@@ -2294,8 +2199,8 @@ static const struct of_device_id qnoc_of_match[] = {
- MODULE_DEVICE_TABLE(of, qnoc_of_match);
- 
- static struct platform_driver qnoc_driver = {
--	.probe = qnoc_probe,
--	.remove = qnoc_remove,
-+	.probe = qcom_icc_rpmh_probe,
-+	.remove = qcom_icc_rpmh_remove,
- 	.driver = {
- 		.name = "qnoc-sm8550",
- 		.of_match_table = qnoc_of_match,
+ config CPU_FREQ
+ 	bool "CPU Frequency scaling"
+-	select SRCU
+ 	help
+ 	  CPU Frequency scaling allows you to change the clock speed of 
+ 	  CPUs on the fly. This is a nice method to save power, because 
 -- 
-2.39.0
+2.31.1.189.g2e36527f23
 
