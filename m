@@ -2,56 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7986166036F
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 16:38:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5CB660663
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 19:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234772AbjAFPir (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Jan 2023 10:38:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
+        id S235129AbjAFSdn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Jan 2023 13:33:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235793AbjAFPiq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 10:38:46 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3176812;
-        Fri,  6 Jan 2023 07:38:44 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 623FAB81DC6;
-        Fri,  6 Jan 2023 15:38:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E6C433EF;
-        Fri,  6 Jan 2023 15:38:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673019522;
-        bh=zECSIxnlqSh8Du9ojj67iCF+qRV5NrCmWjaftpFai5M=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IASV2kuZp4oGVXt3aFShgGCb/jiX8ClpKtEpLQkSNcVZSQrKThTwlV6v22kYg1rZU
-         H5z+jzEzz76NfW2KkVGX/i9ato81Gl6tu/THrP9AtNxDh0HvCaj1aOla+bpWNW2Ivf
-         VUto3VQ/K8lxcjAg8LsHiMo+ZPjJ1GKe8QcD2lNkWMw872TBwu5DDWpr27VY0mQ5iB
-         DcQHhSCzgbac8SedwwkTpAePt77serxOnT8A9OxEtYf0hJXz+DcLXVhevQ4uXL9PN/
-         RvswlHkWUnjR3obfs+43MJ3yYPEX5c6R5aCc0RTsQ34oip+Wiq/Fe3X6xBIBOp5ZWl
-         AlkW2ItUmxQmg==
-Date:   Fri, 6 Jan 2023 09:38:40 -0600
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        Xuefeng Li <lixuefeng@loongson.cn>,
-        Huacai Chen <chenhuacai@gmail.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
-Message-ID: <20230106153840.GA1226257@bhelgaas>
+        with ESMTP id S230244AbjAFSdm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 13:33:42 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11F37681E
+        for <linux-pm@vger.kernel.org>; Fri,  6 Jan 2023 10:33:39 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id b3so3176621lfv.2
+        for <linux-pm@vger.kernel.org>; Fri, 06 Jan 2023 10:33:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CrCVYWNpL5Wnb1p4Qbo4TV8of4XvTw24DGvAqDgmAt4=;
+        b=wHsGjhqFYaNvFCFES3o26xH6GOcgIKRtcs3sIhmjCgHTmSkMpEx6lu0TmuoHtSL6+K
+         9iaYlmN2jIMGJUuxSpE9RmtLjtmIK0ntzEXFCZtDIebFrZpICH6VbSUzODBM0d1TMesl
+         3whfqrfHEUvvKYxcQNCXWMBW0g0rmnsA1hAAjRSlAFi6Z8vFqh+lGWsoHYhfP5jnUd/1
+         0BxqVkp5ebTO4T9t+PZfJdds6X3TijLosRhdQDrqkzGTbfe3iRJ3Pe6/WPXzk2NmwvnF
+         KOG5ogOzUyOEoSLtuoVLqPPoJ9qPbP3fiHolvaaj/p7acd/ms8bgE2U6F82tj0UkUSB8
+         4eDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CrCVYWNpL5Wnb1p4Qbo4TV8of4XvTw24DGvAqDgmAt4=;
+        b=vckqcqOWmZUdj6j9C8Y5IwtbemgTEj6vWOzXZoYAn+tTR+FW2Hc0jDOfgcDQVaynpK
+         T6nkmrogm/TkEkmx5qqF2mPJI4UFfPjWAp7PkNmmXOisuwxWNI4ksq8FfopBT/sxd+2q
+         RuOD83xW2MjRg/3NSyyN3Vn5sKQpPVAGkwGBak1BKbAZEPuwLkbQ4pI8rcKuAu8IoTL9
+         IMQiW2aAoPKl0AZ9l2kGSrnI//gXtQmpHnmsQz/BmmNMWdz1dSHSrfKB7IV4t8QBrU5t
+         YwIYGsFbz6x2yBiJ/MdbCL65mIpgVzRlDdvPM6IxbR5UyaHjcqaGE0Pua3+8ckMqeIAg
+         hlkQ==
+X-Gm-Message-State: AFqh2koOOFYlwlb8TrLO5gqrZ0lBOv8iDEKSIMBNcXwHNyYWH/H2beKX
+        jx/4DXGb19N8yl1p1Mx74KIhSA==
+X-Google-Smtp-Source: AMrXdXtYYOvcWvdLnE52R/PdG2gcdhQoTn0D+na2q7BvwZQLX3ks5xdQQ91OSsx3RsVSfct/7fNLNA==
+X-Received: by 2002:a05:6512:1104:b0:4af:5088:959c with SMTP id l4-20020a056512110400b004af5088959cmr17307664lfg.2.1673030018285;
+        Fri, 06 Jan 2023 10:33:38 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id n14-20020ac2490e000000b004b55cebdbd7sm234780lfi.120.2023.01.06.10.33.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 10:33:37 -0800 (PST)
+Message-ID: <d87ca8de-f763-48a4-d7f5-54bfc5192f97@linaro.org>
+Date:   Fri, 6 Jan 2023 20:33:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230106095143.3158998-3-chenhuacai@loongson.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/9] clk: qcom: rpmh: define IPA clocks where required
+Content-Language: en-GB
+To:     Alex Elder <elder@linaro.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     Georgi Djakov <djakov@kernel.org>,
+        Odelu Kukatla <okukatla@codeaurora.org>,
+        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230106073313.1720029-1-dmitry.baryshkov@linaro.org>
+ <20230106073313.1720029-2-dmitry.baryshkov@linaro.org>
+ <927673c9-ce50-d03a-83f5-45d5416838d1@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <927673c9-ce50-d03a-83f5-45d5416838d1@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,165 +85,64 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-[+cc Rafael, linux-pm, linux-kernel in case you have comments on
-whether devices should still be usable after .remove()/.shutdown()]
+On 06/01/2023 15:39, Alex Elder wrote:
+> On 1/6/23 1:33 AM, Dmitry Baryshkov wrote:
+>> Follow the example of sc7180 and sdx55 and implement IP0 resource as
+>> clocks rather than interconnects.
+>>
+>> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 
+> So this is simply adding these clocks?  Were they not
+> defined/implemented as interconnects before?  (It
+> isn't clear from your message above, and I just want
+> to be sure there's no duplication.)
 
-On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
-> After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe services during
-> shutdown") we observe poweroff/reboot failures on systems with LS7A
-> chipset.
-> 
-> We found that if we remove "pci_command &= ~PCI_COMMAND_MASTER" in
-> do_pci_disable_device(), it can work well. The hardware engineer says
-> that the root cause is that CPU is still accessing PCIe devices while
-> poweroff/reboot, and if we disable the Bus Master Bit at this time, the
-> PCIe controller doesn't forward requests to downstream devices, and also
-> does not send TIMEOUT to CPU, which causes CPU wait forever (hardware
-> deadlock).
-> 
-> To be clear, the sequence is like this:
-> 
->   - CPU issues MMIO read to device below Root Port
-> 
->   - LS7A Root Port fails to forward transaction to secondary bus
->     because of LS7A Bus Master defect
-> 
->   - CPU hangs waiting for response to MMIO read
-> 
-> Then how is userspace able to use a device after the device is removed?
-> 
-> To give more details, let's take the graphics driver (e.g. amdgpu) as
-> an example. The userspace programs call printf() to display "shutting
-> down xxx service" during shutdown/reboot, or the kernel calls printk()
-> to display something during shutdown/reboot. These can happen at any
-> time, even after we call pcie_port_device_remove() to disable the pcie
-> port on the graphic card.
-> 
-> The call stack is: printk() --> call_console_drivers() --> con->write()
-> --> vt_console_print() --> fbcon_putcs()
-> 
-> This scenario happens because userspace programs (or the kernel itself)
-> don't know whether a device is 'usable', they just use it, at any time.
+Well, that's the point of the patchset: to turn them from ICC to clock. 
+I can change the order of the patches in the patchset, if you think it 
+will make it more obvious.
 
-Thanks for this background.  So basically we want to call .remove() on
-a console device (or a bridge leading to it), but we expect it to keep
-working as usual afterwards?
+> 
+>                      -Alex
+> 
+>> ---
+>>   drivers/clk/qcom/clk-rpmh.c | 4 ++++
+>>   1 file changed, 4 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/clk-rpmh.c b/drivers/clk/qcom/clk-rpmh.c
+>> index 586a810c682c..5f914cf36b10 100644
+>> --- a/drivers/clk/qcom/clk-rpmh.c
+>> +++ b/drivers/clk/qcom/clk-rpmh.c
+>> @@ -445,6 +445,7 @@ static struct clk_hw *sm8150_rpmh_clocks[] = {
+>>       [RPMH_RF_CLK2_A]    = &clk_rpmh_rf_clk2_a_ao.hw,
+>>       [RPMH_RF_CLK3]        = &clk_rpmh_rf_clk3_a.hw,
+>>       [RPMH_RF_CLK3_A]    = &clk_rpmh_rf_clk3_a_ao.hw,
+>> +    [RPMH_IPA_CLK]        = &clk_rpmh_ipa.hw,
+>>   };
+>>   static const struct clk_rpmh_desc clk_rpmh_sm8150 = {
+>> @@ -484,6 +485,7 @@ static struct clk_hw *sc8180x_rpmh_clocks[] = {
+>>       [RPMH_RF_CLK2_A]    = &clk_rpmh_rf_clk2_d_ao.hw,
+>>       [RPMH_RF_CLK3]        = &clk_rpmh_rf_clk3_d.hw,
+>>       [RPMH_RF_CLK3_A]    = &clk_rpmh_rf_clk3_d_ao.hw,
+>> +    [RPMH_IPA_CLK]        = &clk_rpmh_ipa.hw,
+>>   };
+>>   static const struct clk_rpmh_desc clk_rpmh_sc8180x = {
+>> @@ -504,6 +506,7 @@ static struct clk_hw *sm8250_rpmh_clocks[] = {
+>>       [RPMH_RF_CLK1_A]    = &clk_rpmh_rf_clk1_a_ao.hw,
+>>       [RPMH_RF_CLK3]        = &clk_rpmh_rf_clk3_a.hw,
+>>       [RPMH_RF_CLK3_A]    = &clk_rpmh_rf_clk3_a_ao.hw,
+>> +    [RPMH_IPA_CLK]        = &clk_rpmh_ipa.hw,
+>>   };
+>>   static const struct clk_rpmh_desc clk_rpmh_sm8250 = {
+>> @@ -546,6 +549,7 @@ static struct clk_hw *sc8280xp_rpmh_clocks[] = {
+>>       [RPMH_IPA_CLK]          = &clk_rpmh_ipa.hw,
+>>       [RPMH_PKA_CLK]          = &clk_rpmh_pka.hw,
+>>       [RPMH_HWKM_CLK]         = &clk_rpmh_hwkm.hw,
+>> +    [RPMH_IPA_CLK]        = &clk_rpmh_ipa.hw,
+>>   };
+>>   static const struct clk_rpmh_desc clk_rpmh_sc8280xp = {
+> 
 
-That seems a little weird.  Is that the design we want?  Maybe we
-should have a way to mark devices so we don't remove them during
-shutdown or reboot?
+-- 
+With best wishes
+Dmitry
 
-> This hardware behavior is a PCIe protocol violation (Bus Master should
-> not be involved in CPU MMIO transactions), and it will be fixed in new
-> revisions of hardware (add timeout mechanism for CPU read request,
-> whether or not Bus Master bit is cleared).
-> 
-> On some x86 platforms, radeon/amdgpu devices can cause similar problems
-> [1][2]. Once before I wanted to make a single patch to solve "all of
-> these problems" together, but it seems unreasonable because maybe they
-> are not exactly the same problem. So, this patch add a new function
-> pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
-> dedicated for the shutdown path, and then add a quirk just for LS7A to
-> avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
-> platforms behave as before.
-> 
-> [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
-> [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
-> 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
->  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
->  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
->  include/linux/pci.h                   |  1 +
->  3 files changed, 37 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
-> index 759ec211c17b..641308ba4126 100644
-> --- a/drivers/pci/controller/pci-loongson.c
-> +++ b/drivers/pci/controller/pci-loongson.c
-> @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
->  			DEV_PCIE_PORT_2, loongson_mrrs_quirk);
->  
-> +static void loongson_bmaster_quirk(struct pci_dev *pdev)
-> +{
-> +	/*
-> +	 * Some Loongson PCIe ports will cause CPU deadlock if there is
-> +	 * MMIO access to a downstream device when the root port disable
-> +	 * the Bus Master bit during poweroff/reboot.
-> +	 */
-> +	struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
-> +
-> +	bridge->no_dis_bmaster = 1;
-> +}
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> +			DEV_PCIE_PORT_0, loongson_bmaster_quirk);
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> +			DEV_PCIE_PORT_1, loongson_bmaster_quirk);
-> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
-> +			DEV_PCIE_PORT_2, loongson_bmaster_quirk);
-> +
->  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
->  {
->  	pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
-> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
-> index 2cc2e60bcb39..96f45c444422 100644
-> --- a/drivers/pci/pcie/portdrv.c
-> +++ b/drivers/pci/pcie/portdrv.c
-> @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
->  {
->  	device_for_each_child(&dev->dev, NULL, remove_iter);
->  	pci_free_irq_vectors(dev);
-> -	pci_disable_device(dev);
->  }
->  
->  /**
-> @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
->  	}
->  
->  	pcie_port_device_remove(dev);
-> +
-> +	pci_disable_device(dev);
-> +}
-> +
-> +static void pcie_portdrv_shutdown(struct pci_dev *dev)
-> +{
-> +	struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
-> +
-> +	if (pci_bridge_d3_possible(dev)) {
-> +		pm_runtime_forbid(&dev->dev);
-> +		pm_runtime_get_noresume(&dev->dev);
-> +		pm_runtime_dont_use_autosuspend(&dev->dev);
-> +	}
-> +
-> +	pcie_port_device_remove(dev);
-> +
-> +	if (!bridge->no_dis_bmaster)
-> +		pci_disable_device(dev);
->  }
->  
->  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
-> @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
->  
->  	.probe		= pcie_portdrv_probe,
->  	.remove		= pcie_portdrv_remove,
-> -	.shutdown	= pcie_portdrv_remove,
-> +	.shutdown	= pcie_portdrv_shutdown,
->  
->  	.err_handler	= &pcie_portdrv_err_handler,
->  
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 3df2049ec4a8..a64dbcb89231 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -573,6 +573,7 @@ struct pci_host_bridge {
->  	unsigned int	ignore_reset_delay:1;	/* For entire hierarchy */
->  	unsigned int	no_ext_tags:1;		/* No Extended Tags */
->  	unsigned int	no_inc_mrrs:1;		/* No Increase MRRS */
-> +	unsigned int	no_dis_bmaster:1;	/* No Disable Bus Master */
->  	unsigned int	native_aer:1;		/* OS may use PCIe AER */
->  	unsigned int	native_pcie_hotplug:1;	/* OS may use PCIe hotplug */
->  	unsigned int	native_shpc_hotplug:1;	/* OS may use SHPC hotplug */
-> -- 
-> 2.31.1
-> 
