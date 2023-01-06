@@ -2,268 +2,156 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9501A6600C5
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 13:59:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2DD660113
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 14:19:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234013AbjAFM6l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Jan 2023 07:58:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46730 "EHLO
+        id S234016AbjAFNTT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Jan 2023 08:19:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234616AbjAFM6j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 07:58:39 -0500
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D67AB6B59C;
-        Fri,  6 Jan 2023 04:58:37 -0800 (PST)
-X-IronPort-AV: E=Sophos;i="5.96,305,1665414000"; 
-   d="scan'208";a="148398389"
-Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
-  by relmlie6.idc.renesas.com with ESMTP; 06 Jan 2023 21:58:37 +0900
-Received: from mulinux.example.org (unknown [10.226.92.206])
-        by relmlir6.idc.renesas.com (Postfix) with ESMTP id 0D0264254DA7;
-        Fri,  6 Jan 2023 21:58:31 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        linux-renesas-soc@vger.kernel.org,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH v5 2/2] soc: renesas: Add PWC support for RZ/V2M
-Date:   Fri,  6 Jan 2023 12:58:16 +0000
-Message-Id: <20230106125816.10600-3-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230106125816.10600-1-fabrizio.castro.jz@renesas.com>
-References: <20230106125816.10600-1-fabrizio.castro.jz@renesas.com>
+        with ESMTP id S233980AbjAFNTN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 08:19:13 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6264D6B5F4
+        for <linux-pm@vger.kernel.org>; Fri,  6 Jan 2023 05:19:12 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id s9so1224615wru.13
+        for <linux-pm@vger.kernel.org>; Fri, 06 Jan 2023 05:19:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eJpplfB5GZvqmTDPEaVor2GQBiZtx6Fmx8M4N/qSZEA=;
+        b=L/vblB4a0M4F/C2rNy4x4Ddrm8AwkJlwA5QZf764OwGDyQaVaRdzvzqdh6re8HfEwH
+         zP2cbCGSidi730ZkGEGJLeojgoOQq7YFcXjioPvm/Wa6j+3y62wse/IcY7L7eq3Eua49
+         wJZCDlF6SGBQuHXx7rgd0i4d+00JZ7dNJfyaS5eD3DfG5KZxFdkrC3kDghNXENJ2rkxW
+         qDuAK1D/jV1xJrrXfwr4EjM2RxpyidD73N2s8B+XDtqkI67SOSIipArZsQA0DMfNaGoQ
+         MEmzRxI8oAgVHy5qim74XN/0hIJI5Fd++owsfjBeenurnxcw/R3Sf8/d21dUF2m1EXuD
+         3M5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eJpplfB5GZvqmTDPEaVor2GQBiZtx6Fmx8M4N/qSZEA=;
+        b=hE2ScftpZzEiA50/AHjLT+Cmm22GwRa6VisueuI6Wxp/0sMEILpi+iTDxLVyCdnP0b
+         jkrzsAPIkJ3H09gU9f/3QmNkhOvfWLtaHF8HvnEp54JyLXNpzz+q+tAiG2gEIAgwTjd/
+         NmGRITAFrosQNlW8fiDf9n61a7hhbiyLZZuylw80T0pI0HCnbUjPiOX817QUGftuQ9ia
+         SX7UMt4LNm4e8iedSXxO4n+UlUnLwAwHVJplcPRJ9qPyYA796+q7WgADakPvjdX8sjlw
+         ZjFemYq/Lg3qZIpnPvMABhHqj58ADkr/+/m7CR9ifcDO0DBhqg+qNprLHuJ59cy/m7P1
+         4pEA==
+X-Gm-Message-State: AFqh2koEyHNB4RT+PSevmxBUHvwlHDJKGbA9fICGRqoLhit1lnLi3fbn
+        GJcc8wlcnoTYDaDEhkKJWhOyRA==
+X-Google-Smtp-Source: AMrXdXsK9zd1f6w44VhV8Jc17GLbeev2R+BC9yDTntZebOuq7YzekZknrSuTiVGZs2ykWMNhSmYfjg==
+X-Received: by 2002:a5d:6981:0:b0:295:6a4f:4183 with SMTP id g1-20020a5d6981000000b002956a4f4183mr12629387wru.5.1673011150846;
+        Fri, 06 Jan 2023 05:19:10 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id e7-20020a056000120700b00241dd5de644sm1167074wrx.97.2023.01.06.05.19.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Jan 2023 05:19:09 -0800 (PST)
+Message-ID: <9d141edb-c72c-8889-112b-71ce5699dc35@linaro.org>
+Date:   Fri, 6 Jan 2023 14:19:07 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3 2/3] thermal/drivers/intel: Use generic trip points for
+ intel_pch
+Content-Language: en-US
+To:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "Brown, Len" <len.brown@intel.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>,
+        "ricardo.neri-calderon@linux.intel.com" 
+        <ricardo.neri-calderon@linux.intel.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+References: <20230104222127.2364396-1-daniel.lezcano@kernel.org>
+ <20230104222127.2364396-3-daniel.lezcano@kernel.org>
+ <ff0b001a0b7c7beb17e007219414a39ba6d953ef.camel@intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <ff0b001a0b7c7beb17e007219414a39ba6d953ef.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The Renesas RZ/V2M External Power Sequence Controller (PWC)
-IP is capable of:
-* external power supply on/off sequence generation
-* on/off signal generation for the LPDDR4 core power supply (LPVDD)
-* key input signals processing
-* general-purpose output pins
 
-Add the corresponding device driver.
+Hi Rui,
 
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
----
+On 06/01/2023 09:32, Zhang, Rui wrote:
+> On Wed, 2023-01-04 at 23:21 +0100, Daniel Lezcano wrote:
+>> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>
+>> The thermal framework gives the possibility to register the trip
+>> points with the thermal zone. When that is done, no get_trip_* ops
+>> are
+>> needed and they can be removed.
+>>
+>> Convert the ops content logic into generic trip points and register
+>> them with the thermal zone.
+>>
+>> In order to consolidate the code, use the ACPI thermal framework API
+>> to fill the generic trip point from the ACPI tables.
+>>
+>> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
+>> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+>> ---
+>>      V3:
+>>        - The driver Kconfig option selects CONFIG_THERMAL_ACPI
+>> ---
+>>   drivers/thermal/intel/Kconfig             |  1 +
+>>   drivers/thermal/intel/intel_pch_thermal.c | 88 +++++--------------
+>> ----
+>>   2 files changed, 20 insertions(+), 69 deletions(-)
+>>
+>> diff --git a/drivers/thermal/intel/Kconfig
+>> b/drivers/thermal/intel/Kconfig
+>> index f0c845679250..738b88b290f4 100644
+>> --- a/drivers/thermal/intel/Kconfig
+>> +++ b/drivers/thermal/intel/Kconfig
+>> @@ -75,6 +75,7 @@ config INTEL_BXT_PMIC_THERMAL
+>>   config INTEL_PCH_THERMAL
+>>   	tristate "Intel PCH Thermal Reporting Driver"
+>>   	depends on X86 && PCI
+>> +	select THERMAL_ACPI
+> 
+> THERMAL_ACPI depends on ACPI but the PCH thermal driver does not.
+> So we will run into "unmet dependencies" issue when CONFIG_ACPI is
+> cleared like below
+> 
+> WARNING: unmet direct dependencies detected for THERMAL_ACPI
+>    Depends on [n]: THERMAL [=y] && ACPI [=n]
+>    Selected by [m]:
+>    - INTEL_PCH_THERMAL [=m] && THERMAL [=y] && (X86 [=y] ||
+> X86_INTEL_QUARK [=n] || COMPILE_TEST [=n]) && X86 [=y] && PCI [=y]
+> 
 
-v1: In the first version, I had 1 driver for GPIO handling, and 1 driver
-    for poweroff handling, both based on syscon to share the mapped
-    memory region.
-v2: One more driver added to act as MFD core driver. Dropped syscon, and
-    dropped the OF compatible string for the GPIO and poweroff drivers.
-v3: This new patch merges all the PWC code in 1 new driver.
-    It also takes into account the comments received from Bartosz and Geert.
-    Since this is a new driver, I have dropped all the Reviewed-by tags
-    received on the separated drivers.
-v4: No change.
-v5: No change.
+Ah yes, indeed. Thanks for spotting this.
 
- drivers/soc/renesas/Kconfig     |   4 +
- drivers/soc/renesas/Makefile    |   1 +
- drivers/soc/renesas/pwc-rzv2m.c | 141 ++++++++++++++++++++++++++++++++
- 3 files changed, 146 insertions(+)
- create mode 100644 drivers/soc/renesas/pwc-rzv2m.c
+Given the code, I think we should do:
 
-diff --git a/drivers/soc/renesas/Kconfig b/drivers/soc/renesas/Kconfig
-index 660498252ec5..4e8b51ba2266 100644
---- a/drivers/soc/renesas/Kconfig
-+++ b/drivers/soc/renesas/Kconfig
-@@ -330,6 +330,7 @@ config ARCH_R9A09G011
- 	bool "ARM64 Platform support for RZ/V2M"
- 	select PM
- 	select PM_GENERIC_DOMAINS
-+	select PWC_RZV2M
- 	help
- 	  This enables support for the Renesas RZ/V2M SoC.
- 
-@@ -345,6 +346,9 @@ config ARCH_R9A07G043
- 
- endif # RISCV
- 
-+config PWC_RZV2M
-+	bool "Renesas RZ/V2M PWC support" if COMPILE_TEST
-+
- config RST_RCAR
- 	bool "Reset Controller support for R-Car" if COMPILE_TEST
- 
-diff --git a/drivers/soc/renesas/Makefile b/drivers/soc/renesas/Makefile
-index 535868c9c7e4..6e4e77b0afff 100644
---- a/drivers/soc/renesas/Makefile
-+++ b/drivers/soc/renesas/Makefile
-@@ -32,6 +32,7 @@ obj-$(CONFIG_ARCH_R9A06G032)	+= r9a06g032-smp.o
- endif
- 
- # Family
-+obj-$(CONFIG_PWC_RZV2M)		+= pwc-rzv2m.o
- obj-$(CONFIG_RST_RCAR)		+= rcar-rst.o
- obj-$(CONFIG_SYSC_RCAR)		+= rcar-sysc.o
- obj-$(CONFIG_SYSC_RCAR_GEN4)	+= rcar-gen4-sysc.o
-diff --git a/drivers/soc/renesas/pwc-rzv2m.c b/drivers/soc/renesas/pwc-rzv2m.c
-new file mode 100644
-index 000000000000..c83bdbdabb64
---- /dev/null
-+++ b/drivers/soc/renesas/pwc-rzv2m.c
-@@ -0,0 +1,141 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Renesas Electronics Corporation
-+ */
-+
-+#include <linux/delay.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/platform_device.h>
-+#include <linux/reboot.h>
-+
-+#define PWC_PWCRST			0x00
-+#define PWC_PWCCKEN			0x04
-+#define PWC_PWCCTL			0x50
-+#define PWC_GPIO			0x80
-+
-+#define PWC_PWCRST_RSTSOFTAX		0x1
-+#define PWC_PWCCKEN_ENGCKMAIN		0x1
-+#define PWC_PWCCTL_PWOFF		0x1
-+
-+struct rzv2m_pwc_priv {
-+	void __iomem *base;
-+	struct device *dev;
-+	struct gpio_chip gp;
-+	DECLARE_BITMAP(ch_en_bits, 2);
-+};
-+
-+static void rzv2m_pwc_gpio_set(struct gpio_chip *chip, unsigned int offset,
-+			       int value)
-+{
-+	struct rzv2m_pwc_priv *priv = gpiochip_get_data(chip);
-+	u32 reg;
-+
-+	/* BIT 16 enables write to BIT 0, and BIT 17 enables write to BIT 1 */
-+	reg = BIT(offset + 16);
-+	if (value)
-+		reg |= BIT(offset);
-+
-+	writel(reg, priv->base + PWC_GPIO);
-+
-+	assign_bit(offset, priv->ch_en_bits, value);
-+}
-+
-+static int rzv2m_pwc_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct rzv2m_pwc_priv *priv = gpiochip_get_data(chip);
-+
-+	return test_bit(offset, priv->ch_en_bits);
-+}
-+
-+static int rzv2m_pwc_gpio_direction_output(struct gpio_chip *gc,
-+					   unsigned int nr, int value)
-+{
-+	if (nr > 1)
-+		return -EINVAL;
-+
-+	rzv2m_pwc_gpio_set(gc, nr, value);
-+
-+	return 0;
-+}
-+
-+static const struct gpio_chip rzv2m_pwc_gc = {
-+	.label = "gpio_rzv2m_pwc",
-+	.owner = THIS_MODULE,
-+	.get = rzv2m_pwc_gpio_get,
-+	.set = rzv2m_pwc_gpio_set,
-+	.direction_output = rzv2m_pwc_gpio_direction_output,
-+	.can_sleep = false,
-+	.ngpio = 2,
-+	.base = -1,
-+};
-+
-+static int rzv2m_pwc_poweroff(struct sys_off_data *data)
-+{
-+	struct rzv2m_pwc_priv *priv = data->cb_data;
-+
-+	writel(PWC_PWCRST_RSTSOFTAX, priv->base + PWC_PWCRST);
-+	writel(PWC_PWCCKEN_ENGCKMAIN, priv->base + PWC_PWCCKEN);
-+	writel(PWC_PWCCTL_PWOFF, priv->base + PWC_PWCCTL);
-+
-+	mdelay(150);
-+
-+	dev_err(priv->dev, "Failed to power off the system");
-+
-+	return NOTIFY_DONE;
-+}
-+
-+static int rzv2m_pwc_probe(struct platform_device *pdev)
-+{
-+	struct rzv2m_pwc_priv *priv;
-+	int ret;
-+
-+	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(priv->base))
-+		return PTR_ERR(priv->base);
-+
-+	/*
-+	 * The register used by this driver cannot be read, therefore set the
-+	 * outputs to their default values and initialize priv->ch_en_bits
-+	 * accordingly. BIT 16 enables write to BIT 0, BIT 17 enables write to
-+	 * BIT 1, and the default value of both BIT 0 and BIT 1 is 0.
-+	 */
-+	writel(BIT(17) | BIT(16), priv->base + PWC_GPIO);
-+	bitmap_zero(priv->ch_en_bits, 2);
-+
-+	priv->gp = rzv2m_pwc_gc;
-+	priv->gp.parent = pdev->dev.parent;
-+	priv->gp.fwnode = dev_fwnode(&pdev->dev);
-+
-+	ret = devm_gpiochip_add_data(&pdev->dev, &priv->gp, priv);
-+	if (ret)
-+		return ret;
-+
-+	if (device_property_read_bool(&pdev->dev, "renesas,rzv2m-pwc-power"))
-+		ret = devm_register_power_off_handler(&pdev->dev,
-+						      rzv2m_pwc_poweroff, priv);
-+
-+	return ret;
-+}
-+
-+static const struct of_device_id rzv2m_pwc_of_match[] = {
-+	{ .compatible = "renesas,rzv2m-pwc" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, rzv2m_pwc_of_match);
-+
-+static struct platform_driver rzv2m_pwc_driver = {
-+	.probe = rzv2m_pwc_probe,
-+	.driver = {
-+		.name = "rzv2m_pwc",
-+		.of_match_table = of_match_ptr(rzv2m_pwc_of_match),
-+	},
-+};
-+module_platform_driver(rzv2m_pwc_driver);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Fabrizio Castro <castro.fabrizio.jz@renesas.com>");
-+MODULE_DESCRIPTION("Renesas RZ/V2M PWC driver");
+	select THERMAL_ACPI if ACPI
+
+it is from my POV semantically correct.
+
+
 -- 
-2.34.1
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
