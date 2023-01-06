@@ -2,81 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD51A660296
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 15:53:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7986166036F
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 16:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235291AbjAFOxW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Jan 2023 09:53:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
+        id S234772AbjAFPir (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Jan 2023 10:38:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235366AbjAFOxD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 09:53:03 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F1CF831A8
-        for <linux-pm@vger.kernel.org>; Fri,  6 Jan 2023 06:53:02 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id co23so1479616wrb.4
-        for <linux-pm@vger.kernel.org>; Fri, 06 Jan 2023 06:53:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb113jvJzDpaLqkQd+chLk6YPOzvbAerk9emcElPRW8=;
-        b=B9roCgNZ3+rIt6kkae9X8ldsFIGgC5Y/LAJrfN6RaNxbpKJwarDRvWjcsthOsW5+Bq
-         CZVLxCmGkTzXy4WZW2gayuF1H0oWfNyb/fmrCE0YkIupIyvB8spgVEi2Ryh6/t/qWuXj
-         cw2vs9mA0ucXzSA1iYpvpqf81mMRBudFtUvjDpQcfAwAselfjEIYq+oML/OV1Q3dArKD
-         qZnwPFhsX37pAhhQBulKY4z3CyDONPfL1lSj/xxuOQgmI3JRjkw7+8n19V7AMhjqnQt4
-         +2PAfu2Cx7XXebcWFMLl5763smmXHnTxqLChksC3PYTkBGlwBOlBI32eUOD8Pqd/UAMs
-         aP0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fb113jvJzDpaLqkQd+chLk6YPOzvbAerk9emcElPRW8=;
-        b=yYf4OJBSxIZqDbEZz1UXLBzcCBTQc3GEIbqbNfsprX3YILps2h6+XDjq8wqcEiDmi3
-         7ZjWApe6DPS/iutmYXD8lvbQbH3775zECMuxKT0FzM+jhfQSM5NaF1XwgZ5LITwWHVzN
-         0ICAdmwS0TmHiGRisFaO2BOK/2yYKNnzn5JmmNRy0ijFLaASkIcAuk3lEFfunqm0utyg
-         KfuBfwveZg3QMqUQOmfOana92VVbE/C7h/JaT4yeCt3emanaxpOpiCHhn6PH4m47Ykmw
-         DdIUfO4YNASZGBImE5VzXsZiO7WBl6AFEgDSprbsEjsLOKbOPPQKEtEZe4ctCShcXtaZ
-         5lFg==
-X-Gm-Message-State: AFqh2kpJSTmSd9LtIc05IvvlUjwjC0GbwUeErwOh0AtmT5Cr9nJU9dX+
-        lhmwNTmhTenPGiRlq8HviLF7zA==
-X-Google-Smtp-Source: AMrXdXvv0m7kio2W55PZZW8SweXh/614tgLKinx4xscU4tnyjQfdaGyNgovQo1p45Ysx0bmcjLxFfw==
-X-Received: by 2002:a5d:5002:0:b0:28c:d89c:ae48 with SMTP id e2-20020a5d5002000000b0028cd89cae48mr18919200wrt.41.1673016780950;
-        Fri, 06 Jan 2023 06:53:00 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id b1-20020adf9b01000000b0028e55b44a99sm1322146wrc.17.2023.01.06.06.52.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Jan 2023 06:53:00 -0800 (PST)
-Message-ID: <9771639f-5172-8f3b-3ce6-8fd195aa95b3@linaro.org>
-Date:   Fri, 6 Jan 2023 15:52:57 +0100
+        with ESMTP id S235793AbjAFPiq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 10:38:46 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDB3176812;
+        Fri,  6 Jan 2023 07:38:44 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 623FAB81DC6;
+        Fri,  6 Jan 2023 15:38:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA7E6C433EF;
+        Fri,  6 Jan 2023 15:38:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673019522;
+        bh=zECSIxnlqSh8Du9ojj67iCF+qRV5NrCmWjaftpFai5M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=IASV2kuZp4oGVXt3aFShgGCb/jiX8ClpKtEpLQkSNcVZSQrKThTwlV6v22kYg1rZU
+         H5z+jzEzz76NfW2KkVGX/i9ato81Gl6tu/THrP9AtNxDh0HvCaj1aOla+bpWNW2Ivf
+         VUto3VQ/K8lxcjAg8LsHiMo+ZPjJ1GKe8QcD2lNkWMw872TBwu5DDWpr27VY0mQ5iB
+         DcQHhSCzgbac8SedwwkTpAePt77serxOnT8A9OxEtYf0hJXz+DcLXVhevQ4uXL9PN/
+         RvswlHkWUnjR3obfs+43MJ3yYPEX5c6R5aCc0RTsQ34oip+Wiq/Fe3X6xBIBOp5ZWl
+         AlkW2ItUmxQmg==
+Date:   Fri, 6 Jan 2023 09:38:40 -0600
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Huacai Chen <chenhuacai@gmail.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+Message-ID: <20230106153840.GA1226257@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 1/5] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
- <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230106095143.3158998-3-chenhuacai@loongson.cn>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,41 +59,165 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 04/01/2023 16:45, Ulf Hansson wrote:
-> On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> Realtime kernels with PREEMPT_RT must use raw_spinlock_t for domains
->> which are invoked from CPU idle (thus from atomic section).  Example is
->> cpuidle PSCI domain driver which itself is PREEMPT_RT safe, but is being
->> called as part of cpuidle.
+[+cc Rafael, linux-pm, linux-kernel in case you have comments on
+whether devices should still be usable after .remove()/.shutdown()]
+
+On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
+> After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe services during
+> shutdown") we observe poweroff/reboot failures on systems with LS7A
+> chipset.
 > 
-> Just so I don't get this wrong, since the cpuidle-psci also calls
-> pm_runtime_* functions so it isn't PREEMPT_RT safe, at least not yet?
-
-You are correct. Patch 3 here addresses it by... just not doing runtime
-PM. This is a hacky workaround but:
-1. I don't have any other idea,
-2. It's not a big problem because RT systems are not supposed to have
-any CPU idle (one of first things during RT system tuning is to disable
-cpuidle).
-
+> We found that if we remove "pci_command &= ~PCI_COMMAND_MASTER" in
+> do_pci_disable_device(), it can work well. The hardware engineer says
+> that the root cause is that CPU is still accessing PCIe devices while
+> poweroff/reboot, and if we disable the Bus Master Bit at this time, the
+> PCIe controller doesn't forward requests to downstream devices, and also
+> does not send TIMEOUT to CPU, which causes CPU wait forever (hardware
+> deadlock).
 > 
->>
->> Add a flag allowing a power domain provider to indicate it is RT safe.
->> The flag is supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
->>
->> Cc: Adrien Thierry <athierry@redhat.com>
->> Cc: Brian Masney <bmasney@redhat.com>
->> Cc: linux-rt-users@vger.kernel.org
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> To be clear, the sequence is like this:
 > 
-> For genpd, overall, I think this looks like an okay approach to me.
-> Although, let me check the whole series (I need some more time to do
-> that) before I give this my blessing.
+>   - CPU issues MMIO read to device below Root Port
+> 
+>   - LS7A Root Port fails to forward transaction to secondary bus
+>     because of LS7A Bus Master defect
+> 
+>   - CPU hangs waiting for response to MMIO read
+> 
+> Then how is userspace able to use a device after the device is removed?
+> 
+> To give more details, let's take the graphics driver (e.g. amdgpu) as
+> an example. The userspace programs call printf() to display "shutting
+> down xxx service" during shutdown/reboot, or the kernel calls printk()
+> to display something during shutdown/reboot. These can happen at any
+> time, even after we call pcie_port_device_remove() to disable the pcie
+> port on the graphic card.
+> 
+> The call stack is: printk() --> call_console_drivers() --> con->write()
+> --> vt_console_print() --> fbcon_putcs()
+> 
+> This scenario happens because userspace programs (or the kernel itself)
+> don't know whether a device is 'usable', they just use it, at any time.
 
-Sure, we are all have too many mails in inbox. :)
+Thanks for this background.  So basically we want to call .remove() on
+a console device (or a bridge leading to it), but we expect it to keep
+working as usual afterwards?
 
-Best regards,
-Krzysztof
+That seems a little weird.  Is that the design we want?  Maybe we
+should have a way to mark devices so we don't remove them during
+shutdown or reboot?
 
+> This hardware behavior is a PCIe protocol violation (Bus Master should
+> not be involved in CPU MMIO transactions), and it will be fixed in new
+> revisions of hardware (add timeout mechanism for CPU read request,
+> whether or not Bus Master bit is cleared).
+> 
+> On some x86 platforms, radeon/amdgpu devices can cause similar problems
+> [1][2]. Once before I wanted to make a single patch to solve "all of
+> these problems" together, but it seems unreasonable because maybe they
+> are not exactly the same problem. So, this patch add a new function
+> pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
+> dedicated for the shutdown path, and then add a quirk just for LS7A to
+> avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
+> platforms behave as before.
+> 
+> [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
+> [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
+> 
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+>  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
+>  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
+>  include/linux/pci.h                   |  1 +
+>  3 files changed, 37 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> index 759ec211c17b..641308ba4126 100644
+> --- a/drivers/pci/controller/pci-loongson.c
+> +++ b/drivers/pci/controller/pci-loongson.c
+> @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+>  			DEV_PCIE_PORT_2, loongson_mrrs_quirk);
+>  
+> +static void loongson_bmaster_quirk(struct pci_dev *pdev)
+> +{
+> +	/*
+> +	 * Some Loongson PCIe ports will cause CPU deadlock if there is
+> +	 * MMIO access to a downstream device when the root port disable
+> +	 * the Bus Master bit during poweroff/reboot.
+> +	 */
+> +	struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
+> +
+> +	bridge->no_dis_bmaster = 1;
+> +}
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> +			DEV_PCIE_PORT_0, loongson_bmaster_quirk);
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> +			DEV_PCIE_PORT_1, loongson_bmaster_quirk);
+> +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> +			DEV_PCIE_PORT_2, loongson_bmaster_quirk);
+> +
+>  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
+>  {
+>  	pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
+> diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> index 2cc2e60bcb39..96f45c444422 100644
+> --- a/drivers/pci/pcie/portdrv.c
+> +++ b/drivers/pci/pcie/portdrv.c
+> @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
+>  {
+>  	device_for_each_child(&dev->dev, NULL, remove_iter);
+>  	pci_free_irq_vectors(dev);
+> -	pci_disable_device(dev);
+>  }
+>  
+>  /**
+> @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
+>  	}
+>  
+>  	pcie_port_device_remove(dev);
+> +
+> +	pci_disable_device(dev);
+> +}
+> +
+> +static void pcie_portdrv_shutdown(struct pci_dev *dev)
+> +{
+> +	struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
+> +
+> +	if (pci_bridge_d3_possible(dev)) {
+> +		pm_runtime_forbid(&dev->dev);
+> +		pm_runtime_get_noresume(&dev->dev);
+> +		pm_runtime_dont_use_autosuspend(&dev->dev);
+> +	}
+> +
+> +	pcie_port_device_remove(dev);
+> +
+> +	if (!bridge->no_dis_bmaster)
+> +		pci_disable_device(dev);
+>  }
+>  
+>  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
+> @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
+>  
+>  	.probe		= pcie_portdrv_probe,
+>  	.remove		= pcie_portdrv_remove,
+> -	.shutdown	= pcie_portdrv_remove,
+> +	.shutdown	= pcie_portdrv_shutdown,
+>  
+>  	.err_handler	= &pcie_portdrv_err_handler,
+>  
+> diff --git a/include/linux/pci.h b/include/linux/pci.h
+> index 3df2049ec4a8..a64dbcb89231 100644
+> --- a/include/linux/pci.h
+> +++ b/include/linux/pci.h
+> @@ -573,6 +573,7 @@ struct pci_host_bridge {
+>  	unsigned int	ignore_reset_delay:1;	/* For entire hierarchy */
+>  	unsigned int	no_ext_tags:1;		/* No Extended Tags */
+>  	unsigned int	no_inc_mrrs:1;		/* No Increase MRRS */
+> +	unsigned int	no_dis_bmaster:1;	/* No Disable Bus Master */
+>  	unsigned int	native_aer:1;		/* OS may use PCIe AER */
+>  	unsigned int	native_pcie_hotplug:1;	/* OS may use PCIe hotplug */
+>  	unsigned int	native_shpc_hotplug:1;	/* OS may use SHPC hotplug */
+> -- 
+> 2.31.1
+> 
