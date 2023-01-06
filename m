@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E35A65FC04
-	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 08:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E1EB65FC0C
+	for <lists+linux-pm@lfdr.de>; Fri,  6 Jan 2023 08:34:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjAFHdc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 6 Jan 2023 02:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54680 "EHLO
+        id S232390AbjAFHdf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 6 Jan 2023 02:33:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbjAFHdW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 02:33:22 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A23472D29
+        with ESMTP id S232251AbjAFHdZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 6 Jan 2023 02:33:25 -0500
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7C6755C2
         for <linux-pm@vger.kernel.org>; Thu,  5 Jan 2023 23:33:18 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id bu8so937000lfb.4
-        for <linux-pm@vger.kernel.org>; Thu, 05 Jan 2023 23:33:17 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id m6so901548lfj.11
+        for <linux-pm@vger.kernel.org>; Thu, 05 Jan 2023 23:33:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9U19wkTAb+l15z9VckZMObx6RoI/ARCn2vlLUJHpkaw=;
-        b=xvVpDrtS3EAWG5wdTjtao7J7g6o+xdRBSzTbCj8Xt9rWzV7655GCbuhioluua0JVGG
-         Te4qLMqsGdo4Y+uMzher1MkRqz8GKhxGe+gTcui2pBxkiF3J2e0iCY57GjYv0judqEQa
-         JYGbaPXIAsdmurvNnu8qsUT0SgKvDYyrW/DwIJz9pP2KzfsFYo5WMj+ejZDREX7PG0pp
-         Pp9J2zDbZuc+fTuOGa4n05P4jMzCy9r1RbCDqZxIa4CiT2XVL9k51NOLIFb7KonyaFpE
-         gyafx/o8TY0v2SYRkLnQ/lf2flsX4/5XMNyVat9WPJI4RcZRqTvxrnu3ehO7NgDDuGEU
-         TAqA==
+        bh=dx1KDmZfsq2uvvnOI5+H8ue+wTY/UY2mR9Q4gji8O7k=;
+        b=u48/z029prHnx9lvHlheRljzwx5o+Qf0/fL7qkYi1xxchAEPO98SNwYBMgPgBr1z9r
+         T9UWhddmrZipG4ahuwYjVqi2qcBtBQk7DyLbaXgg0/qNuvSJGyq9TtYurC/C8mToxkns
+         RtzUVW6wn1IljNGJDFKNXsxKIkAQpUvWs1CrldUgWZucT8bJHSZqPxjiAt98FAf0PtiU
+         N/fsLcD2aWPladepZzzLxtuR8zv9RYGdofy8aOO14n2lCg4ORxVoqlvhjc0tA2MVLtCi
+         FviKe1rr3F42HV45koLHSsGP3LnaDXGMEdIwUMhLeUSfVWR4DIl+e6tof5OvlEoxTmYP
+         Wg6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9U19wkTAb+l15z9VckZMObx6RoI/ARCn2vlLUJHpkaw=;
-        b=Vx/ZLIS5k/1C5QFSlOyAoq5FEs4fWKduS51odMk4yDGvW7poywpP67SU4uzHvS3GDf
-         y3tjJdjMJ4E0mgybCN8C95J0WiZPKs83AEhgGbrEzyZnB83A3ydOWCiNOb0zQ/4JbJJC
-         t6HNGfzTrhDkOD4ZTG3FWmrvgiDKPKshtLMUjtsGPRcOa6AhzYdsdUCenuf0OMiJM4+5
-         HAW7ic+94MC2x5sDMOZLPaB5NbKn7n7e11sC+ad98eATsdz/bOsrdjRsw2pbzREJCxag
-         VOdfqnEmdQzTFYj523Siqmsi5b5KScAliXowYjO5OZ4IFQhIWED93iArJlchoA1ScG3K
-         9whQ==
-X-Gm-Message-State: AFqh2kqWOQpchUUIiRCZzGSwr0PT5tkJcMRXSksJ85P95yIUM0IC2hg3
-        +8DuWPSZhCbYFcAejOpgNbpf3g==
-X-Google-Smtp-Source: AMrXdXtou8hrOxlqXeK2lKBfRxoaL00fpNbQ3N5cznEeSCGDO88Lxbfm//Y4uxN7ugofQTc6on13Xg==
-X-Received: by 2002:a05:6512:3d2a:b0:4b4:b8fc:4aba with SMTP id d42-20020a0565123d2a00b004b4b8fc4abamr18172596lfv.25.1672990396396;
-        Thu, 05 Jan 2023 23:33:16 -0800 (PST)
+        bh=dx1KDmZfsq2uvvnOI5+H8ue+wTY/UY2mR9Q4gji8O7k=;
+        b=4uaDTDnUOolz9rKVzmHmF9Tk89blFC3tdpBdT/vxt5IHutcVZ+Ok5xslBQjlElceAi
+         JyqS8M6zEuIbPKydpzCsZqH3Ph201wubnYcuSU+OeOK1nJwaiFH/R+IaWozCy57Fmd8J
+         lnxpd567N0GJgt635tIOZ7X8OGHk96zqEcRHJJuNN07XtMFYm++h+Jx2RS+eymB5vMeL
+         Ti/fb5KpoH5Q3GX0MkZUAD7M7PbkCtxpUGCdoQfkvGRhJ56fmBqahZ3gr1/66L8TS7bx
+         RV54pBjUxQy9WWLqz5XaFoyIHHxa207FapTaLYmuphyiNPFM5xnZ/59KXnIXIggp88dE
+         z7Iw==
+X-Gm-Message-State: AFqh2kp7hjLAqtRRDlvFpIFanebClhDObW+jeAscD30P7woWAO8lTzp0
+        HIu/q5oq0ExDUEAWlQSvRma2qg==
+X-Google-Smtp-Source: AMrXdXuTzWGH3SpsWTw6Z7EEsF1vOUy8nCPd6SW8iE5BoPhQcCNIbOi9JPX6Zr1v9Op6BcVDbaIkvA==
+X-Received: by 2002:ac2:431a:0:b0:4c8:ae6b:ea8d with SMTP id l26-20020ac2431a000000b004c8ae6bea8dmr13933538lfh.8.1672990397276;
+        Thu, 05 Jan 2023 23:33:17 -0800 (PST)
 Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c28-20020ac25f7c000000b004b4bb6286d8sm61114lfc.84.2023.01.05.23.33.15
+        by smtp.gmail.com with ESMTPSA id c28-20020ac25f7c000000b004b4bb6286d8sm61114lfc.84.2023.01.05.23.33.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Jan 2023 23:33:15 -0800 (PST)
+        Thu, 05 Jan 2023 23:33:16 -0800 (PST)
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -63,9 +63,9 @@ Cc:     Georgi Djakov <djakov@kernel.org>,
         Alex Elder <elder@linaro.org>, Johan Hovold <johan@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [PATCH 2/9] interconnect: qcom: sdx55: drop IP0 remnants
-Date:   Fri,  6 Jan 2023 09:33:06 +0200
-Message-Id: <20230106073313.1720029-3-dmitry.baryshkov@linaro.org>
+Subject: [PATCH 3/9] interconnect: qcom: sc7180: drop IP0 remnants
+Date:   Fri,  6 Jan 2023 09:33:07 +0200
+Message-Id: <20230106073313.1720029-4-dmitry.baryshkov@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230106073313.1720029-1-dmitry.baryshkov@linaro.org>
 References: <20230106073313.1720029-1-dmitry.baryshkov@linaro.org>
@@ -81,36 +81,36 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Drop two defines leftover from the commit 2fb251c26560 ("interconnect:
-qcom: sdx55: Drop IP0 interconnects"), which dropped handling of the IP0
-resource in favour of handling it in the clk-rpmh driver.
+Drop two defines leftover from the commit 2f3724930eb4 ("interconnect:
+qcom: sc7180: Drop IP0 interconnects"), which dropped handling of the
+IP0 resource in favour of handling it in the clk-rpmh driver.
 
-Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
+Fixes: 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0 interconnects")
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
- drivers/interconnect/qcom/sdx55.h | 2 --
+ drivers/interconnect/qcom/sc7180.h | 2 --
  1 file changed, 2 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/sdx55.h b/drivers/interconnect/qcom/sdx55.h
-index deff8afe0631..f7394f460127 100644
---- a/drivers/interconnect/qcom/sdx55.h
-+++ b/drivers/interconnect/qcom/sdx55.h
-@@ -6,7 +6,6 @@
- #ifndef __DRIVERS_INTERCONNECT_QCOM_SDX55_H
- #define __DRIVERS_INTERCONNECT_QCOM_SDX55_H
- 
--#define SDX55_MASTER_IPA_CORE			0
- #define SDX55_MASTER_LLCC			1
- #define SDX55_MASTER_TCU_0			2
- #define SDX55_MASTER_SNOC_GC_MEM_NOC		3
-@@ -28,7 +27,6 @@
- #define SDX55_MASTER_QDSS_ETR			19
- #define SDX55_MASTER_SDCC_1			20
- #define SDX55_MASTER_USB3			21
--#define SDX55_SLAVE_IPA_CORE			22
- #define SDX55_SLAVE_EBI_CH0			23
- #define SDX55_SLAVE_LLCC			24
- #define SDX55_SLAVE_MEM_NOC_SNOC		25
+diff --git a/drivers/interconnect/qcom/sc7180.h b/drivers/interconnect/qcom/sc7180.h
+index c6212a10c2f6..b691d97d56cf 100644
+--- a/drivers/interconnect/qcom/sc7180.h
++++ b/drivers/interconnect/qcom/sc7180.h
+@@ -11,7 +11,6 @@
+ #define SC7180_MASTER_APPSS_PROC			0
+ #define SC7180_MASTER_SYS_TCU				1
+ #define SC7180_MASTER_NPU_SYS				2
+-#define SC7180_MASTER_IPA_CORE				3
+ #define SC7180_MASTER_LLCC				4
+ #define SC7180_MASTER_A1NOC_CFG				5
+ #define SC7180_MASTER_A2NOC_CFG				6
+@@ -58,7 +57,6 @@
+ #define SC7180_MASTER_USB3				47
+ #define SC7180_MASTER_EMMC				48
+ #define SC7180_SLAVE_EBI1				49
+-#define SC7180_SLAVE_IPA_CORE				50
+ #define SC7180_SLAVE_A1NOC_CFG				51
+ #define SC7180_SLAVE_A2NOC_CFG				52
+ #define SC7180_SLAVE_AHB2PHY_SOUTH			53
 -- 
 2.39.0
 
