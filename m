@@ -2,158 +2,210 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6EF661586
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jan 2023 14:41:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43E6366193A
+	for <lists+linux-pm@lfdr.de>; Sun,  8 Jan 2023 21:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233444AbjAHNlO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Jan 2023 08:41:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        id S233343AbjAHUWQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Jan 2023 15:22:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjAHNlN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Jan 2023 08:41:13 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22EABCBD;
-        Sun,  8 Jan 2023 05:41:11 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id A73295C0099;
-        Sun,  8 Jan 2023 08:41:08 -0500 (EST)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Sun, 08 Jan 2023 08:41:08 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm2; t=1673185268; x=1673271668; bh=pzHAbdQL+W
-        AHy+4O5PrQB6Gr0C7YcxjNyQrc/0x2zps=; b=Xa60G+rAC3iidMuZ8dtIXstRWH
-        Qx5c+WT240uC48PQfQMNI8+0MAGnGwQmQfqUbbAz+wzI9BDMGSzPWf+D/zVPRzPw
-        F2Iu+jB0pwqLfON9lnzcoQrcLKIsZNHXfZj6hi+CGRFZXON3992NLMnIJnuL2wrN
-        g1pZI/k/72M3XHUMf0ZgmFwr/0Fa49KLJe6nunUkxBPk9cosv+mYzVy1eRdvM7Co
-        9LAZdLzqth0xPEIQOCM2OoItmHQy7IoTH+FznjWcrFAr1UrTmp0TeS2WVbwt6fjr
-        LJE5V1DzUPkvjyZ/+L7PjxPvSgi8WnBb1mR669kQQXo1iWjuCIbjfDSJ4xcw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673185268; x=1673271668; bh=pzHAbdQL+WAHy+4O5PrQB6Gr0C7Y
-        cxjNyQrc/0x2zps=; b=loQ54YCdSXJiSI9Kv2X090IUbTDQrvox1ery1xh/0BA+
-        2MFmALo/stswBhFe5HEahH12k1CTXZI9RvBH3e4+k6IespOTCnsxrlKN8BriPnVU
-        F4pD6Qx9fDrn5VDpAjfEBsozSaj9s57lUJBk/ZW0JWAEInRLe9hlvgy9Dd5weB7E
-        neGKSM4YqPWy4glkgHnwpDGl8ursUViECbhKubs37ejTWL6hPr481CuIQM3XaIoT
-        +4Jx4EnFn5OpwqlckzbO1HAHUKTPybi+1mnhsSNTIapC/v4I0l+n5os56nsnThB6
-        +tUEJoUBdBSvAFezHQxsS4gGdVUzkNh7JKQv3MByCw==
-X-ME-Sender: <xms:9Me6Y8Sa5-Hm01QBr92QnMfE4XDevhMmcSSkkQyXs7JdE_CN1abBTA>
-    <xme:9Me6Y5wZTzFcbjWJ0qwZirJan6nV7zUZP3tX_SklTpIdphp4VTl53wdLtph8ozXZa
-    PMS6OY1fLYic1ve9nA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrkeeggdehiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdetrhhn
-    ugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtth
-    gvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedtkeet
-    ffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrh
-    hnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:9Me6Y51n4OrHfZe-hh-e-ZOVlAqkHwyYa-McpmAwsARQ0xkOANfF8Q>
-    <xmx:9Me6YwCYQo66qrLhIxD34OOuvT14sTN25j4EwWw1PUEL5cMJKHUFYA>
-    <xmx:9Me6Y1h8LsPyPO251o6t5mM1TfzXHyVGEr8eN9Kb6jNcKSCUwFa2vQ>
-    <xmx:9Me6Y-ZumOpxlL0Jv3IWIl8XxzlJUWhs-KuDStSvLqxzrDdK-YKpfQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 23398B60089; Sun,  8 Jan 2023 08:41:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1185-g841157300a-fm-20221208.002-g84115730
-Mime-Version: 1.0
-Message-Id: <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
-In-Reply-To: <m2sfglh02h.fsf@free.fr>
-References: <20230105134622.254560-1-arnd@kernel.org>
- <20230105134622.254560-5-arnd@kernel.org> <m2sfglh02h.fsf@free.fr>
-Date:   Sun, 08 Jan 2023 14:40:47 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Robert Jarzmik" <robert.jarzmik@free.fr>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Daniel Mack" <daniel@zonque.org>,
-        "Haojian Zhuang" <haojian.zhuang@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        "Stephen Boyd" <sboyd@kernel.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Viresh Kumar" <viresh.kumar@linaro.org>,
-        "Ulf Hansson" <ulf.hansson@linaro.org>,
-        "Dominik Brodowski" <linux@dominikbrodowski.net>,
-        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>
-Subject: Re: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S231238AbjAHUWO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Jan 2023 15:22:14 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85706F59A
+        for <linux-pm@vger.kernel.org>; Sun,  8 Jan 2023 12:22:12 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id s9so6254754wru.13
+        for <linux-pm@vger.kernel.org>; Sun, 08 Jan 2023 12:22:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jF0KYZTK8QJNvtuEmjEBv0Uobp1zLO6Frlg8xQpiDQY=;
+        b=oykHx1VBFGqHeEeU/T0fOpgU8yKVSyaaHkI9wiqZXYRplC+7cMsaGiBNLCB4JERLhJ
+         B7hZTUK8sNVDoyCGzXJixRHDAIvTxZkJAW2NAqaQifbMbzaTMY3yRl2VvfhBbMHihVP8
+         U5mjD6gV5GJZsJ2UBRo9nf6T6yPljZqNyyUeXRbiq7Sv82RBap5qCc9I4UpfDY7GDFCq
+         w6vFhEqpygJo6+7gNA9SRgXqQNAtGCScnWcAF02LYXRVoSqSyC9asEQYvm8TZ8E/4NMR
+         rHYVNUwIRIttIUL/beCm8Upd/8Y9X0SWFr9WV7nB1mo4i90NgZOMkHd3OGf2fxvc9pNN
+         ow4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=jF0KYZTK8QJNvtuEmjEBv0Uobp1zLO6Frlg8xQpiDQY=;
+        b=LHRLFGClgOnS10VaiTBF8lge7ZTuvcmcqtGdAh8RCDTaxRgR6DjAdhqMVC72mu15zL
+         AKFy1rEZifrCLP8W6ujMWrUuKGbaItWd5C1YLkIyr9nvXbfa1VVMNDqRE8FCBuFj8eJC
+         Gn0THKGapjTqDpcjUCrx9TJfhORrQvcNYPbI9MmSxeCJSO8VxW7K89AsMyDbWZqfMaBK
+         bWk0XtD2NFvwOi45s+OAYEzC6hTu45l5cCHEwFhHHAzFKookWs2iNZVZ5xRJHLpyOfmh
+         AI3YNdT63pxDM29u8rTa0OaISOcqQhaZMKj5XBzg4fL7iCPmGqYrPyMBNsZmgGlpQ1wP
+         ssbQ==
+X-Gm-Message-State: AFqh2kptSiV8+CLgnSZ/ksPgvf7cBDsR8Q/BEaj4lVoav3dTvu+6KUSk
+        dflun/zxL+51mqkczNrbHKnf3Q==
+X-Google-Smtp-Source: AMrXdXumY/IjM9BzQccvh+V/4dRS5DcghPax3xvD7ryg8A6oSHhaK6kQIvkyicpd39XFx5kC2Tkaiw==
+X-Received: by 2002:a5d:6dc4:0:b0:2b4:e5e:1e16 with SMTP id d4-20020a5d6dc4000000b002b40e5e1e16mr8092345wrz.35.1673209330825;
+        Sun, 08 Jan 2023 12:22:10 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id s10-20020adfea8a000000b002421ed1d8c8sm6652754wrm.103.2023.01.08.12.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 08 Jan 2023 12:22:10 -0800 (PST)
+Message-ID: <72fcddd3-0429-4e23-ab68-2a502f451966@linaro.org>
+Date:   Sun, 8 Jan 2023 21:22:09 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Xu Panda <xu.panda@zte.com.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [GIT PULL] generic trip points for the thermal framework
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 8, 2023, at 09:49, Robert Jarzmik wrote:
-> Arnd Bergmann <arnd@kernel.org> writes:
->> There is currently no devicetree support for any of these three
->> SoCs, and no board files remain. As it seems unlikely that 
->> anyone is going to add DT support soon, let's drop the SoC specific 
->> code now.
->
-> Hi Arnd,
->
-> Here you're dropping pxa variant support. For the currently 
-> "partly" working boards in devicetree, such a zylonite, this
-> will break their current support.
->
-> For example the zylonite I have which is working on DT has a 
-> pxa310 variant.
-> The cm-x300, which also works in DT, has a pxa320 variant.
->
-> What these boards need is their IO mappings and cpufreq to still 
-> work after
-> your serie in DT. What bothers me are the changes to :
->  - drivers/clk/pxa/clk-pxa3xx.c
->  - drivers/cpufreq/pxa3xx-cpufreq.c
->
-> Here the clock changes will probably remove the clock provided to 
-> specific
-> pxa310/pxa320 drivers for example.
->
-> I don't know how you want to proceed, yet this change will break 
-> some pxa3xx platforms.
 
-Hi Robert,
+Hi Rafael,
 
-Thanks for pointing this out, I thought that I had caught
-all the missing dependencies ones after you pointed out
-the AC97_BUS_NEW that I fixed in patch 14.
+here are the changes for the generic trip points which were postponed 
+during the last release. They have been in the linux-next branch since 
+November.
 
-From what I can tell, commit b5aaaa666a85 ("ARM: pxa: add
-Kconfig dependencies for ATAGS based boards"), the
-PXA310/PXA320 DT support became dead code because
-MACH_PXA3XX_DT only selects CPU_PXA300, so if it worked
-before that commit, it now needs CONFIG_UNUSED_BOARD_FILES
-and CONFIG_EXPERT as well as enabling one of the legacy
-board files with the corresponding chip support.
+The following changes since commit b878d3ba9bb41cddb73ba4b56e5552f0a638daca:
 
-If that's all you think is missing, I can add this
-trivial patch as well and rework the series to not
-drop code that depends on PXA310/PXA320:
+   thermal: int340x: Add missing attribute for data rate base 
+(2022-12-30 19:48:37 +0100)
 
---- a/arch/arm/mach-pxa/Kconfig
-+++ b/arch/arm/mach-pxa/Kconfig
-@@ -45,6 +45,8 @@ config MACH_PXA27X_DT
- config MACH_PXA3XX_DT
-        bool "Support PXA3xx platforms from device tree"
-        select CPU_PXA300
-+       select CPU_PXA310
-+       select CPU_PXA320
-        select PINCTRL
-        select POWER_SUPPLY
-        select PXA3xx
+are available in the Git repository at:
 
-Can you have a look at the other patches to see if there
-are more removed drivers or platform bits that are currently
-dead code but are actually required?
+ 
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
+tags/generic-trip-point
 
-     Arnd
+for you to fetch changes up to 3a151494dc04c76add577ae66e8a04f900638aaf:
+
+   thermal/drivers/armada: Use strscpy() to instead of strncpy() 
+(2023-01-06 14:14:48 +0100)
+
+----------------------------------------------------------------
+- Rework a large bunch of drivers to use the generic thermal trip
+   structure and the opportunity to do more cleanups by removing unused
+   functions in the OF code (Daniel Lezcano)
+
+- Fix some locking issues related to the generic thermal trip rework
+   (Johan Hovold)
+
+- Fix a crash when requesting the critical temperature on tegra, this
+   fix is related to the generic trip point (Jon Hunter)
+
+- Use strscpy() to instead of strncpy() (Xu Panda)
+
+----------------------------------------------------------------
+Daniel Lezcano (32):
+       thermal/core: Add a generic thermal_zone_get_trip() function
+       thermal/sysfs: Always expose hysteresis attributes
+       thermal/core: Add a generic thermal_zone_set_trip() function
+       thermal/core/governors: Use thermal_zone_get_trip() instead of 
+ops functions
+       thermal/of: Use generic thermal_zone_get_trip() function
+       thermal/of: Remove unused functions
+       thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
+       thermal/drivers/exynos: of_thermal_get_ntrips()
+       thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by 
+thermal_zone_get_trip()
+       thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
+       thermal/drivers/uniphier: Use generic thermal_zone_get_trip() 
+function
+       thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
+       thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
+       thermal/drivers/armada: Use generic thermal_zone_get_trip() function
+       thermal/drivers/rcar_gen3: Use the generic function to get the 
+number of trips
+       thermal/of: Remove of_thermal_get_ntrips()
+       thermal/of: Remove of_thermal_is_trip_valid()
+       thermal/of: Remove of_thermal_set_trip_hyst()
+       thermal/of: Remove of_thermal_get_crit_temp()
+       thermal/drivers/st: Use generic trip points
+       thermal/drivers/imx: Use generic thermal_zone_get_trip() function
+       thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
+       thermal/drivers/broadcom: Use generic thermal_zone_get_trip() 
+function
+       thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
+       thermal/drivers/ti: Remove unused macros 
+ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
+       thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
+       thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
+       thermal/intel/int340x: Replace parameter to simplify
+       thermal/drivers/intel: Use generic thermal_zone_get_trip() function
+       thermal/drivers/exynos: Fix NULL pointer dereference when getting 
+the critical temp
+       wifi: iwlwifi: Use generic thermal_zone_get_trip() function
+       thermal/drivers/mellanox: Use generic thermal_zone_get_trip() 
+function
+
+Johan Hovold (3):
+       thermal/drivers/qcom: Fix set_trip_temp() deadlock
+       thermal/drivers/tegra: Fix set_trip_temp() deadlock
+       thermal/drivers/qcom: Fix lock inversion
+
+Jon Hunter (1):
+       thermal/drivers/tegra: Fix crash when getting critical temp
+
+Xu Panda (1):
+       thermal/drivers/armada: Use strscpy() to instead of strncpy()
+
+  drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
+  drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
+  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 
++++++----------------
+  drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
+  drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
+  drivers/platform/x86/acerhdf.c                     |  73 +++----
+  drivers/thermal/armada_thermal.c                   |  40 ++--
+  drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
+  drivers/thermal/da9062-thermal.c                   |  52 +----
+  drivers/thermal/gov_bang_bang.c                    |  37 ++--
+  drivers/thermal/gov_fair_share.c                   |  18 +-
+  drivers/thermal/gov_power_allocator.c              |  51 +++--
+  drivers/thermal/gov_step_wise.c                    |  22 +--
+  drivers/thermal/hisi_thermal.c                     |  11 +-
+  drivers/thermal/imx_thermal.c                      |  72 +++----
+  .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
+  .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
+  .../int340x_thermal/processor_thermal_device.c     |  10 +-
+  drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
+  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  44 ++---
+  drivers/thermal/rcar_gen3_thermal.c                |   2 +-
+  drivers/thermal/rcar_thermal.c                     |  53 +-----
+  drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
+  drivers/thermal/st/st_thermal.c                    |  47 +----
+  drivers/thermal/tegra/soctherm.c                   |  35 ++--
+  drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
+  drivers/thermal/thermal_core.c                     | 154 ++++++++++++---
+  drivers/thermal/thermal_core.h                     |  24 +--
+  drivers/thermal/thermal_helpers.c                  |  28 +--
+  drivers/thermal/thermal_netlink.c                  |  19 +-
+  drivers/thermal/thermal_of.c                       | 116 ------------
+  drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
+  drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
+  drivers/thermal/uniphier_thermal.c                 |  27 ++-
+  include/linux/thermal.h                            |  12 ++
+  35 files changed, 618 insertions(+), 1046 deletions(-)
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
