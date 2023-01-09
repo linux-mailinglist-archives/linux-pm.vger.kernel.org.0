@@ -2,137 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7768C663124
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 21:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0256663139
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 21:18:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236279AbjAIUNw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 15:13:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S233468AbjAIUSB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 15:18:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237732AbjAIUNs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 15:13:48 -0500
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA802DC8
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 12:13:46 -0800 (PST)
-Received: by mail-lf1-x133.google.com with SMTP id y25so14804742lfa.9
-        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 12:13:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZwlI2rC+HzJTLFLMhKZ8XXSbqvnPdbvWS7MaUPnObQo=;
-        b=kz3Ist5SxOCjqV2Ocp2A6n17EHolOzFGiqs6Wco9XF+43bgkwP9nBpHWfzG4X/BXQx
-         CyGQO1Ofksog/BjasUXnL0yAnmDUZ44XYgH8AYgP6Dnp3dav6Bea9C/x41l56t1mL2Sw
-         chgSQ8gIVZWZ0S0UaW5amMhXBDegOHhh9IFm40U2qPAsFRM09/BF0IvMBNsMmmwR6KtA
-         8cmvA2FyEnoOMh2ULjMshs5E4J7fz2izE+xtI+I4y42dmYwQMyTcgrXVpI7HVQs4caH4
-         KEQ3vy9J0wHOewqQ99+KxtH1TIZOMtJuV/ljHg4FElybP2XRtibuBisf4wIQhKhHdkvW
-         xT7A==
+        with ESMTP id S231359AbjAIURr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 15:17:47 -0500
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D81F1BE8F;
+        Mon,  9 Jan 2023 12:17:46 -0800 (PST)
+Received: by mail-ej1-f46.google.com with SMTP id fy8so23006445ejc.13;
+        Mon, 09 Jan 2023 12:17:46 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZwlI2rC+HzJTLFLMhKZ8XXSbqvnPdbvWS7MaUPnObQo=;
-        b=KW+3CclXWM+UYO5cnAq6z8E5Zt0CFhO1Pkm8/v1P0XadFGBbsrw3Sh9iCKQFib1X4X
-         Q5AgfSyZwgV75fjjZ1U/VDnVX10lIQJhktA3qRjiAOM/oWNIqZK4tdc4/+lGgi+ayhKw
-         lfqYszq4eAlKtONPSPT2Mf5oely2yNve3AF/8hY3IbznbHq9+WyrgoLBZ8V8b8cr5HEE
-         PdLwv4XmidPnq/wLeUEXyvP1znmPBKTIpSN/DhBZ/NWrc0IAhxkMvtOZ8WG6K8104BAl
-         ZD1+/3aA7L+QV2J8H02e27FTUwXseEHpmOofH3f9TEJzbrwuyTd/IzfuJyqAH1fyucFo
-         ikgA==
-X-Gm-Message-State: AFqh2kqTuT1dhHHjCvM7ICjQcaIJqVvJe77NzS41ieHh1ipspFZ4Hxva
-        86iS3ExkI0m9NDZmpXmafA7h0w==
-X-Google-Smtp-Source: AMrXdXtvNWi+5bMNS3mo/Qw4dk7CPRaMpdh2nLCV4A0yC2G+8sSbxJc6WOy18Yj7EqgI+pgZXWBpcA==
-X-Received: by 2002:a05:6512:3601:b0:4b7:13b:259d with SMTP id f1-20020a056512360100b004b7013b259dmr16616174lfs.48.1673295225068;
-        Mon, 09 Jan 2023 12:13:45 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id x2-20020a056512130200b004a8f824466bsm1766455lfu.188.2023.01.09.12.13.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 12:13:44 -0800 (PST)
-Message-ID: <bca87233-ae9d-00f8-07d3-07afef2cb92c@linaro.org>
-Date:   Mon, 9 Jan 2023 22:13:43 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MrLqMdKSNmxzVRMeoaFJCRgQxJZLPqcdUiBMUTVwu2s=;
+        b=hzsNjFElKw45TcpAdVmojXE05wkEiU1HPoDCa9HcmV0A4NLmbuyCeZ/vxii1NF1elJ
+         GYvXmBQxiEIVpzdkiBvNQRpmV2mht30qp5SFXpbGbfOVRY+Oj60a4KI/zsTrpnqyTAow
+         ZfAzNXCUoWoO5zt4w8EdS9nwWUsmrZkXVDMOIv5CKRC/7cYWCljhHWgGQAFNcnuqqxfi
+         8+215B+il3sc8Q+GF6uI8+/rFooLyp6l0Ha19zR/nge7Zpqw7fMjHhbXH6jSycbqNV5A
+         pWue6uE9zPE77d3hZyAMWSECA2duSYkrn384k0sjRp+A9Qw22l9yuXIjCO3E1B99V7Jc
+         gtGw==
+X-Gm-Message-State: AFqh2kpJc0l5q0eHhGVovWXeQrvlaazpYfr5+IGM0/GnmJ7PXxcnOKUO
+        voj7FdvLKKw3MGZXdhef8vC32iegWcSLTFZAueqkca3D
+X-Google-Smtp-Source: AMrXdXvTAoxzeh8FIVJX27P5x8Ly+Q5/FU7ILZb6V1jMNfA03+nsZ4YzUILf5tHM1xj8t9/W6JVCmguX6R2n+zCKVlE=
+X-Received: by 2002:a17:907:6d2a:b0:7c0:efba:b39c with SMTP id
+ sa42-20020a1709076d2a00b007c0efbab39cmr7113965ejc.209.1673295464829; Mon, 09
+ Jan 2023 12:17:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 00/18] arm64: qcom: add support for sa8775p-ride
-Content-Language: en-GB
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230109174511.1740856-1-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <72fcddd3-0429-4e23-ab68-2a502f451966@linaro.org>
+In-Reply-To: <72fcddd3-0429-4e23-ab68-2a502f451966@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 9 Jan 2023 21:17:33 +0100
+Message-ID: <CAJZ5v0iSsg63KdfY79DHSeR+DnaQF2c7GoFZaUw3eHh4XNkWRA@mail.gmail.com>
+Subject: Re: [GIT PULL] generic trip points for the thermal framework
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Xu Panda <xu.panda@zte.com.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/01/2023 19:44, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> This adds basic support for the Qualcomm sa8775p platform and its reference
-> board: sa8775p-ride. The dtsi contains basic SoC description required for
-> a simple boot-to-shell. The dts enables boot-to-shell with UART on the
-> sa8775p-ride board. There are three new drivers required to boot the board:
-> pinctrl, interconnect and GCC clock. Other patches contain various tweaks
-> to existing code. More support is coming up.
-> 
-> Bartosz Golaszewski (15):
->    dt-bindings: clock: sa8775p: add bindings for Qualcomm gcc-sa8775p
->    arm64: defconfig: enable the clock driver for Qualcomm SA8775P
->      platforms
->    dt-bindings: clock: qcom-rpmhcc: document the clock for sa8775p
->    clk: qcom: rpmh: add clocks for sa8775p
->    dt-bindings: interconnect: qcom: document the interconnects for
->      sa8775p
->    arm64: defconfig: enable the interconnect driver for Qualcomm SA8775P
->    dt-bindings: pinctrl: sa8775p: add bindings for qcom,sa8775p-tlmm
->    arm64: defconfig: enable the pinctrl driver for Qualcomm SA8775P
->      platforms
->    dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
->    dt-bindings: power: qcom,rpmpd: document sa8775p
->    soc: qcom: rmphpd: add power domains for sa8775p
->    dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
->    iommu: arm-smmu: qcom: add support for sa8775p
->    dt-bindings: arm: qcom: document the sa8775p reference board
->    arm64: dts: qcom: add initial support for qcom sa8775p-ride
-> 
-> Shazad Hussain (2):
->    clk: qcom: add the GCC driver for sa8775p
+On Sun, Jan 8, 2023 at 9:22 PM Daniel Lezcano <daniel.lezcano@linaro.org> wrote:
+>
+>
+> Hi Rafael,
+>
+> here are the changes for the generic trip points which were postponed
+> during the last release. They have been in the linux-next branch since
+> November.
+>
+> The following changes since commit b878d3ba9bb41cddb73ba4b56e5552f0a638daca:
+>
+>    thermal: int340x: Add missing attribute for data rate base
+> (2022-12-30 19:48:37 +0100)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git
+> tags/generic-trip-point
+>
+> for you to fetch changes up to 3a151494dc04c76add577ae66e8a04f900638aaf:
+>
+>    thermal/drivers/armada: Use strscpy() to instead of strncpy()
+> (2023-01-06 14:14:48 +0100)
+>
+> ----------------------------------------------------------------
+> - Rework a large bunch of drivers to use the generic thermal trip
+>    structure and the opportunity to do more cleanups by removing unused
+>    functions in the OF code (Daniel Lezcano)
+>
+> - Fix some locking issues related to the generic thermal trip rework
+>    (Johan Hovold)
+>
+> - Fix a crash when requesting the critical temperature on tegra, this
+>    fix is related to the generic trip point (Jon Hunter)
+>
+> - Use strscpy() to instead of strncpy() (Xu Panda)
+>
+> ----------------------------------------------------------------
+> Daniel Lezcano (32):
+>        thermal/core: Add a generic thermal_zone_get_trip() function
+>        thermal/sysfs: Always expose hysteresis attributes
+>        thermal/core: Add a generic thermal_zone_set_trip() function
+>        thermal/core/governors: Use thermal_zone_get_trip() instead of
+> ops functions
+>        thermal/of: Use generic thermal_zone_get_trip() function
+>        thermal/of: Remove unused functions
+>        thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/exynos: of_thermal_get_ntrips()
+>        thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by
+> thermal_zone_get_trip()
+>        thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/uniphier: Use generic thermal_zone_get_trip()
+> function
+>        thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/armada: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/rcar_gen3: Use the generic function to get the
+> number of trips
+>        thermal/of: Remove of_thermal_get_ntrips()
+>        thermal/of: Remove of_thermal_is_trip_valid()
+>        thermal/of: Remove of_thermal_set_trip_hyst()
+>        thermal/of: Remove of_thermal_get_crit_temp()
+>        thermal/drivers/st: Use generic trip points
+>        thermal/drivers/imx: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/broadcom: Use generic thermal_zone_get_trip()
+> function
+>        thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/ti: Remove unused macros
+> ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
+>        thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
+>        thermal/intel/int340x: Replace parameter to simplify
+>        thermal/drivers/intel: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/exynos: Fix NULL pointer dereference when getting
+> the critical temp
+>        wifi: iwlwifi: Use generic thermal_zone_get_trip() function
+>        thermal/drivers/mellanox: Use generic thermal_zone_get_trip()
+> function
+>
+> Johan Hovold (3):
+>        thermal/drivers/qcom: Fix set_trip_temp() deadlock
+>        thermal/drivers/tegra: Fix set_trip_temp() deadlock
+>        thermal/drivers/qcom: Fix lock inversion
+>
+> Jon Hunter (1):
+>        thermal/drivers/tegra: Fix crash when getting critical temp
+>
+> Xu Panda (1):
+>        thermal/drivers/armada: Use strscpy() to instead of strncpy()
+>
+>   drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
+>   drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
+>   drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209
+> +++++----------------
+>   drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
+>   drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
+>   drivers/platform/x86/acerhdf.c                     |  73 +++----
+>   drivers/thermal/armada_thermal.c                   |  40 ++--
+>   drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
+>   drivers/thermal/da9062-thermal.c                   |  52 +----
+>   drivers/thermal/gov_bang_bang.c                    |  37 ++--
+>   drivers/thermal/gov_fair_share.c                   |  18 +-
+>   drivers/thermal/gov_power_allocator.c              |  51 +++--
+>   drivers/thermal/gov_step_wise.c                    |  22 +--
+>   drivers/thermal/hisi_thermal.c                     |  11 +-
+>   drivers/thermal/imx_thermal.c                      |  72 +++----
+>   .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
+>   .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
+>   .../int340x_thermal/processor_thermal_device.c     |  10 +-
+>   drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
+>   drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  44 ++---
+>   drivers/thermal/rcar_gen3_thermal.c                |   2 +-
+>   drivers/thermal/rcar_thermal.c                     |  53 +-----
+>   drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
+>   drivers/thermal/st/st_thermal.c                    |  47 +----
+>   drivers/thermal/tegra/soctherm.c                   |  35 ++--
+>   drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
+>   drivers/thermal/thermal_core.c                     | 154 ++++++++++++---
+>   drivers/thermal/thermal_core.h                     |  24 +--
+>   drivers/thermal/thermal_helpers.c                  |  28 +--
+>   drivers/thermal/thermal_netlink.c                  |  19 +-
+>   drivers/thermal/thermal_of.c                       | 116 ------------
+>   drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
+>   drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
+>   drivers/thermal/uniphier_thermal.c                 |  27 ++-
+>   include/linux/thermal.h                            |  12 ++
+>   35 files changed, 618 insertions(+), 1046 deletions(-)
+>
+> --
 
-This patch didn't make it to the list. Please check if you can fix or 
-split it somehow?
+Pulled and pushed out, thanks!
 
--- 
-With best wishes
-Dmitry
-
+I've merged my thermal-intel branch on top of this and pushed out the
+result into the bleeding-edge branch.  Please check my merge conflict
+resolution there.
