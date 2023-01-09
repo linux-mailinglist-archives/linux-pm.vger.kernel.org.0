@@ -2,203 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819C86629FA
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 16:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABF7662A49
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 16:42:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233951AbjAIPcF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 10:32:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S237287AbjAIPlo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 10:41:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237202AbjAIPbo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 10:31:44 -0500
-Received: from fx304.security-mail.net (smtpout30.security-mail.net [85.31.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E5164F8
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 07:30:54 -0800 (PST)
-Received: from localhost (localhost [127.0.0.1])
-        by fx304.security-mail.net (Postfix) with ESMTP id A208D9D0BE
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 16:30:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
-        s=sec-sig-email; t=1673278252;
-        bh=2Ol4WvfIDv/pCXWodkK/JAf2l0CqXaG0EOhqPlCz5xY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=kz8ddZYg0nJtow93ucAH7WnT8Vqwhr3lvi4IHN8OoSZGNmOScb2xcOeU4ahhPcX9+
-         p9CNBdA/jH2f4K049TrCPM610wwO1NQ4J9xx87Kmzbu7GXz0K8YSAee6gE4pfS7J3i
-         nAosaoMAGS6mHOvc8xjvjf4lK/Nd1xrz4y1l10bc=
-Received: from fx304 (localhost [127.0.0.1]) by fx304.security-mail.net
- (Postfix) with ESMTP id 520CF9D07F; Mon,  9 Jan 2023 16:30:52 +0100 (CET)
-Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
- fx304.security-mail.net (Postfix) with ESMTPS id 9D11C9D072; Mon,  9 Jan
- 2023 16:30:51 +0100 (CET)
-Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
- zimbra2.kalray.eu (Postfix) with ESMTPS id 68AED27E0402; Mon,  9 Jan 2023
- 16:30:51 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
- (Postfix) with ESMTP id 38EF527E03FF; Mon,  9 Jan 2023 16:30:51 +0100 (CET)
-Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
- (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
- Ax--sd_V2azt; Mon,  9 Jan 2023 16:30:51 +0100 (CET)
-Received: from [192.168.37.161] (unknown [192.168.37.161]) by
- zimbra2.kalray.eu (Postfix) with ESMTPSA id 8E4D827E03FE; Mon,  9 Jan 2023
- 16:30:50 +0100 (CET)
-X-Virus-Scanned: E-securemail
-Secumail-id: <b2fe.63bc332b.9bc13.0>
-DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu 38EF527E03FF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
- s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1673278251;
- bh=AQRkX8OfPpkm9ao22SwrZcjsHp5YTFXu85Lp04m+1A0=;
- h=Message-ID:Date:MIME-Version:To:From;
- b=Nw9h4dkzOwPn5vuhGKIyNNJs3P3x4pfdYEE7ckz9lL13tSkmK4nwamwpUjampl3D6
- LDhJg2t6qBuoBWDfEIexbrFwLh9D9VyJiOWUlwmQC+1j7iIHZ+vEfgfvPWRc9vt9zD
- PN1+BJeuI0U91Om91ZCvoSBebX3S3D5TsBEjM/tE=
-Message-ID: <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu>
-Date:   Mon, 9 Jan 2023 16:30:50 +0100
+        with ESMTP id S237219AbjAIPkp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 10:40:45 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2081.outbound.protection.outlook.com [40.107.95.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59D715833;
+        Mon,  9 Jan 2023 07:39:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=azxh+7ctfkPZVy3C/IOTLX87Dj1fgk5MRlQ4OM9sy/HnkwYEI2BrdHGGDW8c293AH50GzymDA6uWGJ5o9vZhOZupxBAKF+cBV3umxoPN1afPcx95Qw86GnRSdF16sxgGZFCyyN6/NTuWOpntD78TbMksxL5Yq/g/OYd14CRJKInGfgqFK0VgMpPlGqqWPDfXYcecybS9w+PLAZUfUzn/i1lNKul9S6gCH456nVy7fSLX+yMdN0RT5Tryy1QPUl29FmZdoyEhte3IYqICWRTSCVPWDd5c7LmTs0bWOuICavZBzGbhTT3I1uzFiId6zCFLtqp1/sj8Hi5Fr3VYhS8eVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HjJ0lw2lwUXr67b43HvDYwVHvtEyVazgcWeR0xbw9iI=;
+ b=Ma14otPvN9ByFPXe5dsKV7itlZy4bA+d9J43N1qMPW+iDBK/2EiBAWwSwskxG9pqre6+AJoN/u5hNTrUTPvEG7BDfz+pUzvCH4yDbyqDIvSLUM4hlCYsg+caEEGqsAAVDEd62cmWelHZ1xg0BYkw9tAYRWnGwFqL2HYAmEYuRrsSevElZ1tRz0TJFVPCwdhiveJVOQXdiv72l3c8ifSWUFS3xkheDNTZCCR3FcTu47FN6e6DwieGlJ6CaCVO62/5xrdC0P9UkYbikZnl6KWCLfB0N7Yv3jKeV994VYZly3SgizemIjOqmXo+KYvAR7Rj0UR4RDIb3vtMQh4/arbPQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=HjJ0lw2lwUXr67b43HvDYwVHvtEyVazgcWeR0xbw9iI=;
+ b=3n/Stmq5sYU3dXdgfQInld5HZ0/KkzxMWnyiGBWa18xDnp+64Cwi2+89S74iEd4NmWv55b3K2rFggJsd5/Vnet1+YA9FBtvuTdMJ3oQnW81C5wlUS+QnrhyreGQW+UifQYtMHddDPPDzcZ/VPbVp/WutKqIsYo++VLz9j2pycbU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by SN7PR12MB7251.namprd12.prod.outlook.com (2603:10b6:806:2ab::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Mon, 9 Jan
+ 2023 15:39:05 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.5986.018; Mon, 9 Jan 2023
+ 15:39:05 +0000
+Message-ID: <27b6ec56-4c19-2d05-b8cf-731b7ebd4460@amd.com>
+Date:   Mon, 9 Jan 2023 21:08:51 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH] cpufreq: amd-pstate: fix kernel hang issue while
+ amd-pstate unregistering
+Content-Language: en-US
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106054856.37403-1-perry.yuan@amd.com>
+From:   Wyes Karny <wyes.karny@amd.com>
+In-Reply-To: <20230106054856.37403-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0141.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:6::26) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-Content-Language: en-us
-To:     Jeff Xie <xiehuan09@gmail.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-References: <20230103164359.24347-1-ysionneau@kalray.eu>
- <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
- <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu>
- <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
-From:   Yann Sionneau <ysionneau@kalray.eu>
-In-Reply-To: <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ALTERMIMEV2_out: done
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SN7PR12MB7251:EE_
+X-MS-Office365-Filtering-Correlation-Id: b917e4bd-f301-4b0f-22cf-08daf257a3e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yAPPry9Oadi1QFxG2IMSlzZkhNb5Q4DvLpXBLR0bRMJhwzsr8RQ2aJGSSK0TyNDJB9nKY9HrGJHtEMR9H4cHm9dGGecrsDLVsF7ljXKf6Ey6SikeF9LjaxtPf2lJj7RxCOzX5cXx3nik42ckXYTnebDB3A0ym5S3yFIxqRMiMeN0kzod5fl6+p5/1RXCOVSQ5iun1iGMCKnNwldG5yz/QhKlMxSP2bWyNok6yrJqMo6+Jx6aX+C7r/WFVLf2AtMq8oqdPNqidYz599KdRCrDuzMpu4qkQyeFi/dRnz1SIyc6ccEOzwOpmyRK3cvWqIH5dJV+V+o5Ja0tJIVZ7ILh8mmLvfZC//CZ5ek48d5pR9BuRSLCBOBg3ne0QufAJY/JDz+bDeBsaRlWtwhrve3Ow30o3CMaYvp8J2XD+RmbmLHCfxyImC6EQYXbLrIII8vJcGVBvzdKNQAbJXtTThlvBIzSdUS9btD+PYOR4rAubV4h5dFXSNyB47WfcqcxgsEtPawPndNMCKHHGyGfNJS51WHYgjPHYjcoNCi+ZLnk/zRcEZSLQ7MSybPLqw3xtdyghkRVcegt3Uc8QHxJXSjNVPaDdY3jlb8QYeg8dWAnaLr51q4GNi3zcAhf3MPb9i4JdHJqxUW0otuA29pnleLiIgkcnwz5NUrplyr9213rWjdsASTvxI3dZWvcvPZ7iS5LIMoZtlzHFW0PDo5udfRBxobGhS4WJXF1zgBZozWJ37U=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199015)(316002)(5660300002)(44832011)(26005)(6512007)(186003)(478600001)(6486002)(2616005)(41300700001)(31696002)(4326008)(66946007)(66476007)(66556008)(8676002)(8936002)(83380400001)(86362001)(36756003)(6666004)(31686004)(53546011)(6506007)(38100700002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MWd5aG9aaHdXL2hwZ2NFMzJjY2FvY1M2L09Dd0Jxa2xobmwyVkxFclFwZ3RI?=
+ =?utf-8?B?ZVRuNmRVL1VJdDE3V21UZk5tUUUrV1E2MHVIa2RJRDJkalZpRkZaSGMvRDF4?=
+ =?utf-8?B?ZmZiQXVyU1IwdGROc3pjcFZ1T1dUYTVzUkxjRmZYWVMvWUNJL3pxRnEwak1L?=
+ =?utf-8?B?bzl5Z3ZWMFpoSUdMQnUwNlZBK3F3Nm5Tbk5xQUtRTzF5YnplaXcySDQ0RXdX?=
+ =?utf-8?B?ZmQwcUxuZi9kQU8rUG54bVdDRHhGeWNXbTNLLzh3ZGFkWVdEYklFM1lXNENR?=
+ =?utf-8?B?M0l4SGZpVzJadm5YcmJ5TThhOStEZXZsNWpFVDFUZmtVVWt2dzhXVUNweTJJ?=
+ =?utf-8?B?amFweW4zK3NwL09XUDdRMHh0QkdYK1Erci9WSlY1cXRNOEMvbk52Sm5COHho?=
+ =?utf-8?B?YWw4L21mOVVYSVdHQ0FKNWo3VjlwOXlYdEM1LzhHd25WMTdLdmFNSVRzUG1j?=
+ =?utf-8?B?dTZIc2x6eTRqMDNjaU9TSzYvUk13TmIwVlE1RWd1UCt1d1VDdFg5VTVIUnFx?=
+ =?utf-8?B?NS9UT2xtMFBKNzlYSjRKK1g5NlczYTg2L2hxTFhJM1dMYXhpS0Vkc0Y1SzVo?=
+ =?utf-8?B?bjhNTlIzSzlsblh2eUxpUkFUSFllUEVvRzRoN0o1eHYwYytvV1FvNlNkWUpE?=
+ =?utf-8?B?Qk9obnJkdjhRL0pRdVludmoyd2MvMGFOaSt4L1FHdHdSUVhJTzlTdXJsL0Vo?=
+ =?utf-8?B?cXB0UkNLSW1INVpQZ0hITTdVU0s0aGR1MmtHSVhXZTdDR0t4eFJjc1EzZ200?=
+ =?utf-8?B?dnc1bVlpTyt3aUVoeTlTUDFiMGxzM3ZGY2FpMGJ5VTZjeGUzcHJvb1k0a2xK?=
+ =?utf-8?B?d1BFM3NFNGlIYXlpOUd3TEtJMWFJQW0zNS8vZklsVU5vS082aTUybUdPRWla?=
+ =?utf-8?B?K3pnVUxwc2Q0MkFKVE5JaHRacFRRb3hMbHAvVmpPckZyU3ZOM0NENGFqNGVn?=
+ =?utf-8?B?KzI0TDdsbzRiMlZBRU5HNGZUcHJ4a084OVB3c0ZrYVV6YVltd0pBL1ZJWHJs?=
+ =?utf-8?B?bmF4RlRXWXFxQmt6R1ZwdTd0MUpPSklkVDl4QSt2ZjJXc0JlVG5MdHBneDY1?=
+ =?utf-8?B?NGg4TE13eWJCK3hlNHRoVFZpQ2FCVFVBbUNSZ2UyTUJGVUhIZWc2bFNpMlp6?=
+ =?utf-8?B?NTRYUG9SdURrNWd3eWh1UVdZUnNCWC81MGNjcC8zYnVIZWUxWk5tMm5RY0Vz?=
+ =?utf-8?B?VGVwSkh3a05CMjVpelJpbWRKN3ZrY0d6QnNZbWZtZ0JDSHNQa2xwV3RxTHpl?=
+ =?utf-8?B?d0pSWjg4WnN5MnZtMFFqZWZCU1JuVWhjN0FhK1B6Y09IZzM2Rm4ydVJZVE9x?=
+ =?utf-8?B?VXYwTDBPSnNKZFFNbmRSYlI4d3F1MlFvRUFxdUNrME9Wd2M4ZEhTV2ZvVyta?=
+ =?utf-8?B?cE81TzlxTkhLaG9WUXFlQzkxQWJ0QzNHcXRHSXhMT21JekZxemhKK0RSbkZ1?=
+ =?utf-8?B?TUlRY28rQk00YldmZVBZeUxSSXpZNjdzeWxkMWh4RnR5bzVkUkw5MlFZQ01B?=
+ =?utf-8?B?cnFTYkp1QXpLZHpoM1FwTXZSY2I2WGw2eStGTjBXeTdjOW9xTUZzdjk2a256?=
+ =?utf-8?B?dWJzblp3Wk9UamVFQ3F2bkdFKzE3TCtkSmw4Q1ZjUVdnYjdxTnk0Z0VxV1RC?=
+ =?utf-8?B?emhneC9WdW1sWFJVWExFRFdVcUJLVUtuYy8xOWp0NStKaXRKemVwYzVWcmxj?=
+ =?utf-8?B?TmxQQzhRVGNnRGpvZWFna0RqNEVqekZrdFZrOFB0akV4OThOUCtzQkZ0Tk8y?=
+ =?utf-8?B?Q2xjRG1EZmRVRlo0UElORWM5amtqa3Q4aVBORnRTbTV6V05WSXRyTWRJM1Bx?=
+ =?utf-8?B?cFo4QzJEejVQQTZPZDdCQ3ZKZndlUVl6eFprSmJla291NVM2TVl4QnlpSFhU?=
+ =?utf-8?B?RjJhTEsxYXlwSG5sWE8yOVV5bUFVMEM5M0xLNFFidklLUDZCWGFUL3lMdHUw?=
+ =?utf-8?B?RWdhamljU09YN2NqSnI4a2Z6eXl5SUZvYnJIcUlzMVNEZWZMR0tGT0JMNWRH?=
+ =?utf-8?B?a0lSY1dtR3piS25NN2d5LzJ1MFhjdmFOZTBDNjdzVTRlVXhpRWhzempQaEt2?=
+ =?utf-8?B?Sk5IZWpzWFNMajEzSW5kS001anJjVFplSSs5ZkE0V3hKdUo4N3phOTZDcmk4?=
+ =?utf-8?Q?xut2WRHXDdSrbp1yxzHpf7WPq?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b917e4bd-f301-4b0f-22cf-08daf257a3e2
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Jan 2023 15:39:05.6772
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1dVAwm3uKAToxc1JFWC7/zugXfAuQFbDVBWakZZyVD9qQSW2XkQZEvd6qajT/7HP6+UIs7Rdq0yuTJteqovQFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7251
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Jeff,
+On 1/6/2023 11:18 AM, Perry Yuan wrote:
+> In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
+> increase increments the kobject reference count of policy and make it as
+> busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
+> decrement the kobject reference count back, it will resolve the kernel
+> hang issue when unregistering the amd-pstate driver and register the
+> `amd_pstate_epp` driver instance.
+> 
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
 
-On 1/9/23 16:11, Jeff Xie wrote:
-> On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
->> Hi Jeff,
->>
->> On 1/7/23 07:25, Jeff Xie wrote:
->>> Hi,
->>>
->>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> wrote:
->>>> [snip]
->>>>
->>>> A kvx toolchain can be built using:
->>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
->>>> $ git clone https://github.com/kalray/build-scripts
->>>> $ cd build-scripts
->>>> $ source last.refs
->>>> $ ./build-kvx-xgcc.sh output
->>> I would like to build the kvx-xgcc to compile and test the linux
->>> kernel, but it reported a compile error.
->>> I wonder what version of gcc you are using.
->>>
->>> My build environment:
->>> VERSION="20.04.2 LTS (Focal Fossa)"
->>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
->>>
->>>
->>> Compile error:
->>> $ ./build-kvx-xgcc.sh output
->>>
->>> ../../binutils/libiberty/fibheap.c: In function ‘fibheap_replace_key_data’:
->>> ../../binutils/libiberty/fibheap.c:38:24: error: ‘LONG_MIN’ undeclared
->>> (first use in this function)
->>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
->>>         |                        ^~~~~~~~
->>> [snip]
->> What SHA1 of https://github.com/kalray/build-scripts are you using?
-> I have executed the "source last.refs"
+Tested-by: Wyes Karny <wyes.karny@amd.com>
 
-I was referring to the SHA1 of the repo itself (build-scripts).
+> Cc: stable@vger.kernel.org
+> ---
+>  drivers/cpufreq/amd-pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 204e39006dda..c17bd845f5fc 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>  		max_perf = min_perf;
+>  
+>  	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
+> +	cpufreq_cpu_put(policy);
+>  }
+>  
+>  static int amd_get_min_freq(struct amd_cpudata *cpudata)
 
-`last.refs` is a symbolic link which can point to several releases, 
-depending on "when" you did the clone.
-
-I am asking this because we recently published new toolchains.
-
-I want to make sure which one you are trying to build.
-
->> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 without
->> issues, I don't understand why it does not work for you, although indeed
->> the error log you are having pops out on my search engine and seems to
->> be some well known issue.
-> Yes, there are many answers on the web, but none of them solve this problem.
->
->> If the build-script does not work for you, you can still use the
->> pre-built toolchains generated by the GitHub automated actions:
->> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("latest"
->> means 22.04)
-> Thanks, this is the final solution ;-)
-Good to see it helped :)
-
-Regards,
 
 -- 
-
-Yann
-
-
-
-
-
+Thanks & Regards,
+Wyes
