@@ -2,75 +2,127 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408F366251D
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 13:12:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 124D26626D6
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 14:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237123AbjAIMLn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 07:11:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
+        id S234478AbjAINVd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 08:21:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236646AbjAIMLL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 07:11:11 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32121101E3
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 04:11:10 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so8824340wms.0
-        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 04:11:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JYqj72YDN9vX7ORYinDNrSmo+FXDzYVs0CG3Gil7Bo0=;
-        b=a0qf2DV4GaUSSIZSn1jiG6E68EDzvFGQ0hZJmJiqZwGgh33HVMdTkBQAqdeTuakQrH
-         PSfJg7MklfoZXaX9Kk8RzlUN3vgHu1AsJ9EDUFGtvR0e3hVRPGftlw8ZlFoYkaE7V7AD
-         NXDyuEwC2huBYU6J6hNFeACy8NhQMO77DUXPkVnuETck90RZeEp2l7sTAgD9NrXtvIie
-         e/PW3E5/XI5idH7KkJoaOTvu0JEWuqLxGgxxuDofNrtdr2FRfILiqhM5lNg2zSgwb7O+
-         /bVtrtF/BYcNj8w+ySCeJu+Kl5hRBNR0mlOv3BEZB5Kcjbtf1C/jrglxCdRRtQzKz8LK
-         oHVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JYqj72YDN9vX7ORYinDNrSmo+FXDzYVs0CG3Gil7Bo0=;
-        b=x7m858A0sOSxJWeQCR+gFdtoUy8s/H2M6osDcx4OWEnWCJT4qjYMcH/+/J0jxJTegP
-         791L9uNdqy/HYe3xAwrv5DrquNfBznLI+jOzuDKdefib2yvzQPp9BSAgejVmot5+jSmP
-         GjVgm4cV01PONcx4imc1gkNvw8kf66gLIEY03tI8M+BxLBoKv7EQNQTgXhWD6F+ht9ps
-         q4fzCfWqvKJEJqKpwUCzjB5/dMQ6rG/EID1L+UR7cVCKDD+j68NHQ494AauYJ0VC1qAT
-         Ve4YdC2UQHyKkE58N39SIX+RP22egm1+t0/4MhAqHNJ5vRpqqVKVuWz5Af37i3071zxF
-         XnoA==
-X-Gm-Message-State: AFqh2kqHePpnPO6wtdnQsUuRZgN7maD9SJNdxl99Io7CoxgwuYogZiP+
-        Gj22IR13SPIhJQKzMsAhZsaamQ==
-X-Google-Smtp-Source: AMrXdXv58i0EvUFM224bVaUybSb+1rJybRzqjq0ixhhNzL6IrqeJKfJF9AArKrnFJGTO00L3hNyFDw==
-X-Received: by 2002:a05:600c:2252:b0:3d3:5d8b:7af with SMTP id a18-20020a05600c225200b003d35d8b07afmr49004382wmm.41.1673266268787;
-        Mon, 09 Jan 2023 04:11:08 -0800 (PST)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003d96c811d6dsm16914222wmq.30.2023.01.09.04.11.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Jan 2023 04:11:08 -0800 (PST)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 09 Jan 2023 13:11:06 +0100
-Subject: [PATCH v3] dt-bindings: interconnect: qcom-bwmon: document SM8550 compatibles
+        with ESMTP id S237214AbjAINVW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 08:21:22 -0500
+Received: from fx405.security-mail.net (smtpout140.security-mail.net [85.31.212.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D9FA18A
+        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 05:21:20 -0800 (PST)
+Received: from localhost (fx405.security-mail.net [127.0.0.1])
+        by fx405.security-mail.net (Postfix) with ESMTP id DFC7B335ECD
+        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 14:21:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kalray.eu;
+        s=sec-sig-email; t=1673270478;
+        bh=VTyAgBvawac4uHB7eMyMDicCX2xLvVfQ11WRs4OqUgg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=YZ+jS6/1Ma7JCmcJ3+OEDQF6/jdcWUhHaMCMCUIMiS/QRA3hvieFeCchl43TWG6g4
+         8uzP1OQwFTqJST5NGfflnAynHPXH43mmkQhylk6XZiFnOpe64YOUPMjH/EHaBa+r6X
+         XNQwFD9kMcy8gj0OVjfaZ+Y+swU0mq962ckt9ZPA=
+Received: from fx405 (fx405.security-mail.net [127.0.0.1]) by
+ fx405.security-mail.net (Postfix) with ESMTP id 382DC335EA5; Mon,  9 Jan
+ 2023 14:21:18 +0100 (CET)
+Received: from zimbra2.kalray.eu (unknown [217.181.231.53]) by
+ fx405.security-mail.net (Postfix) with ESMTPS id 1E46D335E6D; Mon,  9 Jan
+ 2023 14:21:17 +0100 (CET)
+Received: from zimbra2.kalray.eu (localhost [127.0.0.1]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPS id D765927E03FF; Mon,  9 Jan 2023
+ 14:21:16 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1]) by zimbra2.kalray.eu
+ (Postfix) with ESMTP id B3B4327E03FA; Mon,  9 Jan 2023 14:21:16 +0100 (CET)
+Received: from zimbra2.kalray.eu ([127.0.0.1]) by localhost
+ (zimbra2.kalray.eu [127.0.0.1]) (amavisd-new, port 10026) with ESMTP id
+ RFDkxXP_U9mz; Mon,  9 Jan 2023 14:21:16 +0100 (CET)
+Received: from [192.168.37.161] (unknown [192.168.37.161]) by
+ zimbra2.kalray.eu (Postfix) with ESMTPSA id 46FC927E03F5; Mon,  9 Jan 2023
+ 14:21:16 +0100 (CET)
+X-Virus-Scanned: E-securemail
+Secumail-id: <18db.63bc14cd.171d3.0>
+DKIM-Filter: OpenDKIM Filter v2.10.3 zimbra2.kalray.eu B3B4327E03FA
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kalray.eu;
+ s=32AE1B44-9502-11E5-BA35-3734643DEF29; t=1673270476;
+ bh=pFwL+Y0S0qo0MF7wO/awAfpxvBk+/1wXJh5pVmIIW2g=;
+ h=Message-ID:Date:MIME-Version:To:From;
+ b=XjT0yLLBY18QxivMgV9uczq9z+HpKf5TnyecD/FGL3y5WOfaxlypJyAxpZ8saNN2c
+ xkoB4C8EPYxurJyqIoGRHgJxE+LjZeyAAIvw8YYk1DjcyoP679xtmnwZh9BbBCh3Ku
+ YVP4+a/ZNoUFvoUsbRjrSO4n7fz2l6dahOcJsTh0=
+Message-ID: <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu>
+Date:   Mon, 9 Jan 2023 14:21:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20221114-narmstrong-sm8550-upstream-bwmon-v3-1-7d63d2ae6bce@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAFoEvGMC/5XNTQrCMBAF4KtI1o4kqWmrK+8hLiY/toEmkaSNS
- OndHdy57Gp4A+97Kysue1fY9bCy7KovPkUKzfHAzIhxcOAtZSa5lEKIM0TMocw5xQFK6JXisLwo
- Owyg3yFFwM60UnZP1K1lxGgsDnTGaEaC4jJN9Bx9mVP+/GaroHPfsVAFcCDd8v5CQ426TZ5K6ZT
- ywB6kV7lXlCRKbpRSrtGo7J+4bdsX9oBI/ygBAAA=
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.11.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+Content-Language: en-us
+To:     Jeff Xie <xiehuan09@gmail.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-audit@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        Marc =?utf-8?b?UG91bGhpw6hz?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+References: <20230103164359.24347-1-ysionneau@kalray.eu>
+ <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
+From:   Yann Sionneau <ysionneau@kalray.eu>
+In-Reply-To: <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ALTERMIMEV2_out: done
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,55 +131,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Document the compatibles used to describe the Bandwidth Monitors
-present on the SM8550 platform.
+Hi Jeff,
 
-A BWMON v4 IP monitors the CPU bandwidth, and a v5 does the LLCC
-bandwidth monitoring.
+On 1/7/23 07:25, Jeff Xie wrote:
+> Hi,
+>
+> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> wrote:
+>> [snip]
+>>
+>> A kvx toolchain can be built using:
+>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmpfr-dev
+>> $ git clone https://github.com/kalray/build-scripts
+>> $ cd build-scripts
+>> $ source last.refs
+>> $ ./build-kvx-xgcc.sh output
+> I would like to build the kvx-xgcc to compile and test the linux
+> kernel, but it reported a compile error.
+> I wonder what version of gcc you are using.
+>
+> My build environment:
+> VERSION="20.04.2 LTS (Focal Fossa)"
+> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
+>
+>
+> Compile error:
+> $ ./build-kvx-xgcc.sh output
+>
+> ../../binutils/libiberty/fibheap.c: In function ‘fibheap_replace_key_data’:
+> ../../binutils/libiberty/fibheap.c:38:24: error: ‘LONG_MIN’ undeclared
+> (first use in this function)
+>     38 | #define FIBHEAPKEY_MIN LONG_MIN
+>        |                        ^~~~~~~~
+> [snip]
 
-This is described by adding "llcc" and "cpu" into the compatible
-strings to differentiate the BWMON IPs.
+What SHA1 of https://github.com/kalray/build-scripts are you using?
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
---
----
-Changes in v3:
-- rebased on v6.2-rc1
-- Link to v2: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-bwmon-v2-0-20c555e3ba5d@linaro.org
+We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 without 
+issues, I don't understand why it does not work for you, although indeed 
+the error log you are having pops out on my search engine and seems to 
+be some well known issue.
 
-Changes in v2:
-- Reworded commit message
-- Added Reviewed-by from Krzysztof
-- Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-bwmon-v1-0-b6dd08927f35@linaro.org
----
- Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+If the build-script does not work for you, you can still use the 
+pre-built toolchains generated by the GitHub automated actions: 
+https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("latest" 
+means 22.04)
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-index 0c720dbde36e..12a0d3ecbabb 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
-@@ -27,11 +27,13 @@ properties:
-               - qcom,sc7280-cpu-bwmon
-               - qcom,sc8280xp-cpu-bwmon
-               - qcom,sdm845-bwmon
-+              - qcom,sm8550-cpu-bwmon
-           - const: qcom,msm8998-bwmon
-       - const: qcom,msm8998-bwmon       # BWMON v4
-       - items:
-           - enum:
-               - qcom,sc8280xp-llcc-bwmon
-+              - qcom,sm8550-llcc-bwmon
-           - const: qcom,sc7280-llcc-bwmon
-       - const: qcom,sc7280-llcc-bwmon   # BWMON v5
-       - const: qcom,sdm845-llcc-bwmon   # BWMON v5
+I hope it will work for you.
 
----
-base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
-change-id: 20221114-narmstrong-sm8550-upstream-bwmon-a7c6227fab6d
+Regards,
 
-Best regards,
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+
+Yann
+
+
+
+
+
