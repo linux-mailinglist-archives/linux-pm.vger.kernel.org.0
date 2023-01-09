@@ -2,188 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 996FB6628B4
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 15:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BE566297B
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 16:12:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229599AbjAIOmm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 09:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32994 "EHLO
+        id S236989AbjAIPMR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 10:12:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjAIOmj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 09:42:39 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B7C61A835
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 06:41:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1673275313;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Gn67qzc8n5vMTxpGkDlTw2FWaLmxliDIMWVXs/A4Cqw=;
-        b=OVIfpRVEjNDTOPVeqjS0VDmWSZdqgAhdyes9PW7PEBCGqG9dAxcrR+CJAS79a0pqXJqyM4
-        q8PHaqargC7MUgRip8wG1U1JPbPMPsct44bUrw5yfw2eJ6uZgTGOQdSPpe/LNmz8WYdwlP
-        LmLRvTs4WTcQ3YTQIGuIfu8CEfd7Db0=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-630-B226bLFvPGSHt2QhNO7UOw-1; Mon, 09 Jan 2023 09:41:45 -0500
-X-MC-Unique: B226bLFvPGSHt2QhNO7UOw-1
-Received: by mail-ej1-f69.google.com with SMTP id sg39-20020a170907a42700b007c19b10a747so5582074ejc.11
-        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 06:41:45 -0800 (PST)
+        with ESMTP id S236945AbjAIPL2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 10:11:28 -0500
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7581FF02A;
+        Mon,  9 Jan 2023 07:11:19 -0800 (PST)
+Received: by mail-pf1-x430.google.com with SMTP id c26so1905272pfp.10;
+        Mon, 09 Jan 2023 07:11:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mbMyQ+Lk6XMV45ZxQEld3vGI2Hm83HoIjGeiP+5YohY=;
+        b=UiyJWV8IESgIQ+htn089mbpQcf/DLM9JuIZW92t4SLyj7AJACTqzJqRhhioRc+Z08O
+         ffJigl+z8xYM/epYBQLukDEyeOtTH1tM7SAJbR7WOX7BbZ/FrxXl23ilCtw/lhtOVpeF
+         pQDilsaYeJlxPdgOuB2kpOB9N/22VjmvkMgJj3N35N3ajCe35g+vg/lIrj2unu/Evrpx
+         fU2zQ9eqCPlN/nNvTZOa47ifIE3siIIOYkbW9vsA3YVH85KM6Oa4xBeI6OXmCZpoM9i2
+         b5kAMbdtBNPmjzzxKBYfzZUeGVBUUWf0ZNBmFg9UICKxIcyhk5OqehRsRS1GdlmX7Sb4
+         De4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gn67qzc8n5vMTxpGkDlTw2FWaLmxliDIMWVXs/A4Cqw=;
-        b=JNCf7SWuCn35mLgEDiIX2cnrsuhaGjE8AD9OjwJB3L0jA+KsYG0i7TuAszKVqlnX1l
-         DOGolG0GnLSFxTr9GgklkZlecu9T54qfASamjGoQhHNtyVRnWim7qL6APjM9OMQaLt7I
-         u8kiC1HjXTxg1WxM9bCPqslb8NH6KomFcvRedv6pFURJ+nEADhi7MeLOXIGNWAy2i5N8
-         q7y6moRsL01iId7ljyvRgx/iN27lX0iIClJPT6ttFuWdi/fsaKMsDUD1peEwbDW0rmIS
-         hIrn+mt2SEN4bs6mLrsNhbpZbf/dbpOR7rJ+g5vZfkS3Wt71pkeMeL7PeaVUR2t76wcf
-         ajuA==
-X-Gm-Message-State: AFqh2koIyH1OcLfXkWCskh8bGzrTThpEdLNarbrAvDrshSAfv5BOzBih
-        2aW/QYqoaxqqQgqBO6TJhAaRWeIqltcr7UnEPeeFxrWUmBR2XRcPnjzFZIoxfyoeMCqox6SJ21V
-        seOXTLvSN5cAeY+12KzY=
-X-Received: by 2002:a17:906:7e55:b0:7c1:7442:8b70 with SMTP id z21-20020a1709067e5500b007c174428b70mr60853407ejr.75.1673275303671;
-        Mon, 09 Jan 2023 06:41:43 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXs7zR8qpKqJBFaEf7dYsXmiXTUSiKO9DP6bCBUS44CJgoVHDpw80FXi5ZfAgOf34b7z0fNJsw==
-X-Received: by 2002:a17:906:7e55:b0:7c1:7442:8b70 with SMTP id z21-20020a1709067e5500b007c174428b70mr60853394ejr.75.1673275303431;
-        Mon, 09 Jan 2023 06:41:43 -0800 (PST)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id e6-20020a170906314600b00781be3e7badsm3855038eje.53.2023.01.09.06.41.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 06:41:42 -0800 (PST)
-Message-ID: <3706e642-5172-0359-afda-6e9b9e738d79@redhat.com>
-Date:   Mon, 9 Jan 2023 15:41:42 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mbMyQ+Lk6XMV45ZxQEld3vGI2Hm83HoIjGeiP+5YohY=;
+        b=0Og63mnKnkLCjRttBZPdyN8VozjcRU0av3C0wx3bjU6vCL2kVOoAStZzPihJIktF9T
+         5nz9MKJFbzgHBVbl5ap3ff/fDyOf9six3gAeST+wS3Uo7w0GPnwQJRisZ/VfGTZ2/nIR
+         PV2lKB1l2+vPKGhMG6L3DsQADW1EmQpq7X84fnFazjrdFkZN9UujT7ZT4V+MbqJwG4Qq
+         7RHGhnpWrQOfGwYjgc42PVXfK7SP8DH4pG5YUTr0ZPdvZrrOG2iUhs3M4iV71cyMB30x
+         6+OEnxnlMHHTHpox/VRribSl0Wk+OxFsnYAXJ1ppTKPqen92EVXPIeXFAAmgf7aZA+JE
+         ZH3g==
+X-Gm-Message-State: AFqh2kpLebFNqVZUXPo/k2iJ3wOv+5LEkc0I2s6t7oI2cUOGtdRhHa8z
+        uI4aBLVclZKIhDYuAkZLBvLf8mFmvJYKf4rgz3w=
+X-Google-Smtp-Source: AMrXdXtaMXZw+A+awBZWMsLxBBg2VbK1BTjUoNNl6u+Vm395uYoqWXtbYO/zcm6KlM3AUdY2y8deWO0NXh0INgA2vaA=
+X-Received: by 2002:a63:f957:0:b0:477:98cc:3d01 with SMTP id
+ q23-20020a63f957000000b0047798cc3d01mr3281088pgk.505.1673277078970; Mon, 09
+ Jan 2023 07:11:18 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 0/9] power: supply: bq25890: Fixes for 6.2 + further
- work for 6.3
-Content-Language: en-US, nl
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Marek Vasut <marex@denx.de>, linux-pm@vger.kernel.org
-References: <20221128092856.71619-1-hdegoede@redhat.com>
- <20230102231530.3eumtnr6jqjv5jlt@mercury.elektranox.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230102231530.3eumtnr6jqjv5jlt@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
+ <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu>
+In-Reply-To: <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Mon, 9 Jan 2023 23:11:07 +0800
+Message-ID: <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+To:     Yann Sionneau <ysionneau@kalray.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-audit@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Sebastian,
+On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
+>
+> Hi Jeff,
+>
+> On 1/7/23 07:25, Jeff Xie wrote:
+> > Hi,
+> >
+> > On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> wrot=
+e:
+> >> [snip]
+> >>
+> >> A kvx toolchain can be built using:
+> >> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev libmp=
+fr-dev
+> >> $ git clone https://github.com/kalray/build-scripts
+> >> $ cd build-scripts
+> >> $ source last.refs
+> >> $ ./build-kvx-xgcc.sh output
+> > I would like to build the kvx-xgcc to compile and test the linux
+> > kernel, but it reported a compile error.
+> > I wonder what version of gcc you are using.
+> >
+> > My build environment:
+> > VERSION=3D"20.04.2 LTS (Focal Fossa)"
+> > gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
+> >
+> >
+> > Compile error:
+> > $ ./build-kvx-xgcc.sh output
+> >
+> > ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_replac=
+e_key_data=E2=80=99:
+> > ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=E2=
+=80=99 undeclared
+> > (first use in this function)
+> >     38 | #define FIBHEAPKEY_MIN LONG_MIN
+> >        |                        ^~~~~~~~
+> > [snip]
+>
+> What SHA1 of https://github.com/kalray/build-scripts are you using?
 
-On 1/3/23 00:15, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Mon, Nov 28, 2022 at 10:28:47AM +0100, Hans de Goede wrote:
->> Hi Sebastian, Marek,
->>
->> Here is v2 of my bq25890 series from yesterday, addressing the few
->> small remarks from Marek + adding Marek's Reviewed-by to most of
->> my patches. Note I dropped patch 1/10 from the v1 series since that
->> has already been merged.
->>
->> Here is a (slightly updated) copy of the v1 cover letter:
->>
->> I have been working on getting a Lenovo Yoga Tab 3 Pro (YT3-X90F) to
->> work with the mainline kernel. This tablet has 2 batteries with
->> 2 bq25892 chargers both connected to a single Micro-USB connector.
->>
->> Supporting the 2 charger board also requires the recent HiZ mode patches
->> from Marek, to avoid merging order problems / conflicts I have included
->> a copy of Marek's series here so this series obsoletes the:
->>
->> [PATCH 1/2] power: supply: bq25890: Factor out chip state update
->> [PATCH 2/2] power: supply: bq25890: Add HiZ mode support
->> [PATCH v2 1/2] power: supply: bq25890: Factor out chip state update
->> [PATCH v2 2/2] power: supply: bq25890: Add HiZ mode support
->>
->> patches from Marek.
->>
->> While working on adding support for this I also noticed some generic issues
->> with the bq25890 driver currently in linux-power-supply/for-next and I also
->> have some fixes to the HiZ support on top of Marek's support.
->>
->> So this entire series consist of 4 parts:
->>
->> 1. Patches 1-2:
->>
->> Generic bugfixes for the bq25890 charger in its current state
->> in linux-power-supply/for-next.
->>
->> 2. Patches 3-4:
->>
->> Marek's HiZ support work, thank you Marek.
->>
->> 3. Patches 5-6:
->>
->> Some fixes / improvements from me to Marek's HiZ support.
->>
->> 4. Patch 7-9:
->>
->> The actual support for boards with 2 chargers.
-> 
-> I just queued patches 3-7 to power-supply's for-next branch.
+I have executed the "source last.refs"
 
-Thank you!
+> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 without
+> issues, I don't understand why it does not work for you, although indeed
+> the error log you are having pops out on my search engine and seems to
+> be some well known issue.
 
-Any particular reason why 8/9 and 9/9 have not been merged?
+Yes, there are many answers on the web, but none of them solve this problem=
+.
 
-8/9 has Marek's Reviewed-by and no other remarks.
+> If the build-script does not work for you, you can still use the
+> pre-built toolchains generated by the GitHub automated actions:
+> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("latest"
+> means 22.04)
 
-9/9 had a small remark by Marek about clamping the percentage,
-but that was for v1 and has been fixed (clamping added when reading
-the property) in v2.
+Thanks, this is the final solution ;-)
 
-Regards,
-
-Hans
+>
+> I hope it will work for you.
+>
+> Regards,
+>
+> --
+>
+> Yann
+>
+>
+>
+>
+>
 
 
-
-
-> 
-> Thanks,
-> 
-> -- Sebastian
-> 
->>
->> Regards,
->>
->> Hans
->>
->>
->> Hans de Goede (7):
->>   power: supply: bq25890: Ensure pump_express_work is cancelled on
->>     remove
->>   power: supply: bq25890: Fix usb-notifier probe and remove races
->>   power: supply: bq25890: Fix setting of F_CONV_RATE rate when disabling
->>     HiZ mode
->>   power: supply: bq25890: Always take HiZ mode into account for ADC rate
->>   power: supply: bq25890: Support boards with more then one charger IC
->>   power: supply: bq25890: Add support for having a secondary charger IC
->>   power: supply: bq25890: Add new linux,iinlim-percentage property
->>
->> Marek Vasut (2):
->>   power: supply: bq25890: Factor out chip state update
->>   power: supply: bq25890: Add HiZ mode support
->>
->>  drivers/platform/x86/x86-android-tablets.c |   2 +-
->>  drivers/power/supply/bq25890_charger.c     | 226 ++++++++++++++++-----
->>  2 files changed, 179 insertions(+), 49 deletions(-)
->>
->> -- 
->> 2.37.3
->>
-
+--=20
+Thanks,
+JeffXie
