@@ -2,69 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43E6366193A
-	for <lists+linux-pm@lfdr.de>; Sun,  8 Jan 2023 21:22:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B58C7661B58
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 01:29:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbjAHUWQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 8 Jan 2023 15:22:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S233771AbjAIA3l (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 8 Jan 2023 19:29:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjAHUWO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Jan 2023 15:22:14 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85706F59A
-        for <linux-pm@vger.kernel.org>; Sun,  8 Jan 2023 12:22:12 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id s9so6254754wru.13
-        for <linux-pm@vger.kernel.org>; Sun, 08 Jan 2023 12:22:12 -0800 (PST)
+        with ESMTP id S230315AbjAIA3j (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 8 Jan 2023 19:29:39 -0500
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001BBBF5E
+        for <linux-pm@vger.kernel.org>; Sun,  8 Jan 2023 16:29:37 -0800 (PST)
+Received: by mail-lj1-x22f.google.com with SMTP id x37so7371930ljq.1
+        for <linux-pm@vger.kernel.org>; Sun, 08 Jan 2023 16:29:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jF0KYZTK8QJNvtuEmjEBv0Uobp1zLO6Frlg8xQpiDQY=;
-        b=oykHx1VBFGqHeEeU/T0fOpgU8yKVSyaaHkI9wiqZXYRplC+7cMsaGiBNLCB4JERLhJ
-         B7hZTUK8sNVDoyCGzXJixRHDAIvTxZkJAW2NAqaQifbMbzaTMY3yRl2VvfhBbMHihVP8
-         U5mjD6gV5GJZsJ2UBRo9nf6T6yPljZqNyyUeXRbiq7Sv82RBap5qCc9I4UpfDY7GDFCq
-         w6vFhEqpygJo6+7gNA9SRgXqQNAtGCScnWcAF02LYXRVoSqSyC9asEQYvm8TZ8E/4NMR
-         rHYVNUwIRIttIUL/beCm8Upd/8Y9X0SWFr9WV7nB1mo4i90NgZOMkHd3OGf2fxvc9pNN
-         ow4Q==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FyO60+1ahxnZMeLVY7otQN3Vyc7r0+eEdWjJHYyzXHM=;
+        b=QaTLOCozXErPo9kask6wWLzoyG0h+4q1CKRhG6R43i2OugYNGLOk3PxKM/0N5aVT/2
+         nCrU/yhfvlVm88fV1xQ9jRCGZytzbEsCZPs+RkKrM4y5w15ksQ+RQUqk6U3z2bz4T0hE
+         OcJ8rSUGWgU8spsiPRbXiqwApQ12s3yKI8FPEmTo6suVV2zwEeB4UFqjAfoIUGU1QvIK
+         XKLzTUQXdQqCu8tfUDOPmJfIPrQsTir3DJKoBYvl1jTgdgQ9Hhh0aoMe6UQQW0vrv46y
+         MVBPKTZFq773J9Ozzie5WviOmV1Q8UyMzXMou8mVuxEKWp8gd+GrJPoWXzBiFgna2ZI/
+         6ybw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jF0KYZTK8QJNvtuEmjEBv0Uobp1zLO6Frlg8xQpiDQY=;
-        b=LHRLFGClgOnS10VaiTBF8lge7ZTuvcmcqtGdAh8RCDTaxRgR6DjAdhqMVC72mu15zL
-         AKFy1rEZifrCLP8W6ujMWrUuKGbaItWd5C1YLkIyr9nvXbfa1VVMNDqRE8FCBuFj8eJC
-         Gn0THKGapjTqDpcjUCrx9TJfhORrQvcNYPbI9MmSxeCJSO8VxW7K89AsMyDbWZqfMaBK
-         bWk0XtD2NFvwOi45s+OAYEzC6hTu45l5cCHEwFhHHAzFKookWs2iNZVZ5xRJHLpyOfmh
-         AI3YNdT63pxDM29u8rTa0OaISOcqQhaZMKj5XBzg4fL7iCPmGqYrPyMBNsZmgGlpQ1wP
-         ssbQ==
-X-Gm-Message-State: AFqh2kptSiV8+CLgnSZ/ksPgvf7cBDsR8Q/BEaj4lVoav3dTvu+6KUSk
-        dflun/zxL+51mqkczNrbHKnf3Q==
-X-Google-Smtp-Source: AMrXdXumY/IjM9BzQccvh+V/4dRS5DcghPax3xvD7ryg8A6oSHhaK6kQIvkyicpd39XFx5kC2Tkaiw==
-X-Received: by 2002:a5d:6dc4:0:b0:2b4:e5e:1e16 with SMTP id d4-20020a5d6dc4000000b002b40e5e1e16mr8092345wrz.35.1673209330825;
-        Sun, 08 Jan 2023 12:22:10 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id s10-20020adfea8a000000b002421ed1d8c8sm6652754wrm.103.2023.01.08.12.22.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 08 Jan 2023 12:22:10 -0800 (PST)
-Message-ID: <72fcddd3-0429-4e23-ab68-2a502f451966@linaro.org>
-Date:   Sun, 8 Jan 2023 21:22:09 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FyO60+1ahxnZMeLVY7otQN3Vyc7r0+eEdWjJHYyzXHM=;
+        b=UWboZ7wt4Zt9aRfjuyrxfrEsJHTg+ZMYoXK9rxSfUL9SOy209tCMZJdgl9eI1jlUdQ
+         imYPvMbbtevingHki5Mf24fhMK8jePGaBZcDNwUbISRNzuQcPNbht35WJsTKoI53GViR
+         RVlOLqgU8yK0U7VVJRSg5r/bdDF+jUPmGILt/cAUt1QrBrxGUCHFZmW5flblQfNEokQE
+         7DUKYW37XYHGMvJoSK0J+6MAEruh4FV+BqHE++6iw2kIprTnSRFLZrF8bjfDwZhfdiKc
+         5WJE39TnR2PFotRKWKUWBq2HHBVuNayzlOSBy5+Vs934Jl6xrYjS2JQav4TuqHTrvLCA
+         YLFQ==
+X-Gm-Message-State: AFqh2kpZSw6FYeKzz+c+egJYab6ald6ex7/YnoHQi7hs/wFOWkc7oGHc
+        Y+IGh+sUIIPEdl5bbtL5S9cPpg==
+X-Google-Smtp-Source: AMrXdXs/wyYesCXijvkDtUnD3XBx/Fcih0q5zjrj9do8jkcsWkXXxqnbBBl+MxPO4JkemxIiWjleoQ==
+X-Received: by 2002:a2e:8344:0:b0:281:f44c:5dcb with SMTP id l4-20020a2e8344000000b00281f44c5dcbmr2563785ljh.32.1673224176375;
+        Sun, 08 Jan 2023 16:29:36 -0800 (PST)
+Received: from eriador.lan (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id a22-20020a2e9816000000b0027fc54f8bf0sm706626ljj.35.2023.01.08.16.29.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jan 2023 16:29:35 -0800 (PST)
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>
+Cc:     Georgi Djakov <djakov@kernel.org>, Alex Elder <elder@linaro.org>,
+        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCH v3 00/12] clk/interconnect: qcom: finish migration of IP0 to clocks
+Date:   Mon,  9 Jan 2023 02:29:23 +0200
+Message-Id: <20230109002935.244320-1-dmitry.baryshkov@linaro.org>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Xu Panda <xu.panda@zte.com.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [GIT PULL] generic trip points for the thermal framework
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -75,137 +76,62 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Commits 2f3724930eb4 ("interconnect: qcom: sc7180: Drop IP0
+interconnects") and 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0
+interconnects") removed IP0 interconnects (and ipa-virt devices support)
+in favour of the RPMH clocks. Follow this example for other platforms
+defining IP0 RPMH resource. While we are at it, remove several leftover
+from the mentioned patches.
 
-Hi Rafael,
+Changes since v2:
+- Fixed the stack frame size warning by moving the ignore_list out of
+  the function to the rodata section.
 
-here are the changes for the generic trip points which were postponed 
-during the last release. They have been in the linux-next branch since 
-November.
+Changes since v1:
+- Reorder patches to put clock patch after the interconnect patches
+  (Alex)
+- Add comments in place of removed defines (Alex)
+- Drop ipa-virt nodes from device trees
+- Add removed ipa-virt nodes to the blacklist in of_count_icc_providers
+  to let icc_sync_state work even with non-updated device trees.
 
-The following changes since commit b878d3ba9bb41cddb73ba4b56e5552f0a638daca:
+Dmitry Baryshkov (12):
+  interconnect: qcom: sdx55: drop IP0 remnants
+  interconnect: qcom: sc7180: drop IP0 remnants
+  interconnect: move ignore_list out of of_count_icc_providers()
+  interconnect: qcom: sm8150: Drop IP0 interconnects
+  interconnect: qcom: sm8250: Drop IP0 interconnects
+  interconnect: qcom: sc8180x: Drop IP0 interconnects
+  interconnect: qcom: sc8280xp: Drop IP0 interconnects
+  dt-bindings: interconnect: qcom: Remove ipa-virt compatibles
+  dt-bindings: interconnect: qcom: drop IPA_CORE related defines
+  clk: qcom: rpmh: define IPA clocks where required
+  arm64: dts: qcom: sm8150: drop the virtual ipa-virt device
+  arm64: dts: qcom: sm8250: drop the virtual ipa-virt device
 
-   thermal: int340x: Add missing attribute for data rate base 
-(2022-12-30 19:48:37 +0100)
-
-are available in the Git repository at:
-
- 
-ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git 
-tags/generic-trip-point
-
-for you to fetch changes up to 3a151494dc04c76add577ae66e8a04f900638aaf:
-
-   thermal/drivers/armada: Use strscpy() to instead of strncpy() 
-(2023-01-06 14:14:48 +0100)
-
-----------------------------------------------------------------
-- Rework a large bunch of drivers to use the generic thermal trip
-   structure and the opportunity to do more cleanups by removing unused
-   functions in the OF code (Daniel Lezcano)
-
-- Fix some locking issues related to the generic thermal trip rework
-   (Johan Hovold)
-
-- Fix a crash when requesting the critical temperature on tegra, this
-   fix is related to the generic trip point (Jon Hunter)
-
-- Use strscpy() to instead of strncpy() (Xu Panda)
-
-----------------------------------------------------------------
-Daniel Lezcano (32):
-       thermal/core: Add a generic thermal_zone_get_trip() function
-       thermal/sysfs: Always expose hysteresis attributes
-       thermal/core: Add a generic thermal_zone_set_trip() function
-       thermal/core/governors: Use thermal_zone_get_trip() instead of 
-ops functions
-       thermal/of: Use generic thermal_zone_get_trip() function
-       thermal/of: Remove unused functions
-       thermal/drivers/exynos: Use generic thermal_zone_get_trip() function
-       thermal/drivers/exynos: of_thermal_get_ntrips()
-       thermal/drivers/exynos: Replace of_thermal_is_trip_valid() by 
-thermal_zone_get_trip()
-       thermal/drivers/tegra: Use generic thermal_zone_get_trip() function
-       thermal/drivers/uniphier: Use generic thermal_zone_get_trip() 
-function
-       thermal/drivers/hisi: Use generic thermal_zone_get_trip() function
-       thermal/drivers/qcom: Use generic thermal_zone_get_trip() function
-       thermal/drivers/armada: Use generic thermal_zone_get_trip() function
-       thermal/drivers/rcar_gen3: Use the generic function to get the 
-number of trips
-       thermal/of: Remove of_thermal_get_ntrips()
-       thermal/of: Remove of_thermal_is_trip_valid()
-       thermal/of: Remove of_thermal_set_trip_hyst()
-       thermal/of: Remove of_thermal_get_crit_temp()
-       thermal/drivers/st: Use generic trip points
-       thermal/drivers/imx: Use generic thermal_zone_get_trip() function
-       thermal/drivers/rcar: Use generic thermal_zone_get_trip() function
-       thermal/drivers/broadcom: Use generic thermal_zone_get_trip() 
-function
-       thermal/drivers/da9062: Use generic thermal_zone_get_trip() function
-       thermal/drivers/ti: Remove unused macros 
-ti_thermal_get_trip_value() / ti_thermal_trip_is_valid()
-       thermal/drivers/acerhdf: Use generic thermal_zone_get_trip() function
-       thermal/drivers/cxgb4: Use generic thermal_zone_get_trip() function
-       thermal/intel/int340x: Replace parameter to simplify
-       thermal/drivers/intel: Use generic thermal_zone_get_trip() function
-       thermal/drivers/exynos: Fix NULL pointer dereference when getting 
-the critical temp
-       wifi: iwlwifi: Use generic thermal_zone_get_trip() function
-       thermal/drivers/mellanox: Use generic thermal_zone_get_trip() 
-function
-
-Johan Hovold (3):
-       thermal/drivers/qcom: Fix set_trip_temp() deadlock
-       thermal/drivers/tegra: Fix set_trip_temp() deadlock
-       thermal/drivers/qcom: Fix lock inversion
-
-Jon Hunter (1):
-       thermal/drivers/tegra: Fix crash when getting critical temp
-
-Xu Panda (1):
-       thermal/drivers/armada: Use strscpy() to instead of strncpy()
-
-  drivers/net/ethernet/chelsio/cxgb4/cxgb4.h         |   2 -
-  drivers/net/ethernet/chelsio/cxgb4/cxgb4_thermal.c |  39 +---
-  drivers/net/ethernet/mellanox/mlxsw/core_thermal.c | 209 
-+++++----------------
-  drivers/net/wireless/intel/iwlwifi/mvm/mvm.h       |   2 +-
-  drivers/net/wireless/intel/iwlwifi/mvm/tt.c        |  71 ++-----
-  drivers/platform/x86/acerhdf.c                     |  73 +++----
-  drivers/thermal/armada_thermal.c                   |  40 ++--
-  drivers/thermal/broadcom/bcm2835_thermal.c         |   8 +-
-  drivers/thermal/da9062-thermal.c                   |  52 +----
-  drivers/thermal/gov_bang_bang.c                    |  37 ++--
-  drivers/thermal/gov_fair_share.c                   |  18 +-
-  drivers/thermal/gov_power_allocator.c              |  51 +++--
-  drivers/thermal/gov_step_wise.c                    |  22 +--
-  drivers/thermal/hisi_thermal.c                     |  11 +-
-  drivers/thermal/imx_thermal.c                      |  72 +++----
-  .../intel/int340x_thermal/int340x_thermal_zone.c   |  33 ++--
-  .../intel/int340x_thermal/int340x_thermal_zone.h   |   4 +-
-  .../int340x_thermal/processor_thermal_device.c     |  10 +-
-  drivers/thermal/intel/x86_pkg_temp_thermal.c       | 120 ++++++------
-  drivers/thermal/qcom/qcom-spmi-temp-alarm.c        |  44 ++---
-  drivers/thermal/rcar_gen3_thermal.c                |   2 +-
-  drivers/thermal/rcar_thermal.c                     |  53 +-----
-  drivers/thermal/samsung/exynos_tmu.c               |  62 +++---
-  drivers/thermal/st/st_thermal.c                    |  47 +----
-  drivers/thermal/tegra/soctherm.c                   |  35 ++--
-  drivers/thermal/tegra/tegra30-tsensor.c            |  17 +-
-  drivers/thermal/thermal_core.c                     | 154 ++++++++++++---
-  drivers/thermal/thermal_core.h                     |  24 +--
-  drivers/thermal/thermal_helpers.c                  |  28 +--
-  drivers/thermal/thermal_netlink.c                  |  19 +-
-  drivers/thermal/thermal_of.c                       | 116 ------------
-  drivers/thermal/thermal_sysfs.c                    | 135 +++++--------
-  drivers/thermal/ti-soc-thermal/ti-thermal.h        |  15 --
-  drivers/thermal/uniphier_thermal.c                 |  27 ++-
-  include/linux/thermal.h                            |  12 ++
-  35 files changed, 618 insertions(+), 1046 deletions(-)
+ .../bindings/interconnect/qcom,rpmh.yaml      |  3 --
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          |  7 ----
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          |  7 ----
+ drivers/clk/qcom/clk-rpmh.c                   |  4 ++
+ drivers/interconnect/core.c                   | 14 ++++---
+ drivers/interconnect/qcom/sc7180.h            |  4 +-
+ drivers/interconnect/qcom/sc8180x.c           | 38 -------------------
+ drivers/interconnect/qcom/sc8180x.h           |  4 +-
+ drivers/interconnect/qcom/sc8280xp.c          | 25 ------------
+ drivers/interconnect/qcom/sc8280xp.h          |  4 +-
+ drivers/interconnect/qcom/sdx55.h             |  4 +-
+ drivers/interconnect/qcom/sm8150.c            | 21 ----------
+ drivers/interconnect/qcom/sm8150.h            |  4 +-
+ drivers/interconnect/qcom/sm8250.c            | 21 ----------
+ drivers/interconnect/qcom/sm8250.h            |  4 +-
+ .../dt-bindings/interconnect/qcom,sc7180.h    |  3 --
+ .../dt-bindings/interconnect/qcom,sc8180x.h   |  3 --
+ .../dt-bindings/interconnect/qcom,sc8280xp.h  |  4 +-
+ include/dt-bindings/interconnect/qcom,sdx55.h |  2 -
+ .../dt-bindings/interconnect/qcom,sm8150.h    |  3 --
+ .../dt-bindings/interconnect/qcom,sm8250.h    |  3 --
+ 21 files changed, 27 insertions(+), 155 deletions(-)
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.39.0
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
