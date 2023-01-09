@@ -2,215 +2,538 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF78662A95
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 16:54:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D36C4662B6C
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 17:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234441AbjAIPx5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 10:53:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
+        id S231418AbjAIQlQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 11:41:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjAIPxs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 10:53:48 -0500
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B0910F4;
-        Mon,  9 Jan 2023 07:53:48 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id g68so5060926pgc.11;
-        Mon, 09 Jan 2023 07:53:48 -0800 (PST)
+        with ESMTP id S234186AbjAIQk7 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 11:40:59 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D34EBDE
+        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 08:40:51 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id s9so8793512wru.13
+        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 08:40:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kr5NMyR17w820E39Zxy+TJT5WIxXv3t9mTGHg5DI4M8=;
-        b=p925wfq85MYYr0Q3szQHiqh8M9TGBDNLmFWeMdVCKRfm+cOHibl08yqwJoSo2r7XJP
-         wq9Jltk/+brtH8hNCZXvq0DxtwSQIazxtjZdEKfg/0vGYUECRtOKJhbchra23Qxq01EI
-         LW2KfmroEgha10Hiqqq7sbs4sKftMAXbHM5UfrApMgHovRtAjqup/7ZDx5c66hJHq9Cr
-         iYTmJQehTgnexoKO7TcMDfBVxLmHJagL/RtulJH5m9HvVCQxeaP/W6dGAdxxBRvcFDn6
-         /uu4CaMMaHvzdo/E1y8HoopqpLRDOCKFzxs2QxX+RtbfC5zpKXwCLbC6QNQfLNGjuHM5
-         8s7Q==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F8B0dtnKFsFauetsTtjBl83TQ1rcFglJZXuSMSB61jc=;
+        b=0GL/w/2WUbnNmh0XMYExgC73TRtlgZPlBX2o+7SKeQT1+AzPfA7uHtYhES0ToGyr9W
+         6BqPeWLKDVLsbth7Ze6tWneCVYbbIMOlEqqusqSxfcqy+d0iFL4ZBLX7NxLoqdPtmybr
+         CfEZSLGvLMubzp9HiWIsFfUbzZvOUTUFxwxksnuv7SpthUIp0Vy1PfoYX6QcQBBqK3ct
+         TMHT3l063kQDi4Nf2Avo4FqcwN56N7L/GipplOvHjkaY48Id1a+U/2WuHK7KjJydV948
+         6vvfBEHKmzRyrOK0BVeT2yVXmuTnnQ7sqzoJ7iRcMfSR7nFYV0A/3Mxsl8fGYziMTM8J
+         PmDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kr5NMyR17w820E39Zxy+TJT5WIxXv3t9mTGHg5DI4M8=;
-        b=vsVUyyhZaXC1xZa0W/BkpO28agq8dxXdBLZwJdYz8+hOKSGPkePAbr+IXJer1xGS/x
-         vIa08qKS+TyQTvnM8R3uG7GqRUPS+6gIzWiLrfTPFdU1WcAyl9kU3Wh9FZIAZu+JzHzo
-         dVDzK3utkV+zj8y4iS+c8obaR64okqEHZYm9NISdKQEpy6YKMkdAI+Cfpz/9CTWrBPPO
-         cHHwE8mEkKTaODrCdOYUxzxx42uPAUFQlKe2+YOAszc9LCC20yEsMue6PEAGX3IoZ+MY
-         nBf7hl7rmNfCFfEvDMqMo6ELbsXW4MZmF1edhQREXln6fDUnnTaF/FcFprn42l1vkL5i
-         adrg==
-X-Gm-Message-State: AFqh2kr93MOknIB1o+1etlr9ym9CmzXNP1B0/FZCyO0i3FGNkIZXOEsT
-        q7dmOOQoczYQQb/o/KO9Kk0o5oFyY6CcOaZRa+0=
-X-Google-Smtp-Source: AMrXdXu5iAQa5w4G/nXooBZotH/u8Cle9aRMcHOGEDe3ZcG1lDUD8XzrRE/n7dp+CGJamrwD1EZHy0OvHYQNsDsudys=
-X-Received: by 2002:a63:1e42:0:b0:478:9503:f498 with SMTP id
- p2-20020a631e42000000b004789503f498mr3557980pgm.96.1673279627421; Mon, 09 Jan
- 2023 07:53:47 -0800 (PST)
-MIME-Version: 1.0
-References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
- <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu> <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
- <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu>
-In-Reply-To: <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 9 Jan 2023 23:53:35 +0800
-Message-ID: <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F8B0dtnKFsFauetsTtjBl83TQ1rcFglJZXuSMSB61jc=;
+        b=VHBoadDKvQ9lwG3ak7NrknXLmyymt1ma8IYKFB6Ym+cpuTnx6QfPldlvgAnaaxQ1iH
+         zjiYSqoobNzhpbBTexOyqBFI4rgKJrofklgpgd6sKTE6JVhGLKd3R7gZNcKbYDo+yZKs
+         063neg/bV3Vv9j/13T1xoEXwO9xxr3P/eLac4lehXhvl/rhkHeH1OIbR1g2oBYh0o0eD
+         JCu0x9pR3X6eC7hlIsdBdWPKCZ6qDrxzl6DHHSzwodbfGO3Wz7nfMR7vYkazVy+LHYFd
+         ObIH2BIHGxzNj/Z0ra0vallTyG0MwvlF9Wkklw6tBpIe3uYND2Je/tsVcd1jeWjvappO
+         l6Qw==
+X-Gm-Message-State: AFqh2kpKOrgDSAfYmACAnHo6rzracjDaImp+6Me/wqrUKxC1V+qSHX78
+        qKQljrrIaP5UACGNlgxX7557WA==
+X-Google-Smtp-Source: AMrXdXtzKonNh7q/6V4X+Ig7G1lykJK2qWne+P/eSio9fpfLNQehJPdIDK1G/yJMxP6r8k7DTdgXQw==
+X-Received: by 2002:adf:e38e:0:b0:241:d7ce:4383 with SMTP id e14-20020adfe38e000000b00241d7ce4383mr41914694wrm.20.1673282449884;
+        Mon, 09 Jan 2023 08:40:49 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id q11-20020adff50b000000b0027f9f073211sm8995543wro.65.2023.01.09.08.40.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jan 2023 08:40:49 -0800 (PST)
+Date:   Mon, 9 Jan 2023 16:40:47 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>
+Subject: Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+ capacity inversion
+Message-ID: <20230109164047.c4xktivav5jqped5@airbuntu>
+References: <20221205110159.nd5igwvsaj55jar7@airbuntu>
+ <CAKfTPtAOhQyfyH_qRArC2SZ1sQOBnRZ4CXARiWu2fvb+KPGsXw@mail.gmail.com>
+ <20221208140526.vvmjxlz6akgqyoma@airbuntu>
+ <20221209164739.GA24368@vingu-book>
+ <20221212184317.sntxy3h6k44oz4mo@airbuntu>
+ <CAKfTPtBX0ugM87CEjAXUbVhnTZTwAAnjXu2fRfc6ezHE8=aC6w@mail.gmail.com>
+ <20221220123254.to6tzznxloxq725q@airbuntu>
+ <20221220135034.GA12359@vingu-book>
+ <20221223115845.3azncwqlyo4zx262@airbuntu>
+ <CAKfTPtCLE8DSa_kV4NgLqhGF--VkOV2x+bf_6NRL76NFnwmq2g@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCLE8DSa_kV4NgLqhGF--VkOV2x+bf_6NRL76NFnwmq2g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:30 PM Yann Sionneau <ysionneau@kalray.eu> wrote:
->
-> Hi Jeff,
->
-> On 1/9/23 16:11, Jeff Xie wrote:
-> > On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wrot=
-e:
-> >> Hi Jeff,
-> >>
-> >> On 1/7/23 07:25, Jeff Xie wrote:
-> >>> Hi,
-> >>>
-> >>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> wr=
-ote:
-> >>>> [snip]
-> >>>>
-> >>>> A kvx toolchain can be built using:
-> >>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev lib=
-mpfr-dev
-> >>>> $ git clone https://github.com/kalray/build-scripts
-> >>>> $ cd build-scripts
-> >>>> $ source last.refs
-> >>>> $ ./build-kvx-xgcc.sh output
-> >>> I would like to build the kvx-xgcc to compile and test the linux
-> >>> kernel, but it reported a compile error.
-> >>> I wonder what version of gcc you are using.
-> >>>
-> >>> My build environment:
-> >>> VERSION=3D"20.04.2 LTS (Focal Fossa)"
-> >>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
-> >>>
-> >>>
-> >>> Compile error:
-> >>> $ ./build-kvx-xgcc.sh output
-> >>>
-> >>> ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_repl=
-ace_key_data=E2=80=99:
-> >>> ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=E2=
-=80=99 undeclared
-> >>> (first use in this function)
-> >>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
-> >>>         |                        ^~~~~~~~
-> >>> [snip]
-> >> What SHA1 of https://github.com/kalray/build-scripts are you using?
-> > I have executed the "source last.refs"
->
-> I was referring to the SHA1 of the repo itself (build-scripts).
->
-> `last.refs` is a symbolic link which can point to several releases,
-> depending on "when" you did the clone.
->
-> I am asking this because we recently published new toolchains.
->
-> I want to make sure which one you are trying to build.
+On 12/27/22 14:33, Vincent Guittot wrote:
 
-Unfortunately I deleted this repo a few minutes before you asked me ;-(
-But I remember that I cloned this repo two days ago.
-it should be:  last.refs -> refs/4.11.0.refs
+Sorry for late response; it was the holiday season :-)
 
-
-> >> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 withou=
-t
-> >> issues, I don't understand why it does not work for you, although inde=
-ed
-> >> the error log you are having pops out on my search engine and seems to
-> >> be some well known issue.
-> > Yes, there are many answers on the web, but none of them solve this pro=
-blem.
+> On Fri, 23 Dec 2022 at 12:58, Qais Yousef <qyousef@layalina.io> wrote:
 > >
-> >> If the build-script does not work for you, you can still use the
-> >> pre-built toolchains generated by the GitHub automated actions:
-> >> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("latest"
-> >> means 22.04)
-> > Thanks, this is the final solution ;-)
-> Good to see it helped :)
->
-> Regards,
->
-> --
->
-> Yann
->
->
->
->
->
+> > On 12/20/22 14:50, Vincent Guittot wrote:
+> >
+> > Thanks for the patch!
+> >
+> > > Hereafter is what I came with in order to decouple misfit task with cpu
+> > > overutilized. We keep using util_fits_cpu but with 3 values so we can keep
+> > > using it with cpu_overutilized but exclude the case of misfit task
+> > > because uclmap_min. Also select_idle_capacity() and feec() keep selecting the
+> > > big cpu even if it doesn't fit only because of uclamp_min
+> > >
+> > >
+> > > Subject: [PATCH] sched/fair: unlink misfit task from cpu overutilized
+> > >
+> > > By taking into account uclamp_min, the 1:1 relation between task misfit and
+> > > cpu overutilized is no more true as a task with a util_avg of 20as an
+> > > example may not fit a 1024 capacity cpu because of a uclamp_min constraint.
+> > >
+> > > Add a new state in util_fits_cpu() to reflect the case that task would fit
+> > > a CPU except for the uclamp_min hint which is a bandwidth requriement.
+> >
+> > nit: mixing uclamp with bandwidth has been a source of a lot of confusion when
+> > discussing uclamp. Can we use performance requirement instead please?
+> 
+> ok
+> 
+> >
+> > >
+> > > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> > > can use this new value to take additional action to select the best cpu
+> > > that doesn't match uclamp_min.
+> > >
+> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > ---
+> > >  kernel/sched/fair.c | 73 ++++++++++++++++++++++++++++++---------------
+> > >  1 file changed, 49 insertions(+), 24 deletions(-)
+> > >
+> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > > index 4423681baf15..705335d6af65 100644
+> > > --- a/kernel/sched/fair.c
+> > > +++ b/kernel/sched/fair.c
+> > > @@ -4578,8 +4578,7 @@ static inline int util_fits_cpu(unsigned long util,
+> > >        *     2. The system is being saturated when we're operating near
+> > >        *        max capacity, it doesn't make sense to block overutilized.
+> > >        */
+> > > -     uclamp_max_fits = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+> > > -     uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
+> > > +     uclamp_max_fits = (uclamp_max <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE);
+> > >       fits = fits || uclamp_max_fits;
+> > >
+> > >       /*
+> > > @@ -4614,8 +4613,8 @@ static inline int util_fits_cpu(unsigned long util,
+> > >        * handle the case uclamp_min > uclamp_max.
+> > >        */
+> > >       uclamp_min = min(uclamp_min, uclamp_max);
+> > > -     if (util < uclamp_min && capacity_orig != SCHED_CAPACITY_SCALE)
+> > > -             fits = fits && (uclamp_min <= capacity_orig_thermal);
+> > > +     if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
+> > > +             return -1;
+> > >
+> > >       return fits;
+> >
+> > nit: return !!fits?
+> >
+> > We check explicitly == 1 below and I'm not sure all the boolean check above
+> > will guarantee we will end up return 1 for true on all combination of
+> > compilerls/archs.
+> >
+> > >  }
+> > > @@ -4625,7 +4624,7 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
+> > >       unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
+> > >       unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
+> > >       unsigned long util = task_util_est(p);
+> > > -     return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
+> > > +     return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) == 1);
+> >
+> > Or make this >  0?
+> 
+> yes, will use > 0
+> 
+> >
+> > >  }
+> > >
+> > >  static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
+> > > @@ -6064,7 +6063,10 @@ static inline void hrtick_update(struct rq *rq)
+> > >  #ifdef CONFIG_SMP
+> > >  static inline bool cpu_overutilized(int cpu)
+> > >  {
+> > > -     return !fits_capacity(cpu_util_cfs(cpu), capacity_of(cpu));
+> > > +     unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> > > +     unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> > > +
+> > > +     return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+> > >  }
+> > >
+> > >  static inline void update_overutilized_status(struct rq *rq)
+> > > @@ -6857,6 +6859,7 @@ static int
+> > >  select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> > >  {
+> > >       unsigned long task_util, util_min, util_max, best_cap = 0;
+> > > +     int fits, best_fits = -1;
+> > >       int cpu, best_cpu = -1;
+> > >       struct cpumask *cpus;
+> > >
+> > > @@ -6872,12 +6875,24 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> > >
+> > >               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+> > >                       continue;
+> > > -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
+> > > +
+> > > +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> > > +
+> > > +             /* This cpu fits with all capacity requirements */
+> >
+> > nit: s#capacity#capacity & performance#?
+> >
+> > > +             if (fits > 0)
+> > >                       return cpu;
+> > > +             /*
+> > > +              * Only the min bandwidth (i.e. uclamp_min) doesn't fit. Look
+> > > +              * for the cpu with highest bandwidth capacity.
+> > > +              */
+> >
+> > s/bandwidth/performance/?
+> >
+> > > +             else if (fits < 0)
+> > > +                     cpu_cap = capacity_of(cpu) - thermal_load_avg(cpu_rq(cpu));
+> >
+> > Hmm. Isn't capacity_of() already takes into account thermal_load_avg()?
+> >
+> > Did you mean capacity_orig_of()?
+> 
+> Yes
+> 
+> >
+> > >
+> > > -             if (cpu_cap > best_cap) {
+> > > +             if ((fits > best_fits) ||
+> > > +                 ((fits == best_fits) && (cpu_cap > best_cap))) {
+> > >                       best_cap = cpu_cap;
+> > >                       best_cpu = cpu;
+> > > +                     best_fits = fits;
+> >
+> > I'm not sure if this logic is correct. It's a bit of a mind  bender.
+> >
+> >         @iter#0
+> >
+> >                 fits <= 0
+> >                 best_fits <= -1
+> >
+> >                 if (fits > best_fits) // 0 > -1 => True
+> >                         ...     // update best_cap if larger
+> >                         best_fits <= 0
+> >
+> >         @iter#1
+> >
+> >                 fits <= -1
+> >                 best_fits <= 0
+> >
+> >                 if (fits > best_fits) // -1 > 0 => False
+> >
+> >                 if (fits == best_fits) // -1 == 0 => False
+> >
+> >                 // We will never update best_cap for all fits = -1 after
+> >                 // encountering the first fits = 0
+> >
+> > I think we should reverse the initial values and split the conditions
+> 
+> The copy/paste from feec() was too quick. It should be :
+> 
+> +             if ((fits < best_fits) ||
+> +                 ((fits == best_fits) && (cpu_cap > best_cap))) {
+> 
+> I don't think that the split gives any benefit but makes it more
+> difficult to read. I will add a comment
+> /*
+> * Select the CPU which fits better first (-1 being better than 0).
+> * Then, select the one with the largest capacity at the same level.
+> */
+
+I think that should work yes. I might have gotten confused; I'll look closely
+again in the new version in case I caught something before but I forgot about
+now.
+
+> 
+> >
+> >         int fits, best_fits = 0;
+> >
+> >                 if ((fits < best_fits)) {
+> >                         /* Reset best_cap for first "fits_but" */
+> >                         best_cap = cpu_cap;
+> >                         best_cpu = cpu;
+> >                         best_fits = fits;
+> >                 } else if ((fits == best_fits) && (cpu_cap > best_cap))) {
+> >                         best_cap = cpu_cap;
+> >                         best_cpu = cpu;
+> >                 }
+> >
+> > Which give us
+> >
+> >         @iter#0
+> >
+> >                 fits <= 0
+> >                 best_fits <= 0
+> >
+> >                 if (fits < best_fits) // 0 < 0 => False
+> >
+> >                 if (fits == best_fits) // 0 == 0 => True
+> >                         ...     // update best_cap if larger
+> >
+> >         @iter#1
+> >
+> >                 fits <= -1
+> >                 best_fits <= 0
+> >
+> >                 if (fits < best_fits) // -1 < 0 => True
+> >                         ...     // reset best_cap to first "fits_but" hit
+> >                         best_fits <= -1
+> >
+> >         @iter#2
+> >
+> >                 fits <= 0
+> >                 best_fits <= -1
+> >
+> >                 if (fits < best_fits) // 0 < -1 => False
+> >
+> >                 if (fits == best_fits) // 0 == -1 => False
+> >
+> >                 // We should never update best_cap for all fits == 0 now
+> >
+> >         @iter#3
+> >
+> >                 fits <= -1
+> >                 best_fits <= -1
+> >
+> >                 if (fits < best_fits) // -1 < -1 => False
+> >
+> >                 if (fits == best_fits) // -1 == -1 => True
+> >                         ...     // update best_cap if larger
+> >
+> >                 // Only fits = -1 will update best_cap if larger now
+> >
+> > Of course any hit with fits = 1 will return the cpu immediately.
+> >
+> >
+> > >               }
+> > >       }
+> > >
+> > > @@ -6890,7 +6905,7 @@ static inline bool asym_fits_cpu(unsigned long util,
+> > >                                int cpu)
+> > >  {
+> > >       if (sched_asym_cpucap_active())
+> > > -             return util_fits_cpu(util, util_min, util_max, cpu);
+> > > +             return (util_fits_cpu(util, util_min, util_max, cpu) > 0);
+> > >
+> > >       return true;
+> > >  }
+> > > @@ -7257,6 +7272,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >       unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
+> > >       struct root_domain *rd = this_rq()->rd;
+> > >       int cpu, best_energy_cpu, target = -1;
+> > > +     int prev_fits = -1, best_fits = -1;
+> > >       struct sched_domain *sd;
+> > >       struct perf_domain *pd;
+> > >       struct energy_env eenv;
+> > > @@ -7288,10 +7304,11 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >               unsigned long cpu_cap, cpu_thermal_cap, util;
+> > >               unsigned long cur_delta, max_spare_cap = 0;
+> > >               unsigned long rq_util_min, rq_util_max;
+> > > -             unsigned long util_min, util_max;
+> > > +             unsigned long util_min = 0, util_max = 1024;
+> >
+> > Why this change? Are you hitting the same warning reported by Dan?
+> 
+> While debugging, I got random util_min|max values passed to
+> util_fits_cpu(). I agree that this is not a real problem because it
+> means that !uclamp_is_used() and the values will not be used in
+> util_fits_cpu() in this case but this is a hidden dependency which
+> seems a bit weak.
+> 
+> I can probably remove it from this patch as it's out of the scope
+
+Patch 1 of this series addresses this already :-)
+
+Talking about this serries; I'm confused what's the plan for patch 2 now?
+
+My understanding was Peter should pick 1 and 2 as fixes until we nail this
+patch out.
+
+> 
+> >
+> > >               unsigned long prev_spare_cap = 0;
+> > >               int max_spare_cap_cpu = -1;
+> > >               unsigned long base_energy;
+> > > +             int fits, max_fits = -1;
+> > >
+> > >               cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+> > >
+> > > @@ -7344,7 +7361,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >                                       util_max = max(rq_util_max, p_util_max);
+> > >                               }
+> > >                       }
+> > > -                     if (!util_fits_cpu(util, util_min, util_max, cpu))
+> > > +
+> > > +                     fits = util_fits_cpu(util, util_min, util_max, cpu);
+> > > +                     if (!fits)
+> > >                               continue;
+> > >
+> > >                       lsub_positive(&cpu_cap, util);
+> > > @@ -7352,7 +7371,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >                       if (cpu == prev_cpu) {
+> > >                               /* Always use prev_cpu as a candidate. */
+> > >                               prev_spare_cap = cpu_cap;
+> > > -                     } else if (cpu_cap > max_spare_cap) {
+> > > +                             prev_fits = fits;
+> > > +                     } else if ((fits > max_fits) ||
+> > > +                                ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
+> > >                               /*
+> > >                                * Find the CPU with the maximum spare capacity
+> > >                                * among the remaining CPUs in the performance
+> > > @@ -7360,6 +7381,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >                                */
+> > >                               max_spare_cap = cpu_cap;
+> > >                               max_spare_cap_cpu = cpu;
+> > > +                             max_fits = fits;
+> >
+> > Should we reset best_delta here?
+> >
+> > Because we update max_fits here..
+> >
+> > >                       }
+> > >               }
+> > >
+> > > @@ -7389,15 +7411,18 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+> > >                       if (cur_delta < base_energy)
+> > >                               goto unlock;
+> > >                       cur_delta -= base_energy;
+> > > -                     if (cur_delta < best_delta) {
+> > > +                     if ((fits > max_fits) ||
+> > > +                         ((fits == max_fits) && (cur_delta < best_delta))) {
+> >
+> > .. on first first transitions from -1 to 1; this condition will be
+> > skipped if cur_delta is lower than best delta. best_delta here could be the
+> > previous -1 fitting cpu.
+> 
+> But we want a cpu that fits in priority then the one with the smallest delta.
+
+Yes; but the smallest delta should be updated when we update the 'priority'.
+
+> 
+> >
+> > We should reset best_delta on first transition then look if we encounter
+> > something with a better delta?
+> 
+> my mistake... This should be
+> 
+> +                     if ((max_fits > best_fits) ||
+> +                         ((max_fits == best_fits) && (cur_delta <
+> best_delta))) {
+> 
+> I'm going to prepare a new version
+
+Hmm I'll go through this in the new patch.
 
 
---=20
-Thanks,
-JeffXie
+Thanks!
+
+--
+Qais Yousef
+
+> 
+> >
+> >
+> > Thanks!
+> >
+> > --
+> > Qais Yousef
+> >
+> > >                               best_delta = cur_delta;
+> > >                               best_energy_cpu = max_spare_cap_cpu;
+> > > +                             best_fits = max_fits;
+> > >                       }
+> > >               }
+> > >       }
+> > >       rcu_read_unlock();
+> > >
+> > > -     if (best_delta < prev_delta)
+> > > +     if ((best_fits > prev_fits) ||
+> > > +         ((best_fits == prev_fits) && (best_delta < prev_delta)))
+> > >               target = best_energy_cpu;
+> > >
+> > >       return target;
+> > > @@ -10164,24 +10189,23 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+> > >        */
+> > >       update_sd_lb_stats(env, &sds);
+> > >
+> > > -     if (sched_energy_enabled()) {
+> > > -             struct root_domain *rd = env->dst_rq->rd;
+> > > -
+> > > -             if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
+> > > -                     goto out_balanced;
+> > > -     }
+> > > -
+> > > -     local = &sds.local_stat;
+> > > -     busiest = &sds.busiest_stat;
+> > > -
+> > >       /* There is no busy sibling group to pull tasks from */
+> > >       if (!sds.busiest)
+> > >               goto out_balanced;
+> > >
+> > > +     busiest = &sds.busiest_stat;
+> > > +
+> > >       /* Misfit tasks should be dealt with regardless of the avg load */
+> > >       if (busiest->group_type == group_misfit_task)
+> > >               goto force_balance;
+> > >
+> > > +     if (sched_energy_enabled()) {
+> > > +             struct root_domain *rd = env->dst_rq->rd;
+> > > +
+> > > +             if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
+> > > +                     goto out_balanced;
+> > > +     }
+> > > +
+> > >       /* ASYM feature bypasses nice load balance check */
+> > >       if (busiest->group_type == group_asym_packing)
+> > >               goto force_balance;
+> > > @@ -10194,6 +10218,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+> > >       if (busiest->group_type == group_imbalanced)
+> > >               goto force_balance;
+> > >
+> > > +     local = &sds.local_stat;
+> > >       /*
+> > >        * If the local group is busier than the selected busiest group
+> > >        * don't try and pull any tasks.
+> > > --
+> > > 2.17.1
+> > >
+> > >
+> > >
+> > > >
+> > > >
+> > > > Thanks!!
+> > > >
+> > > > --
+> > > > Qais Yousef
