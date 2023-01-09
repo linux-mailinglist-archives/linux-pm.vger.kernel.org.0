@@ -2,61 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3D0E66323A
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 22:07:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1BC966325D
+	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 22:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237234AbjAIVG7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 16:06:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48716 "EHLO
+        id S237903AbjAIVLR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 16:11:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238022AbjAIVGG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 16:06:06 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244AA87C2F
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 12:59:11 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id f21so5848677ljc.7
-        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 12:59:11 -0800 (PST)
+        with ESMTP id S237973AbjAIVLA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 16:11:00 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC303BEBC
+        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 13:03:31 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id bt23so14979226lfb.5
+        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 13:03:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=juyuPJPONha78xbpz7iYzYAItkLt8qpPWXxamUxSsrM=;
-        b=cJvLdbiyvt4WHYchX2/l+CT9g5BE14Lx1CykE+gCEIEXPTcogEknF+6WOD5/q92VkK
-         4LcGD+2Alll5yyz/EKEIWAtVAh54/wcKQwAUWqdafLDAP2WdfFFuyd+dtqlpb6L2PjZL
-         pMaKHVZTVNymu/zykTuvMiZQVqgzatVCpV+tpjAtNKKjyKin4CGYvZBtYKIHXcuYMJkf
-         6bA9zFllaJZvXyw0EgULXP3WqMFPD2J1bVDoMfao6KmNyif1giWPjbId/GThW90SUI7r
-         A4NtI35ThOsKpNzHWXTEv+LHqF6msM+MEfnVJ3jzZ89ouZaH/SjstURk7bWbkAny7nOs
-         7dOQ==
+        bh=xvbOJwJCDvAVe4Ypk6TWCIgsg3158YUlrEMw2YNb0Mo=;
+        b=J/52Y5D40ZyVHCKzboYRyiaw0gGNjlAz3UGYLftraJb/Js04jRHSkbpc11vqBhJkLY
+         b4C0zTCHweLcchOlRsBh01CsYClhxIQQzkMmjDMw1QHCZfbvnFZxkESOW8oiOCsnxXKq
+         rWyTPeRhQQX+x+oVnsUSxI/KruU4N+uvaJf5THOLNLhRhuvnjCg79IKXFF66GrW/0Wc+
+         mmsUswGH67RNx2OuO0F2OcmuUJXHOBSE0VO6gW3PGZloL7zlZOwmZCKZHr0na50oGjIN
+         IsCJX2Zb0bSyKP31k9pPVMwhC0uIEfTDb3T6litAsRybOc4ILP9d+PWWJi4g/A6+tGUH
+         HgXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=juyuPJPONha78xbpz7iYzYAItkLt8qpPWXxamUxSsrM=;
-        b=oVeoNfNIObKvM2egXqMCykj3sTH1Jrx4WdBeSCwY7zMkJA/Id6++Ujtpven5Mhl4Jk
-         Nn85tn9dvpIGo/sJ32zFAOSEXGuMrsChBzhbX3sWNuIj9NeagmzKSIByR+yIijX3cT7P
-         F/lgFAgaXdimqw/9M22b5kwHjyFfQptTfXNBmIp+WJuTpzvI8M8KYGwoI5LFVR4ab16h
-         Cr1A+rbBWgMurAyVzg0dtNLNxPHdasNdV/BXrDbRgIHrWk6wp52aZCNXa7Q8dcWjw5Qb
-         fFi2XT+WBfjOzlRFV5xdIL6EKRf+8vaEnNm4inv3U63Yxt5b2kiRugLej4uzTZHA8ywi
-         /aHA==
-X-Gm-Message-State: AFqh2kqwKh+kkIByp5QTcBicBFPpV4ewhqsaNrz50Crl7nqhO119UOPg
-        w3IDGLQtxUwqzMKJB+lCZbrzVw==
-X-Google-Smtp-Source: AMrXdXsFoag9MtSFnbdYxM3IyTa2CUjeLgJrDl4dleDZQ0e9LavXeDDGCLRsH5rm+9xMocIvMDJ7Yg==
-X-Received: by 2002:a2e:b054:0:b0:27f:e465:859e with SMTP id d20-20020a2eb054000000b0027fe465859emr8960942ljl.2.1673297950108;
-        Mon, 09 Jan 2023 12:59:10 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id bj27-20020a2eaa9b000000b0027fd65e4faesm1029211ljb.108.2023.01.09.12.59.06
+        bh=xvbOJwJCDvAVe4Ypk6TWCIgsg3158YUlrEMw2YNb0Mo=;
+        b=mVDFSwSewwzBotPPZlbX78gmtRKsPSO34mHEwyOcjKQYqTGkZFCShxm+hJqBtg5rT7
+         MMn5ce170P9Pz3S4TsQbtUPpstlXAdRN5TiV2k0PbA5LV81Kcqph/lR3PKFgO/PdcR7O
+         gzpheyGGficb7y6tNEG8kQM0RZmXoJKHNoa1nLRREzhDFTdQuhV5tzuinv+2Y7kydg+q
+         C/vS+jjbO3PUdtyfm0+CpXBCMkLrDI5c84jJyRWztnnawwQRHCTdQHZPRSUCXWQ33CqC
+         wz8IEF5Xq9bNimL+kYNo9nagQPzbzzqauCfeKWrct4mmVCmUoxf9el0i2BHEYQUFgnqG
+         podA==
+X-Gm-Message-State: AFqh2koeZsYK7qX/JMowg4anx2ixJVB81OvalyyDjlwbDNY+lTIvdsFX
+        ZKCPsCGxlUGux1qwTQdyxHgWEwmS2tXa1bms
+X-Google-Smtp-Source: AMrXdXsbI5uSFJDymeTgphPOV5Fli5DX46O6F/LKDz4NKUeOQVAI8vZ1Os79nbfg1VaDx1h2TGA5vQ==
+X-Received: by 2002:a05:6512:6d4:b0:4cb:1e1:f380 with SMTP id u20-20020a05651206d400b004cb01e1f380mr17575366lff.40.1673298209192;
+        Mon, 09 Jan 2023 13:03:29 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u6-20020a05651220c600b004cc865fdfdfsm383653lfr.89.2023.01.09.13.03.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 12:59:09 -0800 (PST)
-Message-ID: <59835841-654a-0ef2-6c79-1ba62ff00928@linaro.org>
-Date:   Mon, 9 Jan 2023 21:59:05 +0100
+        Mon, 09 Jan 2023 13:03:28 -0800 (PST)
+Message-ID: <a185b4e3-011c-c7f2-d18b-5c7486b121eb@linaro.org>
+Date:   Mon, 9 Jan 2023 23:03:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
+ Thunderbird/102.6.0
 Subject: Re: [PATCH 00/18] arm64: qcom: add support for sa8775p-ride
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -83,9 +83,10 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 References: <20230109174511.1740856-1-brgl@bgdev.pl>
  <bca87233-ae9d-00f8-07d3-07afef2cb92c@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <bca87233-ae9d-00f8-07d3-07afef2cb92c@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+ <59835841-654a-0ef2-6c79-1ba62ff00928@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <59835841-654a-0ef2-6c79-1ba62ff00928@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -97,45 +98,50 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 9.01.2023 21:13, Dmitry Baryshkov wrote:
-> On 09/01/2023 19:44, Bartosz Golaszewski wrote:
->> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->>
->> This adds basic support for the Qualcomm sa8775p platform and its reference
->> board: sa8775p-ride. The dtsi contains basic SoC description required for
->> a simple boot-to-shell. The dts enables boot-to-shell with UART on the
->> sa8775p-ride board. There are three new drivers required to boot the board:
->> pinctrl, interconnect and GCC clock. Other patches contain various tweaks
->> to existing code. More support is coming up.
->>
->> Bartosz Golaszewski (15):
->>    dt-bindings: clock: sa8775p: add bindings for Qualcomm gcc-sa8775p
->>    arm64: defconfig: enable the clock driver for Qualcomm SA8775P
->>      platforms
->>    dt-bindings: clock: qcom-rpmhcc: document the clock for sa8775p
->>    clk: qcom: rpmh: add clocks for sa8775p
->>    dt-bindings: interconnect: qcom: document the interconnects for
->>      sa8775p
->>    arm64: defconfig: enable the interconnect driver for Qualcomm SA8775P
->>    dt-bindings: pinctrl: sa8775p: add bindings for qcom,sa8775p-tlmm
->>    arm64: defconfig: enable the pinctrl driver for Qualcomm SA8775P
->>      platforms
->>    dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
->>    dt-bindings: power: qcom,rpmpd: document sa8775p
->>    soc: qcom: rmphpd: add power domains for sa8775p
->>    dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
->>    iommu: arm-smmu: qcom: add support for sa8775p
->>    dt-bindings: arm: qcom: document the sa8775p reference board
->>    arm64: dts: qcom: add initial support for qcom sa8775p-ride
->>
->> Shazad Hussain (2):
->>    clk: qcom: add the GCC driver for sa8775p
+On 09/01/2023 22:59, Konrad Dybcio wrote:
 > 
-> This patch didn't make it to the list. Please check if you can fix or split it somehow?
-It's a known issue with lists clipping messages that are too long.
-I'll forward it to you.
-
-Konrad
 > 
+> On 9.01.2023 21:13, Dmitry Baryshkov wrote:
+>> On 09/01/2023 19:44, Bartosz Golaszewski wrote:
+>>> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>>
+>>> This adds basic support for the Qualcomm sa8775p platform and its reference
+>>> board: sa8775p-ride. The dtsi contains basic SoC description required for
+>>> a simple boot-to-shell. The dts enables boot-to-shell with UART on the
+>>> sa8775p-ride board. There are three new drivers required to boot the board:
+>>> pinctrl, interconnect and GCC clock. Other patches contain various tweaks
+>>> to existing code. More support is coming up.
+>>>
+>>> Bartosz Golaszewski (15):
+>>>     dt-bindings: clock: sa8775p: add bindings for Qualcomm gcc-sa8775p
+>>>     arm64: defconfig: enable the clock driver for Qualcomm SA8775P
+>>>       platforms
+>>>     dt-bindings: clock: qcom-rpmhcc: document the clock for sa8775p
+>>>     clk: qcom: rpmh: add clocks for sa8775p
+>>>     dt-bindings: interconnect: qcom: document the interconnects for
+>>>       sa8775p
+>>>     arm64: defconfig: enable the interconnect driver for Qualcomm SA8775P
+>>>     dt-bindings: pinctrl: sa8775p: add bindings for qcom,sa8775p-tlmm
+>>>     arm64: defconfig: enable the pinctrl driver for Qualcomm SA8775P
+>>>       platforms
+>>>     dt-bindings: mailbox: qcom-ipcc: document the sa8775p platform
+>>>     dt-bindings: power: qcom,rpmpd: document sa8775p
+>>>     soc: qcom: rmphpd: add power domains for sa8775p
+>>>     dt-bindings: arm-smmu: document the smmu on Qualcomm SA8775P
+>>>     iommu: arm-smmu: qcom: add support for sa8775p
+>>>     dt-bindings: arm: qcom: document the sa8775p reference board
+>>>     arm64: dts: qcom: add initial support for qcom sa8775p-ride
+>>>
+>>> Shazad Hussain (2):
+>>>     clk: qcom: add the GCC driver for sa8775p
+>>
+>> This patch didn't make it to the list. Please check if you can fix or split it somehow?
+> It's a known issue with lists clipping messages that are too long.
+> I'll forward it to you.
+
+Thank you!
+
+-- 
+With best wishes
+Dmitry
+
