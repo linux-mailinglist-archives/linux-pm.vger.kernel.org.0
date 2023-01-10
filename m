@@ -2,122 +2,212 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAF84664CE3
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 20:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262D6664DEE
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 22:19:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbjAJT7m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 14:59:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S229538AbjAJVTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 16:19:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjAJT7h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 14:59:37 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 425A41001
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 11:59:36 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id u9so31602367ejo.0
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 11:59:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=phqcFcktUOE8soESCOvTtIRnoJvazAqSN6K5QS4zHeQ=;
-        b=yRPpJahVQuEM5LvB+LyRcXEnsDWHfXKiJ8z8N6a524fQc+BDXTjK1QugVozOakcYj7
-         Qa0OgvAwWkDl/OLDPBh0d9Gb85WHkT3yzTmNmINGyAQ+qL/78KjHlO9HPIU4euYZnYAa
-         1FC2EPa0WYMglS+5bQj3zF7R3KQQAC9iFIcJWkb7ZW4t5aozHMLczlddD6aQ/FTJF76M
-         TUprccWun1n3WhxZaODHchJQvbeE0rL/Rk/6L17v01aTDQqCpSxSAq1FGAa7xCNMeTbz
-         Y9oiPX4kd2vNYFnzhA6iVl02G/HI/CEwB8eImepF+GpvjeDkvppn2aExBdn200jRvOAh
-         hfXw==
-X-Gm-Message-State: AFqh2koSPI1ODsyigfl5HEQGNk9qA6ob2sQOB9U3IYdc4OdG17QuSUpp
-        yb3saLcpQzOuK00oF0QhbDZ0zivfkZH3xgtYAoQlfj3p
-X-Google-Smtp-Source: AMrXdXsby0RKfGUgvU6idlVTCi0i0VksJmlcHCJlf+S3mUyB+hxanHK8tBwzbODv23Pndv2rPLloYz5lb6kWbs1H5ek=
-X-Received: by 2002:a17:907:6d2a:b0:7c0:efba:b39c with SMTP id
- sa42-20020a1709076d2a00b007c0efbab39cmr7599211ejc.209.1673380774744; Tue, 10
- Jan 2023 11:59:34 -0800 (PST)
-MIME-Version: 1.0
-References: <20230110041125.tamqbqec5aqyck22@vireshk-i7>
-In-Reply-To: <20230110041125.tamqbqec5aqyck22@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 20:59:23 +0100
-Message-ID: <CAJZ5v0iSVYQ+FtMezeeB5w1h5JBYuhn=ugwzuLymSx9OU4KSWA@mail.gmail.com>
-Subject: Re: [GIT PULL] cpufreq/arm fixes for 6.2-rc
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S232021AbjAJVTB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 16:19:01 -0500
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B3AA5F91B;
+        Tue, 10 Jan 2023 13:19:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673385540; x=1704921540;
+  h=from:to:cc:subject:date:message-id;
+  bh=ulZlgG79EnzhO/at10rqu6ZjlmtW0C087vTovJIq3do=;
+  b=Mtn1QaLMM2daTEsU/U/CM8E0g7liOIXjRR2qej48x8bp7bk2RoZHJUIw
+   gnJ/K+/2k5wuCVRmiYFhD2Ai2+EgreyXVmFP0nmPB2ZiJPc8sY15Lv33b
+   z2xe3EV2O56RsmjMagsVgGBNeKNItK3z35NOlpm6sQOqMItIn87DMjdUD
+   xrf0qoA5RGJkM/Gbknf+LgYM6fDEycW6cwKWKQ3p2m9erAlwrInm26ggZ
+   LoK+Ao5d1gFG5v55pKGeHvt45zd7GNXUS4iQBHuMB8/yTyiX/ElghOG7Z
+   wEKh68HeOhPsXgH/mHAfOKcqt6TLpYuBoUk4rgJ2Dv0gowXDpkFU7IXlb
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="321963123"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="321963123"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 13:18:58 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="720485160"
+X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
+   d="scan'208";a="720485160"
+Received: from anupumpa-mobl3.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.209.91.157])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 13:18:58 -0800
+From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
+To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
+        rppt@kernel.org, peterz@infradead.org, luto@kernel.org
+Cc:     rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
+Date:   Tue, 10 Jan 2023 13:18:39 -0800
+Message-Id: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 5:11 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Hi Rafael,
->
-> The following changes since commit 1b929c02afd37871d5afb9d498426f83432e71c2:
->
->   Linux 6.2-rc1 (2022-12-25 13:41:39 -0800)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq/arm/fixes-6.2-rc4
->
-> for you to fetch changes up to 08f0adb193c008de640fde34a2e00a666c01d77c:
->
->   cpufreq: armada-37xx: stop using 0 as NULL pointer (2023-01-10 09:32:03 +0530)
->
-> ----------------------------------------------------------------
-> cpufreq arm fixes for 6.2-rc4
->
-> - Fix double initialization and set suspend-freq for Apple's cpufreq
->   driver (Arnd Bergmann and Hector Martin).
->
-> - Fix reading of "reg" property, update cpufreq-dt's blocklist and
->   update DT documentation for Qualcomm's cpufreq driver (Konrad Dybcio
->   and Krzysztof Kozlowski).
->
-> - Replace 0 with NULL for Armada driver (Miles Chen).
->
-> - Fix potential overflows in CPPC driver (Pierre Gondois).
->
-> - Update blocklist for Tegra234 Soc (Sumit Gupta).
->
-> ----------------------------------------------------------------
-> Arnd Bergmann (1):
->       cpufreq: apple: remove duplicate intializer
->
-> Hector Martin (1):
->       cpufreq: apple-soc: Switch to the lowest frequency on suspend
->
-> Konrad Dybcio (2):
->       cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2
->       cpufreq: Add SM6375 to cpufreq-dt-platdev blocklist
->
-> Krzysztof Kozlowski (1):
->       dt-bindings: cpufreq: cpufreq-qcom-hw: document interrupts
->
-> Miles Chen (1):
->       cpufreq: armada-37xx: stop using 0 as NULL pointer
->
-> Pierre Gondois (1):
->       cpufreq: CPPC: Add u64 casts to avoid overflowing
->
-> Sumit Gupta (1):
->       cpufreq: Add Tegra234 to cpufreq-dt-platdev blocklist
->
->  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 11 +++++++++++
->  drivers/cpufreq/apple-soc-cpufreq.c                            |  3 ++-
->  drivers/cpufreq/armada-37xx-cpufreq.c                          |  2 +-
->  drivers/cpufreq/cppc_cpufreq.c                                 | 11 ++++++-----
->  drivers/cpufreq/cpufreq-dt-platdev.c                           |  2 ++
->  drivers/cpufreq/qcom-cpufreq-hw.c                              | 22 ++++++++++++++++++++--
->  6 files changed, 42 insertions(+), 9 deletions(-)
->
-> --
+Hibernate uses the direct map to read memory it saves to disk. Since
+sometimes pages are not accessible on the direct map ("not present" on
+x86), it has special case logic to temporarily make a page present. On x86
+these direct map addresses can be mapped at various page sizes, but the
+logic works ok as long as the not present pages are always mapped as
+PAGE_SIZE such that they don't require a split to map the region as
+present. If the address was mapped not present by a larger page size, the
+split may fail and hibernate would then try to read an address mapped not
+present.
 
-Pulled, thanks!
+Today on x86 there are no known cases of this (huge not present pages on
+the direct map), but it has come up from time to time when developing
+things that operate on the direct map. It blocked making
+VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
+has been a complication for various direct map protection efforts.
+
+This dependency is also pretty hidden and easily missed by people poking at
+the direct map. For this reason, there are warnings in place to complain
+but not handle this scenario.
+
+One way to make this more robust would be to create some new CPA
+functionality that can know to map and reset the whole huge page in the
+case of trying to map a subpage. But for simplicity and smaller code, just
+make x86 hibernate have its own fixmap PTE that it can use to point
+to 4k pages when it encounters an unmapped direct map page.
+
+Move do_copy_page() to a header such that it can be used in an arch
+breakout. Rename it hib_copy_page() to be more hibernate specific since
+it could appear in other files.
+
+Use __weak for the arch breakout because there is not a suitable arch
+specific header to use the #define method.
+
+Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+---
+
+Rebase to v6.2-rc3 (original still applied) and resending per:
+https://lore.kernel.org/lkml/CAJZ5v0i6cxGD+V6G+q-Y_Lp-ov51_zmkZr8ZGpCtqWV-e=BsLg@mail.gmail.com/
+
+ arch/x86/include/asm/fixmap.h |  3 +++
+ arch/x86/power/hibernate.c    | 10 ++++++++++
+ include/linux/suspend.h       | 13 +++++++++++++
+ kernel/power/snapshot.c       | 21 +++++++--------------
+ 4 files changed, 33 insertions(+), 14 deletions(-)
+
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59..0fceed9a4152 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -108,6 +108,9 @@ enum fixed_addresses {
+ #ifdef CONFIG_PARAVIRT_XXL
+ 	FIX_PARAVIRT_BOOTMAP,
+ #endif
++#ifdef CONFIG_HIBERNATION
++	FIX_HIBERNATE,
++#endif
+ 
+ #ifdef CONFIG_ACPI_APEI_GHES
+ 	/* Used for GHES mapping from assorted contexts */
+diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+index 6f955eb1e163..473b6b5f6b7e 100644
+--- a/arch/x86/power/hibernate.c
++++ b/arch/x86/power/hibernate.c
+@@ -147,6 +147,16 @@ int arch_hibernation_header_restore(void *addr)
+ 	return 0;
+ }
+ 
++void copy_unmapped_page(void *dst, struct page *page)
++{
++	WARN_ON(!preempt_count());
++
++	set_fixmap(FIX_HIBERNATE, page_to_phys(page));
++	__flush_tlb_all();
++	hib_copy_page(dst, (void *)fix_to_virt(FIX_HIBERNATE));
++	clear_fixmap(FIX_HIBERNATE);
++}
++
+ int relocate_restore_code(void)
+ {
+ 	pgd_t *pgd;
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index cfe19a028918..0b19b910526e 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -447,6 +447,19 @@ extern bool hibernation_available(void);
+ asmlinkage int swsusp_save(void);
+ extern struct pbe *restore_pblist;
+ int pfn_is_nosave(unsigned long pfn);
++void copy_unmapped_page(void *dst, struct page *page);
++
++/*
++ * This is needed, because copy_page and memcpy are not usable for copying
++ * task structs.
++ */
++static inline void hib_copy_page(long *dst, long *src)
++{
++	int n;
++
++	for (n = PAGE_SIZE / sizeof(long); n; n--)
++		*dst++ = *src++;
++}
+ 
+ int hibernate_quiet_exec(int (*func)(void *data), void *data);
+ #else /* CONFIG_HIBERNATION */
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index cd8b7b35f1e8..344c071f29d3 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1369,16 +1369,11 @@ static unsigned int count_data_pages(void)
+ 	return n;
+ }
+ 
+-/*
+- * This is needed, because copy_page and memcpy are not usable for copying
+- * task structs.
+- */
+-static inline void do_copy_page(long *dst, long *src)
++void __weak copy_unmapped_page(void *dst, struct page *page)
+ {
+-	int n;
+-
+-	for (n = PAGE_SIZE / sizeof(long); n; n--)
+-		*dst++ = *src++;
++	hibernate_map_page(page);
++	hib_copy_page(dst, page_address(page));
++	hibernate_unmap_page(page);
+ }
+ 
+ /**
+@@ -1392,11 +1387,9 @@ static inline void do_copy_page(long *dst, long *src)
+ static void safe_copy_page(void *dst, struct page *s_page)
+ {
+ 	if (kernel_page_present(s_page)) {
+-		do_copy_page(dst, page_address(s_page));
++		hib_copy_page(dst, page_address(s_page));
+ 	} else {
+-		hibernate_map_page(s_page);
+-		do_copy_page(dst, page_address(s_page));
+-		hibernate_unmap_page(s_page);
++		copy_unmapped_page(dst, s_page);
+ 	}
+ }
+ 
+@@ -1417,7 +1410,7 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
+ 	if (PageHighMem(s_page)) {
+ 		src = kmap_atomic(s_page);
+ 		dst = kmap_atomic(d_page);
+-		do_copy_page(dst, src);
++		hib_copy_page(dst, src);
+ 		kunmap_atomic(dst);
+ 		kunmap_atomic(src);
+ 	} else {
+-- 
+2.17.1
+
