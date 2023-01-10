@@ -2,125 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90FC56646F9
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 18:05:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88700664734
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 18:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238746AbjAJRFu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 12:05:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41660 "EHLO
+        id S234304AbjAJRRp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 12:17:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238949AbjAJRFh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 12:05:37 -0500
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6A64FCC4
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 09:05:34 -0800 (PST)
-Received: by mail-lf1-x12b.google.com with SMTP id f34so19450371lfv.10
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 09:05:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ViSKVOVdYXza1X58HUisghrY6PNtu3jUgQJxDurpmbU=;
-        b=MsX48sRoyYXUqcmOlftJJM8++0/Mj4qf6uQu5f9hQ8r3FQGKLatvW1xBcP0tDyY3jP
-         79fcWRyi+v8JI5qOTNtuu5R+eKUHS5VJSyKa06eN694zKdDcGNxoGZ7yOTWHY4FnjQ14
-         JUIuwTapO+8FuiZVPkdE0T0yCEtBt3WAmkIKsdeDqJgVH8O7ri3eTxkA4QMysiZCcDcM
-         yI4ijywlYzLyJXYHnUdMrVZAlSc26zgszQpOs1iA1f7VbDKOADFW1j04jGppGafLv0Ps
-         o8vY4SOjIn22EK0RtpohxR8F47OA6alVPg7e+GqQ/69AKEeC7RTEc5bRthhXf169+xvA
-         8xMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ViSKVOVdYXza1X58HUisghrY6PNtu3jUgQJxDurpmbU=;
-        b=RWyvftxT/ThgrD7cWe5K8c6b5RWrOHFnvgQf7z/Ts1N1PKUT8r7CBwOxPbJ7GShdcJ
-         UtJwMidqzmhanJnSntYF5+K87JQ341KyXQh52B0hw18kfxoOfpZ0/nK4bqH9X6XW4rZv
-         rFdnk4nUKSMq6wVkzG0WJeNRVKrxLZsBwtQnjJQrjhAbmpzbd5iWw70crMzTdetxTc1r
-         UGsVAL8UPOc/7fypT1jYYCVl9Xusy/OhfEe9owSzWKJzwDvzLTMVu7cmkZtmDXtW82ed
-         ITAVI3DHmy0mgnagTXqlY/kmPO4Cucq44jG4pUMqIrZcPxLoQwk9L7ly5fzaAmI1X12c
-         PYjw==
-X-Gm-Message-State: AFqh2krtz8eDGCD6IZrrVpOn/oVJkvdzL9phnycb0m8UDSn5xYYLLdOP
-        4QvMGNQ1xWHymJfoq2tq3fU/pw==
-X-Google-Smtp-Source: AMrXdXs52CyJbbjNnpCT3mB8KFDRxubwKTeuPu+s4xCVtpc/QoaxCbT68eLjBaRnniX0fw+UdKUeuA==
-X-Received: by 2002:ac2:46f8:0:b0:4b5:9ec5:dbed with SMTP id q24-20020ac246f8000000b004b59ec5dbedmr21895758lfo.40.1673370332442;
-        Tue, 10 Jan 2023 09:05:32 -0800 (PST)
-Received: from [192.168.1.101] (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id s10-20020a056512202a00b004cb291bcd2csm2257930lfs.246.2023.01.10.09.05.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Jan 2023 09:05:31 -0800 (PST)
-Message-ID: <593e555b-d9fb-83ab-dabe-33d6690210f8@linaro.org>
-Date:   Tue, 10 Jan 2023 18:05:30 +0100
+        with ESMTP id S234716AbjAJRRG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 12:17:06 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD7354DA0;
+        Tue, 10 Jan 2023 09:17:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8281BCE1799;
+        Tue, 10 Jan 2023 17:16:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996A5C433D2;
+        Tue, 10 Jan 2023 17:16:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673371016;
+        bh=iwpyzqVQok4g2qkFvOCpfycpEy0u8yaiB88caR2d+yw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZFlSHcAy0NVD0oYNOUp4HIjmISXck5EjgZpyTmX54tPypcLovVkFVVpnudqYpDO9K
+         UplsOHprYvZuBJWXROow17T1QSPJ9QZQ54qHZ7K+4lIImwm21BkKOyDX/y6aNRNvIE
+         YOpOjPeo1MC8X78tpaaZcAaMnqfo/1PzI3LMkc9s/RTBpOn7HtDmwPMLtFlftePR1Z
+         dAvWgG/yUp0DYlqlctwKty89d/SAmKWqT6wyI1dHKOOf4q5AptgEh75dVt0mY/JWx+
+         HcyXcmbv91fqoUnJSNq1nvDjzZ57STNdv1N6O+WPWU7RKaEQSN9AqknmRWvvddHlxI
+         yLxzhbWz+WeNg==
+Date:   Tue, 10 Jan 2023 11:16:52 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     freedreno <freedreno@lists.freedesktop.org>,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Andy Gross <agross@kernel.org>, Chia-I Wu <olvaffe@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Kevin Hilman <khilman@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Len Brown <len.brown@intel.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Paul <sean@poorly.run>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 0/5] Improve GPU reset sequence for Adreno GPU
+Message-ID: <20230110171652.ur5zgdwvjj3kaimj@builder.lan>
+References: <1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 01/10] interconnect: qcom: rpm: Don't set QoS params
- before non-zero bw is requested
-Content-Language: en-US
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
- <20230110132202.956619-2-konrad.dybcio@linaro.org>
- <1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 10.01.2023 15:00, Bryan O'Donoghue wrote:
-> On 10/01/2023 13:21, Konrad Dybcio wrote:
->> Until now, the icc-rpm driver unconditionally set QoS params, even on
->> empty requests. This is superfluous and the downstream counterpart does
->> not do it. Follow it by doing the same.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/interconnect/qcom/icc-rpm.c | 6 ++++++
->>   1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
->> index df3196f72536..361dcbf3386f 100644
->> --- a/drivers/interconnect/qcom/icc-rpm.c
->> +++ b/drivers/interconnect/qcom/icc-rpm.c
->> @@ -191,6 +191,12 @@ static int qcom_icc_qos_set(struct icc_node *node, u64 sum_bw)
->>       struct qcom_icc_provider *qp = to_qcom_provider(node->provider);
->>       struct qcom_icc_node *qn = node->data;
->>   +    /* Defer setting QoS until the first non-zero bandwidth request. */
->> +    if (!(node->avg_bw || node->peak_bw)) {
->> +        dev_dbg(node->provider->dev, "NOT Setting QoS for %s\n", qn->name);
->> +        return 0;
->> +    }
->> +
->>       dev_dbg(node->provider->dev, "Setting QoS for %s\n", qn->name);
->>         switch (qp->type) {
+On Mon, Jan 02, 2023 at 04:18:26PM +0530, Akhil P Oommen wrote:
 > 
-> I still think you should include the original logic on the else, for the minimum case of silicon that predates the 5.4 kernel release.
+> This is a rework of [1] using genpd instead of 'reset' framework.
 > 
-> /* Clear bandwidth registers */
-> set_qos_bw_regs(base, mas_index, 0, 0, 0, 0, 0);
+> As per the recommended reset sequence of Adreno gpu, we should ensure that
+> gpucc-cx-gdsc has collapsed at hardware to reset gpu's internal hardware states.
+> Because this gdsc is implemented as 'votable', gdsc driver doesn't poll and
+> wait until its hw status says OFF.
 > 
-> Either that or get the relevant silicon engineers at qcom to say the host side port write is redundant.
-After some conversations in private, it was concluded that this patch
-should most likely not be applied, as there's not enough reasoning
-beyond "downstream does this, let's copy it".
+> So use the newly introduced genpd api (dev_pm_genpd_synced_poweroff()) to
+> provide a hint to the gdsc driver to poll for the hw status and use genpd
+> notifier to wait from adreno gpu driver until gdsc is turned OFF.
+> 
+> This series is rebased on top of linux-next (20221215) since the changes span
+> multiple drivers.
+> 
+> [1] https://patchwork.freedesktop.org/series/107507/
+> 
 
-The other 9 should be still reviewed.
+@Rob, please find the PM and gdsc implementation changes picked up here:
 
-Konrad
+  https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git tags/1672656511-1931-1-git-send-email-quic_akhilpo@quicinc.com
+
+Regards,
+Bjorn
+
+> Changes in v5:
+> - Capture all Reviewed-by tags
 > 
-> ---
-> bod
+> Changes in v4:
+> - Update genpd function documentation (Ulf)
+> 
+> Changes in v3:
+> - Rename the var 'force_sync' to 'wait (Stephen)
+> 
+> Changes in v2:
+> - Minor formatting fix
+> - Select PM_GENERIC_DOMAINS from Kconfig
+> 
+> Akhil P Oommen (4):
+>   clk: qcom: gdsc: Support 'synced_poweroff' genpd flag
+>   drm/msm/a6xx: Vote for cx gdsc from gpu driver
+>   drm/msm/a6xx: Remove cx gdsc polling using 'reset'
+>   drm/msm/a6xx: Use genpd notifier to ensure cx-gdsc collapse
+> 
+> Ulf Hansson (1):
+>   PM: domains: Allow a genpd consumer to require a synced power off
+> 
+>  drivers/base/power/domain.c           | 26 ++++++++++++++++++++
+>  drivers/clk/qcom/gdsc.c               | 11 +++++----
+>  drivers/gpu/drm/msm/Kconfig           |  1 +
+>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 46 ++++++++++++++++++++++++++++++++---
+>  drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  7 ++++++
+>  drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 13 +++++++---
+>  drivers/gpu/drm/msm/msm_gpu.c         |  4 ---
+>  drivers/gpu/drm/msm/msm_gpu.h         |  4 ---
+>  include/linux/pm_domain.h             |  5 ++++
+>  9 files changed, 97 insertions(+), 20 deletions(-)
+> 
+> -- 
+> 2.7.4
+> 
