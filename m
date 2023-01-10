@@ -2,61 +2,143 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08665663B77
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 09:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD872663C12
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 10:01:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237937AbjAJIlb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 03:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34364 "EHLO
+        id S234990AbjAJJBM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 04:01:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238012AbjAJIlT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 03:41:19 -0500
-Received: from mail.lokoho.com (mail.lokoho.com [217.61.105.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4551815FCF
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 00:41:18 -0800 (PST)
-Received: by mail.lokoho.com (Postfix, from userid 1001)
-        id 0E5B383DA7; Tue, 10 Jan 2023 08:40:53 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=lokoho.com; s=mail;
-        t=1673340077; bh=Z0N5VlX9/JlryGOL5I747Le9USomZJCRNNGRT3LbbKc=;
-        h=Date:From:To:Subject:From;
-        b=GxbM0vNvvshO1CF4Aq4Rl2qjmQBoMLvg+wePUFXktm7hUIYY9OTCb2BD6okTUK7Sq
-         k7MeXnrIhbfUeIvRdm2EvPs5m0KKjjx40GjHiRude7jLqrDshYW2ZjZ8R/9AIhe6M0
-         gEZaLQ0ZIrKWWyLx3cUi62ihbh5TnPweCB6u9dNDcHnMg+JQq1u1Y2qxkDX5DfJc8J
-         FilxAOc4zC/1q3Lb4WyURhvJ7xj3IwOUzjigLnc/42W6ps8u9rz7sRE8jYKhji1jap
-         o7ulJHTpPhDPHTmv6DINAnv5YpBIjUyjLvebmaJDu9tAjCONg404m7Dgft2kKreoK4
-         1gwlmNymK3EVg==
-Received: by mail.lokoho.com for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 08:40:32 GMT
-Message-ID: <20230110074501-0.1.3b.li05.0.imo04yb89j@lokoho.com>
-Date:   Tue, 10 Jan 2023 08:40:32 GMT
-From:   "Adam Charachuta" <adam.charachuta@lokoho.com>
-To:     <linux-pm@vger.kernel.org>
-Subject: =?UTF-8?Q?S=C5=82owa_kluczowe_do_wypozycjonowania?=
-X-Mailer: mail.lokoho.com
+        with ESMTP id S231636AbjAJI75 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 03:59:57 -0500
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60CF54D721;
+        Tue, 10 Jan 2023 00:59:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673341160; x=1704877160;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=y8eGB0bUm5BuFDRsQCDQVetCmvCEgJqPbi5tofxIzdU=;
+  b=O2fffyLf1uDgmGxF8dsdhHE2dqFxmNZxwfXP9GuPWI5hKVDihkLTx7F/
+   Rzf/C9GzkHTGX3qjmPFOxW3kX/hu56WBmCDyQ3p+d7bYdHDkdsbVyYbI2
+   xnBukEYpN+00aCguoVUgF+O7MyBK51bI5iHDiI5CcmJdLSCwrDNY+ZIOM
+   s3kZRVfgKzn5J5L6R0AkkDLU0EutdaIuGVK75kQdxjIxDWAKKVEXHJKtm
+   jeP5mOaxYObYANaWXRQPvx6ZbgIhfSJtMxrO+mGOkhpsyeO/H+k0ii+eL
+   RwGy08TMrmrxU8LRD2Oxi3j7WNQTgZA5iXhrAxSXcSbnucPGzlUh9cgFI
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="387550148"
+X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
+   d="scan'208";a="387550148"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2023 00:59:19 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="606888054"
+X-IronPort-AV: E=Sophos;i="5.96,314,1665471600"; 
+   d="scan'208";a="606888054"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 10 Jan 2023 00:59:16 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pFATT-0007nr-2r;
+        Tue, 10 Jan 2023 08:59:15 +0000
+Date:   Tue, 10 Jan 2023 16:58:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD REGRESSION
+ e73125f5e4d68eea0197f83c4943672d9c8cbd08
+Message-ID: <63bd28c2.rdYyCKmjDXHO0xmK%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Dzie=C5=84 dobry,
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: e73125f5e4d68eea0197f83c4943672d9c8cbd08  Merge branch 'thermal-intel' into bleeding-edge
 
-zapozna=C5=82em si=C4=99 z Pa=C5=84stwa ofert=C4=85 i z przyjemno=C5=9Bci=
-=C4=85 przyznaj=C4=99, =C5=BCe przyci=C4=85ga uwag=C4=99 i zach=C4=99ca d=
-o dalszych rozm=C3=B3w.=20
+Error/Warning reports:
 
-Pomy=C5=9Bla=C5=82em, =C5=BCe mo=C5=BCe m=C3=B3g=C5=82bym mie=C4=87 sw=C3=
-=B3j wk=C5=82ad w Pa=C5=84stwa rozw=C3=B3j i pom=C3=B3c dotrze=C4=87 z t=C4=
-=85 ofert=C4=85 do wi=C4=99kszego grona odbiorc=C3=B3w. Pozycjonuj=C4=99 =
-strony www, dzi=C4=99ki czemu generuj=C4=85 =C5=9Bwietny ruch w sieci.
+https://lore.kernel.org/oe-kbuild-all/202301101443.IqvnQKMN-lkp@intel.com
 
-Mo=C5=BCemy porozmawia=C4=87 w najbli=C5=BCszym czasie?
+Error/Warning: (recently discovered and may have been fixed)
 
+drivers/thermal/intel/x86_pkg_temp_thermal.c:375:52: error: use of undeclared identifier 'tj_max'
+drivers/thermal/intel/x86_pkg_temp_thermal.c:375:59: error: 'tj_max' undeclared (first use in this function)
 
-Pozdrawiam
-Adam Charachuta
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- x86_64-defconfig
+|   `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:tj_max-undeclared-(first-use-in-this-function)
+|-- x86_64-rhel-8.3-bpf
+|   `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:tj_max-undeclared-(first-use-in-this-function)
+|-- x86_64-rhel-8.3-func
+|   `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:tj_max-undeclared-(first-use-in-this-function)
+|-- x86_64-rhel-8.3-kunit
+|   `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:tj_max-undeclared-(first-use-in-this-function)
+|-- x86_64-rhel-8.3-kvm
+|   `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:tj_max-undeclared-(first-use-in-this-function)
+`-- x86_64-rhel-8.3-syz
+    `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:tj_max-undeclared-(first-use-in-this-function)
+clang_recent_errors
+`-- x86_64-rhel-8.3-rust
+    `-- drivers-thermal-intel-x86_pkg_temp_thermal.c:error:use-of-undeclared-identifier-tj_max
+
+elapsed time: 726m
+
+configs tested: 36
+configs skipped: 2
+
+gcc tested configs:
+x86_64                            allnoconfig
+alpha                             allnoconfig
+i386                              allnoconfig
+arm                               allnoconfig
+arc                               allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+s390                             allyesconfig
+riscv                             allnoconfig
+powerpc                           allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+alpha                            allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+x86_64                           allyesconfig
+sh                               allmodconfig
+i386                                defconfig
+arm                                 defconfig
+powerpc                          allmodconfig
+i386                             allyesconfig
+mips                             allyesconfig
+x86_64                           rhel-8.3-bpf
+arm                              allyesconfig
+arm64                            allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+
+clang tested configs:
+x86_64                          rhel-8.3-rust
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
