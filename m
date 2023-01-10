@@ -2,178 +2,155 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B2E663C24
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 10:04:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEB00663E51
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 11:34:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjAJJEa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 04:04:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S237858AbjAJKes (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 05:34:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238113AbjAJJEG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 04:04:06 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E025C6147C
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 01:02:23 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id s8so4188544plk.5
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 01:02:23 -0800 (PST)
+        with ESMTP id S237838AbjAJKer (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 05:34:47 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ECFF4ECB0
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 02:34:46 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id p1-20020a05600c1d8100b003d8c9b191e0so9486137wms.4
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 02:34:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKIwW6wVI2N1pEUyDsl0YiGjHzjNxMi8/aiksEQ3WDE=;
-        b=Zg19uvoxLqVAENmpDXj6k0EKS8kvVAmhlZvALjkG0uWAJMMvbVg2NTo6rLbAGZOcYt
-         K9+vEm1FN5jGBOgkQtxvVGtoV1dZVXSo7LZdni3dLGAio+o0zghyd+I+g6NXOWkwyYt4
-         owT8dWr6CsbDDCY57x8OhMUooYJ02WiiWj7t7VY4KN2BBu3xpMSUcvC9/XXSDe47kkRN
-         hrvxDt3SWXt4cnqPzTqi9/xzZxlDWPyBNDEn3n2APngzUSPU/G/Rk4ERkv++rqBGz5oO
-         7xPgGmkjoLtC9BbyE2p0NuItFlUa2pFjJdB/eyhPgQsBJ6fTm1Xz8TdW5hX8/pMtlXvy
-         +C3Q==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S8w8+O91x6kumEh4lF0ym7XFpPER6TCzGXKG5aX3JDw=;
+        b=aoBbi6sXhFzCmybRmWwEV1rhv1MxYXadF7W7dx0BjBynhzu9RQeaR9mZVwEW+ghPVx
+         puj2WM34WhsMwTPd+48dLY5tRv0UvfvbBV69pDLqz2Fb9PgGamos65X0tz+OimhWP4eX
+         3nRDEOHq3qH78eIc2MlkJGLnXu6p6wKEXVzzaeYQlr6z/me3qkQWIaVx1XqpDM2vpTxE
+         z1rsYntTDmu+ZGfxjVVJLOowBAxEkNPeL/ngswksFYGlQ17iO10frKh4dfAnBbsIR0cZ
+         dAmu2CB2EvYgvVds6/p08QU9Sjk5wSZ2HP441Y5583Q2r7j8MJI9fQx5TxmIxmVSCfjR
+         Z0CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pKIwW6wVI2N1pEUyDsl0YiGjHzjNxMi8/aiksEQ3WDE=;
-        b=75m9wGDppaLmeciIeILmk95lLFE6HtHUZ6CJL8Xq12x2El5RJxU35CCyx5fDzxo4Nc
-         FgIEnn8nXb2cFSt5sUrraZIXIQdij84d80xfbEREN9MWpk8YD2Gs26gwIG6fkXGuZF/6
-         2TBZtiGFt/tN05VD5lK//jFVPJPngBX6rlYo6p4cIn0iiTxWp9ixcc0nTGU8jeVuKPhV
-         kPwiMEJVclbGX1EA0hm2IBPBxGiOuSU9ibU0xCyG9WqqfYUXq8benYBbvG5O77zPNZjL
-         HbpClY5qiSUErY3jpUr4KFk0p9WUii71f5NjUprwjvl2dVGEy3ORYBmG5iic25TMkE+6
-         c9FQ==
-X-Gm-Message-State: AFqh2kqEMFPgRvXZwBdEgy1N3fBZysBI+Q5kGygcQxQYZ24e2sja6TpW
-        NVWLkk+yItGrsK6IVyoWdWn/Vw==
-X-Google-Smtp-Source: AMrXdXuii80e9TeAlyIJcFAif8TUQzaX7YM/d4+CJOACStr13ZxQ5uB/PDOeWaLoyJkOlHhePpMLdw==
-X-Received: by 2002:a17:902:c245:b0:186:ada3:c1a0 with SMTP id 5-20020a170902c24500b00186ada3c1a0mr71616965plg.45.1673341342162;
-        Tue, 10 Jan 2023 01:02:22 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id t5-20020a170902e84500b0017f756563bcsm7594853plg.47.2023.01.10.01.02.21
+        bh=S8w8+O91x6kumEh4lF0ym7XFpPER6TCzGXKG5aX3JDw=;
+        b=a4qhD95RQbevho78edGdTj17aTLaFHRSClJUF5SK6tYsX+lK1rEYFTHCXJs7JMiccH
+         lyyJNFNwmHMgCgfG4zmZwJyuS+ktIyepK6cVsVGO1eLARXVVcHFUTVN3X/oOpy/moQZD
+         rtOC8I2gYj0FNLD1vqIr2K9LDGI703M2dBWwxTRvHd41mNesBkPsC3Bp+A+yDl/d2HUy
+         gZEnAGybWe918xPV2gBjrW4WEnA//auzyVsT7G937EEC9mb+E3K8cbTXNRVeQEbZ/Kjz
+         m15gsDloooTCmoXvUyqA8jZYqYkv8NoHi6OclbAuGHxlstwWhI9scgeYtp+KjbbbQB7c
+         P+SQ==
+X-Gm-Message-State: AFqh2krwNQLY2BUN7/B589Y/72BK6FoTzjv4wCHKdbd/29aj+6zq3QQp
+        J0SbekaBCFwGNkwyLUNxrmjb/A==
+X-Google-Smtp-Source: AMrXdXsKZIF89HCTLwqLnN4QPrxdRDgUZhxST1pEsKbqms4h+NEyD0x16YKN/NnlBup8oC1yWqXcAA==
+X-Received: by 2002:a05:600c:35ca:b0:3d1:f2de:195a with SMTP id r10-20020a05600c35ca00b003d1f2de195amr52230532wmq.32.1673346884631;
+        Tue, 10 Jan 2023 02:34:44 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id f12-20020a05600c154c00b003d9fba3c7a4sm409366wmg.16.2023.01.10.02.34.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 01:02:21 -0800 (PST)
-Message-ID: <63bd299d.170a0220.18e3f.ba00@mx.google.com>
-Date:   Tue, 10 Jan 2023 01:02:21 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 10 Jan 2023 02:34:44 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+X-Google-Original-From: Daniel Lezcano <daniel.lezcano@kernel.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        dmitry.baryshkov@linaro.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] thermal/drivers/qcom: Remove duplicate set next trip point interrupt code
+Date:   Tue, 10 Jan 2023 11:34:20 +0100
+Message-Id: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.2-rc3-50-g4f0d85674885
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Report-Type: build
-Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
- 5 warnings (v6.2-rc3-50-g4f0d85674885)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc3-50-g4f=
-0d85674885)
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
-2-rc3-50-g4f0d85674885/
+The tsens driver reprogram the next trip points in the irq
+handler. This function then call thermal_zone_device_update().
 
-Tree: pm
-Branch: testing
-Git Describe: v6.2-rc3-50-g4f0d85674885
-Git Commit: 4f0d85674885812931426b0407cda1a33e413e12
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
-Built: 8 unique architectures
+However, thermal_zone_device_update() calls thermal_zone_set_trips()
+and from there it calls the backend 'set_trips' ops. This one in turn
+reprogram the next trip points (low/high).
 
-Warnings Detected:
+Consequently, the code setting the next trip points interrupt in the
+interrupt handle is not needed and could be removed.
 
-arc:
-
-arm64:
-
-arm:
-
-i386:
-
-mips:
-    32r2el_defconfig (gcc-10): 1 warning
-
-riscv:
-
-sparc:
-    sparc64_defconfig (gcc-10): 4 warnings
-
-x86_64:
-
-
-Warnings summary:
-
-    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
-tion failed, symbol will not be versioned.
-    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
--Wcpp]
-    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
-e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
-ted "0,0"
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
-ion mismatches
-
-Warnings:
-    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
-): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
-0,0"
-
----------------------------------------------------------------------------=
------
-defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
-ismatches
-
----------------------------------------------------------------------------=
------
-haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
-on mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
-ction mismatches
-
----------------------------------------------------------------------------=
------
-sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
-ection mismatches
-
-Warnings:
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
-failed, symbol will not be versioned.
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
-ection mismatches
-
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
 ---
-For more info write to <info@kernelci.org>
+ drivers/thermal/qcom/tsens.c | 46 +-----------------------------------
+ 1 file changed, 1 insertion(+), 45 deletions(-)
+
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index b5b136ff323f..58693ee8c430 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -472,52 +472,8 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+ 			continue;
+ 		if (!tsens_threshold_violated(priv, hw_id, &d))
+ 			continue;
+-		ret = get_temp_tsens_valid(s, &temp);
+-		if (ret) {
+-			dev_err(priv->dev, "[%u] %s: error reading sensor\n",
+-				hw_id, __func__);
+-			continue;
+-		}
+ 
+-		spin_lock_irqsave(&priv->ul_lock, flags);
+-
+-		tsens_read_irq_state(priv, hw_id, s, &d);
+-
+-		if (d.up_viol &&
+-		    !masked_irq(hw_id, d.up_irq_mask, tsens_version(priv))) {
+-			tsens_set_interrupt(priv, hw_id, UPPER, disable);
+-			if (d.up_thresh > temp) {
+-				dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
+-					hw_id, __func__);
+-				tsens_set_interrupt(priv, hw_id, UPPER, enable);
+-			} else {
+-				trigger = true;
+-				/* Keep irq masked */
+-			}
+-		} else if (d.low_viol &&
+-			   !masked_irq(hw_id, d.low_irq_mask, tsens_version(priv))) {
+-			tsens_set_interrupt(priv, hw_id, LOWER, disable);
+-			if (d.low_thresh < temp) {
+-				dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
+-					hw_id, __func__);
+-				tsens_set_interrupt(priv, hw_id, LOWER, enable);
+-			} else {
+-				trigger = true;
+-				/* Keep irq masked */
+-			}
+-		}
+-
+-		spin_unlock_irqrestore(&priv->ul_lock, flags);
+-
+-		if (trigger) {
+-			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+-				hw_id, __func__, temp);
+-			thermal_zone_device_update(s->tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		} else {
+-			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+-				hw_id, __func__, temp);
+-		}
++		thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+ 
+ 		if (tsens_version(priv) < VER_0_1) {
+ 			/* Constraint: There is only 1 interrupt control register for all
+-- 
+2.34.1
+
