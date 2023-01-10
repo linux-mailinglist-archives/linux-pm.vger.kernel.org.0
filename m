@@ -2,55 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B2C966410D
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 14:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD1C664124
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 14:04:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232769AbjAJNBW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 08:01:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S231235AbjAJNEH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 08:04:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbjAJNBS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 08:01:18 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4370443A02;
-        Tue, 10 Jan 2023 05:01:17 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id hw16so16509578ejc.10;
-        Tue, 10 Jan 2023 05:01:17 -0800 (PST)
+        with ESMTP id S238592AbjAJNEC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 08:04:02 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B3352767;
+        Tue, 10 Jan 2023 05:04:01 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id jo4so28425786ejb.7;
+        Tue, 10 Jan 2023 05:04:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uxx6b96F/GbifE+0yZegiyb9QfHT/zLsmW4yv+mj9W4=;
-        b=rvmq/25LYh3cgC1DDpHNEpPmXLNePvJu/D/mdSNFrTmJaMDL5Qp9fXOBwPmR1WLn2d
-         U6YtRttoizXMOCrilSsJMmnrR9GbUbVvBRexR1mLdCNi/S7COwSc3Q1D1tno+8LVYdwt
-         laVRSSd5NdBfNpdW52dZMR9zMw2ffUSqKHG1/U/wIfNze7FNk64+tIjTyH01DkB3h3pd
-         NDtKqZj0cKn2SOeaSNCuzIkXD5jIIaBzi/jRIFwY5zlTEi1hlwcKbkzwNUmCMFEL/Qlx
-         YOjyTF8iR5yVArGM4kai+NOcakF63SCnvSapsOiwgt4Owxx3jo1XFFJuQSXBSpvlVCYu
-         UMYA==
-X-Gm-Message-State: AFqh2krKZzjkgaTESSKRQjKYv5RiFeo+qFOr9yjXGzjgOfp80nb9FDxF
-        NxpZkO7aQEIWWv2cdRoD7urKuJHiL4BUOKoMvTSMMRjD
-X-Google-Smtp-Source: AMrXdXtgYXCLfI52JRQ/Dqj47nuocYfJJLayKQtkWoAYrtYkneV3Nrnud3rZTOcoxNr6nWYeViLeGlUHMgYXuzRYhng=
-X-Received: by 2002:a17:906:9484:b0:84d:3c6a:4c55 with SMTP id
- t4-20020a170906948400b0084d3c6a4c55mr1277722ejx.509.1673355675867; Tue, 10
- Jan 2023 05:01:15 -0800 (PST)
+        bh=U62Sr3DmpbCpRGWuqrj+WavjeQmNeJPc3umPZoIz79Y=;
+        b=gGnyh1l6HY+Oda8WTtdaCNybRJzIn6JEVZ2H0zAtaV7khRsAz3FyZYZj2jmGLcdLmm
+         hOH/kViVULndT0gSg7ikLcEzXnlRdZosfQoSD55fMK+kqClwePOmXgSKHEWDofzcb3WT
+         KhluzslSz+Fd1uOd7wQ9HCKPbT8GXUq6ShA1tbuDV6OBMbLzJ39Zl/dDF3wyclBLG8mr
+         YA97ec6WvnuWJQqxIfW1WITG66IG/SRzL3UXq7vd/uGUFC7GxOetXeUnlGQk6/JoHHaY
+         d2TnjSbKgIOfqmflW4Lc495/Bs7iHysZYznvPxgRYjdFo6fUAbUoh04Y+I1rIPkBvW5l
+         ZHxA==
+X-Gm-Message-State: AFqh2kqCjNqDbUhQQT+kz0zGY44x7WOlk7MdQ7KSQojg6OyXlKB1jQAa
+        YIL0/P10Qzy1CR4abXYH2pLimJLXLKAkk1EpS7k=
+X-Google-Smtp-Source: AMrXdXuF4rXBNY4fahxauXG8YvbaAnO3qDtRIPNikdKA5RHQbXb4FCbep2+4Nkb1ts1OV9ptSFa0znU1aG2+R35fo1M=
+X-Received: by 2002:a17:907:29c3:b0:84d:4b8e:efc with SMTP id
+ ev3-20020a17090729c300b0084d4b8e0efcmr450215ejc.390.1673355839925; Tue, 10
+ Jan 2023 05:03:59 -0800 (PST)
 MIME-Version: 1.0
-References: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
-In-Reply-To: <20230110103420.2430518-1-daniel.lezcano@kernel.org>
+References: <20230105041059.39366-1-kvijayab@amd.com> <CAJZ5v0g1Mu8ip68one_gsAR3xmyua+6m1uJqb3n92xxYWeR+FA@mail.gmail.com>
+ <Y7dNjHXJJwzCtYOY@zn.tnic>
+In-Reply-To: <Y7dNjHXJJwzCtYOY@zn.tnic>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 14:01:04 +0100
-Message-ID: <CAJZ5v0hFrevTR4KkO0VDB8YQC60cgDkDKQT3kdQAk-VoOJoZhg@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/qcom: Remove duplicate set next trip
- point interrupt code
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        open list <linux-kernel@vger.kernel.org>
+Date:   Tue, 10 Jan 2023 14:03:48 +0100
+Message-ID: <CAJZ5v0iq1_kSOXuBcteXrCJR0NyyBVXcio_L=47oKrACT1oaZQ@mail.gmail.com>
+Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
+ be onlined for x2apic
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Kishon Vijay Abraham I <kvijayab@amd.com>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Borislav Petkov <bpetkov@amd.com>,
+        Leo Duran <leo.duran@amd.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -62,90 +67,32 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 10, 2023 at 11:34 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Thu, Jan 5, 2023 at 11:22 PM Borislav Petkov <bp@alien8.de> wrote:
 >
-> From: Daniel Lezcano <daniel.lezcano@linaro.org>
+> On Thu, Jan 05, 2023 at 06:09:59PM +0100, Rafael J. Wysocki wrote:
+> > On Thu, Jan 5, 2023 at 5:11 AM Kishon Vijay Abraham I <kvijayab@amd.com> wrote:
+> > >
+> > > Section 5.2.12.12 Processor Local x2APIC Structure in the ACPI v6.5
+> > > spec mandates that both "enabled" and "online capable" Local APIC Flags
+> > > should be used to determine if the processor is usable or not.
+> > >
+> > > However, Linux doesn't use the "online capable" flag for x2APIC to
+> > > determine if the processor is usable. As a result, cpu_possible_mask has
+> > > incorrect value and results in more memory getting allocated for per_cpu
+> > > variables than it is going to be used.
+> > >
+> > > Make sure Linux parses both "enabled" and "online capable" flags for
+> > > x2APIC to correctly determine if the processor is usable.
+> > >
+> > > Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
+> > > Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+> > > Reported-by: Leo Duran <leo.duran@amd.com>
+> > > Signed-off-by: Kishon Vijay Abraham I <kvijayab@amd.com>
+> >
+> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> The tsens driver reprogram the next trip points in the irq
-> handler. This function then call thermal_zone_device_update().
->
-> However, thermal_zone_device_update() calls thermal_zone_set_trips()
-> and from there it calls the backend 'set_trips' ops. This one in turn
-> reprogram the next trip points (low/high).
->
-> Consequently, the code setting the next trip points interrupt in the
-> interrupt handle is not needed and could be removed.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
+> Are you saying, I should take it through tip?
 
-I'm wondering what you wanted to say through these S-o-b tags.
+Works for me either way.
 
-I don't think you have to sign off your own patch again.
-
-> ---
->  drivers/thermal/qcom/tsens.c | 46 +-----------------------------------
->  1 file changed, 1 insertion(+), 45 deletions(-)
->
-> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> index b5b136ff323f..58693ee8c430 100644
-> --- a/drivers/thermal/qcom/tsens.c
-> +++ b/drivers/thermal/qcom/tsens.c
-> @@ -472,52 +472,8 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
->                         continue;
->                 if (!tsens_threshold_violated(priv, hw_id, &d))
->                         continue;
-> -               ret = get_temp_tsens_valid(s, &temp);
-> -               if (ret) {
-> -                       dev_err(priv->dev, "[%u] %s: error reading sensor\n",
-> -                               hw_id, __func__);
-> -                       continue;
-> -               }
->
-> -               spin_lock_irqsave(&priv->ul_lock, flags);
-> -
-> -               tsens_read_irq_state(priv, hw_id, s, &d);
-> -
-> -               if (d.up_viol &&
-> -                   !masked_irq(hw_id, d.up_irq_mask, tsens_version(priv))) {
-> -                       tsens_set_interrupt(priv, hw_id, UPPER, disable);
-> -                       if (d.up_thresh > temp) {
-> -                               dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
-> -                                       hw_id, __func__);
-> -                               tsens_set_interrupt(priv, hw_id, UPPER, enable);
-> -                       } else {
-> -                               trigger = true;
-> -                               /* Keep irq masked */
-> -                       }
-> -               } else if (d.low_viol &&
-> -                          !masked_irq(hw_id, d.low_irq_mask, tsens_version(priv))) {
-> -                       tsens_set_interrupt(priv, hw_id, LOWER, disable);
-> -                       if (d.low_thresh < temp) {
-> -                               dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
-> -                                       hw_id, __func__);
-> -                               tsens_set_interrupt(priv, hw_id, LOWER, enable);
-> -                       } else {
-> -                               trigger = true;
-> -                               /* Keep irq masked */
-> -                       }
-> -               }
-> -
-> -               spin_unlock_irqrestore(&priv->ul_lock, flags);
-> -
-> -               if (trigger) {
-> -                       dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
-> -                               hw_id, __func__, temp);
-> -                       thermal_zone_device_update(s->tzd,
-> -                                                  THERMAL_EVENT_UNSPECIFIED);
-> -               } else {
-> -                       dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
-> -                               hw_id, __func__, temp);
-> -               }
-> +               thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
->
->                 if (tsens_version(priv) < VER_0_1) {
->                         /* Constraint: There is only 1 interrupt control register for all
-> --
-> 2.34.1
->
+Just please let me know if I need to take care of it. :-)
