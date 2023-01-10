@@ -2,135 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54D36664437
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 16:11:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E9F7664454
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 16:18:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238877AbjAJPLu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 10:11:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49556 "EHLO
+        id S232845AbjAJPSC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 10:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238889AbjAJPK6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 10:10:58 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2077.outbound.protection.outlook.com [40.107.237.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651E3E18;
-        Tue, 10 Jan 2023 07:10:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VB8GGIrbDIABFzfl6ksOhONh0cWwIIAtU2GpvujIzlIxa4qKv3JfyM4t9DgGBH7IIOU/Iv1h4rjFKBr+eDJ/SeCn5gpuzbc6Q2GMlS2KryiKs80l4vflric6iSV82Hw4BvpRkfSgOy1cDldR8xjqs4xPlHAyL/GbVhwOdmAocCrvdSzyikLD9zxiIqIulr4e2VX7SzM4OjBicaK+anew72xV51JMgbWqItgEboeHpJFisROJadLF0/fC3qNz7eTJtB62vyjwUdHBdv9mYn72oHisb85rnmPWURBcwgjHZmBLHhhc57PU3oz2UFQIgVVwkw84QT/odzSeDI0UhNtO8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RQBqq/IWdXVMnd4axM7QRZ2j7pYu/Do9vcdTqVz5xTs=;
- b=nbXwiBdIwiEbn/7VoBX1qeJ2tdxx22t/q7E9Phdo4Lqw7GjjxDmz8w/BB1hS4wZChnQ/V4uEPws2sCHdKre0uCE1HuNa/72hoPLN5rjf5V+E7ch/zkjZDPcERvgZ1exWaUlcFmKBmZOYMUGmvrSYD/aKP6Nams26uB0wZgv4x+OCTr4XPE7qb/9LssX4TDSiNsD7cKe2/V8ftaAQ42DhWW2RX+j4hBZF6Hqh463sp67MSGBy6w29d+q5EdUaWu4j1xYaZCNCV+/RYxY0v0DYK147JtoKLWyjaIyixBuDWKa29C/o/02k+V4qQhLMnkh24rhehIO8Wt190U8cX+m64g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RQBqq/IWdXVMnd4axM7QRZ2j7pYu/Do9vcdTqVz5xTs=;
- b=fuG8/iXCkfurU7yPMCad9429pBgDNCkOC4WLR/JIeAmdV1tPNzPpp5kO8mKq7t558iWOVLBNpwlroE5FYccENqACvk5ER01zVI7QvtxPMfZrUgzXeXQ6kXomxjg7T8QPQGdmPPbeShblvjqzU5RdsktiKvFkc7/PBIKLDaX8kdo=
-Received: from BY3PR05CA0023.namprd05.prod.outlook.com (2603:10b6:a03:254::28)
- by MW4PR12MB6754.namprd12.prod.outlook.com (2603:10b6:303:1eb::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
- 2023 15:10:49 +0000
-Received: from CO1PEPF00001A5D.namprd05.prod.outlook.com
- (2603:10b6:a03:254:cafe::3a) by BY3PR05CA0023.outlook.office365.com
- (2603:10b6:a03:254::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.12 via Frontend
- Transport; Tue, 10 Jan 2023 15:10:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1PEPF00001A5D.mail.protection.outlook.com (10.167.241.4) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.11 via Frontend Transport; Tue, 10 Jan 2023 15:10:48 +0000
-Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Tue, 10 Jan 2023 09:10:42 -0600
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
-        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] cpufreq: amd-pstate: fix kernel hang issue while amd-pstate unregistering
-Date:   Tue, 10 Jan 2023 23:10:29 +0800
-Message-ID: <20230110151029.1945544-1-perry.yuan@amd.com>
+        with ESMTP id S233867AbjAJPR6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 10:17:58 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 837BB5BA2F
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 07:17:54 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id l26so9049652wme.5
+        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 07:17:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=uzboIXLTJPA/CndXjJQee1fr50X0HrhF4nPYCfs1XU0=;
+        b=s2M+4R5+xJ7IBwXCD+r7bYx/xe4B+X65TcB6MadC7llHk9qljXzXPWxb0IzcEGnRm8
+         +PmCX6alj6KZ9Px81+SFMDjlwRnPFD5UOTT82D9NxHeOSFYs7LgL/c19kGR54PWvrfi8
+         iCwA6O3RPmy7YPmlW0l7WWG+EFFJ507m6LCDopm9/UmZl+Z/A52fHxf2HpnHIrdFCbeB
+         RCd/znrtNCLNn3++UYSDZBYvIzEBrn0R4UXq0sSRLU32cqntJgdudfflCXHlAfC7pG+n
+         ILpyx1G3j6DCxpGchxQOU0RVQU/LenMoSkKbpTNhneM7U4FMSlK10qT2O1gYhbY2pVYD
+         9jxA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uzboIXLTJPA/CndXjJQee1fr50X0HrhF4nPYCfs1XU0=;
+        b=cFrT13mxwjIiGg5eRrNFKuCBeXQr420mz8sS9kcGgIxcDz6KNmYfORv0iwsD+xnD8Q
+         a3w5W09szRk2YCLta2pwg6WSKuj+BHJqTgoiEJSlubVAUYyBrIG9Nsul8OC7DZeBLtu3
+         Qn1yCkj1PXPfCL47gB57pJB0co2rcDscL6oQDplVLJGQWAPcF7kdjVlKfCttnjk+lah8
+         cNrg4+SvvwuIB+pLOcVIR9/nT7lS1pFYxUN94WKOe87qIFUxYc+PCe6n+q+cSZrAr7F2
+         Ielww5MbTDzBlBcsORx61zL8uxZnyTppmNEItdEjeDlrZLvB6Mko+iE85ISbZcTRgwRk
+         owDQ==
+X-Gm-Message-State: AFqh2krTJRZlTyRMQn32qtp9nt/YCe3avL8yvDqoc3ZZ1gjRNaGyAG4J
+        obMbv49GUuMjFksCePHlxdyuKw==
+X-Google-Smtp-Source: AMrXdXu7O7gUKOxIlAJTx93hk0V+z8hFTJLZE8lDRHKCw9LYY61tcYom+IpefqFPQjV/fkBqrTumEg==
+X-Received: by 2002:a05:600c:3844:b0:3cf:7dc1:f424 with SMTP id s4-20020a05600c384400b003cf7dc1f424mr49054728wmr.3.1673363872999;
+        Tue, 10 Jan 2023 07:17:52 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id p21-20020a7bcc95000000b003c65c9a36dfsm14857281wma.48.2023.01.10.07.17.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Jan 2023 07:17:52 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr
+Subject: [PATCH v4 0/3] Thermal ACPI APIs for generic trip points
+Date:   Tue, 10 Jan 2023 16:17:42 +0100
+Message-Id: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF00001A5D:EE_|MW4PR12MB6754:EE_
-X-MS-Office365-Filtering-Correlation-Id: e6b328eb-0472-4c4c-c463-08daf31cdb4e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MIDb9WFnv0Z+yAfBGOZojHM+Yl2O0qyQF+gddZLb3vEk4LMEy1WWA4U2DUsmLn8/ikshLTFNMiP8ky+4i1BesjiNe9dOX3CPysnRo+r6gzwmlr7E4MuFXQidPvy4oID73Rnzyde6Q2zPOfZMzUBxWEb0QU6YpplcDo7rD+JxCrHFeor0NbWINq4XMNePqN/YfpWzin5GDic0xhGGIzm5SHesnWTeqHUJfC7pW3Z8K8mj+/Nu7Jboy97VrZCCvPU8yWqSrcX2fo8lVYNTv/pmYfp07YzhbaW4YgRWTsYexw0WGvEBbRaiNL01RKT1+5gi3it3+IUMWEBiUTn/3dXI+aPospQ3v1PAIh/9wd4XVlffP1zKzkya3Dw2OXuaoHvglmsrqrDwACS41GzvHTdnBUWRg7CNUsNuAc+iOTGcaMs5LwgnrBavrLPchpOxWFlOC68IKrywlbqfVPxrg+rpzcVCzm9qCift6HlTHUzwGvHfNKdnc4p1zZr4P7PTrnE8mFyzzBpIgRGLM4Rb1HwpvfgzvP1KIdL/2I7mgSh/rVnyFXzSL44bqazxsl6s9uz1sczGMlGZAFp7ajX3hmfbj4zwTSGtsl5ZBQSVXsMT8Bee/dT0DkwNlHpvv5wknmS8Pd8/x+emv+l9glDJ/Wzpz1rLYXtlVOvCDOnzNpHAhpUsudBm5QEWIxSTmttRxMaYDqaJgJfyEsmLJIjcPECh8WNh/quZdGzeJFh2bNhuaUM=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(451199015)(46966006)(36840700001)(40470700004)(110136005)(54906003)(2906002)(5660300002)(40460700003)(336012)(47076005)(426003)(86362001)(44832011)(36756003)(8936002)(40480700001)(41300700001)(4326008)(70586007)(8676002)(70206006)(82740400003)(356005)(81166007)(316002)(36860700001)(82310400005)(83380400001)(7696005)(26005)(186003)(2616005)(16526019)(6666004)(478600001)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 15:10:48.8634
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e6b328eb-0472-4c4c-c463-08daf31cdb4e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF00001A5D.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6754
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
-increase increments the kobject reference count of policy and make it as
-busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
-decrement the kobject reference count back, it will resolve the kernel
-hang issue when unregistering the amd-pstate driver and register the
-`amd_pstate_epp` driver instance.
+Recently sent as a RFC, the thermal ACPI for generic trip points is a set of
+functions to fill the generic trip points structure which will become the
+standard structure for the thermal framework and its users.
 
-Fixes: 1d215f0319 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
-Acked-by: Huang Rui <ray.huang@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Tested-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-Cc: stable@vger.kernel.org
+Different Intel drivers and the ACPI thermal driver are using the ACPI tables to
+get the thermal zone information. As those are getting the same information,
+providing this set of ACPI function with the generic trip points will
+consolidate the code.
 
-v3: add Fixes tag
-v2: add test-by flag from Wyes.
----
- drivers/cpufreq/amd-pstate.c | 1 +
- 1 file changed, 1 insertion(+)
+Also, the Intel PCH and the Intel 34xx drivers are converted to use the generic
+trip points relying on the ACPI generic trip point parsing functions.
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 204e39006dda..c17bd845f5fc 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
- 		max_perf = min_perf;
- 
- 	amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
-+	cpufreq_cpu_put(policy);
- }
- 
- static int amd_get_min_freq(struct amd_cpudata *cpudata)
+These changes have been tested on a Thinkpad Lenovo x280 with the PCH and
+INT34xx drivers. No regression have been observed, the trip points remain the
+same for what is described on this system.
+
+Changelog:
+ - V4:
+   - Fixed Kconfig option dependency, select THERMAL_ACPI if ACPI is set
+     only for the PCH driver
+
+ - V3:
+   - Took into account Rafael's comments
+   - Used a silence option THERMAL_ACPI in order to stay consistent
+     with THERMAL_OF. It is up to the API user to select the option.
+
+ - V2:
+   - Fix the thermal ACPI patch where the thermal_acpi.c was not included in
+     the series
+   - Provide a couple of users of this API which could have been tested on a
+     real system
+
+Daniel Lezcano (3):
+  thermal/acpi: Add ACPI trip point routines
+  thermal/drivers/intel: Use generic trip points for intel_pch
+  thermal/drivers/intel: Use generic trip points int340x
+
+ drivers/thermal/Kconfig                       |   4 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/intel/Kconfig                 |   1 +
+ drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
+ .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++-----------
+ .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+ drivers/thermal/intel/intel_pch_thermal.c     |  88 ++------
+ drivers/thermal/thermal_acpi.c                | 211 ++++++++++++++++++
+ include/linux/thermal.h                       |   8 +
+ 9 files changed, 287 insertions(+), 214 deletions(-)
+ create mode 100644 drivers/thermal/thermal_acpi.c
+
 -- 
 2.34.1
 
