@@ -2,123 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44BAD66326D
-	for <lists+linux-pm@lfdr.de>; Mon,  9 Jan 2023 22:12:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD4D663762
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 03:33:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237863AbjAIVML (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 9 Jan 2023 16:12:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51378 "EHLO
+        id S229848AbjAJCdl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 9 Jan 2023 21:33:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237841AbjAIVLl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 16:11:41 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87965FC0
-        for <linux-pm@vger.kernel.org>; Mon,  9 Jan 2023 13:06:16 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id b3so15049815lfv.2
-        for <linux-pm@vger.kernel.org>; Mon, 09 Jan 2023 13:06:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ATq9lfwFr3RZyhEmOv68Lea4iswGw4nEYd9xucpaSYI=;
-        b=ZnHdLMPbbgf9UrAg9c/LZOWyW3VZt31oKL8x4C6RX9hvUmc4knhTljAbwJiRv/46jh
-         udIB4KWy1VZo7xUMsjusVkPPts5uuRggRun1Qp7LPTkaJ9JXUr/Pimi7Hqp97vBJgTOA
-         yH+HCn9sSJ3IZwpUjLOlXdm/zkU4vG6Y7+WpaMcSVHu4v6HMlkbxX8Jl8mb+oCWUa1WI
-         VPP8CPXaOUWe9zU7vZ5abd1NYUIzuw+Q67fJbLk4UbBkqgq4K6QdIASOk9RXxRjbJKh4
-         cZvcm26xYwAhfEczyf84Muh2jfibMQgKFN40g4Jrm+2Lg73Hg3a1YFbP5kaEZlu2E7Dg
-         LYiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ATq9lfwFr3RZyhEmOv68Lea4iswGw4nEYd9xucpaSYI=;
-        b=H3Tp6JpUqaBzV0FUvpA4swPUxjWEjjDatfkQzGD+EHS6VZUHHya+hE69SQERqOMsK1
-         DPvkC5eAG/P07XC7WQyskgjha+0ss4yoVgVFwQ93WCKkCSoSgbAtwd1GIq8W0KbieJs4
-         NgMZvbGVleTg8qZRpN+5XrnBHeQgADU1kVG+XsbPbpqeATZ0DTWiXDGuQy3bO8+yolre
-         QqK85fcwPC1IiZX+BL+IepnnGyUiMbaOSXfVLlZMqK4804EOuR1scCxc4bP7uLafVMQy
-         PHBlMDnPtq1c2iEPd1GXnCVSdVof9hDRFjnKyNEME9yS9TbST1+T7zRGvjXqMtKHqCEc
-         NWUQ==
-X-Gm-Message-State: AFqh2krANkUGDw8ktByumrr0k73ukD/z/125xc7TZOxcD8HHDJon7U3Z
-        Nb2N3895gowUaW48cHFfwtewrg==
-X-Google-Smtp-Source: AMrXdXtMlPauAhWufnKfAA9Z0/kuM8Pxw6F0q+IwmA1VbDLnvpRiG1kH2m6PlPKVn/aIBM8cKwFg9Q==
-X-Received: by 2002:ac2:5191:0:b0:4cb:20b3:e7f6 with SMTP id u17-20020ac25191000000b004cb20b3e7f6mr10698809lfi.19.1673298375321;
-        Mon, 09 Jan 2023 13:06:15 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c19-20020a056512325300b004cb3d77a936sm1780286lfr.46.2023.01.09.13.06.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 09 Jan 2023 13:06:14 -0800 (PST)
-Message-ID: <843eed4b-552a-a529-83ed-b813c1346c5f@linaro.org>
-Date:   Mon, 9 Jan 2023 23:06:13 +0200
+        with ESMTP id S229747AbjAJCdj (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 9 Jan 2023 21:33:39 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1D318394;
+        Mon,  9 Jan 2023 18:33:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673318018; x=1704854018;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=ndVCMs9uzNJVNnhJNVDY7OYi3hWBTn11Vz73KoiJinM=;
+  b=U7dyfeAoE0zuqCduOKRFH1pNySB+lxxex/Bb9hBAltBafcRAvMXErg/i
+   Dx0KBfIz0dgDLXUpUFFZ4rErr6hCS4akvzvkstswkoRcvl9Mumbor1PlM
+   SpZfhLcurc8cCuymwAhWBmUZpjSAKsSpVwbiaHfpYdIHQAJxCqPZCzbu0
+   ENp3rBXabx0J1q6FxBvZrB6DYSxOv7JVleWTOVVXiZqlv/BXZT/e0Nq/h
+   gif9tItuUHS6/XnnEr7he66fH/hE/EEz+V6mebC5ae5fLHH9dFpd9INga
+   1I7YR00pmmcs552uQoCFzEx060kWU8tod1FvJTmhVWvtB5JMw3DGCkWrX
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="409289612"
+X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
+   d="scan'208";a="409289612"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 18:33:38 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10585"; a="658819714"
+X-IronPort-AV: E=Sophos;i="5.96,313,1665471600"; 
+   d="scan'208";a="658819714"
+Received: from avaratha-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.69.31])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2023 18:33:38 -0800
+Message-ID: <cc9bd410208fb05fcfa32345a609fb1c6cde35d0.camel@linux.intel.com>
+Subject: Re: [RFC/RFT PATCH 1/2] sched/core: Check and schedule ksoftirq
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Frederic Weisbecker <frederic@kernel.org>, rafael@kernel.org,
+        daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, len.brown@intel.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Date:   Mon, 09 Jan 2023 18:33:37 -0800
+In-Reply-To: <Y6ImigCet+RXzds/@hirez.programming.kicks-ass.net>
+References: <20221215184300.1592872-1-srinivas.pandruvada@linux.intel.com>
+         <20221215184300.1592872-2-srinivas.pandruvada@linux.intel.com>
+         <Y5xURk3CkzhIjmmq@hirez.programming.kicks-ass.net>
+         <20221216220748.GA1967978@lothringen>
+         <Y6BMAp6A731F8ZL4@hirez.programming.kicks-ass.net>
+         <5ae0d53990c29aa25648cbf32ef3b16e9bec911c.camel@linux.intel.com>
+         <Y6IgPVacKInH9tgv@hirez.programming.kicks-ass.net>
+         <Y6ImigCet+RXzds/@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 02/18] clk: qcom: add the GCC driver for sa8775p
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
-        netdev@vger.kernel.org, Shazad Hussain <quic_shazhuss@quicinc.com>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230109174511.1740856-1-brgl@bgdev.pl>
- <20230109174511.1740856-3-brgl@bgdev.pl>
- <bbd21894-234e-542e-80ec-8f2bb11e268e@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <bbd21894-234e-542e-80ec-8f2bb11e268e@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 09/01/2023 19:58, Konrad Dybcio wrote:
+On Tue, 2022-12-20 at 22:18 +0100, Peter Zijlstra wrote:
+> On Tue, Dec 20, 2022 at 09:51:09PM +0100, Peter Zijlstra wrote:
+> > On Mon, Dec 19, 2022 at 02:54:55PM -0800, srinivas pandruvada
+> > wrote:
+> > 
+> > > But after ksoftirqd_run_end(), which will renable local irq, this
+> > > may
+> > > further cause more soft irq pending. Here RCU soft irq entry
+> > > continues
+> > 
+> > Right you are.. what about if we spell the idle.c thing like so
+> > instead?
+> > 
+> > Then we repeat the softirq thing every time we drop out of the idle
+> > loop
+> > for a reschedule.
 > 
+> Uff, that obviously can't work because we already have preemption
+> disabled here, this needs a bit more work. I think it's possible to
+> re-arrange things a bit.
+Didn't work.
+Also when __do_softirq returns, softirq can be pending again.  I think
+if local_softirq_pending(), we can break do_idle() loop.
+
+Thanks,
+Srinivas
+
 > 
-> On 9.01.2023 18:44, Bartosz Golaszewski wrote:
->> From: Shazad Hussain <quic_shazhuss@quicinc.com>
->>
->> Add support for the Global Clock Controller found in the QTI SA8775P
->> platforms.
->>
->> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
->> [Bartosz: made the driver ready for upstream]
->> Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->> ---
-> [...]
->
-
-As the driver didn't get to the list, I'll comment OOB.
-
-Please use clk_regmap_phy_mux_ops where applicable (PCIe PIPE clocks).
-
--- 
-With best wishes
-Dmitry
+> I'll try and have a look tomorrow, but the kids have their xmas play
+> at
+> school so who knows what I'll get done.
+> 
+> > diff --git a/kernel/sched/idle.c b/kernel/sched/idle.c
+> > index f26ab2675f7d..6dce49813bcc 100644
+> > --- a/kernel/sched/idle.c
+> > +++ b/kernel/sched/idle.c
+> > @@ -381,8 +381,13 @@ void play_idle_precise(u64 duration_ns, u64
+> > latency_ns)
+> >         hrtimer_start(&it.timer, ns_to_ktime(duration_ns),
+> >                       HRTIMER_MODE_REL_PINNED_HARD);
+> >  
+> > -       while (!READ_ONCE(it.done))
+> > +       while (!READ_ONCE(it.done)) {
+> > +               rt_mutex_lock(&per_cpu(ksoftirq_lock, cpu));
+> > +               __run_ksoftirqd(smp_processor_id());
+> > +               rt_mutex_unlock(&per_cpu(ksoftirq_lock, cpu));
+> > +
+> >                 do_idle();
+> > +       }
+> >  
+> >         cpuidle_use_deepest_state(0);
+> >         current->flags &= ~PF_IDLE;
 
