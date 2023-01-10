@@ -2,1112 +2,453 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A5C6647E3
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 18:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8B3664808
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 19:03:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234009AbjAJR54 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 12:57:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40436 "EHLO
+        id S235116AbjAJSDk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 13:03:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234149AbjAJR5a (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 12:57:30 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6B25276A
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 09:56:19 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id m6so19673608lfj.11
-        for <linux-pm@vger.kernel.org>; Tue, 10 Jan 2023 09:56:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0UZjlYccpny1JZf01mO4nqcMw9RmTWJYPq0JRi9lgRc=;
-        b=jYJhuwXXXlOgJvAwaKkR14uma5sd4FdiAW3PfiaZolKbXrfZUxsleXxNV1xy//4jqw
-         peSvg0/mUal7DiJwVtYWhVGqus8An7iN7m8q/fJk4aOZG1KZtR6Q69gmLyY5r76fZCtN
-         bWLS45fOfS1TVFDd1gZVKahN5+GDYWOtRWKzkci4NUjgVA3/vf7GDdzq8uVzSWK9BZAB
-         9Saq5wD8vqEKxGfO/SJbcQuuu171VOuCNxh7hg8EwAe7xtZNZTGaS+Mg4t6UBEUIvEOx
-         Pb/Vf6pKN9ZnAxgEmQ6sde682moQ6hlIyiOSI2gzjLnq7W0/J6aEDKbeZMMg9iNjsXXl
-         TU2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0UZjlYccpny1JZf01mO4nqcMw9RmTWJYPq0JRi9lgRc=;
-        b=cnoSwRvOVGacfEtXBDNsoEThT2tsxW6JoB9cypuI95zfyE4MUa7152wb7DEIXpDLpQ
-         dCF+7HNiXgs7xMGf5rshA3CzaaL4KOpgbXhsicg0bFzyG39+xgr580hsBQy+MaIL23QI
-         DNlMndZDczRsVmGiOdQgSaZ+/4Bgzm1Q7RDB4m6y+0cYrmBs3IqYYTpggQ9mRQ6LYScs
-         sevAga0vQG/KYuHiuuxGftRkWJXAdyEpj7Usar2vYXOJ8xDGQ7rBPFK1o45cTDKYkjW9
-         5IeCK9tExhxEKTVASq/RPVfSIdvtC0P313k4l3sqy7T/tTrQhfDhHD7RV8TAtt2G80em
-         dY/w==
-X-Gm-Message-State: AFqh2kogtjtu9JCafBYFgxE+ustktBGzvF5n0au7RckfX9Fr0dPBHRf9
-        lpmz+1qgKNmRz75VP5rqiUVDVQ==
-X-Google-Smtp-Source: AMrXdXt35aUTkPUiqAqOK4kEVR6e/q5wvbOuOkAS0BVgoGo5J5yTN63XrjGe8yEq3fX+Dqi81tmnMQ==
-X-Received: by 2002:a05:6512:3143:b0:4ca:faef:bcc6 with SMTP id s3-20020a056512314300b004cafaefbcc6mr14970165lfi.21.1673373377812;
-        Tue, 10 Jan 2023 09:56:17 -0800 (PST)
-Received: from localhost.localdomain (abxi45.neoplus.adsl.tpnet.pl. [83.9.2.45])
-        by smtp.gmail.com with ESMTPSA id x9-20020a0565123f8900b004a1e104b269sm2275056lfa.34.2023.01.10.09.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Jan 2023 09:56:17 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        angelogioacchino.delregno@collabora.com,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Niklas Cassel <nks@flawful.org>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v8 3/5] soc: qcom: cpr: Move common functions to new file
-Date:   Tue, 10 Jan 2023 18:56:03 +0100
-Message-Id: <20230110175605.1240188-4-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230110175605.1240188-1-konrad.dybcio@linaro.org>
-References: <20230110175605.1240188-1-konrad.dybcio@linaro.org>
+        with ESMTP id S235095AbjAJSDQ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 13:03:16 -0500
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2075.outbound.protection.outlook.com [40.107.95.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04050254;
+        Tue, 10 Jan 2023 10:00:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H1om4CbW89uY3/QCRu5MXWq68Mug3Qbg1eHog2tuyLUqCeI1ZejJcOB4LF/BZYwR5H/8qu61MDRRC9RPbsBBd0ZxHd+yaj2K9G5O9ZBfB7PpSwysszI2c4vcSF6CsBbnC2FGCUYdG4WtRwS7Pa3MjT62Mkz1aUYtsamFMs6ocWFU+KRRxFm5fc/uTtpK+qXsVR2xwMrawQk77EdOXP/nEsSi6oEAhUGPC1HkdvlwrJ29kPT8QNGTPr4Uzmay3cE3tlITypxOQrB2wbaq6iBDM1qZ9BAgBz6K5I6qeDjBMZAOy/5zjUurN5YrkfmZOOARRY89Bwpuy1kC45kXxRPr3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+pUb88rLaIF7lnJKuDAK6a0P4c19VU1ic/GytsaWjSo=;
+ b=B24gssxneKxb6zC95wl0zS7vUTie0K3WSJWz+b1vwrXYL219tWmFBfrIqRXB2S3praebWklNXTtgH3UFAL7UCfiKTdvmcNUUvKuJMb6/nRou3uGBwBKxyM2UKHcrGvFGxx5Zl316jKglecmK83hU1YQcyHurZVmVf8MCKqNRDMmcN5JLHy6yweiw6Sb0xJuWxb5Hlta925ebaB8vTHOEsFuw1PsiiT20MNdaBCFDXcLzvhu7+SR/4Q8e2wm7l65YJrwKmOeXFeEBDsPNNQImoUQcbOoQwe3Vtip1cxCaiJ4qXevTv9GfdQ+xwgVgIIVqJQmTbXRL2xK8sqvmw8UU9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=+pUb88rLaIF7lnJKuDAK6a0P4c19VU1ic/GytsaWjSo=;
+ b=xoUleWr9Y/+VCvKhWw+EBrlE1LmIOqiJ0C1fHXzuqkURZ6al+5gYQcbK7xtxAPb9m+gWWRyHd/wGS4xYxmN+jQr9kwzFDqjcTCZUcLEdOJKhQA9195geTKLOChjNUha3mZ2k8emRV6vxq48eTgOd08ijsKCKyb+s68xpMcGdZMc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by IA1PR12MB8078.namprd12.prod.outlook.com (2603:10b6:208:3f1::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.18; Tue, 10 Jan
+ 2023 18:00:49 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.5986.018; Tue, 10 Jan 2023
+ 18:00:49 +0000
+Message-ID: <fccf9cd8-7e4a-7ba8-8a96-12d014d8e915@amd.com>
+Date:   Tue, 10 Jan 2023 23:30:35 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+From:   Wyes Karny <wyes.karny@amd.com>
+Subject: Re: [PATCH v10 00/12] Implement AMD Pstate EPP Driver
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     Deepak.Sharma@amd.com, Nathan.Fontenot@amd.com,
+        Alexander.Deucher@amd.com, Shimmer.Huang@amd.com,
+        Xiaojian.Du@amd.com, Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230106061420.95715-1-perry.yuan@amd.com>
+Content-Language: en-US
+In-Reply-To: <20230106061420.95715-1-perry.yuan@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0120.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:27::35) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|IA1PR12MB8078:EE_
+X-MS-Office365-Filtering-Correlation-Id: aa7a9273-356a-4fe6-e603-08daf3349ab6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jJVYJLlARjaYEE9udpmQOBDMfryDuskVjQ7sZ7x3X2mvQJ7Lxc37CNzSqcSmD1VJjDAeHfJ0tIC7w+CS/9VB5VjHrWUFQg2kMFffouA3e+CxXZs5QpeHH4+kht77lQQMu4Emn6M3UBjaDuTG8GA0uCaeGft1UlndlQVzVcynxwfgm1W1yqH0R2mDLqvFtBZNqAlfJgMNEAwqeqf1gckwErDlZEsogItecUZk1cMbQXbzMXbyzRlbpbePl3KvrVmBOcf8zeuHcF5Z098/7hDtvoLC/cQbS+Mb7mf96teR1aNG+42A5vz2EKJiaUbtPXq5FGsaXdf7axR4HwWelTqt5ddhTTCpSuIImIkxZyeFPhfd5RhY6I47J52yCHaPTde3S0UvLmI7xawu8/401O4E7Zj13r+ZZP3z+ynGqHFEuxp66MOwZY7ihQBYR6HDJQknX5m5aA+0WzzmQXE0MhaKCeTNlLm5WkK8hANyQ9QxvzNqio8qmnKxkAjOunehOoF/gtfOxbT3LyZ6fGsxvhBz5GXnw5Vvvgxb9rKEJt8KQIOl+A5x2vG9NBKwg7dnjpMEUWYEy6zMnslPsMQXG6FK13b9nl0sju1o4iGsCbfbjCcFa1a3l6gLZSQhJS+0allyX9IMWVsduX9jPnW0gJMY2ggnpAmCS+sPJCTaHMPNArju7Ah78GxbQw7EU5MZhUih3bR88SaHrtANekI4enbAuX7wtR/2v529zc5wSM51OETrK/bt2DQRfX8+0kmncr38BMn4ddBgulHAnnn+wFWSgXhQ7+WiPhtBrRp+xvmb2ZY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(136003)(396003)(376002)(39860400002)(451199015)(6512007)(6506007)(186003)(2616005)(6666004)(8676002)(86362001)(4326008)(30864003)(66946007)(38100700002)(66476007)(31696002)(5660300002)(66556008)(478600001)(36756003)(44832011)(53546011)(31686004)(2906002)(26005)(316002)(8936002)(41300700001)(966005)(45080400002)(83380400001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2p3ZTN6azE5WnEyQkZvM2gxc1d2S3hoaldKSktTdGc4NGplZlVLZ1FNdXYw?=
+ =?utf-8?B?dWFPUmhIUXRQalNlS2RCTGlKSXNJNzBnZVI1cHlQQzZmMGljZ21VeWlpUTJu?=
+ =?utf-8?B?WE56Slh6NVptd1FENjZUakY0MDlDRHhDa0FWQVN5NEd4b0txWlFTN3F0Q2Zi?=
+ =?utf-8?B?YXdRR2RtZGpwY3poNjQ5Wm8wWGs5Qm11aER6YUUxVGVlRkhOMmZ5cTlHaXpj?=
+ =?utf-8?B?SStjd1VlV1IweUN1Sk8xRWhwZlhxRW5wanFLaksxM1kwZ2VMVVZqaVpzRk5o?=
+ =?utf-8?B?WWxpN2tRekYxOXNPQk85NTd6eXlVSWU1Z0srV3BYeFdiZ205My9uRjlmS1Rv?=
+ =?utf-8?B?TVVtNlNnR2JqQnJqdjI2djExWjBEYko4bk9uSFhHVk1RcWk3SktmYk9oRDQ1?=
+ =?utf-8?B?N1FJaXBiQVhvZVpsR09OTmpSa2FZUkxoeSs3S0tvaUJ0M3J2NUJYazB0NFlG?=
+ =?utf-8?B?M0NVMGlPK2VpSXV2dllCTllaa0JUR3BVTzlNb3VCb0czZkc0L2RsdFIrRWRj?=
+ =?utf-8?B?dUxCcW5OZU5aMTk3ZURpU3FkUUFJSFkzUEhLV2plSnJSaEd3SHRZUlBhYVRJ?=
+ =?utf-8?B?VE5pSERkSzhpampZYVZvTzNaeUlKR283T3V2c1hZRDNoUjRnamR0L2p5a2pQ?=
+ =?utf-8?B?U2MxVDJScjd1aWEybDVwSjFjYXZBWitTcWM3V3g5M3E4Q0tNV0I1dlNJTHFp?=
+ =?utf-8?B?RWh4ZDRndmlGL3M2NmRtaTc4Z3VmUXNxSC9MMUJXQzlMT1pTSjNIQ3ZZRzBz?=
+ =?utf-8?B?MEU5OThFczdjSTFhc21CWkdpTU4xV3ZmaXRvRTN1UlEwR0toQmJxenV0TlVU?=
+ =?utf-8?B?TXFjTjJ3cnVmU29ub1RjeDBmcElYRmhMWXRKSXhUTVY1RFh5VUVRUHl3dGZC?=
+ =?utf-8?B?T2xPMWZCU2F4dDdzaGw1aGJzU0hkdDRob0ZXMU8yQVB1Qlk3KysvWjlTQWNE?=
+ =?utf-8?B?eGZFSFVPN1MxRUxGWlQyeVQ1S3VNRUJoS25lTHJZdWVOa01PMmFxSDlVdjlz?=
+ =?utf-8?B?ZUt1aUVObkZiS25PQUkwWmRNMVV5QkFFNWhWd05wb29QWlltbHgwU2I1a3py?=
+ =?utf-8?B?L1IxbUxvMGEzZWMvS1dOV0lrYnJGWmpCQVNlZlFXVHlTdGxUK2ZDZ3gzTnpZ?=
+ =?utf-8?B?T2hmSm1CMFlDVUdzb0dkcS9zS2tYZVllSVdLVnM5SDZJdFVWbng5bTB5Y2Jm?=
+ =?utf-8?B?SUhNa29HUWFXYldVb3R1Q204Rk1kLzlqT29wK3VRU2tjeEVJSndSUmNtUVpq?=
+ =?utf-8?B?K21TMVMvcVJlWUx3SnNsK29XUmRwQUZ6MElsdmFWQmNJN2pZWHZFWjA4L1c5?=
+ =?utf-8?B?bFQrdTB6YkpObFc5bndIY05NNW5pa3JxMk4vQS8yaFRSOXJxYThOMHlQcnZM?=
+ =?utf-8?B?cmZZbmc3SllXNzVoOWJEc0U3dlhLVGswNXJSdktHWFhoeFpjTTIvakdKNEtr?=
+ =?utf-8?B?MVl5bTFyZEVIVm41bW5mZHhXNU9ERTZhaWJrNVV1bi9wUVhzajFHbnpxbHZw?=
+ =?utf-8?B?Qm5JODgxL0NnVlR2Q1BGaVJTYzM3YkZDUkFhVXRsZktOQzN2aTNJRzlWd0hS?=
+ =?utf-8?B?NTJ2cE5ncnQyN1kzSGNkOWR0WGFhTERQcmlEUm5LQUFPV3FBQkgvK29Qa0NY?=
+ =?utf-8?B?L2g5V0lUUjVEM2VhNmxsZGZqeFozMFRWNXovMFBoMzBEN0JkR2hsVDJ6TzFP?=
+ =?utf-8?B?M2hTVWxON1R4b1E2aHJNc0htWlAvNjh5QXoyWDNKeU1DWlphMXF0V3MwdUh5?=
+ =?utf-8?B?RlQweXZsTm00Q0Z5eGZjeVRrOHMyRWxZQnBnQXFXTEtwYzlCdDVOVWpCdlNm?=
+ =?utf-8?B?UjE0QXdXcFpQczdGekluSTc4SktEM1ZCTStYc1NCdTZBaW5EVVdOQ2VCZmVH?=
+ =?utf-8?B?TXlQUEswSTFZRlhxc29aQkxHek80NjZkZENRa2tnQlMrZEMxQ3MyUXdCYktm?=
+ =?utf-8?B?NWxhY3NaUW9KQ1lWdkgxczhmZ0o2QU1xUjZCUHo2S2J4TVhMZG5yVkl4d3Y5?=
+ =?utf-8?B?Sk16WjlLZjJoYVhqdUkyR1NIV2hXdU13dStuQks2MS9sVnlESnY5TE90eUl3?=
+ =?utf-8?B?MTk5dWVBTW92WStiOC90ZHRDTVRmQkxzV0Y0anE2N2xuQks4S05SbTdRVVU1?=
+ =?utf-8?Q?fYpqGZSvfAozCensZyA6JYVTn?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aa7a9273-356a-4fe6-e603-08daf3349ab6
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Jan 2023 18:00:48.9310
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FuxNM6f+mPhqqPkC9UKOJiL1ykkcU4x32DssP3frK3Hdo6B0ltmbaA5SD+FdGOrJLSA4erE5QjIkRddbBAjZBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8078
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
 
-In preparation for implementing a new driver that will be handling
-CPRv3, CPRv4 and CPR-Hardened, format out common functions to a new
-file.
 
-Update cpr_get_fuses in preparation for CPR3 implementation, change
-parameters where necessary to not take cpr.c private data structures.
+On 1/6/2023 11:44 AM, Perry Yuan wrote:
+> Hi all,
+> 
+> This patchset implements one new AMD CPU frequency driver
+> `amd-pstate-epp` instance for better performance and power control.
+> CPPC has a parameter called energy preference performance (EPP).
+> The EPP is used in the CCLK DPM controller to drive the frequency that a core
+> is going to operate during short periods of activity.
+> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
+> 
+> AMD Energy Performance Preference (EPP) provides a hint to the hardware
+> if software wants to bias toward performance (0x0) or energy efficiency (0xff)
+> The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
+> value. So the EPP hint will impact the CPU cores frequency responsiveness.
+> 
+> We use the RAPL interface with "perf" tool to get the energy data of the package power.
+> Performance Per Watt (PPW) Calculation:
+> 
+> The PPW calculation is referred by below paper:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
+> 
+> Below formula is referred from below spec to measure the PPW:
+> 
+> (F / t) / P = F * t / (t * E) = F / E,
+> 
+> "F" is the number of frames per second.
+> "P" is power measured in watts.
+> "E" is energy measured in joules.
+> 
+> Gitsouce Benchmark Data on ROME Server CPU
+> +------------------------------+------------------------------+------------+------------------+
+> | Kernel Module                | PPW (1 / s * J)              |Energy(J) | PPW Improvement (%)|
+> +==============================+==============================+============+==================+
+> | acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
+> +------------------------------+------------------------------+------------+------------------+
+> 
+> Tbench Benchmark Data on ROME Server CPU
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)|PPW Improvement(%)|
+> +=============================================+===================+==============+=============+==================+
+> | acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
-[Konrad: rebase, apply review comments, don't break backwards compat, improve msg]
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/soc/qcom/Makefile     |   2 +-
- drivers/soc/qcom/cpr-common.c | 363 ++++++++++++++++++++++++++++++++
- drivers/soc/qcom/cpr-common.h | 108 ++++++++++
- drivers/soc/qcom/cpr.c        | 386 ++--------------------------------
- 4 files changed, 494 insertions(+), 365 deletions(-)
- create mode 100644 drivers/soc/qcom/cpr-common.c
- create mode 100644 drivers/soc/qcom/cpr-common.h
+This series + fix mentioned patch 5/12 is:
 
-diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-index 3b92c6c8e0ec..ba2b55dd94ff 100644
---- a/drivers/soc/qcom/Makefile
-+++ b/drivers/soc/qcom/Makefile
-@@ -3,7 +3,7 @@ CFLAGS_rpmh-rsc.o := -I$(src)
- obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
- obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
- obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
--obj-$(CONFIG_QCOM_CPR)		+= cpr.o
-+obj-$(CONFIG_QCOM_CPR)		+= cpr-common.o cpr.o
- obj-$(CONFIG_QCOM_DCC) += dcc.o
- obj-$(CONFIG_QCOM_GSBI)	+=	qcom_gsbi.o
- obj-$(CONFIG_QCOM_MDT_LOADER)	+= mdt_loader.o
-diff --git a/drivers/soc/qcom/cpr-common.c b/drivers/soc/qcom/cpr-common.c
-new file mode 100644
-index 000000000000..7c877b263241
---- /dev/null
-+++ b/drivers/soc/qcom/cpr-common.c
-@@ -0,0 +1,363 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2019, Linaro Limited
-+ */
-+
-+#include <linux/bitops.h>
-+#include <linux/clk.h>
-+#include <linux/debugfs.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/list.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-consumer.h>
-+#include <linux/of_device.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
-+#include <linux/pm_opp.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/slab.h>
-+#include <linux/string.h>
-+
-+#include "cpr-common.h"
-+
-+int cpr_populate_ring_osc_idx(struct device *dev,
-+			      struct fuse_corner *fuse_corner,
-+			      const struct cpr_fuse *cpr_fuse,
-+			      int num_fuse_corners)
-+{
-+	struct fuse_corner *end = fuse_corner + num_fuse_corners;
-+	u32 data;
-+	int ret;
-+
-+	for (; fuse_corner < end; fuse_corner++, cpr_fuse++) {
-+		ret = nvmem_cell_read_variable_le_u32(dev, cpr_fuse->ring_osc, &data);
-+		if (ret)
-+			return ret;
-+		fuse_corner->ring_osc_idx = data;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(cpr_populate_ring_osc_idx);
-+
-+static int cpr_read_fuse_uV(int init_v_width, int step_size_uV, int ref_uV,
-+		     int adj, int step_volt, const char *init_v_efuse,
-+		     struct device *dev)
-+{
-+	int steps, uV;
-+	u32 bits = 0;
-+	int ret;
-+
-+	ret = nvmem_cell_read_variable_le_u32(dev, init_v_efuse, &bits);
-+	if (ret)
-+		return ret;
-+
-+	steps = bits & (BIT(init_v_width - 1) - 1);
-+	/* Not two's complement.. instead highest bit is sign bit */
-+	if (bits & BIT(init_v_width - 1))
-+		steps = -steps;
-+
-+	uV = ref_uV + steps * step_size_uV;
-+
-+	/* Apply open-loop fixed adjustments to fused values */
-+	uV += adj;
-+
-+	return DIV_ROUND_UP(uV, step_volt) * step_volt;
-+}
-+
-+const struct cpr_fuse *cpr_get_fuses(struct device *dev, int tid,
-+				     unsigned int num_fuse_corners)
-+{
-+	struct cpr_fuse *fuses;
-+	unsigned int i;
-+	char cpr_name[11]; /* length of "cpr" + length of UINT_MAX (7) + \0 */
-+
-+	fuses = devm_kcalloc(dev, num_fuse_corners, sizeof(*fuses), GFP_KERNEL);
-+	if (!fuses)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/* Support legacy bindings */
-+	if (tid == UINT_MAX)
-+		snprintf(cpr_name, sizeof(cpr_name), "cpr");
-+	else
-+		snprintf(cpr_name, sizeof(cpr_name), "cpr%d", tid);
-+
-+	for (i = 0; i < num_fuse_corners; i++) {
-+		char tbuf[50];
-+
-+		snprintf(tbuf, sizeof(tbuf), "%s_ring_osc%d", cpr_name, i + 1);
-+		fuses[i].ring_osc = devm_kstrdup(dev, tbuf, GFP_KERNEL);
-+		if (!fuses[i].ring_osc)
-+			return ERR_PTR(-ENOMEM);
-+
-+		snprintf(tbuf, sizeof(tbuf), "%s_init_voltage%d", cpr_name, i + 1);
-+		fuses[i].init_voltage = devm_kstrdup(dev, tbuf, GFP_KERNEL);
-+		if (!fuses[i].init_voltage)
-+			return ERR_PTR(-ENOMEM);
-+
-+		snprintf(tbuf, sizeof(tbuf), "%s_quotient%d", cpr_name, i + 1);
-+		fuses[i].quotient = devm_kstrdup(dev, tbuf, GFP_KERNEL);
-+		if (!fuses[i].quotient)
-+			return ERR_PTR(-ENOMEM);
-+
-+		snprintf(tbuf, sizeof(tbuf), "%s_quotient_offset%d", cpr_name, i + 1);
-+		fuses[i].quotient_offset = devm_kstrdup(dev, tbuf, GFP_KERNEL);
-+		if (!fuses[i].quotient_offset)
-+			return ERR_PTR(-ENOMEM);
-+	}
-+
-+	return fuses;
-+}
-+EXPORT_SYMBOL_GPL(cpr_get_fuses);
-+
-+int cpr_populate_fuse_common(struct device *dev,
-+			     struct fuse_corner_data *fdata,
-+			     const struct cpr_fuse *cpr_fuse,
-+			     struct fuse_corner *fuse_corner,
-+			     int step_volt, int init_v_width,
-+			     int init_v_step)
-+{
-+	int uV, ret;
-+
-+	/* Populate uV */
-+	uV = cpr_read_fuse_uV(init_v_width, init_v_step,
-+			      fdata->ref_uV, fdata->volt_oloop_adjust,
-+			      step_volt, cpr_fuse->init_voltage, dev);
-+	if (uV < 0)
-+		return uV;
-+
-+	/*
-+	 * Update SoC voltages: platforms might choose a different
-+	 * regulators than the one used to characterize the algorithms
-+	 * (ie, init_voltage_step).
-+	 */
-+	fdata->min_uV = roundup(fdata->min_uV, step_volt);
-+	fdata->max_uV = roundup(fdata->max_uV, step_volt);
-+
-+	fuse_corner->min_uV = fdata->min_uV;
-+	fuse_corner->max_uV = fdata->max_uV;
-+	fuse_corner->uV = clamp(uV, fuse_corner->min_uV, fuse_corner->max_uV);
-+
-+	/* Populate target quotient by scaling */
-+	ret = nvmem_cell_read_variable_le_u32(dev, cpr_fuse->quotient, &fuse_corner->quot);
-+	if (ret)
-+		return ret;
-+
-+	fuse_corner->quot *= fdata->quot_scale;
-+	fuse_corner->quot += fdata->quot_offset;
-+	fuse_corner->quot += fdata->quot_adjust;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(cpr_populate_fuse_common);
-+
-+int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
-+			    struct corner *corners, int num_corners)
-+{
-+	unsigned long rate;
-+	struct corner *iter, *corner;
-+	const struct corner *end;
-+	unsigned int i = 0;
-+
-+	if (!cpu_clk) {
-+		dev_err(dev, "cannot get rate from NULL clk\n");
-+		return -EINVAL;
-+	}
-+
-+	end = &corners[num_corners - 1];
-+	rate = clk_get_rate(cpu_clk);
-+
-+	/*
-+	 * Some bootloaders set a CPU clock frequency that is not defined
-+	 * in the OPP table. When running at an unlisted frequency,
-+	 * cpufreq_online() will change to the OPP which has the lowest
-+	 * frequency, at or above the unlisted frequency.
-+	 * Since cpufreq_online() always "rounds up" in the case of an
-+	 * unlisted frequency, this function always "rounds down" in case
-+	 * of an unlisted frequency. That way, when cpufreq_online()
-+	 * triggers the first ever call to cpr_set_performance_state(),
-+	 * it will correctly determine the direction as UP.
-+	 */
-+	for (iter = corners; iter <= end; iter++) {
-+		if (iter->freq > rate)
-+			break;
-+		i++;
-+		if (iter->freq == rate) {
-+			corner = iter;
-+			break;
-+		}
-+		if (iter->freq < rate)
-+			corner = iter;
-+	}
-+
-+	if (!corner) {
-+		dev_err(dev, "boot up corner not found\n");
-+		return -EINVAL;
-+	}
-+
-+	dev_dbg(dev, "boot up perf state: %u\n", i);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(cpr_find_initial_corner);
-+
-+unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp, u32 tid)
-+{
-+	struct device_node *np;
-+	u32 fc;
-+
-+	np = dev_pm_opp_get_of_node(opp);
-+	if (of_property_read_u32_index(np, "qcom,opp-fuse-level", tid, &fc)) {
-+		pr_debug("%s: missing 'qcom,opp-fuse-level' property\n",
-+			 __func__);
-+		fc = 0;
-+	}
-+
-+	of_node_put(np);
-+
-+	return fc;
-+}
-+EXPORT_SYMBOL_GPL(cpr_get_fuse_corner);
-+
-+unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
-+				     struct device *cpu_dev)
-+{
-+	u64 rate = 0;
-+	struct device_node *ref_np;
-+	struct device_node *desc_np;
-+	struct device_node *child_np = NULL;
-+	struct device_node *child_req_np = NULL;
-+
-+	desc_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
-+	if (!desc_np)
-+		return 0;
-+
-+	ref_np = dev_pm_opp_get_of_node(ref);
-+	if (!ref_np)
-+		goto out_ref;
-+
-+	for_each_available_child_of_node(desc_np, child_np) {
-+		child_req_np = of_parse_phandle(child_np, "required-opps", 0);
-+
-+		if (child_np && child_req_np == ref_np) {
-+			of_property_read_u64(child_np, "opp-hz", &rate);
-+			goto out;
-+		}
-+	}
-+
-+out:
-+	of_node_put(child_req_np);
-+	of_node_put(child_np);
-+	of_node_put(ref_np);
-+out_ref:
-+	of_node_put(desc_np);
-+
-+	return (unsigned long) rate;
-+}
-+EXPORT_SYMBOL_GPL(cpr_get_opp_hz_for_req);
-+
-+int cpr_calculate_scaling(struct device *dev,
-+			  const char *quot_offset,
-+			  const struct fuse_corner_data *fdata,
-+			  const struct corner *corner)
-+{
-+	const struct fuse_corner *fuse, *prev_fuse;
-+	u64 freq_diff;
-+	u32 quot_diff = 0;
-+	int scaling, ret;
-+
-+	fuse = corner->fuse_corner;
-+	prev_fuse = fuse - 1;
-+
-+	if (quot_offset) {
-+		ret = nvmem_cell_read_variable_le_u32(dev, quot_offset, &quot_diff);
-+		if (ret)
-+			return ret;
-+
-+		quot_diff *= fdata->quot_offset_scale;
-+		quot_diff += fdata->quot_offset_adjust;
-+	} else {
-+		quot_diff = fuse->quot - prev_fuse->quot;
-+	}
-+
-+	freq_diff = fuse->max_freq - prev_fuse->max_freq;
-+	freq_diff = div_u64(freq_diff, 1000000); /* Convert to MHz */
-+	scaling = 1000 * quot_diff;
-+	do_div(scaling, freq_diff);
-+	return min(scaling, fdata->max_quot_scale);
-+}
-+EXPORT_SYMBOL_GPL(cpr_calculate_scaling);
-+
-+int cpr_interpolate(const struct corner *corner, int step_volt,
-+		    const struct fuse_corner_data *fdata)
-+{
-+	unsigned long f_high, f_low, f_diff;
-+	int uV_high, uV_low, uV;
-+	u64 temp, temp_limit;
-+	const struct fuse_corner *fuse, *prev_fuse;
-+
-+	fuse = corner->fuse_corner;
-+	prev_fuse = fuse - 1;
-+
-+	f_high = fuse->max_freq;
-+	f_low = prev_fuse->max_freq;
-+	uV_high = fuse->uV;
-+	uV_low = prev_fuse->uV;
-+	f_diff = fuse->max_freq - corner->freq;
-+
-+	/*
-+	 * Don't interpolate in the wrong direction. This could happen
-+	 * if the adjusted fuse voltage overlaps with the previous fuse's
-+	 * adjusted voltage.
-+	 */
-+	if (f_high <= f_low || uV_high <= uV_low || f_high <= corner->freq)
-+		return corner->uV;
-+
-+	temp = f_diff * (uV_high - uV_low);
-+	temp = div64_ul(temp, f_high - f_low);
-+
-+	/*
-+	 * max_volt_scale has units of uV/MHz while freq values
-+	 * have units of Hz.  Divide by 1000000 to convert to.
-+	 */
-+	temp_limit = f_diff * fdata->max_volt_scale;
-+	do_div(temp_limit, 1000000);
-+
-+	uV = uV_high - min(temp, temp_limit);
-+	return roundup(uV, step_volt);
-+}
-+EXPORT_SYMBOL_GPL(cpr_interpolate);
-+
-+int cpr_check_vreg_constraints(struct device *dev, struct regulator *vreg,
-+			       struct fuse_corner *f)
-+{
-+	int ret;
-+
-+	ret = regulator_is_supported_voltage(vreg, f->min_uV, f->min_uV);
-+	if (!ret) {
-+		dev_err(dev, "min uV: %d not supported by regulator\n",
-+			f->min_uV);
-+		return -EINVAL;
-+	}
-+
-+	ret = regulator_is_supported_voltage(vreg, f->max_uV, f->max_uV);
-+	if (!ret) {
-+		dev_err(dev, "max uV: %d not supported by regulator\n",
-+			f->max_uV);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(cpr_check_vreg_constraints);
-+
-+MODULE_DESCRIPTION("Core Power Reduction (CPR) common");
-+MODULE_LICENSE("GPL v2");
-diff --git a/drivers/soc/qcom/cpr-common.h b/drivers/soc/qcom/cpr-common.h
-new file mode 100644
-index 000000000000..2cd15f7eac90
---- /dev/null
-+++ b/drivers/soc/qcom/cpr-common.h
-@@ -0,0 +1,108 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+
-+#include <linux/clk.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_opp.h>
-+#include <linux/regulator/consumer.h>
-+
-+enum voltage_change_dir {
-+	NO_CHANGE,
-+	DOWN,
-+	UP,
-+};
-+
-+struct fuse_corner_data {
-+	int ref_uV;
-+	int max_uV;
-+	int min_uV;
-+	int range_uV;
-+	/* fuse volt: closed/open loop */
-+	int volt_cloop_adjust;
-+	int volt_oloop_adjust;
-+	int max_volt_scale;
-+	int max_quot_scale;
-+	/* fuse quot */
-+	int quot_offset;
-+	int quot_scale;
-+	int quot_adjust;
-+	/* fuse quot_offset */
-+	int quot_offset_scale;
-+	int quot_offset_adjust;
-+};
-+
-+struct cpr_fuse {
-+	char *ring_osc;
-+	char *init_voltage;
-+	char *quotient;
-+	char *quotient_offset;
-+};
-+
-+struct fuse_corner {
-+	int min_uV;
-+	int max_uV;
-+	int uV;
-+	int quot;
-+	int step_quot;
-+	const struct reg_sequence *accs;
-+	int num_accs;
-+	unsigned long max_freq;
-+	u8 ring_osc_idx;
-+};
-+
-+struct corner {
-+	int min_uV;
-+	int max_uV;
-+	int uV;
-+	int last_uV;
-+	int quot_adjust;
-+	u32 save_ctl;
-+	u32 save_irq;
-+	unsigned long freq;
-+	bool is_open_loop;
-+	struct fuse_corner *fuse_corner;
-+};
-+
-+struct corner_data {
-+	unsigned int fuse_corner;
-+	unsigned long freq;
-+};
-+
-+struct acc_desc {
-+	unsigned int	enable_reg;
-+	u32		enable_mask;
-+
-+	struct reg_sequence	*config;
-+	struct reg_sequence	*settings;
-+	int			num_regs_per_fuse;
-+};
-+
-+struct cpr_acc_desc {
-+	const struct cpr_desc *cpr_desc;
-+	const struct acc_desc *acc_desc;
-+};
-+
-+int cpr_populate_ring_osc_idx(struct device *dev,
-+			      struct fuse_corner *fuse_corner,
-+			      const struct cpr_fuse *cpr_fuse,
-+			      int num_fuse_corners);
-+const struct cpr_fuse *cpr_get_fuses(struct device *dev, int tid,
-+				     unsigned int num_fuse_corners);
-+int cpr_populate_fuse_common(struct device *dev,
-+			     struct fuse_corner_data *fdata,
-+			     const struct cpr_fuse *cpr_fuse,
-+			     struct fuse_corner *fuse_corner,
-+			     int step_volt, int init_v_width,
-+			     int init_v_step);
-+int cpr_find_initial_corner(struct device *dev, struct clk *cpu_clk,
-+			    struct corner *corners, int num_corners);
-+u32 cpr_get_fuse_corner(struct dev_pm_opp *opp, u32 tid);
-+unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
-+				     struct device *cpu_dev);
-+int cpr_calculate_scaling(struct device *dev,
-+			  const char *quot_offset,
-+			  const struct fuse_corner_data *fdata,
-+			  const struct corner *corner);
-+int cpr_interpolate(const struct corner *corner, int step_volt,
-+		    const struct fuse_corner_data *fdata);
-+int cpr_check_vreg_constraints(struct device *dev, struct regulator *vreg,
-+			       struct fuse_corner *f);
-\ No newline at end of file
-diff --git a/drivers/soc/qcom/cpr.c b/drivers/soc/qcom/cpr.c
-index e9b854ed1bdf..ba53897fcd99 100644
---- a/drivers/soc/qcom/cpr.c
-+++ b/drivers/soc/qcom/cpr.c
-@@ -26,6 +26,8 @@
- #include <linux/clk.h>
- #include <linux/nvmem-consumer.h>
- 
-+#include "cpr-common.h"
-+
- /* Register Offsets for RB-CPR and Bit Definitions */
- 
- /* RBCPR Version Register */
-@@ -124,45 +126,12 @@
- 
- #define FUSE_REVISION_UNKNOWN		(-1)
- 
--enum voltage_change_dir {
--	NO_CHANGE,
--	DOWN,
--	UP,
--};
--
--struct cpr_fuse {
--	char *ring_osc;
--	char *init_voltage;
--	char *quotient;
--	char *quotient_offset;
--};
--
--struct fuse_corner_data {
--	int ref_uV;
--	int max_uV;
--	int min_uV;
--	int max_volt_scale;
--	int max_quot_scale;
--	/* fuse quot */
--	int quot_offset;
--	int quot_scale;
--	int quot_adjust;
--	/* fuse quot_offset */
--	int quot_offset_scale;
--	int quot_offset_adjust;
--};
--
- struct cpr_fuses {
- 	int init_voltage_step;
- 	int init_voltage_width;
- 	struct fuse_corner_data *fuse_corner_data;
- };
- 
--struct corner_data {
--	unsigned int fuse_corner;
--	unsigned long freq;
--};
--
- struct cpr_desc {
- 	unsigned int num_fuse_corners;
- 	int min_diff_quot;
-@@ -184,44 +153,6 @@ struct cpr_desc {
- 	bool reduce_to_corner_uV;
- };
- 
--struct acc_desc {
--	unsigned int	enable_reg;
--	u32		enable_mask;
--
--	struct reg_sequence	*config;
--	struct reg_sequence	*settings;
--	int			num_regs_per_fuse;
--};
--
--struct cpr_acc_desc {
--	const struct cpr_desc *cpr_desc;
--	const struct acc_desc *acc_desc;
--};
--
--struct fuse_corner {
--	int min_uV;
--	int max_uV;
--	int uV;
--	int quot;
--	int step_quot;
--	const struct reg_sequence *accs;
--	int num_accs;
--	unsigned long max_freq;
--	u8 ring_osc_idx;
--};
--
--struct corner {
--	int min_uV;
--	int max_uV;
--	int uV;
--	int last_uV;
--	int quot_adjust;
--	u32 save_ctl;
--	u32 save_irq;
--	unsigned long freq;
--	struct fuse_corner *fuse_corner;
--};
--
- struct cpr_drv {
- 	unsigned int		num_corners;
- 	unsigned int		ref_clk_khz;
-@@ -801,50 +732,6 @@ static int cpr_set_performance_state(struct generic_pm_domain *domain,
- 	return ret;
- }
- 
--static int
--cpr_populate_ring_osc_idx(struct cpr_drv *drv)
--{
--	struct fuse_corner *fuse = drv->fuse_corners;
--	struct fuse_corner *end = fuse + drv->desc->num_fuse_corners;
--	const struct cpr_fuse *fuses = drv->cpr_fuses;
--	u32 data;
--	int ret;
--
--	for (; fuse < end; fuse++, fuses++) {
--		ret = nvmem_cell_read_variable_le_u32(drv->dev, fuses->ring_osc, &data);
--		if (ret)
--			return ret;
--		fuse->ring_osc_idx = data;
--	}
--
--	return 0;
--}
--
--static int cpr_read_fuse_uV(const struct cpr_desc *desc,
--			    const struct fuse_corner_data *fdata,
--			    const char *init_v_efuse,
--			    int step_volt,
--			    struct cpr_drv *drv)
--{
--	int step_size_uV, steps, uV;
--	u32 bits = 0;
--	int ret;
--
--	ret = nvmem_cell_read_variable_le_u32(drv->dev, init_v_efuse, &bits);
--	if (ret)
--		return ret;
--
--	steps = bits & ~BIT(desc->cpr_fuses.init_voltage_width - 1);
--	/* Not two's complement.. instead highest bit is sign bit */
--	if (bits & BIT(desc->cpr_fuses.init_voltage_width - 1))
--		steps = -steps;
--
--	step_size_uV = desc->cpr_fuses.init_voltage_step;
--
--	uV = fdata->ref_uV + steps * step_size_uV;
--	return DIV_ROUND_UP(uV, step_volt) * step_volt;
--}
--
- static int cpr_fuse_corner_init(struct cpr_drv *drv)
- {
- 	const struct cpr_desc *desc = drv->desc;
-@@ -854,7 +741,6 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 	unsigned int step_volt;
- 	struct fuse_corner_data *fdata;
- 	struct fuse_corner *fuse, *end;
--	int uV;
- 	const struct reg_sequence *accs;
- 	int ret;
- 
-@@ -870,23 +756,15 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 	fdata = desc->cpr_fuses.fuse_corner_data;
- 
- 	for (i = 0; fuse <= end; fuse++, fuses++, i++, fdata++) {
--		/*
--		 * Update SoC voltages: platforms might choose a different
--		 * regulators than the one used to characterize the algorithms
--		 * (ie, init_voltage_step).
--		 */
--		fdata->min_uV = roundup(fdata->min_uV, step_volt);
--		fdata->max_uV = roundup(fdata->max_uV, step_volt);
-+		ret = cpr_populate_fuse_common(drv->dev, fdata, fuses,
-+					       fuse, step_volt,
-+					       desc->cpr_fuses.init_voltage_width,
-+					       desc->cpr_fuses.init_voltage_step);
-+		if (ret)
-+			return ret;
- 
--		/* Populate uV */
--		uV = cpr_read_fuse_uV(desc, fdata, fuses->init_voltage,
--				      step_volt, drv);
--		if (uV < 0)
--			return uV;
- 
--		fuse->min_uV = fdata->min_uV;
--		fuse->max_uV = fdata->max_uV;
--		fuse->uV = clamp(uV, fuse->min_uV, fuse->max_uV);
-+		fuse->step_quot = desc->step_quot[fuse->ring_osc_idx];
- 
- 		if (fuse == end) {
- 			/*
-@@ -924,25 +802,9 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 		else if (fuse->uV < fuse->min_uV)
- 			fuse->uV = fuse->min_uV;
- 
--		ret = regulator_is_supported_voltage(drv->vdd_apc,
--						     fuse->min_uV,
--						     fuse->min_uV);
--		if (!ret) {
--			dev_err(drv->dev,
--				"min uV: %d (fuse corner: %d) not supported by regulator\n",
--				fuse->min_uV, i);
--			return -EINVAL;
--		}
--
--		ret = regulator_is_supported_voltage(drv->vdd_apc,
--						     fuse->max_uV,
--						     fuse->max_uV);
--		if (!ret) {
--			dev_err(drv->dev,
--				"max uV: %d (fuse corner: %d) not supported by regulator\n",
--				fuse->max_uV, i);
--			return -EINVAL;
--		}
-+		ret = cpr_check_vreg_constraints(drv->dev, drv->vdd_apc, fuse);
-+		if (ret)
-+			return ret;
- 
- 		dev_dbg(drv->dev,
- 			"fuse corner %d: [%d %d %d] RO%hhu quot %d squot %d\n",
-@@ -953,126 +815,6 @@ static int cpr_fuse_corner_init(struct cpr_drv *drv)
- 	return 0;
- }
- 
--static int cpr_calculate_scaling(const char *quot_offset,
--				 struct cpr_drv *drv,
--				 const struct fuse_corner_data *fdata,
--				 const struct corner *corner)
--{
--	u32 quot_diff = 0;
--	unsigned long freq_diff;
--	int scaling;
--	const struct fuse_corner *fuse, *prev_fuse;
--	int ret;
--
--	fuse = corner->fuse_corner;
--	prev_fuse = fuse - 1;
--
--	if (quot_offset) {
--		ret = nvmem_cell_read_variable_le_u32(drv->dev, quot_offset, &quot_diff);
--		if (ret)
--			return ret;
--
--		quot_diff *= fdata->quot_offset_scale;
--		quot_diff += fdata->quot_offset_adjust;
--	} else {
--		quot_diff = fuse->quot - prev_fuse->quot;
--	}
--
--	freq_diff = fuse->max_freq - prev_fuse->max_freq;
--	freq_diff /= 1000000; /* Convert to MHz */
--	scaling = 1000 * quot_diff / freq_diff;
--	return min(scaling, fdata->max_quot_scale);
--}
--
--static int cpr_interpolate(const struct corner *corner, int step_volt,
--			   const struct fuse_corner_data *fdata)
--{
--	unsigned long f_high, f_low, f_diff;
--	int uV_high, uV_low, uV;
--	u64 temp, temp_limit;
--	const struct fuse_corner *fuse, *prev_fuse;
--
--	fuse = corner->fuse_corner;
--	prev_fuse = fuse - 1;
--
--	f_high = fuse->max_freq;
--	f_low = prev_fuse->max_freq;
--	uV_high = fuse->uV;
--	uV_low = prev_fuse->uV;
--	f_diff = fuse->max_freq - corner->freq;
--
--	/*
--	 * Don't interpolate in the wrong direction. This could happen
--	 * if the adjusted fuse voltage overlaps with the previous fuse's
--	 * adjusted voltage.
--	 */
--	if (f_high <= f_low || uV_high <= uV_low || f_high <= corner->freq)
--		return corner->uV;
--
--	temp = f_diff * (uV_high - uV_low);
--	temp = div64_ul(temp, f_high - f_low);
--
--	/*
--	 * max_volt_scale has units of uV/MHz while freq values
--	 * have units of Hz.  Divide by 1000000 to convert to.
--	 */
--	temp_limit = f_diff * fdata->max_volt_scale;
--	do_div(temp_limit, 1000000);
--
--	uV = uV_high - min(temp, temp_limit);
--	return roundup(uV, step_volt);
--}
--
--static unsigned int cpr_get_fuse_corner(struct dev_pm_opp *opp)
--{
--	struct device_node *np;
--	unsigned int fuse_corner = 0;
--
--	np = dev_pm_opp_get_of_node(opp);
--	if (of_property_read_u32(np, "qcom,opp-fuse-level", &fuse_corner))
--		pr_err("%s: missing 'qcom,opp-fuse-level' property\n",
--		       __func__);
--
--	of_node_put(np);
--
--	return fuse_corner;
--}
--
--static unsigned long cpr_get_opp_hz_for_req(struct dev_pm_opp *ref,
--					    struct device *cpu_dev)
--{
--	u64 rate = 0;
--	struct device_node *ref_np;
--	struct device_node *desc_np;
--	struct device_node *child_np = NULL;
--	struct device_node *child_req_np = NULL;
--
--	desc_np = dev_pm_opp_of_get_opp_desc_node(cpu_dev);
--	if (!desc_np)
--		return 0;
--
--	ref_np = dev_pm_opp_get_of_node(ref);
--	if (!ref_np)
--		goto out_ref;
--
--	do {
--		of_node_put(child_req_np);
--		child_np = of_get_next_available_child(desc_np, child_np);
--		child_req_np = of_parse_phandle(child_np, "required-opps", 0);
--	} while (child_np && child_req_np != ref_np);
--
--	if (child_np && child_req_np == ref_np)
--		of_property_read_u64(child_np, "opp-hz", &rate);
--
--	of_node_put(child_req_np);
--	of_node_put(child_np);
--	of_node_put(ref_np);
--out_ref:
--	of_node_put(desc_np);
--
--	return (unsigned long) rate;
--}
--
- static int cpr_corner_init(struct cpr_drv *drv)
- {
- 	const struct cpr_desc *desc = drv->desc;
-@@ -1110,7 +852,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
- 		opp = dev_pm_opp_find_level_exact(&drv->pd.dev, level);
- 		if (IS_ERR(opp))
- 			return -EINVAL;
--		fc = cpr_get_fuse_corner(opp);
-+		fc = cpr_get_fuse_corner(opp, 0);
- 		if (!fc) {
- 			dev_pm_opp_put(opp);
- 			return -EINVAL;
-@@ -1186,7 +928,7 @@ static int cpr_corner_init(struct cpr_drv *drv)
- 		corner->uV = fuse->uV;
- 
- 		if (prev_fuse && cdata[i - 1].freq == prev_fuse->max_freq) {
--			scaling = cpr_calculate_scaling(quot_offset, drv,
-+			scaling = cpr_calculate_scaling(drv->dev, quot_offset,
- 							fdata, corner);
- 			if (scaling < 0)
- 				return scaling;
-@@ -1224,47 +966,6 @@ static int cpr_corner_init(struct cpr_drv *drv)
- 	return 0;
- }
- 
--static const struct cpr_fuse *cpr_get_fuses(struct cpr_drv *drv)
--{
--	const struct cpr_desc *desc = drv->desc;
--	struct cpr_fuse *fuses;
--	int i;
--
--	fuses = devm_kcalloc(drv->dev, desc->num_fuse_corners,
--			     sizeof(struct cpr_fuse),
--			     GFP_KERNEL);
--	if (!fuses)
--		return ERR_PTR(-ENOMEM);
--
--	for (i = 0; i < desc->num_fuse_corners; i++) {
--		char tbuf[32];
--
--		snprintf(tbuf, 32, "cpr_ring_osc%d", i + 1);
--		fuses[i].ring_osc = devm_kstrdup(drv->dev, tbuf, GFP_KERNEL);
--		if (!fuses[i].ring_osc)
--			return ERR_PTR(-ENOMEM);
--
--		snprintf(tbuf, 32, "cpr_init_voltage%d", i + 1);
--		fuses[i].init_voltage = devm_kstrdup(drv->dev, tbuf,
--						     GFP_KERNEL);
--		if (!fuses[i].init_voltage)
--			return ERR_PTR(-ENOMEM);
--
--		snprintf(tbuf, 32, "cpr_quotient%d", i + 1);
--		fuses[i].quotient = devm_kstrdup(drv->dev, tbuf, GFP_KERNEL);
--		if (!fuses[i].quotient)
--			return ERR_PTR(-ENOMEM);
--
--		snprintf(tbuf, 32, "cpr_quotient_offset%d", i + 1);
--		fuses[i].quotient_offset = devm_kstrdup(drv->dev, tbuf,
--							GFP_KERNEL);
--		if (!fuses[i].quotient_offset)
--			return ERR_PTR(-ENOMEM);
--	}
--
--	return fuses;
--}
--
- static void cpr_set_loop_allowed(struct cpr_drv *drv)
- {
- 	drv->loop_disabled = false;
-@@ -1296,54 +997,6 @@ static int cpr_init_parameters(struct cpr_drv *drv)
- 	return 0;
- }
- 
--static int cpr_find_initial_corner(struct cpr_drv *drv)
--{
--	unsigned long rate;
--	const struct corner *end;
--	struct corner *iter;
--	unsigned int i = 0;
--
--	if (!drv->cpu_clk) {
--		dev_err(drv->dev, "cannot get rate from NULL clk\n");
--		return -EINVAL;
--	}
--
--	end = &drv->corners[drv->num_corners - 1];
--	rate = clk_get_rate(drv->cpu_clk);
--
--	/*
--	 * Some bootloaders set a CPU clock frequency that is not defined
--	 * in the OPP table. When running at an unlisted frequency,
--	 * cpufreq_online() will change to the OPP which has the lowest
--	 * frequency, at or above the unlisted frequency.
--	 * Since cpufreq_online() always "rounds up" in the case of an
--	 * unlisted frequency, this function always "rounds down" in case
--	 * of an unlisted frequency. That way, when cpufreq_online()
--	 * triggers the first ever call to cpr_set_performance_state(),
--	 * it will correctly determine the direction as UP.
--	 */
--	for (iter = drv->corners; iter <= end; iter++) {
--		if (iter->freq > rate)
--			break;
--		i++;
--		if (iter->freq == rate) {
--			drv->corner = iter;
--			break;
--		}
--		if (iter->freq < rate)
--			drv->corner = iter;
--	}
--
--	if (!drv->corner) {
--		dev_err(drv->dev, "boot up corner not found\n");
--		return -EINVAL;
--	}
--
--	dev_dbg(drv->dev, "boot up perf state: %u\n", i);
--
--	return 0;
--}
--
- static const struct cpr_desc qcs404_cpr_desc = {
- 	.num_fuse_corners = 3,
- 	.min_diff_quot = CPR_FUSE_MIN_QUOT_DIFF,
-@@ -1531,7 +1184,8 @@ static int cpr_pd_attach_dev(struct generic_pm_domain *domain,
- 	if (ret)
- 		goto unlock;
- 
--	ret = cpr_find_initial_corner(drv);
-+	ret = cpr_find_initial_corner(drv->dev, drv->cpu_clk, drv->corners,
-+				      drv->num_corners);
- 	if (ret)
- 		goto unlock;
- 
-@@ -1616,6 +1270,7 @@ static int cpr_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct cpr_drv *drv;
-+	const struct cpr_desc *desc;
- 	int irq, ret;
- 	const struct cpr_acc_desc *data;
- 	struct device_node *np;
-@@ -1631,6 +1286,7 @@ static int cpr_probe(struct platform_device *pdev)
- 	drv->dev = dev;
- 	drv->desc = data->cpr_desc;
- 	drv->acc_desc = data->acc_desc;
-+	desc = drv->desc;
- 
- 	drv->fuse_corners = devm_kcalloc(dev, drv->desc->num_fuse_corners,
- 					 sizeof(*drv->fuse_corners),
-@@ -1670,11 +1326,13 @@ static int cpr_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
--	drv->cpr_fuses = cpr_get_fuses(drv);
-+	drv->cpr_fuses = cpr_get_fuses(drv->dev, UINT_MAX, desc->num_fuse_corners);
- 	if (IS_ERR(drv->cpr_fuses))
- 		return PTR_ERR(drv->cpr_fuses);
- 
--	ret = cpr_populate_ring_osc_idx(drv);
-+	ret = cpr_populate_ring_osc_idx(drv->dev, drv->fuse_corners,
-+					drv->cpr_fuses,
-+					desc->num_fuse_corners);
- 	if (ret)
- 		return ret;
- 
+Tested-by: Wyes Karny <wyes.karny@amd.com>
+
+Test system: AMD Genoa 96C 192T
+Kernel: 6.2-rc2 + patch + perf_ctl_reset_fix
+Scaling driver: amd_pstate/amd_pstate_epp
+(Results are normalized)
+
+================ dbench ================
+dbench result comparison:
+Here results are throughput (MB/s)
+Clients:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr       active+ps+pwr
+    1	   1.00 (0.00 pct)	   0.92 (-8.00 pct)	   0.93 (-7.00 pct)	   0.93 (-7.00 pct)	   0.91 (-9.00 pct)	   0.89 (-11.00 pct)	   0.85 (-15.00 pct)
+    2	   1.03 (0.00 pct)	   0.96 (-6.79 pct)	   0.97 (-5.82 pct)	   0.97 (-5.82 pct)	   0.97 (-5.82 pct)	   0.96 (-6.79 pct)	   0.95 (-7.76 pct)
+    4	   1.93 (0.00 pct)	   1.54 (-20.20 pct)	   1.57 (-18.65 pct)	   1.56 (-19.17 pct)	   1.53 (-20.72 pct)	   1.52 (-21.24 pct)	   1.50 (-22.27 pct)
+    8	   3.48 (0.00 pct)	   2.43 (-30.17 pct)	   2.56 (-26.43 pct)	   2.47 (-29.02 pct)	   2.48 (-28.73 pct)	   2.42 (-30.45 pct)	   2.44 (-29.88 pct)
+   16	   6.08 (0.00 pct)	   3.84 (-36.84 pct)	   4.05 (-33.38 pct)	   3.93 (-35.36 pct)	   4.06 (-33.22 pct)	   3.99 (-34.37 pct)	   3.86 (-36.51 pct)
+   32	   9.25 (0.00 pct)	   5.59 (-39.56 pct)	   6.63 (-28.32 pct)	   6.18 (-33.18 pct)	   6.50 (-29.72 pct)	   6.41 (-30.70 pct)	   5.69 (-38.48 pct)
+   64	  13.07 (0.00 pct)	   8.15 (-37.64 pct)	   9.82 (-24.86 pct)	   8.91 (-31.82 pct)	   9.76 (-25.32 pct)	   8.98 (-31.29 pct)	   8.01 (-38.71 pct)
+  128	  15.02 (0.00 pct)	  11.35 (-24.43 pct)	  13.47 (-10.31 pct)	  12.30 (-18.10 pct)	  13.32 (-11.31 pct)	  11.38 (-24.23 pct)	  11.13 (-25.89 pct)
+  256	  16.37 (0.00 pct)	  14.61 (-10.75 pct)	  16.32 (-0.30 pct)	  15.63 (-4.52 pct)	  16.09 (-1.71 pct)	  14.83 (-9.40 pct)	  14.70 (-10.20 pct)
+  512	  15.00 (0.00 pct)	  14.79 (-1.40 pct)	  15.06 (0.40 pct)	  14.96 (-0.26 pct)	  14.95 (-0.33 pct)	  14.64 (-2.40 pct)	  14.76 (-1.60 pct)
+dbench power comparison:
+Clients:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr       active+ps+pwr
+    1	   1.00 (0.00 pct)	   0.99 (-1.00 pct)	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   0.95 (-5.00 pct)	   0.95 (-5.00 pct)
+    2	   1.00 (0.00 pct)	   0.96 (-4.00 pct)	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.95 (-5.00 pct)	   0.94 (-6.00 pct)	   0.93 (-7.00 pct)
+    4	   1.01 (0.00 pct)	   0.97 (-3.96 pct)	   1.01 (0.00 pct)	   1.01 (0.00 pct)	   0.95 (-5.94 pct)	   0.94 (-6.93 pct)	   0.93 (-7.92 pct)
+    8	   1.03 (0.00 pct)	   0.98 (-4.85 pct)	   1.01 (-1.94 pct)	   1.01 (-1.94 pct)	   0.95 (-7.76 pct)	   0.94 (-8.73 pct)	   0.93 (-9.70 pct)
+   16	   1.05 (0.00 pct)	   0.99 (-5.71 pct)	   1.03 (-1.90 pct)	   1.03 (-1.90 pct)	   0.96 (-8.57 pct)	   0.94 (-10.47 pct)	   0.93 (-11.42 pct)
+   32	   1.08 (0.00 pct)	   1.01 (-6.48 pct)	   1.05 (-2.77 pct)	   1.05 (-2.77 pct)	   0.98 (-9.25 pct)	   0.96 (-11.11 pct)	   0.95 (-12.03 pct)
+   64	   1.12 (0.00 pct)	   1.04 (-7.14 pct)	   1.09 (-2.67 pct)	   1.09 (-2.67 pct)	   1.00 (-10.71 pct)	   0.98 (-12.50 pct)	   0.97 (-13.39 pct)
+  128	   1.15 (0.00 pct)	   1.06 (-7.82 pct)	   1.14 (-0.86 pct)	   1.13 (-1.73 pct)	   1.04 (-9.56 pct)	   1.00 (-13.04 pct)	   0.98 (-14.78 pct)
+  256	   1.18 (0.00 pct)	   1.10 (-6.77 pct)	   1.18 (0.00 pct)	   1.19 (0.84 pct)	   1.06 (-10.16 pct)	   1.03 (-12.71 pct)	   1.02 (-13.55 pct)
+  512	   1.22 (0.00 pct)	   1.15 (-5.73 pct)	   1.23 (0.81 pct)	   1.23 (0.81 pct)	   1.10 (-9.83 pct)	   1.06 (-13.11 pct)	   1.05 (-13.93 pct)
+
+================ git-source ================
+git-source result comparison:
+Here results are throughput (compilations per 1000 sec)
+Threads:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr	   active+ps+pwr
+  192	   1.00 (0.00 pct)	   0.93 (-7.00 pct)	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.87 (-13.00 pct)	   0.81 (-19.00 pct)	   0.71 (-29.00 pct)
+git-source power comparison:
+Threads:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr	   active+ps+pwr
+  192	   1.00 (0.00 pct)	   1.03 (3.00 pct)	   1.03 (3.00 pct)	   1.03 (3.00 pct)	   1.02 (2.00 pct)	   1.06 (6.00 pct)	   1.13 (13.00 pct)
+
+================ kernbench ================
+kernbench result comparison:
+Here results are throughput (compilations per 1000 sec)
+Load:	   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr	   active+ps+pwr
+32	   1.00 (0.00 pct)	   0.94 (-6.00 pct)	   0.97 (-3.00 pct)	   1.01 (1.00 pct)	   0.77 (-23.00 pct)	   0.64 (-36.00 pct)	   0.52 (-48.00 pct)
+48	   1.25 (0.00 pct)	   1.20 (-4.00 pct)	   1.25 (0.00 pct)	   1.24 (-0.80 pct)	   0.96 (-23.20 pct)	   0.80 (-36.00 pct)	   0.66 (-47.20 pct)
+64	   1.41 (0.00 pct)	   1.37 (-2.83 pct)	   1.40 (-0.70 pct)	   1.43 (1.41 pct)	   1.09 (-22.69 pct)	   0.92 (-34.75 pct)	   0.74 (-47.51 pct)
+96	   1.45 (0.00 pct)	   1.40 (-3.44 pct)	   1.44 (-0.68 pct)	   1.44 (-0.68 pct)	   1.22 (-15.86 pct)	   1.05 (-27.58 pct)	   0.93 (-35.86 pct)
+128	   1.36 (0.00 pct)	   1.23 (-9.55 pct)	   1.33 (-2.20 pct)	   1.35 (-0.73 pct)	   1.12 (-17.64 pct)	   0.98 (-27.94 pct)	   0.84 (-38.23 pct)
+192	   1.22 (0.00 pct)	   1.12 (-8.19 pct)	   1.21 (-0.81 pct)	   1.21 (-0.81 pct)	   1.02 (-16.39 pct)	   0.91 (-25.40 pct)	   0.79 (-35.24 pct)
+256	   1.21 (0.00 pct)	   1.10 (-9.09 pct)	   1.21 (0.00 pct)	   1.21 (0.00 pct)	   1.01 (-16.52 pct)	   0.90 (-25.61 pct)	   0.78 (-35.53 pct)
+384	   1.22 (0.00 pct)	   1.09 (-10.65 pct)	   1.21 (-0.81 pct)	   1.21 (-0.81 pct)	   1.01 (-17.21 pct)	   0.90 (-26.22 pct)	   0.79 (-35.24 pct)
+git-source power comparison:
+Clients:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr       active+ps+pwr
+   32	   1.00 (0.00 pct)	   1.06 (6.00 pct)	   1.02 (2.00 pct)	   1.00 (0.00 pct)	   1.03 (3.00 pct)	   1.16 (16.00 pct)	   1.39 (39.00 pct)
+   48	   0.87 (0.00 pct)	   0.88 (1.14 pct)	   0.87 (0.00 pct)	   0.87 (0.00 pct)	   0.89 (2.29 pct)	   0.98 (12.64 pct)	   1.11 (27.58 pct)
+   64	   0.80 (0.00 pct)	   0.79 (-1.25 pct)	   0.80 (0.00 pct)	   0.80 (0.00 pct)	   0.78 (-2.50 pct)	   0.86 (7.50 pct)	   1.03 (28.75 pct)
+   96	   0.79 (0.00 pct)	   0.81 (2.53 pct)	   0.79 (0.00 pct)	   0.79 (0.00 pct)	   0.78 (-1.26 pct)	   0.87 (10.12 pct)	   0.95 (20.25 pct)
+  128	   0.80 (0.00 pct)	   0.86 (7.50 pct)	   0.82 (2.50 pct)	   0.80 (0.00 pct)	   0.86 (7.50 pct)	   0.91 (13.75 pct)	   1.03 (28.75 pct)
+  192	   0.89 (0.00 pct)	   0.96 (7.86 pct)	   0.89 (0.00 pct)	   0.89 (0.00 pct)	   0.96 (7.86 pct)	   1.00 (12.35 pct)	   1.12 (25.84 pct)
+  256	   0.89 (0.00 pct)	   0.95 (6.74 pct)	   0.89 (0.00 pct)	   0.89 (0.00 pct)	   0.96 (7.86 pct)	   1.00 (12.35 pct)	   1.12 (25.84 pct)
+  384	   0.89 (0.00 pct)	   0.95 (6.74 pct)	   0.90 (1.12 pct)	   0.90 (1.12 pct)	   0.95 (6.74 pct)	   1.00 (12.35 pct)	   1.11 (24.71 pct)
+
+================ tbench ================
+tbench result comparison:
+Here results are throughput (MB/s)
+Clients:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr       active+ps+pwr
+    1	   1.00 (0.00 pct)	   0.52 (-48.00 pct)	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.76 (-24.00 pct)	   0.64 (-36.00 pct)	   0.51 (-49.00 pct)
+    2	   1.97 (0.00 pct)	   1.03 (-47.71 pct)	   2.01 (2.03 pct)	   2.00 (1.52 pct)	   1.52 (-22.84 pct)	   1.27 (-35.53 pct)	   1.02 (-48.22 pct)
+    4	   3.85 (0.00 pct)	   2.03 (-47.27 pct)	   3.91 (1.55 pct)	   3.91 (1.55 pct)	   2.95 (-23.37 pct)	   2.49 (-35.32 pct)	   2.01 (-47.79 pct)
+    8	   7.47 (0.00 pct)	   4.01 (-46.31 pct)	   7.48 (0.13 pct)	   7.56 (1.20 pct)	   5.73 (-23.29 pct)	   4.88 (-34.67 pct)	   3.93 (-47.38 pct)
+   16	  14.12 (0.00 pct)	   7.71 (-45.39 pct)	  14.75 (4.46 pct)	  14.49 (2.62 pct)	  11.13 (-21.17 pct)	   9.37 (-33.64 pct)	   7.69 (-45.53 pct)
+   32	  27.87 (0.00 pct)	  14.96 (-46.32 pct)	  27.86 (-0.03 pct)	  27.31 (-2.00 pct)	  21.32 (-23.50 pct)	  17.82 (-36.06 pct)	  14.45 (-48.15 pct)
+   64	  46.26 (0.00 pct)	  31.86 (-31.12 pct)	  45.56 (-1.51 pct)	  45.99 (-0.58 pct)	  36.14 (-21.87 pct)	  31.36 (-32.20 pct)	  24.86 (-46.26 pct)
+  128	  50.68 (0.00 pct)	  51.09 (0.80 pct)	  50.68 (0.00 pct)	  50.54 (-0.27 pct)	  50.63 (-0.09 pct)	  50.34 (-0.67 pct)	  50.69 (0.01 pct)
+  256	 119.57 (0.00 pct)	 120.07 (0.41 pct)	 119.35 (-0.18 pct)	 118.02 (-1.29 pct)	 114.58 (-4.17 pct)	 117.70 (-1.56 pct)	 114.71 (-4.06 pct)
+  512	 115.18 (0.00 pct)	 115.93 (0.65 pct)	 114.90 (-0.24 pct)	 115.69 (0.44 pct)	 115.02 (-0.13 pct)	 115.71 (0.46 pct)	 115.21 (0.02 pct)
+tbench power comparison:
+Clients:   passive+perf		   passive+sug		   active+perf+perf	   active+ps+perf	   active+ps+bln_perf	   active+ps+bln_pwr       active+ps+pwr
+    1	   1.00 (0.00 pct)	   0.90 (-10.00 pct)	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.92 (-8.00 pct)	   0.90 (-10.00 pct)	   0.89 (-11.00 pct)
+    2	   1.02 (0.00 pct)	   0.90 (-11.76 pct)	   1.02 (0.00 pct)	   1.03 (0.98 pct)	   0.93 (-8.82 pct)	   0.91 (-10.78 pct)	   0.90 (-11.76 pct)
+    4	   1.08 (0.00 pct)	   0.92 (-14.81 pct)	   1.09 (0.92 pct)	   1.09 (0.92 pct)	   0.97 (-10.18 pct)	   0.94 (-12.96 pct)	   0.92 (-14.81 pct)
+    8	   1.21 (0.00 pct)	   0.96 (-20.66 pct)	   1.21 (0.00 pct)	   1.22 (0.82 pct)	   1.03 (-14.87 pct)	   0.98 (-19.00 pct)	   0.96 (-20.66 pct)
+   16	   1.44 (0.00 pct)	   1.04 (-27.77 pct)	   1.46 (1.38 pct)	   1.46 (1.38 pct)	   1.16 (-19.44 pct)	   1.08 (-25.00 pct)	   1.03 (-28.47 pct)
+   32	   1.87 (0.00 pct)	   1.26 (-32.62 pct)	   1.88 (0.53 pct)	   1.87 (0.00 pct)	   1.39 (-25.66 pct)	   1.24 (-33.68 pct)	   1.16 (-37.96 pct)
+   64	   2.41 (0.00 pct)	   1.98 (-17.84 pct)	   2.39 (-0.82 pct)	   2.40 (-0.41 pct)	   1.69 (-29.87 pct)	   1.47 (-39.00 pct)	   1.35 (-43.98 pct)
+  128	   2.59 (0.00 pct)	   2.60 (0.38 pct)	   2.59 (0.00 pct)	   2.60 (0.38 pct)	   2.57 (-0.77 pct)	   2.56 (-1.15 pct)	   2.57 (-0.77 pct)
+  256	   3.17 (0.00 pct)	   3.17 (0.00 pct)	   3.17 (0.00 pct)	   3.17 (0.00 pct)	   3.12 (-1.57 pct)	   3.15 (-0.63 pct)	   3.12 (-1.57 pct)
+  512	   3.18 (0.00 pct)	   3.18 (0.00 pct)	   3.18 (0.00 pct)	   3.18 (0.00 pct)	   3.16 (-0.62 pct)	   3.16 (-0.62 pct)	   3.16 (-0.62 pct)
+
+> 
+> changes from v9:
+>  * pick up R-B flas added by Mario
+>  * pick up R-B flag added by Wyes
+>  * rename "default_pstate_driver" to "current_pstate_driver"
+>  * update status string to "disable" when driver disabled and update size check
+>  * move the common macro definition of EPP to cppc library files for intel_pstate and amd_pstate common using
+>  * fix some doc words for new global sysfs patch
+> 
+> changes from v8:
+>  * drive all the feedbacks from Mario and change the codes in this
+>   version
+>  * drive all the feedbacks from Ray and change the codes in this
+>   version
+>  * pick up all the R-B flags from Mario
+>  * pick up all the R-B flags from Ray
+>  * drop boost/refresh_freq_limits callback
+>  * reuse policy->driver_data to store amd_cpudata struct
+>  * use switch-case in the driver mode switching function
+>  * add Kconfig dependency the INTEL_PSTATE for AMD_PSTATE build
+>  * fix some other code format and typos
+> 
+> changes from v7:
+>  * remove  iowait boost functions code
+>  * pick up ack by flag from Huang Ray.
+>  * add one new patch to support multiple working modes in the amd_pstate_param(),aligned with Wyse 
+>  * drop the patch "[v7 08/13] cpufreq: amd-pstate: add frequency dynamic boost sysfs control"
+>  * replace the cppc_get_epp_caps() with new cppc_get_epp_perf() wihch is
+>    more simple to use
+>  * remove I/O wait boost code from amd_pstate_update_status()
+>  * replace cppc_active var with enum type AMD_PSTATE_ACTIVE
+>  * squash amd_pstate_epp_verify_policy() into sigle function
+>  * remove "amd pstate" string from the pr_err, pr_debug logs info
+>  * rework patch [v7 03/13], move the common EPP profiles declaration
+>    into cpufreq.h which will be used by amd-pstate and intel-pstate
+>  * combine amd psate init functions.
+>  * remove epp_powersave from amd-pstate.h and dropping the codes.
+>  * move amd_pstate_params{} from amd-pstate.h into amd-pstate.c
+>  * drive some other feedbacks from huang ray 
+> 
+> changes from v6:
+>  * fix one legacy kernel hang issue when amd-pstate driver unregistering
+>  * add new documentation to introduce new global sysfs attributes
+>  * use sysfs_emit_at() to print epp profiles array
+>  * update commit info for patch v6 patch 1/11 as Mario sugguested.
+>  * trying to add the EPP profiles into cpufreq.h, but it will cause lots
+>    of build failues,continue to keep cpufreq_common.h used in v7
+>  * update commit info using amd-pstate as prefix same as before.
+>  * remove CONFIG_ACPI for the header as Ray suggested.
+>  * move amd_pstate_kobj to where it is used in patch "add frequency dynamic boost sysfs control"
+>  * drive feedback removing X86_FEATURE_CPPC check for the epp init from Huang Ray 
+>  * drive feedback from Mario
+>  
+> change from v5:
+>  * add one common header `cpufreq_commoncpufreq_common` to extract EPP profiles 
+>    definition for amd and intel pstate driver.
+>  * remove the epp_off value to avoid confusion.
+>  * convert some other sysfs sprintf() function with sysfs_emit() and add onew new patch
+>  * add acpi pm server priofile detection to enable dynamic boost control
+>  * fix some code format with checkpatch script
+>  * move the EPP profile declaration into common header file `cpufreq_common.h`
+>  * fix commit typos
+> 
+> changes from v4:
+>  * rebase driver based on the v6.1-rc7
+>  * remove the builtin changes patch because pstate driver has been
+>    changed to builtin type by another thread patch
+>  * update Documentation: amd-pstate: add amd pstate driver mode introduction 
+>  * replace sprintf with sysfs_emit() instead.
+>  * fix typo for cppc_set_epp_perf() in cppc_acpi.h header
+> 
+> changes from v3:
+>  * add one more document update patch for the active and passive mode
+>    introducion.
+>  * drive most of the feedbacks from Mario
+>  * drive feedback from Rafael for the cppc_acpi driver.
+>  * remove the epp raw data set/get function
+>  * set the amd-pstate drive by passing kernel parameter
+>  * set amd-pstate driver disabled by default if no kernel parameter
+>    input from booting
+>  * get cppc_set_auto_epp and cppc_set_epp_perf combined
+>  * pick up reviewed by flag from Mario
+> 
+> changes from v2:
+>  * change pstate driver as builtin type from module
+>  * drop patch "export cpufreq cpu release and acquire"
+>  * squash patch of shared mem into single patch of epp implementation
+>  * add one new patch to support frequency boost control
+>  * add patch to expose driver working status checking
+>  * rebase driver into v6.1-rc4 kernel release
+>  * move some declaration to amd-pstate.h
+>  * drive feedback from Mario for the online/offline patch
+>  * drive feedback from Mario for the suspend/resume patch
+>  * drive feedback from Ray for the cppc_acpi and some other patches
+>  * drive feedback from Nathan for the epp patch
+> 
+> changes from v1:
+>  * rebased to v6.0
+>  * drive feedbacks from Mario for the suspend/resume patch
+>  * drive feedbacks from Nathan for the EPP support on msr type
+>  * fix some typos and code style indent problems
+>  * update commit comments for patch 4/7
+>  * change the `epp_enabled` module param name to `epp`
+>  * set the default epp mode to be false
+>  * add testing for the x86_energy_perf_policy utility patchset(will
+>    send that utility patchset with another thread)
+> 
+> v9: https://lore.kernel.org/lkml/20221225163442.2205660-1-perry.yuan@amd.com/
+> v8: https://lore.kernel.org/lkml/20221219064042.661122-1-perry.yuan@amd.com/
+> v7: https://lore.kernel.org/lkml/20221208111852.386731-1-perry.yuan@amd.com/
+> v6: https://lore.kernel.org/lkml/20221202074719.623673-1-perry.yuan@amd.com/
+> v5: https://lore.kernel.org/lkml/20221128170314.2276636-1-perry.yuan@amd.com/
+> v4: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+> v3: https://lore.kernel.org/all/20221107175705.2207842-1-Perry.Yuan@amd.com/
+> v2: https://lore.kernel.org/all/20221010162248.348141-1-Perry.Yuan@amd.com/
+> v1: https://lore.kernel.org/all/20221009071033.21170-1-Perry.Yuan@amd.com/
+> 
+> Perry Yuan (11):
+>   ACPI: CPPC: Add AMD pstate energy performance preference cppc control
+>   Documentation: amd-pstate: add EPP profiles introduction
+>   cpufreq: intel_pstate: use common macro definition for Energy
+>     Preference Performance(EPP)
+>   cpufreq: amd-pstate: implement Pstate EPP support for the AMD
+>     processors
+>   cpufreq: amd-pstate: implement amd pstate cpu online and offline
+>     callback
+>   cpufreq: amd-pstate: implement suspend and resume callbacks
+>   cpufreq: amd-pstate: add driver working mode switch support
+>   Documentation: amd-pstate: add amd pstate driver mode introduction
+>   Documentation: introduce amd pstate active mode kernel command line
+>     options
+>   cpufreq: amd-pstate: convert sprintf with sysfs_emit()
+>   Documentation: amd-pstate: introduce new global sysfs attributes
+> 
+> Wyes Karny (1):
+>   cpufreq: amd-pstate: optimize driver working mode selection in
+>     amd_pstate_param()
+> 
+>  .../admin-guide/kernel-parameters.txt         |   7 +
+>  Documentation/admin-guide/pm/amd-pstate.rst   |  74 +-
+>  drivers/acpi/cppc_acpi.c                      |  96 +++
+>  drivers/cpufreq/amd-pstate.c                  | 659 +++++++++++++++++-
+>  drivers/cpufreq/intel_pstate.c                |  36 -
+>  include/acpi/cppc_acpi.h                      |  22 +
+>  include/linux/amd-pstate.h                    |  28 +
+>  7 files changed, 865 insertions(+), 57 deletions(-)
+> 
+
 -- 
-2.39.0
-
+Thanks & Regards,
+Wyes
