@@ -2,97 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACD1C664124
-	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 14:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F8D66413B
+	for <lists+linux-pm@lfdr.de>; Tue, 10 Jan 2023 14:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjAJNEH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 10 Jan 2023 08:04:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
+        id S231996AbjAJNIE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 10 Jan 2023 08:08:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238592AbjAJNEC (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 08:04:02 -0500
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B3352767;
-        Tue, 10 Jan 2023 05:04:01 -0800 (PST)
-Received: by mail-ej1-f54.google.com with SMTP id jo4so28425786ejb.7;
-        Tue, 10 Jan 2023 05:04:01 -0800 (PST)
+        with ESMTP id S232045AbjAJNIB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 10 Jan 2023 08:08:01 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD1C58D2B;
+        Tue, 10 Jan 2023 05:08:00 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d15so13097909pls.6;
+        Tue, 10 Jan 2023 05:08:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FQjxjJ8qZ3hM4//p+uSuH9Q7xJZ04eDZ+d9MlCyJuSU=;
+        b=LgUr5bj4jUS1UqenSM2ILfG6zsJOH+F0qMWYC9g1pA4QVDDuzeFyXrYB2vO1LD5xE7
+         pYVnDsyrPR5tyllBDIsqV+EWJDPt3ZQEbIscHV9MdzEWp5isSbTDjbnYoHLgOQhbq4Ez
+         DKpoozCOYQLsOTuC0ux/9SuRDmD2FU2852FhJk+YJN7ZE2vLmx4Jt1xsCx6ij5gAw31S
+         VJ8V5TbK7f04FmgOJONJnLJFjbqiN3lhtnwojTD46EZleXo43lRHqrZQIpHhSFC4WgWK
+         cb/eAE8v7Ry0vTEVLzPQ+x/xjs1AtuV97wQGFHTGUiZHawdxmx/pLBk322EIYPQs7Ikc
+         ZDgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=U62Sr3DmpbCpRGWuqrj+WavjeQmNeJPc3umPZoIz79Y=;
-        b=gGnyh1l6HY+Oda8WTtdaCNybRJzIn6JEVZ2H0zAtaV7khRsAz3FyZYZj2jmGLcdLmm
-         hOH/kViVULndT0gSg7ikLcEzXnlRdZosfQoSD55fMK+kqClwePOmXgSKHEWDofzcb3WT
-         KhluzslSz+Fd1uOd7wQ9HCKPbT8GXUq6ShA1tbuDV6OBMbLzJ39Zl/dDF3wyclBLG8mr
-         YA97ec6WvnuWJQqxIfW1WITG66IG/SRzL3UXq7vd/uGUFC7GxOetXeUnlGQk6/JoHHaY
-         d2TnjSbKgIOfqmflW4Lc495/Bs7iHysZYznvPxgRYjdFo6fUAbUoh04Y+I1rIPkBvW5l
-         ZHxA==
-X-Gm-Message-State: AFqh2kqCjNqDbUhQQT+kz0zGY44x7WOlk7MdQ7KSQojg6OyXlKB1jQAa
-        YIL0/P10Qzy1CR4abXYH2pLimJLXLKAkk1EpS7k=
-X-Google-Smtp-Source: AMrXdXuF4rXBNY4fahxauXG8YvbaAnO3qDtRIPNikdKA5RHQbXb4FCbep2+4Nkb1ts1OV9ptSFa0znU1aG2+R35fo1M=
-X-Received: by 2002:a17:907:29c3:b0:84d:4b8e:efc with SMTP id
- ev3-20020a17090729c300b0084d4b8e0efcmr450215ejc.390.1673355839925; Tue, 10
- Jan 2023 05:03:59 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FQjxjJ8qZ3hM4//p+uSuH9Q7xJZ04eDZ+d9MlCyJuSU=;
+        b=YvVZB+Qq+wKqyyF746wymntJW+qpOiqd7ZPPkcqw4QY9gSTac2jantVAbKF4iRXaI9
+         bEG5tOhdGwOcg2XuqcP2fVQdOuPixpEYznP8bjp4Lwdhd0C0VM+mG45oGd0Y8GVYJg2t
+         OgJYHK4Ynka06PCDWY5UREBWhsK0ItphudqoNePIx1KbZcu5KjLWrKBs63txPdXvulJE
+         BD/XuWAJc7ERzOI7VOw/id/muUouFaavzaVWkkC6awmIwAVcyz6UbJnwqqs2ewN9SXRe
+         Q0KQ9H5/TI1C7AGPsrJD+m02T8q7KOJQM71F0CWfEkheIU+4c2vyJMnSp22dcTpgcpOz
+         xlzw==
+X-Gm-Message-State: AFqh2krjs7xzDBcL8BDM4wC1PNtkB8fu9Paa++iR5FEOT3eEXPwUSmb5
+        xu5T+T+dnYu+jqEc7HJGESI=
+X-Google-Smtp-Source: AMrXdXsA7MqFTjg4QFI8+s01CITBAHUQyaihohIza1jiYEYtuLrF/4EZs97vGb6wqfSVmguVodE8bw==
+X-Received: by 2002:a17:903:31d5:b0:191:4539:d2c1 with SMTP id v21-20020a17090331d500b001914539d2c1mr67586353ple.47.1673356079207;
+        Tue, 10 Jan 2023 05:07:59 -0800 (PST)
+Received: from [172.30.1.1] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902c40c00b00178aaf6247bsm8097869plk.21.2023.01.10.05.07.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Jan 2023 05:07:58 -0800 (PST)
+Message-ID: <49e7326a-2813-db52-9833-dbd5092cb971@gmail.com>
+Date:   Tue, 10 Jan 2023 22:07:54 +0900
 MIME-Version: 1.0
-References: <20230105041059.39366-1-kvijayab@amd.com> <CAJZ5v0g1Mu8ip68one_gsAR3xmyua+6m1uJqb3n92xxYWeR+FA@mail.gmail.com>
- <Y7dNjHXJJwzCtYOY@zn.tnic>
-In-Reply-To: <Y7dNjHXJJwzCtYOY@zn.tnic>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 10 Jan 2023 14:03:48 +0100
-Message-ID: <CAJZ5v0iq1_kSOXuBcteXrCJR0NyyBVXcio_L=47oKrACT1oaZQ@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/acpi/boot: Do not register processors that cannot
- be onlined for x2apic
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kishon Vijay Abraham I <kvijayab@amd.com>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Borislav Petkov <bpetkov@amd.com>,
-        Leo Duran <leo.duran@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH rcu 12/27] drivers/devfreq: Remove "select SRCU"
+To:     "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org, MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>, linux-pm@vger.kernel.org
+References: <20230105003759.GA1769545@paulmck-ThinkPad-P17-Gen-1>
+ <20230105003813.1770367-12-paulmck@kernel.org>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20230105003813.1770367-12-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 5, 2023 at 11:22 PM Borislav Petkov <bp@alien8.de> wrote:
->
-> On Thu, Jan 05, 2023 at 06:09:59PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Jan 5, 2023 at 5:11 AM Kishon Vijay Abraham I <kvijayab@amd.com> wrote:
-> > >
-> > > Section 5.2.12.12 Processor Local x2APIC Structure in the ACPI v6.5
-> > > spec mandates that both "enabled" and "online capable" Local APIC Flags
-> > > should be used to determine if the processor is usable or not.
-> > >
-> > > However, Linux doesn't use the "online capable" flag for x2APIC to
-> > > determine if the processor is usable. As a result, cpu_possible_mask has
-> > > incorrect value and results in more memory getting allocated for per_cpu
-> > > variables than it is going to be used.
-> > >
-> > > Make sure Linux parses both "enabled" and "online capable" flags for
-> > > x2APIC to correctly determine if the processor is usable.
-> > >
-> > > Fixes: aa06e20f1be6 ("x86/ACPI: Don't add CPUs that are not online capable")
-> > > Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-> > > Reported-by: Leo Duran <leo.duran@amd.com>
-> > > Signed-off-by: Kishon Vijay Abraham I <kvijayab@amd.com>
-> >
-> > Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Are you saying, I should take it through tip?
+On 23. 1. 5. 09:37, Paul E. McKenney wrote:
+> Now that the SRCU Kconfig option is unconditionally selected, there is
+> no longer any point in selecting it.  Therefore, remove the "select SRCU"
+> Kconfig statements.
+> 
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: MyungJoo Ham <myungjoo.ham@samsung.com>
+> Cc: Kyungmin Park <kyungmin.park@samsung.com>
+> Cc: Chanwoo Choi <cw00.choi@samsung.com>
+> Cc: <linux-pm@vger.kernel.org>
+> ---
+>  drivers/devfreq/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/devfreq/Kconfig b/drivers/devfreq/Kconfig
+> index 9754d8b316211..3c4862a752b5a 100644
+> --- a/drivers/devfreq/Kconfig
+> +++ b/drivers/devfreq/Kconfig
+> @@ -1,7 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  menuconfig PM_DEVFREQ
+>  	bool "Generic Dynamic Voltage and Frequency Scaling (DVFS) support"
+> -	select SRCU
+>  	select PM_OPP
+>  	help
+>  	  A device may have a list of frequencies and voltages available.
 
-Works for me either way.
+Applied it. Thanks.
 
-Just please let me know if I need to take care of it. :-)
+-- 
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
+
