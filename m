@@ -2,149 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12CB665939
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 11:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7EC6659B1
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 12:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232662AbjAKKnK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Jan 2023 05:43:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58452 "EHLO
+        id S232437AbjAKLFj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Jan 2023 06:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjAKKnI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 05:43:08 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB07426DC;
-        Wed, 11 Jan 2023 02:43:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673433787; x=1704969787;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hbTE3mtmtPLjfx/z0S1cWEQoEQFuxh5WzqxpU3KYFO0=;
-  b=dehngBonNIDrQZyqKr4LWLTp5zaOsRX3+QWiITvNS9gl/VTKf7UZI6fn
-   M6KfOyCpdV98gioQEv16l/3I1iU3j7eVQNK4NgUF7KbwPT8Ra2/N22jGb
-   4cGtgLgCxbPDwiTvDP4dFqmN05zk/2qFF50NDtXEQ+mhbplDJGUioJGE/
-   zg9RAflNl+RhXFwgoiQZ15e36ujDQRC6zPGpyOQ4nsW0MAq1p12Sk7KRF
-   BhngXhG4k/pT4W7bgwWjc7y9WvJJNWnpahdvVGJff95crdR83KPs0El74
-   8E7zyONto2JumtmSVY5ROPnUcIOJz+JwshMlEKU/wTXZnJC3ccSMKCVN2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="323447929"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="323447929"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jan 2023 02:43:07 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="746110376"
-X-IronPort-AV: E=Sophos;i="5.96,315,1665471600"; 
-   d="scan'208";a="746110376"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Jan 2023 02:43:05 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFYZV-000927-17;
-        Wed, 11 Jan 2023 10:43:05 +0000
-Date:   Wed, 11 Jan 2023 18:42:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 60bbd3eb0af043a2c9f7309e6ce5fc573ee0e171
-Message-ID: <63be9299.aULZ0NLJnbOCdI8f%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232728AbjAKLFe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 06:05:34 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9888E2653
+        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 03:05:31 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id g10so10829438wmo.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 03:05:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nI6TmedA3bBtWw0iWBdVWzklstq2fzCdNWRkOyK90aM=;
+        b=MIbPMoDFQpXJnkYpst7gbyXfRCptyzZ1QJ+xcxilEfba6xL2gWM0D23DCFFT3iR0QA
+         9TQIxqeD30/Yi/W7e963uP+SByqqpsZsWRJe3xogcCKpXBEq06CaKAfS24/gRPcg3X42
+         6cldBLgnbCuuHCmcgRN4ZkphRuZ1o5tCe9wkareuBQLJDju8erivKQF9c2zbw4r6Q+cp
+         L745uO4dTa97V6AFhoKHx1SFl2k03N/NIwJOTTmV3jWHAjiMaYlruCwxpjkBvp22LiPO
+         bHsCd2a2pLpLWGL7Z+NW0YrfhicqQ3a9MFZHsepY+V4onmQ2HryUVIft3LEnhK0CaGfa
+         WTlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nI6TmedA3bBtWw0iWBdVWzklstq2fzCdNWRkOyK90aM=;
+        b=I4Wf+jAKrJoDCV84EraBOTvvtopHIQifB7qI3k92umc2vWrXKHLdK+Zsox5T5PjRfr
+         cpmnl8vJ9UOvx1KrHz7d+ro5P7TuS+ffdaDkzyOrnWv9pv3UDsJAoZgTzJmEBeJTyjXv
+         sqoide8K63FwZ5v6trV/ISqrIJ/otuDVuFwk4DNrZJWBN9PSl1/hruaR1ocPRoMCfZu8
+         f1QJ4bb19DY7zchSIAFka1qpBS4pFqFFCKxIFylPEtnaF1BGb/3RkLZlAFDgJP16JgvM
+         61YSvmjD9x6Zx4lQutQRxtwZOa7XS46G8KNjJcjPaCTjubNGEQOPLCj/Bd7nZ00yevpF
+         RGMA==
+X-Gm-Message-State: AFqh2krMV0K6e0hHFAVAMb3fFlt97DgIFbvHwNZYcLL6tTeiHFe/nS9b
+        FcghsxVI2zGAxa+HGzTwnGHYyw==
+X-Google-Smtp-Source: AMrXdXv+xpJ6Z4H9tDgiAiZbtZVebAraSoT8X3gbLtj/4gT1G1FXxsn1P9IKLHr5xB0QwDCzweVlYA==
+X-Received: by 2002:a05:600c:1911:b0:3d9:8635:a916 with SMTP id j17-20020a05600c191100b003d98635a916mr49031679wmq.9.1673435130098;
+        Wed, 11 Jan 2023 03:05:30 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id x7-20020a05600c188700b003c701c12a17sm21353305wmp.12.2023.01.11.03.05.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 03:05:29 -0800 (PST)
+Message-ID: <5d8cb46a-e2bc-a066-ecf4-9daaba33b6ec@linaro.org>
+Date:   Wed, 11 Jan 2023 11:05:28 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v2 06/10] interconnect: qcom: rpm: Rename icc desc clocks
+ to bus_blocks
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230110132202.956619-1-konrad.dybcio@linaro.org>
+ <20230110132202.956619-7-konrad.dybcio@linaro.org>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20230110132202.956619-7-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 60bbd3eb0af043a2c9f7309e6ce5fc573ee0e171  Merge branch 'pm-cpuidle' into bleeding-edge
+On 10/01/2023 13:21, Konrad Dybcio wrote:
+> Rename the "clocks" (and _names) fields of qcom_icc_desc to
+> "bus_clocks" in preparation for introducing handling of clocks that
+> need to be enabled but not voted on with aggregate frequency.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-elapsed time: 729m
+I'd like to further review the clock changes you need to rebase onto 
+linux-next
 
-configs tested: 67
-configs skipped: 2
+Applying: interconnect: qcom: rpm: Rename icc provider num_clocks to 
+num_bus_clocks
+error: patch failed: drivers/interconnect/qcom/icc-rpm.h:23
+error: drivers/interconnect/qcom/icc-rpm.h: patch does not apply
+Patch failed at 0004 interconnect: qcom: rpm: Rename icc provider 
+num_clocks to num_bus_clocks
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-alpha                             allnoconfig
-i386                              allnoconfig
-arc                               allnoconfig
-arm                               allnoconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                                 defconfig
-m68k                             allyesconfig
-s390                             allmodconfig
-powerpc                           allnoconfig
-arc                              allyesconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-x86_64                            allnoconfig
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-arc                  randconfig-r043-20230110
-i386                                defconfig
-s390                 randconfig-r044-20230110
-riscv                randconfig-r042-20230110
-x86_64                              defconfig
-x86_64                        randconfig-a004
-um                             i386_defconfig
-x86_64                        randconfig-a002
-um                           x86_64_defconfig
-x86_64                               rhel-8.3
-x86_64                        randconfig-a006
-ia64                             allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-bpf
-x86_64                           rhel-8.3-syz
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-i386                          randconfig-a005
-x86_64                           allyesconfig
-i386                             allyesconfig
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm                                 defconfig
-riscv                             allnoconfig
-arm64                            allyesconfig
-arm                              allyesconfig
-
-clang tested configs:
-hexagon              randconfig-r041-20230110
-arm                  randconfig-r046-20230110
-hexagon              randconfig-r045-20230110
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-x86_64                          rhel-8.3-rust
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+---
+bod
