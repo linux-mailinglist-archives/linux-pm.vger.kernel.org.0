@@ -2,66 +2,86 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6597F66555D
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 08:46:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29281665720
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 10:16:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235928AbjAKHpv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Jan 2023 02:45:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
+        id S238325AbjAKJQP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Jan 2023 04:16:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjAKHpq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 02:45:46 -0500
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12A3CF01F;
-        Tue, 10 Jan 2023 23:45:37 -0800 (PST)
-X-UUID: ed6ddac0918311eda06fc9ecc4dadd91-20230111
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=ceaIQPIOcwko5n9WHg3R7AZp5W3nMv2eecB7f/baU1k=;
-        b=TX8Vnh3hSMML86xc9CfeDijCZkW9MaY4jjTUK+sm6Gsk/f/mjduT7pIJW9yCiuzMPcYYuT1lKS2YeMsKnl0RJSeUn3tkX6gzr1YT5Az0AkCFzyx7jQcSlEo+nlRwmUy0oler9sV/4iCLMKCtJv8ugpLoSNOE7Ck43ymf45TNf2Q=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.17,REQID:e32595c2-724d-4982-bad9-505815526a93,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:543e81c,CLOUDID:e4747df5-ff42-4fb0-b929-626456a83c14,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0
-X-CID-BVR: 0
-X-UUID: ed6ddac0918311eda06fc9ecc4dadd91-20230111
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <roger.lu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1768144763; Wed, 11 Jan 2023 15:45:32 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 11 Jan 2023 15:45:31 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 11 Jan 2023 15:45:31 +0800
-From:   Roger Lu <roger.lu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Enric Balletbo Serra <eballetbo@gmail.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Nicolas Boichat <drinkcat@google.com>
-CC:     Fan Chen <fan.chen@mediatek.com>, Roger Lu <roger.lu@mediatek.com>,
-        Jia-wei Chang <jia-wei.chang@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Subject: [PATCH v4 14/14] soc: mtk-svs: mt8183: refactor o_slope calculation
-Date:   Wed, 11 Jan 2023 15:45:28 +0800
-Message-ID: <20230111074528.29354-15-roger.lu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230111074528.29354-1-roger.lu@mediatek.com>
-References: <20230111074528.29354-1-roger.lu@mediatek.com>
+        with ESMTP id S238398AbjAKJPh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 04:15:37 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0606B140C2
+        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 01:12:29 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id g10so10622682wmo.1
+        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 01:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eZY9at94V7P9Q8ZmcTLckeYfqsa9rY4dut4aTvEClmo=;
+        b=twfwFW4SzfZQSlglT1rzGB/JM5GiX+NnC0Sjqeo+j0cHLoNw/PxwBuXCtV43e8UNP7
+         zM6oZ/ggYwOE1F2Xp6WBwp4i4u2IMVqKwLsE8CtSafCz0EMo91UMT82VEGRFa6m0WvGN
+         u98Ro3rDWXqHCyftZk+LtQQ085e73sQDoxmJ267U/P4XWh03Gq6FZtsamq6juFRwTjxD
+         yfpopjSA+Nmwb7nmhyy1bQm8NmE02GLi0u483oa89tQf/cylcLMk5E0uoMaZh3ydEeCH
+         s1Bigfqp3H39oDsRcsa7smNSI+rUcpWW1Ja5SSB+phaNMrgxCGmdGI+l2tiyxp4a3kQk
+         GX7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eZY9at94V7P9Q8ZmcTLckeYfqsa9rY4dut4aTvEClmo=;
+        b=qUwAZjpziQqrn86bhLzDykE7fIPksaS72+3A4Ve7WCncrP2qB5izFNlTsowbrrEV8P
+         b2yDb3H+zHP5IRF+8gC4K1kjomgr7vS5AlLOKX5Lvaof2U51Gypl4w1r9FqWnO8WXNa+
+         gXVZkx5tWE5KjS8cXjntBylTX0TVMpn7UTeWKeSfz5sj+436BUTVkq3AClmWNtLfEos+
+         PrUEtvctuJSm4RZCt4Afv9FXEMeCTj1zg+pJhoibXutMuhLyAKQCiUDrtkLadIZvKskz
+         BL3qztxF8AW3IdJe+iglj+GRhtKMF6qeRcMU3t79e9zJLW2oV58XwEK4aimBpwpJ9Mje
+         PN7g==
+X-Gm-Message-State: AFqh2kqcp8EUIccLd3YswCQ5CSOs4MQrRl3pjCWAbPcB4qfMBmOKtzuA
+        ZjEZIH4lGzt5Og34OwBF2+dRrQ==
+X-Google-Smtp-Source: AMrXdXuGGYuouvjFkU04+BHPeCn1p1R2rZNNH//wli0EM9e/fMUnrTsSen06OWCuPV/zqNWJGDL2HA==
+X-Received: by 2002:a05:600c:5114:b0:3d9:fa37:e42d with SMTP id o20-20020a05600c511400b003d9fa37e42dmr3596584wms.17.1673428347726;
+        Wed, 11 Jan 2023 01:12:27 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id h10-20020a1ccc0a000000b003d237d60318sm17928277wmb.2.2023.01.11.01.12.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Jan 2023 01:12:27 -0800 (PST)
+Message-ID: <547ef944-be4d-365e-c639-91812286e42a@linaro.org>
+Date:   Wed, 11 Jan 2023 10:12:25 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 4/7] arm64: dts: qcom: Add msm8939 SoC
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+References: <20230103010904.3201835-1-bryan.odonoghue@linaro.org>
+ <20230103010904.3201835-5-bryan.odonoghue@linaro.org>
+ <6e594438-843a-d03e-5276-d6316a9dc2c0@linaro.org>
+ <88d66834-ca80-888b-e56e-7694e84b6eae@linaro.org>
+ <411a1a02-568e-3695-0a24-0681fbe9f265@linaro.org>
+ <bde66389-619b-771d-1956-43059f8e4d5a@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <bde66389-619b-771d-1956-43059f8e4d5a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,93 +89,46 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The o_slope value is dependent of the o_slope_sign, refactor code to get
-rid of unnecessary if constructs.
+On 10/01/2023 14:42, Bryan O'Donoghue wrote:
+> On 10/01/2023 13:24, Krzysztof Kozlowski wrote:
+>> On 10/01/2023 14:14, Bryan O'Donoghue wrote:
+>>> On 03/01/2023 09:14, Krzysztof Kozlowski wrote:
+>>>> ../arch/arm64/boot/dts/qcom/msm8939.dtsi:1825.23-1842.5: Warning
+>>>> (simple_bus_reg): /soc@0/mmc@7824000: simple-bus unit address format
+>>>> error, expected "7824900
+>>>
+>>> For the record the driver consuming this dt entry requires the host regs
+>>> to come first followed by the core
+>>>
+>>> sdhc_1: mmc@7824000 {
+>>>           compatible = "qcom,msm8916-sdhci", "qcom,sdhci-msm-v4";
+>>>           reg = <0x07824900 0x11c>, <0x07824000 0x800>;
+>>>           reg-names = "hc", "core";
+>>> }
+>>>
+>>> If I change this and the msm8916 to
+>>
+>> That's not the solution. The warning is saying that unit address does
+>> not match your reg. You need to correct unit address.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Is it not the case that the unit-address should match the first reg and 
 
-Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
-Signed-off-by: Roger Lu <roger.lu@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- drivers/soc/mediatek/mtk-svs.c | 51 +++++++++++++++-------------------
- 1 file changed, 22 insertions(+), 29 deletions(-)
+As Konrad wrote, yes.
 
-diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
-index 89117807e85d..8cfbf8ffb138 100644
---- a/drivers/soc/mediatek/mtk-svs.c
-+++ b/drivers/soc/mediatek/mtk-svs.c
-@@ -1944,26 +1944,27 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- 	o_slope_sign = (svsp->tefuse[0] >> 7) & BIT(0);
- 
- 	ts_id = (svsp->tefuse[1] >> 9) & BIT(0);
--	o_slope = (svsp->tefuse[0] >> 26) & GENMASK(5, 0);
--
--	if (adc_cali_en_t == 1) {
--		if (!ts_id)
--			o_slope = 0;
--
--		if (adc_ge_t < 265 || adc_ge_t > 758 ||
--		    adc_oe_t < 265 || adc_oe_t > 758 ||
--		    o_vtsmcu[0] < -8 || o_vtsmcu[0] > 484 ||
--		    o_vtsmcu[1] < -8 || o_vtsmcu[1] > 484 ||
--		    o_vtsmcu[2] < -8 || o_vtsmcu[2] > 484 ||
--		    o_vtsmcu[3] < -8 || o_vtsmcu[3] > 484 ||
--		    o_vtsmcu[4] < -8 || o_vtsmcu[4] > 484 ||
--		    o_vtsabb < -8 || o_vtsabb > 484 ||
--		    degc_cali < 1 || degc_cali > 63) {
--			dev_err(svsp->dev, "bad thermal efuse, no mon mode\n");
--			goto remove_mt8183_svsb_mon_mode;
--		}
-+	if (!ts_id) {
-+		o_slope = 1534;
- 	} else {
--		dev_err(svsp->dev, "no thermal efuse, no mon mode\n");
-+		o_slope = (svsp->tefuse[0] >> 26) & GENMASK(5, 0);
-+		if (!o_slope_sign)
-+			o_slope = 1534 + o_slope * 10;
-+		else
-+			o_slope = 1534 - o_slope * 10;
-+	}
-+
-+	if (adc_cali_en_t == 0 ||
-+	    adc_ge_t < 265 || adc_ge_t > 758 ||
-+	    adc_oe_t < 265 || adc_oe_t > 758 ||
-+	    o_vtsmcu[0] < -8 || o_vtsmcu[0] > 484 ||
-+	    o_vtsmcu[1] < -8 || o_vtsmcu[1] > 484 ||
-+	    o_vtsmcu[2] < -8 || o_vtsmcu[2] > 484 ||
-+	    o_vtsmcu[3] < -8 || o_vtsmcu[3] > 484 ||
-+	    o_vtsmcu[4] < -8 || o_vtsmcu[4] > 484 ||
-+	    o_vtsabb < -8 || o_vtsabb > 484 ||
-+	    degc_cali < 1 || degc_cali > 63) {
-+		dev_err(svsp->dev, "bad thermal efuse, no mon mode\n");
- 		goto remove_mt8183_svsb_mon_mode;
- 	}
- 
-@@ -1982,11 +1983,7 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- 		x_roomt[i] = (((format[i] * 10000) / 4096) * 10000) / gain;
- 
- 	temp0 = (10000 * 100000 / gain) * 15 / 18;
--
--	if (!o_slope_sign)
--		mts = (temp0 * 10) / (1534 + o_slope * 10);
--	else
--		mts = (temp0 * 10) / (1534 - o_slope * 10);
-+	mts = (temp0 * 10) / o_slope;
- 
- 	for (idx = 0; idx < svsp->bank_max; idx++) {
- 		svsb = &svsp->banks[idx];
-@@ -2013,11 +2010,7 @@ static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
- 		temp0 = (degc_cali * 10 / 2);
- 		temp1 = ((10000 * 100000 / 4096 / gain) *
- 			 oe + tb_roomt * 10) * 15 / 18;
--
--		if (!o_slope_sign)
--			temp2 = temp1 * 100 / (1534 + o_slope * 10);
--		else
--			temp2 = temp1 * 100 / (1534 - o_slope * 10);
-+		temp2 = temp1 * 100 / o_slope;
- 
- 		svsb->bts = (temp0 + temp2 - 250) * 4 / 10;
- 	}
--- 
-2.18.0
+> that the first reg should also be the lowest address ?
+
+I never heard such requirement, although it would be logical choice. In
+this case your solution is to use the higher address as unit address.
+apq8084, msm8226 and maybe more already do it.
+
+You can also look at this that HC was made as the main IO address of a
+device (if one can call something "main" here), thus it should be
+expressed in unit address.
+
+Best regards,
+Krzysztof
 
