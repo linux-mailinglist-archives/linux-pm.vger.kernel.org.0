@@ -2,153 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ACA666508
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 21:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1843F66651E
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 21:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232785AbjAKUvh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Jan 2023 15:51:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54124 "EHLO
+        id S231307AbjAKUyQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Jan 2023 15:54:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjAKUvg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 15:51:36 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE063D9D7
-        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 12:51:34 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id g13so25387153lfv.7
-        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 12:51:34 -0800 (PST)
+        with ESMTP id S234534AbjAKUyE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 15:54:04 -0500
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076683FC86
+        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 12:54:03 -0800 (PST)
+Received: by mail-pj1-x102a.google.com with SMTP id z1-20020a17090a66c100b00226f05b9595so3458566pjl.0
+        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 12:54:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DZVlKUhfc1i9OxoybHYHtIAo0AKIGGWqWJ2gIpTCzIM=;
-        b=kosm8WJAxa8BwkKSfwwtXUZBKOjT5y21Dgn4xSAyNiKMjLtvJebhittim222BCFcDz
-         +PtlOyLO9W/2+Mb+X9B+wjU85DUUwuF4LbU8QCpKkV65w+Amx3YkO3E9eksvnRagUuP5
-         grlIxhZX8Tfily2HjjxLjkWz+xukRrh1Ai8XaxW5hzoxisjtqtIZ3UqSf5Ge4csjcpfc
-         bSpx9kGbwb+p5HFthnYHqDFbGt3d3eqshaI/Q4yybHvSEdUuPADE6GcMSYmNq8PXE0NH
-         7EVIhinKn4SIi3n0OL6ber55n5YD+zSKHl3DrGDj+k/xV5rmFn1k16x0t6Mjw5Zv1YzQ
-         y3oA==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=WwvpFWYIFHztPrRh/A739QSc3S2L4ur4AW317iNFW8A=;
+        b=gJyh7XXQzK49F70lkEkQy9/gQyL6ErkXGmWm2MdmryTLZSuuVBpmkCTUrc97ShaoMD
+         6OE4o0xC2hOLh3AQKhyLKESnnbEM8ihKNVtLQ2u8TQBFri53x3EC/HGgwU52Lj993tYG
+         hjhQly3235vp9YskbYpvaPdqw62W+W428rl07KhsxSUAV+JGTEgsyeNJcxzj0HFeO7sX
+         Yi+clGXEyoFsZJhQ32Xz0VDDGgSBbtnN3/DVh4fmYkNkrCBaLLuzBWI4xDkqPKckZLzk
+         5PwuRBpYzPvgoHvSYnCZcb+E6rtwVMYnILZ/2QsOehQzKb4Uw2UbUDHD588zdqvKtUvd
+         pb5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DZVlKUhfc1i9OxoybHYHtIAo0AKIGGWqWJ2gIpTCzIM=;
-        b=EJGoiEl8r0sX16FRPqS+puseWa57s6idM9QPPEeMz7YQrojTfX1foBQbAeEcL0Lzpb
-         VRmBTj0dLFZKUCLHtUX1wBQGZc1ULSHhpFDFpibMl9H5P5iwkyqplUATkAkYANbQUuqn
-         aCBBZyUei/dzY7TiTfS4Qkz1noK2y3webin8D6mx37BuuG5llp5fz1UGeagsDg2nL8vU
-         32epTLi7lM0u5gPyefeH/LdQij9qbakZSBDJqA5ZfXnMDFkrZY5AQ7bBqR3VKovWwm0j
-         6y5OsohacCNAmKpkPtAxgE7aotZIuj8x//myQzke7Ppm1/bJKe2Tig02zGjjgmv6swJo
-         x77w==
-X-Gm-Message-State: AFqh2krVJN8tQgOTrTGqZCfsIT9oovfZvx8A0qa9B3AUFzPjvOjC+ygJ
-        hnem/KYJJnPXjmGr0HpgnFzbZA==
-X-Google-Smtp-Source: AMrXdXtL5bdHP+x3aZHb+F3kZF22VcBLLNZjyCGBmsJj4EEn23qL9UCqWMZuOG9S4FRGVBOZppIAKw==
-X-Received: by 2002:a19:f514:0:b0:4b5:61e8:8934 with SMTP id j20-20020a19f514000000b004b561e88934mr18782486lfb.64.1673470292525;
-        Wed, 11 Jan 2023 12:51:32 -0800 (PST)
-Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id q11-20020a056512210b00b004cc9042c9cfsm928888lfr.158.2023.01.11.12.51.30
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WwvpFWYIFHztPrRh/A739QSc3S2L4ur4AW317iNFW8A=;
+        b=7TSkxi4ePQosu8+tQr6Iy7YwaI32BY4zyu6WT0nFYrbuuqwT0LbDtvztEjWekaSnAZ
+         96nGRwzFM2xOTxIwq/pb/F/R+OZaGtM31d5ZohHNUn4y2GFgS1pCnZGePBkTVLGftPB8
+         zCWKwwteXvEAzRL5E8ytEx8bjD0ejiQ8T4WHq+/TcBfy6uxdq9wY3SjejgLCsXjE3IeX
+         RnrKgH1bcKTMHhW/e11gZdZnv0bjgvrxe9JY/XjghOQqIJ06n8SuiKOaHPMYgTIVYl2I
+         OfWqA9JPvXhwNiAAldhEg/gqya+E3Qk7Hablyq2wzPe4pLDF/dvqvSisEXq6ZDAHXdPI
+         4OMg==
+X-Gm-Message-State: AFqh2koVhj4G1R4ai8VAu/METnlclN7Rs1Kl6li33tJkuWSkDYHvQqt/
+        tnpezJDZGAZ41/Pw1AIeQioTWg==
+X-Google-Smtp-Source: AMrXdXtrGAZmU6o1gcfng+RU79YOwlPLjexc22+V7bIZ8VClJaFhzYSUBDkkz/UlT3Er+c0Spd9c6g==
+X-Received: by 2002:a05:6a20:5490:b0:9d:efbf:48be with SMTP id i16-20020a056a20549000b0009defbf48bemr106327341pzk.2.1673470442551;
+        Wed, 11 Jan 2023 12:54:02 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id a4-20020a63e844000000b004b6c3d7aa21sm1904922pgk.8.2023.01.11.12.54.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 12:51:31 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] cpufreq: qcom-hw: Ensure only freq-domain regs are counted in num_domains
-Date:   Wed, 11 Jan 2023 21:51:25 +0100
-Message-Id: <20230111205125.1860858-2-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
-References: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
+        Wed, 11 Jan 2023 12:54:02 -0800 (PST)
+Message-ID: <63bf21ea.630a0220.c177f.3692@mx.google.com>
+Date:   Wed, 11 Jan 2023 12:54:02 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.2-rc3-79-g837dc62247d5
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.2-rc3-79-g837dc62247d5)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-In preparation for CPRh-aware OSM programming, change the probe
-function so that we determine the number of frequency domains by
-counting the number of reg-names entries that begin with
-"freq-domain", as the aforementioned changes require introduction
-of non-freq-domain register spaces.
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc3-79-g83=
+7dc62247d5)
 
-Fixes: 1a6a8b0080b0 ("cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2")
-Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+2-rc3-79-g837dc62247d5/
+
+Tree: pm
+Branch: testing
+Git Describe: v6.2-rc3-79-g837dc62247d5
+Git Commit: 837dc62247d5e50a0724af2001f070962300c87e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
+
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++---------
- 1 file changed, 24 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 9505a812d6a1..89d5ed267399 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -651,8 +651,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device_node *soc_node;
- 	struct device *cpu_dev;
-+	const char *reg_name;
- 	struct clk *clk;
--	int ret, i, num_domains, reg_sz;
-+	int ret, i, num_reg_names, num_domains = 0;
- 
- 	clk = clk_get(dev, "xo");
- 	if (IS_ERR(clk))
-@@ -684,19 +685,32 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
- 	if (!soc_node)
- 		return -EINVAL;
- 
--	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
--	if (ret)
-+	num_reg_names = of_property_count_strings(dev->of_node, "reg-names");
-+	if (num_reg_names <= 0) {
-+		ret = num_reg_names ? num_reg_names : -ENODATA;
- 		goto of_exit;
-+	}
- 
--	ret = of_property_read_u32(soc_node, "#size-cells", &i);
--	if (ret)
--		goto of_exit;
-+	for (i = 0; i < num_reg_names; i++) {
-+		ret = of_property_read_string_index(dev->of_node, "reg-names", i, &reg_name);
-+		if (ret < 0)
-+			goto of_exit;
- 
--	reg_sz += i;
-+		/*
-+		 * Check if the i-th reg is a freq-domain base, no need to add 1
-+		 * more byte for idx, as sizeof counts \0 whereas strlen does not.
-+		 */
-+		if (strlen(reg_name) == sizeof("freq-domain")) {
-+			/* Check if this reg-name begins with "freq-domain" */
-+			if (!strncmp(reg_name, "freq-domain", sizeof("freq-domain") - 1))
-+				num_domains++;
-+		}
-+	}
- 
--	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
--	if (num_domains <= 0)
--		return num_domains;
-+	if (num_domains <= 0) {
-+		ret = -EINVAL;
-+		goto of_exit;
-+	}
- 
- 	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
- 					 GFP_KERNEL);
--- 
-2.39.0
-
+For more info write to <info@kernelci.org>
