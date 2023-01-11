@@ -2,247 +2,218 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD0066577A
-	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 10:30:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F17D665925
+	for <lists+linux-pm@lfdr.de>; Wed, 11 Jan 2023 11:39:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjAKJa1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 11 Jan 2023 04:30:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57520 "EHLO
+        id S233028AbjAKKjC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 11 Jan 2023 05:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238368AbjAKJ1d (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 04:27:33 -0500
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEEBD9FFF
-        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 01:26:46 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id z5so13332621wrt.6
-        for <linux-pm@vger.kernel.org>; Wed, 11 Jan 2023 01:26:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ijaG+3xVaggm1nN+YcJuB4uQ1h3E1edhyS34My8RK9U=;
-        b=UcUYdgfVkx+/huAyFeMIWq8AKsuIT0lCwNpCXQwNVxsODhE41vFlTpK8oQKQu+Sk71
-         iqec1Emx+AcrhMNnDTtIWB5rcBjluIlmnp/5ELGY4JzgfMgtzVTjX/IhDWZQWKLJvRwQ
-         AkmD2kUOJSf2R1hHeC6YrhN9ft2+2uzev5DMoh8YvtozEZ99koeXsTHQ9TAuopT7a81/
-         cslX1oYfNQtWJcdUbGuiJc+JXsj8F98jvbT1XPHtD4G5WhWfdSx1RzoDtD1jFfDlueYM
-         UlZFGhZAGwP7sb9TmRgY1ItfLLF6WTX7Smatl/VzuPzXOpH8lZ2cwM0XK5P4x9SEm2AV
-         bgHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ijaG+3xVaggm1nN+YcJuB4uQ1h3E1edhyS34My8RK9U=;
-        b=NqB9F5XGcvTAN9BGWn2uvMwpu+I3sE0Ij7OHwHWCTvUG45fJLr3wPVJXGUoMDjk7yO
-         wi09152Y+QaLvKY2Awya61mEwKUksmD/D5Gawfpn3V/bdIp7MP+LMBipg0sOcyI1DHtS
-         pauYs9gMMkqisiUfId8A9WjR7dRaIMyBsUH1PNwZaBO1FcNtEfepZ98aMCrFhtmX1foj
-         WF4N9iMPBcRPb0zlu8gsYwX2/A6E44tl/Fre4NX2xtUAVm5aiZFrMdOrNQFJcoD1OBh0
-         QlQ8F2/mfdvwefxls7t4BZE58gN95andNV/k6nCgWbFAK9M1pUkAP4An+n8tY1OH6R7W
-         L1Fg==
-X-Gm-Message-State: AFqh2kq9uHNfvOCUNI5/AcOr8ZXSzLlQyb32BHQWTmK51gBAiuq69Tvy
-        4Z2u+w+r9XYOSm1DzSLdVDBWOA==
-X-Google-Smtp-Source: AMrXdXua/exNGec9rYPEz47RlWiBjQQnRKQ6BT4h4yhr8xgtTjbwLnicEOy45QbTWwqIwl9PFLzauA==
-X-Received: by 2002:adf:f107:0:b0:284:5050:5e4f with SMTP id r7-20020adff107000000b0028450505e4fmr33901248wro.33.1673429205337;
-        Wed, 11 Jan 2023 01:26:45 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d4010000000b002bbed1388a5sm7954177wrp.15.2023.01.11.01.26.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Jan 2023 01:26:45 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Odelu Kukatla <okukatla@codeaurora.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] dt-bindings: interconnect: split SM8450 to own schema
-Date:   Wed, 11 Jan 2023 10:26:37 +0100
-Message-Id: <20230111092637.17946-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230111092637.17946-1-krzysztof.kozlowski@linaro.org>
-References: <20230111092637.17946-1-krzysztof.kozlowski@linaro.org>
+        with ESMTP id S232326AbjAKKjB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 11 Jan 2023 05:39:01 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D135FAE;
+        Wed, 11 Jan 2023 02:38:59 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id d11bdf500a244b40; Wed, 11 Jan 2023 11:38:57 +0100
+Received: from kreacher.localnet (unknown [213.134.189.3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 94D47262179E;
+        Wed, 11 Jan 2023 11:38:56 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
+Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Mehta Sanju <Sanju.Mehta@amd.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: [PATCH v3] PCI / ACPI: PM: Take _S0W of the target bridge into account in acpi_pci_bridge_d3(()
+Date:   Wed, 11 Jan 2023 11:38:55 +0100
+Message-ID: <5659681.DvuYhMxLoT@kreacher>
+In-Reply-To: <8191575.T7Z3S40VBb@kreacher>
+References: <20221121221742.GA137841@bhelgaas> <8191575.T7Z3S40VBb@kreacher>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.189.3
+X-CLIENT-HOSTNAME: 213.134.189.3
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrleeggdduiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeelrdefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledrfedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepudefpdhrtghpthhtohephhgvlhhgrggrsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrihhordhlihhmohhntghivghllhhosegrmhgurdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgt
+ phhtthhopehlvghnsgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepsghhvghlghgrrghssehgohhoghhlvgdrtghomhdprhgtphhtthhopehmihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepufgrnhhjuhdrofgvhhhtrgesrghmugdrtghomhdprhgtphhtthhopehluhhkrghsseifuhhnnhgvrhdruggvpdhrtghpthhtoheprhgrfhgrvghlrdhjrdifhihsohgtkhhisehinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=13 Fuz1=13 Fuz2=13
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SM8450 comes with interconnects having and missing IO address space, and
-variable number of clocks, so split it from common file for easier
-maintenance and to fix warnings like:
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-  sm8450-hdk.dtb: interconnect-0: 'reg' is a required property
+It is generally questionable to allow a PCI bridge to go into D3 if
+it has _S0W returning D2 or a shallower power state, so modify
+acpi_pci_bridge_d3(() to always take the return value of _S0W for the
+target bridge into accout.  That is, make it return 'false' if _S0W
+returns D2 or a shallower power state for the target bridge regardless
+of its ancestor PCIe Root Port properties.  Of course, this also causes
+'false' to be returned if the PCIe Root Port itself is the target and
+its _S0W returns D2 or a shallower power state.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+However, still allow bridges without _S0W that are power-manageable via
+ACPI to enter D3 to retain the current code behavior in that case.
+
+Link: https://lore.kernel.org/linux-pci/20221031223356.32570-1-mario.limonciello@amd.com/
+Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- .../bindings/interconnect/qcom,rpmh.yaml      |  11 --
- .../interconnect/qcom,sm8450-rpmh.yaml        | 124 ++++++++++++++++++
- 2 files changed, 124 insertions(+), 11 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml
 
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-index 448829ecf6b6..335836a1b3c4 100644
---- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
-@@ -97,17 +97,6 @@ properties:
-       - qcom,sm8350-mmss-noc
-       - qcom,sm8350-compute-noc
-       - qcom,sm8350-system-noc
--      - qcom,sm8450-aggre1-noc
--      - qcom,sm8450-aggre2-noc
--      - qcom,sm8450-clk-virt
--      - qcom,sm8450-config-noc
--      - qcom,sm8450-gem-noc
--      - qcom,sm8450-lpass-ag-noc
--      - qcom,sm8450-mc-virt
--      - qcom,sm8450-mmss-noc
--      - qcom,sm8450-nsp-noc
--      - qcom,sm8450-pcie-anoc
--      - qcom,sm8450-system-noc
+v2 -> v3:
+   * Use rpadev for the ACPI companion of the Root Port in acpi_pci_bridge_d3(()
+     to avoid confusion.
+   * Make the function evaluating _S0W return the value produced by it or "unknown
+     state" on errors and let its caller deal with that value.
+
+---
+ drivers/acpi/device_pm.c |   19 +++++++++++++++++++
+ drivers/pci/pci-acpi.c   |   45 +++++++++++++++++++++++++++++++--------------
+ include/acpi/acpi_bus.h  |    1 +
+ 3 files changed, 51 insertions(+), 14 deletions(-)
+
+Index: linux-pm/drivers/pci/pci-acpi.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci-acpi.c
++++ linux-pm/drivers/pci/pci-acpi.c
+@@ -976,24 +976,41 @@ bool acpi_pci_power_manageable(struct pc
+ bool acpi_pci_bridge_d3(struct pci_dev *dev)
+ {
+ 	struct pci_dev *rpdev;
+-	struct acpi_device *adev;
+-	acpi_status status;
+-	unsigned long long state;
++	struct acpi_device *adev, *rpadev;
+ 	const union acpi_object *obj;
  
-   '#interconnect-cells': true
+ 	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
+ 		return false;
  
-diff --git a/Documentation/devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml
-new file mode 100644
-index 000000000000..3cff7e662255
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interconnect/qcom,sm8450-rpmh.yaml
-@@ -0,0 +1,124 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interconnect/qcom,sm8450-rpmh.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
+-	/* Assume D3 support if the bridge is power-manageable by ACPI. */
+-	if (acpi_pci_power_manageable(dev))
+-		return true;
++	adev = ACPI_COMPANION(&dev->dev);
++	if (adev) {
++		/*
++		 * If the bridge has _S0W, whether or not it can go into D3
++		 * depends on what is returned by that object.  In particular,
++		 * if the power state returned by _S0W is D2 or shallower,
++		 * entering D3 should not be allowed.
++		 */
++		if (acpi_dev_power_state_for_wake(adev) <= ACPI_STATE_D3_HOT)
++			return false;
 +
-+title: Qualcomm RPMh Network-On-Chip Interconnect on SM8450
++		/*
++		 * Otherwise, assume that the bridge can enter D3 so long as it
++		 * is power-manageable via ACPI.
++		 */
++		if (acpi_device_power_manageable(adev))
++			return true;
++	}
+ 
+ 	rpdev = pcie_find_root_port(dev);
+ 	if (!rpdev)
+ 		return false;
+ 
+-	adev = ACPI_COMPANION(&rpdev->dev);
+-	if (!adev)
++	if (rpdev == dev)
++		rpadev = adev;
++	else
++		rpadev = ACPI_COMPANION(&rpdev->dev);
 +
-+maintainers:
-+  - Bjorn Andersson <andersson@kernel.org>
-+  - Konrad Dybcio <konrad.dybcio@linaro.org>
++	if (!rpadev)
+ 		return false;
+ 
+ 	/*
+@@ -1001,15 +1018,15 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	 * doesn't supply a wakeup GPE via _PRW, it cannot signal hotplug
+ 	 * events from low-power states including D3hot and D3cold.
+ 	 */
+-	if (!adev->wakeup.flags.valid)
++	if (!rpadev->wakeup.flags.valid)
+ 		return false;
+ 
+ 	/*
+-	 * If the Root Port cannot wake itself from D3hot or D3cold, we
+-	 * can't use D3.
++	 * In the bridge-below-a-Root-Port case, evaluate _S0W for the Root Port
++	 * to verify whether or not it can signal wakeup from D3.
+ 	 */
+-	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
+-	if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
++	if (rpadev != adev &&
++	    acpi_dev_power_state_for_wake(rpadev) <= ACPI_STATE_D3_HOT)
+ 		return false;
+ 
+ 	/*
+@@ -1018,7 +1035,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
+ 	 * bridges *below* that Root Port can also signal hotplug events
+ 	 * while in D3.
+ 	 */
+-	if (!acpi_dev_get_property(adev, "HotPlugSupportInD3",
++	if (!acpi_dev_get_property(rpadev, "HotPlugSupportInD3",
+ 				   ACPI_TYPE_INTEGER, &obj) &&
+ 	    obj->integer.value == 1)
+ 		return true;
+Index: linux-pm/drivers/acpi/device_pm.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/device_pm.c
++++ linux-pm/drivers/acpi/device_pm.c
+@@ -484,6 +484,25 @@ void acpi_dev_power_up_children_with_adr
+ 	acpi_dev_for_each_child(adev, acpi_power_up_if_adr_present, NULL);
+ }
+ 
++/**
++ * acpi_dev_power_state_for_wake - Deepest power state for wakeup signaling
++ * @adev: ACPI companion of the target device.
++ *
++ * Evaluate _S0W for @adev and return the value produced by it or return
++ * ACPI_STATE_UNKNOWN on errors (including _S0W not present).
++ */
++u8 acpi_dev_power_state_for_wake(struct acpi_device *adev)
++{
++	unsigned long long state;
++	acpi_status status;
 +
-+description: |
-+  RPMh interconnect providers support system bandwidth requirements through
-+  RPMh hardware accelerators known as Bus Clock Manager (BCM).
++	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
++	if (ACPI_FAILURE(status))
++		return ACPI_STATE_UNKNOWN;
 +
-+  See also:: include/dt-bindings/interconnect/qcom,sm8450.h
++	return state;
++}
 +
-+properties:
-+  compatible:
-+    enum:
-+      - qcom,sm8450-aggre1-noc
-+      - qcom,sm8450-aggre2-noc
-+      - qcom,sm8450-clk-virt
-+      - qcom,sm8450-config-noc
-+      - qcom,sm8450-gem-noc
-+      - qcom,sm8450-lpass-ag-noc
-+      - qcom,sm8450-mc-virt
-+      - qcom,sm8450-mmss-noc
-+      - qcom,sm8450-nsp-noc
-+      - qcom,sm8450-pcie-anoc
-+      - qcom,sm8450-system-noc
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    minItems: 1
-+    maxItems: 4
-+
-+required:
-+  - compatible
-+
-+allOf:
-+  - $ref: qcom,rpmh-common.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8450-clk-virt
-+              - qcom,sm8450-mc-virt
-+    then:
-+      properties:
-+        reg: false
-+    else:
-+      required:
-+        - reg
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8450-aggre1-noc
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: aggre UFS PHY AXI clock
-+            - description: aggre USB3 PRIM AXI clock
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8450-aggre2-noc
-+    then:
-+      properties:
-+        clocks:
-+          items:
-+            - description: aggre-NOC PCIe 0 AXI clock
-+            - description: aggre-NOC PCIe 1 AXI clock
-+            - description: aggre UFS PHY AXI clock
-+            - description: RPMH CC IPA clock
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm8450-aggre1-noc
-+              - qcom,sm8450-aggre2-noc
-+    then:
-+      required:
-+        - clocks
-+    else:
-+      properties:
-+        clocks: false
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/qcom,gcc-sm8450.h>
-+    #include <dt-bindings/clock/qcom,rpmh.h>
-+
-+    interconnect-0 {
-+        compatible = "qcom,sm8450-clk-virt";
-+        #interconnect-cells = <2>;
-+        qcom,bcm-voters = <&apps_bcm_voter>;
-+    };
-+
-+    interconnect@1700000 {
-+        compatible = "qcom,sm8450-aggre2-noc";
-+        reg = <0x01700000 0x31080>;
-+        #interconnect-cells = <2>;
-+        qcom,bcm-voters = <&apps_bcm_voter>;
-+        clocks = <&gcc GCC_AGGRE_NOC_PCIE_0_AXI_CLK>,
-+                 <&gcc GCC_AGGRE_NOC_PCIE_1_AXI_CLK>,
-+                 <&gcc GCC_AGGRE_UFS_PHY_AXI_CLK>,
-+                 <&rpmhcc RPMH_IPA_CLK>;
-+    };
--- 
-2.34.1
+ #ifdef CONFIG_PM
+ static DEFINE_MUTEX(acpi_pm_notifier_lock);
+ static DEFINE_MUTEX(acpi_pm_notifier_install_lock);
+Index: linux-pm/include/acpi/acpi_bus.h
+===================================================================
+--- linux-pm.orig/include/acpi/acpi_bus.h
++++ linux-pm/include/acpi/acpi_bus.h
+@@ -533,6 +533,7 @@ int acpi_bus_update_power(acpi_handle ha
+ int acpi_device_update_power(struct acpi_device *device, int *state_p);
+ bool acpi_bus_power_manageable(acpi_handle handle);
+ void acpi_dev_power_up_children_with_adr(struct acpi_device *adev);
++u8 acpi_dev_power_state_for_wake(struct acpi_device *adev);
+ int acpi_device_power_add_dependent(struct acpi_device *adev,
+ 				    struct device *dev);
+ void acpi_device_power_remove_dependent(struct acpi_device *adev,
+
+
 
