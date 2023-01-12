@@ -2,59 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6431667122
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A457B667129
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236600AbjALLmo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 06:42:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52206 "EHLO
+        id S231439AbjALLoi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 06:44:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236413AbjALLlf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 06:41:35 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8871B32273
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:32:23 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id l22so14283694eja.12
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:32:23 -0800 (PST)
+        with ESMTP id S232768AbjALLn2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 06:43:28 -0500
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A9B5006D
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:34:40 -0800 (PST)
+Received: by mail-ed1-x52c.google.com with SMTP id v30so26411692edb.9
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:34:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=x0gSaQMG1ZEFcejTq7nLHyz4oYLVH4s87HrXZ9feFZw=;
-        b=MxATrjpAReX++o2TYHHWOfICbw35vKWQ+92xVH35B4uAi4k3xpysWiDmXJEqF8hNYP
-         K98P+1UPTVgUwELW/eHrcWQvuK5PopluglhhrXaGpKhlfOg5BTT7FMX9kkfzrSzMnPiV
-         qJcHkM/NU+syr++OnBpDhLWYIcAP3+OBFa6DaAcmmuBDAOGLzdpIpi3BivMqtxc6yyac
-         tzpUKrOAgff7npw/YqJ5823aPvKMC8ZPZfYmTzjBd/jI9V1zSn9QVGP524sNDJMH1gC9
-         PLJqLz2SyVGQo0CUnke6+hAFlz6fVai2u5qVdiC/njfVCBmc01WrKvZLZvvpG0kjeE4Y
-         AK8w==
+        bh=NPppTKcTJ8osAB1279QFcRRpcaOPzuC1Irm/XHV91xY=;
+        b=nhy1MtVbKfauFFS3BCGLF7FnbflcNjW2sYGIUXqKeSwmc884VZmYAIaidQikvPoP0C
+         Giv5KKFQN1nRKP8a/VRC/S+K1XNFW8VZ/aHF1sfownzPT+GHr4wdIsqNieuEgZvNAesE
+         UY2vfXdMQxbvwC8eVEkUcuA7+zfVihSbqvh/4LFVoEIgmFbF7H5AFCqmUxg+LNTLOTjf
+         zmgJus8v3RTAel2iPynBI0r+TGT5qyyKVOc9bsF25aRkzzBGIziT9qUA1okUGK84fDju
+         bcQ8JuqCC6hC549gXJ4z6fGA7n+xwHyNI4YoAXat4g4IqaOH7tJFTIarLg6g/fFA3F5V
+         HQ4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x0gSaQMG1ZEFcejTq7nLHyz4oYLVH4s87HrXZ9feFZw=;
-        b=puRamuW6rd5mzUHYEHgG+Gos5VpQZIb5dwyVmQlU35Rn8q0j2P3+ZWaPA0WyuVN6Mk
-         ep1SkmYJ689e6K+bzNhEYLvZuLGG79dmvcr1YjE8NNbd7qfEu6K5v0hTKngutBdon+AB
-         9uyCSX9F0pFSQ/i0UryGF9ijMiMatyepx6fjev1s27YPCpTB0N0dFpSiFjpj8Hqov8SI
-         JWt3xNDh3lTPGkM50dtojNAeILBpx4/hhgQ3jgasWRbI/yMeyIuo65PV1AARpwXCHIX6
-         i/1YtYasNxCeSYE9wxrtf4Hl/WtKrI4xVbimWGBy8FiRSoAtTPlStMFhMKgi1vrse9qK
-         4eHQ==
-X-Gm-Message-State: AFqh2krXBNL9fa3/bc3NZ5LIpea4yEw/Wp8s+zEQVPQNGidYZHoHMIQd
-        WafjU3LPzRVeZg2aqUqzyn0cuQ==
-X-Google-Smtp-Source: AMrXdXt4Icsn6J2EIf5YR6zEEyxeLvlN8muBgDY7KHjKOXpXigEIGra9aZ16EDLnGrrB0D7ip4IWfg==
-X-Received: by 2002:a17:907:7f04:b0:7c0:a4e9:615b with SMTP id qf4-20020a1709077f0400b007c0a4e9615bmr81407577ejc.61.1673523142029;
-        Thu, 12 Jan 2023 03:32:22 -0800 (PST)
+        bh=NPppTKcTJ8osAB1279QFcRRpcaOPzuC1Irm/XHV91xY=;
+        b=qVWvsD+e681xoHKO55nI0U7HOXigvgkKqqbR8UQLtTgbDv629ZL6uWbINpXXICB61q
+         v7pfTfcTLRMG5rk0wO/ZIbyWnyonqWViVFJdUQrZITg8GIYgUe6InYZyx0K5i/KI+QA0
+         d8OA40A7JcPokNC/ye19igKX+zNkP+I/4meYdlDeEVtRy18fiNxNuVUkzBhNXkPXlnz2
+         Prl/VFDIpA/pkvZC7R0regBh3x9dK2yNqsR7u3Ox+7YAsSekN5UHFfwu+aQhLOP8WYHY
+         GO3U8FaMVWDnBmOGjwdn7JJ5CGPCs9enFAHdlg9N8fD3oeAdKXrXBYlInLejOQ75zEEK
+         l4aw==
+X-Gm-Message-State: AFqh2koNwtRKaUVusFvec+3fQgxzp/HKrNcjY4bDlW3u9zzMOytCJyHC
+        E0AAXZHhIe02xWw4cwKOQ+1U5w==
+X-Google-Smtp-Source: AMrXdXvWbW8IAmtnQmlSRkX+6gl0xQtW+r+xOr87zb6PQKvXJ8tr9zg5aJqowtBTnLas0xRFoSASbw==
+X-Received: by 2002:aa7:c393:0:b0:499:b604:4de6 with SMTP id k19-20020aa7c393000000b00499b6044de6mr11772008edq.25.1673523279003;
+        Thu, 12 Jan 2023 03:34:39 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ku12-20020a170907788c00b0084d4564c65fsm5153826ejc.42.2023.01.12.03.32.20
+        by smtp.gmail.com with ESMTPSA id d3-20020aa7d5c3000000b004835bd8dfe5sm7200389eds.35.2023.01.12.03.34.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 03:32:21 -0800 (PST)
-Message-ID: <428c9a9e-f5f3-661f-d3d1-19ca38a75336@linaro.org>
-Date:   Thu, 12 Jan 2023 12:32:19 +0100
+        Thu, 12 Jan 2023 03:34:38 -0800 (PST)
+Message-ID: <3d7c3a52-baa4-ce7b-e6d1-06a4d885d445@linaro.org>
+Date:   Thu, 12 Jan 2023 12:34:35 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v2 2/5] cpuidle: psci: Mark as PREEMPT_RT safe
+Subject: Re: [PATCH v2 3/5] cpuidle: psci: Do not suspend topology CPUs on
+ PREEMPT_RT
 Content-Language: en-US
 To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -70,73 +71,44 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Brian Masney <bmasney@redhat.com>,
         linux-rt-users@vger.kernel.org
 References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-3-krzysztof.kozlowski@linaro.org>
- <Y7/oO8s26SKU8eOz@linutronix.de>
+ <20221219151503.385816-4-krzysztof.kozlowski@linaro.org>
+ <Y7/qZNoXvp/I6h8s@linutronix.de>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y7/oO8s26SKU8eOz@linutronix.de>
+In-Reply-To: <Y7/qZNoXvp/I6h8s@linutronix.de>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/01/2023 12:00, Sebastian Andrzej Siewior wrote:
-> On 2022-12-19 16:15:00 [+0100], Krzysztof Kozlowski wrote:
->> The PSCI cpuidle power domain in power_off callback uses
->> __this_cpu_write() so it is PREEMPT_RT safe.  This allows to use it in
+On 12/01/2023 12:09, Sebastian Andrzej Siewior wrote:
+> On 2022-12-19 16:15:01 [+0100], Krzysztof Kozlowski wrote:
+>> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+>> index 57bc3e3ae391..9d971cc4b12b 100644
+>> --- a/drivers/cpuidle/cpuidle-psci.c
+>> +++ b/drivers/cpuidle/cpuidle-psci.c
+>> @@ -72,7 +72,7 @@ static int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
+>>  	ct_irq_enter_irqson();
+>>  	if (s2idle)
+>>  		dev_pm_genpd_suspend(pd_dev);
+>> -	else
+>> +	else if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+>>  		pm_runtime_put_sync_suspend(pd_dev);
 > 
-> Why does __this_cpu_write() matter here?
+> So based on the commit description you run into a sleeping lock in
+> pm_runtime_put_sync_suspend() while the CPU is in an IRQ-off region.
+> Why is it okay to skip it on PREEMPT_RT?
 
-I'll reword to "not using sleeping primitives nor spinlock_t"
-
-> 
->> Realtime kernels and solves errors like:
->>
->>   BUG: scheduling while atomic: swapper/2/0/0x00000002
->>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
->>   Call trace:
->>    dump_backtrace.part.0+0xe0/0xf0
->>    show_stack+0x18/0x40
->>    dump_stack_lvl+0x68/0x84
->>    dump_stack+0x18/0x34
->>    __schedule_bug+0x60/0x80
->>    __schedule+0x628/0x800
->>    schedule_rtlock+0x28/0x5c
->>    rtlock_slowlock_locked+0x360/0xd30
->>    rt_spin_lock+0x88/0xb0
->>    genpd_lock_nested_spin+0x1c/0x30
->>    genpd_power_off.part.0.isra.0+0x20c/0x2a0
->>    genpd_runtime_suspend+0x150/0x2bc
->>    __rpm_callback+0x48/0x170
->>    rpm_callback+0x6c/0x7c
->>    rpm_suspend+0x108/0x660
->>    __pm_runtime_suspend+0x4c/0x8c
->>    __psci_enter_domain_idle_state.constprop.0+0x54/0xe0
->>    psci_enter_domain_idle_state+0x18/0x2c
->>    cpuidle_enter_state+0x8c/0x4e0
->>    cpuidle_enter+0x38/0x50
->>    do_idle+0x248/0x2f0
->>    cpu_startup_entry+0x24/0x30
->>    secondary_start_kernel+0x130/0x154
->>    __secondary_switched+0xb0/0xb4
-> 
-> This is to a sleeping lock (spinlock_t) in an IRQ-off region which
-> starts in do_idle(). You could describe the problem and to solution you
-> aim for instead pasting a backtrace into the commit description and
-> adding a flow in the code.
-
-I'll extend the description.
-
-> 
-> I don't see how your commit description matches your change in code. One
-> might think "Oh. If I see this pattern, I need an irqsafe lock to fix
-> it".
-
+It is okay to skip it everywhere, you just don't get a suspended CPU.
+Why PREEMPT_RT is different here - having suspended CPU is a great way
+to have longer or even unpredictable (as it goes to firmware which is
+out of control of Linux) latencies.
 
 Best regards,
 Krzysztof
