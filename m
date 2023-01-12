@@ -2,221 +2,253 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033F266850B
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 22:07:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC4B466853F
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 22:24:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240902AbjALVHY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 16:07:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42058 "EHLO
+        id S240674AbjALVX7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 16:23:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232594AbjALVGs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 16:06:48 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 990954EC9F;
-        Thu, 12 Jan 2023 12:51:28 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id b7a161d816828b9a; Thu, 12 Jan 2023 21:51:26 +0100
-Received: from kreacher.localnet (unknown [213.134.163.115])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 84F53944A6E;
-        Thu, 12 Jan 2023 21:51:25 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org
-Cc:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Mehta Sanju <Sanju.Mehta@amd.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH v4] PCI / ACPI: PM: Take _S0W of the target bridge into account in acpi_pci_bridge_d3(()
-Date:   Thu, 12 Jan 2023 21:51:24 +0100
-Message-ID: <12155458.O9o76ZdvQC@kreacher>
-In-Reply-To: <8191575.T7Z3S40VBb@kreacher>
-References: <20221121221742.GA137841@bhelgaas> <8191575.T7Z3S40VBb@kreacher>
+        with ESMTP id S240143AbjALVX0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 16:23:26 -0500
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D8404E437;
+        Thu, 12 Jan 2023 13:03:26 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id j16so28590661edw.11;
+        Thu, 12 Jan 2023 13:03:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zj/N95Ji5ZdK8xc/oqVwzmf/fFqgkizzqKPRjzALu+4=;
+        b=gNhuYfMGeckVO2VOrMR+IG779XVf0WPmprZap+Y3k7nZjnurK24M3R2q7D/Bc9Ree1
+         tkXqOZAv4fHjPEaEi2PpBHmTxXzDLNQsBdkANciN6YrbNQSoq8Gp+uLFJGJpDkXpQqFP
+         Z/ZW22JZXI9M8cywB2lWKcuzcfYjmMqV6hdb+3E4MKy2FDaMZ3umZoilLJ8QZzGrbad5
+         G9ESjNtYwYWw17Yp+NoTt+u8oKnlhXcSECmfl7Fy01AUz7gdcf4ksE1sSI42Qf7VETPw
+         b341iF9DxT/j17BG7FwzfirIhNpjg7B4vUqjMJphJegaCv6vGyMfoWBDX55IdTKe3ZQd
+         +s9A==
+X-Gm-Message-State: AFqh2kp1MIja6w6Z3Uu6ud66CArCKJ3BoR4DGo0OmRh+uWvuJRg5BjPX
+        45orLmblitCEN6v/uQ6q15Hf/CA4tRUubS1Zpo9wZSNmdKo=
+X-Google-Smtp-Source: AMrXdXtTR2myoTxXVkai7xE8q8x4eOH3jG9d9vYPQfE3Bo4T48gZXYyqBFOioqchPE/jvGgGe2OOmYe+YaCThuZSNd4=
+X-Received: by 2002:a50:eb49:0:b0:46d:731c:2baf with SMTP id
+ z9-20020a50eb49000000b0046d731c2bafmr7780458edp.280.1673557404782; Thu, 12
+ Jan 2023 13:03:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
+ <20221129233419.4022830-4-srinivas.pandruvada@linux.intel.com>
+ <CAJZ5v0iPfFi9oS3D2=CvzdqZc+iZ7XUex8s_81-voVHYuU4Pvw@mail.gmail.com> <beda908814705a9e71f8241c787e5c53d2c7cda3.camel@linux.intel.com>
+In-Reply-To: <beda908814705a9e71f8241c787e5c53d2c7cda3.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 22:03:13 +0100
+Message-ID: <CAJZ5v0jmFLoPFTg9GLKt--iWThG4ezzWM7MH69=Q2BtCBP+Giw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] thermal/drivers/intel_powerclamp: Use powercap
+ idle-inject framework
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com, amitk@kernel.org,
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.115
-X-CLIENT-HOSTNAME: 213.134.163.115
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrleeigddugeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudeifedrudduheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrdduieefrdduudehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopedufedprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhptghisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrrhhiohdrlhhimhhonhgtihgvlhhlohesrghmugdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdho
- rhhgpdhrtghpthhtoheplhgvnhgssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopefurghnjhhurdfovghhthgrsegrmhgurdgtohhmpdhrtghpthhtoheplhhukhgrshesfihunhhnvghrrdguvgdprhgtphhtthhopehrrghfrggvlhdrjhdrfiihshhotghkihesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=13 Fuz1=13 Fuz2=13
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Jan 12, 2023 at 9:23 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Thu, 2023-01-12 at 19:32 +0100, Rafael J. Wysocki wrote:
+> > On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
+> > <srinivas.pandruvada@linux.intel.com> wrote:
+> > >
+> > > There are two idle injection implementation in the Linux kernel.
+> > > One
+> > > via intel_powerclamp and the other using powercap/idle_inject. Both
+> > > implementation end up in calling play_idle* function from a FIFO
+> > > priority thread. Both can't be used at the same time.
+> > >
+> > > Currently per core idle injection (cpuidle_cooling) is using
+> > > powercap/idle_inject, which is not used in platforms where
+> > > intel_powerclamp is used for system wide idle injection. So there
+> > > is
+> > > no conflict. But there are some use cases where per core idle
+> > > injection
+> > > is beneficial on the same system where system wide idle injection
+> > > is
+> > > also used via intel_powerclamp. To avoid conflict only one of the
+> > > idle
+> > > injection type must be in use at a time. This require a common
+> > > framework
+> > > which both per core and system wide idle injection can use.
+> > >
+> > > Here powercap/idle_inject can be used for both per-core and for
+> > > system
+> > > wide idle injection. This framework has a well defined interface
+> > > which allow registry for per-core or for all CPUs (system wide). If
+> > > particular CPU is already participating in idle injection, the call
+> > > to registry fails. Here the registry can be done when user space
+> > > changes the current cooling device state.
+> > >
+> > > Also one framework for idle injection is better as there is one
+> > > loop
+> > > calling play_idle*, instead of multiple for better maintenance.
+> > >
+> > > So, reuse powercap/idle_inject calls in intel_powerclamp. This
+> > > simplifies
+> > > the code as all per CPU kthreads which calls play_idle* can be
+> > > removed.
+> > >
+> > > The changes include:
+> > > - Remove unneeded include files
+> > > - Remove per CPU kthread workers: balancing_work and
+> > > idle_injection_work
+> > > - Reuse the compensation related code by moving from previous
+> > > worker
+> > > thread to idle_injection callbacks
+> > > - Adjust the idle_duration and runtime by using
+> > > powercap/idle_inject
+> > > interface
+> > > - Remove all variables, which are not required once
+> > > powercap/idle_inject
+> > > is used
+> > > - Add mutex to avoid race during removal of idle injection during
+> > > module
+> > > unload and user action to change idle inject percent
+> > > - Use READ_ONCE and WRITE_ONCE for data accessed from multiple CPUs
+> > >
+> > > Signed-off-by: Srinivas Pandruvada
+> > > <srinivas.pandruvada@linux.intel.com>
+> > > ---
+> > > v2:
+> > > - Use idle_inject_register_full instead of idle_inject_register
+> > > - Also fix dependency issue with POWERCAP config
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >
+> > >  drivers/thermal/intel/Kconfig            |   2 +
+> > >  drivers/thermal/intel/intel_powerclamp.c | 292 ++++++++++---------
+> > > ----
+> > >  2 files changed, 126 insertions(+), 168 deletions(-)
+> > >
+> > > diff --git a/drivers/thermal/intel/Kconfig
+> > > b/drivers/thermal/intel/Kconfig
+> > > index f0c845679250..6c2a95f41c81 100644
+> > > --- a/drivers/thermal/intel/Kconfig
+> > > +++ b/drivers/thermal/intel/Kconfig
+> > > @@ -3,6 +3,8 @@ config INTEL_POWERCLAMP
+> > >         tristate "Intel PowerClamp idle injection driver"
+> > >         depends on X86
+> > >         depends on CPU_SUP_INTEL
+> > > +       select POWERCAP
+> > > +       select IDLE_INJECT
+> > >         help
+> > >           Enable this to enable Intel PowerClamp idle injection
+> > > driver. This
+> > >           enforce idle time which results in more package C-state
+> > > residency. The
+> > > diff --git a/drivers/thermal/intel/intel_powerclamp.c
+> > > b/drivers/thermal/intel/intel_powerclamp.c
+> > > index b80e25ec1261..3f2b20ae8f68 100644
+> > > --- a/drivers/thermal/intel/intel_powerclamp.c
+> > > +++ b/drivers/thermal/intel/intel_powerclamp.c
+> > > @@ -2,7 +2,7 @@
+> > >  /*
+> > >   * intel_powerclamp.c - package c-state idle injection
+> > >   *
+> > > - * Copyright (c) 2012, Intel Corporation.
+> > > + * Copyright (c) 2022, Intel Corporation.
+> >
+> > Nit: I would retain the original year of introduction, so 2012 -
+> > 2022.
+> OK
+>
+> >
+> > >   *
+> > >
+>
+> [...]
+>
+> > > +
+> > > +static int idle_inject_begin(unsigned int cpu)
+> >
+> > So this would be the ->prepare() callback to be invoked on each CPU
+> > from idle_inject_fn() IIUC.
+> >
+> Yes
+>
+> > >  {
+> > > -       struct powerclamp_worker_data *w_data =
+> > > per_cpu_ptr(worker_data, cpu);
+> > > -       struct kthread_worker *worker;
+> > > +       /*
+> > > +        * only elected controlling cpu can collect stats and
+> > > update
+> > > +        * control parameters.
+> > > +        */
+> > > +       if (cpu == control_cpu) {
+> > > +               bool update = READ_ONCE(target_ratio_updated);
+> > > +
+> > > +               if (!(powerclamp_data.count %
+> > > powerclamp_data.window_size_now)) {
+> > > +                       bool skip =
+> > > powerclamp_adjust_controls(powerclamp_data.target_ratio,
+> > > +
+> > > powerclamp_data.guard,
+> > > +
+> > > powerclamp_data.window_size_now);
+> > > +                       WRITE_ONCE(should_skip, skip);
+> > > +                       update = true;
+> > > +               }
+> > >
+> > > -       worker = kthread_create_worker_on_cpu(cpu, 0,
+> > > "kidle_inj/%ld", cpu);
+> > > -       if (IS_ERR(worker))
+> > > -               return;
+> > > +               if (update) {
+> > > +                       unsigned int runtime;
+> > > +
+> > > +                       runtime = get_run_time();
+> > > +                       idle_inject_set_duration(ii_dev, runtime,
+> > > duration);
+> > > +                       WRITE_ONCE(target_ratio_updated, false);
+> > > +               }
+> > > +               powerclamp_data.count++;
+> > > +       }
+> > > +
+> > > +       if (READ_ONCE(should_skip))
+> > > +               return -EAGAIN;
+> >
+> > This has a bit of a synchronization issue, because the control CPU is
+> > not guaranteed to run this code before any other CPUs in the given
+> > cycle, so at least some of them may see a stale value of should_skip
+> > and they will still inject idle in this cycle.  Or else, they may
+> > skip
+> > idle injection when it should be done.
+> This is correct observation. This is true in in even in current
+> implementation. The per thread timer in the existing implementation has
+> this sync issue. So I tried to just mimic current implementation as is.
 
-It is generally questionable to allow a PCI bridge to go into D3 if
-it has _S0W returning D2 or a shallower power state, so modify
-acpi_pci_bridge_d3(() to always take the return value of _S0W for the
-target bridge into accout.  That is, make it return 'false' if _S0W
-returns D2 or a shallower power state for the target bridge regardless
-of its ancestor PCIe Root Port properties.  Of course, this also causes
-'false' to be returned if the PCIe Root Port itself is the target and
-its _S0W returns D2 or a shallower power state.
+I see, but I don't think that the new implementation has to be bug
+compatible with the old one.
 
-However, still allow bridges without _S0W that are power-manageable via
-ACPI to enter D3 to retain the current code behavior in that case.
+> >
+> > I think that it would be better to run the callback from
+> > idle_inject_timer_fn() where it would decide whether or not to call
+> > idle_inject_wakeup(), in which case the control CPU would not be
+> > needed any more (which would be a plus), because the "control" could
+> > be done by the CPU running the timer function, whichever it is.
+> >
+> > Does this sound viable?
+>
+> Yes it is. In this case prepare() callback from idle_inject core is not
+> per CPU, but per device.
 
-Link: https://lore.kernel.org/linux-pci/20221031223356.32570-1-mario.limonciello@amd.com/
-Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+Right.
 
-v3 -> v4:
-   * Use ACPI_STATE_D2 in the checks in acpi_pci_bridge_d3().
-
-v2 -> v3:
-   * Use rpadev for the ACPI companion of the Root Port in acpi_pci_bridge_d3(()
-     to avoid confusion.
-   * Make the function evaluating _S0W return the value produced by it or "unknown
-     state" on errors and let its caller deal with that value.
-
----
- drivers/acpi/device_pm.c |   19 +++++++++++++++++++
- drivers/pci/pci-acpi.c   |   45 +++++++++++++++++++++++++++++++--------------
- include/acpi/acpi_bus.h  |    1 +
- 3 files changed, 51 insertions(+), 14 deletions(-)
-
-Index: linux-pm/drivers/pci/pci-acpi.c
-===================================================================
---- linux-pm.orig/drivers/pci/pci-acpi.c
-+++ linux-pm/drivers/pci/pci-acpi.c
-@@ -976,24 +976,41 @@ bool acpi_pci_power_manageable(struct pc
- bool acpi_pci_bridge_d3(struct pci_dev *dev)
- {
- 	struct pci_dev *rpdev;
--	struct acpi_device *adev;
--	acpi_status status;
--	unsigned long long state;
-+	struct acpi_device *adev, *rpadev;
- 	const union acpi_object *obj;
- 
- 	if (acpi_pci_disabled || !dev->is_hotplug_bridge)
- 		return false;
- 
--	/* Assume D3 support if the bridge is power-manageable by ACPI. */
--	if (acpi_pci_power_manageable(dev))
--		return true;
-+	adev = ACPI_COMPANION(&dev->dev);
-+	if (adev) {
-+		/*
-+		 * If the bridge has _S0W, whether or not it can go into D3
-+		 * depends on what is returned by that object.  In particular,
-+		 * if the power state returned by _S0W is D2 or shallower,
-+		 * entering D3 should not be allowed.
-+		 */
-+		if (acpi_dev_power_state_for_wake(adev) <= ACPI_STATE_D2)
-+			return false;
-+
-+		/*
-+		 * Otherwise, assume that the bridge can enter D3 so long as it
-+		 * is power-manageable via ACPI.
-+		 */
-+		if (acpi_device_power_manageable(adev))
-+			return true;
-+	}
- 
- 	rpdev = pcie_find_root_port(dev);
- 	if (!rpdev)
- 		return false;
- 
--	adev = ACPI_COMPANION(&rpdev->dev);
--	if (!adev)
-+	if (rpdev == dev)
-+		rpadev = adev;
-+	else
-+		rpadev = ACPI_COMPANION(&rpdev->dev);
-+
-+	if (!rpadev)
- 		return false;
- 
- 	/*
-@@ -1001,15 +1018,15 @@ bool acpi_pci_bridge_d3(struct pci_dev *
- 	 * doesn't supply a wakeup GPE via _PRW, it cannot signal hotplug
- 	 * events from low-power states including D3hot and D3cold.
- 	 */
--	if (!adev->wakeup.flags.valid)
-+	if (!rpadev->wakeup.flags.valid)
- 		return false;
- 
- 	/*
--	 * If the Root Port cannot wake itself from D3hot or D3cold, we
--	 * can't use D3.
-+	 * In the bridge-below-a-Root-Port case, evaluate _S0W for the Root Port
-+	 * to verify whether or not it can signal wakeup from D3.
- 	 */
--	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
--	if (ACPI_SUCCESS(status) && state < ACPI_STATE_D3_HOT)
-+	if (rpadev != adev &&
-+	    acpi_dev_power_state_for_wake(rpadev) <= ACPI_STATE_D2)
- 		return false;
- 
- 	/*
-@@ -1018,7 +1035,7 @@ bool acpi_pci_bridge_d3(struct pci_dev *
- 	 * bridges *below* that Root Port can also signal hotplug events
- 	 * while in D3.
- 	 */
--	if (!acpi_dev_get_property(adev, "HotPlugSupportInD3",
-+	if (!acpi_dev_get_property(rpadev, "HotPlugSupportInD3",
- 				   ACPI_TYPE_INTEGER, &obj) &&
- 	    obj->integer.value == 1)
- 		return true;
-Index: linux-pm/drivers/acpi/device_pm.c
-===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -484,6 +484,25 @@ void acpi_dev_power_up_children_with_adr
- 	acpi_dev_for_each_child(adev, acpi_power_up_if_adr_present, NULL);
- }
- 
-+/**
-+ * acpi_dev_power_state_for_wake - Deepest power state for wakeup signaling
-+ * @adev: ACPI companion of the target device.
-+ *
-+ * Evaluate _S0W for @adev and return the value produced by it or return
-+ * ACPI_STATE_UNKNOWN on errors (including _S0W not present).
-+ */
-+u8 acpi_dev_power_state_for_wake(struct acpi_device *adev)
-+{
-+	unsigned long long state;
-+	acpi_status status;
-+
-+	status = acpi_evaluate_integer(adev->handle, "_S0W", NULL, &state);
-+	if (ACPI_FAILURE(status))
-+		return ACPI_STATE_UNKNOWN;
-+
-+	return state;
-+}
-+
- #ifdef CONFIG_PM
- static DEFINE_MUTEX(acpi_pm_notifier_lock);
- static DEFINE_MUTEX(acpi_pm_notifier_install_lock);
-Index: linux-pm/include/acpi/acpi_bus.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -533,6 +533,7 @@ int acpi_bus_update_power(acpi_handle ha
- int acpi_device_update_power(struct acpi_device *device, int *state_p);
- bool acpi_bus_power_manageable(acpi_handle handle);
- void acpi_dev_power_up_children_with_adr(struct acpi_device *adev);
-+u8 acpi_dev_power_state_for_wake(struct acpi_device *adev);
- int acpi_device_power_add_dependent(struct acpi_device *adev,
- 				    struct device *dev);
- void acpi_device_power_remove_dependent(struct acpi_device *adev,
-
-
-
+BTW, I also would call it "update" and make it return bool, so
+idle_inject_wakeup() would be called when it returned 'true'.
