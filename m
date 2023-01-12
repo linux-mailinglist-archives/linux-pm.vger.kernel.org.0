@@ -2,199 +2,119 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6922F66712D
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:47:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9304B667229
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 13:27:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231960AbjALLq5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 06:46:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57496 "EHLO
+        id S232553AbjALM1b (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 07:27:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjALLq0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 06:46:26 -0500
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A6C5BA3F
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:37:30 -0800 (PST)
-Received: by mail-ej1-x62a.google.com with SMTP id u9so44105945ejo.0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:37:30 -0800 (PST)
+        with ESMTP id S232010AbjALM13 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 07:27:29 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983F0BF78
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 04:27:27 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id az7so17921040wrb.5
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 04:27:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hXQ/SgOW9ZIz5YPVls2OSgh2a8mqb0cRkYRLLkLbVHI=;
-        b=uX4CGHSmu8BJWn04RKsyh8DbfwXi9VpEohOvGmvvEE2DZjYm7gO3ehgZujRagi2N8T
-         Fg+s2iMX/JLFPBnFtxDCUZQZlsrOc6+OvM8Y2vD60B4FfXZQTWcPKHNJEbUAb5d/oEDr
-         2XgyxpDm5qb6z441NicpOHTr8KNOLBO5zwfCfANgmQN60KEknw4qzzN6SsfY15Mqwrw9
-         6IyZJNSH4R2RSwjka4pIg/3sTBaoDcZ6M00tG44WtAO+nWSWunMKlgC5jxq10D+XuXxv
-         3U5Cm3IH140QagEVhbtEIbnaYS/0ywNZ/ShGG47XQ5NnF+Dx31aMIpLREa9qr0UkwYj+
-         3ldw==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q4xQw8oRzEZf6j1JjjiSzT91wT9Ia+zmbBNMEAe4Rho=;
+        b=Y8QkTUOrsDhczrnsucN0ok8RvJU3RKsxPN3Scx93YpjzCZFGuFhR3HVYZXDCTICozq
+         Il/uHl3DSp/1sZV5n3lstFc2DzrvuW4mEMiKk+uTKYvv0qGLn+vJ0LS/zgbe2AGW8o5M
+         GK7ewtehINNfFhwDmlIbpB3m80TpQuCmz2JWjV0EoBE0XR26cq1bkFUr1wmkmTi1DMJ+
+         xdzr5uQ3sFDzy1EivMdC7kGlAlPwQ5aTZc2k1rp0VKPdCc9q5tzTofBklJKgQ1C/AgfV
+         n2+yoYBvKfGcPPNpur32VBAjdr0yqoP9WoNYdv+076bZ0L5BIcgrljFi4BxeBUynKGYZ
+         HTYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXQ/SgOW9ZIz5YPVls2OSgh2a8mqb0cRkYRLLkLbVHI=;
-        b=joTSSc/OS0zFxl2cfYPlvLbgX7wzohHkxNhZ/tbrvUMx9CCasOqlmYfwZiaiV4Y3TS
-         ruSjol28mvWSRNQAdmxlUQojde7VGuK6eUX8sotiMSWuTTqKwqc/s/f3gOEIPQKj8zpw
-         LhB9b17pYSdZ86NejmBobmY2bRzRDJf/uQksfJwfv2RMWryWd/hw6uKvqCd1YH6h8uhg
-         keCQkoPhxippK9IOfCmTCzfcpC/OyNQ9o1q0oo6Jj3SBsrgXXeSrHPBXImaaNTiTZbna
-         Wp0If/QvfBHQ50On5dSjFBDL3Xbqlz/GYAsN5qroXcgp9nyRSO/vtsZ13lPEfXulfoQ2
-         lxbQ==
-X-Gm-Message-State: AFqh2koM38xhF2cWHepJCexFJswXl8XPzRV5FUBO9knmaHa6u6ClNcqZ
-        Yg1Wrx52DoyqOX3ynCux/F4Pyw==
-X-Google-Smtp-Source: AMrXdXtISiqCWRExHvPBfANuhyJGYIWCtdeYm0iF4V7TNOJs9R8iNDdaYn430QChTu9b2s5637tU/Q==
-X-Received: by 2002:a17:907:c28f:b0:83f:5f77:8ff9 with SMTP id tk15-20020a170907c28f00b0083f5f778ff9mr65293259ejc.12.1673523449252;
-        Thu, 12 Jan 2023 03:37:29 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id ku12-20020a170907788c00b0084d4564c65fsm5158059ejc.42.2023.01.12.03.37.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 03:37:28 -0800 (PST)
-Message-ID: <4562c5c8-e2bd-4ade-55df-dab07540ce19@linaro.org>
-Date:   Thu, 12 Jan 2023 12:37:26 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v2 5/5] PM: domains: Do not call
- device_pm_check_callbacks() when holding genpd_lock()
-Content-Language: en-US
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q4xQw8oRzEZf6j1JjjiSzT91wT9Ia+zmbBNMEAe4Rho=;
+        b=gpDHiCJVf8jWfmHSuU4tsHl3rrCrXzziVWLpnZVUWmGK5E6pnKm4/F1UFn/BwvXUmF
+         dro/FWicAZVuFyUmLgKbjmGZgz/RKbSfcDptN4A247503jvnRqO3K4Q6ob2OMh6YcN4x
+         /vWVRIAWwQhz77NyghnWXZhN35jMz4o3jyL+yTIj2tH3iWxh5+4qK0bvxRhZfBWU2JzX
+         1aNkL/YGtNrYOyrye4fWUJotbYaKPnkePxtlxmPqkjIEMm8QUgXa5De4WSd//b2J2+ez
+         dfIoQnSd0w3/1fz1OsK7wIAGgB6HAK41IcevmkPuj0aeqtKk/6wWvaev7Oc5Th+edeq+
+         o/XQ==
+X-Gm-Message-State: AFqh2kqdOdZSW9Rg7uWUmZi9Yb7kukZwMisYmVMG106hToOOgUYrN3Eb
+        fyH3cYZZrtWUWeUyLaB993SEwQ==
+X-Google-Smtp-Source: AMrXdXs+bSeX89Po94TSwdL81EnOCsC12PGKuloj4OtbBiXcUmLflMf/yuoxXlvGLDh55lylJ0HGfw==
+X-Received: by 2002:a05:6000:1a41:b0:24b:b74d:8012 with SMTP id t1-20020a0560001a4100b0024bb74d8012mr45902907wry.18.1673526446099;
+        Thu, 12 Jan 2023 04:27:26 -0800 (PST)
+Received: from airbuntu.lon.corp.google.com ([104.132.45.104])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05600c4e8b00b003d04e4ed873sm30132354wmq.22.2023.01.12.04.27.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 04:27:25 -0800 (PST)
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-6-krzysztof.kozlowski@linaro.org>
- <Y7/vdnD8qELX4A5m@linutronix.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y7/vdnD8qELX4A5m@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Lukasz Luba <lukasz.luba@arm.com>, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Qais Yousef <qyousef@layalina.io>
+Subject: [PATCH v3 0/2] Fixes for uclamp and capacity inversion detection
+Date:   Thu, 12 Jan 2023 12:27:06 +0000
+Message-Id: <20230112122708.330667-1-qyousef@layalina.io>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/01/2023 12:31, Sebastian Andrzej Siewior wrote:
-> On 2022-12-19 16:15:03 [+0100], Krzysztof Kozlowski wrote:
->> If PM domain on PREEMPT_RT is marked as GENPD_FLAG_RT_SAFE(), the
->> genpd_lock() will be a raw spin lock, thus device_pm_check_callbacks()
-> 
-> a raw_spinlock_t
-> 
->> must be called outside of the domain lock.
-> 
-> Right. First the sleeping lock, followed by the spinning locks. This is
-> covered in
-> 	Documentation/locking/locktypes.rst
-> 
-> at the end. 
+Patch 1 addresses a smatch warning reported by Dan Carpenter.
 
-I don't understand your comment. Do you expect me to change something?
+Patch 2 fixes a couple of issues reported by Dietmar in capacity inversion
+logic.
 
-> 
->> This solves on PREEMPT_RT:
-> Yes but
->>   [ BUG: Invalid wait context ]
-> 
-> This "Invalid wait context" should also trigger on !PREEMPT_RT with
-> CONFIG_PROVE_RAW_LOCK_NESTING.
+Patch 3 which was an RFC patch was dropped. The discussion has settled into
+this patch which is now treated separately from this series
 
-Could be, I just did not hit it.
+	https://lore.kernel.org/lkml/20221228165415.3436-1-vincent.guittot@linaro.org/
 
-> 
->>   6.1.0-rt5-00325-g8a5f56bcfcca #8 Tainted: G        W
->>   -----------------------------
->>   swapper/0/1 is trying to lock:
->>   ffff76e045dec9a0 (&dev->power.lock){+.+.}-{3:3}, at: device_pm_check_callbacks+0x20/0xf0
->>   other info that might help us debug this:
->>   context-{5:5}
->>   3 locks held by swapper/0/1:
->>    #0: ffff76e045deb8e8 (&dev->mutex){....}-{4:4}, at: __device_attach+0x38/0x1c0
->>    #1: ffffa92b81f825e0 (gpd_list_lock){+.+.}-{4:4}, at: __genpd_dev_pm_attach+0x7c/0x250
->>    #2: ffff76e04105c7a0 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x1c/0x30
->>   stack backtrace:
->>   CPU: 5 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
->>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
->>   Call trace:
->>    dump_backtrace.part.0+0xe0/0xf0
->>    show_stack+0x18/0x40
->>    dump_stack_lvl+0x8c/0xb8
->>    dump_stack+0x18/0x34
->>    __lock_acquire+0x938/0x2100
->>    lock_acquire.part.0+0x104/0x28c
->>    lock_acquire+0x68/0x84
->>    rt_spin_lock+0x40/0x100
->>    device_pm_check_callbacks+0x20/0xf0
->>    dev_pm_domain_set+0x54/0x64
->>    genpd_add_device+0x258/0x340
->>    __genpd_dev_pm_attach+0xa8/0x250
->>    genpd_dev_pm_attach_by_id+0xc4/0x190
->>    genpd_dev_pm_attach_by_name+0x3c/0x60
->>    dev_pm_domain_attach_by_name+0x20/0x30
->>    dt_idle_attach_cpu+0x24/0x90
->>    psci_cpuidle_probe+0x300/0x4b0
->>    platform_probe+0x68/0xe0
->>    really_probe+0xbc/0x2dc
->>    __driver_probe_device+0x78/0xe0
->>    driver_probe_device+0x3c/0x160
->>    __device_attach_driver+0xb8/0x140
->>    bus_for_each_drv+0x78/0xd0
->>    __device_attach+0xa8/0x1c0
->>    device_initial_probe+0x14/0x20
->>    bus_probe_device+0x9c/0xa4
->>    device_add+0x3b4/0x8dc
->>    platform_device_add+0x114/0x234
->>    platform_device_register_full+0x108/0x1a4
->>    psci_idle_init+0x6c/0xb0
->>    do_one_initcall+0x74/0x450
->>    kernel_init_freeable+0x2e0/0x350
->>    kernel_init+0x24/0x130
->>    ret_from_fork+0x10/0x20
-> 
-> I would prefer a description of the issue instead hacing this
-> backtrace.
 
-I'll extend the commit msg.
+Changes in v3:
 
-> 
->> Cc: Adrien Thierry <athierry@redhat.com>
->> Cc: Brian Masney <bmasney@redhat.com>
->> Cc: linux-rt-users@vger.kernel.org
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  drivers/base/power/domain.c | 6 +++++-
->>  1 file changed, 5 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
->> index 4dfce1d476f4..db499ba40497 100644
->> --- a/drivers/base/power/domain.c
->> +++ b/drivers/base/power/domain.c
->> @@ -1666,10 +1666,14 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
->>  	if (ret)
->>  		goto out;
->>  
->> +
->> +	/* PREEMPT_RT: Must be outside of genpd_lock */
-> 
-> Could this comment be rewritten if needed?
-> The callback, which acquires sleeping locks on PREEMPT_RT, can be moved
-> before genpd_lock() because it does not rely on this lock. It must be
-> moved because the latter may acquire spinning locks.
+	* Fix commit message in patch 2.
+	* Drop Patch 3
 
-Sure
+Changes in v2:
 
-Best regards,
-Krzysztof
+	* Patch1: Improve indentation as suggested by Dietmar
+	* Patch2: Make sure to hold rcu_read_lock() as we need it's not
+	  held in all paths.
+
+
+LINK v1:
+	* https://lore.kernel.org/lkml/20221127141742.1644023-1-qyousef@layalina.io/
+
+LINK v2:
+	Sent in-reply-to v1
+
+	* https://lore.kernel.org/lkml/20221208145108.452032-1-qyousef@layalina.io/
+	* https://lore.kernel.org/lkml/20221208145409.453308-1-qyousef@layalina.io/
+
+Qais Yousef (2):
+  sched/uclamp: Fix a uninitialized variable warnings
+  sched/fair: Fixes for capacity inversion detection
+
+ kernel/sched/fair.c | 48 +++++++++++++++++++++++++--------------------
+ 1 file changed, 27 insertions(+), 21 deletions(-)
+
+-- 
+2.25.1
 
