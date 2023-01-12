@@ -2,130 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6D1667D4D
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 19:03:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50745667DBC
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 19:18:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240202AbjALSDZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 13:03:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42142 "EHLO
+        id S235936AbjALSSP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 13:18:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240154AbjALSC3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 13:02:29 -0500
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DD755648;
-        Thu, 12 Jan 2023 09:25:16 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id az20so27375390ejc.1;
-        Thu, 12 Jan 2023 09:25:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nRAo6X3Gzu+d8rohxmVob5wOtGI7yz4wlOWRro7CXUA=;
-        b=gFKeHQ4wgG4hygkRVSzeRu0IwaITX4sdnPbQDt+LgJWqcdzCcogb8y4hx7xds8ncqJ
-         snrtzvVlxAkliyCeFUC5eNEzrHGXkGQj8XVkRhSSp/yhJr0LO+xMyAjMun3dBWniXxAY
-         zA88GHE2+fdhPL96RGgrQoJi0T7eUIEGJLUZ+dz+VikCjf7wHtiEDsPJQDPWGfPVX/Tt
-         +vj2WzitgysJ0thVR8n7vvguPrG73xFV4J11QFnE4dQ2zt8uwxPmYYXFV/mp/QsrLON0
-         7avXG4KYki0ZL93SqPKRNlpfYqORYqQnspNuD1Wvw4UwCDewAyTSyQYuIJh2g0Z47fat
-         2IJw==
-X-Gm-Message-State: AFqh2koXBDpkffC7JJ1ZEwHvB2CNcuzdYCpIksqOaY4IcZOOD/wbhDao
-        DK7guY1T7zfFlPnMNjxB/MQvAnJZ3YMFn8J7V1E=
-X-Google-Smtp-Source: AMrXdXsK8Tvqwl2au4/lOh3+aakXmuw3EHFLXbSEAFqucw4DdRf3FjdYtrCyRjiAp75YomeCO2m2YqYfXNZscUXXWxA=
-X-Received: by 2002:a17:907:29c3:b0:84d:4b8e:efc with SMTP id
- ev3-20020a17090729c300b0084d4b8e0efcmr1137894ejc.390.1673544315331; Thu, 12
- Jan 2023 09:25:15 -0800 (PST)
+        with ESMTP id S240439AbjALSRx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 13:17:53 -0500
+Received: from smtp4-g21.free.fr (smtp4-g21.free.fr [IPv6:2a01:e0c:1:1599::13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B9D7148A;
+        Thu, 12 Jan 2023 09:47:13 -0800 (PST)
+Received: from SOPL295.local (unknown [IPv6:2a02:8440:d20f:6de0:6125:d027:2017:9d97])
+        (Authenticated sender: robert.jarzmik@free.fr)
+        by smtp4-g21.free.fr (Postfix) with ESMTPSA id 0B0F519F59E;
+        Thu, 12 Jan 2023 18:46:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=free.fr;
+        s=smtp-20201208; t=1673545631;
+        bh=KRTPZlKd33p2jA5AfUXMRlfCbedKs4GMu6pgnM4y4Qo=;
+        h=References:From:To:Cc:Subject:Date:In-reply-to:From;
+        b=LctVqhCykYrI8EvXeqUmUdArGNK/b6sZcJ0gtvgPgfxfckye4plPdcS9NoAVKI7ya
+         +OuDsuuF1zEN2T6xCaKeWWVNYOB0hsY5QWeDseR4wMcwypp6ocReR+eShxR7Tn5nAZ
+         Ufw1bfs5KavS1JtsBALOpAasZvUcCYSVZBr5CRr/gIpWIYd1aDgoywyutwO3O20sH5
+         /0Nwd4W/cm8SSndULierf0N+0aujwJO0K/OH7wn8eJtMgEnMJffLWHTvy94+7kx3Ie
+         RDFaxi9Ee4NeCA6M3Qk5O/EZiFYqWMlnc3k/vIrnGVtjWeFF1dX/rXG9L9x5gqdwv/
+         qwjMqYBvKHKJA==
+References: <20230105134622.254560-1-arnd@kernel.org>
+ <20230105134622.254560-5-arnd@kernel.org> <m2sfglh02h.fsf@free.fr>
+ <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
+User-agent: mu4e 1.8.11; emacs 28.1
+From:   Robert Jarzmik <robert.jarzmik@free.fr>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Robert Jarzmik <robert.jarzmik@free.fr>,
+        Arnd Bergmann <arnd@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+        "linux-mmc @ vger . kernel . org" <linux-mmc@vger.kernel.org>
+Subject: Re: [PATCH 04/27] ARM: pxa: drop pxa310/pxa320/pxa93x support
+Date:   Thu, 12 Jan 2023 18:37:32 +0100
+In-reply-to: <2d085660-41a2-492c-a343-7df80d510a59@app.fastmail.com>
+Message-ID: <m2k01rhchf.fsf@free.fr>
 MIME-Version: 1.0
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com>
- <20221129233419.4022830-3-srinivas.pandruvada@linux.intel.com> <CAJZ5v0jSL3bbEHJLxpn_Liu4DcNeMFG=iQJA_AgophmtXpzMGQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jSL3bbEHJLxpn_Liu4DcNeMFG=iQJA_AgophmtXpzMGQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 18:25:04 +0100
-Message-ID: <CAJZ5v0gbNv-SgTEHpjiQEwk7qELg6EkByd-8en0=wZ=abFD2JA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] powercap: idle_inject: Add prepare/complete callbacks
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 3:53 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >
-> > The actual idle percentage can be less than the desired because of
-> > interrupts.
->
-> This is somewhat unclear.
->
-> > Since the objective for CPU Idle injection is for thermal
-> > control, there should be some way to compensate for lost idle percentage.
->
-> What does "lost idle percentage" mean here?
->
-> > Some architectures provide interface to get actual idle percent observed
-> > by the hardware. So, the idle percent can be adjusted using the hardware
-> > feedback. For example, Intel CPUs provides package idle counters, which
-> > is currently used by intel powerclamp driver to adjust idle time.
-> >
-> > The only way this can be done currently is by monitoring hardware idle
-> > percent from a different software thread. This can be avoided by adding
-> > callbacks.
-> >
-> > Add a capability to register a prepare and complete callback during idle
-> > inject registry. Add a new register function idle_inject_register_full()
-> > which also allows to register callbacks.
-> >
-> > If they are not NULL, then prepare callback is called before calling
-> > play_idle_precise() and complete callback is called after calling
-> > play_idle_precise().
-> >
-> > If prepare callback is present and returns non 0 value then
-> > play_idle_precise() is not called to avoid over compensation.
->
-> This mechanism isn't particularly straightforward, but maybe there's
-> no better way.
->
-> > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> > ---
-> > v2
-> > - Replace begin/end with prepare/complete
-> > - Add new interface idle_inject_register_full with callbacks
-> > - Update kernel doc
-> > - Update commit description
-> >
-> >  drivers/powercap/idle_inject.c | 62 +++++++++++++++++++++++++++++++---
-> >  include/linux/idle_inject.h    |  4 +++
-> >  2 files changed, 62 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-> > index dfa989182e71..f48e71501429 100644
-> > --- a/drivers/powercap/idle_inject.c
-> > +++ b/drivers/powercap/idle_inject.c
-> > @@ -63,13 +63,31 @@ struct idle_inject_thread {
-> >   * @idle_duration_us: duration of CPU idle time to inject
-> >   * @run_duration_us: duration of CPU run time to allow
-> >   * @latency_us: max allowed latency
-> > + * @prepare: Callback function which is called before calling
-> > + *             play_idle_precise()
-> > + * @complete: Callback function which is called after calling
-> > + *             play_idle_precise()
->
-> What about:
->
-> @prepare: Optional callback deciding whether or not to skip idle
-> injection in the given cycle.
-> @complete: Optional callback updating the state after idle injection.
 
-One more thing: ->complete() is not even used by powerclamp AFAICS, so
-I wouldn't add it at this time, because it isn't clear if it's going
-to be useful at all.
+"Arnd Bergmann" <arnd@arndb.de> writes:
+
+> Hi Robert,
+Hi Arnd,
+
+> Thanks for pointing this out, I thought that I had caught
+> all the missing dependencies ones after you pointed out
+> the AC97_BUS_NEW that I fixed in patch 14.
+Sorry I've not seen this one in my previous review.
+
+> From what I can tell, commit b5aaaa666a85 ("ARM: pxa: add
+> Kconfig dependencies for ATAGS based boards"), the
+> PXA310/PXA320 DT support became dead code because
+> MACH_PXA3XX_DT only selects CPU_PXA300, so if it worked
+> before that commit, it now needs CONFIG_UNUSED_BOARD_FILES
+> and CONFIG_EXPERT as well as enabling one of the legacy
+> board files with the corresponding chip support.
+>
+> If that's all you think is missing, I can add this
+> trivial patch as well and rework the series to not
+> drop code that depends on PXA310/PXA320:
+Yes, that would be great !
+
+> Can you have a look at the other patches to see if there
+> are more removed drivers or platform bits that are currently
+> dead code but are actually required?
+Yes, I've been through your whole serie and that's the
+last thing I have identified. I've read carefully all the
+patches now, and the whole serie looks good to me.
+
+So with this patch and keeping the clocks and cpufreq
+parts for pxa3*0, you can add everywhere my :
+
+Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
+
+Cheers.
+
+--
+Robert
