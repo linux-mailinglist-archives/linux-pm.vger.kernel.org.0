@@ -2,175 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F666705A
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21745667088
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:09:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236566AbjALLAD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 06:00:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57518 "EHLO
+        id S230273AbjALLI6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 06:08:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238117AbjALK7f (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 05:59:35 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E12B6342;
-        Thu, 12 Jan 2023 02:48:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673520534; x=1705056534;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jfh/hKghtPdW5Oes/WPXdp58HNBjb/t8ROv6s8KXR2g=;
-  b=LyZA8cnBhzZMpmlZCMZbVd+bWaHogzaYGlFfXHRaHs+BfU0AA746d05y
-   UmDWB0opatc340FqUAPMV6TlSzjs+a7VN9H/OwoYYzzhbVWZMc3y4v2UC
-   2iBZVNzcx0ILftB4mOomojNcRpG9c9Wuz+CPAxs6A+H6k5DqtnTbd8D4u
-   Ka/I23f9u/IrsSU/bbxtX2JTW5omzyhk+rT7Sy3NKvhh+j5bm/sipRdFy
-   oJ1WMjyGOs/PRpADX7iFiZw9rvGHSH/UvLWgr1QDzRdUWTm3gNpX1sfFw
-   Tr0Zdy2s78n8fpfmF44DO5XoAfU6S7bYvMwUppP05FEYH5xkk9CIh5UEb
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="307191981"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="307191981"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 02:48:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10586"; a="726253802"
-X-IronPort-AV: E=Sophos;i="5.96,319,1665471600"; 
-   d="scan'208";a="726253802"
-Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Jan 2023 02:48:50 -0800
-Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pFv8b-000A3c-1q;
-        Thu, 12 Jan 2023 10:48:49 +0000
-Date:   Thu, 12 Jan 2023 18:48:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 837dc62247d5e50a0724af2001f070962300c87e
-Message-ID: <63bfe586.t84X7VvLykMbUcZI%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S232083AbjALLIE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 06:08:04 -0500
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C264F48CE8;
+        Thu, 12 Jan 2023 03:00:14 -0800 (PST)
+Date:   Thu, 12 Jan 2023 12:00:11 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1673521213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l1QNHCIDJ7rojdgNnqA4mJe1cfCZkTQt32RrnCw+08k=;
+        b=lu/zi31dDgZlme4oCsT42jgjaLWwS35EFzK1BNuDLfE/ErYQvoC+EfLpwwsJhx6MrYWH3R
+        lTR/wGrdAwXluasLJR24Ww3NFcsobuUsC3qc+tz/vbOUaeq3gn0shnyJ0B6Nqh130sJoi1
+        QuD4oOD6Yw4rMipZgJaLY5VBKMfr7pd65FZ8ZprGzwtHZLbGBq37uDRNadkQee9ytauV2i
+        zlIwnWth7JVobRow1bJEmcf4aFn8pHuFzSRH1ZvbECYWUxD4sszzxEt88kfPD9r3YoiYxl
+        yil1kLeRuqiCcuhFwEg9YwtSwMkPHHSPNutdxQED6q1rrQM1mgLPgCJTmdfS9A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1673521213;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l1QNHCIDJ7rojdgNnqA4mJe1cfCZkTQt32RrnCw+08k=;
+        b=ksnBDcHqpunrEMuMJZuzFI2qNz87htcUDVk/44Hy+Ebt+cE0Eb+ZVDJ5+LzKk0mfjU2ink
+        nBgWmCLKQ9FBWeAg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] cpuidle: psci: Mark as PREEMPT_RT safe
+Message-ID: <Y7/oO8s26SKU8eOz@linutronix.de>
+References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
+ <20221219151503.385816-3-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221219151503.385816-3-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 837dc62247d5e50a0724af2001f070962300c87e  Merge branch 'pm-cpuidle' into linux-next
+On 2022-12-19 16:15:00 [+0100], Krzysztof Kozlowski wrote:
+> The PSCI cpuidle power domain in power_off callback uses
+> __this_cpu_write() so it is PREEMPT_RT safe.  This allows to use it in
 
-elapsed time: 831m
+Why does __this_cpu_write() matter here?
 
-configs tested: 93
-configs skipped: 2
+> Realtime kernels and solves errors like:
+> 
+>   BUG: scheduling while atomic: swapper/2/0/0x00000002
+>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+>   Call trace:
+>    dump_backtrace.part.0+0xe0/0xf0
+>    show_stack+0x18/0x40
+>    dump_stack_lvl+0x68/0x84
+>    dump_stack+0x18/0x34
+>    __schedule_bug+0x60/0x80
+>    __schedule+0x628/0x800
+>    schedule_rtlock+0x28/0x5c
+>    rtlock_slowlock_locked+0x360/0xd30
+>    rt_spin_lock+0x88/0xb0
+>    genpd_lock_nested_spin+0x1c/0x30
+>    genpd_power_off.part.0.isra.0+0x20c/0x2a0
+>    genpd_runtime_suspend+0x150/0x2bc
+>    __rpm_callback+0x48/0x170
+>    rpm_callback+0x6c/0x7c
+>    rpm_suspend+0x108/0x660
+>    __pm_runtime_suspend+0x4c/0x8c
+>    __psci_enter_domain_idle_state.constprop.0+0x54/0xe0
+>    psci_enter_domain_idle_state+0x18/0x2c
+>    cpuidle_enter_state+0x8c/0x4e0
+>    cpuidle_enter+0x38/0x50
+>    do_idle+0x248/0x2f0
+>    cpu_startup_entry+0x24/0x30
+>    secondary_start_kernel+0x130/0x154
+>    __secondary_switched+0xb0/0xb4
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+This is to a sleeping lock (spinlock_t) in an IRQ-off region which
+starts in do_idle(). You could describe the problem and to solution you
+aim for instead pasting a backtrace into the commit description and
+adding a flow in the code.
 
-gcc tested configs:
-i386                                defconfig
-x86_64                            allnoconfig
-x86_64                        randconfig-a015
-i386                          randconfig-a014
-i386                          randconfig-a012
-alpha                             allnoconfig
-i386                              allnoconfig
-arm                               allnoconfig
-arc                               allnoconfig
-i386                          randconfig-a016
-arc                  randconfig-r043-20230110
-s390                 randconfig-r044-20230110
-i386                             allyesconfig
-riscv                randconfig-r042-20230110
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                               rhel-8.3
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-syz
-x86_64                           rhel-8.3-bpf
-x86_64                         rhel-8.3-kunit
-ia64                             allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                    rhel-8.3-kselftests
-um                           x86_64_defconfig
-um                             i386_defconfig
-riscv                             allnoconfig
-s390                                defconfig
-s390                             allmodconfig
-arc                                 defconfig
-alpha                               defconfig
-s390                             allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-nios2                            allyesconfig
-nios2                               defconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-m68k                         amcore_defconfig
-arm                        multi_v7_defconfig
-sh                              ul2_defconfig
-m68k                             alldefconfig
-powerpc                 mpc85xx_cds_defconfig
-powerpc                    klondike_defconfig
-i386                          randconfig-c001
-arm                          gemini_defconfig
-powerpc                     tqm8548_defconfig
-sh                ecovec24-romimage_defconfig
-sparc                       sparc64_defconfig
-powerpc                      mgcoge_defconfig
-openrisc                 simple_smp_defconfig
-arm                          simpad_defconfig
-arm                           stm32_defconfig
-loongarch                 loongson3_defconfig
-sparc                               defconfig
-xtensa                           allyesconfig
-csky                                defconfig
-sparc                            allyesconfig
-x86_64                                  kexec
+I don't see how your commit description matches your change in code. One
+might think "Oh. If I see this pattern, I need an irqsafe lock to fix
+it".
 
-clang tested configs:
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-hexagon              randconfig-r041-20230110
-arm                  randconfig-r046-20230110
-hexagon              randconfig-r045-20230110
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-arm                         s5pv210_defconfig
-hexagon                          alldefconfig
-powerpc                     ksi8560_defconfig
-x86_64                          rhel-8.3-rust
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Sebastian
