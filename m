@@ -2,175 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 792C46679E7
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 16:53:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EF7667A11
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 16:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239515AbjALPxn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 10:53:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
+        id S240642AbjALP5m (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 10:57:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240130AbjALPxV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 10:53:21 -0500
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832C2DEA5
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 07:41:56 -0800 (PST)
-Received: by mail-lf1-x135.google.com with SMTP id m6so28988236lfj.11
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 07:41:55 -0800 (PST)
+        with ESMTP id S240328AbjALP4t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 10:56:49 -0500
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E00762CA
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 07:47:30 -0800 (PST)
+Received: by mail-wr1-x42e.google.com with SMTP id e3so9288471wru.13
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 07:47:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=VvVJkpynNn6IA1P//L3YcO7yOYdHOM5TGw7F2BW1HfI=;
-        b=mZWf1t9tcyeMA4GQXcr8qTcdv/+TqM/BqV5iKqOE4y36tTw81YCsd9DwsTWmqmATMc
-         AsCQwj+j4RhhGoFWCypPO6gwZe7gNrQ+rEJpsUwvo4v1+rQ5etZSLfo5zKUX1NN9adCa
-         K8PI0tEg+HxUEeMK6+eybaJ8n3GKQSkJd2cZ0YvkfW6eElvJmy91/yk96w71yp5AEKfT
-         onTtLLpRppF0eRpuoeD17TIapXgfjIVQs5MjULq63CuI3w0bdGuE9zNjqMVOmAf9ptCN
-         nrlkdfmWRWEZCy98bH9MP3G9uCXJ5AlYZO8s5TiFo7Mh2ppOWitQyNS0XBJ7fCScklwi
-         pqgg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rhfywHFYZng0Lm1GCbNe4P4vSb5tP1UVcI0mrPnEUgU=;
+        b=Zd4JSRk7z4qab9nUUWHRSjJo5CfzZIM6yZQ1CPXoBQsO/4XbWnThRqxWCIxA5NYNRd
+         FvXMbAm4ByoFuQZl1v272c7f9BklhmYzmpmCsg7Eis6NfqBdr19494ZGvui/2FAU6kqE
+         ljJs6irLOp7jTkEMbavBMUDsjA7y4M/g/4kYBGm7xKnmw9ktufDTK31Ihru9Iud16ExP
+         tq7V/9tl7bXa/6Ounpoz0JuXbbhiAXcOn/7lpqZRTgvJpsMLfN63Rf7jf2La7oT/BOJ7
+         o98lElvLzx4xu7sXUVorTGvZPhKTQSue3KBwEH/R/w4oj8ZMrFUC9QRtuRQd9wUSsImn
+         5psw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VvVJkpynNn6IA1P//L3YcO7yOYdHOM5TGw7F2BW1HfI=;
-        b=jKTK8WSOBH6YxuGfQmdIWIU+qJ5kh2+SBcngfk8ggHAKmpuPya3GEzynKUmvzCmQsI
-         1IbzCoonMrxERc0G7oSV4KsJguKxsInYM3BVoYiCpY8BekeO3Vb2QYEPESZ/aeYI6RfS
-         l/5vDcFVFhAbJuxvG/ffCjxGCTipEF7Vs/U86SpNHfn44ukZXjUJU76caRFvLoVIi2RK
-         sofYJA1b5NTs9Uohtz47aJ5n/hBxHjYOKRaL82BH0eLx8aUlNDSqElzjF4ExT7I56dPf
-         sGQcTqqmDIOXhMSn5gaBfhMk0PBfGX6x1ereZ5ub2QpSekQaFf3DrcqSWcZDPIhQ2T7f
-         wnOA==
-X-Gm-Message-State: AFqh2kqhsaWA1cHE2R8ZAtonO2/38bqmSGsEzfyxSBLwnY5wbeJ3YSHW
-        F5hLIuVL+uC/0yq5pJc5Fx3OQA==
-X-Google-Smtp-Source: AMrXdXu+pSZjQKg6YWKPpwwT1Cd28e2/W6qw8KqQ+mgP9Ohv6zo0OgYdcKPEM9ehempAL9hiEPw07g==
-X-Received: by 2002:a05:6512:2213:b0:4bb:7028:f6b6 with SMTP id h19-20020a056512221300b004bb7028f6b6mr25214095lfu.49.1673538114309;
-        Thu, 12 Jan 2023 07:41:54 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id y3-20020ac24463000000b004ceb053c3ebsm41710lfl.179.2023.01.12.07.41.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 07:41:52 -0800 (PST)
-Message-ID: <7dec47af-0981-7d70-3926-69419f5d1c8e@linaro.org>
-Date:   Thu, 12 Jan 2023 16:41:50 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] cpufreq: qcom-hw: Ensure only freq-domain regs are
- counted in num_domains
-Content-Language: en-US
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rhfywHFYZng0Lm1GCbNe4P4vSb5tP1UVcI0mrPnEUgU=;
+        b=m7NkWoHx+TP2GtfK3zVajyviTjt18JMy0dLoELW1bBejsDr4jBEdaNny1p02bx9H8n
+         fox9xUV8JcxlxonFRffP9SCyq6m81CNDIzI2hmQ4HdnCSd/4MBpZnScyfcYwJCvYVQ9y
+         +7qXwGwHYagUdKBd+317ALOPtHcqOS60UZv+N+UQFqXELbT8Or3eNHWpujy9hOMc29Uc
+         NeK2vJnmH6xcYDgjf7uCel/HCKz99cehxIC3s+J14rBI5kP/Q1IXGu9ktNZB4wHbmF9h
+         5ohLvILbwawz1AeHXNWV1215MOJiXVvF79AUK5qshbp+1n17OWoI6M02bFU/zzotV9P/
+         cQQg==
+X-Gm-Message-State: AFqh2koup4e4ntdNNmj12OY+w6BfCvvQ5fy1AvBghw1mrCV8Oc8RMS0y
+        UFNAKQcxWNaocLIOxWpzZgislQ==
+X-Google-Smtp-Source: AMrXdXsCzQTM4x9M+n/1OAVGF8m0hYzLxEQ2ys+TBgTIRdp9ZhwWz2iAzvghMJBnQ7xPCSDho1FPdQ==
+X-Received: by 2002:adf:de01:0:b0:2bb:d927:eb7a with SMTP id b1-20020adfde01000000b002bbd927eb7amr1458096wrm.30.1673538448818;
+        Thu, 12 Jan 2023 07:47:28 -0800 (PST)
+Received: from lion.. (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id o14-20020a5d58ce000000b002879c013b8asm16601129wrf.42.2023.01.12.07.47.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 07:47:28 -0800 (PST)
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
- <20230111205125.1860858-2-konrad.dybcio@linaro.org>
- <20230112153704.6d37dygm4yfexdq6@builder.lan>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230112153704.6d37dygm4yfexdq6@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH v3] thermal/core: fix error paths in __thermal_cooling_device_register()
+Date:   Thu, 12 Jan 2023 15:47:20 +0000
+Message-Id: <20230112154721.452292-1-caleb.connolly@linaro.org>
+X-Mailer: git-send-email 2.39.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+There is in invalid call to thermal_cooling_device_destroy_sysfs() and
+another to put_device() in the error paths here. Fix them.
 
+Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+Signed-off-by: Caleb Connolly <caleb.connolly@linaro.org>
+---
+Changes since v2:
+ * Rework and simplify into one patch following Yang's suggestions.
 
-On 12.01.2023 16:37, Bjorn Andersson wrote:
-> On Wed, Jan 11, 2023 at 09:51:25PM +0100, Konrad Dybcio wrote:
->> In preparation for CPRh-aware OSM programming, change the probe
->> function so that we determine the number of frequency domains by
->> counting the number of reg-names entries that begin with
->> "freq-domain", as the aforementioned changes require introduction
->> of non-freq-domain register spaces.
->>
-> 
-> Requiring reg-names would break backwards compatibility with at least
-> sc7280 and sm6115.
-Ouch, you're correct..
+V2: https://lore.kernel.org/all/20230103171811.204196-1-caleb.connolly@linaro.org/
+---
+ drivers/thermal/thermal_core.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-Does checking for reg-names and applying the code flow proposed in this
-patch if found and the existing one if not sound good?
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index f17ab2316dbd..321d2a6300c4 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -909,15 +909,16 @@ __thermal_cooling_device_register(struct device_node *np,
+ 	cdev->devdata = devdata;
+ 
+ 	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
+-	if (ret)
+-		goto out_kfree_type;
++	if (ret) {
++		kfree(cdev->type);
++		goto out_ida_remove;
++	}
+ 
+ 	thermal_cooling_device_setup_sysfs(cdev);
+ 	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+-	if (ret) {
+-		thermal_cooling_device_destroy_sysfs(cdev);
++	if (ret)
+ 		goto out_kfree_type;
+-	}
++
+ 	ret = device_register(&cdev->device);
+ 	if (ret)
+ 		goto out_kfree_type;
+-- 
+2.39.0
 
-Konrad
-> 
-> Regards,
-> Bjorn
-> 
->> Fixes: 1a6a8b0080b0 ("cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2")
->> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++---------
->>  1 file changed, 24 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->> index 9505a812d6a1..89d5ed267399 100644
->> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->> @@ -651,8 +651,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->>  	struct device *dev = &pdev->dev;
->>  	struct device_node *soc_node;
->>  	struct device *cpu_dev;
->> +	const char *reg_name;
->>  	struct clk *clk;
->> -	int ret, i, num_domains, reg_sz;
->> +	int ret, i, num_reg_names, num_domains = 0;
->>  
->>  	clk = clk_get(dev, "xo");
->>  	if (IS_ERR(clk))
->> @@ -684,19 +685,32 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->>  	if (!soc_node)
->>  		return -EINVAL;
->>  
->> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
->> -	if (ret)
->> +	num_reg_names = of_property_count_strings(dev->of_node, "reg-names");
->> +	if (num_reg_names <= 0) {
->> +		ret = num_reg_names ? num_reg_names : -ENODATA;
->>  		goto of_exit;
->> +	}
->>  
->> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
->> -	if (ret)
->> -		goto of_exit;
->> +	for (i = 0; i < num_reg_names; i++) {
->> +		ret = of_property_read_string_index(dev->of_node, "reg-names", i, &reg_name);
->> +		if (ret < 0)
->> +			goto of_exit;
->>  
->> -	reg_sz += i;
->> +		/*
->> +		 * Check if the i-th reg is a freq-domain base, no need to add 1
->> +		 * more byte for idx, as sizeof counts \0 whereas strlen does not.
->> +		 */
->> +		if (strlen(reg_name) == sizeof("freq-domain")) {
->> +			/* Check if this reg-name begins with "freq-domain" */
->> +			if (!strncmp(reg_name, "freq-domain", sizeof("freq-domain") - 1))
->> +				num_domains++;
->> +		}
->> +	}
->>  
->> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
->> -	if (num_domains <= 0)
->> -		return num_domains;
->> +	if (num_domains <= 0) {
->> +		ret = -EINVAL;
->> +		goto of_exit;
->> +	}
->>  
->>  	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
->>  					 GFP_KERNEL);
->> -- 
->> 2.39.0
->>
