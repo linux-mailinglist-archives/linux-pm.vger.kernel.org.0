@@ -2,66 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99613667108
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D23AD66711D
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 12:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235567AbjALLgc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 06:36:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S232065AbjALLla (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 06:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233223AbjALLfk (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 06:35:40 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08A47D13D
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:27:45 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id az20so24907783ejc.1
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:27:45 -0800 (PST)
+        with ESMTP id S229619AbjALLkr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 06:40:47 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0287951327
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:31:06 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id jo4so44029910ejb.7
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 03:31:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=mwUGdMdqQ5tbh6fulqHtNli2C4weV3GDfalhUbOh6bU=;
-        b=JNn/EK5OMJg07OXhdAwRxuoI9+WGyo1GNL4MX8tRTjqOm6W4I3/SAW5XDSQm/o32CE
-         s5t2FVJpFFnfH0z4dArWTR3KEWKwV/U2Xnvu/WhjyTSoCyWMW4CoGrJHCu8Wulcb4SyG
-         d4p752RCGdjPONvALvToF3qUNnR4qgbcbMGuUk2aW/q7V7sZFPYya/MVCLWAEp9eaWBU
-         NXBkGaqcmUAxM8l5/+r5zNCKxTCX/6jwJNeCkg7cDWWTcm/Dp83Y1jiFnpcTr8L+qF8n
-         wEv5jqXSUlkMJ+sps+ofi7jtd3lSxLNxxBqrWPNv+fAb4c6zyqb15mXElL6bdpRCAD72
-         GSrQ==
+        bh=OMuAyOi3tfWlxGzLyr9WZRzvZr9Bx2UzbGUycZVDQqY=;
+        b=q2tr9HM5VxAlb2mwHwciq3gjRse0GjE0+vDhDI8zP3Zcb2njpROrPv2SY9bxIJ3krP
+         RmqYW07g5BKQApBoUJN6+Nw7pagjCanKvHHDMgAdibHtiIPB8J9vvTjhvzR/bqBbcI2P
+         CQakZdJEf7AmWhA0PDSMH1ymuVKuZIFPmga5JT5LE48uFzspo+G1A6vhUrXXJ4gvBlhw
+         AfqqgTopEvMZ5QLo3ABdN15CUv26nOirfhe/uFSRPyE9Gme5BnuFRtYH+oJW9v+rWnhQ
+         ogSUXBKhEnF3HKDlj08efs31mh+wmJ7/3MrlbL5VqHFr6yBJUxSWoc0hff5K0chk+jqI
+         PB5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mwUGdMdqQ5tbh6fulqHtNli2C4weV3GDfalhUbOh6bU=;
-        b=T/42NqRBqLt9bZywptbD61ulxYVFa3pAf8URvpLmTC6+MYQ1GDzon6gpGW6dStp7KM
-         qUqkse304Y/QJhcTcLYnhu+sIYa/H1ljIYUJTJ5jP6I+FLs671Ft0LJ6m4XdVtjL11Hq
-         KOXaJKRFDJ/ZU7Uuh1hGx72laBpGHOu8Lt4wzvcLoc0md56wotmT2N74GUyw6APmI5xe
-         6MNEGQO+47GegJcJSC6v2nUZevKwBs03J5NBmo+KSgGf2M9d5B2G8WqNmJkLlILLCxGG
-         JQ/sS6LLCmuky4d8l0lELZp9nrhQ+2valq3xORV7w2nEJBaY1R+Cd+zyh+PAY3/w15va
-         rB9g==
-X-Gm-Message-State: AFqh2koY0biYkXelnioZrcMoNAkgFiAJTcDFqxhczRUJxUAXa4EG1X47
-        ozFPKCeGoNcXbohrTCHAMghnIivEfrgXc9dV
-X-Google-Smtp-Source: AMrXdXsrfWRN51qqDzuvW1z46m/MJznhSK3Yxhf2zm98azkkuZjn9djgxtaHw2xxLqxVRs4y26aVqw==
-X-Received: by 2002:a17:907:cbc6:b0:7c0:8371:97aa with SMTP id vk6-20020a170907cbc600b007c0837197aamr68472901ejc.28.1673522863656;
-        Thu, 12 Jan 2023 03:27:43 -0800 (PST)
+        bh=OMuAyOi3tfWlxGzLyr9WZRzvZr9Bx2UzbGUycZVDQqY=;
+        b=w8UgL062cbhlmxLP9APNyDa4YJ+L8KkBb5tqsISiNMRg7o/GNaKSozBbGTt0pRF3yD
+         9wr3rT/UEEWy14nC0UhzGgEBt02Z6oJ6ey7CBJNiWJsTfDax7ehoZefyNe93aTwlL36W
+         a9Sqse5mUbS1717QjDsOux4lJZul6ZqeNPbGK/f+WQJyLGqQqH0TyCy7dNk7rCwIZdQp
+         zOXv93rZYNa8eL3B9ie6jKB58ISlXg02SVBquBS9vyEbM3W9txzorOpErsrYmgwbskTF
+         Bsk4yKX03vA26CKf/FiHBTwTpidYGG4asM+uypxDDSXpaRbIHCu3gLXQU3sHuhHKta+1
+         ad8w==
+X-Gm-Message-State: AFqh2krII1khAnpyyU3PQL3kEXycfTsq8DeVqW/So3q6gcT6iJeuIyd+
+        WnK9bKPog93q5cf6O66FeQgcaw==
+X-Google-Smtp-Source: AMrXdXu8nq7pgkBL5G94fORkKbl1bwAxN1S0t3Ainvx6uqRt5geVVuxRrObSl7eTbW+NVr/UGxJBLA==
+X-Received: by 2002:a17:906:30d4:b0:7a6:5b50:a32c with SMTP id b20-20020a17090630d400b007a65b50a32cmr60646950ejb.12.1673523064627;
+        Thu, 12 Jan 2023 03:31:04 -0800 (PST)
 Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id kv1-20020a17090778c100b00864d20e53ffsm870762ejc.14.2023.01.12.03.27.41
+        by smtp.gmail.com with ESMTPSA id r18-20020a1709061bb200b0082000f8d871sm7362044ejg.152.2023.01.12.03.31.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Jan 2023 03:27:43 -0800 (PST)
-Message-ID: <8f37d1cc-41d9-ad4b-ec84-708f1db03e89@linaro.org>
-Date:   Thu, 12 Jan 2023 12:27:40 +0100
+        Thu, 12 Jan 2023 03:31:04 -0800 (PST)
+Message-ID: <b6d0aa40-5d25-df4e-f8fb-64d056b24c84@linaro.org>
+Date:   Thu, 12 Jan 2023 12:31:01 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
 Subject: Re: [PATCH v2 1/5] PM: domains: Add GENPD_FLAG_RT_SAFE for PREEMPT_RT
 Content-Language: en-US
 To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
         Lorenzo Pieralisi <lpieralisi@kernel.org>,
         Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
@@ -71,13 +71,11 @@ Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
         linux-rt-users@vger.kernel.org
 References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
  <20221219151503.385816-2-krzysztof.kozlowski@linaro.org>
- <CAPDyKFrVjenwv0Fe36LBqML-R_w2TjoCwmbnqqOohV_1zH8vJQ@mail.gmail.com>
- <9771639f-5172-8f3b-3ce6-8fd195aa95b3@linaro.org>
- <Y7/inz5ZoQiR3bP3@linutronix.de>
+ <Y7/h2n271HBeXDl6@linutronix.de>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y7/inz5ZoQiR3bP3@linutronix.de>
+In-Reply-To: <Y7/h2n271HBeXDl6@linutronix.de>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -87,22 +85,76 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/01/2023 11:36, Sebastian Andrzej Siewior wrote:
-> On 2023-01-06 15:52:57 [+0100], Krzysztof Kozlowski wrote:
->>> Just so I don't get this wrong, since the cpuidle-psci also calls
->>> pm_runtime_* functions so it isn't PREEMPT_RT safe, at least not yet?
->>
->> You are correct. Patch 3 here addresses it by... just not doing runtime
->> PM. This is a hacky workaround but:
->> 1. I don't have any other idea,
->> 2. It's not a big problem because RT systems are not supposed to have
->> any CPU idle (one of first things during RT system tuning is to disable
->> cpuidle).
+On 12/01/2023 11:32, Sebastian Andrzej Siewior wrote:
+> On 2022-12-19 16:14:59 [+0100], Krzysztof Kozlowski wrote:
+>> Realtime kernels with PREEMPT_RT must use raw_spinlock_t for domains
+>> which are invoked from CPU idle (thus from atomic section).  Example is
+>> cpuidle PSCI domain driver which itself is PREEMPT_RT safe, but is being
+>> called as part of cpuidle.
 > 
-> so you say you use idle=poll instead? 
+> I think it needs to be clarified what PREEMPT_RT safe means. 
 
-This was generic comment that system is not supposed to go into deeper
-idle states.
+OK
+
+> PSCI is an
+> external interface which does not inform us what it does and how long
+> the operation will take.
+> The ACPI table for instance populate several idle states and their
+> entry/exit time. Then you can decide if and when an entry/exit latency
+> of 500us is PREEMPT_RT safe.
+> 
+>> Add a flag allowing a power domain provider to indicate it is RT safe.
+>> The flag is supposed to be used with existing GENPD_FLAG_IRQ_SAFE.
+>>
+>> Cc: Adrien Thierry <athierry@redhat.com>
+>> Cc: Brian Masney <bmasney@redhat.com>
+>> Cc: linux-rt-users@vger.kernel.org
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+> …
+>> index 1cd41bdf73cf..0a1600244963 100644
+>> --- a/include/linux/pm_domain.h
+>> +++ b/include/linux/pm_domain.h
+>> @@ -61,6 +61,14 @@
+>>   * GENPD_FLAG_MIN_RESIDENCY:	Enable the genpd governor to consider its
+>>   *				components' next wakeup when determining the
+>>   *				optimal idle state.
+>> + *
+>> + * GENPD_FLAG_RT_SAFE:		When used with GENPD_FLAG_IRQ_SAFE, this informs
+>> + *				genpd that its backend callbacks, ->power_on|off(),
+>> + *				do not use other spinlocks. They might use
+>> + *				raw_spinlocks or other pre-emption-disable
+>> + *				methods, all of which are PREEMPT_RT safe. Note
+> 
+> Please use spinlock_t and raw_spinlock_t. Wouldn't it be better to write
+> "preemption" instead "pre-emption"?
+
+Sure.
+
+> The important part is probably that once a raw_spinlock_t has been
+> acquired, it is not possible to invoke any function that acquries
+> sleeping locks (which includes memory allocations). While even without
+> that flag it is possible to invoke a function which disables and enables
+> preemption on its own.
+> 
+>> + *				that, a genpd having this flag set, requires its
+>> + *				masterdomains to also have it set.
+> 
+> This could be verified upon registration, no?
+
+It is, just like the IRQ_SAFE flag. The code is symmetrical to IRQ_SAFE.
+
+> It might be worth noting that preemption-off section during PM
+> operations contribute to the system's max latency.
+
+You mean in the commit msg? In the doc, I don't want to deviate from
+IRQ_SAFE. It's not really related to the flag.
+
+> Depending on how low
+> the operation is, it may or may not be a problem.
+> The ->power_on|off() refers to the sate of the component, right?
+
+It refers to genpd framework.
 
 Best regards,
 Krzysztof
