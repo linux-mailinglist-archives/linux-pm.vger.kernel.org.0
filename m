@@ -2,139 +2,205 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246A06678C9
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 16:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D60F667985
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 16:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239926AbjALPOy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 10:14:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58604 "EHLO
+        id S240380AbjALPjI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 10:39:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232996AbjALPO3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 10:14:29 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E820C12AAC;
-        Thu, 12 Jan 2023 07:05:33 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id jo4so45491739ejb.7;
-        Thu, 12 Jan 2023 07:05:33 -0800 (PST)
+        with ESMTP id S240550AbjALPik (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 10:38:40 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A308248588
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 07:29:54 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id g19-20020a05600c4ed300b003d9eb1dbc0aso12399640wmq.3
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 07:29:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/eWDyoKHBFUvFef0M8aMXHWc3vZP4l1W+59M7RIL4k8=;
+        b=2k0Q66TJM6ZdCiCnaz6dci8qLsscm01j1v48pmTDfPWhJAV0a7z7vQ6x6WScy/SlRL
+         rt0+9o1PnxALwFiPgK+my6rkFK2dCkFHzhQgMfnqHklfv0ftTmWXWfrLOtIaaUANOIA9
+         8djxvPZyypGmxHlk1vLEKunkV8QHpeLqWa/UEjPDItso4pNSac67zLmBcRD3tmZ9kupv
+         giZ6JDJNy8dkpKZFeUzgNCtarRj2igfYDGPGmGAUPyCuFOEXnh300yZoH09EZjZGxYMl
+         fpMAjdGbIa2WZVfObkRoZCxqH+1GlCtCoipjuVmbRIJLBr4Q1s4zP7hz5VaQ5LLgr9AR
+         8EWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wltNgvmoTEOdzqXrThP0TENXCKomPCLaFAPp9HR3deY=;
-        b=ZgZ5L3Bketfsde0TLMzOY61Fvk+o266XO03TTckE5BOB8DKDeMsOkLLE2J/h9QoWsR
-         yeSTo32aRST1+hrkt2TZLcLCPvV8u0Xj3adH/eVbCu3tcUicfMaPe/M7DmzWzE1zfDOC
-         anFbgi4a52k/Iq89DCof5zYCIxa90PvHpvUgyhXCl4MxPx1/FIrzxfQOoQEKuxK7OjoW
-         7MzbY8TXhqfFLIQhfjxaVrYbfty0dFLY8lDmyg6pO7+32RGNxtHqT+RJg6J8JRR9ZCdt
-         Pi7XVJcfYtQCBC2ic5QICsAuxBIHzVPGzNy4xLRMP7MzkMw9rpP+TXzhooX2U4TTa3ux
-         mW5w==
-X-Gm-Message-State: AFqh2kpPt7iWWrphufPztSTKw72xKNmMSY2haYJ2Q+nwtmRQJvwyUHfe
-        EKMrufUwxNCny0eCa9FdGtIOc9SDK4utQYKPBBU=
-X-Google-Smtp-Source: AMrXdXvKmZ2PCMXVnx7nExgmOtUWzRBMI/6pY7Omz5S3AXQJ76U8+Cuvv1wgfhkdhzXb7XvSkvwJKcy+CYycMkK7wro=
-X-Received: by 2002:a17:907:75ea:b0:7c0:f118:7e4e with SMTP id
- jz10-20020a17090775ea00b007c0f1187e4emr4416278ejc.478.1673535932416; Thu, 12
- Jan 2023 07:05:32 -0800 (PST)
+        bh=/eWDyoKHBFUvFef0M8aMXHWc3vZP4l1W+59M7RIL4k8=;
+        b=AArb0elrzahF/vICc+ULYMXbAJRlO+jsBXxLfMfqyl7ftjGXDTvpSiLro0NO+zpx9y
+         YBAUGrBLckqgFbN6/3c6Ecx9O3AHt98oaieRwZJCOqGLKSD2XIlR7oPgbIyKlzKIPUNG
+         cS94hv3RzE3oj8DubL/r3NraYFILssy+HgKcR6pvFmO/1WrrkFQs0y3YJ7in6MScPi9r
+         WMCUhnYtceP0P9MhH3rauDVDZ6IRPjyBVx4LFnbljV/XMi5PlWVzSRncnLRFIrhCz4bV
+         ZlZD6aeo2CTY5ul8Jc08yEw66HamxGVXJFPuWxaZ0CLS1HpV5IdyIwW4m2e1VB6XQjhg
+         NgCQ==
+X-Gm-Message-State: AFqh2korKvotFcnr8yn2aNciyI7IbZoqwnM9+usLs62Lpzehxpz9N5AS
+        nIPqMQRgDLHOZHqXf6sX1KSY44C9zm6QAn1c
+X-Google-Smtp-Source: AMrXdXsQnB+daHOKSUGnTX+2xpNJiQ/ioCPcrA3tqxJTpITi8JOBE+Lz76UOTLm0SCGSH0pjN5n5GA==
+X-Received: by 2002:a05:600c:1e8c:b0:3d6:2952:679b with SMTP id be12-20020a05600c1e8c00b003d62952679bmr55319960wmb.34.1673537393008;
+        Thu, 12 Jan 2023 07:29:53 -0800 (PST)
+Received: from t480-bl003.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
+        by smtp.gmail.com with ESMTPSA id l24-20020a1ced18000000b003d99da8d30asm26395909wmh.46.2023.01.12.07.29.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Jan 2023 07:29:52 -0800 (PST)
+From:   bchihi@baylibre.com
+To:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+Subject: [PATCH v10 0/6] Add LVTS thermal architecture
+Date:   Thu, 12 Jan 2023 16:28:49 +0100
+Message-Id: <20230112152855.216072-1-bchihi@baylibre.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20221129233419.4022830-1-srinivas.pandruvada@linux.intel.com> <20221129233419.4022830-2-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20221129233419.4022830-2-srinivas.pandruvada@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 16:05:21 +0100
-Message-ID: <CAJZ5v0gxTdHW_Wk2E13M+tK+B5rqOirY4sz6UJVMjhentvEstg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] powercap: idle_inject: Export symbols
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
         autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Nov 30, 2022 at 12:34 AM Srinivas Pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
->
-> Export symbols for external interfaces, so that they can be used in
-> other loadable modules.
->
-> Export is done under name space IDLE_INJECT.
->
-> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+From: Balsam CHIHI <bchihi@baylibre.com>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The LVTS (Low Voltage Thermal Sensor) driver is capable of monitoring
+multiple hot points. For that, it contains 7 thermal control blocks
+dedicated to specific devices on the die. Each control block can handle
+up to 4 sensors. 
 
-> ---
-> v2:
->         No change
->
->  drivers/powercap/idle_inject.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
-> index fe86a09e3b67..dfa989182e71 100644
-> --- a/drivers/powercap/idle_inject.c
-> +++ b/drivers/powercap/idle_inject.c
-> @@ -160,6 +160,7 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
->                 WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
->         }
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
->
->  /**
->   * idle_inject_get_duration - idle and run duration retrieval helper
-> @@ -174,6 +175,7 @@ void idle_inject_get_duration(struct idle_inject_device *ii_dev,
->         *run_duration_us = READ_ONCE(ii_dev->run_duration_us);
->         *idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_get_duration, IDLE_INJECT);
->
->  /**
->   * idle_inject_set_latency - set the maximum latency allowed
-> @@ -185,6 +187,7 @@ void idle_inject_set_latency(struct idle_inject_device *ii_dev,
->  {
->         WRITE_ONCE(ii_dev->latency_us, latency_us);
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_set_latency, IDLE_INJECT);
->
->  /**
->   * idle_inject_start - start idle injections
-> @@ -216,6 +219,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
->
->         return 0;
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_start, IDLE_INJECT);
->
->  /**
->   * idle_inject_stop - stops idle injections
-> @@ -262,6 +266,7 @@ void idle_inject_stop(struct idle_inject_device *ii_dev)
->
->         cpu_hotplug_enable();
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_stop, IDLE_INJECT);
->
->  /**
->   * idle_inject_setup - prepare the current task for idle injection
-> @@ -337,6 +342,7 @@ struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
->
->         return NULL;
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
->
->  /**
->   * idle_inject_unregister - unregister idle injection control device
-> @@ -357,6 +363,7 @@ void idle_inject_unregister(struct idle_inject_device *ii_dev)
->
->         kfree(ii_dev);
->  }
-> +EXPORT_SYMBOL_NS_GPL(idle_inject_unregister, IDLE_INJECT);
->
->  static struct smp_hotplug_thread idle_inject_threads = {
->         .store = &idle_inject_thread.tsk,
-> --
-> 2.31.1
->
+The thermal controller supports several interrupts. One for the cold
+trip point, the hot trip point, the return to the normal trip point,
+and a specific programmable trip point to monitor the temperature
+dynamically.
+
+The temperature measurement can be done in two ways, the immediate mode
+where the temperature read is instantaneous and the filtered mode where
+the controller uses, by configuration, an average of a set of values
+removing the minimum and the maximum.
+
+Finally, it is composed of 2 finite-state machines responsible for
+the state of the temperature (cold, hot, hot 2 normal, hot hot),
+the triggering of the interrupts, and the monitoring of the temperature.
+
+As requested, the thermal driver has been reworked to reduce
+the complexity of the code. At this time, the 4 little CPUs and
+the 4 big CPUs are supported by the thermal driver.They are described
+in a data structure and more devices can be added later.
+The calibration routine has been simplified also.
+
+The series provide the following changes:
+
+ - Move the Mediatek drivers inside a dedicated folder as their number
+   is increasing
+ - Add the DT bindings for the controller
+ - Add the efuse node for the mt8195
+ - The LVTS driver
+ - The thermal zones description in the DT
+
+Changelog:
+  v10:
+     - Rebase on top of "thermal/linux-next"
+     - Rework the LVTS driver
+     - Add the thermal trip temperature and cooling devices
+       for the sensors supported by the driver
+
+  v9:
+     - Rebase on top of 6.0.0-rc1
+     - Fix coding style issues
+     - Fix commit titles and commit messages
+     - Update dt-bindings :
+     - Add "allOf:if:then:"
+     - Use mt8192 as example (instead of mt8195)
+     - Fix dt-binding errors
+     - Fix DTS errors
+
+  v8:
+     - Fix coding style issues
+     - Rebase on top of next-20220803
+     - Add multi-instance support :
+       - Rewrite DT-binding and DTS :
+         - Add DT-binding and DTS for LVTS_v4 (MT8192 and MT8195)
+           - One LVTS node for each HW Domain (AP and MCU)
+         - One SW Instance for each HW Domain
+         - Add a Kconfig sub-menu entry for LVTS and LVTS_v4 SoCs
+     - Replace platform_get_resource by platform_get_mem_or_io to get
+       Base Address
+     - Replace platform_get_resource by platform_get_irq to get
+       Interrupt Number
+     - Add "lvts_" prefix to functions and structs
+
+ v7:
+     - Fix coding style issues
+     - Rewrite dt bindings
+       - was not accurate
+       - Use mt8195 for example (instead of mt8192)
+       - Rename mt6873 to mt8192
+       - Remove clock name
+     - Rebased on top of to series:
+       - patchwork.kernel.org/project/linux-mediatek/list/?series=637849
+       - patchwork.kernel.org/project/linux-pm/list/?series=639386
+
+ v6:
+     - Remove temperature aggregation (it will be added in another
+       series)
+     - Update the way to read the temperature (read one sensor
+       instead of all)
+     - Add support of mt8195
+
+  v5:
+     - Use 'git mv' for the relocated file.
+
+  v4:
+     - Rebase to kernel-v5.13-rc1
+
+  v3:
+     - change the expression in the lvts_temp_to_raw to dev_s64.
+
+  v2:
+     - Rebase to kernel-5.11-rc1.
+     - sort headers
+     - remove initial value 0 of msr_raw in the lvts_temp_to_raw.
+     - disconstruct the api of lvts_read_tc_msr_raw.
+     - add the initial value max_temp = 0 and compare e.q.
+       in the lvts_read_all_tc_temperature.
+     - add the return with an invalid number in the lvts_init.
+
+Balsam CHIHI (6):
+  thermal/drivers/mediatek: Relocate driver to mediatek folder
+  dt-bindings/thermal/mediatek: Add dt-binding document for LVTS thermal
+    controllers
+  arm64/dts/mt8195: Add efuse node to mt8195
+  thermal/drivers/mediatek: Add the Low Voltage Thermal Sensor driver
+  arm64/dts/mt8195: Add thermal zones and thermal nodes
+  arm64/dts/mt8195: Add temperature mitigation threshold
+
+ .../thermal/mediatek,lvts-thermal.yaml        |  140 ++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  256 ++++
+ drivers/thermal/Kconfig                       |   14 +-
+ drivers/thermal/Makefile                      |    2 +-
+ drivers/thermal/mediatek/Kconfig              |   36 +
+ drivers/thermal/mediatek/Makefile             |    2 +
+ .../auxadc_thermal.c}                         |    2 +-
+ drivers/thermal/mediatek/lvts_thermal.c       | 1244 +++++++++++++++++
+ include/dt-bindings/thermal/mediatek-lvts.h   |   19 +
+ 9 files changed, 1703 insertions(+), 12 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/thermal/mediatek,lvts-thermal.yaml
+ create mode 100644 drivers/thermal/mediatek/Kconfig
+ create mode 100644 drivers/thermal/mediatek/Makefile
+ rename drivers/thermal/{mtk_thermal.c => mediatek/auxadc_thermal.c} (99%)
+ create mode 100644 drivers/thermal/mediatek/lvts_thermal.c
+ create mode 100644 include/dt-bindings/thermal/mediatek-lvts.h
+
+-- 
+2.34.1
+
