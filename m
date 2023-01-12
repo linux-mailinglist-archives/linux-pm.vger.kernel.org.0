@@ -2,135 +2,293 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B97667F85
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 20:45:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571386681F8
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 21:04:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239861AbjALTpf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 14:45:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
+        id S241292AbjALUD3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 15:03:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240224AbjALToj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 14:44:39 -0500
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2386E63;
-        Thu, 12 Jan 2023 11:38:10 -0800 (PST)
-Received: by mail-ej1-f41.google.com with SMTP id u9so47348174ejo.0;
-        Thu, 12 Jan 2023 11:38:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9VdqiaMUL5pJHnh0vv31PI0BCnozHCyhdFgddFMC5oY=;
-        b=gfgAfo5bxz9lk6VI5sHTkN9LIsuQgo+vOrwWrGvlRyCOsD2SPw7X5sdPQtJhJV6uFR
-         a0I4xd6e3EY1K8+xKFqn5hO6oos6n51Sc3VGT57ANi/PekZS4bsclTaig3QxMQa+wTK9
-         2He9NtLMjmWKBmV+S4aDgSfLvv7EtQ672tPq8SMqvExRj90IHAjUvLMmbhhWn68BQSux
-         rQClUWBMiMoOYnz4iepL97+dOlEWOyCoxk9DkBdVDmVkUGk3JR6c6CYxq2lb548s3wgo
-         /NoK7CSEdOqGVNxJc7RMrAA7BmzDrZlKB/gY8XAGkEw2CywEqjjnAlHUqy7mrMgWmvhA
-         TyVw==
-X-Gm-Message-State: AFqh2ko+7E2pOp6o/+cAovUW0BfkzkV7dIRZR4T9OCQ63zNU5/Pzc82P
-        lfJP2TGJstT0ROOWrtJgAzXAT+01CIkvmHG+p+M=
-X-Google-Smtp-Source: AMrXdXvKZPHXU+H5/fEX/mbk5PlNsB/sE3EpVAawCLZc/TnIVrXachJXZCNezgeMMeNaEjDeNP0Y9wpWGuHMg6eEhbc=
-X-Received: by 2002:a17:906:9484:b0:84d:3c6a:4c55 with SMTP id
- t4-20020a170906948400b0084d3c6a4c55mr2556546ejx.509.1673552289361; Thu, 12
- Jan 2023 11:38:09 -0800 (PST)
-MIME-Version: 1.0
-References: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
- <CAJZ5v0jnp3jLdD1wN1NjMfxrt+gYZ+im_quHdgsOrWve0XQaWg@mail.gmail.com>
- <cd2a9ccec0d88821fb0c7580f7ae934f2de71ddf.camel@intel.com>
- <CAJZ5v0hffKjor=kzr71esaw7M2BV5vCTEY7pg67-iWXZ98sQBw@mail.gmail.com> <0c7760bf5976cb64c952df5601eae14fd33fbe2e.camel@intel.com>
-In-Reply-To: <0c7760bf5976cb64c952df5601eae14fd33fbe2e.camel@intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 20:37:58 +0100
-Message-ID: <CAJZ5v0hmuWRtMkfsbPkiK5J=S5XvO1U2tzrL+dpPBGwbLJz=5A@mail.gmail.com>
-Subject: Re: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "Brown, Len" <len.brown@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        with ESMTP id S233105AbjALT7P (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 14:59:15 -0500
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C970BFEF;
+        Thu, 12 Jan 2023 11:58:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Subject:Cc:To:From:Date:Message-ID:
+        Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=nVA2Mm1l3YORbADd6moHHe8hZRGP2vbv/t+d/ET+JHY=; b=TlaXG0UvI5/2makRvuA5VeDU0a
+        4qRI7QdjL2xdYtQkDc8A2gDeJm4SgV/ZE4QRpV0RJDXMMB4Ses7eZGFiDTofTYDgr5hwzJFCgjN92
+        vjbEtwgBXa7w8/R1TM/dXCqOwghJkDoeZQJX5TmGkr+c4V4wG8XOesTfWGNVPxDj+IWa66EcgnnI+
+        N0h0XzCqzVIGmuy6C6fbFV000CEf+CbKGraRaRx5LgxRtmWU3UqYXBQJ9uTZWqnINayTTaNj6FBwG
+        4DgvEy1EZkXwsa6PFe7gZwS9WdTNugjk+fRc/F3eGMFukmGi05t3vedt00SILqwwr57VstSzHs3kM
+        kK9YAFjw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pG3hA-0045nn-1f;
+        Thu, 12 Jan 2023 19:57:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B6B2D300C22;
+        Thu, 12 Jan 2023 20:57:07 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
+        id 892382CCF1F46; Thu, 12 Jan 2023 20:57:07 +0100 (CET)
+Message-ID: <20230112194314.845371875@infradead.org>
+User-Agent: quilt/0.66
+Date:   Thu, 12 Jan 2023 20:43:14 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     peterz@infradead.org
+Cc:     richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com,
+        boris.ostrovsky@oracle.com, chris@zankel.net, jcmvbkbc@gmail.com,
+        rafael@kernel.org, lenb@kernel.org, pavel@ucw.cz,
+        gregkh@linuxfoundation.org, mturquette@baylibre.com,
+        sboyd@kernel.org, daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        sudeep.holla@arm.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, anup@brainfault.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        jacob.jun.pan@linux.intel.com, atishp@atishpatra.org,
+        Arnd Bergmann <arnd@arndb.de>, yury.norov@gmail.com,
+        andriy.shevchenko@linux.intel.com, linux@rasmusvillemoes.dk,
+        dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        rostedt@goodmis.org, mhiramat@kernel.org, frederic@kernel.org,
+        paulmck@kernel.org, pmladek@suse.com, senozhatsky@chromium.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, ryabinin.a.a@gmail.com, glider@google.com,
+        andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 8:15 PM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Thu, 2023-01-12 at 15:15 +0100, Rafael J. Wysocki wrote:
-> > > >
-> > > > I don't think the above is needed.  The code using this function
-> > > > cannot be preempted anyway AFAICS.
-> > >
-> > > The reason I thought it was useful was because this function is now
-> > > defined in a header. Someone else might decide to use it. Does it
-> > > seem
-> > > more useful?
-> >
-> > Well, it is exposed now, but only in order to allow the __weak
-> > function to be overridden.  I don't think it is logically valid to
-> > use
-> > it anywhere beyond its original call site.
-> >
-> > To make that clear, I would call it something hibernation-specific,
-> > like hibernate_copy_unmapped_page() and I would add a kerneldoc
-> > comment to it to describe its intended use.
->
-> Ok, I'll change the name, that makes sense.
->
-> On the warning, ok, I'll drop it. But to me the code stand out as
-> questionable with the PTE change and only the local TLB flush. It's a
-> bit of a comment as code on a rare path.
->
-> >
-> > Furthermore, I'm not sure about the new code layout.
-> >
-> > Personally, I would prefer hibernate_map_page() and
-> > hibernate_unmap_page() to be turned into __weak functions and
-> > possibly
-> > overridden by the arch code, which would allow the amount of changes
-> > to be reduced and do_copy_page() wouldn't need to be moved into the
-> > header any more.
->
-> Currently hibernate_map_page() maps the page on the direct map and
-> doesn't return anything. This new code effectively creates a readable
-> alias in the fixmap. So it would have to return an address to use so
-> the core hibernate code would know where to copy from. Then it would
-> have to pass it back into hibernate_unmap_page() for the arch to decide
-> what to do to clean it up. I think it would be more complicated.
+Hi All!
 
-AFAICS, you only need hibernate_map_page() to return an address that
-will be passed to do_copy_page() (that doesn't need to be touched
-otherwise) and hibernate_unmap_page() would just do
+The (hopefully) final respin of cpuidle vs rcu cleanup patches. Barring any
+objections I'll be queueing these patches in tip/sched/core in the next few
+days.
 
-clear_fixmap(FIX_HIBERNATE);
+v2: https://lkml.kernel.org/r/20220919095939.761690562@infradead.org
 
-so it may as well take the page as the argument.
+These here patches clean up the mess that is cpuidle vs rcuidle.
 
-> There is also already multiple paths in hibernate_map_page() that would
-> have to be duplicated in the arch versions.
+At the end of the ride there's only on RCU_NONIDLE user left:
 
-But only if the arch decides to override the originals.
+  arch/arm64/kernel/suspend.c:            RCU_NONIDLE(__cpu_suspend_exit());
 
-Now, the only caller of both hibernate_map_page() and
-hibernate_unmap_page() is safe_copy_page() in the "else" branch.  Your
-current patch replaces that branch completely with an arch version, so
-they are not going to be invoked on x86 anyway.
+And I know Mark has been prodding that with something sharp.
 
-> So I see the idea, but I'm not sure it ends up better. Can we leave this one?
+The last version was tested by a number of people and I'm hoping to not have
+broken anything in the meantime ;-)
 
-I first need to be convinced that it is indeed better.
+
+Changes since v2:
+
+ - rebased to v6.2-rc3; as available at:
+     git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git sched/idle
+
+ - folded: https://lkml.kernel.org/r/Y3UBwYNY15ETUKy9@hirez.programming.kicks-ass.net
+   which makes the ARM cpuidle index 0 consistently not use
+   CPUIDLE_FLAG_RCU_IDLE, as requested by Ulf.
+
+ - added a few more __always_inline to empty stub functions as found by the
+   robot.
+
+ - Used _RET_IP_ instead of _THIS_IP_ in a few placed because of:
+   https://github.com/ClangBuiltLinux/linux/issues/263
+
+ - Added new patches to address various robot reports:
+
+     #35:  trace,hardirq: No moar _rcuidle() tracing
+     #47:  cpuidle: Ensure ct_cpuidle_enter() is always called from noinstr/__cpuidle
+     #48:  cpuidle,arch: Mark all ct_cpuidle_enter() callers __cpuidle
+     #49:  cpuidle,arch: Mark all regular cpuidle_state::enter methods __cpuidle
+     #50:  cpuidle: Comments about noinstr/__cpuidle
+     #51:  context_tracking: Fix noinstr vs KASAN
+
+
+---
+ arch/alpha/kernel/process.c               |  1 -
+ arch/alpha/kernel/vmlinux.lds.S           |  1 -
+ arch/arc/kernel/process.c                 |  3 ++
+ arch/arc/kernel/vmlinux.lds.S             |  1 -
+ arch/arm/include/asm/vmlinux.lds.h        |  1 -
+ arch/arm/kernel/cpuidle.c                 |  4 +-
+ arch/arm/kernel/process.c                 |  1 -
+ arch/arm/kernel/smp.c                     |  6 +--
+ arch/arm/mach-davinci/cpuidle.c           |  4 +-
+ arch/arm/mach-gemini/board-dt.c           |  3 +-
+ arch/arm/mach-imx/cpuidle-imx5.c          |  4 +-
+ arch/arm/mach-imx/cpuidle-imx6q.c         |  8 ++--
+ arch/arm/mach-imx/cpuidle-imx6sl.c        |  4 +-
+ arch/arm/mach-imx/cpuidle-imx6sx.c        |  9 ++--
+ arch/arm/mach-imx/cpuidle-imx7ulp.c       |  4 +-
+ arch/arm/mach-omap2/common.h              |  6 ++-
+ arch/arm/mach-omap2/cpuidle34xx.c         | 16 ++++++-
+ arch/arm/mach-omap2/cpuidle44xx.c         | 29 +++++++------
+ arch/arm/mach-omap2/omap-mpuss-lowpower.c | 12 +++++-
+ arch/arm/mach-omap2/pm.h                  |  2 +-
+ arch/arm/mach-omap2/pm24xx.c              | 51 +---------------------
+ arch/arm/mach-omap2/pm34xx.c              | 14 +++++--
+ arch/arm/mach-omap2/pm44xx.c              |  2 +-
+ arch/arm/mach-omap2/powerdomain.c         | 10 ++---
+ arch/arm/mach-s3c/cpuidle-s3c64xx.c       |  5 +--
+ arch/arm64/kernel/cpuidle.c               |  2 +-
+ arch/arm64/kernel/idle.c                  |  1 -
+ arch/arm64/kernel/smp.c                   |  4 +-
+ arch/arm64/kernel/vmlinux.lds.S           |  1 -
+ arch/csky/kernel/process.c                |  1 -
+ arch/csky/kernel/smp.c                    |  2 +-
+ arch/csky/kernel/vmlinux.lds.S            |  1 -
+ arch/hexagon/kernel/process.c             |  1 -
+ arch/hexagon/kernel/vmlinux.lds.S         |  1 -
+ arch/ia64/kernel/process.c                |  1 +
+ arch/ia64/kernel/vmlinux.lds.S            |  1 -
+ arch/loongarch/kernel/idle.c              |  1 +
+ arch/loongarch/kernel/vmlinux.lds.S       |  1 -
+ arch/m68k/kernel/vmlinux-nommu.lds        |  1 -
+ arch/m68k/kernel/vmlinux-std.lds          |  1 -
+ arch/m68k/kernel/vmlinux-sun3.lds         |  1 -
+ arch/microblaze/kernel/process.c          |  1 -
+ arch/microblaze/kernel/vmlinux.lds.S      |  1 -
+ arch/mips/kernel/idle.c                   | 14 +++----
+ arch/mips/kernel/vmlinux.lds.S            |  1 -
+ arch/nios2/kernel/process.c               |  1 -
+ arch/nios2/kernel/vmlinux.lds.S           |  1 -
+ arch/openrisc/kernel/process.c            |  1 +
+ arch/openrisc/kernel/vmlinux.lds.S        |  1 -
+ arch/parisc/kernel/process.c              |  2 -
+ arch/parisc/kernel/vmlinux.lds.S          |  1 -
+ arch/powerpc/kernel/idle.c                |  5 +--
+ arch/powerpc/kernel/vmlinux.lds.S         |  1 -
+ arch/riscv/kernel/process.c               |  1 -
+ arch/riscv/kernel/vmlinux-xip.lds.S       |  1 -
+ arch/riscv/kernel/vmlinux.lds.S           |  1 -
+ arch/s390/kernel/idle.c                   |  1 -
+ arch/s390/kernel/vmlinux.lds.S            |  1 -
+ arch/sh/kernel/idle.c                     |  1 +
+ arch/sh/kernel/vmlinux.lds.S              |  1 -
+ arch/sparc/kernel/leon_pmc.c              |  4 ++
+ arch/sparc/kernel/process_32.c            |  1 -
+ arch/sparc/kernel/process_64.c            |  3 +-
+ arch/sparc/kernel/vmlinux.lds.S           |  1 -
+ arch/um/kernel/dyn.lds.S                  |  1 -
+ arch/um/kernel/process.c                  |  1 -
+ arch/um/kernel/uml.lds.S                  |  1 -
+ arch/x86/boot/compressed/vmlinux.lds.S    |  1 +
+ arch/x86/coco/tdx/tdcall.S                | 15 +------
+ arch/x86/coco/tdx/tdx.c                   | 25 ++++-------
+ arch/x86/events/amd/brs.c                 | 13 +++---
+ arch/x86/include/asm/fpu/xcr.h            |  4 +-
+ arch/x86/include/asm/irqflags.h           | 11 ++---
+ arch/x86/include/asm/mwait.h              | 14 +++----
+ arch/x86/include/asm/nospec-branch.h      |  2 +-
+ arch/x86/include/asm/paravirt.h           |  6 ++-
+ arch/x86/include/asm/perf_event.h         |  2 +-
+ arch/x86/include/asm/shared/io.h          |  4 +-
+ arch/x86/include/asm/shared/tdx.h         |  1 -
+ arch/x86/include/asm/special_insns.h      |  8 ++--
+ arch/x86/include/asm/xen/hypercall.h      |  2 +-
+ arch/x86/kernel/cpu/bugs.c                |  2 +-
+ arch/x86/kernel/fpu/core.c                |  4 +-
+ arch/x86/kernel/paravirt.c                | 14 ++++++-
+ arch/x86/kernel/process.c                 | 65 ++++++++++++++--------------
+ arch/x86/kernel/vmlinux.lds.S             |  1 -
+ arch/x86/lib/memcpy_64.S                  |  5 +--
+ arch/x86/lib/memmove_64.S                 |  4 +-
+ arch/x86/lib/memset_64.S                  |  4 +-
+ arch/x86/xen/enlighten_pv.c               |  2 +-
+ arch/x86/xen/irq.c                        |  2 +-
+ arch/xtensa/kernel/process.c              |  1 +
+ arch/xtensa/kernel/vmlinux.lds.S          |  1 -
+ drivers/acpi/processor_idle.c             | 28 ++++++++-----
+ drivers/base/power/runtime.c              | 24 +++++------
+ drivers/clk/clk.c                         |  8 ++--
+ drivers/cpuidle/cpuidle-arm.c             |  4 +-
+ drivers/cpuidle/cpuidle-big_little.c      | 12 ++++--
+ drivers/cpuidle/cpuidle-mvebu-v7.c        | 13 ++++--
+ drivers/cpuidle/cpuidle-psci.c            | 26 +++++-------
+ drivers/cpuidle/cpuidle-qcom-spm.c        |  4 +-
+ drivers/cpuidle/cpuidle-riscv-sbi.c       | 19 +++++----
+ drivers/cpuidle/cpuidle-tegra.c           | 31 +++++++++-----
+ drivers/cpuidle/cpuidle.c                 | 70 ++++++++++++++++++++++---------
+ drivers/cpuidle/dt_idle_states.c          |  2 +-
+ drivers/cpuidle/poll_state.c              | 10 ++++-
+ drivers/idle/intel_idle.c                 | 19 ++++-----
+ drivers/perf/arm_pmu.c                    | 11 +----
+ drivers/perf/riscv_pmu_sbi.c              |  8 +---
+ include/asm-generic/vmlinux.lds.h         |  9 ++--
+ include/linux/clockchips.h                |  4 +-
+ include/linux/compiler_types.h            | 18 +++++++-
+ include/linux/cpu.h                       |  3 --
+ include/linux/cpuidle.h                   | 32 ++++++++++++++
+ include/linux/cpumask.h                   |  4 +-
+ include/linux/percpu-defs.h               |  2 +-
+ include/linux/sched/idle.h                | 40 +++++++++++++-----
+ include/linux/thread_info.h               | 18 +++++++-
+ include/linux/tracepoint.h                | 15 ++++++-
+ kernel/context_tracking.c                 | 12 +++---
+ kernel/cpu_pm.c                           |  9 ----
+ kernel/printk/printk.c                    |  2 +-
+ kernel/sched/idle.c                       | 47 ++++++---------------
+ kernel/time/tick-broadcast-hrtimer.c      | 29 ++++++-------
+ kernel/time/tick-broadcast.c              |  6 ++-
+ kernel/trace/trace.c                      |  3 ++
+ kernel/trace/trace_preemptirq.c           | 50 ++++++----------------
+ lib/ubsan.c                               |  5 ++-
+ mm/kasan/kasan.h                          |  4 ++
+ mm/kasan/shadow.c                         | 38 +++++++++++++++++
+ tools/objtool/check.c                     | 17 ++++++++
+ 131 files changed, 617 insertions(+), 523 deletions(-)
+
