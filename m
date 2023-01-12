@@ -2,207 +2,431 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68FF3667EFF
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 20:25:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AA4667F31
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 20:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232500AbjALTZj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 14:25:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46578 "EHLO
+        id S234650AbjALT3X convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 12 Jan 2023 14:29:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbjALTZM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 14:25:12 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D369A3753C;
-        Thu, 12 Jan 2023 11:15:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673550924; x=1705086924;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=3lI6U01xj+sqRZBpqCEWEHvh+8BBKw0Is+AMzYJ7bxc=;
-  b=CEa0n42pigPBWzhPfiOozCXF05KaKGyvaVjHra2IPn0e7Vhl/uLC6ORt
-   IAd4nJC5KtbtNnnb+1+Riagg10KZtqk9zwyRKNg6tMr4JL5e3Cp2Ebc+S
-   8XQVd0HbZPjHQRzKSNCagC8xjIPPKEUcMOA77z5MDtmQXM16gJXqh7FvV
-   KrE2SLfEQxwOEwYVCs7ZApwvYsWl2rRBVubuj2TqE5WjOCXsQV2cx5SbT
-   VNl4ladiE86o5qOKnIAggxLZIR+Zd8ycJaMNJTtB6wRp9GoY85qF3KQ/y
-   9GgA6r94PR8sbvvDRm0fa21Epn5DzHCCCDdTr8TvUlpUS/cWMVPaIF1OG
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="321498464"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="321498464"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2023 11:15:24 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10588"; a="657933893"
-X-IronPort-AV: E=Sophos;i="5.97,211,1669104000"; 
-   d="scan'208";a="657933893"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 12 Jan 2023 11:15:23 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Thu, 12 Jan 2023 11:15:22 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16 via Frontend Transport; Thu, 12 Jan 2023 11:15:22 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.16; Thu, 12 Jan 2023 11:15:21 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WvlbL0q8N/jgjrPXBDBdCReH5fanJdIAb0U59Ow12UoMrMjh24HgEfNP3h9v7SPGP71RRrheGkKJBAyD6ZkVKa8HJ+VkDnN6730t/7FjgMqVz3I1OTLBUjMawEtwwOmtyuUVXywdtPnECMMc8EDMo2pJ1TImes71dZKt1nYbKHKWxTr+jEbK//4fiVH0WWIc1kCm78ccLf+lE6+smo91ebNSPOQfaAX04Bw1RgJ5kzhBTKlddcuIQaq8vCXHYeY8g2R9kFDgPWV8DiaFFzNIQ5aLS/gw4OEUftWfbCT6mh6bYgUz2Hqd0o45rnmb8h30kOU1NBfC7B1aVavoOSZEwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3lI6U01xj+sqRZBpqCEWEHvh+8BBKw0Is+AMzYJ7bxc=;
- b=Pg5jFW81Udy60HLfy35UiMba6vsdn5ENJ4NEUBdxsz/tEf3eJPNlxgbI5S+ju+xwh1D6Su1T0XOnyyRx8ur+3/CZ4a5XU5qK337ATmkzTf4RmpnhorYjgG8wD+1ZqIPDm0Z3Mt1fMajZnGpVezCPkBWs+kCamBrkRID6bEDQ/pqp7z6xN8sxfCxadR3a3wvycALG1kezblEBMIIf8/dX8i6PjGMK/Qoqlvkcoj4HOVVI1//aYmTO+PHM6eZdQ6e0fT/RgyTWL6jFs4mjXglbj4ouWUofFPfEMLKRzhmPcJz9Ls8z8MTxO0pvTaI83m9ElBOmEIgFIqY/UFjm53bExw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by SA2PR11MB5148.namprd11.prod.outlook.com (2603:10b6:806:11e::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.19; Thu, 12 Jan
- 2023 19:15:17 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::7ed5:a749:7b4f:ceff%5]) with mapi id 15.20.5986.018; Thu, 12 Jan 2023
- 19:15:17 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "rafael@kernel.org" <rafael@kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "x86@kernel.org" <x86@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "Brown, Len" <len.brown@intel.com>
-Subject: Re: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
-Thread-Topic: [PATCH v2] x86/hibernate: Use fixmap for saving unmapped pages
-Thread-Index: AQHZJTksM0Lkm+QZIUqyvtSWxlR3AK6Zrh4AgAADCICAASUoAIAAU6cA
-Date:   Thu, 12 Jan 2023 19:15:17 +0000
-Message-ID: <0c7760bf5976cb64c952df5601eae14fd33fbe2e.camel@intel.com>
-References: <20230110211839.19572-1-rick.p.edgecombe@intel.com>
-         <CAJZ5v0jnp3jLdD1wN1NjMfxrt+gYZ+im_quHdgsOrWve0XQaWg@mail.gmail.com>
-         <cd2a9ccec0d88821fb0c7580f7ae934f2de71ddf.camel@intel.com>
-         <CAJZ5v0hffKjor=kzr71esaw7M2BV5vCTEY7pg67-iWXZ98sQBw@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hffKjor=kzr71esaw7M2BV5vCTEY7pg67-iWXZ98sQBw@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|SA2PR11MB5148:EE_
-x-ms-office365-filtering-correlation-id: d30b2917-5718-43b7-5677-08daf4d1572a
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: z9K5tI59bGC+45ZVwWcif3fcvd9OMfjipRGglm3FKPxPocVi2HQJyVHRlAGdz/veOSgUUxCy3tv4zeYi3pOM9Yr4JSPKizuIbnQyEp3HlLYCq+4Uf7PACRFkyYy+hSyCU9ZI0TSXLt0/90wUfulMgJBcpSBfauJQVp9dVnNc19DdmGSZ7WmgdNA2RzXzIjcwmvEaKvIMIIBXnnmcLWAUzgLjoVFR1YlhdbqAYNUsHj7uLxC/bCtcVECDMqIz1vvUcAGBMi0t/KGYgg+gcqD7xVhG1wGJEO2DCrqishFjGJa4Xjm1pyhSAOQyLOFvtld2KZ2ULeSmnlVESZaoGKbQvGGm+c8DQ0vkfYyfKQe0PSHcmV+oybeG3AAjIQyDQj2sgTfYuwI2X/uUv35pXaZSnDtG03HXYJ6sPt1GUwgkVhnytKSAEOufGpPFBEnATLud5KyYxh9Dj3gZJKNlQ0rMQfHiOjpajkeGz5Ba3x5q9ITtZCadtr+PC9aFKHdejijq5pBusJcTK5qYbpiqy/FsrADysoKeiNVSFsi3oTqhEuNwOG4m+Pp5JJyohytvMA1kpj2YXzBR0XGACzqbupyJY42HBGozuSxZ+Mw2XNyXnZkENtbdWaRIU91Q66onPjA2K9AQ1P57bwd0VdxyfRhW7KHVMcUirWSabbsNsXc67F0UkptBIysxfiilSmyEqXIoJTLOcwShaJmMywR9p74LOCX1hJMJIV8Jd39hYglczPo=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(39860400002)(396003)(366004)(136003)(451199015)(2906002)(7416002)(5660300002)(8936002)(26005)(36756003)(41300700001)(186003)(6512007)(76116006)(66476007)(71200400001)(66946007)(91956017)(66446008)(64756008)(66556008)(38070700005)(86362001)(4326008)(6916009)(8676002)(38100700002)(82960400001)(122000001)(2616005)(478600001)(83380400001)(6486002)(6506007)(54906003)(316002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SldTaTlBdGFYL1Evam1pTXQrYmxyTHpWN1pkTWhCcERrbWNVS2QzOFgwdUw2?=
- =?utf-8?B?ZHhEVmFaR3YxNG90VkFlWGVMNTRzb2RFOU05c2Zha09Kd0VYdzFOL00zUWg4?=
- =?utf-8?B?SVloOGJJNHZEbzZLSFpobDBvVHBnTUVTOExPcThUNUZBMW50RGpBMVROYndR?=
- =?utf-8?B?NEo3Qm1VdUxHQ2gzNEJ6bnNNNnd5KzNoUnZ0SWhjM28yeUZhZGs0VHZYUm42?=
- =?utf-8?B?VWNZYVFKY1FORm5VWTFOOUNPZ2RLYzFwd2xKL1FsUldIVGV2Ri95TU5KeXZI?=
- =?utf-8?B?MG4wNFBmdFZ1S25FaG9KV21BYVgrdVM4Z0hiRlFSWmZBRnUxa3Z6U2xrajhv?=
- =?utf-8?B?SUhTYlJnKytZYkNORjZ1ZVRxemFVcnRNWFVTZG5oQStGOURUSjFEeDdkVG5a?=
- =?utf-8?B?djM5QlI2ZGp2ZHk3RFVXdWJxZ2Y1NEZHSmZQQVZrRG4zUU1BNlVOd0lqcDVJ?=
- =?utf-8?B?eXIvNTBORGE2UURySWdIa2NTUUYxUjRDbHg0YldUa1liaG5PWHVVSlQ5T04x?=
- =?utf-8?B?NCtiNFIrN256UUd2bVlWK1ZxWFlGcEhwQWZqYTVPQUtiSTlNc3NmeDFsQnpL?=
- =?utf-8?B?aDZ1SHZPcWNzNnYvYnZqVTU3MENGenBWcU55UTRnZlV4bGhqTkYwS0grMHow?=
- =?utf-8?B?VFlxYXNYNW1LRGZnKzNFZW9iUjNGbFpQaENYRHJNV1c1YWt0cjR3R3BlRC8r?=
- =?utf-8?B?RTdZSEZFMzMwejVQTUo3OFFrRU13NGRiZExsN2xxb2ZiYjdaY01Sd2hWV1B0?=
- =?utf-8?B?SGVQbmhnalBiZVZiV0E1WXhJWEVzRHJVa1U0VHF6VXAzQjhCWmtDZ0lqT3pK?=
- =?utf-8?B?UlUvdGJ4YU5hMnorbTNteXdQb3BIWlgrS0JZMjlnVUZnVDgxVFNzLzZBNWNI?=
- =?utf-8?B?OHYyS0JvTEZCeXlnZkgraDQxK0l6NWFzaldWRUNCNjU4bTJ6ODRMRmtURUE2?=
- =?utf-8?B?TUY4bGF4U2pEWHpSZ2Q0NlVvbnlsUW0xM1VodTFRUDNFY3VlbGZhYVljbjlG?=
- =?utf-8?B?cU1aTW5CMVF5ejBVbStaZ1lnaFZsN1B1SDA1cDh2Zm5JYlJUa29XdnRFZzFW?=
- =?utf-8?B?dXVlYSs0b0NzbkRCMytUb1BreW5peVJ6RzVmano4TnI2cWlhWWFwMlo5Mk5Z?=
- =?utf-8?B?Y0NrSzZHenh0QmRmckhNT1Fkd21hektwekZFQ0xlNGNnSjZiSTZiOU1JMmNh?=
- =?utf-8?B?Nm1id2dhejhZN1c3bFlzRkVQYlAvUDZSbE9rY0NuMWVqV1J2TWp0NU4yZkFq?=
- =?utf-8?B?dFdybFNMaUd5R1VjY0JjQ3ZRRXJFcHVPTi8xOTRwWkRxTW5tRzVLSGhoL290?=
- =?utf-8?B?TUZmSndubnY3SnpQS3NGeEVmSTUyY1ZvdmZub3NqZWZPTWg4U052Q2RteERh?=
- =?utf-8?B?QmJiWnl4Y2gzcnpzd1JnMHBTTTFvaTR6SUdaMkZBbnR0MkhZdmdGRi9JWXNR?=
- =?utf-8?B?bFR4V3RhdmlUQllZaDUxRktkL0s2SktSYVV4RkQ2Q1dkaTd6YjhkUmdzeXdL?=
- =?utf-8?B?d045bUlVcnAzb1NGYVpoUmNCczJKbUF3SlBpTWZsQ1d0N21HK0lyOFoxcTV6?=
- =?utf-8?B?U0VxNFRQblZXOXo3aytER3BPRlVwbExQNGw5ZGdrTGVVSDVvbG93YTBaeEt6?=
- =?utf-8?B?OG9YcTJiZzM1TVVNbVJKUFVKYlNYTnNFa0xYSnB3VU9icE9LMExDRFdrNElj?=
- =?utf-8?B?NTQ2dUs4bkdZQnhBSG4zcmNHNDd6c1ZxSXFGaVlkY01kTDhlN1QvSld4T0d5?=
- =?utf-8?B?Vmw1M0Q5ZzQ5d1NrSG9mR1Urd2k3OXV4akd4VVM4QUJOVUFpQ1RiQU1TWjVD?=
- =?utf-8?B?ZFZyTlkvNkViUCt2RktNbnBzSW5rQUxwQ3hxZGJ3bG5HckxhYnZ5T3lJRDZo?=
- =?utf-8?B?bXhhbFVNMXdIbS83SlY2ejFmaG9IL2xjNnpYeHdTeDE0ODJkT3ZUTTdlVlJN?=
- =?utf-8?B?c3VickUzbTZXL0htVG1lRlJqUUFvWEpBZURMQjFQaklDNHM3RFV4UWpIRGRJ?=
- =?utf-8?B?T291SWI0WFEvbmk2VVhNMUVCbHJhY3orQnN6am9XVm40Nit2bUg5NVpTRWRw?=
- =?utf-8?B?Q28xSldkckxQVVp0ZUs0Tkxwam9Pb1RQblk0bzFJSnhaU0FldkR4SDBLdGFT?=
- =?utf-8?B?QitSek9WQngvS3lpdFdadXJQMWVEYTdqVzZkYzUrYzB4a0gzSXNvVDd6M3Fw?=
- =?utf-8?Q?/7fgPcwpOrLMbzu2/lXD2cY=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3C2143BF9764C742B77451AD7FD2DEB8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        with ESMTP id S240032AbjALT2W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 14:28:22 -0500
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD003F461;
+        Thu, 12 Jan 2023 11:22:36 -0800 (PST)
+Received: by mail-ed1-f49.google.com with SMTP id j16so28232607edw.11;
+        Thu, 12 Jan 2023 11:22:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sZ+Kgl/yiHekhY8TIyagTN2tIn8nH8IHrkiUteEM3yQ=;
+        b=FzvplVLBLvKeIFN+bNsg17osQKs4UGP2jyBltl40Zv2VfVs8I2OYjzZeEJAeIdLsDW
+         4VVIp/kiC6VD1GmOzrrySf4W5A7oi9C1brhHudTJkL7yQrOmlwPWku1w4u0wvaPp7LWJ
+         doOKhxfq3aZ61bahZoBFQHR8D+MdIntaaVi6AGIe4+h3ZmNIQBjBfcihX/rT1T4y7Jbd
+         PBM4RVg4lrpfT7YPa0//3BRr4CAXFGc3ippretClv+titbpdY9FrzDs7tnwHGGeoVvWR
+         U1+zfDBQcepUWjFTsC3LmnsKHMyp8iYqAeNZ4EAebiYkj9ZRIddjuNrbYqH8QPgUbbag
+         ukhQ==
+X-Gm-Message-State: AFqh2kp0aF2Yc8dS5E0D6k/DZhk22xJvSAVCLgJZZTosRKpkIFRy4w+8
+        Qmaw7tEjH5nFqDX798uzlKRgzELkjlYpemUj+9Y=
+X-Google-Smtp-Source: AMrXdXtk+YPe30kAaspgYZXfr2Ojqyu2iUpd1huzvpdI0dDQsDPKNIk8ESZ9nKi7l4p0T6z/Sye4ikI7xL8/rixuMmg=
+X-Received: by 2002:a05:6402:5c5:b0:46d:53d7:d1f6 with SMTP id
+ n5-20020a05640205c500b0046d53d7d1f6mr7942968edx.211.1673551355370; Thu, 12
+ Jan 2023 11:22:35 -0800 (PST)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d30b2917-5718-43b7-5677-08daf4d1572a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Jan 2023 19:15:17.3612
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 9gAvjJkzRqB5Enh9FyfpjQWrf/QNMSTRbz+o0rzAED2vTVJV8roUpnsomN+N+hyTSJYmo8MuV7jHELK2yBj7v9QdCHNuiAg4wPPW029g1h8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5148
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+In-Reply-To: <20230105145159.1089531-1-kajetan.puchalski@arm.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 12 Jan 2023 20:22:24 +0100
+Message-ID: <CAJZ5v0hMEOWgCQC6=Qf7dfsgkxe==RGXpsQSL4h-PtDaGMok=g@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] cpuidle: teo: Introduce util-awareness
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, dsmythies@telus.net,
+        yu.chen.surf@gmail.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-T24gVGh1LCAyMDIzLTAxLTEyIGF0IDE1OjE1ICswMTAwLCBSYWZhZWwgSi4gV3lzb2NraSB3cm90
-ZToNCj4gPiA+IA0KPiA+ID4gSSBkb24ndCB0aGluayB0aGUgYWJvdmUgaXMgbmVlZGVkLiAgVGhl
-IGNvZGUgdXNpbmcgdGhpcyBmdW5jdGlvbg0KPiA+ID4gY2Fubm90IGJlIHByZWVtcHRlZCBhbnl3
-YXkgQUZBSUNTLg0KPiA+IA0KPiA+IFRoZSByZWFzb24gSSB0aG91Z2h0IGl0IHdhcyB1c2VmdWwg
-d2FzIGJlY2F1c2UgdGhpcyBmdW5jdGlvbiBpcyBub3cNCj4gPiBkZWZpbmVkIGluIGEgaGVhZGVy
-LiBTb21lb25lIGVsc2UgbWlnaHQgZGVjaWRlIHRvIHVzZSBpdC4gRG9lcyBpdA0KPiA+IHNlZW0N
-Cj4gPiBtb3JlIHVzZWZ1bD8NCj4gDQo+IFdlbGwsIGl0IGlzIGV4cG9zZWQgbm93LCBidXQgb25s
-eSBpbiBvcmRlciB0byBhbGxvdyB0aGUgX193ZWFrDQo+IGZ1bmN0aW9uIHRvIGJlIG92ZXJyaWRk
-ZW4uICBJIGRvbid0IHRoaW5rIGl0IGlzIGxvZ2ljYWxseSB2YWxpZCB0bw0KPiB1c2UNCj4gaXQg
-YW55d2hlcmUgYmV5b25kIGl0cyBvcmlnaW5hbCBjYWxsIHNpdGUuDQo+IA0KPiBUbyBtYWtlIHRo
-YXQgY2xlYXIsIEkgd291bGQgY2FsbCBpdCBzb21ldGhpbmcgaGliZXJuYXRpb24tc3BlY2lmaWMs
-DQo+IGxpa2UgaGliZXJuYXRlX2NvcHlfdW5tYXBwZWRfcGFnZSgpIGFuZCBJIHdvdWxkIGFkZCBh
-IGtlcm5lbGRvYw0KPiBjb21tZW50IHRvIGl0IHRvIGRlc2NyaWJlIGl0cyBpbnRlbmRlZCB1c2Uu
-DQoNCk9rLCBJJ2xsIGNoYW5nZSB0aGUgbmFtZSwgdGhhdCBtYWtlcyBzZW5zZS4NCg0KT24gdGhl
-IHdhcm5pbmcsIG9rLCBJJ2xsIGRyb3AgaXQuIEJ1dCB0byBtZSB0aGUgY29kZSBzdGFuZCBvdXQg
-YXMNCnF1ZXN0aW9uYWJsZSB3aXRoIHRoZSBQVEUgY2hhbmdlIGFuZCBvbmx5IHRoZSBsb2NhbCBU
-TEIgZmx1c2guIEl0J3MgYQ0KYml0IG9mIGEgY29tbWVudCBhcyBjb2RlIG9uIGEgcmFyZSBwYXRo
-Lg0KDQo+IA0KPiBGdXJ0aGVybW9yZSwgSSdtIG5vdCBzdXJlIGFib3V0IHRoZSBuZXcgY29kZSBs
-YXlvdXQuDQo+IA0KPiBQZXJzb25hbGx5LCBJIHdvdWxkIHByZWZlciBoaWJlcm5hdGVfbWFwX3Bh
-Z2UoKSBhbmQNCj4gaGliZXJuYXRlX3VubWFwX3BhZ2UoKSB0byBiZSB0dXJuZWQgaW50byBfX3dl
-YWsgZnVuY3Rpb25zIGFuZA0KPiBwb3NzaWJseQ0KPiBvdmVycmlkZGVuIGJ5IHRoZSBhcmNoIGNv
-ZGUsIHdoaWNoIHdvdWxkIGFsbG93IHRoZSBhbW91bnQgb2YgY2hhbmdlcw0KPiB0byBiZSByZWR1
-Y2VkIGFuZCBkb19jb3B5X3BhZ2UoKSB3b3VsZG4ndCBuZWVkIHRvIGJlIG1vdmVkIGludG8gdGhl
-DQo+IGhlYWRlciBhbnkgbW9yZS4NCg0KQ3VycmVudGx5IGhpYmVybmF0ZV9tYXBfcGFnZSgpIG1h
-cHMgdGhlIHBhZ2Ugb24gdGhlIGRpcmVjdCBtYXAgYW5kDQpkb2Vzbid0IHJldHVybiBhbnl0aGlu
-Zy4gVGhpcyBuZXcgY29kZSBlZmZlY3RpdmVseSBjcmVhdGVzIGEgcmVhZGFibGUNCmFsaWFzIGlu
-IHRoZSBmaXhtYXAuIFNvIGl0IHdvdWxkIGhhdmUgdG8gcmV0dXJuIGFuIGFkZHJlc3MgdG8gdXNl
-IHNvDQp0aGUgY29yZSBoaWJlcm5hdGUgY29kZSB3b3VsZCBrbm93IHdoZXJlIHRvIGNvcHkgZnJv
-bS4gVGhlbiBpdCB3b3VsZA0KaGF2ZSB0byBwYXNzIGl0IGJhY2sgaW50byBoaWJlcm5hdGVfdW5t
-YXBfcGFnZSgpIGZvciB0aGUgYXJjaCB0byBkZWNpZGUNCndoYXQgdG8gZG8gdG8gY2xlYW4gaXQg
-dXAuIEkgdGhpbmsgaXQgd291bGQgYmUgbW9yZSBjb21wbGljYXRlZC4NCg0KVGhlcmUgaXMgYWxz
-byBhbHJlYWR5IG11bHRpcGxlIHBhdGhzIGluIGhpYmVybmF0ZV9tYXBfcGFnZSgpIHRoYXQgd291
-bGQNCmhhdmUgdG8gYmUgZHVwbGljYXRlZCBpbiB0aGUgYXJjaCB2ZXJzaW9ucy4NCg0KU28gSSBz
-ZWUgdGhlIGlkZWEsIGJ1dCBJJ20gbm90IHN1cmUgaXQgZW5kcyB1cCBiZXR0ZXIuIENhbiB3ZSBs
-ZWF2ZQ0KdGhpcyBvbmU/DQoNClRoYW5rcywNClJpY2sNCg==
+On Thu, Jan 5, 2023 at 3:52 PM Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> Hi,
+>
+> At the moment, none of the available idle governors take any scheduling
+> information into account. They also tend to overestimate the idle
+> duration quite often, which causes them to select excessively deep idle
+> states, thus leading to increased wakeup latency and lower performance with no
+> power saving. For 'menu' while web browsing on Android for instance, those
+> types of wakeups ('too deep') account for over 24% of all wakeups.
+>
+> At the same time, on some platforms idle state 0 can be power efficient
+> enough to warrant wanting to prefer it over idle state 1. This is because
+> the power usage of the two states can be so close that sufficient amounts
+> of too deep state 1 sleeps can completely offset the state 1 power saving to the
+> point where it would've been more power efficient to just use state 0 instead.
+> This is of course for systems where state 0 is not a polling state, such as
+> arm-based devices.
+>
+> Sleeps that happened in state 0 while they could have used state 1 ('too shallow') only
+> save less power than they otherwise could have. Too deep sleeps, on the other
+> hand, harm performance and nullify the potential power saving from using state 1 in
+> the first place. While taking this into account, it is clear that on balance it
+> is preferable for an idle governor to have more too shallow sleeps instead of
+> more too deep sleeps on those kinds of platforms.
+>
+> Currently the best available governor under this metric is TEO which on average results in less than
+> half the percentage of too deep sleeps compared to 'menu', getting much better wakeup latencies and
+> increased performance in the process.
+>
+> This patchset specifically tunes TEO to prefer shallower idle states in order to reduce wakeup latency
+> and achieve better performance. To this end, before selecting the next idle state it uses the avg_util
+> signal of a CPU's runqueue in order to determine to what extent the CPU is being utilized.
+> This util value is then compared to a threshold defined as a percentage of the cpu's capacity
+> (capacity >> 6 ie. ~1.5% in the current implementation). If the util is above the threshold, the idle
+> state selected by TEO metrics will be reduced by 1, thus selecting a shallower state. If the util is
+> below the threshold, the governor defaults to the TEO metrics mechanism to try to select the deepest
+> available idle state based on the closest timer event and its own correctness.
+>
+> The main goal of this is to reduce latency and increase performance for some workloads. Under some
+> workloads it will result in an increase in power usage (Geekbench 5) while for other workloads it
+> will also result in a decrease in power usage compared to TEO (PCMark Web, Jankbench, Speedometer).
+>
+> As of v2 the patch includes a 'fast exit' path for arm-based and similar systems where only 2 idle
+> states are present. If there's just 2 idle states and the CPU is utilized, we can directly select
+> the shallowest state and save cycles by skipping the entire metrics mechanism.
+>
+> Under the current implementation, the state will not be reduced by 1 if the change would lead to
+> selecting a polling state instead of a non-polling state.
+>
+> This approach can outperform all the other currently available governors, at least on mobile device
+> workloads, which is why I think it is worth keeping as an option.
+>
+> There is no particular attachment or reliance on TEO for this mechanism, I simply chose to base
+> it on TEO because it performs the best out of all the available options and I didn't think there was
+> any point in reinventing the wheel on the side of computing governor metrics. If a
+> better approach comes along at some point, there's no reason why the same idle aware mechanism
+> couldn't be used with any other metrics algorithm. That would, however, require implemeting it as
+> a separate governor rather than a TEO add-on.
+>
+> As for how the extension performs in practice, below I'll add some benchmark results I got while
+> testing this patchset. All the benchmarks were run after holding the phone in the fridge for exactly
+> an hour each time to minimise the impact of thermal issues.
+>
+> Pixel 6 (Android 12, mainline kernel 5.18, with newer mainline CFS patches):
+>
+> 1. Geekbench 5 (latency-sensitive, heavy load test)
+>
+> The values below are gmean values across 3 back to back iteration of Geekbench 5.
+> As GB5 is a heavy benchmark, after more than 3 iterations intense throttling kicks in on mobile devices
+> resulting in skewed benchmark scores, which makes it difficult to collect reliable results. The actual
+> values for all of the governors can change between runs as the benchmark might be affected by factors
+> other than just latency. Nevertheless, on the runs I've seen, util-aware TEO frequently achieved better
+> scores than all the other governors.
+>
+> Benchmark scores
+>
+> +-----------------+-------------+---------+-------------+
+> | metric          | kernel      |   value | perc_diff   |
+> |-----------------+-------------+---------+-------------|
+> | multicore_score | menu        |  2826.5 | 0.0%        |
+> | multicore_score | teo         |  2764.8 | -2.18%      |
+> | multicore_score | teo_util_v3 |  2849   | 0.8%        |
+> | multicore_score | teo_util_v4 |  2865   | 1.36%       |
+> | score           | menu        |  1053   | 0.0%        |
+> | score           | teo         |  1050.7 | -0.22%      |
+> | score           | teo_util_v3 |  1059.6 | 0.63%       |
+> | score           | teo_util_v4 |  1057.6 | 0.44%       |
+> +-----------------+-------------+---------+-------------+
+>
+> Idle misses
+>
+> The numbers are percentages of too deep and too shallow sleeps computed using the new trace
+> event - cpu_idle_miss. The percentage is obtained by counting the two types of misses over
+> the course of a run and then dividing them by the total number of wakeups in that run.
+>
+> +-------------+-------------+--------------+
+> | wa_path     | type        |   count_perc |
+> |-------------+-------------+--------------|
+> | menu        | too deep    |      14.994% |
+> | teo         | too deep    |       9.649% |
+> | teo_util_v3 | too deep    |       4.298% |
+> | teo_util_v4 | too deep    |       4.02 % |
+> | menu        | too shallow |       2.497% |
+> | teo         | too shallow |       5.963% |
+> | teo_util_v3 | too shallow |      13.773% |
+> | teo_util_v4 | too shallow |      14.598% |
+> +-------------+-------------+--------------+
+>
+> Power usage [mW]
+>
+> +--------------+----------+-------------+---------+-------------+
+> | chan_name    | metric   | kernel      |   value | perc_diff   |
+> |--------------+----------+-------------+---------+-------------|
+> | total_power  | gmean    | menu        |  2551.4 | 0.0%        |
+> | total_power  | gmean    | teo         |  2606.8 | 2.17%       |
+> | total_power  | gmean    | teo_util_v3 |  2670.1 | 4.65%       |
+> | total_power  | gmean    | teo_util_v4 |  2722.3 | 6.7%        |
+> +--------------+----------+-------------+---------+-------------+
+>
+> Task wakeup latency
+>
+> +-----------------+----------+-------------+-------------+-------------+
+> | comm            | metric   | kernel      |       value | perc_diff   |
+> |-----------------+----------+-------------+-------------+-------------|
+> | AsyncTask #1    | gmean    | menu        | 78.16μs     | 0.0%        |
+> | AsyncTask #1    | gmean    | teo         | 61.60μs     | -21.19%     |
+> | AsyncTask #1    | gmean    | teo_util_v3 | 74.34μs     | -4.89%      |
+> | AsyncTask #1    | gmean    | teo_util_v4 | 54.45μs     | -30.34%     |
+> | labs.geekbench5 | gmean    | menu        | 88.55μs     | 0.0%        |
+> | labs.geekbench5 | gmean    | teo         | 100.97μs    | 14.02%      |
+> | labs.geekbench5 | gmean    | teo_util_v3 | 53.57μs     | -39.5%      |
+> | labs.geekbench5 | gmean    | teo_util_v4 | 59.60μs     | -32.7%      |
+> +-----------------+----------+-------------+-------------+-------------+
+>
+> In case of this benchmark, the difference in latency does seem to translate into better scores.
+>
+> 2. PCMark Web Browsing (non latency-sensitive, normal usage web browsing test)
+>
+> The table below contains gmean values across 20 back to back iterations of PCMark 2 Web Browsing.
+>
+> Benchmark scores
+>
+> +----------------+-------------+---------+-------------+
+> | metric         | kernel      |   value | perc_diff   |
+> |----------------+-------------+---------+-------------|
+> | PcmaWebV2Score | menu        |  5232   | 0.0%        |
+> | PcmaWebV2Score | teo         |  5219.8 | -0.23%      |
+> | PcmaWebV2Score | teo_util_v3 |  5273.5 | 0.79%       |
+> | PcmaWebV2Score | teo_util_v4 |  5239.9 | 0.15%       |
+> +----------------+-------------+---------+-------------+
+>
+> Idle misses
+>
+> +-------------+-------------+--------------+
+> | wa_path     | type        |   count_perc |
+> |-------------+-------------+--------------|
+> | menu        | too deep    |      24.814% |
+> | teo         | too deep    |       11.65% |
+> | teo_util_v3 | too deep    |       3.481% |
+> | teo_util_v4 | too deep    |       3.662% |
+> | menu        | too shallow |       3.101% |
+> | teo         | too shallow |       8.578% |
+> | teo_util_v3 | too shallow |      18.326% |
+> | teo_util_v4 | too shallow |      18.692% |
+> +-------------+-------------+--------------+
+>
+> Power usage [mW]
+>
+> +--------------+----------+-------------+---------+-------------+
+> | chan_name    | metric   | kernel      |   value | perc_diff   |
+> |--------------+----------+-------------+---------+-------------|
+> | total_power  | gmean    | menu        |   179.2 | 0.0%        |
+> | total_power  | gmean    | teo         |   184.8 | 3.1%        |
+> | total_power  | gmean    | teo_util_v3 |   177.4 | -1.02%      |
+> | total_power  | gmean    | teo_util_v4 |   184.1 | 2.71%       |
+> +--------------+----------+-------------+---------+-------------+
+>
+> Task wakeup latency
+>
+> +-----------------+----------+-------------+-------------+-------------+
+> | comm            | metric   | kernel      |       value | perc_diff   |
+> |-----------------+----------+-------------+-------------+-------------|
+> | CrRendererMain  | gmean    | menu        | 236.63μs    | 0.0%        |
+> | CrRendererMain  | gmean    | teo         | 201.85μs    | -14.7%      |
+> | CrRendererMain  | gmean    | teo_util_v3 | 106.46μs    | -55.01%     |
+> | CrRendererMain  | gmean    | teo_util_v4 | 106.72μs    | -54.9%      |
+> | chmark:workload | gmean    | menu        | 100.30μs    | 0.0%        |
+> | chmark:workload | gmean    | teo         | 80.20μs     | -20.04%     |
+> | chmark:workload | gmean    | teo_util_v3 | 65.88μs     | -34.32%     |
+> | chmark:workload | gmean    | teo_util_v4 | 57.90μs     | -42.28%     |
+> | surfaceflinger  | gmean    | menu        | 97.57μs     | 0.0%        |
+> | surfaceflinger  | gmean    | teo         | 98.86μs     | 1.31%       |
+> | surfaceflinger  | gmean    | teo_util_v3 | 56.49μs     | -42.1%      |
+> | surfaceflinger  | gmean    | teo_util_v4 | 72.68μs     | -25.52%     |
+> +-----------------+----------+-------------+-------------+-------------+
+>
+> In this case the large latency improvement does not translate into a notable increase in benchmark score as
+> this particular benchmark mainly responds to changes in operating frequency.
+>
+> 3. Jankbench (locked 60hz screen) (normal usage UI test)
+>
+> Frame durations
+>
+> +---------------+------------------+---------+-------------+
+> | variable      | kernel           |   value | perc_diff   |
+> |---------------+------------------+---------+-------------|
+> | mean_duration | menu_60hz        |    13.9 | 0.0%        |
+> | mean_duration | teo_60hz         |    14.7 | 6.0%        |
+> | mean_duration | teo_util_v3_60hz |    13.8 | -0.87%      |
+> | mean_duration | teo_util_v4_60hz |    12.6 | -9.0%       |
+> +---------------+------------------+---------+-------------+
+>
+> Jank percentage
+>
+> +------------+------------------+---------+-------------+
+> | variable   | kernel           |   value | perc_diff   |
+> |------------+------------------+---------+-------------|
+> | jank_perc  | menu_60hz        |     1.5 | 0.0%        |
+> | jank_perc  | teo_60hz         |     2.1 | 36.99%      |
+> | jank_perc  | teo_util_v3_60hz |     1.3 | -13.95%     |
+> | jank_perc  | teo_util_v4_60hz |     1.3 | -17.37%     |
+> +------------+------------------+---------+-------------+
+>
+> Idle misses
+>
+> +------------------+-------------+--------------+
+> | wa_path          | type        |   count_perc |
+> |------------------+-------------+--------------|
+> | menu_60hz        | too deep    |       26.00% |
+> | teo_60hz         | too deep    |       11.00% |
+> | teo_util_v3_60hz | too deep    |        2.33% |
+> | teo_util_v4_60hz | too deep    |        2.54% |
+> | menu_60hz        | too shallow |        4.74% |
+> | teo_60hz         | too shallow |       11.89% |
+> | teo_util_v3_60hz | too shallow |       21.78% |
+> | teo_util_v4_60hz | too shallow |       21.93% |
+> +------------------+-------------+--------------+
+>
+> Power usage [mW]
+>
+> +--------------+------------------+---------+-------------+
+> | chan_name    | kernel           |   value | perc_diff   |
+> |--------------+------------------+---------+-------------|
+> | total_power  | menu_60hz        |   144.6 | 0.0%        |
+> | total_power  | teo_60hz         |   136.9 | -5.27%      |
+> | total_power  | teo_util_v3_60hz |   134.2 | -7.19%      |
+> | total_power  | teo_util_v4_60hz |   121.3 | -16.08%     |
+> +--------------+------------------+---------+-------------+
+>
+> Task wakeup latency
+>
+> +-----------------+------------------+-------------+-------------+
+> | comm            | kernel           |       value | perc_diff   |
+> |-----------------+------------------+-------------+-------------|
+> | RenderThread    | menu_60hz        | 139.52μs    | 0.0%        |
+> | RenderThread    | teo_60hz         | 116.51μs    | -16.49%     |
+> | RenderThread    | teo_util_v3_60hz | 86.76μs     | -37.82%     |
+> | RenderThread    | teo_util_v4_60hz | 91.11μs     | -34.7%      |
+> | droid.benchmark | menu_60hz        | 135.88μs    | 0.0%        |
+> | droid.benchmark | teo_60hz         | 105.21μs    | -22.57%     |
+> | droid.benchmark | teo_util_v3_60hz | 83.92μs     | -38.24%     |
+> | droid.benchmark | teo_util_v4_60hz | 83.18μs     | -38.79%     |
+> | surfaceflinger  | menu_60hz        | 124.03μs    | 0.0%        |
+> | surfaceflinger  | teo_60hz         | 151.90μs    | 22.47%      |
+> | surfaceflinger  | teo_util_v3_60hz | 100.19μs    | -19.22%     |
+> | surfaceflinger  | teo_util_v4_60hz | 87.65μs     | -29.33%     |
+> +-----------------+------------------+-------------+-------------+
+>
+> 4. Speedometer 2 (heavy load web browsing test)
+>
+> Benchmark scores
+>
+> +-------------------+-------------+---------+-------------+
+> | metric            | kernel      |   value | perc_diff   |
+> |-------------------+-------------+---------+-------------|
+> | Speedometer Score | menu        |   102   | 0.0%        |
+> | Speedometer Score | teo         |   104.9 | 2.88%       |
+> | Speedometer Score | teo_util_v3 |   102.1 | 0.16%       |
+> | Speedometer Score | teo_util_v4 |   103.8 | 1.83%       |
+> +-------------------+-------------+---------+-------------+
+>
+> Idle misses
+>
+> +-------------+-------------+--------------+
+> | wa_path     | type        |   count_perc |
+> |-------------+-------------+--------------|
+> | menu        | too deep    |       17.95% |
+> | teo         | too deep    |        6.46% |
+> | teo_util_v3 | too deep    |        0.63% |
+> | teo_util_v4 | too deep    |        0.64% |
+> | menu        | too shallow |        3.86% |
+> | teo         | too shallow |        8.21% |
+> | teo_util_v3 | too shallow |       14.72% |
+> | teo_util_v4 | too shallow |       14.43% |
+> +-------------+-------------+--------------+
+>
+> Power usage [mW]
+>
+> +--------------+----------+-------------+---------+-------------+
+> | chan_name    | metric   | kernel      |   value | perc_diff   |
+> |--------------+----------+-------------+---------+-------------|
+> | total_power  | gmean    | menu        |  2059   | 0.0%        |
+> | total_power  | gmean    | teo         |  2187.8 | 6.26%       |
+> | total_power  | gmean    | teo_util_v3 |  2212.9 | 7.47%       |
+> | total_power  | gmean    | teo_util_v4 |  2121.8 | 3.05%       |
+> +--------------+----------+-------------+---------+-------------+
+>
+> Task wakeup latency
+>
+> +-----------------+----------+-------------+-------------+-------------+
+> | comm            | metric   | kernel      |       value | perc_diff   |
+> |-----------------+----------+-------------+-------------+-------------|
+> | CrRendererMain  | gmean    | menu        | 17.18μs     | 0.0%        |
+> | CrRendererMain  | gmean    | teo         | 16.18μs     | -5.82%      |
+> | CrRendererMain  | gmean    | teo_util_v3 | 18.04μs     | 5.05%       |
+> | CrRendererMain  | gmean    | teo_util_v4 | 18.25μs     | 6.27%       |
+> | RenderThread    | gmean    | menu        | 68.60μs     | 0.0%        |
+> | RenderThread    | gmean    | teo         | 48.44μs     | -29.39%     |
+> | RenderThread    | gmean    | teo_util_v3 | 48.01μs     | -30.02%     |
+> | RenderThread    | gmean    | teo_util_v4 | 51.24μs     | -25.3%      |
+> | surfaceflinger  | gmean    | menu        | 42.23μs     | 0.0%        |
+> | surfaceflinger  | gmean    | teo         | 29.84μs     | -29.33%     |
+> | surfaceflinger  | gmean    | teo_util_v3 | 24.51μs     | -41.95%     |
+> | surfaceflinger  | gmean    | teo_util_v4 | 29.64μs     | -29.8%      |
+> +-----------------+----------+-------------+-------------+-------------+
+>
+> Thank you for taking your time to read this!
+>
+> --
+> Kajetan
+>
+> v5 -> v6:
+> - amended some wording in the commit description & cover letter
+> - included test results in the commit description
+> - refactored checking the CPU utilized status to account for !SMP systems
+> - dropped the RFC from the patchset header
+>
+> v4 -> v5:
+> - remove the restriction to only apply the mechanism for C1 candidate state
+> - clarify some code comments, fix comment style
+> - refactor the fast-exit path loop implementation
+> - move some cover letter information into the commit description
+>
+> v3 -> v4:
+> - remove the chunk of code skipping metrics updates when the CPU was utilized
+> - include new test results and more benchmarks in the cover letter
+>
+> v2 -> v3:
+> - add a patch adding an option to skip polling states in teo_find_shallower_state()
+> - only reduce the state if the candidate state is C1 and C0 is not a polling state
+> - add a check for polling states in the 2-states fast-exit path
+> - remove the ifdefs and Kconfig option
+>
+> v1 -> v2:
+> - rework the mechanism to reduce selected state by 1 instead of directly selecting C0 (suggested by Doug Smythies)
+> - add a fast-exit path for systems with 2 idle states to not waste cycles on metrics when utilized
+> - fix typos in comments
+> - include a missing header
+>
+>
+> Kajetan Puchalski (2):
+>   cpuidle: teo: Optionally skip polling states in teo_find_shallower_state()
+>   cpuidle: teo: Introduce util-awareness
+>
+>  drivers/cpuidle/governors/teo.c | 100 ++++++++++++++++++++++++++++++--
+>  1 file changed, 96 insertions(+), 4 deletions(-)
+>
+> --
+
+Both patches in the series applied as 6.3 material, thanks!
