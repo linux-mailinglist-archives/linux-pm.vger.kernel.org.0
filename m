@@ -2,103 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE2D667F33
-	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 20:29:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689FB667F49
+	for <lists+linux-pm@lfdr.de>; Thu, 12 Jan 2023 20:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236181AbjALT3Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 14:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51380 "EHLO
+        id S232439AbjALTaX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 14:30:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240642AbjALT2q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 14:28:46 -0500
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D9965F3;
-        Thu, 12 Jan 2023 11:23:28 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id u9so47258319ejo.0;
-        Thu, 12 Jan 2023 11:23:28 -0800 (PST)
+        with ESMTP id S234912AbjALT3W (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 14:29:22 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B7113CF4;
+        Thu, 12 Jan 2023 11:24:16 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id w14so10929710edi.5;
+        Thu, 12 Jan 2023 11:24:15 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nKrf1dgum1SXnE9nilvyIY+Ubkbdg8+lqnAjJi8wIj8=;
-        b=Cr9F3G70miWMcevRLId8ATPP34V50hLiZl5wswvvcJ91IWbpOO6z7xdUvwXiNsNHNi
-         fv44BwcBCGrD20Co9ZqayQr9yaBXf5kg93fzSXrqcVG/eI51B2EAsMF/Fi6lYS/bkqMa
-         JHpD59nOlakWkjLh1BraY0ZgU7UNVa/qckqcvg5JuJ6l0qeNP+YUhHKp5f7eSgZDPdpG
-         5kGdTsNEJtgfHJNz0p4dUfuUa35QF62boU97UWsdDntxrNLMNCuF8JXhxjt4se7jmGdU
-         4JOmuLMBrmnKZDQQc6RPrC1zQ+PKrgpE/f+MnC/1UyyT9GblD/JGAQjUkHZ1usIqCeY1
-         /tIg==
-X-Gm-Message-State: AFqh2kprK2CqpXQaEDZK5mowC3l8oJAIAJsPYyAqcLOMmkDmsoF+Bxui
-        b8xHGhDw+nasVAoMGceUnVB6/dFoWbZ2ylaoqts=
-X-Google-Smtp-Source: AMrXdXtL1rja7E90VH6eS1N2VoXUsMrVjlY9Cx5HI455VOxOrsfbpcBloLIrnlSYf7nWGf3tsZSlcNJSq247NSHStxA=
-X-Received: by 2002:a17:907:8d0e:b0:7b2:7b45:2cd2 with SMTP id
- tc14-20020a1709078d0e00b007b27b452cd2mr6894663ejc.615.1673551406640; Thu, 12
- Jan 2023 11:23:26 -0800 (PST)
+        bh=YMnmIzijuaqZflMjTtYj3OMB+Pw4CnTvILOcUfn79Dg=;
+        b=GnH5pCZrAoVhTAwmLW5XkDZmMnLaT05kH+wjAQec+0FMdrFjdBxBre7ZwCM4sbnGFS
+         DLguLmpvZr9F5Pn7aibq6TYF42MdryglhBPN0BEJN5G3a2MepTJtw6pVIPUm9+Fuyb/o
+         xUGdO+OFvB48KUmyCrR96JwpIVDRcsw7/9U0bM1Sp9LlXFIqxRL3FycKjm1A8ZbUhbrH
+         U9kmGS2/GIo0uPRGeN0BkldtnZRjpblsoVVc/VSelJz0tpDOC122eys05MaSVw1G6yWh
+         cySrRJeCiwMtT0CtfZUh7WJgebao4C2sD0sR9i1jjRuJNH8URm0QIbFBiFElU+ZAkIZj
+         XvWQ==
+X-Gm-Message-State: AFqh2kp6TLtj60SIjZwMhMSs4kh+MznXtYGm/soyW22cgOVY34WzGTun
+        0ojK6buDTulLV5GAhm8lnE3eWbeWJwSEMY8MYIY=
+X-Google-Smtp-Source: AMrXdXtQgP05F0VUbaSSiLUXXPpwhzoqg6IKpiGRNLVL+VBYmqdsS7uJgawpVSSYXoJNM82CAMH0k6IcttIrGpYHJK8=
+X-Received: by 2002:aa7:c853:0:b0:47e:4f0b:7ad9 with SMTP id
+ g19-20020aa7c853000000b0047e4f0b7ad9mr5614791edt.239.1673551454572; Thu, 12
+ Jan 2023 11:24:14 -0800 (PST)
 MIME-Version: 1.0
-References: <20230106005951.100479-1-yang.lee@linux.alibaba.com> <057bd9fa05f1bfdf10858f23506856f6376c9f8f.camel@intel.com>
-In-Reply-To: <057bd9fa05f1bfdf10858f23506856f6376c9f8f.camel@intel.com>
+References: <20230110151029.1945544-1-perry.yuan@amd.com>
+In-Reply-To: <20230110151029.1945544-1-perry.yuan@amd.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 12 Jan 2023 20:23:15 +0100
-Message-ID: <CAJZ5v0hjACvmP8fytYWMEa-p4F8aix4O3PZ_jxrEedz3etwKZA@mail.gmail.com>
-Subject: Re: [PATCH -next] thermal: Fix unsigned comparison with less than zero
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "yang.lee@linux.alibaba.com" <yang.lee@linux.alibaba.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>,
-        "abaci@linux.alibaba.com" <abaci@linux.alibaba.com>
+Date:   Thu, 12 Jan 2023 20:24:03 +0100
+Message-ID: <CAJZ5v0hvvm4j+LvQsL_Uz9o8gD95L=mn257E5yMWvCRC25bV7w@mail.gmail.com>
+Subject: Re: [PATCH v3] cpufreq: amd-pstate: fix kernel hang issue while
+ amd-pstate unregistering
+To:     Perry Yuan <perry.yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, Mario.Limonciello@amd.com,
+        ray.huang@amd.com, viresh.kumar@linaro.org, Deepak.Sharma@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        wyes.karny@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 6, 2023 at 8:03 AM Zhang, Rui <rui.zhang@intel.com> wrote:
+On Tue, Jan 10, 2023 at 4:11 PM Perry Yuan <perry.yuan@amd.com> wrote:
 >
-> On Fri, 2023-01-06 at 08:59 +0800, Yang Li wrote:
-> > The return value from the call to intel_tcc_get_tjmax() is int, which
-> > can
-> > be a negative error code. However, the return value is being assigned
-> > to
-> > an u32 variable 'tj_max', so making 'tj_max' an int.
-> >
-> > Eliminate the following warning:
-> > ./drivers/thermal/intel/intel_soc_dts_iosf.c:394:5-11: WARNING:
-> > Unsigned expression compared with zero: tj_max < 0
-> >
-> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3637
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> In the amd_pstate_adjust_perf(), there is one cpufreq_cpu_get() call to
+> increase increments the kobject reference count of policy and make it as
+> busy. Therefore, a corresponding call to cpufreq_cpu_put() is needed to
+> decrement the kobject reference count back, it will resolve the kernel
+> hang issue when unregistering the amd-pstate driver and register the
+> `amd_pstate_epp` driver instance.
 >
-> Thanks for catching this issue.
+> Fixes: 1d215f0319 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Tested-by: Wyes Karny <wyes.karny@amd.com>
+> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> Cc: stable@vger.kernel.org
 >
-> Acked-by: Zhang Rui <rui.zhang@intel.com>
+> v3: add Fixes tag
+> v2: add test-by flag from Wyes.
+> ---
+>  drivers/cpufreq/amd-pstate.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 204e39006dda..c17bd845f5fc 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -307,6 +307,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+>                 max_perf = min_perf;
+>
+>         amd_pstate_update(cpudata, min_perf, des_perf, max_perf, true);
+> +       cpufreq_cpu_put(policy);
+>  }
+>
+>  static int amd_get_min_freq(struct amd_cpudata *cpudata)
+> --
 
-Applied, thanks!
-
-> > ---
-> >  drivers/thermal/intel/intel_soc_dts_iosf.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c
-> > b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> > index 2138693d8afd..8c26f7b2316b 100644
-> > --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-> > +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> > @@ -380,7 +380,7 @@ struct intel_soc_dts_sensors
-> > *intel_soc_dts_iosf_init(
-> >  {
-> >       struct intel_soc_dts_sensors *sensors;
-> >       bool notification;
-> > -     u32 tj_max;
-> > +     int tj_max;
-> >       int ret;
-> >       int i;
-> >
+Applied as 6.2-rc material, thanks!
