@@ -2,100 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE2C669A2E
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 15:32:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D7A669A44
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 15:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229515AbjAMObe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 09:31:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
+        id S229606AbjAMOdG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 09:33:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjAMOah (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 09:30:37 -0500
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B118848C1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
-Received: by mail-io1-xd33.google.com with SMTP id y205so5989180iof.0
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
+        with ESMTP id S229757AbjAMOcC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 09:32:02 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47DF60DE
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 06:25:33 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id i15so31408927edf.2
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 06:25:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=MK7e6Vy0okniHu3Q9+oSRGxZAwtfUcCw709gjtpmGqYm4W84IZvw4tBwf/JeD4Sz6H
-         3KURCQ1q7FJNLx+GLRWt1AGelsjK5K90b9GlN0sKUA6ZUg/qpGAmzhVkYIMi1e8GW14O
-         cFtXxDW3U7HKPR1h1QucXhqmNKCsZMoObgInYsIcK9GV+Q1SmTW3TNFPjIiYngs//Zw8
-         0a/3E2iFbnIOhj7mPg7o55ip5AqJcSu4cmOrbMNeUEYXVxQDLd1kY3ucGjxruvrrHS7M
-         XetQgLqP0j8VlFQPDJPkXr0ojEVpUsKfNGxzo9W4EnGlfHoCwYlTt4oOdX6QabpPSrPy
-         sowg==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=YEUcQJgo4nd7YRU9VbAj1BQarAeAhdaCCvt7HZueth4=;
+        b=k6r9nxffwxxByM++kGiGb1vHHyRXAE938BBi8hokhVcsx9RQWHVSsX/cqY4Pc6ObvP
+         Fl/uwzCHjMccvMnIfnDa0Bs4yN7HT1OdK+AxVzTnxnDh8AFQh3CLtN5W+YsKXUXG34K1
+         vUBV3KfCaTR5NqkFXScK8219n0P0mlxC8eg5Ab68JYMIIeQ28blbm8Od/N2C2V2cQxf0
+         bgqb8ORnhcs+vourTXKeoCNZOdzLiPaJQ9anjnOjinn7XNJQ8Z5gpXQ32Xpuq/40DqvP
+         AC2pJ1lYVnlQU7fqLKePJVO/GF7jyt9NXRi3UbRjAqK3CkssoaFX4SDICxjJjyFXO6uD
+         L2GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
-        b=RJC+TuXnIxi06uHC3ZcSq1ygetI7zNt1+CxJMo2DRCIbxmt4wlXs6Fv6qoq3FI5k/Z
-         Hx8EmoRUHsJwucV/Gq/PYs8RgD5oZK5i1F7kWdfwnkPOAs0YZIHGvtB2Y2lcK2MVZxMC
-         vx1JCx8vez+KbPw7GNhPGcMH8C3XJaI98iDxHHQQN1W9X+PO7Fw0TeNDT3tr3YcychoJ
-         PXqlcvlG8lGACmDQ3PZcV5kdCV4rkymeixLyNUahwki1AcqY6mOH+E+3H90oyDcskp+O
-         SbGIKOW930K2BgGkf6onJi+Ao7L4PEpsVoBR9XGxLhws3v35saPQQINOCT7Ya+DTXqVl
-         fQpw==
-X-Gm-Message-State: AFqh2kq0qD8jfhkAjqRBalFNIwfS+ijctrtcciKviI5CKi5iK+7yxjl8
-        8nc7y4HUuchH9u9nN829BY4lL7hboYgFqsmLg4Q=
-X-Google-Smtp-Source: AMrXdXshiBnmfviu9GpNb0RTPGnCcyaimsk+bKcdbNGmrDubcSeViaijlgxCq2yePIP/Xii+kaUmkoerHpw3FkTn4/M=
-X-Received: by 2002:a6b:7f08:0:b0:6e2:ec05:87c8 with SMTP id
- l8-20020a6b7f08000000b006e2ec0587c8mr6674474ioq.144.1673619821627; Fri, 13
- Jan 2023 06:23:41 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YEUcQJgo4nd7YRU9VbAj1BQarAeAhdaCCvt7HZueth4=;
+        b=yc0CTXaBaeJPdgbZu+xDZ+H/T2cD1V4FIIQ2aHVQUZLm4Tp1+GH5t+/584lIOcZRKZ
+         aPpdgLdXdiKbjfrT+H3T6Qpsguw05Nf+3sb1Ix8lN5hSvS5kmbiLBmze6Xlg9/xOu0r5
+         TKJ8hko+nA25Crh9HmgqcVB5xqsPKdXrfIOR0wHGf5mxf1vX1K8PS4B9QfFzFmysm4rR
+         uI88i45Nx2Gc4NWQeJzlMe1qPXScGvuEnX5NxvbzkbrNhsPCSLwhn8Om++eHB8OjRTeZ
+         kzgWG3YbkxPfpW+sy4nBbq/d/TvE2END+ITHY2WutfyeZS8yoUWlo9DngR6x5XM37qs5
+         10Hg==
+X-Gm-Message-State: AFqh2krRb2rlxP/3cDkOINYIhuO/qWNynpeOfV72sFoFGyZwWnczUQXw
+        GTGIv+Et3cNZRtbFbWS0SWMRdVqQZA5Lyk14LcqhKA==
+X-Google-Smtp-Source: AMrXdXulmidvZ1oMRAo6JmZyF47HXbfqDleSFL/Eiv4c6UJxSDGmEO8n3WxUW+wsM7qr+H6GXfGk9iaQMny1qwxvTPo=
+X-Received: by 2002:a05:6402:4013:b0:49a:b8ee:ef4b with SMTP id
+ d19-20020a056402401300b0049ab8eeef4bmr787211eda.143.1673619932279; Fri, 13
+ Jan 2023 06:25:32 -0800 (PST)
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1282:b0:30d:c36b:403c with HTTP; Fri, 13 Jan 2023
- 06:23:41 -0800 (PST)
-Reply-To: hitnodeby23@yahoo.com
-From:   Hinda Itno Deby <atidigahcyril@gmail.com>
-Date:   Fri, 13 Jan 2023 06:23:41 -0800
-Message-ID: <CALHvQ-i=c6i56KKAWCU6YHCKu56RytXe0C3_h_MOPvHa0vgPTw@mail.gmail.com>
-Subject: Reply
-To:     undisclosed-recipients:;
+References: <20230112152855.216072-1-bchihi@baylibre.com> <20230112152855.216072-7-bchihi@baylibre.com>
+ <daed4793-3aae-f927-5634-cfb876709f93@gmail.com>
+In-Reply-To: <daed4793-3aae-f927-5634-cfb876709f93@gmail.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Fri, 13 Jan 2023 15:24:55 +0100
+Message-ID: <CAGuA+orPcSkztt_9vUmrSD8R0tifAtdHt=KsKVebJFXpe6zBzA@mail.gmail.com>
+Subject: Re: [PATCH v10 6/6] arm64/dts/mt8195: Add temperature mitigation threshold
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d33 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5005]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [hitnodeby23[at]yahoo.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [atidigahcyril[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.6 URG_BIZ Contains urgent matter
-        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
--- 
-My name is Hinda Itno Deby Please I want us to discuss Urgent Business
-Proposal, if you are interested kindly reply to me so i can give you
-all the details.
+On Fri, Jan 13, 2023 at 12:49 PM Matthias Brugger
+<matthias.bgg@gmail.com> wrote:
+>
+>
+>
+> On 12/01/2023 16:28, bchihi@baylibre.com wrote:
+> > From: Balsam CHIHI <bchihi@baylibre.com>
+> >
+> > The mt8195 board has several hotspots around the CPUs. Specify the
+> > targeted temperature threshold when to apply the mitigation and define
+> > the associated cooling devices.
+> >
+> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> > ---
+> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 153 ++++++++++++++++++++---
+> >   1 file changed, 137 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > index 683e5057d68d..0d6642603095 100644
+> > --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> > @@ -14,6 +14,7 @@
+> >   #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
+> >   #include <dt-bindings/power/mt8195-power.h>
+> >   #include <dt-bindings/reset/mt8195-resets.h>
+> > +#include <dt-bindings/thermal/thermal.h>
+> >   #include <dt-bindings/thermal/mediatek-lvts.h>
+> >
+> >   / {
+> > @@ -2413,107 +2414,227 @@ dp_tx: dp-tx@1c600000 {
+> >
+> >       thermal_zones: thermal-zones {
+> >               cpu0-thermal {
+> > -                     polling-delay = <0>;
+> > -                     polling-delay-passive = <0>;
+> > +                     polling-delay = <1000>;
+> > +                     polling-delay-passive = <250>;
+> >                       thermal-sensors = <&lvts_mcu MT819x_MCU_LITTLE_CPU0>;
+>
+> New line here please.
+>
+> >                       trips {
+> > +                             cpu0_alert: trip-alert {
+> > +                                     temperature = <85000>;
+> > +                                     hysteresis = <2000>;
+> > +                                     type = "passive";
+> > +                             };
+>
+> New line here please and on other trip point definitions.
+>
 
-Thanks and God Bless You.
-Ms Hinda Itno Deby
+Hi Matthias,
+
+Thank you for the feedback!
+It will be added in the next version.
+
+Best regards,
+Balsam
+
+> Regards,
+> Matthias
