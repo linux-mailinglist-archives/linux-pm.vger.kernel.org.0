@@ -2,147 +2,340 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E92B56697BD
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 13:54:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 331EE6698FA
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 14:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241767AbjAMMy5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 07:54:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S232777AbjAMNrk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 08:47:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241606AbjAMMy2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 07:54:28 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2060.outbound.protection.outlook.com [40.107.93.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AD95D681;
-        Fri, 13 Jan 2023 04:41:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jkRu+MAIPyanbo+GQ7JXW4BAKGisoqbXC4B8J7VcnR/HJXHbye2RE56L9wlE5l7unpwe538gtTQo4a2uWayEPKoMCHg7Za+3dyl0QLO6vcuzthtNwXEM/dsJvcwgSg4eDFwycRBydMFR3bM6dwSXago+IS8GLGa727rkbeJL+8z0dRMmHoEi8/Ko2ix0Ih2omCh+LAUq9DRe3jfzHmBPdnoeAtf1edSq2dJ6Q72ygntPaASOe5lqL9SBasFnUKXyiozEd80n0wES5oQ/nNB/HGZyQx442qOU61umD2Opj4Q++TesyqOpIcJN889B0wfOWsdMeNL2IU0cEzZaLuPeGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UIOHMlDg5rOT1XkRpWcUVw1Fd1qdz+zYNC5GDeREbXQ=;
- b=Nd58Xlu22oGiZgD0wO2gpUss+lKo+sBHd+qnt9rPT8L2h3UbXBJ6KVtARj6iY/adL54ZNOO7O2sr80idC0wtwlmBuIzXANqsdf25UMZ4uexkxjSgOAN9xyuCZ044tvpaVWVDI9NwSLbhMRxWJ4zhZO80ICqhe1MLhezwG2l7gTdZ82CplOyN6A0BDcgntpZilfBavNgf3KVdB17oXOO21E1FWzt1rU3Qr6gMFvPK7p+ZD5zUqKqMQaF3BVb2QrMidyOx/MFVmtc4dg+zKBvnLT/CItSpNxnJJqEgfgq254RXOEOqZggaRE0oN5e8NdXi3mGtpAa9RBbtz/5WzAxBrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UIOHMlDg5rOT1XkRpWcUVw1Fd1qdz+zYNC5GDeREbXQ=;
- b=FDLPjSdVDxHP6hqfKlfJSHcazslmwLdG22aWRyYe1b0Oe1Gtrl7oQl7DcfVf2qcBBJXOkFdmIT1Gr0XoFmGg2C2xaF3W2aX9mdjQAgWFwjydnQ58n3ncnunsHYYv5HOagthVujGN8MdAiVKeOzFBJjdY6A3HAwk2toWdYZOe/ZwvYMLnrc15ZkkkCg3NUe065kAwIVCdFTWDe5FiZ44+TK1MTe/TRxegILqKyf4Gkdvlt/YW6vSsgN9xjB+3plxzp4zpaAB+XbN41hXaC6tAPAqF5pqKO2FlVtyTOAypnzQqUEks1C4K//bTBlYEa9uqaJrVmmbctNYYASIx+klM5w==
-Received: from MW4PR04CA0168.namprd04.prod.outlook.com (2603:10b6:303:85::23)
- by CH0PR12MB8532.namprd12.prod.outlook.com (2603:10b6:610:191::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Fri, 13 Jan
- 2023 12:41:07 +0000
-Received: from CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:85:cafe::cd) by MW4PR04CA0168.outlook.office365.com
- (2603:10b6:303:85::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
- Transport; Fri, 13 Jan 2023 12:41:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CO1NAM11FT014.mail.protection.outlook.com (10.13.175.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.13 via Frontend Transport; Fri, 13 Jan 2023 12:41:07 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 04:40:59 -0800
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
- 2023 04:40:54 -0800
-Message-ID: <649872f1-c92d-1046-1087-d553244a3572@nvidia.com>
-Date:   Fri, 13 Jan 2023 18:10:51 +0530
+        with ESMTP id S241753AbjAMNrO (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 08:47:14 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122F15D405
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 05:41:01 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id r2so21103536wrv.7
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 05:41:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=to8C6Bev+T1XukXaLfCpj5N27WyqBL3BbOApapHPhM4=;
+        b=aalcNYKlp8WuG/reKf77olUau63Gzba5biFTUHqYq4rfPg8JbvsOuj1uewF3tZuGaq
+         57N3Y+um6bIbfyBeLpxBZH7d22BtoAPBNHp5dEkD2OgEeIu1tPjTOUvHeddYmWJH1vcJ
+         RyuPn0pMKO4di9gDltpytCmsr4w4CKin/Abjsj2PO+Y/q6Lw6sf7HdVRpCKYEovK4rk3
+         8jVn7GQjQoGajj+fmNLKlB+1fSSl7E1VFAgaABqYT33TDqUZeR4Zy4Pi0NZ/KCw6vaQf
+         RK9U3q5vPmAHbXQMuyEVf+4YFSnwmQrGRoFJA7Gv+XgmrxUAjuAauHl2W29KHmYQeQM1
+         Aagg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=to8C6Bev+T1XukXaLfCpj5N27WyqBL3BbOApapHPhM4=;
+        b=F5S/G4T5ejARKWULWaLjdm1HVxYOUJ6pZXLthUmpBWKgwaSlwQrmfYMRt3/hjb3P8p
+         wTF0yrbmKWh3L7DlIlS5RPuqP9optp+tcjLLqtBHiuSCvw/EXbrt5Ezx6+d8+tqvJmZh
+         u/V0GVIoYtTFZRhR3GchKtKwLYUVwt3P0q65YjQWzlojoRFeA6G58xgDFQFRFL0s2hdp
+         AhN8nczxbIPqMyL+3NooMryVZJPUnPekQ5WGjFpfLzfbzazo052SodbfIp3GZABfbyNX
+         qjVR4yCXP+5wPudTR8jKg/Ik/kTBlVEJMheMj79qiaRdQzQaPyBf1IuNoU+PPweq5QpQ
+         VFpA==
+X-Gm-Message-State: AFqh2ko74Ktwa2/2ekLKuRVGMJDyDr/dyD5HHzBeCgDzyDFzQLbIe4rw
+        Vvz/fCLvtHsv47qtIVr669+ACg==
+X-Google-Smtp-Source: AMrXdXsZfvkZpxlEymlnMv1aal6S7GbjoACMXVtjWz+lBia188KCa1/Teg/KrcFO/k3PLvBeTvghfA==
+X-Received: by 2002:adf:a497:0:b0:2b2:35:e0a4 with SMTP id g23-20020adfa497000000b002b20035e0a4mr21248053wrb.15.1673617259540;
+        Fri, 13 Jan 2023 05:40:59 -0800 (PST)
+Received: from vingu-book.. ([2a01:e0a:f:6020:1563:65bf:c344:661e])
+        by smtp.gmail.com with ESMTPSA id q4-20020adfdfc4000000b002bc6c180738sm14586348wrn.90.2023.01.13.05.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jan 2023 05:40:58 -0800 (PST)
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+To:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
+        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Date:   Fri, 13 Jan 2023 14:40:56 +0100
+Message-Id: <20230113134056.257691-1-vincent.guittot@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
- scaling in Tegra234
-Content-Language: en-US
-To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
-        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
-CC:     <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-2-sumitg@nvidia.com>
- <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <62fc4a96-bab8-4d43-5278-3375e34431e7@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT014:EE_|CH0PR12MB8532:EE_
-X-MS-Office365-Filtering-Correlation-Id: 85706aea-2b3d-45dd-ec2c-08daf5637116
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Cy2YZKkGsQZmJfoo+qeN97YQpAtLsNesuNEWOtOJCg49Eb5Rk4KOsT+BL3q4hmNcAEa47EYeLVEXw1+spJeBr/962Bxl73LnU7EWWWOarXRuA5Jlk7ku0Ugwdoi1V65Jf1qFPn4SrVFK+xcxkYRSlFLws1ddjqtk9/JVqIj+ZJjUHzniMDujUVSsHM9yqVXXLCqY6sWC0yg2wMPT9PZTD/XdAID0MkE6ze8JPmr685myHw9e+UJagUSqcxarMKM9ss7uNWQPk0cPif2UyxlyPCvemWhnHcnkA5DXi8zNowxnjD7Zo6LTaVu9YjwfYCB50exutdus3yxGYwhRzdp4SUJz8mL8kVj2LrUnbgexj9IxWpc/zBlM1B0BZUSVd8O3XU1qmBMbeme55bs0TBWLKDGt5wsBAQe9VMjjmgT3248H/+aJRqXsmBegjbcTQZcbpZnaKJhsit2fW2a8YgAecZrPUiXR39HwM8X/l10yO9sA/L6UI69UqVC943XBk9AcQaLWHGxWWtS6gJjUsYjYf909UuQtLMk+uAT4uAXwwNpZAoEWcKNRtIawU+RcTqJSbJL0rSnnjvAaOhnY2g0rBzrq/LkYUuJOaK2Tz2qrrTllfBWMjqClTmvY1v0duad43IxebHD5xDtf7rNYb/RjtskPrWA0351anDa84N/zAldhQbPFRwCmH965wqc1X/JsT2rFqgWjxnQqhc1L901hv/4CCU4RdtXBQZRa5kSA5/EPYpQpnm8zAJ6KW5TxGlxg
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199015)(40470700004)(36840700001)(46966006)(7416002)(36860700001)(6666004)(107886003)(36756003)(2906002)(70206006)(5660300002)(53546011)(31686004)(8936002)(4326008)(83380400001)(8676002)(82740400003)(478600001)(47076005)(41300700001)(921005)(426003)(7636003)(356005)(16526019)(26005)(336012)(70586007)(82310400005)(186003)(40480700001)(31696002)(54906003)(16576012)(40460700003)(2616005)(86362001)(316002)(110136005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 12:41:07.2679
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 85706aea-2b3d-45dd-ec2c-08daf5637116
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT014.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8532
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+By taking into account uclamp_min, the 1:1 relation between task misfit
+and cpu overutilized is no more true as a task with a small util_avg of
+may not fit a high capacity cpu because of uclamp_min constraint.
 
+Add a new state in util_fits_cpu() to reflect the case that task would fit
+a CPU except for the uclamp_min hint which is a performance requirement.
 
-On 22/12/22 00:50, Dmitry Osipenko wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> 20.12.2022 19:02, Sumit Gupta пишет:
->> +static int tegra_emc_icc_set_bw(struct icc_node *src, struct icc_node *dst)
->> +{
->> +     struct tegra186_emc *emc = to_tegra186_emc(dst->provider);
->> +     struct tegra_mc *mc = dev_get_drvdata(emc->dev->parent);
->> +     struct mrq_bwmgr_int_request bwmgr_req = { 0 };
->> +     struct mrq_bwmgr_int_response bwmgr_resp = { 0 };
->> +     struct tegra_icc_node *tnode = mc->curr_tnode;
->> +     struct tegra_bpmp_message msg;
->> +     int ret = 0;
->> +
->> +     /*
->> +      * Same Src and Dst node will happen during boot from icc_node_add().
->> +      * This can be used to pre-initialize and set bandwidth for all clients
->> +      * before their drivers are loaded. We are skipping this case as for us,
->> +      * the pre-initialization already happened in Bootloader(MB2) and BPMP-FW.
->> +      */
->> +     if (src->id == dst->id)
->> +             return 0;
->> +
->> +     if (mc->curr_tnode->type == TEGRA_ICC_NISO)
-> 
-> The mc->curr_tnode usage looks suspicious, why you can't use src node?
-> 
+Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+can use this new value to take additional action to select the best CPU
+that doesn't match uclamp_min hint.
 
-Now, we can get rid of "curr_tnode" after moving the code from the EMC 
-to MC driver for transferring MC client's request info to the BPMP.
+Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+---
+
+Change since v2:
+- fix a condition in feec()
+- add comments
+
+ kernel/sched/fair.c | 108 ++++++++++++++++++++++++++++++++++----------
+ 1 file changed, 83 insertions(+), 25 deletions(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index e9d906a9bba9..29adb9e27b3d 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4525,8 +4525,7 @@ static inline int util_fits_cpu(unsigned long util,
+ 	 *     2. The system is being saturated when we're operating near
+ 	 *        max capacity, it doesn't make sense to block overutilized.
+ 	 */
+-	uclamp_max_fits = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
+-	uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
++	uclamp_max_fits = (uclamp_max <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE);
+ 	fits = fits || uclamp_max_fits;
+ 
+ 	/*
+@@ -4561,8 +4560,8 @@ static inline int util_fits_cpu(unsigned long util,
+ 	 * handle the case uclamp_min > uclamp_max.
+ 	 */
+ 	uclamp_min = min(uclamp_min, uclamp_max);
+-	if (util < uclamp_min && capacity_orig != SCHED_CAPACITY_SCALE)
+-		fits = fits && (uclamp_min <= capacity_orig_thermal);
++	if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
++		return -1;
+ 
+ 	return fits;
+ }
+@@ -4572,7 +4571,11 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
+ 	unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
+ 	unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
+ 	unsigned long util = task_util_est(p);
+-	return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
++	/*
++	 * Return true only if the cpu fully fits the task requirements, which
++	 * include the utilization but also the performance.
++	 */
++	return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
+ }
+ 
+ static inline void update_misfit_status(struct task_struct *p, struct rq *rq)
+@@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
+ 	unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+ 	unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+ 
++	/* Return true only if the utlization doesn't fit its capacity */
+ 	return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+ }
+ 
+@@ -6925,6 +6929,7 @@ static int
+ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+ {
+ 	unsigned long task_util, util_min, util_max, best_cap = 0;
++	int fits, best_fits = 0;
+ 	int cpu, best_cpu = -1;
+ 	struct cpumask *cpus;
+ 
+@@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+ 
+ 		if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+ 			continue;
+-		if (util_fits_cpu(task_util, util_min, util_max, cpu))
++
++		fits = util_fits_cpu(task_util, util_min, util_max, cpu);
++
++		/* This CPU fits with all capacity and performance requirements */
++		if (fits > 0)
+ 			return cpu;
++		/*
++		 * Only the min performance (i.e. uclamp_min) doesn't fit. Look
++		 * for the CPU with highest performance capacity.
++		 */
++		else if (fits < 0)
++			cpu_cap = capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu));
+ 
+-		if (cpu_cap > best_cap) {
++		/*
++		 * First, select cpu which fits better (-1 being better than 0).
++		 * Then, select the one with largest capacity at same level.
++		 */
++		if ((fits < best_fits) ||
++		    ((fits == best_fits) && (cpu_cap > best_cap))) {
+ 			best_cap = cpu_cap;
+ 			best_cpu = cpu;
++			best_fits = fits;
+ 		}
+ 	}
+ 
+@@ -6958,7 +6979,11 @@ static inline bool asym_fits_cpu(unsigned long util,
+ 				 int cpu)
+ {
+ 	if (sched_asym_cpucap_active())
+-		return util_fits_cpu(util, util_min, util_max, cpu);
++		/*
++		 * Return true only if the cpu fully fits the task requirements
++		 * which include the utilization but also the performance.
++		 */
++		return (util_fits_cpu(util, util_min, util_max, cpu) > 0);
+ 
+ 	return true;
+ }
+@@ -7325,6 +7350,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 	unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
+ 	struct root_domain *rd = this_rq()->rd;
+ 	int cpu, best_energy_cpu, target = -1;
++	int prev_fits = -1, best_fits = -1;
++	unsigned long best_thermal_cap = 0;
++	unsigned long prev_thermal_cap = 0;
+ 	struct sched_domain *sd;
+ 	struct perf_domain *pd;
+ 	struct energy_env eenv;
+@@ -7360,6 +7388,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 		unsigned long prev_spare_cap = 0;
+ 		int max_spare_cap_cpu = -1;
+ 		unsigned long base_energy;
++		int fits, max_fits = -1;
+ 
+ 		cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+ 
+@@ -7412,7 +7441,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 					util_max = max(rq_util_max, p_util_max);
+ 				}
+ 			}
+-			if (!util_fits_cpu(util, util_min, util_max, cpu))
++
++			fits = util_fits_cpu(util, util_min, util_max, cpu);
++			if (!fits)
+ 				continue;
+ 
+ 			lsub_positive(&cpu_cap, util);
+@@ -7420,7 +7451,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			if (cpu == prev_cpu) {
+ 				/* Always use prev_cpu as a candidate. */
+ 				prev_spare_cap = cpu_cap;
+-			} else if (cpu_cap > max_spare_cap) {
++				prev_fits = fits;
++			} else if ((fits > max_fits) ||
++				   ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
+ 				/*
+ 				 * Find the CPU with the maximum spare capacity
+ 				 * among the remaining CPUs in the performance
+@@ -7428,6 +7461,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 				 */
+ 				max_spare_cap = cpu_cap;
+ 				max_spare_cap_cpu = cpu;
++				max_fits = fits;
+ 			}
+ 		}
+ 
+@@ -7446,26 +7480,50 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
+ 			if (prev_delta < base_energy)
+ 				goto unlock;
+ 			prev_delta -= base_energy;
++			prev_thermal_cap = cpu_thermal_cap;
+ 			best_delta = min(best_delta, prev_delta);
+ 		}
+ 
+ 		/* Evaluate the energy impact of using max_spare_cap_cpu. */
+ 		if (max_spare_cap_cpu >= 0 && max_spare_cap > prev_spare_cap) {
++			/* Current best energy cpu fits better */
++			if (max_fits < best_fits)
++				continue;
++
++			/*
++			 * Both don't fit performance (i.e. uclamp_min) but
++			 * best energy cpu has better performance.
++			 */
++			if ((max_fits < 0) &&
++			    (cpu_thermal_cap <= best_thermal_cap))
++				continue;
++
+ 			cur_delta = compute_energy(&eenv, pd, cpus, p,
+ 						   max_spare_cap_cpu);
+ 			/* CPU utilization has changed */
+ 			if (cur_delta < base_energy)
+ 				goto unlock;
+ 			cur_delta -= base_energy;
+-			if (cur_delta < best_delta) {
+-				best_delta = cur_delta;
+-				best_energy_cpu = max_spare_cap_cpu;
+-			}
++
++			/*
++			 * Both fit for the task but best energy cpu has lower
++			 * energy impact.
++			 */
++			if ((max_fits > 0) && (best_fits > 0) &&
++			    (cur_delta >= best_delta))
++				continue;
++
++			best_delta = cur_delta;
++			best_energy_cpu = max_spare_cap_cpu;
++			best_fits = max_fits;
++			best_thermal_cap = cpu_thermal_cap;
+ 		}
+ 	}
+ 	rcu_read_unlock();
+ 
+-	if (best_delta < prev_delta)
++	if ((best_fits > prev_fits) ||
++	    ((best_fits > 0) && (best_delta < prev_delta)) ||
++	    ((best_fits < 0) && (best_thermal_cap > prev_thermal_cap)))
+ 		target = best_energy_cpu;
+ 
+ 	return target;
+@@ -10259,24 +10317,23 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 	 */
+ 	update_sd_lb_stats(env, &sds);
+ 
+-	if (sched_energy_enabled()) {
+-		struct root_domain *rd = env->dst_rq->rd;
+-
+-		if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
+-			goto out_balanced;
+-	}
+-
+-	local = &sds.local_stat;
+-	busiest = &sds.busiest_stat;
+-
+ 	/* There is no busy sibling group to pull tasks from */
+ 	if (!sds.busiest)
+ 		goto out_balanced;
+ 
++	busiest = &sds.busiest_stat;
++
+ 	/* Misfit tasks should be dealt with regardless of the avg load */
+ 	if (busiest->group_type == group_misfit_task)
+ 		goto force_balance;
+ 
++	if (sched_energy_enabled()) {
++		struct root_domain *rd = env->dst_rq->rd;
++
++		if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
++			goto out_balanced;
++	}
++
+ 	/* ASYM feature bypasses nice load balance check */
+ 	if (busiest->group_type == group_asym_packing)
+ 		goto force_balance;
+@@ -10289,6 +10346,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
+ 	if (busiest->group_type == group_imbalanced)
+ 		goto force_balance;
+ 
++	local = &sds.local_stat;
+ 	/*
+ 	 * If the local group is busier than the selected busiest group
+ 	 * don't try and pull any tasks.
+-- 
+2.34.1
+
