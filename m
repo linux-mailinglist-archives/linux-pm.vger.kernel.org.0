@@ -2,214 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC3106689F4
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 04:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5716668AA9
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 05:12:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjAMDOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 22:14:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S238379AbjAMEMs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 23:12:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230172AbjAMDOT (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 22:14:19 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A3625F0
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 19:14:17 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id bu8so31226018lfb.4
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 19:14:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iPjbB3FK1NBMvplGNfsEp/AEDsK3/EIymSBWqMhhO+g=;
-        b=DezL/d3trZVr4HXL/SAVamVvqujPUjBDNHJnlARdY09fq9HYIx6oGUqPe6l+LxI/eh
-         ifAU3gYz2BA36XzT9cLzaQd9qLTcGTuf4wzI3YFDCwM4+49CdeaHxs8mcXPWihTznWyT
-         VVVmeEuWRNV6Lf3kjm28nifW/uJeyEdcUNCMjaKORkgrT0eJYJ4woI8/vPBXBOwXPt15
-         CWGE6ua9fTkHxswFRvZ8uBuBnty0zCsHzVbTghKe6lMUJWESJuK491DSlBGv7yYK9ntD
-         3Q6QUrf1XSmx8ng9LkddahZzWTjvWrxnAu5zzujKhcG9NlSiMYK8eESnqASJrMnsTu9N
-         T4AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iPjbB3FK1NBMvplGNfsEp/AEDsK3/EIymSBWqMhhO+g=;
-        b=AOeMj6M8a2j+kiwjyjRm497hqiRhu0Nsek5AOwUt3tfE5XResdZ09smBECQ/KzjNOW
-         tw4kH5q7uGafvNA1DAveYo5YP1Ec2cUVNiWb6z3v+Ok9JuWvc4+g7DNVI5NGkseKm3qJ
-         9LUJ9+zJoLJlmkHr8NHd9LjTWWsyl8vEBiXO0huyD9Gz9zOT0C4dGQUWeGzE8FUNN3i5
-         4My8nTUx2hddoaOqdE6JCNFjnuOYMsRoEFW0KkLB5Gy/gy6DjWOpcbGruZy5GNRoixBe
-         rEt3uOHNFxDTZLDGH7tyVfoI3n73kdnHLkOpJhek8U/Cj9Iss2unUA0pIOx8kacwRhHv
-         kGjg==
-X-Gm-Message-State: AFqh2kpf9HJwb97ozZGeUrhv1RzFJW41jGThdS1kvwrr0nGhUj4A3mUD
-        AWtTZCPS+aF7IJr9Mh0xrIm3KQ==
-X-Google-Smtp-Source: AMrXdXuwnrKyJC+g4abuntp+z7g60CE4WM5LJiayATlVFNlo2sO8dPJsZn8M3RdLcB+18kQk/4wtDw==
-X-Received: by 2002:a19:700e:0:b0:4cd:afbf:c206 with SMTP id h14-20020a19700e000000b004cdafbfc206mr886608lfc.22.1673579655859;
-        Thu, 12 Jan 2023 19:14:15 -0800 (PST)
-Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id w19-20020a05651234d300b004cb09fd48ebsm3584858lfr.149.2023.01.12.19.14.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 19:14:13 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org,
+        with ESMTP id S234634AbjAMELz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 23:11:55 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1123761313;
+        Thu, 12 Jan 2023 20:11:41 -0800 (PST)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30D3TBG3007409;
+        Fri, 13 Jan 2023 04:11:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=FgrnE3uDR31VvIPVFnTjM4rDKI7sAez5H4TTb8LGUUA=;
+ b=EYQ5akbvOuIzRQ98P+kKsFO3lz8Wgk9pDfnsoUKbTMjLgRBRFjbNt0jDNus4rquDGAw1
+ j6sV5CNBv0uhWbmLm2ASrf+j2YAvxHBjTqNUFCotnI6Y2UbbRrxBF4uCWSNK/8E5lwwE
+ 1BtdEIDhRiu5+0EgLdgtMMnMbcGtE0XMU7MUhj0JcxjlirPbOyHScoFkcL8ojXGiuiOF
+ p92A/ynJdhZmCpJ2sNd9A/TnVhQ0BhkhS1BuD871iG8RU3yWxq2EWY/y3GFIG4qCM4W9
+ a4bIhIRYOdXWZnGCkFj7sslm50r+tHT6i7gXTQoYlxkn1o/W3Fn4Xt0i3cOZspMsvxyd zQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n2jghsnev-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 04:11:38 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30D4Bbc3031173
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 13 Jan 2023 04:11:37 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Thu, 12 Jan 2023 20:11:37 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [PATCH 2/2] firmware: qcom_scm: Fully implement qcom_scm_lmh_dcvsh()
-Date:   Fri, 13 Jan 2023 04:14:01 +0100
-Message-Id: <20230113031401.2336157-3-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230113031401.2336157-1-konrad.dybcio@linaro.org>
-References: <20230113031401.2336157-1-konrad.dybcio@linaro.org>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH v2 0/4] soc: qcom: Introduce PMIC GLINK
+Date:   Thu, 12 Jan 2023 20:11:28 -0800
+Message-ID: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oP24DT4V-EEved4HU8fi3a0WIQXF36Nh
+X-Proofpoint-ORIG-GUID: oP24DT4V-EEved4HU8fi3a0WIQXF36Nh
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2023-01-12_14,2023-01-12_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ malwarescore=0 mlxscore=0 suspectscore=0 priorityscore=1501 phishscore=0
+ clxscore=1011 bulkscore=0 impostorscore=0 mlxlogscore=852
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301130026
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The qcom_scm_lmh_dcvsh call can actually pass two values to the
-secure world. The second value is used for example with the
-LMH_FREQ_CAP function, which limits the maximum achievable frequency
-directly from LMh. Add the missing arguments, handle them and update
-the current usages of this function.
+This implements the base PMIC GLINK driver, a power_supply driver and a
+driver for the USB Type-C altmode protocol. This has been tested and
+shown to provide battery information, USB Type-C switch and mux requests
+and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/firmware/qcom_scm.c | 13 ++++++++-----
- drivers/thermal/qcom/lmh.c  | 28 ++++++++++++++--------------
- include/linux/qcom_scm.h    |  5 +++--
- 3 files changed, 25 insertions(+), 21 deletions(-)
+Bjorn Andersson (4):
+  dt-bindings: soc: qcom: Introduce PMIC GLINK binding
+  soc: qcom: pmic_glink: Introduce base PMIC GLINK driver
+  soc: qcom: pmic_glink: Introduce altmode support
+  power: supply: Introduce Qualcomm PMIC GLINK power supply
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index cdbfe54c8146..58a19a47e442 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1252,12 +1252,13 @@ int qcom_scm_lmh_profile_change(u32 profile_id)
- }
- EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
- 
--int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
--		       u64 limit_node, u32 node_id, u64 version)
-+int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val0,
-+		       u32 payload_val1, u64 limit_node, u32 node_id,
-+		       u64 version, bool has_val1)
- {
- 	dma_addr_t payload_phys;
- 	u32 *payload_buf;
--	int ret, payload_size = 5 * sizeof(u32);
-+	int ret, payload_size = (5 + has_val1) * sizeof(u32);
- 
- 	struct qcom_scm_desc desc = {
- 		.svc = QCOM_SCM_SVC_LMH,
-@@ -1278,8 +1279,10 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
- 	payload_buf[0] = payload_fn;
- 	payload_buf[1] = 0;
- 	payload_buf[2] = payload_reg;
--	payload_buf[3] = 1;
--	payload_buf[4] = payload_val;
-+	payload_buf[3] = has_val1 ? 2 : 1;
-+	payload_buf[4] = payload_val0;
-+	if (has_val1)
-+		payload_buf[5] = payload_val1;
- 
- 	desc.args[0] = payload_phys;
- 
-diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index 5e8ff196c9a6..d2b5ea8322eb 100644
---- a/drivers/thermal/qcom/lmh.c
-+++ b/drivers/thermal/qcom/lmh.c
-@@ -147,23 +147,23 @@ static int lmh_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 
- 	if (flags & LMH_ENABLE_ALGOS) {
--		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
--					 LMH_NODE_DCVS, node_id, 0);
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1, 0,
-+					 LMH_NODE_DCVS, node_id, 0, false);
- 		if (ret)
- 			dev_err(dev, "Error %d enabling current subfunction\n", ret);
- 
--		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
--					 LMH_NODE_DCVS, node_id, 0);
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1, 0,
-+					 LMH_NODE_DCVS, node_id, 0, false);
- 		if (ret)
- 			dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
- 
--		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
--					 LMH_NODE_DCVS, node_id, 0);
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1, 0,
-+					 LMH_NODE_DCVS, node_id, 0, false);
- 		if (ret)
- 			dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
- 
--		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
--					 LMH_NODE_DCVS, node_id, 0);
-+		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1, 0,
-+					 LMH_NODE_DCVS, node_id, 0, false);
- 		if (ret) {
- 			dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
- 			return ret;
-@@ -177,22 +177,22 @@ static int lmh_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Set default thermal trips */
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm,
--				 LMH_NODE_DCVS, node_id, 0);
-+	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm, 0,
-+				 LMH_NODE_DCVS, node_id, 0, false);
- 	if (ret) {
- 		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
- 		return ret;
- 	}
- 
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high,
--				 LMH_NODE_DCVS, node_id, 0);
-+	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high, 0,
-+				 LMH_NODE_DCVS, node_id, 0, false);
- 	if (ret) {
- 		dev_err(dev, "Error setting thermal HI threshold%d\n", ret);
- 		return ret;
- 	}
- 
--	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low,
--				 LMH_NODE_DCVS, node_id, 0);
-+	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low, 0,
-+				 LMH_NODE_DCVS, node_id, 0, false);
- 	if (ret) {
- 		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
- 		return ret;
-diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
-index 1e449a5d7f5c..9fd798d17fdd 100644
---- a/include/linux/qcom_scm.h
-+++ b/include/linux/qcom_scm.h
-@@ -117,8 +117,9 @@ extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
- extern int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt);
- extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
- 
--extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
--			      u64 limit_node, u32 node_id, u64 version);
-+extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val0,
-+			      u32 payload_val1, u64 limit_node, u32 node_id,
-+			      u64 version, bool has_val1);
- extern int qcom_scm_lmh_profile_change(u32 profile_id);
- extern bool qcom_scm_lmh_dcvsh_available(void);
- 
+ .../bindings/soc/qcom/qcom,pmic-glink.yaml    |  102 ++
+ drivers/power/supply/Kconfig                  |    9 +
+ drivers/power/supply/Makefile                 |    1 +
+ drivers/power/supply/qcom_battmgr.c           | 1421 +++++++++++++++++
+ drivers/soc/qcom/Kconfig                      |   15 +
+ drivers/soc/qcom/Makefile                     |    2 +
+ drivers/soc/qcom/pmic_glink.c                 |  336 ++++
+ drivers/soc/qcom/pmic_glink_altmode.c         |  477 ++++++
+ include/linux/soc/qcom/pmic_glink.h           |   32 +
+ 9 files changed, 2395 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+ create mode 100644 drivers/power/supply/qcom_battmgr.c
+ create mode 100644 drivers/soc/qcom/pmic_glink.c
+ create mode 100644 drivers/soc/qcom/pmic_glink_altmode.c
+ create mode 100644 include/linux/soc/qcom/pmic_glink.h
+
 -- 
-2.39.0
+2.37.3
 
