@@ -2,47 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A12668829
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 01:11:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 244C6668837
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 01:12:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240459AbjAMALx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 19:11:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56436 "EHLO
+        id S240629AbjAMAMg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 19:12:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240175AbjAMALm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 19:11:42 -0500
+        with ESMTP id S240327AbjAMALo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 19:11:44 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF05B5D8A6;
-        Thu, 12 Jan 2023 16:11:37 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B854B1BD;
+        Thu, 12 Jan 2023 16:11:40 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 63283B811FF;
-        Fri, 13 Jan 2023 00:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEA59C433A7;
-        Fri, 13 Jan 2023 00:11:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B834B82046;
+        Fri, 13 Jan 2023 00:11:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A3CC43339;
+        Fri, 13 Jan 2023 00:11:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1673568695;
-        bh=myT394PI0jK3w9+Y5Yr+wETBeUZkki6xDb1CBO26XOM=;
+        bh=0JjRZ97KOFPDAmYeRjByYudJlUdg5gu25llTIyJbPjg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JcrSReQ6I5UiUeSr97F6GLgeLj+fRWzZUT4wxx1ddKGgLdhcXMjvZCt0EsfR5lVhJ
-         rJJTJfit+sZBEOl6jHh2JE3kvk93y9dagrFKbZMM7/XOVQ2kViI5lJz5+Omthi186N
-         23O6txmbqvrU4283ZX7uLG6SMTrS4iOzkkc7qSzS6KQFA0F/myvVicocWHQb/mmltS
-         XmvYLPR6/vriWTejAX303miylTUMv7bt9ZUg0AhVig8ZNbbZjl9RBxXmmtomXyAnob
-         rlCTPjPOiWQ/4K6mbDCFDQ8H5JLfSjN4XbqzMYDEqJlsX39FvKz7Pcd970Ap94pgKy
-         pooc6feXb+pFA==
+        b=U8kOG2btaQ2VkXvOsbYSlW/ZOCrAtvFmC1cjoy/McM2aZNhkOIlABtQfccjAuloBN
+         dRHJtxWNPzTp7j7VQeBHyLj3+wlBzOELAXc23IbvsePITOdPhlPIrG7xzDA0M/nLP5
+         fQA1DAt+g10PqG7d9jh40Vvq+yeUyIAiqe6vzGipUE+IsNpcdxuYxOO0GB2hANNv0F
+         T98sevEBWZKkcIpA5T42nFi3GXXvi94DzrRml6JqOrorzskoro2QtO6iILWmT9lYsr
+         vLSJQ2TkLgCvWGvMVB7/IlS5cTenhdzT5sjh2Bqw213WFO4putr0PKL/ZpxLO87+Rk
+         mAo3mbhd2dxZQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9ABE85C0F2E; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
+        id B427C5C1C85; Thu, 12 Jan 2023 16:11:34 -0800 (PST)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
         linux-pm@vger.kernel.org, John Ogness <john.ogness@linutronix.de>
-Subject: [PATCH rcu v2 03/20] drivers/cpufreq: Remove "select SRCU"
-Date:   Thu, 12 Jan 2023 16:11:15 -0800
-Message-Id: <20230113001132.3375334-3-paulmck@kernel.org>
+Subject: [PATCH rcu v2 16/20] kernel/power: Remove "select SRCU"
+Date:   Thu, 12 Jan 2023 16:11:28 -0800
+Message-Id: <20230113001132.3375334-16-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
 References: <20230113001103.GA3374173@paulmck-ThinkPad-P17-Gen-1>
@@ -63,27 +63,27 @@ Kconfig statements.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
 Cc: <linux-pm@vger.kernel.org>
 Acked-by: "Rafael J. Wysocki" <rafael@kernel.org>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 Reviewed-by: John Ogness <john.ogness@linutronix.de>
 ---
- drivers/cpufreq/Kconfig | 1 -
+ kernel/power/Kconfig | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-index 2a84fc63371e2..785541df59379 100644
---- a/drivers/cpufreq/Kconfig
-+++ b/drivers/cpufreq/Kconfig
-@@ -3,7 +3,6 @@ menu "CPU Frequency scaling"
- 
- config CPU_FREQ
- 	bool "CPU Frequency scaling"
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index 60a1d3051cc79..4b31629c5be4b 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -118,7 +118,6 @@ config PM_SLEEP
+ 	def_bool y
+ 	depends on SUSPEND || HIBERNATE_CALLBACKS
+ 	select PM
 -	select SRCU
- 	help
- 	  CPU Frequency scaling allows you to change the clock speed of 
- 	  CPUs on the fly. This is a nice method to save power, because 
+ 
+ config PM_SLEEP_SMP
+ 	def_bool y
 -- 
 2.31.1.189.g2e36527f23
 
