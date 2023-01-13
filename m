@@ -2,81 +2,115 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5715E6696C9
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 13:20:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FC66696CE
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 13:22:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241163AbjAMMUI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 07:20:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53810 "EHLO
+        id S241299AbjAMMWP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 07:22:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233109AbjAMMTd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 07:19:33 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC3B78A46
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 04:12:50 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id m26-20020a05600c3b1a00b003d9811fcaafso17211640wms.5
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 04:12:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k2B0hsASFUkHWI+dtbJoqoXBrOmDXx4P5iE4tDoIv9Y=;
-        b=r5LMJrP1xmHoLFxCeIJz1DlWNsBJgQSDhoBQsjNX1FZGWGcX5q6iezTlqp7iJ7dxsj
-         2l30AzU3QT015HNw22K27UXC69kTC9Dx3zjaT4zaSywPtt2UmipEhx2YBtCQbTSGOpFa
-         SVBhIPlb1y5YIsk0cxJGkLQuVIdSEnK9KyyCOIKergfjR9O/STPWjKP0B6cjspqe0DJ5
-         ufpKjggsU9ht6XRWi5FqyRLTAF0q/6DILqpjRUnnENWhFyEL2Sn2COJYru4UULhFeCzs
-         VKq9rKeYlp0KZ6KWzId19etifFPGkY4nLW/sjcNxqjKFA2MvjEAz/28i86FUaNO5dHtc
-         TJLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2B0hsASFUkHWI+dtbJoqoXBrOmDXx4P5iE4tDoIv9Y=;
-        b=p4+UoDniqfr9xNeEM7HpbSE9NEk5irPtDzLMJnM0hFzwB7Pn3nziSIul6JFVvkp14o
-         2luWjd77RJAqDSnQ/sJTG01fcYLk7ZlvwBDyq9JH0RI+cba4M1Xs0uknkbp9A8alMTdk
-         qrdved07+heCmcAdqLiLD0bf0BGZTZajyL8ni17brzxZiK0RtkBEN2JfouqWA6jUO8+z
-         jN9tjgyi+IVghAsC0eao6RlwdSVqrZ4qbDbMdvYOMVslNzRIYxYsmPL7PytBckfqyqLV
-         X2PWLdhlI/VLuJxGp8by2FgDMM57mrnEKyl15xiFzHq/J2SCZljna4k1GFcCZ2Bv+jy+
-         oXiw==
-X-Gm-Message-State: AFqh2krj18673RHvu1KjBCqEa+s8b0s75YI8R6s8uBkYRG2kDsgleiB+
-        5IV1i8LuInffsXdTyCX7NUZAaQ==
-X-Google-Smtp-Source: AMrXdXu2ltpUhMmjl2uUB9itPccs5udi7WYLCpJAPI1VbQ0Ahcuu4yLeptqX5/gWOIqo97PCCNz40w==
-X-Received: by 2002:a7b:c851:0:b0:3d9:f067:1c32 with SMTP id c17-20020a7bc851000000b003d9f0671c32mr13643754wml.29.1673611968714;
-        Fri, 13 Jan 2023 04:12:48 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id t9-20020a05600c198900b003d9e74dd9b2sm22536878wmq.9.2023.01.13.04.12.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 04:12:48 -0800 (PST)
-Message-ID: <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
-Date:   Fri, 13 Jan 2023 13:12:47 +0100
+        with ESMTP id S241070AbjAMMVs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 07:21:48 -0500
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2080.outbound.protection.outlook.com [40.107.96.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D37462D0;
+        Fri, 13 Jan 2023 04:15:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c3KScSNYuc7lOTJwpvaGyR/XbdVSwyzaximcbiHQ8IV7WIvxln0PniJZN83Jz/P5TKITsUfd07lJUfVV2vsghQG7s7sfADmYiShXSb6xDFtcVyyEVoa2EVcrZYyJ+mWLEGXOBjTwmkbybXelce8FHgC/CFs0s0sdJyWD0B0Dapzvk2DQcfT8KfgDsrvBmreKu0TaxBTicuD9L2+YxFz/MKUropX1mpSfz6zoPxBeN8g9y/djVCijeyDDiry1c22IM9iUvWqkyt7F3EVxwvbdOp2jkXBoJC7+4BNA9sZCXaOk+Z8b9lF5ioQIppB/1H4ElkxqamzuFO7MHlBjZ9keLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cO2SLqaVsh23fZ4lVrjpDK4kNpIoi0H0Sr0D0GieLs8=;
+ b=GIWQeDzi1caSne+eRb65Re2mZf+b+1SMpHxPIJI/8MYr/hBU+WPMaQWydljPT9PJRHp+9TeqxmBoA0d7pQSl/j38Cw+WdWKDf637v4bdXi6PdDfbTLP5pZK0Mvg44AHd0mbWWs3Kf9lPEXwb9YcniAHcU6My7wZpYjd8c2k7shClIcQCH6N+Ps+LKtGpCkpDDFaDNIIPANd4yC1fykhAQo3WmPxcB+AfQUBMze7fAvG+M+MRrd9ouNySsutS/72p02O9cSAGdR1GpJCNNaf/vjxwWMhn889Ol28onw9BPedeRdIAQooRrPxW13xvsFMq7EnRDKYzm2IM132+fDgYzw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cO2SLqaVsh23fZ4lVrjpDK4kNpIoi0H0Sr0D0GieLs8=;
+ b=pDuU+QI327ybGvhrkij6xTqaTaxJmvKamrB/pGb91gnl99WnWcyHl0tWyvGN5XzXHxVXLFeOsHl7Q5xzV1IQDDEW6cJZ/xoMTbViE1KUDa4GzQurgicPusJJaekOt7421m96Ip9Cs22r5+3N/Nfg7uJWOvlvoFY9Q3wr5Z8SOxeXvI2T5Lx6aNh1kU6YoWk8/W9AhwUkZ9ad6R20Pw5BWKPx6hKHxBm8GIUTjQl0FRnixCcEDCtyYhtij4TA5AapqV8dT4WehvcW9D9U3mH3Az3Jx5B+0aCR1VZWIY97WFFBLXflo4k5zEaFnFDvooWIBMXWphhpIgc7O+DTr116IA==
+Received: from DM6PR02CA0117.namprd02.prod.outlook.com (2603:10b6:5:1b4::19)
+ by SJ2PR12MB8133.namprd12.prod.outlook.com (2603:10b6:a03:4af::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5944.19; Fri, 13 Jan
+ 2023 12:15:57 +0000
+Received: from DS1PEPF0000E645.namprd02.prod.outlook.com
+ (2603:10b6:5:1b4:cafe::4d) by DM6PR02CA0117.outlook.office365.com
+ (2603:10b6:5:1b4::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.14 via Frontend
+ Transport; Fri, 13 Jan 2023 12:15:57 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS1PEPF0000E645.mail.protection.outlook.com (10.167.17.203) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6002.11 via Frontend Transport; Fri, 13 Jan 2023 12:15:57 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 04:15:51 -0800
+Received: from [10.41.21.79] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Fri, 13 Jan
+ 2023 04:15:46 -0800
+Message-ID: <a8134495-c8bf-8824-5fc4-9685a5c11640@nvidia.com>
+Date:   Fri, 13 Jan 2023 17:45:44 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points
- int340x
+Subject: Re: [Patch v1 01/10] memory: tegra: add interconnect support for DRAM
+ scaling in Tegra234
 Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "daniel.lezcano@kernel.org" <daniel.lezcano@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
- <20230110151745.2546131-4-daniel.lezcano@linaro.org>
- <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dmitry Osipenko <digetx@gmail.com>, <treding@nvidia.com>,
+        <krzysztof.kozlowski@linaro.org>, <dmitry.osipenko@collabora.com>,
+        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
+        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-2-sumitg@nvidia.com>
+ <4d562b75-854d-1997-8969-e7ef222e4e37@gmail.com>
+ <298fcaca-c708-5d68-95d6-51673f7a2174@nvidia.com>
+ <d2c4c6fc-c432-d122-1e90-3e3ef96eed72@gmail.com>
+CC:     Sanjay Chandrashekara <sanjayc@nvidia.com>,
+        Krishna Sitaraman <ksitaraman@nvidia.com>,
+        Ishan Shah <ishah@nvidia.com>, Bibek Basu <bbasu@nvidia.com>,
+        Sumit Gupta <sumitg@nvidia.com>
+From:   Sumit Gupta <sumitg@nvidia.com>
+In-Reply-To: <d2c4c6fc-c432-d122-1e90-3e3ef96eed72@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000E645:EE_|SJ2PR12MB8133:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fb09693-595c-449b-9fa6-08daf55fed38
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B8c+lmvsTj55MNAg0fgR7mAASk2ZBowQNuK20VczB9RJX2egwgQRjBW7cipkMNFPdM092RGl+tIs/QBsjCmbQD2IUJ0VfKcS5z7X3i455PuoRL1dZcMOSGvJaLotKUM+CynhMUdzWm8fe5ulP5mMl/dO1CrmOVzyIPI5/ONa7M6GMqkB3cOp9PU3A6uW4HGIInfxEqRW7JiDwvn3BKn6tPJEGgKMQ8Lu5rdFNo3IRaHP8HnxgMUOL6lOPKgcZ+4Q7RJGp6bQfiFUaCH2h2qLm9UKXiEqo4zA1vE6MThaIQ3nDxLmh4GqvawAEIqm0pMOqfmW9yAgkznpeUQLESFv6lKzXEayoXwT/6WH7AFa5kE0JCDjeT6YqZ5CtcCLpPxhBAKE3x60O1fY3MgsPMSl7SWzeioP6UUsUp371wyWJukI/D58w39KHK3X/lleZAywijEp9Btdoas8nGrDo9b9j2gDCaHhvAxWYZdxb3PoVy4RjH1bmrKAyxI8692cgTjJqLQjhlr2O9V1CnjoXftBViQAa1cPGpdzhsT6A2p+hT5wQzk+m1IcW7cdM/bsUp/qDLI2cRcd2StnFdenNBGp7Jw8sUxt+lIqzlkvfCS0dg6C7WHvBw2pUZWGI+FRlVSiJG0a5B8lIfGWTTZojO87ygwUaSRvYyBk+c5k5Su7Ig+F2q2h6e6K8fjqRzaT6q60kX8QEouE6hCLIWvju2RdDzzfPwwildYGqxz3OPwRrfcgWIBcEp5kkvuMMhbtxuj0QZvz3qMEuIpHPGRNiZ8rYQupGkafl6uwl+1WnIXhgzoQqNcJYj38kq1xeLb0juEyS6rEkf/PYi5HYhemu+s99gh3lvl4CkG5+eDLpFhJ9Q4oj3+KO8XB0XRn7OSq1huI
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(136003)(376002)(451199015)(40470700004)(46966006)(36840700001)(86362001)(82310400005)(36756003)(31696002)(41300700001)(2616005)(26005)(186003)(8676002)(16526019)(53546011)(4326008)(47076005)(70586007)(336012)(426003)(70206006)(966005)(316002)(16576012)(54906003)(478600001)(107886003)(7416002)(110136005)(356005)(921005)(7636003)(40460700003)(82740400003)(2906002)(83380400001)(36860700001)(5660300002)(8936002)(40480700001)(31686004)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2023 12:15:57.5393
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fb09693-595c-449b-9fa6-08daf55fed38
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000E645.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8133
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,77 +118,89 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Rui;
 
-thanks for testing and your comments
-
-
-On 13/01/2023 12:41, Zhang, Rui wrote:
-> On Tue, 2023-01-10 at 16:17 +0100, Daniel Lezcano wrote:
->> The thermal framework gives the possibility to register the trip
->> points with the thermal zone. When that is done, no get_trip_* ops
->> are
->> needed and they can be removed.
+On 21/12/22 22:13, Dmitry Osipenko wrote:
+> External email: Use caution opening links or attachments
+> 
+> 
+> 21.12.2022 12:35, Sumit Gupta пишет:
 >>
->> Convert the ops content logic into generic trip points and register
->> them with the thermal zone.
 >>
->> In order to consolidate the code, use the ACPI thermal framework API
->> to fill the generic trip point from the ACPI tables.
+>> On 20/12/22 23:40, Dmitry Osipenko wrote:
+>>> External email: Use caution opening links or attachments
+>>>
+>>>
+>>> 20.12.2022 19:02, Sumit Gupta пишет:
+>>>> +static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32
+>>>> *avg, u32 *peak)
+>>>> +{
+>>>> +     *avg = 0;
+>>>> +     *peak = 0;
+>>>> +
+>>>> +     return 0;
+>>>> +}
+>>>
+>>> Looks wrong, you should add ICC support to all the drivers first and
+>>> only then enable ICC. I think you added this init_bw() to work around
+>>> the fact that ICC isn't supported by T234 drivers.
 >>
->> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
->> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+>> If get_bw hook is not added then max freq is set due to 'INT_MAX' below.
 >>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@kernel.org>
->> ---
->>     V3:
->>        - The driver Kconfig option selects CONFIG_THERMAL_ACPI
->>        - Change the initialization to use GTSH for the hysteresis on
->>          all the trip points
+>>   void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+>>   {
+>>     ....
+>>     /* get the initial bandwidth values and sync them with hardware */
+>>     if (provider->get_bw) {
+>>           provider->get_bw(node, &node->init_avg, &node->init_peak);
+>>     } else {
+>>           node->init_avg = INT_MAX;
+>>           node->init_peak = INT_MAX;
+>>   }
 >>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> ---
->>   drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
->>   .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++----------
->> ----
-
-[ ... ]
-
->> -static int int340x_thermal_get_trip_hyst(struct thermal_zone_device
->> *zone,
->> -		int trip, int *temp)
->> -{
->> -	struct int34x_thermal_zone *d = zone->devdata;
->> -	acpi_status status;
->> -	unsigned long long hyst;
+>> So, will have to add the empty functions at least.
+>>
+>>   static int tegra_emc_icc_get_init_bw(struct icc_node *node, u32 *avg,
+>> u32 *peak)
+>>   {
+>> -       *avg = 0;
+>> -       *peak = 0;
 >> -
->> -	status = acpi_evaluate_integer(d->adev->handle, "GTSH", NULL,
->> &hyst);
->> -	if (ACPI_FAILURE(status))
->> -		*temp = 0;
->> -	else
->> -		*temp = hyst * 100;
+>>          return 0;
+>>   }
+>>
+>> Support to all the client drivers can't be added at once as there are
+>> many drivers all with different requirements and handling. This patch
+>> series is the beginning to add the basic interconnect support in new
+>> Tegra SoC's. Support for more clients will be added later one by one or
+>> in batch.
 > 
-> The previous code returns hyst * 100.
-> But the new API retuurns hyst directly.
+> This means that bandwidth management isn't working properly. You should
+> leave the freq to INT_MAX and fix the missing integer overflows in the
+> code if any, or read out the BW from FW.
 > 
-> -/sys/class/thermal/thermal_zone2/trip_point_4_hyst:2000
-> +/sys/class/the
-> rmal/thermal_zone2/trip_point_4_hyst:20
+> Once you'll enable ICC for all drivers, it will start working.
 > 
-> Is this done on purpose?
 
-No, it is an error. The function thermal_acpi_trip_gtsh() should do:
+Referred the below patches and now understand what you mean.
+ 
+https://patchwork.kernel.org/project/linux-arm-msm/cover/20200825170152.6434-1-georgi.djakov@linaro.org/
+  https://lore.kernel.org/all/20210912183009.6400-1-digetx@gmail.com/
 
-	return deci_kelvin_to_millicelsius(hyst);
+There is no MRQ currently in BPMP-FW to get the bandwidth for a client.
+So, can't add that in get_bw(). As explained earlier, we are in process 
+adding of adding support for all clients but that may take some time. We 
+can remove the get_bw() calls initializing "*bw = 0" once we have the 
+support added in all clients. Noticed that below drivers also do same.
 
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+  $ grep -rB3 "*peak = 0" drivers/interconnect/*
+  drivers/interconnect/imx/imx.c-static int imx_icc_get_bw(struct 
+icc_node *node, u32 *avg, u32 *peak)
+  drivers/interconnect/imx/imx.c-{
+  drivers/interconnect/imx/imx.c- *avg = 0;
+  drivers/interconnect/imx/imx.c: *peak = 0;
+  --
+  drivers/interconnect/qcom/msm8974.c-static int msm8974_get_bw(struct 
+icc_node *node, u32 *avg, u32 *peak)
+  drivers/interconnect/qcom/msm8974.c-{
+  drivers/interconnect/qcom/msm8974.c-    *avg = 0;
+  drivers/interconnect/qcom/msm8974.c:    *peak = 0;
