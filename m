@@ -2,92 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C6F6669F21
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 18:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F9266A0C6
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 18:32:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229727AbjAMRM0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 12:12:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S231154AbjAMRc2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 12:32:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjAMRMW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 12:12:22 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDDE88DC0
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 09:11:13 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id qk9so53801341ejc.3
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 09:11:13 -0800 (PST)
+        with ESMTP id S229707AbjAMRcJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 12:32:09 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E6FF9422B
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 09:21:13 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id bs20so21706857wrb.3
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 09:21:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=qXnH9+h8kjSG0D+e/tnKkzeho/i7l+Lx3wm/Pwk9hac=;
-        b=ROG+cpPA7tl0aCgfJI9jL9DcMqmLVplApi4g3Ilww+0nQVJDXEJz5+pkSOj+WKlc9Y
-         9It0rNCOMWqs31gTquAT75MIhflWofQmAXN4YdlkMYxgUCIuNIclhhP3VR88v95TkFMN
-         s04wUBBiDuUs1Jm2zak+zs9h9W1gvDzqDH6K8AWRD5z3kMv9nnfG9oOF5jnD0AvkAlxY
-         PatMIuorIACUKx9viOAX4ZERgZEWGNparDSsu7QU1A3cd7NCa5CdyGqe2xe9S/8QEs2W
-         bWIGSV3PSwTogUk10787nrTXyWN1aSFtwzHq125GxfuEEImWgrPCd+hleRHEwJ1RpftP
-         eBjg==
+        bh=N5FMUTSD2Bb9aPiO6k1P71VjRgpz4XMtlw/+XVppoH8=;
+        b=qBGrHm1GUCs7QwaYgM8fM+fBP7eHT3+DjFMWceuiU2j5KXaqvISdygjzc2dEThs3WT
+         cf3IuDzZSJup0BBAKBy3/xXs6v2lYAGMWEXrvr+by0okQvrJ9ohY3CGdqDs/Tlp3FLM+
+         OmUeVhHSkkZe4Q3b4lqGNm+6kDhQq0q6wJ/1BADBDTdi46qfxQCfOEPwCwoBql1erxu8
+         8ixCgXcew6NxO/AJGDGoHKYHcbwNHoAYoOvMCo4//1o4siyFAxY7MmcQH/JMVyCX60Qd
+         YCe12UXvAOQduuv2PM8yaNP7hFsPKa86r2D+5W5NnKe/ATzU7ynGkt9cSk3pFOrS0Yt8
+         vnwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qXnH9+h8kjSG0D+e/tnKkzeho/i7l+Lx3wm/Pwk9hac=;
-        b=IP5w8mX6245M9OUKThr8NeNPi4vVNQzNUghmknwbHpvAsyLkwOuXuCXByM25M4SUrJ
-         kzQW6aVV7HoSWitft3KTm/p3OAjBMwJKfu7wHj1C7FDUcCAtMZRybGklxJWuZdTRv+nl
-         1aT46HjX9RCQV5lZjF1/zobLypIQeriUBFQkMtXHIgRLm1giMzRvuVMm1CNd7kRd5C14
-         h4+2PzKbkXpscgEbyKWr/RHbHD6g8Nl5OgKnrQ6zbBLaWzLznH/s6qZ6VVNS17rVb7Jl
-         PWCCMMdjzIzoy8yLZWiC5QHiOboHUNr4T3Ol0P/PypPZJuJ+ykom3+Yl4TRnZtIBqS8n
-         hGNQ==
-X-Gm-Message-State: AFqh2koRSg1XKrfx9gRN+KOUV3Ko5FrBjaxVuWlhcyA8bxGDbTWLF5aL
-        xnHToIGk01iJdKY9b1w9fPOtmA==
-X-Google-Smtp-Source: AMrXdXv6SPsf041fEDD4/yrRnbbzKtP8ij8KanGx5OYsJX5jdeqd/G+Y7NuRCChlBMCjb6SDeiiNZg==
-X-Received: by 2002:a17:906:b00c:b0:7c4:fa17:7202 with SMTP id v12-20020a170906b00c00b007c4fa177202mr68173183ejy.33.1673629871904;
-        Fri, 13 Jan 2023 09:11:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id og5-20020a1709071dc500b0084d420503a3sm6994015ejc.178.2023.01.13.09.11.09
+        bh=N5FMUTSD2Bb9aPiO6k1P71VjRgpz4XMtlw/+XVppoH8=;
+        b=AO4hrCG9IW1odM5guwLtQoOkloSNO2ME5SMoRsGYwsrQl81YgptuFqPCpBsM3f2poc
+         EZgnJtMyAnxb7yjzLFX571HkiRRBgYmg6X6NL7PDYY4Iclu33tKDbVNuQCiRl1RveDU1
+         GzACI29FOQ8h5gySazCimzgDmRSFJGQQ5jngCXXxnVMZuTbm34cC/6guaVQIRRorYEoe
+         7aLgrhece4qr91NJVFUaaZMUYhJzcrrD169Ewc8GozhqaUMK72ZZ/P8MK/9cqgRfIjEO
+         Ak6bbv6S3mAiLAkItcz87pSlvVzRdS3DvV620NTWXWjmQLdA0M863AWnRbgacqruUJPg
+         kgAA==
+X-Gm-Message-State: AFqh2korN0/goHDLdLxJW/9BXkZbruAey8qDQyK4CFNVzuds8CBMUCRj
+        2SrAa8JiJD5KmGOpratGSc79qLjH/JePT/sI
+X-Google-Smtp-Source: AMrXdXtwaKDSiEHVFEYfqtAfdAIdk8ByuhNPLiXqpTPJ9VnvjbQcquOGq8mTQdbEUNw8CTD43MQp0w==
+X-Received: by 2002:adf:d0c8:0:b0:2bd:bae0:8de5 with SMTP id z8-20020adfd0c8000000b002bdbae08de5mr9364481wrh.58.1673630471594;
+        Fri, 13 Jan 2023 09:21:11 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id j11-20020adfd20b000000b0024207478de3sm19610837wrh.93.2023.01.13.09.21.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 09:11:11 -0800 (PST)
-Message-ID: <6bd2d336-e8e8-245c-292c-1e74b4988d89@linaro.org>
-Date:   Fri, 13 Jan 2023 18:11:08 +0100
+        Fri, 13 Jan 2023 09:21:10 -0800 (PST)
+Message-ID: <35b6549e-a722-4667-c471-907d91d424ce@linaro.org>
+Date:   Fri, 13 Jan 2023 18:21:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [Patch v1 05/10] dt-bindings: tegra: add icc ids for dummy MC
- clients
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-6-sumitg@nvidia.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points
+ int340x
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221220160240.27494-6-sumitg@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "daniel.lezcano@kernel.org" <daniel.lezcano@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+References: <20230110151745.2546131-1-daniel.lezcano@linaro.org>
+ <20230110151745.2546131-4-daniel.lezcano@linaro.org>
+ <4f461027be209156d6d9f26870748f204ff4184b.camel@intel.com>
+ <ddcfbd2e-2ea0-9305-96c4-8127181cdd8c@linaro.org>
+ <34f9fc91c398f85c0bedaff89adbb33897cb1f62.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <34f9fc91c398f85c0bedaff89adbb33897cb1f62.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/12/2022 17:02, Sumit Gupta wrote:
-> Adding ICC id's for dummy software clients representing CCPLEX clusters.
+
+Hi Srinivas,
+
+On 13/01/2023 16:48, srinivas pandruvada wrote:
+> Hi Daniel,
 > 
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
+>>>>
+> 
+> [...]
+> 
+>>>> -       status = acpi_evaluate_integer(d->adev->handle, "GTSH",
+>>>> NULL,
+>>>> &hyst);
+>>>> -       if (ACPI_FAILURE(status))
+>>>> -               *temp = 0;
+>>>> -       else
+>>>> -               *temp = hyst * 100;
+>>>
+>>> The previous code returns hyst * 100.
+>>> But the new API retuurns hyst directly.
+>>>
+>>> -/sys/class/thermal/thermal_zone2/trip_point_4_hyst:2000
+>>> +/sys/class/the
+>>> rmal/thermal_zone2/trip_point_4_hyst:20
+>>>
+>>> Is this done on purpose?
+>>
+>> No, it is an error. The function thermal_acpi_trip_gtsh() should do:
+>>
+>>          return deci_kelvin_to_millicelsius(hyst);
+>>
+>>
+> 
+> GTSH returns here in tenths of degree Kelvin. For example 15 means 1.5
+> degree K.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yes, so the above conversion is correct, right ?
 
-Best regards,
-Krzysztof
+> I would like to test your next series with thermald. If there is a
+> problem, it will break every distro.
+
+Great, thanks!
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
