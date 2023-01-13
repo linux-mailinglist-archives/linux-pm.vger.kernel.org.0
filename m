@@ -2,47 +2,50 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3AFB66A3B1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 20:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F86466A3BC
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 20:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjAMTwC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 14:52:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S230110AbjAMTzL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 14:55:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjAMTv7 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 14:51:59 -0500
+        with ESMTP id S230473AbjAMTyy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 14:54:54 -0500
 Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FD37C3B1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 11:51:58 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id v6so11667302ejg.6
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 11:51:58 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CBE8892C7;
+        Fri, 13 Jan 2023 11:54:53 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id u19so54638534ejm.8;
+        Fri, 13 Jan 2023 11:54:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RaeJU1CBT3f4SHty1P0QikqYinKBQQbaLdN6c3ICfbc=;
-        b=dOH9oLf91hE3RrzrZq3HrGRxypvHwk9kBLY4VNlijsvl+3YVic6Re4EuJJ/YYKOlYk
-         MAN0NzhIRwZtfmOPkoHAx5QleaSQC/8tZjqQughQUFMr3HewwpynwxXhviNHfEAGt7k9
-         e3fgHuibq2xyBFA+wsDdL1XrwUpCTnMIyCkCpXzTK59gNlt22Xl0QXZml0Rpoa1p0dME
-         M7nXn705uCrwl7m/uVZ5uJYBJsYTIqm5BuYfqrL+MB6pHlVFOwhqfbZdD8gvzibk3qxD
-         Y7/VyY9agnxl1qhyREcVB1kiN6LiWRRTpVOXYNJYbLd+5aml4sisaz0sEXVBF+82Novu
-         3STQ==
-X-Gm-Message-State: AFqh2kpB4SqHMuPt9M2RMVJ7jTOkGLOSCQFswAx6e+OH+dvprubOZ70o
-        9+GiHPqMki9RWyaYrkR7Mzl3qHMJH/hi71orShrHsZSG
-X-Google-Smtp-Source: AMrXdXuTKpvdohAKOzZJlRMdpVg6kp5WhrCGVgUBskqPQDlaybSr3y3GhOQR0X1e4aF8TXynAevvYJe+4cnw1zguf2c=
-X-Received: by 2002:a17:906:9484:b0:84d:3c6a:4c55 with SMTP id
- t4-20020a170906948400b0084d3c6a4c55mr3081508ejx.509.1673639516983; Fri, 13
- Jan 2023 11:51:56 -0800 (PST)
+        bh=G3hwHrWRDYeXbE9F5VqU2zeZLznB1nQswMi8N/byOT4=;
+        b=HlUYw0RZUi/at66S0ewS3aPT1BVUTjCCc6s+Mwf/zVESp/SYAkONbG53IWZd0+NNPT
+         GMD7a14QT7prAfxVi/hDcoXAoV06iZ5JxleVO4Pm9b7hTmo+lMHf0m5NxJP703QVXazg
+         gGupZl8KOOgJhhlFnjs6uAjXmW2USlE44Azp0RvFh6tW5BJ4dgbwvFqypXzKNAIUGJG9
+         gtNdplGIq6OZb43q6nhiKXXooag7NlRavMOm5vGNNuELusX+qosbiuZD12hM2DslvG95
+         JdcXY3tCFVG82Qaae5gIfOKfgxsPJannWIjJN4z4cVe8XfFnmf0JiedguNcyd6O+PDCL
+         LZyA==
+X-Gm-Message-State: AFqh2koZrFw7gM0UgLeFv8dtaPhfM993Jdi2Jq3JXQwIEb+qlGW4yrUh
+        j/NzaAuPnTXBoBPoMToDb1XgnWFPGnQKkYwxhUk=
+X-Google-Smtp-Source: AMrXdXt6vpnrW8DaG3YYeV4c/q9rW541ut5UAt+4np4gjufFCbn38auJSWEsAR6X9SIJdwPWztq4ZzYn0O763GXKzt0=
+X-Received: by 2002:a17:907:8c85:b0:86a:edd1:29da with SMTP id
+ td5-20020a1709078c8500b0086aedd129damr183485ejc.478.1673639692036; Fri, 13
+ Jan 2023 11:54:52 -0800 (PST)
 MIME-Version: 1.0
-References: <1670577923-39100-1-git-send-email-lirongqing@baidu.com>
-In-Reply-To: <1670577923-39100-1-git-send-email-lirongqing@baidu.com>
+References: <20221213155448.385167-1-rf@opensource.cirrus.com>
+In-Reply-To: <20221213155448.385167-1-rf@opensource.cirrus.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 13 Jan 2023 20:51:45 +0100
-Message-ID: <CAJZ5v0h3mhGMgbjchBVBiPFj4UL+5F6qNxO4bG9comDaC5gbyQ@mail.gmail.com>
-Subject: Re: [PATCH] cpuidle-haltpoll: select haltpoll governor
-To:     lirongqing@baidu.com
-Cc:     linux-pm@vger.kernel.org
+Date:   Fri, 13 Jan 2023 20:54:41 +0100
+Message-ID: <CAJZ5v0iUsRzMzxKcwbTecQvDE2x=2QotgUe-XHYG77GOmOdV0w@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Document that force_suspend() is
+ incompatible with SMART_SUSPEND
+To:     Richard Fitzgerald <rf@opensource.cirrus.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        patches@opensource.cirrus.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -54,30 +57,44 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 9, 2022 at 10:34 AM <lirongqing@baidu.com> wrote:
+On Tue, Dec 13, 2022 at 4:54 PM Richard Fitzgerald
+<rf@opensource.cirrus.com> wrote:
 >
-> From: Li RongQing <lirongqing@baidu.com>
+> pm_runtime_force_suspend() cannot be used with DPM_FLAG_SMART_SUSPEND, so
+> note this in the kerneldoc.
 >
-> haltpoll driver should select haltpoll governor, ensure they
-> work together
+> If DPM_FLAG_SMART_SUSPEND is set and the PM core cannot skip system resume
+> it will call pm_runtime_active() on the driver. This can lead to an
+> inconsistent state where:
 >
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+>   pm_runtime_force_suspend() called ->runtime_suspend
+>
+> but
+>
+>   device_resume_noirq() called pm_runtime_set_active()
+>
+> This leaves the driver actually suspended but marked as active.
+>
+> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
->  drivers/cpuidle/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/base/power/runtime.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 >
-> diff --git a/drivers/cpuidle/Kconfig b/drivers/cpuidle/Kconfig
-> index ff71dd6..cac5997 100644
-> --- a/drivers/cpuidle/Kconfig
-> +++ b/drivers/cpuidle/Kconfig
-> @@ -74,6 +74,7 @@ endmenu
->  config HALTPOLL_CPUIDLE
->         tristate "Halt poll cpuidle driver"
->         depends on X86 && KVM_GUEST
-> +       select CPU_IDLE_GOV_HALTPOLL
->         default y
->         help
->          This option enables halt poll cpuidle driver, which allows to poll
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 50e726b6c2cf..b29be7d4d7d0 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1864,6 +1864,10 @@ static bool pm_runtime_need_not_resume(struct device *dev)
+>   * sure the device is put into low power state and it should only be used during
+>   * system-wide PM transitions to sleep states.  It assumes that the analogous
+>   * pm_runtime_force_resume() will be used to resume the device.
+> + *
+> + * Do not use with DPM_FLAG_SMART_SUSPEND as this can lead to an inconsistent
+> + * state where this function has called the ->runtime_suspend callback but the
+> + * PM core marks the driver as runtime active.
+>   */
+>  int pm_runtime_force_suspend(struct device *dev)
+>  {
 > --
 
 Applied as 6.3 material, thanks!
