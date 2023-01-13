@@ -2,165 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 386CA6699A0
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 15:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE2C669A2E
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 15:32:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241882AbjAMOKc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 09:10:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S229515AbjAMObe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 09:31:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233098AbjAMOKI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 09:10:08 -0500
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5575C1F6;
-        Fri, 13 Jan 2023 06:06:13 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id B856E256B8;
-        Fri, 13 Jan 2023 14:06:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673618771; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=qerTG7yVEdATebY6zaKCk2qNuAQ7K4by6XyL0WSCPFo=;
-        b=mlMz7tpaDKH5ON0g3Sl4mmBovvApom2MngsecURVvLNhBb2UjbPkYxhetfIhGhxNoH0ZBB
-        Z8F0qUptHNhmYOLMOX7rYBaAOAWfUUHinRaV/sD4EEA2d5dDZF+YutajoQc1DwcLPCLOU8
-        TEZAJnoIvy9o4hrjiLIPqIQCjVeXCZk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F2591358A;
-        Fri, 13 Jan 2023 14:06:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bXH8EVNlwWPnDQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 13 Jan 2023 14:06:11 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: [PATCH] x86/acpi: fix suspend with Xen
-Date:   Fri, 13 Jan 2023 15:06:10 +0100
-Message-Id: <20230113140610.7132-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        with ESMTP id S229529AbjAMOah (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 09:30:37 -0500
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B118848C1
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
+Received: by mail-io1-xd33.google.com with SMTP id y205so5989180iof.0
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 06:23:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
+        b=MK7e6Vy0okniHu3Q9+oSRGxZAwtfUcCw709gjtpmGqYm4W84IZvw4tBwf/JeD4Sz6H
+         3KURCQ1q7FJNLx+GLRWt1AGelsjK5K90b9GlN0sKUA6ZUg/qpGAmzhVkYIMi1e8GW14O
+         cFtXxDW3U7HKPR1h1QucXhqmNKCsZMoObgInYsIcK9GV+Q1SmTW3TNFPjIiYngs//Zw8
+         0a/3E2iFbnIOhj7mPg7o55ip5AqJcSu4cmOrbMNeUEYXVxQDLd1kY3ucGjxruvrrHS7M
+         XetQgLqP0j8VlFQPDJPkXr0ojEVpUsKfNGxzo9W4EnGlfHoCwYlTt4oOdX6QabpPSrPy
+         sowg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+OF3VMKCJX/ixRNA7KETCaEsWyEBkIDVOlKWye/O0OA=;
+        b=RJC+TuXnIxi06uHC3ZcSq1ygetI7zNt1+CxJMo2DRCIbxmt4wlXs6Fv6qoq3FI5k/Z
+         Hx8EmoRUHsJwucV/Gq/PYs8RgD5oZK5i1F7kWdfwnkPOAs0YZIHGvtB2Y2lcK2MVZxMC
+         vx1JCx8vez+KbPw7GNhPGcMH8C3XJaI98iDxHHQQN1W9X+PO7Fw0TeNDT3tr3YcychoJ
+         PXqlcvlG8lGACmDQ3PZcV5kdCV4rkymeixLyNUahwki1AcqY6mOH+E+3H90oyDcskp+O
+         SbGIKOW930K2BgGkf6onJi+Ao7L4PEpsVoBR9XGxLhws3v35saPQQINOCT7Ya+DTXqVl
+         fQpw==
+X-Gm-Message-State: AFqh2kq0qD8jfhkAjqRBalFNIwfS+ijctrtcciKviI5CKi5iK+7yxjl8
+        8nc7y4HUuchH9u9nN829BY4lL7hboYgFqsmLg4Q=
+X-Google-Smtp-Source: AMrXdXshiBnmfviu9GpNb0RTPGnCcyaimsk+bKcdbNGmrDubcSeViaijlgxCq2yePIP/Xii+kaUmkoerHpw3FkTn4/M=
+X-Received: by 2002:a6b:7f08:0:b0:6e2:ec05:87c8 with SMTP id
+ l8-20020a6b7f08000000b006e2ec0587c8mr6674474ioq.144.1673619821627; Fri, 13
+ Jan 2023 06:23:41 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6e02:1282:b0:30d:c36b:403c with HTTP; Fri, 13 Jan 2023
+ 06:23:41 -0800 (PST)
+Reply-To: hitnodeby23@yahoo.com
+From:   Hinda Itno Deby <atidigahcyril@gmail.com>
+Date:   Fri, 13 Jan 2023 06:23:41 -0800
+Message-ID: <CALHvQ-i=c6i56KKAWCU6YHCKu56RytXe0C3_h_MOPvHa0vgPTw@mail.gmail.com>
+Subject: Reply
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNDISC_FREEM,UNDISC_MONEY,URG_BIZ autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:d33 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5005]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [hitnodeby23[at]yahoo.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [atidigahcyril[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.6 URG_BIZ Contains urgent matter
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
-Xen PV guest") missed one code path accessing real_mode_header, leading
-to dereferencing NULL when suspending the system under Xen:
-
-    [  348.284004] PM: suspend entry (deep)
-    [  348.289532] Filesystems sync: 0.005 seconds
-    [  348.291545] Freezing user space processes ... (elapsed 0.000 seconds) done.
-    [  348.292457] OOM killer disabled.
-    [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.104 seconds) done.
-    [  348.396612] printk: Suspending console(s) (use no_console_suspend to debug)
-    [  348.749228] PM: suspend devices took 0.352 seconds
-    [  348.769713] ACPI: EC: interrupt blocked
-    [  348.816077] BUG: kernel NULL pointer dereference, address: 000000000000001c
-    [  348.816080] #PF: supervisor read access in kernel mode
-    [  348.816081] #PF: error_code(0x0000) - not-present page
-    [  348.816083] PGD 0 P4D 0
-    [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
-    [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1.3-1.fc32.qubes.x86_64 #1
-    [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.01 07/03/2022
-    [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
-
-Fix that by adding an indirection for acpi_get_wakeup_address() which
-Xen PV dom0 can use to return a dummy non-zero wakeup address (this
-address won't ever be used, as the real suspend handling is done by the
-hypervisor).
-
-Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as Xen PV guest")
-Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
- arch/x86/include/asm/acpi.h  | 2 +-
- arch/x86/kernel/acpi/sleep.c | 3 ++-
- include/xen/acpi.h           | 9 +++++++++
- 3 files changed, 12 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-index 65064d9f7fa6..137259ff8f03 100644
---- a/arch/x86/include/asm/acpi.h
-+++ b/arch/x86/include/asm/acpi.h
-@@ -61,7 +61,7 @@ static inline void acpi_disable_pci(void)
- extern int (*acpi_suspend_lowlevel)(void);
- 
- /* Physical address to resume after wakeup */
--unsigned long acpi_get_wakeup_address(void);
-+extern unsigned long (*acpi_get_wakeup_address)(void);
- 
- /*
-  * Check if the CPU can handle C2 and deeper
-diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-index 3b7f4cdbf2e0..1a3cd5e24cd0 100644
---- a/arch/x86/kernel/acpi/sleep.c
-+++ b/arch/x86/kernel/acpi/sleep.c
-@@ -33,10 +33,11 @@ static char temp_stack[4096];
-  * Returns the physical address where the kernel should be resumed after the
-  * system awakes from S3, e.g. for programming into the firmware waking vector.
-  */
--unsigned long acpi_get_wakeup_address(void)
-+static unsigned long x86_acpi_get_wakeup_address(void)
- {
- 	return ((unsigned long)(real_mode_header->wakeup_start));
- }
-+unsigned long (*acpi_get_wakeup_address)(void) = x86_acpi_get_wakeup_address;
- 
- /**
-  * x86_acpi_enter_sleep_state - enter sleep state
-diff --git a/include/xen/acpi.h b/include/xen/acpi.h
-index b1e11863144d..7e1e5dbfb77c 100644
---- a/include/xen/acpi.h
-+++ b/include/xen/acpi.h
-@@ -56,6 +56,12 @@ static inline int xen_acpi_suspend_lowlevel(void)
- 	return 0;
- }
- 
-+static inline unsigned long xen_acpi_get_wakeup_address(void)
-+{
-+	/* Just return a dummy non-zero value, it will never be used. */
-+	return 1;
-+}
-+
- static inline void xen_acpi_sleep_register(void)
- {
- 	if (xen_initial_domain()) {
-@@ -65,6 +71,9 @@ static inline void xen_acpi_sleep_register(void)
- 			&xen_acpi_notify_hypervisor_extended_sleep);
- 
- 		acpi_suspend_lowlevel = xen_acpi_suspend_lowlevel;
-+#ifdef CONFIG_ACPI_SLEEP
-+		acpi_get_wakeup_address = xen_acpi_get_wakeup_address;
-+#endif
- 	}
- }
- #else
 -- 
-2.35.3
+My name is Hinda Itno Deby Please I want us to discuss Urgent Business
+Proposal, if you are interested kindly reply to me so i can give you
+all the details.
 
+Thanks and God Bless You.
+Ms Hinda Itno Deby
