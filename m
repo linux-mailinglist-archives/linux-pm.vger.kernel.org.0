@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE2616689F1
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 04:14:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3106689F4
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 04:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbjAMDOP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 12 Jan 2023 22:14:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38480 "EHLO
+        id S230195AbjAMDOV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 12 Jan 2023 22:14:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjAMDOO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 22:14:14 -0500
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FB9621AE
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 19:14:13 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id v25so31202555lfe.12
-        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 19:14:12 -0800 (PST)
+        with ESMTP id S230172AbjAMDOT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 12 Jan 2023 22:14:19 -0500
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A3625F0
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 19:14:17 -0800 (PST)
+Received: by mail-lf1-x12f.google.com with SMTP id bu8so31226018lfb.4
+        for <linux-pm@vger.kernel.org>; Thu, 12 Jan 2023 19:14:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UqhrEGDhyNyct6j4UIY/bUU8rmAKJvJsZVTD0uXyplg=;
-        b=EijPl8leAc4s6WSCWxgCiOUVzOKj9SfqolbfYNRNFvGZ4CdrAmgz7BUXQ5loayvIVL
-         Vhu5Ml52r1uANUUmT8XeQCZQplLyBTw3QxH2f8OetmETqgQjFjcw8OQQ6Chtns/5bpt0
-         Gf01zbPDDlKoM8Wa4HPjVdIadzAZgScwC0HEoA+e20iS9//sLnQuC0PzMEp3YMw8TJnQ
-         w+90TtM8qwJKjt0ogwU5Jrcw0FJ2/H9limJiqlFo3BIgh/4RGNeP4zWBqQ5CpYv2rs2H
-         1yGE29Jx3oSYNe7pVapiqN2YwaRwKtfshMKChKjV8roCH4zEddAQbv/gmZoaE25RabHY
-         59ZA==
+        bh=iPjbB3FK1NBMvplGNfsEp/AEDsK3/EIymSBWqMhhO+g=;
+        b=DezL/d3trZVr4HXL/SAVamVvqujPUjBDNHJnlARdY09fq9HYIx6oGUqPe6l+LxI/eh
+         ifAU3gYz2BA36XzT9cLzaQd9qLTcGTuf4wzI3YFDCwM4+49CdeaHxs8mcXPWihTznWyT
+         VVVmeEuWRNV6Lf3kjm28nifW/uJeyEdcUNCMjaKORkgrT0eJYJ4woI8/vPBXBOwXPt15
+         CWGE6ua9fTkHxswFRvZ8uBuBnty0zCsHzVbTghKe6lMUJWESJuK491DSlBGv7yYK9ntD
+         3Q6QUrf1XSmx8ng9LkddahZzWTjvWrxnAu5zzujKhcG9NlSiMYK8eESnqASJrMnsTu9N
+         T4AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UqhrEGDhyNyct6j4UIY/bUU8rmAKJvJsZVTD0uXyplg=;
-        b=ZM77XvBd2xwTbtyUzKgPxBTD2UtxHHLptMxEy8hZYwZx5oneuM/yzlvTQh6vgCs7BL
-         YWxuIoQ2F7LWhQcN63BzcLvJKLtU/lPosYnmjIx4cefYQ+iMqG+pQlJ2VbyYrG81cwz/
-         CrDZGuTRgJWEDWrBMhmHHNuBQidVb/5Q+HoJMQgKdH0PY7nlh2LRNxpebwAuXn9wOKDK
-         uMvTYIiEyxf3lssMkjkbNjo2pQcfi4Hj/vO0ZoEunaRhsqAOWgOLbDlM0GCFyiAkB9y+
-         qhppMK4wUrBfDw//WODwUGXn0M2Zfp/SWfVTlWCCynESMeMAK4NffdjcMHn90HRqw+2Y
-         OK4w==
-X-Gm-Message-State: AFqh2koaxGdlHuzaGmO/ekDfSWon9cZPAZz3/FyCw5KMxRkHQeA2W9rG
-        7u7LiKgiWczmdBLXUQmNjTqPXA==
-X-Google-Smtp-Source: AMrXdXv8B+aSQqpoWPejfljGbBfrwKd1UBoGFnD1EVy3WEmjxhuMINI07fu6exs743agH2pTNjzCWA==
-X-Received: by 2002:a05:6512:3c82:b0:4b5:adae:b6be with SMTP id h2-20020a0565123c8200b004b5adaeb6bemr34753954lfv.42.1673579651452;
-        Thu, 12 Jan 2023 19:14:11 -0800 (PST)
+        bh=iPjbB3FK1NBMvplGNfsEp/AEDsK3/EIymSBWqMhhO+g=;
+        b=AOeMj6M8a2j+kiwjyjRm497hqiRhu0Nsek5AOwUt3tfE5XResdZ09smBECQ/KzjNOW
+         tw4kH5q7uGafvNA1DAveYo5YP1Ec2cUVNiWb6z3v+Ok9JuWvc4+g7DNVI5NGkseKm3qJ
+         9LUJ9+zJoLJlmkHr8NHd9LjTWWsyl8vEBiXO0huyD9Gz9zOT0C4dGQUWeGzE8FUNN3i5
+         4My8nTUx2hddoaOqdE6JCNFjnuOYMsRoEFW0KkLB5Gy/gy6DjWOpcbGruZy5GNRoixBe
+         rEt3uOHNFxDTZLDGH7tyVfoI3n73kdnHLkOpJhek8U/Cj9Iss2unUA0pIOx8kacwRhHv
+         kGjg==
+X-Gm-Message-State: AFqh2kpf9HJwb97ozZGeUrhv1RzFJW41jGThdS1kvwrr0nGhUj4A3mUD
+        AWtTZCPS+aF7IJr9Mh0xrIm3KQ==
+X-Google-Smtp-Source: AMrXdXuwnrKyJC+g4abuntp+z7g60CE4WM5LJiayATlVFNlo2sO8dPJsZn8M3RdLcB+18kQk/4wtDw==
+X-Received: by 2002:a19:700e:0:b0:4cd:afbf:c206 with SMTP id h14-20020a19700e000000b004cdafbfc206mr886608lfc.22.1673579655859;
+        Thu, 12 Jan 2023 19:14:15 -0800 (PST)
 Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id w19-20020a05651234d300b004cb09fd48ebsm3584858lfr.149.2023.01.12.19.14.08
+        by smtp.gmail.com with ESMTPSA id w19-20020a05651234d300b004cb09fd48ebsm3584858lfr.149.2023.01.12.19.14.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Jan 2023 19:14:09 -0800 (PST)
+        Thu, 12 Jan 2023 19:14:13 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -58,11 +58,15 @@ Cc:     marijn.suijten@somainline.org,
         Thara Gopinath <thara.gopinath@gmail.com>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] thermal/drivers/qcom/lmh: Use driver data as flags instead of bool
-Date:   Fri, 13 Jan 2023 04:14:00 +0100
-Message-Id: <20230113031401.2336157-2-konrad.dybcio@linaro.org>
+        Zhang Rui <rui.zhang@intel.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH 2/2] firmware: qcom_scm: Fully implement qcom_scm_lmh_dcvsh()
+Date:   Fri, 13 Jan 2023 04:14:01 +0100
+Message-Id: <20230113031401.2336157-3-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230113031401.2336157-1-konrad.dybcio@linaro.org>
 References: <20230113031401.2336157-1-konrad.dybcio@linaro.org>
@@ -78,54 +82,134 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Currently the OF driver data is used to determine whether to manually
-enable the LMH algorithms through secure calls. In preparation for
-introducing support for SoCs with a configuration that differs from
-both SDM845 and SM8150, convert this to a set of bitflags for more
-flexibility.
+The qcom_scm_lmh_dcvsh call can actually pass two values to the
+secure world. The second value is used for example with the
+LMH_FREQ_CAP function, which limits the maximum achievable frequency
+directly from LMh. Add the missing arguments, handle them and update
+the current usages of this function.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/thermal/qcom/lmh.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/firmware/qcom_scm.c | 13 ++++++++-----
+ drivers/thermal/qcom/lmh.c  | 28 ++++++++++++++--------------
+ include/linux/qcom_scm.h    |  5 +++--
+ 3 files changed, 25 insertions(+), 21 deletions(-)
 
+diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+index cdbfe54c8146..58a19a47e442 100644
+--- a/drivers/firmware/qcom_scm.c
++++ b/drivers/firmware/qcom_scm.c
+@@ -1252,12 +1252,13 @@ int qcom_scm_lmh_profile_change(u32 profile_id)
+ }
+ EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
+ 
+-int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+-		       u64 limit_node, u32 node_id, u64 version)
++int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val0,
++		       u32 payload_val1, u64 limit_node, u32 node_id,
++		       u64 version, bool has_val1)
+ {
+ 	dma_addr_t payload_phys;
+ 	u32 *payload_buf;
+-	int ret, payload_size = 5 * sizeof(u32);
++	int ret, payload_size = (5 + has_val1) * sizeof(u32);
+ 
+ 	struct qcom_scm_desc desc = {
+ 		.svc = QCOM_SCM_SVC_LMH,
+@@ -1278,8 +1279,10 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+ 	payload_buf[0] = payload_fn;
+ 	payload_buf[1] = 0;
+ 	payload_buf[2] = payload_reg;
+-	payload_buf[3] = 1;
+-	payload_buf[4] = payload_val;
++	payload_buf[3] = has_val1 ? 2 : 1;
++	payload_buf[4] = payload_val0;
++	if (has_val1)
++		payload_buf[5] = payload_val1;
+ 
+ 	desc.args[0] = payload_phys;
+ 
 diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-index 4122a51e9874..5e8ff196c9a6 100644
+index 5e8ff196c9a6..d2b5ea8322eb 100644
 --- a/drivers/thermal/qcom/lmh.c
 +++ b/drivers/thermal/qcom/lmh.c
-@@ -28,7 +28,7 @@
- 
- #define LMH_REG_DCVS_INTR_CLR		0x8
- 
--#define LMH_ENABLE_ALGOS		1
-+#define LMH_ENABLE_ALGOS		BIT(0)
- 
- struct lmh_hw_data {
- 	void __iomem *base;
-@@ -92,9 +92,11 @@ static int lmh_probe(struct platform_device *pdev)
- 	struct device_node *cpu_node;
- 	struct lmh_hw_data *lmh_data;
- 	int temp_low, temp_high, temp_arm, cpu_id, ret;
--	unsigned int enable_alg;
-+	unsigned int flags;
- 	u32 node_id;
- 
-+	flags = (uintptr_t)of_device_get_match_data(dev);
-+
- 	lmh_data = devm_kzalloc(dev, sizeof(*lmh_data), GFP_KERNEL);
- 	if (!lmh_data)
- 		return -ENOMEM;
-@@ -144,9 +146,7 @@ static int lmh_probe(struct platform_device *pdev)
- 	if (!qcom_scm_lmh_dcvsh_available())
+@@ -147,23 +147,23 @@ static int lmh_probe(struct platform_device *pdev)
  		return -EINVAL;
  
--	enable_alg = (uintptr_t)of_device_get_match_data(dev);
--
--	if (enable_alg) {
-+	if (flags & LMH_ENABLE_ALGOS) {
- 		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
- 					 LMH_NODE_DCVS, node_id, 0);
+ 	if (flags & LMH_ENABLE_ALGOS) {
+-		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
+-					 LMH_NODE_DCVS, node_id, 0);
++		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1, 0,
++					 LMH_NODE_DCVS, node_id, 0, false);
  		if (ret)
+ 			dev_err(dev, "Error %d enabling current subfunction\n", ret);
+ 
+-		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
+-					 LMH_NODE_DCVS, node_id, 0);
++		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1, 0,
++					 LMH_NODE_DCVS, node_id, 0, false);
+ 		if (ret)
+ 			dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
+ 
+-		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
+-					 LMH_NODE_DCVS, node_id, 0);
++		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1, 0,
++					 LMH_NODE_DCVS, node_id, 0, false);
+ 		if (ret)
+ 			dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
+ 
+-		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
+-					 LMH_NODE_DCVS, node_id, 0);
++		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1, 0,
++					 LMH_NODE_DCVS, node_id, 0, false);
+ 		if (ret) {
+ 			dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
+ 			return ret;
+@@ -177,22 +177,22 @@ static int lmh_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Set default thermal trips */
+-	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm,
+-				 LMH_NODE_DCVS, node_id, 0);
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm, 0,
++				 LMH_NODE_DCVS, node_id, 0, false);
+ 	if (ret) {
+ 		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
+ 		return ret;
+ 	}
+ 
+-	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high,
+-				 LMH_NODE_DCVS, node_id, 0);
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high, 0,
++				 LMH_NODE_DCVS, node_id, 0, false);
+ 	if (ret) {
+ 		dev_err(dev, "Error setting thermal HI threshold%d\n", ret);
+ 		return ret;
+ 	}
+ 
+-	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low,
+-				 LMH_NODE_DCVS, node_id, 0);
++	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low, 0,
++				 LMH_NODE_DCVS, node_id, 0, false);
+ 	if (ret) {
+ 		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
+ 		return ret;
+diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
+index 1e449a5d7f5c..9fd798d17fdd 100644
+--- a/include/linux/qcom_scm.h
++++ b/include/linux/qcom_scm.h
+@@ -117,8 +117,9 @@ extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
+ extern int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt);
+ extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
+ 
+-extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
+-			      u64 limit_node, u32 node_id, u64 version);
++extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val0,
++			      u32 payload_val1, u64 limit_node, u32 node_id,
++			      u64 version, bool has_val1);
+ extern int qcom_scm_lmh_profile_change(u32 profile_id);
+ extern bool qcom_scm_lmh_dcvsh_available(void);
+ 
 -- 
 2.39.0
 
