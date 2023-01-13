@@ -2,102 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5212A66949D
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 11:49:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5B066953D
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 12:14:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240413AbjAMKtV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 05:49:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S241016AbjAMLOe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 06:14:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241328AbjAMKre (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 05:47:34 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53FD43E87A
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 02:47:33 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id v2so9668983wrw.10
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 02:47:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nCKq+3CeXspv0d8FXq+drklgU4PqbEbjubXP8s8ISNY=;
-        b=zQM1ROKNS0lv0njzO8IlF8kS6u62cYpa9djllCqR8EyFB9jz/YeZGIIzf1YTPzEA3u
-         RW9uZMnjVnS/JQL3Eew3HhXn2Zx0cKtFUP9oUkFR0NWErEjkNLq36WuC9R8X1xqjrzgm
-         oh9wT/ZZFN2QFWVQtfF5In4t6K66RWlY8Fd7pJtyX0HXnbORsSthKyk0Tap1DxSCRwgV
-         Z1EgvJhEqTgB9B+nE+HMKPPisuu9XfHKMYg1qRS8qV1o1SQ59HzLeLwQNC557YoKjjVn
-         boei+WiOLV6zYg1b6KaenzPWMUI+MhTEJ0FDH8kSnOz0UTTQWRBr1RFtRPevT0rBS2U5
-         DuPA==
+        with ESMTP id S233190AbjAMLMk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 06:12:40 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B31459F80;
+        Fri, 13 Jan 2023 03:07:45 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id qk9so51517872ejc.3;
+        Fri, 13 Jan 2023 03:07:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nCKq+3CeXspv0d8FXq+drklgU4PqbEbjubXP8s8ISNY=;
-        b=rkYAOVnCt9WyTydcZRZhoRGNH0C1eXcELCJr0kjOEy2xc4nV7s2aWBbmJ7jFJ6wn+K
-         uUuhZXfYX4BQJbgoa9LRxhc9BWP7WtYlDlyPMK7Ufws2+lAxJqRqpTjGc1D5174apaUT
-         P+6EJYoftjrcqOQM1ZkRsfHWkcDlk9M288mtZTCQ80VIikIIChgrgHtTDVg9v0cdC/Ql
-         dZSAeBbbZ0sDQ2hDpiM8rfsZenwPV5eubcTCplogGZ693Vgawdq5kAjzSdQsNgA08h9z
-         5enLD5ppGAZgpSkiVEuJKg5yhh2qVcwYNoFscrjt5d4eyDz8zWTxPZJAtnP65hakYoF7
-         apww==
-X-Gm-Message-State: AFqh2kqJKFcnVaWFKB2n7OhYd6vBJpqUBsaAs2dR3jDPoC8HyoWRTxBh
-        ParKPn1jo6ftwhn7ngt7ibN1lQ==
-X-Google-Smtp-Source: AMrXdXulZs7fMY6nmb7bBhCC1eHU5O0QOYBucr/XwAPS1BKnehd+EoVOMBDJsbVYl/P6L2fkBk9RkA==
-X-Received: by 2002:adf:fad0:0:b0:2bd:e539:46e0 with SMTP id a16-20020adffad0000000b002bde53946e0mr781170wrs.46.1673606851768;
-        Fri, 13 Jan 2023 02:47:31 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id n10-20020a5d6b8a000000b002425787c5easm18553532wrx.96.2023.01.13.02.47.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 02:47:31 -0800 (PST)
-Message-ID: <3dc0b861-04fe-317e-9c9a-39c238b71dd2@linaro.org>
-Date:   Fri, 13 Jan 2023 11:47:29 +0100
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F+15vxFiiY5tc6WQ1LMLTgERRMIi2n7Ag2eOZR93TU8=;
+        b=4fZU9R2F4YPUFvbVUitIxbKfKCx6JJrIIrFXnlyM4OHEERBlk5hzqVyMXLhIEzjT88
+         v1dkVKgHQKUWZQyMGuXYK0sibxyWQuKdExP2h1qkYcuw+GR2FKYT6wmT+57dtKIfGp6p
+         KyYCPtlx3sp7iRPuNMS/qPdcSDfkdVak584Ueqk2FEejMbTLjlDF2he9DTxOp5OSAwn8
+         KMWlEJ0AXWHWvB22gAIhpUUw1cNuvkLBkDVAfZIZVCcIpXykcqk1IsjZL4pniFNIO/RE
+         yutib39SSBomYwL7eNK6zpVyQMSX7rd62hYBpZ5Q2CyBlzoQs6VxHutptS7P9zIwZipv
+         ukdQ==
+X-Gm-Message-State: AFqh2kop4qii3RksgTfmVyYFjvhaUXB3Sc5zD1GSV65ImkeJdjGge6Xt
+        lzI7DsOWoK9LKk3cEowYjZ5DJKBz3sH47QI8NZI=
+X-Google-Smtp-Source: AMrXdXsNUG7ZcKtvUx+1MZrCroVfzUimHibXQrtcFoPQgH3BtYcxwyMClbpIbkNqDFmGktutIDxXDT6i3cjRWk+8xtY=
+X-Received: by 2002:a17:907:c203:b0:867:77a9:db77 with SMTP id
+ ti3-20020a170907c20300b0086777a9db77mr563438ejc.209.1673608064011; Fri, 13
+ Jan 2023 03:07:44 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v10 1/6] thermal/drivers/mediatek: Relocate driver to
- mediatek folder
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, bchihi@baylibre.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230112152855.216072-2-bchihi@baylibre.com>
- <202301130353.wbXPctIq-lkp@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <202301130353.wbXPctIq-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 13 Jan 2023 12:07:33 +0100
+Message-ID: <CAJZ5v0j117rbXsLW5P7hGm4=YL-KM1uY7E-B3kmkt_gRaEicXQ@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.2-rc4
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 12/01/2023 21:08, kernel test robot wrote:
+Hi Linus,
 
-[ ... ]
+Please pull from the tag
 
-> All warnings (new ones prefixed by >>):
-> 
->>> drivers/thermal/mediatek/auxadc_thermal.c:562: warning: expecting prototype for raw_to_mcelsius(). Prototype was for raw_to_mcelsius_v1() instead
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.2-rc4
 
-That has been fixed by:
+with top-most commit 4f3085f87b51a551a0647f218d4f324796ecb703
 
-https://lore.kernel.org/all/20230113064449.15061-1-rdunlap@infradead.org/
+ cpufreq: amd-pstate: fix kernel hang issue while amd-pstate unregistering
 
-and applied in the thermal/linux-next branch
+on top of commit b7bfaa761d760e72a969d116517eaa12e404c262
+
+ Linux 6.2-rc3
+
+to receive power management fixes for 6.2-rc4.
+
+These fix assorted issues in the ARM cpufreq drivers and in the
+AMD P-state driver.
+
+Specifics:
+
+ - Fix cpufreq policy reference counting in amd-pstate to prevent it
+   from crashing on removal (Perry Yuan).
+
+ - Fix double initialization and set suspend-freq for Apple's cpufreq
+   driver (Arnd Bergmann, Hector Martin).
+
+ - Fix reading of "reg" property, update cpufreq-dt's blocklist and
+   update DT documentation for Qualcomm's cpufreq driver (Konrad Dybcio,
+   Krzysztof Kozlowski).
+
+ - Replace 0 with NULL in the Armada cpufreq driver (Miles Chen).
+
+ - Fix potential overflows in the CPPC cpufreq driver (Pierre Gondois).
+
+ - Update blocklist for the Tegra234 Soc cpufreq driver (Sumit Gupta).
+
+Thanks!
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+---------------
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Arnd Bergmann (1):
+      cpufreq: apple: remove duplicate intializer
 
+Hector Martin (1):
+      cpufreq: apple-soc: Switch to the lowest frequency on suspend
+
+Konrad Dybcio (2):
+      cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2
+      cpufreq: Add SM6375 to cpufreq-dt-platdev blocklist
+
+Krzysztof Kozlowski (1):
+      dt-bindings: cpufreq: cpufreq-qcom-hw: document interrupts
+
+Miles Chen (1):
+      cpufreq: armada-37xx: stop using 0 as NULL pointer
+
+Perry Yuan (1):
+      cpufreq: amd-pstate: fix kernel hang issue while amd-pstate unregistering
+
+Pierre Gondois (1):
+      cpufreq: CPPC: Add u64 casts to avoid overflowing
+
+Sumit Gupta (1):
+      cpufreq: Add Tegra234 to cpufreq-dt-platdev blocklist
+
+---------------
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml          | 11 +++++++++++
+ drivers/cpufreq/amd-pstate.c                       |  1 +
+ drivers/cpufreq/apple-soc-cpufreq.c                |  3 ++-
+ drivers/cpufreq/armada-37xx-cpufreq.c              |  2 +-
+ drivers/cpufreq/cppc_cpufreq.c                     | 11 ++++++-----
+ drivers/cpufreq/cpufreq-dt-platdev.c               |  2 ++
+ drivers/cpufreq/qcom-cpufreq-hw.c                  | 22 ++++++++++++++++++++--
+ 7 files changed, 43 insertions(+), 9 deletions(-)
