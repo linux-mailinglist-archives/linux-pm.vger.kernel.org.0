@@ -2,81 +2,77 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEF7D668EA8
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 08:00:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DFD669039
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 09:13:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241169AbjAMHAC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 02:00:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S234853AbjAMINt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 03:13:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240979AbjAMG66 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 01:58:58 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDD16B1BB;
-        Thu, 12 Jan 2023 22:45:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=Y9TFXyY/sfG1sJ/KVOexQqe/pZPSRJnNn2M9xtAbxXc=; b=kIlHQJUiyMYQIPLxOs3YG6fejv
-        pctQUj9Ppqu7l4c9B2B/vfh8IOf9JdZstk/Z14AHQqIkQ7B9SjwzrF5Ubxh1LG69XOUT/KX/xULqP
-        1byMrUPYBnnKoNifXJaFpC5U2pEnNEtHOSxRpQnpz+4ZAlukNzHcAGDjNqKskSI4LaShq9Ud7/B8t
-        FHHQ7SpqyZSUBqDyRPKq9ywQTQOAVOCv0u92e81exNCts4XJQCUFVz4q5ECKSLAD5Wxei4wVaVb+9
-        J74qlC2ebZ3BnyjrOA9gFZd3KZZdcevDsBtNZ0qbFW7zPLB20+8bi7iVM98DEYt3DmCN0dMLbITg/
-        yUvSUEdw==;
-Received: from [2601:1c2:d80:3110::9307] (helo=bombadil.infradead.org)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pGDoK-000s0H-QD; Fri, 13 Jan 2023 06:45:08 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] thermal: uniphier: use regular comment syntax
-Date:   Thu, 12 Jan 2023 22:45:07 -0800
-Message-Id: <20230113064507.17224-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.39.0
+        with ESMTP id S240704AbjAMINK (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 03:13:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8B434262D;
+        Fri, 13 Jan 2023 00:11:38 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5236662231;
+        Fri, 13 Jan 2023 08:11:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398CCC433EF;
+        Fri, 13 Jan 2023 08:11:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673597497;
+        bh=DJouDT5lhPUbU7anaQI3h0jmuQGiHZvzy1TF8vdqLbU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cC4GXKs1uAhxo4jHFGJrBIVvOlBUpnn3TsYxxkupYC1jhNg5dBa4TCQSFxvBuuDyd
+         qNfVmqTolmY7h1mXpwyzFJtHLGXhYj5hpxJbJ46qvqRkuMqnDOGX2iq1Wl2OKQIl6k
+         W4ITasqcS8Q05Pmh779uygdHcz4ZipZb4SOq2zQQsjWgDR3IRG35SZjeFbfr3UmJ8g
+         vPwRF/wfDiMHG8gE2Ej6JNMIO3uVJIt9JBV78vp5P11JQAAY33MQ/Eudag6enremfY
+         0rjdN3wsJjJeRjxhgqP/OVeS4LnbRrdXDPRJFN4U4dYDHIThiHBBpYRuLKZxAbOnxM
+         BjueR1WOmL2rQ==
+Message-ID: <13262366-49f3-2a34-6772-9500461512d4@kernel.org>
+Date:   Fri, 13 Jan 2023 09:11:29 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v10 2/6] dt-bindings/thermal/mediatek: Add dt-binding
+ document for LVTS thermal controllers
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230112152855.216072-1-bchihi@baylibre.com>
+ <20230112152855.216072-3-bchihi@baylibre.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230112152855.216072-3-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Use "/*" comment for the file's initial comment since it is not
-in kernel-doc format. This prevents a kernel-doc warning:
+On 12/01/2023 16:28, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
+> 
+> Add dt-binding document for mt8192 and mt8195 LVTS thermal controllers.
 
-drivers/thermal/uniphier_thermal.c:26: warning: expecting prototype for uniphier_thermal.c(). Prototype was for PVTCTLEN() instead
+Please use scripts/get_maintainers.pl to get a list of necessary people
+and lists to CC.  It might happen, that command when run on an older
+kernel, gives you outdated entries.  Therefore please be sure you base
+your patches on recent Linux kernel.
 
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: Amit Kucheria <amitk@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: linux-pm@vger.kernel.org
-Cc: linux-arm-kernel@lists.infradead.org
----
- drivers/thermal/uniphier_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You skipped several lists and maintainers. Resend.
 
-diff -- a/drivers/thermal/uniphier_thermal.c b/drivers/thermal/uniphier_thermal.c
---- a/drivers/thermal/uniphier_thermal.c
-+++ b/drivers/thermal/uniphier_thermal.c
-@@ -1,5 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
--/**
-+/*
-  * uniphier_thermal.c - Socionext UniPhier thermal driver
-  * Copyright 2014      Panasonic Corporation
-  * Copyright 2016-2017 Socionext Inc.
+Best regards,
+Krzysztof
+
