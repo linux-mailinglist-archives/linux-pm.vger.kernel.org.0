@@ -2,51 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955B066A3CC
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 21:01:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 254DA66A3E7
+	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 21:14:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjAMUBf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 15:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
+        id S229712AbjAMUOb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 15:14:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjAMUBd (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 15:01:33 -0500
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DD83E0C;
-        Fri, 13 Jan 2023 12:01:30 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id az20so35647579ejc.1;
-        Fri, 13 Jan 2023 12:01:30 -0800 (PST)
+        with ESMTP id S229910AbjAMUO3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 15:14:29 -0500
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FE1149E0;
+        Fri, 13 Jan 2023 12:14:27 -0800 (PST)
+Received: by mail-ej1-f54.google.com with SMTP id hw16so42957709ejc.10;
+        Fri, 13 Jan 2023 12:14:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=B8h4FM5Yah9+1s69S3Tpy1g06YL7NXwd6Be7KRZZVjo=;
-        b=5DDhlubkQcS23SojcpHiMPICLJY2tgOi6kTZK+wZaBJn2u4ciz7R0vynuAiJDy4/4I
-         K5aywq5d4uRTO/ruOCyY01yW0zybNDwsEYM+GnrgT2QTQXUYYi3BOPa7LLfPpn0UJwZZ
-         VUXgVES30jcfo/UqRZSHlHYENhGq1SiXT9zr+6hjrXwnie7haz3lJkah8kmArEnD8dcB
-         YjtAVZs5pZSuQH0bW9UGodW82Mlh2XoFWMlU406AONTzAZQ7IReXJKkYGOWU22PG1acl
-         20yIblV6jvkCGPsawqmUbwj3GDEfGsSKS3AjC5mJicmKIWaeWLtz8FPNaWyRX30xzZK8
-         YbxA==
-X-Gm-Message-State: AFqh2kouWzq7d4LvfcjCnCxPqnfo+GUbrXqP2a9z+VotQnXVRfeonN1Z
-        NX9nwB9V+5WYNzqHIU7W7lQJf4zvSR2gyLm0OG2fpVH7
-X-Google-Smtp-Source: AMrXdXvtzfulXjief5eu2O7psrMpxIy6ySvJ6xob6pTI92g8+/l7uWRz1A+g49VM2SXsHORTmy3FqTplRwkyqVowev4=
-X-Received: by 2002:a17:907:8d0e:b0:7b2:7b45:2cd2 with SMTP id
- tc14-20020a1709078d0e00b007b27b452cd2mr7286659ejc.615.1673640089136; Fri, 13
- Jan 2023 12:01:29 -0800 (PST)
+        bh=5JjL1j5iNZo1KU1fhAgOKaIYvkYllk/Lw+U9Din0xd0=;
+        b=B3rbQsvERehpGtZkivvZjjunScQerctRZPQafROFcMjjk54o+1z+uGSgJQ1z8THEoS
+         QOpgoutkqyGfbCFhuXTlEVppcFJz9kHyze+llHzwIuk7HKjuSx8MjW4WEBfUd5WuN9VA
+         IDK64jFzSfFqFrRX5M7+WHeYdsOmijBAH7MVZiDsbv3q5S+F/Zp3IodAgSS3k1uD+XXT
+         /2+zNvFdb/btcOCndy6oR554YxJQERZfixwrrVBTCHnswU5k/HoS/MQF2G7/ZqJp5wfS
+         WphvoIiMH9oqbg2Wq9bT6t0uYn78yJvJ1rH1QCldxZBylu1aF0yo4vmYKU+IDAt8dCVo
+         BPBA==
+X-Gm-Message-State: AFqh2krjO51lKBCgButKex+Rlai+LgwGtZdgumRerz1q9FayZ7xMd3tc
+        3lJ+P3ts4YIGJiMtnl42p2yvn5EAywWRBlqHHk0=
+X-Google-Smtp-Source: AMrXdXvi7NlnuutgKN9shlPcJSSWvdy3mHOMmT5JzO5cppbROUxY4MeClZgMBOhC49TbK0sGrkjHuHwHJoScNz4nf7A=
+X-Received: by 2002:a17:907:98ee:b0:7c1:5ff0:6cc2 with SMTP id
+ ke14-20020a17090798ee00b007c15ff06cc2mr6052436ejc.246.1673640866288; Fri, 13
+ Jan 2023 12:14:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20221215181848.129326-1-helgaas@kernel.org>
-In-Reply-To: <20221215181848.129326-1-helgaas@kernel.org>
+References: <1671085226-21347-1-git-send-email-shradhagupta@linux.microsoft.com>
+In-Reply-To: <1671085226-21347-1-git-send-email-shradhagupta@linux.microsoft.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 13 Jan 2023 21:01:17 +0100
-Message-ID: <CAJZ5v0jHYQHKsg=5OLCUuv=x2F0YN1D_VF984VKDKa7t-1rHJg@mail.gmail.com>
-Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
+Date:   Fri, 13 Jan 2023 21:14:15 +0100
+Message-ID: <CAJZ5v0jb3eU6asQ1TqPqV=s5k+255yse=4QH9WssnM2LH-d3uw@mail.gmail.com>
+Subject: Re: [PATCH] kernel: power: swap: Suppress expected 'Image not found'
+ error on Ubuntu
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -58,55 +59,45 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Dec 15, 2022 at 7:19 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+On Thu, Dec 15, 2022 at 7:20 AM Shradha Gupta
+<shradhagupta@linux.microsoft.com> wrote:
 >
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> Simplify __rpm_get_callback() slightly by returning as soon as the return
-> value is known.  No functional change intended.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> ---
->  drivers/base/power/runtime.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
->
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 50e726b6c2cf..7171ed0668f3 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
->
->  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
->  {
-> -       pm_callback_t cb;
-> -       const struct dev_pm_ops *ops;
-> +       const struct dev_pm_ops *ops = NULL;
->
->         if (dev->pm_domain)
->                 ops = &dev->pm_domain->ops;
-> @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
->                 ops = dev->class->pm;
->         else if (dev->bus && dev->bus->pm)
->                 ops = dev->bus->pm;
-> -       else
-> -               ops = NULL;
->
->         if (ops)
-> -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
-> -       else
-> -               cb = NULL;
-> +               return *(pm_callback_t *)((void *)ops + cb_offset);
->
-> -       if (!cb && dev->driver && dev->driver->pm)
-> -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
-> +       if (dev->driver && dev->driver->pm)
-> +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
->
-> -       return cb;
-> +       return NULL;
->  }
->
->  #define RPM_GET_CALLBACK(dev, callback) \
-> --
+> In 'systemctl hibernate' if resume device is written to the sysfs
+> resume parameter, a software_resume() call is triggerred. This call
+> is expected to fail in swsusp_check() call with -EBUSY error and an
+> 'Image not found' error message. This fix suppresses the expected
+> failure message from getting logged in Ubuntu setups where
+> CONFIG_DYNAMIC_DEBUG is enabled by default.
 
-Applied as 6.3 material, thanks!
+I see what you mean, so what about this change instead (modulo
+GMail-induced white-space breakage):
+
+---
+ kernel/power/swap.c |    9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+Index: linux-pm/kernel/power/swap.c
+===================================================================
+--- linux-pm.orig/kernel/power/swap.c
++++ linux-pm/kernel/power/swap.c
+@@ -1546,17 +1546,16 @@ int swsusp_check(void)
+         }
+
+ put:
+-        if (error)
++        if (error) {
+             blkdev_put(hib_resume_bdev, FMODE_READ | FMODE_EXCL);
+-        else
++            pr_debug("Image not found (code %d)\n", error);
++        } else {
+             pr_debug("Image signature found, resuming\n");
++        }
+     } else {
+         error = PTR_ERR(hib_resume_bdev);
+     }
+
+-    if (error)
+-        pr_debug("Image not found (code %d)\n", error);
+-
+     return error;
+ }
