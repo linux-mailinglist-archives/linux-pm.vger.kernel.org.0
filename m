@@ -2,151 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E1466A868
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 02:40:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F40FC66AA4E
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 10:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjANBkZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 20:40:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S229791AbjANJGi (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Jan 2023 04:06:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjANBkY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 20:40:24 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964231101
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 17:40:22 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id t5so18160808wrq.1
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 17:40:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3BE2U/BpfWFrvPlxtKLOz5b9WboEgquhdVC53R/Grpo=;
-        b=sBi00uOOOpjs7dkU85dc73iWeJm+lQFX0AKJT0bZrc75jRgWd/4cqYKlZDA9xvDOFV
-         PGs9BvGgFtGtSAC4rkH3Ik8f1VvHJWOR/x6oTlXOH2mZZnk2lZbbSwmZzpdTSKZuhsxm
-         xyYk1B0uHP0r9TMZcyhyi+ybTtYMt0jg7E9P0fj8YMHjkyV/2xhWcZ8UNKOBFXt6TVxU
-         L6ffL96s55WMBtyOll6X6qkHIMUNgqBqGbOAFI+k68T0J7EcJdPE/XZtSGTf+ZGczbKC
-         FTIHB8JljNBOejqJyTGNO/N2NOtuXx2sFlwjqh02wfKoSTGX6jFfVJNZer5zZQtPdLYY
-         mTlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3BE2U/BpfWFrvPlxtKLOz5b9WboEgquhdVC53R/Grpo=;
-        b=EabCkYpYTSsxAKXaqyl8R89BaC3Gt7AmG5zYOsdm5VaMyw7QAHCkPXWUeUjuu52o50
-         yuHi5u20zg/A0zd3dajCgHQ39pWnl+rRJKJ1tRqsk3Soh0iO2MoWq9vBQo8agZpysyV+
-         gqLTvSM/b+WJjThoDbLBs1Obw1K3klEsE83c82vAvZ0cO+Cr1JkbQ46fLJrI5uJE1Emi
-         7Yj2UH+UI8of513cgam8EKYku0LjmnNrxHG6mVx4+WcguErHLwK15fHYgH+CvcHZimuD
-         aRaZQaSns8b3JMgATT/Q/V4rsJZaMMrYdCNhC/Iwkc4fPpd2EnBypAYhPE3JRQ5Shnpk
-         67NA==
-X-Gm-Message-State: AFqh2koSg1aaidXISzfWLCBrpPdPPARMRgQBJDGendvLwzAJK7Cs/poc
-        LKVN5Yp+K8FP4FdWNaf2LawlZ3imwBmE8lgUQbc=
-X-Google-Smtp-Source: AMrXdXv6kNTDJkTh0x9q4QGdu19j8o8OqwfCJeVEjhLQXiN/T/cqO7FZPfw3a9NeKphGoHPb8VcHTA==
-X-Received: by 2002:adf:f1c6:0:b0:2bb:c50f:6381 with SMTP id z6-20020adff1c6000000b002bbc50f6381mr17515639wro.6.1673660421170;
-        Fri, 13 Jan 2023 17:40:21 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id d14-20020adffbce000000b002bddd75a83fsm3061349wrs.8.2023.01.13.17.40.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Jan 2023 17:40:20 -0800 (PST)
-Message-ID: <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
-Date:   Sat, 14 Jan 2023 01:40:19 +0000
+        with ESMTP id S229620AbjANJGh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 04:06:37 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3569259E6;
+        Sat, 14 Jan 2023 01:06:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673687196; x=1705223196;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=w+bh/JTScrGi2k5GFuTgWKil04N/ZfVZFC2I5q32xlE=;
+  b=ADMRDHBswjvqogWffdL63mh/eZYVvnfEDhtcn/deVNxLRepBGHj1I8cQ
+   HG9ziujqUZ8ME5osGavklPeM7QCgBYPmxhOBcDDgfwBXQFOS1ULus6nZW
+   22ihgLaliHdEqqz4wEINypdWJ0JXmqIelQHyhtJsvN+QplnEsCkCEXHea
+   oARxs32s/74pFufUdi1U5EynG2Cdz2mp4mnwwbeZIgz/1IcN+VBdSGi2w
+   HkX04sQHQS+LBJowt/CUs3kGpZ4yfi8qMDioA9qjg5UESPeW3RqYzyzo3
+   avOiiGvd7XU3MKIL8RlSaDbyIyy804IZJmswSnDi3iewuqLZnxgSEPJYr
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="303875858"
+X-IronPort-AV: E=Sophos;i="5.97,216,1669104000"; 
+   d="scan'208";a="303875858"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jan 2023 01:06:35 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10589"; a="651775179"
+X-IronPort-AV: E=Sophos;i="5.97,216,1669104000"; 
+   d="scan'208";a="651775179"
+Received: from lkp-server02.sh.intel.com (HELO f1920e93ebb5) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 14 Jan 2023 01:06:33 -0800
+Received: from kbuild by f1920e93ebb5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pGcUi-000Bxb-2T;
+        Sat, 14 Jan 2023 09:06:32 +0000
+Date:   Sat, 14 Jan 2023 17:05:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ c7b1de870ff7fcb5652bc776a42630b07374b09d
+Message-ID: <63c27073.OSK/WBzbTUDR2ZMn%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
-Content-Language: en-US
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-To:     Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
-Cc:     quic_mdtipton@quicinc.com, quic_okukatla@quicinc.com,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
- <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
-In-Reply-To: <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 14/01/2023 01:24, Bryan O'Donoghue wrote:
-> On 13/01/2023 22:07, Vivek Aknurwar wrote:
->> Currently framework sets bw even when init bw requirements are zero 
->> during
->> provider registration, thus resulting bulk of set bw to hw.
->> Avoid this behaviour by skipping provider set bw calls if init bw is 
->> zero.
->>
->> Signed-off-by: Vivek Aknurwar <quic_viveka@quicinc.com>
->> ---
->>   drivers/interconnect/core.c | 17 ++++++++++-------
->>   1 file changed, 10 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->> index 25debde..43ed595 100644
->> --- a/drivers/interconnect/core.c
->> +++ b/drivers/interconnect/core.c
->> @@ -977,14 +977,17 @@ void icc_node_add(struct icc_node *node, struct 
->> icc_provider *provider)
->>       node->avg_bw = node->init_avg;
->>       node->peak_bw = node->init_peak;
->> -    if (provider->pre_aggregate)
->> -        provider->pre_aggregate(node);
->> -
->> -    if (provider->aggregate)
->> -        provider->aggregate(node, 0, node->init_avg, node->init_peak,
->> -                    &node->avg_bw, &node->peak_bw);
->> +    if (node->avg_bw || node->peak_bw) {
->> +        if (provider->pre_aggregate)
->> +            provider->pre_aggregate(node);
->> +
->> +        if (provider->aggregate)
->> +            provider->aggregate(node, 0, node->init_avg, 
->> node->init_peak,
->> +                        &node->avg_bw, &node->peak_bw);
->> +        if (provider->set)
->> +            provider->set(node, node);
->> +    }
->> -    provider->set(node, node);
->>       node->avg_bw = 0;
->>       node->peak_bw = 0;
-> 
-> I have the same comment/question for this patch that I had for the qcom 
-> arch specific version of it. This patch seems to be doing at a higher 
-> level what the patch below was doing at a lower level.
-> 
-> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m0c90588d0d1e2ab88c39be8f5f3a8f0b61396349
-> 
-> what happens to earlier silicon - qcom silicon which previously made 
-> explicit zero requests ?
-> 
-> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m589e8280de470e038249bb362634221771d845dd
-> 
-> https://lkml.org/lkml/2023/1/3/1232
-> 
-> Isn't it a better idea to let lower layer drivers differentiate what 
-> they do ?
-> 
-> For example on pre 5.4 qcom kernel silicon we might choose to set the 
-> value to zero "because that's what the reference code did" but on newer 
-> silicon we might opt to skip the zero configuration ?
-> 
-> I'm happy to be shown the error of my ways but, absent testing to *show* 
-> it doesn't impact existing legacy silicon, I think we should be wary of 
-> this change.
-> 
-> ---
-> bod
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: c7b1de870ff7fcb5652bc776a42630b07374b09d  Merge branch 'pm-cpuidle' into bleeding-edge
 
-Oh, and what is the effect on Samsung and i.MX silicon interconnect 
-providers of skipping the zero set ?
+elapsed time: 721m
 
----
-bod
+configs tested: 71
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allmodconfig
+s390                                defconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+i386                              allnoconfig
+i386                                defconfig
+alpha                             allnoconfig
+arm                               allnoconfig
+x86_64                           rhel-8.3-syz
+arc                               allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+powerpc                           allnoconfig
+x86_64                         rhel-8.3-kunit
+ia64                             allmodconfig
+s390                             allyesconfig
+x86_64                        randconfig-a013
+arc                  randconfig-r043-20230112
+x86_64                        randconfig-a011
+s390                 randconfig-r044-20230112
+i386                          randconfig-a001
+i386                          randconfig-a003
+x86_64                        randconfig-a015
+x86_64                    rhel-8.3-kselftests
+sh                               allmodconfig
+riscv                randconfig-r042-20230112
+mips                             allyesconfig
+m68k                             allyesconfig
+i386                          randconfig-a005
+x86_64                          rhel-8.3-func
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+powerpc                          allmodconfig
+x86_64                              defconfig
+x86_64                               rhel-8.3
+arm                                 defconfig
+i386                          randconfig-a014
+i386                             allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                           allyesconfig
+arm64                            allyesconfig
+arm                              allyesconfig
+openrisc                         alldefconfig
+mips                 decstation_r4k_defconfig
+sh                          urquell_defconfig
+powerpc                       maple_defconfig
+arm64                               defconfig
+
+clang tested configs:
+arm                  randconfig-r046-20230112
+x86_64                          rhel-8.3-rust
+hexagon              randconfig-r041-20230112
+x86_64                        randconfig-a012
+hexagon              randconfig-r045-20230112
+i386                          randconfig-a002
+x86_64                        randconfig-a014
+i386                          randconfig-a004
+x86_64                        randconfig-a016
+i386                          randconfig-a006
+i386                          randconfig-a013
+i386                          randconfig-a011
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
