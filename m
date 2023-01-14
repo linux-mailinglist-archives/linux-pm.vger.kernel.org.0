@@ -2,469 +2,142 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ACD266A768
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 01:15:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8AC266A82B
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 02:24:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjANAP0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 19:15:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54256 "EHLO
+        id S231142AbjANBYW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 20:24:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjANAP0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 19:15:26 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CF08CD38
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 16:15:24 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-4c16ff0159eso247054027b3.17
-        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 16:15:24 -0800 (PST)
+        with ESMTP id S229980AbjANBYW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 20:24:22 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A70C3BA
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 17:24:20 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id q8so4501042wmo.5
+        for <linux-pm@vger.kernel.org>; Fri, 13 Jan 2023 17:24:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1BXchkkHGgxyj6sszULwlgnsnffkY8uchReLKvjdWI=;
-        b=A1E8Bg1o4Imu2jG/Z00UwBuUmgVXYAJ6mk35MAwZd4PV8VRX3rtn/SKA0UgECLJl5q
-         ehI4Cf1WcwcsDjMMz97aeXPc2IOTYob8fTbw5zcbW/5GyYrKidaf0sKkW/PtqamFQjdE
-         I/y6cWTNG05QOebRfzYri6mTDuV/L67i4UwqyJ3W7JmW1nGA+5pkqlI7+X14H5b7rjCm
-         J8+6X6RM5Jm/n+xPJ+yPz+tcT7jSOEB0kYCoF5tjRZoMvfIJ67QcSqarc/8ejCNalZ41
-         cWHysmFUyMoL1KvROvpRLvYN+23Q0ThJG8L/IMmE5bv0ohc7shUukJnBn6o6ZMaERl+5
-         UWYQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xU2XxeDGk6YX3FC/ojl/3L4B1JJ6TXtbrbSc+4+VUa4=;
+        b=qC7hlNkAIWl9Oy5DRJmCgSuEvLpAWFr4wou/sSBdg0pRISSBrszsF31X7WmpvoWMRk
+         4esGZqCRo2RINTRBLm+WDPdxR0loHhwjIsW3sBsHQgznm7z3m+X9628FzLq/0qxJyydq
+         GUnsbH7z70pI5BNxQnotTOQoB0aZKfCooqe6gAkczQPafkKjY7JyP13ZWCDlyUqAqmTi
+         opHbTho/oeseNuxdSDoBKscg1pKNJYAgGOujP3d+jpnH8/Y++7CmvsVuqhYwQOWzbmw3
+         P65sX1h6lWIKs1ceDnEWn2RDCtp3oGpCBiBdsAMX76hIRkpcsAZQSCZnU24m1To120+e
+         2qxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1BXchkkHGgxyj6sszULwlgnsnffkY8uchReLKvjdWI=;
-        b=K3TAUZ7zlR53tr+1s9dh8VHVTQEdzBrT6C8fzjjpfKS/fg2ZzpE0r3FjAGeI5zvhEj
-         r4mxdxuej0pgx2rvvugH1SZ9lNXC0waHw3hXSbEMSRk8UtN/3cMP8AZ14Jeo3mVDPISM
-         LjNhTk/87L1EUqdf8GN7xFzfluKkeEelW+nB8VEO3iBrnPtcYvsi9EKZWL8LUZVWeyhh
-         664YcRVu8pVpIaBBawGt8SMFNdaGNG3rv1ZaHS7vukXF55bjZowyTO2+Uh7MkKuya6hm
-         1KmRy42HrY8Mnfp++alHiRzV+hgA7dVp+8RjUg5yk1X6oOoN51vg0pmtF3kfJWRz9/MU
-         k+nQ==
-X-Gm-Message-State: AFqh2kpb/pEwG1SS0Hvw+mD61b1+GzXWQZpzm4A+8ysmE8eURCmZZhW9
-        vHhOEFQWTA+kgardlOe2kFgCua/e/EFy
-X-Google-Smtp-Source: AMrXdXsSkummVU0L1UHQCSl0tXEbc+BwSM6x+EWNB9gJ65r8RQTLJO2KD0lADbE88X/EGkwFt+7N6qSMsRiK
-X-Received: from bg.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:1b4])
- (user=bgeffon job=sendgmr) by 2002:a0d:ce01:0:b0:4bb:7a82:6b60 with SMTP id
- q1-20020a0dce01000000b004bb7a826b60mr4810864ywd.335.1673655323815; Fri, 13
- Jan 2023 16:15:23 -0800 (PST)
-Date:   Fri, 13 Jan 2023 19:15:18 -0500
-In-Reply-To: <20230113193006.1320379-1-bgeffon@google.com>
-Mime-Version: 1.0
-References: <20230113193006.1320379-1-bgeffon@google.com>
-X-Mailer: git-send-email 2.39.0.314.g84b9a713c41-goog
-Message-ID: <20230114001518.1378049-1-bgeffon@google.com>
-Subject: [PATCH v2] PM: hibernate: don't store zero pages in the image file.
-From:   Brian Geffon <bgeffon@google.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Brian Geffon <bgeffon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xU2XxeDGk6YX3FC/ojl/3L4B1JJ6TXtbrbSc+4+VUa4=;
+        b=4XJFMsw+fN5bQ5wK3cspqPCKCBCc1cID7JHTsgL6nTCYyHADqgZG3JACB6JLVXw7P0
+         t9gGOor/vE+kedF8iv11t58aVUhVSl0ZYFtUWPyW0AGJYkQOTL0S9WbuS7hBPSVcOTGC
+         +YrpIrlj7EKKt4dU2xZF3HeZBH8urFoMq6grOcsjct0RLJRh8lUfzrxPvINL9V4V9Rhh
+         V4M3eKU8YJgS5TSH0EWn/BXyPIItD+2xeIm4nptMkZGxyzyd4PApLX4v62NjcURm5CIJ
+         KsNsb8bcwn1JSUXeCznqQIH9AH4SqV9goNi9WM6DrQSSdxMtfJDw4zfCfxDOkIDeh2Vh
+         tYhg==
+X-Gm-Message-State: AFqh2kqb/E0OsCO//Py1h4+RZo0NyeU2xXHhJTbMaEd65N/4SNl4rmV0
+        ISQ4iS6ffJ6EZSOKkKQXHFYiqA==
+X-Google-Smtp-Source: AMrXdXvI7+ihPxe9K9yveY6NBWcd/Dmo4UaXeaByYpciCo7OwIIinu8o07kuSr4MojVJHZsozjB0Ig==
+X-Received: by 2002:a05:600c:3509:b0:3cf:93de:14e8 with SMTP id h9-20020a05600c350900b003cf93de14e8mr58850335wmq.39.1673659458927;
+        Fri, 13 Jan 2023 17:24:18 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id j23-20020a05600c1c1700b003b4ff30e566sm3405990wms.3.2023.01.13.17.24.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jan 2023 17:24:18 -0800 (PST)
+Message-ID: <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
+Date:   Sat, 14 Jan 2023 01:24:17 +0000
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
+ zero
+Content-Language: en-US
+To:     Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
+Cc:     quic_mdtipton@quicinc.com, quic_okukatla@quicinc.com,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On ChromeOS we've observed a considerable number of in-use pages filled
-with zeros. Today with hibernate it's entirely possible that saveable
-pages are just zero filled. Since we're already copying pages
-word-by-word in do_copy_page it becomes almost free to determine if a
-page was completely filled with zeros.
+On 13/01/2023 22:07, Vivek Aknurwar wrote:
+> Currently framework sets bw even when init bw requirements are zero during
+> provider registration, thus resulting bulk of set bw to hw.
+> Avoid this behaviour by skipping provider set bw calls if init bw is zero.
+> 
+> Signed-off-by: Vivek Aknurwar <quic_viveka@quicinc.com>
+> ---
+>   drivers/interconnect/core.c | 17 ++++++++++-------
+>   1 file changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 25debde..43ed595 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -977,14 +977,17 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+>   	node->avg_bw = node->init_avg;
+>   	node->peak_bw = node->init_peak;
+>   
+> -	if (provider->pre_aggregate)
+> -		provider->pre_aggregate(node);
+> -
+> -	if (provider->aggregate)
+> -		provider->aggregate(node, 0, node->init_avg, node->init_peak,
+> -				    &node->avg_bw, &node->peak_bw);
+> +	if (node->avg_bw || node->peak_bw) {
+> +		if (provider->pre_aggregate)
+> +			provider->pre_aggregate(node);
+> +
+> +		if (provider->aggregate)
+> +			provider->aggregate(node, 0, node->init_avg, node->init_peak,
+> +					    &node->avg_bw, &node->peak_bw);
+> +		if (provider->set)
+> +			provider->set(node, node);
+> +	}
+>   
+> -	provider->set(node, node);
+>   	node->avg_bw = 0;
+>   	node->peak_bw = 0;
+>   
 
-This change introduces a new bitmap which will track these zero pages.
-If a page is zero it will not be included in the saved image, instead to
-track these zero pages in the image file we will introduce a new flag
-which we will set on the packed PFN list. When reading back in the image
-file we will detect these zero page PFNs and rebuild the zero page bitmap.
+I have the same comment/question for this patch that I had for the qcom 
+arch specific version of it. This patch seems to be doing at a higher 
+level what the patch below was doing at a lower level.
 
-When the image is being loaded through calls to snapshot_write_next if we
-encounter a zero page we will silently memset it to 0 and then continue on
-to the next page. Given the implementation in snapshot_read_next and
-snapshot_write_next this change  will be transparent to non-compressed,
-compressed, and swsusp modes of operation.
+https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m0c90588d0d1e2ab88c39be8f5f3a8f0b61396349
 
-To provide some concrete numbers from simple ad-hoc testing, on a device
-which was lightly in use we saw that:
+what happens to earlier silicon - qcom silicon which previously made 
+explicit zero requests ?
 
- PM: hibernation: Image created (964408 pages copied, 548304 zero pages)
+https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m589e8280de470e038249bb362634221771d845dd
 
-Of the approximately 6.2GB of saveable pages 2.2GB (36%) were just zero
-filled and could be tracked entirely within the packed PFN list. The
-savings would obviously be much lower for lzo compressed images, but even
-in the case of compression not copying pages across to the compression
-threads will still speed things up. It's also possible that we would see
-better overall compression ratios as larger regions of "real data" would
-improve the compressibility.
+https://lkml.org/lkml/2023/1/3/1232
 
-Finally, such an approach could dramatically improve swsusp performance
-as each one of those zero pages requires a write syscall to reload, by
-handling it as part of the packed PFN list we're able to fully avoid
-that.
+Isn't it a better idea to let lower layer drivers differentiate what 
+they do ?
 
-patch v2:
-	- correct a minor issue when rebasing.
+For example on pre 5.4 qcom kernel silicon we might choose to set the 
+value to zero "because that's what the reference code did" but on newer 
+silicon we might opt to skip the zero configuration ?
 
-Signed-off-by: Brian Geffon <bgeffon@google.com>
+I'm happy to be shown the error of my ways but, absent testing to *show* 
+it doesn't impact existing legacy silicon, I think we should be wary of 
+this change.
+
 ---
- kernel/power/snapshot.c | 129 ++++++++++++++++++++++++++++++----------
- 1 file changed, 99 insertions(+), 30 deletions(-)
-
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index cd8b7b35f1e8..8d0ba36b0218 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -404,6 +404,7 @@ struct bm_position {
- 	struct mem_zone_bm_rtree *zone;
- 	struct rtree_node *node;
- 	unsigned long node_pfn;
-+	unsigned long cur_pfn;
- 	int node_bit;
- };
- 
-@@ -589,6 +590,7 @@ static void memory_bm_position_reset(struct memory_bitmap *bm)
- 	bm->cur.node = list_entry(bm->cur.zone->leaves.next,
- 				  struct rtree_node, list);
- 	bm->cur.node_pfn = 0;
-+	bm->cur.cur_pfn = BM_END_OF_MAP;
- 	bm->cur.node_bit = 0;
- }
- 
-@@ -850,6 +852,11 @@ static void memory_bm_clear_current(struct memory_bitmap *bm)
- 	clear_bit(bit, bm->cur.node->data);
- }
- 
-+static unsigned long memory_bm_get_current(struct memory_bitmap *bm)
-+{
-+	return bm->cur.cur_pfn;
-+}
-+
- static int memory_bm_test_bit(struct memory_bitmap *bm, unsigned long pfn)
- {
- 	void *addr;
-@@ -929,10 +936,12 @@ static unsigned long memory_bm_next_pfn(struct memory_bitmap *bm)
- 		if (bit < bits) {
- 			pfn = bm->cur.zone->start_pfn + bm->cur.node_pfn + bit;
- 			bm->cur.node_bit = bit + 1;
-+			bm->cur.cur_pfn = pfn;
- 			return pfn;
- 		}
- 	} while (rtree_next_node(bm));
- 
-+	bm->cur.cur_pfn = BM_END_OF_MAP;
- 	return BM_END_OF_MAP;
- }
- 
-@@ -1371,14 +1380,18 @@ static unsigned int count_data_pages(void)
- 
- /*
-  * This is needed, because copy_page and memcpy are not usable for copying
-- * task structs.
-+ * task structs. Returns 1 if a page was filled with only zeros, otherwise 0.
-  */
--static inline void do_copy_page(long *dst, long *src)
-+static inline int do_copy_page(long *dst, long *src)
- {
- 	int n;
-+	long z = 0;
- 
--	for (n = PAGE_SIZE / sizeof(long); n; n--)
-+	for (n = PAGE_SIZE / sizeof(long); n; n--) {
-+		z |= *src;
- 		*dst++ = *src++;
-+	}
-+	return !z;
- }
- 
- /**
-@@ -1389,15 +1402,17 @@ static inline void do_copy_page(long *dst, long *src)
-  * CONFIG_ARCH_HAS_SET_DIRECT_MAP is not set. In that case kernel_page_present()
-  * always returns 'true'.
-  */
--static void safe_copy_page(void *dst, struct page *s_page)
-+static int safe_copy_page(void *dst, struct page *s_page)
- {
-+	int ret;
- 	if (kernel_page_present(s_page)) {
--		do_copy_page(dst, page_address(s_page));
-+		ret = do_copy_page(dst, page_address(s_page));
- 	} else {
- 		hibernate_map_page(s_page);
--		do_copy_page(dst, page_address(s_page));
-+		ret = do_copy_page(dst, page_address(s_page));
- 		hibernate_unmap_page(s_page);
- 	}
-+	return ret;
- }
- 
- #ifdef CONFIG_HIGHMEM
-@@ -1407,17 +1422,18 @@ static inline struct page *page_is_saveable(struct zone *zone, unsigned long pfn
- 		saveable_highmem_page(zone, pfn) : saveable_page(zone, pfn);
- }
- 
--static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-+static int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
- {
- 	struct page *s_page, *d_page;
- 	void *src, *dst;
-+	int ret;
- 
- 	s_page = pfn_to_page(src_pfn);
- 	d_page = pfn_to_page(dst_pfn);
- 	if (PageHighMem(s_page)) {
- 		src = kmap_atomic(s_page);
- 		dst = kmap_atomic(d_page);
--		do_copy_page(dst, src);
-+		ret = do_copy_page(dst, src);
- 		kunmap_atomic(dst);
- 		kunmap_atomic(src);
- 	} else {
-@@ -1426,30 +1442,32 @@ static void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
- 			 * The page pointed to by src may contain some kernel
- 			 * data modified by kmap_atomic()
- 			 */
--			safe_copy_page(buffer, s_page);
-+			ret = safe_copy_page(buffer, s_page);
- 			dst = kmap_atomic(d_page);
- 			copy_page(dst, buffer);
- 			kunmap_atomic(dst);
- 		} else {
--			safe_copy_page(page_address(d_page), s_page);
-+			ret = safe_copy_page(page_address(d_page), s_page);
- 		}
- 	}
-+	return ret;
- }
- #else
- #define page_is_saveable(zone, pfn)	saveable_page(zone, pfn)
- 
--static inline void copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
-+static inline int copy_data_page(unsigned long dst_pfn, unsigned long src_pfn)
- {
--	safe_copy_page(page_address(pfn_to_page(dst_pfn)),
-+	return safe_copy_page(page_address(pfn_to_page(dst_pfn)),
- 				pfn_to_page(src_pfn));
- }
- #endif /* CONFIG_HIGHMEM */
- 
- static void copy_data_pages(struct memory_bitmap *copy_bm,
--			    struct memory_bitmap *orig_bm)
-+			    struct memory_bitmap *orig_bm,
-+			    struct memory_bitmap *zero_bm)
- {
- 	struct zone *zone;
--	unsigned long pfn;
-+	unsigned long pfn, copy_pfn;
- 
- 	for_each_populated_zone(zone) {
- 		unsigned long max_zone_pfn;
-@@ -1462,11 +1480,18 @@ static void copy_data_pages(struct memory_bitmap *copy_bm,
- 	}
- 	memory_bm_position_reset(orig_bm);
- 	memory_bm_position_reset(copy_bm);
-+	copy_pfn = memory_bm_next_pfn(copy_bm);
- 	for(;;) {
- 		pfn = memory_bm_next_pfn(orig_bm);
- 		if (unlikely(pfn == BM_END_OF_MAP))
- 			break;
--		copy_data_page(memory_bm_next_pfn(copy_bm), pfn);
-+		if (copy_data_page(copy_pfn, pfn)) {
-+			memory_bm_set_bit(zero_bm, pfn);
-+
-+			/* We will reuse this copy_pfn for a real 'nonzero' page. */
-+			continue;
-+		}
-+		copy_pfn = memory_bm_next_pfn(copy_bm);
- 	}
- }
- 
-@@ -1494,6 +1519,9 @@ static struct memory_bitmap orig_bm;
-  */
- static struct memory_bitmap copy_bm;
- 
-+/* Memory bitmap which tracks which saveable pages were zero filled. */
-+static struct memory_bitmap zero_bm;
-+
- /**
-  * swsusp_free - Free pages allocated for hibernation image.
-  *
-@@ -1756,6 +1784,12 @@ int hibernate_preallocate_memory(void)
- 		goto err_out;
- 	}
- 
-+	error = memory_bm_create(&zero_bm, GFP_IMAGE, PG_ANY);
-+	if (error) {
-+		pr_err("Cannot allocate zero bitmap\n");
-+		goto err_out;
-+	}
-+
- 	alloc_normal = 0;
- 	alloc_highmem = 0;
- 
-@@ -2013,11 +2047,12 @@ static int swsusp_alloc(struct memory_bitmap *copy_bm,
- 
- asmlinkage __visible int swsusp_save(void)
- {
--	unsigned int nr_pages, nr_highmem;
-+	unsigned int nr_pages, nr_highmem, nr_zero_pages;
- 
- 	pr_info("Creating image:\n");
- 
- 	drain_local_pages(NULL);
-+	nr_zero_pages = 0;
- 	nr_pages = count_data_pages();
- 	nr_highmem = count_highmem_pages();
- 	pr_info("Need to copy %u pages\n", nr_pages + nr_highmem);
-@@ -2037,19 +2072,23 @@ asmlinkage __visible int swsusp_save(void)
- 	 * Kill them.
- 	 */
- 	drain_local_pages(NULL);
--	copy_data_pages(&copy_bm, &orig_bm);
-+	copy_data_pages(&copy_bm, &orig_bm, &zero_bm);
- 
- 	/*
- 	 * End of critical section. From now on, we can write to memory,
- 	 * but we should not touch disk. This specially means we must _not_
- 	 * touch swap space! Except we must write out our image of course.
- 	 */
-+	memory_bm_position_reset(&zero_bm);
-+	while (memory_bm_next_pfn(&zero_bm) != BM_END_OF_MAP)
-+		nr_zero_pages++;
- 
- 	nr_pages += nr_highmem;
--	nr_copy_pages = nr_pages;
-+	/* We don't actually copy the zero pages */
-+	nr_copy_pages = nr_pages - nr_zero_pages;
- 	nr_meta_pages = DIV_ROUND_UP(nr_pages * sizeof(long), PAGE_SIZE);
- 
--	pr_info("Image created (%d pages copied)\n", nr_pages);
-+	pr_info("Image created (%d pages copied, %d zero pages)\n", nr_copy_pages, nr_zero_pages);
- 
- 	return 0;
- }
-@@ -2094,15 +2133,22 @@ static int init_header(struct swsusp_info *info)
- 	return init_header_complete(info);
- }
- 
-+#define ENCODED_PFN_ZERO_FLAG (1UL << (BITS_PER_LONG - 1))
-+#define ENCODED_PFN_MASK (~ENCODED_PFN_ZERO_FLAG)
-+
- /**
-  * pack_pfns - Prepare PFNs for saving.
-  * @bm: Memory bitmap.
-  * @buf: Memory buffer to store the PFNs in.
-+ * @zero_bm: Memory bitmap containing PFNs of zero pages.
-  *
-  * PFNs corresponding to set bits in @bm are stored in the area of memory
-- * pointed to by @buf (1 page at a time).
-+ * pointed to by @buf (1 page at a time). Pages which were filled with only
-+ * zeros will have the highest bit set in the packed format to distinguish
-+ * them from PFNs which will be contained in the image file.
-  */
--static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
-+static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm,
-+		struct memory_bitmap *zero_bm)
- {
- 	int j;
- 
-@@ -2110,6 +2156,8 @@ static inline void pack_pfns(unsigned long *buf, struct memory_bitmap *bm)
- 		buf[j] = memory_bm_next_pfn(bm);
- 		if (unlikely(buf[j] == BM_END_OF_MAP))
- 			break;
-+		if (memory_bm_test_bit(zero_bm, buf[j]))
-+			buf[j] |= ENCODED_PFN_ZERO_FLAG;
- 	}
- }
- 
-@@ -2151,7 +2199,7 @@ int snapshot_read_next(struct snapshot_handle *handle)
- 		memory_bm_position_reset(&copy_bm);
- 	} else if (handle->cur <= nr_meta_pages) {
- 		clear_page(buffer);
--		pack_pfns(buffer, &orig_bm);
-+		pack_pfns(buffer, &orig_bm, &zero_bm);
- 	} else {
- 		struct page *page;
- 
-@@ -2247,24 +2295,32 @@ static int load_header(struct swsusp_info *info)
-  * unpack_orig_pfns - Set bits corresponding to given PFNs in a memory bitmap.
-  * @bm: Memory bitmap.
-  * @buf: Area of memory containing the PFNs.
-+ * @zero_bm: Memory bitmap which will be populated with the PFNs of zero pages.
-  *
-  * For each element of the array pointed to by @buf (1 page at a time), set the
-- * corresponding bit in @bm.
-+ * corresponding bit in @bm. If the page was originally populated with only
-+ * zeros then a corresponding bit will also be set in @zero_bm.
-  */
--static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm)
-+static int unpack_orig_pfns(unsigned long *buf, struct memory_bitmap *bm,
-+		struct memory_bitmap *zero_bm)
- {
--	int j;
-+	int j, zero;
-+	unsigned long decoded_pfn;
- 
- 	for (j = 0; j < PAGE_SIZE / sizeof(long); j++) {
- 		if (unlikely(buf[j] == BM_END_OF_MAP))
- 			break;
- 
--		if (pfn_valid(buf[j]) && memory_bm_pfn_present(bm, buf[j])) {
--			memory_bm_set_bit(bm, buf[j]);
-+		zero = !!(buf[j] & ENCODED_PFN_ZERO_FLAG);
-+		decoded_pfn = buf[j] & ENCODED_PFN_MASK;
-+		if (pfn_valid(decoded_pfn) && memory_bm_pfn_present(bm, decoded_pfn)) {
-+			memory_bm_set_bit(bm, decoded_pfn);
-+			if (zero)
-+				memory_bm_set_bit(zero_bm, decoded_pfn);
- 		} else {
--			if (!pfn_valid(buf[j]))
-+			if (!pfn_valid(decoded_pfn))
- 				pr_err(FW_BUG "Memory map mismatch at 0x%llx after hibernation\n",
--				       (unsigned long long)PFN_PHYS(buf[j]));
-+				       (unsigned long long)PFN_PHYS(decoded_pfn));
- 			return -EFAULT;
- 		}
- 	}
-@@ -2631,6 +2687,7 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 	static struct chain_allocator ca;
- 	int error = 0;
- 
-+next:
- 	/* Check if we have already loaded the entire image */
- 	if (handle->cur > 1 && handle->cur > nr_meta_pages + nr_copy_pages)
- 		return 0;
-@@ -2657,9 +2714,13 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 		if (error)
- 			return error;
- 
-+		error = memory_bm_create(&zero_bm, GFP_ATOMIC, PG_ANY);
-+		if (error)
-+			return error;
-+
- 		hibernate_restore_protection_begin();
- 	} else if (handle->cur <= nr_meta_pages + 1) {
--		error = unpack_orig_pfns(buffer, &copy_bm);
-+		error = unpack_orig_pfns(buffer, &copy_bm, &zero_bm);
- 		if (error)
- 			return error;
- 
-@@ -2686,6 +2747,14 @@ int snapshot_write_next(struct snapshot_handle *handle)
- 			handle->sync_read = 0;
- 	}
- 	handle->cur++;
-+
-+	/* Zero pages were not included in the image, memset it and move on. */
-+	if ((handle->cur > nr_meta_pages + 1) &&
-+			memory_bm_test_bit(&zero_bm, memory_bm_get_current(&orig_bm))) {
-+		memset(handle->buffer, 0, PAGE_SIZE);
-+		goto next;
-+	}
-+
- 	return PAGE_SIZE;
- }
- 
--- 
-2.39.0.314.g84b9a713c41-goog
-
+bod
