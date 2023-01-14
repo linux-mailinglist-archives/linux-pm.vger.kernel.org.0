@@ -2,285 +2,306 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF0E066AD42
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 19:21:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5828066AD77
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 20:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjANSVN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Jan 2023 13:21:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52908 "EHLO
+        id S229676AbjANTrx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Jan 2023 14:47:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjANSVL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 13:21:11 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CADA7EF2
-        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 10:21:09 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id m8-20020a05600c3b0800b003d96f801c48so20838815wms.0
-        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 10:21:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JbYS1PC8JzhDRB4EPNw4J+rgsfQV281zmahxoSJ2CAw=;
-        b=fbaB2R+4RroQNVP2o2YEQ6xm/aQ0SxAeMTTf+t1IQDZRul8EUvjD1rWvaeIwcjmyrn
-         Z5uC1B1+XKpv2Mqz49XNaa9Pu1ppSKjXUJaVYMJplk2ci4j1/9D8Lm6dp96gpxP5kFtm
-         UocxQQ8xotsRLg3y9FOS0LQEcU9okzuwyHV34OlMSZCbkrmQjWhzFsABnxxcRrtSWkQW
-         kjabQzGZRyMQDkzttwJwpCd2hZccbjNCaafBQsa93ssN9Ug352ywwiXr13vPYepiRAIa
-         QFASVKlnDkM5F1pSzWwfqNw2OuTQONJVn159+YowchAuCJ60Norstsol2k2r/8O4gCTG
-         2ZLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JbYS1PC8JzhDRB4EPNw4J+rgsfQV281zmahxoSJ2CAw=;
-        b=I1cXqUiRCxOnuyulgk66nmGQR81iFjtNqlp/8VQC7y+LU2i5E4TFrfhE2G0HY/Nzkf
-         8JrlxnqGWqoVsusGAhF/kABRh3TkJ5fHGhNGnTIFS6m9xd50SiRPGT6g4E0ImlynLiCK
-         cm6FBo7tkCHtFRWSls8jSPvE17lZvPUmMsqJn1HOcc72q1sNb6mXV6SGZUbl60Ea/ifz
-         W3cie7k5MUYGXBIjeGwfw7v0UMco/tRbcJgoA5nYCVTYXZsjzChaGAI3yUC65Go7na3m
-         BVOMTRTUgcfgxIAxvS6PH9P1z35etdq9ISyjzyRR9vSJvNmiqzo1jwQGWixOchEmbLyR
-         YKJQ==
-X-Gm-Message-State: AFqh2kpg2bQZtwzADY7Ez/+N7K3Y57L/fr3CRBUfkgZ5EwBYDldItC0C
-        R7XUv5ZvLxzkyUNXrj0SsAD73FJHA/LDgum6
-X-Google-Smtp-Source: AMrXdXsJCKUE9UX8YHR/iWVC9ZsDthI0ZlR02ziH5qUwiVRG1Dzd1bve8koVMAHiPcBkHSZRP2DY0w==
-X-Received: by 2002:a05:600c:19c7:b0:3d9:7096:262a with SMTP id u7-20020a05600c19c700b003d97096262amr56129779wmq.27.1673720467246;
-        Sat, 14 Jan 2023 10:21:07 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id k30-20020a05600c1c9e00b003d9b89a39b2sm31905436wms.10.2023.01.14.10.21.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Jan 2023 10:21:06 -0800 (PST)
-Date:   Sat, 14 Jan 2023 18:21:04 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
-        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
-        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH v2] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <20230114182104.gyb7osljrvwpbn42@airbuntu>
-References: <20221228165415.3436-1-vincent.guittot@linaro.org>
- <20230112142603.yj5dtleksi6sfrzp@airbuntu>
- <CAKfTPtCPedS22+0QHS65ixMELAvjRnn6XMCu0DzickEcpjkMFQ@mail.gmail.com>
+        with ESMTP id S230260AbjANTrt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 14:47:49 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA011A5C9;
+        Sat, 14 Jan 2023 11:47:48 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA52F60ADD;
+        Sat, 14 Jan 2023 19:47:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DA54C433D2;
+        Sat, 14 Jan 2023 19:47:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673725667;
+        bh=gMU2qV2VgM+YENiKJhH+abvn4ddBqKL0P0RzB5p/M9M=;
+        h=From:To:Cc:Subject:Date:From;
+        b=J80B8qRk5QOTG8JqtnwvGlTRxhA2TlX3aGgUGykutFA28xkS1L79HoIMWUQtYDCTj
+         dCd/689zlAuf5mMLONRyOIcLBGJAawuKZj0GNZM0DDyfIiv63g6cOGVUdPbGjzGOeK
+         43nrrY1DnPSIiCsMQ1mdGBgd09ZbU7hmOt/yvu59q2hP3l8M/NAyQ9o/F9B/CQK0on
+         fE3yWz8n685HzaXhQIOLWmaeEhVdi+exUo8YNDBbMl6cPP11Fb39GIRiU/kHrDNDvZ
+         HNsfKIJOXgJf6U3sjs1605a6/2LOgx2m45e2P4jaM8tXl63pcbaHE+AD8eIJbaVA1T
+         Q5DrM4P1UlMBg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     SeongJae Park <sj@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Iwona Winiarska <iwona.winiarska@intel.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-pci@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-crypto@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-hwmon@vger.kernel.org, linux-input@vger.kernel.org,
+        openbmc@lists.ozlabs.org, alsa-devel@alsa-project.org,
+        linux-watchdog@vger.kernel.org
+Subject: [PATCH 1/2] Docs/subsystem-apis: Remove '[The ]Linux' prefixes from titles of listed documents
+Date:   Sat, 14 Jan 2023 19:47:40 +0000
+Message-Id: <20230114194741.115855-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCPedS22+0QHS65ixMELAvjRnn6XMCu0DzickEcpjkMFQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/13/23 09:53, Vincent Guittot wrote:
-> On Thu, 12 Jan 2023 at 15:26, Qais Yousef <qyousef@layalina.io> wrote:
-> >
-> > Hi Vincent
-> >
-> > On 12/28/22 17:54, Vincent Guittot wrote:
-> > > By taking into account uclamp_min, the 1:1 relation between task misfit
-> > > and cpu overutilized is no more true as a task with a small util_avg of
-> > > may not may not fit a high capacity cpu because of uclamp_min constraint.
-> >
-> > Wouldn't it be better to split this into two patches
-> >
-> >         * Unlink/Decouple misfit ...
-> >         * Unlink/Decouple util_fits_cpu from HMP
-> >
-> > ?
-> 
-> I'm afraid that git bisect could then raise a false positive between
-> the 2 commits
+Some documents that listed on subsystem-apis have 'Linux' or 'The Linux'
+title prefixes.  It's duplicated information, and makes finding the
+document of interest with human eyes not easy.  Remove the prefixes from
+the titles.
 
-They should be independent, no? Anyway, I don't feel that strongly about it but
-as a minor nit the commit subject could be better.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ Documentation/PCI/index.rst        | 6 +++---
+ Documentation/cpu-freq/index.rst   | 6 +++---
+ Documentation/crypto/index.rst     | 6 +++---
+ Documentation/driver-api/index.rst | 6 +++---
+ Documentation/gpu/index.rst        | 6 +++---
+ Documentation/hwmon/index.rst      | 6 +++---
+ Documentation/input/index.rst      | 6 +++---
+ Documentation/mm/index.rst         | 6 +++---
+ Documentation/peci/index.rst       | 6 +++---
+ Documentation/scheduler/index.rst  | 6 +++---
+ Documentation/scsi/index.rst       | 6 +++---
+ Documentation/sound/index.rst      | 6 +++---
+ Documentation/virt/index.rst       | 6 +++---
+ Documentation/watchdog/index.rst   | 6 +++---
+ 14 files changed, 42 insertions(+), 42 deletions(-)
 
-> 
-> >
-> > >
-> > > Add a new state in util_fits_cpu() to reflect the case that task would fit
-> > > a CPU except for the uclamp_min hint which is a performance requirement.
-> > >
-> > > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
-> > > can use this new value to take additional action to select the best CPU
-> > > that doesn't match uclamp_min hint.
-> >
-> > This part has nothing to do with the commit subject. I think it's better to
-> > split the patches if it's not too much work for you.
-> >
-> > >
-> > > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > > ---
-> > >
-> > > Change since v1:
-> > > - fix some wrong conditions
-> > > - take into account more cases
-> > >
-> > >  kernel/sched/fair.c | 99 +++++++++++++++++++++++++++++++++------------
-> > >  1 file changed, 74 insertions(+), 25 deletions(-)
-> > >
-> > > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > > index 1649e7d71d24..57077f0a897e 100644
-> > > --- a/kernel/sched/fair.c
-> > > +++ b/kernel/sched/fair.c
-> > > @@ -4582,8 +4582,7 @@ static inline int util_fits_cpu(unsigned long util,
-> > >        *     2. The system is being saturated when we're operating near
-> > >        *        max capacity, it doesn't make sense to block overutilized.
-> > >        */
-> > > -     uclamp_max_fits = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
-> > > -     uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
-> > > +     uclamp_max_fits = (uclamp_max <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE);
-> > >       fits = fits || uclamp_max_fits;
-> > >
-> > >       /*
-> > > @@ -4618,8 +4617,8 @@ static inline int util_fits_cpu(unsigned long util,
-> > >        * handle the case uclamp_min > uclamp_max.
-> > >        */
-> > >       uclamp_min = min(uclamp_min, uclamp_max);
-> > > -     if (util < uclamp_min && capacity_orig != SCHED_CAPACITY_SCALE)
-> > > -             fits = fits && (uclamp_min <= capacity_orig_thermal);
-> > > +     if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
-> > > +             return -1;
-> > >
-> > >       return fits;
-> > >  }
-> > > @@ -4629,7 +4628,7 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
-> > >       unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
-> > >       unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
-> > >       unsigned long util = task_util_est(p);
-> > > -     return util_fits_cpu(util, uclamp_min, uclamp_max, cpu);
-> > > +     return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
-> >
-> > So the big difference between your approach and my approach is that
-> > task_fits_cpu() and asym_fits_cpu() now are very strict in regards to thermal
-> > pressure since with your approach we delegate the smartness to the caller.
-> >
-> > Should we add a comment for these 2 users to make it obvious we intentionally
-> > ignore the '-1' value and why it is okay?
-> 
-> I can probably add something saying that a positive value (1 in this
-> case) is the only one that says that a task fits to a cpu. Other
-> returned values imply that either the utilization or the uclamp
-> constraints are not meet
+diff --git a/Documentation/PCI/index.rst b/Documentation/PCI/index.rst
+index c17c87af1968..e73f84aebde3 100644
+--- a/Documentation/PCI/index.rst
++++ b/Documentation/PCI/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-=======================
+-Linux PCI Bus Subsystem
+-=======================
++=================
++PCI Bus Subsystem
++=================
+ 
+ .. toctree::
+    :maxdepth: 2
+diff --git a/Documentation/cpu-freq/index.rst b/Documentation/cpu-freq/index.rst
+index 2fe32dad562a..de25740651f7 100644
+--- a/Documentation/cpu-freq/index.rst
++++ b/Documentation/cpu-freq/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-==============================================================================
+-Linux CPUFreq - CPU frequency and voltage scaling code in the Linux(TM) kernel
+-==============================================================================
++========================================================================
++CPUFreq - CPU frequency and voltage scaling code in the Linux(TM) kernel
++========================================================================
+ 
+ Author: Dominik Brodowski  <linux@brodo.de>
+ 
+diff --git a/Documentation/crypto/index.rst b/Documentation/crypto/index.rst
+index 21338fa92642..da5d5ad2bdf3 100644
+--- a/Documentation/crypto/index.rst
++++ b/Documentation/crypto/index.rst
+@@ -1,6 +1,6 @@
+-=======================
+-Linux Kernel Crypto API
+-=======================
++==========
++Crypto API
++==========
+ 
+ :Author: Stephan Mueller
+ :Author: Marek Vasut
+diff --git a/Documentation/driver-api/index.rst b/Documentation/driver-api/index.rst
+index d3a58f77328e..b208e0dac3a0 100644
+--- a/Documentation/driver-api/index.rst
++++ b/Documentation/driver-api/index.rst
+@@ -1,6 +1,6 @@
+-========================================
+-The Linux driver implementer's API guide
+-========================================
++==============================
++Driver implementer's API guide
++==============================
+ 
+ The kernel offers a wide variety of interfaces to support the development
+ of device drivers.  This document is an only somewhat organized collection
+diff --git a/Documentation/gpu/index.rst b/Documentation/gpu/index.rst
+index b99dede9a5b1..eee5996acf2c 100644
+--- a/Documentation/gpu/index.rst
++++ b/Documentation/gpu/index.rst
+@@ -1,6 +1,6 @@
+-==================================
+-Linux GPU Driver Developer's Guide
+-==================================
++============================
++GPU Driver Developer's Guide
++============================
+ 
+ .. toctree::
+ 
+diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rst
+index fe2cc6b73634..c2b3c1a822dd 100644
+--- a/Documentation/hwmon/index.rst
++++ b/Documentation/hwmon/index.rst
+@@ -1,6 +1,6 @@
+-=========================
+-Linux Hardware Monitoring
+-=========================
++===================
++Hardware Monitoring
++===================
+ 
+ .. toctree::
+    :maxdepth: 1
+diff --git a/Documentation/input/index.rst b/Documentation/input/index.rst
+index 9888f5cbf6d5..35581cd18e91 100644
+--- a/Documentation/input/index.rst
++++ b/Documentation/input/index.rst
+@@ -1,6 +1,6 @@
+-=============================
+-The Linux Input Documentation
+-=============================
++===================
++Input Documentation
++===================
+ 
+ Contents:
+ 
+diff --git a/Documentation/mm/index.rst b/Documentation/mm/index.rst
+index 4aa12b8be278..5a94a921ea40 100644
+--- a/Documentation/mm/index.rst
++++ b/Documentation/mm/index.rst
+@@ -1,6 +1,6 @@
+-=====================================
+-Linux Memory Management Documentation
+-=====================================
++===============================
++Memory Management Documentation
++===============================
+ 
+ Memory Management Guide
+ =======================
+diff --git a/Documentation/peci/index.rst b/Documentation/peci/index.rst
+index 989de10416e7..930e75217c33 100644
+--- a/Documentation/peci/index.rst
++++ b/Documentation/peci/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0-only
+ 
+-====================
+-Linux PECI Subsystem
+-====================
++==============
++PECI Subsystem
++==============
+ 
+ .. toctree::
+ 
+diff --git a/Documentation/scheduler/index.rst b/Documentation/scheduler/index.rst
+index b430d856056a..1aac972a652f 100644
+--- a/Documentation/scheduler/index.rst
++++ b/Documentation/scheduler/index.rst
+@@ -1,6 +1,6 @@
+-===============
+-Linux Scheduler
+-===============
++=========
++Scheduler
++=========
+ 
+ .. toctree::
+     :maxdepth: 1
+diff --git a/Documentation/scsi/index.rst b/Documentation/scsi/index.rst
+index 7c5f5f8f614e..919f3edfe1bf 100644
+--- a/Documentation/scsi/index.rst
++++ b/Documentation/scsi/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-====================
+-Linux SCSI Subsystem
+-====================
++==============
++SCSI Subsystem
++==============
+ 
+ .. toctree::
+    :maxdepth: 1
+diff --git a/Documentation/sound/index.rst b/Documentation/sound/index.rst
+index 4d7d42acf6df..5abed5fc6485 100644
+--- a/Documentation/sound/index.rst
++++ b/Documentation/sound/index.rst
+@@ -1,6 +1,6 @@
+-===================================
+-Linux Sound Subsystem Documentation
+-===================================
++=============================
++Sound Subsystem Documentation
++=============================
+ 
+ .. toctree::
+    :maxdepth: 2
+diff --git a/Documentation/virt/index.rst b/Documentation/virt/index.rst
+index 56e003ff28ff..7fb55ae08598 100644
+--- a/Documentation/virt/index.rst
++++ b/Documentation/virt/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-============================
+-Linux Virtualization Support
+-============================
++======================
++Virtualization Support
++======================
+ 
+ .. toctree::
+    :maxdepth: 2
+diff --git a/Documentation/watchdog/index.rst b/Documentation/watchdog/index.rst
+index c177645081d8..4603f2511f58 100644
+--- a/Documentation/watchdog/index.rst
++++ b/Documentation/watchdog/index.rst
+@@ -1,8 +1,8 @@
+ .. SPDX-License-Identifier: GPL-2.0
+ 
+-======================
+-Linux Watchdog Support
+-======================
++================
++Watchdog Support
++================
+ 
+ .. toctree::
+     :maxdepth: 1
+-- 
+2.25.1
 
-Sounds good to me. So at least whoever looks at this later and doesn't know
-the history will at least try to dig more before using it as-is and assume
-wonders.
-
-> >
-> > I'm not sure I can write a reasonable rationale myself. I'm actually worried
-> > this might subtly break decisions made by select_idle_capacity() or feec() when
-> > doing the LB.
-> >
-> > Have you considered this?
-> 
-> Yes, that why i have keep the changes in 1 patch
-
-Okay I think I see what you're on about now.
-
-[...]
-
-> > > +                     /*
-> > > +                      * Both fit for the task but best energy cpu has lower
-> > > +                      * energy impact.
-> > > +                      */
-> > > +                     if ((max_fits > 0) &&
-> >
-> > Shouldn't this be
-> >
-> >                         if ((max_fits > 0) && (max_fits == best_fits) &&
-> > ?
-> 
-> I will use the below which match better the comment and the fact that
-> both fit for the task:
-> 
-> +                    if ((max_fits > 0) && (best_fits > 0) &&
-> 
-
-Fine by me.
-
-> >
-> > We should update best_delta unconditionally first time we hit max_fits = 1, no?
-> >
-> > I think it's worth extending the comment with something along the lines of
-> >
-> >                         * ... except for the first time max_fits becomes 1
-> >                         * then we must update best_delta unconditionally
-> 
-> With the new condition above this is not needed anymore
-
-+1
-
-> 
-> >
-> > > +                         (cur_delta >= best_delta))
-> > > +                             continue;
-> > > +
-> > > +                     best_delta = cur_delta;
-> > > +                     best_energy_cpu = max_spare_cap_cpu;
-> > > +                     best_fits = max_fits;
-> > > +                     best_thermal_cap = cpu_thermal_cap;
-> > >               }
-> > >       }
-> > >       rcu_read_unlock();
-> > >
-> > > -     if (best_delta < prev_delta)
-> > > +     if ((best_fits > prev_fits) ||
-> > > +         ((best_fits > 0) && (best_delta < prev_delta)) ||
-> > > +         ((best_fits < 0) && (best_thermal_cap > prev_thermal_cap)))
-> > >               target = best_energy_cpu;
-> >
-> > Overall I think the approach is sound. I tested it on my pinebook pro and
-> > couldn't catch obvious breakage at least.
-> >
-> > I am still worried though about spilling the knowledge outside of
-> > util_fits_cpu() is creating extra complexity in the callers and potentially
-> > more fragility when these callers evolve overtime e.g:
-> > task_fits_cpu()/asym_fits_cpu() gain a new user that must actually care about
-> > the -1 return value.
-> 
-> ask_fits_cpu()/asym_fits_cpu() remain simple booleans that return true
-> if the task fits the cpu in regards to all requirements. If a new user
-> wants to make smarter decisions like select_idle_capacity() or feec(),
-> it will have to use util_fits_cpu(). Both handle the case where
-> uclamp_min is not met differently.
-
-I think with that comment added we can hope this will promote new users to
-think more.
-
-> 
-> >
-> > I think we can still optimize the capacity inversion logic to use no loops
-> > without having to spill the knowledge to the users/callers of util_fits_cpu(),
-> > no?
-> 
-> TBH, I don't know how because we are not always comparing the same
-> things depending of the reason it doesn't fit
-
-Your patch will do a more comprehensive search, true. It will try harder to
-find a best fit. I do have a bit of a bias that some severe thermal conditions
-are indication of a bigger problem to try harder to honour uclamp_min (warrant
-the additional complexity). But I thought more about it and I think it actually
-might be worth while. Xuewen had a system where medium's capacity was 900 and
-bigs could easily be inverted with some thermal pressure on mediums too. So
-this harder search can help these systems to keep these tasks on mediums. e.g:
-if uclamp_min was 900 and big is inverted and medium is under pressure my
-approach would have returned false for all CPUs then; while yours will keep it
-on medium cpus.
-
-> 
-> >
-> > That said except for the few comments I had this LGTM anyway. Thanks for your
-> > effort!
-> 
-> Thanks
-> 
-> I'm going to prepare  v2
-
-Thanks!
-
-
---
-Qais Yousef
