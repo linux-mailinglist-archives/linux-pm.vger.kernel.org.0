@@ -2,255 +2,184 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D09266A63D
-	for <lists+linux-pm@lfdr.de>; Fri, 13 Jan 2023 23:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FEB66A764
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 01:11:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbjAMWxJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 13 Jan 2023 17:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
+        id S229806AbjANALm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 13 Jan 2023 19:11:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230144AbjAMWxI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 17:53:08 -0500
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89207D27C;
-        Fri, 13 Jan 2023 14:53:07 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 433D95C00B6;
-        Fri, 13 Jan 2023 17:53:05 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 13 Jan 2023 17:53:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1673650385; x=
-        1673736785; bh=lKCV0ycAY0SFtq1SYJ0F5dfFWAI3C/PKOUtKuY5T64U=; b=O
-        KFd4cQE64z7byI+zm0c8nD+rqAxFmbGCCZ3Vh/GS10spMDBCdu2RoohH4GfizyP7
-        vMHfF9Q3WqmBl2tCCbTlvQDj9C1AU71gp0LMeVLamWIKmQOJVj2WgoTcd2glt9CD
-        NJU93AEM0M81j6mGmV+a78IrElGBu8J+WY2pq9Rph2PggMehhJ6Lxs8XMLC8+1xh
-        dPPhBk46PubiUYUtfMLpaPP2foH7VbmabHbuSpPNeu7qlLnMzTf+BBW3Xn2dtM2u
-        cHgF2KFFaOcui/CsmFJQNBOgoIuHOECmvhFMGxX+AdzcNb0brcCxrcIhfsuGLrL8
-        jVBLMoKogB89F8lLoGumA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1673650385; x=1673736785; bh=lKCV0ycAY0SFtq1SYJ0F5dfFWAI3
-        C/PKOUtKuY5T64U=; b=h7tHLk4So03Ss4ZbzU95hbw5XdcLitSlfxF8xEqBfY3j
-        joqrFC7z74bAP8YAbP5esYISC2yGIU8b1Egx55R5djKpVEJSvNdibHDK/PK9zCGF
-        uOS8o3PHCloegp5m1Ft21Sarose/LPAvAQvydu7FsvL5YMgF3f77vlyV9z95U4vm
-        2L/cmX66SFqzKcEUawqtUm1D1ikbDK+A0pHO88VUEl3q5K9TCjVn8xei29jJOiZa
-        aqdN75PUUdaKyJvuaB6Raic4lKaYE7MtPNxwJP4FMeP+WLad4Rr3GBf1S33e/Eq0
-        88eN3GjPn6Ggd+zIshPGDz8T8T9PfoyZ+f6JrITEyg==
-X-ME-Sender: <xms:0ODBY8DY6RuCSKy1hKs8ei14XotYeEgNfvDM51g94ptZLn5i3BJQNQ>
-    <xme:0ODBY-jlQ5TmHwJi7OFBAhA4mttip_uggmMKVULoKV-TlKfkIkumA4MHMTnCSTYF7
-    Fo9YqvBg-Vb_w>
-X-ME-Received: <xmr:0ODBY_mrtzrdIrJ9DzrMo5QCBskDEtngeyvUB4IrnxQSIPGrbl9NtRMrR6X-EjYvJTmQq547ut3C11F1URb8S6wZWIpb8SA67g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrleelgddtgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeforghrvghk
-    ucforghrtgiihihkohifshhkihdqifpkrhgvtghkihcuoehmrghrmhgrrhgvkhesihhnvh
-    hishhisghlvghthhhinhhgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpefgudel
-    teefvefhfeehieetleeihfejhfeludevteetkeevtedtvdegueetfeejudenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrghrmhgrrhgvkhes
-    ihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:0ODBYyxbJcG7imjuq8Dklu6XNbYfj9boTjfAqr2_DvCLFB5rN_rtKA>
-    <xmx:0ODBYxQepT3qyQlR4yI0nr6pPJ7s4J7b8tINsEXME9CfYWK1N_-OIg>
-    <xmx:0ODBY9ZiqivvK03r8PZFSikxrh3ofaufnbSumwH3KxvqEhXTH6DbzQ>
-    <xmx:0eDBYwLcidQbQg_3PNESAxuO6rWVzK0gKXNvMRH9QqCW17WYpgZuLg>
-Feedback-ID: i1568416f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 13 Jan 2023 17:53:02 -0500 (EST)
-Date:   Fri, 13 Jan 2023 23:52:59 +0100
-From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
-Message-ID: <Y8Hgy4UHxKqh0T2T@mail-itl>
-References: <20230113140610.7132-1-jgross@suse.com>
- <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
+        with ESMTP id S231142AbjANALk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 13 Jan 2023 19:11:40 -0500
+Received: from CY4PR02CU007-vft-obe.outbound.protection.outlook.com (mail-westcentralusazon11021015.outbound.protection.outlook.com [40.93.199.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3FB28E9B7;
+        Fri, 13 Jan 2023 16:11:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TG0F++YMu8Xn/otmT6ppHWcZKCl95tWJO3zexsAKThRJiIYGdy37DvyFWfc0loU92ncoREy79GzeF8yUPcasvNwma8TOnDgDxHbF4AFh9aOdFucugbyugeW8q2sZ+GpTZfQg26jIYT3HYZbQ9uAZlCi4kS+1dSoDKr44JiJe9fa0XTsEsCRHjTYjgB7YqpmCKd/dGAHiATJaSMZzuqYh+KcoGotXCC/yoNH9gVVisW78zeKbtP0i8KvFg7E7azGHJDv53rS3B6qSQzdX5DvlFF8nKtacXKgS5RlXh/UhiupkDsKTNry1ZvK6aOJFADCAsOw6TG6Q3e1dHZO3rTrWtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ggpgM4kPzTYAi/YLhvL6Vn7Ymbxgs+IybMPgFe6shSI=;
+ b=m9lTGwS2X+FmC5ctQvsgc1spkevunpxUPA7LTV0t9cpDrie49UeQmVXO1vAckOUxF9aIjT+gpxTKwa3cFd/o8v8i6F2mkZ2zfHIo6NZ2anfv7NssZ0psMCaJPEmUJiN/xwPHtcJRYugJJPoidvKw7pVWlcWEhCJQiIDn4q01kIYd+KLks7hPPOFkh7npwBaG0/23B8v6wmLHxxgBU3+IqW10YWh5JDZMBzV1PE89HEhs+tPDOUh62VOpi0x/ziQwMqPh8kxi9mTJAedwu/SEpdogNYpbukAI4fEjaoWoRBLNu1+HYusSHSKgX2HpHQAF5uqIDDE2C3I5omQm6kLy6A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ggpgM4kPzTYAi/YLhvL6Vn7Ymbxgs+IybMPgFe6shSI=;
+ b=hW2/X+W3debtb7OyTmcGNionjghx3ZWWP9uuNEGSEC51Ra2fb/IcZlXPzZi3glntGe945K4XD6dvzFEgfK0wmxQ/Zp8u7cJ2nmAE4bcmJNTbqs3Xp57JKktvHqS/1tqlGzyU0gz/oIOZomtygxTzEu96uLcy2YJ7Wv6t75o+K2w=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by DS7PR21MB3525.namprd21.prod.outlook.com (2603:10b6:8:92::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.9; Sat, 14 Jan
+ 2023 00:11:37 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::c14e:c8f3:c27a:af3d]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::c14e:c8f3:c27a:af3d%5]) with mapi id 15.20.6023.004; Sat, 14 Jan 2023
+ 00:11:37 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Shradha Gupta <shradhagupta@linux.microsoft.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: RE: [PATCH] kernel: power: swap: Suppress expected 'Image not found'
+ error on Ubuntu
+Thread-Topic: [PATCH] kernel: power: swap: Suppress expected 'Image not found'
+ error on Ubuntu
+Thread-Index: AQHZJ4uk3VW9YTwjQ0+OYg9R0focd66dBefQ
+Date:   Sat, 14 Jan 2023 00:11:37 +0000
+Message-ID: <SA1PR21MB13359F44D6EB8037117F9F31BFC39@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <1671085226-21347-1-git-send-email-shradhagupta@linux.microsoft.com>
+ <CAJZ5v0jb3eU6asQ1TqPqV=s5k+255yse=4QH9WssnM2LH-d3uw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0jb3eU6asQ1TqPqV=s5k+255yse=4QH9WssnM2LH-d3uw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=f0b86067-7307-4653-9b30-2033a529fd79;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-01-13T23:55:21Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR21MB1335:EE_|DS7PR21MB3525:EE_
+x-ms-office365-filtering-correlation-id: 44ef960a-2cab-4eda-c99a-08daf5c3e72a
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: CNq4Us9lWOH9H5o6qLAt6bu+ndbAjAPEN58/C17QanrwowB2oHb+DtywWZ9kmID/NIVWgHUzCOrEb75gIIpD4HA8p07qx1Ulasc4k1wzCMnOIMU98xJzpHK2GTZaYD2Eqj1eZWrAVnexKn0sns9CBTownGd0QmUNlqHyoed+3+FmWbw2MQTIaHQxFEV3xcC9tIn/ZuJwHEEqjc1NkTjU8YV4AB4+fDKyhg4aPVOK6PzC0U3kydk/bdqOfVJSfdOSvyf9HIMs8ze3hqge7hdN8uTWDpbaQ9KMoKdFlyrxoz/8uuwv37ZMFKp2dihs7KZVGLM5d+jMdap6EwauIXvxoFjmYLTQ69QoIoe0+X6dvArnudhOmg2X3piVDRxLy3r45axV+IdxkohnnMTk7JtRQ+dRSTadqzSU5yw2H1cTEXdTaPiG8XZwLcXRQVEF/RVdp1ls4TyivbrLNAauAq8aaAwYxM0m9T9DWZeApAM0K3ywQSZhl8dm8ET5vaeeSMTCAoFiR9GVhIajbWAmhRVD9Lwq/I7zbRlT70xUMv03qw1X+FkaR0kMfQW5/BUqczYut1fWEeMORDAf8QUaHko7OrBRZnfxS7uDTld+8+4RoIhxpwDvBeRhDfUwGNJZ7CFRkqgAt/+dnZr4Mymhijh89wbhmuIATvjxQ9QdsKPyIcKeMqa81acgaenabIPReMdThn2niSK22oyZeOB774fLGzdR+iVN4SXql/7iYRuXU3RHS5Igl3CgWJLy5CfmP9pIa39T7e5rVPKIR7FHC8EeZw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199015)(84970400001)(8990500004)(2906002)(83380400001)(7696005)(64756008)(52536014)(33656002)(66556008)(8676002)(4326008)(76116006)(66476007)(66446008)(66946007)(8936002)(86362001)(316002)(41300700001)(5660300002)(38070700005)(54906003)(71200400001)(53546011)(55016003)(9686003)(10290500003)(26005)(6506007)(186003)(110136005)(122000001)(82950400001)(107886003)(478600001)(38100700002)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cDFJV3puNFhjT1ZwV25YSngvNzBtK3BYbkdzRE9ldDE4bXFQWjRMVmZZZWFP?=
+ =?utf-8?B?eEtrOWdBSWFsK2xnTmlraGFrNUp4a01JdkY3eWx5MmZzRFlJempxZTdBY2Fk?=
+ =?utf-8?B?dmhFRXdseVJhL1VjZlpLV3Joek8wa21NMXAvTU9rdkhLZTVUNzR2NUJYVVRS?=
+ =?utf-8?B?Q1lPdVpJZU9YSWJ2QjBpaXRtaVFuc2hOa3JtUmlpRmxTVFZwVVpqQ2xZKzBP?=
+ =?utf-8?B?ZnMxaFVDbVFSaGpNMjMvNnYyZ3N3MlpYazdCaG84Q0svVmJBbkk0cGVjTHBJ?=
+ =?utf-8?B?aTdvK0J3bkdHTGlYOE9lOFZZWFU2dE5qRSt3bm5jclhhRmo5cUtNcnRUMHBN?=
+ =?utf-8?B?QjB5bXVvNEFJb2tmWnpwcGRzM3JoOHh5aVVWVEQyazNCamVRVndtTGp6Mktw?=
+ =?utf-8?B?bGVXdkg5L1RQcyswNU5oc3ltNnY4YVFpRURuMHZhWFdPZm5iYXRQMTF3WlUx?=
+ =?utf-8?B?bzVzWW1nemNyZjRoZkwzRExyUTJnRGpsVXF5Z0ZNOWcvNjJXbkhweTE5Q3Yr?=
+ =?utf-8?B?NTFTSGRQK2pHQlNWRHY3VExnY0J3UlhVbVZ6UDBGMkpSRWdwQ1RFcHNJcGFE?=
+ =?utf-8?B?RzFQdVErd1A0RmpKSWJTN1laZWRZdU0vRzdZdkYwQWtsMnZ3cktCSS9oV1oy?=
+ =?utf-8?B?NUVTM29kOFVXa1d5bk0wckcxRlN6UFhBSGd2MVBDSEFBU01jd1Y1SGc4ZVZu?=
+ =?utf-8?B?VmRNYjM5VFJtYzk1RlVRcEVjYjIrYlhtOFRsNHM2Wm9nbGdkbmhHdS9scWJK?=
+ =?utf-8?B?V2QrZlRzdlpqcmFpNjRZaG1KWUlxUHU0aUhlb1FnZjRQUUJIbVY3Ym4zV0dP?=
+ =?utf-8?B?R29xbnArM1R3Rnd5MVpBZ1JnZXdpTENmMlJvYXZGZ2VFanRsUXZ3a3ZpZDV6?=
+ =?utf-8?B?b3Q0czBzSVVFU3diRHd3YURNYks3VHVhT0hTbWdMT0c1MmxEUzJoc0VCeEEw?=
+ =?utf-8?B?dEY3ZEtQdzBEUHczSFpFb2dMekQrMXowZ1J4alJFdlJmQUQwa01DM05zVlpo?=
+ =?utf-8?B?WXJqRk9GZWsrMnZlMGlLRWduN0Y0cWZ6ZXNxcFB2WlovcE1HdkovcjhtTWNp?=
+ =?utf-8?B?OWhVYWpEYTNaZmxidFFrYTU3aVlha0kybE13bElTZnFsRkh0VFl4bzlZWXg1?=
+ =?utf-8?B?TmluZFE3OVFPbENGU3FKMWduMUZ0RkJPMkFZNWs0aU1XZXRHS05UQUpMeUNi?=
+ =?utf-8?B?K2duWEdBRlArWjVYZUNaMmphYWx3Wm02UzlZdDBtTHBqdmZFNU5lTGtta2JL?=
+ =?utf-8?B?dnNObWVlZ1FmdmNrWHRKbE5Qb0VHR21LYi9iSndLUTd0SlM4UDdQTld4aldQ?=
+ =?utf-8?B?ZkRkSUN0Y1ljY2ZqOXB0YkExdUZ1b3hmbDBlUGpRWTFaYUpZV3ZDTGFnVUd2?=
+ =?utf-8?B?QzQ1bG1Ya001VEJYbmVWNGZaRnYyTkRRNzVZK05Rc0lwaXRjRHJzbmJBSGdX?=
+ =?utf-8?B?TkJyK3VDV2J2eU5YVDhWWE41ci9JYzFPTW9TNW5jQmVVNFFhZTBuaDRRMXNm?=
+ =?utf-8?B?UlhBVnc4aEJFb2EvYittdUZIQy9oM3hoWC9KSmVqbUQ5Q3J3RkM2QlJsaG9V?=
+ =?utf-8?B?cWxiOVZyQjFkWGdtL3doSDBWc2c0OGtaQTYxZlgzSnhJT3MxMHFPc1J4QS9I?=
+ =?utf-8?B?eno5cjA3eXEwQ0p0aklGVEFtTWRQS0YyWGplRjVsRGxqSE9jOEpuRzI5L0NP?=
+ =?utf-8?B?amtYNVdCc0FMdnBZSXFNN0huMHF1bDRUZCtIYkRPNDBGNld4OVZ1WkZqeFlJ?=
+ =?utf-8?B?bSsyYWwwdWM4ZTk1ZE9XUURhWlludElnNWtOODZURWRhMlppYTdQcjkxQjBD?=
+ =?utf-8?B?Y1NDQWhmbWxEWFVyZkdwdkVZQTRWTlRrZy9lVHlWb1l5Mk11TnpnTlFZckFy?=
+ =?utf-8?B?eXRWSWJvSWt1aHFaNDFFblZnbTlhekhyUkhheEZwaC9DWEYzM2lOY2xMWHM4?=
+ =?utf-8?B?QWxNbU5qcldXQUtaQXdVZUZ2V1FkcGxCNURaQXVuZkNYYUhDTWV3L1dUa3ZO?=
+ =?utf-8?B?a3ZCZWdSUmdjeEJuT0Z5TUExU1R3S3RKQmxaYjZCdUUwNStjTzQrS216RE0v?=
+ =?utf-8?B?Wm9UTFdLZlN4czhlbDc1bE1tS21WV09Wc0ExVzZCbGFPTTRGdlpudGlBajN4?=
+ =?utf-8?Q?sEdRyNa8GrKRuTJCX6hQqf9Gq?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="4m4xLSz0QPn9icEC"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR21MB1335.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 44ef960a-2cab-4eda-c99a-08daf5c3e72a
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Jan 2023 00:11:37.1490
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: EZQC2WM1MF2/afkjnOCdlJcsR16ptPI1n5hjAQIgSngOoyrw5s86ILK6vQEpXhzqd8RhG+WDS91r6/53URHcPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR21MB3525
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
---4m4xLSz0QPn9icEC
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Date: Fri, 13 Jan 2023 23:52:59 +0100
-From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-	x86@kernel.org, linux-pm@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
-	Pavel Machek <pavel@ucw.cz>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	xen-devel@lists.xenproject.org
-Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
-
-On Fri, Jan 13, 2023 at 08:40:15PM +0100, Rafael J. Wysocki wrote:
-> On Fri, Jan 13, 2023 at 3:06 PM Juergen Gross <jgross@suse.com> wrote:
-> >
-> > Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
-> > Xen PV guest") missed one code path accessing real_mode_header, leading
-> > to dereferencing NULL when suspending the system under Xen:
-> >
-> >     [  348.284004] PM: suspend entry (deep)
-> >     [  348.289532] Filesystems sync: 0.005 seconds
-> >     [  348.291545] Freezing user space processes ... (elapsed 0.000 sec=
-onds) done.
-> >     [  348.292457] OOM killer disabled.
-> >     [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.10=
-4 seconds) done.
-> >     [  348.396612] printk: Suspending console(s) (use no_console_suspen=
-d to debug)
-> >     [  348.749228] PM: suspend devices took 0.352 seconds
-> >     [  348.769713] ACPI: EC: interrupt blocked
-> >     [  348.816077] BUG: kernel NULL pointer dereference, address: 00000=
-0000000001c
-> >     [  348.816080] #PF: supervisor read access in kernel mode
-> >     [  348.816081] #PF: error_code(0x0000) - not-present page
-> >     [  348.816083] PGD 0 P4D 0
-> >     [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> >     [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1=
-=2E3-1.fc32.qubes.x86_64 #1
-> >     [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.0=
-1 07/03/2022
-> >     [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
-> >
-> > Fix that by adding an indirection for acpi_get_wakeup_address() which
-> > Xen PV dom0 can use to return a dummy non-zero wakeup address (this
-> > address won't ever be used, as the real suspend handling is done by the
-> > hypervisor).
->=20
-> How exactly does this help?
-
-By not accessing calling acpi_get_wakeup_address() (with the patch
-renamed to x86_acpi_get_wakeup_address()) during PV dom0 suspend, which
-otherwise would access not initialized real_mode_header.
-
-I confirm this patch fixes the issue.
-
-> > Fixes: f1e525009493 ("x86/boot: Skip realmode init code when running as=
- Xen PV guest")
-> > Reported-by: Marek Marczykowski-G=C3=B3recki <marmarek@invisiblethingsl=
-ab.com>
-> > Signed-off-by: Juergen Gross <jgross@suse.com>
-> > ---
-> >  arch/x86/include/asm/acpi.h  | 2 +-
-> >  arch/x86/kernel/acpi/sleep.c | 3 ++-
-> >  include/xen/acpi.h           | 9 +++++++++
-> >  3 files changed, 12 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/acpi.h b/arch/x86/include/asm/acpi.h
-> > index 65064d9f7fa6..137259ff8f03 100644
-> > --- a/arch/x86/include/asm/acpi.h
-> > +++ b/arch/x86/include/asm/acpi.h
-> > @@ -61,7 +61,7 @@ static inline void acpi_disable_pci(void)
-> >  extern int (*acpi_suspend_lowlevel)(void);
-> >
-> >  /* Physical address to resume after wakeup */
-> > -unsigned long acpi_get_wakeup_address(void);
-> > +extern unsigned long (*acpi_get_wakeup_address)(void);
-> >
-> >  /*
-> >   * Check if the CPU can handle C2 and deeper
-> > diff --git a/arch/x86/kernel/acpi/sleep.c b/arch/x86/kernel/acpi/sleep.c
-> > index 3b7f4cdbf2e0..1a3cd5e24cd0 100644
-> > --- a/arch/x86/kernel/acpi/sleep.c
-> > +++ b/arch/x86/kernel/acpi/sleep.c
-> > @@ -33,10 +33,11 @@ static char temp_stack[4096];
-> >   * Returns the physical address where the kernel should be resumed aft=
-er the
-> >   * system awakes from S3, e.g. for programming into the firmware wakin=
-g vector.
-> >   */
-> > -unsigned long acpi_get_wakeup_address(void)
-> > +static unsigned long x86_acpi_get_wakeup_address(void)
-> >  {
-> >         return ((unsigned long)(real_mode_header->wakeup_start));
-> >  }
-> > +unsigned long (*acpi_get_wakeup_address)(void) =3D x86_acpi_get_wakeup=
-_address;
-> >
-> >  /**
-> >   * x86_acpi_enter_sleep_state - enter sleep state
-> > diff --git a/include/xen/acpi.h b/include/xen/acpi.h
-> > index b1e11863144d..7e1e5dbfb77c 100644
-> > --- a/include/xen/acpi.h
-> > +++ b/include/xen/acpi.h
-> > @@ -56,6 +56,12 @@ static inline int xen_acpi_suspend_lowlevel(void)
-> >         return 0;
-> >  }
-> >
-> > +static inline unsigned long xen_acpi_get_wakeup_address(void)
-> > +{
-> > +       /* Just return a dummy non-zero value, it will never be used. */
-> > +       return 1;
-> > +}
-> > +
-> >  static inline void xen_acpi_sleep_register(void)
-> >  {
-> >         if (xen_initial_domain()) {
-> > @@ -65,6 +71,9 @@ static inline void xen_acpi_sleep_register(void)
-> >                         &xen_acpi_notify_hypervisor_extended_sleep);
-> >
-> >                 acpi_suspend_lowlevel =3D xen_acpi_suspend_lowlevel;
-> > +#ifdef CONFIG_ACPI_SLEEP
-> > +               acpi_get_wakeup_address =3D xen_acpi_get_wakeup_address;
-> > +#endif
-> >         }
-> >  }
-> >  #else
-> > --
-> > 2.35.3
-> >
-
---=20
-Best Regards,
-Marek Marczykowski-G=C3=B3recki
-Invisible Things Lab
-
---4m4xLSz0QPn9icEC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmPB4MsACgkQ24/THMrX
-1yw2swgAk/5GqFX39AKLVH88v8kknH2HL3VTuIzqJY8+1FDQ5c7aWElrJp/WmgGR
-EaqALVjRocUTHRX6/rIyg5l7R3drsEOfNLa8tNd5jlWWXRDwHlrf+eXBTlQZs9zX
-a8mLaFADPonMM4XkiPfQutk/qpklvNf2ijAEfDiwsbODHa28Uzif2ysL2ZlTF2CA
-rVxwY4YY9ndRkaBSR7Y/UCMP5P/f7NtbjD2UPcZVDHl0xNp89geMBuSNVHVEcMXn
-tOivOdQ6IpczX6bCME1R3ewDNud+aFznTPyW9Q+ZQmYPLKXF+nzO1lQR5a/gBxyi
-y1OfQ7J0s3r6JaQYvmF6O7JCgHNQ+A==
-=8flr
------END PGP SIGNATURE-----
-
---4m4xLSz0QPn9icEC--
+PiBGcm9tOiBSYWZhZWwgSi4gV3lzb2NraSA8cmFmYWVsQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IEZy
+aWRheSwgSmFudWFyeSAxMywgMjAyMyAxMjoxNCBQTQ0KPiBUbzogU2hyYWRoYSBHdXB0YSA8c2hy
+YWRoYWd1cHRhQGxpbnV4Lm1pY3Jvc29mdC5jb20+DQo+IENjOiBsaW51eC1rZXJuZWxAdmdlci5r
+ZXJuZWwub3JnOyBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmc7IFJhZmFlbCBKLiBXeXNvY2tpDQo+
+IDxyYWZhZWxAa2VybmVsLm9yZz47IFBhdmVsIE1hY2hlayA8cGF2ZWxAdWN3LmN6PjsgTGVuIEJy
+b3duDQo+IDxsZW4uYnJvd25AaW50ZWwuY29tPjsgRGV4dWFuIEN1aSA8ZGVjdWlAbWljcm9zb2Z0
+LmNvbT47IE1pY2hhZWwgS2VsbGV5DQo+IChMSU5VWCkgPG1pa2VsbGV5QG1pY3Jvc29mdC5jb20+
+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0hdIGtlcm5lbDogcG93ZXI6IHN3YXA6IFN1cHByZXNzIGV4
+cGVjdGVkICdJbWFnZSBub3QNCj4gZm91bmQnIGVycm9yIG9uIFVidW50dQ0KPiANCj4gT24gVGh1
+LCBEZWMgMTUsIDIwMjIgYXQgNzoyMCBBTSBTaHJhZGhhIEd1cHRhDQo+IDxzaHJhZGhhZ3VwdGFA
+bGludXgubWljcm9zb2Z0LmNvbT4gd3JvdGU6DQo+ID4NCj4gPiBJbiAnc3lzdGVtY3RsIGhpYmVy
+bmF0ZScgaWYgcmVzdW1lIGRldmljZSBpcyB3cml0dGVuIHRvIHRoZSBzeXNmcw0KPiA+IHJlc3Vt
+ZSBwYXJhbWV0ZXIsIGEgc29mdHdhcmVfcmVzdW1lKCkgY2FsbCBpcyB0cmlnZ2VycmVkLiBUaGlz
+IGNhbGwNCj4gPiBpcyBleHBlY3RlZCB0byBmYWlsIGluIHN3c3VzcF9jaGVjaygpIGNhbGwgd2l0
+aCAtRUJVU1kgZXJyb3IgYW5kIGFuDQo+ID4gJ0ltYWdlIG5vdCBmb3VuZCcgZXJyb3IgbWVzc2Fn
+ZS4gVGhpcyBmaXggc3VwcHJlc3NlcyB0aGUgZXhwZWN0ZWQNCj4gPiBmYWlsdXJlIG1lc3NhZ2Ug
+ZnJvbSBnZXR0aW5nIGxvZ2dlZCBpbiBVYnVudHUgc2V0dXBzIHdoZXJlDQo+ID4gQ09ORklHX0RZ
+TkFNSUNfREVCVUcgaXMgZW5hYmxlZCBieSBkZWZhdWx0Lg0KPiANCj4gSSBzZWUgd2hhdCB5b3Ug
+bWVhbiwgc28gd2hhdCBhYm91dCB0aGlzIGNoYW5nZSBpbnN0ZWFkIChtb2R1bG8NCj4gR01haWwt
+aW5kdWNlZCB3aGl0ZS1zcGFjZSBicmVha2FnZSk6DQo+IA0KPiAtLS0NCj4gIGtlcm5lbC9wb3dl
+ci9zd2FwLmMgfCAgICA5ICsrKystLS0tLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDQgaW5zZXJ0aW9u
+cygrKSwgNSBkZWxldGlvbnMoLSkNCj4gDQo+IEluZGV4OiBsaW51eC1wbS9rZXJuZWwvcG93ZXIv
+c3dhcC5jDQo+ID09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
+PT09PT09PT09PT09PT09PT0NCj4gPT09DQo+IC0tLSBsaW51eC1wbS5vcmlnL2tlcm5lbC9wb3dl
+ci9zd2FwLmMNCj4gKysrIGxpbnV4LXBtL2tlcm5lbC9wb3dlci9zd2FwLmMNCj4gQEAgLTE1NDYs
+MTcgKzE1NDYsMTYgQEAgaW50IHN3c3VzcF9jaGVjayh2b2lkKQ0KPiAgICAgICAgICB9DQo+IA0K
+PiAgcHV0Og0KPiAtICAgICAgICBpZiAoZXJyb3IpDQo+ICsgICAgICAgIGlmIChlcnJvcikgew0K
+PiAgICAgICAgICAgICAgYmxrZGV2X3B1dChoaWJfcmVzdW1lX2JkZXYsIEZNT0RFX1JFQUQgfCBG
+TU9ERV9FWENMKTsNCj4gLSAgICAgICAgZWxzZQ0KPiArICAgICAgICAgICAgcHJfZGVidWcoIklt
+YWdlIG5vdCBmb3VuZCAoY29kZSAlZClcbiIsIGVycm9yKTsNCj4gKyAgICAgICAgfSBlbHNlIHsN
+Cj4gICAgICAgICAgICAgIHByX2RlYnVnKCJJbWFnZSBzaWduYXR1cmUgZm91bmQsIHJlc3VtaW5n
+XG4iKTsNCj4gKyAgICAgICAgfQ0KPiAgICAgIH0gZWxzZSB7DQo+ICAgICAgICAgIGVycm9yID0g
+UFRSX0VSUihoaWJfcmVzdW1lX2JkZXYpOw0KPiAgICAgIH0NCj4gDQo+IC0gICAgaWYgKGVycm9y
+KQ0KPiAtICAgICAgICBwcl9kZWJ1ZygiSW1hZ2Ugbm90IGZvdW5kIChjb2RlICVkKVxuIiwgZXJy
+b3IpOw0KPiAtDQo+ICAgICAgcmV0dXJuIGVycm9yOw0KPiAgfQ0KDQpzb2Z0d2FyZV9yZXN1bWUo
+KSAtPiBzd3N1c3BfY2hlY2soKSBjYW4gYmUgdXNlZCBpbiAyIHNjZW5hcmlvczogDQoNCjEpIEFm
+dGVyIGEgVk0gaGliZXJuYXRlZCBhbmQgcG93ZXJlZCBvZmYsIHdlIHN0YXJ0IHRoZSBWTSwgYW5k
+IHRoZSBzY3JpcHQgDQppbiBpbml0cmQgd3JpdGVzIHRvIHRoZSBzeXMgZmlsZSAncmVzdW1lJywg
+c28gcmVzdW1lX3N0b3JlKCkgLT4gDQpzb2Z0d2FyZV9yZXN1bWUoKSBpcyBjYWxsZWQgdG8gcmVz
+dW1lIHRoZSBWTS4gSW4gdGhpcyBzY2VuYXJpbywgaWYNCnNvZnR3YXJlX3Jlc3VtZSgpIC0+IHN3
+c3VzcF9jaGVjaygpIC0+IGJsa2Rldl9nZXRfYnlfZGV2KCkgaGl0cyBhbg0KZXJyb3IsIHdlIHN0
+aWxsIHdhbnQgdG8gc2VlIHRoZSBtZXNzYWdlICJJbWFnZSBub3QgZm91bmQiLCBidXQgd2l0aCB0
+aGUNCm5ldyBwcm9wb3NlZCBjaGFuZ2UsIHRoZSBtZXNzYWdlIGlzIG5vdCBwcmludGVkLiBXaXRo
+IFNocmFkaGEncyBjaGFuZ2UsDQp0aGUgbWVzc2FnZSBpcyBwcmludGVkLg0KDQoyKSBXaGVuIHdl
+IHJ1biAic3lzdGVtY3RsIGhpYmVybmF0ZSIsIHN5c3RlbWN0bCB3cml0ZXMgdG8gdGhlICdyZXN1
+bWUnIHN5cw0KZmlsZSwgc28gcmVzdW1lX3N0b3JlKCkgLT4gc29mdHdhcmVfcmVzdW1lKCkgLT4g
+c3dzdXNwX2NoZWNrKCkgaXMgY2FsbGVkLg0KSGVyZSB0eXBpY2FsbHkgdGhlIHN3YXAgZmlsZS9w
+YXJ0aXRpb24gaXMgYWxyZWFkeSBpbiB1c2UgYXMgdGhlIHN3YXAgc3BhY2UsIHNvDQp0aGUgYmxr
+ZGV2X2dldF9ieV9kZXYoKSBpbiBzd3N1c3BfY2hlY2soKSBhbHdheXMgZmFpbHMgd2l0aCAtRUJV
+U1kuIFRoaXMgaXMNCnRoZSBzY2VuYXJpbyB3ZSB3YW50IHRvIHN1cHByZXNzIHRoZSBtaXNsZWFk
+aW5nICJJbWFnZSBub3QgZm91bmQiIG1lc3NhZ2UuDQoNCklJVUMsIFNocmFkaGEncyBjaGFuZ2Ug
+aXMgYmV0dGVyLg0K
