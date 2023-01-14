@@ -2,201 +2,262 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04B466ADC0
-	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 21:42:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4795A66AE1A
+	for <lists+linux-pm@lfdr.de>; Sat, 14 Jan 2023 22:19:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjANUmk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Jan 2023 15:42:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42412 "EHLO
+        id S230325AbjANVTD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Jan 2023 16:19:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjANUmj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 15:42:39 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E42A4C2F
-        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 12:42:38 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id bf43so37712447lfb.6
-        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 12:42:38 -0800 (PST)
+        with ESMTP id S230261AbjANVTB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 16:19:01 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7244393C8
+        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 13:18:58 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id m3so17449290wmq.0
+        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 13:18:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgHwj85eFYM/emcDXAR9MgKYKwUi6SnINYZdhujPNvU=;
-        b=Xh4WEvlixndZIokrw6upxP1LScp25MsWlIdp/AWNkz44hj/2l3jzFFBOEUayPUaqSl
-         tqFbYwrV+JQgoB11DoqWPF6RiHVNSj7Gh7mc4ZLL3ouhqsA1hJD7Qr4ewAq5afQa3kNr
-         JvpfXV5CfQgh2aw7qk6Ooc5Wycbk9tnepDG5FvdYWMeBCFbmHk76NGPkYVxFQjOJhT+O
-         5e7LepM6+B+R0z/JGFPUFuzPjq0boV616V2dHtgwbjJG/9MrhDqIiZ89NlipgxJa58QJ
-         l8GA1d2RRng9pRaqWcj8FXig2fhKErhDe/QGR+DumVD1BkQqdidzVqqJsd8YqdQhrj2v
-         onMA==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=H0nt0fJbwh8+Kc6chnTKA90NJ5v+OamoOFN+VwnbxMw=;
+        b=XyEJ8LWwdP5LmhpF1KWG6ICnX/3b0JzPUmBlqGVkdY5mOMS9UeZarBnssBsr/hCOvr
+         Ucap1gTyd1Xcwfx+kJYvfp6Cw8Xu0GONQVxAswz7zlDINZSj5nl1AuJbeF4fa0+KYzvZ
+         2wxOWWp1J/9US0dMWCIj1G8sUOLp7XHiQxrI8Be68siPZH/EtDTsCZzOQNNYcic+8H5L
+         fXoisTlM51LMKApVCUKId2VpFk+HldhEs0NSYZLfXhU4UvVtrlDCItmeI6C3Bdw/noPh
+         34nD9W4TCNMOwSF2S15mFkJtHDCnuJfcw9OkguOwA+73y7xBFlGHsoCxKiydtjgvC1Q1
+         q+HA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZgHwj85eFYM/emcDXAR9MgKYKwUi6SnINYZdhujPNvU=;
-        b=u66srXwJCzrHCqK+Xa+rHYtqzlicEBjA/aBaE8WZmnXe+FxtXkp47L5fXk8dBlFY8n
-         JvD1r4ngB3u6aPdeyjqcnTNEwLf8C9f2SH7eLNO+ci6JtDTjjo8t32TzBkDi94aEiG4h
-         CrrNyDOfw8kJ0niCne42L8TSTjg1z9ufTAblQnBdtEHssqP+vAWPBTI9YtLoBUijx2UC
-         1u7pN+86NvWeodI7emqE2BIIOU4OXnd3LV28vQw2PJ/2FMx5iznVodNGHBQx46OU4mfm
-         nk2taZClUTbSdrAK0Z7X98xK7yW+TDOnJpVafZ1P+QS4rDJa8rIJ+OTrFYtDGhGRw13o
-         VKCw==
-X-Gm-Message-State: AFqh2koqfQCIN9MPnB1TQOCcra6mjDEzGy4QB6vyHnU9S+sClePY1Phq
-        Ccs5UP4O28IfBB829c9zgHM5NQ==
-X-Google-Smtp-Source: AMrXdXuXdTJIkfJc12QFUyrmVUWaa1q+jzMzd4UNhv5TF31ZY094XFq4st2S7GPzHkEHqSF5HfUbrQ==
-X-Received: by 2002:a05:6512:3247:b0:4cd:f558:1f8a with SMTP id c7-20020a056512324700b004cdf5581f8amr3098694lfr.29.1673728956580;
-        Sat, 14 Jan 2023 12:42:36 -0800 (PST)
-Received: from [192.168.1.101] (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id h15-20020a05651211cf00b00498fc3d4d15sm4421027lfr.190.2023.01.14.12.42.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Jan 2023 12:42:35 -0800 (PST)
-Message-ID: <685937dd-6265-1f57-f7aa-e6dd0cf3a49f@linaro.org>
-Date:   Sat, 14 Jan 2023 21:42:34 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H0nt0fJbwh8+Kc6chnTKA90NJ5v+OamoOFN+VwnbxMw=;
+        b=Sm+nuhcBCpETzkWqDPnVcA5VjgOdlHmtFUhSG3o0HKCXVolyw+wGdp0gjRkUPhwWIz
+         snTh3EpaB7lKnM9WlHAVdNbQKWiyuGzYqhbBGkmlJUoCns2Hp47mSYLm/0Y6GJyNrEti
+         A6ywS4FroSTDt/p3+gyExUq9UeM2NlnrpNF5x0hKA5h7SANS12vUZJoebDlVKCF7CjTN
+         16brYIUSclKgUN7L4icjdwX2bhy2VSYVOTbkVQAV/3Ah1UA/ngTK6ti3swIe/AbJ2n3R
+         7ke4ojjU/knu0Qgft5LiSoRC4ZALwArP3tqFP0Ld5O45Chi44gUYeKhy+BeXsrSUu/Ce
+         B1jQ==
+X-Gm-Message-State: AFqh2kq0vGn8plRPWZNzFzX1U86rrVM1yZD/M88oVGMpo+LyagmFbCmR
+        1Ev42RVH84LH3z5f3buVmHnbdw==
+X-Google-Smtp-Source: AMrXdXtgvJu/peSFfRxI4bdykgHpoA4IGfBlVbiMUR02qFKSDRy7joluofZaQFkXfZihfyixnMWyqw==
+X-Received: by 2002:a05:600c:4aa8:b0:3d1:cee0:46d0 with SMTP id b40-20020a05600c4aa800b003d1cee046d0mr61693343wmp.25.1673731136909;
+        Sat, 14 Jan 2023 13:18:56 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id k30-20020a05600c1c9e00b003d9b89a39b2sm32270316wms.10.2023.01.14.13.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Jan 2023 13:18:56 -0800 (PST)
+Date:   Sat, 14 Jan 2023 21:18:54 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Kajetan Puchalski <kajetan.puchalski@arm.com>, mingo@kernel.org,
+        peterz@infradead.org, dietmar.eggemann@arm.com, rafael@kernel.org,
+        viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
+        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
+Subject: Re: [PATCH v2] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <20230114211854.nmvmhtd5yz5wgh2a@airbuntu>
+References: <20221228165415.3436-1-vincent.guittot@linaro.org>
+ <Y8FhfyVyUDZ98hKD@e126311.manchester.arm.com>
+ <CAKfTPtCmDA8WPrhFc8YxFXSOPOKasvvNWA3iOmRYcC2VSyMMrw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] cpufreq: qcom-hw: Ensure only freq-domain regs are
- counted in num_domains
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
- <20230111205125.1860858-2-konrad.dybcio@linaro.org>
- <20230112153704.6d37dygm4yfexdq6@builder.lan>
- <7dec47af-0981-7d70-3926-69419f5d1c8e@linaro.org>
- <20230113194132.GA2806609-robh@kernel.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230113194132.GA2806609-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCmDA8WPrhFc8YxFXSOPOKasvvNWA3iOmRYcC2VSyMMrw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 13.01.2023 20:41, Rob Herring wrote:
-> On Thu, Jan 12, 2023 at 04:41:50PM +0100, Konrad Dybcio wrote:
->>
->>
->> On 12.01.2023 16:37, Bjorn Andersson wrote:
->>> On Wed, Jan 11, 2023 at 09:51:25PM +0100, Konrad Dybcio wrote:
->>>> In preparation for CPRh-aware OSM programming, change the probe
->>>> function so that we determine the number of frequency domains by
->>>> counting the number of reg-names entries that begin with
->>>> "freq-domain", as the aforementioned changes require introduction
->>>> of non-freq-domain register spaces.
->>>>
->>>
->>> Requiring reg-names would break backwards compatibility with at least
->>> sc7280 and sm6115.
->> Ouch, you're correct..
->>
->> Does checking for reg-names and applying the code flow proposed in this
->> patch if found and the existing one if not sound good?
+On 01/13/23 15:28, Vincent Guittot wrote:
+> Hi Kajetan,
 > 
-> Why support 2 ways?
-Targets that are supported by the current revision of this driver
-(which only specify frequency-domain-N MMIO spaces as reg
-entries) assume that ARRAY_SIZE(reg) == the number of frequency
-domains. These usually range from 1 to 3.
+> On Fri, 13 Jan 2023 at 14:50, Kajetan Puchalski
+> <kajetan.puchalski@arm.com> wrote:
+> >
+> > Hi,
+> >
+> > > By taking into account uclamp_min, the 1:1 relation between task misfit
+> > > and cpu overutilized is no more true as a task with a small util_avg of
+> > > may not may not fit a high capacity cpu because of uclamp_min constraint.
+> > >
+> > > Add a new state in util_fits_cpu() to reflect the case that task would fit
+> > > a CPU except for the uclamp_min hint which is a performance requirement.
+> > >
+> > > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> > > can use this new value to take additional action to select the best CPU
+> > > that doesn't match uclamp_min hint.
+> >
+> > I just wanted to flag some issues I noticed with this patch and the
+> > entire topic.
+> >
+> > I was testing this on a Pixel 6 with a 5.18 android-mainline kernel with
+> 
+> Do you have more details to share on your setup ?
+> Android kernel has some hack on top of the mainline. Do you use some ?
+> Then, the perf and the power can be largely impacted by the cgroup
+> configuration. Have you got details on your setup ?
+> 
+> I'm going to try to reproduce the behavior
+> 
+> > all the relevant uclamp and CFS scheduling patches backported to it from
+> > mainline. From what I can see, the 'uclamp fits capacity' patchset
+> > introduced some alarming power usage & performance issues that this
+> > patch makes even worse.
+> >
+> > The patch stack for the following tables is as follows:
+> >
+> > (ufc_patched) sched/fair: unlink misfit task from cpu overutilized
+> 
+> I just sent a v3 which fixes a condition. Wonder if this could have an
+> impact on the results both perf and power
+> 
+> > sched/uclamp: Fix a uninitialized variable warnings
+> > (baseline_ufc) sched/fair: Check if prev_cpu has highest spare cap in feec()
+> > sched/uclamp: Cater for uclamp in find_energy_efficient_cpu()'s early exit condition
+> > sched/uclamp: Make cpu_overutilized() use util_fits_cpu()
+> > sched/uclamp: Make asym_fits_capacity() use util_fits_cpu()
+> > sched/uclamp: Make select_idle_capacity() use util_fits_cpu()
+> > sched/uclamp: Fix fits_capacity() check in feec()
+> > sched/uclamp: Make task_fits_capacity() use util_fits_cpu()
+> > sched/uclamp: Fix relationship between uclamp and migration margin
+> > (previous 'baseline' was here)
+> >
+> > I omitted the 3 patches relating directly to capacity_inversion but in
 
-We can either hardcode the number of frequency domains on targets
-that require more, different register spaces (for manual hardware
-programming, which also happens on currently supported hardware,
-just that the secure firmware does it for us.. see [1])
-or check with reg-names. Requiring reg-names would break backwards
-compatibility with older DTs for at least two SoCs.
+This could lead to confusion. Was there a specific reason for this omission?
+Did you hit some problem?
 
+> > the other tests I did with those there were similar issues. It's
+> > probably easier to consider the uclamp parts and their effects in
+> > isolation.
+> >
+> > 1. Geekbench 5 (performance regression)
+> >
+> > +-----------------+----------------------------+--------+-----------+
+> > |     metric      |           kernel           | value  | perc_diff |
+> > +-----------------+----------------------------+--------+-----------+
+> > | multicore_score |          baseline          | 2765.4 |   0.0%    |
+> > | multicore_score |        baseline_ufc        | 2704.3 |  -2.21%   | <-- a noticeable score decrease already
+> > | multicore_score |        ufc_patched         | 2443.2 |  -11.65%  | <-- a massive score decrease
+> > +-----------------+----------------------------+--------+-----------+
+> >
+> > +--------------+--------+----------------------------+--------+-----------+
+> > |  chan_name   | metric |           kernel           | value  | perc_diff |
+> > +--------------+--------+----------------------------+--------+-----------+
+> > | total_power  | gmean  |          baseline          | 2664.0 |   0.0%    |
+> > | total_power  | gmean  |        baseline_ufc        | 2621.5 |   -1.6%   | <-- worse performance per watt
+> > | total_power  | gmean  |        ufc_patched         | 2601.2 |  -2.36%   | <-- much worse performance per watt
+> > +--------------+--------+----------------------------+--------+-----------+
+
+Hmm I think I've seen a better score but at the cost of more energy in my
+testing in the past.
+
+> >
+> > The most likely cause for the regression seen above is the decrease in the amount of
+> > time spent while overutilized with these patches. Maximising
+> > overutilization for GB5 is the desired outcome as the benchmark for
+> > almost its entire duration keeps either 1 core or all the cores
+> > completely saturated so EAS cannot be effective. These patches have the
+> > opposite from the desired effect in this area.
+> >
+> > +----------------------------+--------------------+--------------------+------------+
+> > |          kernel            |        time        |     total_time     | percentage |
+> > +----------------------------+--------------------+--------------------+------------+
+> > |          baseline          |      121.979       |      181.065       |   67.46    |
+> > |        baseline_ufc        |      120.355       |      184.255       |   65.32    |
+> > |        ufc_patched         |       60.715       |      196.135       |   30.98    | <-- !!!
+> > +----------------------------+--------------------+--------------------+------------+
+> 
+> I'm not surprised because some use cases which were not overutilized
+> were wrongly triggered as overutilized so switching back to
+> performance mode. You might have to tune the uclamp value
+
+I remember there were tasks with uclamp_min=512 or something like that in the
+system. I wonder if they're making the difference here - they will steal time
+from bigger cores and increase energy too.
+
+The big jump with Vincent patches is strange though. How many iterations do you
+run? How long do you wait between each iteration?
+
+The original behavior of overutilized in regards to util_avg shouldn't have
+changed. It's worth digging a bit more into it.
+
+I looked at my previous results and I was seeing ~57% on android12-5.10 kernel
+for both with and without the patch.
 
 > 
-> 
->> Konrad
->>>
->>> Regards,
->>> Bjorn
->>>
->>>> Fixes: 1a6a8b0080b0 ("cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2")
->>>> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
->>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->>>> ---
->>>>  drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++---------
->>>>  1 file changed, 24 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
->>>> index 9505a812d6a1..89d5ed267399 100644
->>>> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
->>>> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
->>>> @@ -651,8 +651,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->>>>  	struct device *dev = &pdev->dev;
->>>>  	struct device_node *soc_node;
->>>>  	struct device *cpu_dev;
->>>> +	const char *reg_name;
->>>>  	struct clk *clk;
->>>> -	int ret, i, num_domains, reg_sz;
->>>> +	int ret, i, num_reg_names, num_domains = 0;
->>>>  
->>>>  	clk = clk_get(dev, "xo");
->>>>  	if (IS_ERR(clk))
->>>> @@ -684,19 +685,32 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
->>>>  	if (!soc_node)
->>>>  		return -EINVAL;
->>>>  
->>>> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
->>>> -	if (ret)
->>>> +	num_reg_names = of_property_count_strings(dev->of_node, "reg-names");
->>>> +	if (num_reg_names <= 0) {
->>>> +		ret = num_reg_names ? num_reg_names : -ENODATA;
->>>>  		goto of_exit;
->>>> +	}
->>>>  
->>>> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
->>>> -	if (ret)
->>>> -		goto of_exit;
->>>> +	for (i = 0; i < num_reg_names; i++) {
->>>> +		ret = of_property_read_string_index(dev->of_node, "reg-names", i, &reg_name);
->>>> +		if (ret < 0)
->>>> +			goto of_exit;
->>>>  
->>>> -	reg_sz += i;
->>>> +		/*
->>>> +		 * Check if the i-th reg is a freq-domain base, no need to add 1
->>>> +		 * more byte for idx, as sizeof counts \0 whereas strlen does not.
->>>> +		 */
->>>> +		if (strlen(reg_name) == sizeof("freq-domain")) {
->>>> +			/* Check if this reg-name begins with "freq-domain" */
->>>> +			if (!strncmp(reg_name, "freq-domain", sizeof("freq-domain") - 1))
->>>> +				num_domains++;
->>>> +		}
->>>> +	}
->>>>  
->>>> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
-> 
-> This code was not great to begin with. Any code parsing 'reg' on it's 
-> own is suspect IMO. It's a standard property and all parsing of it 
-> should be in drivers/of/address.c. (Yes, I know there are other cases.)
-> 
-> The reg entries are already available as platform_device resources? Why 
-> don't you use that? There's also of_address_count(), but I prefer if 
-> there's a platform device equivalent like we have for interrupts.
-Hm.. I knew this was suspiciously bare-dt-operation, but never quite
-connected the dots.. perhaps that's a good idea to pursue..
+> >
+> > 2. Jankbench (power usage regression)
+> >
+> > +--------+---------------+---------------------------------+-------+-----------+
+> > | metric |   variable    |             kernel              | value | perc_diff |
+> > +--------+---------------+---------------------------------+-------+-----------+
+> > | gmean  | mean_duration |          baseline_60hz          | 14.6  |   0.0%    |
+> > | gmean  | mean_duration |        baseline_ufc_60hz        | 15.2  |   3.83%   |
+> > | gmean  | mean_duration |        ufc_patched_60hz         | 14.0  |  -4.12%   |
+> > +--------+---------------+---------------------------------+-------+-----------+
+> >
+> > +--------+-----------+---------------------------------+-------+-----------+
+> > | metric | variable  |             kernel              | value | perc_diff |
+> > +--------+-----------+---------------------------------+-------+-----------+
+> > | gmean  | jank_perc |          baseline_60hz          |  1.9  |   0.0%    |
+> > | gmean  | jank_perc |        baseline_ufc_60hz        |  2.2  |  15.39%   |
+> > | gmean  | jank_perc |        ufc_patched_60hz         |  2.0  |   3.61%   |
+> > +--------+-----------+---------------------------------+-------+-----------+
 
-Konrad
+How many iterations did you run? Do you think they could be within the noise
+region?
 
-[1] https://patchwork.kernel.org/project/linux-pm/patch/20210701105730.322718-7-angelogioacchino.delregno@somainline.org/
-> 
-> Rob
+> >
+> > +--------------+--------+---------------------------------+-------+-----------+
+> > |  chan_name   | metric |             kernel              | value | perc_diff |
+> > +--------------+--------+---------------------------------+-------+-----------+
+> > | total_power  | gmean  |          baseline_60hz          | 135.9 |   0.0%    |
+> > | total_power  | gmean  |        baseline_ufc_60hz        | 155.7 |  14.61%   | <-- !!!
+> > | total_power  | gmean  |        ufc_patched_60hz         | 157.1 |  15.63%   | <-- !!!
+> > +--------------+--------+---------------------------------+-------+-----------+
+> >
+> > With these patches while running Jankbench we use up ~15% more power
+> > just to achieve roughly the same results. Here I'm not sure where this
+> > issue is coming from exactly but all the results above are very consistent
+> > across different runs.
+
+Have you tried to look at uclamp_min/max values of the tasks/cpus?
+
+Do you know which cluster ended up using more energy? Have you looked at freq
+residency between the runs?
+
+I think the system could dynamically boost some UI tasks. I'd expect their
+residency to increase on the medium/big cores compared to before the patch.
+Which could explain what you see.
+
+Did you check your schedutil/rate_limit_us is not using the default 10ms? It
+should be 500us.
+
+I had another patch to set transition latency of the cpufreq driver to 500us
+instead of 5ms - but I doubt this actually was making any difference.
+
+FWIW, I did compare my series against vanilla Pixel 6 kernel where I used
+geekbench, speedometer, pcmark all with and without heavy background activities
+to measure the impact of uclamp_max and nothing stood out then.
+
+I sadly lost my original setup now. I doubt I'll be able to recreate it to
+re-run these tests again anytime soon :/
+
+Could you try removing all thermal handling from util_fits_cpu() so that my
+series behaves like v1 again and see if this makes a difference? It's highlight
+if subtle issues with thermal pressure handling are the culprit. Most obvious
+is using instantaneous thermal pressure in ufc().
+
+
+Thanks!
+
+--
+Qais Yousef
