@@ -2,77 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACECB66AF30
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Jan 2023 04:05:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F4066AF4F
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Jan 2023 05:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjAODFT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Jan 2023 22:05:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32814 "EHLO
+        id S230517AbjAOEQK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Jan 2023 23:16:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjAODFR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 22:05:17 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F69A25E
-        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 19:05:16 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id m21so36407149edc.3
-        for <linux-pm@vger.kernel.org>; Sat, 14 Jan 2023 19:05:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=aurora.tech; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EH090np8Bxqv0c4tiln2a2Jkj01lR68xoqEAzkjHOQs=;
-        b=ADqrq2bRHD6bWqlePVTckbpGSwn1Q/L9k+JpMyRf7MJmd9aqHCPYFvAewGitMOfTMS
-         jMrmVjmTDrObohAP2QJP2ISuLbcMJpir7gLp5tI9dxFSydo4Nx/sBbGJYMKOwyZWDGaP
-         /OOjUjSAfOwZhlfclxO9MjB33uTEZx9Iv07HoSDn0qP6FlSxYsN5E+M+dM5N+389NAC5
-         9V11RsxEuqBMDrIaIZgcS5NDk8uz6Vp85KzrffjjtTUszeWrCz9KE8v+/i9WlIyCzy6T
-         m/gfPEaTjq2u9GmIexjSWI7mldtYbP13kWwpGFjqND+VkCxbltXTxPRDlIG51uIp7uDw
-         fQNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EH090np8Bxqv0c4tiln2a2Jkj01lR68xoqEAzkjHOQs=;
-        b=zvBF1FCYrOA7BgynotG6LukmC1FNvM4v7wFphLuWsA2dP/2R09RzeE8G4jUNvL83nf
-         yeixWZTxZt+iucoT+8//UKRWPwLZCrg0Iv2XvPaVjZ8PkVyjhOz39RLdUs51ZCYYJGYM
-         VHz50lO1xxClACM/C1xiYntO7QulA40wn9UbgjvgBkU2C2Bae7Q566k/DZIn4nt6Kgn2
-         CKdOs4X23L/GNUyAr2FuEs/IT9wzo8XnlmtDnkTfCgn/eI6qZFArdVc9ikoYqKDxZeBf
-         3GZ/1Zs7+uk57fd6qUWITiQEo/0ZNrpS2CE4gi8c9k1ULSrmictXCBIUDW4AU2m/L26a
-         c46A==
-X-Gm-Message-State: AFqh2krHUavinnN8BBUbcnxOdcahtCvOtVoDoEhEfhqEWLEitkxzSywc
-        Dmyg8c8FWcf9zEKpXiNzK27iDJlIQFQT+lSMzhEfoA==
-X-Google-Smtp-Source: AMrXdXt99fPJ3tuWP1S7jqBQHH6YawIC5z8VL4T14v8EEC2myfyKRNQoUMIRdXgGM6xQZqt+5+wm5zu4U6bFHkl8Tx8=
-X-Received: by 2002:a05:6402:6d9:b0:499:7efc:1d78 with SMTP id
- n25-20020a05640206d900b004997efc1d78mr2170774edy.81.1673751914709; Sat, 14
- Jan 2023 19:05:14 -0800 (PST)
+        with ESMTP id S230467AbjAOEQI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 23:16:08 -0500
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C597293;
+        Sat, 14 Jan 2023 20:16:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3EDDBCE0989;
+        Sun, 15 Jan 2023 04:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5C3C433D2;
+        Sun, 15 Jan 2023 04:15:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673756163;
+        bh=2CFAsLsTP5x4IK8ZGcAB8dUH203PMxT+nYUzjSe8obE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LAfx1LH0tf/YgSQhr2ps6HTLeE6pal6HwIuB5v3bAYIs9Qp+DChzmkY1tQ9de0JHR
+         29oN5+PbshH1iADDSq+RsmmxlhLrTWU3dvWjHovSGca6B3CSRFVKH6C1ZkESmIZ/Ub
+         BEjnIiwNkR81J66Gt3prAJHq9Yi5tBRGPKQQIcatdMg8U1KvKX7AZYO0ew5BikOEGa
+         hzg/+DObD+ZXHAdxlPskceOmI8Gm/PDysQHww0FVV65QJxxYQHJDgUPStHWkSt7+pi
+         f6/RMOeo+MGV4o0LRGk2imPz5MDwewQoVpgc6kYkTx8Tll2tGC7Hguvg8sSiSsDZDg
+         qVcsmW3QKBfug==
+Date:   Sun, 15 Jan 2023 09:45:55 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Alex Elder <elder@linaro.org>, Johan Hovold <johan@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 01/12] interconnect: qcom: sdx55: drop IP0 remnants
+Message-ID: <20230115041555.GF6568@thinkpad>
+References: <20230109002935.244320-1-dmitry.baryshkov@linaro.org>
+ <20230109002935.244320-2-dmitry.baryshkov@linaro.org>
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com> <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
-In-Reply-To: <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
-From:   Matthew Garrett <mgarrett@aurora.tech>
-Date:   Sat, 14 Jan 2023 19:05:03 -0800
-Message-ID: <CAHSSk058UoBY2nDx8U7-siG_dbjNSKZaPukZVjSnq=f=CBSKsw@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     jejb@linux.ibm.com
-Cc:     William Roberts <bill.c.roberts@gmail.com>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, jarkko@kernel.org,
-        linux-pm@vger.kernel.org, Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230109002935.244320-2-dmitry.baryshkov@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,25 +64,48 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jan 14, 2023 at 6:55 AM James Bottomley <jejb@linux.ibm.com> wrote:
-> Can we go back again to why you can't use locality?  It's exactly
-> designed for this since locality is part of creation data.  Currently
-> everything only uses locality 0, so it's impossible for anyone on Linux
-> to produce a key with anything other than 0 in the creation data for
-> locality.  However, the dynamic launch people are proposing that the
-> Kernel should use Locality 2 for all its operations, which would allow
-> you to distinguish a key created by the kernel from one created by a
-> user by locality.
->
-> I think the previous objection was that not all TPMs implement
-> locality, but then not all laptops have TPMs either, so if you ever
-> come across one which has a TPM but no locality, it's in a very similar
-> security boat to one which has no TPM.
+On Mon, Jan 09, 2023 at 02:29:24AM +0200, Dmitry Baryshkov wrote:
+> Drop two defines leftover from the commit 2fb251c26560 ("interconnect:
+> qcom: sdx55: Drop IP0 interconnects"), which dropped handling of the IP0
+> resource in favour of handling it in the clk-rpmh driver.
+> 
+> Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-It's not a question of TPM support, it's a question of platform
-support. Intel chipsets that don't support TXT simply don't forward
-requests with non-0 locality. Every Windows-sticker laptop since 2014
-has shipped with a TPM, but the number that ship with TXT support is a
-very small percentage of that. I agree that locality is the obvious
-solution for a whole bunch of problems, but it's just not usable in
-the generic case.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+
+Thanks,
+Mani
+
+> ---
+>  drivers/interconnect/qcom/sdx55.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/sdx55.h b/drivers/interconnect/qcom/sdx55.h
+> index deff8afe0631..46cbabec8aa1 100644
+> --- a/drivers/interconnect/qcom/sdx55.h
+> +++ b/drivers/interconnect/qcom/sdx55.h
+> @@ -6,7 +6,7 @@
+>  #ifndef __DRIVERS_INTERCONNECT_QCOM_SDX55_H
+>  #define __DRIVERS_INTERCONNECT_QCOM_SDX55_H
+>  
+> -#define SDX55_MASTER_IPA_CORE			0
+> +/* 0 was used by MASTER_IPA_CORE, now represented as RPMh clock */
+>  #define SDX55_MASTER_LLCC			1
+>  #define SDX55_MASTER_TCU_0			2
+>  #define SDX55_MASTER_SNOC_GC_MEM_NOC		3
+> @@ -28,7 +28,7 @@
+>  #define SDX55_MASTER_QDSS_ETR			19
+>  #define SDX55_MASTER_SDCC_1			20
+>  #define SDX55_MASTER_USB3			21
+> -#define SDX55_SLAVE_IPA_CORE			22
+> +/* 22 was used by SLAVE_IPA_CORE, now represented as RPMh clock */
+>  #define SDX55_SLAVE_EBI_CH0			23
+>  #define SDX55_SLAVE_LLCC			24
+>  #define SDX55_SLAVE_MEM_NOC_SNOC		25
+> -- 
+> 2.39.0
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
