@@ -2,59 +2,57 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F4066AF4F
-	for <lists+linux-pm@lfdr.de>; Sun, 15 Jan 2023 05:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F8C866AF67
+	for <lists+linux-pm@lfdr.de>; Sun, 15 Jan 2023 05:36:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjAOEQK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 14 Jan 2023 23:16:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39720 "EHLO
+        id S229676AbjAOEgw (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 14 Jan 2023 23:36:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230467AbjAOEQI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 23:16:08 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C597293;
-        Sat, 14 Jan 2023 20:16:07 -0800 (PST)
+        with ESMTP id S230003AbjAOEg0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 14 Jan 2023 23:36:26 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC414EFA;
+        Sat, 14 Jan 2023 20:36:24 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 3EDDBCE0989;
-        Sun, 15 Jan 2023 04:16:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B5C3C433D2;
-        Sun, 15 Jan 2023 04:15:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78EAC60C63;
+        Sun, 15 Jan 2023 04:36:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C0AC433EF;
+        Sun, 15 Jan 2023 04:36:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673756163;
-        bh=2CFAsLsTP5x4IK8ZGcAB8dUH203PMxT+nYUzjSe8obE=;
+        s=k20201202; t=1673757383;
+        bh=FhhWbrTZPYv51lgzQAfjnykdTl4/o1rB/U1rmnxFbWs=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LAfx1LH0tf/YgSQhr2ps6HTLeE6pal6HwIuB5v3bAYIs9Qp+DChzmkY1tQ9de0JHR
-         29oN5+PbshH1iADDSq+RsmmxlhLrTWU3dvWjHovSGca6B3CSRFVKH6C1ZkESmIZ/Ub
-         BEjnIiwNkR81J66Gt3prAJHq9Yi5tBRGPKQQIcatdMg8U1KvKX7AZYO0ew5BikOEGa
-         hzg/+DObD+ZXHAdxlPskceOmI8Gm/PDysQHww0FVV65QJxxYQHJDgUPStHWkSt7+pi
-         f6/RMOeo+MGV4o0LRGk2imPz5MDwewQoVpgc6kYkTx8Tll2tGC7Hguvg8sSiSsDZDg
-         qVcsmW3QKBfug==
-Date:   Sun, 15 Jan 2023 09:45:55 +0530
+        b=NyktDDFS+4Ir1uQhMtXb/TwlK1axEb5QWKJN1KvulVh1x3fkxfHWctO4kr1M1FNF/
+         eNc0GXCUzCDOxMlbYAEyN52OXAAiWLFRh/O2cn6/AniGqbM7bzBM9V+mCyPuAskg19
+         H9JMCEVOkDDy7f/tLSwQRhUOf46x6HbObm8txnpGLKQXOjPbxEqTmrCNwZ3q8/eE0k
+         NxgS/GcVtoCHK3VPKZcnrN1ktDNHQP1/iOWuzZx7llQzSb5KWPSkKKedzR2XshAwse
+         8LU3LwHbzTsaS1eWtyOQLKD2KU6jE8g3/YAaeGCvqgT5BNha/7eogXWgVirSEImv5o
+         ZiTPclI9MG98Q==
+Date:   Sun, 15 Jan 2023 10:06:14 +0530
 From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org,
+        marijn.suijten@somainline.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Alex Elder <elder@linaro.org>, Johan Hovold <johan@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 01/12] interconnect: qcom: sdx55: drop IP0 remnants
-Message-ID: <20230115041555.GF6568@thinkpad>
-References: <20230109002935.244320-1-dmitry.baryshkov@linaro.org>
- <20230109002935.244320-2-dmitry.baryshkov@linaro.org>
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] cpufreq: qcom-hw: Ensure only freq-domain regs are
+ counted in num_domains
+Message-ID: <20230115043614.GM6568@thinkpad>
+References: <20230111205125.1860858-1-konrad.dybcio@linaro.org>
+ <20230111205125.1860858-2-konrad.dybcio@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230109002935.244320-2-dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230111205125.1860858-2-konrad.dybcio@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,45 +62,83 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 09, 2023 at 02:29:24AM +0200, Dmitry Baryshkov wrote:
-> Drop two defines leftover from the commit 2fb251c26560 ("interconnect:
-> qcom: sdx55: Drop IP0 interconnects"), which dropped handling of the IP0
-> resource in favour of handling it in the clk-rpmh driver.
+On Wed, Jan 11, 2023 at 09:51:25PM +0100, Konrad Dybcio wrote:
+> In preparation for CPRh-aware OSM programming, change the probe
+> function so that we determine the number of frequency domains by
+> counting the number of reg-names entries that begin with
+> "freq-domain", as the aforementioned changes require introduction
+> of non-freq-domain register spaces.
 > 
-> Fixes: 2fb251c26560 ("interconnect: qcom: sdx55: Drop IP0 interconnects")
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Fixes: 1a6a8b0080b0 ("cpufreq: qcom-hw: Fix reading "reg" with address/size-cells != 2")
+> Fixes: 054a3ef683a1 ("cpufreq: qcom-hw: Allocate qcom_cpufreq_data during probe")
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Why do you need these fixes tags?
 
 Thanks,
 Mani
 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  drivers/interconnect/qcom/sdx55.h | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  drivers/cpufreq/qcom-cpufreq-hw.c | 34 ++++++++++++++++++++++---------
+>  1 file changed, 24 insertions(+), 10 deletions(-)
 > 
-> diff --git a/drivers/interconnect/qcom/sdx55.h b/drivers/interconnect/qcom/sdx55.h
-> index deff8afe0631..46cbabec8aa1 100644
-> --- a/drivers/interconnect/qcom/sdx55.h
-> +++ b/drivers/interconnect/qcom/sdx55.h
-> @@ -6,7 +6,7 @@
->  #ifndef __DRIVERS_INTERCONNECT_QCOM_SDX55_H
->  #define __DRIVERS_INTERCONNECT_QCOM_SDX55_H
+> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+> index 9505a812d6a1..89d5ed267399 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+> @@ -651,8 +651,9 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *soc_node;
+>  	struct device *cpu_dev;
+> +	const char *reg_name;
+>  	struct clk *clk;
+> -	int ret, i, num_domains, reg_sz;
+> +	int ret, i, num_reg_names, num_domains = 0;
 >  
-> -#define SDX55_MASTER_IPA_CORE			0
-> +/* 0 was used by MASTER_IPA_CORE, now represented as RPMh clock */
->  #define SDX55_MASTER_LLCC			1
->  #define SDX55_MASTER_TCU_0			2
->  #define SDX55_MASTER_SNOC_GC_MEM_NOC		3
-> @@ -28,7 +28,7 @@
->  #define SDX55_MASTER_QDSS_ETR			19
->  #define SDX55_MASTER_SDCC_1			20
->  #define SDX55_MASTER_USB3			21
-> -#define SDX55_SLAVE_IPA_CORE			22
-> +/* 22 was used by SLAVE_IPA_CORE, now represented as RPMh clock */
->  #define SDX55_SLAVE_EBI_CH0			23
->  #define SDX55_SLAVE_LLCC			24
->  #define SDX55_SLAVE_MEM_NOC_SNOC		25
+>  	clk = clk_get(dev, "xo");
+>  	if (IS_ERR(clk))
+> @@ -684,19 +685,32 @@ static int qcom_cpufreq_hw_driver_probe(struct platform_device *pdev)
+>  	if (!soc_node)
+>  		return -EINVAL;
+>  
+> -	ret = of_property_read_u32(soc_node, "#address-cells", &reg_sz);
+> -	if (ret)
+> +	num_reg_names = of_property_count_strings(dev->of_node, "reg-names");
+> +	if (num_reg_names <= 0) {
+> +		ret = num_reg_names ? num_reg_names : -ENODATA;
+>  		goto of_exit;
+> +	}
+>  
+> -	ret = of_property_read_u32(soc_node, "#size-cells", &i);
+> -	if (ret)
+> -		goto of_exit;
+> +	for (i = 0; i < num_reg_names; i++) {
+> +		ret = of_property_read_string_index(dev->of_node, "reg-names", i, &reg_name);
+> +		if (ret < 0)
+> +			goto of_exit;
+>  
+> -	reg_sz += i;
+> +		/*
+> +		 * Check if the i-th reg is a freq-domain base, no need to add 1
+> +		 * more byte for idx, as sizeof counts \0 whereas strlen does not.
+> +		 */
+> +		if (strlen(reg_name) == sizeof("freq-domain")) {
+> +			/* Check if this reg-name begins with "freq-domain" */
+> +			if (!strncmp(reg_name, "freq-domain", sizeof("freq-domain") - 1))
+> +				num_domains++;
+> +		}
+> +	}
+>  
+> -	num_domains = of_property_count_elems_of_size(dev->of_node, "reg", sizeof(u32) * reg_sz);
+> -	if (num_domains <= 0)
+> -		return num_domains;
+> +	if (num_domains <= 0) {
+> +		ret = -EINVAL;
+> +		goto of_exit;
+> +	}
+>  
+>  	qcom_cpufreq.data = devm_kzalloc(dev, sizeof(struct qcom_cpufreq_data) * num_domains,
+>  					 GFP_KERNEL);
 > -- 
 > 2.39.0
 > 
