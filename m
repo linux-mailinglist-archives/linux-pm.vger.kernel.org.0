@@ -2,73 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E318C66C8A2
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 17:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2078A66C8CB
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 17:43:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjAPQlU (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 11:41:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S233614AbjAPQnI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 11:43:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233641AbjAPQkx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 11:40:53 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A76C36B2E;
-        Mon, 16 Jan 2023 08:29:07 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id kt14so10414641ejc.3;
-        Mon, 16 Jan 2023 08:29:07 -0800 (PST)
+        with ESMTP id S233750AbjAPQmS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 11:42:18 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E806738B62;
+        Mon, 16 Jan 2023 08:30:29 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ss4so62047143ejb.11;
+        Mon, 16 Jan 2023 08:30:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5s7i4e/9M2UcJLxes9insspm/+PoKa2o1GchG8eSBbc=;
-        b=Jhd1ZnirmUUEaqs4PzBrNVNrHZrjJCRRvfLXAsFPQFqmYRYykhG//aWcQjTKnEvJg/
-         IhAncth9L+aQ81KqrJeQq0AGpvl/0NMIfiyEUPZqkxsluCf+AFMXOKdAMWP/tKLpYqnV
-         xA+usSt8BKe3NtBuju6wwvrYPwV+MSanG9GbB7ap/rQwDXPR8hwdPgYPbq7m/ZnVy+jm
-         zf5FaKjGGG0Bh8CZ91xbdWy5mG6ukzoJEJmqjft4kLyFWEfcAywncnIlxatu7cm/WFu1
-         UAaSfTXEOEnBqDZt3VJmZYXcn3nfhqf8A31CCpHIhSlqwBUUwf3B951KZcgSawFs8h5h
-         8AOQ==
+        bh=KVo92w+mMU35HgccNk8F5uG9725xv7bq4W+283/I+5A=;
+        b=F1V4NeV1D7nGM8Ao68MkS8QO+9OEKX18y9BLG9eBcTm68JqtuVTes13gtGycIoLRAw
+         srN9x+oQ+5buVkRa2BwZdBVn3kyWx/Md4mJiCqwYdWg7qpuutIKeUlKkwRtm9zk0iQJy
+         +5VIGwNlh1+Yqesp2qqIWTy/rFP2ZnWflhy7kxO1BQE5yjv50Jo9YjkQCCUgBrsJWhho
+         mHjXgiXIWPXB8OGy0UhqN7YE3R2LO0sQh7NEsFnakRuvHcJZPmpvVGDmUBIinGg07pyf
+         HYlSl6MJBi5ctVB4BQUOjdKWHAkIUWQa1z+LWtDPFSz2w3Tc+PmkmgQHYFEDLtR7sAbY
+         tZIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5s7i4e/9M2UcJLxes9insspm/+PoKa2o1GchG8eSBbc=;
-        b=JgP6ALS0hM+G68LxQidu49+EcpOlyBIDnm05fUi1k0Zp+qDvLjPv8WC6VoY9ecj6k+
-         9vvN1CGXBnmziIpvQhdD0xC+fHp3IarzzGB/ZYDfpO6ebBeUZtuNCiM3gzPHYUkIeNgq
-         Xgsk3SxMKZLKlLAYwn2XsWAGEDns2TFBgORTuXwUbUqm5hnmW/J81rY/Kv0K0tMuoRzI
-         be6biPYtCzyZXLk4XOqZE7yHlQB4x1UL01gvNpRHl0oGM+3LUWg/PMy9SJEe/+KkqO/8
-         QWGtAz9jIfhRIGmfz6EF2pALQx5CVmywwqd4OeP4ynTupCCwYtoo10vS99aF72b4qAdQ
-         oXFw==
-X-Gm-Message-State: AFqh2kqzdd+YILCXTbrbyswvlwUxDCBGecwZ0WxsyVO70fjNIJRwF4J6
-        SZyVvC0Oqz5PAa0H9ofFxS8=
-X-Google-Smtp-Source: AMrXdXuwjYY4SeuRhYiBmpNcCIWXCkDyZdQ881c1TRZlr/sdeKegiB+f2b8el7lPUC6lY45jc9547w==
-X-Received: by 2002:a17:907:76f2:b0:869:236c:ac43 with SMTP id kg18-20020a17090776f200b00869236cac43mr14778321ejc.32.1673886545881;
-        Mon, 16 Jan 2023 08:29:05 -0800 (PST)
+        bh=KVo92w+mMU35HgccNk8F5uG9725xv7bq4W+283/I+5A=;
+        b=hnwJy7qSKCqduy3csjO0yJZ0GgCCCGGgjKmRIO/TjxPhgZ9Ru74z8BLx+gSaHk7VmU
+         wONqFu7781Yx9SD9rbP+EhWJ6NjWk1clujRDEwUIg4C2TbqZ/KCCbrhcd26scxivSVHA
+         CEXaKyH8FCgGK7YEB/GRSUGoC0XUSOEtJY7fI2JqKfjCUGLBAQfqk8eOMOtl9tbGKNw+
+         odlf9qjvXYR+Nx573h/Onw+tP1cMMJ+5bPqX0sQyoOWZtV3DWcwu2Snng/qtn1OKYPIG
+         UvIbQKBLZcNsXQVXWHT5DNKATSDdYYT5P3uPjIZv5Ser2z6UEXOMpTXdIyIX50rMUPd8
+         3aHQ==
+X-Gm-Message-State: AFqh2kopwUnbP/bic8JNCOmd6B0rJClrh6h1m2yYlCmHC8uO0pd2ff9k
+        bhAKpaC/B7Ec3Y5KkYA9Lsg=
+X-Google-Smtp-Source: AMrXdXvuq2AkcmdJDlN5B8LWYcHY5dyWpQtmhK1kg5hNM+AsoxOfhH9r3YeEkJiVk7A1UbLdpoJDBA==
+X-Received: by 2002:a17:906:39ca:b0:871:e336:cd2a with SMTP id i10-20020a17090639ca00b00871e336cd2amr1478292eje.47.1673886628390;
+        Mon, 16 Jan 2023 08:30:28 -0800 (PST)
 Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id tc9-20020a1709078d0900b0086edf177209sm2343403ejc.78.2023.01.16.08.29.04
+        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b0084c6581c16fsm12005496ejc.64.2023.01.16.08.30.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 08:29:05 -0800 (PST)
-Date:   Mon, 16 Jan 2023 17:29:02 +0100
+        Mon, 16 Jan 2023 08:30:27 -0800 (PST)
+Date:   Mon, 16 Jan 2023 17:30:24 +0100
 From:   Thierry Reding <thierry.reding@gmail.com>
 To:     Sumit Gupta <sumitg@nvidia.com>
-Cc:     treding@nvidia.com, krzysztof.kozlowski@linaro.org,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
-        bbasu@nvidia.com
-Subject: Re: [Patch v1 06/10] arm64: tegra: Add cpu OPP tables and
- interconnects property
-Message-ID: <Y8V7TkAiEWizF70l@orome>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        treding@nvidia.com, dmitry.osipenko@collabora.com,
+        viresh.kumar@linaro.org, rafael@kernel.org, jonathanh@nvidia.com,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, sanjayc@nvidia.com,
+        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
+Subject: Re: [Patch v1 09/10] memory: tegra: get number of enabled mc channels
+Message-ID: <Y8V7oIzVPffETqtO@orome>
 References: <20221220160240.27494-1-sumitg@nvidia.com>
- <20221220160240.27494-7-sumitg@nvidia.com>
+ <20221220160240.27494-10-sumitg@nvidia.com>
+ <db223161-a424-c4cf-09a8-ff2241fda71a@linaro.org>
+ <86f94266-d88e-af82-0352-876bc369f6a2@nvidia.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ZMip0bUSH42JeHsT"
+        protocol="application/pgp-signature"; boundary="g8Q09nNnddE8uScx"
 Content-Disposition: inline
-In-Reply-To: <20221220160240.27494-7-sumitg@nvidia.com>
+In-Reply-To: <86f94266-d88e-af82-0352-876bc369f6a2@nvidia.com>
 User-Agent: Mutt/2.2.9 (2022-11-12)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -81,71 +82,63 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
---ZMip0bUSH42JeHsT
+--g8Q09nNnddE8uScx
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 20, 2022 at 09:32:36PM +0530, Sumit Gupta wrote:
-> Add OPP table and interconnects property required to scale DDR
-> frequency for better performance. The OPP table has CPU frequency
-> to per MC channel bandwidth mapping in each operating point entry.
-> One table is added for each cluster even though the table data is
-> same because the bandwidth request is per cluster. OPP framework
-> is creating a single icc path if the table is marked 'opp-shared'
-> and shared among all clusters. For us the OPP table is same but
-> the MC client ID argument to interconnects property is different
-> for each cluster which makes different icc path for all.
+On Fri, Jan 13, 2023 at 08:34:18PM +0530, Sumit Gupta wrote:
 >=20
-> Signed-off-by: Sumit Gupta <sumitg@nvidia.com>
-> ---
->  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 276 +++++++++++++++++++++++
->  1 file changed, 276 insertions(+)
 >=20
-> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/d=
-ts/nvidia/tegra234.dtsi
-> index eaf05ee9acd1..ed7d0f7da431 100644
-> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
-> @@ -2840,6 +2840,9 @@
-> =20
->  			enable-method =3D "psci";
-> =20
-> +			operating-points-v2 =3D <&cl0_opp_tbl>;
-> +			interconnects =3D <&mc TEGRA_ICC_MC_CPU_CLUSTER0 &emc>;
+> On 22/12/22 17:07, Krzysztof Kozlowski wrote:
+> > External email: Use caution opening links or attachments
+> >=20
+> >=20
+> > On 20/12/2022 17:02, Sumit Gupta wrote:
+> > > Get number of MC channels which are actually enabled
+> > > in current boot configuration.
+> >=20
+> > Why? You don't do anything with it. Commit msg should give the reason of
+> > changes.
+> >=20
+> >=20
+> > Best regards,
+> > Krzysztof
+> >=20
+>=20
+> CPU OPP tables have per channel bandwidth info. The "mc->num_channels" is
+> used in [1] (Patch v1 10/10) to make the per MC channel bandwidth request=
+ed
+> by the CPU cluster as a multiple of number of the enabled mc channels.
+>=20
+> Will update the commit description with this info.
+>=20
+> [1] https://lore.kernel.org/lkml/20221220160240.27494-1-sumitg@nvidia.com=
+/T/#m3ac150a86977e89b97c5d19c60384f29d7a01d21
 
-I dislike how this muddies the water between hardware and software
-description. We don't have a hardware client ID for the CPU clusters, so
-there's no good way to describe this in a hardware-centric way. We used
-to have MPCORE read and write clients for this, but as far as I know
-they used to be for the entire CCPLEX rather than per-cluster. It'd be
-interesting to know what the BPMP does underneath, perhaps that could
-give some indication as to what would be a better hardware value to use
-for this.
-
-Failing that, I wonder if a combination of icc_node_create() and
-icc_get() can be used for this type of "virtual node" special case.
+Both patch 9 and 10 are reasonably small, so it would be okay to merge
+the two patches and avoid any need for an extra explanation.
 
 Thierry
 
---ZMip0bUSH42JeHsT
+--g8Q09nNnddE8uScx
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPFe0wACgkQ3SOs138+
-s6F2yBAAjowmxzjVq6aVzA6zhSk3nbCgl0QL/OEp6PY0OzH2xVKJUuu4zOttfnbe
-Yp1JqpDpVvueEBIRSRWV2bwEwtJ6W5vYrcW2TkNfM5biG3c1uYRCVcADJPwSO4gL
-Obyy7iew33hS30m/9uynImJVGAh/WuVIZJ/2JTkFGzjP7K7nvhASuyABnVE4+CvJ
-uIgl1XUxTdgD/hS6BmVlKv5S6M9bU7UkWTCWqX2xS/t51K+iv7nBc9NeeVrJZdwF
-sChYSmFEmKMPyZF15al5UK//xakf3l9M1Q3p7QEo/VK6Ee5D8nAvGRzMYWD2uSvv
-rfhT9hZNaLYaHUQkdGJP7hcIspsR3CucHasz6UqDgsWSJkL9b4QlDYLFK9StTEyV
-LrrYjQHe6jTYSGegIBqwzANd3Kp/Enbzdz0Rb9d7fXelYuEkPdxc4xMjw22qe7Er
-9DuaDmkeh1218GaEWeepVrQvDKDiaK2KrhQGd8uu2iXGXe9xOG2TtT0lvQENZpLX
-WkEpDjrh+ZJrSrd8A06oRFmRzHP/Y8W4QUH7dUFujcfip+JQjMlq+K1+EMyRwapR
-yrWPyYqk/2NxS+vlfAwyX+K+DkB/xlvPNRRsdof93MKdbGUgFQ9pbGtzCddzyAOK
-sPo4xnV+1yI+JBT9/OafTN0UMaSLCArvPLubL+7mfrjqaBrPQ54=
-=eSEA
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPFe6AACgkQ3SOs138+
+s6E/2BAAiVcPFgJQq47pbkFQvbySJLa/pcKt6BI8lTuPJwZsRJ13RxfCp2Y+KkE0
+xSYrAmtvD+IDy2s67qTGm6UZjT9KqGmV9zMaZ6ooTylKYtOW4N/Ln4///T9jwRGM
+oTG6NN2DEPVKkV96gTtLzYAAM0cNx7lx7pNEHV7uXDUr2ieKHUhEkEeliDK73xBN
+6so7/FzLBCf/O7mitcLOud1qC1pHSXwULHMxDFZyU3VinsqIJBBc4Ua5IB0dkc8U
+Cy8E04CrxU7H49ylIl4cpO/bq0PuazW6PlIemqoheJyWKyr0foyRpjvJI6nsy1CT
+9Mb+ocRAB+Cu2IILTFl4IaW09982TBJOyIYJ5qRi0DvMhFAb64dUWT/rdMPvQ4q9
+P6RLArDLfcksDnYnhFwhFESdEPOa+YccCYwfFyeYcN2/XzE9AMGW9iNYKPw4fnpM
+fDmU33Q/0ze7q4BDcEDfLFwiRmoHpXZv2QYIi/U2fhN6cuux9QEMWEX4Lksxvqst
+uH/9FFgHHlViYPkb/iW1qZjuOsG4Z5A6xNVCMxbKYt89W7800FlI0tWZGQ/LYT2R
+JdorAB6uZnW0MkXm5N70rnCJn75+2xJmrRLnnIfmAivLrRE6uo8WwXOTVYgTZVAN
+8WONvNE9WgSPFSw2nJ8Rr+UE/pektA2R8QfNrVgyF5w9txkkCDA=
+=jOs7
 -----END PGP SIGNATURE-----
 
---ZMip0bUSH42JeHsT--
+--g8Q09nNnddE8uScx--
