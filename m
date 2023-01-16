@@ -2,81 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F0366BBCC
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 11:34:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610AA66BBFC
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 11:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjAPKeJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 05:34:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45514 "EHLO
+        id S230472AbjAPKkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 05:40:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjAPKeF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 05:34:05 -0500
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4941ABE8
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 02:34:03 -0800 (PST)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-4c24993965eso368353607b3.12
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 02:34:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m/tYLsguvhNX76zD17hbPH2qZrPUhffkR6haBjKQqeM=;
-        b=lOAzNQu8eznDMDQrcDCeg8Fr+f4UMLS1VKaRsPuieAhkt0buE9051t1htqoIaxTiPe
-         J2ypkmPum8BdNAzSBXwbQiS/RJgBXZ9uNJNoY9p7/4ECG5i2eJFzWSvxsI7w4VLi95qA
-         65cm9Sgww5hrMlBJO/mkMjzNxRTk/Cl+Kalzz/jTRBSAkeoZSnD85r5K9fe5Y427m9Wy
-         GvpTxzOk4uy1F9NJo5kgPKyKkrs7kCcWQyuGdxvFOlD7611X+u7Zcgpm/7NGRA8MkNaf
-         ZCvdaxDS1JE4r7/uoMTLFgylYdR+JRh1ELrm209maie8TVQlHpLfuGkkkOdZyBAT06X1
-         NhKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m/tYLsguvhNX76zD17hbPH2qZrPUhffkR6haBjKQqeM=;
-        b=SPnwCaWUs/jsMP/GoTp/z3ASoHcBq0xf53QW1zY/bHef8XXnnASGxV/eNoev0wiXQx
-         OoHhM1ubdWRXu2B0Yr479Cf8Rl/vos2BGcDDNKcnwKGRvk7R59b2GhyPDTvKWYrx0pOU
-         KbRPMZVYBA/tl3SyBCcBax2vCdOzFDYM8vSFMV14/U1xzSwdO91z0yzLgIv684CMjOcw
-         l32tV1OvdOdi55neIyL3r4M315rtdpb18LHf/Aed4tZn4/xYLoqXSa6zPYJj5KBGS5bn
-         hqHnloUVnJczo/gIEKnf5CQZGIdV2HOXEkH0UIhAO2iXKF3aTTaepPxLB0laXv44Izcc
-         Deqg==
-X-Gm-Message-State: AFqh2kpx9cJwB0ZrHb71SJVUund5uyXc531GBLUa1qFClhMytSeH1aFO
-        Ai/ThSX1TTlwEeydIQqd5nomPUIPf2x7FwaZivdeRw==
-X-Google-Smtp-Source: AMrXdXtW6TKCnRsDE0wvhiF6XGnwo0I29h/efOhVdU9ndWaVGtkwJJu/nRXufdrfHsXPEx193xkQYwrYct1AIhwg7Gw=
-X-Received: by 2002:a81:a084:0:b0:4dd:ff06:1358 with SMTP id
- x126-20020a81a084000000b004ddff061358mr1574748ywg.488.1673865243057; Mon, 16
- Jan 2023 02:34:03 -0800 (PST)
+        with ESMTP id S230388AbjAPKj6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 05:39:58 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CBD619692;
+        Mon, 16 Jan 2023 02:38:38 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 25E086602B36;
+        Mon, 16 Jan 2023 10:38:36 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1673865516;
+        bh=YLZ99BawidJKDCpxGXKiZMfzq5kAp++9PhTeUBKM434=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=I6ikQxPO255fQucSWa1a44+rfxZYt8xLd3YpHECYI/3SbyboODwfy8SVHM7uMR+zk
+         RQPzGgcHWULgZy/AtjwuIFolkGjktjc3bmuHVO30K/30JtBl0YURpolHqk3tfVbDH4
+         9tHmLHiqBHlZK+7immEqEOCpajqqFSUjOyfPT+9zhifOwVIVb+CqqMwogfujLxPDk9
+         VfWzqmOYv4vaU0dAq5qiIFNA2a48Zy0CzEjIM0XoUYYXaina1FTRKYQXsnE2tr7Lui
+         gM7POFcOPF+iQaXzfJ1N0plz9Q6Mup843EntdWtdfWCoSyf6Ryk4IRBuAi7oHI5L85
+         t5WiuHdk+Q0lA==
+Message-ID: <69a3b3bc-615b-851a-c275-048539e2b866@collabora.com>
+Date:   Mon, 16 Jan 2023 11:38:33 +0100
 MIME-Version: 1.0
-References: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230112140209.61228-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 16 Jan 2023 11:33:51 +0100
-Message-ID: <CACRpkdZLAOfJ4YHWhK2qfcfC7unex0fHRHdxsCRWhgHmkhacAw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] power: supply: collie_battery: Convert to GPIO
- descriptors (part 2)
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v10 3/6] arm64/dts/mt8195: Add efuse node to mt8195
+Content-Language: en-US
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sebastian Reichel <sre@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230112152855.216072-1-bchihi@baylibre.com>
+ <20230112152855.216072-4-bchihi@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230112152855.216072-4-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 3:02 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+Il 12/01/23 16:28, bchihi@baylibre.com ha scritto:
+> From: Balsam CHIHI <bchihi@baylibre.com>
+> 
+> Add efuse node.
+> This will be required by the thermal driver to get the calibration data.
+> 
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 
-> Finish the job started by the commit ba940ed83218 ("power: supply:
-> collie_battery: Convert to GPIO descriptors"), i.e. convert the use
-> of gpio_to_irq() to gpiod_to_irq(). No functional changes intended.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
