@@ -2,116 +2,173 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABEC866BABF
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 10:44:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B45F66BB94
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 11:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjAPJoC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 04:44:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
+        id S230090AbjAPKU1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 05:20:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232137AbjAPJnN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 04:43:13 -0500
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B26F14EAD
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 01:42:20 -0800 (PST)
-Received: by mail-pl1-x636.google.com with SMTP id d9so29757915pll.9
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 01:42:20 -0800 (PST)
+        with ESMTP id S230195AbjAPKUF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 05:20:05 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23C91A951
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 02:20:04 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o15so19602549wmr.4
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 02:20:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=r5rnNsL4lEChI1TD5S3DOvfNRk0icdBAPi2/vjJi8W8=;
-        b=XltKaVPJPio78dn9fWXrVElyvU7s3UkQS3HseSd7T7iW/oXsc1fQLKL4xFCd2k1Y1V
-         xtm8gANYx/TlpQUJpPuKeQhlHFxXrqEN4rPIPqlvJEXF+VduauJyymi378eLZIP0vQGr
-         vVIsiuef5gh/ce2gDR8vWmEwIkSJ88Nk1bbu0bhYinlch1O3RTAshPafKmuYwND0b4ZK
-         PDpGu6pnnt9QhdHNU+SE+Cl75JfEIk1882jEoB2C2xISz+gSbgXZ+Lle4Kh30K79WxPL
-         ejQdHOHj0+U7BpCfBmCwXkZ2cuNbDpvzz6BoY2OvEvRnQglz9LBHiEFdgh5IoSECRh/v
-         YuIg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ydHIuW52vlpU58xyr8GkPLXOGJ/n+sHnOJ6tjYV+1kM=;
+        b=mdlrc+DQzeu/CNGDnqOq5ti+V/zM3FFwrmq+SyRsLr5WOMmfdeKj2gqOrBTE7t9RjU
+         CDOniMI5Y7P73serbD8eddbXgsEvNTNxJYBP29vSi3NiQEfZWCw7q2hQMPNwPqPkmumx
+         mhOwfrEV6kmwySOgIhamRehAkBt243Yq/OwVUtWsMwv+wPOF26NrbWX6uyobdshY3Lsr
+         E5NZN27KbRLXzFWx00ypMZ2Id/gyBcM/V8xOGoVBTZNCkw6GLJtiHsT0LlDxXcJuOLtL
+         7Zj7N9eDwCZh96UkWQH72Za/dqaAOwF5hUMAsCyZtfOYx6fA5iVM4HhDDEIW32bgKpNX
+         9vqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r5rnNsL4lEChI1TD5S3DOvfNRk0icdBAPi2/vjJi8W8=;
-        b=Zi0ncpnSwcdrxtG4/BoZfZ1ulv4Jw4TyBibeNoUNf44UN3upGRmss84/ixnL040WlV
-         HI5hpqGudi4PjoVxn/PMqKgrrlBgOYguHQ5yv+ZnhOCsi0YvsDYu2LsnjPuPj0eUmxm1
-         ZIUBqNSuO/E8N5kiMq4Caz+ImKYA4ghnsAWI0pke+7FxG0gPPMFTFmFxD3pmec0pQ8wF
-         jnH4O4d22RFKniw6Ap0xIEg8AOQlInM8NPMzmNNdj4c0idiO5bzvYA6zlPrNajuXXylT
-         ahRwvv1/+OqR+rpVf6aF+1KcJE9NwB0kIICvYXa1etj3D2Vd+dPx7qIgscLHLAbgVals
-         /vIg==
-X-Gm-Message-State: AFqh2kr++8pgKXi3t5R0s2Plnt09XldSJRZ+/krZUvQOD0WHmtAZtifg
-        eFRtL0P4RWzYEPhS8TNj5hJblQ==
-X-Google-Smtp-Source: AMrXdXsDIb3h1O/6Tz2h9O66iZtsKZs2KTs69PMWNdtDV8aQkHBc21pklhDRIECg4t7uzG5IyiH8mw==
-X-Received: by 2002:a17:903:442:b0:194:828e:ec5c with SMTP id iw2-20020a170903044200b00194828eec5cmr7035610plb.51.1673862139608;
-        Mon, 16 Jan 2023 01:42:19 -0800 (PST)
-Received: from localhost ([122.172.81.45])
-        by smtp.gmail.com with ESMTPSA id i12-20020a170902c94c00b00189a50d2a3esm6051998pla.241.2023.01.16.01.42.18
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ydHIuW52vlpU58xyr8GkPLXOGJ/n+sHnOJ6tjYV+1kM=;
+        b=t4YDbhGRXJSmqTRZ16bb0QPCJXrmq9+ZZXSDgqxufGn+YL29+RgznUNstTdPtZeiUa
+         ei8rQv3Z4BbWQfUdBhUOWrukINFNqfSjlbsMassTxU7svQuPYdqYCgQxFnNgAJkK1XQm
+         T9If92CbFt2hkMmGmuoqKttCF0ZMcwNaioxA0PYY/L96NHDlGyWlQkorsVBOOVWILhKf
+         +93y6qQyQj+HEsFDEpX5TWXX/1A2jZa4eJY6JQ9Ev791OSY2mSLu44wjFfgqaL+cttKJ
+         QiLMzz23zf5JqjRAsVAflBdWuFQoT82Li+jD6UHvr4YrEYv2g6W0k93KjB9om4c3w7JA
+         kQVg==
+X-Gm-Message-State: AFqh2kr8k6pb7cCRl+h4JzMBMJv+1OxJ1oY5Na1f0D2nt1IpTG118XcZ
+        DQDqsdFjO7kCbujrIc7MNOT3qQ==
+X-Google-Smtp-Source: AMrXdXv8ze6K8DQ5Z0ZElA4plC7SmPqh6d0btvuTMhhQ2fNiLLi5IGU6o+ZVEm4848L2AJcq3jFCLw==
+X-Received: by 2002:a05:600c:a4e:b0:3d1:baf7:ceae with SMTP id c14-20020a05600c0a4e00b003d1baf7ceaemr66199576wmq.39.1673864403273;
+        Mon, 16 Jan 2023 02:20:03 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id r126-20020a1c2b84000000b003d35c845cbbsm37121541wmr.21.2023.01.16.02.20.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 01:42:19 -0800 (PST)
-Date:   Mon, 16 Jan 2023 15:12:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org,
-        marijn.suijten@somainline.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Rob Herring <robh@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Niklas Cassel <nks@flawful.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 3/6] dt-bindings: opp: v2-qcom-level: Let
- qcom,opp-fuse-level be a 2-long array
-Message-ID: <20230116094217.3ekwt7yosfkxst4a@vireshk-i7>
-References: <20230116093845.72621-1-konrad.dybcio@linaro.org>
- <20230116093845.72621-4-konrad.dybcio@linaro.org>
+        Mon, 16 Jan 2023 02:20:02 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-pm@vger.kernel.org (open list:QUALCOMM TSENS THERMAL DRIVER),
+        linux-arm-msm@vger.kernel.org (open list:QUALCOMM TSENS THERMAL DRIVER),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v2] thermal/drivers/qcom: Remove duplicate set next trip point interrupt code
+Date:   Mon, 16 Jan 2023 11:19:54 +0100
+Message-Id: <20230116101955.3961427-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230116093845.72621-4-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16-01-23, 10:38, Konrad Dybcio wrote:
-> In some instances (particularly with CPRh) we might want to specifiy
-> more than one qcom,opp-fuse-level, as the same OPP subnodes may be
-> used by different "CPR threads". We need to make sure that
-> n = num_threads entries is legal and so far nobody seems to use more
-> than two, so let's allow that.
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> index b9ce2e099ce9..a30ef93213c0 100644
-> --- a/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-level.yaml
-> @@ -30,7 +30,9 @@ patternProperties:
->            this OPP node. Sometimes several corners/levels shares a certain fuse
->            corner/level. A fuse corner/level contains e.g. ref uV, min uV,
->            and max uV.
-> -        $ref: /schemas/types.yaml#/definitions/uint32
-> +        $ref: /schemas/types.yaml#/definitions/uint32-array
-> +        minItems: 1
-> +        maxItems: 2
->  
->      required:
->        - opp-level
+The tsens driver reprogram the next trip points in the irq
+handler. This function then call thermal_zone_device_update().
 
-Applied. Thanks.
+However, thermal_zone_device_update() calls thermal_zone_set_trips()
+and from there it calls the backend 'set_trips' ops. This one in turn
+reprogram the next trip points (low/high).
 
+Consequently, the code setting the next trip points interrupt in the
+interrupt handle is not needed and could be removed.
+
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Acked-by: Amit Kucheria <amitk@kernel.org>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+  v2:
+    - Removed unused delcared variables
+---
+ drivers/thermal/qcom/tsens.c | 51 ++----------------------------------
+ 1 file changed, 2 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
+index b5b136ff323f..9dd69754dd63 100644
+--- a/drivers/thermal/qcom/tsens.c
++++ b/drivers/thermal/qcom/tsens.c
+@@ -459,12 +459,9 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+ {
+ 	struct tsens_priv *priv = data;
+ 	struct tsens_irq_data d;
+-	bool enable = true, disable = false;
+-	unsigned long flags;
+-	int temp, ret, i;
++	int i;
+ 
+ 	for (i = 0; i < priv->num_sensors; i++) {
+-		bool trigger = false;
+ 		const struct tsens_sensor *s = &priv->sensor[i];
+ 		u32 hw_id = s->hw_id;
+ 
+@@ -472,52 +469,8 @@ static irqreturn_t tsens_irq_thread(int irq, void *data)
+ 			continue;
+ 		if (!tsens_threshold_violated(priv, hw_id, &d))
+ 			continue;
+-		ret = get_temp_tsens_valid(s, &temp);
+-		if (ret) {
+-			dev_err(priv->dev, "[%u] %s: error reading sensor\n",
+-				hw_id, __func__);
+-			continue;
+-		}
+ 
+-		spin_lock_irqsave(&priv->ul_lock, flags);
+-
+-		tsens_read_irq_state(priv, hw_id, s, &d);
+-
+-		if (d.up_viol &&
+-		    !masked_irq(hw_id, d.up_irq_mask, tsens_version(priv))) {
+-			tsens_set_interrupt(priv, hw_id, UPPER, disable);
+-			if (d.up_thresh > temp) {
+-				dev_dbg(priv->dev, "[%u] %s: re-arm upper\n",
+-					hw_id, __func__);
+-				tsens_set_interrupt(priv, hw_id, UPPER, enable);
+-			} else {
+-				trigger = true;
+-				/* Keep irq masked */
+-			}
+-		} else if (d.low_viol &&
+-			   !masked_irq(hw_id, d.low_irq_mask, tsens_version(priv))) {
+-			tsens_set_interrupt(priv, hw_id, LOWER, disable);
+-			if (d.low_thresh < temp) {
+-				dev_dbg(priv->dev, "[%u] %s: re-arm low\n",
+-					hw_id, __func__);
+-				tsens_set_interrupt(priv, hw_id, LOWER, enable);
+-			} else {
+-				trigger = true;
+-				/* Keep irq masked */
+-			}
+-		}
+-
+-		spin_unlock_irqrestore(&priv->ul_lock, flags);
+-
+-		if (trigger) {
+-			dev_dbg(priv->dev, "[%u] %s: TZ update trigger (%d mC)\n",
+-				hw_id, __func__, temp);
+-			thermal_zone_device_update(s->tzd,
+-						   THERMAL_EVENT_UNSPECIFIED);
+-		} else {
+-			dev_dbg(priv->dev, "[%u] %s: no violation:  %d\n",
+-				hw_id, __func__, temp);
+-		}
++		thermal_zone_device_update(s->tzd, THERMAL_EVENT_UNSPECIFIED);
+ 
+ 		if (tsens_version(priv) < VER_0_1) {
+ 			/* Constraint: There is only 1 interrupt control register for all
 -- 
-viresh
+2.34.1
+
