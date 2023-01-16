@@ -2,233 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8953766B832
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 08:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C95866B85E
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 08:43:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231882AbjAPHb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 02:31:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
+        id S231807AbjAPHnW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 02:43:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAPHb0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 02:31:26 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B8B46B1;
-        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso2095115pjg.2;
-        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
-        b=bNV/0vag1ZvLMpWwA4mawziLzieesOHeeP/uolhRj/Qp/fgoUEgKS7N3HGAUJ0hwEi
-         NNrZZvSk5PRav8zwcMHaV79OCbj1kyAbRLaXuJBlAkL2qROgelytvjsBqXyclWatD66P
-         Ugj2u4a35Qg8LB7A0QOSbJbcpeoiYZd4m2f45lFwkXfct6yFrIw9H9B2+WHzTF0gvm5o
-         AshIWCnV/8OV2oXEADbsYpB4TvdLkd4l84BBzh3/uu9idPKpYXziuWROZgnCLNhU+sJN
-         JRZO8KK8t6UrpaZbxL3OVAvsgPDH3MoIn0oJGJSBPHnnWKgt3Ul15ZHKTohvJxgO9iV7
-         E02Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
-        b=ngHwoVdMQSFl+TZTSIhZJpH1ygpEmiTsy9/PKXu+BHAKTGU8TlX0+GIdRzQnU5On/P
-         zcUINi/9kObNZAL/AKZGuDIwxuY3uiy6ESaN49ylhRGCb2lT5nd1en2Zy03o9QQQjhTL
-         vv3XoJNXPxzKnHJlTaRwmej3V939MS6IZ3sOmzkebvP+9WWMRqwxNbrCL+R0SjKBZk14
-         puoIkveFwnBdvbIeg8tYwAhvtwzwOpwyqIX5W4qBvWS54oM/WLo9XAi2ijYQVX/UQ+Ge
-         wBoA4HjwTjxdIaX98A3lgPElNQGG5d5T8fmOzoUtjpA3YHdEJ+QZlpqZ2tvaFL+XIyTr
-         MjbQ==
-X-Gm-Message-State: AFqh2koQ+8723qi1sLfeMOdWriT51Uj/MskCrUN5ss+WiCwTEyzMiJeV
-        O611GIIC7iZ/0VLnecoOY0GJAM9DG6OaBwq0E6Y=
-X-Google-Smtp-Source: AMrXdXsHaNFvTcwq7IYjoURTRKB9mLY6RlfohU9xRx/ch1k9FfnZTPFe5NEyMuszQC6sWUU/1ki2k4jRifdInbi8kL8=
-X-Received: by 2002:a17:90b:1112:b0:223:dd6f:13b2 with SMTP id
- gi18-20020a17090b111200b00223dd6f13b2mr6617650pjb.56.1673854283697; Sun, 15
- Jan 2023 23:31:23 -0800 (PST)
-MIME-Version: 1.0
-References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
- <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu> <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
- <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu> <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
-In-Reply-To: <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 16 Jan 2023 15:31:11 +0800
-Message-ID: <CAEr6+EC4e5QsodG_SpTVMBoGfW1GDAgUfBphahgrqy52vXFB+Q@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
-To:     Yann Sionneau <ysionneau@kalray.eu>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
-        Christian Brauner <brauner@kernel.org>,
-        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
-        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
-        Jan Kiszka <jan.kiszka@siemens.com>,
-        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Kieran Bingham <kbingham@kernel.org>,
+        with ESMTP id S231963AbjAPHnU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 02:43:20 -0500
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A4BC142;
+        Sun, 15 Jan 2023 23:43:18 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id C05EA24E13F;
+        Mon, 16 Jan 2023 15:43:10 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 16 Jan
+ 2023 15:43:10 +0800
+Received: from localhost.localdomain (113.72.144.207) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 16 Jan
+ 2023 15:43:09 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-audit@redhat.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nick Piggin <npiggin@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Waiman Long <longman@redhat.com>,
-        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
-        Ashley Lesdalons <alesdalons@kalray.eu>,
-        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
-        Clement Leger <clement.leger@bootlin.com>,
-        Guillaume Missonnier <gmissonnier@kalray.eu>,
-        Guillaume Thouvenin <gthouvenin@kalray.eu>,
-        Jean-Christophe Pince <jcpince@gmail.com>,
-        Jonathan Borne <jborne@kalray.eu>,
-        Jules Maselbas <jmaselbas@kalray.eu>,
-        Julian Vetter <jvetter@kalray.eu>,
-        Julien Hascoet <jhascoet@kalray.eu>,
-        Julien Villette <jvillette@kalray.eu>,
-        Louis Morhet <lmorhet@kalray.eu>,
-        Luc Michel <lmichel@kalray.eu>,
-        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
-        Marius Gligor <mgligor@kalray.eu>,
-        Samuel Jones <sjones@kalray.eu>,
-        Thomas Costis <tcostis@kalray.eu>,
-        Vincent Chardon <vincent.chardon@elsys-design.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3 0/3] JH7110 PMU Support
+Date:   Mon, 16 Jan 2023 15:42:56 +0800
+Message-ID: <20230116074259.22874-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [113.72.144.207]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 9, 2023 at 11:53 PM Jeff Xie <xiehuan09@gmail.com> wrote:
->
-> On Mon, Jan 9, 2023 at 11:30 PM Yann Sionneau <ysionneau@kalray.eu> wrote=
-:
-> >
-> > Hi Jeff,
-> >
-> > On 1/9/23 16:11, Jeff Xie wrote:
-> > > On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wr=
-ote:
-> > >> Hi Jeff,
-> > >>
-> > >> On 1/7/23 07:25, Jeff Xie wrote:
-> > >>> Hi,
-> > >>>
-> > >>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> =
-wrote:
-> > >>>> [snip]
-> > >>>>
-> > >>>> A kvx toolchain can be built using:
-> > >>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev l=
-ibmpfr-dev
-> > >>>> $ git clone https://github.com/kalray/build-scripts
-> > >>>> $ cd build-scripts
-> > >>>> $ source last.refs
-> > >>>> $ ./build-kvx-xgcc.sh output
-> > >>> I would like to build the kvx-xgcc to compile and test the linux
-> > >>> kernel, but it reported a compile error.
-> > >>> I wonder what version of gcc you are using.
-> > >>>
-> > >>> My build environment:
-> > >>> VERSION=3D"20.04.2 LTS (Focal Fossa)"
-> > >>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
-> > >>>
-> > >>>
-> > >>> Compile error:
-> > >>> $ ./build-kvx-xgcc.sh output
-> > >>>
-> > >>> ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_re=
-place_key_data=E2=80=99:
-> > >>> ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=
-=E2=80=99 undeclared
-> > >>> (first use in this function)
-> > >>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
-> > >>>         |                        ^~~~~~~~
-> > >>> [snip]
-> > >> What SHA1 of https://github.com/kalray/build-scripts are you using?
-> > > I have executed the "source last.refs"
-> >
-> > I was referring to the SHA1 of the repo itself (build-scripts).
-> >
-> > `last.refs` is a symbolic link which can point to several releases,
-> > depending on "when" you did the clone.
-> >
-> > I am asking this because we recently published new toolchains.
-> >
-> > I want to make sure which one you are trying to build.
->
-> Unfortunately I deleted this repo a few minutes before you asked me ;-(
-> But I remember that I cloned this repo two days ago.
-> it should be:  last.refs -> refs/4.11.0.refs
+Hello,
 
-It should be my own environmental problem.
-I reinstalled the system once and it has been able to compile normally ;-)
+This patchset adds PMU (Power Management Unit) controller driver for the
+StarFive JH7110 SoC. In order to meet low power requirements, PMU is
+designed for including multiple PM domains that can be used for power
+gating of selected IP blocks for power saving by reduced leakage
+current. The first patch adds device tree binding for PM domain provider
+and consumer. The second patch adds pmu driver and support JH7110 SoC.
+The last patch adds device node about pmu to JH7110 dts. 
 
-In the past few days, I have reviewed almost all the codes,
-which is very meaningful for me to learn, thank you team.
+The series has been tested on the VisionFive 2 boards which equip with
+JH7110 SoC and works normally.
 
+The last patch should be applied after the following patchset:
+https://lore.kernel.org/all/20221220011247.35560-1-hal.feng@starfivetech.com/
 
->
-> > >> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 with=
-out
-> > >> issues, I don't understand why it does not work for you, although in=
-deed
-> > >> the error log you are having pops out on my search engine and seems =
-to
-> > >> be some well known issue.
-> > > Yes, there are many answers on the web, but none of them solve this p=
-roblem.
-> > >
-> > >> If the build-script does not work for you, you can still use the
-> > >> pre-built toolchains generated by the GitHub automated actions:
-> > >> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("lates=
-t"
-> > >> means 22.04)
-> > > Thanks, this is the final solution ;-)
-> > Good to see it helped :)
-> >
-> > Regards,
-> >
-> > --
-> >
-> > Yann
-> >
-> >
-> >
-> >
-> >
->
->
-> --
-> Thanks,
-> JeffXie
+Changes in v3:
+- Rebased on tag v6.1.
+- Renamed the dt-bindings 'starfive,jh71xx-power.yaml' to
+  'starfive,jh7110-pmu.yaml' which is matching compatible.
+- Fixed wrong indentation and error when running 'make dt_binding_check'
+  in dt-bindings.
+- Changed the license of the dt-bindings header to be same with
+  dt-bindings.
+- Changed a little bit on dependency conditions in Kconfig of driver.
+- Dropped some macros that are temporarily useless.
+- Simplified the definition of macro 'JH71XX_PMU_INT_ALL_MASK'.
+- Changed the sorting of structure members, such as 'struct
+  jh71xx_domain_info', 'struct jh71xx_pmu', etc.
+- Modified detailed comment about controlling power domain.
+- Dropped useless comment when running 'platform_get_irq'.
+
+v2 - https://lore.kernel.org/all/20221208084523.9733-1-walker.chen@starfivetech.com/
+
+Changes in v2:
+- Squashed 1st patch (dt-bindings header) into 2nd which is related to
+  dt-bindings stuff.
+- Renamed the dt-bindings header 'jh7110-power.h' to
+  'starfive,jh7110-pmu.h' and used dual license for it.
+- Renamed the dt-bindings 'starfive,jh71xx-power.yaml' to
+  'starfive,jh71xx-pmu.yaml', dropped items from properties.
+- Change of MAINTAINERS: added the entry of 'starfive soc drivers';
+  changed status to 'Supported' for the entry of
+  'STARFIVE JH71XX PMU CONTROLLER DRIVER' and sorted the lines alphabetically.
+- Dropped the header file 'include/soc/starfive/pm_domains.h'.
+- Dropped starfive_pmu_hw_event_turn_on() and starfive_pmu_hw_event_turn_off().
+- Added 'default SOC_STARFIVE' and expanded help text in the Kconfig.
+- Added a JH71XX_PMU_ prefix to those macro definitions in driver.
+- Replaced the data type 'uint8_t / uint32_t' with 'u8 / u32'.
+- Fixed some complains by using checkpatch.pl
+- Added spinlock to jh71xx_pmu_int_enable().
+- Dropped spinlock from jh71xx_pmu_interrupt().
+- Used jh71xx_pmu_ as prefix to all functions.
+- Replaced io accessors '__raw_readl / __raw_writel' with 'readl / writel'.
+- Added jh71xx_pmu_get_state() to the beginning of jh71xx_pmu_set_state().
+- Added more detailed comment about controlling power domain.
+- Simplified the usage of loop when performing pm_genpd_init() to register
+  power domain.
+- Added more detailed description about the features of power domain
+  hardware to commit message in 2nd patch.
+- Replaced dev_info() with dev_dbg() in jh71xx_pmu_set_state().
+- Decreased the timeout numbers of polling power status when switching
+  power mode.
+
+v1 - https://lore.kernel.org/all/20221118133216.17037-1-walker.chen@starfivetech.com/
+
+Best regards,
+Walker
+
+Walker Chen (3):
+  dt-bindings: power: Add starfive,jh7110-pmu
+  soc: starfive: Add StarFive JH71XX pmu driver
+  riscv: dts: starfive: add pmu controller node
+
+ .../bindings/power/starfive,jh7110-pmu.yaml   |  45 ++
+ MAINTAINERS                                   |  14 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |   7 +
+ drivers/soc/Kconfig                           |   1 +
+ drivers/soc/Makefile                          |   1 +
+ drivers/soc/starfive/Kconfig                  |  12 +
+ drivers/soc/starfive/Makefile                 |   3 +
+ drivers/soc/starfive/jh71xx_pmu.c             | 384 ++++++++++++++++++
+ .../dt-bindings/power/starfive,jh7110-pmu.h   |  17 +
+ 9 files changed, 484 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/starfive,jh7110-pmu.yaml
+ create mode 100644 drivers/soc/starfive/Kconfig
+ create mode 100644 drivers/soc/starfive/Makefile
+ create mode 100644 drivers/soc/starfive/jh71xx_pmu.c
+ create mode 100644 include/dt-bindings/power/starfive,jh7110-pmu.h
 
 
+base-commit: 830b3c68c1fb1e9176028d02ef86f3cf76aa2476
+prerequisite-patch-id: 54ce870d6ea747466474b5d4105cfbc05e1b01ab
+prerequisite-patch-id: e8dd8258a4c4062eee2cf07c4607d52baea71f3a
+prerequisite-patch-id: 057fa35870d8d7d22a57c13362588ffb9e9df316
+prerequisite-patch-id: 102368a6ff799c4cb639aed513deff09c1839161
+prerequisite-patch-id: 7c1a50a37919fedbbd336ca5dec295ac63c2a89d
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 87cb528acd9a7f1ffe7475d7261553f6a4de5753
+prerequisite-patch-id: 417736eb958e1158c60a5ed74bc2350394321a80
+prerequisite-patch-id: a137312ca162b5712e28719f77d0da78e9fdd778
+prerequisite-patch-id: f7c548b4619f491ce27f319242c4e3685c76173b
+prerequisite-patch-id: 4d90febab2fb7928f50a73104e7454312b9ce6c8
+prerequisite-patch-id: 645a807d50e0e56593ffdc6c3b50ea54a230827a
+prerequisite-patch-id: 165f8cd740ae60585d22c95b99a0689084d468e3
+prerequisite-patch-id: 480d910deccadc2947b3318c3c13dfa0882c8e0d
+prerequisite-patch-id: 1d1cb90ec12dfc9312e448759c7cab89f2bc6394
+prerequisite-patch-id: 5f539ac7c96023b36489c6da7c70c31eaf64a25b
+prerequisite-patch-id: 6bb9a780c62af3bcc2368dfd20303c7b1bc91e23
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: e3b986b9c60b2b93b7812ec174c9e1b4cfb14c97
+prerequisite-patch-id: 2e03eeb766aefd5d38f132d091618e9fa19a37b6
+prerequisite-patch-id: e0ba7af0f8d3d41844da9fbcba14b548cbc18f55
+prerequisite-patch-id: c1f8603e58c64828d0f36deac9b93c24289d8e05
+-- 
+2.17.1
 
---
-Thanks,
-JeffXie
