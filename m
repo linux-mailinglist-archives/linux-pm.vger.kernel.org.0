@@ -2,58 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D3366BC73
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 12:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB8266BCC9
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 12:23:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjAPLIt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 06:08:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38682 "EHLO
+        id S229645AbjAPLXn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 06:23:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjAPLIn (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 06:08:43 -0500
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85723C08
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 03:08:39 -0800 (PST)
-Received: by mail-pl1-x631.google.com with SMTP id k12so7903276plk.0
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 03:08:39 -0800 (PST)
+        with ESMTP id S229987AbjAPLXk (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 06:23:40 -0500
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520531DB99
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 03:23:36 -0800 (PST)
+Received: by mail-pg1-x52b.google.com with SMTP id e10so19434946pgc.9
+        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 03:23:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4YHO4LEMfTmTcqYPEJ5tKfv5llGMA5fDN69knFDKmk=;
-        b=X66jwea1Ws7TsOhdyu9x6HeXn54NEGl9byptDb4ou9vgOdENcFgYzUe5s4rK5ArfBs
-         IMQ4PWEHCt3pRPs3g/RUY5iHmkct1cSh4Ayq22oTmEmllTwMLJvBqZ7cRhdXbK2CKP3Q
-         tGoVO4y4aPC0alMqeYQsPWj4Kdup5auwgOlHhA8yzvyD+HiW6QkUI/b2AXi/ERCiucXd
-         SihyAuNNQog3CRhP5tQfIsDzzKE9RKTyWlDoFqaN7/UA8X/3FCgMSGPnP7ZhBP//VZTr
-         jgBV891QpSJSJW7Q5G0RDRMJqhjYwpoZO8cyGXuqfTSKiYTJ3ejV4VPqjS9+vMlyNbhS
-         hhaw==
+        bh=tLgP40hKSxsObwN4+snUnnezeQ4wAc0rF/UZlYixKYE=;
+        b=ttR4DUNjgwNCiDJGYcKWSjpWkCG8CmI/DGS0PpQhmbyoU1xr6nu3ViH55fG99+iXUJ
+         OcvZcAlQ5ZFjsnVoWtthaJnJtTh00fdWSK+PyViI1ruQY2iLLZ/7KZE/0Kwt+F8HdshF
+         266Kfy8lzrajKzZ8zSZyZAyx22KTaGOopjgbvzE+w4Xm+NYaBqGWolqsYjGsxKXZtk19
+         9AQAUknUn4deuyNXbq2iwtIFHYddWyFRyhuTeDqqNlhN9R4Jv06nLPfe1tC4v66aQmVA
+         McitY5RoyfhO6hecFfbq0GOwNrksApJVLnln1cntrTMG6AUaUnzCsgzHNuTmZB3aDpmz
+         at+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j4YHO4LEMfTmTcqYPEJ5tKfv5llGMA5fDN69knFDKmk=;
-        b=U4vR454Qk5fzQk1wDGwkceTI7WYHECDl3maX+NZOTW5QqNHY1ocKusio2CJUODANJg
-         49qDnb5BLYl5EfpeAv9lSWvoVWKIgu/SYk1KiUiVMIF10JEAXdKB9B6jMjwJJ9OTDg9M
-         2dMGBxafboUpDeHVhpIyUelEEYUhUk1NujVQkvtkq5CzBKdncbKPJDvtyDeA6Mq+3MhO
-         /IuePnMufHg9w1WvpPMGIOoPCxvRQ5abG9hTNBk3Wt68zCzL60AlRN4b+Um4BntAEZcO
-         IfwSdR/VP58QvlpkDZffKyXDuisJ3YnSJqwjzjQWpvhKj45NYToL7iFJy/vyfpnQnw64
-         R1sg==
-X-Gm-Message-State: AFqh2kodWgLE+pQFsSOeBcw++54IeDNBDRYuWUjZ/4cth7HiTTPPIQxJ
-        7buikFFLjKs9SqCRA2MmdxVT6mPYzj4FA3AONF+0aw==
-X-Google-Smtp-Source: AMrXdXuH8DP10SBmOU7T8qoEve9ZhYoH3jXaHZetinyTBa0v5rdC02ml/96wPrqGf0K4SxGiwRfJAjWNqmj6a6p16JY=
-X-Received: by 2002:a17:90a:6505:b0:223:fd3b:538e with SMTP id
- i5-20020a17090a650500b00223fd3b538emr8419868pjj.120.1673867319197; Mon, 16
- Jan 2023 03:08:39 -0800 (PST)
+        bh=tLgP40hKSxsObwN4+snUnnezeQ4wAc0rF/UZlYixKYE=;
+        b=HeuSjQqtGYr8Y0Nnr2bIOQNpwLCnN4yzLNG2VVJh+nxINqKD4M5YwnFBz0aR0vQjMW
+         Te1rezuVTzLCxzynfxpLAdqcsc1IBdhfFPO8GFNEIhZbt+XB5WclWbmWhYvpWZTOMIym
+         gUx9Eu6zbuPqHwdIKsvqJ53av43kxILkCh798obUfcmabeJjBufzPsSJDNSkwxTpfCxk
+         ga3nxYHbtMUnTD+1FMbyZrap7ws1L8QIqkZ0KND9ynSftoxPx4jM5rJo09bJ1tULQAsS
+         JW6fWnKxbCOHf1bF94mYz3SzUxligWSf+8qMx5Rpc14uIKUyJtqwmbS149FXyDQ5Zcyr
+         DXRQ==
+X-Gm-Message-State: AFqh2kppWgy7LwQeP3ziixyqabygV8DIFZQN1n0rlf5I9/U0T/9QgXZ9
+        FJlKL4Zqw+RRSDNjs9+SgCsrH42cI3pjfNRXmPj1wQ==
+X-Google-Smtp-Source: AMrXdXt6Ro5iYwvNcd7pUuuLeNcgwA98EKZwPUwhsrTWIrjVP3kyuxP7+nE2mHuJMsng3nW3MuNikEW5jtLg3Zo5f5w=
+X-Received: by 2002:aa7:8102:0:b0:58d:a683:bb28 with SMTP id
+ b2-20020aa78102000000b0058da683bb28mr222018pfi.36.1673868215665; Mon, 16 Jan
+ 2023 03:23:35 -0800 (PST)
 MIME-Version: 1.0
-References: <20230113134056.257691-1-vincent.guittot@linaro.org> <20230115001906.v7uq4ddodrbvye7d@airbuntu>
-In-Reply-To: <20230115001906.v7uq4ddodrbvye7d@airbuntu>
+References: <20230113134056.257691-1-vincent.guittot@linaro.org> <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+In-Reply-To: <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
 From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Mon, 16 Jan 2023 12:08:27 +0100
-Message-ID: <CAKfTPtB7hk=7SinWAbs7SMQEs4OHSCC1hQQHRtfzN-JxnV7Jvg@mail.gmail.com>
+Date:   Mon, 16 Jan 2023 12:23:24 +0100
+Message-ID: <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
 Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@kernel.org, peterz@infradead.org, qyousef@layalina.io,
         rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
@@ -61,18 +61,22 @@ Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, 15 Jan 2023 at 01:19, Qais Yousef <qyousef@layalina.io> wrote:
+On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
 >
-> On 01/13/23 14:40, Vincent Guittot wrote:
+> On 13/01/2023 14:40, Vincent Guittot wrote:
 > > By taking into account uclamp_min, the 1:1 relation between task misfit
 > > and cpu overutilized is no more true as a task with a small util_avg of
+>
+> of ?
+>
 > > may not fit a high capacity cpu because of uclamp_min constraint.
 > >
 > > Add a new state in util_fits_cpu() to reflect the case that task would fit
@@ -104,42 +108,23 @@ On Sun, 15 Jan 2023 at 01:19, Qais Yousef <qyousef@layalina.io> wrote:
 > > -     uclamp_max_fits = !uclamp_max_fits && (uclamp_max <= capacity_orig);
 > > +     uclamp_max_fits = (uclamp_max <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE);
 >
-> I think this hunk is what is causing the overutilized issues Kajetan reported
-> against your patch.
-
-Yeah, I have been to agressive with uclamp_max
-
+> Isn't `uclamp_max <= capacity_orig` always true for `capacity_orig ==
+> SCHED_CAPACITY_SCALE`?
 >
-> For the big cpu, this expression will always be true. So overutilized will
-> trigger only for little and medium cores.
->
-> I appreciate writing the boolean in a shorter form might appear like less code,
-> but it makes things harder to read too; the compiler should be good at
-> simplifying the expression if it can, no?
->
-> Shall we leave the original expression as-is since it's easier to reason about?
->
-> I think already by 'saving' using another variable we reduced readability and
-> lead to this error. First line checks if we are the max_capacity which is
-> the corner case we'd like to avoid and accidentally lost
->
-> v1 code was:
->
-> +       max_capacity = (capacity_orig == SCHED_CAPACITY_SCALE) && (uclamp_max == SCHED_CAPACITY_SCALE);
-> +       uclamp_max_fits = !max_capacity && (uclamp_max <= capacity_orig);
-> +       fits = fits || uclamp_max_fits;
->
-> I think that extra variable was well named to help make it obvious what corner
-> case we're trying to catch here. Especially it matches the comment above it
-> explaining this corner case. This auto variable should be free, no?
->
-> Can we go back to this form please?
-
-Yes, I'm going to come back to previous version
-
+> uclamp_max = [0..SCHED_CAPACITY_SCALE] , capacity_orig =
+> SCHED_CAPACITY_SCALE
 >
 > >       fits = fits || uclamp_max_fits;
-> >
+>
+> Like Qais I don't understand this change. I read the previous discussion
+> from https://lkml.kernel.org/r/20221208140526.vvmjxlz6akgqyoma@airbuntu
+> ("Re: [RFC PATCH 3/3] sched/fair: Traverse cpufreq policies to detect
+> capacity inversion").
+>
+> I assume Qais wanted to force `uclamp_max_fits = 0` for a big CPU
+> (`capacity_orig = 1024`) and a `uclamp_max = 1024` to not lift `fits`
+> from 0 to 1.
+>
 > >       /*
 > > @@ -4561,8 +4560,8 @@ static inline int util_fits_cpu(unsigned long util,
 > >        * handle the case uclamp_min > uclamp_max.
@@ -149,50 +134,6 @@ Yes, I'm going to come back to previous version
 > > -             fits = fits && (uclamp_min <= capacity_orig_thermal);
 > > +     if (fits && (util < uclamp_min) && (uclamp_min > capacity_orig_thermal))
 > > +             return -1;
->
-> Here shouldn't this be
->
->         if (util < uclamp_min) {
->                 fits = fits && (uclamp_min <= capacity_orig);
->                 if (fits && (uclamp_min > capacity_orig_thermal))
->                         return -1;
->         }
->
-> uclamp_min should fit capacity_orig first then we'd check for the corner case
-
-I don't get why we should test capacity_orig first ?
-
-case 1:
-  capacity_orig = 800
-  uclamp_min = 512
-  capacity_orig_thermal = 400
-  util = 200
-util_fits_cpu should return -1
-
-case 2:
-  uclamp_min = 900
-  capacity_orig = 800
-  capacity_orig_thermal = 400
-  utili_avg = 200
-util_fits_cpu should return -1 whereas with your proposal above it will return 0
-
-> if thermal pressure is causing it not to fit. And all of this should only
-> matter if utill < uclamp_min. Otherwise util_avg should be driving force if
-> uclamp_max is not trumping it.
->
-> I need time to update my unit test [1] to catch these error cases as I didn't
-> see them. In the next version I think it's worth including the changes to
-> remove the capacity inversion in the patch.
->
-> [1] https://github.com/qais-yousef/uclamp_test/blob/master/uclamp_test_thermal_pressure.c
->
->
-> Thanks!
->
-> --
-> Qais Yousef
->
-> >
 > >       return fits;
 > >  }
 > > @@ -4572,7 +4571,11 @@ static inline int task_fits_cpu(struct task_struct *p, int cpu)
@@ -203,6 +144,11 @@ util_fits_cpu should return -1 whereas with your proposal above it will return 0
 > > +     /*
 > > +      * Return true only if the cpu fully fits the task requirements, which
 > > +      * include the utilization but also the performance.
+>
+> Not sure if people get what `performance requirements` mean here? I know
+> we want to use `performance` rather `bandwidth hint` to describe what
+> uclamp is. So shouldn't we use `utilization but also uclamp`?
+>
 > > +      */
 > > +     return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
 > >  }
@@ -213,9 +159,35 @@ util_fits_cpu should return -1 whereas with your proposal above it will return 0
 > >       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
 > >
 > > +     /* Return true only if the utlization doesn't fit its capacity */
+>
+> s/utlization/utilization
+> s/its/CPU ?
+>
 > >       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
 > >  }
-> >
+>
+> cpu_overutilized() is the only place where we now only test for
+> !util_fits_cpu(). The new comment says we only care about utilization
+> not fitting CPU capacity.
+>
+> Does this mean the rq uclamp values are not important here and we could
+> go back to use fits_capacity()?
+>
+> Not sure since util_fits_cpu() is still coded differently:
+
+uclamp_min is not important but uclamp_max still cap the utilization
+
+>
+>   fits = fits_capacity(util, capacity)
+>
+>   fits = fits || uclamp_max_fits  <-- uclamp_max_fits can turn fits from
+>                                       0 into 1, so util doesn't fit but
+>                                       we don't return 1?
+>
+> That said, I don't understand the current 'uclamp_max_fits = (uclamp_max
+> <= capacity_orig) || (capacity_orig == SCHED_CAPACITY_SCALE)' in
+> util_fits_cpu(), like already mentioned.
+>
 > > @@ -6925,6 +6929,7 @@ static int
 > >  select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
 > >  {
@@ -233,11 +205,29 @@ util_fits_cpu should return -1 whereas with your proposal above it will return 0
 > > +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
 > > +
 > > +             /* This CPU fits with all capacity and performance requirements */
+>
+> In task_fits_cpu() `utilization and performance (better uclamp)
+> requirements` term was used. I assume it's the same thing here?
+>
 > > +             if (fits > 0)
 > >                       return cpu;
 > > +             /*
 > > +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
 > > +              * for the CPU with highest performance capacity.
+>                                             ^^^^^^^^^^^^^^^^^^^^
+>
+> Do we use a new CPU capacity value `performance capacity (1)` here?
+>
+> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+>
+> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+> to return -1. Shouldn't (1) and (2) be the same?
+
+I'm all in favor of both being capacity_orig_of(cpu) -
+thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+
+>
 > > +              */
 > > +             else if (fits < 0)
 > > +                     cpu_cap = capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu));
@@ -255,67 +245,9 @@ util_fits_cpu should return -1 whereas with your proposal above it will return 0
 > >               }
 > >       }
 > >
-> > @@ -6958,7 +6979,11 @@ static inline bool asym_fits_cpu(unsigned long util,
-> >                                int cpu)
-> >  {
-> >       if (sched_asym_cpucap_active())
-> > -             return util_fits_cpu(util, util_min, util_max, cpu);
-> > +             /*
-> > +              * Return true only if the cpu fully fits the task requirements
-> > +              * which include the utilization but also the performance.
-> > +              */
-> > +             return (util_fits_cpu(util, util_min, util_max, cpu) > 0);
-> >
-> >       return true;
-> >  }
-> > @@ -7325,6 +7350,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >       unsigned long p_util_max = uclamp_is_used() ? uclamp_eff_value(p, UCLAMP_MAX) : 1024;
-> >       struct root_domain *rd = this_rq()->rd;
-> >       int cpu, best_energy_cpu, target = -1;
-> > +     int prev_fits = -1, best_fits = -1;
-> > +     unsigned long best_thermal_cap = 0;
-> > +     unsigned long prev_thermal_cap = 0;
-> >       struct sched_domain *sd;
-> >       struct perf_domain *pd;
-> >       struct energy_env eenv;
-> > @@ -7360,6 +7388,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >               unsigned long prev_spare_cap = 0;
-> >               int max_spare_cap_cpu = -1;
-> >               unsigned long base_energy;
-> > +             int fits, max_fits = -1;
-> >
-> >               cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
-> >
-> > @@ -7412,7 +7441,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                                       util_max = max(rq_util_max, p_util_max);
-> >                               }
-> >                       }
-> > -                     if (!util_fits_cpu(util, util_min, util_max, cpu))
-> > +
-> > +                     fits = util_fits_cpu(util, util_min, util_max, cpu);
-> > +                     if (!fits)
-> >                               continue;
-> >
-> >                       lsub_positive(&cpu_cap, util);
-> > @@ -7420,7 +7451,9 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                       if (cpu == prev_cpu) {
-> >                               /* Always use prev_cpu as a candidate. */
-> >                               prev_spare_cap = cpu_cap;
-> > -                     } else if (cpu_cap > max_spare_cap) {
-> > +                             prev_fits = fits;
-> > +                     } else if ((fits > max_fits) ||
-> > +                                ((fits == max_fits) && (cpu_cap > max_spare_cap))) {
-> >                               /*
-> >                                * Find the CPU with the maximum spare capacity
-> >                                * among the remaining CPUs in the performance
-> > @@ -7428,6 +7461,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
-> >                                */
-> >                               max_spare_cap = cpu_cap;
-> >                               max_spare_cap_cpu = cpu;
-> > +                             max_fits = fits;
-> >                       }
-> >               }
-> >
+>
+> [...]
+>
 > > @@ -7446,26 +7480,50 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
 > >                       if (prev_delta < base_energy)
 > >                               goto unlock;
@@ -333,87 +265,12 @@ util_fits_cpu should return -1 whereas with your proposal above it will return 0
 > > +                     /*
 > > +                      * Both don't fit performance (i.e. uclamp_min) but
 > > +                      * best energy cpu has better performance.
-> > +                      */
-> > +                     if ((max_fits < 0) &&
-> > +                         (cpu_thermal_cap <= best_thermal_cap))
-> > +                             continue;
-> > +
-> >                       cur_delta = compute_energy(&eenv, pd, cpus, p,
-> >                                                  max_spare_cap_cpu);
-> >                       /* CPU utilization has changed */
-> >                       if (cur_delta < base_energy)
-> >                               goto unlock;
-> >                       cur_delta -= base_energy;
-> > -                     if (cur_delta < best_delta) {
-> > -                             best_delta = cur_delta;
-> > -                             best_energy_cpu = max_spare_cap_cpu;
-> > -                     }
-> > +
-> > +                     /*
-> > +                      * Both fit for the task but best energy cpu has lower
-> > +                      * energy impact.
-> > +                      */
-> > +                     if ((max_fits > 0) && (best_fits > 0) &&
-> > +                         (cur_delta >= best_delta))
-> > +                             continue;
-> > +
-> > +                     best_delta = cur_delta;
-> > +                     best_energy_cpu = max_spare_cap_cpu;
-> > +                     best_fits = max_fits;
-> > +                     best_thermal_cap = cpu_thermal_cap;
-> >               }
-> >       }
-> >       rcu_read_unlock();
-> >
-> > -     if (best_delta < prev_delta)
-> > +     if ((best_fits > prev_fits) ||
-> > +         ((best_fits > 0) && (best_delta < prev_delta)) ||
-> > +         ((best_fits < 0) && (best_thermal_cap > prev_thermal_cap)))
-> >               target = best_energy_cpu;
-> >
-> >       return target;
-> > @@ -10259,24 +10317,23 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
-> >        */
-> >       update_sd_lb_stats(env, &sds);
-> >
-> > -     if (sched_energy_enabled()) {
-> > -             struct root_domain *rd = env->dst_rq->rd;
-> > -
-> > -             if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
-> > -                     goto out_balanced;
-> > -     }
-> > -
-> > -     local = &sds.local_stat;
-> > -     busiest = &sds.busiest_stat;
-> > -
-> >       /* There is no busy sibling group to pull tasks from */
-> >       if (!sds.busiest)
-> >               goto out_balanced;
-> >
-> > +     busiest = &sds.busiest_stat;
-> > +
-> >       /* Misfit tasks should be dealt with regardless of the avg load */
-> >       if (busiest->group_type == group_misfit_task)
-> >               goto force_balance;
-> >
-> > +     if (sched_energy_enabled()) {
-> > +             struct root_domain *rd = env->dst_rq->rd;
-> > +
-> > +             if (rcu_dereference(rd->pd) && !READ_ONCE(rd->overutilized))
-> > +                     goto out_balanced;
-> > +     }
-> > +
-> >       /* ASYM feature bypasses nice load balance check */
-> >       if (busiest->group_type == group_asym_packing)
-> >               goto force_balance;
-> > @@ -10289,6 +10346,7 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
-> >       if (busiest->group_type == group_imbalanced)
-> >               goto force_balance;
-> >
-> > +     local = &sds.local_stat;
-> >       /*
-> >        * If the local group is busier than the selected busiest group
-> >        * don't try and pull any tasks.
-> > --
-> > 2.34.1
-> >
+>
+> IMHO, `performance` stands for `cpu_thermal_cap` which is
+> `cpu_capacity_orig - thermal pressure`.
+>
+> I assume `performance` is equal to `performance capacity` used in
+> select_idle_capacity which uses thermal_load_avg() and not thermal
+> pressure. Why this difference?
+>
+> [...]
