@@ -2,216 +2,233 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589F566B79A
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 07:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8953766B832
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 08:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjAPGpa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 01:45:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34518 "EHLO
+        id S231882AbjAPHb2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 02:31:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbjAPGpa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 01:45:30 -0500
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFD04495;
-        Sun, 15 Jan 2023 22:45:29 -0800 (PST)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B927534EA5;
-        Mon, 16 Jan 2023 06:45:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1673851527; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G86aOTGRKtGT/dL2BP/zBD5nsf0SVezrWANnZeOyr08=;
-        b=BOcpKiRnsFMazn2SHl1SFaYx3eOq7z8cZSJwi8fpak+xv6YFs4yJ93xt/1Wnic9duvs/ZF
-        K2bc85GDUspAUwMA/b65JWhNmCNWqvf5iwIMwaUfM3JVaT++Vb9+uBANx4OnPC+7wqcOw4
-        9D+1hCAsz1ekWiyn/uu8zvbSbX9Tyh4=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4D664138FA;
-        Mon, 16 Jan 2023 06:45:27 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jL9uEYfyxGNlXwAAMHmgww
-        (envelope-from <jgross@suse.com>); Mon, 16 Jan 2023 06:45:27 +0000
-Message-ID: <e5cc2f96-82bc-a0dc-21fa-2f605bc867d1@suse.com>
-Date:   Mon, 16 Jan 2023 07:45:26 +0100
+        with ESMTP id S229930AbjAPHb0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 02:31:26 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B8B46B1;
+        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso2095115pjg.2;
+        Sun, 15 Jan 2023 23:31:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
+        b=bNV/0vag1ZvLMpWwA4mawziLzieesOHeeP/uolhRj/Qp/fgoUEgKS7N3HGAUJ0hwEi
+         NNrZZvSk5PRav8zwcMHaV79OCbj1kyAbRLaXuJBlAkL2qROgelytvjsBqXyclWatD66P
+         Ugj2u4a35Qg8LB7A0QOSbJbcpeoiYZd4m2f45lFwkXfct6yFrIw9H9B2+WHzTF0gvm5o
+         AshIWCnV/8OV2oXEADbsYpB4TvdLkd4l84BBzh3/uu9idPKpYXziuWROZgnCLNhU+sJN
+         JRZO8KK8t6UrpaZbxL3OVAvsgPDH3MoIn0oJGJSBPHnnWKgt3Ul15ZHKTohvJxgO9iV7
+         E02Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HOOg7H5N+Z63OpUC/u+N5UvkbhcnIUC0AQSISCJusN4=;
+        b=ngHwoVdMQSFl+TZTSIhZJpH1ygpEmiTsy9/PKXu+BHAKTGU8TlX0+GIdRzQnU5On/P
+         zcUINi/9kObNZAL/AKZGuDIwxuY3uiy6ESaN49ylhRGCb2lT5nd1en2Zy03o9QQQjhTL
+         vv3XoJNXPxzKnHJlTaRwmej3V939MS6IZ3sOmzkebvP+9WWMRqwxNbrCL+R0SjKBZk14
+         puoIkveFwnBdvbIeg8tYwAhvtwzwOpwyqIX5W4qBvWS54oM/WLo9XAi2ijYQVX/UQ+Ge
+         wBoA4HjwTjxdIaX98A3lgPElNQGG5d5T8fmOzoUtjpA3YHdEJ+QZlpqZ2tvaFL+XIyTr
+         MjbQ==
+X-Gm-Message-State: AFqh2koQ+8723qi1sLfeMOdWriT51Uj/MskCrUN5ss+WiCwTEyzMiJeV
+        O611GIIC7iZ/0VLnecoOY0GJAM9DG6OaBwq0E6Y=
+X-Google-Smtp-Source: AMrXdXsHaNFvTcwq7IYjoURTRKB9mLY6RlfohU9xRx/ch1k9FfnZTPFe5NEyMuszQC6sWUU/1ki2k4jRifdInbi8kL8=
+X-Received: by 2002:a17:90b:1112:b0:223:dd6f:13b2 with SMTP id
+ gi18-20020a17090b111200b00223dd6f13b2mr6617650pjb.56.1673854283697; Sun, 15
+ Jan 2023 23:31:23 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org,
-        =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= 
-        <marmarek@invisiblethingslab.com>
-References: <20230113140610.7132-1-jgross@suse.com>
- <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------DiezvYaLwsyIRkmUHZiBoqpD"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230103164359.24347-1-ysionneau@kalray.eu> <CAEr6+ECRh_9App18zmcS6FUR81YYhR=n4kGdeZAtQBsdMB55_A@mail.gmail.com>
+ <6570d22d-ee19-f8b1-6fb4-bf8865ec4142@kalray.eu> <CAEr6+ECPFeokSULpWzYEYLROYHXNA0PtvdUchT37d4_qVA-PKQ@mail.gmail.com>
+ <bccad498-3af2-08f1-8264-cf7b438732d3@kalray.eu> <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
+In-Reply-To: <CAEr6+EC0SCXLrQ2YNYyCyMK1Z9=3=ajbbLP+RKSsARGsmJO9YA@mail.gmail.com>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Mon, 16 Jan 2023 15:31:11 +0800
+Message-ID: <CAEr6+EC4e5QsodG_SpTVMBoGfW1GDAgUfBphahgrqy52vXFB+Q@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/25] Upstream kvx Linux port
+To:     Yann Sionneau <ysionneau@kalray.eu>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>, bpf@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>,
+        devicetree@vger.kernel.org, Eric Biederman <ebiederm@xmission.com>,
+        Eric Paris <eparis@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+        Jan Kiszka <jan.kiszka@siemens.com>,
+        Jason Baron <jbaron@akamai.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-audit@redhat.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>, Alex Michon <amichon@kalray.eu>,
+        Ashley Lesdalons <alesdalons@kalray.eu>,
+        Benjamin Mugnier <mugnier.benjamin@gmail.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Guillaume Missonnier <gmissonnier@kalray.eu>,
+        Guillaume Thouvenin <gthouvenin@kalray.eu>,
+        Jean-Christophe Pince <jcpince@gmail.com>,
+        Jonathan Borne <jborne@kalray.eu>,
+        Jules Maselbas <jmaselbas@kalray.eu>,
+        Julian Vetter <jvetter@kalray.eu>,
+        Julien Hascoet <jhascoet@kalray.eu>,
+        Julien Villette <jvillette@kalray.eu>,
+        Louis Morhet <lmorhet@kalray.eu>,
+        Luc Michel <lmichel@kalray.eu>,
+        =?UTF-8?Q?Marc_Poulhi=C3=A8s?= <dkm@kataplop.net>,
+        Marius Gligor <mgligor@kalray.eu>,
+        Samuel Jones <sjones@kalray.eu>,
+        Thomas Costis <tcostis@kalray.eu>,
+        Vincent Chardon <vincent.chardon@elsys-design.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------DiezvYaLwsyIRkmUHZiBoqpD
-Content-Type: multipart/mixed; boundary="------------lCn3u2Hrj53tNUYLono29aVo";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-kernel@vger.kernel.org, x86@kernel.org, linux-pm@vger.kernel.org,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- xen-devel@lists.xenproject.org,
- =?UTF-8?Q?Marek_Marczykowski-G=c3=b3recki?= <marmarek@invisiblethingslab.com>
-Message-ID: <e5cc2f96-82bc-a0dc-21fa-2f605bc867d1@suse.com>
-Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
-References: <20230113140610.7132-1-jgross@suse.com>
- <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
+On Mon, Jan 9, 2023 at 11:53 PM Jeff Xie <xiehuan09@gmail.com> wrote:
+>
+> On Mon, Jan 9, 2023 at 11:30 PM Yann Sionneau <ysionneau@kalray.eu> wrote=
+:
+> >
+> > Hi Jeff,
+> >
+> > On 1/9/23 16:11, Jeff Xie wrote:
+> > > On Mon, Jan 9, 2023 at 9:21 PM Yann Sionneau <ysionneau@kalray.eu> wr=
+ote:
+> > >> Hi Jeff,
+> > >>
+> > >> On 1/7/23 07:25, Jeff Xie wrote:
+> > >>> Hi,
+> > >>>
+> > >>> On Wed, Jan 4, 2023 at 1:01 AM Yann Sionneau <ysionneau@kalray.eu> =
+wrote:
+> > >>>> [snip]
+> > >>>>
+> > >>>> A kvx toolchain can be built using:
+> > >>>> # install dependencies: texinfo bison flex libgmp-dev libmpc-dev l=
+ibmpfr-dev
+> > >>>> $ git clone https://github.com/kalray/build-scripts
+> > >>>> $ cd build-scripts
+> > >>>> $ source last.refs
+> > >>>> $ ./build-kvx-xgcc.sh output
+> > >>> I would like to build the kvx-xgcc to compile and test the linux
+> > >>> kernel, but it reported a compile error.
+> > >>> I wonder what version of gcc you are using.
+> > >>>
+> > >>> My build environment:
+> > >>> VERSION=3D"20.04.2 LTS (Focal Fossa)"
+> > >>> gcc version 9.3.0 (Ubuntu 9.3.0-17ubuntu1~20.04)
+> > >>>
+> > >>>
+> > >>> Compile error:
+> > >>> $ ./build-kvx-xgcc.sh output
+> > >>>
+> > >>> ../../binutils/libiberty/fibheap.c: In function =E2=80=98fibheap_re=
+place_key_data=E2=80=99:
+> > >>> ../../binutils/libiberty/fibheap.c:38:24: error: =E2=80=98LONG_MIN=
+=E2=80=99 undeclared
+> > >>> (first use in this function)
+> > >>>      38 | #define FIBHEAPKEY_MIN LONG_MIN
+> > >>>         |                        ^~~~~~~~
+> > >>> [snip]
+> > >> What SHA1 of https://github.com/kalray/build-scripts are you using?
+> > > I have executed the "source last.refs"
+> >
+> > I was referring to the SHA1 of the repo itself (build-scripts).
+> >
+> > `last.refs` is a symbolic link which can point to several releases,
+> > depending on "when" you did the clone.
+> >
+> > I am asking this because we recently published new toolchains.
+> >
+> > I want to make sure which one you are trying to build.
+>
+> Unfortunately I deleted this repo a few minutes before you asked me ;-(
+> But I remember that I cloned this repo two days ago.
+> it should be:  last.refs -> refs/4.11.0.refs
 
---------------lCn3u2Hrj53tNUYLono29aVo
-Content-Type: multipart/mixed; boundary="------------ypmOYZbFydzaBEXMU6GCKR0z"
+It should be my own environmental problem.
+I reinstalled the system once and it has been able to compile normally ;-)
 
---------------ypmOYZbFydzaBEXMU6GCKR0z
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+In the past few days, I have reviewed almost all the codes,
+which is very meaningful for me to learn, thank you team.
 
-T24gMTMuMDEuMjMgMjA6NDAsIFJhZmFlbCBKLiBXeXNvY2tpIHdyb3RlOg0KPiBPbiBGcmks
-IEphbiAxMywgMjAyMyBhdCAzOjA2IFBNIEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNv
-bT4gd3JvdGU6DQo+Pg0KPj4gQ29tbWl0IGYxZTUyNTAwOTQ5MyAoIng4Ni9ib290OiBTa2lw
-IHJlYWxtb2RlIGluaXQgY29kZSB3aGVuIHJ1bm5pbmcgYXMNCj4+IFhlbiBQViBndWVzdCIp
-IG1pc3NlZCBvbmUgY29kZSBwYXRoIGFjY2Vzc2luZyByZWFsX21vZGVfaGVhZGVyLCBsZWFk
-aW5nDQo+PiB0byBkZXJlZmVyZW5jaW5nIE5VTEwgd2hlbiBzdXNwZW5kaW5nIHRoZSBzeXN0
-ZW0gdW5kZXIgWGVuOg0KPj4NCj4+ICAgICAgWyAgMzQ4LjI4NDAwNF0gUE06IHN1c3BlbmQg
-ZW50cnkgKGRlZXApDQo+PiAgICAgIFsgIDM0OC4yODk1MzJdIEZpbGVzeXN0ZW1zIHN5bmM6
-IDAuMDA1IHNlY29uZHMNCj4+ICAgICAgWyAgMzQ4LjI5MTU0NV0gRnJlZXppbmcgdXNlciBz
-cGFjZSBwcm9jZXNzZXMgLi4uIChlbGFwc2VkIDAuMDAwIHNlY29uZHMpIGRvbmUuDQo+PiAg
-ICAgIFsgIDM0OC4yOTI0NTddIE9PTSBraWxsZXIgZGlzYWJsZWQuDQo+PiAgICAgIFsgIDM0
-OC4yOTI0NjJdIEZyZWV6aW5nIHJlbWFpbmluZyBmcmVlemFibGUgdGFza3MgLi4uIChlbGFw
-c2VkIDAuMTA0IHNlY29uZHMpIGRvbmUuDQo+PiAgICAgIFsgIDM0OC4zOTY2MTJdIHByaW50
-azogU3VzcGVuZGluZyBjb25zb2xlKHMpICh1c2Ugbm9fY29uc29sZV9zdXNwZW5kIHRvIGRl
-YnVnKQ0KPj4gICAgICBbICAzNDguNzQ5MjI4XSBQTTogc3VzcGVuZCBkZXZpY2VzIHRvb2sg
-MC4zNTIgc2Vjb25kcw0KPj4gICAgICBbICAzNDguNzY5NzEzXSBBQ1BJOiBFQzogaW50ZXJy
-dXB0IGJsb2NrZWQNCj4+ICAgICAgWyAgMzQ4LjgxNjA3N10gQlVHOiBrZXJuZWwgTlVMTCBw
-b2ludGVyIGRlcmVmZXJlbmNlLCBhZGRyZXNzOiAwMDAwMDAwMDAwMDAwMDFjDQo+PiAgICAg
-IFsgIDM0OC44MTYwODBdICNQRjogc3VwZXJ2aXNvciByZWFkIGFjY2VzcyBpbiBrZXJuZWwg
-bW9kZQ0KPj4gICAgICBbICAzNDguODE2MDgxXSAjUEY6IGVycm9yX2NvZGUoMHgwMDAwKSAt
-IG5vdC1wcmVzZW50IHBhZ2UNCj4+ICAgICAgWyAgMzQ4LjgxNjA4M10gUEdEIDAgUDREIDAN
-Cj4+ICAgICAgWyAgMzQ4LjgxNjA4Nl0gT29wczogMDAwMCBbIzFdIFBSRUVNUFQgU01QIE5P
-UFRJDQo+PiAgICAgIFsgIDM0OC44MTYwODldIENQVTogMCBQSUQ6IDY3NjQgQ29tbTogc3lz
-dGVtZC1zbGVlcCBOb3QgdGFpbnRlZCA2LjEuMy0xLmZjMzIucXViZXMueDg2XzY0ICMxDQo+
-PiAgICAgIFsgIDM0OC44MTYwOTJdIEhhcmR3YXJlIG5hbWU6IFN0YXIgTGFicyBTdGFyQm9v
-ay9TdGFyQm9vaywgQklPUyA4LjAxIDA3LzAzLzIwMjINCj4+ICAgICAgWyAgMzQ4LjgxNjA5
-M10gUklQOiBlMDMwOmFjcGlfZ2V0X3dha2V1cF9hZGRyZXNzKzB4Yy8weDIwDQo+Pg0KPj4g
-Rml4IHRoYXQgYnkgYWRkaW5nIGFuIGluZGlyZWN0aW9uIGZvciBhY3BpX2dldF93YWtldXBf
-YWRkcmVzcygpIHdoaWNoDQo+PiBYZW4gUFYgZG9tMCBjYW4gdXNlIHRvIHJldHVybiBhIGR1
-bW15IG5vbi16ZXJvIHdha2V1cCBhZGRyZXNzICh0aGlzDQo+PiBhZGRyZXNzIHdvbid0IGV2
-ZXIgYmUgdXNlZCwgYXMgdGhlIHJlYWwgc3VzcGVuZCBoYW5kbGluZyBpcyBkb25lIGJ5IHRo
-ZQ0KPj4gaHlwZXJ2aXNvcikuDQo+IA0KPiBIb3cgZXhhY3RseSBkb2VzIHRoaXMgaGVscD8N
-Cg0KSSBiZWxpZXZlZCB0aGUgZmlyc3Qgc2VudGVuY2Ugb2YgdGhlIGNvbW1pdCBtZXNzYWdl
-IHdvdWxkIG1ha2UgdGhpcw0KY2xlYXIgZW5vdWdoLg0KDQpJIGNhbiBleHBhbmQgdGhlIGNv
-bW1pdCBtZXNzYWdlIHRvIGdvIG1vcmUgaW50byBkZXRhaWwgaWYgeW91IHRoaW5rDQp0aGlz
-IGlzIHJlYWxseSBuZWVkZWQuDQoNCg0KSnVlcmdlbg0K
---------------ypmOYZbFydzaBEXMU6GCKR0z
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+>
+> > >> We are building our toolchain on Ubuntu 18.04 / 20.04 and 22.04 with=
+out
+> > >> issues, I don't understand why it does not work for you, although in=
+deed
+> > >> the error log you are having pops out on my search engine and seems =
+to
+> > >> be some well known issue.
+> > > Yes, there are many answers on the web, but none of them solve this p=
+roblem.
+> > >
+> > >> If the build-script does not work for you, you can still use the
+> > >> pre-built toolchains generated by the GitHub automated actions:
+> > >> https://github.com/kalray/build-scripts/releases/tag/v4.11.1 ("lates=
+t"
+> > >> means 22.04)
+> > > Thanks, this is the final solution ;-)
+> > Good to see it helped :)
+> >
+> > Regards,
+> >
+> > --
+> >
+> > Yann
+> >
+> >
+> >
+> >
+> >
+>
+>
+> --
+> Thanks,
+> JeffXie
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
 
---------------ypmOYZbFydzaBEXMU6GCKR0z--
 
---------------lCn3u2Hrj53tNUYLono29aVo--
-
---------------DiezvYaLwsyIRkmUHZiBoqpD
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmPE8oYFAwAAAAAACgkQsN6d1ii/Ey9J
-ZAgAi4CoUUPJ9ONm01UIjdAlhMyh5th9qLyYKLOUDPzBQegwPpK3s6Mo1YOl12jqDLcspdbgsXLV
-KGvkA3oqqLDHZJV257VZqSAHHHcbjmOohiAa2monvmfQJULL4lLSG0nR/yjkqNcxR2Md8XHBFX12
-RP0b7v7WLMa29o2GCPQNu/RWbsv/rfXLj5xjy8TfRDbzMkAugfmLxaz133kVZuoqScHpT7NbQZFB
-XYNfm3uaGTlCasOqNCrIAWyxGUtpX5qV3SfdOk5XTeJW9VN+GVSjQmwpyllQYtkNEE23DYYaWNME
-6mCyQ4pe/TD3UerPryakVNnS4JIbGj7v1Okk+X+u1Q==
-=ZhOs
------END PGP SIGNATURE-----
-
---------------DiezvYaLwsyIRkmUHZiBoqpD--
+--
+Thanks,
+JeffXie
