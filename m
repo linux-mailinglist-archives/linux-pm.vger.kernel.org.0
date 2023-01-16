@@ -2,46 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF2F766C350
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 16:09:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB37F66C83A
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 17:37:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjAPPJW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 10:09:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34000 "EHLO
+        id S233571AbjAPQhJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 11:37:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233067AbjAPPIq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 10:08:46 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA42F265BA;
-        Mon, 16 Jan 2023 06:56:28 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9727AC14;
-        Mon, 16 Jan 2023 06:57:10 -0800 (PST)
-Received: from [10.1.196.21] (e125579.cambridge.arm.com [10.1.196.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C86D93F67D;
-        Mon, 16 Jan 2023 06:56:26 -0800 (PST)
-Message-ID: <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
-Date:   Mon, 16 Jan 2023 14:56:19 +0000
+        with ESMTP id S233511AbjAPQge (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 11:36:34 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2668B32E44;
+        Mon, 16 Jan 2023 08:25:30 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id ss4so62015659ejb.11;
+        Mon, 16 Jan 2023 08:25:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FqXjMQkYS4EvIeq90gP/HUPBM251gTsCOw0vQocW76c=;
+        b=f4XeiWEzsAcCtqVk0q1uzAUNea+XDAdF2YH35e6ZNEy4lnsrIjJVLwdJKmztQg3djX
+         nAyAO5wzKJCgrYFQWEKXS9SjSIrnJKNfhDVQr5sF3lXpCMZMHNH61Z0+fPKLFwkwJwW7
+         Y0TleNOVxNHnnuapn5b/0OgDWfIGLzRpCSeRJls7P2M76miN5vky5eQiyRk6POK01fBG
+         gqWnFJjrbYA8MF0zeKols+ddjQHbvlXazqbLrQH43Ex/X2U73vvf9v0UxMdGg3Y+7x2L
+         Ul8hYssEpTYMG1uLeDMtcyCRsud4hrM+hcqa7R+UBS4vq63D99MUmr3w6jFM7LYSTfkA
+         9PnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FqXjMQkYS4EvIeq90gP/HUPBM251gTsCOw0vQocW76c=;
+        b=Yfsg+bhVoOJQdpStyWV+3QrnHVTjwdk9QkOIMVXr50HQ5PUTl5e0E/Bh9xuBW07zp6
+         WT3aoklAfuqJKz5XFwg6dExXzAPBjylTYcMJJ2B4CQKJTofoNhqSTuqFGcZzLyvR0WxJ
+         U8FSVlNqXZxy/+5MoaoXaNa2X7Bb42t2TcrZx+BiArsa6WjT9gEiVSSrarUwfC8oTC0Q
+         QB+5NDg29V0WKJ1Z+0N4/NAMLoB5kbKEzxUgQ+BilqxTdR2fSmo6Fb91J4/HsLCB/MS0
+         qNwDw8ts6fYic7tqou/gRudS9s90u87rtKIDICRWkitZQS9pGfKIngWexQLi45wC9oYs
+         qfxw==
+X-Gm-Message-State: AFqh2kr2a1ut4x05jaAeU4hZ8QOoe/afXFFO51TRvgazIAsPX7Kji7gA
+        eX7CDqWCF74NA/9NWw1RGFCmYvMzByPsfw==
+X-Google-Smtp-Source: AMrXdXthYSAeZE33qLrnytKv7HGXW8TCnicQsE3yRFIkz/ccQ3TFsVQTgsYiSS4pOGTzDkkFAgtiDw==
+X-Received: by 2002:a17:907:395:b0:7c0:d2b2:eb07 with SMTP id ss21-20020a170907039500b007c0d2b2eb07mr12994866ejb.26.1673886328265;
+        Mon, 16 Jan 2023 08:25:28 -0800 (PST)
+Received: from fedora.. ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id gk8-20020a17090790c800b0084d35ffbc20sm10956060ejb.68.2023.01.16.08.25.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Jan 2023 08:25:27 -0800 (PST)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-pm@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+Subject: [PATCH] x86/ACPI/boot: use try_cmpxchg in __acpi_{acquire,release}_global_lock
+Date:   Mon, 16 Jan 2023 17:25:22 +0100
+Message-Id: <20230116162522.4072-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.39.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, peterz@infradead.org, qyousef@layalina.io,
-        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
-        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
-References: <20230113134056.257691-1-vincent.guittot@linaro.org>
- <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,80 +74,68 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 16/01/2023 12:23, Vincent Guittot wrote:
-> On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>
->> On 13/01/2023 14:40, Vincent Guittot wrote:
+Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
+__acpi_{acquire,release}_global_lock.  x86 CMPXCHG instruction returns
+success in ZF flag, so this change saves a compare after cmpxchg
+(and related move instruction in front of cmpxchg).
 
-[...]
+Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
+fails. There is no need to re-read the value in the loop.
 
->>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
->>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
->>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
->>>
->>> +     /* Return true only if the utlization doesn't fit its capacity */
->>
->> s/utlization/utilization
->> s/its/CPU ?
->>
->>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
->>>  }
->>
->> cpu_overutilized() is the only place where we now only test for
->> !util_fits_cpu(). The new comment says we only care about utilization
->> not fitting CPU capacity.
->>
->> Does this mean the rq uclamp values are not important here and we could
->> go back to use fits_capacity()?
->>
->> Not sure since util_fits_cpu() is still coded differently:
-> 
-> uclamp_min is not important but uclamp_max still cap the utilization
+Note that the value from *ptr should be read using READ_ONCE to prevent
+the compiler from merging, refetching or reordering the read.
 
-OK, makes sense.
+No functional change intended.
 
-I.e. we could pass in `rq_util_min = 0` to avoid fetching it
-unnecessary? In case `fits == 1` before the uclamp_min condition in
-util_fits_cpu() it doesn't matter if we switch to return `-1` when
-called from cpu_overutilized(). Detail though ...
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Len Brown <len.brown@intel.com>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+---
+ arch/x86/kernel/acpi/boot.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-[...]
+diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
+index 907cc98b1938..4177577c173b 100644
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -1840,23 +1840,23 @@ early_param("acpi_sci", setup_acpi_sci);
+ 
+ int __acpi_acquire_global_lock(unsigned int *lock)
+ {
+-	unsigned int old, new, val;
++	unsigned int old, new;
++
++	old = READ_ONCE(*lock);
+ 	do {
+-		old = *lock;
+ 		new = (((old & ~0x3) + 2) + ((old >> 1) & 0x1));
+-		val = cmpxchg(lock, old, new);
+-	} while (unlikely (val != old));
++	} while (!try_cmpxchg(lock, &old, new));
+ 	return ((new & 0x3) < 3) ? -1 : 0;
+ }
+ 
+ int __acpi_release_global_lock(unsigned int *lock)
+ {
+-	unsigned int old, new, val;
++	unsigned int old, new;
++
++	old = READ_ONCE(*lock);
+ 	do {
+-		old = *lock;
+ 		new = old & ~0x3;
+-		val = cmpxchg(lock, old, new);
+-	} while (unlikely (val != old));
++	} while (!try_cmpxchg(lock, &old, new));
+ 	return old & 0x1;
+ }
+ 
+-- 
+2.39.0
 
->>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
->>>
->>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
->>>                       continue;
->>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
->>> +
->>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
->>> +
->>> +             /* This CPU fits with all capacity and performance requirements */
->>
->> In task_fits_cpu() `utilization and performance (better uclamp)
->> requirements` term was used. I assume it's the same thing here?
->>
->>> +             if (fits > 0)
->>>                       return cpu;
->>> +             /*
->>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
->>> +              * for the CPU with highest performance capacity.
->>                                             ^^^^^^^^^^^^^^^^^^^^
->>
->> Do we use a new CPU capacity value `performance capacity (1)` here?
->>
->> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
->>
->> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
->> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
->> to return -1. Shouldn't (1) and (2) be the same?
-> 
-> I'm all in favor of both being capacity_orig_of(cpu) -
-> thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
-
-I think we need a handy name for this new capacity value, which seems to
-be `capacity_orig - capacity reduced by thermal`. And we should either
-use `thermal_load_avg` or `thermal pressure` for the latter part. And
-then we should use this consistently in all these places:
-util_fits_cpu(), feec(), sic().
-
-[...]
