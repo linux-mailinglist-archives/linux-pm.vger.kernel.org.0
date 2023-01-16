@@ -2,53 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7298766BFB1
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 14:22:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA6A666BFAD
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 14:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjAPNWc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 08:22:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42512 "EHLO
+        id S230295AbjAPNWb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 08:22:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjAPNWX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 08:22:23 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8254E1CAF7
+        with ESMTP id S230426AbjAPNWW (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 08:22:22 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24CD1CAFD
         for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 05:22:10 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id f34so42674629lfv.10
+Received: by mail-lf1-x131.google.com with SMTP id o20so10731716lfk.5
         for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 05:22:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uEgLdu9MBr5gHEyywHfCPlxu1SSAFMcXzGeB6TYQjOY=;
-        b=sv/MiCcegjMVGmNJoieYkPeFvcWeYPUEoO5o5MeA92zqwe3jay2mboEWMrBtL8A1s4
-         BoYIFDdxSPoX1QOxp9AAo8fZ0oYgk6v0V/fSmSvGWCgq2/0Vys7fIO5Spn0r18jr98ES
-         0ZayDKMNd/uaR2hy3ZeSssSjisjpxrQ4Oj4nVMIH76b83+QnvFxJTFUFR/Xq8Q8qU0C6
-         CGu9fgs9SV7P61AepFqq+YvO7gWvfi4QHK9sgSrHLkIjsAShHnoGfSLWuKdsH6yjMF2K
-         BGfXcqX2bvBil2icX3rfzKn1cR8ob614j13VF2nbxs7YBJ+Fs+PTIHMqwIoYOMuibFBI
-         205g==
+        bh=DdsB/Dtp2SmoDR4CMEbLw4wpi1c6sbrU8O+sGAR6VMk=;
+        b=TsMPh4NWK3l+1qtViZlV7Cj03vv9URHxALw6ifrSvpJc2eET/CaQMQij5ybzGmEdNR
+         LVZUJKjJWMSCRi6WrGkRVO+Wg0YqR/ZXTFsi/oKwue/Kst9alfkZUZOYTmlqkcscecQ+
+         xCP2rUraBO53/8h80bVH2iTvMsbaopOwsV53dqnXCWqRV1Nw0bDwXWggJmi9F49BZ9iK
+         gSII8r6yXGVhzcFJnYUbhkxWLpA+DQzq7f0E2QgT6Iwogm5LIc0iZhHBQCqlOJNJ80zy
+         Y4tjWJkoU2hMUcCkUR0sLhvlvx7jyBFiETn6Rbxt+WZzeM0Z3CsbzEsblVR/Fx/UVlyv
+         asBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uEgLdu9MBr5gHEyywHfCPlxu1SSAFMcXzGeB6TYQjOY=;
-        b=Mcgq9HAiLNAIgA2QeoCQcD2bhk3W99pa2WGYSr1X2XVfwMrrWcgJaTq7z11WIQlB93
-         TtR4NIuYyYlzNnB6D63z8TIPmGeTrJc25wghJ61+FQggsh+AK1P6e8UsCSyVnE8x1A9l
-         dQZCs9u0ySIOOMHbDpnlu5Fn9BoSRSR9xObOpDZB6qWlHaKYkcDgANB0UdQQhHQSBEXP
-         txkzq4u8AN6mu0JHOxEz1f1vvUoj74mI1pupJdF1Jc7nmt5ehYnBhbxxWa469KJwcQt7
-         5wwSqwodgAbq/cCgkhS6oYZa+ViDSb0x2KDXZ5xZ+D/VjJj4uXWrNaGltE1IWHS3RBbF
-         s2cw==
-X-Gm-Message-State: AFqh2koyqKNNNJfr8n6yj6h6i/bUiCDgwNEbNK9ulIxQGETPYSMKXmmi
-        5Jimb0ANMpwrqGBaQyIflhyuKw==
-X-Google-Smtp-Source: AMrXdXuSzfyp3y4Ri1oExdUC2zPF7pJRuDiIL9FmFjR6sfQAD0oQaxVKPbUFI/g7vzo/HwWXSVF8bw==
-X-Received: by 2002:a05:6512:3b99:b0:4a4:68b9:608c with SMTP id g25-20020a0565123b9900b004a468b9608cmr32382673lfv.23.1673875328874;
-        Mon, 16 Jan 2023 05:22:08 -0800 (PST)
+        bh=DdsB/Dtp2SmoDR4CMEbLw4wpi1c6sbrU8O+sGAR6VMk=;
+        b=6AIPVpWlkL2YPeHuGoHBxI0UMXqQHyB8aNpCn/0W6uzuERR3/TfvETcNxW/nBDMqmm
+         g07X3DirtBIj8E4jBnpwHzjp9eSRg7dIM9xqESAjIm0P6Jwx7Ktgw5FykB/j/PzcHSWG
+         2LBS303NWujsueUIC7NFIV0Xd2oGChcrw8vYEY9uRK6+10ep1vxiu2gcQq4bHYMQl0TY
+         al5YAVD8cmxbQSkmzEvLTrJsNGFFagKvLp3ShRBko5rZ4HfJXP3I+rYEKyXjGEAOX8Ko
+         Fcz2nZ5ic2IB0n3SMJkznT6Hr/s1IS9GND4faNcFcXAwkwgyqAnWJLOulhQ9Tb76lx2H
+         0u9w==
+X-Gm-Message-State: AFqh2kqAghWHugDJKRsKzxD8Qhlb5yLH0zPj+1JuZrkTSHSpOvwCvlFb
+        iiSWk8Ttkr5AmCAYfUvKjrxDQQ==
+X-Google-Smtp-Source: AMrXdXt5e51/ix/1tHSNe+Eo6bw/lo4TXuvqYHbRtUJs1whIyXtN3Fmq1Kff98Omb6euKvV+K28kIw==
+X-Received: by 2002:a05:6512:46b:b0:4c5:a0b4:336b with SMTP id x11-20020a056512046b00b004c5a0b4336bmr3223793lfd.1.1673875330273;
+        Mon, 16 Jan 2023 05:22:10 -0800 (PST)
 Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05651212c900b004cc58b91177sm5016653lfg.239.2023.01.16.05.22.07
+        by smtp.gmail.com with ESMTPSA id p9-20020a05651212c900b004cc58b91177sm5016653lfg.239.2023.01.16.05.22.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 05:22:08 -0800 (PST)
+        Mon, 16 Jan 2023 05:22:09 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
         agross@kernel.org, krzysztof.kozlowski@linaro.org
@@ -56,9 +56,9 @@ Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 7/9] interconnect: qcom: rpm: Handle interface clocks
-Date:   Mon, 16 Jan 2023 14:21:50 +0100
-Message-Id: <20230116132152.405535-8-konrad.dybcio@linaro.org>
+Subject: [PATCH v3 8/9] interconnect: qcom: rpm: Add a way to always set QoS registers
+Date:   Mon, 16 Jan 2023 14:21:51 +0100
+Message-Id: <20230116132152.405535-9-konrad.dybcio@linaro.org>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230116132152.405535-1-konrad.dybcio@linaro.org>
 References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
@@ -74,272 +74,52 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Some (but not all) providers (or their specific nodes) require
-specific clocks to be turned on before they can be accessed. Failure
-to ensure that results in a seemingly random system crash (which
-would usually happen at boot with the interconnect driver built-in),
-resulting in the platform not booting up properly.
-
-Limit the number of bus_clocks to 2 (which is the maximum that SMD
-RPM interconnect supports anyway) and handle non-scaling clocks
-separately. Update MSM8996 and SDM660 drivers to make sure they do
-not regress with this change.
-
-This unfortunately has to be done in one patch to prevent either
-compile errors or broken bisect.
+On newer SoCs (there's no clear boundary, but probably "new enough"
+means every interconnect provider is either BIMC or QNoC and there
+are no old-style NoC hosts) we're expected to set QoS registers
+regardless of the ap_owned param. Add a bool in the qcom_icc_provider
+and make the logic assume it's okay to set the registers when it's
+set.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 48 ++++++++++++++++++++++-------
- drivers/interconnect/qcom/icc-rpm.h | 10 ++++--
- drivers/interconnect/qcom/msm8996.c | 22 ++++++-------
- drivers/interconnect/qcom/sdm660.c  | 16 ++++------
- 4 files changed, 60 insertions(+), 36 deletions(-)
+ drivers/interconnect/qcom/icc-rpm.c | 2 +-
+ drivers/interconnect/qcom/icc-rpm.h | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 5888241c0477..509cadf398e9 100644
+index 509cadf398e9..343e6021a93a 100644
 --- a/drivers/interconnect/qcom/icc-rpm.c
 +++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -453,28 +453,43 @@ int qnoc_probe(struct platform_device *pdev)
- 	qnodes = desc->nodes;
- 	num_nodes = desc->num_nodes;
+@@ -243,7 +243,7 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
+ 	bool vote_ap, vote_rpm;
+ 	int ret;
  
--	if (desc->num_bus_clocks) {
--		cds = desc->bus_clocks;
--		cd_num = desc->num_bus_clocks;
-+	if (desc->num_intf_clocks) {
-+		cds = desc->intf_clocks;
-+		cd_num = desc->num_intf_clocks;
+-	if (qp->type == QCOM_ICC_QNOC) {
++	if (qp->type == QCOM_ICC_QNOC || qp->always_set_qos) {
+ 		vote_ap = true;
+ 		vote_rpm = true;
  	} else {
--		cds = bus_clocks;
--		cd_num = ARRAY_SIZE(bus_clocks);
-+		/* 0 intf clocks is perfectly fine */
-+		cd_num = 0;
- 	}
- 
--	qp = devm_kzalloc(dev, struct_size(qp, bus_clks, cd_num), GFP_KERNEL);
-+	qp = devm_kzalloc(dev, struct_size(qp, intf_clks, cd_num), GFP_KERNEL);
- 	if (!qp)
- 		return -ENOMEM;
- 
--	qp->bus_clk_rate = devm_kcalloc(dev, cd_num, sizeof(*qp->bus_clk_rate),
--					GFP_KERNEL);
--	if (!qp->bus_clk_rate)
--		return -ENOMEM;
--
- 	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
- 			    GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
-+	for (i = 0; i < cd_num; i++)
-+		qp->intf_clks[i].id = cds[i];
-+	qp->num_intf_clks = cd_num;
-+
-+	if (desc->num_bus_clocks) {
-+		cds = desc->bus_clocks;
-+		cd_num = desc->num_bus_clocks;
-+	} else {
-+		cds = bus_clocks;
-+		cd_num = ARRAY_SIZE(bus_clocks);
-+	}
-+
-+	/*
-+	 * This is not realistic, scaling is only possible with an
-+	 * always-active and an active-only clock, or at least one
-+	 * of them in some very bizzare cases.
-+	 */
-+	if (WARN_ON(cd_num > 2))
-+		cd_num = 2;
-+
- 	for (i = 0; i < cd_num; i++)
- 		qp->bus_clks[i].id = cds[i];
- 	qp->num_bus_clks = cd_num;
-@@ -515,6 +530,14 @@ int qnoc_probe(struct platform_device *pdev)
- 	if (ret)
- 		return ret;
- 
-+	ret = devm_clk_bulk_get(dev, qp->num_intf_clks, qp->intf_clks);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_bulk_prepare_enable(qp->num_intf_clks, qp->intf_clks);
-+	if (ret)
-+		return ret;
-+
- 	if (desc->has_bus_pd) {
- 		ret = dev_pm_domain_attach(dev, true);
- 		if (ret)
-@@ -533,6 +556,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	ret = icc_provider_add(provider);
- 	if (ret) {
- 		dev_err(dev, "error adding interconnect provider: %d\n", ret);
-+		clk_bulk_disable_unprepare(qp->num_intf_clks, qp->intf_clks);
- 		clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
- 		return ret;
- 	}
-@@ -566,6 +590,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	return 0;
- err:
- 	icc_nodes_remove(provider);
-+	clk_bulk_disable_unprepare(qp->num_intf_clks, qp->intf_clks);
- 	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
- 	icc_provider_del(provider);
- 
-@@ -578,6 +603,7 @@ int qnoc_remove(struct platform_device *pdev)
- 	struct qcom_icc_provider *qp = platform_get_drvdata(pdev);
- 
- 	icc_nodes_remove(&qp->provider);
-+	clk_bulk_disable_unprepare(qp->num_intf_clks, qp->intf_clks);
- 	clk_bulk_disable_unprepare(qp->num_bus_clks, qp->bus_clks);
- 	icc_provider_del(&qp->provider);
- 
 diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-index d4401f35f6d2..729573f0d9fe 100644
+index 729573f0d9fe..3c8888482a39 100644
 --- a/drivers/interconnect/qcom/icc-rpm.h
 +++ b/drivers/interconnect/qcom/icc-rpm.h
-@@ -24,20 +24,24 @@ enum qcom_icc_type {
-  * struct qcom_icc_provider - Qualcomm specific interconnect provider
-  * @provider: generic interconnect provider
-  * @num_bus_clks: the total number of bus_clks clk_bulk_data entries
-+ * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
+@@ -28,6 +28,7 @@ enum qcom_icc_type {
   * @type: the ICC provider type
   * @regmap: regmap for QoS registers read/write access
   * @qos_offset: offset to QoS registers
++ * @always_set_qos: whether to always set QoS registers regardless of bus type
   * @bus_clk_rate: bus clock rate in Hz
   * @bus_clks: the clk_bulk_data table of bus clocks
-+ * @intf_clks: the clk_bulk_data table of interface clocks
-  */
- struct qcom_icc_provider {
- 	struct icc_provider provider;
- 	int num_bus_clks;
-+	int num_intf_clks;
+  * @intf_clks: the clk_bulk_data table of interface clocks
+@@ -39,6 +40,7 @@ struct qcom_icc_provider {
  	enum qcom_icc_type type;
  	struct regmap *regmap;
  	unsigned int qos_offset;
--	u64 *bus_clk_rate;
--	struct clk_bulk_data bus_clks[];
-+	u64 bus_clk_rate[2];
-+	struct clk_bulk_data bus_clks[2];
-+	struct clk_bulk_data intf_clks[];
- };
- 
- /**
-@@ -93,6 +97,8 @@ struct qcom_icc_desc {
- 	size_t num_nodes;
- 	const char * const *bus_clocks;
- 	size_t num_bus_clocks;
-+	const char * const *intf_clocks;
-+	size_t num_intf_clocks;
- 	bool has_bus_pd;
- 	enum qcom_icc_type type;
- 	const struct regmap_config *regmap_cfg;
-diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-index 69fc50a6fa5c..1a5e0ad36cc4 100644
---- a/drivers/interconnect/qcom/msm8996.c
-+++ b/drivers/interconnect/qcom/msm8996.c
-@@ -21,21 +21,17 @@
- #include "smd-rpm.h"
- #include "msm8996.h"
- 
--static const char * const bus_mm_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const mm_intf_clocks[] = {
- 	"iface"
- };
- 
--static const char * const bus_a0noc_clocks[] = {
-+static const char * const a0noc_intf_clocks[] = {
- 	"aggre0_snoc_axi",
- 	"aggre0_cnoc_ahb",
- 	"aggre0_noc_mpu_cfg"
- };
- 
--static const char * const bus_a2noc_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const a2noc_intf_clocks[] = {
- 	"aggre2_ufs_axi",
- 	"ufs_axi"
- };
-@@ -1821,8 +1817,8 @@ static const struct qcom_icc_desc msm8996_a0noc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = a0noc_nodes,
- 	.num_nodes = ARRAY_SIZE(a0noc_nodes),
--	.bus_clocks = bus_a0noc_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_a0noc_clocks),
-+	.intf_clocks = a0noc_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
- 	.has_bus_pd = true,
- 	.regmap_cfg = &msm8996_a0noc_regmap_config
- };
-@@ -1866,8 +1862,8 @@ static const struct qcom_icc_desc msm8996_a2noc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = a2noc_nodes,
- 	.num_nodes = ARRAY_SIZE(a2noc_nodes),
--	.bus_clocks = bus_a2noc_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_a2noc_clocks),
-+	.intf_clocks = a2noc_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
- 	.regmap_cfg = &msm8996_a2noc_regmap_config
- };
- 
-@@ -2005,8 +2001,8 @@ static const struct qcom_icc_desc msm8996_mnoc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = mnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(mnoc_nodes),
--	.bus_clocks = bus_mm_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_mm_clocks),
-+	.intf_clocks = mm_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
- 	.regmap_cfg = &msm8996_mnoc_regmap_config
- };
- 
-diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-index a22ba821efbf..0e8a96f4ce90 100644
---- a/drivers/interconnect/qcom/sdm660.c
-+++ b/drivers/interconnect/qcom/sdm660.c
-@@ -127,15 +127,11 @@ enum {
- 	SDM660_SNOC,
- };
- 
--static const char * const bus_mm_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const mm_intf_clocks[] = {
- 	"iface",
- };
- 
--static const char * const bus_a2noc_clocks[] = {
--	"bus",
--	"bus_a",
-+static const char * const a2noc_intf_clocks[] = {
- 	"ipa",
- 	"ufs_axi",
- 	"aggre2_ufs_axi",
-@@ -1516,8 +1512,8 @@ static const struct qcom_icc_desc sdm660_a2noc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_a2noc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_a2noc_nodes),
--	.bus_clocks = bus_a2noc_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_a2noc_clocks),
-+	.intf_clocks = a2noc_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
- 	.regmap_cfg = &sdm660_a2noc_regmap_config,
- };
- 
-@@ -1659,8 +1655,8 @@ static const struct qcom_icc_desc sdm660_mnoc = {
- 	.type = QCOM_ICC_NOC,
- 	.nodes = sdm660_mnoc_nodes,
- 	.num_nodes = ARRAY_SIZE(sdm660_mnoc_nodes),
--	.bus_clocks = bus_mm_clocks,
--	.num_bus_clocks = ARRAY_SIZE(bus_mm_clocks),
-+	.intf_clocks = mm_intf_clocks,
-+	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
- 	.regmap_cfg = &sdm660_mnoc_regmap_config,
- };
- 
++	bool always_set_qos;
+ 	u64 bus_clk_rate[2];
+ 	struct clk_bulk_data bus_clks[2];
+ 	struct clk_bulk_data intf_clks[];
 -- 
 2.39.0
 
