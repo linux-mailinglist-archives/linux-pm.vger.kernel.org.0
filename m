@@ -2,105 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 886F266BFB2
-	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 14:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C40566C096
+	for <lists+linux-pm@lfdr.de>; Mon, 16 Jan 2023 15:02:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230411AbjAPNWj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 08:22:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43146 "EHLO
+        id S231686AbjAPOCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 09:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjAPNWZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 08:22:25 -0500
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DFC61CF70
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 05:22:12 -0800 (PST)
-Received: by mail-lf1-x129.google.com with SMTP id o20so10731817lfk.5
-        for <linux-pm@vger.kernel.org>; Mon, 16 Jan 2023 05:22:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t6b0TwGgzkpcqXdb/NMeqpUwn36E7G6fTsEYVsv4xJ4=;
-        b=qdJwWxPcd0u+wekOpipC4vGGjkJSdRnwl7C0Nl3y/tT81k9opLLsYd+Aej4asu8BDp
-         8T7pq+pnjp97vfhVumc1TgJSnN4G2Xx1bUfgbjcKzfxaTgrxaLqnD8sshewFadWjZOXu
-         TrJ32YbOv0L/t+MM3HvI6uROKmi3GFv4iD6Qv8wIKMqOOBOq/hHKf/mD8kY5qaKpIn0D
-         uU6oOOkgLW7XqGUKyBuOBGuGuGlYix8ecJ4aeQKLFRHtrPuOE8j+F+DneLu9qluZmqLb
-         fbacTbfOPReHBQkJ+8eyYo1bQsxJednSqVSKdrFwjlbYNJTXSR0nfTyev3BvD5g9pH1N
-         6nwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t6b0TwGgzkpcqXdb/NMeqpUwn36E7G6fTsEYVsv4xJ4=;
-        b=7q0ez/AixkPPrjfVhMP680YMtsprKaF9hBWh2M9bb3qZYnh/7s8Fw9xQVd9Ehqz+QR
-         9uRdWtE+bsNM360514GRbIYv1hWUlAyvNXpmEhL6NZA3rAL1NI/I9REmlpOEh+HJOnI2
-         39ksuTNaRg4iire++6SQLtVjCG86bDoBaFSyuytfjdVOIj57zkeVU4NQPoYv5iGANSpl
-         5oMH2Z1BAQn/em+aF5K44dWUiQPAd2X8SLuYghy0wKh0xisYVDF2Mh4MFN5JV2YwP47+
-         BclS2cBXmjdKd5KebA6cMs+WKCcHdqccPFfJXIooWPoAHNvJoCr/qlVqEBSqTstYMElV
-         OBjQ==
-X-Gm-Message-State: AFqh2kokNVLafWqapQcSFKTHKm/nfye+Pzqsv2CBuSU75hYcgmSgxEBx
-        IQYZRnKemeyNukvebiDT+DDJKA==
-X-Google-Smtp-Source: AMrXdXt0B1JhS8wmN3eSrHIp72RTHYzZVdVGNRTRSzck9D6zF7N+W6eN+EqYbaHFgDajziYzd1U9LA==
-X-Received: by 2002:a05:6512:1111:b0:4cc:7e0e:8d5c with SMTP id l17-20020a056512111100b004cc7e0e8d5cmr11874928lfg.37.1673875331697;
-        Mon, 16 Jan 2023 05:22:11 -0800 (PST)
-Received: from localhost.localdomain (abym53.neoplus.adsl.tpnet.pl. [83.9.32.53])
-        by smtp.gmail.com with ESMTPSA id p9-20020a05651212c900b004cc58b91177sm5016653lfg.239.2023.01.16.05.22.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Jan 2023 05:22:11 -0800 (PST)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 9/9] interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
-Date:   Mon, 16 Jan 2023 14:21:52 +0100
-Message-Id: <20230116132152.405535-10-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230116132152.405535-1-konrad.dybcio@linaro.org>
-References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
+        with ESMTP id S231561AbjAPOCR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 09:02:17 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210B22197F;
+        Mon, 16 Jan 2023 06:02:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A64A160FD4;
+        Mon, 16 Jan 2023 14:02:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6646AC433D2;
+        Mon, 16 Jan 2023 14:02:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673877730;
+        bh=f34HDFU9G8sG6cn3BHd0SbGmATKQkq6IuNGYsC/EV6k=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ELQoGZKHIBbMHadwieqyVgzPjOBhc9owifa+SSTA7el7bcCrnrZCjpPGyQvb8RZQw
+         C069r23UC8v5kQiYzuwycAP/y4i5mdREbnWhgGMkbzYmo1rheVL/pOz4/nT6pW2GVb
+         IcHOo82171IBlu7+kRdAQpyyrs8yRFnuH05+2LdNGm9t3HLEYeh9zWAO8GFskKpSlu
+         3f4po8UhpQ9/iEeNM3xASLspaCOmwltVDiGLH3b2akLp8queoTz8h1idnvL3RR8qHi
+         v1nVdZmvr3601OuUT0xyaZChrtKCkAnWPV6D6f0zZYlRjMVIzEfAVbB3RQ/NqiRiaq
+         MK1F3oL+0h/LA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Pierre Gondois <pierre.gondois@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Sasha Levin <sashal@kernel.org>, rafael@kernel.org,
+        linux-pm@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 07/53] cpufreq: CPPC: Add u64 casts to avoid overflowing
+Date:   Mon, 16 Jan 2023 09:01:07 -0500
+Message-Id: <20230116140154.114951-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20230116140154.114951-1-sashal@kernel.org>
+References: <20230116140154.114951-1-sashal@kernel.org>
 MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Commit dd42ec8ea5b9 ("interconnect: qcom: rpm: Use _optional func for provider clocks")
-relaxed the requirements around probing bus clocks. This was a decent
-solution for making sure MSM8996 would still boot with old DTs, but
-now that there's a proper fix in place that both old and new DTs
-will be happy about, revert back to the safer variant of the
-function.
+From: Pierre Gondois <pierre.gondois@arm.com>
 
-Fixes: dd42ec8ea5b9 ("interconnect: qcom: rpm: Use _optional func for provider clocks")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+[ Upstream commit f5f94b9c8b805d87ff185caf9779c3a4d07819e3 ]
+
+The fields of the _CPC object are unsigned 32-bits values.
+To avoid overflows while using _CPC's values, add 'u64' casts.
+
+Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/interconnect/qcom/icc-rpm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/cpufreq/cppc_cpufreq.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-index 343e6021a93a..8cff724661f2 100644
---- a/drivers/interconnect/qcom/icc-rpm.c
-+++ b/drivers/interconnect/qcom/icc-rpm.c
-@@ -522,7 +522,7 @@ int qnoc_probe(struct platform_device *pdev)
- 	}
- 
- regmap_done:
--	ret = devm_clk_bulk_get_optional(dev, qp->num_bus_clks, qp->bus_clks);
-+	ret = devm_clk_bulk_get(dev, qp->num_bus_clks, qp->bus_clks);
- 	if (ret)
- 		return ret;
+diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+index 432dfb4e8027..022e3555407c 100644
+--- a/drivers/cpufreq/cppc_cpufreq.c
++++ b/drivers/cpufreq/cppc_cpufreq.c
+@@ -487,7 +487,8 @@ static unsigned int get_perf_level_count(struct cpufreq_policy *policy)
+ 	cpu_data = policy->driver_data;
+ 	perf_caps = &cpu_data->perf_caps;
+ 	max_cap = arch_scale_cpu_capacity(cpu);
+-	min_cap = div_u64(max_cap * perf_caps->lowest_perf, perf_caps->highest_perf);
++	min_cap = div_u64((u64)max_cap * perf_caps->lowest_perf,
++			  perf_caps->highest_perf);
+ 	if ((min_cap == 0) || (max_cap < min_cap))
+ 		return 0;
+ 	return 1 + max_cap / CPPC_EM_CAP_STEP - min_cap / CPPC_EM_CAP_STEP;
+@@ -519,10 +520,10 @@ static int cppc_get_cpu_power(struct device *cpu_dev,
+ 	cpu_data = policy->driver_data;
+ 	perf_caps = &cpu_data->perf_caps;
+ 	max_cap = arch_scale_cpu_capacity(cpu_dev->id);
+-	min_cap = div_u64(max_cap * perf_caps->lowest_perf,
+-			perf_caps->highest_perf);
+-
+-	perf_step = CPPC_EM_CAP_STEP * perf_caps->highest_perf / max_cap;
++	min_cap = div_u64((u64)max_cap * perf_caps->lowest_perf,
++			  perf_caps->highest_perf);
++	perf_step = div_u64((u64)CPPC_EM_CAP_STEP * perf_caps->highest_perf,
++			    max_cap);
+ 	min_step = min_cap / CPPC_EM_CAP_STEP;
+ 	max_step = max_cap / CPPC_EM_CAP_STEP;
  
 -- 
-2.39.0
+2.35.1
 
