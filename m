@@ -2,90 +2,178 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C4366E87A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 22:32:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D7F670B1E
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 23:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbjAQVcS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 16:32:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48766 "EHLO
+        id S229906AbjAQWEO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 17:04:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjAQVas (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 16:30:48 -0500
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF5823333
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 11:56:22 -0800 (PST)
-Received: by mail-yb1-xb35.google.com with SMTP id e130so5961244yba.7
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 11:56:22 -0800 (PST)
+        with ESMTP id S229748AbjAQWDS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 17:03:18 -0500
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518F55AB6B
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
+Received: by mail-ej1-x630.google.com with SMTP id ss4so70830016ejb.11
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yX6+3HvGi/JBBED3BjbKlXKbkX2c1+XYkVkvZbiTdCU=;
-        b=wujQrJi0Tdd+VhGfQqZVZqhwx+Ul+ejY7IxFv3l9huv8Es/bU1LVJey2dIVE+fQhKL
-         dpxucrVRKEYY/CtFJFrqfjAgO2Z2pAT03z7Oj3GfuM1deOAdUyO937O+csOrem/dSHPP
-         81YVjR+14tCr1pOjSYavYY5yMkxWO0dxCL6tVY3Og2dABY91X5QdUSUmpDi816rxsXMH
-         M3ZDmVljGyjziRsU4cKM0dXynYOSC8YBPoZy6auWnGzf46FTqUk7Nkr7IMM0BF1RYwEe
-         RCNdrxe/N1Nt/GqDuuIHFfnn2b42VPZSshgErZ905lUbwcPGWcRNEGWUcE8lmaGU+0mS
-         YK9w==
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
+        b=ee9ZsxFH0+TOnSXcPrEGkTd9TlTqtZr8Jzdq1Pc/ZubpNyLzAegr1AYxHJ163b0TUy
+         dQQCDckhQGbOqH/LVs697vIWIUgWVjqkezi+1Fb/X67JNEVsvTfG8taaSxj9XMcdqnat
+         wuxIENu4lgwtZL3RwMb9XYuzJ3VDaPaHclj4No3S72WGGpkquszBpdzpLTRm/m/xuDVV
+         8T7LsomWI6BDi0D4N0JCzOZLjGpkxVUV7UVosfuwrrCZ162QSbHBlAOAjs9iM/HTdmIY
+         jo+76qdlqTimsnv4Ll2PCZmWskdhr9cuU2EFxMkUFQGntxOtxZich/LI1zMt8fJgl3Xn
+         Cgpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yX6+3HvGi/JBBED3BjbKlXKbkX2c1+XYkVkvZbiTdCU=;
-        b=PhEJkjc2iwVug/U28G0I1qQQ1joV3OZbYL0R8E5JHEMgGwRN79JI1b8m3perGJvul3
-         h2Qhqk+sdbr4JLfOYTUUhCY25HR4VdZxC+PMpeWmH9UERH8Smwzg5Bbu0wmErIFeU1Dz
-         1iVg1dBsdgMlvBwtZpzu2eIJftsVYR8SKL13qXXFvxaUoMBe2O8jr7jg5Wut0ct8PPRZ
-         aZGWP69dOcBZYx2FNvtye0kMjhSTl68O1D6RpgcB3Ece11XONZgqviFf3h88vsfFpqfv
-         WFTvyRXLWwlqpvlTRc9rjUIDe5w9cmTSfhdElJOPb/JRGLkLKElCwHKN5x6Lan7tgDXX
-         Oy7Q==
-X-Gm-Message-State: AFqh2kphH6Khu5LcWETc/8OUVUoTxN3lz3rUIRAAHoe/2arvHZkwcYFO
-        paCBeOsaBXUe6wrBUfDPA2IYcB9gEQz8I2DnRFfsAw==
-X-Google-Smtp-Source: AMrXdXvw2NwEdkD84Kl+3D0H20OO2m6B58bilFAkTCSITgzXtflWJDmamOP5hHStt88AvYwjFedz6X6mkWriMDj0FDs=
-X-Received: by 2002:a25:ca81:0:b0:7d2:891e:ee59 with SMTP id
- a123-20020a25ca81000000b007d2891eee59mr594922ybg.152.1673985381327; Tue, 17
- Jan 2023 11:56:21 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
+        b=GzUSxe/4fnkgypM3eYLywLyAoVTxKG20Ml/4xGAdCPqrut3NZvcc1wBs6x6XlzGopk
+         e/AjgCU2fwyXN7drfxK3BZIPSm3Jxr31pmHQ3ibtXKuJ/1WoU+APrRKxWvx3rWzOAufV
+         CnQmC+8Y238bSNHQG71acQ/BbCFoAZ7oNpHylzvz4u7lQc8yDHMlrjVYyB27L4DiLigz
+         4fzSV1gvqhLv9unTkTn1cmHSxWBLvCcXnmzfsRGKV3uX7ATELHtq4b+F7iE2LYJIi5xH
+         oX39cjGLVfqsF3bTWkAkIBzYgIw2UY7Jcb4iArN1Y+RvOBOZlFp8EiM3tcGIZ+PSeRVm
+         Rlxg==
+X-Gm-Message-State: AFqh2koPoX4Q15It4lCYj65FqdugGvSBkms/eV3UfQ7pPAlfk7BiiMqs
+        /7+Bn5BhZbdkOqKgqbXlFPSDiQ==
+X-Google-Smtp-Source: AMrXdXs9uRo49QUx37/1Ds+MJCE8jo71WpvZDXyr3NVprgNsVLSvnGgypIdXZ+kNkxM/vZUXmVO/Fw==
+X-Received: by 2002:a17:907:a710:b0:7c0:f71b:8b3 with SMTP id vw16-20020a170907a71000b007c0f71b08b3mr4253213ejc.57.1673986858902;
+        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id k14-20020a17090632ce00b00871ac327db6sm2238452ejk.45.2023.01.17.12.20.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
+Date:   Tue, 17 Jan 2023 20:20:56 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <20230117202056.zx2pl22miufcrcu3@airbuntu>
+References: <20230113134056.257691-1-vincent.guittot@linaro.org>
+ <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+ <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+ <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
 MIME-Version: 1.0
-References: <20230103145339.40501-1-andriy.shevchenko@linux.intel.com> <Y8bG5N6uf5XLoiuH@smile.fi.intel.com>
-In-Reply-To: <Y8bG5N6uf5XLoiuH@smile.fi.intel.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Tue, 17 Jan 2023 21:56:10 +0200
-Message-ID: <CAA8EJprAbNDTKW5L5dV9aQQrh1x7wUqNWOogWK9rvPUp5N2ihg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] thermal: qcom-spmi-adc-tm5: Use asm intead of asm-generic
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linexp.org>,
-        Jishnu Prakash <quic_jprakash@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 17 Jan 2023 at 18:04, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Jan 03, 2023 at 04:53:39PM +0200, Andy Shevchenko wrote:
-> > There is no point to specify asm-generic for the unaligned.h.
-> > Drop the 'generic' suffix.
->
-> Any comments?
+On 01/16/23 14:56, Dietmar Eggemann wrote:
+> On 16/01/2023 12:23, Vincent Guittot wrote:
+> > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>
+> >> On 13/01/2023 14:40, Vincent Guittot wrote:
+> 
+> [...]
+> 
+> >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
+> >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> >>>
+> >>> +     /* Return true only if the utlization doesn't fit its capacity */
+> >>
+> >> s/utlization/utilization
+> >> s/its/CPU ?
+> >>
+> >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+> >>>  }
+> >>
+> >> cpu_overutilized() is the only place where we now only test for
+> >> !util_fits_cpu(). The new comment says we only care about utilization
+> >> not fitting CPU capacity.
+> >>
+> >> Does this mean the rq uclamp values are not important here and we could
+> >> go back to use fits_capacity()?
+> >>
+> >> Not sure since util_fits_cpu() is still coded differently:
+> > 
+> > uclamp_min is not important but uclamp_max still cap the utilization
+> 
+> OK, makes sense.
+> 
+> I.e. we could pass in `rq_util_min = 0` to avoid fetching it
+> unnecessary? In case `fits == 1` before the uclamp_min condition in
+> util_fits_cpu() it doesn't matter if we switch to return `-1` when
+> called from cpu_overutilized(). Detail though ...
+> 
+> [...]
+> 
+> >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> >>>
+> >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+> >>>                       continue;
+> >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
+> >>> +
+> >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> >>> +
+> >>> +             /* This CPU fits with all capacity and performance requirements */
+> >>
+> >> In task_fits_cpu() `utilization and performance (better uclamp)
+> >> requirements` term was used. I assume it's the same thing here?
+> >>
+> >>> +             if (fits > 0)
+> >>>                       return cpu;
+> >>> +             /*
+> >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+> >>> +              * for the CPU with highest performance capacity.
+> >>                                             ^^^^^^^^^^^^^^^^^^^^
+> >>
+> >> Do we use a new CPU capacity value `performance capacity (1)` here?
+> >>
+> >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+> >>
+> >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+> >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+> >> to return -1. Shouldn't (1) and (2) be the same?
+> > 
+> > I'm all in favor of both being capacity_orig_of(cpu) -
+> > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+> 
+> I think we need a handy name for this new capacity value, which seems to
+> be `capacity_orig - capacity reduced by thermal`. And we should either
+> use `thermal_load_avg` or `thermal pressure` for the latter part. And
+> then we should use this consistently in all these places:
+> util_fits_cpu(), feec(), sic().
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+So we had reports from Xuewen that not using instantaneous pressure causes
+problems.
 
--- 
-With best wishes
-Dmitry
+Lukasz came up with this patch to help address the problem, but it's still
+waiting discussions. I think we need to discuss this problem more there.
+
+	https://lore.kernel.org/lkml/20220429091245.12423-1-lukasz.luba@arm.com/
+
+At the moment there's no good solution and either comes with its own set of
+caveat(s). Being consistent is not an option now AFAICT? We need to improve
+thermal_load_avg() response time first somehow.
+
+For now, to make best decision - we look at instantaneous. But when falling
+back - I think using the long term pressure signal makes more sense because we
+wouldn't be doing this fallback path if everything works as expected thermal
+wise.
+
+At least, that's what I think is a good trade-of for now :)
+
+
+Thanks!
+
+--
+Qais Yousef
