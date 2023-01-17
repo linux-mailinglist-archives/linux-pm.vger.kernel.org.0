@@ -2,82 +2,181 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA30566E1BB
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5346B66E1C5
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:11:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233642AbjAQPKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 10:10:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S232334AbjAQPL5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 10:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233653AbjAQPKE (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:10:04 -0500
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4019940BE3;
-        Tue, 17 Jan 2023 07:10:01 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id v6so45421835edd.6;
-        Tue, 17 Jan 2023 07:10:01 -0800 (PST)
+        with ESMTP id S233110AbjAQPL4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:11:56 -0500
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4B15582
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 07:11:55 -0800 (PST)
+Received: by mail-pj1-x1030.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso6500772pjg.2
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 07:11:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xUcKWpwPhTRCrCYmeiWFa+p8NZqQHVS8dp2x80vvN2E=;
+        b=i5FxZgEumiJ8FnuC6w3ZPlpjI2uIk1GxX/D13B6iZ8gelXMF9326oWDdxQJWWlPQum
+         w9o9XpXMLM+bl3gIz4dn2sqwz3JMe4Bz+FS0zOQeDms1skkuM+kkfWKKYt5BQYTAlwZK
+         ikGYF2SWASfsFOwDIx0YFFKWv6mthFGwptf5UT+I0fd5TWOOc4EU1H9ZbX7Ta4vwgapf
+         UVEU3KA53mPjf1kTqf8mLWBkotyJN+UC0OZhZjg1KWnWWsLBZ1K8T2oKRGVvVwUuZlRl
+         nrIJIQXZDBaJ2/4iQEQxYXcK5o/64ujWJaG6d2EQTakAPrHLYbZZkVomso52WzaDS85s
+         Ffaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=joZxgCnGkvxp1Xb2Q/5fZ4MsMpLI6GFEvSnwU1Uy6Z4=;
-        b=mvt7caDKRuA1j6+nVgMlZSZuzaoEAIzi9ll1CXAGT0zvozqjqpwBbH+qzryA1uoGVR
-         +57XPxdL0jXxdnryy8Ec47nlLKCh5LiSyzh5sGCKNfceVaDMnw3Um7j+nqXB03rljOLl
-         ayET3N8tIK1gcwwIZhmiAmgbWFprbLF9raSCm3Tb9Ue3fhWk0vwyzQLc5P0LYxeQ/f/V
-         Lp5xWSw34TNTyAubs6VfzR3ZypE0yMx3VbGoEOq8IUc6Sq6JqvfQeylfwE7fRUbKY5iG
-         gTd27LEsg+gy5bX7dbDg8dnfasV/aTNR09xJAqVPdiZO5mFxHejqCdga7JvuD5crBXQr
-         ECqw==
-X-Gm-Message-State: AFqh2kodHxOwxf36IPpPNB4hKO0zhiYvv4ND1H87g8A1Y+7NkLJ2iwf+
-        k6HIuu2bkeZDOGppuSA+f/WkXt7nz9Z28KrgOX4=
-X-Google-Smtp-Source: AMrXdXuQxImuyhNi68zfskM+pJ+qzv1BTz3x5hwfZ5P9iSMuZHtBFZmWuaPM9bNs3+2/y6j0aAG5vtdgoD48+lgwVtk=
-X-Received: by 2002:aa7:c3cb:0:b0:499:c651:625d with SMTP id
- l11-20020aa7c3cb000000b00499c651625dmr388760edr.413.1673968199861; Tue, 17
- Jan 2023 07:09:59 -0800 (PST)
+        bh=xUcKWpwPhTRCrCYmeiWFa+p8NZqQHVS8dp2x80vvN2E=;
+        b=etY5SVQNTDmSR5ZLv6ZYQj7p7GLbmSoNwUwLHI6rIB0ESx4goGnhSOxA55yyx9BS4C
+         hbMwL9RalM/mlDxtnZ70wsvwHsnKGHJsACt+zUaNmUAW2blkyz5ugQ3HI2FZRGhRWHrY
+         klO8nqLFI8dE2Qcpb3MEHbHMQqO5nWqqX7IpQarbwyvSvnLnxSkC2akiE9uI3KvKkS1z
+         YpX62ogRYrkG436pkV0JD+D3+AH3DWXEsjtFjUzvq7Xkss5YQuLl50qDhXmyu9UzZoYV
+         t741WhH0vL/sFnA7sitIyIreYlFcQedLmJCxreYjYwV/Oa43bS8R9j6jEMN3Ge+ueXyL
+         mHHw==
+X-Gm-Message-State: AFqh2kqHvK1ds/+e5uqIFs0wuOjzg+Mpzw1JuqLoigjnbnZLLwdsaUmZ
+        opP1oGWRXRXercKhBY+RWR6vDQ0i8vmJhBTtlQvLeA==
+X-Google-Smtp-Source: AMrXdXtpuDodVQl3BW9NsJpqFbWNMxfzSa4qQxrarcGmm4jmlom2dliA3FVJGFz0n30PGkZH6+LMAScxQ86s5PwdPIE=
+X-Received: by 2002:a17:90a:1d07:b0:228:f08f:a9b3 with SMTP id
+ c7-20020a17090a1d0700b00228f08fa9b3mr335881pjd.202.1673968314504; Tue, 17 Jan
+ 2023 07:11:54 -0800 (PST)
 MIME-Version: 1.0
-References: <20230117020742.2760307-1-srinivas.pandruvada@linux.intel.com>
- <20230117020742.2760307-3-srinivas.pandruvada@linux.intel.com>
- <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org> <e4f08f6642939e9707ee6427affe3d4aca06410a.camel@linux.intel.com>
-In-Reply-To: <e4f08f6642939e9707ee6427affe3d4aca06410a.camel@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Jan 2023 16:09:48 +0100
-Message-ID: <CAJZ5v0jzYbpeVxtuqMWUN+X-wwYtKYq=7Ky3jRnb_S6NZc1RVQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] powercap: idle_inject: Add update callback
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
+References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org> <20221219151503.385816-6-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221219151503.385816-6-krzysztof.kozlowski@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 17 Jan 2023 16:11:18 +0100
+Message-ID: <CAPDyKFoHx+cr-kO-E8mH2UMbs-sH4LY78+1VzJrkS+kGVKvYeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 5/5] PM: domains: Do not call device_pm_check_callbacks()
+ when holding genpd_lock()
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 4:08 PM srinivas pandruvada
-<srinivas.pandruvada@linux.intel.com> wrote:
+On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> On Tue, 2023-01-17 at 12:13 +0100, Daniel Lezcano wrote:
-> > On 17/01/2023 03:07, Srinivas Pandruvada wrote:
-> >
-> > [ ... ]
-> >
-> > > +struct idle_inject_device *idle_inject_register(struct cpumask
-> > > *cpumask)
-> > > +{
-> > > +       return idle_inject_register_full(cpumask, NULL);
-> > > +}
-> > >   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
-> >
-> > Why not just add the parameter to idle_inject_register() ?
-> >
-> > There is only one user ATM
-> That was done in v1. But Rafael suggested to avoid changes to existing
-> kernel source.
+> If PM domain on PREEMPT_RT is marked as GENPD_FLAG_RT_SAFE(), the
+> genpd_lock() will be a raw spin lock, thus device_pm_check_callbacks()
+> must be called outside of the domain lock.
+>
+> This solves on PREEMPT_RT:
+>
+>   [ BUG: Invalid wait context ]
+>   6.1.0-rt5-00325-g8a5f56bcfcca #8 Tainted: G        W
+>   -----------------------------
+>   swapper/0/1 is trying to lock:
+>   ffff76e045dec9a0 (&dev->power.lock){+.+.}-{3:3}, at: device_pm_check_callbacks+0x20/0xf0
+>   other info that might help us debug this:
+>   context-{5:5}
+>   3 locks held by swapper/0/1:
+>    #0: ffff76e045deb8e8 (&dev->mutex){....}-{4:4}, at: __device_attach+0x38/0x1c0
+>    #1: ffffa92b81f825e0 (gpd_list_lock){+.+.}-{4:4}, at: __genpd_dev_pm_attach+0x7c/0x250
+>    #2: ffff76e04105c7a0 (&genpd->rslock){....}-{2:2}, at: genpd_lock_rawspin+0x1c/0x30
+>   stack backtrace:
+>   CPU: 5 PID: 1 Comm: swapper/0 Tainted: G        W          6.1.0-rt5-00325-g8a5f56bcfcca #8
+>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
+>   Call trace:
+>    dump_backtrace.part.0+0xe0/0xf0
+>    show_stack+0x18/0x40
+>    dump_stack_lvl+0x8c/0xb8
+>    dump_stack+0x18/0x34
+>    __lock_acquire+0x938/0x2100
+>    lock_acquire.part.0+0x104/0x28c
+>    lock_acquire+0x68/0x84
+>    rt_spin_lock+0x40/0x100
+>    device_pm_check_callbacks+0x20/0xf0
+>    dev_pm_domain_set+0x54/0x64
+>    genpd_add_device+0x258/0x340
+>    __genpd_dev_pm_attach+0xa8/0x250
+>    genpd_dev_pm_attach_by_id+0xc4/0x190
+>    genpd_dev_pm_attach_by_name+0x3c/0x60
+>    dev_pm_domain_attach_by_name+0x20/0x30
+>    dt_idle_attach_cpu+0x24/0x90
+>    psci_cpuidle_probe+0x300/0x4b0
+>    platform_probe+0x68/0xe0
+>    really_probe+0xbc/0x2dc
+>    __driver_probe_device+0x78/0xe0
+>    driver_probe_device+0x3c/0x160
+>    __device_attach_driver+0xb8/0x140
+>    bus_for_each_drv+0x78/0xd0
+>    __device_attach+0xa8/0x1c0
+>    device_initial_probe+0x14/0x20
+>    bus_probe_device+0x9c/0xa4
+>    device_add+0x3b4/0x8dc
+>    platform_device_add+0x114/0x234
+>    platform_device_register_full+0x108/0x1a4
+>    psci_idle_init+0x6c/0xb0
+>    do_one_initcall+0x74/0x450
+>    kernel_init_freeable+0x2e0/0x350
+>    kernel_init+0x24/0x130
+>    ret_from_fork+0x10/0x20
+>
+> Cc: Adrien Thierry <athierry@redhat.com>
+> Cc: Brian Masney <bmasney@redhat.com>
+> Cc: linux-rt-users@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/base/power/domain.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 4dfce1d476f4..db499ba40497 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1666,10 +1666,14 @@ static int genpd_add_device(struct generic_pm_domain *genpd, struct device *dev,
+>         if (ret)
+>                 goto out;
+>
+> +
+> +       /* PREEMPT_RT: Must be outside of genpd_lock */
+> +       device_pm_check_callbacks(dev);
+> +
+>         genpd_lock(genpd);
+>
+>         genpd_set_cpumask(genpd, gpd_data->cpu);
+> -       dev_pm_domain_set(dev, &genpd->domain);
+> +       dev_pm_domain_set_no_cb(dev, &genpd->domain);
+>
+>         genpd->device_count++;
+>         if (gd)
 
-However, it can be done if Daniel prefers that.  It is 1 callback now
-only, so no big deal I suppose.
+Rather than splitting up the assignment in two steps, I think it
+should be perfectly fine to move the call to dev_pm_domain_set()
+outside the genpd lock.
+
+Note that, genpd_add_device() is always being called with
+gpd_list_lock mutex being held. This prevents the genpd from being
+removed, while we use it here.
+
+Moreover, we need a similar change for the call to dev_pm_domain_set()
+in genpd_remove_device().
+
+> --
+> 2.34.1
+>
+
+Kind regards
+Uffe
