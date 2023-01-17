@@ -2,108 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BDC66E56D
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 18:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 552FD66E5B4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 19:14:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbjAQR53 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 12:57:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39318 "EHLO
+        id S229647AbjAQSOc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 13:14:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjAQRzY (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 12:55:24 -0500
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A15074F86B
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 09:47:15 -0800 (PST)
-Received: by mail-il1-x132.google.com with SMTP id a3so9808599ilp.6
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 09:47:15 -0800 (PST)
+        with ESMTP id S231216AbjAQSJs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 13:09:48 -0500
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D70F233D4;
+        Tue, 17 Jan 2023 09:51:26 -0800 (PST)
+Received: by mail-lj1-x229.google.com with SMTP id n5so33402800ljc.9;
+        Tue, 17 Jan 2023 09:51:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8F81q3l/TJktOEcsAAxVIySD1mWyFaZRhl5NfEknlwM=;
-        b=eGBEqUNrEcTTtbihLCI82m3GrMUfa/u1FaeVqcFS1kv0PlNWZ0LI/zPTKTd32cUDxJ
-         omNj8Eowo53XzGkUZj9O/el/um50AteuVwiDOhpLCzK2BJFi8bY2Yag7DOQyeVKEWpw1
-         dpgG2PtpBNxrAcS9h6K0hLALRH1aMVPYaM/B4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ajQuXH91hVK7dVwZAzoM3s83y9WqIbvmabdkjYPxUI=;
+        b=pJKYXu50oaB7Cw1PTPLx/ZJxt2Ssd2JnY4wmezCXB60WerABYxghOS/pA4fzDTWeS+
+         GNYb0omA9/bSCtZqAhJgJEs3VrxMuUNdibvrFLMqZOFcDdhZHkpaIPFtzyfBfStKzMMz
+         Q5AqDNeWSiGVv3/nG4lmy2aZUYbS+c2z6XZEhdh/I9EjpVZBBYtjOCZPAOOHXW8PqN7P
+         X7+EZUlMo3QYt2p8DMIxCA+vUbNebEKi+bAYKSTd3i0CehaFvMQx+AewLp03d6bDyBkr
+         CEfexuhjnWxOF8T36OdyvLx8l7sdtPbODQGAbZ7enQK+uDK6IEOnJKQVr1fsNUmNHMPz
+         1jIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8F81q3l/TJktOEcsAAxVIySD1mWyFaZRhl5NfEknlwM=;
-        b=UpzuoOpwAZhc+74pXDHbDsCyalEwxmNbc+oyK8ojbfdclRWGyZF3DHMSi/zG/5SGzf
-         kFmPIzmpHr8Th2OC+fTWo2Q5oDZvEZVLtZ6O0jRQTsTJSZoZt77mHNfCTut+CztfvP0i
-         4LZgIV8oDRMSoPB3XRkr6HO9VmwOsxOtFqhWEA2rxMm+tysQsaiq4Wd0kuf4KT0IMTda
-         z8GBwqAbsQYu3pD2HgQdId5TeRHi7iPeDMtiDcmh9pHb6g+N4dLNJ/g/bfQchtv13/bY
-         RF2iuFx6914eLZsHmSMNHPnm4MGwcybS6QuQGpMzyh2eLxUvq/VibZVvgemSD8xYaWR5
-         QISQ==
-X-Gm-Message-State: AFqh2kq1sjVfqf9vOB/+xJAecmyTrg44wvyCCHL6fddEj6H8qcsKt8Ji
-        e7a0d8MGl5af5On35ZVzoR7uqQ==
-X-Google-Smtp-Source: AMrXdXsMe/3YbShdIn9hNUkJvH+E7o8CrBvenCfXUSgVpSPU/i9zfX7YnJFUlYqZmgIutCKUd3zFIg==
-X-Received: by 2002:a05:6e02:ecf:b0:30f:159b:3846 with SMTP id i15-20020a056e020ecf00b0030f159b3846mr3402581ilk.20.1673977635000;
-        Tue, 17 Jan 2023 09:47:15 -0800 (PST)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id r8-20020a92ac08000000b0030c68d38255sm9142749ilh.38.2023.01.17.09.47.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 09:47:14 -0800 (PST)
-Date:   Tue, 17 Jan 2023 17:47:14 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
- (=> interconnect issue)
-Message-ID: <Y8bfIv6GJU1TD4Dh@google.com>
-References: <20220902043511.17130-1-quic_rjendra@quicinc.com>
- <20220902043511.17130-5-quic_rjendra@quicinc.com>
- <Y8Ggh6RObbB1cxSS@google.com>
- <dc5487d8-d31e-28c6-07e8-8d1ff54a4ba4@linaro.org>
- <Y8baZWlKB9vNGYJw@google.com>
- <754f8193-09ec-8bbf-e0d4-898525dc242f@linaro.org>
+        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ajQuXH91hVK7dVwZAzoM3s83y9WqIbvmabdkjYPxUI=;
+        b=n0916e/9n9RRyZ8xBFCve0RkuVvdXhZhQgizVFbr6QU0SgUbAeAlzlNkLr39BSm27Z
+         f8X/k1g6hbfUN0SGiF48fbhCGTHyYb8H0hgLbNK6L+74EYJsL73tQFVBrHHCqSJvy/MV
+         1LOH17QK1bIDz2/xTY6QqwbfZT+/ARVwA4lHcv2TWMG8LDb0ksIj7wRwkU+Qe3N3CcXo
+         PevAU3ScyduPC/kRvdxBSCnAnS5X5bTRAPVCObiOlMFuKKG6txQ95hoVGMYNUWpoUYQH
+         oQgohgAKKNRjnZGWm/mBJs1mE8JhWd7ZjZLiXGAKMZ4PsuMDyJ84XJbXcnER+xVwUvfg
+         lGxg==
+X-Gm-Message-State: AFqh2koYCjXeshArMsjPEpfoOQB8s7eXqJTOjJ4n3al3+CHW3QAtco4V
+        I+M7bQbu31gFMo6py2ZeXdohLFMffxPeH0E8gfc=
+X-Google-Smtp-Source: AMrXdXsIA4q4R93FiNiktLtkM3MVU0yOCGbHwCKrGK6/JNPO8gN8dEJY0Y9YiOX0ajJNzyOFzwmw/HpOPomcM7jtB5k=
+X-Received: by 2002:a2e:9e0d:0:b0:28b:88da:35b with SMTP id
+ e13-20020a2e9e0d000000b0028b88da035bmr379573ljk.364.1673977884887; Tue, 17
+ Jan 2023 09:51:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <754f8193-09ec-8bbf-e0d4-898525dc242f@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com>
+ <7964ec80-4d02-6c9c-ff9e-a6a8a0c427c3@intel.com> <004e01d92a93$79f21e50$6dd65af0$@telus.net>
+In-Reply-To: <004e01d92a93$79f21e50$6dd65af0$@telus.net>
+Reply-To: sedat.dilek@gmail.com
+From:   Sedat Dilek <sedat.dilek@gmail.com>
+Date:   Tue, 17 Jan 2023 18:50:47 +0100
+Message-ID: <CA+icZUW1_p75AgTfZU_1_Az8KGiRf+tdiF4tUoH0ckaVrqCcPA@mail.gmail.com>
+Subject: Re: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, li.meng@amd.com,
+        linux-kernel@vger.kernel.org, Jinzhou Su <Jinzhou.Su@amd.com>,
+        linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 06:33:41PM +0100, Krzysztof Kozlowski wrote:
-> On 17/01/2023 18:27, Matthias Kaehlcke wrote:
-> > 
-> >>> which would set the initially bandwidths to 0 and determine the actually
-> >>> needed bandwidth. But since the driver isn't probed the initial
-> >>> bandwidths stay at INT_MAX.
-> >>>
-> >>> This isn't actually an issue with this patch, but how the interconnect
-> >>> framework deals with devices that are registered on the bus, but aren't
-> >>> probed (yet). Not sure how this would be best fixed. Georgi, do you have
-> >>> any ideas?
+On Tue, Jan 17, 2023 at 5:48 PM Doug Smythies <dsmythies@telus.net> wrote:
+>
+> On 2023.01.17 07:40 Rafael wrote:
+> > On 1/17/2023 3:03 PM, Sedat Dilek wrote:
+> >> Hi,
+> >> I regularly test:
+> >> $ LANG=C LC_ALL=C make -C tools/ clean 2>&1 | tee ../make-log_tools-clean.txt
+> >> This removes:
 > >>
-> >> Why the device is not probed (yet)? If it is registered, it will come
-> >> soon during boot up.
-> > 
-> > Because CONFIG_QCOM_ICC_BWMON is not enabled for the board in question (see
-> > above). It could be enabled as a short term mitigtion, however we shouldn't
-> > require drivers to be enabled just because the DT has a corresponding node.
-> 
-> It's the same case as with all other interconnect leafs/consumers. The
-> same behavior if you do not have it enabled, right? If not, I wonder
-> what is here different?
+> >> $ git status -s
+> >> D tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> >> D tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> >>
+> >> Checking the log:
+> >>
+> >> $ grep pstate_tracer.py ../make-log_tools-clean.txt
+> >> 89:rm -f -r   /home/dileks/src/linux/git/tools/testing/selftests/amd-pstate/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> >> /home/dileks/src/linux/git/tools/t
+> >> esting/selftests/amd-pstate/../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> >>
+> >> Is that intended or not?
+> >
+> > I don't think so.
+> >
+> > Doug?
+>
+> Nothing should ever remove the intel_pstate_tracer.py source file.
+>
+> Sedat, Thank you for your report.
+> I get the same results when running your test.
+>
+> Note that I know nothing about Makefiles and such, but
+> think the guilty commit is this one:
+>
+> commit ba2d788aa873da9c65ff067ca94665853eab95f0
+> Author: Meng Li <li.meng@amd.com>
+> Date:   Mon Oct 31 16:49:22 2022 +0800
+>
+>     selftests: amd-pstate: Trigger tbench benchmark and test cpus
+>
+>     Add tbench.sh trigger the tbench testing and monitor the cpu desire
+>     performance, frequency, load, power consumption and throughput etc.
+>
+>     Signed-off-by: Meng Li <li.meng@amd.com>
+>     Acked-by: Huang Rui <ray.huang@amd.com>
+>     Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+>
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 6f4c7b01e3bb..cac8dedb7226 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -4,7 +4,15 @@
+>  # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
+>  all:
+>
+> +uname_M := $(shell uname -m 2>/dev/null || echo not)
+> +ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+> +
+> +ifeq (x86,$(ARCH))
+> +TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> +TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> +endif
+> +
+>  TEST_PROGS := run.sh
+> -TEST_FILES := basic.sh
+> +TEST_FILES := basic.sh tbench.sh
+>
+>  include ../lib.mk
+> diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
+> ...
+>
+> And if I do this:
+>
+> doug@s19:~/kernel/linux$ git diff
+> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
+> index 5f195ee756d6..5fd1424db37d 100644
+> --- a/tools/testing/selftests/amd-pstate/Makefile
+> +++ b/tools/testing/selftests/amd-pstate/Makefile
+> @@ -7,11 +7,6 @@ all:
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
+>
+> -ifeq (x86,$(ARCH))
+> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> -endif
+> -
 
-Right, this is a general issue. The problem on sc7280 (and probably other
-Qualcomm SoCs) is that the interconnect link at full throttle prevents the
-SoC from entering its low power mode (AOSS sleep) during system suspend.
-On many boards this might go unnoticed, on herobrine the condition is
-detected by the embedded controller (EC) and considered a failed suspend,
-which results in waking up the system.
+[ CC Shuah  due to ba2d788aa873da9c65ff067ca94665853eab95f0 ]
+
+Hi Doug,
+
+I guess some upper top-level Makefile in tools/ remove on PHONY
+"clean" *TEST_GEN_FILES*.
+
+Wild git grep-ing:
+
+dileks@iniza:~/src/linux/git$ git grep TEST_GEN_FILES tools/ | sort | grep -i rm
+
+As an example:
+
+tools/testing/selftests/bpf/Makefile:   $(Q)$(RM) -r $(TEST_GEN_FILES)
+
+You are right those files are NOT generated and are permanently stored in .git.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+
+They should not be removed on `make -C tools/ clean`.
+
+So your above changes make sense to me.
+
+If responsible people agree, come with patch :-).
+
+Best regards,
+-Sedat-
+
+[1] https://git.kernel.org/linus/ba2d788aa873da9c65ff067ca94665853eab95f0
+
+>  TEST_PROGS := run.sh
+>  TEST_FILES := basic.sh tbench.sh gitsource.sh
+>
+> The source files do not get deleted with Sedat's test.
+>
+> ... Doug
+>
+>
