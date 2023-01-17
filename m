@@ -2,135 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F89766DDDA
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 13:40:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF85A66DDE9
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 13:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236761AbjAQMkd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 07:40:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S236733AbjAQMo3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 07:44:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236792AbjAQMkZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 07:40:25 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3562536FE5;
-        Tue, 17 Jan 2023 04:40:16 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id m21so44855938edc.3;
-        Tue, 17 Jan 2023 04:40:16 -0800 (PST)
+        with ESMTP id S236766AbjAQMo1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 07:44:27 -0500
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6A636FE9
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 04:44:24 -0800 (PST)
+Received: by mail-vs1-xe33.google.com with SMTP id d66so19596728vsd.9
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 04:44:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zb5Tffie3pKgu7Pq9EaJZQMrKrZX87HByUGIdfaPiXU=;
+        b=EOqh9vgF7LnKfYFX11HFchok8Ae1u/26sj7dus4KD2RWFXfYayHqXF8VO8jT/RmVRk
+         HYFhGfh+6MdHD/itigrkDCbBknY+fNhnignJoOp6If7O90qOuoVmMmV/bZ5FQ5coS32m
+         yYs9vJmQMWLZM1KqJSSKFIHh6X9qwKy/mxuzBEKdbmv9YXeD9CNN8/Gbgp8pCRdEVTi3
+         VAZ/DSrPCbtPh0MWMQifOhCgBhm1J7mOWH+hg0LDh/pg3kcP3TtsE3XvKJvY9uFCmPix
+         9azcjpSOhRz7ukQtann+ENJf5EQIb8mqf0rMOyR+Cq6dMjTWf5fVnvvgVQHM+b3xdKxp
+         LH4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vu78cM95kexk6ryuE7ZnUIj1w3auUCahcwZeUIrd3MI=;
-        b=pGggSkKFoSEU0Ep8Mt55ZfAyCwh3FkkVFZJQgZgDBcDjk1N671eeT7R+8jcC5GzH1O
-         jx06MdMCeX6V4TK37wx3kHOzJFgxm9GzWpdrKv6yIsZP4C80cEv+pz92UqTv8FCNgk+w
-         Vf5WBpz7lvvf23wDBsrWiyR7KnyLBIRocWRKVvkLG16H+bMDoxeq1ihUdv5zH2VBC09y
-         xnV0Ot0oAWdHTYGuh+ummeafnu1ZCV8dXfYbHm9tGHX8gToJ1pdFjkr6d36MOe20kOeH
-         5elyc6uKNSdp3VCj2YgIKn14a2lvNNQAxDlHaQ31leR8VG+F+VyrhPLVBG6KjZvaJlv6
-         HaxA==
-X-Gm-Message-State: AFqh2kpWO03QbKLexKZvZFyxswXPhm/2KBwC5D7tHvnBJJTqcgSi5iax
-        MmTxKQ3qV3nq6Q7ckppjE4LP+IxJD1cucnBxgN4=
-X-Google-Smtp-Source: AMrXdXuV2s94Y5dfm0VLSa4CwRj8li77wTg4q3sXUWxWIZ46JI5N9odmdrb2km73TX88AA/+lnFRPguSqsfuV9D+nfg=
-X-Received: by 2002:aa7:c3cb:0:b0:499:c651:625d with SMTP id
- l11-20020aa7c3cb000000b00499c651625dmr332014edr.413.1673959214750; Tue, 17
- Jan 2023 04:40:14 -0800 (PST)
+        bh=zb5Tffie3pKgu7Pq9EaJZQMrKrZX87HByUGIdfaPiXU=;
+        b=AcfL90477nA/Lxwrqe7UERRnksyq6ZUWBp6B2eciXx3jsWTrnoP8JGdTExu0R4d+hb
+         IUrkOJy5DQo9JMh/u/rYB7rPy6Jg+Bp8w/4PYHx8HMKJxfMRf4RhTw8nvaiiO5kPitQf
+         ccTvQkFpVw4NKkOKrdMszZkkyx0ySU/u27fUswt2a6Uc5BsBFzHC7er5IkLf9hCEynCx
+         lt8BdPWr2aYcy9DmBDUMDq1AamZEbuLrqbkhn4i8vZt0yKCARA51E64Ev8ulGeFvV7ko
+         WTVONjRIsqLMfpKkEhdjIwRsj/T7aNP6v0WvfwPhIbluJ0V4PXTcRyiLCnPY8dc/ujRH
+         7WoQ==
+X-Gm-Message-State: AFqh2krTH3C3WnaWm+hdy+RN/wdWdtF2RWXFizb1UtRWCpF/RGdaonO3
+        za7L7sG9kMQJ48d5TOfnvzXnKv/iv7rCqcz8UQWlfg==
+X-Google-Smtp-Source: AMrXdXuiYMsRUH99cR/6JzARKg2uSTda58F6pQigrwwH/EVEnADISBrDDLRNg95x8ypLViV89a3Pkk8FPSZi57WIjdw=
+X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
+ a26-20020a67f2da000000b003d3d90c5ef2mr450965vsn.17.1673959464106; Tue, 17 Jan
+ 2023 04:44:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20230116162522.4072-1-ubizjak@gmail.com>
-In-Reply-To: <20230116162522.4072-1-ubizjak@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Jan 2023 13:39:58 +0100
-Message-ID: <CAJZ5v0j7i0FG_ivX1xhTPutJOXb8nZEv7kq+TTOCjynts9049w@mail.gmail.com>
-Subject: Re: [PATCH] x86/ACPI/boot: use try_cmpxchg in __acpi_{acquire,release}_global_lock
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-pm@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>
+References: <20230109174511.1740856-1-brgl@bgdev.pl> <20230109174511.1740856-3-brgl@bgdev.pl>
+ <bbd21894-234e-542e-80ec-8f2bb11e268e@linaro.org> <843eed4b-552a-a529-83ed-b813c1346c5f@linaro.org>
+In-Reply-To: <843eed4b-552a-a529-83ed-b813c1346c5f@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Tue, 17 Jan 2023 13:44:13 +0100
+Message-ID: <CAMRc=MfTynAACwy+hB+FxOQ=-gA+307viz7LCUk8zmn4H7BaOQ@mail.gmail.com>
+Subject: Re: [PATCH 02/18] clk: qcom: add the GCC driver for sa8775p
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Alex Elder <elder@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-gpio@vger.kernel.org,
+        netdev@vger.kernel.org, Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 16, 2023 at 5:25 PM Uros Bizjak <ubizjak@gmail.com> wrote:
+On Mon, Jan 9, 2023 at 10:06 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> Use try_cmpxchg instead of cmpxchg (*ptr, old, new) == old in
-> __acpi_{acquire,release}_global_lock.  x86 CMPXCHG instruction returns
-> success in ZF flag, so this change saves a compare after cmpxchg
-> (and related move instruction in front of cmpxchg).
+> On 09/01/2023 19:58, Konrad Dybcio wrote:
+> >
+> >
+> > On 9.01.2023 18:44, Bartosz Golaszewski wrote:
+> >> From: Shazad Hussain <quic_shazhuss@quicinc.com>
+> >>
+> >> Add support for the Global Clock Controller found in the QTI SA8775P
+> >> platforms.
+> >>
+> >> Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> >> [Bartosz: made the driver ready for upstream]
+> >> Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >> ---
+> > [...]
+> >
 >
-> Also, try_cmpxchg implicitly assigns old *ptr value to "old" when cmpxchg
-> fails. There is no need to re-read the value in the loop.
+> As the driver didn't get to the list, I'll comment OOB.
 >
-> Note that the value from *ptr should be read using READ_ONCE to prevent
-> the compiler from merging, refetching or reordering the read.
+> Please use clk_regmap_phy_mux_ops where applicable (PCIe PIPE clocks).
 >
-> No functional change intended.
->
-> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Pavel Machek <pavel@ucw.cz>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Looks like it's impossible for this platform as the PCIe PIPE clocks
+have two parents.
 
-but please CC linux-acpi on all ACPI-related changes in the future.
-
-> ---
->  arch/x86/kernel/acpi/boot.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/kernel/acpi/boot.c b/arch/x86/kernel/acpi/boot.c
-> index 907cc98b1938..4177577c173b 100644
-> --- a/arch/x86/kernel/acpi/boot.c
-> +++ b/arch/x86/kernel/acpi/boot.c
-> @@ -1840,23 +1840,23 @@ early_param("acpi_sci", setup_acpi_sci);
->
->  int __acpi_acquire_global_lock(unsigned int *lock)
->  {
-> -       unsigned int old, new, val;
-> +       unsigned int old, new;
-> +
-> +       old = READ_ONCE(*lock);
->         do {
-> -               old = *lock;
->                 new = (((old & ~0x3) + 2) + ((old >> 1) & 0x1));
-> -               val = cmpxchg(lock, old, new);
-> -       } while (unlikely (val != old));
-> +       } while (!try_cmpxchg(lock, &old, new));
->         return ((new & 0x3) < 3) ? -1 : 0;
->  }
->
->  int __acpi_release_global_lock(unsigned int *lock)
->  {
-> -       unsigned int old, new, val;
-> +       unsigned int old, new;
-> +
-> +       old = READ_ONCE(*lock);
->         do {
-> -               old = *lock;
->                 new = old & ~0x3;
-> -               val = cmpxchg(lock, old, new);
-> -       } while (unlikely (val != old));
-> +       } while (!try_cmpxchg(lock, &old, new));
->         return old & 0x1;
->  }
->
-> --
-> 2.39.0
->
+Bart
