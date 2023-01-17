@@ -2,67 +2,69 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664BA66E5EB
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 19:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E8766E603
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 19:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjAQS0H (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 13:26:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51060 "EHLO
+        id S231358AbjAQSba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 13:31:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjAQSXF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 13:23:05 -0500
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48AD3D927;
-        Tue, 17 Jan 2023 09:57:44 -0800 (PST)
-Received: by mail-lf1-x12c.google.com with SMTP id br9so12934104lfb.4;
-        Tue, 17 Jan 2023 09:57:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=zSi0uOMA2RCVmp8V5E3w60uQumJE+FV2d1gNUaY7WlI=;
-        b=G++GoLT1Fuqk9OurfLexVgstS6wegfJJ5t5lARRXSCD1Ov6kI/aQXWDGIRVbuRnk/b
-         y9160UuErtPnayYkIPSgcpWMUxIn3szmb5O5YiSOtgtaqQgRdrKqpahqWK/d2s4yYbXF
-         1ji7IN1gOe6YcSdxK4sXLDCyPwBjpn9hK8n/3hH0oz8yehFY5da4zMnIWpqPwttOJLFE
-         Oi1K+gckIURP17btxhnhFSz8dReXlmdX5hzEHDLxO40CBp6sJsePbt6LkUDlUI7m3F1u
-         LUQcBHeSD9JWdC7reQm4atx7z+kfnyww60mPqvDQIMwX5+vnWRC6X3a79ppxsINMoQwf
-         Dahw==
+        with ESMTP id S231373AbjAQS3h (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 13:29:37 -0500
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6164741E;
+        Tue, 17 Jan 2023 10:01:02 -0800 (PST)
+Received: by mail-oo1-f53.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so8162321oom.9;
+        Tue, 17 Jan 2023 10:01:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:reply-to:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zSi0uOMA2RCVmp8V5E3w60uQumJE+FV2d1gNUaY7WlI=;
-        b=cySP0li0sivQUWP5QskZ3EuMI45hGZ2wfYkj4MtC9K/KGXd6XAqw/Wp71dgR19Y5ty
-         duMZdib6EhkHwHs6kx1BiMgNzmBop6yZ4WIZgPxjXo3SKF9aBYxM3xrQ8XlMU6PQC9JN
-         O+4SNwVpuy9no4jMpTryrSIh5PiF+S8wGMa8M2KxfBk0U6l9O7g83VHUN0yt3IPTa1Y6
-         h+9LXsDuTBEly9uR7sT3Z4yg3ybudpfdIfpMU86F2fM+VePG6vedvCUUinbemEysVdwC
-         6Yz+Ql/v1MmbkjEd5xTFofrwA4iOR5mmORrAhl/JZjZR+6lQ5P9fUJzDBekQOL9uQN3u
-         A3CQ==
-X-Gm-Message-State: AFqh2kpNEXyJDLNjyErDfwQnBY9sYfsCGp8yIdEMwYtq8sBYu7dXU2gP
-        Ys2YJR/d+xhtaPtOGDhtR6KJLukDxWNiCVA0Qas=
-X-Google-Smtp-Source: AMrXdXsPcV1ZUirMk99XeiaROwkoCXGuGD/tuFxt7LN0dXWiI3puoY+PW9Mjr4AejAK1eBgT4mjTETVaUoNQt8aH41A=
-X-Received: by 2002:a05:6512:96a:b0:4c4:dd2a:284f with SMTP id
- v10-20020a056512096a00b004c4dd2a284fmr253673lft.440.1673978254596; Tue, 17
- Jan 2023 09:57:34 -0800 (PST)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T/kHOFH1wU0NreMHdddHDbHuXCpkHB1PoZhcRnQt444=;
+        b=foCc1PFG7lYBexT6/8fkfiieupPw+yUWKOVHP2BP/rJxwJ+iP1fXirFkKgDzI/Qa4D
+         EZzGo/EbvWRN627NhAb2M+NsDIoD5dd1uaINbLVstiCqf7m0CSbYU2vWkeBPkZWbVAAq
+         c32/bO38RLbHr3WWC4FZy8T4aU+hWdLJBBw9dvYFh3F7SogOVmBEKmsrzte0n6NDzmbC
+         m+xLZOMqDZbBLKi+DJhW0WAfwbvxh/9RD63V8axdpToc/ESemhiaS/VIC/QQO8niZ9r6
+         sQUU9AAFfuLqi4RYhqGb2R9WVIrMDt/UokL0moYzRzRBLelOCDGb8P5Ch3ytui0fcv7M
+         r/nA==
+X-Gm-Message-State: AFqh2kqun0Ns/yMzVJNHuHbKMQA5pPcH9kqd9WR0VWAqg6rkOk4Y0d0H
+        jfYJSb25/de7O5E7ei6URg==
+X-Google-Smtp-Source: AMrXdXvcuKQfn+7icDnE4nUlh/ljNLsmHBHplIQtCw0qWiIdq35al99wEU9lDuQyulZvwL6n7ShSQA==
+X-Received: by 2002:a05:6820:3c7:b0:4f8:2e60:6afd with SMTP id s7-20020a05682003c700b004f82e606afdmr1593239ooj.8.1673978460048;
+        Tue, 17 Jan 2023 10:01:00 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id p2-20020a4ab382000000b004d8c6815287sm15040211ooo.17.2023.01.17.10.00.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Jan 2023 10:00:59 -0800 (PST)
+Received: (nullmailer pid 3319602 invoked by uid 1000);
+        Tue, 17 Jan 2023 18:00:58 -0000
+Date:   Tue, 17 Jan 2023 12:00:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK
+ binding
+Message-ID: <20230117180058.GA3314512-robh@kernel.org>
+References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+ <20230113041132.4189268-2-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-References: <CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com>
- <7964ec80-4d02-6c9c-ff9e-a6a8a0c427c3@intel.com> <004e01d92a93$79f21e50$6dd65af0$@telus.net>
-In-Reply-To: <004e01d92a93$79f21e50$6dd65af0$@telus.net>
-Reply-To: sedat.dilek@gmail.com
-From:   Sedat Dilek <sedat.dilek@gmail.com>
-Date:   Tue, 17 Jan 2023 18:56:57 +0100
-Message-ID: <CA+icZUUMYMzG=w6o_6s1QxgTaRoZFCbkVFh2-Oa_BH-osyEjBw@mail.gmail.com>
-Subject: Re: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
-To:     Doug Smythies <dsmythies@telus.net>
-Cc:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, li.meng@amd.com,
-        linux-kernel@vger.kernel.org, Jinzhou Su <Jinzhou.Su@amd.com>,
-        linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230113041132.4189268-2-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,59 +72,143 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 5:48 PM Doug Smythies <dsmythies@telus.net> wrote:
-...
-> And if I do this:
->
-> doug@s19:~/kernel/linux$ git diff
-> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-> index 5f195ee756d6..5fd1424db37d 100644
-> --- a/tools/testing/selftests/amd-pstate/Makefile
-> +++ b/tools/testing/selftests/amd-pstate/Makefile
-> @@ -7,11 +7,6 @@ all:
->  uname_M := $(shell uname -m 2>/dev/null || echo not)
->  ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
->
-> -ifeq (x86,$(ARCH))
-> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> -endif
-> -
->  TEST_PROGS := run.sh
->  TEST_FILES := basic.sh tbench.sh gitsource.sh
->
-> The source files do not get deleted with Sedat's test.
->
+On Thu, Jan 12, 2023 at 08:11:29PM -0800, Bjorn Andersson wrote:
+> From: Bjorn Andersson <bjorn.andersson@linaro.org>
+> 
+> The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
+> platforms and implement USB Type-C handling and battery management.
+> This binding describes the component in the OS used to communicate with
+> the firmware and connect it's resources to those described in the
+> Devicetree, particularly the USB Type-C controllers relationship with
+> USB and DisplayPort components.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+> 
+> Changes since v1:
+> - Added reg under connector, to identify multiple connectors
+> - Updated maintainer email
+> 
+>  .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 102 ++++++++++++++++++
+>  1 file changed, 102 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+> new file mode 100644
+> index 000000000000..a79dd0ed9275
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/qcom/qcom,pmic-glink.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm PMIC GLINK firmware interface for battery management, USB
+> +  Type-C and other things.
+> +
+> +maintainers:
+> +  - Bjorn Andersson <andersson@kernel.org>
+> +
+> +description:
+> +  The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
+> +  platforms and implement USB Type-C handling and battery management. This
+> +  binding describes the component in the OS used to communicate with the
+> +  firmware and connect it's resources to those described in the Devicetree,
+> +  particularly the USB Type-C controllers relationship with USB and DisplayPort
+> +  components.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - qcom,sc8180x-pmic-glink
+> +          - qcom,sc8280xp-pmic-glink
+> +          - qcom,sm8350-pmic-glink
+> +      - const: qcom,pmic-glink
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +patternProperties:
+> +  '^connector@\d$':
+> +    $ref: /schemas/connector/usb-connector.yaml#
+> +
+> +    properties:
+> +      reg: true
 
-$ LANG=C LC_ALL=C make -C tools/ clean 2>&1 | tee ../make-log_tools-clean.txt
+       required:
+         - reg
 
-$ git status -s
-M tools/testing/selftests/amd-pstate/Makefile
+Or '@\d' needs to be optional.
 
-$ git diff
-diff --git a/tools/testing/selftests/amd-pstate/Makefile
-b/tools/testing/selftests/amd-pstate/Makefile
-index 5f195ee756d6..5fd1424db37d 100644
---- a/tools/testing/selftests/amd-pstate/Makefile
-+++ b/tools/testing/selftests/amd-pstate/Makefile
-@@ -7,11 +7,6 @@ all:
-uname_M := $(shell uname -m 2>/dev/null || echo not)
-ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
 
--ifeq (x86,$(ARCH))
--TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
--TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
--endif
--
-TEST_PROGS := run.sh
-TEST_FILES := basic.sh tbench.sh gitsource.sh
-
-$ egrep 'amd-pstate|pstate_tracer' ../make-log_tools-clean.txt
-88:make[2]: Entering directory
-'/home/dileks/src/linux/git/tools/testing/selftests/amd-pstate'
-90:make[2]: Leaving directory
-'/home/dileks/src/linux/git/tools/testing/selftests/amd-pstate'
-
-Confirmed.
-
--Sedat-
+> +
+> +    unevaluatedProperties: false
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |+
+> +    pmic-glink {
+> +        compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
+> +
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        connector@0 {
+> +            compatible = "usb-c-connector";
+> +            reg = <0>;
+> +            power-role = "dual";
+> +            data-role = "dual";
+> +
+> +            ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +                    endpoint {
+> +                        remote-endpoint = <&usb_role>;
+> +                    };
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +
+> +                    #address-cells = <1>;
+> +                    #size-cells = <0>;
+> +
+> +                    endpoint@0 {
+> +                        reg = <0>;
+> +                        remote-endpoint = <&qmp_out>;
+> +                    };
+> +
+> +                    endpoint@1 {
+> +                        reg = <1>;
+> +                        remote-endpoint = <&displayport_hpd>;
+> +                    };
+> +                };
+> +
+> +                port@2 {
+> +                    reg = <2>;
+> +                    endpoint {
+> +                        remote-endpoint = <&sbu_mux>;
+> +                    };
+> +                };
+> +            };
+> +        };
+> +    };
+> +...
+> +
+> -- 
+> 2.37.3
+> 
