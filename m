@@ -2,121 +2,185 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369B966E25F
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB7166E289
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233827AbjAQPh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 10:37:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S229938AbjAQPn5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 10:43:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233868AbjAQPgu (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:36:50 -0500
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169F941B70;
-        Tue, 17 Jan 2023 07:36:36 -0800 (PST)
-Received: by mail-ed1-f45.google.com with SMTP id w14so28274792edi.5;
-        Tue, 17 Jan 2023 07:36:36 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ecga+jTngnfjKJUzMM5MjyIXSr3deNDqaVoOTtaxwxk=;
-        b=JpBl2+1G/5kVxd0PIoa8w+ud8Qg3LDvle/MIflgu3jZIdlvK1UW07a/8/IEk9y20jV
-         Omav/VxFhtRJTcdFhjuyGoKkLJVPyHI8sI4l0T0XtqjuETn5SThEtW7MVe7rwE+NjRYy
-         k5BxqT7FZFmi0IrtPpIIQ9VarlRxUPfihqVw05n6h0cWY1J1ILGZd5U8vYtV8bqXEGT5
-         h5mNpnh2fOs3UgQH/7KeSbfWdRe2ZAszGwpoGaaqHW9qNgsBsCjhuBcg7NsXTvYTx4uT
-         mmYq6iB7PXqkMV+llwv6PIESwcDyRYvzUjE1naDNgCSkQOi3Ne6PZ1lT+La5+O3hLe6k
-         S9yA==
-X-Gm-Message-State: AFqh2kpJk4aS/Q6v9XHE2eTUDZEFouw/NyyYxnoQ14AY2GXB3gw69kHq
-        aL6dI9+XCXy0fSJGLtEvwnH/cFOcwNTX+/Udzhg=
-X-Google-Smtp-Source: AMrXdXtT3fvqJUtzb/EzIMdGLBKoB2U84v13s39TajTdzxAVfMVxwEwmsQw4RK6LFCcOvz382MMMQ4nzvw6a1Q/mk4U=
-X-Received: by 2002:a05:6402:94a:b0:47f:7465:6e76 with SMTP id
- h10-20020a056402094a00b0047f74656e76mr357637edz.181.1673969794659; Tue, 17
- Jan 2023 07:36:34 -0800 (PST)
+        with ESMTP id S231543AbjAQPnP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:43:15 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5A84345B;
+        Tue, 17 Jan 2023 07:40:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1673970026; x=1705506026;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=9OdaO2BV7a0z5YTjB2gNCLnB3exm8oFLRnULJp3H1Ts=;
+  b=Blh04w0QNmesWaXh4xiI0PjPwEcpeQP2MT0gsUDY4WonPMlRT02qX2kh
+   LWYZ5hvoxTD9S0R1Aqn1kvaFNivKatJPCdVsz7k5/mO/5WxAaSSSfXLP3
+   SrIvTZxb6K42SfNtlLhXZxFXkUzhimXBLXX6gf9VJDSCJszKTPIvgAeo0
+   5r/CZNNZnedOZwnzafyzzBGV5BAc7uzfjg64PJryLIgpxLgZ4pcED0ol9
+   /mFy5ksskSm9m4RTHZM2ywA6CvXi42T6/r6ReK5u2qveaud1pNDC5b9rM
+   1CrFnTCGG6rPFMRg6vgfB0pgFuTfEWOpatuRiV9oSPGUQ3c6QzQb1YR8K
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="322413250"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="322413250"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:40:26 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="659426750"
+X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
+   d="scan'208";a="659426750"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga002.jf.intel.com with ESMTP; 17 Jan 2023 07:40:26 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16; Tue, 17 Jan 2023 07:40:25 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.16 via Frontend Transport; Tue, 17 Jan 2023 07:40:25 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.16; Tue, 17 Jan 2023 07:40:25 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EddbBu9zbZP4keOFHd1SldriwAweawsfSfWCYMcEEx6ZLgywZg9EAe3tC2RYa9QI9MDev4tKspXfzbskoVYD+Js4k5gjzgZgBMz0LTn4gnSqBuUtY8T/AGLVjXl0ct4OZ2iQToBFf+j1MsVSayBY2eTvVyhgovS9On/VU4z/Ml5fKjdkYtzH7FrsvqmYR9VO+JjOoHAJ2AdW3dprcnB9q5bVQNYwCLp4wqG1NZZIy5FaJFT2prF1vJddoed9nLxpUA/IBbdbn/2DZmTKv3FPXCvozM2uunx4xduhkygBefkEH9MOrONtTHegXlCbkjtgpGSu0s1Iczfm6IiGYafwrA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+luNFWNn05Bju2TqrrOJ2dh6H4Q0jffTAXNi8gFeEI4=;
+ b=oI6cMgzXwHBo7m6JXma4PhyiRbTlIlWck6rh5PTA47IhqaXSG/7+G54Gw8y2RgobfPSgSPb296IsNgSy118e5SCT2nIEVfVwZb8IIOZJwwDmM17giXnAqo3SEX3IWB+nWrbXAVMKl0wWuym+P9p+0Ss21YZQTzGsHSg8baV/CaftVUixI9brQqzRjeohpFlM8UI8oxq0a4fXtPQqlWIPw02NWDJLPPfxAPufOt9XbbjK7sBcKN3vc0mUns98T5chieGJPf8UX7eVde/aXAKl0i5sYyy0vxjPYJECPcSGz/JUYZWpd7UXbsaQFrU0unQTQkHUkQ+I+CtyOOrIgEATUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by BN9PR11MB5337.namprd11.prod.outlook.com (2603:10b6:408:136::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.13; Tue, 17 Jan
+ 2023 15:40:24 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::8836:6aeb:e872:30c3]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::8836:6aeb:e872:30c3%3]) with mapi id 15.20.5986.019; Tue, 17 Jan 2023
+ 15:40:23 +0000
+Message-ID: <7964ec80-4d02-6c9c-ff9e-a6a8a0c427c3@intel.com>
+Date:   Tue, 17 Jan 2023 16:40:16 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [6.2-rc4] tools: {amd,intel}_pstate_tracer: make -C tools/ clean
+Content-Language: en-US
+To:     Huang Rui <ray.huang@amd.com>, Doug Smythies <dsmythies@telus.net>
+CC:     <linux-kernel@vger.kernel.org>, <sedat.dilek@gmail.com>,
+        Jinzhou Su <Jinzhou.Su@amd.com>, <linux-pm@vger.kernel.org>
+References: <CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com>
+From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+In-Reply-To: <CA+icZUUOckm1kwOEZhSw8zsaL5z7r8uczwiKeKGEVioZ=GeFNg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BE1P281CA0101.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:79::19) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
 MIME-Version: 1.0
-References: <20230113140610.7132-1-jgross@suse.com> <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
- <e5cc2f96-82bc-a0dc-21fa-2f605bc867d1@suse.com> <CAJZ5v0ggSbR7+RiXuJo4aq+PYWS-eb9R2iSr0DFfVhcaJ1bfUQ@mail.gmail.com>
- <05d451d0-ab2b-53a5-d666-529b0880b259@suse.com>
-In-Reply-To: <05d451d0-ab2b-53a5-d666-529b0880b259@suse.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 17 Jan 2023 16:36:23 +0100
-Message-ID: <CAJZ5v0idVBgi4GEBwBeGqoaDiYJBuHffy8rXsERML6Dw2pYsWA@mail.gmail.com>
-Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
-To:     Juergen Gross <jgross@suse.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org,
-        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|BN9PR11MB5337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 88e4cd97-4dff-4fec-83a9-08daf8a125c2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eqNQcjvLbysXMytcyfvklFuxUS/Q9LJQiUIbiAohL8SkT+JE/nkx6zI2CaPHPrii7uTX9Hem/EcrIrFrTouGM+X6e4fuKDG1VmkWyFLFQ63YO2/gnpnyd+qHMQ+A5lvgzhOl1vibIpT9fBemS3mopmxIr/9c6wDgt34rIL15S+QIXj+innhvaEvXfe0Vaw2x+Vu47eJbrkPSFUP5+z1dVIN7mo/59NYIvYRfKSyvnqvDqFOibJMoGOhpMNgwzLLh5fc5dupmvaZAsIpUfK5NtGFmS0fxZGlQJVyiO4upmh7ju6/T8IabGOeVuf/Bxa/jiVatgA5r9lF8PJyRnLehg96w9Z7ZFLBYnyjJcIPvbMhUG+qh/1m2bDHE4aBPdieqCrqnFSZJBY4ae61C4+uIMvvMccV/KOhWBtA6WbVmJx5XqRZBt8+es8O0lo3WIdq9q1zMVqR6ZRV5T0w8cZ66HGQxhbAc/dVPodZED0rJvRC/brEzjyQwURe7wEZ5WL8I3c5WvjHUpizqECHHOFt1DJcFa2MXLLJb9MxiTBk1PDwCEw784DrXyiTCY/QsR4He+Ox5/4+WA1d90+HjlBL2g5w7WoWB0CYEHYwKxoxLbYqP5D79+GvGrxm8tBZsTFWRXOc6ox2KVWtV1v1+w0bGJbC7Wclesdjd+mk9mxoy7yOrZfn3+/m/KZ54O1qqMCgQ6rzibb9alnADRgA9qcUDFry2gJOgjemKOcdvzXUyTRg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(396003)(346002)(366004)(136003)(376002)(451199015)(2616005)(478600001)(6666004)(6506007)(26005)(186003)(53546011)(6486002)(6512007)(316002)(31686004)(66476007)(66946007)(66556008)(8676002)(4326008)(4744005)(110136005)(38100700002)(41300700001)(8936002)(5660300002)(31696002)(86362001)(82960400001)(36756003)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aG5ocHN3S2tSRjNBNzVOektETUVrUjlDb3k3QnB0RWxZMVNuM0VwSXlFNjE0?=
+ =?utf-8?B?UkkwNDZTUldvWi9iNE5JT3BLbUxEdEFXNTc5QW5MMUFsTUV5amZJTTBwQWU2?=
+ =?utf-8?B?Wm84Y0RQM09TMlNpWG5oM1FXekMyNHVCNXhpdjFZbklvaHRMVEw4bjVtOHU3?=
+ =?utf-8?B?cGpmUW5MWVJwNlFCTEdUL3MrVXVwMW5mVjMzVGdZNTRQcnM2ZmN4dE95RDBa?=
+ =?utf-8?B?VGxBbkozMDZnT25nN0kyeng5dGlZbUwrYXJsVVNNSS94TkxDZmNSWVlsRzBQ?=
+ =?utf-8?B?ZXNjYVJhWjZYa0owSWpNRlJLZ2ROb1NRSHZNYXdHbFRoeTNEbUNZY1ZZamJ3?=
+ =?utf-8?B?U3grOXRGd1cvRjQ1Y3FPY2tZMDc1eUVkMmhPY1hjQVYwQ091TEtYRy9kb0M5?=
+ =?utf-8?B?dExrMW5xR3V3M1JOMFdBZHExK2dpYWlTWXlwZURieENHSlg3OG9tZUtnOEJK?=
+ =?utf-8?B?eG9wSGdoY2N0RHJYUEFFc29lT2JSU0QrMExkb3Urc2phK1JTRnU4WldtTXhl?=
+ =?utf-8?B?NzNILzNoYVY5YWpvcDk2VTFRZEFqSUM3TzJKcDRSQnM2UzJ0ckRuOElBOHI3?=
+ =?utf-8?B?TVgxeTI3M1B5MFJneDhXS0t1M09qZnZxM0tlbTd0aC9VTHhQRVJaZFp3V3Mz?=
+ =?utf-8?B?Y3dvTVZwTko0OG96Q1FRVUY2WXMrQytEcU96QW1UUXFyR0RTdE9zWDNKNWpw?=
+ =?utf-8?B?c0lFSVlTeExnT1MxZEdKL3pySittRUYycERGd2VCbHZXTlhSeXc1RHJBeTIx?=
+ =?utf-8?B?QVUzWmR2NDFiV3dOMGx1S3JNUU5HcmNJZ2VTcWxDaUVCZDY2VjduQ1NsMHNO?=
+ =?utf-8?B?YmpyQTNrblpadmlEaFJtV0ZHNHZLVWtGcW51TW0xNDRxcFJCTlhIY1dHVnhS?=
+ =?utf-8?B?REU3TkRPc3lXVndEVVRvWjB1cnUxRlV4M1AxZGVJK0VXbkJzSkswb3J2clQx?=
+ =?utf-8?B?OUl2bmRsOTByalJXcUtjS0psblM0T0swdjFtZEpyQnFaV0tqVDVIMUFMYjlj?=
+ =?utf-8?B?SFhhblJNdkFNeXV6VW1UY25ydy9ySjRVb3JKWndnVVhOR1l4WndKWDMvVFJt?=
+ =?utf-8?B?Y2tMVlJnUzYwZlFYS2laa2lqTnROc2hkajNOcWpNckdjL1pFUEoybDNBM0wz?=
+ =?utf-8?B?L3N2Rm9oT3JSY0prUzRnQVBVeElzWmZOdGxUY3Y3ZE9sd21jYWUyaFhyM0VB?=
+ =?utf-8?B?bGZ6dTlVcFVwSmhsL0hRMnZYM3gwckQxSUMzdUI5NUUrcWlUemdiYzlhTnZP?=
+ =?utf-8?B?NmI3c1IwMVBXbHI2RW95WTNyUjcwRFo3TDdndVc5ekQzaFZhbHJGVkhPYUY1?=
+ =?utf-8?B?QWg2eW5sQUZsZFFVNndYWjR4QjdqMmZRR1VqN2hSeFBVeWtMMDRucTNtbTh0?=
+ =?utf-8?B?bTByem5GVFlvZGJxSWhTTk9BVnRSWUJmVHQyUVN0b2dsclhLVm9sMlhFTnRa?=
+ =?utf-8?B?L2xMMVVNdFpGZDh3VVNPZnJ1R25SMHlHemVZY2dvM3h1d2hWMzAvL3FVYUN1?=
+ =?utf-8?B?bGRBWVMxTFBIaDB1TVRWMDZaMDVvMmNCS3M2UVJ5ZjNtY3htd3pIc1BhMlFN?=
+ =?utf-8?B?c1pucm1UeThNMm1iK3k4eGtqTmJKbk8xNkszc3FGcTdaWmRERzl1TFNJa0hx?=
+ =?utf-8?B?djRFTkx1c1pDZFJsVndVbFQ0SFVnSWFPSUdoU1M5eXpJY3YvRTY0L1dISTR5?=
+ =?utf-8?B?Z3dxZnVIalZHSzJ1Y1hLMWMwblRXcU01ZmZVYVpURmVXU09wYUdRb3ovUG1u?=
+ =?utf-8?B?SERlQjNSUHA1ak1YZXU4R3FwZWRJemxwQmZYTjREZUJOSmtLam4wSzl4WWhU?=
+ =?utf-8?B?Y2RYU0IyK3F5eGVqNU1ZWXE3SzNxMXlsSjB4cXY5eFNYalVvSXFLeWhJUjIw?=
+ =?utf-8?B?ekVNUjJMeUtWcXpaUWYvVU1FRzdBc0F1eE8rYjJRSVRRNVVaeTBtRGw2MnBF?=
+ =?utf-8?B?ZmhFQ1hLZkFFQk42NHd5dkpMdGc4eEp4aVhkb0lnVkZzWXh2RDdXblZJVzE2?=
+ =?utf-8?B?MElOckpBT1JidEs4RkZBQUl5dDAzaXkxY2FsME1pVkwzKy8xUjRqalpkOVF5?=
+ =?utf-8?B?QXQ2eXB4UWw1dzZXY2gwai95VTNvUFRrSXBkNXh4ak9IYjRmaUFlL2tlQTRr?=
+ =?utf-8?B?SXRmdWEzeS9XSXdPblZiYmN2bmcxQ3BtMm5Mc2lER2dTTkVGcFl5ekNTVzlH?=
+ =?utf-8?B?NXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88e4cd97-4dff-4fec-83a9-08daf8a125c2
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 15:40:23.7004
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5OTSQwYvSuZ4/qg3UwqLabCZUQ2yzz2G5VA9DkHtRoIYJsCvhWfzqP3oe6TnQujiLiI7xpChxG4l9KoQbPWuvbD/gZ7fRCDL9Qzuk9wSrpk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5337
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 4:32 PM Juergen Gross <jgross@suse.com> wrote:
->
-> On 17.01.23 15:09, Rafael J. Wysocki wrote:
-> > On Mon, Jan 16, 2023 at 7:45 AM Juergen Gross <jgross@suse.com> wrote:
-> >>
-> >> On 13.01.23 20:40, Rafael J. Wysocki wrote:
-> >>> On Fri, Jan 13, 2023 at 3:06 PM Juergen Gross <jgross@suse.com> wrote:
-> >>>>
-> >>>> Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
-> >>>> Xen PV guest") missed one code path accessing real_mode_header, leading
-> >>>> to dereferencing NULL when suspending the system under Xen:
-> >>>>
-> >>>>       [  348.284004] PM: suspend entry (deep)
-> >>>>       [  348.289532] Filesystems sync: 0.005 seconds
-> >>>>       [  348.291545] Freezing user space processes ... (elapsed 0.000 seconds) done.
-> >>>>       [  348.292457] OOM killer disabled.
-> >>>>       [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.104 seconds) done.
-> >>>>       [  348.396612] printk: Suspending console(s) (use no_console_suspend to debug)
-> >>>>       [  348.749228] PM: suspend devices took 0.352 seconds
-> >>>>       [  348.769713] ACPI: EC: interrupt blocked
-> >>>>       [  348.816077] BUG: kernel NULL pointer dereference, address: 000000000000001c
-> >>>>       [  348.816080] #PF: supervisor read access in kernel mode
-> >>>>       [  348.816081] #PF: error_code(0x0000) - not-present page
-> >>>>       [  348.816083] PGD 0 P4D 0
-> >>>>       [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> >>>>       [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1.3-1.fc32.qubes.x86_64 #1
-> >>>>       [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.01 07/03/2022
-> >>>>       [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
-> >>>>
-> >>>> Fix that by adding an indirection for acpi_get_wakeup_address() which
-> >>>> Xen PV dom0 can use to return a dummy non-zero wakeup address (this
-> >>>> address won't ever be used, as the real suspend handling is done by the
-> >>>> hypervisor).
-> >>>
-> >>> How exactly does this help?
-> >>
-> >> I believed the first sentence of the commit message would make this
-> >> clear enough.
-> >
-> > That was clear, but the fix part wasn't really.
-> >
-> >> I can expand the commit message to go more into detail if you think
-> >> this is really needed.
-> >
-> > IMO calling acpi_set_waking_vector() with a known-invalid wakeup
-> > vector address in dom0 is plain confusing.
-> >
-> > I'm not sure what to do about it yet, but IMV something needs to be done.
->
-> Another possibility would be to modify acpi_sleep_prepare(), e.g. like the
-> attached patch (compile tested only).
 
-I prefer this to the previous version.  It is much more straightforward IMV.
+On 1/17/2023 3:03 PM, Sedat Dilek wrote:
+> Hi,
+>
+> I regularly test:
+>
+> $ LANG=C LC_ALL=C make -C tools/ clean 2>&1 | tee ../make-log_tools-clean.txt
+>
+> This removes:
+>
+> $ git status -s
+> D tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> D tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>
+> Checking the log:
+>
+> $ grep pstate_tracer.py ../make-log_tools-clean.txt
+> 89:rm -f -r   /home/dileks/src/linux/git/tools/testing/selftests/amd-pstate/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> /home/dileks/src/linux/git/tools/t
+> esting/selftests/amd-pstate/../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+>
+> Is that intended or not?
+
+I don't think so.
+
+Doug?
+
+
