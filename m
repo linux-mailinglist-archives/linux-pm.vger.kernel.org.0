@@ -2,68 +2,70 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E726C66DC02
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 12:14:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627A466DC18
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 12:17:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236394AbjAQLOI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 06:14:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
+        id S236200AbjAQLRm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 06:17:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236847AbjAQLNj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 06:13:39 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5213B2B0B0
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 03:13:36 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id o17-20020a05600c511100b003db021ef437so2770171wms.4
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 03:13:36 -0800 (PST)
+        with ESMTP id S236812AbjAQLQr (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 06:16:47 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D1A33459
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 03:16:46 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so4437967wmb.0
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 03:16:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6E73OKZGFC8KlEV5K+4dmiSqL5MeLnVsI9NufUq0/Qk=;
-        b=deYr0LmgzrLFK1aoSsIg3H9oleKzD0u8Di4/Vk8ZfniLB0192jc9ZHGtpVO2HjSFzt
-         sy94YCBcXYyiyd8MYK+BnKJmzpM8P6LHfKkFb/HH3fiw9sRCAf6BLvGtVRpsnbFcuGMU
-         yaHmOsws+tmLy1/q9nS13EmAX1suDpPQQ80SOa6aQrtTDqr7vzliTdtX3t19ISKeVduR
-         v1hCcoqHEM2pCANzroxa5obX1BczZOmDClKMcaqDHE9Rb+wg3QZKug9R5ZZNf42AZQPL
-         cWoCMwASKolu7kh873RYf4WGm+pqcJPWUarKZAQlnHywf/BfGtUMpK2nlDMdub2y1nvb
-         cEGQ==
+        bh=uvx0PBneh9iKbtx9q1janfRfqJS2S3RLZNTRDoy1mlI=;
+        b=zmV9+HlMR9pHCaDSEq2FThDlVhumXypOqzeIrWRQEEmcWw1QMP4yADSmB9wPMmYswQ
+         sO4TAn+lK6bLuMzpbhbOLtiH9hnvszIE2sQdtZQf/f94SjQDTxnkxYasiQS40V0wDjrn
+         UHPA5UgFV9nmawdF/69wNDNv54nccNGlmjXtmEuNLLSswAkr2otMneK7m2Uptpz4wRl9
+         2JW7riZ9j1kjlquYg9gDSrZGC0pa1lpUa/9Y6nfyQXTsTiOgd+Ajj4Cn7x0ndHYvgQ6t
+         bvR1ahGBvbqR75+h4LLg5jzy9V7v11k9hyv9mmU+Pj9cJ+EfEQCKfhxErLzdWnaMfJvi
+         cb0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6E73OKZGFC8KlEV5K+4dmiSqL5MeLnVsI9NufUq0/Qk=;
-        b=ZgfD2EVBW3VJOxo/ezxuzyTht3aVbm5wuYQVAgHyR7UZTnJ3o9NZnz65el/BK84ePe
-         /noeGmA91CXT0OulvCt/IM/W/325mYDTE8AJw2XRFk5ERbZ8fC/Twk3BSG6DkgnglBaY
-         Y7xL9Rv51gbMV0eEjKM3MRI25Z3xwibP2hQeTpR5u5IyJMYt7zudfTsMwJIF+5mXFrHR
-         JttUgfh0jyJlu0w9SLJQ6de7tlPhCNytCX1QUuTy9GYdcnSlJJxj6PGbGD6rBJJdOvm3
-         ZgiXX4vqHeTKQl5/L1++33Q75I41c5oS60Hgc3VvJUiNpY48fI4CZseYUSN/iAsL/xzf
-         ulMA==
-X-Gm-Message-State: AFqh2kp2fKYSsBSBQSLNNorSsoUNLgg82yMlGHm1kwXYb7oG7h5zOd36
-        WbwrqXLUm7N2/PUwbzT7XAwm6g==
-X-Google-Smtp-Source: AMrXdXs5ZMgafBZZX2IEn9ljGfxmf4yKbG7WJzajhPYUrZMq7eopmS63raTaCM5nJwQ7o8SPJru50g==
-X-Received: by 2002:a05:600c:348b:b0:3cf:7b8b:6521 with SMTP id a11-20020a05600c348b00b003cf7b8b6521mr2627992wmq.32.1673954014729;
-        Tue, 17 Jan 2023 03:13:34 -0800 (PST)
+        bh=uvx0PBneh9iKbtx9q1janfRfqJS2S3RLZNTRDoy1mlI=;
+        b=8RkOpcKthZ2MQBqGwwgdOCRj2nR/Q5i2B8yNYnA9wGt6k/otr3WvTEOe0PssvyBd18
+         xFuwmAoYAlo2SaqF6Nrn6lJXtY7HH9WTzo7e0EcTKrurVUbKqTSa/P6jHHWaocbObE8R
+         FUK/+1iBesEsOASM1AxDPSS6AXDr2sC0pA7/o8jp91ghgUmpxPOfHJvo2SXVVk5hRPxl
+         DvZSzlY8wktXOBCf357byHAztz9cyT5c6m+dTphTCywi7U88gRYwfYfVuC/0br0lGq/R
+         Tx6Q6SWoG2xnMyRMUyPHZz7iZBj2EyAuvX9QjXb1CtZRmZTc+8zD8QXdQ2SqelzpKJTy
+         GTgQ==
+X-Gm-Message-State: AFqh2koJ61yYIa4rlDd5dlDE7dfCAr1lDyE4goRpvw1kwzvp1mMRaMDe
+        HdNcMrUgVVXw66yDqN1roGJIHQ==
+X-Google-Smtp-Source: AMrXdXs5lM4FNJsLAYe1UJXOYQl5NMnJ6CDAHnniHyQ1Unhve2dTgTWnBstxOwfi5LtKC5ojLNX1aw==
+X-Received: by 2002:a05:600c:5006:b0:3da:f92a:5446 with SMTP id n6-20020a05600c500600b003daf92a5446mr2846622wmr.27.1673954204841;
+        Tue, 17 Jan 2023 03:16:44 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id f15-20020a7bcd0f000000b003d9a71ee54dsm35441612wmj.36.2023.01.17.03.13.33
+        by smtp.googlemail.com with ESMTPSA id q6-20020a05600c46c600b003cfd4e6400csm39224557wmo.19.2023.01.17.03.16.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jan 2023 03:13:34 -0800 (PST)
-Message-ID: <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org>
-Date:   Tue, 17 Jan 2023 12:13:33 +0100
+        Tue, 17 Jan 2023 03:16:44 -0800 (PST)
+Message-ID: <e2b1b18a-26c7-1a45-bad1-4233024062eb@linaro.org>
+Date:   Tue, 17 Jan 2023 12:16:43 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v3 2/4] powercap: idle_inject: Add update callback
+Subject: Re: [PATCH v3 3/4] thermal/drivers/intel_powerclamp: Use powercap
+ idle-inject framework
 Content-Language: en-US
 To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
         rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
+        rui.zhang@intel.com, amitk@kernel.org,
+        kernel test robot <lkp@intel.com>
 References: <20230117020742.2760307-1-srinivas.pandruvada@linux.intel.com>
- <20230117020742.2760307-3-srinivas.pandruvada@linux.intel.com>
+ <20230117020742.2760307-4-srinivas.pandruvada@linux.intel.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230117020742.2760307-3-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230117020742.2760307-4-srinivas.pandruvada@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,15 +83,19 @@ On 17/01/2023 03:07, Srinivas Pandruvada wrote:
 
 [ ... ]
 
-> +struct idle_inject_device *idle_inject_register(struct cpumask *cpumask)
-> +{
-> +	return idle_inject_register_full(cpumask, NULL);
-> +}
->   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+> diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+> index f0c845679250..6c2a95f41c81 100644
+> --- a/drivers/thermal/intel/Kconfig
+> +++ b/drivers/thermal/intel/Kconfig
+> @@ -3,6 +3,8 @@ config INTEL_POWERCLAMP
+>   	tristate "Intel PowerClamp idle injection driver"
+>   	depends on X86
+>   	depends on CPU_SUP_INTEL
+> +	select POWERCAP
+> +	select IDLE_INJECT
 
-Why not just add the parameter to idle_inject_register() ?
-
-There is only one user ATM
+Just a question, not a comment. As IDLE_INJECT depends on POWERCAP, is 
+it necessary to select POWERCAP also here ?
 
 
 -- 
