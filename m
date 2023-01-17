@@ -2,170 +2,121 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 869AC66E251
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:35:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 369B966E25F
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:37:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233061AbjAQPfn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 10:35:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S233827AbjAQPh3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 10:37:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232536AbjAQPfh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:35:37 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78EE341B52;
-        Tue, 17 Jan 2023 07:35:35 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9822A165C;
-        Tue, 17 Jan 2023 07:36:16 -0800 (PST)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.31.153])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ACA663F67D;
-        Tue, 17 Jan 2023 07:35:17 -0800 (PST)
-Date:   Tue, 17 Jan 2023 15:35:10 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
-        linus.walleij@linaro.org, shawnguo@kernel.org,
-        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
-        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
-        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
-        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
-        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
-        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
-        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
-        richard@nod.at, anton.ivanov@cambridgegreys.com,
-        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
-        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
-        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
-        mturquette@baylibre.com, sboyd@kernel.org,
-        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        anup@brainfault.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
-        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
-        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
-        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, rostedt@goodmis.org, mhiramat@kernel.org,
-        frederic@kernel.org, paulmck@kernel.org, pmladek@suse.com,
-        senozhatsky@chromium.org, john.ogness@linutronix.de,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, ryabinin.a.a@gmail.com,
-        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
-        vincenzo.frascino@arm.com,
-        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
-Message-ID: <Y8bALvyrPpdg++/J@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230112194314.845371875@infradead.org>
- <Y8WCWAuQSHN651dA@FVFF77S0Q05N.cambridge.arm.com>
- <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
- <Y8afpbHtDOqAHq9M@FVFF77S0Q05N.cambridge.arm.com>
- <20230117142140.g423hxisv7djudof@bogus>
+        with ESMTP id S233868AbjAQPgu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:36:50 -0500
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169F941B70;
+        Tue, 17 Jan 2023 07:36:36 -0800 (PST)
+Received: by mail-ed1-f45.google.com with SMTP id w14so28274792edi.5;
+        Tue, 17 Jan 2023 07:36:36 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ecga+jTngnfjKJUzMM5MjyIXSr3deNDqaVoOTtaxwxk=;
+        b=JpBl2+1G/5kVxd0PIoa8w+ud8Qg3LDvle/MIflgu3jZIdlvK1UW07a/8/IEk9y20jV
+         Omav/VxFhtRJTcdFhjuyGoKkLJVPyHI8sI4l0T0XtqjuETn5SThEtW7MVe7rwE+NjRYy
+         k5BxqT7FZFmi0IrtPpIIQ9VarlRxUPfihqVw05n6h0cWY1J1ILGZd5U8vYtV8bqXEGT5
+         h5mNpnh2fOs3UgQH/7KeSbfWdRe2ZAszGwpoGaaqHW9qNgsBsCjhuBcg7NsXTvYTx4uT
+         mmYq6iB7PXqkMV+llwv6PIESwcDyRYvzUjE1naDNgCSkQOi3Ne6PZ1lT+La5+O3hLe6k
+         S9yA==
+X-Gm-Message-State: AFqh2kpJk4aS/Q6v9XHE2eTUDZEFouw/NyyYxnoQ14AY2GXB3gw69kHq
+        aL6dI9+XCXy0fSJGLtEvwnH/cFOcwNTX+/Udzhg=
+X-Google-Smtp-Source: AMrXdXtT3fvqJUtzb/EzIMdGLBKoB2U84v13s39TajTdzxAVfMVxwEwmsQw4RK6LFCcOvz382MMMQ4nzvw6a1Q/mk4U=
+X-Received: by 2002:a05:6402:94a:b0:47f:7465:6e76 with SMTP id
+ h10-20020a056402094a00b0047f74656e76mr357637edz.181.1673969794659; Tue, 17
+ Jan 2023 07:36:34 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230117142140.g423hxisv7djudof@bogus>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230113140610.7132-1-jgross@suse.com> <CAJZ5v0gP_NUeQimn21tJuUjpMAOW_wFrRe4jstN13So_4_T4QQ@mail.gmail.com>
+ <e5cc2f96-82bc-a0dc-21fa-2f605bc867d1@suse.com> <CAJZ5v0ggSbR7+RiXuJo4aq+PYWS-eb9R2iSr0DFfVhcaJ1bfUQ@mail.gmail.com>
+ <05d451d0-ab2b-53a5-d666-529b0880b259@suse.com>
+In-Reply-To: <05d451d0-ab2b-53a5-d666-529b0880b259@suse.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Jan 2023 16:36:23 +0100
+Message-ID: <CAJZ5v0idVBgi4GEBwBeGqoaDiYJBuHffy8rXsERML6Dw2pYsWA@mail.gmail.com>
+Subject: Re: [PATCH] x86/acpi: fix suspend with Xen
+To:     Juergen Gross <jgross@suse.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Len Brown <len.brown@intel.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org,
+        =?UTF-8?Q?Marek_Marczykowski=2DG=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 02:21:40PM +0000, Sudeep Holla wrote:
-> On Tue, Jan 17, 2023 at 01:16:21PM +0000, Mark Rutland wrote:
-> > On Tue, Jan 17, 2023 at 11:26:29AM +0100, Peter Zijlstra wrote:
-> > > On Mon, Jan 16, 2023 at 04:59:04PM +0000, Mark Rutland wrote:
-> > > 
-> > > > I'm sorry to have to bear some bad news on that front. :(
-> > > 
-> > > Moo, something had to give..
-> > > 
-> > > 
-> > > > IIUC what's happenign here is the PSCI cpuidle driver has entered idle and RCU
-> > > > is no longer watching when arm64's cpu_suspend() manipulates DAIF. Our
-> > > > local_daif_*() helpers poke lockdep and tracing, hence the call to
-> > > > trace_hardirqs_off() and the RCU usage.
-> > > 
-> > > Right, strictly speaking not needed at this point, IRQs should have been
-> > > traced off a long time ago.
-> > 
-> > True, but there are some other calls around here that *might* end up invoking
-> > RCU stuff (e.g. the MTE code).
-> > 
-> > That all needs a noinstr cleanup too, which I'll sort out as a follow-up.
-> > 
-> > > > I think we need RCU to be watching all the way down to cpu_suspend(), and it's
-> > > > cpu_suspend() that should actually enter/exit idle context. That and we need to
-> > > > make cpu_suspend() and the low-level PSCI invocation noinstr.
-> > > > 
-> > > > I'm not sure whether 32-bit will have a similar issue or not.
-> > > 
-> > > I'm not seeing 32bit or Risc-V have similar issues here, but who knows,
-> > > maybe I missed somsething.
-> > 
-> > I reckon if they do, the core changes here give us the infrastructure to fix
-> > them if/when we get reports.
-> > 
-> > > In any case, the below ought to cure the ARM64 case and remove that last
-> > > known RCU_NONIDLE() user as a bonus.
-> > 
-> > The below works for me testing on a Juno R1 board with PSCI, using defconfig +
-> > CONFIG_PROVE_LOCKING=y + CONFIG_DEBUG_LOCKDEP=y + CONFIG_DEBUG_ATOMIC_SLEEP=y.
-> > I'm not sure how to test the LPI / FFH part, but it looks good to me.
-> > 
-> > FWIW:
-> > 
-> > Reviewed-by: Mark Rutland <mark.rutland@arm.com>
-> > Tested-by: Mark Rutland <mark.rutland@arm.com>
-> > 
-> > Sudeep, would you be able to give the LPI/FFH side a spin with the kconfig
-> > options above?
-> > 
-> 
-> Not sure if I have messed up something in my mail setup, but I did reply
-> earlier.
+On Tue, Jan 17, 2023 at 4:32 PM Juergen Gross <jgross@suse.com> wrote:
+>
+> On 17.01.23 15:09, Rafael J. Wysocki wrote:
+> > On Mon, Jan 16, 2023 at 7:45 AM Juergen Gross <jgross@suse.com> wrote:
+> >>
+> >> On 13.01.23 20:40, Rafael J. Wysocki wrote:
+> >>> On Fri, Jan 13, 2023 at 3:06 PM Juergen Gross <jgross@suse.com> wrote:
+> >>>>
+> >>>> Commit f1e525009493 ("x86/boot: Skip realmode init code when running as
+> >>>> Xen PV guest") missed one code path accessing real_mode_header, leading
+> >>>> to dereferencing NULL when suspending the system under Xen:
+> >>>>
+> >>>>       [  348.284004] PM: suspend entry (deep)
+> >>>>       [  348.289532] Filesystems sync: 0.005 seconds
+> >>>>       [  348.291545] Freezing user space processes ... (elapsed 0.000 seconds) done.
+> >>>>       [  348.292457] OOM killer disabled.
+> >>>>       [  348.292462] Freezing remaining freezable tasks ... (elapsed 0.104 seconds) done.
+> >>>>       [  348.396612] printk: Suspending console(s) (use no_console_suspend to debug)
+> >>>>       [  348.749228] PM: suspend devices took 0.352 seconds
+> >>>>       [  348.769713] ACPI: EC: interrupt blocked
+> >>>>       [  348.816077] BUG: kernel NULL pointer dereference, address: 000000000000001c
+> >>>>       [  348.816080] #PF: supervisor read access in kernel mode
+> >>>>       [  348.816081] #PF: error_code(0x0000) - not-present page
+> >>>>       [  348.816083] PGD 0 P4D 0
+> >>>>       [  348.816086] Oops: 0000 [#1] PREEMPT SMP NOPTI
+> >>>>       [  348.816089] CPU: 0 PID: 6764 Comm: systemd-sleep Not tainted 6.1.3-1.fc32.qubes.x86_64 #1
+> >>>>       [  348.816092] Hardware name: Star Labs StarBook/StarBook, BIOS 8.01 07/03/2022
+> >>>>       [  348.816093] RIP: e030:acpi_get_wakeup_address+0xc/0x20
+> >>>>
+> >>>> Fix that by adding an indirection for acpi_get_wakeup_address() which
+> >>>> Xen PV dom0 can use to return a dummy non-zero wakeup address (this
+> >>>> address won't ever be used, as the real suspend handling is done by the
+> >>>> hypervisor).
+> >>>
+> >>> How exactly does this help?
+> >>
+> >> I believed the first sentence of the commit message would make this
+> >> clear enough.
+> >
+> > That was clear, but the fix part wasn't really.
+> >
+> >> I can expand the commit message to go more into detail if you think
+> >> this is really needed.
+> >
+> > IMO calling acpi_set_waking_vector() with a known-invalid wakeup
+> > vector address in dom0 is plain confusing.
+> >
+> > I'm not sure what to do about it yet, but IMV something needs to be done.
+>
+> Another possibility would be to modify acpi_sleep_prepare(), e.g. like the
+> attached patch (compile tested only).
 
-Sorry, that was my bad; I had been drafting my reply for a while and forgot to
-re-check prior to sending.
-
-> I did test both DT/cpuidle-psci driver and  ACPI/LPI+FFH driver
-> with the fix Peter sent. I was seeing same splat as you in both DT and
-> ACPI boot which the patch fixed it. I used the same config as described by
-> you above.
-
-Perfect; thanks!
-
-Mark.
+I prefer this to the previous version.  It is much more straightforward IMV.
