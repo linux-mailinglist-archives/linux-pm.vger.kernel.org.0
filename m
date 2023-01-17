@@ -2,36 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F02670CFC
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 00:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1895A670D25
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 00:20:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjAQXOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 18:14:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
+        id S229850AbjAQXUO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 18:20:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229845AbjAQXNi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 18:13:38 -0500
+        with ESMTP id S229953AbjAQXTy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 18:19:54 -0500
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8252A14A;
-        Tue, 17 Jan 2023 12:58:07 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F17053E45;
+        Tue, 17 Jan 2023 13:07:00 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA5BBB819B0;
-        Tue, 17 Jan 2023 20:58:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39F7C433F2;
-        Tue, 17 Jan 2023 20:58:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CCDF2B819B0;
+        Tue, 17 Jan 2023 21:06:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FAAC433D2;
+        Tue, 17 Jan 2023 21:06:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673989084;
-        bh=kSbtYgfEYRDJQLRjZGOgB7sOGnCZFG8dk3OebFDhVGs=;
+        s=k20201202; t=1673989617;
+        bh=CysGW8OdPPONp0Zukni5r38vCtpff9N6XeNykqoQOXA=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DCCFukQCO4d/fpfQgIQyqsjTZvkI4EmNpjLBQYM+kFAXHJGBUV3BpgZC5CoxoJGUg
-         ChcFsK86KBMwhSPz41en3YKgyDAjILDUc/hSBoBOZBFnrprj3skp6NXzFczFANbh0Q
-         gXpUBXwYUiME1E7eoDCPjpidVO2ncHFxU7AIelpHRL3y2GSJC1/OXYr7juWQHy3t+R
-         EaMYMmiaoVEGDN9ggRRzbfxPpL7QSMggn2xE5blTC7286ED3IRv+NrZWLK9FPNqFYe
-         3EgIaE6oP46ET8CQCjHembyqBSRpscbDxZR/6adBUfTjBLMGWXstct/uuJKGePnYtQ
-         12roTGJDJDclA==
-Date:   Tue, 17 Jan 2023 14:58:00 -0600
+        b=CEc2eLqrLqFqh6QCXhO2xYmHbtppsBHl+wfbUatH19HEKa5NMpfRp1igSqm+S0Zrk
+         kAe3W2IMfiO+srDEdo/GwE0shTpOxJGH1IqalWuMRAP8PHs01KmEtIirQkySpYEbSB
+         C5UMSGup7X29ksarUC6tgD7jr0QYLrjD7CF0/AQFlZXGVcInj8BGY9sOtXjFuTnbBr
+         BwSJi6EeTX12L1SLecF4bXu4428e4xeoHDIenelc9wPuboI2Agt7gDmM+LYfa3rVPd
+         ELfTR+qJ9pPM0KLXT+bfo/uXSuJ+/2nc1cc28NFrpEQlWNUN2zPPyfrdsu2/6FIVrn
+         lGFmvcRyaaCUg==
+Date:   Tue, 17 Jan 2023 15:06:54 -0600
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
@@ -43,17 +43,15 @@ Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
         Jun Nie <jun.nie@linaro.org>,
         James Willcox <jwillcox@squareup.com>,
         Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
-Message-ID: <20230117205800.cqexxwxmtupapy7e@builder.lan>
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>
+Subject: Re: [PATCH v3 7/8] arm64: dts: qcom: Add Square apq8039-t2 board
+Message-ID: <20230117210654.ojrhlt6c5hdy3whm@builder.lan>
 References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-8-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+In-Reply-To: <20230117024846.1367794-8-bryan.odonoghue@linaro.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,17 +61,9 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
-> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
-> differences to msm8916.
-> 
-> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
-> - DRAM 1x800 LPDDR3
-> - Camera 4+4 lane CSI
-> - Venus @ 1080p60 HEVC
-> - DSI x 2
-> - Adreno A405
-> - WiFi wcn3660/wcn3680b 802.11ac
+On Tue, Jan 17, 2023 at 02:48:45AM +0000, Bryan O'Donoghue wrote:
+> The apq8039-t2 is an apq8039 based board paired with a wcn3680b WiFi
+> chipset.
 > 
 > Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
 > Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
@@ -91,256 +81,84 @@ On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
 > Signed-off-by: Max Chen <mchen@squareup.com>
 > Co-developed-by: Zac Crosby <zac@squareup.com>
 > Signed-off-by: Zac Crosby <zac@squareup.com>
-> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-
-Just to make sure when I get the question, you all co-developed this
-patch, right?
-
 > ---
->  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2393 +++++++++++++++++++++++++
->  1 file changed, 2393 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
+>  arch/arm64/boot/dts/qcom/Makefile       |   1 +
+>  arch/arm64/boot/dts/qcom/apq8039-t2.dts | 557 ++++++++++++++++++++++++
+>  2 files changed, 558 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index e442a81895d04..5c47d1fb50b01 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -1,5 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= apq8039-t2.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
 > new file mode 100644
-> index 0000000000000..8cd358a9fe623
+> index 0000000000000..21f5a21f76135
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
-> @@ -0,0 +1,2393 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> @@ -0,0 +1,557 @@
+> +// SPDX-License-Identifier: GPL-2.0
 > +/*
-> + * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020-2023, Linaro Limited
+> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020-2023, Linaro Ltd.
+> + *
 > + */
 > +
-> +#include <dt-bindings/clock/qcom,gcc-msm8939.h>
-> +#include <dt-bindings/clock/qcom,rpmcc.h>
-> +#include <dt-bindings/interconnect/qcom,msm8939.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/power/qcom-rpmpd.h>
-> +#include <dt-bindings/reset/qcom,gcc-msm8939.h>
-> +#include <dt-bindings/thermal/thermal.h>
+> +/dts-v1/;
+> +
+> +#include "msm8939.dtsi"
+> +#include "msm8939-pm8916.dtsi"
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+> +#include <dt-bindings/sound/apq8016-lpass.h>
 > +
 > +/ {
-> +	interrupt-parent = <&intc>;
+> +	model = "Square, Inc. T2 Devkit";
+> +	compatible = "square,apq8039-t2", "qcom,msm8939";
 > +
-> +	#address-cells = <2>;
-> +	#size-cells = <2>;
+> +	qcom,board-id = <0x53 0x54>;
+> +	qcom,msm-id = <239 0>, <239 0x30000>, <241 0x30000>, <263 0x30000>;
 
-Why do you use a default of 2? In particular since you reduce it to 1 in
-/soc...
+Would it be possible to include and use dt-bindings/arm/qcom,ids.h here?
 
 > +
-> +	clocks {
-> +		xo_board: xo-board {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <19200000>;
-> +		};
-> +
-> +		sleep_clk: sleep-clk {
-> +			compatible = "fixed-clock";
-> +			#clock-cells = <0>;
-> +			clock-frequency = <32768>;
-> +		};
+> +	aliases {
+> +		mmc0 = &sdhc_1;
+> +		mmc1 = &sdhc_2;
+> +		serial0 = &blsp1_uart1;
+> +		serial1 = &blsp1_uart2;
 > +	};
 [..]
-> +	smp2p-hexagon {
+> +&pm8916_gpios {
+> +	gpio-line-names =
+> +		"PM_GPIO1",     /* WIFI_GPIO1_PRE */
+> +		"PM_GPIO2",     /* WIFI_GPIO2_PRE */
+> +		"PM_GPIO3",
+> +		"PM_GPIO4";
+> +};
+> +
+> +&pronto {
 
-To avoid having people start sending patches that changes the sort order
-as soon as I merge this, could you please sort your nodes by address
-(not applicable for this one), then by node name alphabetically, then by
-label alphabetically.
-
-> +		compatible = "qcom,smp2p";
-> +		qcom,smem = <435>, <428>;
-> +
-> +		interrupts = <GIC_SPI 27 IRQ_TYPE_EDGE_RISING>;
-> +
-> +		mboxes = <&apcs1_mbox 14>;
-> +
-> +		qcom,local-pid = <0>;
-> +		qcom,remote-pid = <1>;
-> +
-> +		hexagon_smp2p_out: master-kernel {
-> +			qcom,entry-name = "master-kernel";
-> +
-> +			#qcom,smem-state-cells = <1>;
-> +		};
-> +
-> +		hexagon_smp2p_in: slave-kernel {
-> +			qcom,entry-name = "slave-kernel";
-> +
-> +			interrupt-controller;
-> +			#interrupt-cells = <2>;
-> +			#address-cells = <0>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
-> +	memory@80000000 {
-> +		device_type = "memory";
-> +		/* We expect the bootloader to fill in the reg */
-> +		reg = <0x0 0x80000000 0x0 0x0>;
-> +	};
-> +
-[..]
-> +	soc: soc@0 {
-[..]
-> +		pronto: remoteproc@a204000 {
-> +			compatible = "qcom,pronto-v2-pil", "qcom,pronto";
-> +			reg = <0x0a204000 0x2000>,
-> +			      <0x0a202000 0x1000>,
-> +			      <0x0a21b000 0x3000>;
-> +			reg-names = "ccu", "dxe", "pmu";
-> +
-> +			interrupts-extended = <&intc 0 149 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcnss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcnss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcnss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
-> +
-> +			memory-region = <&wcnss_mem>;
-> +
-> +			power-domains = <&rpmpd MSM8939_VDDCX>,
-> +					<&rpmpd MSM8939_VDDMX_AO>;
-
-The purpose of the remoteproc driver's vote is to keep the rails powered
-while we're booting the remote, in the event that Linux decides to
-suspend and turn of the power rails while we're waiting...
-
-Once the remote pulls the "handover" interrupt, it signals that it has
-cast the necessary votes and need no more hand-holding.
-
-So it's unlikely that _AO is the right choice here.
-
-> +			power-domain-names = "cx", "mx";
-> +
-> +			qcom,smem-states = <&wcnss_smp2p_out 0>;
-> +			qcom,smem-state-names = "stop";
-> +
-> +			pinctrl-names = "default";
-> +			pinctrl-0 = <&wcnss_pin_a>;
-> +
-> +			status = "disabled";
-> +
-> +			iris {
-> +				compatible = "qcom,wcn3620";
-> +				clocks = <&rpmcc RPM_SMD_RF_CLK2>;
-> +				clock-names = "xo";
-> +			};
-> +
-> +			smd-edge {
-> +				interrupts = <GIC_SPI 142 1>;
-> +				qcom,ipc = <&apcs1_mbox 8 17>;
-> +				qcom,smd-edge = <6>;
-> +				qcom,remote-pid = <4>;
-> +
-> +				label = "pronto";
-> +
-> +				wcnss {
-> +					compatible = "qcom,wcnss";
-> +					qcom,smd-channels = "WCNSS_CTRL";
-> +
-> +					qcom,mmio = <&pronto>;
-> +
-> +					bluetooth {
-> +						compatible = "qcom,wcnss-bt";
-> +					};
-> +
-> +					wifi {
-> +						compatible = "qcom,wcnss-wlan";
-> +
-> +						interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
-> +							     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
-> +						interrupt-names = "tx", "rx";
-> +
-> +						qcom,smem-states = <&apps_smsm 10>,
-> +								   <&apps_smsm 9>;
-> +						qcom,smem-state-names = "tx-enable",
-> +									"tx-rings-empty";
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	smd {
-
-"so" < "sm"
-
-> +		compatible = "qcom,smd";
-> +
-> +		rpm {
-> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
-> +			qcom,ipc = <&apcs1_mbox 8 0>;
-> +			qcom,smd-edge = <15>;
-> +
-> +			rpm_requests: rpm-requests {
-> +				compatible = "qcom,rpm-msm8936";
-> +				qcom,smd-channels = "rpm_requests";
-> +
-> +				rpmcc: clock-controller {
-> +					compatible = "qcom,rpmcc-msm8936", "qcom,rpmcc";
-> +					#clock-cells = <1>;
-> +					clock-names = "xo";
-> +					clocks = <&xo_board>;
-> +				};
-> +
-> +				rpmpd: power-controller {
-> +					compatible = "qcom,msm8939-rpmpd";
-> +					#power-domain-cells = <1>;
-> +					operating-points-v2 = <&rpmpd_opp_table>;
-> +
-> +					rpmpd_opp_table: opp-table {
-> +						compatible = "operating-points-v2";
-> +
-> +						rpmpd_opp_ret: opp1 {
-> +							opp-level = <1>;
-> +						};
-> +
-> +						rpmpd_opp_svs_krait: opp2 {
-> +							opp-level = <2>;
-> +						};
-> +
-> +						rpmpd_opp_svs_soc: opp3 {
-> +							opp-level = <3>;
-> +						};
-> +
-> +						rpmpd_opp_nom: opp4 {
-> +							opp-level = <4>;
-> +						};
-> +
-> +						rpmpd_opp_turbo: opp5 {
-> +							opp-level = <5>;
-> +						};
-> +
-> +						rpmpd_opp_super_turbo: opp6 {
-> +							opp-level = <6>;
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-[..]
-> +
-> +	/* Dummy regulator for our non-psci cpu@X defintions */
-
-It's a power-supply...
-
-> +	vreg_dummy: regulator-dummy {
-> +		#power-domain-cells = <0>;
-> +	};
-> +
-> +	smp2p-wcnss {
-
-This belongs up by the other smp2p node.
+As mentioned in the dtsi patch, please sort your nodes by label,
+alphabetically. You may choose to group the pinctrl nodes last in the
+file...
 
 Regards,
 Bjorn
+
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&wcnss_pin_a>;
+> +	status = "okay";
+> +
+> +	iris {
+> +		compatible = "qcom,wcn3680";
+> +	};
+> +};
