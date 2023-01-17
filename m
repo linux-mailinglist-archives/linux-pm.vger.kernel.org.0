@@ -2,178 +2,345 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D7F670B1E
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 23:04:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F02670CFC
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 00:14:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjAQWEO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 17:04:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S229835AbjAQXOX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 18:14:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229748AbjAQWDS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 17:03:18 -0500
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518F55AB6B
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
-Received: by mail-ej1-x630.google.com with SMTP id ss4so70830016ejb.11
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 12:21:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
-        b=ee9ZsxFH0+TOnSXcPrEGkTd9TlTqtZr8Jzdq1Pc/ZubpNyLzAegr1AYxHJ163b0TUy
-         dQQCDckhQGbOqH/LVs697vIWIUgWVjqkezi+1Fb/X67JNEVsvTfG8taaSxj9XMcdqnat
-         wuxIENu4lgwtZL3RwMb9XYuzJ3VDaPaHclj4No3S72WGGpkquszBpdzpLTRm/m/xuDVV
-         8T7LsomWI6BDi0D4N0JCzOZLjGpkxVUV7UVosfuwrrCZ162QSbHBlAOAjs9iM/HTdmIY
-         jo+76qdlqTimsnv4Ll2PCZmWskdhr9cuU2EFxMkUFQGntxOtxZich/LI1zMt8fJgl3Xn
-         Cgpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iWlRLiUKMXJt3KD3VewHmkRai8o03qMC+48h3vloBGk=;
-        b=GzUSxe/4fnkgypM3eYLywLyAoVTxKG20Ml/4xGAdCPqrut3NZvcc1wBs6x6XlzGopk
-         e/AjgCU2fwyXN7drfxK3BZIPSm3Jxr31pmHQ3ibtXKuJ/1WoU+APrRKxWvx3rWzOAufV
-         CnQmC+8Y238bSNHQG71acQ/BbCFoAZ7oNpHylzvz4u7lQc8yDHMlrjVYyB27L4DiLigz
-         4fzSV1gvqhLv9unTkTn1cmHSxWBLvCcXnmzfsRGKV3uX7ATELHtq4b+F7iE2LYJIi5xH
-         oX39cjGLVfqsF3bTWkAkIBzYgIw2UY7Jcb4iArN1Y+RvOBOZlFp8EiM3tcGIZ+PSeRVm
-         Rlxg==
-X-Gm-Message-State: AFqh2koPoX4Q15It4lCYj65FqdugGvSBkms/eV3UfQ7pPAlfk7BiiMqs
-        /7+Bn5BhZbdkOqKgqbXlFPSDiQ==
-X-Google-Smtp-Source: AMrXdXs9uRo49QUx37/1Ds+MJCE8jo71WpvZDXyr3NVprgNsVLSvnGgypIdXZ+kNkxM/vZUXmVO/Fw==
-X-Received: by 2002:a17:907:a710:b0:7c0:f71b:8b3 with SMTP id vw16-20020a170907a71000b007c0f71b08b3mr4253213ejc.57.1673986858902;
-        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id k14-20020a17090632ce00b00871ac327db6sm2238452ejk.45.2023.01.17.12.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 12:20:58 -0800 (PST)
-Date:   Tue, 17 Jan 2023 20:20:56 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
-        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <20230117202056.zx2pl22miufcrcu3@airbuntu>
-References: <20230113134056.257691-1-vincent.guittot@linaro.org>
- <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
- <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+        with ESMTP id S229845AbjAQXNi (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 18:13:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B8252A14A;
+        Tue, 17 Jan 2023 12:58:07 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA5BBB819B0;
+        Tue, 17 Jan 2023 20:58:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E39F7C433F2;
+        Tue, 17 Jan 2023 20:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1673989084;
+        bh=kSbtYgfEYRDJQLRjZGOgB7sOGnCZFG8dk3OebFDhVGs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DCCFukQCO4d/fpfQgIQyqsjTZvkI4EmNpjLBQYM+kFAXHJGBUV3BpgZC5CoxoJGUg
+         ChcFsK86KBMwhSPz41en3YKgyDAjILDUc/hSBoBOZBFnrprj3skp6NXzFczFANbh0Q
+         gXpUBXwYUiME1E7eoDCPjpidVO2ncHFxU7AIelpHRL3y2GSJC1/OXYr7juWQHy3t+R
+         EaMYMmiaoVEGDN9ggRRzbfxPpL7QSMggn2xE5blTC7286ED3IRv+NrZWLK9FPNqFYe
+         3EgIaE6oP46ET8CQCjHembyqBSRpscbDxZR/6adBUfTjBLMGWXstct/uuJKGePnYtQ
+         12roTGJDJDclA==
+Date:   Tue, 17 Jan 2023 14:58:00 -0600
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>,
+        Stephan Gerhold <stephan@gerhold.net>
+Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
+Message-ID: <20230117205800.cqexxwxmtupapy7e@builder.lan>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/16/23 14:56, Dietmar Eggemann wrote:
-> On 16/01/2023 12:23, Vincent Guittot wrote:
-> > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> >>
-> >> On 13/01/2023 14:40, Vincent Guittot wrote:
+On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
+> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
+> differences to msm8916.
 > 
-> [...]
+> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
+> - DRAM 1x800 LPDDR3
+> - Camera 4+4 lane CSI
+> - Venus @ 1080p60 HEVC
+> - DSI x 2
+> - Adreno A405
+> - WiFi wcn3660/wcn3680b 802.11ac
 > 
-> >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
-> >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
-> >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
-> >>>
-> >>> +     /* Return true only if the utlization doesn't fit its capacity */
-> >>
-> >> s/utlization/utilization
-> >> s/its/CPU ?
-> >>
-> >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
-> >>>  }
-> >>
-> >> cpu_overutilized() is the only place where we now only test for
-> >> !util_fits_cpu(). The new comment says we only care about utilization
-> >> not fitting CPU capacity.
-> >>
-> >> Does this mean the rq uclamp values are not important here and we could
-> >> go back to use fits_capacity()?
-> >>
-> >> Not sure since util_fits_cpu() is still coded differently:
-> > 
-> > uclamp_min is not important but uclamp_max still cap the utilization
+> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+> Co-developed-by: Jun Nie <jun.nie@linaro.org>
+> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+> Co-developed-by: Benjamin Li <benl@squareup.com>
+> Signed-off-by: Benjamin Li <benl@squareup.com>
+> Co-developed-by: James Willcox <jwillcox@squareup.com>
+> Signed-off-by: James Willcox <jwillcox@squareup.com>
+> Co-developed-by: Leo Yan <leo.yan@linaro.org>
+> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> Co-developed-by: Joseph Gates <jgates@squareup.com>
+> Signed-off-by: Joseph Gates <jgates@squareup.com>
+> Co-developed-by: Max Chen <mchen@squareup.com>
+> Signed-off-by: Max Chen <mchen@squareup.com>
+> Co-developed-by: Zac Crosby <zac@squareup.com>
+> Signed-off-by: Zac Crosby <zac@squareup.com>
+> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+
+Just to make sure when I get the question, you all co-developed this
+patch, right?
+
+> ---
+>  arch/arm64/boot/dts/qcom/msm8939.dtsi | 2393 +++++++++++++++++++++++++
+>  1 file changed, 2393 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
 > 
-> OK, makes sense.
-> 
-> I.e. we could pass in `rq_util_min = 0` to avoid fetching it
-> unnecessary? In case `fits == 1` before the uclamp_min condition in
-> util_fits_cpu() it doesn't matter if we switch to return `-1` when
-> called from cpu_overutilized(). Detail though ...
-> 
-> [...]
-> 
-> >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
-> >>>
-> >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
-> >>>                       continue;
-> >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
-> >>> +
-> >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
-> >>> +
-> >>> +             /* This CPU fits with all capacity and performance requirements */
-> >>
-> >> In task_fits_cpu() `utilization and performance (better uclamp)
-> >> requirements` term was used. I assume it's the same thing here?
-> >>
-> >>> +             if (fits > 0)
-> >>>                       return cpu;
-> >>> +             /*
-> >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
-> >>> +              * for the CPU with highest performance capacity.
-> >>                                             ^^^^^^^^^^^^^^^^^^^^
-> >>
-> >> Do we use a new CPU capacity value `performance capacity (1)` here?
-> >>
-> >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
-> >>
-> >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
-> >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
-> >> to return -1. Shouldn't (1) and (2) be the same?
-> > 
-> > I'm all in favor of both being capacity_orig_of(cpu) -
-> > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
-> 
-> I think we need a handy name for this new capacity value, which seems to
-> be `capacity_orig - capacity reduced by thermal`. And we should either
-> use `thermal_load_avg` or `thermal pressure` for the latter part. And
-> then we should use this consistently in all these places:
-> util_fits_cpu(), feec(), sic().
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> new file mode 100644
+> index 0000000000000..8cd358a9fe623
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+> @@ -0,0 +1,2393 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2013-2015, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2020-2023, Linaro Limited
+> + */
+> +
+> +#include <dt-bindings/clock/qcom,gcc-msm8939.h>
+> +#include <dt-bindings/clock/qcom,rpmcc.h>
+> +#include <dt-bindings/interconnect/qcom,msm8939.h>
+> +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> +#include <dt-bindings/power/qcom-rpmpd.h>
+> +#include <dt-bindings/reset/qcom,gcc-msm8939.h>
+> +#include <dt-bindings/thermal/thermal.h>
+> +
+> +/ {
+> +	interrupt-parent = <&intc>;
+> +
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
 
-So we had reports from Xuewen that not using instantaneous pressure causes
-problems.
+Why do you use a default of 2? In particular since you reduce it to 1 in
+/soc...
 
-Lukasz came up with this patch to help address the problem, but it's still
-waiting discussions. I think we need to discuss this problem more there.
+> +
+> +	clocks {
+> +		xo_board: xo-board {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <19200000>;
+> +		};
+> +
+> +		sleep_clk: sleep-clk {
+> +			compatible = "fixed-clock";
+> +			#clock-cells = <0>;
+> +			clock-frequency = <32768>;
+> +		};
+> +	};
+[..]
+> +	smp2p-hexagon {
 
-	https://lore.kernel.org/lkml/20220429091245.12423-1-lukasz.luba@arm.com/
+To avoid having people start sending patches that changes the sort order
+as soon as I merge this, could you please sort your nodes by address
+(not applicable for this one), then by node name alphabetically, then by
+label alphabetically.
 
-At the moment there's no good solution and either comes with its own set of
-caveat(s). Being consistent is not an option now AFAICT? We need to improve
-thermal_load_avg() response time first somehow.
+> +		compatible = "qcom,smp2p";
+> +		qcom,smem = <435>, <428>;
+> +
+> +		interrupts = <GIC_SPI 27 IRQ_TYPE_EDGE_RISING>;
+> +
+> +		mboxes = <&apcs1_mbox 14>;
+> +
+> +		qcom,local-pid = <0>;
+> +		qcom,remote-pid = <1>;
+> +
+> +		hexagon_smp2p_out: master-kernel {
+> +			qcom,entry-name = "master-kernel";
+> +
+> +			#qcom,smem-state-cells = <1>;
+> +		};
+> +
+> +		hexagon_smp2p_in: slave-kernel {
+> +			qcom,entry-name = "slave-kernel";
+> +
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +			#address-cells = <0>;
+> +			#size-cells = <0>;
+> +		};
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		/* We expect the bootloader to fill in the reg */
+> +		reg = <0x0 0x80000000 0x0 0x0>;
+> +	};
+> +
+[..]
+> +	soc: soc@0 {
+[..]
+> +		pronto: remoteproc@a204000 {
+> +			compatible = "qcom,pronto-v2-pil", "qcom,pronto";
+> +			reg = <0x0a204000 0x2000>,
+> +			      <0x0a202000 0x1000>,
+> +			      <0x0a21b000 0x3000>;
+> +			reg-names = "ccu", "dxe", "pmu";
+> +
+> +			interrupts-extended = <&intc 0 149 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
+> +					      <&wcnss_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
+> +			interrupt-names = "wdog", "fatal", "ready", "handover", "stop-ack";
+> +
+> +			memory-region = <&wcnss_mem>;
+> +
+> +			power-domains = <&rpmpd MSM8939_VDDCX>,
+> +					<&rpmpd MSM8939_VDDMX_AO>;
 
-For now, to make best decision - we look at instantaneous. But when falling
-back - I think using the long term pressure signal makes more sense because we
-wouldn't be doing this fallback path if everything works as expected thermal
-wise.
+The purpose of the remoteproc driver's vote is to keep the rails powered
+while we're booting the remote, in the event that Linux decides to
+suspend and turn of the power rails while we're waiting...
 
-At least, that's what I think is a good trade-of for now :)
+Once the remote pulls the "handover" interrupt, it signals that it has
+cast the necessary votes and need no more hand-holding.
 
+So it's unlikely that _AO is the right choice here.
 
-Thanks!
+> +			power-domain-names = "cx", "mx";
+> +
+> +			qcom,smem-states = <&wcnss_smp2p_out 0>;
+> +			qcom,smem-state-names = "stop";
+> +
+> +			pinctrl-names = "default";
+> +			pinctrl-0 = <&wcnss_pin_a>;
+> +
+> +			status = "disabled";
+> +
+> +			iris {
+> +				compatible = "qcom,wcn3620";
+> +				clocks = <&rpmcc RPM_SMD_RF_CLK2>;
+> +				clock-names = "xo";
+> +			};
+> +
+> +			smd-edge {
+> +				interrupts = <GIC_SPI 142 1>;
+> +				qcom,ipc = <&apcs1_mbox 8 17>;
+> +				qcom,smd-edge = <6>;
+> +				qcom,remote-pid = <4>;
+> +
+> +				label = "pronto";
+> +
+> +				wcnss {
+> +					compatible = "qcom,wcnss";
+> +					qcom,smd-channels = "WCNSS_CTRL";
+> +
+> +					qcom,mmio = <&pronto>;
+> +
+> +					bluetooth {
+> +						compatible = "qcom,wcnss-bt";
+> +					};
+> +
+> +					wifi {
+> +						compatible = "qcom,wcnss-wlan";
+> +
+> +						interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH>,
+> +							     <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
+> +						interrupt-names = "tx", "rx";
+> +
+> +						qcom,smem-states = <&apps_smsm 10>,
+> +								   <&apps_smsm 9>;
+> +						qcom,smem-state-names = "tx-enable",
+> +									"tx-rings-empty";
+> +					};
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+> +	smd {
 
---
-Qais Yousef
+"so" < "sm"
+
+> +		compatible = "qcom,smd";
+> +
+> +		rpm {
+> +			interrupts = <GIC_SPI 168 IRQ_TYPE_EDGE_RISING>;
+> +			qcom,ipc = <&apcs1_mbox 8 0>;
+> +			qcom,smd-edge = <15>;
+> +
+> +			rpm_requests: rpm-requests {
+> +				compatible = "qcom,rpm-msm8936";
+> +				qcom,smd-channels = "rpm_requests";
+> +
+> +				rpmcc: clock-controller {
+> +					compatible = "qcom,rpmcc-msm8936", "qcom,rpmcc";
+> +					#clock-cells = <1>;
+> +					clock-names = "xo";
+> +					clocks = <&xo_board>;
+> +				};
+> +
+> +				rpmpd: power-controller {
+> +					compatible = "qcom,msm8939-rpmpd";
+> +					#power-domain-cells = <1>;
+> +					operating-points-v2 = <&rpmpd_opp_table>;
+> +
+> +					rpmpd_opp_table: opp-table {
+> +						compatible = "operating-points-v2";
+> +
+> +						rpmpd_opp_ret: opp1 {
+> +							opp-level = <1>;
+> +						};
+> +
+> +						rpmpd_opp_svs_krait: opp2 {
+> +							opp-level = <2>;
+> +						};
+> +
+> +						rpmpd_opp_svs_soc: opp3 {
+> +							opp-level = <3>;
+> +						};
+> +
+> +						rpmpd_opp_nom: opp4 {
+> +							opp-level = <4>;
+> +						};
+> +
+> +						rpmpd_opp_turbo: opp5 {
+> +							opp-level = <5>;
+> +						};
+> +
+> +						rpmpd_opp_super_turbo: opp6 {
+> +							opp-level = <6>;
+> +						};
+> +					};
+> +				};
+> +			};
+> +		};
+> +	};
+[..]
+> +
+> +	/* Dummy regulator for our non-psci cpu@X defintions */
+
+It's a power-supply...
+
+> +	vreg_dummy: regulator-dummy {
+> +		#power-domain-cells = <0>;
+> +	};
+> +
+> +	smp2p-wcnss {
+
+This belongs up by the other smp2p node.
+
+Regards,
+Bjorn
