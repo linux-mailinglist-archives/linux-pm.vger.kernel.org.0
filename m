@@ -2,84 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713E066D418
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 03:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BA866D420
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 03:13:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235112AbjAQCJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 16 Jan 2023 21:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S235097AbjAQCNv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 16 Jan 2023 21:13:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235351AbjAQCJH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 21:09:07 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCF92A17B;
-        Mon, 16 Jan 2023 18:08:52 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B14860F75;
-        Tue, 17 Jan 2023 02:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4C6C433EF;
-        Tue, 17 Jan 2023 02:08:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1673921331;
-        bh=du8shApGKSAEIiVDS61csE3tLeRUz3d2271MWxyE6Lc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mlFbAva7gfMg5nvBjGmyKoSxNqLGYv6ZI1S/ke+GlvF7HDfZxKtMXS9Mps4bpvCma
-         WNjaScNa/nG/otzAx1z8/k/E3ANav7RNFMSv6srplZ9hDPy7YqJaob1YngjKZ61SCE
-         QFhIgMxeieEE/iOTlrb4tr+fLq78GHtCas8IendDMsZkv86ou2dFZEjsZFb0RbF378
-         6Wqw0py64CDJJhysgali38CcE9SNQbIUBJWmBj6aoPTgT7ZIizksGWQSTU0ViN0Jqb
-         n7aSdkd1um0aPTjYr3qhhaQFX8ZsH79aLa8JckEiV4v5RCI1nM5BkYLVKrh4h6J727
-         clk6z7zTX6fUQ==
-Date:   Mon, 16 Jan 2023 20:08:48 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        with ESMTP id S234598AbjAQCNt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 16 Jan 2023 21:13:49 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 805631F5F7;
+        Mon, 16 Jan 2023 18:13:48 -0800 (PST)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30H2BBg0026230;
+        Tue, 17 Jan 2023 02:13:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=Ff4WTlZVH+V7lmYyeny0SbjMnOVONDUYtgsdY67rfzo=;
+ b=JnTVNBQbR+TOAHn+VyJvYNBuruMF1J2qaBJeAu51DOpFs+LXrtTyqpqQmuj1BmSJ5WR1
+ CEgKvPGrFWpKfGo+8NKk6rJkTpmBZ+pWK5CmsD816KLAuEI1z9M4EKaUSbLN7GOc5RzL
+ +A9dgkDDFNHfPkoN2JZ1DpTQxFI9WJcW2aHtvWJDVKqfdvUjoRCNfUTqQF0k9+m2E8l7
+ VqGsQ/PlHs2Jz3+WdaujvrpwQIsGYMyFZLkGWnwLME3L/YKcGad1KxC0KjT1tp6VzsfK
+ Jz+PS175AipXdjasXQ+hauaDWTj3Cp+26HX5xvaOdwmY5IB5Lvncv5RvQW61Mplqr9Fs EA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n3njvc9vd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 02:13:45 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30H2DiKu026328
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 17 Jan 2023 02:13:44 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Mon, 16 Jan 2023 18:13:44 -0800
+Date:   Mon, 16 Jan 2023 18:13:43 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
         Johan Hovold <johan@kernel.org>,
         Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v2 3/4] soc: qcom: pmic_glink: Introduce altmode support
-Message-ID: <20230117020848.7i4znoynf6q5vtom@builder.lan>
+Subject: Re: [PATCH v2 0/4] soc: qcom: Introduce PMIC GLINK
+Message-ID: <20230117021343.GA2350793@hu-bjorande-lv.qualcomm.com>
 References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
- <20230113041132.4189268-4-quic_bjorande@quicinc.com>
- <CAKXuJqhAFc=YQOYw7tKW5D0AW9S+QfutwgxD3sK2M9+HNtOqfQ@mail.gmail.com>
+ <bcf497a7-66bb-9cd9-bada-4081000747a6@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <CAKXuJqhAFc=YQOYw7tKW5D0AW9S+QfutwgxD3sK2M9+HNtOqfQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bcf497a7-66bb-9cd9-bada-4081000747a6@linaro.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: tUMq3C-9vkAFwHb6tUq7GWxnyiXvZL9J
+X-Proofpoint-ORIG-GUID: tUMq3C-9vkAFwHb6tUq7GWxnyiXvZL9J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-16_18,2023-01-13_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 suspectscore=0 bulkscore=0 impostorscore=0
+ malwarescore=0 mlxscore=0 spamscore=0 priorityscore=1501 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301170013
+X-Spam-Status: No, score=0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 15, 2023 at 01:10:14PM -0600, Steev Klimaszewski wrote:
-> > diff --git a/drivers/soc/qcom/pmic_glink_altmode.c b/drivers/soc/qcom/pmic_glink_altmode.c
-[..]
-> > +       msg = data;
-> > +       notification = le32_to_cpu(msg->notification);
-> > +       port = FIELD_GET(SC8180X_PORT_MASK, notification);
-> > +       orientation = FIELD_GET(SC8180X_ORIENTATION_MASK, notification);
-> > +       mux = FIELD_GET(SC8180X_MUX_MASK, notification);
-> > +       mode = FIELD_GET(SC8180X_MODE_MASK, notification);
-> > +       hpd_state = FIELD_GET(SC8180X_HPD_STATE_MASK, notification);
-> > +       hpd_irq = FIELD_GET(SC8180X_HPD_IRQ_MASK, notification);
-> > +
-> The kernel test robot keeps complaining about these FIELD_GET because
-> there is no #include <linux/bitfield.h>
+On Fri, Jan 13, 2023 at 03:56:59PM +0100, Konrad Dybcio wrote:
+> 
+> 
+> On 13.01.2023 05:11, Bjorn Andersson wrote:
+> > This implements the base PMIC GLINK driver, a power_supply driver and a
+> > driver for the USB Type-C altmode protocol. This has been tested and
+> > shown to provide battery information, USB Type-C switch and mux requests
+> > and DisplayPort notifications on SC8180X, SC8280XP and SM8350.
+> > 
+> For the series:
+> 
+> Tested-by: Konrad Dybcio <konrad.dybcio@linaro.org> # SM8350 PDX215
+> 
+> Thanks a lot for working on this!
 > 
 
-I must have missed those complains before, thanks for pointing it out!
+Thank you for testing it :)
+
+> One thing, /sys/class/power_supply/qcom-battmgr-usb/input_current_limit
+> is stuck at zero and so is the current_now as a result (the voltage
+> readout is 5V + some noise, so that looks good), but I don't see any
+> SET paths for it in the driver, so I suppose that's what the firmware
+> default is?
+> 
+
+I have not experimented with adjusting any configuration in this initial
+set, but there are a few knobs that could/should be introduced on top of
+this.
+
+That said, I believe input_current_limit should somehow come from the
+USB stack, rather than user space?
 
 Regards,
 Bjorn
