@@ -2,189 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FDD366E009
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 15:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7864266E06D
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 15:24:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjAQOLb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 09:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36452 "EHLO
+        id S232422AbjAQOYE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 09:24:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbjAQOLa (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 09:11:30 -0500
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592E4303C5;
-        Tue, 17 Jan 2023 06:11:29 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UdeAq2v5ufw/JCkpyvewvZ/DCiEy4JVziYzRMEn4WjPUMZGQNpYaQ3lsNAI+tXvS8USrQbACUP0teYec4aX3lmQ1fIwEKUGlmdLiH65HEjsOZn5BjVru4rRCjQlQz6CKPMB0ztmrD3zlug0quXSpBQ1nkZxTNulQ6H2FQcptnFf3eijFtoRyqb7ThywSFakELi0KBdz2KB2oWo959mfyrfidIueN4ErQRey+uSHPJLpT9bSHH8UO4QYhsNIOkHNdgyWIArfU3lNNQNaNu29kb7QN5RcGnF1mx95OnGxlLg4UncpnjCFIg0ggS+1obKILl7DaiRG6mZHnbv66BiAkRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WjAj8Q3EASeThQ6TlFmpsEMRJGZAVMGiPmj8QaF3xFw=;
- b=casMm+SEuUE4KXsmXPRLGI+TSEbIYBLcZ1S8bPXaNr2sqLVG7NtHAEQNl51YwrG6xHVWrwSA6P8giiMNehACyr9mPosSD1LuWPODIdO98xiFj8Lq3HouChaBS3qQH9h1uE2IpAjFFajMPjfqWRMQLZT9j5Ik3OGDX+dAtgDZf0+tqkGPfy4LQadbdwRcsRpIj6IRE98URhjqc1Km3LB4zMplO/SZeMOke8l9a8J3Nhi4XQIGeA9pwTDC1pY6BimilamFoW99hiYpt5nQpWCBtpketl2IoJKO90Uv7y9P5V78nRkwrRRBL/PY23uQzMvkftb+pVnZ3JeaJh9K/fxHlg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WjAj8Q3EASeThQ6TlFmpsEMRJGZAVMGiPmj8QaF3xFw=;
- b=bbHc3a6O3v7CrT+tjduhos2uick0rElCG/W+XxI+OdTaEnkHsr+TTVwJcozKTLoL2tbS4XevMbW+IowCKIacETyRqwXXL/fVqgImvHAlxkHEV9vszuBqizqDHd+9T+3+gADEsjSu6wTewkxT6SYF71hBS73Kkp4Ef/66hZeXXuY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- IA1PR12MB6577.namprd12.prod.outlook.com (2603:10b6:208:3a3::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.23; Tue, 17 Jan
- 2023 14:11:26 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::d17b:f929:12fd:8ae]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::d17b:f929:12fd:8ae%4]) with mapi id 15.20.6002.013; Tue, 17 Jan 2023
- 14:11:26 +0000
-Date:   Tue, 17 Jan 2023 22:11:00 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v10 12/12] Documentation: amd-pstate: introduce new
- global sysfs attributes
-Message-ID: <Y8asdDS6EZl+dwvi@amd.com>
-References: <20230106061420.95715-1-perry.yuan@amd.com>
- <20230106061420.95715-13-perry.yuan@amd.com>
+        with ESMTP id S232609AbjAQOXe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 09:23:34 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48AEE3E617;
+        Tue, 17 Jan 2023 06:22:00 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7277412FC;
+        Tue, 17 Jan 2023 06:22:41 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1B3A83F67D;
+        Tue, 17 Jan 2023 06:21:43 -0800 (PST)
+Date:   Tue, 17 Jan 2023 14:21:40 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        nsekhar@ti.com, brgl@bgdev.pl, ulli.kroll@googlemail.com,
+        linus.walleij@linaro.org, shawnguo@kernel.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, tony@atomide.com,
+        khilman@kernel.org, krzysztof.kozlowski@linaro.org,
+        alim.akhtar@samsung.com, catalin.marinas@arm.com, will@kernel.org,
+        guoren@kernel.org, bcain@quicinc.com, chenhuacai@kernel.org,
+        kernel@xen0n.name, geert@linux-m68k.org, sammy@sammy.net,
+        monstr@monstr.eu, tsbogend@alpha.franken.de, dinguyen@kernel.org,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        shorne@gmail.com, James.Bottomley@hansenpartnership.com,
+        deller@gmx.de, mpe@ellerman.id.au, npiggin@gmail.com,
+        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org, davem@davemloft.net,
+        richard@nod.at, anton.ivanov@cambridgegreys.com,
+        johannes@sipsolutions.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, acme@kernel.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, boris.ostrovsky@oracle.com,
+        chris@zankel.net, jcmvbkbc@gmail.com, rafael@kernel.org,
+        lenb@kernel.org, pavel@ucw.cz, gregkh@linuxfoundation.org,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        daniel.lezcano@linaro.org, lpieralisi@kernel.org,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        anup@brainfault.org, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, jacob.jun.pan@linux.intel.com,
+        atishp@atishpatra.org, Arnd Bergmann <arnd@arndb.de>,
+        yury.norov@gmail.com, andriy.shevchenko@linux.intel.com,
+        linux@rasmusvillemoes.dk, dennis@kernel.org, tj@kernel.org,
+        cl@linux.com, rostedt@goodmis.org, mhiramat@kernel.org,
+        frederic@kernel.org, paulmck@kernel.org, pmladek@suse.com,
+        senozhatsky@chromium.org, john.ogness@linutronix.de,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, ryabinin.a.a@gmail.com,
+        glider@google.com, andreyknvl@gmail.com, dvyukov@google.com,
+        vincenzo.frascino@arm.com,
+        Andrew Morton <akpm@linux-foundation.org>, jpoimboe@kernel.org,
+        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-perf-users@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-xtensa@linux-xtensa.org, linux-acpi@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        Sudeep Holla <sudeep.holla@arm.com>
+Subject: Re: [PATCH v3 00/51] cpuidle,rcu: Clean up the mess
+Message-ID: <20230117142140.g423hxisv7djudof@bogus>
+References: <20230112194314.845371875@infradead.org>
+ <Y8WCWAuQSHN651dA@FVFF77S0Q05N.cambridge.arm.com>
+ <Y8Z31UbzG3LJgAXE@hirez.programming.kicks-ass.net>
+ <Y8afpbHtDOqAHq9M@FVFF77S0Q05N.cambridge.arm.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230106061420.95715-13-perry.yuan@amd.com>
-X-ClientProxiedBy: SI2PR04CA0009.apcprd04.prod.outlook.com
- (2603:1096:4:197::8) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|IA1PR12MB6577:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9cb83c11-6522-47e3-1a4d-08daf894b85b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EjfG6CXeiv8LBHnx8O7xDF0fKMDTkVIsJmH50rDptuzi3+T/oei1InbB5NDB8vNiYQAtfpWtp3gjGlDaoDxCrdyG+jjwSp2ypEHSrThuCQuBFSMNowx5ikBBF1G71+sj1KP9QzY8Yv8nkj1OXdUIC/xtQCSNNkTpXMWHAVujmEJAyFoq4HMvUiVsjK3mDuOLoVtPKhGAXMOC4E17A16hl56bC2PoCQMD48kxT7gxoMmF9GFCkBh8d8zi+KU/g9sICfjR00l9jbcUD1KTewjWUscMrGvy8/I+klFVKYWxgbDDZTocZnMRHHdEaBlXMpRGjoIPj58s7Q2windZpga95NDB4alGkmwks1iSQoGBKHj3IUd5LGdBxQH7KVW8jg+Fqa558LHW6nBROq6yGI75xmBlV6x+H15vJNva4N1JgrE9R51exB+mRzlFI8/fc3/2IKbcXcO/jGt2BvXQ/JG5xDSIHckvDzQFG4KhhXw8CPApiTyP/tn9Qb4jDRYOG6VR6ZRgkPXJvtL4Mc91AwwI7jn+2IIK0mQZ6Q+kNnSNBQsOoKabGXPff78UaDSVqtAzpvNTKyX7YAQ90p0hlX6hViAN/YR2YX8WqYvaNZ/NUJMpODDO5f2M6tE++HrhAclVh6UsG49jnlbmBoYjH/Rwq9o9ylKTBal2ClpH5kMIApGnGUe/eKTL8GWr3lJGrSLP
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199015)(6636002)(54906003)(2616005)(186003)(26005)(4326008)(8676002)(66556008)(66476007)(6512007)(66946007)(478600001)(6862004)(41300700001)(8936002)(83380400001)(6666004)(2906002)(5660300002)(316002)(6506007)(38100700002)(6486002)(37006003)(86362001)(36756003)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?VBK24+QxddoBWPt8MI3/HFgQOHQmYryUXKXtPMT2sNm28JySaodU6GU2qHOq?=
- =?us-ascii?Q?kOrYF2veaaGIVjbWzJTDADZ3wptqBfGrUedOdzljUsiVI8QEgnBkyewKhexK?=
- =?us-ascii?Q?Ozaj4I6NG6K3J8OSatrxW8k5LkSkoU0NDjYuFrPNJ4wE60AAreMaDw6yfgqV?=
- =?us-ascii?Q?oU5crTQ6xV3Ud46CUVapz8n1pg0WU4tTuGa5mh16Yd9NHmTJlq0MW2+vTimI?=
- =?us-ascii?Q?EWWL32RVtEOEfsED9JRPsToo/Kd0+aNk18JkJ3cMUhfCUZ/gLaEDextIPIu0?=
- =?us-ascii?Q?9QvGsJEJe15BS5zdPMuTRbHF7YNdXOfBrOIobgU5jItVQiHK93kOydKps6Oy?=
- =?us-ascii?Q?kzPdIwmWnXH86TqN/fEW1SzWLanIH4WctaJS3bO6pD/zcF6KrdMmBdIJ8qPD?=
- =?us-ascii?Q?D4mRDDGk2GMoUKUub5+chC9py2256pviwAh7/XZTLytcu8ZQuXcJWQG9NxBu?=
- =?us-ascii?Q?kNg+en6Nbq0CGFhscTcn4d4IM8ZFhADd6pydIzWZQ2LJA0DFWhe3Mvo8uN6E?=
- =?us-ascii?Q?a/oVGuznhMrMtXsPvNxQgKtfWnC6SS3jwsT0VqXPCyLQMbnhRMngJJSM60G0?=
- =?us-ascii?Q?pk8pPhXxsG8zIHj/wxKz7cbW3gHfHy8OsvinMP1ZJFmmnebdNFd4MJ5zB300?=
- =?us-ascii?Q?QTMZUo3ZZpIi+Z45rk/LUG7J93qHUV3Z3LjzPAWQo6J4QGaZhhkB7iz38f80?=
- =?us-ascii?Q?kJSVC2BhhDoH8kQyGoybBxPDtRVYvG0GHltmpjdur/DBTXYfR6w7MJKmER96?=
- =?us-ascii?Q?mz7YiZZ7NrMaHN2QFsSftjnF9QNl23yVBpdQVB4bjLqoggolmAvwT4yIibdM?=
- =?us-ascii?Q?DotPtYOjNsPmzQlEQNOB1eam1AJ0SkyMZ4wensZPm0YGenoTHoTpt5b0k2Fy?=
- =?us-ascii?Q?7VN69HU1KjWjYUmLAgXILaKjHLGg73TiClvgutU+CnDkmXr8Nou05NyBe6Hd?=
- =?us-ascii?Q?pPVZKLb5NwVENz8nNoSFi3/vOkD7mxHldkOXSGTElHROSH6Wuvi1YYYn8Pis?=
- =?us-ascii?Q?cxFsEQ79lpcac82QyK3wyF8tn+n/LT1dF4m65Jdz7zknSp2qlL2thY9hRjRX?=
- =?us-ascii?Q?32/MToNfUhL9U/nCU4uaJB/6q39hXVnprpcY+wheiXjN/XokNp+e8V3Nlwuc?=
- =?us-ascii?Q?Hug7J643b1fgJg6nfSU1vjKmPKAN93HFqKPdcidyZXkKDvfSp9sIXSBVQ4Lj?=
- =?us-ascii?Q?HX7P7PSC8mhe95u1SGEjpz9mvj37w77KuqgWxcIO56p3uOVFuSEjCDmk6Xcc?=
- =?us-ascii?Q?pzlpmgV9c9tKvMKMRZyrJIkukJcdw659VcmA9F0XQNn20lP1hFcjN8TT5gUV?=
- =?us-ascii?Q?74sHW2sCcGl3H0AWcT+kXYFlg82duQyWDfW/QzBbQ5KTnDrxIJkZq04zoLG7?=
- =?us-ascii?Q?1VFloaYo1q+MlPQyoUEnci4vBRMfXwd3qSKx9n+awKxKyb7fnU7qG8FCqxTy?=
- =?us-ascii?Q?I+ArxvOPuMPpc5hY/s0ijMKtOdIAnnI7gQnws7neL0bXr+2z/rNx5SZMlUwH?=
- =?us-ascii?Q?L/ZFOaWOQmCe1yVxLEXCBwTrVZnlHNSiVj4R5Cllh1CzVg+zF/BoXCV2RIY3?=
- =?us-ascii?Q?8VqR37wb47FQiG9SXnBfoXQzKjXA9IEbcIAluVWe?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9cb83c11-6522-47e3-1a4d-08daf894b85b
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jan 2023 14:11:25.9891
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mqv9yJWIZiQxeOJ7LGFnrU08jpDNDzNm+mxwy1S73/OWFIRUUnTCI4NhJ2jHiYEp/ymkWCriijTSOZ2Vq2UJYg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6577
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y8afpbHtDOqAHq9M@FVFF77S0Q05N.cambridge.arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 06, 2023 at 02:14:20PM +0800, Yuan, Perry wrote:
-> The amd-pstate driver supports switching working modes at runtime.
-> Users can view and change modes by interacting with the "status" sysfs
-> attribute.
+On Tue, Jan 17, 2023 at 01:16:21PM +0000, Mark Rutland wrote:
+> On Tue, Jan 17, 2023 at 11:26:29AM +0100, Peter Zijlstra wrote:
+> > On Mon, Jan 16, 2023 at 04:59:04PM +0000, Mark Rutland wrote:
+> > 
+> > > I'm sorry to have to bear some bad news on that front. :(
+> > 
+> > Moo, something had to give..
+> > 
+> > 
+> > > IIUC what's happenign here is the PSCI cpuidle driver has entered idle and RCU
+> > > is no longer watching when arm64's cpu_suspend() manipulates DAIF. Our
+> > > local_daif_*() helpers poke lockdep and tracing, hence the call to
+> > > trace_hardirqs_off() and the RCU usage.
+> > 
+> > Right, strictly speaking not needed at this point, IRQs should have been
+> > traced off a long time ago.
 > 
-> 1) check driver mode:
-> $ cat /sys/devices/system/cpu/amd-pstate/status
+> True, but there are some other calls around here that *might* end up invoking
+> RCU stuff (e.g. the MTE code).
 > 
-> 2) switch mode:
-> `# echo "passive" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
-> or
-> `# echo "active" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
+> That all needs a noinstr cleanup too, which I'll sort out as a follow-up.
 > 
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+> > > I think we need RCU to be watching all the way down to cpu_suspend(), and it's
+> > > cpu_suspend() that should actually enter/exit idle context. That and we need to
+> > > make cpu_suspend() and the low-level PSCI invocation noinstr.
+> > > 
+> > > I'm not sure whether 32-bit will have a similar issue or not.
+> > 
+> > I'm not seeing 32bit or Risc-V have similar issues here, but who knows,
+> > maybe I missed somsething.
+> 
+> I reckon if they do, the core changes here give us the infrastructure to fix
+> them if/when we get reports.
+> 
+> > In any case, the below ought to cure the ARM64 case and remove that last
+> > known RCU_NONIDLE() user as a bonus.
+> 
+> The below works for me testing on a Juno R1 board with PSCI, using defconfig +
+> CONFIG_PROVE_LOCKING=y + CONFIG_DEBUG_LOCKDEP=y + CONFIG_DEBUG_ATOMIC_SLEEP=y.
+> I'm not sure how to test the LPI / FFH part, but it looks good to me.
+> 
+> FWIW:
+> 
+> Reviewed-by: Mark Rutland <mark.rutland@arm.com>
+> Tested-by: Mark Rutland <mark.rutland@arm.com>
+> 
+> Sudeep, would you be able to give the LPI/FFH side a spin with the kconfig
+> options above?
+> 
 
-Patch 9, 10, and 12 are Acked-by: Huang Rui <ray.huang@amd.com>
+Not sure if I have messed up something in my mail setup, but I did reply
+earlier. I did test both DT/cpuidle-psci driver and  ACPI/LPI+FFH driver
+with the fix Peter sent. I was seeing same splat as you in both DT and
+ACPI boot which the patch fixed it. I used the same config as described by
+you above.
 
-> ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 29 +++++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 62744dae3c5f..df0637a49f47 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -339,6 +339,35 @@ processor must provide at least nominal performance requested and go higher if c
->  operating conditions allow.
->  
->  
-> +User Space Interface in ``sysfs``
-> +=================================
-> +
-> +Global Attributes
-> +-----------------
-> +
-> +``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
-> +control its functionality at the system level.  They are located in the
-> +``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
-> +
-> +``status``
-> +	Operation mode of the driver: "active", "passive" or "disable".
-> +
-> +	"active"
-> +		The driver is functional and in the ``active mode``
-> +
-> +	"passive"
-> +		The driver is functional and in the ``passive mode``
-> +
-> +	"disable"
-> +		The driver is unregistered and not functional now.
-> +
-> +        This attribute can be written to in order to change the driver's
-> +        operation mode or to unregister it.  The string written to it must be
-> +        one of the possible values of it and, if successful, writing one of
-> +        these values to the sysfs file will cause the driver to switch over
-> +        to the operation mode represented by that string - or to be
-> +        unregistered in the "disable" case.
-> +
->  ``cpupower`` tool support for ``amd-pstate``
->  ===============================================
->  
-> -- 
-> 2.34.1
-> 
+-- 
+Regards,
+Sudeep
