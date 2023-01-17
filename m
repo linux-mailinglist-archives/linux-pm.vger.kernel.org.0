@@ -2,86 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1821966E1A9
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA30566E1BB
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 16:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232187AbjAQPI2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 10:08:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S233642AbjAQPKY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 10:10:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjAQPI1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:08:27 -0500
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10E83D0AF;
-        Tue, 17 Jan 2023 07:08:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1673968106; x=1705504106;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SQsT0mjx5ZWHQPoOgYAo5vZEfEWYhlkbbWw1IeCzlCs=;
-  b=NQvW33I4t9cwLOsYzP1sbxM3OjdtHnm4ecLyHnSwt6PPPeFZ9ovdWMCC
-   V8XW96+ir6uqfWy1dskFQOPx10/XQfdkJDFE9OO8N/dOad2vkIS0y/nSW
-   nZKzJjrg83n3H6ilI6TBB49LeViFyOwiM64EELBVUzo8Qz22QM9Ya+XVN
-   7r20/MIbNEmjVhb+tl/ExJKiCeq4dmFa1a5FqGJypWBHLRvoY+BisRfbI
-   sFyeWl6Mb+Qo35J/xRonOn1Il/q9Xxd4ot/Pz1AJ7825ND8RVbHF7pXKB
-   q98Ica1m5WJupkwK+gq/Z682wYPXjyxTSW88AlJtIscl54SAyg6pfC0Hn
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="305093299"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="305093299"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:08:26 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10592"; a="689821106"
-X-IronPort-AV: E=Sophos;i="5.97,224,1669104000"; 
-   d="scan'208";a="689821106"
-Received: from mfmaier-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.214.121])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jan 2023 07:08:26 -0800
-Message-ID: <e4f08f6642939e9707ee6427affe3d4aca06410a.camel@linux.intel.com>
-Subject: Re: [PATCH v3 2/4] powercap: idle_inject: Add update callback
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, amitk@kernel.org
-Date:   Tue, 17 Jan 2023 07:08:25 -0800
-In-Reply-To: <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org>
-References: <20230117020742.2760307-1-srinivas.pandruvada@linux.intel.com>
-         <20230117020742.2760307-3-srinivas.pandruvada@linux.intel.com>
-         <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S233653AbjAQPKE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 10:10:04 -0500
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4019940BE3;
+        Tue, 17 Jan 2023 07:10:01 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id v6so45421835edd.6;
+        Tue, 17 Jan 2023 07:10:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=joZxgCnGkvxp1Xb2Q/5fZ4MsMpLI6GFEvSnwU1Uy6Z4=;
+        b=mvt7caDKRuA1j6+nVgMlZSZuzaoEAIzi9ll1CXAGT0zvozqjqpwBbH+qzryA1uoGVR
+         +57XPxdL0jXxdnryy8Ec47nlLKCh5LiSyzh5sGCKNfceVaDMnw3Um7j+nqXB03rljOLl
+         ayET3N8tIK1gcwwIZhmiAmgbWFprbLF9raSCm3Tb9Ue3fhWk0vwyzQLc5P0LYxeQ/f/V
+         Lp5xWSw34TNTyAubs6VfzR3ZypE0yMx3VbGoEOq8IUc6Sq6JqvfQeylfwE7fRUbKY5iG
+         gTd27LEsg+gy5bX7dbDg8dnfasV/aTNR09xJAqVPdiZO5mFxHejqCdga7JvuD5crBXQr
+         ECqw==
+X-Gm-Message-State: AFqh2kodHxOwxf36IPpPNB4hKO0zhiYvv4ND1H87g8A1Y+7NkLJ2iwf+
+        k6HIuu2bkeZDOGppuSA+f/WkXt7nz9Z28KrgOX4=
+X-Google-Smtp-Source: AMrXdXuQxImuyhNi68zfskM+pJ+qzv1BTz3x5hwfZ5P9iSMuZHtBFZmWuaPM9bNs3+2/y6j0aAG5vtdgoD48+lgwVtk=
+X-Received: by 2002:aa7:c3cb:0:b0:499:c651:625d with SMTP id
+ l11-20020aa7c3cb000000b00499c651625dmr388760edr.413.1673968199861; Tue, 17
+ Jan 2023 07:09:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117020742.2760307-1-srinivas.pandruvada@linux.intel.com>
+ <20230117020742.2760307-3-srinivas.pandruvada@linux.intel.com>
+ <c5167eb8-22d6-c230-5828-80e59154aeb0@linaro.org> <e4f08f6642939e9707ee6427affe3d4aca06410a.camel@linux.intel.com>
+In-Reply-To: <e4f08f6642939e9707ee6427affe3d4aca06410a.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 17 Jan 2023 16:09:48 +0100
+Message-ID: <CAJZ5v0jzYbpeVxtuqMWUN+X-wwYtKYq=7Ky3jRnb_S6NZc1RVQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] powercap: idle_inject: Add update callback
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, amitk@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, 2023-01-17 at 12:13 +0100, Daniel Lezcano wrote:
-> On 17/01/2023 03:07, Srinivas Pandruvada wrote:
-> 
-> [ ... ]
-> 
-> > +struct idle_inject_device *idle_inject_register(struct cpumask
-> > *cpumask)
-> > +{
-> > +       return idle_inject_register_full(cpumask, NULL);
-> > +}
-> >   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
-> 
-> Why not just add the parameter to idle_inject_register() ?
-> 
-> There is only one user ATM
-That was done in v1. But Rafael suggested to avoid changes to existing
-kernel source.
+On Tue, Jan 17, 2023 at 4:08 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Tue, 2023-01-17 at 12:13 +0100, Daniel Lezcano wrote:
+> > On 17/01/2023 03:07, Srinivas Pandruvada wrote:
+> >
+> > [ ... ]
+> >
+> > > +struct idle_inject_device *idle_inject_register(struct cpumask
+> > > *cpumask)
+> > > +{
+> > > +       return idle_inject_register_full(cpumask, NULL);
+> > > +}
+> > >   EXPORT_SYMBOL_NS_GPL(idle_inject_register, IDLE_INJECT);
+> >
+> > Why not just add the parameter to idle_inject_register() ?
+> >
+> > There is only one user ATM
+> That was done in v1. But Rafael suggested to avoid changes to existing
+> kernel source.
 
-Thanks,
-Srinivas
-
-> 
-> 
-
+However, it can be done if Daniel prefers that.  It is 1 callback now
+only, so no big deal I suppose.
