@@ -2,213 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E8766E603
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 19:31:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3225C66E661
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Jan 2023 19:47:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjAQSba (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 13:31:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54628 "EHLO
+        id S233977AbjAQSrb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 13:47:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjAQS3h (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 13:29:37 -0500
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6164741E;
-        Tue, 17 Jan 2023 10:01:02 -0800 (PST)
-Received: by mail-oo1-f53.google.com with SMTP id b10-20020a4a9fca000000b004e6f734c6b4so8162321oom.9;
-        Tue, 17 Jan 2023 10:01:02 -0800 (PST)
+        with ESMTP id S234924AbjAQSiy (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 13:38:54 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE9C3728C
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 10:11:16 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id bk16so31477207wrb.11
+        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 10:11:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iuB0/1oIZU7naJsrCvEPte3S8NGjCSc48/6v7Yv614o=;
+        b=F1AJutEnIGzlzqZ91dn2z6HCPCt1BqwQ+wDKHaXfyADSarcYTWIihGnxbAFKlT1khN
+         lYA/q6jfDmH/2KiHyMSR2w9vJwzKtt7+YqL041yvo5Ja+LOtedjm2TLvFg1vPQarD9Xw
+         rDwqpi2gE+UcR95HLk2fFOZZzpZyHyXZYO4HNcNzb70u7LW0LrVbRDVyvP4BFumKqZgT
+         piMCZf/iKW4U3D224tNtl57LG+0PJWaqrj0AKQMOp8DKhBT7lNXuXbbiUEZ6KS3MGjdq
+         fxdfWLA0M2NbAvE1oApiZCcpF4h26pkg/fBwI55IqpNMf+l0BBweCHBvt2DCYxBRCcgk
+         Az9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T/kHOFH1wU0NreMHdddHDbHuXCpkHB1PoZhcRnQt444=;
-        b=foCc1PFG7lYBexT6/8fkfiieupPw+yUWKOVHP2BP/rJxwJ+iP1fXirFkKgDzI/Qa4D
-         EZzGo/EbvWRN627NhAb2M+NsDIoD5dd1uaINbLVstiCqf7m0CSbYU2vWkeBPkZWbVAAq
-         c32/bO38RLbHr3WWC4FZy8T4aU+hWdLJBBw9dvYFh3F7SogOVmBEKmsrzte0n6NDzmbC
-         m+xLZOMqDZbBLKi+DJhW0WAfwbvxh/9RD63V8axdpToc/ESemhiaS/VIC/QQO8niZ9r6
-         sQUU9AAFfuLqi4RYhqGb2R9WVIrMDt/UokL0moYzRzRBLelOCDGb8P5Ch3ytui0fcv7M
-         r/nA==
-X-Gm-Message-State: AFqh2kqun0Ns/yMzVJNHuHbKMQA5pPcH9kqd9WR0VWAqg6rkOk4Y0d0H
-        jfYJSb25/de7O5E7ei6URg==
-X-Google-Smtp-Source: AMrXdXvcuKQfn+7icDnE4nUlh/ljNLsmHBHplIQtCw0qWiIdq35al99wEU9lDuQyulZvwL6n7ShSQA==
-X-Received: by 2002:a05:6820:3c7:b0:4f8:2e60:6afd with SMTP id s7-20020a05682003c700b004f82e606afdmr1593239ooj.8.1673978460048;
-        Tue, 17 Jan 2023 10:01:00 -0800 (PST)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p2-20020a4ab382000000b004d8c6815287sm15040211ooo.17.2023.01.17.10.00.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 10:00:59 -0800 (PST)
-Received: (nullmailer pid 3319602 invoked by uid 1000);
-        Tue, 17 Jan 2023 18:00:58 -0000
-Date:   Tue, 17 Jan 2023 12:00:58 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Subbaraman Narayanamurthy <quic_subbaram@quicinc.com>,
-        Johan Hovold <johan@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v2 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK
- binding
-Message-ID: <20230117180058.GA3314512-robh@kernel.org>
-References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
- <20230113041132.4189268-2-quic_bjorande@quicinc.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iuB0/1oIZU7naJsrCvEPte3S8NGjCSc48/6v7Yv614o=;
+        b=Vev3QN36EfBpC8/dA6Zxn7qLEZOrd93TdAEBvKDgA4h2ggsnhBnVLsaNKVaaNIfxjP
+         ba7K9cBSAC0w+S9ANg52IIKseT0Asm+qUWwlsQgXmRtV4wvTR1FrX/lQVlYu8JvdeJQu
+         NDvp2LuFD63VKcaEf7WhNYzpNj4nyqmIITXoonhjNomMqDrwKPa6GNXR8T6tqDZfqFWP
+         qmK7trAcFntx6gKfrqWxhoL/2tK3Z9VBMKWmxSHga3ahSgpwRnfQOgUdvAGcNay7gt5B
+         kd3t/brfQ/D0uJ9cdBTzaLR3AR797KobK4cXJSQG82seEZXJzd5VWov3GHfmiTnTNF3W
+         MrqQ==
+X-Gm-Message-State: AFqh2ko1k02nLDVRPmv47GW1OB+h/OtW155N8MoXPLfwI8aoPaR5F/Kf
+        2224M5Wc/BiVnhQlO1ij1N/6iw==
+X-Google-Smtp-Source: AMrXdXtLQ9Mo0FGP5+jiuuFnCFH4rp8V/fgLMDAfyBHmQ4/rpo5mUT7wGskX5hjlQVEZNE+7jGw4lg==
+X-Received: by 2002:adf:f612:0:b0:2bb:dc9f:b241 with SMTP id t18-20020adff612000000b002bbdc9fb241mr3900834wrp.9.1673979075508;
+        Tue, 17 Jan 2023 10:11:15 -0800 (PST)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id h3-20020adfe983000000b002bdf5832843sm8501445wrm.66.2023.01.17.10.11.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jan 2023 10:11:15 -0800 (PST)
+Message-ID: <26cc4bea-1e0b-2d41-fbf3-aae3ab6dfcfe@linaro.org>
+Date:   Tue, 17 Jan 2023 18:11:14 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230113041132.4189268-2-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3] thermal/core: fix error paths in
+ __thermal_cooling_device_register()
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     Yang Yingliang <yangyingliang@huawei.com>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+References: <20230112154721.452292-1-caleb.connolly@linaro.org>
+ <20230116042326.l3kyd55lbw4dfocm@vireshk-i7>
+ <24afe142-f835-29af-fca6-d00e864b0c82@huawei.com>
+ <20230117043653.4n2dfruh36x4uazj@vireshk-i7>
+ <CAJZ5v0ihaNHneyRwd8nWYUhGKGRpHrVFi7gJsp_g9MX=oLc9Eg@mail.gmail.com>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <CAJZ5v0ihaNHneyRwd8nWYUhGKGRpHrVFi7gJsp_g9MX=oLc9Eg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 12, 2023 at 08:11:29PM -0800, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> platforms and implement USB Type-C handling and battery management.
-> This binding describes the component in the OS used to communicate with
-> the firmware and connect it's resources to those described in the
-> Devicetree, particularly the USB Type-C controllers relationship with
-> USB and DisplayPort components.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Changes since v1:
-> - Added reg under connector, to identify multiple connectors
-> - Updated maintainer email
-> 
->  .../bindings/soc/qcom/qcom,pmic-glink.yaml    | 102 ++++++++++++++++++
->  1 file changed, 102 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> new file mode 100644
-> index 000000000000..a79dd0ed9275
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,pmic-glink.yaml
-> @@ -0,0 +1,102 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/soc/qcom/qcom,pmic-glink.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm PMIC GLINK firmware interface for battery management, USB
-> +  Type-C and other things.
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +
-> +description:
-> +  The PMIC GLINK service, running on a coprocessor on some modern Qualcomm
-> +  platforms and implement USB Type-C handling and battery management. This
-> +  binding describes the component in the OS used to communicate with the
-> +  firmware and connect it's resources to those described in the Devicetree,
-> +  particularly the USB Type-C controllers relationship with USB and DisplayPort
-> +  components.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,sc8180x-pmic-glink
-> +          - qcom,sc8280xp-pmic-glink
-> +          - qcom,sm8350-pmic-glink
-> +      - const: qcom,pmic-glink
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^connector@\d$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +    properties:
-> +      reg: true
-
-       required:
-         - reg
-
-Or '@\d' needs to be optional.
 
 
-> +
-> +    unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |+
-> +    pmic-glink {
-> +        compatible = "qcom,sc8280xp-pmic-glink", "qcom,pmic-glink";
-> +
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        connector@0 {
-> +            compatible = "usb-c-connector";
-> +            reg = <0>;
-> +            power-role = "dual";
-> +            data-role = "dual";
-> +
-> +            ports {
-> +                #address-cells = <1>;
-> +                #size-cells = <0>;
-> +
-> +                port@0 {
-> +                    reg = <0>;
-> +                    endpoint {
-> +                        remote-endpoint = <&usb_role>;
-> +                    };
-> +                };
-> +
-> +                port@1 {
-> +                    reg = <1>;
-> +
-> +                    #address-cells = <1>;
-> +                    #size-cells = <0>;
-> +
-> +                    endpoint@0 {
-> +                        reg = <0>;
-> +                        remote-endpoint = <&qmp_out>;
-> +                    };
-> +
-> +                    endpoint@1 {
-> +                        reg = <1>;
-> +                        remote-endpoint = <&displayport_hpd>;
-> +                    };
-> +                };
-> +
-> +                port@2 {
-> +                    reg = <2>;
-> +                    endpoint {
-> +                        remote-endpoint = <&sbu_mux>;
-> +                    };
-> +                };
-> +            };
-> +        };
-> +    };
-> +...
-> +
-> -- 
-> 2.37.3
+On 17/01/2023 13:39, Rafael J. Wysocki wrote:
+> On Tue, Jan 17, 2023 at 5:36 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>>
+>> On 16-01-23, 20:38, Yang Yingliang wrote:
+>>> The 'cdev' will be freed after calling put_device(), it can not be accessed
+>>> anymore.
+>>
+>> I surely missed the class's release callback :(
+>>
+>> How about this then, it clears this in a better way, i.e. what entity
+>> is responsible for what exactly. This can be divided in a few patches
+>> for sure.
 > 
+> It looks good to me, but then I haven't caught the release bug too.
+
+it's a fun one:
+
+https://lore.kernel.org/linux-pm/20230101174342.58351-1-caleb.connolly@linaro.org/
+
+I don't see any issues with this suggested patch, however I don't think
+I could comfortably attach my SoB to it given the larger code reordering
+and my complete lack of experience with this subsystem.
+
+Would a Tested-by be acceptable?
+> 
+>> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+>> index f17ab2316dbd..5555bf827a0f 100644
+>> --- a/drivers/thermal/thermal_core.c
+>> +++ b/drivers/thermal/thermal_core.c
+>> @@ -774,6 +774,9 @@ static void thermal_release(struct device *dev)
+>>         } else if (!strncmp(dev_name(dev), "cooling_device",
+>>                             sizeof("cooling_device") - 1)) {
+>>                 cdev = to_cooling_device(dev);
+>> +               thermal_cooling_device_destroy_sysfs(cdev);
+>> +               kfree(cdev->type);
+>> +               ida_free(&thermal_cdev_ida, cdev->id);
+>>                 kfree(cdev);
+>>         }
+>>  }
+>> @@ -910,17 +913,18 @@ __thermal_cooling_device_register(struct device_node *np,
+>>
+>>         ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
+>>         if (ret)
+>> -               goto out_kfree_type;
+>> +               goto out_cdev_type;
+>>
+>>         thermal_cooling_device_setup_sysfs(cdev);
+>>         ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+>> +       if (ret)
+>> +               goto out_cooling_dev;
+>> +       ret = device_register(&cdev->device);
+>>         if (ret) {
+>> -               thermal_cooling_device_destroy_sysfs(cdev);
+>> -               goto out_kfree_type;
+>> +               /* thermal_release() handles rest of the cleanup */
+>> +               put_device(&cdev->device);
+>> +               return ret;
+>>         }
+>> -       ret = device_register(&cdev->device);
+>> -       if (ret)
+>> -               goto out_kfree_type;
+>>
+>>         /* Add 'this' new cdev to the global cdev list */
+>>         mutex_lock(&thermal_list_lock);
+>> @@ -939,11 +943,10 @@ __thermal_cooling_device_register(struct device_node *np,
+>>
+>>         return cdev;
+>>
+>> -out_kfree_type:
+>> +out_cooling_dev:
+>>         thermal_cooling_device_destroy_sysfs(cdev);
+>> +out_cdev_type:
+>>         kfree(cdev->type);
+>> -       put_device(&cdev->device);
+>> -       cdev = NULL;
+>>  out_ida_remove:
+>>         ida_free(&thermal_cdev_ida, id);
+>>  out_kfree_cdev:
+>> @@ -1104,11 +1107,7 @@ void thermal_cooling_device_unregister(struct thermal_cooling_device *cdev)
+>>
+>>         mutex_unlock(&thermal_list_lock);
+>>
+>> -       ida_free(&thermal_cdev_ida, cdev->id);
+>> -       device_del(&cdev->device);
+>> -       thermal_cooling_device_destroy_sysfs(cdev);
+>> -       kfree(cdev->type);
+>> -       put_device(&cdev->device);
+>> +       device_unregister(&cdev->device);
+>>  }
+>>  EXPORT_SYMBOL_GPL(thermal_cooling_device_unregister);
+>>
+>> --
+>> viresh
+
+-- 
+Kind Regards,
+Caleb (they/them)
