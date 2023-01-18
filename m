@@ -2,152 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D770672984
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 21:37:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 584936729BF
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 21:53:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjARUhO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 15:37:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S229614AbjARUxf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 15:53:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjARUgt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 15:36:49 -0500
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF82760498
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 12:36:39 -0800 (PST)
-Received: by mail-ej1-x62f.google.com with SMTP id mg12so251234ejc.5
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 12:36:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LL1I4GwHYHunE20Z1xOXGvvtulphoBZMPu7mQcoTDjU=;
-        b=lVq0ApR7wpNjKYW+Y7W2kWZdE7dAbMEcdxD/z/duwXqDArTknD/x1iMrLDR9BRFywZ
-         nTkHZ6C+NL55NZOtp8YnWr5ma4BDNr9E8HXi9IEAgqxKVbbC+O1q0zjy7yTCBS+S6jXh
-         FequP/8M+mjc55qCEu97QPr83gLvIJhuGTILnyA4j3BXy3GJRXHgQCvphSDeGIo+RrGG
-         w28ez2s3kK1I4xYqIwj+Qj5wvxQqGlBzMv/4Sm6Asqxy/9zj47M2gcWTejQ1oFUVD5sH
-         +HzK7QUzb24f6O2RNsGjO99JNtjJl73x5oY+oDSGCLc3FWRXqqgH2iR8e3siPYuv+Mgz
-         vWNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LL1I4GwHYHunE20Z1xOXGvvtulphoBZMPu7mQcoTDjU=;
-        b=BdvKomVlPE4QZ4eWU6fl6elNn16+LaC+MeQKC9leMiAOyEio2RPAOvkqh/ShwdUpIy
-         sHiLt2hD5n1eirzF0zU1v42tT6wZ2yL62ejOAjawhkMve9rb42/Ny5Tw6ih27B4e2oUg
-         UuPoP4Tgpjgq+xZJhffPuELRQOxsSvu1IO3YTCd0CDv4d//XXfuSGKwoy/2WfOAmgfZ0
-         +4zap87tbsOTlJphIDxCzRRRoFrSPku/QjuzFjWqdGn2Nkn/ntXlLrdloau83zf1QO4u
-         nnwWyrw2RtyXBu/jbuRKPznBJPVOXlscBHabutJX+1cXKHn0Xg4Ng8D6b3WRkrWUPqDc
-         1K4w==
-X-Gm-Message-State: AFqh2kqVN33FuxOyzNw2IUixL0g+596VOv+wQaTR6v/j8Bfec9UXR1iF
-        5AUX6/MVOWmGtN+rUXmfIrbTvg==
-X-Google-Smtp-Source: AMrXdXsfUbRWYZbFT1n/j0VlmXtzaOPqFjXEhtYouuqtX8fD8Cyl5LNeGNI5+eJ4j8vqMxFUTaK4eA==
-X-Received: by 2002:a17:906:80d:b0:870:d15a:c2e0 with SMTP id e13-20020a170906080d00b00870d15ac2e0mr7826142ejd.51.1674074198540;
-        Wed, 18 Jan 2023 12:36:38 -0800 (PST)
-Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
-        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0084d14646fd9sm14993594ejf.165.2023.01.18.12.36.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 12:36:38 -0800 (PST)
-Message-ID: <8673ef49-a37e-2d76-b800-bf9b10875006@linaro.org>
-Date:   Wed, 18 Jan 2023 21:36:35 +0100
+        with ESMTP id S229459AbjARUxe (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 15:53:34 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8DEA5D4;
+        Wed, 18 Jan 2023 12:53:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674075212; x=1705611212;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=l4SONC/Qdtv6CckCiaxSv423aZE7tdp+t6/ZdNoJapo=;
+  b=GdcZDIyrHIzwKmZzHuGzNLSz5h/MzRFceBhRsTs2D0uB9cigKeqrBMKq
+   ng1jlo/Pp7VKnwaCAxefgPGUpkgk94xAQv8V3B26uVAeMTYmcLy5bn2mj
+   jGYlJc5nSBPu9RLt2e7Z6E73mMgU2UDw4Hu9TraUWL7wAbOCRQAYJaj5q
+   Zlp3j0AoBkFeRmPnVv/pgw8KJyDVYcms3yVDB4PpLb5c/AYQQUZn3zmP9
+   2kbixE/x2ng0CThwdZNDd5k9G9GzEGFmMu2Yx08N0JTjkqzRKZCOvbe9C
+   FfKXA/XhmmLdFCEmS9VejKW0ajBSMzt3Zlp2gLCNIVNT7yNvus/++P0Fy
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="325149644"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="325149644"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:53:31 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="637432730"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="637432730"
+Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 12:53:30 -0800
+Message-ID: <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Date:   Wed, 18 Jan 2023 12:53:31 -0800
+In-Reply-To: <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
+         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
+         <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
+         <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
+         <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 2/9] interconnect: qcom: rpm: Always set QoS params on
- QNoC
-Content-Language: en-US
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
-        Georgi Djakov <djakov@kernel.org>,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>
-References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
- <20230116132152.405535-3-konrad.dybcio@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230116132152.405535-3-konrad.dybcio@linaro.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
+> On 18/01/2023 20:16, srinivas pandruvada wrote:
+> 
+> [ ... ]
+> 
+> > > > But we'd better wait for the thermald test result from
+> > > > Srinvias.
+> > > 
+> > > A quick test show that things still work with thermald and these
+> > > changes.
+> > 
+> > But I have a question. In some devices trip point temperature is
+> > not
+> > static. When hardware changes, we get notification. For example
+> > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
+> > Currently get_trip can get the latest changed value. But if we
+> > preregister, we need some mechanism to update them.
+> 
+> When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we
+> call 
+> int340x_thermal_read_trips() which in turn updates the trip points.
+> 
+
+Not sure how we handle concurrency here when driver can freely update
+trips while thermal core is using trips.
 
 
-On 16.01.2023 14:21, Konrad Dybcio wrote:
-> On newer SoCs, QoS parameters and RPM bandwidth requests are wholly
-> separate. Setting one should only depend on the description of the
-> interconnect node and not whether the other is present. If we don't
-> vote through RPM, QoS parameters should be set regardless, as we're
-> requesting additional bandwidth by setting the interconnect clock
-> rates.
-> 
-> With NoC (the old-SoC bus type), this is not the case and they are
-> mutually exclusive (so, the current upstream logic is correct).
-> 
-> For BIMC however, newer SoCs expect QoS params to be always set
-> (like QNoC) whereas older ones (like MSM8998) hang up completely when
-> doing so, hence this will be addressed in the next commit.
-> 
-> The Fixes tag references the commit in which this logic was added, it
-> has since been shuffled around to a different file, but it's the one
-> where it originates from.
-> 
-> Fixes: f80a1d414328 ("interconnect: qcom: Add SDM660 interconnect provider driver")
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
-Would be very nice if somebody could test this one in particular
-on QCM2290 to make sure it does not regress that SoC..
+Thanks,
+Srinivas
 
-Shawn, Loic?
 
-Konrad
->  drivers/interconnect/qcom/icc-rpm.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
+
 > 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 385a67c20956..b1337f90c975 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -239,15 +239,27 @@ static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
->  static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
->  			  u64 sum_bw)
->  {
-> +	struct qcom_icc_provider *qp = to_qcom_provider(n->provider);
-> +	bool vote_ap, vote_rpm;
->  	int ret;
->  
-> -	if (!qn->qos.ap_owned) {
-> -		/* send bandwidth request message to the RPM processor */
-> +	if (qp->type == QCOM_ICC_QNOC) {
-> +		vote_ap = true;
-> +		vote_rpm = true;
-> +	} else {
-> +		vote_ap = qn->qos.ap_owned;
-> +		vote_rpm = !vote_ap;
-> +	}
-> +
-> +	if (vote_rpm) {
-> +		/* Send bandwidth request message to the RPM processor */
->  		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
->  		if (ret)
->  			return ret;
-> -	} else if (qn->qos.qos_mode != -1) {
-> -		/* set bandwidth directly from the AP */
-> +	}
-> +
-> +	if (vote_ap && qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
-> +		/* Set QoS params from the AP */
->  		ret = qcom_icc_qos_set(n, sum_bw);
->  		if (ret)
->  			return ret;
+> 
+
