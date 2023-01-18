@@ -2,165 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87D6767165A
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 09:35:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40EFF6716C3
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 09:59:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjARIfW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 03:35:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47610 "EHLO
+        id S229907AbjARI7o (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 03:59:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230196AbjARIfA (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 03:35:00 -0500
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2062.outbound.protection.outlook.com [40.107.101.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D5E7E685;
-        Tue, 17 Jan 2023 23:55:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e+emd4Y7YF8M9/f+BHvaxTHZwJn1zILURuLemTYiuL9pS6AeuZjOwC/V15jPb/SV6LpEFf6nwNYmVh+98JHqbmiuh3JUG1tMjUxV4BRGfWvoTjcsl7yDjKtDXlr7MCdKNq1293j8RdIFiJN9UHP2rd2SpFh7kI0T0BkHTm1yfZGYdGxOeSJK9FANUPP7D+t8D5Acu0iA4hU9f79ps9Y4EJko3RdnCKx5iSP1SOLYO1gmz6o445gO1WUBlohO9Ryk1KdMZJMEaxEH8Gjz2Ee8I5sjkGjrFJT4S/Oi5dnqL5Xtt3t/E1ZgJqE5OvgW212K1ZUYoCSMvwQAFQmoXgFe3w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UUSe1i5OPPJzwoPGgnbIn1pCp1Owlinq3a453rgR2AY=;
- b=gW3SUy61NklzthpB/Ql1piX8ySePR0a7PwEAX7HPhJPHUKUnoMjFHyTlF0yZVo0ECNEXX3Vda0UiDyoAhJjG9Jhqmx1K9YqAcJjQPIUtEjk9K29NrOAWOzsCeaVUcCcUHUmFuwdmQR3RjTE5wb++6czodvtukwFy42Y6yBESDZQe+fzsf+vr4/NGwjxKFewmBXqELFmi+2MNItwcaZhrCMAafT/EosW9eT394Ke/kg0uOO22ZvKyZWMCrTrCjOYbWt5teSJ/w8N6zsY9dCr/RU9VU0SqiqWEbpB5siwwQfTUOA8Q7c/zKXaMWcoTtomtDaW3x1vbXy4E5W7Z1fNKMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UUSe1i5OPPJzwoPGgnbIn1pCp1Owlinq3a453rgR2AY=;
- b=WYLAHqcHcEW10kbhXHbsF2jLW044AyPgik0jXJE/1I6uXa64VintnomccVcm35dGJu14KzjxDxszUdtKayuCm2CRJFgSVwIecd8If43jUn6WmFbDwQaX4YhdnhvEutpog6lASU8hbvDF8kZPZntKp71Yy+N6dL0R73CpLwAoi3o=
-Received: from MW4PR04CA0350.namprd04.prod.outlook.com (2603:10b6:303:8a::25)
- by DM4PR12MB6230.namprd12.prod.outlook.com (2603:10b6:8:a7::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5986.22; Wed, 18 Jan
- 2023 07:54:02 +0000
-Received: from CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:8a:cafe::4b) by MW4PR04CA0350.outlook.office365.com
- (2603:10b6:303:8a::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.19 via Frontend
- Transport; Wed, 18 Jan 2023 07:54:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT046.mail.protection.outlook.com (10.13.174.203) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6002.13 via Frontend Transport; Wed, 18 Jan 2023 07:54:02 +0000
-Received: from pyuan-Cloudripper.amd.com (10.180.168.240) by
- SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Wed, 18 Jan 2023 01:53:20 -0600
-From:   Perry Yuan <perry.yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <Mario.Limonciello@amd.com>,
-        <ray.huang@amd.com>, <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Nathan.Fontenot@amd.com>,
-        <Alexander.Deucher@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>, <wyes.karny@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v11 11/11] Documentation: amd-pstate: introduce new global sysfs attributes
-Date:   Wed, 18 Jan 2023 15:52:10 +0800
-Message-ID: <20230118075210.447418-12-perry.yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118075210.447418-1-perry.yuan@amd.com>
-References: <20230118075210.447418-1-perry.yuan@amd.com>
+        with ESMTP id S229890AbjARI6i (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 03:58:38 -0500
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2CC46172
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:16:10 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id x2-20020a17090a46c200b002295ca9855aso1562616pjg.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:16:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qn3GGCQC7Lq3SjAD0sxaBFxcbnbqZOohuV+R+jjZOJo=;
+        b=ykKlwt/MKf9r1oA+04Qe2lbveRmL590iNsfp3mTwuWkNDRU6QHrPrC87Vj8YNqgKwU
+         /KoGBYyEHufmakGpK7ZbzviMX3L6zc7tJs+wjJ8sKs7O+T+i6F/FG7NT6q2rKcFNMSYI
+         BYDArkhjK+8q4g74fvtqympfujvYcLc7noIMSnOv6ug58QNP9KXJFLqnCKYM27hmxARA
+         KHArh+f0NzPYeOBiTOXRT+XG9JHR/riEKMV/u8BWJ+sejnLBK0kf+9KTLUIWUYpJK+dG
+         GP6Tpdhvn75Wr+UYmnbJyYETfKbGftNE30SpNsnCU4w02EWUghelaBLSeSjqKD8mVf0p
+         rqQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qn3GGCQC7Lq3SjAD0sxaBFxcbnbqZOohuV+R+jjZOJo=;
+        b=GngfO9j78t/5VZu1flew9zY/q6axDK8zz4Vf9uECLlZTt1qzKCODggciQsNM2Etd9I
+         nl5OWeskn3w88h4VxBITTtZ8zM1z782ijEwFW1y6JWnkd57isI4BMgzVk/FAJgv4GDib
+         cgfK4w+b0NOu8HEgFd+3w//zcny0aO4t2p65JZ9TR1BvQyDXz/lFdoT+kbTWxPivOTgD
+         tXY8XumR9deDZt0j+p3WsmNJWDwPApIi+zH4KGLhRc1qjJD0HGJYrUsYuzcDD4iWEyHZ
+         0Em5jx0uKu7IUp6Kun2yeyzMi51pvFp/ptx2nt3GHdmSJb+CBNwZ/F2wNWvNLtbI3MWm
+         sw/w==
+X-Gm-Message-State: AFqh2kpp6yRWfXcwM+ocm3Xcca1Gfs9RLEIy3yZXGQL1qt0Q2EQqEf1v
+        zZpKMrdC9/EkzpDRp7H5OvWY703NiB7LJKCoR7+h5g==
+X-Google-Smtp-Source: AMrXdXv6CK17QdCPdMdtnEp20WR3c/rupdsnOPIK42WM7fiMBH4nhVv4NQDYQVYEzVNBJV4dZ6CJp2a0RFajEA6+eL0=
+X-Received: by 2002:a17:90a:30d:b0:215:f80c:18e6 with SMTP id
+ 13-20020a17090a030d00b00215f80c18e6mr676658pje.45.1674029769810; Wed, 18 Jan
+ 2023 00:16:09 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT046:EE_|DM4PR12MB6230:EE_
-X-MS-Office365-Filtering-Correlation-Id: efc1bcc4-394d-4168-339c-08daf9292a1e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XT6RrkMeXqJsPPMw/58+7zrMJOmMhKWevQPT9Svi9b1IQAOxRWimSTbYDUnrwBHpbN42WwnhQViCcdCqcW9rW5NhsjQ5j3IHqCtNcHhJPCCY6hv0RJYEEMOCtc2KDNuBUlZlDuKC4ZUSQI6IoQAgqjyIh7u2qUK5UAXedPzIo26cEFMRpWrlov2wh+L3Yr30AO0SPKsr2wgcmtXlfSjxg+R9va1bd2qyRvvsiShA2Z3vwXBWZod9kIcqfIfpwnAzHz3fcdKp5gu+B5ALSRLrYzhiFhDXfZ6VGLqeUhEF/5zw9bBWhjxIsL81DEL0Rw0KiY6lzO2BveI70AjJxsNB6ckNAxrrNTA2Sf8je9jQC+YseoemPMT52Dodysk7ZX2eTbB4Bt3+dJ6jgXaIBD53J/JFAG22tKHKefrvdVylifpfpo7wD9vC7u/VBlFbrztoNdXZgt9nSgNvXP31qsFt/ApnPbFB0Amntk59vtzY03tH8ZNHSZbxetBso8yfABbv31VI/ccJE/+8T0mKGtqFmgwt93HXOzgEscjj68544ADmm47P2GR05S7Onoq2ekvXeVZYh7MgtLOFtrCDOnAshh2g4nrmqxd9HhQsMs3o/YpCFSoEoXt7qtgaKJRd9F1XOpQuU/12gYl28Lqj7AsalW8HmigJbz6dwBzI61ITDbAYe5XPS03kAjfaYD9gpbfMraQw9ZHisskC0/vzSrPNv3cRJvcdqm0raFbmgn32SBE=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(39860400002)(346002)(396003)(451199015)(40470700004)(46966006)(36840700001)(6666004)(478600001)(8676002)(110136005)(36756003)(54906003)(4326008)(70206006)(1076003)(41300700001)(70586007)(7696005)(316002)(36860700001)(82740400003)(356005)(40480700001)(81166007)(82310400005)(40460700003)(2616005)(16526019)(26005)(336012)(47076005)(426003)(86362001)(44832011)(186003)(5660300002)(83380400001)(2906002)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Jan 2023 07:54:02.0538
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: efc1bcc4-394d-4168-339c-08daf9292a1e
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6230
+References: <20230113134056.257691-1-vincent.guittot@linaro.org>
+ <78bf2d91-0076-f748-7c6a-530dad466787@arm.com> <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+ <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+In-Reply-To: <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 18 Jan 2023 09:15:58 +0100
+Message-ID: <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     mingo@kernel.org, peterz@infradead.org, qyousef@layalina.io,
+        rafael@kernel.org, viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
+        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The amd-pstate driver supports switching working modes at runtime.
-Users can view and change modes by interacting with the "status" sysfs
-attribute.
+On Mon, 16 Jan 2023 at 15:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>
+> On 16/01/2023 12:23, Vincent Guittot wrote:
+> > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >>
+> >> On 13/01/2023 14:40, Vincent Guittot wrote:
+>
+> [...]
+>
+> >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
+> >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> >>>
+> >>> +     /* Return true only if the utlization doesn't fit its capacity */
+> >>
+> >> s/utlization/utilization
+> >> s/its/CPU ?
+> >>
+> >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+> >>>  }
+> >>
+> >> cpu_overutilized() is the only place where we now only test for
+> >> !util_fits_cpu(). The new comment says we only care about utilization
+> >> not fitting CPU capacity.
+> >>
+> >> Does this mean the rq uclamp values are not important here and we could
+> >> go back to use fits_capacity()?
+> >>
+> >> Not sure since util_fits_cpu() is still coded differently:
+> >
+> > uclamp_min is not important but uclamp_max still cap the utilization
+>
+> OK, makes sense.
+>
+> I.e. we could pass in `rq_util_min = 0` to avoid fetching it
+> unnecessary? In case `fits == 1` before the uclamp_min condition in
+> util_fits_cpu() it doesn't matter if we switch to return `-1` when
+> called from cpu_overutilized(). Detail though ...
 
-1) check driver mode:
-$ cat /sys/devices/system/cpu/amd-pstate/status
+One comment from Qais was to minimize knowledge outside
+util_fits_cpu() that's why I pass both uclamp_min and uclamp_max.
 
-2) switch mode:
-`# echo "passive" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
-or
-`# echo "active" | sudo tee /sys/devices/system/cpu/amd-pstate/status`
+>
+> [...]
+>
+> >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> >>>
+> >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+> >>>                       continue;
+> >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
+> >>> +
+> >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> >>> +
+> >>> +             /* This CPU fits with all capacity and performance requirements */
+> >>
+> >> In task_fits_cpu() `utilization and performance (better uclamp)
+> >> requirements` term was used. I assume it's the same thing here?
+> >>
+> >>> +             if (fits > 0)
+> >>>                       return cpu;
+> >>> +             /*
+> >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+> >>> +              * for the CPU with highest performance capacity.
+> >>                                             ^^^^^^^^^^^^^^^^^^^^
+> >>
+> >> Do we use a new CPU capacity value `performance capacity (1)` here?
+> >>
+> >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+> >>
+> >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+> >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+> >> to return -1. Shouldn't (1) and (2) be the same?
+> >
+> > I'm all in favor of both being capacity_orig_of(cpu) -
+> > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+>
+> I think we need a handy name for this new capacity value, which seems to
+> be `capacity_orig - capacity reduced by thermal`. And we should either
+> use `thermal_load_avg` or `thermal pressure` for the latter part. And
+> then we should use this consistently in all these places:
+> util_fits_cpu(), feec(), sic().
 
-Acked-by: Huang Rui <ray.huang@amd.com>
-Tested-by: Wyes Karny <wyes.karny@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
----
- Documentation/admin-guide/pm/amd-pstate.rst | 29 +++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Ok, let me change this everywhere
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index b6aee69f564f..5304adf2fc2f 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -339,6 +339,35 @@ processor must provide at least nominal performance requested and go higher if c
- operating conditions allow.
- 
- 
-+User Space Interface in ``sysfs``
-+=================================
-+
-+Global Attributes
-+-----------------
-+
-+``amd-pstate`` exposes several global attributes (files) in ``sysfs`` to
-+control its functionality at the system level.  They are located in the
-+``/sys/devices/system/cpu/amd-pstate/`` directory and affect all CPUs.
-+
-+``status``
-+	Operation mode of the driver: "active", "passive" or "disable".
-+
-+	"active"
-+		The driver is functional and in the ``active mode``
-+
-+	"passive"
-+		The driver is functional and in the ``passive mode``
-+
-+	"disable"
-+		The driver is unregistered and not functional now.
-+
-+        This attribute can be written to in order to change the driver's
-+        operation mode or to unregister it.  The string written to it must be
-+        one of the possible values of it and, if successful, writing one of
-+        these values to the sysfs file will cause the driver to switch over
-+        to the operation mode represented by that string - or to be
-+        unregistered in the "disable" case.
-+
- ``cpupower`` tool support for ``amd-pstate``
- ===============================================
- 
--- 
-2.34.1
-
+>
+> [...]
