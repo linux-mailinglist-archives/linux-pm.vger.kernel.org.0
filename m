@@ -2,91 +2,88 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61FA670FE9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 02:22:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D032671239
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 04:55:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjARBWa (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 20:22:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40804 "EHLO
+        id S229650AbjARDzZ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 17 Jan 2023 22:55:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjARBVb (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 20:21:31 -0500
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB561968E;
-        Tue, 17 Jan 2023 17:21:06 -0800 (PST)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id NSN00103;
-        Wed, 18 Jan 2023 09:21:03 +0800
-Received: from localhost.localdomain (10.200.104.82) by
- jtjnmail201619.home.langchao.com (10.100.2.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.16; Wed, 18 Jan 2023 09:21:04 +0800
-From:   Deming Wang <wangdeming@inspur.com>
-To:     <sujith.thomas@intel.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>
-CC:     <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Deming Wang <wangdeming@inspur.com>
-Subject: [PATCH] thermal/intel: Modify function description
-Date:   Tue, 17 Jan 2023 20:20:57 -0500
-Message-ID: <20230118012057.4423-1-wangdeming@inspur.com>
-X-Mailer: git-send-email 2.31.1
+        with ESMTP id S229689AbjARDzX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 22:55:23 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE34453FA2;
+        Tue, 17 Jan 2023 19:55:18 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pHzXZ-00032D-0e;
+        Wed, 18 Jan 2023 04:55:09 +0100
+Date:   Wed, 18 Jan 2023 03:55:01 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>,
+        Frank Wunderlich <frank-w@public-files.de>
+Subject: [PATCH v4 0/2] thermal: mediatek: add support for MT7986 and MT7981
+Message-ID: <cover.1674012985.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.200.104.82]
-X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
- jtjnmail201619.home.langchao.com (10.100.2.19)
-tUid:   20231180921042494a59269222f7e9b3d9b6437df51cb
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Delete the wrong description and add the corresponding description.
+As requested in a previous review, first convert the if-else selection
+of the raw_to_mcelsius_* function to instead use a function pointer
+added to struct mtk_thermal. Then add thermal support for the MT7986
+SoC which can also be used on MT7981.
 
-Signed-off-by: Deming Wang <wangdeming@inspur.com>
----
- drivers/thermal/intel/intel_menlow.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Device Tree bindings have already been merged[1].
 
-diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-index 3f885b08a490..5a6ad0552311 100644
---- a/drivers/thermal/intel/intel_menlow.c
-+++ b/drivers/thermal/intel/intel_menlow.c
-@@ -232,9 +232,9 @@ static DEFINE_MUTEX(intel_menlow_attr_lock);
- 
- /*
-  * sensor_get_auxtrip - get the current auxtrip value from sensor
-- * @name: Thermalzone name
-- * @auxtype : AUX0/AUX1
-- * @buf: syfs buffer
-+ * @handle: Object handle
-+ * @index : GET_AUX1/GET_AUX0
-+ * @value : The address will be fill by the value
-  */
- static int sensor_get_auxtrip(acpi_handle handle, int index,
- 							unsigned long long *value)
-@@ -254,9 +254,9 @@ static int sensor_get_auxtrip(acpi_handle handle, int index,
- 
- /*
-  * sensor_set_auxtrip - set the new auxtrip value to sensor
-- * @name: Thermalzone name
-- * @auxtype : AUX0/AUX1
-- * @buf: syfs buffer
-+ * @handle: Object handle
-+ * @index : GET_AUX1/GET_AUX0
-+ * @value : The value will be set
-  */
- static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
- {
+When submitting v3, it looked like the patch series submitted by Amjad
+Ouled-Ameur ("thermal: mediatek: Add support for MT8365 SoC"[2]) which
+also adds this function pointer would be merged first. However, this a
+re-spin of this series addressing the comments it has received has not
+yet been submitted. The change introducing the raw_to_mcelsius function
+pointer is hence being applied independently.
+
+Changes since v2: Rebase on top of pending patch introducing
+raw_to_mcelsius function pointer.
+Drop left-over macro extracting the unused adc_oe field.
+Use switch (...) instead of if-else-if-else-... statements.
+For now, return -EINVAL as default in case of unknown version. Imho
+this should be BUG(), as this version is only defined within this
+driver.
+
+Changes since v1: Drop use of adc_oe field in efuse, Henry Yen
+confirmed its use has been dropped intentionally in MTK SDK as well.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git//071e99848ccc1fbe238c4c9c7cfffd83f1dfe156
+[2]: https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
+
+Daniel Golle (2):
+  thermal/drivers/mtk: use function pointer for raw_to_mcelsius
+  thermal: mediatek: add support for MT7986 and MT7981
+
+ drivers/thermal/mtk_thermal.c | 150 +++++++++++++++++++++++++++++++---
+ 1 file changed, 140 insertions(+), 10 deletions(-)
+
 -- 
-2.27.0
+2.39.1
 
