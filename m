@@ -2,199 +2,141 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D75672057
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 15:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989CB672084
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 16:05:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjARO5t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 09:57:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54436 "EHLO
+        id S231310AbjARPFo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 10:05:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjARO5e (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 09:57:34 -0500
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3753826587
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 06:53:24 -0800 (PST)
-Received: by mail-ej1-x634.google.com with SMTP id kt14so24944814ejc.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 06:53:24 -0800 (PST)
+        with ESMTP id S231487AbjARPF2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 10:05:28 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8263253F
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 07:05:15 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id l8so7770378wms.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 07:05:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=stZtAhmuNpwwNr+Q894m8k3WKh9stUMtdjvWGZCxIHo=;
-        b=gMIaZ3BgtMrjudzAxsdaMJEgFE4F9gzWsZ1Yg5Xs9B0YV57CZWNK1/tM+ECj0CcKEd
-         xIuekHOqdSaVJlEZnnRWUwaH1iUk1ApyvsCUsQQXCGD2B4NQI9afHBgmp1wCwexCngOt
-         zzX/DRCOZlNNUG4j4wQVTNCWbz25KgX8Vytb7DWsJeRsJnmBbyIEOQbsX9towt1QVbRI
-         YBI7zXGE9epoTzVPz7ce3Eel4B3wP3NPdaa1RUeWh4axIjSsnEszLvmCuPKmBQ+5xbF1
-         Yv+ZBWZMREChJCcVzSRJSmn+Rub06XXL3yUlgpZyKmilLtCpt+TUt1DP6Nh4KcbukFdd
-         obZA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sy9FqaPskON5MA8I0+FqJ4Z9VJahIZ8FHzsydP66LsA=;
+        b=EzfKz8WBnZ8u2u0ulDL+VpHXYEdT+jUt1JdhVpDIyiU+lKlKlNCgThRuQuvU7QziEF
+         A8w717ibNv9S9bMN531O/JeikVT6XyT/5Ql/wZrtsMNdk8XhhNq3/pXy69DpUA2ZXMHI
+         USDop2hSeGr4d/jqYd/ZlNqs7m3Nd6+zVsDxSBv0uIor/yoMHOiCHn4Bw9RanPtNCINZ
+         EBALUequjrD8pb5EBfojehzDYA8fKbTPqze2SmoFhF6veoflzcLoGzA6X5VlzmMP/hYp
+         WEgPNmhnZFsMeOtxMaW4yk+rZv+gljOVwcDnwGuZLqMTYA7hiTpimdVASafEkD/sQHvd
+         tvdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=stZtAhmuNpwwNr+Q894m8k3WKh9stUMtdjvWGZCxIHo=;
-        b=KHTJsZdE3G1CUbUdMipaZjw/5e7SsmJ77s3REpnhacy/J2bmt48VcKcsneCKf2NhKz
-         Py64PcYthV0WhCb+o0GMXjeuGAh5RDjnUlUTdbRZgsBE3zmV+UfnMb5znSrel+YnLz/Y
-         yIdswlE1Fh3hCHld1txbZXiPDDTJQ7v7KXILSjTdK7bCOUm3lGIasADfOiE8LJx3KEGA
-         80hUmwctBHRws0TGCLrlrPQWJ4NCkI1ddrvAwzUNo5hvSJZZ1QidS6WafAY2aP3kmOxB
-         07WSDA/q5KuhZfbXVqeDB/ctfidzaHQqperLHuHsy2LXpWbDU99Om0i3cIXKuN77PIug
-         tHvQ==
-X-Gm-Message-State: AFqh2koeHjnWO4Nf73JsHDw6FriCwKFgQRiSfNo0A6XnSeTHXotizpQA
-        v+E4sGAE//umW77YSvDTVGOUQ3Llly99+mMOOsC6sg==
-X-Google-Smtp-Source: AMrXdXsy2xOVzKPF0BPi56xPXa3Dor+FMxBaDAcYFF6uykQ8n333+Ht+vnPUlk+XgfFvmMKAR3q9fU8or89lfSRfdyU=
-X-Received: by 2002:a17:906:4a99:b0:86f:3748:a4ef with SMTP id
- x25-20020a1709064a9900b0086f3748a4efmr874161eju.462.1674053602831; Wed, 18
- Jan 2023 06:53:22 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sy9FqaPskON5MA8I0+FqJ4Z9VJahIZ8FHzsydP66LsA=;
+        b=BYB8AlNmq0K3HhJQuijKEX1fGC70CHyaB52WJXcJrny0YomKIN0KEVm1p6QDcINuK+
+         HcgIwFKNowlJSgobyWqUAeCGu3cPcM7BOBqU4hHQme0lredxOxTTrCpxMzJwsWtqjeJU
+         x3RM0EKoomWbfR95Lmo3/sdRMbolmZ/1WWRCyAme102cDwbWPQZhcxLXpIN5iSFgziaX
+         /Gc1ZDVEfyYZebQg6i6uxDP6m+BfDu94CYEogEPC0/NTAxRGDgFquFh9/NGxjAbofI+R
+         2ApByCRrzAxXEJXfuUtj2PnrJwHjg2TJ5F98YHyX+Wh8SNf9qDkgZSawr2+OYDVOm6Of
+         ajIQ==
+X-Gm-Message-State: AFqh2krei1dISrzj2ukvOmeFHcGCaUdR3acqnWXu9qCnT1Vhta5Y1nU7
+        rtYREe2wZYY/bFZB/vnuWr+Y+0hKtGYSjzuaOKA=
+X-Google-Smtp-Source: AMrXdXvlSfmfkb6rb42n86ovGFgnlYFhIh6UVJnQTf89DfwPrVph3fOYFhqTCUoNp2NyU+J5tv+x7g==
+X-Received: by 2002:a05:600c:1d8e:b0:3d9:f9ef:3d23 with SMTP id p14-20020a05600c1d8e00b003d9f9ef3d23mr7327500wms.23.1674054313725;
+        Wed, 18 Jan 2023 07:05:13 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:37dc:5071:959c:93e4? ([2a01:e0a:982:cbb0:37dc:5071:959c:93e4])
+        by smtp.gmail.com with ESMTPSA id az9-20020a05600c600900b003b3307fb98fsm2345343wmb.24.2023.01.18.07.05.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 07:05:13 -0800 (PST)
+Message-ID: <5ab38158-6e75-ea9c-f788-f3a2d77dbbe7@linaro.org>
+Date:   Wed, 18 Jan 2023 16:05:12 +0100
 MIME-Version: 1.0
-References: <20230112152855.216072-1-bchihi@baylibre.com> <20230112152855.216072-5-bchihi@baylibre.com>
- <feab4ff4-b874-aa10-2031-ad6b84cbc004@collabora.com> <CAGuA+ooxTf-j957gQ1zRe2-+u2kphaaLGvTDi1=kit5Q3bKOxA@mail.gmail.com>
- <71e5c68a-dbc7-caac-d6d4-5a8cd5b20d5e@linaro.org>
-In-Reply-To: <71e5c68a-dbc7-caac-d6d4-5a8cd5b20d5e@linaro.org>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 18 Jan 2023 15:52:46 +0100
-Message-ID: <CAGuA+oqQt_qZpep_77j=wCS_CuXTVz9mHYdT91+NP96JP8UKLQ@mail.gmail.com>
-Subject: Re: [PATCH v10 4/6] thermal/drivers/mediatek: Add the Low Voltage
- Thermal Sensor driver
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khilman@baylibre.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v3] dt-bindings: interconnect: qcom-bwmon: document SM8550
+ compatibles
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-bwmon-v3-1-7d63d2ae6bce@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20221114-narmstrong-sm8550-upstream-bwmon-v3-1-7d63d2ae6bce@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Georgi,
 
-On Wed, Jan 18, 2023 at 3:30 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Balsam,
->
-> On 18/01/2023 14:58, Balsam CHIHI wrote:
->
-> [ ... ]
->
-> >> You're describing the register with nice words, but there's another wa=
-y to do
-> >> the same that will be even more effective.
-> >>
-> >> /*
-> >>    * LVTS MONINT: Interrupt Monitoring register
-> >>    * Each bit describes the enable status of per-sensor interrupts.
-> >>    */
-> >> #define LVTS_MONINT_THRES_COLD  BIT(0)  /* Cold threshold */
-> >> #define LVTS_MONINT_THRES_HOT   BIT(1)  /* Hot threshold */
-> >> #define LVTS_MONINT_OFFST_LOW   BIT(2)  /* Low offset */
-> >> #define LVTS_MONINT_OFFST_HIGH  BIT(3)  /* High offset */
-> >> #define LVTS_MONINT_OFFST_NTH   BIT(4)  /* Normal To Hot */
-> >> #define EVERYTHING_ELSE ........................
-> >>
-> >> #define LVTS_MONINT_SNS0_MASK   GENMASK( ... )
-> >> #define LVTS_MONINT_SNS1_MASK   GENMASK .....
-> >>
-> >> /* Find a better name for this one */
-> >> #define LVTS_MONINT_EN_IRQS     ( LVTS_MONINT_THRES_COLD | LVTS_MONINT=
-_THRES_HOT |
-> >>                                    LVTS_MONINT_OFFST_LOW ..... etc etc=
-)
-> >>
-> >
-> > Given the complexity of the controller and the number of registers,
-> > if we create a define per bits, we will end up with a huge list of
-> > defines (~300).
->
-> Yeah, that is too much for a little gain.
->
-> However, a few can be added for the interrupt only.
->
-> Instead of LVTS_MONINT_THRES ..., it could be LVTS_INT_THRES_... and
-> reused for LVTS_MONINTSTS and LVTS_MONINT setup as the bits position are
-> the same?
->
+On 09/01/2023 13:11, Neil Armstrong wrote:
+> Document the compatibles used to describe the Bandwidth Monitors
+> present on the SM8550 platform.
+> 
+> A BWMON v4 IP monitors the CPU bandwidth, and a v5 does the LLCC
+> bandwidth monitoring.
+> 
+> This is described by adding "llcc" and "cpu" into the compatible
+> strings to differentiate the BWMON IPs.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-OK, I will add a few for the interrupts.
+Gentle ping,
+Neil
 
-> [ ... ]
->
->
-> >>> +static int lvts_ctrl_configure(struct device *dev, struct lvts_ctrl =
-*lvts_ctrl)
-> >>> +{
-> >>> +     u32 period_unit =3D (118 * 1000) / (256 * 38);
-> >>
-> >> #define SOMETHING       118
-> >> #define SOMETHING_ELSE  1000
-> >> #define ....
-> >>
-> >> const u32 period_unit =3D (SOMETHING * SOMETHING_ELSE) / ....
-> >>
-> >
-> > Constifying "u32 period_unit" generates the following compilation warni=
-ng :
-> > ./include/asm-generic/io.h:273:61: note: expected =E2=80=98volatile voi=
-d *=E2=80=99
-> > but argument is of type =E2=80=98const void *=E2=80=99
-> >    273 | static inline void writel(u32 value, volatile void __iomem *ad=
-dr)
-> >        |                                      ~~~~~~~~~~~~~~~~~~~~~~~^~=
-~~
->
-> That is strange. period_unit is the 'value', not the 'addr'. Are you
-> sure about the warning?
-
-I double-checked and you are right.
-The warning is not related to "const u32 period_unit".
-It is related to the previous one, which is "const void __iomem *lvts_edata=
-".
-And this is the full log :
-
-drivers/thermal/mediatek/lvts_thermal.c: In function =E2=80=98lvts_ctrl_cal=
-ibrate=E2=80=99:
-drivers/thermal/mediatek/lvts_thermal.c:835:47: warning: passing
-argument 2 of =E2=80=98writel=E2=80=99 discards =E2=80=98const=E2=80=99 qua=
-lifier from pointer target
-type [-Wdiscarded-qualifiers]
-  835 |   writel(lvts_ctrl->calibration[i], lvts_edata[i]);
-      |                                     ~~~~~~~~~~^~~
-In file included from ./arch/arm64/include/asm/io.h:163,
-                 from ./include/linux/io.h:13,
-                 from ./include/linux/irq.h:20,
-                 from ./include/asm-generic/hardirq.h:17,
-                 from ./arch/arm64/include/asm/hardirq.h:17,
-                 from ./include/linux/hardirq.h:11,
-                 from ./include/linux/interrupt.h:11,
-                 from drivers/thermal/mediatek/lvts_thermal.c:12:
-./include/asm-generic/io.h:273:61: note: expected =E2=80=98volatile void *=
-=E2=80=99
-but argument is of type =E2=80=98const void *=E2=80=99
-  273 | static inline void writel(u32 value, volatile void __iomem *addr)
-      |                                      ~~~~~~~~~~~~~~~~~~~~~~~^~~~
-
->
->
->
->
+> ---
 > --
-> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
-M SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+> ---
+> Changes in v3:
+> - rebased on v6.2-rc1
+> - Link to v2: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-bwmon-v2-0-20c555e3ba5d@linaro.org
+> 
+> Changes in v2:
+> - Reworded commit message
+> - Added Reviewed-by from Krzysztof
+> - Link to v1: https://lore.kernel.org/r/20221114-narmstrong-sm8550-upstream-bwmon-v1-0-b6dd08927f35@linaro.org
+> ---
+>   Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> index 0c720dbde36e..12a0d3ecbabb 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+> @@ -27,11 +27,13 @@ properties:
+>                 - qcom,sc7280-cpu-bwmon
+>                 - qcom,sc8280xp-cpu-bwmon
+>                 - qcom,sdm845-bwmon
+> +              - qcom,sm8550-cpu-bwmon
+>             - const: qcom,msm8998-bwmon
+>         - const: qcom,msm8998-bwmon       # BWMON v4
+>         - items:
+>             - enum:
+>                 - qcom,sc8280xp-llcc-bwmon
+> +              - qcom,sm8550-llcc-bwmon
+>             - const: qcom,sc7280-llcc-bwmon
+>         - const: qcom,sc7280-llcc-bwmon   # BWMON v5
+>         - const: qcom,sdm845-llcc-bwmon   # BWMON v5
+> 
+> ---
+> base-commit: 1b929c02afd37871d5afb9d498426f83432e71c2
+> change-id: 20221114-narmstrong-sm8550-upstream-bwmon-a7c6227fab6d
+> 
+> Best regards,
 
-Best regards,
-Balsam
