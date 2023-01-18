@@ -2,159 +2,92 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEF7671FDD
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 15:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B61672007
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 15:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjAROkR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 09:40:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38658 "EHLO
+        id S231536AbjAROqg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 09:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbjAROjt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 09:39:49 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E154A202
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 06:30:38 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1648690wmq.5
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 06:30:37 -0800 (PST)
+        with ESMTP id S231480AbjAROqP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 09:46:15 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC5C5DC0D
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 06:38:31 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id s21so5674322edi.12
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 06:38:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y6fqLv/UnsGBNSc1Mg2An/wLaAUk0qhAVQW6Ibj1PBg=;
-        b=uSwrEp6ZoJZh6sAuoGCD4UCnDtztV6IpGP/AtZLvPmNNrN9xz/jnx5F8XJMVHPBqn5
-         ZzcZzqX0tvwa9jZAPnNb9Iir1I4A3yJpVI6pELJJZ/reofaXSE+ykAPOL9zkoaWypm4c
-         dFDBuJBzKtRQsxUsPNxYQunkXbxsH+rTEPJ0YWB744+v7U7SGNb404KVu0RxlW2ZS2P9
-         fn3p6hvdQYoNOOyI7OWuf3xzjM84jsVF+aQx7V2oF6MOXWagF3jni9AWzSRyJMt/Yo/9
-         01FTIhNrN54CvWR8VmxYaozTjid29UxEWxMal0tY0lReyeq4362SFO21i1sEMCT6+ttu
-         XLJw==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bNS6eiGHbygAPEjwKzCdhJHEUCYd2KE+a83PDdTHehk=;
+        b=XQz8nBzO6ssc0BhM0mHTU4Ee9cGY/nEF9rDFzsVgIw1SJeNYIigeUYr5c/RHFjCQh3
+         mO6Yh0EoHw5NR/lWgI3NGtZbHwUvAg5KiyAOOv00OT0yLA/ajYqJ++jHEkg/pc+zO81S
+         cf9EBiXWpLP2i2JYAg4pjh8Lca2+9gxAvzIu2TgJg0f/k6F8n6IIAmoyHqKygdtUmjza
+         C1tqTtmh7MfSy86n8BMT1bXOt2Yl3cfkCDwdbe4AJifEZMfhC3bnpwXSeWfgnozVGO6g
+         3AlrVRnuntM6C8rMVDq51hACHSIot1L4aOPESjBWD/tRxsawdKZtBQx5p4ubeqyyQ3oE
+         ek6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y6fqLv/UnsGBNSc1Mg2An/wLaAUk0qhAVQW6Ibj1PBg=;
-        b=dwURhzfHNZZcEQbPAJh7TgI/b6rvf+DAdvNBH47Id45Ztm/CaA3lWCpqwP0Qkqnpn8
-         UraWzm3p66sHKvLZwGjGfWFRL63rxidbcT+iNcWksMh2+7Bl9uwE1dJlyHf+BfVsoZdw
-         0LDxpJsW8FtE06dP4hCuC18PjXr2Zk78ZfcfPGZqBdiDCQA8pLEb6qeJWITZ4rwHhGHw
-         ZxSGmwvPXYKaVxZEWOjwxg1Pz3pHKYHibGLJEl7rKAYajNltmYlwfTDSD5Rpe5pKnrRO
-         ejfXkcE+jN2zRuZQ8bTbCNUJTda3SL5FqhLLzjMLSq1IP2ju6zAnjMhQWfsg96jmwBnp
-         4ENg==
-X-Gm-Message-State: AFqh2kp4XMUlu6NuJlcsYzJofPGvIKd2kUyOP+ou4dCzun66+i6qXMCV
-        jJp8SHjFAquWh+L3VlL0ZudQuCyEbFNJkxrf
-X-Google-Smtp-Source: AMrXdXvLSN0PHBbiULtPldAnGFmVmcZkI5nbWAR+T2eQFEX0x8wEip7qwseRQfUhjWZgAKhOO6oFSQ==
-X-Received: by 2002:a05:600c:540a:b0:3db:a3a:45ac with SMTP id he10-20020a05600c540a00b003db0a3a45acmr5788450wmb.32.1674052236293;
-        Wed, 18 Jan 2023 06:30:36 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id l23-20020a05600c1d1700b003db0dbbea53sm2418963wms.30.2023.01.18.06.30.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 06:30:35 -0800 (PST)
-Message-ID: <71e5c68a-dbc7-caac-d6d4-5a8cd5b20d5e@linaro.org>
-Date:   Wed, 18 Jan 2023 15:30:34 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bNS6eiGHbygAPEjwKzCdhJHEUCYd2KE+a83PDdTHehk=;
+        b=kGMOF77Njexz0Bm8oJVOIgn8G6AhbO7zLrC/m3i5eqGRNKzv9f8oynzlkKsrx5QKRu
+         FIUVCtzFKbSMJ+PKXjo36ktVjyse4UW/zcSENVmkoekjvpa8GyR0DfXcK8SkS1sU39Of
+         TRVx/eXTTOY+6ySNvW/HQDJq1DxaaudpPNL83YQmjqmaKlqOh2RBg2CgLwr5tCNsjjwC
+         1rRZv6ghtv5Kg1T+4tJYkp5Q5FvsqNQ7dD3zoaiUcNr4xIPqD8DESlY4WflLv0E6hDUT
+         cU3/u7oPmYIUI3CbmTPa8JDf1LtOxru+LeJw+9I1LrQCaOlSsjaNqKntaZxopvHaTzda
+         WnMQ==
+X-Gm-Message-State: AFqh2kqu3l22BkcjOm7l4ETb8lqp7WvGAFeoOIaTtzRxH/BkaaiRpTz5
+        Er7uAjRUITSMulQGZaj9MBwwvV+vEmTA9cZlsScJSw==
+X-Google-Smtp-Source: AMrXdXvD7QlyuufONbPUVTnt/WaVr7FKTorLy3QtyD7HO+AvLys9OISk72Se8sYBY5zkCe52Ol3FTyondDwwMfQ4Gj8=
+X-Received: by 2002:a05:6402:1:b0:498:dfe5:49aa with SMTP id
+ d1-20020a056402000100b00498dfe549aamr561038edu.398.1674052710126; Wed, 18 Jan
+ 2023 06:38:30 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
+References: <20230112152855.216072-1-bchihi@baylibre.com> <20230112152855.216072-5-bchihi@baylibre.com>
+ <feab4ff4-b874-aa10-2031-ad6b84cbc004@collabora.com>
+In-Reply-To: <feab4ff4-b874-aa10-2031-ad6b84cbc004@collabora.com>
+From:   Balsam CHIHI <bchihi@baylibre.com>
+Date:   Wed, 18 Jan 2023 15:37:54 +0100
+Message-ID: <CAGuA+oo5HcVNoCvDxjHhxZnRc5o19V6iXPe4kBPiA8rTHBoAAA@mail.gmail.com>
 Subject: Re: [PATCH v10 4/6] thermal/drivers/mediatek: Add the Low Voltage
  Thermal Sensor driver
-Content-Language: en-US
-To:     Balsam CHIHI <bchihi@baylibre.com>,
-        AngeloGioacchino Del Regno 
+To:     AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        khilman@baylibre.com, linux-arm-kernel@lists.infradead.org,
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
-References: <20230112152855.216072-1-bchihi@baylibre.com>
- <20230112152855.216072-5-bchihi@baylibre.com>
- <feab4ff4-b874-aa10-2031-ad6b84cbc004@collabora.com>
- <CAGuA+ooxTf-j957gQ1zRe2-+u2kphaaLGvTDi1=kit5Q3bKOxA@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAGuA+ooxTf-j957gQ1zRe2-+u2kphaaLGvTDi1=kit5Q3bKOxA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Sorry for forgetting this comment.
 
-Hi Balsam,
+> > +static int lvts_ctrl_initialize(struct device *dev, struct lvts_ctrl *lvts_ctrl)
+> > +{
+> > +     /*
+> > +      * Write device mask: 0xC1030000
+> > +      */
+> > +     u32 cmds[] = {
+> > +             0xC1030E01, 0xC1030CFC, 0xC1030A8C, 0xC103098D, 0xC10308F1,
+> > +             0xC10307A6, 0xC10306B8, 0xC1030500, 0xC1030420, 0xC1030300,
+> > +             0xC1030030, 0xC10300F6, 0xC1030050, 0xC1030060, 0xC10300AC,
+> > +             0xC10300FC, 0xC103009D, 0xC10300F1, 0xC10300E1
+> > +     };
+> ...what is this long list of commands?
+>
 
-On 18/01/2023 14:58, Balsam CHIHI wrote:
-
-[ ... ]
-
->> You're describing the register with nice words, but there's another way to do
->> the same that will be even more effective.
->>
->> /*
->>    * LVTS MONINT: Interrupt Monitoring register
->>    * Each bit describes the enable status of per-sensor interrupts.
->>    */
->> #define LVTS_MONINT_THRES_COLD  BIT(0)  /* Cold threshold */
->> #define LVTS_MONINT_THRES_HOT   BIT(1)  /* Hot threshold */
->> #define LVTS_MONINT_OFFST_LOW   BIT(2)  /* Low offset */
->> #define LVTS_MONINT_OFFST_HIGH  BIT(3)  /* High offset */
->> #define LVTS_MONINT_OFFST_NTH   BIT(4)  /* Normal To Hot */
->> #define EVERYTHING_ELSE ........................
->>
->> #define LVTS_MONINT_SNS0_MASK   GENMASK( ... )
->> #define LVTS_MONINT_SNS1_MASK   GENMASK .....
->>
->> /* Find a better name for this one */
->> #define LVTS_MONINT_EN_IRQS     ( LVTS_MONINT_THRES_COLD | LVTS_MONINT_THRES_HOT |
->>                                    LVTS_MONINT_OFFST_LOW ..... etc etc)
->>
-> 
-> Given the complexity of the controller and the number of registers,
-> if we create a define per bits, we will end up with a huge list of
-> defines (~300).
-
-Yeah, that is too much for a little gain.
-
-However, a few can be added for the interrupt only.
-
-Instead of LVTS_MONINT_THRES ..., it could be LVTS_INT_THRES_... and 
-reused for LVTS_MONINTSTS and LVTS_MONINT setup as the bits position are 
-the same?
-
-[ ... ]
-
-
->>> +static int lvts_ctrl_configure(struct device *dev, struct lvts_ctrl *lvts_ctrl)
->>> +{
->>> +     u32 period_unit = (118 * 1000) / (256 * 38);
->>
->> #define SOMETHING       118
->> #define SOMETHING_ELSE  1000
->> #define ....
->>
->> const u32 period_unit = (SOMETHING * SOMETHING_ELSE) / ....
->>
-> 
-> Constifying "u32 period_unit" generates the following compilation warning :
-> ./include/asm-generic/io.h:273:61: note: expected ‘volatile void *’
-> but argument is of type ‘const void *’
->    273 | static inline void writel(u32 value, volatile void __iomem *addr)
->        |                                      ~~~~~~~~~~~~~~~~~~~~~~~^~~~
-
-That is strange. period_unit is the 'value', not the 'addr'. Are you 
-sure about the warning?
-
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+I can not give an answer for that.
+The LVTS programming guide is short in explanation.
+It just gives this code sequence to configure it without any explanation.
