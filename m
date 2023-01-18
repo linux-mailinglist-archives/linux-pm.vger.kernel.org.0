@@ -2,103 +2,93 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 684DA672157
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 16:33:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 941A4672181
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 16:40:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjARPdm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 10:33:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
+        id S229923AbjARPkk (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 10:40:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231172AbjARPdm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 10:33:42 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627012B0B9
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 07:33:39 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id n7so8268401wrx.5
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 07:33:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oUPpYf55nSewKPfRw1r8GTAzRNx6PisN+J3CJfYWWqM=;
-        b=ER+nRfLfGkm6S/o3MmxpSFWWo6T91uTm6DYUbVFOOUC+6DeFJbgFuuyS22UQ55nriy
-         pmWZqfjYVV5qpaqONICqbKhaC3QxF4E2pJOloNLIo5uS7NSvF7zNp56PPGTnHThiuF/p
-         LnEtVfxQlEncXoNaufozHXbHi8uLjaoucMIXqdQ1amadF3yujWJlVRJ+RVXxjD+bzNLM
-         9wpmSjZegYNzNgqR6zt8ODCpgAKpU2IsmMbu+Me5U6eiqvNui0GAjCg3SdGzjp0q5+ui
-         xJ89PpSRdyJmedgCuDXRY0yU2KRNDVosV2inzdam3HY3bz2jgEsYfnnEhAZSRW8gQcBY
-         Vfxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oUPpYf55nSewKPfRw1r8GTAzRNx6PisN+J3CJfYWWqM=;
-        b=c8i16YpEViFcuZ2XixqIk1cSnw4LixM6F/BNfRK9/LkFPuVuW0AcZmGQ5v5kg7fhrU
-         U458m5ASS/8bMGCgUPU54l0GnT6NOSd3cGJLvAAa7vS6xTTEEU34VthE4HSGkDP1k38M
-         w3NZl7kOI3RJ6eRSZHLZC1MJkOi+Z3D753mq/LqYZFFVh0t/X0bbUq/lH/EpJt6GSb5I
-         JgaBPdfGsizqATP6v1+QjoGSvCa02TIeBlgNi+ci0NzM9DPL2987QNZK6YR/J4iJ1QNo
-         j3xIDma81Yx/haR3DuQjT3UxWw2mMirUUul0w5lu939F5kExBi8as3gtMM1ZIZOJC50V
-         UjkQ==
-X-Gm-Message-State: AFqh2kqI3Q02zYTq0RcOVtWLZGZhgdn8TSLsL9DIJeThAt/ODBEKpX/3
-        QTfOFg/1GYTES1rKa7D/eRJNMI9DyM2GCCL1
-X-Google-Smtp-Source: AMrXdXtsBYgy2yvXAk1HX7S7z4hIuZLQip5px4lekLCG5EOdySAkbweDKG6rgI8l5Dgzm8Noat9D+g==
-X-Received: by 2002:adf:df10:0:b0:2bb:e891:1829 with SMTP id y16-20020adfdf10000000b002bbe8911829mr6814451wrl.4.1674056017946;
-        Wed, 18 Jan 2023 07:33:37 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm31225540wrx.21.2023.01.18.07.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 07:33:37 -0800 (PST)
-Message-ID: <f7d3cd69-3eee-d96e-4c53-958c1e3d1c37@linaro.org>
-Date:   Wed, 18 Jan 2023 16:33:35 +0100
+        with ESMTP id S229994AbjARPki (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 10:40:38 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE6310DE;
+        Wed, 18 Jan 2023 07:40:36 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pIAY6-0007gG-1J;
+        Wed, 18 Jan 2023 16:40:26 +0100
+Date:   Wed, 18 Jan 2023 15:40:19 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>
+Subject: [PATCH v5 0/2] thermal: mediatek: add support for MT7986 and MT7981
+Message-ID: <cover.1674055882.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: interconnect: qcom: document the
- interconnects for sa8775p
-Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230118140825.242544-1-brgl@bgdev.pl>
- <20230118140825.242544-2-brgl@bgdev.pl>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230118140825.242544-2-brgl@bgdev.pl>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/01/2023 15:08, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> 
-> Add a DT binding document for the RPMh interconnects on Qualcomm sa8775p
-> platforms.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
->  .../interconnect/qcom,sa8775p-rpmh.yaml       |  50 ++++
->  .../interconnect/qcom,sa8775p-rpmh.h          | 231 ++++++++++++++++++
->  2 files changed, 281 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/interconnect/qcom,sa8775p-rpmh.yaml
->  create mode 100644 include/dt-bindings/interconnect/qcom,sa8775p-rpmh.h
+As requested in a previous review, first convert the if-else selection
+of the raw_to_mcelsius_* function to instead use a function pointer
+added to struct mtk_thermal. Then add thermal support for the MT7986
+SoC which can also be used on MT7981.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Device Tree bindings have already been merged[1].
 
-Best regards,
-Krzysztof
+Changes since v4: Only use switch statement where requested[2] and keep
+if-else logic in other places.
+
+When submitting v3, it looked like the patch series submitted by Amjad
+Ouled-Ameur ("thermal: mediatek: Add support for MT8365 SoC"[3]) which
+also adds this function pointer would be merged first. However, a
+re-spin of this series addressing the comments it has received has not
+yet been submitted. The change introducing the raw_to_mcelsius function
+pointer is hence being applied independently.
+
+Changes since v2: Rebase on top of pending patch introducing
+raw_to_mcelsius function pointer.
+Drop left-over macro extracting the unused adc_oe field.
+Use switch (...) instead of if-else-if-else-... statements.
+For now, return -EINVAL as default in case of unknown version. Imho
+this should be BUG(), as this version is only defined within this
+driver.
+
+Changes since v1: Drop use of adc_oe field in efuse, Henry Yen
+confirmed its use has been dropped intentionally in MTK SDK as well.
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/commit/?h=thermal/bleeding-edge&id=071e99848ccc1fbe238c4c9c7cfffd83f1dfe156
+[2]: https://lore.kernel.org/lkml/0b72a12c-286f-79d0-09e9-b1761530850a@collabora.com/
+[3]: https://lore.kernel.org/linux-arm-kernel/4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org/T/
+
+Daniel Golle (2):
+  thermal/drivers/mtk: use function pointer for raw_to_mcelsius
+  thermal: mediatek: add support for MT7986 and MT7981
+
+ drivers/thermal/mtk_thermal.c | 143 +++++++++++++++++++++++++++++++---
+ 1 file changed, 133 insertions(+), 10 deletions(-)
+
+
+base-commit: 9ce08dd7ea24253aac5fd2519f9aea27dfb390c9
+-- 
+2.39.1
 
