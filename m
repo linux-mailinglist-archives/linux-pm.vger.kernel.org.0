@@ -2,167 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF29672A14
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 22:12:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B960F672A37
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 22:17:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjARVMn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 16:12:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
+        id S230448AbjARVQ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 16:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbjARVMW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 16:12:22 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0B0613C0
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 13:11:37 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id m15so110022wms.4
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 13:11:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MbZTt1nKV5Kzktb6N/J9c4cwx0dyU8TgWnYTyorPexI=;
-        b=XJ8fx8qgbtpA2yj0y7FDGXBOtSmezFrHxGnXGFlbiODLkUf1IVM49rmBXyp0rn47tv
-         HBh/kgCib3lMDyYaGvUIyBbK612QqakthrpNqxNgXaF8M1e6rdQt4cTXFpHn+d9ns7GD
-         GQjd2CJnXol3dlHTZI1jBhzMbsjA4pYvqya5yxSNTpakqnenN4jbnrA0vwtGtQ9SHe3G
-         wJtD7Jto/KRbAfrjcRGSVGwlG7irYUy0hiZmuuYwvIFH7Ih+N/uBA4Q/Z212ZZMD0EUW
-         H8aRUWUREmRNjm0KcPY8jFdZ8wA/BeFCNVRZ3AeDYXK5A7HyejQrWrZR1mEFD+UQa8oE
-         yHnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MbZTt1nKV5Kzktb6N/J9c4cwx0dyU8TgWnYTyorPexI=;
-        b=H5qIw9KOGSqI1nm9CrOMCLrSwq/tV7M0wgNcLncVDN4Fnm86ERtOt2w3E0gR42PUdQ
-         /FiC0ReYXm/0YjqJCukEg2dBqlTgh9qtiWI+rS1MAq8f6hpynkZ3eDR1jsSYwDHEZcbC
-         500hxBP8Cp52nQTLcgOGY8xxbULyp8xHUXm36ohZWt1Rg+MsHUQifUtRBpWZr3uXMBtO
-         DxRhUFbOmFrBUroFqRkSm7eK5Wkhf9VBBy917hlf7LpmFEdFBZh8u7E8odxXOaSydkxF
-         V6Ny+SsBVuFgL0Id6mALzajl1/JewQgFcMWOCCRrYfo9y+NZkcelKdc5GxRJ++SE+7qO
-         64PA==
-X-Gm-Message-State: AFqh2kpRWGt/sBxKZsAHfdbkq2vNRs4r3OQRkYwsFfZu2Sw5qw9K3opw
-        AH1bybZHdK9/15FiYsn9MkJ+Bg==
-X-Google-Smtp-Source: AMrXdXsV8RveJh+m5ZCwXlPjvyBVaicdsqtarl2MxP1HDcUBEHlTg8ChBtkG0ESaSyfE2sAUcZdk5Q==
-X-Received: by 2002:a05:600c:6014:b0:3da:2032:6c0f with SMTP id az20-20020a05600c601400b003da20326c0fmr16523812wmb.31.1674076295926;
-        Wed, 18 Jan 2023 13:11:35 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id l27-20020a05600c2cdb00b003d99da8d30asm3198835wmc.46.2023.01.18.13.11.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 13:11:35 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 5/5] thermal/core: Sort the trip points when registering a thermal zone
-Date:   Wed, 18 Jan 2023 22:11:23 +0100
-Message-Id: <20230118211123.111493-5-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230118211123.111493-1-daniel.lezcano@linaro.org>
-References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
+        with ESMTP id S230458AbjARVQ6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 16:16:58 -0500
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2A01C306;
+        Wed, 18 Jan 2023 13:16:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674076613; x=1705612613;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+obUbfv4AWADjLLT9aInBE8U8pKm+zFRM9cucM+TI5M=;
+  b=Pf6xESk1m0U81RDfkfrgXrCugey9EnBvY54nvhkTne7PnL6IPMpIGoJp
+   gFiiM+FdfTiZS4jDO5Jfs+VzFCS8AdXDgpbgizwUNUL7pRUyfLz/Ebs0L
+   1SIKnXBJJUstWcHI7FR4KKPHxzHdJ7UB67gltpXWv9Ppu968OhQafIFTv
+   VtZLsYUNKHbMnMoOKcJLbFyavsYjgfsJ9YKRFQge4SUVijG53GGYmKG5n
+   7qnIt6LuQS7bdAkzpt9aAcDo8mGlnZw5zf7j5wU/dj5+AbpzV2twIA7bp
+   MCC79BJ+a6/8l/Q1rCYZ4DjhQgrTQEn9pgpFvf50CYmkiIJ4/RhC9zTO6
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="322792588"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="322792588"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 13:16:51 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="609821066"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="609821066"
+Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 13:16:50 -0800
+Message-ID: <340f3ecdaddb2c422dcbe3df712a082f333eab0d.camel@linux.intel.com>
+Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>
+Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Date:   Wed, 18 Jan 2023 13:16:50 -0800
+In-Reply-To: <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org>
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
+         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
+         <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
+         <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
+         <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
+         <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+         <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Most of the drivers are converted to use the generic thermal trip
-points. They register a thermal zone with an array of trip points.
+On Wed, 2023-01-18 at 22:01 +0100, Daniel Lezcano wrote:
+> On 18/01/2023 21:53, srinivas pandruvada wrote:
+> > On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
+> > > On 18/01/2023 20:16, srinivas pandruvada wrote:
+> > > 
+> > > [ ... ]
+> > > 
+> > > > > > But we'd better wait for the thermald test result from
+> > > > > > Srinvias.
+> > > > > 
+> > > > > A quick test show that things still work with thermald and
+> > > > > these
+> > > > > changes.
+> > > > 
+> > > > But I have a question. In some devices trip point temperature
+> > > > is
+> > > > not
+> > > > static. When hardware changes, we get notification. For example
+> > > > INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
+> > > > Currently get_trip can get the latest changed value. But if we
+> > > > preregister, we need some mechanism to update them.
+> > > 
+> > > When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we
+> > > call
+> > > int340x_thermal_read_trips() which in turn updates the trip
+> > > points.
+> > > 
+> > 
+> > Not sure how we handle concurrency here when driver can freely
+> > update
+> > trips while thermal core is using trips.
+> 
+> Don't we have the same race without this patch ? The thermal core can
+> call get_trip_temp() while there is an update, no ?
+Yes it is. But I can add a mutex locally here to solve.
+But not any longer.
 
-However, we don't have the guarantee the trip points are ordered. The
-main goal of moving to the generic trip points is to provide a common
-structure, ordered, so we can fix sanely how the trip points are
-crossed. As a reminder, the detection is fuzzy when the trip points
-are defined with hysteresis values, we can have duplicated or
-inconsistent trip events.
+I think you need some thermal_zone_read_lock/unlock() in core, which
+can use rcu. Even mutex is fine as there will be no contention as
+updates to trips will be rare.
 
-This change sorts the trip points array when it is registered with the
-thermal zone. The direction of the ordering is descending because when
-we browse the trip points, we want to check the highest trip points
-first as they are higher in temperature, thus higher in priority.
+Thanks,
+Srinivas
 
-A pr_info() trace tells the trip points have been ordered if it
-appears they are not sorted initially.
-
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/thermal_core.c |  3 +++
- drivers/thermal/thermal_core.h |  1 +
- drivers/thermal/thermal_trip.c | 28 ++++++++++++++++++++++++++++
- 3 files changed, 32 insertions(+)
-
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index d0577685085a..394770591771 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1255,6 +1255,9 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
- 	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
- 		return ERR_PTR(-EINVAL);
- 
-+	if (trips && thermal_trip_sort(trips, num_trips))
-+		pr_info("Thermal trips sorted for thermal zone '%s'\n", type);
-+	
- 	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
- 	if (!tz)
- 		return ERR_PTR(-ENOMEM);
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 26350206a98d..4688107fda1d 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -117,6 +117,7 @@ void __thermal_zone_set_trips(struct thermal_zone_device *tz);
- int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
- 			    struct thermal_trip *trip);
- int __thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp);
-+int thermal_trip_sort(struct thermal_trip *trips, int num_trips);
- 
- /* sysfs I/F */
- int thermal_zone_create_device_groups(struct thermal_zone_device *, int);
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-index 2ef61ff7ffc3..924998f09a5a 100644
---- a/drivers/thermal/thermal_trip.c
-+++ b/drivers/thermal/thermal_trip.c
-@@ -9,6 +9,34 @@
-  */
- #include "thermal_core.h"
- 
-+/*
-+ * The trip points must be ordered in the descending order so when we
-+ * browse the trip points we will hit the critical, hot and then the
-+ * passive/active trip points. The critical trip point being the first
-+ * one to be handled.
-+ */
-+int thermal_trip_sort(struct thermal_trip *trips, int num_trips)
-+{
-+	struct thermal_trip tt;
-+	int sorted = 0;
-+	int i, j;
-+
-+	for (i = 0; i < num_trips; i++) {
-+
-+		for (j = i + 1; j < num_trips; j++) {
-+
-+			if (trips[i].temperature < trips[j].temperature) {
-+				tt = trips[i];
-+				trips[i] = trips[j];
-+				trips[j] = tt;
-+				sorted++;
-+			}
-+		}
-+ 	}
-+
-+	return sorted;
-+}
-+
- int __for_each_thermal_trip(struct thermal_zone_device *tz,
- 			    int (*cb)(struct thermal_trip *,
- 				      int trip_id, void *),
--- 
-2.34.1
+> 
 
