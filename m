@@ -2,237 +2,111 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A700671C5D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 13:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 85DAE671C8F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 13:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjARMm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 07:42:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S231158AbjARMvv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 07:51:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229941AbjARMku (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 07:40:50 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461EC42DDE
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:05:53 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id r30so9278392wrr.10
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:05:53 -0800 (PST)
+        with ESMTP id S230403AbjARMvf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 07:51:35 -0500
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1E9AA5C0
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:12:40 -0800 (PST)
+Received: by mail-ej1-x62d.google.com with SMTP id u19so82681644ejm.8
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:12:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jOtBx7iuzRQsPxKN1y+9m4RLuvwP28DoAs7Gu1XGBOA=;
-        b=P6bO8vngjWSIT1XrIAM91BorkF/ywf8NRmLu2N4HPgWbx6ENup6EZGFzyFAaO4kTyt
-         BijCwnc6YuX5l0kgMI7QPtk+dH9VJi0YUSTnNkej28eJfuWziyV4CyTR2wa2RR0dtvPA
-         eKFFMdq73UeGETv/MccUPmItb+t0dezwpF1CPwa0WLXNtNoq/EYzbJlAnSyTUmdRMQfW
-         4hvHPmQv+XHF/3mXO1A6++0s/dnEYYlunbplWUXEK0RfddDtPWUxg4dnM+FDAgGprwVP
-         HEjiA6GM4PPYsjjCnf7/cbAlPzzE7K/ZQhYKGUwX1Oiy/c4+608MHijUSO0Z0aE+1hkJ
-         41nA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HJcZxpyrwGsFLd0khHQDpi2RJfK7qh9/a4UC27izsOk=;
+        b=At6V6LmpVZCQl1TGLLCGaCq8nvSvnGDown+WFGhJ0CWr7aZoHMRiesTxgBG6ajdw21
+         iuU3MXlRWvfzbZSS0VFw0RdIfyeUtjfYHS/IAmRk6lWU+dDrZCMr/qTJJHQ12aQW8suR
+         gk8MewMS9bS9WQJu68PePXX4tMJSpEUVsbaGORMO/zBq+owLRYTQl9zD2SspoVAaNPZN
+         d9AT8VekWlPSM+CwgiaY1mm+ZZXG0JAwKiWsx9eW04Xx6R9uxa7xdvC+COjNBsz59cU1
+         Ja29RThY2FUX/QfqRXkBjL1LQ/iqy5z0nOsfhkmVFu8XICVKC/qStqD4BdNWoRlUpaVg
+         EXWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jOtBx7iuzRQsPxKN1y+9m4RLuvwP28DoAs7Gu1XGBOA=;
-        b=rWR9v8Yrv9OCgQd0oCuLdGjQ14wejJKes8EgiCZnHEZ5c2hgy5TbC6fGqDSTmsbHSb
-         EmJnLEhS8fIFeE50I3HGA3zmNv7Xfy5DIZZTV/JoOYlgqogqzMw/X7tcOtCn+MgtwRup
-         SO1egFKogxTi3Jy0eT5BPICHhEtYqbyu0gRmc9K0YDGSGrv+iOIaWkwB2gUxiTXx3uIH
-         8HgdZerUVS+0pGLyyUVv/qwA0HE3rFI3jjxsCrv9HTdccfs1lhEFNP5Zxtlf1Ntcw9Vt
-         kGyNGXzkYtfES9pgHTt7SmFqtvXw0zXOw59ZnZVHgSaGirJdbvw5131Q8Q6KeTBM2TdZ
-         oe9w==
-X-Gm-Message-State: AFqh2kqntfU9Yxk1GJy8kmxYzpUbg691H/cIzi3tOg6R9WC/yE2cxzqU
-        UGE+HI22m2qK0ErN0ZDSEb9ygw==
-X-Google-Smtp-Source: AMrXdXvC7BWWUHoh9f7f73Qbm2nv6DQNkQWjt2oVVrh14s35bOVD3wyjjp8Q+p1rcAfALaOJuwvL8g==
-X-Received: by 2002:a5d:6e82:0:b0:242:5563:c3b with SMTP id k2-20020a5d6e82000000b0024255630c3bmr5868223wrz.59.1674043551833;
-        Wed, 18 Jan 2023 04:05:51 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id j3-20020adfff83000000b002bddc1ac273sm14126833wrr.87.2023.01.18.04.05.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 04:05:51 -0800 (PST)
-Message-ID: <7822949a-c373-3028-6a42-66a04245e93b@linaro.org>
-Date:   Wed, 18 Jan 2023 12:05:50 +0000
+        bh=HJcZxpyrwGsFLd0khHQDpi2RJfK7qh9/a4UC27izsOk=;
+        b=bvNG4bjAQ8BwnAAFXZ8N8VCUIL6vCVWE3DFwOfagR8X2lYTOH3EFeGDmiLvTNvAXkO
+         eQvDfdOUwYP6BYFdZeYOUWgkPuY8VP+nKzVAuBS3fJZ4dRdo/UJmXedDzzcsMCVQqCya
+         xTRvG8n5A0rxp6oe5kuHfzk6WHL1v3FRJXlT87EvktXlWrRmy+U0SwgpzWUAH5yECUzo
+         4BDcg52Jiu56zwm5BqmLTzzbNNbbzPkSnMNkmlYXfDv2RTTB03X9Z58PmngM+HMXGvTZ
+         cPuHASImCRAGIdggp0dktVEjYVAzI3QUwb41iCvCYe6tdpcctjPA6XgAoykrWpLqDgVy
+         /IEw==
+X-Gm-Message-State: AFqh2kreTwZEjgQuji+oYQzPwV1xL3n8K53MdhV3/DpFJJzlvle99mFB
+        r7nCWFWKlrtY9am7ewU6h7nY30K1eJVIrm22U04=
+X-Google-Smtp-Source: AMrXdXtBBaNCK2uM/GK+BilgvXJEf+ppiEwQ990VrL74XgKcaLTs+p+Zndq5y9e/gO/Lg0SEDPRmyv+q4KYpyUt4fz0=
+X-Received: by 2002:a17:906:f0c6:b0:7c0:deb6:e13c with SMTP id
+ dk6-20020a170906f0c600b007c0deb6e13cmr534873ejb.457.1674043958948; Wed, 18
+ Jan 2023 04:12:38 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v3 1/8] dt-bindings: arm: qcom: Document MSM8939 SoC
- binding
-Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-2-bryan.odonoghue@linaro.org>
- <Y8eyIO8BqKzvulbB@gerhold.net>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <Y8eyIO8BqKzvulbB@gerhold.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Sender: johncliff888@gmail.com
+Received: by 2002:a05:640c:1fca:b0:1a0:53e4:7117 with HTTP; Wed, 18 Jan 2023
+ 04:12:38 -0800 (PST)
+From:   "Mr. Omar Ousman" <mromarousman@gmail.com>
+Date:   Wed, 18 Jan 2023 04:12:38 -0800
+X-Google-Sender-Auth: fkOPEan5-5fOF_qDNMgHo2pF7KI
+Message-ID: <CABmh+1k9zGYdP+eYo6OU+=rmmB1PBYTGZB1r0XqAv9chHZ+v7A@mail.gmail.com>
+Subject: GREETINGS TO YOU., ...
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_USD,MONEY_FORM_SHORT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:62d listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8436]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [johncliff888[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [johncliff888[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  2.0 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
+        *      information
+        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
+        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/01/2023 08:47, Stephan Gerhold wrote:
-> On Tue, Jan 17, 2023 at 02:48:39AM +0000, Bryan O'Donoghue wrote:
->> Document the MSM8939 and supported boards in upstream Sony "Tulip" M4 Aqua
->> and Square APQ8039 T2.
->>
->> MSM8939 is one of the older SoCs so we need to expand the list of
->> qcom,board-ids to allow for the bootloader DTS board-id matching
->> dependency.
->>
-> 
-> The original LK bootloaders cannot boot your msm8939.dtsi correctly,
-> because a spin-table implementation is required to get the other CPU
-> cores up. This means that a modified bootloader is always needed from
-> the upstream point of view, since I doubt anyone wants to use these
-> devices with a single core only. lk2nd (as the primary spin-table
-> implementation right now) has never required qcom,board-ids and any
-> custom LK would be easy to patch to ignore these.
+I'm Mr. Omar a regional managing director (CORIS BANK INTERNATIONAL)
+Ouagadougou Burkina Faso, in my department we have US$ 9.5 million
+united state dollars, to transfer into your account as a dormant
+fund,If you are interested to use this fund to help the orphans around
+the world contact me with my email address (mromarousman@gmail.com)
+and your personal information's below
 
-The system boots just fine with the shipped LK. We get display, USB, SD, 
-WiFi.
+Your Full names.
+Your Country of origin.
+Your Occupation
+Your Mobile Number
 
-We just don't support booting the second cluster via any other means 
-than lk2nd right now.
-
-You could also not use lk2nd, stick with your default LK and import LPM 
-patches.
-
-Default LK:
-root@linaro-alip:~# cat /proc/cpuinfo
-processor       : 0
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-root@linaro-alip:~# iw wlan0 info 
- 
-
-Interface wlan0
-         ifindex 6
-         wdev 0x1
-         addr e2:b9:a0:ef:3a:ba
-         type managed
-         wiphy 0
-         channel 52 (5260 MHz), width: 80 MHz, center1: 5290 MHz
-         txpower 20.00 dBm
-         multicast TXQ:
-                 qsz-byt qsz-pkt flows   drops   marks   overlmt hashcol 
-tx-bytes        tx-packets
-                 0       0       0       0       0       0       0 
-0               0
-root@linaro-alip:~# uname -a
-Linux linaro-alip 6.2.0-rc4-next-20230116-00029-gf1a46ff9e812-dirty #392 
-SMP PREEMPT Tue Jan 17 23:46:42 GMT 2023 aarch64 GNU/Linux
-
-
-LK2ND:
-root@linaro-alip:~# cat /proc/cpuinfo
-processor       : 0
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 1
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 2
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 3
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 4
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 5
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 6
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-processor       : 7
-BogoMIPS        : 38.40
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x0
-CPU part        : 0xd03
-CPU revision    : 4
-
-root@linaro-alip:~# iw wlan0 info
-Interface wlan0
-         ifindex 6
-         wdev 0x1
-         addr 02:00:0e:66:5c:21
-         type managed
-         wiphy 0
-         channel 64 (5320 MHz), width: 80 MHz, center1: 5290 MHz
-         txpower 20.00 dBm
-         multicast TXQ:
-                 qsz-byt qsz-pkt flows   drops   marks   overlmt hashcol 
-tx-bytes        tx-packets
-                 0       0       0       0       0       0       0 
-0               0
-root@linaro-alip:~# uname -a
-Linux linaro-alip 6.2.0-rc4-next-20230116-00029-gf1a46ff9e812-dirty #392 
-SMP PREEMPT Tue Jan 17 23:46:42 GMT 2023 aarch64 GNU/Linux
-
----
-bod
+My Regards
