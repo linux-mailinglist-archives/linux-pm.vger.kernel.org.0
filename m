@@ -2,137 +2,237 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EECB1671C25
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 13:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A700671C5D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 13:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjARMeR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 07:34:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35384 "EHLO
+        id S229482AbjARMm4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 07:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjARMdt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 07:33:49 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46483656CA;
-        Wed, 18 Jan 2023 03:55:05 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 407611477;
-        Wed, 18 Jan 2023 03:55:47 -0800 (PST)
-Received: from [10.57.15.75] (unknown [10.57.15.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8D8FA3F71A;
-        Wed, 18 Jan 2023 03:55:03 -0800 (PST)
-Message-ID: <8b1bdb9f-3942-8af2-3d7c-c6e53a6392d4@arm.com>
-Date:   Wed, 18 Jan 2023 11:55:01 +0000
+        with ESMTP id S229941AbjARMku (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 07:40:50 -0500
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461EC42DDE
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:05:53 -0800 (PST)
+Received: by mail-wr1-x429.google.com with SMTP id r30so9278392wrr.10
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:05:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jOtBx7iuzRQsPxKN1y+9m4RLuvwP28DoAs7Gu1XGBOA=;
+        b=P6bO8vngjWSIT1XrIAM91BorkF/ywf8NRmLu2N4HPgWbx6ENup6EZGFzyFAaO4kTyt
+         BijCwnc6YuX5l0kgMI7QPtk+dH9VJi0YUSTnNkej28eJfuWziyV4CyTR2wa2RR0dtvPA
+         eKFFMdq73UeGETv/MccUPmItb+t0dezwpF1CPwa0WLXNtNoq/EYzbJlAnSyTUmdRMQfW
+         4hvHPmQv+XHF/3mXO1A6++0s/dnEYYlunbplWUXEK0RfddDtPWUxg4dnM+FDAgGprwVP
+         HEjiA6GM4PPYsjjCnf7/cbAlPzzE7K/ZQhYKGUwX1Oiy/c4+608MHijUSO0Z0aE+1hkJ
+         41nA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jOtBx7iuzRQsPxKN1y+9m4RLuvwP28DoAs7Gu1XGBOA=;
+        b=rWR9v8Yrv9OCgQd0oCuLdGjQ14wejJKes8EgiCZnHEZ5c2hgy5TbC6fGqDSTmsbHSb
+         EmJnLEhS8fIFeE50I3HGA3zmNv7Xfy5DIZZTV/JoOYlgqogqzMw/X7tcOtCn+MgtwRup
+         SO1egFKogxTi3Jy0eT5BPICHhEtYqbyu0gRmc9K0YDGSGrv+iOIaWkwB2gUxiTXx3uIH
+         8HgdZerUVS+0pGLyyUVv/qwA0HE3rFI3jjxsCrv9HTdccfs1lhEFNP5Zxtlf1Ntcw9Vt
+         kGyNGXzkYtfES9pgHTt7SmFqtvXw0zXOw59ZnZVHgSaGirJdbvw5131Q8Q6KeTBM2TdZ
+         oe9w==
+X-Gm-Message-State: AFqh2kqntfU9Yxk1GJy8kmxYzpUbg691H/cIzi3tOg6R9WC/yE2cxzqU
+        UGE+HI22m2qK0ErN0ZDSEb9ygw==
+X-Google-Smtp-Source: AMrXdXvC7BWWUHoh9f7f73Qbm2nv6DQNkQWjt2oVVrh14s35bOVD3wyjjp8Q+p1rcAfALaOJuwvL8g==
+X-Received: by 2002:a5d:6e82:0:b0:242:5563:c3b with SMTP id k2-20020a5d6e82000000b0024255630c3bmr5868223wrz.59.1674043551833;
+        Wed, 18 Jan 2023 04:05:51 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id j3-20020adfff83000000b002bddc1ac273sm14126833wrr.87.2023.01.18.04.05.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 04:05:51 -0800 (PST)
+Message-ID: <7822949a-c373-3028-6a42-66a04245e93b@linaro.org>
+Date:   Wed, 18 Jan 2023 12:05:50 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] cpufreq: Register with perf domain before
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 1/8] dt-bindings: arm: qcom: Document MSM8939 SoC
+ binding
 Content-Language: en-US
-To:     Vincent Wang3 <vincentwang3@lenovo.com>
-Cc:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        Vincent Wang <bhuwz@163.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        "qperret@google.com" <qperret@google.com>,
-        Todd Kjos <tkjos@google.com>
-References: <20230118044733.29391-1-bhuwz@163.com>
- <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
- <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
- <SG2PR03MB6456E1E22B9D26317B1BE9AFE5C79@SG2PR03MB6456.apcprd03.prod.outlook.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <SG2PR03MB6456E1E22B9D26317B1BE9AFE5C79@SG2PR03MB6456.apcprd03.prod.outlook.com>
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-2-bryan.odonoghue@linaro.org>
+ <Y8eyIO8BqKzvulbB@gerhold.net>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y8eyIO8BqKzvulbB@gerhold.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-+Quentin and Todd
-
-On 1/18/23 10:00, Vincent Wang3 wrote:
-> Hi, Lukasz, Viresh
-> 
-> I found this issue on Android phone with kernel 5.15, and the governor is schedutil.
-> With the pd_init issue, the rd->pd will be NULL and EAS doesn't work since rd->pd will be checked in function find_energy_efficient_cpu( ).
-
-That's true, but that's not mainline issue. This discussion should
-be moved to Android kernel bug tracking system.
-I've seen probably similar issue in Android.
-
-I have added Quentin and Todd who are more familiar with this design in
-Android kernel.
-
-> 
-> I didn't notice the modification in schedutil at mainline, so I submitted this patch to fix the problem, sorry!
-> 
-> However, besides EAS will check rd->pd, I noticed that it's also used in the find_busiest_group() and update_cpu_capacity() functions at mainline, so I'm worried that may not be enough to circumvent it only in schedutil.
-
-Those function indeed use the perf domain, but they don't use the
-Energy Model pointer: rd->pd->em_pd, so they don't suffer.
-
-> 
-> 
-> detail of the exact code path:
-> in function register_cpufreq_notifier( ), the notifier_block init_cpu_capacity_notifier is registered with CPUFREQ_POLICY_NOTIFIER.
-> During the initialization of a new policy, the notifier_call function init_cpu_capacity_callback( ) will be called，in which the work update_topology_flags_work will be scheduled.
-> 
-> for the kwork function update_topology_flags_workfn( )：
-> update_topology_flags_workfn( ) -> rebuild_sched_domains( ) -> rebuild_sched_domains_locked( ) -> partition_sched_domains_locked( ) -> build_perf_domains( ) -> pd_init( )
-> 
-> 
-> BRs
-> Vincent
-> 
-> -----邮件原件-----
-> 发件人: Lukasz Luba <lukasz.luba@arm.com>
-> 发送时间: 2023年1月18日 17:24
-> 收件人: Viresh Kumar <viresh.kumar@linaro.org>; Vincent Wang <bhuwz@163.com>; Vincent Wang3 <vincentwang3@lenovo.com>
-> 抄送: rafael@kernel.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> 主题: [External] Re: [PATCH v2] cpufreq: Register with perf domain before
-> 
-> Hi Viresh, Vincent
-> 
-> I'm surprised seeing this thread and thanks that you Viresh have answered, so it could go through my spam/junk filters.
-> (I hope when answer to that domain it would change something).
-> 
-> On 1/18/23 08:49, Viresh Kumar wrote:
->> On 18-01-23, 12:47, Vincent Wang wrote:
->>> From: Vincent Wang <vincentwang3@lenovo.com>
->>>
->>> We found the following issue during kernel boot on android phone:
->>>
->>> [    1.325272][    T1] cpu cpu0: EM: created perf domain
->>> [    1.329317][    T1] cpu cpu4: EM: created perf domain
->>> [    1.337597][   T76] pd_init: no EM found for CPU7
->>> [    1.350849][    T1] cpu cpu7: EM: created perf domain
->>>
->>> pd init for cluster2 is executed in a kworker thread and is earlier
->>> than the perf domain creation for cluster2.
+On 18/01/2023 08:47, Stephan Gerhold wrote:
+> On Tue, Jan 17, 2023 at 02:48:39AM +0000, Bryan O'Donoghue wrote:
+>> Document the MSM8939 and supported boards in upstream Sony "Tulip" M4 Aqua
+>> and Square APQ8039 T2.
 >>
->> Can you please give detail of the exact code path, for mainline kernel
->> ? I am not sure which kworker thread are you talking about here.
-> 
-> Please also tell us your cpufreq governor. The schedutil governor at mainline can handle those situations and we rebuild the perf domains here [1].
-> 
+>> MSM8939 is one of the older SoCs so we need to expand the list of
+>> qcom,board-ids to allow for the bootloader DTS board-id matching
+>> dependency.
 >>
->>> pd_init() is called from the cpufreq notification of
->>> CPUFREQ_CREATE_POLICY in cpufreq_online(), which is earlier than that
->>> cpufreq_driver->register_em() is called.
 > 
-> Viresh, If that's an issue for other governors, than maybe we should address that. IMO the patch just relies on side-effect in arch_topology.c update_topology_flags_workfn(). That would be a workaround and dangerous if someone would change that arch_topology.c design. Shouldn't we come up with something reliable inside the cpufreq.c if there is a real issue?
-> Even now, these two mechanisms:
-> 1. in the schedutil [1]
-> 2. in the update_topology_flags_workfn() are a bit leaky (in terms of design holes).
-> 
-> Regards,
-> Lukasz
-> 
-> [1]
-> https://apc01.safelinks.protection.outlook.com/?url=https%3A%2F%2Felixir.bootlin.com%2Flinux%2Flatest%2Fsource%2Fkernel%2Fsched%2Fcpufreq_schedutil.c%23L858&data=05%7C01%7Cvincentwang3%40lenovo.com%7Cc69b7dca4401474bd23808daf935bfd5%7C5c7d0b28bdf8410caa934df372b16203%7C0%7C0%7C638096306507392144%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=WTPpWDytIsbfdW920cGNiHhEs7udgrX0O78sAh8JV7I%3D&reserved=0
-> 
+> The original LK bootloaders cannot boot your msm8939.dtsi correctly,
+> because a spin-table implementation is required to get the other CPU
+> cores up. This means that a modified bootloader is always needed from
+> the upstream point of view, since I doubt anyone wants to use these
+> devices with a single core only. lk2nd (as the primary spin-table
+> implementation right now) has never required qcom,board-ids and any
+> custom LK would be easy to patch to ignore these.
+
+The system boots just fine with the shipped LK. We get display, USB, SD, 
+WiFi.
+
+We just don't support booting the second cluster via any other means 
+than lk2nd right now.
+
+You could also not use lk2nd, stick with your default LK and import LPM 
+patches.
+
+Default LK:
+root@linaro-alip:~# cat /proc/cpuinfo
+processor       : 0
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+root@linaro-alip:~# iw wlan0 info 
+ 
+
+Interface wlan0
+         ifindex 6
+         wdev 0x1
+         addr e2:b9:a0:ef:3a:ba
+         type managed
+         wiphy 0
+         channel 52 (5260 MHz), width: 80 MHz, center1: 5290 MHz
+         txpower 20.00 dBm
+         multicast TXQ:
+                 qsz-byt qsz-pkt flows   drops   marks   overlmt hashcol 
+tx-bytes        tx-packets
+                 0       0       0       0       0       0       0 
+0               0
+root@linaro-alip:~# uname -a
+Linux linaro-alip 6.2.0-rc4-next-20230116-00029-gf1a46ff9e812-dirty #392 
+SMP PREEMPT Tue Jan 17 23:46:42 GMT 2023 aarch64 GNU/Linux
+
+
+LK2ND:
+root@linaro-alip:~# cat /proc/cpuinfo
+processor       : 0
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 1
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 2
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 3
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 4
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 5
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 6
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+processor       : 7
+BogoMIPS        : 38.40
+Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 cpuid
+CPU implementer : 0x41
+CPU architecture: 8
+CPU variant     : 0x0
+CPU part        : 0xd03
+CPU revision    : 4
+
+root@linaro-alip:~# iw wlan0 info
+Interface wlan0
+         ifindex 6
+         wdev 0x1
+         addr 02:00:0e:66:5c:21
+         type managed
+         wiphy 0
+         channel 64 (5320 MHz), width: 80 MHz, center1: 5290 MHz
+         txpower 20.00 dBm
+         multicast TXQ:
+                 qsz-byt qsz-pkt flows   drops   marks   overlmt hashcol 
+tx-bytes        tx-packets
+                 0       0       0       0       0       0       0 
+0               0
+root@linaro-alip:~# uname -a
+Linux linaro-alip 6.2.0-rc4-next-20230116-00029-gf1a46ff9e812-dirty #392 
+SMP PREEMPT Tue Jan 17 23:46:42 GMT 2023 aarch64 GNU/Linux
+
+---
+bod
