@@ -2,100 +2,152 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ACD46728FB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 21:05:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D770672984
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 21:37:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjARUFN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 15:05:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S229654AbjARUhO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 15:37:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjARUE5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 15:04:57 -0500
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AF059761;
-        Wed, 18 Jan 2023 12:04:50 -0800 (PST)
-Received: by mail-ed1-f48.google.com with SMTP id y11so120930edd.6;
-        Wed, 18 Jan 2023 12:04:50 -0800 (PST)
+        with ESMTP id S230191AbjARUgt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 15:36:49 -0500
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF82760498
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 12:36:39 -0800 (PST)
+Received: by mail-ej1-x62f.google.com with SMTP id mg12so251234ejc.5
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 12:36:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LL1I4GwHYHunE20Z1xOXGvvtulphoBZMPu7mQcoTDjU=;
+        b=lVq0ApR7wpNjKYW+Y7W2kWZdE7dAbMEcdxD/z/duwXqDArTknD/x1iMrLDR9BRFywZ
+         nTkHZ6C+NL55NZOtp8YnWr5ma4BDNr9E8HXi9IEAgqxKVbbC+O1q0zjy7yTCBS+S6jXh
+         FequP/8M+mjc55qCEu97QPr83gLvIJhuGTILnyA4j3BXy3GJRXHgQCvphSDeGIo+RrGG
+         w28ez2s3kK1I4xYqIwj+Qj5wvxQqGlBzMv/4Sm6Asqxy/9zj47M2gcWTejQ1oFUVD5sH
+         +HzK7QUzb24f6O2RNsGjO99JNtjJl73x5oY+oDSGCLc3FWRXqqgH2iR8e3siPYuv+Mgz
+         vWNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KYqhoJmoJb6YJL3uVlmiN1AfZHw+rBK4PG67UqSeJlo=;
-        b=wKnzl4t+jJ89XF5NsRd8My22iDV8UEPy6gKFX17ytValLkBabN9s9fbnrPAdIq+Hjj
-         TsEGvkWjd1lP73BOhQsgTvW5fYWW5lCHe83xpVK7Te8TtxNsPxxfgz6FCez+tmzjNoXb
-         YmIaf1s5DowTYv4QVmzQRzjwmasrbTCz6wr6ofV/i6W9UL3e+5Jo2fpot6OSTjhFyXV1
-         fp9FrbATt9Tc3fe/V7zNHgROQrk2Ye5HZ7HmUZqpJEXJa1ouGFDkhcW5zTk83+ut+PVv
-         sNkQIpE8OJHegi7rOipNMZ7Ho1edYUqCOupaWU6UesnEx2T6Rt1lWblCMMWZZYw2SaOK
-         C0hA==
-X-Gm-Message-State: AFqh2kqOnXECTYIu9F/NySgZSjGvsxK56Rtfv0clRb3i0x5ITB4kQm3S
-        Y0M/kJnNLilqGTIF4MEfIOpICPtyB8jUnQisdpo=
-X-Google-Smtp-Source: AMrXdXuHO0wmN6pgwxtfJledZud+cVIlKlvRCmM5bb4+W6FJd7fkqKGo2TOTPc3Wf+4fwiv+cPuDldnJNpPWdZ9oVB4=
-X-Received: by 2002:a05:6402:94a:b0:47f:7465:6e76 with SMTP id
- h10-20020a056402094a00b0047f74656e76mr833058edz.181.1674072288871; Wed, 18
- Jan 2023 12:04:48 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LL1I4GwHYHunE20Z1xOXGvvtulphoBZMPu7mQcoTDjU=;
+        b=BdvKomVlPE4QZ4eWU6fl6elNn16+LaC+MeQKC9leMiAOyEio2RPAOvkqh/ShwdUpIy
+         sHiLt2hD5n1eirzF0zU1v42tT6wZ2yL62ejOAjawhkMve9rb42/Ny5Tw6ih27B4e2oUg
+         UuPoP4Tgpjgq+xZJhffPuELRQOxsSvu1IO3YTCd0CDv4d//XXfuSGKwoy/2WfOAmgfZ0
+         +4zap87tbsOTlJphIDxCzRRRoFrSPku/QjuzFjWqdGn2Nkn/ntXlLrdloau83zf1QO4u
+         nnwWyrw2RtyXBu/jbuRKPznBJPVOXlscBHabutJX+1cXKHn0Xg4Ng8D6b3WRkrWUPqDc
+         1K4w==
+X-Gm-Message-State: AFqh2kqVN33FuxOyzNw2IUixL0g+596VOv+wQaTR6v/j8Bfec9UXR1iF
+        5AUX6/MVOWmGtN+rUXmfIrbTvg==
+X-Google-Smtp-Source: AMrXdXsfUbRWYZbFT1n/j0VlmXtzaOPqFjXEhtYouuqtX8fD8Cyl5LNeGNI5+eJ4j8vqMxFUTaK4eA==
+X-Received: by 2002:a17:906:80d:b0:870:d15a:c2e0 with SMTP id e13-20020a170906080d00b00870d15ac2e0mr7826142ejd.51.1674074198540;
+        Wed, 18 Jan 2023 12:36:38 -0800 (PST)
+Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
+        by smtp.gmail.com with ESMTPSA id c10-20020a17090618aa00b0084d14646fd9sm14993594ejf.165.2023.01.18.12.36.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 12:36:38 -0800 (PST)
+Message-ID: <8673ef49-a37e-2d76-b800-bf9b10875006@linaro.org>
+Date:   Wed, 18 Jan 2023 21:36:35 +0100
 MIME-Version: 1.0
-References: <20230118012057.4423-1-wangdeming@inspur.com>
-In-Reply-To: <20230118012057.4423-1-wangdeming@inspur.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 18 Jan 2023 21:04:37 +0100
-Message-ID: <CAJZ5v0i+2a_Bm1oBoYGoU0Sps-w+w2Eb5YWuVXvjxZvz97fGEg@mail.gmail.com>
-Subject: Re: [PATCH] thermal/intel: Modify function description
-To:     Deming Wang <wangdeming@inspur.com>
-Cc:     sujith.thomas@intel.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 2/9] interconnect: qcom: rpm: Always set QoS params on
+ QNoC
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
+        Georgi Djakov <djakov@kernel.org>,
+        AngeloGioacchino Del Regno <kholk11@gmail.com>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>
+References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
+ <20230116132152.405535-3-konrad.dybcio@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230116132152.405535-3-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 2:21 AM Deming Wang <wangdeming@inspur.com> wrote:
->
-> Delete the wrong description and add the corresponding description.
->
-> Signed-off-by: Deming Wang <wangdeming@inspur.com>
-> ---
->  drivers/thermal/intel/intel_menlow.c | 12 ++++++------
->  1 file changed, 6 insertions(+), 6 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-> index 3f885b08a490..5a6ad0552311 100644
-> --- a/drivers/thermal/intel/intel_menlow.c
-> +++ b/drivers/thermal/intel/intel_menlow.c
-> @@ -232,9 +232,9 @@ static DEFINE_MUTEX(intel_menlow_attr_lock);
->
->  /*
->   * sensor_get_auxtrip - get the current auxtrip value from sensor
-> - * @name: Thermalzone name
-> - * @auxtype : AUX0/AUX1
-> - * @buf: syfs buffer
-> + * @handle: Object handle
-> + * @index : GET_AUX1/GET_AUX0
-> + * @value : The address will be fill by the value
->   */
->  static int sensor_get_auxtrip(acpi_handle handle, int index,
->                                                         unsigned long long *value)
-> @@ -254,9 +254,9 @@ static int sensor_get_auxtrip(acpi_handle handle, int index,
->
->  /*
->   * sensor_set_auxtrip - set the new auxtrip value to sensor
-> - * @name: Thermalzone name
-> - * @auxtype : AUX0/AUX1
-> - * @buf: syfs buffer
-> + * @handle: Object handle
-> + * @index : GET_AUX1/GET_AUX0
-> + * @value : The value will be set
->   */
->  static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
->  {
-> --
 
-Applied as 6.3 material with edits in the subject and a modified
-changelog, thanks!
+
+On 16.01.2023 14:21, Konrad Dybcio wrote:
+> On newer SoCs, QoS parameters and RPM bandwidth requests are wholly
+> separate. Setting one should only depend on the description of the
+> interconnect node and not whether the other is present. If we don't
+> vote through RPM, QoS parameters should be set regardless, as we're
+> requesting additional bandwidth by setting the interconnect clock
+> rates.
+> 
+> With NoC (the old-SoC bus type), this is not the case and they are
+> mutually exclusive (so, the current upstream logic is correct).
+> 
+> For BIMC however, newer SoCs expect QoS params to be always set
+> (like QNoC) whereas older ones (like MSM8998) hang up completely when
+> doing so, hence this will be addressed in the next commit.
+> 
+> The Fixes tag references the commit in which this logic was added, it
+> has since been shuffled around to a different file, but it's the one
+> where it originates from.
+> 
+> Fixes: f80a1d414328 ("interconnect: qcom: Add SDM660 interconnect provider driver")
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+Would be very nice if somebody could test this one in particular
+on QCM2290 to make sure it does not regress that SoC..
+
+Shawn, Loic?
+
+Konrad
+>  drivers/interconnect/qcom/icc-rpm.c | 20 ++++++++++++++++----
+>  1 file changed, 16 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 385a67c20956..b1337f90c975 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -239,15 +239,27 @@ static int qcom_icc_rpm_set(int mas_rpm_id, int slv_rpm_id, u64 sum_bw)
+>  static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
+>  			  u64 sum_bw)
+>  {
+> +	struct qcom_icc_provider *qp = to_qcom_provider(n->provider);
+> +	bool vote_ap, vote_rpm;
+>  	int ret;
+>  
+> -	if (!qn->qos.ap_owned) {
+> -		/* send bandwidth request message to the RPM processor */
+> +	if (qp->type == QCOM_ICC_QNOC) {
+> +		vote_ap = true;
+> +		vote_rpm = true;
+> +	} else {
+> +		vote_ap = qn->qos.ap_owned;
+> +		vote_rpm = !vote_ap;
+> +	}
+> +
+> +	if (vote_rpm) {
+> +		/* Send bandwidth request message to the RPM processor */
+>  		ret = qcom_icc_rpm_set(qn->mas_rpm_id, qn->slv_rpm_id, sum_bw);
+>  		if (ret)
+>  			return ret;
+> -	} else if (qn->qos.qos_mode != -1) {
+> -		/* set bandwidth directly from the AP */
+> +	}
+> +
+> +	if (vote_ap && qn->qos.qos_mode != NOC_QOS_MODE_INVALID) {
+> +		/* Set QoS params from the AP */
+>  		ret = qcom_icc_qos_set(n, sum_bw);
+>  		if (ret)
+>  			return ret;
