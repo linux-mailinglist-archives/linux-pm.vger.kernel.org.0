@@ -2,230 +2,495 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151B26719AB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 11:53:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83714671C1A
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 13:33:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjARKxD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 05:53:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43818 "EHLO
+        id S230410AbjARMdE (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 07:33:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230455AbjARKu5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 05:50:57 -0500
-Received: from mail1.bemta33.messagelabs.com (mail1.bemta33.messagelabs.com [67.219.247.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B36787663;
-        Wed, 18 Jan 2023 02:00:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lenovo.com;
-        s=Selector; t=1674036009; i=@lenovo.com;
-        bh=XoQwNyzjDT5tvmicWIscdcRunbbY7E3v1qzH3Sn8snc=;
-        h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-         Content-Type:Content-Transfer-Encoding:MIME-Version;
-        b=HSYHrbOhOdP8FXFa80aRquVti+TjhAi5m325xE8AfnrFft6Yz5eqbYuLmgmgOo4Gm
-         GB/uIhND7d9fWsMXH8w/rzcf+L2u2P6i4uft/vyWo5NQ/sXRiWzQnBxKkZtmqjwNuv
-         hByxSb5CX2AD2ov/9nPIeAumc3IQ1IRpSZzQTGKxKOht9xGZCZVqvtP4esalOFjA11
-         Id5wD+YDxaHpsHT80cO8otPhgFaIrAc56BBD99ZOGXCBf2kVDDyhZM3QxF+1fKHhSW
-         eFIUYC5CHEGdyLrD1Sw+hNv8zSCxc93kq+RY8Y5Z4ovYDjhEA4xmmHGOs1mkm57Bkz
-         06wyxZBwnDejw==
-X-Brightmail-Tracker: H4sIAAAAAAAAA1VSf0wTZxjm612vB2nNtUD62YC6Rh3D9QaaLXV
-  OGYuYxs2ETMecmehBb7RbKU3vwNYlW2EkU1gdM0CgQMevEeyMzO4Hs2mhCggYCRvbHMya8jOz
-  mjhXoHHjx9b20LH/nud9nvd7n+/NiyOSaUyG0yaWNuopnRyLQzXPyQyKlL7B/LRF627lP+46g
-  fInVyOmnLf2A2VLWblA2bRQgygvL6pexlRtndV81UX7RaByOs5iKt8tN6aad27K5h/ja/V5Ra
-  aTfM3KQDlqcKeYppx+YAGPnq4AcTggvkBgcCnE40grH452uAQc+QrAyr/nQYRIiEYe/HPUinH
-  ED2B3eRCtALE4RihgYNAXxjieQOjgDw15EQ9CtAHonfQgEU88kQUDv7qj/gTiADwXWuZzmIRn
-  zjiidZTYBj8OcVhEHIeuvgqUG1YF4FKlF4sIscQeOGHp5EUwIJJh7bQ/ihFCCptqbdFHIUHAd
-  vcowuFEGJhZ5XN+Fv4W6MK4ejIc+7wScDgDXu/sRjl8CLpafAIOb4IO69RafTOsbf1jrZ4EJ8
-  e7o5uARBUGq+Z+BBy5jUJHqY/HudKgPdS/5jqXCIdaewRc1FRotyytxX4KVldOCarADtu6X9j
-  W2WzrbLboasRwuH4WbQaoA7zA0MYS2qjYmU7mGbUFGraQ0upI6rSCIosZBU0xrGInSZ1iSJph
-  SMZcmK9Tk3qadYLwcamNr9z4Hlg6lslrYCPOkyeKZryD+ZINeUVqs4ZiNCeMxTqauQaScFwOR
-  XO9YU1spAto0ztaXfhEH8sQF8oTRIFIq4gxUIWMtoCTboAM/OfvPB4Ev9XV3IPg9obVXgTvbK
-  +5ikhQfZGelklFwavhNiLSpinWP3n08emPgWRZvAjExMRIhAbaWKhl/6/fA1IcyONFvZHhQq2
-  efTL7XjgWLxxLxQ5EYrHUf5LMwjPU+I+zZU2nY8oTd13ZM7LvdTzzzUOw/dGrGzwxR3+ZeOtk
-  790vvV87RpoEeoN384NQ83X/keGJ977dGHtBJNx1XvpMwwc3VZJSs2CglB+UvTR72LNSj42ku
-  28mj9k/ifssy/phcnzm77nP6uXikteGyOxjeebMOx9VNPgKJ9/Iefu2NHjnLnrpcvDhp3En6v
-  qO7O7bsv/KNuH2anph+9Cs/2FHn/qviqOr44cpDba4xVpiSupaGtrReKonqeHgpYNK12j28IG
-  SjJn+8bPLKSCk3nu/zZvLn0t94Fwxt+TmeMg09P1pWNmcpRAbt/pf7Liwv76sbF/K84FvFsR7
-  37Xn1J2/L0cZDZWeihgZ6l8/J9GLdQQAAA==
-X-Env-Sender: vincentwang3@lenovo.com
-X-Msg-Ref: server-6.tower-715.messagelabs.com!1674036006!58484!1
-X-Originating-IP: [104.47.26.112]
-X-SYMC-ESS-Client-Auth: mailfrom-relay-check=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.102.1; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 19436 invoked from network); 18 Jan 2023 10:00:08 -0000
-Received: from mail-sgaapc01lp2112.outbound.protection.outlook.com (HELO APC01-SG2-obe.outbound.protection.outlook.com) (104.47.26.112)
-  by server-6.tower-715.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 18 Jan 2023 10:00:08 -0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cDh72dSchll0dNrzsILs9khFYRyuSMIxQ81WgWULF6PQ4mw0FObpkSK3rnQ6uVPrhZ3DZIDYhJ6oageaqHQeBRierHxDOISDS60Zlz8/1b5eZY9v4Pu8N5hzX+8YZzxL9QnVtZgW90t2rNpwjXA6BTO5Cl3M2WOwRrPU3oqG8T8O8NsUxy1qWcXaFEKNdeV3nA1uhnExjA26N5oRIXcdcEPLrcLt5MvswQ51yBQS4Lx+ZDE8VLKlSkxwiAGYjppAC3n1HMJHhmBFa12RrJAaf/6Mkgb7+vrFY4u8uvhbK+VWrrvgOeuBdgehROmz6zzM7zEQucRrDHixqNPEI5o0ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XoQwNyzjDT5tvmicWIscdcRunbbY7E3v1qzH3Sn8snc=;
- b=RdYcVF89I/qaUfN4RRGe5FoD6T4GdtjMe5AGZ0Q/86kFYwu4XTlSiMxxma8V6CXO0GS+EJtW1PI7HDjQrFXlnTgHJjpweOii7GsmSdlDf1ONegUAp3pnvLqwtjsiMqGtognwJqKl557K0dVgRhurUVUpkrGGLowADYkg7asq8Lv4AL5yunGa/l6ka4jyKBGPt1SLR+QP7buDJKQFUzPzm8cxkZ/C4himx0KBriWjlRGnK9ODE0udbyK+4vs8JbLn9Xyjj/CBMgSXkOvPvMkWMuLxVkBhdw6xEW/0/tAOHpf2LobX4S2yhLpa4mG8ziq13kR714QUtJAPsbsut21bkg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=lenovo.com; dmarc=pass action=none header.from=lenovo.com;
- dkim=pass header.d=lenovo.com; arc=none
-Received: from SG2PR03MB6456.apcprd03.prod.outlook.com (2603:1096:4:1c4::6) by
- TYZPR03MB5727.apcprd03.prod.outlook.com (2603:1096:400:8d::14) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.12; Wed, 18 Jan 2023 10:00:05 +0000
-Received: from SG2PR03MB6456.apcprd03.prod.outlook.com
- ([fe80::c9e4:f03b:b6d4:f36c]) by SG2PR03MB6456.apcprd03.prod.outlook.com
- ([fe80::c9e4:f03b:b6d4:f36c%6]) with mapi id 15.20.5986.023; Wed, 18 Jan 2023
- 10:00:05 +0000
-From:   Vincent Wang3 <vincentwang3@lenovo.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Wang <bhuwz@163.com>
-CC:     "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: Re: [PATCH v2] cpufreq: Register with perf domain before
-Thread-Topic: Re: [PATCH v2] cpufreq: Register with perf domain before
-Thread-Index: AQHZKyOjEfJRmZRSokujrJSwEinVtg==
-Date:   Wed, 18 Jan 2023 10:00:04 +0000
-Message-ID: <SG2PR03MB6456E1E22B9D26317B1BE9AFE5C79@SG2PR03MB6456.apcprd03.prod.outlook.com>
-References: <20230118044733.29391-1-bhuwz@163.com>
- <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
- <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
-In-Reply-To: <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR03MB6456:EE_|TYZPR03MB5727:EE_
-x-ms-office365-filtering-correlation-id: e32ff2fe-9700-4a97-1c88-08daf93ac5eb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: BS67ATm08PYucEe+IrlQk2lQonpVZV2f4djp7MePdnmu4tzvfXycEMmoqgYld9ouDOpbIIGu6OgUq4UuqZXExyWSqBcSxjtFSHTyZqBywBKTErpHFuNEqHepRjLvT3DxZHC/6BT0TQ4agsiSdHRYhrqjlBVaJXUKIiTz5zjtua4hM05vkC/aaY7tEKT/z2ZmbIHbDVqi5wH+u1JzOjpaD5YnpTWdvO/r+KB7l9Tih00rlZd41+qLjA04xd3nZTFOr9q/Hpz8GapOL2rZmaIHvWqLbPnbcX+krb4XfR4Ek0VxHzYv4zaKRv0z62HfMJMKbK2pTJ/hNlPGbcBf1RStyu13q6e23FzEvK8oXsgS6XyUz+NE7YSJDx2eq+VNcjqHjup22aGckK9jCxQNeoUKWOvrQiawbCgZWaBlj3qafghD73l9ns4cZsVf4ZgpS1Gve/LT0f94THSiSndnd1NVo4wfXflvGkyMMBrY2+eZTYmWmqdGbP7J4+2TkhNhNlV0x28mLxjxz/rileW9CLyzwVdmhS2IcrLnC2j94CeYod7hNIMqTh5wB65YGAWQK2xOhJg2OnGIY0PWwvWUDMYEaN79stBpC090TIQVYp7tNpsuGso2WfeWiU4jY3t5UHXgMStc6uUHMZUjfT8kMuqM371VwVzt506p7M+EHQyxKUMYsKxK60RYhwZ1BANUYTTmlxnCH4Ps2bli9HAJco2sxbpnT1zqBnd25au4oq4CU2s=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR03MB6456.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199015)(66556008)(41300700001)(186003)(26005)(52536014)(5660300002)(76116006)(64756008)(66476007)(4326008)(66446008)(66946007)(82960400001)(38070700005)(54906003)(8676002)(122000001)(316002)(8936002)(110136005)(86362001)(38100700002)(2906002)(71200400001)(966005)(478600001)(7696005)(6506007)(53546011)(55016003)(45080400002)(9686003)(33656002)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?gb2312?B?cG9PNlJaNng1SUtqWUE2cVFPQ1ZabTQxY1liRnF6TkpRSHlkSmpTMFlGazFx?=
- =?gb2312?B?Y2VqTUVoNkJ6UXdVS01aMk1hUk1RWUdhSC9KRHl0MG9JU05iR3l4RzhoaUlm?=
- =?gb2312?B?ZjlXN2NrZDJDc0lsVlpESkZmdWUrMVdINGZ3Q1gzOW9zazNTYXZCWGQ4WEdP?=
- =?gb2312?B?ank1NHBYb0l6M1ZKV1BlUkRGUldYc1UvcVB1K1ZqTmhwSTYvZHNRUGdrQnl4?=
- =?gb2312?B?dFpSYkxRT2lPWUwzaHBnTnZPVlpHZktoSlJuTFBWVGVhZk1CemllK1ByeERC?=
- =?gb2312?B?ME1mRlRGNUx6YzA2dmRoY0pJdW5OcUdJaUF6QVE4QTdJU3M1WWUvOERaSmZW?=
- =?gb2312?B?NkdPNm1sVXpNUjJDY0JiOENSV0d3V1YvWERxUUxNNlhQeDNrZGdyRkNJUjRB?=
- =?gb2312?B?ZGpZS2szb0tSRERqNUhSdlZ3eVBBdE1qb3g2Qk0xaHVTdHBDRFZ2QmtuSHFs?=
- =?gb2312?B?WTVyK2t2RXY0NUhBZEx1UC9NcWM4Mit6REV6SkxoSGk1SVBFRUhEMnh4YzR3?=
- =?gb2312?B?aThkNFNuVHcxdlprOTc4YUpmZXFMN04ySHFuZmdWOGduZHhCRSsxemg5OCtH?=
- =?gb2312?B?c01Oa3NRZlVCV1NEWm5Jd05Edmk2VUlFbTM4R0lCU2NkdnVBZVd0Q2RkN05K?=
- =?gb2312?B?Tm9oQXI5dHdlSTBSUHdRVTlWTS9HbmFNNDlLQ3VEbUs5cldRZzFXZ3FPR2RW?=
- =?gb2312?B?NFZSbFlBM25qUHhDcDBzSXBGc3VHcnNvRExla0Q4NDFLSkNvSC81UkEvMGpG?=
- =?gb2312?B?dmxubHNmeTh6aGJ3ZzdiVFFGZ0t3alVRSWFPbU16L0ppajNSSEJoUUUwOXMw?=
- =?gb2312?B?ZDc4SjRIMktUR0RXWG51QVloOGRFVUpWb3hOOUZQRzg1RUJac1QwL0RETkJV?=
- =?gb2312?B?MFI3akRGQ2ZZcGIvQUNwdEZ6dmc4cENNNGNWOGJwTFZxMUFTcm5JckM2VCsr?=
- =?gb2312?B?dVNzRUJ1dElBcGZNcVJxSUgwK2N5aGhHRXpuREtqbGJURiswTEdsWm9qckk1?=
- =?gb2312?B?dEpDMXJBV3IyQkNpMWZXbzA5aU01K2dwTnNPaHdOdEhLL2pJT2NFUzk3VWl5?=
- =?gb2312?B?VjdBd1RUeVJTdlZCc3FSYnZHVHU3emdnOVdDbHJzUTdjUVFkWk9kN3JMOHRi?=
- =?gb2312?B?NW9kTmJGOEI4RUdRWEJpMGxoVW5KZ0NET29DNjJnbHRYZlBEdm8yOVNwa2V6?=
- =?gb2312?B?M3lUdGtjV0ZBUHRPeENGRGtXbExVaWFVY1ZId0JhT2MxdVdlSzFaTnFrSGZh?=
- =?gb2312?B?OGRMbVVGUkdvQkVCS1RLdTJ6YXBubFgzUEd0KzBrcTBsK1dlZ1YwK2tXemU5?=
- =?gb2312?B?YjZpZnBJYTNlSGV5cjBuK2Fib3U2SXUzUDJ6VU5GQ0thQU9rdWpnZytsUnJp?=
- =?gb2312?B?aVNsdTUyS29uTXhnRk91UGxjY2p5VW5kZU50VGQrS29GcGR6NDZZMTVjNG9M?=
- =?gb2312?B?YXZrSEtldzd2VzFUeVhTNjJ6WDloV3ppeUIrSTdZZEdueVdOZnc5R1J5eXR4?=
- =?gb2312?B?Y3FWeWorYjdSb1lKUWF6eGhCbjRGTDc0SmNiVkRFQTBtZkpoMlRUL29FSDE0?=
- =?gb2312?B?bDM0TndnaGJLMWJkNEp1WE5uTW4xbGJmM01zU1BWbEhOajhiYWN2MlBJeXRL?=
- =?gb2312?B?dkpLL1ovZ2VqUlVGVUIzajF5a25OOENrL1MxTkxRVXA5T3FpbVFMejFNS1Fp?=
- =?gb2312?B?ZDZ0Q21rQWMrQ1FXM3dpVDJlb0cwY0cxL09mRXRnZTRRWFgyVFg2dkVIQ3JJ?=
- =?gb2312?B?RFZwU0xuUnR3WTJhc1pVK2x2NzF4ZWFwVVZMTEV3SDhsRlZNbTAyZkdrUzlQ?=
- =?gb2312?B?U01YbDJPWU9YMGhPY2d1RDlZOUN0MncrT0pqSUdxbXhueTZhRTBZUlRCRGxx?=
- =?gb2312?B?VWk2bU5WdlRLbkRTaUpyOFhsVDhFUnQ5a2VsbnFqQjUzZy9GcExlZFZrbHhx?=
- =?gb2312?B?WW1WNzNkSjVLd29QTVg5RWNmRUthVEQxODY1eXVYOWNBZk9qdlg1N2R5REt6?=
- =?gb2312?B?bkk2bEpsd2R1VjJHakgweGhRVGhwZ3FBczNEMGxJVXVqd1lwcVUvanZEWHJF?=
- =?gb2312?B?RW5zd2JCMTN4RkxtbXc4dHVPdmltQ1dYNWhsQkl4eTdhSWxCV0I0VjhVa2pZ?=
- =?gb2312?Q?3xoenM7ztMX/iCbHp9vf9RMCe?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        with ESMTP id S230143AbjARMcn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 07:32:43 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6338C5CE43
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 03:50:24 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id k8so19166950wrc.9
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 03:50:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YWB/ese8ZwFRllWf7nsL8bsDpP0Q+wo0YCV75hUGQzo=;
+        b=JuUKSeBAwcrUCHjkFD+bc8yUghPGtoTEKWu8FkcVgI3zkhapD5uoRva+qjhxGPwcfl
+         IkhYnuDciQXbDh8Nj+UB/0Iusz9WE1bzWA2zdZCmsGYl4fpyeQ3ONjNotO+AdQ1NYOVE
+         kOHibAYl2i8O0A7u7DuTaFFuoH+sIt6jyDrVRapt8K14H+yP9MELbhlEA9TQi+BxkTdI
+         RNzIzEtkngVS2mluLtBqVco2qe8BFF+adg4xvUP4gljV7O1wBm4wMGMEY3id2DjP8f8j
+         ROLHMjqf/wF5AOu3WK/SS5Jqt3c2g/rPI2H3ycBceyJNx3sZWmSMzfMnufaBFWahahYg
+         nFcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YWB/ese8ZwFRllWf7nsL8bsDpP0Q+wo0YCV75hUGQzo=;
+        b=H4lamlvxLozjkaiFORePNzDxt++hgp8Xphh+J4e5SCn5oomQF5tNb3Eo2wCdFn8KW0
+         SRylSuM5ca6GgkgdThR2tgzshZu69dB1oGVu8ZTvfWshjUgLDPC/Akse4BsJz68Cq3ej
+         cqlF7bQX+JF+A67rWTdakARM99zViNcrQLiRoCk5A1Sx0NtgMh5imMkmi9UadMyKfaWr
+         hCyUjwRW3Xp7mrxemCIpcTJ0BP+1kt9jgDtqDGPwjffI7QTvoQh5BttaJP2GRRV8dez2
+         W+VhSDYxr0fvpObibHqLQIk4sCJTvtfjDgaM/g/lzLFswd2kVrhtPWj3hICSMovwU2AL
+         j8nw==
+X-Gm-Message-State: AFqh2kpAf+2uBcIFJAwxQvdGTBiKO48f8Iowr9qewYgF2AxKshXhcPw2
+        cR3Z9Vr1uke5g0TEkNOnjh7joQ==
+X-Google-Smtp-Source: AMrXdXu2RaAvdT+CrF34XcTNF2qHGw/JsiNlQDZe8hlX5Nv+jLDpCCcNilRCjvYtITnFSZ2Bb9NApw==
+X-Received: by 2002:a05:6000:1f14:b0:2bb:5adc:9f92 with SMTP id bv20-20020a0560001f1400b002bb5adc9f92mr6107322wrb.50.1674042622795;
+        Wed, 18 Jan 2023 03:50:22 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id h3-20020adfe983000000b002bdf5832843sm10298027wrm.66.2023.01.18.03.50.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 03:50:22 -0800 (PST)
+Message-ID: <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
+Date:   Wed, 18 Jan 2023 11:50:20 +0000
 MIME-Version: 1.0
-X-OriginatorOrg: lenovo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB6456.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e32ff2fe-9700-4a97-1c88-08daf93ac5eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Jan 2023 10:00:04.9817
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5c7d0b28-bdf8-410c-aa93-4df372b16203
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: YktDwBHzv7A01NckOAazwB4s+Z1D0YgUT4CbeQ8vJdVfLgEoTPF7TolBICup5JcBbfLBe2IBovQvbn/LaLzyKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR03MB5727
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
+To:     Stephan Gerhold <stephan@gerhold.net>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+ <Y8fC/GCHfENQmBNC@gerhold.net>
+Content-Language: en-US
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <Y8fC/GCHfENQmBNC@gerhold.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-SGksIEx1a2FzeiwgVmlyZXNoDQoNCkkgZm91bmQgdGhpcyBpc3N1ZSBvbiBBbmRyb2lkIHBob25l
-IHdpdGgga2VybmVsIDUuMTUsIGFuZCB0aGUgZ292ZXJub3IgaXMgc2NoZWR1dGlsLg0KV2l0aCB0
-aGUgcGRfaW5pdCBpc3N1ZSwgdGhlIHJkLT5wZCB3aWxsIGJlIE5VTEwgYW5kIEVBUyBkb2Vzbid0
-IHdvcmsgc2luY2UgcmQtPnBkIHdpbGwgYmUgY2hlY2tlZCBpbiBmdW5jdGlvbiBmaW5kX2VuZXJn
-eV9lZmZpY2llbnRfY3B1KCApLg0KDQpJIGRpZG4ndCBub3RpY2UgdGhlIG1vZGlmaWNhdGlvbiBp
-biBzY2hlZHV0aWwgYXQgbWFpbmxpbmUsIHNvIEkgc3VibWl0dGVkIHRoaXMgcGF0Y2ggdG8gZml4
-IHRoZSBwcm9ibGVtLCBzb3JyeSENCg0KSG93ZXZlciwgYmVzaWRlcyBFQVMgd2lsbCBjaGVjayBy
-ZC0+cGQsIEkgbm90aWNlZCB0aGF0IGl0J3MgYWxzbyB1c2VkIGluIHRoZSBmaW5kX2J1c2llc3Rf
-Z3JvdXAoKSBhbmQgdXBkYXRlX2NwdV9jYXBhY2l0eSgpIGZ1bmN0aW9ucyBhdCBtYWlubGluZSwg
-c28gSSdtIHdvcnJpZWQgdGhhdCBtYXkgbm90IGJlIGVub3VnaCB0byBjaXJjdW12ZW50IGl0IG9u
-bHkgaW4gc2NoZWR1dGlsLg0KDQoNCmRldGFpbCBvZiB0aGUgZXhhY3QgY29kZSBwYXRoOg0KaW4g
-ZnVuY3Rpb24gcmVnaXN0ZXJfY3B1ZnJlcV9ub3RpZmllciggKSwgdGhlIG5vdGlmaWVyX2Jsb2Nr
-IGluaXRfY3B1X2NhcGFjaXR5X25vdGlmaWVyIGlzIHJlZ2lzdGVyZWQgd2l0aCBDUFVGUkVRX1BP
-TElDWV9OT1RJRklFUi4NCkR1cmluZyB0aGUgaW5pdGlhbGl6YXRpb24gb2YgYSBuZXcgcG9saWN5
-LCB0aGUgbm90aWZpZXJfY2FsbCBmdW5jdGlvbiBpbml0X2NwdV9jYXBhY2l0eV9jYWxsYmFjaygg
-KSB3aWxsIGJlIGNhbGxlZKOsaW4gd2hpY2ggdGhlIHdvcmsgdXBkYXRlX3RvcG9sb2d5X2ZsYWdz
-X3dvcmsgd2lsbCBiZSBzY2hlZHVsZWQuDQoNCmZvciB0aGUga3dvcmsgZnVuY3Rpb24gdXBkYXRl
-X3RvcG9sb2d5X2ZsYWdzX3dvcmtmbiggKaO6DQp1cGRhdGVfdG9wb2xvZ3lfZmxhZ3Nfd29ya2Zu
-KCApIC0+IHJlYnVpbGRfc2NoZWRfZG9tYWlucyggKSAtPiByZWJ1aWxkX3NjaGVkX2RvbWFpbnNf
-bG9ja2VkKCApIC0+IHBhcnRpdGlvbl9zY2hlZF9kb21haW5zX2xvY2tlZCggKSAtPiBidWlsZF9w
-ZXJmX2RvbWFpbnMoICkgLT4gcGRfaW5pdCggKQ0KDQoNCkJScw0KVmluY2VudA0KDQotLS0tLdPK
-vP7Urbz+LS0tLS0NCreivP7IyzogTHVrYXN6IEx1YmEgPGx1a2Fzei5sdWJhQGFybS5jb20+IA0K
-t6LLzcqxvOQ6IDIwMjPE6jHUwjE4yNUgMTc6MjQNCsrVvP7IyzogVmlyZXNoIEt1bWFyIDx2aXJl
-c2gua3VtYXJAbGluYXJvLm9yZz47IFZpbmNlbnQgV2FuZyA8Ymh1d3pAMTYzLmNvbT47IFZpbmNl
-bnQgV2FuZzMgPHZpbmNlbnR3YW5nM0BsZW5vdm8uY29tPg0Ks63LzTogcmFmYWVsQGtlcm5lbC5v
-cmc7IGxpbnV4LXBtQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
-Zw0K1vfM4jogW0V4dGVybmFsXSBSZTogW1BBVENIIHYyXSBjcHVmcmVxOiBSZWdpc3RlciB3aXRo
-IHBlcmYgZG9tYWluIGJlZm9yZQ0KDQpIaSBWaXJlc2gsIFZpbmNlbnQNCg0KSSdtIHN1cnByaXNl
-ZCBzZWVpbmcgdGhpcyB0aHJlYWQgYW5kIHRoYW5rcyB0aGF0IHlvdSBWaXJlc2ggaGF2ZSBhbnN3
-ZXJlZCwgc28gaXQgY291bGQgZ28gdGhyb3VnaCBteSBzcGFtL2p1bmsgZmlsdGVycy4NCihJIGhv
-cGUgd2hlbiBhbnN3ZXIgdG8gdGhhdCBkb21haW4gaXQgd291bGQgY2hhbmdlIHNvbWV0aGluZyku
-DQoNCk9uIDEvMTgvMjMgMDg6NDksIFZpcmVzaCBLdW1hciB3cm90ZToNCj4gT24gMTgtMDEtMjMs
-IDEyOjQ3LCBWaW5jZW50IFdhbmcgd3JvdGU6DQo+PiBGcm9tOiBWaW5jZW50IFdhbmcgPHZpbmNl
-bnR3YW5nM0BsZW5vdm8uY29tPg0KPj4NCj4+IFdlIGZvdW5kIHRoZSBmb2xsb3dpbmcgaXNzdWUg
-ZHVyaW5nIGtlcm5lbCBib290IG9uIGFuZHJvaWQgcGhvbmU6DQo+Pg0KPj4gWyAgICAxLjMyNTI3
-Ml1bICAgIFQxXSBjcHUgY3B1MDogRU06IGNyZWF0ZWQgcGVyZiBkb21haW4NCj4+IFsgICAgMS4z
-MjkzMTddWyAgICBUMV0gY3B1IGNwdTQ6IEVNOiBjcmVhdGVkIHBlcmYgZG9tYWluDQo+PiBbICAg
-IDEuMzM3NTk3XVsgICBUNzZdIHBkX2luaXQ6IG5vIEVNIGZvdW5kIGZvciBDUFU3DQo+PiBbICAg
-IDEuMzUwODQ5XVsgICAgVDFdIGNwdSBjcHU3OiBFTTogY3JlYXRlZCBwZXJmIGRvbWFpbg0KPj4N
-Cj4+IHBkIGluaXQgZm9yIGNsdXN0ZXIyIGlzIGV4ZWN1dGVkIGluIGEga3dvcmtlciB0aHJlYWQg
-YW5kIGlzIGVhcmxpZXIgDQo+PiB0aGFuIHRoZSBwZXJmIGRvbWFpbiBjcmVhdGlvbiBmb3IgY2x1
-c3RlcjIuDQo+IA0KPiBDYW4geW91IHBsZWFzZSBnaXZlIGRldGFpbCBvZiB0aGUgZXhhY3QgY29k
-ZSBwYXRoLCBmb3IgbWFpbmxpbmUga2VybmVsIA0KPiA/IEkgYW0gbm90IHN1cmUgd2hpY2gga3dv
-cmtlciB0aHJlYWQgYXJlIHlvdSB0YWxraW5nIGFib3V0IGhlcmUuDQoNClBsZWFzZSBhbHNvIHRl
-bGwgdXMgeW91ciBjcHVmcmVxIGdvdmVybm9yLiBUaGUgc2NoZWR1dGlsIGdvdmVybm9yIGF0IG1h
-aW5saW5lIGNhbiBoYW5kbGUgdGhvc2Ugc2l0dWF0aW9ucyBhbmQgd2UgcmVidWlsZCB0aGUgcGVy
-ZiBkb21haW5zIGhlcmUgWzFdLg0KDQo+IA0KPj4gcGRfaW5pdCgpIGlzIGNhbGxlZCBmcm9tIHRo
-ZSBjcHVmcmVxIG5vdGlmaWNhdGlvbiBvZiANCj4+IENQVUZSRVFfQ1JFQVRFX1BPTElDWSBpbiBj
-cHVmcmVxX29ubGluZSgpLCB3aGljaCBpcyBlYXJsaWVyIHRoYW4gdGhhdCANCj4+IGNwdWZyZXFf
-ZHJpdmVyLT5yZWdpc3Rlcl9lbSgpIGlzIGNhbGxlZC4NCg0KVmlyZXNoLCBJZiB0aGF0J3MgYW4g
-aXNzdWUgZm9yIG90aGVyIGdvdmVybm9ycywgdGhhbiBtYXliZSB3ZSBzaG91bGQgYWRkcmVzcyB0
-aGF0LiBJTU8gdGhlIHBhdGNoIGp1c3QgcmVsaWVzIG9uIHNpZGUtZWZmZWN0IGluIGFyY2hfdG9w
-b2xvZ3kuYyB1cGRhdGVfdG9wb2xvZ3lfZmxhZ3Nfd29ya2ZuKCkuIFRoYXQgd291bGQgYmUgYSB3
-b3JrYXJvdW5kIGFuZCBkYW5nZXJvdXMgaWYgc29tZW9uZSB3b3VsZCBjaGFuZ2UgdGhhdCBhcmNo
-X3RvcG9sb2d5LmMgZGVzaWduLiBTaG91bGRuJ3Qgd2UgY29tZSB1cCB3aXRoIHNvbWV0aGluZyBy
-ZWxpYWJsZSBpbnNpZGUgdGhlIGNwdWZyZXEuYyBpZiB0aGVyZSBpcyBhIHJlYWwgaXNzdWU/DQpF
-dmVuIG5vdywgdGhlc2UgdHdvIG1lY2hhbmlzbXM6DQoxLiBpbiB0aGUgc2NoZWR1dGlsIFsxXQ0K
-Mi4gaW4gdGhlIHVwZGF0ZV90b3BvbG9neV9mbGFnc193b3JrZm4oKSBhcmUgYSBiaXQgbGVha3kg
-KGluIHRlcm1zIG9mIGRlc2lnbiBob2xlcykuDQoNClJlZ2FyZHMsDQpMdWthc3oNCg0KWzFdDQpo
-dHRwczovL2FwYzAxLnNhZmVsaW5rcy5wcm90ZWN0aW9uLm91dGxvb2suY29tLz91cmw9aHR0cHMl
-M0ElMkYlMkZlbGl4aXIuYm9vdGxpbi5jb20lMkZsaW51eCUyRmxhdGVzdCUyRnNvdXJjZSUyRmtl
-cm5lbCUyRnNjaGVkJTJGY3B1ZnJlcV9zY2hlZHV0aWwuYyUyM0w4NTgmZGF0YT0wNSU3QzAxJTdD
-dmluY2VudHdhbmczJTQwbGVub3ZvLmNvbSU3Q2M2OWI3ZGNhNDQwMTQ3NGJkMjM4MDhkYWY5MzVi
-ZmQ1JTdDNWM3ZDBiMjhiZGY4NDEwY2FhOTM0ZGYzNzJiMTYyMDMlN0MwJTdDMCU3QzYzODA5NjMw
-NjUwNzM5MjE0NCU3Q1Vua25vd24lN0NUV0ZwYkdac2IzZDhleUpXSWpvaU1DNHdMakF3TURBaUxD
-SlFJam9pVjJsdU16SWlMQ0pCVGlJNklrMWhhV3dpTENKWFZDSTZNbjAlM0QlN0MzMDAwJTdDJTdD
-JTdDJnNkYXRhPVdUUHBXRHl0SXNiZmRXOTIwY0dOaUhoRXM3dWRnclgwTzc4c0FoOEpWN0klM0Qm
-cmVzZXJ2ZWQ9MA0KDQo=
+On 18/01/2023 09:59, Stephan Gerhold wrote:
+> On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
+>> Add msm8939 a derivative SoC of msm8916. This SoC contains a number of key
+>> differences to msm8916.
+>>
+>> - big.LITTLE Octa Core - quad 1.5GHz + quad 1.0GHz
+>> - DRAM 1x800 LPDDR3
+>> - Camera 4+4 lane CSI
+>> - Venus @ 1080p60 HEVC
+>> - DSI x 2
+>> - Adreno A405
+>> - WiFi wcn3660/wcn3680b 802.11ac
+>>
+>> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+>> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+>> Co-developed-by: Jun Nie <jun.nie@linaro.org>
+>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+>> Co-developed-by: Benjamin Li <benl@squareup.com>
+>> Signed-off-by: Benjamin Li <benl@squareup.com>
+>> Co-developed-by: James Willcox <jwillcox@squareup.com>
+>> Signed-off-by: James Willcox <jwillcox@squareup.com>
+>> Co-developed-by: Leo Yan <leo.yan@linaro.org>
+>> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+>> Co-developed-by: Joseph Gates <jgates@squareup.com>
+>> Signed-off-by: Joseph Gates <jgates@squareup.com>
+>> Co-developed-by: Max Chen <mchen@squareup.com>
+>> Signed-off-by: Max Chen <mchen@squareup.com>
+>> Co-developed-by: Zac Crosby <zac@squareup.com>
+>> Signed-off-by: Zac Crosby <zac@squareup.com>
+>> Co-developed-by: Vincent Knecht <vincent.knecht@mailoo.org>
+>> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
+>> Co-developed-by: Stephan Gerhold <stephan@gerhold.net>
+>> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>> ---
+>>   arch/arm64/boot/dts/qcom/msm8939.dtsi | 2393 +++++++++++++++++++++++++
+>>   1 file changed, 2393 insertions(+)
+>>   create mode 100644 arch/arm64/boot/dts/qcom/msm8939.dtsi
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/msm8939.dtsi b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+>> new file mode 100644
+>> index 0000000000000..8cd358a9fe623
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/qcom/msm8939.dtsi
+>> @@ -0,0 +1,2393 @@
+>> [...]
+>> +	cpus {
+>> +		#address-cells = <1>;
+>> +		#size-cells = <0>;
+>> +
+>> +		cpu0: cpu@100 {
+>> +			compatible = "arm,cortex-a53";
+>> +			device_type = "cpu";
+>> +			enable-method = "spin-table";
+>> +			reg = <0x100>;
+>> +			next-level-cache = <&L2_1>;
+>> +			power-domains = <&vreg_dummy>;
+>> +			power-domain-names = "cpr";
+> 
+> Why are you adding a dummy power domain here? IMO this would be better
+> added together with CPR. Especially because I would expect two power
+> domains here later ("mx", "cpr"). For cpufreq you also need to make
+> votes for the "MSM8939_VDDMX" power domain.
+
+I'm pretty sure there's binding checks that demand this but, I will 
+re-verify it.
+
+> 
+>> +			qcom,acc = <&acc0>;
+>> +			qcom,saw = <&saw0>;
+>> +			cpu-idle-states = <&CPU_SLEEP_0>;
+>> +			clocks = <&apcs1_mbox>;
+>> +			#cooling-cells = <2>;
+>> +			L2_1: l2-cache {
+>> +				compatible = "cache";
+>> +				cache-level = <2>;
+>> +			};
+>> +		};
+>> [...]
+>> +	soc: soc@0 {
+>> +		compatible = "simple-bus";
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0 0 0xffffffff>;
+>> +
+>> +		rng@22000 {
+>> +			compatible = "qcom,prng";
+>> +			reg = <0x00022000 0x200>;
+>> +			clocks = <&gcc GCC_PRNG_AHB_CLK>;
+>> +			clock-names = "core";
+>> +		};
+>> +
+>> +		qfprom: qfprom@5c000 {
+>> +			compatible = "qcom,msm8916-qfprom", "qcom,qfprom";
+>> +			reg = <0x0005c000 0x1000>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +
+>> +			tsens_caldata: caldata@a0 {
+>> +				reg = <0xa0 0x5c>;
+>> +			};
+>> +			cpr_efuse_init_voltage1: ivoltage1@dc {
+>> +				reg = <0xdc 0x4>;
+>> +				bits = <4 6>;
+>> +			};
+>> +			cpr_efuse_init_voltage2: ivoltage2@da {
+>> +				reg = <0xda 0x4>;
+>> +				bits = <2 6>;
+>> +			};
+>> +			cpr_efuse_init_voltage3: ivoltage3@d8 {
+>> +				reg = <0xd8 0x4>;
+>> +				bits = <0 6>;
+>> +			};
+>> +			cpr_efuse_quot1: quot1@dd {
+>> +				reg = <0xdd 0x8>;
+>> +				bits = <2 12>;
+>> +			};
+>> +			cpr_efuse_quot2: quot2@db {
+>> +				reg = <0xdb 0x8>;
+>> +				bits = <0x0 12>;
+>> +			};
+>> +			cpr_efuse_ring1: ring1@de {
+>> +				reg = <0xde 0x4>;
+>> +				bits = <6 3>;
+>> +			};
+>> +			cpr_efuse_revision: revision@5 {
+>> +				reg = <0x5 0x1>;
+>> +				bits = <5 1>;
+>> +			};
+>> +			cpr_efuse_revision_high: revision-high@7 {
+>> +				reg = <0x7 0x1>;
+>> +				bits = <0 1>;
+>> +			};
+>> +			cpr_efuse_pvs_version: pvs@3 {
+>> +				reg = <0x3 0x1>;
+>> +				bits = <5 1>;
+>> +			};
+>> +			cpr_efuse_pvs_version_high: pvs-high@6 {
+>> +				reg = <0x6 0x1>;
+>> +				bits = <2 2>;
+>> +			};
+>> +			cpr_efuse_speedbin: speedbin@c {
+>> +				reg = <0xc 0x1>;
+>> +				bits = <2 3>;
+>> +			};
+> 
+> Please add the CPR items later together with CPR. This will make the
+> review a bit easier because we don't need to check that these are right
+> for the initial submission.
+
+I will excise this if I can, i.e. if the system will still boot once done.
+
+> 
+>> +		};
+>> [...]
+>> +		mdss: display-subsystem@1a00000 {
+>> +			compatible = "qcom,mdss";
+>> +			reg = <0x01a00000 0x1000>,
+>> +			      <0x01ac8000 0x3000>;
+>> +			reg-names = "mdss_phys", "vbif_phys";
+>> +
+>> +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-controller;
+>> +
+>> +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
+>> +				 <&gcc GCC_MDSS_AXI_CLK>,
+>> +				 <&gcc GCC_MDSS_VSYNC_CLK>;
+>> +			clock-names = "iface",
+>> +				      "bus",
+>> +				      "vsync";
+>> +
+>> +			power-domains = <&gcc MDSS_GDSC>;
+>> +
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			#interrupt-cells = <1>;
+>> +			ranges;
+>> +
+>> +			mdp: display-controller@1a01000 {
+>> +				compatible = "qcom,mdp5";
+>> +				reg = <0x01a01000 0x89000>;
+>> +				reg-names = "mdp_phys";
+>> +
+>> +				interrupt-parent = <&mdss>;
+>> +				interrupts = <0>;
+>> +
+>> +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
+>> +					 <&gcc GCC_MDSS_AXI_CLK>,
+>> +					 <&gcc GCC_MDSS_MDP_CLK>,
+>> +					 <&gcc GCC_MDSS_VSYNC_CLK>,
+>> +					 <&gcc GCC_MDP_TBU_CLK>,
+>> +					 <&gcc GCC_MDP_RT_TBU_CLK>;
+>> +				clock-names = "iface",
+>> +					      "bus",
+>> +					      "core",
+>> +					      "vsync",
+>> +					      "tbu",
+>> +					      "tbu_rt";
+>> +
+>> +				iommus = <&apps_iommu 4>;
+>> +
+>> +				interconnects = <&snoc_mm MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>,
+>> +						<&snoc_mm MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
+>> +						<&pcnoc MASTER_SPDM &snoc SLAVE_IMEM>;
+>> +				interconnect-names = "mdp0-mem", "mdp1-mem", "register-mem";
+> 
+> As I mentioned a already in a direct email at some point, AFAIU adding
+> interconnects should be an [almost-] all or nothing step. If you only
+> add interconnects for MDP then everything else that needs bandwidth will
+> either break or only continue working as a mere side effect of MDP
+> voting for permanent high bandwidth.
+
+We did discuss that. You'll also recall we concluded we would have to 
+revert this patch to make that happen.
+
+commit 76a748e2c1aa976d0c7fef872fa6ff93ce334a8a
+Author: Leo Yan <leo.yan@linaro.org>
+Date:   Sat Apr 16 09:26:34 2022 +0800
+
+     interconnect: qcom: msm8939: Use icc_sync_state
+
+but then why not revert for all of these SoCs too ?
+
+drivers/interconnect/qcom/msm8939.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/msm8974.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/msm8996.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/osm-l3.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sc7180.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sc7280.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sc8180x.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sc8280xp.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sdm845.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sdx55.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sdx65.c:		.sync_state = icc_sync_state,
+drivers/interconnect/qcom/sm6350.c:		.sync_state = icc_sync_state,
+
+until such time as we have an all or nothing interconnect setup for each 
+of those SoCs ?
+
+Yes I take your point "some peripherals will appear to work only as a 
+result of the AHB vote the MDP casts here" but, that is a bug in the 
+definition of that hypothetical peripheral.
+
+The MDP/display won't run without the interconnect here and the only way 
+to pull it is to remove sync_state which begs the question why not pull 
+sync_state for all SoCs without a perfect interconnect description ?
+
+I think that would be a retrograde step.
+
+> (Semi-related side note: "register-mem" is neither documented nor used
+>   anywhere in the code?)
+
+Oh do you have me there though, this is a holdover from the Android 
+dtsi. I'll see if it makes a difference dropping this.
+
+> 
+>> +
+>> +				ports {
+>> +					#address-cells = <1>;
+>> +					#size-cells = <0>;
+>> +
+>> +					port@0 {
+>> +						reg = <0>;
+>> +						mdp5_intf1_out: endpoint {
+>> +							remote-endpoint = <&dsi0_in>;
+>> +						};
+>> +					};
+>> +
+>> +					port@1 {
+>> +						reg = <1>;
+>> +						mdp5_intf2_out: endpoint {
+>> +							remote-endpoint = <&dsi1_in>;
+>> +						};
+>> +					};
+>> +				};
+>> +			};
+>> +
+>> +			dsi0: dsi@1a98000 {
+>> +				compatible = "qcom,msm8916-dsi-ctrl",
+>> +					     "qcom,mdss-dsi-ctrl";
+>> +				reg = <0x01a98000 0x25c>;
+>> +				reg-names = "dsi_ctrl";
+>> +
+>> +				interrupt-parent = <&mdss>;
+>> +				interrupts = <4>;
+>> +
+>> +				power-domains = <&gcc MDSS_GDSC>;
+> 
+> Why is MDSS_GDSC defined again here? The parent-child relationship of
+> MDSS->MDP should ensure that the MDSS_GDSC from the parent mdss node
+> is on when dsi is.
+> 
+>> +
+>> +				clocks = <&gcc GCC_MDSS_MDP_CLK>,
+>> +					 <&gcc GCC_MDSS_AHB_CLK>,
+>> +					 <&gcc GCC_MDSS_AXI_CLK>,
+>> +					 <&gcc GCC_MDSS_BYTE0_CLK>,
+>> +					 <&gcc GCC_MDSS_PCLK0_CLK>,
+>> +					 <&gcc GCC_MDSS_ESC0_CLK>;
+>> +				clock-names = "mdp_core",
+>> +					      "iface",
+>> +					      "bus",
+>> +					      "byte",
+>> +					      "pixel",
+>> +					      "core";
+>> +				assigned-clocks = <&gcc BYTE0_CLK_SRC>,
+>> +						  <&gcc PCLK0_CLK_SRC>;
+>> +				assigned-clock-parents = <&dsi_phy0 0>,
+>> +							 <&dsi_phy0 1>;
+>> +
+>> +				phys = <&dsi_phy0>;
+>> +				status = "disabled";
+>> +
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +
+>> +				ports {
+>> +					#address-cells = <1>;
+>> +					#size-cells = <0>;
+>> +
+>> +					port@0 {
+>> +						reg = <0>;
+>> +						dsi0_in: endpoint {
+>> +							remote-endpoint = <&mdp5_intf1_out>;
+>> +						};
+>> +					};
+>> +
+>> +					port@1 {
+>> +						reg = <1>;
+>> +						dsi0_out: endpoint {
+>> +						};
+>> +					};
+>> +				};
+>> +			};
+>> +
+>> +			dsi_phy0: phy@1a98300 {
+>> +				compatible = "qcom,dsi-phy-28nm-lp";
+>> +				reg = <0x01a98300 0xd4>,
+>> +				      <0x01a98500 0x280>,
+>> +				      <0x01a98780 0x30>;
+>> +				reg-names = "dsi_pll",
+>> +					    "dsi_phy",
+>> +					    "dsi_phy_regulator";
+>> +
+>> +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
+>> +					 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>> +				clock-names = "iface", "ref";
+>> +
+>> +				#clock-cells = <1>;
+>> +				#phy-cells = <0>;
+>> +				status = "disabled";
+>> +			};
+>> +
+>> +			dsi1: dsi@1aa0000 {
+>> +				compatible = "qcom,msm8916-dsi-ctrl",
+>> +					     "qcom,mdss-dsi-ctrl";
+>> +				reg = <0x01aa0000 0x25c>;
+>> +				reg-names = "dsi_ctrl";
+>> +
+>> +				interrupt-parent = <&mdss>;
+>> +				interrupts = <5>;
+>> +
+>> +				power-domains = <&gcc MDSS_GDSC>;
+>> +
+>> +				clocks = <&gcc GCC_MDSS_MDP_CLK>,
+>> +					 <&gcc GCC_MDSS_AHB_CLK>,
+>> +					 <&gcc GCC_MDSS_AXI_CLK>,
+>> +					 <&gcc GCC_MDSS_BYTE1_CLK>,
+>> +					 <&gcc GCC_MDSS_PCLK1_CLK>,
+>> +					 <&gcc GCC_MDSS_ESC1_CLK>;
+>> +				clock-names = "mdp_core",
+>> +					      "iface",
+>> +					      "bus",
+>> +					      "byte",
+>> +					      "pixel",
+>> +					      "core";
+>> +				assigned-clocks = <&gcc BYTE1_CLK_SRC>,
+>> +						  <&gcc PCLK1_CLK_SRC>;
+>> +				assigned-clock-parents = <&dsi_phy1 0>,
+>> +							 <&dsi_phy1 1>;
+> 
+> Does this work? Confusingly, BYTE1/PCLK1_CLK_SRC can only have dsi0pll
+> as parent in gcc-msm8939 and not the dsi1pll. <&dsi_phy1 0/1> is not a
+> valid parent for those clocks.
+
+No you're right, its all wrong. I will correct it
+
+         mdss_dsi0: qcom,mdss_dsi@1a98000 {
+                 compatible = "qcom,mdss-dsi-ctrl";
+                 label = "MDSS DSI CTRL->0";
+                 cell-index = <0>;
+                 reg = <0x1a98000 0x25c>,
+                       <0x1a98500 0x2b0>,
+                       <0x193e000 0x30>;
+                 reg-names = "dsi_ctrl", "dsi_phy", "mmss_misc_phys";
+                 qcom,mdss-fb-map = <&mdss_fb0>;
+                 qcom,mdss-mdp = <&mdss_mdp>;
+                 gdsc-supply = <&gdsc_mdss>;
+                 vdda-supply = <&pm8916_l2>;
+                 vdd-supply = <&pm8916_l17>;
+                 vddio-supply = <&pm8916_l6>;
+                 clocks = <&clock_gcc clk_gcc_mdss_mdp_clk>,
+                          <&clock_gcc clk_gcc_mdss_ahb_clk>,
+                          <&clock_gcc clk_gcc_mdss_axi_clk>,
+                          <&clock_gcc_mdss clk_gcc_mdss_byte0_clk>,
+                          <&clock_gcc_mdss clk_gcc_mdss_pclk0_clk>,
+                          <&clock_gcc clk_gcc_mdss_esc0_clk>;
+---
+bod
