@@ -2,111 +2,100 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25336728E7
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 21:01:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ACD46728FB
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 21:05:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjARUBY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 15:01:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S229664AbjARUFN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 15:05:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjARUBJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 15:01:09 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A2259E6E
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 12:01:02 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso2419271wmq.5
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 12:01:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7dYEwLlHafATWFxoot4gAkpZeqySUmli4e77a+Kz66Q=;
-        b=YG2vrGt09g0yHnyyvId1HwQgn8Ll2rfdESrrdfrmWb1rRAXLf92doKETB0eY4JhCdV
-         d8ZN3RPTPar5q3ru582m4Cb0kbKdASv0uiQMcABTflWx0A0NajrZo5pOSJQXW4Ke/gYu
-         TNT0UTkw9nAtuGiQ7Pcle7xM68tzESmuBMgS6l4HYXRmZqzXi6iXffITyI67mO1lbQf2
-         I4iu3rdhJwsLHUFK/mLaElQZPfd2DOoygFff0ey2+2HTidDl/8tXiHgWCNVtKBV4RKsH
-         aC+EmW2ddQCDx+YvPw2o81xfKit3Ek3bJWCZ/m5c1q2l3ZR87lV4KOC0L+jI/AuetXCX
-         Luew==
+        with ESMTP id S230136AbjARUE5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 15:04:57 -0500
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35AF059761;
+        Wed, 18 Jan 2023 12:04:50 -0800 (PST)
+Received: by mail-ed1-f48.google.com with SMTP id y11so120930edd.6;
+        Wed, 18 Jan 2023 12:04:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7dYEwLlHafATWFxoot4gAkpZeqySUmli4e77a+Kz66Q=;
-        b=EM/Fgf7dSSUabEObinhnr/Hp/QvGi2CXLIWiq2m5Pg7GJVYw9WnD/Rda/gKCLqaENI
-         Fm9G19btza6sZjlM1FKcuCE09wIn1m/0Ht+i98RMCZ2JIIctYp4BXLq+tmJs43OYcg5S
-         gD6lJD1KszypDPafPhbw5BX4Iu0LX1UEXTsBSuKB5Ey3UHvUi/gHkizORYOm3nit6yko
-         vTTpb0kV/cetOa7vPpwqMP+skrUcZoyZWl520EjiQw68S54amFfAeStAOQbpT1/nZ1H6
-         pzv/8Gz+k/9VSDsEWUAlcrhPGPOfSi7vzjLAiSgAYMEGTYjXTbdlwqzWRAd0UckOk2lm
-         FvUw==
-X-Gm-Message-State: AFqh2kr8/fXjlqwDTB99mMoq7cntj1CMIdGVTNKTaXb1CSoYYeowNgo2
-        T2m/VtewPsonvX8zqrqo4PWCMw==
-X-Google-Smtp-Source: AMrXdXsKOk9RGH34JouXfHO4lX3tTXExBI8r27KQ19DpAYc2hCkx4gJMYsL82f9A3100rJ6R74M13g==
-X-Received: by 2002:a05:600c:714:b0:3d9:ed30:79d with SMTP id i20-20020a05600c071400b003d9ed30079dmr7915447wmn.18.1674072060565;
-        Wed, 18 Jan 2023 12:01:00 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id b5-20020a05600c150500b003daf98d7e35sm2635658wmg.14.2023.01.18.12.00.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 12:01:00 -0800 (PST)
-Message-ID: <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
-Date:   Wed, 18 Jan 2023 21:00:59 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KYqhoJmoJb6YJL3uVlmiN1AfZHw+rBK4PG67UqSeJlo=;
+        b=wKnzl4t+jJ89XF5NsRd8My22iDV8UEPy6gKFX17ytValLkBabN9s9fbnrPAdIq+Hjj
+         TsEGvkWjd1lP73BOhQsgTvW5fYWW5lCHe83xpVK7Te8TtxNsPxxfgz6FCez+tmzjNoXb
+         YmIaf1s5DowTYv4QVmzQRzjwmasrbTCz6wr6ofV/i6W9UL3e+5Jo2fpot6OSTjhFyXV1
+         fp9FrbATt9Tc3fe/V7zNHgROQrk2Ye5HZ7HmUZqpJEXJa1ouGFDkhcW5zTk83+ut+PVv
+         sNkQIpE8OJHegi7rOipNMZ7Ho1edYUqCOupaWU6UesnEx2T6Rt1lWblCMMWZZYw2SaOK
+         C0hA==
+X-Gm-Message-State: AFqh2kqOnXECTYIu9F/NySgZSjGvsxK56Rtfv0clRb3i0x5ITB4kQm3S
+        Y0M/kJnNLilqGTIF4MEfIOpICPtyB8jUnQisdpo=
+X-Google-Smtp-Source: AMrXdXuHO0wmN6pgwxtfJledZud+cVIlKlvRCmM5bb4+W6FJd7fkqKGo2TOTPc3Wf+4fwiv+cPuDldnJNpPWdZ9oVB4=
+X-Received: by 2002:a05:6402:94a:b0:47f:7465:6e76 with SMTP id
+ h10-20020a056402094a00b0047f74656e76mr833058edz.181.1674072288871; Wed, 18
+ Jan 2023 12:04:48 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
- <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
- <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
- <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
- <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20230118012057.4423-1-wangdeming@inspur.com>
+In-Reply-To: <20230118012057.4423-1-wangdeming@inspur.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 18 Jan 2023 21:04:37 +0100
+Message-ID: <CAJZ5v0i+2a_Bm1oBoYGoU0Sps-w+w2Eb5YWuVXvjxZvz97fGEg@mail.gmail.com>
+Subject: Re: [PATCH] thermal/intel: Modify function description
+To:     Deming Wang <wangdeming@inspur.com>
+Cc:     sujith.thomas@intel.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/01/2023 20:16, srinivas pandruvada wrote:
+On Wed, Jan 18, 2023 at 2:21 AM Deming Wang <wangdeming@inspur.com> wrote:
+>
+> Delete the wrong description and add the corresponding description.
+>
+> Signed-off-by: Deming Wang <wangdeming@inspur.com>
+> ---
+>  drivers/thermal/intel/intel_menlow.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
+> index 3f885b08a490..5a6ad0552311 100644
+> --- a/drivers/thermal/intel/intel_menlow.c
+> +++ b/drivers/thermal/intel/intel_menlow.c
+> @@ -232,9 +232,9 @@ static DEFINE_MUTEX(intel_menlow_attr_lock);
+>
+>  /*
+>   * sensor_get_auxtrip - get the current auxtrip value from sensor
+> - * @name: Thermalzone name
+> - * @auxtype : AUX0/AUX1
+> - * @buf: syfs buffer
+> + * @handle: Object handle
+> + * @index : GET_AUX1/GET_AUX0
+> + * @value : The address will be fill by the value
+>   */
+>  static int sensor_get_auxtrip(acpi_handle handle, int index,
+>                                                         unsigned long long *value)
+> @@ -254,9 +254,9 @@ static int sensor_get_auxtrip(acpi_handle handle, int index,
+>
+>  /*
+>   * sensor_set_auxtrip - set the new auxtrip value to sensor
+> - * @name: Thermalzone name
+> - * @auxtype : AUX0/AUX1
+> - * @buf: syfs buffer
+> + * @handle: Object handle
+> + * @index : GET_AUX1/GET_AUX0
+> + * @value : The value will be set
+>   */
+>  static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
+>  {
+> --
 
-[ ... ]
-
->>> But we'd better wait for the thermald test result from Srinvias.
->>
->> A quick test show that things still work with thermald and these
->> changes.
-> 
-> But I have a question. In some devices trip point temperature is not
-> static. When hardware changes, we get notification. For example
-> INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
-> Currently get_trip can get the latest changed value. But if we
-> preregister, we need some mechanism to update them.
-
-When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we call 
-int340x_thermal_read_trips() which in turn updates the trip points.
-
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Applied as 6.3 material with edits in the subject and a modified
+changelog, thanks!
