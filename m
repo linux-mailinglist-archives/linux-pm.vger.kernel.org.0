@@ -2,193 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A36D6727F9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 20:16:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7736728C4
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 20:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjARTQt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 14:16:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S229483AbjARTy5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 14:54:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjARTQs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 14:16:48 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F29166FE;
-        Wed, 18 Jan 2023 11:16:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674069406; x=1705605406;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=kyLK2MQ6l6mvCoDXunF6Gzt2wFf1x80d2Y5A7KOX1NU=;
-  b=NZU9LAmxfgz5Gi5onH2cXJJtTiwSitm7TmplXqcpLNnKNx3BvkJM1Qyn
-   l6jKPqOZjfGK/Vxni2GaOHn8sGAavVzpsTWB+dY7l71gUwL16Rj3EL8Wh
-   ZblwJk067dn822xLpJmpM1OVxm8OrsjSJAWg9fp4etEJwVxHO3GdKvigH
-   yuYyr0kbrWMWrk/26BML48oTtuUa/629P2Ha5S/8dLTiNTorkPv6tn3Zj
-   xIWjY+B9o9Z0G43ZQ2z2TOd84cQPATJrV4xWanLvLo128UUNDa7sqli7n
-   WdoiSyBUsC/cWJH9JuhpaRJNN2sl73Jkyv0jZfaax2ZLg2PKrTVNHQaMP
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="325126805"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="325126805"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:16:41 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="833707773"
-X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="833707773"
-Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:16:41 -0800
-Message-ID: <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Date:   Wed, 18 Jan 2023 11:16:41 -0800
-In-Reply-To: <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
-         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
-         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
-         <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S229468AbjARTy4 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 14:54:56 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618B6589BE
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 11:54:55 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id kt14so7291ejc.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 11:54:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PS/7KuaB+IDJ4czpYZHfKfWWHUA84RHoIsTNfT8XuEU=;
+        b=S0yIBmB+f/4oFnfqAxjqm9aQJfCPt643cmPeAJKJPeekK2T3v7n5HehsoVvxSE6bU6
+         Y7Bg7s+JENwF9NUn2L7RZFzpVypzZaRMOCFOxolI4MU9wCdSvZYVPSKQnQ3nH05aA/84
+         qlu+z0GkLuieC2sDWH54TBMrxtjFX3knmLW7FotnDQns8sYrlNMGNpJrgH6omg5QQ8S4
+         W8zcVnI5enQv6Oh9l78bEWs5lAVF8Y7bIaQZgg0WvRZwQFUoMY9yWfcuYfKQI31lvRMW
+         t8NxgxIyBXVFwA15TebgbIaBGylGv0Wr/kfDtzyw+peIGIfPEmVeQnc6pnc1LCfqTSS0
+         eIWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PS/7KuaB+IDJ4czpYZHfKfWWHUA84RHoIsTNfT8XuEU=;
+        b=nOkXY1u1Lw1oFxtoqkDb5BTnBLQ3cblKY+urwzLV0zBvtuFhtUZH+FoeQXX6Eclcs1
+         RE82QABQgfgzJi/U0QQ4hx/Zn0yoeK3kr0rGRraXaG3TRQNGBDoh4Z7znOpa+fXygQF1
+         VGfexjnOfYaeihWJ8u+ovsiuuuJusBEVnvkZTl4pi3KFBlDqnda7z829o8fXsdHmhgfv
+         VODD3wKk42JlJGWnXU8hhpyUun3YkG2gkq2Ra8mQwJ16D6FwWgBVQ5tDNcQ9Rm7sT9m9
+         yGSqaabj4qKqzi73x3mgA5Zs+AdE+To3JQg7m73xc4TA73TRF07rIonyUYHY7n6IlQjP
+         AJTw==
+X-Gm-Message-State: AFqh2krwpJadwJT9R3FSsqv1E8eIFQRyBaNYGdjBNoY5OIwqTD4Jncbw
+        j4brBEgYbfzoarsb32BEsWdS/g==
+X-Google-Smtp-Source: AMrXdXsTXO2h6sqsyvxXkLtL0jBXFCsyXKu+HZK+lAdfdFRJ7Z+o+GbGbEHYDji0L9trJsJrB6sDew==
+X-Received: by 2002:a17:907:1a46:b0:84c:e89e:bb4c with SMTP id mf6-20020a1709071a4600b0084ce89ebb4cmr4063246ejc.49.1674071694016;
+        Wed, 18 Jan 2023 11:54:54 -0800 (PST)
+Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
+        by smtp.gmail.com with ESMTPSA id f17-20020a170906495100b0086dd8f20a6asm5923513ejt.77.2023.01.18.11.54.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 11:54:53 -0800 (PST)
+Message-ID: <f07bbbb6-3343-19c7-bd94-c8c239f1cbc8@linaro.org>
+Date:   Wed, 18 Jan 2023 20:54:51 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 8/9] interconnect: qcom: rpm: Add a way to always set
+ QoS registers
+Content-Language: en-US
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
+        Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
+ <20230116132152.405535-9-konrad.dybcio@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230116132152.405535-9-konrad.dybcio@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2023-01-18 at 11:01 -0800, srinivas pandruvada wrote:
-> On Wed, 2023-01-18 at 13:48 +0000, Zhang, Rui wrote:
-> > On Wed, 2023-01-18 at 10:53 +0100, Daniel Lezcano wrote:
-> > > Hi,
-> > > 
-> > > On 13/01/2023 19:02, Daniel Lezcano wrote:
-> > > > Recently sent as a RFC, the thermal ACPI for generic trip
-> > > > points
-> > > > is
-> > > > a set of
-> > > > functions to fill the generic trip points structure which will
-> > > > become the
-> > > > standard structure for the thermal framework and its users.
-> > > > 
-> > > > Different Intel drivers and the ACPI thermal driver are using
-> > > > the
-> > > > ACPI tables to
-> > > > get the thermal zone information. As those are getting the same
-> > > > information,
-> > > > providing this set of ACPI function with the generic trip
-> > > > points
-> > > > will
-> > > > consolidate the code.
-> > > > 
-> > > > Also, the Intel PCH and the Intel 34xx drivers are converted to
-> > > > use
-> > > > the generic
-> > > > trip points relying on the ACPI generic trip point parsing
-> > > > functions.
-> > > > 
-> > > > These changes have been tested on a Thinkpad Lenovo x280 with
-> > > > the
-> > > > PCH and
-> > > > INT34xx drivers. No regression have been observed, the trip
-> > > > points
-> > > > remain the
-> > > > same for what is described on this system.
-> > > 
-> > > Are we ok with this series ?
-> > > 
-> > > Sorry for insisting but I would like to go forward with the
-> > > generic
-> > > thermal trip work. There are more patches pending depending on
-> > > this
-> > > series.
-> > 
-> > The whole series looks good to me.
-> > 
-> > Reviwed-by: Zhang Rui <rui.zhang@intel.com>
-> > 
-> > But we'd better wait for the thermald test result from Srinvias.
+
+
+On 16.01.2023 14:21, Konrad Dybcio wrote:
+> On newer SoCs (there's no clear boundary, but probably "new enough"
+> means every interconnect provider is either BIMC or QNoC and there
+> are no old-style NoC hosts) we're expected to set QoS registers
+> regardless of the ap_owned param. Add a bool in the qcom_icc_provider
+> and make the logic assume it's okay to set the registers when it's
+> set.
 > 
-> A quick test show that things still work with thermald and these
-> changes.
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+Argh, I only noticed now that this patch is incomplete,
+missing setting the value in qnoc_probe() and adding a
+similar struct member to qcom_icc_desc..
 
-But I have a question. In some devices trip point temperature is not
-static. When hardware changes, we get notification. For example
-INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
-Currently get_trip can get the latest changed value. But if we
-preregister, we need some mechanism to update them.
-
-Thanks,
-Srinivas
-
-
-
-> Thanks,
-> Srinivas
+Konrad
+>  drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>  drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 > 
-> > 
-> > thanks,
-> > rui
-> > > 
-> > > Thanks
-> > >    -- Daniel
-> > > 
-> > > > Changelog:
-> > > >   - V5:
-> > > >     - Fixed GTSH unit conversion, deciK -> milli C
-> > > > 
-> > > >   - V4:
-> > > >     - Fixed Kconfig option dependency, select THERMAL_ACPI if
-> > > > ACPI
-> > > > is set
-> > > >       only for the PCH driver
-> > > > 
-> > > >   - V3:
-> > > >     - Took into account Rafael's comments
-> > > >     - Used a silence option THERMAL_ACPI in order to stay
-> > > > consistent
-> > > >       with THERMAL_OF. It is up to the API user to select the
-> > > > option.
-> > > > 
-> > > >   - V2:
-> > > >     - Fix the thermal ACPI patch where the thermal_acpi.c was
-> > > > not
-> > > > included in
-> > > >       the series
-> > > >     - Provide a couple of users of this API which could have
-> > > > been
-> > > > tested on a
-> > > >       real system
-> > > > 
-> > > > Daniel Lezcano (3):
-> > > >    thermal/acpi: Add ACPI trip point routines
-> > > >    thermal/drivers/intel: Use generic trip points for intel_pch
-> > > >    thermal/drivers/intel: Use generic trip points int340x
-> > > > 
-> > > >   drivers/thermal/Kconfig                       |   4 +
-> > > >   drivers/thermal/Makefile                      |   1 +
-> > > >   drivers/thermal/intel/Kconfig                 |   1 +
-> > > >   drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
-> > > >   .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++-----
-> > > > --
-> > > > --
-> > > > --
-> > > >   .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
-> > > >   drivers/thermal/intel/intel_pch_thermal.c     |  88 ++------
-> > > >   drivers/thermal/thermal_acpi.c                | 210
-> > > > ++++++++++++++++++
-> > > >   include/linux/thermal.h                       |   8 +
-> > > >   9 files changed, 286 insertions(+), 214 deletions(-)
-> > > >   create mode 100644 drivers/thermal/thermal_acpi.c
-> > > > 
-> 
-
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 509cadf398e9..343e6021a93a 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -243,7 +243,7 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
+>  	bool vote_ap, vote_rpm;
+>  	int ret;
+>  
+> -	if (qp->type == QCOM_ICC_QNOC) {
+> +	if (qp->type == QCOM_ICC_QNOC || qp->always_set_qos) {
+>  		vote_ap = true;
+>  		vote_rpm = true;
+>  	} else {
+> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
+> index 729573f0d9fe..3c8888482a39 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.h
+> +++ b/drivers/interconnect/qcom/icc-rpm.h
+> @@ -28,6 +28,7 @@ enum qcom_icc_type {
+>   * @type: the ICC provider type
+>   * @regmap: regmap for QoS registers read/write access
+>   * @qos_offset: offset to QoS registers
+> + * @always_set_qos: whether to always set QoS registers regardless of bus type
+>   * @bus_clk_rate: bus clock rate in Hz
+>   * @bus_clks: the clk_bulk_data table of bus clocks
+>   * @intf_clks: the clk_bulk_data table of interface clocks
+> @@ -39,6 +40,7 @@ struct qcom_icc_provider {
+>  	enum qcom_icc_type type;
+>  	struct regmap *regmap;
+>  	unsigned int qos_offset;
+> +	bool always_set_qos;
+>  	u64 bus_clk_rate[2];
+>  	struct clk_bulk_data bus_clks[2];
+>  	struct clk_bulk_data intf_clks[];
