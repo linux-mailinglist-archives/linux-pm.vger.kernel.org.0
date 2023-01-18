@@ -2,192 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD9B9671710
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F97967173B
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:17:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjARJGf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 04:06:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S229630AbjARJQ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 04:16:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjARJEc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:04:32 -0500
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE3538669
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:23:58 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso823376wmc.4
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:23:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ntwZ5V+lwcuNIqseOgUdBN0ZeQdpnadVeyJPes4mYw0=;
-        b=qAcvkdrwZWHVcNstCzsHYwDd5iq0jfV72sZQA0qYP8uX8umaa01DrLKu7RGHAk4vGG
-         I9aL8yJosuURm/xZ5+jXWYLa0hZDIXXhgrtYIlv/j8WEFHmUqPoyv4MdizN1EpH8D6yh
-         HJpxOME8v3DZCcN83nIfQ982zhP+oHkPXqvf5GfuAaj1r2VNP6pqF8QvM2zCFCDMa18x
-         2oKG8SiCWy6Outaf/qowvVJIqcjE8jJfhKsooNZGBECFSRs87sP6oXywAQ/U78srKbAs
-         N42F60mtqV8Z0BzJznjKg2zSmhQxtRV4MX2MEf2DMdAfmMKWFOdz61ixV/ZzLhoYh0Mf
-         gWXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntwZ5V+lwcuNIqseOgUdBN0ZeQdpnadVeyJPes4mYw0=;
-        b=L0G/NnItUbzNldste/mEgGffyivTljXChcw3LPCuEbL6Udn3mtGlP7lKUNi0y9qbyO
-         FX76sGNbWW0snz9/G3Ps5x9DfimzF+JCF9z3TQHzuzp+nD9r9S7V2C1edSBmezPAPdS2
-         LfjGtiickZwYJxgHtJoMWkVF4LXXVGScAI3yQremrEwOEXpp5KK/C2St8e17sm+ANFLz
-         W/5P44on+D06N7DHPBnvt0Xun5HOYm325NA45r8jOIw/pZx+LSYYHJIioJrrihXD9D2x
-         VnM7FH45weO5WJgehne4h7DYOXqjlMZ1vJBP1tUS9aCUl5lGEv9pgrzG0srUdijQkd27
-         pmeQ==
-X-Gm-Message-State: AFqh2kqtiNGbr5ltPCovj3hasdG8IQtE01Q4qdsRwTew+IsJKrMi7RU8
-        KhJkGVLewF4/SksfDXbPPkPLCg==
-X-Google-Smtp-Source: AMrXdXvv1P6q/BEGO+kEaR3NCNAI+uTRe2+X7D0g9xb/FAwoHRKuCJQWY4YCGlUA2C6RsSokNfa59w==
-X-Received: by 2002:a05:600c:5545:b0:3d9:f806:2d26 with SMTP id iz5-20020a05600c554500b003d9f8062d26mr6133937wmb.7.1674030236698;
-        Wed, 18 Jan 2023 00:23:56 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id u20-20020a05600c19d400b003c6f1732f65sm1245803wmq.38.2023.01.18.00.23.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 00:23:56 -0800 (PST)
-Message-ID: <b1bf9ec6-f762-e993-edc6-1c293584c51a@linaro.org>
-Date:   Wed, 18 Jan 2023 09:23:55 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: WARNING in __thermal_cooling_device_register()
-Content-Language: en-US
-To:     Frank Rowand <frowand.list@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <06ed7c15-cd37-a0ce-b75e-b0c8d3188f3a@gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <06ed7c15-cd37-a0ce-b75e-b0c8d3188f3a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        with ESMTP id S229882AbjARJOp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:14:45 -0500
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CDE4366A4;
+        Wed, 18 Jan 2023 00:31:48 -0800 (PST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4NxfBC0917z501SW;
+        Wed, 18 Jan 2023 16:31:47 +0800 (CST)
+Received: from xaxapp03.zte.com.cn ([10.88.97.17])
+        by mse-fl2.zte.com.cn with SMTP id 30I8VYIl048219;
+        Wed, 18 Jan 2023 16:31:34 +0800 (+08)
+        (envelope-from ye.xingchen@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 18 Jan 2023 16:31:36 +0800 (CST)
+Date:   Wed, 18 Jan 2023 16:31:36 +0800 (CST)
+X-Zmail-TransId: 2af963c7ae68ffffffffe400015c
+X-Mailer: Zmail v1.0
+Message-ID: <202301181631362083446@zte.com.cn>
+Mime-Version: 1.0
+From:   <ye.xingchen@zte.com.cn>
+To:     <daniel.lezcano@linaro.org>
+Cc:     <mmayer@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
+        <rafael@kernel.org>, <amitk@kernel.org>, <rui.zhang@intel.com>,
+        <f.fainelli@gmail.com>, <linux-pm@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsOiBicmNtc3RiX3RoZXJtYWw6IFVzZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 30I8VYIl048219
+X-Fangmail-Gw-Spam-Type: 0
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63C7AE73.000/4NxfBC0917z501SW
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Hi Frank,
+Convert platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-Thanks for reporting the WARNING.
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ drivers/thermal/broadcom/brcmstb_thermal.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-It is currently being fixed:
+diff --git a/drivers/thermal/broadcom/brcmstb_thermal.c b/drivers/thermal/broadcom/brcmstb_thermal.c
+index c79c6cfdd74d..4d02c28331e3 100644
+--- a/drivers/thermal/broadcom/brcmstb_thermal.c
++++ b/drivers/thermal/broadcom/brcmstb_thermal.c
+@@ -321,7 +321,6 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+ 	const struct thermal_zone_device_ops *of_ops;
+ 	struct thermal_zone_device *thermal;
+ 	struct brcmstb_thermal_priv *priv;
+-	struct resource *res;
+ 	int irq, ret;
 
-https://lore.kernel.org/all/20230112154721.452292-1-caleb.connolly@linaro.org/
+ 	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
+@@ -332,8 +331,7 @@ static int brcmstb_thermal_probe(struct platform_device *pdev)
+ 	if (!priv->temp_params)
+ 		return -EINVAL;
 
-   -- Daniel
-
-
-On 18/01/2023 08:38, Frank Rowand wrote:
-> I am getting two new warning traces in v6.2-rc1 on boot that are not present in v6.1-rc1.
-> 
-> I have not done a bisect yet, but wanted to report the issue without further delay.
-> 
-> The configuration is qcom_defconfig
-> 
-> The system is a Qualcomm Dragon 8074
-> 
-> I have not done any debugging, but noted some changes to the file that contains
-> __thermal_cooling_device_register() since 6.1-rc1:
-> 
-> linux--6.2-rc> git log --oneline v6.1-rc1.. -- drivers/thermal/thermal_core.c
-> 4748f9687caa thermal: core: fix some possible name leaks in error paths
-> b778b4d782d4 thermal/core: Protect thermal device operations against thermal device removal
-> 05eeee2b51b4 thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
-> 1c439dec359c thermal/core: Introduce locked version of thermal_zone_device_update
-> 30b2ae07d3d6 thermal/core: Delete device under thermal device zone lock
-> d35f29ed9d11 thermal/core: Destroy thermal zone device mutex in release function
-> e49a1e1ee078 thermal/core: fix error code in __thermal_cooling_device_register()
-> c408b3d1d9bb thermal: Validate new state in cur_state_store()
-> 
-> 
-> 
-> The stack traces are:
-> 
-> -----------[ cut here ]------------
-> WARNING: CPU: 0 PID: 31 at lib/kobject.c:718 kobject_put+0x114/0x29c
-> kobject: '(null)' ((ptrval)): is not initialized, yet kobject_put() is being called.
-> Modules linked in:
-> CPU: 0 PID: 31 Comm: kworker/u8:2 Not tainted 6.2.0-rc1 #1
-> Hardware name: Generic DT based system
-> Workqueue: events_unbound deferred_probe_work_func
->   unwind_backtrace from show_stack+0x10/0x14
->   show_stack from dump_stack_lvl+0x40/0x4c
->   dump_stack_lvl from __warn+0x7c/0x15c
->   __warn from warn_slowpath_fmt+0x98/0xcc
->   warn_slowpath_fmt from kobject_put+0x114/0x29c
->   kobject_put from __thermal_cooling_device_register+0x11c/0x388
->   __thermal_cooling_device_register from __power_supply_register+0x49c/0x5dc
->   __power_supply_register from devm_power_supply_register+0x54/0x90
->   devm_power_supply_register from smbb_charger_probe+0x358/0x61c
->   smbb_charger_probe from platform_probe+0x5c/0xb8
->   platform_probe from really_probe+0xe0/0x3dc
->   really_probe from __driver_probe_device+0x9c/0x208
->   __driver_probe_device from driver_probe_device+0x30/0xcc
->   driver_probe_device from __device_attach_driver+0xa8/0x120
->   __device_attach_driver from bus_for_each_drv+0x84/0xd4
->   bus_for_each_drv from __device_attach+0x108/0x1d8
->   __device_attach from bus_probe_device+0x84/0x8c
->   bus_probe_device from deferred_probe_work_func+0x9c/0xdc
->   deferred_probe_work_func from process_one_work+0x1d4/0x510
->   process_one_work from worker_thread+0x1fc/0x4d0
->   worker_thread from kthread+0xf4/0x124
->   kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xf0901fb0 to 0xf0901ff8)
-> 1fa0:                                     00000000 00000000 00000000 00000000
-> 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 31 at lib/refcount.c:28 __thermal_cooling_device_register+0x11c/0x388
-> refcount_t: underflow; use-after-free.
-> Modules linked in:
-> CPU: 0 PID: 31 Comm: kworker/u8:2 Tainted: G        W          6.2.0-rc1 #1
-> Hardware name: Generic DT based system
-> Workqueue: events_unbound deferred_probe_work_func
->   unwind_backtrace from show_stack+0x10/0x14
->   show_stack from dump_stack_lvl+0x40/0x4c
->   dump_stack_lvl from __warn+0x7c/0x15c
->   __warn from warn_slowpath_fmt+0x98/0xcc
->   warn_slowpath_fmt from __thermal_cooling_device_register+0x11c/0x388
->   __thermal_cooling_device_register from __power_supply_register+0x49c/0x5dc
->   __power_supply_register from devm_power_supply_register+0x54/0x90
->   devm_power_supply_register from smbb_charger_probe+0x358/0x61c
->   smbb_charger_probe from platform_probe+0x5c/0xb8
->   platform_probe from really_probe+0xe0/0x3dc
->   really_probe from __driver_probe_device+0x9c/0x208
->   __driver_probe_device from driver_probe_device+0x30/0xcc
->   driver_probe_device from __device_attach_driver+0xa8/0x120
->   __device_attach_driver from bus_for_each_drv+0x84/0xd4
->   bus_for_each_drv from __device_attach+0x108/0x1d8
->   __device_attach from bus_probe_device+0x84/0x8c
->   bus_probe_device from deferred_probe_work_func+0x9c/0xdc
->   deferred_probe_work_func from process_one_work+0x1d4/0x510
->   process_one_work from worker_thread+0x1fc/0x4d0
->   worker_thread from kthread+0xf4/0x124
->   kthread from ret_from_fork+0x14/0x2c
-> Exception stack(0xf0901fb0 to 0xf0901ff8)
-> 1fa0:                                     00000000 00000000 00000000 00000000
-> 1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> 1fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-> ---[ end trace 0000000000000000 ]---
-> 
-> 
-> -Frank
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	priv->tmon_base = devm_ioremap_resource(&pdev->dev, res);
++	priv->tmon_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(priv->tmon_base))
+ 		return PTR_ERR(priv->tmon_base);
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+2.25.1
