@@ -2,92 +2,203 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3622967266F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 19:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFB7672686
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 19:16:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjARSOR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 13:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39548 "EHLO
+        id S230260AbjARSQv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 13:16:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbjARSON (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 13:14:13 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A638D11EAD;
-        Wed, 18 Jan 2023 10:14:12 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id v10-20020a17090abb8a00b00229c517a6eeso3228121pjr.5;
-        Wed, 18 Jan 2023 10:14:12 -0800 (PST)
+        with ESMTP id S230266AbjARSQf (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 13:16:35 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BE959B7B
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 10:16:33 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so2220206wmc.1
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 10:16:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AUf1WL4DC62jNFpHWgbiIiXy8vmrGW1Cknk5CUVOTQM=;
-        b=E/Xv8DeU001hXlW5CXebfhCmsWS0iKO5rnPPon78D3gGy9lIgeQGxPbg0qdlIHy4hL
-         gVgnlXDLCQikYpRNPdXzTKVntGZHDVy9eVeYOQDxzKCqxrrjELKGIdiR2TNxU9sDWqoO
-         qfxaKHjYFS2uEdHX4wIwXgEs1sQO+9QLsF9NdySDU89Xa5aMiepolF/Q8t/9h1RBLZX+
-         N/CPQs/MRiNPZtYW9Ch/airdT1bbt6V/vkyL9+6jfhF+ZsZKjto4Qoaz/+jIs+5pBPnW
-         w1qlUbfIhBP/gt7EyQz0pgWV279fqYSPLTukVinld76uGh9Gt9WjdL8zRZ5+KjtoI0xv
-         ljjg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FZuxz2Nc/8QrqCzCamHaGIaa6VVO9EC4Sr9XAoWF6pY=;
+        b=gkpw9IZzYcl1dAnnjN/nEU/WYiGEqwjyeWRxvrttmz8Pjd7VUHlBIrXHE7G15slK0v
+         +KYozqf8E0OWNAZyZFQKiMp4q+OhBYWwC8TltkpP5eQJeyhZudH6WhKZN6QYD6krmp1e
+         w18W4n46yQkVCOawNbFlfbdWf5/lcqRzQPhMvMl/H6S2ZZ+TfgVuGYIuCZCcrjrVEETM
+         TYwXE+F7+PrNylzMCj3iaAk6Xv1Jrup7ahFxT2VTdmhEUDItNqTWM11dsUzbmZMeulhE
+         /kM0nGMN7L0I/YErnvmLcXJt5GOHD9A4sMnjRBrSjfqDYrWoqH4h6K8sVovsFvQYwHua
+         uGHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AUf1WL4DC62jNFpHWgbiIiXy8vmrGW1Cknk5CUVOTQM=;
-        b=qk1TrU2QsxCtzx9rRMMJRBpFJxudZo8f2IYh3a06ZuWwhg0fMvZw94GriLcKgumZ0r
-         uyx+1mkeU+Y/f/HmqN8BQsFDEDr5VgbWuele7KTE5w9p9/b/Q8ENivxtOjWC+7TxBjYa
-         Wdv+P+yED8sVW3Z/A1CS6q26B8bsq5R/FTWliyLD5+X0NVy5Wq1ewqImtfc+tbY6QuTF
-         1u4PpjC9bqbdNSDzTEjQH2Fy0bz6O7zKDfqhr46jLmlR48EWSO807grs0Rrs6Ve222hY
-         hy4dckeGFk7M8L1lokMCNxv4ww1KJDmBv9fmGgdfOGgK21QvUMBQa36fnIlGrt2O+3YH
-         R4jw==
-X-Gm-Message-State: AFqh2kpiAkgnkEZ2MtxqvviPyo8dQPCfQlsdbkLLPcBzRI+BEsdTMjhC
-        Fvq9p+EI0j/TztegRbq9rE0gD4X+/l4=
-X-Google-Smtp-Source: AMrXdXuU8fvKII6vjhHAoRukMLOv3minz7sQV7qP3GFKNNWp8kr88B9p2pmsbT67uqvYQUKneVht6w==
-X-Received: by 2002:a17:90a:604e:b0:223:4bfe:f215 with SMTP id h14-20020a17090a604e00b002234bfef215mr8554692pjm.15.1674065652118;
-        Wed, 18 Jan 2023 10:14:12 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id i13-20020a17090a2a0d00b00219186abd7csm1655732pjd.16.2023.01.18.10.14.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 10:14:11 -0800 (PST)
-Message-ID: <ed6b3d7a-f117-6cf4-9cd1-0e6802ded227@gmail.com>
-Date:   Wed, 18 Jan 2023 10:13:59 -0800
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FZuxz2Nc/8QrqCzCamHaGIaa6VVO9EC4Sr9XAoWF6pY=;
+        b=Uc7HXkfutiedZRR4QfE/KbS6Y1icJISJblU+x5LxJ6hH/gXenClj4dUkTH+tAbXwfy
+         fGTG2bvcaKFOPcVILu4QBxfNMdIToqf2C5oOR6CueGROqaIeGPUCWGjhjKIKH6XHq5bw
+         1oOFqLDTo3xU77+wTrJ4BKAF09NvXMns1eXqOazgjlUTD/0Q4cc6IMqVz1RXFL1bCuyu
+         ebcOlcwOhMP5/WXFDGVpTY3ZjSVE9J0kUvDim9EsJFFN8bHYtBMtbxTADTmrcyT6tkzj
+         Q9H4LHCN5VhcKSKSQ5tHPv29bzjuvhfpb5h0/ttzxCR9SMyHIiyVHQIbfxcJXMSTptCj
+         GMOg==
+X-Gm-Message-State: AFqh2koLSKsLJMt7JKSmbCBiufUrHaYTPiMruZfb/13fUCGi8elViWe7
+        LnrdZVBr3id7CMFi/mAEav309g==
+X-Google-Smtp-Source: AMrXdXt+ChbNmzVtI4RDEGrkLSF2Y3zhi8ybIhr2xSOEdneD4pC+utw+QyexttzlYg2ialdSiQz1fA==
+X-Received: by 2002:a05:600c:995:b0:3da:f4f5:ad0e with SMTP id w21-20020a05600c099500b003daf4f5ad0emr7467231wmp.9.1674065791979;
+        Wed, 18 Jan 2023 10:16:31 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id c10-20020a05600c0a4a00b003db12112fcfsm2817414wmq.4.2023.01.18.10.16.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 10:16:31 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Amit Kucheria <amitk@kernel.org>
+Subject: [PATCH 1/3] thermal/drivers/intel: Use generic trip points for quark_dts
+Date:   Wed, 18 Jan 2023 19:16:19 +0100
+Message-Id: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_thermal/drivers/bcm2835=3a_Use=c2=a0dev?=
- =?UTF-8?Q?m=5fplatform=5fget=5fand=5fioremap=5fresource=28=29?=
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
-        bcm-kernel-feedback-list@broadcom.com, linux-pm@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202301181636223863583@zte.com.cn>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <202301181636223863583@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/18/23 00:36, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
-> 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
-> 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+The thermal framework gives the possibility to register the trip
+points with the thermal zone. When that is done, no get_trip_* ops are
+needed and they can be removed.
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Convert ops content logic into generic trip points and register them with the
+thermal zone.
+
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ .../thermal/intel/intel_quark_dts_thermal.c   | 56 +++++++++----------
+ 1 file changed, 25 insertions(+), 31 deletions(-)
+
+diff --git a/drivers/thermal/intel/intel_quark_dts_thermal.c b/drivers/thermal/intel/intel_quark_dts_thermal.c
+index 3eafc6b0e6c3..4e1d1799ec22 100644
+--- a/drivers/thermal/intel/intel_quark_dts_thermal.c
++++ b/drivers/thermal/intel/intel_quark_dts_thermal.c
+@@ -84,6 +84,7 @@
+ #define QRK_DTS_MASK_TP_THRES		0xFF
+ #define QRK_DTS_SHIFT_TP		8
+ #define QRK_DTS_ID_TP_CRITICAL		0
++#define QRK_DTS_ID_TP_HOT		1
+ #define QRK_DTS_SAFE_TP_THRES		105
+ 
+ /* Thermal Sensor Register Lock */
+@@ -104,6 +105,7 @@ struct soc_sensor_entry {
+ 	u32 store_ptps;
+ 	u32 store_dts_enable;
+ 	struct thermal_zone_device *tzone;
++	struct thermal_trip trips[QRK_MAX_DTS_TRIPS];
+ };
+ 
+ static struct soc_sensor_entry *soc_dts;
+@@ -172,7 +174,7 @@ static int soc_dts_disable(struct thermal_zone_device *tzd)
+ 	return ret;
+ }
+ 
+-static int _get_trip_temp(int trip, int *temp)
++static int get_trip_temp(int trip, int *temp)
+ {
+ 	int status;
+ 	u32 out;
+@@ -197,17 +199,6 @@ static int _get_trip_temp(int trip, int *temp)
+ 	return 0;
+ }
+ 
+-static inline int sys_get_trip_temp(struct thermal_zone_device *tzd,
+-				int trip, int *temp)
+-{
+-	return _get_trip_temp(trip, temp);
+-}
+-
+-static inline int sys_get_crit_temp(struct thermal_zone_device *tzd, int *temp)
+-{
+-	return _get_trip_temp(QRK_DTS_ID_TP_CRITICAL, temp);
+-}
+-
+ static int update_trip_temp(struct soc_sensor_entry *aux_entry,
+ 				int trip, int temp)
+ {
+@@ -262,17 +253,6 @@ static inline int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
+ 	return update_trip_temp(tzd->devdata, trip, temp);
+ }
+ 
+-static int sys_get_trip_type(struct thermal_zone_device *thermal,
+-		int trip, enum thermal_trip_type *type)
+-{
+-	if (trip)
+-		*type = THERMAL_TRIP_HOT;
+-	else
+-		*type = THERMAL_TRIP_CRITICAL;
+-
+-	return 0;
+-}
+-
+ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
+ 				int *temp)
+ {
+@@ -315,10 +295,7 @@ static int sys_change_mode(struct thermal_zone_device *tzd,
+ 
+ static struct thermal_zone_device_ops tzone_ops = {
+ 	.get_temp = sys_get_curr_temp,
+-	.get_trip_temp = sys_get_trip_temp,
+-	.get_trip_type = sys_get_trip_type,
+ 	.set_trip_temp = sys_set_trip_temp,
+-	.get_crit_temp = sys_get_crit_temp,
+ 	.change_mode = sys_change_mode,
+ };
+ 
+@@ -344,7 +321,7 @@ static void free_soc_dts(struct soc_sensor_entry *aux_entry)
+ static struct soc_sensor_entry *alloc_soc_dts(void)
+ {
+ 	struct soc_sensor_entry *aux_entry;
+-	int err;
++	int err, temperature;
+ 	u32 out;
+ 	int wr_mask;
+ 
+@@ -385,10 +362,27 @@ static struct soc_sensor_entry *alloc_soc_dts(void)
+ 			goto err_ret;
+ 	}
+ 
+-	aux_entry->tzone = thermal_zone_device_register("quark_dts",
+-			QRK_MAX_DTS_TRIPS,
+-			wr_mask,
+-			aux_entry, &tzone_ops, NULL, 0, polling_delay);
++	err = get_trip_temp(QRK_DTS_ID_TP_CRITICAL, &temperature);
++	if (err)
++		goto err_ret;
++
++	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].temperature = temperature;
++	aux_entry->trips[QRK_DTS_ID_TP_CRITICAL].type = THERMAL_TRIP_CRITICAL;
++
++	err = get_trip_temp(QRK_DTS_ID_TP_HOT, &temperature);
++	if (err)
++		goto err_ret;
++
++	aux_entry->trips[QRK_DTS_ID_TP_HOT].temperature = temperature;
++	aux_entry->trips[QRK_DTS_ID_TP_HOT].type = THERMAL_TRIP_HOT;
++
++	aux_entry->tzone =
++		thermal_zone_device_register_with_trips("quark_dts",
++							aux_entry->trips,
++							QRK_MAX_DTS_TRIPS,
++							wr_mask,
++							aux_entry, &tzone_ops,
++							NULL, 0, polling_delay);
+ 	if (IS_ERR(aux_entry->tzone)) {
+ 		err = PTR_ERR(aux_entry->tzone);
+ 		goto err_ret;
 -- 
-Florian
+2.34.1
 
