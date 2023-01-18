@@ -2,83 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A15D6717B9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96128671790
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjARJ2e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 04:28:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45474 "EHLO
+        id S229475AbjARJZY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 04:25:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjARJZQ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:25:16 -0500
-X-Greylist: delayed 182 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 18 Jan 2023 00:50:40 PST
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413675087D
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:50:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674031655; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=TcCGyEgo6Qao6KmNRk3zvg9d3vQZkcfrVTcQMmDQT9KZeodDKuivyb3zLImp0PHf/1
-    Sy1f2cXtzYlFOgrKYazcZHfER2xpgGjSDoRDiOpgFpyI6+MaeVChxp8idbgYkHGW3MyI
-    VYKbgf6JfqQPzhQEsgl8OC/R41ELqQsgBPhoPB1DnEX1WX4txNuJ2m9eqAgGw8UCXoAa
-    /C1wc9YkSzK+WT12TmmRFtM+AwgcVAJUhGb71dKohmfZ7h7tcWmugh2YMzsSIPJcprAr
-    2YzyiKUgHbZpr8Nor3skYAwvscZrSLMRhVcrSQ4zjwTZd3Ov9YQRLdMYqOUiyKSkjkos
-    Yzcg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674031655;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=6OM+98Zg5AKMW00qUsRvqkrqoox/NO870n6+38ilnf0=;
-    b=fD5AnTLjhL7UEohPTE3fVhyT4aKpFBO2KC/IzAzFNT6kKvdSXyedtyYliA9w8yncPw
-    Jv90P8Kmf16Q7WQKioNj/zLOwKELhYahkRZAD387tbgjsrkohUqtBXArVOsfB3Y0ZmcI
-    iA38swBCK3W47/O6rNkLskkLj/oRZyfAoiwvcY0D3xPBIMSua60q2ROO64fsbeXxetss
-    CdMDR8EnrReSM7URXNKL9au1mjPB60ZFfiI8aVQsJUiuMLOec81Zq14u/69WZBye3yH9
-    Zlf5myGvbmSUc8UjHJ59M4mSHccxjR2k8836Kj1GMjC+VgJQE7i/11L2Go7lmR7x5CuX
-    4nQQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674031655;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=6OM+98Zg5AKMW00qUsRvqkrqoox/NO870n6+38ilnf0=;
-    b=J+YhEtQrTAAhk49PyKCqEkF8adhBEFjCyEwcQ0AfgzpmRbfIL6Xeg91q7mB2NNFdgj
-    1bCM/IbqLA0Zt3pXfokuwYBQ3FUcgC65/JYsvz0OENcTA3NEgVJ94RN+1vIp7Mwh4FR/
-    6V5mZSu49mOLuvkGIWFHX2VQLsyvRmX0Swow71IhCfWsInjOVuRVrirJaI1iFotgFrYT
-    6Cazf6ebUlCYDNkEUwdrzoynS3HUuZGfZqIJFjFZ8TDKHFl0VDm3BPjTeB82FqES5NoV
-    LPuURj14vrIE64Mfwsq+eU1K3KYg1yrehUQkosqeEHrw2ym2GeNPotFrqA+TeWXBzjCR
-    F0RQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWx/bI"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 48.6.2 DYNA|AUTH)
-    with ESMTPSA id yacdeez0I8lYLd9
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 18 Jan 2023 09:47:34 +0100 (CET)
-Date:   Wed, 18 Jan 2023 09:47:28 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/8] dt-bindings: arm: qcom: Document MSM8939 SoC
- binding
-Message-ID: <Y8eyIO8BqKzvulbB@gerhold.net>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-2-bryan.odonoghue@linaro.org>
+        with ESMTP id S230183AbjARJYE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:24:04 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 382C0798F8
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:49:27 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id v23so31309115plo.1
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:49:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ACMX/rYtpwog5RBKFT4Bl4KCPeviYqcrlPIVvg3gfv4=;
+        b=TTRxm6HEV3Ax5bsr6E+mCXOjTdUde7Aavz4/DKVeRo4IbvjIRbzBX7gjOi+OnD8V/B
+         ZsQNgHykS68MCvlH2tzV/JnJpGjFr/6NGpRTrPhg374STYJDWD+HRxHsYGcaozsROY3o
+         +cd8DAoh6RFbgtR55896pQL4qi0+wirhLBSAdzHfFkwAfwb9Op3vIUD6v7bSCe/WNAEZ
+         Tsri4uNHixsLJhl9KQ8DydyfQajRm+BWcobiLge/ZY/KU5VPnTXo+oi7bpdC+Yps4UUd
+         ksgCec7OMjsDulyLr91JhQbo+hck56MRa0zFjnTokjHjyhaApGoMX77yQdVynBHQBwo4
+         0GJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ACMX/rYtpwog5RBKFT4Bl4KCPeviYqcrlPIVvg3gfv4=;
+        b=3fvtrfrIvfW20o2hSYw450Wm/CqM/j+Yd3gghGY/GctebovTeqmokDIloYgEKatjQn
+         fA1HXJjCrosIYK2iodqj+Bn+Cqy3igZI/sJ+Qg3a83HUi4NavnA0wRp0jgBvhgBF8LDo
+         /3RCwH+ljEi4cvECdB0JsYdXFuzF9lV16qKobqyZQxIpdCoDZ2BKJlNnMmjmOWVm+jkY
+         TjcJtfVICsVX3i2avl0eSOkCx8cy+OGumDypvlSLyp+zwGDHyLdvjFvrc9sFs0aVR3lt
+         nKrgfal0W08UFDluhuM8p95qEYro41nq8ntl0I8lJBWWpz4nyqLXdO/VF5WqA/z45X2f
+         +FGw==
+X-Gm-Message-State: AFqh2kr3cBhgQE/SNIVlJjE8lEFleusRCs9TGKSSVM5T3FFuce5HbmN+
+        ggEAoAXBDG2drnXGOM59WKLjxQ==
+X-Google-Smtp-Source: AMrXdXuC6FRTTT3m2sKNJd3v7eYjibMNTVCRskuIxXGz018rzDhmQVGzqorCxJaR8ZGowLy3/ns0wg==
+X-Received: by 2002:a17:903:200a:b0:188:640f:f41e with SMTP id s10-20020a170903200a00b00188640ff41emr5663995pla.4.1674031766608;
+        Wed, 18 Jan 2023 00:49:26 -0800 (PST)
+Received: from localhost ([122.172.81.45])
+        by smtp.gmail.com with ESMTPSA id z20-20020a170903409400b001933b4b1a49sm17152344plc.183.2023.01.18.00.49.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 00:49:25 -0800 (PST)
+Date:   Wed, 18 Jan 2023 14:19:23 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Vincent Wang <bhuwz@163.com>
+Cc:     rafael@kernel.org, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vincent Wang <vincentwang3@lenovo.com>
+Subject: Re: [PATCH v2] cpufreq: Register with perf domain before
+Message-ID: <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
+References: <20230118044733.29391-1-bhuwz@163.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230117024846.1367794-2-bryan.odonoghue@linaro.org>
+In-Reply-To: <20230118044733.29391-1-bhuwz@163.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=unavailable autolearn_force=no
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,33 +71,25 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 17, 2023 at 02:48:39AM +0000, Bryan O'Donoghue wrote:
-> Document the MSM8939 and supported boards in upstream Sony "Tulip" M4 Aqua
-> and Square APQ8039 T2.
+On 18-01-23, 12:47, Vincent Wang wrote:
+> From: Vincent Wang <vincentwang3@lenovo.com>
 > 
-> MSM8939 is one of the older SoCs so we need to expand the list of
-> qcom,board-ids to allow for the bootloader DTS board-id matching
-> dependency.
+> We found the following issue during kernel boot on android phone:
 > 
+> [    1.325272][    T1] cpu cpu0: EM: created perf domain
+> [    1.329317][    T1] cpu cpu4: EM: created perf domain
+> [    1.337597][   T76] pd_init: no EM found for CPU7
+> [    1.350849][    T1] cpu cpu7: EM: created perf domain
+> 
+> pd init for cluster2 is executed in a kworker thread and
+> is earlier than the perf domain creation for cluster2.
 
-The original LK bootloaders cannot boot your msm8939.dtsi correctly,
-because a spin-table implementation is required to get the other CPU
-cores up. This means that a modified bootloader is always needed from
-the upstream point of view, since I doubt anyone wants to use these
-devices with a single core only. lk2nd (as the primary spin-table
-implementation right now) has never required qcom,board-ids and any
-custom LK would be easy to patch to ignore these.
+Can you please give detail of the exact code path, for mainline kernel
+? I am not sure which kworker thread are you talking about here.
 
-Do you already have a bootloader with spin-table support deployed in the
-field that can be no longer easily modified to ignore the qcom,board-id?
+> pd_init() is called from the cpufreq notification of
+> CPUFREQ_CREATE_POLICY in cpufreq_online(), which is earlier
+> than that cpufreq_driver->register_em() is called.
 
-If not, and you're planning to keep using the downstream patches to
-bring the CPU cores up without spin-table/PSCI then you might as well
-add the qcom,board-id as downstream patch as well.
-
-If we don't support the original bootloaders in a usable way upstream
-then we should not add MSM8939 to the allow list of broken bootloaders
-either, in my opinion.
-
-Thanks,
-Stephan
+-- 
+viresh
