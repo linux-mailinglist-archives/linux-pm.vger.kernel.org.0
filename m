@@ -2,182 +2,236 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C3506723F9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 17:48:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 569C1672509
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 18:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjARQs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 11:48:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
+        id S229479AbjARRd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 12:33:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjARQsZ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 11:48:25 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244FB17CCE
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 08:48:24 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v6so50374364edd.6
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 08:48:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=layalina-io.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5eigK6NhPZ1BzYqG/rSKwU17B7Pa951B39IAGV/KhXA=;
-        b=HizGboq0OC8XKjblNCtaASyrgCAdADxGBXfBRPO0jB68wVvbLXM4u0qhGOWDDTpuvR
-         vWCLZtvyaQuS/2Tvgp8bOpAfEckgpLrxcy5zLW0IgBJnZ/2FBnHftxND5Orp/JQO2+QN
-         w0lV1rBbetb161VYgvAGjqfouX4oSB/Mze3U7GkG5LwSwZvNRm6LaogH7pTGimcdqgdS
-         rekFnb9L2Xqd3vw4vLdKMB9fFMwTcafX4NR/HTDErB122lvv40HlRUY72iycyj7FNkYF
-         10neXwmBGMjE+j8Zi9yw0lYAUimir2PwovgeaQOFOAI62f7SFiQbsdQvsv1hq1HynPJe
-         g95Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5eigK6NhPZ1BzYqG/rSKwU17B7Pa951B39IAGV/KhXA=;
-        b=7qV/rrRqCGr/UQRg2N/SMHjyu9Ow5J4LMUcVqM2u6gFnETXYiKipcU6Cf22ZZ0nKOA
-         EAumSVYU78HrUfIG7X18HdZwj96Nr51QiYfaVshwz4W5CHwZaxfuCT7qHRq+D+k/2h72
-         tc6oSOEfBF8qvzA+WOtJZl3fNE8oBzAkipesn+ihwzllFCZmsurI4fFKjuhLZB5EslYS
-         Piiv6vCDUyB+Jq+qWfYFSbcLXuRv97jPwM61OAQ4PVCUCjBXLa0+UeIKvskyLEoHSySX
-         N/GDHQzdXD3oxHsedxyynTrPDPZ9YCxoNWoYutNn1xESjzFH8ShUMgB+a1j1tkLO9tU6
-         aFLg==
-X-Gm-Message-State: AFqh2kraZCAPTuRBXk27rANfJELtG8XBt78Ujlnlca1KkZLT9TVF6PYd
-        hK/srIKdP2Bxktj/VsKxPWhoJ1NQWM4tYVp+
-X-Google-Smtp-Source: AMrXdXstpqo7orPGoSroBhoJGiliGWm2gYQm8T8Kt7XTBTrW3BxHgSVYkNk8R0Vxu7qfafQKn9xGwA==
-X-Received: by 2002:a05:6402:2989:b0:461:1998:217f with SMTP id eq9-20020a056402298900b004611998217fmr7661275edb.4.1674060502714;
-        Wed, 18 Jan 2023 08:48:22 -0800 (PST)
-Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
-        by smtp.gmail.com with ESMTPSA id k22-20020a1709063fd600b00862497eafb2sm8867294ejj.103.2023.01.18.08.48.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 08:48:22 -0800 (PST)
-Date:   Wed, 18 Jan 2023 16:48:20 +0000
-From:   Qais Yousef <qyousef@layalina.io>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@kernel.org,
-        peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <20230118164820.r37yfigmwwdske4r@airbuntu>
-References: <20230113134056.257691-1-vincent.guittot@linaro.org>
- <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
- <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
- <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+        with ESMTP id S229608AbjARRdz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 12:33:55 -0500
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1892366A5;
+        Wed, 18 Jan 2023 09:33:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674063230; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=nTyGx3IBUOThxA5UW0x6SQXKNxe0UVidwVF/ILH8Y9+Z8S/daiPL2o626+Fkxqy74f
+    iHQedwsTJLaXhKWInWV8u+S+7mmAwoPbCuyOK2XUSFGlrE0igHnghxzO/GY5bGVC7DC/
+    tFMp4VkJlHruTj/0fe/XzLZk/Z7o2mUgS/YMExga8aaSnF33BWrYphVRlRtzyZ84UM7e
+    57Sb9t1ZR+V7v0muO3kl9avVn6odH6sgnH543nWHLpE8/U2FWOROWAZJNmfMWTJXI5T6
+    +hpjSFy6hPrUvresjKpaN60JpCBao33fMFzUjM9L1DQLV/lfOhkb5pSk5DMyx+uBCp8y
+    7/Og==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674063230;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=LhU3r4sZfO0h84dSgJ90dRQ0Xnm8CosoxMUeoX+kEY0=;
+    b=lW/71BGfGza5oHKJsBp33AZyRlVgdG/iyY9Pe9427uUbb397iE9fQfYagFJTB89H3v
+    2gn2FCSczSy0uaZ+Zbs18CK33++GP/XNt/3LlWz98aFGLLnxYBNudPV/7cQjdFZrda9X
+    vVf7isZ+BeCWKUMqZsSJDZnCdt/aPBKZ9t0HymbQadjX13k53BlGk5ltrELjTrejI6SR
+    nZqOv+n7ktpKIiEo23vtWuLx4HalbbmsDwEZi1hmE79/I2TV5r1Ld/IbtC+sb6HTCvL9
+    mLywnqVdcHHEGH4Gsa1KhLor3uAH/hV5I/h2mOKaJFUMxPkbKuiqYvEur8lNv/4WykCt
+    zIWg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674063230;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=LhU3r4sZfO0h84dSgJ90dRQ0Xnm8CosoxMUeoX+kEY0=;
+    b=WC4S4Oj5/ADgdtmFtA1J6VT9/XbEfYWTL4w2GFuB6epZnTMWb2d80U4JEfaEWN9d9/
+    B1qNou0E5/wxwsy5RIuw3sAcfGN0hyGfDI3HfUCyUDtCuzP5yJotwksxsdYcS1IjnDpH
+    Zx24quTGTwH2UNOo7QOqpV2n1ur74ykZUyPvRIwpCRCD91vipEMqPOOPQxvs9+3KONzx
+    TvuUOeCErGdkSLM/MCTh4RgSeZQtz7jaGx54/2jkMkogDqU7itsWW2WJBmY64W09B5X0
+    FX1mPiDq/WHylv7qEhhZcXNJ/XeNT49Gq3i651Tz2JMZE/K5lYPqHMc4VWrtyp2cfcoK
+    7ejw==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWx/bI"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.0.0 DYNA|AUTH)
+    with ESMTPSA id 92895dz0IHXn0Q6
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Wed, 18 Jan 2023 18:33:49 +0100 (CET)
+Date:   Wed, 18 Jan 2023 18:33:42 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
+        Vincent Knecht <vincent.knecht@mailoo.org>
+Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
+Message-ID: <Y8gtdpDnMLIwfj+3@gerhold.net>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+ <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
+ <Y8fC/GCHfENQmBNC@gerhold.net>
+ <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 01/18/23 09:15, Vincent Guittot wrote:
-> On Mon, 16 Jan 2023 at 15:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> >
-> > On 16/01/2023 12:23, Vincent Guittot wrote:
-> > > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
-> > >>
-> > >> On 13/01/2023 14:40, Vincent Guittot wrote:
-> >
-> > [...]
-> >
-> > >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
-> > >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
-> > >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
-> > >>>
-> > >>> +     /* Return true only if the utlization doesn't fit its capacity */
-> > >>
-> > >> s/utlization/utilization
-> > >> s/its/CPU ?
-> > >>
-> > >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
-> > >>>  }
-> > >>
-> > >> cpu_overutilized() is the only place where we now only test for
-> > >> !util_fits_cpu(). The new comment says we only care about utilization
-> > >> not fitting CPU capacity.
-> > >>
-> > >> Does this mean the rq uclamp values are not important here and we could
-> > >> go back to use fits_capacity()?
-> > >>
-> > >> Not sure since util_fits_cpu() is still coded differently:
-> > >
-> > > uclamp_min is not important but uclamp_max still cap the utilization
-> >
-> > OK, makes sense.
-> >
-> > I.e. we could pass in `rq_util_min = 0` to avoid fetching it
-> > unnecessary? In case `fits == 1` before the uclamp_min condition in
-> > util_fits_cpu() it doesn't matter if we switch to return `-1` when
-> > called from cpu_overutilized(). Detail though ...
+On Wed, Jan 18, 2023 at 11:50:20AM +0000, Bryan O'Donoghue wrote:
+> On 18/01/2023 09:59, Stephan Gerhold wrote:
+> > On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
+> [...]
+> > > +		mdss: display-subsystem@1a00000 {
+> > > +			compatible = "qcom,mdss";
+> > > +			reg = <0x01a00000 0x1000>,
+> > > +			      <0x01ac8000 0x3000>;
+> > > +			reg-names = "mdss_phys", "vbif_phys";
+> > > +
+> > > +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
+> > > +			interrupt-controller;
+> > > +
+> > > +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
+> > > +				 <&gcc GCC_MDSS_AXI_CLK>,
+> > > +				 <&gcc GCC_MDSS_VSYNC_CLK>;
+> > > +			clock-names = "iface",
+> > > +				      "bus",
+> > > +				      "vsync";
+> > > +
+> > > +			power-domains = <&gcc MDSS_GDSC>;
+> > > +
+> > > +			#address-cells = <1>;
+> > > +			#size-cells = <1>;
+> > > +			#interrupt-cells = <1>;
+> > > +			ranges;
+> > > +
+> > > +			mdp: display-controller@1a01000 {
+> > > +				compatible = "qcom,mdp5";
+> > > +				reg = <0x01a01000 0x89000>;
+> > > +				reg-names = "mdp_phys";
+> > > +
+> > > +				interrupt-parent = <&mdss>;
+> > > +				interrupts = <0>;
+> > > +
+> > > +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
+> > > +					 <&gcc GCC_MDSS_AXI_CLK>,
+> > > +					 <&gcc GCC_MDSS_MDP_CLK>,
+> > > +					 <&gcc GCC_MDSS_VSYNC_CLK>,
+> > > +					 <&gcc GCC_MDP_TBU_CLK>,
+> > > +					 <&gcc GCC_MDP_RT_TBU_CLK>;
+> > > +				clock-names = "iface",
+> > > +					      "bus",
+> > > +					      "core",
+> > > +					      "vsync",
+> > > +					      "tbu",
+> > > +					      "tbu_rt";
+> > > +
+> > > +				iommus = <&apps_iommu 4>;
+> > > +
+> > > +				interconnects = <&snoc_mm MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>,
+> > > +						<&snoc_mm MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
+> > > +						<&pcnoc MASTER_SPDM &snoc SLAVE_IMEM>;
+> > > +				interconnect-names = "mdp0-mem", "mdp1-mem", "register-mem";
+> > 
+> > As I mentioned a already in a direct email at some point, AFAIU adding
+> > interconnects should be an [almost-] all or nothing step. If you only
+> > add interconnects for MDP then everything else that needs bandwidth will
+> > either break or only continue working as a mere side effect of MDP
+> > voting for permanent high bandwidth.
 > 
-> One comment from Qais was to minimize knowledge outside
-> util_fits_cpu() that's why I pass both uclamp_min and uclamp_max.
+> We did discuss that. You'll also recall we concluded we would have to revert
+> this patch to make that happen.
 > 
-> >
-> > [...]
-> >
-> > >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
-> > >>>
-> > >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
-> > >>>                       continue;
-> > >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
-> > >>> +
-> > >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
-> > >>> +
-> > >>> +             /* This CPU fits with all capacity and performance requirements */
-> > >>
-> > >> In task_fits_cpu() `utilization and performance (better uclamp)
-> > >> requirements` term was used. I assume it's the same thing here?
-> > >>
-> > >>> +             if (fits > 0)
-> > >>>                       return cpu;
-> > >>> +             /*
-> > >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
-> > >>> +              * for the CPU with highest performance capacity.
-> > >>                                             ^^^^^^^^^^^^^^^^^^^^
-> > >>
-> > >> Do we use a new CPU capacity value `performance capacity (1)` here?
-> > >>
-> > >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
-> > >>
-> > >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
-> > >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
-> > >> to return -1. Shouldn't (1) and (2) be the same?
-> > >
-> > > I'm all in favor of both being capacity_orig_of(cpu) -
-> > > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
-> >
-> > I think we need a handy name for this new capacity value, which seems to
-> > be `capacity_orig - capacity reduced by thermal`. And we should either
-> > use `thermal_load_avg` or `thermal pressure` for the latter part. And
-> > then we should use this consistently in all these places:
-> > util_fits_cpu(), feec(), sic().
+> commit 76a748e2c1aa976d0c7fef872fa6ff93ce334a8a
+> Author: Leo Yan <leo.yan@linaro.org>
+> Date:   Sat Apr 16 09:26:34 2022 +0800
 > 
-> Ok, let me change this everywhere
+>     interconnect: qcom: msm8939: Use icc_sync_state
+> 
+> but then why not revert for all of these SoCs too ?
+> 
+> drivers/interconnect/qcom/msm8939.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/msm8974.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/msm8996.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/osm-l3.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sc7180.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sc7280.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sc8180x.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sc8280xp.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sdm845.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sdx55.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sdx65.c:		.sync_state = icc_sync_state,
+> drivers/interconnect/qcom/sm6350.c:		.sync_state = icc_sync_state,
+> 
+> until such time as we have an all or nothing interconnect setup for each of
+> those SoCs ?
+> 
+> Yes I take your point "some peripherals will appear to work only as a result
+> of the AHB vote the MDP casts here" but, that is a bug in the definition of
+> that hypothetical peripheral.
+> 
+> The MDP/display won't run without the interconnect here and the only way to
+> pull it is to remove sync_state which begs the question why not pull
+> sync_state for all SoCs without a perfect interconnect description ?
+> 
+> I think that would be a retrograde step.
+> 
 
-I'm not keen on this :-/
+Most of the SoCs you list do have "interconnects" defined for most
+components, which means the situation for them is quite a different
+level. It's probably not necessary to have the interconnect setup
+absolutely perfect before enabling it. However to avoid frustration for
+people with slightly different board setups it should at the very least
+cover more than one component.
 
-Changing this everywhere could have implications beyond our simple capabilities
-of testing now :(
+Should the icc_sync_state() change be reverted for some of these SoCs?
+If you ask me: Yes!
 
-Current choice (in util_fits_cpu()) was based on a direct feedback from Xuewen.
-I think we should discuss how we can improve the situation instead rather than
-worry about consistency. I don't think we can be consistent without doing some
-improvements on thermal pressure response time.
+Perhaps a real example makes my concern more understandable: As I
+mentioned, you rely on MDP providing the necessary bandwidth for the
+entire system. This works fine in your case, but it can happen easily
+that MDSS/MDP is not enabled at all, e.g.:
 
-A separate proposal patch to invoke some testing and discussion is fine by me.
+ - On a board without display.
+ - During early bring-up: I usually start with UART, USB and SDHCI
+   before I even think about enabling the display.
 
-Better keep it a separate work item please?
+I simulated this on the BQ Aquaris M5 (MSM8939) that has most
+functionality set up already in postmarketOS. First the results without
+any changes (interconnects enabled like in your patch here):
 
+ -> Boots into rootfs in about *18 seconds*, feels fine
 
-Cheers
+Now I just disable MDSS in the device tree and boot again:
 
---
-Qais Yousef
+	&mdss {
+		status = "disabled";
+	};
+
+ -> Boots into rootfs in about *80 seconds*, everything feels sluggish
+
+This is 4 times the normal boot time, and nothing in dmesg tells me that
+it's because I don't have display enabled. Someone porting a new device,
+especially without UART, might have given up already before waiting so
+long. Plus, what would I do to fix this on a board without display? :/
+
+Now I try removing icc_sync_state:
+
+ -> Boots into rootfs in about 17 seconds, feels fine
+
+IMO it is clear that adding icc_sync_state() too early is a bad idea,
+and *will* break some setups.
+
+Thanks,
+Stephan
