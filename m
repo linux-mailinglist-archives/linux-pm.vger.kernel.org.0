@@ -2,97 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 226686718C9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 11:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05921671992
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 11:49:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjARKST (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 05:18:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50392 "EHLO
+        id S230174AbjARKsu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 05:48:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjARKRU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 05:17:20 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CD6597856B;
-        Wed, 18 Jan 2023 01:24:06 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5F78E14BF;
-        Wed, 18 Jan 2023 01:24:48 -0800 (PST)
-Received: from [10.57.15.75] (unknown [10.57.15.75])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 085B63F445;
-        Wed, 18 Jan 2023 01:24:04 -0800 (PST)
-Message-ID: <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
-Date:   Wed, 18 Jan 2023 09:24:02 +0000
+        with ESMTP id S229954AbjARKry (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 05:47:54 -0500
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6687660
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 01:53:24 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id l8so7099868wms.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 01:53:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/Q41RJO+h6k6168ZraYXL447AhJRg2Xc99d/LkAs2QQ=;
+        b=zZExUtYo13Lftddlf2ihuNmYpS0Nyd8EwbRqQrir7eyUpvzVLcrs5c8Ghb7UfQhjnX
+         DBaD13z+/BdA5f+AUtyVBM5b7vQX9ijTuUM2SgnkDlFVSYAdYTaAI6ZFU0gy2Le4j/Xw
+         jZXoupP5fVegQtzuFzfA8jA5ka/RTxJABF9Q7Q5e2AIe3oeTUjASzmfx3IdZbFJGiuS1
+         xpvviT7mPv4LTdZZokHfqh2WXzoHWsDYNLAokkhmsRXByX6aImvhL1eEukwXojX8KUdu
+         PFPTZHLtKJo22/f/lL5ryjXZkH5vrSm5jzwJvv4JAOJI7o2RuUKiTYHiyK3GzSXZCN6F
+         vYJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Q41RJO+h6k6168ZraYXL447AhJRg2Xc99d/LkAs2QQ=;
+        b=t/gOPBKaSJh32xCAS5oATPInM3n2CAV0Hn6kPlnsGSs5J8u13sGfCshUz+9yzlArA6
+         vZvGN3w/MXnuAK48SyEnEGTnj1dZlyHQRJBqIW8NQd5ict7VZoeNGOwleSkT9rE3zgKO
+         FxShTs0ywjob3sBw0ym76A8qsDcR1DcM7LGvxJzpEPgcqEYX6pmVDzyMJPBXfpuNOyGH
+         grOJ2g6mFLqcA9fnjLp5KaHwxLLNCfp75exWoBYastxFBeb6Mio7wwsXiPgP0x/FJA3i
+         ouS46Qs8ZrigWXzFjl0mm8NEXh9p9Zsy44/OmWinbtgYA3h1LqqVGb6K3CZWz+sW0Xg/
+         Youw==
+X-Gm-Message-State: AFqh2koIbNkjFbWlr8ooblOMjTM5XWcjpttXw3eW1RuUE3WIRM83e11a
+        bFIGX/yPUr2YYRIHk3GeEgdkHw==
+X-Google-Smtp-Source: AMrXdXucG64+L7me1kWC4dE8dfpb4nk5JzCJtlsAOZgJwOTPPQqnllak5CBIbFFnecncg6lqmMPlHw==
+X-Received: by 2002:a05:600c:331d:b0:3d3:591a:bfda with SMTP id q29-20020a05600c331d00b003d3591abfdamr14722922wmp.27.1674035602762;
+        Wed, 18 Jan 2023 01:53:22 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id f3-20020adfdb43000000b00236883f2f5csm31401173wrj.94.2023.01.18.01.53.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 01:53:22 -0800 (PST)
+Message-ID: <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
+Date:   Wed, 18 Jan 2023 10:53:21 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH v2] cpufreq: Register with perf domain before
+Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
 Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        Vincent Wang <bhuwz@163.com>,
-        Vincent Wang <vincentwang3@lenovo.com>
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230118044733.29391-1-bhuwz@163.com>
- <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
+To:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        rui.zhang@intel.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, christophe.jaillet@wanadoo.fr
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Viresh, Vincent
+Hi,
 
-I'm surprised seeing this thread and thanks that you Viresh have
-answered, so it could go through my spam/junk filters.
-(I hope when answer to that domain it would change something).
-
-On 1/18/23 08:49, Viresh Kumar wrote:
-> On 18-01-23, 12:47, Vincent Wang wrote:
->> From: Vincent Wang <vincentwang3@lenovo.com>
->>
->> We found the following issue during kernel boot on android phone:
->>
->> [    1.325272][    T1] cpu cpu0: EM: created perf domain
->> [    1.329317][    T1] cpu cpu4: EM: created perf domain
->> [    1.337597][   T76] pd_init: no EM found for CPU7
->> [    1.350849][    T1] cpu cpu7: EM: created perf domain
->>
->> pd init for cluster2 is executed in a kworker thread and
->> is earlier than the perf domain creation for cluster2.
+On 13/01/2023 19:02, Daniel Lezcano wrote:
+> Recently sent as a RFC, the thermal ACPI for generic trip points is a set of
+> functions to fill the generic trip points structure which will become the
+> standard structure for the thermal framework and its users.
 > 
-> Can you please give detail of the exact code path, for mainline kernel
-> ? I am not sure which kworker thread are you talking about here.
-
-Please also tell us your cpufreq governor. The schedutil governor
-at mainline can handle those situations and we rebuild the perf domains
-here [1].
-
+> Different Intel drivers and the ACPI thermal driver are using the ACPI tables to
+> get the thermal zone information. As those are getting the same information,
+> providing this set of ACPI function with the generic trip points will
+> consolidate the code.
 > 
->> pd_init() is called from the cpufreq notification of
->> CPUFREQ_CREATE_POLICY in cpufreq_online(), which is earlier
->> than that cpufreq_driver->register_em() is called.
+> Also, the Intel PCH and the Intel 34xx drivers are converted to use the generic
+> trip points relying on the ACPI generic trip point parsing functions.
+> 
+> These changes have been tested on a Thinkpad Lenovo x280 with the PCH and
+> INT34xx drivers. No regression have been observed, the trip points remain the
+> same for what is described on this system.
 
-Viresh, If that's an issue for other governors, than maybe
-we should address that. IMO the patch just relies on side-effect
-in arch_topology.c update_topology_flags_workfn(). That would be
-a workaround and dangerous if someone would change that arch_topology.c
-design. Shouldn't we come up with something reliable inside the
-cpufreq.c if there is a real issue?
-Even now, these two mechanisms:
-1. in the schedutil [1]
-2. in the update_topology_flags_workfn()
-are a bit leaky (in terms of design holes).
+Are we ok with this series ?
 
-Regards,
-Lukasz
+Sorry for insisting but I would like to go forward with the generic 
+thermal trip work. There are more patches pending depending on this series.
 
-[1] 
-https://elixir.bootlin.com/linux/latest/source/kernel/sched/cpufreq_schedutil.c#L858
+Thanks
+   -- Daniel
+
+> Changelog:
+>   - V5:
+>     - Fixed GTSH unit conversion, deciK -> milli C
+> 
+>   - V4:
+>     - Fixed Kconfig option dependency, select THERMAL_ACPI if ACPI is set
+>       only for the PCH driver
+> 
+>   - V3:
+>     - Took into account Rafael's comments
+>     - Used a silence option THERMAL_ACPI in order to stay consistent
+>       with THERMAL_OF. It is up to the API user to select the option.
+> 
+>   - V2:
+>     - Fix the thermal ACPI patch where the thermal_acpi.c was not included in
+>       the series
+>     - Provide a couple of users of this API which could have been tested on a
+>       real system
+> 
+> Daniel Lezcano (3):
+>    thermal/acpi: Add ACPI trip point routines
+>    thermal/drivers/intel: Use generic trip points for intel_pch
+>    thermal/drivers/intel: Use generic trip points int340x
+> 
+>   drivers/thermal/Kconfig                       |   4 +
+>   drivers/thermal/Makefile                      |   1 +
+>   drivers/thermal/intel/Kconfig                 |   1 +
+>   drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
+>   .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++-----------
+>   .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+>   drivers/thermal/intel/intel_pch_thermal.c     |  88 ++------
+>   drivers/thermal/thermal_acpi.c                | 210 ++++++++++++++++++
+>   include/linux/thermal.h                       |   8 +
+>   9 files changed, 286 insertions(+), 214 deletions(-)
+>   create mode 100644 drivers/thermal/thermal_acpi.c
+> 
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
