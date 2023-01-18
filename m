@@ -2,47 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 250D46722DA
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 17:21:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3506723F9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 17:48:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbjARQVR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 11:21:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52380 "EHLO
+        id S229513AbjARQs0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 11:48:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbjARQUr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 11:20:47 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1A71D54B2E;
-        Wed, 18 Jan 2023 08:17:42 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7C25AD7;
-        Wed, 18 Jan 2023 08:18:24 -0800 (PST)
-Received: from [10.1.196.21] (e125579.cambridge.arm.com [10.1.196.21])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4F963F67D;
-        Wed, 18 Jan 2023 08:17:40 -0800 (PST)
-Message-ID: <69457060-ede6-c805-af1d-a6e2b05fd55e@arm.com>
-Date:   Wed, 18 Jan 2023 16:17:31 +0000
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
-Content-Language: en-US
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Vincent Guittot <vincent.guittot@linaro.org>, mingo@kernel.org,
+        with ESMTP id S229575AbjARQsZ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 11:48:25 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244FB17CCE
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 08:48:24 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id v6so50374364edd.6
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 08:48:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5eigK6NhPZ1BzYqG/rSKwU17B7Pa951B39IAGV/KhXA=;
+        b=HizGboq0OC8XKjblNCtaASyrgCAdADxGBXfBRPO0jB68wVvbLXM4u0qhGOWDDTpuvR
+         vWCLZtvyaQuS/2Tvgp8bOpAfEckgpLrxcy5zLW0IgBJnZ/2FBnHftxND5Orp/JQO2+QN
+         w0lV1rBbetb161VYgvAGjqfouX4oSB/Mze3U7GkG5LwSwZvNRm6LaogH7pTGimcdqgdS
+         rekFnb9L2Xqd3vw4vLdKMB9fFMwTcafX4NR/HTDErB122lvv40HlRUY72iycyj7FNkYF
+         10neXwmBGMjE+j8Zi9yw0lYAUimir2PwovgeaQOFOAI62f7SFiQbsdQvsv1hq1HynPJe
+         g95Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5eigK6NhPZ1BzYqG/rSKwU17B7Pa951B39IAGV/KhXA=;
+        b=7qV/rrRqCGr/UQRg2N/SMHjyu9Ow5J4LMUcVqM2u6gFnETXYiKipcU6Cf22ZZ0nKOA
+         EAumSVYU78HrUfIG7X18HdZwj96Nr51QiYfaVshwz4W5CHwZaxfuCT7qHRq+D+k/2h72
+         tc6oSOEfBF8qvzA+WOtJZl3fNE8oBzAkipesn+ihwzllFCZmsurI4fFKjuhLZB5EslYS
+         Piiv6vCDUyB+Jq+qWfYFSbcLXuRv97jPwM61OAQ4PVCUCjBXLa0+UeIKvskyLEoHSySX
+         N/GDHQzdXD3oxHsedxyynTrPDPZ9YCxoNWoYutNn1xESjzFH8ShUMgB+a1j1tkLO9tU6
+         aFLg==
+X-Gm-Message-State: AFqh2kraZCAPTuRBXk27rANfJELtG8XBt78Ujlnlca1KkZLT9TVF6PYd
+        hK/srIKdP2Bxktj/VsKxPWhoJ1NQWM4tYVp+
+X-Google-Smtp-Source: AMrXdXstpqo7orPGoSroBhoJGiliGWm2gYQm8T8Kt7XTBTrW3BxHgSVYkNk8R0Vxu7qfafQKn9xGwA==
+X-Received: by 2002:a05:6402:2989:b0:461:1998:217f with SMTP id eq9-20020a056402298900b004611998217fmr7661275edb.4.1674060502714;
+        Wed, 18 Jan 2023 08:48:22 -0800 (PST)
+Received: from airbuntu (host86-130-134-87.range86-130.btcentralplus.com. [86.130.134.87])
+        by smtp.gmail.com with ESMTPSA id k22-20020a1709063fd600b00862497eafb2sm8867294ejj.103.2023.01.18.08.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 08:48:22 -0800 (PST)
+Date:   Wed, 18 Jan 2023 16:48:20 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>, mingo@kernel.org,
         peterz@infradead.org, rafael@kernel.org, viresh.kumar@linaro.org,
         vschneid@redhat.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
         xuewen.yan94@gmail.com, han.lin@mediatek.com,
         Jonathan.JMChen@mediatek.com
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <20230118164820.r37yfigmwwdske4r@airbuntu>
 References: <20230113134056.257691-1-vincent.guittot@linaro.org>
  <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
- <20230117163841.d5jv6ysqf5kmvvmh@airbuntu>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <20230117163841.d5jv6ysqf5kmvvmh@airbuntu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+ <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+ <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+ <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,83 +77,107 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17/01/2023 16:38, Qais Yousef wrote:
-> On 01/16/23 09:07, Dietmar Eggemann wrote:
+On 01/18/23 09:15, Vincent Guittot wrote:
+> On Mon, 16 Jan 2023 at 15:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> >
+> > On 16/01/2023 12:23, Vincent Guittot wrote:
+> > > On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+> > >>
+> > >> On 13/01/2023 14:40, Vincent Guittot wrote:
+> >
+> > [...]
+> >
+> > >>> @@ -6132,6 +6135,7 @@ static inline bool cpu_overutilized(int cpu)
+> > >>>       unsigned long rq_util_min = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MIN);
+> > >>>       unsigned long rq_util_max = uclamp_rq_get(cpu_rq(cpu), UCLAMP_MAX);
+> > >>>
+> > >>> +     /* Return true only if the utlization doesn't fit its capacity */
+> > >>
+> > >> s/utlization/utilization
+> > >> s/its/CPU ?
+> > >>
+> > >>>       return !util_fits_cpu(cpu_util_cfs(cpu), rq_util_min, rq_util_max, cpu);
+> > >>>  }
+> > >>
+> > >> cpu_overutilized() is the only place where we now only test for
+> > >> !util_fits_cpu(). The new comment says we only care about utilization
+> > >> not fitting CPU capacity.
+> > >>
+> > >> Does this mean the rq uclamp values are not important here and we could
+> > >> go back to use fits_capacity()?
+> > >>
+> > >> Not sure since util_fits_cpu() is still coded differently:
+> > >
+> > > uclamp_min is not important but uclamp_max still cap the utilization
+> >
+> > OK, makes sense.
+> >
+> > I.e. we could pass in `rq_util_min = 0` to avoid fetching it
+> > unnecessary? In case `fits == 1` before the uclamp_min condition in
+> > util_fits_cpu() it doesn't matter if we switch to return `-1` when
+> > called from cpu_overutilized(). Detail though ...
 > 
-> [...]
+> One comment from Qais was to minimize knowledge outside
+> util_fits_cpu() that's why I pass both uclamp_min and uclamp_max.
 > 
->> Not sure if people get what `performance requirements` mean here? I know
->> we want to use `performance` rather `bandwidth hint` to describe what
->> uclamp is. So shouldn't we use `utilization but also uclamp`?
+> >
+> > [...]
+> >
+> > >>> @@ -6940,12 +6945,28 @@ select_idle_capacity(struct task_struct *p, struct sched_domain *sd, int target)
+> > >>>
+> > >>>               if (!available_idle_cpu(cpu) && !sched_idle_cpu(cpu))
+> > >>>                       continue;
+> > >>> -             if (util_fits_cpu(task_util, util_min, util_max, cpu))
+> > >>> +
+> > >>> +             fits = util_fits_cpu(task_util, util_min, util_max, cpu);
+> > >>> +
+> > >>> +             /* This CPU fits with all capacity and performance requirements */
+> > >>
+> > >> In task_fits_cpu() `utilization and performance (better uclamp)
+> > >> requirements` term was used. I assume it's the same thing here?
+> > >>
+> > >>> +             if (fits > 0)
+> > >>>                       return cpu;
+> > >>> +             /*
+> > >>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+> > >>> +              * for the CPU with highest performance capacity.
+> > >>                                             ^^^^^^^^^^^^^^^^^^^^
+> > >>
+> > >> Do we use a new CPU capacity value `performance capacity (1)` here?
+> > >>
+> > >> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+> > >>
+> > >> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+> > >> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+> > >> to return -1. Shouldn't (1) and (2) be the same?
+> > >
+> > > I'm all in favor of both being capacity_orig_of(cpu) -
+> > > thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+> >
+> > I think we need a handy name for this new capacity value, which seems to
+> > be `capacity_orig - capacity reduced by thermal`. And we should either
+> > use `thermal_load_avg` or `thermal pressure` for the latter part. And
+> > then we should use this consistently in all these places:
+> > util_fits_cpu(), feec(), sic().
 > 
-> We do have the uclamp doc now which explains this, no? I'm not keen on
-> utilization because it's an overloaded term. In the context of uclamp
+> Ok, let me change this everywhere
 
-And `performance` isn't ? ;-) True, the doc refers to uclamp as a
-`performance requirements`.
+I'm not keen on this :-/
 
-> - utilization _signal_ in the scheduler is used to indicate performance
-> requirements of a workload, no?
+Changing this everywhere could have implications beyond our simple capabilities
+of testing now :(
 
-I was referring to:
+Current choice (in util_fits_cpu()) was based on a direct feedback from Xuewen.
+I think we should discuss how we can improve the situation instead rather than
+worry about consistency. I don't think we can be consistent without doing some
+improvements on thermal pressure response time.
 
- 4569 static inline int task_fits_cpu(struct task_struct *p, int cpu)
- 4570 {
- 4571   unsigned long uclamp_min = uclamp_eff_value(p, UCLAMP_MIN);
- 4572   unsigned long uclamp_max = uclamp_eff_value(p, UCLAMP_MAX);
- 4573   unsigned long util = task_util_est(p);
- 4574   /*
- 4575   * Return true only if the cpu fully fits the task requirements,
- 4576   * which include the utilization but also the performance.
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 4577   */
- 4578   return (util_fits_cpu(util, uclamp_min, uclamp_max, cpu) > 0);
- 4579 }
+A separate proposal patch to invoke some testing and discussion is fine by me.
 
-So here we explicitly talk about `utilization` (util_avg/util_est)
-versus `uclamp (max/min)` and the latter is referred as `performance`.
-You're right, we shouldn't refer to `uclamp (min/max)` as `utilization`
-either.
+Better keep it a separate work item please?
 
-In other places we use:
 
-select_idle_capacity()
+Cheers
 
-/* This CPU fits with all capacity and performance requirements */
-                          ^^^^^^^^     ^^^^^^^^^^^^^^^^^^^^^^^^
-
-`capacity` is probably equal `utilization`? and `performance
-requirements` stand for `uclamp (min/max)`.
-
-/* Only the min performance (i.e. uclamp_min) doesn't fit */
-            ^^^^^^^^^^^^^^^
-here we link `min performance` explicitly to `uclamp_min`.
-
-/* Look for the CPU with highest performance capacity.
-                                 ^^^^^^^^^^^^^^^^^^^^
-I guess this stands for `cap_orig - thermal_load_avg()`
-
-feec()
-
-/* Both don't fit performance (i.e. uclamp_min) but best energy cpu has
-                  ^^^^^^^^^^^  ^^^^^^^^^^^^^^^
-better performance. */
-^^^^^^ ^^^^^^^^^^^
-
-Here I assume `better performance` stands for higher `cap_orig -
-thermal_pressure', not for `uclamp min or max`?
-
----
-
-IMHO, referring to `uclamp (min/max)` as `performance (min/max)
-hint/(requirement)` is fine as long as it's done consistently in
-comments and the alias is not used for other items.
-
-> 
-> Using 'uclamp hint' if you found it really confusing, is fine by me. But I'd
-> rather steer away from 'bandwidth' or 'utilization' when describing uclamp and
-> its intention.
-> 
-> I like using performance requirements because it enforces what this hint
-> actually means.
-
+--
+Qais Yousef
