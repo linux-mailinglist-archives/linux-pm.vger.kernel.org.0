@@ -2,142 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91C8672B40
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 23:26:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A81D672BB0
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 23:50:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjARW02 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 17:26:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35734 "EHLO
+        id S229564AbjARWug (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 17:50:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229575AbjARW00 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 17:26:26 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B25E63081
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 14:26:24 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id r30so77828wrr.10
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 14:26:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ZiyYIQERyoQDZx5EhXQDAi77/yaNBI4sXFn9DiwCNs=;
-        b=YPYqlz+xHhe24OpPAn+LNnN3Koe8wjxIjSvVz5I/7Jjr25c0z3FTjYXb5q6WFGBbtb
-         VUUWXDa96j9cU/FWN2b41d2kv8+vPjvlHRJ4M7QmaAoH8VwUzl8/+NeECrYGDTjhfn8O
-         KKJXsGQNonRZNVyWUSS35cC3DHPKupzIYZGZLznBjJutXq9ncBOAfnZq2kf+u15yBwb8
-         b9BzEBisLqVElsrhI2Q9/Ik7g+KDgW4v8/DzLkzl6UStl78+ofqQ5Dz4ryT/eEAW7Ves
-         kJR9yNfZ0kaSkFPL1C99I2XhydDZwlyJH3Lst2Kl+S7pEQuNzPuxCLeRaN9CmEOtpOVw
-         wp/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5ZiyYIQERyoQDZx5EhXQDAi77/yaNBI4sXFn9DiwCNs=;
-        b=1RE18vul6JqKdCGJqvsrzk3Cu/UghT/vx0J9waWeP2WvfyOL25pWTro+Ux2KXBcBnl
-         AyGBBGsCW3QgGImNBuyeDaduJdAgrxASUgVz2s+8scLVEjoBMUPkzv+MR/fmM/pL5Rff
-         FpQJLwGnX3XVBwZdX2QYDEaJ7JUy90O3sZQ4aI+KT/3xiyUI6Y8Bx+p7B2lTFIela0al
-         VVMgaMx4qxO7+I2XtaeTlg8vQHlAolzs7RPDV4vW/0OgiUqOFFTcx33C9cdKYVLOQlRt
-         TgA9dnKY2VQ68ZFUD2uxtxpUR6pBnFL+wpzY+AavbBk9TkNaDh4yDe1rlsdPcO9T/BO9
-         e+4g==
-X-Gm-Message-State: AFqh2kpOADUzWlKdZRBaes/55Cs9xCzn+/lzeq4bm2qRDQ/2eCbd04RW
-        5KMiM3rETAJyIB+psPJJKsGCpQ==
-X-Google-Smtp-Source: AMrXdXtcjUpeIxxnEUDjtsSxM6s+gch9zqzPnXBZ0708WwUezrD/yB8TVQbkMm1cx8av67Q/ZUMenA==
-X-Received: by 2002:a5d:66c6:0:b0:2bd:d966:7fff with SMTP id k6-20020a5d66c6000000b002bdd9667fffmr8331359wrw.20.1674080782807;
-        Wed, 18 Jan 2023 14:26:22 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id o7-20020a5d62c7000000b002bbeda3809csm26353554wrv.11.2023.01.18.14.26.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 14:26:22 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     rafael@kernel.org, daniel.lezcano@linaro.org
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] thermal/drivers/armada: Use the thermal_zone_get_crit_temp()
-Date:   Wed, 18 Jan 2023 23:26:10 +0100
-Message-Id: <20230118222610.186088-1-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        with ESMTP id S229720AbjARWue (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 17:50:34 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEBF4CE40;
+        Wed, 18 Jan 2023 14:50:34 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EADE8B81F70;
+        Wed, 18 Jan 2023 22:50:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E26DC433D2;
+        Wed, 18 Jan 2023 22:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674082231;
+        bh=GVjj5wv/W5r/JII8diz1Kv9XSvPiIbibbdcOM15O5xI=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=jc0YgQwM7BEg5Ex5QHeLykneFg18l9PKawsGooxUjc/bcg1KwK+os/Zct5hrMlUh0
+         /G+u6sz1NU8lQHSBw63z7+JOWH4NI9oytdOWlXveppanadRXjVPe8ihzOnLFyrdMWp
+         8axVKGLffxlF2S5F4JTS1gwBUfwUjHdWOG5Pq7eJhIOigL6G37RZH1TzTFYztzGjbJ
+         I5Te+neg/Nk5H/U1ng0vJfuNIYaZIid6cbA4xrHbhjd5anN3eYsu4APr22454c4DaD
+         0rBklk8C3IACsRXqhv2Oj+Q5UfxZcwmTQ5gDrSD83aydU4pi7O5k1ooKvJhTVInt4e
+         I4bJHQv43T2aw==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        bryan.odonoghue@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        djakov@kernel.org, agross@kernel.org
+Cc:     shawn.guo@linaro.org, dmitry.baryshkov@linaro.org,
+        devicetree@vger.kernel.org, fabien.parent@linaro.org,
+        benl@squareup.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        leo.yan@linaro.org
+Subject: Re: (subset) [PATCH v3 0/8] Add MSM8939 SoC support with two devices
+Date:   Wed, 18 Jan 2023 16:50:21 -0600
+Message-Id: <167408222413.2952004.17840128703188022875.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
+References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The driver browses the trip point to find out the critical trip
-temperature. However the function thermal_zone_get_crit_temp() does
-already that, so the routine is pointless in the driver.
+On Tue, 17 Jan 2023 02:48:38 +0000, Bryan O'Donoghue wrote:
+> V3:
+> - Happily I don't currently depend on any other series to be merged.
+>   Bjorn and Chanwoo picked up everything I need to unblock this series. ＼(^o^)／
+> 
+> - Moves xo_board to RPM/PMIC clock gated CXO, not including rpmcc: obvs - Konrad/Bjorn
+> - qcom,msm-id = <239 0> - left as in V2 valid according to Sony references - bod
+> - cpu-release-addr - as stated below we rely on lk2nd to take the second cluster
+>   out of reset - bod
+> - smem child node update - Konrad
+> - Whitespace updates - Konrad
+> - gpu no interconnect - Konrad - No bod
+> - 19.2 MHz dropped from timer@b020000 - Konrad
+> - Added vreg_dummy comment - Konrad
+> - sdc_pins grouped - Konrad
+> - startup-delay-us = <0> - left as is
+> - bias - added no-bias - Konrad
+> - :g/msmgpio/s//tlmm/g - Konrad
+> - mdss/s//display-controller - Konrad
+> - l11 set-load - Korad
+> 
+> [...]
 
-Use thermal_zone_get_crit_temp() instead of inspecting all the trip
-points.
+Applied, thanks!
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/armada_thermal.c | 38 +++++++++++++-------------------
- 1 file changed, 15 insertions(+), 23 deletions(-)
+[4/8] clk: qcom: smd-rpm: msm8936: Add PMIC gated RPM_SMD_XO_*
+      commit: d03de4179540e9cee6e3f664e1b65178f07bb612
 
-diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_thermal.c
-index db040dbdaa0a..c6d51d8acbf0 100644
---- a/drivers/thermal/armada_thermal.c
-+++ b/drivers/thermal/armada_thermal.c
-@@ -784,34 +784,26 @@ static int armada_configure_overheat_int(struct armada_thermal_priv *priv,
- 					 int sensor_id)
- {
- 	/* Retrieve the critical trip point to enable the overheat interrupt */
--	struct thermal_trip trip;
-+	int temperature;
- 	int ret;
--	int i;
--
--	for (i = 0; i < thermal_zone_get_num_trips(tz); i++) {
--
--		ret = thermal_zone_get_trip(tz, i, &trip);
--		if (ret)
--			return ret;
--
--		if (trip.type != THERMAL_TRIP_CRITICAL)
--			continue;
--
--		ret = armada_select_channel(priv, sensor_id);
--		if (ret)
--			return ret;
- 
--		armada_set_overheat_thresholds(priv, trip.temperature,
--					       trip.hysteresis);
--		priv->overheat_sensor = tz;
--		priv->interrupt_source = sensor_id;
-+	ret = thermal_zone_get_crit_temp(tz, &temperature);
-+	if (ret)
-+		return ret;
- 
--		armada_enable_overheat_interrupt(priv);
-+	ret = armada_select_channel(priv, sensor_id);
-+	if (ret)
-+		return ret;
- 
--		return 0;
--	}
-+	/*
-+	 * A critical temperature does not have a hysteresis
-+	 */
-+	armada_set_overheat_thresholds(priv, temperature, 0);
-+	priv->overheat_sensor = tz;
-+	priv->interrupt_source = sensor_id;
-+	armada_enable_overheat_interrupt(priv);
- 
--	return -EINVAL;
-+	return 0;
- }
- 
- static int armada_thermal_probe(struct platform_device *pdev)
+Best regards,
 -- 
-2.34.1
-
+Bjorn Andersson <andersson@kernel.org>
