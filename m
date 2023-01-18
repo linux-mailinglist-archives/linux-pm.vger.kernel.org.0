@@ -2,132 +2,159 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7736728C4
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 20:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 215686728D3
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 20:57:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229483AbjARTy5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 14:54:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
+        id S229512AbjART5s (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 14:57:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjARTy4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 14:54:56 -0500
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618B6589BE
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 11:54:55 -0800 (PST)
-Received: by mail-ej1-x62c.google.com with SMTP id kt14so7291ejc.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 11:54:55 -0800 (PST)
+        with ESMTP id S229659AbjART5p (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 14:57:45 -0500
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94A059541;
+        Wed, 18 Jan 2023 11:57:42 -0800 (PST)
+Received: by mail-qt1-x831.google.com with SMTP id s4so1814245qtx.6;
+        Wed, 18 Jan 2023 11:57:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=PS/7KuaB+IDJ4czpYZHfKfWWHUA84RHoIsTNfT8XuEU=;
-        b=S0yIBmB+f/4oFnfqAxjqm9aQJfCPt643cmPeAJKJPeekK2T3v7n5HehsoVvxSE6bU6
-         Y7Bg7s+JENwF9NUn2L7RZFzpVypzZaRMOCFOxolI4MU9wCdSvZYVPSKQnQ3nH05aA/84
-         qlu+z0GkLuieC2sDWH54TBMrxtjFX3knmLW7FotnDQns8sYrlNMGNpJrgH6omg5QQ8S4
-         W8zcVnI5enQv6Oh9l78bEWs5lAVF8Y7bIaQZgg0WvRZwQFUoMY9yWfcuYfKQI31lvRMW
-         t8NxgxIyBXVFwA15TebgbIaBGylGv0Wr/kfDtzyw+peIGIfPEmVeQnc6pnc1LCfqTSS0
-         eIWw==
+        bh=2qWA5wiyfjH0Va+Vx5qAKgnXVeWFuFmu2RbQWpk+MCc=;
+        b=MkYk6LD8I0u6FoU+zrOFzm9+HfOG9qh7vFwihyD9kbVeC2NuyQGGfGXS+0wT+o8lXg
+         GMR4WogwcgeFmCtrqEcrZUfeA4ES6C4qt/cohsvIsMuW32D9W4awvLThONuCiqQTcKOh
+         0/uZy0+QB87A8dTPxHhy6dCqMYjWNHOaUMz8TXrYKdkXkZzZVxZHgjDXj06NcqnOHoAK
+         xr7l1PvgeFB4QNiPNoX7wCOcT3Bb8SIgOUMqamQK0vxzY7YCLokgRxxNfJjTe8RNBvDT
+         I9Wqd3V0IrEYJFRyk7Pt7tsAh3IEpQ2eJxtws0iBn6aaMzZERw/W8cKdHSDmrfaf25Li
+         nx5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PS/7KuaB+IDJ4czpYZHfKfWWHUA84RHoIsTNfT8XuEU=;
-        b=nOkXY1u1Lw1oFxtoqkDb5BTnBLQ3cblKY+urwzLV0zBvtuFhtUZH+FoeQXX6Eclcs1
-         RE82QABQgfgzJi/U0QQ4hx/Zn0yoeK3kr0rGRraXaG3TRQNGBDoh4Z7znOpa+fXygQF1
-         VGfexjnOfYaeihWJ8u+ovsiuuuJusBEVnvkZTl4pi3KFBlDqnda7z829o8fXsdHmhgfv
-         VODD3wKk42JlJGWnXU8hhpyUun3YkG2gkq2Ra8mQwJ16D6FwWgBVQ5tDNcQ9Rm7sT9m9
-         yGSqaabj4qKqzi73x3mgA5Zs+AdE+To3JQg7m73xc4TA73TRF07rIonyUYHY7n6IlQjP
-         AJTw==
-X-Gm-Message-State: AFqh2krwpJadwJT9R3FSsqv1E8eIFQRyBaNYGdjBNoY5OIwqTD4Jncbw
-        j4brBEgYbfzoarsb32BEsWdS/g==
-X-Google-Smtp-Source: AMrXdXsTXO2h6sqsyvxXkLtL0jBXFCsyXKu+HZK+lAdfdFRJ7Z+o+GbGbEHYDji0L9trJsJrB6sDew==
-X-Received: by 2002:a17:907:1a46:b0:84c:e89e:bb4c with SMTP id mf6-20020a1709071a4600b0084ce89ebb4cmr4063246ejc.49.1674071694016;
-        Wed, 18 Jan 2023 11:54:54 -0800 (PST)
-Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
-        by smtp.gmail.com with ESMTPSA id f17-20020a170906495100b0086dd8f20a6asm5923513ejt.77.2023.01.18.11.54.52
+        bh=2qWA5wiyfjH0Va+Vx5qAKgnXVeWFuFmu2RbQWpk+MCc=;
+        b=OO8/juYlnbO84m9WXGGgYSqz5CjEh4qDRsqZ8ySlqwiMEMTNe7OSXIeeZJjO5dqs7k
+         5/reHzdB/WgqZZKVvUYj7csAQqIj5TAhoSzh/hHFe+iz2+7DYm7q7zsmLWmIAonRoKfY
+         MfsgCj7CQDZFk2KDUpr5XoLzZm6aqf++NtsiE8gcdx1K67gNfKiH1BWIuc148dddv0Hn
+         WbwKPHcuspv0/+pK7xag9+0YhnDXwezhxarL5RE0oXb6GfXjnnYQkBKE5X2W5A8pgLxZ
+         mrIMYhUg/1m0KIzhLFGuKDcvJhM7MVFPkBPN7ln1oe1k0KoITdceCuRJLrKRfLc6y21I
+         z/Bg==
+X-Gm-Message-State: AFqh2kpt2tsHaWaKD58g31DSg+WBP1xo74juH8cXWW3Kz+aQrr6CYXlf
+        aaSEkACleyvAsV0Kk2dLI05c4Vw9Eq8=
+X-Google-Smtp-Source: AMrXdXsd4MmZhfJts2pvzlCxOrOLnJ4Igu3WSwNBulzTItK+mfNTm2DuuFFzyd//LJYjrKnc6aSYzg==
+X-Received: by 2002:a05:622a:1dc4:b0:3b6:3b60:e0 with SMTP id bn4-20020a05622a1dc400b003b63b6000e0mr10477164qtb.31.1674071861737;
+        Wed, 18 Jan 2023 11:57:41 -0800 (PST)
+Received: from ?IPV6:2600:1700:2442:6db0:c0fe:24db:874d:3fd8? ([2600:1700:2442:6db0:c0fe:24db:874d:3fd8])
+        by smtp.gmail.com with ESMTPSA id b24-20020ac86798000000b0039cc944ebdasm17888911qtp.54.2023.01.18.11.57.40
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 11:54:53 -0800 (PST)
-Message-ID: <f07bbbb6-3343-19c7-bd94-c8c239f1cbc8@linaro.org>
-Date:   Wed, 18 Jan 2023 20:54:51 +0100
+        Wed, 18 Jan 2023 11:57:41 -0800 (PST)
+Message-ID: <0c1b5696-060b-8545-994d-160217449951@gmail.com>
+Date:   Wed, 18 Jan 2023 13:57:40 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3 8/9] interconnect: qcom: rpm: Add a way to always set
- QoS registers
+ Thunderbird/102.4.2
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
 Content-Language: en-US
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, krzysztof.kozlowski@linaro.org
-Cc:     marijn.suijten@somainline.org, bryan.odonoghue@linaro.org,
-        Georgi Djakov <djakov@kernel.org>, linux-pm@vger.kernel.org,
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-kernel@vger.kernel.org
-References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
- <20230116132152.405535-9-konrad.dybcio@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230116132152.405535-9-konrad.dybcio@linaro.org>
+References: <cover.1674030722.git.viresh.kumar@linaro.org>
+ <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-
-On 16.01.2023 14:21, Konrad Dybcio wrote:
-> On newer SoCs (there's no clear boundary, but probably "new enough"
-> means every interconnect provider is either BIMC or QNoC and there
-> are no old-style NoC hosts) we're expected to set QoS registers
-> regardless of the ap_owned param. Add a bool in the qcom_icc_provider
-> and make the logic assume it's okay to set the registers when it's
-> set.
+On 1/18/23 02:38, Viresh Kumar wrote:
+> put_device() shouldn't be called before a prior call to
+> device_register(). __thermal_cooling_device_register() doesn't follow
+> that properly and needs fixing. Also
+> thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> on few error paths.
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Fix all this by placing the calls at the right place.
+> 
+> Based on initial work done by Caleb Connolly.
+> 
+> Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
-Argh, I only noticed now that this patch is incomplete,
-missing setting the value in qnoc_probe() and adding a
-similar struct member to qcom_icc_desc..
-
-Konrad
->  drivers/interconnect/qcom/icc-rpm.c | 2 +-
->  drivers/interconnect/qcom/icc-rpm.h | 2 ++
->  2 files changed, 3 insertions(+), 1 deletion(-)
+> For v6.2-rc.
 > 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index 509cadf398e9..343e6021a93a 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -243,7 +243,7 @@ static int __qcom_icc_set(struct icc_node *n, struct qcom_icc_node *qn,
->  	bool vote_ap, vote_rpm;
->  	int ret;
+> V3->V4:
+> - The first three versions were sent by Caleb.
+> - The new version fixes the current bugs, without looking to optimize the
+>   code any further, which is done separately in the next two patches.
+> 
+>  drivers/thermal/thermal_core.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index f17ab2316dbd..77bd47d976a2 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -909,15 +909,20 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	cdev->devdata = devdata;
 >  
-> -	if (qp->type == QCOM_ICC_QNOC) {
-> +	if (qp->type == QCOM_ICC_QNOC || qp->always_set_qos) {
->  		vote_ap = true;
->  		vote_rpm = true;
->  	} else {
-> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-> index 729573f0d9fe..3c8888482a39 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.h
-> +++ b/drivers/interconnect/qcom/icc-rpm.h
-> @@ -28,6 +28,7 @@ enum qcom_icc_type {
->   * @type: the ICC provider type
->   * @regmap: regmap for QoS registers read/write access
->   * @qos_offset: offset to QoS registers
-> + * @always_set_qos: whether to always set QoS registers regardless of bus type
->   * @bus_clk_rate: bus clock rate in Hz
->   * @bus_clks: the clk_bulk_data table of bus clocks
->   * @intf_clks: the clk_bulk_data table of interface clocks
-> @@ -39,6 +40,7 @@ struct qcom_icc_provider {
->  	enum qcom_icc_type type;
->  	struct regmap *regmap;
->  	unsigned int qos_offset;
-> +	bool always_set_qos;
->  	u64 bus_clk_rate[2];
->  	struct clk_bulk_data bus_clks[2];
->  	struct clk_bulk_data intf_clks[];
+>  	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
+> -	if (ret)
+> -		goto out_kfree_type;
+> +	if (ret) {
+> +		kfree(cdev->type);
+> +		goto out_ida_remove;
+> +	}
+>  
+>  	thermal_cooling_device_setup_sysfs(cdev);
+> +
+>  	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+>  	if (ret) {
+> +		kfree(cdev->type);
+>  		thermal_cooling_device_destroy_sysfs(cdev);
+> -		goto out_kfree_type;
+> +		goto out_ida_remove;
+>  	}
+> +
+>  	ret = device_register(&cdev->device);
+>  	if (ret)
+>  		goto out_kfree_type;
+> @@ -943,6 +948,8 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	thermal_cooling_device_destroy_sysfs(cdev);
+>  	kfree(cdev->type);
+>  	put_device(&cdev->device);
+> +
+> +	/* thermal_release() takes care of the rest */
+>  	cdev = NULL;
+>  out_ida_remove:
+>  	ida_free(&thermal_cdev_ida, id);
+
+My testing:
+
+ Applied on top of v6.2-rc1
+ The configuration is qcom_defconfig
+ The system is a Qualcomm Dragon 8074
+
+The two WARNING stack traces no longer occur after applying the patch.
+
+Tested-by: Frank Rowand <frowand.list@gmail.com>
+
