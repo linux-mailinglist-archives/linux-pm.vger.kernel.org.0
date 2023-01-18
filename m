@@ -2,111 +2,136 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85DAE671C8F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 13:51:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C69671D9E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 14:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbjARMvv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 07:51:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
+        id S229895AbjARNYA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 08:24:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjARMvf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 07:51:35 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF1E9AA5C0
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:12:40 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id u19so82681644ejm.8
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:12:40 -0800 (PST)
+        with ESMTP id S229629AbjARNXo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 08:23:44 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EC53EC5E
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:49:34 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id z11so49495678ede.1
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 04:49:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HJcZxpyrwGsFLd0khHQDpi2RJfK7qh9/a4UC27izsOk=;
-        b=At6V6LmpVZCQl1TGLLCGaCq8nvSvnGDown+WFGhJ0CWr7aZoHMRiesTxgBG6ajdw21
-         iuU3MXlRWvfzbZSS0VFw0RdIfyeUtjfYHS/IAmRk6lWU+dDrZCMr/qTJJHQ12aQW8suR
-         gk8MewMS9bS9WQJu68PePXX4tMJSpEUVsbaGORMO/zBq+owLRYTQl9zD2SspoVAaNPZN
-         d9AT8VekWlPSM+CwgiaY1mm+ZZXG0JAwKiWsx9eW04Xx6R9uxa7xdvC+COjNBsz59cU1
-         Ja29RThY2FUX/QfqRXkBjL1LQ/iqy5z0nOsfhkmVFu8XICVKC/qStqD4BdNWoRlUpaVg
-         EXWQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=djHqBDlScb5lRsRE74FGmmvvX5FCg2DiG/HUABofp+s=;
+        b=S3jpbPgP+0E7k7Q/czAPZSiFUwGdraKA/CiRy5bKyvrnH65HGI0UdVVF0Id10XglQt
+         lfqC4jpTpojl2k4PcOwJdYourHyO7k4VLjhrtizKYslUoi5DpiE3+y9wtRitKlELjybG
+         8KXvMAyiWSJZB+J5lifEkDU9r5PojnhkSJ0JKsX1wMUgiUs9Z+xTWOQN2U/jljPyIe2e
+         yMIunlhUW4gUk+ezilPNN8i+NhxxWrdjt06FqsMcWkmQ/WtngAk96P3nyvvwBkdLhZA1
+         4JyqIJH0wTHTXhR0sSGC7Ocf3z4qyZq1VnGDRlw3mjOX6z/qd2D8e0nn+bkwRfDqzs1H
+         JjLw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HJcZxpyrwGsFLd0khHQDpi2RJfK7qh9/a4UC27izsOk=;
-        b=bvNG4bjAQ8BwnAAFXZ8N8VCUIL6vCVWE3DFwOfagR8X2lYTOH3EFeGDmiLvTNvAXkO
-         eQvDfdOUwYP6BYFdZeYOUWgkPuY8VP+nKzVAuBS3fJZ4dRdo/UJmXedDzzcsMCVQqCya
-         xTRvG8n5A0rxp6oe5kuHfzk6WHL1v3FRJXlT87EvktXlWrRmy+U0SwgpzWUAH5yECUzo
-         4BDcg52Jiu56zwm5BqmLTzzbNNbbzPkSnMNkmlYXfDv2RTTB03X9Z58PmngM+HMXGvTZ
-         cPuHASImCRAGIdggp0dktVEjYVAzI3QUwb41iCvCYe6tdpcctjPA6XgAoykrWpLqDgVy
-         /IEw==
-X-Gm-Message-State: AFqh2kreTwZEjgQuji+oYQzPwV1xL3n8K53MdhV3/DpFJJzlvle99mFB
-        r7nCWFWKlrtY9am7ewU6h7nY30K1eJVIrm22U04=
-X-Google-Smtp-Source: AMrXdXtBBaNCK2uM/GK+BilgvXJEf+ppiEwQ990VrL74XgKcaLTs+p+Zndq5y9e/gO/Lg0SEDPRmyv+q4KYpyUt4fz0=
-X-Received: by 2002:a17:906:f0c6:b0:7c0:deb6:e13c with SMTP id
- dk6-20020a170906f0c600b007c0deb6e13cmr534873ejb.457.1674043958948; Wed, 18
- Jan 2023 04:12:38 -0800 (PST)
+        bh=djHqBDlScb5lRsRE74FGmmvvX5FCg2DiG/HUABofp+s=;
+        b=zrkjTs+zocRe66DapeYZmSaWABRPCXRViNSVMMhTSaenJ4NWkbqQdrVOG183oIAIF+
+         B8SG4ZDgNvn4+r7MtzG0qplyHrSnBB9k0keXA3kuOIMuj4seVuzmZIjkwYJfnkVtu5i0
+         aKoLuoHsuEvS0daphNCxF/Cdoi1yswFpRIOYYKF4rcmb/mfWixIQW++TMvlvAkdanRIr
+         xCgW8zTJ6KHvycYRFKEEDADXj2Log1MqcgChVvIY1oJqLukwGhGpsDpQTzTdbBTDZH1T
+         eczT8fvmowN9I37LYxznGsOcvXCuBCalngVIckfsmdgx/zAqiV+VlqOh/10r69Z4Ca8A
+         Wljw==
+X-Gm-Message-State: AFqh2koA4rMbgwYK9j+F0lf53jLr1WQ9TgGTBAZGL47oQfNHCE3LesTB
+        djVrIAaMMdcOH4PbdDGxHRXMi3ilAMBMOPVU
+X-Google-Smtp-Source: AMrXdXvsUJwb/yAFbMhciMhs5y72gLy9mpb2XpfKAbJT39PGO3tb+WGBE3y6N5X1t0pHWPZdLobXuw==
+X-Received: by 2002:aa7:ccd3:0:b0:49d:f44f:7ef1 with SMTP id y19-20020aa7ccd3000000b0049df44f7ef1mr7209879edt.14.1674046173533;
+        Wed, 18 Jan 2023 04:49:33 -0800 (PST)
+Received: from [192.168.1.101] (abxh252.neoplus.adsl.tpnet.pl. [83.9.1.252])
+        by smtp.gmail.com with ESMTPSA id 18-20020a170906201200b00846734faa9asm14468680ejo.164.2023.01.18.04.49.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 04:49:33 -0800 (PST)
+Message-ID: <9850c8a3-5d1e-d379-7994-14c04fc8c653@linaro.org>
+Date:   Wed, 18 Jan 2023 13:49:30 +0100
 MIME-Version: 1.0
-Sender: johncliff888@gmail.com
-Received: by 2002:a05:640c:1fca:b0:1a0:53e4:7117 with HTTP; Wed, 18 Jan 2023
- 04:12:38 -0800 (PST)
-From:   "Mr. Omar Ousman" <mromarousman@gmail.com>
-Date:   Wed, 18 Jan 2023 04:12:38 -0800
-X-Google-Sender-Auth: fkOPEan5-5fOF_qDNMgHo2pF7KI
-Message-ID: <CABmh+1k9zGYdP+eYo6OU+=rmmB1PBYTGZB1r0XqAv9chHZ+v7A@mail.gmail.com>
-Subject: GREETINGS TO YOU., ...
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.5 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_USD,MONEY_FORM_SHORT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_SHORT,T_HK_NAME_FM_MR_MRS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:62d listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.8436]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [johncliff888[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [johncliff888[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  2.0 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  0.0 T_FILL_THIS_FORM_SHORT Fill in a short form with personal
-        *      information
-        *  0.0 MONEY_FORM_SHORT Lots of money if you fill out a short form
-        *  2.9 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v3 8/9] interconnect: qcom: rpm: Add a way to always set
+ QoS registers
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org, krzysztof.kozlowski@linaro.org
+Cc:     marijn.suijten@somainline.org, Georgi Djakov <djakov@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230116132152.405535-1-konrad.dybcio@linaro.org>
+ <20230116132152.405535-9-konrad.dybcio@linaro.org>
+ <6e35de82-e539-35c1-fcb1-10c02af9bb8c@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <6e35de82-e539-35c1-fcb1-10c02af9bb8c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-I'm Mr. Omar a regional managing director (CORIS BANK INTERNATIONAL)
-Ouagadougou Burkina Faso, in my department we have US$ 9.5 million
-united state dollars, to transfer into your account as a dormant
-fund,If you are interested to use this fund to help the orphans around
-the world contact me with my email address (mromarousman@gmail.com)
-and your personal information's below
 
-Your Full names.
-Your Country of origin.
-Your Occupation
-Your Mobile Number
 
-My Regards
+On 17.01.2023 14:27, Bryan O'Donoghue wrote:
+> On 16/01/2023 13:21, Konrad Dybcio wrote:
+>> On newer SoCs (there's no clear boundary, but probably "new enough"
+>> means every interconnect provider is either BIMC or QNoC and there
+>> are no old-style NoC hosts) we're expected to set QoS registers
+>> regardless of the ap_owned param. Add a bool in the qcom_icc_provider
+>> and make the logic assume it's okay to set the registers when it's
+>> set.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> ---
+>>   drivers/interconnect/qcom/icc-rpm.c | 2 +-
+>>   drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>>   2 files changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+>> index 509cadf398e9..343e6021a93a 100644
+> 
+> On next-20230116,
+g fetch linux-next next-20230116
+gco FETCH_HEAD
+b4 am 20230116132152.405535-1-konrad.dybcio@linaro.org
+g am ./v3_20230116_konrad_dybcio_the_great_interconnecification_fixation.mbx
+
+Stosowanie: interconnect: qcom: rpm: make QoS INVALID default, separate out driver data
+Stosowanie: interconnect: qcom: rpm: Always set QoS params on QNoC
+Stosowanie: interconnect: qcom: rpm: Add support for specifying channel num
+Stosowanie: interconnect: qcom: Sort kerneldoc entries
+Stosowanie: interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+Stosowanie: interconnect: qcom: rpm: Rename icc provider num_clocks to num_bus_clocks
+Stosowanie: interconnect: qcom: rpm: Handle interface clocks
+Stosowanie: interconnect: qcom: rpm: Add a way to always set QoS registers
+Stosowanie: interconnect: qcom: rpm: Don't use clk_get_optional for bus clocks anymore
+(no errors)
+
+Konrad
+> 
+> git am < ~/Downloads/v3-1-9-interconnect-qcom-rpm-make-QoS-INVALID-default-separate-out-driver-data.patch
+> Applying: interconnect: qcom: rpm: make QoS INVALID default, separate out driver data
+> Applying: interconnect: qcom: rpm: Add support for specifying channel num
+> Applying: interconnect: qcom: rpm: Rename icc desc clocks to bus_blocks
+> Applying: interconnect: qcom: rpm: Add a way to always set QoS registers
+> 
+> error: patch failed: drivers/interconnect/qcom/icc-rpm.c:243
+> error: drivers/interconnect/qcom/icc-rpm.c: patch does not apply
+> error: patch failed: drivers/interconnect/qcom/icc-rpm.h:28
+> error: drivers/interconnect/qcom/icc-rpm.h: patch does not apply
+> Patch failed at 0004 interconnect: qcom: rpm: Add a way to always set QoS registers
+> hint: Use 'git am --show-current-patch=diff' to see the failed patch
+> 
+> Should I pick up another series from elsewhere to apply this ?
+> 
+> ---
+> bod
