@@ -2,91 +2,106 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7B167264D
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 19:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E4467266A
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 19:13:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjARSII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 13:08:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
+        id S229950AbjARSNB (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 13:13:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbjARSHc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 13:07:32 -0500
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75330305E5;
-        Wed, 18 Jan 2023 10:06:54 -0800 (PST)
-Received: by mail-pj1-x102f.google.com with SMTP id d8so5438161pjc.3;
-        Wed, 18 Jan 2023 10:06:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SxGr9rOjQ2yaqoiQx0FCZlVaS0TlHYkQlc1FA+WU8H8=;
-        b=a/BjP6c+RXvAJ5fpcIIE7Z3Df2XqmGu0WVjZhlCP4QZweEp1D6ia0ryuOes2T5daAG
-         XypMlmzfAo19fqgw93mdtd4ekji3zoeJvxtGm8bUA1It609G5S/3qTzvQ243VF6UcFjl
-         Ht+u1xSsmRzlBMY+aIaI4zuFJ1jc4+WcZTM5bYxpnJPd8L8EaSXaI0GcXZLEqMcBAvjc
-         3+ba7eep3kAcDT8yDp40bK9hsP5tioL6C8dN+ndXdTLQ80hQPsaGKI9Ds6MJ08lYPCwi
-         Qc0pone/sWpfxcmRHAOWvuu+kkejlS1oF/cJPy4nGO2O2fd0maHt5WVJniL1T7AAI9L9
-         GRqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SxGr9rOjQ2yaqoiQx0FCZlVaS0TlHYkQlc1FA+WU8H8=;
-        b=Ix01Jcmwgb8YZxGWXY5qXs66MoOQ6C/A70XxOa1suYtZcgRRjm0zdqykaeFF1AouYq
-         AFa3hVJyUcRNYIR3PF7t3oEfCauPo1Hk9v6la9wJHm3JWFVLXagWAfjeemvshRG8DLqj
-         yYUmLGiKb6SpO982ij+amKc0FEATfIX2gyIM7qZp3prZc/3g2Iiis4ge3TnV9Y8v0e1p
-         +vnNj7c4Jovu6FH+2JOIS8JpDrKGAHdwUWHz+GcZBP8U5MOBK0SJgVkbhzAS7+nMgKwu
-         bbCl0DYSuKBE30yLMr0SsbnxFbryPnGATKBsL2QxXcnoiC8Less1Hy2a5SCGWzEEEguw
-         MZZg==
-X-Gm-Message-State: AFqh2kqpfUHM4Rs6elzY/W80QowBHEnvIx9ARh++tJEh553/cKJMuzyA
-        E5LQfZIfbkVaSAYxcAAamrSgX3+3Ucw=
-X-Google-Smtp-Source: AMrXdXueiL3W/Jezt82y5r981JYjbBLjAmeVFwgCxnME+StrfxNCm+8TTZM1Gs1onLkI/fGuwOid0g==
-X-Received: by 2002:a17:90b:3c0e:b0:227:1c1e:7529 with SMTP id pb14-20020a17090b3c0e00b002271c1e7529mr8356052pjb.15.1674065213863;
-        Wed, 18 Jan 2023 10:06:53 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id pc3-20020a17090b3b8300b001fde655225fsm2786736pjb.2.2023.01.18.10.06.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 10:06:52 -0800 (PST)
-Message-ID: <2746ce9a-c44f-167d-7d2f-5dcd838af1d0@gmail.com>
-Date:   Wed, 18 Jan 2023 10:06:43 -0800
+        with ESMTP id S229739AbjARSNA (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 13:13:00 -0500
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7E4A9;
+        Wed, 18 Jan 2023 10:12:59 -0800 (PST)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30IHg6bT013725;
+        Wed, 18 Jan 2023 18:12:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=tNDW5Z5FfWRU2ZvezRgERgXKcaw2HRi53+wjPgcTQq8=;
+ b=edc22gJU1MgKp1N7OLA1fq0LAWEDH/0zmS+ktoxtNhtxw8yFz///xN+KWDZNizPCMObt
+ eLdOQyP76yUf1b+aZuM4sfmvQZuNHMBz52PGXqxMM1ZASzrVRzMmJWdDLb1SvAVNrv8u
+ Wa5UKd3XHHKnMDA1PoNeba5p4obxIB7eRMvgkqWzArgv6Cx1kfEiY+w3zOezvn30Qr6k
+ ZwEVDTRc6/D6jwJIa2ylfhN/iZcCSRU4D2szrhWWtsGrrY7fa++4bCJV8qDtckekCkdm
+ b3j/qJkQGetvjoNsqKi1ok53/ToV7gZghqfV+GEAqig+DZtMWBAuiswl1UgnR7O3/hA6 wA== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n5nkqc3a4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 18:12:55 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30IICsH0024143
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 18 Jan 2023 18:12:54 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.36; Wed, 18 Jan 2023 10:12:54 -0800
+Date:   Wed, 18 Jan 2023 10:12:52 -0800
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Rob Herring <robh@kernel.org>
+CC:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        "Subbaraman Narayanamurthy" <quic_subbaram@quicinc.com>,
+        Johan Hovold <johan@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v2 1/4] dt-bindings: soc: qcom: Introduce PMIC GLINK
+ binding
+Message-ID: <20230118181252.GC3322341@hu-bjorande-lv.qualcomm.com>
+References: <20230113041132.4189268-1-quic_bjorande@quicinc.com>
+ <20230113041132.4189268-2-quic_bjorande@quicinc.com>
+ <20230117180058.GA3314512-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_thermal=3a_brcmstb=5fthermal=3a_Use?=
- =?UTF-8?B?wqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
-Content-Language: en-US
-To:     ye.xingchen@zte.com.cn, daniel.lezcano@linaro.org
-Cc:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <202301181631362083446@zte.com.cn>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <202301181631362083446@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230117180058.GA3314512-robh@kernel.org>
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: j4FepsETTAT2pHP7BWO3SeDm-EQS5guX
+X-Proofpoint-ORIG-GUID: j4FepsETTAT2pHP7BWO3SeDm-EQS5guX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.923,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-18_05,2023-01-18_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=918 bulkscore=0 lowpriorityscore=0
+ spamscore=0 priorityscore=1501 phishscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301180154
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/18/23 00:31, ye.xingchen@zte.com.cn wrote:
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+On Tue, Jan 17, 2023 at 12:00:58PM -0600, Rob Herring wrote:
+> On Thu, Jan 12, 2023 at 08:11:29PM -0800, Bjorn Andersson wrote:
+[..]
+> > +patternProperties:
+> > +  '^connector@\d$':
+> > +    $ref: /schemas/connector/usb-connector.yaml#
+> > +
+> > +    properties:
+> > +      reg: true
 > 
-> Convert platform_get_resource(), devm_ioremap_resource() to a single
-> call to devm_platform_get_and_ioremap_resource(), as this is exactly
-> what this function does.
+>        required:
+>          - reg
 > 
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> Or '@\d' needs to be optional.
+> 
 
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+You're right, and as the identifier is significant in the firmware
+interface I'll add it as required.
 
+Thanks,
+Bjorn
