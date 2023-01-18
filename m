@@ -2,56 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1766727B8
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 20:02:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4A966727DF
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 20:09:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbjARTC0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 14:02:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
+        id S229796AbjARTJ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 14:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229773AbjARTCH (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 14:02:07 -0500
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E6695CFD8;
-        Wed, 18 Jan 2023 11:01:06 -0800 (PST)
+        with ESMTP id S229840AbjARTJx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 14:09:53 -0500
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62EFF5143A;
+        Wed, 18 Jan 2023 11:09:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674068468; x=1705604468;
+  t=1674068992; x=1705604992;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=csT4HksI9oM/ml2mHEbILNsUNQxDWjDr4rLyUkDIzRE=;
-  b=G20Cf0W0gUunSk7mfjpp2Egv3xYMh1WZvhVbv2utcvUPDG9tG983x4Ok
-   HN89imn4SHVfZqKyz6kLZgol49zR32e+S181pzlZ2SOULuYew6t9aZpFy
-   G3fOHFpMlQ7bnez+9wWq5kAZPqYxyEsUgbeiYq34uuHd0X+1wy/Mzbo7I
-   twkTbwx5//xwSN/C+ZnBAuXbOjewQKk33Frz7s+9YDKfBF6wMhY8si5CZ
-   t3NnQ4SGyjmFIQUL5wSlThAS44MBgC6JFZ9jxMpW5pdfOng+KsjCMTmQc
-   V4Q5QqWkFt6xFm8+4Z4/cf088kG/+2mYUpZcLZKu2VWJsf9SeLPujER4X
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="323756339"
+  bh=4ZvVKyuc/15y4uwM2vM5DwHTEG1jR38Bd4ONK3Npz5Y=;
+  b=nhpjAblNZMqAvOr3mjXyn4NKB5QETpjn446T9LpTJ41weg33KedolgKJ
+   PXx4i054BXuoxx1Pti3uYvunSz8F9mV2BZ8BHvWes5FiM8qBheKinP6I9
+   mu7GL3guQKx5hovPrPar9+qFc+sOpulm3WTvwXTSG2wQR0XDjDHKQ3f2X
+   S05MyE21lDAs0myMxjL5ZbnXn7aa04PEy0sm7V9YYT8GL3BjasdtiZmTG
+   2x+7KZQF0dQWuAHC1boPHZ8Kq6nUIMUT6rWvNhQapIYTdJeCTv3ZkqiI4
+   WXSATCy9YvfHmKgO81JlpERLRjbo2wyIhOOrgI6bqrQRxsmjpEpLgGtq3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="411313056"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="323756339"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:01:02 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="659907410"
+   d="scan'208";a="411313056"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:09:52 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="653065942"
 X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
-   d="scan'208";a="659907410"
+   d="scan'208";a="653065942"
 Received: from yzeleke-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.16.158])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:01:01 -0800
-Message-ID: <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 11:09:51 -0800
+Message-ID: <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for
+ processor_thermal_device_pci
 From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Date:   Wed, 18 Jan 2023 11:01:01 -0800
-In-Reply-To: <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
-         <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
-         <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>
+Date:   Wed, 18 Jan 2023 11:09:51 -0800
+In-Reply-To: <20230118181622.33335-2-daniel.lezcano@linaro.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+         <20230118181622.33335-2-daniel.lezcano@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
@@ -65,107 +63,129 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 2023-01-18 at 13:48 +0000, Zhang, Rui wrote:
-> On Wed, 2023-01-18 at 10:53 +0100, Daniel Lezcano wrote:
-> > Hi,
-> > 
-> > On 13/01/2023 19:02, Daniel Lezcano wrote:
-> > > Recently sent as a RFC, the thermal ACPI for generic trip points
-> > > is
-> > > a set of
-> > > functions to fill the generic trip points structure which will
-> > > become the
-> > > standard structure for the thermal framework and its users.
-> > > 
-> > > Different Intel drivers and the ACPI thermal driver are using the
-> > > ACPI tables to
-> > > get the thermal zone information. As those are getting the same
-> > > information,
-> > > providing this set of ACPI function with the generic trip points
-> > > will
-> > > consolidate the code.
-> > > 
-> > > Also, the Intel PCH and the Intel 34xx drivers are converted to
-> > > use
-> > > the generic
-> > > trip points relying on the ACPI generic trip point parsing
-> > > functions.
-> > > 
-> > > These changes have been tested on a Thinkpad Lenovo x280 with the
-> > > PCH and
-> > > INT34xx drivers. No regression have been observed, the trip
-> > > points
-> > > remain the
-> > > same for what is described on this system.
-> > 
-> > Are we ok with this series ?
-> > 
-> > Sorry for insisting but I would like to go forward with the generic
-> > thermal trip work. There are more patches pending depending on this
-> > series.
+On Wed, 2023-01-18 at 19:16 +0100, Daniel Lezcano wrote:
+> The thermal framework gives the possibility to register the trip
+> points with the thermal zone. When that is done, no get_trip_* ops
+> are
+> needed and they can be removed.
 > 
-> The whole series looks good to me.
+> Convert ops content logic into generic trip points and register them
+> with the
+> thermal zone.
 > 
-> Reviwed-by: Zhang Rui <rui.zhang@intel.com>
-> 
-> But we'd better wait for the thermald test result from Srinvias.
-
-A quick test show that things still work with thermald and these
-changes.
+In this scheme is the assumption is that trip point temperature never
+changes? If firmware updated the trip temperature, what needs to be
+done?
 
 Thanks,
 Srinivas
 
+
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  .../processor_thermal_device_pci.c            | 53 ++++++++---------
+> --
+>  1 file changed, 22 insertions(+), 31 deletions(-)
 > 
-> thanks,
-> rui
-> > 
-> > Thanks
-> >    -- Daniel
-> > 
-> > > Changelog:
-> > >   - V5:
-> > >     - Fixed GTSH unit conversion, deciK -> milli C
-> > > 
-> > >   - V4:
-> > >     - Fixed Kconfig option dependency, select THERMAL_ACPI if
-> > > ACPI
-> > > is set
-> > >       only for the PCH driver
-> > > 
-> > >   - V3:
-> > >     - Took into account Rafael's comments
-> > >     - Used a silence option THERMAL_ACPI in order to stay
-> > > consistent
-> > >       with THERMAL_OF. It is up to the API user to select the
-> > > option.
-> > > 
-> > >   - V2:
-> > >     - Fix the thermal ACPI patch where the thermal_acpi.c was not
-> > > included in
-> > >       the series
-> > >     - Provide a couple of users of this API which could have been
-> > > tested on a
-> > >       real system
-> > > 
-> > > Daniel Lezcano (3):
-> > >    thermal/acpi: Add ACPI trip point routines
-> > >    thermal/drivers/intel: Use generic trip points for intel_pch
-> > >    thermal/drivers/intel: Use generic trip points int340x
-> > > 
-> > >   drivers/thermal/Kconfig                       |   4 +
-> > >   drivers/thermal/Makefile                      |   1 +
-> > >   drivers/thermal/intel/Kconfig                 |   1 +
-> > >   drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
-> > >   .../int340x_thermal/int340x_thermal_zone.c    | 177 ++++-------
-> > > --
-> > > --
-> > >   .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
-> > >   drivers/thermal/intel/intel_pch_thermal.c     |  88 ++------
-> > >   drivers/thermal/thermal_acpi.c                | 210
-> > > ++++++++++++++++++
-> > >   include/linux/thermal.h                       |   8 +
-> > >   9 files changed, 286 insertions(+), 214 deletions(-)
-> > >   create mode 100644 drivers/thermal/thermal_acpi.c
-> > > 
+> diff --git
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.
+> c
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.
+> c
+> index bf1b1cdfade4..c7d50862bf56 100644
+> ---
+> a/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.
+> c
+> +++
+> b/drivers/thermal/intel/int340x_thermal/processor_thermal_device_pci.
+> c
+> @@ -144,34 +144,6 @@ static int sys_get_curr_temp(struct
+> thermal_zone_device *tzd, int *temp)
+>         return 0;
+>  }
+>  
+> -static int sys_get_trip_temp(struct thermal_zone_device *tzd,
+> -                            int trip, int *temp)
+> -{
+> -       struct proc_thermal_pci *pci_info = tzd->devdata;
+> -       u32 _temp;
+> -
+> -       proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_THRES_0,
+> &_temp);
+> -       if (!_temp) {
+> -               *temp = THERMAL_TEMP_INVALID;
+> -       } else {
+> -               int tjmax;
+> -
+> -               proc_thermal_mmio_read(pci_info,
+> PROC_THERMAL_MMIO_TJMAX, &tjmax);
+> -               _temp = tjmax - _temp;
+> -               *temp = (unsigned long)_temp * 1000;
+> -       }
+> -
+> -       return 0;
+> -}
+> -
+> -static int sys_get_trip_type(struct thermal_zone_device *tzd, int
+> trip,
+> -                             enum thermal_trip_type *type)
+> -{
+> -       *type = THERMAL_TRIP_PASSIVE;
+> -
+> -       return 0;
+> -}
+> -
+>  static int sys_set_trip_temp(struct thermal_zone_device *tzd, int
+> trip, int temp)
+>  {
+>         struct proc_thermal_pci *pci_info = tzd->devdata;
+> @@ -200,10 +172,26 @@ static int sys_set_trip_temp(struct
+> thermal_zone_device *tzd, int trip, int temp
+>         return 0;
+>  }
+>  
+> +static int get_trip_temp(struct proc_thermal_pci *pci_info)
+> +{
+> +       int temp, tjmax;
+> +
+> +       proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_THRES_0,
+> &temp);
+> +       if (!temp)
+> +               return THERMAL_TEMP_INVALID;
+> +
+> +       proc_thermal_mmio_read(pci_info, PROC_THERMAL_MMIO_TJMAX,
+> &tjmax);
+> +       temp = (tjmax - temp) * 1000;
+> +
+> +       return temp;
+> +}
+> +
+> +static struct thermal_trip psv_trip = {
+> +       .type = THERMAL_TRIP_PASSIVE,
+> +};
+> +
+>  static struct thermal_zone_device_ops tzone_ops = {
+>         .get_temp = sys_get_curr_temp,
+> -       .get_trip_temp = sys_get_trip_temp,
+> -       .get_trip_type = sys_get_trip_type,
+>         .set_trip_temp  = sys_set_trip_temp,
+>  };
+>  
+> @@ -251,7 +239,10 @@ static int proc_thermal_pci_probe(struct pci_dev
+> *pdev, const struct pci_device_
+>         if (ret)
+>                 goto err_ret_thermal;
+>  
+> -       pci_info->tzone = thermal_zone_device_register("TCPU_PCI", 1,
+> 1, pci_info,
+> +       psv_trip.temperature = get_trip_temp(pci_info);
+> +       
+> +       pci_info->tzone =
+> thermal_zone_device_register_with_trips("TCPU_PCI", &psv_trip,
+> +                                                       1, 1,
+> pci_info,
+>                                                         &tzone_ops,
+>                                                         &tzone_params
+> , 0, 0);
+>         if (IS_ERR(pci_info->tzone)) {
 
