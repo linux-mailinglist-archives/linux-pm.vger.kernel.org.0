@@ -2,80 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F4206729D4
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 22:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE2C672A0F
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 22:12:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjARVCA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 16:02:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60028 "EHLO
+        id S230467AbjARVMl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 16:12:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbjARVB2 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 16:01:28 -0500
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DCE611CD
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 13:01:27 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id l8so98042wms.3
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 13:01:26 -0800 (PST)
+        with ESMTP id S230440AbjARVMT (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 16:12:19 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD63F611CD
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 13:11:32 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so2304834wmb.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 13:11:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=knANNtPJ6XIo6dhH/TJiHGKaWP7/nXyBF8BdTVUEzFg=;
-        b=pPouJEbcun1aMaef0XckXv6aaN/Kc7o4lkDjrpzkElM69nO9Kw7QQB/dMR1PuTzBQQ
-         nHL7j8hbYLZpXYwlGEt6Zr3rCwXEwe2GYHe6HkLClgs01pjBRZOWner8EFFw1T/FTFSB
-         0ndN3ChDWYK51the37SIDugqABFI22zaiS6J2r9T5t7q2+gb2KNPA5l8n3LEN61qLe5F
-         yXdis2TNVHUR0rmZDh5snxNirBN/p5a0Y0sqvRZOqYMcEC1hy71Zw/6y/D1xVbH25XRZ
-         XsdS7FjsoLgRx8QOKHLXldpRqJUVEBGoWYMY0Y/Kk4XK+uzFdA04ElJwHQThrNe6Ctkk
-         4aHA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OIWV5/U3aD1TS48D9ejtlC9TCaF31IO7b6c4b9EuDIo=;
+        b=t2fk2cgG7M8bLDNWGKnT74AMDXx9E7iJEn9H+QmUp0+M0KACJvTvbTetxbS1f1oUd3
+         9jw5nLahBjhiptCacAmD/eFVtuLZGCAug65HWqH1hKtev9u9Y7ClMJ2P2ryogs8y5COz
+         J4COS/80Luf8tEiCAeyVTEOmyPLJljb5zHOmr0/PoI45uddUhg5h55DpEnr6o9s+O/4K
+         l2/WxJFKOFyFJq0t4kxEuR4ylykxgWq4HNXl4EW2vDbAWr8EL9c1eIVfIGXNAYhrC7i3
+         sywuHTSDuLMFj6VyDEDPXKOZSmbCY0DKoQjOT03XENss5p/WBLc1fKKhLJQSYL2lw2bS
+         aLrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=knANNtPJ6XIo6dhH/TJiHGKaWP7/nXyBF8BdTVUEzFg=;
-        b=7AePohyNnjbJo7qLnx3YIBgc59XW8X+X148x7x5NFW+1hCEJTbafhVO+XZoX9/SYTV
-         DfTvEYFxFUHiHFodOzAfNitwtPPgoag+Qu6LlKg4e+BJAKM5TeriULlk/Ca0VVzF1QCv
-         iQdfQhSuppnRq4y+RbY3k0/wgsgqFj6eNt+1W+P0zam+skbLJv/myvDDz7z/QqcVZ1/h
-         ZY/Tzcm1xubYzXnpoUF1MShDO8nROhLB5qZGu74z9GsQb2iGNqAbS2H56WzA9FKMFllU
-         0wPecGSIHFsxttPmUYRiWnm037rVcjb4MLLavwC7xHRPz+UcU+e2QuAxaxx1ISvzakGG
-         KzUw==
-X-Gm-Message-State: AFqh2kr3T2igp+9KQgREnHq6KwBZ0DqNlwERYZC4DI0edZpa5fNQZ+Xh
-        vW3vT6DYyGifeXflf/SKEDdgIw==
-X-Google-Smtp-Source: AMrXdXuiJafH4K8yLFpEO1UCI043pMNN7DvU69liShaUlZWracQ11ODpgvhwOGR3LnbnIFCOwzAu1A==
-X-Received: by 2002:a05:600c:540e:b0:3da:fc41:198c with SMTP id he14-20020a05600c540e00b003dafc41198cmr7975647wmb.40.1674075685468;
-        Wed, 18 Jan 2023 13:01:25 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id a3-20020a05600c348300b003db09692364sm3074111wmq.11.2023.01.18.13.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Jan 2023 13:01:25 -0800 (PST)
-Message-ID: <87627e1f-322c-a195-8ce6-8922d9787ff0@linaro.org>
-Date:   Wed, 18 Jan 2023 22:01:23 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v5 0/3] Thermal ACPI APIs for generic trip points
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
- <f76c13de-d250-ebc0-d234-ccb3a9ce3c28@linaro.org>
- <2627c37e07dce6b125d3fea3bf38a5f2407ad6a1.camel@intel.com>
- <5aabdd3010a02e361fbbe01f4af0e30d11f0ae6b.camel@linux.intel.com>
- <c7abcce47df0aaa55f1e6c65f501bc691d35eae8.camel@linux.intel.com>
- <c210542f-0a71-15f2-c58f-ec607e60b06d@linaro.org>
- <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OIWV5/U3aD1TS48D9ejtlC9TCaF31IO7b6c4b9EuDIo=;
+        b=0B1xRhDa6GwA8sJD/Wdn/h/AXdD7yTLSHWdxOhL39nVEf9Cfqxgj3vESGwiomM1y5l
+         5TpEUAp2GvzTwIN9V8LD4+JIN8/tASntPjG1IcgdU09sLZKgHZMuhOjzIZV7oy41WvF9
+         3PWYgXeglLxEdz2hbNggBwocEzcSQ0JoVSUloRh9Jszz8ImU0pBHrhW+lu3wE9bg32EQ
+         EGZE5hGAquAWk7mlFjMBUkC6Hmm4sK2T+O6KoAEzbATVKsu5+iQeTR/1ujLJ+6pR1qlv
+         j2bCTT8M06607OSg8qdfuOLKzCibBmXa80RuRphL/5mHr0EDeftYvJ1T6V8k9rT2ahGq
+         HMwQ==
+X-Gm-Message-State: AFqh2kodBdcHvgd/rMAxSNM+uO96SOYZAOiYf2uuF5IoWHdIf+kjEQM8
+        R9m+mGemYt+AHseTKJQijP5a9w==
+X-Google-Smtp-Source: AMrXdXsC1bjPn7WUQDAuWg4zV7HvQ9J6GS2Z3eJA/hau1rgZLze5tynv+ZKh43nBURVkvpF0ExTreA==
+X-Received: by 2002:a05:600c:35c1:b0:3db:1424:e781 with SMTP id r1-20020a05600c35c100b003db1424e781mr3207421wmq.23.1674076291099;
+        Wed, 18 Jan 2023 13:11:31 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id l27-20020a05600c2cdb00b003d99da8d30asm3198835wmc.46.2023.01.18.13.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 13:11:30 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <8547963350fb3bdb09a4693f0eb80c7199ab6f21.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/5] thermal/core: Fix unregistering netlink at thermal init time
+Date:   Wed, 18 Jan 2023 22:11:19 +0100
+Message-Id: <20230118211123.111493-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Level: *
@@ -85,40 +70,70 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18/01/2023 21:53, srinivas pandruvada wrote:
-> On Wed, 2023-01-18 at 21:00 +0100, Daniel Lezcano wrote:
->> On 18/01/2023 20:16, srinivas pandruvada wrote:
->>
->> [ ... ]
->>
->>>>> But we'd better wait for the thermald test result from
->>>>> Srinvias.
->>>>
->>>> A quick test show that things still work with thermald and these
->>>> changes.
->>>
->>> But I have a question. In some devices trip point temperature is
->>> not
->>> static. When hardware changes, we get notification. For example
->>> INT3403_PERF_TRIP_POINT_CHANGED for INT3403 drivers.
->>> Currently get_trip can get the latest changed value. But if we
->>> preregister, we need some mechanism to update them.
->>
->> When the notification INT3403_PERF_TRIP_POINT_CHANGED happens, we
->> call
->> int340x_thermal_read_trips() which in turn updates the trip points.
->>
-> 
-> Not sure how we handle concurrency here when driver can freely update
-> trips while thermal core is using trips.
+The thermal subsystem initialization miss an netlink unregistering
+function in the error. Add it.
 
-Don't we have the same race without this patch ? The thermal core can 
-call get_trip_temp() while there is an update, no ?
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+---
+ drivers/thermal/thermal_core.c    | 4 +++-
+ drivers/thermal/thermal_netlink.c | 5 +++++
+ drivers/thermal/thermal_netlink.h | 3 +++
+ 3 files changed, 11 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index d9a3d9566d73..fddafcee5e6f 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1606,7 +1606,7 @@ static int __init thermal_init(void)
+ 
+ 	result = thermal_register_governors();
+ 	if (result)
+-		goto error;
++		goto unregister_netlink;
+ 
+ 	result = class_register(&thermal_class);
+ 	if (result)
+@@ -1621,6 +1621,8 @@ static int __init thermal_init(void)
+ 
+ unregister_governors:
+ 	thermal_unregister_governors();
++unregister_netlink:
++	thermal_netlink_exit();
+ error:
+ 	ida_destroy(&thermal_tz_ida);
+ 	ida_destroy(&thermal_cdev_ida);
+diff --git a/drivers/thermal/thermal_netlink.c b/drivers/thermal/thermal_netlink.c
+index 75943b06dbe7..08bc46c3ec7b 100644
+--- a/drivers/thermal/thermal_netlink.c
++++ b/drivers/thermal/thermal_netlink.c
+@@ -699,3 +699,8 @@ int __init thermal_netlink_init(void)
+ {
+ 	return genl_register_family(&thermal_gnl_family);
+ }
++
++void __init thermal_netlink_exit(void)
++{
++	genl_unregister_family(&thermal_gnl_family);
++}
+diff --git a/drivers/thermal/thermal_netlink.h b/drivers/thermal/thermal_netlink.h
+index 1052f523188d..0a9987c3bc57 100644
+--- a/drivers/thermal/thermal_netlink.h
++++ b/drivers/thermal/thermal_netlink.h
+@@ -13,6 +13,7 @@ struct thermal_genl_cpu_caps {
+ /* Netlink notification function */
+ #ifdef CONFIG_THERMAL_NETLINK
+ int __init thermal_netlink_init(void);
++void __init thermal_netlink_exit(void);
+ int thermal_notify_tz_create(int tz_id, const char *name);
+ int thermal_notify_tz_delete(int tz_id);
+ int thermal_notify_tz_enable(int tz_id);
+@@ -115,4 +116,6 @@ static inline int thermal_genl_cpu_capability_event(int count, struct thermal_ge
+ 	return 0;
+ }
+ 
++static inline void __init thermal_netlink_exit(void) {}
++
+ #endif /* CONFIG_THERMAL_NETLINK */
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
