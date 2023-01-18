@@ -2,55 +2,54 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DC1C67179B
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A02767175C
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:21:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229450AbjARJZp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 04:25:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43854 "EHLO
+        id S229463AbjARJU5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 04:20:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjARJTj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:19:39 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEAD279BC;
-        Wed, 18 Jan 2023 00:36:27 -0800 (PST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        with ESMTP id S230213AbjARJU3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:20:29 -0500
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A2038B60;
+        Wed, 18 Jan 2023 00:37:56 -0800 (PST)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NxfHZ34Hzz8RTZH;
-        Wed, 18 Jan 2023 16:36:26 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.99.176])
-        by mse-fl2.zte.com.cn with SMTP id 30I8aKc1066268;
-        Wed, 18 Jan 2023 16:36:20 +0800 (+08)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NxfKG2Wkwz508D2;
+        Wed, 18 Jan 2023 16:37:54 +0800 (CST)
+Received: from xaxapp02.zte.com.cn ([10.88.97.241])
+        by mse-fl1.zte.com.cn with SMTP id 30I8bi8n021856;
+        Wed, 18 Jan 2023 16:37:44 +0800 (+08)
         (envelope-from ye.xingchen@zte.com.cn)
 Received: from mapi (xaxapp01[null])
         by mapi (Zmail) with MAPI id mid31;
-        Wed, 18 Jan 2023 16:36:22 +0800 (CST)
-Date:   Wed, 18 Jan 2023 16:36:22 +0800 (CST)
-X-Zmail-TransId: 2af963c7af866cf0a9e0
+        Wed, 18 Jan 2023 16:37:47 +0800 (CST)
+Date:   Wed, 18 Jan 2023 16:37:47 +0800 (CST)
+X-Zmail-TransId: 2af963c7afdbffffffffa170dd25
 X-Mailer: Zmail v1.0
-Message-ID: <202301181636223863583@zte.com.cn>
+Message-ID: <202301181637472073620@zte.com.cn>
 Mime-Version: 1.0
 From:   <ye.xingchen@zte.com.cn>
 To:     <daniel.lezcano@linaro.org>
 Cc:     <rafael@kernel.org>, <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <f.fainelli@gmail.com>, <rjui@broadcom.com>,
-        <sbranden@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <linux-pm@vger.kernel.org>, <linux-rpi-kernel@lists.infradead.org>,
+        <matthias.bgg@gmail.com>, <linux-pm@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsL2RyaXZlcnMvYmNtMjgzNTogVXNlwqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsL2RyaXZlcnMvbXRrX3RoZXJtYWw6IFVzZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
 Content-Type: text/plain;
         charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 30I8aKc1066268
+X-MAIL: mse-fl1.zte.com.cn 30I8bi8n021856
 X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.137.novalocal with ID 63C7AF8A.000 by FangMail milter!
-X-FangMail-Envelope: 1674030986/4NxfHZ34Hzz8RTZH/63C7AF8A.000/10.5.228.133/[10.5.228.133]/mse-fl2.zte.com.cn/<ye.xingchen@zte.com.cn>
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63C7AFE2.000 by FangMail milter!
+X-FangMail-Envelope: 1674031074/4NxfKG2Wkwz508D2/63C7AFE2.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
 X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C7AF8A.000/4NxfHZ34Hzz8RTZH
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Fangmail-MID-QID: 63C7AFE2.000/4NxfKG2Wkwz508D2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -65,30 +64,30 @@ what this function does.
 
 Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 ---
- drivers/thermal/broadcom/bcm2835_thermal.c | 4 +---
+ drivers/thermal/mtk_thermal.c | 4 +---
  1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/thermal/broadcom/bcm2835_thermal.c b/drivers/thermal/broadcom/bcm2835_thermal.c
-index 5485e59d03a9..b1b000e6833f 100644
---- a/drivers/thermal/broadcom/bcm2835_thermal.c
-+++ b/drivers/thermal/broadcom/bcm2835_thermal.c
-@@ -167,7 +167,6 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 	const struct of_device_id *match;
- 	struct thermal_zone_device *tz;
- 	struct bcm2835_thermal_data *data;
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index 0084b76493d9..9a8b107900e9 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -990,7 +990,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 	int ret, i, ctrl_id;
+ 	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
+ 	struct mtk_thermal *mt;
 -	struct resource *res;
- 	int err = 0;
- 	u32 val;
- 	unsigned long rate;
-@@ -181,8 +180,7 @@ static int bcm2835_thermal_probe(struct platform_device *pdev)
- 	if (!match)
- 		return -EINVAL;
+ 	u64 auxadc_phys_base, apmixed_phys_base;
+ 	struct thermal_zone_device *tzdev;
+ 	void __iomem *apmixed_base, *auxadc_base;
+@@ -1009,8 +1008,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 	if (IS_ERR(mt->clk_auxadc))
+ 		return PTR_ERR(mt->clk_auxadc);
 
 -	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	data->regs = devm_ioremap_resource(&pdev->dev, res);
-+	data->regs = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(data->regs)) {
- 		err = PTR_ERR(data->regs);
- 		return err;
+-	mt->thermal_base = devm_ioremap_resource(&pdev->dev, res);
++	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
+ 	if (IS_ERR(mt->thermal_base))
+ 		return PTR_ERR(mt->thermal_base);
+
 -- 
 2.25.1
