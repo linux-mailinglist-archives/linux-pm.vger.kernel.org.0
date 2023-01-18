@@ -2,92 +2,97 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A02767175C
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:21:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3B1671793
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 10:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229463AbjARJU5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 04:20:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45018 "EHLO
+        id S229907AbjARJZc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 04:25:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230213AbjARJU3 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:20:29 -0500
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A2038B60;
-        Wed, 18 Jan 2023 00:37:56 -0800 (PST)
-Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4NxfKG2Wkwz508D2;
-        Wed, 18 Jan 2023 16:37:54 +0800 (CST)
-Received: from xaxapp02.zte.com.cn ([10.88.97.241])
-        by mse-fl1.zte.com.cn with SMTP id 30I8bi8n021856;
-        Wed, 18 Jan 2023 16:37:44 +0800 (+08)
-        (envelope-from ye.xingchen@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 18 Jan 2023 16:37:47 +0800 (CST)
-Date:   Wed, 18 Jan 2023 16:37:47 +0800 (CST)
-X-Zmail-TransId: 2af963c7afdbffffffffa170dd25
-X-Mailer: Zmail v1.0
-Message-ID: <202301181637472073620@zte.com.cn>
-Mime-Version: 1.0
-From:   <ye.xingchen@zte.com.cn>
-To:     <daniel.lezcano@linaro.org>
-Cc:     <rafael@kernel.org>, <amitk@kernel.org>, <rui.zhang@intel.com>,
-        <matthias.bgg@gmail.com>, <linux-pm@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?B?W1BBVENIXSB0aGVybWFsL2RyaXZlcnMvbXRrX3RoZXJtYWw6IFVzZcKgZGV2bV9wbGF0Zm9ybV9nZXRfYW5kX2lvcmVtYXBfcmVzb3VyY2UoKQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl1.zte.com.cn 30I8bi8n021856
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63C7AFE2.000 by FangMail milter!
-X-FangMail-Envelope: 1674031074/4NxfKG2Wkwz508D2/63C7AFE2.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<ye.xingchen@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 63C7AFE2.000/4NxfKG2Wkwz508D2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        with ESMTP id S230266AbjARJUh (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 04:20:37 -0500
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA385AA64
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:38:32 -0800 (PST)
+Received: by mail-pf1-x432.google.com with SMTP id 207so9502873pfv.5
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 00:38:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Seq1mX1XtKCwlcIcPQRmNyguKpAMYVn4ufk1mjtx/c=;
+        b=H8yMg62Cq5wI/wHrn1Gcd5A/7UHoJqQ4Mc7NinTnr/5hGSO48NgbHgNQa2QuBVBHbN
+         VJ/PSuW7KKTckTfWhC8lDoLWSpKEOynWhuH/7iskzZjvs8yBrnWYFOLH80zf2l9Gw59M
+         XHUbEQxjaJKBLZLzxO9gYb+ZR2xX5ADI+P8oSTHiJNVH39HPPHqS5YqOqvb3b0h/rUI1
+         0kXBUhgR3QjmsFl8l9T82o0xjBIGLcjidI2pWIOtagtqYjwtcQspYcV5YBQpjQpwM7bf
+         AEPyic5C+u2QiF34C5tmEdiKMSUXuUvCatYasrKADxfUMeljP4QNsj900ZTbuEqTthgK
+         S+Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8Seq1mX1XtKCwlcIcPQRmNyguKpAMYVn4ufk1mjtx/c=;
+        b=dcFOOGNBYB2PQye4wRudQWP/0YoGPyRH6uh7LciyXodzp8gZ2KRGvMn4T0Q1rKTWGe
+         oK+cahkJIzzzuBwQLyBBKJBhE4642UbVIxWBwFnr9Jn7QjGXI8ng9hMsoJtd19Z2HgIR
+         CPLxNAnYHR1yAj09f3LMKt/5EdKyqE9ZWbKjXo1c8r9QbMAJxvrVxDHqS5hvc581YcYl
+         1YMdoqiyv21TDIESwNN9O3Je+W1La2m4hl/NLt8sFeqMsHuP2JRw+TYcNn2J3qdSZHqz
+         P2x2TPymU3L36LJ5XeUvk4tNAWfBPcmGr9Nl+xSMPAZY8TXtatPOirReAG3uZNNclYH3
+         HLKg==
+X-Gm-Message-State: AFqh2krUwd0QfbhWMJpS5SDCJUo4U1eymXeyVRSQHG4iYpYnzGI2XLIK
+        sBRkTs2OTXijzGJd7xORqFAkww==
+X-Google-Smtp-Source: AMrXdXuTJH4v7znJMxTMt9jc5jG0ofaVClDu4kQgHlioRTy6pjhtRH5jVqPmJ4Xz+BGXRqadTtX29g==
+X-Received: by 2002:aa7:8283:0:b0:588:9c15:65c4 with SMTP id s3-20020aa78283000000b005889c1565c4mr5481132pfm.3.1674031111722;
+        Wed, 18 Jan 2023 00:38:31 -0800 (PST)
+Received: from localhost ([122.172.81.45])
+        by smtp.gmail.com with ESMTPSA id d62-20020a623641000000b005800cb7cbcasm19709245pfa.120.2023.01.18.00.38.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 00:38:31 -0800 (PST)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 0/3] thermal: Fix/cleanup error paths in __thermal_cooling_device_register()
+Date:   Wed, 18 Jan 2023 14:08:23 +0530
+Message-Id: <cover.1674030722.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+Hi,
 
-Convert platform_get_resource(), devm_ioremap_resource() to a single
-call to devm_platform_get_and_ioremap_resource(), as this is exactly
-what this function does.
+The error paths in __thermal_cooling_device_register() are trying to free
+un-acquired resources, fix that and clean it up a bit.
 
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/thermal/mtk_thermal.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Caleb, can you please test this? I have just build tested it for now.
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 0084b76493d9..9a8b107900e9 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -990,7 +990,6 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	int ret, i, ctrl_id;
- 	struct device_node *auxadc, *apmixedsys, *np = pdev->dev.of_node;
- 	struct mtk_thermal *mt;
--	struct resource *res;
- 	u64 auxadc_phys_base, apmixed_phys_base;
- 	struct thermal_zone_device *tzdev;
- 	void __iomem *apmixed_base, *auxadc_base;
-@@ -1009,8 +1008,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 	if (IS_ERR(mt->clk_auxadc))
- 		return PTR_ERR(mt->clk_auxadc);
+--
+Viresh
 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	mt->thermal_base = devm_ioremap_resource(&pdev->dev, res);
-+	mt->thermal_base = devm_platform_get_and_ioremap_resource(pdev, 0, NULL);
- 	if (IS_ERR(mt->thermal_base))
- 		return PTR_ERR(mt->thermal_base);
+Viresh Kumar (3):
+  thermal: core: call put_device() only after device_register() fails
+  thermal: core: Move cdev cleanup to thermal_release()
+  thermal: core: Use device_unregister() instead of device_del/put()
+
+ drivers/thermal/thermal_core.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
 
 -- 
-2.25.1
+2.31.1.272.g89b43f80a514
+
