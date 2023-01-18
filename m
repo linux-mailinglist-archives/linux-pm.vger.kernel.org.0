@@ -2,236 +2,91 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569C1672509
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 18:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE7B167264D
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 19:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229479AbjARRd6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 12:33:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S231171AbjARSII (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 13:08:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjARRdz (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 12:33:55 -0500
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1892366A5;
-        Wed, 18 Jan 2023 09:33:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674063230; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=nTyGx3IBUOThxA5UW0x6SQXKNxe0UVidwVF/ILH8Y9+Z8S/daiPL2o626+Fkxqy74f
-    iHQedwsTJLaXhKWInWV8u+S+7mmAwoPbCuyOK2XUSFGlrE0igHnghxzO/GY5bGVC7DC/
-    tFMp4VkJlHruTj/0fe/XzLZk/Z7o2mUgS/YMExga8aaSnF33BWrYphVRlRtzyZ84UM7e
-    57Sb9t1ZR+V7v0muO3kl9avVn6odH6sgnH543nWHLpE8/U2FWOROWAZJNmfMWTJXI5T6
-    +hpjSFy6hPrUvresjKpaN60JpCBao33fMFzUjM9L1DQLV/lfOhkb5pSk5DMyx+uBCp8y
-    7/Og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674063230;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=LhU3r4sZfO0h84dSgJ90dRQ0Xnm8CosoxMUeoX+kEY0=;
-    b=lW/71BGfGza5oHKJsBp33AZyRlVgdG/iyY9Pe9427uUbb397iE9fQfYagFJTB89H3v
-    2gn2FCSczSy0uaZ+Zbs18CK33++GP/XNt/3LlWz98aFGLLnxYBNudPV/7cQjdFZrda9X
-    vVf7isZ+BeCWKUMqZsSJDZnCdt/aPBKZ9t0HymbQadjX13k53BlGk5ltrELjTrejI6SR
-    nZqOv+n7ktpKIiEo23vtWuLx4HalbbmsDwEZi1hmE79/I2TV5r1Ld/IbtC+sb6HTCvL9
-    mLywnqVdcHHEGH4Gsa1KhLor3uAH/hV5I/h2mOKaJFUMxPkbKuiqYvEur8lNv/4WykCt
-    zIWg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674063230;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=LhU3r4sZfO0h84dSgJ90dRQ0Xnm8CosoxMUeoX+kEY0=;
-    b=WC4S4Oj5/ADgdtmFtA1J6VT9/XbEfYWTL4w2GFuB6epZnTMWb2d80U4JEfaEWN9d9/
-    B1qNou0E5/wxwsy5RIuw3sAcfGN0hyGfDI3HfUCyUDtCuzP5yJotwksxsdYcS1IjnDpH
-    Zx24quTGTwH2UNOo7QOqpV2n1ur74ykZUyPvRIwpCRCD91vipEMqPOOPQxvs9+3KONzx
-    TvuUOeCErGdkSLM/MCTh4RgSeZQtz7jaGx54/2jkMkogDqU7itsWW2WJBmY64W09B5X0
-    FX1mPiDq/WHylv7qEhhZcXNJ/XeNT49Gq3i651Tz2JMZE/K5lYPqHMc4VWrtyp2cfcoK
-    7ejw==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWx/bI"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.0.0 DYNA|AUTH)
-    with ESMTPSA id 92895dz0IHXn0Q6
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 18 Jan 2023 18:33:49 +0100 (CET)
-Date:   Wed, 18 Jan 2023 18:33:42 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org, Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>,
-        Vincent Knecht <vincent.knecht@mailoo.org>
-Subject: Re: [PATCH v3 5/8] arm64: dts: qcom: Add msm8939 SoC
-Message-ID: <Y8gtdpDnMLIwfj+3@gerhold.net>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-6-bryan.odonoghue@linaro.org>
- <Y8fC/GCHfENQmBNC@gerhold.net>
- <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
+        with ESMTP id S231153AbjARSHc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 13:07:32 -0500
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75330305E5;
+        Wed, 18 Jan 2023 10:06:54 -0800 (PST)
+Received: by mail-pj1-x102f.google.com with SMTP id d8so5438161pjc.3;
+        Wed, 18 Jan 2023 10:06:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SxGr9rOjQ2yaqoiQx0FCZlVaS0TlHYkQlc1FA+WU8H8=;
+        b=a/BjP6c+RXvAJ5fpcIIE7Z3Df2XqmGu0WVjZhlCP4QZweEp1D6ia0ryuOes2T5daAG
+         XypMlmzfAo19fqgw93mdtd4ekji3zoeJvxtGm8bUA1It609G5S/3qTzvQ243VF6UcFjl
+         Ht+u1xSsmRzlBMY+aIaI4zuFJ1jc4+WcZTM5bYxpnJPd8L8EaSXaI0GcXZLEqMcBAvjc
+         3+ba7eep3kAcDT8yDp40bK9hsP5tioL6C8dN+ndXdTLQ80hQPsaGKI9Ds6MJ08lYPCwi
+         Qc0pone/sWpfxcmRHAOWvuu+kkejlS1oF/cJPy4nGO2O2fd0maHt5WVJniL1T7AAI9L9
+         GRqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SxGr9rOjQ2yaqoiQx0FCZlVaS0TlHYkQlc1FA+WU8H8=;
+        b=Ix01Jcmwgb8YZxGWXY5qXs66MoOQ6C/A70XxOa1suYtZcgRRjm0zdqykaeFF1AouYq
+         AFa3hVJyUcRNYIR3PF7t3oEfCauPo1Hk9v6la9wJHm3JWFVLXagWAfjeemvshRG8DLqj
+         yYUmLGiKb6SpO982ij+amKc0FEATfIX2gyIM7qZp3prZc/3g2Iiis4ge3TnV9Y8v0e1p
+         +vnNj7c4Jovu6FH+2JOIS8JpDrKGAHdwUWHz+GcZBP8U5MOBK0SJgVkbhzAS7+nMgKwu
+         bbCl0DYSuKBE30yLMr0SsbnxFbryPnGATKBsL2QxXcnoiC8Less1Hy2a5SCGWzEEEguw
+         MZZg==
+X-Gm-Message-State: AFqh2kqpfUHM4Rs6elzY/W80QowBHEnvIx9ARh++tJEh553/cKJMuzyA
+        E5LQfZIfbkVaSAYxcAAamrSgX3+3Ucw=
+X-Google-Smtp-Source: AMrXdXueiL3W/Jezt82y5r981JYjbBLjAmeVFwgCxnME+StrfxNCm+8TTZM1Gs1onLkI/fGuwOid0g==
+X-Received: by 2002:a17:90b:3c0e:b0:227:1c1e:7529 with SMTP id pb14-20020a17090b3c0e00b002271c1e7529mr8356052pjb.15.1674065213863;
+        Wed, 18 Jan 2023 10:06:53 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id pc3-20020a17090b3b8300b001fde655225fsm2786736pjb.2.2023.01.18.10.06.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 18 Jan 2023 10:06:52 -0800 (PST)
+Message-ID: <2746ce9a-c44f-167d-7d2f-5dcd838af1d0@gmail.com>
+Date:   Wed, 18 Jan 2023 10:06:43 -0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cf4920e6-c007-20a5-ba3a-5005b22f891b@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_thermal=3a_brcmstb=5fthermal=3a_Use?=
+ =?UTF-8?B?wqBkZXZtX3BsYXRmb3JtX2dldF9hbmRfaW9yZW1hcF9yZXNvdXJjZSgp?=
+Content-Language: en-US
+To:     ye.xingchen@zte.com.cn, daniel.lezcano@linaro.org
+Cc:     mmayer@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <202301181631362083446@zte.com.cn>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <202301181631362083446@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 11:50:20AM +0000, Bryan O'Donoghue wrote:
-> On 18/01/2023 09:59, Stephan Gerhold wrote:
-> > On Tue, Jan 17, 2023 at 02:48:43AM +0000, Bryan O'Donoghue wrote:
-> [...]
-> > > +		mdss: display-subsystem@1a00000 {
-> > > +			compatible = "qcom,mdss";
-> > > +			reg = <0x01a00000 0x1000>,
-> > > +			      <0x01ac8000 0x3000>;
-> > > +			reg-names = "mdss_phys", "vbif_phys";
-> > > +
-> > > +			interrupts = <GIC_SPI 72 IRQ_TYPE_LEVEL_HIGH>;
-> > > +			interrupt-controller;
-> > > +
-> > > +			clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> > > +				 <&gcc GCC_MDSS_AXI_CLK>,
-> > > +				 <&gcc GCC_MDSS_VSYNC_CLK>;
-> > > +			clock-names = "iface",
-> > > +				      "bus",
-> > > +				      "vsync";
-> > > +
-> > > +			power-domains = <&gcc MDSS_GDSC>;
-> > > +
-> > > +			#address-cells = <1>;
-> > > +			#size-cells = <1>;
-> > > +			#interrupt-cells = <1>;
-> > > +			ranges;
-> > > +
-> > > +			mdp: display-controller@1a01000 {
-> > > +				compatible = "qcom,mdp5";
-> > > +				reg = <0x01a01000 0x89000>;
-> > > +				reg-names = "mdp_phys";
-> > > +
-> > > +				interrupt-parent = <&mdss>;
-> > > +				interrupts = <0>;
-> > > +
-> > > +				clocks = <&gcc GCC_MDSS_AHB_CLK>,
-> > > +					 <&gcc GCC_MDSS_AXI_CLK>,
-> > > +					 <&gcc GCC_MDSS_MDP_CLK>,
-> > > +					 <&gcc GCC_MDSS_VSYNC_CLK>,
-> > > +					 <&gcc GCC_MDP_TBU_CLK>,
-> > > +					 <&gcc GCC_MDP_RT_TBU_CLK>;
-> > > +				clock-names = "iface",
-> > > +					      "bus",
-> > > +					      "core",
-> > > +					      "vsync",
-> > > +					      "tbu",
-> > > +					      "tbu_rt";
-> > > +
-> > > +				iommus = <&apps_iommu 4>;
-> > > +
-> > > +				interconnects = <&snoc_mm MASTER_MDP_PORT0 &bimc SLAVE_EBI_CH0>,
-> > > +						<&snoc_mm MASTER_MDP_PORT1 &bimc SLAVE_EBI_CH0>,
-> > > +						<&pcnoc MASTER_SPDM &snoc SLAVE_IMEM>;
-> > > +				interconnect-names = "mdp0-mem", "mdp1-mem", "register-mem";
-> > 
-> > As I mentioned a already in a direct email at some point, AFAIU adding
-> > interconnects should be an [almost-] all or nothing step. If you only
-> > add interconnects for MDP then everything else that needs bandwidth will
-> > either break or only continue working as a mere side effect of MDP
-> > voting for permanent high bandwidth.
+On 1/18/23 00:31, ye.xingchen@zte.com.cn wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 > 
-> We did discuss that. You'll also recall we concluded we would have to revert
-> this patch to make that happen.
+> Convert platform_get_resource(), devm_ioremap_resource() to a single
+> call to devm_platform_get_and_ioremap_resource(), as this is exactly
+> what this function does.
 > 
-> commit 76a748e2c1aa976d0c7fef872fa6ff93ce334a8a
-> Author: Leo Yan <leo.yan@linaro.org>
-> Date:   Sat Apr 16 09:26:34 2022 +0800
-> 
->     interconnect: qcom: msm8939: Use icc_sync_state
-> 
-> but then why not revert for all of these SoCs too ?
-> 
-> drivers/interconnect/qcom/msm8939.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/msm8974.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/msm8996.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/osm-l3.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sc7180.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sc7280.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sc8180x.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sc8280xp.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sdm845.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sdx55.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sdx65.c:		.sync_state = icc_sync_state,
-> drivers/interconnect/qcom/sm6350.c:		.sync_state = icc_sync_state,
-> 
-> until such time as we have an all or nothing interconnect setup for each of
-> those SoCs ?
-> 
-> Yes I take your point "some peripherals will appear to work only as a result
-> of the AHB vote the MDP casts here" but, that is a bug in the definition of
-> that hypothetical peripheral.
-> 
-> The MDP/display won't run without the interconnect here and the only way to
-> pull it is to remove sync_state which begs the question why not pull
-> sync_state for all SoCs without a perfect interconnect description ?
-> 
-> I think that would be a retrograde step.
-> 
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Most of the SoCs you list do have "interconnects" defined for most
-components, which means the situation for them is quite a different
-level. It's probably not necessary to have the interconnect setup
-absolutely perfect before enabling it. However to avoid frustration for
-people with slightly different board setups it should at the very least
-cover more than one component.
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
 
-Should the icc_sync_state() change be reverted for some of these SoCs?
-If you ask me: Yes!
-
-Perhaps a real example makes my concern more understandable: As I
-mentioned, you rely on MDP providing the necessary bandwidth for the
-entire system. This works fine in your case, but it can happen easily
-that MDSS/MDP is not enabled at all, e.g.:
-
- - On a board without display.
- - During early bring-up: I usually start with UART, USB and SDHCI
-   before I even think about enabling the display.
-
-I simulated this on the BQ Aquaris M5 (MSM8939) that has most
-functionality set up already in postmarketOS. First the results without
-any changes (interconnects enabled like in your patch here):
-
- -> Boots into rootfs in about *18 seconds*, feels fine
-
-Now I just disable MDSS in the device tree and boot again:
-
-	&mdss {
-		status = "disabled";
-	};
-
- -> Boots into rootfs in about *80 seconds*, everything feels sluggish
-
-This is 4 times the normal boot time, and nothing in dmesg tells me that
-it's because I don't have display enabled. Someone porting a new device,
-especially without UART, might have given up already before waiting so
-long. Plus, what would I do to fix this on a board without display? :/
-
-Now I try removing icc_sync_state:
-
- -> Boots into rootfs in about 17 seconds, feels fine
-
-IMO it is clear that adding icc_sync_state() too early is a bad idea,
-and *will* break some setups.
-
-Thanks,
-Stephan
