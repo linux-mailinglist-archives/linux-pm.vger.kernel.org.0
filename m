@@ -2,84 +2,66 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C15A8672199
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 16:43:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7540C672219
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 16:51:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjARPnX (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 10:43:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S230197AbjARPv3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 10:51:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjARPnW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 10:43:22 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D6F2B60D;
-        Wed, 18 Jan 2023 07:43:19 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674056597; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=EA7ps0F7S1sfJyw0zKoEkokxSF7bjf2J9HOe1KYFXsXuEDd6UupDnVuzwrFTxYn6KB
-    kV8q6GFDwZU+p+XgRxEHJYFIVJAxFUnaeIxZnShl2QX4AIYbKzcp0NmVnagOk9x9EOWZ
-    NEYMoAHAO/pVitG5pdkc6CRriu2mCYRn888NC0bZ0r1RU2ylSh7z9CtpNHOGNIgE2dyU
-    jb/nUzu+FsysWnN//VKR+zhZruDKGWtFpphZ07cRIZ95pyriNND0BkMtPUPYR/IweQYP
-    XWkgaFyZ2Tjhf9Xkp3nWSagSqSaLY2MuuKOyTIALp96F4y94DpRC8WHwjFqmFu3LpMDi
-    lrqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674056597;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=Xk+u4Od71sEXJd5Tz3OHlg0hDar5B+RACjEct3dMYC8=;
-    b=FhpgLNwtbNAFXCObLPZpRMOOJM2ZZq42QW3/Cs8AcSWs80BB4ofLkLuEPkaXCENa04
-    W0biXV6O3TdOAzGNYg+pfb9lqZPPf4wzGSIMJcYJ9PPb6dP78BaXvh42aPv0N99YaPsT
-    ibTWr1+7WmkAMKyWQAbStDNuk7FFR/PHDzBuTSnukfF1tHaMyqM2qvfozNydwtnBkgcS
-    ldTzlTglmBBaOVjivBQ3WPWqTYuRH37+6QL4ifRaVurRqK2RKA2HfGuJYp5UBjnatw7J
-    W46RcpQCrb0uNx1S8F5vOEg2/MtoG+Ej5/G0vfDWhG7gXZ8E6dO2FAkeQIw/ZkPT+L9I
-    yNTg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674056597;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=Xk+u4Od71sEXJd5Tz3OHlg0hDar5B+RACjEct3dMYC8=;
-    b=KmJZqf288rSrsDCCOxTHpRUm8aE/3mar7UCDb71GQEkTtHKLb8BEs9wVXrde4PCkQG
-    W1SyhOKSBW1SFxLJvvy7/3XAnqx+dG2qIvvWGpAAtkPAsgN7vn1reApmPjTaRP6N09LN
-    EMPsmlTJ3Zr1dlW3Z0e1psfZriGHM+SOmZnzMbG8bPBMdCvGjdrIPaYn3OIwQd8RrfTt
-    OhKKpKpzAuIrsBz6edG2MhSg2+k9lVvMSK33M6nA/UwyVFdAthtqTW2VznyShuRp05jA
-    nax+vUDFOdMhvDlevXscywg1ZaM8f4L2BzY+qTqAK3vygvddPcSJriCwlXMPLp+AXxaZ
-    FkZg==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJAhdlWx/bI"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.0.0 DYNA|AUTH)
-    with ESMTPSA id 92895dz0IFhH063
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Wed, 18 Jan 2023 16:43:17 +0100 (CET)
-Date:   Wed, 18 Jan 2023 16:43:09 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v3 1/8] dt-bindings: arm: qcom: Document MSM8939 SoC
- binding
-Message-ID: <Y8gTjSkecPvvZtYg@gerhold.net>
-References: <20230117024846.1367794-1-bryan.odonoghue@linaro.org>
- <20230117024846.1367794-2-bryan.odonoghue@linaro.org>
- <Y8eyIO8BqKzvulbB@gerhold.net>
- <7822949a-c373-3028-6a42-66a04245e93b@linaro.org>
+        with ESMTP id S231287AbjARPul (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 10:50:41 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0EB5423A;
+        Wed, 18 Jan 2023 07:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674056941; x=1705592941;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/S4y7oDBR7UHj4PnIE+PQukj/5U/90zDnFO+1s+hhgs=;
+  b=XYiGLLwAwxgNnp5rmxYKhh+mT7NJ0dcRRB6z/IWuh5Y0CKuS8Ka3NXgp
+   l+HkWwDsl918LAR5vrBDAi4vWJlKVFZ/XQFk7YC2IVzGVx89nMZdlBDGo
+   I/90TBZQiYNLGIAIV1IGDl6ngdA31YM//HJVwejXTVM52tzdEDiebJiTf
+   VI67Eq7zRE2i4xqDa3Hya+Jmp9lM072mjdt9L6MR0jurasZ4IB/LMAOqj
+   +o1B0Ulw8w2eynrOUWK9VB7MVYNBCtNovGKhe3hhJ7ExIZrSigo12/GmU
+   jQSW7eqzVdoIVVWgbNhPOmN+3m3WgMeGBxUw12FYCekZN7Oz2ULyKXNSE
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="304694800"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="304694800"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2023 07:48:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10594"; a="723131293"
+X-IronPort-AV: E=Sophos;i="5.97,226,1669104000"; 
+   d="scan'208";a="723131293"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Jan 2023 07:48:54 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pIAgH-0000TO-1A;
+        Wed, 18 Jan 2023 15:48:53 +0000
+Date:   Wed, 18 Jan 2023 23:47:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        Mario.Limonciello@amd.com, ray.huang@amd.com,
+        viresh.kumar@linaro.org
+Cc:     oe-kbuild-all@lists.linux.dev, Deepak.Sharma@amd.com,
+        Nathan.Fontenot@amd.com, Alexander.Deucher@amd.com,
+        Shimmer.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        wyes.karny@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v11 04/11] cpufreq: amd-pstate: implement Pstate EPP
+ support for the AMD processors
+Message-ID: <202301182325.NoodiJ0K-lkp@intel.com>
+References: <20230118075210.447418-5-perry.yuan@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7822949a-c373-3028-6a42-66a04245e93b@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20230118075210.447418-5-perry.yuan@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,47 +69,63 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 12:05:50PM +0000, Bryan O'Donoghue wrote:
-> On 18/01/2023 08:47, Stephan Gerhold wrote:
-> > On Tue, Jan 17, 2023 at 02:48:39AM +0000, Bryan O'Donoghue wrote:
-> > > Document the MSM8939 and supported boards in upstream Sony "Tulip" M4 Aqua
-> > > and Square APQ8039 T2.
-> > > 
-> > > MSM8939 is one of the older SoCs so we need to expand the list of
-> > > qcom,board-ids to allow for the bootloader DTS board-id matching
-> > > dependency.
-> > > 
-> > 
-> > The original LK bootloaders cannot boot your msm8939.dtsi correctly,
-> > because a spin-table implementation is required to get the other CPU
-> > cores up. This means that a modified bootloader is always needed from
-> > the upstream point of view, since I doubt anyone wants to use these
-> > devices with a single core only. lk2nd (as the primary spin-table
-> > implementation right now) has never required qcom,board-ids and any
-> > custom LK would be easy to patch to ignore these.
-> 
-> The system boots just fine with the shipped LK. We get display, USB, SD,
-> WiFi.
-> 
-> We just don't support booting the second cluster via any other means than
-> lk2nd right now.
-> 
-> You could also not use lk2nd, stick with your default LK and import LPM
-> patches.
-> 
+Hi Perry,
 
-My point is: If you import out of tree LPM patches you can also just
-import an extra patch that adds the qcom,board-id property where needed.
+I love your patch! Perhaps something to improve:
 
-The qcom,board-id is only needed/used in configurations where you need
-to add those extra LPM patches on top anyway. Those configurations are
-(sadly) not supported from the upstream point of view, since only PSCI
-or spin-table are supposed to be used for CPU bring-up/idle.
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.2-rc4 next-20230118]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Anyway, for me personally there is no difference if the funky
-qcom,board-id properties are there or not, so I'll leave it up to
-Rob/Krzysztof to decide if the board-id exception is warranted here or
-not. :)
+url:    https://github.com/intel-lab-lkp/linux/commits/Perry-Yuan/ACPI-CPPC-Add-AMD-pstate-energy-performance-preference-cppc-control/20230118-163633
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230118075210.447418-5-perry.yuan%40amd.com
+patch subject: [PATCH v11 04/11] cpufreq: amd-pstate: implement Pstate EPP support for the AMD processors
+config: x86_64-randconfig-a013-20230116 (https://download.01.org/0day-ci/archive/20230118/202301182325.NoodiJ0K-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/d596b3586a809f4f6b65ec216c168b6f01c82f67
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Perry-Yuan/ACPI-CPPC-Add-AMD-pstate-energy-performance-preference-cppc-control/20230118-163633
+        git checkout d596b3586a809f4f6b65ec216c168b6f01c82f67
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cpufreq/
 
-Thanks,
-Stephan
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/cpufreq/amd-pstate-ut.c:29:
+>> include/linux/amd-pstate.h:142:21: warning: 'epp_values' defined but not used [-Wunused-variable]
+     142 | static unsigned int epp_values[] = {
+         |                     ^~~~~~~~~~
+>> include/linux/amd-pstate.h:133:27: warning: 'energy_perf_strings' defined but not used [-Wunused-const-variable=]
+     133 | static const char * const energy_perf_strings[] = {
+         |                           ^~~~~~~~~~~~~~~~~~~
+   include/linux/amd-pstate.h:97:27: warning: 'amd_pstate_mode_string' defined but not used [-Wunused-const-variable=]
+      97 | static const char * const amd_pstate_mode_string[] = {
+         |                           ^~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/epp_values +142 include/linux/amd-pstate.h
+
+   132	
+ > 133	static const char * const energy_perf_strings[] = {
+   134		[EPP_INDEX_DEFAULT] = "default",
+   135		[EPP_INDEX_PERFORMANCE] = "performance",
+   136		[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
+   137		[EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
+   138		[EPP_INDEX_POWERSAVE] = "power",
+   139		NULL
+   140	};
+   141	
+ > 142	static unsigned int epp_values[] = {
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
