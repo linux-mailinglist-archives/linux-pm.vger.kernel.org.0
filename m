@@ -2,95 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BAA671282
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 05:18:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 119B56712EE
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Jan 2023 06:03:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229448AbjARES2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 17 Jan 2023 23:18:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
+        id S229530AbjARFDW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 00:03:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjARES1 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 17 Jan 2023 23:18:27 -0500
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637EAC67A
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 20:18:26 -0800 (PST)
-Received: by mail-pl1-x62c.google.com with SMTP id v23so30765539plo.1
-        for <linux-pm@vger.kernel.org>; Tue, 17 Jan 2023 20:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O03edEju3xNBHfHUVApCGJHSP3GZsUCwUrXGo331jWg=;
-        b=pqy6AtsjAh1flHEp+yVREN4y+SsHGXanPzd+GifPM6R08b50cq8rSZkseMdw/LmLU4
-         EpeChP/hYNe8oIcFAcv8/cbXXKOogytinur18tW3+lYNaIp3i5+z9jvnKFgw+wtqXUOV
-         JlWvBXbWxMukjG2J+4/DaL57xnKP1xm3QP+j4EocrwPQ5HnS3T6NdROiY5G9b/NhVEoD
-         T4i9oonMi0s65HoNy8F4rsoInTReu8H46pNiCM4kzFtZdNd0fyHKHNolDIa+E8+clvjp
-         YXJWAvG2iol8CYI3OeNW96urSkboZBL4R38Uh9W5nWx/9EB4mRP3srpO6Wf6JsqdGdh7
-         855g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O03edEju3xNBHfHUVApCGJHSP3GZsUCwUrXGo331jWg=;
-        b=5IZZIP+mwqYiA+zUXmOLhixrihYlGg3XgccjLblPL1wPna+DzBlY3jsPICiwiuhAG3
-         xjj6WvSEtAK4vfKT2lZcrCR9nXMfxZXfBYHjHtdt/qBKlNuSu2SXq1+/H93dQzgDIHLk
-         aaOaYKmp/FcGovCwU6l031zkWpU3YvaE/KJ0YtbkTAZnuaeWCcfY/+HLcdoRAGhUPSm7
-         dbaCnjEoJsUyjzwDtEi3VvG9sLA1SY8No2T9avRRXyD4tZT8kz3BWjhYVuu8JgLW9Np8
-         xO8iGt0mIBLuUFp1g6oAIf5NFwznGq7ySzNP6HB9nTghs/9sbPa8I1RuV8Unw4woDT2a
-         eGWQ==
-X-Gm-Message-State: AFqh2kosqtf3Leb0HgCHVieBJXJhCHtcFUy/7EGmtX4OX18G/z/9j6EL
-        /z4XB0hQr1MygzJmMrTfGA5H2siVvFSbVqhN
-X-Google-Smtp-Source: AMrXdXsdxq2UrqHrWVz/d9oIcLgR+P2iWo46IHY8T4MOSxzMUnhZdkFCX8qLkPNFH0BtQ+c1RUR0pQ==
-X-Received: by 2002:a17:902:9343:b0:194:4a2b:d7e4 with SMTP id g3-20020a170902934300b001944a2bd7e4mr6520564plp.17.1674015505875;
-        Tue, 17 Jan 2023 20:18:25 -0800 (PST)
-Received: from localhost ([122.172.81.45])
-        by smtp.gmail.com with ESMTPSA id x6-20020a170902a38600b001782aab6318sm21921982pla.68.2023.01.17.20.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jan 2023 20:18:25 -0800 (PST)
-Date:   Wed, 18 Jan 2023 09:48:20 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v3] thermal/core: fix error paths in
- __thermal_cooling_device_register()
-Message-ID: <20230118041820.tdaq7nmgsunlm7zt@vireshk-i7>
-References: <20230112154721.452292-1-caleb.connolly@linaro.org>
- <20230116042326.l3kyd55lbw4dfocm@vireshk-i7>
- <24afe142-f835-29af-fca6-d00e864b0c82@huawei.com>
- <20230117043653.4n2dfruh36x4uazj@vireshk-i7>
- <CAJZ5v0ihaNHneyRwd8nWYUhGKGRpHrVFi7gJsp_g9MX=oLc9Eg@mail.gmail.com>
- <26cc4bea-1e0b-2d41-fbf3-aae3ab6dfcfe@linaro.org>
+        with ESMTP id S229475AbjARFDV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 00:03:21 -0500
+X-Greylist: delayed 906 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 17 Jan 2023 21:03:15 PST
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CC27F5142D;
+        Tue, 17 Jan 2023 21:03:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=tlkYc
+        HL+mRM3my7PDBxqnuZOPrQXNYZeNk/a8GwpYdg=; b=YHf+pD0a2qcAaY1G90ryJ
+        iCuGLnkLN2ZKGYLd7OhEAMkeX5p1WlNI9TviNV65OkSFC05nj/0QzJRFz0Zw1j+s
+        FZsvpNxVlQIqdAYpwruCfzs4khJ32Gj5SZccDn73c11MTOavRme+hZZSlnWlZjsD
+        MxIKI8gXBYk8Frlk1n408c=
+Received: from ubuntu20.04 (unknown [222.129.34.12])
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wB31sroecdjkCcWAw--.3910S2;
+        Wed, 18 Jan 2023 12:47:37 +0800 (CST)
+From:   Vincent Wang <bhuwz@163.com>
+To:     rafael@kernel.org, viresh.kumar@linaro.org, lukasz.luba@arm.com
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vincent Wang <vincentwang3@lenovo.com>
+Subject: [PATCH v2] cpufreq: Register with perf domain before
+Date:   Wed, 18 Jan 2023 12:47:33 +0800
+Message-Id: <20230118044733.29391-1-bhuwz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <26cc4bea-1e0b-2d41-fbf3-aae3ab6dfcfe@linaro.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wB31sroecdjkCcWAw--.3910S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCF4UWw1UCw4UJF1UWFWDtwb_yoW5WFWfpF
+        Wag39Yyr4vqFZFyw47Aa18ua4Fg3Z7JFW2krW5G34Fyr1DGF10g3WxWFy5CFyfKr1kAFWj
+        yr1Yqa47Ca1UAFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jyCJQUUUUU=
+X-Originating-IP: [222.129.34.12]
+X-CM-SenderInfo: pekx46i6rwjhhfrp/1tbiYxz63FaENYJzxgABsI
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 17-01-23, 18:11, Caleb Connolly wrote:
-> it's a fun one:
-> 
-> https://lore.kernel.org/linux-pm/20230101174342.58351-1-caleb.connolly@linaro.org/
-> 
-> I don't see any issues with this suggested patch, however I don't think
-> I could comfortably attach my SoB to it given the larger code reordering
-> and my complete lack of experience with this subsystem.
-> 
-> Would a Tested-by be acceptable?
+From: Vincent Wang <vincentwang3@lenovo.com>
 
-Sure, lemme send the patch(es) formally then.
+We found the following issue during kernel boot on android phone:
 
+[    1.325272][    T1] cpu cpu0: EM: created perf domain
+[    1.329317][    T1] cpu cpu4: EM: created perf domain
+[    1.337597][   T76] pd_init: no EM found for CPU7
+[    1.350849][    T1] cpu cpu7: EM: created perf domain
+
+pd init for cluster2 is executed in a kworker thread and
+is earlier than the perf domain creation for cluster2.
+
+pd_init() is called from the cpufreq notification of
+CPUFREQ_CREATE_POLICY in cpufreq_online(), which is earlier
+than that cpufreq_driver->register_em() is called.
+
+To avoid this issue, register with perf domain should be
+earlier than the notification is sent.
+
+Signed-off-by: Vincent Wang <vincentwang3@lenovo.com>
+---
+v1 -> v2:  based on Rafael's comment, adjust the order of
+regitster perf domain. But I think it's no need to be in
+advance to the initialization of frequency QoS.
+
+Change the description of this patch.
+
+ drivers/cpufreq/cpufreq.c | 31 ++++++++++++++++++-------------
+ 1 file changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 7e56a42750ea..a715c8323897 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -1431,6 +1431,24 @@ static int cpufreq_online(unsigned int cpu)
+ 			goto out_destroy_policy;
+ 		}
+ 
++		/*
++		 * Register with the energy model before
++		 * blocking_notifier_call_chain() is called for
++		 * CPUFREQ_CREATE_POLICY, which will result in rebuilding of the
++		 * sched domains in update_topology_flags_workfn().
++		 *
++		 * Register with the energy model before
++		 * sched_cpufreq_governor_change() is called, which will result
++		 * in rebuilding of the sched domains, which should only be done
++		 * once the energy model is properly initialized for the policy
++		 * first.
++		 *
++		 * Also, this should be called before the policy is registered
++		 * with cooling framework.
++		 */
++		if (cpufreq_driver->register_em)
++			cpufreq_driver->register_em(policy);
++
+ 		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+ 				CPUFREQ_CREATE_POLICY, policy);
+ 	}
+@@ -1493,19 +1511,6 @@ static int cpufreq_online(unsigned int cpu)
+ 		write_lock_irqsave(&cpufreq_driver_lock, flags);
+ 		list_add(&policy->policy_list, &cpufreq_policy_list);
+ 		write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+-
+-		/*
+-		 * Register with the energy model before
+-		 * sched_cpufreq_governor_change() is called, which will result
+-		 * in rebuilding of the sched domains, which should only be done
+-		 * once the energy model is properly initialized for the policy
+-		 * first.
+-		 *
+-		 * Also, this should be called before the policy is registered
+-		 * with cooling framework.
+-		 */
+-		if (cpufreq_driver->register_em)
+-			cpufreq_driver->register_em(policy);
+ 	}
+ 
+ 	ret = cpufreq_init_policy(policy);
 -- 
-viresh
+2.25.1
+
