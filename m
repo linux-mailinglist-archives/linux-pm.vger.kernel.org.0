@@ -2,45 +2,55 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B11673324
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 08:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6324673363
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 09:13:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjASH6x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 02:58:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34042 "EHLO
+        id S229750AbjASINT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 03:13:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjASH6o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 02:58:44 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 178A83EFED;
-        Wed, 18 Jan 2023 23:58:41 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA0441758;
-        Wed, 18 Jan 2023 23:59:22 -0800 (PST)
-Received: from [10.57.10.42] (unknown [10.57.10.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2201F3F445;
-        Wed, 18 Jan 2023 23:58:39 -0800 (PST)
-Message-ID: <eee126fc-c93f-9ff1-835a-96d5d70b4eca@arm.com>
-Date:   Thu, 19 Jan 2023 07:58:38 +0000
+        with ESMTP id S229468AbjASINR (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 03:13:17 -0500
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B665145BDD;
+        Thu, 19 Jan 2023 00:13:15 -0800 (PST)
+Received: from dggpemm100007.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4NyFh74YGwzRrHR;
+        Thu, 19 Jan 2023 16:11:19 +0800 (CST)
+Received: from [10.174.178.174] (10.174.178.174) by
+ dggpemm100007.china.huawei.com (7.185.36.116) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Thu, 19 Jan 2023 16:13:12 +0800
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+CC:     <linux-pm@vger.kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        <linux-kernel@vger.kernel.org>
+References: <cover.1674030722.git.viresh.kumar@linaro.org>
+ <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+From:   Yang Yingliang <yangyingliang@huawei.com>
+Message-ID: <d7c05b81-3299-9ebe-b27d-06549290e3a1@huawei.com>
+Date:   Thu, 19 Jan 2023 16:13:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] cpufreq: Register with perf domain before
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Vincent Wang <bhuwz@163.com>,
-        Vincent Wang <vincentwang3@lenovo.com>, rafael@kernel.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230118044733.29391-1-bhuwz@163.com>
- <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
- <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
- <20230119053952.qwh2yrmhddzocnju@vireshk-i7>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20230119053952.qwh2yrmhddzocnju@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.178.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm100007.china.huawei.com (7.185.36.116)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,20 +59,67 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-
-On 1/19/23 05:39, Viresh Kumar wrote:
-> On 18-01-23, 09:24, Lukasz Luba wrote:
->> Viresh, If that's an issue for other governors, than maybe
->> we should address that.
-> 
-> As you said in the other email, it isn't a mainline issue, I will
-> ignore it then :)
-> 
-
-Fair enough. Although, I hope one day, maybe at some conference,
-we could discuss those Android-kernel vs. mainline differences.
-IMO the gap isn't shrinking, but I would like to shrink it.
-Especially when we are serious about long term kernel
-support for mobile devices, this gap should be tiny.
-Therefore, I would tackle this scheduler cpufreq governors and API
-for them.
+On 2023/1/18 16:38, Viresh Kumar wrote:
+> put_device() shouldn't be called before a prior call to
+> device_register(). __thermal_cooling_device_register() doesn't follow
+> that properly and needs fixing. Also
+> thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> on few error paths.
+>
+> Fix all this by placing the calls at the right place.
+>
+> Based on initial work done by Caleb Connolly.
+>
+> Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> ---
+Reviewed-by: Yang Yingliang <yangyingliang@huawei.com>
+> For v6.2-rc.
+>
+> V3->V4:
+> - The first three versions were sent by Caleb.
+> - The new version fixes the current bugs, without looking to optimize the
+>    code any further, which is done separately in the next two patches.
+>
+>   drivers/thermal/thermal_core.c | 13 ++++++++++---
+>   1 file changed, 10 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index f17ab2316dbd..77bd47d976a2 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -909,15 +909,20 @@ __thermal_cooling_device_register(struct device_node *np,
+>   	cdev->devdata = devdata;
+>   
+>   	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
+> -	if (ret)
+> -		goto out_kfree_type;
+> +	if (ret) {
+> +		kfree(cdev->type);
+> +		goto out_ida_remove;
+> +	}
+>   
+>   	thermal_cooling_device_setup_sysfs(cdev);
+> +
+>   	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+>   	if (ret) {
+> +		kfree(cdev->type);
+>   		thermal_cooling_device_destroy_sysfs(cdev);
+> -		goto out_kfree_type;
+> +		goto out_ida_remove;
+>   	}
+> +
+>   	ret = device_register(&cdev->device);
+>   	if (ret)
+>   		goto out_kfree_type;
+> @@ -943,6 +948,8 @@ __thermal_cooling_device_register(struct device_node *np,
+>   	thermal_cooling_device_destroy_sysfs(cdev);
+>   	kfree(cdev->type);
+>   	put_device(&cdev->device);
+> +
+> +	/* thermal_release() takes care of the rest */
+>   	cdev = NULL;
+>   out_ida_remove:
+>   	ida_free(&thermal_cdev_ida, id);
