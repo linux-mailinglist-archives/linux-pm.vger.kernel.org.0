@@ -2,93 +2,175 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B48A67434D
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 21:09:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B808D674641
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 23:37:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbjASUJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 15:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        id S229929AbjASWhY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 17:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjASUJ0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 15:09:26 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239A69373F;
-        Thu, 19 Jan 2023 12:09:25 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id qx13so8570485ejb.13;
-        Thu, 19 Jan 2023 12:09:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ICucaelScFBp72R2uUWOJT+N8a5uz5WEAv6I/4JxUuk=;
-        b=jK2NeiJo854AoGrsi4rBI6CsgqTo57Rj7k3Flb+3Y3rggNJ4obxdJQF7QLfSSjygtw
-         c3kg4MCURwA1vGFCMiEo+IFo0f7STKpMB7T8KkisbEpRYkP5J/Iz9cDL/Al5D9kxmfFU
-         SyfawoNrnwyp8RcodoCDxT/Ycl8LzmHFpR2zfgfBexmlCnI2pS4LFWEDuNw8tpShJJCZ
-         0J02cjmMFHMtJ4MA9xmnm+mn/nMTo6tsVwqHPO/WasVJImdFEND2Op9jlkZzEzWvNnfQ
-         WwBynWaN4LTHb8Z4WutS9E3d1Etti1rsCw/G6mchGlXYugT7zxISLuXOwSMJVy7prqN8
-         gVww==
-X-Gm-Message-State: AFqh2krz6+vYPxB5vYIK55y+i5E76wbbozpeUNOMUkHO+epCVxxcwOHN
-        uuaeMEpTqUuLC7XCpH223KjEBb/oR7j0H0yRU3A=
-X-Google-Smtp-Source: AMrXdXv6fX2i+S2TtdLghlFy/s9iCVkLfqeNqxedK50jvgkzbYaKWuoSuxSIsR/xYEbeYYMXk6rDtTfGx2efzkjlP14=
-X-Received: by 2002:a17:906:eb1b:b0:86e:abe4:5acf with SMTP id
- mb27-20020a170906eb1b00b0086eabe45acfmr1265955ejb.615.1674158963797; Thu, 19
- Jan 2023 12:09:23 -0800 (PST)
+        with ESMTP id S230383AbjASWge (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 17:36:34 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB24A5CE5;
+        Thu, 19 Jan 2023 14:18:26 -0800 (PST)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30JMEgIV023694;
+        Thu, 19 Jan 2023 22:18:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=AxkyY/06uGUrmuwDgIjlBDb5C2vYmq8tk8MxpWGbAkY=;
+ b=TchB5w/RTzPV+HNyAyJ72jLoaLB9P7XTT7MXTEP8WOPDJMIGPnrjkYBDD3p2q/du6Kc4
+ CmNP7GKIEJYomyl44dBAJpx8p8lhURQgQU8vTeRhv1jrRMRmGp/th7iLkgDYFjGRhrRy
+ 92z5TeNkkxg0GZ2J63eCRhm98I5iqBGZ8XgSHxHz3XgPl00mUIRPl4KgZS8B20u2mcRM
+ G8f9/VoJSRjnlS9n1/1GJ6ahJ1NQa7KieAhU246uF9Ux/1IKhrP2M/DAP51BYGus7MKv
+ rDZslcggIc0CiVFdqM1V1del6gfZdXmcLks3BGBK6fDlZ2gy146Hl1CZwTyiwWinR32M 8A== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3n6r59b46d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 22:18:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 30JMIMUb012325
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 19 Jan 2023 22:18:22 GMT
+Received: from [10.46.163.175] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Thu, 19 Jan
+ 2023 14:18:21 -0800
+Message-ID: <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
+Date:   Thu, 19 Jan 2023 14:18:12 -0800
 MIME-Version: 1.0
-References: <cover.1674030722.git.viresh.kumar@linaro.org> <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
- <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com> <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
-In-Reply-To: <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Jan 2023 21:09:12 +0100
-Message-ID: <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
-Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
- device_register() fails
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
+ zero
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, <djakov@kernel.org>
+CC:     <quic_mdtipton@quicinc.com>, <quic_okukatla@quicinc.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
+ <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
+ <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
+From:   Vivek Aknurwar <quic_viveka@quicinc.com>
+In-Reply-To: <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EZTNWv0qyfHa0plkKzRRco13XcNlfvMr
+X-Proofpoint-GUID: EZTNWv0qyfHa0plkKzRRco13XcNlfvMr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-19_14,2023-01-19_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
+ mlxscore=0 mlxlogscore=999 malwarescore=0 priorityscore=1501 bulkscore=0
+ suspectscore=0 phishscore=0 adultscore=0 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2301190188
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 6:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> On 18-01-23, 20:58, Rafael J. Wysocki wrote:
-> > On Wed, Jan 18, 2023 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> > >
-> > > put_device() shouldn't be called before a prior call to
-> > > device_register(). __thermal_cooling_device_register() doesn't follow
-> > > that properly and needs fixing. Also
-> > > thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
-> > > on few error paths.
-> > >
-> > > Fix all this by placing the calls at the right place.
-> > >
-> > > Based on initial work done by Caleb Connolly.
-> > >
-> > > Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
-> > > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
-> > > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
-> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> >
-> > OK, so I think that this patch is needed for 6.2 and the other two may
-> > be queued up for later (they do depend on this one, though, of
-> > course).  Is my understanding correct?
->
-> Right.
+Hi Bryan,
+Thanks for taking time to review the patch.
 
-OK, applied as 6.2-rc material and I'll get to the other two when this goes in.
+On 1/13/2023 5:40 PM, Bryan O'Donoghue wrote:
+> On 14/01/2023 01:24, Bryan O'Donoghue wrote:
+>> On 13/01/2023 22:07, Vivek Aknurwar wrote:
+>>> Currently framework sets bw even when init bw requirements are zero 
+>>> during
+>>> provider registration, thus resulting bulk of set bw to hw.
+>>> Avoid this behaviour by skipping provider set bw calls if init bw is 
+>>> zero.
+>>>
+>>> Signed-off-by: Vivek Aknurwar <quic_viveka@quicinc.com>
+>>> ---
+>>>   drivers/interconnect/core.c | 17 ++++++++++-------
+>>>   1 file changed, 10 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+>>> index 25debde..43ed595 100644
+>>> --- a/drivers/interconnect/core.c
+>>> +++ b/drivers/interconnect/core.c
+>>> @@ -977,14 +977,17 @@ void icc_node_add(struct icc_node *node, struct 
+>>> icc_provider *provider)
+>>>       node->avg_bw = node->init_avg;
+>>>       node->peak_bw = node->init_peak;
+>>> -    if (provider->pre_aggregate)
+>>> -        provider->pre_aggregate(node);
+>>> -
+>>> -    if (provider->aggregate)
+>>> -        provider->aggregate(node, 0, node->init_avg, node->init_peak,
+>>> -                    &node->avg_bw, &node->peak_bw);
+>>> +    if (node->avg_bw || node->peak_bw) {
+>>> +        if (provider->pre_aggregate)
+>>> +            provider->pre_aggregate(node);
+>>> +
+>>> +        if (provider->aggregate)
+>>> +            provider->aggregate(node, 0, node->init_avg, 
+>>> node->init_peak,
+>>> +                        &node->avg_bw, &node->peak_bw);
+>>> +        if (provider->set)
+>>> +            provider->set(node, node);
+>>> +    }
+>>> -    provider->set(node, node);
+>>>       node->avg_bw = 0;
+>>>       node->peak_bw = 0;
+>>
+>> I have the same comment/question for this patch that I had for the 
+>> qcom arch specific version of it. This patch seems to be doing at a 
+>> higher level what the patch below was doing at a lower level.
+>>
+>> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m0c90588d0d1e2ab88c39be8f5f3a8f0b61396349
+>>
+>> what happens to earlier silicon - qcom silicon which previously made 
+>> explicit zero requests ?
+
+This patch is to optimize and avoid all those bw 0 requests on each node 
+addition during probe (which results in rpmh remote calls) for upcoming 
+targets.
+
+>>
+>> https://lore.kernel.org/lkml/1039a507-c4cd-e92f-dc29-1e2169ce5078@linaro.org/T/#m589e8280de470e038249bb362634221771d845dd
+>>
+>> https://lkml.org/lkml/2023/1/3/1232
+>>
+>> Isn't it a better idea to let lower layer drivers differentiate what 
+>> they do ?
+
+AFAIU lower layer driver can/should not differentiate between normal 
+flow calls vs made as a result from probe/initialization of driver. 
+Hence even bw 0 request is honored as like client in general wish to 
+vote 0 as in an normal use case.
+
+>>
+>> For example on pre 5.4 qcom kernel silicon we might choose to set the 
+>> value to zero "because that's what the reference code did" but on 
+>> newer silicon we might opt to skip the zero configuration ?
+>>
+>> I'm happy to be shown the error of my ways but, absent testing to 
+>> *show* it doesn't impact existing legacy silicon, I think we should be 
+>> wary of this change.
+>>
+>> ---
+>> bod
+> 
+> Oh, and what is the effect on Samsung and i.MX silicon interconnect 
+> providers of skipping the zero set ?
+
+If interconnect providers are trying to clear bw votes coming from 
+boot-loader then best place to clear those is in sync-state call back.
+
+> 
+> ---
+> bod
