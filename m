@@ -2,50 +2,58 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DFBA674340
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 21:05:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B48A67434D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 21:09:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjASUE7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 15:04:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59198 "EHLO
+        id S229609AbjASUJ1 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 15:09:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjASUE5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 15:04:57 -0500
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE1F917C6;
-        Thu, 19 Jan 2023 12:04:56 -0800 (PST)
-Received: by mail-ed1-f50.google.com with SMTP id y11so4220373edd.6;
-        Thu, 19 Jan 2023 12:04:56 -0800 (PST)
+        with ESMTP id S229487AbjASUJ0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 15:09:26 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 239A69373F;
+        Thu, 19 Jan 2023 12:09:25 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id qx13so8570485ejb.13;
+        Thu, 19 Jan 2023 12:09:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TVMdR0BjzfJmEICL+5SSx1r2ex/vjlCSfm19tGq42RM=;
-        b=mnN0TTTAkeHrrn3JQ+iT1JyNe/MfycnM6DiCVVE7fD4j5ra7B81yU7QF9hxe9i5PJv
-         +LM0WbLYhEhLVBeAu7rfjgCx/b/M5/PAE66JVVprPuAcPuFKSKhxCuKeoSNdF0o62BGI
-         mzWFNN9p6da+DR3W1QT2g7t5PrJ+3IExBHSLwHk+FrF8MBiuWBSkkKpKX3Vhc8BIz7O5
-         Vm8HDtpFvVEUyP1kEGxwt0cUvjR2tXMEnykg+TRPcIfH7pNXOuyJK7V9YAnW88XHtktJ
-         mAE0VGSlxh5QpZCHEYBa1FKYMuG3hegjJnR4djnHIxBhHDstJUtgF9YBvSC5U6LcC5CX
-         GcVA==
-X-Gm-Message-State: AFqh2kqNxtg1I2x0HOYdaTYeyUP29IDQdBodlF0zYSZg+aADN/JlFFoB
-        EfrVI/JPU5Fz0Qrm9rmnKv/q6JcQJOHmAhfk6jQ=
-X-Google-Smtp-Source: AMrXdXtBZdgI/Hh6TetNuEgyIYo1C+IHq7d11QyhzD+OC8k6+JPG53vY2RXyUuKZuKB1fEFqTfwXGOQXjokRNdtmOu4=
-X-Received: by 2002:a05:6402:2218:b0:499:b433:ec1a with SMTP id
- cq24-20020a056402221800b00499b433ec1amr1451712edb.222.1674158694701; Thu, 19
- Jan 2023 12:04:54 -0800 (PST)
+        bh=ICucaelScFBp72R2uUWOJT+N8a5uz5WEAv6I/4JxUuk=;
+        b=jK2NeiJo854AoGrsi4rBI6CsgqTo57Rj7k3Flb+3Y3rggNJ4obxdJQF7QLfSSjygtw
+         c3kg4MCURwA1vGFCMiEo+IFo0f7STKpMB7T8KkisbEpRYkP5J/Iz9cDL/Al5D9kxmfFU
+         SyfawoNrnwyp8RcodoCDxT/Ycl8LzmHFpR2zfgfBexmlCnI2pS4LFWEDuNw8tpShJJCZ
+         0J02cjmMFHMtJ4MA9xmnm+mn/nMTo6tsVwqHPO/WasVJImdFEND2Op9jlkZzEzWvNnfQ
+         WwBynWaN4LTHb8Z4WutS9E3d1Etti1rsCw/G6mchGlXYugT7zxISLuXOwSMJVy7prqN8
+         gVww==
+X-Gm-Message-State: AFqh2krz6+vYPxB5vYIK55y+i5E76wbbozpeUNOMUkHO+epCVxxcwOHN
+        uuaeMEpTqUuLC7XCpH223KjEBb/oR7j0H0yRU3A=
+X-Google-Smtp-Source: AMrXdXv6fX2i+S2TtdLghlFy/s9iCVkLfqeNqxedK50jvgkzbYaKWuoSuxSIsR/xYEbeYYMXk6rDtTfGx2efzkjlP14=
+X-Received: by 2002:a17:906:eb1b:b0:86e:abe4:5acf with SMTP id
+ mb27-20020a170906eb1b00b0086eabe45acfmr1265955ejb.615.1674158963797; Thu, 19
+ Jan 2023 12:09:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org> <20230118181622.33335-3-daniel.lezcano@linaro.org>
-In-Reply-To: <20230118181622.33335-3-daniel.lezcano@linaro.org>
+References: <cover.1674030722.git.viresh.kumar@linaro.org> <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+ <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com> <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
+In-Reply-To: <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Jan 2023 21:04:43 +0100
-Message-ID: <CAJZ5v0hCJF-+1SFHyNF-=4FWPLcOqRnc09KeA=rz6BdYTvb=BQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for intel_soc_dts_iosf
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>
+Date:   Thu, 19 Jan 2023 21:09:12 +0100
+Message-ID: <CAJZ5v0jBhbWasCd0qdZb0Ah=5obLzOUxWQwz9J9=mZ+pVFfxRg@mail.gmail.com>
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -57,164 +65,30 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
+On Thu, Jan 19, 2023 at 6:16 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
 >
-> From: Daniel Lezcano <daniel.lezcano@kernel.org>
+> On 18-01-23, 20:58, Rafael J. Wysocki wrote:
+> > On Wed, Jan 18, 2023 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > >
+> > > put_device() shouldn't be called before a prior call to
+> > > device_register(). __thermal_cooling_device_register() doesn't follow
+> > > that properly and needs fixing. Also
+> > > thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> > > on few error paths.
+> > >
+> > > Fix all this by placing the calls at the right place.
+> > >
+> > > Based on initial work done by Caleb Connolly.
+> > >
+> > > Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> > > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> > > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> > > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> >
+> > OK, so I think that this patch is needed for 6.2 and the other two may
+> > be queued up for later (they do depend on this one, though, of
+> > course).  Is my understanding correct?
 >
-> The thermal framework gives the possibility to register the trip
-> points with the thermal zone. When that is done, no get_trip_* ops are
-> needed and they can be removed.
->
-> Convert ops content logic into generic trip points and register them with the
-> thermal zone.
->
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/intel/intel_soc_dts_iosf.c | 58 ++++++++--------------
->  drivers/thermal/intel/intel_soc_dts_iosf.h |  2 +-
->  2 files changed, 23 insertions(+), 37 deletions(-)
->
-> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.c b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> index 342b0bb5a56d..130c416ec601 100644
-> --- a/drivers/thermal/intel/intel_soc_dts_iosf.c
-> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.c
-> @@ -71,20 +71,13 @@ static int get_tj_max(u32 *tj_max)
->         return err;
->  }
->
-> -static int sys_get_trip_temp(struct thermal_zone_device *tzd, int trip,
-> -                            int *temp)
-> +static int get_trip_temp(struct intel_soc_dts_sensors *sensors, int trip, int *temp)
->  {
->         int status;
->         u32 out;
-> -       struct intel_soc_dts_sensor_entry *dts;
-> -       struct intel_soc_dts_sensors *sensors;
->
-> -       dts = tzd->devdata;
-> -       sensors = dts->sensors;
-> -       mutex_lock(&sensors->dts_update_lock);
->         status = iosf_mbi_read(BT_MBI_UNIT_PMC, MBI_REG_READ,
->                                SOC_DTS_OFFSET_PTPS, &out);
-> -       mutex_unlock(&sensors->dts_update_lock);
->         if (status)
->                 return status;
->
-> @@ -173,8 +166,13 @@ static int update_trip_temp(struct intel_soc_dts_sensor_entry *dts,
->         if (status)
->                 goto err_restore_te_out;
->
-> -       dts->trip_types[thres_index] = trip_type;
-> -
-> +       status = get_trip_temp(sensors, thres_index, &temp);
-> +       if (status)
-> +               goto err_restore_te_out;
-> +
-> +       dts->trips[thres_index].type = trip_type;
-> +       dts->trips[thres_index].temperature = temp;
-> +
->         return 0;
->  err_restore_te_out:
->         iosf_mbi_write(BT_MBI_UNIT_PMC, MBI_REG_WRITE,
-> @@ -202,24 +200,12 @@ static int sys_set_trip_temp(struct thermal_zone_device *tzd, int trip,
->
->         mutex_lock(&sensors->dts_update_lock);
->         status = update_trip_temp(tzd->devdata, trip, temp,
-> -                                 dts->trip_types[trip]);
-> +                                 dts->trips[trip].type);
->         mutex_unlock(&sensors->dts_update_lock);
->
->         return status;
->  }
->
-> -static int sys_get_trip_type(struct thermal_zone_device *tzd,
-> -                            int trip, enum thermal_trip_type *type)
-> -{
-> -       struct intel_soc_dts_sensor_entry *dts;
-> -
-> -       dts = tzd->devdata;
-> -
-> -       *type = dts->trip_types[trip];
-> -
-> -       return 0;
-> -}
-> -
->  static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->                              int *temp)
->  {
-> @@ -245,8 +231,6 @@ static int sys_get_curr_temp(struct thermal_zone_device *tzd,
->
->  static struct thermal_zone_device_ops tzone_ops = {
->         .get_temp = sys_get_curr_temp,
-> -       .get_trip_temp = sys_get_trip_temp,
-> -       .get_trip_type = sys_get_trip_type,
->         .set_trip_temp = sys_set_trip_temp,
->  };
->
-> @@ -320,7 +304,8 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
->         dts->trip_mask = trip_mask;
->         dts->trip_count = trip_count;
->         snprintf(name, sizeof(name), "soc_dts%d", id);
-> -       dts->tzone = thermal_zone_device_register(name,
-> +       dts->tzone = thermal_zone_device_register_with_trips(name,
-> +                                                 dts->trips,
->                                                   trip_count,
->                                                   trip_mask,
->                                                   dts, &tzone_ops,
-> @@ -430,27 +415,28 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
->                 notification = false;
->         else
->                 notification = true;
-> -       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-> -               sensors->soc_dts[i].sensors = sensors;
-> -               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
-> -                                          notification, trip_count,
-> -                                          read_only_trip_count);
-> -               if (ret)
-> -                       goto err_free;
-> -       }
+> Right.
 
-How is this change related to the rest of the patch?
-
->
->         for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
->                 ret = update_trip_temp(&sensors->soc_dts[i], 0, 0,
->                                        THERMAL_TRIP_PASSIVE);
->                 if (ret)
-> -                       goto err_remove_zone;
-> +                       goto err_free;
->
->                 ret = update_trip_temp(&sensors->soc_dts[i], 1, 0,
->                                        THERMAL_TRIP_PASSIVE);
->                 if (ret)
-> -                       goto err_remove_zone;
-> +                       goto err_free;
->         }
->
-> +       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
-> +               sensors->soc_dts[i].sensors = sensors;
-> +               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
-> +                                          notification, trip_count,
-> +                                          read_only_trip_count);
-> +               if (ret)
-> +                       goto err_remove_zone;
-> +       }
-> +
->         return sensors;
->  err_remove_zone:
->         for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i)
-> diff --git a/drivers/thermal/intel/intel_soc_dts_iosf.h b/drivers/thermal/intel/intel_soc_dts_iosf.h
-> index c54945748200..ee0a39e3edd3 100644
-> --- a/drivers/thermal/intel/intel_soc_dts_iosf.h
-> +++ b/drivers/thermal/intel/intel_soc_dts_iosf.h
-> @@ -27,7 +27,7 @@ struct intel_soc_dts_sensor_entry {
->         u32 store_status;
->         u32 trip_mask;
->         u32 trip_count;
-> -       enum thermal_trip_type trip_types[2];
-> +       struct thermal_trip trips[2];
->         struct thermal_zone_device *tzone;
->         struct intel_soc_dts_sensors *sensors;
->  };
-> --
+OK, applied as 6.2-rc material and I'll get to the other two when this goes in.
