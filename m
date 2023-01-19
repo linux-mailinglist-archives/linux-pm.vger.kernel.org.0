@@ -2,46 +2,47 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25965672F33
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 03:46:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ABB672F3D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 03:50:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjASCqL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 21:46:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53626 "EHLO
+        id S229712AbjASCum (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 18 Jan 2023 21:50:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjASCqK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 21:46:10 -0500
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2051.outbound.protection.outlook.com [40.107.237.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1574AB47E;
-        Wed, 18 Jan 2023 18:46:08 -0800 (PST)
+        with ESMTP id S229838AbjASCul (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 21:50:41 -0500
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2062.outbound.protection.outlook.com [40.107.223.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEAEF6843F;
+        Wed, 18 Jan 2023 18:50:39 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jyuWW7BP0O3O9+JT7GY7OGE7JXznBynqnoFkYuA8ZFxwawr7WyCAl5LOSoKwteaIaXrsuySS29WygGsvvZHBJil3STUGIp0QZGTvI+3z7i5v7qnGco9Nzb9CYz5MPjwED8Ru9GCcxR/Q7AvEW2umGT7dP/fgLYqAS4xFUxkHYj7/o9LwMBaw80tIPzlprB4Ixllgoy4HhBH8mIhI0idBz9C2qAiHaf3G9or2r41fFXYAaX/HvUu/JNJdqKb83+NLEiAYoi2ZRxw4JGQN9WVB32OQ/TO2+V+K4Ubn0TomMQCfDO7q4g8d+R8R6+Pllm4F9Jc41a05ud9v8XhHmFrZyA==
+ b=UY5WBl67ami4i6XN48OqDbz9sabBaLa4Wm6DOys3DHKlFwBifZlJ9jcObeR1WSUgGZsXrTW2Sg7KZOhObt4GtKD9d9LMh8fiBAekn2/2odwRZuZVRv6ykUs1K0fOMWTU2xLpEVXm36uf/j2DgQwn2NoaRI0FYoyjriCwL04CoB5bUxZzJTHKnaH6YgpPIkZY61C2RQZgTTAAbxGGuywUX1j1VUjLvCU/RVsaqj9s1yQnnG+uZXS43UgTpf81SJB9BhZQshwosoYTB0xWh9pVf7Wxukktkiutpy/NxJJf8JEq5RLyiAoaEb8L4Yae4ux3ijHGER/Z1VJ5pQCHvfF/nA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jczZk4tzUxVEC/N57EYtdckb2GBReVxCm/PE3LauQ1U=;
- b=YSP1CIrsQYBwQWgpUFPVcGO2iXiKZ0MPZApIiR7kTYPm/3s4DSeZtQKOamuuSf2Bjl+lUDD84r8xX4r0p1F+okQfQty/c07GO6/rf87cRPwBiTaYdYZjq2/lSgpcErJtXyc3s+x6Ret/VKpNAtJK4qqPT88NbPS/ZrLLoN1K+X3B2YkYFL7ubFfZqNeyctPd2I0i54EWamHuM+ugvAQ8a0vu8MHM9Xfw0FzHuour8Q75c+6+8Kvi2GojfVoXfZiNY8Z3eHekOpZYOStwWkuNvIbmzlk1dEK08bSEysZQV3/LLeGWqo3PO3AP0xgWfOZ67NbFk5oMMAPComO41s/Scg==
+ bh=11bHEFOcE/qvbvFL4gCKtt/vQzEl2IVt9ZJCc3P0aIU=;
+ b=VaxJs0NYg8s3Unq+z63HmhldJvqZ8c6YLp2g7ymJrsLdFXyOFjZA1R0vUtzUqKFBPNmDDX8Hi/H/ji2R+ydeq/aMPAuI+sumU1sEDAB9NyKz/9WjskYdYHP86Bqn1zriEqJv4hY9F1lhrIB4SARJ6wKXLvkO2fRNWW1EosxuNAUvV9zMwGPgRAXdDUmz9gw6RsQ+nymJfsBoM4j4q9O//Tg9BdGD1XAtTSzB4ZtoWpOKI494Du6Bhu8Hx/bIypf+B8OxT8DDDPXnPwmCA+aqGYLlduZABgYRBEAxFG5B58xXY8Uf7tMnqgQGDj/uh68KkIF7mMfZ6aRYs2nZxIFLdw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jczZk4tzUxVEC/N57EYtdckb2GBReVxCm/PE3LauQ1U=;
- b=41bY0RyAEnliwVfVcBpaS7jSdMKlEC74wLWOUAqwBuWf9WryjT78LpTh3pyC5oG5nOOTmwKJQa6XkDAC/nnYIvsQaJWY7JNQMt3oybj5eVnRz4D76Vs84FqAdkCPBfO+OfXUbiKURF+H3w0JYIvbyeMHqdZDpFJV3MFSRemWsHQ=
+ bh=11bHEFOcE/qvbvFL4gCKtt/vQzEl2IVt9ZJCc3P0aIU=;
+ b=LIAYlgeGpo0Z9P5glR7N+khXqQSu8cW3ewscSIqsK7Zog24Zaf0HT7V49+GA+RM247l/79kac5sAxMIvP3BgtTaFZ9RcdDaokGCKC7EEpIyNHZ/2AfqyozrDXn0zD3hl2hVgZ4t2vopXzUYLGh66upqJCLw+uh9Sk6qddZA9QJ4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from MW2PR12MB2506.namprd12.prod.outlook.com (2603:10b6:907:7::12)
  by CY8PR12MB7193.namprd12.prod.outlook.com (2603:10b6:930:5b::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
- 2023 02:46:03 +0000
+ 2023 02:50:37 +0000
 Received: from MW2PR12MB2506.namprd12.prod.outlook.com
  ([fe80::444e:a4dc:f113:7751]) by MW2PR12MB2506.namprd12.prod.outlook.com
  ([fe80::444e:a4dc:f113:7751%7]) with mapi id 15.20.5986.023; Thu, 19 Jan 2023
- 02:46:03 +0000
-Date:   Thu, 19 Jan 2023 10:45:40 +0800
+ 02:50:37 +0000
+Date:   Thu, 19 Jan 2023 10:50:15 +0800
 From:   Huang Rui <ray.huang@amd.com>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
         "Limonciello, Mario" <Mario.Limonciello@amd.com>,
         "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
@@ -54,63 +55,62 @@ Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
         "Karny, Wyes" <Wyes.Karny@amd.com>,
         "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v11 04/11] cpufreq: amd-pstate: implement Pstate EPP
- support for the AMD processors
-Message-ID: <Y8iu1AkMFM8TUQFX@amd.com>
+Subject: Re: [PATCH v11 00/11] Implement AMD Pstate EPP Driver
+Message-ID: <Y8iv56PPKkhEsL02@amd.com>
 References: <20230118075210.447418-1-perry.yuan@amd.com>
- <20230118075210.447418-5-perry.yuan@amd.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230118075210.447418-5-perry.yuan@amd.com>
-X-ClientProxiedBy: SGXP274CA0007.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b8::19)
- To MW2PR12MB2506.namprd12.prod.outlook.com (2603:10b6:907:7::12)
+In-Reply-To: <20230118075210.447418-1-perry.yuan@amd.com>
+X-ClientProxiedBy: TY2PR06CA0031.apcprd06.prod.outlook.com
+ (2603:1096:404:2e::19) To MW2PR12MB2506.namprd12.prod.outlook.com
+ (2603:10b6:907:7::12)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: MW2PR12MB2506:EE_|CY8PR12MB7193:EE_
-X-MS-Office365-Filtering-Correlation-Id: 35e6ac7c-1502-4f71-3f59-08daf9c74dc1
+X-MS-Office365-Filtering-Correlation-Id: b00a87cc-2c89-4e83-a2dc-08daf9c7f16c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fpr+StwhKCb0lR+tqkjTwq2auL1LA0wwUczthFNfV/aWffzjEtga3tbvK4ffBCoBGEZ2HEySd75ZTUBhcV0TupL5dMv7rvPEhruKR0Q5OSkB4AIp1/fmKJoZaQHcAyqnrkSiETZVwmpGQwQDhnlMx6pPtGaKyRLyV0Mqko4KXQweDS1dS0vRsddndRkKUJe/FWjDLXqaTF92FxKWG+FBECJ/iQA8iX+erMXtwMwe+4EcYto8r1KgC9dJF1XyFiwUDMmfKg0mMQNua19TYFEtLC/nmkWSxCaJ5qsJ1uhG0/HrCkMKU8bLXxnPIa13T9pGwlcNXKfN7smnLr9iVny8Sa0vn1w+jOWgP7DXg0jmWTY3l4PsFzgbzdPtttps7dqQBtQzdDPGpewVCoCpQMsurJ8PoHxf/H5H/PTyHTqbX2Rm71LeKKyLfJ++Yi6nHmmFvAzixV3NO3SlGFcZy5jA/quhaftrKFIbmC3Hxd5FrQLTXcGgXBGeErh/0qaXzFSS/+lPkAOzQdkqbSNvFUgBJvcuaz9JCvTE0vCJP8t+K1bT2x3BS5B4Mm6/XPse1y0Cvk8TpCjIkq8WEs5axUGX75tZCp+V/U4m8N6/fsebzrQ9LnbgmQ2lEEHJqZHTn8UdDkIJx9bOTaOKLuvtbEkpjg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(451199015)(36756003)(8936002)(2616005)(6862004)(83380400001)(41300700001)(4326008)(316002)(37006003)(54906003)(6636002)(66946007)(8676002)(66556008)(66476007)(38100700002)(86362001)(2906002)(5660300002)(30864003)(66899015)(186003)(6512007)(26005)(478600001)(6486002)(6506007)(6666004);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Bdvg0WH/4oivzVpNCgtWGJTwEhaTk5PDaIN/FSKcveLUZTSuDDuxyGfdhkU8JvkKepJx/89p/8Aw6Dl8uvn6jb0nW7rKDkkM8dr4DYZ2upcc8/+8FV4Wcc5DPd0D7BaWulp8U5tsRLY5zTmCG90m+DYu2ynrFHedCKiyjGbBA5i2/q1PUqYrkP8OA/ltmbOhZEg2bl/FaB/Hv47f3GwP5vT+qWIdAxPpFaElQGiI67G2RnqkFGpzkka57q/9JYXZv7MxJNnTYwEvj7mlmks3mk4H9fPmlHsL30UOyKtdVDSo9oxeHv6GeJ+C7Cm2seufn9ymnlc+4k4XQAqVZbQwLGPC1pndiFvdFFi3qVSUEMsRt5dWVi/l06HvP3G5tvjihaMyLTrbAi+EtGEwl8pVaFvieLks52I7usDuHliS1Uhpm46YZ9ijkjb/mgWdw4Tf5c/NJcWevyZLav+cyR6HM+f5XTmbUE1NUPInmC3YUb8KcCfjJXppClvWRVuTOczE+mHu60CpXt5hSl74Rl4f4+8tNPZT8/R4+p2ZiBrmLOeZTJerPu0PGEj7HU1vl4CZmOGVgxPhI+agMD4/1fG/H16xyKOR9+Tc+Tk0EkQVGtIgPju9jV4IFVYvmouR6tJm+CbK1ApIkZR+rxL0BSD9ZOV2kB34ZUauQhKUHdtUq2+WV8kqfEqu0sM4zr3Kdmb8xDQsmjIxMPzOTWG9MN/dwQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW2PR12MB2506.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(376002)(396003)(136003)(39860400002)(451199015)(36756003)(8936002)(2616005)(83380400001)(41300700001)(4326008)(316002)(110136005)(54906003)(66946007)(8676002)(66556008)(66476007)(38100700002)(86362001)(2906002)(5660300002)(30864003)(186003)(6512007)(26005)(478600001)(6486002)(966005)(6506007)(6666004)(45080400002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+8ForLh5iQEDglUnyMw8D93gu3fkXiPJaFUtxhAO4w1eu9yd9afSvwly7QeP?=
- =?us-ascii?Q?AUt/aEf7efIcHCK1jGPM1zHWxAoUsInebITKKpkFoEIeTxHnmY86y017XlJc?=
- =?us-ascii?Q?G4Hei7xcercgvcsIOy2K3OI0BBxKG94siywjyoQhoZ8VrcX1slQ4YwBnlQ8J?=
- =?us-ascii?Q?1PSUmRNNlP7IM0C1Ckg27SsnPTac4NJQrq841HzWKAJ9/499ix3Ow8/VlDJ4?=
- =?us-ascii?Q?aVIAj8+oQW2Cpu8Jgwo7QmZUcRzhxlVoKBc71MkdXPEw9z1qaWUOEaYheb/9?=
- =?us-ascii?Q?pLpNxPHUnz7jA3YTB8fM8C/AAzNfee9a7VqVqUFNNDkBKF2VFEzgr54bQ8F4?=
- =?us-ascii?Q?ofmbfzRwOehxWD4q9+yHVLUcR4jJZUlQCw2INfltVWoJ8gdMtUna6VLRXj+a?=
- =?us-ascii?Q?64ad9ObqV0dBgWCL+9ka0BjnAFjjE6yAg9FEJmTFCbSWH4CuRzvlKHDgu4Gh?=
- =?us-ascii?Q?5OTubI+nsAWQHPXy1ebPymsBtQAPfPRmkzcxGJV7cYIQE22ess1gTihtTFUc?=
- =?us-ascii?Q?uJCb6MZlITHbJnZxIW0XqD82iSCorDKb2Nlzv3Lt0v2ZS1mCxSvsL7pKprvx?=
- =?us-ascii?Q?It4s6+JNjTkfpU2mJWUCNpH7ZfxxDo5qCKQqimVTQ5nL6zFU44woW+5zEbvG?=
- =?us-ascii?Q?sfNiKPRrRP4uJ95W+hD7Zj/+TRejvEeUxzkEBwcHrIsSrdArQgAv8ujjxN+a?=
- =?us-ascii?Q?u4NJBmUdRkFEV4SwA/RkXJIC/dP5RXkPWT1pYZTOZ7BrtrX9f7894hGAulei?=
- =?us-ascii?Q?gOUR8bE6fOZxYmlEuk5Htfu2hRCle3jM0gksjx/GvA1Pb9QQtfQuDIP+aOzQ?=
- =?us-ascii?Q?NhHjt8LvaCuUFD3lzYwZAZrdAmOW3n6aUW/LjkHccfI0ExRhvWPsXeW253tD?=
- =?us-ascii?Q?+TrThhJKDhWmPhOfmE9gINnY5/BQWcv89EXwONj19Up/z53qHQc0CykAf1wY?=
- =?us-ascii?Q?bK3itDforKb9pJt+ANRMRiXhcT8GkfjfqIB/YAu7jdpbATq1Xaq0p2T3aE2s?=
- =?us-ascii?Q?euG5iuj6TVxOSLr+/Ye0iblxcAufKghV3KvEmvZ1ekPJvIZvqcfWc/Vv4MFh?=
- =?us-ascii?Q?BF8pNvLXFB14bnJ7o9Gla/QQx8GEDvBVNw1P1NwgQZvCflQ3JPpYVM7flS8y?=
- =?us-ascii?Q?v4TDWreNXiNV2y0eSowCCuavA3BXFA36Gxba3C/YOGmj8GvSEGtSIE/M52FT?=
- =?us-ascii?Q?XjkgyG7u10amdC7gefja9ZjGFZThvPUiQ6Iv3HhLA9/9QJHouwM++4qG+PDg?=
- =?us-ascii?Q?KlHNkXMyXWVoGiZzedFALrQOPYify7mN/4sKdifKh/o4D8Cxwov8mRL75Iz/?=
- =?us-ascii?Q?sSpE6OisuCUUdY+Tj2jZapbpKF+SZooPpnMQHjKOBB7EBm2IbS7j9v9JRrmH?=
- =?us-ascii?Q?U0Y6Xd7oBYgapOEHevp9MJkBNUycmjKOsEE4Gf0Am0Ry5WVj4O8iwmCn2yFO?=
- =?us-ascii?Q?uMqhITwZCwT+JkMJY49IIfxrjHoxMh3wa2X6EVwgCKBfg6MDB2tSafFvwTLo?=
- =?us-ascii?Q?0cY7XnyukK7zRZsnBvir2dLiN4HYOLvwvb00mbWUeOwZ/Qm2VV0nqoYAJMib?=
- =?us-ascii?Q?L2U4EpOG9UoxMYBwCIrP4mjgjkObL5vdjsRLmPDw?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tfCdTMXn/3UbKC0IqqfiCnJg+95CDxkwtAztKsjaQ+RbExoiT5OpPtALQoXT?=
+ =?us-ascii?Q?OmdwswOmvTJw4Vb+7ft812bIa6XQWqGnUJSH10pLXOwA8uKypqIH8LpXKO8p?=
+ =?us-ascii?Q?RwKr1QlYcV45mFscJKN6RbQ29uA4SVgciydUP+TuFlfJaBY6o8J64yZop2rD?=
+ =?us-ascii?Q?IuvHl0qym8KXgIQ1kSuqoOL5CEpMaIDJvsX9Y1VwCCfMiG7JwMd4Kw1E36nr?=
+ =?us-ascii?Q?flrrRpcUpx3XMGG9KWU988hCrBXnmxBjBNbEBVQ6hyRhZWJVvTf9DhCxoMUS?=
+ =?us-ascii?Q?CLOvk4gbc6qPabaZCD8QYPsLuXdSz+3igZMJYd5Vl7eAIiMNcrxghX2pvbw6?=
+ =?us-ascii?Q?/QYplXKB7Tp7yRxAraCf7/UV2z+WEf2Oj2hBlOekY0TAeWA9HbH5pJuY6HDL?=
+ =?us-ascii?Q?mn+If5J+AlzJbl135FguU3lJhYGdsElubqB9ryVeiOVD0WCrOtvUu1CJ0lWN?=
+ =?us-ascii?Q?kZx6MrpthBkKfd38Fs9twtjuIyCx+r7FMH/tgKquG9pwOqe2rwc824u0N2Lt?=
+ =?us-ascii?Q?Eli6yx7aqHD9TrSmuuLutFG78aUG4VUvCEze7vmIgASq6AxlAA4eBmM+RiT/?=
+ =?us-ascii?Q?exPRlnrMuiYuXf9kXWcFEGtGF2sMBp1ewXJUK+uWQBV7w0bBMLd7uRpKVOl9?=
+ =?us-ascii?Q?tMlsKpmq06XzrOqP+r7EF27FBo2h8nA7g0tk4JPqbqNqeoyh8WPdZbpDyVZh?=
+ =?us-ascii?Q?OImb7jEmLSAQJ90B3GFFdvwH0I1l7rBAM95rJHPLP+dIzj66wxbduluOy5SE?=
+ =?us-ascii?Q?Sq/xy/uLfcReFPn6Ztcbzm3MYpTUIUQhFtgb8YL8SZcZDJ6NQOc+EM3GgFhe?=
+ =?us-ascii?Q?D6dOqw4Ij+eBB0ITbS+hGfaGZI0JmcbrCG4KIW2u5CQr9bgl9YanPkGhIndy?=
+ =?us-ascii?Q?gnOt6W5G2OV6H5uizA75c0ACnchBqV1YUrlRRey/Bl20oFfgV79zK4fckMyK?=
+ =?us-ascii?Q?Mp24g9zXMrGU4AwwdGkUkZ5AxZouEGlq9P1jLTjaHyjiwToUlH7UF1nXhxwL?=
+ =?us-ascii?Q?BPmugx0Urgl5j0Rx9qpyhsqAU2efuL6BEI+3xS+vwdvaTSUknlPddpjSwWST?=
+ =?us-ascii?Q?Kxty9vg3SWKcQYTfWO9PIL/b4RroVRbuALj+lewlsACEFGkV/Z0ylhfqN2JT?=
+ =?us-ascii?Q?ci+iHii9qjuKTVibqSGEM/1SSjFhvaCWgWpFlg1jYsEvOJtkGb3oldZh6fPz?=
+ =?us-ascii?Q?NJcZ9D8ECz3I99WEQZdb91fip7Mk79bLC9HaxqlksMVA0uj/Wm3Kxd19g7VR?=
+ =?us-ascii?Q?60W5Q7cq2LtSLuqkTyfigxaggt8KPxPYERoJ/62Z7BMZBIbtLCewdkWNRKoY?=
+ =?us-ascii?Q?GVOBMCNC8ZoYeHfO7yLQuC9MnblpIhB8TkzWi0nyJ5dybL7KxiZKzglCPndm?=
+ =?us-ascii?Q?PHZbplydWw5XEcoRJ0cIRAnUBtGZ79ZOZwcCEDgKqH/FqVHOshcAyXWBooKZ?=
+ =?us-ascii?Q?tsriJbSXq2qEW1rTBZ1gsaVRXCqL4BlAQBpoqzJEUcoMd7U5kjV4X9xIUaUT?=
+ =?us-ascii?Q?fGeNFM57aC0t0RpxeIKas1bbBhEX12OYe4q/6DzaGDdxxI0+o1HGrFyMRMXo?=
+ =?us-ascii?Q?7t/mhTu7IpkWvAyxbey+azUx5Jku+Xbrhuur4CQP?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 35e6ac7c-1502-4f71-3f59-08daf9c74dc1
+X-MS-Exchange-CrossTenant-Network-Message-Id: b00a87cc-2c89-4e83-a2dc-08daf9c7f16c
 X-MS-Exchange-CrossTenant-AuthSource: MW2PR12MB2506.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 02:46:03.1227
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 02:50:37.3708
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ufflv2lGR9a1hA8CtWDz2xv6NHiegPvxtd/hl6ES1eNzxe9oWLnyWKGJFHCeCNPWBSuQEaw4CANULE8yfTIUlg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: c/1AMGlcbaCW1DxNxxlT4tEtO/m9SIFdgs2id+HBr/jzsO/Z6zO5otLWA477xFIeIjMT8BboL+D9GEdhiggrIw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7193
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -122,593 +122,226 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 18, 2023 at 03:52:03PM +0800, Yuan, Perry wrote:
-> From: Perry Yuan <Perry.Yuan@amd.com>
+On Wed, Jan 18, 2023 at 03:51:59PM +0800, Yuan, Perry wrote:
+> Hi all,
 > 
-> Add EPP driver support for AMD SoCs which support a dedicated MSR for
-> CPPC.  EPP is used by the DPM controller to configure the frequency that
-> a core operates at during short periods of activity.
+> This patchset implements one new AMD CPU frequency driver
+> `amd-pstate-epp` instance for better performance and power control.
+> CPPC has a parameter called energy preference performance (EPP).
+> The EPP is used in the CCLK DPM controller to drive the frequency that a core
+> is going to operate during short periods of activity.
+> EPP values will be utilized for different OS profiles (balanced, performance, power savings).
 > 
-> The SoC EPP targets are configured on a scale from 0 to 255 where 0
-> represents maximum performance and 255 represents maximum efficiency.
+> AMD Energy Performance Preference (EPP) provides a hint to the hardware
+> if software wants to bias toward performance (0x0) or energy efficiency (0xff)
+> The lowlevel power firmware will calculate the runtime frequency according to the EPP preference 
+> value. So the EPP hint will impact the CPU cores frequency responsiveness.
 > 
-> The amd-pstate driver exports profile string names to userspace that are
-> tied to specific EPP values.
+> We use the RAPL interface with "perf" tool to get the energy data of the package power.
+> Performance Per Watt (PPW) Calculation:
 > 
-> The balance_performance string (0x80) provides the best balance for
-> efficiency versus power on most systems, but users can choose other
-> strings to meet their needs as well.
+> The PPW calculation is referred by below paper:
+> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fsoftware.intel.com%2Fcontent%2Fdam%2Fdevelop%2Fexternal%2Fus%2Fen%2Fdocuments%2Fperformance-per-what-paper.pdf&amp;data=04%7C01%7CPerry.Yuan%40amd.com%7Cac66e8ce98044e9b062708d9ab47c8d8%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637729147708574423%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=TPOvCE%2Frbb0ptBreWNxHqOi9YnVhcHGKG88vviDLb00%3D&amp;reserved=0
 > 
-> $ cat /sys/devices/system/cpu/cpufreq/policy0/energy_performance_available_preferences
-> default performance balance_performance balance_power power
+> Below formula is referred from below spec to measure the PPW:
 > 
-> $ cat /sys/devices/system/cpu/cpufreq/policy0/energy_performance_preference
-> balance_performance
+> (F / t) / P = F * t / (t * E) = F / E,
 > 
-> To enable the driver,it needs to add `amd_pstate=active` to kernel
-> command line and kernel will load the active mode epp driver
+> "F" is the number of frames per second.
+> "P" is power measured in watts.
+> "E" is energy measured in joules.
 > 
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Reviewed-by: Mario Limonciello <Mario.Limonciello@amd.com>
-> Tested-by: Wyes Karny <wyes.karny@amd.com>
-> Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 379 ++++++++++++++++++++++++++++++++++-
->  include/linux/amd-pstate.h   |  55 +++++
->  2 files changed, 428 insertions(+), 6 deletions(-)
+> Gitsouce Benchmark Data on ROME Server CPU
+> +------------------------------+------------------------------+------------+------------------+
+> | Kernel Module                | PPW (1 / s * J)              |Energy(J) | PPW Improvement (%)|
+> +==============================+==============================+============+==================+
+> | acpi-cpufreq:schedutil       | 5.85658E-05                  | 17074.8    | base             |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:ondemand        | 5.03079E-05                  | 19877.6    | -14.10%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | acpi-cpufreq:performance     | 5.88132E-05                  | 17003      | 0.42%            |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:ondemand          | 4.60295E-05                  | 21725.2    | -21.41%          |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:schedutil         | 4.70026E-05                  | 21275.4    | -19.7%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | amd-pstate:performance       | 5.80094E-05                  | 17238.6    | -0.95%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:performance              | 5.8292E-05                   | 17155      | -0.47%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP: balance performance:    | 6.71709E-05                  | 14887.4    | 14.69%           |
+> +------------------------------+------------------------------+------------+------------------+
+> | EPP:power                    | 6.66951E-05                  | 4993.6     | 13.88%           |
+> +------------------------------+------------------------------+------------+------------------+
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 1a8b31277620..2109ad3fdd42 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -59,7 +59,9 @@
->   * we disable it by default to go acpi-cpufreq on these processors and add a
->   * module parameter to be able to enable it manually for debugging.
->   */
-> +static struct cpufreq_driver *current_pstate_driver;
->  static struct cpufreq_driver amd_pstate_driver;
-> +static struct cpufreq_driver amd_pstate_epp_driver;
->  static int cppc_state = AMD_PSTATE_DISABLE;
+> Tbench Benchmark Data on ROME Server CPU
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | Kernel Module                               | PPW MB / (s * J)  |Throughput(MB/s)| Energy (J)|PPW Improvement(%)|
+> +=============================================+===================+==============+=============+==================+
+> | acpi_cpufreq: schedutil                     | 46.39             | 17191        | 37057.3     | base             |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: ondemand                      | 51.51             | 19269.5      | 37406.5     | 11.04 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | acpi_cpufreq: performance                   | 45.96             | 17063.7      | 37123.7     | -0.74 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: performance(0)               | 54.46             | 20263.1      | 37205       | 17.87 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance performance          | 55.03             | 20481.9      | 37221.5     | 19.14 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: balance_power                | 54.43             | 20245.9      | 37194.2     | 17.77 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | EPP:powersave: power(255)                   | 54.26             | 20181.7      | 37197.4     | 17.40 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: schedutil                       | 48.22             | 17844.9      | 37006.6     | 3.80 %           |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: ondemand                        | 61.30             | 22988        | 37503.4     | 33.72 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> | amd-pstate: performance                     | 54.52             | 20252.6      | 37147.8     | 17.81 %          |
+> +---------------------------------------------+-------------------+--------------+-------------+------------------+
+> 
+> changes from v10:
+>  * pick up all new ack flas added by Ray
+>  * pick up Review-By flag added by Wyes
+>  * pick up Test-By flags added by Wyes
+>  * move the EPP macro definition to amd_pstate.h and drop the common
+>    code patch
+>  * add amd_perf_ctl_reset() in epp init code as well
+>  * As the warning which reminded by 0day, change amd_pstate_get_epp(cpudata, value)
+>    to amd_pstate_get_epp(cpudata, 0).
+> 
+> changes from v8:
+>  * drive all the feedbacks from Mario and change the codes in this
+>   version
+>  * drive all the feedbacks from Ray and change the codes in this
+>   version
+>  * pick up all the R-B flags from Mario
+>  * pick up all the R-B flags from Ray
+>  * drop boost/refresh_freq_limits callback
+>  * reuse policy->driver_data to store amd_cpudata struct
+>  * use switch-case in the driver mode switching function
+>  * add Kconfig dependency the INTEL_PSTATE for AMD_PSTATE build
+>  * fix some other code format and typos
+> 
+> changes from v7:
+>  * remove  iowait boost functions code
+>  * pick up ack by flag from Huang Ray.
+>  * add one new patch to support multiple working modes in the amd_pstate_param(),aligned with Wyse 
+>  * drop the patch "[v7 08/13] cpufreq: amd-pstate: add frequency dynamic boost sysfs control"
+>  * replace the cppc_get_epp_caps() with new cppc_get_epp_perf() wihch is
+>    more simple to use
+>  * remove I/O wait boost code from amd_pstate_update_status()
+>  * replace cppc_active var with enum type AMD_PSTATE_ACTIVE
+>  * squash amd_pstate_epp_verify_policy() into sigle function
+>  * remove "amd pstate" string from the pr_err, pr_debug logs info
+>  * rework patch [v7 03/13], move the common EPP profiles declaration
+>    into cpufreq.h which will be used by amd-pstate and intel-pstate
+>  * combine amd psate init functions.
+>  * remove epp_powersave from amd-pstate.h and dropping the codes.
+>  * move amd_pstate_params{} from amd-pstate.h into amd-pstate.c
+>  * drive some other feedbacks from huang ray 
+> 
+> changes from v6:
+>  * fix one legacy kernel hang issue when amd-pstate driver unregistering
+>  * add new documentation to introduce new global sysfs attributes
+>  * use sysfs_emit_at() to print epp profiles array
+>  * update commit info for patch v6 patch 1/11 as Mario sugguested.
+>  * trying to add the EPP profiles into cpufreq.h, but it will cause lots
+>    of build failues,continue to keep cpufreq_common.h used in v7
+>  * update commit info using amd-pstate as prefix same as before.
+>  * remove CONFIG_ACPI for the header as Ray suggested.
+>  * move amd_pstate_kobj to where it is used in patch "add frequency dynamic boost sysfs control"
+>  * drive feedback removing X86_FEATURE_CPPC check for the epp init from Huang Ray 
+>  * drive feedback from Mario
 >  
->  static inline int get_mode_idx_from_str(const char *str, size_t size)
-> @@ -73,6 +75,114 @@ static inline int get_mode_idx_from_str(const char *str, size_t size)
->  	return -EINVAL;
->  }
->  
-> +static DEFINE_MUTEX(amd_pstate_limits_lock);
-> +static DEFINE_MUTEX(amd_pstate_driver_lock);
-> +
-> +static s16 amd_pstate_get_epp(struct amd_cpudata *cpudata, u64 cppc_req_cached)
-> +{
-> +	u64 epp;
-> +	int ret;
-> +
-> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> +		if (!cppc_req_cached) {
-> +			epp = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
-> +					&cppc_req_cached);
-> +			if (epp)
-> +				return epp;
-> +		}
-> +		epp = (cppc_req_cached >> 24) & 0xFF;
-> +	} else {
-> +		ret = cppc_get_epp_perf(cpudata->cpu, &epp);
-> +		if (ret < 0) {
-> +			pr_debug("Could not retrieve energy perf value (%d)\n", ret);
-> +			return -EIO;
-> +		}
-> +	}
-> +
-> +	return (s16)(epp & 0xff);
-> +}
-> +
-> +static int amd_pstate_get_energy_pref_index(struct amd_cpudata *cpudata)
-> +{
-> +	s16 epp;
-> +	int index = -EINVAL;
-> +
-> +	epp = amd_pstate_get_epp(cpudata, 0);
-> +	if (epp < 0)
-> +		return epp;
-> +
-> +	switch (epp) {
-> +	case AMD_CPPC_EPP_PERFORMANCE:
-> +		index = EPP_INDEX_PERFORMANCE;
-> +		break;
-> +	case AMD_CPPC_EPP_BALANCE_PERFORMANCE:
-> +		index = EPP_INDEX_BALANCE_PERFORMANCE;
-> +		break;
-> +	case AMD_CPPC_EPP_BALANCE_POWERSAVE:
-> +		index = EPP_INDEX_BALANCE_POWERSAVE;
-> +		break;
-> +	case AMD_CPPC_EPP_POWERSAVE:
-> +		index = EPP_INDEX_POWERSAVE;
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return index;
-> +}
-> +
-> +static int amd_pstate_set_epp(struct amd_cpudata *cpudata, u32 epp)
-> +{
-> +	int ret;
-> +	struct cppc_perf_ctrls perf_ctrls;
-> +
-> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> +		u64 value = READ_ONCE(cpudata->cppc_req_cached);
-> +
-> +		value &= ~GENMASK_ULL(31, 24);
-> +		value |= (u64)epp << 24;
-> +		WRITE_ONCE(cpudata->cppc_req_cached, value);
-> +
-> +		ret = wrmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, value);
-> +		if (!ret)
-> +			cpudata->epp_cached = epp;
-> +	} else {
-> +		perf_ctrls.energy_perf = epp;
-> +		ret = cppc_set_epp_perf(cpudata->cpu, &perf_ctrls, 1);
-> +		if (ret) {
-> +			pr_debug("failed to set energy perf value (%d)\n", ret);
-> +			return ret;
-> +		}
-> +		cpudata->epp_cached = epp;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int amd_pstate_set_energy_pref_index(struct amd_cpudata *cpudata,
-> +		int pref_index)
-> +{
-> +	int epp = -EINVAL;
-> +	int ret;
-> +
-> +	if (!pref_index) {
-> +		pr_debug("EPP pref_index is invalid\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (epp == -EINVAL)
-> +		epp = epp_values[pref_index];
-> +
-> +	if (epp > 0 && cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
-> +		pr_debug("EPP cannot be set under performance policy\n");
-> +		return -EBUSY;
-> +	}
-> +
-> +	ret = amd_pstate_set_epp(cpudata, epp);
-> +
-> +	return ret;
-> +}
-> +
->  static inline int pstate_enable(bool enable)
->  {
->  	return wrmsrl_safe(MSR_AMD_CPPC_ENABLE, enable);
-> @@ -81,11 +191,21 @@ static inline int pstate_enable(bool enable)
->  static int cppc_enable(bool enable)
->  {
->  	int cpu, ret = 0;
-> +	struct cppc_perf_ctrls perf_ctrls;
->  
->  	for_each_present_cpu(cpu) {
->  		ret = cppc_set_enable(cpu, enable);
->  		if (ret)
->  			return ret;
-> +
-> +		/* Enable autonomous mode for EPP */
-> +		if (cppc_state == AMD_PSTATE_ACTIVE) {
-> +			/* Set desired perf as zero to allow EPP firmware control */
-> +			perf_ctrls.desired_perf = 0;
-> +			ret = cppc_set_perf(cpu, &perf_ctrls);
-> +			if (ret)
-> +				return ret;
-> +		}
->  	}
->  
->  	return ret;
-> @@ -428,7 +548,7 @@ static void amd_pstate_boost_init(struct amd_cpudata *cpudata)
->  		return;
->  
->  	cpudata->boost_supported = true;
-> -	amd_pstate_driver.boost_enabled = true;
-> +	current_pstate_driver->boost_enabled = true;
->  }
->  
->  static void amd_perf_ctl_reset(unsigned int cpu)
-> @@ -602,10 +722,61 @@ static ssize_t show_amd_pstate_highest_perf(struct cpufreq_policy *policy,
->  	return sprintf(&buf[0], "%u\n", perf);
->  }
->  
-> +static ssize_t show_energy_performance_available_preferences(
-> +				struct cpufreq_policy *policy, char *buf)
-> +{
-> +	int i = 0;
-> +	int offset = 0;
-> +
-> +	while (energy_perf_strings[i] != NULL)
-> +		offset += sysfs_emit_at(buf, offset, "%s ", energy_perf_strings[i++]);
-> +
-> +	sysfs_emit_at(buf, offset, "\n");
-> +
-> +	return offset;
-> +}
-> +
-> +static ssize_t store_energy_performance_preference(
-> +		struct cpufreq_policy *policy, const char *buf, size_t count)
-> +{
-> +	struct amd_cpudata *cpudata = policy->driver_data;
-> +	char str_preference[21];
-> +	ssize_t ret;
-> +
-> +	ret = sscanf(buf, "%20s", str_preference);
-> +	if (ret != 1)
-> +		return -EINVAL;
-> +
-> +	ret = match_string(energy_perf_strings, -1, str_preference);
-> +	if (ret < 0)
-> +		return -EINVAL;
-> +
-> +	mutex_lock(&amd_pstate_limits_lock);
-> +	ret = amd_pstate_set_energy_pref_index(cpudata, ret);
-> +	mutex_unlock(&amd_pstate_limits_lock);
-> +
-> +	return ret ?: count;
-> +}
-> +
-> +static ssize_t show_energy_performance_preference(
-> +				struct cpufreq_policy *policy, char *buf)
-> +{
-> +	struct amd_cpudata *cpudata = policy->driver_data;
-> +	int preference;
-> +
-> +	preference = amd_pstate_get_energy_pref_index(cpudata);
-> +	if (preference < 0)
-> +		return preference;
-> +
-> +	return sysfs_emit(buf, "%s\n", energy_perf_strings[preference]);
-> +}
-> +
->  cpufreq_freq_attr_ro(amd_pstate_max_freq);
->  cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
->  
->  cpufreq_freq_attr_ro(amd_pstate_highest_perf);
-> +cpufreq_freq_attr_rw(energy_performance_preference);
-> +cpufreq_freq_attr_ro(energy_performance_available_preferences);
->  
->  static struct freq_attr *amd_pstate_attr[] = {
->  	&amd_pstate_max_freq,
-> @@ -614,6 +785,186 @@ static struct freq_attr *amd_pstate_attr[] = {
->  	NULL,
->  };
->  
-> +static struct freq_attr *amd_pstate_epp_attr[] = {
-> +	&amd_pstate_max_freq,
-> +	&amd_pstate_lowest_nonlinear_freq,
-> +	&amd_pstate_highest_perf,
-> +	&energy_performance_preference,
-> +	&energy_performance_available_preferences,
-> +	NULL,
-> +};
-> +
-> +static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
-> +{
-> +	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
-> +	struct amd_cpudata *cpudata;
-> +	struct device *dev;
-> +	int rc;
-> +	u64 value;
-> +
-> +	/*
-> +	 * Resetting PERF_CTL_MSR will put the CPU in P0 frequency,
-> +	 * which is ideal for initialization process.
-> +	 */
-> +	amd_perf_ctl_reset(policy->cpu);
-> +	dev = get_cpu_device(policy->cpu);
-> +	if (!dev)
-> +		goto free_cpudata1;
-> +
-> +	cpudata = kzalloc(sizeof(*cpudata), GFP_KERNEL);
-> +	if (!cpudata)
-> +		return -ENOMEM;
-> +
-> +	cpudata->cpu = policy->cpu;
-> +	cpudata->epp_policy = 0;
-> +
-> +	rc = amd_pstate_init_perf(cpudata);
-> +	if (rc)
-> +		goto free_cpudata1;
-> +
-> +	min_freq = amd_get_min_freq(cpudata);
-> +	max_freq = amd_get_max_freq(cpudata);
-> +	nominal_freq = amd_get_nominal_freq(cpudata);
-> +	lowest_nonlinear_freq = amd_get_lowest_nonlinear_freq(cpudata);
-> +	if (min_freq < 0 || max_freq < 0 || min_freq > max_freq) {
-> +		dev_err(dev, "min_freq(%d) or max_freq(%d) value is incorrect\n",
-> +				min_freq, max_freq);
-> +		ret = -EINVAL;
-> +		goto free_cpudata1;
-> +	}
-> +
-> +	policy->cpuinfo.min_freq = min_freq;
-> +	policy->cpuinfo.max_freq = max_freq;
-> +	/* It will be updated by governor */
-> +	policy->cur = policy->cpuinfo.min_freq;
-> +
-> +	/* Initial processor data capability frequencies */
-> +	cpudata->max_freq = max_freq;
-> +	cpudata->min_freq = min_freq;
-> +	cpudata->nominal_freq = nominal_freq;
-> +	cpudata->lowest_nonlinear_freq = lowest_nonlinear_freq;
-> +
-> +	policy->driver_data = cpudata;
-> +
-> +	cpudata->epp_cached = amd_pstate_get_epp(cpudata, 0);
-> +
-> +	policy->min = policy->cpuinfo.min_freq;
-> +	policy->max = policy->cpuinfo.max_freq;
-> +
-> +	/*
-> +	 * Set the policy to powersave to provide a valid fallback value in case
-> +	 * the default cpufreq governor is neither powersave nor performance.
-> +	 */
-> +	policy->policy = CPUFREQ_POLICY_POWERSAVE;
-> +
-> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> +		policy->fast_switch_possible = true;
-> +		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &value);
-> +		if (ret)
-> +			return ret;
-> +		WRITE_ONCE(cpudata->cppc_req_cached, value);
-> +
-> +		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1, &value);
-> +		if (ret)
-> +			return ret;
-> +		WRITE_ONCE(cpudata->cppc_cap1_cached, value);
-> +	}
-> +	amd_pstate_boost_init(cpudata);
-> +
-> +	return 0;
-> +
-> +free_cpudata1:
-> +	kfree(cpudata);
-> +	return ret;
-> +}
-> +
-> +static int amd_pstate_epp_cpu_exit(struct cpufreq_policy *policy)
-> +{
-> +	pr_debug("CPU %d exiting\n", policy->cpu);
-> +	policy->fast_switch_possible = false;
-> +	return 0;
-> +}
-> +
-> +static void amd_pstate_epp_init(unsigned int cpu)
-> +{
-> +	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
-> +	struct amd_cpudata *cpudata = policy->driver_data;
-> +	u32 max_perf, min_perf;
-> +	u64 value;
-> +	s16 epp;
-> +
-> +	max_perf = READ_ONCE(cpudata->highest_perf);
-> +	min_perf = READ_ONCE(cpudata->lowest_perf);
-> +
-> +	value = READ_ONCE(cpudata->cppc_req_cached);
-> +
-> +	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
-> +		min_perf = max_perf;
-> +
-> +	/* Initial min/max values for CPPC Performance Controls Register */
-> +	value &= ~AMD_CPPC_MIN_PERF(~0L);
-> +	value |= AMD_CPPC_MIN_PERF(min_perf);
-> +
-> +	value &= ~AMD_CPPC_MAX_PERF(~0L);
-> +	value |= AMD_CPPC_MAX_PERF(max_perf);
-> +
-> +	/* CPPC EPP feature require to set zero to the desire perf bit */
-> +	value &= ~AMD_CPPC_DES_PERF(~0L);
-> +	value |= AMD_CPPC_DES_PERF(0);
-> +
-> +	if (cpudata->epp_policy == cpudata->policy)
-> +		goto skip_epp;
-> +
-> +	cpudata->epp_policy = cpudata->policy;
-> +
-> +	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
-> +		epp = amd_pstate_get_epp(cpudata, value);
-> +		if (epp < 0)
-> +			goto skip_epp;
-> +		/* force the epp value to be zero for performance policy */
-> +		epp = 0;
-> +	} else {
-> +		/* Get BIOS pre-defined epp value */
-> +		epp = amd_pstate_get_epp(cpudata, value);
-> +		if (epp)
-> +			goto skip_epp;
-> +	}
-> +	/* Set initial EPP value */
-> +	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> +		value &= ~GENMASK_ULL(31, 24);
-> +		value |= (u64)epp << 24;
-> +	}
-> +
-> +skip_epp:
-> +	WRITE_ONCE(cpudata->cppc_req_cached, value);
-> +	amd_pstate_set_epp(cpudata, epp);
-> +	cpufreq_cpu_put(policy);
-> +}
-> +
-> +static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
-> +{
-> +	struct amd_cpudata *cpudata = policy->driver_data;
-> +
-> +	if (!policy->cpuinfo.max_freq)
-> +		return -ENODEV;
-> +
-> +	pr_debug("set_policy: cpuinfo.max %u policy->max %u\n",
-> +				policy->cpuinfo.max_freq, policy->max);
-> +
-> +	cpudata->policy = policy->policy;
-> +
-> +	amd_pstate_epp_init(policy->cpu);
-> +
-> +	return 0;
-> +}
-> +
-> +static int amd_pstate_epp_verify_policy(struct cpufreq_policy_data *policy)
-> +{
-> +	cpufreq_verify_within_cpu_limits(policy);
-> +	pr_debug("policy_max =%d, policy_min=%d\n", policy->max, policy->min);
-> +	return 0;
-> +}
-> +
->  static struct cpufreq_driver amd_pstate_driver = {
->  	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
->  	.verify		= amd_pstate_verify,
-> @@ -627,6 +978,16 @@ static struct cpufreq_driver amd_pstate_driver = {
->  	.attr		= amd_pstate_attr,
->  };
->  
-> +static struct cpufreq_driver amd_pstate_epp_driver = {
-> +	.flags		= CPUFREQ_CONST_LOOPS,
-> +	.verify		= amd_pstate_epp_verify_policy,
-> +	.setpolicy	= amd_pstate_epp_set_policy,
-> +	.init		= amd_pstate_epp_cpu_init,
-> +	.exit		= amd_pstate_epp_cpu_exit,
-> +	.name		= "amd_pstate_epp",
-> +	.attr		= amd_pstate_epp_attr,
-> +};
-> +
->  static int __init amd_pstate_init(void)
->  {
->  	int ret;
-> @@ -655,7 +1016,8 @@ static int __init amd_pstate_init(void)
->  	/* capability check */
->  	if (boot_cpu_has(X86_FEATURE_CPPC)) {
->  		pr_debug("AMD CPPC MSR based functionality is supported\n");
-> -		amd_pstate_driver.adjust_perf = amd_pstate_adjust_perf;
-> +		if (cppc_state == AMD_PSTATE_PASSIVE)
-> +			current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
->  	} else {
->  		pr_debug("AMD CPPC shared memory based functionality is supported\n");
->  		static_call_update(amd_pstate_enable, cppc_enable);
-> @@ -666,14 +1028,13 @@ static int __init amd_pstate_init(void)
->  	/* enable amd pstate feature */
->  	ret = amd_pstate_enable(true);
->  	if (ret) {
-> -		pr_err("failed to enable amd-pstate with return %d\n", ret);
-> +		pr_err("failed to enable with return %d\n", ret);
->  		return ret;
->  	}
->  
-> -	ret = cpufreq_register_driver(&amd_pstate_driver);
-> +	ret = cpufreq_register_driver(current_pstate_driver);
->  	if (ret)
-> -		pr_err("failed to register amd_pstate_driver with return %d\n",
-> -		       ret);
-> +		pr_err("failed to register with return %d\n", ret);
->  
->  	return ret;
->  }
-> @@ -695,6 +1056,12 @@ static int __init amd_pstate_param(char *str)
->  		if (cppc_state == AMD_PSTATE_DISABLE)
->  			pr_info("driver is explicitly disabled\n");
->  
-> +		if (cppc_state == AMD_PSTATE_ACTIVE)
-> +			current_pstate_driver = &amd_pstate_epp_driver;
-> +
-> +		if (cppc_state == AMD_PSTATE_PASSIVE)
-> +			current_pstate_driver = &amd_pstate_driver;
-> +
->  		return 0;
->  	}
->  
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index dae2ce0f6735..9bfdabd9d930 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -47,6 +47,10 @@ struct amd_aperf_mperf {
->   * @prev: Last Aperf/Mperf/tsc count value read from register
->   * @freq: current cpu frequency value
->   * @boost_supported: check whether the Processor or SBIOS supports boost mode
-> + * @epp_policy: Last saved policy used to set energy-performance preference
-> + * @epp_cached: Cached CPPC energy-performance preference value
-> + * @policy: Cpufreq policy value
-> + * @cppc_cap1_cached Cached MSR_AMD_CPPC_CAP1 register value
->   *
->   * The amd_cpudata is key private data for each CPU thread in AMD P-State, and
->   * represents all the attributes and goals that AMD P-State requests at runtime.
-> @@ -72,6 +76,12 @@ struct amd_cpudata {
->  
->  	u64	freq;
->  	bool	boost_supported;
-> +
-> +	/* EPP feature related attributes*/
-> +	s16	epp_policy;
-> +	s16	epp_cached;
-> +	u32	policy;
-> +	u64	cppc_cap1_cached;
->  };
->  
->  /*
-> @@ -91,4 +101,49 @@ static const char * const amd_pstate_mode_string[] = {
->  	NULL,
->  };
->  
-> +#define AMD_CPPC_EPP_PERFORMANCE		0x00
-> +#define AMD_CPPC_EPP_BALANCE_PERFORMANCE	0x80
-> +#define AMD_CPPC_EPP_BALANCE_POWERSAVE		0xBF
-> +#define AMD_CPPC_EPP_POWERSAVE			0xFF
-> +
-> +/*
-> + * AMD Energy Preference Performance (EPP)
-> + * The EPP is used in the CCLK DPM controller to drive
-> + * the frequency that a core is going to operate during
-> + * short periods of activity. EPP values will be utilized for
-> + * different OS profiles (balanced, performance, power savings)
-> + * display strings corresponding to EPP index in the
-> + * energy_perf_strings[]
-> + *	index		String
-> + *-------------------------------------
-> + *	0		default
-> + *	1		performance
-> + *	2		balance_performance
-> + *	3		balance_power
-> + *	4		power
-> + */
-> +enum energy_perf_value_index {
-> +	EPP_INDEX_DEFAULT = 0,
-> +	EPP_INDEX_PERFORMANCE,
-> +	EPP_INDEX_BALANCE_PERFORMANCE,
-> +	EPP_INDEX_BALANCE_POWERSAVE,
-> +	EPP_INDEX_POWERSAVE,
-> +};
-> +
-> +static const char * const energy_perf_strings[] = {
-> +	[EPP_INDEX_DEFAULT] = "default",
-> +	[EPP_INDEX_PERFORMANCE] = "performance",
-> +	[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
-> +	[EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
-> +	[EPP_INDEX_POWERSAVE] = "power",
-> +	NULL
-> +};
-> +
-> +static unsigned int epp_values[] = {
-> +	[EPP_INDEX_DEFAULT] = 0,
-> +	[EPP_INDEX_PERFORMANCE] = AMD_CPPC_EPP_PERFORMANCE,
-> +	[EPP_INDEX_BALANCE_PERFORMANCE] = AMD_CPPC_EPP_BALANCE_PERFORMANCE,
-> +	[EPP_INDEX_BALANCE_POWERSAVE] = AMD_CPPC_EPP_BALANCE_POWERSAVE,
-> +	[EPP_INDEX_POWERSAVE] = AMD_CPPC_EPP_POWERSAVE,
-> + };
+> change from v5:
+>  * add one common header `cpufreq_commoncpufreq_common` to extract EPP profiles 
+>    definition for amd and intel pstate driver.
+>  * remove the epp_off value to avoid confusion.
+>  * convert some other sysfs sprintf() function with sysfs_emit() and add onew new patch
+>  * add acpi pm server priofile detection to enable dynamic boost control
+>  * fix some code format with checkpatch script
+>  * move the EPP profile declaration into common header file `cpufreq_common.h`
+>  * fix commit typos
+> 
+> changes from v4:
+>  * rebase driver based on the v6.1-rc7
+>  * remove the builtin changes patch because pstate driver has been
+>    changed to builtin type by another thread patch
+>  * update Documentation: amd-pstate: add amd pstate driver mode introduction 
+>  * replace sprintf with sysfs_emit() instead.
+>  * fix typo for cppc_set_epp_perf() in cppc_acpi.h header
+> 
+> changes from v3:
+>  * add one more document update patch for the active and passive mode
+>    introducion.
+>  * drive most of the feedbacks from Mario
+>  * drive feedback from Rafael for the cppc_acpi driver.
+>  * remove the epp raw data set/get function
+>  * set the amd-pstate drive by passing kernel parameter
+>  * set amd-pstate driver disabled by default if no kernel parameter
+>    input from booting
+>  * get cppc_set_auto_epp and cppc_set_epp_perf combined
+>  * pick up reviewed by flag from Mario
+> 
+> changes from v2:
+>  * change pstate driver as builtin type from module
+>  * drop patch "export cpufreq cpu release and acquire"
+>  * squash patch of shared mem into single patch of epp implementation
+>  * add one new patch to support frequency boost control
+>  * add patch to expose driver working status checking
+>  * rebase driver into v6.1-rc4 kernel release
+>  * move some declaration to amd-pstate.h
+>  * drive feedback from Mario for the online/offline patch
+>  * drive feedback from Mario for the suspend/resume patch
+>  * drive feedback from Ray for the cppc_acpi and some other patches
+>  * drive feedback from Nathan for the epp patch
+> 
+> changes from v1:
+>  * rebased to v6.0
+>  * drive feedbacks from Mario for the suspend/resume patch
+>  * drive feedbacks from Nathan for the EPP support on msr type
+>  * fix some typos and code style indent problems
+>  * update commit comments for patch 4/7
+>  * change the `epp_enabled` module param name to `epp`
+>  * set the default epp mode to be false
+>  * add testing for the x86_energy_perf_policy utility patchset(will
+>    send that utility patchset with another thread)
+> 
+> v10:https://lore.kernel.org/lkml/20230106061420.95715-1-perry.yuan@amd.com/
+> v9: https://lore.kernel.org/lkml/20221225163442.2205660-1-perry.yuan@amd.com/
+> v8: https://lore.kernel.org/lkml/20221219064042.661122-1-perry.yuan@amd.com/
+> v7: https://lore.kernel.org/lkml/20221208111852.386731-1-perry.yuan@amd.com/
+> v6: https://lore.kernel.org/lkml/20221202074719.623673-1-perry.yuan@amd.com/
+> v5: https://lore.kernel.org/lkml/20221128170314.2276636-1-perry.yuan@amd.com/
+> v4: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+> v3: https://lore.kernel.org/all/20221107175705.2207842-1-Perry.Yuan@amd.com/
+> v2: https://lore.kernel.org/all/20221010162248.348141-1-Perry.Yuan@amd.com/
+> v1: https://lore.kernel.org/all/20221009071033.21170-1-Perry.Yuan@amd.com/
+> 
+> Perry Yuan (10):
+>   ACPI: CPPC: Add AMD pstate energy performance preference cppc control
+>   Documentation: amd-pstate: add EPP profiles introduction
+>   cpufreq: amd-pstate: implement Pstate EPP support for the AMD
+>     processors
+>   cpufreq: amd-pstate: implement amd pstate cpu online and offline
+>     callback
+>   cpufreq: amd-pstate: implement suspend and resume callbacks
+>   cpufreq: amd-pstate: add driver working mode switch support
+>   Documentation: amd-pstate: add amd pstate driver mode introduction
+>   Documentation: introduce amd pstate active mode kernel command line
+>     options
+>   cpufreq: amd-pstate: convert sprintf with sysfs_emit()
+>   Documentation: amd-pstate: introduce new global sysfs attributes
+> 
+> Wyes Karny (1):
+>   cpufreq: amd-pstate: optimize driver working mode selection in
+>     amd_pstate_param()
+> 
 
-These definitions should be moved to amd-pstate.c, because they are only
-called at that module as the warning by 0 days.
+Hi Rafael,
+
+We have finished the review for these series, may we know if any additional
+comments from your side?
 
 Thanks,
 Ray
-
->  #endif /* _LINUX_AMD_PSTATE_H */
-> -- 
-> 2.34.1
-> 
