@@ -2,118 +2,132 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDC53673D06
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F42673D0D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:06:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjASPF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 10:05:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
+        id S229686AbjASPGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 10:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbjASPFX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:05:23 -0500
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A761B47428;
-        Thu, 19 Jan 2023 07:05:22 -0800 (PST)
-Received: by mail-ej1-f47.google.com with SMTP id rl14so3082770ejb.2;
-        Thu, 19 Jan 2023 07:05:22 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+KexWLSH93Ec8V05gNl80AF1pI7NWr9fNaHQgJTqsrc=;
-        b=0tZHDrQ/nebNzwNJLlz4XqS6iQUgGkcLXNIS8sTDyezozkzfBUhG+ZIrlAareN2MYI
-         xBPpYpP+s2YwBevCF8YvX33SjDlsyQYumkkN5P0avX5gzsVzsBCune8d0zIQ30GBs1Hu
-         tIPCjo5vTEYK9v/VAizvYg34/5gcIsIBQx+itmQigEMIIAhKbfZSl1XXue923Pi7+DJ8
-         GbONzzLS2djXgMAWeQ27raQu6N+ex9S9JKqU3GT1w4dNPjMNMzmKHyGFK/OiLV2RKC5m
-         euS0XHAl755wFePfFXMKGRhevIdN+j0JdAB7++Vy0CjRlWW0KWPRtjQjYUwTu0guEGPd
-         FvRw==
-X-Gm-Message-State: AFqh2ko+jRk8YEd7Ce1FU/lpS64kJu7FVyeDbTCx2cISjzBdjf4Hyyif
-        9DELM/9wx8Zfj7bHBqdRo2q5xJGxaLFHHTyrbuA=
-X-Google-Smtp-Source: AMrXdXtCAyoG77gOytAc/WL4aLFNMoefgkOF1Ymab5D9Eh9gzbiSMGfZuiBLIpuDcEW8STiUncojFyEhlOk4xuJ1AmE=
-X-Received: by 2002:a17:906:3283:b0:84d:4b8e:efc with SMTP id
- 3-20020a170906328300b0084d4b8e0efcmr784466ejw.390.1674140720983; Thu, 19 Jan
- 2023 07:05:20 -0800 (PST)
+        with ESMTP id S229544AbjASPGS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:06:18 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D492B83C3;
+        Thu, 19 Jan 2023 07:06:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F75461C1E;
+        Thu, 19 Jan 2023 15:06:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0BDC433EF;
+        Thu, 19 Jan 2023 15:06:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674140776;
+        bh=ed/d1Vc476vyDl5PAf6BZKDeh52LAXW4QTKCR29Wwos=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=G+qBScBy5NjwE5b+jFH2oJR4GBZxRf3rwDsZDXzMUG2u4Z2TKPAlcej+oJ8Tt8CLC
+         dUshQoe7+t30T5JtUpSjXsy9Wr25/iGgjBIdZUSlncyhzLq2ZO8YXYOCUOYDTo/aD2
+         VxbXCMMACZURN6ojxDnP4V2Uwuv/1lXWKpKDhKy4MjzhSc/xhdtVm2R/qig/ml6A3W
+         R6Sye8BvYGnBvqMXx6OZE1oEdjF782aSwWp4nqFkZKtvjGHS0QWiH+utpz45h5JFQ1
+         O7gjpD6Vb2yxR8jdIlDTc5uOETRdmJvlLdyPCS3EtpwEuuzV+Xyl23qf5ek6Qmp2+1
+         9dYHPohTlge2A==
+Date:   Thu, 19 Jan 2023 15:06:11 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Saravanan Sekar <sravanhome@gmail.com>
+Cc:     sre@kernel.org, jic23@kernel.org, lars@metafoo.de,
+        andy.shevchenko@gmail.com, linux-pm@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v6 3/7] mfd: mp2629: introduce chip id machanism to
+ distinguish chip
+Message-ID: <Y8lcY/hhDSEw9Mt3@google.com>
+References: <20221123175425.564042-1-sravanhome@gmail.com>
+ <20221123175425.564042-4-sravanhome@gmail.com>
 MIME-Version: 1.0
-References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
- <20230118211123.111493-3-daniel.lezcano@linaro.org> <92a6e8494b92f0bb8cb36c98d2237ee3d347c358.camel@intel.com>
- <db701c97-883e-f231-68fa-c851c6a1a862@linaro.org> <CAJZ5v0jFQv09MQw8Z0gn1=Yf3JJD=BWKy3+Xy7RWUy1NXAK7wg@mail.gmail.com>
- <85e0a85d-6935-11cc-8396-4c3e425188f2@linaro.org> <CAJZ5v0gR-Z1DNcpRCkK6KapjU_F87RZKpE0ssQn1Y5BiH+sG_g@mail.gmail.com>
- <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
-In-Reply-To: <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 19 Jan 2023 16:05:09 +0100
-Message-ID: <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com>
-Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Zhang, Rui" <rui.zhang@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221123175425.564042-4-sravanhome@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 3:13 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 19/01/2023 14:24, Rafael J. Wysocki wrote:
-> > On Thu, Jan 19, 2023 at 1:48 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >> On 19/01/2023 13:11, Rafael J. Wysocki wrote:
-> >>> On Thu, Jan 19, 2023 at 10:30 AM Daniel Lezcano
-> >>> <daniel.lezcano@linaro.org> wrote:
-> >>>>
-> >>>> On 19/01/2023 08:41, Zhang, Rui wrote:
-> >>>>> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
-> >>>>>> If the thermal framework fails to initialize, the mutex can be used
-> >>>>>> by
-> >>>>>> the different functions registering a thermal zone anyway.
-> >>>>>
-> >>>>> Hmm, even with no governors and unregistered thermal sysfs class?
-> >>>>>
-> >>>>> IMO, thermal APIs for registering a thermal_zone/cooling_device should
-> >>>>> yield early if thermal_init fails.
-> >>>>> For other APIs that relies on a valid
-> >>>>> thermal_zone_device/thermal_cooling_device pointer, nothing needs to
-> >>>>> be changed.
-> >>>>>
-> >>>>> what do you think?
-> >>>>
-> >>>> I think you are right.
-> >>>>
-> >>>> It would be nice if we can check if the thermal class is registered and
-> >>>> bail out if not. But there is no function to check that AFAICS.
-> >>>>
-> >>>> Alternatively we can convert the thermal class static structure to a
-> >>>> pointer and set it to NULL in case of error in thermal_init() ?
-> >>>
-> >>> It doesn't matter if this is a NULL pointer or a static object that's
-> >>> clearly marked as unused.
-> >>
-> >> Without introducing another global variable, is it possible to know if
-> >> the class is used or not ?
-> >
-> > If thermal_class.p is cleared to NULL on class_register() failures in
-> > thermal_init() (unfortunately, the driver core doesn't do that, but
-> > maybe it should - let me cut a patch for that), then it can be used
-> > for that.
->
-> It should be in class_unregister() too, right ?
->
-> And is it possible to add a class_is_registered() ? in order to prevent
-> accessing class structure internals ?
+"Use DT API to pass through chip ID"
 
-I suppose so.
+On Wed, 23 Nov 2022, Saravanan Sekar wrote:
 
-And we'd like it to be used some places like
-thermal_zone_device_register_with_trips(), wouldn't we?
+> Introduce chip id machanism to distinguish chip
+
+Please be more imaginative than simply repeating the subject line.
+
+Also: "ID"
+ 
+> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> ---
+>  drivers/mfd/mp2629.c       | 4 +++-
+>  include/linux/mfd/mp2629.h | 5 +++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mfd/mp2629.c b/drivers/mfd/mp2629.c
+> index f4c5aa06f38c..a3fc02ad5ec1 100644
+> --- a/drivers/mfd/mp2629.c
+> +++ b/drivers/mfd/mp2629.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/mfd/mp2629.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  #include <linux/regmap.h>
+>  #include <linux/slab.h>
+>  
+> @@ -43,6 +44,7 @@ static int mp2629_probe(struct i2c_client *client)
+>  		return -ENOMEM;
+>  
+>  	ddata->dev = &client->dev;
+> +	ddata->chip_id = (uintptr_t)device_get_match_data(&client->dev);
+>  	i2c_set_clientdata(client, ddata);
+>  
+>  	ddata->regmap = devm_regmap_init_i2c(client, &mp2629_regmap_config);
+> @@ -60,7 +62,7 @@ static int mp2629_probe(struct i2c_client *client)
+>  }
+>  
+>  static const struct of_device_id mp2629_of_match[] = {
+> -	{ .compatible = "mps,mp2629"},
+> +	{ .compatible = "mps,mp2629", .data = (void *)CHIP_ID_MP2629 },
+
+
+Is this value something you can ask the H/W for?
+
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, mp2629_of_match);
+> diff --git a/include/linux/mfd/mp2629.h b/include/linux/mfd/mp2629.h
+> index 89b706900b57..072c8181b48b 100644
+> --- a/include/linux/mfd/mp2629.h
+> +++ b/include/linux/mfd/mp2629.h
+> @@ -9,9 +9,14 @@
+>  #include <linux/device.h>
+>  #include <linux/regmap.h>
+>  
+> +enum mp2xx_chip_id {
+> +	CHIP_ID_MP2629,
+> +};
+> +
+>  struct mp2629_data {
+>  	struct device *dev;
+>  	struct regmap *regmap;
+> +	enum mp2xx_chip_id chip_id;
+>  };
+>  
+>  enum mp2629_adc_chan {
+> -- 
+> 2.34.1
+> 
+
+-- 
+Lee Jones [李琼斯]
