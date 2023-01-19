@@ -2,53 +2,79 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E8AF673CF4
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E780673CF7
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbjASPBL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 10:01:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
+        id S229564AbjASPCs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 10:02:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjASPBK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:01:10 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C8B298FD;
-        Thu, 19 Jan 2023 07:01:06 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4240361C2F;
-        Thu, 19 Jan 2023 15:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56B5BC433D2;
-        Thu, 19 Jan 2023 15:01:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674140465;
-        bh=jtw/ZizwoNTsLpGN/pS2yl4aMhOQh+qg2c0Qa/WImKs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GjFDprlT7EJ8Nrwkz4CXAKiCBu7tVEE603oN6sj2eaMf9hWE6psoiVfycnTW01hJh
-         lBzLACWXf/3WoIsz185DB2VhBUBTGB4muMGLjYmPJTq8MU0hST8paR4d2mt8j9NWmh
-         3hXtSqA0eU3HKP+jkkwvrcYVi371U2FVx76BuUyf5NR+df3fQCCdPUmCmy9qWHALi5
-         e14EEAVeOLgCt/b5j/c0AU7ezDJqzVjzUR+IhI+S7WdlZRqpZ+Wm10do2vQbHKuULC
-         N/2xvPCmqbwNuB54YTP8WsUIgnYH/HYBynyr2G4qt90SMCUrT8SLSbF4hbdDYQgSit
-         Cj4768SIUY4Ig==
-Date:   Thu, 19 Jan 2023 15:00:59 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Saravanan Sekar <sravanhome@gmail.com>
-Cc:     sre@kernel.org, jic23@kernel.org, lars@metafoo.de,
-        andy.shevchenko@gmail.com, linux-pm@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 1/7] mfd: mp2629: fix failed to get iio channel by
- device name
-Message-ID: <Y8lbKy1jjkeSHJL3@google.com>
-References: <20221123175425.564042-1-sravanhome@gmail.com>
- <20221123175425.564042-2-sravanhome@gmail.com>
+        with ESMTP id S229468AbjASPCq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:02:46 -0500
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C72A124
+        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 07:02:43 -0800 (PST)
+Received: by mail-wr1-x42a.google.com with SMTP id r9so2153439wrw.4
+        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 07:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3QK5WQn5QfBW/lzr1XE6GsXDkO2SXCDtOuGMfSg9l3M=;
+        b=XG0Cz0s5psxor5yKGeQDddzYU6ImiInRjAEgxOUjHu7J9N0wbLsX0Y2+JjQKKzMX83
+         PPtZ6pvhQzGzaTclzZXpZRH0i/g483oSTD5GzXEq/tWIdmXcHm1LaU9J791DqMN+XkmE
+         Dj3Zc9QsQErsh4LnQshRbmT0tYtWAZF5ygTZfqDUMRUJNAhPasspLPaGcKTQcwjWGzJj
+         qoa+hFVXJnyR9v94itjdrLWVdfiv3fF5a8WJlNboKnpKt7aW6kcCZdwssCbi9d64Dcdd
+         jb8qUhu5mU9pSOQPcfBTXD9LM4KSZ9lAGX8CfjREVZHeuFI5gvHj/o0XhoETP+fWoXPL
+         9hjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3QK5WQn5QfBW/lzr1XE6GsXDkO2SXCDtOuGMfSg9l3M=;
+        b=zKZo6FxSSGJDG3zP2MoTtC44AnTX1Ae+2yl3i3oFdxJtdVDVMSZW3NsZfK2aBUC/GL
+         fMtY4gfgH4cbrsweOniJIYhc7a+AJ1DHCL3y9hm4ojC2U0GJINmzcZ9uFdZpuWxBsaHZ
+         XfQwVMrq5gtnD8LAaDei9YYOe1pYmebElYOGwS9McHFobSqFHE5KKUOpM0pMUflGvfej
+         mWA7S3ACkGiUOGyaduRN7sm3G1HTobSJIrQPlIotgwa9gZn1I5eSAAj3SvKh5RmlLTVn
+         gnj9MnDsRkHhKeSU+ElZKbWTdtuo43KHVS5awo3NgP5WY8ooMVlWVs7/BGz+EISP/ZZM
+         daaw==
+X-Gm-Message-State: AFqh2kqdgRjWciSWjk4NWWckO9lGBUTRZFXQgNs4jB+/8/UoW6u4xrJ7
+        Q/zv/9ku3wduuLDcmGJiKgLPXQ==
+X-Google-Smtp-Source: AMrXdXvN5OAXpi0lBHlrQWgXpVOOeMyLnW7Euf2BH25QlVqgl405zMxCn+7Fv4tUeo3hxiHoaph1og==
+X-Received: by 2002:a5d:50c9:0:b0:2bd:db42:36cd with SMTP id f9-20020a5d50c9000000b002bddb4236cdmr9087284wrt.0.1674140562038;
+        Thu, 19 Jan 2023 07:02:42 -0800 (PST)
+Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
+        by smtp.gmail.com with ESMTPSA id w8-20020adf8bc8000000b002bdc39849d1sm22061235wra.44.2023.01.19.07.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 07:02:41 -0800 (PST)
+Message-ID: <c53fd127-2fc0-57a1-1ae1-c1ae3480eedc@linaro.org>
+Date:   Thu, 19 Jan 2023 15:02:40 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221123175425.564042-2-sravanhome@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1674030722.git.viresh.kumar@linaro.org>
+ <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+From:   Caleb Connolly <caleb.connolly@linaro.org>
+In-Reply-To: <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,53 +82,77 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 23 Nov 2022, Saravanan Sekar wrote:
 
-> The mfd cell devices name populated on sysfs entry is dynamically derived
 
-Could you please make an attempt to capitalise words that require it?
+On 18/01/2023 08:38, Viresh Kumar wrote:
+> put_device() shouldn't be called before a prior call to
+> device_register(). __thermal_cooling_device_register() doesn't follow
+> that properly and needs fixing. Also
+> thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> on few error paths.
+> 
+> Fix all this by placing the calls at the right place.
+> 
+> Based on initial work done by Caleb Connolly.
+> 
+> Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-MFD, ADC, IIO, etc.  Also the start of the subject line description.
+Tested-by: Caleb Connolly <caleb.connolly@linaro.org>
 
-> from an auto instance which introduced a regression. As a result
-> mpc2629_charger driver failed to get adc channel because of iio consumer
-
-How can you regress something that doesn't appear to exist?
-
-$ git grep -i mpc2629 next/master
-
-> name mismatch with the sysfs.
-
-Why is the charger driver reading sysfs?
-
-> /sys/class/i2c-adapter/i2c-1/mp2629_adc.0.auto/
-> /sys/class/i2c-adapter/i2c-1/mp2629_charger.1.auto/
-
-Can you provide an error message or some debug prints or something that
-will help describe the exact issue you are facing please?
- 
-> Fixes: 466a62d7642f ("mfd: core: Make a best effort attempt to match devices with the correct of_nodes")
-> Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
+Thanks for sending this, with this I no longer hit the splats when
+get_max_state() fails.
 > ---
->  drivers/mfd/mp2629.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> For v6.2-rc.
 > 
-> diff --git a/drivers/mfd/mp2629.c b/drivers/mfd/mp2629.c
-> index 16840ec5fd1c..f4c5aa06f38c 100644
-> --- a/drivers/mfd/mp2629.c
-> +++ b/drivers/mfd/mp2629.c
-> @@ -51,7 +51,7 @@ static int mp2629_probe(struct i2c_client *client)
->  		return PTR_ERR(ddata->regmap);
->  	}
+> V3->V4:
+> - The first three versions were sent by Caleb.
+> - The new version fixes the current bugs, without looking to optimize the
+>   code any further, which is done separately in the next two patches.
+> 
+>  drivers/thermal/thermal_core.c | 13 ++++++++++---
+>  1 file changed, 10 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index f17ab2316dbd..77bd47d976a2 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -909,15 +909,20 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	cdev->devdata = devdata;
 >  
-> -	ret = devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO, mp2629_cell,
-> +	ret = devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_NONE, mp2629_cell,
->  				   ARRAY_SIZE(mp2629_cell), NULL, 0, NULL);
+>  	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
+> -	if (ret)
+> -		goto out_kfree_type;
+> +	if (ret) {
+> +		kfree(cdev->type);
+> +		goto out_ida_remove;
+> +	}
+>  
+>  	thermal_cooling_device_setup_sysfs(cdev);
+> +
+>  	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
+>  	if (ret) {
+> +		kfree(cdev->type);
+>  		thermal_cooling_device_destroy_sysfs(cdev);
+> -		goto out_kfree_type;
+> +		goto out_ida_remove;
+>  	}
+> +
+>  	ret = device_register(&cdev->device);
 >  	if (ret)
->  		dev_err(ddata->dev, "Failed to register sub-devices %d\n", ret);
-> -- 
-> 2.34.1
-> 
+>  		goto out_kfree_type;
+> @@ -943,6 +948,8 @@ __thermal_cooling_device_register(struct device_node *np,
+>  	thermal_cooling_device_destroy_sysfs(cdev);
+>  	kfree(cdev->type);
+>  	put_device(&cdev->device);
+> +
+> +	/* thermal_release() takes care of the rest */
+>  	cdev = NULL;
+>  out_ida_remove:
+>  	ida_free(&thermal_cdev_ida, id);
 
 -- 
-Lee Jones [李琼斯]
+Kind Regards,
+Caleb (they/them)
