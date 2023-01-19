@@ -2,225 +2,102 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8559F673A31
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 14:29:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8B2A673A8C
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 14:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjASN3t (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 08:29:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38050 "EHLO
+        id S229740AbjASNlI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 08:41:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjASN3q (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 08:29:46 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB0378AB4
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 05:28:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1674134938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=jQ7TZ/uWcR3rMx72VYX8JKupiK67GA9GFvn8roRQmyo=;
-        b=hR7QNCBKeORNPD47WFXp8R5x4u4Sy1EFH3UvwPGeFqoKGvPQCAKkrzH2NQMfpj/WAjQxkF
-        aNJjU2uC88O3XxYvsx+V3/6uLug/bSfiJKqaO65SldvYfysyKNOSIiG7eh6TGucnJYisi2
-        pK4rhgvSlfUTTs5dO822Dgw2H81tCX4=
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
- [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-159-tr-A4CvpNGaKcfNJNIIs9w-1; Thu, 19 Jan 2023 08:28:57 -0500
-X-MC-Unique: tr-A4CvpNGaKcfNJNIIs9w-1
-Received: by mail-ua1-f69.google.com with SMTP id z44-20020a9f372f000000b00390af225beaso503209uad.12
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 05:28:57 -0800 (PST)
+        with ESMTP id S231310AbjASNkn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 08:40:43 -0500
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109DE80885
+        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 05:40:31 -0800 (PST)
+Received: by mail-wm1-x333.google.com with SMTP id m5-20020a05600c4f4500b003db03b2559eso1282281wmq.5
+        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 05:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XcoeZ2kZnaju4+VtNiFKzU3RYmZc2v0F4v89RyRolVo=;
+        b=LbgxxrOfGOTgPygegnrzKZTqIeDa04JMfqw3oY6S/3yudde8/xt5m2x7quAoiwRs+s
+         QMxz7lnat4EIEVQFsmZNDHZbeFyvV8KN8r9DhutWGRm+xNnZ3IL2k8fnCQCsTD78Lr/w
+         Jq/1DLP/2sF2ocX5/vLa7OPPuToMEaSQUB/U7kJKjZrl7zLU1kZHX+UJCBsBAsE1TyzD
+         Dx2CLMFdP+uQMgIcOisb8J8plm9ykb5zCisypsFHan0qNafYRPW8ukAr3FNLdveMVuPU
+         fjjqH4rcLeq5kmSN/MljXgyYrfc2Z3I0ssfOsYXnAYIOutrKXh4AaKD8HOxWHJUYD33W
+         9LxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jQ7TZ/uWcR3rMx72VYX8JKupiK67GA9GFvn8roRQmyo=;
-        b=nQjoW8Ub7zKt7AhdHu1G6NC3hhaABjKtjvMWA6+jIw2QHoy1C5magKBukcMdGuRzF7
-         pCp2MqLD/LyguatUmriy+YQbgeMa7YAuF2ZSbzzmQAsuJYknBxJnqq91s6MpZe9ZpgdD
-         rT4OtPuKYJAcBSfhnmTAixbV6WST05wl4eJC4S3dLVL1QCJlSU4TghQAW4r+iQDaFQ8+
-         rJjE8gtkGTD6wc27j/S1MM/f40RXA6tPWoHvHxLVJ9dKOzgIu9n0sWYfmbjFpb5Ci+iD
-         dfI/R7an9XmpDpNZDkkkTD/Hm2uM4omGn/ns8Ek8VlLsw4Z0aCw9N53+/A5BfkgQ+Dnf
-         3Kiw==
-X-Gm-Message-State: AFqh2krIgKoob9CKADtZyBOQlVSInPRaJguC1V5CEEO5pj8KG6Tndv0C
-        pFC+ClPRQYy/ikUm5jxLuh9NBw2n0HYF4NuYqlP9BMDykHEGOl8PdvPNZyg/Woz79tfC/iIgDTm
-        bznWVSZkpsfXUZcmXo0qt82oi2edSgei4/jxkjO34sz+c47QsTVrOzEeA7UThDGfhwKDOuBJCZw
-        ==
-X-Received: by 2002:a67:e0cb:0:b0:3d3:d872:c821 with SMTP id m11-20020a67e0cb000000b003d3d872c821mr6701208vsl.27.1674134935740;
-        Thu, 19 Jan 2023 05:28:55 -0800 (PST)
-X-Google-Smtp-Source: AMrXdXsW2d4f3aJCvFi7ZPx3NN62wzdS1amESGFPao53yYXylhQRkBmdMXNQCs3VYkD3aCbWzy7zUg==
-X-Received: by 2002:a67:e0cb:0:b0:3d3:d872:c821 with SMTP id m11-20020a67e0cb000000b003d3d872c821mr6701165vsl.27.1674134935144;
-        Thu, 19 Jan 2023 05:28:55 -0800 (PST)
-Received: from localhost.localdomain ([176.206.23.228])
-        by smtp.gmail.com with ESMTPSA id m8-20020a05620a290800b006fb8239db65sm24355107qkp.43.2023.01.19.05.28.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:28:54 -0800 (PST)
-Date:   Thu, 19 Jan 2023 14:28:49 +0100
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-rt-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Tommaso Cucinotta <tommaso.cucinotta@santannapisa.it>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@linaro.org>
-Subject: [ANNOUNCE][CFP] Power Management and Scheduling in the Linux Kernel
- V edition (OSPM-summit 2023)
-Message-ID: <Y8lFkbJ6nluNdVYO@localhost.localdomain>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XcoeZ2kZnaju4+VtNiFKzU3RYmZc2v0F4v89RyRolVo=;
+        b=vXNSAscW2NxgbXsAHxZ1pu6VFMsMmnDy2bqXTNm1bH0LDCXHDsXR0pvLvDdVBu4Mgy
+         LnoZpHl4Oyhy5CY7+8dMPZZ4pKswan98MQJcdETRp7mCrvyJ/ezbvA4XUgH/4Sp7WCEV
+         mY7FoNC6rOkC+kwN1cE0g04lRsqSzVIud7Y1BYK6HUd7exb037emnPlL4XljmSRuwa/O
+         V3y6FPEAjRQc0zolG56yoU9/ZuTRZmqutilVG5XxGdmTVZQ1eaxzF4O7fILHFGvsRERm
+         gxrErGCP9Ac2fRUD8JrBlZUiicy0Rb/JPV0jyHN8fGIFbzwml+rS+eY92PvK2kFteumi
+         uJyw==
+X-Gm-Message-State: AFqh2kp05wKOMUgx9hBg5LpsFVtndvNXmXjXSbZvQHETp9qfHWHs+ugV
+        XVsAM9chKVN1m5fMeQOcbQenlai0eVFII3ca
+X-Google-Smtp-Source: AMrXdXuwRjv7fXtdMHXGsJnNizol1Hkxw5TN7y/jS2s40VORmJJWL65apHjMWaMSjMI3eI5JK7FxOw==
+X-Received: by 2002:a05:600c:22d2:b0:3d1:f0f1:ceb4 with SMTP id 18-20020a05600c22d200b003d1f0f1ceb4mr10286742wmg.19.1674135629377;
+        Thu, 19 Jan 2023 05:40:29 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id e12-20020a05600c218c00b003d9ddc82450sm4707612wme.45.2023.01.19.05.40.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 19 Jan 2023 05:40:29 -0800 (PST)
+Message-ID: <5f90aef1-93e1-832a-6cee-6e2cb4d7ec25@linaro.org>
+Date:   Thu, 19 Jan 2023 14:40:28 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 1/5] thermal/core: Fix unregistering netlink at thermal
+ init time
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-pm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0h-QkrgyLYLn9S_mkWN5nN1fUXej8zmarU425xW-Lei0Q@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0h-QkrgyLYLn9S_mkWN5nN1fUXej8zmarU425xW-Lei0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Power Management and Scheduling in the Linux Kernel (OSPM-summit) V edition
+On 19/01/2023 14:28, Rafael J. Wysocki wrote:
+> On Wed, Jan 18, 2023 at 10:11 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> The thermal subsystem initialization miss an netlink unregistering
+>> function in the error. Add it.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> What tree is this series based on?
 
-April 17-19, 2023
-Universita Politecnica delle Marche, Facolta di Economia
-Ancona, Italy
+It is based on 
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/log/?h=thermal/linux-next
 
----
 
-.:: FOCUS
 
-After a couple of years break, OSPM is back! In a different venue.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-The V edition of the Power Management and Scheduling in the Linux Kernel
-(OSPM) summit aims at fostering discussions on power management and
-(real-time) scheduling techniques. Summit will be held in Ancona (Italy)
-on April 17-19, 2023.
-
-We welcome anybody interested in having discussions on the broad scope
-of scheduler techniques for reducing energy consumption while meeting
-performance and latency requirements, real-time systems, real-time and
-non-real-time scheduling, tooling, debugging and tracing.
-
-Feel free to take a look at what happened previous years:
-
- I   edition - https://lwn.net/Articles/721573/
- II  edition - https://lwn.net/Articles/754923/
- III edition - https://lwn.net/Articles/793281/
- IV  edition - https://lwn.net/Articles/820337/ (online)
-
-.:: FORMAT
-
-The summit is organized to cover three days of discussions and talks.
-
-The list of topics of interest includes (but it is not limited to):
-
- * Power management techniques
- * Real-time and non real-time scheduling techniques
- * Energy consumption and CPU capacity aware scheduling
- * Real-time virtualization
- * Mobile/Server power management real-world use cases (successes and
-   failures)
- * Power management and scheduling tooling (configuration, integration,
-   testing, etc.)
- * Tracing
- * Recap/lightning talks
-
-Presentations can cover recently developed technologies, ongoing work
-and new ideas. Please understand that this workshop is not intended for
-presenting sales and marketing pitches.
-
-.:: ATTENDING
-
-Attending the OSPM-summit is free of charge, but registration to the
-event is mandatory. The event can allow a maximum of 50 people (so, be
-sure to register early!).
-
-Registrations open on February 17th, 2020.
-To register fill in the registration form available at
-https://forms.gle/QbRhGS3HWXinKBZq7
-
-While it is not strictly required to submit a topic/presentation (see
-below), registrations with a topic/presentation proposal will take
-precedence.
-
-.:: SUBMIT A TOPIC/PRESENTATION
-
-To submit a topic/presentation add its details to this list:
-https://docs.google.com/spreadsheets/d/10AJFQporrCPH9Gn6-MaRotdfO4Hm4LG6dVAoDrQdj5A/edit?usp=sharing
-
-Or, if you prefer, simply reply (only to me, please :) to this email
-specifying:
-
-- name/surname
-- affiliation
-- short bio
-- email address
-- title
-- abstract
-- 30min or 50min slot
-
-Deadline for submitting topics/presentations is 10th of February 2023.
-Notifications for accepted topics/presentations will be sent out 17th of
-February 2023.
-
-.:: VENUE
-
-The workshop will take place at Univpm [1], Universita Politecnica delle
-Marche, Facolta di Economia, Ancona, Italy.
-
-The workshop venue is within walking distance [2] from the city center
-[3] and in general from the hotels/accommodation suggested below.  You
-can reach Facolta di Economia by public transportation, via Conero Bus
-[4] (approx one every 10 minutes in rush hours)  from the station (15
-minutes to the venue).  A map of the city center with the venue,
-transportation and food/drinks places is provided here [5].  A smaller
-map locating the Facolta di Economia is also available: How to reach
-Facolta di Economia [6].
-
-For flights to Ancona, there are multiple options:
-
-- Flying directly to Ancona airport (direct flights from London Stansted
-  and Munich among others) Ancona Airport AOI [7]
-  Bus to Ancona city center from the airport Ancona airport shuttle [8]
-  Taxi service from Airport AOI to Ancona taxi [9]
-
-- Flight to Bologna airport Bologna airport [10]. From Bologna Ancona is
-  reachable by train, tickets purchasable from Trenitalia [11] (destination
-  “Ancona Centrale”). Bologna Centrale railway station is connected to
-  the airport by Marconi Express [12].
-
-A list of hotels within walking distance from the workshop venue:
-
-https://www.grandhotelpassetto.com/
-https://www.grandhotelpalaceancona.com/en/
-https://www.seeporthotel.com/
-https://www.thecityancona.it/en
-https://www.nh-hotels.it/hotel/nh-ancona
-https://www.hoteldellavittoria.it/it/
-
-1  - https://www.econ.univpm.it/?language=en
-2  - https://goo.gl/maps/9GRDxYPnUYuBSh5h9
-3  - https://goo.gl/maps/VGHaTsNi4GTgHGSj7
-4  - https://www.conerobus.it/
-5  - https://www.google.com/maps/d/u/0/edit?mid=135LJkfG6wq9rO2MoWPV2ofv1I2DfHvc&usp=sharing
-6  - https://www.econ.univpm.it/content/how-reach-us?language=en
-7  - https://www.ancona-airport.com/en/
-8  - https://www.ancona-airport.com/en/passengers/transportation/bus/
-9  - https://www.ctftaxi.it/?lang=en
-10 - https://www.bologna-airport.it/en/welcome-to-bologna-airport/?idC=62175
-11 - https://www.trenitalia.com/en.html
-12 - https://www.marconiexpress.it/
-
-.:: ORGANIZERS
-
-Juri Lelli (Red Hat)
-Daniel Bristot de Oliveira (Red Hat)
-Lorenzo Pieralisi (Linaro)
-Tommaso Cucinotta (SSSA)
-Adriano Mancini (UnivPM)
-Luca Spalazzi (UnivPM)
-Stefano Squartini (UnivPM)
-Emanuele Storti (UnivPM)
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
