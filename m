@@ -2,83 +2,109 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3CE673144
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 06:40:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F9B673207
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 08:02:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229773AbjASFkA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 00:40:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S229653AbjASHCO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 02:02:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjASFj6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 00:39:58 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB9FC2
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 21:39:55 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id v10-20020a17090abb8a00b00229c517a6eeso4773423pjr.5
-        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 21:39:55 -0800 (PST)
+        with ESMTP id S229468AbjASHCN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 02:02:13 -0500
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB6726A5;
+        Wed, 18 Jan 2023 23:02:11 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id q10so893836wrs.2;
+        Wed, 18 Jan 2023 23:02:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zGDn0N8Ms6feoyrcP9CT4zVtB2Eed1lBejF9LTMQpMU=;
-        b=dZnwg0Ly1yeOJNsCb4QCQdYVOEJUCq6Si1pae/K3zD7A3EzzkXrUPQes3tfoy6diw7
-         sztMsuos6SjPcczzcpcYab+62BXRSopALKqN+ZLYmRNbELW0nen7PR+qAp0pdNM2B5Ea
-         O3U2An5c7kJs1U9P1Q02Ca+oAKSG61LhEqN5SFql1/R9IQ3ZhUBLKG2BQQVBuzqKpA/Z
-         J3iHK4KnwD/ET1o7oLNcycRoo82cEwG1YpFOK6rqkwG35sldnfznkJtmgnGt3bRSszsV
-         LU9jI8i8YMz+3bx+qu6b65F1KTzGAmhwY8qbZVQ+biivzwytyw86r2W1wojfqp4lrjvh
-         YK0w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MVejuSpufQoHVCnyKKrCfjSO3sMF3yvPZTzZzBmN5U4=;
+        b=Lb5M9rUW4h0g7yi2Ye4TdWod0MffWK72w3BHfPesKWM7UnwjSjEQTscE83rJwQCUGr
+         WYALQ3EIgERt4u5/lNxio9ooP2S+TNckJAW3o6KnaXiDpkRngDw0irxgAT6N3e3rAxX3
+         5ayWBFxlxqNDNAPoPdoPunjbd/lXpgLbc7FIXboxcha0YvXhJ2A2u9Qpup39Z7RNzUGN
+         7MZ6SFuCKs2ZHTvTIipvbc51t6zGaREKIQ4evduo1KAKT7xmQsGYzokqY6sH9VPKOS2e
+         dmCpmbwIx6PKYNvSqFIqsD9LFGglcCQAzE1ja83L06BGXG/KKIg/+vomGr7QFg7Drn4W
+         MCVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zGDn0N8Ms6feoyrcP9CT4zVtB2Eed1lBejF9LTMQpMU=;
-        b=LjX5vYTrEak74eljsUcXa9HOUMi2dGu1oYfhZnkBqRJzJzX5pzh2ql5kyifQi1+PUK
-         2SzZN24wpb961pyXU76kNSEyURzKcVlgpOFue1Rmnotq38O5WdTTc18ttCJljZ9fSr7S
-         RogZ3J21ao9m0VZlxNWe6FC3semKHx34Lsb1DX6UwfIkJCb4SNxvErQfCn9yQibvYbw7
-         f3YXLezTxC+8APxALJ9rONQt2JGCULWRPgk0KYz62KNmFydy9OHxKhaPDc4vaQF+DuF8
-         LtoN62n+BK4P7Dn6HQ9mV23i9Y1JZHHvkzNkPtoGa2Hj6ICyxPutXHiA/vNNrlAdt96k
-         MoOA==
-X-Gm-Message-State: AFqh2kptr84zJYDJEi0XFmAJ/Y2rFXa7+ltpXD8Cvs292dvC/AshEVyV
-        xm4vC4Hk9/7s1JuQdaDhqKKmkQ==
-X-Google-Smtp-Source: AMrXdXtkQCK+4BLvooEaySdhdPo9CXsc3cxW/QcHx53H3kXI7eJt/RwNqVl6YIPbtIWKH75QPRZfIQ==
-X-Received: by 2002:a17:90b:3d0c:b0:219:5fc5:7790 with SMTP id pt12-20020a17090b3d0c00b002195fc57790mr9993838pjb.16.1674106795185;
-        Wed, 18 Jan 2023 21:39:55 -0800 (PST)
-Received: from localhost ([122.172.83.155])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090a558200b00229661c5650sm2180168pji.37.2023.01.18.21.39.54
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MVejuSpufQoHVCnyKKrCfjSO3sMF3yvPZTzZzBmN5U4=;
+        b=qZH7in5GsWAlm3BZp/P+gR3jjxznefY78T0dtqtWd/KFLOI9haSG+LP6rqBKFJlY9R
+         kiXNyIHfjaS6GJRtswVR3wCkrlnBV4z9gJKf/bvJawOtUyZFFRuXmhTGfi0UN4SiBbf2
+         qDa7RNeuNb9uLsFXywXrchQfOgbBbvrfsBvLH3YslVFequc6ayNAasHSffI6yEM4vdVR
+         rLXGB00Sp4gTq0KmF7Y3MtFfVe2HIMzvIaOWWhFv5iRprGzyG9Rn64olIjbZpoH94ObW
+         A8XlwVWpIHEqIZ8JnJRc4uBHzApS2mKc0qFHgu+5A6c8x0ts3o3bqvrcrr5LqODe1TY4
+         dzxQ==
+X-Gm-Message-State: AFqh2kqSY7DYqX2donj5jfBXS4fOCvDVONKxKdMWmAWcLKGRRF5Ib+sU
+        +uaK37v3IVBxxTTZBwad/Uw=
+X-Google-Smtp-Source: AMrXdXsOg+jK73ghQeVgFHO14gSXLMD5c2D3ROLHrCQQaaxekrtRrZltX8L/tCEmMipKUTtuQJCj6w==
+X-Received: by 2002:a05:6000:608:b0:28f:29b3:1a7f with SMTP id bn8-20020a056000060800b0028f29b31a7fmr9628995wrb.36.1674111729960;
+        Wed, 18 Jan 2023 23:02:09 -0800 (PST)
+Received: from skynet.lan (198.red-79-146-135.dynamicip.rima-tde.net. [79.146.135.198])
+        by smtp.gmail.com with ESMTPSA id z2-20020a5d6402000000b00297dcfdc90fsm32735943wru.24.2023.01.18.23.02.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Jan 2023 21:39:54 -0800 (PST)
-Date:   Thu, 19 Jan 2023 11:09:52 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     Vincent Wang <bhuwz@163.com>,
-        Vincent Wang <vincentwang3@lenovo.com>, rafael@kernel.org,
+        Wed, 18 Jan 2023 23:02:09 -0800 (PST)
+From:   =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+To:     jacob.jun.pan@linux.intel.com, lenb@kernel.org,
         linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: Register with perf domain before
-Message-ID: <20230119053952.qwh2yrmhddzocnju@vireshk-i7>
-References: <20230118044733.29391-1-bhuwz@163.com>
- <20230118084923.m3ztfn6v3hskpad6@vireshk-i7>
- <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
+Cc:     =?UTF-8?q?=C3=81lvaro=20Fern=C3=A1ndez=20Rojas?= 
+        <noltari@gmail.com>
+Subject: [PATCH] intel_idle: Add RaptorLake support
+Date:   Thu, 19 Jan 2023 08:02:05 +0100
+Message-Id: <20230119070205.90047-1-noltari@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <529d967f-9dbc-5b35-546a-428cbb191f0f@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 18-01-23, 09:24, Lukasz Luba wrote:
-> Viresh, If that's an issue for other governors, than maybe
-> we should address that.
+This patch adds RaptorLake support to the intel_idle driver.
 
-As you said in the other email, it isn't a mainline issue, I will
-ignore it then :)
+Since RaptorLake and AlderLake C-state are characteristics the same, we use
+AlderLake C-states tables for RaptorLake as well.
 
+Signed-off-by: Álvaro Fernández Rojas <noltari@gmail.com>
+---
+ drivers/idle/intel_idle.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index cfeb24d40d37..1a35b98d9bae 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -1429,6 +1429,9 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&idle_cpu_adl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,		&idle_cpu_adl_l),
+ 	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&idle_cpu_adl_n),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&idle_cpu_adl),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,	&idle_cpu_adl_n),
++	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&idle_cpu_adl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,	&idle_cpu_spr),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,	&idle_cpu_knl),
+ 	X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,	&idle_cpu_knl),
+@@ -1867,6 +1870,9 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 	case INTEL_FAM6_ALDERLAKE:
+ 	case INTEL_FAM6_ALDERLAKE_L:
+ 	case INTEL_FAM6_ALDERLAKE_N:
++	case INTEL_FAM6_RAPTORLAKE:
++	case INTEL_FAM6_RAPTORLAKE_P:
++	case INTEL_FAM6_RAPTORLAKE_S:
+ 		adl_idle_state_table_update();
+ 		break;
+ 	}
 -- 
-viresh
+2.34.1
+
