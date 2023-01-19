@@ -2,165 +2,198 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CEAF673F7F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 18:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39683673FC6
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 18:21:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjASRGP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 12:06:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50118 "EHLO
+        id S230055AbjASRVL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 12:21:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjASRGO (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 12:06:14 -0500
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 970B34E523
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 09:06:12 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id g10so2078115wmo.1
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 09:06:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F9F2+kem/Aol8OKIhzJOZk9K6JUDOkZxO5i8jszSiM4=;
-        b=MCNAfQYZB2wEVUkb4hbkSQJZXhJE0XmeFncjH4Q8H8cDml2FrE1cPod/xuOreWCzVs
-         NuCPNihpGhbncqMC/k4lHK/hvow54BDqkAQtRtdQOhqTC7CiQMF86ULShGzMHSmyQv4r
-         COt181ZayO4TGS1cYNtqZEoJF3ljBYPhE3zMi8GrgvQyGmb+dhFqHeGR/7iYDL8u0y7i
-         0UdWbA7sG+IPh76UlOVT0VBJU4N9PL6wUV85hzVe+L3zyunQcksgLO3+7dKQEKPYinQh
-         90lSudIfv2SAQtVPYaPkVdgyd/WpKYl6MivR+bvjz1VD9eFUIE8qPWhlaOVMz+sfVa0V
-         uMQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=F9F2+kem/Aol8OKIhzJOZk9K6JUDOkZxO5i8jszSiM4=;
-        b=GuuL5QlHPSC8yYW9SGyBAPHAlHUkQFiqIYC4cLH0f2HY31D1tmLdPevL4Zldv0/78U
-         38FXKQfjvCVohACH7cmSkb30V/t5SqskrD//fNW3k5369wnujRv+vviC0h567oTj8oGW
-         LUAr4BD58+jlhIdD+r/jfKJw8gsfIwTwWL86KYEfXjWMFgD8bHQKaIkhi56u0JZOq1ni
-         Bwf9OLR+lZyIcUYbD2TUBUwDKNnjlcYwBAioVQbvDAx0CW1e1pTmp0ARTeTecx82eBI1
-         otcq2nV31QCER6dCrLsYprxjcrLV7qz0no6wDs2MfQCchJUFgPf58GGUSGg3jn/w/Qb3
-         3tog==
-X-Gm-Message-State: AFqh2krGgz+B3sAqU9OaLfUCaMyho9wUqzx9/G2yNMAZzkv1UyxjryI0
-        PJHanixtn6NrXsnR/209dnq+XfNkZNWc6OGC
-X-Google-Smtp-Source: AMrXdXtXRI6A4TNlWSdtGXMNKtXaOx+xvopqc946bLCtJouV8zIk+8cpXiW2moR5mnYS/MffCis/gA==
-X-Received: by 2002:a05:600c:4f82:b0:3db:25a0:ca5b with SMTP id n2-20020a05600c4f8200b003db25a0ca5bmr2317662wmq.37.1674147971210;
-        Thu, 19 Jan 2023 09:06:11 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f24-20020a05600c491800b003d9e74dd9b2sm5110372wmp.9.2023.01.19.09.06.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 09:06:10 -0800 (PST)
-Message-ID: <5d3059e5-168d-a039-5ea1-a7b787dadc97@linaro.org>
-Date:   Thu, 19 Jan 2023 18:06:08 +0100
+        with ESMTP id S230142AbjASRVJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 12:21:09 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C632983DB;
+        Thu, 19 Jan 2023 09:21:04 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 3e5c0cf68ce6ed84; Thu, 19 Jan 2023 18:21:01 +0100
+Received: from kreacher.localnet (unknown [213.134.183.25])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 16AAF66B8AC;
+        Thu, 19 Jan 2023 18:21:01 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Zhang, Rui" <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
+Date:   Thu, 19 Jan 2023 18:21:00 +0100
+Message-ID: <12134920.O9o76ZdvQC@kreacher>
+In-Reply-To: <54674d67-7be3-0abc-4252-e7f4158f56f2@linaro.org>
+References: <20230118211123.111493-1-daniel.lezcano@linaro.org> <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com> <54674d67-7be3-0abc-4252-e7f4158f56f2@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v2 2/5] cpuidle: psci: Mark as PREEMPT_RT safe
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20221219151503.385816-1-krzysztof.kozlowski@linaro.org>
- <20221219151503.385816-3-krzysztof.kozlowski@linaro.org>
- <CAPDyKFr=-Mts4QtdizW5-D5qO3aP=9ODMhgST4Nx74n5xXxi5A@mail.gmail.com>
- <26e431a5-9666-0c72-7b0b-1a6c1bfaec22@linaro.org>
-In-Reply-To: <26e431a5-9666-0c72-7b0b-1a6c1bfaec22@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.25
+X-CLIENT-HOSTNAME: 213.134.183.25
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddutddguddtudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeetkeeigfegjeevudelvdejvdetteehleekjeegkeejiedvlefgheehieehgedugfenucffohhmrghinhepkhhosghjrdhnrghmvgenucfkphepvddufedrudefgedrudekfedrvdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekfedrvdehpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeeipdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
+ rhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrmhhithhksehkvghrnhgvlhdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 19/01/2023 16:40, Krzysztof Kozlowski wrote:
-> On 17/01/2023 16:27, Ulf Hansson wrote:
->> On Mon, 19 Dec 2022 at 16:15, Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> The PSCI cpuidle power domain in power_off callback uses
->>> __this_cpu_write() so it is PREEMPT_RT safe.  This allows to use it in
->>> Realtime kernels and solves errors like:
->>>
->>>   BUG: scheduling while atomic: swapper/2/0/0x00000002
->>>   Hardware name: Qualcomm Technologies, Inc. Robotics RB5 (DT)
->>>   Call trace:
->>>    dump_backtrace.part.0+0xe0/0xf0
->>>    show_stack+0x18/0x40
->>>    dump_stack_lvl+0x68/0x84
->>>    dump_stack+0x18/0x34
->>>    __schedule_bug+0x60/0x80
->>>    __schedule+0x628/0x800
->>>    schedule_rtlock+0x28/0x5c
->>>    rtlock_slowlock_locked+0x360/0xd30
->>>    rt_spin_lock+0x88/0xb0
->>>    genpd_lock_nested_spin+0x1c/0x30
->>>    genpd_power_off.part.0.isra.0+0x20c/0x2a0
->>>    genpd_runtime_suspend+0x150/0x2bc
->>>    __rpm_callback+0x48/0x170
->>>    rpm_callback+0x6c/0x7c
->>>    rpm_suspend+0x108/0x660
->>>    __pm_runtime_suspend+0x4c/0x8c
->>>    __psci_enter_domain_idle_state.constprop.0+0x54/0xe0
->>>    psci_enter_domain_idle_state+0x18/0x2c
->>>    cpuidle_enter_state+0x8c/0x4e0
->>>    cpuidle_enter+0x38/0x50
->>>    do_idle+0x248/0x2f0
->>>    cpu_startup_entry+0x24/0x30
->>>    secondary_start_kernel+0x130/0x154
->>>    __secondary_switched+0xb0/0xb4
->>>
->>> Cc: Adrien Thierry <athierry@redhat.com>
->>> Cc: Brian Masney <bmasney@redhat.com>
->>> Cc: linux-rt-users@vger.kernel.org
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>>  drivers/cpuidle/cpuidle-psci-domain.c | 3 ++-
->>>  1 file changed, 2 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
->>> index c80cf9ddabd8..d15a91fb7048 100644
->>> --- a/drivers/cpuidle/cpuidle-psci-domain.c
->>> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
->>> @@ -62,7 +62,8 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
->>>         if (!pd_provider)
->>>                 goto free_pd;
->>>
->>> -       pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
->>> +       pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_RT_SAFE | \
->>> +                    GENPD_FLAG_CPU_DOMAIN;
->>
->> My main concern with this, is that it will affect the parent domains
->> too. Whether those would be able to use the GENPD_FLAG_RT_SAFE or not,
->> is a different story.
->>
->> In one way or the other, I think it would be better to limit the
->> GENPD_FLAG_RT_SAFE to be used only for PREEMPT_RT kernels.
+On Thursday, January 19, 2023 5:39:29 PM CET Daniel Lezcano wrote:
+> On 19/01/2023 16:05, Rafael J. Wysocki wrote:
+> > On Thu, Jan 19, 2023 at 3:13 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 19/01/2023 14:24, Rafael J. Wysocki wrote:
+> >>> On Thu, Jan 19, 2023 at 1:48 PM Daniel Lezcano
+> >>> <daniel.lezcano@linaro.org> wrote:
+> >>>>
+> >>>> On 19/01/2023 13:11, Rafael J. Wysocki wrote:
+> >>>>> On Thu, Jan 19, 2023 at 10:30 AM Daniel Lezcano
+> >>>>> <daniel.lezcano@linaro.org> wrote:
+> >>>>>>
+> >>>>>> On 19/01/2023 08:41, Zhang, Rui wrote:
+> >>>>>>> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
+> >>>>>>>> If the thermal framework fails to initialize, the mutex can be used
+> >>>>>>>> by
+> >>>>>>>> the different functions registering a thermal zone anyway.
+> >>>>>>>
+> >>>>>>> Hmm, even with no governors and unregistered thermal sysfs class?
+> >>>>>>>
+> >>>>>>> IMO, thermal APIs for registering a thermal_zone/cooling_device should
+> >>>>>>> yield early if thermal_init fails.
+> >>>>>>> For other APIs that relies on a valid
+> >>>>>>> thermal_zone_device/thermal_cooling_device pointer, nothing needs to
+> >>>>>>> be changed.
+> >>>>>>>
+> >>>>>>> what do you think?
+> >>>>>>
+> >>>>>> I think you are right.
+> >>>>>>
+> >>>>>> It would be nice if we can check if the thermal class is registered and
+> >>>>>> bail out if not. But there is no function to check that AFAICS.
+> >>>>>>
+> >>>>>> Alternatively we can convert the thermal class static structure to a
+> >>>>>> pointer and set it to NULL in case of error in thermal_init() ?
+> >>>>>
+> >>>>> It doesn't matter if this is a NULL pointer or a static object that's
+> >>>>> clearly marked as unused.
+> >>>>
+> >>>> Without introducing another global variable, is it possible to know if
+> >>>> the class is used or not ?
+> >>>
+> >>> If thermal_class.p is cleared to NULL on class_register() failures in
+> >>> thermal_init() (unfortunately, the driver core doesn't do that, but
+> >>> maybe it should - let me cut a patch for that), then it can be used
+> >>> for that.
+> >>
+> >> It should be in class_unregister() too, right ?
+> >>
+> >> And is it possible to add a class_is_registered() ? in order to prevent
+> >> accessing class structure internals ?
+> > 
+> > I suppose so.
+> > 
+> > And we'd like it to be used some places like
+> > thermal_zone_device_register_with_trips(), wouldn't we?
 > 
-> I can do it... or maybe we should just drop the flags (RT and IRQ safe)
-> when parent domain does not have it?
+> Yes, in thermal_zone_device_register_with_trips() and 
+> thermal_cooling_device_register().
 
-Actually, with next patch, I can skip this one entirely. This is needed
-if PSCI cpuidle driver invokes runtime PM functions which eventually
-puts PSCI cpuidle power domain into suspend/resume. If the former does
-not happen, the domain driver won't be even called so my problem disappears.
+Something like the patch below I think, because thermal_cooling_device_register()
+is a wrapper around thermal_zone_device_register_with_trips().
 
-Since I need patch 3/5 - effectively disabling PSCI cpuidle runtime PM -
-we can drop this one, till we find a real user needing it.
+It needs to be split into 2 individual patches.
 
-Best regards,
-Krzysztof
+---
+ drivers/base/class.c           |   16 +++++++++++-----
+ drivers/thermal/thermal_core.c |    3 +++
+ include/linux/device/class.h   |    5 +++++
+ 3 files changed, 19 insertions(+), 5 deletions(-)
+
+Index: linux-pm/include/linux/device/class.h
+===================================================================
+--- linux-pm.orig/include/linux/device/class.h
++++ linux-pm/include/linux/device/class.h
+@@ -82,6 +82,11 @@ struct class_dev_iter {
+ 	const struct device_type	*type;
+ };
+ 
++static inline bool class_is_registered(struct class *class)
++{
++	return !!class->p;
++}
++
+ extern struct kobject *sysfs_dev_block_kobj;
+ extern struct kobject *sysfs_dev_char_kobj;
+ extern int __must_check __class_register(struct class *class,
+Index: linux-pm/drivers/base/class.c
+===================================================================
+--- linux-pm.orig/drivers/base/class.c
++++ linux-pm/drivers/base/class.c
+@@ -53,6 +53,8 @@ static void class_release(struct kobject
+ 
+ 	pr_debug("class '%s': release.\n", class->name);
+ 
++	class->p = NULL;
++
+ 	if (class->class_release)
+ 		class->class_release(class);
+ 	else
+@@ -186,17 +188,21 @@ int __class_register(struct class *cls,
+ 	cls->p = cp;
+ 
+ 	error = kset_register(&cp->subsys);
+-	if (error) {
+-		kfree(cp);
+-		return error;
+-	}
++	if (error)
++		goto err_out;
++
+ 	error = class_add_groups(class_get(cls), cls->class_groups);
+ 	class_put(cls);
+ 	if (error) {
+ 		kobject_del(&cp->subsys.kobj);
+ 		kfree_const(cp->subsys.kobj.name);
+-		kfree(cp);
++		goto err_out;
+ 	}
++	return 0;
++
++err_out:
++	cls->p = NULL;
++	kfree(cp);
+ 	return error;
+ }
+ EXPORT_SYMBOL_GPL(__class_register);
+Index: linux-pm/drivers/thermal/thermal_core.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/thermal_core.c
++++ linux-pm/drivers/thermal/thermal_core.c
+@@ -1342,6 +1342,9 @@ thermal_zone_device_register_with_trips(
+ 	if (num_trips > 0 && (!ops->get_trip_type || !ops->get_trip_temp) && !trips)
+ 		return ERR_PTR(-EINVAL);
+ 
++	if (!class_is_registered(&thermal_class))
++		return ERR_PTR(-ENODEV);
++
+ 	tz = kzalloc(sizeof(*tz), GFP_KERNEL);
+ 	if (!tz)
+ 		return ERR_PTR(-ENOMEM);
+
+
 
