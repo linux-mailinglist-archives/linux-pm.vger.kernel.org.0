@@ -2,157 +2,118 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E780673CF7
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC53673D06
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjASPCs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 10:02:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
+        id S229710AbjASPF0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 10:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjASPCq (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:02:46 -0500
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C72A124
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 07:02:43 -0800 (PST)
-Received: by mail-wr1-x42a.google.com with SMTP id r9so2153439wrw.4
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 07:02:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3QK5WQn5QfBW/lzr1XE6GsXDkO2SXCDtOuGMfSg9l3M=;
-        b=XG0Cz0s5psxor5yKGeQDddzYU6ImiInRjAEgxOUjHu7J9N0wbLsX0Y2+JjQKKzMX83
-         PPtZ6pvhQzGzaTclzZXpZRH0i/g483oSTD5GzXEq/tWIdmXcHm1LaU9J791DqMN+XkmE
-         Dj3Zc9QsQErsh4LnQshRbmT0tYtWAZF5ygTZfqDUMRUJNAhPasspLPaGcKTQcwjWGzJj
-         qoa+hFVXJnyR9v94itjdrLWVdfiv3fF5a8WJlNboKnpKt7aW6kcCZdwssCbi9d64Dcdd
-         jb8qUhu5mU9pSOQPcfBTXD9LM4KSZ9lAGX8CfjREVZHeuFI5gvHj/o0XhoETP+fWoXPL
-         9hjA==
+        with ESMTP id S229779AbjASPFX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:05:23 -0500
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A761B47428;
+        Thu, 19 Jan 2023 07:05:22 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id rl14so3082770ejb.2;
+        Thu, 19 Jan 2023 07:05:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3QK5WQn5QfBW/lzr1XE6GsXDkO2SXCDtOuGMfSg9l3M=;
-        b=zKZo6FxSSGJDG3zP2MoTtC44AnTX1Ae+2yl3i3oFdxJtdVDVMSZW3NsZfK2aBUC/GL
-         fMtY4gfgH4cbrsweOniJIYhc7a+AJ1DHCL3y9hm4ojC2U0GJINmzcZ9uFdZpuWxBsaHZ
-         XfQwVMrq5gtnD8LAaDei9YYOe1pYmebElYOGwS9McHFobSqFHE5KKUOpM0pMUflGvfej
-         mWA7S3ACkGiUOGyaduRN7sm3G1HTobSJIrQPlIotgwa9gZn1I5eSAAj3SvKh5RmlLTVn
-         gnj9MnDsRkHhKeSU+ElZKbWTdtuo43KHVS5awo3NgP5WY8ooMVlWVs7/BGz+EISP/ZZM
-         daaw==
-X-Gm-Message-State: AFqh2kqdgRjWciSWjk4NWWckO9lGBUTRZFXQgNs4jB+/8/UoW6u4xrJ7
-        Q/zv/9ku3wduuLDcmGJiKgLPXQ==
-X-Google-Smtp-Source: AMrXdXvN5OAXpi0lBHlrQWgXpVOOeMyLnW7Euf2BH25QlVqgl405zMxCn+7Fv4tUeo3hxiHoaph1og==
-X-Received: by 2002:a5d:50c9:0:b0:2bd:db42:36cd with SMTP id f9-20020a5d50c9000000b002bddb4236cdmr9087284wrt.0.1674140562038;
-        Thu, 19 Jan 2023 07:02:42 -0800 (PST)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id w8-20020adf8bc8000000b002bdc39849d1sm22061235wra.44.2023.01.19.07.02.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 07:02:41 -0800 (PST)
-Message-ID: <c53fd127-2fc0-57a1-1ae1-c1ae3480eedc@linaro.org>
-Date:   Thu, 19 Jan 2023 15:02:40 +0000
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+KexWLSH93Ec8V05gNl80AF1pI7NWr9fNaHQgJTqsrc=;
+        b=0tZHDrQ/nebNzwNJLlz4XqS6iQUgGkcLXNIS8sTDyezozkzfBUhG+ZIrlAareN2MYI
+         xBPpYpP+s2YwBevCF8YvX33SjDlsyQYumkkN5P0avX5gzsVzsBCune8d0zIQ30GBs1Hu
+         tIPCjo5vTEYK9v/VAizvYg34/5gcIsIBQx+itmQigEMIIAhKbfZSl1XXue923Pi7+DJ8
+         GbONzzLS2djXgMAWeQ27raQu6N+ex9S9JKqU3GT1w4dNPjMNMzmKHyGFK/OiLV2RKC5m
+         euS0XHAl755wFePfFXMKGRhevIdN+j0JdAB7++Vy0CjRlWW0KWPRtjQjYUwTu0guEGPd
+         FvRw==
+X-Gm-Message-State: AFqh2ko+jRk8YEd7Ce1FU/lpS64kJu7FVyeDbTCx2cISjzBdjf4Hyyif
+        9DELM/9wx8Zfj7bHBqdRo2q5xJGxaLFHHTyrbuA=
+X-Google-Smtp-Source: AMrXdXtCAyoG77gOytAc/WL4aLFNMoefgkOF1Ymab5D9Eh9gzbiSMGfZuiBLIpuDcEW8STiUncojFyEhlOk4xuJ1AmE=
+X-Received: by 2002:a17:906:3283:b0:84d:4b8e:efc with SMTP id
+ 3-20020a170906328300b0084d4b8e0efcmr784466ejw.390.1674140720983; Thu, 19 Jan
+ 2023 07:05:20 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
- device_register() fails
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Yang Yingliang <yangyingliang@huawei.com>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-kernel@vger.kernel.org
-References: <cover.1674030722.git.viresh.kumar@linaro.org>
- <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
+ <20230118211123.111493-3-daniel.lezcano@linaro.org> <92a6e8494b92f0bb8cb36c98d2237ee3d347c358.camel@intel.com>
+ <db701c97-883e-f231-68fa-c851c6a1a862@linaro.org> <CAJZ5v0jFQv09MQw8Z0gn1=Yf3JJD=BWKy3+Xy7RWUy1NXAK7wg@mail.gmail.com>
+ <85e0a85d-6935-11cc-8396-4c3e425188f2@linaro.org> <CAJZ5v0gR-Z1DNcpRCkK6KapjU_F87RZKpE0ssQn1Y5BiH+sG_g@mail.gmail.com>
+ <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
+In-Reply-To: <1313b9b6-45f0-aad1-9a3f-c5e1e3636697@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 Jan 2023 16:05:09 +0100
+Message-ID: <CAJZ5v0icp3nH+3-timEh2o8kxXpe4O2uMdJ8pSwe8fmY_OW4zA@mail.gmail.com>
+Subject: Re: [PATCH 3/5] thermal/core: Remove unneeded mutex_destroy()
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Zhang, Rui" <rui.zhang@intel.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amitk@kernel.org" <amitk@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Thu, Jan 19, 2023 at 3:13 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> On 19/01/2023 14:24, Rafael J. Wysocki wrote:
+> > On Thu, Jan 19, 2023 at 1:48 PM Daniel Lezcano
+> > <daniel.lezcano@linaro.org> wrote:
+> >>
+> >> On 19/01/2023 13:11, Rafael J. Wysocki wrote:
+> >>> On Thu, Jan 19, 2023 at 10:30 AM Daniel Lezcano
+> >>> <daniel.lezcano@linaro.org> wrote:
+> >>>>
+> >>>> On 19/01/2023 08:41, Zhang, Rui wrote:
+> >>>>> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
+> >>>>>> If the thermal framework fails to initialize, the mutex can be used
+> >>>>>> by
+> >>>>>> the different functions registering a thermal zone anyway.
+> >>>>>
+> >>>>> Hmm, even with no governors and unregistered thermal sysfs class?
+> >>>>>
+> >>>>> IMO, thermal APIs for registering a thermal_zone/cooling_device should
+> >>>>> yield early if thermal_init fails.
+> >>>>> For other APIs that relies on a valid
+> >>>>> thermal_zone_device/thermal_cooling_device pointer, nothing needs to
+> >>>>> be changed.
+> >>>>>
+> >>>>> what do you think?
+> >>>>
+> >>>> I think you are right.
+> >>>>
+> >>>> It would be nice if we can check if the thermal class is registered and
+> >>>> bail out if not. But there is no function to check that AFAICS.
+> >>>>
+> >>>> Alternatively we can convert the thermal class static structure to a
+> >>>> pointer and set it to NULL in case of error in thermal_init() ?
+> >>>
+> >>> It doesn't matter if this is a NULL pointer or a static object that's
+> >>> clearly marked as unused.
+> >>
+> >> Without introducing another global variable, is it possible to know if
+> >> the class is used or not ?
+> >
+> > If thermal_class.p is cleared to NULL on class_register() failures in
+> > thermal_init() (unfortunately, the driver core doesn't do that, but
+> > maybe it should - let me cut a patch for that), then it can be used
+> > for that.
+>
+> It should be in class_unregister() too, right ?
+>
+> And is it possible to add a class_is_registered() ? in order to prevent
+> accessing class structure internals ?
 
+I suppose so.
 
-On 18/01/2023 08:38, Viresh Kumar wrote:
-> put_device() shouldn't be called before a prior call to
-> device_register(). __thermal_cooling_device_register() doesn't follow
-> that properly and needs fixing. Also
-> thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
-> on few error paths.
-> 
-> Fix all this by placing the calls at the right place.
-> 
-> Based on initial work done by Caleb Connolly.
-> 
-> Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
-> Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
-> Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-
-Tested-by: Caleb Connolly <caleb.connolly@linaro.org>
-
-Thanks for sending this, with this I no longer hit the splats when
-get_max_state() fails.
-> ---
-> For v6.2-rc.
-> 
-> V3->V4:
-> - The first three versions were sent by Caleb.
-> - The new version fixes the current bugs, without looking to optimize the
->   code any further, which is done separately in the next two patches.
-> 
->  drivers/thermal/thermal_core.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index f17ab2316dbd..77bd47d976a2 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -909,15 +909,20 @@ __thermal_cooling_device_register(struct device_node *np,
->  	cdev->devdata = devdata;
->  
->  	ret = cdev->ops->get_max_state(cdev, &cdev->max_state);
-> -	if (ret)
-> -		goto out_kfree_type;
-> +	if (ret) {
-> +		kfree(cdev->type);
-> +		goto out_ida_remove;
-> +	}
->  
->  	thermal_cooling_device_setup_sysfs(cdev);
-> +
->  	ret = dev_set_name(&cdev->device, "cooling_device%d", cdev->id);
->  	if (ret) {
-> +		kfree(cdev->type);
->  		thermal_cooling_device_destroy_sysfs(cdev);
-> -		goto out_kfree_type;
-> +		goto out_ida_remove;
->  	}
-> +
->  	ret = device_register(&cdev->device);
->  	if (ret)
->  		goto out_kfree_type;
-> @@ -943,6 +948,8 @@ __thermal_cooling_device_register(struct device_node *np,
->  	thermal_cooling_device_destroy_sysfs(cdev);
->  	kfree(cdev->type);
->  	put_device(&cdev->device);
-> +
-> +	/* thermal_release() takes care of the rest */
->  	cdev = NULL;
->  out_ida_remove:
->  	ida_free(&thermal_cdev_ida, id);
-
--- 
-Kind Regards,
-Caleb (they/them)
+And we'd like it to be used some places like
+thermal_zone_device_register_with_trips(), wouldn't we?
