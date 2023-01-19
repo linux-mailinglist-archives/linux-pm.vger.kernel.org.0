@@ -2,78 +2,82 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00788673570
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 11:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24EE967357A
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 11:26:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjASKZr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 05:25:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
+        id S230360AbjASK0n (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 05:26:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjASKZj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 05:25:39 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C694DE20
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 02:25:34 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id r30so1357647wrr.10
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 02:25:34 -0800 (PST)
+        with ESMTP id S230341AbjASK00 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 05:26:26 -0500
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777E2521DE;
+        Thu, 19 Jan 2023 02:26:24 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id rl14so1083462ejb.2;
+        Thu, 19 Jan 2023 02:26:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eZPsqFx3N2mmetQ9IPUz/o5Ei0eo+cmPrq1DjOstt2U=;
-        b=MJWEQ5YxvQO/KtG8yraOUX4CV9Y94kp3bly+P+taebUCUPTqA0FTLAry7ndjC4Jcds
-         IdpXITWz5/oqJM4/9/4q1ign137txyKrOaBVi0V6Rt5v7sPuuFStqGlcDJWhzd4mKQKN
-         VoWoppK5uodLiYc974plSupqfQv9Rm3le1E95l71rZ3SW+ddppk6Rn1keyY5l6eK5/7k
-         Ak9je9NrfgzPego6uUFZM09G5FXG2pyXBw4ehu0ElKXA8zAQF4ma981HCuza3wyDorF0
-         Q+PUWxYc/Seo7nnxPoiRAbH7kB4YqmKmo6J5DByveueUQGcTcYwmgEATQarpfrvCVaha
-         4Fwg==
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=clRCjHfA7rKJ2oTt1B+97caDociqEL0Rl6BA3x8VTP0=;
+        b=hS975poE2XDyTtRXqaSp3RNPHLKWlnWoBUnMSaE+kUZiL3hg4no7WvjdggldCJ3H8Z
+         7GY4set0sB24oy2yCIPP+ywNqXfoejuJFzZAJ0lZny/yYuiHzwUXJ19RhwvgsLxd/CbI
+         le0vQvjW0byRPCLW/9vLZj7/K0/beC3jzIPdPOafEt0B6QraEuBIU+8aDJ7iW9Q9MR2g
+         wvCzm8406/+hILoyADBZgUh9YwIKrL/iEHilNOt0exSb3lr6Gdgz9seiPDOOfjVJwidz
+         NgyGLIkGkshORF0yWKDOyd2jk9UtmoTomzt1iKL4zT96WmikSjKGkpwXQUjCy7QTqCC3
+         xVqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eZPsqFx3N2mmetQ9IPUz/o5Ei0eo+cmPrq1DjOstt2U=;
-        b=NlAfLbQDHSk9+bkLjFZcPrlDpPm0IaYtQ3K8DLAtow3L/B/3QD9+ythiY9ryhNcVTl
-         w+NnmoOdeYw91/fxTodMaUZt/NsI6OmUE3JW8CPWYD4NEMJNKZ7mJIBm+HBFwBcGE4UB
-         CtA1V3Odoz28NWSWLQkXKFtOSNJ/zumWtGnzjxI3Yym+oLpCkalKgnvhBIQXCdshl0Fi
-         hCVl5gcHoZ9LdkgO8hXm9ef0+aDX81M1MO5H3c8OkQql72ovwemglttM6fOaAaZg2ctD
-         NVmQUbfEKIV1FufRLNx/T8C8vL4ZnBuN+XZxdHqJZdZ0uIvP9Hm8qdHZ2hNQkZ/jxUot
-         f1Rw==
-X-Gm-Message-State: AFqh2kq4cTrdUbDrgI6nX/0e7nKmkR4tkMDLq9fdlOS4QaQGi15WFOuo
-        k0ISHlA+bIQNWkXNNyiWWFwiKQ==
-X-Google-Smtp-Source: AMrXdXtzkD23ITweixx6i2fklGVpeNFgVYzuFJhdqSjGlRzgFPKyYkDuQ9kwqM141fy6sRseX/gLkw==
-X-Received: by 2002:a5d:5e85:0:b0:2b6:2eb3:82a1 with SMTP id ck5-20020a5d5e85000000b002b62eb382a1mr5497731wrb.67.1674123932401;
-        Thu, 19 Jan 2023 02:25:32 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id r11-20020adff70b000000b002bdf290efdasm10768285wrp.58.2023.01.19.02.25.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 02:25:32 -0800 (PST)
-Message-ID: <d852675e-fdae-ec02-a4d1-4f3c7c8f64d7@linaro.org>
-Date:   Thu, 19 Jan 2023 11:25:30 +0100
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=clRCjHfA7rKJ2oTt1B+97caDociqEL0Rl6BA3x8VTP0=;
+        b=699DYf3fRRATauzi2Ge5KyzX/9DTzqYAdfLpTGBngmvJtHWWECbWNPmvtdfIy2iAss
+         ZEpxMLqQ1gFRVG+Q3MLp2YQrXjoILrbD8Nz5crpUacY/HX1l+LZfN6D9lkYerFHXASyO
+         VARLzaiZrb5MMzqxrS/e9bLbtA8rzyubnEikTOSU/+gk6GpQg0TKIBvLPjVTRW0dq4C5
+         fGc+dKHSV9AiecNfWHBIJiZXNt3LG/vQIKrzSHzfmNeFcytr6vDIBIJqJcfNED6K6OsG
+         f1qz4gLAx8Np97bzzCH1U5X2YM8TGx0pBNWvy/UW/SYovL5A7IukqQ9lT3E796fYDdja
+         RKxg==
+X-Gm-Message-State: AFqh2kqTZM4vXui/+l++C610IhFkgJkRj8kswCPZ/w3xMN5OdYxESlJC
+        r5L4Tx6p7skEIKhrdaucKkLir/kmV8o=
+X-Google-Smtp-Source: AMrXdXtqcH/8Sf/CngK7xv/mWLSKmba4Glnzkg/+gCZisxT3aEJJ6tNONigLWslMq7fmyrz1h41VNg==
+X-Received: by 2002:a17:906:5906:b0:870:2f70:c624 with SMTP id h6-20020a170906590600b008702f70c624mr10657240ejq.3.1674123982603;
+        Thu, 19 Jan 2023 02:26:22 -0800 (PST)
+Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id b1-20020a1709063ca100b007af0f0d2249sm16057107ejh.52.2023.01.19.02.26.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Jan 2023 02:26:21 -0800 (PST)
+Date:   Thu, 19 Jan 2023 11:26:19 +0100
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Sumit Gupta <sumitg@nvidia.com>,
+        Dmitry Osipenko <digetx@gmail.com>, treding@nvidia.com,
+        krzysztof.kozlowski@linaro.org, viresh.kumar@linaro.org,
+        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        sanjayc@nvidia.com, ksitaraman@nvidia.com, ishah@nvidia.com,
+        bbasu@nvidia.com, Rajkumar Kasirajan <rkasirajan@nvidia.com>
+Subject: Re: [Patch v1 08/10] cpufreq: tegra194: add OPP support and set
+ bandwidth
+Message-ID: <Y8kay0/AmjqhU2jO@orome>
+References: <20221220160240.27494-1-sumitg@nvidia.com>
+ <20221220160240.27494-9-sumitg@nvidia.com>
+ <4e3e4485-ba22-eb47-fb95-e8d626160bc6@gmail.com>
+ <8e6d7dd3-1bdc-ee4b-0c1e-1ae9cd8e4f29@nvidia.com>
+ <8bd5cf36-e1fb-305c-08c5-3bbc80204866@collabora.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 5/5] thermal/core: Sort the trip points when registering a
- thermal zone
-Content-Language: en-US
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "amitk@kernel.org" <amitk@kernel.org>
-References: <20230118211123.111493-1-daniel.lezcano@linaro.org>
- <20230118211123.111493-5-daniel.lezcano@linaro.org>
- <f515876ea2e43e734b8d4ac7feda7f17ee04894f.camel@intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f515876ea2e43e734b8d4ac7feda7f17ee04894f.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wXgEOUGcow8GwYyA"
+Content-Disposition: inline
+In-Reply-To: <8bd5cf36-e1fb-305c-08c5-3bbc80204866@collabora.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,81 +85,113 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-Hi Rui,
+--wXgEOUGcow8GwYyA
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 19/01/2023 08:22, Zhang, Rui wrote:
-> On Wed, 2023-01-18 at 22:11 +0100, Daniel Lezcano wrote:
+On Mon, Jan 16, 2023 at 03:16:48PM +0300, Dmitry Osipenko wrote:
+> On 1/13/23 16:50, Sumit Gupta wrote:
+> >=20
+> >=20
+> > On 22/12/22 21:16, Dmitry Osipenko wrote:
+> >> External email: Use caution opening links or attachments
+> >>
+> >>
+> >> 20.12.2022 19:02, Sumit Gupta =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> >>> Add support to use OPP table from DT in Tegra194 cpufreq driver.
+> >>> Tegra SoC's receive the frequency lookup table (LUT) from BPMP-FW.
+> >>> Cross check the OPP's present in DT against the LUT from BPMP-FW
+> >>> and enable only those DT OPP's which are present in LUT also.
+> >>>
+> >>> The OPP table in DT has CPU Frequency to bandwidth mapping where
+> >>> the bandwidth value is per MC channel. DRAM bandwidth depends on the
+> >>> number of MC channels which can vary as per the boot configuration.
+> >>> This per channel bandwidth from OPP table will be later converted by
+> >>> MC driver to final bandwidth value by multiplying with number of
+> >>> channels before sending the request to BPMP-FW.
+> >>>
+> >>> If OPP table is not present in DT, then use the LUT from BPMP-FW dire=
+cty
+> >>> as the frequency table and not do the DRAM frequency scaling which is
+> >>> same as the current behavior.
+> >>>
+> >>> Now, as the CPU Frequency table is being controlling through OPP table
+> >>> in DT. Keeping fewer entries in the table will create less frequency
+> >>> steps and scale fast to high frequencies if required.
+> >>
+> >> It's not exactly clear what you're doing here. Are you going to scale
+> >> memory BW based on CPU freq? If yes, then this is wrong because CPU fr=
+eq
+> >> is independent from the memory subsystem.
+> >>
+> >> All Tegra30+ SoCs have ACTMON hardware unit that monitors CPU memory
+> >> activity and CPU memory BW should be scaled based on CPU memory events
+> >> counter. We have ACTMON devfreq driver for older SoCs. I have no clue
+> >> how ACTMON can be accessed on T186+, perhaps there should be a BPMP FW
+> >> API for that.
+> >>
+> >=20
+> > Yes, scaling the memory BW based on CPU freq.
+> > Referred below patch set for previous generation of Tegra Soc's which
+> > you mentioned and tried to trace the history.
+> >=20
+> > https://patchwork.ozlabs.org/project/linux-tegra/patch/1418719298-25314=
+-3-git-send-email-tomeu.vizoso@collabora.com/
+> >=20
+> > In new Tegra Soc's, actmon counter control and usage has been moved to
+> > BPMP-FW where only 'MCALL' counter is used and 'MCCPU is not being used.
+> > Using the actmon counter was a reactive way to scale the frequency which
+> > is less effective due to averaging over a time period.
+> > We are now using the proactive way where clients tell their bandwidth
+> > needs to help achieve better performance.
+>=20
+> You don't know what bandwidth CPU needs, you trying to guess it.
+>=20
+> It should be a bad decision to use cpufreq for memory bandwidth scaling.
+> You'll be wasting memory power 90% of time because cpufreq doesn't have
+> relation to the DRAM, your heuristics will be wrong and won't do
+> anything good compared to using ACTMON. The L2 CPU cache + memory
+> prefetching hides memory from CPU. And cpufreq should be less reactive
+> than ACTMON in general.
+>=20
+> Scaling memory freq based on cpufreq is what downstream NV kernel did
+> 10+ years ago for the oldest Tegra generations. Today upstream has all
+> the necessary infrastructure for doing memory bandwidth scaling properly
+> and we even using h/w memory counters on T20. It's strange that you want
+> to bring the downstream archaity to the modern upstream for the latest
+> Tegra generations.
+>=20
+> If you can skip the BPMP-FW and use ACTMON directly from kernel, then
+> that's what I suggest to do.
 
-[ ... ]
+After talking to a few people, it turns out that BPMP is already using
+ACTMON internally to do the actual scaling of the EMC frequency (or the
+CPUs contribution to that). So BPMP will use ACTMON counters to monitor
+the effective memory load of the CPU and adjust the EMC frequency. The
+bandwidth request that we generate from the cpufreq driver is more of a
+guideline for the maximum bandwidth we might consume.
 
->> +int thermal_trip_sort(struct thermal_trip *trips, int num_trips)
->> +{
->> +	struct thermal_trip tt;
->> +	int sorted = 0;
->> +	int i, j;
->> +
->> +	for (i = 0; i < num_trips; i++) {
->> +
->> +		for (j = i + 1; j < num_trips; j++) {
->> +
->> +			if (trips[i].temperature <
->> trips[j].temperature) {
->> +				tt = trips[i];
->> +				trips[i] = trips[j];
->> +				trips[j] = tt;
->> +				sorted++;
->> +			}
->> +		}
->> + 	}
->> +
->> +	return sorted;
->> +}
->> +
-> When this happens, the index(trip_id) of each trip is changed, but we
-> pass the new trip_id to .get_trip_temp()/.set_trip_temp() callbacks.
+Thierry
 
-If we pass the thermal trips to the 
-thermal_zone_device_register_with_trips(), .get_trip_temp, 
-.get_trip_hyst and .get_trip_type are not used.
+--wXgEOUGcow8GwYyA
+Content-Type: application/pgp-signature; name="signature.asc"
 
-.set_trip_temp is called from sysfs, where the trip_id is read from the 
-file name. This trip_id will be correct in this case, as the files are 
-created after sorting the array.
+-----BEGIN PGP SIGNATURE-----
 
-> This will confuse the drivers and update the wrong trips, right?
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmPJGssACgkQ3SOs138+
+s6FLcQ//SDuIXbEmFWNwO/6zyR0Uu1oyte3hbT72Pg/1mj0FdHlo44tkuI2iGsJo
+XslkLfJSE8FQ4kygY2mqyKBsZP0Eqlmh2hwWfofm4n1+EX6NE1u1zOOw8YbVrG+2
+PYiFHf2JxQUTvEg1GgaU58OXm6aLT9jKS6zFl6R7OLnsSUKtJzzJUIgwdGfnH6qV
+yvyo7mG30Nk+7s7Yn7LA85CaD18/agj+DHvFQ8UD7Ysn3+SvyVbcq2u4+JdOlSeN
+oYGIJ8S3OMSXSt3M35p4Q+5+9xEPzPN5sZ9Xov9A5xS0jdVHoFzTGj4FhMRKAJq9
+VQYmR97bYQlIAwZYiI1Lh6n/YMNtfBtqfKA7qvVSTK7Z7QnbVD4JuIBq3AbatPuK
+DWykzPs/8xOf0fbLS7e9KwdahWaYdjbsfDvKV81JbA8xRaEO47+x7lBsa5RT/mHg
+ala4a4Ia0TLEjQ6eHmg16qxrP9HRvGqezInLHO/2/RgJOaxps1kcljyotMkZspnb
+fHK7VFMvtDI0vLlDya2NJu1XWQnPlP1j3virK8zBTlRbQmwXbp4OfXumP8hHa9et
+CeccsM+oIXovEm4Zkc23V5aRDnKG9o6iQ6YIbj0Kl/VMo+boffDb+sltcgJDAcZT
+OSx6CdbmLW2OoZhC6x926chQZXo1APxTdYdUegNrUQsJRjyHnY4=
+=tF8B
+-----END PGP SIGNATURE-----
 
-No, because at the moment we use the generic trip structure, it is 
-handled by the thermal framework.
-
-The drivers do not have to deal with the trip id or assuming its value 
-given a trip point after registering the thermal zone. If it does, we 
-should fix the driver as the trip_id is a framework internal value.
-
-The trip_id is just an index to be passed around, so whatever the value, 
-it should point to the right trip point.
-
-For instance, the device tree describes the trip point and they could be 
-in any order, all the DT based drivers are agnostic of the trip_id.
-
-If there is an update of the trip points, we read the trip points 
-definition again and do an update of all of them.
-
-> IMO, we need a map between thermal core trips and unsorted driver
-> trips.
-
-That what I proposed several months ago but we concluded that would 
-another extra level of complexity. So we decided to replace all the 
-.get_trip_* by a generic trip point structure handled by the thermal 
-framework itself.
-
-Hopefully, soon we will have all .get_trip* gone with a nice cleanup of 
-the drivers and the core framework.
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+--wXgEOUGcow8GwYyA--
