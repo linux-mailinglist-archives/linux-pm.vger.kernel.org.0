@@ -2,274 +2,256 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDC4F6735D0
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 11:42:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75B1F673765
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 12:50:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjASKmm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 05:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
+        id S230373AbjASLus (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 06:50:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjASKmF (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 05:42:05 -0500
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 037D3530D7
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 02:41:57 -0800 (PST)
-Received: by mail-ej1-x631.google.com with SMTP id rl14so1186327ejb.2
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 02:41:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uS3a51Hf3DeDt61DkEEova6jWQ+51q/C5Vt9AtIW4EY=;
-        b=a610o/VsGt0ptWMrSEL2hb8IAPtrLG6IiIGvUpRybeQv9TGs2j85nG/DIQAbNi7WP3
-         sSkKuQU/+WGfQEalbavTnvcl/h2hkZ9Cxo7/m4qx1al4e0n/XZbdwzMHTzaAzDfZQKuo
-         lyfxsC/Mz74rur7iPU7SptxxP/muoAvfj+HfRm0wPxD3Mq1+eAnhPN68G4szYnAf8Z8M
-         X0mk/um2i58ScTWClViIAcB77BMJwMEUp3OaM3ztgKznkaHabIpC6nMe5RXSKgfCTnQa
-         yrleFtKy3+RJURyzn64eJDRao50rQnCssDMjPW8AKCIw83UhXeGpxm2muW2sFtmTDbN/
-         f1LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uS3a51Hf3DeDt61DkEEova6jWQ+51q/C5Vt9AtIW4EY=;
-        b=1rF0eiqrlo1aM28IiICqo1+YJlwn/FlZpNTYxlQWWZT4PKkIcnPYjcsls3Lu5NZeI9
-         udptLpeP1eh5rbU5Ndxci4yJbY8D/2fCIByHYt5biameMGmd9CuJw2Y10xJYryZonY98
-         6ui/CMoNS0PuLgaFCviKoUrQVK8cFe2do7Mth9qsIm2PgXxDOPjLA3cGuN2xEKr7cVyf
-         QgCE4gX43Uq3JZejKCHmWYlaOyZL8/gexVtNb+dNk7cd1S3cS/hi3uR5nVb5GiEJaB14
-         eRdFzs5i9gOjSfZ8Mnn45rrJG+dtc3J4kauwDJp51k40ZQ7h0yxDZ8+rkBcSaWK7x3ss
-         0Xwg==
-X-Gm-Message-State: AFqh2kpiI1Y1ez3WiD9+4ApWSX0fYWVA6mwLcIpdhO57DPXGljrgv2FV
-        M2Xs891bd9ryki3qjHVajRHTig==
-X-Google-Smtp-Source: AMrXdXulFNkg2BZdef9haxKrfnXc0E4+Br72L9bPdpuMtceDIFili6YQO7W/wr8o7/OWWyw6Yy4jHA==
-X-Received: by 2002:a17:906:15d2:b0:84c:cf42:e16 with SMTP id l18-20020a17090615d200b0084ccf420e16mr12961395ejd.1.1674124916149;
-        Thu, 19 Jan 2023 02:41:56 -0800 (PST)
-Received: from [192.168.1.101] (abxh150.neoplus.adsl.tpnet.pl. [83.9.1.150])
-        by smtp.gmail.com with ESMTPSA id hq15-20020a1709073f0f00b0084c7029b24dsm16222588ejc.151.2023.01.19.02.41.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 02:41:55 -0800 (PST)
-Message-ID: <83385cac-9b66-8236-6039-65332ea9edb3@linaro.org>
-Date:   Thu, 19 Jan 2023 11:41:52 +0100
+        with ESMTP id S230043AbjASLuq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 06:50:46 -0500
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE7030F8;
+        Thu, 19 Jan 2023 03:50:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FTKwAGPqTpqF3aTIlFFsleh3bjMtrK2FpsfQQOuW2LoJugkXYJbDap++K5hk/cwW9ZAVGAUb5NzzlL2DgNjYZdkpoTnymEKBZwPvPSEtRRGXjGgCA2sRKGckek7be6VMZlVhUPXSPCGNLqH9mUdIO5dqyP+Eh6tEEJ8wlxBVjBc0aIlJ4TOEN5S5VxkwSTlGv9haPvNG5M3m3DBOGyTUWEf2yj6YIXZhaD2K9aADfcezRMatnFkx4jZw6HERLwbqmNWJPB8M5DnFMzxlVzXNtLMbnrGjyN0yEqWHViPpqEyG1JViPDp1RUBel61xugR61OIwxGkpckmAjRvvtwuFVA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ddDot8RwVCcog2R8vhoezMLY7YHPipdMy+E5uSHONBA=;
+ b=QpRAqoZyqZM0y8xFf6b5Y/fSpI0ge3pAMAe6Tut1QFiPttm6pJPVDrUNpNrw42gaifZqKgErFRyBs+pnhqkaGqaS3EVF43SwG3OCHm30u6FI/oMh0q0LoBMHcCT8oErC+GAeSv8yCkD9EoFfOTIy3bDyK2b9ZxzoWrCx3lgff/Yt8ROnr1a061HjF0Xo2xUpHJmw5rXF3CjaYQ5Fl+HaNJ1ouRV1eILGP62w8Bgms9wNAg+2y+JL8FOc73E0rTzmQl4uC8Z6natpR6y0ZffF6tOWE0Y3nZl5piSLdGj9wizxjaM6FKeUpYuBkVcBD8HUOY3iLy4xUsKhg6GHQ6CiWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ddDot8RwVCcog2R8vhoezMLY7YHPipdMy+E5uSHONBA=;
+ b=RBU4LOQDjHM8L7AYvjsPmkQH1TwySn9kZdm2rioob6giyyQCCGH8RdWskLAjF4dwZiwc/GONBpUxvX6YO9TlGogcJTLdmblxhjQSSfi+j4YM9oubhGKfC+jwcR6nQw5ezRiJJI13Yf+oRQ2SzkCP1oWcs29OiyX1GAsGT7uJsb4=
+Received: from DM6PR13CA0070.namprd13.prod.outlook.com (2603:10b6:5:134::47)
+ by PH7PR12MB8107.namprd12.prod.outlook.com (2603:10b6:510:2bb::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Thu, 19 Jan
+ 2023 11:50:41 +0000
+Received: from DS1PEPF0000B07A.namprd05.prod.outlook.com
+ (2603:10b6:5:134:cafe::32) by DM6PR13CA0070.outlook.office365.com
+ (2603:10b6:5:134::47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6023.17 via Frontend
+ Transport; Thu, 19 Jan 2023 11:50:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS1PEPF0000B07A.mail.protection.outlook.com (10.167.17.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6002.11 via Frontend Transport; Thu, 19 Jan 2023 11:50:41 +0000
+Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 19 Jan
+ 2023 05:50:35 -0600
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        <Mario.Limonciello@amd.com>, <Perry.Yuan@amd.com>,
+        Ananth Narayan <ananth.narayan@amd.com>,
+        <gautham.shenoy@amd.com>
+CC:     <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, Bagas Sanjaya <bagasdotme@gmail.com>,
+        <santosh.shukla@amd.com>, Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@suse.de>, Wyes Karny <wyes.karny@amd.com>
+Subject: [PATCH v3 0/6] amd_pstate: Add guided autonomous mode support
+Date:   Thu, 19 Jan 2023 11:50:11 +0000
+Message-ID: <20230119115017.10188-1-wyes.karny@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH 2/2] firmware: qcom_scm: Fully implement
- qcom_scm_lmh_dcvsh()
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
-        Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230113031401.2336157-1-konrad.dybcio@linaro.org>
- <20230113031401.2336157-3-konrad.dybcio@linaro.org>
- <20230119030422.askkliovlyonurvz@builder.lan>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230119030422.askkliovlyonurvz@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0000B07A:EE_|PH7PR12MB8107:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6cbda4df-b8db-468c-73df-08dafa1363d0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fxbXDWX38i5P2HWZcPEl5MJn5eM2H2vt6j8leUTJHA1642O4utwtfGlqtE4pRk6tfPPUUEhPK+m6F0htCUViXHB5R/mM9Mn9PeJ6rbkfyP63YnL25Abp/X6LdepS7mFJ446c9vadu3m6KTCWT1F92bA1L5Ws8x8ETLFTVpbNoUy7LoKpgqsxzbW8czJ7TQi/SC7muvqqrcR/oVKbXipFnJgMJzOsFLxD5VSeUU+3Zj2O5aQdXve3Uz3tw4PQKkw1AqIUpZjg7RF3TcwkultA8YLbs8z6fisLqnIUlFHDdREffoPBunQwnJUcYxlTLryLi4WPuk/jL7W1qsjZC0OsQWX+5QnsrdiT3XLNPR3kacP6KtMRA84yCmB4XSGtzx4JjpTHsT4ieBkiPmpiVmXZFD7c/TPNF+Fc9HJwG0xa9J7kne03INeOqDUKnNOgKHpSZ1BbyFxMnFfeOV8/NYgQNDuofqz90UYkURfxztk6s4u3xVpQZCWDewmv99+Hw7grlvdojsMKESQBRDsXAIID8cwySddhUCpv7IvcrAcMUNmdA9UTaNtY7ULutV2QXSmuJsWkeZNNKltLefT8AG9RveZcXFQFunvkAcXTahFE9b296kgBHxMIW7xKb5fXfXMw0mRb9eF+eaipy6aUoFcEEch4M0SPwRCf+SixUlUvCYQqMz3MxK4NXThVV8uy/v4+TE3fPZgms+Uq8hwcFKUXBTco8+AuMeA+IJT+nDdj02FjrhMtJfEY34UDUPKog9iaCEHQ6o2zQspiPkjU+p/i2QFYLkkGEd6GRuwGbZkcpmv8YIv6EA6RU5QRYoQRBOk8
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(396003)(39860400002)(136003)(346002)(376002)(451199015)(46966006)(36840700001)(40470700004)(83380400001)(36860700001)(82310400005)(426003)(86362001)(47076005)(356005)(82740400003)(5660300002)(2906002)(8936002)(41300700001)(44832011)(7416002)(40480700001)(40460700003)(4326008)(1076003)(6666004)(2616005)(966005)(186003)(478600001)(336012)(26005)(316002)(16526019)(8676002)(54906003)(70206006)(7696005)(6636002)(110136005)(70586007)(81166007)(36756003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jan 2023 11:50:41.1493
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6cbda4df-b8db-468c-73df-08dafa1363d0
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0000B07A.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8107
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+From ACPI spec[1] below 3 modes for CPPC can be defined:
+1. Non autonomous: OS scaling governor specifies operating frequency/
+   performance level through `Desired Performance` register and platform
+follows that.
+2. Guided autonomous: OS scaling governor specifies min and max
+   frequencies/ performance levels through `Minimum Performance` and
+`Maximum Performance` register, and platform can autonomously select an
+operating frequency in this range.
+3. Fully autonomous: OS only hints (via EPP) to platform for the required
+   energy performance preference for the workload and platform autonomously
+scales the frequency.
+
+Currently (1) is supported by amd_pstate as passive mode, and (3) is
+implemented by EPP support[2]. This change is to support (2).
+
+In guided autonomous mode the min_perf is based on the input from the
+scaling governor. For example, in case of schedutil this value depends
+on the current utilization. And max_perf is set to max capacity.
+
+To activate guided auto mode ``amd_pstate=guided`` command line
+parameter has to be passed in the kernel.
+
+Below are the results (normalized) of benchmarks with this patch:
+System: Genoa 96C 192T
+Kernel: 6.2.0-rc2 + EPP v11 + patch
+Scaling governor: schedutil
+
+================ dbench comparisons ================
+dbench result comparison:
+Here results are throughput (MB/s)
+Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+    1	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
+    2	   1.07 (0.00 pct)	   1.06 (-0.93 pct)	   1.07 (0.00 pct)
+    4	   1.68 (0.00 pct)	   1.70 (1.19 pct)	   1.72 (2.38 pct)
+    8	   2.61 (0.00 pct)	   2.68 (2.68 pct)	   2.76 (5.74 pct)
+   16	   4.16 (0.00 pct)	   4.24 (1.92 pct)	   4.53 (8.89 pct)
+   32	   5.98 (0.00 pct)	   6.17 (3.17 pct)	   7.30 (22.07 pct)
+   64	   8.67 (0.00 pct)	   8.99 (3.69 pct)	  10.71 (23.52 pct)
+  128	  11.98 (0.00 pct)	  12.52 (4.50 pct)	  14.67 (22.45 pct)
+  256	  15.73 (0.00 pct)	  16.13 (2.54 pct)	  17.81 (13.22 pct)
+  512	  15.77 (0.00 pct)	  16.32 (3.48 pct)	  16.39 (3.93 pct)
+dbench power comparison:
+Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+    1	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   1.04 (4.00 pct)
+    2	   0.99 (0.00 pct)	   0.97 (-2.02 pct)	   1.02 (3.03 pct)
+    4	   0.98 (0.00 pct)	   0.98 (0.00 pct)	   1.02 (4.08 pct)
+    8	   0.98 (0.00 pct)	   0.99 (1.02 pct)	   1.02 (4.08 pct)
+   16	   0.99 (0.00 pct)	   1.00 (1.01 pct)	   1.04 (5.05 pct)
+   32	   1.02 (0.00 pct)	   1.02 (0.00 pct)	   1.07 (4.90 pct)
+   64	   1.05 (0.00 pct)	   1.05 (0.00 pct)	   1.11 (5.71 pct)
+  128	   1.08 (0.00 pct)	   1.08 (0.00 pct)	   1.15 (6.48 pct)
+  256	   1.12 (0.00 pct)	   1.12 (0.00 pct)	   1.20 (7.14 pct)
+  512	   1.18 (0.00 pct)	   1.17 (-0.84 pct)	   1.26 (6.77 pct)
+
+================ git-source comparisons ================
+git-source result comparison:
+Here results are throughput (compilations per 1000 sec)
+Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+  192	   1.00 (0.00 pct)	   0.93 (-7.00 pct)	   1.00 (0.00 pct)
+git-source power comparison:
+Threads:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+  192	   1.00 (0.00 pct)	   1.00 (0.00 pct)	   0.96 (-4.00 pct)
+
+================ kernbench comparisons ================
+kernbench result comparison:
+Here results are throughput (compilations per 1000 sec)
+Load:	   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+32	   1.00 (0.00 pct)	   1.01 (1.00 pct)	   1.02 (2.00 pct)
+48	   1.26 (0.00 pct)	   1.28 (1.58 pct)	   1.25 (-0.79 pct)
+64	   1.39 (0.00 pct)	   1.47 (5.75 pct)	   1.43 (2.87 pct)
+96	   1.48 (0.00 pct)	   1.50 (1.35 pct)	   1.49 (0.67 pct)
+128	   1.29 (0.00 pct)	   1.32 (2.32 pct)	   1.33 (3.10 pct)
+192	   1.17 (0.00 pct)	   1.20 (2.56 pct)	   1.21 (3.41 pct)
+256	   1.17 (0.00 pct)	   1.18 (0.85 pct)	   1.20 (2.56 pct)
+384	   1.16 (0.00 pct)	   1.17 (0.86 pct)	   1.21 (4.31 pct)
+kernbench power comparison:
+Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+   32	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.00 (0.00 pct)
+   48	   0.87 (0.00 pct)	   0.81 (-6.89 pct)	   0.88 (1.14 pct)
+   64	   0.81 (0.00 pct)	   0.73 (-9.87 pct)	   0.77 (-4.93 pct)
+   96	   0.75 (0.00 pct)	   0.74 (-1.33 pct)	   0.75 (0.00 pct)
+  128	   0.83 (0.00 pct)	   0.79 (-4.81 pct)	   0.83 (0.00 pct)
+  192	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+  256	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+  384	   0.92 (0.00 pct)	   0.88 (-4.34 pct)	   0.92 (0.00 pct)
+
+================ tbench comparisons ================
+tbench result comparison:
+Here results are throughput (MB/s)
+Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+    1	   1.00 (0.00 pct)	   0.70 (-30.00 pct)	   1.37 (37.00 pct)
+    2	   2.64 (0.00 pct)	   1.39 (-47.34 pct)	   2.70 (2.27 pct)
+    4	   4.89 (0.00 pct)	   2.75 (-43.76 pct)	   5.28 (7.97 pct)
+    8	   9.46 (0.00 pct)	   5.42 (-42.70 pct)	  10.22 (8.03 pct)
+   16	  19.05 (0.00 pct)	  10.42 (-45.30 pct)	  19.94 (4.67 pct)
+   32	  37.50 (0.00 pct)	  20.23 (-46.05 pct)	  36.87 (-1.68 pct)
+   64	  61.24 (0.00 pct)	  43.08 (-29.65 pct)	  62.96 (2.80 pct)
+  128	  67.16 (0.00 pct)	  69.08 (2.85 pct)	  67.34 (0.26 pct)
+  256	 154.59 (0.00 pct)	 162.33 (5.00 pct)	 156.78 (1.41 pct)
+  512	 154.02 (0.00 pct)	 156.74 (1.76 pct)	 153.48 (-0.35 pct)
+tbench power comparison:
+Clients:   acpi-cpufreq		   amd_pst+passive	   amd_pst+guided
+    1	   1.00 (0.00 pct)	   0.97 (-3.00 pct)	   1.08 (8.00 pct)
+    2	   1.04 (0.00 pct)	   0.97 (-6.73 pct)	   1.11 (6.73 pct)
+    4	   1.12 (0.00 pct)	   0.99 (-11.60 pct)	   1.18 (5.35 pct)
+    8	   1.25 (0.00 pct)	   1.04 (-16.80 pct)	   1.31 (4.80 pct)
+   16	   1.53 (0.00 pct)	   1.13 (-26.14 pct)	   1.58 (3.26 pct)
+   32	   2.01 (0.00 pct)	   1.36 (-32.33 pct)	   2.03 (0.99 pct)
+   64	   2.58 (0.00 pct)	   2.14 (-17.05 pct)	   2.61 (1.16 pct)
+  128	   2.80 (0.00 pct)	   2.81 (0.35 pct)	   2.81 (0.35 pct)
+  256	   3.39 (0.00 pct)	   3.43 (1.17 pct)	   3.42 (0.88 pct)
+  512	   3.44 (0.00 pct)	   3.44 (0.00 pct)	   3.44 (0.00 pct)
+
+Note: this series is based on top of EPP v11 [3] series
+
+Change log:
+
+v2 -> v3:
+- Addressed review comments form Mario.
+- Picked up RB tag from Mario.
+- Rebase on top of EPP v11 [3].
+
+v1 -> v2:
+- Fix issue with shared mem systems.
+- Rebase on top of EPP series.
+
+[1]: https://uefi.org/sites/default/files/resources/ACPI_6_3_final_Jan30.pdf
+[2]: https://lore.kernel.org/lkml/20221110175847.3098728-1-Perry.Yuan@amd.com/
+[3]: https://lore.kernel.org/linux-pm/20230118075210.447418-1-perry.yuan@amd.com/
 
 
-On 19.01.2023 04:04, Bjorn Andersson wrote:
-> On Fri, Jan 13, 2023 at 04:14:01AM +0100, Konrad Dybcio wrote:
->> The qcom_scm_lmh_dcvsh call can actually pass two values to the
->> secure world. The second value is used for example with the
->> LMH_FREQ_CAP function, which limits the maximum achievable frequency
->> directly from LMh. Add the missing arguments, handle them and update
->> the current usages of this function.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>  drivers/firmware/qcom_scm.c | 13 ++++++++-----
->>  drivers/thermal/qcom/lmh.c  | 28 ++++++++++++++--------------
->>  include/linux/qcom_scm.h    |  5 +++--
->>  3 files changed, 25 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index cdbfe54c8146..58a19a47e442 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -1252,12 +1252,13 @@ int qcom_scm_lmh_profile_change(u32 profile_id)
->>  }
->>  EXPORT_SYMBOL(qcom_scm_lmh_profile_change);
->>  
->> -int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
->> -		       u64 limit_node, u32 node_id, u64 version)
->> +int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val0,
->> +		       u32 payload_val1, u64 limit_node, u32 node_id,
->> +		       u64 version, bool has_val1)
-> 
-> Rather than always passing a dummy payload_val1 and then having has_val1
-> to indicate if it should be considered or not... how about moving the
-> payload last in the call, as a va_list with a "count" before that?
-Sounds neat, but..
+Wyes Karny (6):
+  acpi: cppc: Add min and max perf reg writing support
+  acpi: cppc: Add auto select register read/write support
+  cpufreq: amd_pstate: Add guided autonomous mode
+  Documentation: amd_pstate: Move amd_pstate param to alphabetical order
+  cpufreq: amd_pstate: Add guided mode control support via sysfs
+  Documentation: amd_pstate: Update amd_pstate status sysfs for guided
 
-> 
-> I.e:
-> 
-> int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u64 limit_node, u32 node_id,
-> 		       u64 version, unsigned int payload_count, ...)
-> 
->>  {
->>  	dma_addr_t payload_phys;
->>  	u32 *payload_buf;
->> -	int ret, payload_size = 5 * sizeof(u32);
->> +	int ret, payload_size = (5 + has_val1) * sizeof(u32);
-> 
-> allocate 4 + payload_count
-> 
->>  
->>  	struct qcom_scm_desc desc = {
->>  		.svc = QCOM_SCM_SVC_LMH,
->> @@ -1278,8 +1279,10 @@ int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
->>  	payload_buf[0] = payload_fn;
->>  	payload_buf[1] = 0;
->>  	payload_buf[2] = payload_reg;
->> -	payload_buf[3] = 1;
->> -	payload_buf[4] = payload_val;
->> +	payload_buf[3] = has_val1 ? 2 : 1;
->> +	payload_buf[4] = payload_val0;
->> +	if (has_val1)
->> +		payload_buf[5] = payload_val1;
-> 
-> Something like:
-> 
-> payload_buf[3] = payload_count;
-> va_start(ap, payload_count);
-> for (i = 0; i < payload_count; i++)
-> 	payload_buf[4 + i] = va_arg(ap, uint32_t);
-> va_end(ap);
-..can the call accept more arguments? And will they be
-interpreted in any way? Otherwise I may add also add
-WARN_ON() or something like this to prevent user error.
+ .../admin-guide/kernel-parameters.txt         |  41 ++--
+ Documentation/admin-guide/pm/amd-pstate.rst   |  32 ++-
+ drivers/acpi/cppc_acpi.c                      | 113 ++++++++++-
+ drivers/cpufreq/amd-pstate.c                  | 184 +++++++++++++-----
+ include/acpi/cppc_acpi.h                      |  11 ++
+ include/linux/amd-pstate.h                    |   2 +
+ 6 files changed, 302 insertions(+), 81 deletions(-)
 
-> 
-> 
-> 
-> That said, I don't see a single "true" below. Perhaps I'm missing it? I
-> would expect some code in the same series use the newly introduced
-> logic.
-Yeah there's no "true"s, this patch only refactored the
-code in preparation for 8998/660, but adding them as-is
-makes little sense before LMh_lite is also supported
-(AFAIUU this LMh_normal part is just an interface for OSM
-and the actual limits programming is either done on an
-internal-consensus-between-all-3-blocks basis OR just by
-LMh_lite. I can delay resending this series until the
-changes are actually required if you prefer.
+-- 
+2.34.1
 
-On newer SoCs LMh wakes up as part of OSM_secure/EPSS
-programming and needs little to no configuration
-externally (as you can see in this driver) and there's
-no external _lite block.
-
-Konrad
-> 
-> Thanks,
-> Bjorn
-> 
->>  
->>  	desc.args[0] = payload_phys;
->>  
->> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
->> index 5e8ff196c9a6..d2b5ea8322eb 100644
->> --- a/drivers/thermal/qcom/lmh.c
->> +++ b/drivers/thermal/qcom/lmh.c
->> @@ -147,23 +147,23 @@ static int lmh_probe(struct platform_device *pdev)
->>  		return -EINVAL;
->>  
->>  	if (flags & LMH_ENABLE_ALGOS) {
->> -		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
->> -					 LMH_NODE_DCVS, node_id, 0);
->> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1, 0,
->> +					 LMH_NODE_DCVS, node_id, 0, false);
->>  		if (ret)
->>  			dev_err(dev, "Error %d enabling current subfunction\n", ret);
->>  
->> -		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1,
->> -					 LMH_NODE_DCVS, node_id, 0);
->> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_REL, LMH_ALGO_MODE_ENABLE, 1, 0,
->> +					 LMH_NODE_DCVS, node_id, 0, false);
->>  		if (ret)
->>  			dev_err(dev, "Error %d enabling reliability subfunction\n", ret);
->>  
->> -		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1,
->> -					 LMH_NODE_DCVS, node_id, 0);
->> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_BCL, LMH_ALGO_MODE_ENABLE, 1, 0,
->> +					 LMH_NODE_DCVS, node_id, 0, false);
->>  		if (ret)
->>  			dev_err(dev, "Error %d enabling BCL subfunction\n", ret);
->>  
->> -		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1,
->> -					 LMH_NODE_DCVS, node_id, 0);
->> +		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_ALGO_MODE_ENABLE, 1, 0,
->> +					 LMH_NODE_DCVS, node_id, 0, false);
->>  		if (ret) {
->>  			dev_err(dev, "Error %d enabling thermal subfunction\n", ret);
->>  			return ret;
->> @@ -177,22 +177,22 @@ static int lmh_probe(struct platform_device *pdev)
->>  	}
->>  
->>  	/* Set default thermal trips */
->> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm,
->> -				 LMH_NODE_DCVS, node_id, 0);
->> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_ARM_THRESHOLD, temp_arm, 0,
->> +				 LMH_NODE_DCVS, node_id, 0, false);
->>  	if (ret) {
->>  		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
->>  		return ret;
->>  	}
->>  
->> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high,
->> -				 LMH_NODE_DCVS, node_id, 0);
->> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_HI_THRESHOLD, temp_high, 0,
->> +				 LMH_NODE_DCVS, node_id, 0, false);
->>  	if (ret) {
->>  		dev_err(dev, "Error setting thermal HI threshold%d\n", ret);
->>  		return ret;
->>  	}
->>  
->> -	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low,
->> -				 LMH_NODE_DCVS, node_id, 0);
->> +	ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_THERMAL, LMH_TH_LOW_THRESHOLD, temp_low, 0,
->> +				 LMH_NODE_DCVS, node_id, 0, false);
->>  	if (ret) {
->>  		dev_err(dev, "Error setting thermal ARM threshold%d\n", ret);
->>  		return ret;
->> diff --git a/include/linux/qcom_scm.h b/include/linux/qcom_scm.h
->> index 1e449a5d7f5c..9fd798d17fdd 100644
->> --- a/include/linux/qcom_scm.h
->> +++ b/include/linux/qcom_scm.h
->> @@ -117,8 +117,9 @@ extern int qcom_scm_hdcp_req(struct qcom_scm_hdcp_req *req, u32 req_cnt,
->>  extern int qcom_scm_iommu_set_pt_format(u32 sec_id, u32 ctx_num, u32 pt_fmt);
->>  extern int qcom_scm_qsmmu500_wait_safe_toggle(bool en);
->>  
->> -extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val,
->> -			      u64 limit_node, u32 node_id, u64 version);
->> +extern int qcom_scm_lmh_dcvsh(u32 payload_fn, u32 payload_reg, u32 payload_val0,
->> +			      u32 payload_val1, u64 limit_node, u32 node_id,
->> +			      u64 version, bool has_val1);
->>  extern int qcom_scm_lmh_profile_change(u32 profile_id);
->>  extern bool qcom_scm_lmh_dcvsh_available(void);
->>  
->> -- 
->> 2.39.0
->>
