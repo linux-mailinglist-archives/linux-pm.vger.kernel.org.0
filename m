@@ -2,51 +2,51 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F42673D0D
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:06:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3460673D19
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 16:08:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229686AbjASPGT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 10:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S229737AbjASPIc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 10:08:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjASPGS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:06:18 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D492B83C3;
-        Thu, 19 Jan 2023 07:06:17 -0800 (PST)
+        with ESMTP id S229575AbjASPIb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 10:08:31 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F3AA2D147;
+        Thu, 19 Jan 2023 07:08:30 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F75461C1E;
-        Thu, 19 Jan 2023 15:06:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF0BDC433EF;
-        Thu, 19 Jan 2023 15:06:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F0FD61C40;
+        Thu, 19 Jan 2023 15:08:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDCA1C433D2;
+        Thu, 19 Jan 2023 15:08:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674140776;
-        bh=ed/d1Vc476vyDl5PAf6BZKDeh52LAXW4QTKCR29Wwos=;
+        s=k20201202; t=1674140908;
+        bh=gWg8R9h32+YanBxUrwFptR8qDXzcix128ZijjGUPXE8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G+qBScBy5NjwE5b+jFH2oJR4GBZxRf3rwDsZDXzMUG2u4Z2TKPAlcej+oJ8Tt8CLC
-         dUshQoe7+t30T5JtUpSjXsy9Wr25/iGgjBIdZUSlncyhzLq2ZO8YXYOCUOYDTo/aD2
-         VxbXCMMACZURN6ojxDnP4V2Uwuv/1lXWKpKDhKy4MjzhSc/xhdtVm2R/qig/ml6A3W
-         R6Sye8BvYGnBvqMXx6OZE1oEdjF782aSwWp4nqFkZKtvjGHS0QWiH+utpz45h5JFQ1
-         O7gjpD6Vb2yxR8jdIlDTc5uOETRdmJvlLdyPCS3EtpwEuuzV+Xyl23qf5ek6Qmp2+1
-         9dYHPohTlge2A==
-Date:   Thu, 19 Jan 2023 15:06:11 +0000
+        b=mvK3Qp86sII9omRQ4/aay2babUNA9v1MIJZRUV9u1rbIV4KoVcJX4Hfca98s02BrI
+         iUklylOMQRJQpNLJGzSeX6ltjSHcZSqfB+kvt7UajQmRCAqbX0Easa5XxsEwDk5wl/
+         S5MYRv3bpqgRPpt4C+WNt6AGozO17xej5Il4ILP+nAOSdOyjEEr49rIja2muhF64yV
+         TqPTZfwvGnH7CGDnPaLkejVqcMtw4f8atkZAO5FV1kzMmbwUFOiFcZ5VrZ3/0mRqCA
+         8pz0ZgZ1NLOp/Z/AzScVH0WMKwNwJZG9Lc+QYqogVdOOqsrgAuwJk5HhZM70fNT2ar
+         //uv4wgIQdDDQ==
+Date:   Thu, 19 Jan 2023 15:08:23 +0000
 From:   Lee Jones <lee@kernel.org>
 To:     Saravanan Sekar <sravanhome@gmail.com>
 Cc:     sre@kernel.org, jic23@kernel.org, lars@metafoo.de,
         andy.shevchenko@gmail.com, linux-pm@vger.kernel.org,
         linux-iio@vger.kernel.org
-Subject: Re: [PATCH v6 3/7] mfd: mp2629: introduce chip id machanism to
- distinguish chip
-Message-ID: <Y8lcY/hhDSEw9Mt3@google.com>
+Subject: Re: [PATCH v6 4/7] mfd: mp2629: Add support for mps mp2733 battery
+ charger
+Message-ID: <Y8lc52I7A9TkWpMa@google.com>
 References: <20221123175425.564042-1-sravanhome@gmail.com>
- <20221123175425.564042-4-sravanhome@gmail.com>
+ <20221123175425.564042-5-sravanhome@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221123175425.564042-4-sravanhome@gmail.com>
+In-Reply-To: <20221123175425.564042-5-sravanhome@gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -56,78 +56,26 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-"Use DT API to pass through chip ID"
+MP2733, MP2629, MPS, Battery Charge Management? 
 
 On Wed, 23 Nov 2022, Saravanan Sekar wrote:
 
-> Introduce chip id machanism to distinguish chip
-
-Please be more imaginative than simply repeating the subject line.
-
-Also: "ID"
- 
+> mp2733 is updated version of mp2629 battery charge management
+> device for single-cell Li-ion or Li-polymer battery. Additionally
+> supports USB fast-charge and higher range of input voltage.
+> 
 > Signed-off-by: Saravanan Sekar <sravanhome@gmail.com>
 > Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 > ---
->  drivers/mfd/mp2629.c       | 4 +++-
->  include/linux/mfd/mp2629.h | 5 +++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mfd/mp2629.c b/drivers/mfd/mp2629.c
-> index f4c5aa06f38c..a3fc02ad5ec1 100644
-> --- a/drivers/mfd/mp2629.c
-> +++ b/drivers/mfd/mp2629.c
-> @@ -13,6 +13,7 @@
->  #include <linux/mfd/mp2629.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/property.h>
->  #include <linux/regmap.h>
->  #include <linux/slab.h>
->  
-> @@ -43,6 +44,7 @@ static int mp2629_probe(struct i2c_client *client)
->  		return -ENOMEM;
->  
->  	ddata->dev = &client->dev;
-> +	ddata->chip_id = (uintptr_t)device_get_match_data(&client->dev);
->  	i2c_set_clientdata(client, ddata);
->  
->  	ddata->regmap = devm_regmap_init_i2c(client, &mp2629_regmap_config);
-> @@ -60,7 +62,7 @@ static int mp2629_probe(struct i2c_client *client)
->  }
->  
->  static const struct of_device_id mp2629_of_match[] = {
-> -	{ .compatible = "mps,mp2629"},
-> +	{ .compatible = "mps,mp2629", .data = (void *)CHIP_ID_MP2629 },
+>  drivers/mfd/mp2629.c       | 1 +
+>  include/linux/mfd/mp2629.h | 1 +
+>  2 files changed, 2 insertions(+)
 
+Once the above has been fixed, please add my:
 
-Is this value something you can ask the H/W for?
+For my own reference (apply this as-is to your sign-off block):
 
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(of, mp2629_of_match);
-> diff --git a/include/linux/mfd/mp2629.h b/include/linux/mfd/mp2629.h
-> index 89b706900b57..072c8181b48b 100644
-> --- a/include/linux/mfd/mp2629.h
-> +++ b/include/linux/mfd/mp2629.h
-> @@ -9,9 +9,14 @@
->  #include <linux/device.h>
->  #include <linux/regmap.h>
->  
-> +enum mp2xx_chip_id {
-> +	CHIP_ID_MP2629,
-> +};
-> +
->  struct mp2629_data {
->  	struct device *dev;
->  	struct regmap *regmap;
-> +	enum mp2xx_chip_id chip_id;
->  };
->  
->  enum mp2629_adc_chan {
-> -- 
-> 2.34.1
-> 
+Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 
 -- 
 Lee Jones [李琼斯]
