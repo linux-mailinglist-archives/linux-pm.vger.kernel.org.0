@@ -2,57 +2,76 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D1D672F60
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 04:05:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2CD67310D
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 06:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229760AbjASDFY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 18 Jan 2023 22:05:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
+        id S229482AbjASFQb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 00:16:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbjASDFW (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 18 Jan 2023 22:05:22 -0500
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0EB3803A;
-        Wed, 18 Jan 2023 19:05:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id ECC4ACE2019;
-        Thu, 19 Jan 2023 03:05:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59BB4C433EF;
-        Thu, 19 Jan 2023 03:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674097516;
-        bh=/7NZO+eNjezMVSczrtOiyCfSUTdU+G5FtJU4hgZgVdY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oQGHV6HMkNhqAFK0CGFPZMow8KBbtsCHl2IdPf0uvAjfbCZ5mYfe2WHN/DlMwmD74
-         pJ8odHKi0PdSkK4a/tQ6R1YdJrgPy6xb9oCArrq6BRjhzTycBF/RsqV8wQAZ2nSAWH
-         A7drFeVhqqn9D40M1X2/nt5ZmcxVCrPJYVOQ2jdt+bnUsZu1KUWHGkXhMkKMKLei/8
-         6XwtOz4WWMH+3hneT/rX+OUSPPjvCvT05htc80Q8rXFtVMJQz2yBV0Dr8p3Fgj/pmf
-         LqF8YJQNlEX8513QNHIql+tLLDRADBjemRwefvyb0NwCu3skObhjA6HB/3A/cKMm4B
-         hHHeBYBMXJ3wg==
-Date:   Wed, 18 Jan 2023 21:05:13 -0600
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org, marijn.suijten@somainline.org,
+        with ESMTP id S229468AbjASFQa (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 00:16:30 -0500
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1516AC9
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 21:16:28 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id 20so1299818plo.3
+        for <linux-pm@vger.kernel.org>; Wed, 18 Jan 2023 21:16:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FVamRwg47e7JomZYS51/vFhQgPnkTMn8aAsEafDtbAQ=;
+        b=MFge/j3m75+cZ8vY8wmYW63HFOJqHiWd3Pdhn/69Mx/Dri4LxllCHnx+BKs5f8czes
+         yYAj9oWFFHXmC+hmuDEmQLC8dcBBI2POx1fRwR/5A0AP2+Jbjrh9+Ut22z7C0mYWun8i
+         YnZQgVWGQ9MiFjaWN4yObw59YzcuyliXqdRGYl1nXaPl05kVQmdooeJTq1iGM4jngryB
+         m8RKB6f1F1ISPS7+hUKUvXY5cjLlibn76LiQe6TEy+tf4VDtLteFdCK8xH2g3VNewvm+
+         4leX7Hx6RHJWi0kzVVvtbgchj1OSh2QZGtNli7S3SF77WzH1y7I6DX3X6UgaKv7bOysa
+         Tpiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FVamRwg47e7JomZYS51/vFhQgPnkTMn8aAsEafDtbAQ=;
+        b=C0PwvANlfCxCQM0hd3TgyLNt5twl9g1L8H/cTivL67GKkppBFCKMwLESESXE7kRdwQ
+         CkrmJSUcnlqdfYUrHYvQbGOWFlbY7P27lKPdUlSJIwVyzVUMQyH8CD9bxo1BXXHcIzd+
+         4mXOcQQE4pr1xiZZo0u1D6i42Iwg3rX2sj3/JqUxDeXXC1eQGHw28eMckPbjEABSi13c
+         khxqyLRgF8rKSZ2S7slm0eHOLNbYfxOk4lKXQbjpLJlvN1cWWTxJ7RDpN/E0KY2YBjxE
+         hAkbw8K6efegCR1dZjFDLagE65zjVmpri0So5sSQH1BmdHP3EDPjXGgOpVeR+OZYvf1g
+         t7SQ==
+X-Gm-Message-State: AFqh2koS/omwu87bcaaGxwktcDrRb96ErtlxkaU/ee1litgk8zx+SqUG
+        qTOOnv3MFgzjfu6tOm670+ieAg==
+X-Google-Smtp-Source: AMrXdXts8rSAKygqpdeOjQR88r50roQumtOlj18cpeCK2uCLtB5aIdQseFMbUVRQgkXTKg1E1qm+mw==
+X-Received: by 2002:a17:902:c24c:b0:194:7696:b0f9 with SMTP id 12-20020a170902c24c00b001947696b0f9mr22640309plg.66.1674105387586;
+        Wed, 18 Jan 2023 21:16:27 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id n8-20020a170902e54800b001894198d0ebsm9529061plf.24.2023.01.18.21.16.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Jan 2023 21:16:26 -0800 (PST)
+Date:   Thu, 19 Jan 2023 10:46:25 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        Zhang Rui <rui.zhang@intel.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] thermal/drivers/qcom/lmh: Use driver data as flags
- instead of bool
-Message-ID: <20230119030513.eyj3o2b7yugisvqy@builder.lan>
-References: <20230113031401.2336157-1-konrad.dybcio@linaro.org>
- <20230113031401.2336157-2-konrad.dybcio@linaro.org>
+Subject: Re: [PATCH V4 1/3] thermal: core: call put_device() only after
+ device_register() fails
+Message-ID: <20230119051625.bd4dtnriw6jys6nt@vireshk-i7>
+References: <cover.1674030722.git.viresh.kumar@linaro.org>
+ <d6e5d4fcca5f66d290e907d10c45cb2e7bbb09e5.1674030722.git.viresh.kumar@linaro.org>
+ <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230113031401.2336157-2-konrad.dybcio@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CAJZ5v0j5Rfw7pj05WsNka0BCNOszxsvPuMfNH8Kh88J+QZFHfA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,63 +79,29 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 13, 2023 at 04:14:00AM +0100, Konrad Dybcio wrote:
-> Currently the OF driver data is used to determine whether to manually
-> enable the LMH algorithms through secure calls. In preparation for
-> introducing support for SoCs with a configuration that differs from
-> both SDM845 and SM8150, convert this to a set of bitflags for more
-> flexibility.
+On 18-01-23, 20:58, Rafael J. Wysocki wrote:
+> On Wed, Jan 18, 2023 at 9:38 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > put_device() shouldn't be called before a prior call to
+> > device_register(). __thermal_cooling_device_register() doesn't follow
+> > that properly and needs fixing. Also
+> > thermal_cooling_device_destroy_sysfs() is getting called unnecessarily
+> > on few error paths.
+> >
+> > Fix all this by placing the calls at the right place.
+> >
+> > Based on initial work done by Caleb Connolly.
+> >
+> > Fixes: 4748f9687caa ("thermal: core: fix some possible name leaks in error paths")
+> > Fixes: c408b3d1d9bb ("thermal: Validate new state in cur_state_store()")
+> > Reported-by: Caleb Connolly <caleb.connolly@linaro.org>
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/thermal/qcom/lmh.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/thermal/qcom/lmh.c b/drivers/thermal/qcom/lmh.c
-> index 4122a51e9874..5e8ff196c9a6 100644
-> --- a/drivers/thermal/qcom/lmh.c
-> +++ b/drivers/thermal/qcom/lmh.c
-> @@ -28,7 +28,7 @@
->  
->  #define LMH_REG_DCVS_INTR_CLR		0x8
->  
-> -#define LMH_ENABLE_ALGOS		1
-> +#define LMH_ENABLE_ALGOS		BIT(0)
+> OK, so I think that this patch is needed for 6.2 and the other two may
+> be queued up for later (they do depend on this one, though, of
+> course).  Is my understanding correct?
 
-Looks perfectly fine, but please include a patch in the same series that
-adds another bit. And don't forget to update the .data in the
-of_match_id listing.
+Right.
 
-Regards,
-Bjorn
-
->  
->  struct lmh_hw_data {
->  	void __iomem *base;
-> @@ -92,9 +92,11 @@ static int lmh_probe(struct platform_device *pdev)
->  	struct device_node *cpu_node;
->  	struct lmh_hw_data *lmh_data;
->  	int temp_low, temp_high, temp_arm, cpu_id, ret;
-> -	unsigned int enable_alg;
-> +	unsigned int flags;
->  	u32 node_id;
->  
-> +	flags = (uintptr_t)of_device_get_match_data(dev);
-> +
->  	lmh_data = devm_kzalloc(dev, sizeof(*lmh_data), GFP_KERNEL);
->  	if (!lmh_data)
->  		return -ENOMEM;
-> @@ -144,9 +146,7 @@ static int lmh_probe(struct platform_device *pdev)
->  	if (!qcom_scm_lmh_dcvsh_available())
->  		return -EINVAL;
->  
-> -	enable_alg = (uintptr_t)of_device_get_match_data(dev);
-> -
-> -	if (enable_alg) {
-> +	if (flags & LMH_ENABLE_ALGOS) {
->  		ret = qcom_scm_lmh_dcvsh(LMH_SUB_FN_CRNT, LMH_ALGO_MODE_ENABLE, 1,
->  					 LMH_NODE_DCVS, node_id, 0);
->  		if (ret)
-> -- 
-> 2.39.0
-> 
+-- 
+viresh
