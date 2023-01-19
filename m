@@ -2,332 +2,500 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF5E26739A8
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 14:12:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C57E66739BA
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Jan 2023 14:16:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjASNMo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Thu, 19 Jan 2023 08:12:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S230282AbjASNQy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-pm@lfdr.de>); Thu, 19 Jan 2023 08:16:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjASNMS (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 08:12:18 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E79887A503
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 05:10:45 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id r2so1805783wrv.7
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 05:10:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=blNpZwh2SZlig8QQ/nC77W3/O0N7mDjpaqH8VDOv2eU=;
-        b=DzFy88bDZoVlfwhHlTp6yaa4pDvXz2S+rRv+4hM9hJnwR6Pea0ryUtzFRVDKTcUUsl
-         M4WGeBQ4f5np3UXyL67X+o7x7P/J5qmVp0R5lkDakCtZEQtlusfYKHLxzghATAV4nd0a
-         z98YCC83E6ttozJrFFjGynwEZszZmhKvl9UoIjEdSD7XkJiDRHgQRbis6wO6FxJADvfK
-         cktGAaPSDhZo4THEOHj8dKlw+WulH7V4oQJ2on2nX0h1OfkOosTQ7XIRanih5OYRUAxK
-         ltD8viS7fmAMLiiNqe9YAR8H52ZHuJTSCfhfO8zLeGpcQBwvgn9pof+aob41Ehwdclxf
-         BgQg==
+        with ESMTP id S231286AbjASNQd (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 08:16:33 -0500
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58906273B;
+        Thu, 19 Jan 2023 05:16:04 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id hw16so5512543ejc.10;
+        Thu, 19 Jan 2023 05:16:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=blNpZwh2SZlig8QQ/nC77W3/O0N7mDjpaqH8VDOv2eU=;
-        b=xpVDBF3zkEA01iZ3hJVM0KwgCu13B7DhekGuSZ7zYhJZiYhIgo9dpTFG7KywzfEE71
-         Yy9DyreTkJyua1kIZ0/oIibxqhdTABJgubYzZyj62nasweXD+711sHED3haNOaIO/BMm
-         YU2DjBhqosElO7tuj6mHJUfVObN1sHZTRTVZbSu5g+R5+3cs9ILIpVTlgvgyqoQHcrB8
-         Gs/FX1KJOTZKhzVnZV4QiPGBn8vKSy6WY95vG7SwXGIsQ5hNl1vB3P2AzyWB9sEUVgz2
-         I21/xVCD216oOExZ9g3QDaGYxZSL9A2itQf+7gLuFzJ4vy0iASe/Ll/7hko8O+zNEmK/
-         gf7w==
-X-Gm-Message-State: AFqh2ko8ERp4V+LoHZWq7DshZCG7shClxo3g3+lsX7tmGz5lVeRLOm2Y
-        2lR9MtPZ6Aqu0Al0nF78mf3D3A==
-X-Google-Smtp-Source: AMrXdXvrY6LK2dvL+iGhjr8puYL3YHweG43wf3Hfc7anlN9+EMnZ5/F6pOfVqjpVCAvI/2eVrdRgvw==
-X-Received: by 2002:a05:6000:1816:b0:2bd:fe5a:b579 with SMTP id m22-20020a056000181600b002bdfe5ab579mr8424345wrh.70.1674133837495;
-        Thu, 19 Jan 2023 05:10:37 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id f16-20020a5d50d0000000b002755e301eeasm15881791wrt.100.2023.01.19.05.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Jan 2023 05:10:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-pwm@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: drop type for operating-points-v2
-Date:   Thu, 19 Jan 2023 14:10:33 +0100
-Message-Id: <20230119131033.117324-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fuPJLNGabGsbrlhOcRlric/iKXyS+94jimdrGMQDzRE=;
+        b=3ay//uwSRm4bvKkKKm3HECMN2gdhLqJGLzK5y5oXcz5D2qf9ukl6Y6bDXdgiFgFqjf
+         N3CfUa7bbGmS456SMhYokfkdSYaVpBAwJx4mePpM0uY3gVHVgaPvGg2zOI9VAeo3kXA5
+         pK7571tS2ZeUsaFdptREICkSPlQmf/HwhYtSbVRv7a8zX8rN61EjKIybqf+MefjzEoHu
+         vvdW+5frlT5AVDv+1ntM7ZZlomLaps5jpMxyrGj2KIuAeDiFlsjNJff8oTHRKQqdztSN
+         Ie8PidHluP9pNjIjdkQu6DPyP19YmNmlzSRwXguXmyxcyAdQXH6CqOpEmZH6zxD7vRVu
+         9aTg==
+X-Gm-Message-State: AFqh2kr+71It4lMiLMcu+qZj7wccAqiZwC0POn9W+oPQhsMXsIcSk1ZQ
+        56pskvtd/tfSNou0TXrBfkforCdoNRnBzmhEISA=
+X-Google-Smtp-Source: AMrXdXtOG5Q7pPaecvDpTIChm1p3y9e1jZJMVt2IIBa/XY1dr4U4h/3wyHk7G/kRC5FQymcC4cIkmjFw5tOuEVroZ8I=
+X-Received: by 2002:a17:906:a20c:b0:7c1:5ff0:6cc2 with SMTP id
+ r12-20020a170906a20c00b007c15ff06cc2mr914845ejy.246.1674134162844; Thu, 19
+ Jan 2023 05:16:02 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230113180235.1604526-1-daniel.lezcano@linaro.org> <20230113180235.1604526-2-daniel.lezcano@linaro.org>
+In-Reply-To: <20230113180235.1604526-2-daniel.lezcano@linaro.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 19 Jan 2023 14:15:51 +0100
+Message-ID: <CAJZ5v0jDF9qrQAQM1AhT-Q4A3Nzyht9XxZoZyS1afoAPt1h_=A@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] thermal/acpi: Add ACPI trip point routines
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, rui.zhang@intel.com,
+        christophe.jaillet@wanadoo.fr
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The type for operating-points-v2 property is coming from dtschema
-(/schemas/opp/opp.yaml), so individual bindings can just use simple
-"true".
+On Fri, Jan 13, 2023 at 7:02 PM Daniel Lezcano
+<daniel.lezcano@linaro.org> wrote:
+>
+> The ACPI specification describes the trip points, the device tree
+> bindings as well.
+>
+> The OF code uses the generic trip point structures.
+>
+> The ACPI has their own trip points structure and uses the get_trip_*
+> ops to retrieve them.
+>
+> We can do the same as the OF code and create a set of ACPI functions
+> to retrieve a trip point description. Having a common code for ACPI
+> will help to cleanup the remaining Intel drivers and get rid of the
+> get_trip_* functions.
+>
+> These changes add the ACPI thermal calls to retrieve the basic
+> information we need to be reused in the thermal ACPI and Intel
+> drivers.
+>
+> The different ACPI functions have the generic trip point structure
+> passed as parameter where it is filled.
+>
+> This structure aims to be the one used by all the thermal drivers and
+> the thermal framework.
+>
+> After this series, a couple of Intel drivers and the ACPI thermal
+> driver will still have their own trip points definition but a new
+> series on top of this one will finish the conversion to the generic
+> trip point handling.
+>
+> This series depends on the generic trip point added to the thermal
+> framework and available in the thermal/linux-next branch.
+>
+>  https://lkml.org/lkml/2022/10/3/456
+>
+> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
+> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Some names of the functions defined below can be less cryptic IMO.
+Please see the following comments.
 
----
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/Kconfig        |   4 +
+>  drivers/thermal/Makefile       |   1 +
+>  drivers/thermal/thermal_acpi.c | 209 +++++++++++++++++++++++++++++++++
+>  include/linux/thermal.h        |   8 ++
+>  4 files changed, 222 insertions(+)
+>  create mode 100644 drivers/thermal/thermal_acpi.c
+>
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index e052dae614eb..eaeb2b2ee6e9 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -76,6 +76,10 @@ config THERMAL_OF
+>           Say 'Y' here if you need to build thermal infrastructure
+>           based on device tree.
+>
+> +config THERMAL_ACPI
+> +       depends on ACPI
+> +       bool
+> +
+>  config THERMAL_WRITABLE_TRIPS
+>         bool "Enable writable trip points"
+>         help
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 2506c6c8ca83..60f0dfa9aae2 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -13,6 +13,7 @@ thermal_sys-$(CONFIG_THERMAL_NETLINK)         += thermal_netlink.o
+>  # interface to/from other layers providing sensors
+>  thermal_sys-$(CONFIG_THERMAL_HWMON)            += thermal_hwmon.o
+>  thermal_sys-$(CONFIG_THERMAL_OF)               += thermal_of.o
+> +thermal_sys-$(CONFIG_THERMAL_ACPI)             += thermal_acpi.o
+>
+>  # governors
+>  thermal_sys-$(CONFIG_THERMAL_GOV_FAIR_SHARE)   += gov_fair_share.o
+> diff --git a/drivers/thermal/thermal_acpi.c b/drivers/thermal/thermal_acpi.c
+> new file mode 100644
+> index 000000000000..ef6f10713650
+> --- /dev/null
+> +++ b/drivers/thermal/thermal_acpi.c
+> @@ -0,0 +1,209 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2022 Linaro Limited
+> + *
+> + * Author: Daniel Lezcano <daniel.lezcano@linaro.org>
+> + *
+> + * ACPI thermal configuration
+> + */
+> +#include <linux/acpi.h>
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/units.h>
+> +#include <uapi/linux/thermal.h>
+> +
+> +#include "thermal_core.h"
+> +
+> +/*
+> + * An hysteresis value below zero is invalid and we can consider a
+> + * value greater than 20°K/°C is invalid too.
+> + */
+> +#define HYSTERESIS_MIN_DECIK   0
+> +#define HYSTERESIS_MAX_DECIK   200
 
-This depends on my pull request, at least logically:
-https://github.com/devicetree-org/dt-schema/pull/95
+If the full word "hysteresis" is used here, it should also be used in
+the hysteresis-related names below.
 
-Patch could be applied in parallel but only if above PULL is
-accepted/correct.
----
- .../devicetree/bindings/display/msm/dp-controller.yaml         | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml   | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml | 3 +--
- .../bindings/display/tegra/nvidia,tegra20-host1x.yaml          | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml  | 3 +--
- .../devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml   | 3 +--
- .../devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml          | 3 +--
- .../devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml          | 3 +--
- Documentation/devicetree/bindings/power/power-domain.yaml      | 3 ---
- Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml  | 3 +--
- 15 files changed, 14 insertions(+), 31 deletions(-)
+I would use the "hyst" abbreviation here and elsewhere where applicable.
 
-diff --git a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-index 3e54956e57db..d7678fcd1710 100644
---- a/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-+++ b/Documentation/devicetree/bindings/display/msm/dp-controller.yaml
-@@ -71,8 +71,7 @@ properties:
-     items:
-       - const: dp
- 
--  operating-points-v2:
--    maxItems: 1
-+  operating-points-v2: true
- 
-   opp-table: true
- 
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
-index 6eedee503aa0..69be95afd562 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml
-@@ -59,8 +59,7 @@ properties:
-   iommus:
-     maxItems: 1
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-index 75546f250ad7..511cbe74e729 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml
-@@ -47,8 +47,7 @@ properties:
-     items:
-       - const: dsi
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     maxItems: 1
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
-index 0d55e6206b5e..3c095a5491fe 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml
-@@ -46,8 +46,7 @@ properties:
-   interconnect-names:
-     maxItems: 4
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-index bf38accd98eb..1026b0bc3dc8 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml
-@@ -49,8 +49,7 @@ properties:
-   interconnect-names:
-     maxItems: 4
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-index 4755a73473c7..59a52e732ca3 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml
-@@ -51,8 +51,7 @@ properties:
-     minItems: 4
-     maxItems: 10
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     minItems: 1
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-index 035b9f1f2eb5..f65e59cfffa7 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml
-@@ -50,8 +50,7 @@ properties:
-     items:
-       - const: hdmi
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
-index 913ca104c871..94c5242c03b2 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-host1x.yaml
-@@ -90,8 +90,7 @@ properties:
-     items:
-       - const: dma-mem # read
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
-index 5f4f0fb4b692..2cd3e60cd0a8 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml
-@@ -47,8 +47,7 @@ properties:
-   interconnect-names:
-     maxItems: 6
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
-index 467b015e5700..6c84d8b7eb7b 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml
-@@ -30,8 +30,7 @@ properties:
-     items:
-       - description: module clock
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-index 782a4b10150a..a42bf33d1e7d 100644
---- a/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-+++ b/Documentation/devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml
-@@ -55,8 +55,7 @@ properties:
-     minItems: 4
-     maxItems: 5
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml b/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml
-index 481901269872..02f0b0462377 100644
---- a/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml
-+++ b/Documentation/devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml
-@@ -44,8 +44,7 @@ properties:
-     items:
-       - const: fuse
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
-index fe0270207622..fda0b45ee577 100644
---- a/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml
-@@ -82,8 +82,7 @@ properties:
-   iommus:
-     maxItems: 1
- 
--  operating-points-v2:
--    $ref: "/schemas/types.yaml#/definitions/phandle"
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
-diff --git a/Documentation/devicetree/bindings/power/power-domain.yaml b/Documentation/devicetree/bindings/power/power-domain.yaml
-index 889091b9814f..d1235e562041 100644
---- a/Documentation/devicetree/bindings/power/power-domain.yaml
-+++ b/Documentation/devicetree/bindings/power/power-domain.yaml
-@@ -43,9 +43,6 @@ properties:
-       domain would be considered as capable of being powered-on or powered-off.
- 
-   operating-points-v2:
--    $ref: /schemas/types.yaml#/definitions/phandle-array
--    items:
--      maxItems: 1
-     description:
-       Phandles to the OPP tables of power domains provided by a power domain
-       provider. If the provider provides a single power domain only or all
-diff --git a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
-index 739d3155dd32..41cea4979132 100644
---- a/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
-+++ b/Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml
-@@ -63,8 +63,7 @@ properties:
-   pinctrl-1:
-     description: configuration for the sleep state
- 
--  operating-points-v2:
--    $ref: /schemas/types.yaml#/definitions/phandle
-+  operating-points-v2: true
- 
-   power-domains:
-     items:
--- 
-2.34.1
+> +
+> +/*
+> + * Minimum temperature for full military grade is 218°K (-55°C) and
+> + * max temperature is 448°K (175°C). We can consider those values as
+> + * the boundaries for the [trips] temperature returned by the
+> + * firmware. Any values out of these boundaries can be considered
+> + * bogus and we can assume the firmware has no data to provide.
+> + */
+> +#define TEMPERATURE_MIN_DECIK  2180
+> +#define TEMPERATURE_MAX_DECIK  4480
 
+Like the above, but regarding "temperature" and "temp" instead of
+"hysteresis" and "hyst", respectively.
+
+> +
+> +static int thermal_acpi_get_temperature_object(struct acpi_device *adev,
+> +                                              char *object, int *temperature)
+
+So this would become thermal_acpi_get_temp_object(). or even
+thermal_acpi_get_temp() because it really returns the temperature
+value.
+
+I also don't particularly like returning values via pointers, which is
+entirely avoidable here, because the temperature value obtained from
+the ACPI control methods must be a positive number.
+
+So I would make it
+
+static int thermal_acpi_get_temp(struct acpi_device *adev, char *object_name)
+{
+
+which would be consistent with the definition of the hysteresis
+function below (which returns the value directly).
+
+> +{
+> +       unsigned long long temp;
+> +       acpi_status status;
+> +
+> +       status = acpi_evaluate_integer(adev->handle, object, NULL, &temp);
+> +       if (ACPI_FAILURE(status)) {
+> +               acpi_handle_debug(adev->handle, "No temperature object '%s'\n", object);
+
+This message may not be true, because status need not be AE_NOT_FOUND.
+
+> +               return -ENODEV;
+> +       }
+> +
+> +       if (temp < TEMPERATURE_MIN_DECIK || temp >= TEMPERATURE_MAX_DECIK) {
+> +               acpi_handle_info(adev->handle, "Invalid temperature '%llu deci°K' for object '%s'\n",
+> +                                temp, object);
+
+I think that the message can be debug-level as well and I would just
+say "Invalid value %llu returned by %s\n" in it.
+
+> +               return -ENODATA;
+
+And I'm not sure if the difference between -ENODEV and -ENODATA
+matters here.  Maybe return -ENODATA in all error cases?
+
+> +       }
+> +
+> +       *temperature = deci_kelvin_to_millicelsius(temp);
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * thermal_acpi_trip_gtsh() - Get the global hysteresis value
+
+thermal_acpi_global_hyst() please.
+
+> + * @adev: the acpi device to get the description from
+> + *
+> + * Get the global hysteresis value for the trip points. If any call
+> + * fail, we shall return a zero hysteresis value.
+> + *
+> + * Return: An integer between %HYSTERESIS_MIN_DECIK and %HYSTERESIS_MAX_DECIK
+> + */
+> +int thermal_acpi_trip_gtsh(struct acpi_device *adev)
+> +{
+> +       unsigned long long hyst;
+> +       acpi_status status;
+> +
+> +       status = acpi_evaluate_integer(adev->handle, "GTSH", NULL, &hyst);
+
+GTSH is not a standard ACPI thing.
+
+AFAICS, it's int3403 specific, so using it in a generic ACPI library
+is questionable.
+
+> +       if (ACPI_FAILURE(status))
+> +               return 0;
+> +
+> +       if (hyst < HYSTERESIS_MIN_DECIK || hyst >= HYSTERESIS_MAX_DECIK) {
+> +               acpi_handle_info(adev->handle, "Invalid hysteresis '%llu deci°K' for object 'GTSH'\n",
+> +                                hyst);
+> +               return 0;
+> +       }
+> +
+> +       return deci_kelvin_to_millicelsius(hyst);
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_gtsh);
+> +
+> +/**
+> + * thermal_acpi_trip_act() - Get the specified active trip point
+
+thermal_acpi_active_trip_temp, please.
+
+> + * @adev: the acpi device to get the description from
+
+Please spell ACPI in capitals in all comments.
+
+And I would say
+
+@adev: Thermal zone ACPI device object
+
+> + * @trip: a &struct thermal_trip to be filled if the function succeed
+
+@trip: Trip point structure to be populated on success
+
+> + * @id: an integer speciyfing the active trip point id
+
+@id: Active cooling level (0 - 9)
+
+> + *
+> + * The function calls the ACPI framework to get the "_ACTx" objects
+> + * which describe the active trip points.
+
+No, it doesn't do that.  What it really does can be described as
+
+"Evaluate the _ACx object for the thermal zone represented by @adev to
+obtain the temperature of the active cooling trip point corresponding
+to the active cooling level given by @id and initialize @trip as an
+active trip point using that temperature value"
+
+> The @id builds the "_ACTx"
+> + * string with the numbered active trip point name. Then it fills the
+> + * @trip structure with the information retrieved from those objects.
+> + *
+> + * Return:
+> + * * 0 - Success
+> + * * -ENODEV - Failed to retrieve the ACPI object
+> + * * -ENODATA - The ACPI object value appears to be inconsistent
+> + */
+> +int thermal_acpi_trip_act(struct acpi_device *adev,
+> +                         struct thermal_trip *trip, int id)
+> +{
+> +       char name[5];
+
+char name[] = "_AC0";
+
+> +       int ret;
+
+int temp;
+
+if (id < 0 || id > 9)
+        return -EINVAL;
+
+name[3] += id;
+
+> +
+> +       sprintf(name, "_AC%d", id);
+> +
+> +       ret = thermal_acpi_get_temperature_object(adev, name, &trip->temperature);
+> +       if (ret)
+> +               return ret;
+
+temp = thermal_acpi_get_temp(adev, name);
+if (temp < 0)
+        return temp;
+
+trip->temperature = temp;
+
+And analogously below.
+
+> +
+> +       trip->hysteresis = 0;
+> +       trip->type = THERMAL_TRIP_ACTIVE;
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_act);
+> +
+> +/**
+> + * thermal_acpi_trip_psv() - Get the passive trip point
+
+thermal_acpi_passive_trip_temp, please.
+
+> + * @adev: the acpi device to get the description from
+> + * @trip: a &struct thermal_trip to be filled if the function succeed
+
+The same comments as above apply.
+
+> + *
+> + * The function calls the ACPI framework to get the "_PSV" object
+> + * which describe the passive trip point. Then it fills the @trip
+> + * structure with the information retrieved from those objects.
+
+"Evaluate the _PSV object for the thermal zone represented by @adev to
+obtain the temperature of the passive cooling trip point and
+initialize @trip as a passive trip point using that temperature
+value."
+
+> + *
+> + * Return:
+> + * * 0 - Success
+> + * * -ENODEV - Failed to retrieve the ACPI object
+> + * * -ENODATA - The ACPI object value appears to be inconsistent
+> + */
+> +int thermal_acpi_trip_psv(struct acpi_device *adev, struct thermal_trip *trip)
+> +{
+> +       int ret;
+> +
+> +       ret = thermal_acpi_get_temperature_object(adev, "_PSV", &trip->temperature);
+> +       if (ret)
+> +               return ret;
+> +
+> +       trip->hysteresis = 0;
+> +       trip->type = THERMAL_TRIP_PASSIVE;
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_psv);
+> +
+> +/**
+> + * thermal_acpi_trip_hot() - Get the near critical trip point
+
+thermal_acpi_hot_trip_temp, please.
+
+> + * @adev: the acpi device to get the description from
+> + * @trip: a &struct thermal_trip to be filled if the function succeed
+
+The same comments as above apply.
+
+> + *
+> + * The function calls the ACPI framework to get the "_HOT" object
+> + * which describe the hot trip point. Then it fills the @trip
+> + * structure with the information retrieved from those objects.
+
+"Evaluate the _HOT object for the thermal zone represented by @adev to
+obtain the temperature of the trip point at which the system is
+expected to be put into the S4 sleep state and initialize @trip as a
+hot trip point using that temperature value."
+
+> + *
+> + * Return:
+> + * * 0 - Success
+> + * * -ENODEV - Failed to retrieve the ACPI object
+> + * * -ENODATA - The ACPI object appears to be inconsistent
+> + */
+> +int thermal_acpi_trip_hot(struct acpi_device *adev, struct thermal_trip *trip)
+> +{
+> +       int ret;
+> +
+> +       ret = thermal_acpi_get_temperature_object(adev, "_HOT", &trip->temperature);
+> +       if (ret)
+> +               return ret;
+> +
+> +       trip->hysteresis = 0;
+> +       trip->type = THERMAL_TRIP_HOT;
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_hot);
+> +
+> +/**
+> + * thermal_acpi_trip_crit() - Get the critical trip point
+
+thermal_acpi_crit_trip_temp, please.
+
+> + * @adev: the acpi device to get the description from
+> + * @trip: a &struct thermal_trip to be filled if the function succeed
+
+The same comments as above apply.
+
+> + *
+> + * The function calls the ACPI framework to get the "_CRT" object
+> + * which describe the critical trip point. Then it fills the @trip
+> + * structure with the information retrieved from this object.
+
+"Evaluate the _CRT object for the thermal zone represented by @adev to
+obtain the temperature of the critical cooling trip point and
+initialize @trip as a critical trip point using that temperature
+value."
+
+> + *
+> + * Return:
+> + * * 0 - Success
+> + * * -ENODEV - Failed to retrieve the ACPI object
+> + * * -ENODATA - The ACPI object value appears to be inconsistent
+> + */
+> +int thermal_acpi_trip_crit(struct acpi_device *adev, struct thermal_trip *trip)
+> +{
+> +       int ret;
+> +
+> +       ret = thermal_acpi_get_temperature_object(adev, "_CRT", &trip->temperature);
+> +       if (ret)
+> +               return ret;
+> +
+> +       /*
+> +        * The hysteresis value has no sense here because critical
+> +        * trip point has no u-turn
+> +        */
+> +       trip->hysteresis = 0;
+> +       trip->type = THERMAL_TRIP_CRITICAL;
+> +
+> +       return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(thermal_acpi_trip_crit);
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 30353e4b1424..ba2d5d4c23e2 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -334,6 +334,14 @@ static inline void devm_thermal_of_zone_unregister(struct device *dev,
+>  }
+>  #endif
+>
+> +#ifdef CONFIG_THERMAL_ACPI
+> +int thermal_acpi_trip_gtsh(struct acpi_device *adev);
+> +int thermal_acpi_trip_crit(struct acpi_device *adev, struct thermal_trip *trip);
+> +int thermal_acpi_trip_hot(struct acpi_device *adev, struct thermal_trip *trip);
+> +int thermal_acpi_trip_psv(struct acpi_device *adev, struct thermal_trip *trip);
+> +int thermal_acpi_trip_act(struct acpi_device *adev, struct thermal_trip *trip, int id);
+> +#endif
+> +
+>  int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+>                             struct thermal_trip *trip);
+>  int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
+> --
