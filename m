@@ -2,130 +2,80 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8E6674D72
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 07:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB8F674FDB
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 09:53:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjATGlY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 01:41:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
+        id S229678AbjATIxq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 03:53:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjATGlX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 01:41:23 -0500
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C0311EB7
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 22:41:22 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id z5so3937783wrt.6
-        for <linux-pm@vger.kernel.org>; Thu, 19 Jan 2023 22:41:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=slGPI6crOMYVC8sg2UdbToHUlfJe2Yt2u0BePxW+DE8=;
-        b=syu8BvlihPitmOdzTlCvAKZdU0CYUPdiFZAMMB324wLdZi6aBGYiVdeFs0mVcpo5rL
-         L3mtJQa3rFwuMK3Iu1x58Mgpb0AuR8ATuRu+AwSMRNFqMmlElKbaBaohxDf7Y+Ypk3SA
-         7birmWEI2+Atf+CuDiCl+P9U8xLS4glBIg1yfgmytNVN2bCzA5u7zGI31eI1rU2fqj84
-         E7qOIkcVnkqvgrVCAkQ1sdSKW5RW1MHETFpxOC0U2C3tGpSX3ih5uLiWT29s9WBXn+Jf
-         /MQ5cGEbvgFXOswsuFR3v0oFZw9K8VtgV7f6DKyWltLjOHZfrglD8EP8RHSFlz/cDp8Z
-         6AKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=slGPI6crOMYVC8sg2UdbToHUlfJe2Yt2u0BePxW+DE8=;
-        b=JMkZiFt90xneQXuSHm3HHBNTeKNm7we+IjWzRHU14tXXXxoEOMAREtFaiuLp/v4cgl
-         mTR+2WEqXQp2i6EVXbUXqExJH6PzWLzF0ow5ZE8Roe8P/iTCX7E4pGzEZ3mr0t0+mWws
-         S4qyO+uIbV2FtRj1hI7XT++dRo1/ekIra4cRE/JFkTf4wzPD6rO08q9h3jJ/WAs9LCGS
-         ByNu1N6B+m+exNiK/5GvZNs50Byppf2d7fJ70AWughww4Z1VJ/AbXOEmlrM6nvyJKSPs
-         0L7SJneFfuKv6Dx9HRSQ+5NaE5JyHa1EgB2lve74mgBBNyQup8Dj18ua9iJkNslGSHJg
-         NNHw==
-X-Gm-Message-State: AFqh2kry5QMm4eO1glzVQ7nFAbLqD7VnAef5UTHi0w5gb7vAquuIlvX5
-        MXH/6wZJ8MGfzvDLG7aYc6yePQ==
-X-Google-Smtp-Source: AMrXdXsEQJpb4J+80as5QAfc8VdtlHuSYRcxkbLulhlLE4kmrEIl6O1WXICsnLmy9n/UBpwLCIu6Jg==
-X-Received: by 2002:a5d:6b0e:0:b0:2be:d03:287 with SMTP id v14-20020a5d6b0e000000b002be0d030287mr11554212wrw.44.1674196880688;
-        Thu, 19 Jan 2023 22:41:20 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id v14-20020adff68e000000b002365730eae8sm35429959wrp.55.2023.01.19.22.41.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Jan 2023 22:41:20 -0800 (PST)
-Message-ID: <e8b6034e-f163-6f6b-2f02-f2eda808950f@linaro.org>
-Date:   Fri, 20 Jan 2023 07:41:18 +0100
+        with ESMTP id S229562AbjATIxp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 03:53:45 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E0E8B30C;
+        Fri, 20 Jan 2023 00:53:25 -0800 (PST)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 53BE6660087F;
+        Fri, 20 Jan 2023 08:53:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674204804;
+        bh=SSwbJApT+7gQSGJQ/b+H3IPkK4hbO5OL73lIyx5BgMc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kcehd1Jq0FFH+HQ+lMBOMtNqdZL8spAJ9jdGNO+emTS4Z8FfWmjNxzsZ6z91dBcRS
+         sk3QV21MV/sGyRubA2G1w7oKJC2Wiv3Ztqb+bmMgMgWnR7x5+1xolzymlS+lPXV3Yi
+         EQUliJay9oJaIGofsVKJ+pWgYMgCZd3H9U3y/49ZpACz27d8LMhAjMGusTCQulCyuh
+         c0nwhN2QoVqEshjdLoLyjdovy1IQsGbm6n4p3Wm4kCPq3RTeaNYw+tSV9BypiEZqFo
+         lGlCzin0xwqbTBqu1r4SgWoyzV/GT4sjdJf9ggFebVJpoHNdy4ZsSjmtMB/Fs4nvuH
+         Wj+8EvBtTSqLQ==
+Message-ID: <23691243-303b-5f0a-df59-f272137e083b@collabora.com>
+Date:   Fri, 20 Jan 2023 09:53:20 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 2/2] dt-bindings: opp: constrain required-opps
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v5 2/2] thermal: mediatek: add support for MT7986 and
+ MT7981
 Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-References: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
- <20230119130028.106817-2-krzysztof.kozlowski@linaro.org>
- <20230120043834.txkg4tockxcjqs2g@vireshk-i7>
- <9adec806-5529-f98a-949a-630edf3e1d0a@linaro.org>
-In-Reply-To: <9adec806-5529-f98a-949a-630edf3e1d0a@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Steven Liu <steven.liu@mediatek.com>,
+        Henry Yen <Henry.Yen@mediatek.com>,
+        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>
+References: <cover.1674055882.git.daniel@makrotopia.org>
+ <2d341fc45266217249586eb4bd3be3ac4ca83a12.1674055882.git.daniel@makrotopia.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <2d341fc45266217249586eb4bd3be3ac4ca83a12.1674055882.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/01/2023 07:27, Krzysztof Kozlowski wrote:
-> On 20/01/2023 05:38, Viresh Kumar wrote:
->> On 19-01-23, 14:00, Krzysztof Kozlowski wrote:
->>> Be specific how many required-opps are allowed.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> ---
->>>
->>> This change is independent, although logically is connected with my
->>> dtschema pull:
->>> https://github.com/devicetree-org/dt-schema/pull/95
->>> ---
->>>  Documentation/devicetree/bindings/opp/opp-v2-base.yaml     | 1 +
->>>  Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 3 ++-
->>>  2 files changed, 3 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->>> index 47e6f36b7637..9b141a409191 100644
->>> --- a/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-base.yaml
->>> @@ -202,6 +202,7 @@ patternProperties:
->>>            for the functioning of the current device at the current OPP (where
->>>            this property is present).
->>>          $ref: /schemas/types.yaml#/definitions/phandle-array
->>> +        maxItems: 1
->>
->> I may not under this property very well. What exactly does this line
->> say ? Asking as required-properties can have an array of phandles as
->> well.
->>
+Il 18/01/23 16:40, Daniel Golle ha scritto:
+> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
+> Brings code to assign values from efuse as well as new function to
+> convert raw temperature to millidegree celsius, as found in MediaTek's
+> SDK sources (but cleaned up and de-duplicated)
 > 
-> It says we can have maximum one item in "required-opps" in "opp" node
-> and you are right that we could have here more. I'll fix it.
+> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
 
-OK, this patch can be actually dropped. The dtschema will bring
-constraints of 1-8 number of items here, which should cover all cases
-for both opps - v2 and v2-kryo-cpu.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Best regards,
-Krzysztof
 
