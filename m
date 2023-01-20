@@ -2,51 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B948675BAF
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 18:37:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0CB6675BC3
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 18:41:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbjATRha (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 12:37:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54064 "EHLO
+        id S229919AbjATRlF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 12:41:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjATRha (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 12:37:30 -0500
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2E74209;
-        Fri, 20 Jan 2023 09:37:28 -0800 (PST)
-Received: by mail-ej1-f44.google.com with SMTP id mg12so15798020ejc.5;
-        Fri, 20 Jan 2023 09:37:28 -0800 (PST)
+        with ESMTP id S230198AbjATRlF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 12:41:05 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D179456494
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 09:41:03 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id mp20so15771656ejc.7
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 09:41:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SGkDVIxsqubX5WE2V1v1oe6bCNNiRkn1j1V9aISQ8xw=;
-        b=1fIBNvl2Pil7M7imVhkSdF8qdjgkKPjvTWrsuc7ZxyArYrneK2xzWnm3XWo/zOo4Np
-         HKL7aOjtl00FZeTBD9eKowsJ/UjCBk0TJAsPXMNcPjV8QPTjAmc73Y7kuYgcYN8+Lmne
-         gM9lcdo87SLao2uBKkqKhIf0/eoPvq3JGAimwREaIqfMV1gOGWi7Gb/8o31/TMyNDNEv
-         nAADxrUEkto6Ir/GnZRqXqcZreaMKue4GzTHx3yRtHATXPvsohEQetmOzfwvj+AADOcQ
-         YG9Q+DROOtg71mMoppfe3EA871CaryoOL1ehUigohHxcTcMTh5BdxN2cZKBF9qHrGjq+
-         jlWA==
-X-Gm-Message-State: AFqh2krSaC0fUktrKATpHo/GXAuRmOJJGzJpdtCmqVlhWmcax1/xTEzs
-        zJUHiabpgZ7YlZJHMHtSPNw1LAnwD6Pg5fFVgFNNu6RR
-X-Google-Smtp-Source: AMrXdXs37y8BTEY9zVoeV+YMDXtcEFumP/IOtQPHUotZl+HgIdCWNB/NiGpNMe+uN+B1s5mg48aABhNBfVaNV+gtLro=
-X-Received: by 2002:a17:906:2c4b:b0:870:3557:160e with SMTP id
- f11-20020a1709062c4b00b008703557160emr1231864ejh.78.1674236247378; Fri, 20
- Jan 2023 09:37:27 -0800 (PST)
+        bh=MB41ZujG7/9rd+TE8qPmR8WJ95sfEfHaPebIse7/w4Q=;
+        b=SH/lxL9wFQqD9gdUv3Yw6aTlbz/PjC+WOpJ6K+Bbw6Go5aiEvoIvFbl9mf+NqxbPGH
+         FA5JUvM+B7T3eswOw+32cmnQziJJyO2XNCrxppw5dzreFskmkNUm6um2PVHWD3bBci7k
+         Ku/nFNMgny8ySZaYx+2bQ9V0r2h3dCd7lMKTbYgm7tNZ3J5uG8p7/6aBNcFGASlNKRuN
+         wnD2AKDFjVpfWhyzNesEd/mAV84lLY0mb5HEARLRWIQkmKVW3oKypVM7Gn+UJ9Q+jzRM
+         gyIEwGZBJWB5qQ1iCkzH7r/rdf0pHFTstPJ0Zx6FCPZ5OLEdqyJnZPJIme78+SA7Khw5
+         i9Lw==
+X-Gm-Message-State: AFqh2kpzKg2VMJNgd95GvCXWan1Xw567lzL/ix1JDJDmF1LiodpYFr7T
+        VE+kLuC90XG1voB8Da6ofPRYAwnvtbWwXyzypN0=
+X-Google-Smtp-Source: AMrXdXs+PH6YXsCsw5sBYyaGHQuN+VbfXom4HAmMCRTBcMEWp07RlaWUFDSWB9U2tpfBfCaAAUpr+RPQMhfMF8c/7rc=
+X-Received: by 2002:a17:906:1684:b0:871:9c0:1ef5 with SMTP id
+ s4-20020a170906168400b0087109c01ef5mr2154119ejd.500.1674236462427; Fri, 20
+ Jan 2023 09:41:02 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
-In-Reply-To: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
+References: <20230120091528.142625-1-dedekind1@gmail.com>
+In-Reply-To: <20230120091528.142625-1-dedekind1@gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 18:37:16 +0100
-Message-ID: <CAJZ5v0jNN7ZDti7h=jzbwFzP-PLGDE-2beO5Eh9hW_WGpZMN=A@mail.gmail.com>
-Subject: Re: [PATCH v3] x86/hibernate: Use fixmap for saving unmapped pages
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        rppt@kernel.org, peterz@infradead.org, luto@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Date:   Fri, 20 Jan 2023 18:40:51 +0100
+Message-ID: <CAJZ5v0hO1JjM+3Z3V_wQjTagGPrnQfA+N3p8ZmBuf+97=Mk+YQ@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: add Emerald Rapids Xeon support
+To:     Artem Bityutskiy <dedekind1@gmail.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM Mailing List <linux-pm@vger.kernel.org>,
+        Rui Zhang <rui.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -58,169 +56,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 12:52 AM Rick Edgecombe
-<rick.p.edgecombe@intel.com> wrote:
+On Fri, Jan 20, 2023 at 10:15 AM Artem Bityutskiy <dedekind1@gmail.com> wrote:
 >
-> Hibernate uses the direct map to read memory it saves to disk. Since
-> sometimes pages are not accessible on the direct map ("not present" on
-> x86), it has special case logic to temporarily make a page present. On x86
-> these direct map addresses can be mapped at various page sizes, but the
-> logic works ok as long as the not present pages are always mapped as
-> PAGE_SIZE such that they don't require a split to map the region as
-> present. If the address was mapped not present by a larger page size, the
-> split may fail and hibernate would then try to read an address mapped not
-> present.
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 >
-> Today on x86 there are no known cases of this (huge not present pages on
-> the direct map), but it has come up from time to time when developing
-> things that operate on the direct map. It blocked making
-> VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
-> has been a complication for various direct map protection efforts.
+> Emerald Rapids (EMR) is the next Intel Xeon processor after Sapphire Rapids
+> (SPR). EMR C-states are the same as SPR C-states, and we expect that EMR
+> C-state characteristics (latency and target residency) will be the same as in
+> SPR. Therefore, this patch adds EMR support by using SPR C-states table.
 >
-> This dependency is also pretty hidden and easily missed by people poking at
-> the direct map. For this reason, there are warnings in place to complain
-> but not handle this scenario.
->
-> One way to make this more robust would be to create some new CPA
-> functionality that can know to map and reset the whole huge page in the
-> case of trying to map a subpage. But for simplicity and smaller code, just
-> make x86 hibernate have its own fixmap PTE that it can use to point
-> to 4k pages when it encounters an unmapped direct map page.
->
-> So create arch breakouts for hibernate_map_page() and
-> hibernate_unmap_page() so that the mapping of unmapped pages can be
-> off the direct map. Change hibernate_map_page() to return an address,
-> and implement an arch breakout on x86 on that uses the fixmap.
->
-> Since now hibernate_map_page() can return a value, have it return NULL
-> when the page fails to map, and have safe_copy_page() skip copying the
-> page if it fails to map. The existing behavior should crash in this case,
-> so this way there is a chance the system would be recoverable.
->
-> Use __weak for the arch breakout because there is not a suitable arch
-> specific header to use the #define method.
->
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 > ---
+>  drivers/idle/intel_idle.c | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> v3:
->  - Switch from hib_copy_page() breakout to hibernate_un/map_page()
->    breakouts.
->  - Since there is an error to use now, skip copying for unmappable pages
-
-Much better than before.
-
-In case the x86 folks want to take this
-
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-and otherwise please let me know that I need to take care of it.
-
->
-> v2:
->  - Rebase
->
->  arch/x86/include/asm/fixmap.h |  3 +++
->  arch/x86/power/hibernate.c    | 12 ++++++++++++
->  include/linux/suspend.h       |  2 ++
->  kernel/power/snapshot.c       | 22 ++++++++++++++--------
->  4 files changed, 31 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
-> index d0dcefb5cc59..0fceed9a4152 100644
-> --- a/arch/x86/include/asm/fixmap.h
-> +++ b/arch/x86/include/asm/fixmap.h
-> @@ -108,6 +108,9 @@ enum fixed_addresses {
->  #ifdef CONFIG_PARAVIRT_XXL
->         FIX_PARAVIRT_BOOTMAP,
->  #endif
-> +#ifdef CONFIG_HIBERNATION
-> +       FIX_HIBERNATE,
-> +#endif
->
->  #ifdef CONFIG_ACPI_APEI_GHES
->         /* Used for GHES mapping from assorted contexts */
-> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-> index 6f955eb1e163..e7cde7cd529d 100644
-> --- a/arch/x86/power/hibernate.c
-> +++ b/arch/x86/power/hibernate.c
-> @@ -147,6 +147,18 @@ int arch_hibernation_header_restore(void *addr)
->         return 0;
->  }
->
-> +long *hibernate_map_page(struct page *page)
-> +{
-> +       set_fixmap(FIX_HIBERNATE, page_to_phys(page));
-> +       __flush_tlb_all();
-> +       return (long *)fix_to_virt(FIX_HIBERNATE);
-> +}
-> +
-> +void hibernate_unmap_page(struct page *page)
-> +{
-> +       clear_fixmap(FIX_HIBERNATE);
-> +}
-> +
->  int relocate_restore_code(void)
->  {
->         pgd_t *pgd;
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index cfe19a028918..a6c3f7dac9e1 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -447,6 +447,8 @@ extern bool hibernation_available(void);
->  asmlinkage int swsusp_save(void);
->  extern struct pbe *restore_pblist;
->  int pfn_is_nosave(unsigned long pfn);
-> +long *hibernate_map_page(struct page *page);
-> +void hibernate_unmap_page(struct page *page);
->
->  int hibernate_quiet_exec(int (*func)(void *data), void *data);
->  #else /* CONFIG_HIBERNATION */
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index cd8b7b35f1e8..8cc16114da75 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -83,19 +83,18 @@ static inline void hibernate_restore_unprotect_page(void *page_address) {}
->   * It is still worth to have a warning here if something changes and this
->   * will no longer be the case.
->   */
-> -static inline void hibernate_map_page(struct page *page)
-> +long * __weak hibernate_map_page(struct page *page)
->  {
->         if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
-> -               int ret = set_direct_map_default_noflush(page);
-> -
-> -               if (ret)
-> -                       pr_warn_once("Failed to remap page\n");
-> +               if (set_direct_map_default_noflush(page))
-> +                       return NULL;
->         } else {
->                 debug_pagealloc_map_pages(page, 1);
->         }
-> +       return page_address(page);
->  }
->
-> -static inline void hibernate_unmap_page(struct page *page)
-> +void __weak hibernate_unmap_page(struct page *page)
->  {
->         if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
->                 unsigned long addr = (unsigned long)page_address(page);
-> @@ -1394,8 +1393,15 @@ static void safe_copy_page(void *dst, struct page *s_page)
->         if (kernel_page_present(s_page)) {
->                 do_copy_page(dst, page_address(s_page));
->         } else {
-> -               hibernate_map_page(s_page);
-> -               do_copy_page(dst, page_address(s_page));
-> +               long *src = hibernate_map_page(s_page);
-> +
-> +               if (!src) {
-> +                       pr_warn_once("Failed to remap page\n");
-> +                       return;
-> +               }
-> +
-> +               do_copy_page(dst, src);
-> +
->                 hibernate_unmap_page(s_page);
->         }
->  }
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index cfeb24d40d37..bb3d10099ba4 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1430,6 +1430,7 @@ static const struct x86_cpu_id intel_idle_ids[] __initconst = {
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,         &idle_cpu_adl_l),
+>         X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,         &idle_cpu_adl_n),
+>         X86_MATCH_INTEL_FAM6_MODEL(SAPPHIRERAPIDS_X,    &idle_cpu_spr),
+> +       X86_MATCH_INTEL_FAM6_MODEL(EMERALDRAPIDS_X,     &idle_cpu_spr),
+>         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNL,        &idle_cpu_knl),
+>         X86_MATCH_INTEL_FAM6_MODEL(XEON_PHI_KNM,        &idle_cpu_knl),
+>         X86_MATCH_INTEL_FAM6_MODEL(ATOM_GOLDMONT,       &idle_cpu_bxt),
+> @@ -1862,6 +1863,7 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+>                 skx_idle_state_table_update();
+>                 break;
+>         case INTEL_FAM6_SAPPHIRERAPIDS_X:
+> +       case INTEL_FAM6_EMERALDRAPIDS_X:
+>                 spr_idle_state_table_update();
+>                 break;
+>         case INTEL_FAM6_ALDERLAKE:
 > --
+
+Applied as 6.3 material, thanks!
