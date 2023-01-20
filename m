@@ -2,137 +2,85 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6421F6750FC
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 10:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A27B667513C
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 10:34:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjATJ0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 04:26:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
+        id S229767AbjATJeM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 04:34:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230405AbjATJ0o (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 04:26:44 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6789740FE;
-        Fri, 20 Jan 2023 01:26:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674206778; x=1705742778;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=udIPImkCh/9a7qDyIWXLa5eBinnKrc5ccOlD3i7ngTE=;
-  b=EUoW+FsnCd8H/crq8BCBIqFkHSFigfa4TAQpOEMJlddneCn+mN0wEHDy
-   XujwL0Uyzr7Agiz4qCw4ZXxbKLBYXDVxvjppi9ynXE00LQiQFBZCIWmCj
-   XI3DKqxNaCKvNZ7IutBcx5buK316wK/0Xpg3KKfpIUudXknj9wNg/nGLo
-   EceZDlVVGof8DZKDCeAVns7AFRchtbSZlnoUqIWOqbUDnttEFVELa0g9k
-   RevdTYzU8OJqGoV0MifzD5E4udCaJS2U03O6dfYkBEWhfkPmjIWTXi0fs
-   ymUb32PyiAnQDdbcYlLPvMTno37Vk7AfVi44li2SUM5bkRvaZO7dpLF2F
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305216143"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="305216143"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:22:54 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803016157"
-X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="803016157"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jan 2023 01:22:53 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pInbo-0002Qq-1A;
-        Fri, 20 Jan 2023 09:22:52 +0000
-Date:   Fri, 20 Jan 2023 17:22:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- ee391c142b7e153701eb16fcc63fb9ed9624a572
-Message-ID: <63ca5d61./KDTaptyyzmqazxX%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S231146AbjATJeI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 04:34:08 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015E6D7;
+        Fri, 20 Jan 2023 01:33:46 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7D3061E60;
+        Fri, 20 Jan 2023 09:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36969C433D2;
+        Fri, 20 Jan 2023 09:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674207225;
+        bh=flGcaxUpqgF9SiqX+TICUIWFq/FXqENur7P1o86/rHY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XJYyIMynCAzLWyyw3ZwFpO5CSRJVeTfe+kvui3Qu7aZ8m5bhWAZwP2S7XE5Dcxky+
+         7+e44erve1l6DUdzSKFijm68uYg7l4z1imA+tvF52F4jZ/b3fY1Qk57WTVcfTO+1eP
+         dnRr8iej2Yi5gsyPH3e+bJV9tRpEgPGC+I+1TuRtx3sJCVVaauUFqvHNIGVWb5AJL8
+         0VHRTVhFUezNFyEHIDFkVsamlCjhq3/1AQoyG1v6+rKRv62ucNyIurI7+CfAk2TIgq
+         aW4TZwrCanxNizsExEBscyEI/qp94kTSxy9q296hCdmxXtYuS+vN0iLd2p7DlLxHPP
+         80FpsvKWIlq6Q==
+Message-ID: <72112478-32fe-7e00-aa69-073140bc6713@kernel.org>
+Date:   Fri, 20 Jan 2023 11:33:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Subject: Re: [PATCH v3] dt-bindings: interconnect: qcom-bwmon: document SM8550
+ compatibles
+Content-Language: en-US
+To:     neil.armstrong@linaro.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221114-narmstrong-sm8550-upstream-bwmon-v3-1-7d63d2ae6bce@linaro.org>
+ <5ab38158-6e75-ea9c-f788-f3a2d77dbbe7@linaro.org>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <5ab38158-6e75-ea9c-f788-f3a2d77dbbe7@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ee391c142b7e153701eb16fcc63fb9ed9624a572  Merge branch 'thermal-core' into bleeding-edge
+On 18.01.23 17:05, Neil Armstrong wrote:
+> Hi Georgi,
+> 
+> On 09/01/2023 13:11, Neil Armstrong wrote:
+>> Document the compatibles used to describe the Bandwidth Monitors
+>> present on the SM8550 platform.
+>>
+>> A BWMON v4 IP monitors the CPU bandwidth, and a v5 does the LLCC
+>> bandwidth monitoring.
+>>
+>> This is described by adding "llcc" and "cpu" into the compatible
+>> strings to differentiate the BWMON IPs.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Gentle ping,
+> Neil
 
-elapsed time: 722m
+Thanks Neil! Applied and in linux-next already.
 
-configs tested: 55
-configs skipped: 2
+BR,
+Georgi
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-x86_64                            allnoconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                           rhel-8.3-bpf
-i386                          randconfig-a001
-i386                          randconfig-a003
-arc                                 defconfig
-s390                             allmodconfig
-i386                          randconfig-a005
-arc                               allnoconfig
-powerpc                           allnoconfig
-alpha                               defconfig
-um                             i386_defconfig
-alpha                             allnoconfig
-i386                              allnoconfig
-s390                                defconfig
-arm                               allnoconfig
-um                           x86_64_defconfig
-i386                                defconfig
-x86_64                              defconfig
-s390                             allyesconfig
-ia64                             allmodconfig
-x86_64                               rhel-8.3
-arm                  randconfig-r046-20230119
-arc                  randconfig-r043-20230119
-arm                                 defconfig
-x86_64                    rhel-8.3-kselftests
-sh                               allmodconfig
-x86_64                          rhel-8.3-func
-x86_64                           allyesconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-alpha                            allyesconfig
-arc                              allyesconfig
-arm64                            allyesconfig
-i386                             allyesconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-arm                              allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-riscv                             allnoconfig
-
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r041-20230119
-s390                 randconfig-r044-20230119
-hexagon              randconfig-r045-20230119
-riscv                randconfig-r042-20230119
-x86_64                          rhel-8.3-rust
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
