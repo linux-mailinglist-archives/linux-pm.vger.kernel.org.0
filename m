@@ -2,71 +2,137 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E2267509A
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 10:20:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6421F6750FC
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 10:26:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjATJUH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 04:20:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34620 "EHLO
+        id S230300AbjATJ0r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 04:26:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbjATJUG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 04:20:06 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F43AD1C
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 01:20:03 -0800 (PST)
+        with ESMTP id S230405AbjATJ0o (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 04:26:44 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6789740FE;
+        Fri, 20 Jan 2023 01:26:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674206403; x=1705742403;
-  h=message-id:subject:from:to:date:in-reply-to:references:
-   content-transfer-encoding:mime-version;
-  bh=mgBVF8vlmMH39gQQ20CUHzrXMIOeXJUewES7Scoo1YM=;
-  b=D0oAfgKBh+eBGFDU6umsgPvItauysxnLDsGbAU451qdzkKGofLm1RmmW
-   MAWocuDigW1JjAGgWSpnvof3hCTcWs6Bjf36w8/1KE0TrSiynplwiNsqn
-   RodIy85v/zMTFr5Zw8pxDsSefmF6Ca/f1qS6Qqug/6TzC6b9esj2g58OO
-   m6WC9mC/aSbGZLq21UtrzaCa6HbZVAE4m08A/Qk3NOVADU7WlcCyJA7yU
-   D6OhMkefuHIEn8jrsdctLPJ+HX2NkCBC1QnEqjm2amYEEHO5lAGnVaSVY
-   QEp96Rt+tahuFCsGh0UZIoQ3ytta6RUrjQr8XATetEvVPdazQBC9fpaaH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="387905471"
+  t=1674206778; x=1705742778;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=udIPImkCh/9a7qDyIWXLa5eBinnKrc5ccOlD3i7ngTE=;
+  b=EUoW+FsnCd8H/crq8BCBIqFkHSFigfa4TAQpOEMJlddneCn+mN0wEHDy
+   XujwL0Uyzr7Agiz4qCw4ZXxbKLBYXDVxvjppi9ynXE00LQiQFBZCIWmCj
+   XI3DKqxNaCKvNZ7IutBcx5buK316wK/0Xpg3KKfpIUudXknj9wNg/nGLo
+   EceZDlVVGof8DZKDCeAVns7AFRchtbSZlnoUqIWOqbUDnttEFVELa0g9k
+   RevdTYzU8OJqGoV0MifzD5E4udCaJS2U03O6dfYkBEWhfkPmjIWTXi0fs
+   ymUb32PyiAnQDdbcYlLPvMTno37Vk7AfVi44li2SUM5bkRvaZO7dpLF2F
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="305216143"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="387905471"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:20:03 -0800
+   d="scan'208";a="305216143"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jan 2023 01:22:54 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="638099624"
+X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="803016157"
 X-IronPort-AV: E=Sophos;i="5.97,231,1669104000"; 
-   d="scan'208";a="638099624"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jan 2023 01:20:03 -0800
-Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
-        by linux.intel.com (Postfix) with ESMTP id 21BE3580BE4;
-        Fri, 20 Jan 2023 01:20:01 -0800 (PST)
-Message-ID: <b41d06bcfcfef27c28c0638c4050036226f01416.camel@linux.intel.com>
-Subject: Re: [PATCH] tools/power turbostat: Introduce support for EMR
-From:   Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-To:     Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        rafael.j.wysocki@intel.com, len.brown@intel.com
-Date:   Fri, 20 Jan 2023 11:20:01 +0200
-In-Reply-To: <0b1d39d1ad323ef815f5db133753a990375eb45d.camel@linux.intel.com>
-References: <20230104142353.22871-1-rui.zhang@intel.com>
-         <0b1d39d1ad323ef815f5db133753a990375eb45d.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.2 (3.46.2-1.fc37) 
+   d="scan'208";a="803016157"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jan 2023 01:22:53 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pInbo-0002Qq-1A;
+        Fri, 20 Jan 2023 09:22:52 +0000
+Date:   Fri, 20 Jan 2023 17:22:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ ee391c142b7e153701eb16fcc63fb9ed9624a572
+Message-ID: <63ca5d61./KDTaptyyzmqazxX%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: ee391c142b7e153701eb16fcc63fb9ed9624a572  Merge branch 'thermal-core' into bleeding-edge
 
-On Wed, 2023-01-11 at 18:29 +0200, Artem Bityutskiy wrote:
-> Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+elapsed time: 722m
 
-And today, also
+configs tested: 55
+configs skipped: 2
 
-Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                            allnoconfig
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-bpf
+i386                          randconfig-a001
+i386                          randconfig-a003
+arc                                 defconfig
+s390                             allmodconfig
+i386                          randconfig-a005
+arc                               allnoconfig
+powerpc                           allnoconfig
+alpha                               defconfig
+um                             i386_defconfig
+alpha                             allnoconfig
+i386                              allnoconfig
+s390                                defconfig
+arm                               allnoconfig
+um                           x86_64_defconfig
+i386                                defconfig
+x86_64                              defconfig
+s390                             allyesconfig
+ia64                             allmodconfig
+x86_64                               rhel-8.3
+arm                  randconfig-r046-20230119
+arc                  randconfig-r043-20230119
+arm                                 defconfig
+x86_64                    rhel-8.3-kselftests
+sh                               allmodconfig
+x86_64                          rhel-8.3-func
+x86_64                           allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+alpha                            allyesconfig
+arc                              allyesconfig
+arm64                            allyesconfig
+i386                             allyesconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+arm                              allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+riscv                             allnoconfig
+
+clang tested configs:
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20230119
+s390                 randconfig-r044-20230119
+hexagon              randconfig-r045-20230119
+riscv                randconfig-r042-20230119
+x86_64                          rhel-8.3-rust
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
