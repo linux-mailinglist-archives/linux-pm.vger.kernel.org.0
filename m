@@ -2,143 +2,146 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFD91675D04
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 19:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A0367675D1F
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 19:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjATSsS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-pm@lfdr.de>); Fri, 20 Jan 2023 13:48:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S229624AbjATSxO (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 13:53:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjATSsR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 13:48:17 -0500
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477BE5FDF;
-        Fri, 20 Jan 2023 10:48:02 -0800 (PST)
-Received: by mail-ej1-f49.google.com with SMTP id u19so16200959ejm.8;
-        Fri, 20 Jan 2023 10:48:02 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SGnyRzY1q6uGKHCPbfZjapTbd1fVyDwIxw6QkOwGmkU=;
-        b=kjpSjUoIyi1nX7BOQ6b9j1oM2jEk/t1Wmji8Qe6jOpyneoFPEI3krCAY2aoT5wUHEc
-         pppxTcYC0dCz/1GAO0phQ5jPpgTnmtJzSGwtSyVcmVupz8OX+Bx7VhF1ndPA6diftjC3
-         e//8MPMHzD6OvdiAiD/S7rmnd9NegEF5TqVz4Zd4CTdoBAyjA2t0Uv3doEqfxnOCTfF2
-         vfp/hV/XNoWUVOcn74U0KuDz6WSZZiJB4Ttz0nTOIwUKt0bWycfLsVUCwExIGC7HfdzG
-         Ft49yb7w+V45hYKH4SjcMgfH9e4RqN7wLOtd8+tQlnnzfz+TF7skH1MheJbBwrKVcSxD
-         auuQ==
-X-Gm-Message-State: AFqh2kp5ivyjAUJ/vH5wSJcJuZODgP65lm+J7gEMkEmnvWm2XB7uTLTn
-        GG0MUEK7gFEqyvsoa4S9bfOYVCWRypU4+xPWIMPeisCE
-X-Google-Smtp-Source: AMrXdXuhUvkqhYk6ZW7X0dfejp6ANt7B4z2byqer5sbFY1X5djVrrqhZRFPv8+n3VS3t4QElV7Qs5Ov9F2qmO/lCElE=
-X-Received: by 2002:a17:907:7855:b0:855:63bb:d3cb with SMTP id
- lb21-20020a170907785500b0085563bbd3cbmr1637584ejc.532.1674240480941; Fri, 20
- Jan 2023 10:48:00 -0800 (PST)
+        with ESMTP id S229555AbjATSxN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 13:53:13 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B89660C80;
+        Fri, 20 Jan 2023 10:53:07 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0894E11FB;
+        Fri, 20 Jan 2023 10:53:49 -0800 (PST)
+Received: from [192.168.255.158] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8790B3F445;
+        Fri, 20 Jan 2023 10:53:04 -0800 (PST)
+Message-ID: <eee85ad6-bc78-0693-c182-4a53410af054@arm.com>
+Date:   Fri, 20 Jan 2023 18:53:00 +0000
 MIME-Version: 1.0
-References: <20230113180235.1604526-1-daniel.lezcano@linaro.org>
- <20230113180235.1604526-2-daniel.lezcano@linaro.org> <CAJZ5v0jDF9qrQAQM1AhT-Q4A3Nzyht9XxZoZyS1afoAPt1h_=A@mail.gmail.com>
- <e4468710-1336-847e-89e4-51c745a0a79b@linaro.org> <CAJZ5v0gdXJuNr9jUm6rPdPCuBjc8jwgcZQwtyxurd-jr50btLw@mail.gmail.com>
- <b007d54e-737f-b0cc-2fb3-45a06d5fa044@linaro.org>
-In-Reply-To: <b007d54e-737f-b0cc-2fb3-45a06d5fa044@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 19:47:49 +0100
-Message-ID: <CAJZ5v0j=4u6eKBiEEBsLJySidSi+VPcGc5Qw0_qK4RVvX4=pzw@mail.gmail.com>
-Subject: Re: [PATCH v5 1/3] thermal/acpi: Add ACPI trip point routines
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v3] sched/fair: unlink misfit task from cpu overutilized
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>
+Cc:     mingo@kernel.org, peterz@infradead.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, vschneid@redhat.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lukasz.luba@arm.com, wvw@google.com, xuewen.yan94@gmail.com,
+        han.lin@mediatek.com, Jonathan.JMChen@mediatek.com
+References: <20230113134056.257691-1-vincent.guittot@linaro.org>
+ <78bf2d91-0076-f748-7c6a-530dad466787@arm.com>
+ <CAKfTPtCAAOvFak2FqkKv2AwnoBZ3cwbMwfnAAGqDx+Wq4Ng+zw@mail.gmail.com>
+ <7a6182dd-89f5-69c5-4331-2f102dc0418d@arm.com>
+ <CAKfTPtCfbVgwPGYgw4vuO3UgEFM9GbMzyrzkgCoeL7onZXQXBg@mail.gmail.com>
+ <20230118164820.r37yfigmwwdske4r@airbuntu>
+ <CAKfTPtBX=tA2mDdbMP+R5fOZkH-P3AORgTk=ozXLRrP2Hz7kVg@mail.gmail.com>
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+In-Reply-To: <CAKfTPtBX=tA2mDdbMP+R5fOZkH-P3AORgTk=ozXLRrP2Hz7kVg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 7:27 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
-> On 20/01/2023 19:15, Rafael J. Wysocki wrote:
-> > On Fri, Jan 20, 2023 at 7:08 PM Daniel Lezcano
-> > <daniel.lezcano@linaro.org> wrote:
-> >>
-> >>
-> >> Hi Rafael,
-> >>
-> >>
-> >> On 19/01/2023 14:15, Rafael J. Wysocki wrote:
-> >>
-> >> [ ... ]
-> >>
-> >>>> +static int thermal_acpi_get_temperature_object(struct acpi_device *adev,
-> >>>> +                                              char *object, int *temperature)
-> >>>
-> >>> So this would become thermal_acpi_get_temp_object(). or even
-> >>> thermal_acpi_get_temp() because it really returns the temperature
-> >>> value.
-> >>>
-> >>> I also don't particularly like returning values via pointers, which is
-> >>> entirely avoidable here, because the temperature value obtained from
-> >>> the ACPI control methods must be a positive number.
-> >>>
-> >>> So I would make it
-> >>>
-> >>> static int thermal_acpi_get_temp(struct acpi_device *adev, char *object_name)
-> >>> {
-> >>
-> >> We are converting decikelvin -> millicelsius. Even it is very unlikely,
-> >> the result could be less than zero (eg. -1°C). We won't be able to
-> >> differentiate -ENODATA with a negative value, no ?
-> >>
-> >> In the future, it is possible we will have to deal with cold trip points
-> >> in order to warm a board. May be we should don't care for now ?
-> >
-> > My point is that the ACPI specification mandates that the return
-> > values be in deciK and so always non-negative.
->
-> I understand that but the code does:
->
-> static int thermal_acpi_get_temp(struct acpi_device *adev, char
-> *object_name)
-> {
->         ...
->
->         return deci_kelvin_to_millicelsius(temp);
-> }
->
-> All the callers do:
->
-> ...
->
->          ret = thermal_acpi_get_temp(adev, name);
->          if (ret < 0)
->                 return ret;
->         /* This could be an error
->          * or negative millicelsius temperature
->          */
->
->         /* here we already have millicelsius */
->          trip->temperature = ret;
-> ...
->
-> So I guess we want to do:
->
-> ...
->
->          ret = thermal_acpi_get_temp(adev, name);
->          if (ret < 0)
->                 return ret;
->
->         /* we convert here instead in thermal_acpi_get_temp() */
->          trip->temperature = deci_kelvin_to_millicelsius(ret);
-> ...
->
-> Sounds good ?
+On 19/01/2023 10:08, Vincent Guittot wrote:
+> On Wed, 18 Jan 2023 at 17:48, Qais Yousef <qyousef@layalina.io> wrote:
+>>
+>> On 01/18/23 09:15, Vincent Guittot wrote:
+>>> On Mon, 16 Jan 2023 at 15:56, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>>>
+>>>> On 16/01/2023 12:23, Vincent Guittot wrote:
+>>>>> On Mon, 16 Jan 2023 at 10:07, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
+>>>>>>
+>>>>>> On 13/01/2023 14:40, Vincent Guittot wrote:
 
-Yes, it does.  Convert when it is known to be valid.
+[...]
+
+>>>>>> In task_fits_cpu() `utilization and performance (better uclamp)
+>>>>>> requirements` term was used. I assume it's the same thing here?
+>>>>>>
+>>>>>>> +             if (fits > 0)
+>>>>>>>                       return cpu;
+>>>>>>> +             /*
+>>>>>>> +              * Only the min performance (i.e. uclamp_min) doesn't fit. Look
+>>>>>>> +              * for the CPU with highest performance capacity.
+>>>>>>                                             ^^^^^^^^^^^^^^^^^^^^
+>>>>>>
+>>>>>> Do we use a new CPU capacity value `performance capacity (1)` here?
+>>>>>>
+>>>>>> Which I guess is `capacity_orig_of(cpu) - thermal_load_avg(cpu_rq(cpu)`.
+>>>>>>
+>>>>>> I'm asking since util_fits_cpu() still uses: `capacity_orig_thermal (2)
+>>>>>> = capacity_orig - arch_scale_thermal_pressure()` when checking whether
+>>>>>> to return -1. Shouldn't (1) and (2) be the same?
+>>>>>
+>>>>> I'm all in favor of both being capacity_orig_of(cpu) -
+>>>>> thermal_load_avg(cpu_rq(cpu) like the capacity inversion detection
+>>>>
+>>>> I think we need a handy name for this new capacity value, which seems to
+>>>> be `capacity_orig - capacity reduced by thermal`. And we should either
+>>>> use `thermal_load_avg` or `thermal pressure` for the latter part. And
+>>>> then we should use this consistently in all these places:
+>>>> util_fits_cpu(), feec(), sic().
+>>>
+>>> Ok, let me change this everywhere
+>>
+>> I'm not keen on this :-/
+>>
+>> Changing this everywhere could have implications beyond our simple capabilities
+>> of testing now :(
+
+It's actually not everywhere. I'm aware of 2 occurrences now in which we
+use 'cap_orig - th_pressure': in feec()/compute_energy() (commit
+489f16459e00 "sched/fair: Take thermal pressure into account while
+estimating energy") and now also in util_fits_cpu().
+
+>> Current choice (in util_fits_cpu()) was based on a direct feedback from Xuewen.
+
+I went through these ~40 emails in the '[PATCH] sched: Take thermal
+pressure into account when determine rt fits capacity' thread (1):
+
+https://lkml.kernel.org/r/20220407051932.4071-1-xuewen.yan@unisoc.com
+
+and the '[PATCH 1/7] sched/uclamp: Fix relationship between uclamp and
+migration margin' (2):
+
+https://lkml.kernel.org/r/20220629194632.1117723-2-qais.yousef@arm.com
+
+There is this email from Xuewen in (1):
+
+https://lkml.kernel.org/r/CAB8ipk--Y8HxetcmUhBmtWq6Mmd726QmDbcbibGLERJw_PUqkQ@mail.gmail.com
+
+in which he mentioned that he prefers th_pressure but this was a CapInv
+prototype in update_cpu_capacity() (the whole discussion was about
+th_pressure in rt_task_fits_capacity()) rather than util_fits_cpu().
+
+Maybe I missed something more directly related to util_fits_cpu()?
+
+>> I think we should discuss how we can improve the situation instead rather than
+>> worry about consistency. I don't think we can be consistent without doing some
+>> improvements on thermal pressure response time.
+
+I'm fine with discussing this next Wednesday.
+
+We just have to watch out for v4 of this patch which uses `cap_orig -
+thermal_load_avg()` in sic().
+
+>> A separate proposal patch to invoke some testing and discussion is fine by me.
+>>
+>> Better keep it a separate work item please?
+> 
+> Ok, I'm going to keep the current use of arch_scale_thermal_pressure
+> and thermal_load_avg for this patch
+
+OK.
