@@ -2,88 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72D9C67601E
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 23:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FBA676052
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 23:43:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjATWWx (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 17:22:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39624 "EHLO
+        id S229775AbjATWno (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 17:43:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjATWWw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 17:22:52 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B72671BDF;
-        Fri, 20 Jan 2023 14:22:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 023C1B82A95;
-        Fri, 20 Jan 2023 22:22:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E812FC4339B;
-        Fri, 20 Jan 2023 22:22:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674253357;
-        bh=/B3zFHsbmUuGcZFPrh9xj1KkPrOVA+AyCX+HZKfxBSs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fpYwxFukNmMNbXlyBZIS3seg83mrQYDkDXJPUU2/yt0Sevg1q41fnxmiXxikKHr+K
-         TaLL6FeojH28nSTCZxdFLaESnSk7UrMiN4gRc4ykfl8JR4YRWwS1hJeGk/Jr1ruxuV
-         Ksb0N/mBWl5NYBvUfxm4eZQeo3vXCN/qZTWtB6ZyO4UrUzmQ6VuO5n8Z+GGZBCZ7fo
-         xxY+FsODVZgWKliDzH3WD+r6J+fdDsaUJC1M9o8fZTzfQhXmcdFmPNNgWj1VvtqI4r
-         r+XP9P/ikkE/LATGVdkctIEICL5/cWnvppt4tTnXwnpA30gyW/r2E6x31TDbTUIfbs
-         GbayQlsvzsiuQ==
-From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Walker Chen <walker.chen@starfivetech.com>
-Cc:     conor@kernel.org, Daire McNamara <daire.mcnamara@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] JH7110 PMU Support
-Date:   Fri, 20 Jan 2023 22:21:54 +0000
-Message-Id: <167425300253.196995.6414153954346182622.b4-ty@microchip.com>
-X-Mailer: git-send-email 2.39.0
-In-Reply-To: <20230119094447.21939-1-walker.chen@starfivetech.com>
-References: <20230119094447.21939-1-walker.chen@starfivetech.com>
+        with ESMTP id S229604AbjATWnn (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 17:43:43 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DBC613EE
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 14:43:42 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id o17-20020a05600c511100b003db021ef437so4692803wms.4
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 14:43:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PtLMDQAX/YK9HtOu1Z9v06OwTqR1lRLgNqC7/vxACsc=;
+        b=T46csed2Nhq9XwzM3we2Jfb2clZKTRKljlMtsvqPHw5Q0zsHe4do7qhAdqwZEuXTrp
+         jxi38P1OdcslMWdVMSihR0Rjkih0taAwWwuvfTXprBimserYz9pgbFvbROLn2Cr+Fhe7
+         3ADg73dAwXJXliaSv/FIDeQvmdm4tH3hUiv0St7h5sA8n8KliYrjgCUkNe7uUHLBqBG1
+         Dyl22AVts5DQFd6d/yaAJ78VZqkaELwzZW/EKZFBBBmrXWb9exTD1HUpQ6zDShi4iNrf
+         G3OI+1vfoc8+oLeoeexjSs0deW62ZamACHSAbALnsWnLUW3p0+8ZKVQLKoW0SN7JB5Qd
+         xEBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PtLMDQAX/YK9HtOu1Z9v06OwTqR1lRLgNqC7/vxACsc=;
+        b=O6UjI0Qq9kkSayAKGMwVwOfM/yIUHBxHXaqYXvev35CmBNrwAbIiF0dMSQAjCsts2e
+         R6bxFMzR1MFcQf7Jb/eL8xiRXczpNzb8g5sg8tG1sKPFJE0IMWm6mTYQtDJBqo6GOM6v
+         7imf+Nc9Kt3OIEDeCIzL+frYQyziz+9YQoj3Csg5iwryGeWUsy+X6v51pDRtUOC63Gg4
+         t3EBKn+p0uxlWVU997yz8ZaXTDJdrLtnuP5vh0rDUgqC2aDOF1uZSq7HsvUHFGVeTe6z
+         qFUVRM7nCKEFfdqfKbVUufqhzozYadAWSK3mbEAR64FnsUIA1ZUll/1VOTErwhT8naPK
+         XDOA==
+X-Gm-Message-State: AFqh2koL0bNi0WCnVs6trVMWy7/X/XGMdzfMMo17vEUlAbJqsbtul/W9
+        EctanF0A93qhxC+4RpzIlMKou7wjMrrZENrw
+X-Google-Smtp-Source: AMrXdXu80icGL8ey6l0/W9ZOqaGxphD9S86JFy5cjw7ZTIc3Qm4Jfm4RRFZtslY9rOhdvK9FsUkg1A==
+X-Received: by 2002:a1c:4c0a:0:b0:3db:210:6a24 with SMTP id z10-20020a1c4c0a000000b003db02106a24mr15188096wmf.8.1674254620497;
+        Fri, 20 Jan 2023 14:43:40 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm3953996wmq.28.2023.01.20.14.43.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Jan 2023 14:43:40 -0800 (PST)
+Message-ID: <999011db-32c0-9f75-ca63-09f0e51c5df1@linaro.org>
+Date:   Fri, 20 Jan 2023 23:43:38 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=934; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=PKB/daeDLqS7LF3I2YHL9Fy5Hx8w0JBq6gduu4aGKmM=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDMmnhf849mce2XZrb5Z/abxJmdacbacr3FcbLMhLFJiWp2Kt vep/RykLgxgHg6yYIkvi7b4WqfV/XHY497yFmcPKBDKEgYtTACbi9YuR4VD73DnrulU3XPO+tuteo8 LEe3zGwasXsmxI29R5YmHFibOMDG8nKkzUjnz1Xr77VVpwQGRhTsk63eB9830LCqs/HFnDyA4A
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v1 1/2] driver core: class: Clear private pointer on
+ registration failures
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>
+References: <5905717.lOV4Wx5bFT@kreacher> <4463268.LvFx2qVVIh@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <4463268.LvFx2qVVIh@kreacher>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
-
-On Thu, 19 Jan 2023 17:44:45 +0800, Walker Chen wrote:
-> This patchset adds PMU (Power Management Unit) controller driver for the
-> StarFive JH7110 SoC. In order to meet low power requirements, PMU is
-> designed for including multiple PM domains that can be used for power
-> gating of selected IP blocks for power saving by reduced leakage
-> current. The first patch adds device tree binding for PM domain provider
-> and consumer. The second patch adds pmu driver and support JH7110 SoC.
+On 20/01/2023 20:46, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> [...]
+> Clear the class private pointer if __class_register() fails for it, so
+> as to allow its users to verify that the class is usable by checking
+> the value of that pointer.
+> 
+> For consistency, clear that pointer before freeing the object pointed
+> to by it in class_release().
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
 
-Applied to riscv-soc-for-next, thanks!
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 
-[1/2] dt-bindings: power: Add starfive,jh7110-pmu
-      https://git.kernel.org/conor/c/1fc7606d5083f79a20eb9cfd77c0dbd9299421c1
-[2/2] soc: starfive: Add StarFive JH71XX pmu driver
-      https://git.kernel.org/conor/c/08b9a94e8654d402bfd1f5496b077503d69aa2cf
 
-I modified the MAINTAINERS entry to remove the include directory that
-was deleted along the way.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Thanks,
-Conor.
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
