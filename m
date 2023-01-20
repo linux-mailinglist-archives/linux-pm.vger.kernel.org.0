@@ -2,49 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1F9675B0A
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 18:19:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B125675B60
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 18:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjATRTG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 12:19:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S229587AbjATRad (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 12:30:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbjATRTG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 12:19:06 -0500
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA029AAA6;
-        Fri, 20 Jan 2023 09:18:53 -0800 (PST)
-Received: by mail-ej1-f42.google.com with SMTP id mg12so15673088ejc.5;
-        Fri, 20 Jan 2023 09:18:53 -0800 (PST)
+        with ESMTP id S230022AbjATRad (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 12:30:33 -0500
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA001DBCE;
+        Fri, 20 Jan 2023 09:30:27 -0800 (PST)
+Received: by mail-ej1-f49.google.com with SMTP id ss4so15668643ejb.11;
+        Fri, 20 Jan 2023 09:30:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AJ6JhYd9+j7gVBnwQvGodk2H/uJ2jxB4BimsC/7ijq8=;
-        b=KA6kVp8/4oM9OqG44ygaKvWkcPx1R9ui9irUV8qHCZRA+2Epq2iNCrZHhNRBolTr38
-         XvSDDAC2Cae1FUqwtrfDzm8kexctJG5tIXOIFiXRC7snQ7EDAF1yYN76bRL1pKCH2boc
-         PCu9CSPD/Q65ZSh/rOu1GX4bc3ZLIDR4VYPU6vJZJadHBp55BhvbE8yK9wBoRFEIXl63
-         za/3CmEaRtXOtnmmXS+7Hdzmh+9MrNOKNiu3mEshmQAr9W1XjeDjeKo1aiLoC2/QsQuz
-         bzza6uMb2SYQIJzL9343jEmVBNrMwb3uHLEYA9TswoeAcLOyhPiDqHhJQ6v1YAen3qMo
-         1gCA==
-X-Gm-Message-State: AFqh2koHf71/3zwUXd4vtd+hshYz50jrSOJY1eAN0bVmxUGOhyErGmPT
-        LXqzFTXzNesMQq60tOFe1sEXP+kV7RdlrNqmwsw=
-X-Google-Smtp-Source: AMrXdXt8aTmsW3tIZHJfP01G5f4JXkJ4DuYZHnEUDRgxwgclF8xg4dVqsnKVr5Em7NxTSxNaIg/X7anu2BJU4s8CCvU=
-X-Received: by 2002:a17:907:7855:b0:855:63bb:d3cb with SMTP id
- lb21-20020a170907785500b0085563bbd3cbmr1603903ejc.532.1674235132409; Fri, 20
- Jan 2023 09:18:52 -0800 (PST)
+        bh=sN0PSQag0tcwUzY5X+frwcic7C4pJSMJyVbEv7noVTE=;
+        b=s7Dv9mDd7KEdxxv82Zz1d+u1HHnll+Gb1XKVHiNaJYvf2Nyr2h6kBtR3sAoMpX0bEM
+         4RitrscbrVnmEwlkWt3iFUOMvVLsWnQHYAG9dZJN2CNlM6HQtCU3DhGxbX1ntLdswgbP
+         FtPwECfi1RQDjSAWtSCrprv0SNUbC+qJEwMr1F9Dgx3cb1LLUhVNYzIiFYnV9woh8gJY
+         VlzSVqLrLmjevXVwR//j3ecF6Nk3o6GV2vORtkOSwmIFyRaq3UatDUSO7JCRvPI/+dQh
+         uwrOkXGHiF/sPpjKLe5uiTv7OpEciPp4lSxyen3xJ+sbCrrTF/MbJcULRwTP9b9fFMdL
+         f+/A==
+X-Gm-Message-State: AFqh2krUNXvFEDO/3+NBLkmv/hf2Udv5ncqeIgRd5wghHlJiHKJ6gHZM
+        54RsIedEbhMX3JfxwoSIweFvno2VcHNKvkI/Vxk=
+X-Google-Smtp-Source: AMrXdXu5puPtkKEsmzys+RRoxegVJqcv1U+3h3RwvTcHcZmZSffWb6JjdxqdLw7RkRwMK/bh/5aqTDGl6i4Un3xN61A=
+X-Received: by 2002:a17:906:940c:b0:86f:d628:e184 with SMTP id
+ q12-20020a170906940c00b0086fd628e184mr1947206ejx.96.1674235826481; Fri, 20
+ Jan 2023 09:30:26 -0800 (PST)
 MIME-Version: 1.0
-References: <20230119192921.3215965-1-srinivas.pandruvada@linux.intel.com>
-In-Reply-To: <20230119192921.3215965-1-srinivas.pandruvada@linux.intel.com>
+References: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230117182240.2817822-1-srinivas.pandruvada@linux.intel.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 18:18:41 +0100
-Message-ID: <CAJZ5v0ieRhK_bzufRGFVZXtK_rW7vn1PDDA0nFMQLm3_Rm=4rA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: int340x: Protect trip temperature from dynamic update
+Date:   Fri, 20 Jan 2023 18:30:15 +0100
+Message-ID: <CAJZ5v0gnx4R0M86O5+Eth4kEoxk1-=Ym7Wrs0-DzRUsvAvR-KA@mail.gmail.com>
+Subject: Re: [PATCH] thermal/idle_inject: Support 100% idle injection
 To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
+Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, daniel.lezcano@linaro.org,
+        rui.zhang@intel.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -56,135 +56,75 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Thu, Jan 19, 2023 at 8:29 PM Srinivas Pandruvada
+It's powercap/idle_inject.
+
+On Tue, Jan 17, 2023 at 7:23 PM Srinivas Pandruvada
 <srinivas.pandruvada@linux.intel.com> wrote:
 >
-> Trip temperatures are read using ACPI methods and stored in the memory
-> during zone initializtion and when the firmware sends a notification for
-> change. This trip temperature is returned when the thermal core calls via
-> callback get_trip_temp().
+> The users of idle injection framework allow 100% idle injection. For
+> example: thermal/cpuidle_cooling.c driver. When the ratio set to 100%,
+> the runtime_duration becomes zero.
 >
-> But it is possible that while updating the memory copy of the trips when
-> the firmware sends a notification for change, thermal core is reading the
-> trip temperature via the callback get_trip_temp(). This may return invalid
-> trip temperature.
+> In the function idle_inject_set_duration() in idle injection framework
+> run_duration_us == 0 is silently ignored, without any error (it is a
+> void function). So, the caller will assume that everything is fine and
+> 100% idle is effective. But in reality the idle inject will be whatever
+> set before.
 >
-> To address this add a mutex to protect the invalid temperature reads in
-> the callback get_trip_temp() and int340x_thermal_read_trips().
+> There are two options:
+> - The caller change their max state to 99% instead of 100% and
+> document that 100% is not supported by idle inject framework
+> - Support 100% idle support in idle inject framework
 >
+> Since there are other protections via RT throttling, this framework can
+> allow 100% idle. The RT throttling will be activated at 95% idle by
+> default. The caller disabling RT throttling and injecting 100% idle,
+> should be aware that CPU can't be used at all.
+>
+> The idle inject timer is started for (run_duration_us + idle_duration_us)
+> duration. Hence replace (run_duration_us && idle_duration_us) with
+> (run_duration_us + idle_duration_us) in the function
+> idle_inject_set_duration(). Also check for !(run_duration_us +
+> idle_duration_us) to return -EINVAL in the function idle_inject_start().
+
+And I have edited the changelog somewhat.
+
 > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: stable@vger.kernel.org # 5.0+
-
-One nit below.
-
 > ---
->  .../intel/int340x_thermal/int340x_thermal_zone.c | 16 +++++++++++++++-
->  .../intel/int340x_thermal/int340x_thermal_zone.h |  1 +
->  2 files changed, 16 insertions(+), 1 deletion(-)
+> Change log:
+> Compared to RFC/RFT
+> - Add a pr_debug for 100% idle
 >
-> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> index 62c0aa5d0783..fd9080640e03 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-> @@ -49,6 +49,8 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
-
-I would add a new local var:
-
-int ret = 0;
-
->         if (d->override_ops && d->override_ops->get_trip_temp)
->                 return d->override_ops->get_trip_temp(zone, trip, temp);
+>  drivers/powercap/idle_inject.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >
-> +       mutex_lock(&d->trip_mutex);
-> +
->         if (trip < d->aux_trip_nr)
->                 *temp = d->aux_trips[trip];
->         else if (trip == d->crt_trip_id)
-> @@ -65,10 +67,14 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
->                                 break;
->                         }
->                 }
-> -               if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
-> +               if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT) {
-> +                       mutex_unlock(&d->trip_mutex);
->                         return -EINVAL;
-
-And then do
-
-                        ret = -EINVAL;
-
-instead of the above.
-
-> +               }
+> diff --git a/drivers/powercap/idle_inject.c b/drivers/powercap/idle_inject.c
+> index c57b40477246..3ac81086d71f 100644
+> --- a/drivers/powercap/idle_inject.c
+> +++ b/drivers/powercap/idle_inject.c
+> @@ -170,10 +170,12 @@ void idle_inject_set_duration(struct idle_inject_device *ii_dev,
+>                               unsigned int run_duration_us,
+>                               unsigned int idle_duration_us)
+>  {
+> -       if (run_duration_us && idle_duration_us) {
+> +       if (run_duration_us + idle_duration_us) {
+>                 WRITE_ONCE(ii_dev->run_duration_us, run_duration_us);
+>                 WRITE_ONCE(ii_dev->idle_duration_us, idle_duration_us);
 >         }
->
-> +       mutex_unlock(&d->trip_mutex);
-> +
->         return 0;
-
-And
-
-    return ret;
-
-here.
-
+> +       if (!run_duration_us)
+> +               pr_debug("CPU is forced to 100 percent idle\n");
 >  }
+>  EXPORT_SYMBOL_NS_GPL(idle_inject_set_duration, IDLE_INJECT);
 >
-> @@ -180,6 +186,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
->         int trip_cnt = int34x_zone->aux_trip_nr;
->         int i;
+> @@ -219,7 +221,7 @@ int idle_inject_start(struct idle_inject_device *ii_dev)
+>         unsigned int idle_duration_us = READ_ONCE(ii_dev->idle_duration_us);
+>         unsigned int run_duration_us = READ_ONCE(ii_dev->run_duration_us);
 >
-> +       mutex_lock(&int34x_zone->trip_mutex);
-> +
->         int34x_zone->crt_trip_id = -1;
->         if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
->                                              &int34x_zone->crt_temp))
-> @@ -207,6 +215,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
->                 int34x_zone->act_trips[i].valid = true;
->         }
+> -       if (!idle_duration_us || !run_duration_us)
+> +       if (!(idle_duration_us + run_duration_us))
+>                 return -EINVAL;
 >
-> +       mutex_unlock(&int34x_zone->trip_mutex);
-> +
->         return trip_cnt;
->  }
->  EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
-> @@ -230,6 +240,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->         if (!int34x_thermal_zone)
->                 return ERR_PTR(-ENOMEM);
->
-> +       mutex_init(&int34x_thermal_zone->trip_mutex);
-> +
->         int34x_thermal_zone->adev = adev;
->         int34x_thermal_zone->override_ops = override_ops;
->
-> @@ -281,6 +293,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
->         acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
->         kfree(int34x_thermal_zone->aux_trips);
->  err_trip_alloc:
-> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
->         kfree(int34x_thermal_zone);
->         return ERR_PTR(ret);
->  }
-> @@ -292,6 +305,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
->         thermal_zone_device_unregister(int34x_thermal_zone->zone);
->         acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
->         kfree(int34x_thermal_zone->aux_trips);
-> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
->         kfree(int34x_thermal_zone);
->  }
->  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
-> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> index 3b4971df1b33..8f9872afd0d3 100644
-> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
-> @@ -32,6 +32,7 @@ struct int34x_thermal_zone {
->         struct thermal_zone_device_ops *override_ops;
->         void *priv_data;
->         struct acpi_lpat_conversion_table *lpat_table;
-> +       struct mutex trip_mutex;
->  };
->
->  struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
+>         pr_debug("Starting injecting idle cycles on CPUs '%*pbl'\n",
 > --
-> 2.38.1
->
+
+Applied as 6.3 material, thanks!
