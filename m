@@ -2,48 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8805675A30
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 17:40:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9FB675A60
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 17:46:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjATQkV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 11:40:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S230422AbjATQqV (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 11:46:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbjATQkU (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 11:40:20 -0500
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93FA40E9;
-        Fri, 20 Jan 2023 08:40:18 -0800 (PST)
-Received: by mail-ej1-f51.google.com with SMTP id mg12so15396148ejc.5;
-        Fri, 20 Jan 2023 08:40:18 -0800 (PST)
+        with ESMTP id S230415AbjATQqU (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 11:46:20 -0500
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11B4CBCE22;
+        Fri, 20 Jan 2023 08:46:12 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id hw16so15352838ejc.10;
+        Fri, 20 Jan 2023 08:46:11 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=csi4POQTNrwGOEhk2ixGemwP2nNjAXiSiCcAdPhdTRQ=;
-        b=bHlbi46ChsuTYuiuBurzTfYbs13WkYQjQMVa16wlnSrphvlRZE3EQ9vTRetsUhI3Nb
-         dvzgFKV1rqoHWzebIuKqMHuU6XYG2UwQRiIhtLNmZAHM8GP3xxfuyWqzqfPJj4BuU1Cl
-         uyeEhlmEY/k5TtaAsIB0PUB6MngsffkNCDj7h8D8WLaIowZ7W0a3N+T28qAniU721MIb
-         bqgXNC9J3bSeEUNQcPA2IkTDFJ3momOk0dLTybNDQznTKGEmnX1SzTFjZ5zW+8eyxOPl
-         ZSVA/z27oJhMkiK0L0s14BU/5RW3hodIyA8UnSwFDqiJoyxo7yCtvEt9kEr/wVQPEVN6
-         jMqQ==
-X-Gm-Message-State: AFqh2kqjtymfyBmp5bxBMe+5h5O5JUFF17KVhM98BhHPgdosXkM7ppQQ
-        vt9pHfXXb1s5LRonKsgLPu7SJ+KjEsJi1n8Ap0A=
-X-Google-Smtp-Source: AMrXdXtpPdy6MsSqnbjmEa5Sd5dQV23sws9Ah6n4RaZklieDTar+9aUOWK5AiksS9zwNzb60mWWv6+exwxXt/k4JIC0=
-X-Received: by 2002:a17:907:7855:b0:855:63bb:d3cb with SMTP id
- lb21-20020a170907785500b0085563bbd3cbmr1587945ejc.532.1674232817416; Fri, 20
- Jan 2023 08:40:17 -0800 (PST)
+        bh=312xYwnLz5cacggAuSe9muCPby1Aby9dhCgWb/T+ruM=;
+        b=l/oaEG/3ZKYPGvUCdNKR7206bgzz4DMd50LFCOucuBTuCrrR9d4FKIsyBKSNP269vC
+         J45hNIsfeKyADwbkrStWew9/vB1w6YNs2VYc6UZ4lXYoezYnMwUUHnk44YTAQHBrN9PW
+         X4KunW+OCgz49oCcSUnTX/dDlFJCahBhst+9J2wt6whKbo1C/XCZSl4mkASo/WqKX8Xs
+         XlKW3TqFM5qE23fHs6mbcNCdE0rUK09iab8/sDSn4TNAMut/0bGxzp8jFSj+MA4tSV7O
+         nmLAcGKQz80kOy/SG4zrUkKgu9jjH0P26WUPihXIUw6Ml2BDp6YlbFJpGvthUncop1cM
+         U+pA==
+X-Gm-Message-State: AFqh2kraq/hZ9lOspaFw7kxMCPgtD52xnrmGgrCXkrm9JVEL7CdQFexj
+        9+4HLcGU1dQaA4bNmlJPWql4xs+vQOySZxciG2g=
+X-Google-Smtp-Source: AMrXdXvhb7C0T8m+7x5vnfEhE69z7624giygkvR6JKePgXoVfxAOW9H6Y6jsXeTTooXkOuc0dmUn3M1F+icmGnZYHIU=
+X-Received: by 2002:a17:906:2c4b:b0:870:3557:160e with SMTP id
+ f11-20020a1709062c4b00b008703557160emr1216124ejh.78.1674233170685; Fri, 20
+ Jan 2023 08:46:10 -0800 (PST)
 MIME-Version: 1.0
-References: <20230107192513.118172-1-tim@linux4.de>
-In-Reply-To: <20230107192513.118172-1-tim@linux4.de>
+References: <20230112052453.3365-1-kunyu@nfschina.com>
+In-Reply-To: <20230112052453.3365-1-kunyu@nfschina.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 17:40:06 +0100
-Message-ID: <CAJZ5v0jYUmDHn6ati=zOU6JyYYAuc6CUtV2eomPWWa2aBoKdSA@mail.gmail.com>
-Subject: Re: [PATCH] thermal: intel: pch: Add support for Wellsburg PCH
-To:     Tim Zimmermann <tim@linux4.de>, Zhang Rui <rui.zhang@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Tushar Dave <tushar.n.dave@intel.com>, linux-pm@vger.kernel.org,
+Date:   Fri, 20 Jan 2023 17:45:59 +0100
+Message-ID: <CAJZ5v0gunKQKOtMz4wOWAkyn1_Q5fGFtyqOWd7Y7=FedWAJikw@mail.gmail.com>
+Subject: Re: [PATCH] power: hibernate: optimize function structure
+To:     Li kunyu <kunyu@nfschina.com>
+Cc:     rafael@kernel.org, pavel@ucw.cz, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -56,60 +57,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, Jan 7, 2023 at 8:42 PM Tim Zimmermann <tim@linux4.de> wrote:
+On Thu, Jan 12, 2023 at 6:25 AM Li kunyu <kunyu@nfschina.com> wrote:
 >
-> This adds the PCI ID for the Wellsburg C610 series chipset PCH. The
-> driver can read the temperature from the Wellsburg PCH with only the PCI
-> ID added and no other modifications.
+> The goto statement jump is not required at the end of the if statement
+> block, because it will be executed to the lower part of the goto
+> statement.
 >
-> Signed-off-by: Tim Zimmermann <tim@linux4.de>
+> Signed-off-by: Li kunyu <kunyu@nfschina.com>
 
-Rui, Srinivas, any objections to this one?
+The patch itself is OK, but its subject should be something like "PM:
+hibernate: x86: Drop unneeded goto statement from arch_resume_nosmt()"
+and the changelog should be more precise, for example:
+
+"The last goto statement in arch_resume_nosmt() is not necessary,
+because the target label is right next to it."
+
+Please update.
 
 > ---
->  drivers/thermal/intel/intel_pch_thermal.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  arch/x86/power/hibernate.c | 2 --
+>  1 file changed, 2 deletions(-)
 >
-> diff --git a/drivers/thermal/intel/intel_pch_thermal.c b/drivers/thermal/intel/intel_pch_thermal.c
-> index dabf11a687a1..9e27f430e034 100644
-> --- a/drivers/thermal/intel/intel_pch_thermal.c
-> +++ b/drivers/thermal/intel/intel_pch_thermal.c
-> @@ -29,6 +29,7 @@
->  #define PCH_THERMAL_DID_CNL_LP 0x02F9 /* CNL-LP PCH */
->  #define PCH_THERMAL_DID_CML_H  0X06F9 /* CML-H PCH */
->  #define PCH_THERMAL_DID_LWB    0xA1B1 /* Lewisburg PCH */
-> +#define PCH_THERMAL_DID_WBG    0x8D24 /* Wellsburg PCH */
->
->  /* Wildcat Point-LP  PCH Thermal registers */
->  #define WPT_TEMP       0x0000  /* Temperature */
-> @@ -350,6 +351,7 @@ enum board_ids {
->         board_cnl,
->         board_cml,
->         board_lwb,
-> +       board_wbg,
->  };
->
->  static const struct board_info {
-> @@ -380,6 +382,10 @@ static const struct board_info {
->                 .name = "pch_lewisburg",
->                 .ops = &pch_dev_ops_wpt,
->         },
-> +       [board_wbg] = {
-> +               .name = "pch_wellsburg",
-> +               .ops = &pch_dev_ops_wpt,
-> +       },
->  };
->
->  static int intel_pch_thermal_probe(struct pci_dev *pdev,
-> @@ -495,6 +501,8 @@ static const struct pci_device_id intel_pch_thermal_id[] = {
->                 .driver_data = board_cml, },
->         { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_LWB),
->                 .driver_data = board_lwb, },
-> +       { PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCH_THERMAL_DID_WBG),
-> +               .driver_data = board_wbg, },
->         { 0, },
->  };
->  MODULE_DEVICE_TABLE(pci, intel_pch_thermal_id);
+> diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
+> index 6f955eb1e163..936558c4e821 100644
+> --- a/arch/x86/power/hibernate.c
+> +++ b/arch/x86/power/hibernate.c
+> @@ -210,8 +210,6 @@ int arch_resume_nosmt(void)
+>                 if (ret)
+>                         goto out;
+>                 ret = cpuhp_smt_disable(old);
+> -               if (ret)
+> -                       goto out;
+>         }
+>  out:
+>         cpu_hotplug_disable();
 > --
-> 2.39.0
+> 2.18.2
 >
