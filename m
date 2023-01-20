@@ -2,80 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CB8F674FDB
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 09:53:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D898E675052
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 10:11:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjATIxq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 03:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36614 "EHLO
+        id S229741AbjATJLQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 04:11:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjATIxp (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 03:53:45 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E0E8B30C;
-        Fri, 20 Jan 2023 00:53:25 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 53BE6660087F;
-        Fri, 20 Jan 2023 08:53:23 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674204804;
-        bh=SSwbJApT+7gQSGJQ/b+H3IPkK4hbO5OL73lIyx5BgMc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kcehd1Jq0FFH+HQ+lMBOMtNqdZL8spAJ9jdGNO+emTS4Z8FfWmjNxzsZ6z91dBcRS
-         sk3QV21MV/sGyRubA2G1w7oKJC2Wiv3Ztqb+bmMgMgWnR7x5+1xolzymlS+lPXV3Yi
-         EQUliJay9oJaIGofsVKJ+pWgYMgCZd3H9U3y/49ZpACz27d8LMhAjMGusTCQulCyuh
-         c0nwhN2QoVqEshjdLoLyjdovy1IQsGbm6n4p3Wm4kCPq3RTeaNYw+tSV9BypiEZqFo
-         lGlCzin0xwqbTBqu1r4SgWoyzV/GT4sjdJf9ggFebVJpoHNdy4ZsSjmtMB/Fs4nvuH
-         Wj+8EvBtTSqLQ==
-Message-ID: <23691243-303b-5f0a-df59-f272137e083b@collabora.com>
-Date:   Fri, 20 Jan 2023 09:53:20 +0100
+        with ESMTP id S229882AbjATJLP (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 04:11:15 -0500
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF4A90B11
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 01:10:35 -0800 (PST)
+Received: by mail-vs1-xe35.google.com with SMTP id n190so4980329vsc.11
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 01:10:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MZaS2jFjKgJPIvOoi38x6xVSa304xRVXmBfQSeerAQY=;
+        b=oS34Rc5HqDn0y15rqvi/SJ7g/YzvXWq0oxQW3beFjIl1h0f2A1Hbkc6cYkGT/Qt9u7
+         I2whoZrl78YFDiKZsS3Gp8hoc/MAtStyl8kT501tDSnjzejpUcrEAKrWvfWqqQCKhXn9
+         BYvMzs3RTYs3I0fetVg4f0ujpF21vjBQ16sLDg1U8mo9AT2mWcgZ0yQC0k5VhelwF06a
+         qLDRvDv7lVwx+PDEZtqTJ7YDDYNidzpcHtOf4XQfIQ9kNj2WfW8+nkCBq619uUKy0jGQ
+         Jc6Y/SDX6V5/Z4L2J2ZrQgwmMY3PW96vmVnGwxDWhfQMQGTnSw+ZKu1K1MfE8GsC/20c
+         cvDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MZaS2jFjKgJPIvOoi38x6xVSa304xRVXmBfQSeerAQY=;
+        b=Inp+y+7uZcB7v3iFFUfDsFv47i0lDJRQxYU/wDcOMmpP6o3iGkwiFtWJb5ibWrGtGN
+         rwUignA0yq+uEluaAlAvwbc0OzsNFKO3T/LOlKEoC5cXWiqxbJ4zOateOdwzSF7FDrea
+         CvlYqGafvvV89KR10U1NnRSflkEZtFMQtMi7j3PR5izpqoNF+2iiEnRXNrDZ01HwvE2h
+         lxt6pgl87pldCycOyepY8kFRz5xrw/TZ7oZ5TWWaSoMAYMala/TQhDNuEJ+eZ3gdCgqA
+         kgedAbqnMqlAcMnIr2gjCADkAdlN+GPiuE15ALcVjRov5uT3J7BCiMl6PN+cztSt7w17
+         DaOA==
+X-Gm-Message-State: AFqh2ko9SFFkk5Dw8JZSfg6Q69AvDDEG0gF9vQKFR1pdYdh2jYxoIyvG
+        MQ2do4s1MROwJKHUMytV2zBrOGHJj4fsJS1tQnAxsg==
+X-Google-Smtp-Source: AMrXdXuoNgBQTMIHd+dvijVuebGsbNf80ukIzQIavSmHvcpNOwe/UwQI7TD7lVbOmJjHW7p96DCDvNBXfraxk5DyG7M=
+X-Received: by 2002:a67:f2da:0:b0:3d3:d90c:5ef2 with SMTP id
+ a26-20020a67f2da000000b003d3d90c5ef2mr2358807vsn.17.1674205804654; Fri, 20
+ Jan 2023 01:10:04 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v5 2/2] thermal: mediatek: add support for MT7986 and
- MT7981
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>, linux-pm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Steven Liu <steven.liu@mediatek.com>,
-        Henry Yen <Henry.Yen@mediatek.com>,
-        Chad Monroe <chad@monroe.io>, John Crispin <john@phrozen.org>
-References: <cover.1674055882.git.daniel@makrotopia.org>
- <2d341fc45266217249586eb4bd3be3ac4ca83a12.1674055882.git.daniel@makrotopia.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <2d341fc45266217249586eb4bd3be3ac4ca83a12.1674055882.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230118140825.242544-1-brgl@bgdev.pl> <20230118140825.242544-3-brgl@bgdev.pl>
+ <4f65001a-b442-7425-dfa3-b1e9be81d566@linaro.org>
+In-Reply-To: <4f65001a-b442-7425-dfa3-b1e9be81d566@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Fri, 20 Jan 2023 10:09:53 +0100
+Message-ID: <CAMRc=MfnBF3Bnez7w+twmn8bzCk3HRRSq69mJ3NpSrQeQqpPDA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] interconnect: qcom: add a driver for sa8775p
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 18/01/23 16:40, Daniel Golle ha scritto:
-> Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
-> Brings code to assign values from efuse as well as new function to
-> convert raw temperature to millidegree celsius, as found in MediaTek's
-> SDK sources (but cleaned up and de-duplicated)
-> 
-> [1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+On Wed, Jan 18, 2023 at 3:45 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 18.01.2023 15:08, Bartosz Golaszewski wrote:
+> > From: Shazad Hussain <quic_shazhuss@quicinc.com>
+> >
+> > Introduce QTI SA8775P-specific interconnect driver.
+> >
+> > Signed-off-by: Shazad Hussain <quic_shazhuss@quicinc.com>
+> > [Bartosz: made the driver ready for upstream]
+> > Co-developed-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> >  drivers/interconnect/qcom/Kconfig   |    9 +
+> >  drivers/interconnect/qcom/Makefile  |    2 +
+> >  drivers/interconnect/qcom/sa8775p.c | 2541 +++++++++++++++++++++++++++
+> >  3 files changed, 2552 insertions(+)
+> >  create mode 100644 drivers/interconnect/qcom/sa8775p.c
+> >
+> > diff --git a/drivers/interconnect/qcom/Kconfig b/drivers/interconnect/qcom/Kconfig
+> > index cd689b782f97..3132a03ca974 100644
+> > --- a/drivers/interconnect/qcom/Kconfig
+> > +++ b/drivers/interconnect/qcom/Kconfig
+> > @@ -92,6 +92,15 @@ config INTERCONNECT_QCOM_RPMH_POSSIBLE
+> >  config INTERCONNECT_QCOM_RPMH
+> >       tristate
+> >
+> > +config INTERCONNECT_QCOM_SA8775P
+> > +     tristate "Qualcomm SA8775P interconnect driver"
+> > +     depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+> > +     select INTERCONNECT_QCOM_RPMH
+> > +     select INTERCONNECT_QCOM_BCM_VOTER
+> > +     help
+> > +       This is a driver for the Qualcomm Network-on-Chip on sa8775p-based
+> > +       platforms.
+> > +
+> >  config INTERCONNECT_QCOM_SC7180
+> >       tristate "Qualcomm SC7180 interconnect driver"
+> >       depends on INTERCONNECT_QCOM_RPMH_POSSIBLE
+> > diff --git a/drivers/interconnect/qcom/Makefile b/drivers/interconnect/qcom/Makefile
+> > index 3fd4c2713c4a..75df2cf64c0b 100644
+> > --- a/drivers/interconnect/qcom/Makefile
+> > +++ b/drivers/interconnect/qcom/Makefile
+> > @@ -13,6 +13,7 @@ qnoc-qcm2290-objs                   := qcm2290.o
+> >  qnoc-qcs404-objs                     := qcs404.o
+> >  qnoc-qdu1000-objs                    := qdu1000.o
+> >  icc-rpmh-obj                         := icc-rpmh.o
+> > +qnoc-sa8775p-objs                    := sa8775p.o
+> >  qnoc-sc7180-objs                     := sc7180.o
+> >  qnoc-sc7280-objs                        := sc7280.o
+> >  qnoc-sc8180x-objs                    := sc8180x.o
+> > @@ -39,6 +40,7 @@ obj-$(CONFIG_INTERCONNECT_QCOM_QCM2290) += qnoc-qcm2290.o
+> >  obj-$(CONFIG_INTERCONNECT_QCOM_QCS404) += qnoc-qcs404.o
+> >  obj-$(CONFIG_INTERCONNECT_QCOM_QDU1000) += qnoc-qdu1000.o
+> >  obj-$(CONFIG_INTERCONNECT_QCOM_RPMH) += icc-rpmh.o
+> > +obj-$(CONFIG_INTERCONNECT_QCOM_SA8775P) += qnoc-sa8775p.o
+> >  obj-$(CONFIG_INTERCONNECT_QCOM_SC7180) += qnoc-sc7180.o
+> >  obj-$(CONFIG_INTERCONNECT_QCOM_SC7280) += qnoc-sc7280.o
+> >  obj-$(CONFIG_INTERCONNECT_QCOM_SC8180X) += qnoc-sc8180x.o
+> > diff --git a/drivers/interconnect/qcom/sa8775p.c b/drivers/interconnect/qcom/sa8775p.c
+> > new file mode 100644
+> > index 000000000000..da21cc31a580
+> > --- /dev/null
+> > +++ b/drivers/interconnect/qcom/sa8775p.c
+> > @@ -0,0 +1,2541 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2021-2022, Qualcomm Innovation Center, Inc. All rights reserved.
+> > + * Copyright (c) 2023, Linaro Limited
+> > + */
+> > +
+> > +#include <linux/device.h>
+> > +#include <linux/interconnect.h>
+> > +#include <linux/interconnect-provider.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_platform.h>
+> > +#include <dt-bindings/interconnect/qcom,sa8775p-rpmh.h>
+> > +
+> > +#include "bcm-voter.h"
+> > +#include "icc-rpmh.h"
+> > +
+> > +#define SA8775P_MASTER_GPU_TCU                               0
+> Other drivers move these to socname.h
+>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Why would they do it if the symbols are not meant to be used outside
+of the driver?
 
+> Otherwise, this lgtm:
+>
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>
 
+[...]
+
+Bart
