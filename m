@@ -2,213 +2,163 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA23D674B92
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 06:02:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D17EF674A83
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 05:16:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjATFCJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 00:02:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S229462AbjATEQm (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Thu, 19 Jan 2023 23:16:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230230AbjATFBy (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 00:01:54 -0500
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EB2CC5D7;
-        Thu, 19 Jan 2023 20:49:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674190166; x=1705726166;
-  h=from:to:cc:subject:date:message-id;
-  bh=MRaoQHl13vbKfYUOZLICSPqZK23aH07qLJtCBzzV2wo=;
-  b=C0C1I5xriEW++3c7rTYfu8PvTco+aE9ZIw4uRGOpK7Po0JoCUq2CygcZ
-   naW3meiQVIvchc+aH4ndt8TQTnJZ2gN6eGfSuZ1gwue4uboW3m6LJy/o2
-   u6V2SVUTA70slAS3yQsvniuJJHm/zzOcba9PXZTmLBo9G/ydv33JqoLTp
-   Emw1x5xbECOEiFZce95DBT8BsZqZHn7iMRC4eiFepDZ5Ll0OB36pax5M2
-   MdUWuQYC3TCK2JvFAlEcrSqpNZIG2nBD19QOkkRj8wqquKwuMNIowZycS
-   gsQmwJ9EOY5On/j+gOe+r6ZCOVbzyJb7E4v4uc1wk7Pno3o0qmrTM6VMe
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="309042726"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="309042726"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 15:52:13 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10595"; a="662317599"
-X-IronPort-AV: E=Sophos;i="5.97,230,1669104000"; 
-   d="scan'208";a="662317599"
-Received: from hossain3-mobl.amr.corp.intel.com (HELO rpedgeco-desk.amr.corp.intel.com) ([10.252.128.187])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jan 2023 15:52:12 -0800
-From:   Rick Edgecombe <rick.p.edgecombe@intel.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        rafael@kernel.org, pavel@ucw.cz, len.brown@intel.com,
-        rppt@kernel.org, peterz@infradead.org, luto@kernel.org
-Cc:     rick.p.edgecombe@intel.com, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: [PATCH v3] x86/hibernate: Use fixmap for saving unmapped pages
-Date:   Thu, 19 Jan 2023 15:51:45 -0800
-Message-Id: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229450AbjATEQl (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Thu, 19 Jan 2023 23:16:41 -0500
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F01E893FA;
+        Thu, 19 Jan 2023 20:16:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=FzOKWwOEQAXKWswgzfzWlUsJio1tKQvlCgzTYFVRynoBJez/akBbR9bnAfw45k5D81H9P910hf7FThD+SeHX5zCThlaRnq45jU0zYIXnCuxZTaJySGGq16ETEGB88ly/SIKNbnJ1S87/Fv2i+z4oGjRsVV/8Rh9L9TK8WKM7VVHU0hwRegiYXBcrgnvS/pcJPo2poUuLaKvGhtEuDlczusoMyQX/vcckzz6cBSk+7OBUD4n/CuIjzt6sXFDoAYX4EaP64Agu6+i1RUghl4qytg/U1FGZuscYD13naKTcSPZvalPRwraB9Jj0jgBfr5vEtVNTZ70IPpn/iTMhfO3GAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LoGX+A8j37Lhz5LRM6rbNdW0qABbpt+z/tE8Ty8GPmY=;
+ b=JAGeZsz+yLjGkZ/P751vAi3DFXnoYhSyFBujzqYKDecWU7AkWI/zcHz6sVJ6Xdwm+rGFr7LBvL57FeidG3ZdmrGJmPM/uT1jx0957dasDXtzUwZtyBj/f5PhsSCIuCZ0OUPxAkC+Q6Di6QVXFxiDaYwo4m4FegenubsQ2qtzpHcSh/LgLrfDqwLDnFW5WeV+gWkKXDJZUFAZQdfwlvTj0GW/Yie4qgtSZ/SvPY1C86GTMLRAna9a/EYE89qK5V1F2cdLeDcqpS4w4ScZkYDMeyirzlQCk+67ZvzCxEBxFjInkMtBlS7nn/wodTmWRi6qtY6XrUSlXa8RVehYR8M3mw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LoGX+A8j37Lhz5LRM6rbNdW0qABbpt+z/tE8Ty8GPmY=;
+ b=Dt8XsfRtKx51w3xcBW1xsKOybklYaytPtskwblBJnp53ETCVGJMUphZdr1qm3Jw8iIL8gAdWxfNVo0r0fwUZ2IlR0JwPdT79GQvJx9kmTQHxjmJm5ZZWKW2wTs2Sfas7EQMZ0b5rlDUMIIdYxf206zN6wQB+ueQkNp1OWjlaAts=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by SN7PR12MB8060.namprd12.prod.outlook.com (2603:10b6:806:343::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.24; Fri, 20 Jan
+ 2023 04:16:36 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::4ac9:c4f8:b0f:a863%7]) with mapi id 15.20.5986.018; Fri, 20 Jan 2023
+ 04:16:36 +0000
+Message-ID: <39061ae2-e8a2-c3c1-7909-9bcb030a16de@amd.com>
+Date:   Fri, 20 Jan 2023 09:46:22 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v3 6/6] Documentation: amd_pstate: Update amd_pstate
+ status sysfs for guided
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, santosh.shukla@amd.com,
+        Len Brown <lenb@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        Huang Rui <ray.huang@amd.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Viresh Kumar <viresh.kumar@linaro.org>, Perry.Yuan@amd.com,
+        Mario.Limonciello@amd.com, Ananth Narayan <ananth.narayan@amd.com>,
+        gautham.shenoy@amd.com
+References: <20230119115017.10188-1-wyes.karny@amd.com>
+ <20230119115017.10188-7-wyes.karny@amd.com>
+ <13f7a493-d1b6-481b-63a5-64080a4aee90@gmail.com>
+From:   Wyes Karny <wyes.karny@amd.com>
+In-Reply-To: <13f7a493-d1b6-481b-63a5-64080a4aee90@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0010.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:95::11) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|SN7PR12MB8060:EE_
+X-MS-Office365-Filtering-Correlation-Id: 31603a1c-0740-4681-d9d0-08dafa9d1e81
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: CzOsjRhkKk7981uUs8GweWcyQzbptaR28d3/imHf9AUvdMQ8qga88o0goEe/I0+jBgZasjNppSHCK9rG2PSqaQZk9yUUkYiyw4xRgqaINQtxgSF7aYaIZKu+MyzUDPOJlwvYKt+sv9p+5EgWTWn0NA2eDNft2yJT2uTWUTdxk5dNwseyzyo3qGeppRk2TjRalpxZL2HM00Wpx1g8NN/AuaYeIXjZSek2WV+OVFqq0NIS23L1estfCPcaqDyVqnAkfO3A8PKKhKmvbZoyeEcZ3AAKWZOqzD0E/NpsXwh1mHgKsiWX8NxaxANFFQ8fmdW6LKKYzywzJzpC9VJmQZqZVNxSFeakIpCfOfXJ2R8WrBhC0COX51uKm0dB0lLISkBAzEVE5oEypl3Rn2JAJGjhW17jBDzIhjXxLjg1YG2zUkgPaAOM9QTmEjvPManUQ2Mej1j/G0oN2mD4vFpD4++04JGGRonr00DgI7xHTeXo4KXjTxND0m0UR7YDi0BmIM0POS4zN359gOHUiSbsVYUK4UF28P0svDWCWZeELAjAEVcYLcJ18ui03qPgUaGBIYY+/yRzjSXS2DsIFMiZyAoIwYkqNBCQB/iW/bPzLBdm3RnQ5g9BDPFopFXLeqPrGXEVkHeO8UJhvQ5JDW6MXQTAolmLk3Pf7hkHnsi0rig7KerrFDSGAgAorIjgpXDpuDTYQSRc73G4j2F2SktXBH1w8uUiT4EAZ3SaQ5Y10QIi8ZM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(376002)(136003)(346002)(366004)(396003)(451199015)(36756003)(31686004)(478600001)(86362001)(31696002)(66556008)(66476007)(15650500001)(66946007)(7416002)(4744005)(2906002)(44832011)(8936002)(5660300002)(38100700002)(316002)(54906003)(6666004)(53546011)(6486002)(6506007)(8676002)(186003)(4326008)(6916009)(41300700001)(26005)(83380400001)(6512007)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZlNmbWxQeFpsSnBoZHBJejJHSCs3TnBrekhtTXJBOXZRM2RVOTQ5bjVZZnVN?=
+ =?utf-8?B?RUNTVzhqUFprRFdZMVlIcG5OaW9yYzRVdnNpMlBpd2tvQWxpMUhGMWhxbW1v?=
+ =?utf-8?B?b0l3bmhTak1hcFFZK3RXS0owQkIzUmx0SGN2bDRUS1QyWEVHakhHSUVxcnRi?=
+ =?utf-8?B?VHhHTnlaWi9GTjBiSXVpUFJBTlFrMmNoNnpDK0VQdG5CWWhFUC9uUlBFY2Z1?=
+ =?utf-8?B?Z092Y3VWMWM4MHZsRlZxMWRXK0w1Q2dNQ2FXN1kxNCt4dU1DSHpaUzljMFRt?=
+ =?utf-8?B?L20xaXk1MmJzaTJId2lUNnhLdmRIUzZObkpwblpwRGVWK1Q1dlRDWkx6UW1p?=
+ =?utf-8?B?Rys1bzl4TmJNbkhDQnIyei9NbjI3cEcxMEFRWTlIejNYK255NjZWeldSZ1ZN?=
+ =?utf-8?B?WDk0VkQyWjRYd0ppcFlRS3NFSlI4VWRxZHFHaUJpM1d4WWF2cGVjQlEvT2tj?=
+ =?utf-8?B?UjNPOHdhZzBIZW1XZFYzY3N6QXdZNWszM29uTnhjVHhFVUl2cDc4Tm5ueEhO?=
+ =?utf-8?B?ZXR6N29VdEYxZjI2THd6VGdzZ2VxK3RqU0hiYUtyTzg2UjM2Qm95a3V4ZEN5?=
+ =?utf-8?B?OE4yRThXS1FCR2sxV0RXU3ZuQVI4Mk1LQmhvMDVlQVFBc0E3ZFJxZGFLcjUy?=
+ =?utf-8?B?ZGJ6NFBUb0J5dkZKSFNvbjNHWlIza3lGMlBKN0U0V3B0aGRxWmhla01MWnNh?=
+ =?utf-8?B?VDFxZ0RzWlpib1VGY3ZITEl1bWdiUFJZNFBrU2N1WE1SN3pjSk9uY2p4WURn?=
+ =?utf-8?B?UWpOVlhiSmc3aklqVllrVnBreFpKS3loakVLSk9sRThiTzVnSDBIbW93REp3?=
+ =?utf-8?B?cFN6VFhLYWxXQlU4VnFHM3kydFJucGZTeXVBYU9YcTlOZWREWTVRV3FEcVIv?=
+ =?utf-8?B?Z1p2ckpIYWZnR1I4Q2Y2a0NWdmFYdzJqWjJVUVZTRTdOY0xOZ1pHUHBIZDJu?=
+ =?utf-8?B?bUFjeTdPdGhCaGxHdDZtZXM4RmVtNGJzd3dvbmdGOFNaVjBnaHpnbzFDSDBF?=
+ =?utf-8?B?QUhaQU1DcDZrQTFrUFNZVWI2YnJndVpsN2d1M3RUL0hzZ1FCYVN3bjBOeVZj?=
+ =?utf-8?B?VTBxZlRZb0s2VmtCKytJMlVGdE9pWlFXQUdmeldLNEJuNlVkT21MV0VoZFdq?=
+ =?utf-8?B?T1BGcTN4Mmk5V1FnYVI0NVhTRnI0clFWN0lHOVBxMTNLNjRVUEIxanZDYzVa?=
+ =?utf-8?B?NFBNd2xBUkc5NUp5YzRvUmVDSVFsand2d0hXTEFDdkRJVWpHZlJXT3hPRmJs?=
+ =?utf-8?B?N3JsY3VZNmJNUks4VWRxQVdJUlJ1c0ZpbmFSazY1MUtkRk1NcE5xaXl0SlEx?=
+ =?utf-8?B?d1pxa2ZrVnhKSkFQTlBlKzdVaVlRNXV0K2E2VGJ6Tk1PcVZ1bUZrTXVLdzF3?=
+ =?utf-8?B?MHhpcGZIM0dsZmMrNmVYdS95S2JLY1l4TjlXRGtRU1ZLa2hzSVBWdWVXS1N1?=
+ =?utf-8?B?SDZLbko2Ym44OWo2NXpmNTc1ak5TV0FDVUtYekZoVnV1eFRTTVpLc3hGY29I?=
+ =?utf-8?B?VStNdldQRjh3R0E4YmJJcU1QUFF5bUFiVncvMFJMS245YkhDVDJjWnZuWTRO?=
+ =?utf-8?B?djZHZ2FGUmp2ZkZ5aXlaYXlZTytEQ0VzQVFzOHhuMGFRQXBkWGhBVkJlMHlx?=
+ =?utf-8?B?M0phTU9oZmJhQU81YytrbFE2Y0tsSllxeVJ3OS82MkZLUFVhUGpCVDl5T1pk?=
+ =?utf-8?B?Ym1lQ1Y1WFNMZGNjR0dUWjd0RFlScTRLWUFoTTliQ2w2ekJFeXJlWTViREpo?=
+ =?utf-8?B?SEJPclc1QUlrcG5xSzBwSkpxSEhUNDk1Sjh6TEQwQWhUbmh0L09EQUdXTUVV?=
+ =?utf-8?B?VDR6NHM2YjFjd1dOb3VndXppbzRPR1lJL2ZYSXJOMDNlMjMzbkNkbjdSZUhz?=
+ =?utf-8?B?OXozdmllcXVIUFhlTUMzSS9ud1FESmR2UjE0YmtFWitMb1pyN1lBMmZHQ0Zn?=
+ =?utf-8?B?WjZKcTBsU3VCbGo0QkdTT292alB4M0o0bjlsUlBlVDIzL29tVXNYQU4zSWxH?=
+ =?utf-8?B?b3NWbG1IM0ZZU2kzcnpKQnp5R0VBS2R1SUg1cWZUTmdFUWpvbGFYQVg0MnVV?=
+ =?utf-8?B?Z0NDMDBlTnlqWDRnTWhuRU1sZWhrcDZ5MUdDaitablNzSXlpZFNNcjl4QmJR?=
+ =?utf-8?Q?bThuo5S55Sl/2Y5BcDEM9eIsW?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 31603a1c-0740-4681-d9d0-08dafa9d1e81
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jan 2023 04:16:35.8888
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EF8q7vd0oOHZ53kC5lQZUsQeD0Z6+Xj/CupUqseAWRcTJ9o3Fwcd2w5uINH3w1j4mvo7+PBbwWqOL/sVRZ8D7Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB8060
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hibernate uses the direct map to read memory it saves to disk. Since
-sometimes pages are not accessible on the direct map ("not present" on
-x86), it has special case logic to temporarily make a page present. On x86
-these direct map addresses can be mapped at various page sizes, but the
-logic works ok as long as the not present pages are always mapped as
-PAGE_SIZE such that they don't require a split to map the region as
-present. If the address was mapped not present by a larger page size, the
-split may fail and hibernate would then try to read an address mapped not
-present.
 
-Today on x86 there are no known cases of this (huge not present pages on
-the direct map), but it has come up from time to time when developing
-things that operate on the direct map. It blocked making
-VM_FLUSH_RESET_PERMS support huge vmalloc when that came up, and also
-has been a complication for various direct map protection efforts.
 
-This dependency is also pretty hidden and easily missed by people poking at
-the direct map. For this reason, there are warnings in place to complain
-but not handle this scenario.
+On 1/19/2023 6:00 PM, Bagas Sanjaya wrote:
+> On 1/19/23 18:50, Wyes Karny wrote:
+>> +- In autonomous mode, platform ignores the desired performance level request
+>> +  and takes into account only the values set to the Minimum requested
+>> +  performance, Maximum requested performance and Energy Performance Preference
+>> +  registers.
+> 
+> "minimum, maximum, and energy performance registers."
 
-One way to make this more robust would be to create some new CPA
-functionality that can know to map and reset the whole huge page in the
-case of trying to map a subpage. But for simplicity and smaller code, just
-make x86 hibernate have its own fixmap PTE that it can use to point
-to 4k pages when it encounters an unmapped direct map page.
+Thanks for reviewing! Will update.
 
-So create arch breakouts for hibernate_map_page() and
-hibernate_unmap_page() so that the mapping of unmapped pages can be
-off the direct map. Change hibernate_map_page() to return an address,
-and implement an arch breakout on x86 on that uses the fixmap.
+> 
+>> +- In non-autonomous mode, platform gets desired performance level
+>> +  from OS directly through Desired Performance Register.
+>> +- In guided-autonomous mode, platform sets operating performance level
+>> +  autonomously according to the current workload and within the limits set by
+>> +  OS through min and max performance registers.
+>>  
+> 
+> The rest is LGTM.
+> 
 
-Since now hibernate_map_page() can return a value, have it return NULL
-when the page fails to map, and have safe_copy_page() skip copying the
-page if it fails to map. The existing behavior should crash in this case,
-so this way there is a chance the system would be recoverable.
-
-Use __weak for the arch breakout because there is not a suitable arch
-specific header to use the #define method.
-
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
----
-
-v3:
- - Switch from hib_copy_page() breakout to hibernate_un/map_page()
-   breakouts.
- - Since there is an error to use now, skip copying for unmappable pages
-
-v2:
- - Rebase
-
- arch/x86/include/asm/fixmap.h |  3 +++
- arch/x86/power/hibernate.c    | 12 ++++++++++++
- include/linux/suspend.h       |  2 ++
- kernel/power/snapshot.c       | 22 ++++++++++++++--------
- 4 files changed, 31 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
-index d0dcefb5cc59..0fceed9a4152 100644
---- a/arch/x86/include/asm/fixmap.h
-+++ b/arch/x86/include/asm/fixmap.h
-@@ -108,6 +108,9 @@ enum fixed_addresses {
- #ifdef CONFIG_PARAVIRT_XXL
- 	FIX_PARAVIRT_BOOTMAP,
- #endif
-+#ifdef CONFIG_HIBERNATION
-+	FIX_HIBERNATE,
-+#endif
- 
- #ifdef CONFIG_ACPI_APEI_GHES
- 	/* Used for GHES mapping from assorted contexts */
-diff --git a/arch/x86/power/hibernate.c b/arch/x86/power/hibernate.c
-index 6f955eb1e163..e7cde7cd529d 100644
---- a/arch/x86/power/hibernate.c
-+++ b/arch/x86/power/hibernate.c
-@@ -147,6 +147,18 @@ int arch_hibernation_header_restore(void *addr)
- 	return 0;
- }
- 
-+long *hibernate_map_page(struct page *page)
-+{
-+	set_fixmap(FIX_HIBERNATE, page_to_phys(page));
-+	__flush_tlb_all();
-+	return (long *)fix_to_virt(FIX_HIBERNATE);
-+}
-+
-+void hibernate_unmap_page(struct page *page)
-+{
-+	clear_fixmap(FIX_HIBERNATE);
-+}
-+
- int relocate_restore_code(void)
- {
- 	pgd_t *pgd;
-diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-index cfe19a028918..a6c3f7dac9e1 100644
---- a/include/linux/suspend.h
-+++ b/include/linux/suspend.h
-@@ -447,6 +447,8 @@ extern bool hibernation_available(void);
- asmlinkage int swsusp_save(void);
- extern struct pbe *restore_pblist;
- int pfn_is_nosave(unsigned long pfn);
-+long *hibernate_map_page(struct page *page);
-+void hibernate_unmap_page(struct page *page);
- 
- int hibernate_quiet_exec(int (*func)(void *data), void *data);
- #else /* CONFIG_HIBERNATION */
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index cd8b7b35f1e8..8cc16114da75 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -83,19 +83,18 @@ static inline void hibernate_restore_unprotect_page(void *page_address) {}
-  * It is still worth to have a warning here if something changes and this
-  * will no longer be the case.
-  */
--static inline void hibernate_map_page(struct page *page)
-+long * __weak hibernate_map_page(struct page *page)
- {
- 	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
--		int ret = set_direct_map_default_noflush(page);
--
--		if (ret)
--			pr_warn_once("Failed to remap page\n");
-+		if (set_direct_map_default_noflush(page))
-+			return NULL;
- 	} else {
- 		debug_pagealloc_map_pages(page, 1);
- 	}
-+	return page_address(page);
- }
- 
--static inline void hibernate_unmap_page(struct page *page)
-+void __weak hibernate_unmap_page(struct page *page)
- {
- 	if (IS_ENABLED(CONFIG_ARCH_HAS_SET_DIRECT_MAP)) {
- 		unsigned long addr = (unsigned long)page_address(page);
-@@ -1394,8 +1393,15 @@ static void safe_copy_page(void *dst, struct page *s_page)
- 	if (kernel_page_present(s_page)) {
- 		do_copy_page(dst, page_address(s_page));
- 	} else {
--		hibernate_map_page(s_page);
--		do_copy_page(dst, page_address(s_page));
-+		long *src = hibernate_map_page(s_page);
-+
-+		if (!src) {
-+			pr_warn_once("Failed to remap page\n");
-+			return;
-+		}
-+
-+		do_copy_page(dst, src);
-+
- 		hibernate_unmap_page(s_page);
- 	}
- }
 -- 
-2.17.1
-
+Thanks & Regards,
+Wyes
