@@ -2,74 +2,65 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B806676054
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 23:44:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0270267614D
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 00:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229746AbjATWoS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 17:44:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
+        id S229760AbjATXPs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 18:15:48 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjATWoR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 17:44:17 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 588F313DC5
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 14:44:01 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so6829129wmb.2
-        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 14:44:01 -0800 (PST)
+        with ESMTP id S229711AbjATXPq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 18:15:46 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D711B545
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 15:15:45 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id bk16so6078619wrb.11
+        for <linux-pm@vger.kernel.org>; Fri, 20 Jan 2023 15:15:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Uni4fgWzey2A2pr/65sW4fSjZ1BK0qfdeoeclceKc+I=;
-        b=p587u395pzhdB1gao6W8PwGUdEh0uuwLLyLD0oCi2QsiNyXvUhdZ7UYWqIjlE8qtF8
-         PIwCWEOuQw3HEf7nVesE8DnpT6plVIKMIvGLvSvQR40MUXDgWUUJMsD4/wJW6n/8MiJt
-         hesXHJB9ytz+ZbOsYOFhHVJediFtzXim9MvQO44xUqF5c9soPa0e6/ADR8s1SLgT+qWw
-         CJWXxTLF9NZfQ9oeoIQVgyopDsRvYx8pXpZV7TDwnjwtlOtFiJXCcvOsBjANblgIlg6W
-         jArcVnSXy1bKKfZzXeYeg91cCjQn3lzFkA5ib9QHryDkj7jNDBSJxZS6DQLcrCOOVVB2
-         JRcw==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcdsDDfSv/wOa26KZForZ8gEXRm+p3O2oR+ZEYCfkv4=;
+        b=TMyYtdLS+kw/Y7uOKSZDlvFr4P5eCu4SU6aqXmXP5IhaJx/7BOZpvvn9IQ1Y2gmX2Y
+         0HTPw2tiIat4yLQmAPd5zBqbGRCWHkdnHe+ynj9z7oXVvilNcnk8Wt1dnFB0bc95MMyz
+         VzEdMjlN7BF5n0zW5MqttwEvZdP0gpy09qLK/XdrD2pGNqdOKlwIHTH5jtYXhDqe11AX
+         jmKoEWhoQYKPIAVckHP9BFHmR80Run9MlE1TWsgHpcBO5q1CbpjpqcXs53voEcUiaqBm
+         5Wj/MS+2Ej1I0mt8ydXvrxeqkgmkYuKgyVobfadhI4sSjW96Pf3PmUychMxqT7otDILe
+         vMVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Uni4fgWzey2A2pr/65sW4fSjZ1BK0qfdeoeclceKc+I=;
-        b=vZ1I37vPNxfrIAlKYIjqrKuwA9wILVAiNjHczYbfzGqHVuQeOjw6YNOrtQ0rij7170
-         lu5TrNae10ZK17WNqKMFZxUH0/3DDUg4qa4XY4dQj2MBXn1Q9AuWIwAZ/tV+tSWm6G0j
-         WcvYdKrldq+Re/I3keZqOqerHLHFKUiSjcL76PvqrbVB/KDdAH0vuQjW6Ikq5K8UtrA/
-         JYNVz3X4spLqyFBaayRx28FrWhTz16jetTBGnNUnMkJ73Kui+pU+2IB9pgPdIfYIPT6v
-         G/5qW7z9AkIKmqXmrgj2LYn6941B8aoGE/hjr+gD+RghdfwdiuKzz6t2rwYYfd63QLha
-         sLwA==
-X-Gm-Message-State: AFqh2kq4O1scytkZ3iw/FoGjKQnYfFynMjMTJw6dUaTsg4t/vDDiWAEh
-        28MTCI0OWg1UJLOCzAcMW/SC9w==
-X-Google-Smtp-Source: AMrXdXuFooVJ5PKTGIO+sDLW3dqj2bMA3ND7vGcK7Lo8MNL+a+xqlJM/2QCAAHuUDKj7rzRll+eJLg==
-X-Received: by 2002:a05:600c:5409:b0:3da:f66a:e866 with SMTP id he9-20020a05600c540900b003daf66ae866mr15767602wmb.10.1674254639777;
-        Fri, 20 Jan 2023 14:43:59 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id bg1-20020a05600c3c8100b003db09eaddb5sm12011498wmb.3.2023.01.20.14.43.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Jan 2023 14:43:59 -0800 (PST)
-Message-ID: <4c532a7b-d5b4-da5e-5703-c6f8ebfbc62b@linaro.org>
-Date:   Fri, 20 Jan 2023 23:43:58 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v1 2/2] thermal: Fail object registration if thermal class
- is not registered
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <5905717.lOV4Wx5bFT@kreacher> <4780418.GXAFRqVoOG@kreacher>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jcdsDDfSv/wOa26KZForZ8gEXRm+p3O2oR+ZEYCfkv4=;
+        b=hKaZdv8T3diJR6ExPNGYpLWi/w7N5TlAvqVwiRdKzCGPGdfoAaDi34N+uUe5kR8Uoy
+         hV3QvQU2Fz2TM3OLlitjsLcdtD2qFadZBxwuVHQeinwrD4mgT28R+yWNKUjQgjo/aRM7
+         QOye11PNh4LgCcMtuyDbOOI3mDc5MiewByAOFavzoNFBBq530PLkWyVeDJBkDbFUSyS2
+         wn7KE9pGCl4kZOQp1SpAqYr8PT/+jtDJkzygnh9aixlBVwiTqfeL4GHhJYVavlVitPup
+         6w51xWn+85i2WSdE+CStklkUkEFm5C9Tiuw8vY1t2J9+KGdul9wpNb4nWuvq8A+xSxrX
+         zidQ==
+X-Gm-Message-State: AFqh2ko+9QI90f8Thyepfem5m1oSTuY6Da3QA0h6a5xblFKCNrjJ3G0Y
+        hWIs8U4S7MYx92yPnf6GRC7JOjIyImXsgLMd
+X-Google-Smtp-Source: AMrXdXu5uRtEXEjUmBxsqEg9GL5wXWVse6JOwIon7LMB1tEA+GaItIVqoZboTQ60rlO/FQLPmy2ChA==
+X-Received: by 2002:a5d:6102:0:b0:2bd:beac:ef7b with SMTP id v2-20020a5d6102000000b002bdbeacef7bmr14686709wrt.52.1674256543948;
+        Fri, 20 Jan 2023 15:15:43 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id t17-20020a05600001d100b00241d21d4652sm36436828wrx.21.2023.01.20.15.15.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Jan 2023 15:15:43 -0800 (PST)
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <4780418.GXAFRqVoOG@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr
+Subject: [PATCH v6 0/3] Thermal ACPI APIs for generic trip points
+Date:   Sat, 21 Jan 2023 00:15:27 +0100
+Message-Id: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Level: *
@@ -79,28 +70,71 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 20/01/2023 20:48, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If thermal_class is not registered with the driver core, there is no way
-> to expose the interfaces used by the thermal control framework, so
-> prevent thermal zones and cooling devices from being registered in
-> that case by returning an error from object registration functions.
-> 
-> For this purpose, introduce class_is_registered() that checks the
-> private pointer of the given class and returns 'false' if it is NULL,
-> which means that the class has not been registered, and use it in the
-> thermal framework.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Recently sent as a RFC, the thermal ACPI for generic trip points is a set of
+functions to fill the generic trip points structure which will become the
+standard structure for the thermal framework and its users.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Different Intel drivers and the ACPI thermal driver are using the ACPI tables to
+get the thermal zone information. As those are getting the same information,
+providing this set of ACPI function with the generic trip points will
+consolidate the code.
 
+Also, the Intel PCH and the Intel 34xx drivers are converted to use the generic
+trip points relying on the ACPI generic trip point parsing functions.
+
+These changes have been tested on a Thinkpad Lenovo x280 with the PCH and
+INT34xx drivers. No regression have been observed, the trip points remain the
+same for what is described on this system.
+
+Changelog:
+ - V6:
+   - Changed thermal ACPI function names according the changes done in the first patch
+   - Put back the GTSH function here as it is specific to int340x
+   - Propagate the function name change from thermal ACPI
+   - Changed the functions name and prototype to return the temperature
+     instead of passing a pointer
+   - Removed the GTSH function as it does not belong to the ACPI standard
+   - Changed hysteresis -> hyst, temperature -> temp
+   - Changed message level info -> debug
+   - Changed error messages
+   - Return -ENODATA error only
+   - Fixed description functions
+ 
+ - V5:
+   - Fixed GTSH unit conversion, deciK -> milli C
+
+ - V4:
+   - Fixed Kconfig option dependency, select THERMAL_ACPI if ACPI is set
+     only for the PCH driver
+
+ - V3:
+   - Took into account Rafael's comments
+   - Used a silence option THERMAL_ACPI in order to stay consistent
+     with THERMAL_OF. It is up to the API user to select the option.
+
+ - V2:
+   - Fix the thermal ACPI patch where the thermal_acpi.c was not included in
+     the series
+   - Provide a couple of users of this API which could have been tested on a
+     real system
+
+Daniel Lezcano (3):
+  thermal/acpi: Add ACPI trip point routines
+  thermal/drivers/intel: Use generic trip points for intel_pch
+  thermal/drivers/intel: Use generic trip points int340x
+
+ drivers/thermal/Kconfig                       |   4 +
+ drivers/thermal/Makefile                      |   1 +
+ drivers/thermal/intel/Kconfig                 |   1 +
+ drivers/thermal/intel/int340x_thermal/Kconfig |   1 +
+ .../int340x_thermal/int340x_thermal_zone.c    | 168 ++++------------
+ .../int340x_thermal/int340x_thermal_zone.h    |  10 +-
+ drivers/thermal/intel/intel_pch_thermal.c     |  88 ++-------
+ drivers/thermal/thermal_acpi.c                | 185 ++++++++++++++++++
+ include/linux/thermal.h                       |   7 +
+ 9 files changed, 263 insertions(+), 202 deletions(-)
+ create mode 100644 drivers/thermal/thermal_acpi.c
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+2.34.1
 
