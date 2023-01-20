@@ -2,123 +2,165 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E41D675610
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 14:44:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA12F675620
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Jan 2023 14:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjATNoM (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Fri, 20 Jan 2023 08:44:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S229485AbjATNvq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Fri, 20 Jan 2023 08:51:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjATNoL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 08:44:11 -0500
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4EF6CCF2;
-        Fri, 20 Jan 2023 05:44:10 -0800 (PST)
-Received: by mail-ej1-f46.google.com with SMTP id ss4so13992138ejb.11;
-        Fri, 20 Jan 2023 05:44:10 -0800 (PST)
+        with ESMTP id S229459AbjATNvp (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Fri, 20 Jan 2023 08:51:45 -0500
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4417A8C;
+        Fri, 20 Jan 2023 05:51:44 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id v10so6823769edi.8;
+        Fri, 20 Jan 2023 05:51:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ugActICuqABJPgs2DMA844zVQO+yJ6DzsC4UoZ9cvY0=;
-        b=I1dRWk2jcx8D1Tl0BycBI0OLyx29efSHBWwdelliCYbzz50CfLJH77Yclgh2uWAZwq
-         2MLs2+KC2oSG0elq5Wx6d8+YKOCSvJWXy+i97oWqCtEs9rTcehXaeW639ie4iIvBZ3ek
-         FEcnYlcuqCKkh/GmVNAFHlDT9MlEH285HxwdQ8ZJPh2Toay8KXZeM7X0Z1L/3dhbQrNF
-         y75iFlDZ1PYBmdN06GTr0A+QjocylHCmoDg91SWdgjfHmFE4c1Eer2GFLlEOqbmFgfgP
-         SPJhnbnkW4/jq9dYDXaeqyFGbMrbANQfvHIyZAw8ETgI+GWj8hb9tpdDpoDLZL0HF/Fa
-         nvHg==
-X-Gm-Message-State: AFqh2kqCrRMx4HO+WARodcQGAuf7cu33Q6ePicKXNM2ljOVYpQQaH4t2
-        TGsm2d9L1UTn3uyBNEGHqpbZKv/ay30SIv4LKVlfV6YF
-X-Google-Smtp-Source: AMrXdXsvPmKcejSlnKj0fndRKkkmeosK6wyiVNiyt9QcuBvqv51+RPXD7R5SRfiM6F7cK2Oz2tjwpcEPsf99O1WAcfw=
-X-Received: by 2002:a17:906:940c:b0:86f:d628:e184 with SMTP id
- q12-20020a170906940c00b0086fd628e184mr1810820ejx.96.1674222249153; Fri, 20
- Jan 2023 05:44:09 -0800 (PST)
+        bh=L7z4p3bE6yeWZf9K6gd38mjPF+wHICd+ZDjndpXq4sU=;
+        b=c96DBGE6Quo+ZfjDWh8cXxNdpzAdwX0tGEbrwallV7zrrCb8PEGFnyMcu8kPCPgnPM
+         mei2a2ktFzKU6Kph7uUYQRLtx2JHXmxwm8waPchbkNL8Y/MxeJXt4638eYQLIuYEKM4O
+         7PaHRWwHcmo3YwtDhEoq9+9mpZSgyltQnvk8fPiKgSfEBBVppjhV6DdUNWdTXBExHtRJ
+         wYA6uXvdncoEbrrojBGINBF+RjGzHe76KtkB3UsIR/Bf76wUgOflyI3ATm1imOAwk22M
+         K9EYXaVuocEa/s42Yi7hgT+mPV5n3sSX3s0bKwGoqbg/gNL0YO/Vhtbe7FpU65nAtAr3
+         4mDQ==
+X-Gm-Message-State: AFqh2kpF9wcQEOZL4P5YC2gORnu0ZZtLvhC799o1c/bA6JZOuoCSEJdD
+        xiem4qQE2nmYKSAp27Ysdbf8R0quz+jQoAMd908=
+X-Google-Smtp-Source: AMrXdXtP5nWZeqdv/HtGkPdXqIpj/Oe+I/LVjm8KHGxKctawzLe1A7TwcW/LT4cmqKELB6jq+ny40EGxkgAkcMgX2XU=
+X-Received: by 2002:a05:6402:28a4:b0:485:2bdf:ca28 with SMTP id
+ eg36-20020a05640228a400b004852bdfca28mr2195464edb.251.1674222703011; Fri, 20
+ Jan 2023 05:51:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20221230075159.1482626-1-linmq006@gmail.com>
-In-Reply-To: <20221230075159.1482626-1-linmq006@gmail.com>
+References: <20230103032840.12265-1-rdunlap@infradead.org>
+In-Reply-To: <20230103032840.12265-1-rdunlap@infradead.org>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 20 Jan 2023 14:43:57 +0100
-Message-ID: <CAJZ5v0iPMyQUibJk5S=ZdnsU43yBqyDAVCFkbmmwd_LVZjR=5w@mail.gmail.com>
-Subject: Re: [PATCH] powercap/dtpm_cpu: Fix refcount leak in __dtpm_cpu_setup
-To:     Miaoqian Lin <linmq006@gmail.com>
-Cc:     Daniel Lezcano <daniel.lezcano@kernel.org>,
+Date:   Fri, 20 Jan 2023 14:51:31 +0100
+Message-ID: <CAJZ5v0hmwtYDYKP5BsDfynTyw+LvL5qpcXmbiWSZV7MpTTtrcA@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: swap: don't use /** for non-kernel-doc comments
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Dec 30, 2022 at 8:52 AM Miaoqian Lin <linmq006@gmail.com> wrote:
+On Tue, Jan 3, 2023 at 4:28 AM Randy Dunlap <rdunlap@infradead.org> wrote:
 >
-> The policy return by cpufreq_cpu_get() should be released with
-> cpufreq_cpu_put() to balance the reference counter.
-> Add missing cpufreq_cpu_put() to fix this.
+> kernel-doc complains about multiple occurrences of "/**" being used
+> for something that is not a kernel-doc comment, so change all of these
+> to just use "/*" comment style.
 >
-> Fixes: 0e8f68d7f048 ("powercap/drivers/dtpm: Add CPU energy model based support")
-> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+> The warning message for all of these is:
+>
+> FILE:LINE: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+>
+> kernel/power/swap.c:585: warning: ...
+> Structure used for CRC32.
+> kernel/power/swap.c:600: warning: ...
+>  * CRC32 update function that runs in its own thread.
+> kernel/power/swap.c:627: warning: ...
+>  * Structure used for LZO data compression.
+> kernel/power/swap.c:644: warning: ...
+>  * Compression function that runs in its own thread.
+> kernel/power/swap.c:952: warning: ...
+>  *      The following functions allow us to read data using a swap map
+> kernel/power/swap.c:1111: warning: ...
+>  * Structure used for LZO data decompression.
+> kernel/power/swap.c:1127: warning: ...
+>  * Decompression function that runs in its own thread.
+>
+> Also correct one spello/typo.
+>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Pavel Machek <pavel@ucw.cz>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: linux-pm@vger.kernel.org
 > ---
->  drivers/powercap/dtpm_cpu.c | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  kernel/power/swap.c |   16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
 >
-> diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
-> index 2ff7717530bf..3083c6b45c90 100644
-> --- a/drivers/powercap/dtpm_cpu.c
-> +++ b/drivers/powercap/dtpm_cpu.c
-> @@ -195,12 +195,16 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
->                 return 0;
->
->         pd = em_cpu_get(cpu);
-> -       if (!pd || em_is_artificial(pd))
-> -               return -EINVAL;
-> +       if (!pd || em_is_artificial(pd)) {
-> +               ret = -EINVAL;
-> +               goto out_put_policy;
-> +       }
->
->         dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
-> -       if (!dtpm_cpu)
-> -               return -ENOMEM;
-> +       if (!dtpm_cpu) {
-> +               ret = -ENOMEM;
-> +               goto out_put_policy;
-> +       }
->
->         dtpm_init(&dtpm_cpu->dtpm, &dtpm_ops);
->         dtpm_cpu->cpu = cpu;
-> @@ -220,6 +224,8 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
->         if (ret)
->                 goto out_dtpm_unregister;
-
-The part of the patch above is valid, but I don't think that the
-policy reference counter can be dropped below, because that may allow
-the policy to go away and this driver will be still using it, won't
-it?
-
->
-> +       cpufreq_cpu_put(policy);
-> +
->         return 0;
->
->  out_dtpm_unregister:
-> @@ -230,7 +236,8 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
->         for_each_cpu(cpu, policy->related_cpus)
->                 per_cpu(dtpm_per_cpu, cpu) = NULL;
->         kfree(dtpm_cpu);
-> -
-> +out_put_policy:
-> +       cpufreq_cpu_put(policy);
+> diff -- a/kernel/power/swap.c b/kernel/power/swap.c
+> --- a/kernel/power/swap.c
+> +++ b/kernel/power/swap.c
+> @@ -581,7 +581,7 @@ static int save_image(struct swap_map_ha
 >         return ret;
 >  }
 >
-> --
-> 2.25.1
+> -/**
+> +/*
+>   * Structure used for CRC32.
+>   */
+>  struct crc_data {
+> @@ -596,7 +596,7 @@ struct crc_data {
+>         unsigned char *unc[LZO_THREADS];          /* uncompressed data */
+>  };
 >
+> -/**
+> +/*
+>   * CRC32 update function that runs in its own thread.
+>   */
+>  static int crc32_threadfn(void *data)
+> @@ -623,7 +623,7 @@ static int crc32_threadfn(void *data)
+>         }
+>         return 0;
+>  }
+> -/**
+> +/*
+>   * Structure used for LZO data compression.
+>   */
+>  struct cmp_data {
+> @@ -640,7 +640,7 @@ struct cmp_data {
+>         unsigned char wrk[LZO1X_1_MEM_COMPRESS];  /* compression workspace */
+>  };
+>
+> -/**
+> +/*
+>   * Compression function that runs in its own thread.
+>   */
+>  static int lzo_compress_threadfn(void *data)
+> @@ -948,9 +948,9 @@ out_finish:
+>         return error;
+>  }
+>
+> -/**
+> +/*
+>   *     The following functions allow us to read data using a swap map
+> - *     in a file-alike way
+> + *     in a file-like way.
+>   */
+>
+>  static void release_swap_reader(struct swap_map_handle *handle)
+> @@ -1107,7 +1107,7 @@ static int load_image(struct swap_map_ha
+>         return ret;
+>  }
+>
+> -/**
+> +/*
+>   * Structure used for LZO data decompression.
+>   */
+>  struct dec_data {
+> @@ -1123,7 +1123,7 @@ struct dec_data {
+>         unsigned char cmp[LZO_CMP_SIZE];          /* compressed buffer */
+>  };
+>
+> -/**
+> +/*
+>   * Decompression function that runs in its own thread.
+>   */
+>  static int lzo_decompress_threadfn(void *data)
+
+Applied as 6.3 material, thanks!
