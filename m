@@ -2,126 +2,225 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81CA676500
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 08:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D566765F2
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 12:19:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229566AbjAUHkW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Jan 2023 02:40:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51872 "EHLO
+        id S229778AbjAULS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Jan 2023 06:18:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjAUHkV (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Jan 2023 02:40:21 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670803646F;
-        Fri, 20 Jan 2023 23:40:20 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C01BB81FA4;
-        Sat, 21 Jan 2023 07:40:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CE23C433D2;
-        Sat, 21 Jan 2023 07:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674286817;
-        bh=VdyACnhBRmEcMxtf8IQVgiG+xeFoJuTvHl879f/uUZ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ar6JoaP7b9/Cmu3LpaMNYJdCW83qB539pyI6iZa/HGRjXR25Kt1zDBzw9eVMcwLIG
-         hf+kXSKyoOWEywEyb1acz+BPnlvnjTi647LWlT8ToTVwEueSYxyr5A7ZBwjH1KPCQ7
-         vIcmGX9IX7dFtE1+xqW4ZiwnaSYz646bCnBFTaco=
-Date:   Sat, 21 Jan 2023 08:40:15 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v1 2/2] thermal: Fail object registration if thermal
- class is not registered
-Message-ID: <Y8uW374CM37m0/wI@kroah.com>
-References: <5905717.lOV4Wx5bFT@kreacher>
- <4780418.GXAFRqVoOG@kreacher>
+        with ESMTP id S229484AbjAULS6 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Jan 2023 06:18:58 -0500
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE2586B8;
+        Sat, 21 Jan 2023 03:18:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=sjnfNZ8hw7XnaikIzmFyW/hjvInLUHEoDAKXX/TVuFo=; b=F+bqWmEc3NoVkh3NFbmuce/5KI
+        WBSwstOFaLP6LUqEqd8XwM7AaHtQCN/CcXZW4+PFRLpPpJOaziMQXVZKs7QvoB+G7+TBxE5QYuRzg
+        j15L5ZmDIGwMAAanVjVOy/RsRqaCya7Br3cmeizeVSbxnkA1KqNt8QFkoAq6BNFAg9DUwXQ/wNT4C
+        P2V2Q+DYz15K7CJRAzCp+I2f4e74Xht4lH9lgO9aGeNpDRDOQXbi0dKCMD5bInRxEYbNxQu6RPuHM
+        BzZ7VdXtEKBJTzXo+sCNlzNy8BI51ibAiP8auKmP9U8JFgKuayX8drTYZ6xsaDUtwLuWgVx84ZZMq
+        wdYdnI2Q==;
+Received: from p200300ccff2fb4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2f:b400:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pJBtQ-00083d-UD; Sat, 21 Jan 2023 12:18:41 +0100
+Received: from andi by aktux with local (Exim 4.94.2)
+        (envelope-from <andreas@kemnade.info>)
+        id 1pJBtQ-00Bq2M-Au; Sat, 21 Jan 2023 12:18:40 +0100
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     sre@kernel.org, error27@gmail.com, rafael.j.wysocki@intel.com,
+        anton.vorontsov@linaro.org, ramakrishna.pallala@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hns@goldelico.com
+Cc:     Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] power: supply: disable faulty cooling logic
+Date:   Sat, 21 Jan 2023 12:16:21 +0100
+Message-Id: <20230121111621.2821558-1-andreas@kemnade.info>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4780418.GXAFRqVoOG@kreacher>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 08:48:07PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> If thermal_class is not registered with the driver core, there is no way
-> to expose the interfaces used by the thermal control framework, so
-> prevent thermal zones and cooling devices from being registered in
-> that case by returning an error from object registration functions.
-> 
-> For this purpose, introduce class_is_registered() that checks the
-> private pointer of the given class and returns 'false' if it is NULL,
-> which means that the class has not been registered, and use it in the
-> thermal framework.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/thermal/thermal_core.c |    6 ++++++
->  include/linux/device/class.h   |    5 +++++
->  2 files changed, 11 insertions(+)
-> 
-> Index: linux-pm/include/linux/device/class.h
-> ===================================================================
-> --- linux-pm.orig/include/linux/device/class.h
-> +++ linux-pm/include/linux/device/class.h
-> @@ -82,6 +82,11 @@ struct class_dev_iter {
->  	const struct device_type	*type;
->  };
->  
-> +static inline bool class_is_registered(struct class *class)
-> +{
-> +	return !!class->p;
+The rn5t618 power driver fails to register
+a cooling device because POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX
+is missing but availability is not checked before registering
+cooling device. After improved error checking in the thermal
+code, the registration of the power supply fails entirely.
 
-I really do not like this as it is exposing internals to drivers and
-whenever we do that, it gets abused and we have to unwind the mess in a
-few years.
+Checking for availability of _MAX before registering cooling device
+fixes the rn5t618 problem. But the whole logic feels questionable.
 
-Overall, I'm trying to remove the ->p usage, but that's a longterm goal
-of mine (to allow class and bus structures to be in read-only memory),
-which isn't your issue here, but it's good to think about why you want
-to know this information (more below.)
+First, the logic is inverted here:
+the code tells: max_current = max_cooling but
+0 = max_cooling, so there needs to be some inversion
+in the code which cannot be found. Comparing with other
+cooling devices, it can be found that value for fan speed is not
+inverted, value for cpufreq cooling is inverted (similar situation
+as here lowest frequency = max cooling)
 
-> +}
-> +
->  extern struct kobject *sysfs_dev_block_kobj;
->  extern struct kobject *sysfs_dev_char_kobj;
->  extern int __must_check __class_register(struct class *class,
-> Index: linux-pm/drivers/thermal/thermal_core.c
-> ===================================================================
-> --- linux-pm.orig/drivers/thermal/thermal_core.c
-> +++ linux-pm/drivers/thermal/thermal_core.c
-> @@ -880,6 +880,9 @@ __thermal_cooling_device_register(struct
->  	    !ops->set_cur_state)
->  		return ERR_PTR(-EINVAL);
->  
-> +	if (!class_is_registered(&thermal_class))
-> +		return ERR_PTR(-ENODEV);
+Second, analyzing usage of _MAX: it is seems that maximum capabilities
+of charging controller are specified and not of the battery. Probably
+there is not too much mismatch in the drivers actually implementing
+that. So nothing has exploded yet.  So there is no easy and safe way
+to specifify a max cooling value now.
 
-If the class isn't registered, then sommething went wrong with the
-thermal core code, right?  So why isn't the thermal core keeping a local
-variable of "class was registered" and relying on the driver core to
-know this?
+Conclusion for now (as a regression fix) just remove the cooling device
+registration and do it properly later on.
 
-The number of individual users that should be doing one thing or another
-if a class is not registered feels very very slim.  How come this code
-is being called at all if the thermal class was not registered in the
-first place?  What would have prevented that from happening?  Is it an
-ordering issue, or a kernel configuration issue?
+Fixes: e49a1e1ee078 ("thermal/core: fix error code in __thermal_cooling_device_register()")
+Fixes: 952aeeb3ee28 ("power_supply: Register power supply for thermal cooling device")
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ drivers/power/supply/power_supply_core.c | 93 ------------------------
+ 1 file changed, 93 deletions(-)
 
-thanks,
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index 7c790c41e2fe..cc5b2e22b42a 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1186,83 +1186,6 @@ static void psy_unregister_thermal(struct power_supply *psy)
+ 	thermal_zone_device_unregister(psy->tzd);
+ }
+ 
+-/* thermal cooling device callbacks */
+-static int ps_get_max_charge_cntl_limit(struct thermal_cooling_device *tcd,
+-					unsigned long *state)
+-{
+-	struct power_supply *psy;
+-	union power_supply_propval val;
+-	int ret;
+-
+-	psy = tcd->devdata;
+-	ret = power_supply_get_property(psy,
+-			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX, &val);
+-	if (ret)
+-		return ret;
+-
+-	*state = val.intval;
+-
+-	return ret;
+-}
+-
+-static int ps_get_cur_charge_cntl_limit(struct thermal_cooling_device *tcd,
+-					unsigned long *state)
+-{
+-	struct power_supply *psy;
+-	union power_supply_propval val;
+-	int ret;
+-
+-	psy = tcd->devdata;
+-	ret = power_supply_get_property(psy,
+-			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
+-	if (ret)
+-		return ret;
+-
+-	*state = val.intval;
+-
+-	return ret;
+-}
+-
+-static int ps_set_cur_charge_cntl_limit(struct thermal_cooling_device *tcd,
+-					unsigned long state)
+-{
+-	struct power_supply *psy;
+-	union power_supply_propval val;
+-	int ret;
+-
+-	psy = tcd->devdata;
+-	val.intval = state;
+-	ret = psy->desc->set_property(psy,
+-		POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
+-
+-	return ret;
+-}
+-
+-static const struct thermal_cooling_device_ops psy_tcd_ops = {
+-	.get_max_state = ps_get_max_charge_cntl_limit,
+-	.get_cur_state = ps_get_cur_charge_cntl_limit,
+-	.set_cur_state = ps_set_cur_charge_cntl_limit,
+-};
+-
+-static int psy_register_cooler(struct power_supply *psy)
+-{
+-	/* Register for cooling device if psy can control charging */
+-	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT)) {
+-		psy->tcd = thermal_cooling_device_register(
+-			(char *)psy->desc->name,
+-			psy, &psy_tcd_ops);
+-		return PTR_ERR_OR_ZERO(psy->tcd);
+-	}
+-
+-	return 0;
+-}
+-
+-static void psy_unregister_cooler(struct power_supply *psy)
+-{
+-	if (IS_ERR_OR_NULL(psy->tcd))
+-		return;
+-	thermal_cooling_device_unregister(psy->tcd);
+-}
+ #else
+ static int psy_register_thermal(struct power_supply *psy)
+ {
+@@ -1272,15 +1195,6 @@ static int psy_register_thermal(struct power_supply *psy)
+ static void psy_unregister_thermal(struct power_supply *psy)
+ {
+ }
+-
+-static int psy_register_cooler(struct power_supply *psy)
+-{
+-	return 0;
+-}
+-
+-static void psy_unregister_cooler(struct power_supply *psy)
+-{
+-}
+ #endif
+ 
+ static struct power_supply *__must_check
+@@ -1354,10 +1268,6 @@ __power_supply_register(struct device *parent,
+ 	if (rc)
+ 		goto register_thermal_failed;
+ 
+-	rc = psy_register_cooler(psy);
+-	if (rc)
+-		goto register_cooler_failed;
+-
+ 	rc = power_supply_create_triggers(psy);
+ 	if (rc)
+ 		goto create_triggers_failed;
+@@ -1387,8 +1297,6 @@ __power_supply_register(struct device *parent,
+ add_hwmon_sysfs_failed:
+ 	power_supply_remove_triggers(psy);
+ create_triggers_failed:
+-	psy_unregister_cooler(psy);
+-register_cooler_failed:
+ 	psy_unregister_thermal(psy);
+ register_thermal_failed:
+ wakeup_init_failed:
+@@ -1540,7 +1448,6 @@ void power_supply_unregister(struct power_supply *psy)
+ 	sysfs_remove_link(&psy->dev.kobj, "powers");
+ 	power_supply_remove_hwmon_sysfs(psy);
+ 	power_supply_remove_triggers(psy);
+-	psy_unregister_cooler(psy);
+ 	psy_unregister_thermal(psy);
+ 	device_init_wakeup(&psy->dev, false);
+ 	device_unregister(&psy->dev);
+-- 
+2.30.2
 
-greg k-h
