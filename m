@@ -2,68 +2,72 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10D9676614
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 12:42:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EE0676705
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 16:10:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjAULmn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Jan 2023 06:42:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S229815AbjAUPK2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Jan 2023 10:10:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjAULmm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Jan 2023 06:42:42 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A0B1027A;
-        Sat, 21 Jan 2023 03:42:40 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id dw9so7856106pjb.5;
-        Sat, 21 Jan 2023 03:42:40 -0800 (PST)
+        with ESMTP id S229699AbjAUPK1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Jan 2023 10:10:27 -0500
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5593234FA;
+        Sat, 21 Jan 2023 07:10:25 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id bk15so20686619ejb.9;
+        Sat, 21 Jan 2023 07:10:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NHJDkBvlNstfz18vvoahKce6VuIb6P55yo97+y6lwa0=;
-        b=UGWEpCN2IvqEPN7jbkvyVdInxTySPOiWUMas/9ZJPPmKhQ6wXHhFTt/RAeYb0YrL/x
-         9thVJPjEnQf7F9QODIF5G/mUOXj/U7QYoyL54DNSXwTJ/XM6LwRfRNV6hf7EBhMwnbAr
-         XkTG1Z80zd7CPTaEzGqcXxSEkzztqebatkciMEk2M7qnN3vIHpT3YZHItUEzXTOTtJmA
-         /dHIhcxMqgYpNArH2o8sh/XvF7WyYz+oY9+W++REGjwPOF/h14bLgGfKLQhzs+eoBsGn
-         vMSRkvvOZwEOW0GZ+dzJb3fAUKf8EkByIeEL6volnGoV/S3YSaYfIRaEjmRGpCB1spIe
-         LvTQ==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bfTLTRbRZ/hpg7GJwMI9/8DsFVyW9rI61TePGTxtz9M=;
+        b=KrSPKmS09qpqHQr7sUwCLKg777685P4ZDEEsG1lHeb0qUsuT2HDGkPrhitvHpjUu/t
+         VJKgu2lXkyTLvKxtBGuNysSp4JLMV08C/qAamG+L20x/PYJQX01s/g7O56JCMdLDmTAh
+         6FjPg1ai9zHwe7neRK+nLwRayamMD/R/gyRUM4gFiUzYkm9xaZzBBW4wt2rIfCRposH5
+         GcFBQPR4N0DnIQ12HC8oYeyoQaGORpj1Wz2QPKDBQbd4IX+js3yEyX/wW2cFHkGcuy/F
+         v7FYUbKXa/HjqTgSOsBQxOlodp8e1sk2wEWhHFjDCOuGCyxNciA2C/YXwJjO+AuqLmgz
+         Cu3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NHJDkBvlNstfz18vvoahKce6VuIb6P55yo97+y6lwa0=;
-        b=OqSbuihCRiaLbdBeEtmTdAAQmsUH9X0iKBkthnxmGSjER/nDvrOHe3eUoe/5xEqpJa
-         wFS3Dih+7VDQLBHnksfl/hXqmhHdUSA4xx2wnToUN/Guq7sxRuvph/B9mnDNFmM1LSVk
-         qYIr8NzrXrGdO6bJO6UrONWwgWYjX62ImMtgKmJUUdj2Pmfix1LwagW7sR//FmaAb63H
-         1D2zNI1pcaMEGCHEA6mHve1KgwrUFvok/HwMVSwEiqbvS6cY4NhM4BpOO3Jcu3YjyAuf
-         Hy85T9CQyd7QfWHE7j/cZYoZah3xhlJSYWs/6cpXRFvbhKxoKaForS6xTZKZOKgG0wWf
-         atBg==
-X-Gm-Message-State: AFqh2krqthocJkbfhUvvL2cUBm1uSuKWHMke7pA78hsMYhMbpSQw5WsE
-        Y7aM+p3tnPwnKnDzbpUuDrNkCWXIXP1H6p1M5UU=
-X-Google-Smtp-Source: AMrXdXvotOY0y8RjovwfKKxFVDmVxaajAoAYRRWqCebJeKEiTAo2xCcSC2K71D/24/RcR4cRF2T4o/jFGftm+YVGr+M=
-X-Received: by 2002:a17:90b:3110:b0:229:d5ce:64ce with SMTP id
- gc16-20020a17090b311000b00229d5ce64cemr1175773pjb.142.1674301359908; Sat, 21
- Jan 2023 03:42:39 -0800 (PST)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bfTLTRbRZ/hpg7GJwMI9/8DsFVyW9rI61TePGTxtz9M=;
+        b=MmRmPtfiePmoilhQ1cXRHyl6Z8nNjfdEMY7uNV7B0zM2v2anzFAXI0RG57p6KpyA1E
+         Lmdlzd8Lr2HezQ+EIe5RllCjx+NefMvPAL702YTqt2ge99r+j8JfdSGVsQxyXWEmzRJI
+         n/Bn8WLvOrDkVCOrqWDbcu3YBpTNj/33CYj+DFq05SjrqUe3UM5uBNg6xyPOueTcclyj
+         0DVHF8C/f52gby3tCQpP83IUQrESdNL2TIidkzdg3BLrA8SGo8qP0HUEtm2bVBVpWADw
+         eFG0dTH2gkWaEDoysEOj2PG3NRRBxiqHtUg14GP/WmDi5K/7sLJrSuPupB3yHM3SYSQn
+         EReA==
+X-Gm-Message-State: AFqh2kq6NSCqGZMy+J7/HH/toAcgSzZw4zDwwx0yvhACAeDgy58Hf+29
+        xSxpkxDvXv1bKbtGnG2kmhFwL14INUHJezEUzaw=
+X-Google-Smtp-Source: AMrXdXsdO2/OAYC7SoSxzhcJCVKyAMAQ0sxpHyUR77rCL83GcmNV/0yKXXnBKN3xJ701cqQ4LiLtDJhHgcVSQmaHPis=
+X-Received: by 2002:a17:906:eb13:b0:84d:4cb1:2591 with SMTP id
+ mb19-20020a170906eb1300b0084d4cb12591mr2708214ejb.202.1674313823986; Sat, 21
+ Jan 2023 07:10:23 -0800 (PST)
 MIME-Version: 1.0
-References: <20230121112947.53433-1-robimarko@gmail.com> <9956151e-d678-646f-b82e-fcf98ad25a1f@wanadoo.fr>
-In-Reply-To: <9956151e-d678-646f-b82e-fcf98ad25a1f@wanadoo.fr>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Sat, 21 Jan 2023 12:42:28 +0100
-Message-ID: <CAOX2RU71caFrGT++AOm_yJzwUCGU033PEqxXew+sed1QdA4M6g@mail.gmail.com>
-Subject: Re: [PATCH 1/4] soc: qcom: socinfo: move SMEM item struct and defines
- to a header
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <CAAhV-H59FLAFGD8oDZGjXWgL2ei_L=rYAaFWWp1skUT9nUPVYg@mail.gmail.com>
+ <20230120153644.GA636025@bhelgaas>
+In-Reply-To: <20230120153644.GA636025@bhelgaas>
+From:   Huacai Chen <chenhuacai@gmail.com>
+Date:   Sat, 21 Jan 2023 23:10:09 +0800
+Message-ID: <CAAhV-H4LDn4YmM6Cwse-yjEeooeyqQ4Gy0gPxN0WS=H6KmuSJw@mail.gmail.com>
+Subject: Re: [PATCH V2 2/2] PCI: Add quirk for LS7A to avoid reboot failure
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        Xuefeng Li <lixuefeng@loongson.cn>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,207 +75,215 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sat, 21 Jan 2023 at 12:33, Christophe JAILLET
-<christophe.jaillet@wanadoo.fr> wrote:
+On Fri, Jan 20, 2023 at 11:36 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> Le 21/01/2023 =C3=A0 12:29, Robert Marko a =C3=A9crit :
-> > Move SMEM item struct and related defines to a header in order to be ab=
-le
-> > to reuse them in the Qualcomm NVMEM CPUFreq driver instead of duplicati=
-ng
-> > them.
+> On Fri, Jan 20, 2023 at 09:31:43PM +0800, Huacai Chen wrote:
+> > On Thu, Jan 19, 2023 at 8:50 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > On Thu, Jan 19, 2023 at 08:25:20PM +0800, Huacai Chen wrote:
+> > > > Ping?
+> > >
+> > > I suggested another possible way to do this that wasn't so much of a
+> > > special case.  Did you explore that at all?
 > >
-> > Signed-off-by: Robert Marko <robimarko@gmail.com>
-> > ---
-> >   drivers/soc/qcom/socinfo.c       | 65 +-----------------------------
-> >   include/linux/soc/qcom/socinfo.h | 68 +++++++++++++++++++++++++++++++=
-+
-> >   2 files changed, 69 insertions(+), 64 deletions(-)
-> >   create mode 100644 include/linux/soc/qcom/socinfo.h
-> >
-> > diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-> > index 3b970a80f3aa..5919f863f369 100644
-> > --- a/drivers/soc/qcom/socinfo.c
-> > +++ b/drivers/soc/qcom/socinfo.c
-> > @@ -11,6 +11,7 @@
-> >   #include <linux/random.h>
-> >   #include <linux/slab.h>
-> >   #include <linux/soc/qcom/smem.h>
-> > +#include <linux/soc/qcom/socinfo.h>
-> >   #include <linux/string.h>
-> >   #include <linux/stringify.h>
-> >   #include <linux/sys_soc.h>
-> > @@ -32,15 +33,6 @@
-> >   #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
-> >   #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
-> >
-> > -#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
-> > -#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
-> > -
-> > -/*
-> > - * SMEM item id, used to acquire handles to respective
-> > - * SMEM region.
-> > - */
-> > -#define SMEM_HW_SW_BUILD_ID            137
-> > -
-> >   #ifdef CONFIG_DEBUG_FS
-> >   #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
-> >   #define SMEM_IMAGE_VERSION_SIZE                4096
-> > @@ -121,62 +113,7 @@ static const char *const pmic_models[] =3D {
-> >       [58] =3D "PM8450",
-> >       [65] =3D "PM8010",
-> >   };
-> > -#endif /* CONFIG_DEBUG_FS */
+> > That is a little difficult for me, but what is worse is that the root
+> > cause doesn't come from gpu or console drivers, but from the root
+> > port. That means: even if we can workaround the gpu issue in another
+> > way, there are still problems on other devices. Besides the graphics
+> > card, the most frequent problematic device is the sata controller
+> > connected on LS7A chipset, there are incomplete I/O accesses after the
+> > root port disabled and also cause reboot failure.
 >
-> This removal is spurious.
+> Yes, SATA sounds like another case where we want to use the device
+> after we call the driver's remove/shutdown method.  That's not
+> *worse*, it's just another case where we might have to mark devices
+> for special handling.
+That needs too much effort because we need to modify nearly every pci
+driver, and it exceeds my ability. :)
 
-Hi,
-Its intentional as only the socinfo struct was not guarded with an
-debugfs ifdef,
-so after moving it to a separate header you would have:
+>
+> If we remove/shutdown *any* Root Port, not just LS7A, I think the idea
+> of assuming downstream devices can continue to work as usual is a
+> little suspect.  They might continue to work by accident today, but it
+> doesn't seem like a robust design.
+The existing design works for so many years, so it is mostly
+reasonable. For the LS7A case, the root cause comes from the root
+port, so a workaround on the root port seems somewhat reasonable.
 
-#endif /* CONFIG_DEBUG_FS */
-#ifdef CONFIG_DEBUG_FS
-
-This doesn't really make sense to me, so that is why endif is removed.
-
-Regards,
-Robert
+Huacai
 >
-> CJ
->
->
-> > -
-> > -/* Socinfo SMEM item structure */
-> > -struct socinfo {
-> > -     __le32 fmt;
-> > -     __le32 id;
-> > -     __le32 ver;
-> > -     char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
-> > -     /* Version 2 */
-> > -     __le32 raw_id;
-> > -     __le32 raw_ver;
-> > -     /* Version 3 */
-> > -     __le32 hw_plat;
-> > -     /* Version 4 */
-> > -     __le32 plat_ver;
-> > -     /* Version 5 */
-> > -     __le32 accessory_chip;
-> > -     /* Version 6 */
-> > -     __le32 hw_plat_subtype;
-> > -     /* Version 7 */
-> > -     __le32 pmic_model;
-> > -     __le32 pmic_die_rev;
-> > -     /* Version 8 */
-> > -     __le32 pmic_model_1;
-> > -     __le32 pmic_die_rev_1;
-> > -     __le32 pmic_model_2;
-> > -     __le32 pmic_die_rev_2;
-> > -     /* Version 9 */
-> > -     __le32 foundry_id;
-> > -     /* Version 10 */
-> > -     __le32 serial_num;
-> > -     /* Version 11 */
-> > -     __le32 num_pmics;
-> > -     __le32 pmic_array_offset;
-> > -     /* Version 12 */
-> > -     __le32 chip_family;
-> > -     __le32 raw_device_family;
-> > -     __le32 raw_device_num;
-> > -     /* Version 13 */
-> > -     __le32 nproduct_id;
-> > -     char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
-> > -     /* Version 14 */
-> > -     __le32 num_clusters;
-> > -     __le32 ncluster_array_offset;
-> > -     __le32 num_defective_parts;
-> > -     __le32 ndefective_parts_array_offset;
-> > -     /* Version 15 */
-> > -     __le32 nmodem_supported;
-> > -     /* Version 16 */
-> > -     __le32  feature_code;
-> > -     __le32  pcode;
-> > -     __le32  npartnamemap_offset;
-> > -     __le32  nnum_partname_mapping;
-> > -};
-> >
-> > -#ifdef CONFIG_DEBUG_FS
-> >   struct socinfo_params {
-> >       u32 raw_device_family;
-> >       u32 hw_plat_subtype;
-> > diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/=
-socinfo.h
-> > new file mode 100644
-> > index 000000000000..6a175d635617
-> > --- /dev/null
-> > +++ b/include/linux/soc/qcom/socinfo.h
-> > @@ -0,0 +1,68 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +
-> > +#ifndef __QCOM_SOCINFO_H__
-> > +#define __QCOM_SOCINFO_H__
-> > +
-> > +/*
-> > + * SMEM item id, used to acquire handles to respective
-> > + * SMEM region.
-> > + */
-> > +#define SMEM_HW_SW_BUILD_ID          137
-> > +
-> > +#define SMEM_SOCINFO_BUILD_ID_LENGTH 32
-> > +#define SMEM_SOCINFO_CHIP_ID_LENGTH  32
-> > +
-> > +/* Socinfo SMEM item structure */
-> > +struct socinfo {
-> > +     __le32 fmt;
-> > +     __le32 id;
-> > +     __le32 ver;
-> > +     char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
-> > +     /* Version 2 */
-> > +     __le32 raw_id;
-> > +     __le32 raw_ver;
-> > +     /* Version 3 */
-> > +     __le32 hw_plat;
-> > +     /* Version 4 */
-> > +     __le32 plat_ver;
-> > +     /* Version 5 */
-> > +     __le32 accessory_chip;
-> > +     /* Version 6 */
-> > +     __le32 hw_plat_subtype;
-> > +     /* Version 7 */
-> > +     __le32 pmic_model;
-> > +     __le32 pmic_die_rev;
-> > +     /* Version 8 */
-> > +     __le32 pmic_model_1;
-> > +     __le32 pmic_die_rev_1;
-> > +     __le32 pmic_model_2;
-> > +     __le32 pmic_die_rev_2;
-> > +     /* Version 9 */
-> > +     __le32 foundry_id;
-> > +     /* Version 10 */
-> > +     __le32 serial_num;
-> > +     /* Version 11 */
-> > +     __le32 num_pmics;
-> > +     __le32 pmic_array_offset;
-> > +     /* Version 12 */
-> > +     __le32 chip_family;
-> > +     __le32 raw_device_family;
-> > +     __le32 raw_device_num;
-> > +     /* Version 13 */
-> > +     __le32 nproduct_id;
-> > +     char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
-> > +     /* Version 14 */
-> > +     __le32 num_clusters;
-> > +     __le32 ncluster_array_offset;
-> > +     __le32 num_defective_parts;
-> > +     __le32 ndefective_parts_array_offset;
-> > +     /* Version 15 */
-> > +     __le32 nmodem_supported;
-> > +     /* Version 16 */
-> > +     __le32  feature_code;
-> > +     __le32  pcode;
-> > +     __le32  npartnamemap_offset;
-> > +     __le32  nnum_partname_mapping;
-> > +};
-> > +
-> > +#endif
->
+> > > I know there's no *existing* way to mark devices that we need to use
+> > > all the way through shutdown or reboot, but if it makes sense, there's
+> > > no reason we couldn't add one.  That has the potential of being more
+> > > generic, e.g., we could do it for all console devices, as opposed to
+> > > quirking a Root Port that just happens to be in the path to the
+> > > console.
+> > >
+> > > > On Sat, Jan 7, 2023 at 10:25 AM Huacai Chen <chenhuacai@gmail.com> wrote:
+> > > > > On Fri, Jan 6, 2023 at 11:38 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > > > On Fri, Jan 06, 2023 at 05:51:43PM +0800, Huacai Chen wrote:
+> > > > > > > After cc27b735ad3a7557 ("PCI/portdrv: Turn off PCIe
+> > > > > > > services during shutdown") we observe poweroff/reboot
+> > > > > > > failures on systems with LS7A chipset.
+> > > > > > >
+> > > > > > > We found that if we remove "pci_command &=
+> > > > > > > ~PCI_COMMAND_MASTER" in do_pci_disable_device(), it can
+> > > > > > > work well. The hardware engineer says that the root cause
+> > > > > > > is that CPU is still accessing PCIe devices while
+> > > > > > > poweroff/reboot, and if we disable the Bus Master Bit at
+> > > > > > > this time, the PCIe controller doesn't forward requests to
+> > > > > > > downstream devices, and also does not send TIMEOUT to CPU,
+> > > > > > > which causes CPU wait forever (hardware deadlock).
+> > > > > > >
+> > > > > > > To be clear, the sequence is like this:
+> > > > > > >
+> > > > > > >   - CPU issues MMIO read to device below Root Port
+> > > > > > >
+> > > > > > >   - LS7A Root Port fails to forward transaction to secondary bus
+> > > > > > >     because of LS7A Bus Master defect
+> > > > > > >
+> > > > > > >   - CPU hangs waiting for response to MMIO read
+> > > > > > >
+> > > > > > > Then how is userspace able to use a device after the
+> > > > > > > device is removed?
+> > > > > > >
+> > > > > > > To give more details, let's take the graphics driver (e.g.
+> > > > > > > amdgpu) as an example. The userspace programs call
+> > > > > > > printf() to display "shutting down xxx service" during
+> > > > > > > shutdown/reboot, or the kernel calls printk() to display
+> > > > > > > something during shutdown/reboot. These can happen at any
+> > > > > > > time, even after we call pcie_port_device_remove() to
+> > > > > > > disable the pcie port on the graphic card.
+> > > > > > >
+> > > > > > > The call stack is: printk() --> call_console_drivers() -->
+> > > > > > > con->write() --> vt_console_print() --> fbcon_putcs()
+> > > > > > >
+> > > > > > > This scenario happens because userspace programs (or the
+> > > > > > > kernel itself) don't know whether a device is 'usable',
+> > > > > > > they just use it, at any time.
+> > > > > >
+> > > > > > Thanks for this background.  So basically we want to call
+> > > > > > .remove() on a console device (or a bridge leading to it),
+> > > > > > but we expect it to keep working as usual afterwards?
+> > > > > >
+> > > > > > That seems a little weird.  Is that the design we want?
+> > > > > > Maybe we should have a way to mark devices so we don't
+> > > > > > remove them during shutdown or reboot?
+> > > > >
+> > > > > Sounds reasonable, but it seems no existing way can mark this.
+> > > > >
+> > > > > Huacai
+> > > > > >
+> > > > > > > This hardware behavior is a PCIe protocol violation (Bus Master should
+> > > > > > > not be involved in CPU MMIO transactions), and it will be fixed in new
+> > > > > > > revisions of hardware (add timeout mechanism for CPU read request,
+> > > > > > > whether or not Bus Master bit is cleared).
+> > > > > > >
+> > > > > > > On some x86 platforms, radeon/amdgpu devices can cause similar problems
+> > > > > > > [1][2]. Once before I wanted to make a single patch to solve "all of
+> > > > > > > these problems" together, but it seems unreasonable because maybe they
+> > > > > > > are not exactly the same problem. So, this patch add a new function
+> > > > > > > pcie_portdrv_shutdown(), a slight modified copy of pcie_portdrv_remove()
+> > > > > > > dedicated for the shutdown path, and then add a quirk just for LS7A to
+> > > > > > > avoid clearing Bus Master bit in pcie_portdrv_shutdown(). Leave other
+> > > > > > > platforms behave as before.
+> > > > > > >
+> > > > > > > [1] https://bugs.freedesktop.org/show_bug.cgi?id=97980
+> > > > > > > [2] https://bugs.freedesktop.org/show_bug.cgi?id=98638
+> > > > > > >
+> > > > > > > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> > > > > > > ---
+> > > > > > >  drivers/pci/controller/pci-loongson.c | 17 +++++++++++++++++
+> > > > > > >  drivers/pci/pcie/portdrv.c            | 21 +++++++++++++++++++--
+> > > > > > >  include/linux/pci.h                   |  1 +
+> > > > > > >  3 files changed, 37 insertions(+), 2 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/pci/controller/pci-loongson.c b/drivers/pci/controller/pci-loongson.c
+> > > > > > > index 759ec211c17b..641308ba4126 100644
+> > > > > > > --- a/drivers/pci/controller/pci-loongson.c
+> > > > > > > +++ b/drivers/pci/controller/pci-loongson.c
+> > > > > > > @@ -93,6 +93,24 @@ DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > >  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > >                       DEV_PCIE_PORT_2, loongson_mrrs_quirk);
+> > > > > > >
+> > > > > > > +static void loongson_bmaster_quirk(struct pci_dev *pdev)
+> > > > > > > +{
+> > > > > > > +     /*
+> > > > > > > +      * Some Loongson PCIe ports will cause CPU deadlock if there is
+> > > > > > > +      * MMIO access to a downstream device when the root port disable
+> > > > > > > +      * the Bus Master bit during poweroff/reboot.
+> > > > > > > +      */
+> > > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(pdev->bus);
+> > > > > > > +
+> > > > > > > +     bridge->no_dis_bmaster = 1;
+> > > > > > > +}
+> > > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > > +                     DEV_PCIE_PORT_0, loongson_bmaster_quirk);
+> > > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > > +                     DEV_PCIE_PORT_1, loongson_bmaster_quirk);
+> > > > > > > +DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_LOONGSON,
+> > > > > > > +                     DEV_PCIE_PORT_2, loongson_bmaster_quirk);
+> > > > > > > +
+> > > > > > >  static void loongson_pci_pin_quirk(struct pci_dev *pdev)
+> > > > > > >  {
+> > > > > > >       pdev->pin = 1 + (PCI_FUNC(pdev->devfn) & 3);
+> > > > > > > diff --git a/drivers/pci/pcie/portdrv.c b/drivers/pci/pcie/portdrv.c
+> > > > > > > index 2cc2e60bcb39..96f45c444422 100644
+> > > > > > > --- a/drivers/pci/pcie/portdrv.c
+> > > > > > > +++ b/drivers/pci/pcie/portdrv.c
+> > > > > > > @@ -501,7 +501,6 @@ static void pcie_port_device_remove(struct pci_dev *dev)
+> > > > > > >  {
+> > > > > > >       device_for_each_child(&dev->dev, NULL, remove_iter);
+> > > > > > >       pci_free_irq_vectors(dev);
+> > > > > > > -     pci_disable_device(dev);
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  /**
+> > > > > > > @@ -727,6 +726,24 @@ static void pcie_portdrv_remove(struct pci_dev *dev)
+> > > > > > >       }
+> > > > > > >
+> > > > > > >       pcie_port_device_remove(dev);
+> > > > > > > +
+> > > > > > > +     pci_disable_device(dev);
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +static void pcie_portdrv_shutdown(struct pci_dev *dev)
+> > > > > > > +{
+> > > > > > > +     struct pci_host_bridge *bridge = pci_find_host_bridge(dev->bus);
+> > > > > > > +
+> > > > > > > +     if (pci_bridge_d3_possible(dev)) {
+> > > > > > > +             pm_runtime_forbid(&dev->dev);
+> > > > > > > +             pm_runtime_get_noresume(&dev->dev);
+> > > > > > > +             pm_runtime_dont_use_autosuspend(&dev->dev);
+> > > > > > > +     }
+> > > > > > > +
+> > > > > > > +     pcie_port_device_remove(dev);
+> > > > > > > +
+> > > > > > > +     if (!bridge->no_dis_bmaster)
+> > > > > > > +             pci_disable_device(dev);
+> > > > > > >  }
+> > > > > > >
+> > > > > > >  static pci_ers_result_t pcie_portdrv_error_detected(struct pci_dev *dev,
+> > > > > > > @@ -777,7 +794,7 @@ static struct pci_driver pcie_portdriver = {
+> > > > > > >
+> > > > > > >       .probe          = pcie_portdrv_probe,
+> > > > > > >       .remove         = pcie_portdrv_remove,
+> > > > > > > -     .shutdown       = pcie_portdrv_remove,
+> > > > > > > +     .shutdown       = pcie_portdrv_shutdown,
+> > > > > > >
+> > > > > > >       .err_handler    = &pcie_portdrv_err_handler,
+> > > > > > >
+> > > > > > > diff --git a/include/linux/pci.h b/include/linux/pci.h
+> > > > > > > index 3df2049ec4a8..a64dbcb89231 100644
+> > > > > > > --- a/include/linux/pci.h
+> > > > > > > +++ b/include/linux/pci.h
+> > > > > > > @@ -573,6 +573,7 @@ struct pci_host_bridge {
+> > > > > > >       unsigned int    ignore_reset_delay:1;   /* For entire hierarchy */
+> > > > > > >       unsigned int    no_ext_tags:1;          /* No Extended Tags */
+> > > > > > >       unsigned int    no_inc_mrrs:1;          /* No Increase MRRS */
+> > > > > > > +     unsigned int    no_dis_bmaster:1;       /* No Disable Bus Master */
+> > > > > > >       unsigned int    native_aer:1;           /* OS may use PCIe AER */
+> > > > > > >       unsigned int    native_pcie_hotplug:1;  /* OS may use PCIe hotplug */
+> > > > > > >       unsigned int    native_shpc_hotplug:1;  /* OS may use SHPC hotplug */
+> > > > > > > --
+> > > > > > > 2.31.1
+> > > > > > >
