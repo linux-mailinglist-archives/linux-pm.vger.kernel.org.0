@@ -2,225 +2,250 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D566765F2
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 12:19:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1490676601
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Jan 2023 12:29:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjAULS7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sat, 21 Jan 2023 06:18:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44594 "EHLO
+        id S229814AbjAUL34 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sat, 21 Jan 2023 06:29:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbjAULS6 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Jan 2023 06:18:58 -0500
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE2586B8;
-        Sat, 21 Jan 2023 03:18:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=sjnfNZ8hw7XnaikIzmFyW/hjvInLUHEoDAKXX/TVuFo=; b=F+bqWmEc3NoVkh3NFbmuce/5KI
-        WBSwstOFaLP6LUqEqd8XwM7AaHtQCN/CcXZW4+PFRLpPpJOaziMQXVZKs7QvoB+G7+TBxE5QYuRzg
-        j15L5ZmDIGwMAAanVjVOy/RsRqaCya7Br3cmeizeVSbxnkA1KqNt8QFkoAq6BNFAg9DUwXQ/wNT4C
-        P2V2Q+DYz15K7CJRAzCp+I2f4e74Xht4lH9lgO9aGeNpDRDOQXbi0dKCMD5bInRxEYbNxQu6RPuHM
-        BzZ7VdXtEKBJTzXo+sCNlzNy8BI51ibAiP8auKmP9U8JFgKuayX8drTYZ6xsaDUtwLuWgVx84ZZMq
-        wdYdnI2Q==;
-Received: from p200300ccff2fb4001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff2f:b400:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pJBtQ-00083d-UD; Sat, 21 Jan 2023 12:18:41 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pJBtQ-00Bq2M-Au; Sat, 21 Jan 2023 12:18:40 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     sre@kernel.org, error27@gmail.com, rafael.j.wysocki@intel.com,
-        anton.vorontsov@linaro.org, ramakrishna.pallala@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hns@goldelico.com
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH] power: supply: disable faulty cooling logic
-Date:   Sat, 21 Jan 2023 12:16:21 +0100
-Message-Id: <20230121111621.2821558-1-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
+        with ESMTP id S229523AbjAUL3x (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sat, 21 Jan 2023 06:29:53 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF93B3DC;
+        Sat, 21 Jan 2023 03:29:51 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id y11so9450891edd.6;
+        Sat, 21 Jan 2023 03:29:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tQtA9gnXbHiCVZ0cdHgz61/mVXx++tAhOoDuPrap8Z8=;
+        b=IrfWZ6nnGNuKzRQyWZxpXbc/uAwXN43BQn8gO3yrJq2u3+D/z8GgtpgGunHjw7ig5o
+         pbJ8RLv0KPCELe3aZpmvWDkSnx0R2vaOT0K8hMNZ9qONHT+Nz6pquv5j0JNGDSx0jLb8
+         mlntWNQt3gvIbnQrVG+p6iOGnxyARi05vZnjC6aiPspZReA/kCrUlRI7scCaXJB9TdXO
+         0RftYK4T6hdaTXHH86j+ZHaJtPB5WYueVscMBR3jz0io+Jof3qcYptT8dxBw762lYnTy
+         d7+T8gctiDul0KmQVJ1s8ShAo9X5HKbNCHSIB7qGXhlkDl1vLVlMn2EobIfVzYXPGntD
+         U2Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tQtA9gnXbHiCVZ0cdHgz61/mVXx++tAhOoDuPrap8Z8=;
+        b=rI7//64ZdgKn9b1XfLm9YzUkJmDRBi9kQFbHZ7X62/V0g82KhIpSn3HQELIufuuOOI
+         Q0mOkb3uOAgh49RkObKaV8z4X7A0yzY7yAusZmywN7qHz8fesYRz7N+1WXWxNpG75hPL
+         4ePwNtZ3PvTEtEJ8/SEI8ImP8tVody0j3pXjUAoCKhmCBxVZs+xWthxsiDY249GPupRD
+         ogDzOgmeodk3Jd9OeLFP6uBN6Mkxxl8FOxNsJMdYzvG17/2EFm0jpQDiAOYhWIHgbDsn
+         3IZ5ozmiRiQfYb+tjxXLoC9zd9bngUFFypz9sS6EmYf9V+W++KQoik2azptFGeSeTMFz
+         5mpg==
+X-Gm-Message-State: AFqh2kqoVFpQ242MUI6HF3jS+SRKTXmPnP++e7x2++oJOVMu6ww/RUK6
+        TGxgx3HtrHvYko9qMbGowx4=
+X-Google-Smtp-Source: AMrXdXtMK0T0DTiO6dazvK4Gi14KKO6u4xEFwf3TbeONxFRnhsCY1K0ZzvDUaYtLmDLP9uhEZrVYRQ==
+X-Received: by 2002:a05:6402:2055:b0:479:6c4f:40df with SMTP id bc21-20020a056402205500b004796c4f40dfmr16794615edb.18.1674300589520;
+        Sat, 21 Jan 2023 03:29:49 -0800 (PST)
+Received: from fedora.. ([188.252.220.152])
+        by smtp.googlemail.com with ESMTPSA id d26-20020a056402401a00b0046c7c3755a7sm5152151eda.17.2023.01.21.03.29.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Jan 2023 03:29:48 -0800 (PST)
+From:   Robert Marko <robimarko@gmail.com>
+To:     ilia.lin@kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, rafael@kernel.org,
+        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Cc:     Robert Marko <robimarko@gmail.com>
+Subject: [PATCH 1/4] soc: qcom: socinfo: move SMEM item struct and defines to a header
+Date:   Sat, 21 Jan 2023 12:29:44 +0100
+Message-Id: <20230121112947.53433-1-robimarko@gmail.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The rn5t618 power driver fails to register
-a cooling device because POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX
-is missing but availability is not checked before registering
-cooling device. After improved error checking in the thermal
-code, the registration of the power supply fails entirely.
+Move SMEM item struct and related defines to a header in order to be able
+to reuse them in the Qualcomm NVMEM CPUFreq driver instead of duplicating
+them.
 
-Checking for availability of _MAX before registering cooling device
-fixes the rn5t618 problem. But the whole logic feels questionable.
-
-First, the logic is inverted here:
-the code tells: max_current = max_cooling but
-0 = max_cooling, so there needs to be some inversion
-in the code which cannot be found. Comparing with other
-cooling devices, it can be found that value for fan speed is not
-inverted, value for cpufreq cooling is inverted (similar situation
-as here lowest frequency = max cooling)
-
-Second, analyzing usage of _MAX: it is seems that maximum capabilities
-of charging controller are specified and not of the battery. Probably
-there is not too much mismatch in the drivers actually implementing
-that. So nothing has exploded yet.  So there is no easy and safe way
-to specifify a max cooling value now.
-
-Conclusion for now (as a regression fix) just remove the cooling device
-registration and do it properly later on.
-
-Fixes: e49a1e1ee078 ("thermal/core: fix error code in __thermal_cooling_device_register()")
-Fixes: 952aeeb3ee28 ("power_supply: Register power supply for thermal cooling device")
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+Signed-off-by: Robert Marko <robimarko@gmail.com>
 ---
- drivers/power/supply/power_supply_core.c | 93 ------------------------
- 1 file changed, 93 deletions(-)
+ drivers/soc/qcom/socinfo.c       | 65 +-----------------------------
+ include/linux/soc/qcom/socinfo.h | 68 ++++++++++++++++++++++++++++++++
+ 2 files changed, 69 insertions(+), 64 deletions(-)
+ create mode 100644 include/linux/soc/qcom/socinfo.h
 
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 7c790c41e2fe..cc5b2e22b42a 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -1186,83 +1186,6 @@ static void psy_unregister_thermal(struct power_supply *psy)
- 	thermal_zone_device_unregister(psy->tzd);
- }
+diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
+index 3b970a80f3aa..5919f863f369 100644
+--- a/drivers/soc/qcom/socinfo.c
++++ b/drivers/soc/qcom/socinfo.c
+@@ -11,6 +11,7 @@
+ #include <linux/random.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/smem.h>
++#include <linux/soc/qcom/socinfo.h>
+ #include <linux/string.h>
+ #include <linux/stringify.h>
+ #include <linux/sys_soc.h>
+@@ -32,15 +33,6 @@
+ #define qcom_board_id(id) QCOM_ID_ ## id, __stringify(id)
+ #define qcom_board_id_named(id, name) QCOM_ID_ ## id, (name)
  
--/* thermal cooling device callbacks */
--static int ps_get_max_charge_cntl_limit(struct thermal_cooling_device *tcd,
--					unsigned long *state)
--{
--	struct power_supply *psy;
--	union power_supply_propval val;
--	int ret;
+-#define SMEM_SOCINFO_BUILD_ID_LENGTH           32
+-#define SMEM_SOCINFO_CHIP_ID_LENGTH            32
 -
--	psy = tcd->devdata;
--	ret = power_supply_get_property(psy,
--			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX, &val);
--	if (ret)
--		return ret;
+-/*
+- * SMEM item id, used to acquire handles to respective
+- * SMEM region.
+- */
+-#define SMEM_HW_SW_BUILD_ID            137
 -
--	*state = val.intval;
+ #ifdef CONFIG_DEBUG_FS
+ #define SMEM_IMAGE_VERSION_BLOCKS_COUNT        32
+ #define SMEM_IMAGE_VERSION_SIZE                4096
+@@ -121,62 +113,7 @@ static const char *const pmic_models[] = {
+ 	[58] = "PM8450",
+ 	[65] = "PM8010",
+ };
+-#endif /* CONFIG_DEBUG_FS */
 -
--	return ret;
--}
--
--static int ps_get_cur_charge_cntl_limit(struct thermal_cooling_device *tcd,
--					unsigned long *state)
--{
--	struct power_supply *psy;
--	union power_supply_propval val;
--	int ret;
--
--	psy = tcd->devdata;
--	ret = power_supply_get_property(psy,
--			POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
--	if (ret)
--		return ret;
--
--	*state = val.intval;
--
--	return ret;
--}
--
--static int ps_set_cur_charge_cntl_limit(struct thermal_cooling_device *tcd,
--					unsigned long state)
--{
--	struct power_supply *psy;
--	union power_supply_propval val;
--	int ret;
--
--	psy = tcd->devdata;
--	val.intval = state;
--	ret = psy->desc->set_property(psy,
--		POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT, &val);
--
--	return ret;
--}
--
--static const struct thermal_cooling_device_ops psy_tcd_ops = {
--	.get_max_state = ps_get_max_charge_cntl_limit,
--	.get_cur_state = ps_get_cur_charge_cntl_limit,
--	.set_cur_state = ps_set_cur_charge_cntl_limit,
+-/* Socinfo SMEM item structure */
+-struct socinfo {
+-	__le32 fmt;
+-	__le32 id;
+-	__le32 ver;
+-	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
+-	/* Version 2 */
+-	__le32 raw_id;
+-	__le32 raw_ver;
+-	/* Version 3 */
+-	__le32 hw_plat;
+-	/* Version 4 */
+-	__le32 plat_ver;
+-	/* Version 5 */
+-	__le32 accessory_chip;
+-	/* Version 6 */
+-	__le32 hw_plat_subtype;
+-	/* Version 7 */
+-	__le32 pmic_model;
+-	__le32 pmic_die_rev;
+-	/* Version 8 */
+-	__le32 pmic_model_1;
+-	__le32 pmic_die_rev_1;
+-	__le32 pmic_model_2;
+-	__le32 pmic_die_rev_2;
+-	/* Version 9 */
+-	__le32 foundry_id;
+-	/* Version 10 */
+-	__le32 serial_num;
+-	/* Version 11 */
+-	__le32 num_pmics;
+-	__le32 pmic_array_offset;
+-	/* Version 12 */
+-	__le32 chip_family;
+-	__le32 raw_device_family;
+-	__le32 raw_device_num;
+-	/* Version 13 */
+-	__le32 nproduct_id;
+-	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
+-	/* Version 14 */
+-	__le32 num_clusters;
+-	__le32 ncluster_array_offset;
+-	__le32 num_defective_parts;
+-	__le32 ndefective_parts_array_offset;
+-	/* Version 15 */
+-	__le32 nmodem_supported;
+-	/* Version 16 */
+-	__le32  feature_code;
+-	__le32  pcode;
+-	__le32  npartnamemap_offset;
+-	__le32  nnum_partname_mapping;
 -};
--
--static int psy_register_cooler(struct power_supply *psy)
--{
--	/* Register for cooling device if psy can control charging */
--	if (psy_has_property(psy->desc, POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT)) {
--		psy->tcd = thermal_cooling_device_register(
--			(char *)psy->desc->name,
--			psy, &psy_tcd_ops);
--		return PTR_ERR_OR_ZERO(psy->tcd);
--	}
--
--	return 0;
--}
--
--static void psy_unregister_cooler(struct power_supply *psy)
--{
--	if (IS_ERR_OR_NULL(psy->tcd))
--		return;
--	thermal_cooling_device_unregister(psy->tcd);
--}
- #else
- static int psy_register_thermal(struct power_supply *psy)
- {
-@@ -1272,15 +1195,6 @@ static int psy_register_thermal(struct power_supply *psy)
- static void psy_unregister_thermal(struct power_supply *psy)
- {
- }
--
--static int psy_register_cooler(struct power_supply *psy)
--{
--	return 0;
--}
--
--static void psy_unregister_cooler(struct power_supply *psy)
--{
--}
- #endif
  
- static struct power_supply *__must_check
-@@ -1354,10 +1268,6 @@ __power_supply_register(struct device *parent,
- 	if (rc)
- 		goto register_thermal_failed;
- 
--	rc = psy_register_cooler(psy);
--	if (rc)
--		goto register_cooler_failed;
--
- 	rc = power_supply_create_triggers(psy);
- 	if (rc)
- 		goto create_triggers_failed;
-@@ -1387,8 +1297,6 @@ __power_supply_register(struct device *parent,
- add_hwmon_sysfs_failed:
- 	power_supply_remove_triggers(psy);
- create_triggers_failed:
--	psy_unregister_cooler(psy);
--register_cooler_failed:
- 	psy_unregister_thermal(psy);
- register_thermal_failed:
- wakeup_init_failed:
-@@ -1540,7 +1448,6 @@ void power_supply_unregister(struct power_supply *psy)
- 	sysfs_remove_link(&psy->dev.kobj, "powers");
- 	power_supply_remove_hwmon_sysfs(psy);
- 	power_supply_remove_triggers(psy);
--	psy_unregister_cooler(psy);
- 	psy_unregister_thermal(psy);
- 	device_init_wakeup(&psy->dev, false);
- 	device_unregister(&psy->dev);
+-#ifdef CONFIG_DEBUG_FS
+ struct socinfo_params {
+ 	u32 raw_device_family;
+ 	u32 hw_plat_subtype;
+diff --git a/include/linux/soc/qcom/socinfo.h b/include/linux/soc/qcom/socinfo.h
+new file mode 100644
+index 000000000000..6a175d635617
+--- /dev/null
++++ b/include/linux/soc/qcom/socinfo.h
+@@ -0,0 +1,68 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++#ifndef __QCOM_SOCINFO_H__
++#define __QCOM_SOCINFO_H__
++
++/*
++ * SMEM item id, used to acquire handles to respective
++ * SMEM region.
++ */
++#define SMEM_HW_SW_BUILD_ID		137
++
++#define SMEM_SOCINFO_BUILD_ID_LENGTH	32
++#define SMEM_SOCINFO_CHIP_ID_LENGTH	32
++
++/* Socinfo SMEM item structure */
++struct socinfo {
++	__le32 fmt;
++	__le32 id;
++	__le32 ver;
++	char build_id[SMEM_SOCINFO_BUILD_ID_LENGTH];
++	/* Version 2 */
++	__le32 raw_id;
++	__le32 raw_ver;
++	/* Version 3 */
++	__le32 hw_plat;
++	/* Version 4 */
++	__le32 plat_ver;
++	/* Version 5 */
++	__le32 accessory_chip;
++	/* Version 6 */
++	__le32 hw_plat_subtype;
++	/* Version 7 */
++	__le32 pmic_model;
++	__le32 pmic_die_rev;
++	/* Version 8 */
++	__le32 pmic_model_1;
++	__le32 pmic_die_rev_1;
++	__le32 pmic_model_2;
++	__le32 pmic_die_rev_2;
++	/* Version 9 */
++	__le32 foundry_id;
++	/* Version 10 */
++	__le32 serial_num;
++	/* Version 11 */
++	__le32 num_pmics;
++	__le32 pmic_array_offset;
++	/* Version 12 */
++	__le32 chip_family;
++	__le32 raw_device_family;
++	__le32 raw_device_num;
++	/* Version 13 */
++	__le32 nproduct_id;
++	char chip_id[SMEM_SOCINFO_CHIP_ID_LENGTH];
++	/* Version 14 */
++	__le32 num_clusters;
++	__le32 ncluster_array_offset;
++	__le32 num_defective_parts;
++	__le32 ndefective_parts_array_offset;
++	/* Version 15 */
++	__le32 nmodem_supported;
++	/* Version 16 */
++	__le32  feature_code;
++	__le32  pcode;
++	__le32  npartnamemap_offset;
++	__le32  nnum_partname_mapping;
++};
++
++#endif
 -- 
-2.30.2
+2.39.1
 
