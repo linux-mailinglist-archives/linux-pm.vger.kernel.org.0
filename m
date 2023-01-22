@@ -2,85 +2,74 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FA6676DBA
-	for <lists+linux-pm@lfdr.de>; Sun, 22 Jan 2023 15:35:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4732D67712B
+	for <lists+linux-pm@lfdr.de>; Sun, 22 Jan 2023 18:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjAVOfy (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Sun, 22 Jan 2023 09:35:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50456 "EHLO
+        id S230352AbjAVRp6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Sun, 22 Jan 2023 12:45:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjAVOfx (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Jan 2023 09:35:53 -0500
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4361A487;
-        Sun, 22 Jan 2023 06:35:52 -0800 (PST)
-Received: by mail-wr1-x432.google.com with SMTP id b7so8663253wrt.3;
-        Sun, 22 Jan 2023 06:35:52 -0800 (PST)
+        with ESMTP id S230355AbjAVRp5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Sun, 22 Jan 2023 12:45:57 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A427BC163;
+        Sun, 22 Jan 2023 09:45:54 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so7034723wmq.0;
+        Sun, 22 Jan 2023 09:45:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=yrVZNgRV6FceaMBoO7b1bSNI7OZRej+dPjOag/ZFF98=;
-        b=ggJNpzEbwqFoTTGTS56yie1K6sXXzCVKs+Hbecvxe/tzyGWFIW8de+/p+RQVy8m9sl
-         0DLUvTVpYGot6Gjpja9HGRMWm/Mz19S5V4+kQFGwCMkmrJZGQUk/D5AmfJpj5NixsHHl
-         EL5E52YEBshcbKilgPS7lv9bRdMKGTnrGd1L7gyc4o56uoBFjeaxmRN5B6XeddGn5lyM
-         wCHEk3RSDC5pdXpFcHYWgjDFhPxFZmvyr0iuAJc8yN3KDEkIiz5knIFn3CSIqUSI9tMG
-         t3rEFodI7dJ1RAk90FaTZR8bl8aY8QRgyRBs0gTWbyR3hfM6jwjY8QKW3BldzmvVSGSd
-         W4EA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=C1pTKo3OWmmnFLZF4o1FXmS9+0egk/fNiq0vh7NwwbU=;
+        b=aRl4d32ipmSDJVbkB5xcYtx/AEwBlze3zNYXP97tiaBBpEkJWi9Ocm3s2RSA6dbWAT
+         WiKfLjPLWOZZtJTA2bF0t8Ps4md2g3wtDHIq+Y9rZLqri54rsQhr1YSYASz/4hz2klL8
+         pNclQ14iwKUYBdN/Skrr9eBveH+M3sULQMipbSi7KoTkWfZt/ccuvFL67f0liZeAMFSg
+         JHAs8yHxUK9T7Rt/3udUUNESxkzTJhLpBWzknac5PU0aMWT5FYH4EhSDsxP6ICU2N3rB
+         TcViA1D/7jyYCFWyy8lMD/hZnLUGElS8KlzNSV4dCL/LePhKt6UQyiashgwN14Llv6rk
+         dZdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yrVZNgRV6FceaMBoO7b1bSNI7OZRej+dPjOag/ZFF98=;
-        b=Gx/PBM5w+xq4/qoO3XFK9HWzM/s87iojZQT/RIN3lRSElBS8h0CBtRWVFuKhbwOz5L
-         I4tUfBUtHjyGO60tOQyD9nhl9kQ/K6C0oItpMa53JDRc6u7O9FjskVPQNEQhnjlfDauB
-         o6bDouoWEAX7ITmnS6IfB/QP7BmQQafmeb6esTU/Mu0BgSt+Xd0Qke9t9YIBjj0EmYMs
-         yStsEtWqc99pttpGSvxqtjddwmjqNbv9BH5HU3O+RP6pHpMk3Wu+w6CXT82HblvKI1NH
-         DKxUj73EXByE7FUclEi0selnwbK7fvnVp1sJvfkubQser7XcF5smQBec7UvjrfZazqtz
-         U8fw==
-X-Gm-Message-State: AFqh2koU1ur6Rpt1cbwWdeGeJghw4Pb/AV2112nuEXtaMaYJoPFmIpV+
-        NdCDZUBUVAddhRZug636Phs=
-X-Google-Smtp-Source: AMrXdXugCAQB5A1GcSxE6l3N14LJg6WCrpJHJ2DpbyIBTuNUm+B9/qigiR4NQLs1zxAqCpKaAzJVyQ==
-X-Received: by 2002:a05:6000:11c6:b0:2bd:bf72:76f2 with SMTP id i6-20020a05600011c600b002bdbf7276f2mr16813899wrx.14.1674398150854;
-        Sun, 22 Jan 2023 06:35:50 -0800 (PST)
-Received: from Ansuel-xps. (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
-        by smtp.gmail.com with ESMTPSA id l14-20020a5d526e000000b0028e55b44a99sm22612060wrc.17.2023.01.22.06.35.49
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C1pTKo3OWmmnFLZF4o1FXmS9+0egk/fNiq0vh7NwwbU=;
+        b=NqofxZnzJMXcn5kjP7Lfs6woqlwCV+Jr1qlrMldHQI2UXG9fNQL0MRPge9r0d4GxdO
+         MUiFblh1IeWZfZs9nUq1LQwr8igGq6zltsi+L5ctYHnpoCQKUupHwBaLnBvfIhYK6Sh3
+         G41EG0HzV3lctreRZ2ojlBPvXdknMfnW2/gFDuqQC099BWOuteKMmc74QsqF8YB4SUL+
+         0G7O1AUDyrRoEK6blD90W+5Ni9LdiruXgoLtoYW9cEcmvH146uBP3KRkvnze+LFlugME
+         nD5lfjde81CUfA4tv35Zt0YdCLBmryKHOt1Q3x/E0x709g0qlID90cf8IwfpZ86dM1CG
+         CZJA==
+X-Gm-Message-State: AFqh2koN3zpIvAXAI6DuzP289rA9UQXo+mAKJ5omXqUVTMSEGNGAg2qK
+        TxYTTnxMnGiHvpH6C6ewHtWA3lpL16w=
+X-Google-Smtp-Source: AMrXdXv15xgAEn1TsHXrbNh2/YWwtVVKsFJc/09xjz314ROnSyjf0M66mSz36RwziLbNJ3WC3u1s4A==
+X-Received: by 2002:a05:600c:16c9:b0:3db:222:3e0c with SMTP id l9-20020a05600c16c900b003db02223e0cmr21130173wmn.33.1674409553042;
+        Sun, 22 Jan 2023 09:45:53 -0800 (PST)
+Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.googlemail.com with ESMTPSA id m2-20020a05600c4f4200b003db0ad636d1sm9202257wmq.28.2023.01.22.09.45.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Jan 2023 06:35:50 -0800 (PST)
-Message-ID: <63cd49c6.5d0a0220.d6391.519b@mx.google.com>
-X-Google-Original-Message-ID: <Y81JxNxaMPjV6l1U@Ansuel-xps.>
-Date:   Sun, 22 Jan 2023 15:35:48 +0100
+        Sun, 22 Jan 2023 09:45:52 -0800 (PST)
 From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
+To:     Ilia Lin <ilia.lin@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
         Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] dt-bindings: opp: opp-v2-kryo-cpu: add opp-microvolt
- nvmem based
-References: <20230121000146.7809-1-ansuelsmth@gmail.com>
- <20230121000146.7809-2-ansuelsmth@gmail.com>
- <4b58dcf1-df8a-048f-ba6f-ea170479751b@linaro.org>
- <63cd44e6.050a0220.ed90.635a@mx.google.com>
- <c5888e27-18e7-24da-f177-4651fc875269@linaro.org>
- <63cd4674.5d0a0220.57633.fef5@mx.google.com>
- <8ba708ad-5635-e840-f21c-ad3ab105fb5f@linaro.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr bindings optional
+Date:   Sun, 22 Jan 2023 18:45:47 +0100
+Message-Id: <20230122174548.13758-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8ba708ad-5635-e840-f21c-ad3ab105fb5f@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,93 +77,132 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Sun, Jan 22, 2023 at 03:31:14PM +0100, Krzysztof Kozlowski wrote:
-> On 22/01/2023 15:21, Christian Marangi wrote:
-> > On Sun, Jan 22, 2023 at 03:17:54PM +0100, Krzysztof Kozlowski wrote:
-> >> On 22/01/2023 15:15, Christian Marangi wrote:
-> >>> On Sun, Jan 22, 2023 at 03:00:22PM +0100, Krzysztof Kozlowski wrote:
-> >>>> On 21/01/2023 01:01, Christian Marangi wrote:
-> >>>>> The operating-points-v2-kryo-cpu driver supports defining multiple
-> >>>>> opp-microvolt based on the blown efuses in the soc. It consist of 3
-> >>>>> values that are parsed: speedbin, psv and version. They are all
-> >>>>> appended to the opp-microvolt name and selected by the nvmem driver and
-> >>>>> loaded dynamically at runtime.
-> >>>>>
-> >>>>> Example:
-> >>>>>
-> >>>>> opp-microvolt-speed0-pvs0-v0 = <1050000 997500 1102500>;
-> >>>>> opp-microvolt-speed0-pvs1-v0 = <975000 926250 1023750>;
-> >>>>> opp-microvolt-speed0-pvs2-v0 = <925000 878750 971250>;
-> >>>>> opp-microvolt-speed0-pvs3-v0 = <850000 807500 892500>;
-> >>>>>
-> >>>>> Add support for this and reject these special binding if we don't have a
-> >>>>> nvmem-cell to read data from.
-> >>>>>
-> >>>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> >>>>> ---
-> >>>>>  .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 16 ++++++++++++++++
-> >>>>>  1 file changed, 16 insertions(+)
-> >>>>>
-> >>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> >>>>> index b4947b326773..cea932339faf 100644
-> >>>>> --- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> >>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-> >>>>> @@ -61,6 +61,17 @@ patternProperties:
-> >>>>>  
-> >>>>>        required-opps: true
-> >>>>>  
-> >>>>> +    patternProperties:
-> >>>>> +      '^opp-microvolt-speed[0-9]-pvs[0-9]-v[0-9]$':
-> >>>>
-> >>>> This does not end with correct unit suffix. Should be
-> >>>> opp-speed-.....-microvolt
-> >>>>
-> >>>
-> >>> I think I didn't understand this?
-> >>>
-> >>> From opp-v2-base and from what we are using downstream, the named
-> >>> opp-micrvolt works correctly.
-> >>>
-> >>> (speed[0-9]-pvs[0-9]-v[0-9] is the entire name of the named
-> >>> opp-microvolt- binding)
-> >>>
-> >>> This is the reference I always used for the pattern. [1]
-> >>> Here the pattern used by the driver. [2]
-> >>>
-> >>> [1] https://elixir.bootlin.com/linux/latest/source/Documentation/devicetree/bindings/opp/opp-v2-base.yaml#L209
-> >>> [2] https://elixir.bootlin.com/linux/latest/source/drivers/cpufreq/qcom-cpufreq-nvmem.c#L238
-> >>
-> >> Are you documenting existing property or adding new? Commit msg suggests
-> >> you add new property, so what do you reference here? How is it related?
-> >>
-> > 
-> > It should have been added from the start when the schema was submitted
-> > but I get what you mean with the other question.
-> > 
-> >>>
-> >>>>> +        description: |
-> >>>>> +          Assign a microvolt value to the opp hz based on the efuses value from
-> >>>>> +          speedbin, pvs and vers
-> >>>>
-> >>>> Where is the DTS change?
-> >>>
-> >>> You mean an additional example that use this additional binding? This
-> >>> may be difficult to add since the current example in this schema is a
-> >>> root one and I can't put multiple root example.
-> >>
-> >> No, I mean, you DTS using it. We do not want empty (unused) bindings...
-> >>
-> > 
-> > Ok, will drop this and make it part of the ipq8064 opp series that will use
-> > this binding.
-> 
-> You can also link the DTS changes, it's also fine.
-> 
+The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+- pre-cpr that doesn't have power-domains and base everything on nvmem
+  cells and multiple named microvolt bindings
+- cpr-based that require power-domain in the cpu nodes and use various
+  source to decide the correct voltage and freq
 
-There are some required changes to do on the driver so the opp series
-still have to be submitted so I guess dropping this is the only way
-currently. But it's not a problem the real important patch in the series
-is the first one.
+When the schema was introduced, it was wrongly set to always require these
+binding but this is not the case for pre-cpr devices.
 
+Make the power-domain optional and set them required only for qcs404
+based devices.
+
+While at it also make more clear what the opp-table supports by adding
+ref to the opp-v2-kryo-cpu and opp-v2-qcom-level schema.
+
+Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 81 +++++++++++++------
+ 1 file changed, 56 insertions(+), 25 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..6f5e7904181f 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -17,6 +17,9 @@ description: |
+   on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
+   according to the required OPPs defined in the CPU OPP tables.
+ 
++  For old implementation efuses are parsed to select the correct opp table and
++  voltage and CPR is not supported/used.
++
+ select:
+   properties:
+     compatible:
+@@ -33,37 +36,65 @@ select:
+   required:
+     - compatible
+ 
+-properties:
+-  cpus:
+-    type: object
+-
+-    patternProperties:
+-      '^cpu@[0-9a-f]+$':
+-        type: object
+-
+-        properties:
+-          power-domains:
+-            maxItems: 1
+-
+-          power-domain-names:
+-            items:
+-              - const: cpr
+-
+-        required:
+-          - power-domains
+-          - power-domain-names
+-
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
++
++allOf:
++  - if:
+       properties:
+         compatible:
+-          const: operating-points-v2-kryo-cpu
++          contains:
++            enum:
++              - qcom,qcs404
++
+     then:
++      properties:
++        cpus:
++          type: object
++
++          patternProperties:
++            '^cpu@[0-9a-f]+$':
++              type: object
++
++              properties:
++                power-domains:
++                  maxItems: 1
++
++                power-domain-names:
++                  items:
++                    - const: cpr
++
++              required:
++                - power-domains
++                - power-domain-names
++
+       patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++        '^opp-table(-[a-z0-9]+)?$':
++          if:
++            properties:
++              compatible:
++                const: operating-points-v2-kryo-cpu
++          then:
++            patternProperties:
++              '^opp-?[0-9]+$':
++                required:
++                  - required-opps
+ 
+ additionalProperties: true
+ 
 -- 
-	Ansuel
+2.38.1
+
