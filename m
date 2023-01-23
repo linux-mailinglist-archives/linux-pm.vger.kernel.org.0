@@ -2,59 +2,59 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F8967812D
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 17:17:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A8E2678137
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 17:19:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233116AbjAWQRz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 11:17:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
+        id S233137AbjAWQTW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 11:19:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjAWQRw (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 11:17:52 -0500
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C42BF754
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 08:17:50 -0800 (PST)
-Received: by mail-ej1-x635.google.com with SMTP id qx13so31789274ejb.13
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 08:17:50 -0800 (PST)
+        with ESMTP id S233125AbjAWQTS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 11:19:18 -0500
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30674EB5A
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 08:19:15 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id qx13so31800467ejb.13
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 08:19:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=P1CEbeQMaB4LwlSTEw5iqIL+Gy833ZhGZWjYT6kU88A=;
-        b=s7V31Xr5KObQ47y07Oolh1BgeBYOO4YTzEA1ryR9wadi/KA2vRAHxl7FJk6mAVPda/
-         BICWQ/YpB+pDUqC2qRwcJPXKE/cz0a9yl4ajkO2I/0liz7fTlmzZBrXaUepYyvIDGb+m
-         SaMgwMn4X5ZI6+AtEeGNt9L87siJKmFWb54sj4gv5zRhBZZnbgfGo0br4VT+W6JQWJHh
-         VNIbk4zi081yyIr+QGQePBUtv1tNCt3Qxtfcht9WLxWI0A8RydA7tsxU+vytyyr5Ooii
-         gs/M//TP2YMgav8oLfWlid+hJ5hmzrTM0nqY1ewg9awvoxidz06gXrtDtOiLIQHyk0CG
-         /GqQ==
+        bh=9RwzVjGhokVRls3E5a/A2Pxx76BYNJN2Jyv9IOWVcx8=;
+        b=nWItICmqkeVcWCgU1nUsx3shbqRMtZZO7ZHNHKuisQg9gPmpkQTocXYGRz8tp7UK4c
+         BzRfxw/FPJSZSwZgLljPzzHPjlTaea7GMlwZ0x9IahAQMmkr0YCYTIxVRSsMCNQ7BsB3
+         vp4EGV7d1+aHejiDDgrF6pKoFK7HKs1EL9S3E3oPRl8iHqe4DFINh+wZqW72c/ukwruW
+         GUw4cqLYJLkFqMeP+E4KrEMqEyPFhiaM/CXmuYeeJdVlKBOJnBpHC1l4JRj8NnVa1iR2
+         9D2bDXJUJLQDfTp0oEHY/+Ol2Llbmy7mVRn0S17W4h24fxpVWH5zQVBUWNPuo3krr5ME
+         ZOBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P1CEbeQMaB4LwlSTEw5iqIL+Gy833ZhGZWjYT6kU88A=;
-        b=HfuGrybpak8gIcS2N12pnY/arjM2wGWxtuWDVZnTYlqytYGuN66icDGlyIMEiPgW8A
-         Fs/QqA6OugXkEh+RA7An7t9voX2/EgyR3DnNkmJ65UwBvdvd7aRPdHqVunN2jowpZ9lJ
-         hzv9DJTl2GauvYdPA9NhpKXsBDb4Wiwu3S2jYCrgZpJehOgrQlYkQ9ieem/Lr2X9McCV
-         23ZB6XNjy1uHENaSdlZg9koDtljQ5Npl/6MsI1K+EcGOZ9tidYFSttAIaaKSZkAtwnxy
-         V0LeWOwcRg6OjFpKheUrSClEl/qHdDhoSpAfoqbSR+7UoO2Nb42W6JXucl3l3uIXJSmE
-         n2lg==
-X-Gm-Message-State: AFqh2kq2LUgxmmAG5EYHbv2yx7D7Mueof2J9DoU4oGWzzu4EJmP6GcJX
-        3vv87zYUdba+o9ob+AdhcJDgiQ==
-X-Google-Smtp-Source: AMrXdXsf2wyFfK9nmGSENf1629hUsF0PAAEUyjEoLtsQXUUPLFaPUw+D1dSws6W/XN3daBVs9lMFEQ==
-X-Received: by 2002:a17:906:8298:b0:86d:be0:607d with SMTP id h24-20020a170906829800b0086d0be0607dmr26935535ejx.70.1674490668664;
-        Mon, 23 Jan 2023 08:17:48 -0800 (PST)
+        bh=9RwzVjGhokVRls3E5a/A2Pxx76BYNJN2Jyv9IOWVcx8=;
+        b=z8rreOsUGaLnz8E93Tj5XeEj2UOqrKNX3BBfrKF/zorvCeDY6OG0QqRs3/Cvm/km14
+         OmJIAsNrMmBLQDu3ccuz4IO9RmqWTh+drsW0zE6WhsBlvc6OCrTH3fTtOfrzJmeMM9hd
+         MQ8jFZciGtfUMvzryUIs5ocZkYzwpHF5hoVc35zDuwi8lOF0wF2GMi/HOtk9/hUdwRNf
+         6jHILKDE78DVUrNw5VjUVORWmEdzp/Zf1PGqG6vtfLy93V/GFoo3mRowZ/oF5xhUCORo
+         2CHcNqjdVXAqUopgs4C01Wc3G0ohBVhOIhD7ks/tix/bd3FRlPMKX+ODliDDaIAVSGFt
+         b5jg==
+X-Gm-Message-State: AFqh2kpd9GhLT5+7Op5OjvgaOkCSJXRT35la6Fi+AbI01FJYbvwW8ojt
+        smwKUjlhO9tAIA9GvK+U01BelA==
+X-Google-Smtp-Source: AMrXdXsVHcxkDtiRfcBmYuL40wO5tIicsAGzvEhmqcrtOLK8tJZX1cmw3clk3YaQjojqnXac68yrZQ==
+X-Received: by 2002:a17:906:40d7:b0:86d:4517:a4fa with SMTP id a23-20020a17090640d700b0086d4517a4famr26981625ejk.1.1674490753746;
+        Mon, 23 Jan 2023 08:19:13 -0800 (PST)
 Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id sb25-20020a1709076d9900b0084c6581c16fsm22275360ejc.64.2023.01.23.08.17.45
+        by smtp.gmail.com with ESMTPSA id hq15-20020a1709073f0f00b0084c4b87a69csm22291483ejc.153.2023.01.23.08.19.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 08:17:48 -0800 (PST)
-Message-ID: <3e3038fa-cfa2-13fe-b978-6a78940dcc3e@linaro.org>
-Date:   Mon, 23 Jan 2023 17:17:45 +0100
+        Mon, 23 Jan 2023 08:19:13 -0800 (PST)
+Message-ID: <4f93929b-6076-cbb3-3d34-242ce6fa580f@linaro.org>
+Date:   Mon, 23 Jan 2023 17:19:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH v4 5/6] arm64: dts: qcom: Add Square apq8039-t2 board
+Subject: Re: [PATCH v4 6/6] arm64: dts: qcom: Add msm8939 Sony Xperia M4 Aqua
 Content-Language: en-US
 To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
         andersson@kernel.org, djakov@kernel.org, robh+dt@kernel.org,
@@ -63,19 +63,17 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
         leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        stephan@gerhold.net, Jun Nie <jun.nie@linaro.org>,
-        James Willcox <jwillcox@squareup.com>,
-        Joseph Gates <jgates@squareup.com>,
-        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>
+        stephan@gerhold.net
 References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
- <20230123023127.1186619-6-bryan.odonoghue@linaro.org>
+ <20230123023127.1186619-7-bryan.odonoghue@linaro.org>
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230123023127.1186619-6-bryan.odonoghue@linaro.org>
+In-Reply-To: <20230123023127.1186619-7-bryan.odonoghue@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,53 +83,43 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 
 On 23.01.2023 03:31, Bryan O'Donoghue wrote:
-> The apq8039-t2 is an apq8039 based board paired with a wcn3680b WiFi
-> chipset.
+> Add a basic booting DTS for the Sony Xperia M4 Aqua aka "tulip".
 > 
-> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
-> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-> Co-developed-by: Jun Nie <jun.nie@linaro.org>
-> Signed-off-by: Jun Nie <jun.nie@linaro.org>
-> Co-developed-by: Benjamin Li <benl@squareup.com>
-> Signed-off-by: Benjamin Li <benl@squareup.com>
-> Co-developed-by: James Willcox <jwillcox@squareup.com>
-> Signed-off-by: James Willcox <jwillcox@squareup.com>
-> Co-developed-by: Leo Yan <leo.yan@linaro.org>
-> Signed-off-by: Leo Yan <leo.yan@linaro.org>
-> Co-developed-by: Joseph Gates <jgates@squareup.com>
-> Signed-off-by: Joseph Gates <jgates@squareup.com>
-> Co-developed-by: Max Chen <mchen@squareup.com>
-> Signed-off-by: Max Chen <mchen@squareup.com>
-> Co-developed-by: Zac Crosby <zac@squareup.com>
-> Signed-off-by: Zac Crosby <zac@squareup.com>
+> Tulip is paired with:
+> 
+> - wcn3660
+> - smb1360 battery charger
+> - 720p Truly NT35521 Panel
+> 
 > Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
 > ---
->  arch/arm64/boot/dts/qcom/Makefile       |   1 +
->  arch/arm64/boot/dts/qcom/apq8039-t2.dts | 545 ++++++++++++++++++++++++
->  2 files changed, 546 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
+>  arch/arm64/boot/dts/qcom/Makefile             |   1 +
+>  .../qcom/msm8939-sony-xperia-kanuti-tulip.dts | 453 ++++++++++++++++++
+>  2 files changed, 454 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
 > 
 > diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index b0423ca3e79fd..73ff8d3213d99 100644
+> index 73ff8d3213d99..1df3dbaf8a6d8 100644
 > --- a/arch/arm64/boot/dts/qcom/Makefile
 > +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -1,5 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= apq8039-t2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+> @@ -27,6 +27,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-j5x.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8939-sony-xperia-kanuti-tulip.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
 > new file mode 100644
-> index 0000000000000..734b4d6054132
+> index 0000000000000..841d88fe3659f
 > --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
-> @@ -0,0 +1,545 @@
+> +++ b/arch/arm64/boot/dts/qcom/msm8939-sony-xperia-kanuti-tulip.dts
+> @@ -0,0 +1,453 @@
 > +// SPDX-License-Identifier: GPL-2.0
 > +/*
 > + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2020-2023, Linaro Ltd.
+> + * Copyright (c) 2022-2023, Bryan O'Donoghue.
 > + *
 > + */
 > +
@@ -142,171 +130,337 @@ On 23.01.2023 03:31, Bryan O'Donoghue wrote:
 > +#include <dt-bindings/arm/qcom,ids.h>
 > +#include <dt-bindings/gpio/gpio.h>
 > +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
-> +#include <dt-bindings/sound/apq8016-lpass.h>
 > +
 > +/ {
-> +	model = "Square, Inc. T2 Devkit";
-> +	compatible = "square,apq8039-t2", "qcom,msm8939";
+> +	model = "Sony Xperia M4 Aqua";
+> +	compatible = "sony,kanuti-tulip", "qcom,msm8939";
 > +
-> +	qcom,board-id = <0x53 0x54>;
+> +	qcom,board-id = <8 0>;
 > +	qcom,msm-id = <QCOM_ID_MSM8939 0>, <QCOM_ID_MSM8939 0x30000>, <QCOM_ID_APQ8039 0x30000>;
+I doubt a phone shipped with apq..
+
 > +
 > +	aliases {
-> +		mmc0 = &sdhc_1;
-> +		mmc1 = &sdhc_2;
-> +		serial0 = &blsp1_uart1;
-> +		serial1 = &blsp1_uart2;
-> +	};
-> +
-> +	bl: backlight {
-> +		compatible = "gpio-backlight";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_backlight>;
-pinctrl-0
-pinctrl-names
-everywhere, please
-
-> +		gpios = <&tlmm 98 GPIO_ACTIVE_HIGH>;
+> +		mmc0 = &sdhc_1; /* SDC1 eMMC slot */
+> +		mmc1 = &sdhc_2; /* SDC2 SD card slot */
+> +		serial0 = &blsp1_uart2;
 > +	};
 > +
 > +	chosen {
-> +		stdout-path = "serial1:115200n8";
+> +		stdout-path = "serial0:115200n8";
 > +	};
 > +
-> +	lcd_avdd_reg: lcd-avdd-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "lcd_avdd";
-> +		regulator-min-microvolt = <5600000>;
-> +		regulator-max-microvolt = <5600000>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_lcd_avdd_reg>;
-> +		gpio = <&tlmm 86 GPIO_ACTIVE_HIGH>;
-> +		startup-delay-us = <300>;
-> +		enable-active-high;
-> +	};
-> +
-> +	lcd_avee_reg: lcd-avee-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "lcd_avee";
-> +		regulator-min-microvolt = <5600000>;
-> +		regulator-max-microvolt = <5600000>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_lcd_avee_reg>;
-> +		gpio = <&tlmm 87 GPIO_ACTIVE_HIGH>;
-> +		startup-delay-us = <300>;
-> +		enable-active-high;
-> +	};
-> +
-> +	lcd_iovcc_reg: lcd-iovcc-regulator {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "lcd_iovcc";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_lcd_iovcc_reg>;
-> +		gpio = <&tlmm 9 GPIO_ACTIVE_HIGH>;
-> +		startup-delay-us = <300>;
-> +		enable-active-high;
-> +	};
-> +
-> +	pp_crq_3v3_reg: pp-crq-3v3-regulator {
+> +	negative5_reg: negative5-regulator {
 > +		compatible = "regulator-fixed";
 > +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tlmm_crq_reg>;
-> +		regulator-name = "pp_crq_3v3";
-> +		gpio = <&tlmm 12 GPIO_ACTIVE_HIGH>;
-> +		startup-delay-us = <0>;
-> +		enable-active-high;
-> +	};
-> +
-> +	pp_spe_3v3_reg: pp-spe-3v3-regulator {
-> +		compatible = "regulator-fixed";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&tlmm_spe_reg>;
-> +		regulator-name = "pp_spe_3v3";
-> +		gpio = <&tlmm 108 GPIO_ACTIVE_HIGH>;
-> +		startup-delay-us = <0>;
-> +		enable-active-high;
-> +	};
-> +};
-> +
-> +&blsp_i2c1 {
-> +	status = "okay";
-> +};
-> +
-> +&blsp_i2c2 {
-> +	status = "okay";
-> +};
-> +
-> +&blsp_i2c3 {
-> +	status = "okay";
-> +
-> +	typec: tps6598x@38 {
-> +		compatible = "ti,tps6598x";
-> +		reg = <0x38>;
-> +
-> +		interrupt-parent = <&tlmm>;
-> +		interrupts = <107 IRQ_TYPE_LEVEL_LOW>;
-> +		interrupt-names = "irq";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&typec_irq>;
-> +
-> +		typec_con: connector {
-> +			compatible = "usb-c-connector";
-> +			label = "USB-C";
-Add a newline before the subnode
+> +		pinctrl-0 = <&negative5_reg_default>;
+pinctrl-0
+pinctrl-names
 
-With these two:
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+please
 
-Konrad
+> +		regulator-name = "negative5_reg";
+> +		gpio = <&tlmm 17 GPIO_ACTIVE_LOW>;
+> +		startup-delay-us = <0>;
+> +	};
+> +
+> +	positive5_reg: positive5-regulator {
+> +		compatible = "regulator-fixed";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&positive5_reg_default>;
+> +		regulator-name = "positive5_reg";
+> +		gpio = <&tlmm 114 GPIO_ACTIVE_LOW>;
+> +		startup-delay-us = <0>;
+> +	};
+> +
+> +	usb_id: usb-id {
+> +		compatible = "linux,extcon-usb-gpio";
+> +		id-gpio = <&tlmm 110 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&usb_id_default>;
+> +	};
+> +};
+> +
+> +&dsi0 {
+> +	status = "okay";
+> +
+> +	panel@0 {
+> +		compatible = "sony,tulip-truly-nt35521";
+> +		reg = <0>;
+> +		positive5-supply = <&positive5_reg>;
+> +		negative5-supply = <&negative5_reg>;
+> +		reset-gpios = <&tlmm 25 GPIO_ACTIVE_LOW>;
+> +		enable-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
+> +
+> +		ports {
 > +			port {
-> +				typec_ep: endpoint {
-> +					remote-endpoint = <&otg_ep>;
+> +				panel_in: endpoint {
+> +					remote-endpoint = <&dsi0_out>;
 > +				};
 > +			};
 > +		};
+> +
 > +	};
 > +};
 > +
-> +&blsp_i2c5 {
+> +&dsi0_out {
+> +	remote-endpoint = <&panel_in>;
+> +	data-lanes = <0 1 2 3>;
+> +};
+> +
+> +&dsi_phy0 {
+> +	qcom,dsi-phy-regulator-ldo-mode;
 > +	status = "okay";
 > +};
 > +
-> +&blsp1_uart1 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&blsp1_uart1_default>;
-> +	pinctrl-1 = <&blsp1_uart1_sleep>;
-> +	status = "okay";
-> +};
+> +&tlmm {
+> +	ak8963_default: ak8963-default-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
 > +
-> +&blsp1_uart2 {
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&blsp1_uart2_default>;
-> +	pinctrl-1 = <&blsp1_uart2_sleep>;
-> +	status = "okay";
-> +};
+> +	ak8963_sleep: ak8963-sleep-state {
+> +		pins = "gpio69";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
 > +
-> +&lpass {
-> +	status = "okay";
-> +};
+> +	/* Ambient light and proximity sensor apds9930 and apds9900 */
+> +	apds99xx_default: apds99xx-default-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
 > +
-> +&pm8916_gpios {
-> +	gpio-line-names =
-> +		"PM_GPIO1",     /* WIFI_GPIO1_PRE */
-> +		"PM_GPIO2",     /* WIFI_GPIO2_PRE */
-> +		"PM_GPIO3",
-> +		"PM_GPIO4";
+> +	apds99xx_sleep: apds99xx-sleep-state {
+> +		pins = "gpio113";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	cam_sensor_flash_default: cam-sensor-flash-default-state {
+> +		pins = "gpio98", "gpio97";
+> +		function = "gpio";
+> +		bias-disable;
+> +		drive-strength = <2>;
+drive-strength
+bias-
+
+like in all other nodes
+
+With these:
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Konrad
+> +	};
+> +
+> +	cci1_default: cci1-default-state {
+> +		pins = "gpio31", "gpio32";
+> +		function = "cci_i2c";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	cdc_ext_spk_pa_active: cdc-ext-spk-pa-on-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		output-low;
+> +	};
+> +
+> +	cdc_ext_spk_pa_sus: cdc-ext-spk-pa-off-state {
+> +		pins = "gpio0";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	cdc_slim_lines_act: lines-on-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		drive-strength = <8>;
+> +		output-high;
+> +	};
+> +
+> +	cdc_slim_lines_sus: lines-off-state {
+> +		pins = "gpio63";
+> +		function = "cdc_pdm0";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	cross_conn_det_act: lines-on-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-pull-down;
+> +		output-low;
+> +	};
+> +
+> +	cross_conn_det_sus: lines-off-state {
+> +		pins = "gpio120";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ext_buck_vsel: vsel0-state {
+> +		pins = "gpio111";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_act: tlmm-lines-on-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-disable;
+> +	};
+> +
+> +	ext_cdc_tlmm_lines_sus: tlmm-lines-off-state {
+> +		pins = "gpio116", "gpio112", "gpio117", "gpio118", "gpio119";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-disable;
+> +	};
+> +
+> +	gpio_key_suspend: gpio-key-suspend-state {
+> +		pins = "gpio107", "gpio108", "gpio109";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	negative5_reg_default: negative5-reg-default-state {
+> +		pins = "gpio17";
+> +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	positive5_reg_default: positive5-reg-default-state {
+> +		pins = "gpio114";
+> +		function = "gpio";
+> +		output-low;
+> +	};
+> +
+> +	/* Gyroscope and accelerometer sensor combo */
+> +	mpu6050_default: mpu6050-default-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	mpu6050_sleep: mpu6050-sleep-state {
+> +		pins = "gpio115";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	nfc_disable_active: nfc-disable-active-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	nfc_disable_suspend: nfc-disable-suspend-state {
+> +		pins = "gpio20";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-disable;
+> +	};
+> +
+> +	nfc_int_active: nfc-int-active-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	nfc_int_suspend: nfc-int-suspend-state {
+> +		pins = "gpio21";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	nt35521_te_default: nt35521-te-default-state {
+> +		pins = "gpio24";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	nt35521_backlight: nt35521-backlight-default-state {
+> +		pins = "gpio10";
+> +		function = "gpio";
+> +		drive-strength = <6>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	smb_int: smb-int-default-state {
+> +		pins = "gpio62";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ts_int_active: ts-int-active-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ts_int_suspend: ts-int-suspend-state {
+> +		pins = "gpio13";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ts_reset_active: ts-reset-active-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		drive-strength = <16>;
+> +		bias-pull-up;
+> +	};
+> +
+> +	ts_reset_suspend: ts-reset-suspend-state {
+> +		pins = "gpio12";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	ts_release: ts-release-default-state {
+> +		pins = "gpio13", "gpio12";
+> +		function = "gpio";
+> +		drive-strength = <2>;
+> +		bias-pull-down;
+> +	};
+> +
+> +	usb_id_default: usb-id-default-state {
+> +		pins = "gpio110";
+> +		function = "gpio";
+> +		drive-strength = <8>;
+> +		bias-pull-up;
+> +	};
 > +};
 > +
 > +&pronto {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&wcnss_pin_a>;
 > +	status = "okay";
 > +
 > +	iris {
-> +		compatible = "qcom,wcn3680";
+> +		compatible = "qcom,wcn3660";
 > +	};
 > +};
 > +
@@ -324,8 +478,6 @@ Konrad
 > +		regulator-min-microvolt = <1800000>;
 > +		regulator-max-microvolt = <2100000>;
 > +	};
-> +
-> +	/* l1 is fixed to 1225000, but not connected in schematic */
 > +
 > +	pm8916_l2: l2 {
 > +		regulator-min-microvolt = <1200000>;
@@ -345,6 +497,7 @@ Konrad
 > +	pm8916_l6: l6 {
 > +		regulator-min-microvolt = <1800000>;
 > +		regulator-max-microvolt = <1800000>;
+> +		regulator-always-on;
 > +	};
 > +
 > +	pm8916_l7: l7 {
@@ -369,12 +522,14 @@ Konrad
 > +
 > +	pm8916_l11: l11 {
 > +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <2950000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-system-load = <200000>;
+> +		regulator-allow-set-load;
 > +	};
 > +
 > +	pm8916_l12: l12 {
 > +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <2950000>;
+> +		regulator-max-microvolt = <3300000>;
 > +	};
 > +
 > +	pm8916_l13: l13 {
@@ -415,271 +570,19 @@ Konrad
 > +	status = "okay";
 > +};
 > +
-> +&sound {
-> +	model = "apq8039-square-sndcard";
-> +	audio-routing = "AMIC2", "MIC BIAS Internal2";
+> +&sdhc_2 {
 > +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&cdc_pdm_lines_default>;
-> +	pinctrl-1 = <&cdc_pdm_lines_sleep>;
-> +
-> +	internal-codec-playback-dai-link {
-> +		link-name = "WCD";
-> +		cpu {
-> +			sound-dai = <&lpass MI2S_PRIMARY>;
-> +		};
-> +		codec {
-> +			sound-dai = <&lpass_codec 0>, <&wcd_codec 0>;
-> +		};
-> +	};
-> +
-> +	internal-codec-capture-dai-link {
-> +		link-name = "WCD-Capture";
-> +		cpu {
-> +			sound-dai = <&lpass MI2S_TERTIARY>;
-> +		};
-> +		codec {
-> +			sound-dai = <&lpass_codec 1>, <&wcd_codec 1>;
-> +		};
-> +	};
-> +};
-> +
-> +/*
-> + * Line names are taken from the schematic of T2, Ver X03.
-> + * July 14, 2018. Page 4 in particular.
-> + */
-> +&tlmm {
-> +	gpio-line-names =
-> +		"APQ_UART1_TX",		/* GPIO_0 */
-> +		"APQ_UART1_RX",
-> +		"APQ_I2C1_SDA",
-> +		"APQ_I2C1_SCL",
-> +		"APQ_UART2_TX_1V8",
-> +		"APQ_UART2_RX_1V8",
-> +		"APQ_I2C2_SDA",
-> +		"APQ_I2C2_SCL",
-> +		"NC",
-> +		"APQ_LCD_IOVCC_EN",
-> +		"APQ_I2C3_SDA",		/* GPIO_10 */
-> +		"APQ_I2C3_SCL",
-> +		"TOUCH_RST_1V8_L",
-> +		"NC",
-> +		"APQ_I2C4_SDA",
-> +		"APQ_I2C4_SCL",
-> +		"APQ_ID5",
-> +		"USB_DISCONNECT",
-> +		"APQ_I2C5_SDA",
-> +		"APQ_I2C5_SCL",
-> +		"APQ_USBC_SPI_MOSI",	/* GPIO_20 */
-> +		"APQ_USBC_SPI_MISO",
-> +		"APQ_USBC_SPI_SS_L",
-> +		"APQ_USBC_SPI_CLK",
-> +		"APQ_LCD_TE0",
-> +		"APQ_LCD_RST_L",
-> +		"NC",
-> +		"NC",
-> +		"ACCELEROMETER_INT1",
-> +		"APQ_CAM_I2C0_SDA",
-> +		"APQ_CAM_I2C0_SCL",	/* GPIO_30 */
-> +		"ACCELEROMETER_INT2",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"APQ_K21_RST_1V8_L",
-> +		"NC",
-> +		"APQ_EDL_1V8",
-> +		"TP145",
-> +		"BT_SSBI",
-> +		"NC",			/* GPIO_40 */
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"BT_CTRL",
-> +		"BT_DAT",
-> +		"PWR_GPIO_IN",
-> +		"PWR_GPIO_OUT",		/* GPIO_50 */
-> +		"CARD_DET_MLB_L",
-> +		"HALL_SENSOR",
-> +		"TP63",
-> +		"TP64",
-> +		"TP65",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"NC",			/* GPIO_60 */
-> +		"NC",
-> +		"APQ_K21_GPIO0_1V8",
-> +		"CDC_PDM_CLK",
-> +		"CDC_PDM_SYNC",
-> +		"CDC_PDM_TX",
-> +		"CDC_PDM_RX0",
-> +		"CDC_PDM_RX1",
-> +		"CDC_PDM_RX2",
-> +		"APQ_K21_GPIO1_1V8",
-> +		"NC",			/* GPIO_70 */
-> +		"APQ_HUB_SEL_1V8",
-> +		"APQ_K21_GPIO2_1V8",
-> +		"APQ_K21_GPIO3_1V8",
-> +		"APQ_ID0",
-> +		"APQ_ID1",
-> +		"APQ_ID2",
-> +		"APQ_ID3",
-> +		"APQ_ID4",
-> +		"APQ_HUB_SUSP_IND",
-> +		"BOOT_CONFIG_0",	/* GPIO_80 */
-> +		"BOOT_CONFIG_1",
-> +		"BOOT_CONFIG_2",
-> +		"BOOT_CONFIG_3",
-> +		"NC",
-> +		"NC",
-> +		"APQ_LCD_AVDD_EN",
-> +		"APQ_LCD_AVEE_EN",
-> +		"TP70",
-> +		"NC",
-> +		"APQ_DEBUG0",		/* GPIO_90 */
-> +		"APQ_DEBUG1",
-> +		"APQ_DEBUG2",
-> +		"APQ_DEBUG3",
-> +		"TP165",
-> +		"NC",
-> +		"APQ_LNA_PWR_EN",
-> +		"NC",
-> +		"APQ_LCD_BL_EN",
-> +		"NC",
-> +		"APQ_LCD_ID0",		/* GPIO_100 */
-> +		"APQ_LCD_ID1",
-> +		"USBC_GPIO5_1V8",
-> +		"NC",
-> +		"NC",
-> +		"NC",
-> +		"APQ_HUB_RST_1V8_L",
-> +		"USBC_I2C_IRQ_1V8_L",
-> +		"SPE_PWR_EN",
-> +		"NC",
-> +		"APQ_USB_ID",		/* GPIO_110 */
-> +		"APQ_EXT_BUCK_VSEL",
-> +		"APQ_USB_ID_OUT",
-> +		"NC",
-> +		"PRNT_RST_L",
-> +		"APQ_CRQ_I2C_RDY_1V8",
-> +		"TYPEC_RST_1V8_H",
-> +		"CHG_BACKPWR_EN",
-> +		"CHG_PROCHOT_L",
-> +		"NC",
-> +		"USBC_GPIO7_1V8",	/* GPIO_120 */
-> +		"NC";
-> +
-> +	blsp1_uart1_default: blsp1-uart1-default-state {
-> +		pins = "gpio0", "gpio1";
-> +		function = "blsp_uart1";
-> +		drive-strength = <16>;
-> +		bias-disable;
-> +	};
-> +
-> +	blsp1_uart1_sleep: blsp1-uart1-sleep-state {
-> +		pins = "gpio0", "gpio1";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-down;
-> +	};
-> +
-> +	ext_buck_vsel_reg: ext-buck-vsel-reg-state {
-> +		function = "gpio";
-> +		pins = "gpio111";
-> +		drive-strength = <2>;
-> +	};
-> +
-> +	pinctrl_backlight: backlight-state {
-> +		pins = "gpio98";
-> +		function = "gpio";
-> +	};
-> +
-> +	pinctrl_lcd_avdd_reg: lcd-avdd-reg-state {
-> +		pins = "gpio86";
-> +		function = "gpio";
-> +	};
-> +
-> +	pinctrl_lcd_avee_reg: lcd-avee-reg-state {
-> +		pins = "gpio87";
-> +		function = "gpio";
-> +	};
-> +
-> +	pinctrl_lcd_iovcc_reg: lcd-iovcc-reg-state {
-> +		pins = "gpio9";
-> +		function = "gpio";
-> +	};
-> +
-> +	pinctrl_lcd_rst: lcd-rst-state {
-> +		pins = "gpio25";
-> +		function = "gpio";
-> +	};
-> +
-> +	pinctrl_otg_default: otg-default-state {
-> +		function = "gpio";
-> +		pins = "gpio17";
-> +		output-high;
-> +	};
-> +
-> +	pinctrl_otg_device: otg-device-state {
-> +		function = "gpio";
-> +		pins = "gpio17";
-> +		output-low;
-> +	};
-> +
-> +	pinctrl_otg_host: otg-host-state {
-> +		function = "gpio";
-> +		pins = "gpio17";
-> +		output-low;
-> +	};
-> +
-> +	sq_spe_enable: sq-spe-enable-state {
-> +		pins = "gpio35";
-> +		function = "gpio";
-> +		output-low;
-> +	};
-> +
-> +	tlmm_crq_reg: tlmm-crq-reg-state {
-> +		function = "gpio";
-> +		pins = "gpio12";
-> +		output-high;
-> +	};
-> +
-> +	tlmm_spe_reg: tlmm-spe-reg-state {
-> +		pins = "gpio108";
-> +		function = "gpio";
-> +		output-high;
-> +	};
-> +
-> +	typec_irq: typec-irq-state {
-> +		function = "gpio";
-> +		pins = "gpio107";
-> +		bias-pull-up;
-> +		input-enable;
-> +	};
+> +	pinctrl-0 = <&sdc2_default_state>;
+> +	pinctrl-1 = <&sdc2_sleep_state>;
+> +	cd-gpios = <&tlmm 38 GPIO_ACTIVE_HIGH>;
+> +	status = "okay";
 > +};
 > +
 > +&usb {
-> +	pinctrl-names = "default", "host", "device";
-> +	pinctrl-0 = <&pinctrl_otg_default>;
-> +	pinctrl-1 = <&pinctrl_otg_host>;
-> +	pinctrl-2 = <&pinctrl_otg_device>;
-> +	pin-switch-delay-us = <100000>;
-> +	usb-role-switch;
+> +	extcon = <&usb_id>, <&usb_id>;
 > +	status = "okay";
-> +
-> +	port {
-> +		otg_ep: endpoint {
-> +			remote-endpoint = <&typec_ep>;
-> +		};
-> +	};
 > +};
 > +
-> +&wcd_codec {
-> +	qcom,hphl-jack-type-normally-open;
-> +	qcom,mbhc-vthreshold-low = <75 150 237 450 500>;
-> +	qcom,mbhc-vthreshold-high = <75 150 237 450 500>;
-> +	status = "okay";
+> +&usb_hs_phy {
+> +	extcon = <&usb_id>;
 > +};
