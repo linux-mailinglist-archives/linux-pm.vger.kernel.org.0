@@ -2,139 +2,73 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78B05677D50
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 15:00:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B862677DEF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 15:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232059AbjAWOAl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 09:00:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49066 "EHLO
+        id S231496AbjAWO1N (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 09:27:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231641AbjAWOAj (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 09:00:39 -0500
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCF324124;
-        Mon, 23 Jan 2023 06:00:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1674482421; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=i8g+OYD4qLJslVd2a7zsTaUeG+ayTHTbXVMmNWT9D8BB1E/NbU37uOdnAdq7HuDj2C
-    a9t0zS0mHoyl+kGCwNXhjSwQoNO8nT0h+7nff4lC+6IU+snioB9KnCC/wll3zCAWVRmM
-    EPEKLPP57R6f/ZqpkcsLRAa9FWjNv7ErU3YvRbvpstsCnDuW2NvMuqe3JlRLX1QZBUPD
-    dDtmlS3iH1610aDtH0xUxcaz0rJ0bwEa1v5QsbFs5kURBXF5eDufUp8iPAtnBCib0xtO
-    FXiuHigQbjjQf7Kag14FpaLnq0HqKYiZNxF+FjOMRU4D61caejPsC+NmVbm+MVcGIBZW
-    yReQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674482421;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MzmR+pdf6WvdnGo11VA79zzyz+QelUpUAN/r6350yD0=;
-    b=Lb+qFbKItS6dgtd2zh82ALVctzo0iiYXbuXUqwhyQPe0w81sddA5Z5z/bw200DdpKk
-    35CfHQClt2jAWXS+S2XVdfJ4xuO17ZxpIrtk0TYyLDx96lGwhSzgVR7Ey20x0ilvtV6U
-    zMmLp0gmIRBPYhFWy9voiWT6bkIBc4U4Jh4WJVpHsN7WSvb9DLyxHs8QaCVAwT4foJG3
-    beCbJ40kt1/HNayQpYwyeTFXa8m/o/j9uAtoVfa8HPv6n/TYbJQi1zW+Exiz4nSLh/eG
-    9NMFo9qXqRQrveMR8aLQTcj77jsLs6efPSfENGQ/0Hr9hoB7wiqYWtFRLGg3IHV1KVUl
-    pfhA==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674482421;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=MzmR+pdf6WvdnGo11VA79zzyz+QelUpUAN/r6350yD0=;
-    b=cFzH8aoau9UDu1+da4fdxCnPDKNnB6xsZoLQbyFNOKrcdmEDxbp8AMVJNx7Kgrdik8
-    011YOEH9xuOvBNmR7eh5P4CljuMDMOVfrOlRbrncvgl8NtQGYDuV4r+udTCFrgHCQPeb
-    0UqkwB9lXcrP4ZPZhmem+XHW4Avu48ZTJu8x/3fKTr5Je/xgYJNOAGEHR+JtKxH8r/M7
-    xAcUpT5FYAaFTMKbx//FhIiqln9SLyDCrsvARvRh+LQc3XRNmNwe6BY+tJKGj2EvVEwc
-    yA/eoIU5Km6tNpWyv2emNpNBykuPWw/60hoQ2amntjNxa59+dS0gOIKJNcsoG22cEFvQ
-    oK8w==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKjXrKw58qY="
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.2.1 AUTH)
-    with ESMTPSA id hf4e4dz0NE0K0OQ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Mon, 23 Jan 2023 15:00:20 +0100 (CET)
-Date:   Mon, 23 Jan 2023 15:00:14 +0100
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benl@squareup.com,
-        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
-        dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
-Message-ID: <Y86S7h/QxqXoKS1U@gerhold.net>
-References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
- <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
- <Y86CPmgvAi+kChQI@gerhold.net>
- <45800033-e2ae-09c8-b8a2-e97afb6508fd@linaro.org>
+        with ESMTP id S231287AbjAWO1M (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 09:27:12 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A681F24106;
+        Mon, 23 Jan 2023 06:27:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E333C14;
+        Mon, 23 Jan 2023 06:27:53 -0800 (PST)
+Received: from e120937-lin.. (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A563B3F64C;
+        Mon, 23 Jan 2023 06:27:09 -0800 (PST)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-pm@vger.kernel.org
+Cc:     sudeep.holla@arm.com, Jonathan.Cameron@Huawei.com,
+        f.fainelli@gmail.com, vincent.guittot@linaro.org,
+        tarek.el-sherbiny@arm.com, nicola.mazzucato@arm.com,
+        souvik.chakravarty@arm.com, wleavitt@marvell.com,
+        wbartczak@marvell.com, Cristian Marussi <cristian.marussi@arm.com>
+Subject: [PATCH 0/3] Add SCMI v3.2 Powercap disable support
+Date:   Mon, 23 Jan 2023 14:26:37 +0000
+Message-Id: <20230123142640.1895975-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <45800033-e2ae-09c8-b8a2-e97afb6508fd@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 01:23:22PM +0000, Bryan O'Donoghue wrote:
-> On 23/01/2023 12:49, Stephan Gerhold wrote:
-> > It's only required though because you forgot to drop the DT schema patch
-> > (3/4) when I suggested half a year ago that you make the MSM8939
-> > cpufreq-qcom-nvmem changes together with the CPR stack [1]. :/
-> 
-> Didn't forget, tested that and as I recall there are side-effects removing
-> 8939 from drivers/cpufreq/cpufreq-dt-platdev.c - not all processors were
-> booted.
-> 
+Hi,
 
-The cpufreq-dt-platdev.c addition for MSM8939 does not exist upstream
-because you dropped it in your v3 back then. You just kept the DT schema
-part. I don't have that addition and have no problems with SMP boot so
-I would say it works fine without.
+Upcoming SCMI v3.2 specification (publicly available as BETA at [1])
+introduces support to disable powercapping as a whole on the desired
+zones.
 
-> > Anyway, it looks like qcom-cpufreq-nvmem.yaml requiring "cpr" power
-> > domain unconditionally is a mistake anyway for multiple platforms.
-> > [2] was recently submitted to fix this so that patch should allow you to
-> > drop the dummy nodes. 😄
-> > 
-> > [1]:https://lore.kernel.org/linux-arm-msm/Ysf8VRaXdGg+8Ev3@gerhold.net/
-> > [2]:https://lore.kernel.org/linux-arm-msm/20230122174548.13758-1-ansuelsmth@gmail.com/
-> 
-> 8939 _is_ a CPR device, I think qcs404 comes from msm893x IP.
-> 
-> To me it makes more sense to stub CPR in the DTS than to, wrongly declare
-> the 8939 a non-CPR device.
-> 
+This small series at first add the needed support to the core SCMI Powercap
+protocol, exposing a couple more enable/disable protocol operations, and
+then wires such new ops in the related Powercap framework helpers.
 
-It is not clear yet which power domains 8939 needs to list for the CPUs.
-The conclusion of the previous discussion of CPR for MSM8916 was that
-the VDDMX requirements would be best handled separately from the CPR
-driver, by listing it as separate power domain for all CPUs [3].
-
-Unless this conclusion changes with your CPR patch set this means that
-both the DTS and the DT schema will need changes anyway, because you
-wouldn't need power-domain-names = "cpr", but rather
-
-	power-domains = <&rpmpd MSM8939_VDDMX_AO>, <&vreg_dummy>;
-	power-domain-names = "mx", "cpr";
-
-QCS404 is a different situation in this case because it does not have
-the requirement of voting for VDDMX states.
-
-IMO this means that listing only "cpr" there with a dummy node is more
-confusing than helpful right now. (I can explain this further if you
-want, but I think I tend to write too long answers...)
+Based on v6.2-rc5.
 
 Thanks,
-Stephan
+Cristian
 
-[3]: https://lore.kernel.org/linux-arm-msm/20200403175934.GA96064@gerhold.net/
+[1]: https://developer.arm.com/documentation/den0056/e 
+
+Cristian Marussi (3):
+  firmware: arm_scmi: Refactor powercap get/set helpers
+  firmware: arm_scmi: Add Powercap protocol enable support
+  powercap: arm_scmi: Add support for disabling powercaps on a zone
+
+ drivers/firmware/arm_scmi/powercap.c | 173 +++++++++++++++++++++++----
+ drivers/powercap/arm_scmi_powercap.c |  16 +++
+ include/linux/scmi_protocol.h        |  18 +++
+ 3 files changed, 182 insertions(+), 25 deletions(-)
+
+-- 
+2.34.1
+
