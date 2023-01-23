@@ -2,125 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D41D067826B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 17:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610A067830B
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 18:26:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232270AbjAWQ7z (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 11:59:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37414 "EHLO
+        id S233682AbjAWR0S (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 12:26:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbjAWQ7r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 11:59:47 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E96E3C0
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 08:59:45 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id v13so15322466eda.11
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 08:59:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xK/tJD2L46iP/URfZGuVe4KqSktL9jm8XqyOKQlMWUc=;
-        b=C3Zdpzssjw/N8nZmtlDkdTlrmRFezDyF04q9f30A2Yn6VdKPIsuxO+5sMUZnQURu8f
-         eJHB7BQE+B0N9svPpWUisK7v9fmtZ7WGbfA0oZEklCJNTHiSxqgKGnhdTDJ3Jq/5inEs
-         uKqnXx6BOz3Slauoz0uUM2gZaHPSAPB6K+I3uuS9YLEQl45eq5E2oDevuTsDT/ybzka+
-         SH1CbGAKqzmcBZjKDPforPR0UDtq8kys12+Oc33k0tnj676wBP9GckT1gutHlEwbrNvr
-         vxOn96iHfpZA9BOw/orQL7hINtyg0jOtzGdE/UnubkflV2yxMxGmoZxXpvubHZkf7JRZ
-         Ka/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xK/tJD2L46iP/URfZGuVe4KqSktL9jm8XqyOKQlMWUc=;
-        b=iWU+sEpsAWdZCbo/qC1emsiXNQ2sFTBAFBikKpmtCURTiUAa3cO0nFgvO8iz7rhxhj
-         Hf3TZ7jBqexDTa4dM+x6IrItna0H63R+c5/7OQeNuipJT2wSnbumxCTuqX5O3Yb22pBG
-         WNqCFyz/6wNIMbCJqRWumktX2rRzMgO+bGDJCDGHPmGhD4cP9DR6boeu1wkak10B2D4V
-         D5sn6JELTQRW7tNXAuERYdcsQKZFlDRjsl7Vz2mTYMeJchwICyXHRF/toRpULp0rJYXX
-         V7Du98+FdeUT28aq0E00ggtNp+w5LSmhtOAxXrUjAsJuDIDSRzRIXzIGArCFOToywIp0
-         zwFA==
-X-Gm-Message-State: AFqh2kqVbzDVL46EqkcUCBxWUXwY7l8iTX712u06eWuqIK1HnAtA46co
-        Ed/rOmKSiRGlk2Sf4bDyAE7MOQ==
-X-Google-Smtp-Source: AMrXdXst8AG3jkX/eSdhSIJ7ADBSzh6KhNY/+rEfVHGCYZ4T5aCH5AT4/LAdJ2nV2eVDUy4OIXZN0w==
-X-Received: by 2002:a05:6402:448d:b0:498:2f9f:3442 with SMTP id er13-20020a056402448d00b004982f9f3442mr27190337edb.2.1674493184575;
-        Mon, 23 Jan 2023 08:59:44 -0800 (PST)
-Received: from [192.168.1.101] (abxi24.neoplus.adsl.tpnet.pl. [83.9.2.24])
-        by smtp.gmail.com with ESMTPSA id d26-20020a056402401a00b0046c7c3755a7sm8271999eda.17.2023.01.23.08.59.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 08:59:44 -0800 (PST)
-Message-ID: <fd71f1ef-22c7-c0cb-cb68-b7a044c94d03@linaro.org>
-Date:   Mon, 23 Jan 2023 17:59:42 +0100
+        with ESMTP id S233671AbjAWR0R (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 12:26:17 -0500
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A156E2367C;
+        Mon, 23 Jan 2023 09:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674494764; x=1706030764;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RP+wYCAJL0M0LJuF5F7wBJukpGj1LEvq6KdJ4YEAF1E=;
+  b=ZwBBW6DepfSC4fkCo5HCfQpYH9DuJk0x5mkJbSz9WsWERG+7tmhHlIqq
+   a1XEP4VVy1OYW+tKJQak79OlTlLQ6aVj1m6v61zIKHn2RNovpGRQ2/ef9
+   MdwxcxjhOXb6U+GeQL0ukFX81kewobAZUXtxFmsVdSgYJDeavc2JMk6Y/
+   XQ6Gc9xKC5Hb/LprV84lz3jXkvjlBTKXRqZzsl7s9MxUYZg/icS7BAEkR
+   fXY9mPPBAxKKh6hD5Ky9rzkBJt+V6V+iRyi4fOjir95KmbTfeJTtg4B90
+   lq0Q0kWZsrmd9aCD14A7H2RTA6nmeprNCt9gnDDCSMbeH5UNTfMFjimKw
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="305757323"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="305757323"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 09:21:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="730355012"
+X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
+   d="scan'208";a="730355012"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by fmsmga004.fm.intel.com with ESMTP; 23 Jan 2023 09:21:11 -0800
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] thermal: int340x: Protect trip temperature from dynamic update
+Date:   Mon, 23 Jan 2023 09:21:10 -0800
+Message-Id: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH 3/4] cpufreq: qcom-nvmem: use SoC ID-s from bindings
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, ilia.lin@kernel.org,
-        agross@kernel.org, andersson@kernel.org, rafael@kernel.org,
-        viresh.kumar@linaro.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20230121112947.53433-1-robimarko@gmail.com>
- <20230121112947.53433-3-robimarko@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230121112947.53433-3-robimarko@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+Trip temperatures are read using ACPI methods and stored in the memory
+during zone initializtion and when the firmware sends a notification for
+change. This trip temperature is returned when the thermal core calls via
+callback get_trip_temp().
 
+But it is possible that while updating the memory copy of the trips when
+the firmware sends a notification for change, thermal core is reading the
+trip temperature via the callback get_trip_temp(). This may return invalid
+trip temperature.
 
-On 21.01.2023 12:29, Robert Marko wrote:
-> SMEM SoC ID-s are now stored in DT bindings so lets use those instead of
-> defining them in the driver again.
-> 
-> Signed-off-by: Robert Marko <robimarko@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+To address this add a mutex to protect the invalid temperature reads in
+the callback get_trip_temp() and int340x_thermal_read_trips().
 
-Konrad
->  drivers/cpufreq/qcom-cpufreq-nvmem.c | 15 +++++----------
->  1 file changed, 5 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index c0a7841a56c1..da55d2e1925a 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -30,12 +30,7 @@
->  #include <linux/soc/qcom/smem.h>
->  #include <linux/soc/qcom/socinfo.h>
->  
-> -enum _msm_id {
-> -	MSM8996V3 = 0xF6ul,
-> -	APQ8096V3 = 0x123ul,
-> -	MSM8996SG = 0x131ul,
-> -	APQ8096SG = 0x138ul,
-> -};
-> +#include <dt-bindings/arm/qcom,ids.h>
->  
->  enum _msm8996_version {
->  	MSM8996_V3,
-> @@ -150,12 +145,12 @@ static enum _msm8996_version qcom_cpufreq_get_msm_id(void)
->  		return NUM_OF_MSM8996_VERSIONS;
->  
->  	switch (info->id) {
-> -	case MSM8996V3:
-> -	case APQ8096V3:
-> +	case QCOM_ID_MSM8996:
-> +	case QCOM_ID_APQ8096:
->  		version = MSM8996_V3;
->  		break;
-> -	case MSM8996SG:
-> -	case APQ8096SG:
-> +	case QCOM_ID_MSM8996SG:
-> +	case QCOM_ID_APQ8096SG:
->  		version = MSM8996_SG;
->  		break;
->  	default:
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: stable@vger.kernel.org # 5.0+
+---
+v2:
+- rebased on linux-next
+- Add ret variable and remove return as suugested by Rafael
+
+ .../int340x_thermal/int340x_thermal_zone.c     | 18 +++++++++++++++---
+ .../int340x_thermal/int340x_thermal_zone.h     |  1 +
+ 2 files changed, 16 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index 228f44260b27..5fda1e67b793 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -41,7 +41,9 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+ 					 int trip, int *temp)
+ {
+ 	struct int34x_thermal_zone *d = zone->devdata;
+-	int i;
++	int i, ret = 0;
++
++	mutex_lock(&d->trip_mutex);
+ 
+ 	if (trip < d->aux_trip_nr)
+ 		*temp = d->aux_trips[trip];
+@@ -60,10 +62,12 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+ 			}
+ 		}
+ 		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
+-			return -EINVAL;
++			ret = -EINVAL;
+ 	}
+ 
+-	return 0;
++	mutex_unlock(&d->trip_mutex);
++
++	return ret;
+ }
+ 
+ static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
+@@ -165,6 +169,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+ 	int trip_cnt = int34x_zone->aux_trip_nr;
+ 	int i;
+ 
++	mutex_lock(&int34x_zone->trip_mutex);
++
+ 	int34x_zone->crt_trip_id = -1;
+ 	if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
+ 					     &int34x_zone->crt_temp))
+@@ -192,6 +198,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+ 		int34x_zone->act_trips[i].valid = true;
+ 	}
+ 
++	mutex_unlock(&int34x_zone->trip_mutex);
++
+ 	return trip_cnt;
+ }
+ EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
+@@ -215,6 +223,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ 	if (!int34x_thermal_zone)
+ 		return ERR_PTR(-ENOMEM);
+ 
++	mutex_init(&int34x_thermal_zone->trip_mutex);
++
+ 	int34x_thermal_zone->adev = adev;
+ 
+ 	int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+@@ -277,6 +287,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ err_trip_alloc:
+ 	kfree(int34x_thermal_zone->ops);
+ err_ops_alloc:
++	mutex_destroy(&int34x_thermal_zone->trip_mutex);
+ 	kfree(int34x_thermal_zone);
+ 	return ERR_PTR(ret);
+ }
+@@ -289,6 +300,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
+ 	acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
+ 	kfree(int34x_thermal_zone->aux_trips);
+ 	kfree(int34x_thermal_zone->ops);
++	mutex_destroy(&int34x_thermal_zone->trip_mutex);
+ 	kfree(int34x_thermal_zone);
+ }
+ EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+index e28ab1ba5e06..6610a9cc441b 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+@@ -32,6 +32,7 @@ struct int34x_thermal_zone {
+ 	struct thermal_zone_device_ops *ops;
+ 	void *priv_data;
+ 	struct acpi_lpat_conversion_table *lpat_table;
++	struct mutex trip_mutex;
+ };
+ 
+ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
+-- 
+2.31.1
+
