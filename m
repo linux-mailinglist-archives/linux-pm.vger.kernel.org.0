@@ -2,103 +2,104 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33F9678B1B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 23:56:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1CD6678B3B
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 23:59:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjAWW4Y (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 17:56:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
+        id S231788AbjAWW7X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 17:59:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjAWW4X (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 17:56:23 -0500
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B32E11147
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 14:56:22 -0800 (PST)
-Received: by mail-wr1-x429.google.com with SMTP id q5so7595993wrv.0
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 14:56:22 -0800 (PST)
+        with ESMTP id S232537AbjAWW7T (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 17:59:19 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD32F38657
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 14:59:01 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso11653023wmc.4
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 14:59:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+W+0DXre6rZ4jn5MnUCPTafW1zYtqDVUfo0frThxGJI=;
-        b=O2HhYC1rTVbYOZ7PoNNUZZ36xXkdnWZOQsgEw5fBUoBSy2E6sWtQEisTJUFGLImL9N
-         R3ppqyZBWPejxOldb9C8+aWzkzKUrzfvWn4g74XAtQKbkoKIU6zb4/idCUIQOHa2lnvM
-         hFUcoBW+8QcReGMysn+qE07DprC0nDcFp8h51vSLmmwNF4MJq3zWLCYxLKP7Grh+AcSR
-         /1vWcPLL6VZ+CbbQHTUOvtm5SbDXib1VFwqaxs/di1yXpge33Mlv8CgAs2jsmV418Mpv
-         CtG0EBR7CGcace4itUags5Y9USmnlNVJtx2Qhkuid/iHDnE2+yMu8GrBPS8aPGoD/bZo
-         4BUw==
+        bh=IZpSsT6QI0rgCdyfZs7KnVG5ae2iXjgk88FXgcyzmRA=;
+        b=u5YeiB5rqWMAFD8zMzjvfbaFygIA9yFyCGmYqetLzBTxTDxda40pEo/CEnjcItlDxi
+         EAj9F/ALM4fpbpfTCjGzuGUf58H6DR1XjBJhxxFo0/sqp0g6FiEQ1VZew29eZ1WLqA5x
+         M2mlXycExKOVQSDPiNJ5G2yee9aX5VGK2Mp/IcjXQ5sr8nCsI9PT9wciXDwoTuhcYbNV
+         YW8nziM6jLvJBaWlWmQ5QWoprB1UJJ3E6tlIeeGhKOD0jmMDHxfSHTEaDxvzIVOZXtYz
+         oPWyPC9pbYyTrTDh3QQV2Bl05htN5LSILIbm5qXrQFMpZ36JnQWG0Rc3O9pzJlKeEizd
+         DUfA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+W+0DXre6rZ4jn5MnUCPTafW1zYtqDVUfo0frThxGJI=;
-        b=0mfZg4QCHLuv+lN4HGDOfgH2c8DAjm1nv6Mi4FV2a2oL8HgHjEfMgS644b6h4i+Luo
-         iIj4cvofeh2wACzEu9tMAaztK4/kIAjGIAJSaizEub/LmrC92SumhwPo+4XzsqnFiJ/h
-         0aeh/v3aaMwkqIfB6BwG2EVdPPTc5Xst40fitUVIzgfvtQkqZB1Sed+FvU4v52A+TQN1
-         frmIhSbtfHba9aBcggCgPcjQEh0JOmPDVbSxgnRvWYqnvjdSgF7JHzapjOj6M50USD+r
-         4Z6KHrKjC9IwKu8c3XFvXasgi+c+uMyQyV6vYRG65UTd6/8DhWAOHREhgP2L8tcvzUct
-         K4Rw==
-X-Gm-Message-State: AFqh2komtwlAC1RICFA1aUPxiXGWHmr3RFAJ8gxJTJ6Ai6VuYs3PGheU
-        Ji+ddzmEAAKRmOQ5OIwSlQ+gQQ==
-X-Google-Smtp-Source: AMrXdXum3Sw/1CdPtfFpHOadHQfkpx8OzHVcYJdkSYOIDRvuSWiMWs4DPfb3KPfNmNB3h+EZIGSnyw==
-X-Received: by 2002:a5d:5e85:0:b0:2bd:d782:c2b8 with SMTP id ck5-20020a5d5e85000000b002bdd782c2b8mr25039739wrb.29.1674514580987;
-        Mon, 23 Jan 2023 14:56:20 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id h17-20020a5d4311000000b002bdfcd8c77csm407542wrq.101.2023.01.23.14.56.20
+        bh=IZpSsT6QI0rgCdyfZs7KnVG5ae2iXjgk88FXgcyzmRA=;
+        b=PrWs1YoGxSW+QFT7B6d62zRW3wvLxSLc+kKz22gOqO6vh5UeGM39+JCcCVS1VK6NND
+         L+KMdVDLBThoDAsU86x+C/DYctOHtsx6mi9XTLCnpUz2Ii26k7j4SYWf+WO1uFXR25Yr
+         /vtfhL+34/OxYOnnkFeX+stQLec/B74VgJqt04ynGwOl/WvAiXSU9aznMeoVHY7eOkS6
+         ZELM+TpDrcCUHfpZUydR4SRr8v/ayU1wgLAGIZARL4ElQFJxUL9NAXJrVkFdEXYNdFrL
+         QzWmGSLgfxuHGqbKh1drIhhOfUumxPALNjlkiCOd5a5HXFBkzvIwagSI50+pVP1EQ7ga
+         rOUw==
+X-Gm-Message-State: AFqh2kq6bseKkXIRtMa++aGov8aggO4vDdBSJIYk+q+uRfT6UuwFoNoD
+        9yAvFz02GkBsvkNggOE4GNPvoA==
+X-Google-Smtp-Source: AMrXdXtHjG/WoKRMTL4vHHKw+QJOus1BHZT4nnfsCks4OXHZZWPMWOdEEOz5p7UVsK240vz5ky2+GA==
+X-Received: by 2002:a05:600c:3296:b0:3cf:82b9:2fe6 with SMTP id t22-20020a05600c329600b003cf82b92fe6mr26652326wmp.8.1674514730781;
+        Mon, 23 Jan 2023 14:58:50 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id k23-20020a05600c479700b003d9e74dd9b2sm389691wmo.9.2023.01.23.14.58.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 14:56:20 -0800 (PST)
-Message-ID: <1dbd4e5b-f5e0-8f06-24b3-67daaf3e2af9@linaro.org>
-Date:   Mon, 23 Jan 2023 23:56:19 +0100
+        Mon, 23 Jan 2023 14:58:50 -0800 (PST)
+Message-ID: <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
+Date:   Mon, 23 Jan 2023 22:58:49 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] thermal: Fail object registration if thermal class is
- not registered
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
+ zero
 Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-References: <5660360.DvuYhMxLoT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5660360.DvuYhMxLoT@kreacher>
+To:     Mike Tipton <quic_mdtipton@quicinc.com>,
+        Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
+Cc:     quic_okukatla@quicinc.com, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "abel >> Philipp Zabel" <p.zabel@pengutronix.de>,
+        abelvesa@kernel.org, abel.vesa@linaro.org
+References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
+ <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
+ <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
+ <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
+ <35dcb764-e340-5fe7-6637-cdb5f84266ce@linaro.org>
+ <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/01/2023 21:44, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 23/01/2023 20:37, Mike Tipton wrote:
 > 
-> If thermal_class is not registered with the driver core, there is no way
-> to expose the interfaces used by the thermal control framework, so
-> prevent thermal zones and cooling devices from being registered in
-> that case by returning an error from object registration functions.
-> 
-> For this purpose, use a thermal_class pointer that will be NULL if the
-> class is not registered.  To avoid wasting memory in that case, allocate
-> the thermal class object dynamically and if it fails to register, free
-> it and clear the thermal_class pointer to NULL.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> This isn't actually changing it for all providers. Only for those that 
+> define the get_bw() callback. Right now that's only qcom/msm8974 and 
+> imx/imx. If get_bw() isn't defined, then icc_node_add() defaults to 
+> INT_MAX. So, the logical behavior in that case is unchanged. Which means 
+> this isn't even changing the behavior for rpmh yet, either.
 
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Yes that adds up.
 
+Looking at the commit for get_bw() for the 8974, I think this change 
+would be OK with the intent of this commit
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+commit 9caf2d956cfa254c6d89c5f4d7b3f8235d75b28f
+Author: Georgi Djakov <georgi.djakov@linaro.org>
+Date:   Mon Nov 9 14:45:12 2020 +0200
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+@Abel what effect will skipping pre->aggregation() have on i.MX ?
 
+---
+bod
