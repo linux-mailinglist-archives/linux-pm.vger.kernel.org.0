@@ -2,65 +2,53 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6471A6789C0
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 22:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A22B76789FF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 22:53:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbjAWVfj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 16:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58022 "EHLO
+        id S231661AbjAWVxR (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 16:53:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjAWVfh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 16:35:37 -0500
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F7816AD4;
-        Mon, 23 Jan 2023 13:35:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674509736; x=1706045736;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nR7qvqEhQSQs2BJuXYecKKgYCOIc9fcU9d15EG7XyuE=;
-  b=HljD/vjcUJoZSMvS15lsu+6LE6EiZvbm5p+Fz8mL7qduiFLHRrx2Q9ip
-   5pQnm5EHMvR/bXYKCnv0WShoFBb0wV13AjifrEQTJeQE1JRqm45EBv1jj
-   /yya9YlBTP0+Yxkg+kdq0AGMBaRkrPg2w1v9yh1dnErVyGRd6T7nU6lqr
-   uOifIdk4MBB/qQfCxozmJalHNN7lECqrdQizAJ5w9wJX+5Yl0GbDRArJu
-   SAClSJkKMMnObr4g7LVS/hAv6FiA3zRz7Vr4n5FmCYR/aUEzGpvonNrpe
-   focO2vtSNhO49gDNVbqQM6qHDJxlgk/884p2fWkm17VjpsDWJf6JnwT3Z
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="353428761"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="353428761"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 13:35:36 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="663833142"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="663833142"
-Received: from mhkirsch-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.134.26])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 13:35:36 -0800
-Message-ID: <ca878d5a177b68eaf5f698e0afda5c0b1718a53f.camel@linux.intel.com>
-Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2
- drivers
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Date:   Mon, 23 Jan 2023 13:35:35 -0800
-In-Reply-To: <CAJZ5v0gK_O-9_tPEVbmBbf+2vxVA2_C5tPGOo_qghyw86pohoA@mail.gmail.com>
-References: <5916342.lOV4Wx5bFT@kreacher> <2882611.e9J7NaK4W3@kreacher>
-         <3234230.44csPzL39Z@kreacher>
-         <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
-         <CAJZ5v0gK_O-9_tPEVbmBbf+2vxVA2_C5tPGOo_qghyw86pohoA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S231864AbjAWVxN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 16:53:13 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34C7636479;
+        Mon, 23 Jan 2023 13:53:11 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4FB061029;
+        Mon, 23 Jan 2023 21:53:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97F38C433EF;
+        Mon, 23 Jan 2023 21:53:06 +0000 (UTC)
+Date:   Mon, 23 Jan 2023 16:53:04 -0500
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
+        mark.rutland@arm.com, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
+        srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
+        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
+ is disabled
+Message-ID: <20230123165304.370121e7@gandalf.local.home>
+In-Reply-To: <20230123205515.059999893@infradead.org>
+References: <20230123205009.790550642@infradead.org>
+        <20230123205515.059999893@infradead.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,58 +56,40 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-01-23 at 20:54 +0100, Rafael J. Wysocki wrote:
-> On Mon, Jan 23, 2023 at 8:26 PM srinivas pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > On Mon, 2023-01-23 at 19:52 +0100, Rafael J. Wysocki wrote:
-> > > On Monday, January 23, 2023 7:45:30 PM CET Rafael J. Wysocki
-> > > wrote:
-> > > > On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki
-> > > > wrote:
-> > > > > Hi All,
-> > > > > 
-> > > > > This is a new version of the series from Daniel posted as:
-> > > > > 
-> > > > > https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
-> > > > > 
-> > > > > The first patch has been reworked (see
-> > > > > https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/
-> > > > > )
-> > > > > and the other two have been rebased on top of it.
-> > > > > 
-> > > > > I have retained the R-by tags from Rui, because the changes
-> > > > > in
-> > > > > patches [2-3/3] are
-> > > > > not essential, but I think that this new set needs to be
-> > > > > tested
-> > > > > again.
-> > > > > 
-> > > > > Srinivas, can you test it please?
-> > > > 
-> > > > Something's wrong, sorry.
-> > > > 
-> > > > I get some invalid trip temperatures with this set.
-> > > 
-> > > Sorry, scratch this, I got confused by THERMAL_TEMP_INVALID
-> > > showing
-> > > up in
-> > > sysfs, but it did show up before too.
-> > > 
-> > > Please test!
-> > > 
-> > 
-> > > 
-> > 
-> > > 
-> > It will be easy if you have some test branch to avoid dependecies
-> > on
-> > other patches.
+On Mon, 23 Jan 2023 21:50:12 +0100
+Peter Zijlstra <peterz@infradead.org> wrote:
+
+> All RCU disabled code should be noinstr and hence we should never get
+> here -- when we do, WARN about it and make sure to not actually do
+> tracing.
 > 
-> Please see the thermal-intel-test branch in linux-pm.git.  It's this
-> series on top of the core thermal stuff + ARM drivers.
-Tested on one system. Works fine.
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> ---
+>  arch/x86/kernel/ftrace.c |    3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -646,6 +646,9 @@ void prepare_ftrace_return(unsigned long
+>  	if (unlikely(atomic_read(&current->tracing_graph_pause)))
+>  		return;
+>  
+> +	if (WARN_ONCE(!rcu_is_watching(), "RCU not on for: %pS\n", (void *)ip))
+> +		return;
+> +
 
-Thanks,
-Srinivas
+Please add this to after recursion trylock below. Although WARN_ONCE()
+should not not have recursion issues, as function tracing can do weird
+things, I rather be safe than sorry, and not have the system triple boot
+due to some path that might get added in the future.
 
+If rcu_is_watching() is false, it will still get by the below recursion
+check and warn. That is, the below check should be done before this
+function calls any other function.
+
+>  	bit = ftrace_test_recursion_trylock(ip, *parent);
+>  	if (bit < 0)
+>  		return;
+> 
+
+-- Steve
