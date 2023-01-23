@@ -2,141 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F876779E9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 12:15:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AD0A677A91
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 13:10:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231468AbjAWLPh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 06:15:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S231491AbjAWMKd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 07:10:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230163AbjAWLPg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 06:15:36 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296BDA257
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 03:15:35 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id r2so10430552wrv.7
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 03:15:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3XkQ9oUZTbY4eAuJQ4rHHOrVFOAzENNJtkSeiTWtEh0=;
-        b=wUtzcgACzqkGpAo+dlIAkkVs6Qga9eBS/4luyVihK9aL8B6be54Fdz8ErF4ZFZJOJH
-         GA6F/QEDPB/5QQUKt47SnMBOxvtVP+LU6haiTyp5PPUSCD+9aeAh4mMyKKimLsa2Dz5e
-         wpLH8Y9Q/2I8HkCyurp36dJyHl53vmT38wyKT0U4ON6cJy8FYY0RdjBquA3/ewmyoYR1
-         5nefyRK7/5LFic8ciEONbsrNRkWjBOZyryDHEaPZ0A2AK/J4FcEeQoQcUTCV13YPJC7l
-         1+sb3j5YU4Op9lqoer1aeogDqiVDX9aQfwuFTepkhNzn9IIHcI4ju8wLBQYlkyplx0qn
-         tQEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3XkQ9oUZTbY4eAuJQ4rHHOrVFOAzENNJtkSeiTWtEh0=;
-        b=p+phe/z90FSj6jJslT37VleTVvDSdoUGbX0rBzYN2R/QuOUW8AEdeWnDyn/fS0n3YB
-         uiyLqyE7dp0bOdFop2+J6ZYhdJYeFuCsVKIVSbB5I7dooBeZMDSqi+27RYF/5q3iV4UY
-         CpNUd7W7d2uIDlGnfI9oUCyKZAAVSY0trKBWqRCuIzvTN3DUutLWDdnQFmSQkIgejGOV
-         GwfgjPwiaby147TCLhZaiaK/sFo0dLO6ufb9vHki26fkdwPKUmlxD3vISKuI+r83lY1u
-         c5wzVcO6XnKLiCjeXr3dYGIeYiivGwkeDhndN3iGECP6GnNyah1Vz9LPoI5MMIFgAZ5b
-         zUEg==
-X-Gm-Message-State: AFqh2krwREDj30klyS1XGViW3JgVD66DhU/WxH4P8TLSLYds1Yba/O9/
-        Mpr+spk8Fns2+pUqclpwG1L+jw==
-X-Google-Smtp-Source: AMrXdXtDML4IHtodIbfm9IsqYkufHLWTDtMNlTsWu6FPw06LoyDhO1IrZK4zXFMaz4QiNCrwC+nxTw==
-X-Received: by 2002:a5d:5c07:0:b0:2bd:fa1d:5291 with SMTP id cc7-20020a5d5c07000000b002bdfa1d5291mr23368215wrb.67.1674472533568;
-        Mon, 23 Jan 2023 03:15:33 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id b9-20020adff909000000b002be5401ef5fsm7908845wrr.39.2023.01.23.03.15.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 03:15:33 -0800 (PST)
-Message-ID: <6a073166-af3c-4867-6237-dca6e03633db@linaro.org>
-Date:   Mon, 23 Jan 2023 12:15:31 +0100
+        with ESMTP id S229579AbjAWMKc (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 07:10:32 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACB4D1F5CC;
+        Mon, 23 Jan 2023 04:10:31 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAB63AD7;
+        Mon, 23 Jan 2023 04:11:12 -0800 (PST)
+Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0D313F64C;
+        Mon, 23 Jan 2023 04:10:27 -0800 (PST)
+Date:   Mon, 23 Jan 2023 12:10:22 +0000
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com, kajetan.puchalski@arm.com
+Subject: Re: [PATCH v4] sched/fair: unlink misfit task from cpu overutilized
+Message-ID: <Y855HxG8hK78+NtQ@e126311.manchester.arm.com>
+References: <20230119174244.2059628-1-vincent.guittot@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v6 1/3] thermal/acpi: Add ACPI trip point routines
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
-Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
-        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
-        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr,
-        Amit Kucheria <amitk@kernel.org>
-References: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
- <20230120231530.2368330-2-daniel.lezcano@linaro.org>
- <5911499.lOV4Wx5bFT@kreacher>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5911499.lOV4Wx5bFT@kreacher>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119174244.2059628-1-vincent.guittot@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 22/01/2023 23:08, Rafael J. Wysocki wrote:
-> On Saturday, January 21, 2023 12:15:28 AM CET Daniel Lezcano wrote:
->> The ACPI specification describes the trip points, the device tree
->> bindings as well.
->>
->> The OF code uses the generic trip point structures.
->>
->> The ACPI has their own trip points structure and uses the get_trip_*
->> ops to retrieve them.
->>
->> We can do the same as the OF code and create a set of ACPI functions
->> to retrieve a trip point description. Having a common code for ACPI
->> will help to cleanup the remaining Intel drivers and get rid of the
->> get_trip_* functions.
->>
->> These changes add the ACPI thermal calls to retrieve the basic
->> information we need to be reused in the thermal ACPI and Intel
->> drivers.
->>
->> The different ACPI functions have the generic trip point structure
->> passed as parameter where it is filled.
->>
->> This structure aims to be the one used by all the thermal drivers and
->> the thermal framework.
->>
->> After this series, a couple of Intel drivers and the ACPI thermal
->> driver will still have their own trip points definition but a new
->> series on top of this one will finish the conversion to the generic
->> trip point handling.
->>
->> This series depends on the generic trip point added to the thermal
->> framework and available in the thermal/linux-next branch.
->>
->>   https://lkml.org/lkml/2022/10/3/456
->>
->> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
->> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
->> Tested-by: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+> By taking into account uclamp_min, the 1:1 relation between task misfit
+> and cpu overutilized is no more true as a task with a small util_avg may
+> not fit a high capacity cpu because of uclamp_min constraint.
 > 
-> Co-developed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Add a new state in util_fits_cpu() to reflect the case that task would fit
+> a CPU except for the uclamp_min hint which is a performance requirement.
 > 
-> Also I'm not sure if this version has been tested and reviewed.
+> Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> can use this new value to take additional action to select the best CPU
+> that doesn't match uclamp_min hint.
 > 
-> There are still a few things to improve in it, but overall I think that
-> something like the patch below would be better - it is fewer lines of code
-> and less duplication.
+> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> ---
+> 
+> Change since v3:
+> - Keep current condition for uclamp_max_fits in util_fits_cpu()
+> - Update some comments
 
-I'm always in favor of the simplest code, in terms of line of code and 
-readability. I'm perfectly fine with your proposal.
+That one condition change from v3 did fix the overutilization issues so
+good news on that front :)
 
+1. GB5
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
++-----------------+-------------------------+--------+-----------+
+|     metric      |         kernel          | value  | perc_diff |
++-----------------+-------------------------+--------+-----------+
+| multicore_score |        baseline         | 2765.4 |   0.0%    |
+| multicore_score |      baseline_ufc       | 2704.3 |  -2.21%   | <-- current mainline regression
+| multicore_score |     ufc_patched_v4      | 2839.8 |   2.69%   | <-- new score improvement
++-----------------+-------------------------+--------+-----------+
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
++--------------+--------+-------------------------+--------+-----------+
+|  chan_name   | metric |         kernel          | value  | perc_diff |
++--------------+--------+-------------------------+--------+-----------+
+| total_power  | gmean  |        baseline         | 2664.0 |   0.0%    |
+| total_power  | gmean  |      baseline_ufc       | 2621.5 |   -1.6%   |
+| total_power  | gmean  |     ufc_patched_v4      | 2729.0 |   2.44%   |
++--------------+--------+-------------------------+--------+-----------+
 
+2. Jankbench
+
++--------+---------------+------------------------------+-------+-----------+
+| metric |   variable    |            kernel            | value | perc_diff |
++--------+---------------+------------------------------+-------+-----------+
+| gmean  | mean_duration |        baseline_60hz         | 14.6  |   0.0%    |
+| gmean  | mean_duration |      baseline_ufc_60hz       | 15.2  |   3.83%   |
+| gmean  | mean_duration |     ufc_patched_v4_60hz      | 14.0  |  -3.98%   |
++--------+---------------+------------------------------+-------+-----------+
+
++--------+-----------+------------------------------+-------+-----------+
+| metric | variable  |            kernel            | value | perc_diff |
++--------+-----------+------------------------------+-------+-----------+
+| gmean  | jank_perc |        baseline_60hz         |  1.9  |   0.0%    |
+| gmean  | jank_perc |      baseline_ufc_60hz       |  2.2  |  15.39%   |
+| gmean  | jank_perc |     ufc_patched_v4_60hz      |  1.8  |  -5.67%   |
++--------+-----------+------------------------------+-------+-----------+
+
++--------------+--------+------------------------------+-------+-----------+
+|  chan_name   | metric |            kernel            | value | perc_diff |
++--------------+--------+------------------------------+-------+-----------+
+| total_power  | gmean  |        baseline_60hz         | 135.9 |   0.0%    |
+| total_power  | gmean  |      baseline_ufc_60hz       | 155.7 |  14.61%   | <-- current mainline regression
+| total_power  | gmean  |     ufc_patched_v4_60hz      | 131.4 |  -3.26%   | <-- new power saving
++--------------+--------+------------------------------+-------+-----------+
+
+All in all this comes out better on every metric than the previous
+baseline and way better than current mainline. At least from an Android
+perspective as far as the impacts go I'd say it's probably fine to go
+ahead and apply this.
+
+Feel free to add this if you'd like:
+Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+
+> -- 
+> 2.34.1
+> 
+> 
