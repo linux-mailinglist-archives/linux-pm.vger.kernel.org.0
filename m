@@ -2,501 +2,187 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA1E677FB8
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 16:28:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECCA5677FFC
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 16:38:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232310AbjAWP2f (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 10:28:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
+        id S232768AbjAWPiK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 10:38:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232424AbjAWP2b (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 10:28:31 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F149026862
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 07:28:21 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id l41-20020a05600c1d2900b003daf986faaeso8848245wms.3
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 07:28:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PODENPNbVWjL8xQyhgyl+t+P0w0tYfl3GahnpsmHGfc=;
-        b=rBe6MWIuBU4PCPosy8wmdLnAW+6r7YikSJA5xpfDvJzaopUx7GneUOOzFqT9WpC6Zm
-         w6bQKEy7zRI/udwTUnkYPw96lYwXM8Pf67jtjjPSHaMNoboQrVuixb/HaIUgkhL8QFk4
-         7ZV4G2vh/5vzA2V6zwW7i/DItMiUA0UTkitFGhS8OxDvjgKob8yyTgPHmy6/WY8bpLuN
-         mJzSVPvjqSreJ3jsdELvRgK+jG+6nJ483IsVpGRBUo0fvukuT07KQVenLCJAOuPb2RDk
-         adjSfKfbqAYL/frRh3KkHsAkKTDll2XM0Q98sMey6w6wYQWfWtTBOVowWDup4NozKtoA
-         1cnA==
+        with ESMTP id S231883AbjAWPiF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 10:38:05 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92F5298EC
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 07:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1674488239;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nrgSGGG2jivQORYVrLOlwmevh4Rgh/EU/neEY/ItRis=;
+        b=AcOONj4Zkw07VMfGCdI8jiMyZc9jIsl35CdxHqIOGgTqM5n3YD64jS9sBw4AgUVfuBBTFS
+        KlVFGozBdR+ywONhYwHoCpnNfv9NA67B/2XT6VcO+vs6w1/MbxpplTHpJqXmbY8/fVQc9i
+        P3Ku0KvZEcq3wOEhmyHHbq5mVzibs7k=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-223-wBYvJGzyMbynFS13mhrpyw-1; Mon, 23 Jan 2023 10:37:17 -0500
+X-MC-Unique: wBYvJGzyMbynFS13mhrpyw-1
+Received: by mail-ed1-f71.google.com with SMTP id z18-20020a05640235d200b0049d84165065so8759878edc.18
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 07:37:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PODENPNbVWjL8xQyhgyl+t+P0w0tYfl3GahnpsmHGfc=;
-        b=Oi6ur5izgYjIJHhCHGaDSH6CQeV6yqh9os1aCCl+/Bq2X8mXT13WDrq7myuw+Wynf6
-         NkLUk5ZD81KIOchf1RKQ4QCBQTXXnRsbIpjwyeJv8HDcbR+0w7kZrdCczg8tqsjZhp0P
-         3IABjfpvG1orPCxC2UrG3dif8ecuLVVOkq2Ib8BJYP95DY6FgMBuMRSfZ0DpxYavYIMS
-         mr76wVZMCnBW+Uc8pdJOObsdkyPjqEqz+ZujJC93L4eOq2Rn2sBV9MOZOZAx5fk45v1w
-         ZcVeEPRzhTyIR/tnM9M5UVsUh/C4atENfUFeLUu3LMvF3EiTmQdDu1gzAkQQVJuMiUZY
-         oLQg==
-X-Gm-Message-State: AFqh2kqUz9tWFyKvK8Ng1gsx6kvZF6xdYHfOUVYCOEfbCfIKOOjgFmjs
-        KCRJGqvriGW+sRVANwidtDBvXw==
-X-Google-Smtp-Source: AMrXdXvGnLNGRLSFXB24uuBDMTzuXupdOxNjf55X9XoW+9vcUkTl81sFYVSEBG8lSDLiEJR7iG3gsg==
-X-Received: by 2002:a05:600c:1c01:b0:3c6:e63e:23e9 with SMTP id j1-20020a05600c1c0100b003c6e63e23e9mr24804179wms.24.1674487700334;
-        Mon, 23 Jan 2023 07:28:20 -0800 (PST)
-Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.gmail.com with ESMTPSA id t13-20020a1c770d000000b003db1ca20170sm10673096wmi.37.2023.01.23.07.28.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 07:28:19 -0800 (PST)
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-To:     daniel.lezcano@linaro.org, rui.zhang@intel.com, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Subject: [PATCH v2 3/3] thermal/core: Move the thermal trip code to a dedicated file
-Date:   Mon, 23 Jan 2023 16:27:56 +0100
-Message-Id: <20230123152756.4031574-4-daniel.lezcano@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230123152756.4031574-1-daniel.lezcano@linaro.org>
-References: <20230123152756.4031574-1-daniel.lezcano@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nrgSGGG2jivQORYVrLOlwmevh4Rgh/EU/neEY/ItRis=;
+        b=ejbYz1AlvheW1EFWI5SpS80IwtjpgCDXlKvGEA5wECAyYg9doUp1C5nzobANMjd9o6
+         gq8mmXgSZ9HuVQYhwhM0N/qW4c/YwKr3QS24/htfXHw0dXEuBhh9sgXR9tkxBPOjAnP6
+         jN0ElVuFi0QSngOLREzvMHwnWcYHU5+dShZ4pkLtQYo6J47B04qs+A14OiZa1T4l717R
+         AV5CpfqC/oSD9Y9Y9n4rt7q/ACcef/iFm65NGsssTKfRSU2jihKZ9uLRNc1AnEDkIunF
+         bCGirMoDxtc5O4u3h5zuq7VAuQoxV38wIpbC7vGjluyEa34rdZIHgHEEfmYGd/9FtZlV
+         XMmQ==
+X-Gm-Message-State: AFqh2kqNS0ubOML/QtAm4bCAwcbQqIsX58Vn09R5wqBn+UeJcKnPNHAg
+        aYOMTjcNwWXUCEOoptD9A+mDqEn3kQZbUf2NiUaUeO2FDY3PhkZzZm+0a2dq7okaCOMvPS7qW8W
+        kj9KztffS57V04L0gYHA=
+X-Received: by 2002:a17:907:a601:b0:877:a7ec:5ff with SMTP id vt1-20020a170907a60100b00877a7ec05ffmr11987739ejc.10.1674488231732;
+        Mon, 23 Jan 2023 07:37:11 -0800 (PST)
+X-Google-Smtp-Source: AMrXdXtr1c6/aX5wLHbH7NQWaOi30A9xv9EkJz28AZBsNN6soWEYPWWpSZA9Zkp3Fm+NFpmtrXZwug==
+X-Received: by 2002:a17:907:a601:b0:877:a7ec:5ff with SMTP id vt1-20020a170907a60100b00877a7ec05ffmr11987725ejc.10.1674488231560;
+        Mon, 23 Jan 2023 07:37:11 -0800 (PST)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id kz22-20020a17090777d600b007c1633cea13sm22618884ejc.12.2023.01.23.07.37.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 07:37:11 -0800 (PST)
+Message-ID: <33c497ad-2279-ccf6-016b-52b8e1b4783f@redhat.com>
+Date:   Mon, 23 Jan 2023 16:37:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 0/9] platform/surface: aggregator: Improve target/source
+ handling in SSH messages
+Content-Language: en-US
+To:     Maximilian Luz <luzmaximilian@gmail.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>
+Cc:     Mark Gross <markgross@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        platform-driver-x86@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221202223327.690880-1-luzmaximilian@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20221202223327.690880-1-luzmaximilian@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The thermal_core.c files contains a lot of functions handling
-different thermal components like the governors, the trip points, the
-cooling device, the OF cooling device, etc ...
+Hi,
 
-This organization does not help to migrate to a more sane code where
-there is a better self-encapsulation as all the components' internals
-can be directly accessed from a single file.
+On 12/2/22 23:33, Maximilian Luz wrote:
+> We have some new insights into the Serial Hub protocol, obtained through
+> reverse engineering. In particular, regarding the command structure. The
+> input/output target IDs actually represent source and target IDs of
+> (what looks like) physical entities (specifically: host, SAM EC, KIP EC,
+> debug connector, and SurfLink connector).
+> 
+> This series aims to improve handling of messages with regards to those
+> new findings and, mainly, improve clarity of the documentation and usage
+> around those fields.
+> 
+> See the discussion in
+> 
+>     https://github.com/linux-surface/surface-aggregator-module/issues/64
+> 
+> for more details.
+> 
+> There are a couple of standouts:
+> 
+> - Patch 1 ensures that we only handle commands actually intended for us.
+>   It's possible that we receive messages not intended for us when we
+>   enable debugging. I've kept it intentionally minimal to simplify
+>   backporting. The rest of the series patch 9 focuses more on clarity
+>   and documentation, which is probably too much to backport.
+> 
+> - Patch 8 touches on multiple subsystems. The intention is to enforce
+>   proper usage and documentation of target IDs in the SSAM_SDEV() /
+>   SSAM_VDEV() macros. As it directly touches those macros I
+>   unfortunately can't split it up by subsystem.
+> 
+> - Patch 9 is a loosely connected cleanup for consistency.
+> 
+> Hans, Jiri, Benjamin, Sebastian: While patch 8 ("platform/surface:
+> aggregator: Enforce use of target-ID enum in device ID macros") touches
+> multiple subsystems, it should be possible to take the whole series
+> through the pdx86 tree. The changes in other subsystems are fairly
+> limited.
 
-For the sake of clarity, let's move the thermal trip points code in a
-dedicated thermal_trip.c file and add a function to browse all the
-trip points like we do with the thermal zones, the govenors and the
-cooling devices.
+Thank you for your patch-series, I've applied the series to my
+review-hans branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-The same can be done for the cooling devices and the governor code but
-that will come later as the current work in the thermal framework is
-to fix the trip point handling and use a generic trip point structure.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-No functional changes intended.
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
----
- drivers/thermal/Makefile          |   4 +-
- drivers/thermal/thermal_core.c    |  87 --------------
- drivers/thermal/thermal_core.h    |   4 +
- drivers/thermal/thermal_helpers.c |  62 ----------
- drivers/thermal/thermal_trip.c    | 182 ++++++++++++++++++++++++++++++
- 5 files changed, 188 insertions(+), 151 deletions(-)
- create mode 100644 drivers/thermal/thermal_trip.c
+Regards,
 
-diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-index 2506c6c8ca83..2faf4651f34a 100644
---- a/drivers/thermal/Makefile
-+++ b/drivers/thermal/Makefile
-@@ -4,8 +4,8 @@
- #
- 
- obj-$(CONFIG_THERMAL)		+= thermal_sys.o
--thermal_sys-y			+= thermal_core.o thermal_sysfs.o \
--					thermal_helpers.o
-+thermal_sys-y			+= thermal_core.o thermal_sysfs.o	
-+thermal_sys-y			+= thermal_trip.o thermal_helpers.o
- 
- # netlink interface to manage the thermal framework
- thermal_sys-$(CONFIG_THERMAL_NETLINK)		+= thermal_netlink.o
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index fad0c4a07d16..4ee685043a3e 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1155,12 +1155,6 @@ static void thermal_set_delay_jiffies(unsigned long *delay_jiffies, int delay_ms
- 		*delay_jiffies = round_jiffies(*delay_jiffies);
- }
- 
--int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
--{
--	return tz->num_trips;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_get_num_trips);
--
- int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
- {
- 	int i, ret = -EINVAL;
-@@ -1187,87 +1181,6 @@ int thermal_zone_get_crit_temp(struct thermal_zone_device *tz, int *temp)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_crit_temp);
- 
--int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
--			    struct thermal_trip *trip)
--{
--	int ret;
--
--	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
--		return -EINVAL;
--
--	if (tz->trips) {
--		*trip = tz->trips[trip_id];
--		return 0;
--	}
--
--	if (tz->ops->get_trip_hyst) {
--		ret = tz->ops->get_trip_hyst(tz, trip_id, &trip->hysteresis);
--		if (ret)
--			return ret;
--	} else {
--		trip->hysteresis = 0;
--	}
--
--	ret = tz->ops->get_trip_temp(tz, trip_id, &trip->temperature);
--	if (ret)
--		return ret;
--
--	return tz->ops->get_trip_type(tz, trip_id, &trip->type);
--}
--EXPORT_SYMBOL_GPL(__thermal_zone_get_trip);
--
--int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
--			  struct thermal_trip *trip)
--{
--	int ret;
--
--	mutex_lock(&tz->lock);
--	ret = __thermal_zone_get_trip(tz, trip_id, trip);
--	mutex_unlock(&tz->lock);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
--
--int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
--			  const struct thermal_trip *trip)
--{
--	struct thermal_trip t;
--	int ret;
--
--	if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
--		return -EINVAL;
--
--	ret = __thermal_zone_get_trip(tz, trip_id, &t);
--	if (ret)
--		return ret;
--
--	if (t.type != trip->type)
--		return -EINVAL;
--
--	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
--		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
--		if (ret)
--			return ret;
--	}
--
--	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
--		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
--		if (ret)
--			return ret;
--	}
--
--	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
--		tz->trips[trip_id] = *trip;
--
--	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
--				      trip->temperature, trip->hysteresis);
--
--	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
--	
--	return 0;
--}
--
- /**
-  * thermal_zone_device_register_with_trips() - register a new thermal zone device
-  * @type:	the thermal zone device type
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 26350206a98d..7af54382e915 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -52,6 +52,10 @@ int for_each_thermal_cooling_device(int (*cb)(struct thermal_cooling_device *,
- int for_each_thermal_governor(int (*cb)(struct thermal_governor *, void *),
- 			      void *thermal_governor);
- 
-+int __for_each_thermal_trip(struct thermal_zone_device *,
-+			    int (*cb)(struct thermal_trip *, void *),
-+			    void *);
-+
- struct thermal_zone_device *thermal_zone_get_by_id(int id);
- 
- struct thermal_attr {
-diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
-index 8977d5ddc23c..0f648131b0b5 100644
---- a/drivers/thermal/thermal_helpers.c
-+++ b/drivers/thermal/thermal_helpers.c
-@@ -146,68 +146,6 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
- }
- EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
- 
--/**
-- * __thermal_zone_set_trips - Computes the next trip points for the driver
-- * @tz: a pointer to a thermal zone device structure
-- *
-- * The function computes the next temperature boundaries by browsing
-- * the trip points. The result is the closer low and high trip points
-- * to the current temperature. These values are passed to the backend
-- * driver to let it set its own notification mechanism (usually an
-- * interrupt).
-- *
-- * This function must be called with tz->lock held. Both tz and tz->ops
-- * must be valid pointers.
-- *
-- * It does not return a value
-- */
--void __thermal_zone_set_trips(struct thermal_zone_device *tz)
--{
--	struct thermal_trip trip;
--	int low = -INT_MAX, high = INT_MAX;
--	int i, ret;
--
--	lockdep_assert_held(&tz->lock);
--
--	if (!tz->ops->set_trips)
--		return;
--
--	for (i = 0; i < tz->num_trips; i++) {
--		int trip_low;
--
--		ret = __thermal_zone_get_trip(tz, i , &trip);
--		if (ret)
--			return;
--
--		trip_low = trip.temperature - trip.hysteresis;
--
--		if (trip_low < tz->temperature && trip_low > low)
--			low = trip_low;
--
--		if (trip.temperature > tz->temperature &&
--		    trip.temperature < high)
--			high = trip.temperature;
--	}
--
--	/* No need to change trip points */
--	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
--		return;
--
--	tz->prev_low_trip = low;
--	tz->prev_high_trip = high;
--
--	dev_dbg(&tz->device,
--		"new temperature boundaries: %d < x < %d\n", low, high);
--
--	/*
--	 * Set a temperature window. When this window is left the driver
--	 * must inform the thermal core via thermal_zone_device_update.
--	 */
--	ret = tz->ops->set_trips(tz, low, high);
--	if (ret)
--		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
--}
--
- static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
- 				       int target)
- {
-diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-new file mode 100644
-index 000000000000..5ce71f1cb1ba
---- /dev/null
-+++ b/drivers/thermal/thermal_trip.c
-@@ -0,0 +1,182 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ *  Copyright (C) 2008 Intel Corp
-+ *  Copyright (C) 2008 Zhang Rui <rui.zhang@intel.com>
-+ *  Copyright (C) 2008 Sujith Thomas <sujith.thomas@intel.com>
-+ *  Copyright 2022 Linaro Limited
-+ *
-+ * Thermal trips handling
-+ */
-+#include "thermal_core.h"
-+
-+int __for_each_thermal_trip(struct thermal_zone_device *tz,
-+			    int (*cb)(struct thermal_trip *, void *),
-+			    void *data)
-+{
-+	int i, ret;
-+	struct thermal_trip trip;
-+
-+	lockdep_assert_held(&tz->lock);
-+
-+	for (i = 0; i < tz->num_trips; i++) {
-+
-+		ret = __thermal_zone_get_trip(tz, i, &trip);
-+		if (ret)
-+			return ret;
-+		
-+		ret = cb(&trip, data);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+int thermal_zone_get_num_trips(struct thermal_zone_device *tz)
-+{
-+	return tz->num_trips;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_get_num_trips);
-+
-+/**
-+ * __thermal_zone_set_trips - Computes the next trip points for the driver
-+ * @tz: a pointer to a thermal zone device structure
-+ *
-+ * The function computes the next temperature boundaries by browsing
-+ * the trip points. The result is the closer low and high trip points
-+ * to the current temperature. These values are passed to the backend
-+ * driver to let it set its own notification mechanism (usually an
-+ * interrupt).
-+ *
-+ * This function must be called with tz->lock held. Both tz and tz->ops
-+ * must be valid pointers.
-+ *
-+ * It does not return a value
-+ */
-+void __thermal_zone_set_trips(struct thermal_zone_device *tz)
-+{
-+	struct thermal_trip trip;
-+	int low = -INT_MAX, high = INT_MAX;
-+	int i, ret;
-+
-+	lockdep_assert_held(&tz->lock);
-+
-+	if (!tz->ops->set_trips)
-+		return;
-+
-+	for (i = 0; i < tz->num_trips; i++) {
-+		int trip_low;
-+
-+		ret = __thermal_zone_get_trip(tz, i , &trip);
-+		if (ret)
-+			return;
-+
-+		trip_low = trip.temperature - trip.hysteresis;
-+
-+		if (trip_low < tz->temperature && trip_low > low)
-+			low = trip_low;
-+
-+		if (trip.temperature > tz->temperature &&
-+		    trip.temperature < high)
-+			high = trip.temperature;
-+	}
-+
-+	/* No need to change trip points */
-+	if (tz->prev_low_trip == low && tz->prev_high_trip == high)
-+		return;
-+
-+	tz->prev_low_trip = low;
-+	tz->prev_high_trip = high;
-+
-+	dev_dbg(&tz->device,
-+		"new temperature boundaries: %d < x < %d\n", low, high);
-+
-+	/*
-+	 * Set a temperature window. When this window is left the driver
-+	 * must inform the thermal core via thermal_zone_device_update.
-+	 */
-+	ret = tz->ops->set_trips(tz, low, high);
-+	if (ret)
-+		dev_err(&tz->device, "Failed to set trips: %d\n", ret);
-+}
-+
-+int __thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
-+			    struct thermal_trip *trip)
-+{
-+	int ret;
-+
-+	if (!tz || trip_id < 0 || trip_id >= tz->num_trips || !trip)
-+		return -EINVAL;
-+
-+	if (tz->trips) {
-+		*trip = tz->trips[trip_id];
-+		return 0;
-+	}
-+
-+	if (tz->ops->get_trip_hyst) {
-+		ret = tz->ops->get_trip_hyst(tz, trip_id, &trip->hysteresis);
-+		if (ret)
-+			return ret;
-+	} else {
-+		trip->hysteresis = 0;
-+	}
-+
-+	ret = tz->ops->get_trip_temp(tz, trip_id, &trip->temperature);
-+	if (ret)
-+		return ret;
-+
-+	return tz->ops->get_trip_type(tz, trip_id, &trip->type);
-+}
-+EXPORT_SYMBOL_GPL(__thermal_zone_get_trip);
-+
-+int thermal_zone_get_trip(struct thermal_zone_device *tz, int trip_id,
-+			  struct thermal_trip *trip)
-+{
-+	int ret;
-+
-+	mutex_lock(&tz->lock);
-+	ret = __thermal_zone_get_trip(tz, trip_id, trip);
-+	mutex_unlock(&tz->lock);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(thermal_zone_get_trip);
-+
-+int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-+			  const struct thermal_trip *trip)
-+{
-+	struct thermal_trip t;
-+	int ret;
-+
-+	if (!tz->ops->set_trip_temp && !tz->ops->set_trip_hyst && !tz->trips)
-+		return -EINVAL;
-+
-+	ret = __thermal_zone_get_trip(tz, trip_id, &t);
-+	if (ret)
-+		return ret;
-+
-+	if (t.type != trip->type)
-+		return -EINVAL;
-+
-+	if (t.temperature != trip->temperature && tz->ops->set_trip_temp) {
-+		ret = tz->ops->set_trip_temp(tz, trip_id, trip->temperature);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (t.hysteresis != trip->hysteresis && tz->ops->set_trip_hyst) {
-+		ret = tz->ops->set_trip_hyst(tz, trip_id, trip->hysteresis);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
-+		tz->trips[trip_id] = *trip;
-+
-+	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
-+				      trip->temperature, trip->hysteresis);
-+
-+	__thermal_zone_device_update(tz, THERMAL_TRIP_CHANGED);
-+	
-+	return 0;
-+}
--- 
-2.34.1
+Hans
+
+
+
+> 
+> 
+> Maximilian Luz (9):
+>   platform/surface: aggregator: Ignore command messages not intended for
+>     us
+>   platform/surface: aggregator: Improve documentation and handling of
+>     message target and source IDs
+>   platform/surface: aggregator: Add target and source IDs to command
+>     trace events
+>   platform/surface: aggregator_hub: Use target-ID enum instead of
+>     hard-coding values
+>   platform/surface: aggregator_tabletsw: Use target-ID enum instead of
+>     hard-coding values
+>   platform/surface: dtx: Use target-ID enum instead of hard-coding
+>     values
+>   HID: surface-hid: Use target-ID enum instead of hard-coding values
+>   platform/surface: aggregator: Enforce use of target-ID enum in device
+>     ID macros
+>   platform/surface: aggregator_registry: Fix target-ID of base-hub
+> 
+>  .../driver-api/surface_aggregator/client.rst  |  4 +-
+>  .../driver-api/surface_aggregator/ssh.rst     | 36 ++++-----
+>  drivers/hid/surface-hid/surface_hid.c         |  2 +-
+>  drivers/hid/surface-hid/surface_kbd.c         |  2 +-
+>  .../platform/surface/aggregator/controller.c  | 12 +--
+>  .../platform/surface/aggregator/ssh_msgb.h    |  4 +-
+>  .../surface/aggregator/ssh_request_layer.c    | 15 ++++
+>  drivers/platform/surface/aggregator/trace.h   | 73 +++++++++++++++++--
+>  .../platform/surface/surface_aggregator_hub.c |  8 +-
+>  .../surface/surface_aggregator_registry.c     |  2 +-
+>  .../surface/surface_aggregator_tabletsw.c     | 10 +--
+>  drivers/platform/surface/surface_dtx.c        | 20 ++---
+>  .../surface/surface_platform_profile.c        |  2 +-
+>  drivers/power/supply/surface_battery.c        |  4 +-
+>  drivers/power/supply/surface_charger.c        |  2 +-
+>  include/linux/surface_aggregator/controller.h |  4 +-
+>  include/linux/surface_aggregator/device.h     | 50 ++++++-------
+>  include/linux/surface_aggregator/serial_hub.h | 40 ++++++----
+>  18 files changed, 191 insertions(+), 99 deletions(-)
+> 
 
