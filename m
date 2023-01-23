@@ -2,62 +2,61 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBF7677C1C
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 14:03:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B29B7677C62
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 14:23:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231583AbjAWNDp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 08:03:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S231302AbjAWNX2 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 08:23:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230344AbjAWNDo (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 08:03:44 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C4814E83
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 05:03:43 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso9054036wmn.5
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 05:03:43 -0800 (PST)
+        with ESMTP id S230172AbjAWNX1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 08:23:27 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB6020058
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 05:23:25 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id q8so8981706wmo.5
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 05:23:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zaX0gI0/ZktxsTJ1ltyBOzUuyo84ob21wz6E7O6B+2w=;
-        b=gtduIFeibsORW/y3pwoBVh8NSDUcIWKrmMxVqFKZyjD0Xxfo9YQs3zSVKkFZ2bUc+8
-         I1uO6Ml/Xg6Vm8NBwKANOrgqeTCl34mEYAoPDVnb0CEI6SDhJL5WvZIwNLXHqZ9dKYkc
-         cEd2qbMw93J34xD1Wtm9Ascz+2RBsJRZkmYpBMSKnnyt3xYmlP8cSEG1g30xHstBv95Y
-         ikbonLRDw2Y5bBt6zNK9l0/Q+d+zrW+4FjcfcNco3vHJaAZQIbDea2rRlbfApkgvaG0r
-         wjRuUFdZrfPhnl7BGFhDeR083B/payaCrPb93B1ooM88Kgwi5qVRL7hzUp4SbOVRgCZN
-         bw+w==
+        bh=UWI06omnMqNceUtG8KJb2WUeJNmegQhi3FN/6Z1ebzY=;
+        b=kYxewxF3YY5x1+++vIOTxnpAGTNbG/KViPKqxc5gokiTsdHeKqMGsWMCPI0eM2ghuU
+         VHthTUPgKTUV1ZKgUQxCRgYcOMohV4J6G9AO/seBNZFLKsGyRB9jDpT6GDrNDFYX160x
+         adWm/2gOBoUBBA/URyrrO21EWyNvKbv/VwKx0ZpOovZAKIVMngkKl/2xudSooUd+UEWP
+         24sizqZHc4SDCGLXygdKaT6UD7TeguLLO2e26I6rNNH/ClQrew1/GM8Cg//Hhyl2oZ8H
+         rPIweQwR9GmrzKwmN/lvyxgrHsOujxTnk816LqaQR8nIfiO7ij45pDS/J2FwjE/HBd7H
+         j4UQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zaX0gI0/ZktxsTJ1ltyBOzUuyo84ob21wz6E7O6B+2w=;
-        b=8GWKkrPC8yu3S9E/O7U2UEK+VJ3z95qaAWWyMjsfadu3uF+/zsExhLd8rY1MopycgD
-         sjugOj1TA/mdFUdMtCOjXBD4in7hFqH8TYmOgEphjJrl+8Pu83MTACg7ss8S8Bo2nUbl
-         UHAYEJCQVB7mLiVEcyKaI/HVZJYyslJ51Y/vWr3qqTihtZ7O+6QGTIWUS35V8ZxlWzbw
-         3rrSHNOQs3zFZG2JO9aMWWQNHjcG0wC/gDLruEJXrTdQ68W/yuXNjvCoBXX+hfjMF2ew
-         KZifHElF8FO5LZFHtbOglwgWMfBoIUvLL+A0lp6AF8HfV+dQReVCleve9jtldE6//Xgu
-         T3ZQ==
-X-Gm-Message-State: AFqh2kqvz4EO4yRHlocEq0dOlWk2zOaVfHOL2BLiKb1Sdk19z4LqVa+f
-        Mf1Q2uCSgRU0m423p4Kr4WeX3w==
-X-Google-Smtp-Source: AMrXdXvClwHfXDW+e6ScZ+irhQ83QlbY+vHsw/aMa+9Cj9j4Bg4nTDUFZOkEOfgX/zAxE2UCTUxFSg==
-X-Received: by 2002:a05:600c:3d16:b0:3d0:6a57:66a5 with SMTP id bh22-20020a05600c3d1600b003d06a5766a5mr24048487wmb.0.1674479021800;
-        Mon, 23 Jan 2023 05:03:41 -0800 (PST)
+        bh=UWI06omnMqNceUtG8KJb2WUeJNmegQhi3FN/6Z1ebzY=;
+        b=5sprsWk5U2C2+nxQ6oExBNypypI/jesIl4CNh+fvCd+8qxNrGDo126DvfBKkauhTkk
+         I1TpHYuLhmR/jUmwQ2KgMUjbLMwDZKXa31Yviu3PC+E6Ypfr6tTJUxTk6Co5qjMXZAtc
+         7T8IHqBkN8OJVEHAVx4IDWTN7fT4xx0bJzME9LLofr/TQ84+QJLwTYCT03vlD1mFXMwI
+         C1pP15gQy2JlXkQH0zrWUgFu5ugLg3OdlbL0bTiqREo2YuOQw3Udu2uv0txoDaGTlBcQ
+         5Pgt5KAGTcW7Jpji+ffqwJT4V7bW6h2JyIsfkYRwvsZWGMJ/IQxvrpqrwdDNJJ1xfA1W
+         09+g==
+X-Gm-Message-State: AFqh2koAvjDKG9nIiFurlrxS98nbBiGDM3bmXb9TvKRDMgtDv+mUPgfp
+        uLiym3qlRbTKzu6XDYehMNq5ZQ==
+X-Google-Smtp-Source: AMrXdXvEqTk26rpkj64XjgRaJNm95+WxdojhIs2s8lBudsO1uqhbmoSNsw3wackOkLEtrqe/V0YdBg==
+X-Received: by 2002:a05:600c:4d06:b0:3da:f0a:83d7 with SMTP id u6-20020a05600c4d0600b003da0f0a83d7mr23428035wmp.8.1674480204173;
+        Mon, 23 Jan 2023 05:23:24 -0800 (PST)
 Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id p16-20020a05600c359000b003da105437besm11443558wmq.29.2023.01.23.05.03.40
+        by smtp.gmail.com with ESMTPSA id f23-20020a7bc8d7000000b003d1f3e9df3csm10751788wml.7.2023.01.23.05.23.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 05:03:41 -0800 (PST)
-Message-ID: <f36c7095-592b-a4e2-4d76-09632efcc63d@linaro.org>
-Date:   Mon, 23 Jan 2023 13:03:40 +0000
+        Mon, 23 Jan 2023 05:23:23 -0800 (PST)
+Message-ID: <45800033-e2ae-09c8-b8a2-e97afb6508fd@linaro.org>
+Date:   Mon, 23 Jan 2023 13:23:22 +0000
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
 Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+To:     Stephan Gerhold <stephan@gerhold.net>
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         djakov@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
@@ -74,7 +73,8 @@ Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,6 +82,26 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 On 23/01/2023 12:49, Stephan Gerhold wrote:
-> Also: The undocumented "register-mem" interconnect is still there. 😄
+> It's only required though because you forgot to drop the DT schema patch
+> (3/4) when I suggested half a year ago that you make the MSM8939
+> cpufreq-qcom-nvmem changes together with the CPR stack [1]. :/
 
-Ah indeed. 2:30 am email rule
+Didn't forget, tested that and as I recall there are side-effects 
+removing 8939 from drivers/cpufreq/cpufreq-dt-platdev.c - not all 
+processors were booted.
+
+> Anyway, it looks like qcom-cpufreq-nvmem.yaml requiring "cpr" power
+> domain unconditionally is a mistake anyway for multiple platforms.
+> [2] was recently submitted to fix this so that patch should allow you to
+> drop the dummy nodes. 😄
+> 
+> [1]:https://lore.kernel.org/linux-arm-msm/Ysf8VRaXdGg+8Ev3@gerhold.net/
+> [2]:https://lore.kernel.org/linux-arm-msm/20230122174548.13758-1-ansuelsmth@gmail.com/
+
+8939 _is_ a CPR device, I think qcs404 comes from msm893x IP.
+
+To me it makes more sense to stub CPR in the DTS than to, wrongly 
+declare the 8939 a non-CPR device.
+
+---
+bod
