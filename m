@@ -2,131 +2,122 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360C4678390
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 18:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 877D46783F4
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 19:02:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjAWRsj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 12:48:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56980 "EHLO
+        id S233340AbjAWSCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 13:02:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjAWRsi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 12:48:38 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63897ED7;
-        Mon, 23 Jan 2023 09:48:37 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id 3so13765340vsq.7;
-        Mon, 23 Jan 2023 09:48:37 -0800 (PST)
+        with ESMTP id S233197AbjAWSCg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 13:02:36 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66BE2CFC6
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 10:02:34 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so11240670wmb.0
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 10:02:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5T0R8xw8fLnWbY1bVzZ9vubTFqhlFK/RWCUsjgwBlk0=;
-        b=mQ/DwTxG5eOQGFJv2eC2szm9EanBABfaeHDADhlyiz5KEeo1n5ITjX65tdcjBCu0gc
-         Vklg1PLCIG6T3B1XiWYLzg3Zsbj9GpmCeGTzlWDtBEwZB1GHD5vLtJL4mcnkTSRcDGME
-         KqncecNfpF+ufysoO3TTLOdHm2ugvGP8UFCYTYLDDLybVDXO5MODUAfuYGS5OOLgq73I
-         LO3pGeS1yEiR+OltOytCdnIfPM19fmQpFYpWaQtJugD2wAOk0IUIZjbYqL1FVZ6lI9fq
-         kwriEf2MOBjM2d/1IF8uYY8HUjFQOHVOVwHC7UDRf3DWsuY34ZIyevNzWVysYu4fjKat
-         d3Eg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yk2fX5q0jXoyVU2uukxJAFScsvm4XeRwSWczxQlKv7c=;
+        b=qVg6gV5Bi3EkI4zHTcNGByKaQjGFOvWPkBlorpwTICHLWmVwrLQrcfzy/pakxNgb4Z
+         t0obd8NOlg5OQGEGZeM+JLUmnxOFZZmvzHfTkuJpSMMWrGeb5DbHs0A2lbl7xXY0ojAM
+         9Jwdo85MZEtuQI+eN5SBsoN6aykHJ4v0sC25XWV55+4Fbzq0ijYWhzsrn4C1JKHyjQe3
+         b59kTAt2uuwxE6RgBuqnrjH99UJzmNuHDV/3biLsCEtClktzXNKoenweJq8vmTA2J5jx
+         cdsT/4Cn2zZz5M9VW8ZI/OqX67Sc23sU6Hu86Ec3RzdOPCW0n0NncMu0cdgm9iB18XqN
+         4F9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5T0R8xw8fLnWbY1bVzZ9vubTFqhlFK/RWCUsjgwBlk0=;
-        b=NfQXkVDmKVwM2s/hPevCRYJWUpKdSK6Vl2vllhYJ/mQTv9/5TdyFt9fZBwh3zaKWAX
-         W+fDsfn1kZSaqf4cLXOLK70mOKTx368q4Fs9g6fk0o4oQw4i1iTE8eh/U0OgtmPiDhnA
-         F0QPrPcro4beWk+HalgmNxl6gx773DaKTT7GqvaYgkS62Dvfyo/8cEWzy54T3h/CNVru
-         MAuslWOtPr0U2ZbvvHlx67MrPXCxaUayazd87RXX8eUmp/zwJypql5KpcYXGxO8Ta8jL
-         uYeIjt5CgAPOND1uaNhr7L45rIDh1gbi1geP6/jUoJ2q5ottoqbKDdsP/1sTq4DGy8A8
-         6lQQ==
-X-Gm-Message-State: AFqh2kqsHBd9i/wa2kJDBHZ4C0bclKPh+LJ62/xsu0a3Y57fATkUwu9I
-        M3wPubY10kspWnnL80p1dPtwNq8cuK2TL0YRSy0=
-X-Google-Smtp-Source: AMrXdXvuPwYtIEZpsWrv4ZFsxzPB4C+HGxA0g+XpqN1OFuaz75cvM0xxhTuLaS2ziKK3sI9p9uaL/zAk4sliCAhbxEc=
-X-Received: by 2002:a67:efc2:0:b0:3d0:d941:d598 with SMTP id
- s2-20020a67efc2000000b003d0d941d598mr4303312vsp.8.1674496116700; Mon, 23 Jan
- 2023 09:48:36 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yk2fX5q0jXoyVU2uukxJAFScsvm4XeRwSWczxQlKv7c=;
+        b=1Q/Qs4k3qN02TOXOXC7Xuq1dcxtFe9GEZsmYXmS+Bhfe7trfCUpm2qQ/EIcjzydt82
+         OEobQkl01nTctOEusvyaeQk3cfia7n9YZuHH76IUdpxRo5ZsZY0m7zXzvR+RVok+bRTy
+         /tqjZe8I5xhI/oocSRaCkwoHFT68VUjXmnlEePYTO6JrX+4zM66c2fW32+jGUWfkdRTn
+         phGYl3dVMluB9hZCLM0Z9B6EXCRukI1PNCqudmff2edr49f/7X9DHhXxqifmZhyNagnK
+         FBpX6N9tT3jgMIhR209EARctumy9ouLsePbAobTQqcHA/FaCK1yaJCZvli6m4+0QY+XD
+         pQcA==
+X-Gm-Message-State: AFqh2koTIoE0DcWE801lG3w1Mu43YpGyHguKpVqxLSQdFk4pHzOr4+cj
+        CAbY4IQZhb/w1McnihCae6glcA==
+X-Google-Smtp-Source: AMrXdXvWK2tDK4Ma8vpazDen+DCctMU1tiawaFCNhCgqr3FDwfsmSpAB9iG7lkjLzjTOIU1xSNynqg==
+X-Received: by 2002:a05:600c:4fcb:b0:3db:1919:41b5 with SMTP id o11-20020a05600c4fcb00b003db191941b5mr19016437wmq.21.1674496953315;
+        Mon, 23 Jan 2023 10:02:33 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id m18-20020a05600c4f5200b003cffd3c3d6csm12116756wmq.12.2023.01.23.10.02.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Jan 2023 10:02:32 -0800 (PST)
+Message-ID: <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
+Date:   Mon, 23 Jan 2023 19:02:31 +0100
 MIME-Version: 1.0
-References: <20221111231636.3748636-1-evgreen@chromium.org>
- <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
- <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
- <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
- <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
- <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
- <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com> <Y8tcEtr8Kl3p4qtA@kernel.org>
-In-Reply-To: <Y8tcEtr8Kl3p4qtA@kernel.org>
-From:   William Roberts <bill.c.roberts@gmail.com>
-Date:   Mon, 23 Jan 2023 11:48:25 -0600
-Message-ID: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
-Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
- kernel-only use
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     James Bottomley <jejb@linux.ibm.com>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, corbet@lwn.net,
-        linux-integrity@vger.kernel.org,
-        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
-        dianders@chromium.org, apronin@chromium.org,
-        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
-        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
-        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
-        Matthew Garrett <mjg59@google.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for
+ processor_thermal_device_pci
+Content-Language: en-US
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <20230118181622.33335-2-daniel.lezcano@linaro.org>
+ <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
-> > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
-> > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
-> > > <bill.c.roberts@gmail.com> wrote:
-> > >
-> > > > What's the use case of using the creation data and ticket in this
-> > > > context? Who gets the creationData and the ticket?
-> > > > Could a user supplied outsideInfo work? IIRC I saw some patches
-> > > > flying around where the sessions will get encrypted and presumably
-> > > > correctly as well. This would allow the transfer of that
-> > > > outsideInfo, like the NV Index PCR value to be included and
-> > > > integrity protected by the session HMAC.
-> > >
-> > > The goal is to ensure that the key was generated by the kernel. In
-> > > the absence of the creation data, an attacker could generate a
-> > > hibernation image using their own key and trick the kernel into
-> > > resuming arbitrary code. We don't have any way to pass secret data
-> > > from the hibernate kernel to the resume kernel, so I don't think
-> > > there's any easy way to do it with outsideinfo.
-> >
-> > Can we go back again to why you can't use locality?  It's exactly
-> > designed for this since locality is part of creation data.  Currently
-> > everything only uses locality 0, so it's impossible for anyone on Linux
-> > to produce a key with anything other than 0 in the creation data for
-> > locality.  However, the dynamic launch people are proposing that the
-> > Kernel should use Locality 2 for all its operations, which would allow
-> > you to distinguish a key created by the kernel from one created by a
-> > user by locality.
-> >
-> > I think the previous objection was that not all TPMs implement
-> > locality, but then not all laptops have TPMs either, so if you ever
-> > come across one which has a TPM but no locality, it's in a very similar
-> > security boat to one which has no TPM.
->
-> Kernel could try to use locality 2 and use locality 0 as fallback.
 
-I don't think that would work for Matthew, they need something
-reliable to indicate key provenance.
+Hi Srinivas,
 
-I was informed that all 5 localities should be supported starting
-with Gen 7 Kaby Lake launched in 2016. Don't know if this is
-still "too new".
 
->
-> BR, Jarkko
+On 18/01/2023 20:09, srinivas pandruvada wrote:
+> On Wed, 2023-01-18 at 19:16 +0100, Daniel Lezcano wrote:
+>> The thermal framework gives the possibility to register the trip
+>> points with the thermal zone. When that is done, no get_trip_* ops
+>> are
+>> needed and they can be removed.
+>>
+>> Convert ops content logic into generic trip points and register them
+>> with the
+>> thermal zone.
+>>
+> In this scheme is the assumption is that trip point temperature never
+> changes? If firmware updated the trip temperature, what needs to be
+> done?
+
+I'm a bit confused about the situation where the firmware can change the 
+trip point in the back of the OSPM.
+
+Does the firmware send a notification about the trip change? Or does it 
+assume the OSPM will be reading the trip point while monitoring/polling 
+the thermal zone ?
+
+Is the question for this particular driver?
+
+If the trip point is changed by the userspace (via sysfs), 
+thermal_zone_set_trip() is used which in turn changes the thermal trip 
+temperature directly in the generic structure and then calls the back 
+set_trip_temp.
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
