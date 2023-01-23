@@ -2,92 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D18E678443
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 19:15:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F536678525
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 19:42:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbjAWSPs (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 13:15:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55686 "EHLO
+        id S232831AbjAWSmK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 13:42:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbjAWSPr (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 13:15:47 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119F7272C;
-        Mon, 23 Jan 2023 10:15:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674497747; x=1706033747;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fCebxrq3wvFUCTQ6n7ODNVvPM0+JUTSbVVQl7ngMGaU=;
-  b=WsOzdQONK7CyFiUqUUEyoNvndmt7I4xO/owq+izA4CQwjw0ylhU+oTtS
-   QUvpUytI26odnIV41QY/3lVIzijd7FkEhKn9l0F1pIKn6FBKZbW4pF5Rz
-   FBqvvC2R1nTazmy8VyjmrxWnGSF6NWu30Ox+miwFRQGLhxfp4JaKK2y86
-   J7EXLag4KWdRprFIDdWQ5eJeZ3mipWKMAW8Gl8zAALn+J6M80aGUunpgT
-   k8UDa56tSTY43sV7aPDKUQR3S8GMmWbkAoiqCzlvRIvwL3jxzKTBPDAag
-   Nv3lPyGB9g1Uu3M0lfLCULHZSj3proA54FBOu4Cpr0ZgDXPMXgQ52S87p
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="390611361"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="390611361"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 10:15:46 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="611714969"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="611714969"
-Received: from smmorton-mobl.amr.corp.intel.com (HELO [10.212.176.16]) ([10.212.176.16])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 10:15:45 -0800
-Message-ID: <948c678b-5f26-2390-dd68-1b9b7b3fd50f@intel.com>
-Date:   Mon, 23 Jan 2023 10:15:45 -0800
+        with ESMTP id S231624AbjAWSmH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 13:42:07 -0500
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 895BE2CFFC;
+        Mon, 23 Jan 2023 10:41:45 -0800 (PST)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id aea66656563a992a; Mon, 23 Jan 2023 19:41:43 +0100
+Received: from kreacher.localnet (unknown [213.134.188.170])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 32D0A21325FF;
+        Mon, 23 Jan 2023 19:41:43 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2 drivers
+Date:   Mon, 23 Jan 2023 19:36:52 +0100
+Message-ID: <5916342.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH v3] x86/hibernate: Use fixmap for saving unmapped pages
-Content-Language: en-US
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, x86@kernel.org, rafael@kernel.org, pavel@ucw.cz,
-        len.brown@intel.com, rppt@kernel.org, peterz@infradead.org,
-        luto@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230119235145.22740-1-rick.p.edgecombe@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.188.170
+X-CLIENT-HOSTNAME: 213.134.188.170
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddukedguddtgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvudefrddufeegrddukeekrddujedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekkedrudejtddphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthht
+ oheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/19/23 15:51, Rick Edgecombe wrote:
-> Hibernate uses the direct map to read memory it saves to disk. Since
-> sometimes pages are not accessible on the direct map ("not present" on
-> x86), it has special case logic to temporarily make a page present. On x86
-> these direct map addresses can be mapped at various page sizes, but the
-> logic works ok as long as the not present pages are always mapped as
-> PAGE_SIZE such that they don't require a split to map the region as
-> present. If the address was mapped not present by a larger page size, the
-> split may fail and hibernate would then try to read an address mapped not
-> present.
+Hi All,
 
-The "split" thing here kinda threw me a bit.
+This is a new version of the series from Daniel posted as:
 
-First, this code depends on having a 'struct page'.  On 64-bit, that
-means that the pages at least have an address in the direct map.
+https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
 
-But, that doesn't mean that there's an actual mapping in the direct map
-for the page.  Lots of things zap the direct map.  To make up for this,
-the hibernate code tries to temporarily restore a zapped mapping with
-hibernate_map_page()->set_direct_map_default_noflush().
+The first patch has been reworked (see https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/)
+and the other two have been rebased on top of it.
 
-What's the actual failure mode here, though?  Does __change_page_attr()
-just fail to find an existing PTE and fall over?  Or, does it actually
-try to and fail to allocate the PTE page?
+I have retained the R-by tags from Rui, because the changes in patches [2-3/3] are
+not essential, but I think that this new set needs to be tested again.
+
+Srinivas, can you test it please?
+
+Thanks!
+
+
+
 
 
