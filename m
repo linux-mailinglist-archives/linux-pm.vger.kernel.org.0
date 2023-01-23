@@ -2,123 +2,214 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1BA678663
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 20:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FA1678670
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 20:34:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjAWTb6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 14:31:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S231847AbjAWTeh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 14:34:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjAWTb5 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 14:31:57 -0500
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E57B771;
-        Mon, 23 Jan 2023 11:31:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674502316; x=1706038316;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=d0TymjITAt4p1WrJetdkWvEzktXVON3Q9fS07Rfw2Dw=;
-  b=BgyzU9ubY6sLTsfSmRRowMLzTINdrQvJbq6Zwr0QgPw7pOo+YRaw8uxc
-   qgFdzVKb3xZNi7mO6hBo3X3i3cErYx+MUzvTmn9VdMgSi/wWvsNUr+4GY
-   3VyQhk/vwdBsDoM795+6IDbeCfWCE8o524qlP5HgsJLa9OfFuM+kyFcXm
-   +W+Hf9niTJ3+eZCl3sWOKSIm+oMGo7QF+NoOFSoQAoDu4lTBB/ZsEVQYs
-   hC0TMwPPN1/Hrcz84hafAJ3eIduQst6y7w6qgAJzZUzgvBm+a53u6nhMd
-   aJQ8w1Ng4zy85Jpb776k6yshsp/Q8KU/IVbiEes1axZj3UGuFx7IU7Uo1
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328216791"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="328216791"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:31:56 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750552130"
-X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="750552130"
-Received: from mhkirsch-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.134.26])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:31:55 -0800
-Message-ID: <cc1bc78192d2a73b29840a19cf89ea0625fb9aba.camel@linux.intel.com>
-Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for
- processor_thermal_device_pci
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>
-Date:   Mon, 23 Jan 2023 11:31:54 -0800
-In-Reply-To: <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
-References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
-         <20230118181622.33335-2-daniel.lezcano@linaro.org>
-         <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
-         <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        with ESMTP id S230236AbjAWTeg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 14:34:36 -0500
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E654931E0C;
+        Mon, 23 Jan 2023 11:34:34 -0800 (PST)
+Received: by mail-wr1-x430.google.com with SMTP id bk16so11826848wrb.11;
+        Mon, 23 Jan 2023 11:34:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fT8/4JtDsE0YLu2QTGwrIucYe0iIl5yrZgyKe52Vxt0=;
+        b=MyN/HVpy+iGknjLb01ZXX6V1zantOArIGSbx7Hfh02ILItgOR5jbSdjM1rh7k91pal
+         Hmldfoz3YoxtE41iHSI5EvSN6AomdKawaUQjq6uRI26Qeukgrqn2GClLSNS6Afktqgc4
+         ozpUPH0Sf6I+vM9nTM/BfiDCxKmlR0wMoYUBpsk0RmkxyVjyjlfmuLbx6y2yerX2XlyL
+         B1L6dAhHdGErOVp/cT85OSW81lvkLLU7q0Xnx6GHOIxTbTLhoBYxafGAG0XPlazzYJQw
+         RaSQDc3RvrL92asL1VbkPuDOXsoEj1wvmrWefuxk5IfVEpKmfz5cxXiXh3tqoaqCD/82
+         YVTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fT8/4JtDsE0YLu2QTGwrIucYe0iIl5yrZgyKe52Vxt0=;
+        b=C5OsWFNNZF9rtKDBk6MZEfvqudQ85/KTP1zQAIA3D2/ePqvDSlMSW/ogKbWAOih7N5
+         wZvIT4OzMGSsktaNse7wnX2NSbn43065vnvhn5ZIk93yXi+KwcAl62Le3BJ6YyEGmjka
+         dhgcRdJhvH79Vuop/1HUySxFuanBZZ2U+6yN22/PGptkXvTpZYv9DITaK2sURf91MCfl
+         UbB7RRn7FiSCbY+9kWM5QErkYxufzet+C0v/QIRX56a6ILwcqVLX83VJONf0duntk2sP
+         o5an1+dPf+O6suNG1Q0wqSWjNIcm9vISpOeWr5g1CokwdPb73+Nm5cddSiDI1foUAEKn
+         ts9Q==
+X-Gm-Message-State: AFqh2koSyGePlMV6OTbh16MdGg3OFJRzEDLhDZ+ktdat6q5jfqUQ1VT/
+        iscZ8/H39Sb69e5H/xGULzc=
+X-Google-Smtp-Source: AMrXdXseQT646WmqbfLo2Jjq9TtOmfd4GJkOXvOok5et0qEfdMM3jD97AMUlbSv77byUoFS/oq4iPQ==
+X-Received: by 2002:a5d:4644:0:b0:2be:5cf8:2a83 with SMTP id j4-20020a5d4644000000b002be5cf82a83mr10311279wrs.37.1674502473337;
+        Mon, 23 Jan 2023 11:34:33 -0800 (PST)
+Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
+        by smtp.googlemail.com with ESMTPSA id z8-20020a5d4408000000b002b8fe58d6desm151428wrq.62.2023.01.23.11.34.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 11:34:32 -0800 (PST)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Christian Marangi <ansuelsmth@gmail.com>
+Subject: [PATCH v3 1/2] dt-bindings: cpufreq: qcom-cpufreq-nvmem: make cpr bindings optional
+Date:   Mon, 23 Jan 2023 20:34:21 +0100
+Message-Id: <20230123193422.15972-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+The qcom-cpufreq-nvmem driver supports 2 kind of devices:
+- pre-cpr that doesn't have power-domains and base everything on nvmem
+  cells and multiple named microvolt bindings
+- cpr-based that require power-domain in the cpu nodes and use various
+  source to decide the correct voltage and freq
 
-On Mon, 2023-01-23 at 19:02 +0100, Daniel Lezcano wrote:
-> 
-> Hi Srinivas,
-> 
-> 
-> On 18/01/2023 20:09, srinivas pandruvada wrote:
-> > On Wed, 2023-01-18 at 19:16 +0100, Daniel Lezcano wrote:
-> > > The thermal framework gives the possibility to register the trip
-> > > points with the thermal zone. When that is done, no get_trip_*
-> > > ops
-> > > are
-> > > needed and they can be removed.
-> > > 
-> > > Convert ops content logic into generic trip points and register
-> > > them
-> > > with the
-> > > thermal zone.
-> > > 
-> > In this scheme is the assumption is that trip point temperature
-> > never
-> > changes? If firmware updated the trip temperature, what needs to be
-> > done?
-> 
-> I'm a bit confused about the situation where the firmware can change
-> the 
-> trip point in the back of the OSPM.
-> 
-> Does the firmware send a notification about the trip change? Or does
-> it 
-> assume the OSPM will be reading the trip point while
-> monitoring/polling 
-> the thermal zone ?
-Firmware sends an ACPI notification. For example INT3403.
+When the schema was introduced, it was wrongly set to always require these
+binding but this is not the case for pre-cpr devices.
 
-https://elixir.bootlin.com/linux/latest/C/ident/INT3403_PERF_TRIP_POINT_CHANGED
+Make the power-domain optional and set them required only for qcs404
+based devices.
 
+While at it also make more clear what the opp-table supports by adding
+ref to the opp-v2-kryo-cpu and opp-v2-qcom-level schema.
 
-> 
-> Is the question for this particular driver?
-This PCH driver trips are not changed by firmware hence we don't have
-to worry about here.
+Fixes: ec24d1d55469 ("dt-bindings: opp: Convert qcom-nvmem-cpufreq to DT schema")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
 
-Thanks,
-Srinivas
+Changes v2:
+- Reword commit description
+- Fix condition order
+- Add allOf
 
-> 
-> If the trip point is changed by the userspace (via sysfs), 
-> thermal_zone_set_trip() is used which in turn changes the thermal
-> trip 
-> temperature directly in the generic structure and then calls the back
-> set_trip_temp.
-> 
+ .../bindings/cpufreq/qcom-cpufreq-nvmem.yaml  | 81 +++++++++++++------
+ 1 file changed, 56 insertions(+), 25 deletions(-)
 
-
+diff --git a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+index 9c086eac6ca7..6f5e7904181f 100644
+--- a/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
++++ b/Documentation/devicetree/bindings/cpufreq/qcom-cpufreq-nvmem.yaml
+@@ -17,6 +17,9 @@ description: |
+   on the CPU OPP in use. The CPUFreq driver sets the CPR power domain level
+   according to the required OPPs defined in the CPU OPP tables.
+ 
++  For old implementation efuses are parsed to select the correct opp table and
++  voltage and CPR is not supported/used.
++
+ select:
+   properties:
+     compatible:
+@@ -33,37 +36,65 @@ select:
+   required:
+     - compatible
+ 
+-properties:
+-  cpus:
+-    type: object
+-
+-    patternProperties:
+-      '^cpu@[0-9a-f]+$':
+-        type: object
+-
+-        properties:
+-          power-domains:
+-            maxItems: 1
+-
+-          power-domain-names:
+-            items:
+-              - const: cpr
+-
+-        required:
+-          - power-domains
+-          - power-domain-names
+-
+ patternProperties:
+   '^opp-table(-[a-z0-9]+)?$':
+-    if:
++    allOf:
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-kryo-cpu
++        then:
++          $ref: /schemas/opp/opp-v2-kryo-cpu.yaml#
++
++      - if:
++          properties:
++            compatible:
++              const: operating-points-v2-qcom-level
++        then:
++          $ref: /schemas/opp/opp-v2-qcom-level.yaml#
++
++    unevaluatedProperties: false
++
++allOf:
++  - if:
+       properties:
+         compatible:
+-          const: operating-points-v2-kryo-cpu
++          contains:
++            enum:
++              - qcom,qcs404
++
+     then:
++      properties:
++        cpus:
++          type: object
++
++          patternProperties:
++            '^cpu@[0-9a-f]+$':
++              type: object
++
++              properties:
++                power-domains:
++                  maxItems: 1
++
++                power-domain-names:
++                  items:
++                    - const: cpr
++
++              required:
++                - power-domains
++                - power-domain-names
++
+       patternProperties:
+-        '^opp-?[0-9]+$':
+-          required:
+-            - required-opps
++        '^opp-table(-[a-z0-9]+)?$':
++          if:
++            properties:
++              compatible:
++                const: operating-points-v2-kryo-cpu
++          then:
++            patternProperties:
++              '^opp-?[0-9]+$':
++                required:
++                  - required-opps
+ 
+ additionalProperties: true
+ 
+-- 
+2.38.1
 
