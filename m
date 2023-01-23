@@ -2,66 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20094678957
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 22:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BB19678964
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 22:20:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231989AbjAWVSN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 16:18:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S230294AbjAWVUn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 16:20:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231540AbjAWVSM (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 16:18:12 -0500
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DFC125BC;
-        Mon, 23 Jan 2023 13:18:12 -0800 (PST)
-Received: by mail-oi1-f170.google.com with SMTP id o66so11570294oia.6;
-        Mon, 23 Jan 2023 13:18:12 -0800 (PST)
+        with ESMTP id S229930AbjAWVUm (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 16:20:42 -0500
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E011ABF0;
+        Mon, 23 Jan 2023 13:20:39 -0800 (PST)
+Received: by mail-oi1-f169.google.com with SMTP id p185so11596935oif.2;
+        Mon, 23 Jan 2023 13:20:39 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ywud7ZWeMHmFOjclbft5yqOHQmEsSUXtRD9i7sVK4H4=;
-        b=ALTfYGYOylZVx5sewQN3qY/XI5Rp4gu8T0SZ6W8C6Rb7abeoeeCadQlN5gelcOTagw
-         xEkiqouP6mbxUAmFVQKOySSEa6knxj4rNpoJsyyoyWRrwxcvJAUxJi8A7LzFu9MbjIfZ
-         zhKUJyfnWbmq9m/zp+2owLkUNG3OIcF2HzhXVbzRp5+tBMF2Vcyzl9vzZVFBBRPe0b6b
-         DHUmcWYbRj40FJz+rmD7h/5CbVwrJLUMAj4WVOc+1pVKNEwBn9q5dm/ScMGC3D1XfJun
-         2I4b0s/VnZOtUFitZeRBQV73mqpGPrybWIZ4JNsVV17bqhcscf0oCUXDz6fJ+adV9iu/
-         cY4g==
-X-Gm-Message-State: AFqh2kqUNkBs3IxoiX9zWRrBiJBMaSsE+sjPlSNJ36f92UdcKtGmeE0H
-        El9yRQO/YEdcsZYWY7vGKw==
-X-Google-Smtp-Source: AMrXdXs10bEeIFi0iNTyIEE1UTl8pknOudNavorSMN1FcmHPxgWJTXAPtNxXk9tDO/wrml1h3JNCxg==
-X-Received: by 2002:aca:3203:0:b0:36a:d348:26d8 with SMTP id y3-20020aca3203000000b0036ad34826d8mr10764521oiy.52.1674508691287;
-        Mon, 23 Jan 2023 13:18:11 -0800 (PST)
+        bh=UJETK3OSsznW7YVJ84aqO5Pm3VovO6KPLRPmFaeGzU8=;
+        b=xo+j1wWbOAgopWBLhc2RMVlS/ylXH0Wj93ImWz3bu2v221bkDTP20QwlqSkcF/pk7G
+         7VBbNIcuGG1t7vOaQnnKFkROtVqIDvkN8gzcS46ndjbBELjbqa1SbKLrdKlmvldNCreo
+         NHGfU2Mogp9hgt5vEeZlAofa5iODky+NI6s3YC4w1xr7pK8NYTzT4Vtbs8em+hxXneYu
+         9u3IkXf9HXPsiVkLnZqDDsB3xXX9f250ayy3wtvPK5LQwZ6Wr0XgOkZ6lOpsTFTzuSMV
+         oTPZ1dbLBiWMgAQh5YS2l356hr5ZgIst2gntqWOcQAWinUTRaTGORjJ+6Tiz52Cot7xZ
+         1BtQ==
+X-Gm-Message-State: AFqh2krf8zqL9WOcL+/z0pcsKV4PNYjsaYkbZBpr1r2lXV2aoj78Vuhx
+        O66QItm53tqYBrMtMfdxAg==
+X-Google-Smtp-Source: AMrXdXtJ9Hc6xSNFXIXyN/NZ/8XRuK8JDpzti/x/t7iLm86yGhXfW5m3KZ4+rQbjzmzC3AT4qN3p0g==
+X-Received: by 2002:a05:6808:404b:b0:36c:cc25:8bc4 with SMTP id cz11-20020a056808404b00b0036ccc258bc4mr9393700oib.26.1674508838860;
+        Mon, 23 Jan 2023 13:20:38 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id y5-20020a056808130500b00363ef79e2a1sm223198oiv.31.2023.01.23.13.18.10
+        by smtp.gmail.com with ESMTPSA id o8-20020a0568080bc800b003646062e83bsm218464oik.29.2023.01.23.13.20.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 13:18:10 -0800 (PST)
-Received: (nullmailer pid 2655726 invoked by uid 1000);
-        Mon, 23 Jan 2023 21:18:09 -0000
-Date:   Mon, 23 Jan 2023 15:18:09 -0600
+        Mon, 23 Jan 2023 13:20:38 -0800 (PST)
+Received: (nullmailer pid 2659455 invoked by uid 1000);
+        Mon, 23 Jan 2023 21:20:37 -0000
+Date:   Mon, 23 Jan 2023 15:20:37 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+Cc:     Daniel Vetter <daniel@ffwll.ch>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?utf-8?q?=2C?=linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@gmail.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+        Sowjanya Komatineni <skomatineni@nvidia.com>,
+        linux-arm-msm@vger.kernel.org, linux-pwm@vger.kernel.org,
+        linux-tegra@vger.kernel.org, Sean Paul <sean@poorly.run>,
+        freedreno@lists.freedesktop.org, linux-pm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        devicetree@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Viresh Kumar <vireshk@kernel.org>,
-        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        Ilia Lin <ilia.lin@kernel.org>, linux-clk@vger.kernel.org,
-        Nishanth Menon <nm@ti.com>, Andy Gross <agross@kernel.org>,
-        linux-arm-msm@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: qcom,sm8450-camcc: constrain
- required-opps
-Message-ID: <167450868811.2655634.3848215536562654320.robh@kernel.org>
-References: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
+        David Airlie <airlied@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        ", Kevin Hilman" <khilman@kernel.org>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Subject: Re: [PATCH] dt-bindings: drop type for operating-points-v2
+Message-ID: <167450883575.2659375.17323544164739111670.robh@kernel.org>
+References: <20230119131033.117324-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230119131033.117324-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -73,19 +82,37 @@ List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
 
-On Thu, 19 Jan 2023 14:00:27 +0100, Krzysztof Kozlowski wrote:
-> Be specific how many required-opps are allowed.
+On Thu, 19 Jan 2023 14:10:33 +0100, Krzysztof Kozlowski wrote:
+> The type for operating-points-v2 property is coming from dtschema
+> (/schemas/opp/opp.yaml), so individual bindings can just use simple
+> "true".
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
 > ---
 > 
-> This change is independent, although logically is connected with my
-> dtschema pull:
+> This depends on my pull request, at least logically:
 > https://github.com/devicetree-org/dt-schema/pull/95
+> 
+> Patch could be applied in parallel but only if above PULL is
+> accepted/correct.
 > ---
->  Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  .../devicetree/bindings/display/msm/dp-controller.yaml         | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-dc.yaml   | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-dsi.yaml  | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-epp.yaml  | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-gr2d.yaml | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-gr3d.yaml | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-hdmi.yaml | 3 +--
+>  .../bindings/display/tegra/nvidia,tegra20-host1x.yaml          | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-mpe.yaml  | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-tvo.yaml  | 3 +--
+>  .../devicetree/bindings/display/tegra/nvidia,tegra20-vi.yaml   | 3 +--
+>  .../devicetree/bindings/fuse/nvidia,tegra20-fuse.yaml          | 3 +--
+>  .../devicetree/bindings/mmc/nvidia,tegra20-sdhci.yaml          | 3 +--
+>  Documentation/devicetree/bindings/power/power-domain.yaml      | 3 ---
+>  Documentation/devicetree/bindings/pwm/nvidia,tegra20-pwm.yaml  | 3 +--
+>  15 files changed, 14 insertions(+), 31 deletions(-)
 > 
 
-Acked-by: Rob Herring <robh@kernel.org>
+Applied, thanks!
