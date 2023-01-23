@@ -2,122 +2,172 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD0A677A91
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 13:10:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB579677BA5
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 13:50:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjAWMKd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 07:10:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S231812AbjAWMuA (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 07:50:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjAWMKc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 07:10:32 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACB4D1F5CC;
-        Mon, 23 Jan 2023 04:10:31 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAB63AD7;
-        Mon, 23 Jan 2023 04:11:12 -0800 (PST)
-Received: from e126311.manchester.arm.com (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0D313F64C;
-        Mon, 23 Jan 2023 04:10:27 -0800 (PST)
-Date:   Mon, 23 Jan 2023 12:10:22 +0000
-From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
-        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com, kajetan.puchalski@arm.com
-Subject: Re: [PATCH v4] sched/fair: unlink misfit task from cpu overutilized
-Message-ID: <Y855HxG8hK78+NtQ@e126311.manchester.arm.com>
-References: <20230119174244.2059628-1-vincent.guittot@linaro.org>
+        with ESMTP id S231891AbjAWMty (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 07:49:54 -0500
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84671114D;
+        Mon, 23 Jan 2023 04:49:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1674478149; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Bb7+wDR4HhZ+4yPZeTDvI/n5HAUqDx2yxahDWMl9/K4xhBvhwoq7gvn/rOksK3Jdaz
+    9RpfYLFqImLDMep2oJ8sHGIIeKvHv6EEDYfljOBIOcrTTSwrpbRAbzOjiCfqkv2LIVSU
+    4eac7q6zrHXiKvhbm57yvnElx+z+S7GJXu6KbGu9AwjwlJrC/t6eeGY3/0DpKaCz1X9a
+    eMF2k1Pfu+70x2uBCPXvgE4kGFPaeR4naIYkD0jY6ii/JThRC9bNDe5O2vdCYtNrMprs
+    uyYO7c4zjHTEimJgu3gyiEw+J3RI8DLfqoNTcbxM+PvLtFZGkDvHnvYPumLdZJd7GtMf
+    MItA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1674478149;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=sD2B2ZOQtBqvxHV8WDrINo/9+pIZKRvy/nGecyo3S0o=;
+    b=i2zn1vRDDu+vsxX0VYcRCYlvXwyPQs6V+IR8glc/YTkV5fbXpASNMihKjtdQWZGmzN
+    cDxJ8Psaqs9935RTM7KlaFtsik7e0xbA09syacnbHTt6BQW4zsQnUM5brVQfPrJdlfj7
+    yQH+trIIkg8GYPC8Yws4gRDhFqfqyIWNJT7eg502u/5s1AtsdM/RBDMQQgoKMqePESHN
+    JDLlLSSd6vAsLaaH+e6vHCP7aJm5w+Niln2ApkCRIGDhucSe+Zyj5IaUzMAxGCWGpyoZ
+    mGP6+QwR2tZEBdDWqEToimpVYIzHtbyKOKdWsua7Xc9XMhtrbK9pAhU1X7LSjBcGbpc9
+    dleg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1674478149;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=sD2B2ZOQtBqvxHV8WDrINo/9+pIZKRvy/nGecyo3S0o=;
+    b=nk3ux1boGsNtcf4ltzkvj2s81dSMvhXpY7A5851MmYf/yIZ6+1jvm7OJFefNI2fe+f
+    ZJJ4NW/EP1qpgpL8OuGqf6OzDfA65PX0Gori51lqErBqoyB3E5NRo3LvWFOEdmGlyPP5
+    5xo6k/PIndDgTeqOI6Q5ks6hszQYAaX5CDmGJ6LlJD+UIIu/IK6amahZfFxB5bzVU0ui
+    UaI+NIVoAnHNs5LKlUEyxbNBMNBaXyVZYMpDxyY3jzALGq/Ohy0+d2VptT5c9f8nFqyW
+    Wi+XVc2AV5iyyKTdmDZIXtDLCpmgOvcaJC3W3BOwdyMWFxGFAbRdBe4WNt3G+G6YUkBe
+    oEHg==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u267FZF9PwpcNKjXrKw58qY="
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.1.0 AUTH)
+    with ESMTPSA id 6630d1z0NCn8AFC
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 23 Jan 2023 13:49:08 +0100 (CET)
+Date:   Mon, 23 Jan 2023 13:49:02 +0100
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        djakov@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benl@squareup.com,
+        shawn.guo@linaro.org, fabien.parent@linaro.org, leo.yan@linaro.org,
+        dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+Message-ID: <Y86CPmgvAi+kChQI@gerhold.net>
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230119174244.2059628-1-vincent.guittot@linaro.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-> By taking into account uclamp_min, the 1:1 relation between task misfit
-> and cpu overutilized is no more true as a task with a small util_avg may
-> not fit a high capacity cpu because of uclamp_min constraint.
+On Mon, Jan 23, 2023 at 11:08:28AM +0000, Bryan O'Donoghue wrote:
+> V4:
+> - Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
+
+Downstream is just an implementation and contains plenty of misleading
+or even wrong information. IMO Bjorn is right here that VDDMX_AO is not
+a logical choice.
+
+The _AO (active-only) suffix means that the votes are only applied when
+the processor making the vote is "active", that is when the Linux CPUs
+are not in deep cpuidle mode.
+
+For WCNSS the goal is to keep the necessary power domains active while
+WCNSS is booting up, until it is able to make its own votes (handover).
+The WCNSS firmware might then vote for VDDMX_AO internally because VDDMX
+is not needed when the WCNSS CPU is suspended.
+
+However, I would expect that the meaning is totally different when the
+same vote is made from Linux. When Linux votes for _AO the "active"
+state likely refers to the Linux CPUs, instead of the WCNSS CPU when
+made from the WCNSS firmware.
+
+Why does it work in downstream then? I would just assume "side effects":
+  - Something else votes for VDDMX without _AO while WCNSS is booting
+  - The Linux CPUs don't go into deep cpuidle state during startup
+    - In particular, note how downstream often has "lpm_levels.sleep_disabled=1"
+      on the kernel command line. This disables all cpuidle states until
+      late after boot-up when userspace changes this setting. Without
+      cpuidle, VDDMX_AO is identical to VDDMX.
+
+Please change it to VDDMX (without _AO). It will most likely not make
+any difference, but IMO it is logcially more correct and less
+confusing/misleading. :)
+
+> - Leaves dummy power-domain reference in cpu defintion as this is a
+>   required property and the dt checker complains - Stephan/Bryan
+
+It's only required though because you forgot to drop the DT schema patch
+(3/4) when I suggested half a year ago that you make the MSM8939
+cpufreq-qcom-nvmem changes together with the CPR stack [1]. :/
+
+Anyway, it looks like qcom-cpufreq-nvmem.yaml requiring "cpr" power
+domain unconditionally is a mistake anyway for multiple platforms.
+[2] was recently submitted to fix this so that patch should allow you to
+drop the dummy nodes. :)
+
+[1]: https://lore.kernel.org/linux-arm-msm/Ysf8VRaXdGg+8Ev3@gerhold.net/
+[2]: https://lore.kernel.org/linux-arm-msm/20230122174548.13758-1-ansuelsmth@gmail.com/
+
+> - Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
+
+Fair enough, if you would like to keep it I will likely send a revert
+for the MSM8939 icc_sync_state() though. Because clearly it breaks
+setups without a display and I don't see how one would fix that from the
+device tree.
+
+Also: The undocumented "register-mem" interconnect is still there. :)
+
+> - power-domain in MDSS - dropped its not longer required after
+>   commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix
+> power-domain constraint") - Stephan
+
+Thanks!
+
+> - Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
+>   Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
+>   GCC_BYTE1_CFG_RCGR : SRC_SEL
+>   Root Source Select
+>   000 : cxo
+>   001 : dsi0_phy_pll_out_byteclk
+>   010 : GPLL0_OUT_AUX
+>   011 : gnd
+>   100 : gnd
+>   101 : gnd
+>   110 : gnd
+>   111 : reserved - Stephan/Bryan
 > 
-> Add a new state in util_fits_cpu() to reflect the case that task would fit
-> a CPU except for the uclamp_min hint which is a performance requirement.
-> 
-> Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
-> can use this new value to take additional action to select the best CPU
-> that doesn't match uclamp_min hint.
-> 
-> Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
-> ---
-> 
-> Change since v3:
-> - Keep current condition for uclamp_max_fits in util_fits_cpu()
-> - Update some comments
 
-That one condition change from v3 did fix the overutilization issues so
-good news on that front :)
+I'm confused. Are you not contradicting yourself here? You say that
+dsi0_phy_pll (dsi ZERO) is used to clock GCC_BYTE1_CFG_RCGR. Then why
+do you add dsi1_phy_pll (dsi ONE) to the gcc clock list?
 
-1. GB5
+To me this looks like a confirmation of what downstream does, that both
+DSI byte clocks are actually sourced from the dsi0_phy and the PLL of
+dsi1_phy is not used.
 
-+-----------------+-------------------------+--------+-----------+
-|     metric      |         kernel          | value  | perc_diff |
-+-----------------+-------------------------+--------+-----------+
-| multicore_score |        baseline         | 2765.4 |   0.0%    |
-| multicore_score |      baseline_ufc       | 2704.3 |  -2.21%   | <-- current mainline regression
-| multicore_score |     ufc_patched_v4      | 2839.8 |   2.69%   | <-- new score improvement
-+-----------------+-------------------------+--------+-----------+
-
-+--------------+--------+-------------------------+--------+-----------+
-|  chan_name   | metric |         kernel          | value  | perc_diff |
-+--------------+--------+-------------------------+--------+-----------+
-| total_power  | gmean  |        baseline         | 2664.0 |   0.0%    |
-| total_power  | gmean  |      baseline_ufc       | 2621.5 |   -1.6%   |
-| total_power  | gmean  |     ufc_patched_v4      | 2729.0 |   2.44%   |
-+--------------+--------+-------------------------+--------+-----------+
-
-2. Jankbench
-
-+--------+---------------+------------------------------+-------+-----------+
-| metric |   variable    |            kernel            | value | perc_diff |
-+--------+---------------+------------------------------+-------+-----------+
-| gmean  | mean_duration |        baseline_60hz         | 14.6  |   0.0%    |
-| gmean  | mean_duration |      baseline_ufc_60hz       | 15.2  |   3.83%   |
-| gmean  | mean_duration |     ufc_patched_v4_60hz      | 14.0  |  -3.98%   |
-+--------+---------------+------------------------------+-------+-----------+
-
-+--------+-----------+------------------------------+-------+-----------+
-| metric | variable  |            kernel            | value | perc_diff |
-+--------+-----------+------------------------------+-------+-----------+
-| gmean  | jank_perc |        baseline_60hz         |  1.9  |   0.0%    |
-| gmean  | jank_perc |      baseline_ufc_60hz       |  2.2  |  15.39%   |
-| gmean  | jank_perc |     ufc_patched_v4_60hz      |  1.8  |  -5.67%   |
-+--------+-----------+------------------------------+-------+-----------+
-
-+--------------+--------+------------------------------+-------+-----------+
-|  chan_name   | metric |            kernel            | value | perc_diff |
-+--------------+--------+------------------------------+-------+-----------+
-| total_power  | gmean  |        baseline_60hz         | 135.9 |   0.0%    |
-| total_power  | gmean  |      baseline_ufc_60hz       | 155.7 |  14.61%   | <-- current mainline regression
-| total_power  | gmean  |     ufc_patched_v4_60hz      | 131.4 |  -3.26%   | <-- new power saving
-+--------------+--------+------------------------------+-------+-----------+
-
-All in all this comes out better on every metric than the previous
-baseline and way better than current mainline. At least from an Android
-perspective as far as the impacts go I'd say it's probably fine to go
-ahead and apply this.
-
-Feel free to add this if you'd like:
-Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
-
-> -- 
-> 2.34.1
-> 
-> 
+Thanks,
+Stephan
