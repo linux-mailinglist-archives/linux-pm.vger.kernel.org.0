@@ -2,76 +2,75 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F80A6779D5
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 12:08:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 36F876779E9
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 12:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbjAWLIe (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 06:08:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47048 "EHLO
+        id S231468AbjAWLPh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 06:15:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjAWLIc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 06:08:32 -0500
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349E7233D5
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 03:08:31 -0800 (PST)
-Received: by mail-wr1-x42d.google.com with SMTP id n7so10424024wrx.5
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 03:08:31 -0800 (PST)
+        with ESMTP id S230163AbjAWLPg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 06:15:36 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296BDA257
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 03:15:35 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id r2so10430552wrv.7
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 03:15:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bQhr3/JItD8hiN7B4W7XTXf1SnlTBU1RgIeCnQ3jPKA=;
-        b=cdX/kt69lIxdnoYMqHALGJ85P2JsDX7UIgix1qTebzlEAE4wFYkZRWuS6tr4Wg5RlQ
-         tpUsh7OAKuQYChuXpqsSkpUYZ5kpNjKktcQOU2RGepS8vQm3XZKDY3cfpefVlMvep76L
-         TQpLv2rwgTVzAHVATahafe9KB3kZYEqvPnCO9YAtw+NThIiHVHs1n2qGshd+5b+sPGeB
-         OS0RQ3UgUHb4zimpE/Vt9xX5zC48zjeMmZuxQmOPzcQWFNT9+47Igf+M6cAE78HBBpMa
-         IMfHfnsq3HJJ+PkfHQ6jovCLBKbaiBf0I1rQFXgVwVtjSnO5LDvuzWpGMuF/rbg0JPOl
-         AA/A==
+        bh=3XkQ9oUZTbY4eAuJQ4rHHOrVFOAzENNJtkSeiTWtEh0=;
+        b=wUtzcgACzqkGpAo+dlIAkkVs6Qga9eBS/4luyVihK9aL8B6be54Fdz8ErF4ZFZJOJH
+         GA6F/QEDPB/5QQUKt47SnMBOxvtVP+LU6haiTyp5PPUSCD+9aeAh4mMyKKimLsa2Dz5e
+         wpLH8Y9Q/2I8HkCyurp36dJyHl53vmT38wyKT0U4ON6cJy8FYY0RdjBquA3/ewmyoYR1
+         5nefyRK7/5LFic8ciEONbsrNRkWjBOZyryDHEaPZ0A2AK/J4FcEeQoQcUTCV13YPJC7l
+         1+sb3j5YU4Op9lqoer1aeogDqiVDX9aQfwuFTepkhNzn9IIHcI4ju8wLBQYlkyplx0qn
+         tQEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQhr3/JItD8hiN7B4W7XTXf1SnlTBU1RgIeCnQ3jPKA=;
-        b=EpNdgHz0EaUt5F4MuqGeKFYNR+d7abC6rnF3FlJqZvnPTiYS73ggEuHGoOZiXE//jb
-         tPFfKWMngAdzhbJZ+byWeBy20chfkBLygjzJyzjdmQh27HFlQYMaeN/+a9GiO/TYjJQZ
-         o6n5DKQR4PQk6Zdghwusce7+1c01Vb+Llc7+q2dn49fISVSZG6DgKNhXAbLfU5MTu9aI
-         Eu1dbuVddKk/nY4IFO8FAyXnjYGOO/UXnW+KrKG8Ek9z+vxMIEhC5t8xIzOqHf/AkrAa
-         vdrOHbnjkna7ByCXmsVW/0HTOdbZTobpu5TgYp1c0wpxhkCjs2UN2FndKQAJbs/lr3cf
-         1rGw==
-X-Gm-Message-State: AFqh2kqX82nyzfuNRtL387Ppy4nQUvkkFMGtqwxwsczDO2jGSR/vuYVX
-        sP/q4L/bcIQbEGVVW9k9bCgWkQ==
-X-Google-Smtp-Source: AMrXdXt5O7dxKnG4Glq1alTML0xWLrojOeN5LDDkhRQ34p8sStaW4LtOUIFMQQKPT3KO6CtLnx/8tg==
-X-Received: by 2002:a5d:660a:0:b0:2be:5162:c8da with SMTP id n10-20020a5d660a000000b002be5162c8damr12676248wru.16.1674472109680;
-        Mon, 23 Jan 2023 03:08:29 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id bt14-20020a056000080e00b0027cb20605e3sm18488946wrb.105.2023.01.23.03.08.28
+        bh=3XkQ9oUZTbY4eAuJQ4rHHOrVFOAzENNJtkSeiTWtEh0=;
+        b=p+phe/z90FSj6jJslT37VleTVvDSdoUGbX0rBzYN2R/QuOUW8AEdeWnDyn/fS0n3YB
+         uiyLqyE7dp0bOdFop2+J6ZYhdJYeFuCsVKIVSbB5I7dooBeZMDSqi+27RYF/5q3iV4UY
+         CpNUd7W7d2uIDlGnfI9oUCyKZAAVSY0trKBWqRCuIzvTN3DUutLWDdnQFmSQkIgejGOV
+         GwfgjPwiaby147TCLhZaiaK/sFo0dLO6ufb9vHki26fkdwPKUmlxD3vISKuI+r83lY1u
+         c5wzVcO6XnKLiCjeXr3dYGIeYiivGwkeDhndN3iGECP6GnNyah1Vz9LPoI5MMIFgAZ5b
+         zUEg==
+X-Gm-Message-State: AFqh2krwREDj30klyS1XGViW3JgVD66DhU/WxH4P8TLSLYds1Yba/O9/
+        Mpr+spk8Fns2+pUqclpwG1L+jw==
+X-Google-Smtp-Source: AMrXdXtDML4IHtodIbfm9IsqYkufHLWTDtMNlTsWu6FPw06LoyDhO1IrZK4zXFMaz4QiNCrwC+nxTw==
+X-Received: by 2002:a5d:5c07:0:b0:2bd:fa1d:5291 with SMTP id cc7-20020a5d5c07000000b002bdfa1d5291mr23368215wrb.67.1674472533568;
+        Mon, 23 Jan 2023 03:15:33 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id b9-20020adff909000000b002be5401ef5fsm7908845wrr.39.2023.01.23.03.15.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 03:08:29 -0800 (PST)
-Message-ID: <42baa874-c926-9111-b0b3-2df2562d8de6@linaro.org>
-Date:   Mon, 23 Jan 2023 11:08:28 +0000
+        Mon, 23 Jan 2023 03:15:33 -0800 (PST)
+Message-ID: <6a073166-af3c-4867-6237-dca6e03633db@linaro.org>
+Date:   Mon, 23 Jan 2023 12:15:31 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH v4 0/6] Add MSM8939 SoC support with two devices
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v6 1/3] thermal/acpi: Add ACPI trip point routines
 Content-Language: en-US
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        djakov@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
-        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
-        stephan@gerhold.net
-References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Cc:     rafael@kernel.org, srinivas.pandruvada@linux.intel.com,
+        linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+        rui.zhang@intel.com, christophe.jaillet@wanadoo.fr,
+        Amit Kucheria <amitk@kernel.org>
+References: <20230120231530.2368330-1-daniel.lezcano@linaro.org>
+ <20230120231530.2368330-2-daniel.lezcano@linaro.org>
+ <5911499.lOV4Wx5bFT@kreacher>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <5911499.lOV4Wx5bFT@kreacher>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,80 +78,65 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/01/2023 02:31, Bryan O'Donoghue wrote:
-> V4:
-> - Adds Krzysztof's RB to snoc-mm
-> - Re-orders alphabetically missed nodes in previous iteration - Bjorn
-> - Adds LK address/size cells comment - Bjorn
+On 22/01/2023 23:08, Rafael J. Wysocki wrote:
+> On Saturday, January 21, 2023 12:15:28 AM CET Daniel Lezcano wrote:
+>> The ACPI specification describes the trip points, the device tree
+>> bindings as well.
+>>
+>> The OF code uses the generic trip point structures.
+>>
+>> The ACPI has their own trip points structure and uses the get_trip_*
+>> ops to retrieve them.
+>>
+>> We can do the same as the OF code and create a set of ACPI functions
+>> to retrieve a trip point description. Having a common code for ACPI
+>> will help to cleanup the remaining Intel drivers and get rid of the
+>> get_trip_* functions.
+>>
+>> These changes add the ACPI thermal calls to retrieve the basic
+>> information we need to be reused in the thermal ACPI and Intel
+>> drivers.
+>>
+>> The different ACPI functions have the generic trip point structure
+>> passed as parameter where it is filled.
+>>
+>> This structure aims to be the one used by all the thermal drivers and
+>> the thermal framework.
+>>
+>> After this series, a couple of Intel drivers and the ACPI thermal
+>> driver will still have their own trip points definition but a new
+>> series on top of this one will finish the conversion to the generic
+>> trip point handling.
+>>
+>> This series depends on the generic trip point added to the thermal
+>> framework and available in the thermal/linux-next branch.
+>>
+>>   https://lkml.org/lkml/2022/10/3/456
+>>
+>> It has been tested on a Intel i7-8650U - x280 with the INT3400, the
+>> PCH, ACPITZ, and x86_pkg_temp. No regression observed so far.
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> Reviewed-by: Zhang Rui <rui.zhang@intel.com>
+>> Tested-by: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
 > 
-> - Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
-> - Uses qcom,ids.h and QCOM_ID_SOCNAME for qcom,msm-id - Bjorn
-> - Revises comment from "Regulator" to "Power supply" - Bjorn
-> - Leaves dummy power-domain reference in cpu defintion as this
+> Co-developed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> - Relabels "cpu" to "CPU" to be more consistent with other dtsi - Bryan
-> - Moves msm8939 gcc to its own yaml file to capture 8939 specific form - Bryan
+> Also I'm not sure if this version has been tested and reviewed.
 > 
->    is a required property and the dt checker complains - Stephan/Bryan
-> - Removes CPR entries from qfprom - Stephan
-> - Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
-> - power-domain in MDSS - dropped its not longer required after
->    commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix power-domain constraint") - Stephan
-> - Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
->    Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
->    GCC_BYTE1_CFG_RCGR : SRC_SEL
->    Root Source Select
->    000 : cxo
->    001 : dsi0_phy_pll_out_byteclk
->    010 : GPLL0_OUT_AUX
->    011 : gnd
->    100 : gnd
->    101 : gnd
->    110 : gnd
->    111 : reserved - Stephan/Bryan
-> 
-> - pm8916_l16 -> pm8916_l6 in dsi definition, typo - Konrad
-> - Moved regulator_set_load location - Konrad
-> 
-> Previous:https://lore.kernel.org/lkml/20230118050948.bibhq26s6sgzullg@builder.lan/T/
-> Bootable:https://git.linaro.org/people/bryan.odonoghue/kernel.git/log/?h=linux-next-23-01-23-msm8939-nocpr
+> There are still a few things to improve in it, but overall I think that
+> something like the patch below would be better - it is fewer lines of code
+> and less duplication.
 
-Let me translate my 2:30 am email to english, I meant to group this by 
-reviewer
-
-V4:
-- Adds Krzysztof's RB to snoc-mm
-
-- Re-orders alphabetically missed nodes in previous iteration - Bjorn
-- Adds LK address/size cells comment - Bjorn
-- Left _AO for wcnss as downstream reference uses this - Bjorn/Bryan
-- Uses qcom,ids.h and QCOM_ID_SOCNAME for qcom,msm-id - Bjorn
-- Revises comment from "Regulator" to "Power supply" - Bjorn
-- Leaves dummy power-domain reference in cpu defintion as this is a
-   required property and the dt checker complains - Stephan/Bryan
-
-- Relabels "cpu" to "CPU" to be more consistent with other dtsi - Bryan
-- Moves msm8939 gcc to its own yaml file to 8939 specifics -Bryan
+I'm always in favor of the simplest code, in terms of line of code and 
+readability. I'm perfectly fine with your proposal.
 
 
-- Removes CPR entries from qfprom - Stephan
-- Left MDSS interconnects. I don't see a bug to fix here - Stephan/Bryan
-- power-domain in MDSS - dropped its not longer required after
-   commit a6f033938beb ("dt-bindings: msm: dsi-controller-main: Fix 
-power-domain constraint") - Stephan
-- Adds gcc dsi1pll and dsi1pllbyte to gcc clock list.
-   Reviewing the silicon documentation we see dsi0_phy_pll is used to clock
-   GCC_BYTE1_CFG_RCGR : SRC_SEL
-   Root Source Select
-   000 : cxo
-   001 : dsi0_phy_pll_out_byteclk
-   010 : GPLL0_OUT_AUX
-   011 : gnd
-   100 : gnd
-   101 : gnd
-   110 : gnd
-   111 : reserved - Stephan/Bryan
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-- pm8916_l16 -> pm8916_l6 in dsi definition, typo - Konrad
-- Moved regulator_set_load location - Konrad
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
