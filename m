@@ -2,116 +2,90 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95186788F5
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 21:59:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20094678957
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 22:18:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjAWU66 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 15:58:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S231989AbjAWVSN (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 16:18:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbjAWU6r (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 15:58:47 -0500
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A2834C29;
-        Mon, 23 Jan 2023 12:58:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
-        Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
-        Content-ID:Content-Description:In-Reply-To;
-        bh=DwNtSkSaGTU0TFqzb2/WMPSb8JYwGKCIYZsmeR/P6pc=; b=FueaaZb7VWO4atG18KkGUgcSzQ
-        FI5cJ88LeuzKk95B4T/ujA5RntI3Q5IOg661T+Nx6Jg1ofr+WaQ3jBAlstIFsm10tCM3ugdjreIdw
-        jekc2aQYG/Zbaa+emGpeAz4Lv6QTZxYV0c5nx4gqJLGh7FKawVx+Ru+OgUlQzQ74ginyYEH3WP7dw
-        5txleE63/CC3gyBWdpXXfg+uTfS6QliMubretWIhRomQhaeRWZ4/+Y6MJMCwfLlvq3DfaoQCRPIFH
-        +KxmdhhfRE4vj/Ol3tLiIZOlGF2SQI84vVc0Rt8I4gS0JE1bOVgjV0eJCIaInsyf0I1LAQCcZ89zG
-        l5gK1P0g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pK3sB-001dto-1f;
-        Mon, 23 Jan 2023 20:57:02 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 6AB39300BCB;
-        Mon, 23 Jan 2023 21:57:27 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id D952B2075A6F8; Mon, 23 Jan 2023 21:57:24 +0100 (CET)
-Message-ID: <20230123205515.233366796@infradead.org>
-User-Agent: quilt/0.66
-Date:   Mon, 23 Jan 2023 21:50:15 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     mingo@kernel.org
-Cc:     will@kernel.org, peterz@infradead.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, rostedt@goodmis.org, mhiramat@kernel.org,
-        wanpengli@tencent.com, vkuznets@redhat.com,
-        boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        kernel test robot <oliver.sang@intel.com>
-Subject: [PATCH 6/6] cpuidle: Fix poll_idle() noinstr annotation
-References: <20230123205009.790550642@infradead.org>
+        with ESMTP id S231540AbjAWVSM (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 16:18:12 -0500
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07DFC125BC;
+        Mon, 23 Jan 2023 13:18:12 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id o66so11570294oia.6;
+        Mon, 23 Jan 2023 13:18:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ywud7ZWeMHmFOjclbft5yqOHQmEsSUXtRD9i7sVK4H4=;
+        b=ALTfYGYOylZVx5sewQN3qY/XI5Rp4gu8T0SZ6W8C6Rb7abeoeeCadQlN5gelcOTagw
+         xEkiqouP6mbxUAmFVQKOySSEa6knxj4rNpoJsyyoyWRrwxcvJAUxJi8A7LzFu9MbjIfZ
+         zhKUJyfnWbmq9m/zp+2owLkUNG3OIcF2HzhXVbzRp5+tBMF2Vcyzl9vzZVFBBRPe0b6b
+         DHUmcWYbRj40FJz+rmD7h/5CbVwrJLUMAj4WVOc+1pVKNEwBn9q5dm/ScMGC3D1XfJun
+         2I4b0s/VnZOtUFitZeRBQV73mqpGPrybWIZ4JNsVV17bqhcscf0oCUXDz6fJ+adV9iu/
+         cY4g==
+X-Gm-Message-State: AFqh2kqUNkBs3IxoiX9zWRrBiJBMaSsE+sjPlSNJ36f92UdcKtGmeE0H
+        El9yRQO/YEdcsZYWY7vGKw==
+X-Google-Smtp-Source: AMrXdXs10bEeIFi0iNTyIEE1UTl8pknOudNavorSMN1FcmHPxgWJTXAPtNxXk9tDO/wrml1h3JNCxg==
+X-Received: by 2002:aca:3203:0:b0:36a:d348:26d8 with SMTP id y3-20020aca3203000000b0036ad34826d8mr10764521oiy.52.1674508691287;
+        Mon, 23 Jan 2023 13:18:11 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id y5-20020a056808130500b00363ef79e2a1sm223198oiv.31.2023.01.23.13.18.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jan 2023 13:18:10 -0800 (PST)
+Received: (nullmailer pid 2655726 invoked by uid 1000);
+        Mon, 23 Jan 2023 21:18:09 -0000
+Date:   Mon, 23 Jan 2023 15:18:09 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        Ilia Lin <ilia.lin@kernel.org>, linux-clk@vger.kernel.org,
+        Nishanth Menon <nm@ti.com>, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>
+Subject: Re: [PATCH 1/2] dt-bindings: clock: qcom,sm8450-camcc: constrain
+ required-opps
+Message-ID: <167450868811.2655634.3848215536562654320.robh@kernel.org>
+References: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119130028.106817-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The instrumentation_begin()/end() annotations in poll_idle() were
-complete nonsense. Specifically they caused tracing to happen in the
-middle of noinstr code, resulting in RCU splats.
 
-Now that local_clock() is noinstr, mark up the rest and let it rip.
+On Thu, 19 Jan 2023 14:00:27 +0100, Krzysztof Kozlowski wrote:
+> Be specific how many required-opps are allowed.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> This change is independent, although logically is connected with my
+> dtschema pull:
+> https://github.com/devicetree-org/dt-schema/pull/95
+> ---
+>  Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Fixes: 00717eb8c955 ("cpuidle: Annotate poll_idle()")
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202301192148.58ece903-oliver.sang@intel.com
----
- drivers/cpuidle/cpuidle.c    |    2 +-
- drivers/cpuidle/poll_state.c |    2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
-
---- a/drivers/cpuidle/cpuidle.c
-+++ b/drivers/cpuidle/cpuidle.c
-@@ -426,7 +426,7 @@ void cpuidle_reflect(struct cpuidle_devi
-  * @dev:   the cpuidle device
-  *
-  */
--u64 cpuidle_poll_time(struct cpuidle_driver *drv,
-+__cpuidle u64 cpuidle_poll_time(struct cpuidle_driver *drv,
- 		      struct cpuidle_device *dev)
- {
- 	int i;
---- a/drivers/cpuidle/poll_state.c
-+++ b/drivers/cpuidle/poll_state.c
-@@ -15,7 +15,6 @@ static int __cpuidle poll_idle(struct cp
- {
- 	u64 time_start;
- 
--	instrumentation_begin();
- 	time_start = local_clock();
- 
- 	dev->poll_time_limit = false;
-@@ -42,7 +41,6 @@ static int __cpuidle poll_idle(struct cp
- 	raw_local_irq_disable();
- 
- 	current_clr_polling();
--	instrumentation_end();
- 
- 	return index;
- }
-
-
+Acked-by: Rob Herring <robh@kernel.org>
