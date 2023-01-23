@@ -2,72 +2,71 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 877D46783F4
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 19:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78B16678432
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 19:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233340AbjAWSCg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 13:02:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S233904AbjAWSJ7 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 13:09:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233197AbjAWSCg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 13:02:36 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66BE2CFC6
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 10:02:34 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so11240670wmb.0
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 10:02:34 -0800 (PST)
+        with ESMTP id S233843AbjAWSJu (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 13:09:50 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08006190
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 10:09:49 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so9237959wmc.1
+        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 10:09:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=yk2fX5q0jXoyVU2uukxJAFScsvm4XeRwSWczxQlKv7c=;
-        b=qVg6gV5Bi3EkI4zHTcNGByKaQjGFOvWPkBlorpwTICHLWmVwrLQrcfzy/pakxNgb4Z
-         t0obd8NOlg5OQGEGZeM+JLUmnxOFZZmvzHfTkuJpSMMWrGeb5DbHs0A2lbl7xXY0ojAM
-         9Jwdo85MZEtuQI+eN5SBsoN6aykHJ4v0sC25XWV55+4Fbzq0ijYWhzsrn4C1JKHyjQe3
-         b59kTAt2uuwxE6RgBuqnrjH99UJzmNuHDV/3biLsCEtClktzXNKoenweJq8vmTA2J5jx
-         cdsT/4Cn2zZz5M9VW8ZI/OqX67Sc23sU6Hu86Ec3RzdOPCW0n0NncMu0cdgm9iB18XqN
-         4F9A==
+        bh=8UgnE9yzQF0/kVw1PL+2zXVglBvTk6kltxJXDJT9BEE=;
+        b=lO/ofHm2oLCA8D9EygOt6I2k8rvS0T7OuwBbIv5LSIb7VeVPbdkncXCquvm8YyHI0l
+         o05cJNTCy+zYkKzckP9szX+y4NgGH1r/pmDCrAd9YGLBMynEu1YPZ3PRPcfSZGkrPny0
+         eVaGzV3BYK4d1SVwpRO2AZPZDnDrZdCVncXuR6efnEZK5FlzkfXRHySIHKp//5nBZ0xC
+         D1Li4GFq3RDqvVRmBnLJ3Ztl7S5fbjxnBBQrFgXXzfPEBQI23aQje4nwVRrC19HuJSGH
+         sigiGlCfqv/7Pea+9vvYVrfP896xT5/eraqB4Dwpu4hPFsilJ1rmRKrzfUkd33ToDVgM
+         FvRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yk2fX5q0jXoyVU2uukxJAFScsvm4XeRwSWczxQlKv7c=;
-        b=1Q/Qs4k3qN02TOXOXC7Xuq1dcxtFe9GEZsmYXmS+Bhfe7trfCUpm2qQ/EIcjzydt82
-         OEobQkl01nTctOEusvyaeQk3cfia7n9YZuHH76IUdpxRo5ZsZY0m7zXzvR+RVok+bRTy
-         /tqjZe8I5xhI/oocSRaCkwoHFT68VUjXmnlEePYTO6JrX+4zM66c2fW32+jGUWfkdRTn
-         phGYl3dVMluB9hZCLM0Z9B6EXCRukI1PNCqudmff2edr49f/7X9DHhXxqifmZhyNagnK
-         FBpX6N9tT3jgMIhR209EARctumy9ouLsePbAobTQqcHA/FaCK1yaJCZvli6m4+0QY+XD
-         pQcA==
-X-Gm-Message-State: AFqh2koTIoE0DcWE801lG3w1Mu43YpGyHguKpVqxLSQdFk4pHzOr4+cj
-        CAbY4IQZhb/w1McnihCae6glcA==
-X-Google-Smtp-Source: AMrXdXvWK2tDK4Ma8vpazDen+DCctMU1tiawaFCNhCgqr3FDwfsmSpAB9iG7lkjLzjTOIU1xSNynqg==
-X-Received: by 2002:a05:600c:4fcb:b0:3db:1919:41b5 with SMTP id o11-20020a05600c4fcb00b003db191941b5mr19016437wmq.21.1674496953315;
-        Mon, 23 Jan 2023 10:02:33 -0800 (PST)
+        bh=8UgnE9yzQF0/kVw1PL+2zXVglBvTk6kltxJXDJT9BEE=;
+        b=XvwcY1O3k6SExjKipvGMf/3hdezbFN79/neacUbiXlaKI/FeY4ITZTcEeGeCsA95b9
+         4gSodStLBhC3Y79C2cmAazG0GF5Ku0WoWRVMEdV2j7TeacycuIY2/bKg1lBez8GMW3Mj
+         isY5UVjdtdJnUviTLw15J17tCwBx2WYdCKqn/kHLakYT4eW9Fy1eqUHQ/RNX1O/HlpUJ
+         1/1Fdef44aNOUmrRVc0qfl9Wwe7Lvz449YU4SDcfxuJSgF/julfymHn3aFkFl9KxX00A
+         laV5s5dvB2gS+Q3VVfDF1z0lFCwUWq0H4dKIP+3Xijc8E/39xqCr8yy3DZPDln2ObCPd
+         dU3w==
+X-Gm-Message-State: AFqh2kpjztJArplBnrnSK6iazULrOtnhfsEuKSf1UCikY9utU3syUSk2
+        uVE8i3qnQpwiRscdLM5fxmxMOA==
+X-Google-Smtp-Source: AMrXdXt9rMaHRspPdmiatf0waXS8DVwHrYK+M9dNQzuX3sPOYtaOZ4bjAgTVu9rg3cprzcsKmgGQrg==
+X-Received: by 2002:a05:600c:3586:b0:3da:fb3c:c1ab with SMTP id p6-20020a05600c358600b003dafb3cc1abmr24815025wmq.0.1674497387509;
+        Mon, 23 Jan 2023 10:09:47 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id m18-20020a05600c4f5200b003cffd3c3d6csm12116756wmq.12.2023.01.23.10.02.32
+        by smtp.googlemail.com with ESMTPSA id o13-20020a05600c4fcd00b003d237d60318sm12380338wmq.2.2023.01.23.10.09.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 10:02:32 -0800 (PST)
-Message-ID: <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
-Date:   Mon, 23 Jan 2023 19:02:31 +0100
+        Mon, 23 Jan 2023 10:09:47 -0800 (PST)
+Message-ID: <ff598dd3-91d0-b660-7821-e34177056954@linaro.org>
+Date:   Mon, 23 Jan 2023 19:09:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.2
-Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for
- processor_thermal_device_pci
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for
+ intel_soc_dts_iosf
 Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        rafael@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
 References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
- <20230118181622.33335-2-daniel.lezcano@linaro.org>
- <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+ <20230118181622.33335-3-daniel.lezcano@linaro.org>
+ <CAJZ5v0hCJF-+1SFHyNF-=4FWPLcOqRnc09KeA=rz6BdYTvb=BQ@mail.gmail.com>
 From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+In-Reply-To: <CAJZ5v0hCJF-+1SFHyNF-=4FWPLcOqRnc09KeA=rz6BdYTvb=BQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,36 +82,87 @@ X-Mailing-List: linux-pm@vger.kernel.org
 
 Hi Srinivas,
 
-
-On 18/01/2023 20:09, srinivas pandruvada wrote:
-> On Wed, 2023-01-18 at 19:16 +0100, Daniel Lezcano wrote:
+On 19/01/2023 21:04, Rafael J. Wysocki wrote:
+> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> From: Daniel Lezcano <daniel.lezcano@kernel.org>
+>>
 >> The thermal framework gives the possibility to register the trip
->> points with the thermal zone. When that is done, no get_trip_* ops
->> are
+>> points with the thermal zone. When that is done, no get_trip_* ops are
 >> needed and they can be removed.
 >>
->> Convert ops content logic into generic trip points and register them
->> with the
+>> Convert ops content logic into generic trip points and register them with the
 >> thermal zone.
 >>
-> In this scheme is the assumption is that trip point temperature never
-> changes? If firmware updated the trip temperature, what needs to be
-> done?
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>> ---
 
-I'm a bit confused about the situation where the firmware can change the 
-trip point in the back of the OSPM.
+[ ... ]
 
-Does the firmware send a notification about the trip change? Or does it 
-assume the OSPM will be reading the trip point while monitoring/polling 
-the thermal zone ?
+>>
+>> @@ -320,7 +304,8 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+>>          dts->trip_mask = trip_mask;
+>>          dts->trip_count = trip_count;
+>>          snprintf(name, sizeof(name), "soc_dts%d", id);
+>> -       dts->tzone = thermal_zone_device_register(name,
+>> +       dts->tzone = thermal_zone_device_register_with_trips(name,
+>> +                                                 dts->trips,
+>>                                                    trip_count,
+>>                                                    trip_mask,
+>>                                                    dts, &tzone_ops,
+>> @@ -430,27 +415,28 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
+>>                  notification = false;
+>>          else
+>>                  notification = true;
+>> -       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+>> -               sensors->soc_dts[i].sensors = sensors;
+>> -               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
+>> -                                          notification, trip_count,
+>> -                                          read_only_trip_count);
+>> -               if (ret)
+>> -                       goto err_free;
+>> -       }
+> 
+> How is this change related to the rest of the patch?
 
-Is the question for this particular driver?
+We want to register the thermal zone with the trip points.
 
-If the trip point is changed by the userspace (via sysfs), 
-thermal_zone_set_trip() is used which in turn changes the thermal trip 
-temperature directly in the generic structure and then calls the back 
-set_trip_temp.
+thermal_zone_device_register() becomes
 
+thermal_zone_device_register_with_trips()
+
+But in the current code, the trip points are updated after the thermal 
+zones are created (and strictly speaking it is wrong as get_trip_temp 
+can be invoked before the trip points are updated).
+
+So the change inverts the initialization where we update the trip points 
+and then we register the thermal zones.
+
+>>
+>>          for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+>>                  ret = update_trip_temp(&sensors->soc_dts[i], 0, 0,
+>>                                         THERMAL_TRIP_PASSIVE);
+>>                  if (ret)
+>> -                       goto err_remove_zone;
+>> +                       goto err_free;
+>>
+>>                  ret = update_trip_temp(&sensors->soc_dts[i], 1, 0,
+>>                                         THERMAL_TRIP_PASSIVE);
+>>                  if (ret)
+>> -                       goto err_remove_zone;
+>> +                       goto err_free;
+>>          }
+>>
+>> +       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+>> +               sensors->soc_dts[i].sensors = sensors;
+>> +               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
+>> +                                          notification, trip_count,
+>> +                                          read_only_trip_count);
+>> +               if (ret)
+>> +                       goto err_remove_zone;
+>> +       }
+>> +
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
