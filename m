@@ -2,134 +2,103 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECE14678672
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 20:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11CE16786E4
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 20:54:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231938AbjAWTei (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 14:34:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S232024AbjAWTyc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 14:54:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjAWTeh (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 14:34:37 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B8930E93;
-        Mon, 23 Jan 2023 11:34:35 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id e3so11822284wru.13;
-        Mon, 23 Jan 2023 11:34:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=soIeeALkS41bJ2ncvnZDLOOPGxMriqJTL5s1g1AyJyc=;
-        b=ZXMPZfkOFIL6dxeDLSpIRvNj9o6WVBrQyyyuuxO4aH8UdL8p8gg/FiQQ97cQLhMeXU
-         VEUo0xjJYLnWhQFzLFdnn47I6nq785nL8oPWyp0K9rgsniZcJOaqghz+AG068L0MU+xW
-         Bqx6nuAZ2hLA22ySlcqUEXE//qir9d0THhXT4/P/494Ysckf00Ml+8ekbKarNVNOwK8e
-         Q6ffxoTB4psAMWeZfixOUtBJenIIR6WRg0vcrHrq4bUAcbVO4xQbn69Crr5a/T/zFVFU
-         e1OeXt6qREJEbh29PFd8URiT8VWsIMf6dtMmvJ/y65E7C1h3mIIL7Oz4DXrFHWPpItDN
-         CmUA==
+        with ESMTP id S231468AbjAWTyb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 14:54:31 -0500
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A49030EBD;
+        Mon, 23 Jan 2023 11:54:30 -0800 (PST)
+Received: by mail-ed1-f46.google.com with SMTP id w14so15948651edi.5;
+        Mon, 23 Jan 2023 11:54:30 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=soIeeALkS41bJ2ncvnZDLOOPGxMriqJTL5s1g1AyJyc=;
-        b=AchauiRQW/2UDYC9cXXqhno0AdbaJ7/RgSghKN0/Ri6wxjud2HDphEjSNGTT5FfBO+
-         tJJTZpK0dNo1zREIKG2Ywfhveu7OdFzoSrCkWI4DaGHWLd8q4nbT9OI8UHUx+i5YucLM
-         UZKLVbNIdhfyqq/nTPkhV01hMOMU0zm3p7WclH/SMPrZIDerBHVe6p0ZI/f0Z59yj50d
-         6XTNSyc1JvUpRwO5Yx52WSvEmWXhiyttBMnSkgqDgt7mR6a8FtI2P5XF6IaFnT9QvYSa
-         I9ARHlWtemy+GE9+0XoWhUZFTr7x/Xt5+be2v4Wwl/AAe7x77nmHGq8Xm4Md3TRoUmCr
-         7R4Q==
-X-Gm-Message-State: AFqh2kopzs75q0NWAj1s7qhflwZ0JVC8psdQVNxLTICD5qgXfW4XCI5r
-        tbhK77cElWJho4/Tekjb/uGk2OfcMEQ=
-X-Google-Smtp-Source: AMrXdXswKfzpNtGZwSh6N9h23hhfo2/ZJ4yh+Eljese29HLOMBEU93s0Z968TxRIVGWoSQt5mMNBrg==
-X-Received: by 2002:a5d:4350:0:b0:2be:5366:8cdf with SMTP id u16-20020a5d4350000000b002be53668cdfmr11652548wrr.20.1674502474339;
-        Mon, 23 Jan 2023 11:34:34 -0800 (PST)
-Received: from localhost.localdomain (93-34-89-61.ip49.fastwebnet.it. [93.34.89.61])
-        by smtp.googlemail.com with ESMTPSA id z8-20020a5d4408000000b002b8fe58d6desm151428wrq.62.2023.01.23.11.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Jan 2023 11:34:34 -0800 (PST)
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
-        Yassine Oudjana <y.oudjana@protonmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Christian Marangi <ansuelsmth@gmail.com>
-Subject: [PATCH v3 2/2] dt-bindings: opp: opp-v2-kryo-cpu: enlarge opp-supported-hw maximum
-Date:   Mon, 23 Jan 2023 20:34:22 +0100
-Message-Id: <20230123193422.15972-2-ansuelsmth@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230123193422.15972-1-ansuelsmth@gmail.com>
-References: <20230123193422.15972-1-ansuelsmth@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7OnFmO9xTR9Xu/C+ebnyO395E7LnrsXHhVtvHZqLro4=;
+        b=OfUhXFjPcuBGN1Yp2tm+KNK24mlwVEF6HJ4K6Q0lkUE7srQSs02pBoovIGek5ySAfG
+         0kk4KazibhHQqORSxLKejOmpdAPQLeYGuxM8j/dcgo43wrngZGG0WiqmFh6FYj3TdhSu
+         J26ysP1CQ/j49U+rsJiJkXfsFr5kh/IVF3YOuveYO+56nfnDeFevu5qufGhL8IUwN8jd
+         37AsRJr2I9VtpiJm808wXcF6VsTyJ2OHgp7rrojRqXrFTSzUlg0ocHlk6SyEh7I5hvIQ
+         3mPsV7ZZK1IkQ6Wo4f+WpNMZJnYrXwxt5+98AD3NxbJvgpy3eMGuz1cV5VyewIyB9OXH
+         OEMw==
+X-Gm-Message-State: AO0yUKUoCNtRSs3YrVghaUn7wou4bLzcggCAENEgB/GRg0StG8MkpStD
+        1MEyWCXnq00R9UwUevnaSyaTiZ2dFWr4VZ8UkmI=
+X-Google-Smtp-Source: AK7set9cTilvBV+L5qo6TMmPzDimd8d6AOUOsy91hVUnjjLUoYABTMFOCbFaqCLdAWnKXOhc1HAxC/jEk9VOXmYMfpY=
+X-Received: by 2002:a50:ec8f:0:b0:49f:6dda:9e1f with SMTP id
+ e15-20020a50ec8f000000b0049f6dda9e1fmr92431edr.251.1674503668936; Mon, 23 Jan
+ 2023 11:54:28 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <5916342.lOV4Wx5bFT@kreacher> <2882611.e9J7NaK4W3@kreacher>
+ <3234230.44csPzL39Z@kreacher> <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
+In-Reply-To: <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 23 Jan 2023 20:54:17 +0100
+Message-ID: <CAJZ5v0gK_O-9_tPEVbmBbf+2vxVA2_C5tPGOo_qghyw86pohoA@mail.gmail.com>
+Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2 drivers
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Enlarge opp-supported-hw maximum value. In recent SoC we started
-matching more bit and we currently match mask of 112. The old maximum of
-7 was good for old SoC that didn't had complex id, but now this is
-limiting and we need to enlarge it to support more variants.
+On Mon, Jan 23, 2023 at 8:26 PM srinivas pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> On Mon, 2023-01-23 at 19:52 +0100, Rafael J. Wysocki wrote:
+> > On Monday, January 23, 2023 7:45:30 PM CET Rafael J. Wysocki wrote:
+> > > On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki wrote:
+> > > > Hi All,
+> > > >
+> > > > This is a new version of the series from Daniel posted as:
+> > > >
+> > > > https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
+> > > >
+> > > > The first patch has been reworked (see
+> > > > https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/)
+> > > > and the other two have been rebased on top of it.
+> > > >
+> > > > I have retained the R-by tags from Rui, because the changes in
+> > > > patches [2-3/3] are
+> > > > not essential, but I think that this new set needs to be tested
+> > > > again.
+> > > >
+> > > > Srinivas, can you test it please?
+> > >
+> > > Something's wrong, sorry.
+> > >
+> > > I get some invalid trip temperatures with this set.
+> >
+> > Sorry, scratch this, I got confused by THERMAL_TEMP_INVALID showing
+> > up in
+> > sysfs, but it did show up before too.
+> >
+> > Please test!
+> >
+>
+> >
+>
+> >
+> It will be easy if you have some test branch to avoid dependecies on
+> other patches.
 
-Document all the various mask that can be used and limit them to only
-reasonable values instead of using a generic maximum limit.
-
-Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
----
-
-Changes v3:
-- Fix dt_binding_check for missing 0x5 and 0x6 value
-Changes v2:
-- Document additional bit format
-
- .../devicetree/bindings/opp/opp-v2-kryo-cpu.yaml | 16 +++++++++++++---
- 1 file changed, 13 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-index b4947b326773..bbbad31ae4ca 100644
---- a/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-+++ b/Documentation/devicetree/bindings/opp/opp-v2-kryo-cpu.yaml
-@@ -50,12 +50,22 @@ patternProperties:
-       opp-supported-hw:
-         description: |
-           A single 32 bit bitmap value, representing compatible HW.
--          Bitmap:
-+          Bitmap for MSM8996 format:
-           0:  MSM8996, speedbin 0
-           1:  MSM8996, speedbin 1
-           2:  MSM8996, speedbin 2
--          3-31:  unused
--        maximum: 0x7
-+          3:  MSM8996, speedbin 3
-+          4-31:  unused
-+
-+          Bitmap for MSM8996SG format (speedbin shifted of 4 left):
-+          0-3:  unused
-+          4:  MSM8996SG, speedbin 0
-+          5:  MSM8996SG, speedbin 1
-+          6:  MSM8996SG, speedbin 2
-+          7-31:  unused
-+        enum: [0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7,
-+               0x9, 0xd, 0xe, 0xf,
-+               0x10, 0x20, 0x30, 0x70]
- 
-       clock-latency-ns: true
- 
--- 
-2.38.1
-
+Please see the thermal-intel-test branch in linux-pm.git.  It's this
+series on top of the core thermal stuff + ARM drivers.
