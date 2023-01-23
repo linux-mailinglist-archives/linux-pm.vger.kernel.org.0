@@ -2,55 +2,56 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCC24678640
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 20:26:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F1BA678663
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 20:31:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbjAWT0U (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 14:26:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S231548AbjAWTb6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 14:31:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjAWT0T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 14:26:19 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55092113;
-        Mon, 23 Jan 2023 11:26:18 -0800 (PST)
+        with ESMTP id S230346AbjAWTb5 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 14:31:57 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E57B771;
+        Mon, 23 Jan 2023 11:31:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674501978; x=1706037978;
+  t=1674502316; x=1706038316;
   h=message-id:subject:from:to:cc:date:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Jy150XyuERCh2fiwnJuz+EToeoCHCaLdsWTWyPJgDPA=;
-  b=LeAMQCP/ml5BMLzbKgKnT4T5xeBo++hHrSbMxwFlfLwBghKXmT+qljQ1
-   2Y8uuNs7h4dJCMmsCRf3DMwJUNME59g0oJVd0o/F6bcRPjAJbGqzUQG4K
-   9c+8qrIHp4YZtI1h5Fp4hsqx8m1t9kZm89zSfMwQcWGGZVn5oA3PZQnjP
-   xvTCGazdpGzElVYp+zp27u70P2cz5oAgPYQnrZ14fvlMnA5mSviBth+t4
-   25L/+CjPj1kR3I/sSyx4F/DlCwqXl4wEYpQANS+ijzpKlrgTBzXIDb56q
-   Txhu6BQ7B7qveZqQrjYXoFcR/qO7oIJkG45jxYo/5wx5i3rf5HyOpX4FR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="412355868"
+  bh=d0TymjITAt4p1WrJetdkWvEzktXVON3Q9fS07Rfw2Dw=;
+  b=BgyzU9ubY6sLTsfSmRRowMLzTINdrQvJbq6Zwr0QgPw7pOo+YRaw8uxc
+   qgFdzVKb3xZNi7mO6hBo3X3i3cErYx+MUzvTmn9VdMgSi/wWvsNUr+4GY
+   3VyQhk/vwdBsDoM795+6IDbeCfWCE8o524qlP5HgsJLa9OfFuM+kyFcXm
+   +W+Hf9niTJ3+eZCl3sWOKSIm+oMGo7QF+NoOFSoQAoDu4lTBB/ZsEVQYs
+   hC0TMwPPN1/Hrcz84hafAJ3eIduQst6y7w6qgAJzZUzgvBm+a53u6nhMd
+   aJQ8w1Ng4zy85Jpb776k6yshsp/Q8KU/IVbiEes1axZj3UGuFx7IU7Uo1
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="328216791"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="412355868"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:26:18 -0800
-X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="663789877"
+   d="scan'208";a="328216791"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:31:56 -0800
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="750552130"
 X-IronPort-AV: E=Sophos;i="5.97,240,1669104000"; 
-   d="scan'208";a="663789877"
+   d="scan'208";a="750552130"
 Received: from mhkirsch-mobl1.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.212.134.26])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:26:18 -0800
-Message-ID: <19f1860e20fbc75c3d2c3eefda29cccd18ca59a9.camel@linux.intel.com>
-Subject: Re: [PATCH v7 0/3] thermal: intel: Use generic trip points in 2
- drivers
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 11:31:55 -0800
+Message-ID: <cc1bc78192d2a73b29840a19cf89ea0625fb9aba.camel@linux.intel.com>
+Subject: Re: [PATCH 2/3] thermal/drivers/intel: Use generic trip points for
+ processor_thermal_device_pci
 From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Date:   Mon, 23 Jan 2023 11:26:09 -0800
-In-Reply-To: <3234230.44csPzL39Z@kreacher>
-References: <5916342.lOV4Wx5bFT@kreacher> <2882611.e9J7NaK4W3@kreacher>
-         <3234230.44csPzL39Z@kreacher>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rui.zhang@intel.com, Amit Kucheria <amitk@kernel.org>,
+        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
+        Shang XiaoJing <shangxiaojing@huawei.com>
+Date:   Mon, 23 Jan 2023 11:31:54 -0800
+In-Reply-To: <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+         <20230118181622.33335-2-daniel.lezcano@linaro.org>
+         <e7ab0321e8c655836960295987f69c18d940ae52.camel@linux.intel.com>
+         <7b263423-11f8-d3e8-d040-e045dc2fb74c@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
@@ -64,46 +65,60 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, 2023-01-23 at 19:52 +0100, Rafael J. Wysocki wrote:
-> On Monday, January 23, 2023 7:45:30 PM CET Rafael J. Wysocki wrote:
-> > On Monday, January 23, 2023 7:36:52 PM CET Rafael J. Wysocki wrote:
-> > > Hi All,
-> > > 
-> > > This is a new version of the series from Daniel posted as:
-> > > 
-> > > https://lore.kernel.org/linux-pm/20230120231530.2368330-1-daniel.lezcano@linaro.org/
-> > > 
-> > > The first patch has been reworked (see
-> > > https://lore.kernel.org/linux-pm/5911499.lOV4Wx5bFT@kreacher/)
-> > > and the other two have been rebased on top of it.
-> > > 
-> > > I have retained the R-by tags from Rui, because the changes in
-> > > patches [2-3/3] are
-> > > not essential, but I think that this new set needs to be tested
-> > > again.
-> > > 
-> > > Srinivas, can you test it please?
-> > 
-> > Something's wrong, sorry.
-> > 
-> > I get some invalid trip temperatures with this set.
+Hi Daniel,
+
+On Mon, 2023-01-23 at 19:02 +0100, Daniel Lezcano wrote:
 > 
-> Sorry, scratch this, I got confused by THERMAL_TEMP_INVALID showing
-> up in
-> sysfs, but it did show up before too.
+> Hi Srinivas,
 > 
-> Please test!
 > 
+> On 18/01/2023 20:09, srinivas pandruvada wrote:
+> > On Wed, 2023-01-18 at 19:16 +0100, Daniel Lezcano wrote:
+> > > The thermal framework gives the possibility to register the trip
+> > > points with the thermal zone. When that is done, no get_trip_*
+> > > ops
+> > > are
+> > > needed and they can be removed.
+> > > 
+> > > Convert ops content logic into generic trip points and register
+> > > them
+> > > with the
+> > > thermal zone.
+> > > 
+> > In this scheme is the assumption is that trip point temperature
+> > never
+> > changes? If firmware updated the trip temperature, what needs to be
+> > done?
+> 
+> I'm a bit confused about the situation where the firmware can change
+> the 
+> trip point in the back of the OSPM.
+> 
+> Does the firmware send a notification about the trip change? Or does
+> it 
+> assume the OSPM will be reading the trip point while
+> monitoring/polling 
+> the thermal zone ?
+Firmware sends an ACPI notification. For example INT3403.
+
+https://elixir.bootlin.com/linux/latest/C/ident/INT3403_PERF_TRIP_POINT_CHANGED
+
 
 > 
-
-> 
-> It will be easy if you have some test branch to avoid dependecies on
-> other patches.
+> Is the question for this particular driver?
+This PCH driver trips are not changed by firmware hence we don't have
+to worry about here.
 
 Thanks,
 Srinivas
 
 > 
+> If the trip point is changed by the userspace (via sysfs), 
+> thermal_zone_set_trip() is used which in turn changes the thermal
+> trip 
+> temperature directly in the generic structure and then calls the back
+> set_trip_temp.
 > 
+
+
 
