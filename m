@@ -2,262 +2,199 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D683467A0B1
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 18:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3067367A16F
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 19:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjAXR6w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 12:58:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S233193AbjAXSkp (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 13:40:45 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233730AbjAXR6v (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 12:58:51 -0500
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D821026F
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 09:58:50 -0800 (PST)
-Received: by mail-pf1-x42c.google.com with SMTP id z3so11772830pfb.2
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 09:58:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qa312IQe6s7eAevg/FuIllFRk5MeLGl2PRsRn8MrkRQ=;
-        b=iEieSu88AepsbWukLohZfrqQRJowo3VRiEpzUh/+iYEIV/7TmPvlrwa4x6akU0T2lB
-         QhY3mMRJgTvVWlyggef+/MIMz//SZKPp/MOu18kfFg6laaUIba2bDi3Xx5ZdXpQlzET0
-         zmgiuOJOiDA6MJWlZ9Ug//B4s0VlcRQwXiINF3WJRGdixghNV2qoIGDXG7WHFu3qLY2+
-         734vRquA/ehnWZTP5Bvg6709drru9E7Fun7LMmwJCCDTUMXxruCMylxkWKBIzX/+kh4z
-         UTCa/NUrbNk19lBpkC5wdGPxhDJQd0an3qQFMrOGbF6j/atDBqCOHnzj+FQxxZoP89Nv
-         6rNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qa312IQe6s7eAevg/FuIllFRk5MeLGl2PRsRn8MrkRQ=;
-        b=JijZQzjn7sROns4aCl+rpfxWbN7NCtEjNOvc4Sa6GJiAJZdHCqyvUBEfEghjVrDbI+
-         WsbqpvU7wb9a2PGp9MzxZsXkHeNrPshHqkR5k3V+sa2vcyp35ADiAqefEh/gexlG9yYU
-         J5SQzV0oNjv4ZGU6UOEMI+LCQ3kDqR4LpLLVJi3aUenh90h7yXJInE+UTC2VpCy+uzIy
-         rBHoDAeFYATX8UCjJADLIl7tx0Ol3mecKKFpI01shsjBML7izwczluORQvlRO90TdWPD
-         isXAoipwkX0HtqV7a5722ycN4+47lefYikGZfUkKrjUj3mn8RrGDqw2XtEBzTPELC+6b
-         HD5w==
-X-Gm-Message-State: AFqh2kqXDOkuwssGqWjVV5fBUodYkSIJ7Ekjwp3Nxi+EOt94yfCFtsG5
-        LwOG3zd6yTKJ3aKmQryas0GGOhAXxCCbjaJH+j0=
-X-Google-Smtp-Source: AMrXdXtcR0ZNjSPVzZcn6GHYqJisf9lEziWLmPx8x/wGzSXAzeRYVFzVfhIxsbFZNHthqPGYaO90bA==
-X-Received: by 2002:a62:ea13:0:b0:58d:9ad4:adaa with SMTP id t19-20020a62ea13000000b0058d9ad4adaamr28704639pfh.17.1674583130185;
-        Tue, 24 Jan 2023 09:58:50 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id ck7-20020a056a00328700b00580d877a50fsm1878976pfb.55.2023.01.24.09.58.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 09:58:49 -0800 (PST)
-Message-ID: <63d01c59.050a0220.b94b4.372e@mx.google.com>
-Date:   Tue, 24 Jan 2023 09:58:49 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229546AbjAXSko (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 13:40:44 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 223664F37E;
+        Tue, 24 Jan 2023 10:40:11 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 376DE4B3;
+        Tue, 24 Jan 2023 10:40:05 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.11.85])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 901603F64C;
+        Tue, 24 Jan 2023 10:39:18 -0800 (PST)
+Date:   Tue, 24 Jan 2023 18:39:12 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
+        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
+        boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
+Message-ID: <Y9Al0PfSsx/VWL31@FVFF77S0Q05N>
+References: <20230123205009.790550642@infradead.org>
+ <Y9AIj1s5iPPki3dK@FVFF77S0Q05N>
+ <Y9AVtUY8bnF3WjQr@FVFF77S0Q05N>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.2-rc5-93-g06f503868b96
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 30 runs,
- 3 regressions (v6.2-rc5-93-g06f503868b96)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9AVtUY8bnF3WjQr@FVFF77S0Q05N>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 30 runs, 3 regressions (v6.2-rc5-93-g06f503868b96)
+On Tue, Jan 24, 2023 at 05:30:29PM +0000, Mark Rutland wrote:
+> On Tue, Jan 24, 2023 at 04:34:23PM +0000, Mark Rutland wrote:
+> > Hi Peter,
+> > 
+> > On Mon, Jan 23, 2023 at 09:50:09PM +0100, Peter Zijlstra wrote:
+> > > 0-day robot reported graph-tracing made the cpuidle-vs-rcu rework go splat.
+> > 
+> > Do you have a link toe the splat somewhere?
+> > 
+> > I'm assuming that this is partially generic, and I'd like to make sure I test
+> > the right thing on arm64. I'll throw my usual lockdep options at the ftrace
+> > selftests...
+> 
+> Hmm... with the tip sched/core branch, with or without this series applied atop
+> I see a couple of splats which I don't see with v6.2-rc1 (which seems to be
+> entirely clean). I'm not seeing any other splats.
+> 
+> I can trigger those reliably with the 'toplevel-enable.tc' ftrace test:
+> 
+>   ./ftracetest test.d/event/toplevel-enable.tc
+> 
+> Splats below; I'll dig into this a bit more tomorrow.
+> 
+> [   65.729252] ------------[ cut here ]------------
+> [   65.730397] WARNING: CPU: 3 PID: 1162 at include/trace/events/preemptirq.h:55 trace_preempt_on+0x68/0x70
 
-Regressions Summary
--------------------
+The line number here is a bit inscrutible, but a bisect led me down to commit
 
-platform                     | arch | lab          | compiler | defconfig  =
-        | regressions
------------------------------+------+--------------+----------+------------=
---------+------------
-cubietruck                   | arm  | lab-baylibre | gcc-10   | multi_v7_de=
-fconfig | 1          =
+  408b961146be4c1a ("tracing: WARN on rcuidle")
 
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
-fconfig | 1          =
+... and it appears this must be the RCUIDLE_COND() warning that adds, and that
+seems to be because trace_preempt_on() calls trace_preempt_enable_rcuidle():
 
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
-fconfig | 1          =
+| void trace_preempt_on(unsigned long a0, unsigned long a1)
+| {
+|         if (!in_nmi())
+|                 trace_preempt_enable_rcuidle(a0, a1);
+|         tracer_preempt_on(a0, a1);
+| }
 
+It looks like that tracing is dependend upon CONFIG_TRACE_PREEMPT_TOGGLE, and I
+have that because I enabled CONFIG_PREEMPT_TRACER. I reckon the same should
+happen on x86 with CONFIG_PREEMPT_TRACER=y.
 
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.2-rc5=
--93-g06f503868b96/plan/baseline/
+IIUC we'll need to clean up that trace_.*_rcuidle() usage too, but I'm not
+entirely sure how to do that.
 
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.2-rc5-93-g06f503868b96
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      06f503868b964d4833db2465c13e0ab1efff1a5d =
+Thanks,
+Mark.
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch | lab          | compiler | defconfig  =
-        | regressions
------------------------------+------+--------------+----------+------------=
---------+------------
-cubietruck                   | arm  | lab-baylibre | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d00ba2998479efd8915ede
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
-868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
-868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d00ba2998479efd8915ee3
-        failing since 5 days (last pass: v6.1-rc8-176-gcb06e36a6532, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-24T16:47:14.074616  + set +x<8>[   15.035836] <LAVA_SIGNAL_ENDR=
-UN 0_dmesg 3202287_1.5.2.4.1>
-    2023-01-24T16:47:14.074911  =
-
-    2023-01-24T16:47:14.182680  / # #
-    2023-01-24T16:47:14.284163  export SHELL=3D/bin/sh
-    2023-01-24T16:47:14.284514  #
-    2023-01-24T16:47:14.385600  / # export SHELL=3D/bin/sh. /lava-3202287/e=
-nvironment
-    2023-01-24T16:47:14.386140  =
-
-    2023-01-24T16:47:14.487504  / # . /lava-3202287/environment/lava-320228=
-7/bin/lava-test-runner /lava-3202287/1
-    2023-01-24T16:47:14.488258  =
-
-    2023-01-24T16:47:14.493808  / # /lava-3202287/bin/lava-test-runner /lav=
-a-3202287/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch | lab          | compiler | defconfig  =
-        | regressions
------------------------------+------+--------------+----------+------------=
---------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d00aeb045123a229915ed9
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
-868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
-bretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
-868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
-bretech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d00aeb045123a229915ede
-        failing since 5 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-24T16:44:17.536585  / # #
-    2023-01-24T16:44:17.638305  export SHELL=3D/bin/sh
-    2023-01-24T16:44:17.638865  #
-    2023-01-24T16:44:17.740284  / # export SHELL=3D/bin/sh. /lava-3202285/e=
-nvironment
-    2023-01-24T16:44:17.740842  =
-
-    2023-01-24T16:44:17.842301  / # . /lava-3202285/environment/lava-320228=
-5/bin/lava-test-runner /lava-3202285/1
-    2023-01-24T16:44:17.843136  =
-
-    2023-01-24T16:44:17.848656  / # /lava-3202285/bin/lava-test-runner /lav=
-a-3202285/1
-    2023-01-24T16:44:17.951643  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-24T16:44:17.952024  + cd /lava-3202285/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
- =
-
-
-
-platform                     | arch | lab          | compiler | defconfig  =
-        | regressions
------------------------------+------+--------------+----------+------------=
---------+------------
-sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
-fconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d00b06647ee05f39915ec5
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
-868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
-ch-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
-868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
-ch-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d00b06647ee05f39915eca
-        failing since 5 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-24T16:44:19.389461  / # #
-    2023-01-24T16:44:19.491462  export SHELL=3D/bin/sh
-    2023-01-24T16:44:19.491951  #
-    2023-01-24T16:44:19.593320  / # export SHELL=3D/bin/sh. /lava-3202278/e=
-nvironment
-    2023-01-24T16:44:19.593817  =
-
-    2023-01-24T16:44:19.695173  / # . /lava-3202278/environment/lava-320227=
-8/bin/lava-test-runner /lava-3202278/1
-    2023-01-24T16:44:19.695915  =
-
-    2023-01-24T16:44:19.700487  / # /lava-3202278/bin/lava-test-runner /lav=
-a-3202278/1
-    2023-01-24T16:44:19.809363  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-24T16:44:19.809974  + cd /lava-3202278/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
- =20
+> [   65.732450] Modules linked in:
+> [   65.733204] CPU: 3 PID: 1162 Comm: ftracetest Not tainted 6.2.0-rc1-00100-g1066815869f5 #2
+> [   65.735165] Hardware name: linux,dummy-virt (DT)
+> [   65.736278] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   65.737929] pc : trace_preempt_on+0x68/0x70
+> [   65.738962] lr : preempt_count_sub+0xb4/0xf0
+> [   65.739998] sp : ffff80000e03ba70
+> [   65.740818] x29: ffff80000e03ba70 x28: ffff80000add07e8 x27: ffff800009d0b548
+> [   65.742531] x26: ffff00000742dd10 x25: ffff00000742dd00 x24: ffff80000ade11d0
+> [   65.744246] x23: ffff80000e03bb80 x22: ffff80000a99abb0 x21: ffff8000080a5cf4
+> [   65.745957] x20: ffff8000080a5cf4 x19: 0000000000000001 x18: 0000000000000000
+> [   65.747677] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> [   65.749388] x14: 0000000000000028 x13: 00000000000042d7 x12: 000000000000035f
+> [   65.751105] x11: 000000000000035f x10: 000000000004035f x9 : ffff8000080a5cf4
+> [   65.752820] x8 : ffff80000ae31a18 x7 : 0000000000000000 x6 : 0000000000000001
+> [   65.754526] x5 : ffff80000a8e14e8 x4 : 0000000000000003 x3 : 0000000000000000
+> [   65.756244] x2 : 0000000000000001 x1 : ffff8000080a5cf4 x0 : ffff8000080a5cf4
+> [   65.757957] Call trace:
+> [   65.758572]  trace_preempt_on+0x68/0x70
+> [   65.759520]  preempt_count_sub+0xb4/0xf0
+> [   65.760477]  percpu_up_read.constprop.0+0xc4/0x180
+> [   65.761639]  cpus_read_unlock+0x18/0x24
+> [   65.762579]  static_key_enable+0x2c/0x40
+> [   65.763572]  tracepoint_add_func+0x330/0x3dc
+> [   65.764611]  tracepoint_probe_register+0x74/0xc0
+> [   65.765725]  trace_event_reg+0x8c/0xa0
+> [   65.766642]  __ftrace_event_enable_disable+0x174/0x4d0
+> [   65.767884]  __ftrace_set_clr_event_nolock+0xe0/0x150
+> [   65.769109]  ftrace_set_clr_event+0x90/0x13c
+> [   65.770143]  ftrace_event_write+0xd4/0x120
+> [   65.771145]  vfs_write+0xcc/0x2f0
+> [   65.771964]  ksys_write+0x78/0x110
+> [   65.772803]  __arm64_sys_write+0x24/0x30
+> [   65.773763]  invoke_syscall+0x50/0x120
+> [   65.774681]  el0_svc_common.constprop.0+0x68/0x124
+> [   65.775848]  do_el0_svc+0x40/0xbc
+> [   65.776669]  el0_svc+0x48/0xc0
+> [   65.777426]  el0t_64_sync_handler+0xf4/0x120
+> [   65.778459]  el0t_64_sync+0x190/0x194
+> [   65.779365] irq event stamp: 69686
+> [   65.780199] hardirqs last  enabled at (69685): [<ffff8000092d5664>] _raw_spin_unlock_irqrestore+0x80/0xa0
+> [   65.782457] hardirqs last disabled at (69686): [<ffff8000092c3fd4>] el1_dbg+0x24/0x90
+> [   65.784315] softirqs last  enabled at (69622): [<ffff800008010b08>] __do_softirq+0x448/0x5bc
+> [   65.786309] softirqs last disabled at (69613): [<ffff800008017288>] ____do_softirq+0x18/0x24
+> [   65.788332] ---[ end trace 0000000000000000 ]---
+> [   65.789588] ------------[ cut here ]------------
+> [   65.790622] WARNING: CPU: 3 PID: 1162 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x68/0xb0
+> [   65.792698] Modules linked in:
+> [   65.793465] CPU: 3 PID: 1162 Comm: ftracetest Tainted: G        W          6.2.0-rc1-00100-g1066815869f5 #2
+> [   65.795780] Hardware name: linux,dummy-virt (DT)
+> [   65.796898] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   65.798555] pc : trace_preempt_off+0x68/0xb0
+> [   65.799602] lr : preempt_count_add+0xa0/0xc0
+> [   65.800646] sp : ffff80000e03ba80
+> [   65.801465] x29: ffff80000e03ba80 x28: ffff80000add07e8 x27: ffff800009d0b558
+> [   65.803185] x26: ffff00000742dd90 x25: ffff00000742dd80 x24: ffff80000ade1188
+> [   65.804900] x23: ffff80000e03bb80 x22: ffff80000a99abb0 x21: ffff80000b8b7d18
+> [   65.806612] x20: ffff8000080a5c68 x19: ffff8000080a5c68 x18: 0000000000000000
+> [   65.808334] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+> [   65.810041] x14: 0000000000000028 x13: 00000000000042d7 x12: 000000000000035f
+> [   65.811755] x11: 000000000000035f x10: 000000000004035f x9 : ffff8000080a5c68
+> [   65.813460] x8 : ffff80000ae31a18 x7 : 0000000000000000 x6 : 0000000000000003
+> [   65.815174] x5 : 0000000030b5c3ca x4 : 0000000000000003 x3 : 0000000000000000
+> [   65.816886] x2 : 0000000000000001 x1 : ffff8000080a5c68 x0 : ffff8000080a5c68
+> [   65.818592] Call trace:
+> [   65.819216]  trace_preempt_off+0x68/0xb0
+> [   65.820171]  preempt_count_add+0xa0/0xc0
+> [   65.821131]  percpu_up_read.constprop.0+0x38/0x180
+> [   65.822288]  cpus_read_unlock+0x18/0x24
+> [   65.823236]  static_key_enable+0x2c/0x40
+> [   65.824194]  tracepoint_add_func+0x330/0x3dc
+> [   65.825236]  tracepoint_probe_register+0x74/0xc0
+> [   65.826351]  trace_event_reg+0x8c/0xa0
+> [   65.827276]  __ftrace_event_enable_disable+0x174/0x4d0
+> [   65.828506]  __ftrace_set_clr_event_nolock+0xe0/0x150
+> [   65.829721]  ftrace_set_clr_event+0x90/0x13c
+> [   65.830769]  ftrace_event_write+0xd4/0x120
+> [   65.831766]  vfs_write+0xcc/0x2f0
+> [   65.832581]  ksys_write+0x78/0x110
+> [   65.833422]  __arm64_sys_write+0x24/0x30
+> [   65.834376]  invoke_syscall+0x50/0x120
+> [   65.835300]  el0_svc_common.constprop.0+0x68/0x124
+> [   65.836451]  do_el0_svc+0x40/0xbc
+> [   65.837290]  el0_svc+0x48/0xc0
+> [   65.838054]  el0t_64_sync_handler+0xf4/0x120
+> [   65.839102]  el0t_64_sync+0x190/0x194
+> [   65.840006] irq event stamp: 69710
+> [   65.840845] hardirqs last  enabled at (69709): [<ffff8000092c4028>] el1_dbg+0x78/0x90
+> [   65.842699] hardirqs last disabled at (69710): [<ffff8000092c3fd4>] el1_dbg+0x24/0x90
+> [   65.844568] softirqs last  enabled at (69694): [<ffff800008010b08>] __do_softirq+0x448/0x5bc
+> [   65.846573] softirqs last disabled at (69689): [<ffff800008017288>] ____do_softirq+0x18/0x24
+> [   65.848578] ---[ end trace 0000000000000000 ]---
+> 
+> Thanks,
+> Mark.
