@@ -2,364 +2,117 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33BE679913
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 14:17:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D807679AA3
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 14:53:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbjAXNRr (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 08:17:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46316 "EHLO
+        id S234310AbjAXNxu (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 08:53:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234079AbjAXNRl (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 08:17:41 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D76E540BDD
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 05:17:27 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id bk16so13826785wrb.11
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 05:17:27 -0800 (PST)
+        with ESMTP id S234334AbjAXNx1 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 08:53:27 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA4B48A3D
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 05:51:22 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id m15so11481934wms.4
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 05:51:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xPtScS6BY2oQMQfZghRsu5KobsKH5DtWf/rH2GOOn2E=;
-        b=W4lKDHBsNTAbBP+sCaS3NnLnfNX0w7IFxvJzjy1O9YprvEICvju4Gm0nsIt3YvhJib
-         rtn8xAn8YHyPQkyP1/LXYQG+JQ8fyVKzY3X0c/GfuhL2KOdcAUUnmdUobWDRAbuzhfD2
-         0isiHPLSm4DPlSA3JydEkUhMSe4SUMMt1pyukjgaLtuh+Q8O3EzdyylJeKTQqEjhGffc
-         qC3N8cT++V4WQysalxniy0cQtAxwfduPUmFJjvfLAAzyQLtK2CC91xqRGl7/YNrNeD9y
-         2TaRElWEv/HFUY/78xNo8HJ2tYcxqr2lzmRw1IFx3zo0KPUT7nCXDidKZDVud1A8sY6P
-         un3w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KdNKBm9dCMT5uwH0jJSmOk/S2BVD6poXI4UEU8hMcS4=;
+        b=lx/21U8jUJGqSVM9i0svqPlaaG3+0DuV1wZ6usLlLKooLymgkn2yujl6xNPqW7Zvh9
+         9hfPkIDo7UW9c/xCwVawPbhZTYmVHn297MrmAjg3e7bTVZ/MUPZ19JsmjUOH+uwW4mzI
+         hY8Z3E6rV1ybpHQTapr7tWZUA0mgoYr9XmGQ0JLN0DwMfpXyUcjD0fhSNT4/nmbY2Xtz
+         uM7Xf9/FUp7LVaikISToWjm5fFb284ZeSj6pxXs0I4/ZraPjaxf2+xuyEGGeMgrK5bLo
+         LTc2rAIlHhQ6Z8Eo6cg6HKsoGZ7bKEhOEr9OxSpQbFuhj0TFRVsOVYcSgVxb9TV7Jwq6
+         NFNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xPtScS6BY2oQMQfZghRsu5KobsKH5DtWf/rH2GOOn2E=;
-        b=K/anMnVNqeIktboy3wKU9ysqPRiSZm8TtoLzlk0RziPu4jGqWOBrxCOC90SoExPcVQ
-         nyUTgkIySF0pFvnOi6hP/KiI4CAYxi1NGZAJmV/1GnShZz6DBRzIHRuNyR5quKDBpUIl
-         gjywo9TlU7NtprLfxUCRBIVyzfnjXWlqSLfXW9EQxQH8P1R+11HJlgbPcHLO0PlxVi9G
-         uKHg8F2VKmLjSKJYVUU5LrgVs+U7bpgI0hzOLc3qm+Ikp6600w6Mp987/pQKZGSMtL0q
-         lSWo3Hu8KIKGOgPB6Va9ooAo4SeCA/5CPmzRBaFPqHRj4QS0lyLiH8XO36ceZH2UulSJ
-         feGg==
-X-Gm-Message-State: AFqh2krY3dIWzc1lH1C2y4DHV4m0fJF9JbRf1zpHpnUoj4aOpxHCM0nw
-        jgvTzCSO/cgd8RgGXj3vzM6WIQ==
-X-Google-Smtp-Source: AMrXdXsqFzBNFFRsfEKNgsDGLdcohtkUIEtjlnmBj53xs2rQu+gfm/nVnqvxc5b40qAwmuYSCz7WUw==
-X-Received: by 2002:a5d:6f15:0:b0:2b9:28ef:24c9 with SMTP id ay21-20020a5d6f15000000b002b928ef24c9mr28610014wrb.39.1674566246341;
-        Tue, 24 Jan 2023 05:17:26 -0800 (PST)
-Received: from t480-bl003.civfrance.com (58.188.158.77.rev.sfr.net. [77.158.188.58])
-        by smtp.gmail.com with ESMTPSA id a5-20020adfeec5000000b002bfb5ebf8cfsm49427wrp.21.2023.01.24.05.17.25
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KdNKBm9dCMT5uwH0jJSmOk/S2BVD6poXI4UEU8hMcS4=;
+        b=nFkz/RFf7/c23QA+4XUkiRQQomm08TB764CSflwG4AV6/MPCOfgzPuYvSLEhwi1uUg
+         Cdm5LYPbeHx9YyTQ8wo/usOa/qEpGmIjhwUFpC2oAXfdjkEHzyN2BGwG6/V13lqaf3Q6
+         7qRnprB3amcfM1uZDyolVj6SvwdFyRUOx+iJwRHWFP8EvxDwuMZQ9vBgkdMaHkb5c7n/
+         aNEuM+yjjsTlcpOorDOKJ5ij8FCfeEDxV6Ilxymj8EdrQr2mXOzoOIQwWP/+HXSViaJ8
+         i4ku7y5Y1TvF+RdpED2FiOsnLslgxegju40wUCI6t2qb7QGF4yEAVjCPFGRqKJ7oTtOH
+         oM9A==
+X-Gm-Message-State: AFqh2kq48c8LckOMan2bYYxxcS6WlijchQuGx5f9KmWERH8ceNDDKd6B
+        VSQiFf2P5kFSeCJiIC9qMwyAtg==
+X-Google-Smtp-Source: AMrXdXunikjcS9s0xgheXf7NKMfZtNWludHny4GcAoKNgTN3yRN01dPUYcB1LKn6hvPPJlC32/KJQQ==
+X-Received: by 2002:a05:600c:5108:b0:3d3:49db:d84 with SMTP id o8-20020a05600c510800b003d349db0d84mr27336962wms.20.1674568235876;
+        Tue, 24 Jan 2023 05:50:35 -0800 (PST)
+Received: from mai.. (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id j4-20020a05600c42c400b003db1ca20170sm1972507wme.37.2023.01.24.05.50.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 05:17:26 -0800 (PST)
-From:   bchihi@baylibre.com
-To:     daniel.lezcano@linaro.org, angelogioacchino.delregno@collabora.com,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+        Tue, 24 Jan 2023 05:50:35 -0800 (PST)
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Subject: [PATCH v11 6/6] arm64/dts/mt8195: Add temperature mitigation threshold
-Date:   Tue, 24 Jan 2023 14:17:17 +0100
-Message-Id: <20230124131717.128660-7-bchihi@baylibre.com>
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
+        / MXC ARM ARCHITECTURE)
+Subject: [PATCH 1/3] thermal/drivers/imx: Remove get_trip_temp ops
+Date:   Tue, 24 Jan 2023 14:50:21 +0100
+Message-Id: <20230124135024.366486-1-daniel.lezcano@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230124131717.128660-1-bchihi@baylibre.com>
-References: <20230124131717.128660-1-bchihi@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Balsam CHIHI <bchihi@baylibre.com>
+The i.MX thermal sensor uses the generic trip points. The thermal
+framework can return the critical temperature directly.
 
-The mt8195 SoC has several hotspots around the CPUs. Specify the
-targeted temperature threshold when to apply the mitigation and define
-the associated cooling devices.
+Remove the pointless get_trip_temp ops.
 
-Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
 ---
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 169 ++++++++++++++++++++---
- 1 file changed, 153 insertions(+), 16 deletions(-)
+ drivers/thermal/imx_thermal.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index 636676f4ba25..9544ae91379a 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -14,6 +14,7 @@
- #include <dt-bindings/pinctrl/mt8195-pinfunc.h>
- #include <dt-bindings/power/mt8195-power.h>
- #include <dt-bindings/reset/mt8195-resets.h>
-+#include <dt-bindings/thermal/thermal.h>
- #include <dt-bindings/thermal/mediatek-lvts.h>
+diff --git a/drivers/thermal/imx_thermal.c b/drivers/thermal/imx_thermal.c
+index fb0d5cab70af..0d94d4baea33 100644
+--- a/drivers/thermal/imx_thermal.c
++++ b/drivers/thermal/imx_thermal.c
+@@ -332,13 +332,6 @@ static int imx_change_mode(struct thermal_zone_device *tz,
+ 	return 0;
+ }
  
- / {
-@@ -2413,107 +2414,243 @@ dp_tx: dp-tx@1c600000 {
- 
- 	thermal_zones: thermal-zones {
- 		cpu0-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU0>;
-+
- 			trips {
-+				cpu0_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu0_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu0_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu1-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU1>;
-+
- 			trips {
-+				cpu1_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu1_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu1_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu2-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU2>;
-+
- 			trips {
-+				cpu2_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu2_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu2_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu3-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_LITTLE_CPU3>;
-+
- 			trips {
-+				cpu3_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu3_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu3_alert>;
-+					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu4-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU0>;
-+
- 			trips {
-+				cpu4_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu4_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu4_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu5-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU1>;
-+
- 			trips {
-+				cpu5_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu5_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu5_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu6-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU2>;
-+
- 			trips {
-+				cpu6_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu6_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu6_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 
- 		cpu7-thermal {
--			polling-delay = <0>;
--			polling-delay-passive = <0>;
-+			polling-delay = <1000>;
-+			polling-delay-passive = <250>;
- 			thermal-sensors = <&lvts_mcu MT8195_MCU_BIG_CPU3>;
-+
- 			trips {
-+				cpu7_alert: trip-alert {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
- 				cpu7_crit: trip-crit {
- 					temperature = <100000>;
- 					hysteresis = <2000>;
- 					type = "critical";
- 				};
- 			};
-+
-+			cooling-maps {
-+				map0 {
-+					trip = <&cpu7_alert>;
-+					cooling-device = <&cpu4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-+								<&cpu7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-+				};
-+			};
- 		};
- 	};
+-static int imx_get_crit_temp(struct thermal_zone_device *tz, int *temp)
+-{
+-	*temp = trips[IMX_TRIP_CRITICAL].temperature;
+-
+-	return 0;
+-}
+-
+ static int imx_set_trip_temp(struct thermal_zone_device *tz, int trip,
+ 			     int temp)
+ {
+@@ -406,7 +399,6 @@ static struct thermal_zone_device_ops imx_tz_ops = {
+ 	.unbind = imx_unbind,
+ 	.get_temp = imx_get_temp,
+ 	.change_mode = imx_change_mode,
+-	.get_crit_temp = imx_get_crit_temp,
+ 	.set_trip_temp = imx_set_trip_temp,
  };
+ 
 -- 
 2.34.1
 
