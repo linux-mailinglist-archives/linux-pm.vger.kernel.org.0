@@ -2,35 +2,36 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A1E678FC0
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 06:20:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AE7678FCF
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 06:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjAXFUj (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 00:20:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S229930AbjAXFZP (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 00:25:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjAXFUi (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 00:20:38 -0500
+        with ESMTP id S231599AbjAXFZN (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 00:25:13 -0500
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7D844AA;
-        Mon, 23 Jan 2023 21:20:36 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D312DE60;
+        Mon, 23 Jan 2023 21:25:12 -0800 (PST)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id DA62C24E24D;
-        Tue, 24 Jan 2023 13:20:33 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 24 Jan
- 2023 13:20:33 +0800
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 34DCE24E250;
+        Tue, 24 Jan 2023 13:25:11 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 24 Jan
+ 2023 13:25:11 +0800
 Received: from [192.168.125.95] (183.27.96.38) by EXMBX168.cuchost.com
  (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 24 Jan
- 2023 13:20:32 +0800
-Message-ID: <820be512-c7f8-1af1-12fa-53c557532c7a@starfivetech.com>
-Date:   Tue, 24 Jan 2023 13:20:32 +0800
+ 2023 13:25:10 +0800
+Message-ID: <e1560151-f446-681d-ccb6-3d9d9ea3e7c0@starfivetech.com>
+Date:   Tue, 24 Jan 2023 13:25:09 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
 Subject: Re: [PATCH v4 0/2] JH7110 PMU Support
+Content-Language: en-US
 To:     Conor Dooley <conor@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor.dooley@microchip.com>,
@@ -43,13 +44,12 @@ CC:     Daire McNamara <daire.mcnamara@microchip.com>,
         <linux-kernel@vger.kernel.org>
 References: <20230119094447.21939-1-walker.chen@starfivetech.com>
  <167425300253.196995.6414153954346182622.b4-ty@microchip.com>
-Content-Language: en-US
 From:   Walker Chen <walker.chen@starfivetech.com>
 In-Reply-To: <167425300253.196995.6414153954346182622.b4-ty@microchip.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-Originating-IP: [183.27.96.38]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
  (172.16.6.78)
 X-YovoleRuleAgent: yovoleflag
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -83,6 +83,11 @@ On 2023/1/21 6:21, Conor Dooley wrote:
 > I modified the MAINTAINERS entry to remove the include directory that
 > was deleted along the way.
 
-Thank you so much for your support, Conor, Krzysztof, Emil, Heiko, Rob Herring, etc.
+Great news!
+
+Thank you so much for your support, Conor, Krzysztof, Emil, Heiko, Rob Herring and so on.
 Hopefully more and more drivers & modules of StarFive SoC will upstream to the open source community.
+
+Best regards,
+Walker Chen
 
