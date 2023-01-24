@@ -2,134 +2,188 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D6D679717
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 12:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 225BC67982E
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 13:38:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233100AbjAXLxf (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 06:53:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44688 "EHLO
+        id S233653AbjAXMiq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 07:38:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjAXLxe (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 06:53:34 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2054.outbound.protection.outlook.com [40.107.223.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B882C55BB;
-        Tue, 24 Jan 2023 03:53:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oDcj+IzlVoPYrl/gtcP4T1m8Wtug2ixiwokmKjeYbkLA/C9lbRf81vWw7cUW3phTYjPJ3dd17e6uWJFejkQeBPRLxEq+qbsq1AGm6IAE6Boa/JtbjbFnrAUn0Uvos71pJyStBzWI7+7A/XFjkvQvPhSnqL1xcEmm4cxJDNNTHaYhGAxVuSi0S1qBoAPhYD1DDVDzVclkZmcpp3IPn1YBqsJ9F6aRP9F2ayKZr7MtOdCCEzRxGNyvGAeXqmIJNRm3XGtjgI4hVyv9x8hncueutJlX/8/MZL0jkUlnSeDM7vwzgAuSNGKE1Z/mzi4L8S3l8aXat7uxuwXPOilu9Tm0vA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RZRvzApit7+eg+2vY7J1g6NLqVDpdwgXJdINMCeZdHk=;
- b=c9Q+3QsjW6jiBBRhXlu67kFYmM/pSIKg+caZ+wftAFeFvpFdw2DsJBVwC07OFYxix2V5jbH70AjKtpkIdtfJgobhJI/jeBIJlOYdx4vfR+Vw97uPT8TtH049G11hqRKi0cha4KrPoXuKUG9VQpLPseFQpIkTMnRiqN91PWEStETw1N2L/OmW1ed2n3qA4LMkf98mLERGw0doRSqrWvPMQ1Zellpr/0lpLhjTCAdXAi6rbmYJ+J2XMlPAZ3ivV2LE4IYaDd4DSXGt+W4E/DIrzD775/oMabX8vJNCrtes8BH/yaYIF/HLW+3FXVl8LPlx3/r3ugCi1tLehX2Dj1ZCuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RZRvzApit7+eg+2vY7J1g6NLqVDpdwgXJdINMCeZdHk=;
- b=rj42zcAtHcaZAgpvYQ7D3nkWOZx0wVViB+CxQt2Gwi7O7xzgWzbjtGF+9sQR+9dqPoGe+qbyf2tYgkrQh+E0RNqw8oHJ6JLrUM73mBhkEd7l4B9Vx1bEXg7rajZZwKXcBJx4poxB4fgvJMKsbFXXhREyX/OCO6/dQCumBSRo0C/EaQDbrVpQB8P7jLZJCN7c6wBWYE5HN09R7Udm/yURU0XCfP8p5fnEYOOxf+w44bdFHbx5AYduxgUYaEl1AbXjiN0vQYKf1AYTK7VUVMa0lvPdceU3A5/8QCvfERU30uYRk0AlS2CknWrIwsO2GvOjUagws9bB2/esagZTgSCEIQ==
-Received: from DM6PR07CA0046.namprd07.prod.outlook.com (2603:10b6:5:74::23) by
- DM4PR12MB5746.namprd12.prod.outlook.com (2603:10b6:8:5d::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6002.33; Tue, 24 Jan 2023 11:53:32 +0000
-Received: from DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:74:cafe::4) by DM6PR07CA0046.outlook.office365.com
- (2603:10b6:5:74::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6002.33 via Frontend
- Transport; Tue, 24 Jan 2023 11:53:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DM6NAM11FT113.mail.protection.outlook.com (10.13.173.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6043.17 via Frontend Transport; Tue, 24 Jan 2023 11:53:32 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.36; Tue, 24 Jan
- 2023 03:53:31 -0800
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.36; Tue, 24 Jan 2023 03:53:31 -0800
-Received: from moonraker.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server id 15.2.986.36 via Frontend
- Transport; Tue, 24 Jan 2023 03:53:30 -0800
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>
-CC:     <linux-pm@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        Yi-Wei Wang <yiweiw@nvidia.com>,
-        Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH] cpufreq: tegra194: Enable CPUFREQ thermal cooling
-Date:   Tue, 24 Jan 2023 11:53:23 +0000
-Message-ID: <20230124115323.21910-1-jonathanh@nvidia.com>
-X-Mailer: git-send-email 2.25.1
+        with ESMTP id S233513AbjAXMip (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 07:38:45 -0500
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C2237B7D;
+        Tue, 24 Jan 2023 04:38:29 -0800 (PST)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 30OC1lmh001235;
+        Tue, 24 Jan 2023 12:38:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : reply-to : to : cc : date : in-reply-to : references : content-type
+ : mime-version : content-transfer-encoding; s=pp1;
+ bh=la4YFSxXOheE6TzxwQqP3ufcbSsJu2d3J+0QKvARdUA=;
+ b=Wm5oAfHgvTjJqjhG2IwBuOz/c2q+xWwpchqHD3qZfCjwaFWhMy+7o91tiGMuXZ8Ov4ty
+ rKpYlVUT8s6u0C6K1BK1fR9qumKy6BoSQ0XC/YsPXNuplMn/Tvtj9qUZf4erEB0+icNh
+ +0iOKdYgobjic1x1NHeun7AqAvwpWnR5ErISYAiGPCqamUf7pYysTw95z3fZYMb4D0F1
+ WAE7LcMjoCobuYBSYS6MERH8VMpy2d2tBMFAG9b4ZrV3/h52YdAb8k1la4xGRbglxnX5
+ SjQqZ5F68AvjnRCF2hQIiFS5W0E2V37iQNzkKCvV9GmGBq7QJNotr84RAxQzeKs6ktNl ow== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg0mec8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:38:13 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 30OBuxcG000304;
+        Tue, 24 Jan 2023 12:38:12 GMT
+Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3nacg0meba-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:38:12 +0000
+Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
+        by ppma03wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 30OBfIqt006849;
+        Tue, 24 Jan 2023 12:38:10 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([9.208.129.113])
+        by ppma03wdc.us.ibm.com (PPS) with ESMTPS id 3n87p7a1vf-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 24 Jan 2023 12:38:10 +0000
+Received: from b03ledav004.gho.boulder.ibm.com ([9.17.130.235])
+        by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 30OCc9tJ10486320
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 24 Jan 2023 12:38:09 GMT
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1AC97805E;
+        Tue, 24 Jan 2023 14:24:59 +0000 (GMT)
+Received: from b03ledav004.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C1B0F7805C;
+        Tue, 24 Jan 2023 14:24:56 +0000 (GMT)
+Received: from lingrow.int.hansenpartnership.com (unknown [9.163.35.100])
+        by b03ledav004.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Tue, 24 Jan 2023 14:24:56 +0000 (GMT)
+Message-ID: <5fb9193be57d22131feecf8b39dffbb03af3f60a.camel@linux.ibm.com>
+Subject: Re: [PATCH v5 03/11] tpm: Allow PCR 23 to be restricted to
+ kernel-only use
+From:   James Bottomley <jejb@linux.ibm.com>
+Reply-To: jejb@linux.ibm.com
+To:     William Roberts <bill.c.roberts@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Matthew Garrett <mgarrett@aurora.tech>,
+        Evan Green <evgreen@chromium.org>,
+        linux-kernel@vger.kernel.org, corbet@lwn.net,
+        linux-integrity@vger.kernel.org,
+        Eric Biggers <ebiggers@kernel.org>, gwendal@chromium.org,
+        dianders@chromium.org, apronin@chromium.org,
+        Pavel Machek <pavel@ucw.cz>, Ben Boeckel <me@benboeckel.net>,
+        rjw@rjwysocki.net, Kees Cook <keescook@chromium.org>,
+        dlunev@google.com, zohar@linux.ibm.com, linux-pm@vger.kernel.org,
+        Matthew Garrett <mjg59@google.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Peter Huewe <peterhuewe@gmx.de>
+Date:   Tue, 24 Jan 2023 07:38:04 -0500
+In-Reply-To: <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+References: <20221111231636.3748636-1-evgreen@chromium.org>
+         <20221111151451.v5.3.I9ded8c8caad27403e9284dfc78ad6cbd845bc98d@changeid>
+         <8ae56656a461d7b957b93778d716c6161070383a.camel@linux.ibm.com>
+         <CAHSSk06sH6Ck11R7k8Pk_30KbzLzZVdBdj5MpsNfY-R_1kt_dA@mail.gmail.com>
+         <CAFftDdqUOiysgrAC4wPUXRaEWz4j9V6na3u4bm29AfxE8TAyXw@mail.gmail.com>
+         <CAHSSk04asd_ac8KLJYNRyR1Z+fD+iUb+UxjUu0U=HbT1-2R7Ag@mail.gmail.com>
+         <08302ed1c056da86a71aa2e6ca19111075383e75.camel@linux.ibm.com>
+         <Y8tcEtr8Kl3p4qtA@kernel.org>
+         <CAFftDdoVraQVKLZGc6gMpZRyyK+LEO3cwjLhKM61qbp8ZSRYrg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-X-NVConfidentiality: public
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT113:EE_|DM4PR12MB5746:EE_
-X-MS-Office365-Filtering-Correlation-Id: d239ba9b-0d1f-471e-724d-08dafe019e0a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: TF2RkWVy/fklolHcS4vK+RqQU0giogmEd/pM83cj3zWLk34KZoD7uowudeaPQ8f88aoiwdAvH9zaGhqI26uOy421pNuLW+X5Bn9W/YD4mEARPsRIerXuP09VMaAdX2BjIrqEgarorO9qUekfGdjvayy+fqU1Jv5eCcx9a4mTzsdaQDsCl/TLl2e87T1NiPQApOydPTFTMMvjY9p/ME85WYQi24h8FB8sB+rv1tEyp8BCSnx2iKxzG6PS9/Ynm4RAuCVN0TrSw4NJ8cOd8ZRL6qTYRM8HUrLic9VqwdFdAX5gl7+9vmQK6x9TP/370G7CPsKfiE7Gu7fCI9tX5cz22vSLxby0MaUGq/3CJvJVlA2iBZGPgRZ8Bt8CL/aw+kpRUmvEMXUFXAyOE8YUbEx7usZf1//NfzAJqN4bDQCm6MZUmfDDp1ChZGsxOeflT6FaV5bxqKAR9QiCATmA+pSEGFXHy3/w6g/eKGoWrIgX2tcWAG4BOdZv3dr8EGQy4hFFyQHABqoi/N5VtBErjtyAVrvwnK0t8Tk9nMWJvfYWKn0ThqfjjI1f17WrhSgGG4fIfiqQtbVsDlwCXipWsm2YMMeMnDQVGLt5g4V1Sx/yY1Dv19hcHYK+Ligp6adItQkpXKohee3lBL6RO5t4o4o/qLMJQ829mzJtavPKpu63jBVWK08nehDdBcMBlzG/zXcFYumroSj062j8wdma2j0Pxg==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199015)(40470700004)(46966006)(36840700001)(36756003)(7636003)(356005)(2906002)(82740400003)(8936002)(4326008)(82310400005)(5660300002)(41300700001)(83380400001)(36860700001)(86362001)(26005)(478600001)(110136005)(7696005)(54906003)(186003)(40480700001)(40460700003)(70206006)(8676002)(2616005)(316002)(70586007)(426003)(107886003)(1076003)(47076005)(336012)(6666004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Jan 2023 11:53:32.5003
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d239ba9b-0d1f-471e-724d-08dafe019e0a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT113.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5746
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: W6lhHVrCJEXLOG1WcinsU_3DsgBdNAVC
+X-Proofpoint-GUID: TTPoKd1_ay6imEY8KQ5opjuTd2SWTtph
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.930,Hydra:6.0.562,FMLib:17.11.122.1
+ definitions=2023-01-23_12,2023-01-24_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ lowpriorityscore=0 phishscore=0 adultscore=0 bulkscore=0 malwarescore=0
+ clxscore=1015 impostorscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2301240114
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Yi-Wei Wang <yiweiw@nvidia.com>
+On Mon, 2023-01-23 at 11:48 -0600, William Roberts wrote:
+> On Fri, Jan 20, 2023 at 9:29 PM Jarkko Sakkinen <jarkko@kernel.org>
+> wrote:
+> > 
+> > On Sat, Jan 14, 2023 at 09:55:37AM -0500, James Bottomley wrote:
+> > > On Tue, 2023-01-03 at 13:10 -0800, Matthew Garrett wrote:
+> > > > On Tue, Jan 3, 2023 at 1:05 PM William Roberts
+> > > > <bill.c.roberts@gmail.com> wrote:
+> > > > 
+> > > > > What's the use case of using the creation data and ticket in
+> > > > > this context? Who gets the creationData and the ticket?
+> > > > > Could a user supplied outsideInfo work? IIRC I saw some
+> > > > > patches flying around where the sessions will get encrypted
+> > > > > and presumably correctly as well. This would allow the
+> > > > > transfer of that outsideInfo, like the NV Index PCR value to
+> > > > > be included and integrity protected by the session HMAC.
+> > > > 
+> > > > The goal is to ensure that the key was generated by the kernel.
+> > > > In the absence of the creation data, an attacker could generate
+> > > > a hibernation image using their own key and trick the kernel
+> > > > into resuming arbitrary code. We don't have any way to pass
+> > > > secret data from the hibernate kernel to the resume kernel, so
+> > > > I don't think there's any easy way to do it with outsideinfo.
+> > > 
+> > > Can we go back again to why you can't use locality?  It's exactly
+> > > designed for this since locality is part of creation data. 
+> > > Currently everything only uses locality 0, so it's impossible for
+> > > anyone on Linux to produce a key with anything other than 0 in
+> > > the creation data for locality.  However, the dynamic launch
+> > > people are proposing that the Kernel should use Locality 2 for
+> > > all its operations, which would allow you to distinguish a key
+> > > created by the kernel from one created by a user by locality.
+> > > 
+> > > I think the previous objection was that not all TPMs implement
+> > > locality, but then not all laptops have TPMs either, so if you
+> > > ever come across one which has a TPM but no locality, it's in a
+> > > very similar security boat to one which has no TPM.
+> > 
+> > Kernel could try to use locality 2 and use locality 0 as fallback.
+> 
+> I don't think that would work for Matthew, they need something
+> reliable to indicate key provenance.
 
-Populate the flag CPUFREQ_IS_COOLING_DEV for the Tegra194 CPUFREQ driver
-to register it as a cooling device. This enables CPU frequency
-throttling for CPUs when the passive trip points are crossed.
+No, I think it would be good enough: locality 0 means anyone (including
+the kernel on a machine which doesn't function correctly) could have
+created this key.  Locality 2 would mean only the kernel could have
+created this key.
 
-Signed-off-by: Yi-Wei Wang <yiweiw@nvidia.com>
-Signed-off-by: Jon Hunter <jonathanh@nvidia.com>
----
- drivers/cpufreq/tegra194-cpufreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+By the time the kernel boots and before it loads the hibernation image
+it will know the answer to the question "does my TPM support locality
+2", so it can use that in its security assessment: if the kernel
+supports locality 2 and the key wasn't created in locality 2 then
+assume an attack.  Obviously, if the kernel doesn't support locality 2
+then the hibernation resume has to accept any old key, but that's the
+same as the situation today.
 
-diff --git a/drivers/cpufreq/tegra194-cpufreq.c b/drivers/cpufreq/tegra194-cpufreq.c
-index 4596c3e323aa..5890e25d7f77 100644
---- a/drivers/cpufreq/tegra194-cpufreq.c
-+++ b/drivers/cpufreq/tegra194-cpufreq.c
-@@ -411,7 +411,8 @@ static int tegra194_cpufreq_set_target(struct cpufreq_policy *policy,
- 
- static struct cpufreq_driver tegra194_cpufreq_driver = {
- 	.name = "tegra194",
--	.flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_INITIAL_FREQ_CHECK,
-+	.flags = CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_INITIAL_FREQ_CHECK |
-+		 CPUFREQ_IS_COOLING_DEV,
- 	.verify = cpufreq_generic_frequency_table_verify,
- 	.target_index = tegra194_cpufreq_set_target,
- 	.get = tegra194_get_speed,
--- 
-2.25.1
+> I was informed that all 5 localities should be supported starting
+> with Gen 7 Kaby Lake launched in 2016. Don't know if this is
+> still "too new".
+
+It's probably good enough.  Current laptops which can't use locality 2
+are in the same position as now, but newer ones can provide more
+security guarantees.
+
+There is, however, another wrinkle: can Kaby Lake be persuaded, though
+bios settings perhaps, to shut off the non zero localities?  This would
+allow for a downgrade attack where you shut off locality 2 then present
+a forged locality 0 key and hibernation image; the kernel will think,
+because it can't access locality 2, that it's in a reduced security
+environment so the key might be OK.  We could fix this by requiring
+Kaby Lake and beyond to have locality 2 and refusing to hibernate if it
+can't be accessed and building "is this Kaby lake or beyond" into the
+check for should I have locality 2, but this is getting complex and
+error prone.
+
+James
 
