@@ -2,96 +2,108 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87C7F679D87
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 16:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E95FD679D9A
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 16:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbjAXPbS (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 10:31:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
+        id S235236AbjAXPeb (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 10:34:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235167AbjAXPbR (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 10:31:17 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 103534B893;
-        Tue, 24 Jan 2023 07:31:14 -0800 (PST)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5597C6602E26;
-        Tue, 24 Jan 2023 15:31:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674574273;
-        bh=XzNWMNMUfZ0GUDmKAy/1fnLOVo23adcRjRtL+79OId8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Wd3alA47WJak7VwJSwj/g28hfDBPbDYB4YWhX2yIzbv1EFbkY6ZbZrfU9p8BL4kHG
-         GEkU5beBUZ/ETjL+r9EfyVo++qItpQADfj4QgrVgUZ+2uEuoNNtBJ1jT0KyM7lO0Sp
-         9+0LCBYKp6IdH8CAk+bkCIW7fhIHD/DR6xpkZMuao04IS9ItM4RVcBqrpnyuHQ8fQE
-         MAxPgcPckoC8LuSthZNtsFdpmnc3gsFrNAIGHXan86l9DBk1GfCavwpxVWkhFES1nj
-         +cu5fi0WFvmxIruSdHfV+HgCCsabSIAykerlE+LdrftpqxHNHh4kBxAauZYGi/W150
-         8AwvnJnfqkj8g==
-Message-ID: <5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com>
-Date:   Tue, 24 Jan 2023 16:31:09 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v11 4/6] thermal/drivers/mediatek: Add the Low Voltage
- Thermal Sensor driver
-Content-Language: en-US
-To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
-        amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rdunlap@infradead.org, ye.xingchen@zte.com.cn,
-        p.zabel@pengutronix.de
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S235239AbjAXPeX (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 10:34:23 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0AB04C0CA;
+        Tue, 24 Jan 2023 07:34:15 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4CF224B3;
+        Tue, 24 Jan 2023 07:34:57 -0800 (PST)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDBE73F5A1;
+        Tue, 24 Jan 2023 07:34:13 -0800 (PST)
+Date:   Tue, 24 Jan 2023 15:34:11 +0000
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-References: <20230124131717.128660-1-bchihi@baylibre.com>
- <20230124131717.128660-5-bchihi@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230124131717.128660-5-bchihi@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: Re: [PATCH v3] cpuidle: psci: Do not suspend topology CPUs on
+ PREEMPT_RT
+Message-ID: <20230124153411.nwkbjgoqgkua2icm@bogus>
+References: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
-> From: Balsam CHIHI <bchihi@baylibre.com>
+On Thu, Jan 19, 2023 at 07:42:28PM +0100, Krzysztof Kozlowski wrote:
+> The runtime Power Management of CPU topology is not compatible with
+> PREEMPT_RT:
+> 1. Core cpuidle path disables IRQs.
+> 2. Core cpuidle calls cpuidle-psci.
+> 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
+>    pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
+>    spinlocks (which are sleeping on PREEMPT_RT).
 > 
-> The Low Voltage Thermal Sensor (LVTS) is a multiple sensors, multi
-> controllers contained in a thermal domain.
+> Deep sleep modes are not a priority of Realtime kernels because the
+> latencies might become unpredictable.  On the other hand the PSCI CPU
+> idle power domain is a parent of other devices and power domain
+> controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
 > 
-> A thermal domains can be the MCU or the AP.
+> Disable the runtime PM calls from cpuidle-psci, which effectively stops
+> suspending the cpuidle PSCI domain.  This is a trade-off between making
+> PREEMPT_RT working and still having a proper power domain hierarchy in
+> the system.
 > 
-> Each thermal domains contain up to seven controllers, each thermal
-> controller handle up to four thermal sensors.
+> Cc: Adrien Thierry <athierry@redhat.com>
+> Cc: Brian Masney <bmasney@redhat.com>
+> Cc: linux-rt-users@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> The LVTS has two Finite State Machines (FSM), one to handle the
-> functionin temperatures range like hot or cold temperature and another
-> one to handle monitoring trip point. The FSM notifies via interrupts
-> when a trip point is crossed.
+> ---
 > 
-> The interrupt is managed at the thermal controller level, so when an
-> interrupt occurs, the driver has to find out which sensor triggered
-> such an interrupt.
+> Changes since v1:
+> 1. Re-work commit msg.
+> 2. Add note to Kconfig.
 > 
-> The sampling of the thermal can be filtered or immediate. For the
-> former, the LVTS measures several points and applies a low pass
-> filter.
+> Several other patches were dropped, as this is the only one actually
+> needed.  It effectively stops PSCI cpuidle power domains from suspending
+> thus solving all other issues I experienced.
+> ---
+>  drivers/cpuidle/Kconfig.arm    | 3 +++
+>  drivers/cpuidle/cpuidle-psci.c | 4 ++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 > 
-> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 747aa537389b..24429b5bfd1c 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -24,6 +24,9 @@ config ARM_PSCI_CPUIDLE
+>  	  It provides an idle driver that is capable of detecting and
+>  	  managing idle states through the PSCI firmware interface.
+>  
+> +	  The driver is not yet compatible with PREEMPT_RT: no idle states will
+> +	  be entered by CPUs on such kernel.
+> +
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Any particular reason for even compiling this file in or allowing the
+ARM_PSCI_CPUIDLE when PREEMPT_RT=y ? If we can't enter idle states, we
+can as well compile this file out ?
 
-On MT8195 Tomato Chromebook:
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+-- 
+Regards,
+Sudeep
