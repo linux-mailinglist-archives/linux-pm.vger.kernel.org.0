@@ -2,141 +2,130 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9E367961E
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 12:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00F99679678
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 12:20:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjAXLFH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 06:05:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35722 "EHLO
+        id S233118AbjAXLUD (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 06:20:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjAXLFD (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 06:05:03 -0500
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD1016325;
-        Tue, 24 Jan 2023 03:05:01 -0800 (PST)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7D9314000F;
-        Tue, 24 Jan 2023 11:04:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1674558300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B5b17gTu1Sy9bBEbtdI72ad6ZsLU6SuiKe4CSVzX2go=;
-        b=ERSrbbZrVaakWmVNJXSJzVKng+PG139vcB9TrESG1ssY2GoES/aFd/6/IB0wyFBPj/E270
-        U3vaOMKJFMrp99TGelOQp/7SSR0NrpA+XHMrB/u7mvN+JBs4TIQozveXOaeXKg3PD938lb
-        DtQoh06uHUy/XwIWvTNfikyZvYhycGOFB0E4oM3VMGO4s5yoydbxPuxoyi+m3moPBB/1/O
-        kp4Yr3k1ZyeGpNmU+jArHUSs5A7/jdHN6trpXfUr+8J5nYzCXCf0aNczWOs/n7yDAM6kT4
-        fWnx7WFsnEqu/1Ca4q6eu18nX/YmmhRvabIwWRtfIhw/MtuLnBnfurSqhCwlFg==
-Date:   Tue, 24 Jan 2023 12:04:58 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        linux-pm@vger.kernel.org (open list:THERMAL),
-        linux-kernel@vger.kernel.org (open list)
-Subject: Re: [PATCH] thermal/drivers/armada: Use the
- thermal_zone_get_crit_temp()
-Message-ID: <20230124120458.412fc528@xps-13>
-In-Reply-To: <20230118222610.186088-1-daniel.lezcano@linaro.org>
-References: <20230118222610.186088-1-daniel.lezcano@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        with ESMTP id S233488AbjAXLUC (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 06:20:02 -0500
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F71113DC0;
+        Tue, 24 Jan 2023 03:20:01 -0800 (PST)
+Received: by mail-qt1-f181.google.com with SMTP id h24so8797253qta.12;
+        Tue, 24 Jan 2023 03:20:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mcS4Z2L0QM2nzxWhHiDqpfIkuii5KPQKeERri9Le/+U=;
+        b=d0RzeqLeaNaHmsFGl+ZOa84hBxs9rY2SJMVcu6sbAZGIxyX0jYzngK1R563zwajkdb
+         XdFC2op5EWMoZrYqwqQPOllCS9FkhZDrsgqDe0rUTbEFgBlhw0WK2nPrZSNJc01AIq7f
+         VHFhPN6qIxaORLeYg/ZlXIebVrqIpq1Fy3R4ojt24qSDeyJOlVJpYMtZrSknHjgTzcO9
+         /ypEKTfXTDjvJChElODabDERgvzuXCxCScFCSnc+IJ2tfvO8fpKdiTe0wZRluqFVX9AE
+         f+NK/+wGAzofeBDMCmmpndYkExsp6lPUVK6tZuGIEfIQBdlk0iDm8E9P4RnKilCUplAz
+         SnXQ==
+X-Gm-Message-State: AFqh2ko8O0FLccDIwF1B6nJnlZObbTcEVzXwf/kwBPjWpXsXbPqng6LQ
+        gvgHoKSxZnvWYBFK+puvnltn4alAWmkUNg==
+X-Google-Smtp-Source: AMrXdXv9tUyJ9RkQhbWGMVtAVss+FAukRQemDyxmYy2IOsxStGL8scBEoBSg3+h9t5dH/GWy+wUFlQ==
+X-Received: by 2002:ac8:4c84:0:b0:3b4:d5be:a2e0 with SMTP id j4-20020ac84c84000000b003b4d5bea2e0mr37558150qtv.20.1674559200247;
+        Tue, 24 Jan 2023 03:20:00 -0800 (PST)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id 18-20020ac856f2000000b0039cd4d87aacsm1057227qtu.15.2023.01.24.03.19.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 03:19:59 -0800 (PST)
+Received: by mail-yb1-f178.google.com with SMTP id m199so2628677ybm.4;
+        Tue, 24 Jan 2023 03:19:59 -0800 (PST)
+X-Received: by 2002:a25:d88c:0:b0:77a:b5f3:d0ac with SMTP id
+ p134-20020a25d88c000000b0077ab5f3d0acmr2609830ybg.202.1674559199422; Tue, 24
+ Jan 2023 03:19:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215181848.129326-1-helgaas@kernel.org>
+In-Reply-To: <20221215181848.129326-1-helgaas@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 24 Jan 2023 12:19:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUuPKyMDwAHvUxC_s-Cqv_aui=1+eHCMypkpQSmvz=uuQ@mail.gmail.com>
+Message-ID: <CAMuHMdUuPKyMDwAHvUxC_s-Cqv_aui=1+eHCMypkpQSmvz=uuQ@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
+Hi Bjorn,
 
-daniel.lezcano@linaro.org wrote on Wed, 18 Jan 2023 23:26:10 +0100:
+On Thu, Dec 15, 2022 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
+>
+> Simplify __rpm_get_callback() slightly by returning as soon as the return
+> value is known.  No functional change intended.
+>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 
-> The driver browses the trip point to find out the critical trip
-> temperature. However the function thermal_zone_get_crit_temp() does
-> already that, so the routine is pointless in the driver.
->=20
-> Use thermal_zone_get_crit_temp() instead of inspecting all the trip
-> points.
->=20
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
->  drivers/thermal/armada_thermal.c | 38 +++++++++++++-------------------
->  1 file changed, 15 insertions(+), 23 deletions(-)
->=20
-> diff --git a/drivers/thermal/armada_thermal.c b/drivers/thermal/armada_th=
-ermal.c
-> index db040dbdaa0a..c6d51d8acbf0 100644
-> --- a/drivers/thermal/armada_thermal.c
-> +++ b/drivers/thermal/armada_thermal.c
-> @@ -784,34 +784,26 @@ static int armada_configure_overheat_int(struct arm=
-ada_thermal_priv *priv,
->  					 int sensor_id)
+Thanks for your patch, which is now commit 650bdddb6b311705 ("PM:
+runtime: Simplify __rpm_get_callback()") in pm/linux-next.
+
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
+>
+>  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
 >  {
->  	/* Retrieve the critical trip point to enable the overheat interrupt */
-> -	struct thermal_trip trip;
-> +	int temperature;
->  	int ret;
-> -	int i;
-> -
-> -	for (i =3D 0; i < thermal_zone_get_num_trips(tz); i++) {
-> -
-> -		ret =3D thermal_zone_get_trip(tz, i, &trip);
-> -		if (ret)
-> -			return ret;
-> -
-> -		if (trip.type !=3D THERMAL_TRIP_CRITICAL)
-> -			continue;
-> -
-> -		ret =3D armada_select_channel(priv, sensor_id);
-> -		if (ret)
-> -			return ret;
-> =20
-> -		armada_set_overheat_thresholds(priv, trip.temperature,
-> -					       trip.hysteresis);
-> -		priv->overheat_sensor =3D tz;
-> -		priv->interrupt_source =3D sensor_id;
-> +	ret =3D thermal_zone_get_crit_temp(tz, &temperature);
-> +	if (ret)
-> +		return ret;
-> =20
-> -		armada_enable_overheat_interrupt(priv);
-> +	ret =3D armada_select_channel(priv, sensor_id);
-> +	if (ret)
-> +		return ret;
-> =20
-> -		return 0;
-> -	}
-> +	/*
-> +	 * A critical temperature does not have a hysteresis
-> +	 */
+> -       pm_callback_t cb;
+> -       const struct dev_pm_ops *ops;
+> +       const struct dev_pm_ops *ops = NULL;
+>
+>         if (dev->pm_domain)
+>                 ops = &dev->pm_domain->ops;
+> @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+>                 ops = dev->class->pm;
+>         else if (dev->bus && dev->bus->pm)
+>                 ops = dev->bus->pm;
+> -       else
+> -               ops = NULL;
+>
+>         if (ops)
+> -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> -       else
+> -               cb = NULL;
+> +               return *(pm_callback_t *)((void *)ops + cb_offset);
 
-Makes sense.
+This is a change in behavior in case the callback turns out to be NULL:
+  - before, it would fall back to the driver-specific callback below,
+  - after, it always returns NULL.
 
-Nit: I would actually put that comment in the commit log rather than
-keeping it in the code, but whatever, that's a nice simplification.
-
-> +	armada_set_overheat_thresholds(priv, temperature, 0);
-> +	priv->overheat_sensor =3D tz;
-> +	priv->interrupt_source =3D sensor_id;
-> +	armada_enable_overheat_interrupt(priv);
-> =20
-> -	return -EINVAL;
-> +	return 0;
+>
+> -       if (!cb && dev->driver && dev->driver->pm)
+> -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> +       if (dev->driver && dev->driver->pm)
+> +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+>
+> -       return cb;
+> +       return NULL;
 >  }
-> =20
->  static int armada_thermal_probe(struct platform_device *pdev)
 
-LGTM so,
+Gr{oetje,eeting}s,
 
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+                        Geert
 
-Thanks,
-Miqu=C3=A8l
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
