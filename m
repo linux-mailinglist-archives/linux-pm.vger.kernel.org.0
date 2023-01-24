@@ -2,200 +2,162 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A1066794C6
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 11:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8780B679528
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 11:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233396AbjAXKIK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 05:08:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S233480AbjAXK2x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 05:28:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232977AbjAXKIJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 05:08:09 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5191740C0
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 02:08:08 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id fl11-20020a05600c0b8b00b003daf72fc844so12457290wmb.0
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 02:08:08 -0800 (PST)
+        with ESMTP id S233279AbjAXK2t (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 05:28:49 -0500
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D95F2ED4F
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 02:28:48 -0800 (PST)
+Received: by mail-wm1-x331.google.com with SMTP id e19-20020a05600c439300b003db1cac0c1fso10985417wmn.5
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 02:28:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BFAsoCM7lTTy8pzMkhBP/3Y7R7BLbBDpiacpk1e+svk=;
-        b=zbc1Kh29haSWpTL482axZTwaQ+BCuuBVWHm9Wm9CefPtdVb2/WcPKQtJBGwMv8h1Xa
-         Uu3j/8TozWnXngaG9EMppKbhb+OEJAx2cDFrbg/7y9Apf3rS0ImEdwsm/sQ2qEPKbPY/
-         g5VdPz5btDNmrLcJsNN39oIPiUWQWPqMqR4HmfMtKZVrUEsJNAYyYB7VPDWlA4RZyGlj
-         RSOf1frU64pubP9yex7qfz6s5oKkc9G36D/M/6370N4aSnqEDDbxsgwFeDlpXeMHcZ1t
-         tMSzZcOvNm6JIKGPVWLu2QTY8+TQV51tFYQV2t4z7lyzacaDeZmajykwGoSJkI8DBgYD
-         lRvw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BlcrQjWefz/S13eT32WWKg7ghQtvzvoszqcQe0iG9RQ=;
+        b=FfX9E01ayPtK7ZX948dKsjcx67Qj8+70ocH+kVltVTeAvPNGcms6h0thGyi32+5NfK
+         UMBWYKr+qYGb7oge+OcRkVlNIHylBTQTzU4ogt6mzlTtoo+PQG0mCc8+Of//9lYFaLWx
+         4m6AyOwWVt7S20d3pD0rcd3V9VMCj8pXQ+XcUq2/635qZYgRuC94hXv4W4E0MKjIkBdH
+         iNp2SUeKahVmaylMEBsr+Tu3UrVYEp6vhGWSEp6OxjvBoHBWqqdUmQuNSxD1QUDy8d4z
+         7KgQDJ81K/PAZUOQ/8AEM9cYEBoeUbRTh5BA+KhDcg+OeHcZkF4YZZvG4JUGfOq6Df6T
+         Z0yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BFAsoCM7lTTy8pzMkhBP/3Y7R7BLbBDpiacpk1e+svk=;
-        b=tUnHfB8mifUB+vwt+HY4UliwwaevtQrBYDfQKV+2WS+pEWN06nJ+/r2iNhYjUDSJEu
-         G4eIxSO3/Kea/62QQXNLD1xztOQrpjsyWcoTnktWGxqT+THUeHxSzNYSmrVR6kQNW6/w
-         Wz9igavoD7XgMeDTish1OpKQekDgUo6DCuTR8yAKfHYmPazWuH5QD2ymma8XUjpT92Ni
-         jxtbLkAbpp0uJC+PZ5oBv5cS7JdmZ7zxEy71dijMwFwMtWfyPqIaCRModpgtX3LWxTb1
-         b6KrSQ2/Qhq20E82+rMv6h64mvyNcbreeQK4baTNJPOBlNsncQpY0NFTgvI8luOFnWPk
-         dPJw==
-X-Gm-Message-State: AFqh2krKSGzk7T5TlkFM+MwyXN3Pqu4LJ11oo/TvGxrFc8qV9QySlC97
-        RHOjt7NXBNBJUaG7Gn0kbHdY/Q==
-X-Google-Smtp-Source: AMrXdXtnSVR3GOqGkK+I/1saZYRYhFvhUquzJUpk3lftfHhjGUEtOPza9mC7F8QU6s/MYeXc3UoNng==
-X-Received: by 2002:a05:600c:3556:b0:3db:331b:bd2d with SMTP id i22-20020a05600c355600b003db331bbd2dmr15705410wmq.18.1674554886768;
-        Tue, 24 Jan 2023 02:08:06 -0800 (PST)
-Received: from [192.168.99.137] ([95.178.111.30])
-        by smtp.gmail.com with ESMTPSA id az41-20020a05600c602900b003dab77aa911sm13183099wmb.23.2023.01.24.02.08.05
+        bh=BlcrQjWefz/S13eT32WWKg7ghQtvzvoszqcQe0iG9RQ=;
+        b=F44s9g0mXdJVk0WMHXhoqd7O0gNjxosGmo0TpMQ5/+oot8fH83nw+LPynnOFTEzZ7u
+         zTPOO0tBjayvVO+qUDFB42E1JMZOiv6xBmAcQDKI70ZSOPfS6STFXxxgM0AaPnOhrK88
+         v37jRypAqnnm95Dt58iwCcXYuGEHTvriN4n1JjbTSUqlpcsLSDAK+Ll2qTK4EAgI2fM3
+         pC91ipSgBJzgiOHMhfgBMEfqnmD64xJjMR9DNDIGfn5q6E89rlqc5mw/fU884K7MZ2YO
+         9ohrzg9wzb4pObuNDl7tTe5FL7lADHg8D9tBmlk3UsPD/QHAmgznMP71YNqsMTjjWwwv
+         waYw==
+X-Gm-Message-State: AFqh2kpkCqw7nLHmeMXFkhFIE5GPZ7GRQgIMrHD0F0I/adOFdhnwFQor
+        WOz0s9zOIYeeCHqeotM578Ptig==
+X-Google-Smtp-Source: AMrXdXs06jKTOVzfu9vyv/1L05BqAtz2Bt2nP7EYZ7yhQoc3BRf/C60l0tLl40SxRyR63Ip6Z9YTlQ==
+X-Received: by 2002:a05:600c:c05:b0:3db:2252:e50e with SMTP id fm5-20020a05600c0c0500b003db2252e50emr19888324wmb.24.1674556126935;
+        Tue, 24 Jan 2023 02:28:46 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id k21-20020a05600c1c9500b003db30be4a54sm13901674wms.38.2023.01.24.02.28.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 02:08:06 -0800 (PST)
-Message-ID: <d3daece0-ed23-fae7-9bc8-c6e53b84e8e7@baylibre.com>
-Date:   Tue, 24 Jan 2023 11:08:04 +0100
+        Tue, 24 Jan 2023 02:28:46 -0800 (PST)
+Message-ID: <a08e0d60-994a-c11b-2f5d-55c6984df7b4@linaro.org>
+Date:   Tue, 24 Jan 2023 11:28:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
- <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
- <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
+ Thunderbird/102.4.2
+Subject: Re: [PATCH 3/3] thermal/drivers/intel: Use generic trip points for
+ intel_soc_dts_iosf
 Content-Language: en-US
-In-Reply-To: <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     srinivas.pandruvada@linux.intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        Daniel Lezcano <daniel.lezcano@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>
+References: <20230118181622.33335-1-daniel.lezcano@linaro.org>
+ <20230118181622.33335-3-daniel.lezcano@linaro.org>
+ <CAJZ5v0hCJF-+1SFHyNF-=4FWPLcOqRnc09KeA=rz6BdYTvb=BQ@mail.gmail.com>
+ <ff598dd3-91d0-b660-7821-e34177056954@linaro.org>
+ <CAJZ5v0gSG3aaeywiMWZTzWHmz_tVupeB1xyZfXhhXJ3NEV8-Yg@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0gSG3aaeywiMWZTzWHmz_tVupeB1xyZfXhhXJ3NEV8-Yg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Daniel,
-
-On 1/19/23 18:03, Amjad Ouled-Ameur wrote:
-> Hi Daniel,
->
-> On 12/29/22 16:49, Daniel Lezcano wrote:
->> On 06/12/2022 10:18, Amjad Ouled-Ameur wrote:
->>> Hi Daniel,
->>> On Mon Dec 5, 2022 at 8:39 PM CET, Daniel Lezcano wrote:
+On 23/01/2023 21:19, Rafael J. Wysocki wrote:
+> On Mon, Jan 23, 2023 at 7:09 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>>
+>> Hi Srinivas,
+>>
+>> On 19/01/2023 21:04, Rafael J. Wysocki wrote:
+>>> On Wed, Jan 18, 2023 at 7:16 PM Daniel Lezcano
+>>> <daniel.lezcano@linaro.org> wrote:
 >>>>
->>>> Hi Amjad,
+>>>> From: Daniel Lezcano <daniel.lezcano@kernel.org>
 >>>>
+>>>> The thermal framework gives the possibility to register the trip
+>>>> points with the thermal zone. When that is done, no get_trip_* ops are
+>>>> needed and they can be removed.
 >>>>
->>>> On 05/12/2022 11:41, Amjad Ouled-Ameur wrote:
+>>>> Convert ops content logic into generic trip points and register them with the
+>>>> thermal zone.
 >>>>
->>>> [ ... ]
+>>>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+>>>> ---
+>>
+>> [ ... ]
+>>
 >>>>
->>>>>>> @@ -1161,11 +1197,24 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>>>>>>             platform_set_drvdata(pdev, mt);
->>>>>>>     -    tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->>>>>>> -                          &mtk_thermal_ops);
->>>>>>> -    if (IS_ERR(tzdev)) {
->>>>>>> -        ret = PTR_ERR(tzdev);
->>>>>>> -        goto err_disable_clk_peri_therm;
->>>>>>> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->>>>>>> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->>>>>>> +        if (!tz)
->>>>>>> +            return -ENOMEM;
->>>>>>> +
->>>>>>> +        tz->mt = mt;
->>>>>>> +        tz->id = i;
->>>>>>> +
->>>>>>> +        tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->>>>>>> +                                 &mtk_thermal_ops :
->>>>>>> + &mtk_thermal_sensor_ops);
->>>>>>
->>>>>> Here you use again the aggregation
->>>>> I addressed this concern in V6, could you please take a look and let me
->>>>> know what you think [0].
->>>>>
->>>>> [0]: https://lore.kernel.org/all/5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com/
->>>>
->>>> May I misunderstanding but AFAICS, this patch is setting the
->>>> mtk_thermal_ops if the sensor id is zero. The get_temp is computing the
->>>> max temperature in this ops which is what we don't want to do.
+>>>> @@ -320,7 +304,8 @@ static int add_dts_thermal_zone(int id, struct intel_soc_dts_sensor_entry *dts,
+>>>>           dts->trip_mask = trip_mask;
+>>>>           dts->trip_count = trip_count;
+>>>>           snprintf(name, sizeof(name), "soc_dts%d", id);
+>>>> -       dts->tzone = thermal_zone_device_register(name,
+>>>> +       dts->tzone = thermal_zone_device_register_with_trips(name,
+>>>> +                                                 dts->trips,
+>>>>                                                     trip_count,
+>>>>                                                     trip_mask,
+>>>>                                                     dts, &tzone_ops,
+>>>> @@ -430,27 +415,28 @@ struct intel_soc_dts_sensors *intel_soc_dts_iosf_init(
+>>>>                   notification = false;
+>>>>           else
+>>>>                   notification = true;
+>>>> -       for (i = 0; i < SOC_MAX_DTS_SENSORS; ++i) {
+>>>> -               sensors->soc_dts[i].sensors = sensors;
+>>>> -               ret = add_dts_thermal_zone(i, &sensors->soc_dts[i],
+>>>> -                                          notification, trip_count,
+>>>> -                                          read_only_trip_count);
+>>>> -               if (ret)
+>>>> -                       goto err_free;
+>>>> -       }
 >>>
->>> Correct, but I think that is out of scope of this patchset, as the current
->>> driver already uses mtk_thermal_ops for sensor 0. The focus of this patchset
->>> is to add support for the other sensors.
->>>
->>> Besides, what do you suggest as a clean implementation if the current one
->>> no longer meets thermal core requirements ?
+>>> How is this change related to the rest of the patch?
 >>
->> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 Little, right ?
->
-> MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per sensor. Thermal zone 0 corresponds
->
-> to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has nothing to do with CPUs. The cooling device type
->
-> used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are present in the SoC for debug-purpose only, they are not supposed
->
-> to be used for production.
->
-After reconsidering the fact that zones 1, 2 and 3 are only used for dev/debug, it might be best to avoid
-
-aggregation as you suggested, and keep only support for zone 0 in this driver. Thus I suggest I send a V8
-
-where I keep only below fixes for this patch if that's okay with you:
-
-- Define "raw_to_mcelsius" function pointer for "struct thermal_bank_cfg".
-
-- Fix "mtk_thermal" variable in mtk_read_temp().
-
-- Set "mt->raw_to_mcelsius" in probe().
-
-
-For zones 1, 2 and 3 we can later add a different driver specific for dev/debug to probe them to
-
-avoid confusion.
-
-
-Regards,
-
-Amjad
-
->
-> Regards,
->
-> Amjad
->
+>> We want to register the thermal zone with the trip points.
 >>
->> If it is the case, then a thermal zone per sensor with the trip points and a cooling device for each of them.
+>> thermal_zone_device_register() becomes
 >>
->> The two thermal zones for the big will share the same cooling device. The little thermal zone will have its own cooling device.
+>> thermal_zone_device_register_with_trips()
 >>
->> If there is the GPU, then its own cooling device also with devfreq.
+>> But in the current code, the trip points are updated after the thermal
+>> zones are created (and strictly speaking it is wrong as get_trip_temp
+>> can be invoked before the trip points are updated).
 >>
->>
->>>> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->>>>
->>>> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
->>>> <http://twitter.com/#!/linaroorg> Twitter |
->>>> <http://www.linaro.org/linaro-blog/> Blog
->>>
->>
+>> So the change inverts the initialization where we update the trip points
+>> and then we register the thermal zones.
+> 
+> It would be nice to write this in the changelog too.
+
+Srinivasn, are you fine with the changes ?
+
+Rafael, if the patches are ok, shall I resend a new version with the 
+changelog updated or can you pick them amending the changelog ?
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
