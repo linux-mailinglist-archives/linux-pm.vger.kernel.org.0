@@ -2,361 +2,133 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8FC67A360
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 20:49:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6518667A373
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 20:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233125AbjAXTtc (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 14:49:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52954 "EHLO
+        id S233589AbjAXT5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 14:57:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjAXTtc (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 14:49:32 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3304C66F
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 11:49:29 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id b24-20020a17090a551800b0022beefa7a23so2980620pji.5
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 11:49:29 -0800 (PST)
+        with ESMTP id S233586AbjAXT53 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 14:57:29 -0500
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F0C4672C
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id q5so10330778wrv.0
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=SUvbV9PRMI3FTN1TGsA5mLwjbHJCsxKrq7dtEI3Cv1g=;
-        b=k4IMsxvTjqgyghoKeqg+/xrKlpIcpuan89KMx8S8B9u39+5NFRmyfw8RAVg3vcIJwM
-         YAB81ICR4lmFCwE+GEhsSe/ph6lIa/SH3Xp/6seEuzDq+mEkZm5ipzV1xnQHQ8/NtpKg
-         Av5qcVDlwUSOQjKRLqq7fINc+pIxI+jvgtlbNsuyL8zZOAhrtMTMj8tbHO/iG2yzVBcG
-         /0udhggFivOvH7u6WrLoWfGcArJhYiJBEaykxjkuMT3WQPPIcvP2O5vEjPjdRBPF+Dfn
-         EBeMC82mSvpmFFilD3uCjCO7IuLQmmCJY2ueXkNZ4XMOR6Gg7uMslnMhaOXthN8sLM15
-         n0eg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
+        b=YiZbCsTkWX7qaBcx9slMjH6+effXtwjymWr3GN8IP7nGKDffEFwF+GniYQJGxRDdij
+         ddxnoXiPHLtD1J2xu06stt50XG7TMZHlU4vUx1FUq5u1vVJ1iFg138K5ObVFl5VqTbij
+         vgJu63fNHqpEAcA70RBCp7uEoqgSo8vC4mMsXr1eFSwwyt5n7FebqWFUxG22D15WSOLx
+         rr65vwxKSRjpn0Q/Phw+MaIIrh5QNbS8PF3uygWX27Z16dxkYQc/uZt6NRcmIevTJ0To
+         TDTM2yGHMo7TX+Uiq+7ajTJHTvsLOzLdPh7rrhMVO04WMLFrxkUZDic+0tnVmERM7//X
+         EyTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SUvbV9PRMI3FTN1TGsA5mLwjbHJCsxKrq7dtEI3Cv1g=;
-        b=GGOWobMv0DR+WfJUN7SJEuUJV4ovAVUCVOB0E4hzIBRgWpG4uI3SlIf7DhWyAL/xty
-         xR7zsmiVrim5K+IpdYxNRgc9jSQXV3e1Y0XuhN54dZiPLO81Z9dgVyQK4eKCKVFcy8jn
-         JzlwVYuC/qvrmtvaRJihAKDJA8VhJbVuILHG5Jg9xLK2ZdgxQYmRCGs5xBLl6qtoIFVa
-         LYxC9SxS93Q2VoP5vJ+1PXSYfcG6pa1KFmLJyj/CYdCRVaSJYGqe6gYQM3c95WRY7w6Y
-         KUaGBBmy/nDpdu0St8tpSqZuoYQgdieBNR87GAJ6TydN6kx/4LpQG+k5c34VlJ2G+LE4
-         wD0w==
-X-Gm-Message-State: AO0yUKUXMcGQrjGsKiixi8av1fnqDpRxyAZjC57d9rvxfOOzaD7r21TM
-        manXKTlefpTHoFf3TVL7TSHQht8aFFcPw7VwvWM=
-X-Google-Smtp-Source: AK7set/uPDfpEP3FCMvyfI1s4/ZMJVq0RDCUBFLS3KwKWhFEZLzvbxewWMszkxF+HtFkBLRzgQ4BuQ==
-X-Received: by 2002:a05:6a20:8f20:b0:bb:9ad9:4967 with SMTP id b32-20020a056a208f2000b000bb9ad94967mr4196651pzk.44.1674589769109;
-        Tue, 24 Jan 2023 11:49:29 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id d4-20020a63a704000000b0047850cecbdesm1766121pgf.69.2023.01.24.11.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jan 2023 11:49:28 -0800 (PST)
-Message-ID: <63d03648.630a0220.2ae67.2e46@mx.google.com>
-Date:   Tue, 24 Jan 2023 11:49:28 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        h=content-transfer-encoding:cc:subject:from:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
+        b=tXDF3YLxnrjX9KRtK4lZbIN7Gbr56PBINczn/K5maxY+sfkUa9LO29Hfo8I/pj5Drk
+         y6amZv/SZkcsd7uAFHJp9k42Ok6BLeLtHSJLzPjtIBgLzUzbanuPSGWA1cJA+MN5QnkR
+         F4egRbkodbdeNs99k+PH1eDRDkKz/ICOLFSLpdadcE9saYWGxBoWsQdqZ2ZhYjLMH4QQ
+         ui5sNLnlASp+StbKWbAdS+ZTanGx7p0Xcjh7YRJxIlP3pc0qkbnPHkM+fVAeUeTbptsM
+         eIawQU57C49ddtZZC4M6XZ+qZoP66LPm5K3P4HwMjpuzTPyaD6FYnhmoGAFDRvh31D7o
+         MKuA==
+X-Gm-Message-State: AFqh2krqA6Wh3JIfq7ZyHtrZQTUN/ViO7p7ACs7Mf/bprWTs4xASRBcz
+        9tUo+5wDliMDlQ8MSsBuOifUDw==
+X-Google-Smtp-Source: AMrXdXsxJ+yxlj1AkbpDDlit6M5S/lntxDSsaXZO6X121kBm1RStBcF/mVtX9lX/QgH1/sqY8z727Q==
+X-Received: by 2002:a5d:404c:0:b0:2be:1258:897d with SMTP id w12-20020a5d404c000000b002be1258897dmr25315390wrp.43.1674590245043;
+        Tue, 24 Jan 2023 11:57:25 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id q3-20020adff943000000b002bfae43109fsm2473693wrr.93.2023.01.24.11.57.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 11:57:24 -0800 (PST)
+Message-ID: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
+Date:   Tue, 24 Jan 2023 20:57:23 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.2-rc5-95-gc37ccd838159
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 68 runs,
- 6 regressions (v6.2-rc5-95-gc37ccd838159)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Content-Language: en-US
+To:     Thierry Reding <thierry.reding@gmail.com>, Wei Ni <wni@nvidia.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
+ usage
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Johan Hovold <johan@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+        Linux PM mailing list <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 68 runs, 6 regressions (v6.2-rc5-95-gc37ccd838159)
 
-Regressions Summary
--------------------
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-cubietruck                   | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-kontron-pitx-imx8m           | arm64 | lab-kontron  | gcc-10   | defconfig =
-         | 2          =
-
-meson-gxbb-p200              | arm64 | lab-baylibre | gcc-10   | defconfig =
-         | 1          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.2-rc5=
--95-gc37ccd838159/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.2-rc5-95-gc37ccd838159
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      c37ccd8381598ce7a31a9606ba2dd1c1da289990 =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-cubietruck                   | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d02e6b12978393b4915ec8
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d02e6b12978393b4915ecd
-        failing since 5 days (last pass: v6.1-rc8-176-gcb06e36a6532, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-24T19:15:28.617697  <8>[   13.929881] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3202951_1.5.2.4.1>
-    2023-01-24T19:15:28.727454  / # #
-    2023-01-24T19:15:28.831530  export SHELL=3D/bin/sh
-    2023-01-24T19:15:28.832797  #
-    2023-01-24T19:15:28.935385  / # export SHELL=3D/bin/sh. /lava-3202951/e=
-nvironment
-    2023-01-24T19:15:28.936553  =
-
-    2023-01-24T19:15:29.039240  / # . /lava-3202951/environment/lava-320295=
-1/bin/lava-test-runner /lava-3202951/1
-    2023-01-24T19:15:29.041012  =
-
-    2023-01-24T19:15:29.045705  / # /lava-3202951/bin/lava-test-runner /lav=
-a-3202951/1
-    2023-01-24T19:15:29.137322  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-kontron-pitx-imx8m           | arm64 | lab-kontron  | gcc-10   | defconfig =
-         | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d02989c3a9a7fc9f915ecf
-
-  Results:     51 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d02989c3a9a7fc9f915ed2
-        failing since 0 day (last pass: v6.2-rc4-80-gafd822f01cda, first fa=
-il: v6.2-rc5-85-gfaa268e6daed)
-
-    2023-01-24T18:54:46.471391  / # #
-    2023-01-24T18:54:46.573268  export SHELL=3D/bin/sh
-    2023-01-24T18:54:46.573695  #
-    2023-01-24T18:54:46.675088  / # export SHELL=3D/bin/sh. /lava-254611/en=
-vironment
-    2023-01-24T18:54:46.675527  =
-
-    2023-01-24T18:54:46.776956  / # . /lava-254611/environment/lava-254611/=
-bin/lava-test-runner /lava-254611/1
-    2023-01-24T18:54:46.777695  =
-
-    2023-01-24T18:54:46.783703  / # /lava-254611/bin/lava-test-runner /lava=
--254611/1
-    2023-01-24T18:54:46.847556  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-24T18:54:46.847867  + cd /l<8>[   15.889668] <LAVA_SIGNAL_START=
-RUN 1_bootrr 254611_1.5.2.4.5> =
-
-    ... (10 line(s) more)  =
-
-
-  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/63d=
-02989c3a9a7fc9f915ee2
-        failing since 0 day (last pass: v6.2-rc4-80-gafd822f01cda, first fa=
-il: v6.2-rc5-85-gfaa268e6daed)
-
-    2023-01-24T18:54:50.907979  /lava-254611/1/../bin/lava-test-case
-    2023-01-24T18:54:50.908350  <8>[   20.114655] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>
-    2023-01-24T18:54:50.908593  /lava-254611/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-meson-gxbb-p200              | arm64 | lab-baylibre | gcc-10   | defconfig =
-         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d029dae06c4ca0de915ecc
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm64/defconfig/gcc-10/lab-baylibre/baseline-meson-gxbb-p200.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63d029dae06c4ca0de915=
-ecd
-        new failure (last pass: v6.2-rc5-85-gfaa268e6daed) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d02c221fb89389e2915ed3
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
-bretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
-bretech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d02c221fb89389e2915ed8
-        failing since 5 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-24T19:05:39.764433  <8>[   11.067557] <LAVA_SIGNAL_ENDRUN 0_dme=
-sg 3202953_1.5.2.4.1>
-    2023-01-24T19:05:39.869740  / # #
-    2023-01-24T19:05:39.971445  export SHELL=3D/bin/sh
-    2023-01-24T19:05:39.971790  #
-    2023-01-24T19:05:40.073144  / # export SHELL=3D/bin/sh. /lava-3202953/e=
-nvironment
-    2023-01-24T19:05:40.073502  =
-
-    2023-01-24T19:05:40.174860  / # . /lava-3202953/environment/lava-320295=
-3/bin/lava-test-runner /lava-3202953/1
-    2023-01-24T19:05:40.175526  =
-
-    2023-01-24T19:05:40.195180  / # /lava-3202953/bin/lava-test-runner /lav=
-a-3202953/1
-    2023-01-24T19:05:40.284116  + export 'TESTRUN_ID=3D1_bootrr' =
-
-    ... (11 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-sun8i-h3-libretech-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d02c092aa3f4d649915ebd
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
-ch-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-95-gc37ccd=
-838159/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
-ch-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d02c092aa3f4d649915ec2
-        failing since 5 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-24T19:05:29.896840  / # #
-    2023-01-24T19:05:29.998671  export SHELL=3D/bin/sh
-    2023-01-24T19:05:29.999027  #
-    2023-01-24T19:05:30.100375  / # export SHELL=3D/bin/sh. /lava-3202952/e=
-nvironment
-    2023-01-24T19:05:30.100732  =
-
-    2023-01-24T19:05:30.202084  / # . /lava-3202952/environment/lava-320295=
-2/bin/lava-test-runner /lava-3202952/1
-    2023-01-24T19:05:30.202751  =
-
-    2023-01-24T19:05:30.207776  / # /lava-3202952/bin/lava-test-runner /lav=
-a-3202952/1
-    2023-01-24T19:05:30.314588  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-24T19:05:30.315162  + cd /lava-3202952/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
- =20
+Hi,
+
+does anyone know what is the purpose of the get_thermal_instance() usage 
+in this code:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
+
+The driver is using a function which is reserved for the thermal core. 
+It should not.
+
+Is the following change ok ?
+
+diff --git a/drivers/thermal/tegra/soctherm.c 
+b/drivers/thermal/tegra/soctherm.c
+index 220873298d77..5f552402d987 100644
+--- a/drivers/thermal/tegra/soctherm.c
++++ b/drivers/thermal/tegra/soctherm.c
+@@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct 
+thermal_zone_device *tz, int trip
+  				continue;
+
+  			cdev = ts->throt_cfgs[i].cdev;
+-			if (get_thermal_instance(tz, cdev, trip_id))
+-				stc = find_throttle_cfg_by_name(ts, cdev->type);
+-			else
++			stc = find_throttle_cfg_by_name(ts, cdev->type);
++			if (!stc)
+  				continue;
+
+  			return throttrip_program(dev, sg, stc, temp);
+@@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device 
+*dev,
+  			continue;
+
+  		cdev = ts->throt_cfgs[i].cdev;
+-		if (get_thermal_instance(tz, cdev, trip))
+-			stc = find_throttle_cfg_by_name(ts, cdev->type);
+-		else
++
++		stc = find_throttle_cfg_by_name(ts, cdev->type);
++		if (!stc)
+  			continue;
+
+  		ret = throttrip_program(dev, sg, stc, temperature);
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
