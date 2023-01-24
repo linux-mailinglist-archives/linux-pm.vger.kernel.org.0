@@ -2,42 +2,42 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A9A679DA3
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 16:37:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A124679DAA
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 16:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbjAXPhG (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 10:37:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48938 "EHLO
+        id S235211AbjAXPhd (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 10:37:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235252AbjAXPhG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 10:37:06 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0124B8A4;
-        Tue, 24 Jan 2023 07:37:05 -0800 (PST)
+        with ESMTP id S234172AbjAXPhb (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 10:37:31 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770B82CC73;
+        Tue, 24 Jan 2023 07:37:28 -0800 (PST)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id B14996602E26;
-        Tue, 24 Jan 2023 15:37:02 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7EBA96602E31;
+        Tue, 24 Jan 2023 15:37:26 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674574624;
-        bh=Sbagj/2ywhL0xjl99DNt7MthmCjBe7nT34X+hJH8Tyo=;
+        s=mail; t=1674574647;
+        bh=6o2Viye9YQhlWUr1v1m4HSU+/9UO2qVzEYBso3DcU74=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=CZKyUC4g7T+UGAfyRIlrIyLoXcSqP/fwCYpQtFWz1bg42bPzpM97kUFMSWxcZ0J+E
-         9ERXJ3BLsVaz6hZ6LphJQdd4Fk6Ac7Yf9qizO6kQ5XPTYsljS8NIyRPsFuvLzs21zP
-         c7ZTDc4tt8BCZV2+Xpvy0MkcFPjb4EbP9jFU3wl/kn8N2BQDyPVGMcUqzzcfINxa/D
-         j/flgrEfGM7715+yMSQi5W9QhFTa+mNglSCpeAYd+6wcMvPkQ9wMYEBBSDY2vsf7W+
-         w+2nsgFYiRZ2OSShsJvrY7XIk/hs6JpDHcKGyPH0qUNHsZSgqR4qJ4Uq6YOe8b9OtK
-         DwntItrcEvNhw==
-Message-ID: <80ce4ea3-6ebd-c249-45bd-a2f04343690b@collabora.com>
-Date:   Tue, 24 Jan 2023 16:36:59 +0100
+        b=EcfMMKRrFJ+ZmF4kvLS3arY6Ebrqq007CmGaHy4ghYSORuNKDs/FaqDZdz9Svndho
+         WemQr658azNuU+A/bpt//twLudF7E9dIqLwjkxlK/u44KPJN9cv2nhKrTeOl2JGt8k
+         Ea/zFkOgWa+5nCkrvhlt9adSY2Ambx2t67Z5GnRlJoHMNBlLyldGJljfFCeRH2hjiA
+         /9VXQAKKvWqoSgfzr6dw16ArwG68QPCSUHSSmthfLZIUMl6r9eruPFWiXmYWtRDIvH
+         9ad99HMS9cA0vI6/gZyXGECKDUM0AkfZRkdmtp3vuJuXa6EbHCgncd9nHZQaybcu6V
+         EFbbBC0PVeEFw==
+Message-ID: <976628a6-58c8-3298-3777-97aaddf53bc1@collabora.com>
+Date:   Tue, 24 Jan 2023 16:37:24 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.0
-Subject: Re: [PATCH v11 5/6] arm64/dts/mt8195: Add thermal zones and thermal
- nodes
+Subject: Re: [PATCH v11 1/6] thermal/drivers/mediatek: Relocate driver to
+ mediatek folder
 Content-Language: en-US
 To:     bchihi@baylibre.com, daniel.lezcano@linaro.org, rafael@kernel.org,
         amitk@kernel.org, rui.zhang@intel.com, matthias.bgg@gmail.com,
@@ -50,10 +50,10 @@ Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
         khilman@baylibre.com, james.lo@mediatek.com,
         rex-bc.chen@mediatek.com
 References: <20230124131717.128660-1-bchihi@baylibre.com>
- <20230124131717.128660-6-bchihi@baylibre.com>
+ <20230124131717.128660-2-bchihi@baylibre.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230124131717.128660-6-bchihi@baylibre.com>
+In-Reply-To: <20230124131717.128660-2-bchihi@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,21 +68,12 @@ X-Mailing-List: linux-pm@vger.kernel.org
 Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
 > From: Balsam CHIHI <bchihi@baylibre.com>
 > 
-> Add thermal zones and thermal nodes for the mt8195.
+> Add MediaTek proprietary folder to upstream more thermal zone and cooler
+> drivers, relocate the original thermal controller driver to it, and rename it
+> as "auxadc_thermal.c" to show its purpose more clearly.
 > 
 > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
 
-You should change the commit title to reflect the same syntax that you can find
-in a `git log --oneline arch/arm64/boot/dts/mediatek/`.
-
-arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
-
-or
-
-arm64: dts: mt8195: Add thermal zones and thermal nodes
-
-
-...otherwise:
-
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
 
