@@ -2,133 +2,182 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6518667A373
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 20:57:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 610EA67A3F9
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 21:33:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233589AbjAXT5a (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 14:57:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S230461AbjAXUdI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 15:33:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233586AbjAXT53 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 14:57:29 -0500
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F0C4672C
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
-Received: by mail-wr1-x436.google.com with SMTP id q5so10330778wrv.0
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 11:57:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
-        b=YiZbCsTkWX7qaBcx9slMjH6+effXtwjymWr3GN8IP7nGKDffEFwF+GniYQJGxRDdij
-         ddxnoXiPHLtD1J2xu06stt50XG7TMZHlU4vUx1FUq5u1vVJ1iFg138K5ObVFl5VqTbij
-         vgJu63fNHqpEAcA70RBCp7uEoqgSo8vC4mMsXr1eFSwwyt5n7FebqWFUxG22D15WSOLx
-         rr65vwxKSRjpn0Q/Phw+MaIIrh5QNbS8PF3uygWX27Z16dxkYQc/uZt6NRcmIevTJ0To
-         TDTM2yGHMo7TX+Uiq+7ajTJHTvsLOzLdPh7rrhMVO04WMLFrxkUZDic+0tnVmERM7//X
-         EyTg==
+        with ESMTP id S229646AbjAXUdH (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 15:33:07 -0500
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5932346A5;
+        Tue, 24 Jan 2023 12:33:02 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id w11so4316171edv.0;
+        Tue, 24 Jan 2023 12:33:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=uB9I+/Tk9kHQT8QPiB3II5sGODvwetZQhB7HX9QWOdE=;
-        b=tXDF3YLxnrjX9KRtK4lZbIN7Gbr56PBINczn/K5maxY+sfkUa9LO29Hfo8I/pj5Drk
-         y6amZv/SZkcsd7uAFHJp9k42Ok6BLeLtHSJLzPjtIBgLzUzbanuPSGWA1cJA+MN5QnkR
-         F4egRbkodbdeNs99k+PH1eDRDkKz/ICOLFSLpdadcE9saYWGxBoWsQdqZ2ZhYjLMH4QQ
-         ui5sNLnlASp+StbKWbAdS+ZTanGx7p0Xcjh7YRJxIlP3pc0qkbnPHkM+fVAeUeTbptsM
-         eIawQU57C49ddtZZC4M6XZ+qZoP66LPm5K3P4HwMjpuzTPyaD6FYnhmoGAFDRvh31D7o
-         MKuA==
-X-Gm-Message-State: AFqh2krqA6Wh3JIfq7ZyHtrZQTUN/ViO7p7ACs7Mf/bprWTs4xASRBcz
-        9tUo+5wDliMDlQ8MSsBuOifUDw==
-X-Google-Smtp-Source: AMrXdXsxJ+yxlj1AkbpDDlit6M5S/lntxDSsaXZO6X121kBm1RStBcF/mVtX9lX/QgH1/sqY8z727Q==
-X-Received: by 2002:a5d:404c:0:b0:2be:1258:897d with SMTP id w12-20020a5d404c000000b002be1258897dmr25315390wrp.43.1674590245043;
-        Tue, 24 Jan 2023 11:57:25 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id q3-20020adff943000000b002bfae43109fsm2473693wrr.93.2023.01.24.11.57.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 11:57:24 -0800 (PST)
-Message-ID: <fa2bd92a-f2ae-a671-b537-87c0f3c03dbd@linaro.org>
-Date:   Tue, 24 Jan 2023 20:57:23 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hLMuamyiEkVxFlo4bpu/j50H3Gmc39mnq5ps46HJInM=;
+        b=B7Uf301KQdUEU4wLXYWeo5Xt/tHFq/mYNwm8GQ7en0DSI5/MUUiytmvGUlVfGzMFpN
+         FYHZWvlvt5pNHy9+FhlcXHyn7Y0lYBGZbL7zasVE78Dbg52QO7aaaXf+CSP1g0jUYOcy
+         lh7Lq0XJ+Ak+gLi91cn9329gdcn4qqoOemxMO/CZumzFHq3jP0SB/8lH8kA+OS1LMhDz
+         SViJAUPkJQ0mZYC3oBWHpImb2H8jd/ZzFY8WYRCI6Evr+jeq5NwLVDZcPZWvNYnW5btD
+         47Op6xdE0mntdiA+CDDdUldEaDqD9fc2tsTXaS7HwGgM5f/kHsRWUWtODlkIVpAJlHrJ
+         Q+7g==
+X-Gm-Message-State: AFqh2ko2bnT5YOrfM0c2djfIph+RLFzr06YeM/GJVAY4MTYtgxdxhzTI
+        U0z4EBPym9uN8a7dAKkESzYzNwD3ohndOz4cyKA=
+X-Google-Smtp-Source: AMrXdXsi9Z4o6NR9nxS+XvbV4TvF/2sYLkf+RWnW0dEd8aSqKvrYiEcKljqXfFK0PjovolbaZHJ9xkgq3p1zbIIwfwY=
+X-Received: by 2002:a05:6402:1002:b0:49a:1676:4280 with SMTP id
+ c2-20020a056402100200b0049a16764280mr3625796edu.16.1674592380903; Tue, 24 Jan
+ 2023 12:33:00 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>, Wei Ni <wni@nvidia.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: thermal/drivers/tegra: Getting rid of the get_thermal_instance()
- usage
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Jon Hunter <jonathanh@nvidia.com>,
-        Johan Hovold <johan@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
-        Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230123172110.376549-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Jan 2023 21:32:49 +0100
+Message-ID: <CAJZ5v0hBy2Jgezhuamz+++_EVfrO2gyuaC8vXvRMHvE5MjxtXw@mail.gmail.com>
+Subject: Re: [PATCH v2] thermal: int340x: Protect trip temperature from
+ dynamic update
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
+On Mon, Jan 23, 2023 at 6:26 PM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
+>
+> Trip temperatures are read using ACPI methods and stored in the memory
+> during zone initializtion and when the firmware sends a notification for
+> change. This trip temperature is returned when the thermal core calls via
+> callback get_trip_temp().
+>
+> But it is possible that while updating the memory copy of the trips when
+> the firmware sends a notification for change, thermal core is reading the
+> trip temperature via the callback get_trip_temp(). This may return invalid
+> trip temperature.
+>
+> To address this add a mutex to protect the invalid temperature reads in
+> the callback get_trip_temp() and int340x_thermal_read_trips().
+>
+> Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: stable@vger.kernel.org # 5.0+
+> ---
+> v2:
+> - rebased on linux-next
 
-Hi,
+So I've rebased it back onto 6.2-rc5 and pushed the result into the
+thermal-intel-fixes branch.  Please see if it looks good to you and
+let me know.
 
-does anyone know what is the purpose of the get_thermal_instance() usage 
-in this code:
+I'd prefer to push it for 6.2-rc.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/thermal/linux.git/tree/drivers/thermal/tegra/soctherm.c?h=thermal/linux-next#n623
+> - Add ret variable and remove return as suugested by Rafael
 
-The driver is using a function which is reserved for the thermal core. 
-It should not.
+Thanks!
 
-Is the following change ok ?
-
-diff --git a/drivers/thermal/tegra/soctherm.c 
-b/drivers/thermal/tegra/soctherm.c
-index 220873298d77..5f552402d987 100644
---- a/drivers/thermal/tegra/soctherm.c
-+++ b/drivers/thermal/tegra/soctherm.c
-@@ -620,9 +620,8 @@ static int tegra_thermctl_set_trip_temp(struct 
-thermal_zone_device *tz, int trip
-  				continue;
-
-  			cdev = ts->throt_cfgs[i].cdev;
--			if (get_thermal_instance(tz, cdev, trip_id))
--				stc = find_throttle_cfg_by_name(ts, cdev->type);
--			else
-+			stc = find_throttle_cfg_by_name(ts, cdev->type);
-+			if (!stc)
-  				continue;
-
-  			return throttrip_program(dev, sg, stc, temp);
-@@ -768,9 +767,9 @@ static int tegra_soctherm_set_hwtrips(struct device 
-*dev,
-  			continue;
-
-  		cdev = ts->throt_cfgs[i].cdev;
--		if (get_thermal_instance(tz, cdev, trip))
--			stc = find_throttle_cfg_by_name(ts, cdev->type);
--		else
-+
-+		stc = find_throttle_cfg_by_name(ts, cdev->type);
-+		if (!stc)
-  			continue;
-
-  		ret = throttrip_program(dev, sg, stc, temperature);
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>  .../int340x_thermal/int340x_thermal_zone.c     | 18 +++++++++++++++---
+>  .../int340x_thermal/int340x_thermal_zone.h     |  1 +
+>  2 files changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> index 228f44260b27..5fda1e67b793 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> @@ -41,7 +41,9 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>                                          int trip, int *temp)
+>  {
+>         struct int34x_thermal_zone *d = zone->devdata;
+> -       int i;
+> +       int i, ret = 0;
+> +
+> +       mutex_lock(&d->trip_mutex);
+>
+>         if (trip < d->aux_trip_nr)
+>                 *temp = d->aux_trips[trip];
+> @@ -60,10 +62,12 @@ static int int340x_thermal_get_trip_temp(struct thermal_zone_device *zone,
+>                         }
+>                 }
+>                 if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
+> -                       return -EINVAL;
+> +                       ret = -EINVAL;
+>         }
+>
+> -       return 0;
+> +       mutex_unlock(&d->trip_mutex);
+> +
+> +       return ret;
+>  }
+>
+>  static int int340x_thermal_get_trip_type(struct thermal_zone_device *zone,
+> @@ -165,6 +169,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+>         int trip_cnt = int34x_zone->aux_trip_nr;
+>         int i;
+>
+> +       mutex_lock(&int34x_zone->trip_mutex);
+> +
+>         int34x_zone->crt_trip_id = -1;
+>         if (!int340x_thermal_get_trip_config(int34x_zone->adev->handle, "_CRT",
+>                                              &int34x_zone->crt_temp))
+> @@ -192,6 +198,8 @@ int int340x_thermal_read_trips(struct int34x_thermal_zone *int34x_zone)
+>                 int34x_zone->act_trips[i].valid = true;
+>         }
+>
+> +       mutex_unlock(&int34x_zone->trip_mutex);
+> +
+>         return trip_cnt;
+>  }
+>  EXPORT_SYMBOL_GPL(int340x_thermal_read_trips);
+> @@ -215,6 +223,8 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+>         if (!int34x_thermal_zone)
+>                 return ERR_PTR(-ENOMEM);
+>
+> +       mutex_init(&int34x_thermal_zone->trip_mutex);
+> +
+>         int34x_thermal_zone->adev = adev;
+>
+>         int34x_thermal_zone->ops = kmemdup(&int340x_thermal_zone_ops,
+> @@ -277,6 +287,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+>  err_trip_alloc:
+>         kfree(int34x_thermal_zone->ops);
+>  err_ops_alloc:
+> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
+>         kfree(int34x_thermal_zone);
+>         return ERR_PTR(ret);
+>  }
+> @@ -289,6 +300,7 @@ void int340x_thermal_zone_remove(struct int34x_thermal_zone
+>         acpi_lpat_free_conversion_table(int34x_thermal_zone->lpat_table);
+>         kfree(int34x_thermal_zone->aux_trips);
+>         kfree(int34x_thermal_zone->ops);
+> +       mutex_destroy(&int34x_thermal_zone->trip_mutex);
+>         kfree(int34x_thermal_zone);
+>  }
+>  EXPORT_SYMBOL_GPL(int340x_thermal_zone_remove);
+> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> index e28ab1ba5e06..6610a9cc441b 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.h
+> @@ -32,6 +32,7 @@ struct int34x_thermal_zone {
+>         struct thermal_zone_device_ops *ops;
+>         void *priv_data;
+>         struct acpi_lpat_conversion_table *lpat_table;
+> +       struct mutex trip_mutex;
+>  };
+>
+>  struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *,
+> --
+> 2.31.1
+>
