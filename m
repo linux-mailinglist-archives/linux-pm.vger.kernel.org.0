@@ -2,56 +2,52 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8FD679ADA
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 14:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1724F679B1C
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 15:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbjAXN7d (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 08:59:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S233473AbjAXOH3 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 09:07:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233977AbjAXN7c (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 08:59:32 -0500
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323C346083;
-        Tue, 24 Jan 2023 05:59:09 -0800 (PST)
-Received: by mail-ej1-f43.google.com with SMTP id u19so39182170ejm.8;
-        Tue, 24 Jan 2023 05:59:09 -0800 (PST)
+        with ESMTP id S233498AbjAXOH2 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 09:07:28 -0500
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E62082118;
+        Tue, 24 Jan 2023 06:07:27 -0800 (PST)
+Received: by mail-ed1-f49.google.com with SMTP id x36so18334283ede.13;
+        Tue, 24 Jan 2023 06:07:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J2lXeXDqGRi72Z7AvKODItv9Wb9h3SsxMbVGpQDGFwM=;
-        b=RmW2aRfKTnm3YRNb0yiExdO5t1IQkU5Uy+6jNMpibVGAvUahqCwYSzTsZmrjEn9APy
-         WBz0marfvUm9koGH4Df1Vey3JDnair4bEHy4QI+Y6pY6HBj8vnjGRr3pnXJAUYYa2yda
-         eGQeb2jGdK436Q4B4hnrPZYVbGjmk45IWpStoqfpqnvtTElCuQ6Mt7CGZN5Sqmfl1NLw
-         OlQcC9stXrjqjVD6wqHhDK21KbQtL2OQQtqsCRS8CmsJPJYbY+vLy6u4vgmuSIuv+aRb
-         2NMcUPhO02vis21RuBrByZ70D7gLZHzZ92B9w+wbFlrH6hSFqwcX8zZ2I549sC5gQf+f
-         Fi1w==
-X-Gm-Message-State: AFqh2krhNIOM0yShfb5OEJdwn0hW79CtoqeuCuHg4Ylz8tCbr59Lgdcs
-        2v7jN8IeQfQyp/I/PCfe0TDMvcVia9wTKKXmy4Q=
-X-Google-Smtp-Source: AMrXdXt272T2gLt8zGhAPIDeefYDvDCUpzKrcOQrFQU+4hD2ak44rOCQjlHNEwJcFjpO88qpGIihAEQqm+uT6FwD8VU=
-X-Received: by 2002:a17:906:514:b0:870:6768:ebcb with SMTP id
- j20-20020a170906051400b008706768ebcbmr3385384eja.13.1674568686751; Tue, 24
- Jan 2023 05:58:06 -0800 (PST)
+        bh=vhqNjsUMR/wQl2JOVYvrO/As/K1uYd+JaqmxQNnVzYo=;
+        b=WRYARnClHI62qwBps2luvVY4ZdhzqAqp45y0vHOOlF2Vl2afRYURgPerEABnKKpNkP
+         hg8ApiQmmLXMRO/5i1KiXi6738OFv6yQilKWawLRf3mwvj0osL99RC6pweiT4OTdAp38
+         mFhxuGHkmowjWuaCCJNcMie8GkP74Yw5CMsxrTLnL4ROS1Wv5QcWyzrBSKofEbaTouN6
+         2LF0OXv42hnG7PgliWlsw6z9bPOfl+/iBZt3J6azz6hs6ryMxFJlsDRQ8jbRTraD8tTr
+         QNzSOQ9Sl02TG0netTU08IqE8qPc3c5kmE7ZUgWZddVjEdcnDLfx7sg0rHcg4H3ZW1Vs
+         56AA==
+X-Gm-Message-State: AFqh2kpDNrUOUNQ2Zfs0p51cSApc/oNTGHdV3WMMCmFYAT8Uicc68Fum
+        vC9MeVxqLTrUAdK0LJsmLe9yFiePO5mUnF3I+6StcpD6xvE=
+X-Google-Smtp-Source: AMrXdXtdK6EczqynYVUM/iCe1GvKWGH4VnuUKio0M21NBoKvI9VVetXeNd5n0Vt6s2fx5DfQtDzFk/jjfghUK7XZ9yg=
+X-Received: by 2002:a05:6402:5023:b0:49e:3526:5671 with SMTP id
+ p35-20020a056402502300b0049e35265671mr3836064eda.22.1674569246383; Tue, 24
+ Jan 2023 06:07:26 -0800 (PST)
 MIME-Version: 1.0
-References: <5905717.lOV4Wx5bFT@kreacher> <4780418.GXAFRqVoOG@kreacher>
- <Y8uW374CM37m0/wI@kroah.com> <CAJZ5v0heCTm+1sv9taAoMe8PGgLPEzsTxh9ZdOGjdhDLuvc-Zw@mail.gmail.com>
- <Y890oFSRSG4G2kp6@kroah.com>
-In-Reply-To: <Y890oFSRSG4G2kp6@kroah.com>
+References: <20221215181848.129326-1-helgaas@kernel.org> <CAMuHMdUuPKyMDwAHvUxC_s-Cqv_aui=1+eHCMypkpQSmvz=uuQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdUuPKyMDwAHvUxC_s-Cqv_aui=1+eHCMypkpQSmvz=uuQ@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 24 Jan 2023 14:57:55 +0100
-Message-ID: <CAJZ5v0ju0h9FbswXqB9GEy_ZjANvy=6NGday1Qn5PrRV7TkQfw@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] thermal: Fail object registration if thermal class
- is not registered
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
+Date:   Tue, 24 Jan 2023 15:07:14 +0100
+Message-ID: <CAJZ5v0jaFsGc23pNVumxnA955PtGpJjry07CU+2eMJEx=CDw4A@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -63,99 +59,88 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 7:03 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, Jan 24, 2023 at 12:20 PM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
 >
-> On Mon, Jan 23, 2023 at 09:16:33PM +0100, Rafael J. Wysocki wrote:
-> > On Sat, Jan 21, 2023 at 8:40 AM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Fri, Jan 20, 2023 at 08:48:07PM +0100, Rafael J. Wysocki wrote:
-> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > >
-> > > > If thermal_class is not registered with the driver core, there is no way
-> > > > to expose the interfaces used by the thermal control framework, so
-> > > > prevent thermal zones and cooling devices from being registered in
-> > > > that case by returning an error from object registration functions.
-> > > >
-> > > > For this purpose, introduce class_is_registered() that checks the
-> > > > private pointer of the given class and returns 'false' if it is NULL,
-> > > > which means that the class has not been registered, and use it in the
-> > > > thermal framework.
-> > > >
-> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > ---
-> > > >  drivers/thermal/thermal_core.c |    6 ++++++
-> > > >  include/linux/device/class.h   |    5 +++++
-> > > >  2 files changed, 11 insertions(+)
-> > > >
-> > > > Index: linux-pm/include/linux/device/class.h
-> > > > ===================================================================
-> > > > --- linux-pm.orig/include/linux/device/class.h
-> > > > +++ linux-pm/include/linux/device/class.h
-> > > > @@ -82,6 +82,11 @@ struct class_dev_iter {
-> > > >       const struct device_type        *type;
-> > > >  };
-> > > >
-> > > > +static inline bool class_is_registered(struct class *class)
-> > > > +{
-> > > > +     return !!class->p;
-> > >
-> > > I really do not like this as it is exposing internals to drivers and
-> > > whenever we do that, it gets abused and we have to unwind the mess in a
-> > > few years.
-> > >
-> > > Overall, I'm trying to remove the ->p usage, but that's a longterm goal
-> > > of mine (to allow class and bus structures to be in read-only memory),
-> > > which isn't your issue here, but it's good to think about why you want
-> > > to know this information (more below.)
-> > >
-> > > > +}
-> > > > +
-> > > >  extern struct kobject *sysfs_dev_block_kobj;
-> > > >  extern struct kobject *sysfs_dev_char_kobj;
-> > > >  extern int __must_check __class_register(struct class *class,
-> > > > Index: linux-pm/drivers/thermal/thermal_core.c
-> > > > ===================================================================
-> > > > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > > > +++ linux-pm/drivers/thermal/thermal_core.c
-> > > > @@ -880,6 +880,9 @@ __thermal_cooling_device_register(struct
-> > > >           !ops->set_cur_state)
-> > > >               return ERR_PTR(-EINVAL);
-> > > >
-> > > > +     if (!class_is_registered(&thermal_class))
-> > > > +             return ERR_PTR(-ENODEV);
-> > >
-> > > If the class isn't registered, then sommething went wrong with the
-> > > thermal core code, right?  So why isn't the thermal core keeping a local
-> > > variable of "class was registered" and relying on the driver core to
-> > > know this?
-> > >
-> > > The number of individual users that should be doing one thing or another
-> > > if a class is not registered feels very very slim.  How come this code
-> > > is being called at all if the thermal class was not registered in the
-> > > first place?  What would have prevented that from happening?  Is it an
-> > > ordering issue, or a kernel configuration issue?
+> Hi Bjorn,
+>
+> On Thu, Dec 15, 2022 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > From: Bjorn Helgaas <bhelgaas@google.com>
 > >
-> > It's basically a matter of class_register() returning an error.
+> > Simplify __rpm_get_callback() slightly by returning as soon as the return
+> > value is known.  No functional change intended.
+> >
+> > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 >
-> Ok, so not a real problem then :)
+> Thanks for your patch, which is now commit 650bdddb6b311705 ("PM:
+> runtime: Simplify __rpm_get_callback()") in pm/linux-next.
 >
-> > Yes, we could use an extra variable for this purpose, but that would
-> > be a bit wasteful, because thermal_class will then sit unused and
-> > occupy memory in vain.
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
+> >
+> >  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+> >  {
+> > -       pm_callback_t cb;
+> > -       const struct dev_pm_ops *ops;
+> > +       const struct dev_pm_ops *ops = NULL;
+> >
+> >         if (dev->pm_domain)
+> >                 ops = &dev->pm_domain->ops;
+> > @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+> >                 ops = dev->class->pm;
+> >         else if (dev->bus && dev->bus->pm)
+> >                 ops = dev->bus->pm;
+> > -       else
+> > -               ops = NULL;
+> >
+> >         if (ops)
+> > -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> > -       else
+> > -               cb = NULL;
+> > +               return *(pm_callback_t *)((void *)ops + cb_offset);
 >
-> How would it retain memory if class_register() failed?
+> This is a change in behavior in case the callback turns out to be NULL:
+>   - before, it would fall back to the driver-specific callback below,
+>   - after, it always returns NULL.
 
-The point was that we might use the existing (but not registered)
-class object to "flag" the fact that the class could not be used
-without adding extra variables.
+Good point and sorry for missing this!
 
-> > Oh well, we may as well just allocate it dynamically.
+> >
+> > -       if (!cb && dev->driver && dev->driver->pm)
+> > -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> > +       if (dev->driver && dev->driver->pm)
+> > +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> >
+> > -       return cb;
+> > +       return NULL;
+> >  }
 >
-> Allocate what?
 
-Well, that was a bit terse, sorry.
+Something like the patch below (modulo gmail-induced whitespace
+breakage) should restore the previous behavior if I'm not mistaken:
 
-This patch implements what I meant:
-https://patchwork.kernel.org/project/linux-pm/patch/5660360.DvuYhMxLoT@kreacher/
+---
+ drivers/base/power/runtime.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+Index: linux-pm/drivers/base/power/runtime.c
+===================================================================
+--- linux-pm.orig/drivers/base/power/runtime.c
++++ linux-pm/drivers/base/power/runtime.c
+@@ -31,8 +31,13 @@ static pm_callback_t __rpm_get_callback(
+     else if (dev->bus && dev->bus->pm)
+         ops = dev->bus->pm;
+
+-    if (ops)
+-        return *(pm_callback_t *)((void *)ops + cb_offset);
++    if (ops) {
++        pm_callback_t cb;
++
++        cb = *(pm_callback_t *)((void *)ops + cb_offset);
++        if (cb)
++            return cb;
++    }
+
+     if (dev->driver && dev->driver->pm)
+         return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
