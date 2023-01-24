@@ -2,166 +2,262 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF0567A08C
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 18:55:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D683467A0B1
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 18:58:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233239AbjAXRzY (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 12:55:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50316 "EHLO
+        id S230115AbjAXR6w (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 12:58:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbjAXRzX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 12:55:23 -0500
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A72EFAD
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 09:55:22 -0800 (PST)
-Received: by mail-wm1-x32a.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so11560589wmc.1
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 09:55:22 -0800 (PST)
+        with ESMTP id S233730AbjAXR6v (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 12:58:51 -0500
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D821026F
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 09:58:50 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id z3so11772830pfb.2
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 09:58:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YdCDxw9M+4W0xFySyeUJf90dqwb2v7zc2Ewn7qbXfQc=;
-        b=nTV6D3WxyzREC9gAUBj88qhd6dsVubBwo+bua+KcqQsi8SCAXCmgRE6bDc1Z2+f7Zd
-         SIqicVlq3EwfcpB94fJJFj6QTA4hpd2Jcoo2bM5rPUKJ2JrJ+83qH2mdkkn9KgF1lZxV
-         Miqwkx3iUyDPH4bXFO+pJsYQOYHvoXkXxiBOhUVnFUtPhcwNkIS/EipwFcSUN19P849A
-         E5XbPyCcrW+5BMoY4L+mXW63eC1PyK6cSUb/yo+MrU3IXz9+NidcsaJXDRnnXpssnlUr
-         e2ojOuSj3BuTojAhZoql+/SptDHxKhkCeUhrfMghNpytbFbqrMLWs14AzMkYTxtig9Ux
-         Q3Nw==
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=qa312IQe6s7eAevg/FuIllFRk5MeLGl2PRsRn8MrkRQ=;
+        b=iEieSu88AepsbWukLohZfrqQRJowo3VRiEpzUh/+iYEIV/7TmPvlrwa4x6akU0T2lB
+         QhY3mMRJgTvVWlyggef+/MIMz//SZKPp/MOu18kfFg6laaUIba2bDi3Xx5ZdXpQlzET0
+         zmgiuOJOiDA6MJWlZ9Ug//B4s0VlcRQwXiINF3WJRGdixghNV2qoIGDXG7WHFu3qLY2+
+         734vRquA/ehnWZTP5Bvg6709drru9E7Fun7LMmwJCCDTUMXxruCMylxkWKBIzX/+kh4z
+         UTCa/NUrbNk19lBpkC5wdGPxhDJQd0an3qQFMrOGbF6j/atDBqCOHnzj+FQxxZoP89Nv
+         6rNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YdCDxw9M+4W0xFySyeUJf90dqwb2v7zc2Ewn7qbXfQc=;
-        b=vZZjR2BH3FHLNBOml3nhnR/OZx9YQGY+CpwtUHog8FcIVW4ry/wpKZ6K0bEZ5XTMrv
-         RHlvhYG4q6ugRugxYdaJm4pNzXzNlxdKYOPRFTP8NNBJBwqyeNXP6jjtvg0AMjVoj00o
-         RH/HZUpSUf7YHv2Ysb1/yRpPjjlcJ5ntW6Z9HidbGWXJ53ynOys+HpljX313H2DE1qEQ
-         nd/pm9YQbydvcbdUX0HwbokOZRJl+dBRjtqnY0hE//O5yHy4kBhrtxBEtYGM+tTyxLsK
-         Bei1r0UBqikmPEswlIyMCOfDGvmnjpan2URg6II8pwq5vezRq7nYs16ELVS09+s0a47u
-         s1Iw==
-X-Gm-Message-State: AFqh2kqDVN/WauQU1LgpT7ij24gI0D2vqimOmIlaCzrEXv/ADiG92Ymr
-        D/SVoc/MpgyHJaubQsKal9poHQ==
-X-Google-Smtp-Source: AMrXdXu5BjwW7IFLRR4MJylMvG6n0IIZ5Qgl14oQlDbA4IA8jBRxv1Dcpy/srHrBN7IZmO+kRvOodw==
-X-Received: by 2002:a05:600c:600e:b0:3c6:e62e:2e74 with SMTP id az14-20020a05600c600e00b003c6e62e2e74mr25728996wmb.15.1674582921045;
-        Tue, 24 Jan 2023 09:55:21 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id f14-20020a05600c154e00b003daff80f16esm19579059wmg.27.2023.01.24.09.55.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 09:55:20 -0800 (PST)
-Message-ID: <c1fad818-1858-2e81-84fd-03cfb54d8938@linaro.org>
-Date:   Tue, 24 Jan 2023 18:55:18 +0100
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qa312IQe6s7eAevg/FuIllFRk5MeLGl2PRsRn8MrkRQ=;
+        b=JijZQzjn7sROns4aCl+rpfxWbN7NCtEjNOvc4Sa6GJiAJZdHCqyvUBEfEghjVrDbI+
+         WsbqpvU7wb9a2PGp9MzxZsXkHeNrPshHqkR5k3V+sa2vcyp35ADiAqefEh/gexlG9yYU
+         J5SQzV0oNjv4ZGU6UOEMI+LCQ3kDqR4LpLLVJi3aUenh90h7yXJInE+UTC2VpCy+uzIy
+         rBHoDAeFYATX8UCjJADLIl7tx0Ol3mecKKFpI01shsjBML7izwczluORQvlRO90TdWPD
+         isXAoipwkX0HtqV7a5722ycN4+47lefYikGZfUkKrjUj3mn8RrGDqw2XtEBzTPELC+6b
+         HD5w==
+X-Gm-Message-State: AFqh2kqXDOkuwssGqWjVV5fBUodYkSIJ7Ekjwp3Nxi+EOt94yfCFtsG5
+        LwOG3zd6yTKJ3aKmQryas0GGOhAXxCCbjaJH+j0=
+X-Google-Smtp-Source: AMrXdXtcR0ZNjSPVzZcn6GHYqJisf9lEziWLmPx8x/wGzSXAzeRYVFzVfhIxsbFZNHthqPGYaO90bA==
+X-Received: by 2002:a62:ea13:0:b0:58d:9ad4:adaa with SMTP id t19-20020a62ea13000000b0058d9ad4adaamr28704639pfh.17.1674583130185;
+        Tue, 24 Jan 2023 09:58:50 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id ck7-20020a056a00328700b00580d877a50fsm1878976pfb.55.2023.01.24.09.58.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 09:58:49 -0800 (PST)
+Message-ID: <63d01c59.050a0220.b94b4.372e@mx.google.com>
+Date:   Tue, 24 Jan 2023 09:58:49 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-Content-Language: en-US
-To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
- <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
- <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
- <d3daece0-ed23-fae7-9bc8-c6e53b84e8e7@baylibre.com>
- <9f9547a2-69dd-f91d-c587-289156bf9d55@linaro.org>
- <2950b824-ad2f-2579-a956-a03d157453eb@baylibre.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <2950b824-ad2f-2579-a956-a03d157453eb@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.2-rc5-93-g06f503868b96
+X-Kernelci-Report-Type: test
+Subject: pm/testing baseline: 30 runs,
+ 3 regressions (v6.2-rc5-93-g06f503868b96)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/01/2023 18:46, Amjad Ouled-Ameur wrote:
-> 
-> On 1/24/23 17:54, Daniel Lezcano wrote:
->>
->> Hi Amjad,
->>
->> On 24/01/2023 11:08, Amjad Ouled-Ameur wrote:
->>
->> [ ... ]
->>
->>>>>
->>>>> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 
->>>>> 1 x 4 Little, right ?
->>>>
->>>> MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per sensor. 
->>>> Thermal zone 0 corresponds
->>>>
->>>> to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has 
->>>> nothing to do with CPUs. The cooling device type
->>>>
->>>> used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are present 
->>>> in the SoC for debug-purpose only, they are not supposed
->>>>
->>>> to be used for production.
->>>>
->>> After reconsidering the fact that zones 1, 2 and 3 are only used for 
->>> dev/debug, it might be best to avo >
->>> aggregation as you suggested, and keep only support for zone 0 in 
->>> this driver. Thus I suggest I send a V8
->>>
->>> where I keep only below fixes for this patch if that's okay with you:
->>>
->>> - Define "raw_to_mcelsius" function pointer for "struct 
->>> thermal_bank_cfg".
->>>
->>> - Fix "mtk_thermal" variable in mtk_read_temp().
->>>
->>> - Set "mt->raw_to_mcelsius" in probe().
->>>
->>>
->>> For zones 1, 2 and 3 we can later add a different driver specific for 
->>> dev/debug to probe them to
->>>
->>> avoid confusion.
->>
->> You can add them in the driver and in the device tree, but just add 
->> the cooling device for the thermal zone 0.
-> 
-> Thermal zone 0 uses CPU{0..3} for passive cooling, in this case we 
-> should register cooling device with
-> 
-> cpufreq_cooling_register() for each CPU right ?
+pm/testing baseline: 30 runs, 3 regressions (v6.2-rc5-93-g06f503868b96)
 
-No, the OF code device tree does already that. You just have to register 
-the different thermal zones.
+Regressions Summary
+-------------------
 
-Do you have a pointer to a device tree for this board and the thermal 
-setup ?
+platform                     | arch | lab          | compiler | defconfig  =
+        | regressions
+-----------------------------+------+--------------+----------+------------=
+--------+------------
+cubietruck                   | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fconfig | 1          =
+
+sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fconfig | 1          =
+
+sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fconfig | 1          =
 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.2-rc5=
+-93-g06f503868b96/plan/baseline/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+  Test:     baseline
+  Tree:     pm
+  Branch:   testing
+  Describe: v6.2-rc5-93-g06f503868b96
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
+.git
+  SHA:      06f503868b964d4833db2465c13e0ab1efff1a5d =
 
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+        | regressions
+-----------------------------+------+--------------+----------+------------=
+--------+------------
+cubietruck                   | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63d00ba2998479efd8915ede
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
+868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
+868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230120.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63d00ba2998479efd8915ee3
+        failing since 5 days (last pass: v6.1-rc8-176-gcb06e36a6532, first =
+fail: v6.2-rc4-74-g590cffafa8dd)
+
+    2023-01-24T16:47:14.074616  + set +x<8>[   15.035836] <LAVA_SIGNAL_ENDR=
+UN 0_dmesg 3202287_1.5.2.4.1>
+    2023-01-24T16:47:14.074911  =
+
+    2023-01-24T16:47:14.182680  / # #
+    2023-01-24T16:47:14.284163  export SHELL=3D/bin/sh
+    2023-01-24T16:47:14.284514  #
+    2023-01-24T16:47:14.385600  / # export SHELL=3D/bin/sh. /lava-3202287/e=
+nvironment
+    2023-01-24T16:47:14.386140  =
+
+    2023-01-24T16:47:14.487504  / # . /lava-3202287/environment/lava-320228=
+7/bin/lava-test-runner /lava-3202287/1
+    2023-01-24T16:47:14.488258  =
+
+    2023-01-24T16:47:14.493808  / # /lava-3202287/bin/lava-test-runner /lav=
+a-3202287/1 =
+
+    ... (12 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+        | regressions
+-----------------------------+------+--------------+----------+------------=
+--------+------------
+sun8i-h2-plus...ch-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63d00aeb045123a229915ed9
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
+868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
+bretech-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
+868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
+bretech-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230120.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63d00aeb045123a229915ede
+        failing since 5 days (last pass: v6.1-rc8-224-g02f29b079520, first =
+fail: v6.2-rc4-74-g590cffafa8dd)
+
+    2023-01-24T16:44:17.536585  / # #
+    2023-01-24T16:44:17.638305  export SHELL=3D/bin/sh
+    2023-01-24T16:44:17.638865  #
+    2023-01-24T16:44:17.740284  / # export SHELL=3D/bin/sh. /lava-3202285/e=
+nvironment
+    2023-01-24T16:44:17.740842  =
+
+    2023-01-24T16:44:17.842301  / # . /lava-3202285/environment/lava-320228=
+5/bin/lava-test-runner /lava-3202285/1
+    2023-01-24T16:44:17.843136  =
+
+    2023-01-24T16:44:17.848656  / # /lava-3202285/bin/lava-test-runner /lav=
+a-3202285/1
+    2023-01-24T16:44:17.951643  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-01-24T16:44:17.952024  + cd /lava-3202285/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =
+
+
+
+platform                     | arch | lab          | compiler | defconfig  =
+        | regressions
+-----------------------------+------+--------------+----------+------------=
+--------+------------
+sun8i-h3-libretech-all-h3-cc | arm  | lab-baylibre | gcc-10   | multi_v7_de=
+fconfig | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/63d00b06647ee05f39915ec5
+
+  Results:     5 PASS, 1 FAIL, 1 SKIP
+  Full config: multi_v7_defconfig
+  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
+10110)
+  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
+868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
+ch-all-h3-cc.txt
+  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-93-g06f503=
+868b96/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
+ch-all-h3-cc.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
+t-baseline/20230120.0/armel/rootfs.cpio.gz =
+
+
+
+  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
+/63d00b06647ee05f39915eca
+        failing since 5 days (last pass: v6.1-rc8-224-g02f29b079520, first =
+fail: v6.2-rc4-74-g590cffafa8dd)
+
+    2023-01-24T16:44:19.389461  / # #
+    2023-01-24T16:44:19.491462  export SHELL=3D/bin/sh
+    2023-01-24T16:44:19.491951  #
+    2023-01-24T16:44:19.593320  / # export SHELL=3D/bin/sh. /lava-3202278/e=
+nvironment
+    2023-01-24T16:44:19.593817  =
+
+    2023-01-24T16:44:19.695173  / # . /lava-3202278/environment/lava-320227=
+8/bin/lava-test-runner /lava-3202278/1
+    2023-01-24T16:44:19.695915  =
+
+    2023-01-24T16:44:19.700487  / # /lava-3202278/bin/lava-test-runner /lav=
+a-3202278/1
+    2023-01-24T16:44:19.809363  + export 'TESTRUN_ID=3D1_bootrr'
+    2023-01-24T16:44:19.809974  + cd /lava-3202278/1/tests/1_bootrr =
+
+    ... (10 line(s) more)  =
+
+ =20
