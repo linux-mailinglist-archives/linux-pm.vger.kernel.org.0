@@ -2,146 +2,148 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70B676790A2
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 07:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B5B56790CE
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 07:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233188AbjAXGD0 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 01:03:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32956 "EHLO
+        id S232865AbjAXG1r (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 01:27:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjAXGDX (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 01:03:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A6E29162;
-        Mon, 23 Jan 2023 22:03:17 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 935E8B81012;
-        Tue, 24 Jan 2023 06:03:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8C2C433EF;
-        Tue, 24 Jan 2023 06:03:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1674540195;
-        bh=Cy73BGSYSI6DnKddy5tVdl8T0Y7C31PI+ZUw4kgG1ew=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=njgY2SE5M5U26+ZvWfhPmU7eBHDZshjd1PgcuvXd63+l2RYMvHC3n7MOVqn+qYQf+
-         IIg64RzGoc97J9h3bSoEWF9p4vzTX3xuBfM79SCob7TlcbgaRridkwoIrPorTlmoat
-         YHyLqjpd4wT/RAnRRbc5WZN9JbqAyWUxzOwbqxGQ=
-Date:   Tue, 24 Jan 2023 07:03:12 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Zhang Rui <rui.zhang@intel.com>
-Subject: Re: [PATCH v1 2/2] thermal: Fail object registration if thermal
- class is not registered
-Message-ID: <Y890oFSRSG4G2kp6@kroah.com>
-References: <5905717.lOV4Wx5bFT@kreacher>
- <4780418.GXAFRqVoOG@kreacher>
- <Y8uW374CM37m0/wI@kroah.com>
- <CAJZ5v0heCTm+1sv9taAoMe8PGgLPEzsTxh9ZdOGjdhDLuvc-Zw@mail.gmail.com>
+        with ESMTP id S232675AbjAXG1q (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 01:27:46 -0500
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B57A4C07;
+        Mon, 23 Jan 2023 22:27:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1674541665; x=1706077665;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HA10miwnYpwZU0Y8NmoNkv0z+JH08TJTXcIoZzUSVYs=;
+  b=GHD9Is7K4XVL7CIxA6fu0Uelq9jhAXpD85ruzyFrxyOgYhdhumo31s0+
+   SyfJEoG9PdqhE5uze8LMPdThGRTbgvVhWE3qgiEAogjNUa6C04KyxHszs
+   5dn/nU5obEqkLy69rj3kn38vdrSG0obZZ/Vc5oDOxkYQK1NCurl/IR3+K
+   Cnu7/vOTi++XZRf1Y9nrdww4V3mhEyMsm0xQfnrfQN3ZTn0iKUG3dGRkd
+   SpGrn+HCwb8S4qLS3vi4DUgW7NjBltJilK520N2lmcQlR8YI7WY21brdQ
+   TdwNKWqd7T6rBGBJtkUEZWqfhr9uTiMsagZ4Nd3nT/QKFgGBqUYVWUmug
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="309813885"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="309813885"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2023 22:27:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10599"; a="785960807"
+X-IronPort-AV: E=Sophos;i="5.97,241,1669104000"; 
+   d="scan'208";a="785960807"
+Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 23 Jan 2023 22:27:43 -0800
+Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pKCmU-0006Ci-0n;
+        Tue, 24 Jan 2023 06:27:42 +0000
+Date:   Tue, 24 Jan 2023 14:27:21 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
+        linux-acpi@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ a27056168dec62cbbb83eab4d609a60e182d912f
+Message-ID: <63cf7a49.zZ40ZNRGtlqfYhln%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0heCTm+1sv9taAoMe8PGgLPEzsTxh9ZdOGjdhDLuvc-Zw@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 09:16:33PM +0100, Rafael J. Wysocki wrote:
-> On Sat, Jan 21, 2023 at 8:40 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Fri, Jan 20, 2023 at 08:48:07PM +0100, Rafael J. Wysocki wrote:
-> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >
-> > > If thermal_class is not registered with the driver core, there is no way
-> > > to expose the interfaces used by the thermal control framework, so
-> > > prevent thermal zones and cooling devices from being registered in
-> > > that case by returning an error from object registration functions.
-> > >
-> > > For this purpose, introduce class_is_registered() that checks the
-> > > private pointer of the given class and returns 'false' if it is NULL,
-> > > which means that the class has not been registered, and use it in the
-> > > thermal framework.
-> > >
-> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  drivers/thermal/thermal_core.c |    6 ++++++
-> > >  include/linux/device/class.h   |    5 +++++
-> > >  2 files changed, 11 insertions(+)
-> > >
-> > > Index: linux-pm/include/linux/device/class.h
-> > > ===================================================================
-> > > --- linux-pm.orig/include/linux/device/class.h
-> > > +++ linux-pm/include/linux/device/class.h
-> > > @@ -82,6 +82,11 @@ struct class_dev_iter {
-> > >       const struct device_type        *type;
-> > >  };
-> > >
-> > > +static inline bool class_is_registered(struct class *class)
-> > > +{
-> > > +     return !!class->p;
-> >
-> > I really do not like this as it is exposing internals to drivers and
-> > whenever we do that, it gets abused and we have to unwind the mess in a
-> > few years.
-> >
-> > Overall, I'm trying to remove the ->p usage, but that's a longterm goal
-> > of mine (to allow class and bus structures to be in read-only memory),
-> > which isn't your issue here, but it's good to think about why you want
-> > to know this information (more below.)
-> >
-> > > +}
-> > > +
-> > >  extern struct kobject *sysfs_dev_block_kobj;
-> > >  extern struct kobject *sysfs_dev_char_kobj;
-> > >  extern int __must_check __class_register(struct class *class,
-> > > Index: linux-pm/drivers/thermal/thermal_core.c
-> > > ===================================================================
-> > > --- linux-pm.orig/drivers/thermal/thermal_core.c
-> > > +++ linux-pm/drivers/thermal/thermal_core.c
-> > > @@ -880,6 +880,9 @@ __thermal_cooling_device_register(struct
-> > >           !ops->set_cur_state)
-> > >               return ERR_PTR(-EINVAL);
-> > >
-> > > +     if (!class_is_registered(&thermal_class))
-> > > +             return ERR_PTR(-ENODEV);
-> >
-> > If the class isn't registered, then sommething went wrong with the
-> > thermal core code, right?  So why isn't the thermal core keeping a local
-> > variable of "class was registered" and relying on the driver core to
-> > know this?
-> >
-> > The number of individual users that should be doing one thing or another
-> > if a class is not registered feels very very slim.  How come this code
-> > is being called at all if the thermal class was not registered in the
-> > first place?  What would have prevented that from happening?  Is it an
-> > ordering issue, or a kernel configuration issue?
-> 
-> It's basically a matter of class_register() returning an error.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: a27056168dec62cbbb83eab4d609a60e182d912f  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
 
-Ok, so not a real problem then :)
+elapsed time: 724m
 
-> Yes, we could use an extra variable for this purpose, but that would
-> be a bit wasteful, because thermal_class will then sit unused and
-> occupy memory in vain.
+configs tested: 66
+configs skipped: 2
 
-How would it retain memory if class_register() failed?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> Oh well, we may as well just allocate it dynamically.
+gcc tested configs:
+powerpc                           allnoconfig
+x86_64                            allnoconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+sh                               allmodconfig
+s390                                defconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+um                             i386_defconfig
+s390                             allyesconfig
+arc                  randconfig-r043-20230123
+um                           x86_64_defconfig
+arm                  randconfig-r046-20230123
+x86_64                              defconfig
+alpha                             allnoconfig
+x86_64                          rhel-8.3-func
+i386                              allnoconfig
+i386                                defconfig
+x86_64                    rhel-8.3-kselftests
+arm                               allnoconfig
+arc                               allnoconfig
+x86_64                               rhel-8.3
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64               randconfig-a002-20230123
+ia64                             allmodconfig
+x86_64               randconfig-a001-20230123
+m68k                             allmodconfig
+x86_64               randconfig-a004-20230123
+arc                              allyesconfig
+i386                             allyesconfig
+x86_64               randconfig-a003-20230123
+x86_64                           rhel-8.3-bpf
+alpha                            allyesconfig
+x86_64               randconfig-a005-20230123
+m68k                             allyesconfig
+x86_64               randconfig-a006-20230123
+x86_64                           allyesconfig
+i386                 randconfig-a003-20230123
+i386                 randconfig-a002-20230123
+i386                 randconfig-a001-20230123
+i386                 randconfig-a005-20230123
+i386                 randconfig-a006-20230123
+i386                 randconfig-a004-20230123
+arm                                 defconfig
+arm                              allyesconfig
+arm64                            allyesconfig
 
-Allocate what?
+clang tested configs:
+hexagon              randconfig-r041-20230123
+hexagon              randconfig-r045-20230123
+s390                 randconfig-r044-20230123
+riscv                randconfig-r042-20230123
+x86_64                          rhel-8.3-rust
+x86_64               randconfig-a013-20230123
+x86_64               randconfig-a011-20230123
+i386                 randconfig-a012-20230123
+x86_64               randconfig-a012-20230123
+i386                 randconfig-a013-20230123
+x86_64               randconfig-a016-20230123
+i386                 randconfig-a011-20230123
+x86_64               randconfig-a015-20230123
+i386                 randconfig-a014-20230123
+x86_64               randconfig-a014-20230123
+i386                 randconfig-a016-20230123
+i386                 randconfig-a015-20230123
 
-confused,
-
-greg k-h
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
