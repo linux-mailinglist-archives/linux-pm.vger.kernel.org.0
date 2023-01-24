@@ -2,90 +2,157 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C84679C49
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 15:45:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFD85679C4C
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 15:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233555AbjAXOpg (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 09:45:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S233390AbjAXOqF (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 09:46:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233936AbjAXOpf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 09:45:35 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE69F1BDB;
-        Tue, 24 Jan 2023 06:45:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=eA3jWjQCsaXuex737PYn1zrT0M5qTbaDIBSPCUlVDsw=; b=i0YMl4H0Tpp+J+qXHd3MZ+ZHEI
-        hs/7dJiIdRGD0/TiQGg0NFONmko92fDUJ4AubYMGqa6gc0agQlfzopu+pWMdZnnzKxwccufwMIYrU
-        ClpQiGyv6OLZGvM7WorTpI/EaX1kSWeiy/6PEw75g19P1+p2e6RSfFbOotaQ06+fX2/cgL/FtfbtZ
-        aiAcxPawZOuKyHHRyVYxomM3UzUeqHVNlOnHa7540fgMhqgZs2d7+jxX3LOwTmArB7v7VySuvOcaW
-        jCAUeGZxAuKc46C/X36RB0qw19xOwBay+soy3RV1jEhInSalJCtjqI1VOajgawdVUvrJNFvucjDHQ
-        zMyhMRrQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKKXO-0057eL-0Z; Tue, 24 Jan 2023 14:44:38 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 415DE30036B;
-        Tue, 24 Jan 2023 15:44:35 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 26A232C217298; Tue, 24 Jan 2023 15:44:35 +0100 (CET)
-Date:   Tue, 24 Jan 2023 15:44:35 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
-        mark.rutland@arm.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, jgross@suse.com,
-        srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
-        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
- is disabled
-Message-ID: <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
-References: <20230123205009.790550642@infradead.org>
- <20230123205515.059999893@infradead.org>
- <20230123165304.370121e7@gandalf.local.home>
- <20230123170753.7ac9419e@gandalf.local.home>
+        with ESMTP id S231246AbjAXOqE (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 09:46:04 -0500
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66AA8BA;
+        Tue, 24 Jan 2023 06:46:03 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id ss4so39504013ejb.11;
+        Tue, 24 Jan 2023 06:46:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xM5j0uZ37ZwFA6dbSjXEuwR6b70pSS9hN9lzO/o8Vh0=;
+        b=MHCZ1H8z5Zw1i6o5+26OhRZLFShJbfIaATqiKZdvv5Xpw6h3RyBZYD1QQxFCF/qoIg
+         9cnVU6tgelHB+d+k7edsjRIW4JhtN46A4fUXgBBPtl/0yhlEuG2wPjxQyANNODPuxDX5
+         HvKsWxNRMlmtIB8g3FtJTf7mo2r1plDwmQ+pPHide1P8X6Kf3kUuNy6SspsRtwUR65qk
+         J8WhZxz4rpvQfuc7po5VboxhR5ZfU6Gwsbd939YYapullHDYQE3SlFdFUxBtB9aVcnDw
+         /F5kEXKy4DAXO5EaOzxEvU387iJs+S0KsSqComKmOxBV55rUTdfigZjeLG7UswIkHp65
+         PypQ==
+X-Gm-Message-State: AFqh2kpMMPHELVEPOfG84M0X/+KAwA2l2yJL4AOylmJ0/+Bf7YiTKVud
+        SeG8/za6kob8rlyAQTsSb2D6CpHanalux1VOmhw=
+X-Google-Smtp-Source: AMrXdXvg/uyeR3Li1dzKUe3ORvlIbNdd6UZwtixUIGGLIyvTJakMfwWt6vqrSE02WTTJA8BcbCn5q22+IqqGBM4m7c0=
+X-Received: by 2002:a17:906:514:b0:870:6768:ebcb with SMTP id
+ j20-20020a170906051400b008706768ebcbmr3417156eja.13.1674571561873; Tue, 24
+ Jan 2023 06:46:01 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123170753.7ac9419e@gandalf.local.home>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221215181848.129326-1-helgaas@kernel.org> <CAMuHMdUuPKyMDwAHvUxC_s-Cqv_aui=1+eHCMypkpQSmvz=uuQ@mail.gmail.com>
+ <CAJZ5v0jaFsGc23pNVumxnA955PtGpJjry07CU+2eMJEx=CDw4A@mail.gmail.com> <CAMuHMdVRnAVtff2ZrYzf4VGfhTPrUXmn+8o5NyXopLQFm4HuMQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdVRnAVtff2ZrYzf4VGfhTPrUXmn+8o5NyXopLQFm4HuMQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 24 Jan 2023 15:45:50 +0100
+Message-ID: <CAJZ5v0j4m-=twN3oH-Q_MDHLi-VnktMhFcGbGbGCC-x+0TXM_w@mail.gmail.com>
+Subject: Re: [PATCH] PM: runtime: Simplify __rpm_get_callback()
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
+On Tue, Jan 24, 2023 at 3:37 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Rafael,
+>
+> On Tue, Jan 24, 2023 at 3:18 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> > On Tue, Jan 24, 2023 at 12:20 PM Geert Uytterhoeven
+> > <geert@linux-m68k.org> wrote:
+> > >
+> > > Hi Bjorn,
+> > >
+> > > On Thu, Dec 15, 2022 at 7:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > From: Bjorn Helgaas <bhelgaas@google.com>
+> > > >
+> > > > Simplify __rpm_get_callback() slightly by returning as soon as the return
+> > > > value is known.  No functional change intended.
+> > > >
+> > > > Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> > >
+> > > Thanks for your patch, which is now commit 650bdddb6b311705 ("PM:
+> > > runtime: Simplify __rpm_get_callback()") in pm/linux-next.
+> > >
+> > > > --- a/drivers/base/power/runtime.c
+> > > > +++ b/drivers/base/power/runtime.c
+> > > > @@ -20,8 +20,7 @@ typedef int (*pm_callback_t)(struct device *);
+> > > >
+> > > >  static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+> > > >  {
+> > > > -       pm_callback_t cb;
+> > > > -       const struct dev_pm_ops *ops;
+> > > > +       const struct dev_pm_ops *ops = NULL;
+> > > >
+> > > >         if (dev->pm_domain)
+> > > >                 ops = &dev->pm_domain->ops;
+> > > > @@ -31,18 +30,14 @@ static pm_callback_t __rpm_get_callback(struct device *dev, size_t cb_offset)
+> > > >                 ops = dev->class->pm;
+> > > >         else if (dev->bus && dev->bus->pm)
+> > > >                 ops = dev->bus->pm;
+> > > > -       else
+> > > > -               ops = NULL;
+> > > >
+> > > >         if (ops)
+> > > > -               cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> > > > -       else
+> > > > -               cb = NULL;
+> > > > +               return *(pm_callback_t *)((void *)ops + cb_offset);
+> > >
+> > > This is a change in behavior in case the callback turns out to be NULL:
+> > >   - before, it would fall back to the driver-specific callback below,
+> > >   - after, it always returns NULL.
+> >
+> > Good point and sorry for missing this!
+> >
+> > > >
+> > > > -       if (!cb && dev->driver && dev->driver->pm)
+> > > > -               cb = *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> > > > +       if (dev->driver && dev->driver->pm)
+> > > > +               return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+> > > >
+> > > > -       return cb;
+> > > > +       return NULL;
+> > > >  }
+> > >
+> >
+> > Something like the patch below (modulo gmail-induced whitespace
+> > breakage) should restore the previous behavior if I'm not mistaken:
+> >
+> > ---
+> >  drivers/base/power/runtime.c |    9 +++++++--
+> >  1 file changed, 7 insertions(+), 2 deletions(-)
+> >
+> > Index: linux-pm/drivers/base/power/runtime.c
+> > ===================================================================
+> > --- linux-pm.orig/drivers/base/power/runtime.c
+> > +++ linux-pm/drivers/base/power/runtime.c
+> > @@ -31,8 +31,13 @@ static pm_callback_t __rpm_get_callback(
+> >      else if (dev->bus && dev->bus->pm)
+> >          ops = dev->bus->pm;
+> >
+> > -    if (ops)
+> > -        return *(pm_callback_t *)((void *)ops + cb_offset);
+> > +    if (ops) {
+> > +        pm_callback_t cb;
+> > +
+> > +        cb = *(pm_callback_t *)((void *)ops + cb_offset);
+> > +        if (cb)
+> > +            return cb;
+> > +    }
+> >
+> >      if (dev->driver && dev->driver->pm)
+> >          return *(pm_callback_t *)((void *)dev->driver->pm + cb_offset);
+>
+> Which is now more complex than the original?
 
-> Actually, perhaps we can just add this, and all you need to do is create
-> and set CONFIG_NO_RCU_TRACING (or some other name).
+Arguably so.
 
-Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
-
-Anyway, I took it for a spin and it .... doesn't seems to do the job.
-
-With my patch the first splat is
-
-  "RCU not on for: cpuidle_poll_time+0x0/0x70"
-
-While with yours I seems to get the endless:
-
-  "WARNING: suspicious RCU usage"
-
-thing. Let me see if I can figure out where it goes side-ways.
+OK, I'll drop the commit in question then, sorry Bjorn.
