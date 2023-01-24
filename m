@@ -2,79 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1CD6678B3B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Jan 2023 23:59:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E916678C74
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Jan 2023 01:02:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231788AbjAWW7X (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Mon, 23 Jan 2023 17:59:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60192 "EHLO
+        id S232408AbjAXACo (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Mon, 23 Jan 2023 19:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbjAWW7T (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 17:59:19 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD32F38657
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 14:59:01 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso11653023wmc.4
-        for <linux-pm@vger.kernel.org>; Mon, 23 Jan 2023 14:59:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IZpSsT6QI0rgCdyfZs7KnVG5ae2iXjgk88FXgcyzmRA=;
-        b=u5YeiB5rqWMAFD8zMzjvfbaFygIA9yFyCGmYqetLzBTxTDxda40pEo/CEnjcItlDxi
-         EAj9F/ALM4fpbpfTCjGzuGUf58H6DR1XjBJhxxFo0/sqp0g6FiEQ1VZew29eZ1WLqA5x
-         M2mlXycExKOVQSDPiNJ5G2yee9aX5VGK2Mp/IcjXQ5sr8nCsI9PT9wciXDwoTuhcYbNV
-         YW8nziM6jLvJBaWlWmQ5QWoprB1UJJ3E6tlIeeGhKOD0jmMDHxfSHTEaDxvzIVOZXtYz
-         oPWyPC9pbYyTrTDh3QQV2Bl05htN5LSILIbm5qXrQFMpZ36JnQWG0Rc3O9pzJlKeEizd
-         DUfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZpSsT6QI0rgCdyfZs7KnVG5ae2iXjgk88FXgcyzmRA=;
-        b=PrWs1YoGxSW+QFT7B6d62zRW3wvLxSLc+kKz22gOqO6vh5UeGM39+JCcCVS1VK6NND
-         L+KMdVDLBThoDAsU86x+C/DYctOHtsx6mi9XTLCnpUz2Ii26k7j4SYWf+WO1uFXR25Yr
-         /vtfhL+34/OxYOnnkFeX+stQLec/B74VgJqt04ynGwOl/WvAiXSU9aznMeoVHY7eOkS6
-         ZELM+TpDrcCUHfpZUydR4SRr8v/ayU1wgLAGIZARL4ElQFJxUL9NAXJrVkFdEXYNdFrL
-         QzWmGSLgfxuHGqbKh1drIhhOfUumxPALNjlkiCOd5a5HXFBkzvIwagSI50+pVP1EQ7ga
-         rOUw==
-X-Gm-Message-State: AFqh2kq6bseKkXIRtMa++aGov8aggO4vDdBSJIYk+q+uRfT6UuwFoNoD
-        9yAvFz02GkBsvkNggOE4GNPvoA==
-X-Google-Smtp-Source: AMrXdXtHjG/WoKRMTL4vHHKw+QJOus1BHZT4nnfsCks4OXHZZWPMWOdEEOz5p7UVsK240vz5ky2+GA==
-X-Received: by 2002:a05:600c:3296:b0:3cf:82b9:2fe6 with SMTP id t22-20020a05600c329600b003cf82b92fe6mr26652326wmp.8.1674514730781;
-        Mon, 23 Jan 2023 14:58:50 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id k23-20020a05600c479700b003d9e74dd9b2sm389691wmo.9.2023.01.23.14.58.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Jan 2023 14:58:50 -0800 (PST)
-Message-ID: <742ff9cd-e7be-11b8-3805-5b60aba6b2f1@linaro.org>
-Date:   Mon, 23 Jan 2023 22:58:49 +0000
+        with ESMTP id S232129AbjAXACo (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Mon, 23 Jan 2023 19:02:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7C4913B;
+        Mon, 23 Jan 2023 16:02:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7125661185;
+        Tue, 24 Jan 2023 00:02:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AE1FC433EF;
+        Tue, 24 Jan 2023 00:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674518561;
+        bh=7ooN/zdnBQml/4YUgBf9nDQlZ6ILhJkNlwfGgWR6VmA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Jbyxq8idG+tPMy2tMXwuxpoef3LkIfreIyUgeD3JjkljIzoNsMdqPAZqLJU4GUhYp
+         70T72Okc2ZB14Jd/07fCVnF0wY2LEarnwPFurnjcgrZoSMb0o6+tqf7jadxDLPNxjO
+         Ixfr9TX2zgsrnSEPcRpvS+Xp+41UEzJK7q/bPhvekqiPC1/wnoa3XQaJ4gB/qGWNDV
+         mzqeiQxM7UEtELlcKyNSxTn/engo1HozghiuYd6/KsJ6hWx9UyhNE4yPvDl17UaqXh
+         a8+0GqKZExkMk/2AkGP1awpfR4bGQL9f1mDf+AhvoBPCLdJhEnsD8ReJzRfB2rzm1f
+         qOkS7xBSrCQ/w==
+Message-ID: <2d064077-d4ec-31c4-19a9-4cc9aec8d85b@kernel.org>
+Date:   Tue, 24 Jan 2023 02:02:36 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.5.0
-Subject: Re: [PATCH] interconnect: Skip call into provider if initial bw is
- zero
+Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
+ (=> interconnect issue)
 Content-Language: en-US
-To:     Mike Tipton <quic_mdtipton@quicinc.com>,
-        Vivek Aknurwar <quic_viveka@quicinc.com>, djakov@kernel.org
-Cc:     quic_okukatla@quicinc.com, linux-pm@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "abel >> Philipp Zabel" <p.zabel@pengutronix.de>,
-        abelvesa@kernel.org, abel.vesa@linaro.org
-References: <1673647679-15216-1-git-send-email-quic_viveka@quicinc.com>
- <83a7bfed-3b16-3d01-b1b2-f197252bd0b1@linaro.org>
- <5e1f37ba-494a-19d2-e412-7631508ab142@linaro.org>
- <151790dd-02e5-a1f5-aab5-360f39e21c57@quicinc.com>
- <35dcb764-e340-5fe7-6637-cdb5f84266ce@linaro.org>
- <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <6dd7b0b0-f6fb-9de4-c365-d6cbfe04f2c0@quicinc.com>
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-pm@vger.kernel.org, Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>
+References: <20220902043511.17130-1-quic_rjendra@quicinc.com>
+ <20220902043511.17130-5-quic_rjendra@quicinc.com>
+ <Y8Ggh6RObbB1cxSS@google.com>
+ <dc5487d8-d31e-28c6-07e8-8d1ff54a4ba4@linaro.org>
+ <Y8baZWlKB9vNGYJw@google.com>
+ <754f8193-09ec-8bbf-e0d4-898525dc242f@linaro.org>
+ <Y8bfIv6GJU1TD4Dh@google.com> <Y8sIf+41EGJuPQrP@google.com>
+From:   Georgi Djakov <djakov@kernel.org>
+In-Reply-To: <Y8sIf+41EGJuPQrP@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +65,73 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 23/01/2023 20:37, Mike Tipton wrote:
+Hi Matthias,
+
+On 20.01.23 23:32, Matthias Kaehlcke wrote:
+> On Tue, Jan 17, 2023 at 05:47:14PM +0000, Matthias Kaehlcke wrote:
+>> On Tue, Jan 17, 2023 at 06:33:41PM +0100, Krzysztof Kozlowski wrote:
+>>> On 17/01/2023 18:27, Matthias Kaehlcke wrote:
+>>>>
+>>>>>> which would set the initially bandwidths to 0 and determine the actually
+>>>>>> needed bandwidth. But since the driver isn't probed the initial
+>>>>>> bandwidths stay at INT_MAX.
+>>>>>>
+>>>>>> This isn't actually an issue with this patch, but how the interconnect
+>>>>>> framework deals with devices that are registered on the bus, but aren't
+>>>>>> probed (yet). Not sure how this would be best fixed. Georgi, do you have
+>>>>>> any ideas?
+>>>>>
+>>>>> Why the device is not probed (yet)? If it is registered, it will come
+>>>>> soon during boot up.
+>>>>
+>>>> Because CONFIG_QCOM_ICC_BWMON is not enabled for the board in question (see
+>>>> above). It could be enabled as a short term mitigtion, however we shouldn't
+>>>> require drivers to be enabled just because the DT has a corresponding node.
+>>>
+>>> It's the same case as with all other interconnect leafs/consumers. The
+>>> same behavior if you do not have it enabled, right? If not, I wonder
+>>> what is here different?
+>>
+>> Right, this is a general issue. The problem on sc7280 (and probably other
+>> Qualcomm SoCs) is that the interconnect link at full throttle prevents the
+>> SoC from entering its low power mode (AOSS sleep) during system suspend.
+>> On many boards this might go unnoticed, on herobrine the condition is
+>> detected by the embedded controller (EC) and considered a failed suspend,
+>> which results in waking up the system.
 > 
-> This isn't actually changing it for all providers. Only for those that 
-> define the get_bw() callback. Right now that's only qcom/msm8974 and 
-> imx/imx. If get_bw() isn't defined, then icc_node_add() defaults to 
-> INT_MAX. So, the logical behavior in that case is unchanged. Which means 
-> this isn't even changing the behavior for rpmh yet, either.
+> I did some hackery to convince the EC to enter/stay in S3, despite AOSS
+> no entering sleep mode. That allowed me to take power measurements. With
+> the kernel suspended but the AOSS remaining on the power consumption of
+> the Qcard is more than 7x higher than when the AOSS enters sleep mode!
+> On a Qcard system I can't break the power consumption further down, but
+> I think the extra power consumption must be coming mostly from the SoC
+> itself, since the kernel and the EC are essentially in the same state as
+> during a suspend with AOSS in sleep mode.
+> 
+> The enormous increase in power consumption suggests that this is a serious
+> issue for non-Chrome OS platforms as well. On herobrine and trogdor boards
+> we have the 'luxury' of being able to detect that AOSS stays awake (though
+> it comes with the caveat that the system can't suspend when that happens).
+> On other boards this goes likely unnoticed until someone measures suspend
+> power or notices a significant regression in S3 battery life.
+> 
+> It seems something needs to be done at the interconnect core to fix this.
+> Is it really necessary to init all link to max bandwidth? Maybe it is
+> needed for certain links, but not all of them? What is the background
+> here?
 
-Yes that adds up.
+The basic idea here is to do some initial configuration of the system and
+enable the interconnect buses until all consumers have probed. Otherwise
+it might disable the bus to some hardware, whose driver (module) is not
+loaded yet (and didn't had a chance to express it's bandwidth needs).
 
-Looking at the commit for get_bw() for the 8974, I think this change 
-would be OK with the intent of this commit
+The max bandwidth is the default, but we can implement the get_bw() for a
+given platform to return the current (or initial) value. It would be best
+if we could read this value from the hardware, but as this is not possible
+on this board, maybe we can implement get_bw() to return something else.
 
-commit 9caf2d956cfa254c6d89c5f4d7b3f8235d75b28f
-Author: Georgi Djakov <georgi.djakov@linaro.org>
-Date:   Mon Nov 9 14:45:12 2020 +0200
+I guess that you see some int_max values in interconnect_summary for the
+ebi and llcc nodes that stay forever?
 
-@Abel what effect will skipping pre->aggregation() have on i.MX ?
-
----
-bod
+BR,
+Georgi
