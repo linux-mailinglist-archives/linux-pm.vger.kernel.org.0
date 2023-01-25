@@ -2,105 +2,190 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B43667B6E9
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 17:26:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFD667B729
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 17:47:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234640AbjAYQ0x (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 11:26:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58790 "EHLO
+        id S235697AbjAYQrJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 11:47:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234844AbjAYQ0x (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 11:26:53 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0BC1BF3;
-        Wed, 25 Jan 2023 08:26:48 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id w11so7049981edv.0;
-        Wed, 25 Jan 2023 08:26:48 -0800 (PST)
+        with ESMTP id S235574AbjAYQrD (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 11:47:03 -0500
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E687599B4
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 08:46:57 -0800 (PST)
+Received: by mail-wm1-x32f.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso1656911wmc.4
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 08:46:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ilN6S2DYFu/DESx5TOWbGLPHlfDmzvINI2SI+/X/LA=;
-        b=o4j8nJomybIx4kE59DRw52ujqDVZ1WQewtiJ58C37pZX/5DWWR3us5SruXAAGyfGBc
-         0oxAeGxQTdIDM++/ONptAOL1nO0F6K6FiZC1F/r6Qme1XRV2lBzY485x0B9dWJnV3W0W
-         TnQMulrN7yyZXGHFTiOyWDC1wY59f/tjlS5vjPAnXkbmCVxXIc2maTfx3FlJemGXPbEd
-         oIhFRB2EHA0oTv8BIEwV/oq0Vp9kY4A8qUg2UpNdvj82VIuPM+pGvvRPDGd+iKkdN0iE
-         fMhuNZyuRhr5wQD9uKjHTu0/dBcgt18B09bb5lO3wvYzPbjdtZ4zCb8IaUuWGDUTVpmZ
-         9R4A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SOGMCuNWW1qhFYaLtNrQ/3iF7ZU3/hOM8JR1TIVeFps=;
+        b=sdD7R8X13wYUC6wJuc8MnHh3smCmEtX8wlJgUhIie0R5KmMxvF8582xjP4joAUbNYE
+         jw97LiQ4PvGqGpMu26/a3iouDV3kmWn/Gzz0fqbFJo8LcWf3aa+2j8cOEwNrQKuzjH41
+         /eWySxxpYkE0kGz0l2BuHrDQnoHP6kK6lyuL2qKs4A0Xpyr/mpPlntxd8ys+cxp3wk/C
+         zQXQDoSYw7qpfGbx79f/qjGTUdMaUpmae2VsnuINYWs595+Sl3ym6WOJ2a/W0koXHqYh
+         Zl8uk27sWEP8kQztR4XDRB930/pJLZOwCREXvRkTkoBhTDgnTsLjxZXahAkNu6KJ0RpJ
+         OwhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1ilN6S2DYFu/DESx5TOWbGLPHlfDmzvINI2SI+/X/LA=;
-        b=5ZfFRpnn9Eay7xwuP6gMu+s3NAAsN8lM5nYsZrS6M3Z+k9qGfFlmtzVOSecXs5kpHm
-         4pDF7WpB/Pnf5ADu5LznRG7U7cYDh5roKMCl6b00sAGV0VLzoROddbfN2VwXtdhystFt
-         PQwqE3kUCtn2LoV0Gw676JM/SKi/JO50qB//RE7pJmXTSmU/e9kxpGw15ROosz1EpoQr
-         J8B0uyG5od6G6u8wMIgK1smVV/OTVMXbAYAVeXNsRya+X+k+EzZFXsxG2dxCeQUb8KyO
-         c419wfdWhfy+DgD1qPtUV6SJ7tcp0L2AA5A/3I+Ty+jmrite5Y6xkSTm/6fHFNQfkxJn
-         b0rQ==
-X-Gm-Message-State: AO0yUKW1+W0Gi/vqzSD17cFIUGlgHEvIbnoyjyTi8KPi+IhO0U/FLkWl
-        1j4qK4pg3cPiH7oA+UfeNbRvI2vlBfSe05CRqhM=
-X-Google-Smtp-Source: AK7set8Ywx0iAQrGoEEkgv3qLgP8YXwI3+TvqWY8ReSLX18XMQnjssyGUpWN7izePXDq8V+lj0t2lykY83BEM5yxFts=
-X-Received: by 2002:a05:6402:d59:b0:4a0:90da:4653 with SMTP id
- ec25-20020a0564020d5900b004a090da4653mr814683edb.153.1674664006555; Wed, 25
- Jan 2023 08:26:46 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SOGMCuNWW1qhFYaLtNrQ/3iF7ZU3/hOM8JR1TIVeFps=;
+        b=LNMhUfQz8rlr7g90bceke2V705G/9y4jLJInCMINjD19a8jNNpjexDYQ1hRT+8+poj
+         aWzZtXbrCguPZjOWRRJKR91bUwyWhVfu4m7MV+tKkPnrVtM1e4xObzRJKMJTRwxM0inr
+         64jqyAVtz1NJt7otea0emkwbZSXvpcNMvWM7RGKae3V/0dsb+IBnEUGgUBklEXVxAFW0
+         5GyS0+T5lAMNf6jJvuxdEqJPS7HRQVv9PxNciLfnxrdLVJ+01ZdyOcq6SfU7uFcO4umn
+         hFOpL5rrd3C2aTZWl4p3Yr9ltQs+BpRFQ7zpbT+Dy0+yj3gB2nfeNOUaDyaD99Kz+UM2
+         GDmQ==
+X-Gm-Message-State: AFqh2kpGbXmbZuy8WCmADrOwEuRrUNssQgeK6aXP8HhU8e8WDEjyxXZh
+        /CLjfjJkbxLazG44nldK6RXw3w==
+X-Google-Smtp-Source: AMrXdXujjg+GiiEgro9U1/t4lYCnOFSW322yIEGNwNMqm1feqreeZkIYRQNZPaurQpsYf1Y1lyQ+sA==
+X-Received: by 2002:a05:600c:31a3:b0:3d6:8570:1239 with SMTP id s35-20020a05600c31a300b003d685701239mr33878544wmp.16.1674665215494;
+        Wed, 25 Jan 2023 08:46:55 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id bg6-20020a05600c3c8600b003db06493ee7sm2637400wmb.47.2023.01.25.08.46.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 08:46:55 -0800 (PST)
+Message-ID: <ac3ed1da-fcd1-d8e9-7770-8a047f0e392d@linaro.org>
+Date:   Wed, 25 Jan 2023 17:46:53 +0100
 MIME-Version: 1.0
-References: <20230124230048.371144-1-robh@kernel.org>
-In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Wed, 25 Jan 2023 10:26:35 -0600
-Message-ID: <CABb+yY3FwCwEsNYuNP8MBi+2TUra5O7+-GWMzWr06x1g4MJUyg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing (unevaluated|additional)Properties
- on child node schemas
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on
+ PREEMPT_RT
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 5:00 PM Rob Herring <robh@kernel.org> wrote:
->
-> Just as unevaluatedProperties or additionalProperties are required at
-> the top level of schemas, they should (and will) also be required for
-> child node schemas. That ensures only documented properties are
-> present.
->
-> Add unevaluatedProperties or additionalProperties as appropriate, and
-> then add any missing properties flagged by the addition.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Hi Krzysztof,
+
+
+On 25/01/2023 12:34, Krzysztof Kozlowski wrote:
+> The runtime Power Management of CPU topology is not compatible with
+> PREEMPT_RT:
+> 1. Core cpuidle path disables IRQs.
+> 2. Core cpuidle calls cpuidle-psci.
+> 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
+>     pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
+>     spinlocks (which are sleeping on PREEMPT_RT).
+> 
+> Deep sleep modes are not a priority of Realtime kernels because the
+> latencies might become unpredictable.  On the other hand the PSCI CPU
+> idle power domain is a parent of other devices and power domain
+> controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
+> 
+> Disable the idle callbacks in cpuidle-psci and mark the domain as
+> always on.  This is a trade-off between making PREEMPT_RT working and
+> still having a proper power domain hierarchy in the system.
+
+Wouldn't make sense to rely on the latency constraint framework ?
+
+
+> Cc: Adrien Thierry <athierry@redhat.com>
+> Cc: Brian Masney <bmasney@redhat.com>
+> Cc: linux-rt-users@vger.kernel.org
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
 > ---
-For the mailbox change,
-   Acked-by: Jassi Brar <jassisinghbrar@gmail.com>
+> 
+> Changes since v3:
+> 1. Rework - disable idle states, mark as always on (Ulf).
+> 2. Extend Kconfig warning (Ulf).
+> 
+> Changes since v1:
+> 1. Re-work commit msg.
+> 2. Add note to Kconfig.
+> 
+> Several other patches were dropped, as this is the only one actually
+> needed.  It effectively stops PSCI cpuidle power domains from suspending
+> thus solving all other issues I experienced.
+> ---
+>   drivers/cpuidle/Kconfig.arm           | 8 ++++++++
+>   drivers/cpuidle/cpuidle-psci-domain.c | 7 +++++--
+>   drivers/cpuidle/cpuidle-psci.c        | 3 +++
+>   3 files changed, 16 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+> index 747aa537389b..8deaa2e05206 100644
+> --- a/drivers/cpuidle/Kconfig.arm
+> +++ b/drivers/cpuidle/Kconfig.arm
+> @@ -24,6 +24,14 @@ config ARM_PSCI_CPUIDLE
+>   	  It provides an idle driver that is capable of detecting and
+>   	  managing idle states through the PSCI firmware interface.
+>   
+> +	  The driver has limitations when used with PREEMPT_RT:
+> +	  - If the idle states are described with the non-hierarchical layout,
+> +	    all idle states are still available.
+> +
+> +	  - If the idle states are described with the hierarchical layout,
+> +	    only the idle states defined per CPU are available, but not the ones
+> +	    being shared among a group of CPUs (aka cluster idle states).
+> +
+>   config ARM_PSCI_CPUIDLE_DOMAIN
+>   	bool "PSCI CPU idle Domain"
+>   	depends on ARM_PSCI_CPUIDLE
+> diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+> index c80cf9ddabd8..6ad2954948a5 100644
+> --- a/drivers/cpuidle/cpuidle-psci-domain.c
+> +++ b/drivers/cpuidle/cpuidle-psci-domain.c
+> @@ -64,8 +64,11 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+>   
+>   	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
+>   
+> -	/* Allow power off when OSI has been successfully enabled. */
+> -	if (use_osi)
+> +	/*
+> +	 * Allow power off when OSI has been successfully enabled.
+> +	 * PREEMPT_RT is not yet ready to enter domain idle states.
+> +	 */
+> +	if (use_osi && !IS_ENABLED(CONFIG_PREEMPT_RT))
+>   		pd->power_off = psci_pd_power_off;
+>   	else
+>   		pd->flags |= GENPD_FLAG_ALWAYS_ON;
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index 312a34ef28dc..6de027f9f6f5 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -222,6 +222,9 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
+>   	if (!psci_has_osi_support())
+>   		return 0;
+>   
+> +	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> +		return 0;
+> +
+>   	data->dev = psci_dt_attach_cpu(cpu);
+>   	if (IS_ERR_OR_NULL(data->dev))
+>   		return PTR_ERR_OR_ZERO(data->dev);
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
