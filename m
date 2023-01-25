@@ -2,216 +2,124 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D93167B9C5
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 19:47:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A286E67BA61
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 20:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjAYSrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 13:47:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
+        id S236082AbjAYTJ5 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 14:09:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjAYSrB (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 13:47:01 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3911151C49;
-        Wed, 25 Jan 2023 10:47:00 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B18615B3;
-        Wed, 25 Jan 2023 18:46:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0586AC433D2;
-        Wed, 25 Jan 2023 18:46:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1674672419;
-        bh=e35zOz55fvzDHe3U2OJO5ZyYTEJxv3m4O3arQ4xHu2Q=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=lZx1OjncBFk3KhakW/keEzXjkMh8CzQFUSxiz0i523UhOmFbavzP1u/f+wDZd41Dj
-         JkJxMZjVxktOabJKfPaKwVHFCmGpsZ/MTQzTZOzj0uEAzg1zXz6NmSq+E/Wu90SZzF
-         qbfP5f8KGIMT9DhdDOxBtfYtIO0DVl95Nzn3HucSFaNwk9bgkZRlWu/KfIG83BGefW
-         EnOARW49bEt9btXDF9eUIrw+l87z5qMVEWTKmBgw6EMhrTJF/HGY3DqdmhITB15K62
-         OyouCYlbluDtRJKjdczyBcsvERva3BaXWLffDfhWlFoVN3m/xnxff4ijZ07URvMhTm
-         dRjaxPmD6Ut/g==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 9686D5C0865; Wed, 25 Jan 2023 10:46:58 -0800 (PST)
-Date:   Wed, 25 Jan 2023 10:46:58 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>, mingo@kernel.org,
-        will@kernel.org, boqun.feng@gmail.com, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
-        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Frederic Weisbecker <fweisbec@gmail.com>
-Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
- is disabled
-Message-ID: <20230125184658.GL2948950@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20230123205009.790550642@infradead.org>
- <20230123205515.059999893@infradead.org>
- <20230123165304.370121e7@gandalf.local.home>
- <20230123170753.7ac9419e@gandalf.local.home>
- <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
- <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
- <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+        with ESMTP id S236071AbjAYTJg (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 14:09:36 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793315CFC4;
+        Wed, 25 Jan 2023 11:09:08 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id c10-20020a05600c0a4a00b003db0636ff84so2055307wmq.0;
+        Wed, 25 Jan 2023 11:09:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5RAf+FoD3kD3uKp2a9aXTt0ztNoNqQfHHQT67AwEHFY=;
+        b=b6H4AGc9EcLzEpPx1uNxpDkYcPOiFlaHxDr1dtMOdeYAPKhbJX0M9HTALOa/5GWWPk
+         4KkMruQx7gIRtMa+nf670ZzvrfPJYOHUioW8A8fRWRwY4IPBliEFosyiKOJ1FjOf9Bk1
+         siz60TgzggOI4I2fMZl2Hot3etpGe3VykDi23cXOhcuxouCac0nrAcQqxUAJMYEx440P
+         vR2KOKNnnIKkgkcfFTGpABIswcbBF3vxsVFNVMmekAwzbmo2of95dYp6sSKNTWYFLQ7w
+         DDfKiFfXvHjApYrFYcW7ESGEJkwnIdK9TaNcUmMcUDwv1Uft6+xArMMyIxUSotu41N0Y
+         z6dw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5RAf+FoD3kD3uKp2a9aXTt0ztNoNqQfHHQT67AwEHFY=;
+        b=I7vyvZdkq2prjrj1eDHMYmykSqvDDrX+UUzWh8zNlGlroHvOLzO5/jZDAJV4XwTR+o
+         nxKZL/+VJWLwOEADJgJ49MeszljJtRlGjDbiIThFIHarcVB7im78Ak00lolxHTnOFM81
+         Oz2qym2ShDyy6QCk8htCscWvXhrCduD+i8KRUgP8JA0jbnyp+pWNwlfz1hr9yuvwxYft
+         Uvae3kfvM3zPHVLB1UWJ+rfAfsEGxpFgln02iDXxvcYK59yXM5//Sl2BzeV0bagMWJ1n
+         r7ltoSK5fiU6kLboj+Cce6o0Ma+/DO5oUoUKnhuqypzjuNscLCJzTuVhoLfzf4g/DE8+
+         IYrQ==
+X-Gm-Message-State: AFqh2ko/+xi0a336vxnb9K0ianNgxMn41syUh6cqFJffgYSoClT+PEY2
+        9nf/b8JqNcDrJ6MRlnJdydI=
+X-Google-Smtp-Source: AMrXdXvtMXyMvraIkniFaiTIvZWVgPXmcScLBOxVnQYgvmZhBJMkq+rEi0E9cvgaQW5EFnA9zYXaZQ==
+X-Received: by 2002:a7b:cb88:0:b0:3d9:f801:73bf with SMTP id m8-20020a7bcb88000000b003d9f80173bfmr32430098wmi.12.1674673746896;
+        Wed, 25 Jan 2023 11:09:06 -0800 (PST)
+Received: from [192.168.1.135] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id b5-20020a05600c150500b003dafb0c8dfbsm2998092wmg.14.2023.01.25.11.09.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 11:09:06 -0800 (PST)
+Message-ID: <243ad9f8-76f6-3e60-91ae-21d04ba6f262@gmail.com>
+Date:   Wed, 25 Jan 2023 20:09:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v11 5/6] arm64/dts/mt8195: Add thermal zones and thermal
+ nodes
+Content-Language: en-US
+To:     Balsam CHIHI <bchihi@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
+        rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230124131717.128660-1-bchihi@baylibre.com>
+ <20230124131717.128660-6-bchihi@baylibre.com>
+ <80ce4ea3-6ebd-c249-45bd-a2f04343690b@collabora.com>
+ <CAGuA+opCcdbPbasadEFbKw1nSy-kbK3WzKG=wXn6dtzynjrY1Q@mail.gmail.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <CAGuA+opCcdbPbasadEFbKw1nSy-kbK3WzKG=wXn6dtzynjrY1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 11:47:44AM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 24, 2023 at 05:12:14PM +0000, Mark Rutland wrote:
-> > On Tue, Jan 24, 2023 at 03:44:35PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
-> > > 
-> > > > Actually, perhaps we can just add this, and all you need to do is create
-> > > > and set CONFIG_NO_RCU_TRACING (or some other name).
-> > > 
-> > > Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
-> > 
-> > Yes please; if we use CONFIG_ARCH_WANTS_NO_INSTR then arm64 will get this "for
-> > free" once we add the missing checks (which I assume we need) in our ftrace_prepare_return().
-> > 
-> > > Anyway, I took it for a spin and it .... doesn't seems to do the job.
-> > > 
-> > > With my patch the first splat is
-> > > 
-> > >   "RCU not on for: cpuidle_poll_time+0x0/0x70"
-> > > 
-> > > While with yours I seems to get the endless:
-> > > 
-> > >   "WARNING: suspicious RCU usage"
-> > > 
-> > > thing. Let me see if I can figure out where it goes side-ways.
-> > 
-> > Hmmm... for WARN_ONCE() don't we need to wake RCU first also? I thought we
-> > needed that at least for the printk machinery?
+
+
+On 25/01/2023 16:10, Balsam CHIHI wrote:
+> On Tue, Jan 24, 2023 at 4:37 PM AngeloGioacchino Del Regno
+> <angelogioacchino.delregno@collabora.com> wrote:
+>>
+>> Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
+>>> From: Balsam CHIHI <bchihi@baylibre.com>
+>>>
+>>> Add thermal zones and thermal nodes for the mt8195.
+>>>
+>>> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+>>
+>> You should change the commit title to reflect the same syntax that you can find
+>> in a `git log --oneline arch/arm64/boot/dts/mediatek/`.
+>>
+>> arm64: dts: mediatek: mt8195: Add thermal zones and thermal nodes
+>>
+>> or
+>>
+>> arm64: dts: mt8195: Add thermal zones and thermal nodes
+>>
 > 
-> OK, the below seems to work nice for me -- although I'm still on a
-> hacked up printk, but the recursive RCU not watching fail seems to be
-> tamed.
+> Hi Angelo,
 > 
-> Ofc. Paul might have an opinion on this glorious bodge ;-)
-
-For some definition of the word "glorious", to be sure.  ;-)
-
-Am I correct that you have two things happening here?  (1) Preventing
-trace recursion and (2) forcing RCU to pay attention when needed.
-
-I cannot resist pointing out that you have re-invented RCU_NONIDLE(),
-though avoiding much of the overhead when not needed.  ;-)
-
-I would have objections if this ever leaks out onto a non-error code path.
-There are things that need doing when RCU starts and stops watching,
-and this approach omits those things.  Which again is OK in this case,
-where this code is only ever executed when something is already broken,
-but definitely *not* OK when things are not already broken.
-
-							Thanx, Paul
-
-> ---
+> Thank you for the review.
+> Should I resend with the fix?
+> Or you would fix it when applying it like Matthias did for "[PATCH v11
+> 3/6] arm64/dts/mt8195: Add efuse node to mt8195"?
 > 
-> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
-> index c303f7a114e9..d48cd92d2364 100644
-> --- a/include/linux/trace_recursion.h
-> +++ b/include/linux/trace_recursion.h
-> @@ -135,6 +135,21 @@ extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
->  # define do_ftrace_record_recursion(ip, pip)	do { } while (0)
->  #endif
->  
-> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
-> +# define trace_warn_on_no_rcu(ip)					\
-> +	({								\
-> +		bool __ret = !rcu_is_watching();			\
-> +		if (__ret && !trace_recursion_test(TRACE_RECORD_RECURSION_BIT)) { \
-> +			trace_recursion_set(TRACE_RECORD_RECURSION_BIT); \
-> +			WARN_ONCE(true, "RCU not on for: %pS\n", (void *)ip); \
-> +			trace_recursion_clear(TRACE_RECORD_RECURSION_BIT); \
-> +		}							\
-> +		__ret;							\
-> +	})
-> +#else
-> +# define trace_warn_on_no_rcu(ip)	false
-> +#endif
-> +
->  /*
->   * Preemption is promised to be disabled when return bit >= 0.
->   */
-> @@ -144,6 +159,9 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
->  	unsigned int val = READ_ONCE(current->trace_recursion);
->  	int bit;
->  
-> +	if (trace_warn_on_no_rcu(ip))
-> +		return -1;
-> +
->  	bit = trace_get_context_bit() + start;
->  	if (unlikely(val & (1 << bit))) {
->  		/*
-> diff --git a/lib/bug.c b/lib/bug.c
-> index c223a2575b72..0a10643ea168 100644
-> --- a/lib/bug.c
-> +++ b/lib/bug.c
-> @@ -47,6 +47,7 @@
->  #include <linux/sched.h>
->  #include <linux/rculist.h>
->  #include <linux/ftrace.h>
-> +#include <linux/context_tracking.h>
->  
->  extern struct bug_entry __start___bug_table[], __stop___bug_table[];
->  
-> @@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
->  	return module_find_bug(bugaddr);
->  }
->  
-> -enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-> +static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
->  {
->  	struct bug_entry *bug;
->  	const char *file;
-> @@ -209,6 +210,30 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
->  	return BUG_TRAP_TYPE_BUG;
->  }
->  
-> +enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-> +{
-> +	enum bug_trap_type ret;
-> +	bool rcu = false;
-> +
-> +#ifdef CONFIG_CONTEXT_TRACKING_IDLE
-> +	/*
-> +	 * Horrible hack to shut up recursive RCU isn't watching fail since
-> +	 * lots of the actual reporting also relies on RCU.
-> +	 */
-> +	if (!rcu_is_watching()) {
-> +		rcu = true;
-> +		ct_state_inc(RCU_DYNTICKS_IDX);
-> +	}
-> +#endif
-> +
-> +	ret = __report_bug(bugaddr, regs);
-> +
-> +	if (rcu)
-> +		ct_state_inc(RCU_DYNTICKS_IDX);
-> +
-> +	return ret;
-> +}
-> +
->  static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
->  {
->  	struct bug_entry *bug;
+
+If you need to send a new version for any reason, then please update. Otherwise 
+I'll fix it once I can take it.
+
+Regards,
+Matthias
