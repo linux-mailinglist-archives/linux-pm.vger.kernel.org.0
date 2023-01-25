@@ -2,199 +2,189 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A46867AFA9
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 11:27:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B57967AFEB
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 11:44:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235518AbjAYK1k (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 05:27:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
+        id S235636AbjAYKor (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 05:44:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235467AbjAYK1j (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 05:27:39 -0500
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CACD4489
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:27:37 -0800 (PST)
-Received: by mail-wm1-x32f.google.com with SMTP id j17so13396859wms.0
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:27:37 -0800 (PST)
+        with ESMTP id S235115AbjAYKoq (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 05:44:46 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 430622D56
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:44:45 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id f25-20020a1c6a19000000b003da221fbf48so958470wmc.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:44:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vbhZrnM6mfd46f2wkH2U150cOFArpKuhN8vLZPnu2Us=;
-        b=um5KOEmxDtoPoQAuc6NgwIwqE8E1tsVOuA0r8VIa7+DumXxQtmSODovV+CiWvssSAO
-         9pFKV49mNWSV2GLWaxePW8JQ1hcWi6x9i48WKtC9IQc3f6hJFGm3c6nZ1Xls0bAqTdRM
-         P9ttNuD5a1MCoW0sDzfgAEHCB/PrFxbxg6Soox0xHNGH0490IIV3EPLq9qaM0WhjSYtQ
-         jnuI8RLeCOhFOw//quyNHE5KDEojkI3/RyuzR45dIkOpOHlXAy8QnYxjj/l3uuZWTEGD
-         SvYLrMTVhIBeGaSCj/YxFruHJXBOnrdalv27w6zKsfvmszt33rDLo1W1yPUlSx7cojMH
-         b5Dg==
+        bh=J0PGKaDOTP+JnIoKhp2Ab4jDZbqX2jvYo8Knl+SxJHk=;
+        b=J2CivbOq9Sc0LYpWFpt6Y/a3MN4ijCaw4I0eOR9msSJLA0jPy4CMxMK10iAxfryEPF
+         VOgwTP3+RZ/+4KLbHZr7sMH+gmPhKZ851U3UbIeYDQd/L5VcRkRt6/H/H6QJ8DS+fasc
+         f76Q1Zt5KQGsx+sPySwlO0v9Fn7mA5C3AcYNaBnEMV9/G+7U/k0m7c2vnnZkvPCjvlYn
+         yrV7KxcrDNPpPiY4EGBYmjWmF+ip0lvEqPoOPw4d1B1gaXcY52DE568nHkc7+x16dQEx
+         G2TASwTvOQ3MmCqVyQ/KnT6Q00xPR/whsPHlJ43bOFd2phwtXXTRBLnYPksZoLZkOOxj
+         W0EA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vbhZrnM6mfd46f2wkH2U150cOFArpKuhN8vLZPnu2Us=;
-        b=mOyohoMYR3YuVjhz7MOVESgzdZtEyJ7wflyAkOOIYVF/gdMWkDZVC0SW4D50rF+qNi
-         1obTjeAi9Bu6FJWm7Y8i67f8srM+Yz8hYn6Veef2pBcsATqFWBtzN+YBPvTCIUI2uk1t
-         7sH60ZeFb7yhYaUbT/xxIDogqBTl9Ndp3WENIuthKcAM6PKEKif2hdp3zu8fbBsQi9Au
-         TGIhTGWY7tpzSKEf7H3hDNj1FOZvPWds4KPCqq7BF109MPqJYokuIRTLN2zvy6FfhB0c
-         nEq21g/lD6HV+nQVO8rYM3YKKGPGXF3QQrFVXpAvAhnSBiSKiIfaT9M/c/FSgk0tBo7b
-         R1yg==
-X-Gm-Message-State: AFqh2koe7yk9E+cUEFGKyIvgnUxnqyAG/qZabhzaqNO7g44ERn9jKigK
-        9rIdIEVDWzXoFe0eBR4RIAhaAg==
-X-Google-Smtp-Source: AMrXdXtKgy48rz00UMBhwP0Nzrp1Xhd4qMKtvxDVpA8TgtfNn+bybvxaGr2VyhrpXFYGmHRqTI7v3Q==
-X-Received: by 2002:a05:600c:601c:b0:3d9:ee01:60a4 with SMTP id az28-20020a05600c601c00b003d9ee0160a4mr31527635wmb.1.1674642456074;
-        Wed, 25 Jan 2023 02:27:36 -0800 (PST)
-Received: from [192.168.0.20] (62.213.132.195.rev.sfr.net. [195.132.213.62])
-        by smtp.gmail.com with ESMTPSA id g9-20020adff3c9000000b002bfb29d19e4sm3202470wrp.88.2023.01.25.02.27.34
+        bh=J0PGKaDOTP+JnIoKhp2Ab4jDZbqX2jvYo8Knl+SxJHk=;
+        b=wQgvbMQ+5TTgK/OG2XTOpzlUddDTWRMlvQI9Y4TZo4JrCJEpBAw29OrJsEVIUBUL6X
+         J/o9/6C1LSNWI3SpAHE2T40jA0V2J3117w7GYPl7frTx538yaXcZjkLGq5PXn+TO4WIz
+         ApVIbfC9X+4mxB5A3dvlk52c8K4eOA7DcoF6PLf1QVU1yZsfR3EdFUfRVpU8tiWzVv6q
+         vwqC0/+Odiizs/weVz5i1TeB4Xgn336ryPk1AEcO8pXKvzg5QuS/44McBZyztoG1UGpH
+         xw2syBSq3aSUNXuucqvt0l88Ry8brIO5pOLIdLpT5LBb2/mlWX3V6Qt9BdUV84fsImn2
+         BQ7A==
+X-Gm-Message-State: AFqh2kpnn7ohnEbCLJX94/RfepjF+pz+d5D9jv84Ph8eQ6YMkO1+dDQB
+        g0jAWHTej50rsqth6nSKSDsC2A==
+X-Google-Smtp-Source: AMrXdXvJ/wkwe3kkV70uazDWMi6X32/RVz4xSdXVXDPYwCipK5A0Pdbn4mOILW6hSAm3yRw0nC6x/Q==
+X-Received: by 2002:a05:600c:1d8e:b0:3d9:efe8:a42d with SMTP id p14-20020a05600c1d8e00b003d9efe8a42dmr31067477wms.21.1674643483805;
+        Wed, 25 Jan 2023 02:44:43 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id o40-20020a05600c512800b003dc0b0e1e47sm1545487wms.48.2023.01.25.02.44.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 02:27:35 -0800 (PST)
-Message-ID: <8d9c51c8-8271-51de-a02c-4e44668be692@baylibre.com>
-Date:   Wed, 25 Jan 2023 11:27:33 +0100
+        Wed, 25 Jan 2023 02:44:43 -0800 (PST)
+Message-ID: <327c9cad-602a-e931-c8b8-cd0457639267@linaro.org>
+Date:   Wed, 25 Jan 2023 11:44:41 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.0
-Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Michael Kao <michael.kao@mediatek.com>,
-        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
-References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
- <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
- <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
- <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
- <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
- <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
- <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
- <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
- <d3daece0-ed23-fae7-9bc8-c6e53b84e8e7@baylibre.com>
- <9f9547a2-69dd-f91d-c587-289156bf9d55@linaro.org>
- <2950b824-ad2f-2579-a956-a03d157453eb@baylibre.com>
- <c1fad818-1858-2e81-84fd-03cfb54d8938@linaro.org>
- <0b5e3a14-fd23-4646-d4cb-df255eb8fa20@baylibre.com>
- <0df50d0f-de3a-a2be-9363-2b3c65599f96@linaro.org>
+Subject: Re: [PATCH v3] cpuidle: psci: Do not suspend topology CPUs on
+ PREEMPT_RT
 Content-Language: en-US
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <0df50d0f-de3a-a2be-9363-2b3c65599f96@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+References: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
+ <CAPDyKFqwRw5=SK9vckt02eGoo_dtqEpV6D0Nr5YsijoJZQh0eQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAPDyKFqwRw5=SK9vckt02eGoo_dtqEpV6D0Nr5YsijoJZQh0eQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-
-On 1/25/23 11:02, Daniel Lezcano wrote:
-> On 24/01/2023 23:27, Amjad Ouled-Ameur wrote:
+On 24/01/2023 11:33, Ulf Hansson wrote:
+> On Thu, 19 Jan 2023 at 19:42, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
 >>
->> On 1/24/23 18:55, Daniel Lezcano wrote:
->>> On 24/01/2023 18:46, Amjad Ouled-Ameur wrote:
->>>>
->>>> On 1/24/23 17:54, Daniel Lezcano wrote:
->>>>>
->>>>> Hi Amjad,
->>>>>
->>>>> On 24/01/2023 11:08, Amjad Ouled-Ameur wrote:
->>>>>
->>>>> [ ... ]
->>>>>
->>>>>>>>
->>>>>>>> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 2Bigs, 1 x 4 Little, right ?
->>>>>>>
->>>>>>> MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per sensor. Thermal zone 0 corresponds
->>>>>>>
->>>>>>> to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has nothing to do with CPUs. The cooling device type
->>>>>>>
->>>>>>> used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are present in the SoC for debug-purpose only, they are not supposed
->>>>>>>
->>>>>>> to be used for production.
->>>>>>>
->>>>>> After reconsidering the fact that zones 1, 2 and 3 are only used for dev/debug, it might be best to avo >
->>>>>> aggregation as you suggested, and keep only support for zone 0 in this driver. Thus I suggest I send a V8
->>>>>>
->>>>>> where I keep only below fixes for this patch if that's okay with you:
->>>>>>
->>>>>> - Define "raw_to_mcelsius" function pointer for "struct thermal_bank_cfg".
->>>>>>
->>>>>> - Fix "mtk_thermal" variable in mtk_read_temp().
->>>>>>
->>>>>> - Set "mt->raw_to_mcelsius" in probe().
->>>>>>
->>>>>>
->>>>>> For zones 1, 2 and 3 we can later add a different driver specific for dev/debug to probe them to
->>>>>>
->>>>>> avoid confusion.
->>>>>
->>>>> You can add them in the driver and in the device tree, but just add the cooling device for the thermal zone 0.
->>>>
->>>> Thermal zone 0 uses CPU{0..3} for passive cooling, in this case we should register cooling device with
->>>>
->>>> cpufreq_cooling_register() for each CPU right ?
->>>
->>> No, the OF code device tree does already that. You just have to register the different thermal zones.
->>>
->>> Do you have a pointer to a device tree for this board and the thermal setup ?
+>> The runtime Power Management of CPU topology is not compatible with
+>> PREEMPT_RT:
+>> 1. Core cpuidle path disables IRQs.
+>> 2. Core cpuidle calls cpuidle-psci.
+>> 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
+>>    pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
+>>    spinlocks (which are sleeping on PREEMPT_RT).
 >>
->> Sure, here is a dtsi for MT8365 SoC which contains thermal nodes [0].
->
-> From my POV, there are two different setup with the DT but only one implementation with the driver.
->
-> The driver should register all the thermal zones for each CPUs. For that, make things nice with the defines for the dt-bindings like [1].
->
-> Then the device tree:
->
-> setup1:
->
-> Describe all the thermal zones in the DT which will be similar to [2]. Each CPU has a thermal zone, trip points and the same cooling device.
->
-> The first thermal zone reaching the trip temperature threshold will start the mitigation. The thermal framework takes care of multiple thermal zones sharing the same cooling device.
->
-> The result will be the same as the max temperature aggregation you did previously.
->
-> setup2:
->
-> Describe all the thermal zones in the DT [3], but add the cooling device only on the sensor you are interested in mitigating.
->
->
-> And finally, if the sensors should be used to describe a kind of temperature gradient, a linear equation could be used but that is not implemented yet in the thermal framework.
->
-> Hope that helps
->
-Thank you Daniel for the thorough insights.
+>> Deep sleep modes are not a priority of Realtime kernels because the
+>> latencies might become unpredictable.  On the other hand the PSCI CPU
+>> idle power domain is a parent of other devices and power domain
+>> controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
+>>
+>> Disable the runtime PM calls from cpuidle-psci, which effectively stops
+>> suspending the cpuidle PSCI domain.  This is a trade-off between making
+>> PREEMPT_RT working and still having a proper power domain hierarchy in
+>> the system.
+> 
+> I think this sounds like a reasonable compromise, at least at this point.
+> 
+>>
+>> Cc: Adrien Thierry <athierry@redhat.com>
+>> Cc: Brian Masney <bmasney@redhat.com>
+>> Cc: linux-rt-users@vger.kernel.org
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> ---
+>>
+>> Changes since v1:
+>> 1. Re-work commit msg.
+>> 2. Add note to Kconfig.
+>>
+>> Several other patches were dropped, as this is the only one actually
+>> needed.  It effectively stops PSCI cpuidle power domains from suspending
+>> thus solving all other issues I experienced.
+> 
+> I like this approach better, thanks!
+> 
+>> ---
+>>  drivers/cpuidle/Kconfig.arm    | 3 +++
+>>  drivers/cpuidle/cpuidle-psci.c | 4 ++--
+>>  2 files changed, 5 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+>> index 747aa537389b..24429b5bfd1c 100644
+>> --- a/drivers/cpuidle/Kconfig.arm
+>> +++ b/drivers/cpuidle/Kconfig.arm
+>> @@ -24,6 +24,9 @@ config ARM_PSCI_CPUIDLE
+>>           It provides an idle driver that is capable of detecting and
+>>           managing idle states through the PSCI firmware interface.
+>>
+>> +         The driver is not yet compatible with PREEMPT_RT: no idle states will
+>> +         be entered by CPUs on such kernel.
+> 
+> This isn't entirely correct. In principle your suggested change ends
+> up providing the below updated behaviour for PREEMPT_RT.
+> 
+> *) If the idle states are described with the non-hierarchical layout,
+> all idle states are still available.
+> **) If the idle states are described with the hierarchical layout,
+> only the idle states defined per CPU are available, but not the ones
+> being shared among a group of CPUs (aka cluster idle states).
+> 
+> Perhaps there is an easier way to summarize what I stated above?
 
-FYI, MT8195 SoC you referred to has a different thermal architecture and sensor mapping than on MT8365. The latter has only one
+Yes, I'll correct the message.
 
-useful thermal zone corresponding to 4 CPUs at once. The other 3 thermal zones have no real purpose and will probably
+> 
+>> +
+>>  config ARM_PSCI_CPUIDLE_DOMAIN
+>>         bool "PSCI CPU idle Domain"
+>>         depends on ARM_PSCI_CPUIDLE
+>> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+>> index 312a34ef28dc..c25592718984 100644
+>> --- a/drivers/cpuidle/cpuidle-psci.c
+>> +++ b/drivers/cpuidle/cpuidle-psci.c
+>> @@ -66,7 +66,7 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
+>>         /* Do runtime PM to manage a hierarchical CPU toplogy. */
+>>         if (s2idle)
+>>                 dev_pm_genpd_suspend(pd_dev);
+>> -       else
+>> +       else if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+> 
+> Rather than doing this (and the below) in
+> __psci_enter_domain_idle_state(), I suggest replacing this with a
+> bailout point in psci_dt_cpu_init_topology(). That would prevent the
+> __psci_enter_domain_idle_state() from being called altogether, which
+> is really what we need.
 
-not be defined in dtsi. Thus I sent a V8 of this series to keep only support for thermal zone 0 of interest.
+Ack
 
-Kindly,
+> 
+> Moreover, I think it would make sense to set the GENPD_FLAG_ALWAYS_ON
+> for the corresponding genpd, when CONFIG_PREEMPT_RT is set. See
+> psci_pd_init().
 
-Amjad
+Makes sense.
 
->   -- Daniel
->
-> [1] https://lore.kernel.org/linux-arm-kernel/5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com/T/#Z2e.:..:20230124131717.128660-3-bchihi::40baylibre.com:1include:dt-bindings:thermal:mediatek-lvts.h
->
-> [2] https://lore.kernel.org/linux-arm-kernel/5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com/T/#m303240c4da71f6f37831e5d1b6f3da771ae8dd90
->
-> [3] https://lore.kernel.org/linux-arm-kernel/5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com/T/#Z2e.:..:20230124131717.128660-6-bchihi::40baylibre.com:1arch:arm64:boot:dts:mediatek:mt8195.dtsi
->
->
+
+Best regards,
+Krzysztof
+
