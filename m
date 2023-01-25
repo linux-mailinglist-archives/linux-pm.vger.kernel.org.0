@@ -2,145 +2,135 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9D767AE3E
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 10:40:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1E3967AEC4
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 10:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234144AbjAYJku (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 04:40:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
+        id S235359AbjAYJvH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 04:51:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbjAYJkt (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 04:40:49 -0500
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC69F30DF;
-        Wed, 25 Jan 2023 01:40:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mAgJz+pic6BVmXYxBN+VWs/MMMnUkDDE/YC6Sdu0ab4=; b=nQunn52byOr6gIM3Gee8jkXqqf
-        P6ahezAXaOoJgEZU94N64D+DY4WwzdeoQuN4TSrB2re+n+FRNKB313f7pWE3Axto20QcMUBKawlfC
-        V1XlCuQ0HNEXvSEVlc9MCGGDKp9M9zX1BjIEPu/fEx26+EqvosBwmbH9b7QG7nRTmlygLzXEHtwKa
-        mJAB4xNAatoGxBX1ofJIpGgNLMwT/i7t85iVTBKKH0Q4JXlZDCPTj6rQBK6UpcUUCjr/3q3NQMTAi
-        6qzJSabUvHh49Pf9klLM7hSY7ZwtdmvWkG9b3eRbmn6kPYULi21KJSaokx6M+bIa4JJK6jTNUkaUe
-        dH8i0crA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pKcGP-005onB-Pz; Wed, 25 Jan 2023 09:40:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 29E27300137;
-        Wed, 25 Jan 2023 10:40:17 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1094A21477E2E; Wed, 25 Jan 2023 10:40:17 +0100 (CET)
-Date:   Wed, 25 Jan 2023 10:40:17 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
-        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
-        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
-        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
-        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
-        boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
-Message-ID: <Y9D5AfnOukWNOZ5q@hirez.programming.kicks-ass.net>
-References: <20230123205009.790550642@infradead.org>
- <Y9AIj1s5iPPki3dK@FVFF77S0Q05N>
- <Y9AVtUY8bnF3WjQr@FVFF77S0Q05N>
- <Y9Al0PfSsx/VWL31@FVFF77S0Q05N>
- <Y9D31FHOCaSnO5gS@hirez.programming.kicks-ass.net>
+        with ESMTP id S234138AbjAYJvF (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 04:51:05 -0500
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED28273E
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:51:02 -0800 (PST)
+Received: by mail-wr1-x432.google.com with SMTP id r2so16426428wrv.7
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vaCPXkD9SZLVsUqcpjkMaFmczW7gT3DS5/0BLDeDcbQ=;
+        b=Rw7ZKTIlxluTpzjoIaXA952ZSKYgO45W3mwE4xtZ2FfGN97Q0me77t81wHveCmmSXy
+         fob1NruqdEF6M4PvdSIF+Rt9WTqjMYVqZ1q4h8kvtDopvY0OIUSezCIMNTHLHriz2y9Y
+         C0ze5VIeMqOwGpNBH3FVctSVFOUxxG5AIr0lFAAoD3IFIznNtNfpqRhwgFktd1UfMFTh
+         nxQpJ9G43+ZPw8cN/KC+vJYtiQU6cLW6t6hC3Iv+EuCWzbN1Z/ccKAbdH5ibdc9XD7mJ
+         XPKlPFb/LzrDH1m5D4mRAcmBkVEtXxnxIHvgUJkUje4lTo2rA0AFrrcObtfowoRPx5dP
+         yO5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vaCPXkD9SZLVsUqcpjkMaFmczW7gT3DS5/0BLDeDcbQ=;
+        b=nbPB7DHx9HmGYM+K55nIqKAjhW65mFTlpTtngY+29JAcVrkPzX0wDr7j+QX1jxKrW7
+         +VPPNVTJUCSf8bXefCa+dJHbat6ZOnrRu66nwNb2Sr6lNSG4cpVQMdDIk+vfrbkt9q96
+         BJbO5De9uMFPUdll46uWeBu6xRI7Zbvr8c1ZQymkcdhNCj074P8Go5zWUuNn89N1uA3/
+         qzqfD6GWiGv1g+B8hq20fU+A5+KbqTSMS8CAIz4H13Bls4O11kDpX/BgmD/60HvqYj/n
+         fj/TN3Y++ojvtuOS73CevMWKGX2OOcNu//UZO1ITfRMhHYkUgP6Dd0VlVDMs9KvReHci
+         99VA==
+X-Gm-Message-State: AFqh2krI9xzXc5sJyFEP5QiRMvfXO9a3DMOAHrBaEsrc1FJaHLH4K516
+        JUBmm9Hijc3ua8iR6Kj+mB1d7WVn4iexUu6X
+X-Google-Smtp-Source: AMrXdXs4iX7MHDhQ8IpIinu+zVBZH31DduJs8o0yFDjgZqXVRfmzOBdosIhPx5NkKAMeRHZalGCImA==
+X-Received: by 2002:a5d:68ce:0:b0:2be:4dc0:6684 with SMTP id p14-20020a5d68ce000000b002be4dc06684mr18346214wrw.7.1674640260896;
+        Wed, 25 Jan 2023 01:51:00 -0800 (PST)
+Received: from [127.0.1.1] (62.213.132.195.rev.sfr.net. [195.132.213.62])
+        by smtp.googlemail.com with ESMTPSA id j26-20020a5d453a000000b002bdf3809f59sm3955072wra.38.2023.01.25.01.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 01:51:00 -0800 (PST)
+From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
+Subject: [PATCH v8 0/5] thermal: mediatek: Add support for MT8365 SoC
+Date:   Wed, 25 Jan 2023 10:50:29 +0100
+Message-Id: <20221018-up-i350-thermal-bringup-v8-0-23e8fbb08837@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9D31FHOCaSnO5gS@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGX70GMC/42NywrCMBREf6VkbSSm5KEr/0Nc5HHTBNpUkjZQS
+ v/di0s3uhpmhjmzkwolQSW3bicFWqppzmj0qSMumjwATR494YzzC7tour5o6gWjS4QymZHakvKA
+ ofG9lr5XTMhAcG1NBSxNdhH3eR1HDGOqy1y2z1uTKI/f4CYpo04rew1KCMHs3ZptTLbA2c0TeSK
+ 2qT9RClFgA9MhcPD+G3UcxxuNJQD1EQEAAA==
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        Michael Kao <michael.kao@mediatek.com>
+X-Mailer: b4 0.11.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674640259; l=1557;
+ i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
+ bh=6g6r80ja2Rzpq9olLoUbWHBTm7xTpanipH7fHDJFqNU=;
+ b=T+CLaw+DkWdzd1nbg+TlT6goz1/RMjgk9CSpiYrLyUOPxR6irKRnar3iyJQAhpi1Xuc2kSBCqW1Q
+ JWuB6H0dDOndEuRobKtDdzYA5x9mtavP6YwfwCwZj2Gv6j1r9nf3
+X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
+ pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 10:35:16AM +0100, Peter Zijlstra wrote:
-> tip/sched/core contains the following patch addressing this:
-> 
-> ---
-> commit 9aedeaed6fc6fe8452b9b8225e95cc2b8631ff91
-> Author: Peter Zijlstra <peterz@infradead.org>
-> Date:   Thu Jan 12 20:43:49 2023 +0100
-> 
->     tracing, hardirq: No moar _rcuidle() tracing
->     
->     Robot reported that trace_hardirqs_{on,off}() tickle the forbidden
->     _rcuidle() tracepoint through local_irq_{en,dis}able().
->     
->     For 'sane' configs, these calls will only happen with RCU enabled and
->     as such can use the regular tracepoint. This also means it's possible
->     to trace them from NMI context again.
->     
->     Reported-by: kernel test robot <lkp@intel.com>
->     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->     Signed-off-by: Ingo Molnar <mingo@kernel.org>
->     Link: https://lore.kernel.org/r/20230112195541.477416709@infradead.org
-> 
-> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
-> index 629f2854e12b..f992444a0b1f 100644
-> --- a/kernel/trace/trace_preemptirq.c
-> +++ b/kernel/trace/trace_preemptirq.c
-> @@ -19,6 +19,20 @@
->  /* Per-cpu variable to prevent redundant calls when IRQs already off */
->  static DEFINE_PER_CPU(int, tracing_irq_cpu);
->  
-> +/*
-> + * Use regular trace points on architectures that implement noinstr
-> + * tooling: these calls will only happen with RCU enabled, which can
-> + * use a regular tracepoint.
-> + *
-> + * On older architectures, use the rcuidle tracing methods (which
-> + * aren't NMI-safe - so exclude NMI contexts):
-> + */
-> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
-> +#define trace(point)	trace_##point
-> +#else
-> +#define trace(point)	if (!in_nmi()) trace_##point##_rcuidle
-> +#endif
-> +
->  /*
->   * Like trace_hardirqs_on() but without the lockdep invocation. This is
->   * used in the low level entry code where the ordering vs. RCU is important
+This patchset adds thermal support for MT8365 SoC.
 
-For some reason I missed the trace_preempt_{on,off} things, so that then
-gets the below on top or so.
+MT8365 has 4 thermal sensors, one for CPUs and the rest for debug/dev
+purposes. The CPU thermal zone uses passive cooling device with
+CPU{0..3}.
 
-diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
-index f992444a0b1f..ea96b41c8838 100644
---- a/kernel/trace/trace_preemptirq.c
-+++ b/kernel/trace/trace_preemptirq.c
-@@ -100,15 +100,13 @@ NOKPROBE_SYMBOL(trace_hardirqs_off);
- 
- void trace_preempt_on(unsigned long a0, unsigned long a1)
- {
--	if (!in_nmi())
--		trace_preempt_enable_rcuidle(a0, a1);
-+	trace(preempt_enable)(a0, a1);
- 	tracer_preempt_on(a0, a1);
- }
- 
- void trace_preempt_off(unsigned long a0, unsigned long a1)
- {
--	if (!in_nmi())
--		trace_preempt_disable_rcuidle(a0, a1);
-+	trace(preempt_disable)(a0, a1);
- 	tracer_preempt_off(a0, a1);
- }
- #endif
+Changes in v8:
+- Drop support for thermal zones 1, 2 and 3 as they are used for debug only,
+and would cause aggregation issues with current MTK thermal driver.
+- Split up 4/4 patch into 2 patches for clarity.
+- Link to v7: https://lore.kernel.org/r/20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com
+
+Changes in v7:
+- Fix devm_thermal_of_zone_register() error checks.
+- Link to v6: https://lore.kernel.org/r/20221018-up-i350-thermal-bringup-
+v6-0-c87b9f75550b@baylibre.com
+
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
+---
+Amjad Ouled-Ameur (2):
+      thermal: mediatek: add callback for raw to mcelsius conversion
+      thermal: mediatek: try again if first temp read is bogus
+
+Fabien Parent (2):
+      dt-bindings: thermal: mediatek: add binding documentation for MT8365 SoC
+      thermal: mediatek: add support for MT8365 SoC
+
+Markus Schneider-Pargmann (1):
+      thermal: mediatek: control buffer enablement tweaks
+
+ .../bindings/thermal/mediatek-thermal.txt          |   1 +
+ drivers/thermal/mtk_thermal.c                      | 108 ++++++++++++++++++---
+ 2 files changed, 94 insertions(+), 15 deletions(-)
+---
+base-commit: a2c81dc59d41e92362ab7d41d0c15471ea50637d
+change-id: 20221018-up-i350-thermal-bringup-ad386d37056f
+
+Best regards,
+-- 
+Amjad Ouled-Ameur <aouledameur@baylibre.com>
