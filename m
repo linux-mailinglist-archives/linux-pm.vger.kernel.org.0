@@ -2,141 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1416767AA10
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 06:46:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D38C67AABB
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 08:16:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjAYFqh (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 00:46:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55482 "EHLO
+        id S234644AbjAYHQJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 02:16:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjAYFqg (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 00:46:36 -0500
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D6693EA
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 21:46:33 -0800 (PST)
-Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230125054629epoutp04c5a7bc87c8a0236c62622bf86e93e865~9dxnoZAXa2484824848epoutp04G
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 05:46:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230125054629epoutp04c5a7bc87c8a0236c62622bf86e93e865~9dxnoZAXa2484824848epoutp04G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1674625589;
-        bh=NEwNm/LwY6eOUXbJxfSdsnrHPfYhWSnwXjX0rr9rmhU=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=RhPMlKHU+owlp3B3G2FfLUkxn5TDNnAyPFZOU7JAEPMwSRPb2cwMeYmTB/VDdxRjJ
-         upRNM+SM/ROBKOUjklq4cQbk+6ckA/iq8+5F9U/155Qlt2zbDSsND8BT3lYgh9+Uv7
-         WRDpkBPd3aW1RSUEnpm8yTBmxLaOKYNejrbcOvh8=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
-        20230125054628epcas1p4f84952b2c9ef9b88d805454a009cf28c~9dxnCntqR3064130641epcas1p4C;
-        Wed, 25 Jan 2023 05:46:28 +0000 (GMT)
-Received: from epsmges1p4.samsung.com (unknown [182.195.36.136]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4P1tBD0431z4x9Q2; Wed, 25 Jan
-        2023 05:46:28 +0000 (GMT)
-X-AuditID: b6c32a38-39fff70000029402-00-63d0c2328958
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        32.3A.37890.232C0D36; Wed, 25 Jan 2023 14:46:26 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: Re: [PATCH] PM / devfreq: Fix build issues with devfreq
- disabled
-Reply-To: myungjoo.ham@samsung.com
-Sender: MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   MyungJoo Ham <myungjoo.ham@samsung.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>
-CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CAF6AEGud-ESF=VgcaSFzKsWas0H5eSXZDdZGcnd8Ju=pr-W2EQ@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230125054626epcms1p38d34dc65cbc9cb29dd707a4b2cac8fb4@epcms1p3>
-Date:   Wed, 25 Jan 2023 14:46:26 +0900
-X-CMS-MailID: 20230125054626epcms1p38d34dc65cbc9cb29dd707a4b2cac8fb4
+        with ESMTP id S234873AbjAYHQI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 02:16:08 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338AB38025
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 23:16:03 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id b7so16080798wrt.3
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 23:16:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KqVnz5dHE+H8EBqWuT4m2bnfmcW1edtMXQTUn/uHibA=;
+        b=iI1Q+Ner3x7gfdxiAzK3mur3wDEWCKn9dxfIlWuEpFSxsQzxWuRG7X2pLeQN1I5xel
+         +/v3dUdnrUtxdcuwqtWLOkUW+eJngWmIT+MPRIQXRgW175yJpTmLSxcFB0w7vsu7ZRG6
+         5KWHHkNWIilYMfDYT4uI/vwyF3PIBy/TuwDWygtGcvDeeaDbaOZU09haKxYnGMYAGkn3
+         c5FIebWU0ol3EqoHLIYnxGUiaxfdB2ltNWnOxNiia87ULZoB9CL5bp+F1isWrpWsfGLO
+         FZbcb2brECcbs+PkKYu6x+NgahwJrTM0Bux310+vKUbOiZGSFuj7v5f1d0IaU4Ane4lx
+         JJlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KqVnz5dHE+H8EBqWuT4m2bnfmcW1edtMXQTUn/uHibA=;
+        b=Ijmyrq/0kO/eqmmVhIDRFV7bQ9a0riXm4DQwFeevzxMEjvsOfGvE8yPdhuhyC3fMOt
+         YHx7BfEZso2TlmhBUjve18507kyqS/FtMKuHJUBNz2eGMKLRoYAdj9NNN5V62Uz5OzSC
+         tua2O0HUhScCbSJFFxIrPxdCDcH/OCP1NxUvuXpb5m/l+gwqZtcWKxU9ZP4IVl6pzApm
+         D2CxBIhJE7DTw3UNi7R8ByA8vVC7BE2jExwkKdtgOz2KSAwXlwRZVv6VehWSDd79vN/I
+         K5qRc25uvadxtR1H/x7rENU0gyySR5IkAUQO4YCExg1kUYIoFMTc1lszWsYrLtqaYlpu
+         T1Ag==
+X-Gm-Message-State: AFqh2krWOVBHDSjiui9465WQuU4gAMRHQTw/2sJZIMzg4UglMPtA5PkO
+        JD4oXx85Ra337l+gmci3Zn2gdw==
+X-Google-Smtp-Source: AMrXdXsQTc3tcSZ5O/Y+CPqj3BvK3F17J/9RhcE/qU182Xl1ciIA3AMHZDscUVB9vIS8xkIVoWcA6Q==
+X-Received: by 2002:a05:6000:1816:b0:2bd:fe5a:b579 with SMTP id m22-20020a056000181600b002bdfe5ab579mr24770799wrh.70.1674630961690;
+        Tue, 24 Jan 2023 23:16:01 -0800 (PST)
+Received: from [192.168.1.109] ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id x6-20020a5d4906000000b002bc6c180738sm4135881wrq.90.2023.01.24.23.15.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Jan 2023 23:16:01 -0800 (PST)
+Message-ID: <c1e206f2-7e86-a7ad-c6fa-c80cc1c3f77d@linaro.org>
+Date:   Wed, 25 Jan 2023 08:15:58 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH v4 5/6] arm64: dts: qcom: Add Square apq8039-t2 board
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, djakov@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benl@squareup.com, shawn.guo@linaro.org, fabien.parent@linaro.org,
+        leo.yan@linaro.org, dmitry.baryshkov@linaro.org,
+        stephan@gerhold.net, Jun Nie <jun.nie@linaro.org>,
+        James Willcox <jwillcox@squareup.com>,
+        Joseph Gates <jgates@squareup.com>,
+        Max Chen <mchen@squareup.com>, Zac Crosby <zac@squareup.com>
+References: <20230123023127.1186619-1-bryan.odonoghue@linaro.org>
+ <20230123023127.1186619-6-bryan.odonoghue@linaro.org>
+ <e80b98bc-54e8-f7ab-b9a9-dd888108a0cd@linaro.org>
+ <8dd1ce3c-82ea-cfc3-a84c-c022cbaec8a0@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <8dd1ce3c-82ea-cfc3-a84c-c022cbaec8a0@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAJsWRmVeSWpSXmKPExsWy7bCmnq7RoQvJBq9XqVtc//Kc1eLK1/ds
-        FnOen2W0OH9+A7vF2aY37BaXd81hs/jce4TRYstqe4trPx8zWzxf+IPZgctjdsNFFo+ds+6y
-        e2xa1cnmcb/7OJNH35ZVjB6fN8kFsEVl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpa
-        WpgrKeQl5qbaKrn4BOi6ZeYAXaakUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAt
-        0CtOzC0uzUvXy0stsTI0MDAyBSpMyM54dHoRe8E+7ooPe7+yNjDu5uxi5OSQEDCRaHlxirGL
-        kYtDSGAHo0Tn2rcsXYwcHLwCghJ/dwiD1AgL+EtMWdzCBGILCShJNNzcxwwR15foeLCNEcRm
-        E9CV2LrhLguILSLgKTFt33p2kJnMAj3MElc6jzJBLOOVmNH+lAXClpbYvnwrWDOnQKDEj7Wt
-        7BBxUYmbq9/C2e+PzWeEsEUkWu+dZYawBSUe/NwNFZeSeLJzMhvIMgmByYwSJ08cZ4Rw5jBK
-        TNvwjg2iSl/izNyTYDavgK/EgrsPWEG+ZBFQlZj5GGqZi8TX3mlgQ5kF5CW2v53DDFLCLKAp
-        sX6XPkSYT+Ld1x5WmF92zHsC9ZeaxKHdS6DGyEicnr4Q6k4PiV9bX7JDAreXSWLVlqMsExjl
-        ZyHCdxaSbbMQti1gZF7FKJZaUJybnlpsWGACj9Lk/NxNjOCkqWWxg3Hu2w96hxiZOBgPMUpw
-        MCuJ8PbMPp8sxJuSWFmVWpQfX1Sak1p8iNEU6M2JzFKiyfnAtJ1XEm9oYmlgYmZkbGJhaGao
-        JM4rbnsyWUggPbEkNTs1tSC1CKaPiYNTqoHJT3v1Gd7eGzfPO/q8MirN3zanzMFNcM3x/54L
-        nbi6S2Uq9qWsjzjKuSn6y4aG921T3lY8dTx1pXnfnOmpJW57/Yz+COz6J3s91Nzuun3hfacd
-        J5qF/H69aWp4ZZZ29aStp1CBW/WJRP9Qr4V1iomG3y7sevO0rtSnPeJo7oGVTjJxs5oNPupm
-        3T90WW2p9u7u6MNB1ydW82WLFWxK9D+7KkbigrWb0Mcd4ZHPuTg3nplQduJVXeD/Y0GNQi8E
-        v2pdEFhwi7NRN+90bOK6TQ+eJsvbOS12OLRqYfvTuVyGqgbumx+8uRsU7nyPf8drL+ezN3u9
-        ba9ZMxa0ngiPltT7XOa782/nI946HjeFLSFKLMUZiYZazEXFiQDi5e2cIwQAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230123153745epcas1p17e57cf83ed371e86258139473befc615
-References: <CAF6AEGud-ESF=VgcaSFzKsWas0H5eSXZDdZGcnd8Ju=pr-W2EQ@mail.gmail.com>
-        <20230123153745.3185032-1-robdclark@gmail.com>
-        <20230125040403epcms1p1646e9668b87df3e9c344ad58d39b6eb6@epcms1p1>
-        <CGME20230123153745epcas1p17e57cf83ed371e86258139473befc615@epcms1p3>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
->On Tue, Jan 24, 2023 at 8:04 PM MyungJoo Ham <myungjoo.ham@samsung.com> wrote:
+On 25/01/2023 02:21, Bryan O'Donoghue wrote:
+> On 23/01/2023 16:29, Krzysztof Kozlowski wrote:
+>> On 23/01/2023 03:31, Bryan O'Donoghue wrote:
+>>> The apq8039-t2 is an apq8039 based board paired with a wcn3680b WiFi
+>>> chipset.
+>>>
+>>> Co-developed-by: Shawn Guo <shawn.guo@linaro.org>
+>>> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+>>> Co-developed-by: Jun Nie <jun.nie@linaro.org>
+>>> Signed-off-by: Jun Nie <jun.nie@linaro.org>
+>>> Co-developed-by: Benjamin Li <benl@squareup.com>
+>>> Signed-off-by: Benjamin Li <benl@squareup.com>
+>>> Co-developed-by: James Willcox <jwillcox@squareup.com>
+>>> Signed-off-by: James Willcox <jwillcox@squareup.com>
+>>> Co-developed-by: Leo Yan <leo.yan@linaro.org>
+>>> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+>>> Co-developed-by: Joseph Gates <jgates@squareup.com>
+>>> Signed-off-by: Joseph Gates <jgates@squareup.com>
+>>> Co-developed-by: Max Chen <mchen@squareup.com>
+>>> Signed-off-by: Max Chen <mchen@squareup.com>
+>>> Co-developed-by: Zac Crosby <zac@squareup.com>
+>>> Signed-off-by: Zac Crosby <zac@squareup.com>
+>>> Signed-off-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/Makefile       |   1 +
+>>>   arch/arm64/boot/dts/qcom/apq8039-t2.dts | 545 ++++++++++++++++++++++++
+>>>   2 files changed, 546 insertions(+)
+>>>   create mode 100644 arch/arm64/boot/dts/qcom/apq8039-t2.dts
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+>>> index b0423ca3e79fd..73ff8d3213d99 100644
+>>> --- a/arch/arm64/boot/dts/qcom/Makefile
+>>> +++ b/arch/arm64/boot/dts/qcom/Makefile
+>>> @@ -1,5 +1,6 @@
+>>>   # SPDX-License-Identifier: GPL-2.0
+>>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
+>>> +dtb-$(CONFIG_ARCH_QCOM)	+= apq8039-t2.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
+>>>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
+>>> diff --git a/arch/arm64/boot/dts/qcom/apq8039-t2.dts b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+>>> new file mode 100644
+>>> index 0000000000000..734b4d6054132
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/qcom/apq8039-t2.dts
+>>> @@ -0,0 +1,545 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+>>> + * Copyright (c) 2020-2023, Linaro Ltd.
+>>> + *
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "msm8939.dtsi"
+>>> +#include "msm8939-pm8916.dtsi"
+>>> +#include <dt-bindings/arm/qcom,ids.h>
+>>> +#include <dt-bindings/gpio/gpio.h>
+>>> +#include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
+>>> +#include <dt-bindings/sound/apq8016-lpass.h>
+>>> +
+>>> +/ {
+>>> +	model = "Square, Inc. T2 Devkit";
+>>> +	compatible = "square,apq8039-t2", "qcom,msm8939";
 >>
->> >Sender : Rob Clark <robdclark@gmail.com>
->> >Date : 2023-01-24 00:37 (GMT+9)
->> >Title : [PATCH] PM / devfreq: Fix build issues with devfreq disabled
->> >
->> >From: Rob Clark <robdclark@chromium.org>
->> >
->> >The existing no-op shims for when PM_DEVFREQ (or an individual governor)
->> >only do half the job.  The governor specific config/tuning structs need
->> >to be available to avoid compile errors in drivers using devfreq.
->> >
->> >Fixes: 6563f60f14cb ("drm/msm/gpu: Add devfreq tuning debugfs")
->> >Signed-off-by: Rob Clark <robdclark@chromium.org>
->>
->> Doesn't this imply that DRM_MSM should depend on PM_DEVFREQ ?
->>
->> It appears that gpu/drm/msm/DRM_MSM uses PM_DEVFREQ without actually
->> declaring the dependency on PM_DEVFREQ.
->> You cannot use SIMPLE_ONDEMAND without DEVFREQ.
->
->Possibly that would resolve some issues, and that might have been my
->mistake in assuming that depending on SIMPLE_ONDEMAND implied a
->dependency on DEFREQ (which seems like a reasonable assumption, IMHO)
->
->But AFAICT some kernel configs that could otherwise use DRM_MSM don't
->support PM_DEVFREQ.. either way, lets solve this properly and remove
->needless dependencies on devfreq.
->
->BR,
->-R
+>> There is no square vendor prefix.
+> 
+> commit d3e2262cd0d1105bb3a71012693876d01e8de203
+> Author: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Date:   Tue Jan 17 02:48:39 2023 +0000
+> 
+>      dt-bindings: arm: qcom: Document MSM8939 SoC binding
+> 
+> +      - items:
+> +          - enum:
+> +              - sony,kanuti-tulip
+> +              - square,apq8039-t2
+> +          - const: qcom,msm8939
 
-Ok. You are enabling struct and enum only and that looks harmless.
+This is board compatible. You still missing vendor prefix in
+vendor-prefixes.
 
-PTAL, Chanwoo.
+Best regards,
+Krzysztof
 
-Acked-by: MyungJoo Ham <myungjoo.ham@samsung.com>
-
-Cheers,
-MyungJoo.
