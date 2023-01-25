@@ -2,156 +2,131 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E4F67ABE6
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 09:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0533B67AD58
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 10:09:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235190AbjAYIhQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 03:37:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S233235AbjAYJI4 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 04:08:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234627AbjAYIhP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 03:37:15 -0500
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 422635BA0
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 00:37:14 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id z31so9823630pfw.4
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 00:37:14 -0800 (PST)
+        with ESMTP id S234005AbjAYJIz (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 04:08:55 -0500
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91023D939
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:08:53 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id bg13-20020a05600c3c8d00b003d9712b29d2so752181wmb.2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:08:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=k9Nec76Oi0E+mrHL8wSYgF34A1/FIvu+NGyByFAKcaY=;
-        b=Aa+UpWul0pfvnY1IDnj12S/PyC1uh+eOIlvAp+l2dcwh6xjmt6IPjfhuq/TEQTxEsh
-         c7aIvJ8QkwEssT69lVo3cVNo5YLseNB2Nap7LxWl3FreYgJz8YYJ4lT+4sIui/ZR1TMZ
-         UfxrdLdrucFqrTuo3CHKo4NIo8kwzLKaP73DmfiRaZ8m5+MQuoRLZ5zdCvHH81IG5+/b
-         gAWCO4MXXjCdbrRNalRv9yicG9tJ1Y331eUdiwj0acp0ymj/Vc6JJ8c7BpmPRMI+eaba
-         lb4B1NLMKE4T+JxnvTMqM6tbAjCZk864rdLVIX1LVYwbGcNCbwTsqAdKN4HG68SZISnG
-         F7og==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sF+NbwG3d0SXyd+w9CGOwS5V+wHVHgGRIB1Vv65RfW4=;
+        b=ZWrIKDuUi3xvqvKgoHlNBI3N5mKVytsVXnEpwpDbLuTaqSBniGX+ox9bf938gpk8jt
+         H9efII5W8y6VumMOo7nTj2EnIXWml7+JW2SxwQTLXg5W3aKQyLTCQBOZoNxROtjHlp4h
+         NMbGirP+YenRX6bdA/md5/UjuzkwkdfUR87pPS5i6uqhn5suxigqU478/Zb2OJIqRvYT
+         h/z2c07uxlv8IO4tWj85LYStXlZamuppYXBBObn1JhykQiP8G4fj/TZbJHBJLdyE1bkz
+         JlNz4iFeEzqRWuPy8tfWt3tQnn8qvhZ92rIKApzJjLo1EQIge/J3u4FmbhxUJ1jJZDmW
+         8IBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=k9Nec76Oi0E+mrHL8wSYgF34A1/FIvu+NGyByFAKcaY=;
-        b=KlrZPlqbgAQsDBDNJ7eLsGOXTn1KY9fIEz82W4CDCvLLfhndvheQEq9RL9UtwYSAXv
-         3W54NsF+zU+Rb8YBfKo6iFAYB58cSOt/59VE9wR9gm2dRG3/XuADDGqoB4Mii+Pnq/AH
-         gzSz6EWjh+Q+aDw0RKW8UPpKkNW2JYyPo81mV9sManFFyv5rbouHJ1KRGkX+TWCvHq6Q
-         Nbhd28Odgbrz+rvWdn5nklr7nClwZWdObBCBMMTLbhrAfyznG7CRM3jljD7aQcaQMOa0
-         iBiAZFHP8QOT4CAXcnJcJoIMIi5mXm66Hdm8qyYxcmadFHzO7sOV5pJJVjXQMQ6VP78a
-         Renw==
-X-Gm-Message-State: AFqh2kr8OBquLg3DnzzP+pPAUX6Wkc5jgPjpROnf/hZTZ1lkb6E+YNSP
-        v65gBCdb0nzSCGZPLRdhlVliE9hVog7bJohCJpJSK8ZuHRo69dMs
-X-Google-Smtp-Source: AMrXdXv0NmesZGztdzXUh/Zk/swdQdcARb22fUY+pOh/ib/o2jBP2fEXJYTqAswc/REwktUn9vVRzBViDt1jsdL/AaA=
-X-Received: by 2002:a63:946:0:b0:4cf:7ba0:dd5a with SMTP id
- 67-20020a630946000000b004cf7ba0dd5amr2971793pgj.119.1674635833651; Wed, 25
- Jan 2023 00:37:13 -0800 (PST)
+        bh=sF+NbwG3d0SXyd+w9CGOwS5V+wHVHgGRIB1Vv65RfW4=;
+        b=lnaCjGv61CWVYetfuvohQzy3leXnxCSkgqmc38y85KHKqMzzT5sz+bi/KwxYv00zSP
+         je8A5u8wmKxI9leIpNKFWCxzT1Xzl2QbqmkPa3LBM/3ER96wYZ2FRkzDcWr8adTeVLPQ
+         1sviC6nuONXkHakg3vUtRhE71vBtpMeq8g32aIiXDgO8XxZcF6ULpUz8WbMoiH2ZWW+1
+         NzG9Mb0xoebQcUY0e5lJC/5T4mmAMl8ZHG0GcEj+LYIv1kEw/ew0KGS0WaifirBEsZrJ
+         kWM3eywcWtxn//GlXVVBAptUfBcfBz/9SYc82BZUjopz9skDywTTQepMpcXjeurRUthg
+         VOcA==
+X-Gm-Message-State: AFqh2koH5HwssEaUe0nE8+kB6c5GOxJeuDzXVfLUX8VKUiBkQb6yySW5
+        q3usfUlWe+SisJqouJjC807ozA==
+X-Google-Smtp-Source: AMrXdXvspCLpjak/blAkqScmjuu7tOfRkMdKuuRUnkH3nrmuuQvbcbNJUkPnLwAuNPDyLikW11ck/g==
+X-Received: by 2002:a05:600c:35d5:b0:3db:fc4:d018 with SMTP id r21-20020a05600c35d500b003db0fc4d018mr28490606wmq.40.1674637732378;
+        Wed, 25 Jan 2023 01:08:52 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id e19-20020a05600c13d300b003daf98d7e35sm1198258wmg.14.2023.01.25.01.08.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 01:08:51 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Chanwoo Choi <cw00.choi@samsung.com>,
+        Georgi Djakov <djakov@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-pm@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: interconnect: samsung,exynos-bus: allow opp-table
+Date:   Wed, 25 Jan 2023 10:08:49 +0100
+Message-Id: <20230125090849.122189-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230119174244.2059628-1-vincent.guittot@linaro.org> <Y9CJ3w4q/NCw5RcK@e126311.manchester.arm.com>
-In-Reply-To: <Y9CJ3w4q/NCw5RcK@e126311.manchester.arm.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 25 Jan 2023 09:37:02 +0100
-Message-ID: <CAKfTPtAm39hJk_=M08ceFUFwac2jj92-z=r2cev3K9JZ1xHDxg@mail.gmail.com>
-Subject: Re: [PATCH v4] sched/fair: unlink misfit task from cpu overutilized
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
-        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
-        vschneid@redhat.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
-        xuewen.yan94@gmail.com, han.lin@mediatek.com,
-        Jonathan.JMChen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 02:46, Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
->
-> Hi,
->
-> > By taking into account uclamp_min, the 1:1 relation between task misfit
-> > and cpu overutilized is no more true as a task with a small util_avg may
-> > not fit a high capacity cpu because of uclamp_min constraint.
-> >
-> > Add a new state in util_fits_cpu() to reflect the case that task would fit
-> > a CPU except for the uclamp_min hint which is a performance requirement.
-> >
-> > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
-> > can use this new value to take additional action to select the best CPU
-> > that doesn't match uclamp_min hint.
-> >
->
-> Just wanted to include some more test data here to flag potential issues
-> with how all these changes use thermal pressure in the scheduler.
->
-> For the tables below, 'baseline' is pre the already merged "uclamp fits
-> capacity" patchset.
-> 'baseline_ufc' is the current mainline with said patchset applied.
-> The 'no_thermal' variants are variants with thermal handling taken out
-> of util_fits_cpu akin to the v1 variant of the patchset.
-> The 'patched' variants are the above but with the v4 of the 'unlink misfit
-> task' patch applied as well.
->
-> Geekbench 5:
->
-> +-----------------+-------------------------+--------+-----------+
-> |     metric      |         kernel          | value  | perc_diff |
-> +-----------------+-------------------------+--------+-----------+
-> | multicore_score |        baseline         | 2765.4 |   0.0%    |
-> | multicore_score |      baseline_ufc       | 2704.3 |  -2.21%   | <-- mainline score regression
-> | multicore_score | baseline_ufc_no_thermal | 2870.8 |   3.81%   | <-- ~170 pts better without thermal
-> | multicore_score |     ufc_patched_v4      | 2839.8 |   2.69%   | <-- no more regression but worse than above
-> | multicore_score | ufc_patched_no_thermal  | 2891.0 |   4.54%   | <-- best score
-> +-----------------+-------------------------+--------+-----------+
->
-> +--------------+--------+-------------------------+--------+-----------+
-> |  chan_name   | metric |         kernel          | value  | perc_diff |
-> +--------------+--------+-------------------------+--------+-----------+
-> | total_power  | gmean  |        baseline         | 2664.0 |   0.0%    |
-> | total_power  | gmean  |      baseline_ufc       | 2621.5 |   -1.6%   |
-> | total_power  | gmean  | baseline_ufc_no_thermal | 2710.0 |   1.73%   |
-> | total_power  | gmean  |     ufc_patched_v4      | 2729.0 |   2.44%   |
-> | total_power  | gmean  | ufc_patched_no_thermal  | 2778.1 |   4.28%   |
-> +--------------+--------+-------------------------+--------+-----------+
->
-> (Jankbench scores show more or less no change, Jankbench power below)
->
-> +--------------+--------+------------------------------+-------+-----------+
-> |  chan_name   | metric |            kernel            | value | perc_diff |
-> +--------------+--------+------------------------------+-------+-----------+
-> | total_power  | gmean  |        baseline_60hz         | 135.9 |   0.0%    |
-> | total_power  | gmean  |      baseline_ufc_60hz       | 155.7 |  14.61%   | <-- mainline power usage regression
-> | total_power  | gmean  | baseline_ufc_no_thermal_60hz | 134.5 |  -1.01%   | <-- no more regression without the thermal bit
-> | total_power  | gmean  |     ufc_patched_v4_60hz      | 131.4 |  -3.26%   | <-- no more regression with the patch either
-> | total_power  | gmean  | ufc_patched_no_thermal_60hz  | 140.4 |   3.37%   | <-- both combined increase power usage
-> +--------------+--------+------------------------------+-------+-----------+
->
-> Specifically the swing of +15% power to -1% power by taking out thermal
-> handling from util_fits_cpu on the original patchset is noteworthy. It
-> shows that there's some subtle thermal-related interaction there taking
-> place that can have adverse effects on power usage.
->
-> Even more interestingly, the 'unlink misfit task' patch appears to be
-> preventing said interaction from happening down the line as it has a
-> similar effect to that of just taking out the thermal bits.
->
-> My only concern here is that without taking a closer look at the thermal
-> parts this power issue shown above could easily accidentally be
-> reintroduced at some point in the future.
+The opp-table can be located in the exynos-bus node which uses it, so
+allow such child node.
 
-Yes, the handling of thermal pressure needs some closer look. It has
-been agreed to keep the current behavior for now and have a closer
-look on thermal pressure as a next step. And your results for
-ufc_patched_v4_* provide some reasonably good perf and power figures.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../interconnect/samsung,exynos-bus.yaml      | 27 +++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-Thanks
+diff --git a/Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml b/Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml
+index ad9ed596dfef..5e26e48c7217 100644
+--- a/Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml
++++ b/Documentation/devicetree/bindings/interconnect/samsung,exynos-bus.yaml
+@@ -196,6 +196,8 @@ properties:
+     maxItems: 2
+ 
+   operating-points-v2: true
++  opp-table:
++    type: object
+ 
+   samsung,data-clock-ratio:
+     $ref: /schemas/types.yaml#/definitions/uint32
+@@ -227,6 +229,31 @@ examples:
+         operating-points-v2 = <&bus_dmc_opp_table>;
+         devfreq-events = <&ppmu_dmc0_3>, <&ppmu_dmc1_3>;
+         vdd-supply = <&buck1_reg>;
++
++        bus_dmc_opp_table: opp-table {
++            compatible = "operating-points-v2";
++
++            opp-50000000 {
++                opp-hz = /bits/ 64 <50000000>;
++                opp-microvolt = <800000>;
++            };
++            opp-100000000 {
++                opp-hz = /bits/ 64 <100000000>;
++                opp-microvolt = <800000>;
++            };
++            opp-134000000 {
++                opp-hz = /bits/ 64 <134000000>;
++                opp-microvolt = <800000>;
++            };
++            opp-200000000 {
++                opp-hz = /bits/ 64 <200000000>;
++                opp-microvolt = <825000>;
++            };
++            opp-400000000 {
++                opp-hz = /bits/ 64 <400000000>;
++                opp-microvolt = <875000>;
++            };
++        };
+     };
+ 
+     ppmu_dmc0: ppmu@106a0000 {
+-- 
+2.34.1
 
->
-> > --
-> > 2.34.1
-> >
