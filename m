@@ -2,116 +2,164 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A4467B567
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 16:06:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC6C67B571
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 16:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235701AbjAYPGn (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 10:06:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S235777AbjAYPJH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 10:09:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234565AbjAYPGm (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 10:06:42 -0500
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD07CDD9
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 07:06:41 -0800 (PST)
-Received: by mail-ej1-x62d.google.com with SMTP id vw16so48406809ejc.12
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 07:06:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=hZ+XWT7x3GIrVuC5smdu5kaGnAEgwF0jVXjRtih1Jog=;
-        b=cH3hA1DNTFYYXcYv2dYsdfs/F0a4Fo0x393HAZwW7sg2/ZjfnFAD1GtMUOqjWL6CnP
-         ZvzRjkIG0subDN66xQFmo5RPvHMO3JcQFlvxD4ONkyFtfwzAB0ttmle/4y/TihRmks2S
-         QXEXCp8Wf6YgFDGr3UNW6Zg1acdhVDLA6TZFsp2afNANCN/FBWcfLjqRBqIzEzy0hs2+
-         Iu7AQIKZKCjwH1r3tr76JeJWLqDPeFtDwhkwh4CwUKs4fBH3dkJgQS9oXUFzIuRCTvAV
-         wz10ylaivnJCsis/1BoziUFwpkgIXGHitA8M5eSFjzZ2tVIZ5zMWatWzwaCmwmELkutj
-         aVZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hZ+XWT7x3GIrVuC5smdu5kaGnAEgwF0jVXjRtih1Jog=;
-        b=rfAcXheJkhDpuocYbRDepCVQLZdr4fL9Ird3M+ws2Xf25BqOP1rmpuWFh65wE0DIYW
-         ZOxAFs9fUPodZFzFf+1ZdTm2vz274uOc6DCs8evapaZFiVH4WHL/uZKk3q7oefzJgED8
-         PPEDTFbzaSlzBskAZ82JuPwM1eNn/fIPM+cRV+Q+F/hgQktP5m9LgwGFO0WipDXRsv44
-         EByJoFEo1q0ZJGPRUHPLXvAIZtW6zicnn60AZ8Np1cfYgKSMzDUHtEByPekDtyBLw9PN
-         9KdtIT1ybwpCkgxT2NASfxqLAZ2h1JtxyEbXkf60f+l7gnHisJchMsiD1I1dk8KF/1Ua
-         tAyA==
-X-Gm-Message-State: AFqh2kpCtrqG9WxwcU6ijiZl/WaM+Utd6LpHMBChhmKrw1+BfRDTHgXa
-        IAGVhdgG7pVeZ2fERCjLdDcwsFFqmWQjKDl6dxR4jQ==
-X-Google-Smtp-Source: AMrXdXvqJOlDJST3w87/gr/ZwRFOMtImwLKSDqGCZTr2eYhDs7UWmBPmEUcE54nfAXRo5cLYHmUUvd9VLSwpRS2TOrc=
-X-Received: by 2002:a17:907:c243:b0:7c0:e391:c548 with SMTP id
- tj3-20020a170907c24300b007c0e391c548mr5314680ejc.18.1674659200062; Wed, 25
- Jan 2023 07:06:40 -0800 (PST)
-MIME-Version: 1.0
-References: <20230124131717.128660-1-bchihi@baylibre.com> <20230124131717.128660-5-bchihi@baylibre.com>
- <5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com>
-In-Reply-To: <5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com>
-From:   Balsam CHIHI <bchihi@baylibre.com>
-Date:   Wed, 25 Jan 2023 16:06:04 +0100
-Message-ID: <CAGuA+oo6dV=Vs69PMPSpBSdqDa2ESHjiTzrH_ZYAyUgVmq9HJw@mail.gmail.com>
-Subject: Re: [PATCH v11 4/6] thermal/drivers/mediatek: Add the Low Voltage
- Thermal Sensor driver
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, matthias.bgg@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
-        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        with ESMTP id S234279AbjAYPJG (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 10:09:06 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74CAB1BE0;
+        Wed, 25 Jan 2023 07:09:05 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0EF9761547;
+        Wed, 25 Jan 2023 15:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FC81C433EF;
+        Wed, 25 Jan 2023 15:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674659344;
+        bh=v+B+KDBEA50AHtVt9lQ1BTuMYwoPUgbIgH8/Amio1lE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hSoessefOv16Xt7Qbj98AdgmJicOcikMVtEdI8hVuvfe5IRYVPezihO/irb3buQZt
+         3ZFdNvsViDwPHeE3Jm/XuN6iGzIm1ESIZsv0lbDa1vk4s6rEEf6cKYM+bN/iuQe9VW
+         P/Svjep8k+fSgfN9zyFG7lQqfCHheo29BxDr+K+4T3lE67taLSodJ3E7d4EG4RrRqe
+         73RJMrkg3YqzKBZH4GY2t14YGyMJND9cOXmrIKdYBcHjYwCgCzhERtbbPGPR5fu5EG
+         NLAP3xoucfO28ZdQF16a1/t4V81l7sTg4luWlxs+aH+wX1wDHuET+t7+76hhEK6te3
+         8HtxOatriltJw==
+Date:   Wed, 25 Jan 2023 15:08:54 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        khilman@baylibre.com, james.lo@mediatek.com,
-        rex-bc.chen@mediatek.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing
+ (unevaluated|additional)Properties on child node schemas
+Message-ID: <Y9FGBqFKMxL3XraK@google.com>
+References: <20230124230228.372305-1-robh@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230124230228.372305-1-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Tue, Jan 24, 2023 at 4:31 PM AngeloGioacchino Del Regno
-<angelogioacchino.delregno@collabora.com> wrote:
->
-> Il 24/01/23 14:17, bchihi@baylibre.com ha scritto:
-> > From: Balsam CHIHI <bchihi@baylibre.com>
-> >
-> > The Low Voltage Thermal Sensor (LVTS) is a multiple sensors, multi
-> > controllers contained in a thermal domain.
-> >
-> > A thermal domains can be the MCU or the AP.
-> >
-> > Each thermal domains contain up to seven controllers, each thermal
-> > controller handle up to four thermal sensors.
-> >
-> > The LVTS has two Finite State Machines (FSM), one to handle the
-> > functionin temperatures range like hot or cold temperature and another
-> > one to handle monitoring trip point. The FSM notifies via interrupts
-> > when a trip point is crossed.
-> >
-> > The interrupt is managed at the thermal controller level, so when an
-> > interrupt occurs, the driver has to find out which sensor triggered
-> > such an interrupt.
-> >
-> > The sampling of the thermal can be filtered or immediate. For the
-> > former, the LVTS measures several points and applies a low pass
-> > filter.
-> >
-> > Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
->
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->
-> On MT8195 Tomato Chromebook:
-> Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+On Tue, 24 Jan 2023, Rob Herring wrote:
 
-Hi Angelo,
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
+> 
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: David Airlie <airlied@gmail.com>
+> To: Daniel Vetter <daniel@ffwll.ch>
+> To: Bartosz Golaszewski <brgl@bgdev.pl>
+> To: Jean Delvare <jdelvare@suse.com>
+> To: Guenter Roeck <linux@roeck-us.net>
+> To: Thomas Gleixner <tglx@linutronix.de>
+> To: Marc Zyngier <maz@kernel.org>
+> To: Jassi Brar <jassisinghbrar@gmail.com>
+> To: Mauro Carvalho Chehab <mchehab@kernel.org>
+> To: Lee Jones <lee@kernel.org>
+> To: Ulf Hansson <ulf.hansson@linaro.org>
+> To: Richard Weinberger <richard@nod.at>
+> To: Vignesh Raghavendra <vigneshr@ti.com>
+> To: Sebastian Reichel <sre@kernel.org>
+> To: Mark Brown <broonie@kernel.org>
+> To: "Rafael J. Wysocki" <rafael@kernel.org>
+> To: Daniel Lezcano <daniel.lezcano@linaro.org>
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-gpio@vger.kernel.org
+> Cc: linux-hwmon@vger.kernel.org
+> Cc: linux-media@vger.kernel.org
+> Cc: openbmc@lists.ozlabs.org
+> Cc: linux-mmc@vger.kernel.org
+> Cc: linux-mtd@lists.infradead.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: alsa-devel@alsa-project.org
+> Cc: linux-spi@vger.kernel.org
+> Cc: linux-usb@vger.kernel.org
+> ---
+>  .../devicetree/bindings/arm/arm,vexpress-juno.yaml     |  1 +
+>  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml |  5 +++--
+>  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml         |  4 ++++
+>  .../bindings/bus/allwinner,sun50i-a64-de2.yaml         |  1 +
+>  .../bindings/bus/allwinner,sun8i-a23-rsb.yaml          |  1 +
+>  .../bus/intel,ixp4xx-expansion-bus-controller.yaml     |  6 ++++++
+>  Documentation/devicetree/bindings/bus/palmbus.yaml     |  1 +
+>  .../devicetree/bindings/display/msm/qcom,mdss.yaml     |  5 +++++
+>  Documentation/devicetree/bindings/example-schema.yaml  |  2 ++
+>  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml |  1 +
+>  .../devicetree/bindings/hwmon/adi,ltc2992.yaml         |  1 +
+>  .../bindings/interrupt-controller/arm,gic-v3.yaml      |  2 ++
+>  .../bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml      |  1 +
+>  .../devicetree/bindings/media/i2c/maxim,max9286.yaml   |  7 +++++++
+>  .../bindings/memory-controllers/arm,pl35x-smc.yaml     |  1 +
+>  .../bindings/memory-controllers/exynos-srom.yaml       |  1 +
+>  .../memory-controllers/nvidia,tegra124-emc.yaml        |  1 +
+>  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml |  1 +
+>  .../devicetree/bindings/mfd/mediatek,mt6370.yaml       |  2 ++
+>  .../devicetree/bindings/mmc/aspeed,sdhci.yaml          |  1 +
+>  Documentation/devicetree/bindings/mtd/mtd.yaml         |  1 +
+>  .../devicetree/bindings/power/supply/ti,lp8727.yaml    |  1 +
+>  .../devicetree/bindings/soc/imx/fsl,imx93-src.yaml     |  3 ++-
+>  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml   |  1 +
+>  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml |  1 +
+>  .../devicetree/bindings/sound/marvell,mmp-sspa.yaml    |  1 +
+>  .../devicetree/bindings/sound/qcom,wcd934x.yaml        |  1 +
+>  .../devicetree/bindings/sound/samsung,odroid.yaml      |  2 ++
+>  .../devicetree/bindings/soundwire/qcom,soundwire.yaml  |  1 +
+>  .../bindings/spi/allwinner,sun4i-a10-spi.yaml          |  1 +
+>  .../bindings/spi/allwinner,sun6i-a31-spi.yaml          |  1 +
+>  .../devicetree/bindings/spi/spi-controller.yaml        |  1 +
+>  .../sram/allwinner,sun4i-a10-system-control.yaml       | 10 +++++-----
+>  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml |  1 +
+>  .../devicetree/bindings/thermal/thermal-zones.yaml     |  1 +
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml   |  1 +
+>  36 files changed, 65 insertions(+), 8 deletions(-)
 
-Thank you for reviewing and testing it.
+Acked-by: Lee Jones <lee@kernel.org>
 
-Best regards,
-Balsam
+-- 
+Lee Jones [李琼斯]
