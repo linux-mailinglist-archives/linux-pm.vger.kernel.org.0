@@ -2,148 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01FD667AF0B
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 10:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7081B67AF2D
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 11:02:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232306AbjAYJ7B (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 04:59:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44650 "EHLO
+        id S235102AbjAYKCK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 05:02:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjAYJ7A (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 04:59:00 -0500
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DBD4997B;
-        Wed, 25 Jan 2023 01:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1674640736; x=1706176736;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+anlwynG1paGsjavBdn2ta5mXew30jOhzLYN5tUMxgw=;
-  b=V1iq6QzujFxEZ/zHiQu8exQLdolD+EOmEYcbb1FSh0Ex/pdpjl5RQ1HG
-   +uCLgz4PZwKdXZpC6fqk0jU8KNxvihWHLIhNV8ECLZADNMAnq9D7xag5a
-   3AXDXBHShtUc7WnwZIl/jssUoczLpQG5pi4qzc2EDDhrnipQJ5QgsAe0M
-   oEPZmEJyj3Y0dxcdTCxVbY/YQuaJGkNK6cNYPQOcjCCx9zfEsPUIUudbL
-   BWt5J46vUCsRazOB430eNYF70Riv8BH2j4wiKv+DSPfsh++o0MNDjqQsz
-   yX4BoRrp0Ig+cCmHiFLdKXbk0kearVQjBupoJAWF6rBgvHMtmJ/yY5gHj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="391025673"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="391025673"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jan 2023 01:58:55 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10600"; a="907828782"
-X-IronPort-AV: E=Sophos;i="5.97,245,1669104000"; 
-   d="scan'208";a="907828782"
-Received: from lkp-server01.sh.intel.com (HELO 5646d64e7320) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 25 Jan 2023 01:58:53 -0800
-Received: from kbuild by 5646d64e7320 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pKcYO-0007Dk-37;
-        Wed, 25 Jan 2023 09:58:52 +0000
-Date:   Wed, 25 Jan 2023 17:58:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     linux-pm@vger.kernel.org, devel@acpica.org,
-        linux-acpi@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- 561b75628983188ea131d1830bc08d633ce5f5bb
-Message-ID: <63d0fd54.Azin3S7jE+phXA2m%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        with ESMTP id S235065AbjAYKCJ (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 05:02:09 -0500
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D5653B2D
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:02:07 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso835588wmc.4
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:02:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ez1jIiTv9nX1Skc1wM1E/PnmqK6jZZdjJqYTYBY0xHY=;
+        b=HxmBkWhRZanAM19gbjD/LEt8+fEINkj3ywKLosQLQbJQNZsXfqnXpDbmIAv4vAZn+h
+         Rp/oupBFgjLiKjSMJn0GJqR2OhyItaYDqy9fwTsHSNcLN4EsLbpzBTzwF7Eru0Dyz4MS
+         YHXwLS9ae2cRkytyAYZtRsKZGPO+vvwpEVDhVGWnjZn8WvObuOjAIj7unsoEpdiX6wsG
+         ig6NlHG+XmKN3XjOp67HzuQsrDjiAHGpq3gf5Dkone9+k/HByHdp2SKXjlBhOEtRsPlG
+         brxwTlr9t101guYLnvtRfX0DOYLo0tR56e+9YXEZV8ZDADgbSaQ7KpV5J73e+I9NvoCe
+         WuXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ez1jIiTv9nX1Skc1wM1E/PnmqK6jZZdjJqYTYBY0xHY=;
+        b=RTrm8/fITRYyRffSBsAN6DuWHi/OX1YmAbb04ZBHYcNCIJs9TA+KohbBzKRoWYFO5N
+         QgnBpET6Zf3Y/gN+6u87WJ7JMo4s2mjKPd/UTae0ye+wvhXtsum4pSZhu7FNO4D8ZIrs
+         Qa+f01VQ1IRk6gDaw0BnRxySD8QuN4Fe406qAszG2FnU8pt85eyIB0RKDCUNxxP8e8ET
+         8Mm+C01bU4dk4eod9SZ4/R5YjXRJJo0bkdGKkoy0IVMUv9tgtGVxk7c38995Ev/8+IIX
+         XI4ZGq6HCpSc2KivnsZ5eqXpnXQ5eVwNQrah1VLclBDRLT19MCSt8tsZKYwwTsfeo2pT
+         dMJw==
+X-Gm-Message-State: AFqh2kqn7wZtWa2u9LO1EvnTGYBNmDZFGKV5FdDD2HWezSTiJTabq7vR
+        D2QK6DtE+2HEiZ8FIMKBW+v77w==
+X-Google-Smtp-Source: AMrXdXsWI+Xn0CCZaPu7nEc4G6KvXleAVgMRzL7EE29YVtnKarz3Jdw/b+2Wh3ptAxw9WtwVxtljUg==
+X-Received: by 2002:a1c:4b19:0:b0:3da:fb5c:8754 with SMTP id y25-20020a1c4b19000000b003dafb5c8754mr28049633wma.2.1674640925987;
+        Wed, 25 Jan 2023 02:02:05 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id h20-20020a05600c351400b003dc1300eab0sm1460677wmq.33.2023.01.25.02.02.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 02:02:05 -0800 (PST)
+Message-ID: <0df50d0f-de3a-a2be-9363-2b3c65599f96@linaro.org>
+Date:   Wed, 25 Jan 2023 11:02:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.2
+Subject: Re: [PATCH v7 4/4] thermal: mediatek: add another get_temp ops for
+ thermal sensors
+Content-Language: en-US
+To:     Amjad Ouled-Ameur <aouledameur@baylibre.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Markus Schneider-Pargmann <msp@baylibre.com>,
+        linux-pm@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Michael Kao <michael.kao@mediatek.com>,
+        linux-kernel@vger.kernel.org, Hsin-Yi Wang <hsinyi@chromium.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org
+References: <20221018-up-i350-thermal-bringup-v7-0-ebf08ff2eddb@baylibre.com>
+ <20221018-up-i350-thermal-bringup-v7-4-ebf08ff2eddb@baylibre.com>
+ <4121bb6b-30db-7a23-f4c8-40afdda7a0b5@linaro.org>
+ <COTTJX635TNF.1WL2TEZN7VW9O@amjad-ThinkPad-T490>
+ <adfe41f7-00e5-876b-7803-3127919fba13@linaro.org>
+ <COUMF3IZ9Y63.LA3KFHJSUZIC@amjad-ThinkPad-T490>
+ <0644aede-c281-3919-50e0-4466f6587d81@linaro.org>
+ <187b0fe1-1f14-d8b8-c827-1e824da0b1d3@baylibre.com>
+ <d3daece0-ed23-fae7-9bc8-c6e53b84e8e7@baylibre.com>
+ <9f9547a2-69dd-f91d-c587-289156bf9d55@linaro.org>
+ <2950b824-ad2f-2579-a956-a03d157453eb@baylibre.com>
+ <c1fad818-1858-2e81-84fd-03cfb54d8938@linaro.org>
+ <0b5e3a14-fd23-4646-d4cb-df255eb8fa20@baylibre.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <0b5e3a14-fd23-4646-d4cb-df255eb8fa20@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: 561b75628983188ea131d1830bc08d633ce5f5bb  Merge branch 'thermal/bleeding-edge' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/thermal/linux into bleeding-edge
+On 24/01/2023 23:27, Amjad Ouled-Ameur wrote:
+> 
+> On 1/24/23 18:55, Daniel Lezcano wrote:
+>> On 24/01/2023 18:46, Amjad Ouled-Ameur wrote:
+>>>
+>>> On 1/24/23 17:54, Daniel Lezcano wrote:
+>>>>
+>>>> Hi Amjad,
+>>>>
+>>>> On 24/01/2023 11:08, Amjad Ouled-Ameur wrote:
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>>>>
+>>>>>>> IIUC, there is a sensor per couple of cores. 1 x 2Bigs, 1 x 
+>>>>>>> 2Bigs, 1 x 4 Little, right ?
+>>>>>>
+>>>>>> MT8365 SoC has 4 x A53 CPUs. The SoC has 4 thermal zones per 
+>>>>>> sensor. Thermal zone 0 corresponds
+>>>>>>
+>>>>>> to all 4 x A53 CPUs, the other thermal zones (1, 2 and 3) has 
+>>>>>> nothing to do with CPUs. The cooling device type
+>>>>>>
+>>>>>> used for CPUs is passive. FYI, thermal zones 1, 2 and 3 are 
+>>>>>> present in the SoC for debug-purpose only, they are not supposed
+>>>>>>
+>>>>>> to be used for production.
+>>>>>>
+>>>>> After reconsidering the fact that zones 1, 2 and 3 are only used 
+>>>>> for dev/debug, it might be best to avo >
+>>>>> aggregation as you suggested, and keep only support for zone 0 in 
+>>>>> this driver. Thus I suggest I send a V8
+>>>>>
+>>>>> where I keep only below fixes for this patch if that's okay with you:
+>>>>>
+>>>>> - Define "raw_to_mcelsius" function pointer for "struct 
+>>>>> thermal_bank_cfg".
+>>>>>
+>>>>> - Fix "mtk_thermal" variable in mtk_read_temp().
+>>>>>
+>>>>> - Set "mt->raw_to_mcelsius" in probe().
+>>>>>
+>>>>>
+>>>>> For zones 1, 2 and 3 we can later add a different driver specific 
+>>>>> for dev/debug to probe them to
+>>>>>
+>>>>> avoid confusion.
+>>>>
+>>>> You can add them in the driver and in the device tree, but just add 
+>>>> the cooling device for the thermal zone 0.
+>>>
+>>> Thermal zone 0 uses CPU{0..3} for passive cooling, in this case we 
+>>> should register cooling device with
+>>>
+>>> cpufreq_cooling_register() for each CPU right ?
+>>
+>> No, the OF code device tree does already that. You just have to 
+>> register the different thermal zones.
+>>
+>> Do you have a pointer to a device tree for this board and the thermal 
+>> setup ?
+> 
+> Sure, here is a dtsi for MT8365 SoC which contains thermal nodes [0].
 
-elapsed time: 720m
+ From my POV, there are two different setup with the DT but only one 
+implementation with the driver.
 
-configs tested: 66
-configs skipped: 2
+The driver should register all the thermal zones for each CPUs. For 
+that, make things nice with the defines for the dt-bindings like [1].
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Then the device tree:
 
-gcc tested configs:
-x86_64                            allnoconfig
-arc                                 defconfig
-s390                             allmodconfig
-alpha                               defconfig
-s390                                defconfig
-s390                             allyesconfig
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                              defconfig
-powerpc                           allnoconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-alpha                             allnoconfig
-i386                              allnoconfig
-arm                               allnoconfig
-arc                               allnoconfig
-i386                                defconfig
-arc                  randconfig-r043-20230123
-arm                                 defconfig
-arm                  randconfig-r046-20230123
-arm64                            allyesconfig
-sh                               allmodconfig
-arm                              allyesconfig
-x86_64                           rhel-8.3-syz
-x86_64                         rhel-8.3-kunit
-ia64                             allmodconfig
-i386                 randconfig-a004-20230123
-x86_64                           rhel-8.3-kvm
-i386                 randconfig-a003-20230123
-x86_64                    rhel-8.3-kselftests
-i386                 randconfig-a002-20230123
-x86_64                          rhel-8.3-func
-x86_64                           rhel-8.3-bpf
-i386                 randconfig-a001-20230123
-i386                 randconfig-a006-20230123
-i386                 randconfig-a005-20230123
-x86_64               randconfig-a002-20230123
-x86_64               randconfig-a001-20230123
-x86_64               randconfig-a004-20230123
-x86_64               randconfig-a003-20230123
-i386                             allyesconfig
-x86_64               randconfig-a006-20230123
-x86_64               randconfig-a005-20230123
-mips                             allyesconfig
-powerpc                          allmodconfig
-m68k                             allyesconfig
-alpha                            allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
+setup1:
 
-clang tested configs:
-hexagon              randconfig-r041-20230123
-hexagon              randconfig-r045-20230123
-s390                 randconfig-r044-20230123
-x86_64               randconfig-a013-20230123
-riscv                randconfig-r042-20230123
-x86_64               randconfig-a011-20230123
-x86_64               randconfig-a012-20230123
-x86_64               randconfig-a016-20230123
-x86_64               randconfig-a015-20230123
-x86_64               randconfig-a014-20230123
-x86_64                          rhel-8.3-rust
-i386                 randconfig-a012-20230123
-i386                 randconfig-a013-20230123
-i386                 randconfig-a011-20230123
-i386                 randconfig-a014-20230123
-i386                 randconfig-a016-20230123
-i386                 randconfig-a015-20230123
+Describe all the thermal zones in the DT which will be similar to [2]. 
+Each CPU has a thermal zone, trip points and the same cooling device.
+
+The first thermal zone reaching the trip temperature threshold will 
+start the mitigation. The thermal framework takes care of multiple 
+thermal zones sharing the same cooling device.
+
+The result will be the same as the max temperature aggregation you did 
+previously.
+
+setup2:
+
+Describe all the thermal zones in the DT [3], but add the cooling device 
+only on the sensor you are interested in mitigating.
+
+
+And finally, if the sensors should be used to describe a kind of 
+temperature gradient, a linear equation could be used but that is not 
+implemented yet in the thermal framework.
+
+Hope that helps
+
+   -- Daniel
+
+[1] 
+https://lore.kernel.org/linux-arm-kernel/5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com/T/#Z2e.:..:20230124131717.128660-3-bchihi::40baylibre.com:1include:dt-bindings:thermal:mediatek-lvts.h
+
+[2] 
+https://lore.kernel.org/linux-arm-kernel/5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com/T/#m303240c4da71f6f37831e5d1b6f3da771ae8dd90
+
+[3] 
+https://lore.kernel.org/linux-arm-kernel/5dd5c795-5e67-146d-7132-30fc90171d4c@collabora.com/T/#Z2e.:..:20230124131717.128660-6-bchihi::40baylibre.com:1arch:arm64:boot:dts:mediatek:mt8195.dtsi
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
+
