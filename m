@@ -2,74 +2,68 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6991867B7CB
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 18:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE03167B7D3
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 18:05:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235331AbjAYRDK (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 12:03:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55134 "EHLO
+        id S229884AbjAYRFt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 12:05:49 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235501AbjAYRDK (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 12:03:10 -0500
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F03B366AB
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 09:03:08 -0800 (PST)
-Received: by mail-io1-xd2e.google.com with SMTP id p189so8770771iod.0
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 09:03:08 -0800 (PST)
+        with ESMTP id S235474AbjAYRFs (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 12:05:48 -0500
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979DE4B8A2
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 09:05:47 -0800 (PST)
+Received: by mail-pj1-x102c.google.com with SMTP id j5so5533130pjn.5
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 09:05:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JPVWLTo+vaeF5iEwBOSiPYaPy6VvLY/Th6ssTGMUgl8=;
-        b=XOj66zypoWrEmuT3uRLp5WqdKG6YJzZ3bYzEf7icQnSt11h1lgop4iFwYvZd8XSkLW
-         DOhCCX2b/oAh3+Zn2Wbf8yTMBPyg4qQ9WvSXZfvlA5GXw24XQUibg3s70nBhgzVL4VWI
-         9dRgvzEHF/Z525nzrcj5BsWnP3zhkK2xeMpf8=
+        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=pH/oHI6fF+XkrnZzk0+8BRGX3ci8zWrIwzFuAniDRGQ=;
+        b=gACbS8mM+NrvdIRkmXOsEIFShTN8MYRUqTaKH/XlhK9h+MkgEhihAJlf7WdO3EyYIz
+         lTdedvbJa8MRbKNX2CkzXemefg+MTqVfgrChgD4J68A1e1tWy/LTgBXOAZ0GcXBn/yiZ
+         atNe1NRDb/k/cyoPiDuVGulk50V1iqEyfW8WrEjt49eIPAuMx3SN1D6H974TzwAdn0Nk
+         RooLEP3zK0N1T8hn0e9dpZAkkJwtEaaeFCo9FOomdwF0Kj+HCvB1baQo3IgfMZDmdJUS
+         gnMboQw4M9dHomJKVmaKshKaVn9as4a+Byv9UFEYPOJGLC6GhoOcwwVivs7HdHRYAkEe
+         lL2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JPVWLTo+vaeF5iEwBOSiPYaPy6VvLY/Th6ssTGMUgl8=;
-        b=7Qi4wJl0M697vkEL2NdUpzevzeHzhkIBwHbabiobRwPDctRuV98WFWgbY8toyxMEKT
-         IFOG32TuPWoemxHL4JDvpdDs3oK9HfCRXCicy9DnXfjLr7yAl/HrPq/tPdylkUnA5jvB
-         oHbwPRM/Wchx5dJDc4phm+CdsohK5RX61aVMHD6HgtGLsoUpjXmfI5BVvyL7NxXpin0V
-         FPcKSH9slFZAoDrWY8Nzh9+HGZOawVSa2yEOOfqWAfrDigiclFI7MzRmdEbsxbNbkPPQ
-         QSIBvpNyiBfzCsjy6Orh4ByU/H/wP7lRFWPBIL0WikZBq0yrXerBkBK+XgROEs9c2iEJ
-         rcbA==
-X-Gm-Message-State: AFqh2krz8G8tqlBDXjNCWB7L+JnRPDqIz6wfO1bHaaWDm7dk7naIVOnt
-        A0r8YdEnwnWdbhjkm8k1OYc4hg==
-X-Google-Smtp-Source: AMrXdXvTzdx9bV9nfBVmDShQ+Q25befjEqOGzUdAdd2h+zE8uQH1JTh2YMA7BjTp1cddc+oR3ewuZA==
-X-Received: by 2002:a5e:dd04:0:b0:6dd:f251:caf7 with SMTP id t4-20020a5edd04000000b006ddf251caf7mr4676393iop.0.1674666187811;
-        Wed, 25 Jan 2023 09:03:07 -0800 (PST)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id p1-20020a0566022b0100b006ddb3b698ffsm1597921iov.23.2023.01.25.09.03.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Jan 2023 09:03:07 -0800 (PST)
-Message-ID: <c38ba6b9-b748-cf84-92bd-d29211b10f24@linuxfoundation.org>
-Date:   Wed, 25 Jan 2023 10:03:06 -0700
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pH/oHI6fF+XkrnZzk0+8BRGX3ci8zWrIwzFuAniDRGQ=;
+        b=VwOCm3qZHmB6dVPDA2hGzOTonZxDT0B1NMb1B9KEXL8R2EIC6FTazVJXj583/4VXwT
+         E69iilXWoZJ+sokLGbqmxzVLm8lxeT8gvQZAZF8RAEV67DIyAhqu4725USPxC8hBEFoC
+         c2wPXRX91J/CHDZ4GJXh/b+AY7hD3fd9rHMKsA95kJP947iMYnEGV8diZfhZJt+XHWou
+         v5zvz77JEEmLhszkwgOsDgtt8dWH0Sd9XnLOThHpWOCOTwDeGBLcI5DG1BJQxD/Tw9wU
+         IzuWT5uK+5BXcV9jaipjn9CnxOmBvKQEsjOzYrxAPCzblNbvwQLaQC5+yeb8MHGIGKr2
+         f/hQ==
+X-Gm-Message-State: AO0yUKXJ4duQLQFR+axPVIdf4tRy9F1tJgSD6k6c6GIQXkTon5QKTfAg
+        qKf2HkjlWSsNzNqk5aqLI21IcsX43e6oNF2JCbdFBg==
+X-Google-Smtp-Source: AK7set+lHiPvBsT1EO6252olyerpiKyexbeJ6Gh6kVXXicvc/wZO5UmekfJHbRB08He03D1EYhVa1Q==
+X-Received: by 2002:a17:902:c40b:b0:196:15ad:91ea with SMTP id k11-20020a170902c40b00b0019615ad91eamr7471667plk.63.1674666347100;
+        Wed, 25 Jan 2023 09:05:47 -0800 (PST)
+Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
+        by smtp.gmail.com with ESMTPSA id z15-20020a1709028f8f00b0019607547f29sm3837911plo.304.2023.01.25.09.05.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 09:05:46 -0800 (PST)
+Message-ID: <63d1616a.170a0220.487d7.7797@mx.google.com>
+Date:   Wed, 25 Jan 2023 09:05:46 -0800 (PST)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH v2] selftests: amd-pstate: Don't delete source files via
- Makefile
-To:     Doug Smythies <dsmythies@telus.net>,
-        'Huang Rui' <ray.huang@amd.com>, sedat.dilek@gmail.com,
-        li.meng@amd.com
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "'Rafael J. Wysocki'" <rafael@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <001201d92c93$98c8a040$ca59e0c0$@telus.net>
- <000601d92db7$39e9d0b0$adbd7210$@telus.net>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <000601d92db7$39e9d0b0$adbd7210$@telus.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Tree: pm
+X-Kernelci-Branch: testing
+X-Kernelci-Kernel: v6.2-rc5-97-gf108f07918a9
+X-Kernelci-Report-Type: build
+Subject: pm/testing build: 8 builds: 0 failed, 8 passed,
+ 5 warnings (v6.2-rc5-97-gf108f07918a9)
+To:     rafael@kernel.org, linux-pm@vger.kernel.org,
+        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,41 +71,109 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/21/23 09:41, Doug Smythies wrote:
-> Revert the portion of a recent Makefile change that incorrectly
-> deletes source files when doing "make clean".
-> 
-> Fixes: ba2d788aa873 ("selftests: amd-pstate: Trigger tbench benchmark and test cpus")
-> Reported-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Tested-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Reviewed-by: Sedat Dilek <sedat.dilek@gmail.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Signed-off-by: Doug Smythies <dsmythies@telus.net>
-> ---
-> v2: fix address list.
-> ---
->   tools/testing/selftests/amd-pstate/Makefile | 5 -----
->   1 file changed, 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/amd-pstate/Makefile b/tools/testing/selftests/amd-pstate/Makefile
-> index 5f195ee756d6..5fd1424db37d 100644
-> --- a/tools/testing/selftests/amd-pstate/Makefile
-> +++ b/tools/testing/selftests/amd-pstate/Makefile
-> @@ -7,11 +7,6 @@ all:
->   uname_M := $(shell uname -m 2>/dev/null || echo not)
->   ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
-> 
-> -ifeq (x86,$(ARCH))
-> -TEST_GEN_FILES += ../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
-> -TEST_GEN_FILES += ../../../power/x86/intel_pstate_tracer/intel_pstate_tracer.py
-> -endif
-> -
+pm/testing build: 8 builds: 0 failed, 8 passed, 5 warnings (v6.2-rc5-97-gf1=
+08f07918a9)
 
-This looks good - Do you need these files to run this test and if so
-do these need to installed when the test is run on a test system?
+Full Build Summary: https://kernelci.org/build/pm/branch/testing/kernel/v6.=
+2-rc5-97-gf108f07918a9/
 
-Now applied to linux-kselftest fixes. I will send this up for the next
-rc.
+Tree: pm
+Branch: testing
+Git Describe: v6.2-rc5-97-gf108f07918a9
+Git Commit: f108f07918a97e350e08b923311657f0fcf70b0b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git
+Built: 8 unique architectures
 
-thanks,
--- Shuah
+Warnings Detected:
+
+arc:
+
+arm64:
+
+arm:
+
+i386:
+
+mips:
+    32r2el_defconfig (gcc-10): 1 warning
+
+riscv:
+
+sparc:
+    sparc64_defconfig (gcc-10): 4 warnings
+
+x86_64:
+
+
+Warnings summary:
+
+    2    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version genera=
+tion failed, symbol will not be versioned.
+    2    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [=
+-Wcpp]
+    1    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_devic=
+e_reg): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expec=
+ted "0,0"
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+32r2el_defconfig (mips, gcc-10) =E2=80=94 PASS, 0 errors, 1 warning, 0 sect=
+ion mismatches
+
+Warnings:
+    arch/mips/boot/dts/img/boston.dts:128.19-178.5: Warning (pci_device_reg=
+): /pci@14000000/pci2_root@0,0,0: PCI unit address format error, expected "=
+0,0"
+
+---------------------------------------------------------------------------=
+-----
+defconfig (riscv, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 section m=
+ismatches
+
+---------------------------------------------------------------------------=
+-----
+haps_hs_smp_defconfig (arc, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 secti=
+on mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 se=
+ction mismatches
+
+---------------------------------------------------------------------------=
+-----
+sparc64_defconfig (sparc, gcc-10) =E2=80=94 PASS, 0 errors, 4 warnings, 0 s=
+ection mismatches
+
+Warnings:
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+    <stdin>:1517:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+    WARNING: modpost: EXPORT symbol "_mcount" [vmlinux] version generation =
+failed, symbol will not be versioned.
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0 s=
+ection mismatches
+
+---
+For more info write to <info@kernelci.org>
