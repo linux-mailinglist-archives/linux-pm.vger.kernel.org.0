@@ -2,46 +2,62 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D86667B278
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 13:17:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E159467B2C4
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 13:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235102AbjAYMR6 (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 07:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S235154AbjAYMxJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 07:53:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235268AbjAYMR4 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 07:17:56 -0500
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CB7E61AE;
-        Wed, 25 Jan 2023 04:17:46 -0800 (PST)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 6adeaa922a7c58fb; Wed, 25 Jan 2023 13:17:44 +0100
-Received: from kreacher.localnet (unknown [213.134.163.149])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        with ESMTP id S229778AbjAYMxI (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 07:53:08 -0500
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681D710AAB;
+        Wed, 25 Jan 2023 04:53:07 -0800 (PST)
+Received: from [192.168.2.197] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 94B3022094AA;
-        Wed, 25 Jan 2023 13:17:43 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Subject: [PATCH v1] thermal: intel: int340x: Add locking to int340x_thermal_get_trip_type()
-Date:   Wed, 25 Jan 2023 13:17:42 +0100
-Message-ID: <2688799.mvXUDI8C0e@kreacher>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 015C36602E4D;
+        Wed, 25 Jan 2023 12:53:04 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1674651186;
+        bh=FsmNHA2oh2Kx15JYgMiYPMwo9fJuN5w1csBgs9yBag0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=RpwnSDTKnV/756GSwFe99d13fNSHYTBDoI1mjxpTJsvNS7ku4HBu1ZgsTst6A0Dji
+         Q776uDOZdQbH5Rqgit4GJWEZ3wL+2EAjVJekWRsEtkNaIKutJjJCaHDtIlHIsqGORy
+         dDa+G53xoAZawv88Hv7ZzQZmLSefHyEMkK9Ll0mHuhhqBpowO9D5U9abGd2itwph3u
+         QGoz6uXnF3HXtEvGqD+Z1ShQWD4IE/5QeLBcxsQLGCcjG3zwDF4z3ZDG6/LXbLpZSz
+         UcfYhS4O90WWIjHzDOTV3TpOmihjVdGROF+1dP2eQhae8k6NKUU4X39mPRQc/DoaVm
+         B+2oAPubBm6VA==
+Message-ID: <0a180849-ba1b-2a82-ab06-ed1b8155d5ca@collabora.com>
+Date:   Wed, 25 Jan 2023 15:53:01 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.163.149
-X-CLIENT-HOSTNAME: 213.134.163.149
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedruddvvddgfeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppedvudefrddufeegrdduieefrddugeelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudeifedrudegledphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtgho
- mhdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH v2 0/2] firmware/psci: Switch to the sys-off handler API
+Content-Language: en-US
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Cc:     John Ogness <john.ogness@linutronix.de>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Petr Mladek <pmladek@suse.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        tangmeng <tangmeng@uniontech.com>,
+        Linux PM list <linux-pm@vger.kernel.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>
+References: <20230101181715.42199-1-samuel@sholland.org>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230101181715.42199-1-samuel@sholland.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,52 +65,51 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 1/1/23 21:17, Samuel Holland wrote:
+> I want to convert the axp20x PMIC poweroff handler to use the sys-off
+> API, so it can be used as a fallback for the SBI poweroff handler on
+> RISC-V. But the PSCI poweroff handler still uses pm_power_off, so done
+> alone, this conversion would cause the axp20x callback to be called
+> first, before the PSCI poweroff handler.
+> 
+> In order to prevent this change in behavior, the PSCI poweroff handler
+> needs to be converted to the sys-off API first, at a higher priority.
+> 
+> This series performs the conversion, after accounting for the fact that
+> the PSCI poweroff handler is registered quite early during boot.
+> 
+> The first patch is a dependency for both this series and the SBI
+> series[1], so I would like to get at least patch 1 merged soon.
+> 
+> [1]: https://lore.kernel.org/lkml/20221228161915.13194-1-samuel@sholland.org/
+> 
+> Changes in v2:
+>  - Update commit messages
+> 
+> Samuel Holland (2):
+>   kernel/reboot: Use the static sys-off handler for any priority
+>   firmware/psci: Switch to the sys-off handler API
+> 
+>  drivers/firmware/psci/psci.c |  9 ++++++---
+>  kernel/reboot.c              | 10 ++++------
+>  2 files changed, 10 insertions(+), 9 deletions(-)
+> 
 
-In order to prevent int340x_thermal_get_trip_type() from possibly
-racing with int340x_thermal_read_trips() invoked by int3403_notify()
-add locking to it in analogy with int340x_thermal_get_trip_temp().
+Hello Rafael,
 
-Fixes: 6757a7abe47b ("thermal: intel: int340x: Protect trip temperature from concurrent updates")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+Do you think you will be able to pick up this series for 6.3? I'm going
+to continue removing the pm_power_off from kernel, the new power-off API
+feels stable now to me. I think the Samuel's improvement for the early
+boot memory allocation will be good to have to avoid similar problem for
+other drivers.
 
-On top of the linux-next branch in linux-pm.git from today.
+Ideally, the PSCI patch should get an ack, though the code change is
+about the PM stuff, so perhaps will be fine to take it via PM tree if FW
+maintainers will show no interest in the nearest time.
 
----
- drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c |   10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+Thanks!
 
-Index: linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-===================================================================
---- linux-pm.orig/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-+++ linux-pm/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
-@@ -75,7 +75,9 @@ static int int340x_thermal_get_trip_type
- 					 enum thermal_trip_type *type)
- {
- 	struct int34x_thermal_zone *d = zone->devdata;
--	int i;
-+	int i, ret = 0;
-+
-+	mutex_lock(&d->trip_mutex);
- 
- 	if (trip < d->aux_trip_nr)
- 		*type = THERMAL_TRIP_PASSIVE;
-@@ -94,10 +96,12 @@ static int int340x_thermal_get_trip_type
- 			}
- 		}
- 		if (i == INT340X_THERMAL_MAX_ACT_TRIP_COUNT)
--			return -EINVAL;
-+			ret = -EINVAL;
- 	}
- 
--	return 0;
-+	mutex_unlock(&d->trip_mutex);
-+
-+	return ret;
- }
- 
- static int int340x_thermal_set_trip_temp(struct thermal_zone_device *zone,
-
-
+-- 
+Best regards,
+Dmitry
 
