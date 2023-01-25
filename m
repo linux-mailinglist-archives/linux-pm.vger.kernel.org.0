@@ -2,747 +2,353 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D7267AF92
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 11:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 783A967AF98
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 11:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235527AbjAYKXL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 05:23:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60090 "EHLO
+        id S235534AbjAYKXW (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 05:23:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235522AbjAYKXL (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 05:23:11 -0500
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943730B28
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:23:04 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id v3so13095354pgh.4
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 02:23:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CkEleT+3Wjg+Nam521Ma9RWXpCOG46/jAix6PwpJZoI=;
-        b=BPZzOyjrsS3xtQ6btYKo8bqzcXf0SzUkwbYF0qRSw+q1/0D/zyW0/gVkoBQMaqBg5T
-         ciN4yQrDaGJUgyMNOvvEhFAEfvf9qAUxE0LPBnsXFCHTmzty0zEAjM5wacBzxSAvHH4a
-         GMEl5jRSAFg0ZVQxXgQ3+6fOWIFaNBsqGuCKGYRk5ThjgBwAwyJnGdoOWiJ0Viv01TlS
-         PTPw2l/OREe5SsCvgiV7jQxrSHFZBZ6bCefpkjpiGydmQ+03IunLBnwUiBGomG5DghRW
-         q2U0HKiGi6oJTAFuOE2dDjKNcxaOc2L8G3q97Y8hjxT4DCsbg/hwZJSGqIxvDZfFhrhT
-         yCGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CkEleT+3Wjg+Nam521Ma9RWXpCOG46/jAix6PwpJZoI=;
-        b=kl0qbqR/NGZRgMEzw2aKtzW6NVhU0XFdBbJXol0YtciD1M0Lddo3TgwTkMI8lhR6A0
-         j4M7jti1N6aZnHnYUehoMP3wFpbvXbHIbZetMac5wwvevtnPpPVaXtS9T6zQZbj0C6R0
-         mZFUc/U8+ExKb84Aydc4dxbDxG4jkqg+nBuen538jfWMmagv0uE0ZoaZOtlXEWDNkhNU
-         1T8sdey8IdPhEGCh//ePHzqdzt39SCKr8Q6oYZHI2u8B1wAQNJ32VY6vkCS9moPEhYoo
-         dZKx338wDdVinhM7azWnFKETbEL1v9tvDaZXsV40c/ULBdM5TdFBMqJHj7FtaMLvshLl
-         ye1g==
-X-Gm-Message-State: AO0yUKXz9arWKEwyivDJkw/jtAUuJnLjeYzf1jG/hFY68v7dkEh3Bi4H
-        uZWmzkIuDiZGmfz6YTLLku2q4Fs6SviuxsfuMz5g2g==
-X-Google-Smtp-Source: AK7set84zIasQmo1pR9dGaGkUG/LqqDN6R4ZsasOk1jdp57Ub7njHPajpPeB0GiOI9gB57G3d9xBuO8CmaspADP/obw=
-X-Received: by 2002:a63:e612:0:b0:4da:6c3c:74cf with SMTP id
- g18-20020a63e612000000b004da6c3c74cfmr40452pgh.10.1674642183692; Wed, 25 Jan
- 2023 02:23:03 -0800 (PST)
+        with ESMTP id S235523AbjAYKXV (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 05:23:21 -0500
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D52A2B62F;
+        Wed, 25 Jan 2023 02:23:19 -0800 (PST)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9DAEC4B3;
+        Wed, 25 Jan 2023 02:24:00 -0800 (PST)
+Received: from FVFF77S0Q05N (unknown [10.57.9.209])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 18A8D3F71E;
+        Wed, 25 Jan 2023 02:23:13 -0800 (PST)
+Date:   Wed, 25 Jan 2023 10:23:11 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, will@kernel.org, boqun.feng@gmail.com,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, seanjc@google.com,
+        pbonzini@redhat.com, jgross@suse.com, srivatsa@csail.mit.edu,
+        amakhalov@vmware.com, pv-drivers@vmware.com, rostedt@goodmis.org,
+        mhiramat@kernel.org, wanpengli@tencent.com, vkuznets@redhat.com,
+        boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 0/6] A few cpuidle vs rcu fixes
+Message-ID: <Y9EDD3PBNkxlZjTZ@FVFF77S0Q05N>
+References: <20230123205009.790550642@infradead.org>
+ <Y9AIj1s5iPPki3dK@FVFF77S0Q05N>
+ <Y9AVtUY8bnF3WjQr@FVFF77S0Q05N>
+ <Y9Al0PfSsx/VWL31@FVFF77S0Q05N>
+ <Y9D31FHOCaSnO5gS@hirez.programming.kicks-ass.net>
+ <Y9D5AfnOukWNOZ5q@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230124230048.371144-1-robh@kernel.org>
-In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 25 Jan 2023 11:22:27 +0100
-Message-ID: <CAPDyKFpL_XB1hhq+q1dAsscQu-q9-ZNt08Kuz6bFgZXBjDUYdw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: Add missing (unevaluated|additional)Properties
- on child node schemas
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Lee Jones <lee@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9D5AfnOukWNOZ5q@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, 25 Jan 2023 at 00:00, Rob Herring <robh@kernel.org> wrote:
->
-> Just as unevaluatedProperties or additionalProperties are required at
-> the top level of schemas, they should (and will) also be required for
-> child node schemas. That ensures only documented properties are
-> present.
->
-> Add unevaluatedProperties or additionalProperties as appropriate, and
-> then add any missing properties flagged by the addition.
->
-> Signed-off-by: Rob Herring <robh@kernel.org>
+On Wed, Jan 25, 2023 at 10:40:17AM +0100, Peter Zijlstra wrote:
+> On Wed, Jan 25, 2023 at 10:35:16AM +0100, Peter Zijlstra wrote:
+> > tip/sched/core contains the following patch addressing this:
+> > 
+> > ---
+> > commit 9aedeaed6fc6fe8452b9b8225e95cc2b8631ff91
+> > Author: Peter Zijlstra <peterz@infradead.org>
+> > Date:   Thu Jan 12 20:43:49 2023 +0100
+> > 
+> >     tracing, hardirq: No moar _rcuidle() tracing
+> >     
+> >     Robot reported that trace_hardirqs_{on,off}() tickle the forbidden
+> >     _rcuidle() tracepoint through local_irq_{en,dis}able().
+> >     
+> >     For 'sane' configs, these calls will only happen with RCU enabled and
+> >     as such can use the regular tracepoint. This also means it's possible
+> >     to trace them from NMI context again.
+> >     
+> >     Reported-by: kernel test robot <lkp@intel.com>
+> >     Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> >     Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> >     Link: https://lore.kernel.org/r/20230112195541.477416709@infradead.org
+> > 
+> > diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+> > index 629f2854e12b..f992444a0b1f 100644
+> > --- a/kernel/trace/trace_preemptirq.c
+> > +++ b/kernel/trace/trace_preemptirq.c
+> > @@ -19,6 +19,20 @@
+> >  /* Per-cpu variable to prevent redundant calls when IRQs already off */
+> >  static DEFINE_PER_CPU(int, tracing_irq_cpu);
+> >  
+> > +/*
+> > + * Use regular trace points on architectures that implement noinstr
+> > + * tooling: these calls will only happen with RCU enabled, which can
+> > + * use a regular tracepoint.
+> > + *
+> > + * On older architectures, use the rcuidle tracing methods (which
+> > + * aren't NMI-safe - so exclude NMI contexts):
+> > + */
+> > +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
+> > +#define trace(point)	trace_##point
+> > +#else
+> > +#define trace(point)	if (!in_nmi()) trace_##point##_rcuidle
+> > +#endif
+> > +
+> >  /*
+> >   * Like trace_hardirqs_on() but without the lockdep invocation. This is
+> >   * used in the low level entry code where the ordering vs. RCU is important
+> 
+> For some reason I missed the trace_preempt_{on,off} things, so that then
+> gets the below on top or so.
+> 
+> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
+> index f992444a0b1f..ea96b41c8838 100644
+> --- a/kernel/trace/trace_preemptirq.c
+> +++ b/kernel/trace/trace_preemptirq.c
+> @@ -100,15 +100,13 @@ NOKPROBE_SYMBOL(trace_hardirqs_off);
+>  
+>  void trace_preempt_on(unsigned long a0, unsigned long a1)
+>  {
+> -	if (!in_nmi())
+> -		trace_preempt_enable_rcuidle(a0, a1);
+> +	trace(preempt_enable)(a0, a1);
+>  	tracer_preempt_on(a0, a1);
+>  }
+>  
+>  void trace_preempt_off(unsigned long a0, unsigned long a1)
+>  {
+> -	if (!in_nmi())
+> -		trace_preempt_disable_rcuidle(a0, a1);
+> +	trace(preempt_disable)(a0, a1);
+>  	tracer_preempt_off(a0, a1);
+>  }
+>  #endif
 
-Acked-by: Ulf Hansson <ulf.hansson@linaro.org> # For MMC
+I've tested this fixlet atop this series (itself atop tip/sched/core) with a
+full-fat ftrace config and the ftrace selftests, and that all runs cleanly.
 
-Kind regards
-Uffe
+FWIW, if you spin this as a patch:
 
-> ---
-> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> To: David Airlie <airlied@gmail.com>
-> To: Daniel Vetter <daniel@ffwll.ch>
-> To: Bartosz Golaszewski <brgl@bgdev.pl>
-> To: Jean Delvare <jdelvare@suse.com>
-> To: Guenter Roeck <linux@roeck-us.net>
-> To: Thomas Gleixner <tglx@linutronix.de>
-> To: Marc Zyngier <maz@kernel.org>
-> To: Jassi Brar <jassisinghbrar@gmail.com>
-> To: Mauro Carvalho Chehab <mchehab@kernel.org>
-> To: Lee Jones <lee@kernel.org>
-> To: Ulf Hansson <ulf.hansson@linaro.org>
-> To: Richard Weinberger <richard@nod.at>
-> To: Vignesh Raghavendra <vigneshr@ti.com>
-> To: Sebastian Reichel <sre@kernel.org>
-> To: Mark Brown <broonie@kernel.org>
-> To: "Rafael J. Wysocki" <rafael@kernel.org>
-> To: Daniel Lezcano <daniel.lezcano@linaro.org>
-> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: linux-gpio@vger.kernel.org
-> Cc: linux-hwmon@vger.kernel.org
-> Cc: linux-media@vger.kernel.org
-> Cc: openbmc@lists.ozlabs.org
-> Cc: linux-mmc@vger.kernel.org
-> Cc: linux-mtd@lists.infradead.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: alsa-devel@alsa-project.org
-> Cc: linux-spi@vger.kernel.org
-> Cc: linux-usb@vger.kernel.org
-> ---
->  .../devicetree/bindings/arm/arm,vexpress-juno.yaml     |  1 +
->  .../bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml |  5 +++--
->  .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml         |  4 ++++
->  .../bindings/bus/allwinner,sun50i-a64-de2.yaml         |  1 +
->  .../bindings/bus/allwinner,sun8i-a23-rsb.yaml          |  1 +
->  .../bus/intel,ixp4xx-expansion-bus-controller.yaml     |  6 ++++++
->  Documentation/devicetree/bindings/bus/palmbus.yaml     |  1 +
->  .../devicetree/bindings/display/msm/qcom,mdss.yaml     |  5 +++++
->  Documentation/devicetree/bindings/example-schema.yaml  |  2 ++
->  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml |  1 +
->  .../devicetree/bindings/hwmon/adi,ltc2992.yaml         |  1 +
->  .../bindings/interrupt-controller/arm,gic-v3.yaml      |  2 ++
->  .../bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml      |  1 +
->  .../devicetree/bindings/media/i2c/maxim,max9286.yaml   |  7 +++++++
->  .../bindings/memory-controllers/arm,pl35x-smc.yaml     |  1 +
->  .../bindings/memory-controllers/exynos-srom.yaml       |  1 +
->  .../memory-controllers/nvidia,tegra124-emc.yaml        |  1 +
->  .../bindings/memory-controllers/st,stm32-fmc2-ebi.yaml |  1 +
->  .../devicetree/bindings/mfd/mediatek,mt6370.yaml       |  2 ++
->  .../devicetree/bindings/mmc/aspeed,sdhci.yaml          |  1 +
->  Documentation/devicetree/bindings/mtd/mtd.yaml         |  1 +
->  .../devicetree/bindings/power/supply/ti,lp8727.yaml    |  1 +
->  .../devicetree/bindings/soc/imx/fsl,imx93-src.yaml     |  3 ++-
->  .../bindings/soc/microchip/atmel,at91rm9200-tcb.yaml   |  1 +
->  Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml |  1 +
->  .../devicetree/bindings/sound/marvell,mmp-sspa.yaml    |  1 +
->  .../devicetree/bindings/sound/qcom,wcd934x.yaml        |  1 +
->  .../devicetree/bindings/sound/samsung,odroid.yaml      |  2 ++
->  .../devicetree/bindings/soundwire/qcom,soundwire.yaml  |  1 +
->  .../bindings/spi/allwinner,sun4i-a10-spi.yaml          |  1 +
->  .../bindings/spi/allwinner,sun6i-a31-spi.yaml          |  1 +
->  .../devicetree/bindings/spi/spi-controller.yaml        |  1 +
->  .../sram/allwinner,sun4i-a10-system-control.yaml       | 10 +++++-----
->  Documentation/devicetree/bindings/sram/qcom,ocmem.yaml |  1 +
->  .../devicetree/bindings/thermal/thermal-zones.yaml     |  1 +
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml   |  1 +
->  36 files changed, 65 insertions(+), 8 deletions(-)
->
-> diff --git a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-> index eec190a96225..09c319f803ba 100644
-> --- a/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-> +++ b/Documentation/devicetree/bindings/arm/arm,vexpress-juno.yaml
-> @@ -144,6 +144,7 @@ patternProperties:
->        it is stricter and always has two compatibles.
->      type: object
->      $ref: '/schemas/simple-bus.yaml'
-> +    unevaluatedProperties: false
->
->      properties:
->        compatible:
-> diff --git a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> index b369b374fc4a..39e3c248f5b7 100644
-> --- a/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> +++ b/Documentation/devicetree/bindings/arm/bcm/raspberrypi,bcm2835-firmware.yaml
-> @@ -30,6 +30,7 @@ properties:
->
->    clocks:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> @@ -47,6 +48,7 @@ properties:
->
->    reset:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> @@ -63,6 +65,7 @@ properties:
->
->    pwm:
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> @@ -76,8 +79,6 @@ properties:
->        - compatible
->        - "#pwm-cells"
->
-> -    additionalProperties: false
-> -
->  required:
->    - compatible
->    - mboxes
-> diff --git a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-> index 4a00593b9f7f..89191cfdf619 100644
-> --- a/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-> +++ b/Documentation/devicetree/bindings/arm/tegra/nvidia,tegra20-pmc.yaml
-> @@ -234,6 +234,7 @@ properties:
->      patternProperties:
->        "^[a-z0-9]+$":
->          type: object
-> +        additionalProperties: false
->
->          properties:
->            clocks:
-> @@ -252,6 +253,9 @@ properties:
->                for controlling a power-gate.
->                See ../reset/reset.txt for more details.
->
-> +          power-domains:
-> +            maxItems: 1
-> +
->            '#power-domain-cells':
->              const: 0
->              description: Must be 0.
-> diff --git a/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml b/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
-> index 85c4a979aec4..9845a187bdf6 100644
-> --- a/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
-> +++ b/Documentation/devicetree/bindings/bus/allwinner,sun50i-a64-de2.yaml
-> @@ -46,6 +46,7 @@ patternProperties:
->    # All other properties should be child nodes with unit-address and 'reg'
->    "^[a-zA-Z][a-zA-Z0-9,+\\-._]{0,63}@[0-9a-fA-F]+$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml b/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-> index bee5f53f837f..24c939f59091 100644
-> --- a/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-> +++ b/Documentation/devicetree/bindings/bus/allwinner,sun8i-a23-rsb.yaml
-> @@ -45,6 +45,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-fA-F]+$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml b/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
-> index 5fb4e7bfa4da..8073988937a8 100644
-> --- a/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
-> +++ b/Documentation/devicetree/bindings/bus/intel,ixp4xx-expansion-bus-controller.yaml
-> @@ -56,8 +56,11 @@ patternProperties:
->      description: Devices attached to chip selects are represented as
->        subnodes.
->      type: object
-> +    additionalProperties: true
->
->      properties:
-> +      reg: true
-> +
->        intel,ixp4xx-eb-t1:
->          description: Address timing, extend address phase with n cycles.
->          $ref: /schemas/types.yaml#/definitions/uint32
-> @@ -120,6 +123,9 @@ patternProperties:
->          $ref: /schemas/types.yaml#/definitions/uint32
->          enum: [0, 1]
->
-> +    required:
-> +      - reg
-> +
->  required:
->    - compatible
->    - reg
-> diff --git a/Documentation/devicetree/bindings/bus/palmbus.yaml b/Documentation/devicetree/bindings/bus/palmbus.yaml
-> index 30fa6526cfc2..c36c1e92a573 100644
-> --- a/Documentation/devicetree/bindings/bus/palmbus.yaml
-> +++ b/Documentation/devicetree/bindings/bus/palmbus.yaml
-> @@ -36,6 +36,7 @@ patternProperties:
->    # All other properties should be child nodes with unit-address and 'reg'
->    "@[0-9a-f]+$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          maxItems: 1
-> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml
-> index ba0460268731..14380596027b 100644
-> --- a/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/qcom,mdss.yaml
-> @@ -86,18 +86,21 @@ required:
->  patternProperties:
->    "^mdp@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          const: qcom,mdp5
->
->    "^dsi@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          const: qcom,mdss-dsi-ctrl
->
->    "^phy@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          enum:
-> @@ -110,6 +113,7 @@ patternProperties:
->
->    "^hdmi-phy@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          enum:
-> @@ -121,6 +125,7 @@ patternProperties:
->
->    "^hdmi-tx@[1-9a-f][0-9a-f]*$":
->      type: object
-> +    additionalProperties: true
->      properties:
->        compatible:
->          enum:
-> diff --git a/Documentation/devicetree/bindings/example-schema.yaml b/Documentation/devicetree/bindings/example-schema.yaml
-> index dfcf4c27d44a..f4eec4c42fb3 100644
-> --- a/Documentation/devicetree/bindings/example-schema.yaml
-> +++ b/Documentation/devicetree/bindings/example-schema.yaml
-> @@ -176,6 +176,8 @@ properties:
->      description: Child nodes are just another property from a json-schema
->        perspective.
->      type: object  # DT nodes are json objects
-> +    # Child nodes also need additionalProperties or unevaluatedProperties
-> +    additionalProperties: false
->      properties:
->        vendor,a-child-node-property:
->          description: Child node properties have all the same schema
-> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> index 7f26f6b1eea1..31906c253940 100644
-> --- a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
-> @@ -35,6 +35,7 @@ properties:
->  patternProperties:
->    "^.*-pins?$":
->      $ref: /schemas/pinctrl/pinmux-node.yaml#
-> +    additionalProperties: false
->
->      properties:
->        pins:
-> diff --git a/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml b/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> index 64a8fcb7bc46..14142b59ee9c 100644
-> --- a/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> +++ b/Documentation/devicetree/bindings/hwmon/adi,ltc2992.yaml
-> @@ -32,6 +32,7 @@ properties:
->  patternProperties:
->    "^channel@([0-1])$":
->      type: object
-> +    additionalProperties: false
->      description: |
->        Represents the two supplies to be monitored.
->
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-> index 9f7d3e11aacb..2e72d0acc13d 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
-> @@ -133,12 +133,14 @@ properties:
->
->    ppi-partitions:
->      type: object
-> +    additionalProperties: false
->      description:
->        PPI affinity can be expressed as a single "ppi-partitions" node,
->        containing a set of sub-nodes.
->      patternProperties:
->        "^interrupt-partition-[0-9]+$":
->          type: object
-> +        additionalProperties: false
->          properties:
->            affinity:
->              $ref: /schemas/types.yaml#/definitions/phandle-array
-> diff --git a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-> index 2193141dd7fd..d546b9e0744d 100644
-> --- a/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-> +++ b/Documentation/devicetree/bindings/mailbox/xlnx,zynqmp-ipi-mailbox.yaml
-> @@ -72,6 +72,7 @@ patternProperties:
->    '^mailbox@[0-9a-f]+$':
->      description: Internal ipi mailbox node
->      type: object  # DT nodes are json objects
-> +    additionalProperties: false
->      properties:
->        xlnx,ipi-id:
->          description:
-> diff --git a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> index 90315e217003..13681748559e 100644
-> --- a/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> +++ b/Documentation/devicetree/bindings/media/i2c/maxim,max9286.yaml
-> @@ -141,6 +141,7 @@ properties:
->      patternProperties:
->        "^i2c@[0-3]$":
->          type: object
-> +        additionalProperties: false
->          description: |
->            Child node of the i2c bus multiplexer which represents a GMSL link.
->            Each serializer device on the GMSL link remote end is represented with
-> @@ -152,6 +153,12 @@ properties:
->              description: The index of the GMSL channel.
->              maxItems: 1
->
-> +          '#address-cells':
-> +            const: 1
-> +
-> +          '#size-cells':
-> +            const: 0
-> +
->          patternProperties:
->            "^camera@[a-f0-9]+$":
->              type: object
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml b/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
-> index bd23257fe021..6d3962a17e49 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
-> @@ -73,6 +73,7 @@ properties:
->  patternProperties:
->    "@[0-7],[a-f0-9]+$":
->      type: object
-> +    additionalProperties: true
->      description: |
->        The child device node represents the controller connected to the SMC
->        bus. The controller can be a NAND controller or a pair of any memory
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml b/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
-> index c6e44f47ce7c..10a2d97e5f8b 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/exynos-srom.yaml
-> @@ -38,6 +38,7 @@ properties:
->  patternProperties:
->    "^.*@[0-3],[a-f0-9]+$":
->      type: object
-> +    additionalProperties: true
->      description:
->        The actual device nodes should be added as subnodes to the SROMc node.
->        These subnodes, in addition to regular device specification, should
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
-> index 9163c3f12a85..f5f03bf36413 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/nvidia,tegra124-emc.yaml
-> @@ -50,6 +50,7 @@ properties:
->  patternProperties:
->    "^emc-timings-[0-9]+$":
->      type: object
-> +    additionalProperties: false
->      properties:
->        nvidia,ram-code:
->          $ref: /schemas/types.yaml#/definitions/uint32
-> diff --git a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-> index e76ba767dfd2..14f1833d37c9 100644
-> --- a/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-> +++ b/Documentation/devicetree/bindings/memory-controllers/st,stm32-fmc2-ebi.yaml
-> @@ -47,6 +47,7 @@ properties:
->
->  patternProperties:
->    "^.*@[0-4],[a-f0-9]+$":
-> +    additionalProperties: true
->      type: object
->      $ref: mc-peripheral-props.yaml#
->
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> index 5644882db2e8..c9574b243046 100644
-> --- a/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
-> @@ -35,6 +35,7 @@ properties:
->
->    adc:
->      type: object
-> +    additionalProperties: false
->      description: |
->        Provides 9 channels for system monitoring, including VBUSDIV5 (lower
->        accuracy, higher measure range), VBUSDIV2 (higher accuracy, lower
-> @@ -73,6 +74,7 @@ properties:
->
->    regulators:
->      type: object
-> +    additionalProperties: false
->      description: |
->        List all supported regulators, which support the control for DisplayBias
->        voltages and one general purpose LDO which commonly used to drive the
-> diff --git a/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml b/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-> index 987b287f3bff..9fce8cd7b0b6 100644
-> --- a/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/aspeed,sdhci.yaml
-> @@ -42,6 +42,7 @@ patternProperties:
->    "^sdhci@[0-9a-f]+$":
->      type: object
->      $ref: mmc-controller.yaml
-> +    unevaluatedProperties: false
->
->      properties:
->        compatible:
-> diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml b/Documentation/devicetree/bindings/mtd/mtd.yaml
-> index 78da129e9985..da3d488c335f 100644
-> --- a/Documentation/devicetree/bindings/mtd/mtd.yaml
-> +++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
-> @@ -44,6 +44,7 @@ patternProperties:
->
->    "^otp(-[0-9]+)?$":
->      $ref: ../nvmem/nvmem.yaml#
-> +    unevaluatedProperties: false
->
->      description: |
->        An OTP memory region. Some flashes provide a one-time-programmable
-> diff --git a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> index ce6fbdba8f6b..0542d4126cf5 100644
-> --- a/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/ti,lp8727.yaml
-> @@ -28,6 +28,7 @@ properties:
->  patternProperties:
->    '^(ac|usb)$':
->      type: object
-> +    additionalProperties: false
->      description: USB/AC charging parameters
->      properties:
->        charger-type:
-> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> index c1cc69b51981..9ce8d8b427fa 100644
-> --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-src.yaml
-> @@ -38,8 +38,9 @@ properties:
->
->  patternProperties:
->    "power-domain@[0-9a-f]+$":
-> -
->      type: object
-> +    additionalProperties: false
-> +
->      properties:
->        compatible:
->          items:
-> diff --git a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> index 33748a061898..a46411149571 100644
-> --- a/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> +++ b/Documentation/devicetree/bindings/soc/microchip/atmel,at91rm9200-tcb.yaml
-> @@ -54,6 +54,7 @@ patternProperties:
->    "^timer@[0-2]$":
->      description: The timer block channels that are used as timers or counters.
->      type: object
-> +    additionalProperties: false
->      properties:
->        compatible:
->          items:
-> diff --git a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> index 847873289f25..7ab96baf2064 100644
-> --- a/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> +++ b/Documentation/devicetree/bindings/soc/ti/ti,pruss.yaml
-> @@ -130,6 +130,7 @@ patternProperties:
->        PRU-ICSS configuration space. CFG sub-module represented as a SysCon.
->
->      type: object
-> +    additionalProperties: false
->
->      properties:
->        compatible:
-> diff --git a/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml b/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
-> index f302fe89a253..4193d17d1c62 100644
-> --- a/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
-> +++ b/Documentation/devicetree/bindings/sound/marvell,mmp-sspa.yaml
-> @@ -60,6 +60,7 @@ properties:
->      properties:
->        endpoint:
->          type: object
-> +        additionalProperties: true
->
->          properties:
->            dai-format:
-> diff --git a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-> index 184e8ccbdd13..19c4deae74b8 100644
-> --- a/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-> +++ b/Documentation/devicetree/bindings/sound/qcom,wcd934x.yaml
-> @@ -132,6 +132,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
-> +    additionalProperties: true
->      description: |
->        WCD934x subnode for each slave devices. Bindings of each subnodes
->        depends on the specific driver providing the functionality and
-> diff --git a/Documentation/devicetree/bindings/sound/samsung,odroid.yaml b/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
-> index 7b4e08ddef6a..51a101558c7b 100644
-> --- a/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
-> +++ b/Documentation/devicetree/bindings/sound/samsung,odroid.yaml
-> @@ -35,12 +35,14 @@ properties:
->
->    cpu:
->      type: object
-> +    additionalProperties: false
->      properties:
->        sound-dai:
->          description: phandles to the I2S controllers
->
->    codec:
->      type: object
-> +    additionalProperties: false
->      properties:
->        sound-dai:
->          items:
-> diff --git a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> index bcbfa71536cd..a191a966cf64 100644
-> --- a/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> +++ b/Documentation/devicetree/bindings/soundwire/qcom,soundwire.yaml
-> @@ -200,6 +200,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f],[0-9a-f]$":
->      type: object
-> +    additionalProperties: true
->      description:
->        Child nodes for a standalone audio codec or speaker amplifier IC.
->        It has RX and TX Soundwire secondary devices.
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-> index f1176a28fd87..c18eafbfde8c 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun4i-a10-spi.yaml
-> @@ -51,6 +51,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f]+":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          items:
-> diff --git a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> index 58b7056f4a70..e2187d395bd1 100644
-> --- a/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> +++ b/Documentation/devicetree/bindings/spi/allwinner,sun6i-a31-spi.yaml
-> @@ -63,6 +63,7 @@ properties:
->  patternProperties:
->    "^.*@[0-9a-f]+":
->      type: object
-> +    additionalProperties: true
->      properties:
->        reg:
->          items:
-> diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> index 5a7c72cadf76..90945f59b7e8 100644
-> --- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> +++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-> @@ -94,6 +94,7 @@ patternProperties:
->    "^.*@[0-9a-f]+$":
->      type: object
->      $ref: spi-peripheral-props.yaml
-> +    additionalProperties: true
->
->      properties:
->        spi-3wire:
-> diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> index 98a7dc7f467d..a1c96985951f 100644
-> --- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> +++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
-> @@ -57,17 +57,17 @@ properties:
->
->  patternProperties:
->    "^sram@[a-z0-9]+":
-> -    type: object
-> -
-> -    properties:
-> -      compatible:
-> -        const: mmio-sram
-> +    $ref: /schemas/sram/sram.yaml#
-> +    unevaluatedProperties: false
->
->      patternProperties:
->        "^sram-section?@[a-f0-9]+$":
->          type: object
-> +        additionalProperties: false
->
->          properties:
-> +          reg: true
-> +
->            compatible:
->              oneOf:
->                - const: allwinner,sun4i-a10-sram-a3-a4
-> diff --git a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> index 071f2d676196..4bbf6db0b6bd 100644
-> --- a/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> +++ b/Documentation/devicetree/bindings/sram/qcom,ocmem.yaml
-> @@ -61,6 +61,7 @@ additionalProperties: false
->  patternProperties:
->    "-sram@[0-9a-f]+$":
->      type: object
-> +    additionalProperties: false
->      description: A region of reserved memory.
->
->      properties:
-> diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> index 8581821fa4e1..4f3acdc4dec0 100644
-> --- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> +++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
-> @@ -171,6 +171,7 @@ patternProperties:
->
->        cooling-maps:
->          type: object
-> +        additionalProperties: false
->          description:
->            This node describes the action to be taken when a thermal zone
->            crosses one of the temperature thresholds described in the trips
-> diff --git a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> index a3f8a3f49852..3cdd40f8acc0 100644
-> --- a/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/qcom,dwc3.yaml
-> @@ -118,6 +118,7 @@ properties:
->  patternProperties:
->    "^usb@[0-9a-f]+$":
->      $ref: snps,dwc3.yaml#
-> +    unevaluatedProperties: false
->
->      properties:
->        wakeup-source: false
-> --
-> 2.39.0
->
+Tested-by: Mark Rutland <mark.rutland@arm.com>
+
+Without the fixlet I get splats on both arm64 and x86_64, e.g.
+
+On arm64:
+
+| ------------[ cut here ]------------
+| WARNING: CPU: 1 PID: 1162 at include/trace/events/preemptirq.h:55 trace_preempt_on+0x68/0x70
+| Modules linked in:
+| CPU: 1 PID: 1162 Comm: ftracetest Not tainted 6.2.0-rc1-00100-g1066815869f5 #1
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : trace_preempt_on+0x68/0x70
+| lr : preempt_count_sub+0xb4/0xf0
+| sp : ffff80000e04ba70
+| x29: ffff80000e04ba70 x28: ffff80000ade09e8 x27: ffff800009d0c960
+| x26: ffff000007c97e10 x25: ffff000007c97e00 x24: ffff80000adf1410
+| x23: ffff80000e04bb80 x22: ffff80000a9aabb0 x21: ffff8000080a5cf4
+| x20: ffff8000080a5cf4 x19: 0000000000000001 x18: 0000000000000000
+| x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+| x14: 0000000000000028 x13: 0000000000004320 x12: 0000000000000361
+| x11: 0000000000000361 x10: 0000000000040361 x9 : ffff8000080a5cf4
+| x8 : ffff80000ae42a18 x7 : 0000000000000000 x6 : 0000000000000001
+| x5 : ffff80000a8f14e8 x4 : 0000000000000001 x3 : 0000000000000000
+| x2 : 0000000000000007 x1 : ffff8000080a5cf4 x0 : ffff8000080a5cf4
+| Call trace:
+|  trace_preempt_on+0x68/0x70
+|  preempt_count_sub+0xb4/0xf0
+|  percpu_up_read.constprop.0+0xc4/0x180
+|  cpus_read_unlock+0x18/0x24
+|  static_key_enable+0x2c/0x40
+|  tracepoint_add_func+0x330/0x3dc
+|  tracepoint_probe_register+0x74/0xc0
+|  trace_event_reg+0x8c/0xa0
+|  __ftrace_event_enable_disable+0x174/0x4d0
+|  __ftrace_set_clr_event_nolock+0xe0/0x150
+|  ftrace_set_clr_event+0x90/0x13c
+|  ftrace_event_write+0xd4/0x120
+|  vfs_write+0xcc/0x2f0
+|  ksys_write+0x78/0x110
+|  __arm64_sys_write+0x24/0x30
+|  invoke_syscall+0x50/0x120
+|  el0_svc_common.constprop.0+0x68/0x124
+|  do_el0_svc+0x40/0xbc
+|  el0_svc+0x48/0xc0
+|  el0t_64_sync_handler+0xf4/0x120
+|  el0t_64_sync+0x190/0x194
+| irq event stamp: 69662
+| hardirqs last  enabled at (69661): [<ffff8000092d63f4>] _raw_spin_unlock_irqrestore+0x80/0xa0
+| hardirqs last disabled at (69662): [<ffff8000092c4d64>] el1_dbg+0x24/0x90
+| softirqs last  enabled at (69564): [<ffff800008010b08>] __do_softirq+0x448/0x5bc
+| softirqs last disabled at (69555): [<ffff800008017288>] ____do_softirq+0x18/0x24
+| ---[ end trace 0000000000000000 ]---
+| ------------[ cut here ]------------
+| WARNING: CPU: 1 PID: 1162 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x68/0xb0
+| Modules linked in:
+| CPU: 1 PID: 1162 Comm: ftracetest Tainted: G        W          6.2.0-rc1-00100-g1066815869f5 #1
+| Hardware name: linux,dummy-virt (DT)
+| pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+| pc : trace_preempt_off+0x68/0xb0
+| lr : preempt_count_add+0xa0/0xc0
+| sp : ffff80000e04ba80
+| x29: ffff80000e04ba80 x28: ffff80000ade09e8 x27: ffff800009d0c970
+| x26: ffff000007c97e90 x25: ffff000007c97e80 x24: ffff80000adf13c8
+| x23: ffff80000e04bb80 x22: ffff80000a9aabb0 x21: ffff80000b8c8d18
+| x20: ffff8000080a5c68 x19: ffff8000080a5c68 x18: 0000000000000000
+| x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+| x14: 0000000000000028 x13: 0000000000004320 x12: 0000000000000361
+| x11: 0000000000000361 x10: 0000000000040361 x9 : ffff8000080a5c68
+| x8 : ffff80000ae42a18 x7 : 0000000000000000 x6 : 0000000000000003
+| x5 : 000000003a9e6115 x4 : 0000000000000001 x3 : 0000000000000000
+| x2 : 0000000000000007 x1 : ffff8000080a5c68 x0 : ffff8000080a5c68
+| Call trace:
+|  trace_preempt_off+0x68/0xb0
+|  preempt_count_add+0xa0/0xc0
+|  percpu_up_read.constprop.0+0x38/0x180
+|  cpus_read_unlock+0x18/0x24
+|  static_key_enable+0x2c/0x40
+|  tracepoint_add_func+0x330/0x3dc
+|  tracepoint_probe_register+0x74/0xc0
+|  trace_event_reg+0x8c/0xa0
+|  __ftrace_event_enable_disable+0x174/0x4d0
+|  __ftrace_set_clr_event_nolock+0xe0/0x150
+|  ftrace_set_clr_event+0x90/0x13c
+|  ftrace_event_write+0xd4/0x120
+|  vfs_write+0xcc/0x2f0
+|  ksys_write+0x78/0x110
+|  __arm64_sys_write+0x24/0x30
+|  invoke_syscall+0x50/0x120
+|  el0_svc_common.constprop.0+0x68/0x124
+|  do_el0_svc+0x40/0xbc
+|  el0_svc+0x48/0xc0
+|  el0t_64_sync_handler+0xf4/0x120
+|  el0t_64_sync+0x190/0x194
+| irq event stamp: 69686
+| hardirqs last  enabled at (69685): [<ffff8000092c4db8>] el1_dbg+0x78/0x90
+| hardirqs last disabled at (69686): [<ffff8000092c4d64>] el1_dbg+0x24/0x90
+| softirqs last  enabled at (69670): [<ffff800008010b08>] __do_softirq+0x448/0x5bc
+| softirqs last disabled at (69665): [<ffff800008017288>] ____do_softirq+0x18/0x24
+| ---[ end trace 0000000000000000 ]---
+
+On x86_64:
+
+| ------------[ cut here ]------------
+| WARNING: CPU: 0 PID: 1083 at include/trace/events/preemptirq.h:55 trace_preempt_on+0x31/0x40
+| Modules linked in:
+| CPU: 0 PID: 1083 Comm: ftracetest Not tainted 6.2.0-rc1-00100-g1066815869f5 #3
+| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+| RIP: 0010:trace_preempt_on+0x31/0x40
+| Code: 1d d6 45 4c a9 00 00 f0 00 74 05 e9 29 11 00 00 cc 90 e9 22 11 00 00 65 8b 05 07 d6 45 4c 89 c0 48 0f a3 05 c1 af b1 01 73 e1 <0f> 0b eb dd 66 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 0
+| RSP: 0018:ffffb374c0ce7ba8 EFLAGS: 00010247
+| RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+| RDX: 0000000000000001 RSI: 0000000000000000 RDI: ffffffffb49e9c1d
+| RBP: 0000000000000000 R08: 000000004ea10906 R09: 000000005e02388f
+| R10: 00000000f5e02388 R11: 00000000d269a5f5 R12: ffff98620005c780
+| R13: ffffffffb3a363d0 R14: 0000000000000a37 R15: 0000000000000a38
+| FS:  00007fc812d836a0(0000) GS:ffff98623bc00000(0000) knlGS:0000000000000000
+| CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+| CR2: 0000000000642e58 CR3: 00000001039c6005 CR4: 0000000000370ef0
+| DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+| DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+| Call Trace:
+|  <TASK>
+|  preempt_count_sub+0xa3/0xe0
+|  _raw_spin_unlock+0x2d/0x50
+|  ? trace_preempt_on+0x17/0x40
+|  __text_poke+0x326/0x4c0
+|  ? trace_preempt_on+0x17/0x40
+|  text_poke_bp_batch+0x7f/0x360
+|  text_poke_finish+0x1f/0x30
+|  arch_jump_label_transform_apply+0x1c/0x30
+|  static_key_enable_cpuslocked+0x65/0xa0
+|  static_key_enable+0x1a/0x20
+|  tracepoint_add_func+0x32c/0x430
+|  ? __pfx_trace_event_raw_event_preemptirq_template+0x10/0x10
+|  tracepoint_probe_register+0x78/0xb0
+|  ? __pfx_trace_event_raw_event_preemptirq_template+0x10/0x10
+|  __ftrace_event_enable_disable+0x180/0x250
+|  __ftrace_set_clr_event_nolock+0xe3/0x130
+|  ftrace_set_clr_event+0x74/0xf0
+|  ftrace_event_write+0xdd/0x110
+|  vfs_write+0xee/0x510
+|  ksys_write+0x75/0x100
+|  do_syscall_64+0x3e/0x90
+|  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+| RIP: 0033:0x7fc812d09103
+| Code: 8b 7c 24 08 89 c5 e8 c5 ff ff ff 89 ef 89 44 24 08 e8 81 bc 02 00 8b 44 24 08 48 83 c4 10 5d c3 48 63 ff b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 10 48 8b 15 4e fd 05 00 f7 d8 64 3
+| RSP: 002b:00007ffcb12972f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+| RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fc812d09103
+| RDX: 0000000000000004 RSI: 0000000000645050 RDI: 0000000000000001
+| RBP: 0000000000645050 R08: fefefefefefefeff R09: ffffffff00000000
+| R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000004
+| R13: 00007fc812d83690 R14: 0000000000000001 R15: 0000000000000000
+|  </TASK>
+| irq event stamp: 57597
+| hardirqs last  enabled at (57609): [<ffffffffb3b1384e>] __up_console_sem+0x5e/0x80
+| hardirqs last disabled at (57620): [<ffffffffb3b13833>] __up_console_sem+0x43/0x80
+| softirqs last  enabled at (57556): [<ffffffffb49eae94>] __do_softirq+0x354/0x4d7
+| softirqs last disabled at (57543): [<ffffffffb3a92ad7>] irq_exit_rcu+0xc7/0x140
+| ---[ end trace 0000000000000000 ]---
+| ------------[ cut here ]------------
+| WARNING: CPU: 0 PID: 1083 at include/trace/events/preemptirq.h:51 trace_preempt_off+0x31/0x40
+| Modules linked in:
+| CPU: 0 PID: 1083 Comm: ftracetest Tainted: G        W          6.2.0-rc1-00100-g1066815869f5 #3
+| Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+| RIP: 0010:trace_preempt_off+0x31/0x40
+| Code: cd d5 45 4c a9 00 00 f0 00 74 05 e9 f9 11 00 00 cc 90 e9 f2 11 00 00 65 8b 05 b7 d5 45 4c 89 c0 48 0f a3 05 71 af b1 01 73 e1 <0f> 0b eb dd 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 0
+| RSP: 0018:ffffb374c0ce7c18 EFLAGS: 00010247
+| RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000001
+| RDX: 0000000000000000 RSI: ffffffffb3b74639 RDI: ffffffffb3b74639
+| RBP: ffffffffb56faa10 R08: ffffffffb56faa10 R09: 000000005e02388f
+| R10: 00000000f5e02388 R11: 00000000d269a5f5 R12: ffffffffb3a36d20
+| R13: 0000000000000000 R14: 0000000000000000 R15: ffff9862038a0780
+| FS:  00007fc812d836a0(0000) GS:ffff98623bc00000(0000) knlGS:0000000000000000
+| CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+| CR2: 0000000000642e58 CR3: 00000001039c6005 CR4: 0000000000370ef0
+| DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+| DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+| Call Trace:
+|  <TASK>
+|  on_each_cpu_cond_mask+0x29/0x80
+|  text_poke_bp_batch+0xe7/0x360
+|  text_poke_finish+0x1f/0x30
+|  arch_jump_label_transform_apply+0x1c/0x30
+|  static_key_enable_cpuslocked+0x65/0xa0
+|  static_key_enable+0x1a/0x20
+|  tracepoint_add_func+0x32c/0x430
+|  ? __pfx_trace_event_raw_event_preemptirq_template+0x10/0x10
+|  tracepoint_probe_register+0x78/0xb0
+|  ? __pfx_trace_event_raw_event_preemptirq_template+0x10/0x10
+|  __ftrace_event_enable_disable+0x180/0x250
+|  __ftrace_set_clr_event_nolock+0xe3/0x130
+|  ftrace_set_clr_event+0x74/0xf0
+|  ftrace_event_write+0xdd/0x110
+|  vfs_write+0xee/0x510
+|  ksys_write+0x75/0x100
+|  do_syscall_64+0x3e/0x90
+|  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+| RIP: 0033:0x7fc812d09103
+| Code: 8b 7c 24 08 89 c5 e8 c5 ff ff ff 89 ef 89 44 24 08 e8 81 bc 02 00 8b 44 24 08 48 83 c4 10 5d c3 48 63 ff b8 01 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 10 48 8b 15 4e fd 05 00 f7 d8 64 3
+| RSP: 002b:00007ffcb12972f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+| RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fc812d09103
+| RDX: 0000000000000004 RSI: 0000000000645050 RDI: 0000000000000001
+| RBP: 0000000000645050 R08: fefefefefefefeff R09: ffffffff00000000
+| R10: 0000000000000001 R11: 0000000000000246 R12: 0000000000000004
+| R13: 00007fc812d83690 R14: 0000000000000001 R15: 0000000000000000
+|  </TASK>
+| irq event stamp: 58293
+| hardirqs last  enabled at (58303): [<ffffffffb3b1384e>] __up_console_sem+0x5e/0x80
+| hardirqs last disabled at (58314): [<ffffffffb3b13833>] __up_console_sem+0x43/0x80
+| softirqs last  enabled at (57820): [<ffffffffb49eae94>] __do_softirq+0x354/0x4d7
+| softirqs last disabled at (57811): [<ffffffffb3a92ad7>] irq_exit_rcu+0xc7/0x140
+| ---[ end trace 0000000000000000 ]---
+
+Thanks,
+Mark.
