@@ -2,171 +2,112 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C431967B163
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 12:34:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1133C67B1B2
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 12:41:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234848AbjAYLeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 06:34:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
+        id S235711AbjAYLla (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 06:41:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235608AbjAYLe0 (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 06:34:26 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA616334
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 03:34:24 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id t18so3910773wro.1
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 03:34:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6QYojRCCtYlJhvbj3M9r4VzNWk15cQ6A9mCCL7h6cqs=;
-        b=tM3TcsMUWq0ATsaki5PPF59y/iPtsRn3LI8ChlBOT16wCaHLeLiTV8DDwyuI3Hukcz
-         MaR6lSYLCjvFoAPegdg4pLiIMAWFdk9D8O0JmNrmuKsOZvjuyvolpxaCzTi5QUoZs6BP
-         JW/tDHKxFwyGtgkGpqFpi/HNOK8tDPn2YBfWGWJ4T8rFcLptFgdka6NgIcF2V0xWR02h
-         VWcoQ+d+32zt7qWfr5WNeLWNwUCFe7ahUbVXTK4pgD70W1FK6tu7ObQ1h9P7MhKGXqvM
-         CxPmI+QKnUF9DELrMsqsjFJtUZ9XR+qtZQ5d1X6hmSMee1vDsSKxSjj7fJNR3ukkC9Or
-         gXfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6QYojRCCtYlJhvbj3M9r4VzNWk15cQ6A9mCCL7h6cqs=;
-        b=150TJMuaEs7QV7wk5Z4awFkVSwLrRtinyQF63t7DV2XB2ov41/EMmZuVLFSZbz2aV4
-         maMTDD/2t+8XwY9Yv7NhwkYtvlGbPAL6S+IbMHZPM4vqOQwvRoP/ExK3DIqcAYDf+Dy4
-         5Tk6/OGRHGm/zwW17DO1mS4SN2GPo96W/PD94C/iBBAVf4NOMQKftTuZETk6oVCB5RqV
-         nUV2rwcxoqIqOclGPLSMbnyP7E+0WC+DGLOGK+MHtbGetcoNaA/ob7d2iuOPoAm0nZvf
-         8AUOdgNHMNagZ4kpI7YPWKfx1ChoL425XcKDnDqHSJKWIqz7N9KSNEJUwr59u0PCaU3I
-         xBBw==
-X-Gm-Message-State: AO0yUKWTnEptyHd7gE2ejRYIBNSseRXPVt5jL80Wji1Hs37TPSHvyXJV
-        7B+dswN4DsY3DJywUqUH8JNgEQ==
-X-Google-Smtp-Source: AK7set9VpIH0D3BN4cRVxVqYN7JNRSMgys2I74WBhgAJEIQBNvqfmyMUGW9z20vMf24lhEQK0WRgNg==
-X-Received: by 2002:adf:dd12:0:b0:2bf:afdf:13db with SMTP id a18-20020adfdd12000000b002bfafdf13dbmr4795182wrm.47.1674646463364;
-        Wed, 25 Jan 2023 03:34:23 -0800 (PST)
-Received: from krzk-bin.. ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id s18-20020a5d4ed2000000b002bde537721dsm4213759wrv.20.2023.01.25.03.34.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 03:34:23 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        with ESMTP id S235575AbjAYLl3 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 06:41:29 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C5D9298CC;
+        Wed, 25 Jan 2023 03:41:28 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D3C4614D4;
+        Wed, 25 Jan 2023 11:41:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E044DC433D2;
+        Wed, 25 Jan 2023 11:41:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674646887;
+        bh=BSf4VdDu/Cipkbp8RNs0rNyAzPjqHzof5Fj9ZYA48xM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GfilqO/eKu/QoPePHTTuTn8J1r0Gfr8WyYnJTWSK83NPY89Lt3LaqRMiaWnnxEdz1
+         5GfmqGH8yJFKJlrPMbcp84JgDUzRLc2uldIX4k89jTMcPIFXHFbL6PPgMyEPoohaU3
+         uAQ2xL2z2Rjhzaa8w1lCI5+i1z2YED4iJtXXyaxZ0XqaEafwrnSL76HnHSEhWrfZh2
+         BSVoMTAFP3PkmPkb7Kyti1fKVYFgPbZvpPHr2csZ0HOGM4Do6P0nTDzzOAj/HPpgzU
+         RU4p1z0AJO7YjLO6ciSZmTplImSf9p4ZS2V0k6wbLHUb3lAFakk5haqH41gWo/0kO1
+         OKWEJLNDmmlsQ==
+Date:   Wed, 25 Jan 2023 11:41:25 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee@kernel.org>,
         Ulf Hansson <ulf.hansson@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-Subject: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
-Date:   Wed, 25 Jan 2023 12:34:18 +0100
-Message-Id: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: Add missing
+ (unevaluated|additional)Properties on child node schemas
+Message-ID: <Y9EVZQJEV8i5vdgp@sirena.org.uk>
+References: <20230124230048.371144-1-robh@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YLw58GmZKH9QcKuc"
+Content-Disposition: inline
+In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
+X-Cookie: Serving suggestion.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-The runtime Power Management of CPU topology is not compatible with
-PREEMPT_RT:
-1. Core cpuidle path disables IRQs.
-2. Core cpuidle calls cpuidle-psci.
-3. cpuidle-psci in __psci_enter_domain_idle_state() calls
-   pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
-   spinlocks (which are sleeping on PREEMPT_RT).
 
-Deep sleep modes are not a priority of Realtime kernels because the
-latencies might become unpredictable.  On the other hand the PSCI CPU
-idle power domain is a parent of other devices and power domain
-controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
+--YLw58GmZKH9QcKuc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Disable the idle callbacks in cpuidle-psci and mark the domain as
-always on.  This is a trade-off between making PREEMPT_RT working and
-still having a proper power domain hierarchy in the system.
+On Tue, Jan 24, 2023 at 05:00:48PM -0600, Rob Herring wrote:
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
+>=20
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
 
-Cc: Adrien Thierry <athierry@redhat.com>
-Cc: Brian Masney <bmasney@redhat.com>
-Cc: linux-rt-users@vger.kernel.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Mark Brown <broonie@kernel.org>
 
----
+--YLw58GmZKH9QcKuc
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Changes since v3:
-1. Rework - disable idle states, mark as always on (Ulf).
-2. Extend Kconfig warning (Ulf).
+-----BEGIN PGP SIGNATURE-----
 
-Changes since v1:
-1. Re-work commit msg.
-2. Add note to Kconfig.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmPRFWIACgkQJNaLcl1U
+h9C5IQf9Gj9QI/FW6Xw+gMpDw41zL45NSAa01ZJ7G8XkRAaJNWXTMWR1sZKiK4XJ
+5rjn6QJUusYQuPpRmgG2DjO115ttDY8PNNWUlbpHxdQ+0dQI/dzilsrEFOrFXH1S
+PcEA3qn6o7eU3ICxhOnhcJzf1auMMUeq0hHtfjHxHLhgxeJZ13yZA61DnR9uShhF
+DT2ZXj0DrflrKoX2haOnuhvLc0Rx5qV+O3LfPBcO53OdCgjkAkmW2Jll2UrtTUIc
+9+G5v1R2fy/qBGUUQSzfPcTESH8bAwxpdP3i61xeoUYzaRNM/K4F/00nXADmY71w
+uWdFdQq7y1nxrTCAKIbIk2i8KCJlTg==
+=IpOI
+-----END PGP SIGNATURE-----
 
-Several other patches were dropped, as this is the only one actually
-needed.  It effectively stops PSCI cpuidle power domains from suspending
-thus solving all other issues I experienced.
----
- drivers/cpuidle/Kconfig.arm           | 8 ++++++++
- drivers/cpuidle/cpuidle-psci-domain.c | 7 +++++--
- drivers/cpuidle/cpuidle-psci.c        | 3 +++
- 3 files changed, 16 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
-index 747aa537389b..8deaa2e05206 100644
---- a/drivers/cpuidle/Kconfig.arm
-+++ b/drivers/cpuidle/Kconfig.arm
-@@ -24,6 +24,14 @@ config ARM_PSCI_CPUIDLE
- 	  It provides an idle driver that is capable of detecting and
- 	  managing idle states through the PSCI firmware interface.
- 
-+	  The driver has limitations when used with PREEMPT_RT:
-+	  - If the idle states are described with the non-hierarchical layout,
-+	    all idle states are still available.
-+
-+	  - If the idle states are described with the hierarchical layout,
-+	    only the idle states defined per CPU are available, but not the ones
-+	    being shared among a group of CPUs (aka cluster idle states).
-+
- config ARM_PSCI_CPUIDLE_DOMAIN
- 	bool "PSCI CPU idle Domain"
- 	depends on ARM_PSCI_CPUIDLE
-diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
-index c80cf9ddabd8..6ad2954948a5 100644
---- a/drivers/cpuidle/cpuidle-psci-domain.c
-+++ b/drivers/cpuidle/cpuidle-psci-domain.c
-@@ -64,8 +64,11 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
- 
- 	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
- 
--	/* Allow power off when OSI has been successfully enabled. */
--	if (use_osi)
-+	/*
-+	 * Allow power off when OSI has been successfully enabled.
-+	 * PREEMPT_RT is not yet ready to enter domain idle states.
-+	 */
-+	if (use_osi && !IS_ENABLED(CONFIG_PREEMPT_RT))
- 		pd->power_off = psci_pd_power_off;
- 	else
- 		pd->flags |= GENPD_FLAG_ALWAYS_ON;
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index 312a34ef28dc..6de027f9f6f5 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -222,6 +222,9 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
- 	if (!psci_has_osi_support())
- 		return 0;
- 
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		return 0;
-+
- 	data->dev = psci_dt_attach_cpu(cpu);
- 	if (IS_ERR_OR_NULL(data->dev))
- 		return PTR_ERR_OR_ZERO(data->dev);
--- 
-2.34.1
-
+--YLw58GmZKH9QcKuc--
