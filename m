@@ -2,146 +2,153 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F54C67AB1C
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 08:43:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DCC67AB92
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 09:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235086AbjAYHnH (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 02:43:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42262 "EHLO
+        id S230334AbjAYI0e (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 03:26:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234982AbjAYHnG (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 02:43:06 -0500
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B17113CE
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 23:43:03 -0800 (PST)
-Received: by mail-wr1-x42c.google.com with SMTP id b7so16133157wrt.3
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 23:43:03 -0800 (PST)
+        with ESMTP id S234079AbjAYI0d (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 03:26:33 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D29C366BB
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 00:26:32 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id h5-20020a17090a9c0500b0022bb85eb35dso1273899pjp.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 00:26:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=muf/zGy7zrsCMgmkKGOZ9RAmuniRIs8c0Xd0aflWQ38=;
-        b=jNX0/NkH6hZfgYCdnz9BCQYtQPrh32i6DY87qckF8MY2LT1y61b2YHTZr72e/lPDo8
-         x/2SkxmN8KLA7IbUIFrdMkQmLxzXwu4JBiI0+duaA2eSbnu7LlhiFrzh3YMv5y8ngWft
-         JFqQIpTu+kdEkXqCogFRb+BvOneNBarLE5GooEFBaFyGPPF0G3+6cBS1YZ41Xh2dHP0R
-         oVqlGG/XmJk3ddxP0QpCQkWFkT9v9augtrtUk8Nw3B/AkoUmPotuSFhg5d7IwfuMEmX4
-         ab6lYheHKcyYctGon6MdCLHhvMceliG0ZiG/LEzHnnZhfpatPe2eJ5tTJ13UqycpzlCT
-         PgIg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LgCyJ0JIbzlBz0P4o9IQnpeiV1wz86DjUPsFHIQ6zOw=;
+        b=DwAcjuNFKn4Ga9kQ/yRFOKkH/baTYHVQDjyNI6X9oqNgYzKJ7bsFFyA58174bY1DAZ
+         YsCjt4gMZELUKUwSo2WQWiWzLiID5o2atruMCJoytFJh5RAWwLWjcehvkLMekqgqy4qa
+         y2h9h7rxay2yQOy5MGVeyYTEKRpv3axiUvyGt3R7fZ/IlKXNjeqkzMCzMyjJ8AfBKwfB
+         UXqujQp2x7C4V0gfvfBtJ3gQ9zHi7DcPhikT95e/CVrh3+PAuKK5ieY7X8bPqEAxua8U
+         UPYdDoUxUE1z1CPIDU/X1rG3+ApSCRNcbXNjBIyHtG+mGpv3Vfkq9hIj93kYHOS3Jwpp
+         n7pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=muf/zGy7zrsCMgmkKGOZ9RAmuniRIs8c0Xd0aflWQ38=;
-        b=KX3NyDVfvwXUa5h6Qg/XNwF1K3103PwBDGFPDWgdpdWv4Ip1JArnVcvy0Glfc/NUwH
-         BcRQ0dRN9pgtuGez/8v1SjtFayh9NBo3Dz5BZPjB7rbSn9mfZhnypRnUc4BIcx1XNDn1
-         j10kCCwjY/FaQnRoKjcxfodmrPhQBVzV92Y1MXuURAlRP9ZqBHZp1MSRAL0Af2Wa4Itj
-         a/TI8a+X6jqzShI0ik7LCRUa5+0THdc63OUxfabOvu3sYXSEYg6P77fFk9QPEdweb5zX
-         +wWYpJI8WM0WgCrF5Bzf4gEWZNsNkGTZ9pfYmXPNP4nMyYKhOp3vd+CyVhnY8MYuUWqS
-         HplA==
-X-Gm-Message-State: AFqh2kpk5vC4gaAQryiw8ZUF7d6bw3lR2BTzMMbcFrL4csj/kouihthr
-        rq0i8b0SmUoXPMfV12L24vF2tw==
-X-Google-Smtp-Source: AMrXdXvKSkwmMo6myk0f8HJh2ddDrbZC58zRqOXu6kIgMq+6CNWDJAqwj9wiFLx7d/lVZnDlpJ7vSg==
-X-Received: by 2002:adf:f0c1:0:b0:2bc:67d:c018 with SMTP id x1-20020adff0c1000000b002bc067dc018mr28555562wro.48.1674632582224;
-        Tue, 24 Jan 2023 23:43:02 -0800 (PST)
-Received: from [192.168.1.109] ([178.197.216.144])
-        by smtp.gmail.com with ESMTPSA id i9-20020a5d5849000000b002bddac15b3dsm3291815wrf.33.2023.01.24.23.43.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Jan 2023 23:43:01 -0800 (PST)
-Message-ID: <c247710b-369a-67d0-0637-b32192d25e4d@linaro.org>
-Date:   Wed, 25 Jan 2023 08:42:59 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LgCyJ0JIbzlBz0P4o9IQnpeiV1wz86DjUPsFHIQ6zOw=;
+        b=Q2EvAfLAc5tSOI5kzCozHVR1P34C7DIwSTPU3ap4z53n7Cp6OATswZnSLGGcB59Gt3
+         FRuPpR1o/hIdXklzJcg1Yv64e/jkC0XQYi680xvjWo8HxOFXAeX3cj0nnzrTYyU77FLw
+         CFUtN5pn94/209o2NP1MhFSksPzjdfO+OQfLZB7326YH5awM/sEu7Z8e9181gclNT6ih
+         L1d2gf4HsfGfB3s9iHSWK/zrj3ZLoWvghYlhqPMXdgyusoYNvMM/sn9InNACvl2drCxW
+         65xcUQNJLTS6q8IhVnK1va6uaFjpDGdKGxEbmWXrq1UdN7uFNjVSg1msrY0A06FzI0DZ
+         /yfw==
+X-Gm-Message-State: AFqh2kqifyfEbrA0zI5QURQ4elwvacmE1+vD4GzsOC25gbzlZnlkZfou
+        qXaQ3Eu3602A2RS8uznSyVNXIGBSIZyYZswjrM/yUQ==
+X-Google-Smtp-Source: AMrXdXti9F1jCy17OafGrNTn34a99NxlHzxJXktX0eBliMRumKhw54WdTj/3eGIDEMDGLeZkG3jaCWBdBRB0oyKy17E=
+X-Received: by 2002:a17:90a:c004:b0:227:1f55:158d with SMTP id
+ p4-20020a17090ac00400b002271f55158dmr3776265pjt.92.1674635191798; Wed, 25 Jan
+ 2023 00:26:31 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.0
-Subject: Re: [PATCH v3] cpuidle: psci: Do not suspend topology CPUs on
- PREEMPT_RT
-Content-Language: en-US
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Adrien Thierry <athierry@redhat.com>,
-        Brian Masney <bmasney@redhat.com>,
-        linux-rt-users@vger.kernel.org
-References: <20230119184228.683892-1-krzysztof.kozlowski@linaro.org>
- <20230124153411.nwkbjgoqgkua2icm@bogus>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230124153411.nwkbjgoqgkua2icm@bogus>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230119174244.2059628-1-vincent.guittot@linaro.org> <Y855HxG8hK78+NtQ@e126311.manchester.arm.com>
+In-Reply-To: <Y855HxG8hK78+NtQ@e126311.manchester.arm.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 25 Jan 2023 09:26:20 +0100
+Message-ID: <CAKfTPtAfu=VrDm++8GkD1wU0SEJYT24ACZfk2Ncn7RAqzAH9cA@mail.gmail.com>
+Subject: Re: [PATCH v4] sched/fair: unlink misfit task from cpu overutilized
+To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
+Cc:     mingo@kernel.org, peterz@infradead.org, dietmar.eggemann@arm.com,
+        qyousef@layalina.io, rafael@kernel.org, viresh.kumar@linaro.org,
+        vschneid@redhat.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lukasz.luba@arm.com, wvw@google.com,
+        xuewen.yan94@gmail.com, han.lin@mediatek.com,
+        Jonathan.JMChen@mediatek.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 24/01/2023 16:34, Sudeep Holla wrote:
-> On Thu, Jan 19, 2023 at 07:42:28PM +0100, Krzysztof Kozlowski wrote:
->> The runtime Power Management of CPU topology is not compatible with
->> PREEMPT_RT:
->> 1. Core cpuidle path disables IRQs.
->> 2. Core cpuidle calls cpuidle-psci.
->> 3. cpuidle-psci in __psci_enter_domain_idle_state() calls
->>    pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
->>    spinlocks (which are sleeping on PREEMPT_RT).
->>
->> Deep sleep modes are not a priority of Realtime kernels because the
->> latencies might become unpredictable.  On the other hand the PSCI CPU
->> idle power domain is a parent of other devices and power domain
->> controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
->>
->> Disable the runtime PM calls from cpuidle-psci, which effectively stops
->> suspending the cpuidle PSCI domain.  This is a trade-off between making
->> PREEMPT_RT working and still having a proper power domain hierarchy in
->> the system.
->>
->> Cc: Adrien Thierry <athierry@redhat.com>
->> Cc: Brian Masney <bmasney@redhat.com>
->> Cc: linux-rt-users@vger.kernel.org
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>
->> ---
->>
->> Changes since v1:
->> 1. Re-work commit msg.
->> 2. Add note to Kconfig.
->>
->> Several other patches were dropped, as this is the only one actually
->> needed.  It effectively stops PSCI cpuidle power domains from suspending
->> thus solving all other issues I experienced.
->> ---
->>  drivers/cpuidle/Kconfig.arm    | 3 +++
->>  drivers/cpuidle/cpuidle-psci.c | 4 ++--
->>  2 files changed, 5 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
->> index 747aa537389b..24429b5bfd1c 100644
->> --- a/drivers/cpuidle/Kconfig.arm
->> +++ b/drivers/cpuidle/Kconfig.arm
->> @@ -24,6 +24,9 @@ config ARM_PSCI_CPUIDLE
->>  	  It provides an idle driver that is capable of detecting and
->>  	  managing idle states through the PSCI firmware interface.
->>  
->> +	  The driver is not yet compatible with PREEMPT_RT: no idle states will
->> +	  be entered by CPUs on such kernel.
->> +
-> 
-> Any particular reason for even compiling this file in or allowing the
-> ARM_PSCI_CPUIDLE when PREEMPT_RT=y ? If we can't enter idle states, we
-> can as well compile this file out ?
+On Mon, 23 Jan 2023 at 13:10, Kajetan Puchalski
+<kajetan.puchalski@arm.com> wrote:
+>
+> > By taking into account uclamp_min, the 1:1 relation between task misfit
+> > and cpu overutilized is no more true as a task with a small util_avg may
+> > not fit a high capacity cpu because of uclamp_min constraint.
+> >
+> > Add a new state in util_fits_cpu() to reflect the case that task would fit
+> > a CPU except for the uclamp_min hint which is a performance requirement.
+> >
+> > Use -1 to reflect that a CPU doesn't fit only because of uclamp_min so we
+> > can use this new value to take additional action to select the best CPU
+> > that doesn't match uclamp_min hint.
+> >
+> > Signed-off-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > ---
+> >
+> > Change since v3:
+> > - Keep current condition for uclamp_max_fits in util_fits_cpu()
+> > - Update some comments
+>
+> That one condition change from v3 did fix the overutilization issues so
+> good news on that front :)
+>
+> 1. GB5
+>
+> +-----------------+-------------------------+--------+-----------+
+> |     metric      |         kernel          | value  | perc_diff |
+> +-----------------+-------------------------+--------+-----------+
+> | multicore_score |        baseline         | 2765.4 |   0.0%    |
+> | multicore_score |      baseline_ufc       | 2704.3 |  -2.21%   | <-- current mainline regression
+> | multicore_score |     ufc_patched_v4      | 2839.8 |   2.69%   | <-- new score improvement
+> +-----------------+-------------------------+--------+-----------+
+>
+> +--------------+--------+-------------------------+--------+-----------+
+> |  chan_name   | metric |         kernel          | value  | perc_diff |
+> +--------------+--------+-------------------------+--------+-----------+
+> | total_power  | gmean  |        baseline         | 2664.0 |   0.0%    |
+> | total_power  | gmean  |      baseline_ufc       | 2621.5 |   -1.6%   |
+> | total_power  | gmean  |     ufc_patched_v4      | 2729.0 |   2.44%   |
+> +--------------+--------+-------------------------+--------+-----------+
+>
+> 2. Jankbench
+>
+> +--------+---------------+------------------------------+-------+-----------+
+> | metric |   variable    |            kernel            | value | perc_diff |
+> +--------+---------------+------------------------------+-------+-----------+
+> | gmean  | mean_duration |        baseline_60hz         | 14.6  |   0.0%    |
+> | gmean  | mean_duration |      baseline_ufc_60hz       | 15.2  |   3.83%   |
+> | gmean  | mean_duration |     ufc_patched_v4_60hz      | 14.0  |  -3.98%   |
+> +--------+---------------+------------------------------+-------+-----------+
+>
+> +--------+-----------+------------------------------+-------+-----------+
+> | metric | variable  |            kernel            | value | perc_diff |
+> +--------+-----------+------------------------------+-------+-----------+
+> | gmean  | jank_perc |        baseline_60hz         |  1.9  |   0.0%    |
+> | gmean  | jank_perc |      baseline_ufc_60hz       |  2.2  |  15.39%   |
+> | gmean  | jank_perc |     ufc_patched_v4_60hz      |  1.8  |  -5.67%   |
+> +--------+-----------+------------------------------+-------+-----------+
+>
+> +--------------+--------+------------------------------+-------+-----------+
+> |  chan_name   | metric |            kernel            | value | perc_diff |
+> +--------------+--------+------------------------------+-------+-----------+
+> | total_power  | gmean  |        baseline_60hz         | 135.9 |   0.0%    |
+> | total_power  | gmean  |      baseline_ufc_60hz       | 155.7 |  14.61%   | <-- current mainline regression
+> | total_power  | gmean  |     ufc_patched_v4_60hz      | 131.4 |  -3.26%   | <-- new power saving
+> +--------------+--------+------------------------------+-------+-----------+
+>
+> All in all this comes out better on every metric than the previous
+> baseline and way better than current mainline. At least from an Android
+> perspective as far as the impacts go I'd say it's probably fine to go
+> ahead and apply this.
 
-It's the power domain sued for other devices, so we need it. Otherwise
-other devices will keep waiting for this missing power domain provider.
+Thanks for your tests results
 
-Best regards,
-Krzysztof
-
+>
+> Feel free to add this if you'd like:
+> Tested-by: Kajetan Puchalski <kajetan.puchalski@arm.com>
+>
+> > --
+> > 2.34.1
+> >
+> >
