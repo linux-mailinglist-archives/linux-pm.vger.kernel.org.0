@@ -2,199 +2,171 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CF1367B154
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 12:33:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C431967B163
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 12:34:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235198AbjAYLci (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 06:32:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51348 "EHLO
+        id S234848AbjAYLeq (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 06:34:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235532AbjAYLcP (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 06:32:15 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35A932B291;
-        Wed, 25 Jan 2023 03:32:13 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A8B784B3;
-        Wed, 25 Jan 2023 03:32:54 -0800 (PST)
-Received: from FVFF77S0Q05N (unknown [10.57.9.209])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C58083F71E;
-        Wed, 25 Jan 2023 03:32:07 -0800 (PST)
-Date:   Wed, 25 Jan 2023 11:32:04 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, mingo@kernel.org,
-        will@kernel.org, boqun.feng@gmail.com, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
-        jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
-        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
-        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        Paul McKenney <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>
-Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
- is disabled
-Message-ID: <Y9ETNHyE2NgrPJJL@FVFF77S0Q05N>
-References: <20230123205009.790550642@infradead.org>
- <20230123205515.059999893@infradead.org>
- <20230123165304.370121e7@gandalf.local.home>
- <20230123170753.7ac9419e@gandalf.local.home>
- <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
- <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
- <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+        with ESMTP id S235608AbjAYLe0 (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 06:34:26 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0DA616334
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 03:34:24 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id t18so3910773wro.1
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 03:34:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6QYojRCCtYlJhvbj3M9r4VzNWk15cQ6A9mCCL7h6cqs=;
+        b=tM3TcsMUWq0ATsaki5PPF59y/iPtsRn3LI8ChlBOT16wCaHLeLiTV8DDwyuI3Hukcz
+         MaR6lSYLCjvFoAPegdg4pLiIMAWFdk9D8O0JmNrmuKsOZvjuyvolpxaCzTi5QUoZs6BP
+         JW/tDHKxFwyGtgkGpqFpi/HNOK8tDPn2YBfWGWJ4T8rFcLptFgdka6NgIcF2V0xWR02h
+         VWcoQ+d+32zt7qWfr5WNeLWNwUCFe7ahUbVXTK4pgD70W1FK6tu7ObQ1h9P7MhKGXqvM
+         CxPmI+QKnUF9DELrMsqsjFJtUZ9XR+qtZQ5d1X6hmSMee1vDsSKxSjj7fJNR3ukkC9Or
+         gXfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6QYojRCCtYlJhvbj3M9r4VzNWk15cQ6A9mCCL7h6cqs=;
+        b=150TJMuaEs7QV7wk5Z4awFkVSwLrRtinyQF63t7DV2XB2ov41/EMmZuVLFSZbz2aV4
+         maMTDD/2t+8XwY9Yv7NhwkYtvlGbPAL6S+IbMHZPM4vqOQwvRoP/ExK3DIqcAYDf+Dy4
+         5Tk6/OGRHGm/zwW17DO1mS4SN2GPo96W/PD94C/iBBAVf4NOMQKftTuZETk6oVCB5RqV
+         nUV2rwcxoqIqOclGPLSMbnyP7E+0WC+DGLOGK+MHtbGetcoNaA/ob7d2iuOPoAm0nZvf
+         8AUOdgNHMNagZ4kpI7YPWKfx1ChoL425XcKDnDqHSJKWIqz7N9KSNEJUwr59u0PCaU3I
+         xBBw==
+X-Gm-Message-State: AO0yUKWTnEptyHd7gE2ejRYIBNSseRXPVt5jL80Wji1Hs37TPSHvyXJV
+        7B+dswN4DsY3DJywUqUH8JNgEQ==
+X-Google-Smtp-Source: AK7set9VpIH0D3BN4cRVxVqYN7JNRSMgys2I74WBhgAJEIQBNvqfmyMUGW9z20vMf24lhEQK0WRgNg==
+X-Received: by 2002:adf:dd12:0:b0:2bf:afdf:13db with SMTP id a18-20020adfdd12000000b002bfafdf13dbmr4795182wrm.47.1674646463364;
+        Wed, 25 Jan 2023 03:34:23 -0800 (PST)
+Received: from krzk-bin.. ([178.197.216.144])
+        by smtp.gmail.com with ESMTPSA id s18-20020a5d4ed2000000b002bde537721dsm4213759wrv.20.2023.01.25.03.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Jan 2023 03:34:23 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Adrien Thierry <athierry@redhat.com>,
+        Brian Masney <bmasney@redhat.com>,
+        linux-rt-users@vger.kernel.org
+Subject: [PATCH v4] cpuidle: psci: Do not suspend topology CPUs on PREEMPT_RT
+Date:   Wed, 25 Jan 2023 12:34:18 +0100
+Message-Id: <20230125113418.455089-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 11:47:44AM +0100, Peter Zijlstra wrote:
-> On Tue, Jan 24, 2023 at 05:12:14PM +0000, Mark Rutland wrote:
-> > On Tue, Jan 24, 2023 at 03:44:35PM +0100, Peter Zijlstra wrote:
-> > > On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
-> > > 
-> > > > Actually, perhaps we can just add this, and all you need to do is create
-> > > > and set CONFIG_NO_RCU_TRACING (or some other name).
-> > > 
-> > > Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
-> > 
-> > Yes please; if we use CONFIG_ARCH_WANTS_NO_INSTR then arm64 will get this "for
-> > free" once we add the missing checks (which I assume we need) in our ftrace_prepare_return().
-> > 
-> > > Anyway, I took it for a spin and it .... doesn't seems to do the job.
-> > > 
-> > > With my patch the first splat is
-> > > 
-> > >   "RCU not on for: cpuidle_poll_time+0x0/0x70"
-> > > 
-> > > While with yours I seems to get the endless:
-> > > 
-> > >   "WARNING: suspicious RCU usage"
-> > > 
-> > > thing. Let me see if I can figure out where it goes side-ways.
-> > 
-> > Hmmm... for WARN_ONCE() don't we need to wake RCU first also? I thought we
-> > needed that at least for the printk machinery?
-> 
-> OK, the below seems to work nice for me -- although I'm still on a
-> hacked up printk, but the recursive RCU not watching fail seems to be
-> tamed.
+The runtime Power Management of CPU topology is not compatible with
+PREEMPT_RT:
+1. Core cpuidle path disables IRQs.
+2. Core cpuidle calls cpuidle-psci.
+3. cpuidle-psci in __psci_enter_domain_idle_state() calls
+   pm_runtime_put_sync_suspend() and pm_runtime_get_sync() which use
+   spinlocks (which are sleeping on PREEMPT_RT).
 
-FWIW, I gave that a spin on arm64 with the ftrace selftests, and I see no
-splats, so it looks good on that front.
+Deep sleep modes are not a priority of Realtime kernels because the
+latencies might become unpredictable.  On the other hand the PSCI CPU
+idle power domain is a parent of other devices and power domain
+controllers, thus it cannot be simply skipped (e.g. on Qualcomm SM8250).
 
-Currently arm64's BUG/WARN exception handling does the usual
-lockdep/rcu/whatever stuff before getting to report_bug(), so that bit should
-be redundant (and any WARN() or BUG() early in the entry code is likely to lead
-to a stack overflow and kill the kernel), but it shouldn't be harmful.
+Disable the idle callbacks in cpuidle-psci and mark the domain as
+always on.  This is a trade-off between making PREEMPT_RT working and
+still having a proper power domain hierarchy in the system.
 
-> Ofc. Paul might have an opinion on this glorious bodge ;-)
+Cc: Adrien Thierry <athierry@redhat.com>
+Cc: Brian Masney <bmasney@redhat.com>
+Cc: linux-rt-users@vger.kernel.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I'll leave that to Paul. ;)
+---
 
-Thanks,
-Mark.
+Changes since v3:
+1. Rework - disable idle states, mark as always on (Ulf).
+2. Extend Kconfig warning (Ulf).
 
-> 
-> ---
-> 
-> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
-> index c303f7a114e9..d48cd92d2364 100644
-> --- a/include/linux/trace_recursion.h
-> +++ b/include/linux/trace_recursion.h
-> @@ -135,6 +135,21 @@ extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
->  # define do_ftrace_record_recursion(ip, pip)	do { } while (0)
->  #endif
->  
-> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
-> +# define trace_warn_on_no_rcu(ip)					\
-> +	({								\
-> +		bool __ret = !rcu_is_watching();			\
-> +		if (__ret && !trace_recursion_test(TRACE_RECORD_RECURSION_BIT)) { \
-> +			trace_recursion_set(TRACE_RECORD_RECURSION_BIT); \
-> +			WARN_ONCE(true, "RCU not on for: %pS\n", (void *)ip); \
-> +			trace_recursion_clear(TRACE_RECORD_RECURSION_BIT); \
-> +		}							\
-> +		__ret;							\
-> +	})
-> +#else
-> +# define trace_warn_on_no_rcu(ip)	false
-> +#endif
-> +
->  /*
->   * Preemption is promised to be disabled when return bit >= 0.
->   */
-> @@ -144,6 +159,9 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
->  	unsigned int val = READ_ONCE(current->trace_recursion);
->  	int bit;
->  
-> +	if (trace_warn_on_no_rcu(ip))
-> +		return -1;
-> +
->  	bit = trace_get_context_bit() + start;
->  	if (unlikely(val & (1 << bit))) {
->  		/*
-> diff --git a/lib/bug.c b/lib/bug.c
-> index c223a2575b72..0a10643ea168 100644
-> --- a/lib/bug.c
-> +++ b/lib/bug.c
-> @@ -47,6 +47,7 @@
->  #include <linux/sched.h>
->  #include <linux/rculist.h>
->  #include <linux/ftrace.h>
-> +#include <linux/context_tracking.h>
->  
->  extern struct bug_entry __start___bug_table[], __stop___bug_table[];
->  
-> @@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
->  	return module_find_bug(bugaddr);
->  }
->  
-> -enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-> +static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
->  {
->  	struct bug_entry *bug;
->  	const char *file;
-> @@ -209,6 +210,30 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
->  	return BUG_TRAP_TYPE_BUG;
->  }
->  
-> +enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
-> +{
-> +	enum bug_trap_type ret;
-> +	bool rcu = false;
-> +
-> +#ifdef CONFIG_CONTEXT_TRACKING_IDLE
-> +	/*
-> +	 * Horrible hack to shut up recursive RCU isn't watching fail since
-> +	 * lots of the actual reporting also relies on RCU.
-> +	 */
-> +	if (!rcu_is_watching()) {
-> +		rcu = true;
-> +		ct_state_inc(RCU_DYNTICKS_IDX);
-> +	}
-> +#endif
-> +
-> +	ret = __report_bug(bugaddr, regs);
-> +
-> +	if (rcu)
-> +		ct_state_inc(RCU_DYNTICKS_IDX);
-> +
-> +	return ret;
-> +}
-> +
->  static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
->  {
->  	struct bug_entry *bug;
+Changes since v1:
+1. Re-work commit msg.
+2. Add note to Kconfig.
+
+Several other patches were dropped, as this is the only one actually
+needed.  It effectively stops PSCI cpuidle power domains from suspending
+thus solving all other issues I experienced.
+---
+ drivers/cpuidle/Kconfig.arm           | 8 ++++++++
+ drivers/cpuidle/cpuidle-psci-domain.c | 7 +++++--
+ drivers/cpuidle/cpuidle-psci.c        | 3 +++
+ 3 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpuidle/Kconfig.arm b/drivers/cpuidle/Kconfig.arm
+index 747aa537389b..8deaa2e05206 100644
+--- a/drivers/cpuidle/Kconfig.arm
++++ b/drivers/cpuidle/Kconfig.arm
+@@ -24,6 +24,14 @@ config ARM_PSCI_CPUIDLE
+ 	  It provides an idle driver that is capable of detecting and
+ 	  managing idle states through the PSCI firmware interface.
+ 
++	  The driver has limitations when used with PREEMPT_RT:
++	  - If the idle states are described with the non-hierarchical layout,
++	    all idle states are still available.
++
++	  - If the idle states are described with the hierarchical layout,
++	    only the idle states defined per CPU are available, but not the ones
++	    being shared among a group of CPUs (aka cluster idle states).
++
+ config ARM_PSCI_CPUIDLE_DOMAIN
+ 	bool "PSCI CPU idle Domain"
+ 	depends on ARM_PSCI_CPUIDLE
+diff --git a/drivers/cpuidle/cpuidle-psci-domain.c b/drivers/cpuidle/cpuidle-psci-domain.c
+index c80cf9ddabd8..6ad2954948a5 100644
+--- a/drivers/cpuidle/cpuidle-psci-domain.c
++++ b/drivers/cpuidle/cpuidle-psci-domain.c
+@@ -64,8 +64,11 @@ static int psci_pd_init(struct device_node *np, bool use_osi)
+ 
+ 	pd->flags |= GENPD_FLAG_IRQ_SAFE | GENPD_FLAG_CPU_DOMAIN;
+ 
+-	/* Allow power off when OSI has been successfully enabled. */
+-	if (use_osi)
++	/*
++	 * Allow power off when OSI has been successfully enabled.
++	 * PREEMPT_RT is not yet ready to enter domain idle states.
++	 */
++	if (use_osi && !IS_ENABLED(CONFIG_PREEMPT_RT))
+ 		pd->power_off = psci_pd_power_off;
+ 	else
+ 		pd->flags |= GENPD_FLAG_ALWAYS_ON;
+diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+index 312a34ef28dc..6de027f9f6f5 100644
+--- a/drivers/cpuidle/cpuidle-psci.c
++++ b/drivers/cpuidle/cpuidle-psci.c
+@@ -222,6 +222,9 @@ static int psci_dt_cpu_init_topology(struct cpuidle_driver *drv,
+ 	if (!psci_has_osi_support())
+ 		return 0;
+ 
++	if (IS_ENABLED(CONFIG_PREEMPT_RT))
++		return 0;
++
+ 	data->dev = psci_dt_attach_cpu(cpu);
+ 	if (IS_ERR_OR_NULL(data->dev))
+ 		return PTR_ERR_OR_ZERO(data->dev);
+-- 
+2.34.1
+
