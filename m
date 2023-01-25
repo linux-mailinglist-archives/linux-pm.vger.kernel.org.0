@@ -2,359 +2,216 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F6967B8D2
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 18:49:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D93167B9C5
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 19:47:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235590AbjAYRtl (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 12:49:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S229770AbjAYSrC (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 13:47:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235962AbjAYRtf (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 12:49:35 -0500
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF532940F
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 09:49:32 -0800 (PST)
-Received: by mail-pj1-x1035.google.com with SMTP id m7-20020a17090a71c700b0022c0c070f2eso2147047pjs.4
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 09:49:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20210112.gappssmtp.com; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=rSnmG0DJAJHX1i218XtinHC0HWdD2Bl/dskPWEpsMeA=;
-        b=47QM94OfOjR7lfmPQPlwT5CmPj2ZY+wayIasQPEh/ogJtAAzQbY9Du+av7vUI9dK2v
-         G3n7vUcpJFkmJJ7QGBZ/o7FECDg+4Rd+EDDfk7yfsyND6qBBh7OAcw2AWvcr+6h+1EAO
-         L5w3sVbw4r1HOawbwx7X0dzcLDQJWDT9ZRZlsVizYvPlxClIrld0aeagzhAJWbWVmPLj
-         rvX8ynHyX8ekBq31Micoa/o9Z0vX37HCcjSumBBkudxo5Nm6xQCf39+i4f/bB9XdXIS9
-         1rIDqD3wrJHkWa0Fg4ZpKnRFQVSihim0EF1fOgyZwtPWzRq1nP6Ogvq2eM8HwSK21o3Z
-         UZxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rSnmG0DJAJHX1i218XtinHC0HWdD2Bl/dskPWEpsMeA=;
-        b=Z6tdbvBJ0pNRjVBxTa/1OnxU58cAP1C2Jw93W2D7GAqR0sCMNpPysGzUkHPwrsOSrN
-         B41oX4cL5Dc7dXd+VoK1Hx9NQNcJSHJW4Ob1sR59Cfaoe8idWC1sYL4+2de36UJozbqV
-         lOW1gpshkE0vSwvSg4+GprCIvMEAmVLm4vSo3jS3+5r+V/0fEKZB7dqGInmSaj6fLfzl
-         6Bu1YK26l0+yccrfmuRBd6rxmCbWxN6DjuBActrBIq+lbbGgDAYTAXlrpzQru1tG8sFO
-         36x00H0zhvco+sJoy22B0N/50QATTOMaFiSwmoaBVTkO2QaTZY0SRniGGGDzZVtIm6SJ
-         DZ2w==
-X-Gm-Message-State: AO0yUKU0+OaXuoZSdRwEucwddIu4Lj73nM5V2WcahNP8uL0cZG/xpBXI
-        v1YaI13j2eP/uH0R2N8DfFXnpg==
-X-Google-Smtp-Source: AK7set/bWWVlJMeHLhegECDIT5nDebmx5CB5M1GyORPmAW7AHaiMiujV6X+XDK/CAksTg2KG5xfmUg==
-X-Received: by 2002:a17:902:dac2:b0:196:1257:3cc5 with SMTP id q2-20020a170902dac200b0019612573cc5mr7930680plx.17.1674668971882;
-        Wed, 25 Jan 2023 09:49:31 -0800 (PST)
-Received: from kernelci-production.internal.cloudapp.net ([52.250.1.28])
-        by smtp.gmail.com with ESMTPSA id r19-20020a170902be1300b001963bc7bdb8sm10939pls.274.2023.01.25.09.49.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 09:49:31 -0800 (PST)
-Message-ID: <63d16bab.170a0220.feed7.0077@mx.google.com>
-Date:   Wed, 25 Jan 2023 09:49:31 -0800 (PST)
-Content-Type: text/plain; charset="utf-8"
+        with ESMTP id S229481AbjAYSrB (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 13:47:01 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3911151C49;
+        Wed, 25 Jan 2023 10:47:00 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1B18615B3;
+        Wed, 25 Jan 2023 18:46:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0586AC433D2;
+        Wed, 25 Jan 2023 18:46:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1674672419;
+        bh=e35zOz55fvzDHe3U2OJO5ZyYTEJxv3m4O3arQ4xHu2Q=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=lZx1OjncBFk3KhakW/keEzXjkMh8CzQFUSxiz0i523UhOmFbavzP1u/f+wDZd41Dj
+         JkJxMZjVxktOabJKfPaKwVHFCmGpsZ/MTQzTZOzj0uEAzg1zXz6NmSq+E/Wu90SZzF
+         qbfP5f8KGIMT9DhdDOxBtfYtIO0DVl95Nzn3HucSFaNwk9bgkZRlWu/KfIG83BGefW
+         EnOARW49bEt9btXDF9eUIrw+l87z5qMVEWTKmBgw6EMhrTJF/HGY3DqdmhITB15K62
+         OyouCYlbluDtRJKjdczyBcsvERva3BaXWLffDfhWlFoVN3m/xnxff4ijZ07URvMhTm
+         dRjaxPmD6Ut/g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 9686D5C0865; Wed, 25 Jan 2023 10:46:58 -0800 (PST)
+Date:   Wed, 25 Jan 2023 10:46:58 -0800
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>, mingo@kernel.org,
+        will@kernel.org, boqun.feng@gmail.com, tglx@linutronix.de,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, seanjc@google.com, pbonzini@redhat.com,
+        jgross@suse.com, srivatsa@csail.mit.edu, amakhalov@vmware.com,
+        pv-drivers@vmware.com, mhiramat@kernel.org, wanpengli@tencent.com,
+        vkuznets@redhat.com, boris.ostrovsky@oracle.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Frederic Weisbecker <fweisbec@gmail.com>
+Subject: Re: [PATCH 3/6] ftrace/x86: Warn and ignore graph tracing when RCU
+ is disabled
+Message-ID: <20230125184658.GL2948950@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20230123205009.790550642@infradead.org>
+ <20230123205515.059999893@infradead.org>
+ <20230123165304.370121e7@gandalf.local.home>
+ <20230123170753.7ac9419e@gandalf.local.home>
+ <Y8/u00WHGElMDjoo@hirez.programming.kicks-ass.net>
+ <Y9ARbgtYhxSuOIlZ@FVFF77S0Q05N>
+ <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Tree: pm
-X-Kernelci-Branch: testing
-X-Kernelci-Kernel: v6.2-rc5-97-gf108f07918a9
-X-Kernelci-Report-Type: test
-Subject: pm/testing baseline: 72 runs,
- 6 regressions (v6.2-rc5-97-gf108f07918a9)
-To:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        kernel-build-reports@lists.linaro.org, kernelci-results@groups.io
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y9EI0Gn/NUJt6GEk@hirez.programming.kicks-ass.net>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-pm/testing baseline: 72 runs, 6 regressions (v6.2-rc5-97-gf108f07918a9)
-
-Regressions Summary
--------------------
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-cubietruck                   | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-juno-uboot                   | arm64 | lab-broonie  | gcc-10   | defconfig =
-         | 1          =
-
-kontron-pitx-imx8m           | arm64 | lab-kontron  | gcc-10   | defconfig =
-         | 2          =
-
-sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-sun8i-h3-libretech-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:  https://kernelci.org/test/job/pm/branch/testing/kernel/v6.2-rc5=
--97-gf108f07918a9/plan/baseline/
-
-  Test:     baseline
-  Tree:     pm
-  Branch:   testing
-  Describe: v6.2-rc5-97-gf108f07918a9
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm=
-.git
-  SHA:      f108f07918a97e350e08b923311657f0fcf70b0b =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-cubietruck                   | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d16239979eef9c29915ed5
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-cubietruck.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d16239979eef9c29915eda
-        failing since 6 days (last pass: v6.1-rc8-176-gcb06e36a6532, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-25T17:08:53.754424  + set +x<8>[   15.038648] <LAVA_SIGNAL_ENDR=
-UN 0_dmesg 3211188_1.5.2.4.1>
-    2023-01-25T17:08:53.755232  =
-
-    2023-01-25T17:08:53.863182  / # #
-    2023-01-25T17:08:53.966888  export SHELL=3D/bin/sh
-    2023-01-25T17:08:53.967806  #
-    2023-01-25T17:08:54.069922  / # export SHELL=3D/bin/sh. /lava-3211188/e=
-nvironment
-    2023-01-25T17:08:54.070864  =
-
-    2023-01-25T17:08:54.173139  / # . /lava-3211188/environment/lava-321118=
-8/bin/lava-test-runner /lava-3211188/1
-    2023-01-25T17:08:54.174871  =
-
-    2023-01-25T17:08:54.179530  / # /lava-3211188/bin/lava-test-runner /lav=
-a-3211188/1 =
-
-    ... (12 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-juno-uboot                   | arm64 | lab-broonie  | gcc-10   | defconfig =
-         | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d162a49489fba1d0915eb9
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm64/defconfig/gcc-10/lab-broonie/baseline-juno-uboot.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm64/defconfig/gcc-10/lab-broonie/baseline-juno-uboot.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.login: https://kernelci.org/test/case/id/63d162a49489fba1d0915=
-eba
-        new failure (last pass: v6.2-rc5-92-g2f9e90528ee7) =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-kontron-pitx-imx8m           | arm64 | lab-kontron  | gcc-10   | defconfig =
-         | 2          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d16171aaa2eafcbf915ee9
-
-  Results:     51 PASS, 2 FAIL, 0 SKIP
-  Full config: defconfig
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm64/defconfig/gcc-10/lab-kontron/baseline-kontron-pitx-imx8m.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/arm64/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d16171aaa2eafcbf915eec
-        new failure (last pass: v6.2-rc5-92-g2f9e90528ee7)
-
-    2023-01-25T17:05:41.972889  / # #
-    2023-01-25T17:05:42.075104  export SHELL=3D/bin/sh
-    2023-01-25T17:05:42.075832  #
-    2023-01-25T17:05:42.177269  / # export SHELL=3D/bin/sh. /lava-255608/en=
-vironment
-    2023-01-25T17:05:42.177843  =
-
-    2023-01-25T17:05:42.279342  / # . /lava-255608/environment/lava-255608/=
-bin/lava-test-runner /lava-255608/1
-    2023-01-25T17:05:42.280088  =
-
-    2023-01-25T17:05:42.284717  / # /lava-255608/bin/lava-test-runner /lava=
--255608/1
-    2023-01-25T17:05:42.350612  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-25T17:05:42.350944  + cd /l<8>[   16.201353] <LAVA_SIGNAL_START=
-RUN 1_bootrr 255608_1.5.2.4.5> =
-
-    ... (10 line(s) more)  =
-
-
-  * baseline.bootrr.dwc3-usb1-probed: https://kernelci.org/test/case/id/63d=
-16171aaa2eafcbf915efc
-        new failure (last pass: v6.2-rc5-92-g2f9e90528ee7)
-
-    2023-01-25T17:05:46.410135  /lava-255608/1/../bin/lava-test-case
-    2023-01-25T17:05:46.410541  <8>[   20.425551] <LAVA_SIGNAL_TESTCASE TES=
-T_CASE_ID=3Ddwc3-usb1-probed RESULT=3Dfail>
-    2023-01-25T17:05:46.410783  /lava-255608/1/../bin/lava-test-case   =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-sun8i-h2-plus...ch-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d1609f9a033d65c2915f02
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
-bretech-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h2-plus-li=
-bretech-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d1609f9a033d65c2915f07
-        failing since 6 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-25T17:02:07.040537  / # #
-    2023-01-25T17:02:07.142265  export SHELL=3D/bin/sh
-    2023-01-25T17:02:07.142750  #
-    2023-01-25T17:02:07.244119  / # export SHELL=3D/bin/sh. /lava-3211176/e=
-nvironment
-    2023-01-25T17:02:07.244475  =
-
-    2023-01-25T17:02:07.345823  / # . /lava-3211176/environment/lava-321117=
-6/bin/lava-test-runner /lava-3211176/1
-    2023-01-25T17:02:07.346472  =
-
-    2023-01-25T17:02:07.351310  / # /lava-3211176/bin/lava-test-runner /lav=
-a-3211176/1
-    2023-01-25T17:02:07.455300  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-25T17:02:07.455783  + cd /lava-3211176/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
- =
-
-
-
-platform                     | arch  | lab          | compiler | defconfig =
-         | regressions
------------------------------+-------+--------------+----------+-----------=
----------+------------
-sun8i-h3-libretech-all-h3-cc | arm   | lab-baylibre | gcc-10   | multi_v7_d=
-efconfig | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/63d160b69a033d65c2915f3a
-
-  Results:     5 PASS, 1 FAIL, 1 SKIP
-  Full config: multi_v7_defconfig
-  Compiler:    gcc-10 (arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 202=
-10110)
-  Plain log:   https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
-ch-all-h3-cc.txt
-  HTML log:    https://storage.kernelci.org//pm/testing/v6.2-rc5-97-gf108f0=
-7918a9/arm/multi_v7_defconfig/gcc-10/lab-baylibre/baseline-sun8i-h3-librete=
-ch-all-h3-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/buildroot/buildroo=
-t-baseline/20230120.0/armel/rootfs.cpio.gz =
-
-
-
-  * baseline.bootrr.deferred-probe-empty: https://kernelci.org/test/case/id=
-/63d160b69a033d65c2915f3f
-        failing since 6 days (last pass: v6.1-rc8-224-g02f29b079520, first =
-fail: v6.2-rc4-74-g590cffafa8dd)
-
-    2023-01-25T17:02:25.158695  / # #
-    2023-01-25T17:02:25.260663  export SHELL=3D/bin/sh
-    2023-01-25T17:02:25.261238  #
-    2023-01-25T17:02:25.362621  / # export SHELL=3D/bin/sh. /lava-3211187/e=
-nvironment
-    2023-01-25T17:02:25.363169  =
-
-    2023-01-25T17:02:25.464603  / # . /lava-3211187/environment/lava-321118=
-7/bin/lava-test-runner /lava-3211187/1
-    2023-01-25T17:02:25.465383  =
-
-    2023-01-25T17:02:25.469754  / # /lava-3211187/bin/lava-test-runner /lav=
-a-3211187/1
-    2023-01-25T17:02:25.591780  + export 'TESTRUN_ID=3D1_bootrr'
-    2023-01-25T17:02:25.592401  + cd /lava-3211187/1/tests/1_bootrr =
-
-    ... (10 line(s) more)  =
-
- =20
+On Wed, Jan 25, 2023 at 11:47:44AM +0100, Peter Zijlstra wrote:
+> On Tue, Jan 24, 2023 at 05:12:14PM +0000, Mark Rutland wrote:
+> > On Tue, Jan 24, 2023 at 03:44:35PM +0100, Peter Zijlstra wrote:
+> > > On Mon, Jan 23, 2023 at 05:07:53PM -0500, Steven Rostedt wrote:
+> > > 
+> > > > Actually, perhaps we can just add this, and all you need to do is create
+> > > > and set CONFIG_NO_RCU_TRACING (or some other name).
+> > > 
+> > > Elsewhere I've used CONFIG_ARCH_WANTS_NO_INSTR for this.
+> > 
+> > Yes please; if we use CONFIG_ARCH_WANTS_NO_INSTR then arm64 will get this "for
+> > free" once we add the missing checks (which I assume we need) in our ftrace_prepare_return().
+> > 
+> > > Anyway, I took it for a spin and it .... doesn't seems to do the job.
+> > > 
+> > > With my patch the first splat is
+> > > 
+> > >   "RCU not on for: cpuidle_poll_time+0x0/0x70"
+> > > 
+> > > While with yours I seems to get the endless:
+> > > 
+> > >   "WARNING: suspicious RCU usage"
+> > > 
+> > > thing. Let me see if I can figure out where it goes side-ways.
+> > 
+> > Hmmm... for WARN_ONCE() don't we need to wake RCU first also? I thought we
+> > needed that at least for the printk machinery?
+> 
+> OK, the below seems to work nice for me -- although I'm still on a
+> hacked up printk, but the recursive RCU not watching fail seems to be
+> tamed.
+> 
+> Ofc. Paul might have an opinion on this glorious bodge ;-)
+
+For some definition of the word "glorious", to be sure.  ;-)
+
+Am I correct that you have two things happening here?  (1) Preventing
+trace recursion and (2) forcing RCU to pay attention when needed.
+
+I cannot resist pointing out that you have re-invented RCU_NONIDLE(),
+though avoiding much of the overhead when not needed.  ;-)
+
+I would have objections if this ever leaks out onto a non-error code path.
+There are things that need doing when RCU starts and stops watching,
+and this approach omits those things.  Which again is OK in this case,
+where this code is only ever executed when something is already broken,
+but definitely *not* OK when things are not already broken.
+
+							Thanx, Paul
+
+> ---
+> 
+> diff --git a/include/linux/trace_recursion.h b/include/linux/trace_recursion.h
+> index c303f7a114e9..d48cd92d2364 100644
+> --- a/include/linux/trace_recursion.h
+> +++ b/include/linux/trace_recursion.h
+> @@ -135,6 +135,21 @@ extern void ftrace_record_recursion(unsigned long ip, unsigned long parent_ip);
+>  # define do_ftrace_record_recursion(ip, pip)	do { } while (0)
+>  #endif
+>  
+> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
+> +# define trace_warn_on_no_rcu(ip)					\
+> +	({								\
+> +		bool __ret = !rcu_is_watching();			\
+> +		if (__ret && !trace_recursion_test(TRACE_RECORD_RECURSION_BIT)) { \
+> +			trace_recursion_set(TRACE_RECORD_RECURSION_BIT); \
+> +			WARN_ONCE(true, "RCU not on for: %pS\n", (void *)ip); \
+> +			trace_recursion_clear(TRACE_RECORD_RECURSION_BIT); \
+> +		}							\
+> +		__ret;							\
+> +	})
+> +#else
+> +# define trace_warn_on_no_rcu(ip)	false
+> +#endif
+> +
+>  /*
+>   * Preemption is promised to be disabled when return bit >= 0.
+>   */
+> @@ -144,6 +159,9 @@ static __always_inline int trace_test_and_set_recursion(unsigned long ip, unsign
+>  	unsigned int val = READ_ONCE(current->trace_recursion);
+>  	int bit;
+>  
+> +	if (trace_warn_on_no_rcu(ip))
+> +		return -1;
+> +
+>  	bit = trace_get_context_bit() + start;
+>  	if (unlikely(val & (1 << bit))) {
+>  		/*
+> diff --git a/lib/bug.c b/lib/bug.c
+> index c223a2575b72..0a10643ea168 100644
+> --- a/lib/bug.c
+> +++ b/lib/bug.c
+> @@ -47,6 +47,7 @@
+>  #include <linux/sched.h>
+>  #include <linux/rculist.h>
+>  #include <linux/ftrace.h>
+> +#include <linux/context_tracking.h>
+>  
+>  extern struct bug_entry __start___bug_table[], __stop___bug_table[];
+>  
+> @@ -153,7 +154,7 @@ struct bug_entry *find_bug(unsigned long bugaddr)
+>  	return module_find_bug(bugaddr);
+>  }
+>  
+> -enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> +static enum bug_trap_type __report_bug(unsigned long bugaddr, struct pt_regs *regs)
+>  {
+>  	struct bug_entry *bug;
+>  	const char *file;
+> @@ -209,6 +210,30 @@ enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+>  	return BUG_TRAP_TYPE_BUG;
+>  }
+>  
+> +enum bug_trap_type report_bug(unsigned long bugaddr, struct pt_regs *regs)
+> +{
+> +	enum bug_trap_type ret;
+> +	bool rcu = false;
+> +
+> +#ifdef CONFIG_CONTEXT_TRACKING_IDLE
+> +	/*
+> +	 * Horrible hack to shut up recursive RCU isn't watching fail since
+> +	 * lots of the actual reporting also relies on RCU.
+> +	 */
+> +	if (!rcu_is_watching()) {
+> +		rcu = true;
+> +		ct_state_inc(RCU_DYNTICKS_IDX);
+> +	}
+> +#endif
+> +
+> +	ret = __report_bug(bugaddr, regs);
+> +
+> +	if (rcu)
+> +		ct_state_inc(RCU_DYNTICKS_IDX);
+> +
+> +	return ret;
+> +}
+> +
+>  static void clear_once_table(struct bug_entry *start, struct bug_entry *end)
+>  {
+>  	struct bug_entry *bug;
