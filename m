@@ -2,152 +2,98 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEDD267A977
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 05:04:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EFC67A992
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 05:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233514AbjAYEEQ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Tue, 24 Jan 2023 23:04:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59924 "EHLO
+        id S229625AbjAYEVv (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Tue, 24 Jan 2023 23:21:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232166AbjAYEEN (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 23:04:13 -0500
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC0B4A21F
-        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 20:04:08 -0800 (PST)
-Received: from epcas1p4.samsung.com (unknown [182.195.41.48])
-        by mailout2.samsung.com (KnoxPortal) with ESMTP id 20230125040405epoutp0251cc50bab3bddcdd190c10b7d574f24e~9cYNLdS__1526315263epoutp02D
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 04:04:05 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20230125040405epoutp0251cc50bab3bddcdd190c10b7d574f24e~9cYNLdS__1526315263epoutp02D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1674619445;
-        bh=tKo47pbZYVMiR8BWGW14K9nOPkA7uSFy9/Ap7c5WXfE=;
-        h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-        b=eLX5rRR9sarZeXBI76ITLxthue0Mtro94dO5ojpfZ4RbaiIALLWSxHjrLvFh5fQ//
-         th7NL07+4d/C8fJNEaB+w2cVBSXHQmXLUUZ36NFUt5dvI5dcSQ5AnxxRVejJyJsie2
-         MPgIzBvUhXKF2CbH4uR1ml8CmhxjzMuUF5Rh9k/w=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-        epcas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230125040404epcas1p1dcd61839e317f873691955dbbcdfa93a~9cYMup9g10195801958epcas1p1b;
-        Wed, 25 Jan 2023 04:04:04 +0000 (GMT)
-Received: from epsmges1p1.samsung.com (unknown [182.195.38.236]) by
-        epsnrtp2.localdomain (Postfix) with ESMTP id 4P1qw35MbPz4x9Pv; Wed, 25 Jan
-        2023 04:04:03 +0000 (GMT)
-X-AuditID: b6c32a35-d9fff7000000d8eb-02-63d0aa3302ff
-Received: from epcas1p2.samsung.com ( [182.195.41.46]) by
-        epsmges1p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F3.79.55531.33AA0D36; Wed, 25 Jan 2023 13:04:03 +0900 (KST)
-Mime-Version: 1.0
-Subject: RE: [PATCH] PM / devfreq: Fix build issues with devfreq disabled
-Reply-To: myungjoo.ham@samsung.com
-Sender: MyungJoo Ham <myungjoo.ham@samsung.com>
-From:   MyungJoo Ham <myungjoo.ham@samsung.com>
-To:     Rob Clark <robdclark@gmail.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Rob Clark <robdclark@chromium.org>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230123153745.3185032-1-robdclark@gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230125040403epcms1p1646e9668b87df3e9c344ad58d39b6eb6@epcms1p1>
-Date:   Wed, 25 Jan 2023 13:04:03 +0900
-X-CMS-MailID: 20230125040403epcms1p1646e9668b87df3e9c344ad58d39b6eb6
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 101P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprIJsWRmVeSWpSXmKPExsWy7bCmnq7xqgvJBt//q1pc//Kc1eLK1/ds
-        FnOen2W0OH9+A7vF2aY37BaXd81hs/jce4TRYstqe4trPx8zWzxf+IPZgctjdsNFFo+ds+6y
-        e2xa1cnmcb/7OJNH35ZVjB6fN8kFsEVl22SkJqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpa
-        WpgrKeQl5qbaKrn4BOi6ZeYAXaakUJaYUwoUCkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAt
-        0CtOzC0uzUvXy0stsTI0MDAyBSpMyM6403+csaBDsWLutGdsDYzTFboYOTkkBEwk3jftYe9i
-        5OIQEtjBKPF88R3GLkYODl4BQYm/O4RBaoQFPCWefp3HDmILCShJNNzcxwwR15foeLCNEcRm
-        E9CV2LrhLguILSIQIzHjzCdmkJnMAr+ZJDqWHmWFWMYrMaP9KQuELS2xfflWsGZOAWuJa09+
-        QdWIStxc/ZYdxn5/bD4jhC0i0XrvLDOELSjx4OduqLiUxJOdk9lAlkkITGaUOHniOCOEM4dR
-        YtqGd2wQVfoSZ+aeBLN5BXwlNj+dDraBRUBV4trunVA1LhI3li0H28AsoC2xbOFrZlBIMAto
-        SqzfpQ8R5pN497UH7pkd854wQdhqEod2L4E6Wkbi9PSFUId6SPza+hIauk2MEhuuvGabwCg/
-        CxHAs5Bsm4WwbQEj8ypGsdSC4tz01GLDAkN4nCbn525iBKdNLdMdjBPfftA7xMjEwXiIUYKD
-        WUmEt2f2+WQh3pTEyqrUovz4otKc1OJDjKZAf05klhJNzgcm7rySeEMTSwMTMyNjEwtDM0Ml
-        cV5x25PJQgLpiSWp2ampBalFMH1MHJxSDUz6z358mBgwTeajwCqFGZeleCxZZm9rCRHI/aln
-        dEvj2p/tLxt0ore0b4pp/fPCmq9mYy7zlP+nZ1c87Vu9ui9NqqFjUp514qv3z9e9XSadmTtn
-        tZzm3ZuOBbumbFXOWafXlL92koK+6eM8hf/tJ3zm8hiW85wUnVrBrXHEb5PLhzKLi/NzO/mn
-        Ga48YHjNyGvPps/7GDf1PzwT57uffbbc6Y6T/tdzPl94cKdSIeTfph/C9z+6rZCd4bGut0pD
-        NvPRYlOn3uv/Ph0uNTix+LjENB3ek7u6zzwq257Cf3umlMamu4xmSw9enMkx7faB5purn9nG
-        Kn18fzXh7ONSOYHou2cWaM9oWPRMMf1Pvvyxa0osxRmJhlrMRcWJAEcho5AkBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230123153745epcas1p17e57cf83ed371e86258139473befc615
-References: <20230123153745.3185032-1-robdclark@gmail.com>
-        <CGME20230123153745epcas1p17e57cf83ed371e86258139473befc615@epcms1p1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        with ESMTP id S229534AbjAYEVt (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Tue, 24 Jan 2023 23:21:49 -0500
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E512C4A21F
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 20:21:48 -0800 (PST)
+Received: by mail-pj1-x1035.google.com with SMTP id t12-20020a17090aae0c00b00229f4cff534so2823740pjq.1
+        for <linux-pm@vger.kernel.org>; Tue, 24 Jan 2023 20:21:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjzQ/T18GGXyjP1fr2tGkIhMBqL2k9JdVl3+iLMlvGE=;
+        b=YGqqpWJQj1Juvi9aG1th2Jkyw65lcOA+FMDZ3sPR9TgDcqjELn7ge8gabdukkYupPH
+         +ABtD5m6DNETMOCb4uGHraGpjAjRxA+ls80BwUnTfeGkYZUmJ7mjiVlDWNjX5Ub4qK9o
+         Zet9N8OUEDFRaN7ZltG+ZADJDDoqy1Q8uUQHcSrDMBzP3OrZ0AWZgiX+fR26p3okBoC2
+         BldJV3Mf8t9Hn9Dq48Kat3dnSnA4HsZEjVkLHGyCa21q7Hquy2T2//kaGxcCHkeQ4lmm
+         3SGmq2tY5+G1WReAh0kZZvCLwKhgUzTMYkTmXWLfZlS/Lq/USawQoQeSKvqL6Q4fKayJ
+         0oiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PjzQ/T18GGXyjP1fr2tGkIhMBqL2k9JdVl3+iLMlvGE=;
+        b=VeYJn1BeTOLvaglHAczQlejQL6nyiKMqduirOtZm4s4QIZriDif20CjrCx9+HlZ6gk
+         3UIodGInSvrS9mxSS6ONZmz7IDvo83VT4F/q8je3r1CK7twxv2M3J9hVF3cP1OQfSk9I
+         IuBPQTRvIZXWiUXFAWq3ItHtUUdWLqBqCQYq45ypogNDSQJFv0T4VYl+JS9kxX+8nRyK
+         Lo1d7nzTNiQpaEryBSTELXU10qIrtWdnVGN/OUzYEUhzJl02ZgINmA3lVibeGs2zvbR/
+         kG1j/TZdS+Im3nAuWxh3u+Ne/O2D4pgPbGs6kCpTr84JzxpNDxs+GEHt8F2Y0x/Ep5ay
+         EHkw==
+X-Gm-Message-State: AFqh2kqsWWADIuM9iocySxdrYm9+WMvtLSTPFEQeWFGmeH/LLAu2znH7
+        kOuYodeRhZn139Y3w2xVLFoqLQ==
+X-Google-Smtp-Source: AMrXdXstydjoWHHyfBEAiqN9oXn2N+8Ls6pgDtBMucEiLgGiwZu3fQSoawT5i2Uw5fJr/LcrEALlCg==
+X-Received: by 2002:a05:6a21:99a7:b0:b5:d781:ca7 with SMTP id ve39-20020a056a2199a700b000b5d7810ca7mr42783771pzb.3.1674620508463;
+        Tue, 24 Jan 2023 20:21:48 -0800 (PST)
+Received: from localhost ([122.172.83.155])
+        by smtp.gmail.com with ESMTPSA id e26-20020a65689a000000b004774b5dc24dsm2235706pgt.12.2023.01.24.20.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Jan 2023 20:21:47 -0800 (PST)
+Date:   Wed, 25 Jan 2023 09:51:45 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Johan Hovold <johan@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>, andersson@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] OPP: Disallow "opp-hz" property without a
+ corresponding clk
+Message-ID: <20230125042145.hrjpnskywwqn7b6v@vireshk-i7>
+References: <cover.1669012140.git.viresh.kumar@linaro.org>
+ <c03c4f2b9d4dcc3264d1902606c6c5c464b4b043.1669012140.git.viresh.kumar@linaro.org>
+ <Y3snGQet8yc7HnJK@hovoldconsulting.com>
+ <20221121073946.GE11945@thinkpad>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221121073946.GE11945@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
->Sender : Rob Clark=C2=A0<robdclark=40gmail.com>=0D=0A>Date=20:=202023-01-2=
-4=2000:37=20(GMT+9)=0D=0A>Title=20:=20=5BPATCH=5D=20PM=20/=20devfreq:=20Fix=
-=20build=20issues=20with=20devfreq=20disabled=0D=0A>=C2=A0=0D=0A>From:=20Ro=
-b=20Clark=20<robdclark=40chromium.org>=0D=0A>=0D=0A>The=20existing=20no-op=
-=20shims=20for=20when=20PM_DEVFREQ=20(or=20an=20individual=20governor)=0D=
-=0A>only=20do=20half=20the=20job.=20=C2=A0The=20governor=20specific=20confi=
-g/tuning=20structs=20need=0D=0A>to=20be=20available=20to=20avoid=20compile=
-=20errors=20in=20drivers=20using=20devfreq.=0D=0A>=0D=0A>Fixes:=206563f60f1=
-4cb=20(=22drm/msm/gpu:=20Add=20devfreq=20tuning=20debugfs=22)=0D=0A>Signed-=
-off-by:=20Rob=20Clark=20<robdclark=40chromium.org>=0D=0A=0D=0ADoesn't=20thi=
-s=20imply=20that=20DRM_MSM=20should=20depend=20on=20PM_DEVFREQ=20?=0D=0A=0D=
-=0AIt=20appears=20that=20gpu/drm/msm/DRM_MSM=20uses=20PM_DEVFREQ=20without=
-=20actually=0D=0Adeclaring=20the=20dependency=20on=20PM_DEVFREQ.=0D=0AYou=
-=20cannot=20use=20SIMPLE_ONDEMAND=20without=20DEVFREQ.=0D=0A=0D=0ACheers,=
-=0D=0AMyungJoo=0D=0A=0D=0A>---=0D=0A>Assuming=20this=20doesn't=20conflict=
-=20with=20anything=20else=20landing=20via=20another=0D=0A>tree,=20an=20a-b=
-=20to=20land=20this=20via=20drm/msm-next=20would=20let=20us=20un-break=20bu=
-ilds.=0D=0A>(And=20also=20start=20removing=20=22select=20DEVFREQ_GOV_SIMPLE=
-_ONDEMAND=22s=20added=20in=0D=0A>various=20places=20to=20try=20to=20work=20=
-around=20this=20issue.)=0D=0A>=0D=0A>=20include/linux/devfreq.h=20=7C=207=
-=20++-----=0D=0A>=201=20file=20changed,=202=20insertions(+),=205=20deletion=
-s(-)=0D=0A>=0D=0A>diff=20--git=20a/include/linux/devfreq.h=20b/include/linu=
-x/devfreq.h=0D=0A>index=204dc7cda4fd46..7fd704bb8f3d=20100644=0D=0A>---=20a=
-/include/linux/devfreq.h=0D=0A>+++=20b/include/linux/devfreq.h=0D=0A>=40=40=
-=20-273,8=20+273,8=20=40=40=20void=20devm_devfreq_unregister_notifier(struc=
-t=20device=20*dev,=0D=0A>=20struct=20devfreq=20*devfreq_get_devfreq_by_node=
-(struct=20device_node=20*node);=0D=0A>=20struct=20devfreq=20*devfreq_get_de=
-vfreq_by_phandle(struct=20device=20*dev,=0D=0A>=20=C2=A0=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0const=20char=20*phandle_nam=
-e,=20int=20index);=0D=0A>+=23endif=20/*=20CONFIG_PM_DEVFREQ=20*/=0D=0A>=C2=
-=A0=0D=0A>-=23if=20IS_ENABLED(CONFIG_DEVFREQ_GOV_SIMPLE_ONDEMAND)=0D=0A>=20=
-/**=0D=0A>=20=C2=A0*=20struct=20devfreq_simple_ondemand_data=20-=20=60=60vo=
-id=20*data=60=60=20fed=20to=20struct=20devfreq=0D=0A>=20=C2=A0*=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0and=20devfreq_add_device=0D=0A>=40=40=20-292,9=20+2=
-92,7=20=40=40=20struct=20devfreq_simple_ondemand_data=20=7B=0D=0A>=20=C2=A0=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0unsigned=20int=20upthreshold;=0D=0A>=20=C2=
-=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0unsigned=20int=20downdifferential;=0D=
-=0A>=20=7D;=0D=0A>-=23endif=0D=0A>=C2=A0=0D=0A>-=23if=20IS_ENABLED(CONFIG_D=
-EVFREQ_GOV_PASSIVE)=0D=0A>=20enum=20devfreq_parent_dev_type=20=7B=0D=0A>=20=
-=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0DEVFREQ_PARENT_DEV,=0D=0A>=20=C2=A0=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0CPUFREQ_PARENT_DEV,=0D=0A>=40=40=20-337,9=
-=20+335,8=20=40=40=20struct=20devfreq_passive_data=20=7B=0D=0A>=20=C2=A0=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20notifier_block=20nb;=0D=0A>=20=C2=A0=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20list_head=20cpu_data_list;=0D=0A>=
-=20=7D;=0D=0A>-=23endif=0D=0A>=C2=A0=0D=0A>-=23else=20/*=20=21CONFIG_PM_DEV=
-FREQ=20*/=0D=0A>+=23if=20=21defined(CONFIG_PM_DEVFREQ)=0D=0A>=20static=20in=
-line=20struct=20devfreq=20*devfreq_add_device(struct=20device=20*dev,=0D=0A=
->=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0struct=20devfreq_dev_profile=20*prof=
-ile,=0D=0A>=20=C2=A0=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=
-=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0const=20char=20*governor_na=
-me,=0D=0A>--=20=0D=0A>2.38.1=0D=0A>=0D=0A
+On 21-11-22, 13:09, Manivannan Sadhasivam wrote:
+> That's right. I have proposed to do the similar change to other SoCs as well
+> once the series was completely merged. I thought of doing so for 6.3.
+> 
+> Btw, there seems to be one more candidate:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/qcom/sm8250.dtsi#n2537
+> 
+> Looks like newer SoCs that has the GMU within the GPU block doesn't have clock
+> property. This is because, GMU is the one supplying clocks to the GPU unlike the
+> old SoCs where the clocks used to come from GCC itself.
+> 
+> But we do have a GMU devicetree node, so it should be a matter of adding the
+> clock provider support as done for cpufreq and represent it in devicetree.
+> 
+> I'll ping Rob Clark and see how to get it done.
+
+Any update on this Mani ? I want to get the hack removed if possible.
+
+-- 
+viresh
