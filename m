@@ -2,114 +2,125 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E159467B2C4
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 13:53:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE42567B2E4
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 14:02:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235154AbjAYMxJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 07:53:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S235503AbjAYNCT (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 08:02:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229778AbjAYMxI (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 07:53:08 -0500
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681D710AAB;
-        Wed, 25 Jan 2023 04:53:07 -0800 (PST)
-Received: from [192.168.2.197] (109-252-117-89.nat.spd-mgts.ru [109.252.117.89])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 015C36602E4D;
-        Wed, 25 Jan 2023 12:53:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1674651186;
-        bh=FsmNHA2oh2Kx15JYgMiYPMwo9fJuN5w1csBgs9yBag0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=RpwnSDTKnV/756GSwFe99d13fNSHYTBDoI1mjxpTJsvNS7ku4HBu1ZgsTst6A0Dji
-         Q776uDOZdQbH5Rqgit4GJWEZ3wL+2EAjVJekWRsEtkNaIKutJjJCaHDtIlHIsqGORy
-         dDa+G53xoAZawv88Hv7ZzQZmLSefHyEMkK9Ll0mHuhhqBpowO9D5U9abGd2itwph3u
-         QGoz6uXnF3HXtEvGqD+Z1ShQWD4IE/5QeLBcxsQLGCcjG3zwDF4z3ZDG6/LXbLpZSz
-         UcfYhS4O90WWIjHzDOTV3TpOmihjVdGROF+1dP2eQhae8k6NKUU4X39mPRQc/DoaVm
-         B+2oAPubBm6VA==
-Message-ID: <0a180849-ba1b-2a82-ab06-ed1b8155d5ca@collabora.com>
-Date:   Wed, 25 Jan 2023 15:53:01 +0300
+        with ESMTP id S235317AbjAYNCS (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 08:02:18 -0500
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8200F4673C
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 05:02:11 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id o20so28819563lfk.5
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 05:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WUlWEcztX7LC+YPVdX7zQ3TiSCzemn77YbP9UmZzYSE=;
+        b=ZWujWps5xV+1Wp9WkpTktZV8uw9uUYoO8g5XV6hX5GoFex0wS6QvPRwAG/2X2m1TpC
+         AnHeNzLJDDtn53tWfoYWTefbTDjXDAE0nyphHivQZvoRdrxbqpV+7GwZiiMjSczRHu8S
+         2+wR907XANDw+tY9iJAZ7kQb7uGdBtK+VXYG5abfl8fMtfvdNrdyGPXGOMxIoU9QKeVu
+         4IlTBODyMAWFOY81r6JOyh5Fa315CiPWT2rXXbjFQEfpJSeF4VXVDJglh9UTsnUwh9su
+         TYGOZhQhykmGOSX5lbdOvzn5eD1DRAR9mumAOcV1QbWLinLDbhcnO/qlNyd2Axsp+wEi
+         p/4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WUlWEcztX7LC+YPVdX7zQ3TiSCzemn77YbP9UmZzYSE=;
+        b=AqDbl16GJEE51Zb7QUvIEzJ6MS3W8CdBPFmg6NUxzo2UdCZ2/UXKYt5nfKheV/uFQ4
+         jst78/EC49ZT2pca+T08h312Btv83Hdm0DkECdvYRBbzzur8Magfx1puMRgVvZPRSYjD
+         7xFo7ug72YwEEP/VkAmYRxgYC7u4fdMaxwEv1e5CY+15RagFCF13k/rOL8HGScPvWCt0
+         TCVsMGqPyBo2kBfaw0sat8dU90afzz3DKYkAeAo9wOnPynKb5fP+/8x+o2cWNld14lNY
+         l+A2HlzukS5NO++rMpe1CS2Aroelu0LMfRkt5BcghT85f75CBqsa1RNA2Sricr4OnDZF
+         yz+Q==
+X-Gm-Message-State: AFqh2kqr85jGnOMwFsDVwerJWitmhrxL0df+mjXY2uBllUqezHDe7cSQ
+        4SaHJ+ZCTHH+RK8FWIevzwpLd2J1/IBg8ssqHDH3Zg==
+X-Google-Smtp-Source: AMrXdXua3Xzk3n+mAS+SHWDmCwyiaUE3a82cF5mU8PKvzbJFSacMHuyCjbHJ/PWxjesRw9CjRh1dmLPf3Blx2uP0BXc=
+X-Received: by 2002:a05:6512:3984:b0:4ca:faca:5b59 with SMTP id
+ j4-20020a056512398400b004cafaca5b59mr2768406lfu.615.1674651728174; Wed, 25
+ Jan 2023 05:02:08 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH v2 0/2] firmware/psci: Switch to the sys-off handler API
-Content-Language: en-US
-To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        YueHaibing <yuehaibing@huawei.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        tangmeng <tangmeng@uniontech.com>,
-        Linux PM list <linux-pm@vger.kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Sudeep Holla <sudeep.holla@arm.com>
-References: <20230101181715.42199-1-samuel@sholland.org>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20230101181715.42199-1-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230124230048.371144-1-robh@kernel.org>
+In-Reply-To: <20230124230048.371144-1-robh@kernel.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 25 Jan 2023 14:01:55 +0100
+Message-ID: <CAMRc=MfdDv5teeQx802Qi3otwfXtZ1jAX_bzvH4DQMvdas9YtQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: Add missing (unevaluated|additional)Properties
+ on child node schemas
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lee Jones <lee@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-arm-kernel@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, linux-gpio@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-mmc@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On 1/1/23 21:17, Samuel Holland wrote:
-> I want to convert the axp20x PMIC poweroff handler to use the sys-off
-> API, so it can be used as a fallback for the SBI poweroff handler on
-> RISC-V. But the PSCI poweroff handler still uses pm_power_off, so done
-> alone, this conversion would cause the axp20x callback to be called
-> first, before the PSCI poweroff handler.
-> 
-> In order to prevent this change in behavior, the PSCI poweroff handler
-> needs to be converted to the sys-off API first, at a higher priority.
-> 
-> This series performs the conversion, after accounting for the fact that
-> the PSCI poweroff handler is registered quite early during boot.
-> 
-> The first patch is a dependency for both this series and the SBI
-> series[1], so I would like to get at least patch 1 merged soon.
-> 
-> [1]: https://lore.kernel.org/lkml/20221228161915.13194-1-samuel@sholland.org/
-> 
-> Changes in v2:
->  - Update commit messages
-> 
-> Samuel Holland (2):
->   kernel/reboot: Use the static sys-off handler for any priority
->   firmware/psci: Switch to the sys-off handler API
-> 
->  drivers/firmware/psci/psci.c |  9 ++++++---
->  kernel/reboot.c              | 10 ++++------
->  2 files changed, 10 insertions(+), 9 deletions(-)
-> 
+On Wed, Jan 25, 2023 at 12:00 AM Rob Herring <robh@kernel.org> wrote:
+>
+> Just as unevaluatedProperties or additionalProperties are required at
+> the top level of schemas, they should (and will) also be required for
+> child node schemas. That ensures only documented properties are
+> present.
+>
+> Add unevaluatedProperties or additionalProperties as appropriate, and
+> then add any missing properties flagged by the addition.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
 
-Hello Rafael,
+[...]
 
-Do you think you will be able to pick up this series for 6.3? I'm going
-to continue removing the pm_power_off from kernel, the new power-off API
-feels stable now to me. I think the Samuel's improvement for the early
-boot memory allocation will be good to have to avoid similar problem for
-other drivers.
+>  .../devicetree/bindings/gpio/x-powers,axp209-gpio.yaml |  1 +
 
-Ideally, the PSCI patch should get an ack, though the code change is
-about the PM stuff, so perhaps will be fine to take it via PM tree if FW
-maintainers will show no interest in the nearest time.
+[...]
 
-Thanks!
+> diff --git a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+> index 7f26f6b1eea1..31906c253940 100644
+> --- a/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/x-powers,axp209-gpio.yaml
+> @@ -35,6 +35,7 @@ properties:
+>  patternProperties:
+>    "^.*-pins?$":
+>      $ref: /schemas/pinctrl/pinmux-node.yaml#
+> +    additionalProperties: false
+>
+>      properties:
+>        pins:
 
--- 
-Best regards,
-Dmitry
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
+[...]
