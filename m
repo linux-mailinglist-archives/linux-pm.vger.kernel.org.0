@@ -2,105 +2,123 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE04B67B3CC
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 15:04:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C19667B459
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 15:25:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235248AbjAYOEJ (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 09:04:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S235400AbjAYOZz (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 09:25:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234845AbjAYOEJ (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 09:04:09 -0500
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE37B458;
-        Wed, 25 Jan 2023 06:04:07 -0800 (PST)
-Received: by mail-ej1-f48.google.com with SMTP id mp20so47852676ejc.7;
-        Wed, 25 Jan 2023 06:04:07 -0800 (PST)
+        with ESMTP id S235442AbjAYOZx (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 09:25:53 -0500
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A146594;
+        Wed, 25 Jan 2023 06:25:51 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id f19-20020a1c6a13000000b003db0ef4dedcso1333864wmc.4;
+        Wed, 25 Jan 2023 06:25:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IlIUJxcSdCXYA3OeLTMx+yjKn/rWMjqFuTKoW+FqBqQ=;
+        b=ESzuU4Xe/NCTHQj01jK85maPoZaB0fjlWtTTOzzBYWqjXCW1UlPVfIeWfVZ69iUywz
+         XDwlochFxYGMmulrlSIJmEJKnyzRQWq2/K7rOX7yFq0SbPXpJd4ziQDak9I4S9UQ1HVw
+         IV12wN+ODbqdzDuepL/BbZJW/E/+XF6mV9VseyEb7EV6SD7TybiDHpezYCJS1QcQ7HIV
+         KpitgM/ULJx3FH9SlGaAFw8DeSusleSe/iWfoFtg1DV3D7HUQwHv4dazXdwLWC4dQMMP
+         oA+4IKuoLFkhP0E0ophBN0cQriw8drJug0/m/AWmIja6O6wnNcylAht+Y21UdXCzFSWd
+         29KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QaQLLyWQMu0cYP6O6gnotQPF1R1OOQ10sIq9rkF2ReQ=;
-        b=u93EQ5/n9/qkhDkPsma/1fABZjnfVaJSOxoXdfB8HNQsnVlo0siI1wymnfq1tTQtge
-         dTkvjmFG/BH9V8d1JObQAL+1RPkHK24cDVuBvK/hM1Nq17zxrd+XpbzsyuH34/LJCndt
-         A2DgzuPQ93KVhyv2j2OapX2V9Na4A7uo5Z9XHaKow0FNrc5lLc+AAtB646DKqo3p7cAM
-         h3K4ac546pclgthEJAGYlgcqf63PEKykGfn7r8K75mDkwcRBT60hL4U4BJUDFjgZUyfr
-         1B7FuOuWRxcWIEEaioN/AqT+lW5TrokavRNz9sKj5IWw5Dt7hSyNVdFqfT3Q+NG8n+AF
-         u74w==
-X-Gm-Message-State: AFqh2kocYAx3rgfy17btlA6sh2FSW4vqP3mAtQ+kPsAiwRujEfFrRiP0
-        wBumwopbO9B4oBbufbRBvuGms9+eDse38UKpzIM=
-X-Google-Smtp-Source: AMrXdXvc6pde4wRliLQh07o2Rero2AincHDkvUZhLpLTyEkQCpZyRbSkfS1vi99Kj+jYmmiKjE4rIAQAgzHrWPOpaY4=
-X-Received: by 2002:a17:906:d101:b0:84d:3813:fb8 with SMTP id
- b1-20020a170906d10100b0084d38130fb8mr4509019ejz.384.1674655446166; Wed, 25
- Jan 2023 06:04:06 -0800 (PST)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IlIUJxcSdCXYA3OeLTMx+yjKn/rWMjqFuTKoW+FqBqQ=;
+        b=NFppMG8GpeWNp0EjiM6ivGFSalkQ6ZGdNkl5yj57ulP3tNoGcYXDNr5nlVT1xWKzzz
+         PMY8XvlLd4gRSXblGXa+hZq8yeuDMpVdntloS1fOAvs0yJtJ0Cuml52+Qd0Lo4Y5RVff
+         cBGGmL5PBIkRsCB5nG4Fhmzc6GTctBvORC2CYhJWi3nlcMWGyB7sC+6tFybLv43A8tS7
+         ZFRNe/TSMvy04HryFVbITRL4mMhOTEJw6sXCbjUbW/5Rv7SgOG5Sgr1R1lC/AP+5FHHU
+         Tcw3DeSz7ebDfk0xzwZqImWof/b1QTFTgoW1zIoBKHjdP35+FDSrn759swfdzUSe2alb
+         R9fQ==
+X-Gm-Message-State: AFqh2kofAvh8rLt89KDodhclj8XF0jrEP+fBoMLWty4oMvuU62Cr+I0y
+        teOOo/2Z7dQgW2agwhDmwtO0OmHgTSY=
+X-Google-Smtp-Source: AMrXdXtJkYCfBZ98bJpRNPlgWcGmh8+LeAgVJB+l0cf5KmxTT+BJsZJRK7/wmRdZG8sq/rwhaW2/tw==
+X-Received: by 2002:a05:600c:5021:b0:3d9:9755:d659 with SMTP id n33-20020a05600c502100b003d99755d659mr32006876wmr.22.1674656749638;
+        Wed, 25 Jan 2023 06:25:49 -0800 (PST)
+Received: from [192.168.1.135] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id r4-20020a5d4e44000000b0027cb20605e3sm4574996wrt.105.2023.01.25.06.25.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Jan 2023 06:25:49 -0800 (PST)
+Message-ID: <104bb37e-55c3-8dd0-f501-0e8a142511e6@gmail.com>
+Date:   Wed, 25 Jan 2023 15:25:45 +0100
 MIME-Version: 1.0
-References: <20230123152756.4031574-1-daniel.lezcano@linaro.org> <3e2c6c44-f562-28ff-26cc-933f386e9719@linaro.org>
-In-Reply-To: <3e2c6c44-f562-28ff-26cc-933f386e9719@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 Jan 2023 15:03:54 +0100
-Message-ID: <CAJZ5v0iH283yXWdzTN1Gb2xBUjy0E04zEgrny1N6QcsAwsJyyg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Misc thermal cleanup and fixes
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rui.zhang@intel.com, rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v11 3/6] arm64/dts/mt8195: Add efuse node to mt8195
+Content-Language: en-US
+To:     bchihi@baylibre.com, daniel.lezcano@linaro.org,
+        angelogioacchino.delregno@collabora.com, rafael@kernel.org,
+        amitk@kernel.org, rui.zhang@intel.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, rdunlap@infradead.org,
+        ye.xingchen@zte.com.cn, p.zabel@pengutronix.de
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        khilman@baylibre.com, james.lo@mediatek.com,
+        rex-bc.chen@mediatek.com
+References: <20230124131717.128660-1-bchihi@baylibre.com>
+ <20230124131717.128660-4-bchihi@baylibre.com>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20230124131717.128660-4-bchihi@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-On Wed, Jan 25, 2023 at 12:16 PM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi Rafael,
->
-> will you take this series on your branch ?
 
-Yes, I'm planning to do that, if I don't find any issues with it (not
-likely though).
 
-> On 23/01/2023 16:27, Daniel Lezcano wrote:
-> > This series is based on linux-pm/thermal
-> >
-> > It unregisters the netlink generic family for thermal in case the thermal
-> > framework fails to initialize, removes a unneeded ida_destroy() call and moves
-> > the thermal trip code in a separate file.
-> >
-> > A couple of changes have been removed from the previous version:
-> >
-> >   - Ordering the trip points. Some consolidation is needed in the set_trip_temp
-> >     ops before ordering the trip points, so this change is postpone
-> >
-> >   - Remove the mutex destroy call. Even if the call is not needed, the
-> >     justification of the change is not accurate. So it is postponed also.
-> >
-> >   V2:
-> >     - Removed ordering the trip points change
-> >     - Removed mutex destroy change
-> >     - Added "No functional change intented" as requested by Rui
-> >     - Added the function declaration for_each_thermal_trip
-> >
-> > Daniel Lezcano (3):
-> >    thermal/core: Fix unregistering netlink at thermal init time
-> >    thermal/core: Remove unneeded ida_destroy()
-> >    thermal/core: Move the thermal trip code to a dedicated file
-> >
-> >   drivers/thermal/Makefile          |   4 +-
-> >   drivers/thermal/thermal_core.c    |  93 +--------------
-> >   drivers/thermal/thermal_core.h    |   4 +
-> >   drivers/thermal/thermal_helpers.c |  62 ----------
-> >   drivers/thermal/thermal_netlink.c |   5 +
-> >   drivers/thermal/thermal_netlink.h |   3 +
-> >   drivers/thermal/thermal_trip.c    | 182 ++++++++++++++++++++++++++++++
-> >   7 files changed, 199 insertions(+), 154 deletions(-)
-> >   create mode 100644 drivers/thermal/thermal_trip.c
-> >
->
-> --
+On 24/01/2023 14:17, bchihi@baylibre.com wrote:
+> From: Balsam CHIHI <bchihi@baylibre.com>
+> 
+> Add efuse node.
+> This will be required by the thermal driver to get the calibration data.
+> 
+> Signed-off-by: Balsam CHIHI <bchihi@baylibre.com>
+> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
+I fixed the subject prefix to:
+arm64: dts: mt8195: ...
+to be in line with other commits.
+Please take that into account for future patches you send.
+
+Applied thanks!
+
+> ---
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index 5d31536f4c48..09df105f4606 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -1380,6 +1380,12 @@ pciephy_glb_intr: pciephy-glb-intr@193 {
+>   			dp_calibration: dp-data@1ac {
+>   				reg = <0x1ac 0x10>;
+>   			};
+> +			lvts_efuse_data1: lvts1-calib@1bc {
+> +				reg = <0x1bc 0x14>;
+> +			};
+> +			lvts_efuse_data2: lvts2-calib@1d0 {
+> +				reg = <0x1d0 0x38>;
+> +			};
+>   		};
+>   
+>   		u3phy2: t-phy@11c40000 {
