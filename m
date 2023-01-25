@@ -2,52 +2,49 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ADD567B5BB
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 16:20:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC43067B628
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 16:44:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235306AbjAYPUt (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 10:20:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45712 "EHLO
+        id S235615AbjAYPow (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 10:44:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235162AbjAYPUs (ORCPT
-        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 10:20:48 -0500
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DEE26583;
-        Wed, 25 Jan 2023 07:20:47 -0800 (PST)
-Received: by mail-lj1-f176.google.com with SMTP id a37so20732372ljq.0;
-        Wed, 25 Jan 2023 07:20:47 -0800 (PST)
+        with ESMTP id S235020AbjAYPov (ORCPT
+        <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 10:44:51 -0500
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014D63D92E;
+        Wed, 25 Jan 2023 07:44:51 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id hw16so48680064ejc.10;
+        Wed, 25 Jan 2023 07:44:50 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eA2k8GKSkaJ8JiRx7vynIxEnjRyi/3LR49biO0Zb0Dc=;
-        b=ixTEenOPk/P28/WU27Zufkdc1V3U+/6IBKwUhocsiuw+38itv78CKYJIJm3IOPxZZh
-         i+I5OzNOaSm1ilJLMkp+jKPUY0F6AY8m8Y2Cwsj+Y8qI8jKMhoBPei3zxJ9oehMAyShU
-         PhwwAmOmols9U59QKZl6AMsxBjG3El/paycXsVjsVKrlrhBw6aj8slLejN1b+R0s9QaD
-         TmH9wrXTjrJ5FrPvIvW2bYBhGb7flpPu8GQEPpgqXs0Xz2an4o9ImNOL50s50RwqvzXy
-         QyVI4FIV3ss7L7nUtFffLVk1rXQRrFqUcYgMbf6L90I8kUVdqe9xsyl2fGvb6KskfYrf
-         BUYA==
-X-Gm-Message-State: AO0yUKXmbTAydZAGwzOumhfq49MvzXh/EWMms6YopzkVR3ek3mVBsXyK
-        wxEznsPlAqbF9SnhPAHSQ8bmhs+kJYNlfIDTq3yttu65
-X-Google-Smtp-Source: AMrXdXvLgZvoJvJqVmraThNQIStOeL24DaFIwzCkVTm8WaEP+sS95TlKL6RuNKiTDyWh6InzZ3GrXySUxCjLUSwLpiY=
-X-Received: by 2002:a17:906:4e9a:b0:84d:4dc6:1c08 with SMTP id
- v26-20020a1709064e9a00b0084d4dc61c08mr5520786eju.421.1674660035333; Wed, 25
- Jan 2023 07:20:35 -0800 (PST)
+        bh=dQKz1ivfeZseau89f0LUWH5dfS4HbVoU1vZsEoHnerc=;
+        b=7AuxjUMONQ9fw+WuDum+arJeiAmMatMaa2vpx+0m/4HPF9nAgMahX/V1yL5XfXMm45
+         KK6GJbo8JLdQ1+hmOmNBvIzwpfB8arbDbKT8apqJpE9/YbFNA3Qs38MRmFEHA2OpePaJ
+         BBdztG/7QVwstXkPSZxiQw2c+J7ANfstwa8SiCJYpwJam1ChxUqVwE4Xm+pEvvNB8VHp
+         TNE5ezIPdOg260jFMLF74BYhRQrLNnZn0vT/eYY72iEy+S3y41YCOgjKL4gEgWaw5vdU
+         qKcPSlP/QEamx+p3LlIZASIBCXgUOh08bfJ0QLKl2/7sq+S+z4JB+hmLZ+aWxmdE9Xye
+         PP8g==
+X-Gm-Message-State: AFqh2kqxzeOOuDQcFNzhcl5CC3IsKfLctkZZB76q6Z4gHyRAopwx4swl
+        e9T3ckoew2Qzc2vmLZEiLlmfC+9ls630jZ6sgl2uZzOD
+X-Google-Smtp-Source: AMrXdXvzX7gr0fDhtGa4jw4p2Q6w6svVgIxpCUCQw2/uvb5zgGMPUvySpvTP/WAbAseD31o4y6y6K1MM6eexUvC5r5I=
+X-Received: by 2002:a17:906:d101:b0:84d:3813:fb8 with SMTP id
+ b1-20020a170906d10100b0084d38130fb8mr4575168ejz.384.1674661489604; Wed, 25
+ Jan 2023 07:44:49 -0800 (PST)
 MIME-Version: 1.0
-References: <5665899.DvuYhMxLoT@kreacher>
-In-Reply-To: <5665899.DvuYhMxLoT@kreacher>
+References: <20230123152756.4031574-1-daniel.lezcano@linaro.org>
+ <3e2c6c44-f562-28ff-26cc-933f386e9719@linaro.org> <CAJZ5v0iH283yXWdzTN1Gb2xBUjy0E04zEgrny1N6QcsAwsJyyg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iH283yXWdzTN1Gb2xBUjy0E04zEgrny1N6QcsAwsJyyg@mail.gmail.com>
 From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 25 Jan 2023 16:20:23 +0100
-Message-ID: <CAJZ5v0iVqGoVq1TVvYoQLxRWnP1nTPe7seeQvbVPancxH_6J1g@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] thermal: intel: int340x: Use generic trip points table
-To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc:     Linux PM <linux-pm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Date:   Wed, 25 Jan 2023 16:44:38 +0100
+Message-ID: <CAJZ5v0i8H0mY4+voOgbDKS15zVq6AsJ6Uoco94Tc6fUxzvVEbg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Misc thermal cleanup and fixes
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -59,39 +56,56 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-Hi Srinivas,
+On Wed, Jan 25, 2023 at 3:03 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Wed, Jan 25, 2023 at 12:16 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+> >
+> >
+> > Hi Rafael,
+> >
+> > will you take this series on your branch ?
+>
+> Yes, I'm planning to do that, if I don't find any issues with it (not
+> likely though).
 
-On Wed, Jan 25, 2023 at 3:55 PM Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Hi All,
->
-> This series replaces the following patch:
->
-> https://patchwork.kernel.org/project/linux-pm/patch/2147918.irdbgypaU6@kreacher/
->
-> but it has been almost completely rewritten, so I've dropped all tags from it.
->
-> The most significant difference is that firmware-induced trip point updates are
-> now handled in a less controversial manner (no renumbering, just temperature
-> updates if applicable).
->
-> Please refer to the individual patch changelogs for details.
->
-> The series is on top of this patch:
->
-> https://patchwork.kernel.org/project/linux-pm/patch/2688799.mvXUDI8C0e@kreacher/
->
-> which applies on top of the linux-next branch in linux-pm.git from today.
+I've just queued it up for 6.3.
 
-There are two additional branches in linux-pm.git:
-
-thermal-intel-fixes
-thermal-intel-testing
-
-The former is just fixes to go on top of 6.2-rc5 and the latter - this
-series on top of those and the current thermal-intel branch I have
-locally with the Intel thermal drivers changes for 6.3.
-
-I would appreciate giving each of them a go in your test setup.
-
-Cheers!
+> > On 23/01/2023 16:27, Daniel Lezcano wrote:
+> > > This series is based on linux-pm/thermal
+> > >
+> > > It unregisters the netlink generic family for thermal in case the thermal
+> > > framework fails to initialize, removes a unneeded ida_destroy() call and moves
+> > > the thermal trip code in a separate file.
+> > >
+> > > A couple of changes have been removed from the previous version:
+> > >
+> > >   - Ordering the trip points. Some consolidation is needed in the set_trip_temp
+> > >     ops before ordering the trip points, so this change is postpone
+> > >
+> > >   - Remove the mutex destroy call. Even if the call is not needed, the
+> > >     justification of the change is not accurate. So it is postponed also.
+> > >
+> > >   V2:
+> > >     - Removed ordering the trip points change
+> > >     - Removed mutex destroy change
+> > >     - Added "No functional change intented" as requested by Rui
+> > >     - Added the function declaration for_each_thermal_trip
+> > >
+> > > Daniel Lezcano (3):
+> > >    thermal/core: Fix unregistering netlink at thermal init time
+> > >    thermal/core: Remove unneeded ida_destroy()
+> > >    thermal/core: Move the thermal trip code to a dedicated file
+> > >
+> > >   drivers/thermal/Makefile          |   4 +-
+> > >   drivers/thermal/thermal_core.c    |  93 +--------------
+> > >   drivers/thermal/thermal_core.h    |   4 +
+> > >   drivers/thermal/thermal_helpers.c |  62 ----------
+> > >   drivers/thermal/thermal_netlink.c |   5 +
+> > >   drivers/thermal/thermal_netlink.h |   3 +
+> > >   drivers/thermal/thermal_trip.c    | 182 ++++++++++++++++++++++++++++++
+> > >   7 files changed, 199 insertions(+), 154 deletions(-)
+> > >   create mode 100644 drivers/thermal/thermal_trip.c
+> > >
+> >
+> > --
