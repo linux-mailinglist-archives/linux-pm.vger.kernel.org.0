@@ -2,61 +2,60 @@ Return-Path: <linux-pm-owner@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B51267AEC7
-	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 10:51:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27DA667AECB
+	for <lists+linux-pm@lfdr.de>; Wed, 25 Jan 2023 10:51:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235385AbjAYJvI (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
-        Wed, 25 Jan 2023 04:51:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36398 "EHLO
+        id S235422AbjAYJvL (ORCPT <rfc822;lists+linux-pm@lfdr.de>);
+        Wed, 25 Jan 2023 04:51:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235360AbjAYJvH (ORCPT
+        with ESMTP id S235339AbjAYJvH (ORCPT
         <rfc822;linux-pm@vger.kernel.org>); Wed, 25 Jan 2023 04:51:07 -0500
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E84D44A2
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:51:03 -0800 (PST)
-Received: by mail-wr1-x435.google.com with SMTP id h12so12447879wrv.10
-        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:51:03 -0800 (PST)
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9D8559A
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:51:04 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id b7so16458843wrt.3
+        for <linux-pm@vger.kernel.org>; Wed, 25 Jan 2023 01:51:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SPsz6CoLNjPAxyd2ASpUS9AhmaiVkC3z8HgK93csZ1U=;
-        b=atYXCcfROx7XbUn/LZ+kGkjUtnHTe+RMm1MuS5SWM+LzKJizJlgLzVVqP0QyPeYu6F
-         aHTWuUChw1wGBB40BThmH8Y8mP6onEz5fBTtxMMerW/SBmRLNKqNvHog954EYkxbPC5C
-         nTP6s/sO3jQnZ4vceHG51c24JT07I1p/iRwUiMQHlK0qEJEk3HyljgDNsY7VjMcHG05u
-         ItflGdO/S19WJKwTfoxvJTm//chzfWC4bu/WpNjEVShv4M/xh/2dA/4eHG0PyxpmuMff
-         gHlVjtLklONEyQs/Dvjb4CCSwalhw1QRg9AZeSsTEiGHvGEGGKQYCveiIeTDnoNCMPqj
-         Gv/g==
+        bh=a8rG7Mbgb1oWT4fX2vZyNeYThYNVXL6oBqBlNEJwaWo=;
+        b=xPWzL4S43VKse9dWE8bt5cpWWfxCYYdjSEnvvA18Lvlhc/05RPdQbUtIXakb3vBwOr
+         yvTO5WToHjWPcxv2LW1ueJxhU0PfaDPRmCtYjxQsZ3sU1yQmGMS3+a9TqsoIteKsbReD
+         E6udwR9XHgscFD4p3EXKzHbpMD+F6R1VBsvHQ8tJoRRyV4M0XEzwFOp3eQVwWN5CF1gS
+         /wszNzazSfHLc52rPtQ1ybUM/SwoxBBoW8g2fNCzZouSJ1SJ2BIglkEJXL7vmff1zvPJ
+         PY4u69Zcwb/CGFAYHJ5szMqb1+PkSMyrvhSnRyjsC2FX/XUN4MtNGpJiZbfy3+9Oc7ch
+         PTAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SPsz6CoLNjPAxyd2ASpUS9AhmaiVkC3z8HgK93csZ1U=;
-        b=Ss2MlkDnu5QcD15EOeS4P5EGS2mvKWVkBGBAfBYjeAyTGpi7JzgayDXipyieg7dPgs
-         1HCHyPGAXXkuJz7KspqdO+mWqGBp7IcXQ6j8aOWX4EKigSCdgBHdk6SuHhMUJjc5MjD8
-         aY++aFMHN5yWo2pWJSnM9Vsl7qMbpQY/rfwHcUBrUriRx+wzg2Tl8HIeDdl8wmaTRLOg
-         QUd4yLcmaAQq5g4RG+uaqYsfAmaKL+pf8/JAMmsi9UQOnXFWuLOt8A03ZwjMhzVwMWxI
-         +mYRdgdQC4rFKM2z2YvO7XWrx2cf+bpwuK7rMqj09LKeqZJA6hSQh/u8OijS4BEhqNX5
-         D6tw==
-X-Gm-Message-State: AO0yUKUeSZmqexWGUGdm7Div7lZTdIqg9OmxcZNYuxBBsN1zy4MP6rns
-        Jd1PFJXpHdiucmhu4LVtKNzZnA==
-X-Google-Smtp-Source: AK7set/16CPFtxuNwWrrIsJHEQdd6BbpeVn/tMdMC7hRCr1vC2L5+u84jU88vqJoTNvl4fhYH4s9jg==
-X-Received: by 2002:adf:a38c:0:b0:2bf:bd9f:23cb with SMTP id l12-20020adfa38c000000b002bfbd9f23cbmr828592wrb.52.1674640262041;
-        Wed, 25 Jan 2023 01:51:02 -0800 (PST)
+        bh=a8rG7Mbgb1oWT4fX2vZyNeYThYNVXL6oBqBlNEJwaWo=;
+        b=ybB/yFyi5otS9EAhia2BqVorF0TXRxGsKfHd0xHqTYAvINXe6YcJ3P5VHRgSJ2nenM
+         WZ2kR3rHq6qUcyg/jJIwkBeMdXcJ0pOgjxAm3C+o5yVPuNVkO4g8tlseIWxXa9GXjdTt
+         vIFfPBqjcMUY7rRKAzEBiC+RinNAlZSKA+MfVALJCCetFAlGRHznGVvXLvNVFvfNfb8s
+         pslhfvZi0aX/jGPnKFRrsZwP3j/BOyGLpoc2WCDQR0tb3Ms3bu84zqdo1YxTqgU2zB9K
+         F1fc6F1yCpgWyMjQkE+g2tB83h7Zkf2OdRBlxRdDCQJHlw1YQ/mT1ADN1h7/VE1+yWqE
+         xA6Q==
+X-Gm-Message-State: AO0yUKVY6bmrsBAOMNKiMrBJfTupCIxjQ4T8n2KQ7uil1SHLnM0mpX2l
+        xVFGG5yM/YGKRNFfWqlIx13LRQ==
+X-Google-Smtp-Source: AK7set9P75tmgvXzlQ7uRit1xFYJrLg1XymQi858p0cz6PXUglNd52fGr5orgcHOWHr8J38C041+KA==
+X-Received: by 2002:a5d:66ce:0:b0:2bf:b765:74cf with SMTP id k14-20020a5d66ce000000b002bfb76574cfmr2102506wrw.30.1674640263230;
+        Wed, 25 Jan 2023 01:51:03 -0800 (PST)
 Received: from [127.0.1.1] (62.213.132.195.rev.sfr.net. [195.132.213.62])
-        by smtp.googlemail.com with ESMTPSA id j26-20020a5d453a000000b002bdf3809f59sm3955072wra.38.2023.01.25.01.51.00
+        by smtp.googlemail.com with ESMTPSA id j26-20020a5d453a000000b002bdf3809f59sm3955072wra.38.2023.01.25.01.51.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Jan 2023 01:51:01 -0800 (PST)
+        Wed, 25 Jan 2023 01:51:02 -0800 (PST)
 From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Date:   Wed, 25 Jan 2023 10:50:29 +0100
-Subject: [PATCH v8 1/5] dt-bindings: thermal: mediatek: add binding
- documentation for MT8365 SoC
+Date:   Wed, 25 Jan 2023 10:50:30 +0100
+Subject: [PATCH v8 2/5] thermal: mediatek: control buffer enablement tweaks
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20221018-up-i350-thermal-bringup-v8-1-23e8fbb08837@baylibre.com>
+Message-Id: <20221018-up-i350-thermal-bringup-v8-2-23e8fbb08837@baylibre.com>
 References: <20221018-up-i350-thermal-bringup-v8-0-23e8fbb08837@baylibre.com>
 In-Reply-To: <20221018-up-i350-thermal-bringup-v8-0-23e8fbb08837@baylibre.com>
 To:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -78,11 +77,11 @@ Cc:     linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
         Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Michael Kao <michael.kao@mediatek.com>
 X-Mailer: b4 0.11.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1674640259; l=1282;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1674640259; l=2546;
  i=aouledameur@baylibre.com; s=20220920; h=from:subject:message-id;
- bh=C4Y1Pt62EoG+4OlWvlrEg4v27fXBsImkQVLZNvvWkNY=;
- b=uD21fUR/ws6xOLFPdRjyxdjDPlgRNM1W/KbrrSQK0yePNU+jk8+RDZVIRiljHH9YhIUoHdXfL610
- 77rP5aXeBnwY8vNXCIeKsqzHT+I7iazUu7nOuyhH1XkSUFQH50HC
+ bh=o4V8Nb038m3SOSHzM/Z25bSLgf/ue1pK+n3hiU0se4A=;
+ b=z+eBUVG5tTpkdOflpaYTVv0RLdNKf8a4pIUewm6Ch4PuTfzhjtAJJ58QazUubZZjO6YaNfGgl8VM
+ yS/u5hKRAwrw+zWBjbi6O4hrypwnQNNl63tdF+8pse8qmBDQEers
 X-Developer-Key: i=aouledameur@baylibre.com; a=ed25519;
  pk=HgYWawSL4qLGPx+RzJ+Cuu+V8Pi/KQnDDm1wjWPMOFE=
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,31 +93,80 @@ Precedence: bulk
 List-ID: <linux-pm.vger.kernel.org>
 X-Mailing-List: linux-pm@vger.kernel.org
 
-From: Fabien Parent <fparent@baylibre.com>
+From: Markus Schneider-Pargmann <msp@baylibre.com>
 
-Add the binding documentation for the thermal support on MT8365 SoC.
+Add logic in order to be able to turn on the control buffer on MT8365.
+This change now allows to have control buffer support for MTK_THERMAL_V1,
+and it allows to define the register offset, and mask used to enable it.
 
+Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Acked-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/thermal/mtk_thermal.c | 25 ++++++++++++++++++-------
+ 1 file changed, 18 insertions(+), 7 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-index 38b32bb447e3..ac39c7156fde 100644
---- a/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-+++ b/Documentation/devicetree/bindings/thermal/mediatek-thermal.txt
-@@ -16,6 +16,7 @@ Required properties:
-   - "mediatek,mt7981-thermal", "mediatek,mt7986-thermal" : For MT7981 SoC
-   - "mediatek,mt7986-thermal" : For MT7986 SoC
-   - "mediatek,mt8183-thermal" : For MT8183 family of SoCs
-+  - "mediatek,mt8365-thermal" : For MT8365 family of SoCs
-   - "mediatek,mt8516-thermal", "mediatek,mt2701-thermal : For MT8516 family of SoCs
- - reg: Address range of the thermal controller
- - interrupts: IRQ for the thermal controller
+diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
+index 8440692e3890..d8ddceb75372 100644
+--- a/drivers/thermal/mtk_thermal.c
++++ b/drivers/thermal/mtk_thermal.c
+@@ -271,6 +271,9 @@ struct mtk_thermal_data {
+ 	bool need_switch_bank;
+ 	struct thermal_bank_cfg bank_data[MAX_NUM_ZONES];
+ 	enum mtk_thermal_version version;
++	u32 apmixed_buffer_ctl_reg;
++	u32 apmixed_buffer_ctl_mask;
++	u32 apmixed_buffer_ctl_set;
+ };
+ 
+ struct mtk_thermal {
+@@ -514,6 +517,9 @@ static const struct mtk_thermal_data mt7622_thermal_data = {
+ 	.adcpnp = mt7622_adcpnp,
+ 	.sensor_mux_values = mt7622_mux_values,
+ 	.version = MTK_THERMAL_V2,
++	.apmixed_buffer_ctl_reg = APMIXED_SYS_TS_CON1,
++	.apmixed_buffer_ctl_mask = GENMASK(31, 6) | BIT(3),
++	.apmixed_buffer_ctl_set = BIT(0),
+ };
+ 
+ /*
+@@ -963,14 +969,18 @@ static const struct of_device_id mtk_thermal_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, mtk_thermal_of_match);
+ 
+-static void mtk_thermal_turn_on_buffer(void __iomem *apmixed_base)
++static void mtk_thermal_turn_on_buffer(struct mtk_thermal *mt,
++				       void __iomem *apmixed_base)
+ {
+-	int tmp;
++	u32 tmp;
++
++	if (!mt->conf->apmixed_buffer_ctl_reg)
++		return;
+ 
+-	tmp = readl(apmixed_base + APMIXED_SYS_TS_CON1);
+-	tmp &= ~(0x37);
+-	tmp |= 0x1;
+-	writel(tmp, apmixed_base + APMIXED_SYS_TS_CON1);
++	tmp = readl(apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
++	tmp &= mt->conf->apmixed_buffer_ctl_mask;
++	tmp |= mt->conf->apmixed_buffer_ctl_set;
++	writel(tmp, apmixed_base + mt->conf->apmixed_buffer_ctl_reg);
+ 	udelay(200);
+ }
+ 
+@@ -1070,8 +1080,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
+ 		goto err_disable_clk_auxadc;
+ 	}
+ 
++	mtk_thermal_turn_on_buffer(mt, apmixed_base);
++
+ 	if (mt->conf->version == MTK_THERMAL_V2) {
+-		mtk_thermal_turn_on_buffer(apmixed_base);
+ 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
+ 	}
+ 
 
 -- 
 2.39.1
